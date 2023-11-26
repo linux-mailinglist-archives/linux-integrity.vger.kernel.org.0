@@ -1,89 +1,116 @@
-Return-Path: <linux-integrity+bounces-216-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-217-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 662107F9343
-	for <lists+linux-integrity@lfdr.de>; Sun, 26 Nov 2023 16:07:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2F857F9579
+	for <lists+linux-integrity@lfdr.de>; Sun, 26 Nov 2023 22:17:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167E428120D
-	for <lists+linux-integrity@lfdr.de>; Sun, 26 Nov 2023 15:07:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7A58B20921
+	for <lists+linux-integrity@lfdr.de>; Sun, 26 Nov 2023 21:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 862DC79C5;
-	Sun, 26 Nov 2023 15:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8A4F4FC;
+	Sun, 26 Nov 2023 21:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="d8/40mkf";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="k8/ZKB/j"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="PApdiNXb"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B37DF;
-	Sun, 26 Nov 2023 07:07:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1701011252;
-	bh=+DNjYQqIssPqAWmXjxp4JyvSDdbz/p8NHfW+HfEVAeQ=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=d8/40mkfkkDYITzrjflZ8l52cle4Oj06GLCmal2kBHEy0iiC7rxo9/nz0Ri/bhN8l
-	 ZiHdfRxWfPZ75aXTPx7HP0vuAVTVfLy/glQ1vMFn9tR9TzYsFKXR4XS1VfbkNB/B1R
-	 2HSbWaklxxVFZDJw0Zr9TBrd4eHx+/lBi6nMKSs8=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6BBD91286954;
-	Sun, 26 Nov 2023 10:07:32 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id WDupy6BrESKk; Sun, 26 Nov 2023 10:07:32 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1701011251;
-	bh=+DNjYQqIssPqAWmXjxp4JyvSDdbz/p8NHfW+HfEVAeQ=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=k8/ZKB/jrdaLd+xXYLwsiBdtcjBXzCMTJXpPtqECPzoHIfrlSubODXrF5K7fWV4qi
-	 T6d2A7BZsMUGIypYvf6rW8GMT+cYTJNVMY2AQ9yasjZ2PT4d84CvM2KCB80Q4FfJpP
-	 hIoeqihxG4/a+8laDui3wLsfRNlin+rz1ys4tTNA=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF78DE
+	for <linux-integrity@vger.kernel.org>; Sun, 26 Nov 2023 13:16:50 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits))
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 65FF01286906;
-	Sun, 26 Nov 2023 10:07:31 -0500 (EST)
-Message-ID: <74edd2b83180cd4af1446df3711196fce7502b59.camel@HansenPartnership.com>
-Subject: Re: [PATCH v4 08/13] tpm: Add full HMAC and encrypt/decrypt session
- handling code
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Date: Sun, 26 Nov 2023 10:07:29 -0500
-In-Reply-To: <CX8FNY9X41EO.2JJKWOS7HEQH0@kernel.org>
-References: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
-	 <20230403214003.32093-9-James.Bottomley@HansenPartnership.com>
-	 <CX8FJA25TO6W.ET37QQIXFGQH@kernel.org>
-	 <CX8FNY9X41EO.2JJKWOS7HEQH0@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E716F2C011D;
+	Mon, 27 Nov 2023 10:16:46 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1701033406;
+	bh=IwhR08uy9nRYsdlGPk6drfJ+Bo0wUEBpE+0xNrCmDQ8=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=PApdiNXbwslJviVEt4XxQXjxZRZcPIwhshJYbpd0Kznze/64xQy+E7s9eMPM0/IVa
+	 AAdKTaudR1gyBHPJMoVH49iob8LFbHIQ5YfIAs+wv4AItXDd+tx1suOTjkr5rl0L7z
+	 xIuATsxrhpEcYnowiVoolg5M6hgv5tI5kEes7lX0bEUxotQ6Vv+pUfQgsueXkrnQlb
+	 YZWgciYCrAsAgTHugvHxdhiowK8BoAf8fmWiwFjvw1UTXJGIzZekjGu7mFwMl5zqXp
+	 yuVAAZ0mbk5sOH6NpR2UxeLWsY7ZgXH4a/u257hRkbi2X828bhYwCVYk/v1GXYHszG
+	 8P3rdq+Y6BukQ==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6563b5be0001>; Mon, 27 Nov 2023 10:16:46 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 27 Nov 2023 10:16:46 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Mon, 27 Nov 2023 10:16:46 +1300
+From: Angga <Hermin.Anggawijaya@alliedtelesis.co.nz>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+CC: "peterhuewe@gmx.de" <peterhuewe@gmx.de>, "jarkko@kernel.org"
+	<jarkko@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm: Start the tpm2 before running a self test.
+Thread-Topic: [PATCH] tpm: Start the tpm2 before running a self test.
+Thread-Index: AQHaHREnjIixcvoKIE+Z7DUtybpc5rCFEegAgAc1wAA=
+Date: Sun, 26 Nov 2023 21:16:46 +0000
+Message-ID: <a31afe97-1abf-4448-8827-e365da26fe34@alliedtelesis.co.nz>
+References: <20231122065528.1049819-1-hermin.anggawijaya@alliedtelesis.co.nz>
+ <c9a92192-ee28-4bbf-a02d-1df0d5822027@molgen.mpg.de>
+In-Reply-To: <c9a92192-ee28-4bbf-a02d-1df0d5822027@molgen.mpg.de>
+Accept-Language: en-NZ, en-US
+Content-Language: en-NZ
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BAA2B1C73716B24BB92D6DAB8715B2DC@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=AZXP4EfG c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=aaz9gABReCDEcGSWusUA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-Could you please trim your replies.  In long patches like this not
-doing so makes for a huge fishing expedition
-
-On Sun, 2023-11-26 at 05:45 +0200, Jarkko Sakkinen wrote:
-[...]
-> > Most the code looks overally decent, except reverse christmas tree
-> > declarations would be nice to have. Getting this patch right is
-> > probably the most critical and rest is pretty easy after that.
-> > Thus the focus.
-> 
-> I'll consider picking the tail, editing minimally and sending a new
-> version with the hmac patches. I.e. change the config flag name and
-> stuff like that.
-
-I already have it converted ... that's how I found the bugs I reported,
-but I need a stable base for a repost.
-
-James
-
+T24gMjIvMTEvMjAyMyA4OjEwIHBtLCBQYXVsIE1lbnplbCB3cm90ZToNCj4NCj4gRGVhciBIZXJt
+aW4sDQo+DQo+DQo+IFRoYW5rIHlvdSBmb3IgeW91ciBwYXRjaC4NCj4NCj4gSXTigJlkIGJlIGdy
+ZWF0IGlmIHlvdSByZW1vdmVkIHRoZSBkb3QvcGVyaW9kIGZyb20gdGhlIGVuZCBvZiB0aGUgY29t
+bWl0IA0KPiBtZXNzYWdlIHN1bW1hcnkvdGl0bGUuDQo+DQo+IEFtIDIyLjExLjIzIHVtIDA3OjU1
+IHNjaHJpZWIgSGVybWluIEFuZ2dhd2lqYXlhOg0KPj4gQmVmb3JlIHNlbmRpbmcgYSBjb21tYW5k
+IHRvIGF0dGVtcHQgdGhlIHNlbGYgdGVzdCwgdGhlIFRQTQ0KPj4gbWF5IG5lZWQgdG8gYmUgc3Rh
+cnRlZCwgb3RoZXJ3aXNlIHRoZSBzZWxmIHRlc3QgcmV0dXJucw0KPj4gVFBNMl9SQ19JTklUSUFM
+SVpFIHZhbHVlIGNhdXNpbmcgYSBsb2cgYXMgZm9sbG93czoNCj4+ICJ0cG0gdHBtMDogQSBUUE0g
+ZXJyb3IgKDI1Nikgb2NjdXJyZWQgYXR0ZW1wdGluZyB0aGUgc2VsZiB0ZXN0Ii4NCj4NCj4gUGxl
+YXNlIGRvY3VtZW50IG9uIHdoYXQgcGxhdGZvcm0gdGhpcyBoYXBwZW5zLg0KPg0KPj4gU2lnbmVk
+LW9mZi1ieTogSGVybWluIEFuZ2dhd2lqYXlhIA0KPj4gPGhlcm1pbi5hbmdnYXdpamF5YUBhbGxp
+ZWR0ZWxlc2lzLmNvLm56Pg0KPj4gLS0tDQo+PiDCoCBkcml2ZXJzL2NoYXIvdHBtL3RwbTItY21k
+LmMgfCA4ICsrKystLS0tDQo+PiDCoCAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0
+IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2NoYXIvdHBtL3RwbTIt
+Y21kLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbTItY21kLmMNCj4+IGluZGV4IDkzNTQ1YmUxOTBh
+NS4uMDUzMGYzYjVmODZhIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG0yLWNt
+ZC5jDQo+PiArKysgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbTItY21kLmMNCj4+IEBAIC03MzcsMTUg
+KzczNywxNSBAQCBpbnQgdHBtMl9hdXRvX3N0YXJ0dXAoc3RydWN0IHRwbV9jaGlwICpjaGlwKQ0K
+Pj4gwqDCoMKgwqDCoCBpZiAocmMpDQo+PiDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBvdXQ7DQo+
+PiDCoCArwqDCoMKgIHJjID0gdHBtMl9zdGFydHVwKGNoaXApOw0KPj4gK8KgwqDCoCBpZiAocmMg
+JiYgcmMgIT0gVFBNMl9SQ19JTklUSUFMSVpFKQ0KPj4gK8KgwqDCoMKgwqDCoMKgIGdvdG8gb3V0
+Ow0KPj4gKw0KPj4gwqDCoMKgwqDCoCByYyA9IHRwbTJfZG9fc2VsZnRlc3QoY2hpcCk7DQo+PiDC
+oMKgwqDCoMKgIGlmIChyYyAmJiByYyAhPSBUUE0yX1JDX0lOSVRJQUxJWkUpDQo+PiDCoMKgwqDC
+oMKgwqDCoMKgwqAgZ290byBvdXQ7DQo+PiDCoCDCoMKgwqDCoMKgIGlmIChyYyA9PSBUUE0yX1JD
+X0lOSVRJQUxJWkUpIHsNCj4+IC3CoMKgwqDCoMKgwqDCoCByYyA9IHRwbTJfc3RhcnR1cChjaGlw
+KTsNCj4+IC3CoMKgwqDCoMKgwqDCoCBpZiAocmMpDQo+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCBnb3RvIG91dDsNCj4+IC0NCj4+IMKgwqDCoMKgwqDCoMKgwqDCoCByYyA9IHRwbTJfZG9fc2Vs
+ZnRlc3QoY2hpcCk7DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKHJjKQ0KPj4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgZ290byBvdXQ7DQo+DQo+DQo+IEtpbmQgcmVnYXJkcywNCj4NCj4g
+UGF1bA0KDQpIZWxsbyBQYXVsDQoNClRoYW5rIHlvdSBmb3IgeW91ciBjb21tZW50cy4NCg0KID5Q
+bGVhc2UgZG9jdW1lbnQgb24gd2hhdCBwbGF0Zm9ybSB0aGlzIGhhcHBlbnMuDQoNClRoZSBlcnJv
+ciBsb2cgbWVzc2FnZSBpcyBvYnNlcnZlZCBvbiBhIGN1c3RvbSBoYXJkd2FyZSBkZXNpZ24gKGEg
+cm91dGVyKSANCndpdGggYW4gSW5maW5lb24gU0xNIDk2NzAgVFBNMi4wLg0KVGhlIHBhdGNoIGlz
+IHVzZWZ1bCBmb3IgdXMsIGFzIHRoZSBmaXJtd2FyZSAoYm9vdCBsb2FkZXIpIG9mIHRoZSByb3V0
+ZXIgDQpkb2VzIG5vdCBzdXBwb3J0IFRQTSB5ZXQsIHRodXMgdGhlIGtlcm5lbA0KbmVlZHMgdG8g
+c3RhcnQgdGhlIFRQTSBiZWZvcmUgc3RhcnRpbmcgdGhlIHNlbGYgdGVzdC4NCg0KSSB3aWxsIHJl
+cGx5IHRvIEphcmtrbydzIGFuZCBTdGVmYW4ncyBjb21tZW50cyBzZXBhcmF0ZWx5LCBhbmQgaWYg
+aW4gDQpwcmluY2lwbGUsIHRoZSBwYXRjaCBpcyBhY2NlcHRlZCwgSSB3aWxsIHNlbmQgdGhlDQpz
+ZWNvbmQgdmVyc2lvbiBvZiB0aGUgcGF0Y2ggd2l0aCB5b3VyIGNvbW1lbnRzIGFkZHJlc3NlZC4N
+Cg0KS2luZCByZWdhcmRzDQoNCkhlcm1pbg0KDQoNCg==
 
