@@ -1,256 +1,217 @@
-Return-Path: <linux-integrity+bounces-227-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-228-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E5EF7FA787
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 18:08:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E1547FA9DD
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 20:09:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F5E41C20A4E
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 17:08:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FFD91C20A16
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 19:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34BBC36AE9;
-	Mon, 27 Nov 2023 17:08:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8733DBA3;
+	Mon, 27 Nov 2023 19:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="IqB4jy0p"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="kUPl51r9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5307910F6;
-	Mon, 27 Nov 2023 09:08:24 -0800 (PST)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARGIqEE024935;
-	Mon, 27 Nov 2023 17:07:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=SdXYOyFEsR3A/Q17azmhUsC6oJTh5KpTQfUstBbWeB4=;
- b=IqB4jy0pX2wfoN/MATdf3GugOKPmYfIgRIsUvrwj0Op6WvxHd5mRwdFsUWRy4nwcaSoM
- cKDGDpCAES1Lj4ty53WHucHH02X7yg3TROzk4TmkCjP+YTZLqujTUho+8xCAqsBjLt+G
- 2BH440DLONrgA15UIFB3fnMC3tq9FuZhCuKqPY/nXVlhFASKDbEwPmSyvmAhVFwx3Sf7
- HIXh91tZeFhgTHeFE+7G+lPBnxyqtYx/2w5ehawZgN7tkrxFFgE2V+JSuQ0HuVDzHZUc
- brhKaYwKnPDAE+AXFZwIDwi1x3YUL0gpZf9M8qA1WHto7am0VYB53ZBbvL+F3bt0SJpb /A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3umxh09d27-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 17:07:50 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ARGftfI003246;
-	Mon, 27 Nov 2023 17:07:49 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3umxh09d0w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 17:07:49 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARGpRc1025565;
-	Mon, 27 Nov 2023 17:07:47 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukvrk9xv9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 17:07:47 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ARH7keJ57082336
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Nov 2023 17:07:46 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7B6C758060;
-	Mon, 27 Nov 2023 17:07:46 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 63D9F5803F;
-	Mon, 27 Nov 2023 17:07:45 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.24.153])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 27 Nov 2023 17:07:45 +0000 (GMT)
-Message-ID: <28c4136d0fe360a7fcf6a6547120dc244be0edc3.camel@linux.ibm.com>
-Subject: Re: [RFC V2] IMA Log Snapshotting Design Proposal
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        Jarkko Sakkinen
- <jarkko@kernel.org>, jgg@ziepe.ca,
-        Ken Goldman <kgold@linux.ibm.com>, bhe@redhat.com, vgoyal@redhat.com,
-        Dave Young <dyoung@redhat.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        jmorris@namei.org, serge@hallyn.com,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-security-module@vger.kernel.org,
-        Tyler Hicks
- <tyhicks@linux.microsoft.com>,
-        Lakshmi Ramasubramanian
- <nramas@linux.microsoft.com>,
-        Sush Shringarputale
- <sushring@linux.microsoft.com>
-Date: Mon, 27 Nov 2023 12:07:44 -0500
-In-Reply-To: <CAHC9VhSnDQ-d9dh_icqNyhpT+cTGQOqGh8+cbN3QzF_qPehvaA@mail.gmail.com>
-References: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
-	 <8bff2bf1a4629aacec7b6311d77f233cb75b2f8a.camel@linux.ibm.com>
-	 <CAHC9VhRm9Tzz3C-VTdXS4s1_-kPQQ6RXMt8JGCS4jorJ0VURyQ@mail.gmail.com>
-	 <CAHC9VhSJ7MKNM7nMXR3xE-cNMrYB4AT+B76wzF1cKy2JM9tBrA@mail.gmail.com>
-	 <1b6853e8354af7033e6d87e77cfb175526753c38.camel@linux.ibm.com>
-	 <CAHC9VhSnDQ-d9dh_icqNyhpT+cTGQOqGh8+cbN3QzF_qPehvaA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qzRtYvMLnm7cNTjPesp9QgY9v1vPugLu
-X-Proofpoint-GUID: kpFDBoidQho8vTFczMJQe8Krbzu4x7I1
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86C9D5D;
+	Mon, 27 Nov 2023 11:09:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1701112154;
+	bh=zoGc2JZZb8dCHLG9oIz/ChaoRjOs3tUiFCnmjDqqt1I=;
+	h=From:To:Subject:Date:Message-Id:From;
+	b=kUPl51r9kw4yNAkkQ60l/kRjAzga7eAcGXmFYr+rjeVgtdp3usmliwjwV5H3CE6bf
+	 iJ6yIjGYC8lftcuDu3dMQKxaj+tmXdk9XCFLJw8tYK/itiMGi88W2OpK/D2fXEu8kj
+	 nqMyqnwDjGserlIPPweKHA13kMn1Gd0FkCsJjMYs=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 12632128174C;
+	Mon, 27 Nov 2023 14:09:14 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id oEy1Azh4uP2n; Mon, 27 Nov 2023 14:09:13 -0500 (EST)
+Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7282D1280087;
+	Mon, 27 Nov 2023 14:09:13 -0500 (EST)
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	keyrings@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH v5 00/17] add integrity and security to TPM2 transactions
+Date: Mon, 27 Nov 2023 14:08:37 -0500
+Message-Id: <20231127190854.13310-1-James.Bottomley@HansenPartnership.com>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-27_15,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- suspectscore=0 lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311270119
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2023-11-22 at 09:22 -0500, Paul Moore wrote:
-> On Wed, Nov 22, 2023 at 8:18 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > On Tue, 2023-11-21 at 23:27 -0500, Paul Moore wrote:
-> > > On Thu, Nov 16, 2023 at 5:28 PM Paul Moore <paul@paul-moore.com> wrote:
-> > > > On Tue, Oct 31, 2023 at 3:15 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > >
-> > > ...
-> > >
-> > > > > Userspace can already export the IMA measurement list(s) via the
-> > > > > securityfs {ascii,binary}_runtime_measurements file(s) and do whatever
-> > > > > it wants with it.  All that is missing in the kernel is the ability to
-> > > > > trim the measurement list, which doesn't seem all that complicated.
-> > > >
-> > > > From my perspective what has been presented is basically just trimming
-> > > > the in-memory measurement log, the additional complexity (which really
-> > > > doesn't look that bad IMO) is there to ensure robustness in the face
-> > > > of an unreliable userspace (processes die, get killed, etc.) and to
-> > > > establish a new, transitive root of trust in the newly trimmed
-> > > > in-memory log.
-> > > >
-> > > > I suppose one could simplify things greatly by having a design where
-> > > > userspace  captures the measurement log and then writes the number of
-> > > > measurement records to trim from the start of the measurement log to a
-> > > > sysfs file and the kernel acts on that.  You could do this with, or
-> > > > without, the snapshot_aggregate entry concept; in fact that could be
-> > > > something that was controlled by userspace, e.g. write the number of
-> > > > lines and a flag to indicate if a snapshot_aggregate was desired to
-> > > > the sysfs file.  I can't say I've thought it all the way through to
-> > > > make sure there are no gotchas, but I'm guessing that is about as
-> > > > simple as one can get.
-> >
-> > > > If there is something else you had in mind, Mimi, please share the
-> > > > details.  This is a very real problem we are facing and we want to
-> > > > work to get a solution upstream.
-> > >
-> > > Any thoughts on this Mimi?  We have a real interest in working with
-> > > you to solve this problem upstream, but we need more detailed feedback
-> > > than "too complicated".  If you don't like the solutions presented
-> > > thus far, what type of solution would you like to see?
-> >
-> > Paul, the design copies the measurement list to a temporary "snapshot"
-> > file, before trimming the measurement list, which according to the
-> > design document locks the existing measurement list.  And further
-> > pauses extending the measurement list to calculate the
-> > "snapshot_aggregate".
-> 
-> I believe the intent is to only pause the measurements while the
-> snapshot_aggregate is generated, not for the duration of the entire
-> snapshot process.  The purpose of the snapshot_aggregate is to
-> establish a new root of trust, similar to the boot_aggregate, to help
-> improve attestation performance.
-> 
-> > Userspace can export the measurement list already, so why this
-> > complicated design?
-> 
-> The current code has no provision for trimming the measurement log,
-> that's the primary reason.
-> 
-> > As I mentioned previously and repeated yesterday, the
-> > "snapshot_aggregate" is a new type of critical data and should be
-> > upstreamed independently of this patch set that trims the measurement
-> > list.  Trimming the measurement list could be based, as you suggested
-> > on the number of records to remove, or it could be up to the next/last
-> > "snapshot_aggregate" record.
-> 
-> Okay, we are starting to get closer, but I'm still missing the part
-> where you say "if you do X, Y, and Z, I'll accept and merge the
-> solution."  Can you be more explicit about what approach(es) you would
-> be willing to accept upstream?
+The interest in securing the TPM against interposers, both active and
+passive has risen to fever pitch with the demonstration of key
+recovery against windows bitlocker:
 
-Included with what is wanted/needed is an explanation as to my concerns
-with the existing proposal.
+https://dolosgroup.io/blog/2021/7/9/from-stolen-laptop-to-inside-the-company-network
 
-First we need to differentiate between kernel and uhserspace
-requirements.  (The "snapshotting" design proposal intermixes them.)
+And subsequently the same attack being successful against all the
+Linux TPM based security solutions:
 
-From the kernel persective, the Log Snapshotting Design proposal "B.1
-Goals" is very nice, but once the measurement list can be trimmed it is
-really irrelevant.  Userspace can do whatever it wants with the
-measurement list records.  So instead of paying lip service to what
-should be done, just call it as it is - trimming the measurement list.
+https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-targets
 
------------------------------------------------------------------------
-| B.1 Goals                                                           |
------------------------------------------------------------------------
-To address the issues described in the section above, we propose
-enhancements to the IMA subsystem to achieve the following goals:
+The attacks fall into two categories:
 
-  a. Reduce memory pressure on the Kernel caused by larger in-memory
-     IMA logs.
+1. Passive Interposers, which sit on the bus and merely observe
+2. Active Interposers, which try to manipulate TPM transactions on the
+   bus using man in the middle and packet stealing to create TPM state
+   the interposer owner desires.
 
-  b. Preserve the system's ability to get remotely attested using the
-     IMA log, even after implementing the enhancements to reduce memory
-     pressure caused by the IMA log. IMA's Integrity guarantees should
-     be maintained.
+Our broadest interposer target is the use of TPM_RS_PW for password
+authorization which sends the actual password to the TPM without any
+obfuscation and effectively hands it to any interposer. The way to fix
+this is to use real sessions for HMAC capabilities to ensure integrity
+and to use parameter and response encryption to ensure confidentiality
+of the data flowing over the TPM bus.  HMAC sessions by agreeing a
+challenge with the TPM and then giving a response which is a HMAC of
+the password and the challenge, so the application proves knowledge of
+the password to the TPM without ever transmitting the password itself.
+Using HMAC sessions when sending commands to the TPM also provides
+some measure of protection against active interposers, since the
+interposer can't interfere with or delete a HMAC'd command (because
+they can't manufacture a response with the correct HMAC).
 
-  c. Provide mechanisms from Kernel side to the remote attestation
-     service to make service-side processing more efficient.
+To protect TPM transactions where there isn't a shared secret
+(i.e. the command is something like a PCR extension which doesn't
+involve a TPM object with a password) we have to do a bit more work to
+set up sessions with a passed in encrypted secret (called a salt) to
+act in place of the shared secret in the HMAC.  This secret salt is
+effectively a random number encrypted to a public key of the TPM.  The
+final piece of the puzzle is using parameter input and response return
+encryption, so any interposer can't see the data passing from the
+application to the TPM and vice versa.
 
-From the kernel perspective there needs to be a method of trimming N
-number of records from the head of the measurement list.  In addition
-to the existing securityfs "runtime measurement list",  defining a new
-securityfs file containing the current count of in memory measurement
-records would be beneficial.  Defining other IMA securityfs files like
-how many times the measurement list has been trimmed might be
-beneficial as well.  Of course properly document the integrity
-implications and repercussions of the new Kconfig that allows trimming
-the measurement list.
+The most insidious interposer attack of all is a reset attack: since
+the interposer has access to the TPM bus, it can assert the TPM reset
+line any time it wants.  When a TPM resets it mostly comes back in the
+same state except that all the PCRs are reset to their initial values.
+Controlling the reset line allows the interposer to change the PCR
+state after the fact by resetting the TPM and then replaying PCR
+extends to get the PCRs into a valid state to release secrets, so even
+if an attack event was recorded, the record is erased.  This reset
+attack violates the fundamental princible of non-repudiability of TPM
+logs.  Defeating the reset attack involves tying all TPM operations
+within the kernel to a property which will change detectably if the
+TPM is reset.  For that reason, we tie all TPM sessions to the null
+hierarchy we obtain at start of day and whose seed changes on every
+reset.  If an active interposer asserts a TPM reset, the new null
+primary won't match the kernel's stored one and all TPM operations
+will start failing because of HMAC mismatches in the sessions.  So if
+the kernel TPM code keeps operating, it guarantees that a reset hasn't
+occurred.
 
-Defining a simple "trim" marker measurement record would be a visual
-indication that the measurement list has been trimmed.  I might even
-have compared it to the "boot_aggregate".  However, the proposed marker
-based on TPM PCRs requires pausing extending the measurement list.  
-Although the TCG TPM spec allows reading multiple PCRs, it may fail due
-to the output buffer size.  To avoid TPM read multiple PCRs failure,
-reading one TPM PCR value at a time is safer.  The more TPM banks and
-PCRs needed the longer it will take.  Remember this critical-data
-record won't be limited to just software TPMs, but could be used with
-physical ones as well.  For a physical TPM, this could be on the orderof 240 ms per TPM bank (24 PCRs). 
+The final part of the puzzle is that the machine owner must have a
+fixed idea of the EK of their TPM and should have certified this with
+the TPM manufacturer.  On every boot, the certified EK public key
+should be used to do a make credential/activate credential attestation
+key insertion and then the null key certified with the attestation
+key.  We can follow a trust on first use model where an OS
+installation will extract and verify a public EK and save it to a read
+only file.
 
-Before defining a new critical-data record, we need to decide whether
-it is really necessary or if it is redundant.  If we define a new
-"critical-data" record, can it be defined such that it doesn't require
-pausing extending the measurement list?  For example, a new simple
-visual critical-data record could contain the number of records (e.g.
-<securityfs>/ima/runtime_measurements_count) up to that point.
+This patch series adds a simple API which can ensure the above
+properties as a layered addition to the existing TPM handling code.
+This series now includes protections for PCR extend, getting random
+numbers from the TPM and data sealing and unsealing.  It therefore
+eliminates all uses of TPM2_RS_PW in the kernel and adds encryption
+protection to sensitive data flowing into and out of the TPM.  The
+first four patches add more sophisticated buffer handling to the TPM
+which is needed to build the more complex encryption and
+authentication based commands.  Patch 6 adds all the generic
+cryptography primitives and patches 7-9 use them in critical TPM
+operations where we want to avoid or detect interposers.  Patch 10
+exports the name of the null key we used for boot/run time
+verification and patch 11 documents the security guarantees and
+expectations.
 
-The new critical-data record and trimming the measurement list should
-be disjoint features.  If the first record after trimming the
-measurement list should be the critical-data record, then trim the
-measurement list up to that point.
+This was originally sent over four years ago, with the last iteration
+being:
 
-From a userspace perspective, trimming the measurement list is a major
-change and will break existing attestation requests, unless the change
-is transparent.  Removing "snapshots"/"shards" will of course break
-attestation requests.  Refer to Stefan's suggestions: 
-https://lore.kernel.org/linux-integrity/1ed2d72c-4cb2-48b3-bb0f-b0877fc1e9ca@linux.ibm.com/
+https://lore.kernel.org/linux-integrity/1568031515.6613.31.camel@HansenPartnership.com/
+
+I'm dusting it off now because various forces at Microsoft and Google
+via the Open Compute Platform are making a lot of noise about
+interposers and we in the linux kernel look critically lacking in that
+regard, particularly for TPM trusted keys.
+
+---
+v2 fixes the problems smatch reported and adds more explanation about
+the code motion in the first few patches
+v3 rebases the encryption to be against Ard's new library function, the
+aescfb addition of which appears as patch 1.
+v4 refreshes Ard's patch, adds kernel doc (including a new patch to
+add it to the moved tpm-buf functions) updates and rewords some commit
+logs
+v5: update to proposed tpm-buf implementation (for ease of use all
+precursor patches are part of this series, so the actual session HMAC
+and encryption begins at patch 10) and add review feedback
+
+James
+
+---
+
+Ard Biesheuvel (1):
+  crypto: lib - implement library version of AES in CFB mode
+
+James Bottomley (9):
+  tpm: Move buffer handling from static inlines to real functions
+  tpm: add buffer function to point to returned parameters
+  tpm: export the context save and load commands
+  tpm: Add full HMAC and encrypt/decrypt session handling code
+  tpm: add hmac checks to tpm2_pcr_extend()
+  tpm: add session encryption protection to tpm2_get_random()
+  KEYS: trusted: Add session encryption protection to the seal/unseal
+    path
+  tpm: add the null key name as a sysfs export
+  Documentation: add tpm-security.rst
+
+Jarkko Sakkinen (7):
+  tpm: Remove unused tpm_buf_tag()
+  tpm: Remove tpm_send()
+  tpm: Update struct tpm_buf documentation comments
+  tpm: Store the length of the tpm_buf data separately.
+  tpm: TPM2B formatted buffers
+  tpm: Add tpm_buf_read_{u8,u16,u32}
+  KEYS: trusted: tpm2: Use struct tpm_buf for sized buffers
+
+ Documentation/security/tpm/tpm-security.rst |  216 ++++
+ drivers/char/tpm/Kconfig                    |   14 +
+ drivers/char/tpm/Makefile                   |    2 +
+ drivers/char/tpm/tpm-buf.c                  |  251 ++++
+ drivers/char/tpm/tpm-chip.c                 |    3 +
+ drivers/char/tpm/tpm-interface.c            |   26 +-
+ drivers/char/tpm/tpm-sysfs.c                |   18 +
+ drivers/char/tpm/tpm.h                      |   14 +
+ drivers/char/tpm/tpm2-cmd.c                 |   53 +-
+ drivers/char/tpm/tpm2-sessions.c            | 1176 +++++++++++++++++++
+ drivers/char/tpm/tpm2-space.c               |    8 +-
+ include/crypto/aes.h                        |    5 +
+ include/keys/trusted_tpm.h                  |    2 -
+ include/linux/tpm.h                         |  294 +++--
+ lib/crypto/Kconfig                          |    5 +
+ lib/crypto/Makefile                         |    3 +
+ lib/crypto/aescfb.c                         |  257 ++++
+ security/keys/trusted-keys/trusted_tpm1.c   |   23 +-
+ security/keys/trusted-keys/trusted_tpm2.c   |  136 ++-
+ 19 files changed, 2312 insertions(+), 194 deletions(-)
+ create mode 100644 Documentation/security/tpm/tpm-security.rst
+ create mode 100644 drivers/char/tpm/tpm-buf.c
+ create mode 100644 drivers/char/tpm/tpm2-sessions.c
+ create mode 100644 lib/crypto/aescfb.c
 
 -- 
-thanks,
-
-Mimi
+2.35.3
 
 
