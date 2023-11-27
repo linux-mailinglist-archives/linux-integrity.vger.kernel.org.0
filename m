@@ -1,94 +1,112 @@
-Return-Path: <linux-integrity+bounces-219-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-220-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24F027F9761
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 03:07:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8263B7FA20B
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 15:10:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 559D51C20506
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 02:07:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CE13B20E2D
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 14:10:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C9510F3;
-	Mon, 27 Nov 2023 02:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="mAXP8eL7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E953B30F9E;
+	Mon, 27 Nov 2023 14:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A740125
-	for <linux-integrity@vger.kernel.org>; Sun, 26 Nov 2023 18:07:27 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+X-Greylist: delayed 414 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Nov 2023 06:10:12 PST
+Received: from mailout2.hostsharing.net (mailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ee9:0])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E784319AB;
+	Mon, 27 Nov 2023 06:10:12 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 56D6C2C063F;
-	Mon, 27 Nov 2023 15:07:25 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1701050845;
-	bh=LhxxACd8dghdQZn1oHq+gSzpl7xTf6ckLAsgiTT5KiQ=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=mAXP8eL7PWUMnlM0iqCVAkApCs2yjRfISchkleGv2DCsrs1jPXXoXGNM0hdl5Z5f7
-	 FFqxX5SX4VYpfn+K8A4kGBp2zp0DT4ZOuc9/O9qfSAYeQ3mAUBikZy2xHOiKkuKh2W
-	 nVu4UvqLGVQrCrLvDBgHcJsjMO/EqFZH3rOT5I71UCzaq4mV5LosyvfqxevLjImA2y
-	 tXlHjrsmyBMDxkBSs9USzQe+J0t7JBuitN0Mnyz+Y45jrjUiyo8N46utEhqpu67U1i
-	 AJJXmYdQcw/RAO6CsRtSWDRTyQjziQvMfWA1WQKUr0wnIFSwNG6RCRRTHTglbrWlzd
-	 TxLz7WRfJ1k+g==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6563f9dd0001>; Mon, 27 Nov 2023 15:07:25 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.40; Mon, 27 Nov 2023 15:07:25 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Mon, 27 Nov 2023 15:07:24 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.040; Mon, 27 Nov 2023 15:07:24 +1300
-From: Angga <Hermin.Anggawijaya@alliedtelesis.co.nz>
-To: Jarkko Sakkinen <jarkko@kernel.org>, "peterhuewe@gmx.de"
-	<peterhuewe@gmx.de>, "jgg@ziepe.ca" <jgg@ziepe.ca>
-CC: "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: Start the tpm2 before running a self test.
-Thread-Topic: [PATCH] tpm: Start the tpm2 before running a self test.
-Thread-Index: AQHaHREnjIixcvoKIE+Z7DUtybpc5rCH2ueAgAS99oA=
-Date: Mon, 27 Nov 2023 02:07:24 +0000
-Message-ID: <22f6605c-7e24-423b-b4f3-df096b340674@alliedtelesis.co.nz>
-References: <20231122065528.1049819-1-hermin.anggawijaya@alliedtelesis.co.nz>
- <CX6NSGFJVYKC.3KFEPA92N0V53@kernel.org>
-In-Reply-To: <CX6NSGFJVYKC.3KFEPA92N0V53@kernel.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-NZ
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0BB615F929DAE4439BDCCA891933D9B8@atlnz.lc>
-Content-Transfer-Encoding: base64
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+	by mailout2.hostsharing.net (Postfix) with ESMTPS id 7822810189CF9;
+	Mon, 27 Nov 2023 15:03:14 +0100 (CET)
+Received: from localhost (unknown [89.246.108.87])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by h08.hostsharing.net (Postfix) with ESMTPSA id 420A5609C75F;
+	Mon, 27 Nov 2023 15:03:14 +0100 (CET)
+X-Mailbox-Line: From 86f0fa5ea2759586a871db9978b2fcedd3de6b6f Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1701093036.git.lukas@wunner.de>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Mon, 27 Nov 2023 15:02:50 +0100
+Subject: [PATCH v2 0/3] dt-bindings: tpm: Clean all the things
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=AZXP4EfG c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=e6lE4nR9YQSnTHqkly4A:9 a=QEXdDO2ut3YA:10 a=ZXulRonScM0A:10 a=zZCYzV9kfG8A:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc: devicetree@vger.kernel.org, linux-integrity@vger.kernel.org, Lino Sanfilippo <LinoSanfilippo@gmx.de>, Nayna Jain <nayna@linux.ibm.com>, Thirupathaiah Annapureddy <thiruan@microsoft.com>, Sasha Levin <sashal@kernel.org>, Alexander Steffen <Alexander.Steffen@infineon.com>, Johannes Holland <Johannes.Holland@infineon.com>, Amir Mizinski <amirmizi6@gmail.com>, Benoit HOUYERE <benoit.houyere@st.com>, Peter Delevoryas <peter@pjd.dev>
 
-T24gMjQvMTEvMjAyMyAyOjQyIHBtLCBKYXJra28gU2Fra2luZW4gd3JvdGU6DQo+IE9uIFdlZCBO
-b3YgMjIsIDIwMjMgYXQgODo1NSBBTSBFRVQsIEhlcm1pbiBBbmdnYXdpamF5YSB3cm90ZToNCj4+
-IEJlZm9yZSBzZW5kaW5nIGEgY29tbWFuZCB0byBhdHRlbXB0IHRoZSBzZWxmIHRlc3QsIHRoZSBU
-UE0NCj4+IG1heSBuZWVkIHRvIGJlIHN0YXJ0ZWQsIG90aGVyd2lzZSB0aGUgc2VsZiB0ZXN0IHJl
-dHVybnMNCj4+IFRQTTJfUkNfSU5JVElBTElaRSB2YWx1ZSBjYXVzaW5nIGEgbG9nIGFzIGZvbGxv
-d3M6DQo+PiAidHBtIHRwbTA6IEEgVFBNIGVycm9yICgyNTYpIG9jY3VycmVkIGF0dGVtcHRpbmcg
-dGhlIHNlbGYgdGVzdCIuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogSGVybWluIEFuZ2dhd2lqYXlh
-IDxoZXJtaW4uYW5nZ2F3aWpheWFAYWxsaWVkdGVsZXNpcy5jby5uej4NCj4gRmlybXdhcmUgZG9l
-cyBUUE0gcG93ZXIgb24uDQo+DQo+IEJSLCBKYXJra28NCg0KSGVsbG8gSmFya2tvDQoNClRoYW5r
-IHlvdSBmb3IgeW91ciBjb21tZW50IG9uIHRoZSBwYXRjaC4gQXMgaW5kaWNhdGVkIGluIG15IHBy
-ZXZpb3VzIA0KcmVwbHkgdG8gU3RlZmFuJ3MgY29tbWVudCwNCkkgaGF2ZSB2MiB2ZXJzaW9uIG9m
-IHRoZSBwYXRjaCB3aGljaCBhbHNvIGRlYWxzIHdpdGggbXVsdGlwbGUgYXR0ZW1wdHMgDQp0byBz
-dGFydCB1cCB0aGUgVFBNIGdyYWNlZnVsbHksDQpmb3IgZXhhbXBsZSwgb25jZSBieSB0aGUgZmly
-bXdhcmUgYW5kIGFub3RoZXIgYnkgdGhlIGtlcm5lbCBkdXJpbmcgdHBtMiANCmF1dG8tc3RhcnR1
-cC4NCg0KSWYgeW91IHRoaW5rIHRoZSBpZGVhIGlzIE9LLCBJIGNhbiBzZW5kIHRoZSB2MiBvZiB0
-aGUgcGF0Y2guDQoNCg0KS2luZCByZWdhcmRzDQoNCkhlcm1pbg0KDQoNCg==
+TPM dt-bindings cleanup, take two.
+
+Changes v1 -> v2:
+
+* [PATCH 1/3]:
+  * Overhaul i2c compatible definitions.  Turns out that the fallback
+    tcg,tpm-tis-i2c only applies to chips conforming to the PTP spec,
+    wheras other chips use a vendor-specific interface and thus omit
+    the fallback.
+  * Don't enforce fallback compatible tcg,tpm_tis-spi for google,cr50.
+  * Add nodename restriction to tpm-common.yaml.
+  * Add clock constraints that were previously documented for
+    infineon,slb9635tt and infineon,slb9645tt.
+  * Drop google,cr50 SPI example (Rob).
+  * Fix errors for linux,sml-base, linux,sml-size and lpcpd-gpios
+    properties (Rob).
+
+* [PATCH 2/3]:
+  * Amend device_type with enum (Rob).
+  * Fix nodename in example (Rob).
+
+Link to v1:
+
+https://lore.kernel.org/linux-devicetree/cover.1700555862.git.lukas@wunner.de/
+
+Lukas Wunner (3):
+  dt-bindings: tpm: Consolidate TCG TIS bindings
+  dt-bindings: tpm: Convert IBM vTPM bindings to DT schema
+  dt-bindings: tpm: Document Microsoft fTPM bindings
+
+ .../bindings/security/tpm/google,cr50.txt     |  19 ---
+ .../bindings/security/tpm/ibmvtpm.txt         |  41 -------
+ .../bindings/security/tpm/st33zp24-i2c.txt    |  34 ------
+ .../bindings/security/tpm/st33zp24-spi.txt    |  32 -----
+ .../bindings/security/tpm/tpm-i2c.txt         |  26 ----
+ .../bindings/security/tpm/tpm_tis_mmio.txt    |  25 ----
+ .../bindings/security/tpm/tpm_tis_spi.txt     |  23 ----
+ .../devicetree/bindings/tpm/ibm,vtpm.yaml     | 104 ++++++++++++++++
+ .../bindings/tpm/microsoft,ftpm.yaml          |  48 ++++++++
+ .../bindings/tpm/tcg,tpm-tis-i2c.yaml         | 113 ++++++++++++++++++
+ .../bindings/tpm/tcg,tpm-tis-mmio.yaml        |  49 ++++++++
+ .../bindings/tpm/tcg,tpm_tis-spi.yaml         |  79 ++++++++++++
+ .../devicetree/bindings/tpm/tpm-common.yaml   |  72 +++++++++++
+ .../devicetree/bindings/trivial-devices.yaml  |  16 ---
+ 14 files changed, 465 insertions(+), 216 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/security/tpm/google,cr50.txt
+ delete mode 100644 Documentation/devicetree/bindings/security/tpm/ibmvtpm.txt
+ delete mode 100644 Documentation/devicetree/bindings/security/tpm/st33zp24-i2c.txt
+ delete mode 100644 Documentation/devicetree/bindings/security/tpm/st33zp24-spi.txt
+ delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
+ delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt
+ delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm_tis_spi.txt
+ create mode 100644 Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
+ create mode 100644 Documentation/devicetree/bindings/tpm/microsoft,ftpm.yaml
+ create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
+ create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm-tis-mmio.yaml
+ create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
+ create mode 100644 Documentation/devicetree/bindings/tpm/tpm-common.yaml
+
+-- 
+2.40.1
+
 
