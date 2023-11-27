@@ -1,68 +1,68 @@
-Return-Path: <linux-integrity+bounces-247-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-248-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 483D07FABA0
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 21:33:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5AA07FABA9
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 21:37:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9AD07B2113D
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 20:33:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02A221C20DD3
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 20:37:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0285B46440;
-	Mon, 27 Nov 2023 20:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5238D46440;
+	Mon, 27 Nov 2023 20:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bXs4CsZ0"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EMzB+O+x"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA47593;
-	Mon, 27 Nov 2023 12:33:32 -0800 (PST)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARJgXKV030196;
-	Mon, 27 Nov 2023 20:33:28 GMT
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358D093;
+	Mon, 27 Nov 2023 12:37:23 -0800 (PST)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARK7glu015570;
+	Mon, 27 Nov 2023 20:37:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=Lkh3ZB0fmtu8u/GH3a6JEmF9T4HRnls2lJwdbACwm3Y=;
- b=bXs4CsZ0zaxLPQdnLC/UmozDkO67bfZDxQt+9gwGdxiXOPvN7GyUbDRWvmgKaTgr2aQ3
- zQ9rR45lGVR+pienIPQ++UwKkOIUn1DfHkaP3RskZt9O+nWLLtie+A2feFmS7F+ldwVv
- 4fVrSad32GenFdXf+GiLKpC0c0D4BbjQo44zNSRgSa1MQl+5MjeXlB0zxMjeg2++tZl4
- 3GaCj7kNjRezC/iged+3sMcOp2Fkwi3Xlhv4+KNJ87+0w9mAqkpS1uzIq83PxZ9ytpO3
- 9hUP6oSaaZQp+RE7Ns72y6zXaTvMnMVry8G8eS0GuIGGYjj5IRIhYVBmwoE8K5lBMSnT VA== 
+ bh=6dZtFtVOkj3v2LtTIxhqkO3S6miBpByv3GzVmhf3YVU=;
+ b=EMzB+O+xdsCcRuauPeT9AyRkRBnKlC2X82T+yzMymmXZsR22zWHopFIxqUsty64ex5QH
+ jTrGgb1mDT/3NouBnfIDRqi5DtXbJ2Qe7vVQZcpKrddke9U5JAxC1k4gRqHGX2xpeMTL
+ Cc89fvZMYw8NEOXC58rLOtLnOeqAi5uMulKP2MZoc/SX/eAcropvYeoP6aw7SfNJ1mWz
+ NqoKrUr4GGa53PIXxy+22sWAHsk2/H6YgLkbYJ9FkFRO8YBU5OvT6Fz0WZHeqG3tck56
+ h2zPGLSNCZpt/cXd847+tX153lRHb+tiyy/hbIUca5PJg60msGjWR7Vn0KsPVFT6UJFt 8A== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3un1gesdc2-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3un1v80u17-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 20:33:28 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ARJgtXA031165;
-	Mon, 27 Nov 2023 20:33:28 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3un1gesdat-1
+	Mon, 27 Nov 2023 20:37:19 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ARK9f8k023274;
+	Mon, 27 Nov 2023 20:37:19 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3un1v80u0b-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 20:33:28 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARJchNe018544;
-	Mon, 27 Nov 2023 20:33:26 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ukwfjtttd-1
+	Mon, 27 Nov 2023 20:37:18 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARJP6YP009565;
+	Mon, 27 Nov 2023 20:37:17 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukv8nb792-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 20:33:26 +0000
+	Mon, 27 Nov 2023 20:37:17 +0000
 Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ARKXP1w24707596
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ARKbHv354395314
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Nov 2023 20:33:25 GMT
+	Mon, 27 Nov 2023 20:37:17 GMT
 Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C94B958050;
-	Mon, 27 Nov 2023 20:33:25 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 2122658056;
+	Mon, 27 Nov 2023 20:37:17 +0000 (GMT)
 Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D2CFF58045;
-	Mon, 27 Nov 2023 20:33:24 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 2C7E758045;
+	Mon, 27 Nov 2023 20:37:16 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
 	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 27 Nov 2023 20:33:24 +0000 (GMT)
-Message-ID: <94a6c269-7086-4a20-8396-07521cf1c220@linux.ibm.com>
-Date: Mon, 27 Nov 2023 15:33:23 -0500
+	Mon, 27 Nov 2023 20:37:16 +0000 (GMT)
+Message-ID: <3d900dea-5636-4773-9344-61315c5b7fad@linux.ibm.com>
+Date: Mon, 27 Nov 2023 15:37:15 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/8] tpm: Remove unused tpm_buf_tag()
+Subject: Re: [PATCH v6 2/8] tpm: Remove tpm_send()
 Content-Language: en-US
 To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -81,52 +81,130 @@ Cc: linux-kernel@vger.kernel.org,
         Mario Limonciello <mario.limonciello@amd.com>,
         Jerry Snitselaar <jsnitsel@redhat.com>
 References: <20231124020237.27116-1-jarkko@kernel.org>
- <20231124020237.27116-2-jarkko@kernel.org>
+ <20231124020237.27116-3-jarkko@kernel.org>
 From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20231124020237.27116-2-jarkko@kernel.org>
+In-Reply-To: <20231124020237.27116-3-jarkko@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _B7MXcilXN4EqENafQe1mmccsN1fD6ej
-X-Proofpoint-GUID: G__qMkKK_WvxFx9nFrabSns5lrHjioxA
+X-Proofpoint-ORIG-GUID: _7OXSbSCHb5aBMPFkG3U_4ExYfix84jP
+X-Proofpoint-GUID: xQe8XJ6xrRmmOZeStl5d_tBviX9DRtlf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-27_19,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=714 phishscore=0 malwarescore=0 spamscore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311270143
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 phishscore=0
+ bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311270143
 
 
 
 On 11/23/23 21:02, Jarkko Sakkinen wrote:
-> The helper function has no call sites. Thus, remove it.
+> Open code the last remaining call site for tpm_send().
 > 
 > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+
 Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
 > ---
 > v1 [2023-11-21]: A new patch.
 > ---
->   include/linux/tpm.h | 7 -------
->   1 file changed, 7 deletions(-)
+>   drivers/char/tpm/tpm-interface.c          | 25 -----------------------
+>   include/linux/tpm.h                       |  5 -----
+>   security/keys/trusted-keys/trusted_tpm1.c | 14 +++++++++++--
+>   3 files changed, 12 insertions(+), 32 deletions(-)
 > 
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 66b16d26eecc..163ae247bff2 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -342,31 +342,6 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>   }
+>   EXPORT_SYMBOL_GPL(tpm_pcr_extend);
+>   
+> -/**
+> - * tpm_send - send a TPM command
+> - * @chip:	a &struct tpm_chip instance, %NULL for the default chip
+> - * @cmd:	a TPM command buffer
+> - * @buflen:	the length of the TPM command buffer
+> - *
+> - * Return: same as with tpm_transmit_cmd()
+> - */
+> -int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen)
+> -{
+> -	struct tpm_buf buf;
+> -	int rc;
+> -
+> -	chip = tpm_find_get_ops(chip);
+> -	if (!chip)
+> -		return -ENODEV;
+> -
+> -	buf.data = cmd;
+> -	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to a send a command");
+> -
+> -	tpm_put_ops(chip);
+> -	return rc;
+> -}
+> -EXPORT_SYMBOL_GPL(tpm_send);
+> -
+>   int tpm_auto_startup(struct tpm_chip *chip)
+>   {
+>   	int rc;
 > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 4ee9d13749ad..6588ca87cf93 100644
+> index 6588ca87cf93..d9d645e9c52c 100644
 > --- a/include/linux/tpm.h
 > +++ b/include/linux/tpm.h
-> @@ -358,13 +358,6 @@ static inline u32 tpm_buf_length(struct tpm_buf *buf)
->   	return be32_to_cpu(head->length);
+> @@ -422,7 +422,6 @@ extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+>   			struct tpm_digest *digest);
+>   extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>   			  struct tpm_digest *digests);
+> -extern int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen);
+>   extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+>   extern struct tpm_chip *tpm_default_chip(void);
+>   void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
+> @@ -443,10 +442,6 @@ static inline int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>   	return -ENODEV;
 >   }
 >   
-> -static inline u16 tpm_buf_tag(struct tpm_buf *buf)
+> -static inline int tpm_send(struct tpm_chip *chip, void *cmd, size_t buflen)
 > -{
-> -	struct tpm_header *head = (struct tpm_header *)buf->data;
-> -
-> -	return be16_to_cpu(head->tag);
+> -	return -ENODEV;
 > -}
-> -
->   static inline void tpm_buf_append(struct tpm_buf *buf,
->   				  const unsigned char *new_data,
->   				  unsigned int new_len)
+>   static inline int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max)
+>   {
+>   	return -ENODEV;
+> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+> index aa108bea6739..37bce84eef99 100644
+> --- a/security/keys/trusted-keys/trusted_tpm1.c
+> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> @@ -356,17 +356,27 @@ static int TSS_checkhmac2(unsigned char *buffer,
+>    */
+>   int trusted_tpm_send(unsigned char *cmd, size_t buflen)
+>   {
+> +	struct tpm_buf buf;
+>   	int rc;
+>   
+>   	if (!chip)
+>   		return -ENODEV;
+>   
+> +	rc = tpm_try_get_ops(chip);
+> +	if (rc)
+> +		return rc;
+> +
+> +	buf.flags = 0;
+> +	buf.data = cmd;
+>   	dump_tpm_buf(cmd);
+> -	rc = tpm_send(chip, cmd, buflen);
+> +	rc = tpm_transmit_cmd(chip, &buf, 4, "sending data");
+>   	dump_tpm_buf(cmd);
+> +
+>   	if (rc > 0)
+> -		/* Can't return positive return codes values to keyctl */
+> +		/* TPM error */
+>   		rc = -EPERM;
+> +
+> +	tpm_put_ops(chip);
+>   	return rc;
+>   }
+>   EXPORT_SYMBOL_GPL(trusted_tpm_send);
 
