@@ -1,70 +1,70 @@
-Return-Path: <linux-integrity+bounces-252-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-253-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58B6B7FAC45
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 22:08:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 820397FAC4F
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 22:10:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A0F21C20DB0
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 21:08:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2D7D1C20E64
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Nov 2023 21:10:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA4E3BB46;
-	Mon, 27 Nov 2023 21:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0839D3456F;
+	Mon, 27 Nov 2023 21:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cbR2bmBg"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Zk+EzHs9"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FDE191;
-	Mon, 27 Nov 2023 13:08:16 -0800 (PST)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARKAmpx001569;
-	Mon, 27 Nov 2023 21:08:12 GMT
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1651D6D;
+	Mon, 27 Nov 2023 13:10:17 -0800 (PST)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARKdWH8023197;
+	Mon, 27 Nov 2023 21:10:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=pp1;
- bh=4LopCIk+VbSRPrGHln6ohxeSl7MfENo2tZiIppXReWQ=;
- b=cbR2bmBgmZTnms5y3cdrfMs2wWuK2efgBrf3dZN/JSn08sEjrK9bzdoVmuQ1g6ksgkf6
- mxl/ifeSOPqfZe7LOO152c7A0wVHNiwKBG/YPZrozyxHwrTf9IAtCI0h2TvKnxoAcg0a
- i8zLvKMZ0DZGHEKIITmUHcPBXlr2UrvfGNDssx4FbSbYVlvz+8eq3lPPdYDt2nLv45wV
- OGLMmWmcZ8yZ9x6azZiC97YnjI7cRIWLsJdjM5Wpvs3ej37DYpnRaB5cUdWAnUwI/NAw
- QTWOnsUQNQzxNO98hetfK5b7tPqAd8HTjqwbgqseAuDt4qCVkc+G2t0tf43XQpR1g314 qw== 
+ bh=IH45mWrzzCdZ3sMW0VImP3i2zCTpmv82AlXf7OreOjw=;
+ b=Zk+EzHs981PmcaRjB9044iK66efvB/uxTmZ5Or3Xu5ALtPZsw2KiBOXT59p1GIfSfJMw
+ QMe59aK9GIiB3YvrvwCqedNdu3SbEsihMH8T4li7JKEsrXMU+g1Hjb2V5wOLLfs3HaDH
+ kT7MHF7gyZuZeOKK4wppU/xydfe6Cp79rZPokbcULgPGGF1JbZCBjOdsOMSVFl+jMi7J
+ x/NaegUuxBBBpV+6Tw++XN1Kg8k+d6L5nWqGNM8iXYIfpqb8mcVPfG/wxaqnGoM0Dvt4
+ wOr6pUYhL6LezRABiCX7A2ohIx14CGpOaF7yHhzWVvxAJyg5IJFzY0RC22Vsxixl2lAe TA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3un0mdkgm8-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3umytg5aam-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 21:08:11 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ARKBNTe004677;
-	Mon, 27 Nov 2023 21:08:11 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3un0mdkgke-1
+	Mon, 27 Nov 2023 21:10:13 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3ARKJTSO021559;
+	Mon, 27 Nov 2023 21:10:12 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3umytg5aa1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 21:08:11 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARJWQiN009176;
-	Mon, 27 Nov 2023 21:08:09 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukumybjd3-1
+	Mon, 27 Nov 2023 21:10:12 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARJOPX3001742;
+	Mon, 27 Nov 2023 21:10:11 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ukwy1jvfc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 21:08:09 +0000
+	Mon, 27 Nov 2023 21:10:11 +0000
 Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ARL89qI17892090
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ARLAAge29425922
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Nov 2023 21:08:09 GMT
+	Mon, 27 Nov 2023 21:10:11 GMT
 Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E7A1F5805D;
-	Mon, 27 Nov 2023 21:08:08 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id A34685805D;
+	Mon, 27 Nov 2023 21:10:10 +0000 (GMT)
 Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2413058052;
-	Mon, 27 Nov 2023 21:08:08 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id DD4F058056;
+	Mon, 27 Nov 2023 21:10:09 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
 	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 27 Nov 2023 21:08:08 +0000 (GMT)
-Message-ID: <a9d5b31d-2d89-4787-959e-2df2c059db9b@linux.ibm.com>
-Date: Mon, 27 Nov 2023 16:08:07 -0500
+	Mon, 27 Nov 2023 21:10:09 +0000 (GMT)
+Message-ID: <22032156-bd61-4c72-ad47-fe5932cd832a@linux.ibm.com>
+Date: Mon, 27 Nov 2023 16:10:09 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 6/8] tpm: TPM2B formatted buffers
+Subject: Re: [PATCH v6 7/8] tpm: Add tpm_buf_read_{u8,u16,u32}
 Content-Language: en-US
 To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -75,13 +75,13 @@ Cc: linux-kernel@vger.kernel.org,
         Mario Limonciello <mario.limonciello@amd.com>,
         Jerry Snitselaar <jsnitsel@redhat.com>
 References: <20231124020237.27116-1-jarkko@kernel.org>
- <20231124020237.27116-7-jarkko@kernel.org>
+ <20231124020237.27116-8-jarkko@kernel.org>
 From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20231124020237.27116-7-jarkko@kernel.org>
+In-Reply-To: <20231124020237.27116-8-jarkko@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xOHUTHP6x6ahT23qLkSvmsjkl4sx1t1n
-X-Proofpoint-GUID: XU5Okn9GBCsD6m9LPskvoqo-KqBsw7_M
+X-Proofpoint-GUID: 9weWJHXXl_oURyW7Z4KBN3jXqp0BTMT2
+X-Proofpoint-ORIG-GUID: zeHZ-mPguzqroTmFqZ81zvvIcc3zZJzQ
 Content-Transfer-Encoding: 7bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
@@ -93,113 +93,148 @@ MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-27_19,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- bulkscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311270147
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=670 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311270147
 
 
 
 On 11/23/23 21:02, Jarkko Sakkinen wrote:
-> Declare tpm_buf_init_sized() and tpm_buf_reset_sized() for creating TPM2B
-> formatted buffers. These buffers are also known as sized buffers in the
-> specifications and literature.
+> Declare reader functions for the instances of struct tpm_buf. If the read
+> goes out of boundary, TPM_BUF_BOUNDARY_ERROR is set, and subsequent read
+> will do nothing.
 > 
 > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-
 Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
 > ---
-> v2: [2021-11-21] Refine the API according to the comments for
->      https://lore.kernel.org/linux-integrity/20231024011531.442587-5-jarkko@kernel.org/
+> v5 [2023-11-24]: Fixed off-by-one error in the boundary check.
+> v4 [2023-11-21]: Address James Bottomley's feedback for v2 of this
+> patch, i.e. offset pointer was not correctly dereferenced.
+> v3 [2023-11-21]: Add possibility to check for boundary error to the
+> as response to the feedback from Mario Limenciello:
+> https://lore.kernel.org/linux-integrity/3f9086f6-935f-48a7-889b-c71398422fa1@amd.com/
 > ---
->   drivers/char/tpm/tpm-buf.c | 38 +++++++++++++++++++++++++++++++++++---
->   include/linux/tpm.h        |  4 ++++
->   2 files changed, 39 insertions(+), 3 deletions(-)
+>   drivers/char/tpm/tpm-buf.c | 79 +++++++++++++++++++++++++++++++++++++-
+>   include/linux/tpm.h        |  5 +++
+>   2 files changed, 83 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-> index 3f39893f3bb1..099b4a56c5d5 100644
+> index 099b4a56c5d5..32619e9ab4fa 100644
 > --- a/drivers/char/tpm/tpm-buf.c
 > +++ b/drivers/char/tpm/tpm-buf.c
-> @@ -47,6 +47,36 @@ void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
->   }
->   EXPORT_SYMBOL_GPL(tpm_buf_reset);
->   
-> +/**
-> + * tpm_buf_init_sized() - Allocate and initialize a sized (TPM2B) buffer
-> + * @buf:	A @tpm_buf
-> + *
-> + * Return: 0 or -ENOMEM
-> + */
-> +int tpm_buf_init_sized(struct tpm_buf *buf)
-> +{
-> +	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
-> +	if (!buf->data)
-> +		return -ENOMEM;
-> +
-> +	tpm_buf_reset_sized(buf);
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(tpm_buf_init_sized);
-> +
-> +/**
-> + * tpm_buf_reset_sized() - Initialize a sized buffer
-> + * @buf:	A &tpm_buf
-> + */
-> +void tpm_buf_reset_sized(struct tpm_buf *buf)
-> +{
-> +	buf->flags = TPM_BUF_TPM2B;
-> +	buf->length = 2;
-> +	buf->data[0] = 0;
-> +	buf->data[1] = 0;
-> +}
-> +EXPORT_SYMBOL_GPL(tpm_buf_reset_sized);
-> +
->   void tpm_buf_destroy(struct tpm_buf *buf)
->   {
->   	free_page((unsigned long)buf->data);
-> @@ -72,8 +102,6 @@ EXPORT_SYMBOL_GPL(tpm_buf_length);
->    */
->   void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
->   {
-> -	struct tpm_header *head = (struct tpm_header *)buf->data;
-> -
->   	/* Return silently if overflow has already happened. */
->   	if (buf->flags & TPM_BUF_OVERFLOW)
+> @@ -107,7 +107,7 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
 >   		return;
-> @@ -86,7 +114,11 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
 >   
->   	memcpy(&buf->data[buf->length], new_data, new_length);
->   	buf->length += new_length;
-> -	head->length = cpu_to_be32(buf->length);
-> +
-> +	if (buf->flags & TPM_BUF_TPM2B)
-> +		((__be16 *)buf->data)[0] = cpu_to_be16(buf->length - 2);
-> +	else
-> +		((struct tpm_header *)buf->data)->length = cpu_to_be32(buf->length);
+>   	if ((buf->length + new_length) > PAGE_SIZE) {
+> -		WARN(1, "tpm_buf: overflow\n");
+> +		WARN(1, "tpm_buf: write overflow\n");
+>   		buf->flags |= TPM_BUF_OVERFLOW;
+>   		return;
+>   	}
+> @@ -143,3 +143,80 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
+>   	tpm_buf_append(buf, (u8 *)&value2, 4);
 >   }
->   EXPORT_SYMBOL_GPL(tpm_buf_append);
->   
+>   EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
+> +
+> +/**
+> + * tpm_buf_read() - Read from a TPM buffer
+> + * @buf:	&tpm_buf instance
+> + * @offset:	offset within the buffer
+> + * @count:	the number of bytes to read
+> + * @output:	the output buffer
+> + */
+> +static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void *output)
+> +{
+> +	off_t next_offset;
+> +
+> +	/* Return silently if overflow has already happened. */
+> +	if (buf->flags & TPM_BUF_BOUNDARY_ERROR)
+> +		return;
+> +
+> +	next_offset = *offset + count;
+> +	if (next_offset > buf->length) {
+> +		WARN(1, "tpm_buf: read out of boundary\n");
+> +		buf->flags |= TPM_BUF_BOUNDARY_ERROR;
+> +		return;
+> +	}
+> +
+> +	memcpy(output, &buf->data[*offset], count);
+> +	*offset = next_offset;
+> +}
+> +
+> +/**
+> + * tpm_buf_read_u8() - Read 8-bit word from a TPM buffer
+> + * @buf:	&tpm_buf instance
+> + * @offset:	offset within the buffer
+> + *
+> + * Return: next 8-bit word
+> + */
+> +u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset)
+> +{
+> +	u8 value;
+> +
+> +	tpm_buf_read(buf, offset, sizeof(value), &value);
+> +
+> +	return value;
+> +}
+> +EXPORT_SYMBOL_GPL(tpm_buf_read_u8);
+> +
+> +/**
+> + * tpm_buf_read_u16() - Read 16-bit word from a TPM buffer
+> + * @buf:	&tpm_buf instance
+> + * @offset:	offset within the buffer
+> + *
+> + * Return: next 16-bit word
+> + */
+> +u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset)
+> +{
+> +	u16 value;
+> +
+> +	tpm_buf_read(buf, offset, sizeof(value), &value);
+> +
+> +	return be16_to_cpu(value);
+> +}
+> +EXPORT_SYMBOL_GPL(tpm_buf_read_u16);
+> +
+> +/**
+> + * tpm_buf_read_u32() - Read 32-bit word from a TPM buffer
+> + * @buf:	&tpm_buf instance
+> + * @offset:	offset within the buffer
+> + *
+> + * Return: next 32-bit word
+> + */
+> +u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
+> +{
+> +	u32 value;
+> +
+> +	tpm_buf_read(buf, offset, sizeof(value), &value);
+> +
+> +	return be32_to_cpu(value);
+> +}
+> +EXPORT_SYMBOL_GPL(tpm_buf_read_u32);
 > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 1d7b39b5c383..715db4a91c1f 100644
+> index 715db4a91c1f..e8172f81c562 100644
 > --- a/include/linux/tpm.h
 > +++ b/include/linux/tpm.h
-> @@ -300,6 +300,8 @@ struct tpm_header {
->   enum tpm_buf_flags {
->   	/* the capacity exceeded: */
+> @@ -302,6 +302,8 @@ enum tpm_buf_flags {
 >   	TPM_BUF_OVERFLOW	= BIT(0),
-> +	/* TPM2B format: */
-> +	TPM_BUF_TPM2B		= BIT(1),
+>   	/* TPM2B format: */
+>   	TPM_BUF_TPM2B		= BIT(1),
+> +	/* read out of boundary: */
+> +	TPM_BUF_BOUNDARY_ERROR	= BIT(2),
 >   };
 >   
 >   /*
-> @@ -328,6 +330,8 @@ struct tpm2_hash {
+> @@ -338,6 +340,9 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length);
+>   void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
+>   void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value);
+>   void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
+> +u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset);
+> +u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset);
+> +u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset);
 >   
->   int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
->   void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
-> +int tpm_buf_init_sized(struct tpm_buf *buf);
-> +void tpm_buf_reset_sized(struct tpm_buf *buf);
->   void tpm_buf_destroy(struct tpm_buf *buf);
->   u32 tpm_buf_length(struct tpm_buf *buf);
->   void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length);
+>   /*
+>    * Check if TPM device is in the firmware upgrade mode.
 
