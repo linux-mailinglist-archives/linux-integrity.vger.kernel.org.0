@@ -1,54 +1,55 @@
-Return-Path: <linux-integrity+bounces-273-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-267-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FF947FC237
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Nov 2023 19:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E4417FC228
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Nov 2023 19:16:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 464FDB20E9F
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Nov 2023 18:16:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A22B5B20F55
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Nov 2023 18:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845EC3D0B0;
-	Tue, 28 Nov 2023 18:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3FB21A1A;
+	Tue, 28 Nov 2023 18:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UbGk8sUT"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Vwd/rKS+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDDB30D6
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB2530D5
 	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 10:16:18 -0800 (PST)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASI25cl001457
-	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:18 GMT
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASIAdug000657
+	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=dhb1h0LV3k4YIQn6873JrEo8j+NulMDGdHLLz0RNvJI=;
- b=UbGk8sUTHvRagKuH4ydjOdCm8aNzge8UP/9Ro+D+Tzi5azPVk5emBDZtK4Ri/C7aLFzt
- +qYY09/exkBJm3rv27A2qPR99fsh1NZH7cTrL32faamdyMw5I7Y4pF3Jnhzb6re7usc9
- rEqAa8vh7EApieouswMCpz2CqlMhfpgC2hitvGd2qXazCZCeBfXffrEc05EOCe6kgDY8
- qWX86/U9eISU6oddN83AYWXeN27aywMxOxHCUkO4EUcX88zBIInychJ31INGY2Lhy4eR
- i0EkACt6NujRMvLFGqxEiqEZsoW2/m/fYXcbAMlLjhEpXXa/EtkAumeNEOKN6S5cJuNO xA== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3unn4erd97-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=8VsLwEGaRPa6VBr/WCKPdVu4DNL4dEdY8/54dPItS2A=;
+ b=Vwd/rKS+ohd9dG3034O+mhx4O35p/bvZ6J24tB0DF01sCEFPjoLfZoAb/DTqKWQlzGR5
+ paKUqKgSFNpBSMquwnWkz2Fbj5h2fdovB6dIB5gmJUlW8N4qZI6HSipdMZQroI9Rb+kh
+ D5q/uC16aybd2KSuBFE8RJ59OD2EjQfN80/DdTAVh6EGUyZSTyJewc12q/Kau2qop0Za
+ T9bMBoAnHLGjYSmAOBBnja4uEiB0dUCp0PJNkGsU3jDxNqNUBHuUM5zJdYx+w9GvlJ2z
+ 4WRFOFxFcAEtMW4fcfUg7uSvHXpszQ+E+wwe1ovKP0rDXrjpzOlSQBX2g+OTExj5Q6Ww 2A== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3unn8k888f-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
 	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:17 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASIFpAD028326
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASG2k3k018177
 	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:16 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukv8nhk11-1
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ukwy1s2qd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
 	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:16 +0000
 Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ASIGFb846268724
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ASIGG8b2884316
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Nov 2023 18:16:15 GMT
+	Tue, 28 Nov 2023 18:16:16 GMT
 Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C5FBB5805C;
-	Tue, 28 Nov 2023 18:16:15 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 2B91758051;
+	Tue, 28 Nov 2023 18:16:16 +0000 (GMT)
 Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 81C405805A;
+	by IMSVA (Postfix) with ESMTP id DD8145805A;
 	Tue, 28 Nov 2023 18:16:15 +0000 (GMT)
 Received: from sbct-2.pok.ibm.com?044watson.ibm.com (unknown [9.47.158.152])
 	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -56,479 +57,260 @@ Received: from sbct-2.pok.ibm.com?044watson.ibm.com (unknown [9.47.158.152])
 From: Stefan Berger <stefanb@linux.ibm.com>
 To: linux-integrity@vger.kernel.org
 Cc: zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [ima-evm-utils PATCH v2 01/14] tests: Address issues raised by shellcheck SC2086 & enable shellcheck
-Date: Tue, 28 Nov 2023 13:15:59 -0500
-Message-ID: <20231128181613.1159958-2-stefanb@linux.ibm.com>
+Subject: [ima-evm-utils PATCH v2 02/14] tests: Address issues raised by shellcheck SC2181
+Date: Tue, 28 Nov 2023 13:16:00 -0500
+Message-ID: <20231128181613.1159958-3-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231128181613.1159958-1-stefanb@linux.ibm.com>
 References: <20231128181613.1159958-1-stefanb@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hQiFrYBCLZx2Dr_1sUzclCycu3NfZSnf
-X-Proofpoint-GUID: hQiFrYBCLZx2Dr_1sUzclCycu3NfZSnf
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mgL-bHC6geVUDEWNqkDWTtiq0SbWlC__
+X-Proofpoint-GUID: mgL-bHC6geVUDEWNqkDWTtiq0SbWlC__
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-28_20,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 malwarescore=0 mlxscore=0
- impostorscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311280146
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0
+ suspectscore=0 priorityscore=1501 clxscore=1015 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
+ definitions=main-2311280146
 
-Address issues raised by shellcheck SC2086:
-  "Double quote to prevent globbing and word splitting."
+Address issues raised by shellcheck SC2181:
+  "Check exit code directly with e.g. if mycmd;, not indirectly with $?."
 
-Add support for the make target 'shellcheck' on scripts in the
-test directory.
+The general replacement patterns to fix this issue are:
+
+Old:
+   <cmd>
+   if [ $? -eq 0 ]; then ...
+
+New:
+   if <cmd>; then ...
+
+Old:
+   <cmd>
+   if [ $? -ne 0 ]; then ...
+
+New:
+   if ! <cmd>; then ...
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- Makefile.am               |  5 ++++-
- tests/Makefile.am         | 11 ++++++++++-
- tests/boot_aggregate.test |  4 ++--
- tests/fsverity.test       | 18 +++++++++---------
- tests/functions.sh        | 30 +++++++++++++++---------------
- tests/gen-keys.sh         |  4 ++--
- tests/install-openssl3.sh | 12 ++++++------
- tests/sign_verify.test    | 12 ++++++------
- tests/softhsm_setup       | 28 ++++++++++++++--------------
- 9 files changed, 68 insertions(+), 56 deletions(-)
+ tests/Makefile.am         |  2 +-
+ tests/boot_aggregate.test | 22 ++++++++--------------
+ tests/functions.sh        |  3 +--
+ tests/ima_hash.test       |  4 ++--
+ tests/sign_verify.test    |  3 +--
+ tests/softhsm_setup       | 32 ++++++++++++--------------------
+ 6 files changed, 25 insertions(+), 41 deletions(-)
 
-diff --git a/Makefile.am b/Makefile.am
-index 9ec5681..949c353 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -50,4 +50,7 @@ rmman:
- doc: evmctl.1.html rmman evmctl.1
- endif
- 
--.PHONY: $(tarname)
-+shellcheck:
-+	make -C tests shellcheck
-+
-+.PHONY: $(tarname) shellcheck
 diff --git a/tests/Makefile.am b/tests/Makefile.am
-index a28f671..6bf7eef 100644
+index 6bf7eef..86796c3 100644
 --- a/tests/Makefile.am
 +++ b/tests/Makefile.am
-@@ -24,6 +24,15 @@ clean-local:
- 	-rm -f *.txt *.out *.sig *.sig2
- 
+@@ -26,7 +26,7 @@ clean-local:
  distclean: distclean-keys
--.PHONY: distclean-keys
-+
-+shellcheck:
-+	shellcheck -i SC2086 \
-+		functions.sh gen-keys.sh install-fsverity.sh \
-+		install-mount-idmapped.sh install-openssl3.sh \
-+		install-swtpm.sh install-tss.sh softhsm_setup \
-+		$(check_SCRIPTS)
-+
-+.PHONY: distclean-keys shellcheck
- distclean-keys:
- 	./gen-keys.sh clean
-+
+ 
+ shellcheck:
+-	shellcheck -i SC2086 \
++	shellcheck -i SC2086,SC2181 \
+ 		functions.sh gen-keys.sh install-fsverity.sh \
+ 		install-mount-idmapped.sh install-openssl3.sh \
+ 		install-swtpm.sh install-tss.sh softhsm_setup \
 diff --git a/tests/boot_aggregate.test b/tests/boot_aggregate.test
-index b0b2db4..ccc45f9 100755
+index ccc45f9..04aef9b 100755
 --- a/tests/boot_aggregate.test
 +++ b/tests/boot_aggregate.test
-@@ -129,7 +129,7 @@ check() {
+@@ -47,8 +47,7 @@ swtpm_start() {
+ 	fi
+ 
+ 	if [ -n "${swtpm}" ]; then
+-		pgrep swtpm
+-		if [ $? -eq 0 ]; then
++		if pgrep swtpm; then
+ 			echo "INFO: Software TPM (swtpm) already running"
+ 			return 114
+ 		else
+@@ -60,8 +59,7 @@ swtpm_start() {
+ 	elif [ -n "${tpm_server}" ]; then
+ 		# tpm_server uses the Microsoft simulator encapsulated packet format
+ 		export TPM_SERVER_TYPE="mssim"
+-		pgrep tpm_server
+-		if [ $? -eq 0 ]; then
++		if pgrep tpm_server; then
+ 			echo "INFO: Software TPM (tpm_server) already running"
+ 			return 114
+ 		else
+@@ -81,16 +79,13 @@ swtpm_init() {
+ 	fi
+ 
+ 	echo "INFO: Sending software TPM startup"
+-	"${TSSDIR}/tssstartup"
+-	if [ $? -ne 0 ]; then
++	if ! "${TSSDIR}/tssstartup"; then
+ 		echo "INFO: Retry sending software TPM startup"
+ 		sleep 1
+-		"${TSSDIR}/tssstartup"
+-	fi
+-
+-	if [ $? -ne 0 ]; then
+-		echo "INFO: Software TPM startup failed"
+-		return "$SKIP"
++		if ! "${TSSDIR}/tssstartup"; then
++			echo "INFO: Software TPM startup failed"
++			return "$SKIP"
++		fi
+ 	fi
+ 
+ 	echo "INFO: Walking ${BINARY_BIOS_MEASUREMENTS} initializing the software TPM"
+@@ -129,8 +124,7 @@ check() {
  	local options=$1
  
  	echo "INFO: Calculating the boot_aggregate (PCRs 0 - 9) for multiple banks"
--	bootaggr=$(evmctl ima_boot_aggregate ${options})
-+	bootaggr=$(evmctl ima_boot_aggregate "${options}")
- 	if [ $? -ne 0 ]; then
+-	bootaggr=$(evmctl ima_boot_aggregate "${options}")
+-	if [ $? -ne 0 ]; then
++	if ! bootaggr=$(evmctl ima_boot_aggregate "${options}"); then
  		echo "${CYAN}SKIP: evmctl ima_boot_aggregate: $bootaggr${NORM}"
  		exit "$SKIP"
-@@ -197,4 +197,4 @@ if [ "$(id -u)" != 0 ] || [ ! -c "/dev/tpm0" ]; then
  	fi
- fi
- 
--expect_pass check $BOOTAGGR_OPTIONS
-+expect_pass check "$BOOTAGGR_OPTIONS"
-diff --git a/tests/fsverity.test b/tests/fsverity.test
-index e1e0c8d..2b338ca 100755
---- a/tests/fsverity.test
-+++ b/tests/fsverity.test
-@@ -50,9 +50,9 @@ _require dd mkfs blkid e2fsck tune2fs evmctl setfattr
- trap '_report_exit_and_cleanup _cleanup_env cleanup' SIGINT SIGTERM EXIT
- 
- cleanup() {
--        if [ -e $TST_MNT ]; then
--		if [ $LOOPBACK_MOUNTED -eq 1 ]; then
--			umount $TST_MNT
-+        if [ -e "$TST_MNT" ]; then
-+		if [ "$LOOPBACK_MOUNTED" -eq 1 ]; then
-+			umount "$TST_MNT"
- 		fi
- 		if [ -f "$TST_IMG" ]; then
- 			rm "$TST_IMG"
-@@ -139,7 +139,7 @@ create_loopback_file() {
- 	fi
- 
- 	echo "INFO: Building an $fs_type filesystem"
--	if ! mkfs -t "$fs_type" -q "${TST_IMG}" $options; then
-+	if ! mkfs -t "$fs_type" -q "${TST_IMG}" ${options:+${options}}; then
- 		echo "${RED}FAILURE: Creating $fs_type filesystem${NORM}"
- 		exit "$FAIL"
- 	fi
-@@ -202,7 +202,7 @@ create_file() {
- 	local test=$1
- 	local type=$2
- 
--	TST_FILE=$(mktemp -p $TST_MNT -t "${type}".XXXXXX)
-+	TST_FILE=$(mktemp -p "$TST_MNT" -t "${type}".XXXXXX)
- 	[ "$VERBOSE" -ge 1 ] && echo "INFO: creating $TST_FILE"
- 
- 	# heredoc to create a script
-@@ -251,13 +251,13 @@ measure-verity() {
- 	digest_filename=$("$FSVERITY" digest "$TST_FILE")
- 	[ "$VERBOSE" -ge 2 ] && echo "INFO: verity:$digest_filename"
- 
--	grep "verity:$digest_filename" $IMA_MEASUREMENT_LIST &> /dev/null
-+	grep "verity:$digest_filename" "$IMA_MEASUREMENT_LIST" &> /dev/null
- 	ret=$?
- 
- 	# Not finding the "fsverity digest" result in the IMA measurement
- 	# list is expected for non fs-verity enabled files.  The measurement
- 	# list will contain zeros for the file hash.
--	if [ $ret -eq 1 ]; then
-+	if [ "$ret" -eq 1 ]; then
- 		error="$FAIL"
- 		if [ "$verity" = "enabled" ]; then
- 			echo "${RED}FAILURE: ${msg} ${NORM}"
-@@ -285,7 +285,7 @@ measure-ima() {
- 	create_file "$test" ima-hash
- 	"$TST_FILE"
- 
--	hashalg=$(grep "${TST_FILE}" $IMA_MEASUREMENT_LIST | cut -d':' -f2)
-+	hashalg=$(grep "${TST_FILE}" "$IMA_MEASUREMENT_LIST" | cut -d':' -f2)
- 	if [ -z "${hashalg}" ]; then
- 		echo "${CYAN}SKIP: Measurement record with algorithm not found${NORM}"
- 		return "$SKIP"
-@@ -301,7 +301,7 @@ measure-ima() {
- 	# Remove the extra space before the filename
- 	digest_filename=$(${digestsum} "$TST_FILE" | sed "s/\ \ /\ /")
- 	[ "$VERBOSE" -ge 2 ] && echo "$test: $digest_filename"
--	if grep "$digest_filename" $IMA_MEASUREMENT_LIST &> /dev/null; then
-+	if grep "$digest_filename" "$IMA_MEASUREMENT_LIST" &> /dev/null; then
- 		echo "${GREEN}SUCCESS: Measuring $TST_FILE ${NORM}"
- 	else
- 		error="$FAIL"
 diff --git a/tests/functions.sh b/tests/functions.sh
-index 35e925c..2105f21 100755
+index 2105f21..9670b3a 100755
 --- a/tests/functions.sh
 +++ b/tests/functions.sh
-@@ -42,7 +42,7 @@ exit_early() {
- _require() {
-   ret=
-   for i; do
--    if ! type $i; then
-+    if ! type "$i"; then
-       echo "$i is required for test"
-       ret=1
-     fi
-@@ -79,7 +79,7 @@ expect_pass() {
-   fi
+@@ -368,8 +368,7 @@ _softhsm_setup() {
  
-   if [ $TNESTED -gt 0 ]; then
--    echo $RED"expect_pass should not be run nested"$NORM
-+    echo "${RED}expect_pass should not be run nested${NORM}"
-     testsfail+=1
-     exit "$HARDFAIL"
-   fi
-@@ -110,9 +110,9 @@ expect_pass_if() {
-   ret=$?
+   mkdir -p "${SOFTHSM_SETUP_CONFIGDIR}"
  
-   if [ $ret -ne 0 ] && [ $ret -ne 77 ] && [ -n "$PATCHES" ]; then
--    echo $YELLOW"Possibly missing patches:"$NORM
-+    echo "${YELLOW}Possibly missing patches:${NORM}"
-     for idx in $indexes; do
--      echo $YELLOW" - ${PATCHES[$((idx))]}"$NORM
-+      echo "${YELLOW} - ${PATCHES[$((idx))]}${NORM}"
-     done
-   fi
- 
-@@ -130,7 +130,7 @@ expect_fail() {
-   fi
- 
-   if [ $TNESTED -gt 0 ]; then
--    echo $RED"expect_fail should not be run nested"$NORM
-+    echo "${RED}expect_fail should not be run nested${NORM}"
-     testsfail+=1
-     exit "$HARDFAIL"
-   fi
-@@ -166,9 +166,9 @@ expect_fail_if() {
-   ret=$?
- 
-   if { [ $ret -eq 0 ] || [ $ret -eq 99 ]; } && [ -n "$PATCHES" ]; then
--    echo $YELLOW"Possibly missing patches:"$NORM
-+    echo "${YELLOW}Possibly missing patches:${NORM}"
-     for idx in $indexes; do
--      echo $YELLOW" - ${PATCHES[$((idx))]}"$NORM
-+      echo "${YELLOW} - ${PATCHES[$((idx))]}${NORM}"
-     done
-   fi
- 
-@@ -177,12 +177,12 @@ expect_fail_if() {
- 
- # return true if current test is positive
- _test_expected_to_pass() {
--  [ ! $TFAIL ]
-+  [ ! "$TFAIL" ]
- }
- 
- # return true if current test is negative
- _test_expected_to_fail() {
--  [ $TFAIL ]
-+  [ "$TFAIL" ]
- }
- 
- # Show blank line and color following text to red
-@@ -201,7 +201,7 @@ color_red() {
- }
- 
- color_restore() {
--  [ $COLOR_RESTORE ] && echo "$NORM"
-+  [ "$COLOR_RESTORE" ] && echo "$NORM"
-   COLOR_RESTORE=
- }
- 
-@@ -216,7 +216,7 @@ _evmctl_run() {
-   # ADD_TEXT_FOR: append to text as 'for $ADD_TEXT_FOR'
- 
-   cmd="evmctl $V $EVMCTL_ENGINE $*"
--  echo $YELLOW$TMODE "$cmd"$NORM
-+  echo "${YELLOW}$TMODE $cmd${NORM}"
-   $cmd >"$out" 2>&1
-   ret=$?
- 
-@@ -226,7 +226,7 @@ _evmctl_run() {
-     echo "evmctl $op failed hard with ($ret) $text_for"
-     sed 's/^/  /' "$out"
-     color_restore
--    rm "$out" $ADD_DEL
-+    rm "$out" "$ADD_DEL"
-     ADD_DEL=
-     ADD_TEXT_FOR=
-     return "$HARDFAIL"
-@@ -238,7 +238,7 @@ _evmctl_run() {
-       sed 's/^/  /' "$out"
-     fi
-     color_restore
--    rm "$out" $ADD_DEL
-+    rm "$out" "$ADD_DEL"
-     ADD_DEL=
-     ADD_TEXT_FOR=
-     return "$FAIL"
-@@ -371,7 +371,7 @@ _softhsm_setup() {
-   msg=$(./softhsm_setup setup 2>&1)
-   if [ $? -eq 0 ]; then
+-  msg=$(./softhsm_setup setup 2>&1)
+-  if [ $? -eq 0 ]; then
++  if msg=$(./softhsm_setup setup 2>&1); then
      echo "softhsm_setup setup succeeded: $msg"
--    PKCS11_KEYURI=$(echo $msg | sed -n 's|^keyuri: \(.*\)|\1|p')
-+    PKCS11_KEYURI=$(echo "$msg" | sed -n 's|^keyuri: \(.*\)|\1|p')
+     PKCS11_KEYURI=$(echo "$msg" | sed -n 's|^keyuri: \(.*\)|\1|p')
  
-     export EVMCTL_ENGINE="--engine pkcs11"
-     export OPENSSL_ENGINE="-engine pkcs11"
-@@ -402,7 +402,7 @@ _run_env() {
-   if [ "$TST_ENV" = "um" ]; then
-     expect_pass "$1" rootfstype=hostfs rw init="$2" quiet mem=2048M "$3"
-   else
--    echo $RED"Testing environment $TST_ENV not supported"$NORM
-+    echo "${RED}Testing environment $TST_ENV not supported${NORM}"
-     exit "$FAIL"
-   fi
- }
-diff --git a/tests/gen-keys.sh b/tests/gen-keys.sh
-index 8905cdf..0b03ba4 100755
---- a/tests/gen-keys.sh
-+++ b/tests/gen-keys.sh
-@@ -71,9 +71,9 @@ for m in 1024 1024_skid 2048; do
-     ext=
-   fi
-   if [ ! -e test-rsa$m.key ]; then
--    log openssl req -verbose -new -nodes -utf8 -sha256 -days 10000 -batch -x509 $ext \
-+    log openssl req -verbose -new -nodes -utf8 -sha256 -days 10000 -batch -x509 "$ext" \
-       -config test-ca.conf \
--      -newkey rsa:$bits \
-+      -newkey "rsa:$bits" \
-       -out test-rsa$m.cer -outform DER \
-       -keyout test-rsa$m.key
-     # for v1 signatures
-diff --git a/tests/install-openssl3.sh b/tests/install-openssl3.sh
-index 911c32b..6658c23 100755
---- a/tests/install-openssl3.sh
-+++ b/tests/install-openssl3.sh
-@@ -9,16 +9,16 @@ fi
- 
- version=${COMPILE_SSL}
- 
--wget --no-check-certificate https://github.com/openssl/openssl/archive/refs/tags/${version}.tar.gz
--tar --no-same-owner -xzf ${version}.tar.gz
--cd openssl-${version}
-+wget --no-check-certificate "https://github.com/openssl/openssl/archive/refs/tags/${version}.tar.gz"
-+tar --no-same-owner -xzf "${version}.tar.gz"
-+cd "openssl-${version}"
- 
- if [ "$VARIANT" = "i386" ]; then
- 	echo "32-bit compilation"
- 	FLAGS="-m32 linux-generic32"
- fi
- 
--./Configure $FLAGS no-engine no-dynamic-engine --prefix=/opt/openssl3 --openssldir=/opt/openssl3
-+./Configure ${FLAGS:+${FLAGS}} no-engine no-dynamic-engine --prefix=/opt/openssl3 --openssldir=/opt/openssl3
- # Uncomment for debugging
- # perl configdata.pm --dump | grep engine
- make -j$(nproc)
-@@ -26,5 +26,5 @@ make -j$(nproc)
- sudo make install_sw
- 
- cd ..
--rm -rf ${version}.tar.gz
--rm -rf openssl-${version}
-+rm -rf "${version}.tar.gz"
-+rm -rf "openssl-${version}"
+diff --git a/tests/ima_hash.test b/tests/ima_hash.test
+index e88fd59..9a8d7b6 100755
+--- a/tests/ima_hash.test
++++ b/tests/ima_hash.test
+@@ -33,8 +33,8 @@ check() {
+   # unless it's negative test, then pass to evmctl
+   cmd="openssl dgst $OPENSSL_ENGINE -$alg $file"
+   echo - "$cmd"
+-  hash=$(set -o pipefail; $cmd 2>/dev/null | cut -d' ' -f2)
+-  if [ $? -ne 0 ] && _test_expected_to_pass; then
++  if ! hash=$(set -o pipefail; $cmd 2>/dev/null | cut -d' ' -f2) \
++    && _test_expected_to_pass; then
+     echo "${CYAN}$alg test is skipped$NORM"
+     rm "$file"
+     return "$SKIP"
 diff --git a/tests/sign_verify.test b/tests/sign_verify.test
-index 2bc365a..5cc0393 100755
+index 5cc0393..1b6cf2a 100755
 --- a/tests/sign_verify.test
 +++ b/tests/sign_verify.test
-@@ -141,7 +141,7 @@ check_sign() {
-   local FILE=${FILE:-$ALG.txt}
+@@ -185,8 +185,7 @@ check_sign() {
  
-   # Normalize key filename if it's not a pkcs11 URI
--  if [ ${KEY:0:7} != pkcs11: ]; then
-+  if [ "${KEY:0:7}" != pkcs11: ]; then
-     key=${KEY%.*}.key
-     key=test-${key#test-}
-   else
-@@ -152,8 +152,8 @@ check_sign() {
-   # leave only good files for verify tests.
-   _test_expected_to_fail && FILE+='~'
- 
--  rm -f $FILE
--  if ! touch $FILE; then
-+  rm -f "$FILE"
-+  if ! touch "$FILE"; then
-     color_red
-     echo "Can't create test file: $FILE"
-     color_restore
-@@ -372,7 +372,7 @@ try_different_sigs() {
- 
- ## Test v1 signatures
- # Signature v1 only supports sha1 and sha256 so any other should fail
--if [ $SIGV1 -eq 0 ]; then
-+if [ "$SIGV1" -eq 0 ]; then
-   __skip() { echo "IMA signature v1 tests are skipped: not supported"; return $SKIP; }
-   expect_pass __skip
- else
-@@ -440,8 +440,8 @@ expect_fail \
- # Test signing with key described by pkcs11 URI
- _softhsm_setup "${WORKDIR}"
- if [ -n "${PKCS11_KEYURI}" ]; then
--  expect_pass check_sign FILE=pkcs11test TYPE=ima KEY=${PKCS11_KEYURI} ALG=sha256 PREFIX=0x030204aabbccdd0100 OPTS=--keyid=aabbccdd
--  expect_pass check_sign FILE=pkcs11test TYPE=ima KEY=${PKCS11_KEYURI} ALG=sha1   PREFIX=0x030202aabbccdd0100 OPTS=--keyid=aabbccdd
-+  expect_pass check_sign FILE=pkcs11test TYPE=ima KEY="${PKCS11_KEYURI}" ALG=sha256 PREFIX=0x030204aabbccdd0100 OPTS=--keyid=aabbccdd
-+  expect_pass check_sign FILE=pkcs11test TYPE=ima KEY="${PKCS11_KEYURI}" ALG=sha1   PREFIX=0x030202aabbccdd0100 OPTS=--keyid=aabbccdd
- else
-   # to have a constant number of tests, skip these two tests
-   __skip() { echo "pkcs11 test is skipped: could not setup softhsm"; return $SKIP; }
+   # Insert keyid from cert into PREFIX in-place of marker `:K:'
+   if [[ $PREFIX =~ :K: ]]; then
+-    keyid=$(_keyid_from_cert "$key")
+-    if [ $? -ne 0 ]; then
++    if ! keyid=$(_keyid_from_cert "$key"); then
+       color_red
+       echo "Unable to determine keyid for $key"
+       color_restore
 diff --git a/tests/softhsm_setup b/tests/softhsm_setup
-index 35b1754..10e4013 100755
+index 10e4013..95bf0b1 100755
 --- a/tests/softhsm_setup
 +++ b/tests/softhsm_setup
-@@ -15,7 +15,7 @@ fi
+@@ -30,8 +30,7 @@ UNAME_S="$(uname -s)"
  
- MAJOR=$(softhsm2-util -v | cut -d '.' -f1)
- MINOR=$(softhsm2-util -v | cut -d '.' -f2)
--if [ ${MAJOR} -lt 2 ] || [ ${MAJOR} -eq 2 -a ${MINOR} -lt 2 ]; then
-+if [ "${MAJOR}" -lt 2 ] || [ "${MAJOR}" -eq 2 -a "${MINOR}" -lt 2 ]; then
- 	echo "Need softhsm v2.2.0 or later"
- 	exit 77
- fi
-@@ -91,21 +91,21 @@ setup_softhsm() {
- 				  grep -E "\.so$")"
- 		fi
- 		sudo mkdir -p /etc/gnutls &>/dev/null
--		sudo bash -c "echo "load=${SONAME}" > /etc/gnutls/pkcs11.conf"
-+		sudo bash -c "echo 'load=${SONAME}' > /etc/gnutls/pkcs11.conf"
- 		;;
- 	esac
- 
--	if ! [ -d $configdir ]; then
--		mkdir -p $configdir
-+	if ! [ -d "$configdir" ]; then
-+		mkdir -p "$configdir"
+ case "${UNAME_S}" in
+ Darwin)
+-	msg=$(sudo -v -n)
+-	if [ $? -ne 0 ]; then
++	if ! msg=$(sudo -v -n); then
+ 		echo "Need password-less sudo rights on OS X to change /etc/gnutls/pkcs11.conf"
+ 		exit 1
  	fi
--	mkdir -p ${tokendir}
-+	mkdir -p "${tokendir}"
- 
--	if [ -f $configfile ]; then
-+	if [ -f "$configfile" ]; then
- 		mv "$configfile" "$bakconfigfile"
+@@ -113,18 +112,16 @@ slots.removable = false
+ _EOF_
  	fi
  
--	if ! [ -f $configfile ]; then
--		cat <<_EOF_ > $configfile
-+	if ! [ -f "$configfile" ]; then
-+		cat <<_EOF_ > "$configfile"
- directories.tokendir = ${tokendir}
- objectstore.backend = file
- log.level = DEBUG
-@@ -122,8 +122,8 @@ _EOF_
+-	msg=$(p11tool --list-tokens 2>&1 | grep "token=${NAME}" | tail -n1)
+-	if [ $? -ne 0 ]; then
++	if ! msg=$(p11tool --list-tokens 2>&1 | grep "token=${NAME}" | tail -n1); then
+ 		echo "Could not list existing tokens"
+ 		echo "$msg"
+ 	fi
+ 	tokenuri=$(echo "$msg" | sed -n 's/.*URL: \([[:print:]*]\)/\1/p')
  
  	if [ -z "$tokenuri" ]; then
- 		msg=$(softhsm2-util \
--			--init-token --pin ${PIN} --so-pin ${SO_PIN} \
--			--free --label ${NAME} 2>&1)
-+			--init-token --pin "${PIN}" --so-pin "${SO_PIN}" \
-+			--free --label "${NAME}" 2>&1)
- 		if [ $? -ne 0 ]; then
+-		msg=$(softhsm2-util \
++		if ! msg=$(softhsm2-util \
+ 			--init-token --pin "${PIN}" --so-pin "${SO_PIN}" \
+-			--free --label "${NAME}" 2>&1)
+-		if [ $? -ne 0 ]; then
++			--free --label "${NAME}" 2>&1); then
  			echo "Could not initialize token"
  			echo "$msg"
-@@ -172,7 +172,7 @@ _EOF_
+ 			return 2
+@@ -143,9 +140,8 @@ _EOF_
+ 			fi
  		fi
- 	fi
  
--	getkeyuri_softhsm $slot
-+	getkeyuri_softhsm "$slot"
- 	rc=$?
- 	if [ $rc -ne 0 ]; then
- 		teardown_softhsm
-@@ -196,7 +196,7 @@ _getkeyuri_softhsm() {
+-		msg=$(p11tool --list-tokens 2>&1 | \
+-			grep "token=${NAME}" | tail -n1)
+-		if [ $? -ne 0 ]; then
++		if ! msg=$(p11tool --list-tokens 2>&1 | \
++			grep "token=${NAME}" | tail -n1); then
+ 			echo "Could not list existing tokens"
+ 			echo "$msg"
+ 		fi
+@@ -156,15 +152,13 @@ _EOF_
+ 		fi
+ 
+ 		# more recent versions of p11tool have --generate-privkey ...
+-		msg=$(GNUTLS_PIN=$PIN p11tool \
++		if ! msg=$(GNUTLS_PIN=$PIN p11tool \
+ 			--generate-privkey=rsa --bits 2048 --label mykey --login \
+-			"${tokenuri}" 2>&1)
+-		if [ $? -ne 0 ]; then
++			"${tokenuri}" 2>&1); then
+ 			# ... older versions have --generate-rsa
+-			msg=$(GNUTLS_PIN=$PIN p11tool \
++			if ! msg=$(GNUTLS_PIN=$PIN p11tool \
+ 				--generate-rsa --bits 2048 --label mykey --login \
+-				"${tokenuri}" 2>&1)
+-			if [ $? -ne 0 ]; then
++				"${tokenuri}" 2>&1); then
+ 				echo "Could not create RSA key!"
+ 				echo "$msg"
+ 				return 5
+@@ -184,8 +178,7 @@ _EOF_
+ _getkeyuri_softhsm() {
+ 	local msg tokenuri keyuri
+ 
+-	msg=$(p11tool --list-tokens 2>&1 | grep "token=${NAME}")
+-	if [ $? -ne 0 ]; then
++	if ! msg=$(p11tool --list-tokens 2>&1 | grep "token=${NAME}"); then
+ 		echo "Could not list existing tokens"
+ 		echo "$msg"
+ 		return 5
+@@ -196,8 +189,7 @@ _getkeyuri_softhsm() {
  		echo "$msg"
  		return 6
  	fi
--	msg=$(p11tool --list-all ${tokenuri} 2>&1)
-+	msg=$(p11tool --list-all "${tokenuri}" 2>&1)
- 	if [ $? -ne 0 ]; then
+-	msg=$(p11tool --list-all "${tokenuri}" 2>&1)
+-	if [ $? -ne 0 ]; then
++	if ! msg=$(p11tool --list-all "${tokenuri}" 2>&1); then
  		echo "Could not list object under token $tokenuri"
  		echo "$msg"
-@@ -260,7 +260,7 @@ main() {
- 	local ret
- 
- 	if [ $# -lt 1 ]; then
--		usage $0
-+		usage "$0"
- 		echo -e "Missing command.\n\n"
- 		return 1
- 	fi
-@@ -283,7 +283,7 @@ main() {
- 		;;
- 	*)
- 		echo -e "Unsupported command: $1\n\n"
--		usage $0
-+		usage "$0"
- 		ret=1
- 	esac
- 	return $ret
+ 		softhsm2-util --show-slots
 -- 
 2.43.0
 
