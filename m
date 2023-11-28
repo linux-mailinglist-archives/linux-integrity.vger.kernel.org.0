@@ -1,54 +1,55 @@
-Return-Path: <linux-integrity+bounces-265-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-266-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B63537FC217
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Nov 2023 19:16:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D50477FC224
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Nov 2023 19:16:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B9C3282AD7
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Nov 2023 18:16:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 345EFB20EBE
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Nov 2023 18:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55BF039AD9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B170239AEC;
 	Tue, 28 Nov 2023 18:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fX6ob5gT"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rmH+Cphz"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87CF30D8
-	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 10:16:18 -0800 (PST)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASHXniT011874
-	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:18 GMT
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054F030DF
+	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 10:16:20 -0800 (PST)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASI2fEB024466
+	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=cAL4DHFP7UoXYvElFpKrVWL6OfvJaJg0nyWk6phGV2E=;
- b=fX6ob5gTQngm9XrSh5v4ylYjYzuQU7LPgda8OBsQnWivQDUoxDlgFZimOP4rckQWXDxy
- u4BuFb8eK1y47RCE2zEPlPBo4+D5Nbx7oQsCGR8Fxfz1qCRZBFKycx7OrYQK4TC4Z15Q
- CAaKA2aK3YfAEaWkwGPLsZsUv4d0z4JoyNVKiZ/8FHaXkDQAHwc+OzVg1sRov9GOthON
- MZ3YJcPNa7EbS15ho8vgW88yHh69MJLqoGUUFpGzrUDJepyN5Y26Xyy2YE/gu/8r55Hm
- iUXKhvw1cMwukYyorFls+9CkxJekMFdy+IbUF9cu0SQ7lZf0i8vWv2xWb+j5nhbJdZss Mw== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3unmq9h7ve-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=jkZXqzpbssUnC0OA2mkXDPMADTo5mcz1OocVz0zMBhE=;
+ b=rmH+CphzPBpsb0XU5UYlnU0ghCMUmthA54SWQKqGdSEIJ92hb4vRuVhPCubS/HCS1ozZ
+ O9FmOC9e4KOPLZBjG+sWlVBJIcqLrbU9APXb4TVhX1trd05+JeXzbmodgkTs8ecI3YZG
+ PMdB0cfPXvLTAX1ikCBZEL6My2BtwZHTGCzcx5GthcaL7asxuZJQ+nqcN3X1Cb6liXAH
+ jBAky6YUMzM1sKnv8KK+M/RqNIeqcNAEj1CC/Z3kNIdev1u2ubOU23rkL5DCQ4Mfbth0
+ JaQoqxIUiEo0w6S3bQ0OnYwLlTzbj8vQ9+573D2DJzXAIZcGwjB9oQQggjJQdPN8QXTD 4g== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3unn4p8f18-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:17 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASG26wT031065
+	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:19 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASFshtg012193
 	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:17 GMT
 Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uku8t1uhq-1
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ukvrkhf2t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
 	for <linux-integrity@vger.kernel.org>; Tue, 28 Nov 2023 18:16:17 +0000
 Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ASIGGq621824120
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3ASIGGFn2884326
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Nov 2023 18:16:16 GMT
+	Tue, 28 Nov 2023 18:16:17 GMT
 Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8458E58051;
+	by IMSVA (Postfix) with ESMTP id DDFFA5805C;
 	Tue, 28 Nov 2023 18:16:16 +0000 (GMT)
 Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 425FE5805A;
+	by IMSVA (Postfix) with ESMTP id 9B90B5805A;
 	Tue, 28 Nov 2023 18:16:16 +0000 (GMT)
 Received: from sbct-2.pok.ibm.com?044watson.ibm.com (unknown [9.47.158.152])
 	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -56,129 +57,107 @@ Received: from sbct-2.pok.ibm.com?044watson.ibm.com (unknown [9.47.158.152])
 From: Stefan Berger <stefanb@linux.ibm.com>
 To: linux-integrity@vger.kernel.org
 Cc: zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [ima-evm-utils PATCH v2 03/14] tests: Address issues raised by shellcheck SC2046
-Date: Tue, 28 Nov 2023 13:16:01 -0500
-Message-ID: <20231128181613.1159958-4-stefanb@linux.ibm.com>
+Subject: [ima-evm-utils PATCH v2 04/14] tests: Address issues raised by shellcheck SC2320
+Date: Tue, 28 Nov 2023 13:16:02 -0500
+Message-ID: <20231128181613.1159958-5-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231128181613.1159958-1-stefanb@linux.ibm.com>
 References: <20231128181613.1159958-1-stefanb@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _1R2sdjY3nQA1kODfOuy6OOoPgNnn-Bp
-X-Proofpoint-GUID: _1R2sdjY3nQA1kODfOuy6OOoPgNnn-Bp
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JJR_Pn1MOSOmlv1hExDqXqH9hSUCt6Yq
+X-Proofpoint-ORIG-GUID: JJR_Pn1MOSOmlv1hExDqXqH9hSUCt6Yq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-28_20,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- malwarescore=0 impostorscore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 clxscore=1015
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=998
+ priorityscore=1501 spamscore=0 malwarescore=0 impostorscore=0
+ clxscore=1015 suspectscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311060000 definitions=main-2311280146
 
-Address issues raised by shellcheck SC2046:
-  "Quote this to prevent word splitting."
+Address issues raised by shellcheck SC2320:
+  "This $? refers to echo/printf, not a previous command.
+   Assign to variable to avoid it being overwritten."
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- tests/Makefile.am         | 2 +-
- tests/install-fsverity.sh | 2 +-
- tests/install-openssl3.sh | 2 +-
- tests/install-swtpm.sh    | 9 +++++----
- tests/install-tss.sh      | 2 +-
- tests/softhsm_setup       | 2 +-
- 6 files changed, 10 insertions(+), 9 deletions(-)
+ tests/Makefile.am              | 2 +-
+ tests/mmap_check.test          | 8 +++-----
+ tests/portable_signatures.test | 9 +++------
+ 3 files changed, 7 insertions(+), 12 deletions(-)
 
 diff --git a/tests/Makefile.am b/tests/Makefile.am
-index 86796c3..6fe18e4 100644
+index 6fe18e4..3713771 100644
 --- a/tests/Makefile.am
 +++ b/tests/Makefile.am
 @@ -26,7 +26,7 @@ clean-local:
  distclean: distclean-keys
  
  shellcheck:
--	shellcheck -i SC2086,SC2181 \
-+	shellcheck -i SC2086,SC2181,SC2046 \
+-	shellcheck -i SC2086,SC2181,SC2046 \
++	shellcheck -i SC2086,SC2181,SC2046,SC2320 \
  		functions.sh gen-keys.sh install-fsverity.sh \
  		install-mount-idmapped.sh install-openssl3.sh \
  		install-swtpm.sh install-tss.sh softhsm_setup \
-diff --git a/tests/install-fsverity.sh b/tests/install-fsverity.sh
-index c760485..fa31b2b 100755
---- a/tests/install-fsverity.sh
-+++ b/tests/install-fsverity.sh
-@@ -2,5 +2,5 @@
+diff --git a/tests/mmap_check.test b/tests/mmap_check.test
+index 2dd3433..e3e5c71 100755
+--- a/tests/mmap_check.test
++++ b/tests/mmap_check.test
+@@ -97,14 +97,12 @@ check_load_ima_rule() {
  
- git clone https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git
- cd fsverity-utils
--CC=gcc make -j$(nproc)
-+CC=gcc make -j"$(nproc)"
- cd ..
-diff --git a/tests/install-openssl3.sh b/tests/install-openssl3.sh
-index 6658c23..edd99de 100755
---- a/tests/install-openssl3.sh
-+++ b/tests/install-openssl3.sh
-@@ -21,7 +21,7 @@ fi
- ./Configure ${FLAGS:+${FLAGS}} no-engine no-dynamic-engine --prefix=/opt/openssl3 --openssldir=/opt/openssl3
- # Uncomment for debugging
- # perl configdata.pm --dump | grep engine
--make -j$(nproc)
-+make -j"$(nproc)"
- # only install apps and library
- sudo make install_sw
+ 	new_policy=$(mktemp -p "$g_mountpoint")
+ 	echo "$1" > "$new_policy"
+-	echo "$new_policy" > /sys/kernel/security/ima/policy
+-	result=$?
+-	rm -f "$new_policy"
+-
+-	if [ "$result" -ne 0 ]; then
++	if ! echo "$new_policy" > /sys/kernel/security/ima/policy; then
++		rm -f "$new_policy"
+ 		echo "${RED}Failed to set IMA policy${NORM}"
+ 		return "$HARDFAIL"
+ 	fi
++	rm -f "$new_policy"
  
-diff --git a/tests/install-swtpm.sh b/tests/install-swtpm.sh
-index ff44b52..a0e60ee 100755
---- a/tests/install-swtpm.sh
-+++ b/tests/install-swtpm.sh
-@@ -1,4 +1,4 @@
--#!/bin/sh -ex
-+#!/bin/bash -ex
+ 	return "$OK"
+ }
+diff --git a/tests/portable_signatures.test b/tests/portable_signatures.test
+index 9f3339b..7ddd149 100755
+--- a/tests/portable_signatures.test
++++ b/tests/portable_signatures.test
+@@ -80,7 +80,6 @@ METADATA_CHANGE_FOWNER_2=3002
  
- # No need to run via sudo if we already have permissions.
- # Also, some distros do not have sudo configured for root:
-@@ -10,7 +10,8 @@ else
- fi
+ check_load_ima_rule() {
+ 	local rule_loaded
+-	local result
+ 	local new_policy
  
- git clone https://git.code.sf.net/p/ibmswtpm2/tpm2
--cd tpm2/src
--make -j$(nproc)
-+pushd tpm2/src 1>/dev/null || exit 1
-+make -j"$(nproc)"
- $SUDO cp tpm_server /usr/local/bin/
--cd ../..
-+popd 1>/dev/null
-+
-diff --git a/tests/install-tss.sh b/tests/install-tss.sh
-index c9c179e..31ea690 100755
---- a/tests/install-tss.sh
-+++ b/tests/install-tss.sh
-@@ -3,6 +3,6 @@
- set -ex
- git clone https://git.code.sf.net/p/ibmtpm20tss/tss
- cd tss
--autoreconf -i && ./configure --disable-tpm-1.2 --disable-hwtpm && make -j$(nproc) && sudo make install
-+autoreconf -i && ./configure --disable-tpm-1.2 --disable-hwtpm && make -j"$(nproc)" && sudo make install
- cd ..
- rm -rf tss
-diff --git a/tests/softhsm_setup b/tests/softhsm_setup
-index 95bf0b1..6f8a74e 100755
---- a/tests/softhsm_setup
-+++ b/tests/softhsm_setup
-@@ -82,7 +82,7 @@ setup_softhsm() {
+ 	rule_loaded=$(grep "$1" /sys/kernel/security/ima/policy)
+@@ -88,14 +87,12 @@ check_load_ima_rule() {
+ 		new_policy=$(mktemp -p "$g_mountpoint")
+ 		echo "$1" > "$new_policy"
+ 		evmctl sign -o -a sha256 --imasig --key "$key_path" "$new_policy" &> /dev/null
+-		echo "$new_policy" > /sys/kernel/security/ima/policy
+-		result=$?
+-		rm -f "$new_policy"
+-
+-		if [ "$result" -ne 0 ]; then
++		if ! echo "$new_policy" > /sys/kernel/security/ima/policy; then
++			rm -f "$new_policy"
+ 			echo "${RED}Failed to set IMA policy${NORM}"
+ 			return "$FAIL"
  		fi
- 		sudo mv /etc/gnutls/pkcs11.conf \
- 			/etc/gnutls/pkcs11.conf.bak &>/dev/null
--		if [ $(id -u) -eq 0 ]; then
-+		if [ "$(id -u)" -eq 0 ]; then
- 			SONAME="$(sudo -u nobody brew ls --verbose softhsm | \
- 				  grep -E "\.so$")"
- 		else
++		rm -f "${new_policy}"
+ 	fi
+ 
+ 	return "$OK"
 -- 
 2.43.0
 
