@@ -1,217 +1,218 @@
-Return-Path: <linux-integrity+bounces-280-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-281-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0001D7FCC8A
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Nov 2023 03:07:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 102AE7FD6C1
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Nov 2023 13:28:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D79328315D
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Nov 2023 02:07:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41DB91C2118C
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Nov 2023 12:28:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C9EC1FB3;
-	Wed, 29 Nov 2023 02:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ddCZ72ER"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451331DDCD;
+	Wed, 29 Nov 2023 12:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F08A10EB;
-	Tue, 28 Nov 2023 18:07:36 -0800 (PST)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT1oZug013562;
-	Wed, 29 Nov 2023 02:07:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=q69/ySyS1Q13h0fb7iRkfeR2Gyxb8mm8SutU+U1NBCo=;
- b=ddCZ72ERO9u5xLUNZ0KgUPvbDS1AItd6s9DmTU0oNUx7yV4s7xh61XT5GLT1xAo7r/7h
- tZedPmFWZZ6ksx3UtGvMfDrNxbMtQmA7Ca/vn2cIBRPsZJCM+D/p1e12FxkH539meNgA
- +tzWNPpqNLz6NviQb2vMZ8QQQwH4MOfWadhiDzNSLFzUzRrUFdBLBBceD2vqNIRmfbS1
- 6ygELXxh97z2qtL0cUczYkgEe9obT5FJndukAf3slKr6QUSiGJnb3tu1N99cx4IIsWcf
- 8g+K29rjjtvEBjCCVC9RUzO593lxWPcoqszilfq7XCyjNFiPc8qegcZ8XNPkXsjeiOc2 xQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3unts31v2x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 Nov 2023 02:07:09 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3AT1pSVM015527;
-	Wed, 29 Nov 2023 02:07:08 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3unts31v2c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 Nov 2023 02:07:08 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT2590B004934;
-	Wed, 29 Nov 2023 02:07:07 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ukwfk3yhe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 Nov 2023 02:07:07 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3AT276NL25363010
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 29 Nov 2023 02:07:06 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B262258045;
-	Wed, 29 Nov 2023 02:07:06 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0636B58050;
-	Wed, 29 Nov 2023 02:07:05 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.89.136])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 29 Nov 2023 02:07:04 +0000 (GMT)
-Message-ID: <d9975a7949ca49f404adc981e942f42b6f19d022.camel@linux.ibm.com>
-Subject: Re: [RFC V2] IMA Log Snapshotting Design Proposal
-From: Mimi Zohar <zohar@linux.ibm.com>
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6B31707;
+	Wed, 29 Nov 2023 04:28:19 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4SgJCq3X9czB01N3;
+	Wed, 29 Nov 2023 20:14:31 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 6AE2C1400CA;
+	Wed, 29 Nov 2023 20:28:15 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwAXBXVKLmdlCSKXAQ--.11947S2;
+	Wed, 29 Nov 2023 13:28:14 +0100 (CET)
+Message-ID: <b6c51351be3913be197492469a13980ab379e412.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 23/23] integrity: Switch from rbtree to LSM-managed
+ blob for integrity_iint_cache
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: Paul Moore <paul@paul-moore.com>
-Cc: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        Jarkko Sakkinen
- <jarkko@kernel.org>, jgg@ziepe.ca,
-        Ken Goldman <kgold@linux.ibm.com>, bhe@redhat.com, vgoyal@redhat.com,
-        Dave Young <dyoung@redhat.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        jmorris@namei.org, serge@hallyn.com,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-security-module@vger.kernel.org,
-        Tyler Hicks
- <tyhicks@linux.microsoft.com>,
-        Lakshmi Ramasubramanian
- <nramas@linux.microsoft.com>,
-        Sush Shringarputale
- <sushring@linux.microsoft.com>
-Date: Tue, 28 Nov 2023 21:07:04 -0500
-In-Reply-To: <CAHC9VhRNLzbW++rW3Hep+3yyJZRRvZ4h7LuKcSbRRn-wqh-PAQ@mail.gmail.com>
-References: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
-	 <8bff2bf1a4629aacec7b6311d77f233cb75b2f8a.camel@linux.ibm.com>
-	 <CAHC9VhRm9Tzz3C-VTdXS4s1_-kPQQ6RXMt8JGCS4jorJ0VURyQ@mail.gmail.com>
-	 <CAHC9VhSJ7MKNM7nMXR3xE-cNMrYB4AT+B76wzF1cKy2JM9tBrA@mail.gmail.com>
-	 <1b6853e8354af7033e6d87e77cfb175526753c38.camel@linux.ibm.com>
-	 <CAHC9VhSnDQ-d9dh_icqNyhpT+cTGQOqGh8+cbN3QzF_qPehvaA@mail.gmail.com>
-	 <28c4136d0fe360a7fcf6a6547120dc244be0edc3.camel@linux.ibm.com>
-	 <CAHC9VhTykrsXTuWfRe3rzg2SMbzynvgwXmxVpN5T0cfY7YrkwA@mail.gmail.com>
-	 <d5e2358a0a7aaf4455b1f479483b312e98aa07d5.camel@linux.ibm.com>
-	 <CAHC9VhRNLzbW++rW3Hep+3yyJZRRvZ4h7LuKcSbRRn-wqh-PAQ@mail.gmail.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
+ jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
+ tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+ dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org, 
+ stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ casey@schaufler-ca.com,  mic@digikod.net, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-nfs@vger.kernel.org,
+ linux-security-module@vger.kernel.org,  linux-integrity@vger.kernel.org,
+ keyrings@vger.kernel.org,  selinux@vger.kernel.org, Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Wed, 29 Nov 2023 13:27:51 +0100
+In-Reply-To: <CAHC9VhTTKac1o=RnQadu2xqdeKH8C_F+Wh4sY=HkGbCArwc8JQ@mail.gmail.com>
+References: <20231107134012.682009-24-roberto.sassu@huaweicloud.com>
+	 <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
+	 <2084adba3c27a606cbc5ed7b3214f61427a829dd.camel@huaweicloud.com>
+	 <CAHC9VhTTKac1o=RnQadu2xqdeKH8C_F+Wh4sY=HkGbCArwc8JQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Oy_5AgL3qk6lrf4NBu9pEZ_-IEp22cBj
-X-Proofpoint-ORIG-GUID: Y_lDUo6oEI5OG36TRnxNJxEgCg-F7XtD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-28_27,2023-11-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=986
- lowpriorityscore=0 suspectscore=0 phishscore=0 adultscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311290014
+MIME-Version: 1.0
+X-CM-TRANSID:LxC2BwAXBXVKLmdlCSKXAQ--.11947S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKryfJr4xZFy7JF1rCr17ZFb_yoW7Aw4rpF
+	W3KayxGw1kAry29rn2vF45urWfKrW8WFyUWrn8Cr1kAas0vr10qr4UCryUuFyUGrWDJw1j
+	qF1a9ry7u3Wqy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj5cNmwAFsg
 
-On Tue, 2023-11-28 at 20:06 -0500, Paul Moore wrote:
-> On Tue, Nov 28, 2023 at 7:09 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > On Mon, 2023-11-27 at 17:16 -0500, Paul Moore wrote:
-> > > On Mon, Nov 27, 2023 at 12:08 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > > On Wed, 2023-11-22 at 09:22 -0500, Paul Moore wrote:
-> 
-> ...
-> 
-> > > If we are going to have a record count, I imagine it would also be
-> > > helpful to maintain a securityfs file with the total size (in bytes)
-> > > of the in-memory measurement log.  In fact, I suspect this will
-> > > probably be more useful for those who wish to manage the size of the
-> > > measurement log.
-> >
-> > A running number of bytes needed for carrying the measurement list
-> > across kexec already exists.  This value would be affected when the
-> > measurement list is trimmed.
-> 
-> There we go, it should be trivial to export that information via securityfs.
-> 
-> > > > Defining other IMA securityfs files like
-> > > > how many times the measurement list has been trimmed might be
-> > > > beneficial as well.
-> > >
-> > > I have no objection to that.  Would a total record count, i.e. a value
-> > > that doesn't reset on a snapshot event, be more useful here?
-> >
-> > <securityfs>/ima/runtime_measurements_count already exports the total
-> > number of measurement records.
-> 
-> I guess the question is would you want 'runtime_measurements_count' to
-> reflect the current/trimmed log size or would you want it to reflect
-> hthe measurements since the initial cold boot?  Presumably we would
-> want to add another securityfs file to handle the case not covered by
-> 'runtime_measurements_count'.
+On Mon, 2023-11-20 at 16:06 -0500, Paul Moore wrote:
+> On Mon, Nov 20, 2023 at 3:16=E2=80=AFAM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Fri, 2023-11-17 at 15:57 -0500, Paul Moore wrote:
+> > > On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+> > > >=20
+> > > > Before the security field of kernel objects could be shared among L=
+SMs with
+> > > > the LSM stacking feature, IMA and EVM had to rely on an alternative=
+ storage
+> > > > of inode metadata. The association between inode metadata and inode=
+ is
+> > > > maintained through an rbtree.
+> > > >=20
+> > > > Because of this alternative storage mechanism, there was no need to=
+ use
+> > > > disjoint inode metadata, so IMA and EVM today still share them.
+> > > >=20
+> > > > With the reservation mechanism offered by the LSM infrastructure, t=
+he
+> > > > rbtree is no longer necessary, as each LSM could reserve a space in=
+ the
+> > > > security blob for each inode. However, since IMA and EVM share the
+> > > > inode metadata, they cannot directly reserve the space for them.
+> > > >=20
+> > > > Instead, request from the 'integrity' LSM a space in the security b=
+lob for
+> > > > the pointer of inode metadata (integrity_iint_cache structure). The=
+ other
+> > > > reason for keeping the 'integrity' LSM is to preserve the original =
+ordering
+> > > > of IMA and EVM functions as when they were hardcoded.
+> > > >=20
+> > > > Prefer reserving space for a pointer to allocating the integrity_ii=
+nt_cache
+> > > > structure directly, as IMA would require it only for a subset of in=
+odes.
+> > > > Always allocating it would cause a waste of memory.
+> > > >=20
+> > > > Introduce two primitives for getting and setting the pointer of
+> > > > integrity_iint_cache in the security blob, respectively
+> > > > integrity_inode_get_iint() and integrity_inode_set_iint(). This wou=
+ld make
+> > > > the code more understandable, as they directly replace rbtree opera=
+tions.
+> > > >=20
+> > > > Locking is not needed, as access to inode metadata is not shared, i=
+t is per
+> > > > inode.
+> > > >=20
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > ---
+> > > >  security/integrity/iint.c      | 71 +++++-------------------------=
+----
+> > > >  security/integrity/integrity.h | 20 +++++++++-
+> > > >  2 files changed, 29 insertions(+), 62 deletions(-)
+> > > >=20
+> > > > diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+> > > > index 882fde2a2607..a5edd3c70784 100644
+> > > > --- a/security/integrity/iint.c
+> > > > +++ b/security/integrity/iint.c
+> > > > @@ -231,6 +175,10 @@ static int __init integrity_lsm_init(void)
+> > > >     return 0;
+> > > >  }
+> > > >=20
+> > > > +struct lsm_blob_sizes integrity_blob_sizes __ro_after_init =3D {
+> > > > +   .lbs_inode =3D sizeof(struct integrity_iint_cache *),
+> > > > +};
+> > >=20
+> > > I'll admit that I'm likely missing an important detail, but is there
+> > > a reason why you couldn't stash the integrity_iint_cache struct
+> > > directly in the inode's security blob instead of the pointer?  For
+> > > example:
+> > >=20
+> > >   struct lsm_blob_sizes ... =3D {
+> > >     .lbs_inode =3D sizeof(struct integrity_iint_cache),
+> > >   };
+> > >=20
+> > >   struct integrity_iint_cache *integrity_inode_get(inode)
+> > >   {
+> > >     if (unlikely(!inode->isecurity))
+> > >       return NULL;
+> > >     return inode->i_security + integrity_blob_sizes.lbs_inode;
+> > >   }
+> >=20
+> > It would increase memory occupation. Sometimes the IMA policy
+> > encompasses a small subset of the inodes. Allocating the full
+> > integrity_iint_cache would be a waste of memory, I guess?
+>=20
+> Perhaps, but if it allows us to remove another layer of dynamic memory
+> I would argue that it may be worth the cost.  It's also worth
+> considering the size of integrity_iint_cache, while it isn't small, it
+> isn't exactly huge either.
+>=20
+> > On the other hand... (did not think fully about that) if we embed the
+> > full structure in the security blob, we already have a mutex available
+> > to use, and we don't need to take the inode lock (?).
+>=20
+> That would be excellent, getting rid of a layer of locking would be signi=
+ficant.
+>=20
+> > I'm fully convinced that we can improve the implementation
+> > significantly. I just was really hoping to go step by step and not
+> > accumulating improvements as dependency for moving IMA and EVM to the
+> > LSM infrastructure.
+>=20
+> I understand, and I agree that an iterative approach is a good idea, I
+> just want to make sure we keep things tidy from a user perspective,
+> i.e. not exposing the "integrity" LSM when it isn't required.
 
-Right.  <securityfs>/ima/runtime_measurements_count is defined as the
-total number of measurements since boot.  When the measurement list is
-carried across kexec, it is the number of measurements since cold boot.
+Ok, I went back to it again.
 
-A new securityfs file should be defined for the current number of in
-kernel memory records.  Unless the measurement list has been trimmed,
-this should be the same as the runtime_measurements_count.
+I think trying to separate integrity metadata is premature now, too
+many things at the same time.
 
-> 
-> > > > Before defining a new critical-data record, we need to decide whether
-> > > > it is really necessary or if it is redundant.  If we define a new
-> > > > "critical-data" record, can it be defined such that it doesn't require
-> > > > pausing extending the measurement list?  For example, a new simple
-> > > > visual critical-data record could contain the number of records (e.g.
-> > > > <securityfs>/ima/runtime_measurements_count) up to that point.
-> > >
-> > > What if the snapshot_aggregate was a hash of the measurement log
-> > > starting with either the boot_aggregate or the latest
-> > > snapshot_aggregate and ending on the record before the new
-> > > snapshot_aggregate?  The performance impact at snapshot time should be
-> > > minimal as the hash can be incrementally updated as new records are
-> > > added to the measurement list.  While the hash wouldn't capture the
-> > > TPM state, it would allow some crude verification when reassembling
-> > > the log.  If one could bear the cost of a TPM signing operation, the
-> > > log digest could be signed by the TPM.
-> >
-> > Other critical data is calculated, before calling
-> > ima_measure_critical_data(), which adds the record to the measurement
-> > list and extends the TPM PCR.
-> >
-> > Signing the hash shouldn't be an issue if it behaves like other
-> > critical data.
-> >
-> > In addition to the hash, consider including other information in the
-> > new critical data record (e.g. total number of measurement records, the
-> > number of measurements included in the hash, the number of times the
-> > measurement list was trimmed, etc).
-> 
-> It would be nice if you could provide an explicit list of what you
-> would want hashed into a snapshot_aggregate record; the above is
-> close, but it is still a little hand-wavy.  I'm just trying to reduce
-> the back-n-forth :)
+I started to think, does EVM really need integrity metadata or it can
+work without?
 
-What is being defined here is the first IMA critical-data record, which
-really requires some thought.  For ease of review, this new critical-
-data record should be a separate patch set from trimming the
-measurement list.
+The fact is that CONFIG_IMA=3Dn and CONFIG_EVM=3Dy is allowed, so we have
+the same problem now. What if we make IMA the one that manages
+integrity metadata, so that we can remove the 'integrity' LSM?
 
-As I'm sure you're aware, SElinux defines two critical-data records.  
-From security/selinux/ima.c:
+So, no embedding the full structure in the security blob now, move
+integrity_inode_free() and integrity_kernel_module_request() to IMA,
+call integrity_iintcache_init() from IMA.
 
-        ima_measure_critical_data("selinux", "selinux-state",
-                                  state_str, strlen(state_str), false,
-                                  NULL, 0);
+EVM verification of new files would fail without IMA, but it would be
+the same now.
 
-        ima_measure_critical_data("selinux", "selinux-policy-hash",
-                                  policy, policy_len, true,
-                                  NULL, 0);
+Also, evm_verifyxattr() would only work with IMA, as it assumes that
+the latter creates integrity metadata and passes them as argument.
 
--- 
-thanks,
+Regarding the LSM order, I would take Casey's suggestion of introducing
+LSM_ORDER_REALLY_LAST, for EVM.
 
-Mimi
+Thanks
+
+Roberto
 
 
