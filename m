@@ -1,241 +1,161 @@
-Return-Path: <linux-integrity+bounces-286-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-287-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92E0D7FDFA4
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Nov 2023 19:47:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 131A57FE1E8
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Nov 2023 22:27:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CEB61F20CD6
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Nov 2023 18:47:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B30BD282AF0
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Nov 2023 21:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A011540BEC;
-	Wed, 29 Nov 2023 18:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6666D2B9B3;
+	Wed, 29 Nov 2023 21:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=namei.org header.i=@namei.org header.b="esqokkU6"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915F1133;
-	Wed, 29 Nov 2023 10:47:02 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SgSY930FCz9yfLW;
-	Thu, 30 Nov 2023 02:30:05 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 7DA2614089D;
-	Thu, 30 Nov 2023 02:46:59 +0800 (CST)
-Received: from [10.81.218.12] (unknown [10.81.218.12])
-	by APP2 (Coremail) with SMTP id GxC2BwCHN2EUh2dlazOXAQ--.6321S2;
-	Wed, 29 Nov 2023 19:46:58 +0100 (CET)
-Message-ID: <90eb8e9d-c63e-42d6-b951-f856f31590db@huaweicloud.com>
-Date: Wed, 29 Nov 2023 19:46:43 +0100
+X-Greylist: delayed 470 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Nov 2023 13:27:23 PST
+Received: from mail.namei.org (namei.org [65.99.196.166])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0357FD7D;
+	Wed, 29 Nov 2023 13:27:22 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.namei.org (Postfix) with ESMTPS id AD5651E9;
+	Wed, 29 Nov 2023 21:19:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.namei.org AD5651E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=namei.org; s=2;
+	t=1701292771; bh=a4+Bn7RqABOY0GmF4sZWzB4XQIxtLMsIpqqVdVd/R/g=;
+	h=Date:From:To:cc:Subject:From;
+	b=esqokkU6m4nf9dlOK918bRvVgtUX1grKBeAa/6AFK1BFKHD7FLB9T9rZnn2FQju4M
+	 FQMGgT6R/+KJxex7roE249lEkPpcB7d7oKrbBWUBxuegkHAwBnS5v3JvCOMceY8GGB
+	 OUsmld/soqMTAIKUeFJ3nijvJUEmUYv4888HBa2I=
+Date: Wed, 29 Nov 2023 13:19:31 -0800 (PST)
+From: James Morris <jmorris@namei.org>
+To: linux-security-module@vger.kernel.org
+cc: Linux Security Summit Program Committee <lss-pc@lists.linuxfoundation.org>, 
+    lwn@lwn.net, linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
+    kernel-hardening@lists.openwall.com, linux-integrity@vger.kernel.org, 
+    Audit-ML <linux-audit@redhat.com>
+Subject: [ANNOUNCE] CFP: Linux Security Summit North America 2024
+Message-ID: <826fd432-1acf-16be-e7a9-d692aeed23f0@namei.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Subject: Re: [PATCH v5 23/23] integrity: Switch from rbtree to LSM-managed
- blob for integrity_iint_cache
-To: Paul Moore <paul@paul-moore.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com,
- jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com,
- tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
- dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
- stephen.smalley.work@gmail.com, eparis@parisplace.org,
- casey@schaufler-ca.com, mic@digikod.net, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
- keyrings@vger.kernel.org, selinux@vger.kernel.org,
- Roberto Sassu <roberto.sassu@huawei.com>
-References: <20231107134012.682009-24-roberto.sassu@huaweicloud.com>
- <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
- <2084adba3c27a606cbc5ed7b3214f61427a829dd.camel@huaweicloud.com>
- <CAHC9VhTTKac1o=RnQadu2xqdeKH8C_F+Wh4sY=HkGbCArwc8JQ@mail.gmail.com>
- <b6c51351be3913be197492469a13980ab379e412.camel@huaweicloud.com>
- <CAHC9VhSAryQSeFy0ZMexOiwBG-YdVGRzvh58=heH916DftcmWA@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAHC9VhSAryQSeFy0ZMexOiwBG-YdVGRzvh58=heH916DftcmWA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwCHN2EUh2dlazOXAQ--.6321S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar18WFWruryUtFWUJFy5Jwb_yoW3Jw4kpF
-	W7Kay7Kr1kAry29rn2vF45uFWfKrW8WFyUXrn8Gr18Zas09r10qr4UCrWUuFyUGrZ5Kw1j
-	qr1Y9ry7Z3WDZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-	AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrLvKUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj5MTuwAAsc
+Content-Type: text/plain; charset=US-ASCII
 
-On 11/29/2023 6:22 PM, Paul Moore wrote:
-> On Wed, Nov 29, 2023 at 7:28 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
->>
->> On Mon, 2023-11-20 at 16:06 -0500, Paul Moore wrote:
->>> On Mon, Nov 20, 2023 at 3:16 AM Roberto Sassu
->>> <roberto.sassu@huaweicloud.com> wrote:
->>>> On Fri, 2023-11-17 at 15:57 -0500, Paul Moore wrote:
->>>>> On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
->>>>>>
->>>>>> Before the security field of kernel objects could be shared among LSMs with
->>>>>> the LSM stacking feature, IMA and EVM had to rely on an alternative storage
->>>>>> of inode metadata. The association between inode metadata and inode is
->>>>>> maintained through an rbtree.
->>>>>>
->>>>>> Because of this alternative storage mechanism, there was no need to use
->>>>>> disjoint inode metadata, so IMA and EVM today still share them.
->>>>>>
->>>>>> With the reservation mechanism offered by the LSM infrastructure, the
->>>>>> rbtree is no longer necessary, as each LSM could reserve a space in the
->>>>>> security blob for each inode. However, since IMA and EVM share the
->>>>>> inode metadata, they cannot directly reserve the space for them.
->>>>>>
->>>>>> Instead, request from the 'integrity' LSM a space in the security blob for
->>>>>> the pointer of inode metadata (integrity_iint_cache structure). The other
->>>>>> reason for keeping the 'integrity' LSM is to preserve the original ordering
->>>>>> of IMA and EVM functions as when they were hardcoded.
->>>>>>
->>>>>> Prefer reserving space for a pointer to allocating the integrity_iint_cache
->>>>>> structure directly, as IMA would require it only for a subset of inodes.
->>>>>> Always allocating it would cause a waste of memory.
->>>>>>
->>>>>> Introduce two primitives for getting and setting the pointer of
->>>>>> integrity_iint_cache in the security blob, respectively
->>>>>> integrity_inode_get_iint() and integrity_inode_set_iint(). This would make
->>>>>> the code more understandable, as they directly replace rbtree operations.
->>>>>>
->>>>>> Locking is not needed, as access to inode metadata is not shared, it is per
->>>>>> inode.
->>>>>>
->>>>>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->>>>>> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
->>>>>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->>>>>> ---
->>>>>>   security/integrity/iint.c      | 71 +++++-----------------------------
->>>>>>   security/integrity/integrity.h | 20 +++++++++-
->>>>>>   2 files changed, 29 insertions(+), 62 deletions(-)
->>>>>>
->>>>>> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
->>>>>> index 882fde2a2607..a5edd3c70784 100644
->>>>>> --- a/security/integrity/iint.c
->>>>>> +++ b/security/integrity/iint.c
->>>>>> @@ -231,6 +175,10 @@ static int __init integrity_lsm_init(void)
->>>>>>      return 0;
->>>>>>   }
->>>>>>
->>>>>> +struct lsm_blob_sizes integrity_blob_sizes __ro_after_init = {
->>>>>> +   .lbs_inode = sizeof(struct integrity_iint_cache *),
->>>>>> +};
->>>>>
->>>>> I'll admit that I'm likely missing an important detail, but is there
->>>>> a reason why you couldn't stash the integrity_iint_cache struct
->>>>> directly in the inode's security blob instead of the pointer?  For
->>>>> example:
->>>>>
->>>>>    struct lsm_blob_sizes ... = {
->>>>>      .lbs_inode = sizeof(struct integrity_iint_cache),
->>>>>    };
->>>>>
->>>>>    struct integrity_iint_cache *integrity_inode_get(inode)
->>>>>    {
->>>>>      if (unlikely(!inode->isecurity))
->>>>>        return NULL;
->>>>>      return inode->i_security + integrity_blob_sizes.lbs_inode;
->>>>>    }
->>>>
->>>> It would increase memory occupation. Sometimes the IMA policy
->>>> encompasses a small subset of the inodes. Allocating the full
->>>> integrity_iint_cache would be a waste of memory, I guess?
->>>
->>> Perhaps, but if it allows us to remove another layer of dynamic memory
->>> I would argue that it may be worth the cost.  It's also worth
->>> considering the size of integrity_iint_cache, while it isn't small, it
->>> isn't exactly huge either.
->>>
->>>> On the other hand... (did not think fully about that) if we embed the
->>>> full structure in the security blob, we already have a mutex available
->>>> to use, and we don't need to take the inode lock (?).
->>>
->>> That would be excellent, getting rid of a layer of locking would be significant.
->>>
->>>> I'm fully convinced that we can improve the implementation
->>>> significantly. I just was really hoping to go step by step and not
->>>> accumulating improvements as dependency for moving IMA and EVM to the
->>>> LSM infrastructure.
->>>
->>> I understand, and I agree that an iterative approach is a good idea, I
->>> just want to make sure we keep things tidy from a user perspective,
->>> i.e. not exposing the "integrity" LSM when it isn't required.
->>
->> Ok, I went back to it again.
->>
->> I think trying to separate integrity metadata is premature now, too
->> many things at the same time.
-> 
-> I'm not bothered by the size of the patchset, it is more important
-> that we do The Right Thing.  I would like to hear in more detail why
-> you don't think this will work, I'm not interested in hearing about
-> difficult it may be, I'm interested in hearing about what challenges
-> we need to solve to do this properly.
 
-The right thing in my opinion is to achieve the goal with the minimal 
-set of changes, in the most intuitive way.
+==============================================================================
+                   ANNOUNCEMENT AND CALL FOR PARTICIPATION
 
-Until now, there was no solution that could achieve the primary goal of 
-this patch set (moving IMA and EVM to the LSM infrastructure) and, at 
-the same time, achieve the additional goal you set of removing the 
-'integrity' LSM.
+                   LINUX SECURITY SUMMIT NORTH AMERICA 2024
+                             
+                                 April 18-19
+                              Seattle, WA, USA
+==============================================================================
 
-If you see the diff, the changes compared to v5 that was already 
-accepted by Mimi are very straightforward. If the assumption I made that 
-in the end the 'ima' LSM could take over the role of the 'integrity' 
-LSM, that for me is the preferable option.
+DESCRIPTION
+ 
+Linux Security Summit North America 2024 is a technical forum for
+collaboration between Linux developers, researchers, and end-users.  Its
+primary aim is to foster community efforts in deeply analyzing and solving
+Linux operating system security challenges, including those in the Linux
+kernel.
 
-Given that the patch set is not doing any design change, but merely 
-moving calls and storing pointers elsewhere, that leaves us with the 
-option of thinking better what to do next, including like you suggested 
-to make IMA and EVM use disjoint metadata.
+Presentations are expected to focus deeply on new or improved technology and
+how it advances the state of practice for addressing these challenges.
 
->> I started to think, does EVM really need integrity metadata or it can
->> work without?
->>
->> The fact is that CONFIG_IMA=n and CONFIG_EVM=y is allowed, so we have
->> the same problem now. What if we make IMA the one that manages
->> integrity metadata, so that we can remove the 'integrity' LSM?
-> 
-> I guess we should probably revisit the basic idea of if it even makes
-> sense to enable EVM without IMA?  Should we update the Kconfig to
-> require IMA when EVM is enabled?
+The program committee currently seeks proposals for:
+ 
+   * Refereed Presentations:
+     45 minutes in length.
+ 
+   * Panel Discussion Topics:
+     45 minutes in length.
+ 
+   * Short Topics:
+     30 minutes in total, including at least 10 minutes discussion.
+ 
+   * Tutorials
+     90 minutes in length.
 
-That would be up to Mimi. Also this does not seem the main focus of the 
-patch set.
+Tutorial sessions should be focused on advanced Linux security defense
+topics within areas such as the kernel, compiler, and security-related
+libraries.  Priority will be given to tutorials created for this conference,
+and those where the presenter is a leading subject matter expert on the
+topic.
+ 
+Topic areas include, but are not limited to:
 
->> Regarding the LSM order, I would take Casey's suggestion of introducing
->> LSM_ORDER_REALLY_LAST, for EVM.
-> 
-> Please understand that I really dislike that we have imposed ordering
-> constraints at the LSM layer, but I do understand the necessity (the
-> BPF LSM ordering upsets me the most).  I really don't want to see us
-> make things worse by adding yet another ordering bucket, I would
-> rather that we document it well and leave it alone ... basically treat
-> it like the BPF LSM (grrrrrr).
+    * Access Control
+    * Case Studies
+    * Cryptography and Key Management
+    * Emerging Technologies, Threats & Techniques
+    * Hardware Security
+    * IoT and Embedded Security
+    * Integrity Policy and Enforcement
+    * Open Source Supply Chain for the Linux OS
+    * Security Tools
+    * Security UX
+    * Linux OS Hardening
+    * Virtualization and Containers
 
-Uhm, that would not be possible right away (the BPF LSM is mutable), 
-remember that we defined LSM_ORDER_LAST so that an LSM can be always 
-enable and placed as last (requested by Mimi)?
+Proposals should be submitted via:
+    https://events.linuxfoundation.org/linux-security-summit-north-america/
 
-Thanks
 
-Roberto
+LSS-NA DATES
+ 
+  * CFP close:            Jan 21, 2024
+  * CFP notifications:    Feb 06, 2024
+  * Schedule announced:   Feb 08, 2024
+  * Event:                Apr 18-19, 2024
+
+
+WHO SHOULD ATTEND
+ 
+We're seeking a diverse range of attendees and welcome participation by
+people involved in Linux security development, operations, and research.
+ 
+LSS is a unique global event that provides the opportunity to present and
+discuss your work or research with key Linux security community members and
+maintainers.  It's also useful for those who wish to keep up with the latest
+in Linux security development and to provide input to the development
+process.
+
+
+WEB SITE
+
+    https://events.linuxfoundation.org/linux-security-summit-north-america/
+
+
+MASTODON
+
+  For event updates and announcements, follow:
+    
+    https://social.kernel.org/LinuxSecSummit
+  
+  #linuxsecuritysummit
+
+
+PROGRAM COMMITTEE
+
+  The program committee for LSS 2024 is:
+
+    * James Morris, Microsoft
+    * Serge Hallyn, Cisco
+    * Paul Moore, Microsoft
+    * Stephen Smalley, NSA
+    * Elena Reshetova, Intel
+    * John Johansen, Canonical
+    * Kees Cook, Google
+    * Casey Schaufler
+    * Mimi Zohar, IBM
+    * David A. Wheeler, Linux Foundation
+
+  The program committee may be contacted as a group via email:
+    lss-pc () lists.linuxfoundation.org
 
 
