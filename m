@@ -1,300 +1,254 @@
-Return-Path: <linux-integrity+bounces-344-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-345-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3A8380383D
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Dec 2023 16:04:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE0E803DB3
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Dec 2023 19:57:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A5A828118D
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Dec 2023 15:04:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1A40B20921
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Dec 2023 18:57:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E77B329435;
-	Mon,  4 Dec 2023 15:03:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6855F2FC38;
+	Mon,  4 Dec 2023 18:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mRF4r2OC"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AlbBda2w"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEDAC4;
-	Mon,  4 Dec 2023 07:03:51 -0800 (PST)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4Exrmi003821;
-	Mon, 4 Dec 2023 15:02:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=1M+Lb7RENQgWWhXI/S8gGx7CVn38cCrH9gi8fM6ANxk=;
- b=mRF4r2OCNy2A3Q36eSmIFv+fGgfC9k6w0Z53J0FiB9WvOJvflQA/5EGTKe8kqv16IyN7
- 9SsQL8wx670mRgkFNiNW3bFss2Zy0ZRV5QVvk7XkcE5K7zOCcfeOcUpD/VsDvWjP1lk1
- u48AIIdoUJbJ56R9xW+Y87T9IFnMHdCii/WvWwPugqFpqW9SjgG+fPzn/WDboDhea2TR
- bE87HNx6QaFADbj1UD8YgNnOjcJCUPMn3+Sk9HeChQAWkooBJXsv52i/82IHm6KVIRq5
- UINrSGEXdlxYeUZVSjA0MXaEfHX8t1hvyZAASEI4ScB+sZqcxofgtFXoxrRcfglCqSoE OA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ush1602tm-1
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5D3F0;
+	Mon,  4 Dec 2023 10:56:57 -0800 (PST)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4IrMNO023527;
+	Mon, 4 Dec 2023 18:56:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=rLD9OBiK0t3GW2iPMaqsONUqgMT3CHVh4jx+bRDjQfA=;
+ b=AlbBda2whc1HJD06qtwLizFeGKRgQpNYm5rXQEi+SZMoJ7iu1aUnp+G+E1yQQ5YuQoyr
+ YkLWnFjOSEgV62QPZwXSksGq3xLQ49ccXPkFVacifd6OTOtyjh1BlxNLICZdxAQ6yrtb
+ GMAyaE/nzlbuk+AcJilaRZm+YOLbG1+NEV6BZkt/oVTa7rxGn6adistOXh4hAWm27gBs
+ tI6i8EjUjl1JgcG3dmDyMska2lM/wrBgFZCA5gy4uJYkbRRoO5K5GjwOBte3b+kWFehc
+ LAadCn84q8nLiJsJ/wvsEOxlNTmOzJdo3V7FZnnHKJGMw8z8UXujeAuG/N5Yi98/jsI6 Uw== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3usmee04qa-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Dec 2023 15:02:03 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3B4F0Nt2005079;
-	Mon, 4 Dec 2023 15:02:03 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ush1602sh-1
+	Mon, 04 Dec 2023 18:56:46 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4GvxnF025431;
+	Mon, 4 Dec 2023 18:56:45 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3urewta7v9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Dec 2023 15:02:03 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4EJf6O017843;
-	Mon, 4 Dec 2023 15:02:01 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3urv8awk6g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Dec 2023 15:02:01 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3B4F20MM31392126
+	Mon, 04 Dec 2023 18:56:45 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3B4Iuig71770178
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 4 Dec 2023 15:02:01 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D247D58055;
-	Mon,  4 Dec 2023 15:02:00 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 59CD85803F;
-	Mon,  4 Dec 2023 15:01:58 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.81.193])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  4 Dec 2023 15:01:58 +0000 (GMT)
-Message-ID: <99c92965c2b2c49253967d56f2a4e5f1d2c881f2.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 23/23] integrity: Switch from rbtree to LSM-managed
- blob for integrity_iint_cache
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Paul Moore
-	 <paul@paul-moore.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com,
-        jlayton@kernel.org, neilb@suse.de, kolga@netapp.com,
-        Dai.Ngo@oracle.com, tom@talpey.com, jmorris@namei.org,
-        serge@hallyn.com, dmitry.kasatkin@gmail.com, dhowells@redhat.com,
-        jarkko@kernel.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com, mic@digikod.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Mon, 04 Dec 2023 10:01:57 -0500
-In-Reply-To: <5f441267b6468b98e51a08d247a7ae066a60ff0c.camel@huaweicloud.com>
-References: <20231107134012.682009-24-roberto.sassu@huaweicloud.com>
-	 <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
-	 <2084adba3c27a606cbc5ed7b3214f61427a829dd.camel@huaweicloud.com>
-	 <CAHC9VhTTKac1o=RnQadu2xqdeKH8C_F+Wh4sY=HkGbCArwc8JQ@mail.gmail.com>
-	 <b6c51351be3913be197492469a13980ab379e412.camel@huaweicloud.com>
-	 <CAHC9VhSAryQSeFy0ZMexOiwBG-YdVGRzvh58=heH916DftcmWA@mail.gmail.com>
-	 <90eb8e9d-c63e-42d6-b951-f856f31590db@huaweicloud.com>
-	 <CAHC9VhROnfBoaOy2MurdSpcE_poo_6Qy9d2U3g6m2NRRHaqz4Q@mail.gmail.com>
-	 <5f441267b6468b98e51a08d247a7ae066a60ff0c.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	Mon, 4 Dec 2023 18:56:44 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 839585805A;
+	Mon,  4 Dec 2023 18:56:44 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1FA7658052;
+	Mon,  4 Dec 2023 18:56:44 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  4 Dec 2023 18:56:44 +0000 (GMT)
+Message-ID: <1d8de077-9dd3-432e-90de-0a5b7dafcd75@linux.ibm.com>
+Date: Mon, 4 Dec 2023 13:56:43 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 00/13] add integrity and security to TPM2 transactions
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>
+References: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230403214003.32093-1-James.Bottomley@HansenPartnership.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ryBDgvG6_DU1WhPtNuL5N1l6t-SYR1yd
+X-Proofpoint-ORIG-GUID: ryBDgvG6_DU1WhPtNuL5N1l6t-SYR1yd
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WLTcmefykaHbDOEIiLJwsS3WymVSyxpp
-X-Proofpoint-GUID: xRtCrWQrHAe-uEV4KEeAH2kUbps7vgkn
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-04_13,2023-12-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- spamscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=999
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2312040112
+ definitions=2023-12-04_18,2023-12-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ malwarescore=0 clxscore=1015 mlxlogscore=999 suspectscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2312040146
 
-On Mon, 2023-12-04 at 14:26 +0100, Roberto Sassu wrote:
-> On Thu, 2023-11-30 at 11:34 -0500, Paul Moore wrote:
-> > On Wed, Nov 29, 2023 at 1:47 PM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > On 11/29/2023 6:22 PM, Paul Moore wrote:
-> > > > On Wed, Nov 29, 2023 at 7:28 AM Roberto Sassu
-> > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > 
-> > > > > On Mon, 2023-11-20 at 16:06 -0500, Paul Moore wrote:
-> > > > > > On Mon, Nov 20, 2023 at 3:16 AM Roberto Sassu
-> > > > > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > > On Fri, 2023-11-17 at 15:57 -0500, Paul Moore wrote:
-> > > > > > > > On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> > > > > > > > > 
-> > > > > > > > > Before the security field of kernel objects could be shared among LSMs with
-> > > > > > > > > the LSM stacking feature, IMA and EVM had to rely on an alternative storage
-> > > > > > > > > of inode metadata. The association between inode metadata and inode is
-> > > > > > > > > maintained through an rbtree.
-> > > > > > > > > 
-> > > > > > > > > Because of this alternative storage mechanism, there was no need to use
-> > > > > > > > > disjoint inode metadata, so IMA and EVM today still share them.
-> > > > > > > > > 
-> > > > > > > > > With the reservation mechanism offered by the LSM infrastructure, the
-> > > > > > > > > rbtree is no longer necessary, as each LSM could reserve a space in the
-> > > > > > > > > security blob for each inode. However, since IMA and EVM share the
-> > > > > > > > > inode metadata, they cannot directly reserve the space for them.
-> > > > > > > > > 
-> > > > > > > > > Instead, request from the 'integrity' LSM a space in the security blob for
-> > > > > > > > > the pointer of inode metadata (integrity_iint_cache structure). The other
-> > > > > > > > > reason for keeping the 'integrity' LSM is to preserve the original ordering
-> > > > > > > > > of IMA and EVM functions as when they were hardcoded.
-> > > > > > > > > 
-> > > > > > > > > Prefer reserving space for a pointer to allocating the integrity_iint_cache
-> > > > > > > > > structure directly, as IMA would require it only for a subset of inodes.
-> > > > > > > > > Always allocating it would cause a waste of memory.
-> > > > > > > > > 
-> > > > > > > > > Introduce two primitives for getting and setting the pointer of
-> > > > > > > > > integrity_iint_cache in the security blob, respectively
-> > > > > > > > > integrity_inode_get_iint() and integrity_inode_set_iint(). This would make
-> > > > > > > > > the code more understandable, as they directly replace rbtree operations.
-> > > > > > > > > 
-> > > > > > > > > Locking is not needed, as access to inode metadata is not shared, it is per
-> > > > > > > > > inode.
-> > > > > > > > > 
-> > > > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> > > > > > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > > > > > > > ---
-> > > > > > > > >   security/integrity/iint.c      | 71 +++++-----------------------------
-> > > > > > > > >   security/integrity/integrity.h | 20 +++++++++-
-> > > > > > > > >   2 files changed, 29 insertions(+), 62 deletions(-)
-> > > > > > > > > 
-> > > > > > > > > diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-> > > > > > > > > index 882fde2a2607..a5edd3c70784 100644
-> > > > > > > > > --- a/security/integrity/iint.c
-> > > > > > > > > +++ b/security/integrity/iint.c
-> > > > > > > > > @@ -231,6 +175,10 @@ static int __init integrity_lsm_init(void)
-> > > > > > > > >      return 0;
-> > > > > > > > >   }
-> > > > > > > > > 
-> > > > > > > > > +struct lsm_blob_sizes integrity_blob_sizes __ro_after_init = {
-> > > > > > > > > +   .lbs_inode = sizeof(struct integrity_iint_cache *),
-> > > > > > > > > +};
-> > > > > > > > 
-> > > > > > > > I'll admit that I'm likely missing an important detail, but is there
-> > > > > > > > a reason why you couldn't stash the integrity_iint_cache struct
-> > > > > > > > directly in the inode's security blob instead of the pointer?  For
-> > > > > > > > example:
-> > > > > > > > 
-> > > > > > > >    struct lsm_blob_sizes ... = {
-> > > > > > > >      .lbs_inode = sizeof(struct integrity_iint_cache),
-> > > > > > > >    };
-> > > > > > > > 
-> > > > > > > >    struct integrity_iint_cache *integrity_inode_get(inode)
-> > > > > > > >    {
-> > > > > > > >      if (unlikely(!inode->isecurity))
-> > > > > > > >        return NULL;
-> > > > > > > >      return inode->i_security + integrity_blob_sizes.lbs_inode;
-> > > > > > > >    }
-> > > > > > > 
-> > > > > > > It would increase memory occupation. Sometimes the IMA policy
-> > > > > > > encompasses a small subset of the inodes. Allocating the full
-> > > > > > > integrity_iint_cache would be a waste of memory, I guess?
-> > > > > > 
-> > > > > > Perhaps, but if it allows us to remove another layer of dynamic memory
-> > > > > > I would argue that it may be worth the cost.  It's also worth
-> > > > > > considering the size of integrity_iint_cache, while it isn't small, it
-> > > > > > isn't exactly huge either.
-> > > > > > 
-> > > > > > > On the other hand... (did not think fully about that) if we embed the
-> > > > > > > full structure in the security blob, we already have a mutex available
-> > > > > > > to use, and we don't need to take the inode lock (?).
-> > > > > > 
-> > > > > > That would be excellent, getting rid of a layer of locking would be significant.
-> > > > > > 
-> > > > > > > I'm fully convinced that we can improve the implementation
-> > > > > > > significantly. I just was really hoping to go step by step and not
-> > > > > > > accumulating improvements as dependency for moving IMA and EVM to the
-> > > > > > > LSM infrastructure.
-> > > > > > 
-> > > > > > I understand, and I agree that an iterative approach is a good idea, I
-> > > > > > just want to make sure we keep things tidy from a user perspective,
-> > > > > > i.e. not exposing the "integrity" LSM when it isn't required.
-> > > > > 
-> > > > > Ok, I went back to it again.
-> > > > > 
-> > > > > I think trying to separate integrity metadata is premature now, too
-> > > > > many things at the same time.
-> > > > 
-> > > > I'm not bothered by the size of the patchset, it is more important
-> > > > that we do The Right Thing.  I would like to hear in more detail why
-> > > > you don't think this will work, I'm not interested in hearing about
-> > > > difficult it may be, I'm interested in hearing about what challenges
-> > > > we need to solve to do this properly.
-> > > 
-> > > The right thing in my opinion is to achieve the goal with the minimal
-> > > set of changes, in the most intuitive way.
-> > 
-> > Once again, I want to stress that I don't care about the size of the
-> > change, the number of patches in a patchset, etc.  While it's always
-> > nice to be able to minimize the number of changes in a patch/patchset,
-> > that is secondary to making sure we are doing the right thing over the
-> > long term.  This is especially important when we are talking about
-> > things that are user visible.
-> > 
-> > > Until now, there was no solution that could achieve the primary goal of
-> > > this patch set (moving IMA and EVM to the LSM infrastructure) and, at
-> > > the same time, achieve the additional goal you set of removing the
-> > > 'integrity' LSM.
-> > 
-> > We need to stop thinking about the "integrity" code as a LSM, it isn't
-> > a LSM.  It's a vestigial implementation detail that was necessary back
-> > when there could only be one LSM active at a time and there was a
-> > desire to have IMA/EVM active in conjunction with one of the LSMs,
-> > i.e. Smack, SELinux, etc.
-> > 
-> > IMA and EVM are (or will be) LSMs, "integrity" is not.  I recognize
-> > that eliminating the need for the "integrity" code is a relatively new
-> > addition to this effort, but that is only because I didn't properly
-> > understand the relationship between IMA, EVM, and the "integrity" code
-> > until recently.  The elimination of the shared "integrity" code is
-> > consistent with promoting IMA and EVM as full LSMs, if there is core
-> > functionality that cannot be split up into the IMA and/or EVM LSMs
-> > then we need to look at how to support that without exposing that
-> > implementation detail/hack to userspace.  Maybe that means direct
-> > calls between IMA and EVM, maybe that means preserving some of the
-> > common integrity code hidden from userspace, maybe that means adding
-> > functionality to the LSM layer, maybe that means something else?
-> > Let's think on this to come up with something that we can all accept
-> > as a long term solution instead of just doing the quick and easy
-> > option.
-> 
-> If the result of this patch set should be that IMA and EVM become
-> proper LSMs without the shared integrity layer, instead of collapsing
-> all changes in this patch set, I think we should first verify if IMA
-> and EVM can be really independent. Once we guarantee that, we can
-> proceed making the proper LSMs.
-> 
-> These are the changes I have in mind:
-> 
-> 1) Fix evm_verifyxattr(), and make it work without integrity_iint_cache
-> 2) Remove the integrity_iint_cache parameter from evm_verifyxattr(),
->    since the other callers are not going to use it
-> 3) Create an internal function with the original parameters to be used
->    by IMA
-> 4) Introduce evm_post_path_mknod(), which similarly to
->    ima_post_path_mknod(), sets IMA_NEW_FILE for new files
-> 5) Add hardcoded call to evm_post_path_mknod() after
->    ima_post_path_mknod() in security.c
-> 
-> If we think that this is good enough, we proceed with the move of IMA
-> and EVM functions to the LSM infrastructure (patches v7 19-21).
-> 
-> The next patches are going to be similar to patches v6 22-23, but
-> unlike those, their goal would be simply to split metadata, not to make
-> IMA and EVM independent, which at this point has been addressed
-> separately in the prerequisite patches.
-> 
-> The final patch is to remove the 'integrity' LSM and the integrity
-> metadata management code, which now is not used anymore.
-> 
-> Would that work?
 
-Sounds good to me.
 
-Mimi
+On 4/3/23 17:39, James Bottomley wrote:
+> The interest in securing the TPM against interposers, both active and
+> passive has risen to fever pitch with the demonstration of key
+> recovery against windows bitlocker:
+> 
+> https://dolosgroup.io/blog/2021/7/9/from-stolen-laptop-to-inside-the-company-network
+> 
+> And subsequently the same attack being successful against all the
+> Linux TPM based security solutions:
+> 
+> https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-targets
+> 
+> The attacks fall into two categories:
+> 
+> 1. Passive Interposers, which sit on the bus and merely observe
+> 2. Active Interposers, which try to manipulate TPM transactions on the
+>     bus using man in the middle and packet stealing to create TPM state
+>     the interposer owner desires.
 
+I think this is another capability of an interposer that should be 
+mentioned here, unless technically not possible but I would not know why:
+
+3. Active Interposers that send their own commands to the TPM to for 
+example cause DoS attacks.
+
+If we protect PCR extensions now and the interposer can send his own PCR 
+extensions and the TPM 2 accepts them (TPM doesn't have a mode to reject 
+unprotected commands in general), why protect the PCR extensions from 
+IMA then?
+
+    Stefan
+> 
+> Our broadest interposer target is the use of TPM_RS_PW for password
+> authorization which sends the actual password to the TPM without any
+> obfuscation and effectively hands it to any interposer. The way to fix
+> this is to use real sessions for HMAC capabilities to ensure integrity
+> and to use parameter and response encryption to ensure confidentiality
+> of the data flowing over the TPM bus.  HMAC sessions by agreeing a
+> challenge with the TPM and then giving a response which is a HMAC of
+> the password and the challenge, so the application proves knowledge of
+> the password to the TPM without ever transmitting the password itself.
+> Using HMAC sessions when sending commands to the TPM also provides
+> some measure of protection against active interposers, since the
+> interposer can't interfere with or delete a HMAC'd command (because
+> they can't manufacture a response with the correct HMAC).
+> 
+> To protect TPM transactions where there isn't a shared secret
+> (i.e. the command is something like a PCR extension which doesn't
+> involve a TPM object with a password) we have to do a bit more work to
+> set up sessions with a passed in encrypted secret (called a salt) to
+> act in place of the shared secret in the HMAC.  This secret salt is
+> effectively a random number encrypted to a public key of the TPM.  The
+> final piece of the puzzle is using parameter input and response return
+> encryption, so any interposer can't see the data passing from the
+> application to the TPM and vice versa.
+> 
+> The most insidious interposer attack of all is a reset attack: since
+> the interposer has access to the TPM bus, it can assert the TPM reset
+> line any time it wants.  When a TPM resets it mostly comes back in the
+> same state except that all the PCRs are reset to their initial values.
+> Controlling the reset line allows the interposer to change the PCR
+> state after the fact by resetting the TPM and then replaying PCR
+> extends to get the PCRs into a valid state to release secrets, so even
+> if an attack event was recorded, the record is erased.  This reset
+> attack violates the fundamental princible of non-repudiability of TPM
+> logs.  Defeating the reset attack involves tying all TPM operations
+> within the kernel to a property which will change detectably if the
+> TPM is reset.  For that reason, we tie all TPM sessions to the null
+> hierarchy we obtain at start of day and whose seed changes on every
+> reset.  If an active interposer asserts a TPM reset, the new null
+> primary won't match the kernel's stored one and all TPM operations
+> will start failing because of HMAC mismatches in the sessions.  So if
+> the kernel TPM code keeps operating, it guarantees that a reset hasn't
+> occurred.
+> 
+> The final part of the puzzle is that the machine owner must have a
+> fixed idea of the EK of their TPM and should have certified this with
+> the TPM manufacturer.  On every boot, the certified EK public key
+> should be used to do a make credential/activate credential attestation
+> key insertion and then the null key certified with the attestation
+> key.  We can follow a trust on first use model where an OS
+> installation will extract and verify a public EK and save it to a read
+> only file.
+> 
+> This patch series adds a simple API which can ensure the above
+> properties as a layered addition to the existing TPM handling code.
+> This series now includes protections for PCR extend, getting random
+> numbers from the TPM and data sealing and unsealing.  It therefore
+> eliminates all uses of TPM2_RS_PW in the kernel and adds encryption
+> protection to sensitive data flowing into and out of the TPM.  The
+> first four patches add more sophisticated buffer handling to the TPM
+> which is needed to build the more complex encryption and
+> authentication based commands.  Patch 6 adds all the generic
+> cryptography primitives and patches 7-9 use them in critical TPM
+> operations where we want to avoid or detect interposers.  Patch 10
+> exports the name of the null key we used for boot/run time
+> verification and patch 11 documents the security guarantees and
+> expectations.
+> 
+> This was originally sent over four years ago, with the last iteration
+> being:
+> 
+> https://lore.kernel.org/linux-integrity/1568031515.6613.31.camel@HansenPartnership.com/
+> 
+> I'm dusting it off now because various forces at Microsoft and Google
+> via the Open Compute Platform are making a lot of noise about
+> interposers and we in the linux kernel look critically lacking in that
+> regard, particularly for TPM trusted keys.
+> 
+> ---
+> v2 fixes the problems smatch reported and adds more explanation about
+> the code motion in the first few patches
+> v3 rebases the encryption to be against Ard's new library function, the
+> aescfb addition of which appears as patch 1.
+> v4 refreshes Ard's patch, adds kernel doc (including a new patch to
+> add it to the moved tpm-buf functions) updates and rewords some commit
+> logs
+> 
+> James
+> 
+> ---
+> 
+> Ard Biesheuvel (1):
+>    crypto: lib - implement library version of AES in CFB mode
+> 
+> James Bottomley (12):
+>    tpm: move buffer handling from static inlines to real functions
+>    tpm: add kernel doc to buffer handling functions
+>    tpm: add buffer handling for TPM2B types
+>    tpm: add cursor based buffer functions for response parsing
+>    tpm: add buffer function to point to returned parameters
+>    tpm: export the context save and load commands
+>    tpm: Add full HMAC and encrypt/decrypt session handling code
+>    tpm: add hmac checks to tpm2_pcr_extend()
+>    tpm: add session encryption protection to tpm2_get_random()
+>    KEYS: trusted: Add session encryption protection to the seal/unseal
+>      path
+>    tpm: add the null key name as a sysfs export
+>    Documentation: add tpm-security.rst
+> 
+>   Documentation/security/tpm/tpm-security.rst |  216 ++++
+>   drivers/char/tpm/Kconfig                    |   13 +
+>   drivers/char/tpm/Makefile                   |    2 +
+>   drivers/char/tpm/tpm-buf.c                  |  307 +++++
+>   drivers/char/tpm/tpm-chip.c                 |    3 +
+>   drivers/char/tpm/tpm-sysfs.c                |   18 +
+>   drivers/char/tpm/tpm.h                      |   14 +
+>   drivers/char/tpm/tpm2-cmd.c                 |   52 +-
+>   drivers/char/tpm/tpm2-sessions.c            | 1158 +++++++++++++++++++
+>   drivers/char/tpm/tpm2-space.c               |    8 +-
+>   include/crypto/aes.h                        |    5 +
+>   include/linux/tpm.h                         |  257 ++--
+>   lib/crypto/Kconfig                          |    5 +
+>   lib/crypto/Makefile                         |    3 +
+>   lib/crypto/aescfb.c                         |  257 ++++
+>   security/keys/trusted-keys/trusted_tpm2.c   |   82 +-
+>   16 files changed, 2275 insertions(+), 125 deletions(-)
+>   create mode 100644 Documentation/security/tpm/tpm-security.rst
+>   create mode 100644 drivers/char/tpm/tpm-buf.c
+>   create mode 100644 drivers/char/tpm/tpm2-sessions.c
+>   create mode 100644 lib/crypto/aescfb.c
+> 
 
