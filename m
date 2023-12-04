@@ -1,225 +1,362 @@
-Return-Path: <linux-integrity+bounces-335-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-336-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F009B8033BA
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Dec 2023 14:01:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5410B8034D9
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Dec 2023 14:27:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A65491F21051
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Dec 2023 13:01:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8AFAB20EE5
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Dec 2023 13:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3048F249F0;
-	Mon,  4 Dec 2023 13:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="E94zR/+u";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="oRWL/Xd2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899342555E;
+	Mon,  4 Dec 2023 13:27:39 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB9EAC;
-	Mon,  4 Dec 2023 05:01:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1701694891;
-	bh=TbSN/TIsT1vJTUru8xlpu7RRtQQnVbHwMvjzSHkN48I=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=E94zR/+ueus8EPk2f+4TPecbKM8XcBOTnPDi4M6HJHGfxiOxkQnXLOJX7uFAmJif4
-	 NavHTxsZU4EyqNBZONqJ+Y6pdViqlJaZ8716c3H+Jt0G3XOppCMd6acj6QVph8qCO2
-	 twuPBIAxPMphsvhlUlSndeEkVFhjtHRV9jjbnA6w=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 1696C1280F2A;
-	Mon,  4 Dec 2023 08:01:31 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id WkQhZoOS6q3k; Mon,  4 Dec 2023 08:01:31 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1701694890;
-	bh=TbSN/TIsT1vJTUru8xlpu7RRtQQnVbHwMvjzSHkN48I=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=oRWL/Xd2776oym4PHkRVFZMZoRmrKl9EjcNlcXCsOWFEMdcxjfhgStUKWBkq31lSC
-	 8Z1B/xDumy5NxbyMIG+2Jnntl0bv7vklj9Y5breEMBTfR9vkxfAi+eIaLOlJA7CFe3
-	 mg/yNQP7SBn4eBDaIsXCTiQ2Pthg+EooW/ZM87oI=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits))
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 3649B1280FB4;
-	Mon,  4 Dec 2023 08:01:30 -0500 (EST)
-Message-ID: <222405b5ba1a581079409a724c4ee76e6800253f.camel@HansenPartnership.com>
-Subject: Re: Discussion about using NV indexes for kernel properties like
- localities and PCRs
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Lennart Poettering <lennart@poettering.net>
-Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, Matthew
- Garrett <mjg59@srcf.ucam.org>, ilias.apalodimas@linaro.org
-Date: Mon, 04 Dec 2023 08:01:27 -0500
-In-Reply-To: <ZW2Z7jdO7cHlMsbp@gardel-login>
-References: 
-	<49b9916f60649ad66b87f29e9e87c9375b907975.camel@HansenPartnership.com>
-	 <ZWpRhUNj_M5Pxeif@gardel-login>
-	 <4d9bf547516c50617fe944590075c802492a0c04.camel@HansenPartnership.com>
-	 <ZW2Z7jdO7cHlMsbp@gardel-login>
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F3D26A0;
+	Mon,  4 Dec 2023 05:27:21 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4SkPHP09SJz9yMVd;
+	Mon,  4 Dec 2023 21:13:21 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 19FB114011D;
+	Mon,  4 Dec 2023 21:27:13 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwCHN2Gi021lB5XiAQ--.42467S2;
+	Mon, 04 Dec 2023 14:27:12 +0100 (CET)
+Message-ID: <5f441267b6468b98e51a08d247a7ae066a60ff0c.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 23/23] integrity: Switch from rbtree to LSM-managed
+ blob for integrity_iint_cache
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
+ jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
+ tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+ dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org, 
+ stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ casey@schaufler-ca.com,  mic@digikod.net, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-nfs@vger.kernel.org,
+ linux-security-module@vger.kernel.org,  linux-integrity@vger.kernel.org,
+ keyrings@vger.kernel.org,  selinux@vger.kernel.org, Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Mon, 04 Dec 2023 14:26:55 +0100
+In-Reply-To: <CAHC9VhROnfBoaOy2MurdSpcE_poo_6Qy9d2U3g6m2NRRHaqz4Q@mail.gmail.com>
+References: <20231107134012.682009-24-roberto.sassu@huaweicloud.com>
+	 <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
+	 <2084adba3c27a606cbc5ed7b3214f61427a829dd.camel@huaweicloud.com>
+	 <CAHC9VhTTKac1o=RnQadu2xqdeKH8C_F+Wh4sY=HkGbCArwc8JQ@mail.gmail.com>
+	 <b6c51351be3913be197492469a13980ab379e412.camel@huaweicloud.com>
+	 <CAHC9VhSAryQSeFy0ZMexOiwBG-YdVGRzvh58=heH916DftcmWA@mail.gmail.com>
+	 <90eb8e9d-c63e-42d6-b951-f856f31590db@huaweicloud.com>
+	 <CAHC9VhROnfBoaOy2MurdSpcE_poo_6Qy9d2U3g6m2NRRHaqz4Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwCHN2Gi021lB5XiAQ--.42467S2
+X-Coremail-Antispam: 1UD129KBjvJXoWfJF1rAw4rWryfJF17tr4UXFb_yoWkur1xpF
+	W7Ka1UKr4kJry2krn2vF45ZrWIkrWrXFyUXrn8Kr18Zas0vF10qr40krWUuFyUGrWkKw1j
+	qr1Ygry7Z3WDZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj5M5CgAAsW
 
-On Mon, 2023-12-04 at 10:20 +0100, Lennart Poettering wrote:
-> On Fr, 01.12.23 17:23, James Bottomley
-> (James.Bottomley@HansenPartnership.com) wrote:
-[...]
-> > > > I'm bringing this up for discussion now, in case anyone has a
-> > > > better idea or wants to add nuances (like measuring the
-> > > > creation to a real PCR and adding an event log to measured
-> > > > boot) before I (or someone else) look into coding it up.
-> > > 
-> > > Why would that be necessary though? The "name" of an nvindex pins
-> > > the access policy of the nvindex.
-> > 
-> > I assume you're talking about using TPM2_PolicyNameHash coupled
-> > with TPM2_PolicyNV?  That pins to NV index value and name, but the
-> > problem is that still doesn't necessarily solve the deletion
-> > problem (see below).
-> 
-> I was thinking TPM2_PolicyAuthorizeNV and similar things too. They
-> generally pin NVs by "name".
+On Thu, 2023-11-30 at 11:34 -0500, Paul Moore wrote:
+> On Wed, Nov 29, 2023 at 1:47=E2=80=AFPM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On 11/29/2023 6:22 PM, Paul Moore wrote:
+> > > On Wed, Nov 29, 2023 at 7:28=E2=80=AFAM Roberto Sassu
+> > > <roberto.sassu@huaweicloud.com> wrote:
+> > > >=20
+> > > > On Mon, 2023-11-20 at 16:06 -0500, Paul Moore wrote:
+> > > > > On Mon, Nov 20, 2023 at 3:16=E2=80=AFAM Roberto Sassu
+> > > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > > On Fri, 2023-11-17 at 15:57 -0500, Paul Moore wrote:
+> > > > > > > On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com>=
+ wrote:
+> > > > > > > >=20
+> > > > > > > > Before the security field of kernel objects could be shared=
+ among LSMs with
+> > > > > > > > the LSM stacking feature, IMA and EVM had to rely on an alt=
+ernative storage
+> > > > > > > > of inode metadata. The association between inode metadata a=
+nd inode is
+> > > > > > > > maintained through an rbtree.
+> > > > > > > >=20
+> > > > > > > > Because of this alternative storage mechanism, there was no=
+ need to use
+> > > > > > > > disjoint inode metadata, so IMA and EVM today still share t=
+hem.
+> > > > > > > >=20
+> > > > > > > > With the reservation mechanism offered by the LSM infrastru=
+cture, the
+> > > > > > > > rbtree is no longer necessary, as each LSM could reserve a =
+space in the
+> > > > > > > > security blob for each inode. However, since IMA and EVM sh=
+are the
+> > > > > > > > inode metadata, they cannot directly reserve the space for =
+them.
+> > > > > > > >=20
+> > > > > > > > Instead, request from the 'integrity' LSM a space in the se=
+curity blob for
+> > > > > > > > the pointer of inode metadata (integrity_iint_cache structu=
+re). The other
+> > > > > > > > reason for keeping the 'integrity' LSM is to preserve the o=
+riginal ordering
+> > > > > > > > of IMA and EVM functions as when they were hardcoded.
+> > > > > > > >=20
+> > > > > > > > Prefer reserving space for a pointer to allocating the inte=
+grity_iint_cache
+> > > > > > > > structure directly, as IMA would require it only for a subs=
+et of inodes.
+> > > > > > > > Always allocating it would cause a waste of memory.
+> > > > > > > >=20
+> > > > > > > > Introduce two primitives for getting and setting the pointe=
+r of
+> > > > > > > > integrity_iint_cache in the security blob, respectively
+> > > > > > > > integrity_inode_get_iint() and integrity_inode_set_iint(). =
+This would make
+> > > > > > > > the code more understandable, as they directly replace rbtr=
+ee operations.
+> > > > > > > >=20
+> > > > > > > > Locking is not needed, as access to inode metadata is not s=
+hared, it is per
+> > > > > > > > inode.
+> > > > > > > >=20
+> > > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> > > > > > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > > > > > ---
+> > > > > > > >   security/integrity/iint.c      | 71 +++++----------------=
+-------------
+> > > > > > > >   security/integrity/integrity.h | 20 +++++++++-
+> > > > > > > >   2 files changed, 29 insertions(+), 62 deletions(-)
+> > > > > > > >=20
+> > > > > > > > diff --git a/security/integrity/iint.c b/security/integrity=
+/iint.c
+> > > > > > > > index 882fde2a2607..a5edd3c70784 100644
+> > > > > > > > --- a/security/integrity/iint.c
+> > > > > > > > +++ b/security/integrity/iint.c
+> > > > > > > > @@ -231,6 +175,10 @@ static int __init integrity_lsm_init(v=
+oid)
+> > > > > > > >      return 0;
+> > > > > > > >   }
+> > > > > > > >=20
+> > > > > > > > +struct lsm_blob_sizes integrity_blob_sizes __ro_after_init=
+ =3D {
+> > > > > > > > +   .lbs_inode =3D sizeof(struct integrity_iint_cache *),
+> > > > > > > > +};
+> > > > > > >=20
+> > > > > > > I'll admit that I'm likely missing an important detail, but i=
+s there
+> > > > > > > a reason why you couldn't stash the integrity_iint_cache stru=
+ct
+> > > > > > > directly in the inode's security blob instead of the pointer?=
+  For
+> > > > > > > example:
+> > > > > > >=20
+> > > > > > >    struct lsm_blob_sizes ... =3D {
+> > > > > > >      .lbs_inode =3D sizeof(struct integrity_iint_cache),
+> > > > > > >    };
+> > > > > > >=20
+> > > > > > >    struct integrity_iint_cache *integrity_inode_get(inode)
+> > > > > > >    {
+> > > > > > >      if (unlikely(!inode->isecurity))
+> > > > > > >        return NULL;
+> > > > > > >      return inode->i_security + integrity_blob_sizes.lbs_inod=
+e;
+> > > > > > >    }
+> > > > > >=20
+> > > > > > It would increase memory occupation. Sometimes the IMA policy
+> > > > > > encompasses a small subset of the inodes. Allocating the full
+> > > > > > integrity_iint_cache would be a waste of memory, I guess?
+> > > > >=20
+> > > > > Perhaps, but if it allows us to remove another layer of dynamic m=
+emory
+> > > > > I would argue that it may be worth the cost.  It's also worth
+> > > > > considering the size of integrity_iint_cache, while it isn't smal=
+l, it
+> > > > > isn't exactly huge either.
+> > > > >=20
+> > > > > > On the other hand... (did not think fully about that) if we emb=
+ed the
+> > > > > > full structure in the security blob, we already have a mutex av=
+ailable
+> > > > > > to use, and we don't need to take the inode lock (?).
+> > > > >=20
+> > > > > That would be excellent, getting rid of a layer of locking would =
+be significant.
+> > > > >=20
+> > > > > > I'm fully convinced that we can improve the implementation
+> > > > > > significantly. I just was really hoping to go step by step and =
+not
+> > > > > > accumulating improvements as dependency for moving IMA and EVM =
+to the
+> > > > > > LSM infrastructure.
+> > > > >=20
+> > > > > I understand, and I agree that an iterative approach is a good id=
+ea, I
+> > > > > just want to make sure we keep things tidy from a user perspectiv=
+e,
+> > > > > i.e. not exposing the "integrity" LSM when it isn't required.
+> > > >=20
+> > > > Ok, I went back to it again.
+> > > >=20
+> > > > I think trying to separate integrity metadata is premature now, too
+> > > > many things at the same time.
+> > >=20
+> > > I'm not bothered by the size of the patchset, it is more important
+> > > that we do The Right Thing.  I would like to hear in more detail why
+> > > you don't think this will work, I'm not interested in hearing about
+> > > difficult it may be, I'm interested in hearing about what challenges
+> > > we need to solve to do this properly.
+> >=20
+> > The right thing in my opinion is to achieve the goal with the minimal
+> > set of changes, in the most intuitive way.
+>=20
+> Once again, I want to stress that I don't care about the size of the
+> change, the number of patches in a patchset, etc.  While it's always
+> nice to be able to minimize the number of changes in a patch/patchset,
+> that is secondary to making sure we are doing the right thing over the
+> long term.  This is especially important when we are talking about
+> things that are user visible.
+>=20
+> > Until now, there was no solution that could achieve the primary goal of
+> > this patch set (moving IMA and EVM to the LSM infrastructure) and, at
+> > the same time, achieve the additional goal you set of removing the
+> > 'integrity' LSM.
+>=20
+> We need to stop thinking about the "integrity" code as a LSM, it isn't
+> a LSM.  It's a vestigial implementation detail that was necessary back
+> when there could only be one LSM active at a time and there was a
+> desire to have IMA/EVM active in conjunction with one of the LSMs,
+> i.e. Smack, SELinux, etc.
+>=20
+> IMA and EVM are (or will be) LSMs, "integrity" is not.  I recognize
+> that eliminating the need for the "integrity" code is a relatively new
+> addition to this effort, but that is only because I didn't properly
+> understand the relationship between IMA, EVM, and the "integrity" code
+> until recently.  The elimination of the shared "integrity" code is
+> consistent with promoting IMA and EVM as full LSMs, if there is core
+> functionality that cannot be split up into the IMA and/or EVM LSMs
+> then we need to look at how to support that without exposing that
+> implementation detail/hack to userspace.  Maybe that means direct
+> calls between IMA and EVM, maybe that means preserving some of the
+> common integrity code hidden from userspace, maybe that means adding
+> functionality to the LSM layer, maybe that means something else?
+> Let's think on this to come up with something that we can all accept
+> as a long term solution instead of just doing the quick and easy
+> option.
 
-Heh, well, you have to be careful with that one as I just discovered
-with NV PINs.  Most of the TPMs I have in my system actually comply
-with rev 116.  NV PIN was added in rev 124 and PolicyAuthorizeNV in rev
-132 which means they're not universally supported by TPM2 systems.
+If the result of this patch set should be that IMA and EVM become
+proper LSMs without the shared integrity layer, instead of collapsing
+all changes in this patch set, I think we should first verify if IMA
+and EVM can be really independent. Once we guarantee that, we can
+proceed making the proper LSMs.
 
-> > >  And nvindexes are always created uninitialized, thus to to
-> > > initialize one you just created (i.e. execute the first write to
-> > > it) you must be able to fulfill the write policy set for it. But
-> > > if you can do that, then why bother with deleting/recreating them
-> > > in the first place?
-> > 
-> > Well, I wasn't really considering using a policy for the index, I
-> > was thinking of using the index for other policies (like key
-> > release). However, even though you can have a policy for read and
-> > write, you can't have a policy for delete unless you have access to
-> > the platform hierarchy (which the problem statement above explained
-> > is getting increasingly unlikely), so your index can still be reset
-> > by deleting and recreating it (even if it is recreated with the
-> > same policy). You're right that such an index would be detectably
-> > uninitialized unless whoever deleted it can also write to it.
-> 
-> Yes, deletion doesn't really matter as long as the write policy for
-> the NV is properly chosen so that whoever deletes/recreates the NV
-> cannot write to it.
-> 
-> > >  And if you set a different access policy on them then the "name"
-> > > of the nvindex would change, and it would become useless in all
-> > > references from other objects/quotes/…
-> > 
-> > Right but to take a NV Extend index, you're saying I can delete it
-> > and recreate it with exactly the same policy and attributes (so
-> > same name) but then to prevent me placing malicious entries in it,
-> > the policy has to be narrowly crafted to prevent malicious actors
-> > extending it (because then policy can't tell the difference between
-> > that recreated index and the original one).  I've thought about
-> > this, but haven't ever really been able to come up with usable
-> > policies, because all such policies end up requiring either a
-> > privileged locality to write from or a shared secret between the
-> > TPM and the trusted writer.
-> 
-> So my understanding is that you want fake PCRs, i.e. NV indexes that
-> are world-readable, and world-extendable, and cannot be reset,
-> correct?
+These are the changes I have in mind:
 
-Yes, effectively a simple extension of the PCR system beyond 24 indexes
-for anyone to use.
+1) Fix evm_verifyxattr(), and make it work without integrity_iint_cache
+2) Remove the integrity_iint_cache parameter from evm_verifyxattr(),
+   since the other callers are not going to use it
+3) Create an internal function with the original parameters to be used
+   by IMA
+4) Introduce evm_post_path_mknod(), which similarly to
+   ima_post_path_mknod(), sets IMA_NEW_FILE for new files
+5) Add hardcoded call to evm_post_path_mknod() after
+   ima_post_path_mknod() in security.c
 
-> So a write policy like this should work, no:
-> 
->     A TPM2_PolicyOR with three branches:
->         1. TPM2_PolicyCommandCode(TPM2_NV_Write) +
->            TPM2_PolicyNvWritten(writtenSet=false) +
->            TPM2_PolicySigned(…)
->         2. TPM2_PolicyCommandCode(TPM2_NV_Write) +
->            TPM2_PolicyNvWritten(writtenSet=true)
->         3. TPM2_PolicyCommandCode(TPM2_NV_Read)
-> 
-> (where "+" is suposed to mean AND...)
+If we think that this is good enough, we proceed with the move of IMA
+and EVM functions to the LSM infrastructure (patches v7 19-21).
 
-Well, no, that would mean the entity doing the create (first write) has
-to be able to sign the command.  That requires a permanent secret (the
-private key).  The problem I have is that I want to do this in the
-kernel.  The kernel can generate ephemeral secrets but not permanent
-ones that last across a boot and it certainly can't usefully (without
-leaking) carry persistent private keys, so whatever scheme we come up
-with for the kernel can't code a policy that contains a long lived
-secret.  That's why I went for restricted creation and deletion: The
-kernel can create the index and populate it with a random auth known
-only to it and no-one else can delete and recreate.  Thus we have an
-index that can be mentioned in PolicNV of a sealed object meaning that
-only the kernel can unseal it.  For the NV Extend Indexes it means
-they're wold readable and writable but usable by anyone and possessing
-a no reset guarantee.
+The next patches are going to be similar to patches v6 22-23, but
+unlike those, their goal would be simply to split metadata, not to make
+IMA and EVM independent, which at this point has been addressed
+separately in the prerequisite patches.
 
-> So the first branch covers initialization. The branch first checks
-> for *Write* access, and whether the NV hasn't been written yet. It
-> then combines that with PolicySigned policy whith some public key.
-> The idea would be to use a key pair here that you generate for this
-> purpose only and throw it away after initialization. You could use
-> other policies here too i guess. Important is that you use a policy
-> here that only you as the creator can fulfill, and that fully pins
-> all authentication objects you use, like PolicySigned does.
-> 
-> The second branch covers later extensions, all it checks is that the
-> PCR is already initialized, and then makes no further restructions.
-> 
-> The third branch covers reading, and makes no restrictions beyond
-> that.
-> 
-> I haven't tested the above, but it was my understanding that this is
-> how you'd do it.
-> 
-> Crucial in all of the above is that you reference the NV indexes
-> afterwards by their full name (thus also by their policy, which pins
-> the public key of TPM2_PolicySigned), instead just by their numeric
-> handle. Because if you'd ref them by their numeric handle only, then
-> of course anyone can recreate them with a different policy without
-> you noticing it. The important part is that you assign a policy to
-> the NV index that ensures only you could have initialized them,
-> because they pin some resource only you have control over.
-> 
-> In upcoming systemd 255 we now provide an IPC API for local clients
-> to measure stuff into PCRs, and write a TCG-CEL record about it
-> automatically. I was looking into extending that to also allow
-> writing NV-index based "fake PCRs" and the above is basically what I
-> had in mind to implement that.
-> 
-> But admittedly I am talking a bit out of my ass here, since I did not
-> in fact implement the above. But I don't see why it wouldn't work.
+The final patch is to remove the 'integrity' LSM and the integrity
+metadata management code, which now is not used anymore.
 
-I think it could work.  However to be effective in the above
-PolicySigned, the entity creating the NV index will have to sign the
-nonceTPM, meaning systemd will have to have the private key ... how
-does that get provisioned? (it seems like a similar problem to
-provisioning the kernel with a private key)
+Would that work?
 
-> 
-> > > This logic is explicitly mentioned in that tpm book btw, it took
-> > > me a while to grok how great that concept is, since it basically
-> > > means you don't have to be concerned about removed/readded
-> > > nvindexes at all.
-> > 
-> > Which TPM book is this?
-> 
-> "A practical guide to TPM 2.0". The one that always shows up in your
-> google searches...
+Thanks
 
-Thanks ... I didn't know anyone had written an actual book about the
-TPM. I usually just get my insights from the architecture documents
-(and how they change).
+Roberto
 
-James
+> > If you see the diff, the changes compared to v5 that was already
+> > accepted by Mimi are very straightforward. If the assumption I made tha=
+t
+> > in the end the 'ima' LSM could take over the role of the 'integrity'
+> > LSM, that for me is the preferable option.
+>=20
+> I looked at it quickly, but my workflow isn't well suited for patches
+> as attachments; inline patches (the kernel standard) is preferable.
+>=20
+> > Given that the patch set is not doing any design change, but merely
+> > moving calls and storing pointers elsewhere, that leaves us with the
+> > option of thinking better what to do next, including like you suggested
+> > to make IMA and EVM use disjoint metadata.
+> >=20
+> > > > I started to think, does EVM really need integrity metadata or it c=
+an
+> > > > work without?
+> > > >=20
+> > > > The fact is that CONFIG_IMA=3Dn and CONFIG_EVM=3Dy is allowed, so w=
+e have
+> > > > the same problem now. What if we make IMA the one that manages
+> > > > integrity metadata, so that we can remove the 'integrity' LSM?
+> > >=20
+> > > I guess we should probably revisit the basic idea of if it even makes
+> > > sense to enable EVM without IMA?  Should we update the Kconfig to
+> > > require IMA when EVM is enabled?
+> >=20
+> > That would be up to Mimi. Also this does not seem the main focus of the
+> > patch set.
+>=20
+> Yes, it is not part of the original main focus, but it is definitely
+> relevant to the discussion we are having now.  Once again, the most
+> important thing to me is that we do The Right Thing for the long term
+> maintenance of the code base; if that means scope creep, I've got no
+> problem with that.
+>=20
+> > > > Regarding the LSM order, I would take Casey's suggestion of introdu=
+cing
+> > > > LSM_ORDER_REALLY_LAST, for EVM.
+> > >=20
+> > > Please understand that I really dislike that we have imposed ordering
+> > > constraints at the LSM layer, but I do understand the necessity (the
+> > > BPF LSM ordering upsets me the most).  I really don't want to see us
+> > > make things worse by adding yet another ordering bucket, I would
+> > > rather that we document it well and leave it alone ... basically trea=
+t
+> > > it like the BPF LSM (grrrrrr).
+> >=20
+> > Uhm, that would not be possible right away (the BPF LSM is mutable),
+> > remember that we defined LSM_ORDER_LAST so that an LSM can be always
+> > enable and placed as last (requested by Mimi)?
+>=20
+> To be clear, I can both dislike the bpf-always-last and LSM_ORDER_LAST
+> concepts while accepting them as necessary evils.  I'm willing to
+> tolerate LSM_ORDER_LAST, but I'm not currently willing to tolerate
+> LSM_ORDER_REALLY_LAST; that is one step too far right now.  I brought
+> up the BPF LSM simply as an example of ordering that is not enforced
+> by code, but rather by documentation and convention.
+>=20
 
 
