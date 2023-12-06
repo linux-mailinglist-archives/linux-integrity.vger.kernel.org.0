@@ -1,46 +1,63 @@
-Return-Path: <linux-integrity+bounces-351-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-352-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A97FF806284
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Dec 2023 00:01:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD56380704A
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Dec 2023 13:54:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9D7E1C21108
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Dec 2023 23:01:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5D31B20BBE
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Dec 2023 12:54:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49F3E405D7;
-	Tue,  5 Dec 2023 23:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Ixct9+YK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9F436B04;
+	Wed,  6 Dec 2023 12:54:40 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874EDB5;
-	Tue,  5 Dec 2023 15:01:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=veuA5jcJpJK6ZOBUYJpEl5tEQ5a6kyp2AU4+606vnO0=; b=Ixct9+YK621xO+NHLV3Bl7IpTW
-	RD2TXwUyTf9T5SoFN4RP5+r0GpMXDSzhPaiPhIaMQj/bPyZY8YgfAj1La7E6qd2VvqGY0S1ut3BY+
-	3o1iMIK9VRhWQqZUrMYqplKosgXALBP0NTTenE1BPFmFdyHsHZGbh/MXk1MOx12278cmx7N8ClhF4
-	bZY55cHSyq+XQXIF4l9R2k3DUe0eZLlPMk2ROb8SYuBtIdFl9vXufyEdK4sfSwx1MdpLvFxUxbYAn
-	DD6VqLrOYtaiaSw0uRZO9M4kXFcoDqWhoVUv8PmxJDdFpac5mPf0eznPqzMatOW9cDEM3hpXdGN0o
-	dQ14unRA==;
-Received: from [50.53.46.231] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rAePZ-008ZJ8-0v;
-	Tue, 05 Dec 2023 23:01:11 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH] tpm: cr50: fix a kernel-doc warning
-Date: Tue,  5 Dec 2023 15:01:04 -0800
-Message-ID: <20231205230104.414-1-rdunlap@infradead.org>
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2a07:de40:b251:101:10:150:64:2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33249FA;
+	Wed,  6 Dec 2023 04:54:37 -0800 (PST)
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 9AF461FD0C;
+	Wed,  6 Dec 2023 12:54:35 +0000 (UTC)
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 13BCD13403;
+	Wed,  6 Dec 2023 12:54:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id 9HGHAwtvcGV6dAAAn2gu4w
+	(envelope-from <tzimmermann@suse.de>); Wed, 06 Dec 2023 12:54:35 +0000
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: ardb@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	bhelgaas@google.com,
+	arnd@arndb.de,
+	zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	javierm@redhat.com
+Cc: linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 0/3] arch/x86: Remove unnecessary dependencies on bootparam.h
+Date: Wed,  6 Dec 2023 13:38:36 +0100
+Message-ID: <20231206125433.18420-1-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -49,28 +66,98 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 9AF461FD0C
+X-Spam-Score: 6.49
+X-Spamd-Result: default: False [6.49 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 R_MISSING_CHARSET(2.50)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 R_SPF_SOFTFAIL(0.00)[~all:c];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_TWELVE(0.00)[22];
+	 MID_CONTAINS_FROM(1.00)[];
+	 FREEMAIL_TO(0.00)[kernel.org,linutronix.de,redhat.com,alien8.de,linux.intel.com,zytor.com,google.com,arndb.de,linux.ibm.com,gmail.com,paul-moore.com,namei.org,hallyn.com];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 R_DKIM_NA(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 DMARC_POLICY_SOFTFAIL(0.10)[suse.de : No valid SPF, No valid DKIM,none]
+X-Spamd-Bar: ++++++
+Authentication-Results: smtp-out2.suse.de;
+	dkim=none;
+	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=suse.de (policy=none);
+	spf=softfail (smtp-out2.suse.de: 2a07:de40:b281:104:10:150:64:98 is neither permitted nor denied by domain of tzimmermann@suse.de) smtp.mailfrom=tzimmermann@suse.de
+X-Rspamd-Server: rspamd1
 
-Dropn one function parameter line to prevent kernel-doc warnings.
+Reduce built time in some cases by removing unnecessary include statements
+for <asm/bootparam.h>. Reorganize some header files accordingly.
 
-tpm_tis_i2c_cr50.c:681: warning: Excess function parameter 'id' description in 'tpm_cr50_i2c_probe'
+While working on the kernel's boot-up graphics, I noticed that touching
+include/linux/screen_info.h triggers a complete rebuilt of the kernel
+on x86. It turns out that the architecture's PCI and EFI headers include
+<asm/bootparam.h>, which depends on <linux/screen_info.h>. But none of
+the drivers have any business with boot parameters or the screen_info
+state.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org
----
- drivers/char/tpm/tpm_tis_i2c_cr50.c |    1 -
- 1 file changed, 1 deletion(-)
+The patchset moves a few limes from pci.h and efi.h into separate header
+files and then removes the obsolete include statements on x86. I did
 
-diff -- a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -671,7 +671,6 @@ MODULE_DEVICE_TABLE(of, of_cr50_i2c_matc
- /**
-  * tpm_cr50_i2c_probe() - Driver probe function.
-  * @client:	I2C client information.
-- * @id:		I2C device id.
-  *
-  * Return:
-  * - 0:		Success.
+  make allmodconfig
+  make -j28
+  touch include/linus/screen_info.h
+  time -j28 make
+
+to measure the time it takes to rebuild. Results without the patchset
+are around 20 minutes.
+
+  real    20m46,705s
+  user    354m29,166s
+  sys     28m27,359s
+
+And with the patchset applied it goes down to about a minute.
+
+  real    0m58,232s
+  user    4m37,617s
+  sys     0m34,993s
+
+The test system was an Intel i5-13500.
+
+Thomas Zimmermann (3):
+  arch/x86: Move struct pci_setup_rom into pci_setup.h
+  arch/x86: Add <asm/ima-efi.h> for arch_ima_efi_boot_mode
+  arch/x86: Do not include <asm/bootparam.h> in several header files
+
+ arch/x86/include/asm/efi.h              |  3 ---
+ arch/x86/include/asm/ima-efi.h          | 12 ++++++++++++
+ arch/x86/include/asm/kexec.h            |  1 -
+ arch/x86/include/asm/mem_encrypt.h      |  2 +-
+ arch/x86/include/asm/pci.h              | 13 -------------
+ arch/x86/include/asm/pci_setup.h        | 19 +++++++++++++++++++
+ arch/x86/include/asm/sev.h              |  3 ++-
+ arch/x86/include/asm/x86_init.h         |  2 --
+ arch/x86/pci/common.c                   |  1 +
+ drivers/firmware/efi/libstub/x86-stub.c |  1 +
+ include/asm-generic/Kbuild              |  1 +
+ include/asm-generic/ima-efi.h           | 16 ++++++++++++++++
+ security/integrity/ima/ima_efi.c        |  5 +----
+ 13 files changed, 54 insertions(+), 25 deletions(-)
+ create mode 100644 arch/x86/include/asm/ima-efi.h
+ create mode 100644 arch/x86/include/asm/pci_setup.h
+ create mode 100644 include/asm-generic/ima-efi.h
+
+
+base-commit: a9d99261a978835b02e248fe18af3026416af3e8
+-- 
+2.43.0
+
 
