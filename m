@@ -1,116 +1,94 @@
-Return-Path: <linux-integrity+bounces-373-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-374-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B710F8078AF
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Dec 2023 20:33:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69641807FD1
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 05:52:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2CE51C20A85
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Dec 2023 19:33:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2474C281792
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 04:52:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10C0B47F47;
-	Wed,  6 Dec 2023 19:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B73566E;
+	Thu,  7 Dec 2023 04:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fPsvGLNW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I5jVgvbV"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CAD98
-	for <linux-integrity@vger.kernel.org>; Wed,  6 Dec 2023 11:33:36 -0800 (PST)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B6ImnJc006149
-	for <linux-integrity@vger.kernel.org>; Wed, 6 Dec 2023 19:33:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=xOg4rsu4rEtzh5igcW2KfwtL9HjpV/2hG+rGxi5ylMc=;
- b=fPsvGLNWCQ5gsoYvdUt+SgXHMCtApwRP9FVvSq9QTU8ZBe9Oa6mmbv3DHIT++EIZSeVE
- wg/QusA5bAKYJkNEPmOzuHeN4lyxijzJPTlGmVAxyf0VlSb9D8hVT18Adr1VcQ6GqjoX
- uB+kMJi5K96DL8SHWHL3Zpvi0Brru0C0Gl7A9R4kPigiSTDfEvJVi5K+yFO/efwZBWEf
- zusqQYxIhSJnDRpMMMT1KpBq4uFSZ2YJB7SudwhK8RyIntkOl53+JFa5RZVZn51LCLq7
- Hk/fT8aVIiFniVwwr+o7gqKu51dysLiYCU440rucavT94lDUEANYq6GLwKnMCWMWq5d/ oA== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3utus2f5wm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Wed, 06 Dec 2023 19:33:35 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3B6IQxgE028432
-	for <linux-integrity@vger.kernel.org>; Wed, 6 Dec 2023 19:33:34 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3utavjpkjt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Wed, 06 Dec 2023 19:33:34 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3B6JXXnu29491804
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 6 Dec 2023 19:33:33 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 853AE5805D;
-	Wed,  6 Dec 2023 19:33:33 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4D21C58055;
-	Wed,  6 Dec 2023 19:33:33 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.99.183])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  6 Dec 2023 19:33:33 +0000 (GMT)
-Message-ID: <8b45fae3677cc3827b653b519b00f2f3ebdd3545.camel@linux.ibm.com>
-Subject: Re: [ima-evm-utils PATCH v3 00/14] Enable shellcheck and fix some
- issues
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org
-Date: Wed, 06 Dec 2023 14:33:32 -0500
-In-Reply-To: <20231201133136.2124147-1-stefanb@linux.ibm.com>
-References: <20231201133136.2124147-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F271C38;
+	Thu,  7 Dec 2023 04:52:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263B4C433C7;
+	Thu,  7 Dec 2023 04:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701924748;
+	bh=Vc87ZS5RAgfRHDT98yn81VOmmSQCufCBY4OSxqpN+8I=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=I5jVgvbVEb6aiBxOP5poLVsUDlylK+EKZExZiWBdxQPjYouxGC7IfPbjFhfrx6RuR
+	 0qoDwAbBuMILOPrgbpxBWQIf5jEp8/Oy9mN5rhCyGnFUHiESz0OYV+fijIpsvPBTAc
+	 B5N8jaWctWsB9wgeM9CHzJJZwEomMYRFDLBIklEmVSkBvYw4GPoqctDMtHbdXo0TlB
+	 DcK49dCWLrUARJRl9AddGkmNHEYqNjgp4lyjgX2f7wT02wTYestS8kJ754869oxhFy
+	 t3Itw16fjr8mjrrHQgE0OQzDYsdyn14rZJJ+wg7LQyGXYCoB6U535pxyVlq0U6XXPD
+	 HEZIWjkVeHttg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: gJj9gRiWqaDJ86dQjB25sMiYnsK8IRXX
-X-Proofpoint-GUID: gJj9gRiWqaDJ86dQjB25sMiYnsK8IRXX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-06_16,2023-12-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- mlxscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0
- clxscore=1015 malwarescore=0 priorityscore=1501 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2312060141
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 07 Dec 2023 06:52:23 +0200
+Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH v5 12/17] tpm: Add full HMAC and encrypt/decrypt session
+ handling code
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
+Message-Id: <CXHTVYW17UB6.MR6RH0TMDIX3@suppilovahvero>
+X-Mailer: aerc 0.15.2
+References: <20231127190854.13310-1-James.Bottomley@HansenPartnership.com>
+ <20231127190854.13310-13-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20231127190854.13310-13-James.Bottomley@HansenPartnership.com>
 
-On Fri, 2023-12-01 at 08:31 -0500, Stefan Berger wrote:
-> Enable shellcheck for the bash scripts in the tests directory. Fix issues
-> on the way that are found when particular checks are enabled. In the end
-> all shellcheck v0.9 checks are enabled and shellcheck passes without any
-> issues.
-> 
-> Shellcheck can be run using the following command:
-> 
->    make shellcheck
-> 
-> Apart from style issues two real issues are detected by SC2003 and SC2295.
-> 
-> Regards,
->    Stefan
-> 
-> v3:
->  - Replace read with readarray
-> 
-> v2:
->  - Rebased on latest next-testing branch
->  - 1/14: Use ${var:+${var}} pattern for variables that hold multiple
->          arguments like "--foo bar" which would become one argument
->          if passed with "${var}"; fixed a build issue
->  - 4/14: remove $new_policy file in success and failure cases
+On Mon Nov 27, 2023 at 9:08 PM EET, James Bottomley wrote:
+> Add session based HMAC authentication plus parameter decryption and
+> response encryption using AES. The basic design is to segregate all
+> the nasty crypto, hash and hmac code into tpm2-sessions.c and export a
+> usable API.  The API first of all starts off by gaining a session with
+>
+> tpm2_start_auth_session()
+>
+> which initiates a session with the TPM and allocates an opaque
+> tpm2_auth structure to handle the session parameters.  The design is
+> that session use will be single threaded from start to finish under
+> the ops lock, so the tpm2_auth structure is stored in struct
+> tpm2_chip. Then the use is simply:
+>
+> * tpm_buf_append_name() in place of the tpm_buf_append_u32 for the
+>   handles
+>
+> * tpm_buf_append_hmac_session() where tpm2_append_auth() would go
+>
+> * tpm_buf_fill_hmac_session() called after the entire command buffer
+>   is finished but before tpm_transmit_cmd() is called which computes
+>   the correct HMAC and places it in the command at the correct
+>   location.
 
-Thanks, Stefan.  Other than modifying 1/14 as discussed, it looks good.
-The patch set is now queued in next-testing.
+Split each exported function into a separate patches. This too big
+chunk of diff to be reviawable, i.e. it is impossible to give=20
+reviewed-by in this form. I think I've commented this also throughout
+the series, and it has not been changed.
 
-Mimi
+There needs to be a patch per each exported API function so that they
+can be looked into detail. This patch does not align with submission
+guidelines in the form it is either.
 
+I can give only one half review right now, which "yes wee need this"
+but cannot give any rational feedback whether it is in the form we
+would like it to be.
+
+BR, Jarkko
 
