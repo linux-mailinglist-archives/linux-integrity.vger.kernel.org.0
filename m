@@ -1,99 +1,120 @@
-Return-Path: <linux-integrity+bounces-380-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-381-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E6828094C5
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 22:39:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77A49809671
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Dec 2023 00:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD17F1F213B9
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 21:39:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2206D28227B
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 23:09:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E598657308;
-	Thu,  7 Dec 2023 21:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D66481CD;
+	Thu,  7 Dec 2023 23:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UiYCYvpf"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="sfQlU7fR";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="sfQlU7fR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FD11728;
-	Thu,  7 Dec 2023 13:37:14 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-286d8f3a08bso1439757a91.1;
-        Thu, 07 Dec 2023 13:37:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701985034; x=1702589834; darn=vger.kernel.org;
-        h=message-id:date:content-id:mime-version:references:in-reply-to:cc
-         :to:subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gBBC3+RnZ4D0MUX3ZqGqN8vGIaNXSQk0kKGYcAtYiDo=;
-        b=UiYCYvpfwi+ZDuDgeWWqfiWfuyIBG3Zejdzhpiemxzoau9Sfq7LNJTEvXJ559eoWJh
-         341lGCMfdchI3H4pR9KxwpR569zw/Jw8wMwOWQ0rC1D64CTU2oGSn3yTX3bk621o0ZoE
-         SlhaMaPOkv3/Wgs2oN3LIqdALTEhs0fbzVWYL8LD5MXUQlZbautjNakULGWfORsdCSkL
-         iUMA+lYW6tWlrNPkSqLphx9iHJ/ajeciLnv8GU8vzGMWDW9H3YW6/Xfo9i1XBbwfHVUH
-         FMmW/m4fHC/tf21Yu44IjazXW2vcOeDckkea4ChS/Olclhe7TFy4ka7RoV4h7GqXI0Tv
-         YoHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701985034; x=1702589834;
-        h=message-id:date:content-id:mime-version:references:in-reply-to:cc
-         :to:subject:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gBBC3+RnZ4D0MUX3ZqGqN8vGIaNXSQk0kKGYcAtYiDo=;
-        b=on1lqLftS+Ag1pwHJ6h8YN9kU5QwUKte39Sdk+/vMf5F4SSUWL0F8lkjeOMOTmc+l3
-         bktE/Gwj3pj8U1inpJgvsHWBwkQ+xakGuwk6NhJrS8v5e0WTwAsfbFzKj4T12usEDYWP
-         K2uKVx3HDLUnb6f0w0qI2WP6ofQC/U0puxaoYX1cjhAvZmZ7hybC3v9AAe7XNMTyEYcx
-         jyHO9+Cg/Vejba+Z0WF9pXZLSDLLi2zjLJR9C3jnVi1CcJrph1P4uQXM8Dwt7tbq3lux
-         XQ1I82EhSlvin7/Mgj3O8qeGOZ3ng7xz3Zg3qWgLFF7prEISXE9C/xEalUv/HEcSmeTC
-         xhDA==
-X-Gm-Message-State: AOJu0YwpPsR1EhL1bbInTEmb8r3ZvT6p5htSF6KK7rQxsNpOLZailbwc
-	p4dDcR4vW4JDZSsLcMcFwVk=
-X-Google-Smtp-Source: AGHT+IElIp+cAHpNT5XZVbCct1KDG8EC2BtuKUTXw+pmvU+3AvJNfTkTV1K9c+dUQKpO/5jVtUv7hA==
-X-Received: by 2002:a17:90b:4b44:b0:286:d242:2629 with SMTP id mi4-20020a17090b4b4400b00286d2422629mr3189271pjb.3.1701985034008;
-        Thu, 07 Dec 2023 13:37:14 -0800 (PST)
-Received: from jromail.nowhere (h219-110-241-048.catv02.itscom.jp. [219.110.241.48])
-        by smtp.gmail.com with ESMTPSA id j18-20020a170902c3d200b001cc3a6813f8sm273891plj.154.2023.12.07.13.37.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 13:37:13 -0800 (PST)
-Received: from jro by jrotkm2 id 1rBLdS-0000Rz-2M ;
-	Fri, 08 Dec 2023 06:10:18 +0900
-From: "J. R. Okajima" <hooanon05g@gmail.com>
-Subject: Re: [PATCH] fs: Pass AT_GETATTR_NOSEC flag to getattr interface function
-To: Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc: amir73il@gmail.com, linux-integrity@vger.kernel.org,
-    linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-    miklos@szeredi.hu, Stefan Berger <stefanb@linux.ibm.com>,
-    syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com,
-    Alexander Viro <viro@zeniv.linux.org.uk>,
-    linux-fsdevel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
-    Mimi Zohar <zohar@linux.ibm.com>,
-    Christian Brauner <brauner@kernel.org>
-In-Reply-To: <20231002125733.1251467-1-stefanb@linux.vnet.ibm.com>
-References: <20231002125733.1251467-1-stefanb@linux.vnet.ibm.com>
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1901712;
+	Thu,  7 Dec 2023 15:09:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1701990584;
+	bh=KwrMq1zMkBIFmnhDzQZkZwok6AmAwj7GIyZcFY+4+NU=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=sfQlU7fRE6BfbsNMaMf63xTzhM8sOqXK9tivgUsI/qc7A3ai6M0GBDyUuSyN02/7N
+	 g8uEDsWYWq+ZgFfG2kuTP2fFmpjUWDb3fs0YnFZ28hxAU4xZNJnh1D3UcOhz9mUj/9
+	 mWRbaFLYfLAriE3z3i6GVgfqG8owfmSwQCYGFM0s=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id C5250128014F;
+	Thu,  7 Dec 2023 18:09:44 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id fhuTcLSG1pLQ; Thu,  7 Dec 2023 18:09:44 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1701990584;
+	bh=KwrMq1zMkBIFmnhDzQZkZwok6AmAwj7GIyZcFY+4+NU=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=sfQlU7fRE6BfbsNMaMf63xTzhM8sOqXK9tivgUsI/qc7A3ai6M0GBDyUuSyN02/7N
+	 g8uEDsWYWq+ZgFfG2kuTP2fFmpjUWDb3fs0YnFZ28hxAU4xZNJnh1D3UcOhz9mUj/9
+	 mWRbaFLYfLAriE3z3i6GVgfqG8owfmSwQCYGFM0s=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1251C1280087;
+	Thu,  7 Dec 2023 18:09:43 -0500 (EST)
+Message-ID: <f63ce1f09f7fe2b4ca421ff72d6553c5f7d354fc.camel@HansenPartnership.com>
+Subject: Re: [PATCH v5 12/17] tpm: Add full HMAC and encrypt/decrypt session
+ handling code
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 07 Dec 2023 18:09:41 -0500
+In-Reply-To: <CXHTVYW17UB6.MR6RH0TMDIX3@suppilovahvero>
+References: <20231127190854.13310-1-James.Bottomley@HansenPartnership.com>
+	 <20231127190854.13310-13-James.Bottomley@HansenPartnership.com>
+	 <CXHTVYW17UB6.MR6RH0TMDIX3@suppilovahvero>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1733.1701983418.1@jrotkm2>
-Date: Fri, 08 Dec 2023 06:10:18 +0900
-Message-ID: <1734.1701983418@jrotkm2>
+Content-Transfer-Encoding: 8bit
 
-Stefan Berger:
-> When vfs_getattr_nosec() calls a filesystem's getattr interface function
-> then the 'nosec' should propagate into this function so that
-> vfs_getattr_nosec() can again be called from the filesystem's gettattr
-> rather than vfs_getattr(). The latter would add unnecessary security
-> checks that the initial vfs_getattr_nosec() call wanted to avoid.
-> Therefore, introduce the getattr flag GETATTR_NOSEC and allow to pass
-> with the new getattr_flags parameter to the getattr interface function.
-> In overlayfs and ecryptfs use this flag to determine which one of the
-> two functions to call.
+On Thu, 2023-12-07 at 06:52 +0200, Jarkko Sakkinen wrote:
+> On Mon Nov 27, 2023 at 9:08 PM EET, James Bottomley wrote:
+> > Add session based HMAC authentication plus parameter decryption and
+> > response encryption using AES. The basic design is to segregate all
+> > the nasty crypto, hash and hmac code into tpm2-sessions.c and
+> > export a usable API.  The API first of all starts off by gaining a
+> > session with
+> > 
+> > tpm2_start_auth_session()
+> > 
+> > which initiates a session with the TPM and allocates an opaque
+> > tpm2_auth structure to handle the session parameters.  The design
+> > is that session use will be single threaded from start to finish
+> > under the ops lock, so the tpm2_auth structure is stored in struct
+> > tpm2_chip. Then the use is simply:
+> > 
+> > * tpm_buf_append_name() in place of the tpm_buf_append_u32 for the
+> >   handles
+> > 
+> > * tpm_buf_append_hmac_session() where tpm2_append_auth() would go
+> > 
+> > * tpm_buf_fill_hmac_session() called after the entire command
+> > buffer
+> >   is finished but before tpm_transmit_cmd() is called which
+> > computes
+> >   the correct HMAC and places it in the command at the correct
+> >   location.
+> 
+> Split each exported function into a separate patches. This too big
+> chunk of diff to be reviawable, i.e. it is impossible to give 
+> reviewed-by in this form. I think I've commented this also throughout
+> the series, and it has not been changed.
 
-You are introducing two perfectly identical functions.
-ecryptfs_do_getattr() and ovl_do_getattr().
-Why don't you provide one in a common place, such like
-include/linux/fs_stack.h?
+Um, you mean you mentioned it once and I explained that the API is
+unitary so logically it does belong in one patch and you didn't mention
+it again?
 
+> There needs to be a patch per each exported API function so that they
+> can be looked into detail. This patch does not align with submission
+> guidelines in the form it is either.
 
-J. R. Okajima
+There's no length limit on patch sizes, just the recommendation to keep
+the changes logical.  One patch per API is actually illogical and
+contrary to the guide because the APIs come in sets, so you'd miss the
+logical reviewability with that split.  I suppose what I could do is
+split it into three logically complete API sets: 1) primary creation;
+2) session start/end 3) rest of the session HMAC helpers.  That would
+give three patches of 400-600 lines each.
+
+James
+
 
