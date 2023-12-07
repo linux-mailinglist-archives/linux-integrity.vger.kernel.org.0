@@ -1,131 +1,99 @@
-Return-Path: <linux-integrity+bounces-378-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-379-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1A028092BE
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 21:49:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B529A809323
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 22:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C1F91F20FAF
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 20:49:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4EAB1C208C5
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 21:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 245BF481BC;
-	Thu,  7 Dec 2023 20:49:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39880524D8;
+	Thu,  7 Dec 2023 21:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkbbgWZj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDXzxEix"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0439710947;
-	Thu,  7 Dec 2023 20:49:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A465CC433C8;
-	Thu,  7 Dec 2023 20:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701982141;
-	bh=EuVP1XLpy4xj3vh40AqpvZ7wht1836EEQh/ytHofEsw=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=KkbbgWZjee/KlLSnirPtAF41DgYBmBZbyVwtMclEll7Z2tWp1R9lhvbSalyzbKNBP
-	 594RR/S/SUZjvlTao5AYJzuLyfNwVGpGro2PxmI7bDYdT6okV0s7GD7O5urbEUMeeo
-	 Xt88xx+Tjw6aUGRlSk7YHdil2a8VCCizeHrG5eBP1MceibW1TAR0tZ2hIkWKPNA/w/
-	 w0EPgCjwSrybqPnWRvItUb/kIMgLAv0BrBqMR0PiS4uR5i9/F0EIvKD3ORTzetTPWV
-	 xiAhH4o9FhNelN3u3NhA0aAysS96k+0JkQ++/Zp/b8HonpHLnhx9MPDW/AxSjbdKTY
-	 quoZMYk/l3CSQ==
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D44E9;
+	Thu,  7 Dec 2023 13:10:21 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-286d701cabeso1403864a91.3;
+        Thu, 07 Dec 2023 13:10:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701983421; x=1702588221; darn=vger.kernel.org;
+        h=message-id:date:content-id:mime-version:references:in-reply-to:cc
+         :to:subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gBBC3+RnZ4D0MUX3ZqGqN8vGIaNXSQk0kKGYcAtYiDo=;
+        b=UDXzxEixcsZP0AOw1m67vg70wH4Qj0tkkfVDXGIwGCo0fryMlyRAbM7hXdZnPEm0WQ
+         tkZqX7+Deck3MAOnfZjw4zJGW1cfVfZSjt+voQ05wI8h2ZknXNr1FVa44uwDCX49DjBC
+         H0Kkh1yPGpUydA+3P+X2AaIZaoQlaGTjNSE7gijegOcdwx1wQ3GEs1MU+tpBQvUlbRm2
+         cLwFNGd5JtXWGMr79iojT4FJtjP5rCtw5i9VE1pu09An9VibRRjPasaz+SZtO/KBZJvY
+         LEo2Wx/6EoNSTZYQQqGd81zGjs4wX2FwmdsOrVciFeW6GgSZliuRDD0IBOSLBStmzeNa
+         r2XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701983421; x=1702588221;
+        h=message-id:date:content-id:mime-version:references:in-reply-to:cc
+         :to:subject:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gBBC3+RnZ4D0MUX3ZqGqN8vGIaNXSQk0kKGYcAtYiDo=;
+        b=bPodEdpu95GkrV7tuTle4J1n/0zEjbRmMMw9IZuaVIY4mtGFc0hx5IVsEjPjexjeDm
+         LGoe+hCIdJoDjZ0QO8O4RMaYT5E6lEzgo9yWz+/aZ8CuSIqeQT1FxQAGqMVHw5527hnH
+         OOZr1dOXnjnARrYqHkSp4VLrnGwcqcB2NpklITm1zvzG0gqg5aphvbYhoQnOCCjWhsKd
+         Dnnq7vXtjmwFsoD29gLNEGiIumm8VQUeDmTw4FJZHWq3Gy4sSu+WaXSj1UAioW19F4Ub
+         +6fZup5yYqklhUkoUS+4T6oJXmtgx4mSG3RkZCh8WmPInZZKD/9bLf8OtVlWKPq1fd+O
+         LH+A==
+X-Gm-Message-State: AOJu0YyyiOA2fOt7BvQ1AcgYwPP/EXl0kLPY7f1238P/EyIVGbGPiFRo
+	qlPiAacF7MLh1DMG5wWEhVXb+KKYtnM=
+X-Google-Smtp-Source: AGHT+IE05Lk5zs8mPCAK6fac/YqNLl5Pwmurtilp7IlFNhBJCfM42MDMeksTqB/agK4RcOyMTJD7vg==
+X-Received: by 2002:a17:90a:4e0f:b0:286:818c:27a2 with SMTP id n15-20020a17090a4e0f00b00286818c27a2mr3592885pjh.49.1701983420884;
+        Thu, 07 Dec 2023 13:10:20 -0800 (PST)
+Received: from jromail.nowhere (h219-110-241-048.catv02.itscom.jp. [219.110.241.48])
+        by smtp.gmail.com with ESMTPSA id j8-20020a17090aeb0800b00286596711f1sm1852382pjz.19.2023.12.07.13.10.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 13:10:20 -0800 (PST)
+Received: from jro by jrotkm2 id 1rBLdS-0000Rz-2M ;
+	Fri, 08 Dec 2023 06:10:18 +0900
+From: "J. R. Okajima" <hooanon05g@gmail.com>
+Subject: Re: [PATCH] fs: Pass AT_GETATTR_NOSEC flag to getattr interface function
+To: Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc: amir73il@gmail.com, linux-integrity@vger.kernel.org,
+    linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+    miklos@szeredi.hu, Stefan Berger <stefanb@linux.ibm.com>,
+    syzbot+a67fc5321ffb4b311c98@syzkaller.appspotmail.com,
+    Alexander Viro <viro@zeniv.linux.org.uk>,
+    linux-fsdevel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
+    Mimi Zohar <zohar@linux.ibm.com>,
+    Christian Brauner <brauner@kernel.org>
+In-Reply-To: <20231002125733.1251467-1-stefanb@linux.vnet.ibm.com>
+References: <20231002125733.1251467-1-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Dec 2023 22:48:58 +0200
-Message-Id: <CXIEBCF9573Q.239OKGM1LTIS6@suppilovahvero>
-Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
-Subject: Re: [PATCH v5 16/17] tpm: add the null key name as a sysfs export
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
- <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20231127190854.13310-1-James.Bottomley@HansenPartnership.com>
- <20231127190854.13310-17-James.Bottomley@HansenPartnership.com>
-In-Reply-To: <20231127190854.13310-17-James.Bottomley@HansenPartnership.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1733.1701983418.1@jrotkm2>
+Date: Fri, 08 Dec 2023 06:10:18 +0900
+Message-ID: <1734.1701983418@jrotkm2>
 
-On Mon Nov 27, 2023 at 9:08 PM EET, James Bottomley wrote:
-> This is the last component of encrypted tpm2 session handling that
-> allows us to verify from userspace that the key derived from the NULL
-> seed genuinely belongs to the TPM and has not been spoofed.
->
-> The procedure for doing this involves creating an attestation identity
-> key (which requires verification of the TPM EK certificate) and then
-> using that AIK to sign a certification of the Elliptic Curve key over
-> the NULL seed.  Userspace must create this EC Key using the parameters
-> prescribed in TCG TPM v2.0 Provisioning Guidance for the SRK ECC; if
-> this is done correctly the names will match and the TPM can then run a
-> TPM2_Certify operation on this derived primary key using the newly
-> created AIK.
->
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> ---
->  drivers/char/tpm/tpm-sysfs.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->
-> diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-> index 54c71473aa29..403dffea4ea6 100644
-> --- a/drivers/char/tpm/tpm-sysfs.c
-> +++ b/drivers/char/tpm/tpm-sysfs.c
-> @@ -309,6 +309,21 @@ static ssize_t tpm_version_major_show(struct device =
-*dev,
->  }
->  static DEVICE_ATTR_RO(tpm_version_major);
-> =20
-> +#ifdef CONFIG_TPM_BUS_SECURITY
-> +static ssize_t null_name_show(struct device *dev, struct device_attribut=
-e *attr,
-> +			      char *buf)
-> +{
-> +	struct tpm_chip *chip =3D to_tpm_chip(dev);
-> +	int size =3D TPM2_NAME_SIZE;
-> +
-> +	bin2hex(buf, chip->tpmkeyname, size);
+Stefan Berger:
+> When vfs_getattr_nosec() calls a filesystem's getattr interface function
+> then the 'nosec' should propagate into this function so that
+> vfs_getattr_nosec() can again be called from the filesystem's gettattr
+> rather than vfs_getattr(). The latter would add unnecessary security
+> checks that the initial vfs_getattr_nosec() call wanted to avoid.
+> Therefore, introduce the getattr flag GETATTR_NOSEC and allow to pass
+> with the new getattr_flags parameter to the getattr interface function.
+> In overlayfs and ecryptfs use this flag to determine which one of the
+> two functions to call.
 
-"tpmkeyname" is not very descriptive name.
+You are introducing two perfectly identical functions.
+ecryptfs_do_getattr() and ovl_do_getattr().
+Why don't you provide one in a common place, such like
+include/linux/fs_stack.h?
 
-Why not chip->null_name?
 
-> +	size *=3D 2;
-> +	buf[size++] =3D '\n';
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RO(null_name);
-> +#endif
-> +
->  static struct attribute *tpm1_dev_attrs[] =3D {
->  	&dev_attr_pubek.attr,
->  	&dev_attr_pcrs.attr,
-> @@ -326,6 +341,9 @@ static struct attribute *tpm1_dev_attrs[] =3D {
-> =20
->  static struct attribute *tpm2_dev_attrs[] =3D {
->  	&dev_attr_tpm_version_major.attr,
-> +#ifdef CONFIG_TPM_BUS_SECURITY
-> +	&dev_attr_null_name.attr,
-> +#endif
->  	NULL
->  };
-> =20
-
-I'm able to verify this in QEMU:
-
-# cat /sys/class/tpm/tpm0/null_name
-000b66ec5f9ad1fa46c01707c5a8e67745147695901310e80438ff8f1b66dcf84bf2
-
-I used swtpm in tis mode.
-
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-It is not possible to give tested-by to earlier patches before there's
-some split to smaller pieces.
-
-BR, Jarkko
+J. R. Okajima
 
