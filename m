@@ -1,147 +1,131 @@
-Return-Path: <linux-integrity+bounces-377-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-378-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5254808C03
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 16:38:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1A028092BE
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 21:49:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F09A2815BA
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 15:38:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C1F91F20FAF
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 20:49:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D447344C91;
-	Thu,  7 Dec 2023 15:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 245BF481BC;
+	Thu,  7 Dec 2023 20:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BwBLlw5e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkbbgWZj"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80114437A;
-	Thu,  7 Dec 2023 15:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A55C433CB;
-	Thu,  7 Dec 2023 15:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0439710947;
+	Thu,  7 Dec 2023 20:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A465CC433C8;
+	Thu,  7 Dec 2023 20:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701963494;
-	bh=wvVN+1YIFHu6pwuC8my2GQeLCZBlFO2tSFyxQF8MEoA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BwBLlw5eO1GwXbEIAOPxS00/C0TZYafXou2wc/4do1UG3aFN+nnzSSA5mXnu5gzKN
-	 ++ArkvzxIsTVYgdlDD09GaZYkw39DyQv1MnL2HE5ZYiAz9G4nwmeRvLiEHI6TF6Xyj
-	 F7Bc/ntE8UuQznRkoo3k4paYxXtP+YekIgDKu2H+MKFd34HqpLv5BmOkBcd98Pbz5/
-	 z2/qkCKtoad7MxiAD6wrFdoxf4fJlbly5v09CObEup7PTOfw1PGFtZ+H3Nt1pTXmNL
-	 dE6ZRSVjo/L+4RdBt852KgFxEL0soBCSeoF9rDgb0+BD0qvXdOf108VvM3RvpnF5ep
-	 bJkkQ5ND3sEBQ==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ca0d14976aso11119651fa.2;
-        Thu, 07 Dec 2023 07:38:14 -0800 (PST)
-X-Gm-Message-State: AOJu0YxqTAcfQiOF++ADXxtRp33L6X1oImJKGUwdKA6Z/W8STMjfgRgT
-	mCOZh+pmvmsUEA1DR3zatZUwizz9hSeCalHRIy8=
-X-Google-Smtp-Source: AGHT+IFvQXuCu2DYdb90avyxL8P6qli6omWybxLqio1Iex9LuiGceMcEqs0UsqxMj6ERwpyXfaCn99dgbPE4v3Fpqtg=
-X-Received: by 2002:a2e:9686:0:b0:2ca:c76:c021 with SMTP id
- q6-20020a2e9686000000b002ca0c76c021mr1610161lji.68.1701963492420; Thu, 07 Dec
- 2023 07:38:12 -0800 (PST)
+	s=k20201202; t=1701982141;
+	bh=EuVP1XLpy4xj3vh40AqpvZ7wht1836EEQh/ytHofEsw=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=KkbbgWZjee/KlLSnirPtAF41DgYBmBZbyVwtMclEll7Z2tWp1R9lhvbSalyzbKNBP
+	 594RR/S/SUZjvlTao5AYJzuLyfNwVGpGro2PxmI7bDYdT6okV0s7GD7O5urbEUMeeo
+	 Xt88xx+Tjw6aUGRlSk7YHdil2a8VCCizeHrG5eBP1MceibW1TAR0tZ2hIkWKPNA/w/
+	 w0EPgCjwSrybqPnWRvItUb/kIMgLAv0BrBqMR0PiS4uR5i9/F0EIvKD3ORTzetTPWV
+	 xiAhH4o9FhNelN3u3NhA0aAysS96k+0JkQ++/Zp/b8HonpHLnhx9MPDW/AxSjbdKTY
+	 quoZMYk/l3CSQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231206125433.18420-1-tzimmermann@suse.de> <20231206125433.18420-4-tzimmermann@suse.de>
-In-Reply-To: <20231206125433.18420-4-tzimmermann@suse.de>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 7 Dec 2023 16:38:01 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE7JtotB=V7hrkbseDUwkwgUdkd5ownrsAdhayEqpy4sA@mail.gmail.com>
-Message-ID: <CAMj1kXE7JtotB=V7hrkbseDUwkwgUdkd5ownrsAdhayEqpy4sA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arch/x86: Do not include <asm/bootparam.h> in several
- header files
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 07 Dec 2023 22:48:58 +0200
+Message-Id: <CXIEBCF9573Q.239OKGM1LTIS6@suppilovahvero>
+Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH v5 16/17] tpm: add the null key name as a sysfs export
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.15.2
+References: <20231127190854.13310-1-James.Bottomley@HansenPartnership.com>
+ <20231127190854.13310-17-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20231127190854.13310-17-James.Bottomley@HansenPartnership.com>
 
-On Wed, 6 Dec 2023 at 13:54, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+On Mon Nov 27, 2023 at 9:08 PM EET, James Bottomley wrote:
+> This is the last component of encrypted tpm2 session handling that
+> allows us to verify from userspace that the key derived from the NULL
+> seed genuinely belongs to the TPM and has not been spoofed.
 >
-> Remove the include statement for <asm/bootparam.h> from several header
-> files that don't require it. Limits the exposure of the boot parameters
-> within the Linux kernel code.
+> The procedure for doing this involves creating an attestation identity
+> key (which requires verification of the TPM EK certificate) and then
+> using that AIK to sign a certification of the Elliptic Curve key over
+> the NULL seed.  Userspace must create this EC Key using the parameters
+> prescribed in TCG TPM v2.0 Provisioning Guidance for the SRK ECC; if
+> this is done correctly the names will match and the TPM can then run a
+> TPM2_Certify operation on this derived primary key using the newly
+> created AIK.
 >
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 > ---
->  arch/x86/include/asm/kexec.h       | 1 -
->  arch/x86/include/asm/mem_encrypt.h | 2 +-
->  arch/x86/include/asm/sev.h         | 3 ++-
->  arch/x86/include/asm/x86_init.h    | 2 --
->  4 files changed, 3 insertions(+), 5 deletions(-)
+>  drivers/char/tpm/tpm-sysfs.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 >
-> diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-> index c9f6a6c5de3c..91ca9a9ee3a2 100644
-> --- a/arch/x86/include/asm/kexec.h
-> +++ b/arch/x86/include/asm/kexec.h
-> @@ -25,7 +25,6 @@
->
->  #include <asm/page.h>
->  #include <asm/ptrace.h>
-> -#include <asm/bootparam.h>
->
->  struct kimage;
->
-> diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-> index 359ada486fa9..c1a8a3408c18 100644
-> --- a/arch/x86/include/asm/mem_encrypt.h
-> +++ b/arch/x86/include/asm/mem_encrypt.h
-> @@ -15,7 +15,7 @@
->  #include <linux/init.h>
->  #include <linux/cc_platform.h>
->
-> -#include <asm/bootparam.h>
-> +struct boot_params;
->
->  #ifdef CONFIG_X86_MEM_ENCRYPT
->  void __init mem_encrypt_init(void);
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index 5b4a1ce3d368..8dad8b1613bf 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -13,7 +13,6 @@
->
->  #include <asm/insn.h>
->  #include <asm/sev-common.h>
-> -#include <asm/bootparam.h>
->  #include <asm/coco.h>
->
->  #define GHCB_PROTOCOL_MIN      1ULL
-> @@ -22,6 +21,8 @@
->
->  #define        VMGEXIT()                       { asm volatile("rep; vmmcall\n\r"); }
->
-> +struct boot_params;
+> diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
+> index 54c71473aa29..403dffea4ea6 100644
+> --- a/drivers/char/tpm/tpm-sysfs.c
+> +++ b/drivers/char/tpm/tpm-sysfs.c
+> @@ -309,6 +309,21 @@ static ssize_t tpm_version_major_show(struct device =
+*dev,
+>  }
+>  static DEVICE_ATTR_RO(tpm_version_major);
+> =20
+> +#ifdef CONFIG_TPM_BUS_SECURITY
+> +static ssize_t null_name_show(struct device *dev, struct device_attribut=
+e *attr,
+> +			      char *buf)
+> +{
+> +	struct tpm_chip *chip =3D to_tpm_chip(dev);
+> +	int size =3D TPM2_NAME_SIZE;
 > +
->  enum es_result {
->         ES_OK,                  /* All good */
->         ES_UNSUPPORTED,         /* Requested operation not supported */
-> diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-> index c878616a18b8..f062715578a0 100644
-> --- a/arch/x86/include/asm/x86_init.h
-> +++ b/arch/x86/include/asm/x86_init.h
-> @@ -2,8 +2,6 @@
->  #ifndef _ASM_X86_PLATFORM_H
->  #define _ASM_X86_PLATFORM_H
->
-> -#include <asm/bootparam.h>
-> -
->  struct ghcb;
->  struct mpc_bus;
->  struct mpc_cpu;
-> --
-> 2.43.0
->
+> +	bin2hex(buf, chip->tpmkeyname, size);
+
+"tpmkeyname" is not very descriptive name.
+
+Why not chip->null_name?
+
+> +	size *=3D 2;
+> +	buf[size++] =3D '\n';
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RO(null_name);
+> +#endif
+> +
+>  static struct attribute *tpm1_dev_attrs[] =3D {
+>  	&dev_attr_pubek.attr,
+>  	&dev_attr_pcrs.attr,
+> @@ -326,6 +341,9 @@ static struct attribute *tpm1_dev_attrs[] =3D {
+> =20
+>  static struct attribute *tpm2_dev_attrs[] =3D {
+>  	&dev_attr_tpm_version_major.attr,
+> +#ifdef CONFIG_TPM_BUS_SECURITY
+> +	&dev_attr_null_name.attr,
+> +#endif
+>  	NULL
+>  };
+> =20
+
+I'm able to verify this in QEMU:
+
+# cat /sys/class/tpm/tpm0/null_name
+000b66ec5f9ad1fa46c01707c5a8e67745147695901310e80438ff8f1b66dcf84bf2
+
+I used swtpm in tis mode.
+
+Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+It is not possible to give tested-by to earlier patches before there's
+some split to smaller pieces.
+
+BR, Jarkko
 
