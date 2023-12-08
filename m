@@ -1,63 +1,48 @@
-Return-Path: <linux-integrity+bounces-381-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-382-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77A49809671
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Dec 2023 00:09:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94BE80AAB4
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Dec 2023 18:25:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2206D28227B
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Dec 2023 23:09:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C1D31F21334
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Dec 2023 17:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D66481CD;
-	Thu,  7 Dec 2023 23:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="sfQlU7fR";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="sfQlU7fR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10F2239870;
+	Fri,  8 Dec 2023 17:25:23 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1901712;
-	Thu,  7 Dec 2023 15:09:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1701990584;
-	bh=KwrMq1zMkBIFmnhDzQZkZwok6AmAwj7GIyZcFY+4+NU=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=sfQlU7fRE6BfbsNMaMf63xTzhM8sOqXK9tivgUsI/qc7A3ai6M0GBDyUuSyN02/7N
-	 g8uEDsWYWq+ZgFfG2kuTP2fFmpjUWDb3fs0YnFZ28hxAU4xZNJnh1D3UcOhz9mUj/9
-	 mWRbaFLYfLAriE3z3i6GVgfqG8owfmSwQCYGFM0s=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id C5250128014F;
-	Thu,  7 Dec 2023 18:09:44 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id fhuTcLSG1pLQ; Thu,  7 Dec 2023 18:09:44 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1701990584;
-	bh=KwrMq1zMkBIFmnhDzQZkZwok6AmAwj7GIyZcFY+4+NU=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=sfQlU7fRE6BfbsNMaMf63xTzhM8sOqXK9tivgUsI/qc7A3ai6M0GBDyUuSyN02/7N
-	 g8uEDsWYWq+ZgFfG2kuTP2fFmpjUWDb3fs0YnFZ28hxAU4xZNJnh1D3UcOhz9mUj/9
-	 mWRbaFLYfLAriE3z3i6GVgfqG8owfmSwQCYGFM0s=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1251C1280087;
-	Thu,  7 Dec 2023 18:09:43 -0500 (EST)
-Message-ID: <f63ce1f09f7fe2b4ca421ff72d6553c5f7d354fc.camel@HansenPartnership.com>
-Subject: Re: [PATCH v5 12/17] tpm: Add full HMAC and encrypt/decrypt session
- handling code
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 07 Dec 2023 18:09:41 -0500
-In-Reply-To: <CXHTVYW17UB6.MR6RH0TMDIX3@suppilovahvero>
-References: <20231127190854.13310-1-James.Bottomley@HansenPartnership.com>
-	 <20231127190854.13310-13-James.Bottomley@HansenPartnership.com>
-	 <CXHTVYW17UB6.MR6RH0TMDIX3@suppilovahvero>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73DE11D;
+	Fri,  8 Dec 2023 09:25:17 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SmyJN1wc0z9yskh;
+	Sat,  9 Dec 2023 01:08:04 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id E5EDD14090E;
+	Sat,  9 Dec 2023 01:25:04 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwDnInNoUXNlUnQqAg--.64290S2;
+	Fri, 08 Dec 2023 18:25:04 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: miklos@szeredi.hu,
+	amir73il@gmail.com
+Cc: linux-unionfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zohar@linux.ibm.com,
+	paul@paul-moore.com,
+	stefanb@linux.ibm.com,
+	jlayton@kernel.org,
+	brauner@kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH] overlayfs: Redirect xattr ops on security.evm to security.evm_overlayfs
+Date: Fri,  8 Dec 2023 18:23:08 +0100
+Message-Id: <20231208172308.2876481-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -65,56 +50,164 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwDnInNoUXNlUnQqAg--.64290S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WryxZFWxAw4DAF4xurW8Xrb_yoW7Zw1DpF
+	Wqya4DKr4rXFy7Wws5Aanruw109w4Fk3WUJ3y5Wwn5AF9xW3Za9FyftryYkFyUJr18ZFy5
+	tayjqw13K3s8Ww7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
+	67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+	uYvjxUsrcTDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj5dj+AABs8
 
-On Thu, 2023-12-07 at 06:52 +0200, Jarkko Sakkinen wrote:
-> On Mon Nov 27, 2023 at 9:08 PM EET, James Bottomley wrote:
-> > Add session based HMAC authentication plus parameter decryption and
-> > response encryption using AES. The basic design is to segregate all
-> > the nasty crypto, hash and hmac code into tpm2-sessions.c and
-> > export a usable API.  The API first of all starts off by gaining a
-> > session with
-> > 
-> > tpm2_start_auth_session()
-> > 
-> > which initiates a session with the TPM and allocates an opaque
-> > tpm2_auth structure to handle the session parameters.  The design
-> > is that session use will be single threaded from start to finish
-> > under the ops lock, so the tpm2_auth structure is stored in struct
-> > tpm2_chip. Then the use is simply:
-> > 
-> > * tpm_buf_append_name() in place of the tpm_buf_append_u32 for the
-> >   handles
-> > 
-> > * tpm_buf_append_hmac_session() where tpm2_append_auth() would go
-> > 
-> > * tpm_buf_fill_hmac_session() called after the entire command
-> > buffer
-> >   is finished but before tpm_transmit_cmd() is called which
-> > computes
-> >   the correct HMAC and places it in the command at the correct
-> >   location.
-> 
-> Split each exported function into a separate patches. This too big
-> chunk of diff to be reviawable, i.e. it is impossible to give 
-> reviewed-by in this form. I think I've commented this also throughout
-> the series, and it has not been changed.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Um, you mean you mentioned it once and I explained that the API is
-unitary so logically it does belong in one patch and you didn't mention
-it again?
+EVM updates the HMAC in security.evm whenever there is a setxattr or
+removexattr operation on one of its protected xattrs (e.g. security.ima).
 
-> There needs to be a patch per each exported API function so that they
-> can be looked into detail. This patch does not align with submission
-> guidelines in the form it is either.
+Unfortunately, since overlayfs redirects those xattrs operations on the
+lower filesystem, the EVM HMAC cannot be calculated reliably, since lower
+inode attributes on which the HMAC is calculated are different from upper
+inode attributes (for example i_generation and s_uuid).
 
-There's no length limit on patch sizes, just the recommendation to keep
-the changes logical.  One patch per API is actually illogical and
-contrary to the guide because the APIs come in sets, so you'd miss the
-logical reviewability with that split.  I suppose what I could do is
-split it into three logically complete API sets: 1) primary creation;
-2) session start/end 3) rest of the session HMAC helpers.  That would
-give three patches of 400-600 lines each.
+Although maybe it is possible to align such attributes between the lower
+and the upper inode, another idea is to map security.evm to another name
+(security.evm_overlayfs) during an xattr operation, so that it does not
+collide with security.evm set by the lower filesystem.
 
-James
+Whenever overlayfs wants to set security.evm, it is actually setting
+security.evm_overlayfs calculated with the upper inode attributes. The
+lower filesystem continues to update security.evm.
+
+This seems to make things working again, and even allowing IMA appraisal
+to succeed on both the lower and the upper inode.
+
+Example:
+
+# mount -t overlay overlay \
+    -o lowerdir=data,upperdir=root/data,workdir=root/data_work mnt
+
+# echo "appraise fsname=overlay" > /sys/kernel/security/ima/policy
+# echo "appraise fsuid=<lower fs UUID>" > /sys/kernel/security/ima/policy
+
+# cd mnt
+# echo test > test-file
+evm: security.ima: (34) [0404f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93...]
+evm: hmac_misc: (24) [1300000000000000cd9e816c0000000000000000a4810000]
+evm: uuid: [28b23254946744c0b6ba34b12e85a26f]
+evm: digest: [b186cc901ead302572c6b271db85e4e5cd41c6ce]
+evm: security.ima: (34) [0404f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93...]
+evm: hmac_misc: (24) [1300000000000000000000000000000000000000a4810000]
+evm: uuid: [589286d4df13456ea82a9aca97660302]
+evm: digest: [b90586afd1703a6cbf290d9150465f8bdd48fb8a]
+
+The first 4 lines show the HMAC calculation on the lower inode (ext4), the
+remaining 4 the HMAC calculation on the upper inode (overlay).
+
+Now, after mapping security.evm to security.evm_overlayfs, this is the
+result of the getfattr command on overlayfs:
+
+# getfattr -m - -d -e hex test-file
+# file: test-file
+security.evm=0x02b90586afd1703a6cbf290d9150465f8bdd48fb8a
+security.ima=0x0404f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93...
+
+Instead, this is the result of the getfattr command on the lower fs:
+
+# getfattr -m - -d -e hex ../root/data/test-file
+# file: ../root/data/test-file
+security.evm=0x02b186cc901ead302572c6b271db85e4e5cd41c6ce
+security.evm_overlayfs=0x02b90586afd1703a6cbf290d9150465f8bdd48fb8a
+security.ima=0x0404f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93...
+
+Both HMACs are stored on the lower inode.
+
+Trying IMA appraisal, the result is that both the access from overlayfs and
+from the lower fs succeed. From overlayfs:
+
+# cat test-file
+evm: security.ima: (34) [0404f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93...]
+evm: hmac_misc: (24) [1300000000000000000000000000000000000000a4810000]
+evm: uuid: [589286d4df13456ea82a9aca97660302]
+evm: digest: [b90586afd1703a6cbf290d9150465f8bdd48fb8a]
+test
+
+From the lower fs:
+
+# cat ../root/data/test-file
+evm: security.ima: (34) [0404f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93...]
+evm: hmac_misc: (24) [1300000000000000cd9e816c0000000000000000a4810000]
+evm: uuid: [28b23254946744c0b6ba34b12e85a26f]
+evm: digest: [b186cc901ead302572c6b271db85e4e5cd41c6ce]
+test
+
+security.evm_overlayfs is hidden from listxattr in overlayfs.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ fs/overlayfs/xattrs.c      | 9 +++++++++
+ include/uapi/linux/xattr.h | 4 ++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/fs/overlayfs/xattrs.c b/fs/overlayfs/xattrs.c
+index 383978e4663c..1141d2fa01db 100644
+--- a/fs/overlayfs/xattrs.c
++++ b/fs/overlayfs/xattrs.c
+@@ -65,6 +65,9 @@ static int ovl_xattr_set(struct dentry *dentry, struct inode *inode, const char
+ 		goto out;
+ 
+ 	old_cred = ovl_override_creds(dentry->d_sb);
++	if (!strcmp(name, XATTR_NAME_EVM))
++		name = XATTR_NAME_EVM_OVERLAYFS;
++
+ 	if (value) {
+ 		err = ovl_do_setxattr(ofs, realdentry, name, value, size,
+ 				      flags);
+@@ -88,6 +91,9 @@ static int ovl_xattr_get(struct dentry *dentry, struct inode *inode, const char
+ 	const struct cred *old_cred;
+ 	struct path realpath;
+ 
++	if (!strcmp(name, XATTR_NAME_EVM))
++		name = XATTR_NAME_EVM_OVERLAYFS;
++
+ 	ovl_i_path_real(inode, &realpath);
+ 	old_cred = ovl_override_creds(dentry->d_sb);
+ 	res = vfs_getxattr(mnt_idmap(realpath.mnt), realpath.dentry, name, value, size);
+@@ -101,6 +107,9 @@ static bool ovl_can_list(struct super_block *sb, const char *s)
+ 	if (ovl_is_private_xattr(sb, s))
+ 		return false;
+ 
++	if (!strcmp(s, XATTR_NAME_EVM_OVERLAYFS))
++		return false;
++
+ 	/* List all non-trusted xattrs */
+ 	if (strncmp(s, XATTR_TRUSTED_PREFIX, XATTR_TRUSTED_PREFIX_LEN) != 0)
+ 		return true;
+diff --git a/include/uapi/linux/xattr.h b/include/uapi/linux/xattr.h
+index 9463db2dfa9d..93930300f69e 100644
+--- a/include/uapi/linux/xattr.h
++++ b/include/uapi/linux/xattr.h
+@@ -51,6 +51,10 @@
+ #define XATTR_EVM_SUFFIX "evm"
+ #define XATTR_NAME_EVM XATTR_SECURITY_PREFIX XATTR_EVM_SUFFIX
+ 
++#define XATTR_EVM_OVERLAYFS_SUFFIX "evm_overlayfs"
++#define XATTR_NAME_EVM_OVERLAYFS \
++	XATTR_SECURITY_PREFIX XATTR_EVM_OVERLAYFS_SUFFIX
++
+ #define XATTR_IMA_SUFFIX "ima"
+ #define XATTR_NAME_IMA XATTR_SECURITY_PREFIX XATTR_IMA_SUFFIX
+ 
+-- 
+2.34.1
 
 
