@@ -1,117 +1,113 @@
-Return-Path: <linux-integrity+bounces-387-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-388-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFDA880CFCF
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Dec 2023 16:42:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BB8A80D36F
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Dec 2023 18:15:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 632E61F21936
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Dec 2023 15:42:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 108DE1F218B6
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Dec 2023 17:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C198C4BA96;
-	Mon, 11 Dec 2023 15:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0224D130;
+	Mon, 11 Dec 2023 17:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FILBYqHU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E772CDC;
-	Mon, 11 Dec 2023 07:42:07 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Splxf4jp1zB03Fq;
-	Mon, 11 Dec 2023 23:28:06 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id B5020140489;
-	Mon, 11 Dec 2023 23:41:59 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDnInO+LXdlFG9ZAg--.22283S2;
-	Mon, 11 Dec 2023 16:41:59 +0100 (CET)
-Message-ID: <6e05677355d6d134dddd11da56709b424b631079.camel@huaweicloud.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DB84D124;
+	Mon, 11 Dec 2023 17:15:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C42AC433C8;
+	Mon, 11 Dec 2023 17:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702314943;
+	bh=cOadndWNrJ59Ef3Nb9Yx1iYcwUhRgTCTQRPzgwoU4Rc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FILBYqHUPcbUyd5MWCTu3mNk5EOs8PJ4rWZFg9GLN0kT6ocPIWsAtBIc8ph7HLp+e
+	 4WqN/oiKzN2vUkqnG6fGp2h1pxUuYbEkyrOYSJH1+Nsbp+r3mm3k7aYpivk7JPKKeS
+	 wbHJRIWhLntVfkEoGT3bjtNKCoLHZ8E+c/gyN15Wkrj7dad+eFA1iZaSPDPu+hPVMQ
+	 b1nUWtfn7X8Z99blOTIAOyrPjtDz20Jp3CNfsKlIvvoQnF8X+QGwsLWMyx1gGzTBxM
+	 7sJjeq6UnqyjLaI4yt57m1HzB8oSNs2j0KFKpPJxRUB8x7h+/H/KG8CVvh6dwK8o4k
+	 Q5NljSbajP44Q==
+Date: Mon, 11 Dec 2023 11:15:42 -0600
+From: Seth Forshee <sforshee@kernel.org>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>, miklos@szeredi.hu,
+	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	zohar@linux.ibm.com, paul@paul-moore.com, stefanb@linux.ibm.com,
+	jlayton@kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
 Subject: Re: [RFC][PATCH] overlayfs: Redirect xattr ops on security.evm to
  security.evm_overlayfs
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Seth Forshee <sforshee@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>, Amir Goldstein
- <amir73il@gmail.com>,  miklos@szeredi.hu, linux-unionfs@vger.kernel.org,
- linux-kernel@vger.kernel.org,  zohar@linux.ibm.com, paul@paul-moore.com,
- stefanb@linux.ibm.com,  jlayton@kernel.org,
- linux-integrity@vger.kernel.org,  linux-security-module@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Date: Mon, 11 Dec 2023 16:41:46 +0100
-In-Reply-To: <ZXcsdf6BzszwZc9h@do-x1extreme>
+Message-ID: <ZXdDvgbjSNo78zM2@do-x1extreme>
 References: <20231208172308.2876481-1-roberto.sassu@huaweicloud.com>
-	 <CAOQ4uxivpZ+u0A5kE962XST37-ey2Tv9EtddnZQhk3ohRkcQTw@mail.gmail.com>
-	 <20231208-tauziehen-zerfetzt-026e7ee800a0@brauner>
-	 <c95b24f27021052209ec6911d2b7e7b20e410f43.camel@huaweicloud.com>
-	 <ZXcsdf6BzszwZc9h@do-x1extreme>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+ <CAOQ4uxivpZ+u0A5kE962XST37-ey2Tv9EtddnZQhk3ohRkcQTw@mail.gmail.com>
+ <20231208-tauziehen-zerfetzt-026e7ee800a0@brauner>
+ <c95b24f27021052209ec6911d2b7e7b20e410f43.camel@huaweicloud.com>
+ <ZXcsdf6BzszwZc9h@do-x1extreme>
+ <6e05677355d6d134dddd11da56709b424b631079.camel@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwDnInO+LXdlFG9ZAg--.22283S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFWfXryxCw1xWw4ktw1fWFg_yoW8Cr4rpr
-	WSva4IqFs8JryxZw4SyrsrX3yF93WxWa15Jr45Krn7A3WDGr1jgFWDJ3W3ZFyIqFyDWa1j
-	qayUKas7ur98Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAIBF1jj5d2AAAAsd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e05677355d6d134dddd11da56709b424b631079.camel@huaweicloud.com>
 
-On Mon, 2023-12-11 at 09:36 -0600, Seth Forshee wrote:
-> On Mon, Dec 11, 2023 at 03:56:06PM +0100, Roberto Sassu wrote:
-> > Ok, I will try.
-> >=20
-> > I explain first how EVM works in general, and then why EVM does not
-> > work with overlayfs.
-> >=20
-> > EVM gets called before there is a set/removexattr operation, and after,
-> > if that operation is successful. Before the set/removexattr operation
-> > EVM calculates the HMAC on current inode metadata (i_ino, i_generation,
-> > i_uid, i_gid, i_mode, POSIX ACLs, protected xattrs). Finally, it
-> > compares the calculated HMAC with the one in security.evm.
-> >=20
-> > If the verification and the set/removexattr operation are successful,
-> > EVM calculates again the HMAC (in the post hooks) based on the updated
-> > inode metadata, and sets security.evm with the new HMAC.
-> >=20
-> > The problem is the combination of: overlayfs inodes have different
-> > metadata than the lower/upper inodes; overlayfs calls the VFS to
-> > set/remove xattrs.
->=20
-> I don't know all of the inner workings of overlayfs in detail, but is it
-> not true that whatever metadata an overlayfs mount presents for a given
-> inode is stored in the lower and/or upper filesystem inodes? If the
-> metadata for those inodes is verified with EVM, why is it also necessary
-> to verify the metadata at the overlayfs level? If some overlayfs
-> metadata is currently omitted from the checks on the lower/upper inodes,
-> is there any reason EVM couldn't start including that its checksums?
+On Mon, Dec 11, 2023 at 04:41:46PM +0100, Roberto Sassu wrote:
+> On Mon, 2023-12-11 at 09:36 -0600, Seth Forshee wrote:
+> > On Mon, Dec 11, 2023 at 03:56:06PM +0100, Roberto Sassu wrote:
+> > > Ok, I will try.
+> > > 
+> > > I explain first how EVM works in general, and then why EVM does not
+> > > work with overlayfs.
+> > > 
+> > > EVM gets called before there is a set/removexattr operation, and after,
+> > > if that operation is successful. Before the set/removexattr operation
+> > > EVM calculates the HMAC on current inode metadata (i_ino, i_generation,
+> > > i_uid, i_gid, i_mode, POSIX ACLs, protected xattrs). Finally, it
+> > > compares the calculated HMAC with the one in security.evm.
+> > > 
+> > > If the verification and the set/removexattr operation are successful,
+> > > EVM calculates again the HMAC (in the post hooks) based on the updated
+> > > inode metadata, and sets security.evm with the new HMAC.
+> > > 
+> > > The problem is the combination of: overlayfs inodes have different
+> > > metadata than the lower/upper inodes; overlayfs calls the VFS to
+> > > set/remove xattrs.
+> > 
+> > I don't know all of the inner workings of overlayfs in detail, but is it
+> > not true that whatever metadata an overlayfs mount presents for a given
+> > inode is stored in the lower and/or upper filesystem inodes? If the
+> > metadata for those inodes is verified with EVM, why is it also necessary
+> > to verify the metadata at the overlayfs level? If some overlayfs
+> > metadata is currently omitted from the checks on the lower/upper inodes,
+> > is there any reason EVM couldn't start including that its checksums?
+> 
+> Currently, the metadata where there is a misalignment are:
+> i_generation, s_uuid, (i_ino?). Maybe there is more?
+> 
+> If metadata are aligned, there is no need to store two separate HMACs.
 
-Currently, the metadata where there is a misalignment are:
-i_generation, s_uuid, (i_ino?). Maybe there is more?
+I can only think of three possible sources for the metadata overlayfs
+presents:
 
-If metadata are aligned, there is no need to store two separate HMACs.
+ 1. It comes directly from the underlying filesystems
+ 2. overlayfs synthesizes if from the underlying filesystem data
+ 3. It's purely generated at runtime
 
-Thanks
+Are there others?
 
-Roberto
-
-> Granted that there could be some backwards compatibility issues, but
-> maybe inclusion of the overlayfs metadata could be opt-in.
->=20
-> Thanks,
-> Seth
-
+1 and 2 should be covered by EVM on the underlying filesystems. If 3 is
+happening then it seems like hashing that data is just confirming that
+overlayfs consistently generates the same values for that data, and
+verifying code behavior doesn't seem in-scope for EVM.
 
