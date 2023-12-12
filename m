@@ -1,62 +1,68 @@
-Return-Path: <linux-integrity+bounces-418-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-419-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6E3180F730
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 20:50:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0288480F780
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 21:07:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 295F11F21679
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 19:50:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33E461C20D9A
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 20:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C5B6358F;
-	Tue, 12 Dec 2023 19:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E17652778;
+	Tue, 12 Dec 2023 20:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k0CLPIU5"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="e8AbT5Ji"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE22BAF;
-	Tue, 12 Dec 2023 11:50:05 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6d7fa93afe9so4441740a34.2;
-        Tue, 12 Dec 2023 11:50:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702410605; x=1703015405; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WmuBvNsZRD+aUZxutpdK+Wc4at557PwkYqBm9ImnNo=;
-        b=k0CLPIU5ckVW+tlyT3Y/2RnZi4spOPm9CqgJq1jOJx3reQzh3uxvxH3RXkvQbGyXxk
-         E72NzPBIm1tN3czR7vcr2sY8VXbqjrYc8Q7YpPF+9gdKIS5U8PhEzfp7U09XqpH/SIbc
-         aApUmtAgWBwymssfr84lJ2ibOdKobcKiDDqG+N5ilPe8BbPAroF9OMjAxSErlotR49km
-         pdLp8Um5qVFTX3UiqV2FD0NldK1bLcUEadwJr8MeP2s2qhKkTUAj4fVrmHhaKtthSSdp
-         oeIKjDxZU2xN95xGBvTaat7GGDYjBiiP7d75ooh4A7BaJ1JeUaJTl0X+0yBWUAtt6eBr
-         k+tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702410605; x=1703015405;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+WmuBvNsZRD+aUZxutpdK+Wc4at557PwkYqBm9ImnNo=;
-        b=fqicBPpEc5Z0SPfXGt2EnxYTqHDqH7nd4+N/WMMXVdLkjHElbeci+ccRutR2qvhZwh
-         D8mUEvFIYV0ovr0LzZDLjf+nCLPQj0QmiMlcCPek9MypYCLFR/2lG1HrSQLgLs3ierKC
-         v/CtCq+Wlc9VgwOQnJO7ctxtOBmSjnGjxQVtdGoHQV9+iOTiYuPK5IGCim0mcCTBgAvu
-         Pav+Vlf/IO9dQ2url9tn3IOl1j1tn1lBw5yHxx0MQAG7HzQRxOw44qfWs9crL/1w4stQ
-         UFyQxcGrJkXfVLTvhcnfbONb9RgmL6Emd5JgF4rTOVH6NN2hm/O4k2L+5PPYOcZsHXtv
-         rtRg==
-X-Gm-Message-State: AOJu0Yz3hg3QCz1tHr3gID/qjbtXMmM3oOAZT+5H8UZYspAWdJ3HJ4QI
-	lhXoAjiG0DMCspooMhVUXLc=
-X-Google-Smtp-Source: AGHT+IHxvw0Vut2QyDJrUC2ZE3myAntSoCtrfAiJtnB2NbnqgyxdEdjc1V2fTJZEufc66yWs6pg4mw==
-X-Received: by 2002:a9d:6841:0:b0:6d9:f69a:392c with SMTP id c1-20020a9d6841000000b006d9f69a392cmr5894594oto.31.1702410605018;
-        Tue, 12 Dec 2023 11:50:05 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m19-20020a0568301e7300b006b9cc67386fsm2367658otr.66.2023.12.12.11.50.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 11:50:03 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2946fbb1-2a47-4d21-83dc-8e45bf6ba5a9@roeck-us.net>
-Date: Tue, 12 Dec 2023 11:50:00 -0800
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7BBA2;
+	Tue, 12 Dec 2023 12:07:38 -0800 (PST)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BCJudOR012024;
+	Tue, 12 Dec 2023 20:06:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=TmH9w3blNDPKBoDlTf4OpLYjlao5d1XQCukjpJGG/z4=;
+ b=e8AbT5JibmPkZ8TLdpystRRxmeii14CJ+sDVjlSzpkXZkZcInk9mGQl5DWk1fBGi57QW
+ dOhheEsvVoP1Smi1XBaSugn1zK0IS8qqwnEvMyHsGyyb3+HoK73i+ytJFbGWnQFco2dr
+ mfc5T10B7N2af8SnmrpkLdwkRHJKe88SSYY4pkd/J+ozUxR6H9xY6oegzaes9JmlYOoA
+ IPKr8PCA/qsSilcDrIO6eGRHHTVPg08jbmOeamPuJ3JG/WvDAE7AxQPlXM6wE0YvfiyH
+ x6mzOrVMM/BfN/9kC7chODyWU2LV6X8YienRhY4jaj8Xe3QWAxxsjh8eQu+0cQKdZoSn zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uxw6bsu2u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Dec 2023 20:06:44 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BCJxMk8022179;
+	Tue, 12 Dec 2023 20:06:43 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uxw6bsu21-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Dec 2023 20:06:43 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BCJ8VKR014808;
+	Tue, 12 Dec 2023 20:06:42 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uw42kdecj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Dec 2023 20:06:42 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BCK6ftc66191868
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 12 Dec 2023 20:06:41 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 984E958065;
+	Tue, 12 Dec 2023 20:06:41 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 04AB75805E;
+	Tue, 12 Dec 2023 20:06:41 +0000 (GMT)
+Received: from [9.24.12.86] (unknown [9.24.12.86])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 12 Dec 2023 20:06:40 +0000 (GMT)
+Message-ID: <2ddae2e4-de55-41a1-a93e-819f8d55dde6@linux.ibm.com>
+Date: Tue, 12 Dec 2023 14:06:40 -0600
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -64,172 +70,97 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 7/8] tpm: tis-i2c: Add more compatible strings
+Subject: Re: [PATCH v1 1/8] dt-bindings: arm: aspeed: add IBM system1-bmc
 Content-Language: en-US
 To: Conor Dooley <conor@kernel.org>
-Cc: Ninad Palsule <ninad@linux.ibm.com>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, joel@jms.id.au,
- andrew@codeconstruct.com.au, peterhuewe@gmx.de, jarkko@kernel.org,
- jgg@ziepe.ca, keescook@chromium.org, tony.luck@intel.com,
- gpiccoli@igalia.com, johannes.holland@infineon.com, broonie@kernel.org,
- patrick.rudolph@9elements.com, vincent@vtremblay.dev,
- peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com, bhelgaas@google.com,
- naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
- festevam@denx.de, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-hardening@vger.kernel.org, geissonator@yahoo.com
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        joel@jms.id.au, andrew@codeconstruct.com.au, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, keescook@chromium.org,
+        tony.luck@intel.com, gpiccoli@igalia.com,
+        johannes.holland@infineon.com, linux@roeck-us.net, broonie@kernel.org,
+        patrick.rudolph@9elements.com, vincent@vtremblay.dev,
+        peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com, bhelgaas@google.com,
+        naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
+        festevam@denx.de, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-hardening@vger.kernel.org, geissonator@yahoo.com
 References: <20231212164004.1683589-1-ninad@linux.ibm.com>
- <20231212164004.1683589-8-ninad@linux.ibm.com>
- <20231212-avid-grill-dbead068fac8@spud>
- <73381bb0-7fa7-4a9e-88df-ab0063058e26@roeck-us.net>
- <20231212-mouth-choice-40a83caa34ec@spud>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231212-mouth-choice-40a83caa34ec@spud>
+ <20231212164004.1683589-2-ninad@linux.ibm.com>
+ <20231212-thrower-ebook-d29a85a6ed96@spud>
+From: Ninad Palsule <ninad@linux.ibm.com>
+In-Reply-To: <20231212-thrower-ebook-d29a85a6ed96@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: U8PFgQodpMDqjUJfIhz1uaYjKOARbEhV
+X-Proofpoint-GUID: IRw5VQBoZgxysgbkI057XToVO0Ukxlaf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-12_12,2023-12-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
+ clxscore=1011 priorityscore=1501 suspectscore=0 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312120154
 
-On 12/12/23 10:51, Conor Dooley wrote:
-> On Tue, Dec 12, 2023 at 10:00:39AM -0800, Guenter Roeck wrote:
->> On Tue, Dec 12, 2023 at 05:15:51PM +0000, Conor Dooley wrote:
->>> On Tue, Dec 12, 2023 at 10:40:03AM -0600, Ninad Palsule wrote:
->>>> From: Joel Stanley <joel@jms.id.au>
->>>>
->>>> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
->>>>
->>>> https://www.nuvoton.com/products/cloud-computing/security/trusted-platform-module-tpm/
->>>>
->>>> Add a compatible string for it, and the generic compatible.
->>>>
->>>> OpenBMC-Staging-Count: 3
->>>
->>> Delete this from every patch that it appears from.
->>>
->>>> Signed-off-by: Joel Stanley <joel@jms.id.au>
->>>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>> Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.au
->>>> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
->>>> ---
->>>>   drivers/char/tpm/tpm_tis_i2c.c | 2 ++
->>>>   1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
->>>> index a897402cc36a..9511c0d50185 100644
->>>> --- a/drivers/char/tpm/tpm_tis_i2c.c
->>>> +++ b/drivers/char/tpm/tpm_tis_i2c.c
->>>> @@ -383,6 +383,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
->>>>   #ifdef CONFIG_OF
->>>>   static const struct of_device_id of_tis_i2c_match[] = {
->>>>   	{ .compatible = "infineon,slb9673", },
->>>> +	{ .compatible = "nuvoton,npct75x", },
->>>> +	{ .compatible = "tcg,tpm-tis-i2c", },
->>>
->>> What's the point of the generic compatible if you are adding the device
->>> specific ones to the driver anyway?
->>>
+Hello Conor,
+
+On 12/12/23 11:09, Conor Dooley wrote:
+> On Tue, Dec 12, 2023 at 10:39:57AM -0600, Ninad Palsule wrote:
+>> Document the new compatibles used on IBM system1-bmc
 >>
->> $ git grep infineon,slb9673
->> Documentation/devicetree/bindings/trivial-devices.yaml:          - infineon,slb9673
-> 
-> Hmm, this would then need to be moved into the new schema, out of
-> trivial devices.
-> 
->> drivers/char/tpm/tpm_tis_i2c.c: { .compatible = "infineon,slb9673", },
->> $ git grep nuvoton,npct75x
->> arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:            compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
->> arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts:            compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
->> $ git grep tcg,tpm-tis-i2c
->> arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:            compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
->> arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts:            compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
->> arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts:             compatible = "tcg,tpm-tis-i2c";
-> 
-> pog, undocumented compatibles.
-> 
+>> Tested:
+>>      This board is tested using the simics simulator.
+> I don't see how this is relevant to dt-bindings patches.
+Make sense. Removed it.
+>
+>> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
+>> ---
+>>   Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
+>>   Documentation/devicetree/bindings/trivial-devices.yaml   | 2 ++
+> IMO these should be split into two patches.
 
-Yes, I know, quite annoying. Though, to be fair, a generic "tcg,tpm-tis-i2c"
-would make a lot of sense.
+Make sense. Split it into two patches.
 
-Note that Rob had rejected the original addition (into trivial devices)
-with the argument that it is not a trivial device
-(https://lore.kernel.org/lkml/20220605225610.GA3682221-robh@kernel.org/).
+Thank you for the review.
 
->> It looks like at least the generic entry is needed, given that it is quite
->> likely that there is hardware out there using it. Other than that, this
->> makes me wonder: Is there some official guideline describing if and when
->> to use (only) generic devicetree compatible entries and when specific ones
->> may / should / have to be used ? I suspect the answer to your question might
->> simply be "because we did not know better", and it might be helpful to be
->> able to say "please see XXX for details".
-> 
-> To me using generic compatibles is okay when there is another mechanism
-> to identify the device. This patch would make more sense if the addition
-> of nuvoton,npct75x was omitted and the dt-binding had
-> 
-> properties:
->    compatible:
->      items:
->        - enum:
->            - infineon,slb9673
->            - nuvoton,npct75x
->        - const: tcg,tpm-tis-i2c
-> 
-> And whenever new i2c tpms showed up the device specific compatible was
-> added to the bindings and the driver had only* the generic compatible
-> static const struct of_device_id of_tis_i2c_match[] = {
-> 	{ .compatible = "infineon,slb9673", },
-> 	{ .compatible = "tcg,tpm-tis-i2c", },
-> };
-> 
-> * well, and the existing one since that cannot be removed.
+Thanks & Regards,
 
-That would be perfectly fine with me. All I personally care about is to get
-"tcg,tpm-tis-i2c" added to the kernel source so I can start testing the
-code in qemu.
+Ninad
 
-Thanks,
-Guenter
-
+>
+> Cheers,
+> Conor.
+>
+>>   2 files changed, 3 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+>> index 6f7543463d89..ebebe14c42aa 100644
+>> --- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
+>> @@ -85,6 +85,7 @@ properties:
+>>                 - facebook,yosemite4-bmc
+>>                 - ibm,everest-bmc
+>>                 - ibm,rainier-bmc
+>> +              - ibm,system1-bmc
+>>                 - ibm,tacoma-bmc
+>>                 - inventec,starscream-bmc
+>>                 - inventec,transformer-bmc
+>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+>> index 441b55723675..b12a60d2eb0f 100644
+>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+>> @@ -135,6 +135,8 @@ properties:
+>>             - ibm,cffps1
+>>               # IBM Common Form Factor Power Supply Versions 2
+>>             - ibm,cffps2
+>> +            # Infineon barometric pressure and temperature sensor
+>> +          - infineon,dps310
+>>               # Infineon IR36021 digital POL buck controller
+>>             - infineon,ir36021
+>>               # Infineon IR38060 Voltage Regulator
+>> -- 
+>> 2.39.2
+>>
 
