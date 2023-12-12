@@ -1,150 +1,183 @@
-Return-Path: <linux-integrity+bounces-396-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-397-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42BA680E965
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 11:45:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD25B80EC3C
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 13:41:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99B7CB20B60
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 10:45:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98FAF2814D3
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 12:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798A75C8FB;
-	Tue, 12 Dec 2023 10:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SPfP6wGu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D065FEFC;
+	Tue, 12 Dec 2023 12:41:47 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAE09F;
-	Tue, 12 Dec 2023 02:45:02 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-77f2f492a43so308245385a.2;
-        Tue, 12 Dec 2023 02:45:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702377902; x=1702982702; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QjRectGYgBe38M8M8dJVW+G+bLpHLxY0GGSZK1GNZ70=;
-        b=SPfP6wGuStgp3YcMF0LtsFbgHR8B0Xyj08lsAzeq0NxssW6Or903phlZlaHzP9LOU2
-         Q3/GIWbgQe52famgPH+mSlXQLnfcmEuc8dSczd4brGYA/d61IDdFNbf6dOs5QZbsfCzE
-         LZXftQbe8cam1e1gisH+f1OQsNm+G/vEGC8+9BI8aus5OjixcWiPSQG6+eXcsfdVAxlR
-         SZdwAp7xu7ounad9KO8QYy3/lqFPpf3oP4tG/qBGifOnT3oxzJyutnBGgC3hx+HAGwhW
-         kavWP/w8Bf3YHx1it8D225+sXGXTbbI3K8MRCeUTFhCwuE+MsUBgkKHXDC7BISatgKxb
-         MW0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702377902; x=1702982702;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QjRectGYgBe38M8M8dJVW+G+bLpHLxY0GGSZK1GNZ70=;
-        b=rySmLB/dTfPNUGFd15haaYkh7Fb7i8PM0tLzmCazyHCA9E+beekxU4AjMdERIHFB6l
-         Oq00pIJQTIgkX9OKTFVfjEtnqbBwXA/DFfyO639aKLa//b5YXF0w0Kw4qYDFckztCOTa
-         iAPIQ2ctjvWLDgWiwnyB827q998xqA1fvgZ+O0xV9YtMc069Mn/TfCTkirP7H0k88KH7
-         GGt1VJUvktdbrpZ8Ig6UeKxmUkuk6ZL5+vntxYG/xEqSdjipkYoPojVDnRGpI9lcPmNo
-         +D2yTFZ6kDoJJkmqpNcs78jKwu/Vl5SAl7rWk5m3zbXLu/JOsiO1YJYQpwE2PtJ8tTem
-         FbFg==
-X-Gm-Message-State: AOJu0YwSMy7d9SHuSxwy3xWvnxdjloqxeMmpJsrITwdIWrETKwMyaa+7
-	Jt9+y7cVghlamx5xa0ls3/53qKytehCgTn5pGNkBiDyJDIA=
-X-Google-Smtp-Source: AGHT+IHogBhzr+LATtjgX6ikAafGWmW4xlRNPjq+QN0iUrChh/jFjI4N139XmFcQa1W0rLJcM+e1sXIvBCJ8jKXPQfk=
-X-Received: by 2002:a05:6214:5583:b0:67a:e83e:eb3c with SMTP id
- mi3-20020a056214558300b0067ae83eeb3cmr5706310qvb.60.1702377901707; Tue, 12
- Dec 2023 02:45:01 -0800 (PST)
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B9295;
+	Tue, 12 Dec 2023 04:41:43 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SqHqB6dJRz9xrpF;
+	Tue, 12 Dec 2023 20:24:22 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 1AF9C1404DB;
+	Tue, 12 Dec 2023 20:41:34 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwCHN2H0VHhlfMxgAg--.37324S2;
+	Tue, 12 Dec 2023 13:41:33 +0100 (CET)
+Message-ID: <b9ce0bad-4e7d-44e2-bdd4-6ebf1b6b196f@huaweicloud.com>
+Date: Tue, 12 Dec 2023 13:41:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH] overlayfs: Redirect xattr ops on security.evm to
+ security.evm_overlayfs
+Content-Language: en-US
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>, Seth Forshee
+ <sforshee@kernel.org>, miklos@szeredi.hu, linux-unionfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, zohar@linux.ibm.com, paul@paul-moore.com,
+ stefanb@linux.ibm.com, jlayton@kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ Roberto Sassu <roberto.sassu@huawei.com>
 References: <20231208172308.2876481-1-roberto.sassu@huaweicloud.com>
  <CAOQ4uxivpZ+u0A5kE962XST37-ey2Tv9EtddnZQhk3ohRkcQTw@mail.gmail.com>
- <20231208-tauziehen-zerfetzt-026e7ee800a0@brauner> <c95b24f27021052209ec6911d2b7e7b20e410f43.camel@huaweicloud.com>
- <20231211-fortziehen-basen-b8c0639044b8@brauner> <019f134a-6ab4-48ca-991c-5a5c94e042ea@huaweicloud.com>
-In-Reply-To: <019f134a-6ab4-48ca-991c-5a5c94e042ea@huaweicloud.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 12 Dec 2023 12:44:50 +0200
-Message-ID: <CAOQ4uxgpNt7qKEF_NEJPsKU7-XhM7N_3eP68FrOpMpcRcHt4rQ@mail.gmail.com>
-Subject: Re: [RFC][PATCH] overlayfs: Redirect xattr ops on security.evm to security.evm_overlayfs
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Christian Brauner <brauner@kernel.org>, Seth Forshee <sforshee@kernel.org>, miklos@szeredi.hu, 
-	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	zohar@linux.ibm.com, paul@paul-moore.com, stefanb@linux.ibm.com, 
-	jlayton@kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Eric Snowberg <eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <20231208-tauziehen-zerfetzt-026e7ee800a0@brauner>
+ <c95b24f27021052209ec6911d2b7e7b20e410f43.camel@huaweicloud.com>
+ <CAOQ4uxgvKb520_Nbp+Y7KDq3_7t1tx65w5pOP8y6or1prESv+Q@mail.gmail.com>
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <CAOQ4uxgvKb520_Nbp+Y7KDq3_7t1tx65w5pOP8y6or1prESv+Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwCHN2H0VHhlfMxgAg--.37324S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF1rJFW5Xw43CryftryxKrg_yoWrAryDpF
+	WYka4UKrs8tr17AwnFya17XFWjy3yrJ3WUXw1Dtr4kZFyDtF1Sgry7Ka4UuF9rWr1xG34j
+	vFWjk347ur9xZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj5ONawAAsL
 
-On Tue, Dec 12, 2023 at 12:25=E2=80=AFPM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On 11.12.23 19:01, Christian Brauner wrote:
-> >> The second problem is that one security.evm is not enough. We need two=
-,
-> >> to store the two different HMACs. And we need both at the same time,
-> >> since when overlayfs is mounted the lower/upper directories can be
-> >> still accessible.
-> >
-> > "Changes to the underlying filesystems while part of a mounted overlay
-> > filesystem are not allowed. If the underlying filesystem is changed, th=
-e
-> > behavior of the overlay is undefined, though it will not result in a
-> > crash or deadlock."
-> >
-> > https://docs.kernel.org/filesystems/overlayfs.html#changes-to-underlyin=
-g-filesystems
-> >
-> > So I don't know why this would be a problem.
->
-> + Eric Snowberg
->
-> Ok, that would reduce the surface of attack. However, when looking at:
->
->       ovl: Always reevaluate the file signature for IMA
->
->       Commit db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the
-> i_version")
->       partially closed an IMA integrity issue when directly modifying a f=
-ile
->       on the lower filesystem.  If the overlay file is first opened by a
-> user
->       and later the lower backing file is modified by root, but the exten=
-ded
->       attribute is NOT updated, the signature validation succeeds with
-> the old
->       original signature.
->
-> Ok, so if the behavior of overlayfs is undefined if the lower backing
-> file is modified by root, do we need to reevaluate? Or instead would be
-> better to forbid the write from IMA (legitimate, I think, since the
-> behavior is documented)? I just saw that we have d_real_inode(), we can
-> use it to determine if the write should be denied.
->
+On 11.12.23 19:31, Amir Goldstein wrote:
+> On Mon, Dec 11, 2023 at 4:56 PM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+>>
+>> On Fri, 2023-12-08 at 23:01 +0100, Christian Brauner wrote:
+>>> On Fri, Dec 08, 2023 at 11:55:19PM +0200, Amir Goldstein wrote:
+>>>> On Fri, Dec 8, 2023 at 7:25 PM Roberto Sassu
+>>>> <roberto.sassu@huaweicloud.com> wrote:
+>>>>>
+>>>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>>>
+>>>>> EVM updates the HMAC in security.evm whenever there is a setxattr or
+>>>>> removexattr operation on one of its protected xattrs (e.g. security.ima).
+>>>>>
+>>>>> Unfortunately, since overlayfs redirects those xattrs operations on the
+>>>>> lower filesystem, the EVM HMAC cannot be calculated reliably, since lower
+>>>>> inode attributes on which the HMAC is calculated are different from upper
+>>>>> inode attributes (for example i_generation and s_uuid).
+>>>>>
+>>>>> Although maybe it is possible to align such attributes between the lower
+>>>>> and the upper inode, another idea is to map security.evm to another name
+>>>>> (security.evm_overlayfs)
+>>>>
+>>>> If we were to accept this solution, this will need to be trusted.overlay.evm
+>>>> to properly support private overlay xattr escaping.
+>>>>
+>>>>> during an xattr operation, so that it does not
+>>>>> collide with security.evm set by the lower filesystem.
+>>>>
+>>>> You are using wrong terminology and it is very confusing to me.
+>>>
+>>> Same.
+>>
+>> Argh, sorry...
+>>
+>>>> see the overlay mount command has lowerdir= and upperdir=.
+>>>> Seems that you are using lower filesystem to refer to the upper fs
+>>>> and upper filesystem to refer to overlayfs.
+>>>>
+>>>>>
+>>>>> Whenever overlayfs wants to set security.evm, it is actually setting
+>>>>> security.evm_overlayfs calculated with the upper inode attributes. The
+>>>>> lower filesystem continues to update security.evm.
+>>>>>
+>>>>
+>>>> I understand why that works, but I am having a hard time swallowing
+>>>> the solution, mainly because I feel that there are other issues on the
+>>>> intersection of overlayfs and IMA and I don't feel confident that this
+>>>> addresses them all.
+>>
+>> This solution is specifically for the collisions on HMACs, nothing
+>> else. Does not interfere/solve any other problem.
+>>
+>>>> If you want to try to convince me, please try to write a complete
+>>>> model of how IMA/EVM works with overlayfs, using the section
+>>>> "Permission model" in Documentation/filesystems/overlayfs.rst
+>>>> as a reference.
+>>
+>> Ok, I will try.
+>>
+>> I explain first how EVM works in general, and then why EVM does not
+>> work with overlayfs.
+>>
+> 
+> I understand both of those things.
+> 
+> What I don't understand is WHY EVM needs to work on overlayfs?
+> What is the use case?
+> What is the threat model?
+> 
+> The purpose of IMA/EVM as far as I understand it is to detect and
+> protect against tampering with data/metadata offline. Right?
+> 
+> As Seth correctly wrote, overlayfs is just the composition of existing
+> underlying layers.
+> 
+> Noone can tamper with overlayfs without tampering with the underlying
+> layers.
 
-There may be several possible legitimate actions in this case, but the
-overall concept IMO should be the same as I said about EVM -
-overlayfs does not need an IMA signature of its own, because it
-can use the IMA signature of the underlying file.
+Makes sense.
 
-Whether overlayfs reads a file from lower fs or upper fs, it does not
-matter, the only thing that matters is that the underlying file content
-is attested when needed.
+> The correct solution to your problem, and I have tried to say this many
+> times, in to completely opt-out of IMA/EVM for overlayfs.
+> 
+> EVM should not store those versions of HMAC for overlayfs and for
+> the underlying layers, it should ONLY store a single version for the
+> underlying layer.
 
-The only incident that requires special attention is copy-up.
-This is what the security hooks security_inode_copy_up() and
-security_inode_copy_up_xattr() are for.
+If we avoid the checks in IMA and EVM for overlayfs, we need the 
+guarantee that everything passes through overlayfs down, and that there 
+is no external interference to the lower and upper filesystems (the part 
+that is used by overlayfs).
 
-When a file starts in state "lower" and has security.ima,evm xattrs
-then before a user changes the file, it is copied up to upper fs
-and suppose that security.ima,evm xattrs are copied as is?
+Maybe I'm missing something, I looked at this issue only now, and Mimi 
+knows it much better than me.
 
-When later the overlayfs file content is read from the upper copy
-the security.ima signature should be enough to attest that file content
-was not tampered with between going from "lower" to "upper".
+Roberto
 
-security.evm may need to be fixed on copy up, but that should be
-easy to do with the security_inode_copy_up_xattr() hook. No?
+> Because write() in overlayfs always follows by write() to upper layer
+> and setxattr() in overlayfs always follows by setxattr() to upper layer
+> IMO write() and setxattr() on overlayfs should by ignored by IMA/EVM
+> and only write()/setxattr() on underlying fs should be acted by IMA/EVM
+> which AFAIK, happens anyway.
+> 
+> Please let me know if I am missing something,
+> 
+> Thanks,
+> Amir.
 
-Thanks,
-Amir.
 
