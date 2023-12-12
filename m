@@ -1,131 +1,147 @@
-Return-Path: <linux-integrity+bounces-414-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-415-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45E9880F435
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 18:16:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DB5280F51B
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 19:00:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A846DB20E6C
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 17:16:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38496281E9F
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 18:00:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 689997B3D3;
-	Tue, 12 Dec 2023 17:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EAA27E766;
+	Tue, 12 Dec 2023 18:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDVWYAz6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ku12+XF9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EEC7B3C1;
-	Tue, 12 Dec 2023 17:15:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403B3C433C9;
-	Tue, 12 Dec 2023 17:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702401359;
-	bh=VXQhagqDGb9vAh1nRc7GzOZY2WN4Caui/rFTeDa4cko=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TDVWYAz6eO+Y1M2LDd/np6T4h5hGeO0w73YW0SOmy8G4+7kKFRMH0f3fsGmxVRqFT
-	 LnNiOkMZJuEQjjQSjehHrvC5Rzm8REtMRExbqV91CA06WgeA/hTFgJfu5JduqRI0S0
-	 Rj7GoizXSMggJMReaz3jh4pXeIDkHvZ85cwxB7Pbd09B/4zfd6BgOHK8ZfC1vdZIWn
-	 QnWa/lMRIzgQj+Ig7GiieaB3j5UePPw+WzwiEdZ7Kp2mPWDMY/66fTcJYXn+SQ89Ka
-	 S4T8pFHh61+PSqbaC9Vh8lE/Aupq69ZXKXh4RWuyDT2Z9+pbFg3jDFY1nnH+q9+hbe
-	 Wp31YanBsWVuQ==
-Date: Tue, 12 Dec 2023 17:15:51 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Ninad Palsule <ninad@linux.ibm.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au,
-	peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-	keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-	johannes.holland@infineon.com, linux@roeck-us.net,
-	broonie@kernel.org, patrick.rudolph@9elements.com,
-	vincent@vtremblay.dev, peteryin.openbmc@gmail.com,
-	lakshmiy@us.ibm.com, bhelgaas@google.com,
-	naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
-	festevam@denx.de, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-hardening@vger.kernel.org, geissonator@yahoo.com
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47657AD;
+	Tue, 12 Dec 2023 10:00:42 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6d9d29a2332so2796043a34.0;
+        Tue, 12 Dec 2023 10:00:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702404041; x=1703008841; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OCcCZYfwecxquLlX9Qk4H1uh3FlXglU8cLcEqk1Tg0c=;
+        b=ku12+XF9PILNcNWeB8voRm/7luTldInfD7zImBHinj373nb9vPjiAIjKPUzOQsuOsL
+         jV6prRSa06hGWPmSd7jNVh3HUrbuZQGOECyYTXpPc2WIVFdIPS4oDDenu83acsSTfHIw
+         31cP/fhR+FVBocPdHo0bGMkZvsS12OcbixQWXLBK4oxRV81K4NbKuvvo2ZHmkH3gRuJX
+         XiLX4R5hlmfauJx3ZTv6JzVdPJoKS33uXvBfAtZxRFF6YdIgP2eZC0trIqtNC6GJrYg2
+         cC7889pOr6ccb1O/BaIwgu5Hn234GHZHiWtMSyYZCaCYqvlfPVB9Wfd5RbnuzlFxxXpe
+         nqpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702404041; x=1703008841;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OCcCZYfwecxquLlX9Qk4H1uh3FlXglU8cLcEqk1Tg0c=;
+        b=PzottFw2sTiLyzesb6rOqmAkaOOojrQYl0Y7Ft1Moo7/F+b+SpVui2hquTF/7X9F41
+         jW4z/8f5x+3GSitPn+jI0PjtO1hiBNOmShini1uuuqXylLmG97Q7bsyg8Kx2vVjmuQs5
+         qSvkmxJFCpoSZ4XREdqskxtdJFuS64Tuv808+2jcb1VBRz3GKcSs41gNOkcTO4STxxa7
+         VLVJw5Pr2wBNOOXfeZPdNuACz/VvpLsmjFHFHCkqzjywBrX4EHem6FjbsZGljZu7iHeO
+         zfxBkCNAzJR6Moz1YqKLUV2mkPkPfp0GDZlQRT+/E2TDb7+dkdm8dSprbWRAnBAC0geE
+         f7Lw==
+X-Gm-Message-State: AOJu0YxqlNpYTk8FxVhCUvyLT7e1pPpO0e633Ts1j9Od12cfMVzL/x5W
+	i1QZaWFd8itcC+prjChsfWc=
+X-Google-Smtp-Source: AGHT+IFkasojfWbcCsVLi+mdn01yWMQKc33PTZwYORTSQpbYEFfSP/VEH4VMucXy6fDJEiz7YllCGw==
+X-Received: by 2002:a05:6830:26ef:b0:6d9:d132:7ff with SMTP id m47-20020a05683026ef00b006d9d13207ffmr3413281otu.15.1702404041554;
+        Tue, 12 Dec 2023 10:00:41 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e7-20020a056830200700b006d8811cbc3csm2331250otp.29.2023.12.12.10.00.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 10:00:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 12 Dec 2023 10:00:39 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Conor Dooley <conor@kernel.org>
+Cc: Ninad Palsule <ninad@linux.ibm.com>, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	joel@jms.id.au, andrew@codeconstruct.com.au, peterhuewe@gmx.de,
+	jarkko@kernel.org, jgg@ziepe.ca, keescook@chromium.org,
+	tony.luck@intel.com, gpiccoli@igalia.com,
+	johannes.holland@infineon.com, broonie@kernel.org,
+	patrick.rudolph@9elements.com, vincent@vtremblay.dev,
+	peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com,
+	bhelgaas@google.com, naresh.solanki@9elements.com,
+	alexander.stein@ew.tq-group.com, festevam@denx.de,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
+	geissonator@yahoo.com
 Subject: Re: [PATCH v1 7/8] tpm: tis-i2c: Add more compatible strings
-Message-ID: <20231212-avid-grill-dbead068fac8@spud>
+Message-ID: <73381bb0-7fa7-4a9e-88df-ab0063058e26@roeck-us.net>
 References: <20231212164004.1683589-1-ninad@linux.ibm.com>
  <20231212164004.1683589-8-ninad@linux.ibm.com>
+ <20231212-avid-grill-dbead068fac8@spud>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Truf82TN7Drb/wPF"
-Content-Disposition: inline
-In-Reply-To: <20231212164004.1683589-8-ninad@linux.ibm.com>
-
-
---Truf82TN7Drb/wPF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20231212-avid-grill-dbead068fac8@spud>
 
-On Tue, Dec 12, 2023 at 10:40:03AM -0600, Ninad Palsule wrote:
-> From: Joel Stanley <joel@jms.id.au>
->=20
-> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
->=20
-> https://www.nuvoton.com/products/cloud-computing/security/trusted-platfor=
-m-module-tpm/
->=20
-> Add a compatible string for it, and the generic compatible.
->=20
-> OpenBMC-Staging-Count: 3
+On Tue, Dec 12, 2023 at 05:15:51PM +0000, Conor Dooley wrote:
+> On Tue, Dec 12, 2023 at 10:40:03AM -0600, Ninad Palsule wrote:
+> > From: Joel Stanley <joel@jms.id.au>
+> > 
+> > The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
+> > 
+> > https://www.nuvoton.com/products/cloud-computing/security/trusted-platform-module-tpm/
+> > 
+> > Add a compatible string for it, and the generic compatible.
+> > 
+> > OpenBMC-Staging-Count: 3
+> 
+> Delete this from every patch that it appears from.
+> 
+> > Signed-off-by: Joel Stanley <joel@jms.id.au>
+> > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.au
+> > Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
+> > ---
+> >  drivers/char/tpm/tpm_tis_i2c.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> > index a897402cc36a..9511c0d50185 100644
+> > --- a/drivers/char/tpm/tpm_tis_i2c.c
+> > +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> > @@ -383,6 +383,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+> >  #ifdef CONFIG_OF
+> >  static const struct of_device_id of_tis_i2c_match[] = {
+> >  	{ .compatible = "infineon,slb9673", },
+> > +	{ .compatible = "nuvoton,npct75x", },
+> > +	{ .compatible = "tcg,tpm-tis-i2c", },
+> 
+> What's the point of the generic compatible if you are adding the device
+> specific ones to the driver anyway?
+> 
 
-Delete this from every patch that it appears from.
+$ git grep infineon,slb9673
+Documentation/devicetree/bindings/trivial-devices.yaml:          - infineon,slb9673
+drivers/char/tpm/tpm_tis_i2c.c: { .compatible = "infineon,slb9673", },
+$ git grep nuvoton,npct75x
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:            compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts:            compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
+$ git grep tcg,tpm-tis-i2c
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts:            compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
+arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts:            compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
+arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts:             compatible = "tcg,tpm-tis-i2c";
 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.au
-> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
-> ---
->  drivers/char/tpm/tpm_tis_i2c.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2=
-c.c
-> index a897402cc36a..9511c0d50185 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c.c
-> @@ -383,6 +383,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
->  #ifdef CONFIG_OF
->  static const struct of_device_id of_tis_i2c_match[] =3D {
->  	{ .compatible =3D "infineon,slb9673", },
-> +	{ .compatible =3D "nuvoton,npct75x", },
-> +	{ .compatible =3D "tcg,tpm-tis-i2c", },
-
-What's the point of the generic compatible if you are adding the device
-specific ones to the driver anyway?
+It looks like at least the generic entry is needed, given that it is quite
+likely that there is hardware out there using it. Other than that, this
+makes me wonder: Is there some official guideline describing if and when
+to use (only) generic devicetree compatible entries and when specific ones
+may / should / have to be used ? I suspect the answer to your question might
+simply be "because we did not know better", and it might be helpful to be
+able to say "please see XXX for details".
 
 Thanks,
-Conor.
-
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
-> --=20
-> 2.39.2
->=20
-
---Truf82TN7Drb/wPF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXiVRwAKCRB4tDGHoIJi
-0moFAP9qCekg1FNgRigBOa03OCo2ImwKVNMJNUYY0hON1Ul2NQD/fRm6HnP66ToK
-uVCHCdKv0uV6qfN1BFts+lYjExWXRQs=
-=MJ72
------END PGP SIGNATURE-----
-
---Truf82TN7Drb/wPF--
+Guenter
 
