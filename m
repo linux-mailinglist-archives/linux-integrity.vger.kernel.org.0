@@ -1,109 +1,113 @@
-Return-Path: <linux-integrity+bounces-393-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-394-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5445380E144
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 03:12:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFAAB80E45E
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 07:40:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 035A8282692
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 02:12:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEB6F1C21AC2
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 06:40:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3CF810FF;
-	Tue, 12 Dec 2023 02:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0645D156DE;
+	Tue, 12 Dec 2023 06:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DIGYaDcD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UzRniBVT"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9DE10EB;
-	Tue, 12 Dec 2023 02:12:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E77CAC433C7;
-	Tue, 12 Dec 2023 02:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702347164;
-	bh=2Cg/52nI3fdI2AVhoHfzbNxd0uf98ZFGlAXCevSa/38=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DIGYaDcDJfgV9V9Kll/eVAjU5Pcg/Odi1Q/oYNIrI5NhQ1ZyMT6o6eIw6XHN0R9wZ
-	 jZJPE0ykmH56Zq3PYC8MmI3xEbVcG4FLvsQuecKaL8KGxtO8uN+iygNOIXqAwMa8KY
-	 CiaSf/VC9rIQdtJCSxLIBZ0psruQkZRMt14tins9c3QoLaqVODvduQFC/esPlQ7ict
-	 EVL2YytgLeB2SDSfp2zL1UIcf5Ug13RA3UyDwztS7JkdC9TrSren1N1ujSy2HZsxKf
-	 3n1qxqNE/Sk/SnfnAsoR7AVyKevmv+dvZI6wqHEiym7dgkpP+2F4UlOA00drzROKaH
-	 6iDKiMWaLYLdA==
-Date: Mon, 11 Dec 2023 21:12:42 -0500
-From: Sasha Levin <sashal@kernel.org>
-To: rkolchmeyer@google.com
-Cc: stable@vger.kernel.org, linux-integrity@vger.kernel.org,
-	regressions@lists.linux.dev, eric.snowberg@oracle.com,
-	zohar@linux.ibm.com, jlayton@kernel.org
-Subject: Re: IMA performance regression in 5.10.194 when using overlayfs
-Message-ID: <ZXfBmiTHnm_SsM-n@sashalap>
-References: <000000000000b505f3060c454a49@google.com>
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE7DC7;
+	Mon, 11 Dec 2023 22:40:45 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-589d4033e84so3087907eaf.1;
+        Mon, 11 Dec 2023 22:40:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702363245; x=1702968045; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wQ3uJeujcSHCX4Yuy40El599+rKbJemClUH5Ymogx/A=;
+        b=UzRniBVTjkr5tGpREb+y0JI5HdTuHlEdywQlMvei3lXSW8x4S+uQSyurVwv9HW/KiL
+         Gl3fyLphZ9S4ReqKeZdtHcp322Ow6eACX9nFkLg4XyJMqV6te4fWzPuNjAXedRo0onhg
+         5XUSgq/ncuXhXLd2q67k+gjOB4ApVHGWS+R6wr/JomYn/y64n+gQwPw0vsRPCKBloIk+
+         pngq1X3aTyoVRj5aTLzv9h6Vw0fI1RkDJVNtZFEqQkDoWT7zfzeZrP8k3FDnuzsehSiA
+         FqIHgZDMFwLQu6Gk8v6aWYOLfLCxNmTxJ+RzRtnAhYvK7Ww9tYDu1XUiiMUZsAw75APz
+         K8sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702363245; x=1702968045;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wQ3uJeujcSHCX4Yuy40El599+rKbJemClUH5Ymogx/A=;
+        b=DvsKmk9o5eC9gQauZhqaZ2UWFfwOpENz9uOF16vrggTR/MgYqN16YFtdhVct3otcqr
+         dVSMj240zGx1X3uMXbvj08p3m5S2MBf/Tfq1VctK4nuh1xDGZl3iATbNzXBlGRwViJVM
+         yX0DKueBMKzNcDk22s79ghGswU/pMUcXVYGzM+C5UK43XYrnMsvUjtkrHS+EnFi5Pdf2
+         py63ZnYFyceauJeV8delbkKtB5BglbhMbMIZcgjVctYqccwJTbijtVs+Dj8UDwnvpOLD
+         tPyGIAm5aUZFWXlTF4qhJbBR+K7yuRuVKEquz92Pe9hEv9ns8ofaFIS8ctVIQF9J+2SH
+         Ob7g==
+X-Gm-Message-State: AOJu0YxWv5qXpNE3PybbQb9wvMTIjgNmFn+8LuolSDWqfAq6tCMqLcBc
+	IhLkBK9b7Ryy6Mrqe9gKpbP5B5ySLWU=
+X-Google-Smtp-Source: AGHT+IGO7oCpn2HiGO4Pa3WCaKh+37j9sxmkHe2lf3t5n5MLgxDWCRwUG4qwYd8hUEXSTnJKBHq1DQ==
+X-Received: by 2002:a05:6359:3103:b0:170:8db:96a with SMTP id rh3-20020a056359310300b0017008db096amr4229908rwb.16.1702363244726;
+        Mon, 11 Dec 2023 22:40:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id du12-20020a056a002b4c00b006cef5c025d2sm5326604pfb.95.2023.12.11.22.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 22:40:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 11 Dec 2023 22:40:42 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Joel Stanley <joel@jms.id.au>
+Cc: Rob Herring <robh+dt@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, devicetree@vger.kernel.org,
+	linux-integrity@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+	Johannes Holland <johannes.holland@infineon.com>,
+	eajames@linux.ibm.com
+Subject: Re: [PATCH v2 3/3] tpm: tis-i2c: Add more compatible strings
+Message-ID: <bd63a97e-d27a-495d-aaf5-138507c10e07@roeck-us.net>
+References: <20220928043957.2636877-1-joel@jms.id.au>
+ <20220928043957.2636877-4-joel@jms.id.au>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000b505f3060c454a49@google.com>
+In-Reply-To: <20220928043957.2636877-4-joel@jms.id.au>
 
-On Tue, Dec 12, 2023 at 12:40:05AM +0000, rkolchmeyer@google.com wrote:
->Hi all,
->
->5.10.194 includes 331d85f0bc6e (ovl: Always reevaluate the file
->signature for IMA), which resulted in a performance regression for
->workloads that use IMA and run from overlayfs. 5.10.202 includes
->cd5a262a07a5 (ima: detect changes to the backing overlay file), which
->resolved the regression in the upstream kernel. However, from my
->testing [1], this change doesn't resolve the regression on stable
->kernels.
->
->From what I can tell, cd5a262a07a5 (ima: detect changes to the
->backing overlay file) depends on both db1d1e8b9867 (IMA: use
->vfs_getattr_nosec to get the i_version) and a1175d6b1bda (vfs: plumb
->i_version handling into struct kstat). These two dependent changes
->were not backported to stable kernels. As a result, IMA seems to be
->caching the wrong i_version value when using overlayfs. From my
->testing, backporting these two dependent changes is sufficient to
->resolve the issue in stable kernels.
+On Wed, Sep 28, 2022 at 02:09:57PM +0930, Joel Stanley wrote:
+> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
+> 
+> https://www.nuvoton.com/products/cloud-computing/security/trusted-platform-module-tpm/
+> 
+> Add a compatible string for it, and the generic compatible.
+> 
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
 
-Thanks for triaging and proposing a resolution to the issue!
+Does anyone happen to know why this patch never made it upstream ?
 
->Would it make sense to backport those changes to stable kernels? It's
->possible that they may not follow the stable kernel patching rules. I
->think the issue can also be fixed directly in stable trees with the
->following diff (which doesn't make sense in the upstream kernel):
->
->diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
->index 70efd4aa1bd1..c84ae6b62b3a 100644
->--- a/security/integrity/ima/ima_api.c
->+++ b/security/integrity/ima/ima_api.c
->@@ -239,7 +239,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
-> 	 * which do not support i_version, support is limited to an initial
-> 	 * measurement/appraisal/audit.
-> 	 */
->-	i_version = inode_query_iversion(inode);
->+	i_version = inode_query_iversion(real_inode);
-> 	hash.hdr.algo = algo;
->
-> 	/* Initialize hash digest to 0's in case of failure */
->
->I've verified that this diff resolves the performance regression.
->
->Which approach would make the most sense to fix the issue in stable
->kernels? Backporting the dependent commits, or merging the above diff?
-
-Looking at the dependencies you've identified, it probably makes sense
-to just take them as is (as it's something we would have done if these
-dependencies were identified explicitly).
-
-I'll plan to queue them up after the current round of releases is out.
-
--- 
 Thanks,
-Sasha
+Guenter
+
+> ---
+>  drivers/char/tpm/tpm_tis_i2c.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> index 0692510dfcab..4af27b7ec5b1 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -368,6 +368,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id of_tis_i2c_match[] = {
+>  	{ .compatible = "infineon,slb9673", },
+> +	{ .compatible = "nuvoton,npct75x", },
+> +	{ .compatible = "tcg,tpm-tis-i2c", },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
+> -- 
+> 2.35.1
+> 
 
