@@ -1,60 +1,60 @@
-Return-Path: <linux-integrity+bounces-420-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-421-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77A9780F7C0
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 21:20:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4191A80F7C9
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 21:21:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D6831C20898
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 20:20:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0DEE1F2178E
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 20:21:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6CB63BFD;
-	Tue, 12 Dec 2023 20:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3672F63BE5;
+	Tue, 12 Dec 2023 20:21:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rbrKkcyi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hNjSeSwU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEAFB7
-	for <linux-integrity@vger.kernel.org>; Tue, 12 Dec 2023 12:20:20 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-a1c7b20f895so712506366b.2
-        for <linux-integrity@vger.kernel.org>; Tue, 12 Dec 2023 12:20:20 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E52FBC
+	for <linux-integrity@vger.kernel.org>; Tue, 12 Dec 2023 12:21:32 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40c580ba223so4454455e9.3
+        for <linux-integrity@vger.kernel.org>; Tue, 12 Dec 2023 12:21:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702412418; x=1703017218; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702412490; x=1703017290; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5ngERMlUllXQ8ZRUThwj6cID071LS3nU+eAyqRU27NM=;
-        b=rbrKkcyiNZY0oCTOb22AXk3EcfAwFi7DgHVP5AIo63wKLsd8OFXDmjkLPwaa2yqcxk
-         T8gXo/HJyva9UfGnld68ixH48lE2E5Z8d86kjBY75h/NFpb7zFHSGkiUM0fRNsWZzQwF
-         QSxmTv/C55AiivCprYlqX6LNuZ0/UhXf2XvX6sLaPbPkLVqsvJCDCJb4W6xKvqUr4wuj
-         oZln/ikURo1wlc++IghAkw6BlUWr8SDLHOGpK7uPizj6m5FBf5tmyv38bHNrqELWiGUA
-         O6vMYrqZrXKSjJnq9Mxs5zew2EgtvsWtyAFn2YKWgmUqdd35PiPkXgs47e9qN2on3Pdg
-         wKtQ==
+        bh=wZErAioQf1LZERsxfMR3lKDsZegEE6G271TmDjbBTrk=;
+        b=hNjSeSwUm9XHQEEc+Vh8If8Y9r3RWQhNkArqgHbBCFTOKgC6oj8V4s+VziIhaR5eQR
+         PyeslvWnx55vcDOBZyfWKs0uCfREFrAn1dN3OLxDayuKATP5LikS9zl2Ss4vxTm12bql
+         tzKh6eZwF3B5HRq9Nn5o3NWnvpZfvWB4sTBogU01g7R1i50oHIIrpFMaMDV1pIOpi4ph
+         hikTPGAniZXk0HIY8qZhjDwEWmOJ+ZoF70JvjepY1+teAWRpPTe1BOA0EC6ZHaDRIMBY
+         iOn+d6NPbo/pmiabnqOwfX33ME7fhSVOrIdRuLk51oqlYZdAq8zcUSfcsnt8aJqzAhrp
+         Hrlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702412418; x=1703017218;
+        d=1e100.net; s=20230601; t=1702412490; x=1703017290;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ngERMlUllXQ8ZRUThwj6cID071LS3nU+eAyqRU27NM=;
-        b=nLUIq5c5+vKlzApGmVfBXbSSdweieNeP3OYuSD1oAzQ1vKvZyUYqQ9PF+2x07/4KKs
-         dME8cvZdM6tP+PSQoWGbgS+sRWXmhfI5bC0P+g8ZCzFo9WPl56Kh892mN/XpgF7NRKc5
-         WPBy78QYvWmccTYllDdj1wDRQ+MUPaEkjV5ocGo479c13hYj7jKUCidWOVNRyKIhdFwQ
-         vyqpX87QedDPfuK3TCwhIg+Bors2767SoxrgUIsodcXCyMGZmhZAv1S8isyI7kHxSMTd
-         G8kmSjbiuyvOnEDxhYkFRUfNxDPyJVpipMg2ywz6oDuo0Y6/nI8Yh9VQ5+AyrWeL8D5T
-         +PIw==
-X-Gm-Message-State: AOJu0YzltI704gKsQTF9fIns/7/ZtEuOaiGaA1jigL0I77gKPpjxA/0l
-	KZOXlP+DmI06fhlQA2GzT4LWtA==
-X-Google-Smtp-Source: AGHT+IGDF5Cp6rn6wjaislsRhak5ERzaj+pUWahDpuaS1jBS07qWaO1DIvjztazkGvdBhnEFYnqBYA==
-X-Received: by 2002:a17:907:3d91:b0:9fe:57b3:bc08 with SMTP id he17-20020a1709073d9100b009fe57b3bc08mr4434566ejc.41.1702412418574;
-        Tue, 12 Dec 2023 12:20:18 -0800 (PST)
+        bh=wZErAioQf1LZERsxfMR3lKDsZegEE6G271TmDjbBTrk=;
+        b=E0sGO+OK+12cnNN7SMxfgfgGO4rP+10IJWn7P+MP7nUseI1CwDuF937EDJ9l/l0aZ3
+         gNu10rB5nocAWiZZMPPTaf0xpYJNUCGG0iTUQulbltKPkvkpGoneIQWjM6osyuOa0Dpz
+         7QsID7XTRMya6NcgMHijalKLpCO1OMS2G+1/YeEXCLlYFxsRiPRep1TWAIEUgtRbTzNj
+         GXAScrRkoYqeyAiYY0aRcFWY0sh8CvBn2qAH4n9FephQZLD+olaH/jXkgaPbbBvzfLy4
+         uH9UqGDBk0Jyzb6mzi73Zu0n47HdbKTOa1i2cJQusnMUy/iZ5D9yqeREjJsa4D6C8RLD
+         zhKw==
+X-Gm-Message-State: AOJu0Yy7+WtN2ucIxHmoA2LHhjNtxiHcL0GBIjEpuBXAn56LeeffHm0G
+	RV8MEx2VPf7TOHIJ2dbpd5mycQ==
+X-Google-Smtp-Source: AGHT+IHCvjjcxkTZ8tLlmQz/LBPpAEuUcszYII3Aol0l37yJ2R7Y+P0aPz+zLd00EpkfPVJplPfJ2g==
+X-Received: by 2002:a7b:cd15:0:b0:40c:29a7:643f with SMTP id f21-20020a7bcd15000000b0040c29a7643fmr3983987wmj.131.1702412490596;
+        Tue, 12 Dec 2023 12:21:30 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id li14-20020a170907198e00b00a1f738318a5sm6178368ejc.155.2023.12.12.12.20.15
+        by smtp.gmail.com with ESMTPSA id li14-20020a170907198e00b00a1f738318a5sm6178368ejc.155.2023.12.12.12.21.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 12:20:18 -0800 (PST)
-Message-ID: <81d90c0d-9d7e-43a9-ade8-16b85a242b48@linaro.org>
-Date: Tue, 12 Dec 2023 21:20:14 +0100
+        Tue, 12 Dec 2023 12:21:30 -0800 (PST)
+Message-ID: <72a749b9-b9be-4496-9bcc-37519044c109@linaro.org>
+Date: Tue, 12 Dec 2023 21:21:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/8] ARM: dts: aspeed: System1: IBM system1 BMC board
+Subject: Re: [PATCH v1 4/8] ARM: dts: aspeed: System1: Add i2c and muxes
 Content-Language: en-US
 To: Ninad Palsule <ninad@linux.ibm.com>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, joel@jms.id.au,
@@ -70,15 +70,15 @@ To: Ninad Palsule <ninad@linux.ibm.com>, robh+dt@kernel.org,
  jgg@ziepe.ca, keescook@chromium.org, tony.luck@intel.com,
  gpiccoli@igalia.com, johannes.holland@infineon.com, linux@roeck-us.net,
  broonie@kernel.org
-Cc: Andrew Geissler <geissonator@yahoo.com>, patrick.rudolph@9elements.com,
- vincent@vtremblay.dev, peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com,
- bhelgaas@google.com, naresh.solanki@9elements.com,
- alexander.stein@ew.tq-group.com, festevam@denx.de,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org
+Cc: patrick.rudolph@9elements.com, vincent@vtremblay.dev,
+ peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com, bhelgaas@google.com,
+ naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
+ festevam@denx.de, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-hardening@vger.kernel.org, geissonator@yahoo.com
 References: <20231212164004.1683589-1-ninad@linux.ibm.com>
- <20231212164004.1683589-4-ninad@linux.ibm.com>
+ <20231212164004.1683589-5-ninad@linux.ibm.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -124,80 +124,218 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231212164004.1683589-4-ninad@linux.ibm.com>
+In-Reply-To: <20231212164004.1683589-5-ninad@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/12/2023 17:39, Ninad Palsule wrote:
-> From: Andrew Geissler <geissonator@yahoo.com>
-> 
-> Add a device tree for IBM system1 BMC board. It uses AST2600 SOC.
+On 12/12/2023 17:40, Ninad Palsule wrote:
+> This commit adds i2c devices and muxes.
 > 
 > Tested:
 >     This board is tested using the simics simulator.
 > 
-> Signed-off-by: Andrew Geissler <geissonator@yahoo.com>
 > Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
 > ---
->  arch/arm/boot/dts/aspeed/Makefile             |   1 +
->  .../dts/aspeed/aspeed-bmc-ibm-system1.dts     | 188 ++++++++++++++++++
->  2 files changed, 189 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
+>  .../dts/aspeed/aspeed-bmc-ibm-system1.dts     | 577 ++++++++++++++++++
+>  1 file changed, 577 insertions(+)
 > 
-> diff --git a/arch/arm/boot/dts/aspeed/Makefile b/arch/arm/boot/dts/aspeed/Makefile
-> index 3e3e6b96cb79..6f7ed11978ff 100644
-> --- a/arch/arm/boot/dts/aspeed/Makefile
-> +++ b/arch/arm/boot/dts/aspeed/Makefile
-> @@ -35,6 +35,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->  	aspeed-bmc-ibm-rainier.dtb \
->  	aspeed-bmc-ibm-rainier-1s4u.dtb \
->  	aspeed-bmc-ibm-rainier-4u.dtb \
-> +	aspeed-bmc-ibm-system1.dtb \
->  	aspeed-bmc-intel-s2600wf.dtb \
->  	aspeed-bmc-inspur-fp5280g2.dtb \
->  	aspeed-bmc-inspur-nf5280m6.dtb \
+
+Why do you split new submission into multiple chunks? The logical
+feature here is new board, so all your DTS patches adding new board
+should be in one patch.
+
 > diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
-> new file mode 100644
-> index 000000000000..01291b407f59
-> --- /dev/null
+> index 01291b407f59..0557bff9f36a 100644
+> --- a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
 > +++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
-> @@ -0,0 +1,188 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +// Copyright 2023 IBM Corp.
-> +/dts-v1/;
-> +
-> +#include "aspeed-g6.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +#include <dt-bindings/i2c/i2c.h>
-> +#include <dt-bindings/leds/leds-pca955x.h>
-> +
-> +/ {
-> +	model = "System1";
-> +	compatible = "ibm,system1-bmc", "aspeed,ast2600";
-> +
-> +	chosen {
-> +		stdout-path = &uart5;
-> +		bootargs = "console=ttyS4,115200n8 earlycon";
-
-Drop early con, debugging feature not release. Then use stdout path
-alone, so drop console as well.
-
-
+> @@ -11,6 +11,65 @@ / {
+>  	model = "System1";
+>  	compatible = "ibm,system1-bmc", "aspeed,ast2600";
+>  
+> +	aliases {
+> +		i2c16 = &i2c8mux1chn0;
+> +		i2c17 = &i2c8mux1chn1;
+> +		i2c18 = &i2c8mux1chn2;
+> +		i2c19 = &i2c8mux1chn3;
+> +		i2c20 = &i2c8mux1chn4;
+> +		i2c21 = &i2c8mux1chn5;
+> +		i2c22 = &i2c8mux1chn6;
+> +		i2c23 = &i2c8mux1chn7;
+> +		i2c24 = &i2c3mux0chn0;
+> +		i2c25 = &i2c3mux0chn1;
+> +		i2c26 = &i2c3mux0chn2;
+> +		i2c27 = &i2c3mux0chn3;
+> +		i2c28 = &i2c3mux0chn4;
+> +		i2c29 = &i2c3mux0chn5;
+> +		i2c30 = &i2c3mux0chn6;
+> +		i2c31 = &i2c3mux0chn7;
+> +		i2c32 = &i2c6mux0chn0;
+> +		i2c33 = &i2c6mux0chn1;
+> +		i2c34 = &i2c6mux0chn2;
+> +		i2c35 = &i2c6mux0chn3;
+> +		i2c36 = &i2c6mux0chn4;
+> +		i2c37 = &i2c6mux0chn5;
+> +		i2c38 = &i2c6mux0chn6;
+> +		i2c39 = &i2c6mux0chn7;
+> +		i2c40 = &i2c7mux0chn0;
+> +		i2c41 = &i2c7mux0chn1;
+> +		i2c42 = &i2c7mux0chn2;
+> +		i2c43 = &i2c7mux0chn3;
+> +		i2c44 = &i2c7mux0chn4;
+> +		i2c45 = &i2c7mux0chn5;
+> +		i2c46 = &i2c7mux0chn6;
+> +		i2c47 = &i2c7mux0chn7;
+> +		i2c48 = &i2c8mux0chn0;
+> +		i2c49 = &i2c8mux0chn1;
+> +		i2c50 = &i2c8mux0chn2;
+> +		i2c51 = &i2c8mux0chn3;
+> +		i2c52 = &i2c8mux0chn4;
+> +		i2c53 = &i2c8mux0chn5;
+> +		i2c54 = &i2c8mux0chn6;
+> +		i2c55 = &i2c8mux0chn7;
+> +		i2c56 = &i2c14mux0chn0;
+> +		i2c57 = &i2c14mux0chn1;
+> +		i2c58 = &i2c14mux0chn2;
+> +		i2c59 = &i2c14mux0chn3;
+> +		i2c60 = &i2c14mux0chn4;
+> +		i2c61 = &i2c14mux0chn5;
+> +		i2c62 = &i2c14mux0chn6;
+> +		i2c63 = &i2c14mux0chn7;
+> +		i2c64 = &i2c15mux0chn0;
+> +		i2c65 = &i2c15mux0chn1;
+> +		i2c66 = &i2c15mux0chn2;
+> +		i2c67 = &i2c15mux0chn3;
+> +		i2c68 = &i2c15mux0chn4;
+> +		i2c69 = &i2c15mux0chn5;
+> +		i2c70 = &i2c15mux0chn6;
+> +		i2c71 = &i2c15mux0chn7;
 > +	};
 > +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x80000000 0x40000000>;
-> +	};
+>  	chosen {
+>  		stdout-path = &uart5;
+>  		bootargs = "console=ttyS4,115200n8 earlycon";
+> @@ -54,10 +113,12 @@ vga_memory: region@bf000000 {
+>  			reg = <0xbf000000 0x01000000>;  /* 16M */
+>  		};
+>  	};
 > +
-> +	reserved-memory {
+
+You need to clean your patchset...
+
+
+>  };
+>  
+>  &adc1 {
+>  	status = "okay";
+> +
+
+Really.
+
+>  	aspeed,int-vref-microvolt = <2500000>;
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_adc8_default
+> @@ -186,3 +247,519 @@ &kcs3 {
+>  	aspeed,lpc-io-reg = <0xca2>;
+>  	aspeed,lpc-interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
+>  };
+> +
+> +&i2c0 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c1 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c2 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c3 {
+> +	status = "okay";
+> +
+> +	i2c-mux@70 {
+> +		compatible = "nxp,pca9548";
+> +		reg = <0x70>;
 > +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		event_log: tcg_event_log@b3d00000 {
+> +		#size-cells = <0>;
+> +		status = "okay";
 
-No underscores in node names.
+Drop
+
+> +		i2c-mux-idle-disconnect;
+> +
+> +		i2c3mux0chn0: i2c@0 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <0>;
+> +		};
+> +
+> +		i2c3mux0chn1: i2c@1 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <1>;
+> +		};
+> +
+> +		i2c3mux0chn2: i2c@2 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <2>;
+> +		};
+> +
+> +		i2c3mux0chn3: i2c@3 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <3>;
+> +		};
+> +
+> +		i2c3mux0chn4: i2c@4 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <4>;
+> +		};
+> +
+> +		i2c3mux0chn5: i2c@5 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <5>;
+> +		};
+> +
+> +		i2c3mux0chn6: i2c@6 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <6>;
+> +		};
+> +
+> +		i2c3mux0chn7: i2c@7 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <7>;
+> +		};
+> +	};
+> +};
+> +
+> +&i2c4 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c5 {
+> +	status = "okay";
+> +};
+> +
+> +&i2c6 {
+> +	status = "okay";
+> +
+> +	i2c-mux@70 {
+> +		compatible = "nxp,pca9548";
+> +		reg = <0x70>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		status = "okay";
+
+Drop
+
+Other places as well.
 
 
 Best regards,
