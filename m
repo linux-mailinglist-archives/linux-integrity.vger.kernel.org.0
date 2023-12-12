@@ -1,132 +1,161 @@
-Return-Path: <linux-integrity+bounces-401-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-402-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 842D280F114
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 16:31:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9729E80F253
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 17:21:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 347B4281F63
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 15:31:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0230AB20AAF
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Dec 2023 16:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E81A7763C;
-	Tue, 12 Dec 2023 15:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NcKu09sm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE0677F10;
+	Tue, 12 Dec 2023 16:21:11 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621EA109;
-	Tue, 12 Dec 2023 07:30:01 -0800 (PST)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BCEx5ER006650;
-	Tue, 12 Dec 2023 15:29:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=1QnPj8eOFdOKbzBUzJWtWMceQ+m+B2C7k4p3TzuE9/k=;
- b=NcKu09smPX6EeAQwHvpzlXCWxZVWnEp7/qUcgFPq0ARXQKSGIx4UKNgyhZ6i35UJ+HcJ
- i2rRrAZAoP2lPzh6VO/j5Za3S7eTgRNyfgb+AVI1dqdwwMEqZuteSGC7py9b4f36g/XD
- JqLqkdmgoYjwyqHKWJD4/DgTlaQTH4EeB+JAC9iWe7P9Oxb3YYzwnqxJjfEdyTeZNRrs
- rlrGsZ4Yq6RImXZ1Tz2P7sglqnNts0qFtvoPzRKHLpX/y36EYc+YFW30c20RhgnwQNvR
- pE+VYlyQKtyN/7zRRxrfQKEwvYF3+IN+rMDlW1MAelv8wQDBgSY+5AzWALzWldQLJ/Jm gg== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3uxrqckm2u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 15:29:51 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BCFPVDx004390;
-	Tue, 12 Dec 2023 15:29:50 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uw4sk9jwf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 15:29:50 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BCFTmPE45023712
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 Dec 2023 15:29:48 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8015920040;
-	Tue, 12 Dec 2023 15:29:48 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 137DA2004B;
-	Tue, 12 Dec 2023 15:29:47 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.61.159.221])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 12 Dec 2023 15:29:46 +0000 (GMT)
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: linux-integrity@vger.kernel.org
-Cc: Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Add Roberto Sassu as co-maintainer to IMA and EVM
-Date: Tue, 12 Dec 2023 10:29:37 -0500
-Message-Id: <20231212152937.928126-2-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20231212152937.928126-1-zohar@linux.ibm.com>
-References: <20231212152937.928126-1-zohar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fbJCglrVMoWM9eTCtOH3EcYo-EPFiKxO
-X-Proofpoint-ORIG-GUID: fbJCglrVMoWM9eTCtOH3EcYo-EPFiKxO
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37C79D;
+	Tue, 12 Dec 2023 08:21:04 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4SqNm53fN9z9yB75;
+	Wed, 13 Dec 2023 00:07:01 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id C6B8E1402E1;
+	Wed, 13 Dec 2023 00:21:00 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwDnInNgiHhltjNqAg--.30943S2;
+	Tue, 12 Dec 2023 17:21:00 +0100 (CET)
+Message-ID: <13be18b9-90d2-4535-a72e-40899d4063bd@huaweicloud.com>
+Date: Tue, 12 Dec 2023 17:20:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-12_08,2023-12-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 malwarescore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2312120117
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH] overlayfs: Redirect xattr ops on security.evm to
+ security.evm_overlayfs
+Content-Language: en-US
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>, Seth Forshee
+ <sforshee@kernel.org>, miklos@szeredi.hu, linux-unionfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, zohar@linux.ibm.com, paul@paul-moore.com,
+ stefanb@linux.ibm.com, jlayton@kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>
+References: <20231208172308.2876481-1-roberto.sassu@huaweicloud.com>
+ <CAOQ4uxivpZ+u0A5kE962XST37-ey2Tv9EtddnZQhk3ohRkcQTw@mail.gmail.com>
+ <20231208-tauziehen-zerfetzt-026e7ee800a0@brauner>
+ <c95b24f27021052209ec6911d2b7e7b20e410f43.camel@huaweicloud.com>
+ <20231211-fortziehen-basen-b8c0639044b8@brauner>
+ <019f134a-6ab4-48ca-991c-5a5c94e042ea@huaweicloud.com>
+ <CAOQ4uxgpNt7qKEF_NEJPsKU7-XhM7N_3eP68FrOpMpcRcHt4rQ@mail.gmail.com>
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <CAOQ4uxgpNt7qKEF_NEJPsKU7-XhM7N_3eP68FrOpMpcRcHt4rQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwDnInNgiHhltjNqAg--.30943S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF18Kr4kAF48XF48Zr17Awb_yoW5Kr1xpr
+	ZIk3Z7KrZ8JF17A3sIy3W7uw4Fkr4rCFyUWr98Xr4kCFyDWFnIkrWay345uF17JFsaqw4j
+	v3y2yr9rZr15Z37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAJBF1jj5ePYgAAsH
 
-Roberto Sassu has been actively involved in IMA and EVM since 2011.
-His first major IMA contribution was IMA template support.  He also
-contributed extending TPM 2.0 PCRs with properly calculated per TPM
-bank digests and included file metadata information in the IMA
-measurement list.
+On 12.12.23 11:44, Amir Goldstein wrote:
+> On Tue, Dec 12, 2023 at 12:25 PM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+>>
+>> On 11.12.23 19:01, Christian Brauner wrote:
+>>>> The second problem is that one security.evm is not enough. We need two,
+>>>> to store the two different HMACs. And we need both at the same time,
+>>>> since when overlayfs is mounted the lower/upper directories can be
+>>>> still accessible.
+>>>
+>>> "Changes to the underlying filesystems while part of a mounted overlay
+>>> filesystem are not allowed. If the underlying filesystem is changed, the
+>>> behavior of the overlay is undefined, though it will not result in a
+>>> crash or deadlock."
+>>>
+>>> https://docs.kernel.org/filesystems/overlayfs.html#changes-to-underlying-filesystems
+>>>
+>>> So I don't know why this would be a problem.
+>>
+>> + Eric Snowberg
+>>
+>> Ok, that would reduce the surface of attack. However, when looking at:
+>>
+>>        ovl: Always reevaluate the file signature for IMA
+>>
+>>        Commit db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the
+>> i_version")
+>>        partially closed an IMA integrity issue when directly modifying a file
+>>        on the lower filesystem.  If the overlay file is first opened by a
+>> user
+>>        and later the lower backing file is modified by root, but the extended
+>>        attribute is NOT updated, the signature validation succeeds with
+>> the old
+>>        original signature.
+>>
+>> Ok, so if the behavior of overlayfs is undefined if the lower backing
+>> file is modified by root, do we need to reevaluate? Or instead would be
+>> better to forbid the write from IMA (legitimate, I think, since the
+>> behavior is documented)? I just saw that we have d_real_inode(), we can
+>> use it to determine if the write should be denied.
+>>
+> 
+> There may be several possible legitimate actions in this case, but the
+> overall concept IMO should be the same as I said about EVM -
+> overlayfs does not need an IMA signature of its own, because it
+> can use the IMA signature of the underlying file.
+> 
+> Whether overlayfs reads a file from lower fs or upper fs, it does not
+> matter, the only thing that matters is that the underlying file content
+> is attested when needed.
 
-Regarding EVM, Roberto contributed to making EVM portable and immutable
-signatures more usable.  He also prepared the LSM infrastructure to
-support EVM as a fully fledged LSM, by ensuring that the latter receives
-from the former all xattrs provided by other registered LSMs at inode
-creation time, for HMAC calculation.
+Just some thoughts...
 
-Roberto is currently working on making IMA and EVM full fledged LSMs.
+Ok, so we attest the lower/upper file. What about the path the 
+application specified to access that file (just an example)? Not that it 
+particularly matters (we are not protecting it yet), but we are not 
+recording in the IMA measurement list what the application 
+requested/sees. I don't have a good example for inode metadata, but we 
+already started recording them too.
 
-Add Roberto as an IMA and EVM maintainer.
+Also, I'm thinking about overlayfs-own xattrs. Shouldn't they be 
+protected? If they change during an offline attack, it would change how 
+information are presented by overlayfs (I don't know much, for now).
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Roberto
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 012df8ccf34e..ffaac404d1e0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7977,6 +7977,7 @@ F:	include/uapi/linux/ext4.h
- 
- Extended Verification Module (EVM)
- M:	Mimi Zohar <zohar@linux.ibm.com>
-+M:	Roberto Sassu <roberto.sassu@huawei.com>
- L:	linux-integrity@vger.kernel.org
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-@@ -10554,6 +10555,7 @@ F:	drivers/crypto/inside-secure/
- 
- INTEGRITY MEASUREMENT ARCHITECTURE (IMA)
- M:	Mimi Zohar <zohar@linux.ibm.com>
-+M:	Roberto Sassu <roberto.sassu@huawei.com>
- M:	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
- L:	linux-integrity@vger.kernel.org
- S:	Supported
--- 
-2.39.3
+> The only incident that requires special attention is copy-up.
+> This is what the security hooks security_inode_copy_up() and
+> security_inode_copy_up_xattr() are for.
+> 
+> When a file starts in state "lower" and has security.ima,evm xattrs
+> then before a user changes the file, it is copied up to upper fs
+> and suppose that security.ima,evm xattrs are copied as is?
+> 
+> When later the overlayfs file content is read from the upper copy
+> the security.ima signature should be enough to attest that file content
+> was not tampered with between going from "lower" to "upper".
+> 
+> security.evm may need to be fixed on copy up, but that should be
+> easy to do with the security_inode_copy_up_xattr() hook. No?
+> 
+> Thanks,
+> Amir.
 
 
