@@ -1,32 +1,32 @@
-Return-Path: <linux-integrity+bounces-427-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-428-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1AE2810BD2
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Dec 2023 08:51:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21E68810EC3
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Dec 2023 11:46:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74836281736
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Dec 2023 07:51:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D174D281A80
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Dec 2023 10:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0E71A5A2;
-	Wed, 13 Dec 2023 07:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C06A722EE5;
+	Wed, 13 Dec 2023 10:46:23 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71190BD;
-	Tue, 12 Dec 2023 23:51:06 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4SqnPC144gz9y1y3;
-	Wed, 13 Dec 2023 15:37:03 +0800 (CST)
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D828B2;
+	Wed, 13 Dec 2023 02:46:19 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4SqsHJ5pQQz9y0PF;
+	Wed, 13 Dec 2023 18:32:12 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 31E66140426;
-	Wed, 13 Dec 2023 15:51:03 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 4511B140411;
+	Wed, 13 Dec 2023 18:46:15 +0800 (CST)
 Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwCnpV9gYnllQm9tAg--.42816S2;
-	Wed, 13 Dec 2023 08:51:02 +0100 (CET)
-Message-ID: <ecf524e0-b580-44c0-b64a-4b99da0615bf@huaweicloud.com>
-Date: Wed, 13 Dec 2023 08:50:53 +0100
+	by APP2 (Coremail) with SMTP id GxC2BwCnpV9li3llaWZvAg--.43787S2;
+	Wed, 13 Dec 2023 11:46:14 +0100 (CET)
+Message-ID: <7c226242-2eda-41cd-9be8-c2c010f3fc49@huaweicloud.com>
+Date: Wed, 13 Dec 2023 11:45:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -34,84 +34,136 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MAINTAINERS: Add Roberto Sassu as co-maintainer to IMA
- and EVM
-To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc: Eric Snowberg <eric.snowberg@oracle.com>,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231212152937.928126-1-zohar@linux.ibm.com>
- <20231212152937.928126-2-zohar@linux.ibm.com>
+Subject: Re: [PATCH v5 23/23] integrity: Switch from rbtree to LSM-managed
+ blob for integrity_iint_cache
 Content-Language: en-US
+To: Paul Moore <paul@paul-moore.com>, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+ dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
+ stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ casey@schaufler-ca.com, mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ selinux@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+References: <20231107134012.682009-24-roberto.sassu@huaweicloud.com>
+ <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <20231212152937.928126-2-zohar@linux.ibm.com>
+In-Reply-To: <17befa132379d37977fc854a8af25f6d.paul@paul-moore.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:GxC2BwCnpV9gYnllQm9tAg--.42816S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr1UAF43Zw13Ar1DXFyrZwb_yoW8AF15pa
-	yDWr45Cry0gr1xA3ZYgF43Aay5X3y8Jry7W3yDtw17ZasxG3Z09F4vk3WI9FykKr18KFWY
-	yr9Igrn8uan8ZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:GxC2BwCnpV9li3llaWZvAg--.43787S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF17Kw1kuFWrWr45ur1kGrg_yoW5tF48pF
+	43Ka4xJw4kXF929rn2vF45ur4fKFWSgFWUWwn8Grn7Aas09r1Ygr45Ary8uFyUGr98tw1F
+	qr1a9ry3Z3WqyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
 	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
 	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
 	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj5OUXwACsn
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj5OXOgACsB
 
-On 12.12.23 16:29, Mimi Zohar wrote:
-> Roberto Sassu has been actively involved in IMA and EVM since 2011.
-> His first major IMA contribution was IMA template support.  He also
-> contributed extending TPM 2.0 PCRs with properly calculated per TPM
-> bank digests and included file metadata information in the IMA
-> measurement list.
+On 17.11.23 21:57, Paul Moore wrote:
+> On Nov  7, 2023 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
+>>
+>> Before the security field of kernel objects could be shared among LSMs with
+>> the LSM stacking feature, IMA and EVM had to rely on an alternative storage
+>> of inode metadata. The association between inode metadata and inode is
+>> maintained through an rbtree.
+>>
+>> Because of this alternative storage mechanism, there was no need to use
+>> disjoint inode metadata, so IMA and EVM today still share them.
+>>
+>> With the reservation mechanism offered by the LSM infrastructure, the
+>> rbtree is no longer necessary, as each LSM could reserve a space in the
+>> security blob for each inode. However, since IMA and EVM share the
+>> inode metadata, they cannot directly reserve the space for them.
+>>
+>> Instead, request from the 'integrity' LSM a space in the security blob for
+>> the pointer of inode metadata (integrity_iint_cache structure). The other
+>> reason for keeping the 'integrity' LSM is to preserve the original ordering
+>> of IMA and EVM functions as when they were hardcoded.
+>>
+>> Prefer reserving space for a pointer to allocating the integrity_iint_cache
+>> structure directly, as IMA would require it only for a subset of inodes.
+>> Always allocating it would cause a waste of memory.
+>>
+>> Introduce two primitives for getting and setting the pointer of
+>> integrity_iint_cache in the security blob, respectively
+>> integrity_inode_get_iint() and integrity_inode_set_iint(). This would make
+>> the code more understandable, as they directly replace rbtree operations.
+>>
+>> Locking is not needed, as access to inode metadata is not shared, it is per
+>> inode.
+>>
+>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>> ---
+>>   security/integrity/iint.c      | 71 +++++-----------------------------
+>>   security/integrity/integrity.h | 20 +++++++++-
+>>   2 files changed, 29 insertions(+), 62 deletions(-)
+>>
+>> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+>> index 882fde2a2607..a5edd3c70784 100644
+>> --- a/security/integrity/iint.c
+>> +++ b/security/integrity/iint.c
+>> @@ -231,6 +175,10 @@ static int __init integrity_lsm_init(void)
+>>   	return 0;
+>>   }
+>>   
+>> +struct lsm_blob_sizes integrity_blob_sizes __ro_after_init = {
+>> +	.lbs_inode = sizeof(struct integrity_iint_cache *),
+>> +};
 > 
-> Regarding EVM, Roberto contributed to making EVM portable and immutable
-> signatures more usable.  He also prepared the LSM infrastructure to
-> support EVM as a fully fledged LSM, by ensuring that the latter receives
-> from the former all xattrs provided by other registered LSMs at inode
-> creation time, for HMAC calculation.
+> I'll admit that I'm likely missing an important detail, but is there
+> a reason why you couldn't stash the integrity_iint_cache struct
+> directly in the inode's security blob instead of the pointer?  For
+> example:
 > 
-> Roberto is currently working on making IMA and EVM full fledged LSMs.
+>    struct lsm_blob_sizes ... = {
+>      .lbs_inode = sizeof(struct integrity_iint_cache),
+>    };
 > 
-> Add Roberto as an IMA and EVM maintainer.
-> 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+>    struct integrity_iint_cache *integrity_inode_get(inode)
+>    {
+>      if (unlikely(!inode->isecurity))
+>        return NULL;
 
-Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
+Ok, this caught my attention...
+
+I see that selinux_inode() has it, but smack_inode() doesn't.
+
+Some Smack code assumes that the inode security blob is always non-NULL:
+
+static void init_inode_smack(struct inode *inode, struct smack_known *skp)
+{
+	struct inode_smack *isp = smack_inode(inode);
+
+	isp->smk_inode = skp;
+	isp->smk_flags = 0;
+}
+
+
+Is that intended? Should I add the check?
 
 Thanks
 
 Roberto
 
-> ---
->   MAINTAINERS | 2 ++
->   1 file changed, 2 insertions(+)
+>      return inode->i_security + integrity_blob_sizes.lbs_inode;
+>    }
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 012df8ccf34e..ffaac404d1e0 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7977,6 +7977,7 @@ F:	include/uapi/linux/ext4.h
->   
->   Extended Verification Module (EVM)
->   M:	Mimi Zohar <zohar@linux.ibm.com>
-> +M:	Roberto Sassu <roberto.sassu@huawei.com>
->   L:	linux-integrity@vger.kernel.org
->   S:	Supported
->   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-> @@ -10554,6 +10555,7 @@ F:	drivers/crypto/inside-secure/
->   
->   INTEGRITY MEASUREMENT ARCHITECTURE (IMA)
->   M:	Mimi Zohar <zohar@linux.ibm.com>
-> +M:	Roberto Sassu <roberto.sassu@huawei.com>
->   M:	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
->   L:	linux-integrity@vger.kernel.org
->   S:	Supported
+> --
+> paul-moore.com
 
 
