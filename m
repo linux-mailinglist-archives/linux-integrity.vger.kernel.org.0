@@ -1,79 +1,117 @@
-Return-Path: <linux-integrity+bounces-426-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-427-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6936A8106C3
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Dec 2023 01:37:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1AE2810BD2
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Dec 2023 08:51:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 257632823C5
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Dec 2023 00:37:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74836281736
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Dec 2023 07:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DFA1A31;
-	Wed, 13 Dec 2023 00:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GER0MF1r"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0E71A5A2;
+	Wed, 13 Dec 2023 07:51:13 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF828EB
-	for <linux-integrity@vger.kernel.org>; Tue, 12 Dec 2023 16:37:47 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-548ae9a5eeaso3033a12.1
-        for <linux-integrity@vger.kernel.org>; Tue, 12 Dec 2023 16:37:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702427866; x=1703032666; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1LnE6BidxYtGaY3naq+UID6BS2mBFdrix5t5XhfBs+I=;
-        b=GER0MF1r3n4hbuvaztv/r7g9jGVPXuX+pJokY1ZkDTPPmo/wIIE7c3LqkFrIvPx7Ty
-         UmLA14tAQQgXEpxv1asWdk6rQ9QS2lE3212qvuOC5Uqba7fKx8y01Dcai3PkJSVclyC4
-         4d7V/natmrN/jvPJAp6oV71SbAhayZrmkPzjwkmmwXO9if/oJjJuGXYWgNKIQpkkvAnc
-         J4vXJjAFWk9P/rxTN54I3hpjYqEZ23HiBM1rWIUZSMAdLfACuq0k0KHmiaBfY23LymOI
-         v0G+TFSg5rUV7GY8TmIqZ/fk6B6mBxbGwbw7g+Svkh+7JES+wEZTsa8I91/Z8s0rEkl8
-         rZMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702427866; x=1703032666;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1LnE6BidxYtGaY3naq+UID6BS2mBFdrix5t5XhfBs+I=;
-        b=dzRSsXOMsFD/oYVwfbSGQa2HUUVTtUkpXkSZvVDPL3UYJt6bqXLHKrQ0LeTqUI+nX3
-         0xi0Wbvt5psdpZNCP5LBEeNUMiKwRAYWxhy0leURCHGlJ/Vhm7VOJ4E8BbrJYfeptyR0
-         HKnnPG+TsyTyasdGS05bVr9gpg6S6Nju2/tvGpU5Mwr5cCqj2k5ovnzz5SbnpSTYiQFh
-         /TSdwqME8vCAVq5NHOa31z+6HyLjCpX6TgHFp/0l05PoAzYufsqNyzTEzO6JkBThz/DW
-         C0QG7J0mugLO6NJ3346W1cFa95nAqhLmRrHL9rqdP0621aQyTXpcJXOaQZVZGtr8lDL/
-         KuhQ==
-X-Gm-Message-State: AOJu0YxD3MSSiLCjMpeFO3GzHnMoChk3UCWROyTBwrExsJvhFSCDwtfM
-	+k9HTp9C5oVhhko1XpJj8wp0RmZNnb9ysPH6FHC/EfNqzsQNiS8SaQ==
-X-Google-Smtp-Source: AGHT+IGnMQRiKEPWZSvwWYwwY8FAhUWy825RQ67iHfal2GL8IR+NeDwrblzRUmQldUIwiAa92DPPmgK9pAj6EIrAdq4=
-X-Received: by 2002:a50:d601:0:b0:551:f450:752a with SMTP id
- x1-20020a50d601000000b00551f450752amr37151edi.6.1702427866162; Tue, 12 Dec
- 2023 16:37:46 -0800 (PST)
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71190BD;
+	Tue, 12 Dec 2023 23:51:06 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4SqnPC144gz9y1y3;
+	Wed, 13 Dec 2023 15:37:03 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 31E66140426;
+	Wed, 13 Dec 2023 15:51:03 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwCnpV9gYnllQm9tAg--.42816S2;
+	Wed, 13 Dec 2023 08:51:02 +0100 (CET)
+Message-ID: <ecf524e0-b580-44c0-b64a-4b99da0615bf@huaweicloud.com>
+Date: Wed, 13 Dec 2023 08:50:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000b505f3060c454a49@google.com> <ZXfBmiTHnm_SsM-n@sashalap>
-In-Reply-To: <ZXfBmiTHnm_SsM-n@sashalap>
-From: Robert Kolchmeyer <rkolchmeyer@google.com>
-Date: Tue, 12 Dec 2023 16:37:31 -0800
-Message-ID: <CAJc0_fz4LEyNT2rB7KAsAZuym8TT3DZLEfFqSoBigs-316LNKQ@mail.gmail.com>
-Subject: Re: IMA performance regression in 5.10.194 when using overlayfs
-To: Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	regressions@lists.linux.dev, eric.snowberg@oracle.com, zohar@linux.ibm.com, 
-	jlayton@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MAINTAINERS: Add Roberto Sassu as co-maintainer to IMA
+ and EVM
+To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc: Eric Snowberg <eric.snowberg@oracle.com>,
+ linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231212152937.928126-1-zohar@linux.ibm.com>
+ <20231212152937.928126-2-zohar@linux.ibm.com>
+Content-Language: en-US
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <20231212152937.928126-2-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:GxC2BwCnpV9gYnllQm9tAg--.42816S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr1UAF43Zw13Ar1DXFyrZwb_yoW8AF15pa
+	yDWr45Cry0gr1xA3ZYgF43Aay5X3y8Jry7W3yDtw17ZasxG3Z09F4vk3WI9FykKr18KFWY
+	yr9Igrn8uan8ZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj5OUXwACsn
 
-> Looking at the dependencies you've identified, it probably makes sense
-> to just take them as is (as it's something we would have done if these
-> dependencies were identified explicitly).
->
-> I'll plan to queue them up after the current round of releases is out.
+On 12.12.23 16:29, Mimi Zohar wrote:
+> Roberto Sassu has been actively involved in IMA and EVM since 2011.
+> His first major IMA contribution was IMA template support.  He also
+> contributed extending TPM 2.0 PCRs with properly calculated per TPM
+> bank digests and included file metadata information in the IMA
+> measurement list.
+> 
+> Regarding EVM, Roberto contributed to making EVM portable and immutable
+> signatures more usable.  He also prepared the LSM infrastructure to
+> support EVM as a fully fledged LSM, by ensuring that the latter receives
+> from the former all xattrs provided by other registered LSMs at inode
+> creation time, for HMAC calculation.
+> 
+> Roberto is currently working on making IMA and EVM full fledged LSMs.
+> 
+> Add Roberto as an IMA and EVM maintainer.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Sounds great, thank you!
+Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
 
--Robert
+Thanks
+
+Roberto
+
+> ---
+>   MAINTAINERS | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 012df8ccf34e..ffaac404d1e0 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7977,6 +7977,7 @@ F:	include/uapi/linux/ext4.h
+>   
+>   Extended Verification Module (EVM)
+>   M:	Mimi Zohar <zohar@linux.ibm.com>
+> +M:	Roberto Sassu <roberto.sassu@huawei.com>
+>   L:	linux-integrity@vger.kernel.org
+>   S:	Supported
+>   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+> @@ -10554,6 +10555,7 @@ F:	drivers/crypto/inside-secure/
+>   
+>   INTEGRITY MEASUREMENT ARCHITECTURE (IMA)
+>   M:	Mimi Zohar <zohar@linux.ibm.com>
+> +M:	Roberto Sassu <roberto.sassu@huawei.com>
+>   M:	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+>   L:	linux-integrity@vger.kernel.org
+>   S:	Supported
+
 
