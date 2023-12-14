@@ -1,169 +1,107 @@
-Return-Path: <linux-integrity+bounces-443-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-445-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51E7F813307
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Dec 2023 15:25:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3FB481338F
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Dec 2023 15:50:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 170D628205D
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Dec 2023 14:25:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22E791C21A79
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Dec 2023 14:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BA6359E4D;
-	Thu, 14 Dec 2023 14:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F4425B208;
+	Thu, 14 Dec 2023 14:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iC5jqNZg"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OEtuXcUm"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A6B2;
-	Thu, 14 Dec 2023 06:25:07 -0800 (PST)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BEEGqWA026264;
-	Thu, 14 Dec 2023 14:24:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lqgfGZSL02s12bV+EZPiVU/q0lVJ2wM7GttJMZHSMg4=;
- b=iC5jqNZg7M5Qeg4VQrkpX2zE+6knUtAznit82kJGdiwdlU3HmcA5VrM/e110No9xaS0F
- UR/Z2LGtFIQ9K0bnOB/DY+QRhusp4wpqxTZSlVslMTCmxomNkWHCwoDkTCS3jeDX5soQ
- rd4EPfAaJLQ7x8lAP3GD0o8jj9j5nDr2dfdX4Yj+6OQrkPOve2Nx9AVa6U5nVuKVrFDY
- dRsYWrGAOghCzKbgS+vwXsnHTDm4WwrQJ5pGJwVexMLsEEhw+XQiHjR6wI5sKjgXjmmV
- +Re+J+KHBL6LeDuqXCLkv9PSrsSgurFClvmSs2NvkrL80Ye9SMcaX1JIqtyWxI/4ACRO dQ== 
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB31010F;
+	Thu, 14 Dec 2023 06:50:05 -0800 (PST)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BEEkk4Y005093;
+	Thu, 14 Dec 2023 14:49:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=kHHl0f8RwfUu7HzgV3Mii9bAXDUHulH0KGOvLW3qpr8=;
+ b=OEtuXcUmEVlV2I8stlty9/r/55lnt14br2es7A1erCv0VW5nx5NobRqlIzPmHa/Md7Gy
+ VqRHfVEHMicYHER3uFy91N/nF8kRiqigqI0H6bp+cix2JxBpFdiBPsBA2zJseXjhWK3I
+ SzwCj2zwkkmhgKLzGrCfBsiPXPmRcQy33WNfZBfGM/yNXw3RTGFp2co6Bz9knlRqbdn7
+ Ea9ya1b//DTZ4yXBO8yUI/hRyeLGQ/hxYcDIXmQLaMpWxJDbsaKTfSdOjfDxIM4gY0de
+ A0OydKEW4rngE18MQ9xC7TUjja1jlBiUjX+YjGQjv4jYq0ZLJ0XrbKDWeQkO+SwR0Sx2 SQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v03b307wr-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v03e01145-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Dec 2023 14:24:17 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BEEHkNK029961;
-	Thu, 14 Dec 2023 14:24:16 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v03b307w5-1
+	Thu, 14 Dec 2023 14:49:58 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BEEl88g009151;
+	Thu, 14 Dec 2023 14:49:58 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v03e0113h-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Dec 2023 14:24:15 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BED9jOp012620;
-	Thu, 14 Dec 2023 14:24:14 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uw3jp90pk-1
+	Thu, 14 Dec 2023 14:49:58 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BEEOUx3014136;
+	Thu, 14 Dec 2023 14:49:57 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uw592gmjm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Dec 2023 14:24:14 +0000
+	Thu, 14 Dec 2023 14:49:57 +0000
 Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BEEODRr33358310
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BEEnvm024314506
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 14 Dec 2023 14:24:13 GMT
+	Thu, 14 Dec 2023 14:49:57 GMT
 Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 644605805F;
-	Thu, 14 Dec 2023 14:24:13 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 11F565805E;
+	Thu, 14 Dec 2023 14:49:57 +0000 (GMT)
 Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D15B558051;
-	Thu, 14 Dec 2023 14:24:09 +0000 (GMT)
-Received: from [9.67.23.198] (unknown [9.67.23.198])
+	by IMSVA (Postfix) with ESMTP id BB0FA5805A;
+	Thu, 14 Dec 2023 14:49:56 +0000 (GMT)
+Received: from gfwa153.aus.stglabs.ibm.com (unknown [9.3.84.127])
 	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 14 Dec 2023 14:24:09 +0000 (GMT)
-Message-ID: <f9f95e8d-02e5-454e-8075-1e4231d385bb@linux.ibm.com>
-Date: Thu, 14 Dec 2023 08:24:09 -0600
+	Thu, 14 Dec 2023 14:49:56 +0000 (GMT)
+From: Ninad Palsule <ninad@linux.ibm.com>
+To: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc: Ninad Palsule <ninad@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au
+Subject: [PATCH v1 0/1] Add more compatibility strings to tpm-tis-i2c
+Date: Thu, 14 Dec 2023 08:49:52 -0600
+Message-Id: <20231214144954.3833998-1-ninad@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MlqJ9OKR5yEFp8lNCfRY4eC5ZMX0K3jU
+X-Proofpoint-ORIG-GUID: tPir1ZFJtM1OLt-xegOvT3RfYyi5qy0V
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 8/8] ARM: dts: aspeed: System1: PS, sensor and more
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, joel@jms.id.au,
-        andrew@codeconstruct.com.au, peterhuewe@gmx.de, jarkko@kernel.org,
-        jgg@ziepe.ca, keescook@chromium.org, tony.luck@intel.com,
-        gpiccoli@igalia.com, johannes.holland@infineon.com, linux@roeck-us.net,
-        broonie@kernel.org
-Cc: patrick.rudolph@9elements.com, vincent@vtremblay.dev,
-        peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com, bhelgaas@google.com,
-        naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
-        festevam@denx.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-hardening@vger.kernel.org, geissonator@yahoo.com
-References: <20231212164004.1683589-1-ninad@linux.ibm.com>
- <20231212164004.1683589-9-ninad@linux.ibm.com>
- <5b98538a-8ffe-42ec-b020-514dcfcebba3@linaro.org>
- <44abff4a-0a8e-499b-8b98-a4a1680cb431@linux.ibm.com>
- <427fa99c-764c-4d6a-b9f1-cd9089710d5e@linaro.org>
- <edcdcea2-febc-4859-9ccf-b8c59b794f01@linux.ibm.com>
- <1c5ace65-2fd8-4503-b22f-e0f564d1c83f@linaro.org>
-Content-Language: en-US
-From: Ninad Palsule <ninad@linux.ibm.com>
-In-Reply-To: <1c5ace65-2fd8-4503-b22f-e0f564d1c83f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Dw6P0YguG2FsdSKN_nlMIhXcu-QkMI3x
-X-Proofpoint-GUID: Fa1OsjgEvz5G5Q94M6u6-pMLI18_E7rH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-14_09,2023-12-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- suspectscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- impostorscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2312140100
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 malwarescore=0
+ suspectscore=0 adultscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=777 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311290000 definitions=main-2312140103
 
-Hello Krzysztof,
+The new IBM system1 bmc machine uses Nuvoton TPM chip. I had this commit
+as part of the device tree for new machine but reviewer suggested send
+the driver commit as separate patch.
 
+The patchset for IBM system1 bmc machine device tree is as follows:
+https://lore.kernel.org/linux-kernel/20231212164004.1683589-1-ninad@linux.ibm.com/
 
-On 12/14/23 01:24, Krzysztof Kozlowski wrote:
-> On 13/12/2023 20:49, Ninad Palsule wrote:
->> Hello Krzysztof,
->>
->> On 12/13/23 13:37, Krzysztof Kozlowski wrote:
->>> On 13/12/2023 20:02, Ninad Palsule wrote:
->>>> Hello Krzysztof,
->>>>
->>>> On 12/12/23 14:26, Krzysztof Kozlowski wrote:
->>>>> On 12/12/2023 17:40, Ninad Palsule wrote:
->>>>>> This drop adds following devices in the device tree.
->>>>>> - EEPROM/VPD
->>>>>> - Power supplies
->>>>>> - Humidity, pressure and temperature sensors.
->>>>>> - Trusted platform module(TPM) chip
->>>>>>
->>>>>> Tested:
->>>>>>        This board is tested using the simics simulator.
->>>>>>
->>>>>> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
->>>>>> ---
->>>>> Don't mix DTS with drivers. DTS and drivers go via different subsystems
->>>>> and cannot have dependencies, so why DTS is patch #6, then driver #7 and
->>>>> now again DTS #7?
->>>> There is a dependency on driver code as patch #8 uses the compatibility
->>>> string added in driver patch #7.  I have now moved driver patch at the
->>>> start. Is that ok? OR you are suggesting something else?
->>> First, there is no dependency. Second, except confusing order anyway DTS
->>> will go via separate trees. Third, again, there is no dependency. If
->>> there is, your patchset is broken and this needs to be fixed. Although I
->>> don't understand how new hardware can depend on driver... it's really odd.
->> Thanks for the quick response.
->>
->> This board uses the nuvoton TPM device. The tpm devices uses
->> "nuvoton,npct75x" driver hence we added it in the device tree. If the
->> driver doesn't have this compatibility string then it won't load. So if
->> someone tries to use this board then tpm won't work unless the
-> ... and if there is no board it also fails to load.
->
->> compatibility string is added in the driver. That is the dependency I am
->> talking about.
-> This is not a dependency! It's unrelated.
+Joel Stanley (1):
+  tpm: tis-i2c: Add more compatible strings
 
-ok, I will send it as a separate patch.
+ drivers/char/tpm/tpm_tis_i2c.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks for the prompt reply.
+-- 
+2.39.2
 
-Regards,
-
-Ninad
-
->
-> Best regards,
-> Krzysztof
->
 
