@@ -1,103 +1,206 @@
-Return-Path: <linux-integrity+bounces-501-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-502-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D78F814BAE
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Dec 2023 16:24:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF9D815195
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Dec 2023 22:05:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDFC62819C5
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Dec 2023 15:24:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A0551F24D08
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Dec 2023 21:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8C9364BE;
-	Fri, 15 Dec 2023 15:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59FA4777D;
+	Fri, 15 Dec 2023 21:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="Ht8Sm7ng"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A763A8C9;
-	Fri, 15 Dec 2023 15:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 3212C2801371D;
-	Fri, 15 Dec 2023 16:24:12 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 038C43F34A; Fri, 15 Dec 2023 16:24:11 +0100 (CET)
-Date: Fri, 15 Dec 2023 16:24:11 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-	Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-	Nayna Jain <nayna@linux.ibm.com>,
-	Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-	Sasha Levin <sashal@kernel.org>,
-	Alexander Steffen <Alexander.Steffen@infineon.com>,
-	Johannes Holland <Johannes.Holland@infineon.com>,
-	Amir Mizinski <amirmizi6@gmail.com>,
-	Benoit HOUYERE <benoit.houyere@st.com>,
-	Peter Delevoryas <peter@pjd.dev>
-Subject: Re: [PATCH v2 1/3] dt-bindings: tpm: Consolidate TCG TIS bindings
-Message-ID: <20231215152411.GA20902@wunner.de>
-References: <cover.1701093036.git.lukas@wunner.de>
- <3f56f0a2bb90697a23e83583a21684b75dc7eea2.1701093036.git.lukas@wunner.de>
- <CAL_JsqKwJsaJhoi07gG76TgDtrwh0i=iGtxL-_pbQbGDZ_8C3A@mail.gmail.com>
- <20231213162319.GA31314@wunner.de>
- <CAL_JsqJ=14b19yHZ=rnVd8uLu=kn5W9y0irk0XA983Eo+ByBnA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5870749F69
+	for <linux-integrity@vger.kernel.org>; Fri, 15 Dec 2023 21:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1702674338; bh=h6AWNHWJC/UC96v1b1QJxTRjmX7Dyfl7dMUYyHD71gM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Ht8Sm7ngRGuDTpCUHdn6g5M8qokPmwa1SBwMuaysjZYsBDadGj4Sud+ie280xJAxXinfLOn2X1ib8qbJBkBq15DylOYVeEoZcJh3HJlRfS/jHwYBPNqnD/Rn8D8EFQKj6tOfbTYgeUQfFSqNH9d6Cuv3ovR5GqhBsUeqB8r134exTRZTi7DTO73ezdnrpVODNanVNixQw91rgbnTYSCoMyY2AjlEA/yyKhGwb3a78cgRK8QpEcAFX0B62ZLG2TfF4Pd8dLjIan96ezogv57rEu3FpUi9MiKTcfrl3v5sbmeJKYrxQ4hDgJQ1QRJBwKRVE/0G+Q8GqoC0/+l8SJvDVg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1702674338; bh=EUlOt7OQHRMUT+KZVBTz5PbUFR9CBQ+04YtOrI3iqOa=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WjSpuUWijAhF0fDDuyvnVDWxvf2uTSrUKyfQhiw0r7x8AwDcQqoIHxGNi87OePA4hC7pu0Drj7fS3CxzlxlgBvy3jWI/l60PUt9qOH7kbAW0xdXKq0T/sz5XJCQKtV9h9lPWKHiqStUyZf5YQd2065+QBvSb8pRYTdoI7r5SZ077kO9a37sWsmN1QheuVMqGKflhLtUuIWFw5x8l9LdtBvZz0xlYpoyr/rCJWrlQ8021R/9XhVA893bvJZeIG0RnvEZXf5dfGbbN/oe3S22NG7s2lVs9vadkeNqbe+PyrLqhjJRSC4cKDvSpkQdVFN1VoujOwqe8YiDunj9cEFSRgg==
+X-YMail-OSG: 4YnanhgVM1mIt78sweK4QLBPomWSnrgMyiiyMf8yn97zT5Lb_1X6Z_T9DbzQj83
+ Ihcq91pwrI3Yrp7AJjzT_NS3rsPT0w_whOuzouvb0QkeFIL9chowJ9puN8vyr7KcppdyWF5ASgp3
+ akkxc0d7AVB7nccM.LJkySDy3_tjoLhnw5mPYR55Hoor5rZgTBEZrzT7T7BezoZy7rR864o82zK3
+ mtIVo0qZJ2fNmZ9rXK0RS49rT0BkHdbRGzirarSTh_YXsC8uYjPioL5AnK4qfJ8LsMPO5boHAo3o
+ 364QxyZiO6wnCwVn7kaL8IumWq58.9Z9n.SvbAkEAbo5LMB83p2EMwhZyLx9a8ri63gZHoXPnhTs
+ pFYUvUQBweBW8ZV_sOMH_EEysyLV9KhqcCyR_6OoUjSmj6C1irdlUDn7qzg1HNQ74RhjBmBIP6HJ
+ yWDRB0uU5rxBGkllNh3wbO9YqZfkI.PfyftBB.NmePSRA0X.U6ayoF3r1ddMhXOkJVK6NfEkVjX0
+ l2r1c7XxLA3nes8bQluLafy_cZ7Njxug9CBNguubL9ylPHiebxs7KRUmmOloAPCwT5yGARufFpQR
+ jrEZogQUJicAvRA1OdxkEHu_yNjPOs7GL_zuofC6h7Dt50PWRDonu8jK9oVRnWvFaWwTKQSroyNn
+ _nXTQHPkRJ_DIoNOfGjkO3PnhwBYvQC.fTH2lJ0nYJd53bf3R1SthoPjjcHDw8NJDxa9mTUYuhYx
+ ETXjNlmvV.zM049MOfFK8.hq21SMGfyWmYHTZaJ9bVZGex91NGvg7fQxjLg6dnZhOOChopVCnx6w
+ KRhdvZcxZzrcaDh.zsxNt5rDhRN.7.HnUmkcp44mxKMW5KDrYIzGUL5AtWaCovxXYrVA0xR9.Hh3
+ W_0plDNW43xXqtB927A9Rdqwl54UjaIPyX8yz5lQMImijEB1fxUw_gMOC_9WRWZ8phRU_.CNiPr2
+ lsHeG28WUl6Kb2S9i0JFo3XP1elEIi1uJiQLMCOZZK35UizAFcm.W3qupGT324XOXU82MLs3eANb
+ S_QEMw6I_eNX.GTgtfURkAlJFeMokjIyV6J7GTMoXch3H5Y.XpC6KHZCbDoFlwbuju5L2y5Nqgjz
+ S3pMB3Q.yZ.r.PMISXONAFlPV7KrFdPvGkyLB0qDT_gBFojBGu3hO1GY1lrBBGn5P8QHXkI2lMOZ
+ LeAJ.31.mnNLlvi6PYwAQa7w.CMEfF5v3oDTd6hXzwTkdXzE.UeuDDrMgYzypdWCKRhmVCWrFTTa
+ gl7YQpS7Fj9OntklKU6nluP2J7ASjcpEGhT7fHy6Z3DsCbDnKF7NmDSR0cBRw2Q6NLmNHwlv9QuT
+ 3I.8o1J4diCKR7kcF9hyjgcaMIg4cxf3IIgjJr5XK.6Fo40q3C70.4cVRLzop8rcwjyuZ4DmQULB
+ x0_SPFWM3IpwyHNiNicBbrywpCO1cg2LnVtCCQd2UNaDolLI3ItidG7ojuQB8c9HMmL5fAeJqCIK
+ 5OatDwWrNmNMk69YqCBrrs6V3EZF9bmCbCYr7tsbAvYG24hOqUr8xIQVY5ChysWuNgBkEheHevIp
+ Qdi0ova9924WWFlvyrwmYT0X9Q3HQjGVZHWlKNRMuCZA57BC2s92DzEmmERI1okI_JKrsKnf1oG4
+ Xv0WpckXDCPrd6zLqCVAinEiHhBGqYKgMmTILf_yxaF_03KhW2bk2J7IzUxydDNBrYByEl5BqgSr
+ SiebyFhl1nKrljqXq5nAuQ8ZqLdVH.o1zEd7WrMjMsPQsQWJQ2Ef02owsA87pzsIahu6N.RDmTFA
+ kzxokEhEKZ7DhLzncHlV1PRyC7wZ9w9_eu2pnX9Ty9oRwBoREv3VNAzNwEp7z8zIQD3xKBHLdPrF
+ eftjlG.lplp6byi_pw.Cw51c8AJlDXGEwNfxvt4V.MxWRpyyY21ugIT5utaOw4_gqUZ3DVJg1uvA
+ ExqWurPbfjvmWvtnH2CHRSVbXyBOLpsMyzd5N4B4f_2N_wAGDsFyeVfjDy6I24y1eavfUvaPMjea
+ pMETb8blI9q1iTOdHp_OxYa0JBgJfmkxUtxQFgR_wDZnQj3E8585I1Gh68uYyGAb4d1L7kvrQHLS
+ csPcKI9EUcvsLUDnG5o05dRtPSsX4RZj61iNmZHzdSnvWT2KJ5KaiBc67z1JT.i97Xvm8tEum9tR
+ B_qC24IdC0oxSOBv4WGDTtbKVzwlHkPL9vDjnJ87DqiHyqKZScKSw.LEFxcI4YutS_yGwEjtCEGX
+ sHIZmMqMCAHD7kif9lIWqFg9Q7Cs51VKhNcyI
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 4380ada8-d70d-4e4c-b8ec-d678c5b6a69a
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Fri, 15 Dec 2023 21:05:38 +0000
+Received: by hermes--production-gq1-6949d6d8f9-pmzmd (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID de6033d21389d7246e7fe82deec412af;
+          Fri, 15 Dec 2023 21:05:34 +0000 (UTC)
+Message-ID: <a4493b56-503f-46c3-aa5f-400691b07367@schaufler-ca.com>
+Date: Fri, 15 Dec 2023 13:05:33 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqJ=14b19yHZ=rnVd8uLu=kn5W9y0irk0XA983Eo+ByBnA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 11/24] security: Introduce inode_post_removexattr hook
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+ zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, dhowells@redhat.com,
+ jarkko@kernel.org, stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ shuah@kernel.org, mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Stefan Berger <stefanb@linux.ibm.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
+ <20231214170834.3324559-12-roberto.sassu@huaweicloud.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20231214170834.3324559-12-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21952 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Wed, Dec 13, 2023 at 11:01:21AM -0600, Rob Herring wrote:
-> On Wed, Dec 13, 2023 at 10:23AM Lukas Wunner <lukas@wunner.de> wrote:
-> > Ideally the validator would match a regex against the $nodename of the
-> > parent and see if it contains "spi" or "i2c".  But I think matching
-> > against the parent's $nodename isn't possible, is it?
-> 
-> No. I've thought of adding something like that, but haven't.
+On 12/14/2023 9:08 AM, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> the inode_post_removexattr hook.
+>
+> At inode_removexattr hook, EVM verifies the file's existing HMAC value. At
+> inode_post_removexattr, EVM re-calculates the file's HMAC with the passed
+> xattr removed and other file metadata.
+>
+> Other LSMs could similarly take some action after successful xattr removal.
+>
+> The new hook cannot return an error and cannot cause the operation to be
+> reverted.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Please consider this a feature request. :)
+Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
-It would be good if it were possible to define constraints not just
-for the $nodename of the parent, but any of its properties.
-
-E.g. with i2c, the clock-frequency is set at the host controller's
-devicetree node, not at each attached i2c peripheral's node.
-For ACPI, i2c_acpi_find_bus_speed() walks the bus to find the
-highest clock speed supported by all attached i2c peripherals,
-but for OF, the onus is on the devicetree author to manually
-determine the clock.
-
-Thus, for a TPM such as infineon,slb9635tt which only supports 100 kHz,
-I want to validate that the parent node's clock-frequency is less than
-or equal to that.
-
-In Documentation/devicetree/bindings/security/tpm/st33zp24-i2c.txt
-there's an example showing a clock-frequency property at the
-peripheral's node and I mistakenly carried that over to the yaml
-schema.  A look at the code reveals that's entirely bogus so I'll
-drop the clock-frequency property in v3.  I will retain textual
-hints that infineon,slb9635tt is limited to 100 kHz and
-infineon,slb9645tt to 400 kHz, but as it stands I can't define
-rules that would allow the validator to check that automatically.
-
-Thanks,
-
-Lukas
+> ---
+>  fs/xattr.c                    |  9 +++++----
+>  include/linux/lsm_hook_defs.h |  2 ++
+>  include/linux/security.h      |  5 +++++
+>  security/security.c           | 14 ++++++++++++++
+>  4 files changed, 26 insertions(+), 4 deletions(-)
+>
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index 09d927603433..f891c260a971 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -552,11 +552,12 @@ __vfs_removexattr_locked(struct mnt_idmap *idmap,
+>  		goto out;
+>  
+>  	error = __vfs_removexattr(idmap, dentry, name);
+> +	if (error)
+> +		return error;
+>  
+> -	if (!error) {
+> -		fsnotify_xattr(dentry);
+> -		evm_inode_post_removexattr(dentry, name);
+> -	}
+> +	fsnotify_xattr(dentry);
+> +	security_inode_post_removexattr(dentry, name);
+> +	evm_inode_post_removexattr(dentry, name);
+>  
+>  out:
+>  	return error;
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index 091cddb4e6de..c3199bb69103 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -149,6 +149,8 @@ LSM_HOOK(int, 0, inode_getxattr, struct dentry *dentry, const char *name)
+>  LSM_HOOK(int, 0, inode_listxattr, struct dentry *dentry)
+>  LSM_HOOK(int, 0, inode_removexattr, struct mnt_idmap *idmap,
+>  	 struct dentry *dentry, const char *name)
+> +LSM_HOOK(void, LSM_RET_VOID, inode_post_removexattr, struct dentry *dentry,
+> +	 const char *name)
+>  LSM_HOOK(int, 0, inode_set_acl, struct mnt_idmap *idmap,
+>  	 struct dentry *dentry, const char *acl_name, struct posix_acl *kacl)
+>  LSM_HOOK(int, 0, inode_get_acl, struct mnt_idmap *idmap,
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 664df46b22a9..922ea7709bae 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -380,6 +380,7 @@ int security_inode_getxattr(struct dentry *dentry, const char *name);
+>  int security_inode_listxattr(struct dentry *dentry);
+>  int security_inode_removexattr(struct mnt_idmap *idmap,
+>  			       struct dentry *dentry, const char *name);
+> +void security_inode_post_removexattr(struct dentry *dentry, const char *name);
+>  int security_inode_need_killpriv(struct dentry *dentry);
+>  int security_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry);
+>  int security_inode_getsecurity(struct mnt_idmap *idmap,
+> @@ -940,6 +941,10 @@ static inline int security_inode_removexattr(struct mnt_idmap *idmap,
+>  	return cap_inode_removexattr(idmap, dentry, name);
+>  }
+>  
+> +static inline void security_inode_post_removexattr(struct dentry *dentry,
+> +						   const char *name)
+> +{ }
+> +
+>  static inline int security_inode_need_killpriv(struct dentry *dentry)
+>  {
+>  	return cap_inode_need_killpriv(dentry);
+> diff --git a/security/security.c b/security/security.c
+> index ce3bc7642e18..8aa6e9f316dd 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2452,6 +2452,20 @@ int security_inode_removexattr(struct mnt_idmap *idmap,
+>  	return evm_inode_removexattr(idmap, dentry, name);
+>  }
+>  
+> +/**
+> + * security_inode_post_removexattr() - Update the inode after a removexattr op
+> + * @dentry: file
+> + * @name: xattr name
+> + *
+> + * Update the inode after a successful removexattr operation.
+> + */
+> +void security_inode_post_removexattr(struct dentry *dentry, const char *name)
+> +{
+> +	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+> +		return;
+> +	call_void_hook(inode_post_removexattr, dentry, name);
+> +}
+> +
+>  /**
+>   * security_inode_need_killpriv() - Check if security_inode_killpriv() required
+>   * @dentry: associated dentry
 
