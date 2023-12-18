@@ -1,119 +1,120 @@
-Return-Path: <linux-integrity+bounces-530-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-531-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E9E4817B1C
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 Dec 2023 20:39:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F199C817C5B
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Dec 2023 22:02:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF5A1B21CFB
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 Dec 2023 19:39:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A61341F231BB
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Dec 2023 21:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C76B149899;
-	Mon, 18 Dec 2023 19:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE6773465;
+	Mon, 18 Dec 2023 21:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ee1sM63f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OL7jv8za"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C6F5D74B
-	for <linux-integrity@vger.kernel.org>; Mon, 18 Dec 2023 19:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-552eaf800abso2474a12.0
-        for <linux-integrity@vger.kernel.org>; Mon, 18 Dec 2023 11:39:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702928357; x=1703533157; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5umlgnbsnFZiZVJ0cVpQu5AC72Lnsh+rnvB7uAFTfiY=;
-        b=ee1sM63fzLs6LTmOWGeAK94NWTKA43uncd97atBiZi6BSwmGCaOHLyfbzdrKypmsBv
-         GBn79kLjb2222f+WZ06uhCzu5ffX8lHA6gCPTB7/iXdo9AD6ds8aOalWzz7TMxGAE2rZ
-         fPHK9fEdfVA0HRfV2jDstrTzevsTdEZkc392kcn4siPR+bwu88DjHkYRRj4pP7ocpM3b
-         RrlKdd7bbzO5tRqZDKL7R+Jn1zCTpo4xlDH/MoWmIx4MSmDK5Lwgz7h3CpiqlxKpxHDp
-         KwNkOAwyC95JSBXZrW/eGOU9IIhWVT4l6UVqbD/NxwSvtha2mRb+pKDhrxooOlGy2WZP
-         dg6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702928357; x=1703533157;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5umlgnbsnFZiZVJ0cVpQu5AC72Lnsh+rnvB7uAFTfiY=;
-        b=iXR/nF962Jeo5R5IarxM4FwTjgc1uccoR+K/FquawPEDWxztBYumR7zBIUs+mTcjme
-         3irBTngcRUPgr4XNy27YBBpa4b+bBd1zdIEeB6i02fHdOVfIepQjlTWvrTyb3mhdKR0I
-         PAbPR3qP7guA8yuS6tHC2twIcDhxK0ZS/wPVwLKEj7uanjZWXsFqza2+VGhC4+NWSI+d
-         LAFPnrQnxsH8m4PrHXRCE6xN9rqX4wso+nYn1MDIiM6mLt9CLISAV2Zu2kOVqN+bkN0e
-         41+/4edIh+edE5D9ecuwYEeEXk072v2Wee/yBxQSaqztqcgtu0r8SD0dW/dC98ZGZ3Wu
-         U0pg==
-X-Gm-Message-State: AOJu0Yz0RU9lvdT0vydUdjKkXmiCedECFKe7GVSsgrg8IMqd/u0SSLNU
-	ODlEuL3Ehh6NLiNq6lTM8Y9smZrMnd4MVwurlKJIA9in/NM=
-X-Google-Smtp-Source: AGHT+IG2zTOcLT/slo8Xy1NCbxTjx8uZ3GB00uyChCN28rM0o4JcEyf70j7nxUJQlMxzM1AFksLtvXT6JGsj12dWHxE=
-X-Received: by 2002:a50:d0cd:0:b0:553:7ff4:5885 with SMTP id
- g13-20020a50d0cd000000b005537ff45885mr34380edf.2.1702928357402; Mon, 18 Dec
- 2023 11:39:17 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BD8A2D;
+	Mon, 18 Dec 2023 21:01:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A27C43395;
+	Mon, 18 Dec 2023 21:01:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702933315;
+	bh=AB00qD3Ni0x+sMJqQuHXkbBurZHwihPTNyuC62l4mIc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OL7jv8zagTR9Wa/Z1MKeYECZV7HUW9g6bhf1+6VRaXLN1zJpzTX1rF4u/ixDOjvQp
+	 HgJKxeG29XwsK4pHHylksO5cmdYF9pK7whGbn+pBW1THpuG2ah1iWc0hR0RIEBSzba
+	 W8XIiSmqwFn2CAiuBlgagbXHUyyJD+DQdPpQguxiCEC31h4RA/RIlyrVjj8YKieY2Y
+	 U2EqjrnTrlZcnYCd+pTk/vbBBX3WaR4LDl0tWCz4BDuZeaBHuy1dmHhVx4JBTAjYmw
+	 mIkamE8HJag5c1C3+oyKMrBkW0WWTaScLdvshOc8kTIF17Lzr9K83A7lRwJpWe7LG5
+	 zO2Hse0zcoXTg==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-50e384cd6ebso1847811e87.3;
+        Mon, 18 Dec 2023 13:01:55 -0800 (PST)
+X-Gm-Message-State: AOJu0YzONsUjNAlVTjHNpW8UN/JWYRkC/UDLt3o9HtyRqoLz2/ot/IRL
+	3dIMs+m4ixsLxuPEPtn/nar3Va9qmKfB50wfFQ==
+X-Google-Smtp-Source: AGHT+IFk5wtJASz/OLwqlySUAfrjwRkGoOk+cgnDJrdvoscQSusQODPnNFtFda6GCFbdHjqbNw3yJXK/LYHii9MCWy0=
+X-Received: by 2002:ac2:551b:0:b0:50e:3ccc:a8e with SMTP id
+ j27-20020ac2551b000000b0050e3ccc0a8emr525177lfk.30.1702933313826; Mon, 18 Dec
+ 2023 13:01:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000b505f3060c454a49@google.com> <ZXfBmiTHnm_SsM-n@sashalap>
- <CAJc0_fz4LEyNT2rB7KAsAZuym8TT3DZLEfFqSoBigs-316LNKQ@mail.gmail.com>
- <2023121848-filter-pacifier-c457@gregkh> <2023121834-abiding-armory-e468@gregkh>
-In-Reply-To: <2023121834-abiding-armory-e468@gregkh>
-From: Robert Kolchmeyer <rkolchmeyer@google.com>
-Date: Mon, 18 Dec 2023 11:39:04 -0800
-Message-ID: <CAJc0_fzhWtHJJ+7j6vKoSxppVS0TpbqGZ398JwLs=dkUjUTzhQ@mail.gmail.com>
-Subject: Re: IMA performance regression in 5.10.194 when using overlayfs
-To: Greg KH <greg@kroah.com>
-Cc: Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, regressions@lists.linux.dev, 
-	eric.snowberg@oracle.com, zohar@linux.ibm.com, jlayton@kernel.org
+References: <cover.1701093036.git.lukas@wunner.de> <3f56f0a2bb90697a23e83583a21684b75dc7eea2.1701093036.git.lukas@wunner.de>
+ <CAL_JsqKwJsaJhoi07gG76TgDtrwh0i=iGtxL-_pbQbGDZ_8C3A@mail.gmail.com>
+ <20231213162319.GA31314@wunner.de> <CAL_JsqJ=14b19yHZ=rnVd8uLu=kn5W9y0irk0XA983Eo+ByBnA@mail.gmail.com>
+ <20231215152411.GA20902@wunner.de>
+In-Reply-To: <20231215152411.GA20902@wunner.de>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Mon, 18 Dec 2023 15:01:41 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLHV+7Mcw9CeRVrd6qJR0Yv=+XG_ZwLR8B+113Kp2Wn4g@mail.gmail.com>
+Message-ID: <CAL_JsqLHV+7Mcw9CeRVrd6qJR0Yv=+XG_ZwLR8B+113Kp2Wn4g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: tpm: Consolidate TCG TIS bindings
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	devicetree@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	Lino Sanfilippo <LinoSanfilippo@gmx.de>, Nayna Jain <nayna@linux.ibm.com>, 
+	Thirupathaiah Annapureddy <thiruan@microsoft.com>, Sasha Levin <sashal@kernel.org>, 
+	Alexander Steffen <Alexander.Steffen@infineon.com>, 
+	Johannes Holland <Johannes.Holland@infineon.com>, Amir Mizinski <amirmizi6@gmail.com>, 
+	Benoit HOUYERE <benoit.houyere@st.com>, Peter Delevoryas <peter@pjd.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 18, 2023 at 3:58=E2=80=AFAM Greg KH <greg@kroah.com> wrote:
+On Fri, Dec 15, 2023 at 9:24=E2=80=AFAM Lukas Wunner <lukas@wunner.de> wrot=
+e:
 >
-> On Mon, Dec 18, 2023 at 12:57:20PM +0100, Greg KH wrote:
-> > On Tue, Dec 12, 2023 at 04:37:31PM -0800, Robert Kolchmeyer wrote:
-> > > > Looking at the dependencies you've identified, it probably makes se=
-nse
-> > > > to just take them as is (as it's something we would have done if th=
-ese
-> > > > dependencies were identified explicitly).
-> > > >
-> > > > I'll plan to queue them up after the current round of releases is o=
-ut.
-> > >
-> > > Sounds great, thank you!
+> On Wed, Dec 13, 2023 at 11:01:21AM -0600, Rob Herring wrote:
+> > On Wed, Dec 13, 2023 at 10:23AM Lukas Wunner <lukas@wunner.de> wrote:
+> > > Ideally the validator would match a regex against the $nodename of th=
+e
+> > > parent and see if it contains "spi" or "i2c".  But I think matching
+> > > against the parent's $nodename isn't possible, is it?
 > >
-> > I've dropped them now as there are some reported bug fixes with just
-> > that commit that do not seem to apply properly at all, and we can't add
-> > new problems when we know we are doing so :)
-> >
-> > So can you provide a working set of full backports for the relevant
-> > kernels that include all fixes (specifically stuff like 8a924db2d7b5
-> > ("fs: Pass AT_GETATTR_NOSEC flag to getattr interface function")) so
-> > that we can properly queue them up then?
+> > No. I've thought of adding something like that, but haven't.
 >
-> Also don't forget 18b44bc5a672 ("ovl: Always reevaluate the file
-> signature for IMA") either.  There might be more...
+> Please consider this a feature request. :)
 >
-> thanks,
+> It would be good if it were possible to define constraints not just
+> for the $nodename of the parent, but any of its properties.
+
+You could write such a schema, but it would have to be applied to the
+parent node rather than the child node. It would have to be applied to
+every 'i2c' node and in theory you could have one for every i2c
+device. We could define something like "$defs/parent-schema" within
+the child device schema and make the tools apply it to the parent
+node.
+
+> E.g. with i2c, the clock-frequency is set at the host controller's
+> devicetree node, not at each attached i2c peripheral's node.
+> For ACPI, i2c_acpi_find_bus_speed() walks the bus to find the
+> highest clock speed supported by all attached i2c peripherals,
+> but for OF, the onus is on the devicetree author to manually
+> determine the clock.
 >
-> greg k-h
+> Thus, for a TPM such as infineon,slb9635tt which only supports 100 kHz,
+> I want to validate that the parent node's clock-frequency is less than
+> or equal to that.
+>
+> In Documentation/devicetree/bindings/security/tpm/st33zp24-i2c.txt
+> there's an example showing a clock-frequency property at the
+> peripheral's node and I mistakenly carried that over to the yaml
+> schema.  A look at the code reveals that's entirely bogus so I'll
+> drop the clock-frequency property in v3.  I will retain textual
+> hints that infineon,slb9635tt is limited to 100 kHz and
+> infineon,slb9645tt to 400 kHz, but as it stands I can't define
+> rules that would allow the validator to check that automatically.
 
-Thanks - from what I can tell with `git log --grep`, 8a924db2d7b5
-("fs: Pass AT_GETATTR_NOSEC flag to getattr interface function") is
-the only such fix we need to backport (18b44bc5a672 ("ovl: Always
-reevaluate the file signature for IMA") is already in stable trees and
-introduced the regression that motivated this investigation).
+We could adapt the bindings to accept that. Makes sense as that's
+mostly a property of each device. SPI freq is per child, but I guess
+I2C has to be the minimum of all the child nodes.
 
-I'll prepare these backports and send them to the list.
-
-Thanks,
--Robert
+Rob
 
