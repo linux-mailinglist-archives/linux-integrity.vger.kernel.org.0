@@ -1,188 +1,600 @@
-Return-Path: <linux-integrity+bounces-532-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-533-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1D03817EF3
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 01:46:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 413BD8185A7
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 11:51:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB7651F212EC
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 00:46:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 482B21C231E3
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 10:51:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FDB417CD;
-	Tue, 19 Dec 2023 00:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F9114F67;
+	Tue, 19 Dec 2023 10:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LqEnhT3+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rSlZHRW4"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE337E5
-	for <linux-integrity@vger.kernel.org>; Tue, 19 Dec 2023 00:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dbcfd61bd0fso2713851276.1
-        for <linux-integrity@vger.kernel.org>; Mon, 18 Dec 2023 16:45:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1702946745; x=1703551545; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oasQpdQEdRdV5iTLy9b03b575xEh8lY+6DBy55U7VgY=;
-        b=LqEnhT3+a+75yoCOyPmBl41RJ7jwkObERW3lG2ZIL08Wx4+TSQANXr31ju52BBmUJ1
-         A71eYmv3PanU7wvWn1wzpVsVHVI22JetZL1N1VCudBPOvlda1UHAU4d4cCMjEBs8ihnv
-         JixbhPjvThzyKSCjWlKTqc208dPSldcx5ZAyOoKgNu6emMoZKC9FAeoxj/6vg4Yzhkc1
-         DBDjlMv+QXWQTuD5fXRI8RUM4UWU3F7mwKt0kH/RG/dbRGRWxHDDBm0BkBli7tg/d3Qd
-         y2QuyDvbOi/3tg1Wc/rCEhok/Xy+hUVcuMrL1N5O+y2TO63kGVqSRD4qkf3WT5fiedVf
-         EafQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702946745; x=1703551545;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oasQpdQEdRdV5iTLy9b03b575xEh8lY+6DBy55U7VgY=;
-        b=FGQqy5F/giHw/ltks5nJytxnZhBBA6ZslilkNK2o9hjy7c9Ns+cFglRGttCjYahNFV
-         cXzFV2U3zlDmysX8BI2mNl0+w7lDz8cYsDZhQOgG9L4Q9RJZidtL5hx4riiE956UR51u
-         rS6iZgYlKr6FcEv9Ynovs1zvNp4/F5xRX+K6+BJaOGNmXReD2YZQF5ts6VcmajG5PrLl
-         f1OjGizpGeo/rflhcZj94edwIFBrtwD50FAOTINUJsxnjog5irZ8EamjJTdFbWYfow8F
-         JF37+EPr+4NPx1ZTuCaLs0G6aKsKHAbIH6EGlN2rZukZIsY24axGK3EiQS9KBped4BqE
-         j47A==
-X-Gm-Message-State: AOJu0Yw5758xNhcEAy9IGSCojloARtOy0OlFuy0DRb8RhC7EBgl9jALg
-	JLHCU1MNlViZZV0vthS1whw+EYyzKZpaP/y6TW+txOgUpq1u
-X-Google-Smtp-Source: AGHT+IHFtpoGslhpNZUWQ9Yvh/0J3BP+vucf5ghv5vQv8fV6Ebtbue95F9C+pqRj+w9X/e1PwDGZwltTgDSmFXCRZ9M=
-X-Received: by 2002:a25:d785:0:b0:dbc:f85e:eb39 with SMTP id
- o127-20020a25d785000000b00dbcf85eeb39mr196775ybg.3.1702946745056; Mon, 18 Dec
- 2023 16:45:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B0414AB0;
+	Tue, 19 Dec 2023 10:50:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31AD2C433CC;
+	Tue, 19 Dec 2023 10:50:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702983050;
+	bh=boVSalnCGlkz1ODJ8LdCVIJrPZvD+WMXnOuvULILNQE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rSlZHRW456R4j32VftJoUKWPnAHhgrIuErQlGx8+Pb2j2R6gm/6sZYXraynlQwSJs
+	 TODZF223NDWyXxssJTgkxKy6rklDM0pB2D9VpH/Suk5+j1EAaU+BGRLgN9kA8KVo9U
+	 r2oPJL08RVeXSdw5uCE+cwpHHgzhqG8mT7oE56WZwuqIgFi51SFwm2wJvMUzKaiZh1
+	 1VYQErzPuiks0CXWstQxrxt1yz+aISWsGTSWOkgseRb4fUCwJptc78m1r6bDvlSRTW
+	 IpYx/fSeDFqCkyZ561JICe2si5ZZLwXTD5H7RVULd+Br553Z19KVlyYriX5GClXcTk
+	 LKxuzNuAjwoCA==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50bce78f145so5041386e87.0;
+        Tue, 19 Dec 2023 02:50:50 -0800 (PST)
+X-Gm-Message-State: AOJu0YwEIYk0WsLI7svZXpuDZJSFfpGUfFe6U4cOyCD8TLk86vwdSXkO
+	N7n/2vPPbNz8cyBjMfdXZJAqxLJIIv1PM7v1lBQ=
+X-Google-Smtp-Source: AGHT+IHT4YrAB66G8KurFpT6fXhEv3LbPDu6EWrXwHUtM/XsyvcXI8i1oDj5YA/PvBYxWJPLDHFcZBjQli9onMeLIQ4=
+X-Received: by 2002:a19:c21a:0:b0:50e:2b00:1f99 with SMTP id
+ l26-20020a19c21a000000b0050e2b001f99mr864576lfc.100.1702983048284; Tue, 19
+ Dec 2023 02:50:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231215110639.45522-1-david@sigma-star.at>
-In-Reply-To: <20231215110639.45522-1-david@sigma-star.at>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 18 Dec 2023 19:45:34 -0500
-Message-ID: <CAHC9VhSRjwN=a9=V--m46_xh4fQNwZ9781YBCDpAmAV1mofhQg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] DCP as trusted keys backend
-To: David Gstir <david@sigma-star.at>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>
-Cc: James Bottomley <jejb@linux.ibm.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, Shawn Guo <shawnguo@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	NXP Linux Team <linux-imx@nxp.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>, 
-	sigma star Kernel Team <upstream+dcp@sigma-star.at>, Li Yang <leoyang.li@nxp.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Tejun Heo <tj@kernel.org>, "Steven Rostedt (Google)" <rostedt@goodmis.org>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+References: <20231215122614.5481-1-tzimmermann@suse.de> <20231215122614.5481-2-tzimmermann@suse.de>
+In-Reply-To: <20231215122614.5481-2-tzimmermann@suse.de>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 19 Dec 2023 11:50:36 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG3rHSM=vkDYibe7ZCbk65vwa=vJaDDO1aW1VStzN+sug@mail.gmail.com>
+Message-ID: <CAMj1kXG3rHSM=vkDYibe7ZCbk65vwa=vJaDDO1aW1VStzN+sug@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] arch/x86: Move UAPI setup structures into setup_data.h
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
 	linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 15, 2023 at 6:07=E2=80=AFAM David Gstir <david@sigma-star.at> w=
-rote:
->
-> This is a revival of the previous patch set submitted by Richard Weinberg=
-er:
-> https://lore.kernel.org/linux-integrity/20210614201620.30451-1-richard@no=
-d.at/
->
-> v4 is here:
-> https://lore.kernel.org/keyrings/20231024162024.51260-1-david@sigma-star.=
-at/
->
-> v4 -> v5:
-> - Make Kconfig for trust source check scalable as suggested by Jarkko Sak=
-kinen
-> - Add Acked-By from Herbert Xu to patch #1 - thanks!
-> v3 -> v4:
-> - Split changes on MAINTAINERS and documentation into dedicated patches
-> - Use more concise wording in commit messages as suggested by Jarkko Sakk=
-inen
-> v2 -> v3:
-> - Addressed review comments from Jarkko Sakkinen
-> v1 -> v2:
-> - Revive and rebase to latest version
-> - Include review comments from Ahmad Fatoum
->
-> The Data CoProcessor (DCP) is an IP core built into many NXP SoCs such
-> as i.mx6ull.
->
-> Similar to the CAAM engine used in more powerful SoCs, DCP can AES-
-> encrypt/decrypt user data using a unique, never-disclosed,
-> device-specific key. Unlike CAAM though, it cannot directly wrap and
-> unwrap blobs in hardware. As DCP offers only the bare minimum feature
-> set and a blob mechanism needs aid from software. A blob in this case
-> is a piece of sensitive data (e.g. a key) that is encrypted and
-> authenticated using the device-specific key so that unwrapping can only
-> be done on the hardware where the blob was wrapped.
->
-> This patch series adds a DCP based, trusted-key backend and is similar
-> in spirit to the one by Ahmad Fatoum [0] that does the same for CAAM.
-> It is of interest for similar use cases as the CAAM patch set, but for
-> lower end devices, where CAAM is not available.
->
-> Because constructing and parsing the blob has to happen in software,
-> we needed to decide on a blob format and chose the following:
->
-> struct dcp_blob_fmt {
->         __u8 fmt_version;
->         __u8 blob_key[AES_KEYSIZE_128];
->         __u8 nonce[AES_KEYSIZE_128];
->         __le32 payload_len;
->         __u8 payload[];
-> } __packed;
->
-> The `fmt_version` is currently 1.
->
-> The encrypted key is stored in the payload area. It is AES-128-GCM
-> encrypted using `blob_key` and `nonce`, GCM auth tag is attached at
-> the end of the payload (`payload_len` does not include the size of
-> the auth tag).
->
-> The `blob_key` itself is encrypted in AES-128-ECB mode by DCP using
-> the OTP or UNIQUE device key. A new `blob_key` and `nonce` are generated
-> randomly, when sealing/exporting the DCP blob.
->
-> This patchset was tested with dm-crypt on an i.MX6ULL board.
->
-> [0] https://lore.kernel.org/keyrings/20220513145705.2080323-1-a.fatoum@pe=
-ngutronix.de/
->
-> David Gstir (6):
->   crypto: mxs-dcp: Add support for hardware-bound keys
->   KEYS: trusted: improve scalability of trust source config
->   KEYS: trusted: Introduce NXP DCP-backed trusted keys
->   MAINTAINERS: add entry for DCP-based trusted keys
->   docs: document DCP-backed trusted keys kernel params
->   docs: trusted-encrypted: add DCP as new trust source
->
->  .../admin-guide/kernel-parameters.txt         |  13 +
->  .../security/keys/trusted-encrypted.rst       |  85 +++++
->  MAINTAINERS                                   |   9 +
->  drivers/crypto/mxs-dcp.c                      | 104 +++++-
->  include/keys/trusted_dcp.h                    |  11 +
->  include/soc/fsl/dcp.h                         |  17 +
->  security/keys/trusted-keys/Kconfig            |  18 +-
->  security/keys/trusted-keys/Makefile           |   2 +
->  security/keys/trusted-keys/trusted_core.c     |   6 +-
->  security/keys/trusted-keys/trusted_dcp.c      | 311 ++++++++++++++++++
->  10 files changed, 562 insertions(+), 14 deletions(-)
->  create mode 100644 include/keys/trusted_dcp.h
->  create mode 100644 include/soc/fsl/dcp.h
->  create mode 100644 security/keys/trusted-keys/trusted_dcp.c
+Hi Thomas,
 
-Jarkko, Mimi, David - if this patchset isn't already in your review
-queue, can you take a look at it from a security/keys perspective?
+On Fri, 15 Dec 2023 at 13:26, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+>
+> The type definition of struct pci_setup_rom in <asm/pci.h> requires
+> struct setup_data from <asm/bootparam.h>. Many drivers include
+> <linux/pci.h>, but do not use boot parameters. Changes to bootparam.h
+> or its included header files could easily trigger a large, unnecessary
+> rebuild of the kernel.
+>
+> Moving struct setup_data and related code into its own own header file
+> avoids including <asm/bootparam.h> in <asm/pci.h>. Instead include the
+> new header <asm/screen_data.h> and remove the include statement for
+> x86_init.h, which is unnecessary but pulls in bootparams.h.
+>
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> ---
+>  arch/x86/include/asm/pci.h             |   2 +-
+>  arch/x86/include/uapi/asm/bootparam.h  | 218 +----------------------
+>  arch/x86/include/uapi/asm/setup_data.h | 229 +++++++++++++++++++++++++
+>  3 files changed, 231 insertions(+), 218 deletions(-)
+>  create mode 100644 arch/x86/include/uapi/asm/setup_data.h
+>
 
-Thanks.
+This is an improvement but not quite what I had in mind: setup_data is
+a x86 specific linked list that is only referred to via a u64 in
+setup_header.
 
---=20
-paul-moore.com
+So setup_data and all the specializations belong in setup_data.h.
+OTOH, setup_header, the XLF load flags, efi_info, the e820 related
+definitions etc are not related to setup_data at all but to
+setup_header. Whether or not setup_header could live in its own header
+too (along with those related definitions) is a separate question imo,
+but I don't think they belong in setup_data.h
+
+
+
+> diff --git a/arch/x86/include/asm/pci.h b/arch/x86/include/asm/pci.h
+> index b40c462b4af3..f6100df3652e 100644
+> --- a/arch/x86/include/asm/pci.h
+> +++ b/arch/x86/include/asm/pci.h
+> @@ -10,7 +10,7 @@
+>  #include <linux/numa.h>
+>  #include <asm/io.h>
+>  #include <asm/memtype.h>
+> -#include <asm/x86_init.h>
+> +#include <asm/setup_data.h>
+>
+>  struct pci_sysdata {
+>         int             domain;         /* PCI domain */
+> diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+> index 01d19fc22346..f6361eb792fd 100644
+> --- a/arch/x86/include/uapi/asm/bootparam.h
+> +++ b/arch/x86/include/uapi/asm/bootparam.h
+> @@ -2,42 +2,7 @@
+>  #ifndef _ASM_X86_BOOTPARAM_H
+>  #define _ASM_X86_BOOTPARAM_H
+>
+> -/* setup_data/setup_indirect types */
+> -#define SETUP_NONE                     0
+> -#define SETUP_E820_EXT                 1
+> -#define SETUP_DTB                      2
+> -#define SETUP_PCI                      3
+> -#define SETUP_EFI                      4
+> -#define SETUP_APPLE_PROPERTIES         5
+> -#define SETUP_JAILHOUSE                        6
+> -#define SETUP_CC_BLOB                  7
+> -#define SETUP_IMA                      8
+> -#define SETUP_RNG_SEED                 9
+> -#define SETUP_ENUM_MAX                 SETUP_RNG_SEED
+> -
+> -#define SETUP_INDIRECT                 (1<<31)
+> -#define SETUP_TYPE_MAX                 (SETUP_ENUM_MAX | SETUP_INDIRECT)
+> -
+> -/* ram_size flags */
+> -#define RAMDISK_IMAGE_START_MASK       0x07FF
+> -#define RAMDISK_PROMPT_FLAG            0x8000
+> -#define RAMDISK_LOAD_FLAG              0x4000
+> -
+> -/* loadflags */
+> -#define LOADED_HIGH    (1<<0)
+> -#define KASLR_FLAG     (1<<1)
+> -#define QUIET_FLAG     (1<<5)
+> -#define KEEP_SEGMENTS  (1<<6)
+> -#define CAN_USE_HEAP   (1<<7)
+> -
+> -/* xloadflags */
+> -#define XLF_KERNEL_64                  (1<<0)
+> -#define XLF_CAN_BE_LOADED_ABOVE_4G     (1<<1)
+> -#define XLF_EFI_HANDOVER_32            (1<<2)
+> -#define XLF_EFI_HANDOVER_64            (1<<3)
+> -#define XLF_EFI_KEXEC                  (1<<4)
+> -#define XLF_5LEVEL                     (1<<5)
+> -#define XLF_5LEVEL_ENABLED             (1<<6)
+> +#include <asm/setup_data.h>
+>
+>  #ifndef __ASSEMBLY__
+>
+> @@ -48,139 +13,6 @@
+>  #include <asm/ist.h>
+>  #include <video/edid.h>
+>
+> -/* extensible setup data list node */
+> -struct setup_data {
+> -       __u64 next;
+> -       __u32 type;
+> -       __u32 len;
+> -       __u8 data[];
+> -};
+> -
+> -/* extensible setup indirect data node */
+> -struct setup_indirect {
+> -       __u32 type;
+> -       __u32 reserved;  /* Reserved, must be set to zero. */
+> -       __u64 len;
+> -       __u64 addr;
+> -};
+> -
+> -struct setup_header {
+> -       __u8    setup_sects;
+> -       __u16   root_flags;
+> -       __u32   syssize;
+> -       __u16   ram_size;
+> -       __u16   vid_mode;
+> -       __u16   root_dev;
+> -       __u16   boot_flag;
+> -       __u16   jump;
+> -       __u32   header;
+> -       __u16   version;
+> -       __u32   realmode_swtch;
+> -       __u16   start_sys_seg;
+> -       __u16   kernel_version;
+> -       __u8    type_of_loader;
+> -       __u8    loadflags;
+> -       __u16   setup_move_size;
+> -       __u32   code32_start;
+> -       __u32   ramdisk_image;
+> -       __u32   ramdisk_size;
+> -       __u32   bootsect_kludge;
+> -       __u16   heap_end_ptr;
+> -       __u8    ext_loader_ver;
+> -       __u8    ext_loader_type;
+> -       __u32   cmd_line_ptr;
+> -       __u32   initrd_addr_max;
+> -       __u32   kernel_alignment;
+> -       __u8    relocatable_kernel;
+> -       __u8    min_alignment;
+> -       __u16   xloadflags;
+> -       __u32   cmdline_size;
+> -       __u32   hardware_subarch;
+> -       __u64   hardware_subarch_data;
+> -       __u32   payload_offset;
+> -       __u32   payload_length;
+> -       __u64   setup_data;
+> -       __u64   pref_address;
+> -       __u32   init_size;
+> -       __u32   handover_offset;
+> -       __u32   kernel_info_offset;
+> -} __attribute__((packed));
+> -
+> -struct sys_desc_table {
+> -       __u16 length;
+> -       __u8  table[14];
+> -};
+> -
+> -/* Gleaned from OFW's set-parameters in cpu/x86/pc/linux.fth */
+> -struct olpc_ofw_header {
+> -       __u32 ofw_magic;        /* OFW signature */
+> -       __u32 ofw_version;
+> -       __u32 cif_handler;      /* callback into OFW */
+> -       __u32 irq_desc_table;
+> -} __attribute__((packed));
+> -
+> -struct efi_info {
+> -       __u32 efi_loader_signature;
+> -       __u32 efi_systab;
+> -       __u32 efi_memdesc_size;
+> -       __u32 efi_memdesc_version;
+> -       __u32 efi_memmap;
+> -       __u32 efi_memmap_size;
+> -       __u32 efi_systab_hi;
+> -       __u32 efi_memmap_hi;
+> -};
+> -
+> -/*
+> - * This is the maximum number of entries in struct boot_params::e820_table
+> - * (the zeropage), which is part of the x86 boot protocol ABI:
+> - */
+> -#define E820_MAX_ENTRIES_ZEROPAGE 128
+> -
+> -/*
+> - * The E820 memory region entry of the boot protocol ABI:
+> - */
+> -struct boot_e820_entry {
+> -       __u64 addr;
+> -       __u64 size;
+> -       __u32 type;
+> -} __attribute__((packed));
+> -
+> -/*
+> - * Smallest compatible version of jailhouse_setup_data required by this kernel.
+> - */
+> -#define JAILHOUSE_SETUP_REQUIRED_VERSION       1
+> -
+> -/*
+> - * The boot loader is passing platform information via this Jailhouse-specific
+> - * setup data structure.
+> - */
+> -struct jailhouse_setup_data {
+> -       struct {
+> -               __u16   version;
+> -               __u16   compatible_version;
+> -       } __attribute__((packed)) hdr;
+> -       struct {
+> -               __u16   pm_timer_address;
+> -               __u16   num_cpus;
+> -               __u64   pci_mmconfig_base;
+> -               __u32   tsc_khz;
+> -               __u32   apic_khz;
+> -               __u8    standard_ioapic;
+> -               __u8    cpu_ids[255];
+> -       } __attribute__((packed)) v1;
+> -       struct {
+> -               __u32   flags;
+> -       } __attribute__((packed)) v2;
+> -} __attribute__((packed));
+> -
+> -/*
+> - * IMA buffer setup data information from the previous kernel during kexec
+> - */
+> -struct ima_setup_data {
+> -       __u64 addr;
+> -       __u64 size;
+> -} __attribute__((packed));
+> -
+>  /* The so-called "zeropage" */
+>  struct boot_params {
+>         struct screen_info screen_info;                 /* 0x000 */
+> @@ -231,54 +63,6 @@ struct boot_params {
+>         __u8  _pad9[276];                               /* 0xeec */
+>  } __attribute__((packed));
+>
+> -/**
+> - * enum x86_hardware_subarch - x86 hardware subarchitecture
+> - *
+> - * The x86 hardware_subarch and hardware_subarch_data were added as of the x86
+> - * boot protocol 2.07 to help distinguish and support custom x86 boot
+> - * sequences. This enum represents accepted values for the x86
+> - * hardware_subarch.  Custom x86 boot sequences (not X86_SUBARCH_PC) do not
+> - * have or simply *cannot* make use of natural stubs like BIOS or EFI, the
+> - * hardware_subarch can be used on the Linux entry path to revector to a
+> - * subarchitecture stub when needed. This subarchitecture stub can be used to
+> - * set up Linux boot parameters or for special care to account for nonstandard
+> - * handling of page tables.
+> - *
+> - * These enums should only ever be used by x86 code, and the code that uses
+> - * it should be well contained and compartmentalized.
+> - *
+> - * KVM and Xen HVM do not have a subarch as these are expected to follow
+> - * standard x86 boot entries. If there is a genuine need for "hypervisor" type
+> - * that should be considered separately in the future. Future guest types
+> - * should seriously consider working with standard x86 boot stubs such as
+> - * the BIOS or EFI boot stubs.
+> - *
+> - * WARNING: this enum is only used for legacy hacks, for platform features that
+> - *         are not easily enumerated or discoverable. You should not ever use
+> - *         this for new features.
+> - *
+> - * @X86_SUBARCH_PC: Should be used if the hardware is enumerable using standard
+> - *     PC mechanisms (PCI, ACPI) and doesn't need a special boot flow.
+> - * @X86_SUBARCH_LGUEST: Used for x86 hypervisor demo, lguest, deprecated
+> - * @X86_SUBARCH_XEN: Used for Xen guest types which follow the PV boot path,
+> - *     which start at asm startup_xen() entry point and later jump to the C
+> - *     xen_start_kernel() entry point. Both domU and dom0 type of guests are
+> - *     currently supported through this PV boot path.
+> - * @X86_SUBARCH_INTEL_MID: Used for Intel MID (Mobile Internet Device) platform
+> - *     systems which do not have the PCI legacy interfaces.
+> - * @X86_SUBARCH_CE4100: Used for Intel CE media processor (CE4100) SoC
+> - *     for settop boxes and media devices, the use of a subarch for CE4100
+> - *     is more of a hack...
+> - */
+> -enum x86_hardware_subarch {
+> -       X86_SUBARCH_PC = 0,
+> -       X86_SUBARCH_LGUEST,
+> -       X86_SUBARCH_XEN,
+> -       X86_SUBARCH_INTEL_MID,
+> -       X86_SUBARCH_CE4100,
+> -       X86_NR_SUBARCHS,
+> -};
+> -
+>  #endif /* __ASSEMBLY__ */
+>
+>  #endif /* _ASM_X86_BOOTPARAM_H */
+> diff --git a/arch/x86/include/uapi/asm/setup_data.h b/arch/x86/include/uapi/asm/setup_data.h
+> new file mode 100644
+> index 000000000000..e1396e1bf048
+> --- /dev/null
+> +++ b/arch/x86/include/uapi/asm/setup_data.h
+> @@ -0,0 +1,229 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_ASM_X86_SETUP_DATA_H
+> +#define _UAPI_ASM_X86_SETUP_DATA_H
+> +
+> +/* setup_data/setup_indirect types */
+> +#define SETUP_NONE                     0
+> +#define SETUP_E820_EXT                 1
+> +#define SETUP_DTB                      2
+> +#define SETUP_PCI                      3
+> +#define SETUP_EFI                      4
+> +#define SETUP_APPLE_PROPERTIES         5
+> +#define SETUP_JAILHOUSE                        6
+> +#define SETUP_CC_BLOB                  7
+> +#define SETUP_IMA                      8
+> +#define SETUP_RNG_SEED                 9
+> +#define SETUP_ENUM_MAX                 SETUP_RNG_SEED
+> +
+> +#define SETUP_INDIRECT                 (1<<31)
+> +#define SETUP_TYPE_MAX                 (SETUP_ENUM_MAX | SETUP_INDIRECT)
+> +
+> +/* ram_size flags */
+> +#define RAMDISK_IMAGE_START_MASK       0x07FF
+> +#define RAMDISK_PROMPT_FLAG            0x8000
+> +#define RAMDISK_LOAD_FLAG              0x4000
+> +
+> +/* loadflags */
+> +#define LOADED_HIGH    (1<<0)
+> +#define KASLR_FLAG     (1<<1)
+> +#define QUIET_FLAG     (1<<5)
+> +#define KEEP_SEGMENTS  (1<<6)
+> +#define CAN_USE_HEAP   (1<<7)
+> +
+> +/* xloadflags */
+> +#define XLF_KERNEL_64                  (1<<0)
+> +#define XLF_CAN_BE_LOADED_ABOVE_4G     (1<<1)
+> +#define XLF_EFI_HANDOVER_32            (1<<2)
+> +#define XLF_EFI_HANDOVER_64            (1<<3)
+> +#define XLF_EFI_KEXEC                  (1<<4)
+> +#define XLF_5LEVEL                     (1<<5)
+> +#define XLF_5LEVEL_ENABLED             (1<<6)
+> +
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <linux/types.h>
+> +
+> +/* extensible setup data list node */
+> +struct setup_data {
+> +       __u64 next;
+> +       __u32 type;
+> +       __u32 len;
+> +       __u8 data[];
+> +};
+> +
+> +/* extensible setup indirect data node */
+> +struct setup_indirect {
+> +       __u32 type;
+> +       __u32 reserved;  /* Reserved, must be set to zero. */
+> +       __u64 len;
+> +       __u64 addr;
+> +};
+> +
+> +struct setup_header {
+> +       __u8    setup_sects;
+> +       __u16   root_flags;
+> +       __u32   syssize;
+> +       __u16   ram_size;
+> +       __u16   vid_mode;
+> +       __u16   root_dev;
+> +       __u16   boot_flag;
+> +       __u16   jump;
+> +       __u32   header;
+> +       __u16   version;
+> +       __u32   realmode_swtch;
+> +       __u16   start_sys_seg;
+> +       __u16   kernel_version;
+> +       __u8    type_of_loader;
+> +       __u8    loadflags;
+> +       __u16   setup_move_size;
+> +       __u32   code32_start;
+> +       __u32   ramdisk_image;
+> +       __u32   ramdisk_size;
+> +       __u32   bootsect_kludge;
+> +       __u16   heap_end_ptr;
+> +       __u8    ext_loader_ver;
+> +       __u8    ext_loader_type;
+> +       __u32   cmd_line_ptr;
+> +       __u32   initrd_addr_max;
+> +       __u32   kernel_alignment;
+> +       __u8    relocatable_kernel;
+> +       __u8    min_alignment;
+> +       __u16   xloadflags;
+> +       __u32   cmdline_size;
+> +       __u32   hardware_subarch;
+> +       __u64   hardware_subarch_data;
+> +       __u32   payload_offset;
+> +       __u32   payload_length;
+> +       __u64   setup_data;
+> +       __u64   pref_address;
+> +       __u32   init_size;
+> +       __u32   handover_offset;
+> +       __u32   kernel_info_offset;
+> +} __attribute__((packed));
+> +
+> +struct sys_desc_table {
+> +       __u16 length;
+> +       __u8  table[14];
+> +};
+> +
+> +/* Gleaned from OFW's set-parameters in cpu/x86/pc/linux.fth */
+> +struct olpc_ofw_header {
+> +       __u32 ofw_magic;        /* OFW signature */
+> +       __u32 ofw_version;
+> +       __u32 cif_handler;      /* callback into OFW */
+> +       __u32 irq_desc_table;
+> +} __attribute__((packed));
+> +
+> +struct efi_info {
+> +       __u32 efi_loader_signature;
+> +       __u32 efi_systab;
+> +       __u32 efi_memdesc_size;
+> +       __u32 efi_memdesc_version;
+> +       __u32 efi_memmap;
+> +       __u32 efi_memmap_size;
+> +       __u32 efi_systab_hi;
+> +       __u32 efi_memmap_hi;
+> +};
+> +
+> +/*
+> + * This is the maximum number of entries in struct boot_params::e820_table
+> + * (the zeropage), which is part of the x86 boot protocol ABI:
+> + */
+> +#define E820_MAX_ENTRIES_ZEROPAGE 128
+> +
+> +/*
+> + * The E820 memory region entry of the boot protocol ABI:
+> + */
+> +struct boot_e820_entry {
+> +       __u64 addr;
+> +       __u64 size;
+> +       __u32 type;
+> +} __attribute__((packed));
+> +
+> +/*
+> + * Smallest compatible version of jailhouse_setup_data required by this kernel.
+> + */
+> +#define JAILHOUSE_SETUP_REQUIRED_VERSION       1
+> +
+> +/*
+> + * The boot loader is passing platform information via this Jailhouse-specific
+> + * setup data structure.
+> + */
+> +struct jailhouse_setup_data {
+> +       struct {
+> +               __u16   version;
+> +               __u16   compatible_version;
+> +       } __attribute__((packed)) hdr;
+> +       struct {
+> +               __u16   pm_timer_address;
+> +               __u16   num_cpus;
+> +               __u64   pci_mmconfig_base;
+> +               __u32   tsc_khz;
+> +               __u32   apic_khz;
+> +               __u8    standard_ioapic;
+> +               __u8    cpu_ids[255];
+> +       } __attribute__((packed)) v1;
+> +       struct {
+> +               __u32   flags;
+> +       } __attribute__((packed)) v2;
+> +} __attribute__((packed));
+> +
+> +/*
+> + * IMA buffer setup data information from the previous kernel during kexec
+> + */
+> +struct ima_setup_data {
+> +       __u64 addr;
+> +       __u64 size;
+> +} __attribute__((packed));
+> +
+> +/**
+> + * enum x86_hardware_subarch - x86 hardware subarchitecture
+> + *
+> + * The x86 hardware_subarch and hardware_subarch_data were added as of the x86
+> + * boot protocol 2.07 to help distinguish and support custom x86 boot
+> + * sequences. This enum represents accepted values for the x86
+> + * hardware_subarch.  Custom x86 boot sequences (not X86_SUBARCH_PC) do not
+> + * have or simply *cannot* make use of natural stubs like BIOS or EFI, the
+> + * hardware_subarch can be used on the Linux entry path to revector to a
+> + * subarchitecture stub when needed. This subarchitecture stub can be used to
+> + * set up Linux boot parameters or for special care to account for nonstandard
+> + * handling of page tables.
+> + *
+> + * These enums should only ever be used by x86 code, and the code that uses
+> + * it should be well contained and compartmentalized.
+> + *
+> + * KVM and Xen HVM do not have a subarch as these are expected to follow
+> + * standard x86 boot entries. If there is a genuine need for "hypervisor" type
+> + * that should be considered separately in the future. Future guest types
+> + * should seriously consider working with standard x86 boot stubs such as
+> + * the BIOS or EFI boot stubs.
+> + *
+> + * WARNING: this enum is only used for legacy hacks, for platform features that
+> + *         are not easily enumerated or discoverable. You should not ever use
+> + *         this for new features.
+> + *
+> + * @X86_SUBARCH_PC: Should be used if the hardware is enumerable using standard
+> + *     PC mechanisms (PCI, ACPI) and doesn't need a special boot flow.
+> + * @X86_SUBARCH_LGUEST: Used for x86 hypervisor demo, lguest, deprecated
+> + * @X86_SUBARCH_XEN: Used for Xen guest types which follow the PV boot path,
+> + *     which start at asm startup_xen() entry point and later jump to the C
+> + *     xen_start_kernel() entry point. Both domU and dom0 type of guests are
+> + *     currently supported through this PV boot path.
+> + * @X86_SUBARCH_INTEL_MID: Used for Intel MID (Mobile Internet Device) platform
+> + *     systems which do not have the PCI legacy interfaces.
+> + * @X86_SUBARCH_CE4100: Used for Intel CE media processor (CE4100) SoC
+> + *     for settop boxes and media devices, the use of a subarch for CE4100
+> + *     is more of a hack...
+> + */
+> +enum x86_hardware_subarch {
+> +       X86_SUBARCH_PC = 0,
+> +       X86_SUBARCH_LGUEST,
+> +       X86_SUBARCH_XEN,
+> +       X86_SUBARCH_INTEL_MID,
+> +       X86_SUBARCH_CE4100,
+> +       X86_NR_SUBARCHS,
+> +};
+> +
+> +#endif /* __ASSEMBLY__ */
+> +
+> +#endif /* _UAPI_ASM_X86_SETUP_DATA_H */
+> --
+> 2.43.0
+>
+>
 
