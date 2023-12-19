@@ -1,201 +1,118 @@
-Return-Path: <linux-integrity+bounces-534-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-536-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D03381867C
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 12:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC13C8188E2
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 14:49:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8ADEC1F23FEE
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 11:39:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EFB71F24CC4
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 13:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB812156C0;
-	Tue, 19 Dec 2023 11:38:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76E831B278;
+	Tue, 19 Dec 2023 13:49:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YZ5wW2eq"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SFjzEG3g"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADAC18023;
-	Tue, 19 Dec 2023 11:38:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEDCC43397;
-	Tue, 19 Dec 2023 11:38:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702985937;
-	bh=z/k+YLVG8n9w0gU6sDLuJgWPnnGVRssnALfrFYt48Kc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YZ5wW2eq3iLNVR0D3INYFDiHoOy9u7hHTIJmjfZrOmN9uEHlkSe2+p1LY8oA6Uqc6
-	 o5VzCD0CAEUBSZX5jaeRxTi5InLpxumraBNOcnXdpYcCmIgQhPonNmzT7snKzERGqd
-	 zXQcfBxETiC4pkV1PQZtn8g0yu7/g/wQxuvUn5kEjX/SZ57kCv2F9jYZTXCk3hJCF1
-	 ArW8C+v3dmdH8zKR2xalj8md0QUM4CNJ58TnTYVq9vpI6ZDXlVXiI9XFFYvVPkZRmO
-	 ySmRvSCKaphWrtDvYj4JXREjfOyKuw8GYmjokI38G2QdDaMQwV7V+r1gD6t2hGcj2/
-	 WB8ZmBIkPNq5g==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2cc7b4709edso12475221fa.0;
-        Tue, 19 Dec 2023 03:38:57 -0800 (PST)
-X-Gm-Message-State: AOJu0YybCozzdw1vas2RZEgUc3jQQxA72MjecCrfqmbovMfxNWkvZiu3
-	2mvMT+9Cr8J5l1hmGIJ89djinZdKkNVJ5DSL/LQ=
-X-Google-Smtp-Source: AGHT+IGy+6E+Sn9s6ye17sM7ASYkS54eKGlyAxWBRLZL4jRxMOyZr0iV3s8QFFjT31FJTJwCyWvX4/ab2jc+J0WE6aE=
-X-Received: by 2002:a2e:8897:0:b0:2cc:7013:4b40 with SMTP id
- k23-20020a2e8897000000b002cc70134b40mr1369809lji.68.1702985935277; Tue, 19
- Dec 2023 03:38:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32EC1A71B;
+	Tue, 19 Dec 2023 13:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BJDbkY1029337;
+	Tue, 19 Dec 2023 13:49:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=4N237+y4JuL68L0Vfcja/M7DRPpqMhObSzld6xfYsw4=;
+ b=SFjzEG3gg+UEvbmYcuw5Js2j3UEAF4Z3VwBk5NR2E5zvSP50CjgDSevw4tR8gbmspJB3
+ RQphETmDz+Yk7IrrQQ6vrkDKnzAP1AxgMoIGyHvTeOWcxdgG4O4fOSYcO0NkO4KW6mDZ
+ xxp8MCPk0kvnIeFCzVEzOY6TaiAzXuwcq2LwlRnz1sPnOhH6rdKmkhMGIAA+DzjkK5Vd
+ iGmhV/uKzjMLPQ2V1UOuN5jb+qAltl8AO9Ebeqs+PjyG56uCKVfxUcfKGBu1PmvdGcKF
+ ch2WEKXtB3Ig/NYlowQiVnusaIJrOLyhstvee8wGOOEQFEf5LBLJDmm9BeeYkBiQVNal jQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v3c7f8abc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Dec 2023 13:49:32 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BJDeUUH005251;
+	Tue, 19 Dec 2023 13:49:31 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v3c7f8aah-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Dec 2023 13:49:31 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BJCq6U7004792;
+	Tue, 19 Dec 2023 13:49:30 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3v1pkyr5ay-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Dec 2023 13:49:30 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BJDnSgs23855836
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 19 Dec 2023 13:49:28 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 225D72004F;
+	Tue, 19 Dec 2023 13:49:28 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 305AC20043;
+	Tue, 19 Dec 2023 13:49:26 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.61.183.131])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 19 Dec 2023 13:49:25 +0000 (GMT)
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: linux-unionfs@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Seth Forshee <sforshee@kernel.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>
+Subject: [PATCH 0/2] evm: disable EVM on overlayfs
+Date: Tue, 19 Dec 2023 08:48:59 -0500
+Message-Id: <20231219134901.96300-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231215122614.5481-1-tzimmermann@suse.de> <20231215122614.5481-3-tzimmermann@suse.de>
-In-Reply-To: <20231215122614.5481-3-tzimmermann@suse.de>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 19 Dec 2023 12:38:44 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHrn-PxpMGnR4VoHv7kHvQYyf8SS9i1irm9Gi_uBseciw@mail.gmail.com>
-Message-ID: <CAMj1kXHrn-PxpMGnR4VoHv7kHvQYyf8SS9i1irm9Gi_uBseciw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] arch/x86: Add <asm/ima-efi.h> for arch_ima_efi_boot_mode
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CO7rPos_c23hfFuAAoLouGjOZSLhc1Bc
+X-Proofpoint-GUID: aEYcIDB_FFion9Zow4xPOu-rsQ2zpXWY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-19_08,2023-12-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 mlxlogscore=503 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 impostorscore=0 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2312190103
 
-Hi Thomas,
+EVM verifies the existing 'security.evm' value, before allowing it
+to be updated.  The EVM HMAC and the original file signatures contain
+filesystem specific metadata (e.g. i_ino, i_generation and s_uuid).
 
-On Fri, 15 Dec 2023 at 13:26, Thomas Zimmermann <tzimmermann@suse.de> wrote:
->
-> The header file <asm/efi.h> contains the macro arch_ima_efi_boot_mode,
-> which expands to use struct boot_params from <asm/bootparams.h>. Many
-> drivers include <linux/efi.h>, but do not use boot parameters. Changes
-> to bootparam.h or its included headers can easily trigger large,
-> unnessary rebuilds of the kernel.
->
-> Moving x86's arch_ima_efi_boot_mode to <asm/ima-efi.h> and including
-> <asm/setup.h> separates that dependency from the rest of the EFI
-> interfaces. The only user is in ima_efi.c. As the file already declares
-> a default value for arch_ima_efi_boot_mode, move this define into
-> asm-generic for all other architectures.
->
-> With arch_ima_efi_boot_mode removed from efi.h, <asm/bootparam.h> can
-> later be removed from further x86 header files.
->
+This poses a challenge when transitioning from the lower backing file
+to the upper backing file.
 
-Apologies if I missed this in v1 but is the new asm-generic header
-really necessary? Could we instead turn arch_ima_efi_boot_mode into a
-function that is a static inline { return unset; } by default, but can
-be emitted out of line in one of the x86/platform/efi.c source files,
-where referring to boot_params is fine?
+Until a complete solution is developed, disable EVM on overlayfs.
 
+Mimi Zohar (2):
+  evm: don't copy up 'security.evm' xattr
+  evm: add support to disable EVM on unsupported filesystems
 
+ include/linux/evm.h               |  6 +++++
+ security/integrity/evm/evm_main.c | 42 ++++++++++++++++++++++++++++++-
+ security/security.c               |  4 +++
+ 3 files changed, 51 insertions(+), 1 deletion(-)
 
+-- 
+2.39.3
 
-
-> v2:
->         * remove extra declaration of boot_params (Ard)
->
-
-Please don't put the revision log here, but below the --- so that 'git
-am' will ignore it.
-
-
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
->  arch/x86/include/asm/efi.h       |  3 ---
->  arch/x86/include/asm/ima-efi.h   | 11 +++++++++++
->  include/asm-generic/Kbuild       |  1 +
->  include/asm-generic/ima-efi.h    | 16 ++++++++++++++++
->  security/integrity/ima/ima_efi.c |  5 +----
->  5 files changed, 29 insertions(+), 7 deletions(-)
->  create mode 100644 arch/x86/include/asm/ima-efi.h
->  create mode 100644 include/asm-generic/ima-efi.h
->
-> diff --git a/arch/x86/include/asm/efi.h b/arch/x86/include/asm/efi.h
-> index c4555b269a1b..99f31176c892 100644
-> --- a/arch/x86/include/asm/efi.h
-> +++ b/arch/x86/include/asm/efi.h
-> @@ -418,9 +418,6 @@ extern int __init efi_memmap_split_count(efi_memory_desc_t *md,
->  extern void __init efi_memmap_insert(struct efi_memory_map *old_memmap,
->                                      void *buf, struct efi_mem_range *mem);
->
-> -#define arch_ima_efi_boot_mode \
-> -       ({ extern struct boot_params boot_params; boot_params.secure_boot; })
-> -
->  #ifdef CONFIG_EFI_RUNTIME_MAP
->  int efi_get_runtime_map_size(void);
->  int efi_get_runtime_map_desc_size(void);
-> diff --git a/arch/x86/include/asm/ima-efi.h b/arch/x86/include/asm/ima-efi.h
-> new file mode 100644
-> index 000000000000..b4d904e66b39
-> --- /dev/null
-> +++ b/arch/x86/include/asm/ima-efi.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_IMA_EFI_H
-> +#define _ASM_X86_IMA_EFI_H
-> +
-> +#include <asm/setup.h>
-> +
-> +#define arch_ima_efi_boot_mode boot_params.secure_boot
-> +
-> +#include <asm-generic/ima-efi.h>
-> +
-> +#endif /* _ASM_X86_IMA_EFI_H */
-> diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-> index def242528b1d..4fd16e71e8cd 100644
-> --- a/include/asm-generic/Kbuild
-> +++ b/include/asm-generic/Kbuild
-> @@ -26,6 +26,7 @@ mandatory-y += ftrace.h
->  mandatory-y += futex.h
->  mandatory-y += hardirq.h
->  mandatory-y += hw_irq.h
-> +mandatory-y += ima-efi.h
->  mandatory-y += io.h
->  mandatory-y += irq.h
->  mandatory-y += irq_regs.h
-> diff --git a/include/asm-generic/ima-efi.h b/include/asm-generic/ima-efi.h
-> new file mode 100644
-> index 000000000000..f87f5edef440
-> --- /dev/null
-> +++ b/include/asm-generic/ima-efi.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +
-> +#ifndef __ASM_GENERIC_IMA_EFI_H_
-> +#define __ASM_GENERIC_IMA_EFI_H_
-> +
-> +#include <linux/efi.h>
-> +
-> +/*
-> + * Only include this header file from your architecture's <asm/ima-efi.h>.
-> + */
-> +
-> +#ifndef arch_ima_efi_boot_mode
-> +#define arch_ima_efi_boot_mode efi_secureboot_mode_unset
-> +#endif
-> +
-> +#endif /* __ASM_GENERIC_FB_H_ */
-> diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
-> index 138029bfcce1..56bbee271cec 100644
-> --- a/security/integrity/ima/ima_efi.c
-> +++ b/security/integrity/ima/ima_efi.c
-> @@ -6,10 +6,7 @@
->  #include <linux/module.h>
->  #include <linux/ima.h>
->  #include <asm/efi.h>
-> -
-> -#ifndef arch_ima_efi_boot_mode
-> -#define arch_ima_efi_boot_mode efi_secureboot_mode_unset
-> -#endif
-> +#include <asm/ima-efi.h>
->
->  static enum efi_secureboot_mode get_sb_mode(void)
->  {
-> --
-> 2.43.0
->
->
 
