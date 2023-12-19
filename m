@@ -1,117 +1,126 @@
-Return-Path: <linux-integrity+bounces-539-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-540-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17BF0818A62
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 15:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08A87818EFD
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 18:58:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A15BE28FE39
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 14:47:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9770286675
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 17:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF5A21BDE6;
-	Tue, 19 Dec 2023 14:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3220C4B13F;
+	Tue, 19 Dec 2023 17:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CKM/Xn7g"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SPGBc47L"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F681BDCB;
-	Tue, 19 Dec 2023 14:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-67f47b15fa3so14125876d6.1;
-        Tue, 19 Dec 2023 06:47:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702997245; x=1703602045; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zlUxM8agQFht/Im8QSE/t73OtBt36Jo3dQYhethqDtk=;
-        b=CKM/Xn7gcHG/SDJ8ARD/WpPVJ0qFEeIkcP3wAbXLgCmR4F8XxfALFthpZiP3AwiEV8
-         iZjo1pkVQaKBTc++7EYONWwgoLjeMPrtX7SXBbwhXg7qpK2gYFcCPb2y2EtdkafJzh+4
-         E6HVxxvI4AA+gWAJ99e1Vqlicmj+fuJlHVOObHsTtQUYyQZqYYYQWwGbEeTe9lTuHjoY
-         8kLzD2QvrE2cWWeXLnTP5BL56VKtZW/XHXiODo5HOYBSKihqOXX3eA9LB3dff8LXmpXF
-         Y5UT3aQhlti8rAOR0/rHGRpU/fPY1kbm6sThmV1TbqBDc+tlE7FnLR9+WB6r58MsGcSm
-         WDVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702997245; x=1703602045;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zlUxM8agQFht/Im8QSE/t73OtBt36Jo3dQYhethqDtk=;
-        b=VuWlI8uFaUpwXN/kA4421fcRjcq4n7knfQZja4hqXIBUjC73ytSOFp+8tnIR7HgLZa
-         KTie8epiRYPznrjfRm1Y2PFtqlpA8xfLxNbeR33lJ1BhTdVm9Be+YaldDUG8QN/OWKjK
-         HtrpJw5ILwiOcI/NVw+ij5IBSymQCsImtRhULiwFclugcAo0vTAYRy2o4xUdDjOkUr0A
-         m81QRdFPGYvmekBeY1mTcf7gMk83RIcdO4dAKfTWR+hg5QHQTYZiiohDTlj3H5A3dnqJ
-         hnrGUkAR42IYDj7IazNhtA7G9xJ27VBZuSe8x/rAfa80fAIAAzvzlLI/KQcPisQ2mwuC
-         eIdg==
-X-Gm-Message-State: AOJu0YyuzOAlYSN4bKTVLLcGmORuFOWAd5VPX5PkBFnXlpNpFWHGK1s7
-	Hv4UpCkzWYmFEnu0rDFki34zl/3BbUG+tjlIu0A=
-X-Google-Smtp-Source: AGHT+IFgOnMLQDOxvtlxSolOpF3BG+QjC3iZIQoGyb7nHvaMJ3LbRonwYDI9SE8Yz2xE4dYji1sfPH+tvB/1DPL3iaM=
-X-Received: by 2002:a05:6214:416:b0:67f:5152:705b with SMTP id
- z22-20020a056214041600b0067f5152705bmr2957837qvx.46.1702997245321; Tue, 19
- Dec 2023 06:47:25 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B6E4B13B;
+	Tue, 19 Dec 2023 17:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BJHW8xU000888;
+	Tue, 19 Dec 2023 17:52:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=/G7gx/nF4hhpjw41JIWC4gDPqAOm1ZXfb+1VpMRGg7o=;
+ b=SPGBc47Ld4paTgCmTQmnIEkHioU5l+3SNMkJthqzk1dWaciwrt8hMkKMqw1y8OKHw1+U
+ VaUsGGsQAj5OiwG5Dagy6n6zufvaJxQYyP7UpjmkeHTQQnX2ANTVqxh0plOhub6eNjaP
+ rq+9qF/7U673O4nTKPj+vZmiYpII7iQGm0iFp4hu9aDXn/2S76W+Nmi2BLIOjpbM1yf0
+ jGOqQGU9IfbR3ym3xJSA5UpYQr6ehTGGVaN23MGa1kJJCNITpW6RODhM0hd5J2iC3Khi
+ 4cO+4umvhceUSQgEukNn7zDjTk4PajomSbt1+gec+uBITTDU0Oz5HXnyZL+7BLDd1/W2 mA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v3fngrf6e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Dec 2023 17:52:17 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BJHhatD005939;
+	Tue, 19 Dec 2023 17:52:16 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v3fngrf64-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Dec 2023 17:52:16 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BJHo6x5010885;
+	Tue, 19 Dec 2023 17:52:15 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3v1q7nhefh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Dec 2023 17:52:15 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BJHqDZe43450688
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 19 Dec 2023 17:52:13 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5708520040;
+	Tue, 19 Dec 2023 17:52:13 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 166762004D;
+	Tue, 19 Dec 2023 17:52:11 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.61.138.145])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 19 Dec 2023 17:52:10 +0000 (GMT)
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: linux-unionfs@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Seth Forshee <sforshee@kernel.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>
+Subject: [PATCH v2 0/3] evm: disable EVM on overlayfs
+Date: Tue, 19 Dec 2023 12:52:03 -0500
+Message-Id: <20231219175206.12342-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231219134901.96300-1-zohar@linux.ibm.com> <20231219134901.96300-3-zohar@linux.ibm.com>
-In-Reply-To: <20231219134901.96300-3-zohar@linux.ibm.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 19 Dec 2023 16:47:14 +0200
-Message-ID: <CAOQ4uxhti7BybvXKAxckQM3UghehVVEWD3Kod+55SL+i13-wog@mail.gmail.com>
-Subject: Re: [PATCH 2/2] evm: add support to disable EVM on unsupported filesystems
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-unionfs@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Christian Brauner <brauner@kernel.org>, 
-	Seth Forshee <sforshee@kernel.org>, Roberto Sassu <roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pB-8N_KLuBm7kbVeTuD99iuHW2-CzLEL
+X-Proofpoint-ORIG-GUID: bvmvuLSS8K3RAQnO1sL-wHBB4yByMKm8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-19_10,2023-12-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=661 adultscore=0 phishscore=0 mlxscore=0 malwarescore=0
+ suspectscore=0 clxscore=1015 spamscore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312190133
 
-On Tue, Dec 19, 2023 at 3:49=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
->
-> Don't verify, write, remove or update 'security.evm' on unsupported
-> filesystems.
->
-> Temporarily define overlayfs as an unsupported filesystem until
-> a complete solution is developed.
->
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  security/integrity/evm/evm_main.c | 35 ++++++++++++++++++++++++++++++-
->  1 file changed, 34 insertions(+), 1 deletion(-)
->
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
-vm_main.c
-> index 02adba635b02..aa6d32a07d20 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -151,6 +151,17 @@ static int evm_find_protected_xattrs(struct dentry *=
-dentry)
->         return count;
->  }
->
-> +static int is_unsupported_fs(struct dentry *dentry)
-> +{
-> +       struct inode *inode =3D d_backing_inode(dentry);
-> +
-> +       if (strcmp(inode->i_sb->s_type->name, "overlay") =3D=3D 0) {
-> +               pr_info_once("overlayfs not supported\n");
-> +               return 1;
-> +       }
+EVM verifies the existing 'security.evm' value, before allowing it
+to be updated.  The EVM HMAC and the original file signatures contain
+filesystem specific metadata (e.g. i_ino, i_generation and s_uuid).
 
-Please do not special case overlayfs in and please do not use the
-fs name to detect support.
+This poses a challenge when transitioning from the lower backing file
+to the upper backing file.
 
-Please define an sb flag like SB_I_IMA_UNVERIFIABLE_SIGNATURE
-to disable EVM and set this flag in ovl_fill_super().
+Until a complete solution is developed, disable EVM on overlayfs.
 
-Thanks,
-Amir.
+Changelog v2:
+Addressed Amir's comments:
+- Simplified security_inode_copy_up_xattr() return.
+- Identified filesystems that don't support EVM based on a new SB_I flag.
+
+Mimi Zohar (3):
+  evm: don't copy up 'security.evm' xattr
+  evm: add support to disable EVM on unsupported filesystems
+  overlay: disable EVM
+
+ fs/overlayfs/super.c              |  1 +
+ include/linux/evm.h               |  6 +++++
+ include/linux/fs.h                |  1 +
+ security/integrity/evm/evm_main.c | 42 ++++++++++++++++++++++++++++++-
+ security/security.c               |  2 +-
+ 5 files changed, 50 insertions(+), 2 deletions(-)
+
+-- 
+2.39.3
+
 
