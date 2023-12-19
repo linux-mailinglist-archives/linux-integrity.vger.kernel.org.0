@@ -1,212 +1,167 @@
-Return-Path: <linux-integrity+bounces-537-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-538-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFC778188E7
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 14:50:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E1B3818A4D
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 15:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A8AD1F2558E
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 13:50:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5CBBB25277
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Dec 2023 14:42:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCA91BDFE;
-	Tue, 19 Dec 2023 13:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB5C71C2A3;
+	Tue, 19 Dec 2023 14:42:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Be6SlkjU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kUpyot3a"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB851BDF3;
-	Tue, 19 Dec 2023 13:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BJBhEDk011557;
-	Tue, 19 Dec 2023 13:49:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=NPjpiQqB/XwG2kL1albQJVZXEm834TnGuqtZmfnSItE=;
- b=Be6SlkjUf5kODr8yxPcDnOOC93iT9yZsPnrMaZyLTdBB4wzAhr5c109DFvNb5EGy6Spk
- 23tXQyY7Dsz66jfF6IRtKFdNoVrtIlveb3XZ2cyc1sziaDgLZNHWptBtYAbyUOHZl7JO
- SO/xN34Sk7RwS26uSrEVo89mEhTUuMukLFd3aC+pYQ/FoAeeOONkjzAhQ/2l5P+YMOWr
- mVIJmXVrIdS4qTJrc/tYOqV6qYGpeGi3AYoFkUkCr9euCKd5grYyOKZRywSwfjqMWlXn
- WH3rhuGYkvUzS0ngfZtYGe3s3uZmDyXMJP7tsxUpd5VvX5xJ+bB4vJnHXtd5gAUoza/C jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v3ahwk6tc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Dec 2023 13:49:36 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BJDAhpO008831;
-	Tue, 19 Dec 2023 13:49:35 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v3ahwk6t4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Dec 2023 13:49:35 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BJC759L029712;
-	Tue, 19 Dec 2023 13:49:35 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3v1p7sg7kp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Dec 2023 13:49:34 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BJDnXd945023970
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 Dec 2023 13:49:33 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4503320043;
-	Tue, 19 Dec 2023 13:49:33 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6415A2004B;
-	Tue, 19 Dec 2023 13:49:31 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.61.183.131])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 19 Dec 2023 13:49:31 +0000 (GMT)
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: linux-unionfs@vger.kernel.org
-Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Seth Forshee <sforshee@kernel.org>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>
-Subject: [PATCH 2/2] evm: add support to disable EVM on unsupported filesystems
-Date: Tue, 19 Dec 2023 08:49:01 -0500
-Message-Id: <20231219134901.96300-3-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20231219134901.96300-1-zohar@linux.ibm.com>
-References: <20231219134901.96300-1-zohar@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325A31BDF4;
+	Tue, 19 Dec 2023 14:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4258b8632f4so42043681cf.2;
+        Tue, 19 Dec 2023 06:41:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702996918; x=1703601718; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3nir7D1z6Ri01c3KJKDkvEWuMnaSsoeNEUkYwm+l97o=;
+        b=kUpyot3ao3xU5XDPGTnknquZzPZu58i4hBgA5YEVsmRQVSrGXKiOEQ2T3tUoz5lnwJ
+         /DhOksoVy4Pq1nKZ+vwoYQ32X4g5Nj24tbCYmgrir+MEp7lQI1tsjAwpXol+zgUl5k5b
+         TqZ8oulNQu3TylXk2eaQAnSMJt6FX4eC5YxJEbyyvy49v0OwlbancbruaoWwdbe29Lmy
+         McXXgb8Yn80s9GEb0poeZYQD+fyGfx8WceGIq3cxA7Bt2bVPcAh5911cwLPwC9olZVzR
+         p6IjqW6NmHgf4Z1eipHk5AqTMIa4q997+EwCfnUzdrPENWDY0Pq06c/SDE4z3QZQk7de
+         urkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702996918; x=1703601718;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3nir7D1z6Ri01c3KJKDkvEWuMnaSsoeNEUkYwm+l97o=;
+        b=H2tdOVzDzs6YLBu7cNfFFwduSrIILHwt5pfvWNvUX0r2PlwbcfC/CF+ZpIm5bsHXY+
+         DHxXwK4148zN4TjerYMKQmwerYGzLN2DSYjBb5ik5/PEFYuEwyDb2eyG1/7f3yXcV8KQ
+         ctDsSlDAzDDhmZLBRqJNmr1zSvPcdptPS6q99HDSFflHTdvYEH/LYQii/2xscRvMPB57
+         r0QMrwG6rzqJelT84AAjUkuHk8gisK4mnYyHJ3STPfpUAdIF9ybvrMui6hsYfYCuAoHq
+         sNg4tb15pha8rR0b19Ub2mzGIMr2MbLaaYFamPVEueQBSVQsm+sIzo30fbhRearjifU5
+         Q6NQ==
+X-Gm-Message-State: AOJu0YxBve2WLvsNzM8hp2dwUDVHZmPIqMjxqmLGCuSAKmthgp2QaQu8
+	vPX+TnvL249HY140+P3bMeWFP1INGCj/mpF3/x3R1bPDgKY=
+X-Google-Smtp-Source: AGHT+IFUYu9dArT+DIVXCCdsVgHdijRYpDz5mOvgaB9mdHv3O2yNSPfrbjcMEEiEPqFSHjsK9f07cuAvV2oxVHfrk18=
+X-Received: by 2002:a05:6214:4b94:b0:67a:8e94:2bb2 with SMTP id
+ qf20-20020a0562144b9400b0067a8e942bb2mr21009192qvb.21.1702996918026; Tue, 19
+ Dec 2023 06:41:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: r9Lni6yzcpPQwkP24dn2sm7-qa8qBnGT
-X-Proofpoint-ORIG-GUID: c1n8usABbRrfBGRCvFWMf_kvc_FtTNuA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-19_08,2023-12-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1015 spamscore=0
- phishscore=0 mlxscore=0 impostorscore=0 mlxlogscore=633 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2312190103
+References: <20231219134901.96300-1-zohar@linux.ibm.com> <20231219134901.96300-2-zohar@linux.ibm.com>
+In-Reply-To: <20231219134901.96300-2-zohar@linux.ibm.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Tue, 19 Dec 2023 16:41:46 +0200
+Message-ID: <CAOQ4uxi8yX_z2HAGhGeXNRgUJpvX8nuWHBgbVUBoJYJeAM5i4w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] evm: don't copy up 'security.evm' xattr
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-unionfs@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Christian Brauner <brauner@kernel.org>, 
+	Seth Forshee <sforshee@kernel.org>, Roberto Sassu <roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Don't verify, write, remove or update 'security.evm' on unsupported
-filesystems.
+On Tue, Dec 19, 2023 at 3:49=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
+ote:
+>
+> The security.evm HMAC and the original file signatures contain
+> filesystem specific data.  As a result, the HMAC and signature
+> are not the same on the stacked and backing filesystems.
+>
+> Don't copy up 'security.evm'.
+>
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  include/linux/evm.h               | 6 ++++++
+>  security/integrity/evm/evm_main.c | 7 +++++++
+>  security/security.c               | 4 ++++
+>  3 files changed, 17 insertions(+)
+>
+> diff --git a/include/linux/evm.h b/include/linux/evm.h
+> index 01fc495a83e2..36ec884320d9 100644
+> --- a/include/linux/evm.h
+> +++ b/include/linux/evm.h
+> @@ -31,6 +31,7 @@ extern void evm_inode_post_setxattr(struct dentry *dent=
+ry,
+>                                     const char *xattr_name,
+>                                     const void *xattr_value,
+>                                     size_t xattr_value_len);
+> +extern int evm_inode_copy_up_xattr(const char *name);
+>  extern int evm_inode_removexattr(struct mnt_idmap *idmap,
+>                                  struct dentry *dentry, const char *xattr=
+_name);
+>  extern void evm_inode_post_removexattr(struct dentry *dentry,
+> @@ -117,6 +118,11 @@ static inline void evm_inode_post_setxattr(struct de=
+ntry *dentry,
+>         return;
+>  }
+>
+> +static inline int  evm_inode_copy_up_xattr(const char *name)
+> +{
+> +       return 0;
+> +}
+> +
+>  static inline int evm_inode_removexattr(struct mnt_idmap *idmap,
+>                                         struct dentry *dentry,
+>                                         const char *xattr_name)
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
+vm_main.c
+> index 894570fe39bc..02adba635b02 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -863,6 +863,13 @@ void evm_inode_post_setattr(struct dentry *dentry, i=
+nt ia_valid)
+>                 evm_update_evmxattr(dentry, NULL, NULL, 0);
+>  }
+>
+> +int evm_inode_copy_up_xattr(const char *name)
+> +{
+> +       if (strcmp(name, XATTR_NAME_EVM) =3D=3D 0)
+> +               return 1; /* Discard */
+> +       return -EOPNOTSUPP;
+> +}
+> +
+>  /*
+>   * evm_inode_init_security - initializes security.evm HMAC value
+>   */
+> diff --git a/security/security.c b/security/security.c
+> index dcb3e7014f9b..a02e78c45007 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2539,6 +2539,10 @@ int security_inode_copy_up_xattr(const char *name)
+>                         return rc;
+>         }
+>
+> +       rc =3D evm_inode_copy_up_xattr(name);
+> +       if (rc !=3D LSM_RET_DEFAULT(inode_copy_up_xattr))
+> +               return rc;
+> +
+>         return LSM_RET_DEFAULT(inode_copy_up_xattr);
 
-Temporarily define overlayfs as an unsupported filesystem until
-a complete solution is developed.
+The rest of the hooks call evm last, e.g.:
+        return evm_inode_setattr(idmap, dentry, attr);
+        return evm_inode_remove_acl(idmap, dentry, acl_name);
+        evm_inode_post_setxattr(dentry, name, value, size);
+        return evm_inode_removexattr(idmap, dentry, name);
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- security/integrity/evm/evm_main.c | 35 ++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+best keep a consistent LSM order.
 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 02adba635b02..aa6d32a07d20 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -151,6 +151,17 @@ static int evm_find_protected_xattrs(struct dentry *dentry)
- 	return count;
- }
- 
-+static int is_unsupported_fs(struct dentry *dentry)
-+{
-+	struct inode *inode = d_backing_inode(dentry);
-+
-+	if (strcmp(inode->i_sb->s_type->name, "overlay") == 0) {
-+		pr_info_once("overlayfs not supported\n");
-+		return 1;
-+	}
-+	return 0;
-+}
-+
- /*
-  * evm_verify_hmac - calculate and compare the HMAC with the EVM xattr
-  *
-@@ -181,6 +192,9 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
- 		     iint->evm_status == INTEGRITY_PASS_IMMUTABLE))
- 		return iint->evm_status;
- 
-+	if (is_unsupported_fs(dentry))
-+		return INTEGRITY_UNKNOWN;
-+
- 	/* if status is not PASS, try to check again - against -ENOMEM */
- 
- 	/* first need to know the sig type */
-@@ -408,6 +422,9 @@ enum integrity_status evm_verifyxattr(struct dentry *dentry,
- 	if (!evm_key_loaded() || !evm_protected_xattr(xattr_name))
- 		return INTEGRITY_UNKNOWN;
- 
-+	if (is_unsupported_fs(dentry))
-+		return INTEGRITY_UNKNOWN;
-+
- 	if (!iint) {
- 		iint = integrity_iint_find(d_backing_inode(dentry));
- 		if (!iint)
-@@ -491,15 +508,21 @@ static int evm_protect_xattr(struct mnt_idmap *idmap,
- 	if (strcmp(xattr_name, XATTR_NAME_EVM) == 0) {
- 		if (!capable(CAP_SYS_ADMIN))
- 			return -EPERM;
-+		if (is_unsupported_fs(dentry))
-+			return -EPERM;
- 	} else if (!evm_protected_xattr(xattr_name)) {
- 		if (!posix_xattr_acl(xattr_name))
- 			return 0;
-+		if (is_unsupported_fs(dentry))
-+			return 0;
-+
- 		evm_status = evm_verify_current_integrity(dentry);
- 		if ((evm_status == INTEGRITY_PASS) ||
- 		    (evm_status == INTEGRITY_NOXATTRS))
- 			return 0;
- 		goto out;
--	}
-+	} else if (is_unsupported_fs(dentry))
-+		return 0;
- 
- 	evm_status = evm_verify_current_integrity(dentry);
- 	if (evm_status == INTEGRITY_NOXATTRS) {
-@@ -750,6 +773,9 @@ void evm_inode_post_setxattr(struct dentry *dentry, const char *xattr_name,
- 	if (!(evm_initialized & EVM_INIT_HMAC))
- 		return;
- 
-+	if (is_unsupported_fs(dentry))
-+		return;
-+
- 	evm_update_evmxattr(dentry, xattr_name, xattr_value, xattr_value_len);
- }
- 
-@@ -814,8 +840,12 @@ int evm_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 	if (evm_initialized & EVM_ALLOW_METADATA_WRITES)
- 		return 0;
- 
-+	if (is_unsupported_fs(dentry))
-+		return 0;
-+
- 	if (!(ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID)))
- 		return 0;
-+
- 	evm_status = evm_verify_current_integrity(dentry);
- 	/*
- 	 * Writing attrs is safe for portable signatures, as portable signatures
-@@ -859,6 +889,9 @@ void evm_inode_post_setattr(struct dentry *dentry, int ia_valid)
- 	if (!(evm_initialized & EVM_INIT_HMAC))
- 		return;
- 
-+	if (is_unsupported_fs(dentry))
-+		return;
-+
- 	if (ia_valid & (ATTR_MODE | ATTR_UID | ATTR_GID))
- 		evm_update_evmxattr(dentry, NULL, NULL, 0);
- }
--- 
-2.39.3
+Other than that, feel free to add:
 
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+
+Thanks,
+Amir.
 
