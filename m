@@ -1,161 +1,130 @@
-Return-Path: <linux-integrity+bounces-574-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-575-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5A6081EF4B
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Dec 2023 15:04:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A063A81F09E
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Dec 2023 17:56:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57BD71F21E15
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Dec 2023 14:04:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA4431C21A08
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Dec 2023 16:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F25124500F;
-	Wed, 27 Dec 2023 14:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="p3ERahDh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC0BA45946;
+	Wed, 27 Dec 2023 16:56:04 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A6945010
-	for <linux-integrity@vger.kernel.org>; Wed, 27 Dec 2023 14:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BRCJ2wW001545;
-	Wed, 27 Dec 2023 14:03:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=nBoj/EwX1ohW7VnZXeK68ZIm1epsvBvrY9PaBtBNjXE=;
- b=p3ERahDhjncAZF1zDY9qMDsXryN6KdH/uTOsCYH5GqHaVagJ9PaCKNmAAvlXEgXZhNwV
- NQlStylAU0k962Jw+QKClcuBz/M4FqiI9/pP/sWXw33KcSAM22L4cwOFsNEPbyRsLrrF
- eA8iLNdBgNUUeEzYNdgBaeDdAA3UeupQmziHynIPYUykI2oM7zKHATBJiXE0yB4mh8ie
- kpypWH5q95orUEUMKB6fga5HJUDkk/wjmjyqxoXAJJ7q7Yx0eoJPE+TwDTGYt0UuuGgZ
- lcRmNh3txu5Z2NuKNgHW8DOp3SclLGi+3LOIiMtXcOfXvDp0SefBWJjx7RGjuF3y6T5L Bg== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v8kts1tm4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Dec 2023 14:03:42 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BRC9Vjj008281;
-	Wed, 27 Dec 2023 14:03:42 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3v6ck1sy2e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Dec 2023 14:03:42 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BRE3fkl23134764
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 27 Dec 2023 14:03:41 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0F1135806D;
-	Wed, 27 Dec 2023 14:03:41 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A632C58065;
-	Wed, 27 Dec 2023 14:03:40 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.80.254])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 27 Dec 2023 14:03:40 +0000 (GMT)
-Message-ID: <b1925a98aff62183790f8d68e473bcaaac8891e3.camel@linux.ibm.com>
-Subject: Re: [RFC][PATCH] ima: add crypto agility support for template-hash
- algorithm
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Ken Goldman <kgold@linux.ibm.com>,
-        "Guozihua (Scott)"
- <guozihua@huawei.com>,
-        Enrico Bravi <enrico.bravi@polito.it>, linux-integrity@vger.kernel.org,
-        roberto.sassu@huawei.com
-Cc: Silvia Sisinni <silvia.sisinni@polito.it>
-Date: Wed, 27 Dec 2023 09:03:40 -0500
-In-Reply-To: <3da78a77-9bfb-45c7-9979-2dba6fe27f37@linux.ibm.com>
-References: <20231214145152.36985-1-enrico.bravi@polito.it>
-	 <8bf7eaf170cf609fb4280475d3340179283fd196.camel@linux.ibm.com>
-	 <a27cd216-ab70-46a1-8c2c-4640728c99b2@polito.it>
-	 <89cea05a61ac4616774446683bf612165ba2f43c.camel@linux.ibm.com>
-	 <46e0fd93-86f6-bdf9-99d4-1ccf83f88afe@huawei.com>
-	 <3da78a77-9bfb-45c7-9979-2dba6fe27f37@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8B8446C8;
+	Wed, 27 Dec 2023 16:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4T0cN632MCzB3lGb;
+	Thu, 28 Dec 2023 00:21:42 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id CBE3D1407FC;
+	Thu, 28 Dec 2023 00:39:24 +0800 (CST)
+Received: from [10.81.212.34] (unknown [10.81.212.34])
+	by APP1 (Coremail) with SMTP id LxC2BwB3sXEsU4xl0yFcAw--.34450S2;
+	Wed, 27 Dec 2023 17:39:24 +0100 (CET)
+Message-ID: <ff8e6341-1ff0-4163-b5c7-236a0e8bdc7c@huaweicloud.com>
+Date: Wed, 27 Dec 2023 17:39:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 23/24] ima: Make it independent from 'integrity' LSM
+To: Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+ dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
+ stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Roberto Sassu <roberto.sassu@huawei.com>
+References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
+ <20231214170834.3324559-24-roberto.sassu@huaweicloud.com>
+ <5aa5986266c3a3f834114a835378455cbbff7b64.camel@linux.ibm.com>
+Content-Language: en-US
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <5aa5986266c3a3f834114a835378455cbbff7b64.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WulnTPHz_X6nLcMt0kdfYCl7N8yUNMB9
-X-Proofpoint-GUID: WulnTPHz_X6nLcMt0kdfYCl7N8yUNMB9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-27_08,2023-12-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- phishscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 clxscore=1011 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2312270104
+X-CM-TRANSID:LxC2BwB3sXEsU4xl0yFcAw--.34450S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWftFW7uF4rCF1kJFyDtrb_yoW8tF4Dpr
+	Z2ga4UJr1kZFy29wsYya9FvrWSk395Way7Crs0krn7AF1kXFn0qF40kr18uryfGr1Ut3Wx
+	tF45W3s8Za4qy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj5QGrwACsM
 
-On Tue, 2023-12-26 at 10:36 -0500, Ken Goldman wrote:
+On 12/27/2023 2:22 PM, Mimi Zohar wrote:
+> On Thu, 2023-12-14 at 18:08 +0100, Roberto Sassu wrote:
+>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>
+>> Make the 'ima' LSM independent from the 'integrity' LSM by introducing IMA
+>> own integrity metadata (ima_iint_cache structure, with IMA-specific fields
+>> from the integrity_iint_cache structure), and by managing it directly from
+>> the 'ima' LSM.
+>>
+>> Move the remaining IMA-specific flags to security/integrity/ima/ima.h,
+>> since they are now unnecessary in the common integrity layer.
+>>
+>> Replace integrity_iint_cache with ima_iint_cache in various places
+>> of the IMA code.
+>>
+>> Then, reserve space in the security blob for the entire ima_iint_cache
+>> structure, so that it is available for all inodes having the security blob
+>> allocated (those for which security_inode_alloc() was called).  Adjust the
+>> IMA code accordingly, call ima_iint_inode() to retrieve the ima_iint_cache
+>> structure. Keep the non-NULL checks since there can be inodes without
+>> security blob.
 > 
-> On 12/25/2023 8:00 AM, Guozihua (Scott) wrote:
-> >> After thinking about this some more, I realized that we didn't discuss
-> >> carrying the measurement list across kexec.   How will the kexec'ed
-> >> kernel be able to differentiate between the original and new
-> >> measurement list?   Neither the Kconfig nor making SHA1 backwards
-> >> compatible address this.   How will attestation servers be able to
-> >> differentiate between the two logs?
-> >>
-> >> Obviously the new measurement list with larger digests won't be
-> >> backwards compatible. Can we support carrying the original measurement
-> >> list across kexec to a new kernel?
-> >>
-> >> As long we're making changes to the IMA measurement list, we should
-> >> mention that we could include multiple digests, but I don't think it is
-> >> necessary.
-> >>
-> >>>>> An example of the resulting ima log is the following:
-> >>>>>
-> >>>>> 10 sha256:64326[...]25313 ima-ng sha1:5fc9b[...]974e6 boot_aggregate
-> >>>>> 10 sha256:afd64[...]e3123 ima-ng sha1:5a493[...]f9566 /init
-> >>>>> 10 sha256:99329[...]a6353 ima-ng sha1:8c87d[...]3d8c7 /usr/bin/sh
-> >>>>> 10 sha256:a16ad[...]2ac0e ima-ng sha1:59d4b[...]330b0 /etc/ld.so.cache
-> >> The template DATA_FMT_DIGEST_WITH_ALGO field is a composite field
-> >> defined as <hash algo> + ':' + '\0' + digest.   The above ascii display
-> >> looks like the template composite field, but isn't.  It is two separate
-> >> fields.  Perhaps it should look differently as well.   Consider instead
-> >> of a string use the hash_algo value (include/uapi/linux/hash_info.h).
-> >>
-> >> binary measurement log:  <pcr> <hash_algo> <digest_len> <digest>
-> >>
-> > Hi Mimi and Enrico,
-> > 
-> > As we are extending all supported algorithms of a PCR bank, does
-> > algorithm of template-hash still matters?
-> > 
+> Previously the 'iint' memory was only allocated for regular files in
+> policy and were tagged S_IMA.  This patch totally changes when and how
+> memory is being allocated.  Does it make sense to allocate memory at
+> security_inode_alloc()?  Is this change really necessary for making IMA
+> a full fledged LSM?
+
+Good question. I think it wouldn't be necessary, we can reuse the same 
+approach as in the patch 'integrity: Switch from rbtree to LSM-managed 
+blob for integrity_iint_cache'.
+
+Roberto
+
+> Mimi
 > 
->  From a security and verification viewpoint, I think you are correct. 
-> The template hash is redundant, and can always be calculated from the 
-> template data. In that sense, the template hash can be removed.
-> 
-> On the other hand there is one benefit to the template hash. If there is 
-> a bug in the software that creates the event log or the software that 
-> consumes the event log, the template hash may help to determine which 
-> event has a bug.
-> 
-> If the new event log has a template hash, I do believe that it also 
-> needs a hash algorithm.
-
-Scott are you asking, since the template data hash is redudant, why
-bother changing the measurement list format to support other digest
-algorithms?   After removing the SHA1 digest, perhaps SHA1 would not
-need to be configured in the kernel.
-
--- 
-thanks,
-
-Mimi
-
+>>
+>> Don't include the inode pointer as field in the ima_iint_cache structure,
+>> since the association with the inode is clear. Since the inode field is
+>> missing in ima_iint_cache, pass the extra inode parameter to
+>> ima_get_verity_digest().
+>>
+>> Finally, register ima_inode_alloc_security/ima_inode_free_security() to
+>> initialize/deinitialize the new ima_iint_cache structure (before this task
+>> was done by iint_init_always() and iint_free()). Also, duplicate
+>> iint_lockdep_annotate() for the ima_iint_cache structure, and name it
+>> ima_iint_lockdep_annotate().
+>>
+>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
 
