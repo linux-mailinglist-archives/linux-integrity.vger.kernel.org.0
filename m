@@ -1,196 +1,200 @@
-Return-Path: <linux-integrity+bounces-609-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-610-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC4D3822073
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 18:34:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07EE182208C
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 18:45:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FDC81C225A0
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 17:34:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 727E11F22A8E
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 17:45:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2165154A9;
-	Tue,  2 Jan 2024 17:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B996154AB;
+	Tue,  2 Jan 2024 17:45:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="iXbKnjLi";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CrBqBak3"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dgoP3kcJ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DEB156E7;
-	Tue,  2 Jan 2024 17:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4029TJf8014850;
-	Tue, 2 Jan 2024 17:33:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2023-11-20;
- bh=L/k22AoNXY54EDJ4K9AR4FnfxF3bhhDibVjhYpGhkdQ=;
- b=iXbKnjLism+3AKfwZV+fbEu3ulMfEH1Eb0Bk0xUCmJ3HI+pN4Wx3okcV/0Uxbfx591M4
- M/sdBwzSm5Gp3KRgs/0v7UKIBHtR43XpMNJaOCmMlcKBqD+y/FyURvqVmckPwzihYa4T
- qJMFQ/+NphRT+X8Sei1CAiiUPJjwl1Njkg3T1uaBaXp+4uCtiNZ/09VrKNnjSGYyYYzW
- idL7T0aUxCyWd7hBC6FepPKZdviZnA6c4j8zBSyh7VIV9HHtYXEZDC4hnK2pPtc03el1
- bIq1STVoxNYiKR0v2BeF0puoDzfNSCgYV0XLrB4yMvZnhLssIYFnwmhZDCKHpgF/clvA ww== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3vabrv3ef4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 02 Jan 2024 17:33:56 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 402GnKJX001470;
-	Tue, 2 Jan 2024 17:33:55 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3va9n7gxbp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 02 Jan 2024 17:33:55 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BhSzaQF69v+Ax4udGrP1P5JMQa4wLxFYPR/VjJknrEAQYxAjlI2EQHq4ntwK4LG7oGZqi7opXNxNq2jiGky0m41qzf/2jXnn8u/8wTFbunPbG0V/HzWe5DWZ4oMF1AJHWt92+YV9enje716L8RETRU5I7QyxwW1UEGhs3ajoe0kOnDwyLSk1LQIc83elf3muuan62ECgBznOm8suYYfR1aNLXQgAaYHEFXX+53kEUlo1qG3PHCdUN2vwk8LcOWDcvM61p4+rMsxA95ohCh5fqCIl+MTk81VPBZ5ovTdW3K3s9Csqj9hWQDgxoxt6Z8EFoWiAfxmtqn1IKKbwX7DSEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L/k22AoNXY54EDJ4K9AR4FnfxF3bhhDibVjhYpGhkdQ=;
- b=atUtCwaYG3n0MYqsAobjAh5AzNUqfr6ewsL8H33DekxWCtc21JQ1djjJDJ0A/FSkQds0ydTdYG4ne1GrghjV9b2C/e9wgtuh60wpETuAXeAit8fbJ4gIYT+ivf+NEiPTcpTn1gl8SgPNesGB1DeVeit8kSh7QN+6hHRUNDer5A78/sREvuS36kpr0T57ZNShQBLfxQjOrCjfKrVOcB2+oGpbBPUguxtNfporCuzbiAsxSaJR8s0qX9iXuEqbqzqZQucL0LALpEPSTs8KePeqnm0ysxLOf361YOqxCp6BVIkCBFEY1F4Gw3up5GJs/c2ZWBsMJp1WuYJ3QM59+y874Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L/k22AoNXY54EDJ4K9AR4FnfxF3bhhDibVjhYpGhkdQ=;
- b=CrBqBak3beTHihsvUiDHE3xWfg9cKKf9q1pYb0IEI2VRIQdVzvP4Eb4NV13KwyYaJ2GKyOEDG8xFxi5BU7kkxMyNRx+81BwgwTfzj7+kMiSb/ydqRohB+2S/By+m2oejh7FQL38lb2x2Rg1ru3SV9d84nNtyt0/IoupbT399Aps=
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by IA1PR10MB6099.namprd10.prod.outlook.com (2603:10b6:208:3ac::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.13; Tue, 2 Jan
- 2024 17:33:53 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::cf88:f211:5770:e4ab]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::cf88:f211:5770:e4ab%5]) with mapi id 15.20.7135.023; Tue, 2 Jan 2024
- 17:33:53 +0000
-From: Eric Snowberg <eric.snowberg@oracle.com>
-To: Coiby Xu <coxu@redhat.com>
-CC: "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "itrymybest80@protonmail.com" <itrymybest80@protonmail.com>,
-        Mimi Zohar
-	<zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul
- Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E.
- Hallyn" <serge@hallyn.com>,
-        "open list:SECURITY SUBSYSTEM"
-	<linux-security-module@vger.kernel.org>,
-        open list
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] integrity: don't throw an error immediately when failed
- to add a cert to the .machine keyring
-Thread-Topic: [PATCH] integrity: don't throw an error immediately when failed
- to add a cert to the .machine keyring
-Thread-Index: AQHaOH8TIIKj61NKpUaRSQpmeqn6+LDG0qoA
-Date: Tue, 2 Jan 2024 17:33:53 +0000
-Message-ID: <2E548AE0-8029-4BB0-B162-4CAD0544EDB8@oracle.com>
-References: <20231227044156.166009-1-coxu@redhat.com>
-In-Reply-To: <20231227044156.166009-1-coxu@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3774.200.91.1.1)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR10MB4150:EE_|IA1PR10MB6099:EE_
-x-ms-office365-filtering-correlation-id: 0243f48c-6ff4-4cc1-3d79-08dc0bb8fd4e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- n4PewQnZhJV/dtw3PR4Eju/aoTic9dDmbyFwq5kYkfo/Sq+66I6uyJ5abs6EVH6IGhsbaM26CkHh7kwom/zaTPZ1Ad2G1PahvbLvpAoDWFI/UvqlcAvDPxKdAjKuayZP+Ukv5bYx4ajpC+FfghsMdqQvZiw3hROo+AhEUcwPLjXgKjToc/XaB6ch1gkKW4i6KAVWeAdT4E5NSXsyZ7tTRjjWyaPKvAcWizn6E88/2uMQJfDzOOxl96jbFLETXn9KgEW5vocXBpluIZAjRuOVYoYKzg5et/L7e7ukomw5KPFKYPTlLbZoSj/kZaYhSmycCzTxNJs8ufvlpnmGZwq+F3P1VYkrz/0jPPXhCAaAxcrdthtF4l8XMzk2NEyRYwjQgUo2nbFRIHvg8Zv1kHEd6BQedB7dgqRqu97gl7r2rDalLGMit2aTRWMeB0w+mUqX3Ve0+Zxzwpf8MbY2jfg9PcHYbRzwiLsJQfV7+gjXNHbPgb5sw/vvIPinuMEwRSRqMsSQuyLRkYAAc/o6SAm5UlDa+LEhp6WPpSqaU7WxlHfwaJ379GC2V6OJZAAE3crqiLECYa6Av8jdeahQnOw6BWB03O294VJnTYMaif1BWa3PiRH7sWqYYQtMo7uQnoesV7BRMrfHhSkLu1nQZotMV/RJTSR+yTXQm6oqaUoqrzShHe7PyCji1cSQAqZOgHpd
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(346002)(39860400002)(396003)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(64756008)(83380400001)(2906002)(41300700001)(26005)(2616005)(38100700002)(122000001)(8936002)(54906003)(8676002)(7416002)(316002)(71200400001)(4326008)(4744005)(5660300002)(44832011)(966005)(478600001)(53546011)(66476007)(91956017)(6506007)(6512007)(6916009)(66556008)(66946007)(6486002)(76116006)(66446008)(14773004)(86362001)(38070700009)(33656002)(36756003)(142923001)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-8?B?MWVaRW1POEJWcEIxMENsNEQ0QU54Z3V1YWpqVVZOSGJ3dXM4TE54dEhxMFFj?=
- =?utf-8?B?TlRDSmtMTXRWOUVjTWxuSVpOSmNaYUpsbUNXZGljZzlzQVpjV1RNdG1wdFB5?=
- =?utf-8?B?Rlk3Z3RjMElNbHU1Z3JXVUE2ZjNoTFJYaEE4REx0SFltY0wxZjdEeXdLTFpu?=
- =?utf-8?B?M0c0RXdVcXNaYWJKN3p2RWRJVGgxRjJ2cVBRVGd2dGltQTlHbHR2aHRnelN5?=
- =?utf-8?B?Qmh5cGpWd0VFS3F1QTdXczM3RWhlYnlZNkFnMERFbnZCOUlPemJYUGhsRWI2?=
- =?utf-8?B?bUhLNnkxcElTdlI4TVdlelJLNmpPRm1EaFBZZ0NhUzBiNlBTTDJMVklyZElm?=
- =?utf-8?B?U0J1bnJOY0NQaWlJKzd2K1F3T2RzQUNLTXNRdVRxd3lkempWNytKVlFEZVQ5?=
- =?utf-8?B?aG03RlY2QkVVZkFyRnZaUjdkL0paZk42YlFLUXVyWUVNU2Z4ZVNYT00wUEVx?=
- =?utf-8?B?akV1U2RrZWxXTkJOSWlGbi90SytFU3dNOVFVNFR5bDJxS1NkdDNXUTlDeUtC?=
- =?utf-8?B?ckdWaXpqSlp2aUJwUWhCZzJJZ0pVTDd2bjlmbTVuL0tacTh1WGZlZWtHdVpC?=
- =?utf-8?B?YitnZFBLVUxhQnJMbEdSbXdGYmkxUzQvSE9mU0NlcnF6VWZrb05hWmNaY0hh?=
- =?utf-8?B?Mk90YjR2cUhzeVRBRUFVSkhkUzF6b1JDeUF6Nk1jWTkzakMxbFN0Q3pEYXF5?=
- =?utf-8?B?OW8wenl2ejc2RmRlSWZKNnU0KzBTZU5VQ01MdzhITjV1Ti9vU2xraVB2TXBr?=
- =?utf-8?B?M2FOTUQzM0hYSUMrcHJoV3FETWs2dXFCR0Iycyt0MmRQM2IrbWp1cUV5Y0dE?=
- =?utf-8?B?SXNuSGxTT1ZJa2hKblNJdy80OFY5T044WTEwT3lBOFgyTVVmSlNPQWRFS0NF?=
- =?utf-8?B?ZFdEY0dhK0pKbzIrTm9lcXpyWFBlUlNxVU9VVnYxRUFva2o0RENTYUEzeUQz?=
- =?utf-8?B?U1dFaGloekdjK29CY1llcnBGbTZkUUNaRmRyb1lzN3o5QzRrUldVd0U4Zi9P?=
- =?utf-8?B?VHFFd2V3ODBsNTVxNjdPWGYrTmg1L3k3dmlZa2JrWjNVZmdOUG5EU1p2YzZR?=
- =?utf-8?B?WWFJUk9LVlI0MlFKcFlvUUlvMDhjOVlQdTRpR0k2d3RmMzl4NkxWajNlR1g0?=
- =?utf-8?B?YlJDandLT3p2WHdDc3JKV1hPSHFwVEorNG5MN3daVGl4dGpNekt2TmM4RnFU?=
- =?utf-8?B?bHVKOTc1R0E0WUJrVHc2NXhUaVYwRkVSZk9aUjZ4cFg4dUl4eW1VbjI0U3d4?=
- =?utf-8?B?RHAxbDN5S1k4Nk5Cd2lQd2tkS0ttenE0Y3RCbUdYUTQxd2d1TXNmQmd1Zits?=
- =?utf-8?B?VHRFQjRtVndVVGp4UWVrQ3cvS2VORlVhdFJYdWcrUkJlRDhXcWYvRWEvZDMv?=
- =?utf-8?B?ZEJtZmdxRnJCL0oyZ0Iwd1JTejM1ckgzcW90VVVQQlhEcnc1WjBvSkVDZEox?=
- =?utf-8?B?RFBEbWpzTkhzR1UzZkIvRGJLUDc3NkhjdXAySFhrQXZERTBpazBOM0h3Ly82?=
- =?utf-8?B?ZWZxa0hUTWdMdTA2KzlHcEwrUHU5NjFGVkJ3N3Y1VW1JU3lBMTVCNDltSkhY?=
- =?utf-8?B?dHlyUk5nOEhxUmM4dVk0eExXMXBqT0lBMUxLVTNLVENYRHdVN3VuNCtZY2hH?=
- =?utf-8?B?Y0Q4bks2SnpRb2hLQUdHNjlWWXZZeE5yeEhZYkxyakMzWGFBZmU0SWU4Tzhp?=
- =?utf-8?B?eXRRcU4raVVoMVR2VWlVZlFsd295aGNsWXduQTJXUUxabHJZVWE0V243aTFL?=
- =?utf-8?B?T1lKUWNJd2xpejVWT3g1NTV5S3l0clpPT0ZwSVUzcEcxcG43cGI3VmpseGt5?=
- =?utf-8?B?RnR6TmhkTXUyT1JWSDIwMTE2UDU5OGxuMlk5TDFhUnVRRmhRNkZUSk4wMGJv?=
- =?utf-8?B?N0hBd0htdHFtQ3Boby90NUtuNXpuaC92UnhMb1JSbkVMYmpsc2ZBYjBjWlNE?=
- =?utf-8?B?STRqaWpNMTMwVU8yemdidXpTK2pwUFc3a3kvbGpXd2FtcU40dnRQdWp4ZFRr?=
- =?utf-8?B?OTJrL2NQdkt5OFlJYUZaK2VVUjlYREovRW1USWQrbVJDRVF1SXBETUNiWGFz?=
- =?utf-8?B?dDgvZFQ2Y21tSlF0aXp0cGRQSVhZTThxNnZuaTBFNlZXVVgzcUdTelZWZTZN?=
- =?utf-8?B?a1pVNXdmNWVISUpCakFlUTE0Y25ZdS9DS3Q4V2hRbTg1YWk3a2VFdmZ1SFVF?=
- =?utf-8?B?eVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A3E27294A4514D4F91B5DE9254875FD4@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1654D156EC;
+	Tue,  2 Jan 2024 17:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 402HI09n019616;
+	Tue, 2 Jan 2024 17:44:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=y42mo2JnJSDN9WOIeW8Q048HnRpueulusig05FfdHSc=;
+ b=dgoP3kcJoBgDCM9LrG2PGDCQO/22Bz5HCVjjcGaCW2HD1d78czChL9JN0t8UI/BTCRA6
+ nQc7vUnm2EFfMkazXQ/6je+MhIFtH5XXoT6cIt5REwXEUrAsI1T/u6LhWPo1R9o2+1fq
+ WR43NDCuqemyLlU9YWC8+9/pR/U1v5HQQFTMqRF1Lvxk7cHS/mCTPr56WOay9HDj3fCn
+ V19+gZPAukXreGvyxZ07WKgq4LrTp45CCS6Cy9qpAIydAyuZJuy3PmxMIjeXl0hWdR92
+ wnUUH4PSpI0t1p1yDjicQYtPocb4IT+hNdbDuEJfW33Bozg7zhfKHO1l0s4zuIaWpFsb 4Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vcprx8hgq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Jan 2024 17:44:21 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 402HJEQj023759;
+	Tue, 2 Jan 2024 17:44:20 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vcprx8hgc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Jan 2024 17:44:20 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 402Gn5st007335;
+	Tue, 2 Jan 2024 17:44:19 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vaxhnxatc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Jan 2024 17:44:19 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 402HiILQ3736236
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 2 Jan 2024 17:44:18 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5C62F58056;
+	Tue,  2 Jan 2024 17:44:18 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C239858052;
+	Tue,  2 Jan 2024 17:44:16 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.135.171])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  2 Jan 2024 17:44:16 +0000 (GMT)
+Message-ID: <08e90ff7754aad45785ab05576f308a7aaae3438.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 21/24] evm: Move to LSM infrastructure
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Roberto Sassu
+	 <roberto.sassu@huawei.com>
+Date: Tue, 02 Jan 2024 12:44:16 -0500
+In-Reply-To: <42911719-547d-443a-b2f2-07b0cfb11f7a@huaweicloud.com>
+References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
+	 <20231214170834.3324559-22-roberto.sassu@huaweicloud.com>
+	 <b03e68e9fa1803d6b2cc7a2c0260f78a05a4d88e.camel@linux.ibm.com>
+	 <42911719-547d-443a-b2f2-07b0cfb11f7a@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	OuST4yqw0hfdPSyEH91XOOSYHBUK/fQMCROHUxTeW6Ww45DVga3eHmTgV9cuIZMVkBs9uoSGe81EesGL5mqbdnEh4092prmahayxrN4t3Ugh5AAtYudGgnVqi4+8E8dkqfUobdrIL4K4o3PCO/U05NbsJPf7yHmR8ymkIizt+uzQCxO4fRUCdWSvbogp0w9ydAfCg0gQ1RwY9Fdw5cMZTX+/X4Wew1dZRbirCcWSPTk2dChttHO0hqQP+NA81P6XqX1REur5tteDmMjjB7QS/toxAKetgYG1rCceRf3v0G133jkn+9oZhqFl9J6Kb/gUCTkQcdPP+bFgWuLDWdnWbuofnUjoIFiAlPvZT5BcvmC0ClC8a87qkmaLP/IlZniCNjH6jz8R3ubD6FnLjw1viXQwh35M5jWdTCxgX60a3cIwarhzI86UrpGngqhfl0D9BkBb+exP2edyAkBKnk/JYZe/KSgEfIuyHLiIWS4AFpnEzYTggavrNeOVZzmkNM80R0oc0e8ufLGSrbi30HzUrwrHRswYv/s93l2GL0NupayvnnTVoXepmjtwYMaEVX8v8oQnP4499zjriEb68EuOGUqe0pcelJVZQu0qtop1c6A=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0243f48c-6ff4-4cc1-3d79-08dc0bb8fd4e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2024 17:33:53.1269
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ut/vtBajHDw/8SREs6qvxmjV7uK9KDE46HOLwkeuBptYmYPkX1+P/l0iWjX4nSZunGb/QaEgDF1AqLrAUY+WGAg7Mn/ftFC6k4lgiID5/UY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6099
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VtIxUobX29if44MZAZlKTPViebn08Xdu
+X-Proofpoint-ORIG-GUID: 4wNfWCza0Tzp9fc5Zi2QfysG-XW8l4q-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-02_06,2024-01-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
- adultscore=0 suspectscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2401020132
-X-Proofpoint-ORIG-GUID: beLntiwhNrP32_Uc1EV6VV_9-lz1vM5E
-X-Proofpoint-GUID: beLntiwhNrP32_Uc1EV6VV_9-lz1vM5E
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 mlxlogscore=926 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401020133
 
-DQoNCj4gT24gRGVjIDI2LCAyMDIzLCBhdCA5OjQx4oCvUE0sIENvaWJ5IFh1IDxjb3h1QHJlZGhh
-dC5jb20+IHdyb3RlOg0KPiANCj4gQ3VycmVudGx5IHdoZW4gdGhlIGtlcm5lbCBmYWlscyB0byBh
-ZGQgYSBjZXJ0IHRvIHRoZSAubWFjaGluZSBrZXlyaW5nLA0KPiBpdCB3aWxsIHRocm93IGFuIGVy
-cm9yIGltbWVkaWF0ZWx5IGluIHRoZSBmdW5jdGlvbiBpbnRlZ3JpdHlfYWRkX2tleS4NCj4gDQo+
-IFNpbmNlIHRoZSBrZXJuZWwgd2lsbCB0cnkgYWRkaW5nIHRvIHRoZSAucGxhdGZvcm0ga2V5cmlu
-ZyBuZXh0IG9yIHRocm93DQo+IGFuIGVycm9yIChpbiB0aGUgY2FsbGVyIG9mIGludGVncml0eV9h
-ZGRfa2V5IGkuZS4gYWRkX3RvX21hY2hpbmVfa2V5cmluZyksDQo+IHNvIHRoZXJlIGlzIG5vIG5l
-ZWQgdG8gdGhyb3cgYW4gZXJyb3IgaW1tZWRpYXRlbHkgaW4gaW50ZWdyaXR5X2FkZF9rZXkuDQo+
-IA0KPiBSZXBvcnRlZC1ieTogaXRyeW15YmVzdDgwQHByb3Rvbm1haWwuY29tDQo+IENsb3Nlczog
-aHR0cHM6Ly9idWd6aWxsYS5yZWRoYXQuY29tL3Nob3dfYnVnLmNnaT9pZD0yMjM5MzMxDQo+IFNp
-Z25lZC1vZmYtYnk6IENvaWJ5IFh1IDxjb3h1QHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5OiBF
-cmljIFNub3diZXJnIDxlcmljLnNub3diZXJnQG9yYWNsZS5jb20+DQoNCg==
+On Tue, 2024-01-02 at 12:56 +0100, Roberto Sassu wrote:
+> On 12/26/2023 11:13 PM, Mimi Zohar wrote:
+> > On Thu, 2023-12-14 at 18:08 +0100, Roberto Sassu wrote:
+> >> From: Roberto Sassu <roberto.sassu@huawei.com>
+> >>
+> >> As for IMA, move hardcoded EVM function calls from various places in the
+> >> kernel to the LSM infrastructure, by introducing a new LSM named 'evm'
+> >> (last and always enabled like 'ima'). The order in the Makefile ensures
+> >> that 'evm' hooks are executed after 'ima' ones.
+> >>
+> >> Make EVM functions as static (except for evm_inode_init_security(), which
+> >> is exported), and register them as hook implementations in init_evm_lsm().
+> >>
+> >> Unlike before (see commit to move IMA to the LSM infrastructure),
+> >> evm_inode_post_setattr(), evm_inode_post_set_acl(),
+> >> evm_inode_post_remove_acl(), and evm_inode_post_removexattr() are not
+> >> executed for private inodes.
+> >>
+> > 
+> > Missing is a comment on moving the inline function definitions -
+> > evm_inode_remove_acl(), evm_inode_post_remove_acl(), and
+> > evm_inode_post_set_acl() - to evm_main.c.
+> 
+> Ok.
+> 
+> >> Finally, add the LSM_ID_EVM case in lsm_list_modules_test.c
+> >>
+> >> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> >> ---
+> > 
+> > [...]
+> >> @@ -2307,9 +2299,7 @@ int security_inode_setxattr(struct mnt_idmap *idmap,
+> >>   
+> >>   	if (ret == 1)
+> >>   		ret = cap_inode_setxattr(dentry, name, value, size, flags);
+> >> -	if (ret)
+> >> -		return ret;
+> >> -	return evm_inode_setxattr(idmap, dentry, name, value, size, flags);
+> >> +	return ret;
+> >>   }
+> > 
+> > Even though capability will be called after EVM, it doesn't make a
+> > difference in this instance.
+> > 
+> > [...]
+> > 
+> >>   /**
+> >> @@ -2493,9 +2472,7 @@ int security_inode_removexattr(struct mnt_idmap *idmap,
+> >>   	ret = call_int_hook(inode_removexattr, 1, idmap, dentry, name);
+> >>   	if (ret == 1)
+> >>   		ret = cap_inode_removexattr(idmap, dentry, name);
+> >> -	if (ret)
+> >> -		return ret;
+> >> -	return evm_inode_removexattr(idmap, dentry, name);
+> >> +	return ret;
+> >>   }
+> > 
+> > 'security.capability' is one of the EVM protected xattrs.  As
+> > capability isn't an LSM, it will now be called after EVM, which is a
+> > problem.
+> 
+> Uhm, according to this comment in security_inode_removexattr() and 
+> security_inode_setxattr():
+> 
+> 	/*
+> 	 * SELinux and Smack integrate the cap call,
+> 	 * so assume that all LSMs supplying this call do so.
+> 	 */
+> 
+> We can add the call to IMA and EVM as well, to be compliant.
+
+SELinux and Smack are the only current LSMs that register the
+security_inode_removexattr hook.  Both enforce mandatory access
+control,
+so their calling capabilities to enforce DAC kind of makes sense.  I'm
+not sure it makes sense for IMA and EVM to call capability directly,
+just because of the comment.
+
+> However, I'm missing why the two cases are different. It seems 
+> cap_inode_set/removexattr() are doing just checks.
+
+Both IMA and EVM require CAP_SYS_ADMIN to write/remove security.ima and
+security.evm respectively.  In addition, EVM must recalculate
+security.evm if any protected security xattrs are set or
+removed.   However, security.evm is updated on
+security_inode_post_setxattr, not security_inode_setxattr.
+
+Mimi
+
 
