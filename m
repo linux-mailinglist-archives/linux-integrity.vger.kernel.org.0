@@ -1,83 +1,150 @@
-Return-Path: <linux-integrity+bounces-634-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-579-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F65C8230D1
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jan 2024 16:52:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE32B821A86
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 11:54:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C99A1C23750
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jan 2024 15:52:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A5C01F225CF
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 10:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27841B27F;
-	Wed,  3 Jan 2024 15:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CA52D313;
+	Tue,  2 Jan 2024 10:54:32 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519D71BDC4;
-	Wed,  3 Jan 2024 15:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 16EA4100DCEC0;
-	Wed,  3 Jan 2024 16:52:04 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id BE5BC2CD19; Wed,  3 Jan 2024 16:52:03 +0100 (CET)
-Message-Id: <ea312fdaab76efd1cbcc4ed9fd0e15e5afd1ef88.1704296746.git.lukas@wunner.de>
-From: Lukas Wunner <lukas@wunner.de>
-Date: Wed, 3 Jan 2023 16:51:14 +0100
-Subject: [PATCH] dt-bindings: tpm: Add compatible string atmel,attpm20p
-To: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, Tim Harvey <tharvey@gateworks.com>
-Cc: devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CFFD507;
+	Tue,  2 Jan 2024 10:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4T48R00yTDz9xGZH;
+	Tue,  2 Jan 2024 18:36:28 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 689EF140D05;
+	Tue,  2 Jan 2024 18:54:11 +0800 (CST)
+Received: from [10.48.129.192] (unknown [10.48.129.192])
+	by APP2 (Coremail) with SMTP id GxC2BwAnIlxD65NlVSetAw--.48730S2;
+	Tue, 02 Jan 2024 11:54:10 +0100 (CET)
+Message-ID: <997cfb2f-a493-4f02-9e75-6ebb525c8406@huaweicloud.com>
+Date: Tue, 2 Jan 2024 11:53:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 23/24] ima: Make it independent from 'integrity' LSM
+To: Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+ dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
+ stephen.smalley.work@gmail.com, eparis@parisplace.org,
+ casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Roberto Sassu <roberto.sassu@huawei.com>
+References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
+ <20231214170834.3324559-24-roberto.sassu@huaweicloud.com>
+ <5aa5986266c3a3f834114a835378455cbbff7b64.camel@linux.ibm.com>
+ <ff8e6341-1ff0-4163-b5c7-236a0e8bdc7c@huaweicloud.com>
+ <96f82924cd2fda95f0c89341215e128419bf77fd.camel@linux.ibm.com>
+Content-Language: en-US
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <96f82924cd2fda95f0c89341215e128419bf77fd.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:GxC2BwAnIlxD65NlVSetAw--.48730S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF1xAF47CF1rZFWkGF4xXrb_yoW5AFWrpF
+	Z7Ka4UGr1DZry2kw4vya9xZrWfK395WFW7urn0kr1kAr1vvrn0qF40kr1UuFy5Gr1Ut3WI
+	qF4UG3sxZ3Wqy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj5QiDQABsH
 
-Commit 4f2a348aa365 ("arm64: dts: imx8mm-venice-gw73xx: add TPM device")
-added a devicetree node for the Trusted Platform Module on certain
-Gateworks boards.
+On 12/27/2023 8:21 PM, Mimi Zohar wrote:
+> On Wed, 2023-12-27 at 17:39 +0100, Roberto Sassu wrote:
+>> On 12/27/2023 2:22 PM, Mimi Zohar wrote:
+>>> On Thu, 2023-12-14 at 18:08 +0100, Roberto Sassu wrote:
+>>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>>
+>>>> Make the 'ima' LSM independent from the 'integrity' LSM by introducing IMA
+>>>> own integrity metadata (ima_iint_cache structure, with IMA-specific fields
+>>>> from the integrity_iint_cache structure), and by managing it directly from
+>>>> the 'ima' LSM.
+>>>>
+>>>> Move the remaining IMA-specific flags to security/integrity/ima/ima.h,
+>>>> since they are now unnecessary in the common integrity layer.
+>>>>
+>>>> Replace integrity_iint_cache with ima_iint_cache in various places
+>>>> of the IMA code.
+>>>>
+>>>> Then, reserve space in the security blob for the entire ima_iint_cache
+>>>> structure, so that it is available for all inodes having the security blob
+>>>> allocated (those for which security_inode_alloc() was called).  Adjust the
+>>>> IMA code accordingly, call ima_iint_inode() to retrieve the ima_iint_cache
+>>>> structure. Keep the non-NULL checks since there can be inodes without
+>>>> security blob.
+>>>
+>>> Previously the 'iint' memory was only allocated for regular files in
+>>> policy and were tagged S_IMA.  This patch totally changes when and how
+>>> memory is being allocated.  Does it make sense to allocate memory at
+>>> security_inode_alloc()?  Is this change really necessary for making IMA
+>>> a full fledged LSM?
+>>
+>> Good question. I think it wouldn't be necessary, we can reuse the same
+>> approach as in the patch 'integrity: Switch from rbtree to LSM-managed
+>> blob for integrity_iint_cache'.
+> 
+> Going forward with the v8 proposed solution would require some real
+> memory usage analysis for different types of policies.
+> 
+> To me the "integrity: Switch from rbtree to LSM-managed blob for
+> integrity_iint_cache" makes a lot more sense.   Looking back at the
+> original thread, your reasons back then for not directly allocating the
+> integrity_iint_cache are still valid for the ima_iint_cache structure.
 
-The commit only used the generic "tcg,tpm_tis-spi" compatible string,
-but public documentation shows that the chip is an ATTPM20P from Atmel
-(nowadays Microchip):
-https://trac.gateworks.com/wiki/tpm
+Uhm, ok. It should not be too difficult to restore the old mechanism for 
+ima_iint_cache. Will do it in v9.
 
-Add the chip to the supported compatible strings of the TPM TIS SPI
-schema.
+Thanks
 
-For reference, a datasheet is available at:
-https://ww1.microchip.com/downloads/en/DeviceDoc/ATTPM20P-Trusted-Platform-Module-TPM-2.0-SPI-Interface-Summary-Data-Sheet-DS40002082A.pdf
+Roberto
 
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Cc: Tim Harvey <tharvey@gateworks.com>
----
-This patch depends on the following series to consolidate TCG TIS bindings:
-https://lore.kernel.org/all/cover.1702806810.git.lukas@wunner.de/
-
- Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml b/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
-index c3413b4..6cb2de7 100644
---- a/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
-+++ b/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
-@@ -20,6 +20,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - atmel,attpm20p
-           - infineon,slb9670
-           - st,st33htpm-spi
-           - st,st33zp24-spi
--- 
-2.40.1
+> Mimi
+> 
+>>>
+>>>>
+>>>> Don't include the inode pointer as field in the ima_iint_cache structure,
+>>>> since the association with the inode is clear. Since the inode field is
+>>>> missing in ima_iint_cache, pass the extra inode parameter to
+>>>> ima_get_verity_digest().
+>>>>
+>>>> Finally, register ima_inode_alloc_security/ima_inode_free_security() to
+>>>> initialize/deinitialize the new ima_iint_cache structure (before this task
+>>>> was done by iint_init_always() and iint_free()). Also, duplicate
+>>>> iint_lockdep_annotate() for the ima_iint_cache structure, and name it
+>>>> ima_iint_lockdep_annotate().
+>>>>
+>>>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>>
+> 
 
 
