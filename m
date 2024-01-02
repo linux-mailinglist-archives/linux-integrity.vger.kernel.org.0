@@ -1,294 +1,196 @@
-Return-Path: <linux-integrity+bounces-608-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-609-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 842FC82204B
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 18:17:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC4D3822073
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 18:34:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD8E2B20AD8
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 17:17:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FDC81C225A0
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jan 2024 17:34:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D90915491;
-	Tue,  2 Jan 2024 17:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2165154A9;
+	Tue,  2 Jan 2024 17:34:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="gKrwRofY"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="iXbKnjLi";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CrBqBak3"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8165915494;
-	Tue,  2 Jan 2024 17:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1704215823;
-	bh=X0Q0v99eN2KxDgCMEZHqzTucfel3h4EGsfBLUoiMmnw=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-	b=gKrwRofYqU3F3KGrKDOg1bLqbAk9wXzrkdFq3APtKWQb909CUJRyV9invkStWDTZX
-	 FO5oW6eYWy5ys1Vt8JyVXz2PN4uFrdbPy8mMqW+RfBuI24J/28rtNFXqOGjjVmc3MQ
-	 f45gnPLNX7bBz17bSBmlNsb6AmiDmaP4NXJQeH6Q=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6EF6512868A4;
-	Tue,  2 Jan 2024 12:17:03 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id gfJWZuRS8A4J; Tue,  2 Jan 2024 12:17:03 -0500 (EST)
-Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2EEEA1286695;
-	Tue,  2 Jan 2024 12:17:02 -0500 (EST)
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	keyrings@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v6 20/20] Documentation: add tpm-security.rst
-Date: Tue,  2 Jan 2024 12:04:08 -0500
-Message-Id: <20240102170408.21969-21-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20240102170408.21969-1-James.Bottomley@HansenPartnership.com>
-References: <20240102170408.21969-1-James.Bottomley@HansenPartnership.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DEB156E7;
+	Tue,  2 Jan 2024 17:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4029TJf8014850;
+	Tue, 2 Jan 2024 17:33:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=L/k22AoNXY54EDJ4K9AR4FnfxF3bhhDibVjhYpGhkdQ=;
+ b=iXbKnjLism+3AKfwZV+fbEu3ulMfEH1Eb0Bk0xUCmJ3HI+pN4Wx3okcV/0Uxbfx591M4
+ M/sdBwzSm5Gp3KRgs/0v7UKIBHtR43XpMNJaOCmMlcKBqD+y/FyURvqVmckPwzihYa4T
+ qJMFQ/+NphRT+X8Sei1CAiiUPJjwl1Njkg3T1uaBaXp+4uCtiNZ/09VrKNnjSGYyYYzW
+ idL7T0aUxCyWd7hBC6FepPKZdviZnA6c4j8zBSyh7VIV9HHtYXEZDC4hnK2pPtc03el1
+ bIq1STVoxNYiKR0v2BeF0puoDzfNSCgYV0XLrB4yMvZnhLssIYFnwmhZDCKHpgF/clvA ww== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3vabrv3ef4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 02 Jan 2024 17:33:56 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 402GnKJX001470;
+	Tue, 2 Jan 2024 17:33:55 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3va9n7gxbp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 02 Jan 2024 17:33:55 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BhSzaQF69v+Ax4udGrP1P5JMQa4wLxFYPR/VjJknrEAQYxAjlI2EQHq4ntwK4LG7oGZqi7opXNxNq2jiGky0m41qzf/2jXnn8u/8wTFbunPbG0V/HzWe5DWZ4oMF1AJHWt92+YV9enje716L8RETRU5I7QyxwW1UEGhs3ajoe0kOnDwyLSk1LQIc83elf3muuan62ECgBznOm8suYYfR1aNLXQgAaYHEFXX+53kEUlo1qG3PHCdUN2vwk8LcOWDcvM61p4+rMsxA95ohCh5fqCIl+MTk81VPBZ5ovTdW3K3s9Csqj9hWQDgxoxt6Z8EFoWiAfxmtqn1IKKbwX7DSEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L/k22AoNXY54EDJ4K9AR4FnfxF3bhhDibVjhYpGhkdQ=;
+ b=atUtCwaYG3n0MYqsAobjAh5AzNUqfr6ewsL8H33DekxWCtc21JQ1djjJDJ0A/FSkQds0ydTdYG4ne1GrghjV9b2C/e9wgtuh60wpETuAXeAit8fbJ4gIYT+ivf+NEiPTcpTn1gl8SgPNesGB1DeVeit8kSh7QN+6hHRUNDer5A78/sREvuS36kpr0T57ZNShQBLfxQjOrCjfKrVOcB2+oGpbBPUguxtNfporCuzbiAsxSaJR8s0qX9iXuEqbqzqZQucL0LALpEPSTs8KePeqnm0ysxLOf361YOqxCp6BVIkCBFEY1F4Gw3up5GJs/c2ZWBsMJp1WuYJ3QM59+y874Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L/k22AoNXY54EDJ4K9AR4FnfxF3bhhDibVjhYpGhkdQ=;
+ b=CrBqBak3beTHihsvUiDHE3xWfg9cKKf9q1pYb0IEI2VRIQdVzvP4Eb4NV13KwyYaJ2GKyOEDG8xFxi5BU7kkxMyNRx+81BwgwTfzj7+kMiSb/ydqRohB+2S/By+m2oejh7FQL38lb2x2Rg1ru3SV9d84nNtyt0/IoupbT399Aps=
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
+ by IA1PR10MB6099.namprd10.prod.outlook.com (2603:10b6:208:3ac::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.13; Tue, 2 Jan
+ 2024 17:33:53 +0000
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::cf88:f211:5770:e4ab]) by CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::cf88:f211:5770:e4ab%5]) with mapi id 15.20.7135.023; Tue, 2 Jan 2024
+ 17:33:53 +0000
+From: Eric Snowberg <eric.snowberg@oracle.com>
+To: Coiby Xu <coxu@redhat.com>
+CC: "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "itrymybest80@protonmail.com" <itrymybest80@protonmail.com>,
+        Mimi Zohar
+	<zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul
+ Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E.
+ Hallyn" <serge@hallyn.com>,
+        "open list:SECURITY SUBSYSTEM"
+	<linux-security-module@vger.kernel.org>,
+        open list
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] integrity: don't throw an error immediately when failed
+ to add a cert to the .machine keyring
+Thread-Topic: [PATCH] integrity: don't throw an error immediately when failed
+ to add a cert to the .machine keyring
+Thread-Index: AQHaOH8TIIKj61NKpUaRSQpmeqn6+LDG0qoA
+Date: Tue, 2 Jan 2024 17:33:53 +0000
+Message-ID: <2E548AE0-8029-4BB0-B162-4CAD0544EDB8@oracle.com>
+References: <20231227044156.166009-1-coxu@redhat.com>
+In-Reply-To: <20231227044156.166009-1-coxu@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3774.200.91.1.1)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR10MB4150:EE_|IA1PR10MB6099:EE_
+x-ms-office365-filtering-correlation-id: 0243f48c-6ff4-4cc1-3d79-08dc0bb8fd4e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ n4PewQnZhJV/dtw3PR4Eju/aoTic9dDmbyFwq5kYkfo/Sq+66I6uyJ5abs6EVH6IGhsbaM26CkHh7kwom/zaTPZ1Ad2G1PahvbLvpAoDWFI/UvqlcAvDPxKdAjKuayZP+Ukv5bYx4ajpC+FfghsMdqQvZiw3hROo+AhEUcwPLjXgKjToc/XaB6ch1gkKW4i6KAVWeAdT4E5NSXsyZ7tTRjjWyaPKvAcWizn6E88/2uMQJfDzOOxl96jbFLETXn9KgEW5vocXBpluIZAjRuOVYoYKzg5et/L7e7ukomw5KPFKYPTlLbZoSj/kZaYhSmycCzTxNJs8ufvlpnmGZwq+F3P1VYkrz/0jPPXhCAaAxcrdthtF4l8XMzk2NEyRYwjQgUo2nbFRIHvg8Zv1kHEd6BQedB7dgqRqu97gl7r2rDalLGMit2aTRWMeB0w+mUqX3Ve0+Zxzwpf8MbY2jfg9PcHYbRzwiLsJQfV7+gjXNHbPgb5sw/vvIPinuMEwRSRqMsSQuyLRkYAAc/o6SAm5UlDa+LEhp6WPpSqaU7WxlHfwaJ379GC2V6OJZAAE3crqiLECYa6Av8jdeahQnOw6BWB03O294VJnTYMaif1BWa3PiRH7sWqYYQtMo7uQnoesV7BRMrfHhSkLu1nQZotMV/RJTSR+yTXQm6oqaUoqrzShHe7PyCji1cSQAqZOgHpd
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(346002)(39860400002)(396003)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(64756008)(83380400001)(2906002)(41300700001)(26005)(2616005)(38100700002)(122000001)(8936002)(54906003)(8676002)(7416002)(316002)(71200400001)(4326008)(4744005)(5660300002)(44832011)(966005)(478600001)(53546011)(66476007)(91956017)(6506007)(6512007)(6916009)(66556008)(66946007)(6486002)(76116006)(66446008)(14773004)(86362001)(38070700009)(33656002)(36756003)(142923001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?utf-8?B?MWVaRW1POEJWcEIxMENsNEQ0QU54Z3V1YWpqVVZOSGJ3dXM4TE54dEhxMFFj?=
+ =?utf-8?B?TlRDSmtMTXRWOUVjTWxuSVpOSmNaYUpsbUNXZGljZzlzQVpjV1RNdG1wdFB5?=
+ =?utf-8?B?Rlk3Z3RjMElNbHU1Z3JXVUE2ZjNoTFJYaEE4REx0SFltY0wxZjdEeXdLTFpu?=
+ =?utf-8?B?M0c0RXdVcXNaYWJKN3p2RWRJVGgxRjJ2cVBRVGd2dGltQTlHbHR2aHRnelN5?=
+ =?utf-8?B?Qmh5cGpWd0VFS3F1QTdXczM3RWhlYnlZNkFnMERFbnZCOUlPemJYUGhsRWI2?=
+ =?utf-8?B?bUhLNnkxcElTdlI4TVdlelJLNmpPRm1EaFBZZ0NhUzBiNlBTTDJMVklyZElm?=
+ =?utf-8?B?U0J1bnJOY0NQaWlJKzd2K1F3T2RzQUNLTXNRdVRxd3lkempWNytKVlFEZVQ5?=
+ =?utf-8?B?aG03RlY2QkVVZkFyRnZaUjdkL0paZk42YlFLUXVyWUVNU2Z4ZVNYT00wUEVx?=
+ =?utf-8?B?akV1U2RrZWxXTkJOSWlGbi90SytFU3dNOVFVNFR5bDJxS1NkdDNXUTlDeUtC?=
+ =?utf-8?B?ckdWaXpqSlp2aUJwUWhCZzJJZ0pVTDd2bjlmbTVuL0tacTh1WGZlZWtHdVpC?=
+ =?utf-8?B?YitnZFBLVUxhQnJMbEdSbXdGYmkxUzQvSE9mU0NlcnF6VWZrb05hWmNaY0hh?=
+ =?utf-8?B?Mk90YjR2cUhzeVRBRUFVSkhkUzF6b1JDeUF6Nk1jWTkzakMxbFN0Q3pEYXF5?=
+ =?utf-8?B?OW8wenl2ejc2RmRlSWZKNnU0KzBTZU5VQ01MdzhITjV1Ti9vU2xraVB2TXBr?=
+ =?utf-8?B?M2FOTUQzM0hYSUMrcHJoV3FETWs2dXFCR0Iycyt0MmRQM2IrbWp1cUV5Y0dE?=
+ =?utf-8?B?SXNuSGxTT1ZJa2hKblNJdy80OFY5T044WTEwT3lBOFgyTVVmSlNPQWRFS0NF?=
+ =?utf-8?B?ZFdEY0dhK0pKbzIrTm9lcXpyWFBlUlNxVU9VVnYxRUFva2o0RENTYUEzeUQz?=
+ =?utf-8?B?U1dFaGloekdjK29CY1llcnBGbTZkUUNaRmRyb1lzN3o5QzRrUldVd0U4Zi9P?=
+ =?utf-8?B?VHFFd2V3ODBsNTVxNjdPWGYrTmg1L3k3dmlZa2JrWjNVZmdOUG5EU1p2YzZR?=
+ =?utf-8?B?WWFJUk9LVlI0MlFKcFlvUUlvMDhjOVlQdTRpR0k2d3RmMzl4NkxWajNlR1g0?=
+ =?utf-8?B?YlJDandLT3p2WHdDc3JKV1hPSHFwVEorNG5MN3daVGl4dGpNekt2TmM4RnFU?=
+ =?utf-8?B?bHVKOTc1R0E0WUJrVHc2NXhUaVYwRkVSZk9aUjZ4cFg4dUl4eW1VbjI0U3d4?=
+ =?utf-8?B?RHAxbDN5S1k4Nk5Cd2lQd2tkS0ttenE0Y3RCbUdYUTQxd2d1TXNmQmd1Zits?=
+ =?utf-8?B?VHRFQjRtVndVVGp4UWVrQ3cvS2VORlVhdFJYdWcrUkJlRDhXcWYvRWEvZDMv?=
+ =?utf-8?B?ZEJtZmdxRnJCL0oyZ0Iwd1JTejM1ckgzcW90VVVQQlhEcnc1WjBvSkVDZEox?=
+ =?utf-8?B?RFBEbWpzTkhzR1UzZkIvRGJLUDc3NkhjdXAySFhrQXZERTBpazBOM0h3Ly82?=
+ =?utf-8?B?ZWZxa0hUTWdMdTA2KzlHcEwrUHU5NjFGVkJ3N3Y1VW1JU3lBMTVCNDltSkhY?=
+ =?utf-8?B?dHlyUk5nOEhxUmM4dVk0eExXMXBqT0lBMUxLVTNLVENYRHdVN3VuNCtZY2hH?=
+ =?utf-8?B?Y0Q4bks2SnpRb2hLQUdHNjlWWXZZeE5yeEhZYkxyakMzWGFBZmU0SWU4Tzhp?=
+ =?utf-8?B?eXRRcU4raVVoMVR2VWlVZlFsd295aGNsWXduQTJXUUxabHJZVWE0V243aTFL?=
+ =?utf-8?B?T1lKUWNJd2xpejVWT3g1NTV5S3l0clpPT0ZwSVUzcEcxcG43cGI3VmpseGt5?=
+ =?utf-8?B?RnR6TmhkTXUyT1JWSDIwMTE2UDU5OGxuMlk5TDFhUnVRRmhRNkZUSk4wMGJv?=
+ =?utf-8?B?N0hBd0htdHFtQ3Boby90NUtuNXpuaC92UnhMb1JSbkVMYmpsc2ZBYjBjWlNE?=
+ =?utf-8?B?STRqaWpNMTMwVU8yemdidXpTK2pwUFc3a3kvbGpXd2FtcU40dnRQdWp4ZFRr?=
+ =?utf-8?B?OTJrL2NQdkt5OFlJYUZaK2VVUjlYREovRW1USWQrbVJDRVF1SXBETUNiWGFz?=
+ =?utf-8?B?dDgvZFQ2Y21tSlF0aXp0cGRQSVhZTThxNnZuaTBFNlZXVVgzcUdTelZWZTZN?=
+ =?utf-8?B?a1pVNXdmNWVISUpCakFlUTE0Y25ZdS9DS3Q4V2hRbTg1YWk3a2VFdmZ1SFVF?=
+ =?utf-8?B?eVE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A3E27294A4514D4F91B5DE9254875FD4@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	OuST4yqw0hfdPSyEH91XOOSYHBUK/fQMCROHUxTeW6Ww45DVga3eHmTgV9cuIZMVkBs9uoSGe81EesGL5mqbdnEh4092prmahayxrN4t3Ugh5AAtYudGgnVqi4+8E8dkqfUobdrIL4K4o3PCO/U05NbsJPf7yHmR8ymkIizt+uzQCxO4fRUCdWSvbogp0w9ydAfCg0gQ1RwY9Fdw5cMZTX+/X4Wew1dZRbirCcWSPTk2dChttHO0hqQP+NA81P6XqX1REur5tteDmMjjB7QS/toxAKetgYG1rCceRf3v0G133jkn+9oZhqFl9J6Kb/gUCTkQcdPP+bFgWuLDWdnWbuofnUjoIFiAlPvZT5BcvmC0ClC8a87qkmaLP/IlZniCNjH6jz8R3ubD6FnLjw1viXQwh35M5jWdTCxgX60a3cIwarhzI86UrpGngqhfl0D9BkBb+exP2edyAkBKnk/JYZe/KSgEfIuyHLiIWS4AFpnEzYTggavrNeOVZzmkNM80R0oc0e8ufLGSrbi30HzUrwrHRswYv/s93l2GL0NupayvnnTVoXepmjtwYMaEVX8v8oQnP4499zjriEb68EuOGUqe0pcelJVZQu0qtop1c6A=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0243f48c-6ff4-4cc1-3d79-08dc0bb8fd4e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2024 17:33:53.1269
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ut/vtBajHDw/8SREs6qvxmjV7uK9KDE46HOLwkeuBptYmYPkX1+P/l0iWjX4nSZunGb/QaEgDF1AqLrAUY+WGAg7Mn/ftFC6k4lgiID5/UY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6099
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-02_06,2024-01-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2401020132
+X-Proofpoint-ORIG-GUID: beLntiwhNrP32_Uc1EV6VV_9-lz1vM5E
+X-Proofpoint-GUID: beLntiwhNrP32_Uc1EV6VV_9-lz1vM5E
 
-Document how the new encrypted secure interface for TPM2 works and how
-security can be assured after boot by certifying the NULL seed.
-
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- Documentation/security/tpm/tpm-security.rst | 216 ++++++++++++++++++++
- 1 file changed, 216 insertions(+)
- create mode 100644 Documentation/security/tpm/tpm-security.rst
-
-diff --git a/Documentation/security/tpm/tpm-security.rst b/Documentation/security/tpm/tpm-security.rst
-new file mode 100644
-index 000000000000..4f633f251033
---- /dev/null
-+++ b/Documentation/security/tpm/tpm-security.rst
-@@ -0,0 +1,216 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+TPM Security
-+============
-+
-+The object of this document is to describe how we make the kernel's
-+use of the TPM reasonably robust in the face of external snooping and
-+packet alteration attacks (called passive and active interposer attack
-+in the literature).  The current security document is for TPM 2.0.
-+
-+Introduction
-+------------
-+
-+The TPM is usually a discrete chip attached to a PC via some type of
-+low bandwidth bus.  There are exceptions to this such as the Intel
-+PTT, which is a software TPM running inside a software environment
-+close to the CPU, which are subject to different attacks, but right at
-+the moment, most hardened security environments require a discrete
-+hardware TPM, which is the use case discussed here.
-+
-+Snooping and Alteration Attacks against the bus
-+-----------------------------------------------
-+
-+The current state of the art for snooping the `TPM Genie`_ hardware
-+interposer which is a simple external device that can be installed in
-+a couple of seconds on any system or laptop.  Recently attacks were
-+successfully demonstrated against the `Windows Bitlocker TPM`_ system.
-+Most recently the same `attack against TPM based Linux disk
-+encryption`_ schemes.  The next phase of research seems to be hacking
-+existing devices on the bus to act as interposers, so the fact that
-+the attacker requires physical access for a few seconds might
-+evaporate.  However, the goal of this document is to protect TPM
-+secrets and integrity as far as we are able in this environment and to
-+try to insure that if we can't prevent the attack then at least we can
-+detect it.
-+
-+Unfortunately, most of the TPM functionality, including the hardware
-+reset capability can be controlled by an attacker who has access to
-+the bus, so we'll discuss some of the disruption possibilities below.
-+
-+Measurement (PCR) Integrity
-+---------------------------
-+
-+Since the attacker can send their own commands to the TPM, they can
-+send arbitrary PCR extends and thus disrupt the measurement system,
-+which would be an annoying denial of service attack.  However, there
-+are two, more serious, classes of attack aimed at entities sealed to
-+trust measurements.
-+
-+1. The attacker could intercept all PCR extends coming from the system
-+   and completely substitute their own values, producing a replay of
-+   an untampered state that would cause PCR measurements to attest to
-+   a trusted state and release secrets
-+
-+2. At some point in time the attacker could reset the TPM, clearing
-+   the PCRs and then send down their own measurements which would
-+   effectively overwrite the boot time measurements the TPM has
-+   already done.
-+
-+The first can be thwarted by always doing HMAC protection of the PCR
-+extend and read command meaning measurement values cannot be
-+substituted without producing a detectable HMAC failure in the
-+response.  However, the second can only really be detected by relying
-+on some sort of mechanism for protection which would change over TPM
-+reset.
-+
-+Secrets Guarding
-+----------------
-+
-+Certain information passing in and out of the TPM, such as key sealing
-+and private key import and random number generation, is vulnerable to
-+interception which HMAC protection alone cannot protect against, so
-+for these types of command we must also employ request and response
-+encryption to prevent the loss of secret information.
-+
-+Establishing Initial Trust with the TPM
-+---------------------------------------
-+
-+In order to provide security from the beginning, an initial shared or
-+asymmetric secret must be established which must also be unknown to
-+the attacker.  The most obvious avenues for this are the endorsement
-+and storage seeds, which can be used to derive asymmetric keys.
-+However, using these keys is difficult because the only way to pass
-+them into the kernel would be on the command line, which requires
-+extensive support in the boot system, and there's no guarantee that
-+either hierarchy would not have some type of authorization.
-+
-+The mechanism chosen for the Linux Kernel is to derive the primary
-+elliptic curve key from the null seed using the standard storage seed
-+parameters.  The null seed has two advantages: firstly the hierarchy
-+physically cannot have an authorization, so we are always able to use
-+it and secondly, the null seed changes across TPM resets, meaning if
-+we establish trust on the null seed at start of day, all sessions
-+salted with the derived key will fail if the TPM is reset and the seed
-+changes.
-+
-+Obviously using the null seed without any other prior shared secrets,
-+we have to create and read the initial public key which could, of
-+course, be intercepted and substituted by the bus interposer.
-+However, the TPM has a key certification mechanism (using the EK
-+endorsement certificate, creating an attestation identity key and
-+certifying the null seed primary with that key) which is too complex
-+to run within the kernel, so we keep a copy of the null primary key
-+name, which is what is exported via sysfs so user-space can run the
-+full certification when it boots.  The definitive guarantee here is
-+that if the null primary key certifies correctly, you know all your
-+TPM transactions since start of day were secure and if it doesn't, you
-+know there's an interposer on your system (and that any secret used
-+during boot may have been leaked).
-+
-+Stacking Trust
-+--------------
-+
-+In the current null primary scenario, the TPM must be completely
-+cleared before handing it on to the next consumer.  However the kernel
-+hands to user-space the name of the derived null seed key which can
-+then be verified by certification in user-space.  Therefore, this chain
-+of name handoff can be used between the various boot components as
-+well (via an unspecified mechanism).  For instance, grub could use the
-+null seed scheme for security and hand the name off to the kernel in
-+the boot area.  The kernel could make its own derivation of the key
-+and the name and know definitively that if they differ from the handed
-+off version that tampering has occurred.  Thus it becomes possible to
-+chain arbitrary boot components together (UEFI to grub to kernel) via
-+the name handoff provided each successive component knows how to
-+collect the name and verifies it against its derived key.
-+
-+Session Properties
-+------------------
-+
-+All TPM commands the kernel uses allow sessions.  HMAC sessions may be
-+used to check the integrity of requests and responses and decrypt and
-+encrypt flags may be used to shield parameters and responses.  The
-+HMAC and encryption keys are usually derived from the shared
-+authorization secret, but for a lot of kernel operations that is well
-+known (and usually empty).  Thus, every HMAC session used by the
-+kernel must be created using the null primary key as the salt key
-+which thus provides a cryptographic input into the session key
-+derivation.  Thus, the kernel creates the null primary key once (as a
-+volatile TPM handle) and keeps it around in a saved context stored in
-+tpm_chip for every in-kernel use of the TPM.  Currently, because of a
-+lack of de-gapping in the in-kernel resource manager, the session must
-+be created and destroyed for each operation, but, in future, a single
-+session may also be reused for the in-kernel HMAC, encryption and
-+decryption sessions.
-+
-+Protection Types
-+----------------
-+
-+For every in-kernel operation we use null primary salted HMAC to
-+protect the integrity.  Additionally, we use parameter encryption to
-+protect key sealing and parameter decryption to protect key unsealing
-+and random number generation.
-+
-+Null Primary Key Certification in Userspace
-+===========================================
-+
-+Every TPM comes shipped with a couple of X.509 certificates for the
-+primary endorsement key.  This document assumes that the Elliptic
-+Curve version of the certificate exists at 01C00002, but will work
-+equally well with the RSA certificate (at 01C00001).
-+
-+The first step in the certification is primary creation using the
-+template from the `TCG EK Credential Profile`_ which allows comparison
-+of the generated primary key against the one in the certificate (the
-+public key must match).  Note that generation of the EK primary
-+requires the EK hierarchy password, but a pre-generated version of the
-+EC primary should exist at 81010002 and a TPM2_ReadPublic() may be
-+performed on this without needing the key authority.  Next, the
-+certificate itself must be verified to chain back to the manufacturer
-+root (which should be published on the manufacturer website).  Once
-+this is done, an attestation key (AK) is generated within the TPM and
-+it's name and the EK public key can be used to encrypt a secret using
-+TPM2_MakeCredential.  The TPM then runs TPM2_ActivateCredential which
-+will only recover the secret if the binding between the TPM, the EK
-+and the AK is true. the generated AK may now be used to run a
-+certification of the null primary key whose name the kernel has
-+exported.  Since TPM2_MakeCredential/ActivateCredential are somewhat
-+complicated, a more simplified process involving an externally
-+generated private key is described below.
-+
-+This process is a simplified abbreviation of the usual privacy CA
-+based attestation process.  The assumption here is that the
-+attestation is done by the TPM owner who thus has access to only the
-+owner hierarchy.  The owner creates an external public/private key
-+pair (assume elliptic curve in this case) and wraps the private key
-+for import using an inner wrapping process and parented to the EC
-+derived storage primary.  The TPM2_Import() is done using a parameter
-+decryption HMAC session salted to the EK primary (which also does not
-+require the EK key authority) meaning that the inner wrapping key is
-+the encrypted parameter and thus the TPM will not be able to perform
-+the import unless is possesses the certified EK so if the command
-+succeeds and the HMAC verifies on return we know we have a loadable
-+copy of the private key only for the certified TPM.  This key is now
-+loaded into the TPM and the Storage primary flushed (to free up space
-+for the null key generation).
-+
-+The null EC primary is now generated using the Storage profile
-+outlined in the `TCG TPM v2.0 Provisioning Guidance`_; the name of
-+this key (the hash of the public area) is computed and compared to the
-+null seed name presented by the kernel in
-+/sys/class/tpm/tpm0/null_name.  If the names do not match, the TPM is
-+compromised.  If the names match, the user performs a TPM2_Certify()
-+using the null primary as the object handle and the loaded private key
-+as the sign handle and providing randomized qualifying data.  The
-+signature of the returned certifyInfo is verified against the public
-+part of the loaded private key and the qualifying data checked to
-+prevent replay.  If all of these tests pass, the user is now assured
-+that TPM integrity and privacy was preserved across the entire boot
-+sequence of this kernel.
-+
-+.. _TPM Genie: https://www.nccgroup.trust/globalassets/about-us/us/documents/tpm-genie.pdf
-+.. _Windows Bitlocker TPM: https://dolosgroup.io/blog/2021/7/9/from-stolen-laptop-to-inside-the-company-network
-+.. _attack against TPM based Linux disk encryption: https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-targets
-+.. _TCG EK Credential Profile: https://trustedcomputinggroup.org/resource/tcg-ek-credential-profile-for-tpm-family-2-0/
-+.. _TCG TPM v2.0 Provisioning Guidance: https://trustedcomputinggroup.org/resource/tcg-tpm-v2-0-provisioning-guidance/
--- 
-2.35.3
-
+DQoNCj4gT24gRGVjIDI2LCAyMDIzLCBhdCA5OjQx4oCvUE0sIENvaWJ5IFh1IDxjb3h1QHJlZGhh
+dC5jb20+IHdyb3RlOg0KPiANCj4gQ3VycmVudGx5IHdoZW4gdGhlIGtlcm5lbCBmYWlscyB0byBh
+ZGQgYSBjZXJ0IHRvIHRoZSAubWFjaGluZSBrZXlyaW5nLA0KPiBpdCB3aWxsIHRocm93IGFuIGVy
+cm9yIGltbWVkaWF0ZWx5IGluIHRoZSBmdW5jdGlvbiBpbnRlZ3JpdHlfYWRkX2tleS4NCj4gDQo+
+IFNpbmNlIHRoZSBrZXJuZWwgd2lsbCB0cnkgYWRkaW5nIHRvIHRoZSAucGxhdGZvcm0ga2V5cmlu
+ZyBuZXh0IG9yIHRocm93DQo+IGFuIGVycm9yIChpbiB0aGUgY2FsbGVyIG9mIGludGVncml0eV9h
+ZGRfa2V5IGkuZS4gYWRkX3RvX21hY2hpbmVfa2V5cmluZyksDQo+IHNvIHRoZXJlIGlzIG5vIG5l
+ZWQgdG8gdGhyb3cgYW4gZXJyb3IgaW1tZWRpYXRlbHkgaW4gaW50ZWdyaXR5X2FkZF9rZXkuDQo+
+IA0KPiBSZXBvcnRlZC1ieTogaXRyeW15YmVzdDgwQHByb3Rvbm1haWwuY29tDQo+IENsb3Nlczog
+aHR0cHM6Ly9idWd6aWxsYS5yZWRoYXQuY29tL3Nob3dfYnVnLmNnaT9pZD0yMjM5MzMxDQo+IFNp
+Z25lZC1vZmYtYnk6IENvaWJ5IFh1IDxjb3h1QHJlZGhhdC5jb20+DQoNClJldmlld2VkLWJ5OiBF
+cmljIFNub3diZXJnIDxlcmljLnNub3diZXJnQG9yYWNsZS5jb20+DQoNCg==
 
