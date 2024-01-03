@@ -1,37 +1,37 @@
-Return-Path: <linux-integrity+bounces-619-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-620-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AF18822F32
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jan 2024 15:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 808B2822FF5
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jan 2024 15:59:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C39721F24383
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jan 2024 14:09:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 337591F245C9
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jan 2024 14:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F347D1A28A;
-	Wed,  3 Jan 2024 14:09:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 720ED1A70C;
+	Wed,  3 Jan 2024 14:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mSmEjkNY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sfFwX/w1"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14B21A59D;
-	Wed,  3 Jan 2024 14:09:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EEBAC433C8;
-	Wed,  3 Jan 2024 14:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529CE1A706;
+	Wed,  3 Jan 2024 14:59:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E63F4C433C7;
+	Wed,  3 Jan 2024 14:59:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704290973;
-	bh=2RyW2FyfKqulF+XdUN4uGTLJOz6xINLjJ7oev9I+OEk=;
+	s=k20201202; t=1704293943;
+	bh=Ouxm0wPO+1VlGaUlmQL5dN2XXWLD4GCLCnA+9DdndZ4=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=mSmEjkNYQ8CS09mi8y/qhZLxPZMtfNSZ2VFKWuyZ53RrzjtIRxhSrId+JK8i68urZ
-	 wU3ZoD7C5xB6QBWh7+WRtnxeofc3GLV2e+++LETAFdtSjp3HKtPXl+Rqe7RaDv+oQJ
-	 dYMU7QopRYMKdUOkB7UW0mwkFnp2/SqEz4rOIwvkfpzFVkB5kEXC9xv342UWMWZkAs
-	 KI+26TwS8cazaUw/SWjBL6rn5ioc5d+GcCp2QAQeADgK6KjEyIlISItSt/qq7iFq2S
-	 CdSJS+eK9y6boKhL8keuxnVGA9ke3BtdLnK1yjJ5o7wDdmdN5Rn3gnNoV6knkJw6Mq
-	 goyBIPEPlP3TQ==
+	b=sfFwX/w1GPITRtw4xcZTU8zWIY6YJd9vCL8GjxrMiA26J2oWwVuWIZckH3pjpgQiR
+	 23yWVElDl6cvd61RAIuH6jLUxUOhd2Ve3zw6PHqZ1uy2E+OJoJhsNrpXD5afuOs44L
+	 PWSETOmluboUmIkZoV1obJWAtUFEHvJ/30qV3yMGpxRpmdpPKOHGrKKx2hq2SlotwK
+	 ffmzegyobGFk/nxETG8jo6i5jhEus+t3tWKtAeY+UXiHbIlsuxIeuTWCqe/ry0Lvn8
+	 4dRV8O9ZSy196Ug2DgbL3A9N2xTFDIKSjOlbfaXj94H6HzDos1GlzAinpUE9g5vqK8
+	 s+z+4YW9beo5g==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -40,56 +40,361 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 03 Jan 2024 16:09:29 +0200
-Message-Id: <CY54Q6U6UMKM.2H5N3BACDBGU0@suppilovahvero>
-Cc: <itrymybest80@protonmail.com>, "Mimi Zohar" <zohar@linux.ibm.com>,
- "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>, "Paul Moore"
- <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, "open list:SECURITY SUBSYSTEM"
- <linux-security-module@vger.kernel.org>, "open list"
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] integrity: don't throw an error immediately when failed
- to add a cert to the .machine keyring
+Date: Wed, 03 Jan 2024 16:59:00 +0200
+Message-Id: <CY55S3QYJI7L.2XT5VE45V1VIY@suppilovahvero>
+Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH v6 09/20] crypto: lib - implement library version of AES
+ in CFB mode
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Coiby Xu" <coxu@redhat.com>, <linux-integrity@vger.kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.15.2
-References: <20231227044156.166009-1-coxu@redhat.com>
-In-Reply-To: <20231227044156.166009-1-coxu@redhat.com>
+References: <20240102170408.21969-1-James.Bottomley@HansenPartnership.com>
+ <20240102170408.21969-10-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20240102170408.21969-10-James.Bottomley@HansenPartnership.com>
 
-On Wed Dec 27, 2023 at 6:41 AM EET, Coiby Xu wrote:
-> Currently when the kernel fails to add a cert to the .machine keyring,
-> it will throw an error immediately in the function integrity_add_key.
+On Tue Jan 2, 2024 at 7:03 PM EET, James Bottomley wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
 >
-> Since the kernel will try adding to the .platform keyring next or throw
-> an error (in the caller of integrity_add_key i.e. add_to_machine_keyring)=
-,
-> so there is no need to throw an error immediately in integrity_add_key.
+> Implement AES in CFB mode using the existing, mostly constant-time
+> generic AES library implementation. This will be used by the TPM code
+> to encrypt communications with TPM hardware, which is often a discrete
+> component connected using sniffable wires or traces.
 >
-> Reported-by: itrymybest80@protonmail.com
-
-Missing "Firstname Lastname".
-
-> Closes: https://bugzilla.redhat.com/show_bug.cgi?id=3D2239331
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> While a CFB template does exist, using a skcipher is a major pain for
+> non-performance critical synchronous crypto where the algorithm is known
+> at compile time and the data is in contiguous buffers with valid kernel
+> virtual addresses.
+>
+> Tested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Reviewed-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Link: https://lore.kernel.org/all/20230216201410.15010-1-James.Bottomley@=
+HansenPartnership.com/
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 > ---
->  security/integrity/digsig.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  include/crypto/aes.h |   5 +
+>  lib/crypto/Kconfig   |   5 +
+>  lib/crypto/Makefile  |   3 +
+>  lib/crypto/aescfb.c  | 257 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 270 insertions(+)
+>  create mode 100644 lib/crypto/aescfb.c
 >
-> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
-> index df387de29bfa..45c3e5dda355 100644
-> --- a/security/integrity/digsig.c
-> +++ b/security/integrity/digsig.c
-> @@ -179,7 +179,8 @@ static int __init integrity_add_key(const unsigned in=
-t id, const void *data,
->  				   KEY_ALLOC_NOT_IN_QUOTA);
->  	if (IS_ERR(key)) {
->  		rc =3D PTR_ERR(key);
-> -		pr_err("Problem loading X.509 certificate %d\n", rc);
-> +		if (id !=3D INTEGRITY_KEYRING_MACHINE)
-> +			pr_err("Problem loading X.509 certificate %d\n", rc);
->  	} else {
->  		pr_notice("Loaded X.509 cert '%s'\n",
->  			  key_ref_to_ptr(key)->description);
+> diff --git a/include/crypto/aes.h b/include/crypto/aes.h
+> index 2090729701ab..9339da7c20a8 100644
+> --- a/include/crypto/aes.h
+> +++ b/include/crypto/aes.h
+> @@ -87,4 +87,9 @@ void aes_decrypt(const struct crypto_aes_ctx *ctx, u8 *=
+out, const u8 *in);
+>  extern const u8 crypto_aes_sbox[];
+>  extern const u8 crypto_aes_inv_sbox[];
+> =20
+> +void aescfb_encrypt(const struct crypto_aes_ctx *ctx, u8 *dst, const u8 =
+*src,
+> +		    int len, const u8 iv[AES_BLOCK_SIZE]);
+> +void aescfb_decrypt(const struct crypto_aes_ctx *ctx, u8 *dst, const u8 =
+*src,
+> +		    int len, const u8 iv[AES_BLOCK_SIZE]);
+> +
+>  #endif
+> diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+> index 45436bfc6dff..b01253cac70a 100644
+> --- a/lib/crypto/Kconfig
+> +++ b/lib/crypto/Kconfig
+> @@ -8,6 +8,11 @@ config CRYPTO_LIB_UTILS
+>  config CRYPTO_LIB_AES
+>  	tristate
+> =20
+> +config CRYPTO_LIB_AESCFB
+> +	tristate
+> +	select CRYPTO_LIB_AES
+> +	select CRYPTO_LIB_UTILS
+> +
+>  config CRYPTO_LIB_AESGCM
+>  	tristate
+>  	select CRYPTO_LIB_AES
+> diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
+> index 8d1446c2be71..969baab8c805 100644
+> --- a/lib/crypto/Makefile
+> +++ b/lib/crypto/Makefile
+> @@ -10,6 +10,9 @@ obj-$(CONFIG_CRYPTO_LIB_CHACHA_GENERIC)		+=3D libchacha=
+.o
+>  obj-$(CONFIG_CRYPTO_LIB_AES)			+=3D libaes.o
+>  libaes-y					:=3D aes.o
+> =20
+> +obj-$(CONFIG_CRYPTO_LIB_AESCFB)			+=3D libaescfb.o
+> +libaescfb-y					:=3D aescfb.o
+> +
+>  obj-$(CONFIG_CRYPTO_LIB_AESGCM)			+=3D libaesgcm.o
+>  libaesgcm-y					:=3D aesgcm.o
+> =20
+> diff --git a/lib/crypto/aescfb.c b/lib/crypto/aescfb.c
+> new file mode 100644
+> index 000000000000..749dc1258a44
+> --- /dev/null
+> +++ b/lib/crypto/aescfb.c
+> @@ -0,0 +1,257 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Minimal library implementation of AES in CFB mode
+> + *
+> + * Copyright 2023 Google LLC
+> + */
+> +
+> +#include <linux/module.h>
+> +
+> +#include <crypto/algapi.h>
+> +#include <crypto/aes.h>
+> +
+> +#include <asm/irqflags.h>
+> +
+> +static void aescfb_encrypt_block(const struct crypto_aes_ctx *ctx, void =
+*dst,
+> +				 const void *src)
+> +{
+> +	unsigned long flags;
+> +
+> +	/*
+> +	 * In AES-CFB, the AES encryption operates on known 'plaintext' (the IV
+> +	 * and ciphertext), making it susceptible to timing attacks on the
+> +	 * encryption key. The AES library already mitigates this risk to some
+> +	 * extent by pulling the entire S-box into the caches before doing any
+> +	 * substitutions, but this strategy is more effective when running with
+> +	 * interrupts disabled.
+> +	 */
+> +	local_irq_save(flags);
+> +	aes_encrypt(ctx, dst, src);
+> +	local_irq_restore(flags);
+> +}
+> +
+> +/**
+> + * aescfb_encrypt - Perform AES-CFB encryption on a block of data
+> + *
+> + * @ctx:	The AES-CFB key schedule
+> + * @dst:	Pointer to the ciphertext output buffer
+> + * @src:	Pointer the plaintext (may equal @dst for encryption in place)
+> + * @len:	The size in bytes of the plaintext and ciphertext.
+> + * @iv:		The initialization vector (IV) to use for this block of data
+> + */
+> +void aescfb_encrypt(const struct crypto_aes_ctx *ctx, u8 *dst, const u8 =
+*src,
+> +		    int len, const u8 iv[AES_BLOCK_SIZE])
+> +{
+> +	u8 ks[AES_BLOCK_SIZE];
+> +	const u8 *v =3D iv;
+> +
+> +	while (len > 0) {
+> +		aescfb_encrypt_block(ctx, ks, v);
+> +		crypto_xor_cpy(dst, src, ks, min(len, AES_BLOCK_SIZE));
+> +		v =3D dst;
+> +
+> +		dst +=3D AES_BLOCK_SIZE;
+> +		src +=3D AES_BLOCK_SIZE;
+> +		len -=3D AES_BLOCK_SIZE;
+> +	}
+> +
+> +	memzero_explicit(ks, sizeof(ks));
+> +}
+> +EXPORT_SYMBOL(aescfb_encrypt);
+> +
+> +/**
+> + * aescfb_decrypt - Perform AES-CFB decryption on a block of data
+> + *
+> + * @ctx:	The AES-CFB key schedule
+> + * @dst:	Pointer to the plaintext output buffer
+> + * @src:	Pointer the ciphertext (may equal @dst for decryption in place)
+> + * @len:	The size in bytes of the plaintext and ciphertext.
+> + * @iv:		The initialization vector (IV) to use for this block of data
+> + */
+> +void aescfb_decrypt(const struct crypto_aes_ctx *ctx, u8 *dst, const u8 =
+*src,
+> +		    int len, const u8 iv[AES_BLOCK_SIZE])
+> +{
+> +	u8 ks[2][AES_BLOCK_SIZE];
+> +
+> +	aescfb_encrypt_block(ctx, ks[0], iv);
+> +
+> +	for (int i =3D 0; len > 0; i ^=3D 1) {
+> +		if (len > AES_BLOCK_SIZE)
+> +			/*
+> +			 * Generate the keystream for the next block before
+> +			 * performing the XOR, as that may update in place and
+> +			 * overwrite the ciphertext.
+> +			 */
+> +			aescfb_encrypt_block(ctx, ks[!i], src);
+> +
+> +		crypto_xor_cpy(dst, src, ks[i], min(len, AES_BLOCK_SIZE));
+> +
+> +		dst +=3D AES_BLOCK_SIZE;
+> +		src +=3D AES_BLOCK_SIZE;
+> +		len -=3D AES_BLOCK_SIZE;
+> +	}
+> +
+> +	memzero_explicit(ks, sizeof(ks));
+> +}
+> +EXPORT_SYMBOL(aescfb_decrypt);
+> +
+> +MODULE_DESCRIPTION("Generic AES-CFB library");
+> +MODULE_AUTHOR("Ard Biesheuvel <ardb@kernel.org>");
+> +MODULE_LICENSE("GPL");
+> +
+> +#ifndef CONFIG_CRYPTO_MANAGER_DISABLE_TESTS
+> +
+> +/*
+> + * Test code below. Vectors taken from crypto/testmgr.h
+> + */
+> +
+> +static struct {
+> +	u8	ptext[64];
+> +	u8	ctext[64];
+> +
+> +	u8	key[AES_MAX_KEY_SIZE];
+> +	u8	iv[AES_BLOCK_SIZE];
+> +
+> +	int	klen;
+> +	int	len;
+> +} const aescfb_tv[] __initconst =3D {
+> +	{ /* From NIST SP800-38A */
+> +		.key    =3D "\x2b\x7e\x15\x16\x28\xae\xd2\xa6"
+> +			  "\xab\xf7\x15\x88\x09\xcf\x4f\x3c",
+> +		.klen	=3D 16,
+> +		.iv	=3D "\x00\x01\x02\x03\x04\x05\x06\x07"
+> +			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
+> +		.ptext	=3D "\x6b\xc1\xbe\xe2\x2e\x40\x9f\x96"
+> +			  "\xe9\x3d\x7e\x11\x73\x93\x17\x2a"
+> +			  "\xae\x2d\x8a\x57\x1e\x03\xac\x9c"
+> +			  "\x9e\xb7\x6f\xac\x45\xaf\x8e\x51"
+> +			  "\x30\xc8\x1c\x46\xa3\x5c\xe4\x11"
+> +			  "\xe5\xfb\xc1\x19\x1a\x0a\x52\xef"
+> +			  "\xf6\x9f\x24\x45\xdf\x4f\x9b\x17"
+> +			  "\xad\x2b\x41\x7b\xe6\x6c\x37\x10",
+> +		.ctext	=3D "\x3b\x3f\xd9\x2e\xb7\x2d\xad\x20"
+> +			  "\x33\x34\x49\xf8\xe8\x3c\xfb\x4a"
+> +			  "\xc8\xa6\x45\x37\xa0\xb3\xa9\x3f"
+> +			  "\xcd\xe3\xcd\xad\x9f\x1c\xe5\x8b"
+> +			  "\x26\x75\x1f\x67\xa3\xcb\xb1\x40"
+> +			  "\xb1\x80\x8c\xf1\x87\xa4\xf4\xdf"
+> +			  "\xc0\x4b\x05\x35\x7c\x5d\x1c\x0e"
+> +			  "\xea\xc4\xc6\x6f\x9f\xf7\xf2\xe6",
+> +		.len	=3D 64,
+> +	}, {
+> +		.key	=3D "\x8e\x73\xb0\xf7\xda\x0e\x64\x52"
+> +			  "\xc8\x10\xf3\x2b\x80\x90\x79\xe5"
+> +			  "\x62\xf8\xea\xd2\x52\x2c\x6b\x7b",
+> +		.klen	=3D 24,
+> +		.iv	=3D "\x00\x01\x02\x03\x04\x05\x06\x07"
+> +			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
+> +		.ptext	=3D "\x6b\xc1\xbe\xe2\x2e\x40\x9f\x96"
+> +			  "\xe9\x3d\x7e\x11\x73\x93\x17\x2a"
+> +			  "\xae\x2d\x8a\x57\x1e\x03\xac\x9c"
+> +			  "\x9e\xb7\x6f\xac\x45\xaf\x8e\x51"
+> +			  "\x30\xc8\x1c\x46\xa3\x5c\xe4\x11"
+> +			  "\xe5\xfb\xc1\x19\x1a\x0a\x52\xef"
+> +			  "\xf6\x9f\x24\x45\xdf\x4f\x9b\x17"
+> +			  "\xad\x2b\x41\x7b\xe6\x6c\x37\x10",
+> +		.ctext	=3D "\xcd\xc8\x0d\x6f\xdd\xf1\x8c\xab"
+> +			  "\x34\xc2\x59\x09\xc9\x9a\x41\x74"
+> +			  "\x67\xce\x7f\x7f\x81\x17\x36\x21"
+> +			  "\x96\x1a\x2b\x70\x17\x1d\x3d\x7a"
+> +			  "\x2e\x1e\x8a\x1d\xd5\x9b\x88\xb1"
+> +			  "\xc8\xe6\x0f\xed\x1e\xfa\xc4\xc9"
+> +			  "\xc0\x5f\x9f\x9c\xa9\x83\x4f\xa0"
+> +			  "\x42\xae\x8f\xba\x58\x4b\x09\xff",
+> +		.len	=3D 64,
+> +	}, {
+> +		.key	=3D "\x60\x3d\xeb\x10\x15\xca\x71\xbe"
+> +			  "\x2b\x73\xae\xf0\x85\x7d\x77\x81"
+> +			  "\x1f\x35\x2c\x07\x3b\x61\x08\xd7"
+> +			  "\x2d\x98\x10\xa3\x09\x14\xdf\xf4",
+> +		.klen	=3D 32,
+> +		.iv	=3D "\x00\x01\x02\x03\x04\x05\x06\x07"
+> +			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
+> +		.ptext	=3D "\x6b\xc1\xbe\xe2\x2e\x40\x9f\x96"
+> +			  "\xe9\x3d\x7e\x11\x73\x93\x17\x2a"
+> +			  "\xae\x2d\x8a\x57\x1e\x03\xac\x9c"
+> +			  "\x9e\xb7\x6f\xac\x45\xaf\x8e\x51"
+> +			  "\x30\xc8\x1c\x46\xa3\x5c\xe4\x11"
+> +			  "\xe5\xfb\xc1\x19\x1a\x0a\x52\xef"
+> +			  "\xf6\x9f\x24\x45\xdf\x4f\x9b\x17"
+> +			  "\xad\x2b\x41\x7b\xe6\x6c\x37\x10",
+> +		.ctext	=3D "\xdc\x7e\x84\xbf\xda\x79\x16\x4b"
+> +			  "\x7e\xcd\x84\x86\x98\x5d\x38\x60"
+> +			  "\x39\xff\xed\x14\x3b\x28\xb1\xc8"
+> +			  "\x32\x11\x3c\x63\x31\xe5\x40\x7b"
+> +			  "\xdf\x10\x13\x24\x15\xe5\x4b\x92"
+> +			  "\xa1\x3e\xd0\xa8\x26\x7a\xe2\xf9"
+> +			  "\x75\xa3\x85\x74\x1a\xb9\xce\xf8"
+> +			  "\x20\x31\x62\x3d\x55\xb1\xe4\x71",
+> +		.len	=3D 64,
+> +	}, { /* > 16 bytes, not a multiple of 16 bytes */
+> +		.key	=3D "\x2b\x7e\x15\x16\x28\xae\xd2\xa6"
+> +			  "\xab\xf7\x15\x88\x09\xcf\x4f\x3c",
+> +		.klen	=3D 16,
+> +		.iv	=3D "\x00\x01\x02\x03\x04\x05\x06\x07"
+> +			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
+> +		.ptext	=3D "\x6b\xc1\xbe\xe2\x2e\x40\x9f\x96"
+> +			  "\xe9\x3d\x7e\x11\x73\x93\x17\x2a"
+> +			  "\xae",
+> +		.ctext	=3D "\x3b\x3f\xd9\x2e\xb7\x2d\xad\x20"
+> +			  "\x33\x34\x49\xf8\xe8\x3c\xfb\x4a"
+> +			  "\xc8",
+> +		.len	=3D 17,
+> +	}, { /* < 16 bytes */
+> +		.key	=3D "\x2b\x7e\x15\x16\x28\xae\xd2\xa6"
+> +			  "\xab\xf7\x15\x88\x09\xcf\x4f\x3c",
+> +		.klen	=3D 16,
+> +		.iv	=3D "\x00\x01\x02\x03\x04\x05\x06\x07"
+> +			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
+> +		.ptext	=3D "\x6b\xc1\xbe\xe2\x2e\x40\x9f",
+> +		.ctext	=3D "\x3b\x3f\xd9\x2e\xb7\x2d\xad",
+> +		.len	=3D 7,
+> +	},
+> +};
+> +
+> +static int __init libaescfb_init(void)
+> +{
+> +	for (int i =3D 0; i < ARRAY_SIZE(aescfb_tv); i++) {
+> +		struct crypto_aes_ctx ctx;
+> +		u8 buf[64];
+> +
+> +		if (aes_expandkey(&ctx, aescfb_tv[i].key, aescfb_tv[i].klen)) {
+> +			pr_err("aes_expandkey() failed on vector %d\n", i);
+> +			return -ENODEV;
+> +		}
+> +
+> +		aescfb_encrypt(&ctx, buf, aescfb_tv[i].ptext, aescfb_tv[i].len,
+> +			       aescfb_tv[i].iv);
+> +		if (memcmp(buf, aescfb_tv[i].ctext, aescfb_tv[i].len)) {
+> +			pr_err("aescfb_encrypt() #1 failed on vector %d\n", i);
+> +			return -ENODEV;
+> +		}
+> +
+> +		/* decrypt in place */
+> +		aescfb_decrypt(&ctx, buf, buf, aescfb_tv[i].len, aescfb_tv[i].iv);
+> +		if (memcmp(buf, aescfb_tv[i].ptext, aescfb_tv[i].len)) {
+> +			pr_err("aescfb_decrypt() failed on vector %d\n", i);
+> +			return -ENODEV;
+> +		}
+> +
+> +		/* encrypt in place */
+> +		aescfb_encrypt(&ctx, buf, buf, aescfb_tv[i].len, aescfb_tv[i].iv);
+> +		if (memcmp(buf, aescfb_tv[i].ctext, aescfb_tv[i].len)) {
+> +			pr_err("aescfb_encrypt() #2 failed on vector %d\n", i);
+> +
+> +			return -ENODEV;
+> +		}
+> +
+> +	}
+> +	return 0;
+> +}
+> +module_init(libaescfb_init);
+> +
+> +static void __exit libaescfb_exit(void)
+> +{
+> +}
+> +module_exit(libaescfb_exit);
+> +#endif
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
 
