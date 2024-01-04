@@ -1,132 +1,231 @@
-Return-Path: <linux-integrity+bounces-637-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-638-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FDF5823695
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jan 2024 21:31:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C0B823EF5
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jan 2024 10:55:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BA2D1F25A49
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jan 2024 20:31:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F13991F24215
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jan 2024 09:55:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C561805A;
-	Wed,  3 Jan 2024 20:31:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0818520B19;
+	Thu,  4 Jan 2024 09:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3TkPtcu"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0uTSwqWG";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZQDdmhGK";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0uTSwqWG";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZQDdmhGK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A665A1D53F;
-	Wed,  3 Jan 2024 20:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE2E5C433C7;
-	Wed,  3 Jan 2024 20:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704313879;
-	bh=0edWOR9VwaMq71a+PaUWlI9hzQ8QNgaM82GsM+T+mtI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T3TkPtcuasUWc6CK/Og1R2OcrlIeG1v+Gsgp45g4P5NOtTrfTAuNd2JSpClykypDc
-	 q+W3ER06OzIzF5w/pj3BFJeXJXgWBCg+soqgu1+7zhiGj5z3uP0bGEc7gyYQKiplei
-	 DJCbKGxrvXhuY9/oMjEhBGX/g/9W7mv4GzyqsTMa7CHSOVkj2xprGAfYVwemVkM1bi
-	 grcA9IoWfhKlcOeLkEPtufqdCdQraX87aurTRlEfdcoqw0iAILVAq7eTUG/xOiXfzr
-	 j+95i5cTE6EolvdBxnyB9oxGMAZTJ/Cqb8zfIiVWEB+DiMoj4CdChSy7I8dyFH4bP4
-	 pR9G9A0+cKDyQ==
-Received: (nullmailer pid 1681500 invoked by uid 1000);
-	Wed, 03 Jan 2024 20:31:11 -0000
-Date: Wed, 3 Jan 2024 13:31:11 -0700
-From: Rob Herring <robh@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Lino Sanfilippo <LinoSanfilippo@gmx.de>, linux-integrity@vger.kernel.org, Nishanth Menon <nm@ti.com>, Jason Gunthorpe <jgg@ziepe.ca>, Nayna Jain <nayna@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Francesco Dolcini <francesco@dolcini.it>, Conor Dooley <conor+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>, Ninad Palsule <ninad@linux.ibm.com>, Alexander Steffen <Alexander.Steffen@infineon.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Peter Delevoryas <peter@pjd.dev>, devicetree@vger.kernel.org, Andrey Pronin <apronin@chromium.org>, Sasha Levin <sashal@kernel.org>, Amir Mizinski <amirmizi6@gmail.com>, Johannes Holland <Johannes.Holland@infineon.com>, Peter Huewe <peterhuewe@gmx.de>, Thirupathaiah Annapureddy <thiruan@microsoft.com>, Benoit HOUYERE <benoit.houyere@st.com>
-Subject: Re: [PATCH v3 0/4] dt-bindings: tpm: Clean all the things
-Message-ID: <170431383883.1680828.10023555019997153392.robh@kernel.org>
-References: <cover.1702806810.git.lukas@wunner.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55218208B9;
+	Thu,  4 Jan 2024 09:54:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3E93921E45;
+	Thu,  4 Jan 2024 09:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1704362064; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=IzesxlcAl0bN1e6lTNS2mKw+gXmikmCcEmTGGck0Bk4=;
+	b=0uTSwqWGukZOa1jS1HwOB7kO4VZAZuoeHvxREnZMcWyGqKi0fGOnjQMrA7YQaJ5yqVOrJS
+	4ZoGKWdU8AcWrPP+ZedWLDergRlfhOZ3y6QYoGbdcuLASkBoUwwgHd5PBVwwqhlh4OzxDk
+	zdaNfrSXtrVWRcGhxGaHtS3g5kmig38=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1704362064;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=IzesxlcAl0bN1e6lTNS2mKw+gXmikmCcEmTGGck0Bk4=;
+	b=ZQDdmhGK23qwGI9VuZqXiu5vJ0tDd/JDQZzyIMRvSau7ymLaeVv2++9DQxsrIJ5gPaTnUs
+	ySGJ0mCnOCjNOTDg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1704362064; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=IzesxlcAl0bN1e6lTNS2mKw+gXmikmCcEmTGGck0Bk4=;
+	b=0uTSwqWGukZOa1jS1HwOB7kO4VZAZuoeHvxREnZMcWyGqKi0fGOnjQMrA7YQaJ5yqVOrJS
+	4ZoGKWdU8AcWrPP+ZedWLDergRlfhOZ3y6QYoGbdcuLASkBoUwwgHd5PBVwwqhlh4OzxDk
+	zdaNfrSXtrVWRcGhxGaHtS3g5kmig38=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1704362064;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=IzesxlcAl0bN1e6lTNS2mKw+gXmikmCcEmTGGck0Bk4=;
+	b=ZQDdmhGK23qwGI9VuZqXiu5vJ0tDd/JDQZzyIMRvSau7ymLaeVv2++9DQxsrIJ5gPaTnUs
+	ySGJ0mCnOCjNOTDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 94A9D137E8;
+	Thu,  4 Jan 2024 09:54:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id DELlIk+AlmXPZwAAD6G6ig
+	(envelope-from <tzimmermann@suse.de>); Thu, 04 Jan 2024 09:54:23 +0000
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: ardb@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	bhelgaas@google.com,
+	arnd@arndb.de,
+	zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	javierm@redhat.com
+Cc: linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v3 0/4] arch/x86: Remove unnecessary dependencies on bootparam.h
+Date: Thu,  4 Jan 2024 10:51:18 +0100
+Message-ID: <20240104095421.12772-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1702806810.git.lukas@wunner.de>
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Score: 3.19
+X-Spamd-Bar: +++
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [3.19 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 TO_DN_SOME(0.00)[];
+	 R_MISSING_CHARSET(2.50)[];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 R_RATELIMIT(0.00)[to_ip_from(RLfgmttzabnpkr34rizty4fwu5)];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_TRACE(0.00)[suse.de:+];
+	 MX_GOOD(-0.01)[];
+	 FREEMAIL_TO(0.00)[kernel.org,linutronix.de,redhat.com,alien8.de,linux.intel.com,zytor.com,google.com,arndb.de,linux.ibm.com,gmail.com,paul-moore.com,namei.org,hallyn.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 BAYES_HAM(-3.00)[100.00%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 FROM_HAS_DN(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 RCPT_COUNT_TWELVE(0.00)[22];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=0uTSwqWG;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=ZQDdmhGK
+X-Spam-Level: ***
+X-Rspamd-Queue-Id: 3E93921E45
+
+Reduce built time in some cases by removing unnecessary include statements
+for <asm/bootparam.h>. Reorganize some header files accordingly.
+
+While working on the kernel's boot-up graphics, I noticed that touching
+include/linux/screen_info.h triggers a complete rebuild of the kernel
+on x86. It turns out that the architecture's PCI and EFI headers include
+<asm/bootparam.h>, which depends on <linux/screen_info.h>. But none of
+the drivers have any business with boot parameters or the screen_info
+state.
+
+The patchset moves code from bootparam.h and efi.h into separate header
+files and removes obsolete include statements on x86. I did
+
+  make allmodconfig
+  make -j28
+  touch include/linux/screen_info.h
+  time make -j28
+
+to measure the time it takes to rebuild. Results without the patchset
+are around 20 minutes.
+
+  real    20m46,705s
+  user    354m29,166s
+  sys     28m27,359s
+
+And with the patchset applied it goes down to less than one minute.
+
+  real    0m56,643s
+  user    4m0,661s
+  sys     0m32,956s
+
+The test system is an Intel i5-13500.
+
+v3:
+	* keep setup_header in bootparam.h (Ard)
+	* implement arch_ima_efi_boot_mode() in source file (Ard)
+v2:
+	* only keep struct boot_params in bootparam.h (Ard)
+	* simplify arch_ima_efi_boot_mode define (Ard)
+	* updated cover letter
+
+Thomas Zimmermann (4):
+  arch/x86: Move UAPI setup structures into setup_data.h
+  arch/x86: Move internal setup_data structures into setup_data.h
+  arch/x86: Implement arch_ima_efi_boot_mode() in source file
+  arch/x86: Do not include <asm/bootparam.h> in several files
+
+ arch/x86/boot/compressed/acpi.c        |  2 +
+ arch/x86/boot/compressed/cmdline.c     |  2 +
+ arch/x86/boot/compressed/efi.c         |  2 +
+ arch/x86/boot/compressed/efi.h         |  9 ---
+ arch/x86/boot/compressed/misc.h        |  3 +-
+ arch/x86/boot/compressed/pgtable_64.c  |  1 +
+ arch/x86/boot/compressed/sev.c         |  1 +
+ arch/x86/include/asm/efi.h             | 14 +----
+ arch/x86/include/asm/kexec.h           |  1 -
+ arch/x86/include/asm/mem_encrypt.h     |  2 +-
+ arch/x86/include/asm/pci.h             | 13 ----
+ arch/x86/include/asm/setup_data.h      | 32 ++++++++++
+ arch/x86/include/asm/sev.h             |  3 +-
+ arch/x86/include/asm/x86_init.h        |  2 -
+ arch/x86/include/uapi/asm/bootparam.h  | 72 +---------------------
+ arch/x86/include/uapi/asm/setup_data.h | 83 ++++++++++++++++++++++++++
+ arch/x86/kernel/crash.c                |  1 +
+ arch/x86/kernel/sev-shared.c           |  2 +
+ arch/x86/platform/efi/efi.c            |  5 ++
+ arch/x86/platform/pvh/enlighten.c      |  1 +
+ arch/x86/xen/enlighten_pvh.c           |  1 +
+ arch/x86/xen/vga.c                     |  1 -
+ 22 files changed, 142 insertions(+), 111 deletions(-)
+ create mode 100644 arch/x86/include/asm/setup_data.h
+ create mode 100644 arch/x86/include/uapi/asm/setup_data.h
 
 
-On Sun, 17 Dec 2023 11:13:30 +0100, Lukas Wunner wrote:
-> TPM dt-bindings cleanup, take three.
-> 
-> The existing devicetrees in arch/arm and arch/arm64 contain a few
-> violations of the schemas contained herein.  E.g. the nodename is
-> not "tpm@..." but "tpmdev@..." in some cases.  I've got patches
-> lined up to fix these issues and will submit them separately.
-> 
-> Changes v2 -> v3:
-> * [PATCH 1/4]:
->   * Drop clock-frequency property from tcg,tpm-tis-i2c.yaml.
->     It doesn't exist at the peripheral level, only at the
->     controller level.  Document maximum clock frequency for
->     infineon,slb9635tt and infineon,slb9645tt in textual form
->     (as was previously done in trivial-devices.yaml).
->   * Document reset-gpios property as used by:
->     arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts
-> 
-> * [PATCH 2/4]:
->   * Introduce new schema specifically for google,cr50 (Rob).
->     Note that I can't use "oneOf" for SPI and I²C properties
->     because a node with only a "reg" property is a valid SPI
->     and I²C node and would match both subschemas.
->     So "anyOf" it is.
-> 
-> * [PATCH 4/4]:
->   * Use "const" instead of "enum" for singleton compatible string.
-> 
-> Link to v2:
-> https://lore.kernel.org/linux-devicetree/cover.1701093036.git.lukas@wunner.de/
-> 
-> 
-> Lukas Wunner (4):
->   dt-bindings: tpm: Consolidate TCG TIS bindings
->   dt-bindings: tpm: Convert Google Cr50 bindings to DT schema
->   dt-bindings: tpm: Convert IBM vTPM bindings to DT schema
->   dt-bindings: tpm: Document Microsoft fTPM bindings
-> 
->  .../bindings/security/tpm/google,cr50.txt     |  19 ----
->  .../bindings/security/tpm/ibmvtpm.txt         |  41 -------
->  .../bindings/security/tpm/st33zp24-i2c.txt    |  34 ------
->  .../bindings/security/tpm/st33zp24-spi.txt    |  32 ------
->  .../bindings/security/tpm/tpm-i2c.txt         |  26 -----
->  .../bindings/security/tpm/tpm_tis_mmio.txt    |  25 -----
->  .../bindings/security/tpm/tpm_tis_spi.txt     |  23 ----
->  .../devicetree/bindings/tpm/google,cr50.yaml  |  65 +++++++++++
->  .../devicetree/bindings/tpm/ibm,vtpm.yaml     | 104 ++++++++++++++++++
->  .../bindings/tpm/microsoft,ftpm.yaml          |  47 ++++++++
->  .../bindings/tpm/tcg,tpm-tis-i2c.yaml         |  90 +++++++++++++++
->  .../bindings/tpm/tcg,tpm-tis-mmio.yaml        |  49 +++++++++
->  .../bindings/tpm/tcg,tpm_tis-spi.yaml         |  75 +++++++++++++
->  .../devicetree/bindings/tpm/tpm-common.yaml   |  87 +++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  16 ---
->  15 files changed, 517 insertions(+), 216 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/google,cr50.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/ibmvtpm.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/st33zp24-i2c.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/st33zp24-spi.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-i2c.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm_tis_mmio.txt
->  delete mode 100644 Documentation/devicetree/bindings/security/tpm/tpm_tis_spi.txt
->  create mode 100644 Documentation/devicetree/bindings/tpm/google,cr50.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/microsoft,ftpm.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm-tis-mmio.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
->  create mode 100644 Documentation/devicetree/bindings/tpm/tpm-common.yaml
-> 
-> --
-> 2.40.1
-> 
-> 
-
-Applied, thanks!
+base-commit: 25232eb8a9ac7fa0dac7e846a4bf7fba2b6db39a
+prerequisite-patch-id: 0aa359f6144c4015c140c8a6750be19099c676fb
+prerequisite-patch-id: c67e5d886a47b7d0266d81100837557fda34cb24
+prerequisite-patch-id: cbc453ee02fae02af22fbfdce56ab732c7a88c36
+prerequisite-patch-id: e7a5405fb48608e0c8e3b41bf983fefa2c8bd1f3
+prerequisite-patch-id: f12b8b5465e519f8588e3743e70166be3294009b
+prerequisite-patch-id: c3de42afb37f6240a840f8b12504262d4483873c
+prerequisite-patch-id: 5f31d981a18037906b0e422c0a1031e7dff91a2d
+prerequisite-patch-id: 2345c90842ae2a9117d21b9bd205fe3b89e89c20
+-- 
+2.43.0
 
 
