@@ -1,114 +1,145 @@
-Return-Path: <linux-integrity+bounces-666-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-667-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8850D825479
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 14:30:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF05C82563F
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 15:59:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2624628493F
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 13:30:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D8F42819E2
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 14:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2530F2D7AF;
-	Fri,  5 Jan 2024 13:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC7B42DF8F;
+	Fri,  5 Jan 2024 14:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cLa/ZH+4"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pmnw6U6t"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF1A2D78B
-	for <linux-integrity@vger.kernel.org>; Fri,  5 Jan 2024 13:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704461422;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9ZyA0UiJjlDprNRBcnFya4w1YVvVVz2SWLbH1aem4wE=;
-	b=cLa/ZH+4EvqnJukw8WvfwqGTK1LrUq8zGEruXg9eFMlKfSb+7Xrs+ne0lSFNoRxKYrlUfn
-	+wtonkn6Fja7XRqCBtqEeqUb2FZhq+tCA4HKvGhndh3/w7KGVkgD+LtHic9Y8XBSVjTn4n
-	9jQjefnVjCfolMGUFWZsd1PdFTBalZ0=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-325-kZIDrirRNsG5pOanTZSQ8A-1; Fri, 05 Jan 2024 08:30:21 -0500
-X-MC-Unique: kZIDrirRNsG5pOanTZSQ8A-1
-Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-594f08f3768so1616194eaf.1
-        for <linux-integrity@vger.kernel.org>; Fri, 05 Jan 2024 05:30:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704461421; x=1705066221;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ZyA0UiJjlDprNRBcnFya4w1YVvVVz2SWLbH1aem4wE=;
-        b=fnDubfkJRDRc3z+RtHxzAb//8nrqRpcpK3tHH8xsUzy2W27VbKgIKbcNlBeAjAHtFD
-         mCiL9icpLs8iUyjtk2TRBb+rzbHziUZfZR+tIs4jCRp5BFwk3jKMmEiyih088QDpi1n6
-         8Yj3N2JMdKzSwg9nuzV6e7hQye5NTn3GQqt0SBycc3PQXAc6EYkRrL+t3Q0lzWIBfXV5
-         ENi7SDgOm0iqPRQuqfCJ1irfMtKKmxEXYvrpRqS10+6ccCPQDHLEIEGS4cI2eTX083C9
-         kLh13mN5luy2V/oKKqeQ6s8FWItExH0iibrFRGEVLati4wQAU1Z2+T8wYR8C6q61vXpR
-         S3Ew==
-X-Gm-Message-State: AOJu0Yy7e3UWW9vO4oNbNPztdnxsJ2Z/ly6z15tRbTP26nM/UcE7CbKh
-	F99JmWgP67DJTLoKmLqBdiXOa+p76nPsFa5wuZKmYOZRFMo7RQUt9wNGlYXDQhuZpkoNiW2Nc8A
-	B1NyqMQgT4nC04LOpV0zGUL/SFmYl5r6edi/u
-X-Received: by 2002:a05:6359:309a:b0:172:fe9a:44d9 with SMTP id rg26-20020a056359309a00b00172fe9a44d9mr1557962rwb.33.1704461420862;
-        Fri, 05 Jan 2024 05:30:20 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHHOshhGoPVy2RT2ywK6Ed2waSP6I+rGR3wAj2kBv8fMfQgXPaSMZNLO9B9u77ckjUZGIzI7w==
-X-Received: by 2002:a05:6359:309a:b0:172:fe9a:44d9 with SMTP id rg26-20020a056359309a00b00172fe9a44d9mr1557952rwb.33.1704461420523;
-        Fri, 05 Jan 2024 05:30:20 -0800 (PST)
-Received: from localhost ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id j3-20020a63fc03000000b005ce71f1440bsm1402487pgi.72.2024.01.05.05.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jan 2024 05:30:20 -0800 (PST)
-Date: Fri, 5 Jan 2024 21:27:28 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Eric Snowberg <eric.snowberg@oracle.com>
-Cc: "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>, 
-	"itrymybest80@protonmail.com" <itrymybest80@protonmail.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3AEA2E623;
+	Fri,  5 Jan 2024 14:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 405CRg7u009167;
+	Fri, 5 Jan 2024 14:59:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=srVFGRu3fKLXSKgBecGL2P7rO5z7cc9P6fOF/yabDLg=;
+ b=pmnw6U6tj31dw5SpY47xUj6dhUPMktXqwM4PGn7LHR3FdnfTbt3lAkIHEkSXythiyRSq
+ C+iMicm+nPBECq46DdNC0UJs9AMBZps/BqbC54WWYsnzbI2MkBszMsCMkTmQpk2ugOs3
+ VdkC9E8BcO7a3HP50cWm3QZD7klCYtDv/nd/xuELdeOh9wDWeVOBIUi5pIczHrcjdKet
+ 56ZWWV0qKWFTUAWY8zSddAhbohAu1teXzp1UwACH69lLs2/sveJjgjQCcud4m+8sBG/t
+ vs3YRcMNPAOUrXOC9jdJb/TOG1C7L98kZbplmDi5ukulyvqbMlnMwF+U0oCHhu1t5GWw 3g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vehsnc7nu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Jan 2024 14:59:29 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 405EKn7t002127;
+	Fri, 5 Jan 2024 14:59:29 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vehsnc7n2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Jan 2024 14:59:28 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 405EbBjd017991;
+	Fri, 5 Jan 2024 14:59:28 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vayrkyqg9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Jan 2024 14:59:28 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 405ExRD841288236
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 5 Jan 2024 14:59:27 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E68FF5805E;
+	Fri,  5 Jan 2024 14:59:26 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 65DEF58063;
+	Fri,  5 Jan 2024 14:59:26 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.173.4])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  5 Jan 2024 14:59:26 +0000 (GMT)
+Message-ID: <16ae3e51dc4eeb2b2e674b8ff1051ac315fa492c.camel@linux.ibm.com>
 Subject: Re: Re: [PATCH] integrity: don't throw an error immediately when
  failed to add a cert to the .machine keyring
-Message-ID: <jaybj2ra7cjsfazxcumpkaozthl245a6s4sdmjsrmvpuddb5ye@cntxrwommw4z>
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Coiby Xu <coxu@redhat.com>
+Cc: linux-integrity@vger.kernel.org, itrymybest80@protonmail.com,
+        Dmitry
+ Kasatkin <dmitry.kasatkin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date: Fri, 05 Jan 2024 09:59:14 -0500
+In-Reply-To: <35tiggwgbrb2sapyykv3umio5l2xqhmzc43wy33dxmz4hyu24c@bprgz7skpxma>
 References: <20231227044156.166009-1-coxu@redhat.com>
- <2E548AE0-8029-4BB0-B162-4CAD0544EDB8@oracle.com>
+	 <39e5612eb2d4dea2759310ccce39c1ad40b5388f.camel@linux.ibm.com>
+	 <35tiggwgbrb2sapyykv3umio5l2xqhmzc43wy33dxmz4hyu24c@bprgz7skpxma>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DjDUnVaF_nPsRvGPV58oT1rYzNdxVAPX
+X-Proofpoint-GUID: sHIjKXT9Ew1vDO8zBib0u7QMiLv7rSs-
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2E548AE0-8029-4BB0-B162-4CAD0544EDB8@oracle.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-05_08,2024-01-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 impostorscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=805 bulkscore=0 suspectscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401050125
 
-On Tue, Jan 02, 2024 at 05:33:53PM +0000, Eric Snowberg wrote:
->
->
->> On Dec 26, 2023, at 9:41 PM, Coiby Xu <coxu@redhat.com> wrote:
->>
->> Currently when the kernel fails to add a cert to the .machine keyring,
->> it will throw an error immediately in the function integrity_add_key.
->>
->> Since the kernel will try adding to the .platform keyring next or throw
->> an error (in the caller of integrity_add_key i.e. add_to_machine_keyring),
->> so there is no need to throw an error immediately in integrity_add_key.
->>
->> Reported-by: itrymybest80@protonmail.com
->> Closes: https://bugzilla.redhat.com/show_bug.cgi?id=2239331
->> Signed-off-by: Coiby Xu <coxu@redhat.com>
->
->Reviewed-by: Eric Snowberg <eric.snowberg@oracle.com>
+On Fri, 2024-01-05 at 21:27 +0800, Coiby Xu wrote:
+> On Tue, Jan 02, 2024 at 12:54:02PM -0500, Mimi Zohar wrote:
+> >Hi Coiby,
+> 
+> Hi Mimi,
+> 
+> >
+> >According to https://docs.kernel.org/process/submitting-patches.html,the
+> summary line should be no more than  70 - 75 characters.
+> 
+> Thanks for pointing me to this limit! How about 
+> integrity: eliminate harmless error "Problem loading X.509 certificate -126"
 
-Thank you for reviewing the patch!
+Still >75.   How about the following?
 
--- 
-Best regards,
-Coiby
+integrity: eliminate unnecessary "Problem loading X.509 certificate" msg
+
+Mimi         
+
+> 
+> >
+> >On Wed, 2023-12-27 at 12:41 +0800, Coiby Xu wrote:
+> >> Currently when the kernel fails to add a cert to the .machine keyring,
+> >> it will throw an error immediately in the function integrity_add_key.
+> >>
+> >> Since the kernel will try adding to the .platform keyring next or throw
+> >> an error (in the caller of integrity_add_key i.e. add_to_machine_keyring),
+> >> so there is no need to throw an error immediately in integrity_add_key.
+> >>
+> >> Reported-by: itrymybest80@protonmail.com
+> >> Closes: https://bugzilla.redhat.com/show_bug.cgi?id=2239331
+> >> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> >
+> >Otherwise, the patch looks good.
+> 
+> Thanks for reviewing the patch!
+
 
 
