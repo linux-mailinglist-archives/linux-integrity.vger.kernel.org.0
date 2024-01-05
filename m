@@ -1,162 +1,108 @@
-Return-Path: <linux-integrity+bounces-663-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-664-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA765824AD8
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jan 2024 23:26:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FD6D82546B
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 14:25:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40C7F1F21B18
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jan 2024 22:26:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91166B22CA6
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 13:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 040DE2C85F;
-	Thu,  4 Jan 2024 22:26:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3291F2D629;
+	Fri,  5 Jan 2024 13:25:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="VZk07FVu";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="VZk07FVu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GGmAB5a1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EF02C855;
-	Thu,  4 Jan 2024 22:26:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1704407163;
-	bh=pxtFYTfg5Btt9q2rnCmd31UlDOGjhAIA3pQzQG/fur8=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=VZk07FVuzBCbVfrboiLg+q2okHjldFAPOUSZZbhrUGwPCWD1ajCFNvf1KTZ4guVp8
-	 /61WOOnuecqdTKuxpljbQWD1xolw/vz4UdLqRJoWwtpoHargHmLNOTh3IDeH5PlQ1s
-	 /pl3CDn5IeJAaKvBMhJOlOa7E2CGb9qEdGm3acQQ=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id C399E1286A8E;
-	Thu,  4 Jan 2024 17:26:03 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id OtKBJrqFQNQP; Thu,  4 Jan 2024 17:26:03 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1704407163;
-	bh=pxtFYTfg5Btt9q2rnCmd31UlDOGjhAIA3pQzQG/fur8=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=VZk07FVuzBCbVfrboiLg+q2okHjldFAPOUSZZbhrUGwPCWD1ajCFNvf1KTZ4guVp8
-	 /61WOOnuecqdTKuxpljbQWD1xolw/vz4UdLqRJoWwtpoHargHmLNOTh3IDeH5PlQ1s
-	 /pl3CDn5IeJAaKvBMhJOlOa7E2CGb9qEdGm3acQQ=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C920B1286A80;
-	Thu,  4 Jan 2024 17:26:02 -0500 (EST)
-Message-ID: <c4f30887420363ad67f09b6df607544695e9c0e9.camel@HansenPartnership.com>
-Subject: Re: [PATCH v6 13/20] tpm: Add HMAC session start and end functions
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 04 Jan 2024 17:25:58 -0500
-In-Reply-To: <CY64GOLHZ2ZS.VIOWWUMZTV6U@suppilovahvero>
-References: <20240102170408.21969-1-James.Bottomley@HansenPartnership.com>
-	 <20240102170408.21969-14-James.Bottomley@HansenPartnership.com>
-	 <CY566RG0WK3A.21KMYFHM9R6UR@suppilovahvero>
-	 <926f031e15739ea9044c8aaa7bbe72ab18a8f3c5.camel@HansenPartnership.com>
-	 <CY64GOLHZ2ZS.VIOWWUMZTV6U@suppilovahvero>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF8B2D602
+	for <linux-integrity@vger.kernel.org>; Fri,  5 Jan 2024 13:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704461118;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X+N2QN09tRy41VD5NIYroenQi57udRymfLPwCbxVPuM=;
+	b=GGmAB5a17meogvAcRiiMEnTipLtzD51957YlTocFfDEal3vmf/Rs/Hda6p/u3oGMD8oToC
+	chfhZwSb3VLN2z3KypR/ehua4y+HgoPo/5XdeBcgnVBksr+p2CtoJezvvLa3VUTjxJjs6q
+	4kvAkDqkGU1VIQZmQVs9VqUvZpNlrkY=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-600-K641ItTYNMqPRvBlezpnIQ-1; Fri, 05 Jan 2024 08:25:17 -0500
+X-MC-Unique: K641ItTYNMqPRvBlezpnIQ-1
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-35fd673f361so15423405ab.3
+        for <linux-integrity@vger.kernel.org>; Fri, 05 Jan 2024 05:25:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704461116; x=1705065916;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X+N2QN09tRy41VD5NIYroenQi57udRymfLPwCbxVPuM=;
+        b=QWeyirBfI1o+22fg8M/HnQxf3nRXL4JxtPEYoo94fOB3qRAUoYVk3azQ5UpSU6IOwf
+         8zCf/J6c5GmKjaTD4ubY/XYAkeNdZbP4MZWpVA5zkgFLRUlEWbWrsUzVW0L/VfwmgJhE
+         zMA9/SX1dw6KupmCvVKVianLoi2LfphzH19FVnoh/B/JWTISmtC3pOlkiXxkS9HBobVD
+         mlBgxNhP521Ehn9X6TfQTe90fj3JYacL+kZIiVeG3H5nKZ1/fEfvNNaBu0vg1Hia1obW
+         Nb6W+TsfjPA2cwDFv03YCNrhozOvOTWMoxZ3Jao11WmKSRoIjE6QNWAVgyGii/XjP4yE
+         9ZBw==
+X-Gm-Message-State: AOJu0YxaaRTrhUt7NNhmnNSOsOJuWMO+aYpEdIvKYgdo63bIxccb/9Mq
+	yHHGttsn1mEcpiRKL6hZiCXxGwPNVeOKRiGyYze7DAP09qDTKILRaLpi27RCxj67Uh07wKjlSEJ
+	3ElRUkkOa3tqaV+LaHm+Vnrf2KbTjFzwXQiRq
+X-Received: by 2002:a05:6e02:1788:b0:35f:feb7:35e5 with SMTP id y8-20020a056e02178800b0035ffeb735e5mr2486077ilu.69.1704461116337;
+        Fri, 05 Jan 2024 05:25:16 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGUPQheyiFfY5luVUQI5Mu+aTbDrNLu5ERwC9srQCSZz+wyviXhwj8/teWqfyQ53IB+42HnPQ==
+X-Received: by 2002:a05:6e02:1788:b0:35f:feb7:35e5 with SMTP id y8-20020a056e02178800b0035ffeb735e5mr2486069ilu.69.1704461116035;
+        Fri, 05 Jan 2024 05:25:16 -0800 (PST)
+Received: from localhost ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id q68-20020a634347000000b005cd821a01d4sm1383371pga.28.2024.01.05.05.25.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Jan 2024 05:25:15 -0800 (PST)
+Date: Fri, 5 Jan 2024 21:20:45 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, itrymybest80@protonmail.com, 
+	Mimi Zohar <zohar@linux.ibm.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, 
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: Re: [PATCH] integrity: don't throw an error immediately when
+ failed to add a cert to the .machine keyring
+Message-ID: <43dozoqfip7m6nglbwzwyzykx23fpzbp7d42pcqzudnzlfvfkb@yjvuo5a6suvv>
+References: <20231227044156.166009-1-coxu@redhat.com>
+ <CY54Q6U6UMKM.2H5N3BACDBGU0@suppilovahvero>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CY54Q6U6UMKM.2H5N3BACDBGU0@suppilovahvero>
 
-On Thu, 2024-01-04 at 20:09 +0200, Jarkko Sakkinen wrote:
-> On Wed Jan 3, 2024 at 5:31 PM EET, James Bottomley wrote:
-> > On Wed, 2024-01-03 at 17:18 +0200, Jarkko Sakkinen wrote:
-> > > On Tue Jan 2, 2024 at 7:04 PM EET, James Bottomley wrote:
-[...]
-> > > > +struct tpm2_auth {
-> > > > +       u32 handle;
-> > > > +       /*
-> > > > +        * This has two meanings: before
-> > > > tpm_buf_fill_hmac_session()
-> > > > +        * it marks the offset in the buffer of the start of
-> > > > the
-> > > > +        * sessions (i.e. after all the handles).  Once the
-> > > > buffer
-> > > > has
-> > > > +        * been filled it markes the session number of our auth
-> > > > +        * session so we can find it again in the response
-> > > > buffer.
-> > > > +        *
-> > > > +        * The two cases are distinguished because the first
-> > > > offset
-> > > > +        * must always be greater than TPM_HEADER_SIZE and the
-> > > > second
-> > > > +        * must be less than or equal to 5.
-> > > > +        */
-> > > > +       u32 session;
-> > > > +       /*
-> > > > +        * the size here is variable and set by the size of
-> > > > our_nonce
-> > > > +        * which must be between 16 and the name hash length.
-> > > > we
-> > > > set
-> > > > +        * the maximum sha256 size for the greatest protection
-> > > > +        */
-> > > > +       u8 our_nonce[SHA256_DIGEST_SIZE];
-> > > > +       u8 tpm_nonce[SHA256_DIGEST_SIZE];
-> > > > +       /*
-> > > > +        * the salt is only used across the session
-> > > > command/response
-> > > > +        * after that it can be used as a scratch area
-> > > > +        */
-> > > > +       union {
-> > > > +               u8 salt[EC_PT_SZ];
-> > > > +               /* scratch for key + IV */
-> > > > +               u8 scratch[AES_KEYBYTES + AES_BLOCK_SIZE];
-> > > > +       };
-> > > > +       u8 session_key[SHA256_DIGEST_SIZE];
-> > > > +};
-> > > 
-> > > Could this contain also the fields added in the previous patch?
-> > > 
-> > > Then obviously this data would be allocated together with chip
-> > > but is there hard reason why this needs separate kzalloc and
-> > > cannot be always allocated with chip blob?
-> > 
-> > It's session specific (and highly sensitive data), so it needs to
-> > be allocated and destroyed with each session.  Our usage pattern
-> > under the ops mutex means that every session is single threaded, so
-> > effectively it has a 1:1 relationship with the chip, but part of
-> > the reason for all of this is to remove visibility of the contents
-> > of this area from anything other than the session code. 
-> > Essentially it's stuff the chip doesn't need to know because it's
-> > always constructed when the session is created.
-> > 
-> > I've also got a policy patch much later that requires two sessions,
-> > so needs a push and pop mechanism which a static allocation in the
-> > chip area won't work for.
-> > 
-> > James
-> 
-> Given the 1:1 relationship keeping the fields in tpm_chip has the
-> benefit of not having to deal with allocation error.
-> 
-> I guess having struct tpm2_auth (dunno, maybe tpm2_hmac_auth tho)
-> does make sense because then it could be declared as static field
-> and zeroed with memzero_explicit().
-> 
-> I don't see any point saving memory here at least...
+On Wed, Jan 03, 2024 at 04:09:29PM +0200, Jarkko Sakkinen wrote:
+>On Wed Dec 27, 2023 at 6:41 AM EET, Coiby Xu wrote:
+>> Currently when the kernel fails to add a cert to the .machine keyring,
+>> it will throw an error immediately in the function integrity_add_key.
+>>
+>> Since the kernel will try adding to the .platform keyring next or throw
+>> an error (in the caller of integrity_add_key i.e. add_to_machine_keyring),
+>> so there is no need to throw an error immediately in integrity_add_key.
+>>
+>> Reported-by: itrymybest80@protonmail.com
+>
+>Missing "Firstname Lastname".
 
-It's not about saving memory, it's about encapsulation: the inner
-details of session encryption would have to go into a global linux wide
-header file.  Ideally they should stay local to the TPM code and not be
-splashed about the kernel, so as not to give anyone else the idea they
-can muck with the values.  And, as I also said, a single allocation
-won't work with >1 sessions which are needed later on.
+Thanks for raising this concern! I've asked the reporter if he/she can
+share his/her name.
 
-James
+-- 
+Best regards,
+Coiby
 
 
