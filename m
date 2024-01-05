@@ -1,145 +1,175 @@
-Return-Path: <linux-integrity+bounces-667-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-668-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF05C82563F
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 15:59:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D5B88256C5
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 16:36:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D8F42819E2
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 14:59:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE7AFB20FD8
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jan 2024 15:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC7B42DF8F;
-	Fri,  5 Jan 2024 14:59:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F222E63C;
+	Fri,  5 Jan 2024 15:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pmnw6U6t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CB2giagl"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3AEA2E623;
-	Fri,  5 Jan 2024 14:59:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 405CRg7u009167;
-	Fri, 5 Jan 2024 14:59:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=srVFGRu3fKLXSKgBecGL2P7rO5z7cc9P6fOF/yabDLg=;
- b=pmnw6U6tj31dw5SpY47xUj6dhUPMktXqwM4PGn7LHR3FdnfTbt3lAkIHEkSXythiyRSq
- C+iMicm+nPBECq46DdNC0UJs9AMBZps/BqbC54WWYsnzbI2MkBszMsCMkTmQpk2ugOs3
- VdkC9E8BcO7a3HP50cWm3QZD7klCYtDv/nd/xuELdeOh9wDWeVOBIUi5pIczHrcjdKet
- 56ZWWV0qKWFTUAWY8zSddAhbohAu1teXzp1UwACH69lLs2/sveJjgjQCcud4m+8sBG/t
- vs3YRcMNPAOUrXOC9jdJb/TOG1C7L98kZbplmDi5ukulyvqbMlnMwF+U0oCHhu1t5GWw 3g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vehsnc7nu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Jan 2024 14:59:29 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 405EKn7t002127;
-	Fri, 5 Jan 2024 14:59:29 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vehsnc7n2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Jan 2024 14:59:28 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 405EbBjd017991;
-	Fri, 5 Jan 2024 14:59:28 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vayrkyqg9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Jan 2024 14:59:28 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 405ExRD841288236
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 5 Jan 2024 14:59:27 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E68FF5805E;
-	Fri,  5 Jan 2024 14:59:26 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 65DEF58063;
-	Fri,  5 Jan 2024 14:59:26 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.173.4])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  5 Jan 2024 14:59:26 +0000 (GMT)
-Message-ID: <16ae3e51dc4eeb2b2e674b8ff1051ac315fa492c.camel@linux.ibm.com>
-Subject: Re: Re: [PATCH] integrity: don't throw an error immediately when
- failed to add a cert to the .machine keyring
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Coiby Xu <coxu@redhat.com>
-Cc: linux-integrity@vger.kernel.org, itrymybest80@protonmail.com,
-        Dmitry
- Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date: Fri, 05 Jan 2024 09:59:14 -0500
-In-Reply-To: <35tiggwgbrb2sapyykv3umio5l2xqhmzc43wy33dxmz4hyu24c@bprgz7skpxma>
-References: <20231227044156.166009-1-coxu@redhat.com>
-	 <39e5612eb2d4dea2759310ccce39c1ad40b5388f.camel@linux.ibm.com>
-	 <35tiggwgbrb2sapyykv3umio5l2xqhmzc43wy33dxmz4hyu24c@bprgz7skpxma>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: DjDUnVaF_nPsRvGPV58oT1rYzNdxVAPX
-X-Proofpoint-GUID: sHIjKXT9Ew1vDO8zBib0u7QMiLv7rSs-
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64AA2E631;
+	Fri,  5 Jan 2024 15:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44BC0C433C8;
+	Fri,  5 Jan 2024 15:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704469006;
+	bh=/b6funpS0X/9KSxRshCH0i3q2i/kWjlVhaCDfv8+BaQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CB2giagl66OOlu1L5P2le9NKzW6s2xm8YnqlRbyIqPDo1mCs3hUJoL0N6eVKr9rME
+	 HrUV7FroqH9jTDpU4zAe8/8IR4Tlr9MicY6x5py1U0CF70O9n3aiKPXSOb8JaFIlTX
+	 WxJT8yWxwMeYRgzWUWWoZaK+MBqan+dS3B8YJmF9lHVXFuFnl+GimbVvgGNm6iQIXz
+	 bcZS6nzDxqg16HR1h/wRyvKlzLubi3WZJm0z8jgXwzw+mGE8/nFOSI8/LPeThIpsaG
+	 ckzkPbeEmZsj+4G7he3vmanwBPSNa68MwvGxkLY7NwC6UE0W33Tn7RtWJ8QTdjPANH
+	 BMmDc8ak8766A==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-05_08,2024-01-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 spamscore=0 priorityscore=1501 impostorscore=0 phishscore=0
- mlxscore=0 mlxlogscore=805 bulkscore=0 suspectscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401050125
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 05 Jan 2024 17:36:43 +0200
+Message-Id: <CY6VU28UYUP8.1FBIPURJHNNHV@suppilovahvero>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
+Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH v6 13/20] tpm: Add HMAC session start and end functions
+X-Mailer: aerc 0.15.2
+References: <20240102170408.21969-1-James.Bottomley@HansenPartnership.com>
+ <20240102170408.21969-14-James.Bottomley@HansenPartnership.com>
+ <CY566RG0WK3A.21KMYFHM9R6UR@suppilovahvero>
+ <926f031e15739ea9044c8aaa7bbe72ab18a8f3c5.camel@HansenPartnership.com>
+ <CY64GOLHZ2ZS.VIOWWUMZTV6U@suppilovahvero>
+ <c4f30887420363ad67f09b6df607544695e9c0e9.camel@HansenPartnership.com>
+In-Reply-To: <c4f30887420363ad67f09b6df607544695e9c0e9.camel@HansenPartnership.com>
 
-On Fri, 2024-01-05 at 21:27 +0800, Coiby Xu wrote:
-> On Tue, Jan 02, 2024 at 12:54:02PM -0500, Mimi Zohar wrote:
-> >Hi Coiby,
-> 
-> Hi Mimi,
-> 
-> >
-> >According to https://docs.kernel.org/process/submitting-patches.html,the
-> summary line should be no more than  70 - 75 characters.
-> 
-> Thanks for pointing me to this limit! How about 
-> integrity: eliminate harmless error "Problem loading X.509 certificate -126"
+On Fri Jan 5, 2024 at 12:25 AM EET, James Bottomley wrote:
+> On Thu, 2024-01-04 at 20:09 +0200, Jarkko Sakkinen wrote:
+> > On Wed Jan 3, 2024 at 5:31 PM EET, James Bottomley wrote:
+> > > On Wed, 2024-01-03 at 17:18 +0200, Jarkko Sakkinen wrote:
+> > > > On Tue Jan 2, 2024 at 7:04 PM EET, James Bottomley wrote:
+> [...]
+> > > > > +struct tpm2_auth {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 handle;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * This has two meanin=
+gs: before
+> > > > > tpm_buf_fill_hmac_session()
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * it marks the offset=
+ in the buffer of the start of
+> > > > > the
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * sessions (i.e. afte=
+r all the handles).=C2=A0 Once the
+> > > > > buffer
+> > > > > has
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * been filled it mark=
+es the session number of our auth
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * session so we can f=
+ind it again in the response
+> > > > > buffer.
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * The two cases are d=
+istinguished because the first
+> > > > > offset
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * must always be grea=
+ter than TPM_HEADER_SIZE and the
+> > > > > second
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * must be less than o=
+r equal to 5.
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 session;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * the size here is va=
+riable and set by the size of
+> > > > > our_nonce
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * which must be betwe=
+en 16 and the name hash length.
+> > > > > we
+> > > > > set
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * the maximum sha256 =
+size for the greatest protection
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 our_nonce[SHA256_DI=
+GEST_SIZE];
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 tpm_nonce[SHA256_DI=
+GEST_SIZE];
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * the salt is only us=
+ed across the session
+> > > > > command/response
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * after that it can b=
+e used as a scratch area
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0union {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 salt[EC_PT_SZ];
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0/* scratch for key + IV */
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 scratch[AES_KEYBYTES + AES_BLOCK_SIZE];
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 session_key[SHA256_=
+DIGEST_SIZE];
+> > > > > +};
+> > > >=20
+> > > > Could this contain also the fields added in the previous patch?
+> > > >=20
+> > > > Then obviously this data would be allocated together with chip
+> > > > but is there hard reason why this needs separate kzalloc and
+> > > > cannot be always allocated with chip blob?
+> > >=20
+> > > It's session specific (and highly sensitive data), so it needs to
+> > > be allocated and destroyed with each session.=C2=A0 Our usage pattern
+> > > under the ops mutex means that every session is single threaded, so
+> > > effectively it has a 1:1 relationship with the chip, but part of
+> > > the reason for all of this is to remove visibility of the contents
+> > > of this area from anything other than the session code.=C2=A0
+> > > Essentially it's stuff the chip doesn't need to know because it's
+> > > always constructed when the session is created.
+> > >=20
+> > > I've also got a policy patch much later that requires two sessions,
+> > > so needs a push and pop mechanism which a static allocation in the
+> > > chip area won't work for.
+> > >=20
+> > > James
+> >=20
+> > Given the 1:1 relationship keeping the fields in tpm_chip has the
+> > benefit of not having to deal with allocation error.
+> >=20
+> > I guess having struct tpm2_auth (dunno, maybe tpm2_hmac_auth tho)
+> > does make sense because then it could be declared as static field
+> > and zeroed with memzero_explicit().
+> >=20
+> > I don't see any point saving memory here at least...
+>
+> It's not about saving memory, it's about encapsulation: the inner
+> details of session encryption would have to go into a global linux wide
+> header file.  Ideally they should stay local to the TPM code and not be
+> splashed about the kernel, so as not to give anyone else the idea they
+> can muck with the values.  And, as I also said, a single allocation
+> won't work with >1 sessions which are needed later on.
 
-Still >75.   How about the following?
+Do not mean to be impolite but "later on" does not matter, unless
+it is within the scope of the same patch set. Clearly tpm2_auth
+is not required to implement the feature and should be postponed
+to a patch set which requires multiple instances of tpm2_auth.
 
-integrity: eliminate unnecessary "Problem loading X.509 certificate" msg
+I don't simply want to commmit to futures, sorry.
 
-Mimi         
+> James
 
-> 
-> >
-> >On Wed, 2023-12-27 at 12:41 +0800, Coiby Xu wrote:
-> >> Currently when the kernel fails to add a cert to the .machine keyring,
-> >> it will throw an error immediately in the function integrity_add_key.
-> >>
-> >> Since the kernel will try adding to the .platform keyring next or throw
-> >> an error (in the caller of integrity_add_key i.e. add_to_machine_keyring),
-> >> so there is no need to throw an error immediately in integrity_add_key.
-> >>
-> >> Reported-by: itrymybest80@protonmail.com
-> >> Closes: https://bugzilla.redhat.com/show_bug.cgi?id=2239331
-> >> Signed-off-by: Coiby Xu <coxu@redhat.com>
-> >
-> >Otherwise, the patch looks good.
-> 
-> Thanks for reviewing the patch!
-
-
+BR, Jarkko
 
