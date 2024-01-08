@@ -1,327 +1,252 @@
-Return-Path: <linux-integrity+bounces-685-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-686-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 375BD826B40
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 11:00:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3911826D26
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 12:48:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6615B2172B
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 10:00:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 299211F224D9
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 11:48:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C879E14A91;
-	Mon,  8 Jan 2024 09:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37FF614AAE;
+	Mon,  8 Jan 2024 11:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ewk+LiKR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69AC134A9;
-	Mon,  8 Jan 2024 09:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3E81F21DB4;
-	Mon,  8 Jan 2024 09:59:08 +0000 (UTC)
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B397F1392C;
-	Mon,  8 Jan 2024 09:59:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ALCxKmvHm2XFMwAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Mon, 08 Jan 2024 09:59:07 +0000
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: ardb@kernel.org,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	bhelgaas@google.com,
-	arnd@arndb.de,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	javierm@redhat.com
-Cc: linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v4 4/4] arch/x86: Do not include <asm/bootparam.h> in several files
-Date: Mon,  8 Jan 2024 10:57:30 +0100
-Message-ID: <20240108095903.8427-5-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240108095903.8427-1-tzimmermann@suse.de>
-References: <20240108095903.8427-1-tzimmermann@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C1225116;
+	Mon,  8 Jan 2024 11:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 408AdrtL024094;
+	Mon, 8 Jan 2024 11:48:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=PWMiGE+EAHOh+QuiJv8ydNKljFRfdXalJMkKSiG6J6M=;
+ b=Ewk+LiKRtejfwMDcH1dvqotrfxKlMuv+Sg9CaUVOzRLRwzTuGnWKm6ucDIhVl7sX2tTv
+ k3U82SNydWhJAQnxWntT6AqGgveHy5vlx3O9poh5T0bHc/54UigwyzKqjjQeSq41uffC
+ T3nOCkSlJOebvu3mWA2kWP82dcIrdpiI/UgqMMrmj4V8u3J8eNi4344jenoKuNfVUwMl
+ UO2H4GDFLe/VJf05hnRmEcryaRa7mpUHHP+1zn0Ko/puiw6S9zOVsU7QzOz1SzJTmWRi
+ hIQ/br+P+D5y3B8n+U1f1y8ZWhqJHm+jZlVayfBKXrFnXs+SDCfix4ymYZsMDpUumxG3 Yw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vf6akyass-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Jan 2024 11:48:24 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 408Bgs9c025340;
+	Mon, 8 Jan 2024 11:48:24 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vf6akyasb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Jan 2024 11:48:23 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4088gnjm022808;
+	Mon, 8 Jan 2024 11:48:22 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vfhjy7tbt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Jan 2024 11:48:22 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 408BmL0B39322166
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 8 Jan 2024 11:48:21 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A2D5258056;
+	Mon,  8 Jan 2024 11:48:21 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7C4305803F;
+	Mon,  8 Jan 2024 11:48:20 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.78.221])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  8 Jan 2024 11:48:20 +0000 (GMT)
+Message-ID: <b915f194c9024233d9f6f6ccbf417c26600ee261.camel@linux.ibm.com>
+Subject: Re: [RFC V2] IMA Log Snapshotting Design Proposal
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        Jarkko Sakkinen
+ <jarkko@kernel.org>, jgg@ziepe.ca,
+        Ken Goldman <kgold@linux.ibm.com>, bhe@redhat.com, vgoyal@redhat.com,
+        Dave Young <dyoung@redhat.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        jmorris@namei.org, serge@hallyn.com,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-security-module@vger.kernel.org,
+        Tyler Hicks
+ <tyhicks@linux.microsoft.com>,
+        Lakshmi Ramasubramanian
+ <nramas@linux.microsoft.com>,
+        Sush Shringarputale
+ <sushring@linux.microsoft.com>
+Date: Mon, 08 Jan 2024 06:48:20 -0500
+In-Reply-To: <CAHC9VhRYLLtdOD1GTtigTrgsALdBqUikiNhdBNSaLYxD1iN8bw@mail.gmail.com>
+References: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
+	 <8bff2bf1a4629aacec7b6311d77f233cb75b2f8a.camel@linux.ibm.com>
+	 <CAHC9VhRm9Tzz3C-VTdXS4s1_-kPQQ6RXMt8JGCS4jorJ0VURyQ@mail.gmail.com>
+	 <CAHC9VhSJ7MKNM7nMXR3xE-cNMrYB4AT+B76wzF1cKy2JM9tBrA@mail.gmail.com>
+	 <1b6853e8354af7033e6d87e77cfb175526753c38.camel@linux.ibm.com>
+	 <CAHC9VhSnDQ-d9dh_icqNyhpT+cTGQOqGh8+cbN3QzF_qPehvaA@mail.gmail.com>
+	 <28c4136d0fe360a7fcf6a6547120dc244be0edc3.camel@linux.ibm.com>
+	 <CAHC9VhTykrsXTuWfRe3rzg2SMbzynvgwXmxVpN5T0cfY7YrkwA@mail.gmail.com>
+	 <d5e2358a0a7aaf4455b1f479483b312e98aa07d5.camel@linux.ibm.com>
+	 <CAHC9VhRNLzbW++rW3Hep+3yyJZRRvZ4h7LuKcSbRRn-wqh-PAQ@mail.gmail.com>
+	 <d9975a7949ca49f404adc981e942f42b6f19d022.camel@linux.ibm.com>
+	 <CAHC9VhRd5Qi_NZJMOfHC6jTr_dn0mNFGhy18ff2YgtjQo+38dQ@mail.gmail.com>
+	 <5faa2b81b550d44f0a02917f11c4838d11cbda00.camel@linux.ibm.com>
+	 <CAHC9VhRYLLtdOD1GTtigTrgsALdBqUikiNhdBNSaLYxD1iN8bw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Level: 
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	 TAGGED_RCPT(0.00)[];
-	 REPLY(-4.00)[]
-X-Spam-Score: -4.00
-X-Rspamd-Queue-Id: 3E81F21DB4
-X-Spam-Flag: NO
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: HtZ9x97zWyqS3cQqbPZB5mAODGIDKmdc
+X-Proofpoint-GUID: usKHAPvhjvYxsA9_ocvpV0R_NQbsR9MA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-08_03,2024-01-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 clxscore=1015 bulkscore=0
+ impostorscore=0 mlxlogscore=950 priorityscore=1501 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401080101
 
-Remove the include statement for <asm/bootparam.h> from several files
-that don't require it. Limits the exposure of the boot parameters
-within the Linux kernel code.
+On Sun, 2024-01-07 at 21:58 -0500, Paul Moore wrote:
+> On Sun, Jan 7, 2024 at 7:59 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > On Sat, 2024-01-06 at 18:27 -0500, Paul Moore wrote:
+> > > On Tue, Nov 28, 2023 at 9:07 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > On Tue, 2023-11-28 at 20:06 -0500, Paul Moore wrote:
+> > > > > On Tue, Nov 28, 2023 at 7:09 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > > > On Mon, 2023-11-27 at 17:16 -0500, Paul Moore wrote:
+> > > > > > > On Mon, Nov 27, 2023 at 12:08 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > > > > > On Wed, 2023-11-22 at 09:22 -0500, Paul Moore wrote:
+> > >
+> > > ...
+> > >
+> > > > > > > > Before defining a new critical-data record, we need to decide whether
+> > > > > > > > it is really necessary or if it is redundant.  If we define a new
+> > > > > > > > "critical-data" record, can it be defined such that it doesn't require
+> > > > > > > > pausing extending the measurement list?  For example, a new simple
+> > > > > > > > visual critical-data record could contain the number of records (e.g.
+> > > > > > > > <securityfs>/ima/runtime_measurements_count) up to that point.
+> > > > > > >
+> > > > > > > What if the snapshot_aggregate was a hash of the measurement log
+> > > > > > > starting with either the boot_aggregate or the latest
+> > > > > > > snapshot_aggregate and ending on the record before the new
+> > > > > > > snapshot_aggregate?  The performance impact at snapshot time should be
+> > > > > > > minimal as the hash can be incrementally updated as new records are
+> > > > > > > added to the measurement list.  While the hash wouldn't capture the
+> > > > > > > TPM state, it would allow some crude verification when reassembling
+> > > > > > > the log.  If one could bear the cost of a TPM signing operation, the
+> > > > > > > log digest could be signed by the TPM.
+> > > > > >
+> > > > > > Other critical data is calculated, before calling
+> > > > > > ima_measure_critical_data(), which adds the record to the measurement
+> > > > > > list and extends the TPM PCR.
+> > > > > >
+> > > > > > Signing the hash shouldn't be an issue if it behaves like other
+> > > > > > critical data.
+> > > > > >
+> > > > > > In addition to the hash, consider including other information in the
+> > > > > > new critical data record (e.g. total number of measurement records, the
+> > > > > > number of measurements included in the hash, the number of times the
+> > > > > > measurement list was trimmed, etc).
+> > > > >
+> > > > > It would be nice if you could provide an explicit list of what you
+> > > > > would want hashed into a snapshot_aggregate record; the above is
+> > > > > close, but it is still a little hand-wavy.  I'm just trying to reduce
+> > > > > the back-n-forth :)
+> > > >
+> > > > What is being defined here is the first IMA critical-data record, which
+> > > > really requires some thought.
+> > >
+> > > My thinking has always been that taking a hash of the current
+> > > measurement log up to the snapshot point would be a nice
+> > > snapshot_aggregate measurement, but I'm not heavily invested in that.
+> > > To me it is more important that we find something we can all agree on,
+> > > perhaps reluctantly, so we can move forward with a solution.
+> > >
+> > > > For ease of review, this new critical-
+> > > > data record should be a separate patch set from trimming the
+> > > > measurement list.
+> > >
+> > > I see the two as linked, but if you prefer them as separate then so be
+> > > it.  Once again, the important part is to move forward with a
+> > > solution, I'm not overly bothered if it arrives in multiple pieces
+> > > instead of one.
+> >
+> > Trimming the IMA measurement list could be used in conjunction with the new IMA
+> > critical data record or independently.  Both options should be supported.
+> >
+> > 1. trim N number of records from the head of the in kernel IMA measurement list
+> > 2. intermittently include the new IMA critical data record based on some trigger
+> > 3. trim the measurement list up to the (first/last/Nth) IMA critical data record
+> >
+> > Since the two features could be used independently of each other, there is no
+> > reason to upstream them as a single patch set.  It just makes it harder to
+> > review.
+> 
+> I don't see much point in recording a snapshot aggregate if you aren't
+> doing a snapshot, but it's not harmful in any way, so sure, go for it.
+> Like I said earlier, as long as the functionality is there, I don't
+> think anyone cares too much how it gets into the kernel (although
+> Tushar and Sush should comment from the perspective).
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Paul, there are two features: 
+- trimming the measurement list
+- defining and including an IMA critical data record
 
----
+The original design doc combined these two features making them an "atomic"
+operation and referred to it as a snapshot.  At the time the term "snapshot" was
+an appropriate term for the IMA critical record.  Now not so much.
 
-v4:
-	* fix fwd declaration in compressed/misc.h (Ard)
-v3:
-	* revert of e820/types.h required
-v2:
-	* clean up misc.h and e820/types.h
-	* include bootparam.h in several source files
----
- arch/x86/boot/compressed/acpi.c       | 2 ++
- arch/x86/boot/compressed/cmdline.c    | 2 ++
- arch/x86/boot/compressed/efi.c        | 2 ++
- arch/x86/boot/compressed/misc.h       | 3 ++-
- arch/x86/boot/compressed/pgtable_64.c | 1 +
- arch/x86/boot/compressed/sev.c        | 1 +
- arch/x86/include/asm/kexec.h          | 1 -
- arch/x86/include/asm/mem_encrypt.h    | 2 +-
- arch/x86/include/asm/sev.h            | 3 ++-
- arch/x86/include/asm/x86_init.h       | 2 --
- arch/x86/kernel/crash.c               | 1 +
- arch/x86/kernel/sev-shared.c          | 2 ++
- arch/x86/platform/pvh/enlighten.c     | 1 +
- arch/x86/xen/enlighten_pvh.c          | 1 +
- arch/x86/xen/vga.c                    | 1 -
- 15 files changed, 18 insertions(+), 7 deletions(-)
+These are two separate, independent features.  Trimming the measurement list
+should not be dependent on the IMA critical data record.  The IMA critical data
+record should not be dependent on trimming the measurement list.  Trimming the
+measurement list up to the (first/last/Nth) critical data record should be
+optional.
 
-diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/acpi.c
-index 18d15d1ce87d..f196b1d1ddf8 100644
---- a/arch/x86/boot/compressed/acpi.c
-+++ b/arch/x86/boot/compressed/acpi.c
-@@ -5,6 +5,8 @@
- #include "../string.h"
- #include "efi.h"
- 
-+#include <asm/bootparam.h>
-+
- #include <linux/numa.h>
- 
- /*
-diff --git a/arch/x86/boot/compressed/cmdline.c b/arch/x86/boot/compressed/cmdline.c
-index c1bb180973ea..e162d7f59cc5 100644
---- a/arch/x86/boot/compressed/cmdline.c
-+++ b/arch/x86/boot/compressed/cmdline.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
-+
- static unsigned long fs;
- static inline void set_fs(unsigned long seg)
- {
-diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/efi.c
-index 6edd034b0b30..f2e50f9758e6 100644
---- a/arch/x86/boot/compressed/efi.c
-+++ b/arch/x86/boot/compressed/efi.c
-@@ -7,6 +7,8 @@
- 
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
-+
- /**
-  * efi_get_type - Given a pointer to boot_params, determine the type of EFI environment.
-  *
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index c0d502bd8716..440ed9779ef3 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -33,7 +33,6 @@
- #include <linux/elf.h>
- #include <asm/page.h>
- #include <asm/boot.h>
--#include <asm/bootparam.h>
- #include <asm/desc_defs.h>
- 
- #include "tdx.h"
-@@ -53,6 +52,8 @@
- #define memptr unsigned
- #endif
- 
-+struct boot_params;
-+
- /* boot/compressed/vmlinux start and end markers */
- extern char _head[], _end[];
- 
-diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
-index 51f957b24ba7..c882e1f67af0 100644
---- a/arch/x86/boot/compressed/pgtable_64.c
-+++ b/arch/x86/boot/compressed/pgtable_64.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "misc.h"
-+#include <asm/bootparam.h>
- #include <asm/e820/types.h>
- #include <asm/processor.h>
- #include "pgtable.h"
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index 454acd7a2daf..13beae767e48 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -12,6 +12,7 @@
-  */
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
- #include <asm/pgtable_types.h>
- #include <asm/sev.h>
- #include <asm/trapnr.h>
-diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-index c9f6a6c5de3c..91ca9a9ee3a2 100644
---- a/arch/x86/include/asm/kexec.h
-+++ b/arch/x86/include/asm/kexec.h
-@@ -25,7 +25,6 @@
- 
- #include <asm/page.h>
- #include <asm/ptrace.h>
--#include <asm/bootparam.h>
- 
- struct kimage;
- 
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index 359ada486fa9..c1a8a3408c18 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -15,7 +15,7 @@
- #include <linux/init.h>
- #include <linux/cc_platform.h>
- 
--#include <asm/bootparam.h>
-+struct boot_params;
- 
- #ifdef CONFIG_X86_MEM_ENCRYPT
- void __init mem_encrypt_init(void);
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 5b4a1ce3d368..8dad8b1613bf 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -13,7 +13,6 @@
- 
- #include <asm/insn.h>
- #include <asm/sev-common.h>
--#include <asm/bootparam.h>
- #include <asm/coco.h>
- 
- #define GHCB_PROTOCOL_MIN	1ULL
-@@ -22,6 +21,8 @@
- 
- #define	VMGEXIT()			{ asm volatile("rep; vmmcall\n\r"); }
- 
-+struct boot_params;
-+
- enum es_result {
- 	ES_OK,			/* All good */
- 	ES_UNSUPPORTED,		/* Requested operation not supported */
-diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-index c878616a18b8..f062715578a0 100644
---- a/arch/x86/include/asm/x86_init.h
-+++ b/arch/x86/include/asm/x86_init.h
-@@ -2,8 +2,6 @@
- #ifndef _ASM_X86_PLATFORM_H
- #define _ASM_X86_PLATFORM_H
- 
--#include <asm/bootparam.h>
--
- struct ghcb;
- struct mpc_bus;
- struct mpc_cpu;
-diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-index c92d88680dbf..564cff7ed33a 100644
---- a/arch/x86/kernel/crash.c
-+++ b/arch/x86/kernel/crash.c
-@@ -26,6 +26,7 @@
- #include <linux/vmalloc.h>
- #include <linux/memblock.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/processor.h>
- #include <asm/hardirq.h>
- #include <asm/nmi.h>
-diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-index ccb0915e84e1..4962ec42dc68 100644
---- a/arch/x86/kernel/sev-shared.c
-+++ b/arch/x86/kernel/sev-shared.c
-@@ -9,6 +9,8 @@
-  * and is included directly into both code-bases.
-  */
- 
-+#include <asm/setup_data.h>
-+
- #ifndef __BOOT_COMPRESSED
- #define error(v)	pr_err(v)
- #define has_cpuflag(f)	boot_cpu_has(f)
-diff --git a/arch/x86/platform/pvh/enlighten.c b/arch/x86/platform/pvh/enlighten.c
-index 00a92cb2c814..944e0290f2c0 100644
---- a/arch/x86/platform/pvh/enlighten.c
-+++ b/arch/x86/platform/pvh/enlighten.c
-@@ -3,6 +3,7 @@
- 
- #include <xen/hvc-console.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/io_apic.h>
- #include <asm/hypervisor.h>
- #include <asm/e820/api.h>
-diff --git a/arch/x86/xen/enlighten_pvh.c b/arch/x86/xen/enlighten_pvh.c
-index ada3868c02c2..9e9db601bd52 100644
---- a/arch/x86/xen/enlighten_pvh.c
-+++ b/arch/x86/xen/enlighten_pvh.c
-@@ -4,6 +4,7 @@
- 
- #include <xen/hvc-console.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/io_apic.h>
- #include <asm/hypervisor.h>
- #include <asm/e820/api.h>
-diff --git a/arch/x86/xen/vga.c b/arch/x86/xen/vga.c
-index d97adab8420f..f7547807b0bd 100644
---- a/arch/x86/xen/vga.c
-+++ b/arch/x86/xen/vga.c
-@@ -2,7 +2,6 @@
- #include <linux/screen_info.h>
- #include <linux/init.h>
- 
--#include <asm/bootparam.h>
- #include <asm/setup.h>
- 
- #include <xen/interface/xen.h>
--- 
-2.43.0
+> 
+> > > > As I'm sure you're aware, SElinux defines two critical-data records.
+> > > > From security/selinux/ima.c:
+> > > >
+> > > >         ima_measure_critical_data("selinux", "selinux-state",
+> > > >                                   state_str, strlen(state_str), false,
+> > > >                                   NULL, 0);
+> > > >
+> > > >         ima_measure_critical_data("selinux", "selinux-policy-hash",
+> > > >                                   policy, policy_len, true,
+> > > >                                   NULL, 0);
+> > >
+> > > Yep, but there is far more to this than SELinux.
+> >
+> > Only if you conflate the two features.
+> 
+> If that is a clever retort, you'll need to elaborate a bit as it
+> doesn't make much sense to me.  The IMA measurement log snapshot is
+> independent from SELinux; the only connection is that yes, IMA does
+> measure SELinux "things" but that is no different from any other
+> system attribute that is measured by IMA.
+
+The IMA critical data record should not be that different or more difficult,
+than the SELinux critical data record.  Only if you conflate the two features
+being discussed - trimming the IMA measurement list and the IMA critical data
+record - does it become "far more".
+
+--  
+Mimi  
+
+
 
 
