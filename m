@@ -1,82 +1,82 @@
-Return-Path: <linux-integrity+bounces-690-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-691-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDF0B8278CC
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 20:57:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98B308278E9
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 21:05:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1236C1C22D56
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 19:57:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4CA81C22B56
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 20:05:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6169A53E11;
-	Mon,  8 Jan 2024 19:57:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA9B54FB2;
+	Mon,  8 Jan 2024 20:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sVYqX5Mg"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dBZD3Nol"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE8855C05;
-	Mon,  8 Jan 2024 19:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7006755774;
+	Mon,  8 Jan 2024 20:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 408HrtvQ031424;
-	Mon, 8 Jan 2024 19:56:11 GMT
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 408JCQBm017167;
+	Mon, 8 Jan 2024 20:04:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=pp1;
- bh=uVwT10PMgazQATHJa5vlJDnKd93+2U9U9hTTgES6aeU=;
- b=sVYqX5MgecjDKJcIcBw65R5miWwPoTS82wHPazm4POKsMZAK12xEdxKIJSh5eoJCetzF
- a0oC4LyUHqv3G+cdxV65LUQ0o3O8sPhzsve90clsrwBMPSDvv1xGywDr/Dr5f45ouUfV
- H/YlN5Bju9D4uj1v+4xnB1lfbyR+BiuyA8PPPBpZVd3x5KuNEVFADpqgr8gdZNzoh48o
- IhhH3kzb4F7JoPAl5qEg7HkXXNyN6A+C1Q8NkwDUh8rpXrDzaqdHRAqHPAd1OBBFAMAG
- llYEJsl9GZxQLLsKJyrHxti+bpS1MDoikn+h+Kb0R5IFbbqJ6y6pxrsVYo0GcjattaLV zA== 
+ bh=5Rl5b4kNz1Iyh9nA9DJopv7up/07gSPUzt3uEewWmYY=;
+ b=dBZD3NolpiIPP7X5QVH14LW+AyvPjEULG6z7E1HlO0bD1eUX4arZ25DwebFKA7Kmhd9W
+ Cxr6sZ+bzHPAG+yklQ/bf2bBoBmY2TGXyJE7xiDbioDMaZV6W5jO2BG/MogvGWVQ7Ffo
+ pcTInIAkoE7eby5oLx1GdTfbb4f6XXDrHv9HztC7gbVSJG3tcE4I4gLzQscLsy7J34bq
+ 9WQdlJdJ6bjYnZFTf7ZzdgMtuDtp89WUS3HXPXeno2Qo0J7Kxzf6pXXxbgU3k79o+VJM
+ gbustWlDj1epw3dEMi8II4GaR7jJPZCKpyldgZIybIEaV1swIrJ+1uIlY8UP5pBrcwgP ZA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vgnfj34du-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vgq0f96hs-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jan 2024 19:56:10 +0000
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 408JtVqb027387;
-	Mon, 8 Jan 2024 19:56:10 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vgnfj34d2-1
+	Mon, 08 Jan 2024 20:04:47 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 408JkeIt028792;
+	Mon, 8 Jan 2024 20:04:46 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vgq0f96h0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jan 2024 19:56:09 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 408JBSw1026992;
-	Mon, 8 Jan 2024 19:56:08 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vfkw1suak-1
+	Mon, 08 Jan 2024 20:04:46 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 408Jx0Qw000400;
+	Mon, 8 Jan 2024 20:04:44 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vfh6stj7k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jan 2024 19:56:08 +0000
+	Mon, 08 Jan 2024 20:04:44 +0000
 Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 408Ju8Ms12714716
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 408K4iqR28181140
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 8 Jan 2024 19:56:08 GMT
+	Mon, 8 Jan 2024 20:04:44 GMT
 Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0CF3958050;
-	Mon,  8 Jan 2024 19:56:08 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 0151A58054;
+	Mon,  8 Jan 2024 20:04:44 +0000 (GMT)
 Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 18D1F58045;
-	Mon,  8 Jan 2024 19:56:06 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 78B7958050;
+	Mon,  8 Jan 2024 20:04:42 +0000 (GMT)
 Received: from [9.61.145.235] (unknown [9.61.145.235])
 	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  8 Jan 2024 19:56:06 +0000 (GMT)
-Message-ID: <7ff0e3ca-98bb-47d9-8cf8-20a4e6aadd1e@linux.ibm.com>
-Date: Mon, 8 Jan 2024 13:56:05 -0600
+	Mon,  8 Jan 2024 20:04:42 +0000 (GMT)
+Message-ID: <d5b2ce4b-ada0-46d3-98b1-8648127dec2b@linux.ibm.com>
+Date: Mon, 8 Jan 2024 14:04:42 -0600
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 6/8] ARM: dts: aspeed: System1: GPIO, Fan ctrl, Led
+Subject: Re: [PATCH v1 7/8] tpm: tis-i2c: Add more compatible strings
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, joel@jms.id.au,
-        andrew@codeconstruct.com.au, peterhuewe@gmx.de, jarkko@kernel.org,
-        jgg@ziepe.ca, keescook@chromium.org, tony.luck@intel.com,
-        gpiccoli@igalia.com, johannes.holland@infineon.com, linux@roeck-us.net,
-        broonie@kernel.org
-Cc: patrick.rudolph@9elements.com, vincent@vtremblay.dev,
+To: Conor Dooley <conor@kernel.org>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        joel@jms.id.au, andrew@codeconstruct.com.au, peterhuewe@gmx.de,
+        jarkko@kernel.org, jgg@ziepe.ca, keescook@chromium.org,
+        tony.luck@intel.com, gpiccoli@igalia.com,
+        johannes.holland@infineon.com, linux@roeck-us.net, broonie@kernel.org,
+        patrick.rudolph@9elements.com, vincent@vtremblay.dev,
         peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com, bhelgaas@google.com,
         naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
         festevam@denx.de, devicetree@vger.kernel.org,
@@ -84,14 +84,14 @@ Cc: patrick.rudolph@9elements.com, vincent@vtremblay.dev,
         linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
         linux-hardening@vger.kernel.org, geissonator@yahoo.com
 References: <20231212164004.1683589-1-ninad@linux.ibm.com>
- <20231212164004.1683589-7-ninad@linux.ibm.com>
- <1b19af6f-645a-4913-b9db-49b1f3ad54f9@linaro.org>
+ <20231212164004.1683589-8-ninad@linux.ibm.com>
+ <20231212-avid-grill-dbead068fac8@spud>
 From: Ninad Palsule <ninad@linux.ibm.com>
-In-Reply-To: <1b19af6f-645a-4913-b9db-49b1f3ad54f9@linaro.org>
+In-Reply-To: <20231212-avid-grill-dbead068fac8@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: n7OUMVLs0ZxVJpCaR3pkbmA29BSI5A5j
-X-Proofpoint-GUID: _aB1q7Z9nfR0_O9BbgYWJrn1HoFgIx5S
+X-Proofpoint-GUID: BcrSbIDUA20AqXyea8yQeaJgquxaRGP_
+X-Proofpoint-ORIG-GUID: t6ymHn9VIXq4mcG7cAxPC29lgDsKcsDm
 Content-Transfer-Encoding: 7bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
@@ -102,235 +102,55 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-08_08,2024-01-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 clxscore=1015 suspectscore=0 phishscore=0
- malwarescore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401080163
+ definitions=2024-01-08_09,2024-01-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 clxscore=1015 spamscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401080166
 
-Hello Krzysztof,
+Hello Conor,
 
-On 12/12/23 14:25, Krzysztof Kozlowski wrote:
-> On 12/12/2023 17:40, Ninad Palsule wrote:
->> This commit adds following devices to the device tree.
->> - GPIO pin assignements, GPIO expansion devices
->> - LED brinker devices
->> - Fan controllers
+On 12/12/23 11:15, Conor Dooley wrote:
+> On Tue, Dec 12, 2023 at 10:40:03AM -0600, Ninad Palsule wrote:
+>> From: Joel Stanley <joel@jms.id.au>
 >>
->> Tested:
->>      This board is tested using the simics simulator.
+>> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
 >>
+>> https://www.nuvoton.com/products/cloud-computing/security/trusted-platform-module-tpm/
+>>
+>> Add a compatible string for it, and the generic compatible.
+>>
+>> OpenBMC-Staging-Count: 3
+> Delete this from every patch that it appears from.
+Removed.
+>
+>> Signed-off-by: Joel Stanley <joel@jms.id.au>
+>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+>> Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.au
 >> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
 >> ---
->>   .../dts/aspeed/aspeed-bmc-ibm-system1.dts     | 547 +++++++++++++++++-
-> Squash it.
-
-Yes, I made a single commit for device tree.
-
->
->>   1 file changed, 542 insertions(+), 5 deletions(-)
+>>   drivers/char/tpm/tpm_tis_i2c.c | 2 ++
+>>   1 file changed, 2 insertions(+)
 >>
->> diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
->> index b8e7e52d4600..75562aa63701 100644
->> --- a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
->> +++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
->> @@ -114,6 +114,99 @@ vga_memory: region@bf000000 {
->>   		};
->>   	};
->>   
->> +	leds {
->> +		compatible = "gpio-leds";
->> +
->> +		bmc-ready {
-> It does not look like you tested the DTS against bindings. Please run
-> `make dtbs_check W=1` (see
-> Documentation/devicetree/bindings/writing-schema.rst or
-> https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-> for instructions).
-Fixed names.
+>> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+>> index a897402cc36a..9511c0d50185 100644
+>> --- a/drivers/char/tpm/tpm_tis_i2c.c
+>> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+>> @@ -383,6 +383,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+>>   #ifdef CONFIG_OF
+>>   static const struct of_device_id of_tis_i2c_match[] = {
+>>   	{ .compatible = "infineon,slb9673", },
+>> +	{ .compatible = "nuvoton,npct75x", },
+>> +	{ .compatible = "tcg,tpm-tis-i2c", },
+> What's the point of the generic compatible if you are adding the device
+> specific ones to the driver anyway?
 >
->> +			gpios = <&gpio0 ASPEED_GPIO(L, 7) GPIO_ACTIVE_HIGH>;
->> +		};
->> +
->> +		bmc-hb {
-> None of these were tested.
-Fixed names
->
->>   	/*A0-A7*/	"","","","","","","","",
->> -	/*B0-B7*/	"","","","","","","","",
->> +	/*B0-B7*/	"","","","","bmc-tpm-reset","","","",
-> Really? You just added these lines. There is no point in adding a new
-> line and immediately changing it.
->
-> This points how your split is artificial and not helpful.
-> ...
-Now I have a single commit for device tree.
->
->
->>   &i2c2 {
->> @@ -486,6 +744,20 @@ regulator@43 {
->>   &i2c6 {
->>   	status = "okay";
->>   
->> +	fan-controller@52 {
->> +		compatible = "maxim,max31785a";
->> +		reg = <0x52>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
-> Why do you need cells?
-Removed cells.
->
->> +	};
->> +
->> +	fan-controller@54 {
->> +		compatible = "maxim,max31785a";
->> +		reg = <0x54>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
-> Why do you need cells?
-Removed cells.
->
->> +	};
->> +
->>   	i2c-mux@70 {
->>   		compatible = "nxp,pca9548";
->>   		reg = <0x70>;
->> @@ -522,6 +794,48 @@ i2c6mux0chn4: i2c@4 {
->>   			#address-cells = <1>;
->>   			#size-cells = <0>;
->>   			reg = <4>;
->> +
->> +			led-controller@60 {
->> +				compatible = "nxp,pca9551";
->> +				reg = <0x60>;
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +
->> +				gpio-controller;
->> +				#gpio-cells = <2>;
->> +
->> +				led@0 {
->> +					label = "enclosure-id-led";
->> +					reg = <0>;
->> +					retain-state-shutdown;
->> +					default-state = "keep";
->> +					type = <PCA955X_TYPE_LED>;
->> +				};
->> +
->> +				led@1 {
->> +					label = "attention-led";
->> +					reg = <1>;
->> +					retain-state-shutdown;
->> +					default-state = "keep";
->> +					type = <PCA955X_TYPE_LED>;
->> +				};
->> +
->> +				led@2 {
->> +					label = "enclosure-fault-rollup-led";
->> +					reg = <2>;
->> +					retain-state-shutdown;
->> +					default-state = "keep";
->> +					type = <PCA955X_TYPE_LED>;
->> +				};
->> +
->> +				led@3 {
->> +					label = "power-on-led";
->> +					reg = <3>;
->> +					retain-state-shutdown;
->> +					default-state = "keep";
->> +					type = <PCA955X_TYPE_LED>;
->> +				};
->> +			};
->>   		};
->>   
->>   		i2c6mux0chn5: i2c@5 {
->> @@ -542,6 +856,44 @@ i2c6mux0chn7: i2c@7 {
->>   			reg = <7>;
->>   		};
->>   	};
->> +
->> +	pca3: pca9539@74 {
-> Node names should be generic. See also an explanation and list of
-> examples (not exhaustive) in DT specification:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-Fixed node names.
->
->
->> +		compatible = "nxp,pca9539";
->> +		reg = <0x74>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		gpio-controller;
->> +		#gpio-cells = <2>;
->> +	};
->> +
->> +	pca4: pca9539@77 {
-> Node names should be generic. See also an explanation and list of
-> examples (not exhaustive) in DT specification:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-Fixed node names.
->
->
->> +		compatible = "nxp,pca9539";
->> +		reg = <0x77>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		gpio-controller;
->> +		#gpio-cells = <2>;
->> +
->> +		gpio-line-names =
->> +			"PE_NVMED0_EXP_PRSNT_N",
->> +			"PE_NVMED1_EXP_PRSNT_N",
->> +			"PE_NVMED2_EXP_PRSNT_N",
->> +			"PE_NVMED3_EXP_PRSNT_N",
->> +			"LED_FAULT_NVMED0",
->> +			"LED_FAULT_NVMED1",
->> +			"LED_FAULT_NVMED2",
->> +			"LED_FAULT_NVMED3",
->> +			"FAN0_PRESENCE_R_N",
->> +			"FAN1_PRESENCE_R_N",
->> +			"FAN2_PRESENCE_R_N",
->> +			"FAN3_PRESENCE_R_N",
->> +			"FAN4_PRESENCE_R_N",
->> +			"FAN5_PRESENCE_N",
->> +			"FAN6_PRESENCE_N",
->> +			"";
->> +	};
->>   };
->>   
->>   &i2c7 {
->> @@ -809,6 +1161,191 @@ regulator@41 {
->>   		compatible = "infineon,ir38263";
->>   		reg = <0x41>;
->>   	};
->> +
->> +	led-controller@61 {
->> +		compatible = "nxp,pca9552";
->> +		reg = <0x61>;
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
-> ...
->
->> +		led@15 {
->> +			label = "pe-cp-drv3-perst";
->> +			reg = <15>;
->> +			retain-state-shutdown;
->> +			default-state = "keep";
->> +			type = <PCA955X_TYPE_LED>;
->> +		};
->> +	};
->> +
->> +	pca1: pca9539@75 {
-> Node names should be generic. See also an explanation and list of
-> examples (not exhaustive) in DT specification:
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-Fixed names.
+> Thanks,
+> Conor.
 
-Thanks for the review.
+I have removed this commit from this patchset and send it as a separate 
+patch.
 
 Regards,
 
