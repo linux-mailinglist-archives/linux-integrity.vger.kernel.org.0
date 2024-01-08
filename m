@@ -1,150 +1,225 @@
-Return-Path: <linux-integrity+bounces-678-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-679-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34615826534
-	for <lists+linux-integrity@lfdr.de>; Sun,  7 Jan 2024 18:02:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0249A82674E
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 03:58:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C02261F21006
-	for <lists+linux-integrity@lfdr.de>; Sun,  7 Jan 2024 17:02:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82C7C281803
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 02:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6EDB13ADF;
-	Sun,  7 Jan 2024 17:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C872A5B;
+	Mon,  8 Jan 2024 02:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bRi0eS9s"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="T+ij6OwW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7AE13ACD
-	for <linux-integrity@vger.kernel.org>; Sun,  7 Jan 2024 17:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 407BnaCi012763;
-	Sun, 7 Jan 2024 17:01:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=JdzK4j7V+xX4W5wyHQ6osyAhS5UW/i3kbG+NHgNXvR0=;
- b=bRi0eS9sk8WtSCEkzg5Z/rof3inGi8WGbmRkmyMqnY75NnLdpLEpnLG0Dfw9yRiR+Gu1
- JghvJD3KGEzRyeU/oQz6E8vLN6KbNBP/62zOXPfHaihd1UhWFDxYM19+8DfH/m3Hi9rS
- El+eyuZAwFuWlNHINQKWSZpSp5SKTOzC9K3igCJGQBBQcDyLXHoKOxzyM6flSft4+Jxg
- NoDYoG9QCjzwtxg2hhQPBtJ2+hlgKPfFf4axprSoD38xtHvdjSHyElKJvgndhR5Yrwqf
- bRlPwZvRrjnIzVdY+AfQSdOfHhORJrF5Zr/N2Fy6XVd0Zv/gXUNt4cLDF2xkDaVVVMgT +g== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vf1qea9h8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 07 Jan 2024 17:01:18 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 407EOnnG004395;
-	Sun, 7 Jan 2024 17:00:49 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vfjpkb8wg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 07 Jan 2024 17:00:49 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 407H0m6q45220304
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 7 Jan 2024 17:00:48 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 872725805C;
-	Sun,  7 Jan 2024 17:00:48 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4865958059;
-	Sun,  7 Jan 2024 17:00:47 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.155.63])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Sun,  7 Jan 2024 17:00:47 +0000 (GMT)
-Message-ID: <3e8cb0bd77a2b73613b19febb2b3121ef0ea8255.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 6/7] ima: configure memory to log events between
- kexec load and execute
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, stefanb@linux.ibm.com, ebiederm@xmission.com,
-        noodles@fb.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Date: Sun, 07 Jan 2024 12:00:46 -0500
-In-Reply-To: <b78bbf3f-da39-47a6-aac3-581c8d2827a0@linux.microsoft.com>
-References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
-	 <20231216010729.2904751-7-tusharsu@linux.microsoft.com>
-	 <fbe6aa7577875b23a9913a39f858f06f1d2aa903.camel@linux.ibm.com>
-	 <b78bbf3f-da39-47a6-aac3-581c8d2827a0@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE6810E9
+	for <linux-integrity@vger.kernel.org>; Mon,  8 Jan 2024 02:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6808c3938afso15183016d6.1
+        for <linux-integrity@vger.kernel.org>; Sun, 07 Jan 2024 18:58:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1704682724; x=1705287524; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HlIIC5u/eTGl34/V75N+OsotTMr0HSydl9c69RMzHn0=;
+        b=T+ij6OwWAMQP/mc4k9lMxGeN62LBh+RdvFs1i2WnB8XUWOtGOboO5e089V5qplp6Hs
+         5/erGEklFdbh5CRtTzpidb0pY3wBOvvYIbAguwnNbL+/Cy4VlZC+dbZZ4FcWf0buYEg+
+         1JJmYQ4AGOPzdFtfBIIn34DUQwcryPZRRumLzunRdbj3rae8Nl9GB2A7RxJnKuLMgwdr
+         fXkNC/0ceHS5TwcOhDxgK8Jsgq9vBzTRH0XfgTw3RbJowvtmcAMLDAOqfaeZDqxM4PQm
+         LFXSDO9Hp2UjWgRG0CacQY+rGjRRg/ZqYPtd8idtJZpq+PMWfCBsRqRLsA+AgPCJp5R3
+         QEOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704682724; x=1705287524;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HlIIC5u/eTGl34/V75N+OsotTMr0HSydl9c69RMzHn0=;
+        b=MGDAG2l6Dlf3aiYOKO1MjzzIq0Hn35Rs/EWKoWI8MsFTScMyusEZVp3RACdURU0JVi
+         TPPosBStE20T+uhjllPiG1va0uYp9qfyNYS6ukK5IXv3mtJBepCycaWh+GkfT9lncTMf
+         IQB8dxj5+5iAA3eosQwDufxkNxILlqPKB+zVk1OVSoSW6r3lWDUl9/h4UFJg5bFgNTM8
+         qTohVaj+SVFUsZOE7mjssAkKflbOsxB2Lkkb4cz6G/XHvdn7vjIfW2cmw5jlSFm43gi1
+         AwKhNrSE0tXRoExadBThzar9l9u5ZUpDDBhAeSSI8r8isz6J5TmobJRvKdgNh2sVw+Eh
+         vB6g==
+X-Gm-Message-State: AOJu0YxZx2VWIqawLNyVcmNXrJan8zAfjBMi59b8BbyrwmLHz+mYKhOM
+	rcL3gwYX6YCkQb3ntlW89UW3uqemVa5tpGKed+UI4Pvn+Ohl
+X-Google-Smtp-Source: AGHT+IGACtAKjaMoPGc2k72C9NOma3jMrbB56JAYTw6ZeHqXVo0kVYSoHxnrmj+UtkF+odAAWzpMyPA6aAiB4Bhd9dQ=
+X-Received: by 2002:a05:6214:401:b0:680:b79f:736e with SMTP id
+ z1-20020a056214040100b00680b79f736emr4710723qvx.125.1704682724585; Sun, 07
+ Jan 2024 18:58:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Qj3133W2qu8rtemmqXE5vzPkxvhg9UQQ
-X-Proofpoint-ORIG-GUID: Qj3133W2qu8rtemmqXE5vzPkxvhg9UQQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-07_10,2024-01-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=581 bulkscore=0
- adultscore=0 malwarescore=0 phishscore=0 spamscore=0 mlxscore=0
- lowpriorityscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311290000 definitions=main-2401070080
+MIME-Version: 1.0
+References: <6c0c32d5-e636-2a0e-5bdf-538c904ceea3@linux.microsoft.com>
+ <8bff2bf1a4629aacec7b6311d77f233cb75b2f8a.camel@linux.ibm.com>
+ <CAHC9VhRm9Tzz3C-VTdXS4s1_-kPQQ6RXMt8JGCS4jorJ0VURyQ@mail.gmail.com>
+ <CAHC9VhSJ7MKNM7nMXR3xE-cNMrYB4AT+B76wzF1cKy2JM9tBrA@mail.gmail.com>
+ <1b6853e8354af7033e6d87e77cfb175526753c38.camel@linux.ibm.com>
+ <CAHC9VhSnDQ-d9dh_icqNyhpT+cTGQOqGh8+cbN3QzF_qPehvaA@mail.gmail.com>
+ <28c4136d0fe360a7fcf6a6547120dc244be0edc3.camel@linux.ibm.com>
+ <CAHC9VhTykrsXTuWfRe3rzg2SMbzynvgwXmxVpN5T0cfY7YrkwA@mail.gmail.com>
+ <d5e2358a0a7aaf4455b1f479483b312e98aa07d5.camel@linux.ibm.com>
+ <CAHC9VhRNLzbW++rW3Hep+3yyJZRRvZ4h7LuKcSbRRn-wqh-PAQ@mail.gmail.com>
+ <d9975a7949ca49f404adc981e942f42b6f19d022.camel@linux.ibm.com>
+ <CAHC9VhRd5Qi_NZJMOfHC6jTr_dn0mNFGhy18ff2YgtjQo+38dQ@mail.gmail.com> <5faa2b81b550d44f0a02917f11c4838d11cbda00.camel@linux.ibm.com>
+In-Reply-To: <5faa2b81b550d44f0a02917f11c4838d11cbda00.camel@linux.ibm.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Sun, 7 Jan 2024 21:58:33 -0500
+Message-ID: <CAHC9VhRYLLtdOD1GTtigTrgsALdBqUikiNhdBNSaLYxD1iN8bw@mail.gmail.com>
+Subject: Re: [RFC V2] IMA Log Snapshotting Design Proposal
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Tushar Sugandhi <tusharsu@linux.microsoft.com>, linux-integrity@vger.kernel.org, 
+	peterhuewe@gmx.de, Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca, 
+	Ken Goldman <kgold@linux.ibm.com>, bhe@redhat.com, vgoyal@redhat.com, 
+	Dave Young <dyoung@redhat.com>, "kexec@lists.infradead.org" <kexec@lists.infradead.org>, jmorris@namei.org, 
+	serge@hallyn.com, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	linux-security-module@vger.kernel.org, 
+	Tyler Hicks <tyhicks@linux.microsoft.com>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Sush Shringarputale <sushring@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-01-05 at 12:20 -0800, Tushar Sugandhi wrote:
-> >> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> >> index 60a511c6b583..8792b7aab768 100644
-> >> --- a/security/integrity/ima/Kconfig
-> >> +++ b/security/integrity/ima/Kconfig
-> >> @@ -338,3 +338,12 @@ config IMA_DISABLE_HTABLE
-> >>      default n
-> >>      help
-> >>         This option disables htable to allow measurement of duplicate records.
-> >> +
-> >> +config IMA_KEXEC_EXTRA_MEMORY_KB
-> >> +    int
-> >> +    depends on IMA && IMA_KEXEC
-> >> +    default 64
-> > 
-> > Since this isn't optional, the default should remain as a half page.
-> > Since a page is architecture specific, the default will need to be arch
-> >   specific
-> > 
-> It was a feedback from Stefan in the V2 of this series to convert it 
-> from number of PAGES to KB.[1]
-> 
-> But I can revert it to number of pages again.
-> 
-> Also, making the default value as a fraction (1/2 page) feels weird for 
-> a CONFIG variable.
-> 
-> Is it ok to make the default value as one page rather than half page?
+On Sun, Jan 7, 2024 at 7:59=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wro=
+te:
+> On Sat, 2024-01-06 at 18:27 -0500, Paul Moore wrote:
+> > On Tue, Nov 28, 2023 at 9:07=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com=
+> wrote:
+> > > On Tue, 2023-11-28 at 20:06 -0500, Paul Moore wrote:
+> > > > On Tue, Nov 28, 2023 at 7:09=E2=80=AFAM Mimi Zohar <zohar@linux.ibm=
+.com> wrote:
+> > > > > On Mon, 2023-11-27 at 17:16 -0500, Paul Moore wrote:
+> > > > > > On Mon, Nov 27, 2023 at 12:08=E2=80=AFPM Mimi Zohar <zohar@linu=
+x.ibm.com> wrote:
+> > > > > > > On Wed, 2023-11-22 at 09:22 -0500, Paul Moore wrote:
+> >
+> > ...
+> >
+> > > > > > > Before defining a new critical-data record, we need to decide=
+ whether
+> > > > > > > it is really necessary or if it is redundant.  If we define a=
+ new
+> > > > > > > "critical-data" record, can it be defined such that it doesn'=
+t require
+> > > > > > > pausing extending the measurement list?  For example, a new s=
+imple
+> > > > > > > visual critical-data record could contain the number of recor=
+ds (e.g.
+> > > > > > > <securityfs>/ima/runtime_measurements_count) up to that point=
+.
+> > > > > >
+> > > > > > What if the snapshot_aggregate was a hash of the measurement lo=
+g
+> > > > > > starting with either the boot_aggregate or the latest
+> > > > > > snapshot_aggregate and ending on the record before the new
+> > > > > > snapshot_aggregate?  The performance impact at snapshot time sh=
+ould be
+> > > > > > minimal as the hash can be incrementally updated as new records=
+ are
+> > > > > > added to the measurement list.  While the hash wouldn't capture=
+ the
+> > > > > > TPM state, it would allow some crude verification when reassemb=
+ling
+> > > > > > the log.  If one could bear the cost of a TPM signing operation=
+, the
+> > > > > > log digest could be signed by the TPM.
+> > > > >
+> > > > > Other critical data is calculated, before calling
+> > > > > ima_measure_critical_data(), which adds the record to the measure=
+ment
+> > > > > list and extends the TPM PCR.
+> > > > >
+> > > > > Signing the hash shouldn't be an issue if it behaves like other
+> > > > > critical data.
+> > > > >
+> > > > > In addition to the hash, consider including other information in =
+the
+> > > > > new critical data record (e.g. total number of measurement record=
+s, the
+> > > > > number of measurements included in the hash, the number of times =
+the
+> > > > > measurement list was trimmed, etc).
+> > > >
+> > > > It would be nice if you could provide an explicit list of what you
+> > > > would want hashed into a snapshot_aggregate record; the above is
+> > > > close, but it is still a little hand-wavy.  I'm just trying to redu=
+ce
+> > > > the back-n-forth :)
+> > >
+> > > What is being defined here is the first IMA critical-data record, whi=
+ch
+> > > really requires some thought.
+> >
+> > My thinking has always been that taking a hash of the current
+> > measurement log up to the snapshot point would be a nice
+> > snapshot_aggregate measurement, but I'm not heavily invested in that.
+> > To me it is more important that we find something we can all agree on,
+> > perhaps reluctantly, so we can move forward with a solution.
+> >
+> > > For ease of review, this new critical-
+> > > data record should be a separate patch set from trimming the
+> > > measurement list.
+> >
+> > I see the two as linked, but if you prefer them as separate then so be
+> > it.  Once again, the important part is to move forward with a
+> > solution, I'm not overly bothered if it arrives in multiple pieces
+> > instead of one.
+>
+> Trimming the IMA measurement list could be used in conjunction with the n=
+ew IMA
+> critical data record or independently.  Both options should be supported.
+>
+> 1. trim N number of records from the head of the in kernel IMA measuremen=
+t list
+> 2. intermittently include the new IMA critical data record based on some =
+trigger
+> 3. trim the measurement list up to the (first/last/Nth) IMA critical data=
+ record
+>
+> Since the two features could be used independently of each other, there i=
+s no
+> reason to upstream them as a single patch set.  It just makes it harder t=
+o
+> review.
 
-The point is not whether the extra memory is specified in terms of pages or KB. 
-For backwards compatibility the existing default should be the same as
-previously.  This means the default needs to be architecture specific.b
- 
-$ uname -m; getconf PAGESIZE
-x86_64
-4096
- 
-$ uname -m; getconf PAGESIZE 
-ppc64le
-65536
+I don't see much point in recording a snapshot aggregate if you aren't
+doing a snapshot, but it's not harmful in any way, so sure, go for it.
+Like I said earlier, as long as the functionality is there, I don't
+think anyone cares too much how it gets into the kernel (although
+Tushar and Sush should comment from the perspective).
 
-For example:
+> > > As I'm sure you're aware, SElinux defines two critical-data records.
+> > > From security/selinux/ima.c:
+> > >
+> > >         ima_measure_critical_data("selinux", "selinux-state",
+> > >                                   state_str, strlen(state_str), false=
+,
+> > >                                   NULL, 0);
+> > >
+> > >         ima_measure_critical_data("selinux", "selinux-policy-hash",
+> > >                                   policy, policy_len, true,
+> > >                                   NULL, 0);
+> >
+> > Yep, but there is far more to this than SELinux.
+>
+> Only if you conflate the two features.
 
-default 32 if PPC_64K_PAGES
-default 2 
+If that is a clever retort, you'll need to elaborate a bit as it
+doesn't make much sense to me.  The IMA measurement log snapshot is
+independent from SELinux; the only connection is that yes, IMA does
+measure SELinux "things" but that is no different from any other
+system attribute that is measured by IMA.
 
--- 
-thanks,
-
-Mimi
-
-
+--=20
+paul-moore.com
 
