@@ -1,47 +1,63 @@
-Return-Path: <linux-integrity+bounces-713-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-714-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 151CE828ABD
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 18:11:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66E72828ACD
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 18:14:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F81D1F2482D
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 17:11:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 157D8286DD2
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 17:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918773A8DB;
-	Tue,  9 Jan 2024 17:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820D03A8E8;
+	Tue,  9 Jan 2024 17:14:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZMv47Ml"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SbN6CCuK"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FB139FF9;
-	Tue,  9 Jan 2024 17:11:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F7E2C43390;
-	Tue,  9 Jan 2024 17:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6BF3A8C7;
+	Tue,  9 Jan 2024 17:14:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 548BCC433C7;
+	Tue,  9 Jan 2024 17:14:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704820304;
-	bh=dEsLpeu8K7OJiF7pWVy1b5UFsknF7a9l6+xqZcW0nL8=;
+	s=k20201202; t=1704820476;
+	bh=siOZC4wOuNDoVWsdLiyPsbZnkPF7a7ofovZKE/nAX/k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DZMv47MlGOGybA+uvmyMnlVNp+q60K69Fhnp2Rq08EiHqdoZMpoHlNv2U8C9UBre0
-	 uqHi08hKrD3vXddbNyI2wH4cD794ha3SIGaR3GfGCmKaV0RhBWRp41plsWMHXp68bo
-	 hYzzqbNWsf731KM9JBt/y3Vnsb648R4JztRX18/+KT6rlZtU8VpgMP5bh4t6q1Mdmv
-	 JUMGDq5nXXzejiQbeps0d3QQC+0Qz0Dlwmx52hAmjY2+hnVQeBfrHFCiaFBrII4//a
-	 3JzbXLF48ag9TjxMOVSGfhQkWGVbC1om2zXUPBmDm4kb4fdGdU6dHTS6huLP3OfzBS
-	 wvrw0lvatFOfg==
-Date: Tue, 9 Jan 2024 17:11:41 +0000
+	b=SbN6CCuK5NChl9458MDDbcbs1SdUAG1Fd/5ItykQxgrlxYOt8DA2J14s9SYA8usPM
+	 m5ylQNkriV3WnFbF7c+AFAqUyUAktzZbK3wZoEFB2gKpzmpeF0rHc7zyicWESv7X7n
+	 dFWPf/MH+vgH1EU05HcjMtBdgGFIcA6QVLQ3Zn0XdIe4dg9+PM0H4lp6ZCNA14vqCf
+	 K/XKUGrO0ohFsnTQfU0uJ8mF4pDjRqdZdIN0U0URwMfdzjeGtd6+Jr23csiXdPwDN/
+	 UtmTiCgQlFnX6thWpQcgXP0b9vy5yRfx4+iNclwxUJ8xcjZnZYEPVHPpBX19d0ZaiH
+	 M9/ChPwWdY3CQ==
+Date: Tue, 9 Jan 2024 17:14:29 +0000
 From: Conor Dooley <conor@kernel.org>
 To: Ninad Palsule <ninad@linux.ibm.com>
-Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-	Joel Stanley <joel@jms.id.au>, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] tpm: tis-i2c: Add more compatible strings
-Message-ID: <20240109-saddling-nintendo-c7fbb46bb0dd@spud>
-References: <20231214144954.3833998-1-ninad@linux.ibm.com>
- <20231214144954.3833998-2-ninad@linux.ibm.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	joel@jms.id.au, andrew@codeconstruct.com.au, peterhuewe@gmx.de,
+	jarkko@kernel.org, jgg@ziepe.ca, keescook@chromium.org,
+	tony.luck@intel.com, gpiccoli@igalia.com,
+	johannes.holland@infineon.com, broonie@kernel.org,
+	patrick.rudolph@9elements.com, vincent@vtremblay.dev,
+	peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com,
+	bhelgaas@google.com, naresh.solanki@9elements.com,
+	alexander.stein@ew.tq-group.com, festevam@denx.de,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
+	geissonator@yahoo.com
+Subject: Re: [PATCH v1 7/8] tpm: tis-i2c: Add more compatible strings
+Message-ID: <20240109-pep-coerce-2a86ae88753d@spud>
+References: <20231212164004.1683589-1-ninad@linux.ibm.com>
+ <20231212164004.1683589-8-ninad@linux.ibm.com>
+ <20231212-avid-grill-dbead068fac8@spud>
+ <73381bb0-7fa7-4a9e-88df-ab0063058e26@roeck-us.net>
+ <20231212-mouth-choice-40a83caa34ec@spud>
+ <2946fbb1-2a47-4d21-83dc-8e45bf6ba5a9@roeck-us.net>
+ <60c8bbdb-4e08-44f0-88d4-ab164d4843b5@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,69 +65,60 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="ZxiYjKSulZMuNBQt"
+	protocol="application/pgp-signature"; boundary="OEamGw2PREjDYnc1"
 Content-Disposition: inline
-In-Reply-To: <20231214144954.3833998-2-ninad@linux.ibm.com>
+In-Reply-To: <60c8bbdb-4e08-44f0-88d4-ab164d4843b5@linux.ibm.com>
 
 
---ZxiYjKSulZMuNBQt
+--OEamGw2PREjDYnc1
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 14, 2023 at 08:49:53AM -0600, Ninad Palsule wrote:
-> From: Joel Stanley <joel@jms.id.au>
+On Mon, Jan 08, 2024 at 02:05:53PM -0600, Ninad Palsule wrote:
+> Hello Guenter,
 >=20
-> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
+> On 12/12/23 13:50, Guenter Roeck wrote:
+> > On 12/12/23 10:51, Conor Dooley wrote:
+> > > On Tue, Dec 12, 2023 at 10:00:39AM -0800, Guenter Roeck wrote:
+> > > > On Tue, Dec 12, 2023 at 05:15:51PM +0000, Conor Dooley wrote:
+> > > > > On Tue, Dec 12, 2023 at 10:40:03AM -0600, Ninad Palsule wrote:
+> > > > > > From: Joel Stanley <joel@jms.id.au>
+> > > > > >=20
+> > > > > > The NPCT75x TPM is TIS compatible. It has an I2C and SPI interf=
+ace.
+> > > > > >=20
+> > > > > > https://www.nuvoton.com/products/cloud-computing/security/trust=
+ed-platform-module-tpm/
+> > > > > >=20
+> > > > > >=20
+> > > > > > Add a compatible string for it, and the generic compatible.
+> > > > > >=20
+> > > > > > OpenBMC-Staging-Count: 3
+> > > > >=20
+> > > > > Delete this from every patch that it appears from.
 >=20
-> https://www.nuvoton.com/products/cloud-computing/security/trusted-platfor=
-m-module-tpm/
 >=20
-> Add a compatible string for it, and the generic compatible.
->=20
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.au
-> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
+> I have send it as a separate commit. https://lore.kernel.org/linux-kernel=
+/20231214144954.3833998-1-ninad@linux.ibm.com/
 
-I don't understand why you broke this series up and dropped patches.
-NAK, these compatibles are not documented.
+Why did you do that? It now just adds undocumented compatibles to the
+driver. Please, as Rob requested, work with Lukas on his series to make
+sure that these devices are documented.
 
-Cheers,
+Thanks,
 Conor.
 
-> ---
->  drivers/char/tpm/tpm_tis_i2c.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2=
-c.c
-> index a897402cc36a..9511c0d50185 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c.c
-> @@ -383,6 +383,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
->  #ifdef CONFIG_OF
->  static const struct of_device_id of_tis_i2c_match[] =3D {
->  	{ .compatible =3D "infineon,slb9673", },
-> +	{ .compatible =3D "nuvoton,npct75x", },
-> +	{ .compatible =3D "tcg,tpm-tis-i2c", },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
-> --=20
-> 2.39.2
->=20
-
---ZxiYjKSulZMuNBQt
+--OEamGw2PREjDYnc1
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZ1+TAAKCRB4tDGHoIJi
-0m0QAPoD8jO8sBqNJ8Yjtkt0nD8c8slMnCPmNUOEQCd+wj5foAD/Rm9ZJAaubHBn
-0nZRgQCZxzJ4E/TTJamUTHT07B5MXgg=
-=YR2U
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZ1+9AAKCRB4tDGHoIJi
+0htZAP9a2iXLaNyt9gp80dOzXMKedooH9x1JxCeLqDSn/jQ4FAD7BmzWTG2ck+GX
+6HtPX7JRe5C0eqmAl9taPHOuxon4HQw=
+=q6NZ
 -----END PGP SIGNATURE-----
 
---ZxiYjKSulZMuNBQt--
+--OEamGw2PREjDYnc1--
 
