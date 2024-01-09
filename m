@@ -1,124 +1,93 @@
-Return-Path: <linux-integrity+bounces-716-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-717-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 269B1828B95
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 18:58:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA2EA828E88
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 21:35:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCFDF28115F
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 17:58:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BBCA28687C
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 20:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136233BB25;
-	Tue,  9 Jan 2024 17:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33C493D961;
+	Tue,  9 Jan 2024 20:35:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBXR0hDI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFpX4G7K"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBFD38DF8;
-	Tue,  9 Jan 2024 17:58:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD56C433F1;
-	Tue,  9 Jan 2024 17:58:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7012BD0A;
+	Tue,  9 Jan 2024 20:35:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A43C433C7;
+	Tue,  9 Jan 2024 20:35:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704823097;
-	bh=jPQukDAtVbClY9EBeS+NqfHyLacDsIvaawr24NohtKA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pBXR0hDIxuyEvjXNm0ZHkn82qvWJPxEeg8vRLhUWpcgwAjyw9QDysog3LK2PVQult
-	 9Go+Fi125jYvZDB64hW3vCXxDEcn1/BK+pt5NqtqqQKLTdqo9bY948RcuvcxU2solW
-	 4vKCSzlftGX3C8MVRS35uscVo5/xKVpYDqx9lrU9Apjy76V+ddXDE8gB+2mmN0AuZf
-	 oPcWHesQh5ieuYvzxayCuvHpRXx3KbE78X0kmN1z43HIDK8fHuuSm5D93GP6NTB/A2
-	 otf9gtIxEuJz5XBV4wxvbQ8xXHf1BOfBSoPrqMAdPLvPhwTHpw3vbnYVN41E5sHJLi
-	 jqPfsfuLkmYcA==
-Date: Tue, 9 Jan 2024 10:58:14 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>, ardb@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, javierm@redhat.com, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
- into setup_data.h
-Message-ID: <20240109175814.GA5981@dev-arch.thelio-3990X>
-References: <20240108095903.8427-3-tzimmermann@suse.de>
- <202401090800.UOBEKB3W-lkp@intel.com>
+	s=k20201202; t=1704832531;
+	bh=WWum26QKMFh6vGvEJyJ4MOL9e+MqfFaHurfUS5t9l5M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KFpX4G7KtoXpXwi2h60jBAtMA+jWNdiGvfTfVYgP0xHuKT4FjbZzx53X0KEfztEjC
+	 LRaDENxfYF7dvON5pQwNOaWPcdyxP9Y+wdlCEyim9l0N3Bue/9sYd4MlCb01X3pEBA
+	 1N9IOFptghlzzInxIXccmzOx0GnN3KzgwC6zysA3so3WoQIilwrrxKY2gcEbtRAVX4
+	 5Y/KoE+af5chvd48sKmSazGyer2ZlG5ynsnFbk8zsiFERHrxI6xfJzS+q9SM3CtxVG
+	 y3d51BK67U1tvtHplYGsB6dndV26gLNXRr9PHYfMvgT+FqrrSlCcT4H3N5aaCjHWA7
+	 APoExHWz+KSZA==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	David Howells <dhowells@redhat.com>,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org
+Subject: [GIT PULL] tpmdd changes for v6.8
+Date: Tue,  9 Jan 2024 22:35:14 +0200
+Message-Id: <20240109203514.1511503-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202401090800.UOBEKB3W-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 09, 2024 at 08:28:59AM +0800, kernel test robot wrote:
-> Hi Thomas,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on tip/x86/core]
-> [also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
-> base:   tip/x86/core
-> patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
-> patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
-> config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
-> compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from arch/x86/realmode/rm/wakemain.c:3:
->    In file included from arch/x86/boot/boot.h:24:
->    In file included from arch/x86/include/asm/setup.h:10:
->    In file included from arch/x86/include/asm/page_types.h:7:
->    In file included from include/linux/mem_encrypt.h:17:
->    In file included from arch/x86/include/asm/mem_encrypt.h:18:
->    In file included from arch/x86/include/uapi/asm/bootparam.h:5:
-> >> arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
->       10 |         struct setup_data data;
->          |                           ^
->    1 warning generated.
+  Merge tag 'cgroup-for-6.8' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup (2024-01-08 20:04:02 -0800)
 
-I think this warning is expected. This structure is now included in the
-realmode part of arch/x86, which has its own set of build flags,
-including -Wall, which includes -Wgnu on clang. The kernel obviously
-uses GNU extensions and states this clearly with '-std=gnu11', so
--Wno-gnu is unconditionally added to KBUILD_CFLAGS for clang. It seems
-that same treatment is needed for REALMODE_CFLAGS, which also matches
-arch/x86/boot/compressed/Makefile, see commit 6c3b56b19730 ("x86/boot:
-Disable Clang warnings about GNU extensions"):
+are available in the Git repository at:
 
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 1a068de12a56..24076db59783 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -53,6 +53,9 @@ REALMODE_CFLAGS += -fno-stack-protector
- REALMODE_CFLAGS += -Wno-address-of-packed-member
- REALMODE_CFLAGS += $(cc_stack_align4)
- REALMODE_CFLAGS += $(CLANG_FLAGS)
-+ifdef CONFIG_CC_IS_CLANG
-+REALMODE_CFLAGS += -Wno-gnu
-+endif
- export REALMODE_CFLAGS
- 
- # BITS is used as extension for files which are available in a 32 bit
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-v6.8
+
+for you to fetch changes up to 2b6fad7a900d2a378b475e5c196c146fb71856be:
+
+  tpm: cr50: fix kernel-doc warning and spelling (2024-01-09 11:12:27 +0200)
+
+----------------------------------------------------------------
+Hi,
+
+Just a couple fixes and no new features. I've been reviewing and testing
+TPM patches for encrypted and integrity protected commuinications [1] but
+they did not made yet to this release.
+
+This was also first release I tested with my still heavily in-development
+test suite for linux integrity [2]. I'm refining this at the moment
+to run keyutils test suite, which could be potentially also run by a Gitlab
+runner for keyutis repository.
+
+[1] https://lore.kernel.org/linux-integrity/20240102170408.21969-1-James.Bottomley@HansenPartnership.com/T/#t
+[2] https://github.com/jarkkojs/tpmdd-buildroot-external
+
+BR, Jarkkaso
+
+----------------------------------------------------------------
+Randy Dunlap (1):
+      tpm: cr50: fix kernel-doc warning and spelling
+
+Rob Herring (1):
+      tpm: nuvoton: Use i2c_get_match_data()
+
+ drivers/char/tpm/tpm_i2c_nuvoton.c  | 15 ++++-----------
+ drivers/char/tpm/tpm_tis_i2c_cr50.c |  3 +--
+ 2 files changed, 5 insertions(+), 13 deletions(-)
 
