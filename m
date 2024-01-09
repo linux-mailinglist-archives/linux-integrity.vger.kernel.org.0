@@ -1,107 +1,117 @@
-Return-Path: <linux-integrity+bounces-712-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-713-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 884B5828AB1
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 18:07:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 151CE828ABD
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 18:11:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA46BB22FBB
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 17:07:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F81D1F2482D
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 17:11:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ED4C3A8C5;
-	Tue,  9 Jan 2024 17:07:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918773A8DB;
+	Tue,  9 Jan 2024 17:11:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bm2sihal"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZMv47Ml"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D0633CF4
-	for <linux-integrity@vger.kernel.org>; Tue,  9 Jan 2024 17:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 409GN27K016942
-	for <linux-integrity@vger.kernel.org>; Tue, 9 Jan 2024 17:07:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qpktaUmhoBHKw/tg+lo+ajmLJXXwfFT0x4tntdOznqk=;
- b=bm2sihalGHEcfjQcxAoIPVS1PcvnhgOQlvwPUyCzeVttOxV1Tj5GiqIRByTnI5LeTce1
- uIe76s+GXPfgc4qs3RmPtskF6o0acD9LxRiIN/pkvmCWhXkfbm5K/btG+L/0qEiHC9bU
- V9wS9n0p900DMY/knJNntgEva24Ekwvu8Cm4qgHe4ptZluWNBAPeR9BOyRMULbe4OeeC
- wBw4giu+I0SOaqDIWce88a8cPB3zpD5aZsafXYWJHX9MgyKgGUgFPe2fSgIgjZzutHyR
- n/BF0smvjuUkLQhtbuEnvU/7OWLOXP1M5Dj42z4Mn06wU0DIeglT+ow4pDVSOa6+wvxU OQ== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vh9m49c7u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Tue, 09 Jan 2024 17:07:25 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 409FJFRF000926
-	for <linux-integrity@vger.kernel.org>; Tue, 9 Jan 2024 17:07:24 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vfkdk7ma4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Tue, 09 Jan 2024 17:07:24 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 409H7Nil50266508
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 9 Jan 2024 17:07:23 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 51CCD5805F;
-	Tue,  9 Jan 2024 17:07:23 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C3B9958051;
-	Tue,  9 Jan 2024 17:07:12 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  9 Jan 2024 17:07:09 +0000 (GMT)
-Message-ID: <57d8a51e-d246-4906-b036-45ed09f325fc@linux.ibm.com>
-Date: Tue, 9 Jan 2024 12:07:00 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FB139FF9;
+	Tue,  9 Jan 2024 17:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F7E2C43390;
+	Tue,  9 Jan 2024 17:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704820304;
+	bh=dEsLpeu8K7OJiF7pWVy1b5UFsknF7a9l6+xqZcW0nL8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DZMv47MlGOGybA+uvmyMnlVNp+q60K69Fhnp2Rq08EiHqdoZMpoHlNv2U8C9UBre0
+	 uqHi08hKrD3vXddbNyI2wH4cD794ha3SIGaR3GfGCmKaV0RhBWRp41plsWMHXp68bo
+	 hYzzqbNWsf731KM9JBt/y3Vnsb648R4JztRX18/+KT6rlZtU8VpgMP5bh4t6q1Mdmv
+	 JUMGDq5nXXzejiQbeps0d3QQC+0Qz0Dlwmx52hAmjY2+hnVQeBfrHFCiaFBrII4//a
+	 3JzbXLF48ag9TjxMOVSGfhQkWGVbC1om2zXUPBmDm4kb4fdGdU6dHTS6huLP3OfzBS
+	 wvrw0lvatFOfg==
+Date: Tue, 9 Jan 2024 17:11:41 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Ninad Palsule <ninad@linux.ibm.com>
+Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+	Joel Stanley <joel@jms.id.au>, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] tpm: tis-i2c: Add more compatible strings
+Message-ID: <20240109-saddling-nintendo-c7fbb46bb0dd@spud>
+References: <20231214144954.3833998-1-ninad@linux.ibm.com>
+ <20231214144954.3833998-2-ninad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [ima-evm-utils PATCH v3 07/13] Update ima_measurements to define
- and use a local list of public keys
-Content-Language: en-US
-To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-References: <20240104190558.3674008-1-zohar@linux.ibm.com>
- <20240104190558.3674008-8-zohar@linux.ibm.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240104190558.3674008-8-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rI3fLfwgTCA7GVX581bVLBGcxhpc9feN
-X-Proofpoint-GUID: rI3fLfwgTCA7GVX581bVLBGcxhpc9feN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-09_08,2024-01-09_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 malwarescore=0 adultscore=0 bulkscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 impostorscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2401090138
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="ZxiYjKSulZMuNBQt"
+Content-Disposition: inline
+In-Reply-To: <20231214144954.3833998-2-ninad@linux.ibm.com>
 
 
+--ZxiYjKSulZMuNBQt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 1/4/24 14:05, Mimi Zohar wrote:
-> Replace calling init_public_keys() with the imaevm_init_public_keys()
-> version.  Similarly replace ima_verify_signature() with the
-> ima_verify_signature2() version.
-> 
-> Update the static ima_ng_show() function definition to include a
-> "public_keys" parameter.
-> 
-> Free the local public keys list.
-> 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+On Thu, Dec 14, 2023 at 08:49:53AM -0600, Ninad Palsule wrote:
+> From: Joel Stanley <joel@jms.id.au>
+>=20
+> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
+>=20
+> https://www.nuvoton.com/products/cloud-computing/security/trusted-platfor=
+m-module-tpm/
+>=20
+> Add a compatible string for it, and the generic compatible.
+>=20
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.au
+> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+I don't understand why you broke this series up and dropped patches.
+NAK, these compatibles are not documented.
+
+Cheers,
+Conor.
+
+> ---
+>  drivers/char/tpm/tpm_tis_i2c.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2=
+c.c
+> index a897402cc36a..9511c0d50185 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -383,6 +383,8 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id of_tis_i2c_match[] =3D {
+>  	{ .compatible =3D "infineon,slb9673", },
+> +	{ .compatible =3D "nuvoton,npct75x", },
+> +	{ .compatible =3D "tcg,tpm-tis-i2c", },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
+> --=20
+> 2.39.2
+>=20
+
+--ZxiYjKSulZMuNBQt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZ1+TAAKCRB4tDGHoIJi
+0m0QAPoD8jO8sBqNJ8Yjtkt0nD8c8slMnCPmNUOEQCd+wj5foAD/Rm9ZJAaubHBn
+0nZRgQCZxzJ4E/TTJamUTHT07B5MXgg=
+=YR2U
+-----END PGP SIGNATURE-----
+
+--ZxiYjKSulZMuNBQt--
 
