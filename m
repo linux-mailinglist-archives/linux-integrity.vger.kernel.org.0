@@ -1,129 +1,138 @@
-Return-Path: <linux-integrity+bounces-702-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-701-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10562827C0F
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 01:30:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D35A5827C0A
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 01:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6AB0EB2335E
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 00:30:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D25EB22EA7
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 00:29:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C69C184C;
-	Tue,  9 Jan 2024 00:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E01C1371;
+	Tue,  9 Jan 2024 00:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gCeq9nn2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UhX17OvJ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CA815AA
-	for <linux-integrity@vger.kernel.org>; Tue,  9 Jan 2024 00:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704760208;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w5k+ZXtVfG6u9Bw3T1Sa5a4COKTCSddmRJFEwTBvDNI=;
-	b=gCeq9nn2aypv0+VE1dkvzIjoyW+kVcGqmRmafiJ1fKWyuuiH4SQkWNR1x8zVErR8IL36TG
-	+7enhepNDCYWH1vkhTWpmsPhfyEko07b0xdben0UPazp/nZvipsMJ2R+RSnM7XpdiUUd/f
-	9p3izZsqddWeHQ54MEqgqj0fqUZdiAk=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-17-lMPMo97zPUCnkIfwsvCwyA-1; Mon, 08 Jan 2024 19:30:07 -0500
-X-MC-Unique: lMPMo97zPUCnkIfwsvCwyA-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1d4212b6871so26088715ad.0
-        for <linux-integrity@vger.kernel.org>; Mon, 08 Jan 2024 16:30:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704760207; x=1705365007;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w5k+ZXtVfG6u9Bw3T1Sa5a4COKTCSddmRJFEwTBvDNI=;
-        b=YqNgcl94wU6UkLk0SGdNYLkdMi5af2sRd1W7KqN2VEw/ewel5OKGeB/uYFG93Rgt3B
-         b0o9Jzj0KhcmJpdut0HL8g0foRiDS/T5e6Ccl1IsAVK3G6EWyZHUj6hD2cA6woCjlOsr
-         vrtZmxmL+/Ye6Hk2/e8Np8mD1Ohf0rlcLTjPAWo0AAxMXyNYouGD9kEhQpQ1bSEZFHev
-         Rm2HppH/rFYIplRLqV0MoNbokp8qkQ/nPT+dCzHOnPsMNBvhOvt/+0xxO/pvaURp94Gl
-         ndVaM6Zuw1WMzYMg/e/FaXxFl8VZN3YC3mQSuaFIZYS8NMfvs42TvgPPBXJ4w5gOR2Xq
-         jUpw==
-X-Gm-Message-State: AOJu0YwdEsrgEDl1U+2EClL1u9jbfcyG7bDog392+0Wh4tJHHZfJz/Bf
-	lL7xLleXF4KhYBD5xbGl859Jbhd/IZ1kylbQ+eYS/xmlaKZP+Gs1O1VPQFvhspM78E/sxbhnfbE
-	vhbm+Zz3TvwYvVMMRJ9krMpHmiOdd/SbaV+Ty
-X-Received: by 2002:a17:903:2344:b0:1d5:4c37:714f with SMTP id c4-20020a170903234400b001d54c37714fmr1278398plh.22.1704760206409;
-        Mon, 08 Jan 2024 16:30:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFKsw+pTaiH9xGzdzNmrW8Ru6E0RFiaaS1q6loEdAq46i2p3vx+rT4qLXe66Af5VWUPuJT01A==
-X-Received: by 2002:a17:903:2344:b0:1d5:4c37:714f with SMTP id c4-20020a170903234400b001d54c37714fmr1278384plh.22.1704760206123;
-        Mon, 08 Jan 2024 16:30:06 -0800 (PST)
-Received: from localhost ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id jf18-20020a170903269200b001d4abb685c7sm477815plb.22.2024.01.08.16.30.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 16:30:05 -0800 (PST)
-Date: Tue, 9 Jan 2024 08:27:06 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, itrymybest80@protonmail.com, 
-	Mimi Zohar <zohar@linux.ibm.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: Re: [PATCH] integrity: don't throw an error immediately when
- failed to add a cert to the .machine keyring
-Message-ID: <hnx4cg626xworbjszwn2m7cijhh6fux7h7qnatgccfym6mjxic@uzs7ufqoswhw>
-References: <20231227044156.166009-1-coxu@redhat.com>
- <CY54Q6U6UMKM.2H5N3BACDBGU0@suppilovahvero>
- <43dozoqfip7m6nglbwzwyzykx23fpzbp7d42pcqzudnzlfvfkb@yjvuo5a6suvv>
- <CY6WDWW69XDP.2E8GFRMXYTB22@suppilovahvero>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5885B639;
+	Tue,  9 Jan 2024 00:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704760168; x=1736296168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ICS0Q1nES6wmFGgjB/iavarHm9pD/C1AFIAVIA7DcCg=;
+  b=UhX17OvJ5dE7T7WIKCyciBTJqWDWcu4lVS6h1KJxP6Wa2kfJ2nBA8pDu
+   z7ZSIUTckegp5Tx5h9hNfhCINjYibt+/B+cLo1YEnxmLkBMK20xWRbqhS
+   LI9zoA8GkpgOW8MwCUxlK+o8fd01AxKxNkvyW5zlaPZjuLntFZOnPlLAx
+   z1M+BA/xKIhbEKavwGukIQowopfAAaXtKchhgLuGATa2bNYp1VtP6XPxl
+   BghbUtfXg5ejUs5v22z4z+nTKi77wZ7nQunBMA6hDzFrDdDfdo0RR0n1L
+   IvevUkNMAKuzokjrGuaj88yD1dF2xLsnIr/Ecdsdj7vgEG4RZYe8y2Yny
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="396911428"
+X-IronPort-AV: E=Sophos;i="6.04,181,1695711600"; 
+   d="scan'208";a="396911428"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 16:29:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="900547474"
+X-IronPort-AV: E=Sophos;i="6.04,181,1695711600"; 
+   d="scan'208";a="900547474"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Jan 2024 16:29:19 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rMzzZ-0005G6-28;
+	Tue, 09 Jan 2024 00:29:17 +0000
+Date: Tue, 9 Jan 2024 08:28:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, ardb@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, javierm@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
+ into setup_data.h
+Message-ID: <202401090800.UOBEKB3W-lkp@intel.com>
+References: <20240108095903.8427-3-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CY6WDWW69XDP.2E8GFRMXYTB22@suppilovahvero>
+In-Reply-To: <20240108095903.8427-3-tzimmermann@suse.de>
 
-On Fri, Jan 05, 2024 at 06:02:38PM +0200, Jarkko Sakkinen wrote:
->On Fri Jan 5, 2024 at 3:20 PM EET, Coiby Xu wrote:
->> On Wed, Jan 03, 2024 at 04:09:29PM +0200, Jarkko Sakkinen wrote:
->> >On Wed Dec 27, 2023 at 6:41 AM EET, Coiby Xu wrote:
->> >> Currently when the kernel fails to add a cert to the .machine keyring,
->> >> it will throw an error immediately in the function integrity_add_key.
->> >>
->> >> Since the kernel will try adding to the .platform keyring next or throw
->> >> an error (in the caller of integrity_add_key i.e. add_to_machine_keyring),
->> >> so there is no need to throw an error immediately in integrity_add_key.
->> >>
->> >> Reported-by: itrymybest80@protonmail.com
->> >
->> >Missing "Firstname Lastname".
->>
->> Thanks for raising this concern! I've asked the reporter if he/she can
->> share his/her name.
->
->Also, it is lacking fixes tag.
+Hi Thomas,
 
-Thanks for catching this issue! I've included the Fixes tag in v2.
+kernel test robot noticed the following build warnings:
 
->
->Fixes tag is mandatory, name part would be super nice to have :-) Since
->this categories as a bug fix, getting them in is 1st priority and that
->thus does not absolutely block applying the change. Thanks for going
->trouble trying to query it, however.
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks for the explanation! As I still get no reply from the reporter,
-so I guess we have to accept the name part for now.
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
+patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
+config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
 
->
->BR, Jarkko
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/x86/realmode/rm/wakemain.c:3:
+   In file included from arch/x86/boot/boot.h:24:
+   In file included from arch/x86/include/asm/setup.h:10:
+   In file included from arch/x86/include/asm/page_types.h:7:
+   In file included from include/linux/mem_encrypt.h:17:
+   In file included from arch/x86/include/asm/mem_encrypt.h:18:
+   In file included from arch/x86/include/uapi/asm/bootparam.h:5:
+>> arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+      10 |         struct setup_data data;
+         |                           ^
+   1 warning generated.
+
+
+vim +10 arch/x86/include/asm/setup_data.h
+
+     8	
+     9	struct pci_setup_rom {
+  > 10		struct setup_data data;
+    11		uint16_t vendor;
+    12		uint16_t devid;
+    13		uint64_t pcilen;
+    14		unsigned long segment;
+    15		unsigned long bus;
+    16		unsigned long device;
+    17		unsigned long function;
+    18		uint8_t romdata[];
+    19	};
+    20	
 
 -- 
-Best regards,
-Coiby
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
