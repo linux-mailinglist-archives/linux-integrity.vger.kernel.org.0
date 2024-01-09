@@ -1,115 +1,146 @@
-Return-Path: <linux-integrity+bounces-703-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-704-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E233827C1A
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 01:35:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F41B582831B
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 10:25:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD1E2B22DD5
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 00:35:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BC1F1F22986
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 09:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ABF1819;
-	Tue,  9 Jan 2024 00:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5E035EF0;
+	Tue,  9 Jan 2024 09:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hg0sPdI/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JgCIGLH2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DC7375
-	for <linux-integrity@vger.kernel.org>; Tue,  9 Jan 2024 00:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704760518;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ARMX4HM6itdBlTBKVKSEXcT1ilseNu4Nvq2nBbOEvW8=;
-	b=hg0sPdI/JzE5QqFTLZ6Q4a6nYm4go4/zGBl3ZqPpTDvRxgyrHz0pXJHQQgQcDpawILzpSe
-	A5Qp2sjp9nQOQVwES7NTW8rRyj6qzi2fJeb+QPSOwfnaJZtR+YJw2Fej5MSTC2itToQ7Ms
-	q9vSq4GgTtBRt3S/j6XfFE90KEXIpBo=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-564-TdPLpGZ1ODmVy4yGyeEQqA-1; Mon, 08 Jan 2024 19:35:17 -0500
-X-MC-Unique: TdPLpGZ1ODmVy4yGyeEQqA-1
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-6d99506e2e7so3009334b3a.2
-        for <linux-integrity@vger.kernel.org>; Mon, 08 Jan 2024 16:35:17 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D32F358B7
+	for <linux-integrity@vger.kernel.org>; Tue,  9 Jan 2024 09:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-50eac018059so3347169e87.0
+        for <linux-integrity@vger.kernel.org>; Tue, 09 Jan 2024 01:25:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704792333; x=1705397133; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xfRDTz5XPwRHAABQZ2tll4TIOK6h/k/XpgzRQX6/Vwg=;
+        b=JgCIGLH2GFR+myFQT+JH9GX637IflkhvgzEOSuavqseXObAfMQgArOd9xoIMginiva
+         XinpPm0tslFtW5yviv2cFAYbSW0fqbL94lwe3m0wYg71JXUSiRMsrmnNDYqlcmDCSR1Z
+         LXH1Yy4bdkVmTaEEOzloO7z8KlKoO9bxDcHtmqUzri5cZRuk1Jt5Ff2m3zjBQy+Tjr5H
+         vZUpqGIf2Ts0JDSdhC5F4jI7ZOHK2yRy7SlZzT09mPlqllADK+RwnSX8hyW3LrqQwjAp
+         oXR2bB0y5/JNayJgkx+853Vmg0ttl/N4M+7jQOOGRmO5t8BcXJsP44+H4GHjh1OHb6ED
+         TnlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704760515; x=1705365315;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ARMX4HM6itdBlTBKVKSEXcT1ilseNu4Nvq2nBbOEvW8=;
-        b=DLrLRtav2YlL2PBZ5zG/LgQaMAtphVGVrTMpsw6PQvb8s3f62PBakt2Gdtxz/0Pb3d
-         oDkU/RwNzVgflyhAP308X/A0gKUn5i+W4JdaQwG4L+/uPncp/4jGH5Zu8Xq08uzu+uWU
-         Pqe+av3AiSJwjyQX0McqtD80YCjbK8RJKYlpdyoac+SZoYDs/qFv0qi96rZnjYhGu/AA
-         ugwLp8TOyoTiqQy9fM9PzP1MmaLFt8OOvlCatMKFhxMn5iRtp4M0qGGMIWVazXhfErIl
-         +J7/t7pJrPz7iwI8AXi+Cl2nA0ahppfZ0lplXeTZ3oNLOwWfB9XF/3x2tcA55dHTPnJi
-         2P+Q==
-X-Gm-Message-State: AOJu0Yy0+YPAkTyf4JQhgMvSKSQAiJo7UQuvTkYWqvXnqG0q6+2tTjW+
-	HOLDNS4ptCd2UIDQ3Ff+Tm7QnVOBf1RPIGkJJ7bWX+DZtuwcX4hgeZya8Sa9//bSEG9tSNGaRek
-	s2lQKu7X5Rb8EjrhL/5/555y278IqejLM2LSIf0SlyuoYIQBDvQ==
-X-Received: by 2002:a05:6a20:65d:b0:199:f2ef:8282 with SMTP id 29-20020a056a20065d00b00199f2ef8282mr122302pzm.100.1704760515682;
-        Mon, 08 Jan 2024 16:35:15 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFpvMu4Ls9SGUYo6jmphzFnSHZMJQHYOZu5gp20jJVmFV8u2Z+IYHNt7UlyuoeL2/n3onexSQ==
-X-Received: by 2002:a05:6a20:65d:b0:199:f2ef:8282 with SMTP id 29-20020a056a20065d00b00199f2ef8282mr122295pzm.100.1704760515363;
-        Mon, 08 Jan 2024 16:35:15 -0800 (PST)
-Received: from localhost ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id b15-20020a17090a12cf00b0028c89122f8asm553134pjg.6.2024.01.08.16.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 16:35:15 -0800 (PST)
-Date: Tue, 9 Jan 2024 08:30:03 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, itrymybest80@protonmail.com, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: Re: Re: [PATCH] integrity: don't throw an error immediately when
- failed to add a cert to the .machine keyring
-Message-ID: <vzys7y22d7zduhcrlqojnavcad5zvxde4axdsgrfpwn3u557iz@cnjbuwkfqiur>
-References: <20231227044156.166009-1-coxu@redhat.com>
- <39e5612eb2d4dea2759310ccce39c1ad40b5388f.camel@linux.ibm.com>
- <35tiggwgbrb2sapyykv3umio5l2xqhmzc43wy33dxmz4hyu24c@bprgz7skpxma>
- <16ae3e51dc4eeb2b2e674b8ff1051ac315fa492c.camel@linux.ibm.com>
+        d=1e100.net; s=20230601; t=1704792333; x=1705397133;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfRDTz5XPwRHAABQZ2tll4TIOK6h/k/XpgzRQX6/Vwg=;
+        b=khjoRb/S8pa+4mNgnowP9ZxdHdCS+a6ZIZ2Kc1gux9nfY2/PJg9R2TwPposQ1KwU0+
+         AlnNCJUvCy4IAgq+2X4CcVGsJBTO0lVKGqn7UOzu36S7TBgy6/km4w2MRlODPivVMUmY
+         BSGBPrWHiylId42QY6af+6DquEY9EoDB3D98XhaKrbMSQ7Y/tcL/fhugwD/QghsvNXJw
+         5wUSUFrzC2M2yzCOyDnnQa7NlwjS2dRq5xdw1mnr8DjaL5F2dmB2ewOgpzNPRwgxq7M4
+         BS79IJdVPyDT9j2VnUoYDNOUYy+VLABQpfgUZmYyz96UBRFkUy3v8hQrRXrcT/31yReH
+         +9kg==
+X-Gm-Message-State: AOJu0Yyz10bdxnJkTs4SQc1Q4IGoyeuzWcXMzXPW18jMawQWigw90Jl7
+	rW5eE1A1jyjME7E9TEXkF8dtdNpR54Rtag==
+X-Google-Smtp-Source: AGHT+IEmmRbyNJqYVoXTsrz7c+lNWBKsMw6fJwxoN04iSulduZF9YIz/Y7jdtyetu9H0eTEY08siMQ==
+X-Received: by 2002:a05:6512:102a:b0:50e:1870:1ef4 with SMTP id r10-20020a056512102a00b0050e18701ef4mr1721012lfr.48.1704792333141;
+        Tue, 09 Jan 2024 01:25:33 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.223.112])
+        by smtp.gmail.com with ESMTPSA id l25-20020a1709061c5900b00a28956cf75esm813989ejg.130.2024.01.09.01.25.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jan 2024 01:25:32 -0800 (PST)
+Message-ID: <176f3bcf-d9c6-4672-bb4d-112f1ac17b1f@linaro.org>
+Date: Tue, 9 Jan 2024 10:25:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <16ae3e51dc4eeb2b2e674b8ff1051ac315fa492c.camel@linux.ibm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] dt-bindings: arm: aspeed: add IBM system1-bmc
+Content-Language: en-US
+To: Ninad Palsule <ninad@linux.ibm.com>, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, joel@jms.id.au,
+ andrew@codeconstruct.com.au, peterhuewe@gmx.de, jarkko@kernel.org,
+ jgg@ziepe.ca, keescook@chromium.org, tony.luck@intel.com,
+ gpiccoli@igalia.com, johannes.holland@infineon.com, linux@roeck-us.net,
+ broonie@kernel.org, andre.werner@systec-electronic.com
+Cc: patrick.rudolph@9elements.com, vincent@vtremblay.dev,
+ peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com, bhelgaas@google.com,
+ naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
+ festevam@denx.de, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-hardening@vger.kernel.org, geissonator@yahoo.com,
+ geert+renesas@glider.be, luca.ceresoli@bootlin.com
+References: <20240108204114.1041390-1-ninad@linux.ibm.com>
+ <20240108204114.1041390-2-ninad@linux.ibm.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240108204114.1041390-2-ninad@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 05, 2024 at 09:59:14AM -0500, Mimi Zohar wrote:
->On Fri, 2024-01-05 at 21:27 +0800, Coiby Xu wrote:
->> On Tue, Jan 02, 2024 at 12:54:02PM -0500, Mimi Zohar wrote:
->> >Hi Coiby,
->>
->> Hi Mimi,
->>
->> >
->> >According to https://docs.kernel.org/process/submitting-patches.html,the
->> summary line should be no more than  70 - 75 characters.
->>
->> Thanks for pointing me to this limit! How about
->> integrity: eliminate harmless error "Problem loading X.509 certificate -126"
->
->Still >75.   How about the following?
->
->integrity: eliminate unnecessary "Problem loading X.509 certificate" msg
+On 08/01/2024 21:41, Ninad Palsule wrote:
+> Document the new compatibles used on IBM system1-bmc
+> 
+> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
 
-Thanks, v2 now uses the above subject. I thought the limit applies to
-the "summary phrase" instead of the whole "summary" and a second look
-proved me wrong. 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
 Best regards,
-Coiby
+Krzysztof
 
 
