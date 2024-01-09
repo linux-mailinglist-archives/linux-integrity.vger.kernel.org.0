@@ -1,154 +1,131 @@
-Return-Path: <linux-integrity+bounces-698-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-699-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CDCC827A5D
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 22:46:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33BD9827BF2
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 01:24:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7F3CB22953
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jan 2024 21:46:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7AAD284ED6
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jan 2024 00:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69C455645D;
-	Mon,  8 Jan 2024 21:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857523211;
+	Tue,  9 Jan 2024 00:24:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BTlo9Odg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gmyAZGg0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19AD5644D;
-	Mon,  8 Jan 2024 21:46:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704750384; x=1736286384;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vL2CfUljdFe7w0t2AJp2MOgIOpmNHhRLVOLT7Dr6oi4=;
-  b=BTlo9Odgr6VfkxsteR3eP9+xE+OgzbYmYwMhfLaio0Y7hMGW2CkPK458
-   nLA7H0szO6Q5jnNHoc18v4+hyUmc+ZZp+QogbW9/WbR0UcU+EeyxitPQ+
-   DrQFAwhGJGbyiAZhUErm/AIrIdJptbKgJKXWGNoqiWI7+VwwiBWMQU9sM
-   NHzl8qo1ZsaVgCuOVujTOD+EktKJbryzEOhFfn4tW2sb8GnpTEv0HwMKn
-   eFRBNnkFOdWdDa3ks6ndFTRPnPOOlA4OUlh0w987DyLBSXAKda3MJ+8bH
-   LN1YRQnVLrK3mdHzIeiI/9Q7rRj58+woYOfjAvwrITYaiQvD6Q6RN97o8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="11359337"
-X-IronPort-AV: E=Sophos;i="6.04,180,1695711600"; 
-   d="scan'208";a="11359337"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2024 13:46:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="872007229"
-X-IronPort-AV: E=Sophos;i="6.04,180,1695711600"; 
-   d="scan'208";a="872007229"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jan 2024 13:46:17 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rMxQw-00057e-0T;
-	Mon, 08 Jan 2024 21:45:31 +0000
-Date: Tue, 9 Jan 2024 05:44:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, ardb@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, javierm@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v4 4/4] arch/x86: Do not include <asm/bootparam.h> in
- several files
-Message-ID: <202401090541.atvQk6V7-lkp@intel.com>
-References: <20240108095903.8427-5-tzimmermann@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E115A3209
+	for <linux-integrity@vger.kernel.org>; Tue,  9 Jan 2024 00:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704759877;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wBgrmkRdNGMcly6vlN7IHOo4uqMRRCrvatkr8PlQXzA=;
+	b=gmyAZGg05GqityIsjqq56pJ/2Y/77oLqaa0KpZ4EIHsVn9XELkG8cnX0o8H45R7cLQAD7N
+	ec0q7FP69jvMJxkq/Ame/b99yScjTZ/6wjPqvIQSzdKkVGIZqxaiP4ko0e0Clw918vfIzh
+	mXOUsX48XXy5JvjqsF7p3cxLMTa97b0=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-696-2Tk1gqpZPJ--NdsiX0feZw-1; Mon, 08 Jan 2024 19:24:34 -0500
+X-MC-Unique: 2Tk1gqpZPJ--NdsiX0feZw-1
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-6d9ac6ecb54so1305470b3a.3
+        for <linux-integrity@vger.kernel.org>; Mon, 08 Jan 2024 16:24:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704759872; x=1705364672;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wBgrmkRdNGMcly6vlN7IHOo4uqMRRCrvatkr8PlQXzA=;
+        b=qWfNTk88JL+6P/jmvUAudvZa1i1gblIl1S4kIPWv3k8XxszGAlKCESsSo8SjRC8c7o
+         sHx7Ld034B8rdZX0V/9p9SMXsltovS6hEEEGd5Y2t/+TQnFY+8E63Jp/8uM4wtJjepby
+         Gibkc3wbwqIV7BOPBTLzrhBtWD84X3D0EhXNJuiaoNulouoUUMs/MCxXO3/H6Qap+6M2
+         oHdOVNM2IF8A/Ecr0oWQJNg7azRxrho3MyyTw6IId1jFP91sCneXv4OUffBc++yZj+NY
+         ALJDxzcsUJ9XL5OloXfKbEeRL30Uajhbo6hjSmLv8nj3wh7sbE9jOKrEIupJAxiTvFGn
+         Fgyw==
+X-Gm-Message-State: AOJu0YxdJgecYVyNroEy5dwqIfcWjo2a05PO/nrHrnq7CNtHCbqTB52n
+	U80ySMMYKiHas/7bHUig9A23OMd0M4PV6iC9VC6gZoC7JU3grx8ORdrAmotWeYKwrYunApt4u1J
+	XLHLnvBFhjFhMWCws3bZ6rtwxeHaOXd5YAie6TpaYrYAndbvEgH3ck4ddGei4bPfQm1Uhw9yQtu
+	MxfoT8er6sDi9cAzcFEH41
+X-Received: by 2002:a05:6a20:1044:b0:195:192c:e5a5 with SMTP id gt4-20020a056a20104400b00195192ce5a5mr1584024pzc.56.1704759872494;
+        Mon, 08 Jan 2024 16:24:32 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFAYwqOIUUbzS4Z6Wh9myf9nF6QYMlenNKzdIdCeZBN2nChQ2/gE/uHykLmJ60rmWnGCpKmUA==
+X-Received: by 2002:a05:6a20:1044:b0:195:192c:e5a5 with SMTP id gt4-20020a056a20104400b00195192ce5a5mr1584007pzc.56.1704759871993;
+        Mon, 08 Jan 2024 16:24:31 -0800 (PST)
+Received: from localhost ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id jg11-20020a17090326cb00b001d403f114d2sm459444plb.303.2024.01.08.16.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jan 2024 16:24:31 -0800 (PST)
+From: Coiby Xu <coxu@redhat.com>
+To: linux-integrity@vger.kernel.org
+Cc: itrymybest80@protonmail.com,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] integrity: eliminate unnecessary "Problem loading X.509 certificate" msg
+Date: Tue,  9 Jan 2024 08:24:28 +0800
+Message-ID: <20240109002429.1129950-1-coxu@redhat.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231227044156.166009-1-coxu@redhat.com>
+References: <20231227044156.166009-1-coxu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240108095903.8427-5-tzimmermann@suse.de>
+Content-Transfer-Encoding: 8bit
 
-Hi Thomas,
+Currently when the kernel fails to add a cert to the .machine keyring,
+it will throw an error immediately in the function integrity_add_key.
 
-kernel test robot noticed the following build errors:
+Since the kernel will try adding to the .platform keyring next or throw
+an error (in the caller of integrity_add_key i.e. add_to_machine_keyring),
+so there is no need to throw an error immediately in integrity_add_key.
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reported-by: itrymybest80@protonmail.com
+Closes: https://bugzilla.redhat.com/show_bug.cgi?id=2239331
+Fixes: d19967764ba8 ("integrity: Introduce a Linux keyring called machine")
+Reviewed-by: Eric Snowberg <eric.snowberg@oracle.com>
+Signed-off-by: Coiby Xu <coxu@redhat.com>
+---
+v2
+ - improve patch subject [Mimi]
+ - add Fixes tag [Jarkko]
+ - add Reviewed-by tag from Eric
+---
+ security/integrity/digsig.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20240108095903.8427-5-tzimmermann%40suse.de
-patch subject: [PATCH v4 4/4] arch/x86: Do not include <asm/bootparam.h> in several files
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20240109/202401090541.atvQk6V7-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090541.atvQk6V7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401090541.atvQk6V7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/boot/compressed/cmdline.c:2:
->> arch/x86/boot/compressed/misc.h:154:5: error: incomplete definition of type 'struct boot_params'
-     154 |                 bp->cc_blob_address = 0;
-         |                 ~~^
-   arch/x86/include/asm/mem_encrypt.h:18:8: note: forward declaration of 'struct boot_params'
-      18 | struct boot_params;
-         |        ^
-   1 error generated.
-
-
-vim +154 arch/x86/boot/compressed/misc.h
-
-cec49df9d331fe Joe Millenbach    2012-07-19  135  
-597cfe48212a3f Joerg Roedel      2020-09-07  136  #ifdef CONFIG_AMD_MEM_ENCRYPT
-ec1c66af3a30d4 Michael Roth      2022-02-09  137  void sev_enable(struct boot_params *bp);
-8c29f016540532 Nikunj A Dadhania 2023-01-18  138  void snp_check_features(void);
-597cfe48212a3f Joerg Roedel      2020-09-07  139  void sev_es_shutdown_ghcb(void);
-69add17a7c1992 Joerg Roedel      2020-09-07  140  extern bool sev_es_check_ghcb_fault(unsigned long address);
-4f9c403e44e5e8 Brijesh Singh     2022-02-09  141  void snp_set_page_private(unsigned long paddr);
-4f9c403e44e5e8 Brijesh Singh     2022-02-09  142  void snp_set_page_shared(unsigned long paddr);
-76f61e1e89b32f Michael Roth      2022-02-24  143  void sev_prep_identity_maps(unsigned long top_level_pgt);
-597cfe48212a3f Joerg Roedel      2020-09-07  144  #else
-4b1c742407571e Michael Roth      2022-08-23  145  static inline void sev_enable(struct boot_params *bp)
-4b1c742407571e Michael Roth      2022-08-23  146  {
-4b1c742407571e Michael Roth      2022-08-23  147  	/*
-4b1c742407571e Michael Roth      2022-08-23  148  	 * bp->cc_blob_address should only be set by boot/compressed kernel.
-4b1c742407571e Michael Roth      2022-08-23  149  	 * Initialize it to 0 unconditionally (thus here in this stub too) to
-4b1c742407571e Michael Roth      2022-08-23  150  	 * ensure that uninitialized values from buggy bootloaders aren't
-4b1c742407571e Michael Roth      2022-08-23  151  	 * propagated.
-4b1c742407571e Michael Roth      2022-08-23  152  	 */
-4b1c742407571e Michael Roth      2022-08-23  153  	if (bp)
-4b1c742407571e Michael Roth      2022-08-23 @154  		bp->cc_blob_address = 0;
-4b1c742407571e Michael Roth      2022-08-23  155  }
-8c29f016540532 Nikunj A Dadhania 2023-01-18  156  static inline void snp_check_features(void) { }
-597cfe48212a3f Joerg Roedel      2020-09-07  157  static inline void sev_es_shutdown_ghcb(void) { }
-69add17a7c1992 Joerg Roedel      2020-09-07  158  static inline bool sev_es_check_ghcb_fault(unsigned long address)
-69add17a7c1992 Joerg Roedel      2020-09-07  159  {
-69add17a7c1992 Joerg Roedel      2020-09-07  160  	return false;
-69add17a7c1992 Joerg Roedel      2020-09-07  161  }
-4f9c403e44e5e8 Brijesh Singh     2022-02-09  162  static inline void snp_set_page_private(unsigned long paddr) { }
-4f9c403e44e5e8 Brijesh Singh     2022-02-09  163  static inline void snp_set_page_shared(unsigned long paddr) { }
-76f61e1e89b32f Michael Roth      2022-02-24  164  static inline void sev_prep_identity_maps(unsigned long top_level_pgt) { }
-597cfe48212a3f Joerg Roedel      2020-09-07  165  #endif
-597cfe48212a3f Joerg Roedel      2020-09-07  166  
-
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index df387de29bfa..45c3e5dda355 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -179,7 +179,8 @@ static int __init integrity_add_key(const unsigned int id, const void *data,
+ 				   KEY_ALLOC_NOT_IN_QUOTA);
+ 	if (IS_ERR(key)) {
+ 		rc = PTR_ERR(key);
+-		pr_err("Problem loading X.509 certificate %d\n", rc);
++		if (id != INTEGRITY_KEYRING_MACHINE)
++			pr_err("Problem loading X.509 certificate %d\n", rc);
+ 	} else {
+ 		pr_notice("Loaded X.509 cert '%s'\n",
+ 			  key_ref_to_ptr(key)->description);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
