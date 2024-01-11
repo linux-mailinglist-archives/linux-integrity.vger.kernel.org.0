@@ -1,106 +1,136 @@
-Return-Path: <linux-integrity+bounces-736-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-737-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3337982B45F
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 18:56:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49CA182B485
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 19:10:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBCCF1F242A2
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 17:56:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AB39284D75
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 18:10:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E03D652F78;
-	Thu, 11 Jan 2024 17:56:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F356537E3;
+	Thu, 11 Jan 2024 18:09:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="d+Q1w/wM"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HxdKXFpd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83D7652F74
-	for <linux-integrity@vger.kernel.org>; Thu, 11 Jan 2024 17:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.86.69] (unknown [50.46.228.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 6F7BA20B3CC1;
-	Thu, 11 Jan 2024 09:56:04 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6F7BA20B3CC1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1704995765;
-	bh=bjDCby8arrnCLXKoPLXG5spNzDaZaj7J3NIFKAE7WLQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=d+Q1w/wMPcaJqMMjIY8snExyEKPtVO+I+LBkepU8x1truvKczkDoaCu5fW2rMK4ZX
-	 4hv1052godKnPSya4ggfTvI0z13UEOsHFRnigBnQycASElCjbtB2Ul7NgDQDwLu/6c
-	 AaQTiHcvhi0WcTdOi/ehkDuy9cVJXerHOtkRpGP0=
-Message-ID: <fcc6cf08-083c-4013-a164-359b2a2140b3@linux.microsoft.com>
-Date: Thu, 11 Jan 2024 09:56:03 -0800
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2037652F7B;
+	Thu, 11 Jan 2024 18:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40BHcXWM030596;
+	Thu, 11 Jan 2024 18:09:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=EO3J9A6TroCBSWwiiGnlVOrch5ftdo4Wu2ZAYo+fcUk=;
+ b=HxdKXFpdlqUOQRMHMptzjr5RPR41La1ViQaQXWhZNmb/B/N18udSfIFMFkT6M1Ktu+KY
+ GF9B0cdwFN3ejWP+QpX3Ms90qwiQoNhi1Dd/hwR7YzQ7blEbdlWSTtlGt5cfiipvaGeD
+ D6phIWWjLUaGcWSQvY5XpezwjxNSJgWD1HdxnLmf0XUTqq23jh3oXAFh3m+UO41kZMPx
+ 8Flhx6RjNw3q+b1n5ZQlSd3TLH17g3ovEyZanDnnVwqXc9P9igLARUGIJQ7xJRzFttSF
+ PwmYIahhEk0R4aHJv13gtxK0RMJ9tyoLj5wN2ojRNSrsioz+QV3pvJSz3keCZTSDn3yN Xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vjmwh0yt2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jan 2024 18:09:44 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40BHdWMt000491;
+	Thu, 11 Jan 2024 18:09:44 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vjmwh0ysu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jan 2024 18:09:44 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40BGBmnJ027253;
+	Thu, 11 Jan 2024 18:09:43 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vfkw2cps8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jan 2024 18:09:43 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40BI9gN715532638
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 11 Jan 2024 18:09:42 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 48A0C5805A;
+	Thu, 11 Jan 2024 18:09:42 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0F06258064;
+	Thu, 11 Jan 2024 18:09:42 +0000 (GMT)
+Received: from [9.24.12.86] (unknown [9.24.12.86])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 11 Jan 2024 18:09:42 +0000 (GMT)
+Message-ID: <70838bd2-8b03-4003-86f5-50a635ae31ec@linux.ibm.com>
+Date: Thu, 11 Jan 2024 12:09:41 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] tpm: tis-i2c: Add more compatible strings
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        Joel Stanley <joel@jms.id.au>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ninad Palsule <ninad@linux.vnet.ibm.com>
+References: <20231214144954.3833998-1-ninad@linux.ibm.com>
+ <20231214144954.3833998-2-ninad@linux.ibm.com>
+ <20240109-saddling-nintendo-c7fbb46bb0dd@spud>
+From: Ninad Palsule <ninad@linux.ibm.com>
+In-Reply-To: <20240109-saddling-nintendo-c7fbb46bb0dd@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uuvxTt3KtfKDFwLlGQhoor5IRYlDO1V2
+X-Proofpoint-ORIG-GUID: HfjQtr4LDqAAdNKAYr1YyqQ97IZh4rcz
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 7/7] ima: measure kexec load and exec events as
- critical data
-Content-Language: en-US
-To: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huaweicloud.com,
- roberto.sassu@huawei.com, eric.snowberg@oracle.com, stefanb@linux.ibm.com,
- ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
- linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
- <20231216010729.2904751-8-tusharsu@linux.microsoft.com>
- <0c98853722d57472d451e7838d4b1176665de1c0.camel@linux.ibm.com>
- <db16303d-44b7-45d2-b844-cf4d7fe89647@linux.microsoft.com>
- <ddd990a0faeb79260709b973b2b959a89e6c65bc.camel@linux.ibm.com>
-From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <ddd990a0faeb79260709b973b2b959a89e6c65bc.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-11_09,2024-01-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 clxscore=1015 adultscore=0 mlxscore=0 bulkscore=0
+ phishscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311290000 definitions=main-2401110142
 
+Hello Conor,
 
-
-On 1/7/24 06:24, Mimi Zohar wrote:
-> On Fri, 2024-01-05 at 12:22 -0800, Tushar Sugandhi wrote:
->>>> @@ -194,6 +206,15 @@ static int ima_update_kexec_buffer(struct notifier_block *self,
->>>>               return ret;
->>>>       }
->>>>    
->>>> +    buf_size = ima_get_binary_runtime_size();
->>>> +    scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
->>>> +              "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;",
->>>> +              kexec_segment_size, buf_size);
->>>> +
->>>> +    ima_measure_critical_data("ima_kexec", "kexec_execute",
->>>> +                              ima_kexec_event, strlen(ima_kexec_event),
->>>> +                              false, NULL, 0);
->>>> +
->>>
->>> Please consider including the number of measurement records as well.
->> Will do. I think that would be valuable information.
+On 1/9/24 11:11, Conor Dooley wrote:
+> On Thu, Dec 14, 2023 at 08:49:53AM -0600, Ninad Palsule wrote:
+>> From: Joel Stanley <joel@jms.id.au>
 >>
->> Per my understanding, I will have to use the function
->> ima_show_measurements_count() or ima_show_htable_value() to get the
->> number of measurement records value[1]. So I will have to expose that
->> function from "ima_fs.c" to "ima_kexec.c". Hope that's ok.
+>> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
 >>
->> [1]
->> https://elixir.bootlin.com/linux/latest/sourcesecurity/integrity/ima/ima_fs.c
+>> https://www.nuvoton.com/products/cloud-computing/security/trusted-platform-module-tpm/
 >>
+>> Add a compatible string for it, and the generic compatible.
 >>
->> static ssize_t ima_show_measurements_count(struct file *filp,
->>                                            char __user *buf,
->>                                            size_t count, loff_t *ppos)
->> {
->>           return ima_show_htable_value(buf, count, ppos, &ima_htable.len);
-> 
-> I don't see a need to expose this function.  ima_htable is defined in ima.h.
-> You can read the ima_htable.len directly, as ima_show_htable_value does.
-> 
-Agreed. Thanks for the pointer.
-That's what I concluded too when I was implementing this change.
-I will use ima_htable.len directly.
+>> Signed-off-by: Joel Stanley <joel@jms.id.au>
+>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+>> Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.au
+>> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
+> I don't understand why you broke this series up and dropped patches.
+> NAK, these compatibles are not documented.
 
-~Tushar
+I have reconfirmed and other two patches are already dropped and merged 
+by Lukas:
 
+https://lore.kernel.org/all/3f56f0a2bb90697a23e83583a21684b75dc7eea2.1701093036.git.lukas@wunner.de/
+
+This is the only one pending from that series. Please let me know if I 
+need to do anything else for this patch series.
+
+Regards,
+
+Ninad
+
+>
+>
 
