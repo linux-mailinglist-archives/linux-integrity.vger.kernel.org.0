@@ -1,1796 +1,339 @@
-Return-Path: <linux-integrity+bounces-742-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-738-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19CBF82B4A3
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 19:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBD9082B493
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 19:13:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F86D1F265CF
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 18:14:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46A811F25C15
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 18:13:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD9655C1C;
-	Thu, 11 Jan 2024 18:14:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF40537E6;
+	Thu, 11 Jan 2024 18:13:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HFTu2wPT"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JxGPW4SU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B01754BC2;
-	Thu, 11 Jan 2024 18:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40BHuges019842;
-	Thu, 11 Jan 2024 18:12:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=1lBu5H6fR3HGw4ZeLphY4k9G1UU6dqAh1UHj6Q6qhe0=;
- b=HFTu2wPTcF+4R+f9JOLOmYfrpcTi+sdD+H6IVbhrP8xrdA/l5wBF+PhOAlKzzJTNTUh4
- 6YBZaJiZAqciHCQhKoWjyllKDnLqR55fJeysoO6EoAh5/2uY6Uj1rZzGWxtjnzskd0s6
- M4oB1r6nizDVyazvBLvv2hb7bIZx04zkX95uxte0jPLxqpZVCIpF3Mc1JUGC2EZnyx5x
- 4aQa1Yo0mDqoMamcbf52EvsqkGWVhWCt7hBvsuD43sQnILa2D0Exe6VdGaeeoeiz8Lod
- oXnpclz8rn9V8cJT13Z7X4Fs/cH1HUhFyL9JZt26/j+G0Un5OvxMukDtdkIVsgbHhwlw Aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vjmf91bdc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 18:12:59 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40BHujj1020093;
-	Thu, 11 Jan 2024 18:12:58 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vjmf91bcs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 18:12:58 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40BHsO6b022882;
-	Thu, 11 Jan 2024 18:12:57 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vfj6nw4we-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 18:12:57 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40BICt4R50528792
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Jan 2024 18:12:56 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CD5D558058;
-	Thu, 11 Jan 2024 18:12:55 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 37DA358059;
-	Thu, 11 Jan 2024 18:12:55 +0000 (GMT)
-Received: from gfwa153.aus.stglabs.ibm.com (unknown [9.3.84.127])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 11 Jan 2024 18:12:55 +0000 (GMT)
-From: Ninad Palsule <ninad@linux.ibm.com>
-To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        joel@jms.id.au, andrew@codeconstruct.com.au, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, keescook@chromium.org,
-        tony.luck@intel.com, gpiccoli@igalia.com, ninad@linux.ibm.com,
-        johannes.holland@infineon.com, linux@roeck-us.net, broonie@kernel.org,
-        andre.werner@systec-electronic.com
-Cc: Andrew Geissler <geissonator@yahoo.com>, patrick.rudolph@9elements.com,
-        vincent@vtremblay.dev, peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com,
-        bhelgaas@google.com, naresh.solanki@9elements.com,
-        alexander.stein@ew.tq-group.com, festevam@denx.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
-        geert+renesas@glider.be, luca.ceresoli@bootlin.com
-Subject: [PATCH v3 3/3] ARM: dts: aspeed: System1: IBM system1 BMC board
-Date: Thu, 11 Jan 2024 12:12:51 -0600
-Message-Id: <20240111181251.1817582-4-ninad@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240111181251.1817582-1-ninad@linux.ibm.com>
-References: <20240111181251.1817582-1-ninad@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WfC6e1RGQZHeL5BG31FBhlaXKIcKYwvE
-X-Proofpoint-ORIG-GUID: D7mKMOU1GA7mJPbnLvc7IJux_9_sMSFr
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF2D537E4
+	for <linux-integrity@vger.kernel.org>; Thu, 11 Jan 2024 18:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.86.69] (unknown [50.46.228.62])
+	by linux.microsoft.com (Postfix) with ESMTPSA id E7A4D20B3CC1;
+	Thu, 11 Jan 2024 10:13:05 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E7A4D20B3CC1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1704996786;
+	bh=6JRTcEUnC+WOlcfZNNfu0nkVnWX6JBwrj/f9yBFqx5Y=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JxGPW4SUQfxzLbSDhLF7m4Lgw3jTCh9x5KmQoG54jsR3J+UaEA1dlIfi1YkbUK0dK
+	 qlvu8SVGDMsDf8LpV8XpboTauk+GLakOeRhbvDQZsd6KCqd8UNiaFkXB7ZJiTNUSEt
+	 cWfltyTluKCPrX9ZlbtomBezJODK0BsdDCT+5z2U=
+Message-ID: <0df62e0e-a9d5-434c-866c-936cafeed480@linux.microsoft.com>
+Date: Thu, 11 Jan 2024 10:13:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-11_09,2024-01-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0
- priorityscore=1501 mlxlogscore=999 adultscore=0 bulkscore=0 clxscore=1015
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401110143
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 6/7] ima: configure memory to log events between kexec
+ load and execute
+Content-Language: en-US
+To: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huaweicloud.com,
+ roberto.sassu@huawei.com, eric.snowberg@oracle.com, stefanb@linux.ibm.com,
+ ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
+ linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
+ <20231216010729.2904751-7-tusharsu@linux.microsoft.com>
+ <fbe6aa7577875b23a9913a39f858f06f1d2aa903.camel@linux.ibm.com>
+ <b78bbf3f-da39-47a6-aac3-581c8d2827a0@linux.microsoft.com>
+ <3e8cb0bd77a2b73613b19febb2b3121ef0ea8255.camel@linux.ibm.com>
+From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <3e8cb0bd77a2b73613b19febb2b3121ef0ea8255.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Andrew Geissler <geissonator@yahoo.com>
 
-Add a device tree for IBM system1 BMC board. It uses AST2600 SOC.
-- Added base board
-- Added i2c devices and muxes.
-- Added different voltage regulators.
-- Added GPIO pin assignements, GPIO expansion devices
-- Added LED brinker devices
-- Added Fan controllers
-- Added EEPROM/VPD
-- Added Power supplies
-- Added Humidity, pressure and temperature sensors.
-- Added Trusted platform module(TPM) chip.
 
-Tested:
-    This board is tested using the simics simulator.
+On 1/7/24 09:00, Mimi Zohar wrote:
+> On Fri, 2024-01-05 at 12:20 -0800, Tushar Sugandhi wrote:
+>>>> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+>>>> index 60a511c6b583..8792b7aab768 100644
+>>>> --- a/security/integrity/ima/Kconfig
+>>>> +++ b/security/integrity/ima/Kconfig
+>>>> @@ -338,3 +338,12 @@ config IMA_DISABLE_HTABLE
+>>>>       default n
+>>>>       help
+>>>>          This option disables htable to allow measurement of duplicate records.
+>>>> +
+>>>> +config IMA_KEXEC_EXTRA_MEMORY_KB
+>>>> +    int
+>>>> +    depends on IMA && IMA_KEXEC
+>>>> +    default 64
+>>>
+>>> Since this isn't optional, the default should remain as a half page.
+>>> Since a page is architecture specific, the default will need to be arch
+>>>    specific
+>>>
+>> It was a feedback from Stefan in the V2 of this series to convert it
+>> from number of PAGES to KB.[1]
+>>
+>> But I can revert it to number of pages again.
+>>
+>> Also, making the default value as a fraction (1/2 page) feels weird for
+>> a CONFIG variable.
+>>
+>> Is it ok to make the default value as one page rather than half page?
+> 
+> The point is not whether the extra memory is specified in terms of pages or KB.
+> For backwards compatibility the existing default should be the same as
+> previously.  This means the default needs to be architecture specific.b
+>   
+> $ uname -m; getconf PAGESIZE
+> x86_64
+> 4096
+>   
+> $ uname -m; getconf PAGESIZE
+> ppc64le
+> 65536
+> 
+> For example:
+> 
+> default 32 if PPC_64K_PAGES
+> default 2
+> 
+Ok. Thanks for the clarification.
 
-Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
-Signed-off-by: Andrew Geissler <geissonator@yahoo.com>
----
-The compatibility string and schema for tpm device is documented in the
-following patch series:
--https://lore.kernel.org/all/77fe0ccd-53ff-4773-9787-0d038434297f@linux.ibm.com/
--https://lore.kernel.org/all/3f56f0a2bb90697a23e83583a21684b75dc7eea2.1701093036.git.lukas@wunner.de/
 
-v3:
-  - Fixed the voltage-regulator names.
-v2:
-  - Incorporated review comments from Conor Dooley, Jarkko Sakkinen,
-    Guenter Roeck, Rob Herring, Krzysztof Kozlowski
-    - Merge all patches into single patch.
-    - Split the trivial device patch.
-    - Cleanup commit messages.
-    - Fixed bootargs string.
-    - Fixed node names.
-    - Dropped tpm schema patch as it is covered by Lukas's patch.
-    - Dropped "tpm: tis-i2c: Add more compatible strings" patch and
-      send it as a separate patch.
----
- arch/arm/boot/dts/aspeed/Makefile             |    1 +
- .../dts/aspeed/aspeed-bmc-ibm-system1.dts     | 1623 +++++++++++++++++
- 2 files changed, 1624 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
+Do we want to support only 64K or 4K as possible PAGE_SIZE values?
+I spot checked a few architectures, there are scenarios where PAGE_SIZE
+could be 8K, 16K, 128K, 256K etc. And of course mega pages with
+PAGE_SIZE IN MBs (details below).
 
-diff --git a/arch/arm/boot/dts/aspeed/Makefile b/arch/arm/boot/dts/aspeed/Makefile
-index 23cbc7203a8e..d551aed79286 100644
---- a/arch/arm/boot/dts/aspeed/Makefile
-+++ b/arch/arm/boot/dts/aspeed/Makefile
-@@ -32,6 +32,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-ibm-rainier.dtb \
- 	aspeed-bmc-ibm-rainier-1s4u.dtb \
- 	aspeed-bmc-ibm-rainier-4u.dtb \
-+	aspeed-bmc-ibm-system1.dtb \
- 	aspeed-bmc-intel-s2600wf.dtb \
- 	aspeed-bmc-inspur-fp5280g2.dtb \
- 	aspeed-bmc-inspur-nf5280m6.dtb \
-diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
-new file mode 100644
-index 000000000000..b91a8b473e63
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
-@@ -0,0 +1,1623 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright 2023 IBM Corp.
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/i2c/i2c.h>
-+#include <dt-bindings/leds/leds-pca955x.h>
-+
-+/ {
-+	model = "System1";
-+	compatible = "ibm,system1-bmc", "aspeed,ast2600";
-+
-+	aliases {
-+		i2c16 = &i2c8mux1chn0;
-+		i2c17 = &i2c8mux1chn1;
-+		i2c18 = &i2c8mux1chn2;
-+		i2c19 = &i2c8mux1chn3;
-+		i2c20 = &i2c8mux1chn4;
-+		i2c21 = &i2c8mux1chn5;
-+		i2c22 = &i2c8mux1chn6;
-+		i2c23 = &i2c8mux1chn7;
-+		i2c24 = &i2c3mux0chn0;
-+		i2c25 = &i2c3mux0chn1;
-+		i2c26 = &i2c3mux0chn2;
-+		i2c27 = &i2c3mux0chn3;
-+		i2c28 = &i2c3mux0chn4;
-+		i2c29 = &i2c3mux0chn5;
-+		i2c30 = &i2c3mux0chn6;
-+		i2c31 = &i2c3mux0chn7;
-+		i2c32 = &i2c6mux0chn0;
-+		i2c33 = &i2c6mux0chn1;
-+		i2c34 = &i2c6mux0chn2;
-+		i2c35 = &i2c6mux0chn3;
-+		i2c36 = &i2c6mux0chn4;
-+		i2c37 = &i2c6mux0chn5;
-+		i2c38 = &i2c6mux0chn6;
-+		i2c39 = &i2c6mux0chn7;
-+		i2c40 = &i2c7mux0chn0;
-+		i2c41 = &i2c7mux0chn1;
-+		i2c42 = &i2c7mux0chn2;
-+		i2c43 = &i2c7mux0chn3;
-+		i2c44 = &i2c7mux0chn4;
-+		i2c45 = &i2c7mux0chn5;
-+		i2c46 = &i2c7mux0chn6;
-+		i2c47 = &i2c7mux0chn7;
-+		i2c48 = &i2c8mux0chn0;
-+		i2c49 = &i2c8mux0chn1;
-+		i2c50 = &i2c8mux0chn2;
-+		i2c51 = &i2c8mux0chn3;
-+		i2c52 = &i2c8mux0chn4;
-+		i2c53 = &i2c8mux0chn5;
-+		i2c54 = &i2c8mux0chn6;
-+		i2c55 = &i2c8mux0chn7;
-+		i2c56 = &i2c14mux0chn0;
-+		i2c57 = &i2c14mux0chn1;
-+		i2c58 = &i2c14mux0chn2;
-+		i2c59 = &i2c14mux0chn3;
-+		i2c60 = &i2c14mux0chn4;
-+		i2c61 = &i2c14mux0chn5;
-+		i2c62 = &i2c14mux0chn6;
-+		i2c63 = &i2c14mux0chn7;
-+		i2c64 = &i2c15mux0chn0;
-+		i2c65 = &i2c15mux0chn1;
-+		i2c66 = &i2c15mux0chn2;
-+		i2c67 = &i2c15mux0chn3;
-+		i2c68 = &i2c15mux0chn4;
-+		i2c69 = &i2c15mux0chn5;
-+		i2c70 = &i2c15mux0chn6;
-+		i2c71 = &i2c15mux0chn7;
-+	};
-+
-+	chosen {
-+		stdout-path = "uart5:115200n8";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x40000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		eventlog: tcg-event-log@b3d00000 {
-+			no-map;
-+			reg = <0xb3d00000 0x100000>;
-+		};
-+
-+		ramoops@b3e00000 {
-+			compatible = "ramoops";
-+			reg = <0xb3e00000 0x200000>; /* 16 * (4 * 0x8000) */
-+			record-size = <0x8000>;
-+			console-size = <0x8000>;
-+			ftrace-size = <0x8000>;
-+			pmsg-size = <0x8000>;
-+			max-reason = <3>; /* KMSG_DUMP_EMERG */
-+		};
-+
-+		/* LPC FW cycle bridge region requires natural alignment */
-+		flash_memory: region@b4000000 {
-+			no-map;
-+			reg = <0xb4000000 0x04000000>; /* 64M */
-+		};
-+
-+		/* VGA region is dictated by hardware strapping */
-+		vga_memory: region@bf000000 {
-+			no-map;
-+			compatible = "shared-dma-pool";
-+			reg = <0xbf000000 0x01000000>;  /* 16M */
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			gpios = <&gpio0 ASPEED_GPIO(L, 7) GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-1 {
-+			gpios = <&gpio0 ASPEED_GPIO(P, 7) GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-2 {
-+			gpios = <&gpio0 ASPEED_GPIO(S, 6) GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-3 {
-+			gpios = <&gpio0 ASPEED_GPIO(S, 7) GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-4 {
-+			gpios = <&pca3 5 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-5 {
-+			gpios = <&pca3 6 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-6 {
-+			gpios = <&pca3 7 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-7 {
-+			gpios = <&pca3 8 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-8 {
-+			gpios = <&pca3 9 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-9 {
-+			gpios = <&pca3 10 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-a {
-+			gpios = <&pca3 11 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-b {
-+			gpios = <&pca4 4 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-c {
-+			gpios = <&pca4 5 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-d {
-+			gpios = <&pca4 6 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-e {
-+			gpios = <&pca4 7 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	gpio-keys-polled {
-+		compatible = "gpio-keys-polled";
-+		poll-interval = <1000>;
-+
-+		event-nvme0-presence {
-+			label = "nvme0-presence";
-+			gpios = <&pca4 0 GPIO_ACTIVE_LOW>;
-+			linux,code = <0>;
-+		};
-+
-+		event-nvme1-presence {
-+			label = "nvme1-presence";
-+			gpios = <&pca4 1 GPIO_ACTIVE_LOW>;
-+			linux,code = <1>;
-+		};
-+
-+		event-nvme2-presence {
-+			label = "nvme2-presence";
-+			gpios = <&pca4 2 GPIO_ACTIVE_LOW>;
-+			linux,code = <2>;
-+		};
-+
-+		event-nvme3-presence {
-+			label = "nvme3-presence";
-+			gpios = <&pca4 3 GPIO_ACTIVE_LOW>;
-+			linux,code = <3>;
-+		};
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&p12v_vd 0>, <&p5v_aux_vd 0>,
-+			<&p5v_bmc_aux_vd 0>, <&p3v3_aux_vd 0>,
-+			<&p3v3_bmc_aux_vd 0>, <&p1v8_bmc_aux_vd 0>,
-+			<&adc1 4>, <&adc0 2>, <&adc1 0>,
-+			<&p2v5_aux_vd 0>, <&adc1 7>;
-+	};
-+
-+	p12v_vd: voltage-divider1 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc1 3>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1127/127 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <15>;
-+		full-ohms = <133>;
-+	};
-+
-+	p5v_aux_vd: voltage-divider2 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc1 5>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1365/365 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <50>;
-+		full-ohms = <187>;
-+	};
-+
-+	p5v_bmc_aux_vd: voltage-divider3 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc0 3>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1365/365 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <50>;
-+		full-ohms = <187>;
-+	};
-+
-+	p3v3_aux_vd: voltage-divider4 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc1 2>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1698/698 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <14>;
-+		full-ohms = <34>;
-+	};
-+
-+	p3v3_bmc_aux_vd: voltage-divider5 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc0 7>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1698/698 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <14>;
-+		full-ohms = <34>;
-+	};
-+
-+	p1v8_bmc_aux_vd: voltage-divider6 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc0 6>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 4000/3000 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <3>;
-+		full-ohms = <4>;
-+	};
-+
-+	p2v5_aux_vd: voltage-divider7 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc1 1>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 2100/1100 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <11>;
-+		full-ohms = <21>;
-+	};
-+
-+	p1v8_bmc_aux: fixedregulator-p1v8-bmc-aux {
-+		compatible = "regulator-fixed";
-+		regulator-name = "p1v8_bmc_aux";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
-+	};
-+};
-+
-+&adc0 {
-+	status = "okay";
-+	vref-supply = <&p1v8_bmc_aux>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default
-+		&pinctrl_adc1_default
-+		&pinctrl_adc2_default
-+		&pinctrl_adc3_default
-+		&pinctrl_adc4_default
-+		&pinctrl_adc5_default
-+		&pinctrl_adc6_default
-+		&pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	status = "okay";
-+	vref-supply = <&p1v8_bmc_aux>;
-+	aspeed,battery-sensing;
-+
-+	aspeed,int-vref-microvolt = <2500000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc8_default
-+		&pinctrl_adc9_default
-+		&pinctrl_adc10_default
-+		&pinctrl_adc11_default
-+		&pinctrl_adc12_default
-+		&pinctrl_adc13_default
-+		&pinctrl_adc14_default
-+		&pinctrl_adc15_default>;
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&uhci {
-+	status = "okay";
-+};
-+
-+&gpio0 {
-+	gpio-line-names =
-+	/*A0-A7*/	"","","","","","","","",
-+	/*B0-B7*/	"","","","","bmc-tpm-reset","","","",
-+	/*C0-C7*/	"","","","","","","","",
-+	/*D0-D7*/	"","","","","","","","",
-+	/*E0-E7*/	"","","","","","","","",
-+	/*F0-F7*/	"","","","","","","","",
-+	/*G0-G7*/	"","","","","","","","",
-+	/*H0-H7*/	"","","","","","","","",
-+	/*I0-I7*/	"","","","","","","","",
-+	/*J0-J7*/	"","","","","","","","",
-+	/*K0-K7*/	"","","","","","","","",
-+	/*L0-L7*/	"","","","","","","","bmc-ready",
-+	/*M0-M7*/	"","","","","","","","",
-+	/*N0-N7*/	"","","","","","","","",
-+	/*O0-O7*/	"","","","","","","","",
-+	/*P0-P7*/	"","","","","","","","bmc-hb",
-+	/*Q0-Q7*/	"","","","","","","","",
-+	/*R0-R7*/	"","","","","","","","",
-+	/*S0-S7*/	"","","","","","","rear-enc-fault0","rear-enc-id0",
-+	/*T0-T7*/	"","","","","","","","",
-+	/*U0-U7*/	"","","","","","","","",
-+	/*V0-V7*/	"","rtc-battery-voltage-read-enable","","power-chassis-control","","","","",
-+	/*W0-W7*/	"","","","","","","","",
-+	/*X0-X7*/	"","power-chassis-good","","","","","","",
-+	/*Y0-Y7*/	"","","","","","","","",
-+	/*Z0-Z7*/	"","","","","","","","";
-+};
-+
-+&emmc_controller {
-+	status = "okay";
-+};
-+
-+&pinctrl_emmc_default {
-+	bias-disable;
-+};
-+
-+&emmc {
-+	status = "okay";
-+	clk-phase-mmc-hs200 = <180>, <180>;
-+};
-+
-+&ibt {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&vuart1 {
-+	status = "okay";
-+};
-+
-+&vuart2 {
-+	status = "okay";
-+};
-+
-+&lpc_ctrl {
-+	status = "okay";
-+	memory-region = <&flash_memory>;
-+};
-+
-+&mac2 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii3_default>;
-+	clocks = <&syscon ASPEED_CLK_GATE_MAC3CLK>,
-+		 <&syscon ASPEED_CLK_MAC3RCLK>;
-+	clock-names = "MACCLK", "RCLK";
-+	use-ncsi;
-+};
-+
-+&mac3 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii4_default>;
-+	clocks = <&syscon ASPEED_CLK_GATE_MAC4CLK>,
-+		 <&syscon ASPEED_CLK_MAC4RCLK>;
-+	clock-names = "MACCLK", "RCLK";
-+	use-ncsi;
-+};
-+
-+&wdt1 {
-+	aspeed,reset-type = "none";
-+	aspeed,external-signal;
-+	aspeed,ext-push-pull;
-+	aspeed,ext-active-high;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-+};
-+
-+&wdt2 {
-+	status = "okay";
-+};
-+
-+&kcs2 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xca8 0xcac>;
-+};
-+
-+&kcs3 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xca2>;
-+	aspeed,lpc-interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c64";
-+		reg = <0x50>;
-+	};
-+
-+	regulator@60 {
-+		compatible = "maxim,max8952";
-+		reg = <0x60>;
-+
-+		max8952,default-mode = <0>;
-+		max8952,dvs-mode-microvolt = <1250000>, <1200000>,
-+						<1050000>, <950000>;
-+		max8952,sync-freq = <0>;
-+		max8952,ramp-speed = <0>;
-+
-+		regulator-name = "VR_v77_1v4";
-+		regulator-min-microvolt = <770000>;
-+		regulator-max-microvolt = <1400000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	regulator@42 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x42>;
-+	};
-+
-+	led-controller@60 {
-+		compatible = "nxp,pca9552";
-+		reg = <0x60>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		led@0 {
-+			label = "nic1-perst";
-+			reg = <0>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@1 {
-+			label = "bmc-perst";
-+			reg = <1>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@2 {
-+			label = "reset-M2-SSD1-2-perst";
-+			reg = <2>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@3 {
-+			label = "pcie-perst1";
-+			reg = <3>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@4 {
-+			label = "pcie-perst2";
-+			reg = <4>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@5 {
-+			label = "pcie-perst3";
-+			reg = <5>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@6 {
-+			label = "pcie-perst4";
-+			reg = <6>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@7 {
-+			label = "pcie-perst5";
-+			reg = <7>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@8 {
-+			label = "pcie-perst6";
-+			reg = <8>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@9 {
-+			label = "pcie-perst7";
-+			reg = <9>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@10 {
-+			label = "pcie-perst8";
-+			reg = <10>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@11 {
-+			label = "PV-cp0-sw1stk4-perst";
-+			reg = <11>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@12 {
-+			label = "PV-cp0-sw1stk5-perst";
-+			reg = <12>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@13 {
-+			label = "pe-cp-drv0-perst";
-+			reg = <13>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@14 {
-+			label = "pe-cp-drv1-perst";
-+			reg = <14>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@15 {
-+			label = "lom-perst";
-+			reg = <15>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+	};
-+
-+	gpio@74 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x74>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+			"PLUG_DETECT_PCIE_J101_N",
-+			"PLUG_DETECT_PCIE_J102_N",
-+			"PLUG_DETECT_PCIE_J103_N",
-+			"PLUG_DETECT_PCIE_J104_N",
-+			"PLUG_DETECT_PCIE_J105_N",
-+			"PLUG_DETECT_PCIE_J106_N",
-+			"PLUG_DETECT_PCIE_J107_N",
-+			"PLUG_DETECT_PCIE_J108_N",
-+			"PLUG_DETECT_M2_SSD1_N",
-+			"PLUG_DETECT_NIC1_N",
-+			"SEL_SMB_DIMM_CPU0",
-+			"presence-ps2",
-+			"presence-ps3",
-+			"", "",
-+			"PWRBRD_PLUG_DETECT2_N";
-+	};
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+
-+	power-supply@58 {
-+		compatible = "ibm,cffps";
-+		reg = <0x58>;
-+	};
-+
-+	power-supply@59 {
-+		compatible = "ibm,cffps";
-+		reg = <0x59>;
-+	};
-+
-+	power-supply@5a {
-+		compatible = "ibm,cffps";
-+		reg = <0x5a>;
-+	};
-+
-+	power-supply@5b {
-+		compatible = "ibm,cffps";
-+		reg = <0x5b>;
-+	};
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c3mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c3mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c3mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c3mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+
-+		i2c3mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+		};
-+
-+		i2c3mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		i2c3mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		i2c3mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	regulator@42 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x42>;
-+	};
-+
-+	regulator@43 {
-+		compatible = "infineon,ir38060";
-+		reg = <0x43>;
-+	};
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+
-+	fan-controller@52 {
-+		compatible = "maxim,max31785a";
-+		reg = <0x52>;
-+	};
-+
-+	fan-controller@54 {
-+		compatible = "maxim,max31785a";
-+		reg = <0x54>;
-+	};
-+
-+	eeprom@55 {
-+		compatible = "atmel,24c64";
-+		reg = <0x55>;
-+	};
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c6mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c6mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c6mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c6mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+
-+		i2c6mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+
-+			humidity-sensor@40 {
-+				compatible = "ti,hdc1080";
-+				reg = <0x40>;
-+			};
-+
-+			temperature-sensor@48 {
-+				compatible = "ti,tmp275";
-+				reg = <0x48>;
-+			};
-+
-+			eeprom@50 {
-+				compatible = "atmel,24c32";
-+				reg = <0x50>;
-+			};
-+
-+			led-controller@60 {
-+				compatible = "nxp,pca9551";
-+				reg = <0x60>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+
-+				led@0 {
-+					label = "enclosure-id-led";
-+					reg = <0>;
-+					retain-state-shutdown;
-+					default-state = "keep";
-+					type = <PCA955X_TYPE_LED>;
-+				};
-+
-+				led@1 {
-+					label = "attention-led";
-+					reg = <1>;
-+					retain-state-shutdown;
-+					default-state = "keep";
-+					type = <PCA955X_TYPE_LED>;
-+				};
-+
-+				led@2 {
-+					label = "enclosure-fault-rollup-led";
-+					reg = <2>;
-+					retain-state-shutdown;
-+					default-state = "keep";
-+					type = <PCA955X_TYPE_LED>;
-+				};
-+
-+				led@3 {
-+					label = "power-on-led";
-+					reg = <3>;
-+					retain-state-shutdown;
-+					default-state = "keep";
-+					type = <PCA955X_TYPE_LED>;
-+				};
-+			};
-+
-+			temperature-sensor@76 {
-+				compatible = "infineon,dps310";
-+				reg = <0x76>;
-+			};
-+		};
-+
-+		i2c6mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		i2c6mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		i2c6mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
-+	};
-+
-+	pca3: gpio@74 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x74>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+	};
-+
-+	pca4: gpio@77 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x77>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+			"PE_NVMED0_EXP_PRSNT_N",
-+			"PE_NVMED1_EXP_PRSNT_N",
-+			"PE_NVMED2_EXP_PRSNT_N",
-+			"PE_NVMED3_EXP_PRSNT_N",
-+			"LED_FAULT_NVMED0",
-+			"LED_FAULT_NVMED1",
-+			"LED_FAULT_NVMED2",
-+			"LED_FAULT_NVMED3",
-+			"FAN0_PRESENCE_R_N",
-+			"FAN1_PRESENCE_R_N",
-+			"FAN2_PRESENCE_R_N",
-+			"FAN3_PRESENCE_R_N",
-+			"FAN4_PRESENCE_R_N",
-+			"FAN5_PRESENCE_N",
-+			"FAN6_PRESENCE_N",
-+			"";
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c7mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c7mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c7mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c7mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+
-+			regulator@58 {
-+				compatible = "mps,mp2973";
-+				reg = <0x58>;
-+			};
-+		};
-+
-+		i2c7mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+		};
-+
-+		i2c7mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+
-+			regulator@40 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x40>;
-+			};
-+		};
-+
-+		i2c7mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		i2c7mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
-+	};
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+
-+	i2c-mux@71 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x71>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c8mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+
-+			regulator@58 {
-+				compatible = "mps,mp2971";
-+				reg = <0x58>;
-+			};
-+		};
-+
-+		i2c8mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+
-+			regulator@40 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x40>;
-+			};
-+
-+			regulator@41 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x41>;
-+			};
-+
-+			regulator@58 {
-+				compatible = "mps,mp2971";
-+				reg = <0x58>;
-+			};
-+
-+			regulator@5b {
-+				compatible = "mps,mp2971";
-+				reg = <0x5b>;
-+			};
-+		};
-+
-+		i2c8mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c8mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+
-+		i2c8mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+
-+			i2c-mux@70 {
-+				compatible = "nxp,pca9548";
-+				reg = <0x70>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				i2c-mux-idle-disconnect;
-+
-+				i2c8mux1chn0: i2c@0 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <0>;
-+				};
-+
-+				i2c8mux1chn1: i2c@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <1>;
-+				};
-+
-+				i2c8mux1chn2: i2c@2 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <2>;
-+				};
-+
-+				i2c8mux1chn3: i2c@3 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <3>;
-+				};
-+
-+				i2c8mux1chn4: i2c@4 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <4>;
-+				};
-+
-+				i2c8mux1chn5: i2c@5 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <5>;
-+				};
-+
-+				i2c8mux1chn6: i2c@6 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <6>;
-+				};
-+
-+				i2c8mux1chn7: i2c@7 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <7>;
-+				};
-+			};
-+		};
-+
-+		i2c8mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		i2c8mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+
-+			temperature-sensor@4c {
-+				compatible = "ti,tmp423";
-+				reg = <0x4c>;
-+			};
-+		};
-+
-+		i2c8mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+
-+			regulator@40 {
-+				compatible = "infineon,ir38060";
-+				reg = <0x40>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c9 {
-+	status = "okay";
-+
-+	regulator@40 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x40>;
-+	};
-+
-+	regulator@41 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x41>;
-+	};
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c64";
-+		reg = <0x50>;
-+	};
-+
-+	regulator@60 {
-+		compatible = "maxim,max8952";
-+		reg = <0x60>;
-+
-+		max8952,default-mode = <0>;
-+		max8952,dvs-mode-microvolt = <1250000>, <1200000>,
-+						<1050000>, <950000>;
-+		max8952,sync-freq = <0>;
-+		max8952,ramp-speed = <0>;
-+
-+		regulator-name = "VR_v77_1v4";
-+		regulator-min-microvolt = <770000>;
-+		regulator-max-microvolt = <1400000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+
-+	tpm@2e {
-+		compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
-+		reg = <0x2e>;
-+		memory-region = <&eventlog>;
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+};
-+
-+&i2c13 {
-+	status = "okay";
-+
-+	regulator@41 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x41>;
-+	};
-+
-+	led-controller@61 {
-+		compatible = "nxp,pca9552";
-+		reg = <0x61>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		led@0 {
-+			label = "efuse-12v-slots";
-+			reg = <0>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@1 {
-+			label = "efuse-3p3v-slot";
-+			reg = <1>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@3 {
-+			label = "nic2-pert";
-+			reg = <3>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@4 {
-+			label = "pcie-perst9";
-+			reg = <4>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@5 {
-+			label = "pcie-perst10";
-+			reg = <5>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@6 {
-+			label = "pcie-perst11";
-+			reg = <6>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@7 {
-+			label = "pcie-perst12";
-+			reg = <7>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@8 {
-+			label = "pcie-perst13";
-+			reg = <8>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@9 {
-+			label = "pcie-perst14";
-+			reg = <9>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@10 {
-+			label = "pcie-perst15";
-+			reg = <10>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@11 {
-+			label = "pcie-perst16";
-+			reg = <11>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@12 {
-+			label = "PV-cp1-sw1stk4-perst";
-+			reg = <12>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@13 {
-+			label = "PV-cp1-sw1stk5-perst";
-+			reg = <13>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@14 {
-+			label = "pe-cp-drv2-perst";
-+			reg = <14>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@15 {
-+			label = "pe-cp-drv3-perst";
-+			reg = <15>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+	};
-+
-+	gpio@75 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x75>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+			"PLUG_DETECT_PCIE_J109_N",
-+			"PLUG_DETECT_PCIE_J110_N",
-+			"PLUG_DETECT_PCIE_J111_N",
-+			"PLUG_DETECT_PCIE_J112_N",
-+			"PLUG_DETECT_PCIE_J113_N",
-+			"PLUG_DETECT_PCIE_J114_N",
-+			"PLUG_DETECT_PCIE_J115_N",
-+			"PLUG_DETECT_PCIE_J116_N",
-+			"PLUG_DETECT_M2_SSD2_N",
-+			"PLUG_DETECT_NIC2_N",
-+			"SEL_SMB_DIMM_CPU1",
-+			"presence-ps0",
-+			"presence-ps1",
-+			"", "",
-+			"PWRBRD_PLUG_DETECT1_N";
-+	};
-+
-+	gpio@76 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x76>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+			"SW1_BOOTRCVRYB1_N",
-+			"SW1_BOOTRCVRYB0_N",
-+			"SW2_BOOTRCVRYB1_N",
-+			"SW2_BOOTRCVRYB0_N",
-+			"SW3_4_BOOTRCVRYB1_N",
-+			"SW3_4_BOOTRCVRYB0_N",
-+			"SW5_BOOTRCVRYB1_N",
-+			"SW5_BOOTRCVRYB0_N",
-+			"SW6_BOOTRCVRYB1_N",
-+			"SW6_BOOTRCVRYB0_N",
-+			"SW1_RESET_N",
-+			"SW3_RESET_N",
-+			"SW4_RESET_N",
-+			"SW2_RESET_N",
-+			"SW5_RESET_N",
-+			"SW6_RESET_N";
-+	};
-+};
-+
-+&i2c14 {
-+	status = "okay";
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c14mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c14mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c14mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c14mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+
-+			regulator@58 {
-+				compatible = "mps,mp2973";
-+				reg = <0x58>;
-+			};
-+		};
-+
-+		i2c14mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+		};
-+
-+		i2c14mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+
-+			regulator@40 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x40>;
-+			};
-+		};
-+
-+		i2c14mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		i2c14mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
-+	};
-+};
-+
-+&i2c15 {
-+	status = "okay";
-+
-+	i2c-mux@71 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x71>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c15mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+
-+			regulator@58 {
-+				compatible = "mps,mp2971";
-+				reg = <0x58>;
-+			};
-+		};
-+
-+		i2c15mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+
-+			regulator@40 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x40>;
-+			};
-+
-+			regulator@41 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x41>;
-+			};
-+
-+			regulator@58 {
-+				compatible = "mps,mp2971";
-+				reg = <0x58>;
-+			};
-+
-+			regulator@5b {
-+				compatible = "mps,mp2971";
-+				reg = <0x5b>;
-+			};
-+		};
-+
-+		i2c15mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c15mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+
-+		i2c15mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+
-+			i2c-mux@70 {
-+				compatible = "nxp,pca9548";
-+				reg = <0x70>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				i2c-mux-idle-disconnect;
-+
-+				i2c15mux1chn0: i2c@0 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <0>;
-+				};
-+
-+				i2c15mux1chn1: i2c@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <1>;
-+				};
-+
-+				i2c15mux1chn2: i2c@2 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <2>;
-+				};
-+
-+				i2c15mux1chn3: i2c@3 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <3>;
-+				};
-+
-+				i2c15mux1chn4: i2c@4 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <4>;
-+				};
-+
-+				i2c15mux1chn5: i2c@5 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <5>;
-+				};
-+
-+				i2c15mux1chn6: i2c@6 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <6>;
-+				};
-+
-+				i2c15mux1chn7: i2c@7 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <7>;
-+				};
-+			};
-+		};
-+
-+		i2c15mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		i2c15mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+
-+			temperature-sensor@4c {
-+				compatible = "ti,tmp423";
-+				reg = <0x4c>;
-+			};
-+		};
-+
-+		i2c15mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+
-+			regulator@40 {
-+				compatible = "infineon,ir38060";
-+				reg = <0x40>;
-+			};
-+
-+			temperature-sensor@4c {
-+				compatible = "ti,tmp423";
-+				reg = <0x4c>;
-+			};
-+		};
-+	};
-+};
--- 
-2.39.2
+About the unit of the config value (KB v/s num_pages), if we go with
+num pages, I am having hard time figuring out how to set the config
+value to a float - if we truly want to support 1/2 a page (0.5) as
+a default. Majority are bools or ints. I couldn't find any
+config value with float which I can refer to.
 
+Being said that, I can think of two ways to handle it:
+Option (A) fine tune it to half a page given arch specific page size
+config.
+
+Option (B) Keep it simple and make the default extra memory to be
+a single page rather than half-a-page.
+
+(A) seems fragile, and I am worried we will not cover all the scenarios.
+
+(B) Even though we are technically breaking the backward compatibility
+by changing the default extra memory from half-a-page to a full page,
+I don't see it adversely affecting anything else in the IMA/kexec
+functionality.
+
+I am leaning towards (B), but please let me know your thoughts.
+
+Sample code for both the options:
+
+Option A:
+---------
+config IMA_KEXEC_EXTRA_MEMORY_KB
+     int
+     depends on IMA && IMA_KEXEC
+     default 128 if PAGE_SIZE_256KB
+     default 32 if PPC_64K_PAGES || PAGE_SIZE_64KB || PARISC_PAGE_SIZE_16KB
+     default 16 if PAGE_SIZE_32KB
+     default 8 if PAGE_SIZE_16KB || ARC_PAGE_SIZE_16K || 
+PARISC_PAGE_SIZE_16KB
+     default 4 if PAGE_SIZE_8KB || ARC_PAGE_SIZE_8K
+     default 2
+	  IMA_KEXEC_EXTRA_MEMORY_KB determines the number of extra
+	  memory (in KB) to be allocated for IMA measurements added
+	  during kexec soft-reboot.
+
+Option B:
+--------
+config IMA_KEXEC_EXTRA_PAGES
+	int
+	depends on IMA && IMA_KEXEC
+	default 1
+	help
+	  IMA_KEXEC_EXTRA_PAGES determines the number of extra
+	  pages to be allocated for IMA measurements added during
+	  kexec soft-reboot.
+
+
+Below are a few PAGE_SIZE configs I found for a some architectures.
+
+
+---------------------------------------------------------------------------------
+https://elixir.bootlin.com/linux/v6.7-rc8/source/arch/arc/Kconfig
+choice
+prompt "MMU Page Size"
+default ARC_PAGE_SIZE_8K
+
+config ARC_PAGE_SIZE_8K
+bool "8KB"
+help
+  Choose between 8k vs 16k
+
+config ARC_PAGE_SIZE_16K
+bool "16KB"
+
+config ARC_PAGE_SIZE_4K
+bool "4KB"
+depends on ARC_MMU_V3 || ARC_MMU_V4
+
+endchoice
+
+choice
+prompt "MMU Super Page Size"
+depends on ISA_ARCV2 && TRANSPARENT_HUGEPAGE
+default ARC_HUGEPAGE_2M
+
+config ARC_HUGEPAGE_2M
+bool "2MB"
+
+config ARC_HUGEPAGE_16M
+bool "16MB"
+
+endchoice
+---------------------------------------------------------------------------------------------------------
+https://elixir.bootlin.com/linux/v6.7-rc8/source/arch/hexagon/Kconfig
+choice
+prompt "Kernel page size"
+default PAGE_SIZE_4KB
+help
+  Changes the default page size; use with caution.
+
+config PAGE_SIZE_4KB
+bool "4KB"
+
+config PAGE_SIZE_16KB
+bool "16KB"
+
+config PAGE_SIZE_64KB
+bool "64KB"
+
+config PAGE_SIZE_256KB
+bool "256KB"
+
+endchoice
+---------------------------------------------------------------------------------------------------------
+https://elixir.bootlin.com/linux/v6.7-rc8/source/arch/loongarch/Kconfig
+
+config PAGE_SIZE_4KB
+bool
+
+config PAGE_SIZE_16KB
+bool
+
+config PAGE_SIZE_64KB
+bool
+
+---------------------------------------------------------------------------------------------------------
+
+https://elixir.bootlin.com/linux/v6.7-rc8/source/arch/mips/Kconfig
+choice
+prompt "Kernel page size"
+default PAGE_SIZE_4KB
+
+config PAGE_SIZE_4KB
+bool "4kB"
+depends on !CPU_LOONGSON2EF && !CPU_LOONGSON64
+help
+  This option select the standard 4kB Linux page size.  On some
+  R3000-family processors this is the only available page size.  Using
+  4kB page size will minimize memory consumption and is therefore
+  recommended for low memory systems.
+
+config PAGE_SIZE_8KB
+bool "8kB"
+depends on CPU_CAVIUM_OCTEON
+depends on !MIPS_VA_BITS_48
+help
+  Using 8kB page size will result in higher performance kernel at
+  the price of higher memory consumption.  This option is available
+  only on cnMIPS processors.  Note that you will need a suitable Linux
+  distribution to support this.
+
+config PAGE_SIZE_16KB
+bool "16kB"
+depends on !CPU_R3000
+help
+  Using 16kB page size will result in higher performance kernel at
+  the price of higher memory consumption.  This option is available on
+  all non-R3000 family processors.  Note that you will need a suitable
+  Linux distribution to support this.
+
+config PAGE_SIZE_32KB
+bool "32kB"
+depends on CPU_CAVIUM_OCTEON
+depends on !MIPS_VA_BITS_48
+help
+  Using 32kB page size will result in higher performance kernel at
+  the price of higher memory consumption.  This option is available
+  only on cnMIPS cores.  Note that you will need a suitable Linux
+  distribution to support this.
+
+config PAGE_SIZE_64KB
+bool "64kB"
+depends on !CPU_R3000
+help
+  Using 64kB page size will result in higher performance kernel at
+  the price of higher memory consumption.  This option is available on
+  all non-R3000 family processor.  Not that at the time of this
+  writing this option is still high experimental.
+
+endchoice
+
+----------------------------------------------------------------------------
+https://elixir.bootlin.com/linux/v6.7-rc8/source/arch/parisc/Kconfig
+
+choice
+prompt "Kernel page size"
+default PARISC_PAGE_SIZE_4KB
+
+config PARISC_PAGE_SIZE_4KB
+bool "4KB"
+help
+  This lets you select the page size of the kernel.  For best
+  performance, a page size of 16KB is recommended.  For best
+  compatibility with 32bit applications, a page size of 4KB should be
+  selected (the vast majority of 32bit binaries work perfectly fine
+  with a larger page size).
+
+  4KB                For best 32bit compatibility
+  16KB               For best performance
+  64KB               For best performance, might give more overhead.
+
+  If you don't know what to do, choose 4KB.
+
+config PARISC_PAGE_SIZE_16KB
+bool "16KB"
+depends on PA8X00 && BROKEN && !KFENCE
+
+config PARISC_PAGE_SIZE_64KB
+bool "64KB"
+depends on PA8X00 && BROKEN && !KFENCE
+
+endchoice
+
+----------------------------------------------------------------------------
+https://elixir.bootlin.com/linux/v6.7-rc8/source/arch/sh/Kconfig
+
+config ENTRY_OFFSET
+hex
+default "0x00001000" if PAGE_SIZE_4KB
+default "0x00002000" if PAGE_SIZE_8KB
+default "0x00004000" if PAGE_SIZE_16KB
+default "0x00010000" if PAGE_SIZE_64KB
+default "0x00000000"
+
+
+~Tushar
 
