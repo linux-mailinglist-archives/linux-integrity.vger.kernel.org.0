@@ -1,143 +1,189 @@
-Return-Path: <linux-integrity+bounces-748-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-749-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0537E82B576
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 20:51:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F1182B63E
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 21:52:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8947BB20EEE
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 19:51:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F6A02889AE
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 20:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E8756743;
-	Thu, 11 Jan 2024 19:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7695A5810E;
+	Thu, 11 Jan 2024 20:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="F2NOUJ1I"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ATNX2wP9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB2756741;
-	Thu, 11 Jan 2024 19:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40BJf4qh020558;
-	Thu, 11 Jan 2024 19:50:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=m/WaWO4axy/JtRTQr7uYXMu/rUmUqtk8HnB0BQW4Frs=;
- b=F2NOUJ1IKJ1mN0+QQlt6IuYNqWMxpMi4miGI+IkcsxMJyUCO2ULkRNLcFg1Kz5LJEN3j
- uHKDDPEZkkgE2IRBHvFzVNB+Jvc25hWY8AXfim/mV5mxQJvfKpzlt36xHEB5ya+D3s6L
- Pt+LZvRcHmwgIrgy5Lu19xytZVQO50VeId0Sk1Ib2pnX7e9EakbykL0BL+h8BWG2Dhwe
- lrqvyCQYsnl7Q+0YS+FJv3uavDz0lllI6/UN3Rdj1TO/giQm2QsbRuo8lRCBZrsdeCJR
- 6v635k3hGFCgZOkfin4RYCAhhvgqxuGcm35gpuuix+BzfzpCeyGgPPJl7ft+yc61/ebA Dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vjgmxjyam-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 19:50:16 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40BJkNOO003717;
-	Thu, 11 Jan 2024 19:50:15 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vjgmxjy8y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 19:50:15 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40BIw03p026992;
-	Thu, 11 Jan 2024 19:50:13 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vfkw2d843-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 19:50:13 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40BJoCR510289860
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Jan 2024 19:50:12 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6E78B5805E;
-	Thu, 11 Jan 2024 19:50:12 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 98FCA5805D;
-	Thu, 11 Jan 2024 19:50:10 +0000 (GMT)
-Received: from [9.24.12.86] (unknown [9.24.12.86])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 11 Jan 2024 19:50:10 +0000 (GMT)
-Message-ID: <f21d5e90-7da1-4f65-819d-a02bede53597@linux.ibm.com>
-Date: Thu, 11 Jan 2024 13:50:10 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] dt-bindings: Add DPS310 as trivial device
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, joel@jms.id.au,
-        andrew@codeconstruct.com.au, peterhuewe@gmx.de, jarkko@kernel.org,
-        jgg@ziepe.ca, keescook@chromium.org, tony.luck@intel.com,
-        gpiccoli@igalia.com, johannes.holland@infineon.com, linux@roeck-us.net,
-        broonie@kernel.org, andre.werner@systec-electronic.com
-Cc: patrick.rudolph@9elements.com, vincent@vtremblay.dev,
-        peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com, bhelgaas@google.com,
-        naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
-        festevam@denx.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-hardening@vger.kernel.org, geissonator@yahoo.com,
-        geert+renesas@glider.be, luca.ceresoli@bootlin.com
-References: <20240111181251.1817582-1-ninad@linux.ibm.com>
- <20240111181251.1817582-3-ninad@linux.ibm.com>
- <1cf1f0dd-c453-4733-a5f4-0d2cc22498e2@linaro.org>
-From: Ninad Palsule <ninad@linux.ibm.com>
-In-Reply-To: <1cf1f0dd-c453-4733-a5f4-0d2cc22498e2@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gUJOibKBjrq0VnV4zYK43mC0gXX2H04W
-X-Proofpoint-ORIG-GUID: LMps6aI9GatP4j4NlnHlsUSl3zJggUgE
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09DDD5810C
+	for <linux-integrity@vger.kernel.org>; Thu, 11 Jan 2024 20:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.86.69] (unknown [50.46.228.62])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 5D58D20B3CC1;
+	Thu, 11 Jan 2024 12:52:43 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5D58D20B3CC1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1705006363;
+	bh=U07oEfekVzDj2Hd+ToSATINRRHXIoJTAZMkZ474ONcE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ATNX2wP9sCU6UMS744ITvfdCNZWesi+PZ/ZUhFfT+hmPVwO91G5sGKHAgYdbkqmAL
+	 FGeX4kbGjhsjYhYZt6WvG4L6XfBWyzX9AiVevmLvxf9zmDgYGjK/j9HxYxpAWrzQKe
+	 QF4QjA5kh4ShPVpHa40Ta9EiXNN2d9zI9XrlFsCs=
+Message-ID: <af09bb62-a637-4e30-884a-9ce1a5bf030c@linux.microsoft.com>
+Date: Thu, 11 Jan 2024 12:52:43 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-11_11,2024-01-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 suspectscore=0 mlxlogscore=999 clxscore=1015 adultscore=0
- malwarescore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401110154
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 6/7] ima: configure memory to log events between kexec
+ load and execute
+Content-Language: en-US
+To: Stefan Berger <stefanb@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>,
+ roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+ eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
+ bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+ kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
+ <20231216010729.2904751-7-tusharsu@linux.microsoft.com>
+ <fbe6aa7577875b23a9913a39f858f06f1d2aa903.camel@linux.ibm.com>
+ <b78bbf3f-da39-47a6-aac3-581c8d2827a0@linux.microsoft.com>
+ <3e8cb0bd77a2b73613b19febb2b3121ef0ea8255.camel@linux.ibm.com>
+ <0df62e0e-a9d5-434c-866c-936cafeed480@linux.microsoft.com>
+ <a7c5feb3-b9ef-45c1-bd1c-2bf0e4b7d0c5@linux.ibm.com>
+From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <a7c5feb3-b9ef-45c1-bd1c-2bf0e4b7d0c5@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello Krzysztof,
 
-On 1/11/24 13:40, Krzysztof Kozlowski wrote:
-> On 11/01/2024 19:12, Ninad Palsule wrote:
->> Infineon DPS310 is a barometric pressure and temperature sensor.
+
+On 1/11/24 11:20, Stefan Berger wrote:
+> 
+> 
+> On 1/11/24 13:13, Tushar Sugandhi wrote:
 >>
->> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
-> This is a friendly reminder during the review process.
->
-> It looks like you received a tag and forgot to add it.
->
-> If you do not know the process, here is a short explanation:
-> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-> versions, under or above your Signed-off-by tag. Tag is "received", when
-> provided in a message replied to you on the mailing list. Tools like b4
-> can help here. However, there's no need to repost patches *only* to add
-> the tags. The upstream maintainer will do that for tags received on the
-> version they apply.
->
-> https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
->
-> If a tag was not added on purpose, please state why and what changed.
+>>
+>> On 1/7/24 09:00, Mimi Zohar wrote:
+>>> On Fri, 2024-01-05 at 12:20 -0800, Tushar Sugandhi wrote:
+>>>>>> diff --git a/security/integrity/ima/Kconfig 
+>>>>>> b/security/integrity/ima/Kconfig
+>>>>>> index 60a511c6b583..8792b7aab768 100644
+>>>>>> --- a/security/integrity/ima/Kconfig
+>>>>>> +++ b/security/integrity/ima/Kconfig
+>>>>>> @@ -338,3 +338,12 @@ config IMA_DISABLE_HTABLE
+>>>>>>       default n
+>>>>>>       help
+>>>>>>          This option disables htable to allow measurement of 
+>>>>>> duplicate records.
+>>>>>> +
+>>>>>> +config IMA_KEXEC_EXTRA_MEMORY_KB
+>>>>>> +    int
+>>>>>> +    depends on IMA && IMA_KEXEC
+>>>>>> +    default 64
+>>>>>
+>>>>> Since this isn't optional, the default should remain as a half page.
+>>>>> Since a page is architecture specific, the default will need to be 
+>>>>> arch
+>>>>>    specific
+>>>>>
+>>>> It was a feedback from Stefan in the V2 of this series to convert it
+>>>> from number of PAGES to KB.[1]
+>>>>
+>>>> But I can revert it to number of pages again.
+>>>>
+>>>> Also, making the default value as a fraction (1/2 page) feels weird for
+>>>> a CONFIG variable.
+>>>>
+>>>> Is it ok to make the default value as one page rather than half page?
+>>>
+>>> The point is not whether the extra memory is specified in terms of 
+>>> pages or KB.
+>>> For backwards compatibility the existing default should be the same as
+>>> previously.  This means the default needs to be architecture specific.b
+>>> $ uname -m; getconf PAGESIZE
+>>> x86_64
+>>> 4096
+>>> $ uname -m; getconf PAGESIZE
+>>> ppc64le
+>>> 65536
+>>>
+>>> For example:
+>>>
+>>> default 32 if PPC_64K_PAGES
+>>> default 2
+>>>
+>> Ok. Thanks for the clarification.
+>>
+>>
+>> Do we want to support only 64K or 4K as possible PAGE_SIZE values?
+>> I spot checked a few architectures, there are scenarios where PAGE_SIZE
+>> could be 8K, 16K, 128K, 256K etc. And of course mega pages with
+>> PAGE_SIZE IN MBs (details below).
+> 
+> I would let the user specify the number of kilobytes to reserve and from 
+> this you can conclude the page numbers:
+> 
+> needed_pages = KBs_TO_RESERVE / PAGE_SIZE
+> if (KBs_TO_RESERVER % PAGE_SIZE)
+>      needed_pages++;
+> 
+>     Stefan
+Thanks Stefan.
 
-This is a mistake from my side. Sorry about that. I will remember it 
-next time.
+But the issue here is about the default value,
+not the user specified value.
 
-Thanks & Regards,
+Mimi is suggesting to keep the default value half-a-page,
+to maintain backwards compatibility.
 
-Ninad
+If we go with the KBs approach -
+half-a-page translates to different KBs on different architectures.
+And setting the right default value in KBs which would translate to
+the desired half-a-page, on a given arch, inside the Kconfig seems
+fragile (as I mentioned in the context of Option A in my previous
+response.
 
+And if we go with num_pages approach -
+putting a fractional value (0.5) as a default in Kconfig seems to be non
+trivial too.
+
+Translating num_pages to KBs is trivial in code, but I think its
+orthogonal to this conversation, since its about setting the desired 
+arch specific default value in Kconfig.
+
+
+Option A:
+---------
+config IMA_KEXEC_EXTRA_MEMORY_KB
+     int
+     depends on IMA && IMA_KEXEC
+     default 128 if PAGE_SIZE_256KB
+     default 32 if PPC_64K_PAGES || PAGE_SIZE_64KB || PARISC_PAGE_SIZE_16KB
+     default 16 if PAGE_SIZE_32KB
+     default 8 if PAGE_SIZE_16KB || ARC_PAGE_SIZE_16K || 
+PARISC_PAGE_SIZE_16KB
+     default 4 if PAGE_SIZE_8KB || ARC_PAGE_SIZE_8K
+     default 2
+       IMA_KEXEC_EXTRA_MEMORY_KB determines the number of extra
+       memory (in KB) to be allocated for IMA measurements added
+       during kexec soft-reboot.
+
+Option B:
+--------
+config IMA_KEXEC_EXTRA_PAGES
+     int
+     depends on IMA && IMA_KEXEC
+     default 1
+     help
+       IMA_KEXEC_EXTRA_PAGES determines the number of extra
+       pages to be allocated for IMA measurements added during
+       kexec soft-reboot.
+
+~Tushar
 
