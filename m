@@ -1,64 +1,64 @@
-Return-Path: <linux-integrity+bounces-745-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-746-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B6A482B558
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 20:41:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57F0582B55E
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 20:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F8BD1C214DA
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 19:41:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0702F284A1F
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 19:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A0CB55E62;
-	Thu, 11 Jan 2024 19:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13FFB55E60;
+	Thu, 11 Jan 2024 19:41:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X5DWJz8W"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fX385FX+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1857524AB
-	for <linux-integrity@vger.kernel.org>; Thu, 11 Jan 2024 19:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C61F56760
+	for <linux-integrity@vger.kernel.org>; Thu, 11 Jan 2024 19:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40e62425c60so5900675e9.3
-        for <linux-integrity@vger.kernel.org>; Thu, 11 Jan 2024 11:40:56 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40e60e137aaso9019785e9.0
+        for <linux-integrity@vger.kernel.org>; Thu, 11 Jan 2024 11:41:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705002055; x=1705606855; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705002061; x=1705606861; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ReaiaKhGMpLyq0G0+kbbV2BQXgDy5aBIFU7RUhXOGuI=;
-        b=X5DWJz8WKAsJVRCC1w/OncJaL4Lw1kgumHBNWCb7SALdrYcqJQkaMcxW6yWBYDKaZ1
-         dRe6YVKwSfqzC9v2xJp73WlYXaMsZd5KhDDLAXpazEjgLbuvX4kal45IvoCOrXv5QgSP
-         beV1kkWaK8uhGTGZtXAUg26toWFJPprWUWXeFs6hE80TD4r2ZMwjiTgTJitYpU2bcWqX
-         5GN2AKcW3cC+1lAlARP5P/OigIOZBew0zVL/uac3+fgxI7XSh5YKMQk8DrLYuWToY+0c
-         RubmIH8zBroOHYe1+J5nRRfe5ijqhw0+y34ewxceeT8gru2vqIsf2cz2RODoXszcDnwe
-         BFDQ==
+        bh=yhQg7lFsbSLOoxrpLGlEOB06G2WaPmqtANz9+CdTLcM=;
+        b=fX385FX+3jvFlUcX+dNsoqBTY3G3raqvRdcubrVkvEPllqGgZ2BTmtRcbM51MlZ37W
+         odH3VJtMJuShLL3IaW9HvFdl9f4LPZ+2Eqz8WrwN3AWoNLGLgWzirqFLgtE2iMcomCF5
+         ObbQyGcMAjFCqU5uymkjCSRqcuZ6cmEGFmABhciShPn8kk/EPUSXxdc+YQl2QFACQap+
+         N4rUgsl6Nd5QmRkMosfpoTdTVvJh2nW9/wJcBBWCboUinPXz0lAmt7a50W0pAnGZzGhE
+         k3nzDpjdMIpv0O1DuBhGGOHMHPwLOu45tGxf4UdcgZETQEDmn3RBzsKlkuZfHStJi6yY
+         X65Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705002055; x=1705606855;
+        d=1e100.net; s=20230601; t=1705002061; x=1705606861;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ReaiaKhGMpLyq0G0+kbbV2BQXgDy5aBIFU7RUhXOGuI=;
-        b=n8p3RNe2a+VgcSrfZ+maME9Z3u2sWdYFhe8z1RuTOWh6Kw8BoWVJIgCwW10DJoDPIi
-         dmrPRxBnGZK+nYVIm2e4SAQxhOm3Cw9ltFOz3mXsk+0GPIQW9ec0jm19bRq2lkFVkD/h
-         sNqT9jY1mXHtr0klOp9M+CuNfKH75uqIuJ9qMfBZWpHFHQhv+MIYJltV2z06lK8CxmYf
-         kj5QYP1Y1krnRiaPicqappTMlhzJcGbk/iVq1wYCO2oRpmtRtZ89YP+8Wft9zpQUlbNS
-         Snbh96msVMg08jkw2Gyyfs8T0FoQTJt1Nqh6ljRJqp1XUZQWWY5nYDXikCTSXyMjuj8w
-         /aog==
-X-Gm-Message-State: AOJu0YxJaE7774P52vXX3ABXaBh5/Ga3nBXzfNb21IymcIIbxVj63svz
-	hfUIsFJ2s39psilpJdIwwiGgVQkkYZAwtg==
-X-Google-Smtp-Source: AGHT+IFpgPp6+TFS8mqJ0figBJ6oUJNk53x5VYzpAL9vQ53okPO+Tp97swVXaqXCuX0AVXBpuw9mKQ==
-X-Received: by 2002:a05:600c:340a:b0:40d:560c:eeab with SMTP id y10-20020a05600c340a00b0040d560ceeabmr207276wmp.58.1705002054975;
-        Thu, 11 Jan 2024 11:40:54 -0800 (PST)
+        bh=yhQg7lFsbSLOoxrpLGlEOB06G2WaPmqtANz9+CdTLcM=;
+        b=AUmQWy/93dkb6qZ/9w4oD5tBtBkNH2L0TjBRODv0HyBjhZSzMSNACrUhK88veu7l2H
+         OpK3n1JDRChQ2jSia2wsTnT1tCzixRLH2lI16Y+/ieeeVZpujDReZA7YgA1sfRxyT0kf
+         8bWJ/oaIZE5X/py3olnOj8R/Irx+19WnyaN7Tlv/iVblbTL6SaHvpc0Z865ZOyuZnuRu
+         TpWNYqZgO5zhKHBrhTqym6yTnuJXAphQDrwuUxQOH2hHfqUkLIOssP1jbjgE46BAgHGE
+         hRDKW5Ux/aF99FZtbL/VQmZRMVxld38YQCtew8jLNCud2RveAbOU+BSA09D/CEz1cLyO
+         BSsQ==
+X-Gm-Message-State: AOJu0Yw0IHRwYbT06FteNOY1JIyNXtRjJkE2EQtoRLGGNBEsqzhlfC0Z
+	lWUYj3iXGZM0MaLdCUDzzxSMSVLK51WPDA==
+X-Google-Smtp-Source: AGHT+IHBSJkGZ3FZyaLcawqklbZ73eTvHFb0Vrv8g6ZWD8TQbgZOpziGnkN1kzMB4gK7ps8wLeZDEA==
+X-Received: by 2002:a05:600c:332a:b0:40e:42e7:4c42 with SMTP id q42-20020a05600c332a00b0040e42e74c42mr172537wmp.60.1705002060691;
+        Thu, 11 Jan 2024 11:41:00 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.223.112])
-        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b0040d7b340e07sm3019771wmq.45.2024.01.11.11.40.52
+        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b0040d7b340e07sm3019771wmq.45.2024.01.11.11.40.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jan 2024 11:40:54 -0800 (PST)
-Message-ID: <709a516c-d843-4ed3-8e41-468933f4a022@linaro.org>
-Date: Thu, 11 Jan 2024 20:40:52 +0100
+        Thu, 11 Jan 2024 11:41:00 -0800 (PST)
+Message-ID: <1cf1f0dd-c453-4733-a5f4-0d2cc22498e2@linaro.org>
+Date: Thu, 11 Jan 2024 20:40:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: arm: aspeed: add IBM system1-bmc
+Subject: Re: [PATCH v3 2/3] dt-bindings: Add DPS310 as trivial device
 Content-Language: en-US
 To: Ninad Palsule <ninad@linux.ibm.com>, robh+dt@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, joel@jms.id.au,
@@ -83,7 +83,7 @@ Cc: patrick.rudolph@9elements.com, vincent@vtremblay.dev,
  linux-hardening@vger.kernel.org, geissonator@yahoo.com,
  geert+renesas@glider.be, luca.ceresoli@bootlin.com
 References: <20240111181251.1817582-1-ninad@linux.ibm.com>
- <20240111181251.1817582-2-ninad@linux.ibm.com>
+ <20240111181251.1817582-3-ninad@linux.ibm.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -129,17 +129,14 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240111181251.1817582-2-ninad@linux.ibm.com>
+In-Reply-To: <20240111181251.1817582-3-ninad@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/01/2024 19:12, Ninad Palsule wrote:
-> Document the new compatibles used on IBM system1-bmc
+> Infineon DPS310 is a barometric pressure and temperature sensor.
 > 
 > Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
-> ---
->  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
->  1 file changed, 1 insertion(+)
 
 This is a friendly reminder during the review process.
 
