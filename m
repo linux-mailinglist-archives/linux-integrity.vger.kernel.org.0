@@ -1,66 +1,80 @@
-Return-Path: <linux-integrity+bounces-732-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-733-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DF2182A37B
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jan 2024 22:41:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C26582AB44
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 10:50:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09C1BB20FA0
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jan 2024 21:41:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12B691C210E4
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 09:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FDA94F60F;
-	Wed, 10 Jan 2024 21:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012921172C;
+	Thu, 11 Jan 2024 09:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kz/HacDN"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zhmeMRoN";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fOhSEC/z";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="n5vdaQLj";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qnePHNC/"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04D82AE69;
-	Wed, 10 Jan 2024 21:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d3ed1ca402so42090065ad.2;
-        Wed, 10 Jan 2024 13:41:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704922909; x=1705527709; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HId8f3hkvGtnDismZhBcVXhWd29HmilwtOOYjG3JP0w=;
-        b=Kz/HacDNbt/0Q6FD3hgLYDM22yMP5h0bcCn8b12Ebr9YMjn2ZvxtsXJFvz5ocUVc4Q
-         sSwWln1I2SAL/D7kue/ad3AtE6EJ3bdvLYddOXoR8UYKBkPIuhc1kb/ww+od/mvo0am0
-         qi3HxJO+D8/gBvQK768A3jCAlliuTGgxIy7FaZFNNSdsGOfD8VbhGDJ1Gjui/hvLiECa
-         8rY4QbtFeJbnP4JVvPiWtviGMPouLNpMMBxeExPeJtSrSlnthqwK/ar26rbh8jKERiV0
-         /DNPhPHdBBM0+bK5UOipcaGbzg03kpM9nEMV1Rad/273kZ6eT1T5eWlG1FvIWG+SDoET
-         ftBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704922909; x=1705527709;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HId8f3hkvGtnDismZhBcVXhWd29HmilwtOOYjG3JP0w=;
-        b=jnX39YKR5RQhph7yTuXE9Ke++ID3VQMk3JjxyiuCMqRjN1tc+s09L1YAuaZdBF0cFp
-         cieSXAvWlMGzP7wWeW0wqplC/GE+SXri+lr/vCI+7f9ew1ohPth4DanlWbt1kzttr3oy
-         PZym7yqKReLqNgi8V9SBTxsBT5k2DHTtcPXcR1yFVf7QTk7gO9XAe4C+Spaka3JJgsUD
-         mU0704ZVilJUlT32mzlxXdIUP1BDw1tq3nPW27R0Xm/rPE0xBYUebLHl+7KwxLtmOkUY
-         ASMMumFSEZKin1jlQFTv6OenpmGngzT+3k3uo0P1TuYC+MimLibQUq6OJ5fLnA3K/Pyo
-         elrg==
-X-Gm-Message-State: AOJu0YwSpIoJ60i9w2zi8kZREA4A1jvqjj2dBN+hFwxICx3PF2gPKeVE
-	iAxwZzalMnhQMttkm8lSl4U=
-X-Google-Smtp-Source: AGHT+IEUyQyYeicmT88yj9ZQjWF+5ZnzsbxcWV9NwQBfyw8mdjrtSspcwIBzY9L+4XjDdlhnLm20WQ==
-X-Received: by 2002:a17:902:f54a:b0:1d0:7535:8b94 with SMTP id h10-20020a170902f54a00b001d075358b94mr231266plf.97.1704922908844;
-        Wed, 10 Jan 2024 13:41:48 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q22-20020a170902789600b001cfcc10491fsm4121526pll.161.2024.01.10.13.41.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jan 2024 13:41:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <92625821-d79d-4aba-9bef-148f154be427@roeck-us.net>
-Date: Wed, 10 Jan 2024 13:41:45 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D57CFC1D;
+	Thu, 11 Jan 2024 09:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 660AF221F5;
+	Thu, 11 Jan 2024 09:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1704966630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Mj6jPnJr85UCQs+wlaxAUOi0bHdTY1sfEBADyVhRcZI=;
+	b=zhmeMRoN+n/KzlejibfCEME/2lrVb18mU1wOreFQPpkxsKMeS3y0WT4Wo5dzDQyxUfWz4c
+	9E+dAQ9rBbIK+d/1vHtIDsOx6XUpq24BC/y2Zyogxz2Ng69Fum5NY4r60VGfxA0WdzeS1S
+	aRuAbjGxgmJzy1cAo6Y2o3QXrPSPvvY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1704966630;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Mj6jPnJr85UCQs+wlaxAUOi0bHdTY1sfEBADyVhRcZI=;
+	b=fOhSEC/z/SqIdNetNERk0GhrG0fzuxSOxzLovsgNkD9TjAXb8K+/s4XahRwf7UiYcsVZ04
+	RJcqZaeDpbesRLBw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1704966553; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Mj6jPnJr85UCQs+wlaxAUOi0bHdTY1sfEBADyVhRcZI=;
+	b=n5vdaQLjj+6fLo0adhHGyS21wSr8rPUdrR19FmWjovQpKM71P17fOnwyytaI/W/ie9jgrI
+	dSfurJx/gj1tbF41THcarSXDQXOVdvxaNSmn66NpLwHDkVRCMh4iNHdmPmHawJ8L0NfnFA
+	ROH0aFqC2sbHtWhapAaSgtWhUXQHxIo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1704966553;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Mj6jPnJr85UCQs+wlaxAUOi0bHdTY1sfEBADyVhRcZI=;
+	b=qnePHNC/5FfnR9YWBa4FSXDzCNAykQbW/tRjdriaeYynjX0ycqXBjzubGSY2iyp9cr5Xy7
+	olABhQ+wJlcdafDQ==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 72342138E5;
+	Thu, 11 Jan 2024 09:49:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id 26zDGpm5n2WQMgAAn2gu4w
+	(envelope-from <tzimmermann@suse.de>); Thu, 11 Jan 2024 09:49:13 +0000
+Message-ID: <1fd1a3ca-edeb-4bf6-a12d-a8087a180d36@suse.de>
+Date: Thu, 11 Jan 2024 10:50:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -68,169 +82,207 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 7/8] tpm: tis-i2c: Add more compatible strings
+Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into
+ setup_data.h
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Ninad Palsule <ninad@linux.ibm.com>, Conor Dooley <conor@kernel.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au,
- peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, keescook@chromium.org,
- tony.luck@intel.com, gpiccoli@igalia.com, johannes.holland@infineon.com,
- broonie@kernel.org, patrick.rudolph@9elements.com, vincent@vtremblay.dev,
- peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com, bhelgaas@google.com,
- naresh.solanki@9elements.com, alexander.stein@ew.tq-group.com,
- festevam@denx.de, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-hardening@vger.kernel.org, geissonator@yahoo.com
-References: <20231212164004.1683589-1-ninad@linux.ibm.com>
- <20231212164004.1683589-8-ninad@linux.ibm.com>
- <20231212-avid-grill-dbead068fac8@spud>
- <73381bb0-7fa7-4a9e-88df-ab0063058e26@roeck-us.net>
- <20231212-mouth-choice-40a83caa34ec@spud>
- <2946fbb1-2a47-4d21-83dc-8e45bf6ba5a9@roeck-us.net>
- <60c8bbdb-4e08-44f0-88d4-ab164d4843b5@linux.ibm.com>
- <20240109-pep-coerce-2a86ae88753d@spud>
- <01974929-dfbf-4989-ba39-369e521827d0@linux.ibm.com>
- <3d194e84-bf1a-48e4-a376-e5c327c6508d@linaro.org>
- <2dd37d2b-28da-4e73-9047-61ec5d64bdb5@linux.ibm.com>
- <edbefdfd-eb59-4d86-ad07-feb066a21082@linaro.org>
- <385b06e9-1daa-408a-a0ed-7b09d7d539df@linux.ibm.com>
- <d56b1e3e-72c4-427f-937d-8c8146bf5b28@linaro.org>
- <3830c26d-96be-4084-a04d-8edb9ccbab5e@roeck-us.net>
- <32d46b64-d4a5-437a-8737-c2d172608559@linaro.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <32d46b64-d4a5-437a-8737-c2d172608559@linaro.org>
+To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
+Cc: ardb@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+ bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
+ dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com, javierm@redhat.com, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+References: <20240108095903.8427-3-tzimmermann@suse.de>
+ <202401090800.UOBEKB3W-lkp@intel.com>
+ <20240109175814.GA5981@dev-arch.thelio-3990X>
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <20240109175814.GA5981@dev-arch.thelio-3990X>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------ZmdV1Iv0xYAmP5whbMR1P70e"
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -3.79
+X-Spamd-Result: default: False [-3.79 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 XM_UA_NO_VERSION(0.01)[];
+	 TO_DN_SOME(0.00)[];
+	 HAS_ATTACHMENT(0.00)[];
+	 MIME_BASE64_TEXT_BOGUS(1.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 MIME_BASE64_TEXT(0.10)[];
+	 SIGNED_PGP(-2.00)[];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+,1:+,2:+,3:~];
+	 BAYES_HAM(-3.00)[100.00%];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 ARC_NA(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.20)[multipart/signed,multipart/mixed,text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 RCPT_COUNT_TWELVE(0.00)[25];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,git-scm.com:url];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FREEMAIL_CC(0.00)[kernel.org,linutronix.de,redhat.com,alien8.de,linux.intel.com,zytor.com,google.com,arndb.de,linux.ibm.com,gmail.com,paul-moore.com,namei.org,hallyn.com,lists.linux.dev,vger.kernel.org];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Flag: NO
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------ZmdV1Iv0xYAmP5whbMR1P70e
+Content-Type: multipart/mixed; boundary="------------j6Cwys0LP2kdoAZ1E9hEPCWY";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
+Cc: ardb@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+ bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com,
+ dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com, javierm@redhat.com, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+Message-ID: <1fd1a3ca-edeb-4bf6-a12d-a8087a180d36@suse.de>
+Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into
+ setup_data.h
+References: <20240108095903.8427-3-tzimmermann@suse.de>
+ <202401090800.UOBEKB3W-lkp@intel.com>
+ <20240109175814.GA5981@dev-arch.thelio-3990X>
+In-Reply-To: <20240109175814.GA5981@dev-arch.thelio-3990X>
+
+--------------j6Cwys0LP2kdoAZ1E9hEPCWY
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 
-On 1/10/24 12:34, Krzysztof Kozlowski wrote:
-> On 10/01/2024 20:06, Guenter Roeck wrote:
->> On 1/10/24 09:54, Krzysztof Kozlowski wrote:
->>> On 10/01/2024 16:54, Ninad Palsule wrote:
->>>> Hello Krzysztof,
->>>>
->>>>
->>>> On 1/10/24 09:37, Krzysztof Kozlowski wrote:
->>>>> On 10/01/2024 15:31, Ninad Palsule wrote:
->>>>>> Hello Krzysztof,
->>>>>>
->>>>>>
->>>>>>
->>>>>>>>>> I have send it as a separate commit. https://lore.kernel.org/linux-kernel/20231214144954.3833998-1-ninad@linux.ibm.com/
->>>>>>>>> Why did you do that? It now just adds undocumented compatibles to the
->>>>>>>>> driver. Please, as Rob requested, work with Lukas on his series to make
->>>>>>>>> sure that these devices are documented.
->>>>>>>> I think krzysztof kozlowski suggested to send these patches separately:
->>>>>>>> https://lore.kernel.org/linux-kernel/1c5ace65-2fd8-4503-b22f-e0f564d1c83f@linaro.org/
->>>>>>>>
->>>>>>>> Did I misunderstood it? Do you guys want me to include that commit again?
->>>>>>> My comment was in DTS thread under specific DTS patch. How did you
->>>>>>> figure out it applies to driver and bindings? This does not make sense.
->>>>>> Sorry for the misunderstanding. Where do you want me to add driver
->>>>>> patch? Before all DTS patches or after all DTS patches?
->>>>> Does not matter, why do you insist on combining them with DTS? Drivers
->>>>> and bindings are going together. DTS better separate, although depending
->>>>> on the case can be together.
->>>>>
->>>> I have combined DTS and Driver because DTS was using compatibility
->>>> string which is not upstream yet hence I thought it is logical to send
->>>> it under same patchset.
->>>
->>> Sometimes yes, sometimes not. DTS must not go via driver subsystem, so
->>> sending it in the same patchset has implications on maintainers applying
->>> it. Some like it, some don't and you will be nagged for combining them.
->>>
->>
->> "DTS must not go via driver subsystem"
->>
->> I always thought the guideline was to submit separate _patches_ for dts
->> and driver changes, but as part of a single series. I didn't know that
->> there is a rule to submit separate patch _series_. I also didn't know
->> (and as far as I know no one called me on it) that I am not supposed
->> to _apply_ dts changes. So far, I typically applied dts changes together
->> with driver patches after receiving an Acked-by: or Reviewed-by:
->> from a devicetree maintainer.
-> 
-> I did not notice you applying them, but such guideline - DTS must go via
-> respective SoC tree - was always repeated by me and SoC maintainers.
-> Just like gazillion other things probably was not documented... or even
-> if it was documented, it would be so deep among hundreds of other rules
-> nobody would find it. :)
-> 
->>
->> This exchange suggests that I did it all wrong. Should I reject devicetree
->> patches submitted as part of a driver patch series going forward ?
-> 
-> I propose: just ignore them. The SoC maintainer will pick them up.
-> 
->> Should I not apply dts patches submitted as part of a patch series ?
-> 
-> No, please do not apply them.
-> 
->> If so, it would help to have some documentation I can point to to explain
->> the rationale to submitters (and myself). Also, in that case, how is the
-> 
-> Yes, it would. I can try to create something.
-> 
->> synchronization between device tree patches and driver patches supposed
->> to happen ?
-> 
-> There should not be synchronization. Just to remind: we talk about DTS
-> (so also DTSI and DTSO), thus everything being in arch/*/boot/dts/. We
-> do not talk about DT bindings, right? The bindings are obvious (and
-> documented): preferably go via driver subsystem, with fallback/special
-> cases via SoC tree and fallback to Rob.
-> 
+SGkNCg0KQW0gMDkuMDEuMjQgdW0gMTg6NTggc2NocmllYiBOYXRoYW4gQ2hhbmNlbGxvcjoN
+Cj4gT24gVHVlLCBKYW4gMDksIDIwMjQgYXQgMDg6Mjg6NTlBTSArMDgwMCwga2VybmVsIHRl
+c3Qgcm9ib3Qgd3JvdGU6DQo+PiBIaSBUaG9tYXMsDQo+Pg0KPj4ga2VybmVsIHRlc3Qgcm9i
+b3Qgbm90aWNlZCB0aGUgZm9sbG93aW5nIGJ1aWxkIHdhcm5pbmdzOg0KPj4NCj4+IFthdXRv
+IGJ1aWxkIHRlc3QgV0FSTklORyBvbiB0aXAveDg2L2NvcmVdDQo+PiBbYWxzbyBidWlsZCB0
+ZXN0IFdBUk5JTkcgb24gZWZpL25leHQgdGlwL21hc3RlciB0aXAvYXV0by1sYXRlc3QgbGlu
+dXMvbWFzdGVyIHY2LjcgbmV4dC0yMDI0MDEwOF0NCj4+IFtJZiB5b3VyIHBhdGNoIGlzIGFw
+cGxpZWQgdG8gdGhlIHdyb25nIGdpdCB0cmVlLCBraW5kbHkgZHJvcCB1cyBhIG5vdGUuDQo+
+PiBBbmQgd2hlbiBzdWJtaXR0aW5nIHBhdGNoLCB3ZSBzdWdnZXN0IHRvIHVzZSAnLS1iYXNl
+JyBhcyBkb2N1bWVudGVkIGluDQo+PiBodHRwczovL2dpdC1zY20uY29tL2RvY3MvZ2l0LWZv
+cm1hdC1wYXRjaCNfYmFzZV90cmVlX2luZm9ybWF0aW9uXQ0KPj4NCj4+IHVybDogICAgaHR0
+cHM6Ly9naXRodWIuY29tL2ludGVsLWxhYi1sa3AvbGludXgvY29tbWl0cy9UaG9tYXMtWmlt
+bWVybWFubi9hcmNoLXg4Ni1Nb3ZlLVVBUEktc2V0dXAtc3RydWN0dXJlcy1pbnRvLXNldHVw
+X2RhdGEtaC8yMDI0MDEwOC0xODAxNTgNCj4+IGJhc2U6ICAgdGlwL3g4Ni9jb3JlDQo+PiBw
+YXRjaCBsaW5rOiAgICBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjQwMTA4MDk1OTAz
+Ljg0MjctMy10emltbWVybWFubiU0MHN1c2UuZGUNCj4+IHBhdGNoIHN1YmplY3Q6IFtQQVRD
+SCB2NCAyLzRdIGFyY2gveDg2OiBNb3ZlIGludGVybmFsIHNldHVwX2RhdGEgc3RydWN0dXJl
+cyBpbnRvIHNldHVwX2RhdGEuaA0KPj4gY29uZmlnOiB4ODZfNjQtcmhlbC04LjMtYnBmICho
+dHRwczovL2Rvd25sb2FkLjAxLm9yZy8wZGF5LWNpL2FyY2hpdmUvMjAyNDAxMDkvMjAyNDAx
+MDkwODAwLlVPQkVLQjNXLWxrcEBpbnRlbC5jb20vY29uZmlnKQ0KPj4gY29tcGlsZXI6IENs
+YW5nQnVpbHRMaW51eCBjbGFuZyB2ZXJzaW9uIDE3LjAuNiAoaHR0cHM6Ly9naXRodWIuY29t
+L2xsdm0vbGx2bS1wcm9qZWN0IDYwMDk3MDhiNDM2NzE3MWNjZGJmNGI1OTA1Y2I2YTgwMzc1
+M2ZlMTgpDQo+PiByZXByb2R1Y2UgKHRoaXMgaXMgYSBXPTEgYnVpbGQpOiAoaHR0cHM6Ly9k
+b3dubG9hZC4wMS5vcmcvMGRheS1jaS9hcmNoaXZlLzIwMjQwMTA5LzIwMjQwMTA5MDgwMC5V
+T0JFS0IzVy1sa3BAaW50ZWwuY29tL3JlcHJvZHVjZSkNCj4+DQo+PiBJZiB5b3UgZml4IHRo
+ZSBpc3N1ZSBpbiBhIHNlcGFyYXRlIHBhdGNoL2NvbW1pdCAoaS5lLiBub3QganVzdCBhIG5l
+dyB2ZXJzaW9uIG9mDQo+PiB0aGUgc2FtZSBwYXRjaC9jb21taXQpLCBraW5kbHkgYWRkIGZv
+bGxvd2luZyB0YWdzDQo+PiB8IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtw
+QGludGVsLmNvbT4NCj4+IHwgQ2xvc2VzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9vZS1r
+YnVpbGQtYWxsLzIwMjQwMTA5MDgwMC5VT0JFS0IzVy1sa3BAaW50ZWwuY29tLw0KPj4NCj4+
+IEFsbCB3YXJuaW5ncyAobmV3IG9uZXMgcHJlZml4ZWQgYnkgPj4pOg0KPj4NCj4+ICAgICBJ
+biBmaWxlIGluY2x1ZGVkIGZyb20gYXJjaC94ODYvcmVhbG1vZGUvcm0vd2FrZW1haW4uYzoz
+Og0KPj4gICAgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSBhcmNoL3g4Ni9ib290L2Jvb3QuaDoy
+NDoNCj4+ICAgICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gYXJjaC94ODYvaW5jbHVkZS9hc20v
+c2V0dXAuaDoxMDoNCj4+ICAgICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gYXJjaC94ODYvaW5j
+bHVkZS9hc20vcGFnZV90eXBlcy5oOjc6DQo+PiAgICAgSW4gZmlsZSBpbmNsdWRlZCBmcm9t
+IGluY2x1ZGUvbGludXgvbWVtX2VuY3J5cHQuaDoxNzoNCj4+ICAgICBJbiBmaWxlIGluY2x1
+ZGVkIGZyb20gYXJjaC94ODYvaW5jbHVkZS9hc20vbWVtX2VuY3J5cHQuaDoxODoNCj4+ICAg
+ICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gYXJjaC94ODYvaW5jbHVkZS91YXBpL2FzbS9ib290
+cGFyYW0uaDo1Og0KPj4+PiBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9zZXR1cF9kYXRhLmg6MTA6
+MjA6IHdhcm5pbmc6IGZpZWxkICdkYXRhJyB3aXRoIHZhcmlhYmxlIHNpemVkIHR5cGUgJ3N0
+cnVjdCBzZXR1cF9kYXRhJyBub3QgYXQgdGhlIGVuZCBvZiBhIHN0cnVjdCBvciBjbGFzcyBp
+cyBhIEdOVSBleHRlbnNpb24gWy1XZ251LXZhcmlhYmxlLXNpemVkLXR5cGUtbm90LWF0LWVu
+ZF0NCj4+ICAgICAgICAxMCB8ICAgICAgICAgc3RydWN0IHNldHVwX2RhdGEgZGF0YTsNCj4+
+ICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgXg0KPj4gICAgIDEgd2Fy
+bmluZyBnZW5lcmF0ZWQuDQo+IA0KPiBJIHRoaW5rIHRoaXMgd2FybmluZyBpcyBleHBlY3Rl
+ZC4gVGhpcyBzdHJ1Y3R1cmUgaXMgbm93IGluY2x1ZGVkIGluIHRoZQ0KPiByZWFsbW9kZSBw
+YXJ0IG9mIGFyY2gveDg2LCB3aGljaCBoYXMgaXRzIG93biBzZXQgb2YgYnVpbGQgZmxhZ3Ms
+DQo+IGluY2x1ZGluZyAtV2FsbCwgd2hpY2ggaW5jbHVkZXMgLVdnbnUgb24gY2xhbmcuIFRo
+ZSBrZXJuZWwgb2J2aW91c2x5DQo+IHVzZXMgR05VIGV4dGVuc2lvbnMgYW5kIHN0YXRlcyB0
+aGlzIGNsZWFybHkgd2l0aCAnLXN0ZD1nbnUxMScsIHNvDQo+IC1Xbm8tZ251IGlzIHVuY29u
+ZGl0aW9uYWxseSBhZGRlZCB0byBLQlVJTERfQ0ZMQUdTIGZvciBjbGFuZy4gSXQgc2VlbXMN
+Cj4gdGhhdCBzYW1lIHRyZWF0bWVudCBpcyBuZWVkZWQgZm9yIFJFQUxNT0RFX0NGTEFHUywg
+d2hpY2ggYWxzbyBtYXRjaGVzDQo+IGFyY2gveDg2L2Jvb3QvY29tcHJlc3NlZC9NYWtlZmls
+ZSwgc2VlIGNvbW1pdCA2YzNiNTZiMTk3MzAgKCJ4ODYvYm9vdDoNCj4gRGlzYWJsZSBDbGFu
+ZyB3YXJuaW5ncyBhYm91dCBHTlUgZXh0ZW5zaW9ucyIpOg0KPiANCj4gZGlmZiAtLWdpdCBh
+L2FyY2gveDg2L01ha2VmaWxlIGIvYXJjaC94ODYvTWFrZWZpbGUNCj4gaW5kZXggMWEwNjhk
+ZTEyYTU2Li4yNDA3NmRiNTk3ODMgMTAwNjQ0DQo+IC0tLSBhL2FyY2gveDg2L01ha2VmaWxl
+DQo+ICsrKyBiL2FyY2gveDg2L01ha2VmaWxlDQo+IEBAIC01Myw2ICs1Myw5IEBAIFJFQUxN
+T0RFX0NGTEFHUyArPSAtZm5vLXN0YWNrLXByb3RlY3Rvcg0KPiAgIFJFQUxNT0RFX0NGTEFH
+UyArPSAtV25vLWFkZHJlc3Mtb2YtcGFja2VkLW1lbWJlcg0KPiAgIFJFQUxNT0RFX0NGTEFH
+UyArPSAkKGNjX3N0YWNrX2FsaWduNCkNCj4gICBSRUFMTU9ERV9DRkxBR1MgKz0gJChDTEFO
+R19GTEFHUykNCj4gK2lmZGVmIENPTkZJR19DQ19JU19DTEFORw0KPiArUkVBTE1PREVfQ0ZM
+QUdTICs9IC1Xbm8tZ251DQo+ICtlbmRpZg0KDQpUaGFua3MuIFNoYWxsIEkgaW5jbHVkZSB0
+aGlzIGNoYW5nZSBpbiB0aGUgcGF0Y2hzZXQ/DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoN
+Cj4gICBleHBvcnQgUkVBTE1PREVfQ0ZMQUdTDQo+ICAgDQo+ICAgIyBCSVRTIGlzIHVzZWQg
+YXMgZXh0ZW5zaW9uIGZvciBmaWxlcyB3aGljaCBhcmUgYXZhaWxhYmxlIGluIGEgMzIgYml0
+DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXIN
+ClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2Ug
+MTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBN
+eWVycywgQW5kcmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcg
+TnVlcm5iZXJnKQ0K
 
-Sorry, misunderstanding on my side. I do not and never did apply patches
-in arch/*/boot/dts/. I referred to patches in Documentation/devicetree/
+--------------j6Cwys0LP2kdoAZ1E9hEPCWY--
 
-Sorry, I though you also referred to bindings. My bad.
+--------------ZmdV1Iv0xYAmP5whbMR1P70e
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-Guenter
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmWfufMFAwAAAAAACgkQlh/E3EQov+Ah
+zhAAgyKH/nDt76sEkM59OsOGhqE1rWXhDW6k9pJxX4JG5gER9op5czApHYzb1zUp2UgAaYVcfaW2
+NkJkxGoBI8jwYQSQDcP/m3mFd86Rs06oHKUNNIn8OEIgJG6lSlHce59oeBblILCQLWjA6+swV3Zn
+AuWwLX1h8VfIlseUmxeAUBI6VUlD/1zUcBm69IjDWLMi1Ia2cDsHsh0m8/BSchwBSog3tv82bKnO
+x/VzuoxSh/3tzuzoeqx04oV3T7qMRn47MsgZf6WA6z/k5WnGBgWnrdQSdlAPCUrYJnhV2pEX8Qr9
+U4g5IEDlQLSj4RayC+znUBcPvd9eiRURqLfviKsjbgd71lrEXtMin2AuocfSRK0JzqOSP1poK/Cu
+KLu5UmOP5iLRw/Zm+QYB0/i8N9lKd8rOc9VyjwpMQefl1SHWTRTIKPoEMgMLgQFC2Sqt3zIoizLk
+USSsHL9Iqq4+sdJWDpyNEB0xo+Zb3efRBeesZWhaEflKzeEua3sOsiidqoCuhrAkIe7ll1PZJ2NX
+uM/jTMxH9Jzd02WzSQzwjPz+iz59J7i6RkpmKSiH1RrT3RjD7vhiksnkbjKandI95ZCTugAxxqMg
+vQJf2cdStHZ1LQ3in/QCL4RcYBrMTqQT8K4ospjOi+7x4k8SbsvLdmOVVmrM+jHbl1m1HlsfdhzT
+YnA=
+=4q+T
+-----END PGP SIGNATURE-----
+
+--------------ZmdV1Iv0xYAmP5whbMR1P70e--
 
