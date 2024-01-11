@@ -1,148 +1,321 @@
-Return-Path: <linux-integrity+bounces-750-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-751-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EABBE82B732
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 23:41:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EECF182B80B
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 00:29:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 770D5B24E09
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 22:41:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 639261F25C01
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jan 2024 23:29:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB839FC0D;
-	Thu, 11 Jan 2024 22:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A575A0E3;
+	Thu, 11 Jan 2024 23:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfvTIE3Y"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="OKVjwNRb"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70880FBF8;
-	Thu, 11 Jan 2024 22:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2ECC433F1;
-	Thu, 11 Jan 2024 22:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705012870;
-	bh=+WwJWrlRns8EY2E9CLCbBROU9LT8j8Mr6e6ahvyEWOU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OfvTIE3YPZ6MdksK4thbEF0gX4EYWItfgro+p6au+ae/0L1Rn5KPQUey1MO2mF7sb
-	 912wFQwxWJt6Eqz5rquvRdwVK23gOw+mZN3QMJzBuw9omsgfklBLL4ldqAI5eFHiMf
-	 UwH3kwKHmW649e28JAQ6P8MeeoY5YOS78K9x583/YWF7UJuVj+KZu6omk0vxfKcOhP
-	 NdiX663P8dwv8VefWE36YU8/vmf1Hpt79kYUnhnu0IyL1nEAxmLnqQ0zgq6NMjjG59
-	 7vahCIA30Sn0UeqmjWeNnB4C048bpJkLlXFQL2KrAO5l8ShyZvKdAqNwDxW80aGjE4
-	 KMyE7A/fIix6w==
-Date: Thu, 11 Jan 2024 15:41:08 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: kernel test robot <lkp@intel.com>, ardb@kernel.org, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, bhelgaas@google.com, arnd@arndb.de,
-	zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
-	jmorris@namei.org, serge@hallyn.com, javierm@redhat.com,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] arch/x86: Move internal setup_data structures
- into setup_data.h
-Message-ID: <20240111224108.GA227186@dev-arch.thelio-3990X>
-References: <20240108095903.8427-3-tzimmermann@suse.de>
- <202401090800.UOBEKB3W-lkp@intel.com>
- <20240109175814.GA5981@dev-arch.thelio-3990X>
- <1fd1a3ca-edeb-4bf6-a12d-a8087a180d36@suse.de>
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402CC5A0E0
+	for <linux-integrity@vger.kernel.org>; Thu, 11 Jan 2024 23:29:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.86.69] (unknown [50.46.228.62])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 985AC20B3CC4;
+	Thu, 11 Jan 2024 15:29:11 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 985AC20B3CC4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1705015751;
+	bh=AsPnRUrMFpIrUpYkVrHdeq1HV9N//zJSvvWcLdw4/JE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OKVjwNRbt5+WfRi9Ehw1RrJbio0JT0oEbphQUMsGBw3rOQhfVBT/xL+v/hVTImJO2
+	 rJ5JZt1C61JrgDJ9LzdFED3INOJtH7rnfp7xh3CCHYMeni5NRlhNRXcUdB/bjX74Df
+	 jsH8u1pP53w7W8QLYUXz1OU8Y9ktPcs/dO91OMlg=
+Message-ID: <c2ec280f-4789-4654-a7b4-7a9534476173@linux.microsoft.com>
+Date: Thu, 11 Jan 2024 15:29:10 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1fd1a3ca-edeb-4bf6-a12d-a8087a180d36@suse.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/7] ima: kexec: move ima log copy from kexec load to
+ execute
+Content-Language: en-US
+To: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huaweicloud.com,
+ roberto.sassu@huawei.com, eric.snowberg@oracle.com, stefanb@linux.ibm.com,
+ ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
+ linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
+ <20231216010729.2904751-3-tusharsu@linux.microsoft.com>
+ <b01df40e800ab387d43adcbb7f643bcd9f172cbb.camel@linux.ibm.com>
+From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <b01df40e800ab387d43adcbb7f643bcd9f172cbb.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 11, 2024 at 10:50:43AM +0100, Thomas Zimmermann wrote:
-> Hi
+Apologies for the late response on this particular patch (v3 2/7) Mimi.
+I was on vacation in December.
+I was meaning to respond to this one when I came back, but I was caught 
+in between other work items last few days. Sorry if it caused any 
+confusion.
+
+Responses below.
+
+On 12/20/23 11:02, Mimi Zohar wrote:
+> Hi Tushar,
 > 
-> Am 09.01.24 um 18:58 schrieb Nathan Chancellor:
-> > On Tue, Jan 09, 2024 at 08:28:59AM +0800, kernel test robot wrote:
-> > > Hi Thomas,
-> > > 
-> > > kernel test robot noticed the following build warnings:
-> > > 
-> > > [auto build test WARNING on tip/x86/core]
-> > > [also build test WARNING on efi/next tip/master tip/auto-latest linus/master v6.7 next-20240108]
-> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > > And when submitting patch, we suggest to use '--base' as documented in
-> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/arch-x86-Move-UAPI-setup-structures-into-setup_data-h/20240108-180158
-> > > base:   tip/x86/core
-> > > patch link:    https://lore.kernel.org/r/20240108095903.8427-3-tzimmermann%40suse.de
-> > > patch subject: [PATCH v4 2/4] arch/x86: Move internal setup_data structures into setup_data.h
-> > > config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/config)
-> > > compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240109/202401090800.UOBEKB3W-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202401090800.UOBEKB3W-lkp@intel.com/
-> > > 
-> > > All warnings (new ones prefixed by >>):
-> > > 
-> > >     In file included from arch/x86/realmode/rm/wakemain.c:3:
-> > >     In file included from arch/x86/boot/boot.h:24:
-> > >     In file included from arch/x86/include/asm/setup.h:10:
-> > >     In file included from arch/x86/include/asm/page_types.h:7:
-> > >     In file included from include/linux/mem_encrypt.h:17:
-> > >     In file included from arch/x86/include/asm/mem_encrypt.h:18:
-> > >     In file included from arch/x86/include/uapi/asm/bootparam.h:5:
-> > > > > arch/x86/include/asm/setup_data.h:10:20: warning: field 'data' with variable sized type 'struct setup_data' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-> > >        10 |         struct setup_data data;
-> > >           |                           ^
-> > >     1 warning generated.
-> > 
-> > I think this warning is expected. This structure is now included in the
-> > realmode part of arch/x86, which has its own set of build flags,
-> > including -Wall, which includes -Wgnu on clang. The kernel obviously
-> > uses GNU extensions and states this clearly with '-std=gnu11', so
-> > -Wno-gnu is unconditionally added to KBUILD_CFLAGS for clang. It seems
-> > that same treatment is needed for REALMODE_CFLAGS, which also matches
-> > arch/x86/boot/compressed/Makefile, see commit 6c3b56b19730 ("x86/boot:
-> > Disable Clang warnings about GNU extensions"):
-> > 
-> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> > index 1a068de12a56..24076db59783 100644
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -53,6 +53,9 @@ REALMODE_CFLAGS += -fno-stack-protector
-> >   REALMODE_CFLAGS += -Wno-address-of-packed-member
-> >   REALMODE_CFLAGS += $(cc_stack_align4)
-> >   REALMODE_CFLAGS += $(CLANG_FLAGS)
-> > +ifdef CONFIG_CC_IS_CLANG
-> > +REALMODE_CFLAGS += -Wno-gnu
-> > +endif
+> On Fri, 2023-12-15 at 17:07 -0800, Tushar Sugandhi wrote:
+>> ima_dump_measurement_list() is called from  ima_add_kexec_buffer() during
+>> kexec 'load', which may result in loss of IMA measurements between kexec
+>> 'load' and 'execute'.  It needs to be called during kexec 'execute'.
+>>
+>> Implement ima_update_kexec_buffer(), to be called during kexec 'execute'.
+>> Move ima_dump_measurement_list() function call from ima_add_kexec_buffer()
+>> to ima_update_kexec_buffer().  Make the needed variables global for
+>> accessibility during kexec 'load' and 'execute'. Implement and call
+>> ima_measurements_suspend() and ima_measurements_resume() to help ensure
+>> the integrity of the IMA log during copy. Add a reboot notifier_block to
+>> trigger ima_update_kexec_buffer() during kexec soft-reboot.  Exclude ima
+>> segment from calculating and storing digest in function
+>> kexec_calculate_store_digests(), since ima segment can be modified
+>> after the digest is computed during kexec 'load'.
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 > 
-> Thanks. Shall I include this change in the patchset?
-
-Yes, I think so to keep the build clean.
-
-> Best regards
-> Thomas
+> Wow!   That's quite a bit for a single patch.
 > 
-> >   export REALMODE_CFLAGS
-> >   # BITS is used as extension for files which are available in a 32 bit
+> This patch moves the ima_dump_measurement_list() call from kexec load
+> to exec, but doesn't register the reboot notifier in this patch.  I
+> don't see how it is possible with just the previous and this patch
+> applied that the measurement list is carried across kexec.
+Ah. That's a good catch.
+I was only checking if I can boot into the Kernel for testing 
+bisect-safe readiness for each patch.  I will ensure the move of 
+ima_dump_measurement_list() and registering the reboot notifier at 
+execute stays an atomic operation in a single patch.
+
+
 > 
-> -- 
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Frankenstrasse 146, 90461 Nuernberg, Germany
-> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-> HRB 36809 (AG Nuernberg)
+> Please test after applying each patch in the patch set to make sure
+> that the measurement list is properly carried across kexec.
+> 
+Yup. I was only checking if I can boot into the Kernel after each patch.
+My bad. :(
 
+Going forward, I will check each patch for the measurement list carry 
+over after kexec.
 
+> Additional inline comments below.
+> 
+>> ---
+>>   include/linux/kexec.h              |  3 ++
+>>   kernel/kexec_file.c                |  8 ++++
+>>   security/integrity/ima/ima.h       |  2 +
+>>   security/integrity/ima/ima_kexec.c | 61 +++++++++++++++++++++++++-----
+>>   security/integrity/ima/ima_queue.c | 19 ++++++++++
+>>   5 files changed, 84 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+>> index 22b5cd24f581..fd94404acc66 100644
+>> --- a/include/linux/kexec.h
+>> +++ b/include/linux/kexec.h
+>> @@ -366,6 +366,9 @@ struct kimage {
+>>   
+>>   	phys_addr_t ima_buffer_addr;
+>>   	size_t ima_buffer_size;
+>> +
+>> +	unsigned long ima_segment_index;
+>> +	bool is_ima_segment_index_set;
+>>   #endif
+>>   
+>>   	/* Core ELF header buffer */
+>> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+>> index f989f5f1933b..bf758fd5062c 100644
+>> --- a/kernel/kexec_file.c
+>> +++ b/kernel/kexec_file.c
+>> @@ -734,6 +734,14 @@ static int kexec_calculate_store_digests(struct kimage *image)
+>>   		if (ksegment->kbuf == pi->purgatory_buf)
+>>   			continue;
+>>   
+>> +		/*
+>> +		 * Skip the segment if ima_segment_index is set and matches
+>> +		 * the current index
+>> +		 */
+>> +		if (image->is_ima_segment_index_set &&
+>> +		    i == image->ima_segment_index)
+>> +			continue;
+> 
+> With this change, the IMA segment is not included in the digest
+> calculation, nor should it be included in the digest verification.
+> However, I'm not seeing the matching code change in the digest
+> verification.
+> 
+Fair question.
 
+But I don't think anything else needs to be done here.
+
+The way kexec_calculate_store_digests() and verify_sha256_digest()
+are implemented, it already skips verification of the segments if
+the segment is not part of 'purgatory_sha_regions'.
+
+In kexec_calculate_store_digests(), my change is to 'continue' when the
+segment is the IMA segment when the function is going through all the
+segments in a for loop [1].
+
+Therefore in kexec_calculate_store_digests() -
+  - crypto_shash_update() is not called for IMA segment [1].
+  - sha_regions[j] is not updated with IMA segment  [1].
+  - This 'sha_regions' variable later becomes 'purgatory_sha_regions'
+    in kexec_calculate_store_digests  [1].
+  - and verify_sha256_digest() only verifies 'purgatory_sha_regions'[2].
+
+  Since IMA segment is not part of the 'purgatory_sha_regions', it is
+  not included in the verification as part of verify_sha256_digest().
+
+I have pasted the relevant code below for quick reference [1][2].
+
+> Please make ignoring the IMA segment a separate patch.
+> 
+Sure. Will do.
+
+>>   		ret = crypto_shash_update(desc, ksegment->kbuf,
+>>   					  ksegment->bufsz);
+>>   		if (ret)
+...
+...
+...
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index c29db699c996..49a6047dd8eb 100644
+> 
+> Suspending and resuming extending the measurement list should be a
+> separate patch as well, with its own patch description.
+> 
+Sure. Will do.
+>>   /*
+>>    * Add template entry to the measurement list and hash table, and
+>>    * extend the pcr.
+> 
+----------------------------------------------------------------------------------
+Reference code in the context of kexec_calculate_store_digests()
+and verify_sha256_digest() conversation above.
+----------------------------------------------------------------------------------
+[1]
+https://lore.kernel.org/all/20231216010729.2904751-3-tusharsu@linux.microsoft.com/
+/* Calculate and store the digest of segments */
+static int kexec_calculate_store_digests(struct kimage *image)
+{
+...
+...
+
+      for (j = i = 0; i < image->nr_segments; i++) {
+            struct kexec_segment *ksegment;
+
+            ksegment = &image->segment[i];
+            /*
+             * Skip purgatory as it will be modified once we put digest
+             * info in purgatory.
+             */
+            if (ksegment->kbuf == pi->purgatory_buf)
+                  continue;
+
++           /*
++            * Skip the segment if ima_segment_index is set and matches
++            * the current index
++            */
++           if (image->is_ima_segment_index_set &&
++               i == image->ima_segment_index)
++                 continue;
++
+            ret = crypto_shash_update(desc, ksegment->kbuf,
+                                ksegment->bufsz);
+            if (ret)
+                  break;
+
+            /*
+             * Assume rest of the buffer is filled with zero and
+             * update digest accordingly.
+             */
+            nullsz = ksegment->memsz - ksegment->bufsz;
+            while (nullsz) {
+                  unsigned long bytes = nullsz;
+
+                  if (bytes > zero_buf_sz)
+                        bytes = zero_buf_sz;
+                  ret = crypto_shash_update(desc, zero_buf, bytes);
+                  if (ret)
+                        break;
+                  nullsz -= bytes;
+            }
+
+            if (ret)
+                  break;
+
+            sha_regions[j].start = ksegment->mem;
+            sha_regions[j].len = ksegment->memsz;
+            j++;
+      }
+
+      if (!ret) {
+            ret = crypto_shash_final(desc, digest);
+            if (ret)
+                  goto out_free_digest;
+            ret = kexec_purgatory_get_set_symbol(image, 
+"purgatory_sha_regions",
+                                         sha_regions, sha_region_sz, 0);
+            if (ret)
+                  goto out_free_digest;
+
+            ret = kexec_purgatory_get_set_symbol(image, 
+"purgatory_sha256_digest",
+                                         digest, SHA256_DIGEST_SIZE, 0);
+            if (ret)
+                  goto out_free_digest;
+      }
+
+out_free_digest:
+      kfree(digest);
+out_free_sha_regions:
+      vfree(sha_regions);
+out_free_desc:
+      kfree(desc);
+out_free_tfm:
+      kfree(tfm);
+out:
+      return ret;
+}
+---------------------------------------------------------------------------
+[2] 
+https://elixir.bootlin.com/linux/latest/source/arch/x86/purgatory/purgatory.c#L24
+
+u8 purgatory_sha256_digest[SHA256_DIGEST_SIZE] 
+__section(".kexec-purgatory");
+
+struct kexec_sha_region purgatory_sha_regions[KEXEC_SEGMENT_MAX] 
+__section(".kexec-purgatory");
+
+static int verify_sha256_digest(void)
+{
+      struct kexec_sha_region *ptr, *end;
+      u8 digest[SHA256_DIGEST_SIZE];
+      struct sha256_state sctx;
+
+      sha256_init(&sctx);
+      end = purgatory_sha_regions + ARRAY_SIZE(purgatory_sha_regions);
+
+      for (ptr = purgatory_sha_regions; ptr < end; ptr++)
+            sha256_update(&sctx, (uint8_t *)(ptr->start), ptr->len);
+
+      sha256_final(&sctx, digest);
+
+      if (memcmp(digest, purgatory_sha256_digest, sizeof(digest)))
+            return 1;
+
+      return 0;
+}
+
+Thanks,
+Tushar
 
