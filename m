@@ -1,114 +1,127 @@
-Return-Path: <linux-integrity+bounces-759-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-760-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4026F82C4A7
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 18:26:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70B3682C4B2
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 18:29:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDC061F2239C
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 17:26:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2611A1F24A62
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 17:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F02C422626;
-	Fri, 12 Jan 2024 17:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DA0A2262B;
+	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="NNjnAYa7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/6K2Dib"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A185F17540
-	for <linux-integrity@vger.kernel.org>; Fri, 12 Jan 2024 17:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.86.69] (unknown [50.46.228.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id DC05820B3CE1;
-	Fri, 12 Jan 2024 09:26:15 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DC05820B3CE1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1705080376;
-	bh=KbxatyazcGOb5nVqjoWrzE226sOvTe/q3xt20G4j/YQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NNjnAYa7dcmhzXN7wy7JcWFS/2uApgDBtTWnXOtv+Q8Hxtkf8v3wL+QrK6p7iHJYR
-	 68TBJoI8PALpcCVnvowTMykrVzELltaSIcSUp632A8ZSmvs3ji1xUZJNPgHB0FbyGJ
-	 LeMkB9++4X88Gfj4MeZh/KIH2yv/V9uNaTdCIpE0=
-Message-ID: <30910120-2a44-46fd-b8d3-c7bff38b6269@linux.microsoft.com>
-Date: Fri, 12 Jan 2024 09:26:15 -0800
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743BF22626;
+	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D4DC43330;
+	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705080547;
+	bh=jssAwbuPxvN7TZtNLg2pY60C9/BU5tslVku5TmAKZdw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=c/6K2Dib9ffLTtP8V3/i61Poz6aqFNtuEEiSH0No09eQkAnvZjXt3iRP+NM8lpPGf
+	 rfNOdrI5hPYSrKpRznCK4RiWlk1LTqHjExhvF6deHyxnrKjrTthONGs8tQN09BJyf+
+	 ZNGF3PNfHa6Te4/El8O2JyvHYWpOjCcA40X44RODeJz3hvWAishkave2Lcm354ZJc2
+	 mys6CNHCSLP8C9gXnK28wYuqNQA0WLGIbfTwVqJZuQnYdLrK4TWSLuE/PlqXv1o0oU
+	 8tdoLtWgTzcqN2SvAVAkkn1JH7Uv1B7TActqvkq91t/8/IVXMpok59UqhgkZGnQnRI
+	 waDPJr64KryrA==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-50e7dd8bce8so7970180e87.1;
+        Fri, 12 Jan 2024 09:29:07 -0800 (PST)
+X-Gm-Message-State: AOJu0YxRpTl3mvhOMIuewhyMF3yah9db0Z7hRUc/woI05YEWclUkEUzL
+	kmQQFgj+KrydHIDBxj8sIN133EXjWUnpIhRSdtY=
+X-Google-Smtp-Source: AGHT+IHv4U6Bv1CLMGqgczNTVhhcMsKubjnAMrFM7bbub8DgPF2lBHnCeeFTbjYR9e4eTnYIRgHyWdZc6b2WsJsdG64=
+X-Received: by 2002:a05:6512:39d2:b0:50e:7b01:70df with SMTP id
+ k18-20020a05651239d200b0050e7b0170dfmr1134504lfu.72.1705080545496; Fri, 12
+ Jan 2024 09:29:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/7] ima: kexec: move ima log copy from kexec load to
- execute
-Content-Language: en-US
-To: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huaweicloud.com,
- roberto.sassu@huawei.com, eric.snowberg@oracle.com, stefanb@linux.ibm.com,
- ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
- linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
- <20231216010729.2904751-3-tusharsu@linux.microsoft.com>
- <b01df40e800ab387d43adcbb7f643bcd9f172cbb.camel@linux.ibm.com>
- <c2ec280f-4789-4654-a7b4-7a9534476173@linux.microsoft.com>
- <8f5deffb34c9a948a20e63eae44a1e3343e2ffe4.camel@linux.ibm.com>
-From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <8f5deffb34c9a948a20e63eae44a1e3343e2ffe4.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240112095000.8952-1-tzimmermann@suse.de>
+In-Reply-To: <20240112095000.8952-1-tzimmermann@suse.de>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 12 Jan 2024 18:28:53 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
+Message-ID: <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] arch/x86: Remove unnecessary dependencies on bootparam.h
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: nathan@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Fri, 12 Jan 2024 at 10:50, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+>
+> Reduce build time in some cases by removing unnecessary include statements
+> for <asm/bootparam.h>. Reorganize some header files accordingly.
+>
+> While working on the kernel's boot-up graphics, I noticed that touching
+> include/linux/screen_info.h triggers a complete rebuild of the kernel
+> on x86. It turns out that the architecture's PCI and EFI headers include
+> <asm/bootparam.h>, which depends on <linux/screen_info.h>. But none of
+> the drivers have any business with boot parameters or the screen_info
+> state.
+>
+> The patchset moves code from bootparam.h and efi.h into separate header
+> files and removes obsolete include statements on x86. I did
+>
+>   make allmodconfig
+>   make -j28
+>   touch include/linux/screen_info.h
+>   time make -j28
+>
+> to measure the time it takes to rebuild. Results without the patchset
+> are around 20 minutes.
+>
+>   real    20m46,705s
+>   user    354m29,166s
+>   sys     28m27,359s
+>
+> And with the patchset applied it goes down to less than one minute.
+>
+>   real    0m56,643s
+>   user    4m0,661s
+>   sys     0m32,956s
+>
+> The test system is an Intel i5-13500.
+>
+> v5:
+>         * silence clang warnings for real-mode code (Nathan)
+>         * revert boot/compressed/misc.h (kernel test robot)
+> v4:
+>         * fix fwd declaration in compressed/misc.h (Ard)
+> v3:
+>         * keep setup_header in bootparam.h (Ard)
+>         * implement arch_ima_efi_boot_mode() in source file (Ard)
+> v2:
+>         * only keep struct boot_params in bootparam.h (Ard)
+>         * simplify arch_ima_efi_boot_mode define (Ard)
+>         * updated cover letter
+>
+> Thomas Zimmermann (4):
+>   arch/x86: Move UAPI setup structures into setup_data.h
+>   arch/x86: Move internal setup_data structures into setup_data.h
+>   arch/x86: Implement arch_ima_efi_boot_mode() in source file
+>   arch/x86: Do not include <asm/bootparam.h> in several files
+>
 
+This looks ok to me, thanks for sticking with it.
 
-On 1/12/24 09:06, Mimi Zohar wrote:
-> 
->>>> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
->>>> index f989f5f1933b..bf758fd5062c 100644
->>>> --- a/kernel/kexec_file.c
->>>> +++ b/kernel/kexec_file.c
->>>> @@ -734,6 +734,14 @@ static int kexec_calculate_store_digests(struct kimage *image)
->>>>    		if (ksegment->kbuf == pi->purgatory_buf)
->>>>    			continue;
->>>>    
->>>> +		/*
->>>> +		 * Skip the segment if ima_segment_index is set and matches
->>>> +		 * the current index
->>>> +		 */
->>>> +		if (image->is_ima_segment_index_set &&
->>>> +		    i == image->ima_segment_index)
->>>> +			continue;
->>> With this change, the IMA segment is not included in the digest
->>> calculation, nor should it be included in the digest verification.
->>> However, I'm not seeing the matching code change in the digest
->>> verification.
->>>
->> Fair question.
->>
->> But I don't think anything else needs to be done here.
->>
->> The way kexec_calculate_store_digests() and verify_sha256_digest()
->> are implemented, it already skips verification of the segments if
->> the segment is not part of 'purgatory_sha_regions'.
->>
->> In kexec_calculate_store_digests(), my change is to 'continue' when the
->> segment is the IMA segment when the function is going through all the
->> segments in a for loop [1].
->>
->> Therefore in kexec_calculate_store_digests() -
->>    - crypto_shash_update() is not called for IMA segment [1].
->>    - sha_regions[j] is not updated with IMA segment  [1].
->>    - This 'sha_regions' variable later becomes 'purgatory_sha_regions'
->>      in kexec_calculate_store_digests  [1].
->>    - and verify_sha256_digest() only verifies 'purgatory_sha_regions'[2].
->>
->>    Since IMA segment is not part of the 'purgatory_sha_regions', it is
->>    not included in the verification as part of verify_sha256_digest().
->>
->>> Please make ignoring the IMA segment a separate patch.
->>>
->> Sure. Will do.
-> Thank you for the explanation.  Please include in the patch description a
-> statement about the "sha_regions" not including the IMA segment, so nothing is
-> needed on the verify side.
-Definitely.  Will do.
+For the series,
+
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
