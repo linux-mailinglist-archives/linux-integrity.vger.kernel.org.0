@@ -1,375 +1,182 @@
-Return-Path: <linux-integrity+bounces-756-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-757-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0438E82BDD7
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 10:53:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E87282C444
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 18:08:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AB3CB22D9F
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 09:52:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B47B1C214CE
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 17:08:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A521457317;
-	Fri, 12 Jan 2024 09:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561281B5A2;
+	Fri, 12 Jan 2024 17:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WVfb89vf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GNKTw6kD";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WVfb89vf";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GNKTw6kD"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="M7eyb8MX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D565EE82;
-	Fri, 12 Jan 2024 09:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8193F21E5A;
-	Fri, 12 Jan 2024 09:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1705053005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ZY5CvUKPTyR/DoYhG/6WLW1e06/fH9Nafua63trqkc=;
-	b=WVfb89vfFOsfEQtmvvxMABtAAqd4mvPtclri/fLLV0HtETZ+f00vBbuf84LcqDqTUtmYd9
-	p/p8uNqVD/25+fIw+MfJ1sfpaJrtNp+CCiew/2fWJXXvrpXIBIAu+xNM2wDiJgWbKLtUN9
-	AGN/surNnYHZzBkP7vm2uaTwYYrP+os=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1705053005;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ZY5CvUKPTyR/DoYhG/6WLW1e06/fH9Nafua63trqkc=;
-	b=GNKTw6kDfumSrhXL8aBNPuFDSXgOyUwW5MG5LU3CTmblkDYzL7mYhh6rl38fA3ZfOkQmcz
-	7bHg3H6dazhdIbAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1705053005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ZY5CvUKPTyR/DoYhG/6WLW1e06/fH9Nafua63trqkc=;
-	b=WVfb89vfFOsfEQtmvvxMABtAAqd4mvPtclri/fLLV0HtETZ+f00vBbuf84LcqDqTUtmYd9
-	p/p8uNqVD/25+fIw+MfJ1sfpaJrtNp+CCiew/2fWJXXvrpXIBIAu+xNM2wDiJgWbKLtUN9
-	AGN/surNnYHZzBkP7vm2uaTwYYrP+os=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1705053005;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ZY5CvUKPTyR/DoYhG/6WLW1e06/fH9Nafua63trqkc=;
-	b=GNKTw6kDfumSrhXL8aBNPuFDSXgOyUwW5MG5LU3CTmblkDYzL7mYhh6rl38fA3ZfOkQmcz
-	7bHg3H6dazhdIbAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EBCF613782;
-	Fri, 12 Jan 2024 09:50:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id MPxPOEwLoWVmOgAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Fri, 12 Jan 2024 09:50:04 +0000
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: ardb@kernel.org,
-	nathan@kernel.org,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	bhelgaas@google.com,
-	arnd@arndb.de,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	javierm@redhat.com
-Cc: linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v5 4/4] arch/x86: Do not include <asm/bootparam.h> in several files
-Date: Fri, 12 Jan 2024 10:44:39 +0100
-Message-ID: <20240112095000.8952-5-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240112095000.8952-1-tzimmermann@suse.de>
-References: <20240112095000.8952-1-tzimmermann@suse.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E245683
+	for <linux-integrity@vger.kernel.org>; Fri, 12 Jan 2024 17:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40CGWfZO005929;
+	Fri, 12 Jan 2024 17:07:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=nvfHbUX3NdOOF0RM1HqCVKhl+3u+WtwkaHpacqrG54Y=;
+ b=M7eyb8MX3klM9CYxA8pMbfMCqHuamzkhadDe+PyEVLcC5hwoPqgP1LSQBAW/d66M1vqS
+ qlD370OmfqWp56qeijRQ7F3AXsfz8pZJzACB1uBXN3eXEC3knCXSAWByi7VyVvVFf0Tf
+ vJ+zw3robUrfzKtQK+kzTRYfSA254SDXrWZgWuK5UijSFRGSpx9P6A4PTtQIP6+r0bm1
+ nUYMmzGnAfkke4nrVunQlxTUm+FyGSPSlbWcDEWZ8Vlh7EPATSZrz2d9EdFoUC5H8pfa
+ EEjIY6foFet0a3r53nO/wZ+M+UiG0JuIrPmAECetb0wM2eTW+vR7LVIgAdSeK8xzhm2I rg== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vk91q0tum-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Jan 2024 17:07:35 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40CFZIEC022787;
+	Fri, 12 Jan 2024 17:06:44 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vfhk03ene-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Jan 2024 17:06:44 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40CH6iAp57737632
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 12 Jan 2024 17:06:44 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0AA3B58059;
+	Fri, 12 Jan 2024 17:06:44 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DDA7458058;
+	Fri, 12 Jan 2024 17:06:42 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.149.108])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 12 Jan 2024 17:06:42 +0000 (GMT)
+Message-ID: <8f5deffb34c9a948a20e63eae44a1e3343e2ffe4.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/7] ima: kexec: move ima log copy from kexec load to
+ execute
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, stefanb@linux.ibm.com, ebiederm@xmission.com,
+        noodles@fb.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+Date: Fri, 12 Jan 2024 12:06:42 -0500
+In-Reply-To: <c2ec280f-4789-4654-a7b4-7a9534476173@linux.microsoft.com>
+References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
+	 <20231216010729.2904751-3-tusharsu@linux.microsoft.com>
+	 <b01df40e800ab387d43adcbb7f643bcd9f172cbb.camel@linux.ibm.com>
+	 <c2ec280f-4789-4654-a7b4-7a9534476173@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: *
-X-Spamd-Bar: +
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WVfb89vf;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=GNKTw6kD
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [1.99 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 R_RATELIMIT(0.00)[to_ip_from(RLfgmttzabnpkr34rizty4fwu5)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_TRACE(0.00)[suse.de:+];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FREEMAIL_TO(0.00)[kernel.org,linutronix.de,redhat.com,alien8.de,linux.intel.com,zytor.com,google.com,arndb.de,linux.ibm.com,gmail.com,paul-moore.com,namei.org,hallyn.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-3.00)[100.00%];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 FROM_HAS_DN(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[23];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Score: 1.99
-X-Rspamd-Queue-Id: 8193F21E5A
-X-Spam-Flag: NO
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DeISoDk6VTOGzzhmLGE0CHqvdeq2xQVG
+X-Proofpoint-GUID: DeISoDk6VTOGzzhmLGE0CHqvdeq2xQVG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-12_08,2024-01-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ clxscore=1015 mlxscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 suspectscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401120135
 
-Remove the include statement for <asm/bootparam.h> from several files
-that don't require it. Limits the exposure of the boot parameters
-within the Linux kernel code.
+Hi Tushar,
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> > This patch moves the ima_dump_measurement_list() call from kexec load
+> > to exec, but doesn't register the reboot notifier in this patch.  I
+> > don't see how it is possible with just the previous and this patch
+> > applied that the measurement list is carried across kexec.
+> Ah. That's a good catch.
+> I was only checking if I can boot into the Kernel for testing 
+> bisect-safe readiness for each patch.  I will ensure the move of 
+> ima_dump_measurement_list() and registering the reboot notifier at 
+> execute stays an atomic operation in a single patch.
 
----
+Thanks!
 
-v5:
-	* revert of boot/compressed/misc.h (kernel test robot)
-v3:
-	* revert of e820/types.h required
-v2:
-	* clean up misc.h and e820/types.h
-	* include bootparam.h in several source files
----
- arch/x86/boot/compressed/acpi.c       | 2 ++
- arch/x86/boot/compressed/cmdline.c    | 2 ++
- arch/x86/boot/compressed/efi.c        | 2 ++
- arch/x86/boot/compressed/pgtable_64.c | 1 +
- arch/x86/boot/compressed/sev.c        | 1 +
- arch/x86/include/asm/kexec.h          | 1 -
- arch/x86/include/asm/mem_encrypt.h    | 2 +-
- arch/x86/include/asm/sev.h            | 3 ++-
- arch/x86/include/asm/x86_init.h       | 2 --
- arch/x86/kernel/crash.c               | 1 +
- arch/x86/kernel/sev-shared.c          | 2 ++
- arch/x86/platform/pvh/enlighten.c     | 1 +
- arch/x86/xen/enlighten_pvh.c          | 1 +
- arch/x86/xen/vga.c                    | 1 -
- 14 files changed, 16 insertions(+), 6 deletions(-)
+> >> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> >> index f989f5f1933b..bf758fd5062c 100644
+> >> --- a/kernel/kexec_file.c
+> >> +++ b/kernel/kexec_file.c
+> >> @@ -734,6 +734,14 @@ static int kexec_calculate_store_digests(struct kimage *image)
+> >>   		if (ksegment->kbuf == pi->purgatory_buf)
+> >>   			continue;
+> >>   
+> >> +		/*
+> >> +		 * Skip the segment if ima_segment_index is set and matches
+> >> +		 * the current index
+> >> +		 */
+> >> +		if (image->is_ima_segment_index_set &&
+> >> +		    i == image->ima_segment_index)
+> >> +			continue;
+> > 
+> > With this change, the IMA segment is not included in the digest
+> > calculation, nor should it be included in the digest verification.
+> > However, I'm not seeing the matching code change in the digest
+> > verification.
+> > 
+> Fair question.
+> 
+> But I don't think anything else needs to be done here.
+> 
+> The way kexec_calculate_store_digests() and verify_sha256_digest()
+> are implemented, it already skips verification of the segments if
+> the segment is not part of 'purgatory_sha_regions'.
+> 
+> In kexec_calculate_store_digests(), my change is to 'continue' when the
+> segment is the IMA segment when the function is going through all the
+> segments in a for loop [1].
+> 
+> Therefore in kexec_calculate_store_digests() -
+>   - crypto_shash_update() is not called for IMA segment [1].
+>   - sha_regions[j] is not updated with IMA segment  [1].
+>   - This 'sha_regions' variable later becomes 'purgatory_sha_regions'
+>     in kexec_calculate_store_digests  [1].
+>   - and verify_sha256_digest() only verifies 'purgatory_sha_regions'[2].
+> 
+>   Since IMA segment is not part of the 'purgatory_sha_regions', it is
+>   not included in the verification as part of verify_sha256_digest().
+> 
+> > Please make ignoring the IMA segment a separate patch.
+> > 
+> Sure. Will do.
 
-diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/acpi.c
-index 18d15d1ce87d..f196b1d1ddf8 100644
---- a/arch/x86/boot/compressed/acpi.c
-+++ b/arch/x86/boot/compressed/acpi.c
-@@ -5,6 +5,8 @@
- #include "../string.h"
- #include "efi.h"
- 
-+#include <asm/bootparam.h>
-+
- #include <linux/numa.h>
- 
- /*
-diff --git a/arch/x86/boot/compressed/cmdline.c b/arch/x86/boot/compressed/cmdline.c
-index c1bb180973ea..e162d7f59cc5 100644
---- a/arch/x86/boot/compressed/cmdline.c
-+++ b/arch/x86/boot/compressed/cmdline.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
-+
- static unsigned long fs;
- static inline void set_fs(unsigned long seg)
- {
-diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/efi.c
-index 6edd034b0b30..f2e50f9758e6 100644
---- a/arch/x86/boot/compressed/efi.c
-+++ b/arch/x86/boot/compressed/efi.c
-@@ -7,6 +7,8 @@
- 
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
-+
- /**
-  * efi_get_type - Given a pointer to boot_params, determine the type of EFI environment.
-  *
-diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
-index 51f957b24ba7..c882e1f67af0 100644
---- a/arch/x86/boot/compressed/pgtable_64.c
-+++ b/arch/x86/boot/compressed/pgtable_64.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include "misc.h"
-+#include <asm/bootparam.h>
- #include <asm/e820/types.h>
- #include <asm/processor.h>
- #include "pgtable.h"
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index 454acd7a2daf..13beae767e48 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -12,6 +12,7 @@
-  */
- #include "misc.h"
- 
-+#include <asm/bootparam.h>
- #include <asm/pgtable_types.h>
- #include <asm/sev.h>
- #include <asm/trapnr.h>
-diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-index c9f6a6c5de3c..91ca9a9ee3a2 100644
---- a/arch/x86/include/asm/kexec.h
-+++ b/arch/x86/include/asm/kexec.h
-@@ -25,7 +25,6 @@
- 
- #include <asm/page.h>
- #include <asm/ptrace.h>
--#include <asm/bootparam.h>
- 
- struct kimage;
- 
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index 359ada486fa9..c1a8a3408c18 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -15,7 +15,7 @@
- #include <linux/init.h>
- #include <linux/cc_platform.h>
- 
--#include <asm/bootparam.h>
-+struct boot_params;
- 
- #ifdef CONFIG_X86_MEM_ENCRYPT
- void __init mem_encrypt_init(void);
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 5b4a1ce3d368..8dad8b1613bf 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -13,7 +13,6 @@
- 
- #include <asm/insn.h>
- #include <asm/sev-common.h>
--#include <asm/bootparam.h>
- #include <asm/coco.h>
- 
- #define GHCB_PROTOCOL_MIN	1ULL
-@@ -22,6 +21,8 @@
- 
- #define	VMGEXIT()			{ asm volatile("rep; vmmcall\n\r"); }
- 
-+struct boot_params;
-+
- enum es_result {
- 	ES_OK,			/* All good */
- 	ES_UNSUPPORTED,		/* Requested operation not supported */
-diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-index c878616a18b8..f062715578a0 100644
---- a/arch/x86/include/asm/x86_init.h
-+++ b/arch/x86/include/asm/x86_init.h
-@@ -2,8 +2,6 @@
- #ifndef _ASM_X86_PLATFORM_H
- #define _ASM_X86_PLATFORM_H
- 
--#include <asm/bootparam.h>
--
- struct ghcb;
- struct mpc_bus;
- struct mpc_cpu;
-diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-index c92d88680dbf..564cff7ed33a 100644
---- a/arch/x86/kernel/crash.c
-+++ b/arch/x86/kernel/crash.c
-@@ -26,6 +26,7 @@
- #include <linux/vmalloc.h>
- #include <linux/memblock.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/processor.h>
- #include <asm/hardirq.h>
- #include <asm/nmi.h>
-diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-index ccb0915e84e1..4962ec42dc68 100644
---- a/arch/x86/kernel/sev-shared.c
-+++ b/arch/x86/kernel/sev-shared.c
-@@ -9,6 +9,8 @@
-  * and is included directly into both code-bases.
-  */
- 
-+#include <asm/setup_data.h>
-+
- #ifndef __BOOT_COMPRESSED
- #define error(v)	pr_err(v)
- #define has_cpuflag(f)	boot_cpu_has(f)
-diff --git a/arch/x86/platform/pvh/enlighten.c b/arch/x86/platform/pvh/enlighten.c
-index 00a92cb2c814..944e0290f2c0 100644
---- a/arch/x86/platform/pvh/enlighten.c
-+++ b/arch/x86/platform/pvh/enlighten.c
-@@ -3,6 +3,7 @@
- 
- #include <xen/hvc-console.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/io_apic.h>
- #include <asm/hypervisor.h>
- #include <asm/e820/api.h>
-diff --git a/arch/x86/xen/enlighten_pvh.c b/arch/x86/xen/enlighten_pvh.c
-index ada3868c02c2..9e9db601bd52 100644
---- a/arch/x86/xen/enlighten_pvh.c
-+++ b/arch/x86/xen/enlighten_pvh.c
-@@ -4,6 +4,7 @@
- 
- #include <xen/hvc-console.h>
- 
-+#include <asm/bootparam.h>
- #include <asm/io_apic.h>
- #include <asm/hypervisor.h>
- #include <asm/e820/api.h>
-diff --git a/arch/x86/xen/vga.c b/arch/x86/xen/vga.c
-index d97adab8420f..f7547807b0bd 100644
---- a/arch/x86/xen/vga.c
-+++ b/arch/x86/xen/vga.c
-@@ -2,7 +2,6 @@
- #include <linux/screen_info.h>
- #include <linux/init.h>
- 
--#include <asm/bootparam.h>
- #include <asm/setup.h>
- 
- #include <xen/interface/xen.h>
--- 
-2.43.0
+Thank you for the explanation.  Please include in the patch description a
+statement about the "sha_regions" not including the IMA segment, so nothing is
+needed on the verify side.
+
+> 
+> >>   		ret = crypto_shash_update(desc, ksegment->kbuf,
+> >>   					  ksegment->bufsz);
+> >>   		if (ret)
+> ...
+> ...
+> ...
+> >> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> >> index c29db699c996..49a6047dd8eb 100644
+> > 
+> > Suspending and resuming extending the measurement list should be a
+> > separate patch as well, with its own patch description.
+> > 
+> Sure. Will do.
+
+Thanks!
+
+Mimi
 
 
