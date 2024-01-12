@@ -1,182 +1,135 @@
-Return-Path: <linux-integrity+bounces-757-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-758-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E87282C444
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 18:08:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8018682C4A4
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 18:24:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B47B1C214CE
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 17:08:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2119FB21B99
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 17:24:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561281B5A2;
-	Fri, 12 Jan 2024 17:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB60317569;
+	Fri, 12 Jan 2024 17:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="M7eyb8MX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VLSyzMAp"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E245683
-	for <linux-integrity@vger.kernel.org>; Fri, 12 Jan 2024 17:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40CGWfZO005929;
-	Fri, 12 Jan 2024 17:07:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=nvfHbUX3NdOOF0RM1HqCVKhl+3u+WtwkaHpacqrG54Y=;
- b=M7eyb8MX3klM9CYxA8pMbfMCqHuamzkhadDe+PyEVLcC5hwoPqgP1LSQBAW/d66M1vqS
- qlD370OmfqWp56qeijRQ7F3AXsfz8pZJzACB1uBXN3eXEC3knCXSAWByi7VyVvVFf0Tf
- vJ+zw3robUrfzKtQK+kzTRYfSA254SDXrWZgWuK5UijSFRGSpx9P6A4PTtQIP6+r0bm1
- nUYMmzGnAfkke4nrVunQlxTUm+FyGSPSlbWcDEWZ8Vlh7EPATSZrz2d9EdFoUC5H8pfa
- EEjIY6foFet0a3r53nO/wZ+M+UiG0JuIrPmAECetb0wM2eTW+vR7LVIgAdSeK8xzhm2I rg== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vk91q0tum-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Jan 2024 17:07:35 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40CFZIEC022787;
-	Fri, 12 Jan 2024 17:06:44 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vfhk03ene-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 12 Jan 2024 17:06:44 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40CH6iAp57737632
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 12 Jan 2024 17:06:44 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0AA3B58059;
-	Fri, 12 Jan 2024 17:06:44 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DDA7458058;
-	Fri, 12 Jan 2024 17:06:42 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.149.108])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 12 Jan 2024 17:06:42 +0000 (GMT)
-Message-ID: <8f5deffb34c9a948a20e63eae44a1e3343e2ffe4.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/7] ima: kexec: move ima log copy from kexec load to
- execute
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, stefanb@linux.ibm.com, ebiederm@xmission.com,
-        noodles@fb.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Date: Fri, 12 Jan 2024 12:06:42 -0500
-In-Reply-To: <c2ec280f-4789-4654-a7b4-7a9534476173@linux.microsoft.com>
-References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
-	 <20231216010729.2904751-3-tusharsu@linux.microsoft.com>
-	 <b01df40e800ab387d43adcbb7f643bcd9f172cbb.camel@linux.ibm.com>
-	 <c2ec280f-4789-4654-a7b4-7a9534476173@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E06222612;
+	Fri, 12 Jan 2024 17:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68526C433C7;
+	Fri, 12 Jan 2024 17:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705080282;
+	bh=X9aIgnasVq1ypHKDDLf+2qteQS6RYhO2XgOOTnuWQ50=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VLSyzMApkgq1DzOQ/6xVeUI4wOXZ1Z6Y1UCqgLE/5psQwLRfxRCvEYZ0Hq2hMoEB6
+	 lH2jLkWUcUgB6kaMgCmt7lB1EdoliSJZrvEeiEl1dHf3e9MGVA8KQLgIuyqtHFZysG
+	 enZKmO8TkEsGOGwW/YRACj5bE7cdFPbs0R9h0lyJwws+R5a8Oig/iMpqObQssOQXHk
+	 8RmfxU7RlI0LwQTUAL8AL+SWOIEwlKQkrM3JfRKwKmC7awmaR8ZW8UfFaK8vAiuH2P
+	 jTm45jbyKMA8OYk9r+aSqrnHvBsR8gQM9nB2HVlHsBq5BNuVU3hTc8I2yJv5Ti1EXf
+	 sNdTIJFDQLKPA==
+Date: Fri, 12 Jan 2024 17:24:38 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Ninad Palsule <ninad@linux.ibm.com>
+Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+	Joel Stanley <joel@jms.id.au>, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v1 1/1] tpm: tis-i2c: Add more compatible strings
+Message-ID: <20240112-unrevised-wafer-649c0ebffda5@spud>
+References: <20231214144954.3833998-1-ninad@linux.ibm.com>
+ <20231214144954.3833998-2-ninad@linux.ibm.com>
+ <20240109-saddling-nintendo-c7fbb46bb0dd@spud>
+ <77fe0ccd-53ff-4773-9787-0d038434297f@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: DeISoDk6VTOGzzhmLGE0CHqvdeq2xQVG
-X-Proofpoint-GUID: DeISoDk6VTOGzzhmLGE0CHqvdeq2xQVG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-12_08,2024-01-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- clxscore=1015 mlxscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 suspectscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401120135
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="5Qj7R76LV+2xqmCh"
+Content-Disposition: inline
+In-Reply-To: <77fe0ccd-53ff-4773-9787-0d038434297f@linux.ibm.com>
 
-Hi Tushar,
 
-> > This patch moves the ima_dump_measurement_list() call from kexec load
-> > to exec, but doesn't register the reboot notifier in this patch.  I
-> > don't see how it is possible with just the previous and this patch
-> > applied that the measurement list is carried across kexec.
-> Ah. That's a good catch.
-> I was only checking if I can boot into the Kernel for testing 
-> bisect-safe readiness for each patch.  I will ensure the move of 
-> ima_dump_measurement_list() and registering the reboot notifier at 
-> execute stays an atomic operation in a single patch.
+--5Qj7R76LV+2xqmCh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
+On Thu, Jan 11, 2024 at 10:43:08AM -0600, Ninad Palsule wrote:
+> Hello Conor,
+>=20
+> On 1/9/24 11:11, Conor Dooley wrote:
+> > On Thu, Dec 14, 2023 at 08:49:53AM -0600, Ninad Palsule wrote:
+> > > From: Joel Stanley <joel@jms.id.au>
+> > >=20
+> > > The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
+> > >=20
+> > > https://www.nuvoton.com/products/cloud-computing/security/trusted-pla=
+tform-module-tpm/
+> > >=20
+> > > Add a compatible string for it, and the generic compatible.
+> > >=20
+> > > Signed-off-by: Joel Stanley <joel@jms.id.au>
+> > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.=
+au
+> > > Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
+> > I don't understand why you broke this series up and dropped patches.
+> > NAK, these compatibles are not documented.
+> >=20
+> The original series has three patches:
+>=20
+> 1) Adding compatibility string which I am adding in this series.
+>=20
+> 2) Adding schema for the TIS I2c devices which is already covered by Luka=
+s's
+> patch (already merged in linux-next) https://lore.kernel.org/all/3f56f0a2=
+bb90697a23e83583a21684b75dc7eea2.1701093036.git.lukas@wunner.de/
+>=20
+> 3) Removing "Infineon,slb9673" from trivial-devices.yaml which is not done
+> as it is already added in the TPM specific file. I will add it in my patc=
+h.
+> Good catch!
 
-> >> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> >> index f989f5f1933b..bf758fd5062c 100644
-> >> --- a/kernel/kexec_file.c
-> >> +++ b/kernel/kexec_file.c
-> >> @@ -734,6 +734,14 @@ static int kexec_calculate_store_digests(struct kimage *image)
-> >>   		if (ksegment->kbuf == pi->purgatory_buf)
-> >>   			continue;
-> >>   
-> >> +		/*
-> >> +		 * Skip the segment if ima_segment_index is set and matches
-> >> +		 * the current index
-> >> +		 */
-> >> +		if (image->is_ima_segment_index_set &&
-> >> +		    i == image->ima_segment_index)
-> >> +			continue;
-> > 
-> > With this change, the IMA segment is not included in the digest
-> > calculation, nor should it be included in the digest verification.
-> > However, I'm not seeing the matching code change in the digest
-> > verification.
-> > 
-> Fair question.
-> 
-> But I don't think anything else needs to be done here.
-> 
-> The way kexec_calculate_store_digests() and verify_sha256_digest()
-> are implemented, it already skips verification of the segments if
-> the segment is not part of 'purgatory_sha_regions'.
-> 
-> In kexec_calculate_store_digests(), my change is to 'continue' when the
-> segment is the IMA segment when the function is going through all the
-> segments in a for loop [1].
-> 
-> Therefore in kexec_calculate_store_digests() -
->   - crypto_shash_update() is not called for IMA segment [1].
->   - sha_regions[j] is not updated with IMA segment  [1].
->   - This 'sha_regions' variable later becomes 'purgatory_sha_regions'
->     in kexec_calculate_store_digests  [1].
->   - and verify_sha256_digest() only verifies 'purgatory_sha_regions'[2].
-> 
->   Since IMA segment is not part of the 'purgatory_sha_regions', it is
->   not included in the verification as part of verify_sha256_digest().
-> 
-> > Please make ignoring the IMA segment a separate patch.
-> > 
-> Sure. Will do.
+Dropping this should be a standalone patch (with a Fixes tag I suppose).
 
-Thank you for the explanation.  Please include in the patch description a
-statement about the "sha_regions" not including the IMA segment, so nothing is
-needed on the verify side.
+Looking at what got merged:
+      - description: Generic TPM 2.0 chips conforming to TCG PTP interface
+        items:
+          - enum:
+              - infineon,slb9673
+              - nuvoton,npct75x
+          - const: tcg,tpm-tis-i2c
 
-> 
-> >>   		ret = crypto_shash_update(desc, ksegment->kbuf,
-> >>   					  ksegment->bufsz);
-> >>   		if (ret)
-> ...
-> ...
-> ...
-> >> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> >> index c29db699c996..49a6047dd8eb 100644
-> > 
-> > Suspending and resuming extending the measurement list should be a
-> > separate patch as well, with its own patch description.
-> > 
-> Sure. Will do.
+There's no need to add "nuvoton,npct75x" to this driver, since a
+fallback to tcg,tpm-tis-i2c is required by the binding. Adding the
+generic compatible however makes sense.
 
-Thanks!
+If there's a good reason to add it (like existing QEMU releases that do
+not have the generic compatible, but claim to have the npct75x) then
+please note why we should make an exception in your commit message.
 
-Mimi
+You need not carry the NAK, the motivation behind patch is fine.
 
+Thanks,
+Conor.
+
+--5Qj7R76LV+2xqmCh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZaF11gAKCRB4tDGHoIJi
+0oZjAP9cSm6dL8yxX6MY+K9Mp7w5I9vyiWifxFTd3DFY1N+KmQD7BHbpqKGn/WSc
+/8WU0cPvQfINzbW93T1Avxc1wvV8Bgo=
+=QpGa
+-----END PGP SIGNATURE-----
+
+--5Qj7R76LV+2xqmCh--
 
