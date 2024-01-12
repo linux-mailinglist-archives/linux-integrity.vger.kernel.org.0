@@ -1,127 +1,122 @@
-Return-Path: <linux-integrity+bounces-760-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-761-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70B3682C4B2
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 18:29:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B9FF82C4F9
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 18:46:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2611A1F24A62
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 17:29:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF60E1F21430
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 17:45:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DA0A2262B;
-	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F5C7175A3;
+	Fri, 12 Jan 2024 17:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/6K2Dib"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="o3VCscoE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743BF22626;
-	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D4DC43330;
-	Fri, 12 Jan 2024 17:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705080547;
-	bh=jssAwbuPxvN7TZtNLg2pY60C9/BU5tslVku5TmAKZdw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=c/6K2Dib9ffLTtP8V3/i61Poz6aqFNtuEEiSH0No09eQkAnvZjXt3iRP+NM8lpPGf
-	 rfNOdrI5hPYSrKpRznCK4RiWlk1LTqHjExhvF6deHyxnrKjrTthONGs8tQN09BJyf+
-	 ZNGF3PNfHa6Te4/El8O2JyvHYWpOjCcA40X44RODeJz3hvWAishkave2Lcm354ZJc2
-	 mys6CNHCSLP8C9gXnK28wYuqNQA0WLGIbfTwVqJZuQnYdLrK4TWSLuE/PlqXv1o0oU
-	 8tdoLtWgTzcqN2SvAVAkkn1JH7Uv1B7TActqvkq91t/8/IVXMpok59UqhgkZGnQnRI
-	 waDPJr64KryrA==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-50e7dd8bce8so7970180e87.1;
-        Fri, 12 Jan 2024 09:29:07 -0800 (PST)
-X-Gm-Message-State: AOJu0YxRpTl3mvhOMIuewhyMF3yah9db0Z7hRUc/woI05YEWclUkEUzL
-	kmQQFgj+KrydHIDBxj8sIN133EXjWUnpIhRSdtY=
-X-Google-Smtp-Source: AGHT+IHv4U6Bv1CLMGqgczNTVhhcMsKubjnAMrFM7bbub8DgPF2lBHnCeeFTbjYR9e4eTnYIRgHyWdZc6b2WsJsdG64=
-X-Received: by 2002:a05:6512:39d2:b0:50e:7b01:70df with SMTP id
- k18-20020a05651239d200b0050e7b0170dfmr1134504lfu.72.1705080545496; Fri, 12
- Jan 2024 09:29:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7A41757F
+	for <linux-integrity@vger.kernel.org>; Fri, 12 Jan 2024 17:45:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40CH7e7i030685;
+	Fri, 12 Jan 2024 17:44:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=l145NYIvG8B5+ZD6CdXEuBjP+4XhXGuLSwNVRWXAn/U=;
+ b=o3VCscoEe/gHHZIbG0RegUkKgPRNha3eIbaU1pN32CUPu2jOTbMzcBbUUH9M1qSGkLaO
+ 4nUCnbBUsZMfIYdpWlX9+kAqWDydZc1QTCs44Y2Wak7vw707gw+QsXkupc6dg5Kyuhf/
+ u4XP+XjgQlTI7up+rC/OKRPETTNBlWXTeYMONeEviLh3GrUZmJL272tzh7cE82RCQ3dI
+ birfv7MqaEMmcICrBtsfeAiYeTxelhcev4UXtpRFq110Yw9B4yAQ1SsyebdJy1iXhTAF
+ 4HZOVOCF27slbFsJQLLIstSCA4oV8DQoGQ+5FSIVc8ZN3jmcUsadqg1RuBYdx1rhi8CC CA== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vk9hx8x7m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Jan 2024 17:44:29 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40CH0FSJ004427;
+	Fri, 12 Jan 2024 17:44:27 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vfjpmbbch-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Jan 2024 17:44:27 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40CHiRHj45941230
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 12 Jan 2024 17:44:27 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 12C255805F;
+	Fri, 12 Jan 2024 17:44:27 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5E32F58051;
+	Fri, 12 Jan 2024 17:44:26 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.149.108])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 12 Jan 2024 17:44:26 +0000 (GMT)
+Message-ID: <6acf82dcefd349941b05ff2a3b7e4bf651dc4429.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 6/7] ima: configure memory to log events between
+ kexec load and execute
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        Stefan Berger
+	 <stefanb@linux.ibm.com>, roberto.sassu@huaweicloud.com,
+        roberto.sassu@huawei.com, eric.snowberg@oracle.com,
+        ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+Date: Fri, 12 Jan 2024 12:44:25 -0500
+In-Reply-To: <af09bb62-a637-4e30-884a-9ce1a5bf030c@linux.microsoft.com>
+References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
+	 <20231216010729.2904751-7-tusharsu@linux.microsoft.com>
+	 <fbe6aa7577875b23a9913a39f858f06f1d2aa903.camel@linux.ibm.com>
+	 <b78bbf3f-da39-47a6-aac3-581c8d2827a0@linux.microsoft.com>
+	 <3e8cb0bd77a2b73613b19febb2b3121ef0ea8255.camel@linux.ibm.com>
+	 <0df62e0e-a9d5-434c-866c-936cafeed480@linux.microsoft.com>
+	 <a7c5feb3-b9ef-45c1-bd1c-2bf0e4b7d0c5@linux.ibm.com>
+	 <af09bb62-a637-4e30-884a-9ce1a5bf030c@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240112095000.8952-1-tzimmermann@suse.de>
-In-Reply-To: <20240112095000.8952-1-tzimmermann@suse.de>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 12 Jan 2024 18:28:53 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
-Message-ID: <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] arch/x86: Remove unnecessary dependencies on bootparam.h
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: nathan@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: yHuFKTJkjM8GtMyYopA2FCfK3mjXf6j0
+X-Proofpoint-ORIG-GUID: yHuFKTJkjM8GtMyYopA2FCfK3mjXf6j0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-12_08,2024-01-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 phishscore=0 mlxscore=0
+ clxscore=1015 suspectscore=0 malwarescore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401120140
 
-On Fri, 12 Jan 2024 at 10:50, Thomas Zimmermann <tzimmermann@suse.de> wrote:
->
-> Reduce build time in some cases by removing unnecessary include statements
-> for <asm/bootparam.h>. Reorganize some header files accordingly.
->
-> While working on the kernel's boot-up graphics, I noticed that touching
-> include/linux/screen_info.h triggers a complete rebuild of the kernel
-> on x86. It turns out that the architecture's PCI and EFI headers include
-> <asm/bootparam.h>, which depends on <linux/screen_info.h>. But none of
-> the drivers have any business with boot parameters or the screen_info
-> state.
->
-> The patchset moves code from bootparam.h and efi.h into separate header
-> files and removes obsolete include statements on x86. I did
->
->   make allmodconfig
->   make -j28
->   touch include/linux/screen_info.h
->   time make -j28
->
-> to measure the time it takes to rebuild. Results without the patchset
-> are around 20 minutes.
->
->   real    20m46,705s
->   user    354m29,166s
->   sys     28m27,359s
->
-> And with the patchset applied it goes down to less than one minute.
->
->   real    0m56,643s
->   user    4m0,661s
->   sys     0m32,956s
->
-> The test system is an Intel i5-13500.
->
-> v5:
->         * silence clang warnings for real-mode code (Nathan)
->         * revert boot/compressed/misc.h (kernel test robot)
-> v4:
->         * fix fwd declaration in compressed/misc.h (Ard)
-> v3:
->         * keep setup_header in bootparam.h (Ard)
->         * implement arch_ima_efi_boot_mode() in source file (Ard)
-> v2:
->         * only keep struct boot_params in bootparam.h (Ard)
->         * simplify arch_ima_efi_boot_mode define (Ard)
->         * updated cover letter
->
-> Thomas Zimmermann (4):
->   arch/x86: Move UAPI setup structures into setup_data.h
->   arch/x86: Move internal setup_data structures into setup_data.h
->   arch/x86: Implement arch_ima_efi_boot_mode() in source file
->   arch/x86: Do not include <asm/bootparam.h> in several files
->
+On Thu, 2024-01-11 at 12:52 -0800, Tushar Sugandhi wrote:
+[...]
+> If we go with the KBs approach -
+> 
+> half-a-page translates to different KBs on different architectures.
+> And setting the right default value in KBs which would translate to
+> the desired half-a-page, on a given arch, inside the Kconfig seems
+> fragile (as I mentioned in the context of Option A in my previous
+> response.
 
-This looks ok to me, thanks for sticking with it.
+How about setting the default value to 0, indicating not to change the current
+half page default.  Any other value would be KBs, as Stefan suggested.
 
-For the series,
+-- 
+thanks,
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Mimi
+
+
 
