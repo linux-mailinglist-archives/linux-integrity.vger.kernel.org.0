@@ -1,37 +1,37 @@
-Return-Path: <linux-integrity+bounces-772-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-773-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E613082CEBE
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 22:17:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2498582CEDB
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 22:55:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51DE72828D5
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 21:17:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEC981F22052
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 21:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8525107B3;
-	Sat, 13 Jan 2024 21:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E977016436;
+	Sat, 13 Jan 2024 21:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DoHfSWR9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fhz7AQMn"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C46310796;
-	Sat, 13 Jan 2024 21:17:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69C3C433C7;
-	Sat, 13 Jan 2024 21:17:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40A71642A;
+	Sat, 13 Jan 2024 21:55:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA95C433C7;
+	Sat, 13 Jan 2024 21:54:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705180663;
-	bh=I7L2tY/u1kcRobIAAH7Fuhqt/+nLfFxHiF5sF+6hy+o=;
+	s=k20201202; t=1705182901;
+	bh=3Mgyn8tgABjgqcCRkhZbG3x9eEHC4OuPXrxLGYGGglM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DoHfSWR926G+9ZEsdoCBM5+bL2aMDSBepvmfI//XiyHGLxq5FG4tci4GuL0Xqq5qC
-	 e5/GwREc1fEnYEW9afhWPSBofLSVGAlL4Qa3QCQ74pUQH/uS9K+cPFgTomTXlqJ5NZ
-	 6O3rdVjmx6G+6FPkc0ygv5RQgHAx8DMH206OI07kgDz+emGV780+DG8qGN6QVf01Qu
-	 YpR2Wo5k+N8F4mL3XJKsv3d1Bg3h3/B5lRd6qpaNhOE4hhIH6oBJ+dDXMt31m8+PhH
-	 iwb8W8oURn6WFqrNGTnUYXFRwNUzqbweGOqD43/+7eGSdbqN+4N1jb+kjhoHbfS7qK
-	 hId8TsazJ1WxQ==
+	b=Fhz7AQMnGa8KjIGiPuSjduiGD+mwQtFpI5zz5m/QIvmoVEHu8OyTTWn9dnaKnJ9G7
+	 3OcUTyQiapgnBXDTUtUZXsOGZJH44O3JOTid4vuVCG/CXO2K/zV/eYbv6bk0zPJWFS
+	 0S127ncX0GzdsCoyi/2y2K2G71nAPZpcwI9owsK54FDsPa+4TFLEOOIr6IZYhc74wo
+	 zd0EnvuOvlXEp5r5VhDzPq656CAcv41hKWydWpYl1zmmoiVK7Ir5c8/EHDbbtAH+uk
+	 Fwln5lFBZVCI7zxrFIZtclxPb4mnTja2aBral/Uu5TMQx381+kxKvBQkmi6T0XTDXz
+	 8/sgONXJFVNig==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -40,64 +40,47 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 13 Jan 2024 23:17:39 +0200
-Message-Id: <CYDW3GS1VGP4.2PUT4XW283L99@kernel.org>
+Date: Sat, 13 Jan 2024 23:54:57 +0200
+Message-Id: <CYDWW0Z5CLLS.1XM7MBDWPLR39@kernel.org>
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Lukas Wunner" <lukas@wunner.de>, "Rob Herring" <robh@kernel.org>
+To: "Lukas Wunner" <lukas@wunner.de>
 Cc: <devicetree@vger.kernel.org>, <linux-integrity@vger.kernel.org>, "Peter
  Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>
-Subject: Re: [PATCH v2 1/4] dt-bindings: tpm: Add compatible string
- atmel,attpm20p
+Subject: Re: [PATCH v2 3/4] tpm_tis: Add compatible string atmel,at97sc3204
 X-Mailer: aerc 0.16.0
 References: <cover.1705140898.git.lukas@wunner.de>
- <8886271d52025065eddf5915bb7778ab14362255.1705140898.git.lukas@wunner.de>
-In-Reply-To: <8886271d52025065eddf5915bb7778ab14362255.1705140898.git.lukas@wunner.de>
+ <805eb0868e047bde452144a51e48ce1bc2cac45b.1705140898.git.lukas@wunner.de>
+In-Reply-To: <805eb0868e047bde452144a51e48ce1bc2cac45b.1705140898.git.lukas@wunner.de>
 
 On Sat Jan 13, 2024 at 7:10 PM EET, Lukas Wunner wrote:
-> Commit 4f2a348aa365 ("arm64: dts: imx8mm-venice-gw73xx: add TPM device")
-> added a devicetree node for the Trusted Platform Module on certain
-> Gateworks boards.
+> Commit 420d439849ca ("tpm_tis: Allow tpm_tis to be bound using DT")
+> added the fallback compatible "tcg,tpm-tis-mmio" to the TPM TIS driver,
+> but not the chip-specific "atmel,at97sc3204".  However it did document
+> it as a valid compatible string.
 >
-> The commit only used the generic "tcg,tpm_tis-spi" compatible string,
-> but public documentation shows that the chip is an ATTPM20P from Atmel
-> (nowadays Microchip):
-> https://trac.gateworks.com/wiki/tpm
->
-> Add the chip to the supported compatible strings of the TPM TIS SPI
-> schema.
->
-> For reference, a datasheet is available at:
-> https://ww1.microchip.com/downloads/en/DeviceDoc/ATTPM20P-Trusted-Platfor=
-m-Module-TPM-2.0-SPI-Interface-Summary-Data-Sheet-DS40002082A.pdf
+> Add it to tis_of_platform_match[] for consistency.
 >
 > Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Tim Harvey <tharvey@gateworks.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
 > ---
->  Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml | 1 +
+>  drivers/char/tpm/tpm_tis.c | 1 +
 >  1 file changed, 1 insertion(+)
 >
-> diff --git a/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml b=
-/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
-> index c3413b4..6cb2de7 100644
-> --- a/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
-> +++ b/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
-> @@ -20,6 +20,7 @@ properties:
->    compatible:
->      items:
->        - enum:
-> +          - atmel,attpm20p
->            - infineon,slb9670
->            - st,st33htpm-spi
->            - st,st33zp24-spi
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 2c52b79..14652aa 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -347,6 +347,7 @@ static void tpm_tis_plat_remove(struct platform_devic=
+e *pdev)
+> =20
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id tis_of_platform_match[] =3D {
+> +	{.compatible =3D "atmel,at97sc3204"},
+>  	{.compatible =3D "tcg,tpm-tis-mmio"},
+>  	{},
+>  };
 
-You should to send the patch set with Rob Herring as CC for syncing
-up. Please do it for future versions, if there is need for additional
-versions.
-
-Rob, 3 out of 4 patches are TPM patches. Do you mind if I take all
-four patches once the patch set is ready or do you want to pick this
-patch (assuming that you think it is correctly implemented ofc)?
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
 
