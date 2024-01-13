@@ -1,125 +1,103 @@
-Return-Path: <linux-integrity+bounces-771-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-772-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 393F782CE3E
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 20:14:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E613082CEBE
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 22:17:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB9451F2222B
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 19:14:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51DE72828D5
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 21:17:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40BB1611E;
-	Sat, 13 Jan 2024 19:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8525107B3;
+	Sat, 13 Jan 2024 21:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DoHfSWR9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC5D63A6;
-	Sat, 13 Jan 2024 19:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i5e860cd7.versanet.de ([94.134.12.215] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1rOjRp-00068M-HN; Sat, 13 Jan 2024 20:13:37 +0100
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- soc@kernel.org, devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
- Lukas Wunner <lukas@wunner.de>
-Cc: Yannic Moog <Y.Moog@phytec.de>, Alexander Bauer <a.bauer@phytec.de>,
- upstream@lists.phytec.de, Teresa Remmet <T.Remmet@phytec.de>,
- Tim Harvey <tharvey@gateworks.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
- Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
- Adam Ford <aford173@gmail.com>, Heiko Thiery <heiko.thiery@gmail.com>,
- Enric Balletbo i Serra <eballetbo@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Hsin-Yi Wang <hsinyi@chromium.org>, Chen-Yu Tsai <wenst@chromium.org>,
- Nicolas Prado <nfraprado@collabora.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH] arm64: dts: Fix TPM schema violations
-Date: Sat, 13 Jan 2024 20:13:35 +0100
-Message-ID: <11865970.MucGe3eQFb@diego>
-In-Reply-To:
- <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
-References:
- <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C46310796;
+	Sat, 13 Jan 2024 21:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69C3C433C7;
+	Sat, 13 Jan 2024 21:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705180663;
+	bh=I7L2tY/u1kcRobIAAH7Fuhqt/+nLfFxHiF5sF+6hy+o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DoHfSWR926G+9ZEsdoCBM5+bL2aMDSBepvmfI//XiyHGLxq5FG4tci4GuL0Xqq5qC
+	 e5/GwREc1fEnYEW9afhWPSBofLSVGAlL4Qa3QCQ74pUQH/uS9K+cPFgTomTXlqJ5NZ
+	 6O3rdVjmx6G+6FPkc0ygv5RQgHAx8DMH206OI07kgDz+emGV780+DG8qGN6QVf01Qu
+	 YpR2Wo5k+N8F4mL3XJKsv3d1Bg3h3/B5lRd6qpaNhOE4hhIH6oBJ+dDXMt31m8+PhH
+	 iwb8W8oURn6WFqrNGTnUYXFRwNUzqbweGOqD43/+7eGSdbqN+4N1jb+kjhoHbfS7qK
+	 hId8TsazJ1WxQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 13 Jan 2024 23:17:39 +0200
+Message-Id: <CYDW3GS1VGP4.2PUT4XW283L99@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Lukas Wunner" <lukas@wunner.de>, "Rob Herring" <robh@kernel.org>
+Cc: <devicetree@vger.kernel.org>, <linux-integrity@vger.kernel.org>, "Peter
+ Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 1/4] dt-bindings: tpm: Add compatible string
+ atmel,attpm20p
+X-Mailer: aerc 0.16.0
+References: <cover.1705140898.git.lukas@wunner.de>
+ <8886271d52025065eddf5915bb7778ab14362255.1705140898.git.lukas@wunner.de>
+In-Reply-To: <8886271d52025065eddf5915bb7778ab14362255.1705140898.git.lukas@wunner.de>
 
-Hi Lukas,
-
-Am Samstag, 13. Januar 2024, 19:06:56 CET schrieb Lukas Wunner:
-> Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
-> bindings"), several issues are reported by "make dtbs_check" for arm64
-> devicetrees:
-> 
-> The compatible property needs to contain the chip's name in addition to
-> the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
-> rather than "cr50@0":
-> 
->   tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
->         from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
-> 
->   cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
->         from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
-> 
-> Fix these schema violations.
-> 
-> phyGATE-Tauri uses an Infineon SLB9670:
-> https://lore.kernel.org/all/ab45c82485fa272f74adf560cbb58ee60cc42689.camel@phytec.de/
-> 
-> Gateworks Venice uses an Atmel ATTPM20P:
+On Sat Jan 13, 2024 at 7:10 PM EET, Lukas Wunner wrote:
+> Commit 4f2a348aa365 ("arm64: dts: imx8mm-venice-gw73xx: add TPM device")
+> added a devicetree node for the Trusted Platform Module on certain
+> Gateworks boards.
+>
+> The commit only used the generic "tcg,tpm_tis-spi" compatible string,
+> but public documentation shows that the chip is an ATTPM20P from Atmel
+> (nowadays Microchip):
 > https://trac.gateworks.com/wiki/tpm
-> 
+>
+> Add the chip to the supported compatible strings of the TPM TIS SPI
+> schema.
+>
+> For reference, a datasheet is available at:
+> https://ww1.microchip.com/downloads/en/DeviceDoc/ATTPM20P-Trusted-Platfor=
+m-Module-TPM-2.0-SPI-Interface-Summary-Data-Sheet-DS40002082A.pdf
+>
 > Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Tim Harvey <tharvey@gateworks.com>
 > ---
-> The commit mentioned above, 26c9d152ebf3 ("dt-bindings: tpm: Consolidate
-> TCG TIS bindings") landed in Linus' tree yesterday.
-> 
-> Because this consists only of fixes, I think it could be picked up and
-> forwarded to Linus at any time, even outside the merge window.
-> 
-> The issues reported for imx8m*-venice-gw7*xx.dts* devicetrees will not
-> go away until Jarrko picks up this amendment patch for the dt-bindings:
-> https://lore.kernel.org/all/8886271d52025065eddf5915bb7778ab14362255.1705140898.git.lukas@wunner.de/
-> 
->  arch/arm64/boot/dts/freescale/imx8mm-phygate-tauri-l.dts    | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi     | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi     | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts         | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mp-venice-gw72xx.dtsi     | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi     | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts      | 2 +-
->  arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts | 2 +-
->  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi              | 2 +-
->  arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi            | 2 +-
->  arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts             | 2 +-
->  arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi        | 2 +-
+>  Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml b=
+/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
+> index c3413b4..6cb2de7 100644
+> --- a/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
+> +++ b/Documentation/devicetree/bindings/tpm/tcg,tpm_tis-spi.yaml
+> @@ -20,6 +20,7 @@ properties:
+>    compatible:
+>      items:
+>        - enum:
+> +          - atmel,attpm20p
+>            - infineon,slb9670
+>            - st,st33htpm-spi
+>            - st,st33zp24-spi
 
-you might want to split this per sub-architecture perhaps (freescale,
-mediatek, rockchip) as such dts changes normally go through the trees
-of the subarchitecture maintainers.
+You should to send the patch set with Rob Herring as CC for syncing
+up. Please do it for future versions, if there is need for additional
+versions.
 
+Rob, 3 out of 4 patches are TPM patches. Do you mind if I take all
+four patches once the patch set is ready or do you want to pick this
+patch (assuming that you think it is correctly implemented ofc)?
 
-For the rockchip-parts itself, I'm also fine with them going through
-somewhere else - gru devices are pretty much "finished" by now,
-so for the rockchip changes
-Acked-by: Heiko Stuebner <heiko@sntech.de>
-
-
-Heiko
-
-
+BR, Jarkko
 
