@@ -1,93 +1,200 @@
-Return-Path: <linux-integrity+bounces-762-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-763-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 302FA82C55A
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 19:24:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA59682CAB1
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 10:05:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC4501F247FB
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jan 2024 18:23:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F22851C20D33
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 09:05:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178F625610;
-	Fri, 12 Jan 2024 18:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Z94CzjSn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40EFBA2A;
+	Sat, 13 Jan 2024 09:04:01 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D34E22560A
-	for <linux-integrity@vger.kernel.org>; Fri, 12 Jan 2024 18:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.86.69] (unknown [50.46.228.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 1C41020B3CDE;
-	Fri, 12 Jan 2024 10:23:48 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1C41020B3CDE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1705083828;
-	bh=gpxTcvKnkoBsHVJNPTQQphS77esyYUMo75E4RxbL2x4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Z94CzjSnbTd/Zr7L4YugLYetotrKcRgm4vMmsgdyzJS+6gyjvHChRAdvNWv12x68H
-	 E10T9asTjMJtM8CiQv12PDU4V150aFF9ygovIuXsc8Tuj0exOkQd/7U2jWw1jt9cOQ
-	 H+1l9j6GtA9taAh8vy4bpYbcTwm2p6RdbxyEIXK8=
-Message-ID: <a09613f2-0d9f-41a3-b78d-b1b1fd35614c@linux.microsoft.com>
-Date: Fri, 12 Jan 2024 10:23:47 -0800
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99153A38;
+	Sat, 13 Jan 2024 09:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 2C8E5100D943C;
+	Sat, 13 Jan 2024 10:03:49 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id F15972DEC30; Sat, 13 Jan 2024 10:03:48 +0100 (CET)
+Message-Id: <8b49a64d5946792f01e75fab74076557ef4f7d60.1705135956.git.lukas@wunner.de>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Sat, 13 Jan 2024 10:03:51 +0100
+Subject: [PATCH] ARM: dts: Fix TPM schema violations
+To: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>, soc@kernel.org, devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc: Patrick Williams <patrick@stwcx.xyz>, Tao Ren <rentao.bupt@gmail.com>, Eddie James <eajames@linux.ibm.com>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, Bruno Thomsen <bruno.thomsen@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com, Wes Huang <wes.huang@moxa.com>, Fero JD Zhou <FeroJD.Zhou@moxa.com>, SZ Lin <sz.lin@moxa.com>, Benoit Cousson <bcousson@baylibre.com>, Tony Lindgren <tony@atomide.com>, Yannic Moog <Y.Moog@phytec.de>, Alexander Bauer <a.bauer@phytec.de>, upstream@lists.phytec.de, Teresa Remmet <T.Remmet@phytec.de>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/7] ima: configure memory to log events between kexec
- load and execute
-Content-Language: en-US
-To: Mimi Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>,
- roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
- eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
- bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
- kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-References: <20231216010729.2904751-1-tusharsu@linux.microsoft.com>
- <20231216010729.2904751-7-tusharsu@linux.microsoft.com>
- <fbe6aa7577875b23a9913a39f858f06f1d2aa903.camel@linux.ibm.com>
- <b78bbf3f-da39-47a6-aac3-581c8d2827a0@linux.microsoft.com>
- <3e8cb0bd77a2b73613b19febb2b3121ef0ea8255.camel@linux.ibm.com>
- <0df62e0e-a9d5-434c-866c-936cafeed480@linux.microsoft.com>
- <a7c5feb3-b9ef-45c1-bd1c-2bf0e4b7d0c5@linux.ibm.com>
- <af09bb62-a637-4e30-884a-9ce1a5bf030c@linux.microsoft.com>
- <6acf82dcefd349941b05ff2a3b7e4bf651dc4429.camel@linux.ibm.com>
-From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <6acf82dcefd349941b05ff2a3b7e4bf651dc4429.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
+bindings"), several issues are reported by "make dtbs_check" for ARM
+devicetrees:
 
+The nodename needs to be "tpm@0" rather than "tpmdev@0" and the
+compatible property needs to contain the chip's name in addition to the
+generic "tcg,tpm_tis-spi" or "tcg,tpm-tis-i2c":
 
-On 1/12/24 09:44, Mimi Zohar wrote:
-> On Thu, 2024-01-11 at 12:52 -0800, Tushar Sugandhi wrote:
-> [...]
->> If we go with the KBs approach -
->>
->> half-a-page translates to different KBs on different architectures.
->> And setting the right default value in KBs which would translate to
->> the desired half-a-page, on a given arch, inside the Kconfig seems
->> fragile (as I mentioned in the context of Option A in my previous
->> response.
-> 
-> How about setting the default value to 0, indicating not to change the current
-> half page default.  Any other value would be KBs, as Stefan suggested.
-> 
-Thanks.
-That's way more elegant than the other alternatives.
-It's definitely doable in KConfig and handle the default in code 
-appropriately.
+  tpmdev@0: $nodename:0: 'tpmdev@0' does not match '^tpm(@[0-9a-f]+)?$'
+        from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
 
-It may cause some confusion in the documentation of the config param.
-But it would be a wording issue, and we can work on it.
+  tpm@2e: compatible: 'oneOf' conditional failed, one must be fixed:
+        ['tcg,tpm-tis-i2c'] is too short
+        from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm-tis-i2c.yaml#
 
-Thanks for the suggestion.  I like it honestly.
+Fix these schema violations.
 
-~Tushar
+Aspeed Facebook BMCs use an Infineon SLB9670:
+https://lore.kernel.org/all/ZZSmMJ%2F%2Fl972Qbxu@fedora/
+https://lore.kernel.org/all/ZZT4%2Fw2eVzMhtsPx@fedora/
+https://lore.kernel.org/all/ZZTS0p1hdAchIbKp@heinlein.vulture-banana.ts.net/
+
+Aspeed Tacoma uses a Nuvoton NPCT75X per commit 39d8a73c53a2 ("ARM: dts:
+aspeed: tacoma: Add TPM").
+
+phyGATE-Tauri uses an Infineon SLB9670:
+https://lore.kernel.org/all/ab45c82485fa272f74adf560cbb58ee60cc42689.camel@phytec.de/
+
+A single schema violation remains in am335x-moxa-uc-2100-common.dtsi
+because it is unknown which chip is used on the board.  The devicetree's
+author has been asked for clarification but has not responded so far:
+https://lore.kernel.org/all/20231220090910.GA32182@wunner.de/
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
+---
+The commit mentioned above, 26c9d152ebf3 ("dt-bindings: tpm: Consolidate
+TCG TIS bindings") landed in Linus' tree 8 hours ago.
+
+Because this consists only of fixes, I think it could be picked up and
+forwarded to Linus at any time, even outside the merge window.
+
+The Reviewed-by tags from Patrick and Tao were offered here:
+https://lore.kernel.org/all/ZZWB4wRiAyDtlLJM@heinlein.vulture-banana.ts.net/
+https://lore.kernel.org/all/ZZWkhaiDFOGvcPQy@fedora/
+
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts   | 4 ++--
+ arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts    | 4 ++--
+ arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts           | 2 +-
+ arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi | 4 ++--
+ arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi          | 2 +-
+ arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts        | 2 +-
+ arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi    | 2 +-
+ 7 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts
+index e899de6..5be0e8f 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts
++++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-bletchley.dts
+@@ -45,8 +45,8 @@
+ 		num-chipselects = <1>;
+ 		cs-gpios = <&gpio0 ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
+ 
+-		tpmdev@0 {
+-			compatible = "tcg,tpm_tis-spi";
++		tpm@0 {
++			compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+ 			spi-max-frequency = <33000000>;
+ 			reg = <0>;
+ 		};
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts
+index a677c82..5a8169b 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts
++++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-wedge400.dts
+@@ -80,8 +80,8 @@
+ 		gpio-miso = <&gpio ASPEED_GPIO(R, 5) GPIO_ACTIVE_HIGH>;
+ 		num-chipselects = <1>;
+ 
+-		tpmdev@0 {
+-			compatible = "tcg,tpm_tis-spi";
++		tpm@0 {
++			compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+ 			spi-max-frequency = <33000000>;
+ 			reg = <0>;
+ 		};
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
+index 3f6010e..213023b 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
++++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
+@@ -456,7 +456,7 @@
+ 	status = "okay";
+ 
+ 	tpm: tpm@2e {
+-		compatible = "tcg,tpm-tis-i2c";
++		compatible = "nuvoton,npct75x", "tcg,tpm-tis-i2c";
+ 		reg = <0x2e>;
+ 	};
+ };
+diff --git a/arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi b/arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi
+index 31590d3..00e5887 100644
+--- a/arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi
++++ b/arch/arm/boot/dts/aspeed/ast2600-facebook-netbmc-common.dtsi
+@@ -35,8 +35,8 @@
+ 		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
+ 		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
+ 
+-		tpmdev@0 {
+-			compatible = "tcg,tpm_tis-spi";
++		tpm@0 {
++			compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+ 			spi-max-frequency = <33000000>;
+ 			reg = <0>;
+ 		};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi b/arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi
+index 44cc4ff..d12fb44 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi
++++ b/arch/arm/boot/dts/nxp/imx/imx6ull-phytec-tauri.dtsi
+@@ -116,7 +116,7 @@
+ 	tpm_tis: tpm@1 {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_tpm>;
+-		compatible = "tcg,tpm_tis-spi";
++		compatible = "infineon,slb9670", "tcg,tpm_tis-spi";
+ 		reg = <1>;
+ 		spi-max-frequency = <20000000>;
+ 		interrupt-parent = <&gpio5>;
+diff --git a/arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts b/arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts
+index 3a72384..9984b34 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts
++++ b/arch/arm/boot/dts/nxp/imx/imx7d-flex-concentrator.dts
+@@ -130,7 +130,7 @@
+ 	 * TCG specification - Section 6.4.1 Clocking:
+ 	 * TPM shall support a SPI clock frequency range of 10-24 MHz.
+ 	 */
+-	st33htph: tpm-tis@0 {
++	st33htph: tpm@0 {
+ 		compatible = "st,st33htpm-spi", "tcg,tpm_tis-spi";
+ 		reg = <0>;
+ 		spi-max-frequency = <24000000>;
+diff --git a/arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi b/arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi
+index b8730aa..a59331a 100644
+--- a/arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi
++++ b/arch/arm/boot/dts/ti/omap/am335x-moxa-uc-2100-common.dtsi
+@@ -217,7 +217,7 @@
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&spi1_pins>;
+ 
+-	tpm_spi_tis@0 {
++	tpm@0 {
+ 		compatible = "tcg,tpm_tis-spi";
+ 		reg = <0>;
+ 		spi-max-frequency = <500000>;
+-- 
+2.40.1
+
 
