@@ -1,93 +1,125 @@
-Return-Path: <linux-integrity+bounces-774-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-775-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33F1282CEDE
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 22:55:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B67D282D054
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Jan 2024 11:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D96382828AD
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jan 2024 21:55:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB6BB1C20A5F
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Jan 2024 10:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1350F16435;
-	Sat, 13 Jan 2024 21:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CKBlo2vb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03AED1C17;
+	Sun, 14 Jan 2024 10:41:08 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AD116426;
-	Sat, 13 Jan 2024 21:55:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C153C433C7;
-	Sat, 13 Jan 2024 21:55:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705182935;
-	bh=QVi4awp+o3VBGJySTsyvHAV+yg1wZCWyTzuEQ6e0Uls=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=CKBlo2vbCG1rhbl6d1kGpVev8puDysBKTEAeHe9nRTSbkZe5jinf48bg9jdMjNrIF
-	 HBIbtUNpWYvfEXZvNDVGP3NN4ihgZ50bSy491Ag1ChrrYkHKHLO/TOFI+7M8K7ep9o
-	 TxTYQs2zK4O5FMul3dm3dkbJffYdqcJmPN2W457TvOlJKAlVMTUK8L7g7rO5rSeAq1
-	 x2UXAtq9JZ3KuwPOuWLt9k+aAxucuc+4t+N7A97Z5mTXa6VV3jOxNxkPkqc56+MrPa
-	 i4qUfj9i1YV7sCAofSSMHLp/AmPAbb76/r3RG1mMJFD4I0UCXOXbdBB/48FBXDxwQt
-	 rxtNYYtDG94tA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A88B7E;
+	Sun, 14 Jan 2024 10:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 86E90100D5865;
+	Sun, 14 Jan 2024 11:33:03 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 4B65F2F90C4; Sun, 14 Jan 2024 11:33:03 +0100 (CET)
+Date: Sun, 14 Jan 2024 11:33:03 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	soc@kernel.org, devicetree@vger.kernel.org,
+	linux-integrity@vger.kernel.org, Yannic Moog <Y.Moog@phytec.de>,
+	Alexander Bauer <a.bauer@phytec.de>, upstream@lists.phytec.de,
+	Teresa Remmet <T.Remmet@phytec.de>,
+	Tim Harvey <tharvey@gateworks.com>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+	Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
+	Adam Ford <aford173@gmail.com>,
+	Heiko Thiery <heiko.thiery@gmail.com>,
+	Enric Balletbo i Serra <eballetbo@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Hsin-Yi Wang <hsinyi@chromium.org>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	Nicolas Prado <nfraprado@collabora.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH] arm64: dts: Fix TPM schema violations
+Message-ID: <20240114103303.GA3805@wunner.de>
+References: <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
+ <11865970.MucGe3eQFb@diego>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 13 Jan 2024 23:55:32 +0200
-Message-Id: <CYDWWGW2QW9K.FLB67MSI9YQR@kernel.org>
-Cc: <devicetree@vger.kernel.org>, <linux-integrity@vger.kernel.org>, "Peter
- Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>
-Subject: Re: [PATCH v2 4/4] tpm: tis_i2c: Add compatible string
- nuvoton,npct75x
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Lukas Wunner" <lukas@wunner.de>
-X-Mailer: aerc 0.16.0
-References: <cover.1705140898.git.lukas@wunner.de>
- <6ec711056f5d87d8504f033a404ed14a2e449331.1705140898.git.lukas@wunner.de>
-In-Reply-To: <6ec711056f5d87d8504f033a404ed14a2e449331.1705140898.git.lukas@wunner.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <11865970.MucGe3eQFb@diego>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Sat Jan 13, 2024 at 7:10 PM EET, Lukas Wunner wrote:
-> Add "nuvoton,npct75x" as well as the fallback compatible string
-> "tcg,tpm-tis-i2c" to the TPM TIS I=C2=B2C driver.  They're used by:
->
->   arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-bonnell.dts
->   arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-everest.dts
->
-> And by all accounts, NPCT75x is supported by the driver:
->
->   https://lore.kernel.org/all/60e23fd0f0ff4d1f8954034237ae8865@NTILML02.n=
-uvoton.com/
->   https://lore.kernel.org/all/20220808220839.1006341-8-peter@pjd.dev/
->
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> ---
->  drivers/char/tpm/tpm_tis_i2c.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2=
-c.c
-> index a897402..9511c0d 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c.c
-> @@ -383,6 +383,8 @@ static void tpm_tis_i2c_remove(struct i2c_client *cli=
-ent)
->  #ifdef CONFIG_OF
->  static const struct of_device_id of_tis_i2c_match[] =3D {
->  	{ .compatible =3D "infineon,slb9673", },
-> +	{ .compatible =3D "nuvoton,npct75x", },
-> +	{ .compatible =3D "tcg,tpm-tis-i2c", },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
+On Sat, Jan 13, 2024 at 08:13:35PM +0100, Heiko Stübner wrote:
+> Am Samstag, 13. Januar 2024, 19:06:56 CET schrieb Lukas Wunner:
+> > Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
+> > bindings"), several issues are reported by "make dtbs_check" for arm64
+> > devicetrees:
+> > 
+> > The compatible property needs to contain the chip's name in addition to
+> > the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
+> > rather than "cr50@0":
+> > 
+> >   tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
+> >         from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
+> > 
+> >   cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
+> >         from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
+> > 
+> > Fix these schema violations.
+[...]
+> >  arch/arm64/boot/dts/freescale/imx8mm-phygate-tauri-l.dts    | 2 +-
+> >  arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi     | 2 +-
+> >  arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi     | 2 +-
+> >  arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts         | 2 +-
+> >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw72xx.dtsi     | 2 +-
+> >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi     | 2 +-
+> >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts      | 2 +-
+> >  arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts | 2 +-
+> >  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi              | 2 +-
+> >  arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi            | 2 +-
+> >  arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts             | 2 +-
+> >  arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi        | 2 +-
+> 
+> you might want to split this per sub-architecture perhaps (freescale,
+> mediatek, rockchip) as such dts changes normally go through the trees
+> of the subarchitecture maintainers.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+My concern was that other developers may see these new warnings
+and start submitting piecemeal fixes.  That would be a waste
+of time since I already prepared fixes for everything weeks ago.
+I was only waiting for the schema changes to hit mainline.
 
-BR, Jarkko
+I was hoping that these might make it to Linus during the back half
+of the merge window so that the warnings are gone by rc1 time
+and nobody will ever see them.
+
+Of course I can split them up if that's what Arnd & Olof prefer.
+
+
+> For the rockchip-parts itself, I'm also fine with them going through
+> somewhere else - gru devices are pretty much "finished" by now,
+> so for the rockchip changes
+> Acked-by: Heiko Stuebner <heiko@sntech.de>
+
+Thanks for taking a look!
+
+Lukas
 
