@@ -1,110 +1,147 @@
-Return-Path: <linux-integrity+bounces-778-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-779-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3252082D528
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 09:41:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F34282D7E0
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 11:55:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D674F281B16
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 08:41:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 361E91C217E0
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 10:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94DAF23A7;
-	Mon, 15 Jan 2024 08:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 994C91E867;
+	Mon, 15 Jan 2024 10:55:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="yLQ0h/T9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4IVxdbM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8552563;
-	Mon, 15 Jan 2024 08:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705308092;
-	bh=C3rT1/ddNThmU1OTPQTOVjH0MXuCDiqlLPyDw+7f5lw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=yLQ0h/T9YjM33CfzM7ECMQ2MDC69fQg37HD0pvwsL/tJ3fLbfNOMP3JTJG7+eiHyG
-	 uW9YPNkH1nyOATKBxyHtj5JB+B7iiMQHTucpBL71YSwsgv6viecr9FWGN3Hm9lcI+k
-	 NSsiFXCTof3XQPjt+Zz2lDg2JzLqWx5qapNSnI+YwD+Kyv0jYcPSfhvoVqUMu6TWZ2
-	 YoOhhRI03yEX+AntGcJsnkB8riw8n+sfGwj6B/UWDP3Vmi426el+tAAMgpyMaatRU+
-	 qxf9f01taD7sz6szS2iqhVzzpFsfEWJKea3o9i9FU+6CeZ0D6Non2FvU58XIPOVSBN
-	 tlZpwCftk8lvg==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E7D3D37813E0;
-	Mon, 15 Jan 2024 08:41:30 +0000 (UTC)
-Message-ID: <682b50dc-a92a-4da5-ad06-631c5125ebc5@collabora.com>
-Date: Mon, 15 Jan 2024 09:41:29 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BBB18E00;
+	Mon, 15 Jan 2024 10:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC42C43142;
+	Mon, 15 Jan 2024 10:55:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705316150;
+	bh=rfREZzmiD9nPW8TbesDDnUUTWye4kt++Bv0KP8PLvFk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=A4IVxdbM5n6+Wri6LKPCFt4boNRWCZk+x+FvjGA0rMzBKnTq0PG2P4HgdoibE34JU
+	 7I+sl3ic4kVgy6alkJ1V+WOxCGZ2ZCdHvSZazXxPfmb5arAkTMCAyiEierrpoLCjzM
+	 Ygj8ldj/YeV7xxWj3T+cJucDy6g0wviAclEb83PQYKh4IA3J10TosGkmbLnZg7vRG5
+	 klaKs9ycUq3mSQ8r8jOJecX0Mq/uJGiy1/elHSc22WoW1AxZktex9NE9JrxYS5mS2+
+	 cE8gPHQUwUZeynpCd6W3njl/YBfE5cxvvdBerqY16hvAfFGT43Lf9OM8ZBsaDE8gEI
+	 oLYOyEDKggW0A==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50eaaf2c7deso9635020e87.2;
+        Mon, 15 Jan 2024 02:55:49 -0800 (PST)
+X-Gm-Message-State: AOJu0YxdnEmOWayncYpTcwpapO5T9U7QvQyR1lgCXFPUaZhDDk0Xgoa4
+	sLHZZC3R7KyEeShjc05qn4OEMu7gpa2F7aSXYxA=
+X-Google-Smtp-Source: AGHT+IHjiob4d9Y9lHe/Mg25bV/9NI9KuHdlICb0KG40svce27wXXneGwYvZf40noCzmA0/mYLev+nDZBuyx7BNLBuM=
+X-Received: by 2002:a05:6512:130c:b0:50e:df4f:44d7 with SMTP id
+ x12-20020a056512130c00b0050edf4f44d7mr2867593lfu.90.1705316148087; Mon, 15
+ Jan 2024 02:55:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] arm64: dts: Fix TPM schema violations
-To: Lukas Wunner <lukas@wunner.de>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org, devicetree@vger.kernel.org,
- linux-integrity@vger.kernel.org
-Cc: Yannic Moog <Y.Moog@phytec.de>, Alexander Bauer <a.bauer@phytec.de>,
- upstream@lists.phytec.de, Teresa Remmet <T.Remmet@phytec.de>,
- Tim Harvey <tharvey@gateworks.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
- Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
- Adam Ford <aford173@gmail.com>, Heiko Thiery <heiko.thiery@gmail.com>,
- Enric Balletbo i Serra <eballetbo@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, Hsin-Yi Wang
- <hsinyi@chromium.org>, Chen-Yu Tsai <wenst@chromium.org>,
- Nicolas Prado <nfraprado@collabora.com>, Heiko Stuebner <heiko@sntech.de>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-References: <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240112095000.8952-1-tzimmermann@suse.de> <CAMj1kXGxNTvCca+9TfUfvp06ppyD9XiyO59khYXg88VkyFm1rw@mail.gmail.com>
+ <3e2f70ab-c4de-4fae-9365-4f6f77c847c5@suse.de>
+In-Reply-To: <3e2f70ab-c4de-4fae-9365-4f6f77c847c5@suse.de>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 15 Jan 2024 11:55:36 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGECo1E1U8jjrzvA=ZJe80DVOi3v5CvxkhXbnBQKVMT8Q@mail.gmail.com>
+Message-ID: <CAMj1kXGECo1E1U8jjrzvA=ZJe80DVOi3v5CvxkhXbnBQKVMT8Q@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] arch/x86: Remove unnecessary dependencies on bootparam.h
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: nathan@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	bhelgaas@google.com, arnd@arndb.de, zohar@linux.ibm.com, 
+	dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, javierm@redhat.com, linux-arch@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Il 13/01/24 19:06, Lukas Wunner ha scritto:
-> Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
-> bindings"), several issues are reported by "make dtbs_check" for arm64
-> devicetrees:
-> 
-> The compatible property needs to contain the chip's name in addition to
-> the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
-> rather than "cr50@0":
-> 
->    tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
->          from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
-> 
->    cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
->          from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
-> 
-> Fix these schema violations.
-> 
-> phyGATE-Tauri uses an Infineon SLB9670:
-> https://lore.kernel.org/all/ab45c82485fa272f74adf560cbb58ee60cc42689.camel@phytec.de/
-> 
-> Gateworks Venice uses an Atmel ATTPM20P:
-> https://trac.gateworks.com/wiki/tpm
-> 
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+On Mon, 15 Jan 2024 at 08:58, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+>
+> Hi
+>
+> Am 12.01.24 um 18:28 schrieb Ard Biesheuvel:
+> > On Fri, 12 Jan 2024 at 10:50, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> >>
+> >> Reduce build time in some cases by removing unnecessary include statements
+> >> for <asm/bootparam.h>. Reorganize some header files accordingly.
+> >>
+> >> While working on the kernel's boot-up graphics, I noticed that touching
+> >> include/linux/screen_info.h triggers a complete rebuild of the kernel
+> >> on x86. It turns out that the architecture's PCI and EFI headers include
+> >> <asm/bootparam.h>, which depends on <linux/screen_info.h>. But none of
+> >> the drivers have any business with boot parameters or the screen_info
+> >> state.
+> >>
+> >> The patchset moves code from bootparam.h and efi.h into separate header
+> >> files and removes obsolete include statements on x86. I did
+> >>
+> >>    make allmodconfig
+> >>    make -j28
+> >>    touch include/linux/screen_info.h
+> >>    time make -j28
+> >>
+> >> to measure the time it takes to rebuild. Results without the patchset
+> >> are around 20 minutes.
+> >>
+> >>    real    20m46,705s
+> >>    user    354m29,166s
+> >>    sys     28m27,359s
+> >>
+> >> And with the patchset applied it goes down to less than one minute.
+> >>
+> >>    real    0m56,643s
+> >>    user    4m0,661s
+> >>    sys     0m32,956s
+> >>
+> >> The test system is an Intel i5-13500.
+> >>
+> >> v5:
+> >>          * silence clang warnings for real-mode code (Nathan)
+> >>          * revert boot/compressed/misc.h (kernel test robot)
+> >> v4:
+> >>          * fix fwd declaration in compressed/misc.h (Ard)
+> >> v3:
+> >>          * keep setup_header in bootparam.h (Ard)
+> >>          * implement arch_ima_efi_boot_mode() in source file (Ard)
+> >> v2:
+> >>          * only keep struct boot_params in bootparam.h (Ard)
+> >>          * simplify arch_ima_efi_boot_mode define (Ard)
+> >>          * updated cover letter
+> >>
+> >> Thomas Zimmermann (4):
+> >>    arch/x86: Move UAPI setup structures into setup_data.h
+> >>    arch/x86: Move internal setup_data structures into setup_data.h
+> >>    arch/x86: Implement arch_ima_efi_boot_mode() in source file
+> >>    arch/x86: Do not include <asm/bootparam.h> in several files
+> >>
+> >
+> > This looks ok to me, thanks for sticking with it.
+> >
+> > For the series,
+> >
+> > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+>
+> Thank you so much. Can this series go through the x86 tree?
+>
 
-For MediaTek:
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Yes, this should be taken through the -tip tree. But I am not a -tip maintainer.
 
-...but I think you should split this per-SoC.
+But please be aware that we are in the middle of the merge window
+right now, and I suspect that the -tip maintainers may have some
+feedback of their own. So give it at least a week or so, and ping this
+thread again to ask how to proceed.
 
-Anyway, if Arnd wants to take this patch directly I'm also totally fine with that.
-
-Cheers,
-Angelo
-
+Also, please trim the cc list a bit when you do - this is mostly a x86
+specific reshuffle of headers so no need to keep all the other
+subsystem maintainers on cc while we finish up the discussion.
 
