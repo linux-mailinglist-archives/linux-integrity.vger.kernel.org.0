@@ -1,104 +1,152 @@
-Return-Path: <linux-integrity+bounces-810-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-809-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFF6B82E199
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 21:21:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56B3E82E171
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 21:18:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CE9D2839A3
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 20:21:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EBE67B20CE8
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 20:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7665119BAD;
-	Mon, 15 Jan 2024 20:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38A619470;
+	Mon, 15 Jan 2024 20:18:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Zudq/OQV";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Mi3ROXdw"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AC219BB1
-	for <linux-integrity@vger.kernel.org>; Mon, 15 Jan 2024 20:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPTSI-0004x7-TL; Mon, 15 Jan 2024 21:21:10 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPTSI-0005hd-GU; Mon, 15 Jan 2024 21:21:10 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPTSI-000N8x-1N;
-	Mon, 15 Jan 2024 21:21:10 +0100
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-spi@vger.kernel.org,
-	kernel@pengutronix.de,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH 27/33] tpm_tis_spi: Follow renaming of SPI "master" to "controller"
-Date: Mon, 15 Jan 2024 21:13:13 +0100
-Message-ID:  <31f11901f6329a1de0299903d43c16439948bd46.1705348270.git.u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A4618E10;
+	Mon, 15 Jan 2024 20:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 2815B3200B25;
+	Mon, 15 Jan 2024 15:18:04 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 15 Jan 2024 15:18:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1705349883; x=1705436283; bh=e+ykc0zOmp
+	+y1Z7R5pTDfegBpM5HaaHl2YIznyofnRg=; b=Zudq/OQVUSbgUeJ7VgSexjEMis
+	Yyoi7XQ5AQkOZE1cO8jcSwrnSNFqsmAPtyAEujvTEMJe2w4OU/8E0slEN17nm5hw
+	TPVGSMoDPb8zXQFUu28DDfcA7iQFbfrCypppj1QkJaJbU0wcBrA2OzcxsiOziKQQ
+	v4wz68j7Ett/UYRH4GEwJF6oGetGNJjrzfX7KSE6uY6GTzlCR9AR5nvDSTHUYRtg
+	zUwIabO3NOLxRuzLYH+6HTqewDaKLAaVD0QW00vnsNU5H8nxeGTflkeKCU0ty92z
+	8x3QOkYNK8UVKW3BQQb6rOmZwySIYAeWapxsGm9mVGndOqHmswh4tGT7n8Yw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1705349883; x=1705436283; bh=e+ykc0zOmp+y1Z7R5pTDfegBpM5H
+	aaHl2YIznyofnRg=; b=Mi3ROXdwiL6vOPVn/TnKU+QitRjS39TYAcKwetaXwmo3
+	jC0XdgjlIriLJgI0Tm+TGRAXfaEaqfhuuMsKOFFQJLEtWwFHlsnu2ecajYIrXbdh
+	SeWXyTwWm1WI0Dq1g5c673AAc5rp+0SWTTNc5pPGr5z8OmPWUURXOr8zN/3mW7NF
+	t+19JpX4kU/KtjXxtPqjyhhJy/RQgxWp27uLeBbLXUAfYh52mwQ5B7LGre/w4BUC
+	5GfGZqFl524OIPXAPybjQaEs03sCTgi5CTbQk84mMw+Nh5cdocJJD5DJy1S4GUj1
+	LNSrbQktUKHs+fEnws+jle1ZjmpFKAkPyytZ85Pj0A==
+X-ME-Sender: <xms:-pKlZSeNIxS12fwTkbr06DzcMtTKr4nYHLMiGJ65ir_vW9fuaMTB7g>
+    <xme:-pKlZcM_3r0Rp4UiyUoX5xmyBCCF5qUhl68KBcTzJeKhPe5Br6vKBlJTWg3nlpH69
+    a98kDFMvu2h5LoNC_s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdejuddgudefiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeeiiedtlefgtdfhheetheffudekffefteeiieevudfggfegieefteevgeev
+    veduieenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgpdhkvghrnhgvlhdroh
+    hrghdpghgrthgvfihorhhkshdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:-pKlZTiwDl7yupMOdwsgf6XD1WZQ0S6g-oq3h_Uiu2DhLaZJxuioZw>
+    <xmx:-pKlZf_DFocOrvK91AFNmbCl_5XnYYHQyCukOHgurk9h0AykZwDQEw>
+    <xmx:-pKlZetRIAag5BvUcMXdMOXCc8gn7mMRTTFc4FERKuYIyFOq2E-eqw>
+    <xmx:-5KlZV8O6iaGGFVQ352rrsarpopTVEWvIJtE8_z7GpH_byhOocP9NA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 04AFCB6008D; Mon, 15 Jan 2024 15:18:01 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1374-gc37f3abe3d-fm-20240102.001-gc37f3abe
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1246; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=V8N9aIl0ONqba2eF61XStTUsd5p79z7jiynDO2E7c50=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlpZHf8WD6GjV5qY8OxXbChFsTFEdFqH06f0kdB 8L0fxuPVIaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZaWR3wAKCRCPgPtYfRL+ TpQaB/9uCFV1sRbzNXWST/s0pnW+ymomv0WmvdVwR2vybREGIBOqzoGVnX2ZaPx+vF3lDs0BlBE M7U9EcCJSM6DnvYWGhooX6vuPldYuFccaNLDhLB1hcBrVQWyLNsmFdnfN/7L/Sv4hwdajsJkmLj PP+nRgn9ViKd+D1nZBe9T5EAhf7Ai0PZcOY4RHF5ZwAgvF13/V5/ktqP2egPFyBgj9tXPLsBlRx YSUeSfYDGG7l+zCyR+Oa5zAFMN7qnwBMPPnEfJ6YEJSXMtpTMbRtl8suKQxukS0kbxaT1xxLRli 4HZjr5XH/MtnvRpkbO0GNij0urODsAt3xcfqZdTUpGqcGHK9
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Message-Id: <8e138e54-22ba-43d3-898c-ab772039cd99@app.fastmail.com>
+In-Reply-To: <682b50dc-a92a-4da5-ad06-631c5125ebc5@collabora.com>
+References: 
+ <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
+ <682b50dc-a92a-4da5-ad06-631c5125ebc5@collabora.com>
+Date: Mon, 15 Jan 2024 21:17:41 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>,
+ "Lukas Wunner" <lukas@wunner.de>, "Olof Johansson" <olof@lixom.net>,
+ soc@kernel.org, devicetree@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc: "Yannic Moog" <Y.Moog@phytec.de>, "Alexander Bauer" <a.bauer@phytec.de>,
+ upstream@lists.phytec.de, "Teresa Remmet" <T.Remmet@phytec.de>,
+ "Tim Harvey" <tharvey@gateworks.com>, "Shawn Guo" <shawnguo@kernel.org>,
+ "Sascha Hauer" <s.hauer@pengutronix.de>,
+ "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+ "Fabio Estevam" <festevam@gmail.com>, "NXP Linux Team" <linux-imx@nxp.com>,
+ "Adam Ford" <aford173@gmail.com>, "Heiko Thiery" <heiko.thiery@gmail.com>,
+ "Enric Balletbo i Serra" <eballetbo@kernel.org>,
+ "Matthias Brugger" <matthias.bgg@gmail.com>,
+ "Hsin-Yi Wang" <hsinyi@chromium.org>, "Chen-Yu Tsai" <wenst@chromium.org>,
+ =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Conor Dooley" <conor+dt@kernel.org>
+Subject: Re: [PATCH] arm64: dts: Fix TPM schema violations
+Content-Type: text/plain
 
-In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-some functions and struct members were renamed. To not break all drivers
-compatibility macros were provided.
+On Mon, Jan 15, 2024, at 09:41, AngeloGioacchino Del Regno wrote:
+> Il 13/01/24 19:06, Lukas Wunner ha scritto:
+>> Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
+>> bindings"), several issues are reported by "make dtbs_check" for arm64
+>> devicetrees:
+>> 
+>> The compatible property needs to contain the chip's name in addition to
+>> the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
+>> rather than "cr50@0":
+>> 
+>>    tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
+>>          from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
+>> 
+>>    cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
+>>          from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
+>> 
+>> Fix these schema violations.
+>> 
+>> phyGATE-Tauri uses an Infineon SLB9670:
+>> https://lore.kernel.org/all/ab45c82485fa272f74adf560cbb58ee60cc42689.camel@phytec.de/
+>> 
+>> Gateworks Venice uses an Atmel ATTPM20P:
+>> https://trac.gateworks.com/wiki/tpm
+>> 
+>> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+>
+> For MediaTek:
+> Reviewed-by: AngeloGioacchino Del Regno 
+> <angelogioacchino.delregno@collabora.com>
+>
+> ...but I think you should split this per-SoC.
+>
+> Anyway, if Arnd wants to take this patch directly I'm also totally fine 
+> with that.
 
-To be able to remove these compatibility macros push the renaming into
-this driver.
+I would prefer to apply the combined patches:
+if you end up with a series of patches that all have
+identical commit texts, it's better to combine them
+as that gives a more readable git history.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/char/tpm/tpm_tis_spi_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+However, I got some conflicts trying to apply them on
+top of v6.7, so maybe check that and resend.
 
-diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-index c5c3197ee29f..c647de7b3709 100644
---- a/drivers/char/tpm/tpm_tis_spi_main.c
-+++ b/drivers/char/tpm/tpm_tis_spi_main.c
-@@ -146,7 +146,7 @@ static int tpm_tis_spi_transfer_full(struct tpm_tis_data *data, u32 addr,
- 	struct spi_transfer spi_xfer;
- 	u8 transfer_len;
- 
--	spi_bus_lock(phy->spi_device->master);
-+	spi_bus_lock(phy->spi_device->controller);
- 
- 	while (len) {
- 		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-@@ -210,7 +210,7 @@ static int tpm_tis_spi_transfer_full(struct tpm_tis_data *data, u32 addr,
- 		spi_sync_locked(phy->spi_device, &m);
- 	}
- 
--	spi_bus_unlock(phy->spi_device->master);
-+	spi_bus_unlock(phy->spi_device->controller);
- 	return ret;
- }
- 
--- 
-2.43.0
-
+       Arnd
 
