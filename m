@@ -1,125 +1,195 @@
-Return-Path: <linux-integrity+bounces-775-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-776-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B67D282D054
-	for <lists+linux-integrity@lfdr.de>; Sun, 14 Jan 2024 11:41:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4363982D2E7
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 02:16:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB6BB1C20A5F
-	for <lists+linux-integrity@lfdr.de>; Sun, 14 Jan 2024 10:41:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 150ED28152C
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jan 2024 01:16:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03AED1C17;
-	Sun, 14 Jan 2024 10:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28781381;
+	Mon, 15 Jan 2024 01:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="REKN8IlM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A88B7E;
-	Sun, 14 Jan 2024 10:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 86E90100D5865;
-	Sun, 14 Jan 2024 11:33:03 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 4B65F2F90C4; Sun, 14 Jan 2024 11:33:03 +0100 (CET)
-Date: Sun, 14 Jan 2024 11:33:03 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Cc: Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-	soc@kernel.org, devicetree@vger.kernel.org,
-	linux-integrity@vger.kernel.org, Yannic Moog <Y.Moog@phytec.de>,
-	Alexander Bauer <a.bauer@phytec.de>, upstream@lists.phytec.de,
-	Teresa Remmet <T.Remmet@phytec.de>,
-	Tim Harvey <tharvey@gateworks.com>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-	Fabio Estevam <festevam@gmail.com>, linux-imx@nxp.com,
-	Adam Ford <aford173@gmail.com>,
-	Heiko Thiery <heiko.thiery@gmail.com>,
-	Enric Balletbo i Serra <eballetbo@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Hsin-Yi Wang <hsinyi@chromium.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Nicolas Prado <nfraprado@collabora.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH] arm64: dts: Fix TPM schema violations
-Message-ID: <20240114103303.GA3805@wunner.de>
-References: <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
- <11865970.MucGe3eQFb@diego>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B087137B;
+	Mon, 15 Jan 2024 01:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
+Delivered-To: dpsmith@apertussolutions.com
+ARC-Seal: i=1; a=rsa-sha256; t=1705281357; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=jAuUvxVU8D23KdA/HZzdCYNvhAgM+U2WBQn/wpcFl3at/a7pKAY6U5Y8n9xcyCPfABMDNOCWj55cmjZ0rN7Xv3Mz2o8uWEOKV7WK7s9P+o8U7PB2PJh1e4SiPEDZcsJLE0SeAXhU0QIASsZFzZ4/HQTizxx6W1W2tWDTEZbbiCc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1705281357; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=zLf9QVptryF0InKzR9EnfMAiKSvtoQon6fPnRpBNJf8=; 
+	b=AVEbSNz512ykrZY1XLGhjtJNfbD1VYDoe/IzDbx8nOqrKSI982N6IdpKErV3vzquzvC5YSvCt7wgoeJ8hy91bhpPSAam46SC6qqxzz8F0igywFLcrCYAY/32OnEvMrmcaFKkbalL2qaTYZGtH6OmllNd1HB+fRPDfzeTHBDyoqQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=apertussolutions.com;
+	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+	dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1705281357;
+	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=zLf9QVptryF0InKzR9EnfMAiKSvtoQon6fPnRpBNJf8=;
+	b=REKN8IlMTZyPV8JlO3ggYaFu6+/zE+z2855+XdJ+CJ4Z3kYVyBr1achSluEl8lQ3
+	z9w5VcizG8PhPrkirrcC+6XQ9+ri5dKUY9i76jpBff/Z5lN9ELhTrrb8nwXz4qTfx4S
+	yN8E8gMManHaWMD9NRr2O//JG7ELgFWOA+jlzU0o=
+Received: from sisyou.hme. (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+	with SMTPS id 1705281355612388.34342267689556; Sun, 14 Jan 2024 17:15:55 -0800 (PST)
+From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: "Daniel P. Smith" <dpsmith@apertussolutions.com>,
+	Ross Philipson <ross.philipson@oracle.com>,
+	Kanth Ghatraju <kanth.ghatraju@oracle.com>,
+	Peter Huewe <peterhuewe@gmx.de>
+Subject: [PATCH] tpm: make locality handling resilient
+Date: Sun, 14 Jan 2024 20:15:44 -0500
+Message-Id: <20240115011546.21193-1-dpsmith@apertussolutions.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <11865970.MucGe3eQFb@diego>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ZohoMailClient: External
 
-On Sat, Jan 13, 2024 at 08:13:35PM +0100, Heiko Stübner wrote:
-> Am Samstag, 13. Januar 2024, 19:06:56 CET schrieb Lukas Wunner:
-> > Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
-> > bindings"), several issues are reported by "make dtbs_check" for arm64
-> > devicetrees:
-> > 
-> > The compatible property needs to contain the chip's name in addition to
-> > the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
-> > rather than "cr50@0":
-> > 
-> >   tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
-> >         from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
-> > 
-> >   cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
-> >         from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
-> > 
-> > Fix these schema violations.
-[...]
-> >  arch/arm64/boot/dts/freescale/imx8mm-phygate-tauri-l.dts    | 2 +-
-> >  arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi     | 2 +-
-> >  arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi     | 2 +-
-> >  arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts         | 2 +-
-> >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw72xx.dtsi     | 2 +-
-> >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi     | 2 +-
-> >  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts      | 2 +-
-> >  arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts | 2 +-
-> >  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi              | 2 +-
-> >  arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi            | 2 +-
-> >  arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts             | 2 +-
-> >  arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi        | 2 +-
-> 
-> you might want to split this per sub-architecture perhaps (freescale,
-> mediatek, rockchip) as such dts changes normally go through the trees
-> of the subarchitecture maintainers.
+Commit 933bfc5ad213 introduced the use of a locality counter to control when
+locality request was actually sent to the TPM. This locality counter created a
+hard enforcement that the TPM had no active locality at the time of the driver
+initialization. The reality is that this may not always be the case coupled
+with the fact that the commit indiscriminately decremented the counter created
+the condition for integer underflow of the counter. The underflow was triggered
+by the first pair of request/relinquish calls made in tpm_tis_init_core and all
+subsequent calls to request/relinquished calls would have the counter flipping
+between the underflow value and 0. The result is that it appeared all calls to
+request/relinquish were successful, but they were not. The end result is that
+the locality that was active when the driver loaded would always remain active,
+to include after the driver shutdown. This creates a significant issue when
+using Intel TXT and Locality 2 is active at boot. After the GETSEC[SEXIT]
+instruction is called, the PCH will close access to Locality 2 MMIO address
+space, leaving the TPM locked in Locality 2 with no means to relinquish the
+locality until system reset.
 
-My concern was that other developers may see these new warnings
-and start submitting piecemeal fixes.  That would be a waste
-of time since I already prepared fixes for everything weeks ago.
-I was only waiting for the schema changes to hit mainline.
+The commit seeks to address this situation through three changes. The first is
+to walk the localities during initialization and close any open localities to
+ensure the TPM is in the assumed state. Next is to put guards around the
+counter and the requested locality to ensure they remain within valid values.
+The last change is to make the request locality functions be consistent in
+their return values. The functions will either return the locality requested if
+successful or a negative error code.
 
-I was hoping that these might make it to Linus during the back half
-of the merge window so that the warnings are gone by rc1 time
-and nobody will ever see them.
+Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+Reported-by: Kanth Ghatraju <kanth.ghatraju@oracle.com>
+Fixes: 933bfc5ad213 ("tpm, tpm: Implement usage counter for locality")
+---
+ drivers/char/tpm/tpm-chip.c     |  2 +-
+ drivers/char/tpm/tpm_tis_core.c | 20 +++++++++++++++-----
+ include/linux/tpm.h             |  2 ++
+ 3 files changed, 18 insertions(+), 6 deletions(-)
 
-Of course I can split them up if that's what Arnd & Olof prefer.
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 42b1062e33cd..e7293f85335a 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -49,7 +49,7 @@ static int tpm_request_locality(struct tpm_chip *chip)
+ 		return rc;
+ 
+ 	chip->locality = rc;
+-	return 0;
++	return chip->locality;
+ }
+ 
+ static void tpm_relinquish_locality(struct tpm_chip *chip)
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 1b350412d8a6..c8b9b0b199dc 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -180,7 +180,8 @@ static int tpm_tis_relinquish_locality(struct tpm_chip *chip, int l)
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+ 
+ 	mutex_lock(&priv->locality_count_mutex);
+-	priv->locality_count--;
++	if (priv->locality_count > 0)
++		priv->locality_count--;
+ 	if (priv->locality_count == 0)
+ 		__tpm_tis_relinquish_locality(priv, l);
+ 	mutex_unlock(&priv->locality_count_mutex);
+@@ -226,18 +227,21 @@ static int __tpm_tis_request_locality(struct tpm_chip *chip, int l)
+ 			tpm_msleep(TPM_TIMEOUT);
+ 		} while (time_before(jiffies, stop));
+ 	}
+-	return -1;
++	return -EBUSY;
+ }
+ 
+ static int tpm_tis_request_locality(struct tpm_chip *chip, int l)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	int ret = 0;
++	int ret = -EIO;
++
++	if (l > TPM_MAX_LOCALITY)
++		return -EINVAL;
+ 
+ 	mutex_lock(&priv->locality_count_mutex);
+ 	if (priv->locality_count == 0)
+ 		ret = __tpm_tis_request_locality(chip, l);
+-	if (!ret)
++	if (ret >= 0)
+ 		priv->locality_count++;
+ 	mutex_unlock(&priv->locality_count_mutex);
+ 	return ret;
+@@ -1108,7 +1112,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	u32 intmask;
+ 	u32 clkrun_val;
+ 	u8 rid;
+-	int rc, probe;
++	int rc, probe, locality;
+ 	struct tpm_chip *chip;
+ 
+ 	chip = tpmm_chip_alloc(dev, &tpm_tis);
+@@ -1169,6 +1173,12 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		goto out_err;
+ 	}
+ 
++	/* It is not safe to assume localities are closed on startup */
++	for (locality = 0; locality <= TPM_MAX_LOCALITY; locality++) {
++		if (check_locality(chip, locality))
++			tpm_tis_relinquish_locality(chip, locality);
++	}
++
+ 	/* Take control of the TPM's interrupt hardware and shut it off */
+ 	rc = tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+ 	if (rc < 0)
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 4ee9d13749ad..f2651281f02e 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -116,6 +116,8 @@ struct tpm_chip_seqops {
+ 	const struct seq_operations *seqops;
+ };
+ 
++#define TPM_MAX_LOCALITY		4
++
+ struct tpm_chip {
+ 	struct device dev;
+ 	struct device devs;
+-- 
+2.30.2
 
-
-> For the rockchip-parts itself, I'm also fine with them going through
-> somewhere else - gru devices are pretty much "finished" by now,
-> so for the rockchip changes
-> Acked-by: Heiko Stuebner <heiko@sntech.de>
-
-Thanks for taking a look!
-
-Lukas
 
