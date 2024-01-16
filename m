@@ -1,103 +1,112 @@
-Return-Path: <linux-integrity+bounces-812-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-813-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43B4782EB1D
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 09:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3273882ECB6
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 11:24:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 556B71C22E2A
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 08:48:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 432731C22F20
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 10:24:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51CE311CBE;
-	Tue, 16 Jan 2024 08:47:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7715F134D9;
+	Tue, 16 Jan 2024 10:24:31 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E17125B0;
-	Tue, 16 Jan 2024 08:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4TDhy80gLFz9xvNW;
-	Tue, 16 Jan 2024 16:29:36 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 8282314025A;
-	Tue, 16 Jan 2024 16:47:52 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwC38CSpQqZlOdikAA--.3968S2;
-	Tue, 16 Jan 2024 09:47:51 +0100 (CET)
-Message-ID: <3b440f064a1ae04d69f7e85f4077f8406c0eac67.camel@huaweicloud.com>
-Subject: Re: [PATCH v9 13/25] security: Introduce file_release hook
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Al Viro <viro@zeniv.linux.org.uk>, casey@schaufler-ca.com
-Cc: brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
- neilb@suse.de,  kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
- paul@paul-moore.com,  jmorris@namei.org, serge@hallyn.com,
- zohar@linux.ibm.com,  dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
- dhowells@redhat.com,  jarkko@kernel.org, stephen.smalley.work@gmail.com,
- eparis@parisplace.org,  shuah@kernel.org, mic@digikod.net,
- linux-kernel@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
- linux-nfs@vger.kernel.org,  linux-security-module@vger.kernel.org,
- linux-integrity@vger.kernel.org,  keyrings@vger.kernel.org,
- selinux@vger.kernel.org,  linux-kselftest@vger.kernel.org, Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Tue, 16 Jan 2024 09:47:34 +0100
-In-Reply-To: <20240115191508.GG1674809@ZenIV>
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
-	 <20240115181809.885385-14-roberto.sassu@huaweicloud.com>
-	 <20240115191508.GG1674809@ZenIV>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B13134D5;
+	Tue, 16 Jan 2024 10:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id F2BB730000868;
+	Tue, 16 Jan 2024 11:24:23 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id E3127316BEB; Tue, 16 Jan 2024 11:24:23 +0100 (CET)
+Date: Tue, 16 Jan 2024 11:24:23 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Olof Johansson <olof@lixom.net>, soc@kernel.org,
+	devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+	Yannic Moog <Y.Moog@phytec.de>, Alexander Bauer <a.bauer@phytec.de>,
+	upstream@lists.phytec.de, Teresa Remmet <T.Remmet@phytec.de>,
+	Tim Harvey <tharvey@gateworks.com>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>, Adam Ford <aford173@gmail.com>,
+	Heiko Thiery <heiko.thiery@gmail.com>,
+	Enric Balletbo i Serra <eballetbo@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Hsin-Yi Wang <hsinyi@chromium.org>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH] arm64: dts: Fix TPM schema violations
+Message-ID: <20240116102423.GA27561@wunner.de>
+References: <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
+ <682b50dc-a92a-4da5-ad06-631c5125ebc5@collabora.com>
+ <8e138e54-22ba-43d3-898c-ab772039cd99@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwC38CSpQqZlOdikAA--.3968S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw1DZr4xZrWxZr48XF43Wrg_yoWxArX_ur
-	yqkw1kC398CF47A3sruF1fZrZ2qFW8AF15X390qrnxWayfGa4IkFWF9rZ5Z348GF4IyF9I
-	gFn0vF4xKr1agjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb7xYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-	AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-	j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-	k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQZ2-UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAEBF1jj5iWWAABsn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e138e54-22ba-43d3-898c-ab772039cd99@app.fastmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, 2024-01-15 at 19:15 +0000, Al Viro wrote:
-> On Mon, Jan 15, 2024 at 07:17:57PM +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >=20
-> > In preparation for moving IMA and EVM to the LSM infrastructure, introd=
-uce
-> > the file_release hook.
-> >=20
-> > IMA calculates at file close the new digest of the file content and wri=
-tes
-> > it to security.ima, so that appraisal at next file access succeeds.
-> >=20
-> > An LSM could implement an exclusive access scheme for files, only allow=
-ing
-> > access to files that have no references.
->=20
-> Elaborate that last part, please.
+On Mon, Jan 15, 2024 at 09:17:41PM +0100, Arnd Bergmann wrote:
+> > Il 13/01/24 19:06, Lukas Wunner ha scritto:
+> > > Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
+> > > bindings"), several issues are reported by "make dtbs_check" for arm64
+> > > devicetrees:
+> > > 
+> > > The compatible property needs to contain the chip's name in addition to
+> > > the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
+> > > rather than "cr50@0":
+> > > 
+> > >    tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
+> > >          from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
+> > > 
+> > >    cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
+> > >          from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
+> > > 
+> > > Fix these schema violations.
+> 
+> However, I got some conflicts trying to apply them on
+> top of v6.7, so maybe check that and resend.
 
-Apologies, I didn't understand that either. Casey?
+This patch needs to be applied on top of the soc-dt-6.8 tag,
+not v6.7, because there were changes in your v6.8 pull request
+which introduce a new TPM DT node in:
 
-Thanks
+  arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+  arch/arm64/boot/dts/freescale/imx8mp-venice-gw72xx.dtsi
 
-Roberto
+and modify an existing TPM DT node in:
 
+  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+
+So if I'd base this patch on top of v6.7, it would be missing
+the fixes for these three devicetrees and I'd have to submit
+a separate patch with them.  Happy to do so if that's what
+you want but basing on top of soc-dt-6.8 seemed more reasonable
+to me as initial submission.
+
+Thanks!
+
+Lukas
 
