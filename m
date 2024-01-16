@@ -1,1812 +1,814 @@
-Return-Path: <linux-integrity+bounces-828-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-829-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F17482F476
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 19:39:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B7D182F4B8
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 19:57:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7607D1C239D3
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 18:39:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9B9A1F24B89
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 18:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A481D691;
-	Tue, 16 Jan 2024 18:38:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717A71CF89;
+	Tue, 16 Jan 2024 18:57:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EeOcJF5U"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="fK16Ll1W"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic302-28.consmr.mail.ne1.yahoo.com (sonic302-28.consmr.mail.ne1.yahoo.com [66.163.186.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEBD1D525;
-	Tue, 16 Jan 2024 18:38:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FCD1D527
+	for <linux-integrity@vger.kernel.org>; Tue, 16 Jan 2024 18:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705430324; cv=none; b=Rb6gVURXNx0a90zFSa535YrAD/wGHMgCILa/rogk4CM2lgQkPYIHj33WT7Ih0QWK5DbC3A76CCK8lmuHJkyptGF4mNAQytZCLfBZKcU1QVkiV9vsaJGmFtcSPhUobFm3XPrevxd0rUMOcTZK0Uz/C7+fXJoAdo/K9ox6rBp8GDI=
+	t=1705431455; cv=none; b=nZs/k+sF0SEx/6cX0HTIkTi/UtcDyoXPZ0bA7LirDaDvB5iTsj+T8mpPJ2MYnsb8JBYslHUE3ccmin7aQtz9tNVdCOkwVwszgx0Uki87wp/pq2TUn8qPSDl+RAwHczyedxik2a2y+t55G3BY0dLC66vEoyKZ1REzI+eMgwEdCmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705430324; c=relaxed/simple;
-	bh=J6RR+WRLzNKKhLcQa03Kf8tkTmkxrA1tfAHnKP6mJDs=;
-	h=Received:DKIM-Signature:Received:Received:Received:Received:
-	 Received:Received:Received:Received:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:In-Reply-To:References:X-TM-AS-GCONF:
-	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:Content-Transfer-Encoding:
-	 X-Proofpoint-UnRewURL:MIME-Version:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=aH9AQDzYcUYGsENKxNSkx10pSMAtdoIwHe0nELIJNcaAfTPe6uZQ7iJNXBHAK/nMK5OaRoucXILNoeoBcQiDxg/mtXjMEQ0WKN6Rz+JEkIMB0zexm1STFld5KPavHuSA9dLAwost2RkpfsCfAuzIyFo+i5w4C5pO+e0KLAIz4R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EeOcJF5U; arc=none smtp.client-ip=148.163.156.1
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40GIC9nM024390;
-	Tue, 16 Jan 2024 18:37:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=StG4ISOZ4NBuif5ngtRergfvh/S9wEFGxyDmv10IS6w=;
- b=EeOcJF5UZxL/RK1XwXIj3DMhXhV5A6PrOnnjQ7IPFahGlz/N6NjCgDSSzQifh3wsa2km
- fcpv+Qy88tgvTvdQ4ERi0wfB5HymENU9S6zFdzUK5R4YLcEFqrdAWQmv3O7tVeNhlBFV
- uhiI4oyP88Nj6Lx+oMf+fmpsCJdcPlk/LreY2k6sTzTGAQaF1kZ6rf6wgKQUX5FFxvcK
- AEXq+cPR9MN+nX7ohlQZVrLbTuSFMv8zDgOlVV3tkXQVSw56l18Ip8FAYLlRyaurD7aj
- 92gvM+vJxIhUoYYeeETOqjJJ2vf/wzsOxSYAKOImqVwkAPf5oRArlBaCALCIZI5eFQUp dg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vnxvbgquk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Jan 2024 18:37:44 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40GIGEVR008956;
-	Tue, 16 Jan 2024 18:37:43 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vnxvbgqtd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Jan 2024 18:37:43 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40GGQpmM023694;
-	Tue, 16 Jan 2024 18:37:41 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vm6bkg8ux-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Jan 2024 18:37:41 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40GIbeA624576710
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Jan 2024 18:37:40 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 583A358060;
-	Tue, 16 Jan 2024 18:37:40 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6F42C5805A;
-	Tue, 16 Jan 2024 18:37:39 +0000 (GMT)
-Received: from gfwa153.aus.stglabs.ibm.com (unknown [9.3.84.127])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 16 Jan 2024 18:37:39 +0000 (GMT)
-From: Ninad Palsule <ninad@linux.ibm.com>
-To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        joel@jms.id.au, andrew@codeconstruct.com.au, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, keescook@chromium.org,
-        tony.luck@intel.com, gpiccoli@igalia.com, ninad@linux.ibm.com,
-        johannes.holland@infineon.com, linux@roeck-us.net, broonie@kernel.org,
-        andre.werner@systec-electronic.com
-Cc: Andrew Geissler <geissonator@yahoo.com>, patrick.rudolph@9elements.com,
-        vincent@vtremblay.dev, peteryin.openbmc@gmail.com, lakshmiy@us.ibm.com,
-        bhelgaas@google.com, naresh.solanki@9elements.com,
-        alexander.stein@ew.tq-group.com, festevam@denx.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
-        geert+renesas@glider.be, luca.ceresoli@bootlin.com
-Subject: [PATCH v4 3/3] ARM: dts: aspeed: System1: IBM system1 BMC board
-Date: Tue, 16 Jan 2024 12:37:34 -0600
-Message-Id: <20240116183734.3944028-4-ninad@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240116183734.3944028-1-ninad@linux.ibm.com>
-References: <20240116183734.3944028-1-ninad@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZwCYEsDxtHIoPKs_rRJzdVw0qpANDJP4
-X-Proofpoint-ORIG-GUID: _bn2ATNRrZxDmDWUpM-ACnUAvfP_OQeW
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 2 URL's were un-rewritten
+	s=arc-20240116; t=1705431455; c=relaxed/simple;
+	bh=kFbbpr9quDB2/W1zp3viiUuAHFdLHdmBIAfH31z4SPM=;
+	h=DKIM-Signature:X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:
+	 X-Sonic-ID:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:Content-Language:To:Cc:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Mailer; b=UfgQTzC3mMoNX7tYZeTx0x5g2nPu/BxNwoh1lXer96KGqlPghy7zmorVJj60jqRHIpQ9PmV+XLZj2xlPV40XzPvCw/+opjt+MW+traa0kkXZs2E7L6rToU4NONSO++4dW6SPFMMye4YGsLQhbYqDYiK5ATBV2xe/KIqh/o/Rxio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=fK16Ll1W; arc=none smtp.client-ip=66.163.186.154
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1705431451; bh=JYpWN/nuT0eX+Jt0+jv1KDFs1eVFtW4VEOiAYtun7Xc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=fK16Ll1WA/XvnJbAyvHXT9m33Jgz4NNPnn5t3WEcFXLfWOgpxqAxYyxrctoc5/nRzYA2CBwTU/IUErlE3ZcQWYBYJLlu/oRkUkO20rKRcWEgKYGuEEmvPDME/Tmlvbp22EcFpiU1QrLrPHdQgyzSICWtTfpytTzEz9PWvwdnqcywsKZ1l0sKLv7jBBh3NUHi85Qj66gv8Yt276MU0TD3bVXIhVhdmMnOlG2HO+o1fT1Ok5ryN2NamFsv0olrvb32HfV+H4kfVwmRvPOMFI/hzCNnnIgU9qpJi2s3e3tXVu7Vol2FbQMDPD5BM172MgnHbmfVvdZBfeuhfD7sgw994w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1705431451; bh=YLmenAAk6URSbwXKlg9hDnZk1vjVy7oho9XwojZ1V3E=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=hQdnht0CXPw8pWYL+jH86C/DLTCRS/W36Hbtkq2DVtEDelgxJRUVKF690yLx+8BsDKceUsLLeNOkxgICFuKN5w8x94OiUHK0uNOdIZSgLSLj31iRYLy3ZvSq0Q/nk1Bfa1mVRsVJkQykUnYX9y/iwCHxuiKLBcp2M8j71VM0xxFAXUV4YUxFGFkx76gq2W8L+oV8mxKsoGWZXZnes59FqImqenNfEkFvC+t469hPS2qXEpdCI0ZYZF9TuOSehS5PIjjPJL8yek79eA7g6sJH3t6X+8UtZH5ze6knS6vbNmGZPQ42Dz3bL7a1BE/7mdPR0suEF4cxdUSjCuVFH3QUcg==
+X-YMail-OSG: NiVferQVM1nX3A6jgfyPpEII5OndXZPL3f1m9hhNZ_p2zS0oeV4VrrE0xIOWa.3
+ 1QYkRNCHKXXp8fmNZKoo2l5EXRyS1Ct.csb.UaypUMhWl9Y2LItvRproXyXXHZOLx60cHdv6HghW
+ KRtJU27KMi6E0K4RJ9XN1tiHj4k2Sl2RnYNU7gQoNPcJv56LxRu1XjkMWfws7xRGMu4ImdZ7fpCY
+ IAoKh2RpcVEsHoTXnvxHOCk461ASPI9lMON1xHeAxmp1k_AcnVHvF7RQYlB1U22SFr3UKW.mmRP_
+ diPJNxpLzuZk.CFiZ5JCSaEndnJ9IVacf5x9z1mnVfU0_Mea97YIBLZCEPJfPIZfYulRTYqYL60m
+ cpspscNhwlRP.sC4GKRtB8oUSubGHmGHHqusGCdreL3WGowamY2CC7KbALwNtDvxMskkeitliejU
+ dDx_jqZiZeSsSSVF2MaPwy.pEAeSuqcKMZLSvCd0MCmSFYMzZb9tY0ZT4k1zsLD.Ah0dQEM33XMB
+ Fx7lKVkVQ_n2SQ_zT_tQ7v63La4AtAzLtbS96e8y9BnzXcoLQ.NTWV7f_PDQDnvchXB2jj0r6_49
+ uaXBvO_nLo2UnjGeSsLJEdL5CpMdGqYtAQFM_OyyPi9htl9FobORyyS3Fy2ZoK9a7vvjkEdaXBcC
+ _W.P1wtO1cNSKKVYR6uHT.uS.3Fq2274dTkIiyN..2dQ76ZvhHWkE0qnPrp6rYgVbN721Ud62wN0
+ ykZY8WLfhoBwBcbSS8Qj_OfN5pzMRnpTdz_K8naInpDfPmiv78aC4YHBdS2aKYsEu3QFUADbH6G6
+ eO.MDOGLzYzAJZ8btbUupy9pAM7kEW7SLvlgEVQ2hrWifa5TDv8baRayd17N9AyJ3THAhsgaavzD
+ xuw73caPmDdMSYvhxTzA8_gpKtqBf3NdCr3ZdiHHrKY8aXVk.Uf0HYYN_thAjK2GzAX.bPNvVIlr
+ gajkgQ1esKIyP8H9Qq4ENnxs3LCXQ.mt70WKCqbyo7.D7Y1zpTHXCzf1UA2zZOHCBV9YGBr00yqL
+ PHNXn4UilALOLLlotu84QyEoy.TailxU8O9AFkF32MQwEpFZjEZqPq1OmfjLgSty8LGEOLbcAtNE
+ _X_sEHLT18GzL5g9sBP6MctiU2fX.jRDyNcVAczgjWy1wTU5YLZsFpjHF4LoI.cyd3AMFyeon2k_
+ DKYxo3FOs1LsVGHz3IEwv6O9E0JJd3iFaoE0VsvW4mdksENt1MAcPegZcLePirDsFhOu6a1dQI8Y
+ Fh9EEaT3oZchHKMdmpBOkkJwYlitAoHKO698yfS65UVjLgdXjMm_Ygp7ILKjZpX0rPX5DKPPeWVw
+ aZXdWGJBbO.iWySNGDprzlbpKFV4Cr0bMAieCwPEvM7JlPwsCo0mLZASg7q_rv4XKaBb9ZawuwCl
+ 9UMQX716Z2Y.Du0X0mmFtFxDs7Jpn0CPQvv7UR9DEP4ljQTxkVpzns5ZMKdR4WahVu4slvP30kBW
+ 8J8lpT8hgV0k3.AYvhx.Vn8S21jNqviBgjuPLRibQpT1_2V9xCUSbtQ7DBDm7tEe3MM73IMfPYU4
+ JYpVl4inwtqdS03igjjkf6SqSgNAy1g1Q_7U9pABCL88W8e0fmHXZyUB8rNMJF6hrb5vXFkRpfhP
+ 8RnVxkiAbftCAnMfOaKTIuNfnk.C4nFtZteOWjidxarb2Pzzd__3EBzo2gDfVfhZXUkDmzV07Q_U
+ RbOA4CosmsakJg3xmYg4BbK8au.fsVXoosEKz_PzlOWyV4NY70qG2iVvX3EKfZLicdMSeTkcsCU4
+ 9814XPXKFBEsJ9O1PA2MUD7dC5GrDAbOBjYICR7KIN_aofSygn_kv62dKjfMOlOLqR1JmoEa.WRW
+ PPCTNqbCRsgkr9sLYqr0hIEb6sII0P2K04FRLbeexLGSu3ag4BKcm_m6oQqtZlCTGxDvva4FusZQ
+ Z_taaP35zWHfDvLlIQZ3GgcVA4tyFV3adIR1dwbrYbqkO_FK_S.nJBiXg1foI0zyXQi..jSHg6Do
+ R1D8RpqF3V9LEsaWPCimTxbEIxvnLxXlojePQwKeVpPiLXTk1PPMO.D.WGDmwqG7riJhb5HqzQzM
+ Tj3W_j18DxhbASMSdqTaNkqLjeDduitVZAW00flsZAkzyGn1rmRi2_zh0liz8ueb6we7juGPyazF
+ OPXcyCFUt7M9LPlrLdF_2lW4L.LXvgtb87XDj1s5VrFVbM5S8QsKa_FhAIrPnFNxxvB1zizqQwTE
+ ZfAby5Ag0bk3oyoaEusUf7ZavbKENVgaOBqRX5E72DQ8vavG_q6dPQ7W7wulcnYHT9ENih2A-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 978a2127-5650-456e-9112-6113cd3d92ab
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Tue, 16 Jan 2024 18:57:31 +0000
+Received: by hermes--production-gq1-78d49cd6df-tswkb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d425fd8e0d98b29c03096e67c84d00e4;
+          Tue, 16 Jan 2024 18:57:28 +0000 (UTC)
+Message-ID: <ab80d0e3-e360-410b-ba24-da6c8e0ac5ff@schaufler-ca.com>
+Date: Tue, 16 Jan 2024 10:57:26 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-16_10,2024-01-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- malwarescore=0 lowpriorityscore=0 adultscore=0 mlxscore=0 impostorscore=0
- priorityscore=1501 mlxlogscore=999 phishscore=0 bulkscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2401160147
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 20/25] ima: Move to LSM infrastructure
+Content-Language: en-US
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+ zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+ dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com,
+ eparis@parisplace.org, shuah@kernel.org, mic@digikod.net
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+ <20240115181809.885385-21-roberto.sassu@huaweicloud.com>
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20240115181809.885385-21-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.22010 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-From: Andrew Geissler <geissonator@yahoo.com>
+On 1/15/2024 10:18 AM, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Move hardcoded IMA function calls (not appraisal-specific functions) from
+> various places in the kernel to the LSM infrastructure, by introducing a
+> new LSM named 'ima' (at the end of the LSM list and always enabled like
+> 'integrity').
+>
+> Having IMA before EVM in the Makefile is sufficient to preserve the
+> relative order of the new 'ima' LSM in respect to the upcoming 'evm' LSM,
+> and thus the order of IMA and EVM function calls as when they were
+> hardcoded.
+>
+> Make moved functions as static (except ima_post_key_create_or_update(),
+> which is not in ima_main.c), and register them as implementation of the
+> respective hooks in the new function init_ima_lsm().
+>
+> Select CONFIG_SECURITY_PATH, to ensure that the path-based LSM hook
+> path_post_mknod is always available and ima_post_path_mknod() is always
+> executed to mark files as new, as before the move.
+>
+> A slight difference is that IMA and EVM functions registered for the
+> inode_post_setattr, inode_post_removexattr, path_post_mknod,
+> inode_post_create_tmpfile, inode_post_set_acl and inode_post_remove_acl
+> won't be executed for private inodes. Since those inodes are supposed to be
+> fs-internal, they should not be of interest of IMA or EVM. The S_PRIVATE
+> flag is used for anonymous inodes, hugetlbfs, reiserfs xattrs, XFS scrub
+> and kernel-internal tmpfs files.
+>
+> Conditionally register ima_post_key_create_or_update() if
+> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS is enabled. Also, conditionally register
+> ima_kernel_module_request() if CONFIG_INTEGRITY_ASYMMETRIC_KEYS is enabled.
+>
+> Finally, add the LSM_ID_IMA case in lsm_list_modules_test.c.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Acked-by: Chuck Lever <chuck.lever@oracle.com>
 
-Add a device tree for IBM system1 BMC board. It uses AST2600 SOC.
-- Added base board
-- Added i2c devices and muxes.
-- Added different voltage regulators.
-- Added GPIO pin assignements, GPIO expansion devices
-- Added LED brinker devices
-- Added Fan controllers
-- Added EEPROM/VPD
-- Added Power supplies
-- Added Humidity, pressure and temperature sensors.
-- Added Trusted platform module(TPM) chip.
+Acked-by: Casey Schaufler <casey@schaufler-ca.com>
 
-Tested:
-    This board is tested using the simics simulator.
-
-Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
-Signed-off-by: Andrew Geissler <geissonator@yahoo.com>
----
-The compatibility string and schema for tpm device is documented in the
-following patch series:
--https://lore.kernel.org/all/77fe0ccd-53ff-4773-9787-0d038434297f@linux.ibm.com/
--https://lore.kernel.org/all/3f56f0a2bb90697a23e83583a21684b75dc7eea2.1701093036.git.lukas@wunner.de/
-
-v4:
-  - Removed the compatibility string "nuvoton,npct75x" from tpm node as
-    per the Conor's review comment.
-v3:
-  - Fixed the voltage-regulator names.
-v2:
-  - Incorporated review comments from Conor Dooley, Jarkko Sakkinen,
-    Guenter Roeck, Rob Herring, Krzysztof Kozlowski
-    - Merge all patches into single patch.
-    - Split the trivial device patch.
-    - Cleanup commit messages.
-    - Fixed bootargs string.
-    - Fixed node names.
-    - Dropped tpm schema patch as it is covered by Lukas's patch.
-    - Dropped "tpm: tis-i2c: Add more compatible strings" patch and
-      send it as a separate patch.
----
- arch/arm/boot/dts/aspeed/Makefile             |    1 +
- .../dts/aspeed/aspeed-bmc-ibm-system1.dts     | 1623 +++++++++++++++++
- 2 files changed, 1624 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
-
-diff --git a/arch/arm/boot/dts/aspeed/Makefile b/arch/arm/boot/dts/aspeed/Makefile
-index 23cbc7203a8e..d551aed79286 100644
---- a/arch/arm/boot/dts/aspeed/Makefile
-+++ b/arch/arm/boot/dts/aspeed/Makefile
-@@ -32,6 +32,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-ibm-rainier.dtb \
- 	aspeed-bmc-ibm-rainier-1s4u.dtb \
- 	aspeed-bmc-ibm-rainier-4u.dtb \
-+	aspeed-bmc-ibm-system1.dtb \
- 	aspeed-bmc-intel-s2600wf.dtb \
- 	aspeed-bmc-inspur-fp5280g2.dtb \
- 	aspeed-bmc-inspur-nf5280m6.dtb \
-diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
-new file mode 100644
-index 000000000000..dcbc16308ab5
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-system1.dts
-@@ -0,0 +1,1623 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright 2023 IBM Corp.
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/i2c/i2c.h>
-+#include <dt-bindings/leds/leds-pca955x.h>
-+
-+/ {
-+	model = "System1";
-+	compatible = "ibm,system1-bmc", "aspeed,ast2600";
-+
-+	aliases {
-+		i2c16 = &i2c8mux1chn0;
-+		i2c17 = &i2c8mux1chn1;
-+		i2c18 = &i2c8mux1chn2;
-+		i2c19 = &i2c8mux1chn3;
-+		i2c20 = &i2c8mux1chn4;
-+		i2c21 = &i2c8mux1chn5;
-+		i2c22 = &i2c8mux1chn6;
-+		i2c23 = &i2c8mux1chn7;
-+		i2c24 = &i2c3mux0chn0;
-+		i2c25 = &i2c3mux0chn1;
-+		i2c26 = &i2c3mux0chn2;
-+		i2c27 = &i2c3mux0chn3;
-+		i2c28 = &i2c3mux0chn4;
-+		i2c29 = &i2c3mux0chn5;
-+		i2c30 = &i2c3mux0chn6;
-+		i2c31 = &i2c3mux0chn7;
-+		i2c32 = &i2c6mux0chn0;
-+		i2c33 = &i2c6mux0chn1;
-+		i2c34 = &i2c6mux0chn2;
-+		i2c35 = &i2c6mux0chn3;
-+		i2c36 = &i2c6mux0chn4;
-+		i2c37 = &i2c6mux0chn5;
-+		i2c38 = &i2c6mux0chn6;
-+		i2c39 = &i2c6mux0chn7;
-+		i2c40 = &i2c7mux0chn0;
-+		i2c41 = &i2c7mux0chn1;
-+		i2c42 = &i2c7mux0chn2;
-+		i2c43 = &i2c7mux0chn3;
-+		i2c44 = &i2c7mux0chn4;
-+		i2c45 = &i2c7mux0chn5;
-+		i2c46 = &i2c7mux0chn6;
-+		i2c47 = &i2c7mux0chn7;
-+		i2c48 = &i2c8mux0chn0;
-+		i2c49 = &i2c8mux0chn1;
-+		i2c50 = &i2c8mux0chn2;
-+		i2c51 = &i2c8mux0chn3;
-+		i2c52 = &i2c8mux0chn4;
-+		i2c53 = &i2c8mux0chn5;
-+		i2c54 = &i2c8mux0chn6;
-+		i2c55 = &i2c8mux0chn7;
-+		i2c56 = &i2c14mux0chn0;
-+		i2c57 = &i2c14mux0chn1;
-+		i2c58 = &i2c14mux0chn2;
-+		i2c59 = &i2c14mux0chn3;
-+		i2c60 = &i2c14mux0chn4;
-+		i2c61 = &i2c14mux0chn5;
-+		i2c62 = &i2c14mux0chn6;
-+		i2c63 = &i2c14mux0chn7;
-+		i2c64 = &i2c15mux0chn0;
-+		i2c65 = &i2c15mux0chn1;
-+		i2c66 = &i2c15mux0chn2;
-+		i2c67 = &i2c15mux0chn3;
-+		i2c68 = &i2c15mux0chn4;
-+		i2c69 = &i2c15mux0chn5;
-+		i2c70 = &i2c15mux0chn6;
-+		i2c71 = &i2c15mux0chn7;
-+	};
-+
-+	chosen {
-+		stdout-path = "uart5:115200n8";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x40000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		eventlog: tcg-event-log@b3d00000 {
-+			no-map;
-+			reg = <0xb3d00000 0x100000>;
-+		};
-+
-+		ramoops@b3e00000 {
-+			compatible = "ramoops";
-+			reg = <0xb3e00000 0x200000>; /* 16 * (4 * 0x8000) */
-+			record-size = <0x8000>;
-+			console-size = <0x8000>;
-+			ftrace-size = <0x8000>;
-+			pmsg-size = <0x8000>;
-+			max-reason = <3>; /* KMSG_DUMP_EMERG */
-+		};
-+
-+		/* LPC FW cycle bridge region requires natural alignment */
-+		flash_memory: region@b4000000 {
-+			no-map;
-+			reg = <0xb4000000 0x04000000>; /* 64M */
-+		};
-+
-+		/* VGA region is dictated by hardware strapping */
-+		vga_memory: region@bf000000 {
-+			no-map;
-+			compatible = "shared-dma-pool";
-+			reg = <0xbf000000 0x01000000>;  /* 16M */
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			gpios = <&gpio0 ASPEED_GPIO(L, 7) GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-1 {
-+			gpios = <&gpio0 ASPEED_GPIO(P, 7) GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-2 {
-+			gpios = <&gpio0 ASPEED_GPIO(S, 6) GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-3 {
-+			gpios = <&gpio0 ASPEED_GPIO(S, 7) GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-4 {
-+			gpios = <&pca3 5 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-5 {
-+			gpios = <&pca3 6 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-6 {
-+			gpios = <&pca3 7 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-7 {
-+			gpios = <&pca3 8 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-8 {
-+			gpios = <&pca3 9 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-9 {
-+			gpios = <&pca3 10 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-a {
-+			gpios = <&pca3 11 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-b {
-+			gpios = <&pca4 4 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-c {
-+			gpios = <&pca4 5 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-d {
-+			gpios = <&pca4 6 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		led-e {
-+			gpios = <&pca4 7 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	gpio-keys-polled {
-+		compatible = "gpio-keys-polled";
-+		poll-interval = <1000>;
-+
-+		event-nvme0-presence {
-+			label = "nvme0-presence";
-+			gpios = <&pca4 0 GPIO_ACTIVE_LOW>;
-+			linux,code = <0>;
-+		};
-+
-+		event-nvme1-presence {
-+			label = "nvme1-presence";
-+			gpios = <&pca4 1 GPIO_ACTIVE_LOW>;
-+			linux,code = <1>;
-+		};
-+
-+		event-nvme2-presence {
-+			label = "nvme2-presence";
-+			gpios = <&pca4 2 GPIO_ACTIVE_LOW>;
-+			linux,code = <2>;
-+		};
-+
-+		event-nvme3-presence {
-+			label = "nvme3-presence";
-+			gpios = <&pca4 3 GPIO_ACTIVE_LOW>;
-+			linux,code = <3>;
-+		};
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&p12v_vd 0>, <&p5v_aux_vd 0>,
-+			<&p5v_bmc_aux_vd 0>, <&p3v3_aux_vd 0>,
-+			<&p3v3_bmc_aux_vd 0>, <&p1v8_bmc_aux_vd 0>,
-+			<&adc1 4>, <&adc0 2>, <&adc1 0>,
-+			<&p2v5_aux_vd 0>, <&adc1 7>;
-+	};
-+
-+	p12v_vd: voltage-divider1 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc1 3>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1127/127 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <15>;
-+		full-ohms = <133>;
-+	};
-+
-+	p5v_aux_vd: voltage-divider2 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc1 5>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1365/365 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <50>;
-+		full-ohms = <187>;
-+	};
-+
-+	p5v_bmc_aux_vd: voltage-divider3 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc0 3>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1365/365 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <50>;
-+		full-ohms = <187>;
-+	};
-+
-+	p3v3_aux_vd: voltage-divider4 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc1 2>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1698/698 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <14>;
-+		full-ohms = <34>;
-+	};
-+
-+	p3v3_bmc_aux_vd: voltage-divider5 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc0 7>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 1698/698 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <14>;
-+		full-ohms = <34>;
-+	};
-+
-+	p1v8_bmc_aux_vd: voltage-divider6 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc0 6>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 4000/3000 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <3>;
-+		full-ohms = <4>;
-+	};
-+
-+	p2v5_aux_vd: voltage-divider7 {
-+		compatible = "voltage-divider";
-+		io-channels = <&adc1 1>;
-+		#io-channel-cells = <1>;
-+
-+		/*
-+		 * Scale the system voltage by 2100/1100 to fit the ADC range.
-+		 * Use small nominator to prevent integer overflow.
-+		 */
-+		output-ohms = <11>;
-+		full-ohms = <21>;
-+	};
-+
-+	p1v8_bmc_aux: fixedregulator-p1v8-bmc-aux {
-+		compatible = "regulator-fixed";
-+		regulator-name = "p1v8_bmc_aux";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
-+	};
-+};
-+
-+&adc0 {
-+	status = "okay";
-+	vref-supply = <&p1v8_bmc_aux>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default
-+		&pinctrl_adc1_default
-+		&pinctrl_adc2_default
-+		&pinctrl_adc3_default
-+		&pinctrl_adc4_default
-+		&pinctrl_adc5_default
-+		&pinctrl_adc6_default
-+		&pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	status = "okay";
-+	vref-supply = <&p1v8_bmc_aux>;
-+	aspeed,battery-sensing;
-+
-+	aspeed,int-vref-microvolt = <2500000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc8_default
-+		&pinctrl_adc9_default
-+		&pinctrl_adc10_default
-+		&pinctrl_adc11_default
-+		&pinctrl_adc12_default
-+		&pinctrl_adc13_default
-+		&pinctrl_adc14_default
-+		&pinctrl_adc15_default>;
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&uhci {
-+	status = "okay";
-+};
-+
-+&gpio0 {
-+	gpio-line-names =
-+	/*A0-A7*/	"","","","","","","","",
-+	/*B0-B7*/	"","","","","bmc-tpm-reset","","","",
-+	/*C0-C7*/	"","","","","","","","",
-+	/*D0-D7*/	"","","","","","","","",
-+	/*E0-E7*/	"","","","","","","","",
-+	/*F0-F7*/	"","","","","","","","",
-+	/*G0-G7*/	"","","","","","","","",
-+	/*H0-H7*/	"","","","","","","","",
-+	/*I0-I7*/	"","","","","","","","",
-+	/*J0-J7*/	"","","","","","","","",
-+	/*K0-K7*/	"","","","","","","","",
-+	/*L0-L7*/	"","","","","","","","bmc-ready",
-+	/*M0-M7*/	"","","","","","","","",
-+	/*N0-N7*/	"","","","","","","","",
-+	/*O0-O7*/	"","","","","","","","",
-+	/*P0-P7*/	"","","","","","","","bmc-hb",
-+	/*Q0-Q7*/	"","","","","","","","",
-+	/*R0-R7*/	"","","","","","","","",
-+	/*S0-S7*/	"","","","","","","rear-enc-fault0","rear-enc-id0",
-+	/*T0-T7*/	"","","","","","","","",
-+	/*U0-U7*/	"","","","","","","","",
-+	/*V0-V7*/	"","rtc-battery-voltage-read-enable","","power-chassis-control","","","","",
-+	/*W0-W7*/	"","","","","","","","",
-+	/*X0-X7*/	"","power-chassis-good","","","","","","",
-+	/*Y0-Y7*/	"","","","","","","","",
-+	/*Z0-Z7*/	"","","","","","","","";
-+};
-+
-+&emmc_controller {
-+	status = "okay";
-+};
-+
-+&pinctrl_emmc_default {
-+	bias-disable;
-+};
-+
-+&emmc {
-+	status = "okay";
-+	clk-phase-mmc-hs200 = <180>, <180>;
-+};
-+
-+&ibt {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&vuart1 {
-+	status = "okay";
-+};
-+
-+&vuart2 {
-+	status = "okay";
-+};
-+
-+&lpc_ctrl {
-+	status = "okay";
-+	memory-region = <&flash_memory>;
-+};
-+
-+&mac2 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii3_default>;
-+	clocks = <&syscon ASPEED_CLK_GATE_MAC3CLK>,
-+		 <&syscon ASPEED_CLK_MAC3RCLK>;
-+	clock-names = "MACCLK", "RCLK";
-+	use-ncsi;
-+};
-+
-+&mac3 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii4_default>;
-+	clocks = <&syscon ASPEED_CLK_GATE_MAC4CLK>,
-+		 <&syscon ASPEED_CLK_MAC4RCLK>;
-+	clock-names = "MACCLK", "RCLK";
-+	use-ncsi;
-+};
-+
-+&wdt1 {
-+	aspeed,reset-type = "none";
-+	aspeed,external-signal;
-+	aspeed,ext-push-pull;
-+	aspeed,ext-active-high;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-+};
-+
-+&wdt2 {
-+	status = "okay";
-+};
-+
-+&kcs2 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xca8 0xcac>;
-+};
-+
-+&kcs3 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xca2>;
-+	aspeed,lpc-interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c64";
-+		reg = <0x50>;
-+	};
-+
-+	regulator@60 {
-+		compatible = "maxim,max8952";
-+		reg = <0x60>;
-+
-+		max8952,default-mode = <0>;
-+		max8952,dvs-mode-microvolt = <1250000>, <1200000>,
-+						<1050000>, <950000>;
-+		max8952,sync-freq = <0>;
-+		max8952,ramp-speed = <0>;
-+
-+		regulator-name = "VR_v77_1v4";
-+		regulator-min-microvolt = <770000>;
-+		regulator-max-microvolt = <1400000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	regulator@42 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x42>;
-+	};
-+
-+	led-controller@60 {
-+		compatible = "nxp,pca9552";
-+		reg = <0x60>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		led@0 {
-+			label = "nic1-perst";
-+			reg = <0>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@1 {
-+			label = "bmc-perst";
-+			reg = <1>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@2 {
-+			label = "reset-M2-SSD1-2-perst";
-+			reg = <2>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@3 {
-+			label = "pcie-perst1";
-+			reg = <3>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@4 {
-+			label = "pcie-perst2";
-+			reg = <4>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@5 {
-+			label = "pcie-perst3";
-+			reg = <5>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@6 {
-+			label = "pcie-perst4";
-+			reg = <6>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@7 {
-+			label = "pcie-perst5";
-+			reg = <7>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@8 {
-+			label = "pcie-perst6";
-+			reg = <8>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@9 {
-+			label = "pcie-perst7";
-+			reg = <9>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@10 {
-+			label = "pcie-perst8";
-+			reg = <10>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@11 {
-+			label = "PV-cp0-sw1stk4-perst";
-+			reg = <11>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@12 {
-+			label = "PV-cp0-sw1stk5-perst";
-+			reg = <12>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@13 {
-+			label = "pe-cp-drv0-perst";
-+			reg = <13>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@14 {
-+			label = "pe-cp-drv1-perst";
-+			reg = <14>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@15 {
-+			label = "lom-perst";
-+			reg = <15>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+	};
-+
-+	gpio@74 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x74>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+			"PLUG_DETECT_PCIE_J101_N",
-+			"PLUG_DETECT_PCIE_J102_N",
-+			"PLUG_DETECT_PCIE_J103_N",
-+			"PLUG_DETECT_PCIE_J104_N",
-+			"PLUG_DETECT_PCIE_J105_N",
-+			"PLUG_DETECT_PCIE_J106_N",
-+			"PLUG_DETECT_PCIE_J107_N",
-+			"PLUG_DETECT_PCIE_J108_N",
-+			"PLUG_DETECT_M2_SSD1_N",
-+			"PLUG_DETECT_NIC1_N",
-+			"SEL_SMB_DIMM_CPU0",
-+			"presence-ps2",
-+			"presence-ps3",
-+			"", "",
-+			"PWRBRD_PLUG_DETECT2_N";
-+	};
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+
-+	power-supply@58 {
-+		compatible = "ibm,cffps";
-+		reg = <0x58>;
-+	};
-+
-+	power-supply@59 {
-+		compatible = "ibm,cffps";
-+		reg = <0x59>;
-+	};
-+
-+	power-supply@5a {
-+		compatible = "ibm,cffps";
-+		reg = <0x5a>;
-+	};
-+
-+	power-supply@5b {
-+		compatible = "ibm,cffps";
-+		reg = <0x5b>;
-+	};
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c3mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c3mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c3mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c3mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+
-+		i2c3mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+		};
-+
-+		i2c3mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		i2c3mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		i2c3mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	regulator@42 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x42>;
-+	};
-+
-+	regulator@43 {
-+		compatible = "infineon,ir38060";
-+		reg = <0x43>;
-+	};
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+
-+	fan-controller@52 {
-+		compatible = "maxim,max31785a";
-+		reg = <0x52>;
-+	};
-+
-+	fan-controller@54 {
-+		compatible = "maxim,max31785a";
-+		reg = <0x54>;
-+	};
-+
-+	eeprom@55 {
-+		compatible = "atmel,24c64";
-+		reg = <0x55>;
-+	};
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c6mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c6mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c6mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c6mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+
-+		i2c6mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+
-+			humidity-sensor@40 {
-+				compatible = "ti,hdc1080";
-+				reg = <0x40>;
-+			};
-+
-+			temperature-sensor@48 {
-+				compatible = "ti,tmp275";
-+				reg = <0x48>;
-+			};
-+
-+			eeprom@50 {
-+				compatible = "atmel,24c32";
-+				reg = <0x50>;
-+			};
-+
-+			led-controller@60 {
-+				compatible = "nxp,pca9551";
-+				reg = <0x60>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+
-+				led@0 {
-+					label = "enclosure-id-led";
-+					reg = <0>;
-+					retain-state-shutdown;
-+					default-state = "keep";
-+					type = <PCA955X_TYPE_LED>;
-+				};
-+
-+				led@1 {
-+					label = "attention-led";
-+					reg = <1>;
-+					retain-state-shutdown;
-+					default-state = "keep";
-+					type = <PCA955X_TYPE_LED>;
-+				};
-+
-+				led@2 {
-+					label = "enclosure-fault-rollup-led";
-+					reg = <2>;
-+					retain-state-shutdown;
-+					default-state = "keep";
-+					type = <PCA955X_TYPE_LED>;
-+				};
-+
-+				led@3 {
-+					label = "power-on-led";
-+					reg = <3>;
-+					retain-state-shutdown;
-+					default-state = "keep";
-+					type = <PCA955X_TYPE_LED>;
-+				};
-+			};
-+
-+			temperature-sensor@76 {
-+				compatible = "infineon,dps310";
-+				reg = <0x76>;
-+			};
-+		};
-+
-+		i2c6mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		i2c6mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		i2c6mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
-+	};
-+
-+	pca3: gpio@74 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x74>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+	};
-+
-+	pca4: gpio@77 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x77>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+			"PE_NVMED0_EXP_PRSNT_N",
-+			"PE_NVMED1_EXP_PRSNT_N",
-+			"PE_NVMED2_EXP_PRSNT_N",
-+			"PE_NVMED3_EXP_PRSNT_N",
-+			"LED_FAULT_NVMED0",
-+			"LED_FAULT_NVMED1",
-+			"LED_FAULT_NVMED2",
-+			"LED_FAULT_NVMED3",
-+			"FAN0_PRESENCE_R_N",
-+			"FAN1_PRESENCE_R_N",
-+			"FAN2_PRESENCE_R_N",
-+			"FAN3_PRESENCE_R_N",
-+			"FAN4_PRESENCE_R_N",
-+			"FAN5_PRESENCE_N",
-+			"FAN6_PRESENCE_N",
-+			"";
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c7mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c7mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c7mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c7mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+
-+			regulator@58 {
-+				compatible = "mps,mp2973";
-+				reg = <0x58>;
-+			};
-+		};
-+
-+		i2c7mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+		};
-+
-+		i2c7mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+
-+			regulator@40 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x40>;
-+			};
-+		};
-+
-+		i2c7mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		i2c7mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
-+	};
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+
-+	i2c-mux@71 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x71>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c8mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+
-+			regulator@58 {
-+				compatible = "mps,mp2971";
-+				reg = <0x58>;
-+			};
-+		};
-+
-+		i2c8mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+
-+			regulator@40 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x40>;
-+			};
-+
-+			regulator@41 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x41>;
-+			};
-+
-+			regulator@58 {
-+				compatible = "mps,mp2971";
-+				reg = <0x58>;
-+			};
-+
-+			regulator@5b {
-+				compatible = "mps,mp2971";
-+				reg = <0x5b>;
-+			};
-+		};
-+
-+		i2c8mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c8mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+
-+		i2c8mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+
-+			i2c-mux@70 {
-+				compatible = "nxp,pca9548";
-+				reg = <0x70>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				i2c-mux-idle-disconnect;
-+
-+				i2c8mux1chn0: i2c@0 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <0>;
-+				};
-+
-+				i2c8mux1chn1: i2c@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <1>;
-+				};
-+
-+				i2c8mux1chn2: i2c@2 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <2>;
-+				};
-+
-+				i2c8mux1chn3: i2c@3 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <3>;
-+				};
-+
-+				i2c8mux1chn4: i2c@4 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <4>;
-+				};
-+
-+				i2c8mux1chn5: i2c@5 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <5>;
-+				};
-+
-+				i2c8mux1chn6: i2c@6 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <6>;
-+				};
-+
-+				i2c8mux1chn7: i2c@7 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <7>;
-+				};
-+			};
-+		};
-+
-+		i2c8mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		i2c8mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+
-+			temperature-sensor@4c {
-+				compatible = "ti,tmp423";
-+				reg = <0x4c>;
-+			};
-+		};
-+
-+		i2c8mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+
-+			regulator@40 {
-+				compatible = "infineon,ir38060";
-+				reg = <0x40>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2c9 {
-+	status = "okay";
-+
-+	regulator@40 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x40>;
-+	};
-+
-+	regulator@41 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x41>;
-+	};
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c64";
-+		reg = <0x50>;
-+	};
-+
-+	regulator@60 {
-+		compatible = "maxim,max8952";
-+		reg = <0x60>;
-+
-+		max8952,default-mode = <0>;
-+		max8952,dvs-mode-microvolt = <1250000>, <1200000>,
-+						<1050000>, <950000>;
-+		max8952,sync-freq = <0>;
-+		max8952,ramp-speed = <0>;
-+
-+		regulator-name = "VR_v77_1v4";
-+		regulator-min-microvolt = <770000>;
-+		regulator-max-microvolt = <1400000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&i2c11 {
-+	status = "okay";
-+
-+	tpm@2e {
-+		compatible = "tcg,tpm-tis-i2c";
-+		reg = <0x2e>;
-+		memory-region = <&eventlog>;
-+	};
-+};
-+
-+&i2c12 {
-+	status = "okay";
-+};
-+
-+&i2c13 {
-+	status = "okay";
-+
-+	regulator@41 {
-+		compatible = "infineon,ir38263";
-+		reg = <0x41>;
-+	};
-+
-+	led-controller@61 {
-+		compatible = "nxp,pca9552";
-+		reg = <0x61>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		led@0 {
-+			label = "efuse-12v-slots";
-+			reg = <0>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@1 {
-+			label = "efuse-3p3v-slot";
-+			reg = <1>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@3 {
-+			label = "nic2-pert";
-+			reg = <3>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@4 {
-+			label = "pcie-perst9";
-+			reg = <4>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@5 {
-+			label = "pcie-perst10";
-+			reg = <5>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@6 {
-+			label = "pcie-perst11";
-+			reg = <6>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@7 {
-+			label = "pcie-perst12";
-+			reg = <7>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@8 {
-+			label = "pcie-perst13";
-+			reg = <8>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@9 {
-+			label = "pcie-perst14";
-+			reg = <9>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@10 {
-+			label = "pcie-perst15";
-+			reg = <10>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@11 {
-+			label = "pcie-perst16";
-+			reg = <11>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@12 {
-+			label = "PV-cp1-sw1stk4-perst";
-+			reg = <12>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@13 {
-+			label = "PV-cp1-sw1stk5-perst";
-+			reg = <13>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@14 {
-+			label = "pe-cp-drv2-perst";
-+			reg = <14>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+
-+		led@15 {
-+			label = "pe-cp-drv3-perst";
-+			reg = <15>;
-+			retain-state-shutdown;
-+			default-state = "keep";
-+			type = <PCA955X_TYPE_LED>;
-+		};
-+	};
-+
-+	gpio@75 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x75>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+			"PLUG_DETECT_PCIE_J109_N",
-+			"PLUG_DETECT_PCIE_J110_N",
-+			"PLUG_DETECT_PCIE_J111_N",
-+			"PLUG_DETECT_PCIE_J112_N",
-+			"PLUG_DETECT_PCIE_J113_N",
-+			"PLUG_DETECT_PCIE_J114_N",
-+			"PLUG_DETECT_PCIE_J115_N",
-+			"PLUG_DETECT_PCIE_J116_N",
-+			"PLUG_DETECT_M2_SSD2_N",
-+			"PLUG_DETECT_NIC2_N",
-+			"SEL_SMB_DIMM_CPU1",
-+			"presence-ps0",
-+			"presence-ps1",
-+			"", "",
-+			"PWRBRD_PLUG_DETECT1_N";
-+	};
-+
-+	gpio@76 {
-+		compatible = "nxp,pca9539";
-+		reg = <0x76>;
-+
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+			"SW1_BOOTRCVRYB1_N",
-+			"SW1_BOOTRCVRYB0_N",
-+			"SW2_BOOTRCVRYB1_N",
-+			"SW2_BOOTRCVRYB0_N",
-+			"SW3_4_BOOTRCVRYB1_N",
-+			"SW3_4_BOOTRCVRYB0_N",
-+			"SW5_BOOTRCVRYB1_N",
-+			"SW5_BOOTRCVRYB0_N",
-+			"SW6_BOOTRCVRYB1_N",
-+			"SW6_BOOTRCVRYB0_N",
-+			"SW1_RESET_N",
-+			"SW3_RESET_N",
-+			"SW4_RESET_N",
-+			"SW2_RESET_N",
-+			"SW5_RESET_N",
-+			"SW6_RESET_N";
-+	};
-+};
-+
-+&i2c14 {
-+	status = "okay";
-+
-+	i2c-mux@70 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x70>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c14mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+		};
-+
-+		i2c14mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+		};
-+
-+		i2c14mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c14mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+
-+			regulator@58 {
-+				compatible = "mps,mp2973";
-+				reg = <0x58>;
-+			};
-+		};
-+
-+		i2c14mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+		};
-+
-+		i2c14mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+
-+			regulator@40 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x40>;
-+			};
-+		};
-+
-+		i2c14mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		i2c14mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
-+	};
-+};
-+
-+&i2c15 {
-+	status = "okay";
-+
-+	i2c-mux@71 {
-+		compatible = "nxp,pca9548";
-+		reg = <0x71>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-mux-idle-disconnect;
-+
-+		i2c15mux0chn0: i2c@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+
-+			regulator@58 {
-+				compatible = "mps,mp2971";
-+				reg = <0x58>;
-+			};
-+		};
-+
-+		i2c15mux0chn1: i2c@1 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <1>;
-+
-+			regulator@40 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x40>;
-+			};
-+
-+			regulator@41 {
-+				compatible = "infineon,tda38640";
-+				reg = <0x41>;
-+			};
-+
-+			regulator@58 {
-+				compatible = "mps,mp2971";
-+				reg = <0x58>;
-+			};
-+
-+			regulator@5b {
-+				compatible = "mps,mp2971";
-+				reg = <0x5b>;
-+			};
-+		};
-+
-+		i2c15mux0chn2: i2c@2 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <2>;
-+		};
-+
-+		i2c15mux0chn3: i2c@3 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <3>;
-+		};
-+
-+		i2c15mux0chn4: i2c@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+
-+			i2c-mux@70 {
-+				compatible = "nxp,pca9548";
-+				reg = <0x70>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				i2c-mux-idle-disconnect;
-+
-+				i2c15mux1chn0: i2c@0 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <0>;
-+				};
-+
-+				i2c15mux1chn1: i2c@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <1>;
-+				};
-+
-+				i2c15mux1chn2: i2c@2 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <2>;
-+				};
-+
-+				i2c15mux1chn3: i2c@3 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <3>;
-+				};
-+
-+				i2c15mux1chn4: i2c@4 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <4>;
-+				};
-+
-+				i2c15mux1chn5: i2c@5 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <5>;
-+				};
-+
-+				i2c15mux1chn6: i2c@6 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <6>;
-+				};
-+
-+				i2c15mux1chn7: i2c@7 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					reg = <7>;
-+				};
-+			};
-+		};
-+
-+		i2c15mux0chn5: i2c@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		i2c15mux0chn6: i2c@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+
-+			temperature-sensor@4c {
-+				compatible = "ti,tmp423";
-+				reg = <0x4c>;
-+			};
-+		};
-+
-+		i2c15mux0chn7: i2c@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+
-+			regulator@40 {
-+				compatible = "infineon,ir38060";
-+				reg = <0x40>;
-+			};
-+
-+			temperature-sensor@4c {
-+				compatible = "ti,tmp423";
-+				reg = <0x4c>;
-+			};
-+		};
-+	};
-+};
--- 
-2.39.2
-
+> ---
+>  fs/file_table.c                               |   2 -
+>  fs/namei.c                                    |   6 -
+>  fs/nfsd/vfs.c                                 |   7 --
+>  fs/open.c                                     |   1 -
+>  include/linux/ima.h                           | 104 ------------------
+>  include/uapi/linux/lsm.h                      |   1 +
+>  security/integrity/Makefile                   |   1 +
+>  security/integrity/ima/Kconfig                |   1 +
+>  security/integrity/ima/ima.h                  |   6 +
+>  security/integrity/ima/ima_main.c             |  78 +++++++++----
+>  security/integrity/integrity.h                |   1 +
+>  security/keys/key.c                           |   9 +-
+>  security/security.c                           |  63 ++---------
+>  .../selftests/lsm/lsm_list_modules_test.c     |   3 +
+>  14 files changed, 83 insertions(+), 200 deletions(-)
+>
+> diff --git a/fs/file_table.c b/fs/file_table.c
+> index c72dc75f2bd3..0401ac98281c 100644
+> --- a/fs/file_table.c
+> +++ b/fs/file_table.c
+> @@ -26,7 +26,6 @@
+>  #include <linux/percpu_counter.h>
+>  #include <linux/percpu.h>
+>  #include <linux/task_work.h>
+> -#include <linux/ima.h>
+>  #include <linux/swap.h>
+>  #include <linux/kmemleak.h>
+>  
+> @@ -386,7 +385,6 @@ static void __fput(struct file *file)
+>  	locks_remove_file(file);
+>  
+>  	security_file_release(file);
+> -	ima_file_free(file);
+>  	if (unlikely(file->f_flags & FASYNC)) {
+>  		if (file->f_op->fasync)
+>  			file->f_op->fasync(-1, file, 0);
+> diff --git a/fs/namei.c b/fs/namei.c
+> index adb3ab27951a..37cc0988308f 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -27,7 +27,6 @@
+>  #include <linux/fsnotify.h>
+>  #include <linux/personality.h>
+>  #include <linux/security.h>
+> -#include <linux/ima.h>
+>  #include <linux/syscalls.h>
+>  #include <linux/mount.h>
+>  #include <linux/audit.h>
+> @@ -3622,8 +3621,6 @@ static int do_open(struct nameidata *nd,
+>  		error = vfs_open(&nd->path, file);
+>  	if (!error)
+>  		error = security_file_post_open(file, op->acc_mode);
+> -	if (!error)
+> -		error = ima_file_check(file, op->acc_mode);
+>  	if (!error && do_truncate)
+>  		error = handle_truncate(idmap, file);
+>  	if (unlikely(error > 0)) {
+> @@ -3687,7 +3684,6 @@ static int vfs_tmpfile(struct mnt_idmap *idmap,
+>  		spin_unlock(&inode->i_lock);
+>  	}
+>  	security_inode_post_create_tmpfile(idmap, inode);
+> -	ima_post_create_tmpfile(idmap, inode);
+>  	return 0;
+>  }
+>  
+> @@ -4036,8 +4032,6 @@ static int do_mknodat(int dfd, struct filename *name, umode_t mode,
+>  		case 0: case S_IFREG:
+>  			error = vfs_create(idmap, path.dentry->d_inode,
+>  					   dentry, mode, true);
+> -			if (!error)
+> -				ima_post_path_mknod(idmap, dentry);
+>  			break;
+>  		case S_IFCHR: case S_IFBLK:
+>  			error = vfs_mknod(idmap, path.dentry->d_inode,
+> diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+> index b0c3f07a8bba..e491392a1243 100644
+> --- a/fs/nfsd/vfs.c
+> +++ b/fs/nfsd/vfs.c
+> @@ -25,7 +25,6 @@
+>  #include <linux/posix_acl_xattr.h>
+>  #include <linux/xattr.h>
+>  #include <linux/jhash.h>
+> -#include <linux/ima.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/slab.h>
+>  #include <linux/uaccess.h>
+> @@ -883,12 +882,6 @@ __nfsd_open(struct svc_rqst *rqstp, struct svc_fh *fhp, umode_t type,
+>  		goto out;
+>  	}
+>  
+> -	host_err = ima_file_check(file, may_flags);
+> -	if (host_err) {
+> -		fput(file);
+> -		goto out;
+> -	}
+> -
+>  	if (may_flags & NFSD_MAY_64BIT_COOKIE)
+>  		file->f_mode |= FMODE_64BITHASH;
+>  	else
+> diff --git a/fs/open.c b/fs/open.c
+> index 02dc608d40d8..c8bb9bd5259f 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -29,7 +29,6 @@
+>  #include <linux/audit.h>
+>  #include <linux/falloc.h>
+>  #include <linux/fs_struct.h>
+> -#include <linux/ima.h>
+>  #include <linux/dnotify.h>
+>  #include <linux/compat.h>
+>  #include <linux/mnt_idmapping.h>
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 0f9af283cbc8..23ae24b60ecf 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -16,24 +16,6 @@ struct linux_binprm;
+>  
+>  #ifdef CONFIG_IMA
+>  extern enum hash_algo ima_get_current_hash_algo(void);
+> -extern int ima_bprm_check(struct linux_binprm *bprm);
+> -extern int ima_file_check(struct file *file, int mask);
+> -extern void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+> -				    struct inode *inode);
+> -extern void ima_file_free(struct file *file);
+> -extern int ima_file_mmap(struct file *file, unsigned long reqprot,
+> -			 unsigned long prot, unsigned long flags);
+> -extern int ima_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+> -			     unsigned long prot);
+> -extern int ima_load_data(enum kernel_load_data_id id, bool contents);
+> -extern int ima_post_load_data(char *buf, loff_t size,
+> -			      enum kernel_load_data_id id, char *description);
+> -extern int ima_read_file(struct file *file, enum kernel_read_file_id id,
+> -			 bool contents);
+> -extern int ima_post_read_file(struct file *file, char *buf, loff_t size,
+> -			      enum kernel_read_file_id id);
+> -extern void ima_post_path_mknod(struct mnt_idmap *idmap,
+> -				struct dentry *dentry);
+>  extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
+>  extern int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size);
+>  extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
+> @@ -58,68 +40,6 @@ static inline enum hash_algo ima_get_current_hash_algo(void)
+>  	return HASH_ALGO__LAST;
+>  }
+>  
+> -static inline int ima_bprm_check(struct linux_binprm *bprm)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline int ima_file_check(struct file *file, int mask)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+> -					   struct inode *inode)
+> -{
+> -}
+> -
+> -static inline void ima_file_free(struct file *file)
+> -{
+> -	return;
+> -}
+> -
+> -static inline int ima_file_mmap(struct file *file, unsigned long reqprot,
+> -				unsigned long prot, unsigned long flags)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline int ima_file_mprotect(struct vm_area_struct *vma,
+> -				    unsigned long reqprot, unsigned long prot)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline int ima_load_data(enum kernel_load_data_id id, bool contents)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline int ima_post_load_data(char *buf, loff_t size,
+> -				     enum kernel_load_data_id id,
+> -				     char *description)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline int ima_read_file(struct file *file, enum kernel_read_file_id id,
+> -				bool contents)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline int ima_post_read_file(struct file *file, char *buf, loff_t size,
+> -				     enum kernel_read_file_id id)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline void ima_post_path_mknod(struct mnt_idmap *idmap,
+> -				       struct dentry *dentry)
+> -{
+> -	return;
+> -}
+> -
+>  static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+>  {
+>  	return -EOPNOTSUPP;
+> @@ -170,20 +90,6 @@ static inline void ima_add_kexec_buffer(struct kimage *image)
+>  {}
+>  #endif
+>  
+> -#ifdef CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
+> -extern void ima_post_key_create_or_update(struct key *keyring,
+> -					  struct key *key,
+> -					  const void *payload, size_t plen,
+> -					  unsigned long flags, bool create);
+> -#else
+> -static inline void ima_post_key_create_or_update(struct key *keyring,
+> -						 struct key *key,
+> -						 const void *payload,
+> -						 size_t plen,
+> -						 unsigned long flags,
+> -						 bool create) {}
+> -#endif  /* CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS */
+> -
+>  #ifdef CONFIG_IMA_APPRAISE
+>  extern bool is_ima_appraise_enabled(void);
+>  extern void ima_inode_post_setattr(struct mnt_idmap *idmap,
+> @@ -256,14 +162,4 @@ static inline bool ima_appraise_signature(enum kernel_read_file_id func)
+>  	return false;
+>  }
+>  #endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
+> -
+> -#if defined(CONFIG_IMA) && defined(CONFIG_INTEGRITY_ASYMMETRIC_KEYS)
+> -extern int ima_kernel_module_request(char *kmod_name);
+> -#else
+> -static inline int ima_kernel_module_request(char *kmod_name)
+> -{
+> -	return 0;
+> -}
+> -
+> -#endif
+>  #endif /* _LINUX_IMA_H */
+> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
+> index f8aef9ade549..b3b7fd699b63 100644
+> --- a/include/uapi/linux/lsm.h
+> +++ b/include/uapi/linux/lsm.h
+> @@ -62,6 +62,7 @@ struct lsm_ctx {
+>  #define LSM_ID_LOCKDOWN		108
+>  #define LSM_ID_BPF		109
+>  #define LSM_ID_LANDLOCK		110
+> +#define LSM_ID_IMA		111
+>  
+>  /*
+>   * LSM_ATTR_XXX definitions identify different LSM attributes
+> diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+> index d0ffe37dc1d6..92b63039c654 100644
+> --- a/security/integrity/Makefile
+> +++ b/security/integrity/Makefile
+> @@ -18,5 +18,6 @@ integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
+>  integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
+>                                       platform_certs/load_powerpc.o \
+>                                       platform_certs/keyring_handler.o
+> +# The relative order of the 'ima' and 'evm' LSMs depends on the order below.
+>  obj-$(CONFIG_IMA)			+= ima/
+>  obj-$(CONFIG_EVM)			+= evm/
+> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+> index b98bfe9efd0c..475c32615006 100644
+> --- a/security/integrity/ima/Kconfig
+> +++ b/security/integrity/ima/Kconfig
+> @@ -8,6 +8,7 @@ config IMA
+>  	select CRYPTO_HMAC
+>  	select CRYPTO_SHA1
+>  	select CRYPTO_HASH_INFO
+> +	select SECURITY_PATH
+>  	select TCG_TPM if HAS_IOMEM
+>  	select TCG_TIS if TCG_TPM && X86
+>  	select TCG_CRB if TCG_TPM && ACPI
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index c29db699c996..c0412100023e 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -127,6 +127,12 @@ void ima_load_kexec_buffer(void);
+>  static inline void ima_load_kexec_buffer(void) {}
+>  #endif /* CONFIG_HAVE_IMA_KEXEC */
+>  
+> +#ifdef CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
+> +void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+> +				   const void *payload, size_t plen,
+> +				   unsigned long flags, bool create);
+> +#endif
+> +
+>  /*
+>   * The default binary_runtime_measurements list format is defined as the
+>   * platform native format.  The canonical format is defined as little-endian.
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 908fa026ec58..483ccd24e214 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -189,7 +189,7 @@ static void ima_check_last_writer(struct integrity_iint_cache *iint,
+>   *
+>   * Flag files that changed, based on i_version
+>   */
+> -void ima_file_free(struct file *file)
+> +static void ima_file_free(struct file *file)
+>  {
+>  	struct inode *inode = file_inode(file);
+>  	struct integrity_iint_cache *iint;
+> @@ -427,8 +427,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
+>   * On success return 0.  On integrity appraisal error, assuming the file
+>   * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+>   */
+> -int ima_file_mmap(struct file *file, unsigned long reqprot,
+> -		  unsigned long prot, unsigned long flags)
+> +static int ima_file_mmap(struct file *file, unsigned long reqprot,
+> +			 unsigned long prot, unsigned long flags)
+>  {
+>  	u32 secid;
+>  	int ret;
+> @@ -466,8 +466,8 @@ int ima_file_mmap(struct file *file, unsigned long reqprot,
+>   *
+>   * On mprotect change success, return 0.  On failure, return -EACESS.
+>   */
+> -int ima_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+> -		      unsigned long prot)
+> +static int ima_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+> +			     unsigned long prot)
+>  {
+>  	struct ima_template_desc *template = NULL;
+>  	struct file *file;
+> @@ -525,7 +525,7 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+>   * On success return 0.  On integrity appraisal error, assuming the file
+>   * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+>   */
+> -int ima_bprm_check(struct linux_binprm *bprm)
+> +static int ima_bprm_check(struct linux_binprm *bprm)
+>  {
+>  	int ret;
+>  	u32 secid;
+> @@ -551,7 +551,7 @@ int ima_bprm_check(struct linux_binprm *bprm)
+>   * On success return 0.  On integrity appraisal error, assuming the file
+>   * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+>   */
+> -int ima_file_check(struct file *file, int mask)
+> +static int ima_file_check(struct file *file, int mask)
+>  {
+>  	u32 secid;
+>  
+> @@ -560,7 +560,6 @@ int ima_file_check(struct file *file, int mask)
+>  				   mask & (MAY_READ | MAY_WRITE | MAY_EXEC |
+>  					   MAY_APPEND), FILE_CHECK);
+>  }
+> -EXPORT_SYMBOL_GPL(ima_file_check);
+>  
+>  static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
+>  			    size_t buf_size)
+> @@ -685,8 +684,9 @@ EXPORT_SYMBOL_GPL(ima_inode_hash);
+>   * Skip calling process_measurement(), but indicate which newly, created
+>   * tmpfiles are in policy.
+>   */
+> -void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+> -			     struct inode *inode)
+> +static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+> +				    struct inode *inode)
+> +
+>  {
+>  	struct integrity_iint_cache *iint;
+>  	int must_appraise;
+> @@ -717,8 +717,7 @@ void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+>   * Mark files created via the mknodat syscall as new, so that the
+>   * file data can be written later.
+>   */
+> -void ima_post_path_mknod(struct mnt_idmap *idmap,
+> -			 struct dentry *dentry)
+> +static void ima_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+>  {
+>  	struct integrity_iint_cache *iint;
+>  	struct inode *inode = dentry->d_inode;
+> @@ -753,8 +752,8 @@ void ima_post_path_mknod(struct mnt_idmap *idmap,
+>   *
+>   * For permission return 0, otherwise return -EACCES.
+>   */
+> -int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
+> -		  bool contents)
+> +static int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
+> +			 bool contents)
+>  {
+>  	enum ima_hooks func;
+>  	u32 secid;
+> @@ -803,8 +802,8 @@ const int read_idmap[READING_MAX_ID] = {
+>   * On success return 0.  On integrity appraisal error, assuming the file
+>   * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+>   */
+> -int ima_post_read_file(struct file *file, char *buf, loff_t size,
+> -		       enum kernel_read_file_id read_id)
+> +static int ima_post_read_file(struct file *file, char *buf, loff_t size,
+> +			      enum kernel_read_file_id read_id)
+>  {
+>  	enum ima_hooks func;
+>  	u32 secid;
+> @@ -837,7 +836,7 @@ int ima_post_read_file(struct file *file, char *buf, loff_t size,
+>   *
+>   * For permission return 0, otherwise return -EACCES.
+>   */
+> -int ima_load_data(enum kernel_load_data_id id, bool contents)
+> +static int ima_load_data(enum kernel_load_data_id id, bool contents)
+>  {
+>  	bool ima_enforce, sig_enforce;
+>  
+> @@ -891,9 +890,9 @@ int ima_load_data(enum kernel_load_data_id id, bool contents)
+>   * On success return 0.  On integrity appraisal error, assuming the file
+>   * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
+>   */
+> -int ima_post_load_data(char *buf, loff_t size,
+> -		       enum kernel_load_data_id load_id,
+> -		       char *description)
+> +static int ima_post_load_data(char *buf, loff_t size,
+> +			      enum kernel_load_data_id load_id,
+> +			      char *description)
+>  {
+>  	if (load_id == LOADING_FIRMWARE) {
+>  		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
+> @@ -1110,7 +1109,7 @@ EXPORT_SYMBOL_GPL(ima_measure_critical_data);
+>   *
+>   * Return: Zero if it is safe to load the kernel module, -EINVAL otherwise.
+>   */
+> -int ima_kernel_module_request(char *kmod_name)
+> +static int ima_kernel_module_request(char *kmod_name)
+>  {
+>  	if (strncmp(kmod_name, "crypto-pkcs1pad(rsa,", 20) == 0)
+>  		return -EINVAL;
+> @@ -1151,4 +1150,41 @@ static int __init init_ima(void)
+>  	return error;
+>  }
+>  
+> +static struct security_hook_list ima_hooks[] __ro_after_init = {
+> +	LSM_HOOK_INIT(bprm_check_security, ima_bprm_check),
+> +	LSM_HOOK_INIT(file_post_open, ima_file_check),
+> +	LSM_HOOK_INIT(inode_post_create_tmpfile, ima_post_create_tmpfile),
+> +	LSM_HOOK_INIT(file_release, ima_file_free),
+> +	LSM_HOOK_INIT(mmap_file, ima_file_mmap),
+> +	LSM_HOOK_INIT(file_mprotect, ima_file_mprotect),
+> +	LSM_HOOK_INIT(kernel_load_data, ima_load_data),
+> +	LSM_HOOK_INIT(kernel_post_load_data, ima_post_load_data),
+> +	LSM_HOOK_INIT(kernel_read_file, ima_read_file),
+> +	LSM_HOOK_INIT(kernel_post_read_file, ima_post_read_file),
+> +	LSM_HOOK_INIT(path_post_mknod, ima_post_path_mknod),
+> +#ifdef CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
+> +	LSM_HOOK_INIT(key_post_create_or_update, ima_post_key_create_or_update),
+> +#endif
+> +#ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
+> +	LSM_HOOK_INIT(kernel_module_request, ima_kernel_module_request),
+> +#endif
+> +};
+> +
+> +static const struct lsm_id ima_lsmid = {
+> +	.name = "ima",
+> +	.id = LSM_ID_IMA,
+> +};
+> +
+> +static int __init init_ima_lsm(void)
+> +{
+> +	security_add_hooks(ima_hooks, ARRAY_SIZE(ima_hooks), &ima_lsmid);
+> +	return 0;
+> +}
+> +
+> +DEFINE_LSM(ima) = {
+> +	.name = "ima",
+> +	.init = init_ima_lsm,
+> +	.order = LSM_ORDER_LAST,
+> +};
+> +
+>  late_initcall(init_ima);	/* Start IMA after the TPM is available */
+> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+> index 9561db7cf6b4..59eaddd84434 100644
+> --- a/security/integrity/integrity.h
+> +++ b/security/integrity/integrity.h
+> @@ -18,6 +18,7 @@
+>  #include <crypto/hash.h>
+>  #include <linux/key.h>
+>  #include <linux/audit.h>
+> +#include <linux/lsm_hooks.h>
+>  
+>  /* iint action cache flags */
+>  #define IMA_MEASURE		0x00000001
+> diff --git a/security/keys/key.c b/security/keys/key.c
+> index f75fe66c2f03..80fc2f203a0c 100644
+> --- a/security/keys/key.c
+> +++ b/security/keys/key.c
+> @@ -13,7 +13,6 @@
+>  #include <linux/security.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/random.h>
+> -#include <linux/ima.h>
+>  #include <linux/err.h>
+>  #include "internal.h"
+>  
+> @@ -937,8 +936,6 @@ static key_ref_t __key_create_or_update(key_ref_t keyring_ref,
+>  
+>  	security_key_post_create_or_update(keyring, key, payload, plen, flags,
+>  					   true);
+> -	ima_post_key_create_or_update(keyring, key, payload, plen,
+> -				      flags, true);
+>  
+>  	key_ref = make_key_ref(key, is_key_possessed(keyring_ref));
+>  
+> @@ -970,13 +967,9 @@ static key_ref_t __key_create_or_update(key_ref_t keyring_ref,
+>  
+>  	key_ref = __key_update(key_ref, &prep);
+>  
+> -	if (!IS_ERR(key_ref)) {
+> +	if (!IS_ERR(key_ref))
+>  		security_key_post_create_or_update(keyring, key, payload, plen,
+>  						   flags, false);
+> -		ima_post_key_create_or_update(keyring, key,
+> -					      payload, plen,
+> -					      flags, false);
+> -	}
+>  
+>  	goto error_free_prep;
+>  }
+> diff --git a/security/security.c b/security/security.c
+> index 6c6571a141a1..aa17b47d44c1 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -50,7 +50,8 @@
+>  	(IS_ENABLED(CONFIG_SECURITY_SAFESETID) ? 1 : 0) + \
+>  	(IS_ENABLED(CONFIG_SECURITY_LOCKDOWN_LSM) ? 1 : 0) + \
+>  	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
+> -	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0))
+> +	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0) + \
+> +	(IS_ENABLED(CONFIG_IMA) ? 1 : 0))
+>  
+>  /*
+>   * These are descriptions of the reasons that can be passed to the
+> @@ -1182,12 +1183,7 @@ int security_bprm_creds_from_file(struct linux_binprm *bprm, const struct file *
+>   */
+>  int security_bprm_check(struct linux_binprm *bprm)
+>  {
+> -	int ret;
+> -
+> -	ret = call_int_hook(bprm_check_security, 0, bprm);
+> -	if (ret)
+> -		return ret;
+> -	return ima_bprm_check(bprm);
+> +	return call_int_hook(bprm_check_security, 0, bprm);
+>  }
+>  
+>  /**
+> @@ -2901,13 +2897,8 @@ static inline unsigned long mmap_prot(struct file *file, unsigned long prot)
+>  int security_mmap_file(struct file *file, unsigned long prot,
+>  		       unsigned long flags)
+>  {
+> -	unsigned long prot_adj = mmap_prot(file, prot);
+> -	int ret;
+> -
+> -	ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
+> -	if (ret)
+> -		return ret;
+> -	return ima_file_mmap(file, prot, prot_adj, flags);
+> +	return call_int_hook(mmap_file, 0, file, prot, mmap_prot(file, prot),
+> +			     flags);
+>  }
+>  
+>  /**
+> @@ -2936,12 +2927,7 @@ int security_mmap_addr(unsigned long addr)
+>  int security_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
+>  			   unsigned long prot)
+>  {
+> -	int ret;
+> -
+> -	ret = call_int_hook(file_mprotect, 0, vma, reqprot, prot);
+> -	if (ret)
+> -		return ret;
+> -	return ima_file_mprotect(vma, reqprot, prot);
+> +	return call_int_hook(file_mprotect, 0, vma, reqprot, prot);
+>  }
+>  
+>  /**
+> @@ -3250,12 +3236,7 @@ int security_kernel_create_files_as(struct cred *new, struct inode *inode)
+>   */
+>  int security_kernel_module_request(char *kmod_name)
+>  {
+> -	int ret;
+> -
+> -	ret = call_int_hook(kernel_module_request, 0, kmod_name);
+> -	if (ret)
+> -		return ret;
+> -	return ima_kernel_module_request(kmod_name);
+> +	return call_int_hook(kernel_module_request, 0, kmod_name);
+>  }
+>  
+>  /**
+> @@ -3271,12 +3252,7 @@ int security_kernel_module_request(char *kmod_name)
+>  int security_kernel_read_file(struct file *file, enum kernel_read_file_id id,
+>  			      bool contents)
+>  {
+> -	int ret;
+> -
+> -	ret = call_int_hook(kernel_read_file, 0, file, id, contents);
+> -	if (ret)
+> -		return ret;
+> -	return ima_read_file(file, id, contents);
+> +	return call_int_hook(kernel_read_file, 0, file, id, contents);
+>  }
+>  EXPORT_SYMBOL_GPL(security_kernel_read_file);
+>  
+> @@ -3296,12 +3272,7 @@ EXPORT_SYMBOL_GPL(security_kernel_read_file);
+>  int security_kernel_post_read_file(struct file *file, char *buf, loff_t size,
+>  				   enum kernel_read_file_id id)
+>  {
+> -	int ret;
+> -
+> -	ret = call_int_hook(kernel_post_read_file, 0, file, buf, size, id);
+> -	if (ret)
+> -		return ret;
+> -	return ima_post_read_file(file, buf, size, id);
+> +	return call_int_hook(kernel_post_read_file, 0, file, buf, size, id);
+>  }
+>  EXPORT_SYMBOL_GPL(security_kernel_post_read_file);
+>  
+> @@ -3316,12 +3287,7 @@ EXPORT_SYMBOL_GPL(security_kernel_post_read_file);
+>   */
+>  int security_kernel_load_data(enum kernel_load_data_id id, bool contents)
+>  {
+> -	int ret;
+> -
+> -	ret = call_int_hook(kernel_load_data, 0, id, contents);
+> -	if (ret)
+> -		return ret;
+> -	return ima_load_data(id, contents);
+> +	return call_int_hook(kernel_load_data, 0, id, contents);
+>  }
+>  EXPORT_SYMBOL_GPL(security_kernel_load_data);
+>  
+> @@ -3343,13 +3309,8 @@ int security_kernel_post_load_data(char *buf, loff_t size,
+>  				   enum kernel_load_data_id id,
+>  				   char *description)
+>  {
+> -	int ret;
+> -
+> -	ret = call_int_hook(kernel_post_load_data, 0, buf, size, id,
+> -			    description);
+> -	if (ret)
+> -		return ret;
+> -	return ima_post_load_data(buf, size, id, description);
+> +	return call_int_hook(kernel_post_load_data, 0, buf, size, id,
+> +			     description);
+>  }
+>  EXPORT_SYMBOL_GPL(security_kernel_post_load_data);
+>  
+> diff --git a/tools/testing/selftests/lsm/lsm_list_modules_test.c b/tools/testing/selftests/lsm/lsm_list_modules_test.c
+> index 9df29b1e3497..17333787cb2f 100644
+> --- a/tools/testing/selftests/lsm/lsm_list_modules_test.c
+> +++ b/tools/testing/selftests/lsm/lsm_list_modules_test.c
+> @@ -122,6 +122,9 @@ TEST(correct_lsm_list_modules)
+>  		case LSM_ID_LANDLOCK:
+>  			name = "landlock";
+>  			break;
+> +		case LSM_ID_IMA:
+> +			name = "ima";
+> +			break;
+>  		default:
+>  			name = "INVALID";
+>  			break;
 
