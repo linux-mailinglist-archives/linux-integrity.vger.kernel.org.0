@@ -1,157 +1,124 @@
-Return-Path: <linux-integrity+bounces-816-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-817-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C58B382F154
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 16:21:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 845BC82F29C
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 17:51:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C1D31F21995
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 15:21:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FF99285300
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 16:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57FC31C287;
-	Tue, 16 Jan 2024 15:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66E31CA80;
+	Tue, 16 Jan 2024 16:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="A7u7ADJq"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic302-27.consmr.mail.ne1.yahoo.com (sonic302-27.consmr.mail.ne1.yahoo.com [66.163.186.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D251BF58
-	for <linux-integrity@vger.kernel.org>; Tue, 16 Jan 2024 15:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPlD8-0000tu-OV; Tue, 16 Jan 2024 16:18:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPlD0-000Gxt-VX; Tue, 16 Jan 2024 16:18:34 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rPlD0-0011AW-2X;
-	Tue, 16 Jan 2024 16:18:34 +0100
-Date: Tue, 16 Jan 2024 16:18:34 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Linus Walleij <linus.walleij@linaro.org>, 
-	dri-devel@lists.freedesktop.org, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Ronald Wahl <ronald.wahl@raritan.com>, Stefan Schmidt <stefan@datenfreihafen.org>, 
-	libertas-dev@lists.infradead.org, Javier Martinez Canillas <javierm@redhat.com>, 
-	Alex Elder <elder@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org, 
-	kernel@pengutronix.de, linux-media@vger.kernel.org, linux-wpan@vger.kernel.org, 
-	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>, linux-doc@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>, 
-	Max Filippov <jcmvbkbc@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	James Clark <james.clark@arm.com>, Guenter Roeck <groeck@chromium.org>, 
-	Dario Binacchi <dario.binacchi@amarulasolutions.com>, chrome-platform@lists.linux.dev, 
-	Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, 
-	Viresh Kumar <vireshk@kernel.org>, Helge Deller <deller@gmx.de>, Wu Hao <hao.wu@intel.com>, 
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	linux-arm-msm@vger.kernel.org, greybus-dev@lists.linaro.org, 
-	Bjorn Helgaas <bhelgaas@google.com>, Michal Simek <michal.simek@amd.com>, 
-	linux-arm-kernel@lists.infradead.org, Aaro Koskinen <aaro.koskinen@iki.fi>, 
-	"David S. Miller" <davem@davemloft.net>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	linux-integrity@vger.kernel.org, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Herve Codina <herve.codina@bootlin.com>, linux-iio@vger.kernel.org, Tom Rix <trix@redhat.com>, 
-	linux-fpga@vger.kernel.org, linux-fbdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	Sam Ravnborg <sam@ravnborg.org>, Rob Herring <robh@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	linux-staging@lists.linux.dev, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	linux-input@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Yang Yingliang <yangyingliang@huawei.com>, Moritz Fischer <mdf@kernel.org>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Benson Leung <bleung@chromium.org>, 
-	Rayyan Ansari <rayyan@ansari.sh>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	linux-mmc@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Martin Tuma <martin.tuma@digiteqautomotive.com>, Xu Yilun <yilun.xu@intel.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Peter Huewe <peterhuewe@gmx.de>, Sergey Kozlov <serjk@netup.ru>, 
-	Richard Weinberger <richard@nod.at>, Jason Gunthorpe <jgg@ziepe.ca>, Jakub Kicinski <kuba@kernel.org>, 
-	Kalle Valo <kvalo@kernel.org>, Johan Hovold <johan@kernel.org>, 
-	Rui Miguel Silva <rmfrfs@gmail.com>, linux-mediatek@lists.infradead.org, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 00/33] spi: get rid of some legacy macros
-Message-ID: <l4azekfj7hduzi4wcyphispst46fi3m5ams65nzer2ai6upoxw@3p2uki626ytt>
-References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
- <3404c9af-6c11-45d7-9ba4-a120e21e407e@sirena.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F4C1CA87
+	for <linux-integrity@vger.kernel.org>; Tue, 16 Jan 2024 16:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1705423879; bh=3SJp5s3Z+exCH+4UfHcT4UCsjWtziANQFAalTNp3V4c=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=A7u7ADJqhucDT/inj+zEnSMaejTIONrsEM1yaVmWrmsNg+aNwf2yDcsjf0DHwehiGogDbZlGAA1PU97UbzGCBUOmEDpzwgLtf5a4QhXNiUvCvbanOiJ1ol3UXeP0ITEmwrQPyUr58NPzGMBh+ySGQWZIGaqM/lJm8g50+tEuznMw3u58zCylW9KD7uHlXfCt98KpVJR4H3DXY7mYfUFE2dBJasazPAsGPfVhh8pNVfSw8RaWpNvu9SxPGg4X9uHMDlZO2DQJsk0RintUKlP7vFyv7IYJXaoq8ZlP7X3dDzFukyGLkbMBY71ByEc8vizGgpVmAUVUD0YKQ4hMNIgSQA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1705423879; bh=6g1/Z5dhwtw34v2/raI1RfnLcnZRJC7llHW1yzDrq7O=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=HHPu3liBO2n+pM1rPTxEPcgtbTjb14gZHzeduQaiNR7QcXvwLrW+t19dNENBguBJWqkIMOEDCoE9WqWAMVYDjb1dEdqVYWZTgB6LHvkbPVwrMxmKuILTs9DNUuu2xEWZxtN/gFLh/PSJU1Iw1RMmfGK08EflKNKlFlpewDbFgZ17NRY1vaPebOtf11My02lwuMj+e+XKX56Pihp9FQuwaR9UfNUCBwpOWW4/4uSlYnEzEWwrDU/CB0VZp1VPhD2jzfR6stYT1bix9ZBwFO8CUBin9Jahhp+0jgZoyxe3rX6hL9OVFM4w+rr3Xye+D63bIGmPVfd6afBBGg+xop8G9g==
+X-YMail-OSG: A5CgyOEVM1k7T20.uer7oRuubZ6Y.egXrwI9sExA1NznFEIXkWCZcUCJBQRI5z0
+ dUVoM9vL8JUmxqY.WM2kmbbrxV.NfunHNLhqt27_Td7Qp8mDDtF8yKJtMEwlwRlQqFtI0uc6UNuy
+ v_t3cIW12YNMGiUmM6FM4nPaT9nu2e6onqnHWVYEP7jb61S0dwwoMh__F8x2QCcICqwKrK6hMHU_
+ pqxG7IcbsGCV0pbHfJO00Y8.sGYefulMmQgbRxUbeZvdZ6BpGK6hqnLVM1wdlTUaMdsYfOGgdIIK
+ IUearccrrWHBGkDy3PmPk8lzrQhbRNQ1LiuIKGfgD6B1ywCC2nTjtE6HrQjoIfTB8acmrUDOowAo
+ BmigJ1K9guUkP55v9SyMzPXid.6ClEW.cVDO8SBwoc1fLktaQhOEt95B.o00s35aPT6juJVzHPbw
+ lY1dHEVUmWNd5YynMOegvFdy1Z2oO1BSMEDt1NrLGPBUY1mbUA4H55YgUYT_5cWSL9UXu7ApG_NQ
+ 74s40GkbeWfg1w2cBEPnfkaysIBp96g.o4Is_0HnhHo6ABa7j0VZUxSVKN7XOQ5DcNwfIRsveNif
+ 5sHuJIOJBI2dnzkuw1HloeLo1jRayxwz3me4iqG_8kSJOBDug9WqGgR_ItxTwaaf7l91eq6a7.JP
+ Oz66mhWnRGJjQpmcZeHcaurCHDLhfiXw8eq2tHNBCod9.2LNVd9wPKMSb1xktR4bqElOr2syyum2
+ 7LeMoURNNR7lPicU5dXVjnvE0lMHs.pbHx10gQNWgkhOL_ooOFif23zY52KjLihVBfohWM3IyiwN
+ N.h3r1huoQ_60cNOv3A8OSSYgeNeKX_Jsa1LEQw4aZKZAQbEuYmJuzTwT6G6FiPcYT7k8ODiPyZ6
+ 5uytBjv3N4S5fFaqaDtF6KZ1wUsPGJuefm62Fde3xRnjK1q0fyAZ3bqi08cm32JsMg.h_fGSIUdB
+ 6aIAjWdqU1W4HFqTQ.lHZC2SSdWvUMfQ.97VPLKZmc1chzt8NmnLud2oh4rdQ7MGE1ynInKRZdTs
+ cPH6m8O7vLOyaPUfZoZOgZi5kmvj0WW7OBGHR5AKh8KtUnTyGCPz8FDRRjexQ_y33Nh4fGagXtfG
+ YLCjiXLVC7rBZiw0.jqkV3Anp7Exz6SsyRvEBuraPG6StqmvWItzASprjkpeERwr431mfouJ2QRo
+ NEHC_oLtPECK9h6ORbFRW7Bn1aDwDQKW_6DzKKC72GtjxqQSQhrPqx1bULiTykszuG2tRsjyDbZI
+ GFIFhYPq9gQLI0HQsToaiZ.aGz8hRFRImH4_UBqEdAk.cbTASyHqPHVdHcRtTKaF0i7RKOrpFFRD
+ DCieCh7SftO0cdeDtn4qS1T_jaOPDAelXyJThAcR1wJV948czh6gM586k1N8IGG4ce2vb5TWgmC9
+ x8J.b4.k9ZakLNmtAM_oC7P5UI9iWQOa2RMfW6YQhldAiMki.6cZw6HcfOsoxUqIB4wahHwyF.Oz
+ H3Gs1wqS.aQXtEdgQYKQTTn63BrWPjIH4VY3a9CfgoCyYmMatopckhvT4SUFtiyHHbnzV5b8Rj1U
+ jxO5FhDkUsZKkp_HQIIK_0iNBx_7iSBTjt4xz6I6IP9gvW8S_VxfRPlJ.pC0UdbabMngDaiCgcTZ
+ FjmkuXQtO3yqbDd4emfoZxh6uO3XQtSRMHe2a0xBQtyzobBh3Be3n0IvlF7HhnfJm7Rb4PpLNmaO
+ yrSEZ7RIqnQOGZSt.lP0DnTI0jpc4vMNEsaWCvK73hMiQjva_ajuJaDhXYATCWd_wQYn3in9en8C
+ LAuiLXdQDl2Q1jjGMcf2nt5vObnJnzirYjod8N2IYulsifjIU0wgapS4JTDLIqDraLMyXG7sP3xq
+ vYCeABKYECZJkxZ1kspcltO0yfr.E0f5zAHLuajake8Hj9k300IvFqAJhL_IqnfyDnXEUAt39QME
+ qbdxglOjBmjP2OC.yivvwfak_unL4S6GUKypZOtfifFzTXH8Rmn63WTf64F39y45aCUdy9QVF4r5
+ 3xq.HH0id_rBFNbce9gsI6P8Sz0IWxV6C.iA_OLzb3p0E2FA5Y6AZFFmdacSnrfStmeVX1NUeuHp
+ meURET0zgC18FcL7e7_b7AoBWmElfXF7Pg7maB9re_.PPQp15DeeDq1HR7q6fcs4VOFkIQbnq2va
+ Rg1VWn9PiQrAiarWNFi0yClhqn_tw8kWJ5QaIMOeovQ8Ut.Itbsg.PbSbKaa0zFJHTjaD3hKaYE_
+ zDfVfk0qF2Ns_9Le9GQ75eJD3ybiOYwPFOwK2.5Ap.5BLgwkZjhJHJLGXSE4a
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 15ae8b31-4e9c-4be6-9dc6-e6e06b3d0f25
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Tue, 16 Jan 2024 16:51:19 +0000
+Received: by hermes--production-gq1-78d49cd6df-mvdth (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 44515f8eb2e2b5946457ba67dd58da86;
+          Tue, 16 Jan 2024 16:51:14 +0000 (UTC)
+Message-ID: <00b7ff22-f213-471a-a604-658a9af80d59@schaufler-ca.com>
+Date: Tue, 16 Jan 2024 08:51:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ojpgqs276usvjple"
-Content-Disposition: inline
-In-Reply-To: <3404c9af-6c11-45d7-9ba4-a120e21e407e@sirena.org.uk>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 13/25] security: Introduce file_release hook
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
+ Al Viro <viro@zeniv.linux.org.uk>
+Cc: brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+ zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+ dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com,
+ eparis@parisplace.org, shuah@kernel.org, mic@digikod.net,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+ <20240115181809.885385-14-roberto.sassu@huaweicloud.com>
+ <20240115191508.GG1674809@ZenIV>
+ <3b440f064a1ae04d69f7e85f4077f8406c0eac67.camel@huaweicloud.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <3b440f064a1ae04d69f7e85f4077f8406c0eac67.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.22010 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
+On 1/16/2024 12:47 AM, Roberto Sassu wrote:
+> On Mon, 2024-01-15 at 19:15 +0000, Al Viro wrote:
+>> On Mon, Jan 15, 2024 at 07:17:57PM +0100, Roberto Sassu wrote:
+>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>
+>>> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+>>> the file_release hook.
+>>>
+>>> IMA calculates at file close the new digest of the file content and writes
+>>> it to security.ima, so that appraisal at next file access succeeds.
+>>>
+>>> An LSM could implement an exclusive access scheme for files, only allowing
+>>> access to files that have no references.
+>> Elaborate that last part, please.
+> Apologies, I didn't understand that either. Casey?
 
---ojpgqs276usvjple
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Just a hypothetical notion that if an LSM wanted to implement an
+exclusive access scheme it might find the proposed hook helpful.
+I don't have any plan to create such a scheme, nor do I think that
+a file_release hook would be the only thing you'd need.
 
-Hello Mark,
-
-On Tue, Jan 16, 2024 at 02:40:39PM +0000, Mark Brown wrote:
-> On Mon, Jan 15, 2024 at 09:12:46PM +0100, Uwe Kleine-K=F6nig wrote:
->=20
-> > In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-> > some functions were renamed. Further some compat defines were introduced
-> > to map the old names to the new ones.
->=20
-> > Patch #18 and #19 touch the same driver, otherwise the patches #1 - #31
-> > are pairwise independent and could be applied by their respective
-> > maintainers. The alternative is to let all patches go via the spi tree.
-> > Mark, what's your preference here?
->=20
-> I don't have a strong preference here, I'm happy to take all the patches
-> if the maintainers for the other subsystem are OK with that - ideally
-> I'd apply things at -rc1 but the timeline is a bit tight there.  I think
-> my plan here unless anyone objects (or I notice something myself) will
-> be to queue things at -rc3, please shout if that doesn't seem
-> reasonable.
-
-=46rom my side there is no rush, we lived with these defines since
-4.13-rc1. Applying them during the next merge window is fine for me.
-
-Anyhow, I intend to resend the series for the feedback I received after
--rc1. Up to you when you want to apply it. Watching out for offending
-patches using lore shouldn't be a big thing and I can do that.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ojpgqs276usvjple
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWmnkkACgkQj4D7WH0S
-/k7Jlgf/bxg8PBfYKKX7PvDPgT3ZVpLLtWReyLQDBjEkSddRCSKzwPE5dQsE6TGF
-pkpgz7Za7CnFfHKtW25alERgnrqA9inDitGvBoBIVgSHPf6GJsGOPVLhziEMU9t1
-tBlCUkInYGMvS/Gn5tOoSjNLmapgV8tiNzeos6MHWZzdKpWIzj6SBNH72Bof8kUq
-R287GggNJ2PLZa24vL2Pct4BZIfpbD+n1o6O62edEmpGe17xuDkSNfjirG7MojjX
-vAtAlEpsLidT0eabHr4XkgyBSQZLwlh1OdReMiXhtK5GM3Oh9R4Y2XVhUq83hKSl
-5zzsBEXwEe1w3pKgGJnCD1jxAAcJ9A==
-=Sz6E
------END PGP SIGNATURE-----
-
---ojpgqs276usvjple--
+>
+> Thanks
+>
+> Roberto
+>
 
