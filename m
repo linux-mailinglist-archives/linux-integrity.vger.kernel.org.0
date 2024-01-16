@@ -1,112 +1,162 @@
-Return-Path: <linux-integrity+bounces-813-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-814-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3273882ECB6
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 11:24:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FF6682F0A8
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 15:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 432731C22F20
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 10:24:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C8D7285D4F
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 14:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7715F134D9;
-	Tue, 16 Jan 2024 10:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE871BF2D;
+	Tue, 16 Jan 2024 14:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eoW8PYM2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B13134D5;
-	Tue, 16 Jan 2024 10:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout1.hostsharing.net (Postfix) with ESMTPS id F2BB730000868;
-	Tue, 16 Jan 2024 11:24:23 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id E3127316BEB; Tue, 16 Jan 2024 11:24:23 +0100 (CET)
-Date: Tue, 16 Jan 2024 11:24:23 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org,
-	devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-	Yannic Moog <Y.Moog@phytec.de>, Alexander Bauer <a.bauer@phytec.de>,
-	upstream@lists.phytec.de, Teresa Remmet <T.Remmet@phytec.de>,
-	Tim Harvey <tharvey@gateworks.com>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>, Adam Ford <aford173@gmail.com>,
-	Heiko Thiery <heiko.thiery@gmail.com>,
-	Enric Balletbo i Serra <eballetbo@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433D01BF2A;
+	Tue, 16 Jan 2024 14:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82385C433F1;
+	Tue, 16 Jan 2024 14:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705416062;
+	bh=pi9f5n7aCz4k4GcDtHhDD5lv5OgeZ4ucYdJWw/uz8rU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eoW8PYM2MfAuIBhKaoTZlWZwOEH64nrarWgh8smz385NHA2AvWbxhu44TZid6guIO
+	 ztdPcokve4KGk/P0r48xP9LXjdlp+nfRggeFVeFp1EKUfQh1HSmalAz393OHzBH8yx
+	 HITZr7gQr/eVgLSaMXJ0zK/Hypf/9tgOSbSJiXzjxDaUW1d3OgO9S7G4+/H4mw666+
+	 L5PksNx2fvrD/Q9/Cn2uOjt9fv52HRvN58krYPnsggJ/tW1Mam7cV3tInWEBTcjzIV
+	 QhTlg/jUO4g8ofnL8rKCTYV2n5vBGWNCAEmw7Luoyo7bgDS5dKI4oEy8rewQcDvB/c
+	 CCz+OFltnyGUA==
+Date: Tue, 16 Jan 2024 14:40:39 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, linux-spi@vger.kernel.org,
+	kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rayyan Ansari <rayyan@ansari.sh>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Sergey Kozlov <serjk@netup.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	linux-mmc@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
+	Rob Herring <robh@kernel.org>, linux-mtd@lists.infradead.org,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Ronald Wahl <ronald.wahl@raritan.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	Michal Simek <michal.simek@amd.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
 	Matthias Brugger <matthias.bgg@gmail.com>,
-	Hsin-Yi Wang <hsinyi@chromium.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH] arm64: dts: Fix TPM schema violations
-Message-ID: <20240116102423.GA27561@wunner.de>
-References: <e6d7768e2a257e0bd5948bcf168909b6c670851b.1705168605.git.lukas@wunner.de>
- <682b50dc-a92a-4da5-ad06-631c5125ebc5@collabora.com>
- <8e138e54-22ba-43d3-898c-ab772039cd99@app.fastmail.com>
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev, Rui Miguel Silva <rmfrfs@gmail.com>,
+	Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>, greybus-dev@lists.linaro.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	Herve Codina <herve.codina@bootlin.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-usb@vger.kernel.org, Helge Deller <deller@gmx.de>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>,
+	libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>, James Clark <james.clark@arm.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 00/33] spi: get rid of some legacy macros
+Message-ID: <3404c9af-6c11-45d7-9ba4-a120e21e407e@sirena.org.uk>
+References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="c8yli56mmI+gJGEV"
 Content-Disposition: inline
-In-Reply-To: <8e138e54-22ba-43d3-898c-ab772039cd99@app.fastmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
+X-Cookie: Programmers do it bit by bit.
 
-On Mon, Jan 15, 2024 at 09:17:41PM +0100, Arnd Bergmann wrote:
-> > Il 13/01/24 19:06, Lukas Wunner ha scritto:
-> > > Since commit 26c9d152ebf3 ("dt-bindings: tpm: Consolidate TCG TIS
-> > > bindings"), several issues are reported by "make dtbs_check" for arm64
-> > > devicetrees:
-> > > 
-> > > The compatible property needs to contain the chip's name in addition to
-> > > the generic "tcg,tpm_tis-spi" and the nodename needs to be "tpm@0"
-> > > rather than "cr50@0":
-> > > 
-> > >    tpm@1: compatible: ['tcg,tpm_tis-spi'] is too short
-> > >          from schema $id: http://devicetree.org/schemas/tpm/tcg,tpm_tis-spi.yaml#
-> > > 
-> > >    cr50@0: $nodename:0: 'cr50@0' does not match '^tpm(@[0-9a-f]+)?$'
-> > >          from schema $id: http://devicetree.org/schemas/tpm/google,cr50.yaml#
-> > > 
-> > > Fix these schema violations.
-> 
-> However, I got some conflicts trying to apply them on
-> top of v6.7, so maybe check that and resend.
 
-This patch needs to be applied on top of the soc-dt-6.8 tag,
-not v6.7, because there were changes in your v6.8 pull request
-which introduce a new TPM DT node in:
+--c8yli56mmI+gJGEV
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
-  arch/arm64/boot/dts/freescale/imx8mp-venice-gw72xx.dtsi
+On Mon, Jan 15, 2024 at 09:12:46PM +0100, Uwe Kleine-K=F6nig wrote:
 
-and modify an existing TPM DT node in:
+> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
+> some functions were renamed. Further some compat defines were introduced
+> to map the old names to the new ones.
 
-  arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+> Patch #18 and #19 touch the same driver, otherwise the patches #1 - #31
+> are pairwise independent and could be applied by their respective
+> maintainers. The alternative is to let all patches go via the spi tree.
+> Mark, what's your preference here?
 
-So if I'd base this patch on top of v6.7, it would be missing
-the fixes for these three devicetrees and I'd have to submit
-a separate patch with them.  Happy to do so if that's what
-you want but basing on top of soc-dt-6.8 seemed more reasonable
-to me as initial submission.
+I don't have a strong preference here, I'm happy to take all the patches
+if the maintainers for the other subsystem are OK with that - ideally
+I'd apply things at -rc1 but the timeline is a bit tight there.  I think
+my plan here unless anyone objects (or I notice something myself) will
+be to queue things at -rc3, please shout if that doesn't seem
+reasonable.
 
-Thanks!
+--c8yli56mmI+gJGEV
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Lukas
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWmlVwACgkQJNaLcl1U
+h9AImgf/YhrOsj57KBdfXCGkJi2n+rTwU/YN3Vvfy2fP+4gmJoFGfjk1o+luXQwi
+q3+RNetq9JicN07DE0eggUdY7EqvLtghmHnQWYraw+gEPT7PwkiFuKZgDEy79tmH
+pNpJuEKTeDipvLkXCVMzD0T+NrW2BXshkACyxLpBrh+ewGJpmmgJEH8LEo52dxrk
+uLfK3YjSYco5zXw8Dzak8Ea9Hb57dnySjT6aQf8GRXZMjNYAPqMC27Pzd5pWHnD1
+am4raQY/1ji5yjiVs38+2RB0EnWlFJyj0VvC9vL5PEhkz0XiW3OTTedLKcxKKoYv
+H+d+5ZwIRVx3bl+qcRRzH8EMyJW7pA==
+=Umm1
+-----END PGP SIGNATURE-----
+
+--c8yli56mmI+gJGEV--
 
