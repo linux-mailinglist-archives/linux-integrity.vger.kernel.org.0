@@ -1,107 +1,181 @@
-Return-Path: <linux-integrity+bounces-818-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-819-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A35D482F33B
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 18:34:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25E7082F36A
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 18:44:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B68501C236FF
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 17:33:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DA351C23735
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jan 2024 17:44:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A6E1CAB0;
-	Tue, 16 Jan 2024 17:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE4501CD06;
+	Tue, 16 Jan 2024 17:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="oB2T4v4o"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Pwtea/BH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C96E1CA8C;
-	Tue, 16 Jan 2024 17:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E017E1CD03;
+	Tue, 16 Jan 2024 17:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705426433; cv=none; b=W1JhDbTc1vQsP1u2fjT4UhzvZrIF75cH5VdhClK2ZmOXKY3Rvi2chVP0mUJp1E0KKncPqtLooogiPhyGmpnjMp+Nm0xB/j+/9QwGpCP/ywuSzwzICy0b5KL87pfFNkLCdCpB3iFtpkBUd01QsvU1jbyLXSWFH+DmnWO+ARz/p6E=
+	t=1705427072; cv=none; b=OCJx3MGRFJkOolwyEsuGw6TlJW0SNiLz9CeOfDBAwi0KF9sn6Tq/lK9YM2N0dlo8JW0qolAlt5kwl68R0wWuviSN9NjwJteuGUwKXyiKN3oBn7eBHsOriNfUpLV3v0sqFgty1wS9EvkIHb6gtOT4wi2vGl2uSjCXTsbUsWfkZ/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705426433; c=relaxed/simple;
-	bh=eO4OQip7Vt8iBukXP9TAx2AYps5FjXjzaKh58KGbU+U=;
-	h=DKIM-Signature:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:Sender; b=mgt7i0rhcF4NmKvI9Toxh/tR73zBv6sowCCL5cINF4EjskIlMfBvqUfHQUviYLuWFgDcmfseGZiZFbH9fPtRJLLgGyC4TLuD3RXeS+oj9F3j5tJh9CEXol6ZJfoji3rUG4idkpwQJdBc09ecuKeeceQybAXve9D/LddMnlSviGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=oB2T4v4o; arc=none smtp.client-ip=62.89.141.173
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=S+5my9jXWKBreUOHlR6pw/2iHlpnFX5ZhPEFeXmOIzU=; b=oB2T4v4oLxkQEl5he5aGeli2CM
-	22r5wlr+d67aycYttFH91VKhE4z4GFMtZCLZ/t5N5Dy8EnFkFyO35Kx+42NeZjon4az/S7jao3zQt
-	oOc30bwbkfVK/bIYToXwaAZijTrmhqgvTSExU0PZXKz9Y32gME5PiJX6f/o/VOYV8YFOoTBQd5cZR
-	N/U6CgHtJ9kHws5CwSe0OijCh0Y08yklS2uRQzVYk4NnUCpXG4Kgq1QDaW/CY7H1uoe0ZCn6BPK1l
-	dDTU5uHuJNYSfiOyxHFVJdpvoTrZBff9+VvcrIVStbRrfPIka65NVBC0E6aS32uosVxIU6OnOllvV
-	x718UZbw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1rPnJN-004gXh-1E;
-	Tue, 16 Jan 2024 17:33:17 +0000
-Date: Tue, 16 Jan 2024 17:33:17 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, brauner@kernel.org,
-	chuck.lever@oracle.com, jlayton@kernel.org, neilb@suse.de,
-	kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-	zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org,
-	stephen.smalley.work@gmail.com, eparis@parisplace.org,
-	shuah@kernel.org, mic@digikod.net, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v9 13/25] security: Introduce file_release hook
-Message-ID: <20240116173317.GL1674809@ZenIV>
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
- <20240115181809.885385-14-roberto.sassu@huaweicloud.com>
- <20240115191508.GG1674809@ZenIV>
- <3b440f064a1ae04d69f7e85f4077f8406c0eac67.camel@huaweicloud.com>
- <00b7ff22-f213-471a-a604-658a9af80d59@schaufler-ca.com>
+	s=arc-20240116; t=1705427072; c=relaxed/simple;
+	bh=8ZQSUM5HHyNNwWiT3KNnANcyU223j6kAUF5U/zEq3eE=;
+	h=Received:DKIM-Signature:Received:Received:Received:Received:
+	 Received:Received:Received:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:
+	 In-Reply-To:Content-Type:X-TM-AS-GCONF:X-Proofpoint-GUID:
+	 X-Proofpoint-ORIG-GUID:Content-Transfer-Encoding:
+	 X-Proofpoint-UnRewURL:MIME-Version:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details; b=gx+0f9WJZz8baZlYkAtgQvBa24shWdUioaRxoVUnHhHGQx0woH5PAdrIdZW8CO6Gd7xXAGrEVazQAQ7xLQPBUnwHwENyDf5XHCbLOkY4n9yUZeV2g0hoFr0VbfoyweIcYEWuj01mCqs7A+7hcmpP83sG1AA4CoMajAUe/xOxveo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Pwtea/BH; arc=none smtp.client-ip=148.163.158.5
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40GHauhh021964;
+	Tue, 16 Jan 2024 17:44:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=zvksaMNtL6Ps/tgLmmbcPa9+3ibbYYEzNDam56TV9u8=;
+ b=Pwtea/BHdFspXSIpzVV4rPzuU8QeAUxNTMxrjNzg7p6hOIojeKqh4k28DoAFCTcCuhDe
+ OzwmPR5Kchzs4QsbJW/sPorLJJXv1Vcw4jWbepnVzcM5P07C3jQJrdAHAjd/uCcy2CI+
+ i1dBSMwsmVMGAmr/swPdstTuPkIjOOnyflUAAGtvfOk+VrytwphJjR06Mc4TkwyFd7Qn
+ 9OhPw/sX8MftndEpl6a7hDm09CIG34ePeBHMyr4nv32hn4w4EAzJMJJgyFW4dap9HaPB
+ g7QzoK7ilKS66xkTxletj7RL7lVXs3EhHGGl1bZjROXBQqdDZ5p3jLvvl6dxVhZydU79 pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vnwm61p3g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jan 2024 17:44:22 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40GHC5rZ004365;
+	Tue, 16 Jan 2024 17:44:22 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vnwm61p31-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jan 2024 17:44:22 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40GGSUCR011053;
+	Tue, 16 Jan 2024 17:44:21 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vm57yg81m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jan 2024 17:44:21 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40GHiKKk25297546
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 16 Jan 2024 17:44:20 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AF11B58060;
+	Tue, 16 Jan 2024 17:44:20 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 685F058051;
+	Tue, 16 Jan 2024 17:44:20 +0000 (GMT)
+Received: from [9.24.12.86] (unknown [9.24.12.86])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 16 Jan 2024 17:44:20 +0000 (GMT)
+Message-ID: <9a3d26a5-acfc-443a-911c-80f2ef6ba946@linux.ibm.com>
+Date: Tue, 16 Jan 2024 11:44:20 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] tpm: tis-i2c: Add more compatible strings
+To: Conor Dooley <conor@kernel.org>
+Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        Joel Stanley <joel@jms.id.au>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
+References: <20231214144954.3833998-1-ninad@linux.ibm.com>
+ <20231214144954.3833998-2-ninad@linux.ibm.com>
+ <20240109-saddling-nintendo-c7fbb46bb0dd@spud>
+ <77fe0ccd-53ff-4773-9787-0d038434297f@linux.ibm.com>
+ <20240112-unrevised-wafer-649c0ebffda5@spud>
+Content-Language: en-US
+From: Ninad Palsule <ninad@linux.ibm.com>
+In-Reply-To: <20240112-unrevised-wafer-649c0ebffda5@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IARhOqyUtolwKtH3lyayBaHxU5ltsstz
+X-Proofpoint-ORIG-GUID: gxD_H4TXGT-l9LAEmD7DpCZS8UHWw7kS
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00b7ff22-f213-471a-a604-658a9af80d59@schaufler-ca.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-16_10,2024-01-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 adultscore=0 mlxlogscore=999
+ impostorscore=0 bulkscore=0 phishscore=0 malwarescore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401160139
 
-On Tue, Jan 16, 2024 at 08:51:11AM -0800, Casey Schaufler wrote:
-> On 1/16/2024 12:47 AM, Roberto Sassu wrote:
-> > On Mon, 2024-01-15 at 19:15 +0000, Al Viro wrote:
-> >> On Mon, Jan 15, 2024 at 07:17:57PM +0100, Roberto Sassu wrote:
-> >>> From: Roberto Sassu <roberto.sassu@huawei.com>
-> >>>
-> >>> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
-> >>> the file_release hook.
-> >>>
-> >>> IMA calculates at file close the new digest of the file content and writes
-> >>> it to security.ima, so that appraisal at next file access succeeds.
-> >>>
-> >>> An LSM could implement an exclusive access scheme for files, only allowing
-> >>> access to files that have no references.
-> >> Elaborate that last part, please.
-> > Apologies, I didn't understand that either. Casey?
-> 
-> Just a hypothetical notion that if an LSM wanted to implement an
-> exclusive access scheme it might find the proposed hook helpful.
-> I don't have any plan to create such a scheme, nor do I think that
-> a file_release hook would be the only thing you'd need.
+Hello Conor,
 
-Exclusive access to what?  "No more than one opened file with this
-inode at a time"?  It won't serialize IO operations, obviously...
-Details, please.
+On 1/12/24 11:24, Conor Dooley wrote:
+> On Thu, Jan 11, 2024 at 10:43:08AM -0600, Ninad Palsule wrote:
+>> Hello Conor,
+>>
+>> On 1/9/24 11:11, Conor Dooley wrote:
+>>> On Thu, Dec 14, 2023 at 08:49:53AM -0600, Ninad Palsule wrote:
+>>>> From: Joel Stanley <joel@jms.id.au>
+>>>>
+>>>> The NPCT75x TPM is TIS compatible. It has an I2C and SPI interface.
+>>>>
+>>>> https://www.nuvoton.com/products/cloud-computing/security/trusted-platform-module-tpm/
+>>>>
+>>>> Add a compatible string for it, and the generic compatible.
+>>>>
+>>>> Signed-off-by: Joel Stanley <joel@jms.id.au>
+>>>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>>> Link: https://lore.kernel.org/r/20220928043957.2636877-4-joel@jms.id.au
+>>>> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
+>>> I don't understand why you broke this series up and dropped patches.
+>>> NAK, these compatibles are not documented.
+>>>
+>> The original series has three patches:
+>>
+>> 1) Adding compatibility string which I am adding in this series.
+>>
+>> 2) Adding schema for the TIS I2c devices which is already covered by Lukas's
+>> patch (already merged in linux-next) https://lore.kernel.org/all/3f56f0a2bb90697a23e83583a21684b75dc7eea2.1701093036.git.lukas@wunner.de/
+>>
+>> 3) Removing "Infineon,slb9673" from trivial-devices.yaml which is not done
+>> as it is already added in the TPM specific file. I will add it in my patch.
+>> Good catch!
+> Dropping this should be a standalone patch (with a Fixes tag I suppose).
+>
+> Looking at what got merged:
+>        - description: Generic TPM 2.0 chips conforming to TCG PTP interface
+>          items:
+>            - enum:
+>                - infineon,slb9673
+>                - nuvoton,npct75x
+>            - const: tcg,tpm-tis-i2c
+>
+> There's no need to add "nuvoton,npct75x" to this driver, since a
+> fallback to tcg,tpm-tis-i2c is required by the binding. Adding the
+> generic compatible however makes sense.
+>
+> If there's a good reason to add it (like existing QEMU releases that do
+> not have the generic compatible, but claim to have the npct75x) then
+> please note why we should make an exception in your commit message.
+>
+> You need not carry the NAK, the motivation behind patch is fine.
+
+Make sense. As there is no specific code for npct75x in the driver, I 
+will remove it.
+
+Thanks for the review.
+
+Regards,
+
+Ninad
+
 
