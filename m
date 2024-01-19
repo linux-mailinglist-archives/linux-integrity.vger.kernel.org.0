@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-838-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-839-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44207833047
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jan 2024 22:30:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9525B83305F
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jan 2024 22:38:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1C0228648D
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jan 2024 21:30:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EFF1286AAF
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jan 2024 21:38:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B6FE5813B;
-	Fri, 19 Jan 2024 21:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F30758200;
+	Fri, 19 Jan 2024 21:38:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNYAMaJl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VgzZunqF"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EB757888;
-	Fri, 19 Jan 2024 21:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763EA57888;
+	Fri, 19 Jan 2024 21:38:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705699777; cv=none; b=lK1j1nvlZqXgEi2CXcKF3OGWANRKE2MwI31Tdf+PecyO13IrqB4bAShbScbADAo28p78SYPMZFw4ApmVlp3rBRE+xFzFh0ofckAIwWPJqFopGwtxEtzW8IA/vY7WIkWWH0YYdFw3VIy+esx459bBY07hoLB4idrKxTedHwcCkKc=
+	t=1705700316; cv=none; b=T0j4G6DnL6j3rWu8LnGhtKjJBzQxDzqgsNYqnRT90QvqYbrur/q4C5Mqtukgal+JpTT7u/CpDUeX4UurhglC2IZgaP0jnxQOqVBIT3CnTJCnbvwWpHtjYTXPuve0k8LmY6c6oWQ4NTl8WOcyDr1NaP2K+W86jP0I7wK4ezzrNdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705699777; c=relaxed/simple;
-	bh=YikW7lhYlahvCq9SPWKKoDVb1qi/8r2rATHPjPXCZAQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=jaARc2BgTOWyW3SiGDLrx0hAKoRMI1/ZPW0elzEwMv2cA3A9qmhM0MSRSVs4IO7miP4F0ivybhXd8mnABQ4I0dnEdTdr6kNs7KRxAhqtVR0GzBIZoFiO87HKb947W6pHVlkpIJvN54k6NlNmHQKcP2Mw30N9hyg5uUOsV43UffU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNYAMaJl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8B0C433F1;
-	Fri, 19 Jan 2024 21:29:35 +0000 (UTC)
+	s=arc-20240116; t=1705700316; c=relaxed/simple;
+	bh=s8jIqE+vW+iYqMRnNiKZlbFoWO7EWkMJg5CQzYRn9bk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=OZ0IiROoFyXaYP0CiXu3hkdw7UqdgWzaN9zWYf6jII21hCozYD4z6X19nqeNT7J4jKvPXNqe8p2FKqCfPQkWSJaDuDDoarQJNbwdcqroGaPIV5K7/YBYVV7rXUOY4eMR5Qa/xZocYIL8KFoAMUjmrCoxoo08J0RRU0ldPjt8krE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VgzZunqF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F093EC433C7;
+	Fri, 19 Jan 2024 21:38:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705699777;
-	bh=YikW7lhYlahvCq9SPWKKoDVb1qi/8r2rATHPjPXCZAQ=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=fNYAMaJl87g8brAWEF9ciyIBUcHtvs+vNA4qzwim3dguV/orb/OBUZp00U7SoCxUS
-	 Gq/JFsR2adfGHwGVFweokxA4BS5crfs5qNXwDXMm6bG4hp58xZ1w7IFTdb0ilGt09s
-	 cnnYoRngpfscpVBQBkxLyWPDEmH6HFzvZl4izchJCwb0U0YaJgGRiRTGhcfHWw6pGs
-	 dLBIC9JuTsbZM0AUWoXAAPoPLgcl3w6ML8EAT/dbNNPVe0DdYVSTl3GfX6U7koc2Pn
-	 3FxZN4zDq+yPMRGZMBvxERLaU1+Wcr9Q8CiVjplLfXFN5W9uHyrx/+3wLPYdwCqMv7
-	 wTOMS0htw5nZQ==
+	s=k20201202; t=1705700315;
+	bh=s8jIqE+vW+iYqMRnNiKZlbFoWO7EWkMJg5CQzYRn9bk=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=VgzZunqFSQAJW/Qgk7hSaAYMCU33W/15xkyyRu/F7jsuzVfx5pNO4SJcpxwGSq7Cw
+	 Afym3p8UxCBp5oLhqtzsOoo4uHOq9kCQEhceK0QSJLLMVM2QLTLKxk+2UwbO/kJzmX
+	 svOZUAMU4gJh8O3BVj/l6iGh4WQor6SptG0Oju/hTgWY9u1yUBN0wiCnGceFClMBFo
+	 YmjI9d7jevRwCF6G3gOq9ONkQ6vvVOchbA9l39rGYp94bLoPMHf8E72PkqKJiiplPM
+	 Dr9o/sqnpXjPWZXS9Gq2D8CW35c83wOSCssicjuezHUhtQQMjsbKFN6EvAJMMXWjN4
+	 NYTeDEacBYtEw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,63 +49,77 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 19 Jan 2024 21:29:33 +0000
-Message-Id: <CYJ03UKAG12Z.1BIINI4G2A47G@seitikki>
-Cc: <linux-spi@vger.kernel.org>, <kernel@pengutronix.de>, "Peter Huewe"
- <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH 27/33] tpm_tis_spi: Follow renaming of SPI "master" to
- "controller"
+Date: Fri, 19 Jan 2024 21:38:32 +0000
+Message-Id: <CYJ0APT6N1KL.CSHV5R4VRWHB@seitikki>
+To: "Alexander Steffen" <Alexander.Steffen@infineon.com>, "Daniel P. Smith"
+ <dpsmith@apertussolutions.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Lino
+ Sanfilippo" <l.sanfilippo@kunbus.com>, "Sasha Levin" <sashal@kernel.org>,
+ <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Kanth Ghatraju"
+ <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.de>
+Subject: Re: [PATCH] tpm: make locality handling resilient
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- "Mark Brown" <broonie@kernel.org>, "Geert Uytterhoeven"
- <geert+renesas@glider.be>
 X-Mailer: aerc 0.15.2
-References: <cover.1705348269.git.u.kleine-koenig@pengutronix.de>
- <31f11901f6329a1de0299903d43c16439948bd46.1705348270.git.u.kleine-koenig@pengutronix.de>
-In-Reply-To: <31f11901f6329a1de0299903d43c16439948bd46.1705348270.git.u.kleine-koenig@pengutronix.de>
+References: <20240115011546.21193-1-dpsmith@apertussolutions.com>
+ <711d659f-3f57-48e4-b5b3-efbc2fe236c8@infineon.com>
+In-Reply-To: <711d659f-3f57-48e4-b5b3-efbc2fe236c8@infineon.com>
 
-On Mon Jan 15, 2024 at 8:13 PM UTC, Uwe Kleine-K=C3=B6nig wrote:
-> In commit 8caab75fd2c2 ("spi: Generalize SPI "master" to "controller"")
-> some functions and struct members were renamed. To not break all drivers
-> compatibility macros were provided.
+On Wed Jan 17, 2024 at 8:44 AM UTC, Alexander Steffen wrote:
+> On 15.01.2024 02:15, Daniel P. Smith wrote:
+> > Commit 933bfc5ad213 introduced the use of a locality counter to control=
+ when
+> > locality request was actually sent to the TPM. This locality counter cr=
+eated a
+> > hard enforcement that the TPM had no active locality at the time of the=
+ driver
+> > initialization. The reality is that this may not always be the case cou=
+pled
+> > with the fact that the commit indiscriminately decremented the counter =
+created
+> > the condition for integer underflow of the counter. The underflow was t=
+riggered
+> > by the first pair of request/relinquish calls made in tpm_tis_init_core=
+ and all
+> > subsequent calls to request/relinquished calls would have the counter f=
+lipping
+> > between the underflow value and 0. The result is that it appeared all c=
+alls to
+> > request/relinquish were successful, but they were not. The end result i=
+s that
+> > the locality that was active when the driver loaded would always remain=
+ active,
+> > to include after the driver shutdown. This creates a significant issue =
+when
+> > using Intel TXT and Locality 2 is active at boot. After the GETSEC[SEXI=
+T]
+> > instruction is called, the PCH will close access to Locality 2 MMIO add=
+ress
+> > space, leaving the TPM locked in Locality 2 with no means to relinquish=
+ the
+> > locality until system reset.
+> >=20
+> > The commit seeks to address this situation through three changes.
 >
-> To be able to remove these compatibility macros push the renaming into
-> this driver.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/char/tpm/tpm_tis_spi_main.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_t=
-is_spi_main.c
-> index c5c3197ee29f..c647de7b3709 100644
-> --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> @@ -146,7 +146,7 @@ static int tpm_tis_spi_transfer_full(struct tpm_tis_d=
-ata *data, u32 addr,
->  	struct spi_transfer spi_xfer;
->  	u8 transfer_len;
-> =20
-> -	spi_bus_lock(phy->spi_device->master);
-> +	spi_bus_lock(phy->spi_device->controller);
-> =20
->  	while (len) {
->  		transfer_len =3D min_t(u16, len, MAX_SPI_FRAMESIZE);
-> @@ -210,7 +210,7 @@ static int tpm_tis_spi_transfer_full(struct tpm_tis_d=
-ata *data, u32 addr,
->  		spi_sync_locked(phy->spi_device, &m);
->  	}
-> =20
-> -	spi_bus_unlock(phy->spi_device->master);
-> +	spi_bus_unlock(phy->spi_device->controller);
->  	return ret;
->  }
-> =20
+> Could you split this up into multiple patches then, so that they can be=
+=20
+> discussed separately?
 
+I have to agree with you ttly.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Yeah also the text above is not exactly in the ballpark.
+
+I did not understand what I read. I had to read the code change instead
+to get an idea. A huge pile of text does not equal to stronger story.
+
+Like for any essay, scientific paper or a kernel message one should do
+also few edit rounds. The commit message is more important than the code
+change itself in bug fixes...
+
+There is trigger (TXT) and solution. A great commit message should have
+motivation and implementation parts and somewhat concise story where
+things lead to another. It should essentially make *any* reader who
+knows the basics of kernel code base convinced, not confused. This is
+at leat a good aim even tho sometimes unreachable.
 
 BR, Jarkko
 
