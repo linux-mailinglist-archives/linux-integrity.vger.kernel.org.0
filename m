@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-840-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-841-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C20E83306B
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jan 2024 22:47:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3673F8330BB
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jan 2024 23:19:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 141111F225B9
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jan 2024 21:47:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD44F283732
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jan 2024 22:19:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3775821A;
-	Fri, 19 Jan 2024 21:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F4158AB2;
+	Fri, 19 Jan 2024 22:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DoAso2Im"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iHLcp68+"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7485D58123;
-	Fri, 19 Jan 2024 21:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7133F54BDA;
+	Fri, 19 Jan 2024 22:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705700866; cv=none; b=krtWdLckrTY6QbTw7hgztfUsoFaU+W91/slaR/9flFKtW0hbs9U5xlp8Gn83nR3JexdmxLscnCSwAJj7jbSDCLrbRsIK7/5dnNZh8upUDWKvRl6Qzs5oCLRM5vTQAO+RYdXHjyVq1rrEV41jgYcSD4RWBlWQwgzgieeiAIAv8cA=
+	t=1705702774; cv=none; b=Yc2mOaQu0eWYaSdnBWchZBcj00erXOyFRP8MVCQUV6vMLQfcbLUYkmacll/WIUxxoQfoPA0jrCpTzW6xxWOhz/qjOPLr6/h8ddf7vZ4+O5sEAc5r1XCXE3hdqw+va6C90yMN/tF8l62302nrx2jQmzK6a8ZqCQyalcXzkWhlJLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705700866; c=relaxed/simple;
-	bh=nHLgtBAhSg8XOTkKBOpQXz866fOfPjAISCWJqDJ2jRs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=JWOFrGRjCBSmsfg67qIUx447jPcVR+uzgLwiLfQvWu7K7zrLTF4l98ACMDLdJpbdmUF/y5DpFitMv98Sae5RTrQLXyVH+uv8rrdUPaAP3BpvsPpFlCj8Rlub8Ge12UeOP0xbfLvgtOKsKf9RDwKtAMm39G8OXpt52UmZmUKk3JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DoAso2Im; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 047CCC433F1;
-	Fri, 19 Jan 2024 21:47:44 +0000 (UTC)
+	s=arc-20240116; t=1705702774; c=relaxed/simple;
+	bh=UA6/IOt2jYNWP1zjtJ/vtkAP1eXv9x92BeR6Bjs4g+s=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=abEmxheeKRW+rNW3H3Zl4vwZD1/K3/Fp3/nWFrYVv3FfBqApOsyAC8vAnlhyE1k3vN3Jo8s+1CLWiKyOeyXsSJaBvC7jL0gKAHS43BsfGY+Om8ao/TLrOEUrna3QIEQBILIaTpH4dvZ9MXpfq6fo7L/g3+hGTziC9DYD1mGV6hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iHLcp68+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F7CC433F1;
+	Fri, 19 Jan 2024 22:19:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705700866;
-	bh=nHLgtBAhSg8XOTkKBOpQXz866fOfPjAISCWJqDJ2jRs=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=DoAso2ImRH4dzU3wnYl5DsQpjaNS9P3ZWIiWyEZKIinJzq1eiTfHqfR6BTYdC1qNU
-	 iY8qvZtrgZlH9bLSAj5z6Nis73tLHPIad+8DLqrp/u8Mn94K6MwTfIgPkme0i9Nnc6
-	 Cqqp0rCw8wlqrEUAhrG8CwRRU4cyMxI7Fs7tWl37yOjVQFh84Vc5auHuFhXBBP9FhP
-	 iUvb3l8pZnhq3L+1Ct6paN/C81Rpnk/uesFGEdmEsqfTEAPTPdrUJRzGQ7+kWA+WB7
-	 H1e7AQttgxfp/RTM+ntbxtkbNV9DhPnmgrZxozKiqoGOpDXGwV/WlqO0yul9qAaP+F
-	 i3mn8jXx2YfJw==
+	s=k20201202; t=1705702774;
+	bh=UA6/IOt2jYNWP1zjtJ/vtkAP1eXv9x92BeR6Bjs4g+s=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=iHLcp68+MK5iibr8rj8DWNHu+2yr/ddJBuS0AG060eSIBMxOQ+1No9owOdfOqupZj
+	 83AIQ+9MCHYok2qkZRnVtSYKWgZWB02kZ4jI1b0/PP/hJ+6208348nOH7G4nsHvqdl
+	 HDGkhmndJBQ7/X0B/QkQiGMclSNVgJlcDKFloWvcRtUeBYvQladI4Os/pqYZEENPsd
+	 ooyPUx2jg/u2r4xEBEEWmqGJaG+6O7TJ6WhXA9g8q8ayQn5S3GPvEcwVIRUYtNGZs+
+	 txNM0U3zcsCIcA7/kEF9HqDITRIfo54SvUmd8rL6RCxJLzAUpwIivQL35KFl9vqs3d
+	 0GdhP1Jhx6Sxw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,79 +49,190 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 19 Jan 2024 21:47:42 +0000
-Message-Id: <CYJ0HQTT1R88.1MZFUE1URTELJ@seitikki>
-Cc: "Thirupathaiah Annapureddy" <thiruan@microsoft.com>, "Peter Huewe"
- <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH] tpm/tpm_ftpm_tee: fix all kernel-doc warnings
+Date: Fri, 19 Jan 2024 22:19:31 +0000
+Message-Id: <CYJ163J3I09U.2XMVZ0BLWV1Y1@seitikki>
+Subject: Re: tpm_tis_remove: `WARNING: CPU: 6 PID: 265 at
+ kernel/workqueue.c:3397 __flush_work.isra.0+0x29f/0x2c0`
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Randy Dunlap" <rdunlap@infradead.org>, <linux-kernel@vger.kernel.org>
+To: "Paul Menzel" <pmenzel@molgen.mpg.de>, "Peter Huewe" <peterhuewe@gmx.de>
+Cc: <linux-integrity@vger.kernel.org>, <regressions@lists.linux.dev>
 X-Mailer: aerc 0.15.2
-References: <20240115192447.26481-1-rdunlap@infradead.org>
-In-Reply-To: <20240115192447.26481-1-rdunlap@infradead.org>
+References: <e2e17227-9e8f-430b-80fc-9ca9eac1f69a@molgen.mpg.de>
+In-Reply-To: <e2e17227-9e8f-430b-80fc-9ca9eac1f69a@molgen.mpg.de>
 
-On Mon Jan 15, 2024 at 7:24 PM UTC, Randy Dunlap wrote:
-> Change @pdev to @dev in 2 places to match the function parameters.
-> Correct one function name in kernel-doc comment to match the function
-> implementation.
+On Tue Jan 16, 2024 at 2:44 PM UTC, Paul Menzel wrote:
+> #regzbot introduced: v5.15.131..v6.6.11
 >
-> This prevents these warnings:
 >
-> tpm_ftpm_tee.c:217: warning: Function parameter or struct member 'dev' no=
-t described in 'ftpm_tee_probe'
-> tpm_ftpm_tee.c:217: warning: Excess function parameter 'pdev' description=
- in 'ftpm_tee_probe'
-> tpm_ftpm_tee.c:313: warning: Function parameter or struct member 'dev' no=
-t described in 'ftpm_tee_remove'
-> tpm_ftpm_tee.c:313: warning: Excess function parameter 'pdev' description=
- in 'ftpm_tee_remove'
-> tpm_ftpm_tee.c:348: warning: expecting prototype for ftpm_tee_shutdown().=
- Prototype was for ftpm_plat_tee_shutdown() instead
+> Dear Linux folks,
 >
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Thirupathaiah Annapureddy <thiruan@microsoft.com>
-> Cc: Peter Huewe <peterhuewe@gmx.de>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: linux-integrity@vger.kernel.org
-> ---
->  drivers/char/tpm/tpm_ftpm_tee.c |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> diff -- a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee=
-.c
-> --- a/drivers/char/tpm/tpm_ftpm_tee.c
-> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
-> @@ -208,7 +208,7 @@ static int ftpm_tee_match(struct tee_ioc
-> =20
->  /**
->   * ftpm_tee_probe() - initialize the fTPM
-> - * @pdev: the platform_device description.
-> + * @dev: the device description.
->   *
->   * Return:
->   *	On success, 0. On failure, -errno.
-> @@ -304,7 +304,7 @@ static int ftpm_plat_tee_probe(struct pl
-> =20
->  /**
->   * ftpm_tee_remove() - remove the TPM device
-> - * @pdev: the platform_device description.
-> + * @dev: the device description.
->   *
->   * Return:
->   *	0 always.
-> @@ -341,7 +341,7 @@ static void ftpm_plat_tee_remove(struct
->  }
-> =20
->  /**
-> - * ftpm_tee_shutdown() - shutdown the TPM device
-> + * ftpm_plat_tee_shutdown() - shutdown the TPM device
->   * @pdev: the platform_device description.
->   */
->  static void ftpm_plat_tee_shutdown(struct platform_device *pdev)
+> On a Dell OptiPlex 5055 with an AMD Ryzen, Linux always logged the error
+>
+>      tpm_tis: probe of MSFT0101:00 failed with error -1
+>
+> but upgrading from 5.15.131 to 6.6.11, the warning below is also logged:
+>
+> ```
+> [    0.000000] Linux version 6.6.11.mx64.460=20
+> (root@theinternet.molgen.mpg.de) (gcc (GCC) 12.2.0, GNU ld (GNU=20
+> Binutils) 2.41) #1 SMP PREEMPT_DYNAMIC Thu Jan 11 16:15:43 CET 2024
+> [    0.000000] Command line: BOOT_IMAGE=3D/boot/bzImage-6.6.11.mx64.460=
+=20
+> root=3DLABEL=3Droot ro crashkernel=3D64G-:256M console=3DttyS0,115200n8=
+=20
+> console=3Dtty0 init=3D/bin/systemd audit=3D0 random.trust_cpu=3Don=20
+> systemd.unified_cgroup_hierarchy
+> [=E2=80=A6]
+> [    0.000000] DMI: Dell Inc. OptiPlex 5055 Ryzen CPU/0P03DX, BIOS=20
+> 1.1.20 05/31/2019
+> [=E2=80=A6]
+> [   12.092264] WARNING: CPU: 6 PID: 265 at kernel/workqueue.c:3397=20
+> __flush_work.isra.0+0x29f/0x2c0
+> [   12.103259] Modules linked in: snd_hda_intel(+) tg3(+) kvm(+)=20
+> snd_intel_dspcfg snd_hda_codec snd_hda_core snd_pcm snd_timer libphy=20
+> drm_ttm_helper ttm snd video k10temp soundcore i2c_piix4 irqbypass=20
+> tpm_tis(+) tpm_tis_core efi_pstore tpm wmi_bmof rng_core wmi=20
+> crc32c_intel pstore acpi_cpufreq nfsd auth_rpcgss oid_registry nfs_acl=20
+> lockd grace sunrpc efivarfs ip_tables x_tables ipv6 autofs4
+> [   12.143539] CPU: 6 PID: 265 Comm: systemd-udevd Not tainted=20
+> 6.6.11.mx64.460 #1
+> [   12.152698] Hardware name: Dell Inc. OptiPlex 5055 Ryzen CPU/0P03DX,=
+=20
+> BIOS 1.1.20 05/31/2019
+> [   12.162512] RIP: 0010:__flush_work.isra.0+0x29f/0x2c0
+> [   12.168674] Code: 8b 04 25 80 cf 02 00 48 89 44 24 40 48 8b 53 40 8b=
+=20
+> 43 30 e9 b3 fe ff ff 40 30 f6 4c 8b 36 e9 f2 fd ff ff 0f 0b e9 3b ff ff=
+=20
+> ff <0f> 0b e9 34 ff ff ff 0f 0b e9 d8 fe ff ff 0f 0b e9 a9 fe ff ff e8
+> [   12.188375] RSP: 0018:ffffc90000ab7a10 EFLAGS: 00010246
+> [   12.194699] RAX: 0000000000000000 RBX: ffff888108f79b28 RCX:=20
+> 0000000000000000
+> [   12.202894] RDX: ffffc90000ab7a10 RSI: ffffc90000b10008 RDI:=20
+> ffffc90000ab7a58
+> [   12.211107] RBP: ffff888108f79b68 R08: 0000000000000002 R09:=20
+> 0000000000000000
+> [   12.219305] R10: 0000000000000001 R11: 0000000000000000 R12:=20
+> 0000000000000001
+> [   12.227499] R13: ffff888108f79b38 R14: 00000000ffffffff R15:=20
+> 0000000000fe1050
+> [   12.235706] FS:  00007f2cf22c2800(0000) GS:ffff88840eb80000(0000)=20
+> knlGS:0000000000000000
+> [   12.244871] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   12.251670] CR2: 00000000006878e8 CR3: 000000010ca66000 CR4:=20
+> 00000000003506e0
+> [   12.259901] Call Trace:
+> [   12.263395]  <TASK>
+> [   12.266521]  ? __warn+0x81/0x140
+> [   12.270776]  ? __flush_work.isra.0+0x29f/0x2c0
+> [   12.276235]  ? report_bug+0x171/0x1a0
+> [   12.280803]  ? handle_bug+0x3c/0x70
+> [   12.285352]  ? exc_invalid_op+0x17/0x70
+> [   12.290203]  ? asm_exc_invalid_op+0x1a/0x20
+> [   12.295397]  ? __flush_work.isra.0+0x29f/0x2c0
+> [   12.300807]  tpm_tis_remove+0xaa/0x100 [tpm_tis_core]
+> [   12.306872]  tpm_tis_core_init+0x234/0xfa0 [tpm_tis_core]
+> [   12.313280]  tpm_tis_plat_probe+0xd0/0x110 [tpm_tis]
+> [   12.319139]  platform_probe+0x44/0xa0
+> [   12.323796]  really_probe+0xd0/0x3e0
+> [   12.328384]  ? __pfx___driver_attach+0x10/0x10
+> [   12.334129]  __driver_probe_device+0x80/0x160
+> [   12.339803]  driver_probe_device+0x1f/0x90
+> [   12.344831]  __driver_attach+0xf8/0x1c0
+> [   12.349568]  bus_for_each_dev+0x88/0xd0
+> [   12.354298]  bus_add_driver+0xf9/0x220
+> [   12.358919]  driver_register+0x59/0x100
+> [   12.363623]  ? __pfx_init_tis+0x10/0x10 [tpm_tis]
+> [   12.369198]  init_tis+0x39/0xff0 [tpm_tis]
+> [   12.374172]  ? srso_return_thunk+0x5/0x10
+> [   12.379044]  do_one_initcall+0x66/0x240
+> [   12.383751]  do_init_module+0x60/0x230
+> [   12.388357]  init_module_from_file+0x86/0xc0
+> [   12.393483]  idempotent_init_module+0x120/0x2b0
+> [   12.398869]  __x64_sys_finit_module+0x65/0xc0
+> [   12.404082]  do_syscall_64+0x46/0x90
+> [   12.408506]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+> [   12.414411] RIP: 0033:0x7f2cf1d1ed09
+> [   12.418831] Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00=
+=20
+> 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f=
+=20
+> 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c7 20 0d 00 f7 d8 64 89 01 48
+> [   12.438506] RSP: 002b:00007ffc335d02f8 EFLAGS: 00000246 ORIG_RAX:=20
+> 0000000000000139
+> [   12.446965] RAX: ffffffffffffffda RBX: 0000000000674390 RCX:=20
+> 00007f2cf1d1ed09
+> [   12.454993] RDX: 0000000000000000 RSI: 00007f2cf1a0f54b RDI:=20
+> 0000000000000010
+> [   12.463013] RBP: 00007f2cf1a0f54b R08: 0000000000000000 R09:=20
+> 0000000000000002
+> [   12.471025] R10: 0000000000000010 R11: 0000000000000246 R12:=20
+> 0000000000000000
+> [   12.479059] R13: 00000000007700f0 R14: 0000000000020000 R15:=20
+> 0000000000679d90
+> [   12.487092]  </TASK>
+> [   12.490162] ---[ end trace 0000000000000000 ]---
+> [   12.498048] tpm_tis: probe of MSFT0101:00 failed with error -1
+> ```
+>
+> ```
+> $ scripts/decodecode < /scratch/tmp/linux-6.6.11-schokokeks.txt
+> [ 12.418831] Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 48=
+=20
+> 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05=
+=20
+> <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c7 20 0d 00 f7 d8 64 89 01 48
+> All code
+> =3D=3D=3D=3D=3D=3D=3D=3D
+>     0:	08 44 89 e0          	or     %al,-0x20(%rcx,%rcx,4)
+>     4:	5b                   	pop    %rbx
+>     5:	41 5c                	pop    %r12
+>     7:	c3                   	ret
+>     8:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+>     f:	00 00
+>    11:	48 89 f8             	mov    %rdi,%rax
+>    14:	48 89 f7             	mov    %rsi,%rdi
+>    17:	48 89 d6             	mov    %rdx,%rsi
+>    1a:	48 89 ca             	mov    %rcx,%rdx
+>    1d:	4d 89 c2             	mov    %r8,%r10
+>    20:	4d 89 c8             	mov    %r9,%r8
+>    23:	4c 8b 4c 24 08       	mov    0x8(%rsp),%r9
+>    28:	0f 05                	syscall
+>    2a:*	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax		<--=20
+> trapping instruction
+>    30:	73 01                	jae    0x33
+>    32:	c3                   	ret
+>    33:	48 8b 0d c7 20 0d 00 	mov    0xd20c7(%rip),%rcx        # 0xd2101
+>    3a:	f7 d8                	neg    %eax
+>    3c:	64 89 01             	mov    %eax,%fs:(%rcx)
+>    3f:	48                   	rex.W
+>
+> Code starting with the faulting instruction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>     0:	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax
+>     6:	73 01                	jae    0x9
+>     8:	c3                   	ret
+>     9:	48 8b 0d c7 20 0d 00 	mov    0xd20c7(%rip),%rcx        # 0xd20d7
+>    10:	f7 d8                	neg    %eax
+>    12:	64 89 01             	mov    %eax,%fs:(%rcx)
+>    15:	48                   	rex.W
+> ```
+>
+> Please find all the Linux messages attached. Bisecting is unfortunately=
+=20
+> not easily doable.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Thanks for the logs. I'll need to reflect this to the code in
+aforementioned versions next week (just encountered the email).
+
+>
+>
+> Kind regards,
+>
+> Paul
 
 BR, Jarkko
+
 
