@@ -1,482 +1,273 @@
-Return-Path: <linux-integrity+bounces-845-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-847-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5677836F75
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jan 2024 19:16:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCAB68370A0
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jan 2024 19:48:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D98E31C29207
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jan 2024 18:16:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE07E2901A0
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jan 2024 18:47:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A394174B;
-	Mon, 22 Jan 2024 17:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=politoit.onmicrosoft.com header.i=@politoit.onmicrosoft.com header.b="oxuTqZ3P"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA7F5787A;
+	Mon, 22 Jan 2024 18:11:11 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2119.outbound.protection.outlook.com [40.107.6.119])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B4840C00
-	for <linux-integrity@vger.kernel.org>; Mon, 22 Jan 2024 17:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.6.119
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705945299; cv=fail; b=ggtFt8uqY2HXYG7aT9EnoaDJKIUHBcY03HRi/KvYoaslLX3UoOCwYPOgyy06GbrVSepmadKuomI/nBT2TL1uBCzXx7lu9HKlaL6Mef1sPsXuHGUVKKc6VcQ1Bz07AlJV2xsEdoymh2+Qd5VRU9Bl5vY8Yvnbt84PgA9JDJCS9A8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705945299; c=relaxed/simple;
-	bh=9FyQC03WjbvbhNxhvtTnaaMJhja8Tc9fL91ClQxl+uE=;
-	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=OXdm8RGLogAStnetBk1WAsTnRpGUUV3x+QNh/+P/nliecNe63kq5UOsaMjMnO/TknyK1NmeeB0QV/iQJ2Hy/MoYb9XEupHztWIVh5KGWxG58oggwh/RRxGg0xaKmOr55yU20MN+gQcQXlkBzSMDK6fyuUvSgki5/5pfLv+nTbE4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=polito.it; spf=pass smtp.mailfrom=polito.it; dkim=pass (1024-bit key) header.d=politoit.onmicrosoft.com header.i=@politoit.onmicrosoft.com header.b=oxuTqZ3P; arc=fail smtp.client-ip=40.107.6.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=polito.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=polito.it
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SvYPZT6bn5zTiSi5mF2nFElNvFiaPtCcdF0gRNIrL+OUScXpHwb/j9zIqg4b532o7jfTGGaojjhcM02tHLENNb5J6b+f6mrPmmA9tzhFMBLz2vI5TldDw3vmLEwqPxXCIZkxi2cz2D6EDHCPr90gKwk9/Cl3czjti0QbmdPEM9rG8PFiP33UGuUD0yEhOMdk+sbYyllHOA7gs67tptdVW2IPBgtonVs4YbHK4aRV2knfx9QoQj03k1to1zSMRrlBkvDEesg5yqzPo6KasdFmvHV9IyWyY8tCzNyja4i57Drs0LXdbN6VC1MEKu9lDkWUKNKH+zcVwJyEX8ax8uNfaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q7r1ZphosAT2243ypCEpCdV8dDat/GNJwQ8qoeS1Dv4=;
- b=CF5Gtj7xw6CZPQ9RwkgMT5fWW03HUAqF5n1ot2SRC9CdDt2Z5venNj+rVK5H+k1h0YmvAdXQvkO7sGBnR8hJKMLqvtKy5K7eHeHsuafZvX+sFNHohpZwi355YbTwlEt7rKpJk3xtyJWDLa01AHXaRaMVO8FoJ1cU/Lv/z+kQNXYPGEvWW7zx1mlde54dZdRuZDAboeH7nKnphuxIFMswVCyU3exAwosUG8Q0plAOuqj/Df0i2A9DcnZfwsQYvjY5al2b7Yn7PAtn03M9tEIOLA/y9Clk/PJiwQtau3jleV0CCN1vAQaOqSkihv/STnMTZbKa/hKuVRXx8EOPdLp5Tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=polito.it; dmarc=pass action=none header.from=polito.it;
- dkim=pass header.d=polito.it; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=politoit.onmicrosoft.com; s=selector2-politoit-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q7r1ZphosAT2243ypCEpCdV8dDat/GNJwQ8qoeS1Dv4=;
- b=oxuTqZ3PnePLDk6Q/AdJlGBTFalhIXrpmtIZk/NoMhGlYJWplOHqPpBU9P5VGYyR/g4XXqhpIWtgobbDzdXm60akhpqWxn6wRd94PAjS6qCn1c03uMflUBexEdYDNaDOdJ095qXs7RBVJfnN3+raHG0LwC9J9RgpW7eNa5ta6k4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=polito.it;
-Received: from AS2PR05MB9840.eurprd05.prod.outlook.com (2603:10a6:20b:5f5::20)
- by PA4PR05MB9305.eurprd05.prod.outlook.com (2603:10a6:102:2ad::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.31; Mon, 22 Jan
- 2024 17:41:31 +0000
-Received: from AS2PR05MB9840.eurprd05.prod.outlook.com
- ([fe80::3351:44:a53e:99a9]) by AS2PR05MB9840.eurprd05.prod.outlook.com
- ([fe80::3351:44:a53e:99a9%4]) with mapi id 15.20.7202.027; Mon, 22 Jan 2024
- 17:41:31 +0000
-Message-ID: <e0664bb2-8caf-42f3-9344-ee4159782eda@polito.it>
-Date: Mon, 22 Jan 2024 18:41:29 +0100
-User-Agent: Mozilla Thunderbird
-From: Enrico Bravi <enrico.bravi@polito.it>
-Subject: Re: [PATCH v2] ima: add crypto agility support for template-hash
- algorithm
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
- linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
- roberto.sassu@huawei.com
-Cc: Silvia Sisinni <silvia.sisinni@polito.it>
-References: <20240121161633.2302285-1-enrico.bravi@polito.it>
- <aa50966e78c74539f6379c7c2215880db22d2752.camel@huaweicloud.com>
-Content-Language: en-US, it
-In-Reply-To: <aa50966e78c74539f6379c7c2215880db22d2752.camel@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZR2P278CA0079.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:65::18) To AS2PR05MB9840.eurprd05.prod.outlook.com
- (2603:10a6:20b:5f5::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A713D545
+	for <linux-integrity@vger.kernel.org>; Mon, 22 Jan 2024 18:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705947071; cv=none; b=aTB4LoZz2vzUwXBXgBftzp17crlRNh5e0Ffek7RsDdKe8/ureDo1PKyXUcf7KgrX5igAew4tGdGR+A40PzZghdI8BRU9U1Jy1SpIucnoOeN4F/tmdY5P7varjgUaBa2Rzifo5DfFH/4T358k7xE9+WQu2vreT4G8S6pO7+OYScM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705947071; c=relaxed/simple;
+	bh=r4hNLx1axTK9D2SO1h2Nidy6wdhcdwS0oI6JMP4mupU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SH3XvvL1C61QcvGyaS0REwJ3F1+uiuvKrzvn1DHL2cZGZUuSp1/crRTOlqlOXXY5kXKFyVur+Q/o4rEMKtzXX/u5DOLFfuV6WTbAb6ZTMAblPOWzx+RKQchhtZvDGGVqduMEi2JxgqqQJi5BQR4SYLFvzF5YgqtBIwuo9tm4CHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiY-0001lP-N0; Mon, 22 Jan 2024 19:08:18 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiS-001ePE-PM; Mon, 22 Jan 2024 19:08:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rRyiS-005Zwj-1m;
+	Mon, 22 Jan 2024 19:08:12 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: kernel@pengutronix.de,
+	Moritz Fischer <mdf@kernel.org>,
+	Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexander Aring <alex.aring@gmail.com>,
+	Stefan Schmidt <stefan@datenfreihafen.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-wpan@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	linux-iio@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Rayyan Ansari <rayyan@ansari.sh>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Martin Tuma <martin.tuma@digiteqautomotive.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org,
+	Sergey Kozlov <serjk@netup.ru>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	linux-mmc@vger.kernel.org,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Rob Herring <robh@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Michal Simek <michal.simek@amd.com>,
+	Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>,
+	linux-mtd@lists.infradead.org,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	=?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Ronald Wahl <ronald.wahl@raritan.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	Viresh Kumar <vireshk@kernel.org>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	greybus-dev@lists.linaro.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	Herve Codina <herve.codina@bootlin.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-usb@vger.kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	libertas-dev@lists.infradead.org,
+	linux-wireless@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	James Clark <james.clark@arm.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v2 00/33] spi: get rid of some legacy macros
+Date: Mon, 22 Jan 2024 19:06:55 +0100
+Message-ID: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS2PR05MB9840:EE_|PA4PR05MB9305:EE_
-X-MS-Office365-Filtering-Correlation-Id: abb7213d-0032-4781-f356-08dc1b715ead
-X-politoEOL-CGPAlias: 1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	npLDRE7xwGLZBPnjACTN20Ni6vJByodRpxGkQvtKCSwyPqzygqfxgBT1FLKIeP75kfMzltisIWMSXlI26OY43Wzb0CdrNj4bFYst+U3AfKuFmuSzFyF4TtVB+AC3StPDLPAkr3CG3LvUOk/17IpRtjzsdYnUF4m2bQZdGFexvgSvQRNF6IocfXbxELblSiDdk372eEtnDFQ7l+90WIr03JNvEhnWpGUt8IPTz0ZMz12yyHOG8S9NaXPDoULOvCJv6TqtwUEn2hSyqF47ouN/sbA/HdBokgCjHHeOeLHungM3gkzR/v1Ruqbi9Sv2YbsLiOw1I/zlJlNwnUPfgkEmpD1n2O/ICsaKsYoeDeq7Cy5nWrH8+JuwaEKcHXf0AMdVFtTexKuhf6fkFAzUWGxuhYyxvgK9vY2E4eKsZPiy7W8Ie8OpXElMVVkvhmw32MJYKpJya6Y+TLWMfQ5ND9QojXVblqVnr7o2+D+0lt6O2kaS+0Vext2UHN9uNGcKakA0fLkv0AU/1ISVLKssPMTFqoGgwgbMGg97yGsauTXyFiVIEJybQfqihCkM+23hMjksbqnLw7CH7Yc/IQNyovkxScBpXdsDdbyiF1z/OsGAY0n20patJH3C2uRsM1g0PfhtkYqNs4Zsmflui4gYHae5pQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR05MB9840.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(346002)(39860400002)(396003)(366004)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(31686004)(83380400001)(31696002)(86362001)(36756003)(4326008)(8936002)(8676002)(53546011)(107886003)(2616005)(38100700002)(26005)(6506007)(66556008)(6512007)(6486002)(316002)(66946007)(786003)(66476007)(41300700001)(5660300002)(2906002)(478600001)(30864003)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NE04MmcxL0IwTi9vKzZqd3h5REFQKzdsMnc4N2VaUWRBbm54Qk85RWowTDJI?=
- =?utf-8?B?ME8yWC95RHFLWXJWWVBXU1RkQms4UW5zQlZIOWlOVktUOUJjYUM5aTVidVdk?=
- =?utf-8?B?QzlWYjVGSmwwRGxmRTNZN25WczgvQTU2YW1sRGl6UGJkYyt0NUxKTDFNeDJl?=
- =?utf-8?B?TG5IMkZUTC9wREZVcEMrblFLY05NTGZTMkFRcHdhekV4OXpGWlVkTkJSWDJs?=
- =?utf-8?B?MWYwZ2VVSElMTUJBa3VXNWFEVkR2YXkrcjM1UTBuaEsxOGFNUDJrT0g2OWdo?=
- =?utf-8?B?VVhxa1ZnRDlQMmgvcW5TcStPZURBV1VEQnFtVDUyamlUYm1KWWttUmdJUHkx?=
- =?utf-8?B?b3dNdVVmSXdwOENkTnZqQ1dtVCt3T0lwMXgvZGFGa3YvSTl1V29XdE9yYWto?=
- =?utf-8?B?TVZ5STVvSmRIK1huYkhVY3hkV1IwNHJBRTB5YjBKN2d4MzRYNGJTdDFmdWdV?=
- =?utf-8?B?SFUrMXEySGRlNHc2SExhazh4TTI2S0tMRVdvL3h6OUtXc3VmYUQ2WFlsMG1i?=
- =?utf-8?B?RDhEZVh3ejRaMm5FeG5Qc2k5Wk9lVzVLd0ZzZHVReWxhUlQ5bXp2NUcwcTRs?=
- =?utf-8?B?M05BMDZXWEQ2MkNzNnBJeEJYN3VOem8rS2xRa3JvMmIvNzRFSkMvYjMrSnlz?=
- =?utf-8?B?TE1PWDZmTlZPZVRPWG9WdGQ5c01PR2RaK1AwNzEwbW9NY00wSU4reVNSMUdR?=
- =?utf-8?B?aDBmRnVIKzViZVl0amlOTW45blo3ODN5VG9ma1hCVTYycWRNNHJTMXZUdUFS?=
- =?utf-8?B?dGsyWU9RSnNheUxoSVFiZG5TK1lzUE9pdGg2bW5EWitnejlDKzR6MmwwcUNX?=
- =?utf-8?B?RG5JOVlvQUtSRXNjaU5ObFhCKzlwR3piMnZUenFCSDliS1JkVm4xbzR6T0ph?=
- =?utf-8?B?d2dmN3Y1eGxjNjhwazNuamVvNHFjMHl4M1NsallwUk4wdEdPWkZYZ1FoRUlD?=
- =?utf-8?B?MEhLWkpnMXJXTVdrV2xFTW51djJDc3ZPSGtHK0VUWm4zbmJjbEVRNzVsUmNN?=
- =?utf-8?B?NXpGTG9KOEJpaTM4Ulo3U1JVM0pLdTVpTFJYSUNxbmVGMXhIRkE2TVFKOVU4?=
- =?utf-8?B?SE9CWHE0UlFaUFMzTE0rdjBib2MwZFExSTVEbFZBaitOUEYvdUYwWjQzdjVP?=
- =?utf-8?B?OUgwdUpBNVZKckNxbkNITFZ3dUIrTkZ5SHFuVTNOdm5pbWlMRkdnZTFMekRj?=
- =?utf-8?B?Y0kzZGdNcUFCTTMrT2gzRUhsNm5uMTBNQmYxeHA2Rjd4NE9KSk4wNC9HT0FF?=
- =?utf-8?B?UW4veVlzVlZDbVVvcllXVysrTmNwT0crRytFa3A5N2hCazdmeEkrcENWNndG?=
- =?utf-8?B?aWRsNVIxRGJMNXJVd0tFZ0trYkVRdUxDdWhuU0F5SlpFZmdTaDJ4RnJWMk80?=
- =?utf-8?B?VktYUlpDRHlvVUlacXgwUC9ZdXl3OHlFWHc3Y3MwZGYvdUtXRkdRYlBUWXgr?=
- =?utf-8?B?SkJtdUNrOFhTQW9NckxYOWxOTXZsVnJHZWVNYTNEK251NGJFeml6MWNRS3pX?=
- =?utf-8?B?Z2pWbUJPYzl0cWpGTWkyZFVlSytjdG5aUWQydy8zVjUxTjFKOGZwOS9XY1RW?=
- =?utf-8?B?OVFZV0VKODh6V1BCZVBCM1FxeEVRTnRHM3ZGREM4VUExeEhjL0ZFZllUZFhn?=
- =?utf-8?B?Z0ppU3VhR09IWmVodisyQTVqbk4weHpUcXlRcDRwc1czUVorM1ZXZFdMYUR5?=
- =?utf-8?B?K1N2QlRPV3ZSeUp6YTNZV2U3S3VqTnBoNXY0WHd0VTJKdVMzQ0F4anhTTkk3?=
- =?utf-8?B?ZGh2NS9NQ3Y1UnJxZDVkTFdTZnM1RVUxT3V2d29HOGxLWUlreHlIVG9vTkNa?=
- =?utf-8?B?YW5sMHVoeEFhTTV2OGhpT1c5NzA5aE1aRUxrQjdqS0pQTnBxdm8xSUpBeUFp?=
- =?utf-8?B?d3loWGNXcDd3RmdjeWRrSWpHd2tkR0hQaEFFRnluZENrY2FxaUl6TFNYVVMv?=
- =?utf-8?B?TDFDY3Nid3JkRWMwTHV6K1NsbGJPeFhzVzdKT0JoNmRpcGZuUGNaNU9yN3p1?=
- =?utf-8?B?SW9adGhKdWZPbW5KSUNubmlZallsNGt3T3RMREsyeFAwZE1BdVZmVDdTV3pC?=
- =?utf-8?B?VTZEaFdxdTZoRHJmZlQyTXlWbzdlRlVpR2tlOE5FVzRVSkRLVzVVdjdUUE5l?=
- =?utf-8?B?R0FpTExrR05kcTM0YW9odUN4Z2R3YVo2R01UNU9ZY3FGbi9maXRaQkl1TzVJ?=
- =?utf-8?B?U1E9PQ==?=
-X-OriginatorOrg: polito.it
-X-MS-Exchange-CrossTenant-Network-Message-Id: abb7213d-0032-4781-f356-08dc1b715ead
-X-MS-Exchange-CrossTenant-AuthSource: AS2PR05MB9840.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2024 17:41:31.6316
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 2a05ac92-2049-4a26-9b34-897763efc8e2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aTKsH6+bVZtxmHybSOv2VnFOF+Uxb0QMTRRWtqjZcPqCg2EYU5LBoFuitXmEa6OWdL+tLwOIdDG94jwgNnJfEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR05MB9305
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5874; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=r4hNLx1axTK9D2SO1h2Nidy6wdhcdwS0oI6JMP4mupU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlrq7CRGL5rco/IZ7baQyO1t3S9it11eXvRLZKR GbQbTfz3/2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZa6uwgAKCRCPgPtYfRL+ TlSmB/4k7WiBaRL3saK9pl+Gkw8Hqk7HVFstVTQ/rkaYbIsJGY0xZw8/1EJjSObFeB+APA4aMQh I79wzfj/BAi6u9wIsVNiQ9y/G7wHtwifXCuuRBAfRSQICGNo++YWb4VjoViqUrlwFz1on55YRHO fF0At9RAUzuTpDwaPQlercYTSV2fRZOyE6oFjYu50ibPS5RDRAlt5RMXKu+KeNvZIt1a7rYblZd 3X+5IV8boWAzqfA2x+ESE9bxy64tcf4U55YuI4LIo7T/6pTUUmJEXiJK3Hqi+KdRcDIt0RoY0Co KLQSX3Yu+cnQoWcdVVqzWe5P2RjCFOxbxIHkvh+IxoWx5PzK
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
 
-Hi Roberto,
+Hello,
 
-thanks a lot for your quick feedback.
+this is v2 of this patch set.
 
-On 22/01/24 09:20, Roberto Sassu wrote:
-> On Sun, 2024-01-21 at 17:16 +0100, Enrico Bravi wrote:
->> The template hash showed by the ascii_runtime_measurements and
->> binary_runtime_measurements is the one calculated using sha1 and there is no
->> possibility to change this value, despite the fact that the template hash is
->> calculated using the hash algorothms corresponding to all the PCR banks
->> configured in the TPM.
->>
->> This patch introduce the support to retrieve the ima log with the template data
->> hash calculated with a specific hash algorithm.
->> Add a new file in the securityfs ima directory for each hash algo configured
->> for the PCR banks of the TPM. Each new file has the name with the following
->> structure:
->>
->> 	{binary, ascii}_runtime_measurements_<hash_algo_name>
->>
->> except for sha1 which it remains associated with the standard file names.
->> The <hash_algo_name> is used to select the template data hash algorithm to show
->> in ima_ascii_measurements_show() and in ima_measurements_show().
->>
->> As example, in the case sha1 and sha256 are the configured PCR banks, the
->> listing of the security/ima directory is the following:
->>
->> -r--r----- 1 root root 0 gen 20 15:06 ascii_runtime_measurements
->> -r--r----- 1 root root 0 gen 20 15:06 ascii_runtime_measurements_sha256
->> -r--r----- 1 root root 0 gen 20 15:06 binary_runtime_measurements
->> -r--r----- 1 root root 0 gen 20 15:06 binary_runtime_measurements_sha256
->> --w------- 1 root root 0 gen 20 15:06 policy
->> -r--r----- 1 root root 0 gen 20 15:06 runtime_measurements_count
->> -r--r----- 1 root root 0 gen 20 15:06 violations
->>
->> v2:
->>  - Changed the behaviour of configuring at boot time the template data hash
->>    algorithm.
->>  - Removed template data hash algo name prefix.
->>  - Removed ima_template_hash command line option.
->>  - Introducing a new file in the securityfs ima subdir for each PCR banks
->>    algorithm configured in the TPM.
->>    (suggested by Roberto)
->>
->> Signed-off-by: Enrico Bravi <enrico.bravi@polito.it>
->> Signed-off-by: Silvia Sisinni <silvia.sisinni@polito.it>
->>
->> ---
->>  security/integrity/ima/ima_fs.c | 164 ++++++++++++++++++++++++++++++--
->>  1 file changed, 157 insertions(+), 7 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
->> index cd1683dad3bf..db57edeb112d 100644
->> --- a/security/integrity/ima/ima_fs.c
->> +++ b/security/integrity/ima/ima_fs.c
->> @@ -118,7 +118,7 @@ void ima_putc(struct seq_file *m, void *data, int datalen)
->>  
->>  /* print format:
->>   *       32bit-le=pcr#
->> - *       char[20]=template digest
->> + *       char[n]=template digest
->>   *       32bit-le=template name size
->>   *       char[n]=template name
->>   *       [eventdata length]
->> @@ -130,9 +130,37 @@ int ima_measurements_show(struct seq_file *m, void *v)
->>  	struct ima_queue_entry *qe = v;
->>  	struct ima_template_entry *e;
->>  	char *template_name;
->> +	const char *filename;
->> +	char algo_name[16];
->>  	u32 pcr, namelen, template_data_len; /* temporary fields */
->>  	bool is_ima_template = false;
->> -	int i;
->> +	int i, rc, algo_idx;
->> +	enum hash_algo algo;
->> +
->> +	filename = m->file->f_path.dentry->d_name.name;
->> +	rc = sscanf(filename, "binary_runtime_measurements%s", algo_name);
->> +
->> +	if (rc != 0) {
->> +		for (i = 0; i < HASH_ALGO__LAST; i++) {
->> +			if (!strcmp(algo_name + 1, hash_algo_name[i])) {
->> +				algo = i;
->> +				break;
->> +			}
->> +		}
->> +		if (i == HASH_ALGO__LAST)
->> +			algo = HASH_ALGO_SHA1;
->> +
->> +		for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
->> +			if (algo == ima_tpm_chip->allocated_banks[i].crypto_id) {
->> +				algo_idx = i;
->> +				break;
->> +			}
->> +		}
->> +	}
-> 
-> Hi Enrico, Silvia
-> 
-> I would find more efficient if you create an array of dentries in the
-> same order as ima_tpm_chip->allocated_banks, so that you can compare
-> dentry addresses and find already the right index.
+Changes since (implicit) v1, sent with Message-Id:
+cover.1705348269.git.u.kleine-koenig@pengutronix.de:
 
-Your are absolutely right, there is no need of two loops.
+ - Rebase to v6.8-rc1
+ - Fix a build failure on sh
+ - Added the tags received in (implicit) v1.
 
->> +	else {
->> +		algo_idx = ima_sha1_idx;
->> +		algo = HASH_ALGO_SHA1;
->> +	}
->>  
->>  	/* get entry */
->>  	e = qe->entry;
->> @@ -151,7 +179,7 @@ int ima_measurements_show(struct seq_file *m, void *v)
->>  	ima_putc(m, &pcr, sizeof(e->pcr));
->>  
->>  	/* 2nd: template digest */
->> -	ima_putc(m, e->digests[ima_sha1_idx].digest, TPM_DIGEST_SIZE);
->> +	ima_putc(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
->>  
->>  	/* 3rd: template name size */
->>  	namelen = !ima_canonical_fmt ? strlen(template_name) :
->> @@ -220,7 +248,35 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
->>  	struct ima_queue_entry *qe = v;
->>  	struct ima_template_entry *e;
->>  	char *template_name;
->> -	int i;
->> +	const char *filename;
->> +	char algo_name[16];
->> +	int i, algo_idx, rc;
->> +	enum hash_algo algo;
->> +
->> +	filename = m->file->f_path.dentry->d_name.name;
->> +	rc = sscanf(filename, "ascii_runtime_measurements%s", algo_name);
->> +
->> +	if (rc != 0) {
->> +		for (i = 0; i < HASH_ALGO__LAST; i++) {
->> +			if (!strcmp(algo_name + 1, hash_algo_name[i])) {
->> +				algo = i;
->> +				break;
->> +			}
->> +		}
->> +		if (i == HASH_ALGO__LAST)
->> +			algo = HASH_ALGO_SHA1;
->> +
->> +		for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
->> +			if (algo == ima_tpm_chip->allocated_banks[i].crypto_id) {
->> +				algo_idx = i;
->> +				break;
->> +			}
->> +		}
->> +	}
-> 
-> Same.
-> 
->> +	else {
->> +		algo_idx = ima_sha1_idx;
->> +		algo = HASH_ALGO_SHA1;
->> +	}
->>  
->>  	/* get entry */
->>  	e = qe->entry;
->> @@ -233,8 +289,8 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
->>  	/* 1st: PCR used (config option) */
->>  	seq_printf(m, "%2d ", e->pcr);
->>  
->> -	/* 2nd: SHA1 template hash */
->> -	ima_print_digest(m, e->digests[ima_sha1_idx].digest, TPM_DIGEST_SIZE);
->> +	/* 2nd: template hash */
->> +	ima_print_digest(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
->>  
->>  	/* 3th:  template name */
->>  	seq_printf(m, " %s", template_name);
->> @@ -363,6 +419,8 @@ static struct dentry *ascii_runtime_measurements;
->>  static struct dentry *runtime_measurements_count;
->>  static struct dentry *violations;
->>  static struct dentry *ima_policy;
->> +static struct dentry **ima_ascii_measurements_files;
->> +static struct dentry **ima_binary_measurements_files;
->>  
->>  enum ima_fs_flags {
->>  	IMA_FS_BUSY,
->> @@ -379,6 +437,31 @@ static const struct seq_operations ima_policy_seqops = {
->>  };
->>  #endif
->>  
->> +/*
->> + * Remove the securityfs files created for each hash algo configured
->> + * in the TPM, excluded ascii_runtime_measurements and
->> + * binary_runtime_measurements.
->> + */
->> +static void remove_measurements_list_files(void)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
->> +		if (ima_ascii_measurements_files[i]) {
->> +			securityfs_remove(ima_ascii_measurements_files[i]);
->> +			kfree(ima_ascii_measurements_files[i]);
->> +		}
->> +
->> +		if (ima_binary_measurements_files[i]) {
->> +			securityfs_remove(ima_binary_measurements_files[i]);
->> +			kfree(ima_binary_measurements_files[i]);
->> +		}
->> +	}
->> +
->> +	kfree(ima_ascii_measurements_files);
->> +	kfree(ima_binary_measurements_files);
-> 
-> Oh, you actually put them in a array and order the elements by PCR
-> bank.
-> 
->> +}
->> +
->>  /*
->>   * ima_open_policy: sequentialize access to the policy file
->>   */
->> @@ -452,7 +535,10 @@ static const struct file_operations ima_measure_policy_ops = {
->>  
->>  int __init ima_fs_init(void)
->>  {
->> -	int ret;
->> +	int ret, i;
->> +	u16 algo;
->> +	char file_name[50];
->> +	struct dentry *dfile;
->>  
->>  	ima_dir = securityfs_create_dir("ima", integrity_dir);
->>  	if (IS_ERR(ima_dir))
->> @@ -483,6 +569,69 @@ int __init ima_fs_init(void)
->>  		goto out;
->>  	}
->>  
->> +	/*
->> +	 * Allocate a file in the securityfs for each hash algo configured
->> +	 * in the TPM but sha1 (for ascii and binary output).
->> +	 */
->> +	if (ima_tpm_chip) {
->> +
->> +		ima_ascii_measurements_files = kmalloc_array(NR_BANKS(ima_tpm_chip),
->> +					sizeof(struct dentry *), GFP_KERNEL);
-> 
-> Since you added a function for freeing the arrays, I would do the same
-> for adding.
+The slave-mt27xx driver needs some more work. The patch presented here
+is enough however to get rid of the defines handled in patch 32.
+Cleaning that up is out-of-scope for this series, so I'll delay that
+until later.
 
-Sure.
+Note that Jonathan Cameron has already applied patch 3 to his tree, it
+didn't appear in a public tree though yet. I still included it here to
+make the kernel build bots happy.
 
->> +		if(ima_ascii_measurements_files == NULL) {
->> +			ret = -ENOMEM;
->> +			goto out;
->> +		}
->> +
->> +		ima_binary_measurements_files = kmalloc_array(NR_BANKS(ima_tpm_chip),
->> +					sizeof(struct dentry *), GFP_KERNEL);
->> +		if(ima_binary_measurements_files == NULL) {
->> +			ret = -ENOMEM;
->> +			goto out;
->> +		}
->> +
->> +		for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
->> +			algo = ima_tpm_chip->allocated_banks[i].crypto_id;
->> +
->> +			/* Skip sha1 */
->> +			if (algo == HASH_ALGO_SHA1)
->> +				continue;
-> 
-> I would go ahead, create also the dentry for SHA1 and add a symbolic
-> link for the legacy files.
+Best regards
+Uwe
 
-ima_ascii_measurements_files and ima_binary_measurements_files are allocated
-just in the case a tpm chip is detected. What you are suggesting is to allocate
-in any case these lists, with at least one element, and creating the legacy file
-always as symbolic links? Or to define them as symbolic links only in the case a
-tpm chip is detected, otherwise creating them as usual?
+Uwe Kleine-König (33):
+  fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
+  ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
+  iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to
+    "controller"
+  Input: pxspad - follow renaming of SPI "master" to "controller"
+  Input: synaptics-rmi4 - follow renaming of SPI "master" to
+    "controller"
+  media: mgb4: Follow renaming of SPI "master" to "controller"
+  media: netup_unidvb: Follow renaming of SPI "master" to "controller"
+  media: usb/msi2500: Follow renaming of SPI "master" to "controller"
+  media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
+  misc: gehc-achc: Follow renaming of SPI "master" to "controller"
+  mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
+  mtd: dataflash: Follow renaming of SPI "master" to "controller"
+  mtd: rawnand: fsl_elbc: Let .probe retry if local bus is missing
+  net: ks8851: Follow renaming of SPI "master" to "controller"
+  net: vertexcom: mse102x: Follow renaming of SPI "master" to
+    "controller"
+  platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to
+    "controller"
+  spi: bitbang: Follow renaming of SPI "master" to "controller"
+  spi: cadence-quadspi: Don't emit error message on allocation error
+  spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
+  spi: cavium: Follow renaming of SPI "master" to "controller"
+  spi: geni-qcom: Follow renaming of SPI "master" to "controller"
+  spi: loopback-test: Follow renaming of SPI "master" to "controller"
+  spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
+  spi: spidev: Follow renaming of SPI "master" to "controller"
+  staging: fbtft: Follow renaming of SPI "master" to "controller"
+  staging: greybus: spi: Follow renaming of SPI "master" to "controller"
+  tpm_tis_spi: Follow renaming of SPI "master" to "controller"
+  usb: gadget: max3420_udc: Follow renaming of SPI "master" to
+    "controller"
+  video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
+  wifi: libertas: Follow renaming of SPI "master" to "controller"
+  spi: fsl-lib: Follow renaming of SPI "master" to "controller"
+  spi: Drop compat layer from renaming "master" to "controller"
+  Documentation: spi: Update documentation for renaming "master" to
+    "controller"
 
->> +
->> +			dfile = kmalloc(sizeof(struct dentry), GFP_KERNEL);
->> +			if (!dfile) {
->> +				ret = -ENOMEM;
->> +				goto out;
->> +			}
-> 
-> I don't remember if the lines above are really necessary. You actually
-> overwrite the pointer below.
+ .../driver-api/driver-model/devres.rst        |  2 +-
+ Documentation/spi/spi-summary.rst             | 74 +++++++++----------
+ drivers/char/tpm/tpm_tis_spi_main.c           |  4 +-
+ drivers/fpga/ice40-spi.c                      |  4 +-
+ drivers/iio/adc/ad_sigma_delta.c              | 14 ++--
+ drivers/input/joystick/psxpad-spi.c           |  4 +-
+ drivers/input/rmi4/rmi_spi.c                  |  2 +-
+ drivers/media/pci/mgb4/mgb4_core.c            | 14 ++--
+ .../media/pci/netup_unidvb/netup_unidvb_spi.c | 48 ++++++------
+ drivers/media/usb/msi2500/msi2500.c           | 38 +++++-----
+ drivers/media/v4l2-core/v4l2-spi.c            |  4 +-
+ drivers/misc/gehc-achc.c                      |  8 +-
+ drivers/mmc/host/mmc_spi.c                    |  6 +-
+ drivers/mtd/devices/mtd_dataflash.c           |  2 +-
+ drivers/mtd/nand/raw/fsl_elbc_nand.c          |  3 +-
+ drivers/net/ethernet/micrel/ks8851_spi.c      |  4 +-
+ drivers/net/ethernet/vertexcom/mse102x.c      |  2 +-
+ drivers/net/ieee802154/ca8210.c               |  2 +-
+ .../net/wireless/marvell/libertas/if_spi.c    |  2 +-
+ drivers/platform/chrome/cros_ec_spi.c         |  8 +-
+ drivers/spi/spi-ath79.c                       |  4 +-
+ drivers/spi/spi-bitbang.c                     | 64 ++++++++--------
+ drivers/spi/spi-butterfly.c                   |  6 +-
+ drivers/spi/spi-cadence-quadspi.c             |  7 +-
+ drivers/spi/spi-cavium.c                      |  6 +-
+ drivers/spi/spi-cavium.h                      |  2 +-
+ drivers/spi/spi-davinci.c                     |  6 +-
+ drivers/spi/spi-fsl-lib.c                     | 14 ++--
+ drivers/spi/spi-geni-qcom.c                   |  2 +-
+ drivers/spi/spi-gpio.c                        |  2 +-
+ drivers/spi/spi-lm70llp.c                     |  6 +-
+ drivers/spi/spi-loopback-test.c               |  4 +-
+ drivers/spi/spi-oc-tiny.c                     |  6 +-
+ drivers/spi/spi-omap-uwire.c                  |  4 +-
+ drivers/spi/spi-sh-sci.c                      | 10 +--
+ drivers/spi/spi-slave-mt27xx.c                |  2 +-
+ drivers/spi/spi-xilinx.c                      |  4 +-
+ drivers/spi/spi-xtensa-xtfpga.c               |  2 +-
+ drivers/spi/spi.c                             |  2 +-
+ drivers/spi/spidev.c                          |  2 +-
+ drivers/staging/fbtft/fbtft-core.c            |  4 +-
+ drivers/staging/greybus/spilib.c              | 66 ++++++++---------
+ drivers/usb/gadget/udc/max3420_udc.c          |  2 +-
+ drivers/video/fbdev/mmp/hw/mmp_spi.c          | 26 +++----
+ include/linux/spi/spi.h                       | 20 +----
+ include/linux/spi/spi_bitbang.h               |  2 +-
+ include/media/v4l2-common.h                   |  6 +-
+ 47 files changed, 254 insertions(+), 272 deletions(-)
 
-Yes these lines are definitely not necessary.
 
-Thanks a lot,
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+-- 
+2.43.0
 
-Enrico
-
-> 
->> +
->> +			sprintf(file_name, "ascii_runtime_measurements_%s",
->> +						hash_algo_name[algo]);
->> +			dfile = securityfs_create_file(file_name,
->> +						S_IRUSR | S_IRGRP, ima_dir, NULL,
->> +						&ima_ascii_measurements_ops);
->> +			if (IS_ERR(dfile)) {
->> +				ret = PTR_ERR(dfile);
->> +				goto out;
->> +			}
->> +			ima_ascii_measurements_files[i] = dfile;
->> +
->> +			dfile = kmalloc(sizeof(struct dentry), GFP_KERNEL);
->> +			if (!dfile) {
->> +				ret = -ENOMEM;
->> +				goto out;
->> +			}
->> +
->> +			sprintf(file_name, "binary_runtime_measurements_%s",
->> +						hash_algo_name[algo]);
->> +			dfile = securityfs_create_file(file_name,
->> +						S_IRUSR | S_IRGRP, ima_dir, NULL,
->> +						&ima_measurements_ops);
->> +			if (IS_ERR(dfile)) {
->> +				ret = PTR_ERR(dfile);
->> +				goto out;
->> +			}
->> +			ima_binary_measurements_files[i] = dfile;
->> +		}
->> +	}
->> +
->>  	runtime_measurements_count =
->>  	    securityfs_create_file("runtime_measurements_count",
->>  				   S_IRUSR | S_IRGRP, ima_dir, NULL,
->> @@ -515,6 +664,7 @@ int __init ima_fs_init(void)
->>  	securityfs_remove(runtime_measurements_count);
->>  	securityfs_remove(ascii_runtime_measurements);
->>  	securityfs_remove(binary_runtime_measurements);
->> +	remove_measurements_list_files();
->>  	securityfs_remove(ima_symlink);
->>  	securityfs_remove(ima_dir);
->>
->> base-commit: 88035e5694a86a7167d490bb95e9df97a9bb162b
 
