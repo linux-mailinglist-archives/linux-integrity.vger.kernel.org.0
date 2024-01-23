@@ -1,457 +1,256 @@
-Return-Path: <linux-integrity+bounces-858-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-859-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B13D838871
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jan 2024 09:04:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF46A8395FE
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jan 2024 18:09:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDEDB1F23530
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jan 2024 08:04:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0344DB235FD
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jan 2024 17:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3F555E6C;
-	Tue, 23 Jan 2024 08:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D127F7D5;
+	Tue, 23 Jan 2024 17:06:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tS7QhAIy"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BA055E65
-	for <linux-integrity@vger.kernel.org>; Tue, 23 Jan 2024 08:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFCB7F7E2
+	for <linux-integrity@vger.kernel.org>; Tue, 23 Jan 2024 17:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705997058; cv=none; b=fkd0Wo9lekwxvwWdvDDIKXlOIZbGFnNUNTX0JwlBm9ELmdOVR2lMUc5tCdhjt9ljVeMPfAvNC4abHuD8o0C/g4WMNg8gL8YPYRUNDT1gK7vpmrpRgQitDDDrqklnXJmw6oK1SQe4qwZNCJjt5zydVPB+DT544eTnM5EVCuAuYWM=
+	t=1706029606; cv=none; b=nQSIoR3kMU8A3/H6nJtUrxHBk9xpDxpMphSyyaGfNzKsIemE8hG5XpQ7a2xHf+dbXflxZ3nsLJBZG0y3a3/J0wUBlU11V5X/luw29hn10qpDxq4P1DOrI7s4supRyrTrg2A9oWIA9a9vVUWCtCyCBKBjuYhNio/sV2TnnKBHikw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705997058; c=relaxed/simple;
-	bh=F2U02YkbjXEiX6u85N4Ajg0dsi/lgEH6TRzwPQLAU9c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=o53Ipz9x8E9RYeF1OSZXbAMt3k9CH4VLfYlvWVzFxKKT11U/+P7vNaYYaZo+4tllrJK87DegSj1115GntxQnFy/bLq9+ryzL4EP6oaITHadM88v3Gr1MDDCuW9EC5YqFPNXgmbq5M3H94qZZCrGbSiWLt/gsHRPhJXXCHmVC/vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4TJzfB05Grz9xwvd
-	for <linux-integrity@vger.kernel.org>; Tue, 23 Jan 2024 15:45:38 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 7E1581400E8
-	for <linux-integrity@vger.kernel.org>; Tue, 23 Jan 2024 16:04:01 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwAXBCjrcq9loPQUAQ--.40912S2;
-	Tue, 23 Jan 2024 09:04:01 +0100 (CET)
-Message-ID: <c600cfadf5cc7cb890adeab9b6f3053c37bbb89f.camel@huaweicloud.com>
-Subject: Re: [PATCH v2] ima: add crypto agility support for template-hash
- algorithm
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Enrico Bravi <enrico.bravi@polito.it>, linux-integrity@vger.kernel.org, 
-	zohar@linux.ibm.com, roberto.sassu@huawei.com
-Cc: Silvia Sisinni <silvia.sisinni@polito.it>
-Date: Tue, 23 Jan 2024 09:03:52 +0100
-In-Reply-To: <e0664bb2-8caf-42f3-9344-ee4159782eda@polito.it>
-References: <20240121161633.2302285-1-enrico.bravi@polito.it>
-	 <aa50966e78c74539f6379c7c2215880db22d2752.camel@huaweicloud.com>
-	 <e0664bb2-8caf-42f3-9344-ee4159782eda@polito.it>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1706029606; c=relaxed/simple;
+	bh=ABandDHQpPz8etHjXb9FzVEEvI1YuaisA7Ob9QrlkNo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BSry/3hmRZeFSF/delcEKeV/UuitmuI5GFSgK+5iLqp0BbpcO7T7DT+N5hDqpG3Hyx9txHyygPPnlE/hTceZJPtq3g11uQcPtB5Gbihst+JszQliQW3zGqBJtDWnXeM3QOKgHWb//JKeYtUrrTZ0pbptH/3m6gMSadF6qlH2LGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tS7QhAIy; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40NGfE81003137;
+	Tue, 23 Jan 2024 17:03:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cvDo4W6sOdpNY/sWyt1gM9KLEdyD3VHgiBuxWk5y72g=;
+ b=tS7QhAIykX8PwrJN6homy8wykJdSlHYfGb1xWOCIgqMDtTwKD3ACY+Tile1Y7Ny18PEk
+ pR4yiXHHk/mY4LQm7Zhl7AHGTpg9jLNlKXKe8h8277rvRjXhaDsjfkiFttfjPznOYNfW
+ YBSosxR6qClKJXMSs2P5mc4AF8QrnM8/KyGWdP34wMoGH8YEolkJgcT4S5sFuizaTOV7
+ DM4kxG7b3A6BQruJtiHqjIuSJ81QECk6F85nnqpvOQzsbtIjsxaJfe1r1QoVoDkDPBeo
+ x363IwN4aUWXTPsrOs0M74tXrkpmquYzi1I8uyFKMj3KzgCw9PG7bXHD5267dAaCzVSS iw== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vtbqaaf35-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jan 2024 17:03:35 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40NFqDg2022438;
+	Tue, 23 Jan 2024 17:03:33 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vrt0m0b07-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Jan 2024 17:03:33 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40NH3X3p23855802
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 23 Jan 2024 17:03:33 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6C2485805C;
+	Tue, 23 Jan 2024 17:03:33 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D8E6E5805A;
+	Tue, 23 Jan 2024 17:03:31 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 23 Jan 2024 17:03:31 +0000 (GMT)
+Message-ID: <e375cd83-f424-4b0e-96e3-7a47a4f70715@linux.ibm.com>
+Date: Tue, 23 Jan 2024 12:03:31 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwAXBCjrcq9loPQUAQ--.40912S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Zr15Aw4DXw45tFWruFyDKFg_yoWkWF48pa
-	93WF1akF1kJFWxKr1S93Z7Wr4Sv3yrKrnrWr4DJ3Wjyrn0vrn2kayYkr1FkryDtr4DJF10
-	qF47trZxCFn8taDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-	KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgALBF1jj5TVjAAAsx
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/7] kexec: define functions to map and unmap segments
+Content-Language: en-US
+To: Tushar Sugandhi <tusharsu@linux.microsoft.com>, zohar@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
+        bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+        kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20240122183804.3293904-1-tusharsu@linux.microsoft.com>
+ <20240122183804.3293904-3-tusharsu@linux.microsoft.com>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20240122183804.3293904-3-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GIayIDHJ_gbEc-vASySdHe9dFulPM_kG
+X-Proofpoint-ORIG-GUID: GIayIDHJ_gbEc-vASySdHe9dFulPM_kG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-23_09,2024-01-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401230125
 
-On Mon, 2024-01-22 at 18:41 +0100, Enrico Bravi wrote:
-> Hi Roberto,
->=20
-> thanks a lot for your quick feedback.
->=20
-> On 22/01/24 09:20, Roberto Sassu wrote:
-> > On Sun, 2024-01-21 at 17:16 +0100, Enrico Bravi wrote:
-> > > The template hash showed by the ascii_runtime_measurements and
-> > > binary_runtime_measurements is the one calculated using sha1 and ther=
-e is no
-> > > possibility to change this value, despite the fact that the template =
-hash is
-> > > calculated using the hash algorothms corresponding to all the PCR ban=
-ks
-> > > configured in the TPM.
-> > >=20
-> > > This patch introduce the support to retrieve the ima log with the tem=
-plate data
-> > > hash calculated with a specific hash algorithm.
-> > > Add a new file in the securityfs ima directory for each hash algo con=
-figured
-> > > for the PCR banks of the TPM. Each new file has the name with the fol=
-lowing
-> > > structure:
-> > >=20
-> > > 	{binary, ascii}_runtime_measurements_<hash_algo_name>
-> > >=20
-> > > except for sha1 which it remains associated with the standard file na=
-mes.
-> > > The <hash_algo_name> is used to select the template data hash algorit=
-hm to show
-> > > in ima_ascii_measurements_show() and in ima_measurements_show().
-> > >=20
-> > > As example, in the case sha1 and sha256 are the configured PCR banks,=
- the
-> > > listing of the security/ima directory is the following:
-> > >=20
-> > > -r--r----- 1 root root 0 gen 20 15:06 ascii_runtime_measurements
-> > > -r--r----- 1 root root 0 gen 20 15:06 ascii_runtime_measurements_sha2=
-56
-> > > -r--r----- 1 root root 0 gen 20 15:06 binary_runtime_measurements
-> > > -r--r----- 1 root root 0 gen 20 15:06 binary_runtime_measurements_sha=
-256
-> > > --w------- 1 root root 0 gen 20 15:06 policy
-> > > -r--r----- 1 root root 0 gen 20 15:06 runtime_measurements_count
-> > > -r--r----- 1 root root 0 gen 20 15:06 violations
-> > >=20
-> > > v2:
-> > >  - Changed the behaviour of configuring at boot time the template dat=
-a hash
-> > >    algorithm.
-> > >  - Removed template data hash algo name prefix.
-> > >  - Removed ima_template_hash command line option.
-> > >  - Introducing a new file in the securityfs ima subdir for each PCR b=
-anks
-> > >    algorithm configured in the TPM.
-> > >    (suggested by Roberto)
-> > >=20
-> > > Signed-off-by: Enrico Bravi <enrico.bravi@polito.it>
-> > > Signed-off-by: Silvia Sisinni <silvia.sisinni@polito.it>
-> > >=20
-> > > ---
-> > >  security/integrity/ima/ima_fs.c | 164 ++++++++++++++++++++++++++++++=
---
-> > >  1 file changed, 157 insertions(+), 7 deletions(-)
-> > >=20
-> > > diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima=
-/ima_fs.c
-> > > index cd1683dad3bf..db57edeb112d 100644
-> > > --- a/security/integrity/ima/ima_fs.c
-> > > +++ b/security/integrity/ima/ima_fs.c
-> > > @@ -118,7 +118,7 @@ void ima_putc(struct seq_file *m, void *data, int=
- datalen)
-> > > =20
-> > >  /* print format:
-> > >   *       32bit-le=3Dpcr#
-> > > - *       char[20]=3Dtemplate digest
-> > > + *       char[n]=3Dtemplate digest
-> > >   *       32bit-le=3Dtemplate name size
-> > >   *       char[n]=3Dtemplate name
-> > >   *       [eventdata length]
-> > > @@ -130,9 +130,37 @@ int ima_measurements_show(struct seq_file *m, vo=
-id *v)
-> > >  	struct ima_queue_entry *qe =3D v;
-> > >  	struct ima_template_entry *e;
-> > >  	char *template_name;
-> > > +	const char *filename;
-> > > +	char algo_name[16];
-> > >  	u32 pcr, namelen, template_data_len; /* temporary fields */
-> > >  	bool is_ima_template =3D false;
-> > > -	int i;
-> > > +	int i, rc, algo_idx;
-> > > +	enum hash_algo algo;
-> > > +
-> > > +	filename =3D m->file->f_path.dentry->d_name.name;
-> > > +	rc =3D sscanf(filename, "binary_runtime_measurements%s", algo_name)=
-;
-> > > +
-> > > +	if (rc !=3D 0) {
-> > > +		for (i =3D 0; i < HASH_ALGO__LAST; i++) {
-> > > +			if (!strcmp(algo_name + 1, hash_algo_name[i])) {
-> > > +				algo =3D i;
-> > > +				break;
-> > > +			}
-> > > +		}
-> > > +		if (i =3D=3D HASH_ALGO__LAST)
-> > > +			algo =3D HASH_ALGO_SHA1;
-> > > +
-> > > +		for (i =3D 0; i < NR_BANKS(ima_tpm_chip); i++) {
-> > > +			if (algo =3D=3D ima_tpm_chip->allocated_banks[i].crypto_id) {
-> > > +				algo_idx =3D i;
-> > > +				break;
-> > > +			}
-> > > +		}
-> > > +	}
-> >=20
-> > Hi Enrico, Silvia
-> >=20
-> > I would find more efficient if you create an array of dentries in the
-> > same order as ima_tpm_chip->allocated_banks, so that you can compare
-> > dentry addresses and find already the right index.
->=20
-> Your are absolutely right, there is no need of two loops.
->=20
-> > > +	else {
-> > > +		algo_idx =3D ima_sha1_idx;
-> > > +		algo =3D HASH_ALGO_SHA1;
-> > > +	}
-> > > =20
-> > >  	/* get entry */
-> > >  	e =3D qe->entry;
-> > > @@ -151,7 +179,7 @@ int ima_measurements_show(struct seq_file *m, voi=
-d *v)
-> > >  	ima_putc(m, &pcr, sizeof(e->pcr));
-> > > =20
-> > >  	/* 2nd: template digest */
-> > > -	ima_putc(m, e->digests[ima_sha1_idx].digest, TPM_DIGEST_SIZE);
-> > > +	ima_putc(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
-> > > =20
-> > >  	/* 3rd: template name size */
-> > >  	namelen =3D !ima_canonical_fmt ? strlen(template_name) :
-> > > @@ -220,7 +248,35 @@ static int ima_ascii_measurements_show(struct se=
-q_file *m, void *v)
-> > >  	struct ima_queue_entry *qe =3D v;
-> > >  	struct ima_template_entry *e;
-> > >  	char *template_name;
-> > > -	int i;
-> > > +	const char *filename;
-> > > +	char algo_name[16];
-> > > +	int i, algo_idx, rc;
-> > > +	enum hash_algo algo;
-> > > +
-> > > +	filename =3D m->file->f_path.dentry->d_name.name;
-> > > +	rc =3D sscanf(filename, "ascii_runtime_measurements%s", algo_name);
-> > > +
-> > > +	if (rc !=3D 0) {
-> > > +		for (i =3D 0; i < HASH_ALGO__LAST; i++) {
-> > > +			if (!strcmp(algo_name + 1, hash_algo_name[i])) {
-> > > +				algo =3D i;
-> > > +				break;
-> > > +			}
-> > > +		}
-> > > +		if (i =3D=3D HASH_ALGO__LAST)
-> > > +			algo =3D HASH_ALGO_SHA1;
-> > > +
-> > > +		for (i =3D 0; i < NR_BANKS(ima_tpm_chip); i++) {
-> > > +			if (algo =3D=3D ima_tpm_chip->allocated_banks[i].crypto_id) {
-> > > +				algo_idx =3D i;
-> > > +				break;
-> > > +			}
-> > > +		}
-> > > +	}
-> >=20
-> > Same.
-> >=20
-> > > +	else {
-> > > +		algo_idx =3D ima_sha1_idx;
-> > > +		algo =3D HASH_ALGO_SHA1;
-> > > +	}
-> > > =20
-> > >  	/* get entry */
-> > >  	e =3D qe->entry;
-> > > @@ -233,8 +289,8 @@ static int ima_ascii_measurements_show(struct seq=
-_file *m, void *v)
-> > >  	/* 1st: PCR used (config option) */
-> > >  	seq_printf(m, "%2d ", e->pcr);
-> > > =20
-> > > -	/* 2nd: SHA1 template hash */
-> > > -	ima_print_digest(m, e->digests[ima_sha1_idx].digest, TPM_DIGEST_SIZ=
-E);
-> > > +	/* 2nd: template hash */
-> > > +	ima_print_digest(m, e->digests[algo_idx].digest, hash_digest_size[a=
-lgo]);
-> > > =20
-> > >  	/* 3th:  template name */
-> > >  	seq_printf(m, " %s", template_name);
-> > > @@ -363,6 +419,8 @@ static struct dentry *ascii_runtime_measurements;
-> > >  static struct dentry *runtime_measurements_count;
-> > >  static struct dentry *violations;
-> > >  static struct dentry *ima_policy;
-> > > +static struct dentry **ima_ascii_measurements_files;
-> > > +static struct dentry **ima_binary_measurements_files;
-> > > =20
-> > >  enum ima_fs_flags {
-> > >  	IMA_FS_BUSY,
-> > > @@ -379,6 +437,31 @@ static const struct seq_operations ima_policy_se=
-qops =3D {
-> > >  };
-> > >  #endif
-> > > =20
-> > > +/*
-> > > + * Remove the securityfs files created for each hash algo configured
-> > > + * in the TPM, excluded ascii_runtime_measurements and
-> > > + * binary_runtime_measurements.
-> > > + */
-> > > +static void remove_measurements_list_files(void)
-> > > +{
-> > > +	int i;
-> > > +
-> > > +	for (i =3D 0; i < NR_BANKS(ima_tpm_chip); i++) {
-> > > +		if (ima_ascii_measurements_files[i]) {
-> > > +			securityfs_remove(ima_ascii_measurements_files[i]);
-> > > +			kfree(ima_ascii_measurements_files[i]);
-> > > +		}
-> > > +
-> > > +		if (ima_binary_measurements_files[i]) {
-> > > +			securityfs_remove(ima_binary_measurements_files[i]);
-> > > +			kfree(ima_binary_measurements_files[i]);
-> > > +		}
-> > > +	}
-> > > +
-> > > +	kfree(ima_ascii_measurements_files);
-> > > +	kfree(ima_binary_measurements_files);
-> >=20
-> > Oh, you actually put them in a array and order the elements by PCR
-> > bank.
-> >=20
-> > > +}
-> > > +
-> > >  /*
-> > >   * ima_open_policy: sequentialize access to the policy file
-> > >   */
-> > > @@ -452,7 +535,10 @@ static const struct file_operations ima_measure_=
-policy_ops =3D {
-> > > =20
-> > >  int __init ima_fs_init(void)
-> > >  {
-> > > -	int ret;
-> > > +	int ret, i;
-> > > +	u16 algo;
-> > > +	char file_name[50];
-> > > +	struct dentry *dfile;
-> > > =20
-> > >  	ima_dir =3D securityfs_create_dir("ima", integrity_dir);
-> > >  	if (IS_ERR(ima_dir))
-> > > @@ -483,6 +569,69 @@ int __init ima_fs_init(void)
-> > >  		goto out;
-> > >  	}
-> > > =20
-> > > +	/*
-> > > +	 * Allocate a file in the securityfs for each hash algo configured
-> > > +	 * in the TPM but sha1 (for ascii and binary output).
-> > > +	 */
-> > > +	if (ima_tpm_chip) {
-> > > +
-> > > +		ima_ascii_measurements_files =3D kmalloc_array(NR_BANKS(ima_tpm_ch=
-ip),
-> > > +					sizeof(struct dentry *), GFP_KERNEL);
-> >=20
-> > Since you added a function for freeing the arrays, I would do the same
-> > for adding.
->=20
-> Sure.
->=20
-> > > +		if(ima_ascii_measurements_files =3D=3D NULL) {
-> > > +			ret =3D -ENOMEM;
-> > > +			goto out;
-> > > +		}
-> > > +
-> > > +		ima_binary_measurements_files =3D kmalloc_array(NR_BANKS(ima_tpm_c=
-hip),
-> > > +					sizeof(struct dentry *), GFP_KERNEL);
-> > > +		if(ima_binary_measurements_files =3D=3D NULL) {
-> > > +			ret =3D -ENOMEM;
-> > > +			goto out;
-> > > +		}
-> > > +
-> > > +		for (i =3D 0; i < NR_BANKS(ima_tpm_chip); i++) {
-> > > +			algo =3D ima_tpm_chip->allocated_banks[i].crypto_id;
-> > > +
-> > > +			/* Skip sha1 */
-> > > +			if (algo =3D=3D HASH_ALGO_SHA1)
-> > > +				continue;
-> >=20
-> > I would go ahead, create also the dentry for SHA1 and add a symbolic
-> > link for the legacy files.
->=20
-> ima_ascii_measurements_files and ima_binary_measurements_files are alloca=
-ted
-> just in the case a tpm chip is detected. What you are suggesting is to al=
-locate
-> in any case these lists, with at least one element, and creating the lega=
-cy file
-> always as symbolic links? Or to define them as symbolic links only in the=
- case a
-> tpm chip is detected, otherwise creating them as usual?
 
-Hi Enrico
 
-I would keep the same scheme, even if there is no TPM chip. So SHA1
-files, plus symbolic links in this case.
+On 1/22/24 13:37, Tushar Sugandhi wrote:
+> Implement kimage_map_segment() to enable mapping of IMA buffer source
+> pages to the kimage structure post kexec 'load'.  This function,
+> accepting a kimage pointer, an address, and a size, will gather the
+> source pages within the specified address range, create an array of page
+> pointers, and map these to a contiguous virtual address range.  The
+> function returns the start of this range if successful, or NULL if
+> unsuccessful.
+> 
+> Implement kimage_unmap_segment() for unmapping segments
+> using vunmap().  Relocate 'for_each_kimage_entry()' macro from
+> kexec_core.c to kexec.h for broader accessibility.
+> 
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> ---
+>   include/linux/kexec.h              | 13 +++++++
+>   kernel/kexec_core.c                | 59 +++++++++++++++++++++++++++---
+>   security/integrity/ima/ima_kexec.c |  1 +
+>   3 files changed, 68 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 22b5cd24f581..e00b8101b53b 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -490,6 +490,15 @@ static inline int arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages, g
+>   static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages) { }
+>   #endif
+>   
+> +#define for_each_kimage_entry(image, ptr, entry) \
+> +	for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
+> +		ptr = (entry & IND_INDIRECTION) ? \
+> +			boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
+> +
+> +extern void *kimage_map_segment(struct kimage *image,
+> +				unsigned long addr, unsigned long size);
+> +extern void kimage_unmap_segment(void *buffer);
+> +
 
-Thanks
+This series applies to v6.5. You may want to rebase to 6.7.
 
-Roberto
+>   #else /* !CONFIG_KEXEC_CORE */
+>   struct pt_regs;
+>   struct task_struct;
+> @@ -497,6 +506,10 @@ static inline void __crash_kexec(struct pt_regs *regs) { }
+>   static inline void crash_kexec(struct pt_regs *regs) { }
+>   static inline int kexec_should_crash(struct task_struct *p) { return 0; }
+>   static inline int kexec_crash_loaded(void) { return 0; }
+> +static inline void *kimage_map_segment(struct kimage *image,
+> +				       unsigned long addr, unsigned long size)
+> +{ return NULL; }
+> +static inline void kimage_unmap_segment(void *buffer) { }
+>   #define kexec_in_progress false
+>   #endif /* CONFIG_KEXEC_CORE */
+>   
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 3d578c6fefee..26978ad02676 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -594,11 +594,6 @@ void kimage_terminate(struct kimage *image)
+>   	*image->entry = IND_DONE;
+>   }
+>   
+> -#define for_each_kimage_entry(image, ptr, entry) \
+> -	for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
+> -		ptr = (entry & IND_INDIRECTION) ? \
+> -			boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
+> -
+>   static void kimage_free_entry(kimage_entry_t entry)
+>   {
+>   	struct page *page;
+> @@ -921,6 +916,60 @@ int kimage_load_segment(struct kimage *image,
+>   	return result;
+>   }
+>   
+> +void *kimage_map_segment(struct kimage *image,
+> +			 unsigned long addr, unsigned long size)
+> +{
+> +	unsigned long eaddr = addr + size;
+> +	unsigned long src_page_addr, dest_page_addr;
+> +	unsigned int npages;
+> +	struct page **src_pages;
+> +	int i;
+> +	kimage_entry_t *ptr, entry;
+> +	void *vaddr = NULL;
+> +
+> +	/*
+> +	 * Collect the source pages and map them in a contiguous VA range.
+> +	 */
+> +	npages = PFN_UP(eaddr) - PFN_DOWN(addr);
+> +	src_pages = kmalloc_array(npages, sizeof(*src_pages), GFP_KERNEL);
+> +	if (!src_pages) {
+> +		pr_err("%s: Could not allocate ima pages array.\n", __func__);
+> +		return NULL;
+> +	}
+> +
+> +	i = 0;
+> +	for_each_kimage_entry(image, ptr, entry) {
+> +		if (entry & IND_DESTINATION)
+> +			dest_page_addr = entry & PAGE_MASK;
+> +		else if (entry & IND_SOURCE) {
+> +			if (dest_page_addr >= addr && dest_page_addr < eaddr) {
+> +				src_page_addr = entry & PAGE_MASK;
+> +				src_pages[i++] =
+> +					virt_to_page(__va(src_page_addr));
+> +				if (i == npages)
+> +					break;
+> +				dest_page_addr += PAGE_SIZE;
+> +			}
+> +		}
+> +	}
+> +
+> +	/* Sanity check. */
+> +	WARN_ON(i < npages);
+> +
+> +	vaddr = vmap(src_pages, npages, VM_MAP, PAGE_KERNEL);
+> +	kfree(src_pages);
+> +
+> +	if (!vaddr)
+> +		pr_err("%s: Could not map imap buffer.\n", __func__);
 
-> > > +
-> > > +			dfile =3D kmalloc(sizeof(struct dentry), GFP_KERNEL);
-> > > +			if (!dfile) {
-> > > +				ret =3D -ENOMEM;
-> > > +				goto out;
-> > > +			}
-> >=20
-> > I don't remember if the lines above are really necessary. You actually
-> > overwrite the pointer below.
->=20
-> Yes these lines are definitely not necessary.
->=20
-> Thanks a lot,
->=20
-> Enrico
->=20
-> >=20
-> > > +
-> > > +			sprintf(file_name, "ascii_runtime_measurements_%s",
-> > > +						hash_algo_name[algo]);
-> > > +			dfile =3D securityfs_create_file(file_name,
-> > > +						S_IRUSR | S_IRGRP, ima_dir, NULL,
-> > > +						&ima_ascii_measurements_ops);
-> > > +			if (IS_ERR(dfile)) {
-> > > +				ret =3D PTR_ERR(dfile);
-> > > +				goto out;
-> > > +			}
-> > > +			ima_ascii_measurements_files[i] =3D dfile;
-> > > +
-> > > +			dfile =3D kmalloc(sizeof(struct dentry), GFP_KERNEL);
-> > > +			if (!dfile) {
-> > > +				ret =3D -ENOMEM;
-> > > +				goto out;
-> > > +			}
-> > > +
-> > > +			sprintf(file_name, "binary_runtime_measurements_%s",
-> > > +						hash_algo_name[algo]);
-> > > +			dfile =3D securityfs_create_file(file_name,
-> > > +						S_IRUSR | S_IRGRP, ima_dir, NULL,
-> > > +						&ima_measurements_ops);
-> > > +			if (IS_ERR(dfile)) {
-> > > +				ret =3D PTR_ERR(dfile);
-> > > +				goto out;
-> > > +			}
-> > > +			ima_binary_measurements_files[i] =3D dfile;
-> > > +		}
-> > > +	}
-> > > +
-> > >  	runtime_measurements_count =3D
-> > >  	    securityfs_create_file("runtime_measurements_count",
-> > >  				   S_IRUSR | S_IRGRP, ima_dir, NULL,
-> > > @@ -515,6 +664,7 @@ int __init ima_fs_init(void)
-> > >  	securityfs_remove(runtime_measurements_count);
-> > >  	securityfs_remove(ascii_runtime_measurements);
-> > >  	securityfs_remove(binary_runtime_measurements);
-> > > +	remove_measurements_list_files();
-> > >  	securityfs_remove(ima_symlink);
-> > >  	securityfs_remove(ima_dir);
-> > >=20
-> > > base-commit: 88035e5694a86a7167d490bb95e9df97a9bb162b
+imap -> ima
 
+> +
+> +	return vaddr;
+> +}
+> +
+> +void kimage_unmap_segment(void *segment_buffer)
+> +{
+> +	vunmap(segment_buffer);
+> +}
+> +
+>   struct kexec_load_limit {
+>   	/* Mutex protects the limit count. */
+>   	struct mutex mutex;
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 99daac355c70..4f944c9b4168 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -170,6 +170,7 @@ void ima_add_kexec_buffer(struct kimage *image)
+>   	pr_debug("kexec measurement buffer for the loaded kernel at 0x%lx.\n",
+>   		 kbuf.mem);
+>   }
+> +
+
+remove
+
+>   #endif /* IMA_KEXEC */
+>   
+>   /*
 
