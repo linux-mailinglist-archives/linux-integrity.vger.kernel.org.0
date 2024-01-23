@@ -1,74 +1,47 @@
-Return-Path: <linux-integrity+bounces-861-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-862-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB77E839935
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jan 2024 20:10:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5527F839A6D
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jan 2024 21:39:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF2C9B2C993
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jan 2024 19:07:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03D09282CAC
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jan 2024 20:39:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63E6282F1;
-	Tue, 23 Jan 2024 19:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CBA20F1;
+	Tue, 23 Jan 2024 20:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A3Fvr6Zj"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="MSwjGWx2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F2B823A8
-	for <linux-integrity@vger.kernel.org>; Tue, 23 Jan 2024 19:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B44FA442F
+	for <linux-integrity@vger.kernel.org>; Tue, 23 Jan 2024 20:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706036610; cv=none; b=VUDik+GC21oGy2GdeY4cOGYNPEoA/x43RlurVMfA41ejfEmuNwTVpAl7fUWL+RbBnXMDOntgDlnT2IjbacZQVKZ1OgKoKdVg6nlQ5hWMUNPWzjjmtLlOoYZ5+tXF7oq5OZN8PoH3diqogubQpgmYcZvEg32jRTwWbzlfXgjEqwk=
+	t=1706042390; cv=none; b=q/8+InTHOVb5uCpiQI/U+w6Y/76Od+Hx/QVLeWhlwrGo3Bil85LXyhQ9LyJ94ApmHF0/fvUTjmUjU0mURy4PAFLYEb+I/6IJIAw9i3uAImHVy2VpANMj+r6yFMZQbmRSjvFDGCDKBSdStGaWj9IgC7Gsniahhc2ira53uFIhq6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706036610; c=relaxed/simple;
-	bh=HKYS7CEE4ZuvhNNzxhrRodznnh/T3W64WUMLkP/IaGo=;
+	s=arc-20240116; t=1706042390; c=relaxed/simple;
+	bh=i6J8JhCKUSOAUoIN6I02LYR/3LiO6VdtviWxHbght6U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WYVciM8dJ0sSo+y8KwKwtpSG/SHeaWpaYLuPuqjLKUQa+oYpyGQI/cLSzrfOkdqQuaIjyS092spHN46vPUhgk/IMME0eNBLxMFQwqInDJ98oElmN+VGLu6bfVUG48vwuVm6WkU85RgPcIhpLTINdOkY+f9CNPZyR7PdwK2r4fgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A3Fvr6Zj; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40NGwJqY000656;
-	Tue, 23 Jan 2024 19:02:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=JK5lMxxygQKHGNpO1+U35W2pP+d1B2vDDpeyY2lyhx8=;
- b=A3Fvr6ZjWA7AamnKNgTW3Jm64GRZMphHLWce/5ffEGD/RJgONksGZW5lQGICzKIDWcj4
- D2UFDE67I7o7WPOB/afo5Gv4w2F3o/XrPYLHP+E3h7+cNM5v8D9Pg3gl65yeiUB/ASnO
- 3S0Y63rH7gvZn5+Mop+lq0hcaLpGOk0XqpKL9wX7U6CXXzDo4jSsKuppcp1tgyVOxrWH
- yHQ+zJ1E7GFqDeCqJqfUrvW7Ul4OBemRPJtgJL/v6GW0mYIK9McngRp89wYOdkoC0IvU
- zvDjaMZ4HrsU7JzmGue1RFJC5pY2teeo/lxCO8iWJuii6LdMww2ZTL7oRDWptYThninX mw== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vthep349p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jan 2024 19:02:55 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40NHPoOw010877;
-	Tue, 23 Jan 2024 19:02:55 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vrrvys8yx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Jan 2024 19:02:55 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40NJ2sgI17367790
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 23 Jan 2024 19:02:54 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E85F55805E;
-	Tue, 23 Jan 2024 19:02:53 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CF95658058;
-	Tue, 23 Jan 2024 19:02:52 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 23 Jan 2024 19:02:52 +0000 (GMT)
-Message-ID: <bdf8c31a-59db-4568-ad7b-e2b3f36c3836@linux.ibm.com>
-Date: Tue, 23 Jan 2024 14:02:52 -0500
+	 In-Reply-To:Content-Type; b=ifa76k7SQv4MlADkoxAWkqdEUEdPGHx4Fi2ZBLrUfhKqEduaOobcFCFIyDufanpp0k+/f/C1IFEpLW+mPB0p5ZI8R9u3lAUZwzPuxwAcs+kWW8KqFuVJSsGUTKNW4+S32+fL3apkwaD3d//EwJpB//yuYv7ZfBZpjtAdlnRFWi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=MSwjGWx2; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.86.69] (unknown [50.46.228.62])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 1D37920E34C3;
+	Tue, 23 Jan 2024 12:39:42 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1D37920E34C3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1706042382;
+	bh=EzzVmcDkr4eK/twYOi2TVMk6XSbdoFxGZpRHPlXrgDk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=MSwjGWx24G/dCiewsrAyb9DoW7Qz4VpJaetsRK60L/WjxLBZQrUhm3xVf7ttb/oGX
+	 xHSDrIlBRB9N4/pQO7hPTUEM2TdDWlaONfjQOYTuXPcRlsoIywv4LZ+vPk/b4DC9lF
+	 MWxJpTE9q0bJOoTJgqFp//IXZMeBX8cJ4T0i/4XI=
+Message-ID: <9c71454b-ba41-4725-9fb7-0602b1a656c1@linux.microsoft.com>
+Date: Tue, 23 Jan 2024 12:39:41 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -76,124 +49,182 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 6/7] ima: make the kexec extra memory configurable
+Subject: Re: [PATCH v4 2/7] kexec: define functions to map and unmap segments
 Content-Language: en-US
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>, zohar@linux.ibm.com,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
-        bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
-        kexec@lists.infradead.org
+To: Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
+ roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+ eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
+ bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+ kexec@lists.infradead.org
 Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
 References: <20240122183804.3293904-1-tusharsu@linux.microsoft.com>
- <20240122183804.3293904-7-tusharsu@linux.microsoft.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240122183804.3293904-7-tusharsu@linux.microsoft.com>
+ <20240122183804.3293904-3-tusharsu@linux.microsoft.com>
+ <e375cd83-f424-4b0e-96e3-7a47a4f70715@linux.ibm.com>
+From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <e375cd83-f424-4b0e-96e3-7a47a4f70715@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vwjKtMi9Mx8ceRK3VXB3wsrLpGOHrxn-
-X-Proofpoint-ORIG-GUID: vwjKtMi9Mx8ceRK3VXB3wsrLpGOHrxn-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-23_11,2024-01-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- clxscore=1015 adultscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401230141
+Content-Transfer-Encoding: 8bit
 
+Thanks Stefan for taking a look.
 
-
-On 1/22/24 13:38, Tushar Sugandhi wrote:
-> The extra memory allocated for carrying the IMA measurement list across
-> kexec is hardcoded as half a PAGE.  Make it configurable.
+On 1/23/24 09:03, Stefan Berger wrote:
 > 
-> Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
-> extra memory (in kb) to be allocated for IMA measurements added during
-> kexec soft reboot.  Ensure the default value of the option is set such
-> that extra half a page of memory for additional measurements is allocated
-> to maintain backwards compatibility.
 > 
-> Update ima_add_kexec_buffer() function to allocate memory based on the
-> Kconfig option value, rather than the currently hardcoded one.
+> On 1/22/24 13:37, Tushar Sugandhi wrote:
+>> Implement kimage_map_segment() to enable mapping of IMA buffer source
+>> pages to the kimage structure post kexec 'load'.  This function,
+>> accepting a kimage pointer, an address, and a size, will gather the
+>> source pages within the specified address range, create an array of page
+>> pointers, and map these to a contiguous virtual address range.  The
+>> function returns the start of this range if successful, or NULL if
+>> unsuccessful.
+>>
+>> Implement kimage_unmap_segment() for unmapping segments
+>> using vunmap().  Relocate 'for_each_kimage_entry()' macro from
+>> kexec_core.c to kexec.h for broader accessibility.
+>>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> ---
+>>   include/linux/kexec.h              | 13 +++++++
+>>   kernel/kexec_core.c                | 59 +++++++++++++++++++++++++++---
+>>   security/integrity/ima/ima_kexec.c |  1 +
+>>   3 files changed, 68 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+>> index 22b5cd24f581..e00b8101b53b 100644
+>> --- a/include/linux/kexec.h
+>> +++ b/include/linux/kexec.h
+>> @@ -490,6 +490,15 @@ static inline int 
+>> arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages, g
+>>   static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned 
+>> int pages) { }
+>>   #endif
+>> +#define for_each_kimage_entry(image, ptr, entry) \
+>> +    for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
+>> +        ptr = (entry & IND_INDIRECTION) ? \
+>> +            boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
+>> +
+>> +extern void *kimage_map_segment(struct kimage *image,
+>> +                unsigned long addr, unsigned long size);
+>> +extern void kimage_unmap_segment(void *buffer);
+>> +
 > 
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> ---
->   security/integrity/ima/Kconfig     | 11 +++++++++++
->   security/integrity/ima/ima_kexec.c | 15 ++++++++++-----
->   2 files changed, 21 insertions(+), 5 deletions(-)
+> This series applies to v6.5. You may want to rebase to 6.7.
 > 
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index 60a511c6b583..fc103288852b 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -338,3 +338,14 @@ config IMA_DISABLE_HTABLE
->   	default n
->   	help
->   	   This option disables htable to allow measurement of duplicate records.
-> +
-> +config IMA_KEXEC_EXTRA_MEMORY_KB
-> +	int
-> +	depends on IMA && IMA_KEXEC
-> +	default 0
-> +	help
-> +	  IMA_KEXEC_EXTRA_MEMORY_KB determines the extra memory to be
-> +	  allocated (in kb) for IMA measurements added during kexec soft reboot.
-> +	  If set to the default value, an extra half page of memory for
-> +	  additional measurements will be allocated to maintain backwards
-> +	  compatibility.
+Will rebase. Thanks for catching this.
+>>   #else /* !CONFIG_KEXEC_CORE */
+>>   struct pt_regs;
+>>   struct task_struct;
+>> @@ -497,6 +506,10 @@ static inline void __crash_kexec(struct pt_regs 
+>> *regs) { }
+>>   static inline void crash_kexec(struct pt_regs *regs) { }
+>>   static inline int kexec_should_crash(struct task_struct *p) { return 
+>> 0; }
+>>   static inline int kexec_crash_loaded(void) { return 0; }
+>> +static inline void *kimage_map_segment(struct kimage *image,
+>> +                       unsigned long addr, unsigned long size)
+>> +{ return NULL; }
+>> +static inline void kimage_unmap_segment(void *buffer) { }
+>>   #define kexec_in_progress false
+>>   #endif /* CONFIG_KEXEC_CORE */
+>> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+>> index 3d578c6fefee..26978ad02676 100644
+>> --- a/kernel/kexec_core.c
+>> +++ b/kernel/kexec_core.c
+>> @@ -594,11 +594,6 @@ void kimage_terminate(struct kimage *image)
+>>       *image->entry = IND_DONE;
+>>   }
+>> -#define for_each_kimage_entry(image, ptr, entry) \
+>> -    for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
+>> -        ptr = (entry & IND_INDIRECTION) ? \
+>> -            boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
+>> -
+>>   static void kimage_free_entry(kimage_entry_t entry)
+>>   {
+>>       struct page *page;
+>> @@ -921,6 +916,60 @@ int kimage_load_segment(struct kimage *image,
+>>       return result;
+>>   }
+>> +void *kimage_map_segment(struct kimage *image,
+>> +             unsigned long addr, unsigned long size)
+>> +{
+>> +    unsigned long eaddr = addr + size;
+>> +    unsigned long src_page_addr, dest_page_addr;
+>> +    unsigned int npages;
+>> +    struct page **src_pages;
+>> +    int i;
+>> +    kimage_entry_t *ptr, entry;
+>> +    void *vaddr = NULL;
+>> +
+>> +    /*
+>> +     * Collect the source pages and map them in a contiguous VA range.
+>> +     */
+>> +    npages = PFN_UP(eaddr) - PFN_DOWN(addr);
+>> +    src_pages = kmalloc_array(npages, sizeof(*src_pages), GFP_KERNEL);
+>> +    if (!src_pages) {
+>> +        pr_err("%s: Could not allocate ima pages array.\n", __func__);
+>> +        return NULL;
+>> +    }
+>> +
+>> +    i = 0;
+>> +    for_each_kimage_entry(image, ptr, entry) {
+>> +        if (entry & IND_DESTINATION)
+>> +            dest_page_addr = entry & PAGE_MASK;
+>> +        else if (entry & IND_SOURCE) {
+>> +            if (dest_page_addr >= addr && dest_page_addr < eaddr) {
+>> +                src_page_addr = entry & PAGE_MASK;
+>> +                src_pages[i++] =
+>> +                    virt_to_page(__va(src_page_addr));
+>> +                if (i == npages)
+>> +                    break;
+>> +                dest_page_addr += PAGE_SIZE;
+>> +            }
+>> +        }
+>> +    }
+>> +
+>> +    /* Sanity check. */
+>> +    WARN_ON(i < npages);
+>> +
+>> +    vaddr = vmap(src_pages, npages, VM_MAP, PAGE_KERNEL);
+>> +    kfree(src_pages);
+>> +
+>> +    if (!vaddr)
+>> +        pr_err("%s: Could not map imap buffer.\n", __func__);
+> 
+> imap -> ima
+> 
+Good eye catching this.
+Will fix.
+>> +
+>> +    return vaddr;
+>> +}
+>> +
+>> +void kimage_unmap_segment(void *segment_buffer)
+>> +{
+>> +    vunmap(segment_buffer);
+>> +}
+>> +
+>>   struct kexec_load_limit {
+>>       /* Mutex protects the limit count. */
+>>       struct mutex mutex;
+>> diff --git a/security/integrity/ima/ima_kexec.c 
+>> b/security/integrity/ima/ima_kexec.c
+>> index 99daac355c70..4f944c9b4168 100644
+>> --- a/security/integrity/ima/ima_kexec.c
+>> +++ b/security/integrity/ima/ima_kexec.c
+>> @@ -170,6 +170,7 @@ void ima_add_kexec_buffer(struct kimage *image)
+>>       pr_debug("kexec measurement buffer for the loaded kernel at 
+>> 0x%lx.\n",
+>>            kbuf.mem);
+>>   }
+>> +
+> 
+> remove
+>
+Will do.
 
-Is there really an issue with 'backwards compatibility' that the user 
-needs to know about ? From looking at the code it seems more important 
-that a bit of additional memory is reserved now to fit the kexec 'load' 
-and 'exec' critical data events but that's not 'backwards compatibility'.
+~Tushar
 
-Also mention this as a guidance on either how kexec load+exec need to be 
-used or as a hint that it may potentially require a lot of memory? :
-
-The amount of extra memory that is necessary to carry all measurements 
-across a kexec depends on memory requirements of the measurements taken 
-between the kexec 'load' and 'exec' stages. The more measurements are 
-taken, the more extra memory is required. Large amounts of extra memory 
-can be avoided by running kexec 'load' and 'exec' in short sequence.
-
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index f26b5b342d84..c126aa6494e9 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -121,6 +121,7 @@ void ima_add_kexec_buffer(struct kimage *image)
->   				  .buf_min = 0, .buf_max = ULONG_MAX,
->   				  .top_down = true };
->   	unsigned long binary_runtime_size;
-> +	unsigned long extra_size;
->   
->   	/* use more understandable variable names than defined in kbuf */
->   	void *kexec_buffer = NULL;
-> @@ -128,15 +129,19 @@ void ima_add_kexec_buffer(struct kimage *image)
->   	int ret;
->   
->   	/*
-> -	 * Reserve an extra half page of memory for additional measurements
-> -	 * added during the kexec load.
-> +	 * Reserve extra memory for measurements added during kexec.
->   	 */
-> -	binary_runtime_size = ima_get_binary_runtime_size();
-> +	if (CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB <= 0)
-> +		extra_size = PAGE_SIZE / 2;
-> +	else
-> +		extra_size = CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB * 1024;
-> +	binary_runtime_size = ima_get_binary_runtime_size() + extra_size;
-> +
->   	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
->   		kexec_segment_size = ULONG_MAX;
->   	else
-> -		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
-> -					   PAGE_SIZE / 2, PAGE_SIZE);
-> +		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
-> +
->   	if ((kexec_segment_size == ULONG_MAX) ||
->   	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
->   		pr_err("Binary measurement list too large.\n");
-
-Code LGTM
+>>   #endif /* IMA_KEXEC */
+>>   /*
 
