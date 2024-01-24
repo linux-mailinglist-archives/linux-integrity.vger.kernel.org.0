@@ -1,49 +1,46 @@
-Return-Path: <linux-integrity+bounces-873-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-874-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E52583B00D
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jan 2024 18:33:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55CD883AFF9
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jan 2024 18:31:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99410B2F14B
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jan 2024 17:26:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C37A280FC5
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jan 2024 17:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4203786157;
-	Wed, 24 Jan 2024 17:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD8CD8614C;
+	Wed, 24 Jan 2024 17:30:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LzpFWfp6"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TE8sMbvf"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0C37F7C4;
-	Wed, 24 Jan 2024 17:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5815D85C4B;
+	Wed, 24 Jan 2024 17:30:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706116942; cv=none; b=hBeIYGRlsjx5r9FV+aaqIxJhvT7L3FPMpEEC29PbrIbpEO56NeeSlh/GAUxBNxSS7m+MeW7ph/paj107VerDkY9VmPuIxEOZ8ZFPsCVwi17uoswACfHGB5z+LmEkzn4850FPD2Bx1klxIOWYFPTedHXW+omxEV/ge8MQo71jBhc=
+	t=1706117458; cv=none; b=g2/Ec2tTrSNkWygH4MD5gwSuXvxi8bYscPTf/MEyb28zsErLI9B1qo0PowMVkwT31ZqfKBmKc3VRKbHn+QacGy17ZPUGbRZnQ6895AGCKhFkt6ii5cf1/9l51ntLlSAa3tqmLHRNutqqEcDHekTAmYK0nwDhodWGx5zciI0cDo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706116942; c=relaxed/simple;
-	bh=J9cWHBzQAtoEqppKJznkEOwXANl/OtQJlMreI+w5+pM=;
+	s=arc-20240116; t=1706117458; c=relaxed/simple;
+	bh=NNDXRpvhIGTKBi9slZ/qWQEGn6Uj559Gpw2fxZO2A8A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JyplCo+6wUwP4Ld+g90II4utX7SzLDxkNtk9cI8u2vTFH0zidK/E2mvXh8Y3B9p7+u+ZxvBi8fSmAAt4CCreowdBP5KED2t+aK9wtIxEnqqGchftgLiM/zAQQvN6MvKJ7SiaYGv0bJBMQgQDOtiaCc8i4R1ZGD87VIgHc8YAoI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LzpFWfp6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF93C433C7;
-	Wed, 24 Jan 2024 17:22:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706116940;
-	bh=J9cWHBzQAtoEqppKJznkEOwXANl/OtQJlMreI+w5+pM=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=hpfhlR1qRxJB6kQ6fi3d6bQPohqrtiyF+cthEde/2U6mwHfmF+UwlDPj5SDfp6wV1EBVPK68UdS82RPYJYgsQP+NVrCfH4ajbPUVcbWEbYY3n/+ggoD5MZ+a2OHAqe4PImU+ytiICGPyuQ9etNR823YUOYVvL0WqQRyyUHdYHr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TE8sMbvf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2D0C433C7;
+	Wed, 24 Jan 2024 17:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706117457;
+	bh=NNDXRpvhIGTKBi9slZ/qWQEGn6Uj559Gpw2fxZO2A8A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LzpFWfp68rpr4dWHpdN+3IBhvKe1BMer+To6gMN52sFIqJGOHOg2ldSKjRXCcMb5m
-	 TFWNLUoV1HFSfX27ssqcTmUNGmLjfsu/z7ab3gxQuXnjvSNFUQXmjhZEIyIhUWWEIT
-	 CgAYNmzcDLnvRg+viWfwfm6By4Ffbj0ymjEy26C89CVOqr6JLR32V+zT7k2ef93fpP
-	 1Ka1oOBMomGGEuXbLQOuhLohRSeVfalTXlkn0w18Bo0vP0gpL8EpG8vIchAhQdEue3
-	 Cd0Kc25AAqNkrZ3Jhe5TUtRkxqZmjaKSQ074XXZPz2CPZUgeNzrq5mcjx4JO7BaCUH
-	 nqaKOF7sEH13g==
-Date: Wed, 24 Jan 2024 17:22:00 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	b=TE8sMbvfIUEPS7l+FWWrLd9ucrffQrWpUeULzzDGbHOZntLPKHC9u7ekCFztLhU3U
+	 g9c/BN8CkGH0i32zPynRDSS6j46gbVDA6ioIe6yR345V3vEOlOOOrQK63M5gAF7wrU
+	 bDTC1oJaRecQ9F29HgZfYDFNvnxiLNzNXD19CPf8=
+Date: Wed, 24 Jan 2024 09:30:56 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Mark Brown <broonie@kernel.org>
 Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
 	kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>,
 	Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
@@ -112,54 +109,37 @@ Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
 	Jonathan Corbet <corbet@lwn.net>, James Clark <james.clark@arm.com>,
 	Bjorn Helgaas <bhelgaas@google.com>, linux-doc@vger.kernel.org
 Subject: Re: [PATCH v2 00/33] spi: get rid of some legacy macros
-Message-ID: <c1e38a30-5075-4d01-af24-ac684e77cf29@sirena.org.uk>
+Message-ID: <2024012439-machinist-amazingly-2d2c@gregkh>
 References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
  <2024012417-prissy-sworn-bc55@gregkh>
+ <c1e38a30-5075-4d01-af24-ac684e77cf29@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FdGjmVpGJ74QDTu1"
-Content-Disposition: inline
-In-Reply-To: <2024012417-prissy-sworn-bc55@gregkh>
-X-Cookie: To err is human, to moo bovine.
-
-
---FdGjmVpGJ74QDTu1
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c1e38a30-5075-4d01-af24-ac684e77cf29@sirena.org.uk>
 
-On Wed, Jan 24, 2024 at 09:13:49AM -0800, Greg Kroah-Hartman wrote:
-> On Mon, Jan 22, 2024 at 07:06:55PM +0100, Uwe Kleine-K=F6nig wrote:
+On Wed, Jan 24, 2024 at 05:22:00PM +0000, Mark Brown wrote:
+> On Wed, Jan 24, 2024 at 09:13:49AM -0800, Greg Kroah-Hartman wrote:
+> > On Mon, Jan 22, 2024 at 07:06:55PM +0100, Uwe Kleine-König wrote:
+> 
+> > > Note that Jonathan Cameron has already applied patch 3 to his tree, it
+> > > didn't appear in a public tree though yet. I still included it here to
+> > > make the kernel build bots happy.
+> 
+> > Are we supposed to take the individual changes in our different
+> > subsystem trees, or do you want them all to go through the spi tree?
+> 
+> Given that the final patch removes the legacy interfaces I'm expecting
+> to take them via SPI.
 
-> > Note that Jonathan Cameron has already applied patch 3 to his tree, it
-> > didn't appear in a public tree though yet. I still included it here to
-> > make the kernel build bots happy.
+Great, thanks, I'll go ack the subsystem patches that are relevent for
+me.
 
-> Are we supposed to take the individual changes in our different
-> subsystem trees, or do you want them all to go through the spi tree?
-
-Given that the final patch removes the legacy interfaces I'm expecting
-to take them via SPI.
-
---FdGjmVpGJ74QDTu1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWxRzcACgkQJNaLcl1U
-h9CS5Af+OPZh7Z4aM5AF1TAMNJebJxrwbV+lfEa8zsdVnpHBXYpXokCrVwsSRBtM
-yR/bt2+OoZjrVep6c0lufmewH58kEtQF4UazYao7MD2alCnwzn49m697Ubpnc/k9
-iSCRd+E5ICMZuRdRrDAmd/To7o3jsg85SeN4qLdeer17NkjU6VS9vR6NlzImV/nS
-MXj52eAHL5+EZIpIlwZSBkCxyEEsz/UFaGcFsKMonZ+24Oz5SXXWFhUWfiFCD+fA
-DNZKxXJ9Vk2i5pCUsduff5giUUypwRqVP4C01wYMs7o3jkMZ2cQhtuH8iyDtKKMU
-FSwO3bpbAgZzLbY2G2cqYZyEpqJ8Ow==
-=E3cl
------END PGP SIGNATURE-----
-
---FdGjmVpGJ74QDTu1--
+greg k-h
 
