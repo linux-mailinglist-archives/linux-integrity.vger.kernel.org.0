@@ -1,205 +1,201 @@
-Return-Path: <linux-integrity+bounces-880-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-881-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC72183B326
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jan 2024 21:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A555483B3A2
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jan 2024 22:11:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E1611C22B62
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jan 2024 20:40:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D84B81C22046
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jan 2024 21:11:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FEF1350C7;
-	Wed, 24 Jan 2024 20:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F9881350EB;
+	Wed, 24 Jan 2024 21:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="F9a4qluB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eeMt1coA"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026C21350C0;
-	Wed, 24 Jan 2024 20:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706128844; cv=none; b=pgaKbbz4Kl/Rl4gd2WYRZpXsK7IYhQVg+iNb5xwgqt/tsqAa9ecGO7bIK8kf28j6qHkQm5bbFD4TFRvhZIrrcJvMHMxtMrXwzvCihGNllX5l1FQJoAxrKmL1cW6oDxeCzjP9XWEB664h2sYEWnUpdHAEcQLwlD9ryEl3UspGQ4M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706128844; c=relaxed/simple;
-	bh=hzJ3DJETdoxLp+P5+lRmaPth2GPIg7sSosK0rWcLIBc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=O4okdkvhdfINZUnIIThq+31MPeRTpz6DDJj1BS+ZXej/C+pu2ZS/0OrM0lF6QI9pi1RsWm1pEEOjhePqyGb+ptKqhyXHwr7dNDmPJBDmDr+Dnz2ey16XAhnZU1yLoYhlYxXdxEweTiCzK6T4vksVRDUYy7KikHrMes0aW8H2fpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=F9a4qluB; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40OKEpge004717;
-	Wed, 24 Jan 2024 20:40:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=6ioIDZv1sGQ7eAng1/+ztxX4+K6ABsfVJQdOjSPqPFo=;
- b=F9a4qluBDv2erKGNQNRZJw4hIXP1QtO//8d/Yd4gluJUQ0rDFJyx5WUAvMS6jWosfzzF
- yB68HafEw0Ts9JF9oJQq7bY/UViDjmSMc57K4nPThh5/TafTMaFOqJT54uR1uvHgKJTs
- xJhubGYuCgIKIq23s0Xw5Eb8xN0uUQ/9KEx6pqqjkluv3dihkevONG2OGrz3ogM9mAFu
- bZmLjwwyOf0shFnTd98uLFjJA3HtIjnVkb17LsueGFyrszO+dBQSSY0W/P+ikkA7lMA2
- jnGH+eGqOd3r2cR1via/p1Yv7ztNKeH0UaYkaQT1E4bPtjJKHeq9pPKOGpRrbms5N1bv vg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vu7uckhg3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 20:40:22 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40OKUf7g023282;
-	Wed, 24 Jan 2024 20:40:21 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vu7uckhfq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 20:40:21 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40OIq5BR026879;
-	Wed, 24 Jan 2024 20:40:20 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vrrgtgk61-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 20:40:20 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40OKeJvM36766408
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 24 Jan 2024 20:40:19 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6D61158057;
-	Wed, 24 Jan 2024 20:40:19 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 08C0B58059;
-	Wed, 24 Jan 2024 20:40:18 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.watson.ibm.com (unknown [9.31.99.90])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 24 Jan 2024 20:40:17 +0000 (GMT)
-Message-ID: <49c48e3e96bf0f5ebef14e7328cc8a6ca6380e08.camel@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6573912BE96;
+	Wed, 24 Jan 2024 21:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.55.52.115
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706130656; cv=fail; b=ZN8dFuC+YCnSsB/l9Jk7BmJ32zisAFrquzqa4bEuum23m2+MMuALJYH0qlxmi2U42EMezcqHkBVIH7yEWN4Dc0qvgld3NoaRO5hm9YfI4sLbXY292kcJIU45WfxBH1Wl7dB9XbyOS9hhHiB2+CfA787qlOLwIpU+/fdxWKZSwX8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706130656; c=relaxed/simple;
+	bh=RmCphI4qXN+MxkkC6mLtgwxpqxF7bZgGqDDS+8RpS3U=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=DkPzo3MYfoE4agxtCuM6XmAON1hOs6hTXRyHf4PsX5Aw+zxQGSw7HwN9eMMfkB1y+yRh4nPb9PTS5w0Ph0N910WEVa9Qsk/1BA6vw3drA+8YCB3ry5G6y9IUGhmycr8nC8LW4eK1QLsh/WO86g0AgxNMAxSax5taqyftFD7M+YU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eeMt1coA; arc=fail smtp.client-ip=192.55.52.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706130654; x=1737666654;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=RmCphI4qXN+MxkkC6mLtgwxpqxF7bZgGqDDS+8RpS3U=;
+  b=eeMt1coAA5ew8+cu2X0UknZc1+ItdF13xnAez/5q/nQYJ0S3N/16UiYi
+   3FcDCDw4tV6LR5+zOt522rZxPc39FN4LsgErl3POv+Y0N6/FpZz0WBwTE
+   Tjnyz7CwVoG0goFkNMTYReD08c745R33XavvISHjQAgjXKmlixAAaTSgt
+   vhwCpRPwZCObf+gz0GCPlKuHOrokXXvWO84teKdm3NIFcwPVXnYgmH+Vf
+   10XaljMfNBt58Eh4XGogj5c5DSe3L+Gk7KwUTuKWh68KJKMIJiE10bi8G
+   xeXXJwcg+CRfp+OSPlBv46CufLMEoli30bVdKXyS3Dx8NVY7Kv677Asw6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="401625624"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="401625624"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2024 13:10:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="929800645"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="929800645"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Jan 2024 13:10:52 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 24 Jan 2024 13:10:51 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Wed, 24 Jan 2024 13:10:51 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Wed, 24 Jan 2024 13:10:51 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z06P59GORCx5H9Fm5gkor5KCJhcLqVJgIjIfHUN1H2JSpRocmnUJBCbGMXPuJkcDH4BNZ56xy0rFkLl5PloIM6bHEK5aSO5JylBcEymyCYkIxBzTmbB7H1isMTised5aRTtR1CtIcTenGKiYqrGUcGRAKS0ra9BExDeL1W2XOUvnL3Ue8SS2KFtivplSJHjrJ8deV23S70e9UYbfMyEkBu3Xs45yc2bgsZf6bI/07J6ksV1i6WRefG9ucT/axAOcULrpVj7523y7kvWjV1dL2lL6rA9FxPB3rpKnNr1mfX+kSPpwKAIUBEKyVNtqiz2fjo2TLKaFh+aXPNXiwzQHKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RmCphI4qXN+MxkkC6mLtgwxpqxF7bZgGqDDS+8RpS3U=;
+ b=bem0OWssq2noh9FT1ZWCYt+cZF5Q9puGBXRGtry2FkG7NA+XqpjgvZ1NYeXeCQMaRu3HQED4xITlJ6jzlE5AjeyjpxM8GH9b2JZqaqIHtfgrt6rultN8XLXA0nydkwcmRLXSxjyw3lB3yXkOCQm99DODVkMUFjtU63mEkK8QP4xJyw+LclUXcSbAwYemz5NuTlRQYoLuHoktMo5Uox0GNefrD0ebxcWrNKe8QfqvedDtF0hyRbZU7mSv9+Kx2hZqHWhrPHFh6scA9Oh4LEz31lZB3jRN9yYiFh9JaCqHT6robI7+5ZQHv6rJiRU/26NuDi19D+84aX2r7CB4nHgCxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MW4PR11MB7125.namprd11.prod.outlook.com (2603:10b6:303:219::12)
+ by CO6PR11MB5618.namprd11.prod.outlook.com (2603:10b6:303:13f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.22; Wed, 24 Jan
+ 2024 21:10:49 +0000
+Received: from MW4PR11MB7125.namprd11.prod.outlook.com
+ ([fe80::e28a:f124:d986:c1d0]) by MW4PR11MB7125.namprd11.prod.outlook.com
+ ([fe80::e28a:f124:d986:c1d0%4]) with mapi id 15.20.7202.027; Wed, 24 Jan 2024
+ 21:10:49 +0000
+From: "Verma, Vishal L" <vishal.l.verma@intel.com>
+To: "zohar@linux.ibm.com" <zohar@linux.ibm.com>, "paul@paul-moore.com"
+	<paul@paul-moore.com>, "jarkko@kernel.org" <jarkko@kernel.org>,
+	"dhowells@redhat.com" <dhowells@redhat.com>, "yaelt@google.com"
+	<yaelt@google.com>, "serge@hallyn.com" <serge@hallyn.com>,
+	"nichen@iscas.ac.cn" <nichen@iscas.ac.cn>, "sumit.garg@linaro.org"
+	<sumit.garg@linaro.org>, "jmorris@namei.org" <jmorris@namei.org>
+CC: "Jiang, Dave" <dave.jiang@intel.com>, "linux-integrity@vger.kernel.org"
+	<linux-integrity@vger.kernel.org>, "linux-cxl@vger.kernel.org"
+	<linux-cxl@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "Williams, Dan J" <dan.j.williams@intel.com>,
+	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+	"linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>, "nvdimm@lists.linux.dev"
+	<nvdimm@lists.linux.dev>
 Subject: Re: [PATCH] KEYS: encrypted: Add check for strsep
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        "paul@paul-moore.com"
-	 <paul@paul-moore.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "dhowells@redhat.com"
-	 <dhowells@redhat.com>,
-        "yaelt@google.com" <yaelt@google.com>,
-        "serge@hallyn.com"
-	 <serge@hallyn.com>,
-        "nichen@iscas.ac.cn" <nichen@iscas.ac.cn>,
-        "sumit.garg@linaro.org"
-	 <sumit.garg@linaro.org>,
-        "jmorris@namei.org" <jmorris@namei.org>
-Cc: "Jiang, Dave" <dave.jiang@intel.com>,
-        "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>,
-        "linux-cxl@vger.kernel.org"
- <linux-cxl@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>,
-        "Williams, Dan J"
- <dan.j.williams@intel.com>,
-        "keyrings@vger.kernel.org"
- <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>,
-        "nvdimm@lists.linux.dev"
- <nvdimm@lists.linux.dev>
-Date: Wed, 24 Jan 2024 15:40:17 -0500
-In-Reply-To: <e3b1a5e532ed86e674385abc4812c5a774f851d4.camel@intel.com>
+Thread-Topic: [PATCH] KEYS: encrypted: Add check for strsep
+Thread-Index: AQHaTojqvjVIX7LD8kG9OsZOaef/FbDpRyyAgAAPCQCAAA9dgIAACHCAgAAIhYA=
+Date: Wed, 24 Jan 2024 21:10:49 +0000
+Message-ID: <50c2fa781e3266ee8151afdef5a8659d63ca952e.camel@intel.com>
 References: <20231108073627.1063464-1-nichen@iscas.ac.cn>
 	 <4d3465b48b9c5a87deb385b15bf5125fc1704019.camel@intel.com>
 	 <e3275c0cfe21d75e0d71ea3fc24a31252efc9ad6.camel@linux.ibm.com>
 	 <e3b1a5e532ed86e674385abc4812c5a774f851d4.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	 <49c48e3e96bf0f5ebef14e7328cc8a6ca6380e08.camel@linux.ibm.com>
+In-Reply-To: <49c48e3e96bf0f5ebef14e7328cc8a6ca6380e08.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Evolution 3.50.3 (3.50.3-1.fc39) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR11MB7125:EE_|CO6PR11MB5618:EE_
+x-ms-office365-filtering-correlation-id: 918d114f-c3c5-48a9-4099-08dc1d20f07b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ex2+PjQJ8+HjmKumq9fYn1PP3obMG2fO1w1cK7XSJNWKAvRKhukDYT7aRyEQyGpP8bDMx1UiLxmdCxITFCWEAcDqpXoO5SJMoh+da2wwVUzzz40epmKoeO9r8gcm3TtcRfPJ0nHDaeiaD+wBydAs04VHcc+hGaoX4IP5eY+4Ys0LpCZgAat/z5e/23ABXNEKr8rC8bP53ucxduls6BsJxKWFvz6Z4t+IZVolaiTkGnW08L3aqvO8gHXkdrXBgsuqSiS+B6Fw48GjTcAy92s8iQWXs2DGbeWM3JYZC4o9J12x/hwVi7seV1dWNi4L+NpqLieHTGzypet9Dvy9VuyuQ6qDpzCNjWYfUV34eANOV2HznFTcXIpx30QXD/HTfUHJsiYwcJAM5Po5ld11upk5iVZwMnFoZGrAkpi6KGRskKqowqkjtvHlsGchngHZmHQSFJqTOyvGl5Fq0DWZYBDb8vUcU7EO49DT5a9w8XVPD08kTJAWlcoMH5IdQ28hdm1upOQspbEg7gQELYFydpxnLVRsFyWvHBfNNajqX7Mz829Ns4+2dGFJx4as4gzM21aLz2xMBzXIZGcf4tVlF+kYnYzqq+xpTcOzZxUTJM1aO3c=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB7125.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(346002)(376002)(39860400002)(396003)(230922051799003)(186009)(64100799003)(1800799012)(451199024)(110136005)(5660300002)(7416002)(4744005)(2906002)(54906003)(66556008)(66476007)(64756008)(66446008)(4326008)(316002)(66946007)(41300700001)(76116006)(8676002)(8936002)(38070700009)(478600001)(82960400001)(38100700002)(36756003)(86362001)(71200400001)(122000001)(2616005)(83380400001)(6506007)(6486002)(6512007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cEE0d0V5RUdCMzFabjFVVkI0MmVtRWs1bGFQUkxCUkp6SnY0SmhCMUc1YzNl?=
+ =?utf-8?B?MER5QjJsMzk3ZWk1Z21yUXZheUJsVlN6SVM2K0hGZ3NrTFNWVFBuZm9NV01M?=
+ =?utf-8?B?aFhCb250K1hvM0FRRWJFSkdGb1NnSlFEdnlldkdzM0U2UUg4L3I3RFZRbE9V?=
+ =?utf-8?B?Mndjb0IwQUVlZk9DdnQrb0t2NktVOW01WUNpenVPYXNPeFZjTnRybXJ6UDRM?=
+ =?utf-8?B?cmZ5d2VkdUdPNlpETGJBUnFrem1pcTcwK3N3L1lreXlmL1doUXlXOVNYMUJy?=
+ =?utf-8?B?R2E3Wm1uc3E2RlhPRE8wc052R095Ulh1WHFYS0c4SVZpeG95ay9rQUNsUTJG?=
+ =?utf-8?B?b2NLU2g0TWcwa1V0UHB0aXE5V3ZtSGFXTzRYTHBlcjhXR09QNmEybXhyWXlU?=
+ =?utf-8?B?Z3RnYjJKTFF3YU9SRHRBUVNyZXRWSERrckc2Z3l0M2NGMjBlQjF4WVVPdEZa?=
+ =?utf-8?B?NjlYWm5hWVl2L3Zidm1SZENjNE9BTnF3ZWVLVGszb21hVjkwbzNLd2ZneVFa?=
+ =?utf-8?B?d3NZOHBWVWVpREx4cjlGZzFZcG1oTzRxdEdMTzVYRk12UWpkRTAzRHhnS0pr?=
+ =?utf-8?B?d2M4eVp6bUxXZDdmNEJLckFOZ0VRanJzbUd1YTlpbkJlNDJYbjhXWkdtd0lJ?=
+ =?utf-8?B?eSs0RnhxMitaZ3VwdlVpOXZNcytRcVNneHc4WDR2Rm1QSE0yYXkrZVhCLzlq?=
+ =?utf-8?B?cys5SGNZcWg4NGRPamlraWdaNUJSU0tFSE5aYkdRQWZHMUxGSFJTYkdUZmhh?=
+ =?utf-8?B?ViswcFM5UVNZYjRSSGJIVTJJUzM0TElteWZqTEs1NGNPNG9uTklvTUROTWtU?=
+ =?utf-8?B?c1BIT3F5cXdoMEdTN2N2SXdoN0RtQk4wV29GL3dCMlRQRFY2ejdDc3RwU0VK?=
+ =?utf-8?B?Tmc5Q215TkthMVF5MnhyU0thcngvTXM5NjJGMG5RUFFBbnlyd1ZpYmpwYmJp?=
+ =?utf-8?B?ZDlhSWdVSXdxVVdzRWVaMjVpZGtwOEpEcUN1QWczV0pGUjZkQ0J2Zm1BcHU1?=
+ =?utf-8?B?WDR4bkk1b3BRbDY0MHk3MXZLemFWV3JVbmhrWHR3bXBsZmdSbUZTVEE5MExs?=
+ =?utf-8?B?Sm43TEs4SndrYnpnYytNZXVtdjQxSUlIV0QrTGI3bFpPMmJ3THRuZEQ3cDZE?=
+ =?utf-8?B?Ujdta1ZvcGNGWVBTaVBMOEFCTU94Q3dna3pIMmU0L0FXYXVRRkh4cmJ6NGts?=
+ =?utf-8?B?a0RTT1ZucFNTZnJYdDlZUVBsNk45WXkwcEJSS0pXcmxVS2hKdnl1NElzazJi?=
+ =?utf-8?B?RTU1MkplY0FaR2xudmVkQXBGMGZ6YkZJeVphbFZZUTNZYWp2RVRKU1Q2a1ZZ?=
+ =?utf-8?B?Q3d3NUx5RU1LckR2NnpCNkVtclFDYnlVcGNTTUFZaDFhNEtPckROTldURWlr?=
+ =?utf-8?B?YThaU1lTOUszU3FsNllhbit2TGhLUE5MMDJwZ0Q3ZlkwUUNsZmRvUjVzdXV3?=
+ =?utf-8?B?SFZENEdxYWp6NGlHMFR1QVIxdy9xQUt2elRyT1lqVlpTam1UeGpETk5DOXNK?=
+ =?utf-8?B?RS96V3hKZ2VqZXhJZml1LytLTzh0anAvYlRPTFQ3R1ZSQ29sazhydk9STTJj?=
+ =?utf-8?B?VVZVaVUrSUh4L0k5WisrZ1YvQnNqdTBUakYrR1ZoV1dYS1kxZWRJM3ZvRmNR?=
+ =?utf-8?B?UlAxVGFoQ2IrZGNWdVN3V1VvRkRCUUwvWkcvRXo5MXRmT0c3WDNObmFrNmYy?=
+ =?utf-8?B?ZkU0YXcxNll0UGFnOGxzbEpIMGlkUzMySVhzaERwNjhhcUNRVWtQcUp4N3Zh?=
+ =?utf-8?B?MHVjUWpCODhzWHFLYWZYazFORHF0OVhpS3JtUkt5YS9LQXJNSC8xcWZKbkdN?=
+ =?utf-8?B?L0o3L3lvYTFlRzVoSms5VERtenYyRFZWVkp5ekFXaEdWZnlzc2ZXQ1d2Wlll?=
+ =?utf-8?B?SUhJNDBTc1hYS2FmVTNUYjQxcFRMakFIZnJybHVJeWdLTFZtdkR1QnFwcHMr?=
+ =?utf-8?B?UEVFcWtzZ1N1ckR4cStDZGh2YTRQWGVaaWl6Ly8zRHA0Tk85Wlpabi9sKy9y?=
+ =?utf-8?B?Q2JiVkpWODAxTHBnZFE0alVYRVhSdnhsL1lwYVBmY1A0b1VjWnByMUhlSjRh?=
+ =?utf-8?B?T0Vhd3NpblE2VU1EMVFkeVhGWURIR2l1N3FRZXI3eDdWTGxtcFBPMm1RUWxx?=
+ =?utf-8?B?dDl3UnZHSmw1MWJaWWtNN1NnZXRGeUNNVkt1YmxXYTU0ck95anA3TlN2aHlr?=
+ =?utf-8?Q?hIEmyccVs0suMptUdPMv10c=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B6D5239E089CDD4EA8D78E10C7D3B4DB@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BIDnxhlJRef7AywAZbikE-sp1Jompx04
-X-Proofpoint-ORIG-GUID: zbbsiYWRF0oFrQlVwoiL0Xu2qIxYjd_6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-24_09,2024-01-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- bulkscore=0 adultscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0
- clxscore=1015 priorityscore=1501 phishscore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2401240149
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB7125.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 918d114f-c3c5-48a9-4099-08dc1d20f07b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jan 2024 21:10:49.0272
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9CLs8zAATRF/8V7reZSLpOPMtYNxib1RXxvwuTuOqXXNlIJQKPiYap2dsvzeX8R8p8OCMkS+qq4zk8yPm6MS28cv98ndKMiYWWHzjCU/17k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5618
+X-OriginatorOrg: intel.com
 
-On Wed, 2024-01-24 at 20:10 +0000, Verma, Vishal L wrote:
-> On Wed, 2024-01-24 at 14:15 -0500, Mimi Zohar wrote:
-> > On Wed, 2024-01-24 at 18:21 +0000, Verma, Vishal L wrote:
-> > > On Wed, 2023-11-08 at 07:36 +0000, Chen Ni wrote:
-> > > > Add check for strsep() in order to transfer the error.
-> > > > 
-> > > > Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-
-> > > > provided decrypted data")
-> > > > Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
-> > > > ---
-> > > >  security/keys/encrypted-keys/encrypted.c | 4 ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > > 
-> > > > diff --git a/security/keys/encrypted-keys/encrypted.c
-> > > > b/security/keys/encrypted-keys/encrypted.c
-> > > > index 8af2136069d2..76f55dd13cb8 100644
-> > > > --- a/security/keys/encrypted-keys/encrypted.c
-> > > > +++ b/security/keys/encrypted-keys/encrypted.c
-> > > > @@ -237,6 +237,10 @@ static int datablob_parse(char *datablob, const
-> > > > char **format,
-> > > >  			break;
-> > > >  		}
-> > > >  		*decrypted_data = strsep(&datablob, " \t");
-> > > > +		if (!*decrypted_data) {
-> > > > +			pr_info("encrypted_key: decrypted_data is
-> > > > missing\n");
-> > > > +			break;
-> > > > +		}
-> > > 
-> > > Hello,
-> > > 
-> > > This patch seems to break keyring usage in CXL and NVDIMM, with the
-> > > "decrypted_data is missing" error path being hit. Reverting this commit
-> > > fixes the tests. I'm not sure if there are valid scenarios where this is
-> > > expected to be empty?
-> > > 
-> > > Here's an strace snippet of where the error occurs:
-> > > 
-> > >    keyctl(KEYCTL_SEARCH, KEY_SPEC_USER_KEYRING, "user", "nvdimm-master", 0) = 76300785
-> > >    openat(AT_FDCWD, "/sys/devices/platform/cxl_acpi.0/root0/nvdimm-bridge0/ndbus0/nmem0/state", O_RDONLY|O_CLOEXEC) = 3
-> > >    read(3, "idle\n", 1024)                 = 5
-> > >    close(3)                                = 0
-> > >    keyctl(KEYCTL_SEARCH, KEY_SPEC_USER_KEYRING, "encrypted", "nvdimm:0", 0) = -1 ENOKEY (Required key not available)
-> > >    uname({sysname="Linux", nodename="fedora", ...}) = 0
-> > >    newfstatat(AT_FDCWD, "/etc/ndctl/keys/nvdimm_0_fedora.blob", 0x7fff23fbc210, 0) = -1 ENOENT (No such file or directory)
-> > >    add_key("encrypted", "nvdimm:0", "new enc32 user:nvdimm-master 32", 31, KEY_SPEC_USER_KEYRING) = -1 EINVAL (Invalid argument)
-> > 
-> > 
-> > Indeed!  The user-provided decrypted data should be optional.   The change needs
-> > to be reverted.
-> > 
-> Ah, thanks for confirming! Would you like me to send a revert patch or
-> will you do it?
-
-Revert "KEYS: encrypted: Add check for strsep"
-    
-This reverts commit b4af096b5df5dd131ab796c79cedc7069d8f4882.
-    
-New encrypted keys are created either from kernel-generated random
-numbers or user-provided decrypted data.  Revert the change requiring
-user-provided decrypted data.
-
-
-Can I add your Reported-by?
-
-Mimi
-
-
-
-
+T24gV2VkLCAyMDI0LTAxLTI0IGF0IDE1OjQwIC0wNTAwLCBNaW1pIFpvaGFyIHdyb3RlOg0KPiBP
+biBXZWQsIDIwMjQtMDEtMjQgYXQgMjA6MTAgKzAwMDAsIFZlcm1hLCBWaXNoYWwgTCB3cm90ZToN
+Cj4gPiA+IA0KPiA+IEFoLCB0aGFua3MgZm9yIGNvbmZpcm1pbmchIFdvdWxkIHlvdSBsaWtlIG1l
+IHRvIHNlbmQgYSByZXZlcnQgcGF0Y2ggb3INCj4gPiB3aWxsIHlvdSBkbyBpdD8NCj4gDQo+IFJl
+dmVydCAiS0VZUzogZW5jcnlwdGVkOiBBZGQgY2hlY2sgZm9yIHN0cnNlcCINCj4gwqDCoMKgIA0K
+PiBUaGlzIHJldmVydHMgY29tbWl0IGI0YWYwOTZiNWRmNWRkMTMxYWI3OTZjNzljZWRjNzA2OWQ4
+ZjQ4ODIuDQo+IMKgwqDCoCANCj4gTmV3IGVuY3J5cHRlZCBrZXlzIGFyZSBjcmVhdGVkIGVpdGhl
+ciBmcm9tIGtlcm5lbC1nZW5lcmF0ZWQgcmFuZG9tDQo+IG51bWJlcnMgb3IgdXNlci1wcm92aWRl
+ZCBkZWNyeXB0ZWQgZGF0YS7CoCBSZXZlcnQgdGhlIGNoYW5nZSByZXF1aXJpbmcNCj4gdXNlci1w
+cm92aWRlZCBkZWNyeXB0ZWQgZGF0YS4NCj4gDQo+IA0KPiBDYW4gSSBhZGQgeW91ciBSZXBvcnRl
+ZC1ieT8NCg0KWWVzIHRoYXQgd29ya3MsIFRoYW5rIHlvdS4NCg0KDQo=
 
