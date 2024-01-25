@@ -1,113 +1,126 @@
-Return-Path: <linux-integrity+bounces-891-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-892-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C08ED83CC07
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jan 2024 20:16:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A47A83CD36
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jan 2024 21:13:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62D40B249A4
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jan 2024 19:16:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D334929A34B
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jan 2024 20:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C15C1350CE;
-	Thu, 25 Jan 2024 19:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BECAB13665E;
+	Thu, 25 Jan 2024 20:13:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="WwCnL77I"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TgLIwN8w"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0855613474C
-	for <linux-integrity@vger.kernel.org>; Thu, 25 Jan 2024 19:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1301134730;
+	Thu, 25 Jan 2024 20:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706210175; cv=none; b=Go7xYIzzbasbJNKjbOaNb/43GzQMj8VKYMcEIEJtHcpyrj7EJQ1ZY7YbosAfRIKtz1ZIkg5TtvOoUzeGedWi0p4cv28wG6rNbt8dZCSmJyNczVvJDbeNOMSC+Fv86Rei1OkeKo1aQ+Afk0j717N/pY9WtvijunuzBedXbiM7Yiw=
+	t=1706213591; cv=none; b=mTNu6RY5mN5y0CxMhsoinCdQ2D6YTm1kw55F7A+dSIe4JPqVbS1sB2CuqTKvfJXTEqV18H0lnnH2LdTFKC7kVHgwMxgGfvZla4WOH0WEAikzSfggvMfwonWQ3q/K2ydGNX4DBRQI+dk6PU7JtWeeAnvALcD3e9m4SqA3dGvpMWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706210175; c=relaxed/simple;
-	bh=FY3mIXOFXdmjySn/uSVm1etI+xStKOObdxGsMjn86Ds=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EHgYrQM4tYwwphNES3SveZw1nZorVclZ/YIlIkrWx2jmVNTBh3IL8eAyXkx1gXIXm4a/NhYW7560riLXP9StZ/hZGkU0viAz8lbZJUj72akLNrFNxh0IDwymsJs6VgpzLI+w0S7Hx9Mzv1p6cGYk6XNodv+0jiP+eHgQLHTLnjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=WwCnL77I; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.86.69] (unknown [50.46.228.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7BAEB20E56B9;
-	Thu, 25 Jan 2024 11:16:13 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7BAEB20E56B9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1706210173;
-	bh=UHZMJ2OsiH095u2y17xITV2zIyr9WMiYCpVsdJpGjxo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WwCnL77IIycm5PRY6u8vhvG3M64aiRKiWFRK4GSsx0ZdQ7/RTq4np3+Nqnvf6tsa4
-	 dFta17N882f5c6fouOfQdAIrh6m/ZN9UdzsyKtiJIjmX52MgrAXSYieU1Wi5SQlOuX
-	 g/KoZjK4CNsVoOzFsRHsMUkCyWCcFk2gHaEey5Ec=
-Message-ID: <c8760b44-e742-49c2-809d-2120d4f93850@linux.microsoft.com>
-Date: Thu, 25 Jan 2024 11:16:13 -0800
+	s=arc-20240116; t=1706213591; c=relaxed/simple;
+	bh=B3ceFyw/SVZiDpOgeabLAgAu8612WJpmcKbUEA6KKl0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=RKcQmIqCMMvAclp6SfnnzYIveX8Om7ycY4VGjM2dSDCBcGoPVRnnoHrzuIc4cAF//sEI564jchbrUZ0ci2foU5ZpzhqQLCCCtcUtpJzMcMDygK/g0lBgTT/B3ZbPWoYR8tv5dMq/muz2pA0LJZwP5DSCgSzeMdf9yjGsApdCnZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TgLIwN8w; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40PIMCV3018100;
+	Thu, 25 Jan 2024 20:13:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=6/1Ftr9qHVfb8ZAHqobSXWEaC3k7lCqrnuCH3dsMTzI=;
+ b=TgLIwN8wJWXBeD9xSVPyPwDJMyIp9AuwOepeevMeJY0K8rZ5k3nllBbFFWA5aCsju5Ap
+ kljU//8IxpXJLg1kb2/SROZcjjeMsCX/8oCINk1YSXtP3R6mNkdoBwxFVZcvcsLwip8a
+ uZ3o5oQiR+BWBv6GxI8REZkAp323S0WGrU0gb9KO8pq65zyXkwFLo16tZ1VAvkQisyXr
+ jBTM5TlZqpq5w6BvbE//8vUj2uQdH3S9cHgtPxI7+Bl3o/Dda1HrRCz6l8y86ffWbskV
+ 4q0GwSaGdEY0WtSNJ+CbzTyA0aja3aA0+HSaoe31r8bUM5u8sLP08FgUVpw6tLcqJiBs eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vuvv0tbmm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jan 2024 20:13:03 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40PKBFYI004815;
+	Thu, 25 Jan 2024 20:13:02 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vuvv0tbkq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jan 2024 20:13:02 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40PHxW3Y010860;
+	Thu, 25 Jan 2024 20:13:01 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vrrw06hp7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jan 2024 20:13:01 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40PKD07T5243778
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 25 Jan 2024 20:13:00 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9B56A58056;
+	Thu, 25 Jan 2024 20:13:00 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 59FBD58052;
+	Thu, 25 Jan 2024 20:13:00 +0000 (GMT)
+Received: from [9.24.12.86] (unknown [9.24.12.86])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 25 Jan 2024 20:13:00 +0000 (GMT)
+Message-ID: <a7cef739-213c-4f9b-ae84-5e5912d2281a@linux.ibm.com>
+Date: Thu, 25 Jan 2024 14:13:00 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] tpm: tis-i2c: Add more compatible strings
+Content-Language: en-US
+To: Conor Dooley <conor@kernel.org>
+Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        Joel Stanley <joel@jms.id.au>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
+References: <20231214144954.3833998-1-ninad@linux.ibm.com>
+ <20231214144954.3833998-2-ninad@linux.ibm.com>
+ <20240109-saddling-nintendo-c7fbb46bb0dd@spud>
+ <77fe0ccd-53ff-4773-9787-0d038434297f@linux.ibm.com>
+ <20240112-unrevised-wafer-649c0ebffda5@spud>
+From: Ninad Palsule <ninad@linux.ibm.com>
+In-Reply-To: <20240112-unrevised-wafer-649c0ebffda5@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 027WmfN-7LSDFb66WQhdOq7NGAmoGauX
+X-Proofpoint-GUID: h2tM9gAfucWNsjkh8iD7RKxBG4kYU6EO
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 7/7] ima: measure kexec load and exec events as
- critical data
-Content-Language: en-US
-To: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huaweicloud.com,
- roberto.sassu@huawei.com, eric.snowberg@oracle.com, stefanb@linux.ibm.com,
- ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
- linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-References: <20240122183804.3293904-1-tusharsu@linux.microsoft.com>
- <20240122183804.3293904-8-tusharsu@linux.microsoft.com>
- <494fc3a82053e71a33bccca3fe6683c59b78b6cf.camel@linux.ibm.com>
-From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <494fc3a82053e71a33bccca3fe6683c59b78b6cf.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-25_12,2024-01-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=396 mlxscore=0
+ adultscore=0 phishscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
+ suspectscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2401250145
+
+Hello Conor,
+
+Can you please send ack for my last patch if you don't have further 
+review comments?
+
+https://lore.kernel.org/linux-kernel/20240116181754.3905754-1-ninad@linux.ibm.com/
+
+Thanks & Regards,
+
+Ninad Palsule
 
 
-
-On 1/24/24 06:35, Mimi Zohar wrote:
-> On Mon, 2024-01-22 at 10:38 -0800, Tushar Sugandhi wrote:
-> 
-> The problem statement could be written as:
-> 
-> The amount of memory allocated at kexec load, even with the extra memory
-> allocated, might not be large enough for the entire measurement list.  The
-> indeterminate interval between kexec 'load' and 'execute' could exacerbate this
-> problem.
-> 
-> Mimi
-> 
-Thank you again for taking efforts to write one more example for me.
-Appreciate it.
-
-Will do.
-
-~Tushar
-
->> There could be a potential mismatch between IMA measurements and TPM PCR
->> quotes caused by the indeterminate interval between kexec 'load' and
->> 'execute'.  The extra memory allocated at kexec 'load' for IMA log buffer
->> may run out.  It can lead to missing events in the IMA log after a soft
->> reboot to the new Kernel, resulting in TPM PCR quotes mismatch and remote
->> attestation failures.
->>
->> Define two new IMA events, 'kexec_load' and 'kexec_execute', to be
->> measured as critical data at kexec 'load' and 'execute' respectively.
->> Report the allocated kexec segment size, IMA binary log size and the
->> runtime measurements count as part of those events.
->>
->> These events, and the values reported through them, serve as markers in
->> the IMA log to verify the IMA events are captured during kexec soft
->> reboot.  The presence of a 'kexec_load' event in between the last two
->> 'boot_aggregate' events in the IMA log implies this is a kexec soft
->> reboot, and not a cold-boot. And the absence of 'kexec_execute' event
->> after kexec soft reboot implies missing events in that window which
->> results in inconsistency with TPM PCR quotes, necessitating a cold boot
->> for a successful remote attestation.
->>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> 
-> 
 
