@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-888-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-889-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6A1983CBCF
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jan 2024 20:03:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E222383CBE5
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jan 2024 20:06:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D8281C21664
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jan 2024 19:03:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 691B129BB57
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jan 2024 19:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 645C479C7;
-	Thu, 25 Jan 2024 19:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB18C1339B7;
+	Thu, 25 Jan 2024 19:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="lgb0GB5W"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="LQM31NQb"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01CFC111AA
-	for <linux-integrity@vger.kernel.org>; Thu, 25 Jan 2024 19:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E26C6A005
+	for <linux-integrity@vger.kernel.org>; Thu, 25 Jan 2024 19:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706209398; cv=none; b=SzOwf2cqx4o+ntZs7wnIH8GWU9YEvocf9VFRneHUxca8OGjwPHPrKYPAL/6EMULwV4iQrR9mMQe1mArSSg3sJ9oUbrR5MdB19UGSXJorQXSJXNToUSmrwapombH9OKTYOiwIPAB8RdaOQ379VeNTH4kRvE2ZxwO4RcXyP1iRjto=
+	t=1706209598; cv=none; b=dxFKDsl3j3GYjbS4+3b2OPTwxgNiryTuuEpo+cbtAAwq+qo6q/Hc85wm+ztDt8a3DF7/Ioe1xaXgLKDKNPh1VtMkAO3S5KpdYBZ2LcNeTPAC2Toc4IMh5xqnUnZuuoIrd6qO2hilA26mL1wVOlqITVSfcm1eja8XG+0/SuOyzp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706209398; c=relaxed/simple;
-	bh=UyQ7baFXCvDKZG7h1X1KET79K+M1k7gNXhapQuIeweo=;
+	s=arc-20240116; t=1706209598; c=relaxed/simple;
+	bh=gF6W+BAy3FfnLOs3Kk71+3ZtbxB5cPbFO8Rj+l7r/5I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K8Wd2YpRAYaUS0lp3kZuOfADnFT7e7vpD+Zp3b9kb/jSHEKP4HMtDXT3YIHC8G25SsluOf6+ICmjEfIcVCBJ8EqyOdaRiCu9pYbvm08Y2gsUt3kkvWLoTTFGsBvxnk1bD+HmFrOAi8o9kW4cg3elRMlPrX4JtVntCA4DgbmtBlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=lgb0GB5W; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=uP5tkA1JPtrKLCNlvfJQ05icT9+olCGJHTdP0g/Cw208Rhb8IBH2IZz0HIrvUFqElOZBYs3bFDtNTKdtDfRYIBcEPVH+xqpUIjK8AbA8ZTCGb+LBT1FSpPvSpAG08AknXCkCtd9i7Jw6DKEMkDq8VZrAmVvPMeHozdIYRHTU6aM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=LQM31NQb; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [192.168.86.69] (unknown [50.46.228.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 4094A20E56B9;
-	Thu, 25 Jan 2024 11:03:16 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4094A20E56B9
+	by linux.microsoft.com (Postfix) with ESMTPSA id AFAF920E56BC;
+	Thu, 25 Jan 2024 11:06:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AFAF920E56BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1706209396;
-	bh=D1T7algiUcMPxXRP8Zi7lyeKEJFua9zPhLw3U+ranoI=;
+	s=default; t=1706209596;
+	bh=ye950e0unO0+Ln8d/jDNryrh84eW8VyNikpbfZLuGzc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lgb0GB5Weej/LzlBhwgz/XV56uxOR7xSl8LbRuN9OYn/eDkPnQbiPluMoGRIFd15Y
-	 kO/Xs5V1q2UWK5SSBxOXolA+5Y3x+xcUZPdpmn2Z/6HWpuDeIwKDY+DIzCgrFTLrlI
-	 uS0XOvfauMR4Dv5pETAM/ngtzzLwyVIuoPK/HfSU=
-Message-ID: <7aec91f8-9284-4c66-bbcd-0d29a9e56881@linux.microsoft.com>
-Date: Thu, 25 Jan 2024 11:03:15 -0800
+	b=LQM31NQbess+W8mxY2a3ZUu69AZIfqYp9kqSOZA0kGQhORFiihNtiKoJ2TTgjdRHT
+	 +omHYAM+wQgrToP8AMh+1TlLHqpj5lK43GsskAc6AVNoHGM96OeuauwNd+40mIV3Dh
+	 P/0q4HnzOXmvn7IhzJQCGMYuouzYhDG7nAsx+ywc=
+Message-ID: <8eee667e-9e97-409f-864f-b4b25710d1ca@linux.microsoft.com>
+Date: Thu, 25 Jan 2024 11:06:36 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,7 +49,8 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/7] ima: define and call ima_alloc_kexec_file_buf
+Subject: Re: [PATCH v4 4/7] ima: kexec: move ima log copy from kexec load to
+ execute
 Content-Language: en-US
 To: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huaweicloud.com,
  roberto.sassu@huawei.com, eric.snowberg@oracle.com, stefanb@linux.ibm.com,
@@ -57,63 +58,58 @@ To: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huaweicloud.com,
  linux-integrity@vger.kernel.org, kexec@lists.infradead.org
 Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
 References: <20240122183804.3293904-1-tusharsu@linux.microsoft.com>
- <20240122183804.3293904-2-tusharsu@linux.microsoft.com>
- <8f8b573a3dda6020972f359f9c54d03272afe852.camel@linux.ibm.com>
+ <20240122183804.3293904-5-tusharsu@linux.microsoft.com>
+ <871a808d902bd6f1133b092a7b1924bcbba2ca6e.camel@linux.ibm.com>
 From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-In-Reply-To: <8f8b573a3dda6020972f359f9c54d03272afe852.camel@linux.ibm.com>
+In-Reply-To: <871a808d902bd6f1133b092a7b1924bcbba2ca6e.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Thanks Mimi.
 
 
-On 1/24/24 05:33, Mimi Zohar wrote:
-> Hi Tushar,
+On 1/24/24 08:11, Mimi Zohar wrote:
+> On Mon, 2024-01-22 at 10:38 -0800, Tushar Sugandhi wrote:
+>> ima_dump_measurement_list() is called during kexec 'load', which may
+>> result in loss of IMA measurements during kexec soft reboot.  It needs
+>> to be called during kexec 'execute'.
+>>
+>> The below changes need to be part of the same patch to ensure this
+>> patch series remains bisect-safe by ensuring the IMA log gets copied over
+>> during kexec soft reboot both before and after this patch.
+>>
+>> Implement ima_update_kexec_buffer() to be called during kexec 'execute'.
+>> Move ima_dump_measurement_list() from ima_add_kexec_buffer() to
+>> ima_update_kexec_buffer().  Make the necessary variables local static to
+>> the file, so that they are accessible during both kexec 'load' - where
+>> the memory is allocated and mapped to a segment in the new Kernel, and
+>> during 'execute' - where the IMA log gets copied over.
+>>
+>> Implement kimage_file_post_load() and ima_kexec_post_load() to be invoked
+>> after the new Kernel image has been loaded for kexec.
+>> ima_kexec_post_load() will map the IMA buffer to a segment in the newly
+>> loaded Kernel.  It will also register the reboot notifier_block to trigger
+>> ima_update_kexec_buffer() at exec 'execute'.
 > 
-> On Mon, 2024-01-22 at 10:37 -0800, Tushar Sugandhi wrote:
+> This defines two new IMA hooks - ima_kexec_post_load() and
+> ima_update_kexec_buffer().  They shouldn't be hidden here in the move of copying
+> the measurement list from kexec load to execute.
 > 
-> Missing from this and the other patch descriptions is the problem
-> description.  Please refer to the section titled  "Describe your changes" in
-> https://docs.kernel.org/process/submitting-patches.html.
+> If "ima_update_kexec_buffer()" was initially defined as a stub function, the
+> infrastructure could be set up ahead of time.  This patch could then be limited
+> to just moving the copy from kexec "load" to "execute", by replacing the stub
+> function with the real function.
 > 
-> "Describe your problem.  Whether your patch is a one-line bug fix or 5000 lines
-> of a new feature, there must be an underlying problem that motivated you to do
-> this work.  Convince the reviewer that there is a problem worth fixing and that
-> it makes sense for them to read past the first paragraph."
-> 
-> In this case, "why" you need to refactor ima_dump_measurement_list() is the
-> problem.
-> 
-Thanks.  I will revisit all the patch descriptions in this series to 
-take into account the 'why' specific to that particular patch.
+Agreed.  Making ima_kexec_post_load() and ima_update_kexec_buffer() as 
+stubs/hooks did cross my mind.  Thanks for confirming that.
 
-> For example:
-> 
-> Carrying the IMA measurement list across kexec requires allocating a buffer and
-> copying the measurement records.  Separate allocating the buffer and copying the
-> measurement records into separate functions in order to allocate the buffer at
-> kexec "load" and copy the measurements at kexec "execute".
-> 
-Appreciate you giving an example in this case.
-I will try to follow it in other patches too.
+I will split this patch (4/7) into two.
 
-> "Once the problem is established, describe what you are actually doing about it
-> in technical detail.  It's important to describe the change in plain English for
-> the reviewer to verify that the code is behaving as you intend it to."
-> 
->> Refactor ima_dump_measurement_list() to move the memory allocation part
->> to a separate function ima_alloc_kexec_file_buf() which allocates buffer
->> of size 'kexec_segment_size' at kexec 'load'.  Make the local variable
->> ima_kexec_file in function ima_dump_measurement_list() as local static to
->> the file, so that it can be accessed from ima_alloc_kexec_file_buf().
->> Make necessary changes to the function ima_add_kexec_buffer() to call the
->> above two functions.
-> 
-> Please make this into an unordered list.
-> 
-Will do.
-
-Thanks again.
+First will define the stubs, setup the infrastructure.
+And second will move the copy from 'load' to 'execute'.
 
 ~Tushar
+>> Modify kexec_file_load() syscall to call kimage_file_post_load() after the
+>> image has been loaded and prepared for kexec.  Call it only on kexec soft
+>> reboot and not for KEXEC_FILE_ON_CRASH.
+> 
 
