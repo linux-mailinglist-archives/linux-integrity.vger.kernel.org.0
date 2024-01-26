@@ -1,217 +1,228 @@
-Return-Path: <linux-integrity+bounces-898-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-899-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2740083D2D7
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jan 2024 04:05:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65A2883E4F9
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jan 2024 23:15:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 261BEB225D7
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jan 2024 03:05:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B5631C21279
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jan 2024 22:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FC9A944;
-	Fri, 26 Jan 2024 03:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56171249E6;
+	Fri, 26 Jan 2024 22:14:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="MZMuOQF3"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Cg7IaZWW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from rcdn-iport-3.cisco.com (rcdn-iport-3.cisco.com [173.37.86.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD63A8F65
-	for <linux-integrity@vger.kernel.org>; Fri, 26 Jan 2024 03:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=173.37.86.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706238310; cv=fail; b=CTFuVHHlqXxHQ2ZPEJRBSFGSq1sZw68GUdwxVeJ/rrjUwhjxgEt5CfJ5ORC1J4dRzMfJ+avKk3SelS2AgfXKNjV8i4P4ppSBi9n8QlxzD9W+7YuxCOIv+ZfO8gvjGkj9FCy78DLjIfXZyPZqYwQWe9Zzkx7npUT1WtpZurnz4Sw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706238310; c=relaxed/simple;
-	bh=StYSg7p+/dhd3KczXxm1WU5Ps2gxe/1dWy2CoZJSjvc=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=nxEkb6sl6Kh187nA/2P28y5q0lOWFQs9zRAHVMtgI29PwBvrlGPyzfnmE7lb82w3KHLaYcnO/kUE6TtW4AtS4y3kKxk70OxqbSusQwYV5jM5F4BgZ9e6c9GucHgsNmiJKx/m0Q51baWhyJWB2m0am+TV5iZiUGbY4S+6ts+rSW4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=MZMuOQF3; arc=fail smtp.client-ip=173.37.86.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=657; q=dns/txt; s=iport;
-  t=1706238307; x=1707447907;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=wjICtjOvQi/8mNcEeVkGgzxSMIwahVAQeW/ny0GjtKE=;
-  b=MZMuOQF3s9NqBBFgYWT9oP9H9MBylvt38fCgRVIT3h3fqr0oDCHBx0OY
-   Tja0EiVE3ot2NwnAofvTIIf+VRmuoWu3TpwpihYnEZoNk8/USR+njkbaZ
-   DRjhyOXzHJ+84IaeME6fTf2Z3ObU2oIwBodHcHhCTq6z7EryCjb9ewWXD
-   I=;
-X-CSE-ConnectionGUID: dDtmrJTqQKqhME8wlH/CBw==
-X-CSE-MsgGUID: MniKAHhjTayWoyFrrGHu0w==
-X-IPAS-Result: =?us-ascii?q?A0BUAQBlILNlmJRdJa1agQklgSqBZ1J6gQcSiGYDhS2hF?=
- =?us-ascii?q?IVbgX4PAQEBDQEBRAQBAYUGAodJAiY0CQ4BAgQBAQEBAwIDAQEBAQEBAQEGA?=
- =?us-ascii?q?QEFAQEBAgEHBRQBAQEBAQEBAR4ZBQ4QJ4VtDIZGAgEDEncCAQg1ETElAgQbG?=
- =?us-ascii?q?oJegmADAal0AYFAAoooeIE0gQGCFgWyfoFIiCIBhWWEPScbgUlEgVeCaD6BB?=
- =?us-ascii?q?QGDPQKEEoIvBIVZkxRUfx0DgQUEXA8bEB43ERATDQMIbh0CMTwDBQMEMgoSD?=
- =?us-ascii?q?AshBRNCA0AGSQsDAhoFAwMEgTAFDRoCEBoGDCYDAxJJAhAUAzgDAwYDCjEwV?=
- =?us-ascii?q?UEMUANlHzIJPA8MGgIbGw0nIwIsQAMREgIWAyQWBDYRCQsmAyoGNwISDAYGB?=
- =?us-ascii?q?l0mFgkEJQMIBANUAyF0EQMECgMUBwsHeIIMgT4EE0cQgUJmA0QdQAMLbT0UI?=
- =?us-ascii?q?RQbBQSBNgWdZTKjZ6FJCoQRoU8Xg3KmKC6HVZBRIKglAgQCBAUCDgEBBoFjO?=
- =?us-ascii?q?oFbcBWDI1EZD445k1qBMQIHCwEBAwmKZwEB?=
-IronPort-PHdr: A9a23:gn7GUhD+CgdAUH7X4MhKUyQVphdPi9zP1kY9454jjfdJaqu8usikN
- 03E7vIrh1jMDs3X6PNB3vLfqLuoGXcB7pCIrG0YfdRSWgUEh8Qbk01oAMOMBUDhav+/Ryc7B
- 89FElRi+iLzKlBbTf73fEaauXiu9XgXExT7OxByI7H/E4rJktyf3OGp8JqVaAJN13KxZLpoJ
- 0CupB7K/okO1JFvKKs61lPFo2AdfeNQyCIgKQeYng334YG7+5sLzg==
-IronPort-Data: A9a23:OFMXw6LkZEhcyfk2FE+R3pUlxSXFcZb7ZxGr2PjKsXjdYENShGRTm
- DFNUW3TP/rcZzT0Ltp0b9m080lQ6JDczdZnTFEd+CA2RRqmiyZq6fd1j6vUF3nPRiEWZBs/t
- 63yUvGZcYZsCCea/0/xWlTYhSEU/bmSQbbhA/LzNCl0RAt1IA8skhsLd9QR2uaEuvDnRVvQ0
- T/Oi5eHYgP9gmQoajt8B5+r8XuDgtyj4Fv0gXRmDRx7lAe2v2UYCpsZOZawIxPQKmWDNrfnL
- wpr5OjRElLxp3/BOPv8+lrIWhFirorpAOS7oiE+t55OLfR1jndaPq4TbJLwYKrM4tmDt4gZJ
- N5l7fRcReq1V0HBsLx1bvVWL81xFaFq5LrdA0SmiO+Kz2jrI2To47JFJl5jaOX0+s4vaY1P3
- eYTJDZIZReZiqfvmvSwS/JngYIoK8yD0IE34y47i2qGS6d9B8mfE80m5vcAtNs0rspHGe3Df
- +ISaCFka1LLZBgn1lI/Uc1hw7z42yWmG9FegHeTpIkew2jR8AVg77/8HsDPVfyXHdoAyy50o
- UqdojymWUtFXDCF8hKB83SxlqrOmz/2V5gTCKyQ6PFnmhuQy3YVBRlQUkG0ycRVkWakUN5Zb
- kcT4Cdr9PJ0/02wRd67VBq9yJKZgvICc9Z8D+ggyj2U84nN4yO0VncAbnlqQsNz4afaWgcW/
- lOOmtroAxlmv7uUVW+R+9+oQdWaZHh9wYgqOH9scOcV3+QPtr3fmf4mczqOOLS+gtuwEjbqz
- nXT9m41hq4YiogA0KDTEbH7b9CE+Mahou0dv1m/soeZAuVRP9/Ni2uAsgez0Bq4BNzFJmRtR
- VBd8yRk0MgADIuWiAuGS/gXEbei6p6taWKE3wQ3QMVxrGv8phZPmLy8BhkjdS+F1e5ZKFfUj
- LP752u9GbcKZST6M/UrC25PI51ykvGI+SvZugD8NYcWPcMrK2drDQllZFWb2Cj2gVMwnKQkc
- ZadeoDEMJrpIfoP8dZCfM9EieVD7nlnnQv7HMmnpzz5iuD2TCDOFt843K6mM7pRAFWs+luFq
- r6y9qKiln1ibQEJSnOPrdFLdQtQRZX5bLivw/Fqmie4ClMOMEkqCuTaxvUqfIkNokifvr6gE
- q2VMqOA9GfCuA==
-IronPort-HdrOrdr: A9a23:S9ifQqqlcWYGuXxtL0jAaCMaV5tkLNV00zEX/kB9WHVpm5Oj5q
- OTdaUgtSMc1gxxZJh5o6H+BEDhex/hHO1OkPcs1NCZLUbbUQqTXc1fBOTZskbd8kHFh4pgPO
- JbAtRD4b7LfBZHZKTBkXOF+r8bqbHtntHL9ILjJjVWPHxXgspbnmFE43OgYzVLrX59dOME/f
- Snl616jgvlU046Ku68AX4IVfXCodrkqLLKCCRtOzcXrCO1oXeN8rDVLzi0ty1yb9pI+9gf2F
- mAtza8yrSosvm9xBOZ/XTU9Y5qlNzozcYGLNCQi+AOQw+cyjqAVcBEYfmvrTo1qOag5BIBi9
- /XuSotOMx19jf4Yny1mx3wwAPtuQxeqEMKiGXow0cLk/aJAA7SOPAxwr6xtSGprXbIiesMlZ
- 6jGVjp7qa/QymwxBgVrOK4Ji2C3nDE0UbK19RjzkC2leAlGeVsRUt1xjIPLH8NcRiKm7wPAa
- 1gCtrR6+1Rdk7fZ3fFvnN3yNjpRXgrGAyaK3Jy8fB9/gIm1UyR9XFojPA3jzMF7tYwWpNE7+
- PLPuBhk6xPVNYfaeZ4CP0aScW6B2TRSVaUWVjibGjPBeUCITbAupT36LI66KWjf4EJ1oI7nN
- DEXElDvWA/dkryAYmF3YFN8BrKXGKhNA6dgP129tx8oPnxVbDrOSqMRBQnlNahuewWBonBV/
- O6KPttconexKvVaPF0NiHFKu1vwCMlIb8oU/4AKieznv4=
-X-Talos-CUID: 9a23:3e2r32Gm4zpvPYbqqmJr2FIRAOIZa0T+1Xf1Dh+nDUYuY5eKHAo=
-X-Talos-MUID: =?us-ascii?q?9a23=3A/JcaPwwMNjBUPIeeeSz1EbDykq6aqIGoCWMksZU?=
- =?us-ascii?q?Eh8CVCithFS2HoxSqGpByfw=3D=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-Received: from rcdn-core-12.cisco.com ([173.37.93.148])
-  by rcdn-iport-3.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 03:03:59 +0000
-Received: from alln-opgw-4.cisco.com (alln-opgw-4.cisco.com [173.37.147.252])
-	by rcdn-core-12.cisco.com (8.15.2/8.15.2) with ESMTPS id 40Q33xoZ018183
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-	for <linux-integrity@vger.kernel.org>; Fri, 26 Jan 2024 03:03:59 GMT
-X-CSE-ConnectionGUID: UpaTK+leS8OSsQo9cgkuYA==
-X-CSE-MsgGUID: INCvLrZGR0m51yu4/6sBHA==
-Authentication-Results: alln-opgw-4.cisco.com; dkim=pass (signature verified) header.i=@cisco.com; spf=Pass smtp.mailfrom=balsup@cisco.com; dmarc=pass (p=reject dis=none) d=cisco.com
-X-IronPort-AV: E=Sophos;i="6.05,216,1701129600"; 
-   d="scan'208";a="21460280"
-Received: from mail-bn8nam11lp2169.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.169])
-  by alln-opgw-4.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 03:03:59 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dvIKOg3/VbNI8oTNHaf0D9TR8dbmROLtAM02WLSJr/20s7japKSqR7Oz1G+UDGHJ7d2bnV1H3cL/A8//EopmUS7jmMvN0esgv09PbtDvEPLk8bA3jkMjA+T+s7fBoymStxq7X3uu+4pBFxPI4x2ZEm9RI8Rl6AV9I0AFxwcknrwDcPR1dAm67wYNw5kvKqjS1jDCakICj8CKsgptnt5Y0GiephKfxqIoZdT3NEhF/iDFx1e1G5Ia/tFVBftSYVt4HNHH7U3KkFafqLKH2efHVRhmm89CRhwbnngx9ox+CccXH/712MsryJ22W84613FJ+wJy59T1pbeeqLO/JKUdjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wjICtjOvQi/8mNcEeVkGgzxSMIwahVAQeW/ny0GjtKE=;
- b=kyH3jDSkYEyPELPgrOUDHPpcrbsknwHrgTdetfnU2z6nfl6AVtt3C7iAHfWSzaTH9uMdy7LMmaKfkFiwHbCpGQAlRmGUlGb9qjnEiUqL5H8VSpajpxMpso9qeAYacyvJ3pESYrkbw2lxLB4QLhhkMjtaF7XGF1Ap/8SZKBmkcA/XA9c3K4+2+ejnh93G/1jWKHwEFlPGcnpIIHGb6+efZmYTEVTTFwzenKwGXmqV6QLUjqMW3yCicV5n1yCJdeprCP+S3mCGF4zbWvGJBNnxkoMT1IqNbZ42TYJ/nc2f5VVpCrbJMbrpLMkPYW8ecSyqCCtt1DsP730Zgd5UYYeN4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
- dkim=pass header.d=cisco.com; arc=none
-Received: from BYAPR11MB3527.namprd11.prod.outlook.com (2603:10b6:a03:8b::26)
- by DS0PR11MB6544.namprd11.prod.outlook.com (2603:10b6:8:d0::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7228.26; Fri, 26 Jan 2024 03:03:57 +0000
-Received: from BYAPR11MB3527.namprd11.prod.outlook.com
- ([fe80::2bd9:67d0:43ba:5f6a]) by BYAPR11MB3527.namprd11.prod.outlook.com
- ([fe80::2bd9:67d0:43ba:5f6a%7]) with mapi id 15.20.7228.026; Fri, 26 Jan 2024
- 03:03:57 +0000
-From: "Billie Alsup (balsup)" <balsup@cisco.com>
-To: "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: Re: ref leak in request_asymmetric_key ?
-Thread-Topic: ref leak in request_asymmetric_key ?
-Thread-Index: AQHaT/hyjB+cdCGonkelvMgjLj11TLDrZ5cR
-Date: Fri, 26 Jan 2024 03:03:57 +0000
-Message-ID:
- <BYAPR11MB3527F7232A143CE35774DB9DD9792@BYAPR11MB3527.namprd11.prod.outlook.com>
-References:
- <BYAPR11MB3527851FFD46381325450F74D9792@BYAPR11MB3527.namprd11.prod.outlook.com>
-In-Reply-To:
- <BYAPR11MB3527851FFD46381325450F74D9792@BYAPR11MB3527.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR11MB3527:EE_|DS0PR11MB6544:EE_
-x-ms-office365-filtering-correlation-id: 417e17dc-99b2-4986-1974-08dc1e1b701f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- 6XY+dHFYgQouk3fmrCeObJC/TJQ8mb5h12xbLZuXog1xl93+rmOQEubXAnueLec4Z9CZV2ZJ24dk9a8UOw0I/eIA1yA9EKlNdFejh8JJ1OYDPPbYiX8gAKDrdnqpsFYkbuSUyYof0uiLsOPw1hBJLvDWLb24JJ+xPAqY71X8RuvE0DfkOCcJtGMfplkA0A0pyy1xNDL8ems2WN7JwcVpRV2mn10XOFyQpZ+hblOUTH5EVUy6FsmFeN75hxhpQ/pj98kw/lZof/y1BgPaBW5Txkk4otgS3eRFtuS6WR2OY+Pg105elbcGlehbWZjjpya+QpphK6kYCgkjRVVFdbPGqm+rvTBV1x5Mzgj7XOYKc8X2/PZsr9MHVohRrqRkOYYQnw5LER1Yon89eiDOlZFMatNKdmkjbdPOTIwNqAUG3GvpD5pvFCBnnG2x+qWUTnUbjsXejPPG1fOtq6GYL0xHemixjYQ0Bu2jX7lJzh7pvsQNfo/MxtuYrDp4UfQ5qMfyvBo/y8ua6Ew2EeVy7JDmk/lwG2n4RjbzWqCWWscDcc2iIYeQvFdVa4KD2UfKRz/HbNgb0TzvmuvuWKWLvLVli+tdsVwh3nXQm5jhiF5R19kLDXq9RKXuLqqHKsFLTXDW
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3527.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(376002)(366004)(396003)(39860400002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(26005)(9686003)(6506007)(7696005)(83380400001)(8676002)(8936002)(52536014)(66476007)(66946007)(478600001)(316002)(76116006)(66446008)(71200400001)(66556008)(91956017)(122000001)(86362001)(6916009)(64756008)(38100700002)(55016003)(2940100002)(38070700009)(5660300002)(41300700001)(33656002)(4744005)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?KmpU5qJjBpn2HSViE6zEvnakkd9EK1ZHVD6Y9NdnFOte0k5vtJkUeqP9YX?=
- =?iso-8859-1?Q?20wRWiW2B3TQ7nmUcJRvukf8DbwAV8/zbC+2dtaUGVaUbHYhIPis/mUVfY?=
- =?iso-8859-1?Q?oDSpmu1mIR47AGld81ygSRMn42rzIEcQy4NPwBs8W/cL/17J+Uiww4mmhf?=
- =?iso-8859-1?Q?GC+xXD1ft0pkIQGoYlZJjL9Seo0nkzO+NabX2Y7DjMFcjVOtxD8CrJy0kh?=
- =?iso-8859-1?Q?TSIUoeHCw8p4UDFaTenXfKOC2fyBCCYK+yR54CwHRReD0kBcmgLcRB4Ndx?=
- =?iso-8859-1?Q?6Df1wP0PRHdF9Mu+4QT8bv0UXXLavs49iHZSiG64zjB5SrVzgZnJYxqwen?=
- =?iso-8859-1?Q?PZpALuXmnrJDCvsxR2hKDw3kvlaktefDiCAfg/u72SHpVYAUAHmSIRDhsX?=
- =?iso-8859-1?Q?RQ3KNv5NIFiKlnhg1HrVMUsGHh8q9P+KJj+gdL05MalOsPn3qxBefZHWfz?=
- =?iso-8859-1?Q?6fRgn/KAR8aAm3UNrN+3q6IAEn8+nKBB8EdzcbXNSDy50ElUDbh5+2G56I?=
- =?iso-8859-1?Q?yltr6AcN/pGVxC6b4ycqXnpWDY6d8K2WU/H9RpT/z7+9Mect8aFZXDvDZX?=
- =?iso-8859-1?Q?8mB3gqRtrBp6rc9EY2onBCqnPe7aqMxwcT+6njaobeMFHqmp22A1nJ60gW?=
- =?iso-8859-1?Q?qRystWlhkFNoQKYofcpEBEkddbejPk0/N5BHAGclveaMwAq45NjKBkat2h?=
- =?iso-8859-1?Q?iganN+E8seW7prFkdw/fHEdGWggB1cb4g4EPLTXPo6vuidQWz5GLB3wAIm?=
- =?iso-8859-1?Q?aV2hNfFLfc4PqG/00z97+JcefWOMFlkxw77KndKOWqSRhjha45dmetAsyD?=
- =?iso-8859-1?Q?FXuSmEusVV3kx0IseYPVUvJ4knn3kftpcPIU45GD7FmqLGE1BXiywaYHJJ?=
- =?iso-8859-1?Q?6lhow0NByaFLAcu3rQcMO22Q2U5gyYTSQShJK25yeIfuBUOek6Gw2gyH5c?=
- =?iso-8859-1?Q?vVj9CfTx5T+Iubd/xF0/nNr9XR2lTcvQRo/Dc4BZBrGPCZaqFDHTDnhriO?=
- =?iso-8859-1?Q?5CDr91mj+fc3qJ5vR1LzW/QFHttnKaGo2+zjBNs8oXpEDH0psPmh3t+tpT?=
- =?iso-8859-1?Q?7CXQmnbtqOayKiMtAXcLXZM2L9yo511MwcZeWdbcQZeYFle7O9tmIN8zIk?=
- =?iso-8859-1?Q?nOvatgXMNKnSq7fBnetc59sH3tI5/4+EUrog46hCSFo4ZXdCFBVnJ8Zhfc?=
- =?iso-8859-1?Q?yBMaDiS2UVEvFFpIJGouMcOErCwhgVVwk39K3c+4Mm/I+5rn8o9vBWLxKG?=
- =?iso-8859-1?Q?/6MlhaBehB2AqQiPennk17wc9bgKkkjtgh9bp6WNE2JmOp4AKNw1LnHnEh?=
- =?iso-8859-1?Q?2mQx9fQha2ny5lOKmmdh+WBDKV313LyGMDAo3IN0YE5YdtPkzXZUR+awJv?=
- =?iso-8859-1?Q?C/9dXAA+kP8mt8PbVWPCZTolJJgy5GwLJ8Ke9+LrAYuY7G458scB0Odrj1?=
- =?iso-8859-1?Q?iEiKaATW/9eSYWdNe2Hv3Au+iYT54nLW7dyJbB8ArRNjZH5gfcGhSuLTDy?=
- =?iso-8859-1?Q?rdjW5qtwQZT+gmQBg8QYjrNvlNOZy6Qxq0GrOCn/1sgE1jEAGDm3CsD16H?=
- =?iso-8859-1?Q?FbnVPLdPk+HGbSGQR2Dof2WToa9FkDxElEyxfPtHUBpoDKqAF2Vz3bgBDT?=
- =?iso-8859-1?Q?JJCOfsceZgch8=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D55A46447
+	for <linux-integrity@vger.kernel.org>; Fri, 26 Jan 2024 22:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706307280; cv=none; b=t46Ah1qHHBVtyeUOkpp/pNL8CWi81x+h9sWx/+YoB0l9D4jn8jMUag5YxS04pai8pNZCMiF1EjllQeQZQn05SbbWHhMu//dV1JVMGmg8ufOmtplMp9dp15E6TQYUejWSjCEFZOXQOjQp0A7FVLfFAYdE9vXHi/+8pm/D8o32qOY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706307280; c=relaxed/simple;
+	bh=0gmkN3yaFwqsZqUzjahvvfez/w99dFq/wbKB8lPy5hc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HGsf9FzzZcnTHgW5kaJSSymHaYcOa2xvIWwN5rQ2/YvOqO5t6stmea5ri1gx9WJH6UVCs4LOBGrVF0KnPSEwKPGfX9VP/KezuZMZ2frTrkqQlSzp7Q0gcC1tU6J5rxFIAE95oAsDrY7oKLklt80wUXosbtMJkLR12lKVXpTnCyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Cg7IaZWW; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.86.69] (unknown [50.46.228.62])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 089A920E61A3;
+	Fri, 26 Jan 2024 14:14:38 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 089A920E61A3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1706307278;
+	bh=GXmiqod9xX64NJifX2j5khOOeqYMJKmC3UctX+BeH7I=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Cg7IaZWWOGAkmTgE1/gjjTuwvQR0/9qlswNmx6ZSrYDC0mjXnXKwdZTK34HkB8/7B
+	 +VMOZKOT+b7akv+iCMBbuc9SbE1XGNyp18UyVFB6xJIgIeSbN1wu46in7jAyMZvpYK
+	 JDbDxC3Pl5pDIRNhivdtAJowv9JlWI8GYpsWzY5I=
+Message-ID: <283233af-52cc-4d13-b0b2-79d9be6b99c5@linux.microsoft.com>
+Date: Fri, 26 Jan 2024 14:14:37 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: cisco.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3527.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 417e17dc-99b2-4986-1974-08dc1e1b701f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2024 03:03:57.3636
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HHJwxUviIGXG9oP1V7UdhEsmKIRy65h/U4/vpCqL6FtAqOrTP/Eqwrm8HT6FBiZAyJHeXSSqBzW9H3yuFiPgtw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6544
-X-Outbound-SMTP-Client: 173.37.147.252, alln-opgw-4.cisco.com
-X-Outbound-Node: rcdn-core-12.cisco.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/7] ima: define and call ima_alloc_kexec_file_buf
+Content-Language: en-US
+To: Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
+ roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+ eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
+ bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+ kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20240122183804.3293904-1-tusharsu@linux.microsoft.com>
+ <20240122183804.3293904-2-tusharsu@linux.microsoft.com>
+ <2c4e98bc-8e26-4df1-8567-04d81d2c3963@linux.ibm.com>
+ <efc24a43-2ebb-4fa4-814a-7c0ad5ef022e@linux.ibm.com>
+From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+In-Reply-To: <efc24a43-2ebb-4fa4-814a-7c0ad5ef022e@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
->In security/integrity/digsig_asymmetric.c function request_asymmetric_key,=
- should we =0A=
->not do a key_ref_put() when the key is found in the ima_blacklist_keyring?=
-=A0I'm working =0A=
->with 6.6.9 kernel but have verified it is the same logic in linux-stable m=
-aster branch =0A=
->(top of tree is ecb1b8288dc7ccbdcb3b9df005fa1c0e0c0388a7)=0A=
-=0A=
-I guess it does not matter, as there doesn't appear to be a function to ins=
-ert anything =0A=
-into the ima_blacklist_keyring.  Seems like we should simply use the system=
- blacklist_keyring,=0A=
-or perhaps the add_key_to_revocation_list function should take a keyring ar=
-gument.=0A=
-=0A=
+Thanks for catching this Stefan.
+
+On 1/23/24 19:38, Stefan Berger wrote:
+>>>       kbuf.buffer = kexec_buffer;
+>>>       kbuf.bufsz = kexec_buffer_size;
+>>>       kbuf.memsz = kexec_segment_size;
+>>
+>>
+>> A dent with this patch when only applying this patch:
+>>
+>> Two consecutive kexec loads lead to this here:
+>>
+>> [   30.670330] IMA buffer at 0x3fff10000, size = 0xf0000
+>> [   32.519618] ------------[ cut here ]------------
+>> [   32.519669] Trying to vfree() nonexistent vm area (00000000093ae29c)
+>> [   32.519762] WARNING: CPU: 11 PID: 1796 at mm/vmalloc.c:2826 
+>> vfree+0x254/0x340
+>> [   32.519786] Modules linked in: bonding tls rfkill sunrpc 
+>> virtio_console virtio_balloon crct10dif_vpmsum fuse loop zram bochs 
+>> drm_vram_helper drm_kms_helper drm_ttm_helper ttm ibmvscsi 
+>> scsi_transport_srp drm virtio_blk virtio_net vmx_crypto net_failover 
+>> crc32c_vpmsum failover pseries_wdt drm_panel_orientation_quirks 
+>> scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_multipath
+>> [   32.519939] CPU: 11 PID: 1796 Comm: kexec Not tainted 6.5.0+ #112
+>> [   32.519953] Hardware name: IBM pSeries (emulated by qemu) POWER8E 
+>> (raw) 0x4b0201 0xf000004 of:SLOF,git-5b4c5a hv:linux,kvm pSeries
+>> [   32.519973] NIP:  c0000000004bd004 LR: c0000000004bd000 CTR: 
+>> c00000000017ef00
+>> [   32.519986] REGS: c00000004593b670 TRAP: 0700   Not tainted  (6.5.0+)
+>> [   32.519999] MSR:  8000000002029033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 
+>> 44424842  XER: 00000000
+>> [   32.520023] CFAR: c0000000001515b0 IRQMASK: 0
+>>                 GPR00: c0000000004bd000 c00000004593b910 
+>> c000000001e17000 0000000000000038
+>>                 GPR04: 00000000ffffbfff c00000004593b6e8 
+>> c00000004593b6e0 00000003f9580000
+>>                 GPR08: 0000000000000027 c0000003fb707010 
+>> 0000000000000001 0000000044424842
+>>                 GPR12: c00000000017ef00 c00000003fff1300 
+>> 0000000000000000 0000000000000000
+>>                 GPR16: 0000000000000000 0000000000000000 
+>> 0000000000000000 0000000000000000
+>>                 GPR20: 0000000000000000 0000000000000000 
+>> 0000000000000003 0000000000000004
+>>                 GPR24: 00007fffeab0f68f 000000000000004c 
+>> 0000000000000000 c00000002bdce400
+>>                 GPR28: c000000002bf28f0 0000000000000000 
+>> c008000004770000 0000000000000000
+>> [   32.520180] NIP [c0000000004bd004] vfree+0x254/0x340
+>> [   32.520212] LR [c0000000004bd000] vfree+0x250/0x340
+>> [   32.520225] Call Trace:
+>> [   32.520232] [c00000004593b910] [c0000000004bd000] vfree+0x250/0x340 
+>> (unreliable)
+>> [   32.520250] [c00000004593b990] [c00000000091d590] 
+>> ima_add_kexec_buffer+0xe0/0x3c0
+>> [   32.520296] [c00000004593ba90] [c000000000280968] 
+>> sys_kexec_file_load+0x148/0x9b0
+>> [   32.520333] [c00000004593bb70] [c00000000002ea84] 
+>> system_call_exception+0x174/0x320
+>> [   32.520372] [c00000004593be50] [c00000000000d6a0] 
+>> system_call_common+0x160/0x2c4
+>> [   32.520408] --- interrupt: c00 at 0x7fffa52e7ae4
+>> [   32.520420] NIP:  00007fffa52e7ae4 LR: 0000000108481d8c CTR: 
+>> 0000000000000000
+>> [   32.520452] REGS: c00000004593be80 TRAP: 0c00   Not tainted  (6.5.0+)
+>> [   32.520483] MSR:  800000000000f033 <SF,EE,PR,FP,ME,IR,DR,RI,LE>  
+>> CR: 24424202  XER: 00000000
+>> [   32.520507] IRQMASK: 0
+>>                 GPR00: 000000000000017e 00007fffeab09470 
+>> 00007fffa53f6f00 0000000000000003
+>>                 GPR04: 0000000000000004 000000000000004c 
+>> 00007fffeab0f68f 0000000000000000
+>>                 GPR08: 0000000000000000 0000000000000000 
+>> 0000000000000000 0000000000000000
+>>                 GPR12: 0000000000000000 00007fffa559b280 
+>> 0000000000000002 0000000000000001
+>>                 GPR16: 0000000000000000 0000000000000000 
+>> 0000000000000000 0000000000000000
+>>                 GPR20: 00007fffa53f0454 00007fffa53f0458 
+>> 0000000000000000 0000000000000001
+>>                 GPR24: 0000000000000000 00007fffeab0f64d 
+>> 0000000000000006 0000000000000000
+>>                 GPR28: 0000000000000003 00007fffeab09530 
+>> 00007fffeab09b08 0000000000000007
+>> [   32.520767] NIP [00007fffa52e7ae4] 0x7fffa52e7ae4
+>> [   32.521192] LR [0000000108481d8c] 0x108481d8c
+>> [   32.521587] --- interrupt: c00
+>> [   32.521981] Code: 3884c208 4bfc20f1 60000000 0fe00000 60000000 
+>> 60000000 60420000 3c62ff94 7fc4f378 38632b20 4bc944cd 60000000 
+>> <0fe00000> eba10068 4bffff34 2c080000
+>> [   32.522823] ---[ end trace 0000000000000000 ]---
+>> [   32.536347] Removed old IMA buffer reservation.
+>> [   32.536473] IMA buffer at 0x3fff10000, size = 0xf0000
+>>
+>> This vfree here probably has to go:
+>>
+>>          ret = kexec_add_buffer(&kbuf);
+>>          if (ret) {
+>>                  pr_err("Error passing over kexec measurement 
+>> buffer.\n");
+>>                  vfree(kexec_buffer);
+>>                  return;
+>>          }
+>>
+> 
+> The vfree may need to be removed or replaced with 
+> ima_free_kexec_file_buf() but it doesn't seem to solve the problem alone.
+> I got rid of this issue later with this:
+> 
+> static void ima_reset_kexec_file(struct seq_file *sf)
+> {
+>          sf->buf = NULL;
+>          sf->size = 0;
+>          sf->read_pos = 0;
+>          sf->count = 0;
+> }
+> 
+> static void ima_free_kexec_file_buf(struct seq_file *sf)
+> {
+>          vfree(sf->buf);
+>          ima_reset_kexec_file(sf);
+> }
+> 
+> [...]
+> 
+I was able to repro the issue by calling kexec 'load' multiple times on 
+patch #1.  Good catch, thanks.
+
+Earlier I was testing the multiple 'load' scenario on the last patch only.
+Here onward I will call it on each of the patch individually.
+
+> @@ -170,6 +175,9 @@ void ima_add_kexec_buffer(struct kimage *image)
+>          image->ima_segment_index = image->nr_segments - 1;
+>          image->is_ima_segment_index_set = true;
+> 
+> +       /* kexec owns kexec_buffer since kexec_add_buffer and will 
+> vfree() it */
+> +       ima_reset_kexec_file(&ima_kexec_file);
+> +
+>          pr_debug("kexec measurement buffer for the loaded kernel at 
+> 0x%lx.\n",
+>                   kbuf.mem);
+> 
+> 
+Thanks for the suggested solution. Looks like you applied it on top of
+patch #3.
+I applied it on patch #1, and it seems to be working.
+
+I will dig deeper to ensure it doesn't cause any memory leaks, and will 
+incorporate it in v5.
+
+Thanks again.
+
+~Tushar
+
+>> _______________________________________________
+>> kexec mailing list
+>> kexec@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/kexec 
 
