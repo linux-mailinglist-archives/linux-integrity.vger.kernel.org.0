@@ -1,319 +1,143 @@
-Return-Path: <linux-integrity+bounces-908-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-909-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B1D3840C9A
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Jan 2024 17:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB348842AB2
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jan 2024 18:19:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 718F41F2261F
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Jan 2024 16:58:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AA6C1F22E85
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jan 2024 17:19:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FF09157027;
-	Mon, 29 Jan 2024 16:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71284129A81;
+	Tue, 30 Jan 2024 17:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O/z872tb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TV1DFHzY"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36277156962
-	for <linux-integrity@vger.kernel.org>; Mon, 29 Jan 2024 16:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3992512836C;
+	Tue, 30 Jan 2024 17:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706547485; cv=none; b=slQVbPUOFOeLkEts2LAij+DK1n+l1FEa5PLEC3nacF5xZxNIKDQgdMwVKzj6spejF96XSRWzhq5O797un64mz2Zs6oPAUummSga+s68xHSCqx8/IvQktzBQP217gYEuTwU844v4kjzwm8M8fHsmCkCUZaQLVayYYyYECXEvzxfw=
+	t=1706635173; cv=none; b=SQlx9ARxMTm7Ano0jF8EgKHpE7MlUo0PE8K7JMfEXUfoysPhrKKvcusU8ryTT8vy5SfAsiRYAYdUQZM74LQif+jPWGXSK4dWzNrAH9ufQQqjVh/G4e/BGU15IdU/tB+eRzACduUntZ4yLNQ3ZVhsLCF3fOjsoreY1vL7rJ2Ql20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706547485; c=relaxed/simple;
-	bh=H7yE0TLn19iCiWHo/FkB1Rzc6lLBWxGxr0DrrmYLh3M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cY8lLoWuU6+LuH9tTSzMv213t8xdw2BvkZdgmAdKB1j8HUJ+N1VobeDjU3OFZuAeTjhSkUECNHbZ8g3nAi9UuYFbEEL0C7QGxXw1jc7p0u8gufCmsWH3mjCDbxmI+NDmbQOiARRIsjLRNLTwP7qskMDCjcb+P8QTKIaZCfwopNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O/z872tb; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-55c24a32bf4so16097a12.0
-        for <linux-integrity@vger.kernel.org>; Mon, 29 Jan 2024 08:58:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706547481; x=1707152281; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P/syXXY1Bnocb0Cr84guiLCcezGMcnPfVVnMLYh6D2Q=;
-        b=O/z872tbAJ5o/TS4F5Cd5pqyyH25Yzjz9fXBdRocYWJ4SQpp00v6CO6tc0jke/xYHM
-         2D0RJ20lDLtIBv2c5MXVupAzzfN+f75C4HawN6pcTI5zdJiruzq0awNNXAyu22uDC5VP
-         BAGA7nRoTyHh2kJs837ya/w+KvECxKFRJkrJzwkdv+HS57XmJC94+xBRw3+pXP1lqD9N
-         t88yl5Wj8P+tcLITdkcH27vbhKihFA27aWTXzXs4f1BZ5Fjb8Lg8mJGUzhN+ouHEcf5L
-         UyOoxXWTrgvk/IJIEvrz6xq5dQWJ2mDPIpRYBvVQWG+jddM6/ZIqX6UFPTDgfZXyLHuQ
-         QfbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706547481; x=1707152281;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P/syXXY1Bnocb0Cr84guiLCcezGMcnPfVVnMLYh6D2Q=;
-        b=cc8yIOh6YUANAz+IHRpDeGMpJAHfhftJ836gjRzErU876a1bJlDM5Jk3bR5fUCWEWD
-         lyONjMd0hO/ImF65Uze/RS3FMiY4n0R3VG26+ZkYMICPiyX2s+PAUPi/vLgisLS0u4wU
-         i2wHDEkUrGzC/gBunGKzMxH5TKfZf0gT/QEC3UtCZMdVRl4OwcJQrV40kxT1HiecR+oo
-         Hbc9b7uYFlpehG59YkrpBX9j7RmRoQ+KiA+tUJsnr6+9fjp/Ky2/UJJuOvLr+nKDHSPU
-         LLT/UPfKNkuxn9QohbLDw2a2idPldGOoUreRgS9UUFmfTxI1e4uJV/toA/HrG8AdTUUn
-         iTUw==
-X-Gm-Message-State: AOJu0Yzi+i83nXBTRmPTkLb6YTG3ngOw3gCabspTEMUgUcR2OlOZuxy6
-	DST/yavUXOtVoqx3kbIxqCY3idx3G1ofF1S6yKDsAyBEBwqYRTzDI1jiQh+Er2fEhbAsZCb2xHv
-	7iEbQCOYPqaFPONH5H3I3m03B6+iEh7MOEhng
-X-Google-Smtp-Source: AGHT+IFwTYFTgvHTNZp2/70im1mOgO6bOgpZmgF7iH0m3dzPzmHnHcy1zYSsfZIjKRWt8jUXXH2+uz7tsRTLyh1ayNQ=
-X-Received: by 2002:a05:6402:3115:b0:55f:1351:ee28 with SMTP id
- dc21-20020a056402311500b0055f1351ee28mr147467edb.6.1706547481247; Mon, 29 Jan
- 2024 08:58:01 -0800 (PST)
+	s=arc-20240116; t=1706635173; c=relaxed/simple;
+	bh=V7diJ4YqO6S1GcyDtkgjCTNRmeE4ZsUI1fbKWHRDOzA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=GsKXGFy8KbrAmRtdHGQO3PA+pCfji268zombttv58rYNpl9ptuhjF3uDr6OFft8YxtnNEnwyNOGNmbwTCzeWibMZwGxyU84KMtfQRmPSCjFgMCqL0pgrsoS7urQfYSqwUgnrXuXSnciwSEph4opzuit0n6Ehf+6767xw2BRB91k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TV1DFHzY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 709EFC433C7;
+	Tue, 30 Jan 2024 17:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706635172;
+	bh=V7diJ4YqO6S1GcyDtkgjCTNRmeE4ZsUI1fbKWHRDOzA=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=TV1DFHzYDZhW59OLkmEAT5zHp3Om+RiE56/Rs+zzt2cYC51I696Ozv4XqGyYhfvLs
+	 DiMhVVHFj37CPiUvZdXlMkSTNCyTF43+XZPTAny/wk4lgvcxXTU8ynkhZy5m7EqyYa
+	 LTJrrhFygZkqmEFYNAQ7/MAYdFxl29FT5xcXmYYPZ9P2JQRNHgqpd9kp1C+N4smMr9
+	 r5ontZ1b86UZ82H6/KIlrEPWd0eieYpSNHwHLZnKHA9YCpp+usbxb7LfQsqwyDs9zb
+	 Ahk84q+dt3xhTMzPIzA+m+C65eIWL/j+4uwnP4s+wpzO3N82ossDdMVCL2hnK/Xv+u
+	 Qmzjuli3IDvew==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240128212532.2754325-1-sameo@rivosinc.com> <20240128212532.2754325-2-sameo@rivosinc.com>
-In-Reply-To: <20240128212532.2754325-2-sameo@rivosinc.com>
-From: Dionna Amalie Glaze <dionnaglaze@google.com>
-Date: Mon, 29 Jan 2024 08:57:49 -0800
-Message-ID: <CAAH4kHaToau86TiYFmLqVKETomYSUmb=d4OjXSKi03C6HWYAQw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/4] tsm: Runtime measurement register support
-To: Samuel Ortiz <sameo@rivosinc.com>
-Cc: Dan Williams <dan.j.williams@intel.com>, 
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>, Qinkun Bao <qinkun@google.com>, 
-	"Yao, Jiewen" <jiewen.yao@intel.com>, "Xing, Cedric" <cedric.xing@intel.com>, biao.lu@intel.com, 
-	linux-coco@lists.linux.dev, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 30 Jan 2024 19:19:27 +0200
+Message-Id: <CYS7OCDQ54WZ.3RS9IWCQG4Y5L@suppilovahvero>
+Cc: "Jiang, Dave" <dave.jiang@intel.com>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "linux-cxl@vger.kernel.org"
+ <linux-cxl@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "Williams, Dan J"
+ <dan.j.williams@intel.com>, "keyrings@vger.kernel.org"
+ <keyrings@vger.kernel.org>, "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "nvdimm@lists.linux.dev"
+ <nvdimm@lists.linux.dev>
+Subject: Re: [PATCH] KEYS: encrypted: Add check for strsep
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Verma, Vishal L" <vishal.l.verma@intel.com>, "zohar@linux.ibm.com"
+ <zohar@linux.ibm.com>, "paul@paul-moore.com" <paul@paul-moore.com>,
+ "dhowells@redhat.com" <dhowells@redhat.com>, "yaelt@google.com"
+ <yaelt@google.com>, "serge@hallyn.com" <serge@hallyn.com>,
+ "nichen@iscas.ac.cn" <nichen@iscas.ac.cn>, "sumit.garg@linaro.org"
+ <sumit.garg@linaro.org>, "jmorris@namei.org" <jmorris@namei.org>
+X-Mailer: aerc 0.15.2
+References: <20231108073627.1063464-1-nichen@iscas.ac.cn>
+ <4d3465b48b9c5a87deb385b15bf5125fc1704019.camel@intel.com>
+In-Reply-To: <4d3465b48b9c5a87deb385b15bf5125fc1704019.camel@intel.com>
 
-The rtmr backend doesn't specify the digest size it expects to user
-space, so rtmr_extend could be zero-fill, or provide a truncated
-update, or be strict and return an error. Should the expected digest
-size for writes not also be a RO attribute?
+On Wed Jan 24, 2024 at 8:21 PM EET, Verma, Vishal L wrote:
+> On Wed, 2023-11-08 at 07:36 +0000, Chen Ni wrote:
+> > Add check for strsep() in order to transfer the error.
+> >=20
+> > Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-
+> > provided decrypted data")
+> > Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> > ---
+> > =C2=A0security/keys/encrypted-keys/encrypted.c | 4 ++++
+> > =C2=A01 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/security/keys/encrypted-keys/encrypted.c
+> > b/security/keys/encrypted-keys/encrypted.c
+> > index 8af2136069d2..76f55dd13cb8 100644
+> > --- a/security/keys/encrypted-keys/encrypted.c
+> > +++ b/security/keys/encrypted-keys/encrypted.c
+> > @@ -237,6 +237,10 @@ static int datablob_parse(char *datablob, const
+> > char **format,
+> > =C2=A0			break;
+> > =C2=A0		}
+> > =C2=A0		*decrypted_data =3D strsep(&datablob, " \t");
+> > +		if (!*decrypted_data) {
+> > +			pr_info("encrypted_key: decrypted_data is
+> > missing\n");
+> > +			break;
+> > +		}
+>
+> Hello,
+>
+> This patch seems to break keyring usage in CXL and NVDIMM, with the
+> "decrypted_data is missing" error path being hit. Reverting this commit
+> fixes the tests. I'm not sure if there are valid scenarios where this is
+> expected to be empty?
+>
+> Here's an strace snippet of where the error occurs:
+>
+>    keyctl(KEYCTL_SEARCH, KEY_SPEC_USER_KEYRING, "user", "nvdimm-master", =
+0) =3D 76300785
+>    openat(AT_FDCWD, "/sys/devices/platform/cxl_acpi.0/root0/nvdimm-bridge=
+0/ndbus0/nmem0/state", O_RDONLY|O_CLOEXEC) =3D 3
+>    read(3, "idle\n", 1024)                 =3D 5
+>    close(3)                                =3D 0
+>    keyctl(KEYCTL_SEARCH, KEY_SPEC_USER_KEYRING, "encrypted", "nvdimm:0", =
+0) =3D -1 ENOKEY (Required key not available)
+>    uname({sysname=3D"Linux", nodename=3D"fedora", ...}) =3D 0
+>    newfstatat(AT_FDCWD, "/etc/ndctl/keys/nvdimm_0_fedora.blob", 0x7fff23f=
+bc210, 0) =3D -1 ENOENT (No such file or directory)
+>    add_key("encrypted", "nvdimm:0", "new enc32 user:nvdimm-master 32", 31=
+, KEY_SPEC_USER_KEYRING) =3D -1 EINVAL (Invalid argument)
+>   =20
 
-On Sun, Jan 28, 2024 at 1:27=E2=80=AFPM Samuel Ortiz <sameo@rivosinc.com> w=
-rote:
->
-> Some confidential computing architecture (Intel TDX, ARM-CCA, RISC-V
-> CoVE) provide the TVM (confidential computing guest) with a set of
-> runtime measurement registers (RTMR). TVMs can extend those registers
-> with their measurements at runtime, i.e. after the TVM initial
-> measurements are finalized and the TVM actually runs.
->
-> RTMRs are separated from the initial measurement registers set, and TSMs
-> typically includes RTMR values into a distinct section of their signed
-> attestion reports.
->
-> We add support for extending and reading a TSM runtime measurement
-> registers by extending the TSM ops structure with resp. an rtmr_extend()
-> and an rtmr_read() function pointers. TSM providers/backends will
-> implement those ops if they are capable of exposing RTMRs to their
-> TVMs. This capability is now described by a tsm_capabilites structure,
-> passed by the TSM provider to the TSM framework at registration time.
->
-> TVMs can configure, extend and read RTMRs from the configfs-tsm interface=
-.
->
-> Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
-> ---
->  drivers/virt/coco/tsm.c | 80 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/tsm.h     | 39 +++++++++++++++++++-
->  2 files changed, 118 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/virt/coco/tsm.c b/drivers/virt/coco/tsm.c
-> index d1c2db83a8ca..1a8c3c096120 100644
-> --- a/drivers/virt/coco/tsm.c
-> +++ b/drivers/virt/coco/tsm.c
-> @@ -11,6 +11,7 @@
->  #include <linux/module.h>
->  #include <linux/cleanup.h>
->  #include <linux/configfs.h>
-> +#include <linux/tpm.h>
->
->  static struct tsm_provider {
->         const struct tsm_ops *ops;
-> @@ -50,6 +51,85 @@ enum tsm_data_select {
->         TSM_CERTS,
->  };
->
-> +/**
-> + * DOC: Trusted Security Module (TSM) Runtime Measurement Register (RTMR=
-) Interface
-> + *
-> + * The TSM RTMR interface is a common ABI for allowing TVMs to extend
-> + * and read measurement registers at runtime, i.e. after the TVM initial
-> + * measurement is finalized. TSMs that support such capability will typi=
-cally
-> + * include all runtime measurement registers values into their signed
-> + * attestation report, providing the TVM post-boot measurements to e.g. =
-remote
-> + * attestation services.
-> + *
-> + * A TVM uses the TSM RTMR configfs ABI to create all runtime measuremen=
-t
-> + * registers (RTMR) that it needs. Each created RTMR must be configured =
-first
-> + * before being readable and extensible. TVM configures an RTMR by setti=
-ng its
-> + * index and optionally by mapping it to one or more TCG PCR indexes.
-> + *
-> + * A TSM backend statically declares the number of RTMRs it supports and=
- which
-> + * hash algorithm must be used when extending them. This declaration is =
-done
-> + * through the tsm_capabilities structure, at TSM registration time (see
-> + * tsm_register()).
-> + */
-> +
-> +/**
-> + * struct tsm_rtmr_state - tracks the state of a TSM RTMR.
-> + * @index: The RTMR hardware index.
-> + * @alg: The hash algorithm used for this RTMR.
-> + * @digest: The RTMR cached digest value.
-> + * @cached_digest: Is the RTMR cached digest valid or not.
-> + * @cfg: The configfs item for this RTMR.
-> + */
-> +struct tsm_rtmr_state {
-> +       u32 index;
-> +       enum hash_algo alg;
-> +       u8 digest[TSM_DIGEST_MAX];
-> +       bool cached_digest;
-> +       struct config_item cfg;
-> +};
-> +
-> +static bool is_rtmr_configured(struct tsm_rtmr_state *rtmr_state)
-> +{
-> +       return rtmr_state->index !=3D U32_MAX;
-> +}
-> +
-> +/**
-> + * struct tsm_rtmrs_state - tracks the state of all RTMRs for a TSM.
-> + * @rtmrs: The array of all created RTMRs.
-> + * @tcg_map: A mapping between TCG PCR and RTMRs, indexed by PCR indexes=
-.
-> + * Entry `i` on this map points to an RTMR that covers TCG PCR[i] for th=
-e TSM
-> + * hash algorithm.
-> + * @group: The configfs group for a TSM RTMRs.
-> + */
-> +static struct tsm_rtmrs_state {
-> +       struct tsm_rtmr_state **rtmrs;
-> +       const struct tsm_rtmr_state *tcg_map[TPM2_PLATFORM_PCR];
-> +       struct config_group *group;
-> +} *tsm_rtmrs;
-> +
-> +static int tsm_rtmr_read(struct tsm_provider *tsm, u32 idx,
-> +                        u8 *digest, size_t digest_size)
-> +{
-> +       if (tsm->ops && tsm->ops->rtmr_read)
-> +               return tsm->ops->rtmr_read(idx, digest, digest_size);
-> +
-> +       return -ENXIO;
-> +}
-> +
-> +static int tsm_rtmr_extend(struct tsm_provider *tsm, u32 idx,
-> +                          const u8 *digest, size_t digest_size)
-> +{
-> +       if (tsm->ops && tsm->ops->rtmr_extend)
-> +               return tsm->ops->rtmr_extend(idx, digest, digest_size);
-> +
-> +       return -ENXIO;
-> +}
-> +
-> +static struct tsm_rtmr_state *to_tsm_rtmr_state(struct config_item *cfg)
-> +{
-> +       return container_of(cfg, struct tsm_rtmr_state, cfg);
-> +}
-> +
->  static struct tsm_report *to_tsm_report(struct config_item *cfg)
->  {
->         struct tsm_report_state *state =3D
-> diff --git a/include/linux/tsm.h b/include/linux/tsm.h
-> index de8324a2223c..a546983c24fc 100644
-> --- a/include/linux/tsm.h
-> +++ b/include/linux/tsm.h
-> @@ -2,11 +2,13 @@
->  #ifndef __TSM_H
->  #define __TSM_H
->
-> +#include <crypto/hash_info.h>
->  #include <linux/sizes.h>
->  #include <linux/types.h>
->
->  #define TSM_INBLOB_MAX 64
->  #define TSM_OUTBLOB_MAX SZ_32K
-> +#define TSM_DIGEST_MAX SHA512_DIGEST_SIZE
->
->  /*
->   * Privilege level is a nested permission concept to allow confidential
-> @@ -42,12 +44,44 @@ struct tsm_report {
->         u8 *auxblob;
->  };
->
-> +#define TSM_MAX_RTMR 32
-> +
-> +/**
-> + * struct tsm_rtmr_desc - Describes a TSM Runtime Measurement Register (=
-RTMR).
-> + * @hash_alg: The hash algorithm used to extend this runtime measurement
-> + *            register.
-> + * @tcg_pcr_mask: A bit mask of all TCG PCRs mapped to this RTMR.
-> + */
-> +struct tsm_rtmr_desc {
-> +       enum hash_algo hash_alg;
-> +       unsigned long tcg_pcr_mask;
-> +};
-> +
-> +/**
-> + * struct tsm_capabilities - Describes a TSM capabilities.
-> + * @num_rtmrs: The number of Runtime Measurement Registers (RTMR) availa=
-ble from
-> + *             a TSM.
-> + * @rtmr_hash_alg: The hash algorithm used to extend a runtime measureme=
-nt
-> + *                 register.
-> + */
-> +struct tsm_capabilities {
-> +       size_t num_rtmrs;
-> +       const struct tsm_rtmr_desc *rtmrs;
-> +};
-> +
->  /**
->   * struct tsm_ops - attributes and operations for tsm instances
->   * @name: tsm id reflected in /sys/kernel/config/tsm/report/$report/prov=
-ider
->   * @privlevel_floor: convey base privlevel for nested scenarios
-> + * @capabilities: Describe the TSM capabilities, e.g. the number of avai=
-lable
-> + *                runtime measurement registers (see `struct tsm_capabil=
-ities`).
->   * @report_new: Populate @report with the report blob and auxblob
-> - * (optional), return 0 on successful population, or -errno otherwise
-> + *              (optional), return 0 on successful population, or -errno
-> + *              otherwise
-> + * @rtmr_extend: Extend an RTMR with the provided digest.
-> + *               Return 0 on successful extension, or -errno otherwise.
-> + * @rtmr_read: Reads the value of an RTMR.
-> + *             Return the number of bytes read or -errno for errors.
->   *
->   * Implementation specific ops, only one is expected to be registered at
->   * a time i.e. only one of "sev-guest", "tdx-guest", etc.
-> @@ -55,7 +89,10 @@ struct tsm_report {
->  struct tsm_ops {
->         const char *name;
->         const unsigned int privlevel_floor;
-> +       const struct tsm_capabilities capabilities;
->         int (*report_new)(struct tsm_report *report, void *data);
-> +       int (*rtmr_extend)(u32 idx, const u8 *digest, size_t digest_size)=
-;
-> +       ssize_t (*rtmr_read)(u32 idx, u8 *digest, size_t digest_size);
->  };
->
->  extern const struct config_item_type tsm_report_default_type;
-> --
-> 2.42.0
->
+I think removing the klog message does not make sense meaning
+that the recent revert was wrong action taken.
 
+Instead necessary actions to retain backwards compatibility
+must be taken, meaning that the branch should set "ret =3D 0;".
 
---=20
--Dionna Glaze, PhD (she/her)
+Motivation to keep it is dead obvious: your examples show that
+it can reveal potentially incorrect behaviour in user space
+software packages. It is info-level to mark that it can be
+also false positive. I.e. the revert commit takes away
+functionality that previously caused kernel masking a
+potential bug.
+
+Please revert the revert.
+
+BR, Jarkko
+
 
