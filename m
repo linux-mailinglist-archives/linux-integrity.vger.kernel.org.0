@@ -1,56 +1,63 @@
-Return-Path: <linux-integrity+bounces-910-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-911-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67011842ABA
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jan 2024 18:20:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9CFB842AC5
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jan 2024 18:22:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA7361F22E85
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jan 2024 17:20:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECBA71C21CB3
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Jan 2024 17:22:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00C21292D2;
-	Tue, 30 Jan 2024 17:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 179F01292D6;
+	Tue, 30 Jan 2024 17:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uB/iUg4J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J2FB7jMS"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8159364AC;
-	Tue, 30 Jan 2024 17:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D89364AC;
+	Tue, 30 Jan 2024 17:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706635224; cv=none; b=TUqcOmtKeoKppyr2f3VspgB5WTiVuEetHanGOBFS6PSp/+KbSMRhSHCUp9Klh1FaY3CkivHFubC50VTTUJmaNrVUXTtWukUreqoWor2u3BQ9MgbpfhRu9sYUmuE8ZKoBIQoGMMT97aLEvMsUai4mxJpuAKBMaOVNNBpt7DzgfLw=
+	t=1706635358; cv=none; b=HlVks0kry9iDrVwgbWf6evkZuRo7dOnBxbpaoTIn0ik9iBIHwZRTzseqSqgq3lvEiLUpFNRPGe1ofPEiMqPPKrJpHORo/b4QMGipavcAiQ5feoCkkDvYS2EyMKdZ7XuBGxl7n6q8Jen7FAxW0ns8Q/1uwG2brXS1LRfv+G2A8Lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706635224; c=relaxed/simple;
-	bh=yd0LIoYb6RMZkeRHe2+uLX6chAwA3W/kYb0I/6Z7rbA=;
-	h=Content-Type:Mime-Version:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=jFr/xRnUple4EqTVHWCqVbvDBh7jkB/LRPJhUkXE9gzNVo1x8Oly568FW8Hos9JoG1qUWDQ7gHmuCW8C45mNos6jtN1r691lcYQJpjHLVVCqAJ+mST0RoHr21p22grvSY5509JWRCXjKIjb5DxsVBEqGSNzf6IsvFmxzDTZYEGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uB/iUg4J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8217AC433C7;
-	Tue, 30 Jan 2024 17:20:20 +0000 (UTC)
+	s=arc-20240116; t=1706635358; c=relaxed/simple;
+	bh=ju5+fIhGys1s4Yvih8zTw/mrpn562bGGj18DsSWfWaU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=ItDvxAYSU49qK+n9mIxUhR1znlj6l41jEZCn94Gum8zClbORdE/wdM/HsbkgFmDHvi2vIpyC03EDGOIqw4HtPzo6F1vkAk4wBDMerZR7oi5HD0720NKjiD/82rGCDxkopCXSpSiN7iQMsNI777ooASfne8k4GKOI8T/HprSc8TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J2FB7jMS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FE1C433F1;
+	Tue, 30 Jan 2024 17:22:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706635224;
-	bh=yd0LIoYb6RMZkeRHe2+uLX6chAwA3W/kYb0I/6Z7rbA=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=uB/iUg4JZ4B+omyXHjyZK2SGuWHBL7QKCZuMAke6JmpTJS6pi+MOueBbl+9O8EWSa
-	 Qi9Po5utKks8La3c7HYPvSR0WgPetrYXDWjLHgLV09FPUq8povDcj5Z5Wh/lON/oHJ
-	 0R+Dq8wvy/FF0BwSzdzlkITTclCwiYEpzdPyw/Z/eQoowZ8y0qrOmazIBq4YT8vKlp
-	 lrJEgfsHmJbBTGWxll1+JcmTSf5pe75TMHIDwjk0GWGooIfgcWWHqdELTxruLdzMwB
-	 XZGEbd7eCgkShwBtQpwoS4BqhAbGvnFYcIJH5aJK4bF0Qsrzbib+o2TW6sGWv6RJhC
-	 pI4onO9EZ1MwA==
-Content-Type: multipart/mixed;
- boundary=cd8ba6b13b7a1f2b1f2526f12f6cd200967ddb0152adf8a67df1cb348e72
+	s=k20201202; t=1706635357;
+	bh=ju5+fIhGys1s4Yvih8zTw/mrpn562bGGj18DsSWfWaU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J2FB7jMSpiTHPf9zT8UDkEUEbTxVUXY4bqp+SnrEP9Mg5tFTNVYpj6AAQUYtTmvqh
+	 liMbd6GxHdNZCYCSRQuXVNjtAkR3fBobldlAxmCRLI291N4VOYBMF89jY+cZMRd+jZ
+	 ErO5ej0tWjIHm/mjlsTcYJPovj8mpYs/alCqog4N466/PfXacPv9SGHHyvBJraygrQ
+	 UFfEMwElSeFBzdv8cBruc1eTlPfreBUJ3Fz0XDystOjLT30O/MG9yUx6azNHRKjEg5
+	 H9QOc1pK0L6gYQjkeXjzPKUrDqFG+694TW7qcSvfgje127A6sIWT7x5/6gtM1EYCIN
+	 sgKB/HH1qX4EA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Date: Tue, 30 Jan 2024 19:20:18 +0200
-Message-Id: <CYS7OZUB3DQZ.5DGIZ3CKSM8G@suppilovahvero>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 30 Jan 2024 19:22:27 +0200
+Message-Id: <CYS7QMYS8XAJ.2QPI3MS5KXK8E@suppilovahvero>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Verma, Vishal L" <vishal.l.verma@intel.com>, "zohar@linux.ibm.com"
+ <zohar@linux.ibm.com>, "paul@paul-moore.com" <paul@paul-moore.com>,
+ "dhowells@redhat.com" <dhowells@redhat.com>, "yaelt@google.com"
+ <yaelt@google.com>, "serge@hallyn.com" <serge@hallyn.com>,
+ "nichen@iscas.ac.cn" <nichen@iscas.ac.cn>, "sumit.garg@linaro.org"
+ <sumit.garg@linaro.org>, "jmorris@namei.org" <jmorris@namei.org>
 Cc: "Jiang, Dave" <dave.jiang@intel.com>, "linux-integrity@vger.kernel.org"
  <linux-integrity@vger.kernel.org>, "linux-cxl@vger.kernel.org"
  <linux-cxl@vger.kernel.org>, "linux-kernel@vger.kernel.org"
@@ -60,131 +67,41 @@ Cc: "Jiang, Dave" <dave.jiang@intel.com>, "linux-integrity@vger.kernel.org"
  <linux-security-module@vger.kernel.org>, "nvdimm@lists.linux.dev"
  <nvdimm@lists.linux.dev>
 Subject: Re: [PATCH] KEYS: encrypted: Add check for strsep
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Verma, Vishal L"
- <vishal.l.verma@intel.com>, "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
- "paul@paul-moore.com" <paul@paul-moore.com>, "dhowells@redhat.com"
- <dhowells@redhat.com>, "yaelt@google.com" <yaelt@google.com>,
- "serge@hallyn.com" <serge@hallyn.com>, "nichen@iscas.ac.cn"
- <nichen@iscas.ac.cn>, "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
- "jmorris@namei.org" <jmorris@namei.org>
 X-Mailer: aerc 0.15.2
 References: <20231108073627.1063464-1-nichen@iscas.ac.cn>
  <4d3465b48b9c5a87deb385b15bf5125fc1704019.camel@intel.com>
- <CYS7OCDQ54WZ.3RS9IWCQG4Y5L@suppilovahvero>
-In-Reply-To: <CYS7OCDQ54WZ.3RS9IWCQG4Y5L@suppilovahvero>
+ <e3275c0cfe21d75e0d71ea3fc24a31252efc9ad6.camel@linux.ibm.com>
+ <e3b1a5e532ed86e674385abc4812c5a774f851d4.camel@intel.com>
+ <49c48e3e96bf0f5ebef14e7328cc8a6ca6380e08.camel@linux.ibm.com>
+ <50c2fa781e3266ee8151afdef5a8659d63ca952e.camel@intel.com>
+In-Reply-To: <50c2fa781e3266ee8151afdef5a8659d63ca952e.camel@intel.com>
 
---cd8ba6b13b7a1f2b1f2526f12f6cd200967ddb0152adf8a67df1cb348e72
-Content-Type: multipart/alternative;
- boundary=881a4053c71afff8675be592295d16a64045cfd6f860722a752edc836342
+On Wed Jan 24, 2024 at 11:10 PM EET, Verma, Vishal L wrote:
+> On Wed, 2024-01-24 at 15:40 -0500, Mimi Zohar wrote:
+> > On Wed, 2024-01-24 at 20:10 +0000, Verma, Vishal L wrote:
+> > > >=20
+> > > Ah, thanks for confirming! Would you like me to send a revert patch o=
+r
+> > > will you do it?
+> >=20
+> > Revert "KEYS: encrypted: Add check for strsep"
+> > =C2=A0=C2=A0=C2=A0=20
+> > This reverts commit b4af096b5df5dd131ab796c79cedc7069d8f4882.
+> > =C2=A0=C2=A0=C2=A0=20
+> > New encrypted keys are created either from kernel-generated random
+> > numbers or user-provided decrypted data.=C2=A0 Revert the change requir=
+ing
+> > user-provided decrypted data.
+> >=20
+> >=20
+> > Can I add your Reported-by?
+>
+> Yes that works, Thank you.
 
---881a4053c71afff8675be592295d16a64045cfd6f860722a752edc836342
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
-Content-Type: text/plain; charset=UTF-8
+This went totally wrong IMHO.
 
-On Tue Jan 30, 2024 at 7:19 PM EET, Jarkko Sakkinen wrote:
-> On Wed Jan 24, 2024 at 8:21 PM EET, Verma, Vishal L wrote:
-> > On Wed, 2023-11-08 at 07:36 +0000, Chen Ni wrote:
-> > > Add check for strsep() in order to transfer the error.
-> > >=20
-> > > Fixes: cd3bc044af48 ("KEYS: encrypted: Instantiate key with user-
-> > > provided decrypted data")
-> > > Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
-> > > ---
-> > > =C2=A0security/keys/encrypted-keys/encrypted.c | 4 ++++
-> > > =C2=A01 file changed, 4 insertions(+)
-> > >=20
-> > > diff --git a/security/keys/encrypted-keys/encrypted.c
-> > > b/security/keys/encrypted-keys/encrypted.c
-> > > index 8af2136069d2..76f55dd13cb8 100644
-> > > --- a/security/keys/encrypted-keys/encrypted.c
-> > > +++ b/security/keys/encrypted-keys/encrypted.c
-> > > @@ -237,6 +237,10 @@ static int datablob_parse(char *datablob, const
-> > > char **format,
-> > > =C2=A0			break;
-> > > =C2=A0		}
-> > > =C2=A0		*decrypted_data =3D strsep(&datablob, " \t");
-> > > +		if (!*decrypted_data) {
-> > > +			pr_info("encrypted_key: decrypted_data is
-> > > missing\n");
-> > > +			break;
-> > > +		}
-> >
-> > Hello,
-> >
-> > This patch seems to break keyring usage in CXL and NVDIMM, with the
-> > "decrypted_data is missing" error path being hit. Reverting this commit
-> > fixes the tests. I'm not sure if there are valid scenarios where this i=
-s
-> > expected to be empty?
-> >
-> > Here's an strace snippet of where the error occurs:
-> >
-> >    keyctl(KEYCTL_SEARCH, KEY_SPEC_USER_KEYRING, "user", "nvdimm-master"=
-, 0) =3D 76300785
-> >    openat(AT_FDCWD, "/sys/devices/platform/cxl_acpi.0/root0/nvdimm-brid=
-ge0/ndbus0/nmem0/state", O_RDONLY|O_CLOEXEC) =3D 3
-> >    read(3, "idle\n", 1024)                 =3D 5
-> >    close(3)                                =3D 0
-> >    keyctl(KEYCTL_SEARCH, KEY_SPEC_USER_KEYRING, "encrypted", "nvdimm:0"=
-, 0) =3D -1 ENOKEY (Required key not available)
-> >    uname({sysname=3D"Linux", nodename=3D"fedora", ...}) =3D 0
-> >    newfstatat(AT_FDCWD, "/etc/ndctl/keys/nvdimm_0_fedora.blob", 0x7fff2=
-3fbc210, 0) =3D -1 ENOENT (No such file or directory)
-> >    add_key("encrypted", "nvdimm:0", "new enc32 user:nvdimm-master 32", =
-31, KEY_SPEC_USER_KEYRING) =3D -1 EINVAL (Invalid argument)
-> >   =20
->
-> I think removing the klog message does not make sense meaning
-> that the recent revert was wrong action taken.
->
-> Instead necessary actions to retain backwards compatibility
-> must be taken, meaning that the branch should set "ret =3D 0;".
->
-> Motivation to keep it is dead obvious: your examples show that
-> it can reveal potentially incorrect behaviour in user space
-> software packages. It is info-level to mark that it can be
-> also false positive. I.e. the revert commit takes away
-> functionality that previously caused kernel masking a
-> potential bug.
->
-> Please revert the revert.
->
-> BR, Jarkko
-
-See the attached patch.
+Priority should be to locate and fix the bug not revert useful stuff
+when a bug is found that has limited scope.
 
 BR, Jarkko
-
---881a4053c71afff8675be592295d16a64045cfd6f860722a752edc836342--
-
---cd8ba6b13b7a1f2b1f2526f12f6cd200967ddb0152adf8a67df1cb348e72
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename=0001-KEYS-encrypted-Return-0-for-empty-decrypted-data.patch
-Content-Type: text/x-patch; charset=utf-8;
- name=0001-KEYS-encrypted-Return-0-for-empty-decrypted-data.patch
-
-RnJvbSBjZGZhNDIwM2M4NjQxMmFmMzliMjMyZWFhNzQwMTU5MTQ1MTY1OWRlIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBKYXJra28gU2Fra2luZW4gPGphcmtrb0BrZXJuZWwub3JnPgpE
-YXRlOiBUdWUsIDMwIEphbiAyMDI0IDE5OjExOjUwICswMjAwClN1YmplY3Q6IFtQQVRDSF0gS0VZ
-UzogZW5jcnlwdGVkOiBSZXR1cm4gMCBmb3IgZW1wdHkgZGVjcnlwdGVkIGRhdGEKClJldHVybiAw
-IHRvIHJldHVybiBiYWNrd2FyZHMgY29tcHRpYmlsaXR5IGJ1dCAqZG8ga2VlcCogdGhlIGtsb2cg
-ZW50cnkKZm9yIGZvcmVzaW5jcyBzYWtlLgoKRml4ZXM6IGI0YWYwOTZiNWRmNSAoIktFWVM6IGVu
-Y3J5cHRlZDogQWRkIGNoZWNrIGZvciBzdHJzZXAiKQpMaW5rOiBodHRwczovL2xvcmUua2VybmVs
-Lm9yZy9rZXlyaW5ncy80ZDM0NjViNDhiOWM1YTg3ZGViMzg1YjE1YmY1MTI1ZmMxNzA0MDE5LmNh
-bWVsQGludGVsLmNvbS8KU2lnbmVkLW9mZi1ieTogSmFya2tvIFNha2tpbmVuIDxqYXJra29Aa2Vy
-bmVsLm9yZz4KLS0tCiBzZWN1cml0eS9rZXlzL2VuY3J5cHRlZC1rZXlzL2VuY3J5cHRlZC5jIHwg
-MSArCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1naXQgYS9zZWN1cml0
-eS9rZXlzL2VuY3J5cHRlZC1rZXlzL2VuY3J5cHRlZC5jIGIvc2VjdXJpdHkva2V5cy9lbmNyeXB0
-ZWQta2V5cy9lbmNyeXB0ZWQuYwppbmRleCA3NmY1NWRkMTNjYjguLmUzMTczMTQxMDI3ZSAxMDA2
-NDQKLS0tIGEvc2VjdXJpdHkva2V5cy9lbmNyeXB0ZWQta2V5cy9lbmNyeXB0ZWQuYworKysgYi9z
-ZWN1cml0eS9rZXlzL2VuY3J5cHRlZC1rZXlzL2VuY3J5cHRlZC5jCkBAIC0yMjUsNiArMjI1LDcg
-QEAgc3RhdGljIGludCBkYXRhYmxvYl9wYXJzZShjaGFyICpkYXRhYmxvYiwgY29uc3QgY2hhciAq
-KmZvcm1hdCwKIAkJKmRlY3J5cHRlZF9kYXRhbGVuID0gc3Ryc2VwKCZkYXRhYmxvYiwgIiBcdCIp
-OwogCQlpZiAoISpkZWNyeXB0ZWRfZGF0YWxlbikgewogCQkJcHJfaW5mbygiZW5jcnlwdGVkX2tl
-eToga2V5bGVuIHBhcmFtZXRlciBpcyBtaXNzaW5nXG4iKTsKKwkJCXJldCA9IDA7CiAJCQlnb3Rv
-IG91dDsKIAkJfQogCX0KLS0gCjIuNDAuMQoK
---cd8ba6b13b7a1f2b1f2526f12f6cd200967ddb0152adf8a67df1cb348e72--
 
