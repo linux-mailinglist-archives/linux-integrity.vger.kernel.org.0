@@ -1,190 +1,162 @@
-Return-Path: <linux-integrity+bounces-954-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-955-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A0FC844374
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 16:54:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2277F8444DA
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 17:49:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ED421C21A2A
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:54:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7CE52B29140
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 16:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35E163C7;
-	Wed, 31 Jan 2024 15:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E7D12BF29;
+	Wed, 31 Jan 2024 16:48:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="br+vz2sV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dem+Ob8S"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CC3129A8D;
-	Wed, 31 Jan 2024 15:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD35712BE8D;
+	Wed, 31 Jan 2024 16:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.115
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706716490; cv=none; b=EgPkYDtFnVM8ZOTgVcYswp57VH5MtTu0+5IccnVHaey1z9g7byeNCxgISJjTfZFdW6LmeAE8I/cwg1Z89AOblM/TK9T6f+fxWpMTjf9gCV2uwa/4NqxYWsD9dXpjX7L2aM20e+0QT95musLposTvRq5sSGygc0pbQCcrWkxwgbg=
+	t=1706719708; cv=none; b=MEyEW5RzzUSNt3cS/pnUxbgdD/oL90k1YUKKYtjNkpxJrNv9eaQG7nLx4loGf/EV1dXRUDTbUhseNL+GjCUbrDh2LzU71WExl64mxq6rGxrtFfx29Drl4x5/uTgUMvxsaP41S9iUVjJc7VqRS1NopMZD2grZ4vpndgMlOiatF+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706716490; c=relaxed/simple;
-	bh=962G4SeZS6ybqHxFrU26+VODCD2iTSXY5jIdT5VAmx0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SGZyG04ipwDyqYCb2EKcka/R67b1yB2J5Um2HVMike/g0DB6/STUGJtjhauyN88UBicWRu9/E8TpDiBeYPWD+4zThEynd1WQdNGwYeZJ9WjpvRL6uqKOxOnbBxEVyhsXuH5roYfQYJEx0dPiGBnUY3Ra+PbE4V04hZ85yHp3FQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=br+vz2sV; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc6b5d0e015so1155436276.1;
-        Wed, 31 Jan 2024 07:54:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706716488; x=1707321288; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sp+45kIh37HWYYNwuHvpyq1RNM06jOtAV4lYBAKJAiQ=;
-        b=br+vz2sV3+EOmEV7kP4zfuON4sDb2xMWnP9TglLvKNbtKZYXG7lOpQiUv9Hmzm8MGr
-         wau6v6SUt5jfTCzbzUQkrWERvSnWWsn8G2uZorc1uC4a+mpKDHufKuuW94ff+3LLOyAh
-         DSedETYwVxuGfZlXWBH9lXGyg9cE574oqrh5b2bIozuzgJjp5dHbgNHlqGVAxd5yHHb0
-         os2SYyVBYbz1ED3sR5QSwqACG0GSilPJTHCgPQBmmL2lYIdso4pvEEVylhL9vv13r0bv
-         4UvBRs7KHO9G6k9hM3xHxdbTrBUXIl7Xh6XfhFeF0mvttMiuy1rt72I1BVjLJBqYxBv5
-         NKJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706716488; x=1707321288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sp+45kIh37HWYYNwuHvpyq1RNM06jOtAV4lYBAKJAiQ=;
-        b=RnqAlLpy9rjqyZrg2o4eqv9tYhuUqMR1YU7ipCK0ClEwv7fb/7UK306J5LpnMdQ4nk
-         PHQHMYhRbitxR+6aW1iirC9BRjAL1S9xP2fDjZiw/B1lTkpjvViRRUXCIqmEicgDbeRC
-         gV+0ZWIPnGg76Kb3agryiiiN98KaLG0e3G3BOawdMy6asVQ1zyDpAe6yCpHQDbRhX1uM
-         DR0SfmPgRpQqnkBKLtI7qfXg609wuAyMMwOUt7CsuKRlisO21LfRtAQMJyXgD7gcJMGB
-         2uRtmYxZl3gt1gLl/4Go5fY12qu1xTfzx7hdZrtTpgmpngSn7mRerBRA4rVFpMsaMqyu
-         t7wA==
-X-Gm-Message-State: AOJu0YxDRfyAP/J0ZasteZp0k/aVUXk8lyqDPelvUmxwargdFHgp/HK9
-	8YJEioGglySmfwAYXHAdTqrxqv6MwW7Zs7Cro/aTv/lsQghgc88bD+KxfB2Qdvxcx9Ah6gy7dB7
-	Wj0x0BZ00MJzwTvnvIwOq7cPe+wg=
-X-Google-Smtp-Source: AGHT+IFdGdK0zvmMkDmOQrQbRw5dX+IZi8Nc46PV6odF8loYa7iZfaTmImmWVuhsxnN4JyycwD/NBnrVZDen5oDkTog=
-X-Received: by 2002:a25:c546:0:b0:dc2:3562:d234 with SMTP id
- v67-20020a25c546000000b00dc23562d234mr2003329ybe.12.1706716488054; Wed, 31
- Jan 2024 07:54:48 -0800 (PST)
+	s=arc-20240116; t=1706719708; c=relaxed/simple;
+	bh=O+Ckqld21NseZzB5lCAj+EQ7OHd0wXrB13RwGOqBfic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ycu0Tm1JuV6Qf8vAZ/C9Mpj2AKWGBlTN0jIj/rTD9WgFF1Qh3H0HK+mjc/wd/vGHLVvroCoqy/PUHfPiiXj01Ej4j8TtkGKKjRgeefw47aJUX2mIuLwasSW/8J7ZzdhnrZXE7O2jm69XbpXsh4WPoWTvTN8yksgnJhAh2b2vSBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dem+Ob8S; arc=none smtp.client-ip=192.55.52.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706719706; x=1738255706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O+Ckqld21NseZzB5lCAj+EQ7OHd0wXrB13RwGOqBfic=;
+  b=dem+Ob8SxoCZs9nxa764/1aU9lSlw21ry8yb7Xf+cAXYtAgqB8gwrk9L
+   FPDktsiihAGsoirO2gmnk24DHLGte9g0yZGeW4rFjhFzyAqU5xz/yLlWU
+   rwkeItK9dyMAopb5Z98R/PpGEb02Nz6n8LIk0+jawne8QdaWD8EbSS+SD
+   YD7DxtRLhXqci2pJDWjKr/Sge7AeHKoKnAWWlbVnXRwP7+FNJrAbZHKr/
+   Bjr2Ca6o0nNgyRE4yrzMU1GG2kiD9ih5mkJeDi2o1fxMlqOrJ7I5kXdDM
+   0NOa4fC1W3pAqtkL77dktN8jxGmrcRoL24rEfWnOOoJm7cncyxZcQ/wIy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="403275510"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="403275510"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2024 08:48:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="788635713"
+X-IronPort-AV: E=Sophos;i="6.05,231,1701158400"; 
+   d="scan'208";a="788635713"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 31 Jan 2024 08:48:21 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rVDl5-0001mG-0n;
+	Wed, 31 Jan 2024 16:48:19 +0000
+Date: Thu, 1 Feb 2024 00:47:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-unionfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, paul@paul-moore.com,
+	jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+	roberto.sassu@huawei.com, amir73il@gmail.com, miklos@szeredi.hu,
+	Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH 1/5] security: allow finer granularity in permitting
+ copy-up of security xattrs
+Message-ID: <202402010014.MArAf4UB-lkp@intel.com>
+References: <20240130214620.3155380-2-stefanb@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
- <20240130214620.3155380-5-stefanb@linux.ibm.com> <38230b4c-54ae-45ed-a6fb-34e63501e5b1@linux.ibm.com>
- <CAOQ4uxiYARZBSgzb4_W-RKvB1XLSF3GUBqeLw2kH+eVeZ_8ARQ@mail.gmail.com> <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com>
-In-Reply-To: <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Wed, 31 Jan 2024 17:54:37 +0200
-Message-ID: <CAOQ4uxi6Te8izWpXROthknRaXrVA9jho5nbc+mkuQDrcTLY44Q@mail.gmail.com>
-Subject: Re: [PATCH 4/5] evm: Use the real inode's metadata to calculate
- metadata hash
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, miklos@szeredi.hu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240130214620.3155380-2-stefanb@linux.ibm.com>
 
-On Wed, Jan 31, 2024 at 4:40=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.co=
-m> wrote:
->
->
->
-> On 1/31/24 08:16, Amir Goldstein wrote:
-> > On Wed, Jan 31, 2024 at 4:11=E2=80=AFAM Stefan Berger <stefanb@linux.ib=
-m.com> wrote:
-> >>
-> >>
-> >>
-> >> On 1/30/24 16:46, Stefan Berger wrote:
-> >>> Changes to the file attribute (mode bits, uid, gid) on the lower laye=
-r
-> >>> are not take into account when d_backing_inode() is used when a file =
-is
-> >>> accessed on the overlay layer and this file has not yet been copied u=
-p.
-> >>> This is because d_backing_inode() does not return the real inode of t=
-he
-> >>> lower layer but instead returns the backing inode which holds old fil=
-e
-> >>> attributes. When the old file attributes are used for calculating the
-> >>> metadata hash then the expected hash is calculated and the file then
-> >>> mistakenly passes signature verification. Therefore, use d_real_inode=
-()
-> >>> which returns the inode of the lower layer for as long as the file ha=
-s
-> >>> not been copied up and returns the upper layer's inode otherwise.
-> >>>
-> >>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> >>> ---
-> >>>    security/integrity/evm/evm_crypto.c | 2 +-
-> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity=
-/evm/evm_crypto.c
-> >>> index b1ffd4cc0b44..2e48fe54e899 100644
-> >>> --- a/security/integrity/evm/evm_crypto.c
-> >>> +++ b/security/integrity/evm/evm_crypto.c
-> >>> @@ -223,7 +223,7 @@ static int evm_calc_hmac_or_hash(struct dentry *d=
-entry,
-> >>>                                 size_t req_xattr_value_len,
-> >>>                                 uint8_t type, struct evm_digest *data=
-)
-> >>>    {
-> >>> -     struct inode *inode =3D d_backing_inode(dentry);
-> >>> +     struct inode *inode =3D d_real_inode(dentry);
-> >>>        struct xattr_list *xattr;
-> >>>        struct shash_desc *desc;
-> >>>        size_t xattr_size =3D 0;
-> >>
-> >> We need this patch when NOT activating CONFIG_OVERLAY_FS_METACOPY but
-> >> when setting CONFIG_OVERLAY_FS_METACOPY=3Dy it has to be reverted...  =
-I am
-> >> not sure what the solution is.
-> >
-> > I think d_real_inode() does not work correctly for all its current user=
-s for
-> > a metacopy file.
-> >
-> > I think the solution is to change d_real_inode() to return the data ino=
-de
-> > and add another helper to get the metadata inode if needed.
-> > I will post some patches for it.
->
-> I thought that we may have to go through vfs_getattr() but even better
-> if we don't because we don't have the file *file anywhere 'near'.
->
-> >
-> > However, I must say that I do not know if evm_calc_hmac_or_hash()
-> > needs the lower data inode, the upper metadata inode or both.
->
-> What it needs are data structures with mode bits, uid, and gid that stat
-> in userspace would show.
->
->
+Hi Stefan,
 
-With or without metacopy enabled, an overlay inode st_uid st_gid st_mode
-are always taken from the upper most inode which is what d_real_inode()
-currently returns, so I do not understand what the problem is.
+kernel test robot noticed the following build errors:
 
-> >
-> > The last time you tried to fix ovl+IMA, I asked for documentation
-> > of what data/metadata is protected with EVM and how are those
-> > protections supposed to work across overlayfs copy up, when the
-> > data and metadata are often split between 2 and myabe event 3
-> > differnt inode.
->
-> I always compare against what userspace sees with stat and that's what
-> the EVM should also work with so it ends up in reasonable matching
-> result in terms of hash calculation and then access permission/rejection.
->
+[auto build test ERROR on zohar-integrity/next-integrity]
+[also build test ERROR on pcmoore-selinux/next linus/master v6.8-rc2 next-20240131]
+[cannot apply to mszeredi-vfs/overlayfs-next mszeredi-vfs/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I will need a lot more analysis information to be able to help you.
-Exactly which setup, exactly which test, exactly which inode/dentry/file
-objects are used and how they are accessed when things go wrong.
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Berger/security-allow-finer-granularity-in-permitting-copy-up-of-security-xattrs/20240131-054854
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+patch link:    https://lore.kernel.org/r/20240130214620.3155380-2-stefanb%40linux.ibm.com
+patch subject: [PATCH 1/5] security: allow finer granularity in permitting copy-up of security xattrs
+config: i386-buildonly-randconfig-002-20240131 (https://download.01.org/0day-ci/archive/20240201/202402010014.MArAf4UB-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240201/202402010014.MArAf4UB-lkp@intel.com/reproduce)
 
-Thanks,
-Amir.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402010014.MArAf4UB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> security/security.c:2627:38: error: too many arguments to function call, expected single argument 'name', have 2 arguments
+    2627 |         return evm_inode_copy_up_xattr(src, name);
+         |                ~~~~~~~~~~~~~~~~~~~~~~~      ^~~~
+   include/linux/evm.h:121:20: note: 'evm_inode_copy_up_xattr' declared here
+     121 | static inline int  evm_inode_copy_up_xattr(const char *name)
+         |                    ^                       ~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +/name +2627 security/security.c
+
+  2596	
+  2597	/**
+  2598	 * security_inode_copy_up_xattr() - Filter xattrs in an overlayfs copy-up op
+  2599	 * @src: union dentry of copy-up file
+  2600	 * @name: xattr name
+  2601	 *
+  2602	 * Filter the xattrs being copied up when a unioned file is copied up from a
+  2603	 * lower layer to the union/overlay layer.   The caller is responsible for
+  2604	 * reading and writing the xattrs, this hook is merely a filter.
+  2605	 *
+  2606	 * Return: Returns 0 to accept the xattr, 1 to discard the xattr, -EOPNOTSUPP
+  2607	 *         if the security module does not know about attribute, or a negative
+  2608	 *         error code to abort the copy up.
+  2609	 */
+  2610	int security_inode_copy_up_xattr(struct dentry *src, const char *name)
+  2611	{
+  2612		struct security_hook_list *hp;
+  2613		int rc;
+  2614	
+  2615		/*
+  2616		 * The implementation can return 0 (accept the xattr), 1 (discard the
+  2617		 * xattr), -EOPNOTSUPP if it does not know anything about the xattr or
+  2618		 * any other error code in case of an error.
+  2619		 */
+  2620		hlist_for_each_entry(hp,
+  2621				     &security_hook_heads.inode_copy_up_xattr, list) {
+  2622			rc = hp->hook.inode_copy_up_xattr(src, name);
+  2623			if (rc != LSM_RET_DEFAULT(inode_copy_up_xattr))
+  2624				return rc;
+  2625		}
+  2626	
+> 2627		return evm_inode_copy_up_xattr(src, name);
+  2628	}
+  2629	EXPORT_SYMBOL(security_inode_copy_up_xattr);
+  2630	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
