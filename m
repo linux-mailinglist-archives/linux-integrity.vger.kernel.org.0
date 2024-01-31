@@ -1,142 +1,118 @@
-Return-Path: <linux-integrity+bounces-948-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-949-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A9C844159
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:08:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B1858441D3
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:26:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4630328F313
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 14:08:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0844728ABEC
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 14:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442198288E;
-	Wed, 31 Jan 2024 14:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820F282D9C;
+	Wed, 31 Jan 2024 14:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/Fbq7TT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbOKxxCe"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD28768F8;
-	Wed, 31 Jan 2024 14:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEF982886;
+	Wed, 31 Jan 2024 14:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706709979; cv=none; b=b58d/LQ6FexIkPlfKZJwpRz7ISFz3I2ft7aMDCBgGg8OVeYL8OFCC8dpDvRkVbtKf8NvvWPl3umALkaGcKjcCIppGt9IV0tcd9VDxCAgWn8YR5UcSuHL4nSXc8+93BJ3qEI7YahozRhzWDaYRkTxR4+EaeUj/X7gYsqtGUkXz9w=
+	t=1706711139; cv=none; b=KraX4U3/haNpNgG61BG6rnzkUQLYWbOzFbf5v9/XMLZPDC4zbIjYxuVUYqOzPjalQO1b+U6jY/Pizu5LvxSCmYsV/VQzKBy1QY5xNR8VaUd/qJ9LA1zGzj3EDCeuABiPCQjQsuK0f0OHXFziYbx7AMEM+lVjgnge5OrwkdCA1dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706709979; c=relaxed/simple;
-	bh=G0kyAZ0knYajTJWEvMpmTnJbQyeiZVah60Pu6fI4O6M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cUeeQiiqRtFY7zJwQi6LXP5PjWNx+5AW1CL3E9y4XP6/ZXP0YwIQfnyDnyvvXs0WGo2MkGaF1SmTcvgHOoyQIoVxOI8Ap35sEcqTvUrZklkYU0qWHQsa3IgZx2Dd6s8t8AEuLnj8xG78NIW9CC+dkzoCcYXYv7HGntfxKFTiSbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/Fbq7TT; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-686a92a8661so35939386d6.0;
-        Wed, 31 Jan 2024 06:06:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706709976; x=1707314776; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+dkh36EExK6t1wawSJGvixoBnmXelA9dYFxogTrOyZY=;
-        b=d/Fbq7TTAO8JtB9DsVf14MzVqsqhDpytGzsOUFfecRfmI6ugbl7xxLQTa27Hd1o2/A
-         NIWVZAnx0/Tff3/7Cz71aJTuA7CA94sg7/oxESV7nbqSAamahkLr+tEB5Y40CXyKtTpA
-         1qvxq22QJqQ//GXkixseBeJ7zQckwUMN1vl2eceNr5+UM55SKkVXLtFSqBmzh9ZApd5b
-         YhSRs3HmDUh6wNVvHVuup2qtdWHJTqUjuQeUbN0AWDSPENFVF8/vL1AyJjm3YxIKUWzR
-         0RLiW4oTsQTJY3yxaRoenrJNrZl2ezGMwX3kMNe+9JXnksq8gjL7tpxhu6ofL2Gr9hSW
-         Dvzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706709976; x=1707314776;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+dkh36EExK6t1wawSJGvixoBnmXelA9dYFxogTrOyZY=;
-        b=taChAQnWq4rc1EzD0Q8v6HBbhiZPiW7tv/GdaJZFP0zFpKJhVzGLjwsprilyosO530
-         hPN+PFH+CMVMSzWhWX9M4s3U4LfqX79qZBzuqbMi+aw52y3Gnm8NCD3ilwcr2h57EXSd
-         D+aVmNPVz/aCCQI90HarP4zyYTMcnY9+mf7+p1SxueHtUUltTjAfAKNrtZTbLZ7sB04m
-         0faoT66z5UJzj8BaUnAKGIogFJ2lQzbEW++fPJq3Erfs5NPcC/ZzuVw0N5oTd2OqRt2F
-         MZ+brOb13NfoSDhbYRRUlLDMkB6ECYwTmJFjmCJspRslbkWVI9DBHgPDdNx+4gLJ1S25
-         T4Pw==
-X-Gm-Message-State: AOJu0YxwbxTriJQ3Ht04Me85XwkWHAF4veinCtDWh3XE40iDkHks+Zuz
-	yezvr7kv6LzsdQT4+TVHpKd8/mb0Lupx0ZRJ+HHwQ/5/xlf5PPugg4o2FA2Lmq+Yhg4BnQr5nce
-	EMdsT18cKm2AD67GYJZptrHKJV5Y=
-X-Google-Smtp-Source: AGHT+IGvoyXyWBOGOuWy9l4yzL1aHxWayBHJA5Zg4k30/AJq0lOWbGIwYNK0YOxDyEDVIJfCpXoUc2em7lfpAm1iLQg=
-X-Received: by 2002:a05:6214:d6c:b0:68c:4f1c:d33b with SMTP id
- 12-20020a0562140d6c00b0068c4f1cd33bmr2003556qvs.37.1706709976293; Wed, 31 Jan
- 2024 06:06:16 -0800 (PST)
+	s=arc-20240116; t=1706711139; c=relaxed/simple;
+	bh=OYIebYlAw7S0p992aaP/mpC7lN+bDzKspkekfONLIXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JJDlINdUaQF++GRHJb3C2gdrUBQ77UnFj4vwlH/2BYLnchYe0z3C6c9Wrz2o7Xm0nxG1crsWmMlMIc09ZXYJhaoYqb8rg4gvY2AbNmB7EBcN5+XZlFhZwD8GJ6thHP0st3uywLPCKMKRB8jakVgLjuMxSC/3HIEP4Rp166p/thw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbOKxxCe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA53C43390;
+	Wed, 31 Jan 2024 14:25:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706711138;
+	bh=OYIebYlAw7S0p992aaP/mpC7lN+bDzKspkekfONLIXk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VbOKxxCe7LLdszUKJ6gqFU85V1F9KsTEni4EqaiaJyNN4AQq7ZbbJ1XJS5iNbHaCn
+	 Uunk1FrgPVF5cZmHwshfWunPMjARZREk+GXLho7Wb2bNkC/6W/lskYsng6MKTHncnC
+	 GTHLENhg/Z31cBppgwtpqoMt68XRXcr+sWD8jiPHnLVTtwxtYoxwnz2c+Aeln9zIbN
+	 IHVTPkuqeHrhJh52yEl8bm3JjEQUp09J9G8WeH226HtBaLYvF6YCywPXc3BbIs6lMN
+	 ZK2uGRcXY4GAc0l87b9m4EWvZXwJvyS/m02MftyvRXXMBpAb9CYZJfXjQwxdWNM/Ag
+	 zutQk5P9aNfnA==
+Date: Wed, 31 Jan 2024 15:25:32 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, miklos@szeredi.hu
+Subject: Re: [PATCH 1/5] security: allow finer granularity in permitting
+ copy-up of security xattrs
+Message-ID: <20240131-lacht-elend-536d94682370@brauner>
+References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
+ <20240130214620.3155380-2-stefanb@linux.ibm.com>
+ <CAOQ4uxjgdvGU0WE+92ByQE26Jp0j16AgfyCjNyEp7=86akOSsA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130214620.3155380-1-stefanb@linux.ibm.com> <20240130214620.3155380-6-stefanb@linux.ibm.com>
-In-Reply-To: <20240130214620.3155380-6-stefanb@linux.ibm.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Wed, 31 Jan 2024 16:06:05 +0200
-Message-ID: <CAOQ4uxikngPf5t9zmJqV3SKkdmMm6ZwF095uoa6HLN-yAkdnSQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] evm: Enforce signatures on unsupported filesystem for EVM_INIT_X509
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, miklos@szeredi.hu, 
-	Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxjgdvGU0WE+92ByQE26Jp0j16AgfyCjNyEp7=86akOSsA@mail.gmail.com>
 
-On Tue, Jan 30, 2024 at 11:46=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.c=
-om> wrote:
->
-> Unsupported filesystems currently do not enforce any signatures. Add
-> support for signature enforcement of the "original" and "portable &
-> immutable" signatures when EVM_INIT_X509 is enabled.
->
-> The "original" signature type contains filesystem specific metadata.
-> Thus it cannot be copied up and verified. However with EVM_INIT_X509
-> and EVM_ALLOW_METADATA_WRITES enabled, the "original" file signature
-> may be written.
->
-> When EVM_ALLOW_METADATA_WRITES is not set or once it is removed from
-> /sys/kernel/security/evm by setting EVM_INIT_HMAC for example, it is not
-> possible to write or remove xattrs on the overlay filesystem.
->
-> This change still prevents EVM from writing HMAC signatures on
-> unsupported filesystem when EVM_INIT_HMAC is enabled.
->
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  security/integrity/evm/evm_main.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
-vm_main.c
-> index e96d127b48a2..f49609dfcbc7 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -192,7 +192,11 @@ static enum integrity_status evm_verify_hmac(struct =
-dentry *dentry,
->                      iint->evm_status =3D=3D INTEGRITY_PASS_IMMUTABLE))
->                 return iint->evm_status;
->
-> -       if (is_unsupported_fs(dentry))
-> +       /*
-> +        * On unsupported filesystems with EVM_INIT_X509 not enabled, ski=
-p
-> +        * signature verification.
-> +        */
-> +       if (!(evm_initialized & EVM_INIT_X509) && is_unsupported_fs(dentr=
-y))
->                 return INTEGRITY_UNKNOWN;
->
+On Wed, Jan 31, 2024 at 03:25:29PM +0200, Amir Goldstein wrote:
+> On Tue, Jan 30, 2024 at 11:46 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
+> >
+> > Copying up xattrs is solely based on the security xattr name. For finer
+> > granularity add a dentry parameter to the security_inode_copy_up_xattr
+> > hook definition, allowing decisions to be based on the xattr content as
+> > well.
+> >
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > ---
+> >  fs/overlayfs/copy_up.c            | 2 +-
+> >  include/linux/evm.h               | 2 +-
+> >  include/linux/lsm_hook_defs.h     | 3 ++-
+> >  include/linux/security.h          | 4 ++--
+> >  security/integrity/evm/evm_main.c | 2 +-
+> >  security/security.c               | 7 ++++---
+> >  security/selinux/hooks.c          | 2 +-
+> >  security/smack/smack_lsm.c        | 2 +-
+> >  8 files changed, 13 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
+> > index b8e25ca51016..bd9ddcefb7a7 100644
+> > --- a/fs/overlayfs/copy_up.c
+> > +++ b/fs/overlayfs/copy_up.c
+> > @@ -114,7 +114,7 @@ int ovl_copy_xattr(struct super_block *sb, const struct path *oldpath, struct de
+> >                 if (ovl_is_private_xattr(sb, name))
+> >                         continue;
+> >
+> > -               error = security_inode_copy_up_xattr(name);
+> > +               error = security_inode_copy_up_xattr(old, name);
+> 
+> What do you think about:
+> 
+>                      error = security_inode_copy_up_xattr(name, NULL, 0);
+> 
+> and then later...
+> 
+>                      error = security_inode_copy_up_xattr(name, value, size);
+> 
+> I am asking because overlayfs uses mnt_idmap(path->mnt) and you
+> have used nop_mnt_idmap inside evm hook.
+> this does not look right to me?
 
-Are the names is_unsupported_fs() and SB_I_EVM_UNSUPPORTED still
-a good description of what overlayfs is after this change?
-Is EVM really not supported on overlayfs after this change?
+So it's relevant if they interact with xattrs that care about the
+idmapping and that's POSIX ACLs and fscaps. And only if they perform
+permission checks such as posix_acl_update_mode() or something. IOW, it
+depends on what exactly EVM is doing.
 
-Would you consider a better descriptive name, for the helper and flag,
-at least as descriptive as SB_I_IMA_UNVERIFIABLE_SIGNATURE?
-
-Thanks,
-Amir.
+IIRC, I already added custom security_*() hooks specifically for POSIX
+ACLs as they can't be retrieved through vfs_xattr*() helpers anymore.
 
