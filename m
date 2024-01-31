@@ -1,56 +1,56 @@
-Return-Path: <linux-integrity+bounces-959-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-960-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B39358445D1
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 18:17:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 257F98445EE
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 18:20:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E58F286047
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 17:17:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 582DC1C24315
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 17:20:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B211112CD95;
-	Wed, 31 Jan 2024 17:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4835D12C554;
+	Wed, 31 Jan 2024 17:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="EuBXF3xn"
+	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="SDAF+ON7"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD60812C554;
-	Wed, 31 Jan 2024 17:17:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=136.143.188.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB0112BE8F;
+	Wed, 31 Jan 2024 17:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706721435; cv=fail; b=GlPs/VGJfMKaNZK/4sLY+FSVXt0vO2L/fc0U8XgOjLuv67oTouNXiW/HYcaZw4j9rb6sIjVJJKdvkwNNqf4WsrwMww8Y3+b9Z9Tpzz/AA+NJ81sSH7AF2C3SgPa1NhM7HWj0WpIpK0mSxIpRFzsmZHO+J/jRsiSe//hJB915SmM=
+	t=1706721590; cv=pass; b=ZtdnzSoPZdFvLzDG02LHhpIHEx4TnAi0mJXZlmv/GhfH+mlH9RQR1zX3DXOJfy65ANbrcP17eumlS7GXvz0qBWPTGXzDbda7ARAWiucppSJXA/+90IqQj7fJ7UMnv1X1Rg8GfHv40UzcBdWU0VJ+NbxgA32sctXCp3ytcV9rLOE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706721435; c=relaxed/simple;
-	bh=XXcpNZ2rcDI3vVQ8/Eszkap951MkG/aGpB/S+UJ2e7Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CwS4RrcRggTlvrAYPhQHJusnTvR3rYPkdyKEwAss056BmQJed9jPo+evUDhXWDexfYO8zWeNY0nZr+8Y8PxywNejbwB4lmG6YNJwE9iGBeD/n2sNUs+ENPmf2cSX3xJlYY+jnu29dMZtdNWmNk9s2NY/MTUPdNAltIRrhzPIciU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=EuBXF3xn; arc=fail smtp.client-ip=136.143.188.50
+	s=arc-20240116; t=1706721590; c=relaxed/simple;
+	bh=KKuyKxfSvJuo9R16tFGRbmgmlPSNp5swHpNOjW6jdtE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u8cCxjhdCXKtE2FXYrxkQW8rPvMbdD+tYU5qF8aqXF6UMLBsrAY7EwvE+jnZqSaldjkVSVW/hEmoZkqpgJZZvKzG/lTLF7vdzKdWFN6Ecou1nn0JlaPc0ZpwPPZJQxyYk/yVteHCANY1w3JjQ/zraO96VDqyqwysZyZRLGRD0AY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=SDAF+ON7; arc=pass smtp.client-ip=136.143.188.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
 Delivered-To: dpsmith@apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1706721425; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1706721579; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=BrzFsShetAr//Au0/VgUiqgtdGUiEYUh6tSSxK6EQ+wwPblT419KlvABnM+gn9hEC9tAs/r8EZlT0gBujaDU6WtfUcAJRNT+1dbAgdJ8yT5IaGkZZ90lioAeq2dn/A3/lg5Xjl/ERnjNnhleWpMWgolD2l/bZ3flB2QPJCGHwhQ=
+	b=XeJNbt80dq/YnqE9s2qrA474J1xloCS1wK0nRo2KoFA1h3Od7FDHPptN2jWbytsG81f/ZRJQoWp6Lwp7TzzTViSKNE//ikmUczA+BhvCJq49Ed7c8rhrm9+t5jekYNnKwCz32WFW6bR3JQTCrpr095Psogjr4xW1aqLNwopeTHk=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1706721425; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:To:To:Message-Id:Reply-To:Subject; 
-	bh=d8FvsybUVvAeqHKTrmR5FtLlH3g40qorWd0hTMXdq/Y=; 
-	b=SHkfsgAt5iF2lQ8ZBn2r4BOJotInCRCOHndatwQmRUBJpW2HgB2wIRowM90ZSfjJQFN746d6MmSyERboNU+rTN/iyIO416zqF7hyUTlKk0wk/Sz8MM3gqybNE8dtTVcFHZyUXBUFrVRKOhRvVG6jvyqPaKZU3XOLxVFP5rmGg+A=
+	t=1706721579; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=H+s0lZ1A3z3Ml9q/qDrJ1Lvaz2sQ/evnbzNLrzH5QYE=; 
+	b=dkYHYxk84cc/iLGcMw+lDHsKcG/lFAlkTuZpvHipdTi/0UczlQ8U6cPibdG2zRiftcG/BYOu5HFAKm27hlF9LCI3UERTRwsp4iH3weoScTCENT0ldUE2eqTDzg+EK6TJ+WkLv6tbYDVZEvc0IRyLrzGuJnu7PCypsGY48DTH4oI=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=apertussolutions.com;
 	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
 	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1706721425;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1706721579;
 	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=d8FvsybUVvAeqHKTrmR5FtLlH3g40qorWd0hTMXdq/Y=;
-	b=EuBXF3xnV0wo6LNqC3nSYFgVtFWAnE2iKsAtGyJLC8dHVWO1LFhSSZmQTXECrlj8
-	agm28wXqMmRN3VG4kWX3G4Dm2KLS1iBRUwZYshbtJGdAgs5EeZaQiDVGiLOXTfqmgnJ
-	V33fyPInCWBy9qTHM/0iSuJleBvnKfIiiZxNw82A=
+	bh=H+s0lZ1A3z3Ml9q/qDrJ1Lvaz2sQ/evnbzNLrzH5QYE=;
+	b=SDAF+ON7AUn4x8ZWG2G1Ns62Uw6JHUBvLqWR5mmP5+dZX0AkX1/RSAIyYyYrtLle
+	IS3FuSEC11RyP0aPWItjqGPU9g/OJSm2QT5vfHpHEqvxnhhHxmHBkTPV/rb9P+pLV8W
+	OrCxDBK1T81on6iLBBX1KmRe7XrkLsRLRuHOFDoE=
 Received: from sisyou.hme. (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-	with SMTPS id 1706721424032954.853713826795; Wed, 31 Jan 2024 09:17:04 -0800 (PST)
+	with SMTPS id 1706721578272198.53972224163658; Wed, 31 Jan 2024 09:19:38 -0800 (PST)
 From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
 To: Jason Gunthorpe <jgg@ziepe.ca>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
@@ -62,9 +62,9 @@ Cc: "Daniel P. Smith" <dpsmith@apertussolutions.com>,
 	Ross Philipson <ross.philipson@oracle.com>,
 	Kanth Ghatraju <kanth.ghatraju@oracle.com>,
 	Peter Huewe <peterhuewe@gmx.de>
-Subject: 
-Date: Wed, 31 Jan 2024 12:16:50 -0500
-Message-Id: <20240131171651.15796-1-dpsmith@apertussolutions.com>
+Subject: [PATCH v2 0/3] tpm: make locality handling resilient
+Date: Wed, 31 Jan 2024 12:19:29 -0500
+Message-Id: <20240131171929.18799-1-dpsmith@apertussolutions.com>
 X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -74,9 +74,6 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
-
-Date: Wed, 31 Jan 2024 11:43:16 -0500
-Subject: [PATCH v2 0/3] tpm: make locality handling resilient
 
 When the kernel is started by a loader that leaves a locality other than
 Locality0 open, for example Intel TXT SINIT ACM leaves Locality2 open, this
