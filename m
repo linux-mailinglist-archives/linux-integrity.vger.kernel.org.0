@@ -1,171 +1,190 @@
-Return-Path: <linux-integrity+bounces-953-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-954-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 652478442C1
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 16:14:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A0FC844374
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 16:54:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41F2DB32585
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:03:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ED421C21A2A
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D351292FD;
-	Wed, 31 Jan 2024 14:56:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35E163C7;
+	Wed, 31 Jan 2024 15:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OsnhFnMI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="br+vz2sV"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58A2D5A7A1;
-	Wed, 31 Jan 2024 14:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CC3129A8D;
+	Wed, 31 Jan 2024 15:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706713002; cv=none; b=aVxM8js7+z4VJTEj1SuckYvkScq7UqlRpN3/GetC2zBUnwGQKJnO2hZ5hI1JrmBwmBDUhfCY3u0uiy3kwxCasDZXPno9ncOWbkEnSklS7Jy2DDwsc3I50iAfPH7uqA0I2ut9gBWSeH62CU8feyj30N5z994eIdY54kZhXdTMhjM=
+	t=1706716490; cv=none; b=EgPkYDtFnVM8ZOTgVcYswp57VH5MtTu0+5IccnVHaey1z9g7byeNCxgISJjTfZFdW6LmeAE8I/cwg1Z89AOblM/TK9T6f+fxWpMTjf9gCV2uwa/4NqxYWsD9dXpjX7L2aM20e+0QT95musLposTvRq5sSGygc0pbQCcrWkxwgbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706713002; c=relaxed/simple;
-	bh=m1kKG/OLqqlepJ3C9hX+fm1JJZfXqHJuu2JoGe8e/Q0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pq0gLVtUvSvOH8jqCgeeE/r6O/mE8RqXe61e6cWG3ny5M7f1LvCOFUDsKGi7fv7U/b1T7mZxmoUy72vrZUEltavpanydQP2aKhJibVjXM0rQ3A25arBPdjYNTNJGoRZlSd28LIdDb3UuKL2ALXAYQqbjWt3fGH8+f5mT9qX5quo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OsnhFnMI; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40VEOmGO018763;
-	Wed, 31 Jan 2024 14:56:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=LhgpvjTYjabLh3xse1S1Padwl0ZlIsQ4O+aF3f3U70E=;
- b=OsnhFnMIwkqMLpEmrGHimJe6Tu7Q7p9ZZTjNvZrvkvhnTuS7RiXCY+HQeo+rH2hfMOP2
- +lGCxKsnpejs+u8cJuMTsEEIwvQEnkOcZ8rU77UFxfHG6Kieq9Wp7yByaXMApVc2Hvjz
- vs2tjjBJLp7URqqluaQ+b2F+pnN2BhnzYZLK7jCRttI7oJBzrsqQ+eYE3+RD8JQ0O0WS
- oS/DgKoIbg0JE6mX1RWQ0LpwM5NBJNbfbVvG22shgZQ/NFD+2YVH9yspfV90Epnoj4qW
- f1+fEzXnE+GMC/Qnx7Cd0FwUVUqua5aehkoZ62Hr7gcAOGKszRn3/5BcbS+ya8YB6ubi ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyp9y3c9f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:56:30 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40VE0TKx011497;
-	Wed, 31 Jan 2024 14:56:29 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyp9y3c93-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:56:29 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40VDXUwc007200;
-	Wed, 31 Jan 2024 14:56:28 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vwev2dk6y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:56:28 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40VEuS5Q14287574
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 31 Jan 2024 14:56:28 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 076DA5804E;
-	Wed, 31 Jan 2024 14:56:28 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7C9F358056;
-	Wed, 31 Jan 2024 14:56:26 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 31 Jan 2024 14:56:26 +0000 (GMT)
-Message-ID: <05fe58a1-9b2c-4c1f-80a6-4cb5094a2126@linux.ibm.com>
-Date: Wed, 31 Jan 2024 09:56:25 -0500
+	s=arc-20240116; t=1706716490; c=relaxed/simple;
+	bh=962G4SeZS6ybqHxFrU26+VODCD2iTSXY5jIdT5VAmx0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SGZyG04ipwDyqYCb2EKcka/R67b1yB2J5Um2HVMike/g0DB6/STUGJtjhauyN88UBicWRu9/E8TpDiBeYPWD+4zThEynd1WQdNGwYeZJ9WjpvRL6uqKOxOnbBxEVyhsXuH5roYfQYJEx0dPiGBnUY3Ra+PbE4V04hZ85yHp3FQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=br+vz2sV; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc6b5d0e015so1155436276.1;
+        Wed, 31 Jan 2024 07:54:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706716488; x=1707321288; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sp+45kIh37HWYYNwuHvpyq1RNM06jOtAV4lYBAKJAiQ=;
+        b=br+vz2sV3+EOmEV7kP4zfuON4sDb2xMWnP9TglLvKNbtKZYXG7lOpQiUv9Hmzm8MGr
+         wau6v6SUt5jfTCzbzUQkrWERvSnWWsn8G2uZorc1uC4a+mpKDHufKuuW94ff+3LLOyAh
+         DSedETYwVxuGfZlXWBH9lXGyg9cE574oqrh5b2bIozuzgJjp5dHbgNHlqGVAxd5yHHb0
+         os2SYyVBYbz1ED3sR5QSwqACG0GSilPJTHCgPQBmmL2lYIdso4pvEEVylhL9vv13r0bv
+         4UvBRs7KHO9G6k9hM3xHxdbTrBUXIl7Xh6XfhFeF0mvttMiuy1rt72I1BVjLJBqYxBv5
+         NKJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706716488; x=1707321288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sp+45kIh37HWYYNwuHvpyq1RNM06jOtAV4lYBAKJAiQ=;
+        b=RnqAlLpy9rjqyZrg2o4eqv9tYhuUqMR1YU7ipCK0ClEwv7fb/7UK306J5LpnMdQ4nk
+         PHQHMYhRbitxR+6aW1iirC9BRjAL1S9xP2fDjZiw/B1lTkpjvViRRUXCIqmEicgDbeRC
+         gV+0ZWIPnGg76Kb3agryiiiN98KaLG0e3G3BOawdMy6asVQ1zyDpAe6yCpHQDbRhX1uM
+         DR0SfmPgRpQqnkBKLtI7qfXg609wuAyMMwOUt7CsuKRlisO21LfRtAQMJyXgD7gcJMGB
+         2uRtmYxZl3gt1gLl/4Go5fY12qu1xTfzx7hdZrtTpgmpngSn7mRerBRA4rVFpMsaMqyu
+         t7wA==
+X-Gm-Message-State: AOJu0YxDRfyAP/J0ZasteZp0k/aVUXk8lyqDPelvUmxwargdFHgp/HK9
+	8YJEioGglySmfwAYXHAdTqrxqv6MwW7Zs7Cro/aTv/lsQghgc88bD+KxfB2Qdvxcx9Ah6gy7dB7
+	Wj0x0BZ00MJzwTvnvIwOq7cPe+wg=
+X-Google-Smtp-Source: AGHT+IFdGdK0zvmMkDmOQrQbRw5dX+IZi8Nc46PV6odF8loYa7iZfaTmImmWVuhsxnN4JyycwD/NBnrVZDen5oDkTog=
+X-Received: by 2002:a25:c546:0:b0:dc2:3562:d234 with SMTP id
+ v67-20020a25c546000000b00dc23562d234mr2003329ybe.12.1706716488054; Wed, 31
+ Jan 2024 07:54:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] security: allow finer granularity in permitting
- copy-up of security xattrs
-Content-Language: en-US
-To: Christian Brauner <brauner@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, roberto.sassu@huawei.com, miklos@szeredi.hu
 References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
- <20240130214620.3155380-2-stefanb@linux.ibm.com>
- <CAOQ4uxjgdvGU0WE+92ByQE26Jp0j16AgfyCjNyEp7=86akOSsA@mail.gmail.com>
- <20240131-lacht-elend-536d94682370@brauner>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240131-lacht-elend-536d94682370@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FP8kjeJ98L7OgLG4mRpuAjGRVNzC3Ggg
-X-Proofpoint-ORIG-GUID: gv3rZ-oEmA7mDo0G8vLGQhoibsmV0QeL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-31_08,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=588 adultscore=0 impostorscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 spamscore=0
- clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401310115
+ <20240130214620.3155380-5-stefanb@linux.ibm.com> <38230b4c-54ae-45ed-a6fb-34e63501e5b1@linux.ibm.com>
+ <CAOQ4uxiYARZBSgzb4_W-RKvB1XLSF3GUBqeLw2kH+eVeZ_8ARQ@mail.gmail.com> <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com>
+In-Reply-To: <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Wed, 31 Jan 2024 17:54:37 +0200
+Message-ID: <CAOQ4uxi6Te8izWpXROthknRaXrVA9jho5nbc+mkuQDrcTLY44Q@mail.gmail.com>
+Subject: Re: [PATCH 4/5] evm: Use the real inode's metadata to calculate
+ metadata hash
+To: Stefan Berger <stefanb@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, miklos@szeredi.hu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jan 31, 2024 at 4:40=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.co=
+m> wrote:
+>
+>
+>
+> On 1/31/24 08:16, Amir Goldstein wrote:
+> > On Wed, Jan 31, 2024 at 4:11=E2=80=AFAM Stefan Berger <stefanb@linux.ib=
+m.com> wrote:
+> >>
+> >>
+> >>
+> >> On 1/30/24 16:46, Stefan Berger wrote:
+> >>> Changes to the file attribute (mode bits, uid, gid) on the lower laye=
+r
+> >>> are not take into account when d_backing_inode() is used when a file =
+is
+> >>> accessed on the overlay layer and this file has not yet been copied u=
+p.
+> >>> This is because d_backing_inode() does not return the real inode of t=
+he
+> >>> lower layer but instead returns the backing inode which holds old fil=
+e
+> >>> attributes. When the old file attributes are used for calculating the
+> >>> metadata hash then the expected hash is calculated and the file then
+> >>> mistakenly passes signature verification. Therefore, use d_real_inode=
+()
+> >>> which returns the inode of the lower layer for as long as the file ha=
+s
+> >>> not been copied up and returns the upper layer's inode otherwise.
+> >>>
+> >>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> >>> ---
+> >>>    security/integrity/evm/evm_crypto.c | 2 +-
+> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity=
+/evm/evm_crypto.c
+> >>> index b1ffd4cc0b44..2e48fe54e899 100644
+> >>> --- a/security/integrity/evm/evm_crypto.c
+> >>> +++ b/security/integrity/evm/evm_crypto.c
+> >>> @@ -223,7 +223,7 @@ static int evm_calc_hmac_or_hash(struct dentry *d=
+entry,
+> >>>                                 size_t req_xattr_value_len,
+> >>>                                 uint8_t type, struct evm_digest *data=
+)
+> >>>    {
+> >>> -     struct inode *inode =3D d_backing_inode(dentry);
+> >>> +     struct inode *inode =3D d_real_inode(dentry);
+> >>>        struct xattr_list *xattr;
+> >>>        struct shash_desc *desc;
+> >>>        size_t xattr_size =3D 0;
+> >>
+> >> We need this patch when NOT activating CONFIG_OVERLAY_FS_METACOPY but
+> >> when setting CONFIG_OVERLAY_FS_METACOPY=3Dy it has to be reverted...  =
+I am
+> >> not sure what the solution is.
+> >
+> > I think d_real_inode() does not work correctly for all its current user=
+s for
+> > a metacopy file.
+> >
+> > I think the solution is to change d_real_inode() to return the data ino=
+de
+> > and add another helper to get the metadata inode if needed.
+> > I will post some patches for it.
+>
+> I thought that we may have to go through vfs_getattr() but even better
+> if we don't because we don't have the file *file anywhere 'near'.
+>
+> >
+> > However, I must say that I do not know if evm_calc_hmac_or_hash()
+> > needs the lower data inode, the upper metadata inode or both.
+>
+> What it needs are data structures with mode bits, uid, and gid that stat
+> in userspace would show.
+>
+>
 
+With or without metacopy enabled, an overlay inode st_uid st_gid st_mode
+are always taken from the upper most inode which is what d_real_inode()
+currently returns, so I do not understand what the problem is.
 
-On 1/31/24 09:25, Christian Brauner wrote:
-> On Wed, Jan 31, 2024 at 03:25:29PM +0200, Amir Goldstein wrote:
->> On Tue, Jan 30, 2024 at 11:46 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
->>>
->>> Copying up xattrs is solely based on the security xattr name. For finer
->>> granularity add a dentry parameter to the security_inode_copy_up_xattr
->>> hook definition, allowing decisions to be based on the xattr content as
->>> well.
->>>
->>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>> ---
->>>   fs/overlayfs/copy_up.c            | 2 +-
->>>   include/linux/evm.h               | 2 +-
->>>   include/linux/lsm_hook_defs.h     | 3 ++-
->>>   include/linux/security.h          | 4 ++--
->>>   security/integrity/evm/evm_main.c | 2 +-
->>>   security/security.c               | 7 ++++---
->>>   security/selinux/hooks.c          | 2 +-
->>>   security/smack/smack_lsm.c        | 2 +-
->>>   8 files changed, 13 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
->>> index b8e25ca51016..bd9ddcefb7a7 100644
->>> --- a/fs/overlayfs/copy_up.c
->>> +++ b/fs/overlayfs/copy_up.c
->>> @@ -114,7 +114,7 @@ int ovl_copy_xattr(struct super_block *sb, const struct path *oldpath, struct de
->>>                  if (ovl_is_private_xattr(sb, name))
->>>                          continue;
->>>
->>> -               error = security_inode_copy_up_xattr(name);
->>> +               error = security_inode_copy_up_xattr(old, name);
->>
->> What do you think about:
->>
->>                       error = security_inode_copy_up_xattr(name, NULL, 0);
->>
->> and then later...
->>
->>                       error = security_inode_copy_up_xattr(name, value, size);
->>
->> I am asking because overlayfs uses mnt_idmap(path->mnt) and you
->> have used nop_mnt_idmap inside evm hook.
->> this does not look right to me?
-> 
-> So it's relevant if they interact with xattrs that care about the
-> idmapping and that's POSIX ACLs and fscaps. And only if they perform
-> permission checks such as posix_acl_update_mode() or something. IOW, it
-> depends on what exactly EVM is doing.
+> >
+> > The last time you tried to fix ovl+IMA, I asked for documentation
+> > of what data/metadata is protected with EVM and how are those
+> > protections supposed to work across overlayfs copy up, when the
+> > data and metadata are often split between 2 and myabe event 3
+> > differnt inode.
+>
+> I always compare against what userspace sees with stat and that's what
+> the EVM should also work with so it ends up in reasonable matching
+> result in terms of hash calculation and then access permission/rejection.
+>
 
-In 2/5 we are reading the value of security.evm to look at its contents.
+I will need a lot more analysis information to be able to help you.
+Exactly which setup, exactly which test, exactly which inode/dentry/file
+objects are used and how they are accessed when things go wrong.
 
-> 
-> IIRC, I already added custom security_*() hooks specifically for POSIX
-> ACLs as they can't be retrieved through vfs_xattr*() helpers anymore.
+Thanks,
+Amir.
 
