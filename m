@@ -1,81 +1,81 @@
-Return-Path: <linux-integrity+bounces-950-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-951-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAA18844201
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:40:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11D5A844220
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:46:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6244428EA52
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 14:40:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 376181C27579
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 14:46:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5FDD8288D;
-	Wed, 31 Jan 2024 14:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AACB84A27;
+	Wed, 31 Jan 2024 14:46:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CycteHDg"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HDsD/c4E"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AC183CA6;
-	Wed, 31 Jan 2024 14:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A4CFBF3;
+	Wed, 31 Jan 2024 14:46:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706712016; cv=none; b=bc2PnPXHqkc9aDE0I6Nit+C1yCKnqlcjtO2VZt2y0X+QTVNzRtU30go4qzYAleZyfzUG9GTuT8UA6BruMh93hRsEZQxpoG57QO8JuRjHpaMkgBqypbE3AOfpTuhqhsQvVqSNNm4EMLcOa1M787ILbHpCBiioizUTdqLQNzmqTXg=
+	t=1706712412; cv=none; b=IXBJ5vD0ChcsRcvgChoss9X7CaWPQd6W0nN3fQdeYcNe7BvdhyA+sVb8iBGyAlOWzVosctqLUQe1CvY60A5OlsDc9PIE1xxpuzXsQaU4qlWy43fF8HMPh9SwvuqUPomeO83bI05fQGsLHMcasC5wG5k2ArDjTGlEHuewVOGQiys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706712016; c=relaxed/simple;
-	bh=Y0pgaaXi7YzqWNFpiKMl8zHYIwKjsgcPsHxhHhb5zOc=;
+	s=arc-20240116; t=1706712412; c=relaxed/simple;
+	bh=dRezcYdYLhpFsKr2NdLaq3DYfeOJBWWpX2zQQ1DPQKo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HBYBHaOThdZVToMc/tKCq0NR9DVsd/uXYd0+x3XC72wQsAzyDi9GsQu7Z3nzs03uEL0UYbOhpBVockf6C6fQgNY92iNntT2IXQy8QuC946oydmHtSFvWFfHYicV102jDbuFhAQ7hGOZEFANJJyah3ZDyylMBIN5khpJzDb6JMYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CycteHDg; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=C5uNtQCDs8z8DXr3wxfaNeWbVTfAZ0IUZYAdSwYvpJuA/jHwNI4k9ovra0oJKR61TCDDrupAhMRa3X0DDlj17sYrY8gSiSteWhNOYSXGHmNJr8cJKhQjfV/pbRa8m+i5d2VUyocTjBFm4Fi5XFXqZrgZT0SHHdx0jm/MBp6kAOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=HDsD/c4E; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40VDeVSu027685;
-	Wed, 31 Jan 2024 14:40:06 GMT
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40VDeBQu019348;
+	Wed, 31 Jan 2024 14:46:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=KtJa0evA8R2SiByaW/FkiX63C4Oob/LD39WUTz76NVI=;
- b=CycteHDgxWbswQCzB6q9UIE7hDmH4Eh+KTIFbUDjBEUd5nTgGoDkHNh0YJIF/yktNUaX
- KohXVmZR4nIQdRuFFBdD2f2UGRlO72mgSL3RBT/9ucBwbMxHifKEeVQ2E85FrQyB4vQC
- Aw1svvIUmk8MUSL8yXsCQiME4GeWOk5TFGTvlo406Jvl5KY8FUfInZHt6KP6nT8TxMIG
- 1b47WghcNvvXrEhoOtk+VmhVwjfNV+emXy4B6nfqRsQh0+CZhO3eAlyWR7NoNnrefUZs
- N4zgIJMR4e/DShVcYPHpXdc6W/VPYR2GYfUWqtpFYS3P43AXytwnvNB5kAk+0i7PzHa1 3g== 
+ bh=wgccrFtt613FD3f0tbHr8qKSJoWVdVbUoodUYvH1tvw=;
+ b=HDsD/c4EnXDTz0lvkSJZmWKwNRaZhHmrDOCW3j8Xm7ZxwtcWcJmfX04VtjrdV6+PM1zS
+ +LWk2X5785a9z9vSaMXPrXUAp/qOYssysQHF+OecHwZfRJMlXOJ4O6u7V03X/BWAV20I
+ 2fohYXbJVyGpLuPQqUiqct4xqhjFOT/girgL8KDoPk3a197Cwbuxwf1c9K9URuXDeude
+ gbNDAOl0viHLCf7G6uL+oWk//dCqDKScTL1cYz1eX3sAJB24e5U1e/KS4bXTBJgPmj8a
+ 0bqHfk+3cY9Kc7nPMxKHtBJwep3bNmVxaokOMNSMcjqGq87HdiMY44IfGgCX34aMhnq/ Ug== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyhyu9qgm-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyq9jt2g0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:40:05 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40VEXnLC015235;
-	Wed, 31 Jan 2024 14:40:05 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyhyu9qg7-1
+	Wed, 31 Jan 2024 14:46:32 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40VEU2ZE007411;
+	Wed, 31 Jan 2024 14:46:31 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyq9jt2fq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:40:05 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40VDW4Tq007189;
-	Wed, 31 Jan 2024 14:40:04 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vwev2dgwr-1
+	Wed, 31 Jan 2024 14:46:31 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40VEZ9o0017723;
+	Wed, 31 Jan 2024 14:46:31 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vwchyx5e8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:40:04 +0000
+	Wed, 31 Jan 2024 14:46:31 +0000
 Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40VEe3kY44302812
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40VEkU6M57016680
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 31 Jan 2024 14:40:03 GMT
+	Wed, 31 Jan 2024 14:46:30 GMT
 Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 73D2258055;
-	Wed, 31 Jan 2024 14:40:03 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 86B1458055;
+	Wed, 31 Jan 2024 14:46:30 +0000 (GMT)
 Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 86A0958060;
-	Wed, 31 Jan 2024 14:40:02 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 4BA215804E;
+	Wed, 31 Jan 2024 14:46:25 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
 	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 31 Jan 2024 14:40:02 +0000 (GMT)
-Message-ID: <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com>
-Date: Wed, 31 Jan 2024 09:40:02 -0500
+	Wed, 31 Jan 2024 14:46:25 +0000 (GMT)
+Message-ID: <c4dc6344-445c-44b8-b5ea-2eb8e2d051d1@linux.ibm.com>
+Date: Wed, 31 Jan 2024 09:46:24 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -83,108 +83,147 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] evm: Use the real inode's metadata to calculate
- metadata hash
+Subject: Re: [PATCH 3/5] ima: Reset EVM status upon detecting changes to
+ overlay backing file
 Content-Language: en-US
 To: Amir Goldstein <amir73il@gmail.com>
 Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
         paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, roberto.sassu@huawei.com, miklos@szeredi.hu
+        zohar@linux.ibm.com, roberto.sassu@huawei.com, miklos@szeredi.hu,
+        Christian Brauner <brauner@kernel.org>
 References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
- <20240130214620.3155380-5-stefanb@linux.ibm.com>
- <38230b4c-54ae-45ed-a6fb-34e63501e5b1@linux.ibm.com>
- <CAOQ4uxiYARZBSgzb4_W-RKvB1XLSF3GUBqeLw2kH+eVeZ_8ARQ@mail.gmail.com>
+ <20240130214620.3155380-4-stefanb@linux.ibm.com>
+ <CAOQ4uxjC=-GOFi3J4ctcNgdMfaerkae30OH9=TkKTWCf=TP95g@mail.gmail.com>
 From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <CAOQ4uxiYARZBSgzb4_W-RKvB1XLSF3GUBqeLw2kH+eVeZ_8ARQ@mail.gmail.com>
+In-Reply-To: <CAOQ4uxjC=-GOFi3J4ctcNgdMfaerkae30OH9=TkKTWCf=TP95g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 87eAHh5J_f4T3CgmxqihatbFrhyObT2c
-X-Proofpoint-ORIG-GUID: PkgsQowtUmVJUJcawDd5_kM-J-6gJnG3
+X-Proofpoint-GUID: NWIO3KIocDpIpKqDbuta9d1ypXNVnaIF
+X-Proofpoint-ORIG-GUID: ixlWU0_8sPCweEQ69zy3CM3YItVpUlUR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-31_08,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- priorityscore=1501 phishscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311290000 definitions=main-2401310112
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 spamscore=0 malwarescore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=835 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311290000 definitions=main-2401310113
 
 
 
-On 1/31/24 08:16, Amir Goldstein wrote:
-> On Wed, Jan 31, 2024 at 4:11 AM Stefan Berger <stefanb@linux.ibm.com> wrote:
+On 1/31/24 08:56, Amir Goldstein wrote:
+> On Tue, Jan 30, 2024 at 11:46 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
 >>
+>> To avoid caching effects to take effect reset the EVM status upon
+>> detecting changes to the overlay backing files. This prevents a not-yet-
+>> copied-up file on the overlay from executing if for example the
+>> security.evm xattr on the file on the 'lower' layer has been removed.
 >>
+> 
+> And what is expected to happen when file is executed after copy up?
+
+The copy-up may be triggered by changing file content or file metadata.
+For EVM file metadata (file attributes and xattrs) are important and if 
+they change EVM would re-evaluate the file, meaning that it would 
+determine the file mode bits, uid, gid and xattrs and calculate a hash 
+over them and compare this hash against the signature in security.evm.
+
+> Doesn't this change also protect the same threat after copy up?
+
+ From what I remember from my testing is that file attribute or extended 
+attribute changes on an already copied-up file were already handled 
+correctly, meaning they caused the re-evaluation of the file as 
+described above.
+
+> 
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   include/linux/evm.h               | 8 ++++++++
+>>   security/integrity/evm/evm_main.c | 7 +++++++
+>>   security/integrity/ima/ima_main.c | 2 ++
+>>   3 files changed, 17 insertions(+)
 >>
->> On 1/30/24 16:46, Stefan Berger wrote:
->>> Changes to the file attribute (mode bits, uid, gid) on the lower layer
->>> are not take into account when d_backing_inode() is used when a file is
->>> accessed on the overlay layer and this file has not yet been copied up.
->>> This is because d_backing_inode() does not return the real inode of the
->>> lower layer but instead returns the backing inode which holds old file
->>> attributes. When the old file attributes are used for calculating the
->>> metadata hash then the expected hash is calculated and the file then
->>> mistakenly passes signature verification. Therefore, use d_real_inode()
->>> which returns the inode of the lower layer for as long as the file has
->>> not been copied up and returns the upper layer's inode otherwise.
->>>
->>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>> ---
->>>    security/integrity/evm/evm_crypto.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
->>> index b1ffd4cc0b44..2e48fe54e899 100644
->>> --- a/security/integrity/evm/evm_crypto.c
->>> +++ b/security/integrity/evm/evm_crypto.c
->>> @@ -223,7 +223,7 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
->>>                                 size_t req_xattr_value_len,
->>>                                 uint8_t type, struct evm_digest *data)
->>>    {
->>> -     struct inode *inode = d_backing_inode(dentry);
->>> +     struct inode *inode = d_real_inode(dentry);
->>>        struct xattr_list *xattr;
->>>        struct shash_desc *desc;
->>>        size_t xattr_size = 0;
+>> diff --git a/include/linux/evm.h b/include/linux/evm.h
+>> index d8c0343436b8..e7d6742eee9d 100644
+>> --- a/include/linux/evm.h
+>> +++ b/include/linux/evm.h
+>> @@ -66,6 +66,8 @@ extern int evm_protected_xattr_if_enabled(const char *req_xattr_name);
+>>   extern int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
+>>                                       int buffer_size, char type,
+>>                                       bool canonical_fmt);
+>> +extern void evm_reset_cache_status(struct dentry *dentry,
+>> +                                  struct integrity_iint_cache *iint);
+>>   #ifdef CONFIG_FS_POSIX_ACL
+>>   extern int posix_xattr_acl(const char *xattrname);
+>>   #else
+>> @@ -189,5 +191,11 @@ static inline int evm_read_protected_xattrs(struct dentry *dentry, u8 *buffer,
+>>          return -EOPNOTSUPP;
+>>   }
 >>
->> We need this patch when NOT activating CONFIG_OVERLAY_FS_METACOPY but
->> when setting CONFIG_OVERLAY_FS_METACOPY=y it has to be reverted...  I am
->> not sure what the solution is.
+>> +static inline void evm_reset_cache_status(struct dentry *dentry,
+>> +                                         struct integrity_iint_cache *iint)
+>> +{
+>> +       return;
+>> +}
+>> +
+>>   #endif /* CONFIG_EVM */
+>>   #endif /* LINUX_EVM_H */
+>> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+>> index 22a5e26860ea..e96d127b48a2 100644
+>> --- a/security/integrity/evm/evm_main.c
+>> +++ b/security/integrity/evm/evm_main.c
+>> @@ -721,6 +721,13 @@ static void evm_reset_status(struct inode *inode)
+>>                  iint->evm_status = INTEGRITY_UNKNOWN;
+>>   }
+>>
+>> +void evm_reset_cache_status(struct dentry *dentry,
+>> +                           struct integrity_iint_cache *iint)
+>> +{
+>> +       if (d_real_inode(dentry) != d_backing_inode(dentry))
+>> +               iint->evm_status = INTEGRITY_UNKNOWN;
+>> +}
+>> +
+>>   /**
+>>    * evm_revalidate_status - report whether EVM status re-validation is necessary
+>>    * @xattr_name: pointer to the affected extended attribute name
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index cc1217ac2c6f..84bdc6e58329 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -26,6 +26,7 @@
+>>   #include <linux/ima.h>
+>>   #include <linux/fs.h>
+>>   #include <linux/iversion.h>
+>> +#include <linux/evm.h>
+>>
+>>   #include "ima.h"
+>>
+>> @@ -295,6 +296,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+>>                      !inode_eq_iversion(backing_inode, iint->version)) {
+>>                          iint->flags &= ~IMA_DONE_MASK;
+>>                          iint->measured_pcrs = 0;
+>> +                       evm_reset_cache_status(file_dentry(file), iint);
+>>                  }
+>>          }
 > 
-> I think d_real_inode() does not work correctly for all its current users for
-> a metacopy file.
+> Make sense.
+> Unrelated to your change, I now noticed something odd about Mimi's change:
 > 
-> I think the solution is to change d_real_inode() to return the data inode
-> and add another helper to get the metadata inode if needed.
-> I will post some patches for it.
-
-I thought that we may have to go through vfs_getattr() but even better 
-if we don't because we don't have the file *file anywhere 'near'.
-
+>          backing_inode = d_real_inode(file_dentry(file));
 > 
-> However, I must say that I do not know if evm_calc_hmac_or_hash()
-> needs the lower data inode, the upper metadata inode or both.
-
-What it needs are data structures with mode bits, uid, and gid that stat 
-in userspace would show.
-
-
+> I find the choice of variable name to be quite confusing, because ima/evm code
+> uses  d_backing_inode() all over the place and d_real_inode() !=
+> d_backing_inode().
 > 
-> The last time you tried to fix ovl+IMA, I asked for documentation
-> of what data/metadata is protected with EVM and how are those
-> protections supposed to work across overlayfs copy up, when the
-> data and metadata are often split between 2 and myabe event 3
-> differnt inode.
-
-I always compare against what userspace sees with stat and that's what 
-the EVM should also work with so it ends up in reasonable matching 
-result in terms of hash calculation and then access permission/rejection.
-
+> First of all, there is never any reason to use d_backing_inode() and its name is
+> quite confusing in the first place, but it will be a big cleanup to
+> remove them all.
 > 
->  From the current patch set, I still don't understand what is the expected
-> behavior before and after copy up of data/metadata-only.
+> Suggest to rename the variable to real_inode, same as in
+> ima_collect_measurement()
+> to be consistent and reduce confusion factor, which is already high enough ;)
 > 
 > Thanks,
 > Amir.
