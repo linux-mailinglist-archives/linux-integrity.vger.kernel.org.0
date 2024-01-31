@@ -1,82 +1,81 @@
-Return-Path: <linux-integrity+bounces-945-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-946-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAF23844080
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 14:25:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2A04844090
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 14:29:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED68D1C2119C
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 13:25:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90046291D86
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 13:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 597207B3E3;
-	Wed, 31 Jan 2024 13:25:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D03A7BAF0;
+	Wed, 31 Jan 2024 13:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H76iJFDD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFxo4WeY"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CE274E24;
-	Wed, 31 Jan 2024 13:25:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819527BAE5;
+	Wed, 31 Jan 2024 13:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706707543; cv=none; b=HStpRzfRuNazWISZ0pKJpvo9Om4CkngKEEvilF/J7SIb/FkgWva+pajhRAfhjkhFDd0KQ/7mgGP+/K6VE9SuxXX0zxI9h8N0pG9Su0oKm6msM0b2V+zC3cc4y+JOJEOpqJre6KnC5k9xjPH8hYfW0oe1rnxSRwNk/XXYVVpTY7c=
+	t=1706707728; cv=none; b=OkQE91SKXwfsRjys6nqcm3ac3bf/nFa+gD2G9dXipvQAhDJBfMFxKHO/gpdZ15LBb/nG/do64oQl/+t99FqI7hdgYiEZXi72unRT0LZWnGOANVKOlb9UjlqspLUqbRBLJd3VYiirAJ8PEQGyAWCn7qF0ZeuKJW9IkbDkViMz+jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706707543; c=relaxed/simple;
-	bh=mrnPuo7MULhNnO7ai8Laqwn0SsYOAxZu1J39la8H5/A=;
+	s=arc-20240116; t=1706707728; c=relaxed/simple;
+	bh=lIBxN2xK0RgqTSCJuiuPNWVTJjAnTDXK2hhfs4E2yZs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WdTiZ0dwUz8C0BuqBy06uUTOo8zCTndlbsJeDLtzQRlOiHSi7A9nVoErynp6j5pcNEw1lZIjS2XS3qNmjiu8HUe19Dt+ZVFaMtt+e4O0ltvUyGLuimAQVTNBa2Dw3caRJk9UWaP+MKCvljZCLWd603pVE8CJjHmn0ztebKb/5ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H76iJFDD; arc=none smtp.client-ip=209.85.219.45
+	 To:Cc:Content-Type; b=rflESknE1uzXpEtMAr1/q/OF6OEDBoPp3MEai9EA6B+PUdwBL3AGjq1MKKUignHXpRk+VkJv431ZfUXlWetOF/lDbkviq8P+5OixbI6hlWA9xsZT9SbjiBQv/Z8y355K64q6VY+iDj5Y74apm+IhIdv0C6v4ZFTb14Vqojy6cfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KFxo4WeY; arc=none smtp.client-ip=209.85.219.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-686a92a8661so35717726d6.0;
-        Wed, 31 Jan 2024 05:25:41 -0800 (PST)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc23bf7e5aaso5662021276.0;
+        Wed, 31 Jan 2024 05:28:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706707541; x=1707312341; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706707725; x=1707312525; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9Uf6+XRPgpi5oQnuc4d38dfYrYU0Kc9cu3ZpAUB+/+o=;
-        b=H76iJFDDCyVEp6Lv5YPurKwteJX+MndVctXj5cTkMldIKXDjQmvsWMJi2m4AU+9MjK
-         S512jeYsvs+d8KG1nRDrU162RK6cSU/FY6ixcvj+e3xXIYPHJQXVBilj6Ps00cCHbvm9
-         5RCm6v/CSIC1n0HFgJFVTdk/djopkaYh9YZb6nPVV66WZ6H0VcQBE4CqeGgqUe3WUGpF
-         Sz+eDCWmZk69Ppn/N0+Jau4i3sgCIecFsPdPzI9goZ4ZP10LfvyqOy3sqxAKYKNRfYx8
-         GrkkIVaIkCnAd7ADUQJJvKy4PvqZSj6SueZ6TIor7EwydrHJ8w+d8spJUPb3g5LceZZG
-         xLyw==
+        bh=CInWjVijKdpWX/OivLCS5uDZMBdRZrMOuy0NJJ7JN4A=;
+        b=KFxo4WeYaGCLdceXsC8bKj6kQa2k5fNOZDX8MN11i6OAEOlnAG1EHMlFysz1cnFGB8
+         E1CPVDd9u7yYtp52LFujb3+owCEY2n67dswnHtxFmSG7iM0Lb9w6h+X4QvYDQUqPpCRq
+         qlFc1aACoYiP6qdUet0XdeCVZIqfOg7/fzNmKAnFe2GHqxMQXAi1HvJ1mlZqUGp5ZWWF
+         vmQDrgxUfMkTUCcLf8nUuKk8h+Qq1vHLx2IWQvad4gklH0Ldx3OcPrqT9/LZrIvG8o5z
+         2i4gV+YuRH+V1SANIMPMCCro+oUqWMqMKbejy8iFsmj2mXfpSqg10w10gdBUySaFlqQD
+         NSGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706707541; x=1707312341;
+        d=1e100.net; s=20230601; t=1706707725; x=1707312525;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9Uf6+XRPgpi5oQnuc4d38dfYrYU0Kc9cu3ZpAUB+/+o=;
-        b=q3H9iwZlnqdem8EeAXY1QyqyF5ZFYG93W/ElUUk10cUdtnPS1D50nf4jq73yjYUA65
-         1bLK5hRi5d0A3Emq+vp/P2BIbaYdnU+fSCMgZFKYYModCrQ+IgNLmqb+TZdysdlt4f6O
-         J9oX6cqUjZFpwudvft+R2vYXKL5iJf3LI2n3JQHhDxR7b2Ai+12plMFm/Wyn14RiuWE4
-         Mlq3ZEbqwlLTdB9OKvYe+rDKXhW6rvTcuQ37A7Rc8zkdLS96ufJV4dHcD9exzIENDPGh
-         qvh5cKHNGccHJh/C4hkWrkEPMQSx2BjFSMYoRJX+dvQk5KoCdQZMJJm37z3r6fatrppn
-         r3/Q==
-X-Gm-Message-State: AOJu0YzezZlh7LeJVJ7/nB4DBwy0RImJUiarEIGBETPIghfAh1IX3v4F
-	BqkaWa5u62hYVVDDVGLWtLPv3tcUFLTB0MHLne1uUYE57g1cEEwBkkmWS6MgkwXOhKw3fsqho6F
-	RrsrxOjBbb6qk/6jCc5G90+4NJcs6rmRw6OM=
-X-Google-Smtp-Source: AGHT+IF0rFCz+Sbu4mEx3ApRgUFGYzvN4mVLVxYjSABEsCtH1c9/X2J9etEXURqYQtFa6EuS8Kcgw3imhNeVyQLiBrI=
-X-Received: by 2002:a05:6214:2425:b0:68c:645d:1a14 with SMTP id
- gy5-20020a056214242500b0068c645d1a14mr2069494qvb.15.1706707540694; Wed, 31
- Jan 2024 05:25:40 -0800 (PST)
+        bh=CInWjVijKdpWX/OivLCS5uDZMBdRZrMOuy0NJJ7JN4A=;
+        b=N7Our5MU74tOZ3C46A5hCW2MLJYmT4cP+tBrJPnMkkMOCnyOGnFmSwt34gshD8Z2/Z
+         ZEj8OWoNURnsK1SSdU/cVlKAqBghr3X9A6VYChfyb7a8BKf1XS6DGZH7Zhz5Vjovc93A
+         lU8LbmiJl6yJXElk+g3II42WBJB+Be1KBcQx9oYkNO0xmbsw//EenZIfZU/p6jaLZAgu
+         quQmH+xvPOMtGk5i+rm5lfmpFzN6ArulM4NiOVPvtv0cXygDSY4mXtxsaVb0sBpwnEK7
+         h394qXtVTgnDWPhl4QY0E+o8TeuYM2PXnb4Fa3jT4rS2z1PbHrOV1Tmt4cIHKqZsoWna
+         feQA==
+X-Gm-Message-State: AOJu0YyUPtA7v30P+FRBEGYE5korAZ7szcXHwgHftI/dX0BDVezirwRf
+	wyheHZqjxaWOBitJ7QxZeT5QOH5+p05ZGZC5WVfGCC7yNLLVzhNxz2sAXOQKrmllnk99iSxsZe4
+	WXnQf+vVBHN8F/CiZb3900E0rP9g=
+X-Google-Smtp-Source: AGHT+IHQ5iuyQY5XSK3G4YxpBh6+91uMY5iuz65wfOW2zqJxshNOPHiQuRLcLSvsDOY1vRbVwWod7Zc2dI96wgK4kwQ=
+X-Received: by 2002:a25:dccc:0:b0:dc6:b7c4:3bb0 with SMTP id
+ y195-20020a25dccc000000b00dc6b7c43bb0mr1352249ybe.27.1706707725398; Wed, 31
+ Jan 2024 05:28:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130214620.3155380-1-stefanb@linux.ibm.com> <20240130214620.3155380-2-stefanb@linux.ibm.com>
-In-Reply-To: <20240130214620.3155380-2-stefanb@linux.ibm.com>
+References: <20240130214620.3155380-1-stefanb@linux.ibm.com> <20240130214620.3155380-3-stefanb@linux.ibm.com>
+In-Reply-To: <20240130214620.3155380-3-stefanb@linux.ibm.com>
 From: Amir Goldstein <amir73il@gmail.com>
-Date: Wed, 31 Jan 2024 15:25:29 +0200
-Message-ID: <CAOQ4uxjgdvGU0WE+92ByQE26Jp0j16AgfyCjNyEp7=86akOSsA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] security: allow finer granularity in permitting
- copy-up of security xattrs
+Date: Wed, 31 Jan 2024 15:28:34 +0200
+Message-ID: <CAOQ4uxhVmdWf+jwKg0bPcFf0VRRqpYg9m7yDavCk4cJ4fDg2zA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] evm: Implement per signature type decision in security_inode_copy_up_xattr
 To: Stefan Berger <stefanb@linux.ibm.com>
 Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
 	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -89,47 +88,49 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jan 30, 2024 at 11:46=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.c=
 om> wrote:
 >
-> Copying up xattrs is solely based on the security xattr name. For finer
-> granularity add a dentry parameter to the security_inode_copy_up_xattr
-> hook definition, allowing decisions to be based on the xattr content as
-> well.
+> To support portable and immutable signatures on otherwise unsupported
+> filesystems, determine the EVM signature type by the content of a file's
+> xattr. If the file has the appropriate signature then allow it to be
+> copied up. All other signature types are discarded as before.
+>
+> Portable and immutable EVM signatures can be copied up by stacked file-
+> system since the metadata their signature covers does not include file-
+> system-specific data such as a file's inode number, generation, and UUID.
 >
 > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 > ---
->  fs/overlayfs/copy_up.c            | 2 +-
->  include/linux/evm.h               | 2 +-
->  include/linux/lsm_hook_defs.h     | 3 ++-
->  include/linux/security.h          | 4 ++--
->  security/integrity/evm/evm_main.c | 2 +-
->  security/security.c               | 7 ++++---
->  security/selinux/hooks.c          | 2 +-
->  security/smack/smack_lsm.c        | 2 +-
->  8 files changed, 13 insertions(+), 11 deletions(-)
+>  security/integrity/evm/evm_main.c | 27 ++++++++++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
 >
-> diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
-> index b8e25ca51016..bd9ddcefb7a7 100644
-> --- a/fs/overlayfs/copy_up.c
-> +++ b/fs/overlayfs/copy_up.c
-> @@ -114,7 +114,7 @@ int ovl_copy_xattr(struct super_block *sb, const stru=
-ct path *oldpath, struct de
->                 if (ovl_is_private_xattr(sb, name))
->                         continue;
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
+vm_main.c
+> index 2555aa4501ae..22a5e26860ea 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -898,9 +898,30 @@ void evm_inode_post_setattr(struct dentry *dentry, i=
+nt ia_valid)
 >
-> -               error =3D security_inode_copy_up_xattr(name);
-> +               error =3D security_inode_copy_up_xattr(old, name);
+>  int evm_inode_copy_up_xattr(struct dentry *src, const char *name)
+>  {
+> -       if (strcmp(name, XATTR_NAME_EVM) =3D=3D 0)
+> -               return 1; /* Discard */
+> -       return -EOPNOTSUPP;
+> +       struct evm_ima_xattr_data *xattr_data =3D NULL;
+> +       int rc;
+> +
+> +       if (strcmp(name, XATTR_NAME_EVM) !=3D 0)
+> +               return -EOPNOTSUPP;
+> +
+> +       /* first need to know the sig type */
+> +       rc =3D vfs_getxattr_alloc(&nop_mnt_idmap, src, XATTR_NAME_EVM,
+> +                               (char **)&xattr_data, 0, GFP_NOFS);
 
-What do you think about:
 
-                     error =3D security_inode_copy_up_xattr(name, NULL, 0);
+See my suggestion for post-getxattr hook:
+security_inode_copy_up_xattr(name, value, size)
+to avoid using nop_mnt_idmap here.
 
-and then later...
-
-                     error =3D security_inode_copy_up_xattr(name, value, si=
-ze);
-
-I am asking because overlayfs uses mnt_idmap(path->mnt) and you
-have used nop_mnt_idmap inside evm hook.
-this does not look right to me?
+Unless it is fine to use nop_mnt_idmap in this context? not sure.
 
 Thanks,
 Amir.
