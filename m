@@ -1,137 +1,198 @@
-Return-Path: <linux-integrity+bounces-960-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-961-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 257F98445EE
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 18:20:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F0EA844602
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 18:23:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 582DC1C24315
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 17:20:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58CA11C24DDC
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 17:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4835D12C554;
-	Wed, 31 Jan 2024 17:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4DE12CD9B;
+	Wed, 31 Jan 2024 17:23:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="SDAF+ON7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GdAm8kY9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB0112BE8F;
-	Wed, 31 Jan 2024 17:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706721590; cv=pass; b=ZtdnzSoPZdFvLzDG02LHhpIHEx4TnAi0mJXZlmv/GhfH+mlH9RQR1zX3DXOJfy65ANbrcP17eumlS7GXvz0qBWPTGXzDbda7ARAWiucppSJXA/+90IqQj7fJ7UMnv1X1Rg8GfHv40UzcBdWU0VJ+NbxgA32sctXCp3ytcV9rLOE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706721590; c=relaxed/simple;
-	bh=KKuyKxfSvJuo9R16tFGRbmgmlPSNp5swHpNOjW6jdtE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u8cCxjhdCXKtE2FXYrxkQW8rPvMbdD+tYU5qF8aqXF6UMLBsrAY7EwvE+jnZqSaldjkVSVW/hEmoZkqpgJZZvKzG/lTLF7vdzKdWFN6Ecou1nn0JlaPc0ZpwPPZJQxyYk/yVteHCANY1w3JjQ/zraO96VDqyqwysZyZRLGRD0AY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=SDAF+ON7; arc=pass smtp.client-ip=136.143.188.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
-Delivered-To: dpsmith@apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1706721579; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=XeJNbt80dq/YnqE9s2qrA474J1xloCS1wK0nRo2KoFA1h3Od7FDHPptN2jWbytsG81f/ZRJQoWp6Lwp7TzzTViSKNE//ikmUczA+BhvCJq49Ed7c8rhrm9+t5jekYNnKwCz32WFW6bR3JQTCrpr095Psogjr4xW1aqLNwopeTHk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1706721579; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=H+s0lZ1A3z3Ml9q/qDrJ1Lvaz2sQ/evnbzNLrzH5QYE=; 
-	b=dkYHYxk84cc/iLGcMw+lDHsKcG/lFAlkTuZpvHipdTi/0UczlQ8U6cPibdG2zRiftcG/BYOu5HFAKm27hlF9LCI3UERTRwsp4iH3weoScTCENT0ldUE2eqTDzg+EK6TJ+WkLv6tbYDVZEvc0IRyLrzGuJnu7PCypsGY48DTH4oI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=apertussolutions.com;
-	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1706721579;
-	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=H+s0lZ1A3z3Ml9q/qDrJ1Lvaz2sQ/evnbzNLrzH5QYE=;
-	b=SDAF+ON7AUn4x8ZWG2G1Ns62Uw6JHUBvLqWR5mmP5+dZX0AkX1/RSAIyYyYrtLle
-	IS3FuSEC11RyP0aPWItjqGPU9g/OJSm2QT5vfHpHEqvxnhhHxmHBkTPV/rb9P+pLV8W
-	OrCxDBK1T81on6iLBBX1KmRe7XrkLsRLRuHOFDoE=
-Received: from sisyou.hme. (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-	with SMTPS id 1706721578272198.53972224163658; Wed, 31 Jan 2024 09:19:38 -0800 (PST)
-From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: "Daniel P. Smith" <dpsmith@apertussolutions.com>,
-	Ross Philipson <ross.philipson@oracle.com>,
-	Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-	Peter Huewe <peterhuewe@gmx.de>
-Subject: [PATCH v2 0/3] tpm: make locality handling resilient
-Date: Wed, 31 Jan 2024 12:19:29 -0500
-Message-Id: <20240131171929.18799-1-dpsmith@apertussolutions.com>
-X-Mailer: git-send-email 2.30.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA0512BF33;
+	Wed, 31 Jan 2024 17:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706721798; cv=none; b=aH09npHOz75V07Jz8NBqUYH1IfwQVb5q2FUWWJlKWvFRq4nh2MGDG/dTsPNHNTK/AeDQ6kIh5kn3YNC8XqTg+fkiyA+3FiSBCq/wvrdOuJX4mmTY8R5fXD2ybSP5EWDg7ka0wHmcP9hzjipTRm2bKmv8L8BaTxmgjIS4X0vb4DU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706721798; c=relaxed/simple;
+	bh=UD8alDMIQlpaZZWNT9SXOnDno797CsiHPwOuAnLgCOA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CuCnT8qSNyJTWh7dy39ijogeiHvR6yjQADfVQI6G7w2/MEr5ecc4iLC01fMkkpXclW75wvNC1ewFEmOVpztMe1FlvCvGrkAy5lI9zr1OsHsfXFa08q2DVLE4tqqBRSywmZBXfAUoS1lxiA1EFKM2hJ/t/sT8nh6gnl6pfL6S4As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GdAm8kY9; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-68c444f9272so89546d6.3;
+        Wed, 31 Jan 2024 09:23:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706721796; x=1707326596; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qKF9b5jRXHNEzHTqMQ0qJvRi4sqUsnU773XWw1XdDnk=;
+        b=GdAm8kY9sfDSmXI5SVGhDGvIsXFUw/6x8pOP7sX8aaECvdNuA2ywqvP5TKCk0O53vc
+         mSdn4qWxGqURcJ0wKcBWpqEsX/TSGsjUaB2U8riyG4uh7+TNzoVrSs4qt/636NcZgaIq
+         631hUNGCCO//PPQ+MW7wYeewqd7WfD4n8FKWAN2pQIH+1T27m29uPt5Pqpt9t7A9Ftug
+         bBPMez0+bnu74OVetxEiNsUnd98iJ3+Y+AVQYr3FLuli2J7ndB+zCQy1ASNocz25dvdR
+         jL4phcCYxBVm+zDS5kyUn5uQlR41L0uPTSDe8SBh/M9TWwAoi56NlPlWx6S3HtObDAm6
+         T1Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706721796; x=1707326596;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qKF9b5jRXHNEzHTqMQ0qJvRi4sqUsnU773XWw1XdDnk=;
+        b=NSY0dRtniAQoUSELePEJlqQv41P3V/TafrqqmSj053dYad1bO2cLV7ssCCPqfNfNCv
+         eTdC6KArYr6zhvLcEnwEpH4rjtuRyn3hMn2J6E++COL8NHKbUf+lATQb1bGGQCgb/jZl
+         XFE7EkLZajhhf9voY4xA9ce6Q8jjEffOFZcY33PkMmxc8HDamCTggj7DIqGmEjo8Xl92
+         qGm3CZUWAiXtiVyMtTx94pWzi18P7uWhvi8P85ljkQioKXhx1jtYwpjNGXJTrYhY+STy
+         NVn93S/LoDnll5ofZfVfPi019kndvvvGX+bQ0cgqMTGgUoLCRy4Oy3CUvpvyzOL5v6M1
+         SgyQ==
+X-Gm-Message-State: AOJu0YyjafEttIis0nO6rTA7oBJVHV4vobLIhvaIdhNBuKDvEMHY/Yof
+	59hCf2BkkXcXdAwHkJIPOVPZrI2hoC3+02fOGH4K02xUX3PANXirJhtfjUyE1X/xbetYkB/iEjk
+	HMkvwZA2slgQXzVjiDnxWWAbWwFc=
+X-Google-Smtp-Source: AGHT+IFGzRvLypDQQEjuxmXgUE4sevR6zn+YkmLLpDLWOlGJnlhYKNxFYU5S4KD85zT0SYNvZrIll0zEBmKhE/kfAOU=
+X-Received: by 2002:a05:6214:21ec:b0:685:5dc8:ec9b with SMTP id
+ p12-20020a05621421ec00b006855dc8ec9bmr2114438qvj.25.1706721795889; Wed, 31
+ Jan 2024 09:23:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
+ <20240130214620.3155380-5-stefanb@linux.ibm.com> <38230b4c-54ae-45ed-a6fb-34e63501e5b1@linux.ibm.com>
+ <CAOQ4uxiYARZBSgzb4_W-RKvB1XLSF3GUBqeLw2kH+eVeZ_8ARQ@mail.gmail.com>
+ <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com> <CAOQ4uxi6Te8izWpXROthknRaXrVA9jho5nbc+mkuQDrcTLY44Q@mail.gmail.com>
+In-Reply-To: <CAOQ4uxi6Te8izWpXROthknRaXrVA9jho5nbc+mkuQDrcTLY44Q@mail.gmail.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Wed, 31 Jan 2024 19:23:03 +0200
+Message-ID: <CAOQ4uxigdNeE+2nfr4VxS9piQf5hez=ryT0a-jzW+tW0BT-zuw@mail.gmail.com>
+Subject: Re: [PATCH 4/5] evm: Use the real inode's metadata to calculate
+ metadata hash
+To: Stefan Berger <stefanb@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, miklos@szeredi.hu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When the kernel is started by a loader that leaves a locality other than
-Locality0 open, for example Intel TXT SINIT ACM leaves Locality2 open, this
-triggers a failure condition in the initialization of the TPM driver. The
-result being that despite calls to request/relinquish locality, the locality
-that was open at startup is never open/closed. The impact for an Intel TXT
-platform is that after SMX mode is exited, access to the Locality2 register
-space is blocked, and the TPM is locked in Locality 2 rendering the TPM
-unusable.
+On Wed, Jan 31, 2024 at 5:54=E2=80=AFPM Amir Goldstein <amir73il@gmail.com>=
+ wrote:
+>
+> On Wed, Jan 31, 2024 at 4:40=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.=
+com> wrote:
+> >
+> >
+> >
+> > On 1/31/24 08:16, Amir Goldstein wrote:
+> > > On Wed, Jan 31, 2024 at 4:11=E2=80=AFAM Stefan Berger <stefanb@linux.=
+ibm.com> wrote:
+> > >>
+> > >>
+> > >>
+> > >> On 1/30/24 16:46, Stefan Berger wrote:
+> > >>> Changes to the file attribute (mode bits, uid, gid) on the lower la=
+yer
+> > >>> are not take into account when d_backing_inode() is used when a fil=
+e is
+> > >>> accessed on the overlay layer and this file has not yet been copied=
+ up.
+> > >>> This is because d_backing_inode() does not return the real inode of=
+ the
+> > >>> lower layer but instead returns the backing inode which holds old f=
+ile
+> > >>> attributes. When the old file attributes are used for calculating t=
+he
+> > >>> metadata hash then the expected hash is calculated and the file the=
+n
+> > >>> mistakenly passes signature verification. Therefore, use d_real_ino=
+de()
+> > >>> which returns the inode of the lower layer for as long as the file =
+has
+> > >>> not been copied up and returns the upper layer's inode otherwise.
+> > >>>
+> > >>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > >>> ---
+> > >>>    security/integrity/evm/evm_crypto.c | 2 +-
+> > >>>    1 file changed, 1 insertion(+), 1 deletion(-)
+> > >>>
+> > >>> diff --git a/security/integrity/evm/evm_crypto.c b/security/integri=
+ty/evm/evm_crypto.c
+> > >>> index b1ffd4cc0b44..2e48fe54e899 100644
+> > >>> --- a/security/integrity/evm/evm_crypto.c
+> > >>> +++ b/security/integrity/evm/evm_crypto.c
+> > >>> @@ -223,7 +223,7 @@ static int evm_calc_hmac_or_hash(struct dentry =
+*dentry,
+> > >>>                                 size_t req_xattr_value_len,
+> > >>>                                 uint8_t type, struct evm_digest *da=
+ta)
+> > >>>    {
+> > >>> -     struct inode *inode =3D d_backing_inode(dentry);
+> > >>> +     struct inode *inode =3D d_real_inode(dentry);
+> > >>>        struct xattr_list *xattr;
+> > >>>        struct shash_desc *desc;
+> > >>>        size_t xattr_size =3D 0;
+> > >>
+> > >> We need this patch when NOT activating CONFIG_OVERLAY_FS_METACOPY bu=
+t
+> > >> when setting CONFIG_OVERLAY_FS_METACOPY=3Dy it has to be reverted...=
+  I am
+> > >> not sure what the solution is.
+> > >
+> > > I think d_real_inode() does not work correctly for all its current us=
+ers for
+> > > a metacopy file.
+> > >
+> > > I think the solution is to change d_real_inode() to return the data i=
+node
+> > > and add another helper to get the metadata inode if needed.
+> > > I will post some patches for it.
+> >
+> > I thought that we may have to go through vfs_getattr() but even better
+> > if we don't because we don't have the file *file anywhere 'near'.
+> >
+> > >
+> > > However, I must say that I do not know if evm_calc_hmac_or_hash()
+> > > needs the lower data inode, the upper metadata inode or both.
+> >
+> > What it needs are data structures with mode bits, uid, and gid that sta=
+t
+> > in userspace would show.
+> >
+> >
+>
+> With or without metacopy enabled, an overlay inode st_uid st_gid st_mode
+> are always taken from the upper most inode which is what d_real_inode()
+> currently returns, so I do not understand what the problem is.
+>
 
-The ability to trigger this failure condition was introduced in commit
-933bfc5ad213, which introduced a locality counter to control when locality
-requests were actually sent to the TPM. The commit introduces a series of
-missing or incorrect protections in place for incrementing and decrementing the
-counter. The protection around incrementing the counter was protected with an
-incorrect check. The check was incorrect in two ways, 1.) it assumed that zero
-was the only successful value that would be returned by
-__tpm_tis_request_locality() and 2.) was evaluated outside the if block under
-which __tpm_tis_request_locality() is called. The effect of (1) is that
-__tpm_tis_request_locality() in fact returns the locality number that was
-requested, e.g. 1-4, and therefore the protection check would fail and the
-counter does not get incremented. The effect of (2) is a combination with the
-ret variable being initialized to 0 and the counter not being 0. The result is
-that __tpm_tis_request_locality() does not get called, but the counter is still
-incremented.
+No, I was wrong. It is the other way around.
+d_real_inode() always returns the real data inode and you need the
+upper most real inode.
 
-Another effect seen is an indirect result of commit 933bfc5ad213 and is due to
-locality being tracked in two different locations. The first is at the TIS
-layer in struct tpm_tis_data and at the chip layer in struct tpm_chip. The
-failures experienced by commit 933bfc5ad213 causes the locality value in these
-two locations to fall out of sync with the value in tpm_tis_data reflecting
-Locality0 and struct tpm_chip having a value of -1, no locality open.
+You can try this:
 
-This series seeks to address these conditions by introducing a protection
-against underflowing the locality counter. The closing of all localities at the
-beginning of initialization to begin with the TPM in the state expected by the
-sequencing codified in the initialization. Lastly to adjust the return error
-codes from __tpm_tis_request_locality() and tpm_tis_request_locality() to
-ensure they are consistent and that the locality counter is only incremented
-for a successful call to __tpm_tis_request_locality().
+ -     struct inode *inode =3D d_backing_inode(dentry);
++     struct inode *inode =3D d_inode(d_real(dentry, false));
 
-Changes in v2:
-- split into three patches
-- adjust code comments per review
-- dropped incorrect return value change for tpm_request_locality in tpm-chip.c
-- additional -1 replacement in __tpm_tis_relinquish_locality
-- changed -EIO to -EBUSY, which is more appropriate, in tpm_tis_relinquish_locality
+With the changes in:
 
-Daniel P. Smith (3):
-  tpm: protect against locality counter underflow
-  tpm: ensure tpm is in known state at startup
-  tpm: make locality request return value consistent
+https://github.com/amir73il/linux/commits/overlayfs-devel/
 
- drivers/char/tpm/tpm_tis_core.c | 25 +++++++++++++++++++------
- include/linux/tpm.h             |  6 ++++++
- 2 files changed, 25 insertions(+), 6 deletions(-)
+Not thoroughly tested...
 
--- 
-2.30.2
-
+Thanks,
+Amir.
 
