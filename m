@@ -1,146 +1,171 @@
-Return-Path: <linux-integrity+bounces-952-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-953-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5177B8442E9
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 16:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 652478442C1
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 16:14:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 22667B31F99
-	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:02:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41F2DB32585
+	for <lists+linux-integrity@lfdr.de>; Wed, 31 Jan 2024 15:03:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FF5712DDAD;
-	Wed, 31 Jan 2024 14:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D351292FD;
+	Wed, 31 Jan 2024 14:56:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JZizRkAf"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OsnhFnMI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809E678B58;
-	Wed, 31 Jan 2024 14:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58A2D5A7A1;
+	Wed, 31 Jan 2024 14:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706712933; cv=none; b=W/peFHMJ3rQqPGhAlkuz8/xS2/j9A7eLR7FPJeW1WPLEpXy/loVPA5MLpr6tIGX4t7ZeeAYvJIA81xq+MFvvmvqmyXOa7wQpl5ha/mAl4ZHty8Ou9tLk7SWxvsBJp7/Ge13ppixF4wMMk8lFB9PCvPxOCiLjrtrlcQtHcaSHsxs=
+	t=1706713002; cv=none; b=aVxM8js7+z4VJTEj1SuckYvkScq7UqlRpN3/GetC2zBUnwGQKJnO2hZ5hI1JrmBwmBDUhfCY3u0uiy3kwxCasDZXPno9ncOWbkEnSklS7Jy2DDwsc3I50iAfPH7uqA0I2ut9gBWSeH62CU8feyj30N5z994eIdY54kZhXdTMhjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706712933; c=relaxed/simple;
-	bh=j43exEgynH+hrdT6l5Mc26Soi5YL7PII8LJE6SllSvE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Zn0Mr/mdT7hV6YiPUM9DE9UxHT+Z6BUc3wGyh1d0pwxSmX+uqFbvYQ9v5+4c3Cr92p4sY36o1R6qkNiuDL+8aCzMp5+bB8uLGB+v4moRAMOA1XtT4Ay7+7akif8B6ocSN2kOdHz0ZqRGBRmHXyS5owvlsPgLMHh2eyGeiKX41kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JZizRkAf; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1706713002; c=relaxed/simple;
+	bh=m1kKG/OLqqlepJ3C9hX+fm1JJZfXqHJuu2JoGe8e/Q0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pq0gLVtUvSvOH8jqCgeeE/r6O/mE8RqXe61e6cWG3ny5M7f1LvCOFUDsKGi7fv7U/b1T7mZxmoUy72vrZUEltavpanydQP2aKhJibVjXM0rQ3A25arBPdjYNTNJGoRZlSd28LIdDb3UuKL2ALXAYQqbjWt3fGH8+f5mT9qX5quo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OsnhFnMI; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40VEaOhW018873;
-	Wed, 31 Jan 2024 14:55:22 GMT
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40VEOmGO018763;
+	Wed, 31 Jan 2024 14:56:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=m8oPPpBE9/jjxHLvwdInXhrtC8tJ2Uj816ArhfmsDks=;
- b=JZizRkAfi3BFWpMAUpNMpY/7IMrNGZza9WWli7BC3BVcVv3zLuwIXc5AZWpZNuTPEJzF
- vOG0pexG9+iBysIqgpeYGoHe6Tv9SkuNTduXA1ZLcO/Ro9SxByr7Yh7XaiAm8T0dqvNf
- RqhvhucwHifqAL6Rjx9MMolYJnCNOCiofEoW5lArtTE9thTsjP4pasJ4ssuuTZHYj8OV
- dsKLL6enzy4xEfFH+rlLbof+Q0avCn08PTj83F/oTXL34PNnHbvUi+NI/c7sSehG3HE1
- aVUJb9Fw44pIHCh4w4nfceGvjHsYoV5inH03mgc99f/yRm2s5sTLy/ciU0JfWa+0KA0i /w== 
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=LhgpvjTYjabLh3xse1S1Padwl0ZlIsQ4O+aF3f3U70E=;
+ b=OsnhFnMIwkqMLpEmrGHimJe6Tu7Q7p9ZZTjNvZrvkvhnTuS7RiXCY+HQeo+rH2hfMOP2
+ +lGCxKsnpejs+u8cJuMTsEEIwvQEnkOcZ8rU77UFxfHG6Kieq9Wp7yByaXMApVc2Hvjz
+ vs2tjjBJLp7URqqluaQ+b2F+pnN2BhnzYZLK7jCRttI7oJBzrsqQ+eYE3+RD8JQ0O0WS
+ oS/DgKoIbg0JE6mX1RWQ0LpwM5NBJNbfbVvG22shgZQ/NFD+2YVH9yspfV90Epnoj4qW
+ f1+fEzXnE+GMC/Qnx7Cd0FwUVUqua5aehkoZ62Hr7gcAOGKszRn3/5BcbS+ya8YB6ubi ww== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyq9jt7r4-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyp9y3c9f-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:55:21 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40VDkZKZ032594;
-	Wed, 31 Jan 2024 14:55:16 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyq9jt7ga-1
+	Wed, 31 Jan 2024 14:56:30 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40VE0TKx011497;
+	Wed, 31 Jan 2024 14:56:29 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vyp9y3c93-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:55:14 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40VD7fpZ010884;
-	Wed, 31 Jan 2024 14:52:47 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vwecknpad-1
+	Wed, 31 Jan 2024 14:56:29 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40VDXUwc007200;
+	Wed, 31 Jan 2024 14:56:28 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vwev2dk6y-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 14:52:47 +0000
+	Wed, 31 Jan 2024 14:56:28 +0000
 Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40VEqkYL37486934
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40VEuS5Q14287574
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 31 Jan 2024 14:52:46 GMT
+	Wed, 31 Jan 2024 14:56:28 GMT
 Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5260C58054;
-	Wed, 31 Jan 2024 14:52:46 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 076DA5804E;
+	Wed, 31 Jan 2024 14:56:28 +0000 (GMT)
 Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2CBE55803F;
-	Wed, 31 Jan 2024 14:52:45 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 7C9F358056;
+	Wed, 31 Jan 2024 14:56:26 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
 	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 31 Jan 2024 14:52:45 +0000 (GMT)
-Message-ID: <015c3a14-0d23-43ba-9593-3d4ff588f1bb@linux.ibm.com>
-Date: Wed, 31 Jan 2024 09:52:44 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] evm: Support signatures on stacked filesystem
-Content-Language: en-US
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, roberto.sassu@huawei.com, miklos@szeredi.hu
-References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
- <CAOQ4uxg9VQ9LksxX5eFFg7E1VO_iFZNmNBaC3pED+a2=ixOhdw@mail.gmail.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <CAOQ4uxg9VQ9LksxX5eFFg7E1VO_iFZNmNBaC3pED+a2=ixOhdw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: baJzSSSfc6NAr5gdJX5P92ig7rAHEN-1
-X-Proofpoint-ORIG-GUID: 9_azz8zb9r4UUIFse6vB9B3KaEx7v_Sr
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	Wed, 31 Jan 2024 14:56:26 +0000 (GMT)
+Message-ID: <05fe58a1-9b2c-4c1f-80a6-4cb5094a2126@linux.ibm.com>
+Date: Wed, 31 Jan 2024 09:56:25 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] security: allow finer granularity in permitting
+ copy-up of security xattrs
+Content-Language: en-US
+To: Christian Brauner <brauner@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        zohar@linux.ibm.com, roberto.sassu@huawei.com, miklos@szeredi.hu
+References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
+ <20240130214620.3155380-2-stefanb@linux.ibm.com>
+ <CAOQ4uxjgdvGU0WE+92ByQE26Jp0j16AgfyCjNyEp7=86akOSsA@mail.gmail.com>
+ <20240131-lacht-elend-536d94682370@brauner>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20240131-lacht-elend-536d94682370@brauner>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FP8kjeJ98L7OgLG4mRpuAjGRVNzC3Ggg
+X-Proofpoint-ORIG-GUID: gv3rZ-oEmA7mDo0G8vLGQhoibsmV0QeL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-31_08,2024-01-31_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 spamscore=0 malwarescore=0 bulkscore=0 mlxscore=0
- priorityscore=1501 phishscore=0 adultscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=976 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311290000 definitions=main-2401310114
+ mlxlogscore=588 adultscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 spamscore=0
+ clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2401310115
 
 
 
-On 1/31/24 08:18, Amir Goldstein wrote:
-> On Tue, Jan 30, 2024 at 11:46 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
+On 1/31/24 09:25, Christian Brauner wrote:
+> On Wed, Jan 31, 2024 at 03:25:29PM +0200, Amir Goldstein wrote:
+>> On Tue, Jan 30, 2024 at 11:46 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
+>>>
+>>> Copying up xattrs is solely based on the security xattr name. For finer
+>>> granularity add a dentry parameter to the security_inode_copy_up_xattr
+>>> hook definition, allowing decisions to be based on the xattr content as
+>>> well.
+>>>
+>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>> ---
+>>>   fs/overlayfs/copy_up.c            | 2 +-
+>>>   include/linux/evm.h               | 2 +-
+>>>   include/linux/lsm_hook_defs.h     | 3 ++-
+>>>   include/linux/security.h          | 4 ++--
+>>>   security/integrity/evm/evm_main.c | 2 +-
+>>>   security/security.c               | 7 ++++---
+>>>   security/selinux/hooks.c          | 2 +-
+>>>   security/smack/smack_lsm.c        | 2 +-
+>>>   8 files changed, 13 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
+>>> index b8e25ca51016..bd9ddcefb7a7 100644
+>>> --- a/fs/overlayfs/copy_up.c
+>>> +++ b/fs/overlayfs/copy_up.c
+>>> @@ -114,7 +114,7 @@ int ovl_copy_xattr(struct super_block *sb, const struct path *oldpath, struct de
+>>>                  if (ovl_is_private_xattr(sb, name))
+>>>                          continue;
+>>>
+>>> -               error = security_inode_copy_up_xattr(name);
+>>> +               error = security_inode_copy_up_xattr(old, name);
 >>
->> EVM has recently been completely disabled on unsupported (e.g.,
->> overlayfs). This series now enables copy-up of "portable and immutable"
->> signatures on those filesystems and enables the enforcement of
->> "portable and immutable" as well as the "original" signatures on
->> previously unsupported filesystem when EVM is enabled with EVM_INIT_X509.
->> HMAC verification and generation remains disabled on those filesystems.
+>> What do you think about:
 >>
+>>                       error = security_inode_copy_up_xattr(name, NULL, 0);
+>>
+>> and then later...
+>>
+>>                       error = security_inode_copy_up_xattr(name, value, size);
+>>
+>> I am asking because overlayfs uses mnt_idmap(path->mnt) and you
+>> have used nop_mnt_idmap inside evm hook.
+>> this does not look right to me?
 > 
-> I am missing a high level description of what is in those "portable
-> and immutable"
-> signatures and how those signatures remain valid across copy up.
+> So it's relevant if they interact with xattrs that care about the
+> idmapping and that's POSIX ACLs and fscaps. And only if they perform
+> permission checks such as posix_acl_update_mode() or something. IOW, it
+> depends on what exactly EVM is doing.
+
+In 2/5 we are reading the value of security.evm to look at its contents.
+
 > 
-
- From 2/5:
-"Portable and immutable EVM signatures can be copied up by stacked file-
-system since the metadata their signature covers does not include file-
-system-specific data such as a file's inode number, generation, and UUID."
-
-Instead, the signatures cover file metadata such as file mode bits, uid, 
-and gid as well as xattrs, which can all be preserved unchanged across a 
-copy-up.
-
-Reference: 
-https://elixir.bootlin.com/linux/v6.7.2/source/security/integrity/evm/evm_crypto.c#L169
-
-
-> Thanks,
-> Amir.
-> 
+> IIRC, I already added custom security_*() hooks specifically for POSIX
+> ACLs as they can't be retrieved through vfs_xattr*() helpers anymore.
 
