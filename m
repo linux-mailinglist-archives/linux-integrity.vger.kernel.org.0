@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-979-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-980-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C615846319
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Feb 2024 23:04:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0F3284631D
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Feb 2024 23:06:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B35C2B23360
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Feb 2024 22:03:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 256D71C246B2
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Feb 2024 22:06:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47003F8D6;
-	Thu,  1 Feb 2024 22:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 275453FB04;
+	Thu,  1 Feb 2024 22:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWcbKjK0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UomVBqi0"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875853FB15;
-	Thu,  1 Feb 2024 22:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BD53F8DB;
+	Thu,  1 Feb 2024 22:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706825034; cv=none; b=kXDaIz/Xtg/E6GiuFMcb+D9JrJGbP3PgwWk++9hPFSAH8Z8eqSSJRsEbOGfLExkXAr+To+oCCUz7bMwJ73kc58OMVFQop4tJHvGsJA64k7kS7k1xI0VR5TbTo1UWtQDt2TzcozMY03PYBWYAdcuLs6PHLUSPZv2WU2XdbwBv7ns=
+	t=1706825164; cv=none; b=YH0QNELIu1VvHfoFsLZrS8qulXgJLvc4O09RFhomOYBZ4YfF8i8oAt8frKr2Jq1B+vHObX0kYIbImVvlWWc6+mFovS2/e8m5Q3xiexRdiyKSUXZ2Qe6Toj+idzBFNvD/C20FxQ0ANmmeeGha2Tgf9cbfA3d5PvMnXlCLNxt9Q5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706825034; c=relaxed/simple;
-	bh=DyfFCo9ypbopk5SXJ0mM1Wja7KYemHh8D4kOapDKtP4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=kKbtyzFeJsdQ9yczH3tzAqVBTPiCg1Z2V86W2KnNY2NzoUUz7jc4Sgr2PlFT3QgGA1d153R6kDXLzf/pnS6k9+1eUUZmQtxarcE60/MfBLFqGy+p162aE6HXTxnZ0Oz/MCONZhALfRAA0/DPI5HdsWf6fteWgVbpPUpskwOuLZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWcbKjK0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B581AC433C7;
-	Thu,  1 Feb 2024 22:03:51 +0000 (UTC)
+	s=arc-20240116; t=1706825164; c=relaxed/simple;
+	bh=gm39k00fXSJe5GlQK5AeCq4vRl3BvQqkpLTuncjtNyE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=eRpPcozx98BDJoR/n0KJ9eWvO8wNyJa8h33vF6EhD6POEb5DrMjRMjz6LgUQ6Y1S1C2uj/P9tUtN6EkDUl++OR/0qqtPpUXcfzAyASPOt2e6UrNdDyio/KJDpXLcSdbezWSr+1b+vgjeHGzpwxBJewUYPiSubZKsqRSMheKIruc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UomVBqi0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BBB9C433F1;
+	Thu,  1 Feb 2024 22:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706825034;
-	bh=DyfFCo9ypbopk5SXJ0mM1Wja7KYemHh8D4kOapDKtP4=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=HWcbKjK06tEL6KahLUGO5ozn9ZvtScnt7BO65NP1wK4PxQWrUq1rO3cbqAODtG6+S
-	 9HwdMUVAoR3I4fCQlPqAZbOUilnxvgFviT7YRAOW57F95JDEGBat2qC98wmcSjllkI
-	 BFg9iV9O+N9tib/YDRcbREyhyHH57mu17EK+dNB2Gsjwifx1D17gHKFVds/mO4HZVy
-	 5EHLSn82Wexxd4mWnLOaJrdZDdwmkkmadJf8uHSyZ5nEh2XIj1l14mAUSbZJ7ikyY+
-	 AZ39XeZAYQdfW9Kr4I0UHAvFqtZKuHbwTNk6xsxtESN7Ay2kl8IVhp6AaNE7haEh68
-	 LAyfFgRoCOh4g==
+	s=k20201202; t=1706825163;
+	bh=gm39k00fXSJe5GlQK5AeCq4vRl3BvQqkpLTuncjtNyE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UomVBqi0EGzJV6yaG7J923dM9+hNpVQN1BWkCkA4WcWuUz2at+hH0i96TKF9woxct
+	 fqA37JLy5PeGJAR4C1W+7n3prCC+ZDfmqyS1iiFl57ihoM8h7gcV6s00l7foLPZv4P
+	 dA8gI4KIHDCkS9YH3/39+Bs3f/QkbgDPYlVPr8ocgxRESn6wYkXIL0uyni/EjXXH7j
+	 uYi17hnKmhzTRkyE8jsd1/iK6RjofrafqRpOQa51K7p0cStv3gvOMZMLf+9mDfETU9
+	 uq+zqKR1C0SQ9kuCQUEk6Gl25dkW+zIdKaVQQPLqUicLjpeHkr6QeEc1NYGKcm2Dvm
+	 MKppWHKy3FR+Q==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,34 +49,37 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 02 Feb 2024 00:03:49 +0200
-Message-Id: <CYU2Z635C7SX.U9BMOKPM1G73@suppilovahvero>
+Date: Fri, 02 Feb 2024 00:05:59 +0200
+Message-Id: <CYU30TPVVC1Y.1ZN3LHF3O70QC@suppilovahvero>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Samuel Ortiz" <sameo@rivosinc.com>, "Dan Williams"
+ <dan.j.williams@intel.com>
 Cc: "Kuppuswamy Sathyanarayanan"
  <sathyanarayanan.kuppuswamy@linux.intel.com>, "Qinkun Bao"
  <qinkun@google.com>, "Yao, Jiewen" <jiewen.yao@intel.com>, "Xing, Cedric"
  <cedric.xing@intel.com>, "Dionna Amalie Glaze" <dionnaglaze@google.com>,
  <biao.lu@intel.com>, <linux-coco@lists.linux.dev>,
  <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 1/4] tsm: Runtime measurement register support
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Samuel Ortiz" <sameo@rivosinc.com>, "Dan Williams"
- <dan.j.williams@intel.com>
+Subject: Re: [RFC PATCH v2 2/4] tsm: Add RTMRs to the configfs-tsm hierarchy
 X-Mailer: aerc 0.15.2
 References: <20240128212532.2754325-1-sameo@rivosinc.com>
- <20240128212532.2754325-2-sameo@rivosinc.com>
-In-Reply-To: <20240128212532.2754325-2-sameo@rivosinc.com>
+ <20240128212532.2754325-3-sameo@rivosinc.com>
+In-Reply-To: <20240128212532.2754325-3-sameo@rivosinc.com>
 
 On Sun Jan 28, 2024 at 11:25 PM EET, Samuel Ortiz wrote:
-> Some confidential computing architecture (Intel TDX, ARM-CCA, RISC-V
-> CoVE) provide the TVM (confidential computing guest) with a set of
-> runtime measurement registers (RTMR). TVMs can extend those registers
-> with their measurements at runtime, i.e. after the TVM initial
-> measurements are finalized and the TVM actually runs.
+> RTMRs are defined and managed by their corresponding TSM provider. As
+> such, they can be configured through the TSM configfs root.
 >
-> RTMRs are separated from the initial measurement registers set, and TSMs
+> An additional `rtmrs` directory is added by default under the `tsm` one,
+> where each supported RTMR can be configured:
+>
+> mkdir /sys/kernel/config/tsm/rtmrs/rtmr0
+> echo 0 > /sys/kernel/config/tsm/rtmrs/rtmr0/index
 
-"measurement registers" and you do not need to cross-check what the
-heck RTMR was anyway.
+/sys/kernel/config/tsm/registers/0
+
+Does not mean that I agree with "tsm" sub-path as I don't know what
+TSM is by definition.
 
 BR, Jarkko
 
