@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-986-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-987-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A50B784645A
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 00:19:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD63E846497
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 00:51:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEF001C22697
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Feb 2024 23:19:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3204E1F24889
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 Feb 2024 23:51:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6C547A7E;
-	Thu,  1 Feb 2024 23:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B92847F5A;
+	Thu,  1 Feb 2024 23:51:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lqqy/x+M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADI/72Y8"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A186B41211;
-	Thu,  1 Feb 2024 23:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58F447F57;
+	Thu,  1 Feb 2024 23:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706829543; cv=none; b=iyW9+bkl2xlFi99GxnMx6VpmQrkHbp/is4ZnezT5qccoerXSj4pLJ96Sr/Elwj/OgBKeagu0vmjPvhhrVgESWwx76xjqYCbC7/6ko5NTGEh+sWZvAVSE9+XImp/A4kAbzfKc1D/dWIHWGVdd/yoEVc7STQWe3EoDa6TYJrXjVug=
+	t=1706831481; cv=none; b=laFuA6mPPqXpXjAf0WdbZAVDq6z97xpSY0PX4q+eM7a2ivh2AifL0c2A+lQ8WzYJBtLVaAyUWXPoRZxAox3MvNq9+Wr2wM8GPIuRXstZisOwPYzCFhOpBOKegO7Ki2EPPAZq3vjCQIJNc/UfIYm9WFeABkKrElsnFES6NVv8hcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706829543; c=relaxed/simple;
-	bh=g/Fqx31XYNOhlJ9ECDsRvPPG0ycRV++0qSKtdAFxaxg=;
+	s=arc-20240116; t=1706831481; c=relaxed/simple;
+	bh=vd2d6sHKAqJTlcu+FNSfDZgcz3V3v+EW9kiPJ5h9w/c=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=j7q64ct7GQoCzq3G60HLUc3rHYgI40LznWLYPD01VbGb8kKjb2T+/mETz6ksWxciMe3BEcbsplAyfIU3IeuFXfCrobJuStQu4iXLGD3vztnIrnsvb/TGpfLuCYZ/bkFh/Anq0abc4OTpJ/LJtcy238kD8rXbofXY92moLM7a424=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lqqy/x+M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11851C433F1;
-	Thu,  1 Feb 2024 23:19:00 +0000 (UTC)
+	 References:In-Reply-To; b=ZlTqftwX6Zg7sfwN0Df6kqbj2787NIAMpYS5U32q7CkUMAgAjmCzy5fRIRPErQtQuh203wj9PdRjDOpoJEReVfEeDRMeBNJNG8mZgnYi5qvbGZEHlAfgv/yTxzuoLPE01j+VjigMRScR4K9Rdk9Z1sDvYujkG682nBvDNupOfvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADI/72Y8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE58C433F1;
+	Thu,  1 Feb 2024 23:51:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706829543;
-	bh=g/Fqx31XYNOhlJ9ECDsRvPPG0ycRV++0qSKtdAFxaxg=;
+	s=k20201202; t=1706831480;
+	bh=vd2d6sHKAqJTlcu+FNSfDZgcz3V3v+EW9kiPJ5h9w/c=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=lqqy/x+M6PKHk6qI+VElPsSLnPfv79iVSVo15fdzGE+KkQVXj0k0Dn/SX+Nhs7L1y
-	 ALMVaX8aNE8nK9WpHt/gRv9iGbN+u7SuAjEOWMHqkqHETQTp8PuMwatsnEbk3yK/pt
-	 p6BnBx5jtRywsHk9i8AhB+Q4h55A4CI18bz7tZ+QG3MSD6/hKDPpP75aB7D5H+s/z6
-	 kR/9AAHAtEuU4H539UqLw/9QHF7Lu8N3LPuJyQsUsrYyTYVPp8LOFXgYGV4OeXGxbX
-	 8zhxfLIwyMNzmtgPBRN0/zbNecijFMwAsh+4iJnYubwkK5gM4D3+qNzst+Juz8Unmc
-	 sPRp/H03he1yw==
+	b=ADI/72Y8MfJWLyALK1g9tVNMYGblbP2cRRrYOK9AJYjEZUzrMyQ+h31DMhzhWQrzt
+	 Wbrf+5EbKF7SC++3ru2Y5gl+POWXTJjt91mNUVLQYKdvEQybnSlbJWLU0vlZqguSxz
+	 KndJelCPlASdS5BP19MbQ8v9uxe+bdScqesbYIidC/BpeTouX4udfT8yW7nFwQw9HP
+	 5DlGl7e1seNo3JLYEOxEoE2+Fkh4q/tczz1H4FqSqMVLWf86jJMKWgZleka49p+yV0
+	 g4/SsOPrfhO8b7zlsjZ1h5xLYG+JZQaOkVvx9QZOK2LVOhfioVLZgTvDk8vprnPfy9
+	 4cFxXaXoY/hnw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,50 +49,34 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 02 Feb 2024 01:18:59 +0200
-Message-Id: <CYU4KPJIDWTI.1ZPBLGOCZR0BK@suppilovahvero>
-Cc: "LinoSanfilippo@gmx.de" <LinoSanfilippo@gmx.de>,
- "p.rosenberger@kunbus.com" <p.rosenberger@kunbus.com>, "lukas@wunner.de"
- <lukas@wunner.de>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
- "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] tpm,tpm_tis: Avoid warning splat at shutdown
+Date: Fri, 02 Feb 2024 01:51:16 +0200
+Message-Id: <CYU59FJIKIK5.1XY6N8ODCZWYI@suppilovahvero>
+Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Kanth Ghatraju"
+ <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.de>
+Subject: Re: [PATCH] tpm: make locality handling resilient
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Elliott, Robert (Servers)" <elliott@hpe.com>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>, "peterhuewe@gmx.de" <peterhuewe@gmx.de>
+To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, "Alexander Steffen"
+ <Alexander.Steffen@infineon.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Lino
+ Sanfilippo" <l.sanfilippo@kunbus.com>, "Sasha Levin" <sashal@kernel.org>,
+ <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 X-Mailer: aerc 0.15.2
-References: <20240201113646.31734-1-l.sanfilippo@kunbus.com>
- <MW5PR84MB184274E28D83DC337B486CEFAB432@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <MW5PR84MB184274E28D83DC337B486CEFAB432@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20240115011546.21193-1-dpsmith@apertussolutions.com>
+ <711d659f-3f57-48e4-b5b3-efbc2fe236c8@infineon.com>
+ <d46abc40-5ad8-4d09-a6f8-f53c4b338142@apertussolutions.com>
+In-Reply-To: <d46abc40-5ad8-4d09-a6f8-f53c4b338142@apertussolutions.com>
 
-On Thu Feb 1, 2024 at 6:40 PM EET, Elliott, Robert (Servers) wrote:
-> > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > Sent: Thursday, February 1, 2024 5:37 AM
-> > Subject: [PATCH] tpm,tpm_tis: Avoid warning splat at shutdown
-> >=20
-> > If interrupts are not activated the work struct 'free_irq_work' is not
-> > initialized. This results in a warning splat at module shutdown.
-> >=20
-> > Fix this by always initializing the work regardless of whether interrup=
-ts
-> > are activated or not.
+On Thu Jan 25, 2024 at 2:01 AM EET, Daniel P. Smith wrote:
+> > Could you split this up into multiple patches then, so that they can be=
+=20
+> > discussed separately?
 >
-> That's using flush_work(), which just waits for one to complete. Is there
-> any case where multiple work entries could be queued, and cancel_work_syn=
-c()=20
-> would be necessary?
+> Gladly, but individually none of these fully address the situation.
 
-Questions are cool but please explain how this aligns with the patch
-review because I already accepted the patch.
+The total number of scenarios described was exactly zero meaning for us
+that a situation does not exist with our current pool of knowledge :-)
 
-Should I drop it based on this question, and if so, why?
-
-> tpm_tis_probe_irq() has a loop calling tpm_tis_probe_irq_single()
-> for 3 to 15. Could each of those could trigger an interrupt storm and
-> call tpm_tis_revert_interrupts(), which calls schedule_work()?
-
-AFAIK no based on that TPM_CHIP_FLAG_IRQ should take care of this.
+I wonder what sort of scenario requires all those changes applied at
+once in order to get fixed.
 
 BR, Jarkko
 
