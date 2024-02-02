@@ -1,159 +1,121 @@
-Return-Path: <linux-integrity+bounces-1007-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1008-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 511048473B3
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 16:52:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 220B9847427
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 17:08:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CFAB28BA7A
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 15:51:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81AFEB29B34
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 16:08:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF5F14690C;
-	Fri,  2 Feb 2024 15:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CFF9149016;
+	Fri,  2 Feb 2024 16:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OyUR9OT4"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="lrSmsY9a"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0149C144612;
-	Fri,  2 Feb 2024 15:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C296914A090;
+	Fri,  2 Feb 2024 16:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706889114; cv=none; b=Y8SEhgHrj1UrG+QlKQPsWMkOiBV4/ocAuQNiOgSti97ynJUAu7Btpk6MAehpJLw8PERvbBsVmQWIvQFpeTv3o2BZZF+vaUG2UqsEOB5gDwain9hwhT6XZj8mZqijHOUvCNr8LFC9VSwygZZC54z82lxgEa+qDEqMd6AdqKdG3Wc=
+	t=1706889918; cv=none; b=smUbuvixxghXRV8TGeftk2TyJd4jJgmqju7H8eTJfRcAGkloAUCPL3+S9jopD+4mZ2RxNMTcuUye8aNgoqnpj9rP7OMPFdLrGTtodAQXMxQcQQRSOy0XbfJ5KphGsNC8FUHbhePb9uEGJ4BTCTbPilBvmPVber0p1WS4L9JEXVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706889114; c=relaxed/simple;
-	bh=u62/JTjk2+l4AbxTmlSugZv8zdrDij9jIcMxmTQ3Cs0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s2Q6guC8vIEkYqeMEyWut46sbPFT9eSx9eRsQHf4VO0RxHym8d2d3c5/0/L+FwVAdpr3RBobOoQtBfLRP2LOBA+t88B7xiQgRE9GX4gWc1DxRge7tOOrMGZ5qKEiphm4oivIZXY8lnahJw465wTVusnIBb18KvDsZW2F4ZvUPfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OyUR9OT4; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-68c2f4c3282so10906286d6.3;
-        Fri, 02 Feb 2024 07:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706889112; x=1707493912; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kjFTQhfyX4OpZ75eLCQsarAtUBHRYbyc/PAd9P4Y7CI=;
-        b=OyUR9OT4w/TuRR1vUjSDfsYrkjacCh4Ud6K0piDSkhqBNlFzC9/C305eNPm2L74WFr
-         6SlIXyp4t3psK6lvgUXsyY1JMpG64+cnQ+3Nct72E3dnNIcD8vl7ruLdG/Y245kjXIJQ
-         yx6DtRAxGrZqzA9KYgbkIHrPKyXTO5K5vpr8S1D7a1MXAKxGFnSkdFOlVQTuuJG0cuGP
-         08ftPKmUj7YzQbbi+vOIlQYVTn0MdWvSwnfvIFqIDA+st/2LXLsh//LyetxCcIxGFFBo
-         YmIt9Rd0kJf0emsuARKy+yXAB6Ny5LlLmJgpTOxZ3JFR2EwFVufVKl6USPkc9qBM+JEy
-         MZjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706889112; x=1707493912;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kjFTQhfyX4OpZ75eLCQsarAtUBHRYbyc/PAd9P4Y7CI=;
-        b=oJsYihtzb7pXIOmtByWhk9KbWnlVwtdX163r66UXoaxvHYw9zd0xhL12EdZ9tPvTVN
-         NtlQK/7emL5r6g2gpKCP1/SB0bSfdvx/cEi5ENyhlzCISMROxcyn5kuXWT4YYUQkg/gd
-         HMz/8uK8JRKHlVwn0tPUouzI4Y8M4arlOwMf1XFaY+RR2qzU+IS/Cp85jAtTzfohdmD0
-         ExYCWJnFUvlzqozIqT1k1TYKlJzENA5XcEp2HGLx5/9dlHcK4R345h7HJGRS7TdbWiso
-         wslbMvc/pz8poUAXu7tQgsXdcYgMkj7OzV3fCvbIn6POE2K6sfptJiOiP3zDCS34uoDY
-         gylw==
-X-Gm-Message-State: AOJu0YxhnIYk07XkjbQWBS7kRpvyE4LI/Jrg9s8iWxXzW6qGw9uT9P6N
-	dXQE4rVqa31UUYaWt3AlIt9WNTc+FZUewqAzPwEin4VagMiymCtq1sAMFxRwb4vqxtAuRSHrHJw
-	4ZGbRGYq8wlY/4WifnPA+63C5jolWskOeT4Y=
-X-Google-Smtp-Source: AGHT+IFUNcvFrtEeCkHxcUTQW9b1GdgYlbqRIehUQEHcaweXXXIXkS8cwExw7eL3LP5nnH+WGue4GtsNcAbNqRGPja0=
-X-Received: by 2002:a0c:f1cd:0:b0:68c:8ac3:2acb with SMTP id
- u13-20020a0cf1cd000000b0068c8ac32acbmr842609qvl.41.1706889111860; Fri, 02 Feb
- 2024 07:51:51 -0800 (PST)
+	s=arc-20240116; t=1706889918; c=relaxed/simple;
+	bh=Dk+AdKbujF9yB/76ocqE4KumZbVmual/1iWHKicEDGo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KzOkqew6qHdfGqVPzKdAPKmRV2YBe5yMtP7nctQBUKh/ZRnk5FiElaBIFmeFFVccUHxipfWynh79msp4ufJtU8JMADtf0dnFIsLeunSbZqGd/tuDFIIx4RexSKstuiRBlTDhIJOdWu1SEnQskqP6XzP89R3hz+fBt80ettzdjYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=lrSmsY9a; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=rnRJDh4uEm9M5Ik5O73gj9GsHnJBLKW/Eb0H5ErNkHM=; b=lrSmsY9alYvyue7TNgw6JegiNE
+	LX6hhmVwWpcHej3bwYUpvn5hJv+b86gPMDErVYwdqKIPH7CK7kw9sCv6xrEljXUmL8CyQFCU/blHd
+	+AfpJuq+UbPufo+ZrYbeOYuG2sIIN4YXBhJK+IA2yd7abnTYyMyOCfQIG6ElH+vKaZLMm4QPBKsNO
+	Y6MwNnWChMG/nVIen+TWwrYf7svM5ciALw2y9q8ulaNeAg9chMn57pzfC/AvnHM5DJAgqIGBge84Z
+	geAT/qXmBgYx8CI0ffTTX3NkFXiRb3LASZnDnfe0jCeIuZ+E7kOWRh/uTbqbAAXZwS2J7P3Jv7iRY
+	vCwVkFwg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rVw2P-0045rA-13;
+	Fri, 02 Feb 2024 16:05:09 +0000
+Date: Fri, 2 Feb 2024 16:05:09 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>,
+	Christian Brauner <brauner@kernel.org>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	Mimi Zohar <zohar@linux.ibm.com>, linux-unionfs@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 2/2] fs: remove the inode argument to ->d_real() method
+Message-ID: <20240202160509.GZ2087318@ZenIV>
+References: <20240202110132.1584111-1-amir73il@gmail.com>
+ <20240202110132.1584111-3-amir73il@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
- <20240130214620.3155380-5-stefanb@linux.ibm.com> <38230b4c-54ae-45ed-a6fb-34e63501e5b1@linux.ibm.com>
- <CAOQ4uxiYARZBSgzb4_W-RKvB1XLSF3GUBqeLw2kH+eVeZ_8ARQ@mail.gmail.com>
- <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com> <CAOQ4uxi6Te8izWpXROthknRaXrVA9jho5nbc+mkuQDrcTLY44Q@mail.gmail.com>
- <CAOQ4uxigdNeE+2nfr4VxS9piQf5hez=ryT0a-jzW+tW0BT-zuw@mail.gmail.com>
- <492ea12a-d79d-47da-9bbe-a7f33051bd3f@linux.ibm.com> <CAOQ4uxgiO1RbsmqOu4F4Foy-MBPecnEXO7BvgDGz-Lzb1Eysog@mail.gmail.com>
- <4c584bfb-d282-4584-bb20-18c26b1033c0@linux.ibm.com> <CAOQ4uxjftr7GGx6tuW_yB_MTaVB57m6p_d=UHhN3Z23YVXY0QQ@mail.gmail.com>
- <11abffea-15c5-4d13-9d0f-edbc54b09bf3@linux.ibm.com> <CAOQ4uxjZ6p9+H54G0LNTUnU56WRaoLtWOUj2nOaKJ4JvBGqLVg@mail.gmail.com>
- <427ce381-73fa-48f9-8e18-77e23813b918@linux.ibm.com>
-In-Reply-To: <427ce381-73fa-48f9-8e18-77e23813b918@linux.ibm.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Fri, 2 Feb 2024 17:51:40 +0200
-Message-ID: <CAOQ4uxggqa7j0NS1MN3KSvF_qG1FMVmFxacEYSTx+LuvuosJ5g@mail.gmail.com>
-Subject: Re: [PATCH 4/5] evm: Use the real inode's metadata to calculate
- metadata hash
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, miklos@szeredi.hu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240202110132.1584111-3-amir73il@gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Fri, Feb 2, 2024 at 4:59=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.com=
-> wrote:
->
->
->
-> On 2/2/24 04:24, Amir Goldstein wrote:
-> > On Thu, Feb 1, 2024 at 10:35=E2=80=AFPM Stefan Berger <stefanb@linux.ib=
-m.com> wrote:
->
-> >
-> >>
-> >> and your suggested change to this patch :
-> >>
-> >> -       struct inode *inode =3D d_real_inode(dentry);
-> >> +       struct inode *inode =3D d_inode(d_real(dentry, false));;
-> >>
-> >
-> > In the new version I change the API to use an enum instead of bool, e.g=
-.:
-> >
-> >         struct inode *inode =3D d_inode(d_real(dentry, D_REAL_METADATA)=
-);
->
-> Thanks. I will use it.
->
-> >
-> > This catches in build time and in run time, callers that were not conve=
-rted
-> > to the new API.
-> >
-> >> The test cases are now passing with and without metacopy enabled. Yay!
-> >
-> > Too soon to be happy.
-> > I guess you are missing a test for the following case:
-> > 1. file was meta copied up (change is detected)
-> > 2. the lower file that contains the data is being changed (change is
-> > not detected)
->
-> Right. Though it seems there's something wrong with overlayfs as well
-> after appending a byte to the file on the lower.
->
-> -rwxr-xr-x    1 0        0               25 Feb  2 14:55
-> /ext4.mount/lower/test_rsa_portable2
-> -rwxr-xr-x    1 0        0               24 Feb  2 14:55
-> /ext4.mount/overlay/test_rsa_portable2
-> bb16aa5350bcc8863da1a873c846fec9281842d9
-> /ext4.mount/lower/test_rsa_portable2
-> bb16aa5350bcc8863da1a873c846fec9281842d9
-> /ext4.mount/overlay/test_rsa_portable2
->
-> We have a hash collision on a file with 24 bytes and the underlying one
-> with 25 byte. (-;  :-)
+On Fri, Feb 02, 2024 at 01:01:32PM +0200, Amir Goldstein wrote:
+> The only remaining user of ->d_real() method is d_real_inode(), which
+> passed NULL inode argument to get the real data dentry.
+> 
+> There are no longer any users that call ->d_real() with a non-NULL
+> inode argument for getting a detry from a specific underlying layer.
+> 
+> Remove the inode argument of the method and replace it with an integer
+> 'type' argument, to allow callers to request the real metadata dentry
+> instead of the real data dentry.
+> 
+> All the current users of d_real_inode() (e.g. uprobe) continue to get
+> the real data inode.  Caller that need to get the real metadata inode
+> (e.g. IMA/EVM) can use d_inode(d_real(dentry, D_REAL_METADATA)).
 
-https://docs.kernel.org/filesystems/overlayfs.html#changes-to-underlying-fi=
-lesystems
+Hmm...  Speaking of the callers, could somebody try explain to IMA
+folks that they _still_ have a blatant UAF in ima_collect_measurement()?
+I gave up after several attempts years ago...
 
-If you modify the lower file underneath overlayfs, you get no
-guarantee from overlayfs about expected results.
+int ima_collect_measurement(struct integrity_iint_cache *iint,
+                            struct file *file, void *buf, loff_t size,
+                            enum hash_algo algo, struct modsig *modsig)
+{
+        const char *audit_cause = "failed";
+        struct inode *inode = file_inode(file);
+        struct inode *real_inode = d_real_inode(file_dentry(file));
+        const char *filename = file->f_path.dentry->d_name.name;
 
-This makes your work more challenging.
+The name is longer than 40 characters, and thus separately allocated.
 
-Thanks,
-Amir.
+	...
+Somebody renames the file, now the name is short and ->d_name.name points to
+embedded array.  The reference to external name is dropped and it's freed
+after an RCU delay.
+	...
+        tmpbuf = krealloc(iint->ima_hash, length, GFP_NOFS);
+We block, RCU delay expires and filename points to freed memory object.
+	...
+
+                integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode,
+                                    filename, "collect_data", audit_cause,
+                                    result, 0);
+
+Which calls integrity_audit_message(), where we hit
+                audit_log_untrustedstring(ab, fname);
+with fname being our dangling pointer.
+
+Use After Free.  Really.  And "untrusted" in the function name does not
+refer to "it might be pointing to unmapped page" - it's just "don't
+expect anything from the characters you might find there, including
+the presence of NUL".
 
