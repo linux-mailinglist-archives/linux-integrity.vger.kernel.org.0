@@ -1,65 +1,69 @@
-Return-Path: <linux-integrity+bounces-999-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1000-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10F19847015
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 13:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31F1184707D
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 13:41:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4364D1C26D42
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 12:19:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6504C1C25786
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 12:41:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A177E76D;
-	Fri,  2 Feb 2024 12:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCFE9812;
+	Fri,  2 Feb 2024 12:41:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="FCnvynLb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J5qsnfEW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBDEF1419A4
-	for <linux-integrity@vger.kernel.org>; Fri,  2 Feb 2024 12:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48285185A;
+	Fri,  2 Feb 2024 12:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706876389; cv=none; b=Mi2kGzlpYv9Vow+SycXiSEXXrJyZ76yYdpE/0kqrrtodzHI6AcXgCRW4hVsGQAqYK4SobbSke2EhZ0zeWBeIejFYkrEn/ZSmlzewTPWwYJ/tYO7LsUEyBLfbNS5B6gvj5thSUsLJRp+lSuK8LzMORmCq8nB4xz2jvWHIC3ED7H0=
+	t=1706877690; cv=none; b=l2wQP1DXXqL3p+gl2qS6fisWqgt2bfGtXcWtKXfFg21rY5BTG+5drpIDCg60EFhR1tv3fPcBKuPEkXvBVu017cjcLsn5VOOJAqbAXSDlikQkj8B6P4YZqIKluy4KulCe6PsoPe7BU0TO9xFu3AmoH4vgkszmneh44KEPPi1FVWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706876389; c=relaxed/simple;
-	bh=5hj8arzg/kd3VZoNZL5jFI8jc+DYOemsfmbYbJ/OykU=;
+	s=arc-20240116; t=1706877690; c=relaxed/simple;
+	bh=DqCAzuoEq74A6y7jUgvbobN9H6bLzkMScjlUWPLWvqo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Yqey6zBXorNQOxaM9VuHQsNxEw5eKUcr3eGM8ka4yF3R5VdyXLvlaaxjAOi/AGC3wIBUR631tn7Q6PUqlgf+ln77nLi5pAkGLStyDoYnbqMuZfLrJAJTFFysIPgDb/5NQuYGDl2MCUqHvorHJdE33Q0Oec3SPWvzUdLo2W8Wvh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu; spf=pass smtp.mailfrom=szeredi.hu; dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b=FCnvynLb; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=szeredi.hu
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55fcceb5f34so1688436a12.3
-        for <linux-integrity@vger.kernel.org>; Fri, 02 Feb 2024 04:19:38 -0800 (PST)
+	 To:Cc:Content-Type; b=r4fpuIUbZiNj0s1MB8MMu2iwKUDanubO8tIMD41duIqSq+fETNn06KO8fzwYfJt8q2TNQG94HYo9On7seX71DhYtJegbPKOKKzcHjudY+6Np4a+DisTMGFUCfp8tL3vr1rd7JaUTK/HeeEcQoYBEKsJI+9kS8C8W7NgHYVh009c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J5qsnfEW; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6041779e75eso21781927b3.3;
+        Fri, 02 Feb 2024 04:41:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1706876377; x=1707481177; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LFP84Zrmnc+wlMdD8DIoxjiCigtXFMKoOTPi2WgaEVI=;
-        b=FCnvynLb2HfyZrMuxl7Ds9QkCMDQvBB5aIj1qY6beCYhJOh2i0pRnO4ifvYsPyCVpT
-         7UWqgDljq7yHvF3dsqPBOZXtie1zOA185tfzRMwH7BC5wTsfE9BnZGsg1h0ekesRNtOx
-         qsoz/saloZbH7AxJFxNTSq0JevzVkPoBNV9gM=
+        d=gmail.com; s=20230601; t=1706877688; x=1707482488; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kqYYnNIAPfyQp/lOLSeExWubf4maT7vMZXeoVfYiZmU=;
+        b=J5qsnfEWLnitCUmPKxO6iLWIy5CmMbVBWuwddo2f/zociVkirTiAPFmOQjNGaHH1gl
+         nXBOdwxN3fBKnGI+XSk4yRUKGY1Il9oOzg2krHG/vggCTzrs2HBHKi9SD+WvjIOGjSHZ
+         EynRXvqoRgts51VvSc345mGm2DhaTF7w/UN8/fCcocHbZro7NYYBU2J7qlnDX4hImiW5
+         A6xgCosIp++pUGXCtSxxa5rHm3u7f08WNACpjMuwVhzNBSPnwmxndg0gd6dyOGN60qE9
+         2YQdGA32PaDcGi4CuPv9VqKHO0gzRYbDWTUdVITg3jCsHvjS1bXbgnJ9Xuip2Nm1+EbY
+         M4EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706876377; x=1707481177;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LFP84Zrmnc+wlMdD8DIoxjiCigtXFMKoOTPi2WgaEVI=;
-        b=lDZwmgJ5JHmJ0GFV5GWDvqQg0FIxyLFjbK5tyUh53BCwbaucpPj+Edsjh8qpVo4sAb
-         2VoqxzGBcd3rDWXouk4L6I1bSrUhRQZLZ1EV66hBkCqYkpRh5Fr+e8mfkCjW3rn/NKiA
-         yy64I3oHfJdsCsP+EJLOwW0BObw3dCDJJG+uQ8kmj5x1YS41JER3Dff3ep5P90+v//2o
-         8FgDqlgPYcsLqR2Q18MbXTejoyrkfH9M2Ti9ECjwQNL8fWP/9/xSXu7sTrtQWVz3UFG+
-         LJ4rh3Lo/dFyPIQtSUgU73WuoMVt6I4GhWiY9S8YBl4tHfo6wEVl4hGd6C9LF6g33r7I
-         UH+A==
-X-Gm-Message-State: AOJu0YxY8RqHVsS1c2d/scpiVH5I9xHoIQODsRxQpihN6oGpDKaqIdLb
-	sasDp7tx17+k1YKJLSNhhXANXeTe9Le/xw8hGieHnqQNWcNKdvvBHAg4VKT2aDL+0c9vxLOD/1I
-	aMox/yRIyLj+3EbTL49wrIVLCCqnExFubInqozA==
-X-Google-Smtp-Source: AGHT+IE0f2aO085cH3xmP9VanflnkDeHUQnAqufqusFiaFr70CRd6j+Bz+dipUFrBk+UzO7Pa5H1MDK+TckxWx/Siqo=
-X-Received: by 2002:a17:906:f117:b0:a35:4ee9:7f12 with SMTP id
- gv23-20020a170906f11700b00a354ee97f12mr5466933ejb.50.1706876377331; Fri, 02
- Feb 2024 04:19:37 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706877688; x=1707482488;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kqYYnNIAPfyQp/lOLSeExWubf4maT7vMZXeoVfYiZmU=;
+        b=xHi7QU6Ri8EE/gWDpDhSF1G0XSA5mBGOEtyMOeLJyhMtRbVxZS4el2cdvYQN5CC3YV
+         w+FzNwwDHZNNOEJaEB/kzaQ8tEfPQTWkoDWb009ikHiViu2KJGWJUT2fxGWwdlGqGt19
+         14khxwtZAwOQS53THpf3zfrihkPmiSxAEu+A2w2KpwwkYdpoMgwKipPdKtxXNyQwKr4U
+         QV2le8NOj8cDnD2GTtCZXG1YTey5mbVjC+gtvkXvHGkaHkwt9T0x7qbsv2p+qhRU35Z9
+         hM1tdCH5VIgORszepezQmQqYA/tcb58w+nvQmlAGP0MkKpW/8n3ttvRIYckILhxZ0tSR
+         N/Hg==
+X-Gm-Message-State: AOJu0YwZ7Ur6XTkSNqHo3GkvfN50L7QXJbTfRPuVZrFx9/J1qaFy+/lE
+	3e54MgYy5dGrrGRXVRjybSd0H4d6OruX19+TVtnq0c3kWszLhnCo6cfrfd1IV0+Kn+6Nfb8FIIH
+	ncfwgh2TfyiTJjf9QdH5lC+P1YGw=
+X-Google-Smtp-Source: AGHT+IGUeMVcp/PMXDXbjREYVYvTsstGTRsTqgi4wfbQMeHZFLFvGC0Ppx4vqx2EtvbTOpKuSPKEvCaLYSvrbg0iDj4=
+X-Received: by 2002:a81:6c56:0:b0:5ff:44e8:6df5 with SMTP id
+ h83-20020a816c56000000b005ff44e86df5mr2115142ywc.18.1706877688098; Fri, 02
+ Feb 2024 04:41:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,33 +71,43 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240202110132.1584111-1-amir73il@gmail.com> <20240202110132.1584111-3-amir73il@gmail.com>
-In-Reply-To: <20240202110132.1584111-3-amir73il@gmail.com>
-From: Miklos Szeredi <miklos@szeredi.hu>
-Date: Fri, 2 Feb 2024 13:19:25 +0100
-Message-ID: <CAJfpeguhrTkNYny1xmJxwOg8m5syhti1FDhJmMucwiY6BZ6eLg@mail.gmail.com>
+ <CAJfpeguhrTkNYny1xmJxwOg8m5syhti1FDhJmMucwiY6BZ6eLg@mail.gmail.com>
+In-Reply-To: <CAJfpeguhrTkNYny1xmJxwOg8m5syhti1FDhJmMucwiY6BZ6eLg@mail.gmail.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Fri, 2 Feb 2024 14:41:16 +0200
+Message-ID: <CAOQ4uxhcQfR6QP=oESUvhcwXh+vwBJUL+N1_XDZ5sFGk61HWGg@mail.gmail.com>
 Subject: Re: [PATCH 2/2] fs: remove the inode argument to ->d_real() method
-To: Amir Goldstein <amir73il@gmail.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
 Cc: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
 	Stefan Berger <stefanb@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
 	linux-unionfs@vger.kernel.org, linux-integrity@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2 Feb 2024 at 12:01, Amir Goldstein <amir73il@gmail.com> wrote:
+On Fri, Feb 2, 2024 at 2:19=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu> w=
+rote:
+>
+> On Fri, 2 Feb 2024 at 12:01, Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> > diff --git a/Documentation/filesystems/locking.rst b/Documentation/file=
+systems/locking.rst
+> > index d5bf4b6b7509..453039a2e49b 100644
+> > --- a/Documentation/filesystems/locking.rst
+> > +++ b/Documentation/filesystems/locking.rst
+> > @@ -29,7 +29,7 @@ prototypes::
+> >         char *(*d_dname)((struct dentry *dentry, char *buffer, int bufl=
+en);
+> >         struct vfsmount *(*d_automount)(struct path *path);
+> >         int (*d_manage)(const struct path *, bool);
+> > -       struct dentry *(*d_real)(struct dentry *, const struct inode *)=
+;
+> > +       struct dentry *(*d_real)(struct dentry *, int type);
+>
+> Why not use the specific enum type for the argument?
 
-> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
-> index d5bf4b6b7509..453039a2e49b 100644
-> --- a/Documentation/filesystems/locking.rst
-> +++ b/Documentation/filesystems/locking.rst
-> @@ -29,7 +29,7 @@ prototypes::
->         char *(*d_dname)((struct dentry *dentry, char *buffer, int buflen);
->         struct vfsmount *(*d_automount)(struct path *path);
->         int (*d_manage)(const struct path *, bool);
-> -       struct dentry *(*d_real)(struct dentry *, const struct inode *);
-> +       struct dentry *(*d_real)(struct dentry *, int type);
-
-Why not use the specific enum type for the argument?
+No reason, we can do enum d_real_type.
 
 Thanks,
-Miklos
+Amir.
 
