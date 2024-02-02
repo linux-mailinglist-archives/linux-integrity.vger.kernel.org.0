@@ -1,170 +1,107 @@
-Return-Path: <linux-integrity+bounces-1003-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1004-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78798847274
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 15:59:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 076B88472DA
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 16:15:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 339081F2B538
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 14:59:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44689B2660D
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 15:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8A5144631;
-	Fri,  2 Feb 2024 14:59:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2DA651A2;
+	Fri,  2 Feb 2024 15:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MtJy1EyA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PGKmNw+c"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695D914532F;
-	Fri,  2 Feb 2024 14:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A466C5FDD3;
+	Fri,  2 Feb 2024 15:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706885985; cv=none; b=UkC0MeFY1NoQKBPKKolbq5pzn8zeQ4mo6NCd/UJbL6ZSLI6POgJT5KNsvgQ+pZzjO/jmNCVpynaNsHrP0VAnA4Sk/PqTNJBpdgmtEm3GVDz49WxlIb3Bap8vTWe7GXmRwpQgSMnFc7OhVjgvIv4MZYiDwcY29RcGkF80MTl8dhQ=
+	t=1706886921; cv=none; b=F2Zv33ZQ3eeulPLnKynTT9rYQUHcOSusdyM0Kzq0eyU5lIu9EvtRSmDqnNL0QeU7pdeHGR4lveF8Jpk7z0wfuXfwikhZdrZq7gX0I481TB6K+SGPaHzloGPK1PBdBOsB3C0HlYxyD10pp9l84uUkYcvmP7X17dYgoM0Bp1A+r8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706885985; c=relaxed/simple;
-	bh=j9o/D4PX8P6MAHXX8Li5cakqXSJZBBqE79iYgK9s8xk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=obOO8kWj3Xki5DVzd7Wib8qEzraHRZL1nrSRoShSI85aKK0Nk8A/KruQfD+GrHg+GLQkiejqvgf39Ga+OFjHmrFHktG4KhSaoN0CT4Tog/151OPGEOPtAfB27780fSKZ2AJttGNWvEAlbNFcv93Pg2AR/pnCU9OxPU51d65UIwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MtJy1EyA; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 412ElDTD029311;
-	Fri, 2 Feb 2024 14:59:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lavWl5ZUgUmZW7XwY/1Pku4zomLlRtgMX26Nnc+GCZM=;
- b=MtJy1EyA5q7LktsdR4IXWCVqBdi4/reR084RIJ/8sbzYItLurHsAl7FY4iQTrzu36W8s
- dCARAVfJhHuIjxy7OscPneErUp0WQzByxXxOxZklJOIWdfcwDzKVkXwzs5+CjEdv0nZQ
- jwzGfFTP9RcM3noxc2ew/cQ7RKXxy1RhsnLd8f3TqVzLgtiCprs2gEfSfNnw2J5p2ID9
- BJI8PefIQXiA8qHc+yx7EOZvl1rn1d3qfnpHz1JifBZPc9dr7NUgAUmKACSDdoQSrWKv
- V0SGZNloronpOGcrl5MkTt6Cu446BB62AN+Vhx9qsif15GKrgCGV3vSy/cYgss3PHgcm 5Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w12f78aeu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Feb 2024 14:59:21 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 412Elh9X031100;
-	Fri, 2 Feb 2024 14:59:20 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w12f78ae0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Feb 2024 14:59:20 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 412CbmDH010564;
-	Fri, 2 Feb 2024 14:59:19 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vwd5pbwup-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Feb 2024 14:59:19 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 412ExIRw28181208
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 2 Feb 2024 14:59:19 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BEA0C58058;
-	Fri,  2 Feb 2024 14:59:18 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0997158057;
-	Fri,  2 Feb 2024 14:59:18 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  2 Feb 2024 14:59:17 +0000 (GMT)
-Message-ID: <427ce381-73fa-48f9-8e18-77e23813b918@linux.ibm.com>
-Date: Fri, 2 Feb 2024 09:59:17 -0500
+	s=arc-20240116; t=1706886921; c=relaxed/simple;
+	bh=bb6JJ8DGIU+YS8GDuF1NbPbwT5kWXHlvXEbDqtB+XvE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XwR2wOkVKeAJuOe+N1I0vTxOGjprl+mGX/LuRfgHexkkGBosBFXfBFwEjCedHjwcZ32ZxwpfHS98Vz0o1bj59OnYolRL6sFY6FpW2dlPrjboqfaTwoXZZDN9qGH6FXdqVTwG7W7qexxpvzY7/moMpzwOpqYqqxt84XtRshToa8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PGKmNw+c; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-290ec261a61so1373452a91.0;
+        Fri, 02 Feb 2024 07:15:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706886919; x=1707491719; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E3hbLG6X/DntHPddDHhK9VeKaxqSP8Xz0NQInETgw1Q=;
+        b=PGKmNw+cY8IHw6JEG6+3ezCy5+xc13wP64omJHJTbYkHzNSF+sTd8tUU9j7GeCRsnZ
+         4IIw1v/hy1+ojBp9vgpO53VQpoknTEdPoHG2R3OCfvz39Ha/qlJUzfbAP8yDlCTSInu/
+         A0tCpWzEmSAIrf9TVwV70sLk4ltZqsPxreKAmKTyld116czeQ6XkzAgDDRaTShPX+M8k
+         mRPZh3K2xtNtOKeDLChB3XTdiLl8K09w9HMyCJbLPex5IUSci3JQCkyV12/KTEqZ4imR
+         FQABfvjoN85Da/XtfFBqEHMO/ROZRIS6BZLB+mnIClHBm1hVTyHgI97JFTKeGX2xL0sa
+         zY0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706886919; x=1707491719;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E3hbLG6X/DntHPddDHhK9VeKaxqSP8Xz0NQInETgw1Q=;
+        b=oVqmg34b8r0O8Ozdty8DCgIjH8Ir3t4rbDjuhH1PQsQ8/8jVfz6FaC9Y5HdP2cnsus
+         lS27bvHNZfmbRMUQE8U6nZVlJpzdnnVjDYpjNV7lqEb7qndRTPvK0oGANDv7UYJDag31
+         NyaOlJReWnIRIl++2Z9ktoqFp83d/t44glNyiCRbfdAcmagJsKslq/tknIvbhJeDCaFP
+         mneIkNCJDTbT3ArUfAKkAXtGDf7miJZY48UYaMm42dWJ1pDM1OEQ8hfNOx1WV4RUJ5lk
+         935XVyj5Wm+GUkhsQjpCFNNGwgQyz5sVEe2gPWAD4jrKenZanYRorIwi/Fb4SUHnmoiu
+         moZQ==
+X-Gm-Message-State: AOJu0YzSkbXxFuGc+eR9/lacrBIrR/jVrNMllWK+T7yJiO0viOiC1wAJ
+	kjS8sk/JYcZFsQk91TVeCCfYY2vyy69/cMLJVzicGp7VHqZQycELCxptD4sp
+X-Google-Smtp-Source: AGHT+IH07ZtDoocRy3yBjkccyU7UWOy9iS+iNLhy/e5CWCGd16TlKoZXQ3zA9Y8uc4K+OpMQtNLwKA==
+X-Received: by 2002:a17:90a:17a6:b0:296:14e5:1423 with SMTP id q35-20020a17090a17a600b0029614e51423mr5648693pja.13.1706886918624;
+        Fri, 02 Feb 2024 07:15:18 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCUPetBg+6lQxcwpYdWTK4R61znscJMTXpOP4t52+tt3OQ3ec5hAJbls4FZa0zbE4BBLD/wuIpNVfYi475Bdd0OdRiEwbFK47e4wULipMwiz9GwhXTdHYHXWu7yBc3n0GrnyxNq1Q0lHmxhGPgJ21ERkpXSHwOSfAkU7s8+iJfxKfxq/qCcEK+y8IpPxfIIKCUvg6DPbtCPeywfvZh+fnw==
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t10-20020a170902dcca00b001d94c709738sm1713444pll.217.2024.02.02.07.15.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Feb 2024 07:15:17 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 2 Feb 2024 07:15:16 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ninad Palsule <ninad@linux.ibm.com>
+Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Joel Stanley <joel@jms.id.au>
+Subject: Re: [PATCH v2 1/1] tpm: tis-i2c: Add more compatible strings
+Message-ID: <d2a962c6-9c15-479a-b0c1-475ea1030862@roeck-us.net>
+References: <20240116181754.3905754-1-ninad@linux.ibm.com>
+ <20240116181754.3905754-2-ninad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] evm: Use the real inode's metadata to calculate
- metadata hash
-Content-Language: en-US
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, roberto.sassu@huawei.com, miklos@szeredi.hu
-References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
- <20240130214620.3155380-5-stefanb@linux.ibm.com>
- <38230b4c-54ae-45ed-a6fb-34e63501e5b1@linux.ibm.com>
- <CAOQ4uxiYARZBSgzb4_W-RKvB1XLSF3GUBqeLw2kH+eVeZ_8ARQ@mail.gmail.com>
- <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com>
- <CAOQ4uxi6Te8izWpXROthknRaXrVA9jho5nbc+mkuQDrcTLY44Q@mail.gmail.com>
- <CAOQ4uxigdNeE+2nfr4VxS9piQf5hez=ryT0a-jzW+tW0BT-zuw@mail.gmail.com>
- <492ea12a-d79d-47da-9bbe-a7f33051bd3f@linux.ibm.com>
- <CAOQ4uxgiO1RbsmqOu4F4Foy-MBPecnEXO7BvgDGz-Lzb1Eysog@mail.gmail.com>
- <4c584bfb-d282-4584-bb20-18c26b1033c0@linux.ibm.com>
- <CAOQ4uxjftr7GGx6tuW_yB_MTaVB57m6p_d=UHhN3Z23YVXY0QQ@mail.gmail.com>
- <11abffea-15c5-4d13-9d0f-edbc54b09bf3@linux.ibm.com>
- <CAOQ4uxjZ6p9+H54G0LNTUnU56WRaoLtWOUj2nOaKJ4JvBGqLVg@mail.gmail.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <CAOQ4uxjZ6p9+H54G0LNTUnU56WRaoLtWOUj2nOaKJ4JvBGqLVg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nNkl4IhpdK-es4OdrpqLPUVI1hg5a2Li
-X-Proofpoint-ORIG-GUID: hrDn8ECO5a-V7MBqtbrwJpXdRv35DWCs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-02_08,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxlogscore=948 suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402020109
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240116181754.3905754-2-ninad@linux.ibm.com>
 
-
-
-On 2/2/24 04:24, Amir Goldstein wrote:
-> On Thu, Feb 1, 2024 at 10:35 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
-
+On Tue, Jan 16, 2024 at 12:17:54PM -0600, Ninad Palsule wrote:
+> From: Joel Stanley <joel@jms.id.au>
 > 
->>
->> and your suggested change to this patch :
->>
->> -       struct inode *inode = d_real_inode(dentry);
->> +       struct inode *inode = d_inode(d_real(dentry, false));;
->>
+> Add a generic compatibility string for I2C based TPM 2.0 device.
 > 
-> In the new version I change the API to use an enum instead of bool, e.g.:
-> 
->         struct inode *inode = d_inode(d_real(dentry, D_REAL_METADATA));
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
 
-Thanks. I will use it.
+FWIW:
 
-> 
-> This catches in build time and in run time, callers that were not converted
-> to the new API.
-> 
->> The test cases are now passing with and without metacopy enabled. Yay!
-> 
-> Too soon to be happy.
-> I guess you are missing a test for the following case:
-> 1. file was meta copied up (change is detected)
-> 2. the lower file that contains the data is being changed (change is
-> not detected)
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Right. Though it seems there's something wrong with overlayfs as well 
-after appending a byte to the file on the lower.
+with qemu and tacoma-bmc.
 
--rwxr-xr-x    1 0        0               25 Feb  2 14:55 
-/ext4.mount/lower/test_rsa_portable2
--rwxr-xr-x    1 0        0               24 Feb  2 14:55 
-/ext4.mount/overlay/test_rsa_portable2
-bb16aa5350bcc8863da1a873c846fec9281842d9 
-/ext4.mount/lower/test_rsa_portable2
-bb16aa5350bcc8863da1a873c846fec9281842d9 
-/ext4.mount/overlay/test_rsa_portable2
-
-We have a hash collision on a file with 24 bytes and the underlying one 
-with 25 byte. (-;  :-)
-
-   Stefan
+Thanks,
+Guenter
 
