@@ -1,81 +1,81 @@
-Return-Path: <linux-integrity+bounces-1012-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1013-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D0688474BA
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 17:30:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D076E847630
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 18:34:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0A8A1C2162F
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 16:30:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 017821C20A6C
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 17:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B252E3E1;
-	Fri,  2 Feb 2024 16:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E4A014A4F4;
+	Fri,  2 Feb 2024 17:34:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="U6EqOU/i"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="KGFFvCv8"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7453D3BC;
-	Fri,  2 Feb 2024 16:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E927171A5;
+	Fri,  2 Feb 2024 17:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706891444; cv=none; b=NJG0qjFkCs4ujvlzuFNqE1AEURzKoPNau8Y5eJbxDfr8rPRW5UYc68WEhDMujWv8CNmA5OLI94sy4TMY59sHs3C+BSzmfkc1gvncUbjjbBHwnwuZId3LkqAs5JlE044y4thilVcfrtoJ6WbmCtLJ/uo9h6l05EC0zEQezHc1xfM=
+	t=1706895264; cv=none; b=LW3zVeS6foCxDmQg1dlcMsYEUt44GdxtpRgvUdNZAR9/jU2UDfNET148ODp790pk/s52sIOa/7XPM1lIP3EiS2AyCJzxaMDfVB9MuyPhWJiCgO4mC0QHudmkjU/V0Mq7H7teUPn6Et4GfYp8oUCn+xisWCYJTqflogeaLmvkr+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706891444; c=relaxed/simple;
-	bh=LGIBqBjIQvtTgXrj/p0OJ2yHuL9JY/HDvcoae3CNWa0=;
+	s=arc-20240116; t=1706895264; c=relaxed/simple;
+	bh=mmCqcKOCbWJ4h+yUWXwuD5cmWRJj1dmw2SKtIEtVGtU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S07ApW0yi0EMIYdJ8Si7BqgXotHyxLpJKLnF7N/mP5IaBdoZNVC3Qfa9aNP5rXnnHg82/yd2FCN75s3KgwGYd6YtroUQcTthzmb3xP1pEMYewvVzJnwthV1CXIVOMgkhyD3pqKkmqFAuT5TX/QoFvehTUYpMV1EfioYIo0v7TN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=U6EqOU/i; arc=none smtp.client-ip=148.163.156.1
+	 In-Reply-To:Content-Type; b=FLoHHMpy2M7+CiI0WKpFMrE5Bhkia7Btp6mCa29VhKUcqYZQDe5ZnmPb6clToTUyDbmff6AiewU8QbtDSaUbopUOarXPZFx6XuSvHDhIg3hy44QLcFv2K8mvnghv0rzD2mWNHaQWVvGcqCOeSPzsCvsM1WIDYjQBW2BXxvI+i4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=KGFFvCv8; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 412FoeJi009511;
-	Fri, 2 Feb 2024 16:30:29 GMT
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 412HNPbl001201;
+	Fri, 2 Feb 2024 17:34:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=Bvc08PyuVK+EXrEsLnwYXcm/2Anr57lMlLuuYmfanXQ=;
- b=U6EqOU/iHgA5r0EHZ5RqrmT/NGamw24ZmERHpYRBKAovaDgxaUGgGo6YUqebHokSjv+y
- b5UahIHPeSQKQso5ynhzGtA6yrI1xGTuBpX/TVyjBJ8zN3YOJ/7RjGLyYlBDrOyaSJSz
- xGMc8/R9pryqOlnaFwOTaTUudyvIIVUY9pwA35NsJdcawIeTy0HP8ATSk+M7rj7F1NuM
- ZsN4kbqxoVKjRRHjeRC6sVzq82QTVVFtZ4nGhNc0iIoJeT5S3RubgYHNydraoKors4G1
- 7CONMGjyOJJOy0HZeNCp+Y99VAHGJrSa4uG1Bq9QKvb8tPwpg9ySGaHFVWXoevxRcnx/ 4Q== 
+ bh=S2RHjfRY3vGG1Dg4oiNVOa89gb5fmXyKeMJtxwroD7Q=;
+ b=KGFFvCv8ZdBnKREn3znfi7xiWDqOKru2JsJm+afgjIA/C/m69OHF4VxOd837oIDZRs13
+ h0Jv3SgyiIHkgYocKoAL89jUo0A86e+NoYZesu5Wu0JUxVuXBHR9ms6j7i9XmP3hnzYj
+ KnHTqZ7x9v3ykag8lzSo47ctaWGPIX2x9Mg+7YgKpKP5HglRuhCw9EY0+2SpX0x/T+Op
+ 2AmOiVfEvtRHSJpVvmy7bCOjxqru1miL01aDZvD3ibcMM9xU1WcSGCiy5Lr7UZ8dc/9V
+ 83B54FC+0moX272HuuaPURP5YgGTOybDPxDHN6rWkifncbUEYbuV58/fHh2KsRSGO2G/ sg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w11egv968-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w119t63km-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Feb 2024 16:30:29 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 412GR06X030890;
-	Fri, 2 Feb 2024 16:30:28 GMT
+	Fri, 02 Feb 2024 17:34:19 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 412HNbuC002307;
+	Fri, 2 Feb 2024 17:34:18 GMT
 Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w11egv95b-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w119t63ke-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Feb 2024 16:30:28 +0000
+	Fri, 02 Feb 2024 17:34:18 +0000
 Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 412DwHVf010887;
-	Fri, 2 Feb 2024 16:30:27 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vwecm43ap-1
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 412Gqhkc010862;
+	Fri, 2 Feb 2024 17:34:17 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3vwecm4ecx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Feb 2024 16:30:27 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 412GUQIH23593634
+	Fri, 02 Feb 2024 17:34:17 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 412HYGkU66716044
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 2 Feb 2024 16:30:26 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4737758058;
-	Fri,  2 Feb 2024 16:30:26 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4D9875805E;
-	Fri,  2 Feb 2024 16:30:25 +0000 (GMT)
+	Fri, 2 Feb 2024 17:34:16 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7987F5805E;
+	Fri,  2 Feb 2024 17:34:16 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C0B9458050;
+	Fri,  2 Feb 2024 17:34:15 +0000 (GMT)
 Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  2 Feb 2024 16:30:25 +0000 (GMT)
-Message-ID: <d00e0b2f-7cd8-48d9-aac9-2463af3e3c24@linux.ibm.com>
-Date: Fri, 2 Feb 2024 11:30:24 -0500
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  2 Feb 2024 17:34:15 +0000 (GMT)
+Message-ID: <063577b8-3d7f-4a7f-8ed7-332601c98122@linux.ibm.com>
+Date: Fri, 2 Feb 2024 12:34:15 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -83,94 +83,94 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] evm: Use the real inode's metadata to calculate
- metadata hash
+Subject: Re: [PATCH 2/2] fs: remove the inode argument to ->d_real() method
 Content-Language: en-US
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        zohar@linux.ibm.com, roberto.sassu@huawei.com, miklos@szeredi.hu
-References: <20240130214620.3155380-1-stefanb@linux.ibm.com>
- <38230b4c-54ae-45ed-a6fb-34e63501e5b1@linux.ibm.com>
- <CAOQ4uxiYARZBSgzb4_W-RKvB1XLSF3GUBqeLw2kH+eVeZ_8ARQ@mail.gmail.com>
- <c018b014-9ba8-4395-86dc-b61346ab20a8@linux.ibm.com>
- <CAOQ4uxi6Te8izWpXROthknRaXrVA9jho5nbc+mkuQDrcTLY44Q@mail.gmail.com>
- <CAOQ4uxigdNeE+2nfr4VxS9piQf5hez=ryT0a-jzW+tW0BT-zuw@mail.gmail.com>
- <492ea12a-d79d-47da-9bbe-a7f33051bd3f@linux.ibm.com>
- <CAOQ4uxgiO1RbsmqOu4F4Foy-MBPecnEXO7BvgDGz-Lzb1Eysog@mail.gmail.com>
- <4c584bfb-d282-4584-bb20-18c26b1033c0@linux.ibm.com>
- <CAOQ4uxjftr7GGx6tuW_yB_MTaVB57m6p_d=UHhN3Z23YVXY0QQ@mail.gmail.com>
- <11abffea-15c5-4d13-9d0f-edbc54b09bf3@linux.ibm.com>
- <CAOQ4uxjZ6p9+H54G0LNTUnU56WRaoLtWOUj2nOaKJ4JvBGqLVg@mail.gmail.com>
- <427ce381-73fa-48f9-8e18-77e23813b918@linux.ibm.com>
- <CAOQ4uxggqa7j0NS1MN3KSvF_qG1FMVmFxacEYSTx+LuvuosJ5g@mail.gmail.com>
- <4ce0e20d-ed14-490d-9446-a6cfbd532bca@linux.ibm.com>
- <CAOQ4uxhkyh19rMXnZ+Ou-Z0DgraBJAvL53K_PK9zRUB2O-Lsqw@mail.gmail.com>
+To: Al Viro <viro@zeniv.linux.org.uk>, Amir Goldstein <amir73il@gmail.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>,
+        Christian Brauner
+ <brauner@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>, linux-unionfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20240202110132.1584111-1-amir73il@gmail.com>
+ <20240202110132.1584111-3-amir73il@gmail.com>
+ <20240202160509.GZ2087318@ZenIV> <20240202161601.GA976131@ZenIV>
 From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <CAOQ4uxhkyh19rMXnZ+Ou-Z0DgraBJAvL53K_PK9zRUB2O-Lsqw@mail.gmail.com>
+In-Reply-To: <20240202161601.GA976131@ZenIV>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uBSTZiZ5B46Geg70rrd9NYj5YaWuEnt1
-X-Proofpoint-ORIG-GUID: Hd-VM9MjN1kJ2smJ9B1wx_2Y2zLY97dE
+X-Proofpoint-ORIG-GUID: 3OgVUjc4BWTHlSnBNd0jYiA3T2Q797EN
+X-Proofpoint-GUID: Rs7Boa3vJrPq7t1RDcKj9QF3CE4YeUY_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-02_10,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=528 phishscore=0
- clxscore=1015 malwarescore=0 suspectscore=0 mlxscore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 impostorscore=0 spamscore=0
+ definitions=2024-02-02_11,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=865 impostorscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402020119
+ engine=8.12.0-2311290000 definitions=main-2402020126
 
 
 
-On 2/2/24 11:17, Amir Goldstein wrote:
->> The odd thing is my updated test case '2' seems to indicate that
->> everything already works as expected with CONFIG_OVERLAY_FS_METACOPY=y.
->> After causing copy-up of metadata changes to the file content on the
->> lower layer still cause permission error to file execution on the
->> overlay layer and after restoring the file content on the lower the file
->> on the overlay again runs as expected. The file content change + copy-up
->> of file content also has completely decoupled the lower file from the
->> file on the overlay and changes to the file on the lower cause no more
->> file execution rejections on the overlay.
->>
+On 2/2/24 11:16, Al Viro wrote:
+> On Fri, Feb 02, 2024 at 04:05:09PM +0000, Al Viro wrote:
 > 
-> Sorry, you lost me.
-> The combination of IMA+EVM+OVL must be too complicated to
-> explain in plain language without an explicit test spelled out...
+>> Use After Free.  Really.  And "untrusted" in the function name does not
+>> refer to "it might be pointing to unmapped page" - it's just "don't
+>> expect anything from the characters you might find there, including
+>> the presence of NUL".
 > 
-> When you write "The file content change + copy-up of file content also
-> has completely decoupled the lower file from the file on the overlay",
-> what do you mean by "copy up of the file content"?
-> Why was the file content copied up?
-
-The file was copied up by appending a byte to the file on the 'overlay'.
-
-> I was asking about use case that only metadata was copied up but
-> lower file content, which is still the content of the ovl file was changed
-> underneath ovl - this case does not cause data content to be copied up.
+> Argh...  s/including/beyond the/ - sorry.  Messed up rewriting the
+> sentence.
 > 
-> I don't think we understand each other.
+> "Untrusted" refers to the lack of whitespaces, control characters, '"',
+> etc.  What audit_log_untrustedstring(ab, string) expects is
+> 	* string pointing to readable memory object
+> 	* the object remaining unchanged through the call
+> 	* NUL existing somewhere in that object.
+> 
+> All of those assertions can be violated once the object string
+> used to point to has been passed to kmem_cache_free().  Which is what
+> can very well happen to filename pointer in this case.
 
-One of the test cases I also have is appending a byte to the file on the
-'lower'. At this point in the test one can detect whether 
-CONFIG_OVERLAY_FS_METACOPY is enabled by checking the sha1 of the files 
-on the lower and overlay layers and comparing their hashes. If they are 
-equal then CONFIG_OVERLAY_FS_METACOPY is enabled since previously in the 
-test file metadata on the overlay layer was already changed, which in 
-the CONFIG_OVERLAY_FS_METACOPY=y case only caused a copy-up of metadata.
-So, when trying to execute the file on the overlay layer the file cannot 
-be executed due to the file content change on the lower layer (IMA 
-should be the one detecting this, need to check) still 'shining 
-through'. After restoring the file content on the lower layer the file 
-again executes on the 'overlay' layer - as expected.
+I suppose this would provide a stable name?
 
+diff --git a/security/integrity/ima/ima_api.c 
+b/security/integrity/ima/ima_api.c
+index 597ea0c4d72f..48ae6911139b 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -244,7 +244,6 @@ int ima_collect_measurement(struct 
+integrity_iint_cache *iint,
+         const char *audit_cause = "failed";
+         struct inode *inode = file_inode(file);
+         struct inode *real_inode = d_real_inode(file_dentry(file));
+-       const char *filename = file->f_path.dentry->d_name.name;
+         struct ima_max_digest_data hash;
+         struct kstat stat;
+         int result = 0;
+@@ -313,11 +312,17 @@ int ima_collect_measurement(struct 
+integrity_iint_cache *iint,
+                 iint->flags |= IMA_COLLECTED;
+  out:
+         if (result) {
++               struct qstr *qstr = &file->f_path.dentry->d_name;
++               char buf[NAME_MAX + 1];
++
+                 if (file->f_flags & O_DIRECT)
+                         audit_cause = "failed(directio)";
+
++               memcpy(buf, qstr->name, qstr->len);
++               buf[qstr->len] = 0;
++
+                 integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode,
+-                                   filename, "collect_data", audit_cause,
++                                   buf, "collect_data", audit_cause,
+                                     result, 0);
+         }
+         return result;
+
+
+Regards,
     Stefan
-
-
-> 
-> Thanks,
-> Amir.
 
