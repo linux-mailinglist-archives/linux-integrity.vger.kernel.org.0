@@ -1,107 +1,158 @@
-Return-Path: <linux-integrity+bounces-1004-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1005-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 076B88472DA
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 16:15:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D11A8472E8
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 16:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44689B2660D
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 15:15:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2B0BB24598
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 15:17:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2DA651A2;
-	Fri,  2 Feb 2024 15:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55D30145B37;
+	Fri,  2 Feb 2024 15:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PGKmNw+c"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BFpQ0vey"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A466C5FDD3;
-	Fri,  2 Feb 2024 15:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07A3145B21;
+	Fri,  2 Feb 2024 15:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706886921; cv=none; b=F2Zv33ZQ3eeulPLnKynTT9rYQUHcOSusdyM0Kzq0eyU5lIu9EvtRSmDqnNL0QeU7pdeHGR4lveF8Jpk7z0wfuXfwikhZdrZq7gX0I481TB6K+SGPaHzloGPK1PBdBOsB3C0HlYxyD10pp9l84uUkYcvmP7X17dYgoM0Bp1A+r8c=
+	t=1706887016; cv=none; b=gTIfKcF2zgWBoorwP0MlAyOElJDoywStAMliVNbGwboqDA/2E4reXxQzenTSey7glddK9HzES6rGMejn7+pIBvtM0FNXiyY8QcjT670u6Zz1XtWJKPGIUFsD6b4kTfBzhjLZNn0Uc9lO7tk02jad0oiWKygA8lUfMN1WBarpkyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706886921; c=relaxed/simple;
-	bh=bb6JJ8DGIU+YS8GDuF1NbPbwT5kWXHlvXEbDqtB+XvE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XwR2wOkVKeAJuOe+N1I0vTxOGjprl+mGX/LuRfgHexkkGBosBFXfBFwEjCedHjwcZ32ZxwpfHS98Vz0o1bj59OnYolRL6sFY6FpW2dlPrjboqfaTwoXZZDN9qGH6FXdqVTwG7W7qexxpvzY7/moMpzwOpqYqqxt84XtRshToa8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PGKmNw+c; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-290ec261a61so1373452a91.0;
-        Fri, 02 Feb 2024 07:15:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706886919; x=1707491719; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E3hbLG6X/DntHPddDHhK9VeKaxqSP8Xz0NQInETgw1Q=;
-        b=PGKmNw+cY8IHw6JEG6+3ezCy5+xc13wP64omJHJTbYkHzNSF+sTd8tUU9j7GeCRsnZ
-         4IIw1v/hy1+ojBp9vgpO53VQpoknTEdPoHG2R3OCfvz39Ha/qlJUzfbAP8yDlCTSInu/
-         A0tCpWzEmSAIrf9TVwV70sLk4ltZqsPxreKAmKTyld116czeQ6XkzAgDDRaTShPX+M8k
-         mRPZh3K2xtNtOKeDLChB3XTdiLl8K09w9HMyCJbLPex5IUSci3JQCkyV12/KTEqZ4imR
-         FQABfvjoN85Da/XtfFBqEHMO/ROZRIS6BZLB+mnIClHBm1hVTyHgI97JFTKeGX2xL0sa
-         zY0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706886919; x=1707491719;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E3hbLG6X/DntHPddDHhK9VeKaxqSP8Xz0NQInETgw1Q=;
-        b=oVqmg34b8r0O8Ozdty8DCgIjH8Ir3t4rbDjuhH1PQsQ8/8jVfz6FaC9Y5HdP2cnsus
-         lS27bvHNZfmbRMUQE8U6nZVlJpzdnnVjDYpjNV7lqEb7qndRTPvK0oGANDv7UYJDag31
-         NyaOlJReWnIRIl++2Z9ktoqFp83d/t44glNyiCRbfdAcmagJsKslq/tknIvbhJeDCaFP
-         mneIkNCJDTbT3ArUfAKkAXtGDf7miJZY48UYaMm42dWJ1pDM1OEQ8hfNOx1WV4RUJ5lk
-         935XVyj5Wm+GUkhsQjpCFNNGwgQyz5sVEe2gPWAD4jrKenZanYRorIwi/Fb4SUHnmoiu
-         moZQ==
-X-Gm-Message-State: AOJu0YzSkbXxFuGc+eR9/lacrBIrR/jVrNMllWK+T7yJiO0viOiC1wAJ
-	kjS8sk/JYcZFsQk91TVeCCfYY2vyy69/cMLJVzicGp7VHqZQycELCxptD4sp
-X-Google-Smtp-Source: AGHT+IH07ZtDoocRy3yBjkccyU7UWOy9iS+iNLhy/e5CWCGd16TlKoZXQ3zA9Y8uc4K+OpMQtNLwKA==
-X-Received: by 2002:a17:90a:17a6:b0:296:14e5:1423 with SMTP id q35-20020a17090a17a600b0029614e51423mr5648693pja.13.1706886918624;
-        Fri, 02 Feb 2024 07:15:18 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUPetBg+6lQxcwpYdWTK4R61znscJMTXpOP4t52+tt3OQ3ec5hAJbls4FZa0zbE4BBLD/wuIpNVfYi475Bdd0OdRiEwbFK47e4wULipMwiz9GwhXTdHYHXWu7yBc3n0GrnyxNq1Q0lHmxhGPgJ21ERkpXSHwOSfAkU7s8+iJfxKfxq/qCcEK+y8IpPxfIIKCUvg6DPbtCPeywfvZh+fnw==
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902dcca00b001d94c709738sm1713444pll.217.2024.02.02.07.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Feb 2024 07:15:17 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 2 Feb 2024 07:15:16 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Ninad Palsule <ninad@linux.ibm.com>
-Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH v2 1/1] tpm: tis-i2c: Add more compatible strings
-Message-ID: <d2a962c6-9c15-479a-b0c1-475ea1030862@roeck-us.net>
-References: <20240116181754.3905754-1-ninad@linux.ibm.com>
- <20240116181754.3905754-2-ninad@linux.ibm.com>
+	s=arc-20240116; t=1706887016; c=relaxed/simple;
+	bh=YCw4cDXb5/di2nLxfvW5MuQDHp4yTAmjCvodHy7oN3I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kV94zy3gPirJBSoMB1Ljm9d9laV+bW4Qabm9o9JMJzEYKtmUdA9jR+Eng/gO5JIeVzQH/yCOMYdlMqfWM7f+0jXtusi8zKZAqjFpvUimI4XtEHLuWUFs1y2WSSkE09f39TTOrkqv0SXx/k3089SGyELO7h0LhgfX4gZqJMMYNsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BFpQ0vey; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 412Dsi0Z028349;
+	Fri, 2 Feb 2024 15:16:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=GFtXPX2zDBlf3MAJ3pukKKNv5yphK9EH9NBq7OjssgE=;
+ b=BFpQ0veya5P5aiOv3v/TyuTBi5p4RoiVy3SduXgNKkD4lgSLBybC/s/mBvBVZbb6CKdf
+ 11yINgbbkTKOlxhSl4hzpyNtSsc7S5RRC5nJLpAkPiEaWV913kMdlYVpSHYsv1crh5rc
+ UJoq8XEaYo82m3UMFDnCBYo5ZkNH12zVmbOdOZbQpaxwuokx/wRgSt9/5yd0lr8wP00k
+ IV+mp0zl2s8/T+ew5e2iKW6fek0kRwdGx4y1Zk/+Lr2qMa8gSvTH14JsOsw8Nm9kv16Z
+ 0TRKsd/uJt/vS1wY5Jpyc7+cFRbNI7uz+8Jz+KcnAKKDlqmfOtWsUEP+YtqDKjuzAhP8 kA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w119t2s05-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Feb 2024 15:16:51 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 412EobWe031909;
+	Fri, 2 Feb 2024 15:16:50 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w119t2rya-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Feb 2024 15:16:50 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 412D3CDl010496;
+	Fri, 2 Feb 2024 15:16:49 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vwd5pc15m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Feb 2024 15:16:49 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 412FGmDR1049304
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 2 Feb 2024 15:16:49 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C252358058;
+	Fri,  2 Feb 2024 15:16:48 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3994B58057;
+	Fri,  2 Feb 2024 15:16:48 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  2 Feb 2024 15:16:48 +0000 (GMT)
+Message-ID: <9ff0da83-0be2-4fdc-8108-e65e043eacc3@linux.ibm.com>
+Date: Fri, 2 Feb 2024 10:16:47 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240116181754.3905754-2-ninad@linux.ibm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] fs: make file_dentry() a simple accessor
+Content-Language: en-US
+To: Amir Goldstein <amir73il@gmail.com>, Miklos Szeredi <miklos@szeredi.hu>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner
+ <brauner@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>, linux-unionfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20240202110132.1584111-1-amir73il@gmail.com>
+ <20240202110132.1584111-2-amir73il@gmail.com>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20240202110132.1584111-2-amir73il@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: P3Mv1-12CZv5utfzHqyFN1v8eijGksFn
+X-Proofpoint-GUID: 4mmjaq20M99V0eXW4Cr3Vf1BCSQ6n2hT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-02_08,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=639 impostorscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 clxscore=1011
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402020111
 
-On Tue, Jan 16, 2024 at 12:17:54PM -0600, Ninad Palsule wrote:
-> From: Joel Stanley <joel@jms.id.au>
+
+
+On 2/2/24 06:01, Amir Goldstein wrote:
+> file_dentry() is a relic from the days that overlayfs was using files with
+> a "fake" path, meaning, f_path on overlayfs and f_inode on underlying fs.
 > 
-> Add a generic compatibility string for I2C based TPM 2.0 device.
+> In those days, file_dentry() was needed to get the underlying fs dentry
+> that matches f_inode.
 > 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> Signed-off-by: Ninad Palsule <ninad@linux.ibm.com>
+> Files with "fake" path should not exist nowadays, so make file_dentry() a
+> simple accessor and use an assertion to make sure that file_dentry() was
+> not papering over filesystem bugs.
+> 
+> Signed-off-by: Amir Goldstein <amir73il@gmail.com>
 
-FWIW:
+Tested-by: Stefan Berger <stefanb@linux.ibm.com>
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-with qemu and tacoma-bmc.
-
-Thanks,
-Guenter
+> ---
+>   include/linux/fs.h | 13 ++++++++++++-
+>   1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 023f37c60709..de9aa86d2624 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -1078,9 +1078,20 @@ static inline struct inode *file_inode(const struct file *f)
+>   	return f->f_inode;
+>   }
+>   
+> +/*
+> + * file_dentry() is a relic from the days that overlayfs was using files with a
+> + * "fake" path, meaning, f_path on overlayfs and f_inode on underlying fs.
+> + * In those days, file_dentry() was needed to get the underlying fs dentry that
+> + * matches f_inode.
+> + * Files with "fake" path should not exist nowadays, so use an assertion to make
+> + * sure that file_dentry() was not papering over filesystem bugs.
+> + */
+>   static inline struct dentry *file_dentry(const struct file *file)
+>   {
+> -	return d_real(file->f_path.dentry, file_inode(file));
+> +	struct dentry *dentry = file->f_path.dentry;
+> +
+> +	WARN_ON_ONCE(d_inode(dentry) != file_inode(file));
+> +	return dentry;
+>   }
+>   
+>   struct fasync_struct {
 
