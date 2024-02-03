@@ -1,74 +1,75 @@
-Return-Path: <linux-integrity+bounces-1026-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1027-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1CD1848930
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 23:25:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B325848932
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 23:25:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 133051C21B3F
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 22:25:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 819A81F228F7
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 22:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD7BE1804F;
-	Sat,  3 Feb 2024 22:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238BE168C4;
+	Sat,  3 Feb 2024 22:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="FEg1YU/K"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PFIFmNHR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87BD168DF
-	for <linux-integrity@vger.kernel.org>; Sat,  3 Feb 2024 22:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084C3171D2
+	for <linux-integrity@vger.kernel.org>; Sat,  3 Feb 2024 22:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706999116; cv=none; b=JkRHhnh4UClR3q3U+MuLxpOZeh/JMzZy/K8DoWHu1r9J6pii32rCIl/DK2CHbPZwiWmc7O7lsJ323AElSJ4zQ5c417LsuIyzoyiKl5NlZ5fMRZKdgL6V+NvYMtxko3saG7yQE2k2kAKhvr+cRlUxGgudUTr34jMpIl4OBKpqoJ0=
+	t=1706999117; cv=none; b=PUXleBW1NUsviUfsmoEKrv5GKQ6ANQCa342AOt0Y3wZiJnnDnk1tUKnuXU07nJavRywJv6UkUv7LL38zcqWUN+vsYugZi5oClnjtF6+XjXuVPMXOMcw0TKRMYAfo1Ivo8GtQZdmuuxCSpKWsa4AcbmehZH4fEpBipaFBoKcMkP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706999116; c=relaxed/simple;
-	bh=TG3+0EGUR9bt602rI+2HsmhmcTLyo9r4S+xTet7lKAc=;
+	s=arc-20240116; t=1706999117; c=relaxed/simple;
+	bh=3ztzxjwdFWo2aRQAJna3nsAel/RLxGtTJmcBQeDLi5E=;
 	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=YSnlQF2ijOzp9xV/xdTpxeD7VxCL0e3yuPgead3zwm+8UA4HJswpejO5GrYBmilTS/0UC7Z0oiN2bZtib0saVu3Q++9tUXAnGkEYEDSt0M0JMTQXMSzkySotY2aq+ObNJZVeG3Fx9wGe2OZRjO4+og5IEHDJy1inWunzqSAaom4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=FEg1YU/K; arc=none smtp.client-ip=209.85.160.173
+	 From:To:Cc:Subject:References:In-Reply-To; b=ugb9Z8Co6M17ldmj4qfrc+MYUVaLPZcZPZyV8IMNCSI3vaLarcpX3Zak2zHh9hQFqL5vFLEztSv5P8oAuivhf4exUTBuoA9/nSP21wkK/dsz38/bzDks7BJwLGwwkj2rsLKGAoLGnH9p7gwD+OgIOZZNBTgPvdYnhMQ/9PjS8pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PFIFmNHR; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-42a9f0f1d40so16575031cf.1
-        for <linux-integrity@vger.kernel.org>; Sat, 03 Feb 2024 14:25:12 -0800 (PST)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6869233d472so17813176d6.2
+        for <linux-integrity@vger.kernel.org>; Sat, 03 Feb 2024 14:25:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1706999111; x=1707603911; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1706999112; x=1707603912; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=sSRaH1fgvDWzg8gAGfI9lRaHi1xVIBmOW3KgqeIEJWQ=;
-        b=FEg1YU/KHoKkwFw6L9WNlMEUNpemgVoQwBpPNqtCQ1GOQwGRUVd83XiruWL+RvVojD
-         a4dAH3wEAhlvWjFa31PxPWDsZYwsfCg/putLqmcq6oFdV3INKK9gvadiv82Kx3KY31iH
-         R6+XmKfJKbD4HTfBqYAm2V9rPWbCyI4H84FWhL9ptihIq9KmAZJvzp3RuXHvOqwo/djd
-         XBFIVhfrXY1gtSmo0lvdXAuPN0CPDqETp5eZR4q0IQ5YTIrhYmEnIbxs8JfO+IiRM286
-         1GoAw5SWO8PnfQEXqeeRuaSTkl+xIt2u2lMG/SZNdBUYCWE7dU8xqffXX+F1wududjW4
-         0m+w==
+        bh=36T6G7nLsBOPlZbJneB+42xI8//a+iMUkv+sIps39Ns=;
+        b=PFIFmNHRQVsDOjgxOw0eRqS8/JR/KcuKUN59gY0xApdxCIJ/wN4Ea2yMOKWJ3BuYD7
+         j17VpHt5yf0r/PeySeisaMbFebOs3SWYOBCOBMg9ASR/NmJ1UxYVgALyb31SYuwG7UL0
+         3l64WaUKXMA45+vFyeSXYwYmYCZAEAUmF9ExEozoNFTFtAUAK3qo2+BtusRmKCDGTab7
+         4RUp1tzq9ZMFfDKonCgdQARMf8LUuwfpXUz8ouqhmje9Ai4qve/F9QFzgWMbiSQ8TR1X
+         MOhhIypa5RbYfCqI09yyOPKmlTjLobjNSbqQXGxEkfrmSoyvgu/e2Lk7WpmrJezysMpz
+         tp4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706999111; x=1707603911;
+        d=1e100.net; s=20230601; t=1706999112; x=1707603912;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sSRaH1fgvDWzg8gAGfI9lRaHi1xVIBmOW3KgqeIEJWQ=;
-        b=RpZYE8V5pKepl6U4kkoXQFFXtoGKCQ4jDh2w1nBZjza1lxIMGW68rHA/I30Yr577gY
-         Hd+2BLl5DsLqAXLWmDvfAgkhDPmk+h0T5MX+W6IxI2M4MXVjqzJjZ9sVDS4a6mLOOIVh
-         1lBvP2MJIBErT+sC8DfI6lD1hwV/dTqvklUp7e8l9vplp2evhS7Q3ZEkhTE2Qr/dhEkH
-         Ur3KRTSW3zIDFCFMJkZY+WVWfo6BspgHs/XLCHQgBeMvkQodoFrAp+662f0gYKrR8Xn2
-         mCFBTkfeL5pQr1EI6X6h0QXPBA6RCJsg4diOuqxin8nb3FDuf4yraTeH8FOn9DCpn2Hl
-         jKuw==
-X-Gm-Message-State: AOJu0YyPCk1gn9wvMu830VcpVqN+HjxZGFGndmLf0SlWv1q4bw7MmpQZ
-	xgJ4D+7GZtBdH1MWWySDLqB4cMJf93d23oKpvKbL2zFCkUQYF20Hsqqx8aL5Fg==
-X-Google-Smtp-Source: AGHT+IG3EYhsNVPBU6KUcsUBSOQZNgKpw+Vbn9C8kTOZ2rew1NJBeQEAn2o9I3Z39lXFU9xFt+w5vw==
-X-Received: by 2002:a05:6214:246b:b0:68c:7faa:b256 with SMTP id im11-20020a056214246b00b0068c7faab256mr2977855qvb.54.1706999111497;
-        Sat, 03 Feb 2024 14:25:11 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWJSkgONFuvS33JOo7SgHBJCl+YTDRQpn2fDGiqnCeMDJb05PrWc0j1lbEa88WjF0wk/V3HTr/tA/zLb+NU9Cu//2wkmDRvpvTn0QJLWq8aiOqRyJ2K6BinavcCOK9suVGRki6Ikkq09RW/Sq87IRue3GOQ3e+Q4bsLzWAObDVzhXdNMxzQ9cHt2Y1sKPYHIZRFOWGBU2FmwE38lkXuDp4zCB0K9EiRRCxMcVUkJWRvTTlzwQaJ9U0UnaINRI34+9Ul7fXRwrqEko1h4YAJnl6W0Zhd1RBiapwr53PyKauqBAhrM0AI5PCdstCXGcQGoLKr7ZhCM16Nd8aytLhNgunOBxL1zYMyE9ZuFgvIlSl+6PI7SfWMYgfZkinZeBCUeB8VV31vMjKU0mvQO04fmSC/d900C0wIv5H9kQpC312TyYPlA6+9c++DRYvqTQQo0a5EVe+iDIksVhrACG7X6szUn+6c0KfEQAEWylHaMTAyLHHavIFDd1Jcl+2eVkSfM00gB6l45Z9ixVBD+SyPEMlCj2AjLiVWzMfEWNCCcw1JQqybylZKYc4Q5q4aZxt7ktVMSkGFhxNmRZt5TKeUPN0xnUYBxBbz4UUyFxCtjNdlG+Q8262ydgPT
+        bh=36T6G7nLsBOPlZbJneB+42xI8//a+iMUkv+sIps39Ns=;
+        b=ZgURe2tIo7WGZgaLYvim/B/2fz867FgmsKX438QQQePtjY1kdTGQhBxHXHEyoImjSi
+         7WutPiKwaZAuHm+3w0hD54crNzB5QPZlRFNr7tVHPpifSe1Th7LAuPT7+EhhscD6/Wg6
+         k7irR/gYWSY8f+74Nu7RqMzu/qTkAVWYEA9yd8B7MQ3bd0Y7xsUpBPvNVnTConXhQp7a
+         nPMfDWp2S5URhP3irBRgNf8qudhVbsiUj/8crVujhuJsaax3sduhftb8kjfK0UOsX3hF
+         kUCs215GkJDbQ7lMmddTK4AIYS1TtYLLok5U2Vgn+8CVonVRsYLuMxO3Kutz8RQq76q6
+         HmJg==
+X-Gm-Message-State: AOJu0YyshuUtagUHbkUdhLLpCQDGpp9leh31MLoyi1TdAJ0I+ZdVdy8H
+	awZGYwRMgQ0JCOWJUgVp4q7vkjCHcedAkPgZcDFaQ24N7XS2HxHH1ob4zdmP3dporvEGIptVp9A
+	=
+X-Google-Smtp-Source: AGHT+IEv2CnIOKuawGLYE6rFGzRj31eo5OuqlybxY/nrKh3BNB267rYsEu0rttRMA+E0ociy47JtyQ==
+X-Received: by 2002:a05:6214:21ef:b0:686:a11d:5ce9 with SMTP id p15-20020a05621421ef00b00686a11d5ce9mr3312489qvj.15.1706999112535;
+        Sat, 03 Feb 2024 14:25:12 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWAk0yDn7F4VJHF5IfNpmK+ESq2SxZxJ5XrPfe7jcavhA0CIEVgQZ1s4GE7ad9cEUM/aJkj+pwp8sjzsU6Pq8ZDZIN7WpJRlbM5+NZuiSq9PxoDERFGH6fU8qohxz7P0HwfM1Dz2qGLyBaLd0c6n3waGIFyQuKIx989ydja5+AlQUZjkDIWZW8CoyEzW1NQB5QKyaeFU+M8D4xr+/tpsfGx3ToJHCF56auQ937tsQ3b3zlYSOYJdpQvv4UU72xM3Hi+nFCQhBGmNeyJ0eQ2p4MC0RfRjkb/kAdoimJ8lC95Ze1Wo9eBNB1AC9gAW3bE46iXWvNAIw0Jm6j/GDdabUZey0C0pDhgSMpwup+tREvmwDFRflsp3jfVJR2U8Ef5bg9l/dLlKEhOHD8Hi/Q/kvDthXFVTyhL1EphyK64A3E8F+xFRiwf7lyDY82Xcl5V/9zobljW3JexJM3V9qtKYoEoA7OqeL3sKFprsgQlNTtPnXiogFrxoDav4lizdx9BRVaUZERhg35z9OCMoQja3gVuhT4gYjkqFlBK2rr7dhfFJzuQBUrIf7rz8IJ1AqYCGBgFgum+xiufoBJSiGBWU7CgMhTrtdSpb8Jo8x1LyhS9cnJSjOV2E+JB
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id nf8-20020a0562143b8800b0068c3b1bcf6bsm2177452qvb.95.2024.02.03.14.25.10
+        by smtp.gmail.com with ESMTPSA id nh17-20020a056214391100b0068509353fb6sm2169488qvb.133.2024.02.03.14.25.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Feb 2024 14:25:10 -0800 (PST)
-Date: Sat, 03 Feb 2024 17:25:10 -0500
-Message-ID: <737a8ea0323b3db38044813041215bac@paul-moore.com>
+        Sat, 03 Feb 2024 14:25:12 -0800 (PST)
+Date: Sat, 03 Feb 2024 17:25:11 -0500
+Message-ID: <16ecd49f9528749e288c8a4cc73c4425@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -81,16 +82,123 @@ Content-Transfer-Encoding: 8bit
 From: Paul Moore <paul@paul-moore.com>
 To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
 Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>, Fan Wu <wufan@linux.microsoft.com>
-Subject: Re: [PATCH RFC v12 8/20] ipe: add userspace interface
-References: <1706654228-17180-9-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1706654228-17180-9-git-send-email-wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v12 9/20] uapi|audit|ipe: add ipe auditing support
+References: <1706654228-17180-10-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1706654228-17180-10-git-send-email-wufan@linux.microsoft.com>
 
 On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> As is typical with LSMs, IPE uses securityfs as its interface with
-> userspace. for a complete list of the interfaces and the respective
-> inputs/outputs, please see the documentation under
-> admin-guide/LSM/ipe.rst
+> Users of IPE require a way to identify when and why an operation fails,
+> allowing them to both respond to violations of policy and be notified
+> of potentially malicious actions on their systems with respect to IPE
+> itself.
+> 
+> This patch introduces 3 new audit events.
+> 
+> AUDIT_IPE_ACCESS(1420) indicates the result of an IPE policy evaluation
+> of a resource.
+> AUDIT_IPE_CONFIG_CHANGE(1421) indicates the current active IPE policy
+> has been changed to another loaded policy.
+> AUDIT_IPE_POLICY_LOAD(1422) indicates a new IPE policy has been loaded
+> into the kernel.
+> 
+> This patch also adds support for success auditing, allowing users to
+> identify why an allow decision was made for a resource. However, it is
+> recommended to use this option with caution, as it is quite noisy.
+> 
+> Here are some examples of the new audit record types:
+> 
+> AUDIT_IPE_ACCESS(1420):
+> 
+>     audit: AUDIT1420 ipe_op=EXECUTE ipe_hook=BPRM_CHECK enforcing=1
+>       pid=297 comm="sh" path="/root/vol/bin/hello" dev="tmpfs"
+>       ino=3897 rule="op=EXECUTE boot_verified=TRUE action=ALLOW"
+> 
+>     audit: AUDIT1420 ipe_op=EXECUTE ipe_hook=BPRM_CHECK enforcing=1
+>       pid=299 comm="sh" path="/mnt/ipe/bin/hello" dev="dm-0"
+>       ino=2 rule="DEFAULT action=DENY"
+> 
+>     audit: AUDIT1420 ipe_op=EXECUTE ipe_hook=BPRM_CHECK enforcing=1
+>      pid=300 path="/tmp/tmpdp2h1lub/deny/bin/hello" dev="tmpfs"
+>       ino=131 rule="DEFAULT action=DENY"
+> 
+> The above three records were generated when the active IPE policy only
+> allows binaries from the initramfs to run. The three identical `hello`
+> binary were placed at different locations, only the first hello from
+> the rootfs(initramfs) was allowed.
+> 
+> Field ipe_op followed by the IPE operation name associated with the log.
+> 
+> Field ipe_hook followed by the name of the LSM hook that triggered the IPE
+> event.
+> 
+> Field enforcing followed by the enforcement state of IPE. (it will be
+> introduced in the next commit)
+> 
+> Field pid followed by the pid of the process that triggered the IPE
+> event.
+> 
+> Field comm followed by the command line program name of the process that
+> triggered the IPE event.
+> 
+> Field path followed by the file's path name.
+> 
+> Field dev followed by the device name as found in /dev where the file is
+> from.
+> Note that for device mappers it will use the name `dm-X` instead of
+> the name in /dev/mapper.
+> For a file in a temp file system, which is not from a device, it will use
+> `tmpfs` for the field.
+> The implementation of this part is following another existing use case
+> LSM_AUDIT_DATA_INODE in security/lsm_audit.c
+> 
+> Field ino followed by the file's inode number.
+> 
+> Field rule followed by the IPE rule made the access decision. The whole
+> rule must be audited because the decision is based on the combination of
+> all property conditions in the rule.
+> 
+> Along with the syscall audit event, user can know why a blocked
+> happened. For example:
+> 
+>     audit: AUDIT1420 ipe_op=EXECUTE ipe_hook=BPRM_CHECK enforcing=1
+>       pid=2138 comm="bash" path="/mnt/ipe/bin/hello" dev="dm-0"
+>       ino=2 rule="DEFAULT action=DENY"
+>     audit[1956]: SYSCALL arch=c000003e syscall=59
+>       success=no exit=-13 a0=556790138df0 a1=556790135390 a2=5567901338b0
+>       a3=ab2a41a67f4f1f4e items=1 ppid=147 pid=1956 auid=4294967295 uid=0
+>       gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0
+>       ses=4294967295 comm="bash" exe="/usr/bin/bash" key=(null)
+> 
+> The above two records showed bash used execve to run "hello" and got
+> blocked by IPE. Note that the IPE records are always prior to a SYSCALL
+> record.
+> 
+> AUDIT_IPE_CONFIG_CHANGE(1421):
+> 
+>     audit: AUDIT1421
+>       old_active_pol_name="Allow_All" old_active_pol_version=0.0.0
+>       old_policy_digest=sha256:E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649
+>       new_active_pol_name="boot_verified" new_active_pol_version=0.0.0
+>       new_policy_digest=sha256:820EEA5B40CA42B51F68962354BA083122A20BB846F
+>       auid=4294967295 ses=4294967295 lsm=ipe res=1
+> 
+> The above record showed the current IPE active policy switch from
+> `Allow_All` to `boot_verified` along with the version and the hash
+> digest of the two policies. Note IPE can only have one policy active
+> at a time, all access decision evaluation is based on the current active
+> policy.
+> The normal procedure to deploy a policy is loading the policy to deploy
+> into the kernel first, then switch the active policy to it.
+> 
+> AUDIT_IPE_POLICY_LOAD(1422):
+> 
+>     audit: AUDIT1422 policy_name="boot_verified" policy_version=0.0.0
+>       policy_digest=sha256:820EEA5B40CA42B51F68962354BA083122A20BB846F2676
+>       auid=4294967295 ses=4294967295 lsm=ipe res=1
+> 
+> The above record showed a new policy has been loaded into the kernel
+> with the policy name, policy version and policy hash.
 > 
 > Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
@@ -101,206 +209,180 @@ On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
 >     interface to pass mailing list character limit
 > 
 > v3:
->   + Move policy load and activation audit event to 03/12
->   + Fix a potential panic when a policy failed to load.
->   + use pr_warn for a failure to parse instead of an
->     audit record
->   + Remove comments from headers
->   + Add lockdep assertions to ipe_update_active_policy and
->     ipe_activate_policy
->   + Fix up warnings with checkpatch --strict
->   + Use file_ns_capable for CAP_MAC_ADMIN for securityfs
->     nodes.
->   + Use memdup_user instead of kzalloc+simple_write_to_buffer.
->   + Remove strict_parse command line parameter, as it is added
->     by the sysctl command line.
+>   + Move ipe_load_properties to patch 04.
+>   + Remove useless 0-initializations
 >   + Prefix extern variables with ipe_
+>   + Remove kernel module parameters, as these are
+>     exposed through sysctls.
+>   + Add more prose to the IPE base config option
+>     help text.
+>   + Use GFP_KERNEL for audit_log_start.
+>   + Remove unnecessary caching system.
+>   + Remove comments from headers
+>   + Use rcu_access_pointer for rcu-pointer null check
+>   + Remove usage of reqprot; use prot only.
+>   + Move policy load and activation audit event to 03/12
 > 
 > v4:
->   + Remove securityfs to reverse-dependency
->   + Add SHA1 reverse dependency.
->   + Add versioning scheme for IPE properties, and associated
->     interface to query the versioning scheme.
->   + Cause a parser to always return an error on unknown syntax.
->   + Remove strict_parse option
->   + Change active_policy interface from sysctl, to securityfs,
->     and change scheme.
+>   + Remove sysctls in favor of securityfs nodes
+>   + Re-add kernel module parameters, as these are now
+>     exposed through securityfs.
+>   + Refactor property audit loop to a separate function.
 > 
 > v5:
->   + Cause an error if a default action is not defined for each
->     operation.
->   + Minor function renames
+>   + fix minor grammatical errors
+>   + do not group rule by curly-brace in audit record,
+>     reconstruct the exact rule.
 > 
 > v6:
 >   + No changes
 > 
 > v7:
->   + Propagating changes to support the new ipe_context structure in the
->     evaluation loop.
-> 
->   + Further split the parser and userspace interface changes into
->     separate commits.
-> 
->   + "raw" was renamed to "pkcs7" and made read only
->   + "raw"'s write functionality (update a policy) moved to "update"
->   + introduced "version", "policy_name" nodes.
->   + "content" renamed to "policy"
->   + changes to allow the compiled-in policy to be treated
->     identical to deployed-after-the-fact policies.
+>   + Further split lsm creation, the audit system, the evaluation loop,
+>     and access control hooks into separate patches.
+>   + Further split audit system patch into two separate patches; one
+>     for include/uapi, and the usage of the new defines.
+>   + Split out the permissive functionality into another separate patch,
+>     for easier review.
+>   + Correct misuse of audit_log_n_untrusted string to audit_log_format
+>   + Use get_task_comm instead of comm directly.
+>   + Quote certain audit values
+>   + Remove unnecessary help text on choice options - these were
+>     previously indented at the wrong level
+>   + Correct a stale string constant (ctx_ns_enforce to ctx_enforce)
 > 
 > v8:
->   + Prevent securityfs initialization if the LSM is disabled
+> 
+>   + Change dependency for CONFIG_AUDIT to CONFIG_AUDITSYSCALL
+>   + Drop ctx_* prefix
+>   + Reuse, where appropriate, the audit fields from the field
+>     dictionary. This transforms:
+>       ctx_pathname  -> path
+>       ctx_ino       -> ino
+>       ctx_dev       -> dev
+> 
+>   + Add audit records and event examples to commit description.
+>   + Remove new_audit_ctx, replace with audit_log_start. All data that
+>     would provided by new_audit_ctx is already present in the syscall
+>     audit record, that is always emitted on these actions. The audit
+>     records should be correlated as such.
+>   + Change audit types:
+>     + AUDIT_TRUST_RESULT                -> AUDIT_IPE_ACCESS
+>       +  This prevents overloading of the AVC type.
+>     + AUDIT_TRUST_POLICY_ACTIVATE       -> AUDIT_MAC_CONFIG_CHANGE
+>     + AUDIT_TRUST_POLICY_LOAD           -> AUDIT_MAC_POLICY_LOAD
+>       + There were no significant difference in meaning between
+>         these types.
+> 
+>   + Remove enforcing parameter passed from the context structure
+>     for AUDIT_IPE_ACCESS.
+>     +  This field can be inferred from the SYSCALL audit event,
+>        based on the success field.
+> 
+>   + Remove all fields already captured in the syscall record. "hook",
+>     an IPE specific field, can be determined via the syscall field in
+>     the syscall record itself, so it has been removed.
+>       + ino, path, and dev in IPE's record refer to the subject of the
+>         syscall, while the syscall record refers to the calling process.
+> 
+>   + remove IPE prefix from policy load/policy activation events
+>   + fix a bug wherein a policy change audit record was not fired when
+>     updating a policy
 > 
 > v9:
->   + Switch to securityfs_recursive_remove for policy folder deletion
+>   + Merge the AUDIT_IPE_ACCESS definition with the audit support commit
+>   + Change the audit format of policy load and switch
+>   + Remove the ipe audit kernel switch
 > 
 > v10:
->   + Simplify and correct concurrency
->   + Fix typos
+>   + Create AUDIT_IPE_CONFIG_CHANGE and AUDIT_IPE_POLICY_LOAD
+>   + Change field names per upstream feedback
 > 
 > v11:
->   + Correct code comments
+>   + Fix style issues
 > 
 > v12:
->   + Correct locking and remove redundant code
+>   + Add ipe_op, ipe_hook, and enforcing fields to AUDIT_IPE_ACCESS
 > ---
->  security/ipe/Makefile    |   2 +
->  security/ipe/fs.c        | 101 +++++++++
->  security/ipe/fs.h        |  16 ++
->  security/ipe/ipe.c       |   3 +
->  security/ipe/ipe.h       |   2 +
->  security/ipe/policy.c    | 123 ++++++++++
->  security/ipe/policy.h    |   9 +
->  security/ipe/policy_fs.c | 469 +++++++++++++++++++++++++++++++++++++++
->  8 files changed, 725 insertions(+)
->  create mode 100644 security/ipe/fs.c
->  create mode 100644 security/ipe/fs.h
->  create mode 100644 security/ipe/policy_fs.c
+>  include/uapi/linux/audit.h |   3 +
+>  security/ipe/Kconfig       |   2 +-
+>  security/ipe/Makefile      |   1 +
+>  security/ipe/audit.c       | 212 +++++++++++++++++++++++++++++++++++++
+>  security/ipe/audit.h       |  18 ++++
+>  security/ipe/eval.c        |  44 ++++++--
+>  security/ipe/eval.h        |  13 ++-
+>  security/ipe/fs.c          |  70 ++++++++++++
+>  security/ipe/hooks.c       |  10 +-
+>  security/ipe/hooks.h       |  11 ++
+>  security/ipe/policy.c      |   5 +
+>  11 files changed, 372 insertions(+), 17 deletions(-)
+>  create mode 100644 security/ipe/audit.c
+>  create mode 100644 security/ipe/audit.h
 
 ...
 
-> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
-> index f22a576a6d68..61fea3e38e11 100644
-> --- a/security/ipe/policy.c
-> +++ b/security/ipe/policy.c
-> @@ -43,6 +71,68 @@ static int set_pkcs7_data(void *ctx, const void *data, size_t len,
->  	return 0;
->  }
->  
-> +/**
-> + * ipe_update_policy - parse a new policy and replace old with it.
-> + * @root: Supplies a pointer to the securityfs inode saved the policy.
-> + * @text: Supplies a pointer to the plain text policy.
-> + * @textlen: Supplies the length of @text.
-> + * @pkcs7: Supplies a pointer to a buffer containing a pkcs7 message.
-> + * @pkcs7len: Supplies the length of @pkcs7len.
-> + *
-> + * @text/@textlen is mutually exclusive with @pkcs7/@pkcs7len - see
-> + * ipe_new_policy.
-> + *
-> + * Context: Requires root->i_rwsem to be held.
-> + * Return:
-> + * * !IS_ERR	- The existing policy saved in the inode before update
-> + * * -ENOENT	- Policy doesn't exist
-> + * * -EINVAL	- New policy is invalid
+> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
+> new file mode 100644
+> index 000000000000..79b7af25085c
+> --- /dev/null
+> +++ b/security/ipe/audit.c
+> @@ -0,0 +1,212 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) Microsoft Corporation. All rights reserved.
 > + */
-> +struct ipe_policy *ipe_update_policy(struct inode *root,
-> +				     const char *text, size_t textlen,
-> +				     const char *pkcs7, size_t pkcs7len)
-> +{
-> +	int rc = 0;
-> +	struct ipe_policy *old, *ap, *new = NULL;
 > +
-> +	old = (struct ipe_policy *)root->i_private;
-> +	if (!old)
-> +		return ERR_PTR(-ENOENT);
+> +#include <linux/slab.h>
+> +#include <linux/audit.h>
+> +#include <linux/types.h>
+> +#include <crypto/hash.h>
 > +
-> +	new = ipe_new_policy(text, textlen, pkcs7, pkcs7len);
-> +	if (IS_ERR(new))
-> +		return new;
+> +#include "ipe.h"
+> +#include "eval.h"
+> +#include "hooks.h"
+> +#include "policy.h"
+> +#include "audit.h"
 > +
-> +	if (strcmp(new->parsed->name, old->parsed->name)) {
-> +		rc = -EINVAL;
-> +		goto err;
-> +	}
+> +#define ACTSTR(x) ((x) == IPE_ACTION_ALLOW ? "ALLOW" : "DENY")
 > +
-> +	if (ver_to_u64(old) > ver_to_u64(new)) {
-> +		rc = -EINVAL;
-> +		goto err;
-> +	}
+> +#define IPE_AUDIT_HASH_ALG "sha256"
 > +
-> +	root->i_private = new;
-> +	swap(new->policyfs, old->policyfs);
+> +#define AUDIT_POLICY_LOAD_FMT "policy_name=\"%s\" policy_version=%hu.%hu.%hu "\
+> +			      "policy_digest=" IPE_AUDIT_HASH_ALG ":"
+> +#define AUDIT_OLD_ACTIVE_POLICY_FMT "old_active_pol_name=\"%s\" "\
+> +				    "old_active_pol_version=%hu.%hu.%hu "\
+> +				    "old_policy_digest=" IPE_AUDIT_HASH_ALG ":"
+> +#define AUDIT_NEW_ACTIVE_POLICY_FMT "new_active_pol_name=\"%s\" "\
+> +				    "new_active_pol_version=%hu.%hu.%hu "\
+> +				    "new_policy_digest=" IPE_AUDIT_HASH_ALG ":"
+> +
+> +static const char *const audit_op_names[__IPE_OP_MAX + 1] = {
+> +	"EXECUTE",
+> +	"FIRMWARE",
+> +	"KMODULE",
+> +	"KEXEC_IMAGE",
+> +	"KEXEC_INITRAMFS",
+> +	"POLICY",
+> +	"X509_CERT",
+> +	"UNKNOWN",
+> +};
+> +
+> +static const char *const audit_hook_names[__IPE_HOOK_MAX] = {
+> +	"BPRM_CHECK",
+> +	"MMAP",
+> +	"MPROTECT",
+> +	"KERNEL_READ",
+> +	"KERNEL_LOAD",
+> +};
+> +
+> +static const char *const audit_prop_names[__IPE_PROP_MAX] = {
+> +#ifdef CONFIG_BLK_DEV_INITRD
+> +	"boot_verified=FALSE",
+> +	"boot_verified=TRUE",
+> +#endif /* CONFIG_BLK_DEV_INITRD */
+> +};
 
-Should the swap() take place with @ipe_policy_lock held?
-
-> +	mutex_lock(&ipe_policy_lock);
-> +	ap = rcu_dereference_protected(ipe_active_policy,
-> +				       lockdep_is_held(&ipe_policy_lock));
-> +	if (old == ap) {
-> +		rcu_assign_pointer(ipe_active_policy, new);
-> +		mutex_unlock(&ipe_policy_lock);
-> +		synchronize_rcu();
-
-I'm guessing you are forcing a synchronize_rcu() here because you are
-free()'ing @old in the caller, yes?  Looking at the code, I only see
-one caller, update_policy().  With only one caller, why not free @old
-directly in ipe_update_policy()?  Do you see others callers that would
-do something different?
-
-> +	} else {
-> +		mutex_unlock(&ipe_policy_lock);
-> +	}
-> +
-> +	return old;
-> +err:
-> +	ipe_free_policy(new);
-> +	return ERR_PTR(rc);
-> +}
-> +
->  /**
->   * ipe_new_policy - Allocate and parse an ipe_policy structure.
->   *
-> @@ -99,3 +189,36 @@ struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
->  	ipe_free_policy(new);
->  	return ERR_PTR(rc);
->  }
-> +
-> +/**
-> + * ipe_set_active_pol - Make @p the active policy.
-> + * @p: Supplies a pointer to the policy to make active.
-> + *
-> + * Context: Requires root->i_rwsem, which i_private has the policy, to be held.
-> + * Return:
-> + * * !IS_ERR	- Success
-> + * * -EINVAL	- New active policy version is invalid
-> + */
-> +int ipe_set_active_pol(const struct ipe_policy *p)
-> +{
-> +	struct ipe_policy *ap = NULL;
-> +
-> +	mutex_lock(&ipe_policy_lock);
-> +
-> +	ap = rcu_dereference_protected(ipe_active_policy,
-> +				       lockdep_is_held(&ipe_policy_lock));
-> +	if (ap == p) {
-> +		mutex_unlock(&ipe_policy_lock);
-> +		return 0;
-> +	}
-> +	if (ap && ver_to_u64(ap) > ver_to_u64(p)) {
-> +		mutex_unlock(&ipe_policy_lock);
-> +		return -EINVAL;
-> +	}
-> +
-> +	rcu_assign_pointer(ipe_active_policy, p);
-> +	mutex_unlock(&ipe_policy_lock);
-> +	synchronize_rcu();
-
-Why do you need the synchronize_rcu() call here?
-
-> +	return 0;
-> +}
-
+I think we can get rid of the preprocessor checks here.
 
 --
 paul-moore.com
