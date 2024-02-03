@@ -1,168 +1,183 @@
-Return-Path: <linux-integrity+bounces-1023-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1024-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82C2684852C
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 11:27:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA4B6848921
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 23:25:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C60BF1F267F0
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 10:27:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 037111C219B1
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 22:25:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DF05D735;
-	Sat,  3 Feb 2024 10:27:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B039168CE;
+	Sat,  3 Feb 2024 22:25:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="Qp71fFkF";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="PNMWcq6r"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="UslhFOVg"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF025D724;
-	Sat,  3 Feb 2024 10:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976BF1640B
+	for <linux-integrity@vger.kernel.org>; Sat,  3 Feb 2024 22:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706956050; cv=none; b=a8+1NfVRuE3cQ0bZoK4WGq8j5eBIRgYKbZEGnNYafyRIBhTpkQw5D0TjwpjKpEjWEmMi6Ks2eyHg9EKtk4Zg3GbEZIZBZpoTC9mavJBHazdu0Zv3tuKE7OEuM0zRLVfIUQ1CHHWegnXgr2QQitNPMjNL3dktHHNuwUGSu/rof8w=
+	t=1706999112; cv=none; b=ZT1DG7FGxLliz8KpmVY4b33qoW+fFucvOCdiF5Tzw+u1qHOBEr0/YnoT2ot77tMU0IIZSLgwzYFnrinz5x3x542/1ervbFogUzfKUp7QoIx+V+DVfpwtk3nxOCeWVfJpnivy/FIQr015LLcgKkLc0Csbdd+7ZRie2JAcVxpHwMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706956050; c=relaxed/simple;
-	bh=mYMlO94+qqGU6EIIkvherrMrf4NdbLBrBZ+xFuBRaTo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PmxMZpKQyvFuvVISPtPNA/2ULyHZnBEB1G1bGS2vhOyMzDZK3KLrrEtNKtv0yjYQkzHhVVG2S8DlvFeB8Ft8AX0TuFbmORf77D9z75siF1rmXIWcaxSZNw7/pTLXcGwJL92tHv27GD5kZ1WOvbLgMZN3lxbdK7tYVKX+9LirJ6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=Qp71fFkF; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=PNMWcq6r; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1706956047;
-	bh=mYMlO94+qqGU6EIIkvherrMrf4NdbLBrBZ+xFuBRaTo=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=Qp71fFkFavvAXnK9wZeK4K7rxcIJYAHIdToBfgwTP1y38uehurcBv7Jr6stA8/VCb
-	 Q6ABcfTBxbOmqZgsxNRCSK6AmvK6mkrHA4plqEW+IRATptdvrbGqkXZAt5Tg37Duix
-	 64ANq+0LxTIP5hXAY+sOSPw9hpbulPG9l5A78ulw=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 31E0812867F0;
-	Sat,  3 Feb 2024 05:27:27 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id ulQMKMU24K12; Sat,  3 Feb 2024 05:27:27 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1706956046;
-	bh=mYMlO94+qqGU6EIIkvherrMrf4NdbLBrBZ+xFuBRaTo=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=PNMWcq6riLEdQdBO7NG1Og31o1FCE8KALw7apsI0W5l6ADJ5uUBn2XUd0h/VMK/iy
-	 1mbG9+7gAJbdTjZqTs3mUvZmitnEr/L7Ri448H6d2CIT2rteYc5X+u2H/3KGMVS6s8
-	 2WuQFcOBC4nY93WEER5V8jlvRA6q4jsnCYeUlvtw=
-Received: from [IPv6:2001:67c:1810:f051:aa84:e46e:cdd1:cb4c] (unknown [IPv6:2001:67c:1810:f051:aa84:e46e:cdd1:cb4c])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 69EE21280FCA;
-	Sat,  3 Feb 2024 05:27:24 -0500 (EST)
-Message-ID: <85b7a4a679eada1d17b311bf004c2d9e18ab5cd3.camel@HansenPartnership.com>
-Subject: Re: [RFC PATCH v2 0/4] tsm: Runtime measurement registers ABI
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-  Dan Middleton <dan.middleton@linux.intel.com>, Samuel Ortiz
- <sameo@rivosinc.com>, Dan Williams <dan.j.williams@intel.com>
-Cc: Qinkun Bao <qinkun@google.com>, "Yao, Jiewen" <jiewen.yao@intel.com>, 
- "Xing, Cedric" <cedric.xing@intel.com>, Dionna Amalie Glaze
- <dionnaglaze@google.com>, biao.lu@intel.com,  linux-coco@lists.linux.dev,
- linux-integrity@vger.kernel.org,  linux-kernel@vger.kernel.org
-Date: Sat, 03 Feb 2024 11:27:21 +0100
-In-Reply-To: <1557f98a-3d52-4a02-992b-4401c7c85dd7@linux.intel.com>
-References: <20240128212532.2754325-1-sameo@rivosinc.com>
-	 <c17a31e4fb30f5f9d4a337e5bd8d54cc6f99eef7.camel@HansenPartnership.com>
-	 <a255bc36-2438-41b7-b304-bcf7a6628bef@linux.intel.com>
-	 <42e14f74d3819c95fdb97cd2e9b2829dcb1b1563.camel@HansenPartnership.com>
-	 <1557f98a-3d52-4a02-992b-4401c7c85dd7@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1706999112; c=relaxed/simple;
+	bh=Akk3yfd0skBsyfpDvBuTijI4DTSE1uDMrPs5axVSpcY=;
+	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
+	 From:To:Cc:Subject:References:In-Reply-To; b=fYdnHq/LfuPA2FZ5wJlniTJdTXmV6m3IzQNXMho4+4azVxPM1N34yAF9Ye5C2seI01vr9HxpVZRlExhvstNd9Qp+pObJPBKWrha3MfMe19ctInSRvBLvt8u0FXzyAsKAaWR317iXFnrMEkDTbrY1MDd3wpURlU7oKx7zhzpxaX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UslhFOVg; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-783f3d27bfbso185380785a.2
+        for <linux-integrity@vger.kernel.org>; Sat, 03 Feb 2024 14:25:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1706999109; x=1707603909; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DnWesDs8xRNqrKgsSJ7fCUj/XnlBG4IvaiEQPBxCK/I=;
+        b=UslhFOVg8WFUzqld2FRyTxItmLSnj0ByEQAtAEokRfNrtL65h4jolouj4Q0KaXgy7I
+         dwWBbtq75NLmwEzjqHnxX6ovf74HGb/+eQ1u5u3cDuR962nRMBIQAHO2pklMJs5VEtFF
+         J2KCZKGZqiH1GAnqMx/jR6Kw1zADG154LUO/sPqRF9z5CqmPx0YjEUQsIW35qgmWb16q
+         3UaVjFXAR/V/Ibmrl6bz95E4lv1HC+gW2jdbko6h6uNedJrm2Y8zlf0v1gBV7qgbdbqz
+         HidKBzGH5j3uX3pnyQRpaiw5EN+leF/d42mepu7qrwQGlfYFPxBsNV0AKjK0W8M46hI/
+         AMkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706999109; x=1707603909;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DnWesDs8xRNqrKgsSJ7fCUj/XnlBG4IvaiEQPBxCK/I=;
+        b=uqG32zOyUVRhH1MPVvlVdtmA/LdgctZlFnjiqaQNrH4/x0d9Ks5xkA/Zuiy+bWZe8M
+         r+voa+KWmeo3200YTXulPSVTmfIXq6FZOysulBkkmkkubMIBsOhv4MJ5/Vo5XBFbMtMq
+         Rjw8rlAlhr3PuyvWWYlJ11f3XP12N5mo8hsjhc9tyXXjJFOephenRCB7mwcOo78tgBSU
+         ayI0v/Ke5W/y7cty7n3nwx/IRfP140H0JYMBjtZq1wIC+E5/Qhrp/N4gQ5AEfSyvBu8x
+         9fh+NYhQ1EUsQ6+zTFHr/Mrks+OwrE4uTNNFKpNLV4fWktgyxVMpXXgjV4A51f1IyDL4
+         J7dg==
+X-Gm-Message-State: AOJu0Yx3mMYdH4krlBqnuPLSlmbqDhUSXt05mU78mlD08rwU+HUJlqgC
+	pZ6Xbi3UL/oTPeTayxZ0jVwkIdkzRbbTJdn87G6ymkKWbiXonHI4+ESpYAcJsg==
+X-Google-Smtp-Source: AGHT+IFtZe+Q8W1ePYytw7UeC4Jf2MOnkQ6RcSuccAbbwyK+ZuVbp0rOxBJSIWscsGRZX7r4oaJh+g==
+X-Received: by 2002:a05:620a:2e3:b0:783:b038:d1a1 with SMTP id a3-20020a05620a02e300b00783b038d1a1mr9095773qko.39.1706999109324;
+        Sat, 03 Feb 2024 14:25:09 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVwYaZbKyqip0VIR8GONQxXUcX8op8aMPNo2Ap1p+jdcI0F9O4QdFtfkXUh2izlay/UPxQX4uTdUnml1eWFaVIu3sl4cZN0o9MEZYPtDzuPUBt8ISFeQUgk//7oOgSqTo+LWz7pHI783WZUe7avWlFl2g4RV0ALfs6fSYnt9PmcP3V5e5UUC9OHfUN1hGOhFCEIHdwZdid79pfUdFyuN0HQ1asimEWyLDwYPGdfmyK0n3vX204PQ6L6I7qS+XYcc2+4FDbFfrLjHojE/EkYwAYSDsPcTayfqX5R0GGth4PTwEABerphUsn9JY6Cz1DdD0rhuTOjEi/XLpHp1AvDca0BRlY13p7V9uUBl5XxTmPDaaLTbmdbuj1e2I3b+GHRn4+Guw1TVTp0wlUYUAdXRnJPf1jp9/Mte8sgyYSGDJVgBLodRU8oGcMpA5MLWsHMPY5+8w5xv6eKGe3vsfBvHJH92nrGbL7ODZl7dWe1CNUDc7uQPTJqnToEqjD5Yl1fzWFBuCEy7dobme80FhUuQ9F8QqZX8GC19w5DGqXnrHRf6FF81Ob58I7Z4V+OoQ0FbylAMRBpa+pH
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id g4-20020a37e204000000b00783f534706esm1734412qki.61.2024.02.03.14.25.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Feb 2024 14:25:08 -0800 (PST)
+Date: Sat, 03 Feb 2024 17:25:08 -0500
+Message-ID: <b9ca171301d5abeb78922dd79d65136a@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Disposition: inline 
 Content-Transfer-Encoding: 8bit
+From: Paul Moore <paul@paul-moore.com>
+To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org, Fan Wu <wufan@linux.microsoft.com>
+Subject: Re: [PATCH RFC v12 5/20] initramfs|security: Add security hook to  initramfs unpack
+References: <1706654228-17180-6-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1706654228-17180-6-git-send-email-wufan@linux.microsoft.com>
 
-On Fri, 2024-02-02 at 23:13 -0800, Kuppuswamy Sathyanarayanan wrote:
+On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
 > 
-> On 2/2/24 10:03 PM, James Bottomley wrote:
-> > On Fri, 2024-02-02 at 17:07 -0600, Dan Middleton wrote:
-> > > On 2/2/24 12:24 AM, James Bottomley wrote:
-> > > > On Sun, 2024-01-28 at 22:25 +0100, Samuel Ortiz wrote:
-> > > > > All architectures supporting RTMRs expose a similar interface
-> > > > > to
-> > > > > their TVMs: An extension command/call that takes a
-> > > > > measurement
-> > > > > value and an RTMR index to extend it with, and a readback
-> > > > > command
-> > > > > for reading an RTMR value back (taking an RTMR index as an
-> > > > > argument as well). This patch series builds an architecture
-> > > > > agnostic, configfs-based ABI for userspace to extend and read
-> > > > > RTMR values back. It extends the current TSM ops structure
-> > > > > and
-> > > > > each confidential computing architecture can implement this
-> > > > > extension to provide RTMR support.
-> > > > What's the actual use case for this?  At the moment the TPM
-> > > > PCRs
-> > > > only provide a read interface to userspace (via
-> > > > /sys/class/tpm/tpmX/pcr-shaY/Z) and don't have any extension
-> > > > ability becuase nothing in userspace currently extends them.
-> > > > 
-> > > > The only current runtime use for TPM PCRs is IMA, which is in-
-> > > > kernel (and which this patch doesn't enable).
-> > > > 
-> > > > Without the ability to log, this interface is unusable anyway,
-> > > > but
-> > > > even with that it's not clear that you need the ability
-> > > > separately
-> > > > to extend PCRs because the extension and log entry should be
-> > > > done
-> > > > atomically to prevent the log going out of sync with the PCRs,
-> > > > so
-> > > > it would seem a log first interface would be the correct way of
-> > > > doing this rather than a PCR first one.
-> > > > 
-> > > > James
-> > > > 
-> > > > 
-> > > While we clearly need to cover PCR-like usages, I think
-> > > Confidential
-> > > Computing affords usages that go beyond TPM.
-> > Well, don't get me wrong, I think the ability to create non
-> > repudiable
-> > log entries from userspace is very useful.  However, I think the
-> > proposed ABI is wrong: it should take the log entry (which will
-> > contain
-> > the PCR number and the hash) then do the extension and add it to
-> > the
-> > log so we get the non-repudiable verifiability.  This should work
-> > equally with TPM and RTMR (and anything else).
+> This patch introduces a new hook to notify security system that the
+> content of initramfs has been unpacked into the rootfs.
 > 
-> Maybe I misunderstood your comments, but I am not sure why
-> the user ABI needs to change?
+> Upon receiving this notification, the security system can activate
+> a policy to allow only files that originated from the initramfs to
+> execute or load into kernel during the early stages of booting.
+> 
+> This approach is crucial for minimizing the attack surface by
+> ensuring that only trusted files from the initramfs are operational
+> in the critical boot phase.
+> 
+> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> ---
+> v1-v11:
+>   + Not present
+> 
+> v12:
+>   + Introduced
+> ---
+>  include/linux/lsm_hook_defs.h |  4 ++++
+>  include/linux/security.h      | 10 ++++++++++
+>  init/initramfs.c              |  3 +++
+>  security/security.c           | 12 ++++++++++++
+>  4 files changed, 29 insertions(+)
+> 
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index 185924c56378..b247388786a9 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -425,3 +425,7 @@ LSM_HOOK(int, 0, uring_override_creds, const struct cred *new)
+>  LSM_HOOK(int, 0, uring_sqpoll, void)
+>  LSM_HOOK(int, 0, uring_cmd, struct io_uring_cmd *ioucmd)
+>  #endif /* CONFIG_IO_URING */
+> +
+> +#ifdef CONFIG_BLK_DEV_INITRD
+> +LSM_HOOK(void, LSM_RET_VOID, unpack_initramfs_security, void)
+> +#endif /* CONFIG_BLK_DEV_INITRD */
 
-Well, there is no ABI currently, so I'm saying get it right before
-there is one.
+Let's just call it "unpack_initramfs", the "_security" part is somewhat
+implied since we are talking about a LSM hook ;)
 
->  I agree that logging after extension is the right approach. But,
-> IMO, it should be owned by the back end TSM vendor drivers. The user
-> ABI should just pass the digest and RTMR index.
+> diff --git a/init/initramfs.c b/init/initramfs.c
+> index 76deb48c38cb..075a5794cde5 100644
+> --- a/init/initramfs.c
+> +++ b/init/initramfs.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/init_syscalls.h>
+>  #include <linux/task_work.h>
+>  #include <linux/umh.h>
+> +#include <linux/security.h>
+>  
+>  static __initdata bool csum_present;
+>  static __initdata u32 io_csum;
+> @@ -720,6 +721,8 @@ static void __init do_populate_rootfs(void *unused, async_cookie_t cookie)
+>  #endif
+>  	}
+>  
+> +	security_unpack_initramfs();
 
-Well, lets wind back to the assumptions about the log.  The current
-convention from IMA and Measured Boot is that the log is managed by the
-kernel.  Given the potential problems with timing and serialization
-(which can cause log mismatches) it would make sense for this ABI also
-to have a kernel backed log (probably a new one from the other two). 
-If you have a kernel backed log, the ABI for extending it should be
-where you get the PCR extensions from, that way nothing can go wrong. 
-An API to extend the PCRs separately will only cause pain for people
-who get it wrong (and lead to ordering issues if more than one thing
-wants to add to the log, which they will do because neither the TPM nor
-the RTMRs have enough registers to do one per process that wants to use
-it if this becomes popular).
+Given the caller, what do you think of changing the hook name to
+"security_initramfs_populated()"?  I think this not only matches up
+better with the caller, "do_populate_rootfs()", but since in using the
+past tense we help indicate that this hook happens *after* the rootfs
+is populated with the initramfs data.
 
-James
+>  done:
+>  	/*
+>  	 * If the initrd region is overlapped with crashkernel reserved region,
+> diff --git a/security/security.c b/security/security.c
+> index ddf2e69cf8f2..2a527d4c69bc 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -5581,3 +5581,15 @@ int security_uring_cmd(struct io_uring_cmd *ioucmd)
+>  	return call_int_hook(uring_cmd, 0, ioucmd);
+>  }
+>  #endif /* CONFIG_IO_URING */
+> +
+> +#ifdef CONFIG_BLK_DEV_INITRD
+> +/**
+> + * security_unpack_initramfs() - Notify LSM that initramfs has been loaded
+> + *
+> + * Tells the LSM the initramfs has been unpacked into the rootfs.
+> + */
+> +void security_unpack_initramfs(void)
+> +{
+> +	call_void_hook(unpack_initramfs_security);
+> +}
+> +#endif /* CONFIG_BLK_DEV_INITRD */
+> -- 
+> 2.43.0
 
+--
+paul-moore.com
 
