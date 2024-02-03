@@ -1,61 +1,47 @@
-Return-Path: <linux-integrity+bounces-1019-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1020-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95127847CE6
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 00:07:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C84C847FFF
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 04:57:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8034B22CC1
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Feb 2024 23:07:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F1311C21BCC
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Feb 2024 03:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74C3126F3A;
-	Fri,  2 Feb 2024 23:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B5E0F9F6;
+	Sat,  3 Feb 2024 03:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ek9puBpt"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="m/clajfx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0503B85626;
-	Fri,  2 Feb 2024 23:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85594F9D7;
+	Sat,  3 Feb 2024 03:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706915261; cv=none; b=AagmConz+4OYOgtET9XRbpGjwsmr7G7WhqI8sT/lFRqiNtcUGujBXLE3gr/d7ZzoyqGlBNHvFfyjQ0neWX+3+tFuVAhUlrUYEwO/mFVxhic4ufSGv/enDhxF3VsenrPrNEqZtxrcy1uJuZ+c+F8d71tPQoPJ15KbKVB9jIujBxk=
+	t=1706932616; cv=none; b=GTRhB69qjA7JAhShsrlvg157pXbr4NwEKNkj8MgLXIdXMEyqx907g8kZm+pr36LcPRlbkAncIBzLMtvhNntdFRjxXqffiz7VUCbBMOWcHJSDSluwV34GVHpd68f34wcyE62oGanO/ujG6ldhGjNHll6lfRdK92Gf2LJXRZs/elo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706915261; c=relaxed/simple;
-	bh=I4kgLC3tSksK++ityeMyPTC5f5gRQSkqZH6Pa8WTjlk=;
+	s=arc-20240116; t=1706932616; c=relaxed/simple;
+	bh=ZxPkhkdkh/qzOmQ6tzCINtYqo1Amarn570/0hPuCEws=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cu4Nl/wIsBGEXGcSYBeNKdL34JmZ61Au8Y7Bh4UpdLkqmG2BhBX3j2/kLCf75iaXyHenacjCYowd2i9N68v3r+BxmFHvCaRW3jzvUNP701FtqvnQkoyb9xdWAGoynD19H0ky3qxBZYRhiODE0RmLO9vC9sC4cpe1hzV91u/o+yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ek9puBpt; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706915260; x=1738451260;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=I4kgLC3tSksK++ityeMyPTC5f5gRQSkqZH6Pa8WTjlk=;
-  b=ek9puBpt6DTFNskqJUKALFVx2NSJaxtblSJhEGNETN4htqvRBaN7saQB
-   LKNacQuayRNgIst3Tv+YjyQ87783v0csrG+vpKQEvMKUNpkwoObHSG0eU
-   XgU53uPKhOTh1+dPyBQeGak/6VWm/W2Mx9oM7E6UV7tyac/AR1PO8UKpw
-   GjUG88TafV6AxSkLxp4qOs76GoSC6z//8k9Ibm8cgJLe03AQOBEw/qyoA
-   lGsaBf7vAba+8e0YE24pQxBy/nfAc7BzlG1j4TZjB6gXubIDwMbASxVbA
-   eRcRAFMyQEUijKOISuy4Cg1jb98+lBlNMnuEqoLLUFAi+vMVVxt4MCADC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="17672583"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="17672583"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 15:07:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="4795159"
-Received: from mfzarate-mobl.amr.corp.intel.com (HELO [10.92.4.37]) ([10.92.4.37])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 15:07:37 -0800
-Message-ID: <a255bc36-2438-41b7-b304-bcf7a6628bef@linux.intel.com>
-Date: Fri, 2 Feb 2024 17:07:35 -0600
+	 In-Reply-To:Content-Type; b=aZcddcnhpE5NA4Y65si7OfagtKnE3N3L6G4Yry+aC88qjaiY4u+P+vI1W2+UpNPpPxPo0OoSEGj2entHjZ+wsfXeJBQhBPxmhVum0BjvrQSi/bXTRL7Ff2gV6VQTmt3yfwMhNhNQESEVhCBgTWRlwvwLc+JyDZno4Tkv0Z9jRyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=m/clajfx; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [131.107.8.87])
+	by linux.microsoft.com (Postfix) with ESMTPSA id E44F1206FD0D;
+	Fri,  2 Feb 2024 19:56:53 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E44F1206FD0D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1706932614;
+	bh=0jiNLQIjYZrK1snHh4U7Lo4wv1LyM7JCqFc7TqpIT2U=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=m/clajfxDfxFvAcTDd46NYouM6uhFugKVWR8uHm4sE6EFTynnuvqsAFU7GTarPWIH
+	 y7EQZ7z1rcxftAwNX6cuTOp1ixL13ykPZ5kzqZcWa3CA9w9UEpQl0TTQWWnYBc/fAu
+	 sCvZECuOFeoyIVWglZe2vjeuBACkQz0fknf7owY4=
+Message-ID: <dd6f4726-692b-4537-8bb4-a0466f24d713@linux.microsoft.com>
+Date: Fri, 2 Feb 2024 19:56:53 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -63,74 +49,92 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 0/4] tsm: Runtime measurement registers ABI
+Subject: Re: [RFC PATCH v12 12/20] dm verity: set DM_TARGET_SINGLETON feature
+ flag
+To: Mike Snitzer <snitzer@kernel.org>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+ tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
+ eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+ dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1706654228-17180-1-git-send-email-wufan@linux.microsoft.com>
+ <1706654228-17180-13-git-send-email-wufan@linux.microsoft.com>
+ <Zb05y2cl3T9rxRJZ@redhat.com>
 Content-Language: en-US
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
- Samuel Ortiz <sameo@rivosinc.com>, Dan Williams <dan.j.williams@intel.com>
-Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
- Qinkun Bao <qinkun@google.com>, "Yao, Jiewen" <jiewen.yao@intel.com>,
- "Xing, Cedric" <cedric.xing@intel.com>,
- Dionna Amalie Glaze <dionnaglaze@google.com>, biao.lu@intel.com,
- linux-coco@lists.linux.dev, linux-integrity@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240128212532.2754325-1-sameo@rivosinc.com>
- <c17a31e4fb30f5f9d4a337e5bd8d54cc6f99eef7.camel@HansenPartnership.com>
-From: Dan Middleton <dan.middleton@linux.intel.com>
-In-Reply-To: <c17a31e4fb30f5f9d4a337e5bd8d54cc6f99eef7.camel@HansenPartnership.com>
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <Zb05y2cl3T9rxRJZ@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
-On 2/2/24 12:24 AM, James Bottomley wrote:
-> On Sun, 2024-01-28 at 22:25 +0100, Samuel Ortiz wrote:
->> All architectures supporting RTMRs expose a similar interface to
->> their TVMs: An extension command/call that takes a measurement value
->> and an RTMR index to extend it with, and a readback command for
->> reading an RTMR value back (taking an RTMR index as an argument as
->> well). This patch series builds an architecture agnostic, configfs-
->> based ABI for userspace to extend and read RTMR values back. It
->> extends the current TSM ops structure and each confidential computing
->> architecture can implement this extension to provide RTMR support.
-> What's the actual use case for this?  At the moment the TPM PCRs only
-> provide a read interface to userspace (via /sys/class/tpm/tpmX/pcr-
-> shaY/Z) and don't have any extension ability becuase nothing in
-> userspace currently extends them.
->
-> The only current runtime use for TPM PCRs is IMA, which is in-kernel
-> (and which this patch doesn't enable).
->
-> Without the ability to log, this interface is unusable anyway, but even
-> with that it's not clear that you need the ability separately to extend
-> PCRs because the extension and log entry should be done atomically to
-> prevent the log going out of sync with the PCRs, so it would seem a log
-> first interface would be the correct way of doing this rather than a
-> PCR first one.
->
-> James
->
->
 
-While we clearly need to cover PCR-like usages, I think Confidential
-Computing affords usages that go beyond TPM.
+On 2/2/2024 10:51 AM, Mike Snitzer wrote:
+> On Tue, Jan 30 2024 at  5:37P -0500,
+> Fan Wu <wufan@linux.microsoft.com> wrote:
+> 
+>> The device-mapper has a flag to mark targets as singleton, which is a
+>> required flag for immutable targets. Without this flag, multiple
+>> dm-verity targets can be added to a mapped device, which has no
+>> practical use cases and will let dm_table_get_immutable_target return
+>> NULL. This patch adds the missing flag, restricting only one
+>> dm-verity target per mapped device.
+>>
+>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+>>
+>> ---
+>> v1-v10:
+>>    + Not present
+>>
+>> v11:
+>>    + Introduced
+>>
+>> v12:
+>>    + No changes
+>> ---
+>>   drivers/md/dm-verity-target.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+>> index 14e58ae70521..66a850c02be4 100644
+>> --- a/drivers/md/dm-verity-target.c
+>> +++ b/drivers/md/dm-verity-target.c
+>> @@ -1507,7 +1507,7 @@ int dm_verity_get_root_digest(struct dm_target *ti, u8 **root_digest, unsigned i
+>>   
+>>   static struct target_type verity_target = {
+>>   	.name		= "verity",
+>> -	.features	= DM_TARGET_IMMUTABLE,
+>> +	.features	= DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE,
+>>   	.version	= {1, 9, 0},
+>>   	.module		= THIS_MODULE,
+>>   	.ctr		= verity_ctr,
+>> -- 
+>> 2.43.0
+>>
+>>
+> 
+> It is true this change will cause dm_table_get_immutable_target() to
+> not return NULL, but: I'm curious how that is meaningful in the
+> context of dm-verity? (given the only caller of
+> dm_table_get_immutable_target() is request-based DM code in DM core.)
+> 
+> Thanks,
+> Mike
 
-For example, Attested Containers [1] (and similar explorations in CNCF
-Confidential Containers [2]) extends the measurement chain into the guest.
-There, a trusted agent measures container images, and extends an RTMR
-with those measurements. Particularly in the case of containers, the 
-existing
-runtime infrastructure is user mode oriented. However the generalization
-here is in providing a mechanism to strongly identify an application or
-behavior provided by the TVM.
+Sorry for the confusion. The reference of 
+dm_table_get_immutable_target() is only to justify an immutable target 
+should also be a 
+singleton(https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/md/dm-table.c#n982). 
+It is not directly related to dm-verity.
 
-Less concretely, I think this is an area for developer creativity.
-Attestation is one of the main APIs that CC gives application developers and
-these runtime extendable fields provide a further degree of creativity.
+In the context of dm-verity. I found although veritysetup does ensure 
+the dm-verity target as a singleton, users can still use dmsetup to 
+configure multiple dm-verity targets within a single map table. This 
+leads to a situation where only the first target can be accessed. 
+Therefore to prevent this and similar misuse, I propose introducing 
+DM_TARGET_SINGLETON to allow the kernel to enforce dm-verity targets as 
+singletons.
 
-[1] ACON https://github.com/intel/acon
-[2] CoCo 
-https://github.com/confidential-containers/guest-components/commit/3c75201a8ba0327fb41b68b7e1521ff517e3ca9f
-
-Regards,
-Dan
-
+Thanks,
+Fan
 
