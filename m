@@ -1,192 +1,171 @@
-Return-Path: <linux-integrity+bounces-1040-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1050-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6D8484A20F
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Feb 2024 19:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DFD5584A889
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Feb 2024 23:05:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 552421F240AD
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Feb 2024 18:25:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D0861F2CC99
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Feb 2024 22:05:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF783481A7;
-	Mon,  5 Feb 2024 18:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0327A4D5B5;
+	Mon,  5 Feb 2024 21:18:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rBSiL9wU"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="W8TAC/No"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D61347F41;
-	Mon,  5 Feb 2024 18:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EDC01AB807;
+	Mon,  5 Feb 2024 21:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707157535; cv=none; b=sGfuiGu0H+eoxfuvhOHTGA+xhEwJdh1MsRcaIkSpyK/RdebG+OyKCrdU+8prCQe70YulzSij6nWSaYavmlRp4OQZgj8TO2a+oS1aYndB0Ov82SP7wu0R3lMnRu9UaNLg18E6jyMbb0C0xjOB0Z4v0Lxsn3CzelqIagBXLo2lgmw=
+	t=1707167885; cv=none; b=NXr3hwdCHpzIW+fj6a1pQ1myxallHAiuK7AYuVvi0Gk2kXxaQPCdC7QzLCTDiFKhMDHUn91kctFgJCpTL2BH4Hi3U6yOz7uU/EFk7976CtlYEol28YuNCmHiGbjdTDXquPCVS/uUIN7qwaxmM++GMl3PIy/+eym2oj0x1P+Dzu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707157535; c=relaxed/simple;
-	bh=c420FT9xPcjNNnI7cnPYtoKyvaj5gGmp6EuWZ909yrQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TFhB1OrLeVPUdGL1SWq/303S1wZPpxlqMOcM1AzPGMaP4rmTXJQKFcVJqKbLX/OAskgAk4McDcRPLONasf6w8vktteMZbFug+UM4zssZyuqu185+5U0UgbpW2U4dkUMhbA65IGqB4SPPZDrXktHFckMYxmFMf/90oPGhk1agPYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rBSiL9wU; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 415I8r7X000793;
-	Mon, 5 Feb 2024 18:25:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=f8lofELfN0pFVcElPi3ezYw8PsjubzFBlRnZcA1QfOw=;
- b=rBSiL9wUQfqgimDZM7zff6YQ3UzVf6x0Blq3g5QxV0xcuK7Gyk+WCOHOmvFR1IMlBjTI
- HqxErU0P+6rnXx6b303Lr+9bi6HPUiR9t4hvrbGyeBH47N8imjzHsj7s6QvCq3bEvqju
- Bi5uLC6SXzIF93tll23qVAQm7GTWR3cdsKtZFIGUg3ZUl0DO5AKccSirkfzzM3G8U3sw
- T2J4IZilgd89RwMBiO8SExHCDQnT2FxPXH653paP1dx1ke7aQ8RzJl/c1lir/lnAuSkT
- ZrG+mxBz7CmmDVmwdWaU4xXsEnDKIudyEPEi1TryTXzDqv0h0k8EXVhNC0gk83xNujAp Fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w34pk89yn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Feb 2024 18:25:19 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 415I9xoc003410;
-	Mon, 5 Feb 2024 18:25:19 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w34pk89yj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Feb 2024 18:25:19 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 415G1sJ9020234;
-	Mon, 5 Feb 2024 18:25:18 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w1ytstet2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Feb 2024 18:25:18 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 415IPHbn5374862
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 5 Feb 2024 18:25:17 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 85BA95805A;
-	Mon,  5 Feb 2024 18:25:17 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D843E5803F;
-	Mon,  5 Feb 2024 18:25:16 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  5 Feb 2024 18:25:16 +0000 (GMT)
-From: Stefan Berger <stefanb@linux.ibm.com>
-To: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, zohar@linux.ibm.com, roberto.sassu@huawei.com,
-        amir73il@gmail.com, brauner@kernel.org, miklos@szeredi.hu,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v2 9/9] ima: Record i_version of real_inode for change detection
-Date: Mon,  5 Feb 2024 13:25:06 -0500
-Message-ID: <20240205182506.3569743-10-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240205182506.3569743-1-stefanb@linux.ibm.com>
-References: <20240205182506.3569743-1-stefanb@linux.ibm.com>
+	s=arc-20240116; t=1707167885; c=relaxed/simple;
+	bh=/Enu6bwQmdx49axHA/1lmJJgKYU6G8zyTZPbq9OH+ck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CH7Uxpf3Cez8k7ZdIDuPUiiMg1kLZg5cecEHRLfRZ7OEIDG4p/8d5BYOvoOxnO9ebiuiBCez4yzN0H7+C9rP2x9koyqw/0Iz5sRxCbwgnXPwMryetGmJ1XlScJNKjJx/WDTPlDZTPff+sbwZ7Xn7w5VdP6NWOFKbwJOqid+IFX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=W8TAC/No; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [131.107.8.87])
+	by linux.microsoft.com (Postfix) with ESMTPSA id B65FB20B2000;
+	Mon,  5 Feb 2024 13:18:03 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B65FB20B2000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1707167883;
+	bh=H595nLqKN1iU7O92UiJT9PEuwtk7Rd1yCbWBC1ZA8Dk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=W8TAC/No1VdGRZqMNpbRyarbJ0N1ksbo6q9VDwms6JAikfNWLiPh8pBpJItN4CS23
+	 IfusA0S7VmJXlzwz6fInL7nOKKj4xPLnLwKrHbC0DxeKFY9uDlKLJYrmJTNL3IsRxQ
+	 NhwWoikC1Q5N62rvYtOFqHGPmfxebEyKNmpVRN1s=
+Message-ID: <13daca32-ee3f-46f5-a6ca-66bb02726e5c@linux.microsoft.com>
+Date: Mon, 5 Feb 2024 13:18:03 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ZNRgc6oqUmqwEd5qverWof6L4JleiyOw
-X-Proofpoint-GUID: 0UyHcsfJXduKx_DbyfsYnX2nWa-rvek4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-05_12,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- mlxscore=0 bulkscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 clxscore=1015 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402050138
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v12 5/20] initramfs|security: Add security hook to
+ initramfs unpack
+To: Paul Moore <paul@paul-moore.com>, corbet@lwn.net, zohar@linux.ibm.com,
+ jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+ axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, eparis@redhat.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1706654228-17180-6-git-send-email-wufan@linux.microsoft.com>
+ <b9ca171301d5abeb78922dd79d65136a@paul-moore.com>
+Content-Language: en-US
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <b9ca171301d5abeb78922dd79d65136a@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-process_measurement() will try to detect file content changes for not-yet-
-copied-up files on a stacked filesystem based on the i_version number of
-the real inode: !inode_eq_iversion(real_inode, iint->version)
-Therefore, take a snapshot of the i_version of the real file to be used
-for i_version number-based file content change detection by IMA in
-process_meassurements().
 
-In this case vfs_getattr_nosec() cannot be used since it will return the
-i_version number of the file on the overlay layer which will trigger more
-iint resets in process_measurements() than necessary since this i_version
-number represents different state than that of the real_inode (of a
-not-yet-copied up file).
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- security/integrity/ima/ima_api.c | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+On 2/3/2024 2:25 PM, Paul Moore wrote:
+> On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
+>>
+>> This patch introduces a new hook to notify security system that the
+>> content of initramfs has been unpacked into the rootfs.
+>>
+>> Upon receiving this notification, the security system can activate
+>> a policy to allow only files that originated from the initramfs to
+>> execute or load into kernel during the early stages of booting.
+>>
+>> This approach is crucial for minimizing the attack surface by
+>> ensuring that only trusted files from the initramfs are operational
+>> in the critical boot phase.
+>>
+>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+>> ---
+>> v1-v11:
+>>    + Not present
+>>
+>> v12:
+>>    + Introduced
+>> ---
+>>   include/linux/lsm_hook_defs.h |  4 ++++
+>>   include/linux/security.h      | 10 ++++++++++
+>>   init/initramfs.c              |  3 +++
+>>   security/security.c           | 12 ++++++++++++
+>>   4 files changed, 29 insertions(+)
+>>
+>> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+>> index 185924c56378..b247388786a9 100644
+>> --- a/include/linux/lsm_hook_defs.h
+>> +++ b/include/linux/lsm_hook_defs.h
+>> @@ -425,3 +425,7 @@ LSM_HOOK(int, 0, uring_override_creds, const struct cred *new)
+>>   LSM_HOOK(int, 0, uring_sqpoll, void)
+>>   LSM_HOOK(int, 0, uring_cmd, struct io_uring_cmd *ioucmd)
+>>   #endif /* CONFIG_IO_URING */
+>> +
+>> +#ifdef CONFIG_BLK_DEV_INITRD
+>> +LSM_HOOK(void, LSM_RET_VOID, unpack_initramfs_security, void)
+>> +#endif /* CONFIG_BLK_DEV_INITRD */
+> 
+> Let's just call it "unpack_initramfs", the "_security" part is somewhat
+> implied since we are talking about a LSM hook ;)
+> 
+>> diff --git a/init/initramfs.c b/init/initramfs.c
+>> index 76deb48c38cb..075a5794cde5 100644
+>> --- a/init/initramfs.c
+>> +++ b/init/initramfs.c
+>> @@ -18,6 +18,7 @@
+>>   #include <linux/init_syscalls.h>
+>>   #include <linux/task_work.h>
+>>   #include <linux/umh.h>
+>> +#include <linux/security.h>
+>>   
+>>   static __initdata bool csum_present;
+>>   static __initdata u32 io_csum;
+>> @@ -720,6 +721,8 @@ static void __init do_populate_rootfs(void *unused, async_cookie_t cookie)
+>>   #endif
+>>   	}
+>>   
+>> +	security_unpack_initramfs();
+> 
+> Given the caller, what do you think of changing the hook name to
+> "security_initramfs_populated()"?  I think this not only matches up
+> better with the caller, "do_populate_rootfs()", but since in using the
+> past tense we help indicate that this hook happens *after* the rootfs
+> is populated with the initramfs data.
+> 
 
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 597ea0c4d72f..530888cc481e 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -14,6 +14,7 @@
- #include <linux/xattr.h>
- #include <linux/evm.h>
- #include <linux/fsverity.h>
-+#include <linux/iversion.h>
- 
- #include "ima.h"
- 
-@@ -250,7 +251,6 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 	int result = 0;
- 	int length;
- 	void *tmpbuf;
--	u64 i_version = 0;
- 
- 	/*
- 	 * Always collect the modsig, because IMA might have already collected
-@@ -263,16 +263,6 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 	if (iint->flags & IMA_COLLECTED)
- 		goto out;
- 
--	/*
--	 * Detecting file change is based on i_version. On filesystems
--	 * which do not support i_version, support was originally limited
--	 * to an initial measurement/appraisal/audit, but was modified to
--	 * assume the file changed.
--	 */
--	result = vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
--				   AT_STATX_SYNC_AS_STAT);
--	if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
--		i_version = stat.change_cookie;
- 	hash.hdr.algo = algo;
- 	hash.hdr.length = hash_digest_size[algo];
- 
-@@ -302,10 +292,22 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 
- 	iint->ima_hash = tmpbuf;
- 	memcpy(iint->ima_hash, &hash, length);
--	iint->version = i_version;
--	if (real_inode != inode) {
-+	if (real_inode == inode) {
-+		/*
-+		 * Detecting file change is based on i_version. On filesystems
-+		 * which do not support i_version, support was originally limited
-+		 * to an initial measurement/appraisal/audit, but was modified to
-+		 * assume the file changed.
-+		 */
-+		result = vfs_getattr_nosec(&file->f_path, &stat,
-+					   STATX_CHANGE_COOKIE,
-+					   AT_STATX_SYNC_AS_STAT);
-+		if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
-+			iint->version = stat.change_cookie;
-+	} else {
- 		iint->real_ino = real_inode->i_ino;
- 		iint->real_dev = real_inode->i_sb->s_dev;
-+		iint->version = inode_query_iversion(real_inode);
- 	}
- 
- 	/* Possibly temporary failure due to type of read (eg. O_DIRECT) */
--- 
-2.43.0
+Yeah, I agree this sounds better. I will update this part.
 
+-Fan
+>>   done:
+>>   	/*
+>>   	 * If the initrd region is overlapped with crashkernel reserved region,
+>> diff --git a/security/security.c b/security/security.c
+>> index ddf2e69cf8f2..2a527d4c69bc 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -5581,3 +5581,15 @@ int security_uring_cmd(struct io_uring_cmd *ioucmd)
+>>   	return call_int_hook(uring_cmd, 0, ioucmd);
+>>   }
+>>   #endif /* CONFIG_IO_URING */
+>> +
+>> +#ifdef CONFIG_BLK_DEV_INITRD
+>> +/**
+>> + * security_unpack_initramfs() - Notify LSM that initramfs has been loaded
+>> + *
+>> + * Tells the LSM the initramfs has been unpacked into the rootfs.
+>> + */
+>> +void security_unpack_initramfs(void)
+>> +{
+>> +	call_void_hook(unpack_initramfs_security);
+>> +}
+>> +#endif /* CONFIG_BLK_DEV_INITRD */
+>> -- 
+>> 2.43.0
+> 
+> --
+> paul-moore.com
 
