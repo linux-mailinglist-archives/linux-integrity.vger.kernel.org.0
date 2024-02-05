@@ -1,68 +1,68 @@
-Return-Path: <linux-integrity+bounces-1037-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1039-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7B56849CCC
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Feb 2024 15:16:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79152849CCE
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Feb 2024 15:16:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80791284445
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 Feb 2024 14:16:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32C372843D6
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Feb 2024 14:16:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617DD2CCB4;
-	Mon,  5 Feb 2024 14:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03AFA2CCDF;
+	Mon,  5 Feb 2024 14:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="G8G6mXPD"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mK9rYzkO"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CC22CCDF
-	for <linux-integrity@vger.kernel.org>; Mon,  5 Feb 2024 14:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A1A2C86A
+	for <linux-integrity@vger.kernel.org>; Mon,  5 Feb 2024 14:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707142545; cv=none; b=W7iOT6H5SDfem8lDxdYzI28j+WqlQpVr+RzM0StUJhuCVPZy9aV+Sazz0kGBlIMmiMzq2q8jkWWIvdIhWZvtHF1N5QD8Ep6HjlE/BnW24v+JwlP25TOwpcs5D4l3N8vdL8mHawGMICWBkz2NrMPEL1zQ1qsIbxfDJMDOYUgAd6w=
+	t=1707142546; cv=none; b=gH7QWjU3GeGTyv17jAOdwJgcDKIIH6d+G5urbmNjLjByoRBX4QFrPzzzedT8yERzPuXExlD+LM8bU/jNnLPBrg5M3bXdOK/AkIvB+DGgGzCQmMxCEaHcx6dh0XkHZDGXKHZ4kgGxg+uIhwSvR6ZFTCRqU0EFRK06P/pF62WPf2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707142545; c=relaxed/simple;
-	bh=4C46mIomaJFkL6P1EXY7AdxcwrB4TUibdUT5+dgvZNc=;
+	s=arc-20240116; t=1707142546; c=relaxed/simple;
+	bh=Y6eMCAEzX/E4S0ajagufYTfPDk723QIYonhFGI+uBfE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WKIRH3QKiZbpFTlheYStqHzOqGhjhnv09Hp+PjUeakr9q0tdELSjg9olKvbk+FaAsuaaczSXQlG2+CLf1uZQFC+dskFTNLoWvqUgwmiTO6BZXtYYGqiCZQurG1MZNgOz03hU7B4sPTlwKmIc6n90jN+2Hx/Diqi6End6ZGWns38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=G8G6mXPD; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=qt8mecfKurBWSwN4nIXhYcsVA/s6tE2oO+jdm+AmdQeZvwC4DVAOhYhexgMkSDTV+K4TahzoNIx4X5J+kd84mJ/Sy+edd/lXDSbKkdHt8v9ZnC/3syYgmrparLFmXQy+m8NKPrfHxtNq3BHNB/1XAxpXYCQG1raY1pgBFUpcNn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mK9rYzkO; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 415E36rl013478;
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 415E374q013492;
 	Mon, 5 Feb 2024 14:15:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=CC+DqwjGYhg4BST+o71TOT6eTcupYMaDbmlrZ6/nlDI=;
- b=G8G6mXPDwYdHFSK70v8p4Gq8s1w4UCCUdm8umMIasb0giWGLn7yWC4gPGgl9gNvBVxlL
- NML1fK285cSG1bExsAX3+MjVkTVsk4SRdzuiC9F0J4ZrQUT9uf57/TNg+PE3nVXgsotA
- alBufsj2jedAOV5XXGfYSCFURynBf+DAO4TvdYoUUX6qrNT+AqPHwPI4nq8OBwVn6V8k
- gl7iqnoH3bdv5hZkzETDIKwxyV+k1EjltIg5E+dxyZL1dESQjZADWROsCX37yg9FGmBk
- kVxhUdekY9WFlWCaPalz7JuqEdDCPwEd9ZLe6gS/PUUW23ytuMyhH2P0Hv6DWbmWUr6a gw== 
+ bh=razTQywDLNbyJz3HNi3brSqQXdoskxSbEYYQoZVe1xo=;
+ b=mK9rYzkOJDEA7Q6DbC8/LPhNC+NWo6GRBQPaR0pBPRo1PjZimt19he4FgBiFMsu8INC6
+ JdQSk0NRHvAP6bQ1O9EkcO4g8aAoLBf4AHDgCeMubEZelZzQvZjPykdraQst3NWIrY0Z
+ 1doeEPe6XR/QoOkGyM2auHH5ejqIgOow3OE9zP1KumRDJ8if+LtBuWsmkdGZCW3jIXWx
+ LVQmtdG6Q1OSanoRCyTQ2YgvJAcV57G9bdXK6WGyz3d9xPaITVXRg51esCr2/DehSwCu
+ 85dx+hhV6Ohd1RzHfanWJl5kuzH1N7L4BY6h9qi1KYO1uW7/eonb6tPlPFFDkp2Rd+kn mg== 
 Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w313mrcy8-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w313mrcym-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Feb 2024 14:15:34 +0000
+	Mon, 05 Feb 2024 14:15:35 +0000
 Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 415CxkV0019996;
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 415D5qkh019985;
 	Mon, 5 Feb 2024 14:15:34 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w1ytss5p3-1
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w1ytss5p5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 05 Feb 2024 14:15:34 +0000
 Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 415EFWSc14418586
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 415EFXw640436220
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Mon, 5 Feb 2024 14:15:33 GMT
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AB29B5805E;
-	Mon,  5 Feb 2024 14:15:32 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 1DA2B58052;
+	Mon,  5 Feb 2024 14:15:33 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5E5EA58052;
+	by IMSVA (Postfix) with ESMTP id C29CE5805A;
 	Mon,  5 Feb 2024 14:15:32 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
 	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -71,9 +71,9 @@ From: Stefan Berger <stefanb@linux.ibm.com>
 To: linux-integrity@vger.kernel.org
 Cc: zohar@linux.ibm.com, roberto.sassu@huawei.com,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v1 ima-evm-utils 5/6] tests: Add pkcs11 test using provider
-Date: Mon,  5 Feb 2024 09:15:27 -0500
-Message-ID: <20240205141528.3566511-6-stefanb@linux.ibm.com>
+Subject: [PATCH v1 ima-evm-utils 6/6] ci: Install pkcs11-provider where available
+Date: Mon,  5 Feb 2024 09:15:28 -0500
+Message-ID: <20240205141528.3566511-7-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240205141528.3566511-1-stefanb@linux.ibm.com>
 References: <20240205141528.3566511-1-stefanb@linux.ibm.com>
@@ -85,73 +85,73 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zZQA_6QKQd54rEincSUrF9SHjTMj7kWJ
-X-Proofpoint-ORIG-GUID: zZQA_6QKQd54rEincSUrF9SHjTMj7kWJ
+X-Proofpoint-GUID: 5ntH5kYk6zoKKOznGEXc1ghQOBjZNh8m
+X-Proofpoint-ORIG-GUID: 5ntH5kYk6zoKKOznGEXc1ghQOBjZNh8m
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-05_08,2024-01-31_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- priorityscore=1501 spamscore=0 mlxlogscore=909 bulkscore=0 phishscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=727 bulkscore=0 phishscore=0
  mlxscore=0 suspectscore=0 lowpriorityscore=0 impostorscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2402050108
 
-Adjust the existing pkcs11 engine test cases to pass --engine pkcs11 via
-an option (OPTS) to evmctl rather than using a global variable. Then
-duplicate the pkcs11 engine tests and pass --provider pkcs11 to run the
-same tests using OpenSSL provider. Also check whether evmctl was compiled
-with provider support and if the pkcs11 provider is installed.
+Install the pkcs11-provider package. For it to be useful softhsm and gnutls
+are also needed, so in some cases install them together so that if one of
+the packages cannot be installed then none of them are installed.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- tests/functions.sh     |  1 -
- tests/sign_verify.test | 19 ++++++++++++++++---
- 2 files changed, 16 insertions(+), 4 deletions(-)
+ ci/alt.sh        | 2 ++
+ ci/debian.sh     | 1 +
+ ci/fedora.sh     | 1 +
+ ci/tumbleweed.sh | 2 ++
+ 4 files changed, 6 insertions(+)
 
-diff --git a/tests/functions.sh b/tests/functions.sh
-index c39b894..962a436 100755
---- a/tests/functions.sh
-+++ b/tests/functions.sh
-@@ -373,7 +373,6 @@ _softhsm_setup() {
-     PKCS11_KEYURI=$(echo "$msg" | sed -n 's|^keyuri: \(.*\)|\1|p')
-     export PKCS11_KEYURI
- 
--    export EVMCTL_ENGINE="--engine pkcs11"
-     export OPENSSL_ENGINE="-engine pkcs11"
-     export OPENSSL_KEYFORM="-keyform engine"
-   else
-diff --git a/tests/sign_verify.test b/tests/sign_verify.test
-index 1b6cf2a..0ba7bea 100755
---- a/tests/sign_verify.test
-+++ b/tests/sign_verify.test
-@@ -439,11 +439,24 @@ expect_fail \
- # Test signing with key described by pkcs11 URI
- _softhsm_setup "${WORKDIR}"
- if [ -n "${PKCS11_KEYURI}" ]; then
--  expect_pass check_sign FILE=pkcs11test TYPE=ima KEY="${PKCS11_KEYURI}" ALG=sha256 PREFIX=0x030204aabbccdd0100 OPTS=--keyid=aabbccdd
--  expect_pass check_sign FILE=pkcs11test TYPE=ima KEY="${PKCS11_KEYURI}" ALG=sha1   PREFIX=0x030202aabbccdd0100 OPTS=--keyid=aabbccdd
-+  expect_pass check_sign FILE=pkcs11test TYPE=ima KEY="${PKCS11_KEYURI}" ALG=sha256 PREFIX=0x030204aabbccdd0100 OPTS="--keyid=aabbccdd --engine pkcs11"
-+  expect_pass check_sign FILE=pkcs11test TYPE=ima KEY="${PKCS11_KEYURI}" ALG=sha1   PREFIX=0x030202aabbccdd0100 OPTS="--keyid=aabbccdd --engine pkcs11"
+diff --git a/ci/alt.sh b/ci/alt.sh
+index 36ff657..f86dcec 100755
+--- a/ci/alt.sh
++++ b/ci/alt.sh
+@@ -27,3 +27,5 @@ apt-get install -y \
+ 		xsltproc \
+ 		xxd \
+ 	&& control openssl-gost enabled
 +
-+  # provider may not be supported or pkcs11 provider not installed
-+  if evmctl --help 2>/dev/null | grep -q provider && \
-+     openssl list -providers -provider pkcs11 ; then
-+    PKCS11_PRIVKEYURI=${PKCS11_KEYURI//type=public/type=private}
-+
-+    expect_pass check_sign FILE=pkcs11test TYPE=ima KEY="${PKCS11_PRIVKEYURI}" ALG=sha256 PREFIX=0x030204aabbccdd0100 OPTS="--keyid=aabbccdd --provider pkcs11"
-+    expect_pass check_sign FILE=pkcs11test TYPE=ima KEY="${PKCS11_PRIVKEYURI}" ALG=sha1   PREFIX=0x030202aabbccdd0100 OPTS="--keyid=aabbccdd --provider pkcs11"
-+  else
-+    __skip() { echo "pkcs11 test with provider is skipped since no provider support or pkcs11 not installed"; return "$SKIP"; }
-+    expect_pass __skip
-+    expect_pass __skip
-+  fi
- else
-   # to have a constant number of tests, skip these two tests
--  __skip() { echo "pkcs11 test is skipped: could not setup softhsm"; return $SKIP; }
-+  __skip() { echo "pkcs11 test is skipped: could not setup softhsm"; return "$SKIP"; }
-   expect_pass __skip
-   expect_pass __skip
++apt-get install -y pkcs11-provider || true
+diff --git a/ci/debian.sh b/ci/debian.sh
+index 7676191..740eb9e 100755
+--- a/ci/debian.sh
++++ b/ci/debian.sh
+@@ -59,3 +59,4 @@ $apt \
+ $apt xxd || $apt vim-common
+ $apt libengine-gost-openssl1.1$ARCH || true
+ $apt softhsm gnutls-bin libengine-pkcs11-openssl1.1$ARCH || true
++$apt softhsm gnutls-bin pkcs11-provider || true
+diff --git a/ci/fedora.sh b/ci/fedora.sh
+index 1d17c6b..44fd956 100755
+--- a/ci/fedora.sh
++++ b/ci/fedora.sh
+@@ -60,6 +60,7 @@ if [ -f /etc/centos-release ]; then
+ 	yum -y install epel-release
  fi
+ yum -y install softhsm || true
++yum -y install softhsm pkcs11-provider || true
+ 
+ # haveged is available via EPEL on CentOS stream8.
+ yum -y install haveged || true
+diff --git a/ci/tumbleweed.sh b/ci/tumbleweed.sh
+index bc111fe..a58c296 100755
+--- a/ci/tumbleweed.sh
++++ b/ci/tumbleweed.sh
+@@ -48,6 +48,8 @@ zypper --non-interactive install --force-resolution --no-recommends \
+ 
+ zypper --non-interactive install --force-resolution --no-recommends \
+ 	gnutls openssl-engine-libp11 softhsm || true
++zypper --non-interactive install --force-resolution --no-recommends \
++	gnutls pkcs11-provider softhsm || true
+ 
+ if [ -f /usr/lib/ibmtss/tpm_server -a ! -e /usr/local/bin/tpm_server ]; then
+ 	ln -s /usr/lib/ibmtss/tpm_server /usr/local/bin
 -- 
 2.43.0
 
