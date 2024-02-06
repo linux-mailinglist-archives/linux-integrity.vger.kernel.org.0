@@ -1,218 +1,291 @@
-Return-Path: <linux-integrity+bounces-1068-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1069-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2327A84BCD6
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 19:23:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C810784BF97
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 22:53:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91248B2359D
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 18:23:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F541282E46
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 21:53:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D96D530;
-	Tue,  6 Feb 2024 18:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A32641BDE2;
+	Tue,  6 Feb 2024 21:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hqbM+Q+r"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YOrekqBm"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80B4171A7;
-	Tue,  6 Feb 2024 18:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5980E1B978
+	for <linux-integrity@vger.kernel.org>; Tue,  6 Feb 2024 21:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707243802; cv=none; b=LvbIb+fgLNXyyRulAfKTKh8a1qNusiLC3uGQ9FixkTpIDisTFn3IE43WCpkMCSlLGQaaN7ggs3jnFN1XEDQdcyES5DnQUcAC4Q9FNJUNv5hyg6zJikac2LDZtt1yqob3jaqj7vMVr2nfB9qtnBZQ8+7B/ea8m35JQD2q9UQQGPw=
+	t=1707256418; cv=none; b=kIZqLT4Lw2fljurez+clWBhbsxO7hYtsZaXU2u7C8XsteOjSIFKsr8CxITBqTqgGuq7fg7+a8+TdZ04d8iBoqil0zQwVnoYur52xjzcTgpcbPs3Z0aWP+FNpgjsQoarwCBZU4LgRaMec/N5B4EQH+oaVPYqqrzc3PCS8q4gIqHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707243802; c=relaxed/simple;
-	bh=KTit+aWgJvVP7m+gfVMXWeOWNPCtM6Grpruq+iW3l9Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n6dpKQBPjQhCQPMKs4i+nUGWi4htPxzLAUuvrzxOtbTCjTzvrvaQJLu/AyhFU+lZ1e2I3yX7bKQfZGPAzZnSTvZOzPN3JdaSvdVJIorhAnd9W7bi8FOtSOI3Vfbn64fSLJRJ6wFjDZ/CC+GA4L5n9b+DljOoz+dB1A7d39K5ONA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hqbM+Q+r; arc=none smtp.client-ip=192.55.52.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707243800; x=1738779800;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KTit+aWgJvVP7m+gfVMXWeOWNPCtM6Grpruq+iW3l9Q=;
-  b=hqbM+Q+rjqHVJZ+vKuX5gM9/BiqMjW9EZ8k4J5Iiom4ydmyC0glO/u7O
-   nPIpRQEzQDeO4es5QNf6JyriZBBM2yaLDRAnp9qp6dLx2TC2DzValxK1C
-   +4NhR/dRsqvBpk7nnr41aYYHSqtCUAmD4OPn0gSEsfD6sd5HLXa68+p9m
-   qtVk+xEdm28wQP/sL6X/AXPf6cSlZFzZoSINmQoGhuEb6RV6yBTY51nwj
-   GdEs+knYsr+ilMfkDmln+35ZVgG8EKeXM48ktBePePV4lGyX7U/eErqkj
-   Hphq1QbVAgdEQAXtvGiNu/9FxN/p5cY6DtDLe5h1JObZgLw+p8i2hWhTb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="435948257"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="435948257"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 10:23:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="38507988"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 06 Feb 2024 10:23:16 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXQ6D-0001gG-1H;
-	Tue, 06 Feb 2024 18:23:13 +0000
-Date: Wed, 7 Feb 2024 02:22:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-unionfs@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-	zohar@linux.ibm.com, roberto.sassu@huawei.com, amir73il@gmail.com,
-	brauner@kernel.org, miklos@szeredi.hu,
-	Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v2 5/9] evm: Use the inode holding the metadata to
- calculate metadata hash
-Message-ID: <202402070220.eYpQ6zcm-lkp@intel.com>
-References: <20240205182506.3569743-6-stefanb@linux.ibm.com>
+	s=arc-20240116; t=1707256418; c=relaxed/simple;
+	bh=lEXEftvc8USQ5Sq5o5lp81iZXZA1RVqdMSS6fDyVwYE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QI0zYDO3DGEpRk9Z1V/McBEUcROgmNpCdE51o+L4TzlXmbjxdjrQuKBANSpYtGiKjl/F8BCTMfIKUbR1YSZxOxiFeolhtc4nYpXNFfFxltC28y6S+jvfob2EQJWT7GB7oY+MJLXNhaZfKwKKdRNNL8wP7hVhpYqU7VI0XqjaqH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YOrekqBm; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dc6d8bd618eso1472756276.3
+        for <linux-integrity@vger.kernel.org>; Tue, 06 Feb 2024 13:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1707256414; x=1707861214; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E8VjUURyKl+tDea7fU1YfuA8k7lBdd08O4dfl2Z6+qs=;
+        b=YOrekqBm7lRAevzM7cbTxu7osqs2uDDeEc+pFoXzn6QV6lAHr5CJaplibVG95IRdb6
+         Oy9lnWMptMvSAPHlgft41NfLh1N82vAIq0NALTLUtBy+mH/pLPUyJ0U2FnG319MVRWn4
+         FQs0pFRzTBvCfvvQdWiL9On/vfy2VzY98dpCMKZah75NKlhcmjTcQdeipJhjQyb2fKPG
+         wUSsoubF8VN0j9ABnsWTbKrzE5Bakh5l/wlknLPQaCqqBrD1SYJhyh0gArJWIsw5gQZa
+         FygjWFOUMrPno6A4Uxw79yjVj7MdmSVerDZUXxGqz7dVMvQ63vyTAz7N5ROtznAzhNLO
+         l8Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707256414; x=1707861214;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E8VjUURyKl+tDea7fU1YfuA8k7lBdd08O4dfl2Z6+qs=;
+        b=JAVbZ61MA4Ca6KNOvddc0x58QZUIrBgaTFJOal58wWrP3vAFBiCSNQ2HU/t/48vAVI
+         HQZq10nqKnKprAce4WJJAUQG81AhULxIfeli283pOh0lbFirXAoz+9xEtPpNlgbiC+KR
+         7nzHOx19WOsawxiXhtm0xwufNDAqkVV9T2LsKhMnybksnIMCMnBE6v1MwFXuRPXrgGFb
+         R6uXrh4o7LjKG8XCLmB/e4cEbKC4KgTDHikfDgCPO7UQcihzaTF2R2pBknerUIHa/GO+
+         fVSeTnZOBpqOkS6uFX3haxxPXpiLJiCMEBIBkDS0uNH7131SC0UvXFz5+wN/5qA/3FzO
+         x5eA==
+X-Gm-Message-State: AOJu0YyKjFQE62S1qetoRQIkL2O77C+R4KeA0Wl5HFmwUZ/Ous+PAc1a
+	8ia92G1AGtQRqyoLjHO1vK2BCqYbxE3sfaadpnh2ZvWMeRiUfKaffl8EK8BYmeMZpTSPmwq/aMb
+	ibFYjLenEu+NoCFCAhtFQbsxKDSlpY/Uw0BQa
+X-Google-Smtp-Source: AGHT+IEO4hTUbTAAn40GVh6bVY5MjCMuUK0Go+sNf1Zs+luw8FRTbTUb/aYdCk/1t8fccmSNm68UjpBMUgzFkT5lF5I=
+X-Received: by 2002:a25:84d2:0:b0:dc2:32e6:d1b1 with SMTP id
+ x18-20020a2584d2000000b00dc232e6d1b1mr2686889ybm.18.1707256414268; Tue, 06
+ Feb 2024 13:53:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240205182506.3569743-6-stefanb@linux.ibm.com>
+References: <1706654228-17180-16-git-send-email-wufan@linux.microsoft.com>
+ <6ac3cca9d1d3505f3ed9c7196512f2db@paul-moore.com> <05cb5f03-9236-47b7-8dd4-1741c289efdc@linux.microsoft.com>
+In-Reply-To: <05cb5f03-9236-47b7-8dd4-1741c289efdc@linux.microsoft.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 6 Feb 2024 16:53:23 -0500
+Message-ID: <CAHC9VhS3Yb9QE3spJjFn2Mef-6m5Jxk6Yr80O1VkLp-yudp62w@mail.gmail.com>
+Subject: Re: [PATCH RFC v12 15/20] ipe: add support for dm-verity as a trust provider
+To: Fan Wu <wufan@linux.microsoft.com>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, 
+	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, 
+	snitzer@kernel.org, eparis@redhat.com, linux-doc@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, 
+	dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stefan,
+On Mon, Feb 5, 2024 at 6:11=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> w=
+rote:
+> On 2/3/2024 2:25 PM, Paul Moore wrote:
+> > On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
+> >>
+> >> Allows author of IPE policy to indicate trust for a singular dm-verity
+> >> volume, identified by roothash, through "dmverity_roothash" and all
+> >> signed dm-verity volumes, through "dmverity_signature".
+> >>
+> >> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+> >> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> >> ---
+> >> v2:
+> >>    + No Changes
+> >>
+> >> v3:
+> >>    + No changes
+> >>
+> >> v4:
+> >>    + No changes
+> >>
+> >> v5:
+> >>    + No changes
+> >>
+> >> v6:
+> >>    + Fix an improper cleanup that can result in
+> >>      a leak
+> >>
+> >> v7:
+> >>    + Squash patch 08/12, 10/12 to [11/16]
+> >>
+> >> v8:
+> >>    + Undo squash of 08/12, 10/12 - separating drivers/md/ from securit=
+y/
+> >>      & block/
+> >>    + Use common-audit function for dmverity_signature.
+> >>    + Change implementation for storing the dm-verity digest to use the
+> >>      newly introduced dm_verity_digest structure introduced in patch
+> >>      14/20.
+> >>
+> >> v9:
+> >>    + Adapt to the new parser
+> >>
+> >> v10:
+> >>    + Select the Kconfig when all dependencies are enabled
+> >>
+> >> v11:
+> >>    + No changes
+> >>
+> >> v12:
+> >>    + Refactor to use struct digest_info* instead of void*
+> >>    + Correct audit format
+> >> ---
+> >>   security/ipe/Kconfig         |  18 ++++++
+> >>   security/ipe/Makefile        |   1 +
+> >>   security/ipe/audit.c         |  37 ++++++++++-
+> >>   security/ipe/digest.c        | 120 +++++++++++++++++++++++++++++++++=
+++
+> >>   security/ipe/digest.h        |  26 ++++++++
+> >>   security/ipe/eval.c          |  90 +++++++++++++++++++++++++-
+> >>   security/ipe/eval.h          |  10 +++
+> >>   security/ipe/hooks.c         |  67 +++++++++++++++++++
+> >>   security/ipe/hooks.h         |   8 +++
+> >>   security/ipe/ipe.c           |  15 +++++
+> >>   security/ipe/ipe.h           |   4 ++
+> >>   security/ipe/policy.h        |   3 +
+> >>   security/ipe/policy_parser.c |  26 +++++++-
+> >>   13 files changed, 421 insertions(+), 4 deletions(-)
+> >>   create mode 100644 security/ipe/digest.c
+> >>   create mode 100644 security/ipe/digest.h
+> >>
+> >> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
+> >> index ac4d558e69d5..7afb1ce0cb99 100644
+> >> --- a/security/ipe/Kconfig
+> >> +++ b/security/ipe/Kconfig
+> >> @@ -8,6 +8,7 @@ menuconfig SECURITY_IPE
+> >>      depends on SECURITY && SECURITYFS && AUDIT && AUDITSYSCALL
+> >>      select PKCS7_MESSAGE_PARSER
+> >>      select SYSTEM_DATA_VERIFICATION
+> >> +    select IPE_PROP_DM_VERITY if DM_VERITY && DM_VERITY_VERIFY_ROOTHA=
+SH_SIG
+> >>      help
+> >>        This option enables the Integrity Policy Enforcement LSM
+> >>        allowing users to define a policy to enforce a trust-based acce=
+ss
+> >> @@ -15,3 +16,20 @@ menuconfig SECURITY_IPE
+> >>        admins to reconfigure trust requirements on the fly.
+> >>
+> >>        If unsure, answer N.
+> >> +
+> >> +if SECURITY_IPE
+> >> +menu "IPE Trust Providers"
+> >> +
+> >> +config IPE_PROP_DM_VERITY
+> >> +    bool "Enable support for dm-verity volumes"
+> >> +    depends on DM_VERITY && DM_VERITY_VERIFY_ROOTHASH_SIG
+> >> +    help
+> >> +      This option enables the properties 'dmverity_signature' and
+> >> +      'dmverity_roothash' in IPE policy. These properties evaluates
+> >> +      to TRUE when a file is evaluated against a dm-verity volume
+> >> +      that was mounted with a signed root-hash or the volume's
+> >> +      root hash matches the supplied value in the policy.
+> >> +
+> >> +endmenu
+> >> +
+> >> +endif
+> >> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+> >> index 2279eaa3cea3..66de53687d11 100644
+> >> --- a/security/ipe/Makefile
+> >> +++ b/security/ipe/Makefile
+> >> @@ -6,6 +6,7 @@
+> >>   #
+> >>
+> >>   obj-$(CONFIG_SECURITY_IPE) +=3D \
+> >> +    digest.o \
+> >>      eval.o \
+> >>      hooks.o \
+> >>      fs.o \
+> >> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
+> >> index ed390d32c641..a4ad8e888df0 100644
+> >> --- a/security/ipe/audit.c
+> >> +++ b/security/ipe/audit.c
+> >> @@ -13,6 +13,7 @@
+> >>   #include "hooks.h"
+> >>   #include "policy.h"
+> >>   #include "audit.h"
+> >> +#include "digest.h"
+> >>
+> >>   #define ACTSTR(x) ((x) =3D=3D IPE_ACTION_ALLOW ? "ALLOW" : "DENY")
+> >>
+> >> @@ -54,8 +55,30 @@ static const char *const audit_prop_names[__IPE_PRO=
+P_MAX] =3D {
+> >>      "boot_verified=3DFALSE",
+> >>      "boot_verified=3DTRUE",
+> >>   #endif /* CONFIG_BLK_DEV_INITRD */
+> >> +#ifdef CONFIG_IPE_PROP_DM_VERITY
+> >> +    "dmverity_roothash=3D",
+> >> +    "dmverity_signature=3DFALSE",
+> >> +    "dmverity_signature=3DTRUE",
+> >> +#endif /* CONFIG_IPE_PROP_DM_VERITY */
+> >>   };
+> >>
+> >> +#ifdef CONFIG_IPE_PROP_DM_VERITY
+> >> +/**
+> >> + * audit_dmv_roothash - audit a roothash of a dmverity volume.
+> >> + * @ab: Supplies a pointer to the audit_buffer to append to.
+> >> + * @rh: Supplies a pointer to the digest structure.
+> >> + */
+> >> +static void audit_dmv_roothash(struct audit_buffer *ab, const void *r=
+h)
+> >> +{
+> >> +    audit_log_format(ab, "%s", audit_prop_names[IPE_PROP_DMV_ROOTHASH=
+]);
+> >> +    ipe_digest_audit(ab, rh);
+> >> +}
+> >> +#else
+> >> +static void audit_dmv_roothash(struct audit_buffer *ab, const void *r=
+h)
+> >> +{
+> >> +}
+> >> +#endif /* CONFIG_IPE_PROP_DM_VERITY */
+> >
+> > I talked about this back in my review of the v11 patchset and I'm
+> > guessing you may have missed it ... the problem with the above code is
+> > that the fields in an audit record should remain constant, even if
+> > there is no data for that particular field.  In cases where there is no
+> > data to record for a given field, a "?" should be used as the field's
+> > value, for example:
+> >
+> >    dmverify_roothash=3D?
+> >
+> > My guess is that you would want to do something like this:
+> >
+> >    #else  /* !CONFIG_IPE_PROP_DM_VERITY */
+> >    static void audit_dmv_roothash(...)
+> >    {
+> >      audit_log_format(ab, "%s=3D?", audit_prop_names[...]);
+> >    }
+> >    #endif /* CONFIG_IPE_PROP_DM_VERITY */
+> >
+> > --
+> > paul-moore.com
+>
+> These code are used for auditing a policy rule, which the parser will
+> guarantee the property will always have a valid value. The comments
+> might be misleading which sounds like it's auditing a file's state. I
+> will correct them.
+>
+> Also as we previously discussed, the policy grammar shouldn't depend on
+> any kernel switch so these preprocessor statement will be removed.
+>
+> However, as an audit record should remain constant, I guess we should do
+> some special treatment to anonymous files? Like audit record for them
+> should include "path=3D? dev=3D? ino=3D?"
 
-kernel test robot noticed the following build errors:
+Yes, if the record type includes those fields just once, the record
+type should *always* include those fields.
 
-[auto build test ERROR on zohar-integrity/next-integrity]
-[also build test ERROR on pcmoore-selinux/next linus/master v6.8-rc3 next-20240206]
-[cannot apply to mszeredi-vfs/overlayfs-next mszeredi-vfs/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Berger/ima-Rename-backing_inode-to-real_inode/20240206-022848
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-patch link:    https://lore.kernel.org/r/20240205182506.3569743-6-stefanb%40linux.ibm.com
-patch subject: [PATCH v2 5/9] evm: Use the inode holding the metadata to calculate metadata hash
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20240207/202402070220.eYpQ6zcm-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240207/202402070220.eYpQ6zcm-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402070220.eYpQ6zcm-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   security/integrity/evm/evm_crypto.c: In function 'evm_calc_hmac_or_hash':
->> security/integrity/evm/evm_crypto.c:226:54: error: 'D_REAL_METADATA' undeclared (first use in this function)
-     226 |         struct inode *inode = d_inode(d_real(dentry, D_REAL_METADATA));
-         |                                                      ^~~~~~~~~~~~~~~
-   security/integrity/evm/evm_crypto.c:226:54: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/D_REAL_METADATA +226 security/integrity/evm/evm_crypto.c
-
-   212	
-   213	/*
-   214	 * Calculate the HMAC value across the set of protected security xattrs.
-   215	 *
-   216	 * Instead of retrieving the requested xattr, for performance, calculate
-   217	 * the hmac using the requested xattr value. Don't alloc/free memory for
-   218	 * each xattr, but attempt to re-use the previously allocated memory.
-   219	 */
-   220	static int evm_calc_hmac_or_hash(struct dentry *dentry,
-   221					 const char *req_xattr_name,
-   222					 const char *req_xattr_value,
-   223					 size_t req_xattr_value_len,
-   224					 uint8_t type, struct evm_digest *data)
-   225	{
- > 226		struct inode *inode = d_inode(d_real(dentry, D_REAL_METADATA));
-   227		struct xattr_list *xattr;
-   228		struct shash_desc *desc;
-   229		size_t xattr_size = 0;
-   230		char *xattr_value = NULL;
-   231		int error;
-   232		int size, user_space_size;
-   233		bool ima_present = false;
-   234	
-   235		if (!(inode->i_opflags & IOP_XATTR) ||
-   236		    inode->i_sb->s_user_ns != &init_user_ns)
-   237			return -EOPNOTSUPP;
-   238	
-   239		desc = init_desc(type, data->hdr.algo);
-   240		if (IS_ERR(desc))
-   241			return PTR_ERR(desc);
-   242	
-   243		data->hdr.length = crypto_shash_digestsize(desc->tfm);
-   244	
-   245		error = -ENODATA;
-   246		list_for_each_entry_lockless(xattr, &evm_config_xattrnames, list) {
-   247			bool is_ima = false;
-   248	
-   249			if (strcmp(xattr->name, XATTR_NAME_IMA) == 0)
-   250				is_ima = true;
-   251	
-   252			/*
-   253			 * Skip non-enabled xattrs for locally calculated
-   254			 * signatures/HMACs.
-   255			 */
-   256			if (type != EVM_XATTR_PORTABLE_DIGSIG && !xattr->enabled)
-   257				continue;
-   258	
-   259			if ((req_xattr_name && req_xattr_value)
-   260			    && !strcmp(xattr->name, req_xattr_name)) {
-   261				error = 0;
-   262				crypto_shash_update(desc, (const u8 *)req_xattr_value,
-   263						     req_xattr_value_len);
-   264				if (is_ima)
-   265					ima_present = true;
-   266	
-   267				dump_security_xattr(req_xattr_name,
-   268						    req_xattr_value,
-   269						    req_xattr_value_len);
-   270				continue;
-   271			}
-   272			size = vfs_getxattr_alloc(&nop_mnt_idmap, dentry, xattr->name,
-   273						  &xattr_value, xattr_size, GFP_NOFS);
-   274			if (size == -ENOMEM) {
-   275				error = -ENOMEM;
-   276				goto out;
-   277			}
-   278			if (size < 0)
-   279				continue;
-   280	
-   281			user_space_size = vfs_getxattr(&nop_mnt_idmap, dentry,
-   282						       xattr->name, NULL, 0);
-   283			if (user_space_size != size)
-   284				pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n",
-   285					 dentry->d_name.name, xattr->name, size,
-   286					 user_space_size);
-   287			error = 0;
-   288			xattr_size = size;
-   289			crypto_shash_update(desc, (const u8 *)xattr_value, xattr_size);
-   290			if (is_ima)
-   291				ima_present = true;
-   292	
-   293			dump_security_xattr(xattr->name, xattr_value, xattr_size);
-   294		}
-   295		hmac_add_misc(desc, inode, type, data->digest);
-   296	
-   297		/* Portable EVM signatures must include an IMA hash */
-   298		if (type == EVM_XATTR_PORTABLE_DIGSIG && !ima_present)
-   299			error = -EPERM;
-   300	out:
-   301		kfree(xattr_value);
-   302		kfree(desc);
-   303		return error;
-   304	}
-   305	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+paul-moore.com
 
