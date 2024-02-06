@@ -1,83 +1,82 @@
-Return-Path: <linux-integrity+bounces-1060-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1061-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0567784B928
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 16:19:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8DCA84B975
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 16:28:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83D381F21FB2
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 15:19:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70123291C8F
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 15:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 888A813540E;
-	Tue,  6 Feb 2024 15:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD204134CDF;
+	Tue,  6 Feb 2024 15:23:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HXzMsPXz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j3D7GsJ/"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D5313A883;
-	Tue,  6 Feb 2024 15:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17494134CE4;
+	Tue,  6 Feb 2024 15:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707232337; cv=none; b=aKVM9KIyR4yK50vqm8ctanmOs5z4wzEWyRxnvYADSvdtSwNwd2inK19OPk6D4uJ5x//3Kj3R942B9SmhsPPfxC/l94weRUMu/XQV8N3Eea3F8UFWXe8m1XrUbolTkEFN6usmo5ilRpVJpq5fL2ghk9i3W5gry6L+TlT/NBhvyqY=
+	t=1707233008; cv=none; b=aErXIwhlW3QxWI7Wp1x/IYiMKLZbVpQaKgYqM3+MQ+tzj4VEyrYYLugmEoTBEYQ4u9IHAJICcziW3mn/YHMKeLDg/2H1Z//IcN9lO6/aQRzgZIRyBu9RkQVrL510CGUys3480urlagZGBbVIs0icfXcZYYzn2PJB0BJKhcm7Rzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707232337; c=relaxed/simple;
-	bh=oYEWehvFMJ9pwDF4l/eISgFkLfERvZLJKloD31RHQww=;
+	s=arc-20240116; t=1707233008; c=relaxed/simple;
+	bh=Gh9wuJm14vCFANUo4tl3lHc80pd3ixaoVbcshke1Wt8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YhPh67M8lTgAKDWuLj3uCeeBUdgFzZszqB+cBiyxW3mgrHJnHBVSeZUEzhjWvv6oNsaWt2aYufCoj9W15DxtSgOQttX9Py2Xd5zD1CSIkmLE1wbgO6m4bx7ORWT/FqJ1pgOEq3HcivMAUOSM0pY6Tqkoi2PQm1m+qtmksM+osZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HXzMsPXz; arc=none smtp.client-ip=209.85.219.47
+	 To:Cc:Content-Type; b=LaSAxMAlgZWpy9F2nzYFReA+DA2zHmJL67BvMkcofr7PS5MmGFNlJH6UPBUKrumtiJvdO7fPfsryxuXrNx9NzcohBl/9IYRxe2mEA5qhNBZF1egPtUp5v7LAOtsASvVacXA5LP5UikiZtR/0PI9OqYEVJyDmAABxVbeihmeHozc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j3D7GsJ/; arc=none smtp.client-ip=209.85.219.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-68c7a26a5cbso5278636d6.1;
-        Tue, 06 Feb 2024 07:12:15 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6869e87c8d8so20933836d6.2;
+        Tue, 06 Feb 2024 07:23:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707232334; x=1707837134; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707233006; x=1707837806; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AMA6OtoS96Zf+GkoCGJn556i+luGg4v6HW8Cwy5kkeY=;
-        b=HXzMsPXzD2XG3rufHjk0otiwLpelFQrGpLPlVjZA6Jgi0wB6U5Q3ONKaa1XMZca7rV
-         FZGRpfNhDL6S6AYCuYnIfS+ZW6XGWFZATeELqWp08hWYeYn//1nwUYs3BEJjcCrHi/c8
-         UqBt2Pu9R4onqhhDCTRvVZxfPiKCZSqoBSIqdkNVNVxS3f7sFhyHHskPh8fwKxZWJUGQ
-         UwpnBt4gBP83BOAp64Z8EfEvfvIXJeHpysMGez4Tu6W/5CZI2niMDU3w7TkiVfvkad08
-         p/DVxAi+ZnYJI8kxr96ago6WI78PBvVhRHLacan6k3NjMTL3PIpyrZRuzToTpnPTVhjT
-         4o/g==
+        bh=H/7TPM7Tazk5LDtz7VEiySoWxaEy9ATdPXGmfgfBPRA=;
+        b=j3D7GsJ/B5dHkqAnAZ0JY6IgHpWZOjvcpvTmsrmjG5jSzegqhp7p90t2HAwiiXDn+S
+         jzoKpn5gzjq3u7D3gstDWbrlJ48oV+kjy7JeRdWswljKjx2G871uRFL+/FJusVEN5oJ5
+         yMutPKuBb0SDy3PVRp+NbJDTuVX68QkdDK6tO+uqvnkcRjXlsZGEZ2BRbYiWhZPtOp7s
+         3Z8lQWY1+5VAp/TMSU4Zrb2PiYY0TktLuDRk8Gplq9Jf8DzSe2B3VRchfhXuMhhzgidN
+         5Mno2W6ILbn3SvNTSgrRioxch7ySVxVMDVjOg6w0ew5DrJ2fyKGbBBx4D2ONbs3tSuKC
+         G/KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707232334; x=1707837134;
+        d=1e100.net; s=20230601; t=1707233006; x=1707837806;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AMA6OtoS96Zf+GkoCGJn556i+luGg4v6HW8Cwy5kkeY=;
-        b=AMDy3Q4btY1yOuF3EHkzON1bzjLR3UX4fr+frqPYM5n1KITZu5H3AAKV3Vv2HImC0B
-         taK7rOCBqZ7r32uqaXQVto3ziJRxqP6VpHaDBOXJdnwKEWYDulyO/BHETBOd+1Yhxo3Y
-         WtYvwukSdFvwnCp8THr3nIxum9Kd5uT8xJKRmc7icopTaw0ZgCvoIhul/3hFcGOQxODG
-         6TTjYLFHRlvY7zqlc9vvkbXC092lj4Q/vEUduOgMG3rnNZjsG99JJi7LBWKjqO/7Btno
-         v4l2UJ/vM0Sh3nGkbxq7CrqHrpFaybkJl7e6XBUqbfVvyy4TcSJldE1v8zaX8hJfG29W
-         mJkg==
-X-Gm-Message-State: AOJu0YyQF7MoF64G2hM+8lBMJbzk3FhhvByRgtob4oUj4xb/es9uaP+j
-	Th8GpDoyoK4ex5TRMsbgyXB52clQCMPF8/Byzvo1V0AXrhv1EFjXcadn2j/6fe7/OFMDaJr/IGL
-	V51rA9ea0BhPsBd9ALZbCRMxfyzs=
-X-Google-Smtp-Source: AGHT+IFgX6Kscb6kSDKa8HOGT2SMWHo1VbDYPIkFmBOocSq5uIw/IqPcHyfBt8SQxsU8CBLdLkg5u+NoumkL0jm/3Xo=
-X-Received: by 2002:ad4:5881:0:b0:68c:a2c9:9a7 with SMTP id
- dz1-20020ad45881000000b0068ca2c909a7mr10465946qvb.13.1707232334509; Tue, 06
- Feb 2024 07:12:14 -0800 (PST)
+        bh=H/7TPM7Tazk5LDtz7VEiySoWxaEy9ATdPXGmfgfBPRA=;
+        b=mfwgLIiqgirfUaAto2mTfzgTL1zoXRH17jB6Kd6anL0B3zPn6Rf/RLdqQs531w68KH
+         nPiF1edoPAA7vb+FXIZCetq7/g4p2fAq5JWJtJ5ePbQeIaoTstOlsm+cc+r1CIiDyFLX
+         Ews+RDS3JAD1grfdL7qxim24phQTeeonzehWC4QBf8wmXywSIlABTtLQ+jSEq14y/ns2
+         bIFPlwHfvQfKHzwdy4lv3o15pJxvujZYyIrrBZY3oi7V8s7fxPvoMWhLdxIbVsMJxig+
+         9SZW9KttwypC8BXAUt07crO77pxib121JDVlvolqGhI/MuDULDoHGWtXNLJqbKML4whr
+         eIcg==
+X-Gm-Message-State: AOJu0Yw92kUa3yEoehph7O0msDf0u9P6JK1uDm7vxxF01eWag9kxehub
+	clD95cN62odmxy4+1IbUF1ZeNTLBAee9gYecbcb/Usy/FkcHOwN1180lLcshUj/s1n0lP0z2LfZ
+	itDd575LyMU2AJyOKMZLTRQgTCfKVWC5yXqk=
+X-Google-Smtp-Source: AGHT+IFRvj8iQLkOF9LHUyNODvtxMMSaPlVZsDFwsH1v0atlDvgj+vMTCL06Sjyl5NiGm4tS/mE2f3YB2XRYAjZAdrI=
+X-Received: by 2002:a05:6214:c6a:b0:68c:88a4:3fdd with SMTP id
+ t10-20020a0562140c6a00b0068c88a43fddmr2834431qvj.27.1707233005762; Tue, 06
+ Feb 2024 07:23:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240205182506.3569743-1-stefanb@linux.ibm.com> <20240205182506.3569743-3-stefanb@linux.ibm.com>
-In-Reply-To: <20240205182506.3569743-3-stefanb@linux.ibm.com>
+References: <20240205182506.3569743-1-stefanb@linux.ibm.com> <20240205182506.3569743-10-stefanb@linux.ibm.com>
+In-Reply-To: <20240205182506.3569743-10-stefanb@linux.ibm.com>
 From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 6 Feb 2024 17:12:03 +0200
-Message-ID: <CAOQ4uxhTVaHpo6NgoA6q3bBH+-JSY3in1bEzYMviBHO7N15Kow@mail.gmail.com>
-Subject: Re: [PATCH v2 2/9] security: allow finer granularity in permitting
- copy-up of security xattrs
-To: Stefan Berger <stefanb@linux.ibm.com>
+Date: Tue, 6 Feb 2024 17:23:14 +0200
+Message-ID: <CAOQ4uxhQgCqNZ_4Dy1PghCHBg7H4qaf-st2pWhXe9eq1+dsHHA@mail.gmail.com>
+Subject: Re: [PATCH v2 9/9] ima: Record i_version of real_inode for change detection
+To: Stefan Berger <stefanb@linux.ibm.com>, Jeff Layton <jlayton@kernel.org>
 Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
 	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
@@ -88,201 +87,108 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Feb 5, 2024 at 8:25=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.com=
 > wrote:
 >
-> Copying up xattrs is solely based on the security xattr name. For finer
-> granularity add a dentry parameter to the security_inode_copy_up_xattr
-> hook definition, allowing decisions to be based on the xattr content as
-> well.
+> process_measurement() will try to detect file content changes for not-yet=
+-
+> copied-up files on a stacked filesystem based on the i_version number of
+> the real inode: !inode_eq_iversion(real_inode, iint->version)
+> Therefore, take a snapshot of the i_version of the real file to be used
+> for i_version number-based file content change detection by IMA in
+> process_meassurements().
+>
+> In this case vfs_getattr_nosec() cannot be used since it will return the
+> i_version number of the file on the overlay layer which will trigger more
+> iint resets in process_measurements() than necessary since this i_version
+> number represents different state than that of the real_inode (of a
+> not-yet-copied up file).
 >
 > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-
-For ovl part
-
-Acked-by: Amir Goldstein <amir73il@gmail.com>
-
 > ---
->  fs/overlayfs/copy_up.c            | 2 +-
->  include/linux/evm.h               | 5 +++--
->  include/linux/lsm_hook_defs.h     | 3 ++-
->  include/linux/security.h          | 4 ++--
->  security/integrity/evm/evm_main.c | 2 +-
->  security/security.c               | 7 ++++---
->  security/selinux/hooks.c          | 2 +-
->  security/smack/smack_lsm.c        | 2 +-
->  8 files changed, 15 insertions(+), 12 deletions(-)
+>  security/integrity/ima/ima_api.c | 28 +++++++++++++++-------------
+>  1 file changed, 15 insertions(+), 13 deletions(-)
 >
-> diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
-> index 8586e2f5d243..de20fe9333c0 100644
-> --- a/fs/overlayfs/copy_up.c
-> +++ b/fs/overlayfs/copy_up.c
-> @@ -114,7 +114,7 @@ int ovl_copy_xattr(struct super_block *sb, const stru=
-ct path *oldpath, struct de
->                 if (ovl_is_private_xattr(sb, name))
->                         continue;
+> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/im=
+a_api.c
+> index 597ea0c4d72f..530888cc481e 100644
+> --- a/security/integrity/ima/ima_api.c
+> +++ b/security/integrity/ima/ima_api.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/xattr.h>
+>  #include <linux/evm.h>
+>  #include <linux/fsverity.h>
+> +#include <linux/iversion.h>
 >
-> -               error =3D security_inode_copy_up_xattr(name);
-> +               error =3D security_inode_copy_up_xattr(old, name);
->                 if (error < 0 && error !=3D -EOPNOTSUPP)
->                         break;
->                 if (error =3D=3D 1) {
-> diff --git a/include/linux/evm.h b/include/linux/evm.h
-> index 36ec884320d9..840ffbdc2860 100644
-> --- a/include/linux/evm.h
-> +++ b/include/linux/evm.h
-> @@ -31,7 +31,7 @@ extern void evm_inode_post_setxattr(struct dentry *dent=
-ry,
->                                     const char *xattr_name,
->                                     const void *xattr_value,
->                                     size_t xattr_value_len);
-> -extern int evm_inode_copy_up_xattr(const char *name);
-> +extern int evm_inode_copy_up_xattr(struct dentry *dentry, const char *na=
-me);
->  extern int evm_inode_removexattr(struct mnt_idmap *idmap,
->                                  struct dentry *dentry, const char *xattr=
-_name);
->  extern void evm_inode_post_removexattr(struct dentry *dentry,
-> @@ -118,7 +118,8 @@ static inline void evm_inode_post_setxattr(struct den=
-try *dentry,
->         return;
->  }
+>  #include "ima.h"
 >
-> -static inline int  evm_inode_copy_up_xattr(const char *name)
-> +static inline int evm_inode_copy_up_xattr(struct dentry *dentry,
-> +                                         const char *name)
->  {
->         return 0;
->  }
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.=
-h
-> index 185924c56378..7dd61f51d84a 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -163,7 +163,8 @@ LSM_HOOK(int, 0, inode_listsecurity, struct inode *in=
-ode, char *buffer,
->          size_t buffer_size)
->  LSM_HOOK(void, LSM_RET_VOID, inode_getsecid, struct inode *inode, u32 *s=
-ecid)
->  LSM_HOOK(int, 0, inode_copy_up, struct dentry *src, struct cred **new)
-> -LSM_HOOK(int, -EOPNOTSUPP, inode_copy_up_xattr, const char *name)
-> +LSM_HOOK(int, -EOPNOTSUPP, inode_copy_up_xattr, struct dentry *src,
-> +        const char *name)
->  LSM_HOOK(int, 0, kernfs_init_security, struct kernfs_node *kn_dir,
->          struct kernfs_node *kn)
->  LSM_HOOK(int, 0, file_permission, struct file *file, int mask)
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index d0eb20f90b26..9fc9ca6284d6 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -387,7 +387,7 @@ int security_inode_setsecurity(struct inode *inode, c=
-onst char *name, const void
->  int security_inode_listsecurity(struct inode *inode, char *buffer, size_=
-t buffer_size);
->  void security_inode_getsecid(struct inode *inode, u32 *secid);
->  int security_inode_copy_up(struct dentry *src, struct cred **new);
-> -int security_inode_copy_up_xattr(const char *name);
-> +int security_inode_copy_up_xattr(struct dentry *src, const char *name);
->  int security_kernfs_init_security(struct kernfs_node *kn_dir,
->                                   struct kernfs_node *kn);
->  int security_file_permission(struct file *file, int mask);
-> @@ -980,7 +980,7 @@ static inline int security_kernfs_init_security(struc=
-t kernfs_node *kn_dir,
->         return 0;
->  }
+> @@ -250,7 +251,6 @@ int ima_collect_measurement(struct integrity_iint_cac=
+he *iint,
+>         int result =3D 0;
+>         int length;
+>         void *tmpbuf;
+> -       u64 i_version =3D 0;
 >
-> -static inline int security_inode_copy_up_xattr(const char *name)
-> +static inline int security_inode_copy_up_xattr(struct dentry *src, const=
- char *name)
->  {
->         return -EOPNOTSUPP;
->  }
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
-vm_main.c
-> index cc7956d7878b..2555aa4501ae 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -896,7 +896,7 @@ void evm_inode_post_setattr(struct dentry *dentry, in=
-t ia_valid)
->                 evm_update_evmxattr(dentry, NULL, NULL, 0);
->  }
+>         /*
+>          * Always collect the modsig, because IMA might have already coll=
+ected
+> @@ -263,16 +263,6 @@ int ima_collect_measurement(struct integrity_iint_ca=
+che *iint,
+>         if (iint->flags & IMA_COLLECTED)
+>                 goto out;
 >
-> -int evm_inode_copy_up_xattr(const char *name)
-> +int evm_inode_copy_up_xattr(struct dentry *src, const char *name)
->  {
->         if (strcmp(name, XATTR_NAME_EVM) =3D=3D 0)
->                 return 1; /* Discard */
-> diff --git a/security/security.c b/security/security.c
-> index 0144a98d3712..ee63863c1dc0 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -2596,6 +2596,7 @@ EXPORT_SYMBOL(security_inode_copy_up);
+> -       /*
+> -        * Detecting file change is based on i_version. On filesystems
+> -        * which do not support i_version, support was originally limited
+> -        * to an initial measurement/appraisal/audit, but was modified to
+> -        * assume the file changed.
+> -        */
+> -       result =3D vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_C=
+OOKIE,
+> -                                  AT_STATX_SYNC_AS_STAT);
+> -       if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
+> -               i_version =3D stat.change_cookie;
+>         hash.hdr.algo =3D algo;
+>         hash.hdr.length =3D hash_digest_size[algo];
 >
->  /**
->   * security_inode_copy_up_xattr() - Filter xattrs in an overlayfs copy-u=
-p op
-> + * @src: union dentry of copy-up file
->   * @name: xattr name
->   *
->   * Filter the xattrs being copied up when a unioned file is copied up fr=
-om a
-> @@ -2606,7 +2607,7 @@ EXPORT_SYMBOL(security_inode_copy_up);
->   *         if the security module does not know about attribute, or a ne=
-gative
->   *         error code to abort the copy up.
->   */
-> -int security_inode_copy_up_xattr(const char *name)
-> +int security_inode_copy_up_xattr(struct dentry *src, const char *name)
->  {
->         struct security_hook_list *hp;
->         int rc;
-> @@ -2618,12 +2619,12 @@ int security_inode_copy_up_xattr(const char *name=
-)
->          */
->         hlist_for_each_entry(hp,
->                              &security_hook_heads.inode_copy_up_xattr, li=
-st) {
-> -               rc =3D hp->hook.inode_copy_up_xattr(name);
-> +               rc =3D hp->hook.inode_copy_up_xattr(src, name);
->                 if (rc !=3D LSM_RET_DEFAULT(inode_copy_up_xattr))
->                         return rc;
+> @@ -302,10 +292,22 @@ int ima_collect_measurement(struct integrity_iint_c=
+ache *iint,
+>
+>         iint->ima_hash =3D tmpbuf;
+>         memcpy(iint->ima_hash, &hash, length);
+> -       iint->version =3D i_version;
+> -       if (real_inode !=3D inode) {
+> +       if (real_inode =3D=3D inode) {
+> +               /*
+> +                * Detecting file change is based on i_version. On filesy=
+stems
+> +                * which do not support i_version, support was originally=
+ limited
+> +                * to an initial measurement/appraisal/audit, but was mod=
+ified to
+> +                * assume the file changed.
+> +                */
+> +               result =3D vfs_getattr_nosec(&file->f_path, &stat,
+> +                                          STATX_CHANGE_COOKIE,
+> +                                          AT_STATX_SYNC_AS_STAT);
+> +               if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
+> +                       iint->version =3D stat.change_cookie;
+> +       } else {
+>                 iint->real_ino =3D real_inode->i_ino;
+>                 iint->real_dev =3D real_inode->i_sb->s_dev;
+> +               iint->version =3D inode_query_iversion(real_inode);
 >         }
 >
-> -       return evm_inode_copy_up_xattr(name);
-> +       return evm_inode_copy_up_xattr(src, name);
->  }
->  EXPORT_SYMBOL(security_inode_copy_up_xattr);
->
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index a6bf90ace84c..ebb8876837c6 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -3530,7 +3530,7 @@ static int selinux_inode_copy_up(struct dentry *src=
-, struct cred **new)
->         return 0;
->  }
->
-> -static int selinux_inode_copy_up_xattr(const char *name)
-> +static int selinux_inode_copy_up_xattr(struct dentry *dentry, const char=
- *name)
->  {
->         /* The copy_up hook above sets the initial context on an inode, b=
-ut we
->          * don't then want to overwrite it by blindly copying all the low=
-er
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 0fdbf04cc258..bffca165f07f 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -4873,7 +4873,7 @@ static int smack_inode_copy_up(struct dentry *dentr=
-y, struct cred **new)
->         return 0;
->  }
->
-> -static int smack_inode_copy_up_xattr(const char *name)
-> +static int smack_inode_copy_up_xattr(struct dentry *src, const char *nam=
-e)
->  {
->         /*
->          * Return 1 if this is the smack access Smack attribute.
-> --
-> 2.43.0
->
+
+The commit that removed inode_query_iversion db1d1e8b9867 ("IMA: use
+vfs_getattr_nosec to get the i_version") claimed to do that because
+inode_query_iversion() did not work in overlayfs and now this commit
+uses inode_query_iversion() only for overlayfs.
+
+STATX_CHANGE_COOKIE does not seem to make much sense in this
+code anymore, unless it is still needed, according to original commit to
+"allow IMA to work properly with a broader class of filesystems in the futu=
+re."
+Jeff?
+
+
+Thanks,
+Amir.
 
