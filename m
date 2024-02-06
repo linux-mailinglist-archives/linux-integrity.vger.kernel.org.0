@@ -1,147 +1,127 @@
-Return-Path: <linux-integrity+bounces-1062-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1063-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82BCC84B97A
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 16:28:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A0E284B992
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 16:30:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F282291FA1
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 15:28:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD5A21C24C2C
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 15:29:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60039133400;
-	Tue,  6 Feb 2024 15:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D5C133412;
+	Tue,  6 Feb 2024 15:28:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gh2hGqik"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JcT883gW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC191384B7;
-	Tue,  6 Feb 2024 15:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC5B133400;
+	Tue,  6 Feb 2024 15:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707233039; cv=none; b=NQZam8pS8YC866yanZIHkuuVwo/TZoPQIXyBA/VDfJWua7+7Nk46beA0eRwqeGMtLaUX58gPlULCKvB806vjk6lM3tg+TyglZg9BW9q3iegs9NVTkoMi/w2XRQfhFLSRZdS1EHp/wQXq4RCUd0ubH6RdT7JD5aIwXWjmFXicFiM=
+	t=1707233310; cv=none; b=ccRz3RER6vvJ6c2RP14VuF8JM9SmP3cTfoXBN0pIEi3Wafr0lo5yBL1i4BG8ILKXee6ZEP0OqS0BRqpnp14cMjq04HgeciNxlPkRTnoW+7YVrh39MgSVevOwEy7RB0Kq8taZpuS0nNvwM5WT624YOQxV9aOJsQSpDxwzhEYmn4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707233039; c=relaxed/simple;
-	bh=h6D7G40HLhvkIPZAkoYgGRkOEa7a+WeavQnqf68/ZkA=;
+	s=arc-20240116; t=1707233310; c=relaxed/simple;
+	bh=cjRFuh4HySsEJL5gpssoyDvPMupfO57ja4ej617fdz0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EMK3oQV64Apf4aqWFoUdV6wTKlirXpi2rxShuHXpeMeWwq2cYVKFiHCOZ60nFNu6B1iYbj1X6tbT/dGzVTVJQYnL92KO9kFmGHxG2vfAj1d+78lzn79JkTFQ4O+7lwU9uKI8R+qYjnPVN+qALtLHjJBPfAHTYhK5ibDACKItDNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gh2hGqik; arc=none smtp.client-ip=209.85.219.46
+	 To:Cc:Content-Type; b=W9TNJMZaVPkfltKbKXvpTSL03Eb1XMjF7iqIcD/lIYPGLBNj/1Vl/28Y2Swqxu1ejXBl3dbh//TVnIbzD+zWhMAG5Kwx6+a+SuxQZi2d/ha9OTCKewy0Cj+SxkJpxnBAr56TsTftS86gPg65FGxpkqv4sojlBGV+e7gM3YKaooU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JcT883gW; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-68c4300518bso26272926d6.3;
-        Tue, 06 Feb 2024 07:23:57 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-68c2f4c3282so27493106d6.3;
+        Tue, 06 Feb 2024 07:28:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707233036; x=1707837836; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707233308; x=1707838108; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z6xtk+lTQ1Wv+Q+hYgJigN7nkM3Jee/QikU40oHDl6o=;
-        b=gh2hGqik9xsYI0PoSblqr3HtoYJbJDGPKSA1cdOiLU8R6uGgWwIAJF/xl0lPD3grUB
-         0inSWo2aic8xoEITO7voxNPqALYUg8U0KIo7RUJHtbx6i1N/PDkWkla7Cc9jSc+WN/ns
-         /FK1zCwyeE0tSplopioa83ZCn6YwQIgwwtl97NGcSNSTzPcOOhbh/nWzCIAuH0sGA8Ih
-         YyIUvV/TPsqrjNWPsBBgbhEddhHpQVZzlyxhIegNS73fXO0hlcqjQUNAAYU35upo4/tb
-         FCUIgTPq8umxBvQ3aAjXuZ8I2lqT3hIq8s6IbOBNPyIENHB6mGOhcG1uiNKljnS1e5Gt
-         l9vA==
+        bh=oXjPK0tA1yBTpHZUPdBmW8xYy02khEq+2MG2XFsWB/U=;
+        b=JcT883gWNoG0eDJvmMiPk2X5WtvZ6xYKofhgLravHd9d+ghxJvb1hJh1urjMVETTKE
+         3jBeBGqG6itX+Y9Pilt6c3jBvA+1zjv+1NVwqMK5uzrlABAz1rontW9Qe6u14g75T1Mz
+         duPnTlSostHXJxSOWgq/SCjiSf5QxdehdFYEFjxt1rgi4cC0g6dKhTISH4potspB8nRD
+         AiMqz3Qt9YFddf2ylK4PmtKftOP0mXpGv2fA9PWjlo38RUSpgKSLjuE7eQj+3nov7nt+
+         exwGcLO3DyokgVpcxUdMbH7glbjDNZ/LQKUTOO4u4EzQWD5BaF/ERWllF1+A+uIDk6nk
+         vW/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707233036; x=1707837836;
+        d=1e100.net; s=20230601; t=1707233308; x=1707838108;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z6xtk+lTQ1Wv+Q+hYgJigN7nkM3Jee/QikU40oHDl6o=;
-        b=UnMoMLsdd3v0Zc98Km6ALpMacwxnm1voBdx5ImzSqdNEgXQHlwZMXjYxwfk1B3s0E6
-         IuUDGWK47KL58cvefBChhvNuebUG4vkueWTw4CqgT2uLDkkkxxD4Qq5e+/yzDBlnu9QI
-         MMetUEN4vncy8qh2Mzw7rp1UTFzuY1VIrvbwOWr8E69QO8mJsYbZHghRfpncfi5cbmIg
-         my1UUdfq3BiSnqeUWgmALlmqTGkzn0Y2SRTGsqOeRNRV9uxFqwmubyeU8ldWC1Lkf4QE
-         QUaMPG259tVXSu/DSmgAtArZgia20OIXqEOrsuXPG6KlHShTEmtcYMBsHvNVaZqX4iNu
-         8pqQ==
-X-Gm-Message-State: AOJu0Yw8C0W/VXaT/dZwqx7T3WDy71hnmS4H0pYnfafSllkD+5+uKMqu
-	k1GXIAtwkEv9Le8r8zNfAiiuKAlga1zCCoMtZd8aIKp8tCq3yjAQu68uit+GzYbZ2bgh0ks71nO
-	3M8VYGmAKNOe4AkjVtKggSiSZ99oTEQAQT4Y=
-X-Google-Smtp-Source: AGHT+IGAhQgw7rqwh9fWZV7xPP1QZLXTOgkjzOJgAh+wuWPd4YxVLgxbcEE3cxrYPsHAUANbCX0YgFlHCUmCxEBkg80=
-X-Received: by 2002:a05:6214:1c07:b0:68c:6cc8:1bfe with SMTP id
- u7-20020a0562141c0700b0068c6cc81bfemr4008827qvc.38.1707233036632; Tue, 06 Feb
- 2024 07:23:56 -0800 (PST)
+        bh=oXjPK0tA1yBTpHZUPdBmW8xYy02khEq+2MG2XFsWB/U=;
+        b=m/1OfWfw/aZPM4y7LLwXEYrUXoD2Cp7vtbQ4UtveA+unR4o54M4qcWj1XD9VekwqSg
+         qvfyw8KTZSCaIGVuUmKhzDEQtlTMTrFBwgBN+YTdhBEJ44SR8SknEoc5UjS/T9gzJVSb
+         K/byMNJ/e1VzIuqQdB4nXH+W0CSJ0akssOdsndiMWNRq0LltryqA1VvFFuKYn4pCHHE7
+         /J5JByzX+b0R2dbNMxUb5hAqMTBfdacZeEZxMkQ4a+ev7XZAAhEccTPOcEFcGPX+7jau
+         CwhBD8TZrUvf63B7Uc9lNw4Sg8svkrM0YE1FT9xFe0JHiPt5wn9dBaE7RBBXx8jOQQWH
+         tQkg==
+X-Gm-Message-State: AOJu0YwDifvKPUjY9/E0j/R66V4xb7C4GDUvhNPmOX7yE027Fqw/w19e
+	sKUQ1dZgBBSOzE/KBSVFJd6vz3vdpw7upvbLYsSmFL6Kj8vJTP8wqlTlxTpP8iVSufqeSm9RsuB
+	f6Di961yL+0OS3QdCq8WY6k0RhLo=
+X-Google-Smtp-Source: AGHT+IGbDqlmmzBuMYeMmDEVKXuq88SUElguKySS9+DL++pjTLpNYaNUYDVCQAlYxPOkLARlrzbHZ6YlcrsB7O4hx9Y=
+X-Received: by 2002:ad4:5c8e:0:b0:68c:8422:6dec with SMTP id
+ o14-20020ad45c8e000000b0068c84226decmr2651121qvh.37.1707233307960; Tue, 06
+ Feb 2024 07:28:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240205182506.3569743-1-stefanb@linux.ibm.com> <20240205182506.3569743-2-stefanb@linux.ibm.com>
-In-Reply-To: <20240205182506.3569743-2-stefanb@linux.ibm.com>
+References: <20240202110132.1584111-1-amir73il@gmail.com> <20240202110132.1584111-3-amir73il@gmail.com>
+ <CAJfpeguhrTkNYny1xmJxwOg8m5syhti1FDhJmMucwiY6BZ6eLg@mail.gmail.com>
+ <CAOQ4uxhcQfR6QP=oESUvhcwXh+vwBJUL+N1_XDZ5sFGk61HWGg@mail.gmail.com> <20240202-hemmung-perspektive-d84b93c25b00@brauner>
+In-Reply-To: <20240202-hemmung-perspektive-d84b93c25b00@brauner>
 From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 6 Feb 2024 17:23:45 +0200
-Message-ID: <CAOQ4uxirYv94ub+WP=Lo5HPh6T0QHtkAM2v4tXjkofJrDvtBHA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] ima: Rename backing_inode to real_inode
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, brauner@kernel.org, miklos@szeredi.hu
+Date: Tue, 6 Feb 2024 17:28:16 +0200
+Message-ID: <CAOQ4uxj08Rio4fsx7b2JmXGTnxL5wVzcy97amHgw3AvSjETopw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] fs: remove the inode argument to ->d_real() method
+To: Christian Brauner <brauner@kernel.org>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Stefan Berger <stefanb@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	linux-unionfs@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 5, 2024 at 8:25=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.com=
-> wrote:
+On Fri, Feb 2, 2024 at 3:55=E2=80=AFPM Christian Brauner <brauner@kernel.or=
+g> wrote:
 >
-> Rename the backing_inode variable to real_inode since it gets its value
-> from real_inode().
+> On Fri, Feb 02, 2024 at 02:41:16PM +0200, Amir Goldstein wrote:
+> > On Fri, Feb 2, 2024 at 2:19=E2=80=AFPM Miklos Szeredi <miklos@szeredi.h=
+u> wrote:
+> > >
+> > > On Fri, 2 Feb 2024 at 12:01, Amir Goldstein <amir73il@gmail.com> wrot=
+e:
+> > >
+> > > > diff --git a/Documentation/filesystems/locking.rst b/Documentation/=
+filesystems/locking.rst
+> > > > index d5bf4b6b7509..453039a2e49b 100644
+> > > > --- a/Documentation/filesystems/locking.rst
+> > > > +++ b/Documentation/filesystems/locking.rst
+> > > > @@ -29,7 +29,7 @@ prototypes::
+> > > >         char *(*d_dname)((struct dentry *dentry, char *buffer, int =
+buflen);
+> > > >         struct vfsmount *(*d_automount)(struct path *path);
+> > > >         int (*d_manage)(const struct path *, bool);
+> > > > -       struct dentry *(*d_real)(struct dentry *, const struct inod=
+e *);
+> > > > +       struct dentry *(*d_real)(struct dentry *, int type);
+> > >
+> > > Why not use the specific enum type for the argument?
+> >
+> > No reason, we can do enum d_real_type.
 >
-> Suggested-by: Amir Goldstein <amir73il@gmail.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Fwiw, I'm happy to just change this. No need to resend as far as I'm conc=
+erned.
 
-Acked-by: Amir Goldstein <amir73il@gmail.com>
+FWIW, I'd be happy if you do that :)
+Note to move enum d_real_type definition above dentry_operations.
 
-> ---
->  security/integrity/ima/ima_main.c | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
->
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index cc1217ac2c6f..f1a01d32b92a 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -208,7 +208,7 @@ static int process_measurement(struct file *file, con=
-st struct cred *cred,
->                                u32 secid, char *buf, loff_t size, int mas=
-k,
->                                enum ima_hooks func)
->  {
-> -       struct inode *backing_inode, *inode =3D file_inode(file);
-> +       struct inode *real_inode, *inode =3D file_inode(file);
->         struct integrity_iint_cache *iint =3D NULL;
->         struct ima_template_desc *template_desc =3D NULL;
->         char *pathbuf =3D NULL;
-> @@ -285,14 +285,16 @@ static int process_measurement(struct file *file, c=
-onst struct cred *cred,
->                 iint->measured_pcrs =3D 0;
->         }
->
-> -       /* Detect and re-evaluate changes made to the backing file. */
-> -       backing_inode =3D d_real_inode(file_dentry(file));
-> -       if (backing_inode !=3D inode &&
-> +       /*
-> +        * Detect and re-evaluate changes made to the inode holding file =
-data.
-> +        */
-> +       real_inode =3D d_real_inode(file_dentry(file));
-> +       if (real_inode !=3D inode &&
->             (action & IMA_DO_MASK) && (iint->flags & IMA_DONE_MASK)) {
-> -               if (!IS_I_VERSION(backing_inode) ||
-> -                   backing_inode->i_sb->s_dev !=3D iint->real_dev ||
-> -                   backing_inode->i_ino !=3D iint->real_ino ||
-> -                   !inode_eq_iversion(backing_inode, iint->version)) {
-> +               if (!IS_I_VERSION(real_inode) ||
-> +                   real_inode->i_sb->s_dev !=3D iint->real_dev ||
-> +                   real_inode->i_ino !=3D iint->real_ino ||
-> +                   !inode_eq_iversion(real_inode, iint->version)) {
->                         iint->flags &=3D ~IMA_DONE_MASK;
->                         iint->measured_pcrs =3D 0;
->                 }
-> --
-> 2.43.0
->
+Please add Stefan's Tested-by to both patches.
+
+Thanks,
+Amir.
 
