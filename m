@@ -1,127 +1,130 @@
-Return-Path: <linux-integrity+bounces-1063-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1064-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A0E284B992
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 16:30:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2232F84B9AD
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 16:34:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD5A21C24C2C
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 15:29:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1B27282C4A
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 15:33:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3D5C133412;
-	Tue,  6 Feb 2024 15:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9471332B6;
+	Tue,  6 Feb 2024 15:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JcT883gW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DtX7qbUH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC5B133400;
-	Tue,  6 Feb 2024 15:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6897A132C3A;
+	Tue,  6 Feb 2024 15:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707233310; cv=none; b=ccRz3RER6vvJ6c2RP14VuF8JM9SmP3cTfoXBN0pIEi3Wafr0lo5yBL1i4BG8ILKXee6ZEP0OqS0BRqpnp14cMjq04HgeciNxlPkRTnoW+7YVrh39MgSVevOwEy7RB0Kq8taZpuS0nNvwM5WT624YOQxV9aOJsQSpDxwzhEYmn4A=
+	t=1707233631; cv=none; b=J9jnv6TgO6tJUICfISA/7GeoCyfycHvbt5qFGgCdro+m3LKBsiDJB1bux+CrReGPFyt8uYyFXkrDKo4xVIuO6QUR1LbaSFWQW+B250wio6HCFnvMuVyb1LDQOgzdduIVDzeFEGFtTIkox1gFwG/p6LclerCxYyPE8AvwjwBU9ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707233310; c=relaxed/simple;
-	bh=cjRFuh4HySsEJL5gpssoyDvPMupfO57ja4ej617fdz0=;
+	s=arc-20240116; t=1707233631; c=relaxed/simple;
+	bh=Pq675YyLd2zT05WD6JVqAm14l+wk2+OREl+RR7JEuKw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W9TNJMZaVPkfltKbKXvpTSL03Eb1XMjF7iqIcD/lIYPGLBNj/1Vl/28Y2Swqxu1ejXBl3dbh//TVnIbzD+zWhMAG5Kwx6+a+SuxQZi2d/ha9OTCKewy0Cj+SxkJpxnBAr56TsTftS86gPg65FGxpkqv4sojlBGV+e7gM3YKaooU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JcT883gW; arc=none smtp.client-ip=209.85.219.50
+	 To:Cc:Content-Type; b=EOcPWecZU5ldOzA1AV8GaXkx3P2v/cJUAEpmY8GseQy4pFtVajqEk1LxBXMNarBOSVplZZtDt2HYvJOCza0uXxCnMCMwQUEyoO02/wifwIMvwLmTaFh/AWCZjlU5t8nLDbnMWXt1FdwYrJpcGg1zxdGOoEBgOuNZ5X82XQZmKtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DtX7qbUH; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-68c2f4c3282so27493106d6.3;
-        Tue, 06 Feb 2024 07:28:28 -0800 (PST)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-68c8790aeadso29973666d6.1;
+        Tue, 06 Feb 2024 07:33:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707233308; x=1707838108; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707233629; x=1707838429; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oXjPK0tA1yBTpHZUPdBmW8xYy02khEq+2MG2XFsWB/U=;
-        b=JcT883gWNoG0eDJvmMiPk2X5WtvZ6xYKofhgLravHd9d+ghxJvb1hJh1urjMVETTKE
-         3jBeBGqG6itX+Y9Pilt6c3jBvA+1zjv+1NVwqMK5uzrlABAz1rontW9Qe6u14g75T1Mz
-         duPnTlSostHXJxSOWgq/SCjiSf5QxdehdFYEFjxt1rgi4cC0g6dKhTISH4potspB8nRD
-         AiMqz3Qt9YFddf2ylK4PmtKftOP0mXpGv2fA9PWjlo38RUSpgKSLjuE7eQj+3nov7nt+
-         exwGcLO3DyokgVpcxUdMbH7glbjDNZ/LQKUTOO4u4EzQWD5BaF/ERWllF1+A+uIDk6nk
-         vW/w==
+        bh=wsCHj3o7AvzybMtFe1QCWiHO2CXrsBDEsd537/xdmUc=;
+        b=DtX7qbUHimmUdlP6/vlkbPtPxW8eLyYTeRbQstiYuOUN8c0ZGXm5NuRdRlGaCDb1Ay
+         wQT4RP7uZ4ZDnyZ4EUo7AGX5yeEiWFjBZBJ+tzW4Lm1D0eX4A3u/5V/Gqmp7otyzP1uM
+         yOO9HG688SyduVHbj3eax5+TMJuWDBbSk3aCKPmvR+p7jg8oAwI5dv6+mtx23aD+Fxne
+         9dcEYSEi7PUFILslYFjm9VO6MU1uzGBi0ng8WMMptm5P9cS0HaiHALISvOVftoJAYJyj
+         D2b6JIOSqb6h0xdGGAmhyvq5JhfBcMonYmOCCr590Q1cDDcmvsKA2MBYbr6Okc1wVzAs
+         J7Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707233308; x=1707838108;
+        d=1e100.net; s=20230601; t=1707233629; x=1707838429;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oXjPK0tA1yBTpHZUPdBmW8xYy02khEq+2MG2XFsWB/U=;
-        b=m/1OfWfw/aZPM4y7LLwXEYrUXoD2Cp7vtbQ4UtveA+unR4o54M4qcWj1XD9VekwqSg
-         qvfyw8KTZSCaIGVuUmKhzDEQtlTMTrFBwgBN+YTdhBEJ44SR8SknEoc5UjS/T9gzJVSb
-         K/byMNJ/e1VzIuqQdB4nXH+W0CSJ0akssOdsndiMWNRq0LltryqA1VvFFuKYn4pCHHE7
-         /J5JByzX+b0R2dbNMxUb5hAqMTBfdacZeEZxMkQ4a+ev7XZAAhEccTPOcEFcGPX+7jau
-         CwhBD8TZrUvf63B7Uc9lNw4Sg8svkrM0YE1FT9xFe0JHiPt5wn9dBaE7RBBXx8jOQQWH
-         tQkg==
-X-Gm-Message-State: AOJu0YwDifvKPUjY9/E0j/R66V4xb7C4GDUvhNPmOX7yE027Fqw/w19e
-	sKUQ1dZgBBSOzE/KBSVFJd6vz3vdpw7upvbLYsSmFL6Kj8vJTP8wqlTlxTpP8iVSufqeSm9RsuB
-	f6Di961yL+0OS3QdCq8WY6k0RhLo=
-X-Google-Smtp-Source: AGHT+IGbDqlmmzBuMYeMmDEVKXuq88SUElguKySS9+DL++pjTLpNYaNUYDVCQAlYxPOkLARlrzbHZ6YlcrsB7O4hx9Y=
-X-Received: by 2002:ad4:5c8e:0:b0:68c:8422:6dec with SMTP id
- o14-20020ad45c8e000000b0068c84226decmr2651121qvh.37.1707233307960; Tue, 06
- Feb 2024 07:28:27 -0800 (PST)
+        bh=wsCHj3o7AvzybMtFe1QCWiHO2CXrsBDEsd537/xdmUc=;
+        b=WolLrPEzMQ0ys6YrTzsjwEhu3uE2h190TdfdJN/aEX+TMu/aEZl0N9YmUMfZ/wVdtQ
+         Kf8bh6+TVRRQiFknkzMuEqYw6wXCNgpz1oGl8o+K0iqowoKAlWDIMZXprRSjHzVmQMMS
+         2nEpygr6qD0eBLqNKNCVSikfAJ0QXFnyfFzbGoEZMpQ3I1rBRB2I+Hmkes6YPOCxEaih
+         H03WHHq0N5/dRPHyPCUwsfR8pwexGna0TsVoc/son4ZOswaIS3yfzyD+Mcq+LscdVsmA
+         RUiQuhO/ZrPWk07tA5usdy9wDt8u9bSKHkvj2N8w2TBmwJWXxhBsl/nd4I4vTB7C9ov8
+         IsYA==
+X-Gm-Message-State: AOJu0YyKVgZci3BH+5DJbmxb3c08Y94PYtrwNMu/Wi7EQmbsIp2tz7CR
+	Iy3+D2k+h5Tro4gmrru9pyod8iPvmpJNhbkfTQ6JrAt+XfHqJiNf7t8LmWhG5jrRnWVDRJ4rvt3
+	x4jkei1fxp9nT6RS+9rhUBBrXcZE=
+X-Google-Smtp-Source: AGHT+IGmSM9ZFMWDa22ikiTXuqAqMVu+DEw5ne3rtVqJanmk61QSXJoEdS9UumRX+As1rDxB5ImrAaje8zrMgMrR1l8=
+X-Received: by 2002:a05:6214:519b:b0:68c:9b50:b839 with SMTP id
+ kl27-20020a056214519b00b0068c9b50b839mr2980214qvb.61.1707233629215; Tue, 06
+ Feb 2024 07:33:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240202110132.1584111-1-amir73il@gmail.com> <20240202110132.1584111-3-amir73il@gmail.com>
- <CAJfpeguhrTkNYny1xmJxwOg8m5syhti1FDhJmMucwiY6BZ6eLg@mail.gmail.com>
- <CAOQ4uxhcQfR6QP=oESUvhcwXh+vwBJUL+N1_XDZ5sFGk61HWGg@mail.gmail.com> <20240202-hemmung-perspektive-d84b93c25b00@brauner>
-In-Reply-To: <20240202-hemmung-perspektive-d84b93c25b00@brauner>
+References: <20240205182506.3569743-1-stefanb@linux.ibm.com> <20240205182506.3569743-6-stefanb@linux.ibm.com>
+In-Reply-To: <20240205182506.3569743-6-stefanb@linux.ibm.com>
 From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 6 Feb 2024 17:28:16 +0200
-Message-ID: <CAOQ4uxj08Rio4fsx7b2JmXGTnxL5wVzcy97amHgw3AvSjETopw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] fs: remove the inode argument to ->d_real() method
-To: Christian Brauner <brauner@kernel.org>
-Cc: Miklos Szeredi <miklos@szeredi.hu>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Stefan Berger <stefanb@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	linux-unionfs@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org
+Date: Tue, 6 Feb 2024 17:33:38 +0200
+Message-ID: <CAOQ4uxhhRo20oCrDvs42e4m=HzdUSZ+YtMv8JVykuNoHGP8ypA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] evm: Use the inode holding the metadata to
+ calculate metadata hash
+To: Stefan Berger <stefanb@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, brauner@kernel.org, miklos@szeredi.hu
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 2, 2024 at 3:55=E2=80=AFPM Christian Brauner <brauner@kernel.or=
-g> wrote:
+On Mon, Feb 5, 2024 at 8:25=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.com=
+> wrote:
 >
-> On Fri, Feb 02, 2024 at 02:41:16PM +0200, Amir Goldstein wrote:
-> > On Fri, Feb 2, 2024 at 2:19=E2=80=AFPM Miklos Szeredi <miklos@szeredi.h=
-u> wrote:
-> > >
-> > > On Fri, 2 Feb 2024 at 12:01, Amir Goldstein <amir73il@gmail.com> wrot=
-e:
-> > >
-> > > > diff --git a/Documentation/filesystems/locking.rst b/Documentation/=
-filesystems/locking.rst
-> > > > index d5bf4b6b7509..453039a2e49b 100644
-> > > > --- a/Documentation/filesystems/locking.rst
-> > > > +++ b/Documentation/filesystems/locking.rst
-> > > > @@ -29,7 +29,7 @@ prototypes::
-> > > >         char *(*d_dname)((struct dentry *dentry, char *buffer, int =
-buflen);
-> > > >         struct vfsmount *(*d_automount)(struct path *path);
-> > > >         int (*d_manage)(const struct path *, bool);
-> > > > -       struct dentry *(*d_real)(struct dentry *, const struct inod=
-e *);
-> > > > +       struct dentry *(*d_real)(struct dentry *, int type);
-> > >
-> > > Why not use the specific enum type for the argument?
-> >
-> > No reason, we can do enum d_real_type.
+> Changes to file attributes (mode bits, uid, gid) on the lower layer are
+> not taken into account when d_backing_inode() is used when a file is
+> accessed on the overlay layer and this file has not yet been copied up.
+> This is because d_backing_inode() does not return the real inode of the
+> lower layer but instead returns the backing inode which in this case
+> holds wrong file attributes. Further, when CONFIG_OVERLAY_FS_METACOPY is
+> enabled and a copy-up is triggered due to file metadata changes, then
+> the metadata are held by the backing inode while the data are still held
+> by the real inode. Therefore, use d_inode(d_real(dentry, D_REAL_METADATA)=
+)
+> to get to the inode holding the file's metadata and use it to calculate
+> the metadata hash with.
 >
-> Fwiw, I'm happy to just change this. No need to resend as far as I'm conc=
-erned.
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 
-FWIW, I'd be happy if you do that :)
-Note to move enum d_real_type definition above dentry_operations.
+Acked-by: Amir Goldstein <amir73il@gmail.com>
 
-Please add Stefan's Tested-by to both patches.
-
-Thanks,
-Amir.
+> ---
+>  security/integrity/evm/evm_crypto.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm=
+/evm_crypto.c
+> index b1ffd4cc0b44..51e24a75742c 100644
+> --- a/security/integrity/evm/evm_crypto.c
+> +++ b/security/integrity/evm/evm_crypto.c
+> @@ -223,7 +223,7 @@ static int evm_calc_hmac_or_hash(struct dentry *dentr=
+y,
+>                                  size_t req_xattr_value_len,
+>                                  uint8_t type, struct evm_digest *data)
+>  {
+> -       struct inode *inode =3D d_backing_inode(dentry);
+> +       struct inode *inode =3D d_inode(d_real(dentry, D_REAL_METADATA));
+>         struct xattr_list *xattr;
+>         struct shash_desc *desc;
+>         size_t xattr_size =3D 0;
+> --
+> 2.43.0
+>
 
