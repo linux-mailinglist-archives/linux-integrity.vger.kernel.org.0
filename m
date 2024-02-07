@@ -1,291 +1,191 @@
-Return-Path: <linux-integrity+bounces-1069-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1070-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C810784BF97
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 22:53:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 555AF84C237
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Feb 2024 03:03:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F541282E46
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Feb 2024 21:53:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE0D1B2A8AA
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Feb 2024 02:03:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A32641BDE2;
-	Tue,  6 Feb 2024 21:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03315D512;
+	Wed,  7 Feb 2024 02:02:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YOrekqBm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ThOy+bSo"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5980E1B978
-	for <linux-integrity@vger.kernel.org>; Tue,  6 Feb 2024 21:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707256418; cv=none; b=kIZqLT4Lw2fljurez+clWBhbsxO7hYtsZaXU2u7C8XsteOjSIFKsr8CxITBqTqgGuq7fg7+a8+TdZ04d8iBoqil0zQwVnoYur52xjzcTgpcbPs3Z0aWP+FNpgjsQoarwCBZU4LgRaMec/N5B4EQH+oaVPYqqrzc3PCS8q4gIqHA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707256418; c=relaxed/simple;
-	bh=lEXEftvc8USQ5Sq5o5lp81iZXZA1RVqdMSS6fDyVwYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QI0zYDO3DGEpRk9Z1V/McBEUcROgmNpCdE51o+L4TzlXmbjxdjrQuKBANSpYtGiKjl/F8BCTMfIKUbR1YSZxOxiFeolhtc4nYpXNFfFxltC28y6S+jvfob2EQJWT7GB7oY+MJLXNhaZfKwKKdRNNL8wP7hVhpYqU7VI0XqjaqH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YOrekqBm; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dc6d8bd618eso1472756276.3
-        for <linux-integrity@vger.kernel.org>; Tue, 06 Feb 2024 13:53:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1707256414; x=1707861214; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E8VjUURyKl+tDea7fU1YfuA8k7lBdd08O4dfl2Z6+qs=;
-        b=YOrekqBm7lRAevzM7cbTxu7osqs2uDDeEc+pFoXzn6QV6lAHr5CJaplibVG95IRdb6
-         Oy9lnWMptMvSAPHlgft41NfLh1N82vAIq0NALTLUtBy+mH/pLPUyJ0U2FnG319MVRWn4
-         FQs0pFRzTBvCfvvQdWiL9On/vfy2VzY98dpCMKZah75NKlhcmjTcQdeipJhjQyb2fKPG
-         wUSsoubF8VN0j9ABnsWTbKrzE5Bakh5l/wlknLPQaCqqBrD1SYJhyh0gArJWIsw5gQZa
-         FygjWFOUMrPno6A4Uxw79yjVj7MdmSVerDZUXxGqz7dVMvQ63vyTAz7N5ROtznAzhNLO
-         l8Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707256414; x=1707861214;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E8VjUURyKl+tDea7fU1YfuA8k7lBdd08O4dfl2Z6+qs=;
-        b=JAVbZ61MA4Ca6KNOvddc0x58QZUIrBgaTFJOal58wWrP3vAFBiCSNQ2HU/t/48vAVI
-         HQZq10nqKnKprAce4WJJAUQG81AhULxIfeli283pOh0lbFirXAoz+9xEtPpNlgbiC+KR
-         7nzHOx19WOsawxiXhtm0xwufNDAqkVV9T2LsKhMnybksnIMCMnBE6v1MwFXuRPXrgGFb
-         R6uXrh4o7LjKG8XCLmB/e4cEbKC4KgTDHikfDgCPO7UQcihzaTF2R2pBknerUIHa/GO+
-         fVSeTnZOBpqOkS6uFX3haxxPXpiLJiCMEBIBkDS0uNH7131SC0UvXFz5+wN/5qA/3FzO
-         x5eA==
-X-Gm-Message-State: AOJu0YyKjFQE62S1qetoRQIkL2O77C+R4KeA0Wl5HFmwUZ/Ous+PAc1a
-	8ia92G1AGtQRqyoLjHO1vK2BCqYbxE3sfaadpnh2ZvWMeRiUfKaffl8EK8BYmeMZpTSPmwq/aMb
-	ibFYjLenEu+NoCFCAhtFQbsxKDSlpY/Uw0BQa
-X-Google-Smtp-Source: AGHT+IEO4hTUbTAAn40GVh6bVY5MjCMuUK0Go+sNf1Zs+luw8FRTbTUb/aYdCk/1t8fccmSNm68UjpBMUgzFkT5lF5I=
-X-Received: by 2002:a25:84d2:0:b0:dc2:32e6:d1b1 with SMTP id
- x18-20020a2584d2000000b00dc232e6d1b1mr2686889ybm.18.1707256414268; Tue, 06
- Feb 2024 13:53:34 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDD3DF4E;
+	Wed,  7 Feb 2024 02:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.55.52.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707271349; cv=fail; b=he1VOgYBfXF4PbFjQUAzP6w8di8Rg2I/WFVXvbxRWzUZtXjPp8ipCJ265Q0hGevv4S5wGy9Kjc9zmnR1450Z+vLIU9ROHBNC+7ydUWvUADzOMYr4k5opQdwuyR+9GaYeEyHL0EMwRO7dev52ZO5lfMcF/E+654So6ZkNV87U67A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707271349; c=relaxed/simple;
+	bh=KNl4PjIMGZSH3FMDtg6prZGeahW6CtXizMn+/kr6lks=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ukB6J1IcAMIpOcVq+LgpLMR31D8FTAfKwsKpQDufK5qdi4wiUPBF942SPGA8V68rsvCBUJ0Kyzay1yVGiv8McmWLU18Pxp9P22fNdD88Ss19qnmEtEuWzLN71VzCyzFkAlN8GsRsCIi2IuX3KZ5Z6l5rZZIWiBCeSBmlyWxcRlE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ThOy+bSo; arc=fail smtp.client-ip=192.55.52.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707271348; x=1738807348;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=KNl4PjIMGZSH3FMDtg6prZGeahW6CtXizMn+/kr6lks=;
+  b=ThOy+bSofRSpdZGk+cKfiBznkIkBefDXPO3mxYvcmn8ZCZDuSGBNSzkY
+   xdntZ1WJpGZNJd+QTil+o10e+V/JyXJ3vSAqu6IrruNGbCoc8T1wGGhX6
+   pXy35eyhZY0XrNk4yb6Opfb2psTsdBZV06vO3OgqfiGHvz6tMOCcAaGBr
+   SjBzFzMQEzCVPmZYtHHhvMxOiYdoqRc+UYOOCvSIASnZ89Ffqgm/NWJZB
+   eKX497hRWLoZ6qjtbvcBTtMZsHUXCG2jz99QJ8NC0sPdnQZLIeqDUpQOx
+   kFR7WRhJlrG2es522GFsHnowfuZT+8qOMplW0WYjWUN2F/vi8dlsWruMu
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="436025519"
+X-IronPort-AV: E=Sophos;i="6.05,248,1701158400"; 
+   d="scan'208";a="436025519"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 18:02:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,248,1701158400"; 
+   d="scan'208";a="1503113"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Feb 2024 18:02:27 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 6 Feb 2024 18:02:26 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 6 Feb 2024 18:02:25 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 6 Feb 2024 18:02:25 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.41) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 6 Feb 2024 18:02:22 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c3hrRLxKS298fpE/OKgKhcf6P41I+TjertOqTggKMHMDv/LuR3T/slMQ03j7Nuem65De8zq88ezLJTXIOo4skVXg0QGW46768xBn+Svfyo9BN5a/YatQ4WGUKL8V9ViSITrc9FhTbdO2A98HJrwVrFva0QD9Xaf65i26LAKxHAhvH91ROVmkzF0PWItLfpk4BvDM3tmELebKxRZvso4JqY+3JGPBNkkL5IDs6LWxzIxNYR032FkzW1Ueemmd7svunvXtPJbHf77pkEPpn9WzrFXW9RJI9Ci7aWgOU4kM4E904Dlm06CzlSBC0a1NUlgRFGc3hvr6NTH4MyjTCyKxrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hW7Bx3Li3Jt5mc+Baj29OAOuhygjBBoAKTjVE++czgM=;
+ b=np4Sg2m4ietd80olfkdVuC3RrcHpzoaolF29SDcxmPzt/4OVfRqZRi5MZWiXcXz28QyK6CfagW8jNJ6aHi+1OfBhr0gyZ/QP9jptisMOR3YUT0SoeZTIRmS9PxrvSRjWuLPmjkGT8TEURpaeYEceMqmGqn0TMuhbvsdHI7XsYbBtbhcmmR4Ilm+sCWd6ZW/DQoLO+WTYKlE3F6hb7ZUK+K22O3v3syo5t1I8411g97uifimKwQuPFlvtFmSVHh4Vt9K1mRb5qTYIQWMx2txH38lqfz29dsT5v/aooi5dvtZs1082he/7D7KF1MgKr62hDyXJtYEqOWDfRUhDOVlC6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by CY5PR11MB6463.namprd11.prod.outlook.com (2603:10b6:930:31::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.36; Wed, 7 Feb
+ 2024 02:02:21 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6257:f90:c7dd:f0b2]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6257:f90:c7dd:f0b2%4]) with mapi id 15.20.7249.035; Wed, 7 Feb 2024
+ 02:02:21 +0000
+Date: Tue, 6 Feb 2024 18:02:18 -0800
+From: Dan Williams <dan.j.williams@intel.com>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>, "Xing, Cedric"
+	<cedric.xing@intel.com>, Kuppuswamy Sathyanarayanan
+	<sathyanarayanan.kuppuswamy@linux.intel.com>, Dan Middleton
+	<dan.middleton@linux.intel.com>, Samuel Ortiz <sameo@rivosinc.com>, "Dan
+ Williams" <dan.j.williams@intel.com>
+CC: Qinkun Bao <qinkun@google.com>, "Yao, Jiewen" <jiewen.yao@intel.com>,
+	Dionna Amalie Glaze <dionnaglaze@google.com>, <biao.lu@intel.com>,
+	<linux-coco@lists.linux.dev>, <linux-integrity@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 0/4] tsm: Runtime measurement registers ABI
+Message-ID: <65c2e4aa54a0_d4122947f@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+References: <20240128212532.2754325-1-sameo@rivosinc.com>
+ <c17a31e4fb30f5f9d4a337e5bd8d54cc6f99eef7.camel@HansenPartnership.com>
+ <a255bc36-2438-41b7-b304-bcf7a6628bef@linux.intel.com>
+ <42e14f74d3819c95fdb97cd2e9b2829dcb1b1563.camel@HansenPartnership.com>
+ <1557f98a-3d52-4a02-992b-4401c7c85dd7@linux.intel.com>
+ <85b7a4a679eada1d17b311bf004c2d9e18ab5cd3.camel@HansenPartnership.com>
+ <b8140cc8-a56b-40f6-a593-7be49db14c77@intel.com>
+ <fe1722c3618a8216cb53b8fd3f1b7cbb6fdff5a0.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <fe1722c3618a8216cb53b8fd3f1b7cbb6fdff5a0.camel@HansenPartnership.com>
+X-ClientProxiedBy: MW4PR04CA0206.namprd04.prod.outlook.com
+ (2603:10b6:303:86::31) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1706654228-17180-16-git-send-email-wufan@linux.microsoft.com>
- <6ac3cca9d1d3505f3ed9c7196512f2db@paul-moore.com> <05cb5f03-9236-47b7-8dd4-1741c289efdc@linux.microsoft.com>
-In-Reply-To: <05cb5f03-9236-47b7-8dd4-1741c289efdc@linux.microsoft.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 6 Feb 2024 16:53:23 -0500
-Message-ID: <CAHC9VhS3Yb9QE3spJjFn2Mef-6m5Jxk6Yr80O1VkLp-yudp62w@mail.gmail.com>
-Subject: Re: [PATCH RFC v12 15/20] ipe: add support for dm-verity as a trust provider
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, 
-	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, 
-	snitzer@kernel.org, eparis@redhat.com, linux-doc@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, 
-	dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|CY5PR11MB6463:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a789fb7-430e-433c-6dbe-08dc2780d1b7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZS1djYpWp26hDhuoqKr+FdLI76K6W5ww8CmeiKAF/4WkUXJsMbW4oHckZ3f2fnstf+7H06flv95+9Ygmz6s79sLScP9ag7FUdaERdh7or3jZq/KT5jTcT4S+y+aahjYG18GmfXTjr2DveNZsLkBW6uFtGpRXRf3b2V08B11DjOmnR6ZDQajsbWaVGdqALcRW8/3sJbVrEWhpBF7L2pB7AbV0G1JMeZ5e/lQBTpwI6RSpArkdbhKYxxhjslXUM2YbFfpH1O7f7UcOeL9DgYLPZLnFMoMiSoOQuwH9khp9+yblQRnE0HAEO78AV14xeJXmoYIQLYrh2By8VWzeUOFEqCC0/2f5MkeGJ6e+WUwy+tUjGOw4WsXVo9RZmgaqABVVlolByXO/SpYrzZTJXJpIPztD+PNlRQBgb6SPM6lRBlGfSXiCWu8Ttup91VDkvCgnVVY3m7JD/jKIeidIyp0XDou1I9AMur7LmKOIXPmtQorZEk7UKEuwYg2xKlDDfoX3TgbNK7sIX12EhmuhHhsyrNfUPVXrJs8JZ3XU0Que6n9gB0p6qi0CHf1WWoqmTB8Z
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(136003)(346002)(39860400002)(376002)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(26005)(86362001)(41300700001)(4744005)(478600001)(6486002)(5660300002)(2906002)(110136005)(66946007)(66476007)(54906003)(66556008)(316002)(8676002)(4326008)(6512007)(9686003)(8936002)(6506007)(6666004)(38100700002)(82960400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o5mPQavRjapFuBk5hBb8IbOA9k6FmTWXbOD5O8X0VgZhhgcWT22CnbfMtbhN?=
+ =?us-ascii?Q?zzxW+pPP/VL/KS1APZfzmkhehgUfo+iyqzAJpLbyXNsU8w/HCFSA83QNP4cb?=
+ =?us-ascii?Q?p5XSPasjtKo9AwaYy1m4ap+AuDScu8/y5XJqol2KrVKD/EwK0f4rzB5MNA2P?=
+ =?us-ascii?Q?fVekoaHOExw4rXQttujsl7hzLdH0dZoRWE1OPqtLw9GkWM+xk+yNkCcqlIqc?=
+ =?us-ascii?Q?wuE+Yf0UtiA5KFfNeBYTxvK2peF15YPh+UjtNxZoZ3CmuTMd28zSTMUy1otR?=
+ =?us-ascii?Q?+Ah3sb/9T4euk6hogMiSkjnWHk3fiJkF9IR2PklkNC12g2shHNqkzj0BYlB4?=
+ =?us-ascii?Q?ML8z2V2vMVIi02kwnXeHX4YtyFgFwbncQfvasrgHGjkTov3VWH5vuxf5ksbw?=
+ =?us-ascii?Q?GBuMKlGsZ01qm90hvc4Ofs1zd3kRRtfO5feGS2ITMQSZCQ883Q0wCxu8SLY/?=
+ =?us-ascii?Q?nlnnR4TOvrv0EvJN8uhFq20Yq8ugnp7Ndz/slm+KBb/EdvQGv2JI9NxIvBRY?=
+ =?us-ascii?Q?pD2etrRsChxy6va4/XxSGvUtkxt73WT4Ijc3qWQTKwX8ETec1OJwWr82B4iN?=
+ =?us-ascii?Q?ZUIJ1MwCTmvVJCS3yKakLLpnGR8OodCC1UIAMqQy4RdJccZI/kHa6dQCGLRi?=
+ =?us-ascii?Q?HKNVhGt5mdH2pW9agMB25uX8QQJprpKTASL0bfs8AJ69nVLeYfr37pPRctGt?=
+ =?us-ascii?Q?SoygUhFumlfHuY/kgBNy487/6Dy82TxM6l+xWkymWF2jwKwO2VFF0xSNZo1j?=
+ =?us-ascii?Q?8aWw8fzpsVL8gDwxRco52Ty8RAYoJcu1kd/e5OAKwuqJam+SEJ8r7Ki43DZs?=
+ =?us-ascii?Q?9/uIqDBfVFm7zcsBk2/DdGtWHkHskk0Q6qvb/hx0qmJvOILh0zcTN0FPCtDr?=
+ =?us-ascii?Q?OfAXO6AB48zLDyO5D/5OAIiX/88dCgdRvNDawjVpn9fJACnU8tKZ3CyILAk6?=
+ =?us-ascii?Q?/EjvrqUcq43jeW3s8I4N732Zpf5qDJ6cn7GbamcwQvMUZD46tNM+sljHP/oM?=
+ =?us-ascii?Q?sl7OICLPHMBjwPVADRDxwn0WP9Q2CYTcWHN2jOC11CiICnQmcBIRtEbyYaV1?=
+ =?us-ascii?Q?3cjnlK/KFg+IdigkBUqN/sZmxwZhdtz+o0k1nXCT8RYZlqiwhjEjNaxpig0p?=
+ =?us-ascii?Q?kmYWR+cDHOc5dtoQ3lKTGxr+IccZ/Bm3kEBv/m5Gu6hmAlncVfrh71i/K4Sd?=
+ =?us-ascii?Q?eNAuLeUmEzo0J1XaJQl870m4/KFYpfNA1lFvHwcaFf7Yf79VUpaYQIVwbG3R?=
+ =?us-ascii?Q?SjzYqGSP74hayUF30G6o4Q1mzPAugRp84iIdgOiTUCRVpaHilyKGDD5zM84G?=
+ =?us-ascii?Q?Wx21p8b2KM9ET+XgpYHEycqj56BWCY6anf5cAm+/1lP8bf0hSxWUq+JLa5PG?=
+ =?us-ascii?Q?zRgC1F1JniSdgMo51zxkQ7eL3Hegk6XEEK/VzV5L5YR/j8yHMC/OozheDufI?=
+ =?us-ascii?Q?nmLkDEaFozwXZRI2ti5JPG3x3BwV0iR5Xx0Lacl0Js0Z/y/7znAPYtKhJGWE?=
+ =?us-ascii?Q?TEon0isNcFkYiU7qG+p3FFidJ8kssWZl5SwpZix7KIOlPTI0/7y3S5yhuzn7?=
+ =?us-ascii?Q?r3r5lixA38OKikqkXlKCafLqDJL3UB+UkVp4YvunzImXGxBahpAYy4GOvs1x?=
+ =?us-ascii?Q?+A=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a789fb7-430e-433c-6dbe-08dc2780d1b7
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2024 02:02:20.9845
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AbIQK4ng1Uv6eTLK9tb9Vx4PsmtAgR6QhfjLxUE7h1EWxd646ZdPbeXxIXpP17xkrj5kc/3VGJxAhYoYBto4S3b4Op6nm9IozmoCNiDnOVI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6463
+X-OriginatorOrg: intel.com
 
-On Mon, Feb 5, 2024 at 6:11=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> w=
-rote:
-> On 2/3/2024 2:25 PM, Paul Moore wrote:
-> > On Jan 30, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
-> >>
-> >> Allows author of IPE policy to indicate trust for a singular dm-verity
-> >> volume, identified by roothash, through "dmverity_roothash" and all
-> >> signed dm-verity volumes, through "dmverity_signature".
-> >>
-> >> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> >> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> >> ---
-> >> v2:
-> >>    + No Changes
-> >>
-> >> v3:
-> >>    + No changes
-> >>
-> >> v4:
-> >>    + No changes
-> >>
-> >> v5:
-> >>    + No changes
-> >>
-> >> v6:
-> >>    + Fix an improper cleanup that can result in
-> >>      a leak
-> >>
-> >> v7:
-> >>    + Squash patch 08/12, 10/12 to [11/16]
-> >>
-> >> v8:
-> >>    + Undo squash of 08/12, 10/12 - separating drivers/md/ from securit=
-y/
-> >>      & block/
-> >>    + Use common-audit function for dmverity_signature.
-> >>    + Change implementation for storing the dm-verity digest to use the
-> >>      newly introduced dm_verity_digest structure introduced in patch
-> >>      14/20.
-> >>
-> >> v9:
-> >>    + Adapt to the new parser
-> >>
-> >> v10:
-> >>    + Select the Kconfig when all dependencies are enabled
-> >>
-> >> v11:
-> >>    + No changes
-> >>
-> >> v12:
-> >>    + Refactor to use struct digest_info* instead of void*
-> >>    + Correct audit format
-> >> ---
-> >>   security/ipe/Kconfig         |  18 ++++++
-> >>   security/ipe/Makefile        |   1 +
-> >>   security/ipe/audit.c         |  37 ++++++++++-
-> >>   security/ipe/digest.c        | 120 +++++++++++++++++++++++++++++++++=
-++
-> >>   security/ipe/digest.h        |  26 ++++++++
-> >>   security/ipe/eval.c          |  90 +++++++++++++++++++++++++-
-> >>   security/ipe/eval.h          |  10 +++
-> >>   security/ipe/hooks.c         |  67 +++++++++++++++++++
-> >>   security/ipe/hooks.h         |   8 +++
-> >>   security/ipe/ipe.c           |  15 +++++
-> >>   security/ipe/ipe.h           |   4 ++
-> >>   security/ipe/policy.h        |   3 +
-> >>   security/ipe/policy_parser.c |  26 +++++++-
-> >>   13 files changed, 421 insertions(+), 4 deletions(-)
-> >>   create mode 100644 security/ipe/digest.c
-> >>   create mode 100644 security/ipe/digest.h
-> >>
-> >> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
-> >> index ac4d558e69d5..7afb1ce0cb99 100644
-> >> --- a/security/ipe/Kconfig
-> >> +++ b/security/ipe/Kconfig
-> >> @@ -8,6 +8,7 @@ menuconfig SECURITY_IPE
-> >>      depends on SECURITY && SECURITYFS && AUDIT && AUDITSYSCALL
-> >>      select PKCS7_MESSAGE_PARSER
-> >>      select SYSTEM_DATA_VERIFICATION
-> >> +    select IPE_PROP_DM_VERITY if DM_VERITY && DM_VERITY_VERIFY_ROOTHA=
-SH_SIG
-> >>      help
-> >>        This option enables the Integrity Policy Enforcement LSM
-> >>        allowing users to define a policy to enforce a trust-based acce=
-ss
-> >> @@ -15,3 +16,20 @@ menuconfig SECURITY_IPE
-> >>        admins to reconfigure trust requirements on the fly.
-> >>
-> >>        If unsure, answer N.
-> >> +
-> >> +if SECURITY_IPE
-> >> +menu "IPE Trust Providers"
-> >> +
-> >> +config IPE_PROP_DM_VERITY
-> >> +    bool "Enable support for dm-verity volumes"
-> >> +    depends on DM_VERITY && DM_VERITY_VERIFY_ROOTHASH_SIG
-> >> +    help
-> >> +      This option enables the properties 'dmverity_signature' and
-> >> +      'dmverity_roothash' in IPE policy. These properties evaluates
-> >> +      to TRUE when a file is evaluated against a dm-verity volume
-> >> +      that was mounted with a signed root-hash or the volume's
-> >> +      root hash matches the supplied value in the policy.
-> >> +
-> >> +endmenu
-> >> +
-> >> +endif
-> >> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
-> >> index 2279eaa3cea3..66de53687d11 100644
-> >> --- a/security/ipe/Makefile
-> >> +++ b/security/ipe/Makefile
-> >> @@ -6,6 +6,7 @@
-> >>   #
-> >>
-> >>   obj-$(CONFIG_SECURITY_IPE) +=3D \
-> >> +    digest.o \
-> >>      eval.o \
-> >>      hooks.o \
-> >>      fs.o \
-> >> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
-> >> index ed390d32c641..a4ad8e888df0 100644
-> >> --- a/security/ipe/audit.c
-> >> +++ b/security/ipe/audit.c
-> >> @@ -13,6 +13,7 @@
-> >>   #include "hooks.h"
-> >>   #include "policy.h"
-> >>   #include "audit.h"
-> >> +#include "digest.h"
-> >>
-> >>   #define ACTSTR(x) ((x) =3D=3D IPE_ACTION_ALLOW ? "ALLOW" : "DENY")
-> >>
-> >> @@ -54,8 +55,30 @@ static const char *const audit_prop_names[__IPE_PRO=
-P_MAX] =3D {
-> >>      "boot_verified=3DFALSE",
-> >>      "boot_verified=3DTRUE",
-> >>   #endif /* CONFIG_BLK_DEV_INITRD */
-> >> +#ifdef CONFIG_IPE_PROP_DM_VERITY
-> >> +    "dmverity_roothash=3D",
-> >> +    "dmverity_signature=3DFALSE",
-> >> +    "dmverity_signature=3DTRUE",
-> >> +#endif /* CONFIG_IPE_PROP_DM_VERITY */
-> >>   };
-> >>
-> >> +#ifdef CONFIG_IPE_PROP_DM_VERITY
-> >> +/**
-> >> + * audit_dmv_roothash - audit a roothash of a dmverity volume.
-> >> + * @ab: Supplies a pointer to the audit_buffer to append to.
-> >> + * @rh: Supplies a pointer to the digest structure.
-> >> + */
-> >> +static void audit_dmv_roothash(struct audit_buffer *ab, const void *r=
-h)
-> >> +{
-> >> +    audit_log_format(ab, "%s", audit_prop_names[IPE_PROP_DMV_ROOTHASH=
-]);
-> >> +    ipe_digest_audit(ab, rh);
-> >> +}
-> >> +#else
-> >> +static void audit_dmv_roothash(struct audit_buffer *ab, const void *r=
-h)
-> >> +{
-> >> +}
-> >> +#endif /* CONFIG_IPE_PROP_DM_VERITY */
-> >
-> > I talked about this back in my review of the v11 patchset and I'm
-> > guessing you may have missed it ... the problem with the above code is
-> > that the fields in an audit record should remain constant, even if
-> > there is no data for that particular field.  In cases where there is no
-> > data to record for a given field, a "?" should be used as the field's
-> > value, for example:
-> >
-> >    dmverify_roothash=3D?
-> >
-> > My guess is that you would want to do something like this:
-> >
-> >    #else  /* !CONFIG_IPE_PROP_DM_VERITY */
-> >    static void audit_dmv_roothash(...)
-> >    {
-> >      audit_log_format(ab, "%s=3D?", audit_prop_names[...]);
-> >    }
-> >    #endif /* CONFIG_IPE_PROP_DM_VERITY */
-> >
-> > --
-> > paul-moore.com
->
-> These code are used for auditing a policy rule, which the parser will
-> guarantee the property will always have a valid value. The comments
-> might be misleading which sounds like it's auditing a file's state. I
-> will correct them.
->
-> Also as we previously discussed, the policy grammar shouldn't depend on
-> any kernel switch so these preprocessor statement will be removed.
->
-> However, as an audit record should remain constant, I guess we should do
-> some special treatment to anonymous files? Like audit record for them
-> should include "path=3D? dev=3D? ino=3D?"
+James Bottomley wrote:
+> There isn't really anything more complex about an interface that takes
+> a log entry, and does the record an extend, than an interface which
+> takes a PCR extension value.  So best practice would say that you
+> should create the ABI that you can't get wrong (log and record) rather
+> than creating one that causes additional problems for userspace.
 
-Yes, if the record type includes those fields just once, the record
-type should *always* include those fields.
+Agree, there's no need for the kernel to leave deliberately pointy edges
+for userspace to trip over.
 
---=20
-paul-moore.com
+Cedric, almost every time we, kernel community, build an interface where
+userspace says "trust us, we know what we are doing" it inevitably
+results later in "whoops, turns out it would have helped if the kernel
+enforced structure here". So the log ABI adds that structure for the
+primary use cases.
 
