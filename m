@@ -1,420 +1,248 @@
-Return-Path: <linux-integrity+bounces-1135-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1136-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F296C84FA70
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Feb 2024 18:00:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BCE584FE06
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Feb 2024 21:58:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22BD01C25A16
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Feb 2024 17:00:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D864B259D9
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Feb 2024 20:58:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC037F46B;
-	Fri,  9 Feb 2024 16:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF9CCA68;
+	Fri,  9 Feb 2024 20:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V6MFlSzZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GR59OxEP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C817EF1B
-	for <linux-integrity@vger.kernel.org>; Fri,  9 Feb 2024 16:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707497958; cv=none; b=jH+u830OmV9V+4A8rjO1xoCgW9lpTvSojKUBZPCPw9M3ZJExU7SF4lftW/7XZBnUPW9yi+ZKU1EC12lyhEzR3uwS19hxRVE78PvctI/Otgn6dwQ30dd1Y5hFAehpexmKAf+UtbAnbRG4nUzMtNm6YL3QmlKhVGZ2RrGZptNjJAA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707497958; c=relaxed/simple;
-	bh=eCa7otyZga8ui0LT2a/f1iShzyZTgUiKXtc4vXi8UiE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=enZOuBbAkYiwk7uRlISK5/v1QbZJzSGfzfWJMUjizj7/Fclk9ZzpLBgYm2mYYQG8dqHn3upGO5YrHI7+zQsCRCN+42K3Y6r9V3lENZzVdOUPtXrqIPx+T5BD2BnWOPiVCzMU5lJo36Z/EK5nn2RODwoveKeLyZFex7YhNcf/dAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V6MFlSzZ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707497955;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=syjEctozhBfEeP9cGPctM232qlAEbknuGwIIN4ER+PU=;
-	b=V6MFlSzZJBfhm/Lp9IljG/oGJhP+DSENQlTQBv4y05WiRstsOMg5QIFG9MTdHnupmWATOt
-	otK3tHRebNmhgkzGsgCtOJ3nGdu1DAq+XiqLxuRR7jJVoMmGoysI4VqclV1Bhr9qA8Afy/
-	1cQUYCZdOVZgvHPZyW+cl34dBP3y3kE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-423-c4G57TqTMmqR71MFAGNOnw-1; Fri, 09 Feb 2024 11:59:11 -0500
-X-MC-Unique: c4G57TqTMmqR71MFAGNOnw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5537885A58F;
-	Fri,  9 Feb 2024 16:59:10 +0000 (UTC)
-Received: from rotkaeppchen (unknown [10.39.192.66])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DE220C08EF7;
-	Fri,  9 Feb 2024 16:59:05 +0000 (UTC)
-Date: Fri, 9 Feb 2024 17:59:03 +0100
-From: Philipp Rudo <prudo@redhat.com>
-To: Alexander Graf <graf@amazon.com>
-Cc: <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-mm@kvack.org>, <devicetree@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <kexec@lists.infradead.org>,
- <linux-doc@vger.kernel.org>, <x86@kernel.org>, Eric Biederman
- <ebiederm@xmission.com>, "H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski
- <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt
- <rostedt@goodmis.org>, Andrew Morton <akpm@linux-foundation.org>, "Mark
- Rutland" <mark.rutland@arm.com>, Tom Lendacky <thomas.lendacky@amd.com>,
- Ashish Kalra <ashish.kalra@amd.com>, James Gowans <jgowans@amazon.com>,
- Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>, <arnd@arndb.de>,
- <pbonzini@redhat.com>, <madvenka@linux.microsoft.com>, Anthony Yznaga
- <anthony.yznaga@oracle.com>, Usama Arif <usama.arif@bytedance.com>, "David
- Woodhouse" <dwmw@amazon.co.uk>, Benjamin Herrenschmidt
- <benh@kernel.crashing.org>, Rob Herring <robh+dt@kernel.org>, "Krzysztof
- Kozlowski" <krzk@kernel.org>, <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH v3 00/17] kexec: Allow preservation of ftrace buffers
-Message-ID: <20240209175903.15dcc714@rotkaeppchen>
-In-Reply-To: <3bfbe6b3-d293-483f-9f30-b7d49440be22@amazon.com>
-References: <20240117144704.602-1-graf@amazon.com>
-	<20240129173450.038e46b7@rotkaeppchen>
-	<3bfbe6b3-d293-483f-9f30-b7d49440be22@amazon.com>
-Organization: Red Hat inc.
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE4EDF63;
+	Fri,  9 Feb 2024 20:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707512304; cv=fail; b=dsJxgWqYiHznVjLKwskHpnU+H5Qpavv1ZFJbmz8KTFYrs8CGOQcDT/Aae3GoPucWsLkL9BNBzi9MLwkYJCS6a8dYNAiRR8lKZR62crQ+HoXlY9/8BTxBL17CNioPLER8kF97wG2XEqf6Hw/7hbvXeb2WNRMimwPQUhvpIUVHtC0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707512304; c=relaxed/simple;
+	bh=7l3yCLojRhYlK08XCP0TGsXX/tTt3jQJSwzfBfSuR70=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=C7wFX33HfS2QFaZyITM2L79T8jDw0Zg68fseK3eNASxlt8oidk1sZcDnpGuLla2W31Qe7sEdZ3atDo9q2dLJcCb4sBXwRotphQ3xmwS2f35tso8DEIfUQCKKD47wUbVPg+IGzbAHphwkRX7XHTNnaUczTq5ZUZX/fgWwBiu1dr4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GR59OxEP; arc=fail smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707512303; x=1739048303;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=7l3yCLojRhYlK08XCP0TGsXX/tTt3jQJSwzfBfSuR70=;
+  b=GR59OxEP9FAKDTcCerc/+WyoNIJ+lbNnNGuvMPf1+SIaTD0CVnWvLdC7
+   nk9vZKpxR72Hz8CxPJa+SU8vn8DJJ23lkOdOi9fYq8fXngcnXh4EjmawT
+   4cTMeLuV3FQsAgBNssTaOMH0lJGlFic1nWtbQ52K5RmawjRDM3VxH4sLQ
+   isncUUV8sJjK36rBW/xocTrzlDVF57ZFxaoFmeppEQ41nJt+6neNaDUxY
+   QhQC2CQvwOyW+JnV/mVfWGM5TaDpYnnwnbJWFBBb5IPNaxBQhkvcgbxJc
+   WTEudajyr8tGHkCeCxQGVKfnre3j2S3Gn/NdZAnyBIKuwVeL6dmk/VuZa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="1380642"
+X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
+   d="scan'208";a="1380642"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 12:58:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
+   d="scan'208";a="6680542"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 09 Feb 2024 12:58:21 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 9 Feb 2024 12:58:21 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 9 Feb 2024 12:58:20 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Fri, 9 Feb 2024 12:58:20 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 9 Feb 2024 12:58:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dvtmaTpUzWGttXGeWqA7UFsLtybco3Co2OEtKuXt8iJ/YF97GNTw3l5gA39Pw7Ur1yAv19xgI4VDBHSG7wqeUSuh61lyUDzcwXN2gZgzQKY/ZFG/UIoTssygLGKMV0qIXCFIFBVWbEvctbVPk2BxjJwy3qtkLFSCR2UEM+/XJExg1xpqxYfe/A/p/MVz2fjiXCwEKu12+m0NXiSEIIbWLqayBzNHwY5MvNWhEZVDibMARoaecLOTFg/OZvI5vt0PPG1+RGUGyA61WT3faaVmjGQftJIyrco4mDqm8ImQ0O0G5zPVmySeCKTmf3p0WemPGpNyf1sMVNMv3z4o8u0Rhg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8i/RpuroYJNanEztSCQCdSIhHWFSwSNIVM0Xff/dqZc=;
+ b=nIolEBk+lcALfg7A1eMeW30Dz9aoU3eoMN6BhmTrs17/OYGTUn8ZKyKmAhO5eB9S6D+BHWaDmw8ds+n195aK/YxUR6324wXGEcGG1LGCpRiUAq9Vojw5IlxNOabzD1C1OUzuRZBub6pN31IySyjfNtDX9kUUOYU+vQGN67D0VGj2t6JOhnVDPMe3GyMM8IvfhResz7FH/K2O03uby/Ub22TRV3YA0FTn4zXKhWsN2WfxZjqsdAskByb8ulHjLMRZBeYdJ3fQ7ChwqBehLeT18aejeqi0J9kKolpc105u5VlHuF3sQM76BMWdVEc9DphTeGZ4MYVJZcc8LmRbzniANg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SA1PR11MB8428.namprd11.prod.outlook.com (2603:10b6:806:38b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.36; Fri, 9 Feb
+ 2024 20:58:12 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6257:f90:c7dd:f0b2]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6257:f90:c7dd:f0b2%4]) with mapi id 15.20.7270.024; Fri, 9 Feb 2024
+ 20:58:12 +0000
+Date: Fri, 9 Feb 2024 12:58:09 -0800
+From: Dan Williams <dan.j.williams@intel.com>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>, "Kuppuswamy
+ Sathyanarayanan" <sathyanarayanan.kuppuswamy@linux.intel.com>, "Xing, Cedric"
+	<cedric.xing@intel.com>, Dan Williams <dan.j.williams@intel.com>, "Dan
+ Middleton" <dan.middleton@linux.intel.com>, Samuel Ortiz <sameo@rivosinc.com>
+CC: Qinkun Bao <qinkun@google.com>, "Yao, Jiewen" <jiewen.yao@intel.com>,
+	Dionna Amalie Glaze <dionnaglaze@google.com>, <biao.lu@intel.com>,
+	<linux-coco@lists.linux.dev>, <linux-integrity@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 0/4] tsm: Runtime measurement registers ABI
+Message-ID: <65c691e13a50d_afa42948a@dwillia2-xfh.jf.intel.com.notmuch>
+References: <a255bc36-2438-41b7-b304-bcf7a6628bef@linux.intel.com>
+ <42e14f74d3819c95fdb97cd2e9b2829dcb1b1563.camel@HansenPartnership.com>
+ <1557f98a-3d52-4a02-992b-4401c7c85dd7@linux.intel.com>
+ <85b7a4a679eada1d17b311bf004c2d9e18ab5cd3.camel@HansenPartnership.com>
+ <b8140cc8-a56b-40f6-a593-7be49db14c77@intel.com>
+ <fe1722c3618a8216cb53b8fd3f1b7cbb6fdff5a0.camel@HansenPartnership.com>
+ <65c2e4aa54a0_d4122947f@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+ <22088ed3-51a4-415f-932c-db84c92a2812@intel.com>
+ <527da630-4952-4b1d-80c0-5a87997ff9fd@linux.intel.com>
+ <332775d7218843d6cc168c963d76e6841eab5d5b.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <332775d7218843d6cc168c963d76e6841eab5d5b.camel@HansenPartnership.com>
+X-ClientProxiedBy: MW4PR03CA0106.namprd03.prod.outlook.com
+ (2603:10b6:303:b7::21) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SA1PR11MB8428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 790fc770-f369-4921-9eba-08dc29b1d3a0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UeXN9FAon+H+hsftcbu6gJP1iPsOeC+GkIs8De3wfCk1qorgrUbK1dm4KxBupBNDYG79Q3V0cy4aZ01uoqZ4eeBkL9ggen5mEkgHSX8v8qRiIukKyV++z4QrqSV4268yL3dL5GOp9sIPlU8fQMa0q9NLTw8m6DrtU3fafZPTCoRMPwkLMCG56dK3um5/bkxzXAJ7EfIsa/9BuROX/bTvrXHnWkarahvebMcfVaNxk4dZP9ugkPdhvF21aHIMnyWv72AmkPoQxmhpt/OZEV3lR4aCiCxPRuhjFnExfPuJ8DB7uKAkkNo62cGgr4UnAqNFw0DGbo5jwi+64/DwoYD1/HWP9zrev77WKyygVCue10lmnGm0/nrCTZadZcM9Or0wzGib8noH7Ikqny/fsFA6/Zbv+/di9KunpD0ryOYKKe2Fm/JimkMT/D+Uvpfu6lwWS48foFk6rcE6DB9jNLmRFxZug4qimWaucwJhxW2EnKs+vEW0Dj/W+xmoH4JqSl6MD4i1IS43v2vHz81sHkbs6wIFOnIiSn0f9DEuKQ2DiBGWV/8DsYUGYqyD+K3EsNtr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(396003)(346002)(136003)(376002)(230922051799003)(451199024)(64100799003)(1800799012)(186009)(41300700001)(6666004)(6512007)(6486002)(6506007)(478600001)(53546011)(26005)(9686003)(83380400001)(5660300002)(66556008)(38100700002)(110136005)(54906003)(66476007)(316002)(4326008)(8936002)(8676002)(82960400001)(66946007)(2906002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?9Afovn+I3jsRmE6YpiBe60UZVqAKeITviKerVasj1unBkfu4hYPKnayAry?=
+ =?iso-8859-1?Q?pj1NU4zvbGcQMbCPUepd6Z9YlpjPR6O0Zs8l8lAJYYlV43RIL31PbT6Aup?=
+ =?iso-8859-1?Q?fnRRkQ1kpbUunNA/visb86H1I5UGkDCM1HHJ0neB7KFeKSA6n1jUs9x1cw?=
+ =?iso-8859-1?Q?jxQvtfUJ/CeCl5Gv5MGgdhzeywj206Tts2JBQmXpq9jHn+S0IHkm6y4iE+?=
+ =?iso-8859-1?Q?g4r9jMG3bKrtDu0EOl1hzFu+YZ+H1l9zULtQqhhyajxIrD3WKebp38Wkoo?=
+ =?iso-8859-1?Q?XlPUkonntwNaeWQ/rgJH4XSx2D4eBeFJKnB38nwwy6rosVUpai98K8h59o?=
+ =?iso-8859-1?Q?wBxQlJoAbJSUMI/UQTyP+pL3ELR+t+Q31jEE7zrV4i7tk7otdYuWHSSewR?=
+ =?iso-8859-1?Q?n4p2iN/73Re6jI14vOt42G4xPvTxydM5eHqUXG0AshLm75cGZh8kkUGLEO?=
+ =?iso-8859-1?Q?9xAcqONwa1K6hFKjyOT+OX29Vo5n3J870EWqcInqOI2ParK2UgEeosHMCa?=
+ =?iso-8859-1?Q?qNDSM31Yxj5Cm/I7O7d3yOy61y18Xu7uogPh3PYKrvXjxSklhBXP8myD6l?=
+ =?iso-8859-1?Q?/ZzKAlAI2cktNzLOBXBC9c3AT1XwW+SHxeUQHHW7PAkSme+jQGkJkbvRbr?=
+ =?iso-8859-1?Q?3f7mZdPnz8Ss6RcLKjtP/Rgq37Dj/KnIM6IulkNoBuypi7DK29nPxjtmls?=
+ =?iso-8859-1?Q?f2ke5ix3JRSdfnKjH+bytPIk+hR4uk2Z9DqNdbzalS1dipobb/R72q++M6?=
+ =?iso-8859-1?Q?snL0tJgF8VWTVFWvUVvzNMSJZkbaZ6l5EKDr8nrBo0EFqDcAxIAD+a9ZXR?=
+ =?iso-8859-1?Q?DAXDAJ88yqDf4fRqqjxr06vkOwEXUdo25j8MHXwWd7u5CdmGpCglh1kMY6?=
+ =?iso-8859-1?Q?k/uk62z8whQKA/lvG3Qa/uRl5oEoDAdaL2rVvlJX1cN/UfIWjOXUZuVLiz?=
+ =?iso-8859-1?Q?5/qlWu7BDs/HM/nEEICSR5h0kMXJEn7WdMN7UqfbFSrdFMswxyPevNoiiW?=
+ =?iso-8859-1?Q?cj6KRXIcOKVbnM+xJg9q61SCEQobng8RR0DzGhDZixpxRh1g5MJyBRti8W?=
+ =?iso-8859-1?Q?DXt1ehkb3d7Gc17bxTSoKSh9Wf0VxqLL8gmX+9aDw3u3oMSPCIRLkBDUwZ?=
+ =?iso-8859-1?Q?yVEh0LEjDRR/q5o3ApA8/7ykQsA/7DXhkyVmWtGhJfd/s2EjNn3CbgS4ym?=
+ =?iso-8859-1?Q?D6B3jKb8sfGzJCEhgUsU+HZU8JHeZ5DqAifa3BzhJsT7wArX7g81IsF/LC?=
+ =?iso-8859-1?Q?I5URyL1jIyeVO2GQ2brkuociDmi9nfbhQCz7Vg/7ldDzuGO+GnmWH/w7m/?=
+ =?iso-8859-1?Q?ovH1+3bMXCFWI2uRyLX9iV7NJJIorYLbSRRPlx31dtDaifytcjrGiEt9BP?=
+ =?iso-8859-1?Q?mzkQghftp3w39aWIOgHonqjLzT00n1QaoniEhf5StSLyRSgNgJ7YUVmN0w?=
+ =?iso-8859-1?Q?lT4NqHXD3vMamjpx2ZLnQQ5fsoT8FNrKUcwZZ1e0VUUJvDzWfEBmiNiAgH?=
+ =?iso-8859-1?Q?5zzLdintf0a1urIUSOw+sNMX15yyDZJFOIklGxTeHHiK3yZeTSHl5dlZ7G?=
+ =?iso-8859-1?Q?yAE5pjjq53Sa6wKgrrQvFbj0SbjstmgniMQnSaBYXFxTsQKcgJ58a8wfdP?=
+ =?iso-8859-1?Q?P+g2/dAi5V85vrwjB41M0+dcBUhKWqZsNL/L23siGH/phcjV7892iC1A?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 790fc770-f369-4921-9eba-08dc29b1d3a0
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2024 20:58:11.7714
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gU07aZeq4u7amzvbAJZlBduNZR0d7nQJUJs//Y6WW3ouUCD4H91VGKvKsbNuX0BfPQCLGHeuU/EvCZwFAJJyq3fv+VWWes8ix0MeV1A8Q/4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8428
+X-OriginatorOrg: intel.com
 
-Hi Alex,
+James Bottomley wrote:
+> On Wed, 2024-02-07 at 13:08 -0800, Kuppuswamy Sathyanarayanan wrote:
+> > 
+> > On 2/7/24 12:16 PM, Xing, Cedric wrote:
+> > > On 2/6/2024 6:02 PM, Dan Williams wrote:
+> > > > James Bottomley wrote:
+> > > > > There isn't really anything more complex about an interface
+> > > > > that takes a log entry, and does the record an extend, than an
+> > > > > interface which takes a PCR extension value.  So best practice
+> > > > > would say that you should create the ABI that you can't get
+> > > > > wrong (log and record) rather than creating one that causes
+> > > > > additional problems for userspace.
+> > > > 
+> > > > Agree, there's no need for the kernel to leave deliberately
+> > > > pointy edges for userspace to trip over.
+> > > > 
+> > > > Cedric, almost every time we, kernel community, build an
+> > > > interface where userspace says "trust us, we know what we are
+> > > > doing" it inevitably results later in "whoops, turns out it would
+> > > > have helped if the kernel enforced structure here". So the log
+> > > > ABI adds that structure for the primary use cases.
+> > > 
+> > > Dan, I agree with your statement generally. But with the precedent
+> > > of TPM module not maintaining a log, I just wonder if the addition
+> > > of log would cause problems or force more changes to existing
+> > > usages than necessary. For example, IMA has its own log and if
+> > > changed to use RTMR, how would those 2 logs interoperate? We would
+> > > also need to decide on a log format that can accommodate all
+> > > applications.
+> > 
+> > 
+> > IIUC, CC event logging in firmware uses TCG2 format. Since IMA
+> > internally uses TPM calls, I assume it also uses the TCG2 format. I
+> > think we can follow the same format for RTMR extension.
+> 
+> Just to correct this: IMA uses its own log format, but I think this was
+> a mistake long ago and the new log should use TCG2 format so all the
+> tools know how to parse it.
 
-On Fri, 2 Feb 2024 13:58:52 +0100
-Alexander Graf <graf@amazon.com> wrote:
+Is this a chance to nudge IMA towards a standard log format? In other
+words, one of the goals alongside userspace consumers of the RTMR log
+would be for IMA to support it as well as an alternate in-kernel backend
+next to TPM. IMA-over-TPM continues with its current format,
+IMA-over-RTMR internally unifies with the log format that is shared with
+RTMR-user-ABI.
 
-> Hi Philipp,
->=20
-> On 29.01.24 17:34, Philipp Rudo wrote:
-> > Hi Alex,
-> >
-> > adding linux-integrity as there are some synergies with IMA_KEXEC (in c=
-ase we
-> > get KHO to work).
-> >
-> > Fist of all I believe that having a generic framework to pass informati=
-on from
-> > one kernel to the other across kexec would be a good thing. But I'm afr=
-aid that =20
->=20
->=20
-> Thanks, I'm happy to hear that you agree with the basic motivation :).=20
-> There are fundamentally 2 problems with passing data:
->=20
->  =C2=A0 * Passing structured data in a cross-architecture way
->  =C2=A0 * Passing memory
->=20
-> KHO tackles both. It proposes a common FDT based format that allows us=20
-> to pass per-subsystem properties. That way, a subsystem does not need to=
-=20
-> know whether it's running on ARM, x86, RISC-V or s390x. It just gains=20
-> awareness for KHO and can pass data.
->=20
-> On top of that, it proposes a standardized "mem" property (and some=20
-> magic around that) which allows subsystems to pass memory.
->=20
->=20
-> > you are ignoring some fundamental problems which makes it extremely har=
-d, if
-> > not impossible, to reliably transfer the kernel's state from one kernel=
- to the
-> > other.
-> >
-> > One thing I don't understand is how reusing the scratch area is working=
-. Sure
-> > you pass it's location via the dt/boot_params but I don't see any code =
-that
-> > makes it a CMA region. So IIUC the scratch area won't be available for =
-the 2nd
-> > kernel. Which is probably for the better as IIUC the 2nd kernel gets lo=
-aded and
-> > runs inside that area and I don't believe the CMA design ever considere=
-d that
-> > the kernel image could be included in a CMA area. =20
->=20
->=20
-> That one took me a lot to figure out sensibly (with recursion all the=20
-> way down) while building KHO :). I hope I detailed it sensibly in the=20
-> documentation - please let me know how to improve it in case it's=20
-> unclear: https://lore.kernel.org/lkml/20240117144704.602-8-graf@amazon.co=
-m/
->=20
-> Let me explain inline using different words as well what happens:
->=20
-> The first (and only the first) kernel that boots allocates a CMA region=20
-> as "scratch region". It loads the new kernel into that region. It passes=
-=20
-> that region as "scratch region" to the next kernel. The next kernel now=20
-> takes it and marks every page block that the scratch region spans as CMA:
->=20
-> https://lore.kernel.org/lkml/20240117144704.602-3-graf@amazon.com/
->=20
-> The CMA hint doesn't mean we create an actual CMA region. It mostly=20
-> means that the kernel won't use this memory for any kernel allocations.=20
-> Kernel allocations up to this point are allocations we don't need to=20
-> pass on with KHO again. Kernel allocations past that point may be=20
-> allocations that we want to pass, so we just never place them into the=20
-> "scratch region" again.
->=20
-> And because we now already have a scratch region from the previous=20
-> kernel, we keep reusing that forever with any new KHO kexec.
+...but be warned the above is a comment from someone who knows nothing
+about IMA internals, just reacting to the comment.
 
-Thanks for the explanation. I've missed the memblock_mark_scratch in
-kho_populate. The code makes much more sense now :-)
 
-Having that said, for complex series like this one I like to do the
-review on a branch in my local git as that to avoid problems like that
-(or at least make them less likely). But your patches didn't apply. Can
-you tell me what your base is or make your git branch available. That
-would be very helpful to me. Thanks!
+> > I am wondering where will the event log be stored? Is it in the
+> > log_area region of CCEL table?
+> 
+> IMA stores its log in kernel memory and makes it visible in securityfs
+> (in the smae place as the measured boot log).  Since this interface is
+> using configfs, that's where I'd make the log visible.
+> 
+> Just to add a note about how UEFI works: the measured boot log is
+> effectively copied into kernel memory because the UEFI memory it once
+> occupied is freed after exit boot services, so no UEFI interface will
+> suffice for the log location.
+> 
+> I'd make the file exporting it root owned but probably readable by only
+> the people who can also extend it (presumably enforced by group?). 
 
-> > Staying at reusing the scratch area. One thing that is broken for sure =
-is that
-> > you reuse the scratch area without ever checking the kho_scratch parame=
-ter of
-> > the 2nd kernel's command line. Remember, with kexec you are dealing wit=
-h two
-> > different kernels with two different command lines. Meaning you can onl=
-y reuse
-> > the scratch area if the requested size in the 2nd kernel is identical t=
-o the
-> > one of the 1st kernel. In all other cases you need to adjust the scratc=
-h area's
-> > size or reserve a new one. =20
->=20
->=20
-> Hm. So you're saying a user may want to change the size of the scratch=20
-> area with a KHO kexec. That's insanely risky because you (as rightfully=20
-> pointed out below) may have significant fragmentation at that point. And=
-=20
-> we will only know when we're in the new kernel so it's too late to=20
-> abort. IMHO it's better to just declare the scratch region as immutable=20
-> during KHO to avoid that pitfall.
-
-Yes, a user can set any command line with kexec. My expectation as a
-user is that the kernel respects whatever I set on the command line and
-doesn't think it knows better and simply ignores what I tell it to do.
-So even when you set the scratch area immutable during boot you have to
-make sure that in the end kernel respects what the user has set on the
-2nd kernel's command line.
-
-> > This directly leads to the next problem. In kho_reserve_previous_mem yo=
-u are
-> > reusing the different memory regions wherever the 1st kernel allocated =
-them.
-> > But that also means you are handing over the 1st kernel's memory
-> > fragmentation to the 2nd kernel and you do that extremely early during =
-boot.
-> > Which means that users who need to allocate large continuous physical m=
-emory,
-> > like the scratch area or the crashkernel memory, will have increasing c=
-hance to
-> > not find a suitable area. Which IMHO is unacceptable. =20
->=20
->=20
-> Correct :). It basically means you want to pass large allocations from=20
-> the 1st kernel that you want to preserve on to the next. So if the 1st=20
-> kernel allocated a large crash area, it's safest to pass that allocation=
-=20
-> using KHO to ensure the next kernel also has the region fully reserved.=20
-> Otherwise the next kernel may accidentally place data into the=20
-> previously reserved crash region (which would be contiguously free at=20
-> early init of the 2nd kernel) and fragment it again.
-
-I don't think that this is an option. For one your suggestion means that
-every "large allocation" (whatever that means) needs to be tracked
-manually for it to work together with KHO. In addition there is still
-the problem that the 2nd kernel may need a larger allocation than the
-1st one. Be it because it's a command line parameter, e.g. kho_scratch
-or crashkernel, or just a new feature that requires additional memory
-the 2nd kernel has. IMO it's inevitable that KHO finds a way to
-remove/reduce memory fragmentation.
-
-> > Finally, and that's the big elephant in the room, is your lax handling =
-of the
-> > unstable kernel internal ABI. Remember, you are dealing with two differ=
-ent
-> > kernels, that also means two different source levels and two different =
-configs.
-> > So only because both the 1st and 2nd kernel have a e.g. struct buffer_p=
-age
-> > doesn't means that they have the same struct buffer_page. But that's wh=
-at your
-> > code implicitly assumes. For KHO ever to make it upstream you need to m=
-ake sure
-> > that both kernels are "speaking the same language". =20
->=20
->=20
-> Wow, I hope it didn't come across as that! The whole point of using FDT=20
-> and compatible strings in KHO is to solve exactly that problem. Any time=
-=20
-> a passed over data structure changes incompatibly, you would need to=20
-> modify the compatible string of the subsystem that owns the now=20
-> incompatible data.
->=20
-> So in the example of struct buffer_page, it means that if anyone changes=
-=20
-> the few bits we care about in struct buffer_page, we need to ensure that=
-=20
-> the new kernel emits "ftrace,cpu-v2" compatible strings. We can at that=20
-> point choose whether we want to implement compat handling for=20
-> "ftrace,cpu-v1" style struct buffer_pages or only support same version=20
-> ingestion.
-
-Well, it came across like that because there was absolutely no
-explanation on when those versions need to be bumped up so far.
-
-> The one thing that we could improve on here today IMHO is to have=20
-> compile time errors if any part of struct buffer_page changes=20
-> semantically: So we'd create a few defines for the bits we want in=20
-> "ftrace,cpu-v1" as well as size of struct buffer_page and then compare=20
-> them to what the struct offsets are at compile time to ensure they stay=20
-> identical.
-
-How do you imagine those macros to look like? How do they work with
-structs that change their layout depending on the config?
-
-Personally, I highly doubt that any system that manages these different
-versions manually will work reliably. It might be possible for
-something as simple as struct buffer_page but once it gets more
-complicated, e.g. by depending on the kernel config or simply having
-more dependencies to common data structures, it will be a constant
-source of pain.
-Just assume, although extremely unlikely, that struct list_head is
-changed. Most likely the person who makes the change won't be from the
-ftrace team and thus won't know that he/she/it needs to bump the
-version. Even the compile time errors will only help if
-CONFIG_FTRACE_KHO is enabled which most like won't be the case.
-Ultimately this means that KHO will break silently until someone tries
-to kexec in the new kernel with KHO enabled. But even then there will
-only be a cryptic error message (if any) as you have basically
-introduced a memory corruption to the 2nd kernel. The more complex the
-structs become and the deeper the dependency list goes the more likely
-it becomes that such a breaking change is made.
-
-The way I see it there is no way around generating the version based on
-the actual memory layout for this particular build.
-
-> Please let me know how I can clarify that more in the documentation. It=20
-> really is the absolute core of KHO.
->=20
->=20
-> > Personally I see two possible solutions:
-> >
-> > 1) You introduce a stable intermediate format for every subsystem simil=
-ar to
-> > what IMA_KEXEC does. This should work for simple types like struct buff=
-er_page
-> > but for complex ones like struct vfio_device that's basically impossibl=
-e. =20
->=20
->=20
-> I don't see why. The only reason KHO passes struct buffer_page as memory=
-=20
-> is because we want to be able to produce traces even after KHO=20
-> serialization is done. For vfio_device, I think it's perfectly=20
-> reasonable to serialize any data we need to preserve directly into FDT=20
-> properties.
->=20
->=20
->=20
-> > 2) You also hand over the ABI version for every given type (basically j=
-ust a
-> > hash over all fields including all the dependencies). So the 2nd kernel=
- can
-> > verify that the data handed over is in a format it can handle and if no=
-t bail
-> > out with a descriptive error message rather than reading garbage. Plus =
-side is
-> > that once such a system is in place you can reuse it to automatically r=
-esolve
-> > all dependencies so you no longer need to manually store the buffer_pag=
-e and
-> > its buffer_data_page separately.
-> > Down side is that traversing the debuginfo (including the ones from mod=
-ules) is
-> > not a simple task and I expect that such a system will be way more comp=
-lex than
-> > the rest of KHO. In addition there are some cases that the versioning w=
-on't be
-> > able to capture. For example if a type contains a "void *"-field. Then =
-although
-> > the definition of the type is identical in both kernels the field can b=
-e cast
-> > to different types when used. An other problem will be function pointer=
-s which
-> > you first need to resolve in the 1st kernel and then map to the identic=
-al
-> > function in the 2nd kernel. This will become particularly "fun" when the
-> > function is part of a module that isn't loaded at the time when you try=
- to
-> > recreate the kernel's state. =20
->=20
->=20
-> The whole point of KHO is to leave it to the subsystem which path they=20
-> want to take. The subsystem can either pass binary data and validate as=20
-> part of FDT properties (like compatible strings). That data can be=20
-> identical to today's in-kernel data structures (usually a bad idea) or=20
-> can be a new intermediate data format. But the subsystem can also choose=
-=20
-> to fully serialize into FDT properties and not pass any memory at all=20
-> for state that would be in structs. Or something in between.
-
-That's totally fine. My point is that there are simply too many ways to
-fuck it up and break the 2nd kernel. That's why I don't believe that we
-can rely on the subsystems to "do it right" and "remember to bump the
-version". In other words, KHO needs to provide a reliable, automatic
-mechanism with wich the 2nd kernel can decide if it can handle the
-passed data or not.
-
-> > So to summarize, while it would be nice to have a generic framework lik=
-e KHO to
-> > pass data from one kernel to the other via kexec there are good reasons=
- why it
-> > doesn't exist, yet. =20
->=20
->=20
-> I hope my explanations above clarify things a bit. Let me know if you're=
-=20
-> at FOSDEM, happy to talk about the internals there as well :)
-
-Sorry, I couldn't make it to FOSDEM but I plan to be at LPC later this
-year. In fact I had your talk on my list last year. Unfortunately it was
-parallel to the kernel debugger mc...
-
-Thanks
-Philipp
-
-> Alex
->=20
->=20
->=20
->=20
->=20
-> Amazon Development Center Germany GmbH
-> Krausenstr. 38
-> 10117 Berlin
-> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-> Sitz: Berlin
-> Ust-ID: DE 289 237 879
->=20
->=20
-> _______________________________________________
-> kexec mailing list
-> kexec@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/kexec
-
+I assume EFI copying into kernel memory is ok because that log has a
+limited number of entries. If this RTMR log gets large I assume it needs
+some way cull entries that have been moved to storage. Maybe this is a
+problem IMA has already solved.
 
