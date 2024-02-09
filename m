@@ -1,1047 +1,420 @@
-Return-Path: <linux-integrity+bounces-1134-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1135-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E12384F6FA
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Feb 2024 15:16:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F296C84FA70
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Feb 2024 18:00:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E0131F2172C
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 Feb 2024 14:16:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22BD01C25A16
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Feb 2024 17:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C996966B4D;
-	Fri,  9 Feb 2024 14:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC037F46B;
+	Fri,  9 Feb 2024 16:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V6MFlSzZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F98169D21;
-	Fri,  9 Feb 2024 14:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C817EF1B
+	for <linux-integrity@vger.kernel.org>; Fri,  9 Feb 2024 16:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707488043; cv=none; b=PhyDUwi3OB0dKnNTph/itptVCJC0KRwsUMqCL/oPSxpJ/C9GRqiGcDkAVi/ZFHdkDlJoBFIRcPBfaJ0BwkBCw/xRmszDglvOMWLkS43961b4vi/PmLugni4XE5yXdpytK/LVfquP+flHxCb8PkEiI5lCCeEDxKl0nlad42vfy5o=
+	t=1707497958; cv=none; b=jH+u830OmV9V+4A8rjO1xoCgW9lpTvSojKUBZPCPw9M3ZJExU7SF4lftW/7XZBnUPW9yi+ZKU1EC12lyhEzR3uwS19hxRVE78PvctI/Otgn6dwQ30dd1Y5hFAehpexmKAf+UtbAnbRG4nUzMtNm6YL3QmlKhVGZ2RrGZptNjJAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707488043; c=relaxed/simple;
-	bh=6wqzNgp62owJUlql6tnI4hRFRErRJ9xngX6jLxJn+mA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tHd6UxaEA5q3zRXZ4HNQIzTl1lQrVBVG+0qWkWxv02IJeXQT1yTwZPJLUqDAm87rufVgM6wHqPOvifRWZVgiIMV+C/kXcrSPEjZdui6NDodnaqrth1S/aBkbFCSn50eKuGwrjgftd/FTN7Uw5VWvXCPQq2DFGSkxZY2GvMJrlrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4TWb6x5W38z9yBkR;
-	Fri,  9 Feb 2024 21:58:49 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 34B15140FB5;
-	Fri,  9 Feb 2024 22:13:47 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBnoCThMsZloMgpAg--.31110S5;
-	Fri, 09 Feb 2024 15:13:46 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: corbet@lwn.net,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	shuah@kernel.org,
-	mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com,
-	mic@digikod.net
-Cc: linux-security-module@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	linux-integrity@vger.kernel.org,
-	wufan@linux.microsoft.com,
-	pbrobinson@gmail.com,
-	zbyszek@in.waw.pl,
-	hch@lst.de,
-	mjg59@srcf.ucam.org,
-	pmatilai@redhat.com,
-	jannh@google.com,
-	dhowells@redhat.com,
-	jikos@kernel.org,
-	mkoutny@suse.com,
-	ppavlu@suse.com,
-	petr.vorel@gmail.com,
-	petrtesarik@huaweicloud.com,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v3 13/13] docs: Add documentation of the digest_cache LSM
-Date: Fri,  9 Feb 2024 15:09:17 +0100
-Message-Id: <20240209140917.846878-14-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240209140917.846878-1-roberto.sassu@huaweicloud.com>
-References: <20240209140917.846878-1-roberto.sassu@huaweicloud.com>
+	s=arc-20240116; t=1707497958; c=relaxed/simple;
+	bh=eCa7otyZga8ui0LT2a/f1iShzyZTgUiKXtc4vXi8UiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=enZOuBbAkYiwk7uRlISK5/v1QbZJzSGfzfWJMUjizj7/Fclk9ZzpLBgYm2mYYQG8dqHn3upGO5YrHI7+zQsCRCN+42K3Y6r9V3lENZzVdOUPtXrqIPx+T5BD2BnWOPiVCzMU5lJo36Z/EK5nn2RODwoveKeLyZFex7YhNcf/dAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V6MFlSzZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707497955;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=syjEctozhBfEeP9cGPctM232qlAEbknuGwIIN4ER+PU=;
+	b=V6MFlSzZJBfhm/Lp9IljG/oGJhP+DSENQlTQBv4y05WiRstsOMg5QIFG9MTdHnupmWATOt
+	otK3tHRebNmhgkzGsgCtOJ3nGdu1DAq+XiqLxuRR7jJVoMmGoysI4VqclV1Bhr9qA8Afy/
+	1cQUYCZdOVZgvHPZyW+cl34dBP3y3kE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-423-c4G57TqTMmqR71MFAGNOnw-1; Fri, 09 Feb 2024 11:59:11 -0500
+X-MC-Unique: c4G57TqTMmqR71MFAGNOnw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5537885A58F;
+	Fri,  9 Feb 2024 16:59:10 +0000 (UTC)
+Received: from rotkaeppchen (unknown [10.39.192.66])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DE220C08EF7;
+	Fri,  9 Feb 2024 16:59:05 +0000 (UTC)
+Date: Fri, 9 Feb 2024 17:59:03 +0100
+From: Philipp Rudo <prudo@redhat.com>
+To: Alexander Graf <graf@amazon.com>
+Cc: <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <kexec@lists.infradead.org>,
+ <linux-doc@vger.kernel.org>, <x86@kernel.org>, Eric Biederman
+ <ebiederm@xmission.com>, "H . Peter Anvin" <hpa@zytor.com>, Andy Lutomirski
+ <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt
+ <rostedt@goodmis.org>, Andrew Morton <akpm@linux-foundation.org>, "Mark
+ Rutland" <mark.rutland@arm.com>, Tom Lendacky <thomas.lendacky@amd.com>,
+ Ashish Kalra <ashish.kalra@amd.com>, James Gowans <jgowans@amazon.com>,
+ Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>, <arnd@arndb.de>,
+ <pbonzini@redhat.com>, <madvenka@linux.microsoft.com>, Anthony Yznaga
+ <anthony.yznaga@oracle.com>, Usama Arif <usama.arif@bytedance.com>, "David
+ Woodhouse" <dwmw@amazon.co.uk>, Benjamin Herrenschmidt
+ <benh@kernel.crashing.org>, Rob Herring <robh+dt@kernel.org>, "Krzysztof
+ Kozlowski" <krzk@kernel.org>, <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH v3 00/17] kexec: Allow preservation of ftrace buffers
+Message-ID: <20240209175903.15dcc714@rotkaeppchen>
+In-Reply-To: <3bfbe6b3-d293-483f-9f30-b7d49440be22@amazon.com>
+References: <20240117144704.602-1-graf@amazon.com>
+	<20240129173450.038e46b7@rotkaeppchen>
+	<3bfbe6b3-d293-483f-9f30-b7d49440be22@amazon.com>
+Organization: Red Hat inc.
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwBnoCThMsZloMgpAg--.31110S5
-X-Coremail-Antispam: 1UD129KBjvAXoWftryDGw1xCr45Cry3ZFyrZwb_yoWrGr18to
-	ZY9r4UAw18Kr15uF1kCFnrAw1UG3ZYgwn7Ar18tw45WF18XFWUG3WDC3WUGFy5Jr4rGr97
-	A34xJw48Jr1Dtrn3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUO97kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
-	Wl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
-	xVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-	WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7
-	CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E
-	4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-	WUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYY7kG6xAYrwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF
-	7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuYvjxUwOzVUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAIBF1jj5o4HQABsC
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+Hi Alex,
 
-Add the documentation of the digest_cache LSM in Documentation/security.
+On Fri, 2 Feb 2024 13:58:52 +0100
+Alexander Graf <graf@amazon.com> wrote:
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- Documentation/security/digest_cache.rst | 900 ++++++++++++++++++++++++
- Documentation/security/index.rst        |   1 +
- MAINTAINERS                             |   1 +
- 3 files changed, 902 insertions(+)
- create mode 100644 Documentation/security/digest_cache.rst
+> Hi Philipp,
+>=20
+> On 29.01.24 17:34, Philipp Rudo wrote:
+> > Hi Alex,
+> >
+> > adding linux-integrity as there are some synergies with IMA_KEXEC (in c=
+ase we
+> > get KHO to work).
+> >
+> > Fist of all I believe that having a generic framework to pass informati=
+on from
+> > one kernel to the other across kexec would be a good thing. But I'm afr=
+aid that =20
+>=20
+>=20
+> Thanks, I'm happy to hear that you agree with the basic motivation :).=20
+> There are fundamentally 2 problems with passing data:
+>=20
+>  =C2=A0 * Passing structured data in a cross-architecture way
+>  =C2=A0 * Passing memory
+>=20
+> KHO tackles both. It proposes a common FDT based format that allows us=20
+> to pass per-subsystem properties. That way, a subsystem does not need to=
+=20
+> know whether it's running on ARM, x86, RISC-V or s390x. It just gains=20
+> awareness for KHO and can pass data.
+>=20
+> On top of that, it proposes a standardized "mem" property (and some=20
+> magic around that) which allows subsystems to pass memory.
+>=20
+>=20
+> > you are ignoring some fundamental problems which makes it extremely har=
+d, if
+> > not impossible, to reliably transfer the kernel's state from one kernel=
+ to the
+> > other.
+> >
+> > One thing I don't understand is how reusing the scratch area is working=
+. Sure
+> > you pass it's location via the dt/boot_params but I don't see any code =
+that
+> > makes it a CMA region. So IIUC the scratch area won't be available for =
+the 2nd
+> > kernel. Which is probably for the better as IIUC the 2nd kernel gets lo=
+aded and
+> > runs inside that area and I don't believe the CMA design ever considere=
+d that
+> > the kernel image could be included in a CMA area. =20
+>=20
+>=20
+> That one took me a lot to figure out sensibly (with recursion all the=20
+> way down) while building KHO :). I hope I detailed it sensibly in the=20
+> documentation - please let me know how to improve it in case it's=20
+> unclear: https://lore.kernel.org/lkml/20240117144704.602-8-graf@amazon.co=
+m/
+>=20
+> Let me explain inline using different words as well what happens:
+>=20
+> The first (and only the first) kernel that boots allocates a CMA region=20
+> as "scratch region". It loads the new kernel into that region. It passes=
+=20
+> that region as "scratch region" to the next kernel. The next kernel now=20
+> takes it and marks every page block that the scratch region spans as CMA:
+>=20
+> https://lore.kernel.org/lkml/20240117144704.602-3-graf@amazon.com/
+>=20
+> The CMA hint doesn't mean we create an actual CMA region. It mostly=20
+> means that the kernel won't use this memory for any kernel allocations.=20
+> Kernel allocations up to this point are allocations we don't need to=20
+> pass on with KHO again. Kernel allocations past that point may be=20
+> allocations that we want to pass, so we just never place them into the=20
+> "scratch region" again.
+>=20
+> And because we now already have a scratch region from the previous=20
+> kernel, we keep reusing that forever with any new KHO kexec.
 
-diff --git a/Documentation/security/digest_cache.rst b/Documentation/security/digest_cache.rst
-new file mode 100644
-index 000000000000..6a492e23495c
---- /dev/null
-+++ b/Documentation/security/digest_cache.rst
-@@ -0,0 +1,900 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+================
-+Digest_cache LSM
-+================
-+
-+Introduction
-+============
-+
-+Integrity detection and protection has long been a desirable feature, to
-+reach a large user base and mitigate the risk of flaws in the software and
-+attacks.
-+
-+However, while solutions exist, they struggle to reach the large user base,
-+due to requiring higher than desired constraints on performance,
-+flexibility and configurability, that only security conscious people are
-+willing to accept.
-+
-+This is where the new digest_cache LSM comes into play, it offers
-+additional support for new and existing integrity solutions, to make them
-+faster and easier to deploy.
-+
-+
-+Motivation
-+==========
-+
-+The digest_cache LSM helps to address two important shortcomings of the
-+Integrity Measurement Architecture (IMA): predictability of the Platform
-+Configuration Registers (PCRs), and the provisioning of reference values to
-+compare the calculated file digest against.
-+
-+Remote attestation, according to Trusted Computing Group (TCG)
-+specifications, is done by replicating the PCR extend operation in
-+software with the digests in the event log (in this case the IMA
-+measurement list), and by comparing the obtained value with the PCR value
-+signed by the TPM with the quote operation.
-+
-+Due to how the extend operation is performed, if measurements are done in
-+a different order, the final PCR value will be different. That means that
-+if measurements are done in parallel, there is no way to predict what the
-+final PCR value will be, making impossible to seal data to a PCR value. If
-+the PCR value was predictable, a system could for example prove its
-+integrity by unsealing and using its private key, without sending every
-+time the full list of measurements.
-+
-+Provisioning reference values for file digests is also a difficult task.
-+The solution so far was to add file signatures to RPM packages, and
-+possibly to DEB packages, so that IMA can verify them. While this undoubtly
-+works, it also requires Linux distribution vendors to support the feature
-+by rebuilding all their packages, and eventually extending their PKI to
-+perform the additional signatures. It could also require developers extra
-+work to deal with the additional data.
-+
-+On the other hand, since often packages carry the file digests themselves,
-+it won't be actually needed to add file signatures. If the kernel was able
-+to extract the file digests by itself, all the tasks mentioned above for
-+the Linux distribution vendors won't be needed too. All current and past
-+Linux distributions can be easily retrofitted to enable IMA appraisal with
-+the file digests from the packages.
-+
-+Narrowing down the scope of a package parser to only extract specific
-+information makes it small enough to accurately verify that it cannot harm
-+the kernel. In fact, the parsers included with the digest_cache LSM have
-+been verified with the formal verification tool Frama-C, albeit with a
-+limited buffer size (the verification time grows considerably with bigger
-+buffer sizes). The parsers with the Frama-C assertions are available here:
-+
-+https://github.com/robertosassu/rpm-formal/
-+
-+Frama-C asserts that the parsers don't read beyond their assigned buffer
-+for any byte combination.
-+
-+An additional mitigation against corrupted digest lists consists in
-+verifying the signature of the package first, before attempting to extract
-+the file digests.
-+
-+
-+Solution
-+========
-+
-+The digest_cache LSM can help IMA to extend a PCR in a deterministic way.
-+If IMA knows that a file comes from a Linux distribution, it can measure
-+files in a different way: measure the list of digests coming from the
-+distribution (e.g. RPM package headers), and subsequently measure a file if
-+it is not found in that list.
-+
-+If the system executes known files, it does not matter in which order they
-+are executed, because the PCR is not extended. That however means that the
-+lists of digests must be measured in a deterministic way. The digest_cache
-+LSM has a prefetching mechanism to make this happen, consisting in
-+sequentially reading digest lists in a directory until it finds the
-+requested one.
-+
-+The resulting IMA measurement list however has a disadvantage: it does not
-+tell to remote verifiers whether files with digest in the measured digest
-+lists have been accessed or not and when. Also the IMA measurement list
-+would change after a software update.
-+
-+The digest_cache LSM can also help IMA for appraisal. Currently, IMA has
-+to evaluate the signature of each file individually, and expects that the
-+Linux vendors include those signatures together with the files in the
-+packages.
-+
-+With the digest_cache LSM, IMA can simply lookup in the list of digests
-+extracted from package headers, once the signature of those headers has
-+been verified. The same approach can be followed by other LSMs, such as
-+Integrity Policy Enforcement (IPE).
-+
-+
-+Design
-+======
-+
-+Digest cache
-+------------
-+
-+The digest_cache LSM collects digests from various sources (called digest
-+lists), and stores them in kernel memory, in a set of hash tables forming a
-+digest cache. Extracted digests can be used as reference values for
-+integrity verification of file content or metadata.
-+
-+A digest cache has three types of references: in the inode security blob of
-+the digest list the digest cache was created from (dig_owner field); in the
-+security blob of the inodes for which the digest cache is requested
-+(dig_user field); a reference returned by digest_cache_get().
-+
-+References are released with digest_cache_put(), in the first two cases
-+when inodes are evicted from memory, in the last case when that function is
-+explicitly called. Obtaining a digest cache reference means that the digest
-+cache remains valid and cannot be freed until releasing it and until the
-+total number of references (stored in the digest cache) becomes zero.
-+
-+When digest_cache_get() is called on an inode to compare its digest with
-+a reference value, the digest_cache LSM knows which digest cache to get
-+from the new security.digest_list xattr added to that inode, which contains
-+the file name of the desired digest list digests will be extracted from.
-+
-+All digest lists are expected to be in the same directory, defined in the
-+kernel config, and modifiable at run-time through securityfs. When the
-+digest_cache LSM reads the security.digest_list xattr, it uses its value as
-+last path component, appended to the default path (unless the default path
-+is a file). If an inode does not have that xattr, the default path is
-+considered as the final destination.
-+
-+The default path can be either a file or a directory. If it is a file, the
-+digest_cache LSM always uses the same digest cache from that file to verify
-+all inodes (the xattr, if present, is ignored). If it is a directory, and
-+the inode to verify does not have the xattr, the digest_cache LSM iterates
-+and looks up on the digest caches created from each directory entry.
-+
-+Digest caches are created on demand, only when digest_cache_get() is
-+called. The first time a digest cache is requested, the digest_cache LSM
-+creates it and sets its reference in the dig_owner and dig_user fields of
-+the respective inode security blobs. On the next requests, the previously
-+set reference is returned, after incrementing the reference count.
-+
-+Since there might be multiple digest_cache_get() calls for the same inode,
-+or for different inodes pointing to the same digest list, dig_owner_mutex
-+and dig_user_mutex have been introduced to protect the check and assignment
-+of the digest cache reference in the inode security blob.
-+
-+Contenders that didn't get the lock also have to wait until the digest
-+cache is fully instantiated (when the bit INIT_IN_PROGRESS is cleared).
-+Dig_owner_mutex cannot be used for waiting on the instantiation to avoid
-+lock inversion with the inode lock for directories.
-+
-+
-+Verification data
-+-----------------
-+
-+The digest_cache LSM can support other LSMs in their decisions of granting
-+access to file content and metadata.
-+
-+However, the information alone about whether a digest was found in a digest
-+cache might not be sufficient, because for example those LSMs wouldn't know
-+whether the digest cache itself was created from authentic data.
-+
-+Digest_cache_verif_set() lets the same LSMs (or a chosen integrity
-+provider) evaluate the digest list being read during the creation of the
-+digest cache, by implementing the kernel_post_read_file LSM hook, and lets
-+them attach their verification data to that digest cache.
-+
-+Space is reserved in the file descriptor security blob for the digest cache
-+pointer. Digest_cache_to_file_sec() sets that pointer before calling
-+kernel_read_file() in digest_cache_populate(), and
-+digest_cache_from_file_sec() retrieves the pointer back from the file
-+descriptor passed by LSMs with digest_cache_verif_set().
-+
-+Multiple providers are supported, in the event there are multiple
-+integrity LSMs active. Each provider should also provide an unique verifier
-+ID as an argument to digest_cache_verif_set(), so that verification data
-+can be distinguished.
-+
-+A caller of digest_cache_get() can retrieve back the verification data by
-+calling digest_cache_verif_get() and passing a digest cache pointer and the
-+desired verifier ID.
-+
-+Since directory digest caches are not populated themselves, LSMs have to do
-+a lookup first to get the digest cache containing the digest, call
-+digest_cache_from_found_t() to convert the returned digest_cache_found_t
-+type to a digest cache pointer, and pass that to digest_cache_verif_get().
-+
-+
-+Directories
-+-----------
-+
-+In the environments where xattrs are not available (e.g. in the initial ram
-+disk), the digest_cache LSM cannot precisely determine which digest list in
-+a directory contains the desired reference digest. However, although
-+slower, it would be desirable to search the digest in all digest lists of
-+that directory.
-+
-+This done in two steps. When a digest cache is being created,
-+digest_cache_create() invokes digest_cache_dir_create(), to generate the
-+list of current directory entries. Entries are placed in the list in
-+ascending order by the <seq num> if prepended to the file name, or at the
-+end of the list if not.
-+
-+The resulting digest cache has the IS_DIR bit set, to distinguish it from
-+the digest caches created from regular files.
-+
-+Second, when a digest is searched in a directory digest cache,
-+digest_cache_lookup() invokes digest_cache_dir_lookup_digest() to
-+iteratively search that digest in each directory entry generated by
-+digest_cache_dir_create().
-+
-+That list is stable, even if new files are added or deleted from that
-+directory. In that case, the digest_cache LSM will invalidate the digest
-+cache, forcing next callers of digest_cache_get() to get a new directory
-+digest cache with the updated list of directory entries.
-+
-+If the current directory entry does not have a digest cache reference,
-+digest_cache_dir_lookup_digest() invokes digest_cache_create() to create a
-+new digest cache for that entry. In either case,
-+digest_cache_dir_lookup_digest() calls then digest_cache_htable_lookup()
-+with the new/existing digest cache to search the digest.
-+
-+The iteration stops when the digest is found. In that case,
-+digest_cache_dir_lookup_digest() returns the digest cache reference of the
-+current directory entry as the digest_cache_found_t type, so that callers
-+of digest_cache_lookup() don't mistakenly try to call digest_cache_put()
-+with that reference.
-+
-+This new reference type will be used to retrieve information about the
-+digest cache containing the digest, which is not known in advance until the
-+digest search is performed.
-+
-+The order of the list of directory entries influences the speed of the
-+digest search. A search terminates faster if less digest caches have to be
-+created. One way to optimize it could be to order the list of digest lists
-+in the same way of when they are requested at boot.
-+
-+Finally, digest_cache_dir_free() releases the digest cache references
-+stored in the list of directory entries, and frees the list itself.
-+
-+
-+Prefetching
-+-----------
-+
-+A desirable goal when doing integrity measurements is that they are done
-+always in the same order across boots, so that the resulting PCR value
-+becomes predictable and suitable for sealing policies. However, due to
-+parallel execution of system services at boot, a deterministic order of
-+measurements is difficult to achieve.
-+
-+The digest_cache LSM is not exempted from this issue. Under the assumption
-+that only the digest list is measured, and file measurements are omitted if
-+their digest is found in that digest list, a PCR can be predictable only if
-+all files belong to the same digest list. Otherwise, it will still be
-+unpredictable, since files accessed in a non-deterministic order will cause
-+digest lists to be measured in a non-deterministic order too.
-+
-+The prefetching mechanism overcomes this issue by searching a digest list
-+file name in digest_list_dir_lookup_filename() among the entries of the
-+linked list built by digest_cache_dir_create(). If the file name does not
-+match, it reads the digest list to trigger its measurement. Otherwise, it
-+also creates a digest cache and returns that to the caller.
-+
-+Prefetching needs to be explicitly enabled by setting the new
-+security.dig_prefetch xattr to 1 in the directory containing the digest
-+lists. The newly introduced function digest_cache_prefetch_requested()
-+checks first if the DIR_PREFETCH bit is set in dig_owner, otherwise it
-+reads the xattr. digest_cache_create() sets DIR_PREFETCH in dig_owner, if
-+prefetching is enabled, before declaring the digest cache as initialized.
-+
-+
-+Tracking changes
-+----------------
-+
-+The digest_cache LSM registers to five LSM hooks, file_open, path_truncate,
-+file_release, inode_unlink and inode_rename, to monitor digest lists and
-+directory modifications.
-+
-+If an action affects a digest list or the parent directory, these hooks
-+call digest_cache_reset() to set the RESET bit on the digest cache. This
-+will cause next calls to digest_cache_get() and digest_cache_create() to
-+respectively put and clear dig_user and dig_owner, and request a new
-+digest cache.
-+
-+That does not affect other users of the old digest cache, since that one
-+remains valid as long as the reference count is greater than zero. However,
-+they can explicitly call the new function digest_cache_was_reset(), to
-+check if the RESET bit was set on the digest cache reference they hold.
-+
-+Recreating a file digest cache means reading the digest list again and
-+extracting the digests. Recreating a directory digest cache, instead, does
-+not mean recreating the digest cache for directory entries, since those
-+digest caches are likely already stored in the inode security blob. It
-+would happen however for new files.
-+
-+File digest cache reset is done on file_open, when a digest list is opened
-+for write, path_truncate, when a digest list is truncated (there is no
-+inode_truncate, file_truncate does not catch operations through the
-+truncate() system call), inode_unlink, when a digest list is removed, and
-+inode_rename when a digest list is renamed.
-+
-+Directory digest cache reset is done on file_release, when a digest list is
-+written in the digest list directory, on inode_unlink, when a digest list
-+is deleted from that directory, and finally on inode_rename, when a digest
-+list is moved to/from that directory.
-+
-+With the exception of file_release, which will always be executed (cannot
-+be denied), the other LSM hooks are not optimal, since the digest_cache LSM
-+does not know whether or not the operation will be allowed also by other
-+LSMs. If the operation is denied, the digest_cache LSM would do an
-+unnecessary reset.
-+
-+
-+Data structures and API
-+=======================
-+
-+Data structures
-+---------------
-+
-+These are the data structures defined and used internally by the
-+digest_cache LSM.
-+
-+.. kernel-doc:: security/digest_cache/internal.h
-+
-+
-+Public API
-+----------
-+
-+This API is meant to be used by users of the digest_cache LSM.
-+
-+.. kernel-doc:: include/linux/digest_cache.h
-+		:identifiers: digest_cache_found_t
-+		              digest_cache_from_found_t
-+
-+.. kernel-doc:: security/digest_cache/main.c
-+		:identifiers: digest_cache_get digest_cache_put
-+
-+.. kernel-doc:: security/digest_cache/htable.c
-+		:identifiers: digest_cache_lookup
-+
-+.. kernel-doc:: security/digest_cache/verif.c
-+		:identifiers: digest_cache_verif_set digest_cache_verif_get
-+
-+.. kernel-doc:: security/digest_cache/reset.c
-+		:identifiers: digest_cache_was_reset
-+
-+
-+Parser API
-+----------
-+
-+This API is meant to be used by digest list parsers.
-+
-+.. kernel-doc:: security/digest_cache/htable.c
-+		:identifiers: digest_cache_htable_init
-+		              digest_cache_htable_add
-+			      digest_cache_htable_lookup
-+
-+
-+Digest List Formats
-+===================
-+
-+tlv
-+---
-+
-+The Type-Length-Value (TLV) format was chosen for its extensibility.
-+Additional fields can be added without breaking compatibility with old
-+versions of the parser.
-+
-+The layout of a tlv digest list is the following::
-+
-+ [header: DIGEST_LIST_FILE, num fields, total len]
-+ [field: DIGEST_LIST_ALGO, length, value]
-+ [field: DIGEST_LIST_ENTRY#1, length, value (below)]
-+  |- [header: DIGEST_LIST_ENTRY_DATA, num fields, total len]
-+  |- [DIGEST_LIST_ENTRY_DIGEST#1, length, file digest]
-+  |- [DIGEST_LIST_ENTRY_PATH#1, length, file path]
-+ [field: DIGEST_LIST_ENTRY#N, length, value (below)]
-+  |- [header: DIGEST_LIST_ENTRY_DATA, num fields, total len]
-+  |- [DIGEST_LIST_ENTRY_DIGEST#N, length, file digest]
-+  |- [DIGEST_LIST_ENTRY_PATH#N, length, file path]
-+
-+DIGEST_LIST_ALGO is a field to specify the algorithm of the file digest.
-+DIGEST_LIST_ENTRY is a nested TLV structure with the following fields:
-+DIGEST_LIST_ENTRY_DIGEST contains the file digest; DIGEST_LIST_ENTRY_PATH
-+contains the file path.
-+
-+
-+rpm
-+---
-+
-+The rpm digest list is basically a subset of the RPM package header.
-+Its format is::
-+
-+ [RPM magic number]
-+ [RPMTAG_IMMUTABLE]
-+
-+RPMTAG_IMMUTABLE is a section of the full RPM header containing the part
-+of the header that was signed, and whose signature is stored in the
-+RPMTAG_RSAHEADER section.
-+
-+
-+Appended Signature
-+------------------
-+
-+Digest lists can have a module-style appended signature, that can be used
-+for appraisal with IMA. The signature type can be PKCS#7, as for kernel
-+modules, or a different type.
-+
-+
-+History
-+=======
-+
-+The original name of this work was IMA Digest Lists, which was somehow
-+considered too invasive. The code was moved to a separate component named
-+DIGLIM (DIGest Lists Integrity Module), with the purpose of removing the
-+complexity away of IMA, and also adding the possibility of using it with
-+other kernel components (e.g. Integrity Policy Enforcement, or IPE).
-+
-+The design changed significantly, so DIGLIM was renamed to digest_cache
-+LSM, as the name better reflects what the new component does.
-+
-+Since it was originally proposed, in 2017, this work grew up a lot thanks
-+to various comments/suggestions. It became integrally part of the openEuler
-+distribution since end of 2020.
-+
-+The most important difference between the old the current version is moving
-+from a centralized repository of file digests to a per-package repository.
-+This significantly reduces the memory pressure, since digest lists are
-+loaded into kernel memory only when they are actually needed. Also, file
-+digests are automatically unloaded from kernel memory at the same time
-+inodes are evicted from memory during reclamation.
-+
-+
-+Performance
-+===========
-+
-+System specification
-+--------------------
-+
-+The tests have been performed on a Fedora 38 virtual machine with 4 cores
-+(AMD EPYC-Rome, no hyperthreading), 4 GB of RAM, no TPM/TPM passthrough/
-+emulated. The QEMU process has been pinned to 4 real CPU cores and its
-+priority was set to -20.
-+
-+
-+Benchmark tool
-+--------------
-+
-+The digest_cache LSM has been tested with an ad-hoc benchmark tool that
-+creates 20000 files with a random size up to 100 bytes and randomly adds
-+their digest to one of 303 digest lists. The number of digest lists has
-+been derived from the ratio (66) digests/packages (124174/1883) found in
-+the testing virtual machine (hence, 20000/66 = 303). IMA signatures have
-+been done with ECDSA NIST P-384.
-+
-+The benchmark tool then creates a list of 20000 files to be accessed,
-+randomly chosen (there can be duplicates). This is necessary to make the
-+results reproducible across reboots (by always replaying the same
-+operations). The benchmark reads (sequentially and in parallel) the files
-+from the list 2 times, flushing the kernel caches before each read.
-+
-+Each test has been performed 5 times, and the average value is taken.
-+
-+
-+Purpose of the benchmark
-+------------------------
-+
-+The purpose of the benchmark is to show the performance difference of IMA
-+between the current behavior, and by using the digest_cache LSM.
-+
-+
-+IMA measurement policy: no cache
-+--------------------------------
-+
-+.. code-block:: bash
-+
-+ measure func=FILE_CHECK fowner=2001 pcr=12
-+
-+
-+IMA measurement policy: cache
-+-----------------------------
-+
-+.. code-block:: bash
-+
-+ measure func=DIGEST_LIST_CHECK pcr=12
-+ measure func=FILE_CHECK fowner=2001 digest_cache=content pcr=12
-+
-+
-+IMA Measurement Results
-+-----------------------
-+
-+Sequential
-+~~~~~~~~~~
-+
-+This test was performed reading files sequentially, and waiting for the
-+current read to terminate before beginning a new one.
-+
-+::
-+
-+                      +-------+------------------------+-----------+
-+                      | meas. | time no/p/vTPM (sec.)  | slab (KB) |
-+ +--------------------+-------+------------------------+-----------+
-+ | no cache           | 12313 | 33.65 / 102.51 / 47.13 |   84170   |
-+ +--------------------+-------+------------------------+-----------+
-+ | cache, no prefetch |   304 | 34.04 / 33.32 / 33.09  |   81159   |
-+ +--------------------+-------+------------------------+-----------+
-+ | cache, prefetch    |   304 | 34.02 / 33.31 / 33.15  |   81122   |
-+ +--------------------+-------+------------------------+-----------+
-+
-+The table shows that 12313 measurements (boot_aggregate + files) have been
-+made without the digest cache, and 304 with the digest cache
-+(boot_aggregate + digest lists). Consequently, the memory occupation
-+without the cache is higher due to the higher number of measurements.
-+
-+Not surprisingly, for the same reason, also the test time is significantly
-+higher without the digest cache when the physical or virtual TPM is used.
-+
-+In terms of pure performance, first number in the third column, it can be
-+seen that there are not really performance differences between using or not
-+using the digest cache.
-+
-+Prefetching does not add overhead, also because digest lists were ordered
-+according to their appearance in the IMA measurement list (which minimize
-+the digest lists to prefetch).
-+
-+
-+Parallel
-+~~~~~~~~
-+
-+This test was performed reading files in parallel, not waiting for the
-+current read to terminate.
-+
-+::
-+
-+                      +-------+-----------------------+-----------+
-+                      | meas. | time no/p/vTPM (sec.) | slab (KB) |
-+ +--------------------+-------+-----------------------+-----------+
-+ | no cache           | 12313 | 14.08 / 79.09 / 22.70 |   85138   |
-+ +--------------------+-------+-----------------------+-----------+
-+ | cache, no prefetch |   304 | 14.44 / 15.11 / 14.96 |   85777   |
-+ +--------------------+-------+-----------------------+-----------+
-+ | cache, prefetch    |   304 | 14.30 / 15.41 / 14.40 |   83294   |
-+ +--------------------+-------+-----------------------+-----------+
-+
-+Also in this case, the physical TPM causes the biggest delay especially
-+without digest cache, where a higher number of measurements need to be
-+extended in the TPM.
-+
-+The digest_cache LSM does not introduce a noticeable overhead in all
-+scenarios.
-+
-+
-+IMA appraisal policy: no cache
-+------------------------------
-+
-+.. code-block:: bash
-+
-+ appraise func=FILE_CHECK fowner=2001
-+
-+
-+IMA appraisal policy: cache
-+---------------------------
-+
-+.. code-block:: bash
-+
-+ appraise func=DIGEST_LIST_CHECK
-+ appraise func=FILE_CHECK fowner=2001 digest_cache=content
-+
-+
-+IMA Appraisal Results
-+---------------------
-+
-+Sequential
-+~~~~~~~~~~
-+
-+This test was performed reading files sequentially, and waiting for the
-+current read to terminate before beginning a new one.
-+
-+::
-+
-+                              +-------------+-------------+-----------+
-+                              |    files    | time (sec.) | slab (KB) |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (ECDSA sig)       |    12312    |    96.74    |   78827   |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (cache)           | 12312 + 303 |    33.09    |   80854   |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (cache, prefetch) | 12312 + 303 |    33.42    |   81050   |
-+ +----------------------------+-------------+-------------+-----------+
-+
-+This test shows a huge performance difference from verifying the signature
-+of 12312 files as opposed to just verifying the signature of 303 digest
-+lists, and looking up the digest of the files being read.
-+
-+There are some differences in terms of memory occupation, which is quite
-+expected due to the fact that we have to take into account the digest
-+caches loaded in memory, while with the standard appraisal they don't
-+exist.
-+
-+
-+Parallel
-+~~~~~~~~
-+
-+This test was performed reading files in parallel, not waiting for the
-+current read to terminate.
-+
-+::
-+
-+                              +-------------+-------------+-----------+
-+                              |    files    | time (sec.) | slab (KB) |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (ECDSA sig)       |    12312    |    27.68    |   80596   |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (cache)           | 12313 + 303 |    14.96    |   80778   |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (cache, prefetch) | 12313 + 303 |    14.78    |   83354   |
-+ +----------------------------+-------------+-------------+-----------+
-+
-+The difference is less marked when performing the read in parallel. Also,
-+more memory seems to be occupied in the prefetch case.
-+
-+
-+How to Test
-+===========
-+
-+Additional patches need to be applied to the kernel.
-+
-+The patch to introduce the file_release LSM hook:
-+
-+https://lore.kernel.org/linux-integrity/20240115181809.885385-14-roberto.sassu@huaweicloud.com/
-+
-+The patch set to use the PGP keys from the Linux distributions for
-+verifying the RPM header signatures:
-+
-+https://lore.kernel.org/linux-integrity/20230720153247.3755856-1-roberto.sassu@huaweicloud.com/
-+
-+The same URL contains two GNUPG patches to be applied to the user space
-+program.
-+
-+The patch set to use the digest_cache LSM from IMA:
-+
-+https://github.com/robertosassu/linux/commits/digest_cache-lsm-v3-ima/
-+
-+First, it is necessary to install the kernel headers in usr/ in the kernel
-+source directory:
-+
-+.. code-block:: bash
-+
-+ $ make headers_install
-+
-+After, it is necessary to copy the new kernel headers (tlv_parser.h,
-+uasym_parser.h, tlv_digest_list.h) from usr/include/linux in the kernel
-+source directory to /usr/include/linux.
-+
-+Then, gpg must be rebuilt with the additional patches to convert the PGP
-+keys of the Linux distribution to the new user asymmetric key format:
-+
-+.. code-block:: bash
-+
-+ $ gpg --conv-kernel <path of PGP key> >> certs/uasym_keys.bin
-+
-+This embeds the converted keys in the kernel image.
-+
-+Finally, the following kernel options must be enabled:
-+
-+.. code-block:: bash
-+
-+ CONFIG_SECURITY_DIGEST_CACHE=y
-+ CONFIG_UASYM_KEYS_SIGS=y
-+ CONFIG_UASYM_PRELOAD_PUBLIC_KEYS=y
-+
-+and the kernel must be rebuilt with the patches applied. After reboot, it
-+is necessary to build and install the digest list tools downloadable from:
-+
-+https://github.com/linux-integrity/digest-cache-tools
-+
-+and to execute (as root):
-+
-+.. code-block:: bash
-+
-+ # manage_digest_lists -o gen -d /etc/digest_lists -i rpmdb -f rpm
-+
-+The new gpg must also be installed in the system, as it will be used to
-+convert the PGP signatures of the RPM headers to the user asymmetric key
-+format.
-+
-+It is recommended to create an additional digest list with the following
-+files, by creating a file named ``list`` with the content:
-+
-+.. code-block:: bash
-+
-+ /usr/bin/manage_digest_lists
-+ /usr/lib64/libgen-tlv-list.so
-+ /usr/lib64/libgen-rpm-list.so
-+ /usr/lib64/libparse-rpm-list.so
-+ /usr/lib64/libparse-tlv-list.so
-+
-+Then, to create the digest list, it is sufficient to execute:
-+
-+.. code-block:: bash
-+
-+ # manage_digest_lists -i list -L -d /etc/digest_lists -o gen -f tlv
-+
-+Also, a digest list must be created for the modified gpg binary:
-+
-+.. code-block:: bash
-+
-+ # manage_digest_lists -i /usr/bin/gpg -d /etc/digest_lists -o gen -f tlv
-+
-+If appraisal is enabled and in enforcing mode, it is necessary to sign the
-+new digest lists, with the sign-file tool in the scripts/ directory of the
-+kernel sources:
-+
-+.. code-block:: bash
-+
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/tlv-list
-+ # scripts/sign-file sha256 certs/signing_key.pem certs/signing_key.pem /etc/digest_lists/tlv-gpg
-+
-+The final step is to add security.digest_list to each file with:
-+
-+.. code-block:: bash
-+
-+ # manage_digest_lists -i /etc/digest_lists -o add-xattr
-+
-+After that, it is possible to test the digest_cache LSM with the following
-+policy written to /etc/ima/ima-policy:
-+
-+.. code-block:: bash
-+
-+ measure func=DIGEST_LIST_CHECK template=ima-modsig pcr=12
-+ dont_measure fsmagic=0x01021994
-+ measure func=BPRM_CHECK digest_cache=content pcr=12
-+ measure func=MMAP_CHECK digest_cache=content pcr=12
-+
-+Tmpfs is excluded for now, until memfd is properly handled. The reason why
-+the DIGEST_LIST_CHECK rule is before the dont_measure is that otherwise
-+digest lists in the initial ram disk won't be processed.
-+
-+Before loading the policy, it is possible to enable dynamic debug to see
-+which operations are done by the digest_cache LSM:
-+
-+.. code-block:: bash
-+
-+ # echo "file security/digest_cache/* +p" > /sys/kernel/debug/dynamic_debug/control
-+
-+Alternatively, the same strings can be set as value of the dyndbg= option
-+in the kernel command line.
-+
-+A preliminary test, before booting the system with the new policy, is to
-+supply the policy to IMA in the current system with:
-+
-+.. code-block:: bash
-+
-+ # cat /etc/ima/ima-policy > /sys/kernel/security/ima/policy
-+
-+After executing some commands, it can be seen if the digest_cache LSM is
-+working by checking the IMA measurement list. If there are only digest
-+lists, it means that everything is working properly, and the system can be
-+rebooted. The instructions have been tested on a Fedora 38 OS.
-+
-+After boot, it is possible to check the content of the measurement list:
-+
-+.. code-block:: bash
-+
-+ # cat /sys/kernel/security/ima/ascii_runtime_measurements
-+
-+
-+At this point, it is possible to enable the prefetching mechanism to make
-+the PCR predictable. The virtual machine must be configured with a TPM
-+(Emulated).
-+
-+To enable the prefetching mechanism, it is necessary to set
-+security.dig_prefetch to '1' for the /etc/digest_lists directory:
-+
-+.. code-block:: bash
-+
-+ # setfattr -n security.dig_prefetch -v "1" /etc/digest_lists
-+
-+The final step is to reorder digest lists to be in the same order in which
-+they appear in the IMA measurement list.
-+
-+This can be done by executing the command:
-+
-+.. code-block:: bash
-+
-+ # manage_digest_lists -i /sys/kernel/security/ima/ascii_runtime_measurements -d /etc/digest_lists -o add-seqnum
-+
-+Since we renamed the digest lists, we need to update security.digest_list
-+too:
-+
-+.. code-block:: bash
-+
-+ # manage_digest_lists -i /etc/digest_lists -o add-xattr
-+
-+By rebooting several times, and just logging in (to execute the same
-+commands during each boot), it is possible to compare the PCR 12, and see
-+that it is always the same. That of course works only if the TPM is reset
-+at each boot (e.g. if the virtual machine has a virtual TPM) or if the code
-+is tested in the host environment.
-+
-+.. code-block:: bash
-+
-+ # cat /sys/devices/LNXSYSTM:00/LNXSYBUS:00/MSFT0101:00/tpm/tpm0/pcr-sha256/12
-+
-+The last step is to test IMA appraisal. This can be done by adding the
-+following lines to /etc/ima/ima-policy:
-+
-+.. code-block:: bash
-+
-+ appraise func=DIGEST_LIST_CHECK appraise_type=imasig|modsig
-+ dont_appraise fsmagic=0x01021994
-+ appraise func=BPRM_CHECK digest_cache=content
-+ appraise func=MMAP_CHECK digest_cache=content
-+
-+The following test is to ensure that IMA prevents the execution of unknown
-+files:
-+
-+.. code-block:: bash
-+
-+ # cp -a /bin/cat .
-+ # ./cat
-+
-+That will work. But not on the modified binary:
-+
-+.. code-block:: bash
-+
-+ # echo 1 >> cat
-+ # ./cat
-+ -bash: ./cat: Permission denied
-+
-+Execution will be denied, and a new entry in the measurement list will
-+appear (it would be probably ok to not add that entry, as access to the
-+file was denied):
-+
-+.. code-block:: bash
-+
-+ 12 50b5a68bea0776a84eef6725f17ce474756e51c0 ima-ng sha256:15e1efee080fe54f5d7404af7e913de01671e745ce55215d89f3d6521d3884f0 /root/cat
-+
-+Finally, it is possible to test the shrinking of the digest cache, by
-+forcing the kernel to evict inodes from memory:
-+
-+.. code-block:: bash
-+
-+ # echo 3 > /proc/sys/vm/drop_caches
-+
-+If dynamic debug was enabled, the kernel log should have messages like:
-+
-+.. code-block:: bash
-+
-+ [  313.032536] DIGEST CACHE: Removed digest sha256:102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b from digest list /etc/digest_lists/rpm-libseccomp-2.5.3-4.fc38.x86_64
-+
-+Optionally, it is possible to test IMA measurement/appraisal from the very
-+beginning of the boot process, for now by including all digest lists and the
-+IMA policy in the initial ram disk. In the future, there will be a dracut
-+patch for ``dracut_install`` to select only the necessary digest lists.
-+
-+This can be simply done by executing:
-+
-+.. code-block:: bash
-+
-+ # dracut -f -I " /etc/ima/ima-policy " -i /etc/digest_lists/ /etc/digest_lists/ --nostrip --kver <your kernel version>
-+
-+The --nostrip option is particularly important. If debugging symbols are
-+stripped from the binary, its digest no longer matches with the one from
-+the package, causing access denied.
-+
-+The final test is to try the default IMA measurement and appraisal
-+policies, so that there is no gap between when the system starts and when
-+the integrity evaluation is effective. The default policies actually will
-+be used only until systemd is able to load the custom policy to
-+measure/appraise binaries and shared libraries. It should be good enough
-+for the system to boot.
-+
-+The default IMA measurement and appraisal policies can be loaded at boot by
-+adding the following to the kernel command line:
-+
-+.. code-block:: bash
-+
-+ ima_policy="tcb|appraise_tcb|digest_cache_measure|digest_cache_appraise"
-+
-+The ima-modsig template can be selected by adding to the kernel command
-+line:
-+
-+.. code-block:: bash
-+
-+ ima_template=ima-modsig
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 59f8fc106cb0..34933e13c509 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -19,3 +19,4 @@ Security Documentation
-    digsig
-    landlock
-    secrets/index
-+   digest_cache
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ee52cc664bc7..076b6e9da194 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6159,6 +6159,7 @@ DIGEST_CACHE LSM
- M:	Roberto Sassu <roberto.sassu@huawei.com>
- L:	linux-security-module@vger.kernel.org
- S:	Maintained
-+F:	Documentation/security/digest_cache.rst
- F:	security/digest_cache/
- F:	tools/testing/selftests/digest_cache/
- 
--- 
-2.34.1
+Thanks for the explanation. I've missed the memblock_mark_scratch in
+kho_populate. The code makes much more sense now :-)
+
+Having that said, for complex series like this one I like to do the
+review on a branch in my local git as that to avoid problems like that
+(or at least make them less likely). But your patches didn't apply. Can
+you tell me what your base is or make your git branch available. That
+would be very helpful to me. Thanks!
+
+> > Staying at reusing the scratch area. One thing that is broken for sure =
+is that
+> > you reuse the scratch area without ever checking the kho_scratch parame=
+ter of
+> > the 2nd kernel's command line. Remember, with kexec you are dealing wit=
+h two
+> > different kernels with two different command lines. Meaning you can onl=
+y reuse
+> > the scratch area if the requested size in the 2nd kernel is identical t=
+o the
+> > one of the 1st kernel. In all other cases you need to adjust the scratc=
+h area's
+> > size or reserve a new one. =20
+>=20
+>=20
+> Hm. So you're saying a user may want to change the size of the scratch=20
+> area with a KHO kexec. That's insanely risky because you (as rightfully=20
+> pointed out below) may have significant fragmentation at that point. And=
+=20
+> we will only know when we're in the new kernel so it's too late to=20
+> abort. IMHO it's better to just declare the scratch region as immutable=20
+> during KHO to avoid that pitfall.
+
+Yes, a user can set any command line with kexec. My expectation as a
+user is that the kernel respects whatever I set on the command line and
+doesn't think it knows better and simply ignores what I tell it to do.
+So even when you set the scratch area immutable during boot you have to
+make sure that in the end kernel respects what the user has set on the
+2nd kernel's command line.
+
+> > This directly leads to the next problem. In kho_reserve_previous_mem yo=
+u are
+> > reusing the different memory regions wherever the 1st kernel allocated =
+them.
+> > But that also means you are handing over the 1st kernel's memory
+> > fragmentation to the 2nd kernel and you do that extremely early during =
+boot.
+> > Which means that users who need to allocate large continuous physical m=
+emory,
+> > like the scratch area or the crashkernel memory, will have increasing c=
+hance to
+> > not find a suitable area. Which IMHO is unacceptable. =20
+>=20
+>=20
+> Correct :). It basically means you want to pass large allocations from=20
+> the 1st kernel that you want to preserve on to the next. So if the 1st=20
+> kernel allocated a large crash area, it's safest to pass that allocation=
+=20
+> using KHO to ensure the next kernel also has the region fully reserved.=20
+> Otherwise the next kernel may accidentally place data into the=20
+> previously reserved crash region (which would be contiguously free at=20
+> early init of the 2nd kernel) and fragment it again.
+
+I don't think that this is an option. For one your suggestion means that
+every "large allocation" (whatever that means) needs to be tracked
+manually for it to work together with KHO. In addition there is still
+the problem that the 2nd kernel may need a larger allocation than the
+1st one. Be it because it's a command line parameter, e.g. kho_scratch
+or crashkernel, or just a new feature that requires additional memory
+the 2nd kernel has. IMO it's inevitable that KHO finds a way to
+remove/reduce memory fragmentation.
+
+> > Finally, and that's the big elephant in the room, is your lax handling =
+of the
+> > unstable kernel internal ABI. Remember, you are dealing with two differ=
+ent
+> > kernels, that also means two different source levels and two different =
+configs.
+> > So only because both the 1st and 2nd kernel have a e.g. struct buffer_p=
+age
+> > doesn't means that they have the same struct buffer_page. But that's wh=
+at your
+> > code implicitly assumes. For KHO ever to make it upstream you need to m=
+ake sure
+> > that both kernels are "speaking the same language". =20
+>=20
+>=20
+> Wow, I hope it didn't come across as that! The whole point of using FDT=20
+> and compatible strings in KHO is to solve exactly that problem. Any time=
+=20
+> a passed over data structure changes incompatibly, you would need to=20
+> modify the compatible string of the subsystem that owns the now=20
+> incompatible data.
+>=20
+> So in the example of struct buffer_page, it means that if anyone changes=
+=20
+> the few bits we care about in struct buffer_page, we need to ensure that=
+=20
+> the new kernel emits "ftrace,cpu-v2" compatible strings. We can at that=20
+> point choose whether we want to implement compat handling for=20
+> "ftrace,cpu-v1" style struct buffer_pages or only support same version=20
+> ingestion.
+
+Well, it came across like that because there was absolutely no
+explanation on when those versions need to be bumped up so far.
+
+> The one thing that we could improve on here today IMHO is to have=20
+> compile time errors if any part of struct buffer_page changes=20
+> semantically: So we'd create a few defines for the bits we want in=20
+> "ftrace,cpu-v1" as well as size of struct buffer_page and then compare=20
+> them to what the struct offsets are at compile time to ensure they stay=20
+> identical.
+
+How do you imagine those macros to look like? How do they work with
+structs that change their layout depending on the config?
+
+Personally, I highly doubt that any system that manages these different
+versions manually will work reliably. It might be possible for
+something as simple as struct buffer_page but once it gets more
+complicated, e.g. by depending on the kernel config or simply having
+more dependencies to common data structures, it will be a constant
+source of pain.
+Just assume, although extremely unlikely, that struct list_head is
+changed. Most likely the person who makes the change won't be from the
+ftrace team and thus won't know that he/she/it needs to bump the
+version. Even the compile time errors will only help if
+CONFIG_FTRACE_KHO is enabled which most like won't be the case.
+Ultimately this means that KHO will break silently until someone tries
+to kexec in the new kernel with KHO enabled. But even then there will
+only be a cryptic error message (if any) as you have basically
+introduced a memory corruption to the 2nd kernel. The more complex the
+structs become and the deeper the dependency list goes the more likely
+it becomes that such a breaking change is made.
+
+The way I see it there is no way around generating the version based on
+the actual memory layout for this particular build.
+
+> Please let me know how I can clarify that more in the documentation. It=20
+> really is the absolute core of KHO.
+>=20
+>=20
+> > Personally I see two possible solutions:
+> >
+> > 1) You introduce a stable intermediate format for every subsystem simil=
+ar to
+> > what IMA_KEXEC does. This should work for simple types like struct buff=
+er_page
+> > but for complex ones like struct vfio_device that's basically impossibl=
+e. =20
+>=20
+>=20
+> I don't see why. The only reason KHO passes struct buffer_page as memory=
+=20
+> is because we want to be able to produce traces even after KHO=20
+> serialization is done. For vfio_device, I think it's perfectly=20
+> reasonable to serialize any data we need to preserve directly into FDT=20
+> properties.
+>=20
+>=20
+>=20
+> > 2) You also hand over the ABI version for every given type (basically j=
+ust a
+> > hash over all fields including all the dependencies). So the 2nd kernel=
+ can
+> > verify that the data handed over is in a format it can handle and if no=
+t bail
+> > out with a descriptive error message rather than reading garbage. Plus =
+side is
+> > that once such a system is in place you can reuse it to automatically r=
+esolve
+> > all dependencies so you no longer need to manually store the buffer_pag=
+e and
+> > its buffer_data_page separately.
+> > Down side is that traversing the debuginfo (including the ones from mod=
+ules) is
+> > not a simple task and I expect that such a system will be way more comp=
+lex than
+> > the rest of KHO. In addition there are some cases that the versioning w=
+on't be
+> > able to capture. For example if a type contains a "void *"-field. Then =
+although
+> > the definition of the type is identical in both kernels the field can b=
+e cast
+> > to different types when used. An other problem will be function pointer=
+s which
+> > you first need to resolve in the 1st kernel and then map to the identic=
+al
+> > function in the 2nd kernel. This will become particularly "fun" when the
+> > function is part of a module that isn't loaded at the time when you try=
+ to
+> > recreate the kernel's state. =20
+>=20
+>=20
+> The whole point of KHO is to leave it to the subsystem which path they=20
+> want to take. The subsystem can either pass binary data and validate as=20
+> part of FDT properties (like compatible strings). That data can be=20
+> identical to today's in-kernel data structures (usually a bad idea) or=20
+> can be a new intermediate data format. But the subsystem can also choose=
+=20
+> to fully serialize into FDT properties and not pass any memory at all=20
+> for state that would be in structs. Or something in between.
+
+That's totally fine. My point is that there are simply too many ways to
+fuck it up and break the 2nd kernel. That's why I don't believe that we
+can rely on the subsystems to "do it right" and "remember to bump the
+version". In other words, KHO needs to provide a reliable, automatic
+mechanism with wich the 2nd kernel can decide if it can handle the
+passed data or not.
+
+> > So to summarize, while it would be nice to have a generic framework lik=
+e KHO to
+> > pass data from one kernel to the other via kexec there are good reasons=
+ why it
+> > doesn't exist, yet. =20
+>=20
+>=20
+> I hope my explanations above clarify things a bit. Let me know if you're=
+=20
+> at FOSDEM, happy to talk about the internals there as well :)
+
+Sorry, I couldn't make it to FOSDEM but I plan to be at LPC later this
+year. In fact I had your talk on my list last year. Unfortunately it was
+parallel to the kernel debugger mc...
+
+Thanks
+Philipp
+
+> Alex
+>=20
+>=20
+>=20
+>=20
+>=20
+> Amazon Development Center Germany GmbH
+> Krausenstr. 38
+> 10117 Berlin
+> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+> Sitz: Berlin
+> Ust-ID: DE 289 237 879
+>=20
+>=20
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
 
 
