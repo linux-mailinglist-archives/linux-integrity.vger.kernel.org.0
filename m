@@ -1,111 +1,161 @@
-Return-Path: <linux-integrity+bounces-1151-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1152-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 815B5851E62
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Feb 2024 21:06:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E17E851EA8
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Feb 2024 21:29:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DB821F21801
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Feb 2024 20:06:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72B1CB2108E
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Feb 2024 20:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B23B4E1D0;
-	Mon, 12 Feb 2024 20:05:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72659482FB;
+	Mon, 12 Feb 2024 20:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZpTXpOz"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tAv1716J"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BAA4E1CC;
-	Mon, 12 Feb 2024 20:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E17046551;
+	Mon, 12 Feb 2024 20:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707768317; cv=none; b=cQW/DQM+c5aJSDPQTmriKgIrMI18VEBg8WwfBQCgWIUuidScvD9d0NLnlN0cGlCBkUHLNDZu6Xn38qHRZ5kjbT48r4Ru5f05lYhFXqdRprbgnPQRgkeF3SalULuf6iNRnSVPPcmxRk9OcFfLIHeezAuQhMhK4IHfQIIzDtXizSU=
+	t=1707769753; cv=none; b=CeIxJJcLrojDctgP7PHIAfmX95nNIrtwgsqxsjL3IBg3swecZdAtUQPXqFlLrrczWHH9TRw4Fto7QM+lG12mmSunFRR6OVW2LS5hjoBIFmBAUvHTXiJstrYunMihdYyvLgbBM5ASifSv7K9HkLSwFtTwNwld7xnklLoqqXAm2ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707768317; c=relaxed/simple;
-	bh=C1Uur93VzozDJB1KDcwGTxWQyeDZHRrmkGuViNEdyC0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=XlFzEC1GAyAQ6TPTPN6/OyxW5jvkUI57xF4t8GPbPTvB8YvG8ZQ2imFKqHoXwzZeFg2hI7yI0PB0L1J8hEsIzlyJF48RmM8JtlxmtxFIwq+2bknsKg/5s2DRJnWPNeno0Z1OqBqkRDuox8HlT6HPn6laNgLtTxUMym6+qtikOR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DZpTXpOz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD81BC433C7;
-	Mon, 12 Feb 2024 20:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707768316;
-	bh=C1Uur93VzozDJB1KDcwGTxWQyeDZHRrmkGuViNEdyC0=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=DZpTXpOz1RyoE8E/G7bw6IT9gly+udU4s1xI7qjMCtGzBHP62ttJOFB3VKlf7AD8o
-	 Rvnj6sSVQCyuPyOf65o85ntiHPbJB9KsrEfMBEJULZCua637zPW8bQK3IA78+MOZev
-	 WUXHCI83iYvPJ0SQQOVFII/VZa/bmLpDcirv9rH85vYG/Lecg1GI/b5z/trmqAZDpD
-	 vlUt6HRtgELgdIZ9NG8/6NaORNYyFMnmUU1AndX+FUUmJwKvqrhKchIIWEV5FvSeXL
-	 agBrXS+kW/KmI71d2zfz7z77WJ3UFiURTP9+sNwPRgzi1/OLCy+XkTlBnKI2olXj4e
-	 kLB+O9PbnETRw==
+	s=arc-20240116; t=1707769753; c=relaxed/simple;
+	bh=eSMPcnqleewvsCZOjcxX6j+WVDKLH3kGFH0udq8XuOQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wttk7MdccOB4IXmfEC5SAImVoD+rarb0N+X/IWR6ADizPsaOiM8Wu//sa9BBtMuKPtDvXaZFkJRNld5jxrl/1ph1n+lqrr+YHeqVOaSUD0hrK/VwPS+5GzD2u7gSMq7emi0YsWEJ76K3loYsSjgBHvbuECM+373Mj+HfOJO3Zp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tAv1716J; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41CKN0SZ003408;
+	Mon, 12 Feb 2024 20:28:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=JhR4CnsbNNlV55xXkJZROwtBvgr65QVEvejYyFSklRU=;
+ b=tAv1716JGfXUJ56oTLAfdJEAD2xUh5bWfDi9/epslC9qI0QdHGhMP/isop8LFXZYitAa
+ X5/DINpovaNb3ALNwWh0aQicSxSlX3WzOwvXd3m9k02/VXzF/4GKcMhiTOmgiyW+dOXr
+ lwoTKH3TjlQWp9nDIbr6sM9Q9zGbt2g9THl4Zxm4b32c9xkVgn0QCLEPjsCf/n9T9XhT
+ tgfV7J7oxNDKtRSUSArXMorP4r5rMg0LzL0C7ErqQlUsn9GZiHTasnhq2ToHLX53pHpd
+ O31Ey5sgcha96GI93Q+qCuG+6760LshZH1SRDukLhKwsbjemnWFUeLvqXosjvZNfu8iA 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7taf8470-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 20:28:45 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41CKQ2sa011682;
+	Mon, 12 Feb 2024 20:28:44 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7taf845d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 20:28:44 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41CJ3q0B004297;
+	Mon, 12 Feb 2024 20:28:43 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv036ey-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 20:28:43 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41CKSeM546268780
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 12 Feb 2024 20:28:42 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7FD7C5805D;
+	Mon, 12 Feb 2024 20:28:38 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9BE8E58055;
+	Mon, 12 Feb 2024 20:28:34 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 12 Feb 2024 20:28:34 +0000 (GMT)
+Message-ID: <7940b9d0-3133-4b08-b397-ad9ee34e3b34@linux.ibm.com>
+Date: Mon, 12 Feb 2024 15:28:33 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 12 Feb 2024 22:05:12 +0200
-Message-Id: <CZ3DCC8JHNLK.3MGE70MQJT5XM@kernel.org>
-To: "Lino Sanfilippo" <l.sanfilippo@kunbus.com>, "Daniel P. Smith"
- <dpsmith@apertussolutions.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Sasha
- Levin" <sashal@kernel.org>, <linux-integrity@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Kanth Ghatraju"
- <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.de>
-Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.16.0
-References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
- <20240131170824.6183-2-dpsmith@apertussolutions.com>
- <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
- <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
-In-Reply-To: <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 19/25] integrity: Move
+ integrity_kernel_module_request() to IMA
+Content-Language: en-US
+To: Paul Moore <paul@paul-moore.com>
+Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com, shuah@kernel.org,
+        mic@digikod.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+ <20240115181809.885385-20-roberto.sassu@huaweicloud.com>
+ <fd6ddc3d-e5d3-4b9c-b00b-ac2b1f22d653@linux.ibm.com>
+ <CAHC9VhTY=X7z5SRQZzFe25FGB2E3FBBkuZ_YYA1+ETyr7pv=tA@mail.gmail.com>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <CAHC9VhTY=X7z5SRQZzFe25FGB2E3FBBkuZ_YYA1+ETyr7pv=tA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IG8gA7VCiIuoNiLherBpxii_bnuMc-F5
+X-Proofpoint-ORIG-GUID: n2O60wZIGE2TuBwcELMLALmk7ji0iQ_T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-12_16,2024-02-12_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0
+ adultscore=0 clxscore=1015 spamscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2402120158
 
-On Fri Feb 2, 2024 at 5:08 AM EET, Lino Sanfilippo wrote:
->
->
-> On 01.02.24 23:21, Jarkko Sakkinen wrote:
->
-> >=20
-> > On Wed Jan 31, 2024 at 7:08 PM EET, Daniel P. Smith wrote:
-> >> Commit 933bfc5ad213 introduced the use of a locality counter to contro=
-l when a
-> >> locality request is allowed to be sent to the TPM. In the commit, the =
-counter
-> >> is indiscriminately decremented. Thus creating a situation for an inte=
-ger
-> >> underflow of the counter.
-> >=20
-> > What is the sequence of events that leads to this triggering the
-> > underflow? This information should be represent in the commit message.
-> >=20
->
-> AFAIU this is:
->
-> 1. We start with a locality_counter of 0 and then we call tpm_tis_request=
-_locality()
-> for the first time, but since a locality is (unexpectedly) already active=
- check_locality() and consequently
-> __tpm_tis_request_locality() return "true". This prevents the locality_co=
-unter from being increased
-> to 1, see=20
->
-> 	ret =3D __tpm_tis_request_locality(chip, l);
-> 	if (!ret) /* Counter not increased since ret =3D=3D 1 */
-> 		priv->locality_count++;
->
-> in tpm_tis_request_locality().
->
-> If now the locality is released the counter is decreased to below zero (r=
-esulting
-> in an underflow since "locality_counter" is an unsigned int.=20
 
-Thanks, Daniel, can you transcript this to the commit message?
 
-BR, Jarkko
+On 2/12/24 12:56, Paul Moore wrote:
+> On Mon, Feb 12, 2024 at 12:48 PM Stefan Berger <stefanb@linux.ibm.com> wrote:
+>> On 1/15/24 13:18, Roberto Sassu wrote:
+> 
+> ...
+> 
+>>> +/**
+>>> + * ima_kernel_module_request - Prevent crypto-pkcs1pad(rsa,*) requests
+>>> + * @kmod_name: kernel module name
+>>> + *
+>>> + * We have situation, when public_key_verify_signature() in case of RSA > + * algorithm use alg_name to store internal information in order to
+>>> + * construct an algorithm on the fly, but crypto_larval_lookup() will try
+>>> + * to use alg_name in order to load kernel module with same name.
+>>> + * Since we don't have any real "crypto-pkcs1pad(rsa,*)" kernel modules,
+>>> + * we are safe to fail such module request from crypto_larval_lookup().
+>>> + *
+>>> + * In this way we prevent modprobe execution during digsig verification
+>>> + * and avoid possible deadlock if modprobe and/or it's dependencies
+>>> + * also signed with digsig.
+>>
+>> This text needs to some reformulation at some point..
+> 
+> There is no time like the present.  If you have a suggestion I would
+> love to hear it and I'm sure Roberto would too.
+> 
+
+My interpretation of the issue after possibly lossy decoding of the 
+above sentences:
+
+Avoid a deadlock by rejecting a virtual kernel module with the name 
+"crypto-pkcs1pad(rsa,*)". This module may be requested by 
+crypto_larval_lookup() while trying to verify an RSA signature in 
+public_key_verify_signature(). Since the loading of the RSA module may 
+itself cause the request for an RSA signature verification it will 
+otherwise lead to a deadlock.
+
 
