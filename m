@@ -1,220 +1,215 @@
-Return-Path: <linux-integrity+bounces-1140-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1141-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31650851819
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Feb 2024 16:33:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 552B7851B2C
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Feb 2024 18:22:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA56928336F
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 Feb 2024 15:33:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA8D31F229BA
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Feb 2024 17:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C49E3CF49;
-	Mon, 12 Feb 2024 15:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B17F3D978;
+	Mon, 12 Feb 2024 17:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Co2aU8UO"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mEkS2fjk"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165C43C497;
-	Mon, 12 Feb 2024 15:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B9D3D56D;
+	Mon, 12 Feb 2024 17:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707752001; cv=none; b=S/BayAzGdPR3klvxlZiO1LUgqlCfOoEDK3A4Q5FWj9HKntQaI5WEP5wrcajsUD+iJGMdGLRYWNeiOebLF3LNR+QMpOCI7NhG4AAw4yyZ+2tOT2kn2EJ5inMYbyhypL4z7qI0ixQmTI+BNrt1TEtTI09PH0PE9jDWT98ZI88VEbA=
+	t=1707758536; cv=none; b=Qdg1k4vxgY5775S5wpv+wEaumYV0+p2a7IOkb+TpbNHFTz7ihuEA+nG2h5lbsXRHOeqXU+X5b5vU/6wp1twsBa/r2TnJBIg9WC3Gx9IUowCdmgMvvs29VHFtcdSw0UiPjP8MYDMFO6CxeuPyvcA4yxwr1bdP+B2PzRxpEKaf0uI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707752001; c=relaxed/simple;
-	bh=GFsfkdOmJKsuZtWQAq7OhjxHg4IKHiDCDNVd+Gd58aw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=MmRv28evJMFIXRjQdtHazGe3+puM5+3YvnVkl9fCoH/skTwqYCQ86cssWz3+SzaivKYcGElJhwYgM9XBfewGWXwDSbbf5wnCNfilgG3W8HgwIVomPFjg7leCuzwja53AP7K89FNPXItD6EjIsS9BRMsm2b2VPXa8qzx7eZd4tFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Co2aU8UO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD66C433F1;
-	Mon, 12 Feb 2024 15:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707752000;
-	bh=GFsfkdOmJKsuZtWQAq7OhjxHg4IKHiDCDNVd+Gd58aw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Co2aU8UOdKL4W8SUaaEqV0BTVAuiZ9niMqI5QuXmkWRQqRD+bsuUp32djuJPfJQ7M
-	 J0AdS/WqPhUm+WDhNwj0PIl1NFZPSx4kaz74w8AVaBO2niEWSvmitVVz0AuwMwTUcd
-	 8MtOvRT2s7ojnBMUpDpCQjuzEzxH0//zOgasqtDHJDU6fjIDBJFEa6lJkzge7aVnIn
-	 65sRlXZGfvNWKRj6hhoF+/MvmClp/yoVXWTT6Lqc/PTFBqTwhuA4fpNCA+K8uTOths
-	 DH2aamg+A5g3aeMmWit1ZUc4X0oSEYy8EtlcvJyPFhdziLYkgWINAXOkx2oWF2pGNL
-	 vlKQQFPbdC2Dw==
-From: Mark Brown <broonie@kernel.org>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: kernel@pengutronix.de, Moritz Fischer <mdf@kernel.org>, 
- Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, 
- Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Alexander Aring <alex.aring@gmail.com>, 
- Stefan Schmidt <stefan@datenfreihafen.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- linux-wpan@vger.kernel.org, netdev@vger.kernel.org, 
- Lars-Peter Clausen <lars@metafoo.de>, 
- Michael Hennerich <Michael.Hennerich@analog.com>, 
- Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, linux-input@vger.kernel.org, 
- Ulf Hansson <ulf.hansson@linaro.org>, Rayyan Ansari <rayyan@ansari.sh>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
- Martin Tuma <martin.tuma@digiteqautomotive.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
- Sergey Kozlov <serjk@netup.ru>, Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Yang Yingliang <yangyingliang@huawei.com>, linux-mmc@vger.kernel.org, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Rob Herring <robh@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
- Michal Simek <michal.simek@amd.com>, 
- Amit Kumar Mahapatra via Alsa-devel <alsa-devel@alsa-project.org>, 
- linux-mtd@lists.infradead.org, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
- Simon Horman <horms@kernel.org>, Ronald Wahl <ronald.wahl@raritan.com>, 
- Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
- Guenter Roeck <groeck@chromium.org>, chrome-platform@lists.linux.dev, 
- Max Filippov <jcmvbkbc@gmail.com>, linux-spi@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, linux-arm-msm@vger.kernel.org, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- linux-mediatek@lists.infradead.org, Thomas Zimmermann <tzimmermann@suse.de>, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, 
- linux-staging@lists.linux.dev, Viresh Kumar <vireshk@kernel.org>, 
- Rui Miguel Silva <rmfrfs@gmail.com>, Johan Hovold <johan@kernel.org>, 
- Alex Elder <elder@kernel.org>, greybus-dev@lists.linaro.org, 
- Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
- Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, 
- Herve Codina <herve.codina@bootlin.com>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Aaro Koskinen <aaro.koskinen@iki.fi>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- linux-usb@vger.kernel.org, Helge Deller <deller@gmx.de>, 
- Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
- Kalle Valo <kvalo@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>, 
- libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org, 
- Jonathan Corbet <corbet@lwn.net>, James Clark <james.clark@arm.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, linux-doc@vger.kernel.org
-In-Reply-To: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1705944943.git.u.kleine-koenig@pengutronix.de>
-Subject: Re: (subset) [PATCH v2 00/33] spi: get rid of some legacy macros
-Message-Id: <170775198078.46149.4700126128576800564.b4-ty@kernel.org>
-Date: Mon, 12 Feb 2024 15:33:00 +0000
+	s=arc-20240116; t=1707758536; c=relaxed/simple;
+	bh=k7LXORf4EzSDIl/lyRla5O6ZlfVqO/jSxTnInSO0e4Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n1KdXEWgfFkzybIufuppHMA/nG0kiaifsSFRtN6/zLyIaGl9eWLLep/4usxh/bY/F/lvhdx0l2urku8T6VKgOHHg1coNtqWIm01yI2MAAbAzOaon67X7QMidtbgyPTZAnlzT666nN3rZgLNzwPmX0uy4+bLK/Xyhi8KG9dPi0IM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mEkS2fjk; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41CHG4Ql028987;
+	Mon, 12 Feb 2024 17:21:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=eSdxrm/EgFSXFEX8alLuk+gV1hUzMo+xxS4g34enfxY=;
+ b=mEkS2fjkqCOA6jxngNacB0yRwYRFZw19r0UErGQ4dopxmxCcn/5Ki42z00v8FWhpTp4u
+ DqR0yyaFG5S/C/4YmUKDL3cyCaZ58LgAZn2RUWqQHeq/zK62s8/0o+x0MClB9xL3EBjZ
+ cYX9xBnulkGQ1gOCbWl+VEq5gkHUPSuP/LvzkqfPphKRYweXkWpzem8v673ujELdJZL9
+ wHpsw/YHl7O1KNvcaYihQjBc3/v4PNgu+eFhqrgAsmSvuzdq+Yel5lIN3BOLpWsr2ebv
+ fF83v4LZtJb7S/5feV9Nu9sgZSv5mHeO+AAJcKSTrHWDqXLeuty/DbOcEJ2qo3DC6I2H bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7qcggh27-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 17:21:33 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41CHIXJw008039;
+	Mon, 12 Feb 2024 17:21:32 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w7qcggh0f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 17:21:32 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41CH2LbW016517;
+	Mon, 12 Feb 2024 17:21:30 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mym9t4n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Feb 2024 17:21:30 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41CHLSFF16515820
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 12 Feb 2024 17:21:30 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2779258060;
+	Mon, 12 Feb 2024 17:21:28 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CE8FF58043;
+	Mon, 12 Feb 2024 17:21:24 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 12 Feb 2024 17:21:24 +0000 (GMT)
+Message-ID: <8d89f67b-fa66-492d-8339-baa586d0ca93@linux.ibm.com>
+Date: Mon, 12 Feb 2024 12:21:23 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-a684c
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 13/25] security: Introduce file_release hook
+Content-Language: en-US
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+ <20240115181809.885385-14-roberto.sassu@huaweicloud.com>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20240115181809.885385-14-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uOXCzbmK3_nwpGIe6hrW3GVsbsUdt_V_
+X-Proofpoint-ORIG-GUID: o5EoBELV83dp3OQdJea5KQ3RJesNYIc2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-12_14,2024-02-12_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ spamscore=0 mlxlogscore=999 suspectscore=0 adultscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2402120132
 
-On Mon, 22 Jan 2024 19:06:55 +0100, Uwe Kleine-König wrote:
-> this is v2 of this patch set.
+
+
+On 1/15/24 13:17, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> Changes since (implicit) v1, sent with Message-Id:
-> cover.1705348269.git.u.kleine-koenig@pengutronix.de:
+> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> the file_release hook.
 > 
->  - Rebase to v6.8-rc1
->  - Fix a build failure on sh
->  - Added the tags received in (implicit) v1.
+> IMA calculates at file close the new digest of the file content and writes
+> it to security.ima, so that appraisal at next file access succeeds.
 > 
-> [...]
+> An LSM could implement an exclusive access scheme for files, only allowing
+> access to files that have no references.
+> 
+> The new hook cannot return an error and cannot cause the operation to be
+> reverted.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Applied to
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[01/33] fpga: ice40-spi: Follow renaming of SPI "master" to "controller"
-        commit: 227ab73b89d66e3064b3c2bcb5fe382b1815763d
-[02/33] ieee802154: ca8210: Follow renaming of SPI "master" to "controller"
-        commit: 167b78446706bb4d19f7dd93ca320aed25ae1bbd
-[03/33] iio: adc: ad_sigma_delta: Follow renaming of SPI "master" to "controller"
-        commit: 2780e7b716a605781dbee753ef4983d775a65427
-[04/33] Input: pxspad - follow renaming of SPI "master" to "controller"
-        commit: a78acec53b8524593afeed7258a442adc3450818
-[05/33] Input: synaptics-rmi4 - follow renaming of SPI "master" to "controller"
-        commit: 1245633c61baf159fcc1303d7f0855f49831b9c1
-[06/33] media: mgb4: Follow renaming of SPI "master" to "controller"
-        commit: 2c2f93fbfba7186cc081e23120f169eac3b5b62a
-[07/33] media: netup_unidvb: Follow renaming of SPI "master" to "controller"
-        commit: cfa13a64bd631d8f04a1c385923706fcef9a63ed
-[08/33] media: usb/msi2500: Follow renaming of SPI "master" to "controller"
-        commit: dd868ae646d5770f80f90dc056d06eb2e6d39c62
-[09/33] media: v4l2-subdev: Follow renaming of SPI "master" to "controller"
-        commit: d920b3a672b7f79cd13b341234aebd49233f836c
-[10/33] misc: gehc-achc: Follow renaming of SPI "master" to "controller"
-        commit: 26dcf09ee5d9ceba2c627ae3ba174a229f25638f
-[11/33] mmc: mmc_spi: Follow renaming of SPI "master" to "controller"
-        commit: b0a6776e53403aa380411f2a43cdefb9f00ff50a
-[12/33] mtd: dataflash: Follow renaming of SPI "master" to "controller"
-        commit: 44ee998db9eef84bf005c39486566a67cb018354
-[14/33] net: ks8851: Follow renaming of SPI "master" to "controller"
-        commit: 1cc711a72ae7fd44e90839f0c8d3226664de55a2
-[15/33] net: vertexcom: mse102x: Follow renaming of SPI "master" to "controller"
-        commit: 7969b98b80c0332f940c547f84650a20aab33841
-[16/33] platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
-        commit: 85ad0ec049a771c4910c8aebb2d0bd9ce9311fd9
-[17/33] spi: bitbang: Follow renaming of SPI "master" to "controller"
-        commit: 2259233110d90059187c5ba75537eb93eba8417b
-[18/33] spi: cadence-quadspi: Don't emit error message on allocation error
-        commit: e71011dacc3413bed4118d2c42f10736ffcd762c
-[19/33] spi: cadence-quadspi: Follow renaming of SPI "master" to "controller"
-        commit: 28e59d8bf1ace0ddf05f989a48d6824d75731267
-[20/33] spi: cavium: Follow renaming of SPI "master" to "controller"
-        commit: 1747fbdedba8b6b3fd459895ed5d57e534549884
-[21/33] spi: geni-qcom: Follow renaming of SPI "master" to "controller"
-        commit: 14cea92338a0776c1615994150e738ac0f5fbb2c
-[22/33] spi: loopback-test: Follow renaming of SPI "master" to "controller"
-        commit: 2c2310c17fac13aa7e78756d7f3780c7891f9397
-[23/33] spi: slave-mt27xx: Follow renaming of SPI "master" to "controller"
-        commit: 8197b136bbbe64a7cab1020a4b067020e5977d98
-[24/33] spi: spidev: Follow renaming of SPI "master" to "controller"
-        commit: d934cd6f0e5d0052772612db4b07df60cb9da387
-[25/33] staging: fbtft: Follow renaming of SPI "master" to "controller"
-        commit: bbd25d7260eeeaef89f7371cbadcd33dd7f7bff9
-[26/33] staging: greybus: spi: Follow renaming of SPI "master" to "controller"
-        commit: ee3c668dda3d2783b0fff4091461356fe000e4d8
-[27/33] tpm_tis_spi: Follow renaming of SPI "master" to "controller"
-        commit: b6af14eacc8814b0986e20507df423cebe9fd859
-[28/33] usb: gadget: max3420_udc: Follow renaming of SPI "master" to "controller"
-        commit: 8c716f4a3d4fcbec976247e3443d36cbc24c0512
-[29/33] video: fbdev: mmp: Follow renaming of SPI "master" to "controller"
-        commit: b23031e730e72ec9067b7c38c25e776c5e27e116
-[30/33] wifi: libertas: Follow renaming of SPI "master" to "controller"
-        commit: 30060d57cee194d6b70283f2faf787e2fdc61b6e
-[31/33] spi: fsl-lib: Follow renaming of SPI "master" to "controller"
-        commit: 801185efa2402dce57828930e9684884fc8d62da
-[32/33] spi: Drop compat layer from renaming "master" to "controller"
-        commit: 620d269f29a569ba37419cc03cf1da2d55f6252a
-[33/33] Documentation: spi: Update documentation for renaming "master" to "controller"
-        commit: 76b31eb4c2da3ddb3195cc14f6aad24908adf524
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+> ---
+>   fs/file_table.c               |  1 +
+>   include/linux/lsm_hook_defs.h |  1 +
+>   include/linux/security.h      |  4 ++++
+>   security/security.c           | 11 +++++++++++
+>   4 files changed, 17 insertions(+)
+> 
+> diff --git a/fs/file_table.c b/fs/file_table.c
+> index de4a2915bfd4..c72dc75f2bd3 100644
+> --- a/fs/file_table.c
+> +++ b/fs/file_table.c
+> @@ -385,6 +385,7 @@ static void __fput(struct file *file)
+>   	eventpoll_release(file);
+>   	locks_remove_file(file);
+>   
+> +	security_file_release(file);
+>   	ima_file_free(file);
+>   	if (unlikely(file->f_flags & FASYNC)) {
+>   		if (file->f_op->fasync)
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index c3fecc7dcb0b..229f84ce12ae 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -173,6 +173,7 @@ LSM_HOOK(int, 0, kernfs_init_security, struct kernfs_node *kn_dir,
+>   	 struct kernfs_node *kn)
+>   LSM_HOOK(int, 0, file_permission, struct file *file, int mask)
+>   LSM_HOOK(int, 0, file_alloc_security, struct file *file)
+> +LSM_HOOK(void, LSM_RET_VOID, file_release, struct file *file)
+>   LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
+>   LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
+>   	 unsigned long arg)
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 97f2212c13b6..2997348afcb7 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -395,6 +395,7 @@ int security_kernfs_init_security(struct kernfs_node *kn_dir,
+>   				  struct kernfs_node *kn);
+>   int security_file_permission(struct file *file, int mask);
+>   int security_file_alloc(struct file *file);
+> +void security_file_release(struct file *file);
+>   void security_file_free(struct file *file);
+>   int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
+>   int security_file_ioctl_compat(struct file *file, unsigned int cmd,
+> @@ -1008,6 +1009,9 @@ static inline int security_file_alloc(struct file *file)
+>   	return 0;
+>   }
+>   
+> +static inline void security_file_release(struct file *file)
+> +{ }
+> +
+>   static inline void security_file_free(struct file *file)
+>   { }
+>   
+> diff --git a/security/security.c b/security/security.c
+> index f3d92bffd02f..7d10724872f8 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2724,6 +2724,17 @@ int security_file_alloc(struct file *file)
+>   	return rc;
+>   }
+>   
+> +/**
+> + * security_file_release() - Perform actions before releasing the file ref
+> + * @file: the file
+> + *
+> + * Perform actions before releasing the last reference to a file.
+> + */
+> +void security_file_release(struct file *file)
+> +{
+> +	call_void_hook(file_release, file);
+> +}
+> +
+>   /**
+>    * security_file_free() - Free a file's LSM blob
+>    * @file: the file
 
