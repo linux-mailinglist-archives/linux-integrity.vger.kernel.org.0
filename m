@@ -1,220 +1,96 @@
-Return-Path: <linux-integrity+bounces-1197-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1198-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A8FB854BAB
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Feb 2024 15:39:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28830854C36
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Feb 2024 16:10:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6608FB28961
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Feb 2024 14:39:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A9C61C2743B
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Feb 2024 15:10:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504E15B03B;
-	Wed, 14 Feb 2024 14:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F8725B69C;
+	Wed, 14 Feb 2024 15:10:51 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C63F5B02B;
-	Wed, 14 Feb 2024 14:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336DA5A7AB;
+	Wed, 14 Feb 2024 15:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707921472; cv=none; b=HoONdoXOF3ntGfU0mtt+ahja4JCNICvsqvm7ArtUGUtic4lcpS/SiA+VT6Q539E7aTCpFaFaO6IvVBwD23AddVh3Xqk2v9vZioeVowvg2Wil2sPvrlLgRo02m7gngwlH9iYKrxncp/I0oN8hPH7R23CoN8ZfT+eZGXhrI6qFuzc=
+	t=1707923451; cv=none; b=b06W402VNDbqUgUwCh10GXQ3dV0M47T3pnJgUmVTsAETKdIbX3jMZhYmFUuxXKn8tdJKW+D1rMJAKnXOk1xNWeKzHIp+ScfNp7LDU7J+oyt6XNhUu81CzKH/9IaNuE3ELSYtkaGU5jkyLWAx/93/DVNDUBKjmndxhb45lPRAYSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707921472; c=relaxed/simple;
-	bh=+JzV9zu5I05SQvb2FTgYGGXhXwu6XOdL9AMsciATnr4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WSqeH98nJMLyogK5e1xPWR+mJnDtpsEsS+EXeC6AZOOe98I4gMa+lZpI0YzoIvgQGQ//1QwYZRgXL4tmzid76nNAH8f6lO712MALWWv2iRRuj2TtJ4nXK+4pZfEN52TX7LwFT4L9zYEcb+1ZjWmgv9REEbvdrsGZghCcg3ePDyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4TZgKW2lKsz9xrnX;
-	Wed, 14 Feb 2024 22:18:39 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 7A0A21405F3;
-	Wed, 14 Feb 2024 22:37:41 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDXgRrHz8xlZ55_Ag--.52204S10;
-	Wed, 14 Feb 2024 15:37:40 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: corbet@lwn.net,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	wufan@linux.microsoft.com,
-	pbrobinson@gmail.com,
-	zbyszek@in.waw.pl,
-	hch@lst.de,
-	mjg59@srcf.ucam.org,
-	pmatilai@redhat.com,
-	jannh@google.com,
-	dhowells@redhat.com,
-	jikos@kernel.org,
-	mkoutny@suse.com,
-	ppavlu@suse.com,
-	petr.vorel@gmail.com,
-	petrtesarik@huaweicloud.com,
-	mzerqung@0pointer.de,
-	kgold@linux.ibm.com,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 8/8] ima: Detect if digest cache changed since last measurement/appraisal
-Date: Wed, 14 Feb 2024 15:35:24 +0100
-Message-Id: <20240214143525.2205481-9-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
-References: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
+	s=arc-20240116; t=1707923451; c=relaxed/simple;
+	bh=3A1tr6ddj4x++YoCIZGrOZCWzZE1imB7GaGMVd+favc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=GqJwMJyJsM0KurWKBPuldeSi5GvjQVIj6tkksl/LBGc7Fy2ElfU5nIiQoQbxT6+HXjSXBXZh4Y/09Ym6gue38vpHc4vz1UIHLfuTQI3qGe/TUCSTNGmcteP3Pe5OY4K39F6x2NQONyJuLDq/6HdE4EmV5S6aGvJt6bMEmqMbVr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.53] (ip5f5aea4b.dynamic.kabel-deutschland.de [95.90.234.75])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7B4B461E5FE01;
+	Wed, 14 Feb 2024 16:10:34 +0100 (CET)
+Message-ID: <0eba23c7-f62a-4a85-a383-60dec9d198f9@molgen.mpg.de>
+Date: Wed, 14 Feb 2024 16:10:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: =?UTF-8?Q?init=5Ftis=28=29_takes_50_ms_on_Dell_XPS_13_9360_?=
+ =?UTF-8?Q?=E2=80=93_almost_10_=25_of_whole_time_until_initrd?=
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwDXgRrHz8xlZ55_Ag--.52204S10
-X-Coremail-Antispam: 1UD129KBjvJXoWxXry7ZF4xGF4ruFyxKFy5XFb_yoWrKr4kpa
-	9ruF1UKr48ZF43CanxAa42kF4rKrZYgFW7Gws8GwnYyFs3Xr1vvw1Fyw1UuryrGrWUZa1x
-	tw42gr4UZ3WjvaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmv14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j
-	6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x
-	IIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_
-	Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8c
-	xan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-	c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-	CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryU
-	MIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-	WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUv
-	cSsGvfC2KfnxnUUI43ZEXa7sRRtCztUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj5ZZnAABso
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+Dear Linux folks,
 
-IMA invalidates the cached verification result on file content/metadata
-update, so that the file is evaluated again at next access.
 
-While until now checking modifications on the file was sufficient to
-determine if the cached verification result is still valid, that no longer
-applies if that verification result was obtained with digest caches.
+Trying to optimize the boot time of Linux on the Dell XPS 13 9360, 
+probing of MSFT0101:00 takes 52 ms, making `init_tis()` taking almost 10 
+% alone until starting the initrd:
 
-In that case, it is also necessary to check modifications on the digest
-lists and on the security.digest_list xattr of the files for which digest
-caches are used.
+     [    0.000000] Linux version 6.8.0-rc4 
+(build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 13.2.0-13) 13.2.0, 
+GNU ld (GNU Binutils for Debian) 2.42) #20 SMP PREEMPT_DYNAMIC Mon Feb 
+12 09:40:49 CET 2024
+     […]
+     [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 
+06/02/2022
+     […]
+     [    0.320057] calling  init_tis+0x0/0x100 @ 1
+     [    0.332190] tpm_tis MSFT0101:00: 2.0 TPM (device-id 0xFE, rev-id 4)
+     [    0.372164] probe of MSFT0101:00 returned 0 after 52101 usecs
+     [    0.372186] initcall init_tis+0x0/0x100 returned 0 after 52127 usecs
+     […]
+     [    0.588643] Freeing unused decrypted memory: 2036K
+     [    0.589068] Freeing unused kernel image (initmem) memory: 3976K
+     [    0.606115] Write protecting the kernel read-only data: 22528k
+     [    0.606527] Freeing unused kernel image (rodata/data gap) 
+memory: 276K
+     [    0.652327] x86/mm: Checked W+X mappings: passed, no W+X pages 
+found.
+     [    0.652329] x86/mm: Checking user space page tables
+     [    0.695968] x86/mm: Checked W+X mappings: passed, no W+X pages 
+found.
+     [    0.696104] Run /init as init process
+     […]
 
-The digest_cache LSM offers the digest_cache_changed() function, which
-tells if a file would use a different digest cache than the one passed as
-argument. digest_cache_get() might return a different digest cache if the
-digest list was modified/deleted/renamed or the security.digest_list xattr
-was modified.
+For users, where boot time is most important, can this be moved out of 
+the hot path somehow?
 
-Hold a digest cache reference in the IMA integrity metadata, when using it
-for measurement/appraisal. At every file access, check if that reference is
-still actual by passing it to digest_cache_changed(). If not, reset the
-integrity status and do the verification again.
 
-Finally, move the digest_cache_put() call from process_measurement() to
-ima_iint_free(), unless the digest cache changed. In that case, still
-release the reference in process_measurement().
+Kind regards,
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima.h      |  1 +
- security/integrity/ima/ima_iint.c |  3 +++
- security/integrity/ima/ima_main.c | 22 ++++++++++++++++++----
- 3 files changed, 22 insertions(+), 4 deletions(-)
-
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 36faf2bc81b0..c25bde918cd5 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -192,6 +192,7 @@ struct ima_iint_cache {
- 	enum integrity_status ima_read_status:4;
- 	enum integrity_status ima_creds_status:4;
- 	struct ima_digest_data *ima_hash;
-+	struct digest_cache *digest_cache;
- };
- 
- extern struct lsm_blob_sizes ima_blob_sizes;
-diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/ima_iint.c
-index b4f476fae437..fd369809809f 100644
---- a/security/integrity/ima/ima_iint.c
-+++ b/security/integrity/ima/ima_iint.c
-@@ -68,6 +68,7 @@ static void ima_iint_init_always(struct ima_iint_cache *iint,
- 	iint->ima_read_status = INTEGRITY_UNKNOWN;
- 	iint->ima_creds_status = INTEGRITY_UNKNOWN;
- 	iint->measured_pcrs = 0;
-+	iint->digest_cache = NULL;
- 	mutex_init(&iint->mutex);
- 	ima_iint_lockdep_annotate(iint, inode, nested);
- }
-@@ -75,6 +76,8 @@ static void ima_iint_init_always(struct ima_iint_cache *iint,
- static void ima_iint_free(struct ima_iint_cache *iint)
- {
- 	kfree(iint->ima_hash);
-+	if (iint->digest_cache)
-+		digest_cache_put(iint->digest_cache);
- 	mutex_destroy(&iint->mutex);
- 	kmem_cache_free(ima_iint_cache, iint);
- }
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index a66522a22cbc..e1b2f5737753 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -301,6 +301,15 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 		}
- 	}
- 
-+	/* Check if digest cache changed since last measurement/appraisal. */
-+	if (iint->digest_cache &&
-+	    digest_cache_changed(inode, iint->digest_cache)) {
-+		iint->flags &= ~IMA_DONE_MASK;
-+		iint->measured_pcrs = 0;
-+		digest_cache_put(iint->digest_cache);
-+		iint->digest_cache = NULL;
-+	}
-+
- 	/* Determine if already appraised/measured based on bitmask
- 	 * (IMA_MEASURE, IMA_MEASURED, IMA_XXXX_APPRAISE, IMA_XXXX_APPRAISED,
- 	 *  IMA_AUDIT, IMA_AUDITED)
-@@ -371,8 +380,15 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	 * Since we allow IMA policy rules without func=, we have to enforce
- 	 * this restriction here.
- 	 */
--	if (rc == 0 && policy_mask && func != DIGEST_LIST_CHECK)
--		digest_cache = digest_cache_get(file_dentry(file));
-+	if (rc == 0 && policy_mask && func != DIGEST_LIST_CHECK) {
-+		if (!iint->digest_cache) {
-+			/* Released by ima_iint_free(). */
-+			digest_cache = digest_cache_get(file_dentry(file));
-+			iint->digest_cache = digest_cache;
-+		} else {
-+			digest_cache = iint->digest_cache;
-+		}
-+	}
- 
- 	if (digest_cache) {
- 		found = digest_cache_lookup(file_dentry(file), digest_cache,
-@@ -386,8 +402,6 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 			if (verif_mask_ptr)
- 				allow_mask = policy_mask & *verif_mask_ptr;
- 		}
--
--		digest_cache_put(digest_cache);
- 	}
- 
- 	if (action & IMA_MEASURE)
--- 
-2.34.1
-
+Paul
 
