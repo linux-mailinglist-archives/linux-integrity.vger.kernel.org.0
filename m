@@ -1,249 +1,177 @@
-Return-Path: <linux-integrity+bounces-1208-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1209-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67E5B855365
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Feb 2024 20:44:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF3B8553A6
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Feb 2024 21:08:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E762A1F21F84
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Feb 2024 19:44:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8C92290B88
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Feb 2024 20:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A33FE13B7A8;
-	Wed, 14 Feb 2024 19:44:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A29D13DB9F;
+	Wed, 14 Feb 2024 20:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dYkJOdVs"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XO4ti+F8"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3EE13B799
-	for <linux-integrity@vger.kernel.org>; Wed, 14 Feb 2024 19:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4692613A888;
+	Wed, 14 Feb 2024 20:08:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707939867; cv=none; b=BPI/+ygbVky7p8YEhVY0oTeIheOZdOdWJvBpN4WyqKpNtXVJDc3nNJfR4nYpVErthxsuf/GFgr6RU/6dY3VFmfo998QULH4OwAz6OV7/zfxCr19r7wJZlrmUhy1CQ1BMAOfZhmlKnxQVgq+nbOtVSGbQvun6TaMiWL6GYOBsvwI=
+	t=1707941289; cv=none; b=lK7rO3tuBI7LPpW2KD9dewlV0nI2AnsXyvixk5penrGsX/RpBYFAc4bu79UkwW+5PRZFrze/YmyO5bnWQnPYE3CtsBdsCOrGn10ktliBz2LNvHHo58Ouk3idDKxQtMTm9AAq504tF03BB/W7CbJ/Q+yz9ZJDIDbkuzkEbNc5Oo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707939867; c=relaxed/simple;
-	bh=/wmYHUkXbMoCDAt1Hoj5n5NVGAMFWSMFnDz/92ni/pY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LdKpX/gPauTbdmxrZ7095u8igq/+02zWlVAP9DPDBzviXo+MwX4ZqUxrziAAVGb1+9yR7Sed10cyRcXQl4eiMqdu3tlLugq1Ey+7atp+CnRnoalelkYIdegeZchNs9aTqUgfzwUOL7tY+f8eaHop/g/LxKECx3PL50ryirWDmDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dYkJOdVs; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1707941289; c=relaxed/simple;
+	bh=0c27WM48Hr69yQ4BRbSljfY+8max5aVHrUQMsvmvoT0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=rGXh9vzZ+mmwWZGkm30yg52gEsaQcN2MOdm5gRYvMIdxaKslP0BZQw507K2stJttasCJvxsGAQrGRECj1RgUwRfX+49JAoELWj51pe4/JuYCYQGglmNn9WTR/jZHmIoVCzd9zTBbuep2lySmnAl+6/sf281G10LWA2luIhM2VLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XO4ti+F8; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41EIV7v8006001;
-	Wed, 14 Feb 2024 19:43:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=wsPvTurG4HTSwxjvaNIxv/am929am9ojU0IRhQ0+g+s=;
- b=dYkJOdVsSnfEDT+axzDZsgSm7/vDcdS2HEShJKCkVOUUNye2vpxmL581E3sYvegyXtBT
- xKm3c27nGLAXcE8bB/BeoGTxt53SI9aY7pobOhMiTTDtcnqn7ptCV3oBNPIzKum687ek
- QMdY5V6i5h1c8OXsD4j2HgjKqwhOXBUH5W7gbkksDfv526hqOE4wVgoSElA+fyccgoMK
- m48lFpSspvFGqBbtVnrqnYm+H0zysxlFqolWNB2SEFDnD2YCRf4OBhiCWrVL9XNJd8w+
- WQTgAEVin9sLUhMSAQXYtfkDmqg+r+4WhytfraulHIkVbh26AavL71dNB5go+x49rRcF Sg== 
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41EJvFTF004798;
+	Wed, 14 Feb 2024 20:07:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=mXHxoZ42mf/ESBqj6s5bnVAfG0vN7uRQxTDbGz8SwAo=;
+ b=XO4ti+F8dvznCzwOMommY2wHzUPRF12PQUnYJO8wcMld4+xLiaDZrncmLdNb92rQ7TNe
+ RQ+9rYnPchBKUFw5S9Fl7I38jgR7LO6LKwUUOB0dExBhkPLH6UbwCM16YyMy4XS2iK2r
+ +0gh0WxTiNUirdOxbsuLbSFMGF0eadMRe4+BzFbNOEyWOpeZYWi0E0go6AeH/J1ElsT2
+ sExdubjt5KshLHd61G8KyAJvOgkxAqxFZJV+1qsKFpJwgPGTcHLj9XBxFxl787CNPkXw
+ AuT6Oi0YJiz5OVwSzTfJppPGbBIYD6oTQ2vUShlvwWT49EtCY3XXiM+cGR1oI6+ZznNS ug== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w944jranh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 20:07:32 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41EJvn2l007248;
+	Wed, 14 Feb 2024 20:07:32 GMT
 Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w92gxj6ar-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w944jramk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 19:43:40 +0000
+	Wed, 14 Feb 2024 20:07:31 +0000
 Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41EIQWTK004258;
-	Wed, 14 Feb 2024 19:43:39 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0g985-1
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41EIYP1m004329;
+	Wed, 14 Feb 2024 20:07:30 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0gd5r-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 19:43:39 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41EJha3I9568886
+	Wed, 14 Feb 2024 20:07:30 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41EK7RHI19005960
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Feb 2024 19:43:39 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A2E1458043;
-	Wed, 14 Feb 2024 19:43:36 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DB0EE58055;
-	Wed, 14 Feb 2024 19:43:34 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 14 Feb 2024 19:43:34 +0000 (GMT)
-Message-ID: <e5d6d47a-c9ee-47a1-aec8-aa59a5264884@linux.ibm.com>
-Date: Wed, 14 Feb 2024 14:43:34 -0500
+	Wed, 14 Feb 2024 20:07:29 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8504C5805A;
+	Wed, 14 Feb 2024 20:07:27 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EF2835805E;
+	Wed, 14 Feb 2024 20:07:25 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.101.207])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 14 Feb 2024 20:07:25 +0000 (GMT)
+Message-ID: <63afc94126521629bb7656b6e6783d6614ee898a.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 12/25] security: Introduce file_post_open hook
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>,
+        Roberto Sassu
+	 <roberto.sassu@huaweicloud.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com,
+        jlayton@kernel.org, neilb@suse.de, kolga@netapp.com,
+        Dai.Ngo@oracle.com, tom@talpey.com, jmorris@namei.org,
+        serge@hallyn.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com, shuah@kernel.org,
+        mic@digikod.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Date: Wed, 14 Feb 2024 15:07:25 -0500
+In-Reply-To: <CAHC9VhR2M_MWHs34kn-WH3Wr0sgT09WKveecy7onkFhUb1-gEg@mail.gmail.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+	 <20240115181809.885385-13-roberto.sassu@huaweicloud.com>
+	 <305cd1291a73d788c497fe8f78b574d771b8ba41.camel@linux.ibm.com>
+	 <CAHC9VhQ7DgPJtNTRCYneu_XnpRmuwfPCW+FqVuS=k6U5-F6pJw@mail.gmail.com>
+	 <05ad625b0f5a0e6c095abee5507801da255b36cd.camel@huaweicloud.com>
+	 <CAHC9VhR2M_MWHs34kn-WH3Wr0sgT09WKveecy7onkFhUb1-gEg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/8] kexec: define functions to map and unmap segments
-Content-Language: en-US
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>, zohar@linux.ibm.com,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
-        bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
-        kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
- <20240214153827.1087657-3-tusharsu@linux.microsoft.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240214153827.1087657-3-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _hKO-KHEt4yYt4r37OIENDxY_vWfkbTT
-X-Proofpoint-GUID: _hKO-KHEt4yYt4r37OIENDxY_vWfkbTT
+X-Proofpoint-ORIG-GUID: 3pmfVPR_ZkYzTv8MNJbgBILvsfAhufy_
+X-Proofpoint-GUID: pUskxnPY1Bl82nL8IEpe0UmPvkoY0NWY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-14_12,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 adultscore=0 spamscore=0 suspectscore=0 impostorscore=0
- bulkscore=0 mlxscore=0 phishscore=0 clxscore=1011 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402140154
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ spamscore=0 suspectscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402140157
 
+On Tue, 2024-02-13 at 10:33 -0500, Paul Moore wrote:
+> On Tue, Feb 13, 2024 at 7:59 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Mon, 2024-02-12 at 16:16 -0500, Paul Moore wrote:
+> > > On Mon, Feb 12, 2024 at 4:06 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > > > Hi Roberto,
+> > > > 
+> > > > 
+> > > > > diff --git a/security/security.c b/security/security.c
+> > > > > index d9d2636104db..f3d92bffd02f 100644
+> > > > > --- a/security/security.c
+> > > > > +++ b/security/security.c
+> > > > > @@ -2972,6 +2972,23 @@ int security_file_open(struct file *file)
+> > > > >       return fsnotify_perm(file, MAY_OPEN);  <===  Conflict
+> > > > 
+> > > > Replace with "return fsnotify_open_perm(file);"
+> > > > 
+> > > > >  }
+> > > > > 
+> > > > 
+> > > > The patch set doesn't apply cleaning to 6.8-rcX without this
+> > > > change.  Unless
+> > > > there are other issues, I can make the change.
+> > > 
+> > > I take it this means you want to pull this via the IMA/EVM tree?
+> > 
+> > Not sure about that, but I have enough changes to do to make a v10.
 
+@Roberto:  please add my "Reviewed-by" to the remaining patches.
 
-On 2/14/24 10:38, Tushar Sugandhi wrote:
-> Currently, the mechanism to map and unmap segments to the kimage
-> structure is not available to the subsystems outside of kexec.  This
-> functionality is needed when IMA is allocating the memory segments
-> during kexec 'load' operation.  Implement functions to map and unmap
-> segments to kimage.
 > 
-> Implement kimage_map_segment() to enable mapping of IMA buffer source
-> pages to the kimage structure post kexec 'load'.  This function,
-> accepting a kimage pointer, an address, and a size, will gather the
-> source pages within the specified address range, create an array of page
-> pointers, and map these to a contiguous virtual address range.  The
-> function returns the start of this range if successful, or NULL if
-> unsuccessful.
-> 
-> Implement kimage_unmap_segment() for unmapping segments
-> using vunmap().  Relocate 'for_each_kimage_entry()' macro from
-> kexec_core.c to kexec.h for broader accessibility.
-> 
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> ---
->   include/linux/kexec.h | 13 ++++++++++
->   kernel/kexec_core.c   | 59 +++++++++++++++++++++++++++++++++++++++----
->   2 files changed, 67 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index 400cb6c02176..3145447eb77a 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -486,6 +486,11 @@ static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages) {
->   static inline void arch_crash_handle_hotplug_event(struct kimage *image) { }
->   #endif
->   
-> +#define for_each_kimage_entry(image, ptr, entry) \
-> +	for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
-> +		ptr = (entry & IND_INDIRECTION) ? \
-> +			boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
-> +
->   int crash_check_update_elfcorehdr(void);
->   
->   #ifndef crash_hotplug_cpu_support
-> @@ -507,6 +512,10 @@ extern bool kexec_file_dbg_print;
->   	       kexec_file_dbg_print ? KERN_INFO : KERN_DEBUG,	\
->   	       ##__VA_ARGS__)
->   
-> +extern void *kimage_map_segment(struct kimage *image,
-> +				unsigned long addr, unsigned long size);
-> +extern void kimage_unmap_segment(void *buffer);
-> +
->   #else /* !CONFIG_KEXEC_CORE */
->   struct pt_regs;
->   struct task_struct;
-> @@ -514,6 +523,10 @@ static inline void __crash_kexec(struct pt_regs *regs) { }
->   static inline void crash_kexec(struct pt_regs *regs) { }
->   static inline int kexec_should_crash(struct task_struct *p) { return 0; }
->   static inline int kexec_crash_loaded(void) { return 0; }
-> +static inline void *kimage_map_segment(struct kimage *image,
-> +				       unsigned long addr, unsigned long size)
-> +{ return NULL; }
-> +static inline void kimage_unmap_segment(void *buffer) { }
->   #define kexec_in_progress false
->   #endif /* CONFIG_KEXEC_CORE */
->   
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index d08fc7b5db97..612ad8783bab 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -582,11 +582,6 @@ void kimage_terminate(struct kimage *image)
->   	*image->entry = IND_DONE;
->   }
->   
-> -#define for_each_kimage_entry(image, ptr, entry) \
-> -	for (ptr = &image->head; (entry = *ptr) && !(entry & IND_DONE); \
-> -		ptr = (entry & IND_INDIRECTION) ? \
-> -			boot_phys_to_virt((entry & PAGE_MASK)) : ptr + 1)
-> -
->   static void kimage_free_entry(kimage_entry_t entry)
->   {
->   	struct page *page;
-> @@ -909,6 +904,60 @@ int kimage_load_segment(struct kimage *image,
->   	return result;
->   }
->   
-> +void *kimage_map_segment(struct kimage *image,
-> +			 unsigned long addr, unsigned long size)
-> +{
-> +	unsigned long eaddr = addr + size;
-> +	unsigned long src_page_addr, dest_page_addr;
-> +	unsigned int npages;
-> +	struct page **src_pages;
-> +	int i;
-> +	kimage_entry_t *ptr, entry;
-> +	void *vaddr = NULL;
-> +
-> +	/*
-> +	 * Collect the source pages and map them in a contiguous VA range.
-> +	 */
-> +	npages = PFN_UP(eaddr) - PFN_DOWN(addr);
-> +	src_pages = kmalloc_array(npages, sizeof(*src_pages), GFP_KERNEL);
-> +	if (!src_pages) {
-> +		pr_err("%s: Could not allocate ima pages array.\n", __func__);
-> +		return NULL;
-> +	}
-> +
-> +	i = 0;
-> +	for_each_kimage_entry(image, ptr, entry) {
-> +		if (entry & IND_DESTINATION)
-> +			dest_page_addr = entry & PAGE_MASK;
-> +		else if (entry & IND_SOURCE) {
-> +			if (dest_page_addr >= addr && dest_page_addr < eaddr) {
-> +				src_page_addr = entry & PAGE_MASK;
-> +				src_pages[i++] =
-> +					virt_to_page(__va(src_page_addr));
-> +				if (i == npages)
-> +					break;
-> +				dest_page_addr += PAGE_SIZE;
-> +			}
-> +		}
-> +	}
-> +
-> +	/* Sanity check. */
-> +	WARN_ON(i < npages);
-> +
-> +	vaddr = vmap(src_pages, npages, VM_MAP, PAGE_KERNEL);
-> +	kfree(src_pages);
-> +
-> +	if (!vaddr)
-> +		pr_err("%s: Could not map ima buffer.\n", __func__);
-> +
-> +	return vaddr;
-> +}
-> +
-> +void kimage_unmap_segment(void *segment_buffer)
-> +{
-> +	vunmap(segment_buffer);
-> +}
-> +
->   struct kexec_load_limit {
->   	/* Mutex protects the limit count. */
->   	struct mutex mutex;
+> Sorry, I should have been more clear, the point I was trying to
+> resolve was who was going to take this patchset (eventually).  There
+> are other patches destined for the LSM tree that touch the LSM hooks
+> in a way which will cause conflicts with this patchset, and if
+> you/Mimi are going to take this via the IMA/EVM tree - which is fine
+> with me - I need to take that into account when merging things in the
+> LSM tree during this cycle.  It's not a big deal either way, it would
+> just be nice to get an answer on that within the next week.
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Similarly there are other changes for IMA and EVM.  If you're willing to create
+a topic branch for just the v10 patch set that can be merged into your tree and
+into my tree, I'm fine with your upstreaming v10. (I'll wait to send my pull
+request after yours.)  Roberto will add my Ack's to the integrity, IMA, and EVM
+related patches.  However if you're not willing to create a topic branch, I'll
+upstream the v10 patch set.
+
+thanks,
+
+Mimi
+
 
