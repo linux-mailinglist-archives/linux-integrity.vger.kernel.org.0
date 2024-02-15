@@ -1,403 +1,203 @@
-Return-Path: <linux-integrity+bounces-1238-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1240-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B3D7855C01
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 09:09:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A33B0855C3F
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 09:20:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD3991F217DB
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 08:09:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33F29286088
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 08:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5B411713;
-	Thu, 15 Feb 2024 08:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F8E1643A;
+	Thu, 15 Feb 2024 08:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nihSTvYX"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZiFcak6n"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453091118F;
-	Thu, 15 Feb 2024 08:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE2417984;
+	Thu, 15 Feb 2024 08:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707984553; cv=none; b=NwfMCiDwZG4V+nQF9zwyASylo+0dW+h+/Aa1Y4O1yfFHy8MOutvmtGOIB3UZDue/YR95TD+mX4NTtf/PDtsXFZyXQAlS3Nv6Utc4qs/hOxLZDNLq7zfeTlkj6w/89jIUUOi7IdyjL95J16MIMhGcYHW0F7hyX7PEXNL5+lsskBU=
+	t=1707985125; cv=none; b=CvXEr9K1rU3pF4Q+pPyhnmOW7ypQrWXBGkg0r4/m83VKtkJK4r13WTCv5zCAf0D+DGC3uUJJd84DyJ2gaZ6Do4ysrqd97R9wON/j7wmyhr658xGCT8gw8fUJ2U3uxdY4/TdoTsq5iOCBu8/8j1YvY2yDQO80Q+HUQ4cHnV3ofsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707984553; c=relaxed/simple;
-	bh=iBhxtYQbpLfj3dlhxKI2geTS1BtCu4ErK/UQ/65GC9k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CNB9Z9QOMYZ7CW1tVv6008hIwkn6NKUumVod5ch5HW6UWUkbxN8m0L5DgRdtWNGt0t0GX0KQnWx88V/QaMqHVLuL5r4mC2y7OLkGYB2Bx9rs6KTbMZZnvHlyOyyEt9gzssw4qpHY3oqKeSIo2eyqusw+TJinPFCwZyZc6T4LUFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nihSTvYX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6813C43141;
-	Thu, 15 Feb 2024 08:09:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707984552;
-	bh=iBhxtYQbpLfj3dlhxKI2geTS1BtCu4ErK/UQ/65GC9k=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nihSTvYX3PqYfrp/Bdhm3OFoEXqstCjlXeLvJFPhV0bn04Gh5frQzRdTQFYuObeJN
-	 FLs0y9nCyK06w+AgV8Mw2r5om9Vq1XLDrQrAdIZIawj2AYmScZD1TFkHrgcBzPQSKi
-	 whkNmIjS9L4MswGi/Np4BkbqIUWwGn1gO7AZRj9BScBxPdsKcaSeGzD6cFC+4bfT7I
-	 qpcmKEgXeLzPJswzqgZBbsDgqNXtHwfnHgz7xTMJ6X8PHyOx/dOFUwYipqeFuBm3Wf
-	 3lA/1QZNJnjx4kcNQfjAv2lOqRDj2+LF6KcFMaQn3/zAeEWdRTMt/YltHpfGmZkRRG
-	 scj1PwuNN3d8w==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-511976c126dso741250e87.1;
-        Thu, 15 Feb 2024 00:09:12 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUXno6ypJ2cFs8QFDruGUFMLrdp07P9xYV0oC89c/1RRGF0hHcm3YAcrbL6veJuf+QTxNwMLENSOD64zYsik0S1MDXIpsrc6iUIGIvIa1E6cd7qES7mwzoub1fLlMk0rsvmop3hulLmoC4ES6vzBUrOeKZzm8XsRc2wTY9NxrK5Zj3N260Jlurl4/uPmEzHYUUoXnWujPEFLMC2ue3s/P1Jcjnb
-X-Gm-Message-State: AOJu0YyKDM9adFslKy72ivRkjsW79cEEl45v/Q+9htsSrGo7AbRO3PiE
-	pu7kxLHfm6QU2KtgiNHM9GB9SdSLU9Ob1lnMZhCWuW4Ufru6u9nlhTEQO8yHOjU9Xln+hf2NcwE
-	C3/PMmxnveP8gYtluFRE2/+ye7Tg=
-X-Google-Smtp-Source: AGHT+IES5dFR/dEUVlJWfvtf3xciPB+7NHzjXGklMH5tK3nkOBEGAVCil/5i8S6vDeDjj+8Wg38DPkb9JJN4ATkctI0=
-X-Received: by 2002:a05:6512:e98:b0:511:ac21:57db with SMTP id
- bi24-20020a0565120e9800b00511ac2157dbmr936557lfb.0.1707984550864; Thu, 15 Feb
- 2024 00:09:10 -0800 (PST)
+	s=arc-20240116; t=1707985125; c=relaxed/simple;
+	bh=tQiuOODpfiSZqbi1fSHEb7a5d1KdNB1lrpcclcbPW5o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=gfSyCp9rQH1XZhtAh4cd8uginJshUZ57gYAIByEOgLmS2XnX+sjxDv+IvoeoIAZJLyGccbMSVpZGEMhrcoZgJzWBCTXz7HzdQ48C96PBGS0Ab2gtVls2F51sftj+3EtfkLtsXaUeDVlwmwaqieJFiwhEpMoGVFuUcn97LpTz1eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZiFcak6n; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41F8BcoY032007;
+	Thu, 15 Feb 2024 08:18:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=xQpf4U6thY0RmYjLTmzPv/P+MlK6sZqho4klRx7+4kg=;
+ b=ZiFcak6n4DVmF+NJkPnhQWWDMSj50pD72AfSoDtFmIEGzwGGSJciJIeUNtZXbr3I5epn
+ i+G+F5ozsRoZE12hA8rz2FndgygnuVElri6hT1lZ9yfqBElugOTWbDHRHLD/oB2cR/OZ
+ FSq2KhqKU9c93+tSH2do2g+Ro3074iav/VYcQC2bk8bzepP7OkPXeaNywF69JQ5OoEH/
+ EQDhBdPUfL7wCSjsXFenIAXe85A2BN3d252Ze259y0tgfuP4bu0YdENz5GfVl65yqQNT
+ zI0N7COFL41YtOH3gEgrcxSvMSGv4FpBAeDGU0WCPs0jXpA6lX72KpUaLuwzQCPtCCnB tA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9dnd216y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 08:18:09 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41F8ADxQ028970;
+	Thu, 15 Feb 2024 08:18:08 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9dnd215u-3
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 08:18:08 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41F7FPjv004339;
+	Thu, 15 Feb 2024 08:16:22 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0kmte-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Feb 2024 08:16:22 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41F8GJnj13173444
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Feb 2024 08:16:22 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BE6CB58059;
+	Thu, 15 Feb 2024 08:16:19 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4853558057;
+	Thu, 15 Feb 2024 08:16:18 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.77.242])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 15 Feb 2024 08:16:18 +0000 (GMT)
+Message-ID: <6ffcd054ff81d64b92b52baf097ed21f8ea4d870.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 12/25] security: Introduce file_post_open hook
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        jmorris@namei.org, serge@hallyn.com, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Date: Thu, 15 Feb 2024 03:16:17 -0500
+In-Reply-To: <CAHC9VhQGiSq2LTm7TBvCwDB_NcMe_JjORLbuHVfC4UpJQi_N4g@mail.gmail.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+	 <20240115181809.885385-13-roberto.sassu@huaweicloud.com>
+	 <305cd1291a73d788c497fe8f78b574d771b8ba41.camel@linux.ibm.com>
+	 <CAHC9VhQ7DgPJtNTRCYneu_XnpRmuwfPCW+FqVuS=k6U5-F6pJw@mail.gmail.com>
+	 <05ad625b0f5a0e6c095abee5507801da255b36cd.camel@huaweicloud.com>
+	 <CAHC9VhR2M_MWHs34kn-WH3Wr0sgT09WKveecy7onkFhUb1-gEg@mail.gmail.com>
+	 <63afc94126521629bb7656b6e6783d6614ee898a.camel@linux.ibm.com>
+	 <CAHC9VhQGiSq2LTm7TBvCwDB_NcMe_JjORLbuHVfC4UpJQi_N4g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240214221847.2066632-1-ross.philipson@oracle.com> <20240214221847.2066632-5-ross.philipson@oracle.com>
-In-Reply-To: <20240214221847.2066632-5-ross.philipson@oracle.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 15 Feb 2024 09:08:59 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGaMfUAR85jpeS2JxcmWBbpkzroCVZOtwa3WDQwStDjMw@mail.gmail.com>
-Message-ID: <CAMj1kXGaMfUAR85jpeS2JxcmWBbpkzroCVZOtwa3WDQwStDjMw@mail.gmail.com>
-Subject: Re: [PATCH v8 04/15] x86: Secure Launch Resource Table header file
-To: Ross Philipson <ross.philipson@oracle.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-efi@vger.kernel.org, dpsmith@apertussolutions.com, tglx@linutronix.de, 
-	mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, 
-	mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, 
-	jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, kanth.ghatraju@oracle.com, 
-	trenchboot-devel@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: JPiXEt9OIAZjMDJms0hUwl0uAwRfnvqC
+X-Proofpoint-GUID: tM-IWJ0kHfrSVh4SVeDZK-a2LckzZzzM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-15_08,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 adultscore=0 malwarescore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402150064
 
-On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
->
-> Introduce the Secure Launch Resource Table which forms the formal
-> interface between the pre and post launch code.
->
-> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
-> ---
->  include/linux/slr_table.h | 270 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 270 insertions(+)
->  create mode 100644 include/linux/slr_table.h
->
-> diff --git a/include/linux/slr_table.h b/include/linux/slr_table.h
-> new file mode 100644
-> index 000000000000..42020988233a
-> --- /dev/null
-> +++ b/include/linux/slr_table.h
-> @@ -0,0 +1,270 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Secure Launch Resource Table
-> + *
-> + * Copyright (c) 2023, Oracle and/or its affiliates.
-> + */
-> +
-> +#ifndef _LINUX_SLR_TABLE_H
-> +#define _LINUX_SLR_TABLE_H
-> +
-> +/* Put this in efi.h if it becomes a standard */
-> +#define SLR_TABLE_GUID                         EFI_GUID(0x877a9b2a, 0x0385, 0x45d1, 0xa0, 0x34, 0x9d, 0xac, 0x9c, 0x9e, 0x56, 0x5f)
-> +
-> +/* SLR table header values */
-> +#define SLR_TABLE_MAGIC                0x4452544d
-> +#define SLR_TABLE_REVISION     1
-> +
-> +/* Current revisions for the policy and UEFI config */
-> +#define SLR_POLICY_REVISION            1
-> +#define SLR_UEFI_CONFIG_REVISION       1
-> +
-> +/* SLR defined architectures */
-> +#define SLR_INTEL_TXT          1
-> +#define SLR_AMD_SKINIT         2
-> +
-> +/* SLR defined bootloaders */
-> +#define SLR_BOOTLOADER_INVALID 0
-> +#define SLR_BOOTLOADER_GRUB    1
-> +
-> +/* Log formats */
-> +#define SLR_DRTM_TPM12_LOG     1
-> +#define SLR_DRTM_TPM20_LOG     2
-> +
-> +/* DRTM Policy Entry Flags */
-> +#define SLR_POLICY_FLAG_MEASURED       0x1
-> +#define SLR_POLICY_IMPLICIT_SIZE       0x2
-> +
-> +/* Array Lengths */
-> +#define TPM_EVENT_INFO_LENGTH          32
-> +#define TXT_VARIABLE_MTRRS_LENGTH      32
-> +
-> +/* Tags */
-> +#define SLR_ENTRY_INVALID      0x0000
-> +#define SLR_ENTRY_DL_INFO      0x0001
-> +#define SLR_ENTRY_LOG_INFO     0x0002
-> +#define SLR_ENTRY_ENTRY_POLICY 0x0003
-> +#define SLR_ENTRY_INTEL_INFO   0x0004
-> +#define SLR_ENTRY_AMD_INFO     0x0005
-> +#define SLR_ENTRY_ARM_INFO     0x0006
-> +#define SLR_ENTRY_UEFI_INFO    0x0007
-> +#define SLR_ENTRY_UEFI_CONFIG  0x0008
-> +#define SLR_ENTRY_END          0xffff
-> +
-> +/* Entity Types */
-> +#define SLR_ET_UNSPECIFIED     0x0000
-> +#define SLR_ET_SLRT            0x0001
-> +#define SLR_ET_BOOT_PARAMS     0x0002
-> +#define SLR_ET_SETUP_DATA      0x0003
-> +#define SLR_ET_CMDLINE         0x0004
-> +#define SLR_ET_UEFI_MEMMAP     0x0005
-> +#define SLR_ET_RAMDISK         0x0006
-> +#define SLR_ET_TXT_OS2MLE      0x0010
-> +#define SLR_ET_UNUSED          0xffff
-> +
-> +#ifndef __ASSEMBLY__
-> +
-> +/*
-> + * Primary SLR Table Header
-> + */
-> +struct slr_table {
-> +       u32 magic;
-> +       u16 revision;
-> +       u16 architecture;
-> +       u32 size;
-> +       u32 max_size;
-> +       /* entries[] */
-> +} __packed;
+On Wed, 2024-02-14 at 16:21 -0500, Paul Moore wrote:
+> On Wed, Feb 14, 2024 at 3:07 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > On Tue, 2024-02-13 at 10:33 -0500, Paul Moore wrote:
+> > > On Tue, Feb 13, 2024 at 7:59 AM Roberto Sassu
+> > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > On Mon, 2024-02-12 at 16:16 -0500, Paul Moore wrote:
+> > > > > On Mon, Feb 12, 2024 at 4:06 PM Mimi Zohar <zohar@linux.ibm.com>
+> > > > > wrote:
+> > > > > > Hi Roberto,
+> > > > > > 
+> > > > > > 
+> > > > > > > diff --git a/security/security.c b/security/security.c
+> > > > > > > index d9d2636104db..f3d92bffd02f 100644
+> > > > > > > --- a/security/security.c
+> > > > > > > +++ b/security/security.c
+> > > > > > > @@ -2972,6 +2972,23 @@ int security_file_open(struct file *file)
+> > > > > > >       return fsnotify_perm(file, MAY_OPEN);  <===  Conflict
+> > > > > > 
+> > > > > > Replace with "return fsnotify_open_perm(file);"
+> > > > > > 
+> > > > > > >  }
+> > > > > > > 
+> > > > > > 
+> > > > > > The patch set doesn't apply cleaning to 6.8-rcX without this
+> > > > > > change.  Unless
+> > > > > > there are other issues, I can make the change.
+> > > > > 
+> > > > > I take it this means you want to pull this via the IMA/EVM tree?
+> > > > 
+> > > > Not sure about that, but I have enough changes to do to make a v10.
+> > 
+> > @Roberto:  please add my "Reviewed-by" to the remaining patches.
+> > 
+> > > Sorry, I should have been more clear, the point I was trying to
+> > > resolve was who was going to take this patchset (eventually).  There
+> > > are other patches destined for the LSM tree that touch the LSM hooks
+> > > in a way which will cause conflicts with this patchset, and if
+> > > you/Mimi are going to take this via the IMA/EVM tree - which is fine
+> > > with me - I need to take that into account when merging things in the
+> > > LSM tree during this cycle.  It's not a big deal either way, it would
+> > > just be nice to get an answer on that within the next week.
+> > 
+> > Similarly there are other changes for IMA and EVM.  If you're willing to
+> > create
+> > a topic branch for just the v10 patch set that can be merged into your tree
+> > and
+> > into my tree, I'm fine with your upstreaming v10. (I'll wait to send my pull
+> > request after yours.)  Roberto will add my Ack's to the integrity, IMA, and
+> > EVM
+> > related patches.  However if you're not willing to create a topic branch,
+> > I'll
+> > upstream the v10 patch set.
+> 
+> I'm not a big fan of sharing topic branches across different subsystem
+> trees, I'd much rather just agree that one tree or another takes the
+> patchset and the others plan accordingly.
 
-Packing this struct has no effect on the layout so better drop the
-__packed here. If this table is part of a structure that can appear
-misaligned in memory, better to pack the outer struct or deal with it
-there in another way.
+Just curious why not?
 
-> +
-> +/*
-> + * Common SLRT Table Header
-> + */
-> +struct slr_entry_hdr {
-> +       u16 tag;
-> +       u16 size;
-> +} __packed;
+> Based on our previous
+> discussions I was under the impression that you wanted me to merge
+> this patchset into lsm/dev, but it looks like that is no longer the
+> case - which is okay by me.
 
-Same here
+Paul, I don't recall saying that.  Please go ahead and upstream it.  Roberto can
+add my acks accordingly.
 
-> +
-> +/*
-> + * Boot loader context
-> + */
-> +struct slr_bl_context {
-> +       u16 bootloader;
-> +       u16 reserved;
-> +       u64 context;
-> +} __packed;
-> +
-> +/*
-> + * DRTM Dynamic Launch Configuration
-> + */
-> +struct slr_entry_dl_info {
-> +       struct slr_entry_hdr hdr;
-> +       struct slr_bl_context bl_context;
-> +       u64 dl_handler;
+Mimi
 
-I noticed in the EFI patch that this is actually
+> Assuming Roberto gets a v10 out soon, do you expect to merge the v10
+> patchset and send it up during the upcoming merge window (for v6.9),
+> or are you expecting to wait until after the upcoming merge window
+> closes and target v6.10?  Once again, either is fine, I'm just trying
+> to coordinate this with other patches.
 
-void (*dl_handler)(struct slr_bl_context *bl_context);
 
-so better declare it as such.
 
-> +       u64 dce_base;
-> +       u32 dce_size;
-> +       u64 dlme_entry;
-> +} __packed;
-> +
-> +/*
-> + * TPM Log Information
-> + */
-> +struct slr_entry_log_info {
-> +       struct slr_entry_hdr hdr;
-> +       u16 format;
-> +       u16 reserved;
-> +       u64 addr;
-> +       u32 size;
-> +} __packed;
-> +
-> +/*
-> + * DRTM Measurement Policy
-> + */
-> +struct slr_entry_policy {
-> +       struct slr_entry_hdr hdr;
-> +       u16 revision;
-> +       u16 nr_entries;
-> +       /* policy_entries[] */
-
-Please use a flex array here:
-
-  struct slr_policy_entry policy_entries[];
-
-> +} __packed;
-> +
-> +/*
-> + * DRTM Measurement Entry
-> + */
-> +struct slr_policy_entry {
-> +       u16 pcr;
-> +       u16 entity_type;
-> +       u16 flags;
-> +       u16 reserved;
-> +       u64 entity;
-> +       u64 size;
-> +       char evt_info[TPM_EVENT_INFO_LENGTH];
-> +} __packed;
-> +
-> +/*
-> + * Secure Launch defined MTRR saving structures
-> + */
-> +struct slr_txt_mtrr_pair {
-> +       u64 mtrr_physbase;
-> +       u64 mtrr_physmask;
-> +} __packed;
-> +
-> +struct slr_txt_mtrr_state {
-> +       u64 default_mem_type;
-> +       u64 mtrr_vcnt;
-> +       struct slr_txt_mtrr_pair mtrr_pair[TXT_VARIABLE_MTRRS_LENGTH];
-> +} __packed;
-> +
-> +/*
-> + * Intel TXT Info table
-> + */
-> +struct slr_entry_intel_info {
-> +       struct slr_entry_hdr hdr;
-> +       u64 saved_misc_enable_msr;
-> +       struct slr_txt_mtrr_state saved_bsp_mtrrs;
-> +} __packed;
-> +
-> +/*
-> + * AMD SKINIT Info table
-> + */
-> +struct slr_entry_amd_info {
-> +       struct slr_entry_hdr hdr;
-> +} __packed;
-> +
-> +/*
-> + * ARM DRTM Info table
-> + */
-> +struct slr_entry_arm_info {
-> +       struct slr_entry_hdr hdr;
-> +} __packed;
-> +
-
-These two look preliminary, so better to drop them now and introduce
-only once you know what they will look like.
-
-> +struct slr_entry_uefi_config {
-> +       struct slr_entry_hdr hdr;
-> +       u16 revision;
-> +       u16 nr_entries;
-> +       /* uefi_cfg_entries[] */
-
-Use a flex array
-
-> +} __packed;
-> +
-> +struct slr_uefi_cfg_entry {
-> +       u16 pcr;
-> +       u16 reserved;
-> +       u64 cfg; /* address or value */
-> +       u32 size;
-> +       char evt_info[TPM_EVENT_INFO_LENGTH];
-> +} __packed;
-> +
-> +static inline void *slr_end_of_entrys(struct slr_table *table)
-
-typo 'entrys' ?
-
-> +{
-> +       return (((void *)table) + table->size);
-
-You can drop two sets of parens here
-
-> +}
-> +
-> +static inline struct slr_entry_hdr *
-> +slr_next_entry(struct slr_table *table,
-> +              struct slr_entry_hdr *curr)
-> +{
-> +       struct slr_entry_hdr *next = (struct slr_entry_hdr *)
-> +                               ((u8 *)curr + curr->size);
-> +
-> +       if ((void *)next >= slr_end_of_entrys(table))
-> +               return NULL;
-> +       if (next->tag == SLR_ENTRY_END)
-> +               return NULL;
-> +
-> +       return next;
-> +}
-> +
-> +static inline struct slr_entry_hdr *
-> +slr_next_entry_by_tag(struct slr_table *table,
-> +                     struct slr_entry_hdr *entry,
-> +                     u16 tag)
-> +{
-> +       if (!entry) /* Start from the beginning */
-> +               entry = (struct slr_entry_hdr *)(((u8 *)table) + sizeof(*table));
-> +
-> +       for ( ; ; ) {
-> +               if (entry->tag == tag)
-> +                       return entry;
-> +
-> +               entry = slr_next_entry(table, entry);
-> +               if (!entry)
-> +                       return NULL;
-> +       }
-> +
-> +       return NULL;
-> +}
-> +
-> +static inline int
-> +slr_add_entry(struct slr_table *table,
-> +             struct slr_entry_hdr *entry)
-> +{
-> +       struct slr_entry_hdr *end;
-> +
-> +       if ((table->size + entry->size) > table->max_size)
-> +               return -1;
-> +
-> +       memcpy((u8 *)table + table->size - sizeof(*end), entry, entry->size);
-> +       table->size += entry->size;
-> +
-> +       end  = (struct slr_entry_hdr *)((u8 *)table + table->size - sizeof(*end));
-> +       end->tag = SLR_ENTRY_END;
-> +       end->size = sizeof(*end);
-> +
-> +       return 0;
-> +}
-> +
-> +static inline void
-> +slr_init_table(struct slr_table *slrt, u16 architecture, u32 max_size)
-> +{
-> +       struct slr_entry_hdr *end;
-> +
-> +       slrt->magic = SLR_TABLE_MAGIC;
-> +       slrt->revision = SLR_TABLE_REVISION;
-> +       slrt->architecture = architecture;
-> +       slrt->size = sizeof(*slrt) + sizeof(*end);
-> +       slrt->max_size = max_size;
-> +       end = (struct slr_entry_hdr *)((u8 *)slrt + sizeof(*slrt));
-> +       end->tag = SLR_ENTRY_END;
-> +       end->size = sizeof(*end);
-> +}
-> +
-> +#endif /* !__ASSEMBLY */
-> +
-> +#endif /* _LINUX_SLR_TABLE_H */
-> --
-> 2.39.3
->
 
