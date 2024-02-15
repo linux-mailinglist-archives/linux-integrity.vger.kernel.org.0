@@ -1,203 +1,278 @@
-Return-Path: <linux-integrity+bounces-1240-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1239-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A33B0855C3F
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 09:20:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2D14855C2C
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 09:17:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33F29286088
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 08:20:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07C8B1F23086
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 08:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F8E1643A;
-	Thu, 15 Feb 2024 08:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93B7F125AB;
+	Thu, 15 Feb 2024 08:17:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZiFcak6n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pp4bxTs6"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE2417984;
-	Thu, 15 Feb 2024 08:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5761BBA37;
+	Thu, 15 Feb 2024 08:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707985125; cv=none; b=CvXEr9K1rU3pF4Q+pPyhnmOW7ypQrWXBGkg0r4/m83VKtkJK4r13WTCv5zCAf0D+DGC3uUJJd84DyJ2gaZ6Do4ysrqd97R9wON/j7wmyhr658xGCT8gw8fUJ2U3uxdY4/TdoTsq5iOCBu8/8j1YvY2yDQO80Q+HUQ4cHnV3ofsA=
+	t=1707985050; cv=none; b=EhTyMeAb1uhqTGuGh3p0WkR/D2plUGrqjXAIwEC3IlZuFlvNG0qid/3HGaZ8D5YqTPSW5wct+2Wp9/pysdtqkwJPbuE+XTEZmqnD8+HgQdm1/OozmuT50tdAnMuxIFJ6Q3TOGg9ozhpCEf7vxIQRoA/PQ0OIpK6w0s2AI8S5MWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707985125; c=relaxed/simple;
-	bh=tQiuOODpfiSZqbi1fSHEb7a5d1KdNB1lrpcclcbPW5o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=gfSyCp9rQH1XZhtAh4cd8uginJshUZ57gYAIByEOgLmS2XnX+sjxDv+IvoeoIAZJLyGccbMSVpZGEMhrcoZgJzWBCTXz7HzdQ48C96PBGS0Ab2gtVls2F51sftj+3EtfkLtsXaUeDVlwmwaqieJFiwhEpMoGVFuUcn97LpTz1eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZiFcak6n; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41F8BcoY032007;
-	Thu, 15 Feb 2024 08:18:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=xQpf4U6thY0RmYjLTmzPv/P+MlK6sZqho4klRx7+4kg=;
- b=ZiFcak6n4DVmF+NJkPnhQWWDMSj50pD72AfSoDtFmIEGzwGGSJciJIeUNtZXbr3I5epn
- i+G+F5ozsRoZE12hA8rz2FndgygnuVElri6hT1lZ9yfqBElugOTWbDHRHLD/oB2cR/OZ
- FSq2KhqKU9c93+tSH2do2g+Ro3074iav/VYcQC2bk8bzepP7OkPXeaNywF69JQ5OoEH/
- EQDhBdPUfL7wCSjsXFenIAXe85A2BN3d252Ze259y0tgfuP4bu0YdENz5GfVl65yqQNT
- zI0N7COFL41YtOH3gEgrcxSvMSGv4FpBAeDGU0WCPs0jXpA6lX72KpUaLuwzQCPtCCnB tA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9dnd216y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 08:18:09 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41F8ADxQ028970;
-	Thu, 15 Feb 2024 08:18:08 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9dnd215u-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 08:18:08 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41F7FPjv004339;
-	Thu, 15 Feb 2024 08:16:22 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0kmte-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 08:16:22 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41F8GJnj13173444
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 08:16:22 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BE6CB58059;
-	Thu, 15 Feb 2024 08:16:19 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4853558057;
-	Thu, 15 Feb 2024 08:16:18 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.77.242])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 15 Feb 2024 08:16:18 +0000 (GMT)
-Message-ID: <6ffcd054ff81d64b92b52baf097ed21f8ea4d870.camel@linux.ibm.com>
-Subject: Re: [PATCH v9 12/25] security: Introduce file_post_open hook
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
-        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-        jmorris@namei.org, serge@hallyn.com, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Roberto Sassu
- <roberto.sassu@huawei.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date: Thu, 15 Feb 2024 03:16:17 -0500
-In-Reply-To: <CAHC9VhQGiSq2LTm7TBvCwDB_NcMe_JjORLbuHVfC4UpJQi_N4g@mail.gmail.com>
-References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
-	 <20240115181809.885385-13-roberto.sassu@huaweicloud.com>
-	 <305cd1291a73d788c497fe8f78b574d771b8ba41.camel@linux.ibm.com>
-	 <CAHC9VhQ7DgPJtNTRCYneu_XnpRmuwfPCW+FqVuS=k6U5-F6pJw@mail.gmail.com>
-	 <05ad625b0f5a0e6c095abee5507801da255b36cd.camel@huaweicloud.com>
-	 <CAHC9VhR2M_MWHs34kn-WH3Wr0sgT09WKveecy7onkFhUb1-gEg@mail.gmail.com>
-	 <63afc94126521629bb7656b6e6783d6614ee898a.camel@linux.ibm.com>
-	 <CAHC9VhQGiSq2LTm7TBvCwDB_NcMe_JjORLbuHVfC4UpJQi_N4g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	s=arc-20240116; t=1707985050; c=relaxed/simple;
+	bh=+P7NF3eRBh0FZLxyVDfg36fNj8Y+3yMND3DUl1RSHA8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Pw813ssv7SIJMKoA5m4vbN06UaSdsL5MUCN3P7YP0r/z4bF6PaIiuXOw8Z5jmQAeXs0lvCfgzfX6/4k3+WuKSMrWbvRZ54fwwxmWNobsFUaMQlAI+iov2JK3IjeJzFKYwpXpMtwJmKIV5GQDPM0ey0vruruGGkXRkAKDMQRZxgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pp4bxTs6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAFCCC43601;
+	Thu, 15 Feb 2024 08:17:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707985049;
+	bh=+P7NF3eRBh0FZLxyVDfg36fNj8Y+3yMND3DUl1RSHA8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=pp4bxTs6cC7B/IK2Rd9oqNCXU7OmQGOa7A0+1pVKylChCJCpNJjB/uYO2k+Izg4Hx
+	 MTV+DpCcYgnEacvbskWvbEDroLKH2YAGmIs/7kpnvz+om1Fhg76hiTdT4j36fI204Q
+	 kYOn2JK6l4ceyrs10pU22Bb9NYT0qN1M64CuB08JYb1/ENiV2a7f//1j6aJDWBCpZK
+	 azejBHYv5COlp4ydA0PPm0iXb0Cl9bi1B5U80940/B7vFC/CjF7e6xTJwbfpQGL6t9
+	 qwf/757MkLkTbJ6fx9LfIBUS/TnWFC7tI1ri1/3Irz3JNGovvA6ZED0dU0FeJj6vKZ
+	 wOFmKLTDisT1A==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5112bd13a4fso1749443e87.0;
+        Thu, 15 Feb 2024 00:17:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU44Y+FewHEYeoHDI0jpKffVn7E8A0YVxXn2Vk+7/w5Wg+s+WF4hqpEkcMlGDPEOGsWsy9KBueyod9iDZLOiSumXnzAomFflBWIwALcggfGQhwoKUcXfTJd5PZufdtdZsD5NQmZ2JvHJUMRI0f7xPsyjb1RZzArQB3KInKhk+zJdbJKBU11ovdi/KDrKJanQi4+03j6hjli+p/WYOa5SlsCuVJT
+X-Gm-Message-State: AOJu0YygaXe1GoWWoS6Dqb69+XrlXjLHWpf/MKw1pUAI/Qy9tJ/8z30y
+	Ie6xkPUx6lzYezsT0wyK7qlBSAY8QO2WD43nD+Br6sCQxy3YelqSAjFVhDoieEoLzah3fNCetu9
+	VYhi1N2zreJB3w6egE8X1QlNQzbY=
+X-Google-Smtp-Source: AGHT+IFaJnFdkQY2OwbLLwiamOuZj8op08dvguEH8JXfmdLHQiJ2OW0H1ADrevkksnugXgljUbU9OZ6MaGg3BfNvJ+s=
+X-Received: by 2002:ac2:41c8:0:b0:511:463c:32c1 with SMTP id
+ d8-20020ac241c8000000b00511463c32c1mr1514354lfi.19.1707985047858; Thu, 15 Feb
+ 2024 00:17:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JPiXEt9OIAZjMDJms0hUwl0uAwRfnvqC
-X-Proofpoint-GUID: tM-IWJ0kHfrSVh4SVeDZK-a2LckzZzzM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-15_08,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 adultscore=0 malwarescore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402150064
+MIME-Version: 1.0
+References: <20240214221847.2066632-1-ross.philipson@oracle.com> <20240214221847.2066632-7-ross.philipson@oracle.com>
+In-Reply-To: <20240214221847.2066632-7-ross.philipson@oracle.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 15 Feb 2024 09:17:16 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEmMBY_jc0uM5UgZbuZ3-C7NPKzg5AScaunyu9XzLgzZA@mail.gmail.com>
+Message-ID: <CAMj1kXEmMBY_jc0uM5UgZbuZ3-C7NPKzg5AScaunyu9XzLgzZA@mail.gmail.com>
+Subject: Re: [PATCH v8 06/15] x86: Add early SHA support for Secure Launch
+ early measurements
+To: Ross Philipson <ross.philipson@oracle.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, 
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-efi@vger.kernel.org, dpsmith@apertussolutions.com, tglx@linutronix.de, 
+	mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, 
+	mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, 
+	jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, kanth.ghatraju@oracle.com, 
+	trenchboot-devel@googlegroups.com, Eric Biggers <ebiggers@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2024-02-14 at 16:21 -0500, Paul Moore wrote:
-> On Wed, Feb 14, 2024 at 3:07 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > On Tue, 2024-02-13 at 10:33 -0500, Paul Moore wrote:
-> > > On Tue, Feb 13, 2024 at 7:59 AM Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > > On Mon, 2024-02-12 at 16:16 -0500, Paul Moore wrote:
-> > > > > On Mon, Feb 12, 2024 at 4:06 PM Mimi Zohar <zohar@linux.ibm.com>
-> > > > > wrote:
-> > > > > > Hi Roberto,
-> > > > > > 
-> > > > > > 
-> > > > > > > diff --git a/security/security.c b/security/security.c
-> > > > > > > index d9d2636104db..f3d92bffd02f 100644
-> > > > > > > --- a/security/security.c
-> > > > > > > +++ b/security/security.c
-> > > > > > > @@ -2972,6 +2972,23 @@ int security_file_open(struct file *file)
-> > > > > > >       return fsnotify_perm(file, MAY_OPEN);  <===  Conflict
-> > > > > > 
-> > > > > > Replace with "return fsnotify_open_perm(file);"
-> > > > > > 
-> > > > > > >  }
-> > > > > > > 
-> > > > > > 
-> > > > > > The patch set doesn't apply cleaning to 6.8-rcX without this
-> > > > > > change.  Unless
-> > > > > > there are other issues, I can make the change.
-> > > > > 
-> > > > > I take it this means you want to pull this via the IMA/EVM tree?
-> > > > 
-> > > > Not sure about that, but I have enough changes to do to make a v10.
-> > 
-> > @Roberto:  please add my "Reviewed-by" to the remaining patches.
-> > 
-> > > Sorry, I should have been more clear, the point I was trying to
-> > > resolve was who was going to take this patchset (eventually).  There
-> > > are other patches destined for the LSM tree that touch the LSM hooks
-> > > in a way which will cause conflicts with this patchset, and if
-> > > you/Mimi are going to take this via the IMA/EVM tree - which is fine
-> > > with me - I need to take that into account when merging things in the
-> > > LSM tree during this cycle.  It's not a big deal either way, it would
-> > > just be nice to get an answer on that within the next week.
-> > 
-> > Similarly there are other changes for IMA and EVM.  If you're willing to
-> > create
-> > a topic branch for just the v10 patch set that can be merged into your tree
-> > and
-> > into my tree, I'm fine with your upstreaming v10. (I'll wait to send my pull
-> > request after yours.)  Roberto will add my Ack's to the integrity, IMA, and
-> > EVM
-> > related patches.  However if you're not willing to create a topic branch,
-> > I'll
-> > upstream the v10 patch set.
-> 
-> I'm not a big fan of sharing topic branches across different subsystem
-> trees, I'd much rather just agree that one tree or another takes the
-> patchset and the others plan accordingly.
+On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
+>
+> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+>
+> The SHA algorithms are necessary to measure configuration information into
+> the TPM as early as possible before using the values. This implementation
+> uses the established approach of #including the SHA libraries directly in
+> the code since the compressed kernel is not uncompressed at this point.
+>
+> The SHA code here has its origins in the code from the main kernel:
+>
+> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
+>
+> A modified version of this code was introduced to the lib/crypto/sha1.c
+> to bring it in line with the sha256 code and allow it to be pulled into the
+> setup kernel in the same manner as sha256 is.
+>
+> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 
-Just curious why not?
+We have had some discussions about this, and you really need to
+capture the justification in the commit log for introducing new code
+that implements an obsolete and broken hashing algorithm.
 
-> Based on our previous
-> discussions I was under the impression that you wanted me to merge
-> this patchset into lsm/dev, but it looks like that is no longer the
-> case - which is okay by me.
+SHA-1 is broken and should no longer be used for anything. Introducing
+new support for a highly complex boot security feature, and then
+relying on SHA-1 in the implementation makes this whole effort seem
+almost futile, *unless* you provide some rock solid reasons here why
+this is still safe.
 
-Paul, I don't recall saying that.  Please go ahead and upstream it.  Roberto can
-add my acks accordingly.
+If the upshot would be that some people are stuck with SHA-1 so they
+won't be able to use this feature, then I'm not convinced we should
+obsess over that.
 
-Mimi
-
-> Assuming Roberto gets a v10 out soon, do you expect to merge the v10
-> patchset and send it up during the upcoming merge window (for v6.9),
-> or are you expecting to wait until after the upcoming merge window
-> closes and target v6.10?  Once again, either is fine, I'm just trying
-> to coordinate this with other patches.
+> ---
+>  arch/x86/boot/compressed/Makefile       |  2 +
+>  arch/x86/boot/compressed/early_sha1.c   | 12 ++++
+>  arch/x86/boot/compressed/early_sha256.c |  6 ++
 
 
 
+>  include/crypto/sha1.h                   |  1 +
+>  lib/crypto/sha1.c                       | 81 +++++++++++++++++++++++++
+
+This needs to be a separate patch in any case.
+
+
+>  5 files changed, 102 insertions(+)
+>  create mode 100644 arch/x86/boot/compressed/early_sha1.c
+>  create mode 100644 arch/x86/boot/compressed/early_sha256.c
+>
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index f19c038409aa..a1b018eb9801 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -118,6 +118,8 @@ vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
+>  vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_mixed.o
+>  vmlinux-objs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+>
+> +vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/early_sha1.o $(obj)/early_sha256.o
+> +
+>  $(obj)/vmlinux: $(vmlinux-objs-y) FORCE
+>         $(call if_changed,ld)
+>
+> diff --git a/arch/x86/boot/compressed/early_sha1.c b/arch/x86/boot/compressed/early_sha1.c
+> new file mode 100644
+> index 000000000000..0c7cf6f8157a
+> --- /dev/null
+> +++ b/arch/x86/boot/compressed/early_sha1.c
+> @@ -0,0 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 Apertus Solutions, LLC.
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/linkage.h>
+> +#include <linux/string.h>
+> +#include <asm/boot.h>
+> +#include <asm/unaligned.h>
+> +
+> +#include "../../../../lib/crypto/sha1.c"
+> diff --git a/arch/x86/boot/compressed/early_sha256.c b/arch/x86/boot/compressed/early_sha256.c
+> new file mode 100644
+> index 000000000000..54930166ffee
+> --- /dev/null
+> +++ b/arch/x86/boot/compressed/early_sha256.c
+> @@ -0,0 +1,6 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 Apertus Solutions, LLC
+> + */
+> +
+> +#include "../../../../lib/crypto/sha256.c"
+> diff --git a/include/crypto/sha1.h b/include/crypto/sha1.h
+> index 044ecea60ac8..d715dd5332e1 100644
+> --- a/include/crypto/sha1.h
+> +++ b/include/crypto/sha1.h
+> @@ -42,5 +42,6 @@ extern int crypto_sha1_finup(struct shash_desc *desc, const u8 *data,
+>  #define SHA1_WORKSPACE_WORDS   16
+>  void sha1_init(__u32 *buf);
+>  void sha1_transform(__u32 *digest, const char *data, __u32 *W);
+> +void sha1(const u8 *data, unsigned int len, u8 *out);
+>
+>  #endif /* _CRYPTO_SHA1_H */
+> diff --git a/lib/crypto/sha1.c b/lib/crypto/sha1.c
+> index 1aebe7be9401..10152125b338 100644
+> --- a/lib/crypto/sha1.c
+> +++ b/lib/crypto/sha1.c
+> @@ -137,4 +137,85 @@ void sha1_init(__u32 *buf)
+>  }
+>  EXPORT_SYMBOL(sha1_init);
+>
+> +static void __sha1_transform(u32 *digest, const char *data)
+> +{
+> +       u32 ws[SHA1_WORKSPACE_WORDS];
+> +
+> +       sha1_transform(digest, data, ws);
+> +
+> +       memzero_explicit(ws, sizeof(ws));
+> +}
+> +
+> +static void sha1_update(struct sha1_state *sctx, const u8 *data, unsigned int len)
+> +{
+> +       unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
+> +
+> +       sctx->count += len;
+> +
+> +       if (likely((partial + len) >= SHA1_BLOCK_SIZE)) {
+> +               int blocks;
+> +
+> +               if (partial) {
+> +                       int p = SHA1_BLOCK_SIZE - partial;
+> +
+> +                       memcpy(sctx->buffer + partial, data, p);
+> +                       data += p;
+> +                       len -= p;
+> +
+> +                       __sha1_transform(sctx->state, sctx->buffer);
+> +               }
+> +
+> +               blocks = len / SHA1_BLOCK_SIZE;
+> +               len %= SHA1_BLOCK_SIZE;
+> +
+> +               if (blocks) {
+> +                       while (blocks--) {
+> +                               __sha1_transform(sctx->state, data);
+> +                               data += SHA1_BLOCK_SIZE;
+> +                       }
+> +               }
+> +               partial = 0;
+> +       }
+> +
+> +       if (len)
+> +               memcpy(sctx->buffer + partial, data, len);
+> +}
+> +
+> +static void sha1_final(struct sha1_state *sctx, u8 *out)
+> +{
+> +       const int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
+> +       unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
+> +       __be64 *bits = (__be64 *)(sctx->buffer + bit_offset);
+> +       __be32 *digest = (__be32 *)out;
+> +       int i;
+> +
+> +       sctx->buffer[partial++] = 0x80;
+> +       if (partial > bit_offset) {
+> +               memset(sctx->buffer + partial, 0x0, SHA1_BLOCK_SIZE - partial);
+> +               partial = 0;
+> +
+> +               __sha1_transform(sctx->state, sctx->buffer);
+> +       }
+> +
+> +       memset(sctx->buffer + partial, 0x0, bit_offset - partial);
+> +       *bits = cpu_to_be64(sctx->count << 3);
+> +       __sha1_transform(sctx->state, sctx->buffer);
+> +
+> +       for (i = 0; i < SHA1_DIGEST_SIZE / sizeof(__be32); i++)
+> +               put_unaligned_be32(sctx->state[i], digest++);
+> +
+> +       *sctx = (struct sha1_state){};
+> +}
+> +
+> +void sha1(const u8 *data, unsigned int len, u8 *out)
+> +{
+> +       struct sha1_state sctx = {0};
+> +
+> +       sha1_init(sctx.state);
+> +       sctx.count = 0;
+> +       sha1_update(&sctx, data, len);
+> +       sha1_final(&sctx, out);
+> +}
+> +EXPORT_SYMBOL(sha1);
+> +
+>  MODULE_LICENSE("GPL");
+> --
+> 2.39.3
+>
 
