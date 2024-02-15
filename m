@@ -1,260 +1,197 @@
-Return-Path: <linux-integrity+bounces-1243-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1244-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 736B1855D58
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 10:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DD53855E1E
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 10:30:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8F921F2267F
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 09:05:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7274E1F20FD0
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 09:30:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C71691B800;
-	Thu, 15 Feb 2024 09:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d03AaO80"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34547175B7;
+	Thu, 15 Feb 2024 09:30:19 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92514199AB;
-	Thu, 15 Feb 2024 09:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6951755E;
+	Thu, 15 Feb 2024 09:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707987677; cv=none; b=GpRJUAaereD2G1q58uWKJhBPEPTddceIvTFQkXsyKU4Q+VnHk8bnR199Y1QSW7haX5YOeBxGhqunQaHp1XfBsQmgcHidNmPTzJsKw4hV3QsTfAxKZIG2XlM8sJH05jY4cGTLwezUwvQCgDPpoB32yFsmc6JMccWsNh4MIAWB3i8=
+	t=1707989419; cv=none; b=C71ZOkP/GuMLST6U06Kf2MYGpbx2BfJTbMPfswHf3GyeIjFxSmH68e//Y+7m3fMAeE0jhtCp9TvFeJNhKtJIWScrP4/bdtOfzV93h3m2QiaDfr5wK5PrKxhsVigI8wkGJ3/FxJtvxUfSCsr8zaqJ/5UgfPi29VNCWvVwHiu0CUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707987677; c=relaxed/simple;
-	bh=SiUIHayVYcHe9bkFxdrXvjU/ru0D8DtTz59xRaJtJBY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YcVVy5ZILHgSmqPUVkqvkC/iYxDaMWDu0xfiAvLW3r4aEoQYd0l2npd5v39LGoqlnCUs7LEqwi2CEgw3h/2gAE6Uv8HroLxFg2zzgH2ihtsTO8Kq4VrrnFh0FPifpmH3h9m3Kst4rGbQaCGqS2Cus56HMFliE6VJCLTB6U0sWRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d03AaO80; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D62AC43390;
-	Thu, 15 Feb 2024 09:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707987677;
-	bh=SiUIHayVYcHe9bkFxdrXvjU/ru0D8DtTz59xRaJtJBY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=d03AaO80PMznAQ1ygGgl4bP0JD/qWg8lwUAYD+Cd0KOAbgw27sPii/DOLCtE9wDv7
-	 kgjhC5bdEAdt+IPU9T9VwDKHOmfzmcl/NVCU5ed4BO78QZjSy9MOH3YX6y49OcHyT0
-	 nqkOvzjulchPTBi1+5V9FTsIiarwJANjG+ZTThceD2MUbOALEivnzP6D57dXeKgzLM
-	 VWgtPxQ13aFGJmFZYynLjEZ/zZcdFnFTNe+L4X1YXFlHVSm9v/RLHNr5SVYYaUrbAJ
-	 3e4+THnFEVAhZ+kaFSSbZETU2qEWz2cPDi0kWcg3Wrqd7ZAOO/3iGWcgUZK+i6bCs8
-	 POayKDFk0TKow==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-51182ece518so715354e87.3;
-        Thu, 15 Feb 2024 01:01:16 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWP7CX7KVF10AhNKyV+NjbqXfw3cHQMgUjpOGEejdFNOTRdFHEyo4LA2rkbOdgVMoB+eY4PJsfmbGfi5aRrNDTpLSB65yiMQPl08qKZCnakrZ06jAxVyeGMqOUZJ0XoHZROriWMUr6fLDfhcZ0dKO10Inu1LAflxtQkdLgCNcXy1YeyfJyXt5xISJx1RxJcXn+Hx9jRT1RX4e16L79ophtu8A3n
-X-Gm-Message-State: AOJu0YwSXx2fa5GdVOS9r9CSfaaF5jt42OxzXcXTueJgZ71ViTR8xcbc
-	pCXqMNppsSMiUF6E7B6seYQUxFqjwzBXEnS+c7YNwKrUnkTHMLSabZ2rm3OHtGYU1rjGMKy+06n
-	nnqFmli6g5EpNmr7bahnLQTdbt+U=
-X-Google-Smtp-Source: AGHT+IESsSC82ZPO7zHm75aViouaK3gACXPSL8wbxHFLyvmlDJHekLM2uaQ5vnuSYH17EGhdPcRUbgpXLJsKGUFiH2M=
-X-Received: by 2002:ac2:4946:0:b0:511:6ec9:d380 with SMTP id
- o6-20020ac24946000000b005116ec9d380mr904187lfi.30.1707987675245; Thu, 15 Feb
- 2024 01:01:15 -0800 (PST)
+	s=arc-20240116; t=1707989419; c=relaxed/simple;
+	bh=Ik1XoRnguygiVaidD4Z1D3ctYb5//n0o9fEn7++ICzI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=utx8hq4QG7oQV7fNWSaT/ZWmBkYSyY6RrxsntwoHQqK13q2uOyA+v8jznLHCJF9re7JhI9Bjysk8x5+aYwaotMZb4xG/8Un4dcdDBwh9lKdC9Osi2jo7vN5Mhr6mlJlWmb8yqyHiXkS9dpri5QOTYOGRRmNJ1sv7VVq4iyXKEng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Tb8XZ6KKxz9y4yW;
+	Thu, 15 Feb 2024 17:14:54 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id E5DA41408C5;
+	Thu, 15 Feb 2024 17:30:11 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwDnICWT2c1lIr+GAg--.1387S2;
+	Thu, 15 Feb 2024 10:30:11 +0100 (CET)
+Message-ID: <fefdfdf75163992ecba6292cfd6ad0e8321ee74a.camel@huaweicloud.com>
+Subject: Re: [PATCH v9 19/25] integrity: Move
+ integrity_kernel_module_request() to IMA
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, chuck.lever@oracle.com, 
+	jlayton@kernel.org, neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, 
+	tom@talpey.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, dhowells@redhat.com, 
+	jarkko@kernel.org, stephen.smalley.work@gmail.com, eparis@parisplace.org, 
+	casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, Roberto Sassu
+	 <roberto.sassu@huawei.com>
+Date: Thu, 15 Feb 2024 10:29:52 +0100
+In-Reply-To: <1d8f8990-43e2-4afc-835e-629c7328d497@linux.ibm.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+	 <20240115181809.885385-20-roberto.sassu@huaweicloud.com>
+	 <fd6ddc3d-e5d3-4b9c-b00b-ac2b1f22d653@linux.ibm.com>
+	 <CAHC9VhTY=X7z5SRQZzFe25FGB2E3FBBkuZ_YYA1+ETyr7pv=tA@mail.gmail.com>
+	 <7940b9d0-3133-4b08-b397-ad9ee34e3b34@linux.ibm.com>
+	 <b95967cd1aa2a4e751a8be3d23f72b7e1db0e4b6.camel@huaweicloud.com>
+	 <1d8f8990-43e2-4afc-835e-629c7328d497@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240214221847.2066632-1-ross.philipson@oracle.com> <20240214221847.2066632-16-ross.philipson@oracle.com>
-In-Reply-To: <20240214221847.2066632-16-ross.philipson@oracle.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 15 Feb 2024 10:01:03 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF3k_c4Wn9GU+NC_+_aYfDpAzAUnfR=A4L_T+re1H3G=w@mail.gmail.com>
-Message-ID: <CAMj1kXF3k_c4Wn9GU+NC_+_aYfDpAzAUnfR=A4L_T+re1H3G=w@mail.gmail.com>
-Subject: Re: [PATCH v8 15/15] x86: EFI stub DRTM launch support for Secure Launch
-To: Ross Philipson <ross.philipson@oracle.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-efi@vger.kernel.org, dpsmith@apertussolutions.com, tglx@linutronix.de, 
-	mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, 
-	mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, 
-	jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, kanth.ghatraju@oracle.com, 
-	trenchboot-devel@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-CM-TRANSID:GxC2BwDnICWT2c1lIr+GAg--.1387S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur4xJFyfZw1ftw4UZw1xAFb_yoWrGr1kpF
+	W8ta95CFWUXrn8C3W8tw1xurW3K3yxGrsrWrn8JryfCrn09rnFvr42yF43uFyfCr48Jr10
+	gws7t34Iv3s8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBF1jj5Ze2QAAso
 
-On Wed, 14 Feb 2024 at 23:32, Ross Philipson <ross.philipson@oracle.com> wrote:
->
-> This support allows the DRTM launch to be initiated after an EFI stub
-> launch of the Linux kernel is done. This is accomplished by providing
-> a handler to jump to when a Secure Launch is in progress. This has to be
-> called after the EFI stub does Exit Boot Services.
->
-> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
-> ---
->  drivers/firmware/efi/libstub/x86-stub.c | 55 +++++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 0d510c9a06a4..4df2cf539194 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -9,6 +9,7 @@
->  #include <linux/efi.h>
->  #include <linux/pci.h>
->  #include <linux/stddef.h>
-> +#include <linux/slr_table.h>
->
->  #include <asm/efi.h>
->  #include <asm/e820/types.h>
-> @@ -810,6 +811,57 @@ static efi_status_t efi_decompress_kernel(unsigned long *kernel_entry)
->         return EFI_SUCCESS;
->  }
->
-> +static void efi_secure_launch(struct boot_params *boot_params)
-> +{
-> +       struct slr_entry_uefi_config *uefi_config;
-> +       struct slr_uefi_cfg_entry *uefi_entry;
-> +       struct slr_entry_dl_info *dlinfo;
-> +       efi_guid_t guid = SLR_TABLE_GUID;
-> +       struct slr_table *slrt;
-> +       u64 memmap_hi;
-> +       void *table;
-> +       u8 buf[64] = {0};
-> +
+On Tue, 2024-02-13 at 11:31 -0500, Stefan Berger wrote:
+>=20
+> On 2/13/24 03:57, Roberto Sassu wrote:
+> > On Mon, 2024-02-12 at 15:28 -0500, Stefan Berger wrote:
+> > >=20
+> > > On 2/12/24 12:56, Paul Moore wrote:
+> > > > On Mon, Feb 12, 2024 at 12:48=E2=80=AFPM Stefan Berger <stefanb@lin=
+ux.ibm.com> wrote:
+> > > > > On 1/15/24 13:18, Roberto Sassu wrote:
+> > > >=20
+> > > > ...
+> > > >=20
+> > > > > > +/**
+> > > > > > + * ima_kernel_module_request - Prevent crypto-pkcs1pad(rsa,*) =
+requests
+> > > > > > + * @kmod_name: kernel module name
+> > > > > > + *
+> > > > > > + * We have situation, when public_key_verify_signature() in ca=
+se of RSA > + * algorithm use alg_name to store internal information in ord=
+er to
+> > > > > > + * construct an algorithm on the fly, but crypto_larval_lookup=
+() will try
+> > > > > > + * to use alg_name in order to load kernel module with same na=
+me.
+> > > > > > + * Since we don't have any real "crypto-pkcs1pad(rsa,*)" kerne=
+l modules,
+> > > > > > + * we are safe to fail such module request from crypto_larval_=
+lookup().
+> > > > > > + *
+> > > > > > + * In this way we prevent modprobe execution during digsig ver=
+ification
+> > > > > > + * and avoid possible deadlock if modprobe and/or it's depende=
+ncies
+> > > > > > + * also signed with digsig.
+> > > > >=20
+> > > > > This text needs to some reformulation at some point..
+> > > >=20
+> > > > There is no time like the present.  If you have a suggestion I woul=
+d
+> > > > love to hear it and I'm sure Roberto would too.
+> > > >=20
+> > >=20
+> > > My interpretation of the issue after possibly lossy decoding of the
+> > > above sentences:
+> > >=20
+> > > Avoid a deadlock by rejecting a virtual kernel module with the name
+> > > "crypto-pkcs1pad(rsa,*)". This module may be requested by
+> > > crypto_larval_lookup() while trying to verify an RSA signature in
+> > > public_key_verify_signature(). Since the loading of the RSA module ma=
+y
+> > > itself cause the request for an RSA signature verification it will
+> > > otherwise lead to a deadlock.
+> >=20
+> > I can be even more precise I guess (I actually reproduced it). >
+> > Avoid a verification loop where verifying the signature of the modprobe
+> > binary requires executing modprobe itself. Since the modprobe iint-
+> > > mutex is already held when the signature verification is performed, a
+> > deadlock occurs as soon as modprobe is executed within the critical
+> > region, since the same lock cannot be taken again.
+>=20
+> When ecdsa is used for signing files it could get stuck as well and=20
+> would need this patch:
+>=20
+> diff --git a/security/integrity/ima/ima_main.c=20
+> b/security/integrity/ima/ima_main.c
+> index 45f1a102c599..2e71dc977d43 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -1110,7 +1110,9 @@ EXPORT_SYMBOL_GPL(ima_measure_critical_data);
+>    */
+>   static int ima_kernel_module_request(char *kmod_name)
+>   {
+> -       if (strncmp(kmod_name, "crypto-pkcs1pad(rsa,", 20) =3D=3D 0)
+> +       if (strncmp(kmod_name, "crypto-pkcs1pad(rsa,", 20) =3D=3D 0 ||
+> +           strncmp(kmod_name, "crypto-ecdsa-nist-p", 19) =3D=3D 0 ||
+> +           strcmp(kmod_name, "cryptomgr") =3D=3D 0)
+>                  return -EINVAL;
+>=20
+>          return 0;
+>=20
+> Rejecting cryptomgr seems necessary in the ecdsa case though I am not=20
+> sure what the side effects of rejecting it all the time could be.
 
-If you add a flex array to slr_entry_uefi_config as I suggested in
-response to the other patch, we could simplify this substantially
+Thanks. Ok, let's find a proper way once IMA/EVM are moved to the LSM
+infrastructure.
 
-static struct slr_entry_uefi_config cfg = {
-        .hdr.tag        = SLR_ENTRY_UEFI_CONFIG,
-        .hdr.size       = sizeof(cfg),
-        .revision       = SLR_UEFI_CONFIG_REVISION,
-        .nr_entries     = 1,
-        .entries[0]     = {
-                .pcr    = 18,
-                .evt_info = "Measured UEFI memory map",
-        },
-};
+Roberto
 
-cfg.entries[0].cfg  = boot_params->efi_info.efi_memmap |
-                      (u64)boot_params->efi_info.efi_memmap_hi << 32;
-cfg.entries[0].size = boot_params->efi_info.efi_memmap_size;
+>     Stefan
+>=20
+> >=20
+> > This happens when public_key_verify_signature(), in case of RSA
+> > algorithm, use alg_name to store internal information in order to
+> > construct an algorithm on the fly, but crypto_larval_lookup() will try
+> > to use alg_name in order to load a kernel module with same name.
+> >=20
+> > Since we don't have any real "crypto-pkcs1pad(rsa,*)" kernel modules,
+> > we are safe to fail such module request from crypto_larval_lookup(),
+> > and avoid the verification loop.
+> >=20
+> > Roberto
+> >=20
+> >=20
 
-
-
-> +       table = get_efi_config_table(guid);
-> +
-> +       /*
-> +        * The presence of this table indicated a Secure Launch
-> +        * is being requested.
-> +        */
-> +       if (!table)
-> +               return;
-> +
-> +       slrt = (struct slr_table *)table;
-> +
-> +       if (slrt->magic != SLR_TABLE_MAGIC)
-> +               return;
-> +
-
-slrt = (struct slr_table *)get_efi_config_table(guid);
-if (!slrt || slrt->magic != SLR_TABLE_MAGIC)
-        return;
-
-> +       /* Add config information to measure the UEFI memory map */
-> +       uefi_config = (struct slr_entry_uefi_config *)buf;
-> +       uefi_config->hdr.tag = SLR_ENTRY_UEFI_CONFIG;
-> +       uefi_config->hdr.size = sizeof(*uefi_config) + sizeof(*uefi_entry);
-> +       uefi_config->revision = SLR_UEFI_CONFIG_REVISION;
-> +       uefi_config->nr_entries = 1;
-> +       uefi_entry = (struct slr_uefi_cfg_entry *)(buf + sizeof(*uefi_config));
-> +       uefi_entry->pcr = 18;
-> +       uefi_entry->cfg = boot_params->efi_info.efi_memmap;
-> +       memmap_hi = boot_params->efi_info.efi_memmap_hi;
-> +       uefi_entry->cfg |= memmap_hi << 32;
-> +       uefi_entry->size = boot_params->efi_info.efi_memmap_size;
-> +       memcpy(&uefi_entry->evt_info[0], "Measured UEFI memory map",
-> +               strlen("Measured UEFI memory map"));
-> +
-
-Drop all of this
-
-> +       if (slr_add_entry(slrt, (struct slr_entry_hdr *)uefi_config))
-
-if (slr_add_entry(slrt, &uefi_config.hdr))
-
-
-> +               return;
-> +
-> +       /* Jump through DL stub to initiate Secure Launch */
-> +       dlinfo = (struct slr_entry_dl_info *)
-> +               slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_DL_INFO);
-> +
-> +       asm volatile ("jmp *%%rax"
-> +                     : : "a" (dlinfo->dl_handler), "D" (&dlinfo->bl_context));
-
-Fix the prototype and just do
-
-dlinfo->dl_handler(&dlinfo->bl_context);
-unreachable();
-
-
-So in summary, this becomes
-
-static void efi_secure_launch(struct boot_params *boot_params)
-{
-        static struct slr_entry_uefi_config cfg = {
-                .hdr.tag        = SLR_ENTRY_UEFI_CONFIG,
-                .hdr.size       = sizeof(cfg),
-                .revision       = SLR_UEFI_CONFIG_REVISION,
-                .nr_entries     = 1,
-                .entries[0]     = {
-                        .pcr    = 18,
-                        .evt_info = "Measured UEFI memory map",
-                },
-        };
-        struct slr_entry_dl_info *dlinfo;
-        efi_guid_t guid = SLR_TABLE_GUID;
-        struct slr_table *slrt;
-
-        /*
-         * The presence of this table indicated a Secure Launch
-         * is being requested.
-         */
-        slrt = (struct slr_table *)get_efi_config_table(guid);
-        if (!slrt || slrt->magic != SLR_TABLE_MAGIC)
-                return;
-
-        cfg.entries[0].cfg  = boot_params->efi_info.efi_memmap |
-                              (u64)boot_params->efi_info.efi_memmap_hi << 32;
-        cfg.entries[0].size = boot_params->efi_info.efi_memmap_size;
-
-        if (slr_add_entry(slrt, &cfg.hdr))
-                return;
-
-        /* Jump through DL stub to initiate Secure Launch */
-        dlinfo = (struct slr_entry_dl_info *)
-                 slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_DL_INFO);
-
-        dlinfo->dl_handler(&dlinfo->bl_context);
-
-        unreachable();
-}
-
-
-> +}
-> +
->  static void __noreturn enter_kernel(unsigned long kernel_addr,
->                                     struct boot_params *boot_params)
->  {
-> @@ -934,6 +986,9 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
->                 goto fail;
->         }
->
-> +       /* If a Secure Launch is in progress, this never returns */
-
-if (IS_ENABLED(CONFIG_SECURE_LAUNCH))
-
-> +       efi_secure_launch(boot_params);
-> +
->         /*
->          * Call the SEV init code while still running with the firmware's
->          * GDT/IDT, so #VC exceptions will be handled by EFI.
-> --
-> 2.39.3
->
 
