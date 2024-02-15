@@ -1,977 +1,210 @@
-Return-Path: <linux-integrity+bounces-1269-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1271-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EFC5856160
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 12:22:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 683D38560AC
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 12:04:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C5D3B3738E
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 10:51:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F7672812BC
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 11:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347C0135A42;
-	Thu, 15 Feb 2024 10:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DE412AAD3;
+	Thu, 15 Feb 2024 10:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="MxA9Wv+l";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="SRh6mLPL"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459B9130E41;
-	Thu, 15 Feb 2024 10:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707993587; cv=none; b=s7qtrJGXdw9neN8IuFCen3DXEhwjChqqHWjrX0aF35uOI2PLiamv474JG/in22l0UlhjZVUxxgYqhk/83hTCnXgvMORqlPjFca2BXP7nhHkDuHHdxW3ZoOQfhjaKwSeu7deG/PTEzcNgoF54hjOawjAO0wdbivPwXQ7sEt/1piM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707993587; c=relaxed/simple;
-	bh=zMq/N61JQ6Hs6NcbzOe8UxWEhKFRID9r8j1suadQfi4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=myPbG4TMTxY/XDcGaatShblF5ykoAmlV3o+o/5aLJgZsHxJeKA6wSh1N3y3FW93hK74Lukkkd0gUAHm9U0qluZM/zI6la14cWjlJ0TAKPdVBf4dadCUOR1ezLUeQUfeK27ssvP2t7ZA1Y8zzv5eWYKg/SD5mGv4z5+NnNughJTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4TbB4m01TJz9v7VH;
-	Thu, 15 Feb 2024 18:24:24 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 292571406BF;
-	Thu, 15 Feb 2024 18:39:32 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAHABmc6c1lwxGNAg--.11795S6;
-	Thu, 15 Feb 2024 11:39:31 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	chuck.lever@oracle.com,
-	jlayton@kernel.org,
-	neilb@suse.de,
-	kolga@netapp.com,
-	Dai.Ngo@oracle.com,
-	tom@talpey.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	dhowells@redhat.com,
-	jarkko@kernel.org,
-	stephen.smalley.work@gmail.com,
-	omosnace@redhat.com,
-	casey@schaufler-ca.com,
-	shuah@kernel.org,
-	mic@digikod.net
-Cc: linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v10 24/25] ima: Make it independent from 'integrity' LSM
-Date: Thu, 15 Feb 2024 11:31:12 +0100
-Message-Id: <20240215103113.2369171-25-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
-References: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970A8127B6D;
+	Thu, 15 Feb 2024 10:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707994616; cv=fail; b=UN9zl6ZowK8+WLcz757uSNW9IafpykMhEgF448K0q08twg6NMhURIqKqSn3M/odE/5yBPte2Q5iq2YaEmOUBv6zTjpKLKP/G16Cu7EsZbM/nRpoGeA0WObJOqW7zpo1fFnScxwXEUx6I71d3wwziUVxWSeYXDKXOzBE6k1C0nnA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707994616; c=relaxed/simple;
+	bh=yPCpBZe+BJNcNa7L7yBGygG2Uy/ySl+05MojNia3pRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=KQK8BtHXdKlAEBRJrMy7xv8CAkrq9fOesUZkVhDjLkIvzvcrw1nYdBZtQSjeFpu8n3k7bKAyIADnsXuZrnHxVGbhucRuExt6sD4ywLwdP8VszuSS+BZJTEFbdbU7ESXCe70hecqEboJnFf7w2fn4W9D/Mtn4q9hlOAwdO5v7ji0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=MxA9Wv+l; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=SRh6mLPL; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41F6ixB0000670;
+	Thu, 15 Feb 2024 10:56:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-11-20;
+ bh=yPCpBZe+BJNcNa7L7yBGygG2Uy/ySl+05MojNia3pRY=;
+ b=MxA9Wv+l7gmCcUGJFsjZs8bm5r47iLJvo+GIshrOABT1lbuneLfhJpXjRa2qHtWDH2MR
+ neFB/E0lOu/wtdDlwn4CNj+yigPJ6encW43NHdrmbx1onwQHk7MK8jW+C200PGZrPjNY
+ IECX+wk0uKpLhI7oX4zCx2lQLkxsd4A06dKm5o5JxhzbKWYdKeGjaPiq1HVqqT9Vaqe7
+ ViUSxoYHZQgexaqFSS1AIJQ/CuimP4ID5AAEl+DNkl2DILmrT4JCfNuDP384jFzuX4dd
+ EHeLHe//Mym4YehViLK0Fk+U7Qf9To+nj37wd+E9ezy4G5fGTyFiX8KFYs6i2WNhSfxe og== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w91w6swkg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Feb 2024 10:56:21 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41FAS3uE024589;
+	Thu, 15 Feb 2024 10:56:20 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3w5ykgmn3a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Feb 2024 10:56:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R3m0FsfS9xmYML/ZElm0AuejRKCzXurLdiid6DGXj4REhExu51sP2uWwXLsqkcg81u9Pt7NMIaeClwVZIsREODoVm7076g2waNM6KBwd1mmdSqsX751iStNHILSbYKOL8ocppwm/hAJsVQ7mpWtjZxUjzlMgOse+JnBQxIZ4lxLJLff3eT5gwspgPg9PEMBNkcp3rudjt3n2D0Ca6QuGf03juxBu3Qfpkm1xQ28CNC+FSdSR8dcZoSPPhhJSFkzbL+vcJ++Y4+mX3WH6Hn/tbB/5Q3E63ygVYyXnKooTtpXBcc4zYMiQzHXRqqwF2KFIl4UB9ZBxPcMB51ABIpPDKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yPCpBZe+BJNcNa7L7yBGygG2Uy/ySl+05MojNia3pRY=;
+ b=dEAHP5DUJHFslMjc3Gbc906C2vsg1ZOTmBe7IcapL+eRHaSaAMniGXshUBiqN/8vsvnx8thxsrGDSQ6mIIENNptnAXvryM6QChGSFqis4w7/n6ybPzbTUwAfiniC7ulpOwBU59Z14lJPGFbo0cVuxSDvBYn23jW/iPe1OsJylsL5Zt43NKNUQx3PiILecGa/70uVRYZPYPc0tUsU4lmRL+kD4R6mfUD9peeCz3jStfLjAl9sViPHV0MMcNwxgqt19nMJVWG7tj45rZVs7s3WqPTLO5f+kLu9nRI6sEvl4a8/u30i1iYoPewoA25qk0H+S0oEKOaw9WD9kSLDtfEN2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yPCpBZe+BJNcNa7L7yBGygG2Uy/ySl+05MojNia3pRY=;
+ b=SRh6mLPLac4UDEP+BUewDz/Hvx7enBNvOuDvnarS8A4JVOL1OO0fyNV/ks8NZvDT9/BLalbfWgu875A621eyh7fShVpUc0nCD+v7+KxT1HGRixfacsSmgvgOeroYbnyF2BACCl6RHRtTUqvXJUQuE0PTJ3moQ1WWipbHWSK9apg=
+Received: from LV8PR10MB7920.namprd10.prod.outlook.com (2603:10b6:408:1fd::10)
+ by BLAPR10MB5170.namprd10.prod.outlook.com (2603:10b6:208:321::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.27; Thu, 15 Feb
+ 2024 10:56:17 +0000
+Received: from LV8PR10MB7920.namprd10.prod.outlook.com
+ ([fe80::bdae:43a4:670c:48d1]) by LV8PR10MB7920.namprd10.prod.outlook.com
+ ([fe80::bdae:43a4:670c:48d1%4]) with mapi id 15.20.7270.036; Thu, 15 Feb 2024
+ 10:56:17 +0000
+Date: Thu, 15 Feb 2024 11:56:10 +0100
+From: Daniel Kiper <daniel.kiper@oracle.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-integrity@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-crypto@vger.kernel.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+        mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v8 01/15] x86/boot: Place kernel_info at a fixed offset
+Message-ID: <Zc3tykqH2SjSVtd1@tomti.i.net-space.pl>
+References: <20240214221847.2066632-1-ross.philipson@oracle.com>
+ <20240214221847.2066632-2-ross.philipson@oracle.com>
+ <CAMj1kXH3Gvr3vDRLDdXuc0s7ZAQYE6+D7tmCRBjJWwWt2fn4-w@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXH3Gvr3vDRLDdXuc0s7ZAQYE6+D7tmCRBjJWwWt2fn4-w@mail.gmail.com>
+X-ClientProxiedBy: WA1P291CA0008.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:19::19) To LV8PR10MB7920.namprd10.prod.outlook.com
+ (2603:10b6:408:1fd::10)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwAHABmc6c1lwxGNAg--.11795S6
-X-Coremail-Antispam: 1UD129KBjvAXoWfWr15tF15ZF1DXF4kCF4Uurg_yoW5Zr4Dto
-	Zav39xJr4rWFyfCay8K3WSyFWkuw45K3y3CrZ5WFWDK3W7K34DW347Ww15JFy3ZrW5G39r
-	Cwnrtw4UJF9rJ3Wkn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUYZ7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
-	0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxV
-	AFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28Icx
-	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIx
-	AIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdMIIF
-	0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87
-	Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuYvjxUrCJmUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5pfbQABsT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR10MB7920:EE_|BLAPR10MB5170:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1eeb0ab-d3e0-4943-6049-08dc2e14bc8a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	rWSEJNDZidz3rrVjKErilHVErG0u96tcwBAaV+sOutnxY/a7Fk1KD35IYpTb79HH8dHligjMh95GOPHYyMm0Vds5AdjGCy/K8KnTp8GpesF1AUFoCAUWXMF99Gpj+lXQLpvbSX3s2OUdcy3IlEbrT18l2wXdDJ9Olgabm3ds02bD8w2/gASBj77tJ3dYiZCZ/fHhNjH0x6c6Npc0cgQXBF1PyeoaybcK2yhpE90xh5QCm3Vwt5pI4KMl9t+nX/6PzjkmlQTj0YqlRFGd9HOYsUwb/VsYWpP9gQQWkx08VUe7PYcsoGBt+CFNAJXQ9Bdo+xdOb7sjkw3ugqSTHs2/Upx4SZB3DM4zZN7Rxpc8ZPsg442PKA3PZYMZeuLWFTmlxl7ZvzvhQT3eEazyw2EvuXUzcgZFhIJ3yZof4bZSajTKDTTeZ2br0iS8vkgcSNXBK8pLFA5fTb3KzUFC0YXb6dD3lP7J7QOMlW3+f1pIo0LTMGv9JUekhV/Gn/QDLZmCVYMoou66/Co9O2VdNXZKqsBDCkjbF+uRlTsk39vKQCu16wnnYKrDxzbQZI4jC/mW
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR10MB7920.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(396003)(136003)(366004)(346002)(39860400002)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(44832011)(66556008)(7416002)(5660300002)(66946007)(4326008)(8936002)(8676002)(6916009)(66476007)(2906002)(26005)(86362001)(38100700002)(316002)(6666004)(478600001)(9686003)(6506007)(6486002)(6512007)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?ulL8RWxye+EK5/EQRSOpLvVF7pq+eNXstB4Xm9qON0CHR8D3RcPjV/NDzuQC?=
+ =?us-ascii?Q?vGaF9o7wLy1YyIM/X+KHUSOvYaxVazu6uQDMusyPyAqY9KZk8u98ffUOtZnm?=
+ =?us-ascii?Q?p/dPJfppLWrDt/m7N2X5A+VtJ3P5NUblLA1j3fuYqLKBn2oOe8gQQ7nAabVW?=
+ =?us-ascii?Q?TAj8ymt4CtY3P/CgoSjY1bKRAH2qH5CUplrEc2u6ogo4DHSgF5SEP5Ydcsbd?=
+ =?us-ascii?Q?bPKJAQaFcbZx+4tpEXtrAYkbxN610qQHjVrSPMr3pXpRRxOxjx2+0MqUYwQz?=
+ =?us-ascii?Q?z6XP9X+f/X9ccnBYyNAqXWATglDjzsMyUWac++isyZemHCeCDn1HiJghmo4r?=
+ =?us-ascii?Q?Rw8+7mQqMLgRxN1tfYAHNJeuNgj5odPJmBneprYRWURnLmr/FAUQTuMV9Q8f?=
+ =?us-ascii?Q?5sq3oxfvzEOwkZ3wWXP0bikKMWgdUh2pi8dC5plrIbiPMW+/eL6W0sS7iuFi?=
+ =?us-ascii?Q?Ll68NPjLmtx7yIvIA/PwNzHWlRkyv1KqKnzbGDKqQhcsTPdSu7FDdpaM2YDh?=
+ =?us-ascii?Q?D0EpPBiSalGv6YQw+0X82Seam2P+IUJHkMHx1wqXlYKnmgIAoYPd2drVTL7x?=
+ =?us-ascii?Q?gZFo17fhzyf7lqT4TWQgGbjydXU4H4AAdNehdDIbW9+uRcgDBWvbR3jDRY2o?=
+ =?us-ascii?Q?YalQPPvKPdgOoFeDI9T2PfnIwhIfwuQaGw6xeUubeCtWYsNbfo3x6O96ibTy?=
+ =?us-ascii?Q?o6NodA/KV+i8QIC4zbLg+8OAoonGqt3TLiLz6tjVXsFwpb8/Tot606GaoWsJ?=
+ =?us-ascii?Q?P/ydjMjL8uy+85uV3zCUK+nM2BAZM5YeVNFZ5Ume1OHCwZy8JbNU0UZKYbMG?=
+ =?us-ascii?Q?PBeXlvpyKZ5WJt5NCsbIbVqm/72jr0XSEjNROWD/uthrQm1CN5BbUNYc/ure?=
+ =?us-ascii?Q?CgTMHTClbo+w8jHIo5MAxsdJrvt+oB7zWulG+Dhcm0+iPbxqcsTUN7Iz954b?=
+ =?us-ascii?Q?bNme5nC5OH9M7CITkuBHTsSyzxPfBWNCGH8aaZJDBrPobC1X8O++OsId7Dot?=
+ =?us-ascii?Q?KmdYZ9LeTCWiRhFWHJAD0V2mxiAwBxegItk4RuakRP02iaotSbvCY61EJ3nM?=
+ =?us-ascii?Q?G3z8h5pRM9NRXWy4CXuWqvwT6sk3VBwt8fBLDyWcQfcJW2VTNkQZ3fTDZPeN?=
+ =?us-ascii?Q?1iaoR4PAkgzPjU1uDMqebPaIBaghYQCpkWsHognii9JQoUFiiqz5vup8oiWo?=
+ =?us-ascii?Q?aqXxDdwjNHayZSIiFQdNhlVPRSo6r+s1Qwyhg5YxlTx45qcJg4zfqIOp/SSD?=
+ =?us-ascii?Q?OS6ZnhyJSj9TLSY34CWWsbIUDsTY+joOR9dz/1ey2y5IazU+fLro1JOFL0gh?=
+ =?us-ascii?Q?71OhybIujGlAK74Otjk2qg76lA+SgF1gg8wxzBM7SyG0IIu84/YE9TCC9NH5?=
+ =?us-ascii?Q?29e34CHdU/nk2LrvgGjZvkvvtrB7tuxKHcGvbck74apV1Zq4WCmr9mr19dun?=
+ =?us-ascii?Q?XPxz2rU36iPWa7zZxIa3G4gSBYnmyf86JvIV0Dg4h7xYtEReMgVc7wSrSW7h?=
+ =?us-ascii?Q?dG9cjfHtdDWenoJrgRTz7eTj7aucHnb7axr2vLiMe2gvb+oL+SNxT7/ryux9?=
+ =?us-ascii?Q?CPPHK8fDC/t7HOaFFGsd8z2D+8s5O+CyZpUblNeo?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	99C1mulkHQ/qVS+nRitFJgw8BXbvZZLYFfu5Y800QvtMEOjfzKSJHY/1rl3Ajs7e80PWhZ0l0DldZGrqO8zXF8cw/N19ThPfOVBGDT+HPJX84n/wN3HAxX63fI32ycrkEHk/NK7+57+kwBbUdT/R44WYPudZ3Ek1Mv27ojK7XRY9g2blffT5+oFTKAg+/7ReHjuTCmcbcz2Fx+Tejj1oNdvZ2lO5DJ5QWbZI+vko6+PBAGcN1rcDjBdQW6nBQ/82CCxpq0XzPzMhvVyQ3h/OZaDFrLoJydgMserep6xNyH+cehqktDkeIX0tM1fskry0vrjBrpMa9yqDbd38gNYh4ETinbrboFCn2SUMFnbdDT2hk0hvrZWA+TUgQyppniLi2nvq/tAvRMSF7v7sfVDud+4bOHdgLz1oeHTS1gddu57q0mj7FEXwEv7USvFh1l7YByvZaL9dZKdSZS/DQvNmuGhuJk5lr6kp8y+LqUAJLs0GzPHkXS483iZrpsx0ZqG63ACGtqmrTMryuVhP8s5kDY7ZTzwC9tAFyiuk1w+5Z+heaqitGdVYUVKTPPuzsta0ruKxsTTwEWPs8zzNIEHwmOLsJnBA1ZndKPJD6k71UFU=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1eeb0ab-d3e0-4943-6049-08dc2e14bc8a
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR10MB7920.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Feb 2024 10:56:17.8120
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AoUUkDPLR2vRZVDkv3SSTD7TazsJZNA2PewqJWcgndsXmZnY7ITwPRib/E3Q5ckTv8ojVrdIqiyNMtJKN0z8iA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5170
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-15_10,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402150086
+X-Proofpoint-ORIG-GUID: v7A_Mx55t8SU1ekVojVwFesSvbiSAqhC
+X-Proofpoint-GUID: v7A_Mx55t8SU1ekVojVwFesSvbiSAqhC
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Feb 15, 2024 at 08:56:25AM +0100, Ard Biesheuvel wrote:
+> On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
+> >
+> > From: Arvind Sankar <nivedita@alum.mit.edu>
+> >
+> > There are use cases for storing the offset of a symbol in kernel_info.
+> > For example, the trenchboot series [0] needs to store the offset of the
+> > Measured Launch Environment header in kernel_info.
+> >
+>
+> Why? Is this information consumed by the bootloader?
 
-Make the 'ima' LSM independent from the 'integrity' LSM by introducing IMA
-own integrity metadata (ima_iint_cache structure, with IMA-specific fields
-from the integrity_iint_cache structure), and by managing it directly from
-the 'ima' LSM.
+The bootloader stuffs this info, plus some offset IIRC, into special structure
+and finally it is consumed by SINIT ACM after GETSEC[SENTER] call.
 
-Create ima_iint.c and introduce the same integrity metadata management
-functions found in iint.c (renamed with ima_). However, instead of putting
-metadata in an rbtree, reserve space from IMA in the inode security blob
-for a pointer, and introduce the ima_inode_set_iint()/ima_inode_get_iint()
-primitives to store/retrieve that pointer. This improves search time from
-logarithmic to constant.
+Sadly this data is Intel specific and it is even not compatible with AMD.
+So, if I am not mistaken, we will need additional member for the AMD in
+the kernel_info.
 
-Consequently, don't include the inode pointer as field in the
-ima_iint_cache structure, since the association with the inode is clear.
-Since the inode field is missing in ima_iint_cache, pass the extra inode
-parameter to ima_get_verity_digest().
+> I'd like to get away from x86 specific hacks for boot code and boot
+> images, so I would like to explore if we can avoid kernel_info, or at
+> least expose it in a generic way. We might just add a 32-bit offset
+> somewhere in the first 64 bytes of the bootable image: this could
+> co-exist with EFI bootable images, and can be implemented on arm64,
+> RISC-V and LoongArch as well.
 
-Prefer storing the pointer instead of the entire ima_iint_cache structure,
-to avoid too much memory pressure. Use the same mechanism as before, a
-cache named ima_iint_cache (renamed from iint_cache), to quickly allocate
-a new ima_iint_cache structure when requested by the IMA policy.
+The other architectures may or may not have need for such data due to
+differences in DRTM implementation. Anyway, whatever we do I want to
+be sure the DRTM can be used on UEFI and non-UEFI platforms. So, I am
+not entirely convinced the address/pointer to additional DRTM data
+should be part of the MS-DOS and/or PE header. Though I am not against
+building something generic shared among various architectures either.
 
-Create the new ima_iint_cache in ima_iintcache_init(),
-called by init_ima_lsm(), during the initialization of the 'ima' LSM. And,
-register ima_inode_free_security() to free the ima_iint_cache structure, if
-exists.
-
-Replace integrity_iint_cache with ima_iint_cache in various places of the
-IMA code. Also, replace integrity_inode_get() and integrity_iint_find(),
-respectively with ima_inode_get() and ima_iint_find().
-
-Finally, move the remaining IMA-specific flags
-to security/integrity/ima/ima.h, since they are now unnecessary in the
-common integrity layer.
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
----
- security/integrity/ima/Makefile       |   2 +-
- security/integrity/ima/ima.h          | 137 +++++++++++++++++++++----
- security/integrity/ima/ima_api.c      |  23 +++--
- security/integrity/ima/ima_appraise.c |  27 +++--
- security/integrity/ima/ima_iint.c     | 142 ++++++++++++++++++++++++++
- security/integrity/ima/ima_init.c     |   2 +-
- security/integrity/ima/ima_main.c     |  36 ++++---
- security/integrity/ima/ima_policy.c   |   2 +-
- security/integrity/integrity.h        |  53 ----------
- 9 files changed, 308 insertions(+), 116 deletions(-)
- create mode 100644 security/integrity/ima/ima_iint.c
-
-diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
-index 2499f2485c04..b376d38b4ee6 100644
---- a/security/integrity/ima/Makefile
-+++ b/security/integrity/ima/Makefile
-@@ -4,7 +4,7 @@
- # Measurement Architecture(IMA).
- #
- 
--obj-$(CONFIG_IMA) += ima.o
-+obj-$(CONFIG_IMA) += ima.o ima_iint.o
- 
- ima-y := ima_fs.o ima_queue.o ima_init.o ima_main.o ima_crypto.o ima_api.o \
- 	 ima_policy.o ima_template.o ima_template_lib.o
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index a27fc10f84f7..11d7c0332207 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -60,7 +60,7 @@ extern const char boot_aggregate_name[];
- 
- /* IMA event related data */
- struct ima_event_data {
--	struct integrity_iint_cache *iint;
-+	struct ima_iint_cache *iint;
- 	struct file *file;
- 	const unsigned char *filename;
- 	struct evm_ima_xattr_data *xattr_value;
-@@ -119,6 +119,107 @@ struct ima_kexec_hdr {
- 	u64 count;
- };
- 
-+/* IMA iint action cache flags */
-+#define IMA_MEASURE		0x00000001
-+#define IMA_MEASURED		0x00000002
-+#define IMA_APPRAISE		0x00000004
-+#define IMA_APPRAISED		0x00000008
-+/*#define IMA_COLLECT		0x00000010  do not use this flag */
-+#define IMA_COLLECTED		0x00000020
-+#define IMA_AUDIT		0x00000040
-+#define IMA_AUDITED		0x00000080
-+#define IMA_HASH		0x00000100
-+#define IMA_HASHED		0x00000200
-+
-+/* IMA iint policy rule cache flags */
-+#define IMA_NONACTION_FLAGS	0xff000000
-+#define IMA_DIGSIG_REQUIRED	0x01000000
-+#define IMA_PERMIT_DIRECTIO	0x02000000
-+#define IMA_NEW_FILE		0x04000000
-+#define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
-+#define IMA_MODSIG_ALLOWED	0x20000000
-+#define IMA_CHECK_BLACKLIST	0x40000000
-+#define IMA_VERITY_REQUIRED	0x80000000
-+
-+#define IMA_DO_MASK		(IMA_MEASURE | IMA_APPRAISE | IMA_AUDIT | \
-+				 IMA_HASH | IMA_APPRAISE_SUBMASK)
-+#define IMA_DONE_MASK		(IMA_MEASURED | IMA_APPRAISED | IMA_AUDITED | \
-+				 IMA_HASHED | IMA_COLLECTED | \
-+				 IMA_APPRAISED_SUBMASK)
-+
-+/* IMA iint subaction appraise cache flags */
-+#define IMA_FILE_APPRAISE	0x00001000
-+#define IMA_FILE_APPRAISED	0x00002000
-+#define IMA_MMAP_APPRAISE	0x00004000
-+#define IMA_MMAP_APPRAISED	0x00008000
-+#define IMA_BPRM_APPRAISE	0x00010000
-+#define IMA_BPRM_APPRAISED	0x00020000
-+#define IMA_READ_APPRAISE	0x00040000
-+#define IMA_READ_APPRAISED	0x00080000
-+#define IMA_CREDS_APPRAISE	0x00100000
-+#define IMA_CREDS_APPRAISED	0x00200000
-+#define IMA_APPRAISE_SUBMASK	(IMA_FILE_APPRAISE | IMA_MMAP_APPRAISE | \
-+				 IMA_BPRM_APPRAISE | IMA_READ_APPRAISE | \
-+				 IMA_CREDS_APPRAISE)
-+#define IMA_APPRAISED_SUBMASK	(IMA_FILE_APPRAISED | IMA_MMAP_APPRAISED | \
-+				 IMA_BPRM_APPRAISED | IMA_READ_APPRAISED | \
-+				 IMA_CREDS_APPRAISED)
-+
-+/* IMA iint cache atomic_flags */
-+#define IMA_CHANGE_XATTR	0
-+#define IMA_UPDATE_XATTR	1
-+#define IMA_CHANGE_ATTR		2
-+#define IMA_DIGSIG		3
-+#define IMA_MUST_MEASURE	4
-+
-+/* IMA integrity metadata associated with an inode */
-+struct ima_iint_cache {
-+	struct mutex mutex;	/* protects: version, flags, digest */
-+	u64 version;		/* track inode changes */
-+	unsigned long flags;
-+	unsigned long measured_pcrs;
-+	unsigned long atomic_flags;
-+	unsigned long real_ino;
-+	dev_t real_dev;
-+	enum integrity_status ima_file_status:4;
-+	enum integrity_status ima_mmap_status:4;
-+	enum integrity_status ima_bprm_status:4;
-+	enum integrity_status ima_read_status:4;
-+	enum integrity_status ima_creds_status:4;
-+	struct ima_digest_data *ima_hash;
-+};
-+
-+extern struct lsm_blob_sizes ima_blob_sizes;
-+
-+static inline struct ima_iint_cache *
-+ima_inode_get_iint(const struct inode *inode)
-+{
-+	struct ima_iint_cache **iint_sec;
-+
-+	if (unlikely(!inode->i_security))
-+		return NULL;
-+
-+	iint_sec = inode->i_security + ima_blob_sizes.lbs_inode;
-+	return *iint_sec;
-+}
-+
-+static inline void ima_inode_set_iint(const struct inode *inode,
-+				      struct ima_iint_cache *iint)
-+{
-+	struct ima_iint_cache **iint_sec;
-+
-+	if (unlikely(!inode->i_security))
-+		return;
-+
-+	iint_sec = inode->i_security + ima_blob_sizes.lbs_inode;
-+	*iint_sec = iint;
-+}
-+
-+struct ima_iint_cache *ima_iint_find(struct inode *inode);
-+struct ima_iint_cache *ima_inode_get(struct inode *inode);
-+void ima_inode_free(struct inode *inode);
-+void __init ima_iintcache_init(void);
-+
- extern const int read_idmap[];
- 
- #ifdef CONFIG_HAVE_IMA_KEXEC
-@@ -152,8 +253,8 @@ int ima_calc_field_array_hash(struct ima_field_data *field_data,
- 			      struct ima_template_entry *entry);
- int ima_calc_boot_aggregate(struct ima_digest_data *hash);
- void ima_add_violation(struct file *file, const unsigned char *filename,
--		       struct integrity_iint_cache *iint,
--		       const char *op, const char *cause);
-+		       struct ima_iint_cache *iint, const char *op,
-+		       const char *cause);
- int ima_init_crypto(void);
- void ima_putc(struct seq_file *m, void *data, int datalen);
- void ima_print_digest(struct seq_file *m, u8 *digest, u32 size);
-@@ -267,10 +368,10 @@ int ima_get_action(struct mnt_idmap *idmap, struct inode *inode,
- 		   struct ima_template_desc **template_desc,
- 		   const char *func_data, unsigned int *allowed_algos);
- int ima_must_measure(struct inode *inode, int mask, enum ima_hooks func);
--int ima_collect_measurement(struct integrity_iint_cache *iint,
--			    struct file *file, void *buf, loff_t size,
--			    enum hash_algo algo, struct modsig *modsig);
--void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
-+int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
-+			    void *buf, loff_t size, enum hash_algo algo,
-+			    struct modsig *modsig);
-+void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
- 			   const unsigned char *filename,
- 			   struct evm_ima_xattr_data *xattr_value,
- 			   int xattr_len, const struct modsig *modsig, int pcr,
-@@ -280,7 +381,7 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
- 			       const char *eventname, enum ima_hooks func,
- 			       int pcr, const char *func_data,
- 			       bool buf_hash, u8 *digest, size_t digest_len);
--void ima_audit_measurement(struct integrity_iint_cache *iint,
-+void ima_audit_measurement(struct ima_iint_cache *iint,
- 			   const unsigned char *filename);
- int ima_alloc_init_template(struct ima_event_data *event_data,
- 			    struct ima_template_entry **entry,
-@@ -318,17 +419,16 @@ int ima_policy_show(struct seq_file *m, void *v);
- #define IMA_APPRAISE_KEXEC	0x40
- 
- #ifdef CONFIG_IMA_APPRAISE
--int ima_check_blacklist(struct integrity_iint_cache *iint,
-+int ima_check_blacklist(struct ima_iint_cache *iint,
- 			const struct modsig *modsig, int pcr);
--int ima_appraise_measurement(enum ima_hooks func,
--			     struct integrity_iint_cache *iint,
-+int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
- 			     struct file *file, const unsigned char *filename,
- 			     struct evm_ima_xattr_data *xattr_value,
- 			     int xattr_len, const struct modsig *modsig);
- int ima_must_appraise(struct mnt_idmap *idmap, struct inode *inode,
- 		      int mask, enum ima_hooks func);
--void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file);
--enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
-+void ima_update_xattr(struct ima_iint_cache *iint, struct file *file);
-+enum integrity_status ima_get_cache_status(struct ima_iint_cache *iint,
- 					   enum ima_hooks func);
- enum hash_algo ima_get_hash_algo(const struct evm_ima_xattr_data *xattr_value,
- 				 int xattr_len);
-@@ -337,14 +437,14 @@ int ima_read_xattr(struct dentry *dentry,
- void __init init_ima_appraise_lsm(const struct lsm_id *lsmid);
- 
- #else
--static inline int ima_check_blacklist(struct integrity_iint_cache *iint,
-+static inline int ima_check_blacklist(struct ima_iint_cache *iint,
- 				      const struct modsig *modsig, int pcr)
- {
- 	return 0;
- }
- 
- static inline int ima_appraise_measurement(enum ima_hooks func,
--					   struct integrity_iint_cache *iint,
-+					   struct ima_iint_cache *iint,
- 					   struct file *file,
- 					   const unsigned char *filename,
- 					   struct evm_ima_xattr_data *xattr_value,
-@@ -361,14 +461,13 @@ static inline int ima_must_appraise(struct mnt_idmap *idmap,
- 	return 0;
- }
- 
--static inline void ima_update_xattr(struct integrity_iint_cache *iint,
-+static inline void ima_update_xattr(struct ima_iint_cache *iint,
- 				    struct file *file)
- {
- }
- 
--static inline enum integrity_status ima_get_cache_status(struct integrity_iint_cache
--							 *iint,
--							 enum ima_hooks func)
-+static inline enum integrity_status
-+ima_get_cache_status(struct ima_iint_cache *iint, enum ima_hooks func)
- {
- 	return INTEGRITY_UNKNOWN;
- }
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 597ea0c4d72f..b37d043d5748 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -131,8 +131,8 @@ int ima_store_template(struct ima_template_entry *entry,
-  * value is invalidated.
-  */
- void ima_add_violation(struct file *file, const unsigned char *filename,
--		       struct integrity_iint_cache *iint,
--		       const char *op, const char *cause)
-+		       struct ima_iint_cache *iint, const char *op,
-+		       const char *cause)
- {
- 	struct ima_template_entry *entry;
- 	struct inode *inode = file_inode(file);
-@@ -201,7 +201,8 @@ int ima_get_action(struct mnt_idmap *idmap, struct inode *inode,
- 				allowed_algos);
- }
- 
--static bool ima_get_verity_digest(struct integrity_iint_cache *iint,
-+static bool ima_get_verity_digest(struct ima_iint_cache *iint,
-+				  struct inode *inode,
- 				  struct ima_max_digest_data *hash)
- {
- 	enum hash_algo alg;
-@@ -211,7 +212,7 @@ static bool ima_get_verity_digest(struct integrity_iint_cache *iint,
- 	 * On failure, 'measure' policy rules will result in a file data
- 	 * hash containing 0's.
- 	 */
--	digest_len = fsverity_get_digest(iint->inode, hash->digest, NULL, &alg);
-+	digest_len = fsverity_get_digest(inode, hash->digest, NULL, &alg);
- 	if (digest_len == 0)
- 		return false;
- 
-@@ -237,9 +238,9 @@ static bool ima_get_verity_digest(struct integrity_iint_cache *iint,
-  *
-  * Return 0 on success, error code otherwise
-  */
--int ima_collect_measurement(struct integrity_iint_cache *iint,
--			    struct file *file, void *buf, loff_t size,
--			    enum hash_algo algo, struct modsig *modsig)
-+int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
-+			    void *buf, loff_t size, enum hash_algo algo,
-+			    struct modsig *modsig)
- {
- 	const char *audit_cause = "failed";
- 	struct inode *inode = file_inode(file);
-@@ -280,7 +281,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
- 	memset(&hash.digest, 0, sizeof(hash.digest));
- 
- 	if (iint->flags & IMA_VERITY_REQUIRED) {
--		if (!ima_get_verity_digest(iint, &hash)) {
-+		if (!ima_get_verity_digest(iint, inode, &hash)) {
- 			audit_cause = "no-verity-digest";
- 			result = -ENODATA;
- 		}
-@@ -338,8 +339,8 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
-  *
-  * Must be called with iint->mutex held.
-  */
--void ima_store_measurement(struct integrity_iint_cache *iint,
--			   struct file *file, const unsigned char *filename,
-+void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
-+			   const unsigned char *filename,
- 			   struct evm_ima_xattr_data *xattr_value,
- 			   int xattr_len, const struct modsig *modsig, int pcr,
- 			   struct ima_template_desc *template_desc)
-@@ -382,7 +383,7 @@ void ima_store_measurement(struct integrity_iint_cache *iint,
- 		ima_free_template_entry(entry);
- }
- 
--void ima_audit_measurement(struct integrity_iint_cache *iint,
-+void ima_audit_measurement(struct ima_iint_cache *iint,
- 			   const unsigned char *filename)
- {
- 	struct audit_buffer *ab;
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index 1dd6ee72a20a..3497741caea9 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -84,8 +84,7 @@ int ima_must_appraise(struct mnt_idmap *idmap, struct inode *inode,
- 				NULL, NULL, NULL);
- }
- 
--static int ima_fix_xattr(struct dentry *dentry,
--			 struct integrity_iint_cache *iint)
-+static int ima_fix_xattr(struct dentry *dentry, struct ima_iint_cache *iint)
- {
- 	int rc, offset;
- 	u8 algo = iint->ima_hash->algo;
-@@ -106,7 +105,7 @@ static int ima_fix_xattr(struct dentry *dentry,
- }
- 
- /* Return specific func appraised cached result */
--enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
-+enum integrity_status ima_get_cache_status(struct ima_iint_cache *iint,
- 					   enum ima_hooks func)
- {
- 	switch (func) {
-@@ -126,7 +125,7 @@ enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
- 	}
- }
- 
--static void ima_set_cache_status(struct integrity_iint_cache *iint,
-+static void ima_set_cache_status(struct ima_iint_cache *iint,
- 				 enum ima_hooks func,
- 				 enum integrity_status status)
- {
-@@ -152,8 +151,7 @@ static void ima_set_cache_status(struct integrity_iint_cache *iint,
- 	}
- }
- 
--static void ima_cache_flags(struct integrity_iint_cache *iint,
--			     enum ima_hooks func)
-+static void ima_cache_flags(struct ima_iint_cache *iint, enum ima_hooks func)
- {
- 	switch (func) {
- 	case MMAP_CHECK:
-@@ -276,7 +274,7 @@ static int calc_file_id_hash(enum evm_ima_xattr_type type,
-  *
-  * Return 0 on success, error code otherwise.
-  */
--static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
-+static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
- 			struct evm_ima_xattr_data *xattr_value, int xattr_len,
- 			enum integrity_status *status, const char **cause)
- {
-@@ -443,7 +441,7 @@ static int modsig_verify(enum ima_hooks func, const struct modsig *modsig,
-  *
-  * Returns -EPERM if the hash is blacklisted.
-  */
--int ima_check_blacklist(struct integrity_iint_cache *iint,
-+int ima_check_blacklist(struct ima_iint_cache *iint,
- 			const struct modsig *modsig, int pcr)
- {
- 	enum hash_algo hash_algo;
-@@ -477,8 +475,7 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
-  *
-  * Return 0 on success, error code otherwise
-  */
--int ima_appraise_measurement(enum ima_hooks func,
--			     struct integrity_iint_cache *iint,
-+int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
- 			     struct file *file, const unsigned char *filename,
- 			     struct evm_ima_xattr_data *xattr_value,
- 			     int xattr_len, const struct modsig *modsig)
-@@ -603,7 +600,7 @@ int ima_appraise_measurement(enum ima_hooks func,
- /*
-  * ima_update_xattr - update 'security.ima' hash value
-  */
--void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file)
-+void ima_update_xattr(struct ima_iint_cache *iint, struct file *file)
- {
- 	struct dentry *dentry = file_dentry(file);
- 	int rc = 0;
-@@ -640,7 +637,7 @@ static void ima_inode_post_setattr(struct mnt_idmap *idmap,
- 				   struct dentry *dentry, int ia_valid)
- {
- 	struct inode *inode = d_backing_inode(dentry);
--	struct integrity_iint_cache *iint;
-+	struct ima_iint_cache *iint;
- 	int action;
- 
- 	if (!(ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode)
-@@ -648,7 +645,7 @@ static void ima_inode_post_setattr(struct mnt_idmap *idmap,
- 		return;
- 
- 	action = ima_must_appraise(idmap, inode, MAY_ACCESS, POST_SETATTR);
--	iint = integrity_iint_find(inode);
-+	iint = ima_iint_find(inode);
- 	if (iint) {
- 		set_bit(IMA_CHANGE_ATTR, &iint->atomic_flags);
- 		if (!action)
-@@ -674,12 +671,12 @@ static int ima_protect_xattr(struct dentry *dentry, const char *xattr_name,
- 
- static void ima_reset_appraise_flags(struct inode *inode, int digsig)
- {
--	struct integrity_iint_cache *iint;
-+	struct ima_iint_cache *iint;
- 
- 	if (!(ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode))
- 		return;
- 
--	iint = integrity_iint_find(inode);
-+	iint = ima_iint_find(inode);
- 	if (!iint)
- 		return;
- 	iint->measured_pcrs = 0;
-diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/ima_iint.c
-new file mode 100644
-index 000000000000..e7c9c216c1c6
---- /dev/null
-+++ b/security/integrity/ima/ima_iint.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2008 IBM Corporation
-+ *
-+ * Authors:
-+ * Mimi Zohar <zohar@us.ibm.com>
-+ *
-+ * File: ima_iint.c
-+ *	- implements the IMA hook: ima_inode_free
-+ *	- cache integrity information in the inode security blob
-+ */
-+#include <linux/slab.h>
-+
-+#include "ima.h"
-+
-+static struct kmem_cache *ima_iint_cache __ro_after_init;
-+
-+/**
-+ * ima_iint_find - Return the iint associated with an inode
-+ * @inode: Pointer to the inode
-+ *
-+ * Return the IMA integrity information (iint) associated with an inode, if the
-+ * inode was processed by IMA.
-+ *
-+ * Return: Found iint or NULL.
-+ */
-+struct ima_iint_cache *ima_iint_find(struct inode *inode)
-+{
-+	if (!IS_IMA(inode))
-+		return NULL;
-+
-+	return ima_inode_get_iint(inode);
-+}
-+
-+#define IMA_MAX_NESTING (FILESYSTEM_MAX_STACK_DEPTH + 1)
-+
-+/*
-+ * It is not clear that IMA should be nested at all, but as long is it measures
-+ * files both on overlayfs and on underlying fs, we need to annotate the iint
-+ * mutex to avoid lockdep false positives related to IMA + overlayfs.
-+ * See ovl_lockdep_annotate_inode_mutex_key() for more details.
-+ */
-+static inline void ima_iint_lockdep_annotate(struct ima_iint_cache *iint,
-+					     struct inode *inode)
-+{
-+#ifdef CONFIG_LOCKDEP
-+	static struct lock_class_key ima_iint_mutex_key[IMA_MAX_NESTING];
-+
-+	int depth = inode->i_sb->s_stack_depth;
-+
-+	if (WARN_ON_ONCE(depth < 0 || depth >= IMA_MAX_NESTING))
-+		depth = 0;
-+
-+	lockdep_set_class(&iint->mutex, &ima_iint_mutex_key[depth]);
-+#endif
-+}
-+
-+static void ima_iint_init_always(struct ima_iint_cache *iint,
-+				 struct inode *inode)
-+{
-+	iint->ima_hash = NULL;
-+	iint->version = 0;
-+	iint->flags = 0UL;
-+	iint->atomic_flags = 0UL;
-+	iint->ima_file_status = INTEGRITY_UNKNOWN;
-+	iint->ima_mmap_status = INTEGRITY_UNKNOWN;
-+	iint->ima_bprm_status = INTEGRITY_UNKNOWN;
-+	iint->ima_read_status = INTEGRITY_UNKNOWN;
-+	iint->ima_creds_status = INTEGRITY_UNKNOWN;
-+	iint->measured_pcrs = 0;
-+	mutex_init(&iint->mutex);
-+	ima_iint_lockdep_annotate(iint, inode);
-+}
-+
-+static void ima_iint_free(struct ima_iint_cache *iint)
-+{
-+	kfree(iint->ima_hash);
-+	mutex_destroy(&iint->mutex);
-+	kmem_cache_free(ima_iint_cache, iint);
-+}
-+
-+/**
-+ * ima_inode_get - Find or allocate an iint associated with an inode
-+ * @inode: Pointer to the inode
-+ *
-+ * Find an iint associated with an inode, and allocate a new one if not found.
-+ * Caller must lock i_mutex.
-+ *
-+ * Return: An iint on success, NULL on error.
-+ */
-+struct ima_iint_cache *ima_inode_get(struct inode *inode)
-+{
-+	struct ima_iint_cache *iint;
-+
-+	iint = ima_iint_find(inode);
-+	if (iint)
-+		return iint;
-+
-+	iint = kmem_cache_alloc(ima_iint_cache, GFP_NOFS);
-+	if (!iint)
-+		return NULL;
-+
-+	ima_iint_init_always(iint, inode);
-+
-+	inode->i_flags |= S_IMA;
-+	ima_inode_set_iint(inode, iint);
-+
-+	return iint;
-+}
-+
-+/**
-+ * ima_inode_free - Called on inode free
-+ * @inode: Pointer to the inode
-+ *
-+ * Free the iint associated with an inode.
-+ */
-+void ima_inode_free(struct inode *inode)
-+{
-+	struct ima_iint_cache *iint;
-+
-+	if (!IS_IMA(inode))
-+		return;
-+
-+	iint = ima_iint_find(inode);
-+	ima_inode_set_iint(inode, NULL);
-+
-+	ima_iint_free(iint);
-+}
-+
-+static void ima_iint_init_once(void *foo)
-+{
-+	struct ima_iint_cache *iint = (struct ima_iint_cache *)foo;
-+
-+	memset(iint, 0, sizeof(*iint));
-+}
-+
-+void __init ima_iintcache_init(void)
-+{
-+	ima_iint_cache =
-+	    kmem_cache_create("ima_iint_cache", sizeof(struct ima_iint_cache),
-+			      0, SLAB_PANIC, ima_iint_init_once);
-+}
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 63979aefc95f..393f5c7912d5 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -44,7 +44,7 @@ static int __init ima_add_boot_aggregate(void)
- 	static const char op[] = "add_boot_aggregate";
- 	const char *audit_cause = "ENOMEM";
- 	struct ima_template_entry *entry;
--	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
-+	struct ima_iint_cache tmp_iint, *iint = &tmp_iint;
- 	struct ima_event_data event_data = { .iint = iint,
- 					     .filename = boot_aggregate_name };
- 	struct ima_max_digest_data hash;
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index b8b8891a9379..c84e8c55333d 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -114,7 +114,7 @@ static int mmap_violation_check(enum ima_hooks func, struct file *file,
-  *
-  */
- static void ima_rdwr_violation_check(struct file *file,
--				     struct integrity_iint_cache *iint,
-+				     struct ima_iint_cache *iint,
- 				     int must_measure,
- 				     char **pathbuf,
- 				     const char **pathname,
-@@ -127,7 +127,7 @@ static void ima_rdwr_violation_check(struct file *file,
- 	if (mode & FMODE_WRITE) {
- 		if (atomic_read(&inode->i_readcount) && IS_IMA(inode)) {
- 			if (!iint)
--				iint = integrity_iint_find(inode);
-+				iint = ima_iint_find(inode);
- 			/* IMA_MEASURE is set from reader side */
- 			if (iint && test_bit(IMA_MUST_MEASURE,
- 						&iint->atomic_flags))
-@@ -153,7 +153,7 @@ static void ima_rdwr_violation_check(struct file *file,
- 				  "invalid_pcr", "open_writers");
- }
- 
--static void ima_check_last_writer(struct integrity_iint_cache *iint,
-+static void ima_check_last_writer(struct ima_iint_cache *iint,
- 				  struct inode *inode, struct file *file)
- {
- 	fmode_t mode = file->f_mode;
-@@ -192,12 +192,12 @@ static void ima_check_last_writer(struct integrity_iint_cache *iint,
- static void ima_file_free(struct file *file)
- {
- 	struct inode *inode = file_inode(file);
--	struct integrity_iint_cache *iint;
-+	struct ima_iint_cache *iint;
- 
- 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
- 		return;
- 
--	iint = integrity_iint_find(inode);
-+	iint = ima_iint_find(inode);
- 	if (!iint)
- 		return;
- 
-@@ -209,7 +209,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 			       enum ima_hooks func)
- {
- 	struct inode *backing_inode, *inode = file_inode(file);
--	struct integrity_iint_cache *iint = NULL;
-+	struct ima_iint_cache *iint = NULL;
- 	struct ima_template_desc *template_desc = NULL;
- 	char *pathbuf = NULL;
- 	char filename[NAME_MAX];
-@@ -248,7 +248,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	inode_lock(inode);
- 
- 	if (action) {
--		iint = integrity_inode_get(inode);
-+		iint = ima_inode_get(inode);
- 		if (!iint)
- 			rc = -ENOMEM;
- 	}
-@@ -564,11 +564,11 @@ static int ima_file_check(struct file *file, int mask)
- static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
- 			    size_t buf_size)
- {
--	struct integrity_iint_cache *iint = NULL, tmp_iint;
-+	struct ima_iint_cache *iint = NULL, tmp_iint;
- 	int rc, hash_algo;
- 
- 	if (ima_policy_flag) {
--		iint = integrity_iint_find(inode);
-+		iint = ima_iint_find(inode);
- 		if (iint)
- 			mutex_lock(&iint->mutex);
- 	}
-@@ -578,7 +578,6 @@ static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
- 			mutex_unlock(&iint->mutex);
- 
- 		memset(&tmp_iint, 0, sizeof(tmp_iint));
--		tmp_iint.inode = inode;
- 		mutex_init(&tmp_iint.mutex);
- 
- 		rc = ima_collect_measurement(&tmp_iint, file, NULL, 0,
-@@ -688,7 +687,7 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
- 				    struct inode *inode)
- 
- {
--	struct integrity_iint_cache *iint;
-+	struct ima_iint_cache *iint;
- 	int must_appraise;
- 
- 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
-@@ -700,7 +699,7 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
- 		return;
- 
- 	/* Nothing to do if we can't allocate memory */
--	iint = integrity_inode_get(inode);
-+	iint = ima_inode_get(inode);
- 	if (!iint)
- 		return;
- 
-@@ -719,7 +718,7 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
-  */
- static void ima_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
- {
--	struct integrity_iint_cache *iint;
-+	struct ima_iint_cache *iint;
- 	struct inode *inode = dentry->d_inode;
- 	int must_appraise;
- 
-@@ -732,7 +731,7 @@ static void ima_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
- 		return;
- 
- 	/* Nothing to do if we can't allocate memory */
--	iint = integrity_inode_get(inode);
-+	iint = ima_inode_get(inode);
- 	if (!iint)
- 		return;
- 
-@@ -935,7 +934,7 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
- 	int ret = 0;
- 	const char *audit_cause = "ENOMEM";
- 	struct ima_template_entry *entry = NULL;
--	struct integrity_iint_cache iint = {};
-+	struct ima_iint_cache iint = {};
- 	struct ima_event_data event_data = {.iint = &iint,
- 					    .filename = eventname,
- 					    .buf = buf,
-@@ -1172,6 +1171,7 @@ static struct security_hook_list ima_hooks[] __ro_after_init = {
- #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
- 	LSM_HOOK_INIT(kernel_module_request, ima_kernel_module_request),
- #endif
-+	LSM_HOOK_INIT(inode_free_security, ima_inode_free),
- };
- 
- static const struct lsm_id ima_lsmid = {
-@@ -1181,15 +1181,21 @@ static const struct lsm_id ima_lsmid = {
- 
- static int __init init_ima_lsm(void)
- {
-+	ima_iintcache_init();
- 	security_add_hooks(ima_hooks, ARRAY_SIZE(ima_hooks), &ima_lsmid);
- 	init_ima_appraise_lsm(&ima_lsmid);
- 	return 0;
- }
- 
-+struct lsm_blob_sizes ima_blob_sizes __ro_after_init = {
-+	.lbs_inode = sizeof(struct ima_iint_cache *),
-+};
-+
- DEFINE_LSM(ima) = {
- 	.name = "ima",
- 	.init = init_ima_lsm,
- 	.order = LSM_ORDER_LAST,
-+	.blobs = &ima_blob_sizes,
- };
- 
- late_initcall(init_ima);	/* Start IMA after the TPM is available */
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index f69062617754..c0556907c2e6 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -49,7 +49,7 @@
- #define DONT_HASH	0x0200
- 
- #define INVALID_PCR(a) (((a) < 0) || \
--	(a) >= (sizeof_field(struct integrity_iint_cache, measured_pcrs) * 8))
-+	(a) >= (sizeof_field(struct ima_iint_cache, measured_pcrs) * 8))
- 
- int ima_policy_flag;
- static int temp_ima_appraise;
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 7a97c269a072..671fc50255f9 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -20,59 +20,6 @@
- #include <linux/audit.h>
- #include <linux/lsm_hooks.h>
- 
--/* iint action cache flags */
--#define IMA_MEASURE		0x00000001
--#define IMA_MEASURED		0x00000002
--#define IMA_APPRAISE		0x00000004
--#define IMA_APPRAISED		0x00000008
--/*#define IMA_COLLECT		0x00000010  do not use this flag */
--#define IMA_COLLECTED		0x00000020
--#define IMA_AUDIT		0x00000040
--#define IMA_AUDITED		0x00000080
--#define IMA_HASH		0x00000100
--#define IMA_HASHED		0x00000200
--
--/* iint policy rule cache flags */
--#define IMA_NONACTION_FLAGS	0xff000000
--#define IMA_DIGSIG_REQUIRED	0x01000000
--#define IMA_PERMIT_DIRECTIO	0x02000000
--#define IMA_NEW_FILE		0x04000000
--#define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
--#define IMA_MODSIG_ALLOWED	0x20000000
--#define IMA_CHECK_BLACKLIST	0x40000000
--#define IMA_VERITY_REQUIRED	0x80000000
--
--#define IMA_DO_MASK		(IMA_MEASURE | IMA_APPRAISE | IMA_AUDIT | \
--				 IMA_HASH | IMA_APPRAISE_SUBMASK)
--#define IMA_DONE_MASK		(IMA_MEASURED | IMA_APPRAISED | IMA_AUDITED | \
--				 IMA_HASHED | IMA_COLLECTED | \
--				 IMA_APPRAISED_SUBMASK)
--
--/* iint subaction appraise cache flags */
--#define IMA_FILE_APPRAISE	0x00001000
--#define IMA_FILE_APPRAISED	0x00002000
--#define IMA_MMAP_APPRAISE	0x00004000
--#define IMA_MMAP_APPRAISED	0x00008000
--#define IMA_BPRM_APPRAISE	0x00010000
--#define IMA_BPRM_APPRAISED	0x00020000
--#define IMA_READ_APPRAISE	0x00040000
--#define IMA_READ_APPRAISED	0x00080000
--#define IMA_CREDS_APPRAISE	0x00100000
--#define IMA_CREDS_APPRAISED	0x00200000
--#define IMA_APPRAISE_SUBMASK	(IMA_FILE_APPRAISE | IMA_MMAP_APPRAISE | \
--				 IMA_BPRM_APPRAISE | IMA_READ_APPRAISE | \
--				 IMA_CREDS_APPRAISE)
--#define IMA_APPRAISED_SUBMASK	(IMA_FILE_APPRAISED | IMA_MMAP_APPRAISED | \
--				 IMA_BPRM_APPRAISED | IMA_READ_APPRAISED | \
--				 IMA_CREDS_APPRAISED)
--
--/* iint cache atomic_flags */
--#define IMA_CHANGE_XATTR	0
--#define IMA_UPDATE_XATTR	1
--#define IMA_CHANGE_ATTR		2
--#define IMA_DIGSIG		3
--#define IMA_MUST_MEASURE	4
--
- enum evm_ima_xattr_type {
- 	IMA_XATTR_DIGEST = 0x01,
- 	EVM_XATTR_HMAC,
--- 
-2.34.1
-
+Daniel
 
