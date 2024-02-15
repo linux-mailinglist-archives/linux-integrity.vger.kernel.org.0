@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-1265-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1269-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BE30856184
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 12:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EFC5856160
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 12:22:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7A87CB24A56
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 10:49:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C5D3B3738E
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 10:51:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C03C112F5B4;
-	Thu, 15 Feb 2024 10:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347C0135A42;
+	Thu, 15 Feb 2024 10:39:47 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD6412F5A0;
-	Thu, 15 Feb 2024 10:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459B9130E41;
+	Thu, 15 Feb 2024 10:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707993526; cv=none; b=rZJmhdQIjrJKo5PAgDPcye8ciYmEkNnnlwWpBtGZsmqOWcyEjo7Z0WeSOomzMCu5VWkn+Lv1pf/8TORjvEteLxivY2qa/pr9eNtbjiS0txkPP2YMy5j1DvhzEnJzexn1eckVHVRXnp/V9TJMu7gfZd4yP+RLiyt6prevk0nT9q8=
+	t=1707993587; cv=none; b=s7qtrJGXdw9neN8IuFCen3DXEhwjChqqHWjrX0aF35uOI2PLiamv474JG/in22l0UlhjZVUxxgYqhk/83hTCnXgvMORqlPjFca2BXP7nhHkDuHHdxW3ZoOQfhjaKwSeu7deG/PTEzcNgoF54hjOawjAO0wdbivPwXQ7sEt/1piM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707993526; c=relaxed/simple;
-	bh=xyahZpsyPA1uUH6F6L+ZtFfYH8z+mtwo3KsylZIEuWk=;
+	s=arc-20240116; t=1707993587; c=relaxed/simple;
+	bh=zMq/N61JQ6Hs6NcbzOe8UxWEhKFRID9r8j1suadQfi4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=raL7OeJ/ICb5eONlPKW8ZX9VIvfMPnPnd4JQ13LZquCuhubp2pQIF/xInzKAUEZHk8u1TAsPO7O1Yu4eAI0ueeNgHdNw5KYZ7TODA7r9e4KtEf34xt8JIf4+95AHObuG0jgnyRrOxLBBgpw7tD4aFLUqhG9rDwNG7rpeaNe7IFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+	 MIME-Version; b=myPbG4TMTxY/XDcGaatShblF5ykoAmlV3o+o/5aLJgZsHxJeKA6wSh1N3y3FW93hK74Lukkkd0gUAHm9U0qluZM/zI6la14cWjlJ0TAKPdVBf4dadCUOR1ezLUeQUfeK27ssvP2t7ZA1Y8zzv5eWYKg/SD5mGv4z5+NnNughJTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Tb9z86ggPz9xqtf;
-	Thu, 15 Feb 2024 18:19:32 +0800 (CST)
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4TbB4m01TJz9v7VH;
+	Thu, 15 Feb 2024 18:24:24 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 79C4C14059E;
-	Thu, 15 Feb 2024 18:38:36 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 292571406BF;
+	Thu, 15 Feb 2024 18:39:32 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAHABmc6c1lwxGNAg--.11795S2;
-	Thu, 15 Feb 2024 11:38:35 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwAHABmc6c1lwxGNAg--.11795S6;
+	Thu, 15 Feb 2024 11:39:31 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: viro@zeniv.linux.org.uk,
 	brauner@kernel.org,
@@ -71,9 +71,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Roberto Sassu <roberto.sassu@huawei.com>,
 	Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v10 20/25] ima: Move to LSM infrastructure
-Date: Thu, 15 Feb 2024 11:31:08 +0100
-Message-Id: <20240215103113.2369171-21-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v10 24/25] ima: Make it independent from 'integrity' LSM
+Date: Thu, 15 Feb 2024 11:31:12 +0100
+Message-Id: <20240215103113.2369171-25-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
 References: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
@@ -84,734 +84,893 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwAHABmc6c1lwxGNAg--.11795S2
-X-Coremail-Antispam: 1UD129KBjvAXoWfAFWrur4fXry5Gw4rAw4xJFb_yoW5JrWfuo
-	WIqwsxJr4Fgr13GFWFkF1SyFs8Wws8G3yrJrWa9rZ8u3W2yw1UK340va17Ja4UXa1fKa1U
-	W3s7J3yrZa18Jw1rn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUY07kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF
-	7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
-	0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-	IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k2
-	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48J
-	MIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4UJVW0ow
-	CI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvE
-	x4A2jsIEc7CjxVAFwI0_Cr1j6rxdYxBIdaVFxhVjvjDU0xZFpf9x07UGJPiUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5pfbAAAsT
+X-CM-TRANSID:LxC2BwAHABmc6c1lwxGNAg--.11795S6
+X-Coremail-Antispam: 1UD129KBjvAXoWfWr15tF15ZF1DXF4kCF4Uurg_yoW5Zr4Dto
+	Zav39xJr4rWFyfCay8K3WSyFWkuw45K3y3CrZ5WFWDK3W7K34DW347Ww15JFy3ZrW5G39r
+	Cwnrtw4UJF9rJ3Wkn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYZ7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
+	0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
+	80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28Icx
+	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIx
+	AIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdMIIF
+	0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87
+	Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuYvjxUrCJmUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5pfbQABsT
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Move hardcoded IMA function calls (not appraisal-specific functions) from
-various places in the kernel to the LSM infrastructure, by introducing a
-new LSM named 'ima' (at the end of the LSM list and always enabled like
-'integrity').
+Make the 'ima' LSM independent from the 'integrity' LSM by introducing IMA
+own integrity metadata (ima_iint_cache structure, with IMA-specific fields
+from the integrity_iint_cache structure), and by managing it directly from
+the 'ima' LSM.
 
-Having IMA before EVM in the Makefile is sufficient to preserve the
-relative order of the new 'ima' LSM in respect to the upcoming 'evm' LSM,
-and thus the order of IMA and EVM function calls as when they were
-hardcoded.
+Create ima_iint.c and introduce the same integrity metadata management
+functions found in iint.c (renamed with ima_). However, instead of putting
+metadata in an rbtree, reserve space from IMA in the inode security blob
+for a pointer, and introduce the ima_inode_set_iint()/ima_inode_get_iint()
+primitives to store/retrieve that pointer. This improves search time from
+logarithmic to constant.
 
-Make moved functions as static (except ima_post_key_create_or_update(),
-which is not in ima_main.c), and register them as implementation of the
-respective hooks in the new function init_ima_lsm().
+Consequently, don't include the inode pointer as field in the
+ima_iint_cache structure, since the association with the inode is clear.
+Since the inode field is missing in ima_iint_cache, pass the extra inode
+parameter to ima_get_verity_digest().
 
-Select CONFIG_SECURITY_PATH, to ensure that the path-based LSM hook
-path_post_mknod is always available and ima_post_path_mknod() is always
-executed to mark files as new, as before the move.
+Prefer storing the pointer instead of the entire ima_iint_cache structure,
+to avoid too much memory pressure. Use the same mechanism as before, a
+cache named ima_iint_cache (renamed from iint_cache), to quickly allocate
+a new ima_iint_cache structure when requested by the IMA policy.
 
-A slight difference is that IMA and EVM functions registered for the
-inode_post_setattr, inode_post_removexattr, path_post_mknod,
-inode_post_create_tmpfile, inode_post_set_acl and inode_post_remove_acl
-won't be executed for private inodes. Since those inodes are supposed to be
-fs-internal, they should not be of interest to IMA or EVM. The S_PRIVATE
-flag is used for anonymous inodes, hugetlbfs, reiserfs xattrs, XFS scrub
-and kernel-internal tmpfs files.
+Create the new ima_iint_cache in ima_iintcache_init(),
+called by init_ima_lsm(), during the initialization of the 'ima' LSM. And,
+register ima_inode_free_security() to free the ima_iint_cache structure, if
+exists.
 
-Conditionally register ima_post_key_create_or_update() if
-CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS is enabled. Also, conditionally register
-ima_kernel_module_request() if CONFIG_INTEGRITY_ASYMMETRIC_KEYS is enabled.
+Replace integrity_iint_cache with ima_iint_cache in various places of the
+IMA code. Also, replace integrity_inode_get() and integrity_iint_find(),
+respectively with ima_inode_get() and ima_iint_find().
 
-Finally, add the LSM_ID_IMA case in lsm_list_modules_test.c.
+Finally, move the remaining IMA-specific flags
+to security/integrity/ima/ima.h, since they are now unnecessary in the
+common integrity layer.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Acked-by: Chuck Lever <chuck.lever@oracle.com>
-Acked-by: Casey Schaufler <casey@schaufler-ca.com>
-Acked-by: Paul Moore <paul@paul-moore.com>
-Acked-by: Christian Brauner <brauner@kernel.org>
+Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 Acked-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- fs/file_table.c                               |   2 -
- fs/namei.c                                    |   6 -
- fs/nfsd/vfs.c                                 |   7 --
- fs/open.c                                     |   1 -
- include/linux/ima.h                           | 104 ------------------
- include/uapi/linux/lsm.h                      |   1 +
- security/integrity/Makefile                   |   1 +
- security/integrity/ima/Kconfig                |   1 +
- security/integrity/ima/ima.h                  |   6 +
- security/integrity/ima/ima_main.c             |  78 +++++++++----
- security/integrity/integrity.h                |   1 +
- security/keys/key.c                           |   9 +-
- security/security.c                           |  63 ++---------
- .../selftests/lsm/lsm_list_modules_test.c     |   3 +
- 14 files changed, 83 insertions(+), 200 deletions(-)
+ security/integrity/ima/Makefile       |   2 +-
+ security/integrity/ima/ima.h          | 137 +++++++++++++++++++++----
+ security/integrity/ima/ima_api.c      |  23 +++--
+ security/integrity/ima/ima_appraise.c |  27 +++--
+ security/integrity/ima/ima_iint.c     | 142 ++++++++++++++++++++++++++
+ security/integrity/ima/ima_init.c     |   2 +-
+ security/integrity/ima/ima_main.c     |  36 ++++---
+ security/integrity/ima/ima_policy.c   |   2 +-
+ security/integrity/integrity.h        |  53 ----------
+ 9 files changed, 308 insertions(+), 116 deletions(-)
+ create mode 100644 security/integrity/ima/ima_iint.c
 
-diff --git a/fs/file_table.c b/fs/file_table.c
-index 725407f374fa..1a0962981b48 100644
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -26,7 +26,6 @@
- #include <linux/percpu_counter.h>
- #include <linux/percpu.h>
- #include <linux/task_work.h>
--#include <linux/ima.h>
- #include <linux/swap.h>
- #include <linux/kmemleak.h>
+diff --git a/security/integrity/ima/Makefile b/security/integrity/ima/Makefile
+index 2499f2485c04..b376d38b4ee6 100644
+--- a/security/integrity/ima/Makefile
++++ b/security/integrity/ima/Makefile
+@@ -4,7 +4,7 @@
+ # Measurement Architecture(IMA).
+ #
  
-@@ -368,7 +367,6 @@ static void __fput(struct file *file)
- 	locks_remove_file(file);
+-obj-$(CONFIG_IMA) += ima.o
++obj-$(CONFIG_IMA) += ima.o ima_iint.o
  
- 	security_file_release(file);
--	ima_file_free(file);
- 	if (unlikely(file->f_flags & FASYNC)) {
- 		if (file->f_op->fasync)
- 			file->f_op->fasync(-1, file, 0);
-diff --git a/fs/namei.c b/fs/namei.c
-index c7ac7fdf0f25..1bf7435cdf76 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -27,7 +27,6 @@
- #include <linux/fsnotify.h>
- #include <linux/personality.h>
- #include <linux/security.h>
--#include <linux/ima.h>
- #include <linux/syscalls.h>
- #include <linux/mount.h>
- #include <linux/audit.h>
-@@ -3641,8 +3640,6 @@ static int do_open(struct nameidata *nd,
- 		error = vfs_open(&nd->path, file);
- 	if (!error)
- 		error = security_file_post_open(file, op->acc_mode);
--	if (!error)
--		error = ima_file_check(file, op->acc_mode);
- 	if (!error && do_truncate)
- 		error = handle_truncate(idmap, file);
- 	if (unlikely(error > 0)) {
-@@ -3706,7 +3703,6 @@ static int vfs_tmpfile(struct mnt_idmap *idmap,
- 		spin_unlock(&inode->i_lock);
- 	}
- 	security_inode_post_create_tmpfile(idmap, inode);
--	ima_post_create_tmpfile(idmap, inode);
+ ima-y := ima_fs.o ima_queue.o ima_init.o ima_main.o ima_crypto.o ima_api.o \
+ 	 ima_policy.o ima_template.o ima_template_lib.o
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index a27fc10f84f7..11d7c0332207 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -60,7 +60,7 @@ extern const char boot_aggregate_name[];
+ 
+ /* IMA event related data */
+ struct ima_event_data {
+-	struct integrity_iint_cache *iint;
++	struct ima_iint_cache *iint;
+ 	struct file *file;
+ 	const unsigned char *filename;
+ 	struct evm_ima_xattr_data *xattr_value;
+@@ -119,6 +119,107 @@ struct ima_kexec_hdr {
+ 	u64 count;
+ };
+ 
++/* IMA iint action cache flags */
++#define IMA_MEASURE		0x00000001
++#define IMA_MEASURED		0x00000002
++#define IMA_APPRAISE		0x00000004
++#define IMA_APPRAISED		0x00000008
++/*#define IMA_COLLECT		0x00000010  do not use this flag */
++#define IMA_COLLECTED		0x00000020
++#define IMA_AUDIT		0x00000040
++#define IMA_AUDITED		0x00000080
++#define IMA_HASH		0x00000100
++#define IMA_HASHED		0x00000200
++
++/* IMA iint policy rule cache flags */
++#define IMA_NONACTION_FLAGS	0xff000000
++#define IMA_DIGSIG_REQUIRED	0x01000000
++#define IMA_PERMIT_DIRECTIO	0x02000000
++#define IMA_NEW_FILE		0x04000000
++#define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
++#define IMA_MODSIG_ALLOWED	0x20000000
++#define IMA_CHECK_BLACKLIST	0x40000000
++#define IMA_VERITY_REQUIRED	0x80000000
++
++#define IMA_DO_MASK		(IMA_MEASURE | IMA_APPRAISE | IMA_AUDIT | \
++				 IMA_HASH | IMA_APPRAISE_SUBMASK)
++#define IMA_DONE_MASK		(IMA_MEASURED | IMA_APPRAISED | IMA_AUDITED | \
++				 IMA_HASHED | IMA_COLLECTED | \
++				 IMA_APPRAISED_SUBMASK)
++
++/* IMA iint subaction appraise cache flags */
++#define IMA_FILE_APPRAISE	0x00001000
++#define IMA_FILE_APPRAISED	0x00002000
++#define IMA_MMAP_APPRAISE	0x00004000
++#define IMA_MMAP_APPRAISED	0x00008000
++#define IMA_BPRM_APPRAISE	0x00010000
++#define IMA_BPRM_APPRAISED	0x00020000
++#define IMA_READ_APPRAISE	0x00040000
++#define IMA_READ_APPRAISED	0x00080000
++#define IMA_CREDS_APPRAISE	0x00100000
++#define IMA_CREDS_APPRAISED	0x00200000
++#define IMA_APPRAISE_SUBMASK	(IMA_FILE_APPRAISE | IMA_MMAP_APPRAISE | \
++				 IMA_BPRM_APPRAISE | IMA_READ_APPRAISE | \
++				 IMA_CREDS_APPRAISE)
++#define IMA_APPRAISED_SUBMASK	(IMA_FILE_APPRAISED | IMA_MMAP_APPRAISED | \
++				 IMA_BPRM_APPRAISED | IMA_READ_APPRAISED | \
++				 IMA_CREDS_APPRAISED)
++
++/* IMA iint cache atomic_flags */
++#define IMA_CHANGE_XATTR	0
++#define IMA_UPDATE_XATTR	1
++#define IMA_CHANGE_ATTR		2
++#define IMA_DIGSIG		3
++#define IMA_MUST_MEASURE	4
++
++/* IMA integrity metadata associated with an inode */
++struct ima_iint_cache {
++	struct mutex mutex;	/* protects: version, flags, digest */
++	u64 version;		/* track inode changes */
++	unsigned long flags;
++	unsigned long measured_pcrs;
++	unsigned long atomic_flags;
++	unsigned long real_ino;
++	dev_t real_dev;
++	enum integrity_status ima_file_status:4;
++	enum integrity_status ima_mmap_status:4;
++	enum integrity_status ima_bprm_status:4;
++	enum integrity_status ima_read_status:4;
++	enum integrity_status ima_creds_status:4;
++	struct ima_digest_data *ima_hash;
++};
++
++extern struct lsm_blob_sizes ima_blob_sizes;
++
++static inline struct ima_iint_cache *
++ima_inode_get_iint(const struct inode *inode)
++{
++	struct ima_iint_cache **iint_sec;
++
++	if (unlikely(!inode->i_security))
++		return NULL;
++
++	iint_sec = inode->i_security + ima_blob_sizes.lbs_inode;
++	return *iint_sec;
++}
++
++static inline void ima_inode_set_iint(const struct inode *inode,
++				      struct ima_iint_cache *iint)
++{
++	struct ima_iint_cache **iint_sec;
++
++	if (unlikely(!inode->i_security))
++		return;
++
++	iint_sec = inode->i_security + ima_blob_sizes.lbs_inode;
++	*iint_sec = iint;
++}
++
++struct ima_iint_cache *ima_iint_find(struct inode *inode);
++struct ima_iint_cache *ima_inode_get(struct inode *inode);
++void ima_inode_free(struct inode *inode);
++void __init ima_iintcache_init(void);
++
+ extern const int read_idmap[];
+ 
+ #ifdef CONFIG_HAVE_IMA_KEXEC
+@@ -152,8 +253,8 @@ int ima_calc_field_array_hash(struct ima_field_data *field_data,
+ 			      struct ima_template_entry *entry);
+ int ima_calc_boot_aggregate(struct ima_digest_data *hash);
+ void ima_add_violation(struct file *file, const unsigned char *filename,
+-		       struct integrity_iint_cache *iint,
+-		       const char *op, const char *cause);
++		       struct ima_iint_cache *iint, const char *op,
++		       const char *cause);
+ int ima_init_crypto(void);
+ void ima_putc(struct seq_file *m, void *data, int datalen);
+ void ima_print_digest(struct seq_file *m, u8 *digest, u32 size);
+@@ -267,10 +368,10 @@ int ima_get_action(struct mnt_idmap *idmap, struct inode *inode,
+ 		   struct ima_template_desc **template_desc,
+ 		   const char *func_data, unsigned int *allowed_algos);
+ int ima_must_measure(struct inode *inode, int mask, enum ima_hooks func);
+-int ima_collect_measurement(struct integrity_iint_cache *iint,
+-			    struct file *file, void *buf, loff_t size,
+-			    enum hash_algo algo, struct modsig *modsig);
+-void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
++int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
++			    void *buf, loff_t size, enum hash_algo algo,
++			    struct modsig *modsig);
++void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
+ 			   const unsigned char *filename,
+ 			   struct evm_ima_xattr_data *xattr_value,
+ 			   int xattr_len, const struct modsig *modsig, int pcr,
+@@ -280,7 +381,7 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
+ 			       const char *eventname, enum ima_hooks func,
+ 			       int pcr, const char *func_data,
+ 			       bool buf_hash, u8 *digest, size_t digest_len);
+-void ima_audit_measurement(struct integrity_iint_cache *iint,
++void ima_audit_measurement(struct ima_iint_cache *iint,
+ 			   const unsigned char *filename);
+ int ima_alloc_init_template(struct ima_event_data *event_data,
+ 			    struct ima_template_entry **entry,
+@@ -318,17 +419,16 @@ int ima_policy_show(struct seq_file *m, void *v);
+ #define IMA_APPRAISE_KEXEC	0x40
+ 
+ #ifdef CONFIG_IMA_APPRAISE
+-int ima_check_blacklist(struct integrity_iint_cache *iint,
++int ima_check_blacklist(struct ima_iint_cache *iint,
+ 			const struct modsig *modsig, int pcr);
+-int ima_appraise_measurement(enum ima_hooks func,
+-			     struct integrity_iint_cache *iint,
++int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 			     struct file *file, const unsigned char *filename,
+ 			     struct evm_ima_xattr_data *xattr_value,
+ 			     int xattr_len, const struct modsig *modsig);
+ int ima_must_appraise(struct mnt_idmap *idmap, struct inode *inode,
+ 		      int mask, enum ima_hooks func);
+-void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file);
+-enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
++void ima_update_xattr(struct ima_iint_cache *iint, struct file *file);
++enum integrity_status ima_get_cache_status(struct ima_iint_cache *iint,
+ 					   enum ima_hooks func);
+ enum hash_algo ima_get_hash_algo(const struct evm_ima_xattr_data *xattr_value,
+ 				 int xattr_len);
+@@ -337,14 +437,14 @@ int ima_read_xattr(struct dentry *dentry,
+ void __init init_ima_appraise_lsm(const struct lsm_id *lsmid);
+ 
+ #else
+-static inline int ima_check_blacklist(struct integrity_iint_cache *iint,
++static inline int ima_check_blacklist(struct ima_iint_cache *iint,
+ 				      const struct modsig *modsig, int pcr)
+ {
  	return 0;
  }
  
-@@ -4052,8 +4048,6 @@ static int do_mknodat(int dfd, struct filename *name, umode_t mode,
- 		case 0: case S_IFREG:
- 			error = vfs_create(idmap, path.dentry->d_inode,
- 					   dentry, mode, true);
--			if (!error)
--				ima_post_path_mknod(idmap, dentry);
- 			break;
- 		case S_IFCHR: case S_IFBLK:
- 			error = vfs_mknod(idmap, path.dentry->d_inode,
-diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
-index e44d8239545b..4349dde92154 100644
---- a/fs/nfsd/vfs.c
-+++ b/fs/nfsd/vfs.c
-@@ -25,7 +25,6 @@
- #include <linux/posix_acl_xattr.h>
- #include <linux/xattr.h>
- #include <linux/jhash.h>
--#include <linux/ima.h>
- #include <linux/pagemap.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
-@@ -883,12 +882,6 @@ __nfsd_open(struct svc_rqst *rqstp, struct svc_fh *fhp, umode_t type,
- 		goto out;
- 	}
- 
--	host_err = ima_file_check(file, may_flags);
--	if (host_err) {
--		fput(file);
--		goto out;
--	}
--
- 	if (may_flags & NFSD_MAY_64BIT_COOKIE)
- 		file->f_mode |= FMODE_64BITHASH;
- 	else
-diff --git a/fs/open.c b/fs/open.c
-index a84d21e55c39..1cf05a1413aa 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -29,7 +29,6 @@
- #include <linux/audit.h>
- #include <linux/falloc.h>
- #include <linux/fs_struct.h>
--#include <linux/ima.h>
- #include <linux/dnotify.h>
- #include <linux/compat.h>
- #include <linux/mnt_idmapping.h>
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 0f9af283cbc8..23ae24b60ecf 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -16,24 +16,6 @@ struct linux_binprm;
- 
- #ifdef CONFIG_IMA
- extern enum hash_algo ima_get_current_hash_algo(void);
--extern int ima_bprm_check(struct linux_binprm *bprm);
--extern int ima_file_check(struct file *file, int mask);
--extern void ima_post_create_tmpfile(struct mnt_idmap *idmap,
--				    struct inode *inode);
--extern void ima_file_free(struct file *file);
--extern int ima_file_mmap(struct file *file, unsigned long reqprot,
--			 unsigned long prot, unsigned long flags);
--extern int ima_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
--			     unsigned long prot);
--extern int ima_load_data(enum kernel_load_data_id id, bool contents);
--extern int ima_post_load_data(char *buf, loff_t size,
--			      enum kernel_load_data_id id, char *description);
--extern int ima_read_file(struct file *file, enum kernel_read_file_id id,
--			 bool contents);
--extern int ima_post_read_file(struct file *file, char *buf, loff_t size,
--			      enum kernel_read_file_id id);
--extern void ima_post_path_mknod(struct mnt_idmap *idmap,
--				struct dentry *dentry);
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
- extern int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
-@@ -58,68 +40,6 @@ static inline enum hash_algo ima_get_current_hash_algo(void)
- 	return HASH_ALGO__LAST;
+ static inline int ima_appraise_measurement(enum ima_hooks func,
+-					   struct integrity_iint_cache *iint,
++					   struct ima_iint_cache *iint,
+ 					   struct file *file,
+ 					   const unsigned char *filename,
+ 					   struct evm_ima_xattr_data *xattr_value,
+@@ -361,14 +461,13 @@ static inline int ima_must_appraise(struct mnt_idmap *idmap,
+ 	return 0;
  }
  
--static inline int ima_bprm_check(struct linux_binprm *bprm)
--{
--	return 0;
--}
--
--static inline int ima_file_check(struct file *file, int mask)
--{
--	return 0;
--}
--
--static inline void ima_post_create_tmpfile(struct mnt_idmap *idmap,
--					   struct inode *inode)
--{
--}
--
--static inline void ima_file_free(struct file *file)
--{
--	return;
--}
--
--static inline int ima_file_mmap(struct file *file, unsigned long reqprot,
--				unsigned long prot, unsigned long flags)
--{
--	return 0;
--}
--
--static inline int ima_file_mprotect(struct vm_area_struct *vma,
--				    unsigned long reqprot, unsigned long prot)
--{
--	return 0;
--}
--
--static inline int ima_load_data(enum kernel_load_data_id id, bool contents)
--{
--	return 0;
--}
--
--static inline int ima_post_load_data(char *buf, loff_t size,
--				     enum kernel_load_data_id id,
--				     char *description)
--{
--	return 0;
--}
--
--static inline int ima_read_file(struct file *file, enum kernel_read_file_id id,
--				bool contents)
--{
--	return 0;
--}
--
--static inline int ima_post_read_file(struct file *file, char *buf, loff_t size,
--				     enum kernel_read_file_id id)
--{
--	return 0;
--}
--
--static inline void ima_post_path_mknod(struct mnt_idmap *idmap,
--				       struct dentry *dentry)
--{
--	return;
--}
--
- static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+-static inline void ima_update_xattr(struct integrity_iint_cache *iint,
++static inline void ima_update_xattr(struct ima_iint_cache *iint,
+ 				    struct file *file)
  {
- 	return -EOPNOTSUPP;
-@@ -170,20 +90,6 @@ static inline void ima_add_kexec_buffer(struct kimage *image)
- {}
- #endif
- 
--#ifdef CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
--extern void ima_post_key_create_or_update(struct key *keyring,
--					  struct key *key,
--					  const void *payload, size_t plen,
--					  unsigned long flags, bool create);
--#else
--static inline void ima_post_key_create_or_update(struct key *keyring,
--						 struct key *key,
--						 const void *payload,
--						 size_t plen,
--						 unsigned long flags,
--						 bool create) {}
--#endif  /* CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS */
--
- #ifdef CONFIG_IMA_APPRAISE
- extern bool is_ima_appraise_enabled(void);
- extern void ima_inode_post_setattr(struct mnt_idmap *idmap,
-@@ -256,14 +162,4 @@ static inline bool ima_appraise_signature(enum kernel_read_file_id func)
- 	return false;
  }
- #endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRING */
--
--#if defined(CONFIG_IMA) && defined(CONFIG_INTEGRITY_ASYMMETRIC_KEYS)
--extern int ima_kernel_module_request(char *kmod_name);
--#else
--static inline int ima_kernel_module_request(char *kmod_name)
--{
--	return 0;
--}
--
--#endif
- #endif /* _LINUX_IMA_H */
-diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-index f8aef9ade549..b3b7fd699b63 100644
---- a/include/uapi/linux/lsm.h
-+++ b/include/uapi/linux/lsm.h
-@@ -62,6 +62,7 @@ struct lsm_ctx {
- #define LSM_ID_LOCKDOWN		108
- #define LSM_ID_BPF		109
- #define LSM_ID_LANDLOCK		110
-+#define LSM_ID_IMA		111
  
- /*
-  * LSM_ATTR_XXX definitions identify different LSM attributes
-diff --git a/security/integrity/Makefile b/security/integrity/Makefile
-index d0ffe37dc1d6..92b63039c654 100644
---- a/security/integrity/Makefile
-+++ b/security/integrity/Makefile
-@@ -18,5 +18,6 @@ integrity-$(CONFIG_LOAD_IPL_KEYS) += platform_certs/load_ipl_s390.o
- integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
-                                      platform_certs/load_powerpc.o \
-                                      platform_certs/keyring_handler.o
-+# The relative order of the 'ima' and 'evm' LSMs depends on the order below.
- obj-$(CONFIG_IMA)			+= ima/
- obj-$(CONFIG_EVM)			+= evm/
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index b98bfe9efd0c..475c32615006 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -8,6 +8,7 @@ config IMA
- 	select CRYPTO_HMAC
- 	select CRYPTO_SHA1
- 	select CRYPTO_HASH_INFO
-+	select SECURITY_PATH
- 	select TCG_TPM if HAS_IOMEM
- 	select TCG_TIS if TCG_TPM && X86
- 	select TCG_CRB if TCG_TPM && ACPI
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index c29db699c996..c0412100023e 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -127,6 +127,12 @@ void ima_load_kexec_buffer(void);
- static inline void ima_load_kexec_buffer(void) {}
- #endif /* CONFIG_HAVE_IMA_KEXEC */
- 
-+#ifdef CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
-+void ima_post_key_create_or_update(struct key *keyring, struct key *key,
-+				   const void *payload, size_t plen,
-+				   unsigned long flags, bool create);
-+#endif
-+
- /*
-  * The default binary_runtime_measurements list format is defined as the
-  * platform native format.  The canonical format is defined as little-endian.
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 3891b83efdb3..d0826e864c29 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -189,7 +189,7 @@ static void ima_check_last_writer(struct integrity_iint_cache *iint,
-  *
-  * Flag files that changed, based on i_version
+-static inline enum integrity_status ima_get_cache_status(struct integrity_iint_cache
+-							 *iint,
+-							 enum ima_hooks func)
++static inline enum integrity_status
++ima_get_cache_status(struct ima_iint_cache *iint, enum ima_hooks func)
+ {
+ 	return INTEGRITY_UNKNOWN;
+ }
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index 597ea0c4d72f..b37d043d5748 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -131,8 +131,8 @@ int ima_store_template(struct ima_template_entry *entry,
+  * value is invalidated.
   */
--void ima_file_free(struct file *file)
-+static void ima_file_free(struct file *file)
+ void ima_add_violation(struct file *file, const unsigned char *filename,
+-		       struct integrity_iint_cache *iint,
+-		       const char *op, const char *cause)
++		       struct ima_iint_cache *iint, const char *op,
++		       const char *cause)
  {
+ 	struct ima_template_entry *entry;
  	struct inode *inode = file_inode(file);
- 	struct integrity_iint_cache *iint;
-@@ -427,8 +427,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
-  * On success return 0.  On integrity appraisal error, assuming the file
-  * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
-  */
--int ima_file_mmap(struct file *file, unsigned long reqprot,
--		  unsigned long prot, unsigned long flags)
-+static int ima_file_mmap(struct file *file, unsigned long reqprot,
-+			 unsigned long prot, unsigned long flags)
- {
- 	u32 secid;
- 	int ret;
-@@ -466,8 +466,8 @@ int ima_file_mmap(struct file *file, unsigned long reqprot,
-  *
-  * On mprotect change success, return 0.  On failure, return -EACESS.
-  */
--int ima_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
--		      unsigned long prot)
-+static int ima_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
-+			     unsigned long prot)
- {
- 	struct ima_template_desc *template = NULL;
- 	struct file *file;
-@@ -525,7 +525,7 @@ int ima_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
-  * On success return 0.  On integrity appraisal error, assuming the file
-  * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
-  */
--int ima_bprm_check(struct linux_binprm *bprm)
-+static int ima_bprm_check(struct linux_binprm *bprm)
- {
- 	int ret;
- 	u32 secid;
-@@ -551,7 +551,7 @@ int ima_bprm_check(struct linux_binprm *bprm)
-  * On success return 0.  On integrity appraisal error, assuming the file
-  * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
-  */
--int ima_file_check(struct file *file, int mask)
-+static int ima_file_check(struct file *file, int mask)
- {
- 	u32 secid;
- 
-@@ -560,7 +560,6 @@ int ima_file_check(struct file *file, int mask)
- 				   mask & (MAY_READ | MAY_WRITE | MAY_EXEC |
- 					   MAY_APPEND), FILE_CHECK);
- }
--EXPORT_SYMBOL_GPL(ima_file_check);
- 
- static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
- 			    size_t buf_size)
-@@ -685,8 +684,9 @@ EXPORT_SYMBOL_GPL(ima_inode_hash);
-  * Skip calling process_measurement(), but indicate which newly, created
-  * tmpfiles are in policy.
-  */
--void ima_post_create_tmpfile(struct mnt_idmap *idmap,
--			     struct inode *inode)
-+static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
-+				    struct inode *inode)
-+
- {
- 	struct integrity_iint_cache *iint;
- 	int must_appraise;
-@@ -717,8 +717,7 @@ void ima_post_create_tmpfile(struct mnt_idmap *idmap,
-  * Mark files created via the mknodat syscall as new, so that the
-  * file data can be written later.
-  */
--void ima_post_path_mknod(struct mnt_idmap *idmap,
--			 struct dentry *dentry)
-+static void ima_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
- {
- 	struct integrity_iint_cache *iint;
- 	struct inode *inode = dentry->d_inode;
-@@ -753,8 +752,8 @@ void ima_post_path_mknod(struct mnt_idmap *idmap,
-  *
-  * For permission return 0, otherwise return -EACCES.
-  */
--int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
--		  bool contents)
-+static int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
-+			 bool contents)
- {
- 	enum ima_hooks func;
- 	u32 secid;
-@@ -803,8 +802,8 @@ const int read_idmap[READING_MAX_ID] = {
-  * On success return 0.  On integrity appraisal error, assuming the file
-  * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
-  */
--int ima_post_read_file(struct file *file, char *buf, loff_t size,
--		       enum kernel_read_file_id read_id)
-+static int ima_post_read_file(struct file *file, char *buf, loff_t size,
-+			      enum kernel_read_file_id read_id)
- {
- 	enum ima_hooks func;
- 	u32 secid;
-@@ -837,7 +836,7 @@ int ima_post_read_file(struct file *file, char *buf, loff_t size,
-  *
-  * For permission return 0, otherwise return -EACCES.
-  */
--int ima_load_data(enum kernel_load_data_id id, bool contents)
-+static int ima_load_data(enum kernel_load_data_id id, bool contents)
- {
- 	bool ima_enforce, sig_enforce;
- 
-@@ -891,9 +890,9 @@ int ima_load_data(enum kernel_load_data_id id, bool contents)
-  * On success return 0.  On integrity appraisal error, assuming the file
-  * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
-  */
--int ima_post_load_data(char *buf, loff_t size,
--		       enum kernel_load_data_id load_id,
--		       char *description)
-+static int ima_post_load_data(char *buf, loff_t size,
-+			      enum kernel_load_data_id load_id,
-+			      char *description)
- {
- 	if (load_id == LOADING_FIRMWARE) {
- 		if ((ima_appraise & IMA_APPRAISE_FIRMWARE) &&
-@@ -1114,7 +1113,7 @@ EXPORT_SYMBOL_GPL(ima_measure_critical_data);
-  *
-  * Return: Zero if it is safe to load the kernel module, -EINVAL otherwise.
-  */
--int ima_kernel_module_request(char *kmod_name)
-+static int ima_kernel_module_request(char *kmod_name)
- {
- 	if (strncmp(kmod_name, "crypto-pkcs1pad(rsa,", 20) == 0)
- 		return -EINVAL;
-@@ -1155,4 +1154,41 @@ static int __init init_ima(void)
- 	return error;
+@@ -201,7 +201,8 @@ int ima_get_action(struct mnt_idmap *idmap, struct inode *inode,
+ 				allowed_algos);
  }
  
-+static struct security_hook_list ima_hooks[] __ro_after_init = {
-+	LSM_HOOK_INIT(bprm_check_security, ima_bprm_check),
-+	LSM_HOOK_INIT(file_post_open, ima_file_check),
-+	LSM_HOOK_INIT(inode_post_create_tmpfile, ima_post_create_tmpfile),
-+	LSM_HOOK_INIT(file_release, ima_file_free),
-+	LSM_HOOK_INIT(mmap_file, ima_file_mmap),
-+	LSM_HOOK_INIT(file_mprotect, ima_file_mprotect),
-+	LSM_HOOK_INIT(kernel_load_data, ima_load_data),
-+	LSM_HOOK_INIT(kernel_post_load_data, ima_post_load_data),
-+	LSM_HOOK_INIT(kernel_read_file, ima_read_file),
-+	LSM_HOOK_INIT(kernel_post_read_file, ima_post_read_file),
-+	LSM_HOOK_INIT(path_post_mknod, ima_post_path_mknod),
-+#ifdef CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
-+	LSM_HOOK_INIT(key_post_create_or_update, ima_post_key_create_or_update),
-+#endif
-+#ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
-+	LSM_HOOK_INIT(kernel_module_request, ima_kernel_module_request),
-+#endif
-+};
+-static bool ima_get_verity_digest(struct integrity_iint_cache *iint,
++static bool ima_get_verity_digest(struct ima_iint_cache *iint,
++				  struct inode *inode,
+ 				  struct ima_max_digest_data *hash)
+ {
+ 	enum hash_algo alg;
+@@ -211,7 +212,7 @@ static bool ima_get_verity_digest(struct integrity_iint_cache *iint,
+ 	 * On failure, 'measure' policy rules will result in a file data
+ 	 * hash containing 0's.
+ 	 */
+-	digest_len = fsverity_get_digest(iint->inode, hash->digest, NULL, &alg);
++	digest_len = fsverity_get_digest(inode, hash->digest, NULL, &alg);
+ 	if (digest_len == 0)
+ 		return false;
+ 
+@@ -237,9 +238,9 @@ static bool ima_get_verity_digest(struct integrity_iint_cache *iint,
+  *
+  * Return 0 on success, error code otherwise
+  */
+-int ima_collect_measurement(struct integrity_iint_cache *iint,
+-			    struct file *file, void *buf, loff_t size,
+-			    enum hash_algo algo, struct modsig *modsig)
++int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
++			    void *buf, loff_t size, enum hash_algo algo,
++			    struct modsig *modsig)
+ {
+ 	const char *audit_cause = "failed";
+ 	struct inode *inode = file_inode(file);
+@@ -280,7 +281,7 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+ 	memset(&hash.digest, 0, sizeof(hash.digest));
+ 
+ 	if (iint->flags & IMA_VERITY_REQUIRED) {
+-		if (!ima_get_verity_digest(iint, &hash)) {
++		if (!ima_get_verity_digest(iint, inode, &hash)) {
+ 			audit_cause = "no-verity-digest";
+ 			result = -ENODATA;
+ 		}
+@@ -338,8 +339,8 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
+  *
+  * Must be called with iint->mutex held.
+  */
+-void ima_store_measurement(struct integrity_iint_cache *iint,
+-			   struct file *file, const unsigned char *filename,
++void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
++			   const unsigned char *filename,
+ 			   struct evm_ima_xattr_data *xattr_value,
+ 			   int xattr_len, const struct modsig *modsig, int pcr,
+ 			   struct ima_template_desc *template_desc)
+@@ -382,7 +383,7 @@ void ima_store_measurement(struct integrity_iint_cache *iint,
+ 		ima_free_template_entry(entry);
+ }
+ 
+-void ima_audit_measurement(struct integrity_iint_cache *iint,
++void ima_audit_measurement(struct ima_iint_cache *iint,
+ 			   const unsigned char *filename)
+ {
+ 	struct audit_buffer *ab;
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index 1dd6ee72a20a..3497741caea9 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -84,8 +84,7 @@ int ima_must_appraise(struct mnt_idmap *idmap, struct inode *inode,
+ 				NULL, NULL, NULL);
+ }
+ 
+-static int ima_fix_xattr(struct dentry *dentry,
+-			 struct integrity_iint_cache *iint)
++static int ima_fix_xattr(struct dentry *dentry, struct ima_iint_cache *iint)
+ {
+ 	int rc, offset;
+ 	u8 algo = iint->ima_hash->algo;
+@@ -106,7 +105,7 @@ static int ima_fix_xattr(struct dentry *dentry,
+ }
+ 
+ /* Return specific func appraised cached result */
+-enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
++enum integrity_status ima_get_cache_status(struct ima_iint_cache *iint,
+ 					   enum ima_hooks func)
+ {
+ 	switch (func) {
+@@ -126,7 +125,7 @@ enum integrity_status ima_get_cache_status(struct integrity_iint_cache *iint,
+ 	}
+ }
+ 
+-static void ima_set_cache_status(struct integrity_iint_cache *iint,
++static void ima_set_cache_status(struct ima_iint_cache *iint,
+ 				 enum ima_hooks func,
+ 				 enum integrity_status status)
+ {
+@@ -152,8 +151,7 @@ static void ima_set_cache_status(struct integrity_iint_cache *iint,
+ 	}
+ }
+ 
+-static void ima_cache_flags(struct integrity_iint_cache *iint,
+-			     enum ima_hooks func)
++static void ima_cache_flags(struct ima_iint_cache *iint, enum ima_hooks func)
+ {
+ 	switch (func) {
+ 	case MMAP_CHECK:
+@@ -276,7 +274,7 @@ static int calc_file_id_hash(enum evm_ima_xattr_type type,
+  *
+  * Return 0 on success, error code otherwise.
+  */
+-static int xattr_verify(enum ima_hooks func, struct integrity_iint_cache *iint,
++static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
+ 			struct evm_ima_xattr_data *xattr_value, int xattr_len,
+ 			enum integrity_status *status, const char **cause)
+ {
+@@ -443,7 +441,7 @@ static int modsig_verify(enum ima_hooks func, const struct modsig *modsig,
+  *
+  * Returns -EPERM if the hash is blacklisted.
+  */
+-int ima_check_blacklist(struct integrity_iint_cache *iint,
++int ima_check_blacklist(struct ima_iint_cache *iint,
+ 			const struct modsig *modsig, int pcr)
+ {
+ 	enum hash_algo hash_algo;
+@@ -477,8 +475,7 @@ int ima_check_blacklist(struct integrity_iint_cache *iint,
+  *
+  * Return 0 on success, error code otherwise
+  */
+-int ima_appraise_measurement(enum ima_hooks func,
+-			     struct integrity_iint_cache *iint,
++int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 			     struct file *file, const unsigned char *filename,
+ 			     struct evm_ima_xattr_data *xattr_value,
+ 			     int xattr_len, const struct modsig *modsig)
+@@ -603,7 +600,7 @@ int ima_appraise_measurement(enum ima_hooks func,
+ /*
+  * ima_update_xattr - update 'security.ima' hash value
+  */
+-void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file)
++void ima_update_xattr(struct ima_iint_cache *iint, struct file *file)
+ {
+ 	struct dentry *dentry = file_dentry(file);
+ 	int rc = 0;
+@@ -640,7 +637,7 @@ static void ima_inode_post_setattr(struct mnt_idmap *idmap,
+ 				   struct dentry *dentry, int ia_valid)
+ {
+ 	struct inode *inode = d_backing_inode(dentry);
+-	struct integrity_iint_cache *iint;
++	struct ima_iint_cache *iint;
+ 	int action;
+ 
+ 	if (!(ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode)
+@@ -648,7 +645,7 @@ static void ima_inode_post_setattr(struct mnt_idmap *idmap,
+ 		return;
+ 
+ 	action = ima_must_appraise(idmap, inode, MAY_ACCESS, POST_SETATTR);
+-	iint = integrity_iint_find(inode);
++	iint = ima_iint_find(inode);
+ 	if (iint) {
+ 		set_bit(IMA_CHANGE_ATTR, &iint->atomic_flags);
+ 		if (!action)
+@@ -674,12 +671,12 @@ static int ima_protect_xattr(struct dentry *dentry, const char *xattr_name,
+ 
+ static void ima_reset_appraise_flags(struct inode *inode, int digsig)
+ {
+-	struct integrity_iint_cache *iint;
++	struct ima_iint_cache *iint;
+ 
+ 	if (!(ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode))
+ 		return;
+ 
+-	iint = integrity_iint_find(inode);
++	iint = ima_iint_find(inode);
+ 	if (!iint)
+ 		return;
+ 	iint->measured_pcrs = 0;
+diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/ima_iint.c
+new file mode 100644
+index 000000000000..e7c9c216c1c6
+--- /dev/null
++++ b/security/integrity/ima/ima_iint.c
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2008 IBM Corporation
++ *
++ * Authors:
++ * Mimi Zohar <zohar@us.ibm.com>
++ *
++ * File: ima_iint.c
++ *	- implements the IMA hook: ima_inode_free
++ *	- cache integrity information in the inode security blob
++ */
++#include <linux/slab.h>
 +
-+static const struct lsm_id ima_lsmid = {
-+	.name = "ima",
-+	.id = LSM_ID_IMA,
-+};
++#include "ima.h"
 +
-+static int __init init_ima_lsm(void)
++static struct kmem_cache *ima_iint_cache __ro_after_init;
++
++/**
++ * ima_iint_find - Return the iint associated with an inode
++ * @inode: Pointer to the inode
++ *
++ * Return the IMA integrity information (iint) associated with an inode, if the
++ * inode was processed by IMA.
++ *
++ * Return: Found iint or NULL.
++ */
++struct ima_iint_cache *ima_iint_find(struct inode *inode)
 +{
-+	security_add_hooks(ima_hooks, ARRAY_SIZE(ima_hooks), &ima_lsmid);
-+	return 0;
++	if (!IS_IMA(inode))
++		return NULL;
++
++	return ima_inode_get_iint(inode);
 +}
 +
-+DEFINE_LSM(ima) = {
-+	.name = "ima",
-+	.init = init_ima_lsm,
-+	.order = LSM_ORDER_LAST,
++#define IMA_MAX_NESTING (FILESYSTEM_MAX_STACK_DEPTH + 1)
++
++/*
++ * It is not clear that IMA should be nested at all, but as long is it measures
++ * files both on overlayfs and on underlying fs, we need to annotate the iint
++ * mutex to avoid lockdep false positives related to IMA + overlayfs.
++ * See ovl_lockdep_annotate_inode_mutex_key() for more details.
++ */
++static inline void ima_iint_lockdep_annotate(struct ima_iint_cache *iint,
++					     struct inode *inode)
++{
++#ifdef CONFIG_LOCKDEP
++	static struct lock_class_key ima_iint_mutex_key[IMA_MAX_NESTING];
++
++	int depth = inode->i_sb->s_stack_depth;
++
++	if (WARN_ON_ONCE(depth < 0 || depth >= IMA_MAX_NESTING))
++		depth = 0;
++
++	lockdep_set_class(&iint->mutex, &ima_iint_mutex_key[depth]);
++#endif
++}
++
++static void ima_iint_init_always(struct ima_iint_cache *iint,
++				 struct inode *inode)
++{
++	iint->ima_hash = NULL;
++	iint->version = 0;
++	iint->flags = 0UL;
++	iint->atomic_flags = 0UL;
++	iint->ima_file_status = INTEGRITY_UNKNOWN;
++	iint->ima_mmap_status = INTEGRITY_UNKNOWN;
++	iint->ima_bprm_status = INTEGRITY_UNKNOWN;
++	iint->ima_read_status = INTEGRITY_UNKNOWN;
++	iint->ima_creds_status = INTEGRITY_UNKNOWN;
++	iint->measured_pcrs = 0;
++	mutex_init(&iint->mutex);
++	ima_iint_lockdep_annotate(iint, inode);
++}
++
++static void ima_iint_free(struct ima_iint_cache *iint)
++{
++	kfree(iint->ima_hash);
++	mutex_destroy(&iint->mutex);
++	kmem_cache_free(ima_iint_cache, iint);
++}
++
++/**
++ * ima_inode_get - Find or allocate an iint associated with an inode
++ * @inode: Pointer to the inode
++ *
++ * Find an iint associated with an inode, and allocate a new one if not found.
++ * Caller must lock i_mutex.
++ *
++ * Return: An iint on success, NULL on error.
++ */
++struct ima_iint_cache *ima_inode_get(struct inode *inode)
++{
++	struct ima_iint_cache *iint;
++
++	iint = ima_iint_find(inode);
++	if (iint)
++		return iint;
++
++	iint = kmem_cache_alloc(ima_iint_cache, GFP_NOFS);
++	if (!iint)
++		return NULL;
++
++	ima_iint_init_always(iint, inode);
++
++	inode->i_flags |= S_IMA;
++	ima_inode_set_iint(inode, iint);
++
++	return iint;
++}
++
++/**
++ * ima_inode_free - Called on inode free
++ * @inode: Pointer to the inode
++ *
++ * Free the iint associated with an inode.
++ */
++void ima_inode_free(struct inode *inode)
++{
++	struct ima_iint_cache *iint;
++
++	if (!IS_IMA(inode))
++		return;
++
++	iint = ima_iint_find(inode);
++	ima_inode_set_iint(inode, NULL);
++
++	ima_iint_free(iint);
++}
++
++static void ima_iint_init_once(void *foo)
++{
++	struct ima_iint_cache *iint = (struct ima_iint_cache *)foo;
++
++	memset(iint, 0, sizeof(*iint));
++}
++
++void __init ima_iintcache_init(void)
++{
++	ima_iint_cache =
++	    kmem_cache_create("ima_iint_cache", sizeof(struct ima_iint_cache),
++			      0, SLAB_PANIC, ima_iint_init_once);
++}
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index 63979aefc95f..393f5c7912d5 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -44,7 +44,7 @@ static int __init ima_add_boot_aggregate(void)
+ 	static const char op[] = "add_boot_aggregate";
+ 	const char *audit_cause = "ENOMEM";
+ 	struct ima_template_entry *entry;
+-	struct integrity_iint_cache tmp_iint, *iint = &tmp_iint;
++	struct ima_iint_cache tmp_iint, *iint = &tmp_iint;
+ 	struct ima_event_data event_data = { .iint = iint,
+ 					     .filename = boot_aggregate_name };
+ 	struct ima_max_digest_data hash;
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index b8b8891a9379..c84e8c55333d 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -114,7 +114,7 @@ static int mmap_violation_check(enum ima_hooks func, struct file *file,
+  *
+  */
+ static void ima_rdwr_violation_check(struct file *file,
+-				     struct integrity_iint_cache *iint,
++				     struct ima_iint_cache *iint,
+ 				     int must_measure,
+ 				     char **pathbuf,
+ 				     const char **pathname,
+@@ -127,7 +127,7 @@ static void ima_rdwr_violation_check(struct file *file,
+ 	if (mode & FMODE_WRITE) {
+ 		if (atomic_read(&inode->i_readcount) && IS_IMA(inode)) {
+ 			if (!iint)
+-				iint = integrity_iint_find(inode);
++				iint = ima_iint_find(inode);
+ 			/* IMA_MEASURE is set from reader side */
+ 			if (iint && test_bit(IMA_MUST_MEASURE,
+ 						&iint->atomic_flags))
+@@ -153,7 +153,7 @@ static void ima_rdwr_violation_check(struct file *file,
+ 				  "invalid_pcr", "open_writers");
+ }
+ 
+-static void ima_check_last_writer(struct integrity_iint_cache *iint,
++static void ima_check_last_writer(struct ima_iint_cache *iint,
+ 				  struct inode *inode, struct file *file)
+ {
+ 	fmode_t mode = file->f_mode;
+@@ -192,12 +192,12 @@ static void ima_check_last_writer(struct integrity_iint_cache *iint,
+ static void ima_file_free(struct file *file)
+ {
+ 	struct inode *inode = file_inode(file);
+-	struct integrity_iint_cache *iint;
++	struct ima_iint_cache *iint;
+ 
+ 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+ 		return;
+ 
+-	iint = integrity_iint_find(inode);
++	iint = ima_iint_find(inode);
+ 	if (!iint)
+ 		return;
+ 
+@@ -209,7 +209,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 			       enum ima_hooks func)
+ {
+ 	struct inode *backing_inode, *inode = file_inode(file);
+-	struct integrity_iint_cache *iint = NULL;
++	struct ima_iint_cache *iint = NULL;
+ 	struct ima_template_desc *template_desc = NULL;
+ 	char *pathbuf = NULL;
+ 	char filename[NAME_MAX];
+@@ -248,7 +248,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	inode_lock(inode);
+ 
+ 	if (action) {
+-		iint = integrity_inode_get(inode);
++		iint = ima_inode_get(inode);
+ 		if (!iint)
+ 			rc = -ENOMEM;
+ 	}
+@@ -564,11 +564,11 @@ static int ima_file_check(struct file *file, int mask)
+ static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
+ 			    size_t buf_size)
+ {
+-	struct integrity_iint_cache *iint = NULL, tmp_iint;
++	struct ima_iint_cache *iint = NULL, tmp_iint;
+ 	int rc, hash_algo;
+ 
+ 	if (ima_policy_flag) {
+-		iint = integrity_iint_find(inode);
++		iint = ima_iint_find(inode);
+ 		if (iint)
+ 			mutex_lock(&iint->mutex);
+ 	}
+@@ -578,7 +578,6 @@ static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
+ 			mutex_unlock(&iint->mutex);
+ 
+ 		memset(&tmp_iint, 0, sizeof(tmp_iint));
+-		tmp_iint.inode = inode;
+ 		mutex_init(&tmp_iint.mutex);
+ 
+ 		rc = ima_collect_measurement(&tmp_iint, file, NULL, 0,
+@@ -688,7 +687,7 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+ 				    struct inode *inode)
+ 
+ {
+-	struct integrity_iint_cache *iint;
++	struct ima_iint_cache *iint;
+ 	int must_appraise;
+ 
+ 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+@@ -700,7 +699,7 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+ 		return;
+ 
+ 	/* Nothing to do if we can't allocate memory */
+-	iint = integrity_inode_get(inode);
++	iint = ima_inode_get(inode);
+ 	if (!iint)
+ 		return;
+ 
+@@ -719,7 +718,7 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+  */
+ static void ima_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ {
+-	struct integrity_iint_cache *iint;
++	struct ima_iint_cache *iint;
+ 	struct inode *inode = dentry->d_inode;
+ 	int must_appraise;
+ 
+@@ -732,7 +731,7 @@ static void ima_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ 		return;
+ 
+ 	/* Nothing to do if we can't allocate memory */
+-	iint = integrity_inode_get(inode);
++	iint = ima_inode_get(inode);
+ 	if (!iint)
+ 		return;
+ 
+@@ -935,7 +934,7 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
+ 	int ret = 0;
+ 	const char *audit_cause = "ENOMEM";
+ 	struct ima_template_entry *entry = NULL;
+-	struct integrity_iint_cache iint = {};
++	struct ima_iint_cache iint = {};
+ 	struct ima_event_data event_data = {.iint = &iint,
+ 					    .filename = eventname,
+ 					    .buf = buf,
+@@ -1172,6 +1171,7 @@ static struct security_hook_list ima_hooks[] __ro_after_init = {
+ #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
+ 	LSM_HOOK_INIT(kernel_module_request, ima_kernel_module_request),
+ #endif
++	LSM_HOOK_INIT(inode_free_security, ima_inode_free),
+ };
+ 
+ static const struct lsm_id ima_lsmid = {
+@@ -1181,15 +1181,21 @@ static const struct lsm_id ima_lsmid = {
+ 
+ static int __init init_ima_lsm(void)
+ {
++	ima_iintcache_init();
+ 	security_add_hooks(ima_hooks, ARRAY_SIZE(ima_hooks), &ima_lsmid);
+ 	init_ima_appraise_lsm(&ima_lsmid);
+ 	return 0;
+ }
+ 
++struct lsm_blob_sizes ima_blob_sizes __ro_after_init = {
++	.lbs_inode = sizeof(struct ima_iint_cache *),
 +};
 +
+ DEFINE_LSM(ima) = {
+ 	.name = "ima",
+ 	.init = init_ima_lsm,
+ 	.order = LSM_ORDER_LAST,
++	.blobs = &ima_blob_sizes,
+ };
+ 
  late_initcall(init_ima);	/* Start IMA after the TPM is available */
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index f69062617754..c0556907c2e6 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -49,7 +49,7 @@
+ #define DONT_HASH	0x0200
+ 
+ #define INVALID_PCR(a) (((a) < 0) || \
+-	(a) >= (sizeof_field(struct integrity_iint_cache, measured_pcrs) * 8))
++	(a) >= (sizeof_field(struct ima_iint_cache, measured_pcrs) * 8))
+ 
+ int ima_policy_flag;
+ static int temp_ima_appraise;
 diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 9561db7cf6b4..59eaddd84434 100644
+index 7a97c269a072..671fc50255f9 100644
 --- a/security/integrity/integrity.h
 +++ b/security/integrity/integrity.h
-@@ -18,6 +18,7 @@
- #include <crypto/hash.h>
- #include <linux/key.h>
+@@ -20,59 +20,6 @@
  #include <linux/audit.h>
-+#include <linux/lsm_hooks.h>
+ #include <linux/lsm_hooks.h>
  
- /* iint action cache flags */
- #define IMA_MEASURE		0x00000001
-diff --git a/security/keys/key.c b/security/keys/key.c
-index 31a8b9408b7c..560790038329 100644
---- a/security/keys/key.c
-+++ b/security/keys/key.c
-@@ -13,7 +13,6 @@
- #include <linux/security.h>
- #include <linux/workqueue.h>
- #include <linux/random.h>
--#include <linux/ima.h>
- #include <linux/err.h>
- #include "internal.h"
- 
-@@ -932,8 +931,6 @@ static key_ref_t __key_create_or_update(key_ref_t keyring_ref,
- 
- 	security_key_post_create_or_update(keyring, key, payload, plen, flags,
- 					   true);
--	ima_post_key_create_or_update(keyring, key, payload, plen,
--				      flags, true);
- 
- 	key_ref = make_key_ref(key, is_key_possessed(keyring_ref));
- 
-@@ -965,13 +962,9 @@ static key_ref_t __key_create_or_update(key_ref_t keyring_ref,
- 
- 	key_ref = __key_update(key_ref, &prep);
- 
--	if (!IS_ERR(key_ref)) {
-+	if (!IS_ERR(key_ref))
- 		security_key_post_create_or_update(keyring, key, payload, plen,
- 						   flags, false);
--		ima_post_key_create_or_update(keyring, key,
--					      payload, plen,
--					      flags, false);
--	}
- 
- 	goto error_free_prep;
- }
-diff --git a/security/security.c b/security/security.c
-index 48dc3db4c834..a476af7f8aea 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -51,7 +51,8 @@
- 	(IS_ENABLED(CONFIG_SECURITY_SAFESETID) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_SECURITY_LOCKDOWN_LSM) ? 1 : 0) + \
- 	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
--	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0))
-+	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_IMA) ? 1 : 0))
- 
- /*
-  * These are descriptions of the reasons that can be passed to the
-@@ -1183,12 +1184,7 @@ int security_bprm_creds_from_file(struct linux_binprm *bprm, const struct file *
-  */
- int security_bprm_check(struct linux_binprm *bprm)
- {
--	int ret;
+-/* iint action cache flags */
+-#define IMA_MEASURE		0x00000001
+-#define IMA_MEASURED		0x00000002
+-#define IMA_APPRAISE		0x00000004
+-#define IMA_APPRAISED		0x00000008
+-/*#define IMA_COLLECT		0x00000010  do not use this flag */
+-#define IMA_COLLECTED		0x00000020
+-#define IMA_AUDIT		0x00000040
+-#define IMA_AUDITED		0x00000080
+-#define IMA_HASH		0x00000100
+-#define IMA_HASHED		0x00000200
 -
--	ret = call_int_hook(bprm_check_security, 0, bprm);
--	if (ret)
--		return ret;
--	return ima_bprm_check(bprm);
-+	return call_int_hook(bprm_check_security, 0, bprm);
- }
- 
- /**
-@@ -2896,13 +2892,8 @@ static inline unsigned long mmap_prot(struct file *file, unsigned long prot)
- int security_mmap_file(struct file *file, unsigned long prot,
- 		       unsigned long flags)
- {
--	unsigned long prot_adj = mmap_prot(file, prot);
--	int ret;
+-/* iint policy rule cache flags */
+-#define IMA_NONACTION_FLAGS	0xff000000
+-#define IMA_DIGSIG_REQUIRED	0x01000000
+-#define IMA_PERMIT_DIRECTIO	0x02000000
+-#define IMA_NEW_FILE		0x04000000
+-#define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
+-#define IMA_MODSIG_ALLOWED	0x20000000
+-#define IMA_CHECK_BLACKLIST	0x40000000
+-#define IMA_VERITY_REQUIRED	0x80000000
 -
--	ret = call_int_hook(mmap_file, 0, file, prot, prot_adj, flags);
--	if (ret)
--		return ret;
--	return ima_file_mmap(file, prot, prot_adj, flags);
-+	return call_int_hook(mmap_file, 0, file, prot, mmap_prot(file, prot),
-+			     flags);
- }
- 
- /**
-@@ -2931,12 +2922,7 @@ int security_mmap_addr(unsigned long addr)
- int security_file_mprotect(struct vm_area_struct *vma, unsigned long reqprot,
- 			   unsigned long prot)
- {
--	int ret;
+-#define IMA_DO_MASK		(IMA_MEASURE | IMA_APPRAISE | IMA_AUDIT | \
+-				 IMA_HASH | IMA_APPRAISE_SUBMASK)
+-#define IMA_DONE_MASK		(IMA_MEASURED | IMA_APPRAISED | IMA_AUDITED | \
+-				 IMA_HASHED | IMA_COLLECTED | \
+-				 IMA_APPRAISED_SUBMASK)
 -
--	ret = call_int_hook(file_mprotect, 0, vma, reqprot, prot);
--	if (ret)
--		return ret;
--	return ima_file_mprotect(vma, reqprot, prot);
-+	return call_int_hook(file_mprotect, 0, vma, reqprot, prot);
- }
- 
- /**
-@@ -3245,12 +3231,7 @@ int security_kernel_create_files_as(struct cred *new, struct inode *inode)
-  */
- int security_kernel_module_request(char *kmod_name)
- {
--	int ret;
+-/* iint subaction appraise cache flags */
+-#define IMA_FILE_APPRAISE	0x00001000
+-#define IMA_FILE_APPRAISED	0x00002000
+-#define IMA_MMAP_APPRAISE	0x00004000
+-#define IMA_MMAP_APPRAISED	0x00008000
+-#define IMA_BPRM_APPRAISE	0x00010000
+-#define IMA_BPRM_APPRAISED	0x00020000
+-#define IMA_READ_APPRAISE	0x00040000
+-#define IMA_READ_APPRAISED	0x00080000
+-#define IMA_CREDS_APPRAISE	0x00100000
+-#define IMA_CREDS_APPRAISED	0x00200000
+-#define IMA_APPRAISE_SUBMASK	(IMA_FILE_APPRAISE | IMA_MMAP_APPRAISE | \
+-				 IMA_BPRM_APPRAISE | IMA_READ_APPRAISE | \
+-				 IMA_CREDS_APPRAISE)
+-#define IMA_APPRAISED_SUBMASK	(IMA_FILE_APPRAISED | IMA_MMAP_APPRAISED | \
+-				 IMA_BPRM_APPRAISED | IMA_READ_APPRAISED | \
+-				 IMA_CREDS_APPRAISED)
 -
--	ret = call_int_hook(kernel_module_request, 0, kmod_name);
--	if (ret)
--		return ret;
--	return ima_kernel_module_request(kmod_name);
-+	return call_int_hook(kernel_module_request, 0, kmod_name);
- }
- 
- /**
-@@ -3266,12 +3247,7 @@ int security_kernel_module_request(char *kmod_name)
- int security_kernel_read_file(struct file *file, enum kernel_read_file_id id,
- 			      bool contents)
- {
--	int ret;
+-/* iint cache atomic_flags */
+-#define IMA_CHANGE_XATTR	0
+-#define IMA_UPDATE_XATTR	1
+-#define IMA_CHANGE_ATTR		2
+-#define IMA_DIGSIG		3
+-#define IMA_MUST_MEASURE	4
 -
--	ret = call_int_hook(kernel_read_file, 0, file, id, contents);
--	if (ret)
--		return ret;
--	return ima_read_file(file, id, contents);
-+	return call_int_hook(kernel_read_file, 0, file, id, contents);
- }
- EXPORT_SYMBOL_GPL(security_kernel_read_file);
- 
-@@ -3291,12 +3267,7 @@ EXPORT_SYMBOL_GPL(security_kernel_read_file);
- int security_kernel_post_read_file(struct file *file, char *buf, loff_t size,
- 				   enum kernel_read_file_id id)
- {
--	int ret;
--
--	ret = call_int_hook(kernel_post_read_file, 0, file, buf, size, id);
--	if (ret)
--		return ret;
--	return ima_post_read_file(file, buf, size, id);
-+	return call_int_hook(kernel_post_read_file, 0, file, buf, size, id);
- }
- EXPORT_SYMBOL_GPL(security_kernel_post_read_file);
- 
-@@ -3311,12 +3282,7 @@ EXPORT_SYMBOL_GPL(security_kernel_post_read_file);
-  */
- int security_kernel_load_data(enum kernel_load_data_id id, bool contents)
- {
--	int ret;
--
--	ret = call_int_hook(kernel_load_data, 0, id, contents);
--	if (ret)
--		return ret;
--	return ima_load_data(id, contents);
-+	return call_int_hook(kernel_load_data, 0, id, contents);
- }
- EXPORT_SYMBOL_GPL(security_kernel_load_data);
- 
-@@ -3338,13 +3304,8 @@ int security_kernel_post_load_data(char *buf, loff_t size,
- 				   enum kernel_load_data_id id,
- 				   char *description)
- {
--	int ret;
--
--	ret = call_int_hook(kernel_post_load_data, 0, buf, size, id,
--			    description);
--	if (ret)
--		return ret;
--	return ima_post_load_data(buf, size, id, description);
-+	return call_int_hook(kernel_post_load_data, 0, buf, size, id,
-+			     description);
- }
- EXPORT_SYMBOL_GPL(security_kernel_post_load_data);
- 
-diff --git a/tools/testing/selftests/lsm/lsm_list_modules_test.c b/tools/testing/selftests/lsm/lsm_list_modules_test.c
-index 9df29b1e3497..17333787cb2f 100644
---- a/tools/testing/selftests/lsm/lsm_list_modules_test.c
-+++ b/tools/testing/selftests/lsm/lsm_list_modules_test.c
-@@ -122,6 +122,9 @@ TEST(correct_lsm_list_modules)
- 		case LSM_ID_LANDLOCK:
- 			name = "landlock";
- 			break;
-+		case LSM_ID_IMA:
-+			name = "ima";
-+			break;
- 		default:
- 			name = "INVALID";
- 			break;
+ enum evm_ima_xattr_type {
+ 	IMA_XATTR_DIGEST = 0x01,
+ 	EVM_XATTR_HMAC,
 -- 
 2.34.1
 
