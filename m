@@ -1,223 +1,162 @@
-Return-Path: <linux-integrity+bounces-1276-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1277-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77B4B8570AC
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 23:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF03D857279
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 01:26:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B2BC1C219A3
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Feb 2024 22:44:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D32CB1C216CC
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 00:26:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A167131E49;
-	Thu, 15 Feb 2024 22:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39BE61C11;
+	Fri, 16 Feb 2024 00:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aHIYNU4s"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700B813DBB3;
-	Thu, 15 Feb 2024 22:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2969228E8;
+	Fri, 16 Feb 2024 00:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708037090; cv=none; b=vEqvoAkrcYjiScBQ5vkB7fKmslSZK5FdVAakHOrPVTCD9867bF6hYlQqulWK+cdHtZJXGBqGP1Cej8sLLTvRgnrKYSL2mEji60ATyB3qtnemNZkj6u5Jq3t0KvOYeMn63OrAhtQeDNfxAMXkGmi/z1XS8iupOGa5rJyhQ2r9Qho=
+	t=1708043184; cv=none; b=lm/P+F9UDWnCJQLfgC1NqvsIX95A2S+YGv9IVj3P6qsT5PJ8fa+7O7kNgCN1W8gjrVSYE29zxxWGTE/upoin4gVzHRFXPnh/DjPJTzRyuFFtbve9KCGokvZ+59QJQzJq4wo9ZqKW6MQOJEovHTWOrztcI7idOcI7jlRJglV9RDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708037090; c=relaxed/simple;
-	bh=7a4CRGflS3UeQaHyITsY4L13WF6Py9FXyYYu/eRX+qg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ucy/85zGSi1MBckd1QKYW9OjUEucBtbgAHll9cZYTxQGsiwoSSx9/E8pYSyqmAkcVqkXtr1QbEK2gWVDqyoGQv/EoCocRTPofcmwceC1WbCxm18tVYVIWUQUyOE+BIZCnzOplOiCNtSaemfbwjx7x8MAEqgPHO071GT0aZ2nvXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 41FMi83U029550;
-	Thu, 15 Feb 2024 16:44:08 -0600
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 41FMi7wZ029549;
-	Thu, 15 Feb 2024 16:44:07 -0600
-Date: Thu, 15 Feb 2024 16:44:06 -0600
-From: "Dr. Greg" <greg@enjellic.com>
-To: "Xing, Cedric" <cedric.xing@intel.com>
-Cc: Dan Williams <dan.j.williams@intel.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Dan Middleton <dan.middleton@linux.intel.com>,
-        Samuel Ortiz <sameo@rivosinc.com>, Qinkun Bao <qinkun@google.com>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>, biao.lu@intel.com,
-        linux-coco@lists.linux.dev, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/4] tsm: Runtime measurement registers ABI
-Message-ID: <20240215224406.GA29515@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <1557f98a-3d52-4a02-992b-4401c7c85dd7@linux.intel.com> <85b7a4a679eada1d17b311bf004c2d9e18ab5cd3.camel@HansenPartnership.com> <b8140cc8-a56b-40f6-a593-7be49db14c77@intel.com> <fe1722c3618a8216cb53b8fd3f1b7cbb6fdff5a0.camel@HansenPartnership.com> <65c2e4aa54a0_d4122947f@dwillia2-mobl3.amr.corp.intel.com.notmuch> <22088ed3-51a4-415f-932c-db84c92a2812@intel.com> <527da630-4952-4b1d-80c0-5a87997ff9fd@linux.intel.com> <332775d7218843d6cc168c963d76e6841eab5d5b.camel@HansenPartnership.com> <65c691e13a50d_afa42948a@dwillia2-xfh.jf.intel.com.notmuch> <226df539-b3f4-4099-b6a6-293fa200c536@intel.com>
+	s=arc-20240116; t=1708043184; c=relaxed/simple;
+	bh=oXtwZtSuO9glftnKm5bDsm0gbH6HrsEW0khA9h2R97U=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=DQwaNu4Al00k96r/9VRXvq1JKGdUyXx1+UFYCiKxH6cyqB2RVDy5pdmGgq1XTObDeBXsxtg89SZTfoCY1s8UaXlaiwcGXElV3P1m8ApjwWxexPkU5hQ4lvF/OO12fxf8l/VSyLZjqa2dTd/Yk1XTAeMtK7lTG+5om08RkdpKIF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aHIYNU4s; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FMtnth028679;
+	Fri, 16 Feb 2024 00:25:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Om9oyXgDiFyioTn4kHbDdu9jyc7RJhYiunD0WE9LJcY=;
+ b=aHIYNU4sNfsa6W1Zi2SHNnYp5pAsdwkhgkxJcFYINTcs7hJVzXD1EVzqpEhsQw9vmW54
+ 1AUJMWoYDVuVJx6grRr+rbtVY2w8d2UjRvNHeiATyyb/V4Id7ll/q4t4K9kkWwbF76vf
+ j2Cm+vKS7fWCcn05rSyIYpYOC3RHWwGIQl8vhUK2MQ5fwFRVl/O4wmtSfVPLFc1bI/4z
+ WnInjoiLggCOIG2skURkMzY32fQ4Puohw0GxcsUOQKf4h2y33musZLxiyLV0Uu17uJ/O
+ 5yaUNhukbVWTLYDDZzJxo+gUPF+gWxMjEcxCYbSsCtxF1l3cj+kJNp6WNffJWAkLfWT5 Iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9uucsfcr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 00:25:48 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41G0MkpP026872;
+	Fri, 16 Feb 2024 00:25:47 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9uucsfc1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 00:25:47 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FLD05g009728;
+	Fri, 16 Feb 2024 00:25:46 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6p637q1k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 00:25:46 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41G0Ph1735258676
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 16 Feb 2024 00:25:45 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A2A2B58061;
+	Fri, 16 Feb 2024 00:25:43 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EF01158058;
+	Fri, 16 Feb 2024 00:25:41 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.113.219])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 16 Feb 2024 00:25:41 +0000 (GMT)
+Message-ID: <6154a26bb0efc2abbfc51df4bf1adc8279854f3c.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 19/25] integrity: Move
+ integrity_kernel_module_request() to IMA
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, jack@suse.cz, chuck.lever@oracle.com,
+        jlayton@kernel.org, neilb@suse.de, kolga@netapp.com,
+        Dai.Ngo@oracle.com, tom@talpey.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, omosnace@redhat.com,
+        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Roberto Sassu
+	 <roberto.sassu@huawei.com>,
+        Stefan Berger <stefanb@linux.ibm.com>
+Date: Thu, 15 Feb 2024 19:25:41 -0500
+In-Reply-To: <09d6fa08e2d62720759f57237043a2dd9b5208ca.camel@huaweicloud.com>
+References: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
+	 <20240215103113.2369171-20-roberto.sassu@huaweicloud.com>
+	 <09d6fa08e2d62720759f57237043a2dd9b5208ca.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <226df539-b3f4-4099-b6a6-293fa200c536@intel.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 15 Feb 2024 16:44:08 -0600 (CST)
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: eVp6Z66UPLJF9IDvI4kibR2k_-D2yKlM
+X-Proofpoint-GUID: 8F3OPV3UWb5PHaUQpiMgR3h1AV3Tc70q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-15_23,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
+ suspectscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 adultscore=0 impostorscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402160001
 
-On Mon, Feb 12, 2024 at 11:36:27PM -0800, Xing, Cedric wrote:
+On Thu, 2024-02-15 at 17:09 +0100, Roberto Sassu wrote:
+> On Thu, 2024-02-15 at 11:31 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > In preparation for removing the 'integrity' LSM, move
+> > integrity_kernel_module_request() to IMA, and rename it to
+> > ima_kernel_module_request(). Rewrite the function documentation, to explain
+> > better what the problem is.
+> > 
+> > Compile it conditionally if CONFIG_INTEGRITY_ASYMMETRIC_KEYS is enabled,
+> > and call it from security.c (removed afterwards with the move of IMA to the
+> > LSM infrastructure).
+> > 
+> > Adding this hook cannot be avoided, since IMA has no control on the flags
+> > passed to crypto_alloc_sig() in public_key_verify_signature(), and thus
+> > cannot pass CRYPTO_NOLOAD, which solved the problem for EVM hashing with
+> > commit e2861fa71641 ("evm: Don't deadlock if a crypto algorithm is
+> > unavailable").
+> > 
+> > EVM alone does not need to implement this hook, first because there is no
+> > mutex to deadlock, and second because even if it had it, there should be a
+> > recursive call. However, since verification from EVM can be initiated only
+> > by setting inode metadata, deadlock would occur if modprobe would do the
+> > same while loading a kernel module (which is unlikely).
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Acked-by: Paul Moore <paul@paul-moore.com>
+> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+> 
+> I hope the change of the ima_kernel_module_request() documentation is
+> fine for everyone.
+> 
+> If not, let me know.
 
-Hi, I hope the week is going well for everyone.
+Thanks, Roberto.  The updated kernel-doc looks good.
 
-> On 2/9/2024 12:58 PM, Dan Williams wrote:
-> >James Bottomley wrote:
-> >>Just to correct this: IMA uses its own log format, but I think this was
-> >>a mistake long ago and the new log should use TCG2 format so all the
-> >>tools know how to parse it.
-> >
-> >Is this a chance to nudge IMA towards a standard log format? In other
-> >words, one of the goals alongside userspace consumers of the RTMR log
-> >would be for IMA to support it as well as an alternate in-kernel backend
-> >next to TPM. IMA-over-TPM continues with its current format,
-> >IMA-over-RTMR internally unifies with the log format that is shared with
-> >RTMR-user-ABI.
+Mimi
 
-> I'm not a TCG expert. As far as I know,
-> https://trustedcomputinggroup.org/wp-content/uploads/TCG-PC-Client-Platform-Firmware-Profile-Version-1.06-Revision-52_pub-1.pdf
-> defines the event types for TCG2 logs for firmware uses only. I
-> cannot find a spec that defines event types for OS or
-> applications. We may reuse the firmware event types for Linux but I
-> doubt they can accommodate IMA.
->
-> IMHO, we don't have to follow TCG2 format because TDX is never TPM,
-> nor are any other TEEs that support runtime measurements. The
-> existing TCG2 format looks to me somewhat like ASN.1 - well defined
-> but schema is needed to decode. In contrast, JSON is a lot more
-> popular than ASN.1 nowadays because it's human readable and doesn't
-> require a schema. I just wonder if we should introduce a text based
-> log format. We could make the log a text file, in which each line is
-> an event record and the digest of the line is extended to the
-> specified runtime measurement register. The content of each line
-> could be free-form at the ABI level, but we can still recommend a
-> convention for applications - e.g., the first word/column must be an
-> URL for readers to find out the format/syntax of the rest of the
-> line. Thoughts?
-
-A common text based security event description format, based on JSON
-encoding of LSM security event descriptions, surfaced through
-securityfs, has already been implemented, proposed and has been pushed
-out for review twice.
-
-The TSEM LSM is designed to be a generic security modeling and
-security event description export architecture.
-
-The V2 patches and discusion around those can be found here:
-
-https://lore.kernel.org/lkml/20230710102319.19716-1-greg@enjellic.com/T/#t
-
-We have a rather significant upgrade to that patchset that we are
-staging up for a V3 release.
-
-The fundamental premise for TSEM is the encoding and modeling of the
-parameters that describe LSM based security events.  It is designed to
-be a model/policy agnostic scheme for generating attestations on the
-state of the platform at large or a workload.  Workload models are
-supported by a concept known as a security modeling namespace, much
-like any other namespace, that tracks events for an isolated process
-heirarchy.
-
-The most important review comment on the V1 patchset, that can also be
-found on lore, was by Greg Kroah-Hartmann who suggested using a
-standardized encoding scheme like JSON for the event descriptions.  If
-you look at his comments, he indicated that there is little rationale
-for not using an encoding format that the entire technology industry
-trusts and uses.
-
-FWIW, we made the change to JSON and have never looked back, it was
-the most positive review comment we received.
-
-The current format would not seem to have any issues supporting IMA
-style attestation.  For example, the most important event for IMA
-would be a file open event.  Here is an example of the encoding
-generated for that event:
-
-{
-    "event": {
-        "process": "quixote",
-        "type": "file_open",
-        "ttd": "219",
-        "p_ttd": "219",
-        "task_id": "20e07b3614ee37869391849278dfe7285f37ec2362f7d10c052e6715ad888584",
-        "p_task_id": "20e07b3614ee37869391849278dfe7285f37ec2362f7d10c052e6715ad888584",
-        "ts": "6535350020298"
-    },
-    "COE": {
-        "uid": "0",
-        "euid": "0",
-        "suid": "0",
-        "gid": "0",
-        "egid": "0",
-        "sgid": "0",
-        "fsuid": "0",
-        "fsgid": "0",
-        "capeff": "0x3ffffffffff"
-    },
-    "file_open": {
-        "file": {
-            "flags": "32800",
-            "inode": {
-                "uid": "50",
-                "gid": "50",
-                "mode": "0100755",
-                "s_magic": "0xef53",
-                "s_id": "xvda",
-                "s_uuid": "feadbeaffeadbeaffeadbeaffeadbeaf"
-            },
-            "path": {
-                "dev": {
-                    "major": "202",
-                    "minor": "0"
-                },
-                "pathname": "/opt/Quixote/sbin/runc"
-            },
-            "digest": "81f73a59be3d122ab484d7dfe9ddc81030f595cc59968f61c113a9a38a2c113a"
-        }
-    }
-}
-
-There is sufficient information included to track the digests of
-executable files, or any other type of file for that matter, for any
-user on the system.
-
-This isn't an attempt to pitch TSEM, but rather to suggest the utility
-of a self-describing JSON format for security logging.
-
-As GKH correctly noted in his review comments, there is a great deal
-of utility to be had by using a format that has significant and mature
-userspace tooling support.  Our own work and deployments have also
-indicated a great deal of utility to having log entries that are
-self-describing.
-
-One additional observation that may be of use with respect to anyone
-pursueing an alternate event log format has come out of our data
-science team.  They indicate there has been significant work in the
-Elastic search community with respect to the development of
-standardized descriptions of events for logging and other purposes,
-reference the following URL:
-
-https://www.elastic.co/guide/en/ecs/current/index.html
-
-Our data team is looking at modifying our current security event
-descriptions to be as consistent as possible with existing standards
-for identifying event parameters.  Given that attestation and host
-based security event modeling are only going to become more important
-in the future, there would seem to be utility in working towards
-contributing to standardized descriptions for security relevant logs.
-
-Hopefully the above reflections are of assistance in furthering the
-various agendas that are involved.
-
-Have a good remainder of the week.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
 
