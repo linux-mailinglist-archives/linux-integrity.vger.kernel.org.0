@@ -1,129 +1,148 @@
-Return-Path: <linux-integrity+bounces-1281-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1282-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8BD1857708
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 08:55:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D106857B51
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 12:15:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 685B01F25F94
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 07:55:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F5161C218A9
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 11:15:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 008A4168DC;
-	Fri, 16 Feb 2024 07:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB62E59B57;
+	Fri, 16 Feb 2024 11:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YwTlM3H6"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC8212E5D;
-	Fri, 16 Feb 2024 07:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72F559B47
+	for <linux-integrity@vger.kernel.org>; Fri, 16 Feb 2024 11:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708070115; cv=none; b=Tuj1yU/zVc8pNY8YBF0KlDuhwRYenSlyzM87DRKR0BtGrmYgZjuy6rsFR8mpIogtW6yOpTpcXKbWkLuVQ2I6zW7iCSK0t4J9up7EbNVsGdh6/O+TpeuY1AJLTjL7z0//2wVAH7FcqbagQ1AuT+o+jtDLyAyh06Lp0alK1eoxkBQ=
+	t=1708082139; cv=none; b=dBTWel58GQoPL7rz57jYlNjoEZZe/u+IjhIll1edDZi5Y9oRNOoZiNh5xjVyCiIB2QaU7/S4QI41rdZvtSCgZQU3zgL2TxGAgnumIJQxdARgFgXb+XFX0tFP241i6MaZzGuQrhUmDU3h9BKVglgMBL1Q2O4UT1shkxuVzqexTEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708070115; c=relaxed/simple;
-	bh=VCWiUNtrcsS5Bbg884AsO/L41fooQwqIz2TLGDos6rc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Hot16m7/KfkGTXSuaf1Gyqt+O13wp3ob/YvQXlTj4Pcrlv86z7sePTbKF/ezddsbHVjZHNgpd+1ItHnGwHhZAlRWsyO/Oj3tuRz126vToXMXlFmcvxiBjFEmm4JthxusFwTWQGGeCY04sIwTIASMdr+WkHbyV1manMum86Jsiqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4TbkNM4CT7z9y5ZF;
-	Fri, 16 Feb 2024 15:39:47 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 13058140631;
-	Fri, 16 Feb 2024 15:54:54 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwC3YBm9FM9lcmabAg--.60113S2;
-	Fri, 16 Feb 2024 08:54:53 +0100 (CET)
-Message-ID: <45699f4ed5726fd0d9346069250cd22b04623d9a.camel@huaweicloud.com>
-Subject: Re: [PATCH v10 0/25] security: Move IMA and EVM to the LSM
- infrastructure
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Paul Moore <paul@paul-moore.com>, viro@zeniv.linux.org.uk, 
- brauner@kernel.org, jack@suse.cz, chuck.lever@oracle.com,
- jlayton@kernel.org,  neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com,
- tom@talpey.com,  jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
- dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, dhowells@redhat.com, 
- jarkko@kernel.org, stephen.smalley.work@gmail.com, omosnace@redhat.com, 
- casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, Roberto Sassu
-	 <roberto.sassu@huawei.com>
-Date: Fri, 16 Feb 2024 08:54:35 +0100
-In-Reply-To: <2cdfefc8661d0a82c28250fc22a93a47@paul-moore.com>
-References: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
-	 <2cdfefc8661d0a82c28250fc22a93a47@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1708082139; c=relaxed/simple;
+	bh=gcI2zFkiJLvsn0nkNdjmzHtooKW+t6UPU/213ASspKU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HA4BlMjotbxyyxeCflbp9VsQeQTH6cOXAD17E4dPZwcY77mkltva7sylhgTi44BQCsNmo4jSzg5tm1SC/sZ/gzxH0lwkco7rZSNH7UM5JgREGahcqgYVEEHyKW9AaS0OpwMExckzWMmrufzGUornuDVpl1x0zu6cAt1RSHKIEIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YwTlM3H6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708082136;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cWx2BjWmlnNzwn5DMsMis1QLNV5jlo2UreFfpR6bCh4=;
+	b=YwTlM3H6vy9Myx0Rj8AlQpESWrNgrfqqbB0kjz3TvlnTQzuhZWVuDxYuJKVs9IdNSiHgRP
+	ysMFxKeO31+rqVa1WdeOW1gLdULLF03r/ZJqZfA08YRiWWwwz75HNPbLSmk+YvzSzLa0Wd
+	88U3P8KAGpES1oNhHe/48j38sSQhpfg=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-93-nwmptuvvPdO-hZzdh_Wtdg-1; Fri, 16 Feb 2024 06:15:35 -0500
+X-MC-Unique: nwmptuvvPdO-hZzdh_Wtdg-1
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-59fa26aae1cso254098eaf.3
+        for <linux-integrity@vger.kernel.org>; Fri, 16 Feb 2024 03:15:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708082134; x=1708686934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cWx2BjWmlnNzwn5DMsMis1QLNV5jlo2UreFfpR6bCh4=;
+        b=lKOpihivSnJI/ONm4604E0IpWwlLypSuuKX3gYBWOBIpl33mxXC1UOsyu3FZEElDwu
+         btxwQUSU38y4/Z+RXiyKifIa9V+HN2z46U/UrQxhkrCF9EoH/t9LfyJY9FAADlf5iEy8
+         TP5UhSOr3kGI/OunaFf+vtiI9j1dsl393DdmRByKibqYWA9XI5cx0w4FHCc0cKxtMX71
+         TCfVMBqxxP12+tB3NGHlzqBqFSA9zff7MJZuuXeiu9dB1mjn3Cm3Mo7G4Pah8PgyjHRg
+         qBuEBwXFg1JxgekQf+Dy8J9TjSLyPEASlCt1CqKleIpQTkDugh1X2MtVKtC8zgaFycCg
+         Rfeg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4G4ztbodRGnCAZ7GPFZFs5yQK73IH9ZIah3iPN6Yp7LxtoOkAgijTOEekmp+cEQSgkgET80blGELOn95iPaKeUUsahAcdzblkeYMqVWnq
+X-Gm-Message-State: AOJu0Yz1wna5ww4+h0u257OEXgMgkO0Ljl8OrYW8uul8ob75BRlebJKg
+	MU+a6l6fzyGbZg9iIEI3fdBD7L8rdR6v2+ZGiVME9MEoeXtSLPLDBmGuLsa3xHPgcW1VjNGo3l3
+	kguwPLZmzFXo2t7zrwhjp0+r3f6RhjM72qjgzG9RxXFQbtORAMLBEHNnH4sSTfKnYvg==
+X-Received: by 2002:a05:6358:e484:b0:178:fcd3:c316 with SMTP id by4-20020a056358e48400b00178fcd3c316mr3862964rwb.19.1708082134432;
+        Fri, 16 Feb 2024 03:15:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEEXFS/6A1CU+tkZCl3LqWZoyfkFXBbtOqi684Tub/2r8HFJl2wD8ae/14lEfYPwMipCFTwvg==
+X-Received: by 2002:a05:6358:e484:b0:178:fcd3:c316 with SMTP id by4-20020a056358e48400b00178fcd3c316mr3862947rwb.19.1708082133984;
+        Fri, 16 Feb 2024 03:15:33 -0800 (PST)
+Received: from localhost ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id w21-20020aa78595000000b006dd843734c8sm2854143pfn.81.2024.02.16.03.15.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Feb 2024 03:15:33 -0800 (PST)
+Date: Fri, 16 Feb 2024 19:10:41 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc: itrymybest80@protonmail.com, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, 
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] integrity: eliminate unnecessary "Problem loading
+ X.509 certificate" msg
+Message-ID: <pgwe5qhu7j3t7l37d3tj2nf6wpcjfonxonxjk4ozpinbhl4llr@g5ddvx7cgqsk>
+References: <20231227044156.166009-1-coxu@redhat.com>
+ <20240109002429.1129950-1-coxu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwC3YBm9FM9lcmabAg--.60113S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF4DAF1rtr18Gr13uryrtFb_yoW8Xw1DpF
-	Z7ta1UCr4qqF13Can7Zr48ua1rAwsYqr4jkry8KrWUZa45KF1ftr1xGF4j9FykWwn3ua4Y
-	q34jv3sYy34DAa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj5ZmBQAAsN
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240109002429.1129950-1-coxu@redhat.com>
 
-On Thu, 2024-02-15 at 23:43 -0500, Paul Moore wrote:
-> On Feb 15, 2024 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> >=20
-> > IMA and EVM are not effectively LSMs, especially due to the fact that i=
-n
-> > the past they could not provide a security blob while there is another =
-LSM
-> > active.
-> >=20
-> > That changed in the recent years, the LSM stacking feature now makes it
-> > possible to stack together multiple LSMs, and allows them to provide a
-> > security blob for most kernel objects. While the LSM stacking feature h=
-as
-> > some limitations being worked out, it is already suitable to make IMA a=
-nd
-> > EVM as LSMs.
-> >=20
-> > The main purpose of this patch set is to remove IMA and EVM function ca=
-lls,
-> > hardcoded in the LSM infrastructure and other places in the kernel, and=
- to
-> > register them as LSM hook implementations, so that those functions are
-> > called by the LSM infrastructure like other regular LSMs.
->=20
-> As discussed earlier, I've just merged this into the lsm/dev tree; a big
-> thank you to Roberto for working on this and to all helped along the way
-> with reviews, testing, etc.  I've wanted to see IMA/EVM integrated as
-> proper LSMs for a while and I'm very happy to finally see it happening.
+Hi Mimi,
 
-Thank you, and thanks to all! That's an excellent news! Excited about
-that!
+Could you take a look at this version of patch? If it escaped your
+attention because it got buried in the same thread, sorry for that. And
+I won't send new version as a reply to previous version in the future.
 
-> Mimi, Roberto, I'm going to hold off on merging anything into the lsm/dev
-> tree for a few days in case you decide you would prefer to take these
-> patches yourselves.  If I don't hear anything from the two of you, I'll
-> plan to send these to Linus during the next merge window.
+On Tue, Jan 09, 2024 at 08:24:28AM +0800, Coiby Xu wrote:
+>Currently when the kernel fails to add a cert to the .machine keyring,
+>it will throw an error immediately in the function integrity_add_key.
+>
+>Since the kernel will try adding to the .platform keyring next or throw
+>an error (in the caller of integrity_add_key i.e. add_to_machine_keyring),
+>so there is no need to throw an error immediately in integrity_add_key.
+>
+>Reported-by: itrymybest80@protonmail.com
+>Closes: https://bugzilla.redhat.com/show_bug.cgi?id=2239331
+>Fixes: d19967764ba8 ("integrity: Introduce a Linux keyring called machine")
+>Reviewed-by: Eric Snowberg <eric.snowberg@oracle.com>
+>Signed-off-by: Coiby Xu <coxu@redhat.com>
+>---
+>v2
+> - improve patch subject [Mimi]
+> - add Fixes tag [Jarkko]
+> - add Reviewed-by tag from Eric
+>---
+> security/integrity/digsig.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>
+>diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+>index df387de29bfa..45c3e5dda355 100644
+>--- a/security/integrity/digsig.c
+>+++ b/security/integrity/digsig.c
+>@@ -179,7 +179,8 @@ static int __init integrity_add_key(const unsigned int id, const void *data,
+> 				   KEY_ALLOC_NOT_IN_QUOTA);
+> 	if (IS_ERR(key)) {
+> 		rc = PTR_ERR(key);
+>-		pr_err("Problem loading X.509 certificate %d\n", rc);
+>+		if (id != INTEGRITY_KEYRING_MACHINE)
+>+			pr_err("Problem loading X.509 certificate %d\n", rc);
+> 	} else {
+> 		pr_notice("Loaded X.509 cert '%s'\n",
+> 			  key_ref_to_ptr(key)->description);
+>-- 
+>2.43.0
+>
 
-Perfect!
-
-Roberto
+-- 
+Best regards,
+Coiby
 
 
