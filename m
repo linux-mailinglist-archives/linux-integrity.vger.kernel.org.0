@@ -1,162 +1,192 @@
-Return-Path: <linux-integrity+bounces-1277-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1278-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF03D857279
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 01:26:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA63F857395
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 02:54:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D32CB1C216CC
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 00:26:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 596661F23728
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Feb 2024 01:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39BE61C11;
-	Fri, 16 Feb 2024 00:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1096DDDA;
+	Fri, 16 Feb 2024 01:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aHIYNU4s"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qx3MjGFx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2969228E8;
-	Fri, 16 Feb 2024 00:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4A8DDA7;
+	Fri, 16 Feb 2024 01:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708043184; cv=none; b=lm/P+F9UDWnCJQLfgC1NqvsIX95A2S+YGv9IVj3P6qsT5PJ8fa+7O7kNgCN1W8gjrVSYE29zxxWGTE/upoin4gVzHRFXPnh/DjPJTzRyuFFtbve9KCGokvZ+59QJQzJq4wo9ZqKW6MQOJEovHTWOrztcI7idOcI7jlRJglV9RDo=
+	t=1708048488; cv=none; b=hoHHT/67LqHQPGrn9n9Dg1wdzMEDYfKSCTZ2RezQ8IN2V6Zu1POMJMw4FmGM9cI3KxOjcux1IY68Hwv8wedSFV4gRkJYTOoTWFZ5Fd50N/kAGORnUXHzWgd4UrreGAWxNcAJUqSjhiwClwRUBIblAgWf1TLGtx5MoiOwWe/Mw/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708043184; c=relaxed/simple;
-	bh=oXtwZtSuO9glftnKm5bDsm0gbH6HrsEW0khA9h2R97U=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=DQwaNu4Al00k96r/9VRXvq1JKGdUyXx1+UFYCiKxH6cyqB2RVDy5pdmGgq1XTObDeBXsxtg89SZTfoCY1s8UaXlaiwcGXElV3P1m8ApjwWxexPkU5hQ4lvF/OO12fxf8l/VSyLZjqa2dTd/Yk1XTAeMtK7lTG+5om08RkdpKIF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aHIYNU4s; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FMtnth028679;
-	Fri, 16 Feb 2024 00:25:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Om9oyXgDiFyioTn4kHbDdu9jyc7RJhYiunD0WE9LJcY=;
- b=aHIYNU4sNfsa6W1Zi2SHNnYp5pAsdwkhgkxJcFYINTcs7hJVzXD1EVzqpEhsQw9vmW54
- 1AUJMWoYDVuVJx6grRr+rbtVY2w8d2UjRvNHeiATyyb/V4Id7ll/q4t4K9kkWwbF76vf
- j2Cm+vKS7fWCcn05rSyIYpYOC3RHWwGIQl8vhUK2MQ5fwFRVl/O4wmtSfVPLFc1bI/4z
- WnInjoiLggCOIG2skURkMzY32fQ4Puohw0GxcsUOQKf4h2y33musZLxiyLV0Uu17uJ/O
- 5yaUNhukbVWTLYDDZzJxo+gUPF+gWxMjEcxCYbSsCtxF1l3cj+kJNp6WNffJWAkLfWT5 Iw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9uucsfcr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Feb 2024 00:25:48 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41G0MkpP026872;
-	Fri, 16 Feb 2024 00:25:47 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9uucsfc1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Feb 2024 00:25:47 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FLD05g009728;
-	Fri, 16 Feb 2024 00:25:46 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6p637q1k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Feb 2024 00:25:46 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41G0Ph1735258676
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 16 Feb 2024 00:25:45 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A2A2B58061;
-	Fri, 16 Feb 2024 00:25:43 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EF01158058;
-	Fri, 16 Feb 2024 00:25:41 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.113.219])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 16 Feb 2024 00:25:41 +0000 (GMT)
-Message-ID: <6154a26bb0efc2abbfc51df4bf1adc8279854f3c.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 19/25] integrity: Move
- integrity_kernel_module_request() to IMA
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, jack@suse.cz, chuck.lever@oracle.com,
-        jlayton@kernel.org, neilb@suse.de, kolga@netapp.com,
-        Dai.Ngo@oracle.com, tom@talpey.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, omosnace@redhat.com,
-        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Roberto Sassu
-	 <roberto.sassu@huawei.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date: Thu, 15 Feb 2024 19:25:41 -0500
-In-Reply-To: <09d6fa08e2d62720759f57237043a2dd9b5208ca.camel@huaweicloud.com>
-References: <20240215103113.2369171-1-roberto.sassu@huaweicloud.com>
-	 <20240215103113.2369171-20-roberto.sassu@huaweicloud.com>
-	 <09d6fa08e2d62720759f57237043a2dd9b5208ca.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	s=arc-20240116; t=1708048488; c=relaxed/simple;
+	bh=ELe4LEal0dJOP+F2HGkC1aCnEIJ8KzGDyQcgMtnRmzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QB8RlyamMf/32iH80rSCb6YcHO3qJmO9t75U+M4jSYMJLRd17d0jc/1zv+JAHa4zG4Yn1pG0agjrxviaLhHh8Hk+zGH2kwgFcXgB8FMgHJ6vEKjv4w8A9bNzaJNApeKJrryjxZoeCc26JSAtoT4nZB0z4+7017uoJ/KzIyn7PXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qx3MjGFx; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708048486; x=1739584486;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ELe4LEal0dJOP+F2HGkC1aCnEIJ8KzGDyQcgMtnRmzo=;
+  b=Qx3MjGFxP0mgbSjkTnmhRT9DWY9zBNxqtCa0IO+7MXqG8/9kAO3E9Bfw
+   42G7yKeVAuZESj84TePOOrU+rtuF8EaNf0Xg1Tia29s+zfYrPjX9LkRP0
+   V9zQfpcCiz1LymESz7zDEqZ025CL9fFD/iTHCgbM44LB1CuAZLOvsTYd7
+   EuP3ITgfLJonaemRIw/ufTiBuvYD1fa9KRfcb2u09pYoJySx6G/u8uQgF
+   Cc27bLfyeBUu1Sr823NmjBwLCYGID1Wzza7j6u9vJox2FXInDTQoZdDC0
+   FgDiXwxQO7aDUS/n9XMXQcvrCryxGgrJrY47BgQndWAKBKgcjLZHrOpDI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10985"; a="2026566"
+X-IronPort-AV: E=Sophos;i="6.06,163,1705392000"; 
+   d="scan'208";a="2026566"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 17:54:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,163,1705392000"; 
+   d="scan'208";a="3793970"
+Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 15 Feb 2024 17:54:38 -0800
+Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ranQo-0000vw-1g;
+	Fri, 16 Feb 2024 01:54:34 +0000
+Date: Fri, 16 Feb 2024 09:53:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ross Philipson <ross.philipson@oracle.com>,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+	linux-efi@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ross.philipson@oracle.com, dpsmith@apertussolutions.com,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+	dave.hansen@linux.intel.com, ardb@kernel.org, mjg59@srcf.ucam.org,
+	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
+	jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
+	nivedita@alum.mit.edu, herbert@gondor.apana.org.au,
+	davem@davemloft.net, kanth.ghatraju@oracle.com,
+	trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v8 14/15] x86: Secure Launch late initcall platform module
+Message-ID: <202402160909.BRTtBK7T-lkp@intel.com>
+References: <20240214221847.2066632-15-ross.philipson@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: eVp6Z66UPLJF9IDvI4kibR2k_-D2yKlM
-X-Proofpoint-GUID: 8F3OPV3UWb5PHaUQpiMgR3h1AV3Tc70q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-15_23,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
- suspectscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 adultscore=0 impostorscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402160001
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240214221847.2066632-15-ross.philipson@oracle.com>
 
-On Thu, 2024-02-15 at 17:09 +0100, Roberto Sassu wrote:
-> On Thu, 2024-02-15 at 11:31 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for removing the 'integrity' LSM, move
-> > integrity_kernel_module_request() to IMA, and rename it to
-> > ima_kernel_module_request(). Rewrite the function documentation, to explain
-> > better what the problem is.
-> > 
-> > Compile it conditionally if CONFIG_INTEGRITY_ASYMMETRIC_KEYS is enabled,
-> > and call it from security.c (removed afterwards with the move of IMA to the
-> > LSM infrastructure).
-> > 
-> > Adding this hook cannot be avoided, since IMA has no control on the flags
-> > passed to crypto_alloc_sig() in public_key_verify_signature(), and thus
-> > cannot pass CRYPTO_NOLOAD, which solved the problem for EVM hashing with
-> > commit e2861fa71641 ("evm: Don't deadlock if a crypto algorithm is
-> > unavailable").
-> > 
-> > EVM alone does not need to implement this hook, first because there is no
-> > mutex to deadlock, and second because even if it had it, there should be a
-> > recursive call. However, since verification from EVM can be initiated only
-> > by setting inode metadata, deadlock would occur if modprobe would do the
-> > same while loading a kernel module (which is unlikely).
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Acked-by: Paul Moore <paul@paul-moore.com>
-> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> I hope the change of the ima_kernel_module_request() documentation is
-> fine for everyone.
-> 
-> If not, let me know.
+Hi Ross,
 
-Thanks, Roberto.  The updated kernel-doc looks good.
+kernel test robot noticed the following build warnings:
 
-Mimi
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v6.8-rc4 next-20240215]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Ross-Philipson/x86-boot-Place-kernel_info-at-a-fixed-offset/20240215-064712
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20240214221847.2066632-15-ross.philipson%40oracle.com
+patch subject: [PATCH v8 14/15] x86: Secure Launch late initcall platform module
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20240216/202402160909.BRTtBK7T-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240216/202402160909.BRTtBK7T-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402160909.BRTtBK7T-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/slmodule.c:28:
+   In file included from include/linux/slaunch.h:185:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+     167 |         int mapping_size;
+         |             ^
+>> arch/x86/kernel/slmodule.c:352:4: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     352 |                         default:
+         |                         ^
+   arch/x86/kernel/slmodule.c:352:4: note: insert 'break;' to avoid fall-through
+     352 |                         default:
+         |                         ^
+         |                         break; 
+   2 warnings generated.
+
+
+vim +352 arch/x86/kernel/slmodule.c
+
+   313	
+   314	static void slaunch_tpm20_extend_event(struct tpm_chip *tpm, void __iomem *txt,
+   315					       struct tcg_pcr_event2_head *event)
+   316	{
+   317		u16 *alg_id_field = (u16 *)((u8 *)event + sizeof(struct tcg_pcr_event2_head));
+   318		struct tpm_digest *digests;
+   319		u8 *dptr;
+   320		u32 i, j;
+   321		int ret;
+   322	
+   323		digests = kcalloc(tpm->nr_allocated_banks, sizeof(*digests),
+   324				  GFP_KERNEL);
+   325		if (!digests)
+   326			slaunch_txt_reset(txt, "Failed to allocate array of digests\n",
+   327					  SL_ERROR_GENERIC);
+   328	
+   329		for (i = 0; i < tpm->nr_allocated_banks; i++)
+   330			digests[i].alg_id = tpm->allocated_banks[i].alg_id;
+   331	
+   332		/* Early SL code ensured there was a max count of 2 digests */
+   333		for (i = 0; i < event->count; i++) {
+   334			dptr = (u8 *)alg_id_field + sizeof(u16);
+   335	
+   336			for (j = 0; j < tpm->nr_allocated_banks; j++) {
+   337				if (digests[j].alg_id != *alg_id_field)
+   338					continue;
+   339	
+   340				switch (digests[j].alg_id) {
+   341				case TPM_ALG_SHA256:
+   342					memcpy(&digests[j].digest[0], dptr,
+   343					       SHA256_DIGEST_SIZE);
+   344					alg_id_field = (u16 *)((u8 *)alg_id_field +
+   345						SHA256_DIGEST_SIZE + sizeof(u16));
+   346					break;
+   347				case TPM_ALG_SHA1:
+   348					memcpy(&digests[j].digest[0], dptr,
+   349					       SHA1_DIGEST_SIZE);
+   350					alg_id_field = (u16 *)((u8 *)alg_id_field +
+   351						SHA1_DIGEST_SIZE + sizeof(u16));
+ > 352				default:
+   353					break;
+   354				}
+   355			}
+   356		}
+   357	
+   358		ret = tpm_pcr_extend(tpm, event->pcr_idx, digests);
+   359		if (ret) {
+   360			pr_err("Error extending TPM20 PCR, result: %d\n", ret);
+   361			slaunch_txt_reset(txt, "Failed to extend TPM20 PCR\n",
+   362					  SL_ERROR_TPM_EXTEND);
+   363		}
+   364	
+   365		kfree(digests);
+   366	}
+   367	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
