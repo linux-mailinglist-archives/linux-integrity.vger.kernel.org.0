@@ -1,149 +1,309 @@
-Return-Path: <linux-integrity+bounces-1295-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1296-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F80185AD6C
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 21:45:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72BC785AE44
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 23:18:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5B29B21A92
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 20:45:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BCB01C218FB
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 22:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00ED51C47;
-	Mon, 19 Feb 2024 20:45:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8011A54F88;
+	Mon, 19 Feb 2024 22:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ORKqJJPx"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qpEiGoMw"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788B92E40C;
-	Mon, 19 Feb 2024 20:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B4854BEA
+	for <linux-integrity@vger.kernel.org>; Mon, 19 Feb 2024 22:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708375537; cv=none; b=DqXwCRmZ2FomO1XzhdpyRPo52znHJXMDcHTc54joi0kisig4Dns4niKrnS5UNJ1wWsi1VYTXVsaxTSD0h+Jl2ZkHfxGIN8O/tE4H1guL/Uw7QGCaBKJ4Kb3T7WgzX3qKrlObaL/XotXHsLLSOB3f+nYy2hDqmKn1g42HV0wPvto=
+	t=1708381099; cv=none; b=E+sPnALY5lDPwqrILbJ6barbL6NGUFi4OABGyISgIR1W8Ay3r87y28wlaT3ewx6CySSMGQZLPqOsCOlgvPRHNbieV7JOIxr3FMZQIlBkKj9NKf5tkVV7apOD3ke2lvVbFGq4YS/s1UxBiiq4S3N3LvUpTVapxNUOhEdYXpc/0rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708375537; c=relaxed/simple;
-	bh=RbLok3TbzDososfsQR6bBnabxTYPM3ftFZEG1ID3oXk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=q2ttGYig0exyM+H4Vnxq0lhpIoqv1wrGBnUeu3csTtjTEeHVXEANYwtiXOBZtcLwVRY27TPszHAiaCjlL/SIPUamEwhm9U8Ub31jHSnJREBmg7//ynjYU0kuhhAIx/twtZoFAgaU/7LJpUWxUQF4D07Ayg4gE6ZWf5Ttp+GtEDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ORKqJJPx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC55EC433F1;
-	Mon, 19 Feb 2024 20:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708375537;
-	bh=RbLok3TbzDososfsQR6bBnabxTYPM3ftFZEG1ID3oXk=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=ORKqJJPxeviSRqukC/iAm7zBNCaa4iR8Tc9fVBK6aB7dng3G7U2hQP/KCA3khvlXE
-	 AmcRUJFrn6G1ScFF4cz5ItWC+HGV+NlKfFY8u68ftAvEoiY8u9+njfZqnZRSenccjz
-	 9bC3NDRwq8SBgT+8AJRkeCBgdTG+noAi73LCkQcECJe7ac/rqdCcw6/BcFyD+n5S3s
-	 MDU7Mz2qjW+wcEiyYVE9UzbN8HV++BXTMP7uiSNGu3jx0M6QB0BB1uaC29IEe+m7sL
-	 Ubo0qZOCtxmIbMcfHbo+qgJXuf59B+chSKaov+yuY91AqAvA0g+RWTfSEEslhpjtiS
-	 BgCgFh+Y5MxuQ==
+	s=arc-20240116; t=1708381099; c=relaxed/simple;
+	bh=w12ZLM49JaesoH00N79gM/ItJkbmDk/W6sjcc8HC4ys=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LKGyS/SZ3URwZuwXtd6oX8lU/oV16ZYI4gj0QY480U2+Ufr2aq9IOOvD9m5GYe6jNC0OFdte4SH5TUinZoraZhRClorcP0dnMDVLYCafgrcXnlldD+SAv4t6sJQUwi7/96HDiTGX/CzjU5vOY0mv6/Z5RQ8/PFAFgjk9znJcvUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qpEiGoMw; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41JM60of023284;
+	Mon, 19 Feb 2024 22:17:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=m2vVnm3WIOYe8tuZvxVsO+fx9MrfXEx+Kc5KgrKSaic=;
+ b=qpEiGoMwHmSAG+LlsDVzaIP8Z01j97qKKgXTCZnbv6Je+a4GbHJ+gcDsIH+iAasHe/d+
+ paFuvpalrHhVGXfxAUT45lKr5D+t7mePHqlHXCCKFjCGn1hDkRtMuDDhZplT2ZlCl69g
+ 2ayTKNTuSQb3PhJuW1Uxiej8VYryFVRnys328SPm40Qt56xfKUX/C5RX9ag6hLK7Z3e1
+ WtPZzzYneefEecifJOItvaxyqfpdxKLYi5uLAgDR7JMchxpm0GvRUSi4ZSaBFoAReN6z
+ MpwTFf+Iha336UsObxyEDMqyqhd3XhXmrr59WWxRAyVcJP3d3tqiGdviBTpn7tjBANJh 9Q== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wce8n9wq3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Feb 2024 22:16:59 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41JJbDZt009540;
+	Mon, 19 Feb 2024 22:16:58 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb84p49m3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Feb 2024 22:16:58 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41JMGtDj9503450
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Feb 2024 22:16:58 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 915535805E;
+	Mon, 19 Feb 2024 22:16:55 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D58A458051;
+	Mon, 19 Feb 2024 22:16:53 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 19 Feb 2024 22:16:53 +0000 (GMT)
+Message-ID: <6a2b6fee-6f3c-4099-983a-3be3ecd091b6@linux.ibm.com>
+Date: Mon, 19 Feb 2024 17:16:53 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Feb 2024 20:45:33 +0000
-Message-Id: <CZ9CL1MYG4SK.2L7WVGM7WVCG1@seitikki>
-Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Peter Huewe"
- <peterhuewe@gmx.de>
-Subject: Re: [PATCH 3/3] tpm: make locality request return value consistent
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, "Jason Gunthorpe"
- <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
- <20240131170824.6183-4-dpsmith@apertussolutions.com>
- <CYU3XUGOX6QT.1GL070ONNPBWQ@suppilovahvero>
- <80d95a08-a1c1-44a7-959c-8bff14254608@apertussolutions.com>
-In-Reply-To: <80d95a08-a1c1-44a7-959c-8bff14254608@apertussolutions.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/8] ima: define and call ima_alloc_kexec_file_buf
+Content-Language: en-US
+To: Tushar Sugandhi <tusharsu@linux.microsoft.com>, zohar@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
+        bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+        kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
+ <20240214153827.1087657-2-tusharsu@linux.microsoft.com>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20240214153827.1087657-2-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2sJIqJ5zuL-g3LV3CBhtMkpIcqOU_G81
+X-Proofpoint-ORIG-GUID: 2sJIqJ5zuL-g3LV3CBhtMkpIcqOU_G81
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-19_20,2024-02-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ mlxlogscore=999 clxscore=1015 adultscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402190167
 
-On Mon Feb 19, 2024 at 8:29 PM UTC, Daniel P. Smith wrote:
-> On 2/1/24 17:49, Jarkko Sakkinen wrote:
-> > On Wed Jan 31, 2024 at 7:08 PM EET, Daniel P. Smith wrote:
-> >> The function tpm_tis_request_locality() is expected to return the loca=
-lity
-> >> value that was requested, or a negative error code upon failure. If it=
- is called
-> >> while locality_count of struct tis_data is non-zero, no actual localit=
-y request
-> >> will be sent. Because the ret variable is initially set to 0, the
-> >> locality_count will still get increased, and the function will return =
-0. For a
-> >> caller, this would indicate that locality 0 was successfully requested=
- and not
-> >> the state changes just mentioned.
-> >>
-> >> Additionally, the function __tpm_tis_request_locality() provides incon=
-sistent
-> >> error codes. It will provide either a failed IO write or a -1 should i=
-t have
-> >> timed out waiting for locality request to succeed.
-> >>
-> >> This commit changes __tpm_tis_request_locality() to return valid negat=
-ive error
-> >> codes to reflect the reason it fails. It then adjusts the return value=
- check in
-> >> tpm_tis_request_locality() to check for a non-negative return value be=
-fore
-> >> incrementing locality_cout. In addition, the initial value of the ret =
-value is
-> >> set to a negative error to ensure the check does not pass if
-> >> __tpm_tis_request_locality() is not called.
-> >=20
-> > This is way way too abtract explanation and since I don't honestly
-> > understand what I'm reading, the code changes look bunch of arbitrary
-> > changes with no sound logic as a whole.
->
-> In more simpler terms, the interface is inconsistent with its return=20
-> values. To be specific, here are the sources for the possible values=20
-> tpm_tis_request_locality() will return:
-> 1. 0 - 4: _tpm_tis_request_locality() was able to set the locality
-> 2. 0: a locality already open, no locality request made
-> 3. -1: if timeout happens in __tpm_tis_request_locality()
-> 4. -EINVAL: unlikely, return by IO write for incorrect sized write
->
-> As can easily be seen, tpm_tis_request_locality() will return 0 for both=
-=20
-> a successful(1) and non-successful request(2). And to be explicit for=20
-> (2), if tpm_tis_request_locality is called for a non-zero locality and=20
-> the locality counter is not zero, it will return 0. Thus, making the=20
-> value 0 reflect as success when locality 0 is successfully requested and=
-=20
-> as failure when a locality is requested with a locality already open.
->
-> As for failures, correct me if I am wrong, but if a function is=20
-> returning negative error codes, it should not be using a hard coded -1=20
-> as a generic error code. As I note, it is unlikely for the -EINVAL to be=
-=20
-> delivered, but the code path is still available should something in the=
-=20
-> future change the backing call logic.
->
-> After this change, the possible return values for=20
-> tpm_tis_request_locality() become:
-> 1. 0 - 4: the locality that was successfully requested
-> 2. -EBUSY: tpm busy, unable to request locality
-> 3. -EINVAL: invalid parameter
->
-> With this more consistent interface, I updated the return value checks=20
-> at the call sites to check for negative error as the means to catch=20
-> failures.
 
-For all commits: your responses to my queries have much more to the
-point information and buy-in than the original commit messages. So
-for next version I would take them and edit a bit and then this all
-makes much much more sense. Thank you.
->
-> v/r,
-> dps
 
-BR, Jarkko
+On 2/14/24 10:38, Tushar Sugandhi wrote:
+> Carrying the IMA measurement list across kexec requires allocating a
+> buffer and copying the measurement records.  Separate allocating the
+> buffer and copying the measurement records into separate functions in
+> order to allocate the buffer at kexec 'load' and copy the measurements
+> at kexec 'execute'.
+> 
+> This patch includes the following changes:
+>   - Refactor ima_dump_measurement_list() to move the memory allocation
+>     to a separate function ima_alloc_kexec_file_buf() which allocates
+>     buffer of size 'kexec_segment_size' at kexec 'load'.
+>   - Make the local variable ima_kexec_file in ima_dump_measurement_list()
+>     as local static to the file, so that it can be accessed from
+
+as -> a
+
+>     ima_alloc_kexec_file_buf().
+>   - Make necessary changes to the function ima_add_kexec_buffer() to call
+>     the above two functions.
+> 
+> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> ---
+>   security/integrity/ima/ima_kexec.c | 107 +++++++++++++++++++++--------
+>   1 file changed, 78 insertions(+), 29 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index dadc1d138118..a9cb5e882e2e 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -15,62 +15,98 @@
+>   #include "ima.h"
+>   
+>   #ifdef CONFIG_IMA_KEXEC
+> +static struct seq_file ima_kexec_file;
+> +
+> +static void ima_reset_kexec_file(struct seq_file *sf)
+> +{
+> +	sf->buf = NULL;
+> +	sf->size = 0;
+> +	sf->read_pos = 0;
+> +	sf->count = 0;
+> +}
+> +
+> +static void ima_free_kexec_file_buf(struct seq_file *sf)
+> +{
+> +	vfree(sf->buf);
+> +	ima_reset_kexec_file(sf);
+> +}
+> +
+> +static int ima_alloc_kexec_file_buf(size_t segment_size)
+> +{
+> +	/*
+> +	 * kexec 'load' may be called multiple times.
+> +	 * Free and realloc the buffer only if the segment_size is
+> +	 * changed from the previous kexec 'load' call.
+> +	 */
+> +	if (ima_kexec_file.buf &&
+> +	    ima_kexec_file.size == segment_size &&
+> +	    ima_kexec_file.read_pos == 0 &&
+> +	    ima_kexec_file.count == sizeof(struct ima_kexec_hdr))
+> +		return 0;
+> +
+> +	ima_free_kexec_file_buf(&ima_kexec_file);
+> +
+> +	/* segment size can't change between kexec load and execute */
+> +	ima_kexec_file.buf = vmalloc(segment_size);
+> +	if (!ima_kexec_file.buf)
+> +		return -ENOMEM;
+> +
+> +	ima_kexec_file.size = segment_size;
+> +	ima_kexec_file.read_pos = 0;
+> +	ima_kexec_file.count = sizeof(struct ima_kexec_hdr);	/* reserved space */
+> +
+> +	return 0;
+> +}
+> +
+>   static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
+>   				     unsigned long segment_size)
+>   {
+>   	struct ima_queue_entry *qe;
+> -	struct seq_file file;
+>   	struct ima_kexec_hdr khdr;
+> -	int ret = 0;
+>   
+> -	/* segment size can't change between kexec load and execute */
+> -	file.buf = vmalloc(segment_size);
+> -	if (!file.buf) {
+> -		ret = -ENOMEM;
+> -		goto out;
+> +	if (!ima_kexec_file.buf) {
+> +		*buffer_size = 0;
+> +		*buffer = NULL;
+
+If you return -EINVAL then the caller should not look at the buffer but 
+at 'ret' (5/8). So I don't think it's necessary to initialize these 
+variables since the caller shouldn't look at them.
+
+> +		pr_err("%s: Kexec file buf not allocated\n", __func__);
+> +		return -EINVAL;
+>   	}
+>   
+> -	file.size = segment_size;
+> -	file.read_pos = 0;
+> -	file.count = sizeof(khdr);	/* reserved space */
+> -
+>   	memset(&khdr, 0, sizeof(khdr));
+>   	khdr.version = 1;
+> +
+> +	/* Copy as many IMA measurements list records as possible */
+>   	list_for_each_entry_rcu(qe, &ima_measurements, later) {
+> -		if (file.count < file.size) {
+> +		if (ima_kexec_file.count < ima_kexec_file.size) {
+>   			khdr.count++;
+> -			ima_measurements_show(&file, qe);
+> +			ima_measurements_show(&ima_kexec_file, qe);
+>   		} else {
+> -			ret = -EINVAL;
+> +			pr_err("%s: IMA log file is too big for Kexec buf\n",
+> +			       __func__);
+>   			break;
+>   		}
+>   	}
+>   
+> -	if (ret < 0)
+> -		goto out;
+> -
+>   	/*
+>   	 * fill in reserved space with some buffer details
+>   	 * (eg. version, buffer size, number of measurements)
+>   	 */
+> -	khdr.buffer_size = file.count;
+> +	khdr.buffer_size = ima_kexec_file.count;
+>   	if (ima_canonical_fmt) {
+>   		khdr.version = cpu_to_le16(khdr.version);
+>   		khdr.count = cpu_to_le64(khdr.count);
+>   		khdr.buffer_size = cpu_to_le64(khdr.buffer_size);
+>   	}
+> -	memcpy(file.buf, &khdr, sizeof(khdr));
+> +	memcpy(ima_kexec_file.buf, &khdr, sizeof(khdr));
+>   
+>   	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
+> -			     file.buf, file.count < 100 ? file.count : 100,
+> +			     ima_kexec_file.buf, ima_kexec_file.count < 100 ?
+> +			     ima_kexec_file.count : 100,
+>   			     true);
+>   
+> -	*buffer_size = file.count;
+> -	*buffer = file.buf;
+> -out:
+> -	if (ret == -EINVAL)
+> -		vfree(file.buf);
+> -	return ret;
+> +	*buffer_size = ima_kexec_file.count;
+> +	*buffer = ima_kexec_file.buf;
+> +
+> +	return 0;
+>   }
+>   
+>   /*
+> @@ -108,13 +144,20 @@ void ima_add_kexec_buffer(struct kimage *image)
+>   		return;
+>   	}
+>   
+> -	ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
+> -				  kexec_segment_size);
+> -	if (!kexec_buffer) {
+> +	ret = ima_alloc_kexec_file_buf(kexec_segment_size);
+> +	if (ret < 0) {
+>   		pr_err("Not enough memory for the kexec measurement buffer.\n");
+>   		return;
+>   	}
+>   
+> +	ret = ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
+> +					kexec_segment_size);
+> +	if (ret < 0) {
+> +		pr_err("%s: Failed to dump IMA measurements. Error:%d.\n",
+> +		       __func__, ret);
+> +		return;
+> +	}
+> +
+>   	kbuf.buffer = kexec_buffer;
+>   	kbuf.bufsz = kexec_buffer_size;
+>   	kbuf.memsz = kexec_segment_size;
+> @@ -129,6 +172,12 @@ void ima_add_kexec_buffer(struct kimage *image)
+>   	image->ima_buffer_size = kexec_segment_size;
+>   	image->ima_buffer = kexec_buffer;
+>   
+> +	/*
+> +	 * kexec owns kexec_buffer after kexec_add_buffer() is called
+> +	 * and it will vfree() that buffer.
+> +	 */
+
+Actually, that's not quite right what I told you.   "kexec owns 
+kexec_buffer due to ima->ima_buffer and it will vfree() this buffer."
+
+
+> +	ima_reset_kexec_file(&ima_kexec_file);
+> +
+>   	kexec_dprintk("kexec measurement buffer for the loaded kernel at 0x%lx.\n",
+>   		      kbuf.mem);
+>   }
 
