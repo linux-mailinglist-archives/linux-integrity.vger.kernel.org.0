@@ -1,182 +1,152 @@
-Return-Path: <linux-integrity+bounces-1289-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1290-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DC2485924B
-	for <lists+linux-integrity@lfdr.de>; Sat, 17 Feb 2024 21:07:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D811885AA69
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 18:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E59CB22307
-	for <lists+linux-integrity@lfdr.de>; Sat, 17 Feb 2024 20:07:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87297285729
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 17:54:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5987E593;
-	Sat, 17 Feb 2024 20:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 060E247F53;
+	Mon, 19 Feb 2024 17:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JEomp9Ix"
+	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="g0DvvJjY"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792D17E596;
-	Sat, 17 Feb 2024 20:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708200463; cv=none; b=oIj5G6StB+M+d69nBOrXy1pbbTUek23WKi8LOxx1fwut7sowujdKl5vqGyFDEjuFfRT4APF7Y7C5tzL1eUEoTWXJ0ECe3fZavtFtSJOkt6lZknQXi5+MA+1WbmXpxlNVDPktxy33czxQsHiGg624pXzs+RtjhVRWUwCsqbaBQ8g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708200463; c=relaxed/simple;
-	bh=/69HW9NzBJsJX+iI5iUdtA0unbwpwPW5fq7scXx+J5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hn54m8xYm6TG0AQ6/Bfvocg0znUmtQOyzxIpnZQdDdPi/N+8V+7Os9iVJCK9nEiXgpO9H7qcc+JRo17e6EE8r96x+hY7dUlBeNAj8CB8GTg7AmjpS24HQJt8OGBaltf0jjeK8k7aTkxA5yctZgsR7P4fz+17OIGSbNYb3Ql5h38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JEomp9Ix; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708200461; x=1739736461;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/69HW9NzBJsJX+iI5iUdtA0unbwpwPW5fq7scXx+J5o=;
-  b=JEomp9IxilrusFwFmY5Gvs+SI/7xj3nq73bwW/4turY6J1iDtecBAbeW
-   Fjm0ytzMzUHgkeQdUc3fJVwa5yvEuWymRGQH1HZnmB4uixZv9o3GCiaif
-   c3Bz4U5utU5gO/vdg+4gr0QDj9C3lVboAgI9JUQIo6gFThkdLBqfqikuf
-   LqFMHUUKR/xK9evTiovBjxrEGVs8VmHzMRCSS3tL4VPQHqKPYgE6Lk0ug
-   OzsEz2AAjrjZC37uhuuWGfqtukgH5jkAsZvJKLhSvN11KvZ0/ky9xde/I
-   fszQgpUhTnLntvYafdYBkMCR7R59pSzcPe8ctxmnJIyZ9M0IwZ2d5ejNv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10987"; a="2180177"
-X-IronPort-AV: E=Sophos;i="6.06,167,1705392000"; 
-   d="scan'208";a="2180177"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2024 12:07:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,167,1705392000"; 
-   d="scan'208";a="8727084"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 17 Feb 2024 12:07:35 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rbQyC-0002Te-24;
-	Sat, 17 Feb 2024 20:07:32 +0000
-Date: Sun, 18 Feb 2024 04:06:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ross Philipson <ross.philipson@oracle.com>,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
-	linux-efi@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, ross.philipson@oracle.com,
-	dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
-	ardb@kernel.org, mjg59@srcf.ucam.org,
-	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
-	jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
-	nivedita@alum.mit.edu, herbert@gondor.apana.org.au,
-	davem@davemloft.net, kanth.ghatraju@oracle.com,
-	trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v8 15/15] x86: EFI stub DRTM launch support for Secure
- Launch
-Message-ID: <202402180324.a3PqEegg-lkp@intel.com>
-References: <20240214221847.2066632-16-ross.philipson@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D0847F50;
+	Mon, 19 Feb 2024 17:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708365271; cv=pass; b=Giftd2nbO/8zEk4wDXn6KuTj33uCe1JfbQzLS1j0xEmzcbuzEHaPj19IdKgoyILlg5X8/1GLkiuiya4qcsEgtGESLxkx5Q3I6/oXM+LO2r7lIMr+SYhtfHde+m01vHEue7Ziq+jhAZ7KDg3u1BTlEPTgAqk+zIBffgOZXMdasc4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708365271; c=relaxed/simple;
+	bh=+vBgROQpUxhsS+8mG0Uu59VmhE/8dycc2dSyGObDGfQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qeRLc14X8YFn9Ab8oBavvknj7yL+RW8Bd+TrnyY1GjWw0RQnwSag+GzrDQxYo1yZCgJcecWm+omucIAMSsT/ASO1YGDU6GTvuYd7NN3kl8wufSHkFZT32tX2OEC6rOC1JcnNTZC3s4WwJW4QmGXR9jD6fS4JvH6oWl5iz+UqvcM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=g0DvvJjY; arc=pass smtp.client-ip=136.143.188.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
+ARC-Seal: i=1; a=rsa-sha256; t=1708365259; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Gr732xqzNbkW1WygKqiHg6iJNcKcrTaYqEskI1ux2iTkM6sArjM0EHp+lR0HxIEf8kt7hExfxCGS1IuRdzHvTVy8waCX+Es2V1FLIyHo8/pqIZDADxnvg/v8ZwoO3uym/86PMwoQEkR3e/jA9qEv2lAh02xntqPBw7Hzj4TJqgs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1708365259; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=/SKbO8D/5N0nuzzKcMzPKSUmoio8F0MoSuF1jGCxm4Q=; 
+	b=XcmD3tE0V9D0MiGTq4n8Rw5QFnGVBkeT3TOn32hbC66FUQGyx5d6bVxUiJlanu2LqgI87fBMfPz8AzOoBAT/CZpoRXfFwRvH5PamhlXExJpOziucVdLIJ7h7FzbkYxLENVwJnl5rZ/eLrh4ZNBnsc527FcdAUhdPJFCdLIaUcoE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=apertussolutions.com;
+	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+	dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1708365259;
+	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=/SKbO8D/5N0nuzzKcMzPKSUmoio8F0MoSuF1jGCxm4Q=;
+	b=g0DvvJjYdLBH6JoN43Eojn1EvwXsg8n1LKtPp3mG3k+Ti5YDf69YP85isWYqtYCa
+	4dsRHRSaGwSyASgRP9lNEihJ1ioTy4f4hahNtekwsvgrdtm9de3cTAW/hMFu9MVj9it
+	0vFz+7Z7NsttupcXJx/683zIj0AfovmrSA7aOUqc=
+Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+	with SMTPS id 1708365259034862.7927012571332; Mon, 19 Feb 2024 09:54:19 -0800 (PST)
+Message-ID: <439b7663-233d-46c3-9925-9b830833aa4f@apertussolutions.com>
+Date: Mon, 19 Feb 2024 12:54:16 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240214221847.2066632-16-ross.philipson@oracle.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
+Content-Language: en-US
+To: Jarkko Sakkinen <jarkko@kernel.org>,
+ Lino Sanfilippo <l.sanfilippo@kunbus.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Sasha Levin <sashal@kernel.org>, linux-integrity@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Ross Philipson <ross.philipson@oracle.com>,
+ Kanth Ghatraju <kanth.ghatraju@oracle.com>, Peter Huewe <peterhuewe@gmx.de>
+References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
+ <20240131170824.6183-2-dpsmith@apertussolutions.com>
+ <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
+ <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
+ <CZ3DCC8JHNLK.3MGE70MQJT5XM@kernel.org>
+From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
+ 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
+In-Reply-To: <CZ3DCC8JHNLK.3MGE70MQJT5XM@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-Hi Ross,
+On 2/12/24 15:05, Jarkko Sakkinen wrote:
+> On Fri Feb 2, 2024 at 5:08 AM EET, Lino Sanfilippo wrote:
+>>
+>>
+>> On 01.02.24 23:21, Jarkko Sakkinen wrote:
+>>
+>>>
+>>> On Wed Jan 31, 2024 at 7:08 PM EET, Daniel P. Smith wrote:
+>>>> Commit 933bfc5ad213 introduced the use of a locality counter to control when a
+>>>> locality request is allowed to be sent to the TPM. In the commit, the counter
+>>>> is indiscriminately decremented. Thus creating a situation for an integer
+>>>> underflow of the counter.
+>>>
+>>> What is the sequence of events that leads to this triggering the
+>>> underflow? This information should be represent in the commit message.
+>>>
+>>
+>> AFAIU this is:
+>>
+>> 1. We start with a locality_counter of 0 and then we call tpm_tis_request_locality()
+>> for the first time, but since a locality is (unexpectedly) already active check_locality() and consequently
+>> __tpm_tis_request_locality() return "true". This prevents the locality_counter from being increased
+>> to 1, see
+>>
+>> 	ret = __tpm_tis_request_locality(chip, l);
+>> 	if (!ret) /* Counter not increased since ret == 1 */
+>> 		priv->locality_count++;
+>>
+>> in tpm_tis_request_locality().
+>>
+>> If now the locality is released the counter is decreased to below zero (resulting
+>> in an underflow since "locality_counter" is an unsigned int.
+> 
+> Thanks, Daniel, can you transcript this to the commit message?
 
-kernel test robot noticed the following build errors:
+ack
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus herbert-cryptodev-2.6/master herbert-crypto-2.6/master linus/master v6.8-rc4 next-20240216]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ross-Philipson/x86-boot-Place-kernel_info-at-a-fixed-offset/20240215-064712
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20240214221847.2066632-16-ross.philipson%40oracle.com
-patch subject: [PATCH v8 15/15] x86: EFI stub DRTM launch support for Secure Launch
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240218/202402180324.a3PqEegg-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240218/202402180324.a3PqEegg-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402180324.a3PqEegg-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In function 'efi_secure_launch',
-       inlined from 'efi_stub_entry' at drivers/firmware/efi/libstub/x86-stub.c:990:2:
->> drivers/firmware/efi/libstub/x86-stub.c:861:9: error: inconsistent operand constraints in an 'asm'
-     861 |         asm volatile ("jmp *%%rax"
-         |         ^~~
-
-
-vim +/asm +861 drivers/firmware/efi/libstub/x86-stub.c
-
-   813	
-   814	static void efi_secure_launch(struct boot_params *boot_params)
-   815	{
-   816		struct slr_entry_uefi_config *uefi_config;
-   817		struct slr_uefi_cfg_entry *uefi_entry;
-   818		struct slr_entry_dl_info *dlinfo;
-   819		efi_guid_t guid = SLR_TABLE_GUID;
-   820		struct slr_table *slrt;
-   821		u64 memmap_hi;
-   822		void *table;
-   823		u8 buf[64] = {0};
-   824	
-   825		table = get_efi_config_table(guid);
-   826	
-   827		/*
-   828		 * The presence of this table indicated a Secure Launch
-   829		 * is being requested.
-   830		 */
-   831		if (!table)
-   832			return;
-   833	
-   834		slrt = (struct slr_table *)table;
-   835	
-   836		if (slrt->magic != SLR_TABLE_MAGIC)
-   837			return;
-   838	
-   839		/* Add config information to measure the UEFI memory map */
-   840		uefi_config = (struct slr_entry_uefi_config *)buf;
-   841		uefi_config->hdr.tag = SLR_ENTRY_UEFI_CONFIG;
-   842		uefi_config->hdr.size = sizeof(*uefi_config) + sizeof(*uefi_entry);
-   843		uefi_config->revision = SLR_UEFI_CONFIG_REVISION;
-   844		uefi_config->nr_entries = 1;
-   845		uefi_entry = (struct slr_uefi_cfg_entry *)(buf + sizeof(*uefi_config));
-   846		uefi_entry->pcr = 18;
-   847		uefi_entry->cfg = boot_params->efi_info.efi_memmap;
-   848		memmap_hi = boot_params->efi_info.efi_memmap_hi;
-   849		uefi_entry->cfg |= memmap_hi << 32;
-   850		uefi_entry->size = boot_params->efi_info.efi_memmap_size;
-   851		memcpy(&uefi_entry->evt_info[0], "Measured UEFI memory map",
-   852			strlen("Measured UEFI memory map"));
-   853	
-   854		if (slr_add_entry(slrt, (struct slr_entry_hdr *)uefi_config))
-   855			return;
-   856	
-   857		/* Jump through DL stub to initiate Secure Launch */
-   858		dlinfo = (struct slr_entry_dl_info *)
-   859			slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_DL_INFO);
-   860	
- > 861		asm volatile ("jmp *%%rax"
-   862			      : : "a" (dlinfo->dl_handler), "D" (&dlinfo->bl_context));
-   863	}
-   864	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+v/r,
+dps
 
