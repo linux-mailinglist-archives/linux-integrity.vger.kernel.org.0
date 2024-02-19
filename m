@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1292-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1293-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B7A485ACDB
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 21:14:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C365585ACF3
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 21:18:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF3EE1C22277
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 20:14:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F7CDB2544E
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 20:18:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A45253E16;
-	Mon, 19 Feb 2024 20:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC8A535DF;
+	Mon, 19 Feb 2024 20:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+E0kHhs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kKptZ0kS"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF6953E14;
-	Mon, 19 Feb 2024 20:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B137050267;
+	Mon, 19 Feb 2024 20:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708373598; cv=none; b=hG99hK8cswFwZLHYdYAYEEjSBHk7zULChJkKdvs/PO8vPk/v8lG+3J40mb7WmXYFKv3MgaFpoH7CyyERvn9wxy6Os+ggYovG74GhDjeaeFNUydJdhsxgZwZMYGP8ELUQCgSnd5z3B3ssivdiXdNlndX3eunMr2xgHGT2pM0Q6OA=
+	t=1708373866; cv=none; b=pRotuprmbZFF75k5JHtu9FMyHtE3EZlTS1ZyjFvD6ZfrD5QXGSyrTWGYgu9LDKpkYEG5rxUEOiCy3JqRh/xxQATOEQooEjYLrgLbQRoCY7qV5ZwKCM7D9gijh2w+QNpTxkAUinJ3uzqaTyik3GvGzGrm8VkmaNfV0f57Ky/tgv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708373598; c=relaxed/simple;
-	bh=tx/TfnzZDoT1xc33L7S2O95jgvmeHSm+n3Hd+KXFKug=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=NDXshKvqL6GqBXMhiKY+JGb3gfcO6S/H60J35jdQRbue727YIIe5amixIB6mlM5tgWCB/SlbL0wOuclJhIcedxAk6G56mmji/OoMIxgv+iRWcAIO0jJLaWmypixc4gyrCluTy0VG4G2bc9OSBLTAkCw50jFm3p1Jl7KmX8SWh40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+E0kHhs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFBF4C433C7;
-	Mon, 19 Feb 2024 20:13:16 +0000 (UTC)
+	s=arc-20240116; t=1708373866; c=relaxed/simple;
+	bh=KOY1ANOS2dFuGqiw0GK0ZhMjCXxy3Anhz2OyOJ9uGUE=;
+	h=Mime-Version:Content-Type:Date:Cc:Subject:From:To:Message-Id:
+	 References:In-Reply-To; b=WXMGtBFcyZQ4BzbESjhKb8WQ1tEBbS+5Ac+7Nq+jV9nda/cTAoQGp6n2d53814j3ziG7/BK/abUf0LpJhKssNoBucH+jxHpsvjeE3T+2EU4xsjyl7Hv4v7zLqUkg9+LaCmkrOD2S7Ca+zE9RRgIRK7pbaUobRh68VnODTs/9Mp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kKptZ0kS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C70D6C43399;
+	Mon, 19 Feb 2024 20:17:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708373597;
-	bh=tx/TfnzZDoT1xc33L7S2O95jgvmeHSm+n3Hd+KXFKug=;
+	s=k20201202; t=1708373866;
+	bh=KOY1ANOS2dFuGqiw0GK0ZhMjCXxy3Anhz2OyOJ9uGUE=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=F+E0kHhsWnbpdV4fYP618TSw+he67latBuAV2MowUC+oXcBU04zMlV0vllkfTjbzD
-	 up4tIWcbCqgtBx5Y4SMH9Jiz3mklIxyGJ3Wq+DnQtGHOvqAFhmtCl8F/XMnE6UeBuv
-	 4HxhPuE3c3r36XHap/50FJsS+y4bFOR+/p0FfsR4PCrB3aSvPaXVPOOPaZrcVNq9hJ
-	 ezE3QeHhjtclg5u7LcD5JttuEwHtJd7fo90Ixo4k9ah6T5o8bfh+T3ADLSg6/KqMF4
-	 2qEKuogN4WkPrvMB5R2ND6KFAhzYxip/UdUQvxDZo5q1bBxAYs2aJolUX1cj3tLjYj
-	 eptSBGVuhGtyA==
+	b=kKptZ0kS+bowyvnKt9qKLKHsDmqdCQwopy3H7CldGeuH8WbWvlJKYpOB93RAF9YSb
+	 tbCGK/Kfhl2ndzjcBcf5SMB9wHX/9VL/SPo6OO7M4yZrXrDWS2352HqEQcqgONqmDi
+	 /yuygcM25TDg4LbKU8yxvj+4jHMSS7fAD7RLZe67HYJ/Xj9KE1VkbNZxAQU5oqhBkq
+	 d0z3pYuveMroI4HkIEHt+GtxrGjxMf/0FA7Hz6xPhZl1hUZ2MoXwBbO76TQwzzBARF
+	 K7hvzeQ6Ki7G5C/n3zUCbSAmu5SWBil/OSLkQraLpkx7wHVz+kf99+U/U9dA/1NrX7
+	 dKNcys4K8WxZg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,105 +49,53 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Feb 2024 20:13:14 +0000
-Message-Id: <CZ9BWAZ1GRZG.96ETQPKT8ER4@seitikki>
-Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?utf-8?q?Re:_init=5Ftis()_takes_50_ms_on_Dell_XPS_13_9360_=E2=80=93_almo?= =?utf-8?q?st_10_%_of_whole_time_until_initrd?=
+Date: Mon, 19 Feb 2024 20:17:42 +0000
+Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Peter Huewe"
+ <peterhuewe@gmx.de>
+Subject: Re: [PATCH 2/3] tpm: ensure tpm is in known state at startup
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Paul Menzel" <pmenzel@molgen.mpg.de>, "Peter Huewe" <peterhuewe@gmx.de>
+To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, "Jason Gunthorpe"
+ <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Message-Id: <CZ9BYSWZVHLI.27ICPVJMGNHIM@seitikki>
 X-Mailer: aerc 0.15.2
-References: <0eba23c7-f62a-4a85-a383-60dec9d198f9@molgen.mpg.de>
- <CZ6UFX5R09DD.EWDFS24L16G1@seitikki>
- <512bdab4-1779-4407-aa7b-57d1af015fc1@molgen.mpg.de>
-In-Reply-To: <512bdab4-1779-4407-aa7b-57d1af015fc1@molgen.mpg.de>
+References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
+ <20240131170824.6183-3-dpsmith@apertussolutions.com>
+ <CYU3H17QGBR0.37HWK14BDMGCD@suppilovahvero>
+ <2dd76ebf-b25d-447f-8abe-30e3423c4cdb@apertussolutions.com>
+In-Reply-To: <2dd76ebf-b25d-447f-8abe-30e3423c4cdb@apertussolutions.com>
 
-On Fri Feb 16, 2024 at 10:20 PM UTC, Paul Menzel wrote:
-> Dear Jarkko,
->
->
-> Thank you for your reply.
->
-> Am 16.02.24 um 23:07 schrieb Jarkko Sakkinen:
-> > On Wed Feb 14, 2024 at 3:10 PM UTC, Paul Menzel wrote:
->
-> >> Trying to optimize the boot time of Linux on the Dell XPS 13 9360,
-> >> probing of MSFT0101:00 takes 52 ms, making `init_tis()` taking almost =
-10
-> >> % alone until starting the initrd:
-> >>
-> >>       [    0.000000] Linux version 6.8.0-rc4 (build@bohemianrhapsody.m=
-olgen.mpg.de) (gcc (Debian 13.2.0-13) 13.2.0,
-> >> GNU ld (GNU Binutils for Debian) 2.42) #20 SMP PREEMPT_DYNAMIC Mon Feb=
- 12 09:40:49 CET 2024
-> >>       [=E2=80=A6]
-> >>       [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 06=
-/02/2022
-> >>       [=E2=80=A6]
-> >>       [    0.320057] calling  init_tis+0x0/0x100 @ 1
-> >>       [    0.332190] tpm_tis MSFT0101:00: 2.0 TPM (device-id 0xFE, rev=
--id 4)
-> >>       [    0.372164] probe of MSFT0101:00 returned 0 after 52101 usecs
-> >>       [    0.372186] initcall init_tis+0x0/0x100 returned 0 after 5212=
-7 usecs
-> >>       [=E2=80=A6]
-> >>       [    0.588643] Freeing unused decrypted memory: 2036K
-> >>       [    0.589068] Freeing unused kernel image (initmem) memory: 397=
-6K
-> >>       [    0.606115] Write protecting the kernel read-only data: 22528=
-k
-> >>       [    0.606527] Freeing unused kernel image (rodata/data gap) mem=
-ory: 276K
-> >>       [    0.652327] x86/mm: Checked W+X mappings: passed, no W+X page=
-s found.
-> >>       [    0.652329] x86/mm: Checking user space page tables
-> >>       [    0.695968] x86/mm: Checked W+X mappings: passed, no W+X page=
-s found.
-> >>       [    0.696104] Run /init as init process
-> >>       [=E2=80=A6]
-> >>
-> >> For users, where boot time is most important, can this be moved out of
-> >> the hot path somehow?
+On Mon Feb 19, 2024 at 7:17 PM UTC, Daniel P. Smith wrote:
+> On 2/1/24 17:33, Jarkko Sakkinen wrote:
+> > On Wed Jan 31, 2024 at 7:08 PM EET, Daniel P. Smith wrote:
+> >> When tis core initializes, it assumes all localities are closed. There
+> >         ~~~~~~~~
+> >         tpm_tis_core
 > >=20
-> > It can't be IRQ probing as IRQ's are *disabled* by default. So we can
-> > disclose that.
+> >> are cases when this may not be the case. This commit addresses this by
+> >> ensuring all localities are closed before initializing begins.
 > >=20
-> > I think the delay is caused by tpm2_probe(), which is called by
-> > tpm_tis_core_init(). It sends an idempotent TPM2 command to the TPM
-> > chip to know whether it is TPM 1.x or TPM2 chip.
+> > Remove the last sentence and replace with this paragraph:
 > >=20
-> > That detection is definitely required.
-> >=20
-> > Even some other subsystems in the kernel require to know the correct
-> > TPM version, like hwrng and IMA.
-> Understood. The TPM in my laptop does not change, so could this be=20
-> cached, or does a Linux CLI paramater exist, that I can specify the versi=
-on?
-
-Oops, I totally ignored tpm_chip_register() which runs more TPM commands:
-
-1. PCR alloction: tpm2_get_pcr_allocation()
-2. self-test: tpm2_do_selftest()
-
-(in some cases also tpm2_startup())
-
-Just probe (a single trivial TPM command doing zero calcuation) causing
-that long delay would not make sense, so sorry for misleading with this!
-
-So the problem here is in-kernel clients of TPM that initialize during
-the boot such as IMA and hwrng.
-
-The call for tpm_chip_register() is in the tail of each chip driver,
-i.e. it is in the "overall" framework and thus theoretically could be
-relocated to a workqueue. This requires tho changes to all clients and
-error code for the case where tpm_transmit() flushes this workqueue but
-initialization fails.
-
-So *I think* (was not fully scientifical feasibility study) it is
-possible but it is not as small change as you would first think.=20
-
-> Kind regards,
+> > "Address this by ensuring all the localities are closed in the beginnin=
+g
+> > of tpm_tis_core_init(). There are environments, like Intel TXT, which
+> > may leave a locality open. Close all localities to start from a known
+> > state."
 >
-> Paul
+> okay.
+>
+> > BTW, why we should motivated to take this patch anyway?
+>
+> Without this change, in this scenario the driver is unnecessarily=20
+> thrashing the TPM with locality requests/relinquishes pairs for which=20
+> will never take effect and that the TPM must do state change tracking.=20
+> While I am confident that TPM chips are resilient to such abuse, I do=20
+> not think it would be good form to knowingly allow such behavior to occur=
+.
+
+This would a factor better motivation part for the commit. I can=20
+buy this argument instead the one right now, thanks :-)
 
 BR, Jarkko
 
