@@ -1,105 +1,125 @@
-Return-Path: <linux-integrity+bounces-1302-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1303-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFD0585C374
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 19:12:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E1FF85C3E1
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 19:46:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7220B2530C
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 18:12:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59F61282676
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 18:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C736C77A03;
-	Tue, 20 Feb 2024 18:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61B1128820;
+	Tue, 20 Feb 2024 18:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3pmgEoL"
+	dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b="HhWKPaps"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp14.infineon.com (smtp14.infineon.com [217.10.52.160])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2FE762EC;
-	Tue, 20 Feb 2024 18:12:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E41C7867A;
+	Tue, 20 Feb 2024 18:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.52.160
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708452760; cv=none; b=ooOhSXb3JKcP+xDlnXFbpvc2zCfAjrJQshR9MzvvtskW2QEs90qswfSjW5doPfbxJnWba3j1boAy+5/ES1gRS7w4R+UKbgVtoneEs74f7y+dpsujfh3ChH8OXK1zDW/fa5O8J0TQElixzGO+P1AKw66By0yQz5Fo73DVIF/q0I0=
+	t=1708454637; cv=none; b=c2fYJcfkCkzOYJeTMtFV7jNiyFU5GyVjAcqRPjvGSmBE4ECo3tPYCAKYqblvpM6IRMAD7P9HgDRPEG+rTa2wFABPkOA5HwGf0Hi3H5wAC6FCKr6UaEdsAqegwW040JQL/D2hMy2ps5e7ubT0sDlwDOaYtri3WaMXnB8ft6C4F0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708452760; c=relaxed/simple;
-	bh=dhawpZTrANv0JFsuVpeapW+tVzNPo9GSiWB+4tW8h84=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=rXC9P2PNiEleQTgjzi/6I3fK5PaI8lAjUeNcnQ0KO/gluFmxy/mwkBwkKkG3idSuiw37mdla03QHXQJYPRenBkXBaMyxJQyT5Wwnc0BiSTE7R7lcHDTI7FP3Fx5kbO4YDexU2qeUvKvRp1HHJAt0H5XU7YZNfOyOPpp/kXJ/PFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3pmgEoL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74316C433C7;
-	Tue, 20 Feb 2024 18:12:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708452760;
-	bh=dhawpZTrANv0JFsuVpeapW+tVzNPo9GSiWB+4tW8h84=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=M3pmgEoLcwb/ahgOEvhq0P/XHyzkbxD+b0rbPYoIjx3caUXBdvyBknj8QXFtphibH
-	 6SfTXgLcPPxFDAADeEzSTR3IPFGX8XIo6OX/oNqKzA4r1/3XqEa82FTxXRKj569S46
-	 fVxZ9Z9Lg8M80tN/3LzOf3xHCv+KWwPphbA+/aVW7CeJDs/oNZqHxIokDJILgpxK+A
-	 Ww6mvxE4CI7fi/QoKwQRHjOXA/ZAWt8HIkbcGNY9IEirwGCK+3i0UfHDDI8KZga/l5
-	 WCHHui/5SQ2bz8iKJwvDOK0gCua0+Z05wZeReDrgIruILiorw1Qe24WFc/R7rZNLhY
-	 +D9WovKUznYSA==
+	s=arc-20240116; t=1708454637; c=relaxed/simple;
+	bh=xDL0JSxjxG7/b+TV7BEy12asrlHmC93tIe/YLW8fv74=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=FjK+0yz0z5BVqPgY8BPn6rJzblVJSku4D+SNVNICKywpNR4/4oiF+IPTHiWREPXwkVPIE+RaOjJe+nqm5uOOxuuIdV2xu9yR/whln2tCdPDRfrx0auBhyESm1UvUFiBi0bJ4W/zXFGsHQQCSY/md8cp6i3QDTAL+35wslQnK+3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infineon.com; spf=pass smtp.mailfrom=infineon.com; dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b=HhWKPaps; arc=none smtp.client-ip=217.10.52.160
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infineon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infineon.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1708454636; x=1739990636;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xDL0JSxjxG7/b+TV7BEy12asrlHmC93tIe/YLW8fv74=;
+  b=HhWKPaps02UAU72fmBijPP6Y6J+SmEBSDjeng2gYP0/fSCUIIZJWIEOF
+   8TL9REbXhR6Qj/vA9UrWDWkqnAlAZaQ0lWSKeWENFqSG0osVJ7kxHVk9d
+   08EklaP0FPZAoE/sfBiRpZK97tnsLJpMWE2UPid18FZ0Q6XyMztCbYTUG
+   E=;
+X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="43400251"
+X-IronPort-AV: E=Sophos;i="6.06,174,1705359600"; 
+   d="scan'208";a="43400251"
+Received: from unknown (HELO MUCSE805.infineon.com) ([172.23.29.31])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2024 19:42:44 +0100
+Received: from MUCSE844.infineon.com (172.23.7.73) by MUCSE805.infineon.com
+ (172.23.29.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 20 Feb
+ 2024 19:42:43 +0100
+Received: from [10.165.32.120] (10.165.32.120) by MUCSE844.infineon.com
+ (172.23.7.73) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 20 Feb
+ 2024 19:42:43 +0100
+Message-ID: <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
+Date: Tue, 20 Feb 2024 19:42:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 20 Feb 2024 18:12:36 +0000
-Message-Id: <CZA3YHCSBQK1.F170HT9T3WG3@seitikki>
-Subject: Re: [PATCH v2 0/4] Add missing TPM compatible strings
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Lukas Wunner" <lukas@wunner.de>,
- <robh@kernel.org>
-Cc: <devicetree@vger.kernel.org>, <linux-integrity@vger.kernel.org>, "Peter
- Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>
-X-Mailer: aerc 0.15.2
-References: <cover.1705140898.git.lukas@wunner.de>
- <20240220105536.GA4555@wunner.de> <CZA3STK007KM.2GLEAARLXBLBH@seitikki>
- <CZA3VUBEAZH6.27GXSQ9FDIIA6@seitikki>
-In-Reply-To: <CZA3VUBEAZH6.27GXSQ9FDIIA6@seitikki>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
+To: Lino Sanfilippo <l.sanfilippo@kunbus.com>, Jarkko Sakkinen
+	<jarkko@kernel.org>, "Daniel P. Smith" <dpsmith@apertussolutions.com>, "Jason
+ Gunthorpe" <jgg@ziepe.ca>, Sasha Levin <sashal@kernel.org>,
+	<linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: Ross Philipson <ross.philipson@oracle.com>, Kanth Ghatraju
+	<kanth.ghatraju@oracle.com>, Peter Huewe <peterhuewe@gmx.de>
+References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
+ <20240131170824.6183-2-dpsmith@apertussolutions.com>
+ <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
+ <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
+From: Alexander Steffen <Alexander.Steffen@infineon.com>
+In-Reply-To: <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MUCSE820.infineon.com (172.23.29.46) To
+ MUCSE844.infineon.com (172.23.7.73)
 
-On Tue Feb 20, 2024 at 6:09 PM UTC, Jarkko Sakkinen wrote:
-> On Tue Feb 20, 2024 at 6:06 PM UTC, Jarkko Sakkinen wrote:
-> > On Tue Feb 20, 2024 at 10:55 AM UTC, Lukas Wunner wrote:
-> > > Dear Jarkko,
-> > >
-> > > since v6.8-rc6 is approaching and the end of this cycle is thus in si=
-ght,
-> > > please do not forget to merge this series:
-> > >
-> > > https://lore.kernel.org/all/cover.1705140898.git.lukas@wunner.de/
-> > >
-> > > All 4 patches have a Reviewed-by from you and patch 1 has an Acked-by
-> > > from Rob.
-> > >
-> > > Thanks,
-> > >
-> > > Lukas
-> >
-> > Thanks for reminding!
-> >
-> > Since this patch set only has DT changes and zero actual TPM driver
-> > changes, I think it would be better if Rob picked this.
-> >
-> > Rob, what you think?
-> >
-> > I'm good either way but need to check.
->
-> Ah, sorry I was looking at wrong lore link (had multiple tabs open).
->
-> I will definitely pick this despite one DT patch. Rob, please ignore.
->
-> Sorry for causing confusion.
+On 02.02.2024 04:08, Lino Sanfilippo wrote:
+> On 01.02.24 23:21, Jarkko Sakkinen wrote:
+> 
+>>
+>> On Wed Jan 31, 2024 at 7:08 PM EET, Daniel P. Smith wrote:
+>>> Commit 933bfc5ad213 introduced the use of a locality counter to control when a
+>>> locality request is allowed to be sent to the TPM. In the commit, the counter
+>>> is indiscriminately decremented. Thus creating a situation for an integer
+>>> underflow of the counter.
+>>
+>> What is the sequence of events that leads to this triggering the
+>> underflow? This information should be represent in the commit message.
+>>
+> 
+> AFAIU this is:
+> 
+> 1. We start with a locality_counter of 0 and then we call tpm_tis_request_locality()
+> for the first time, but since a locality is (unexpectedly) already active
+> check_locality() and consequently __tpm_tis_request_locality() return "true".
 
-OK, should be good now:
+check_locality() returns true, but __tpm_tis_request_locality() returns 
+the requested locality. Currently, this is always 0, so the check for 
+!ret will always correctly indicate success and increment the 
+locality_count.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/=
-?h=3Dnext
+But since theoretically a locality != 0 could be requested, the correct 
+fix would be to check for something like ret >= 0 or ret == l instead of 
+!ret. Then the counter will also be incremented correctly for localities 
+!= 0, and no underflow will happen later on. Therefore, explicitly 
+checking for an underflow is unnecessary and hides the real problem.
 
-BR, Jarkko
+> This prevents the locality_counter from being increased to 1, see
+> 
+>          ret = __tpm_tis_request_locality(chip, l);
+>          if (!ret) /* Counter not increased since ret == 1 */
+>                  priv->locality_count++;
+> 
+> in tpm_tis_request_locality().
+> 
+> If now the locality is released the counter is decreased to below zero (resulting
+> in an underflow since "locality_counter" is an unsigned int.
 
