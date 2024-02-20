@@ -1,73 +1,89 @@
-Return-Path: <linux-integrity+bounces-1299-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1300-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7532985B9B2
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 11:56:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B48F85C358
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 19:07:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 312702854D3
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 10:56:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AE711F228D4
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 18:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4607D664C9;
-	Tue, 20 Feb 2024 10:55:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8053779F8;
+	Tue, 20 Feb 2024 18:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEvbezhE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB13365BC6;
-	Tue, 20 Feb 2024 10:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C657602B;
+	Tue, 20 Feb 2024 18:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708426547; cv=none; b=X+wFUNQGEWK0BGFjXVoVV7FqmYZmxlBH7pr9SPvN7ugzZppevsRXLRrLhjsoYuhGJHzklaBGMDNPtPLfvj7s4vrfx2m8pamLK7G0s1ADqTs7JxxMpOapk78tIoSTwMtuYLF6VaL7tmHUC0IlsyaJeYPmyzsKjA6jewUxvFO9iTs=
+	t=1708452407; cv=none; b=pyB1AaTswo85dspyrO9jsgGsaf0rygIeD+/YoOI5uUi48vB/qa7pnthr0DoYw56qbLLHBNKP9zdsLZhD0k4NpcKbmF2l/x87wFwHFytOMTWRjANwF69IGLkssTTM5wb/gl4aQ8LmKJl3oBZLHH18PZnDKRX6me13/2BBnOvIHT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708426547; c=relaxed/simple;
-	bh=51PlZ9crQdCLSq/Dbk0zLEgBJaNa1UNFqgkIbcc7QSw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OZXMOsvTilpTYekI2EayXiHRWOb1Gixo11p4Pwg9MV47pK1qJqvhh1AmyHPyUJaM392x4KKrsjnFQb+T0vseb5N9P47CHhxs3dh6171WVp6QFJrCFS0h6T1auO7r9PpKPmoHYjmZkJL8VU/KiokbLqvmWBNxDRhxC1Ukho/NsEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 69D4930003C66;
-	Tue, 20 Feb 2024 11:55:36 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 5BFFD4DD9EB; Tue, 20 Feb 2024 11:55:36 +0100 (CET)
-Date: Tue, 20 Feb 2024 11:55:36 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v2 0/4] Add missing TPM compatible strings
-Message-ID: <20240220105536.GA4555@wunner.de>
-References: <cover.1705140898.git.lukas@wunner.de>
+	s=arc-20240116; t=1708452407; c=relaxed/simple;
+	bh=LPrpXLHqe4UXA0SOtgNgHEqOcj7pbqm/Xyphpzkf9dM=;
+	h=Mime-Version:Content-Type:Date:Cc:Subject:From:To:Message-Id:
+	 References:In-Reply-To; b=ITcpVnuME/FFIUQZrwV8zS6m9f2q9Hm/Uylm4zwpCQrqvMwD4ow/hk15SFQSVwegZwx5NWsEWD0ARxJWwUY3AFos/H9+j1YLW7cFAGnjydqLfNlAtZmGBYoME49XiBhr4G3252bGvj5VMeXabkeXsOJEMEt0wefVKlVxz1VGH/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEvbezhE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2EDC433F1;
+	Tue, 20 Feb 2024 18:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708452407;
+	bh=LPrpXLHqe4UXA0SOtgNgHEqOcj7pbqm/Xyphpzkf9dM=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=BEvbezhETqlvoxDBJw9bdtOnfRq7BrDJSgwLa/uGfUBset97h0us+8Moi79OonQVc
+	 kyFptyKrvran1ntHrwaOveQ+OqA+2xaFxa9PSM+9seEqfxMAoKgSNvOPFy404+LLRQ
+	 5UC42AUSrDSvWGuqYMW2UGmSOBk3TFWc4mFfpueZOaUJYxKnctja3CTI+nk+o12mOl
+	 5NRF3jG0jPAv+X+5AUiyH5rJcVgfwTBnQL/CuI+znUqZyFJpeSZmk1lPlrO50aynpP
+	 EgAYeJhlFq5fZ350ADoXV3Q8CM4DQFBmzOJNIArkvAgYtH+2dbbciLltOpLtsCZMj5
+	 OHFJH0+51EHMA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1705140898.git.lukas@wunner.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 20 Feb 2024 18:06:44 +0000
+Cc: <devicetree@vger.kernel.org>, <linux-integrity@vger.kernel.org>, "Peter
+ Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 0/4] Add missing TPM compatible strings
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Lukas Wunner" <lukas@wunner.de>, <robh@kernel.org>
+Message-Id: <CZA3STK007KM.2GLEAARLXBLBH@seitikki>
+X-Mailer: aerc 0.15.2
+References: <cover.1705140898.git.lukas@wunner.de>
+ <20240220105536.GA4555@wunner.de>
+In-Reply-To: <20240220105536.GA4555@wunner.de>
 
-Dear Jarkko,
+On Tue Feb 20, 2024 at 10:55 AM UTC, Lukas Wunner wrote:
+> Dear Jarkko,
+>
+> since v6.8-rc6 is approaching and the end of this cycle is thus in sight,
+> please do not forget to merge this series:
+>
+> https://lore.kernel.org/all/cover.1705140898.git.lukas@wunner.de/
+>
+> All 4 patches have a Reviewed-by from you and patch 1 has an Acked-by
+> from Rob.
+>
+> Thanks,
+>
+> Lukas
 
-since v6.8-rc6 is approaching and the end of this cycle is thus in sight,
-please do not forget to merge this series:
+Thanks for reminding!
 
-https://lore.kernel.org/all/cover.1705140898.git.lukas@wunner.de/
+Since this patch set only has DT changes and zero actual TPM driver
+changes, I think it would be better if Rob picked this.
 
-All 4 patches have a Reviewed-by from you and patch 1 has an Acked-by
-from Rob.
+Rob, what you think?
 
-Thanks,
+I'm good either way but need to check.
 
-Lukas
+BR, Jarkko
 
