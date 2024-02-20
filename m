@@ -1,309 +1,357 @@
-Return-Path: <linux-integrity+bounces-1296-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1297-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72BC785AE44
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 23:18:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAAE185B303
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 07:41:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BCB01C218FB
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Feb 2024 22:18:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 096C1B22A9F
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Feb 2024 06:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8011A54F88;
-	Mon, 19 Feb 2024 22:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qpEiGoMw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B2C01EB3A;
+	Tue, 20 Feb 2024 06:41:17 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B4854BEA
-	for <linux-integrity@vger.kernel.org>; Mon, 19 Feb 2024 22:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A409B38398
+	for <linux-integrity@vger.kernel.org>; Tue, 20 Feb 2024 06:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708381099; cv=none; b=E+sPnALY5lDPwqrILbJ6barbL6NGUFi4OABGyISgIR1W8Ay3r87y28wlaT3ewx6CySSMGQZLPqOsCOlgvPRHNbieV7JOIxr3FMZQIlBkKj9NKf5tkVV7apOD3ke2lvVbFGq4YS/s1UxBiiq4S3N3LvUpTVapxNUOhEdYXpc/0rc=
+	t=1708411277; cv=none; b=BvmK/mrslBHxNFiak8wSwXsSK6VNzAsP5LAIXR4Z+RINi81lcCoxH4YJd26LZsmCMeM/mophYiye5miI+N+gCFfpfPxXRrdkTCWi6Wy1P6TRGML9835q2nALdKy0NBZB/H8AwIEUG6AAvgOFOAY0p+uIacWLu3TD6Jj3Oj2bfXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708381099; c=relaxed/simple;
-	bh=w12ZLM49JaesoH00N79gM/ItJkbmDk/W6sjcc8HC4ys=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LKGyS/SZ3URwZuwXtd6oX8lU/oV16ZYI4gj0QY480U2+Ufr2aq9IOOvD9m5GYe6jNC0OFdte4SH5TUinZoraZhRClorcP0dnMDVLYCafgrcXnlldD+SAv4t6sJQUwi7/96HDiTGX/CzjU5vOY0mv6/Z5RQ8/PFAFgjk9znJcvUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qpEiGoMw; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41JM60of023284;
-	Mon, 19 Feb 2024 22:17:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=m2vVnm3WIOYe8tuZvxVsO+fx9MrfXEx+Kc5KgrKSaic=;
- b=qpEiGoMwHmSAG+LlsDVzaIP8Z01j97qKKgXTCZnbv6Je+a4GbHJ+gcDsIH+iAasHe/d+
- paFuvpalrHhVGXfxAUT45lKr5D+t7mePHqlHXCCKFjCGn1hDkRtMuDDhZplT2ZlCl69g
- 2ayTKNTuSQb3PhJuW1Uxiej8VYryFVRnys328SPm40Qt56xfKUX/C5RX9ag6hLK7Z3e1
- WtPZzzYneefEecifJOItvaxyqfpdxKLYi5uLAgDR7JMchxpm0GvRUSi4ZSaBFoAReN6z
- MpwTFf+Iha336UsObxyEDMqyqhd3XhXmrr59WWxRAyVcJP3d3tqiGdviBTpn7tjBANJh 9Q== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wce8n9wq3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Feb 2024 22:16:59 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41JJbDZt009540;
-	Mon, 19 Feb 2024 22:16:58 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb84p49m3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Feb 2024 22:16:58 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41JMGtDj9503450
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 19 Feb 2024 22:16:58 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 915535805E;
-	Mon, 19 Feb 2024 22:16:55 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D58A458051;
-	Mon, 19 Feb 2024 22:16:53 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 19 Feb 2024 22:16:53 +0000 (GMT)
-Message-ID: <6a2b6fee-6f3c-4099-983a-3be3ecd091b6@linux.ibm.com>
-Date: Mon, 19 Feb 2024 17:16:53 -0500
+	s=arc-20240116; t=1708411277; c=relaxed/simple;
+	bh=NtRo2O1ldVbjJcnBavA1aQO7Pzf3iSzVkzqVVJUVVJA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=bKN/CCFkpDZfqJO60FxBCsMbNZdx12vmqplMD9I7vUKDkdslqGhjYL85BygWUbSUh9SestRcrn6wI8PUh8sCyjXIvcYz0Xh67noStke2dTqI9RWB92Ycj3fZyVG+t2M3Imxf3vaYqj/29oyS3OzYlbAMcvdZgK+iOQ0btNSM4gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7c495649efdso505590739f.2
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Feb 2024 22:41:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708411275; x=1709016075;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c64CAYVASUjHaLy4K4kMEouxEUHxQMTvGQZksi5Chfo=;
+        b=t1zzdCTpsOTzon4EojGX76AWF3t+aqZ797PtLcWjg74fGr0P3iShULpu5JH3oHNuGl
+         QdRW8r9WLIOSAi3/DSn6x8pkBhwR0T5bDk0gJptr6R/hPZmlPvJYMMO4+mlnOkuThhyg
+         Q2z5uOEQrWUGEe2I5dB4XGZzm+ix/T0AHV1tOMWXiryhxfhWylR5dqWXqDj1nF9wnF+u
+         fJKDpkzYHZYoauIU9hsY5Aq6t3b0pnIRFqk9JSD9d2hMBhPpRnfRWlOyIv7yj9pfMa9r
+         5Pkhw1XzarIAfUaKnrIrArksbUBWbkuhp3y+VM3A8+qeiFD0AB3ZBjQzeiCeuLeHMm6W
+         y0/g==
+X-Forwarded-Encrypted: i=1; AJvYcCW9kjflGVQLj6p/BEqang+FHA7wflwVZKk6GTPJhUAmO8/LsTam6CjZQwUA3IkdPfYbEoQBo2a7w/oJdVip8L3mOj1D7JQ1OS6UGvrgCQIE
+X-Gm-Message-State: AOJu0YwKc0GHDPB55pusFXU6fDEePJVRjmXa+aRYbCeZ6oe2CAEIypOE
+	qmX3HocHMciChCr6JCxOjiTenTuqp69Ly+Sy5pDp2ePhT7duzA7NIHkHougPvNgJwUDKVHV2EJM
+	tGXpmCSmoYpD4l/gNF5cm9zYCclnNa0uMsXBcZqgMEiXm6X8/V3awTp0=
+X-Google-Smtp-Source: AGHT+IGr0hHQ6y18QSOaLXHCP7x7QzlwM2AIUsPXH/QO9cXaiZZckSnoCE+HPdNDLKeAwCF+Zqj1Eseyup4s0wRLc1p8RaL7pFpJ
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/8] ima: define and call ima_alloc_kexec_file_buf
-Content-Language: en-US
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>, zohar@linux.ibm.com,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, ebiederm@xmission.com, noodles@fb.com,
-        bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
-        kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
- <20240214153827.1087657-2-tusharsu@linux.microsoft.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240214153827.1087657-2-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2sJIqJ5zuL-g3LV3CBhtMkpIcqOU_G81
-X-Proofpoint-ORIG-GUID: 2sJIqJ5zuL-g3LV3CBhtMkpIcqOU_G81
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-19_20,2024-02-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- mlxlogscore=999 clxscore=1015 adultscore=0 malwarescore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402190167
+X-Received: by 2002:a05:6638:13d2:b0:474:3939:3920 with SMTP id
+ i18-20020a05663813d200b0047439393920mr20427jaj.2.1708411274909; Mon, 19 Feb
+ 2024 22:41:14 -0800 (PST)
+Date: Mon, 19 Feb 2024 22:41:14 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002be12a0611ca7ff8@google.com>
+Subject: [syzbot] [integrity?] [lsm?] KMSAN: uninit-value in ima_add_template_entry
+From: syzbot <syzbot+7bc44a489f0ef0670bd5@syzkaller.appspotmail.com>
+To: dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jmorris@namei.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, paul@paul-moore.com, 
+	roberto.sassu@huawei.com, serge@hallyn.com, syzkaller-bugs@googlegroups.com, 
+	zohar@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    4f5e5092fdbf Merge tag 'net-6.8-rc5' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=135ba81c180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e3dd779fba027968
+dashboard link: https://syzkaller.appspot.com/bug?extid=7bc44a489f0ef0670bd5
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/34924e0466d4/disk-4f5e5092.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/29d0b1935c61/vmlinux-4f5e5092.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2e033c3d8679/bzImage-4f5e5092.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7bc44a489f0ef0670bd5@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in ima_add_template_entry+0x52b/0x870 security/integrity/ima/ima_queue.c:172
+ ima_add_template_entry+0x52b/0x870 security/integrity/ima/ima_queue.c:172
+ ima_store_template security/integrity/ima/ima_api.c:122 [inline]
+ ima_store_measurement+0x371/0x8d0 security/integrity/ima/ima_api.c:376
+ process_measurement+0x2c6e/0x3ef0 security/integrity/ima/ima_main.c:367
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+<Zero or more stacks not recorded to save memory>
+
+Uninit was stored to memory at:
+ sha256_transform lib/crypto/sha256.c:117 [inline]
+ sha256_transform_blocks+0x2dbf/0x2e80 lib/crypto/sha256.c:127
+ lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
+ sha256_update+0x2fb/0x340 lib/crypto/sha256.c:136
+ crypto_sha256_update+0x37/0x60 crypto/sha256_generic.c:39
+ crypto_shash_update+0x75/0xa0 crypto/shash.c:70
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:496 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x1816/0x3cc0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x44d/0xdd0 security/integrity/ima/ima_api.c:290
+ process_measurement+0x2936/0x3ef0 security/integrity/ima/ima_main.c:359
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ sha256_transform lib/crypto/sha256.c:117 [inline]
+ sha256_transform_blocks+0x2dbf/0x2e80 lib/crypto/sha256.c:127
+ lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
+ sha256_update+0x2fb/0x340 lib/crypto/sha256.c:136
+ crypto_sha256_update+0x37/0x60 crypto/sha256_generic.c:39
+ crypto_shash_update+0x75/0xa0 crypto/shash.c:70
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:496 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x1816/0x3cc0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x44d/0xdd0 security/integrity/ima/ima_api.c:290
+ process_measurement+0x2936/0x3ef0 security/integrity/ima/ima_main.c:359
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ BLEND_OP lib/crypto/sha256.c:61 [inline]
+ sha256_transform lib/crypto/sha256.c:91 [inline]
+ sha256_transform_blocks+0xf33/0x2e80 lib/crypto/sha256.c:127
+ lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
+ sha256_update+0x2fb/0x340 lib/crypto/sha256.c:136
+ crypto_sha256_update+0x37/0x60 crypto/sha256_generic.c:39
+ crypto_shash_update+0x75/0xa0 crypto/shash.c:70
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:496 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x1816/0x3cc0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x44d/0xdd0 security/integrity/ima/ima_api.c:290
+ process_measurement+0x2936/0x3ef0 security/integrity/ima/ima_main.c:359
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ BLEND_OP lib/crypto/sha256.c:61 [inline]
+ sha256_transform lib/crypto/sha256.c:92 [inline]
+ sha256_transform_blocks+0xf7d/0x2e80 lib/crypto/sha256.c:127
+ lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
+ sha256_update+0x2fb/0x340 lib/crypto/sha256.c:136
+ crypto_sha256_update+0x37/0x60 crypto/sha256_generic.c:39
+ crypto_shash_update+0x75/0xa0 crypto/shash.c:70
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:496 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x1816/0x3cc0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x44d/0xdd0 security/integrity/ima/ima_api.c:290
+ process_measurement+0x2936/0x3ef0 security/integrity/ima/ima_main.c:359
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ BLEND_OP lib/crypto/sha256.c:61 [inline]
+ sha256_transform lib/crypto/sha256.c:93 [inline]
+ sha256_transform_blocks+0xfb5/0x2e80 lib/crypto/sha256.c:127
+ lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
+ sha256_update+0x2fb/0x340 lib/crypto/sha256.c:136
+ crypto_sha256_update+0x37/0x60 crypto/sha256_generic.c:39
+ crypto_shash_update+0x75/0xa0 crypto/shash.c:70
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:496 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x1816/0x3cc0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x44d/0xdd0 security/integrity/ima/ima_api.c:290
+ process_measurement+0x2936/0x3ef0 security/integrity/ima/ima_main.c:359
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ LOAD_OP lib/crypto/sha256.c:56 [inline]
+ sha256_transform lib/crypto/sha256.c:82 [inline]
+ sha256_transform_blocks+0x2c35/0x2e80 lib/crypto/sha256.c:127
+ lib_sha256_base_do_update include/crypto/sha256_base.h:63 [inline]
+ sha256_update+0x2fb/0x340 lib/crypto/sha256.c:136
+ crypto_sha256_update+0x37/0x60 crypto/sha256_generic.c:39
+ crypto_shash_update+0x75/0xa0 crypto/shash.c:70
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:496 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x1816/0x3cc0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x44d/0xdd0 security/integrity/ima/ima_api.c:290
+ process_measurement+0x2936/0x3ef0 security/integrity/ima/ima_main.c:359
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was stored to memory at:
+ memcpy_to_iter lib/iov_iter.c:65 [inline]
+ iterate_kvec include/linux/iov_iter.h:85 [inline]
+ iterate_and_advance2 include/linux/iov_iter.h:251 [inline]
+ iterate_and_advance include/linux/iov_iter.h:271 [inline]
+ _copy_to_iter+0x125a/0x2520 lib/iov_iter.c:186
+ copy_page_to_iter+0x419/0x870 lib/iov_iter.c:381
+ copy_folio_to_iter include/linux/uio.h:181 [inline]
+ filemap_read+0xbf4/0x14d0 mm/filemap.c:2654
+ generic_file_read_iter+0x136/0xad0 mm/filemap.c:2784
+ __kernel_read+0x724/0xce0 fs/read_write.c:434
+ integrity_kernel_read+0x77/0x90 security/integrity/iint.c:221
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:485 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x1743/0x3cc0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x44d/0xdd0 security/integrity/ima/ima_api.c:290
+ process_measurement+0x2936/0x3ef0 security/integrity/ima/ima_main.c:359
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+Uninit was created at:
+ __alloc_pages+0x9a6/0xe00 mm/page_alloc.c:4590
+ alloc_pages_mpol+0x62b/0x9d0 mm/mempolicy.c:2133
+ alloc_pages mm/mempolicy.c:2204 [inline]
+ folio_alloc+0x1da/0x380 mm/mempolicy.c:2211
+ filemap_alloc_folio+0xa5/0x430 mm/filemap.c:975
+ page_cache_ra_unbounded+0x2cc/0x960 mm/readahead.c:247
+ do_page_cache_ra mm/readahead.c:299 [inline]
+ page_cache_ra_order+0xe31/0xee0 mm/readahead.c:544
+ ondemand_readahead+0x157d/0x1750 mm/readahead.c:666
+ page_cache_sync_ra+0x724/0x760 mm/readahead.c:693
+ page_cache_sync_readahead include/linux/pagemap.h:1300 [inline]
+ filemap_get_pages+0x4c4/0x2bd0 mm/filemap.c:2498
+ filemap_read+0x59e/0x14d0 mm/filemap.c:2594
+ generic_file_read_iter+0x136/0xad0 mm/filemap.c:2784
+ __kernel_read+0x724/0xce0 fs/read_write.c:434
+ integrity_kernel_read+0x77/0x90 security/integrity/iint.c:221
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:485 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x1743/0x3cc0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x44d/0xdd0 security/integrity/ima/ima_api.c:290
+ process_measurement+0x2936/0x3ef0 security/integrity/ima/ima_main.c:359
+ ima_file_check+0xb3/0x100 security/integrity/ima/ima_main.c:557
+ do_open fs/namei.c:3643 [inline]
+ path_openat+0x4d09/0x5ad0 fs/namei.c:3798
+ do_filp_open+0x20d/0x590 fs/namei.c:3825
+ do_sys_openat2+0x1bf/0x2f0 fs/open.c:1404
+ do_sys_open fs/open.c:1419 [inline]
+ __do_sys_open fs/open.c:1427 [inline]
+ __se_sys_open fs/open.c:1423 [inline]
+ __x64_sys_open+0x275/0x2d0 fs/open.c:1423
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+CPU: 1 PID: 9243 Comm: syz-executor.3 Not tainted 6.8.0-rc4-syzkaller-00180-g4f5e5092fdbf #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/25/2024
+=====================================================
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On 2/14/24 10:38, Tushar Sugandhi wrote:
-> Carrying the IMA measurement list across kexec requires allocating a
-> buffer and copying the measurement records.  Separate allocating the
-> buffer and copying the measurement records into separate functions in
-> order to allocate the buffer at kexec 'load' and copy the measurements
-> at kexec 'execute'.
-> 
-> This patch includes the following changes:
->   - Refactor ima_dump_measurement_list() to move the memory allocation
->     to a separate function ima_alloc_kexec_file_buf() which allocates
->     buffer of size 'kexec_segment_size' at kexec 'load'.
->   - Make the local variable ima_kexec_file in ima_dump_measurement_list()
->     as local static to the file, so that it can be accessed from
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-as -> a
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
->     ima_alloc_kexec_file_buf().
->   - Make necessary changes to the function ima_add_kexec_buffer() to call
->     the above two functions.
-> 
-> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> ---
->   security/integrity/ima/ima_kexec.c | 107 +++++++++++++++++++++--------
->   1 file changed, 78 insertions(+), 29 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index dadc1d138118..a9cb5e882e2e 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -15,62 +15,98 @@
->   #include "ima.h"
->   
->   #ifdef CONFIG_IMA_KEXEC
-> +static struct seq_file ima_kexec_file;
-> +
-> +static void ima_reset_kexec_file(struct seq_file *sf)
-> +{
-> +	sf->buf = NULL;
-> +	sf->size = 0;
-> +	sf->read_pos = 0;
-> +	sf->count = 0;
-> +}
-> +
-> +static void ima_free_kexec_file_buf(struct seq_file *sf)
-> +{
-> +	vfree(sf->buf);
-> +	ima_reset_kexec_file(sf);
-> +}
-> +
-> +static int ima_alloc_kexec_file_buf(size_t segment_size)
-> +{
-> +	/*
-> +	 * kexec 'load' may be called multiple times.
-> +	 * Free and realloc the buffer only if the segment_size is
-> +	 * changed from the previous kexec 'load' call.
-> +	 */
-> +	if (ima_kexec_file.buf &&
-> +	    ima_kexec_file.size == segment_size &&
-> +	    ima_kexec_file.read_pos == 0 &&
-> +	    ima_kexec_file.count == sizeof(struct ima_kexec_hdr))
-> +		return 0;
-> +
-> +	ima_free_kexec_file_buf(&ima_kexec_file);
-> +
-> +	/* segment size can't change between kexec load and execute */
-> +	ima_kexec_file.buf = vmalloc(segment_size);
-> +	if (!ima_kexec_file.buf)
-> +		return -ENOMEM;
-> +
-> +	ima_kexec_file.size = segment_size;
-> +	ima_kexec_file.read_pos = 0;
-> +	ima_kexec_file.count = sizeof(struct ima_kexec_hdr);	/* reserved space */
-> +
-> +	return 0;
-> +}
-> +
->   static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
->   				     unsigned long segment_size)
->   {
->   	struct ima_queue_entry *qe;
-> -	struct seq_file file;
->   	struct ima_kexec_hdr khdr;
-> -	int ret = 0;
->   
-> -	/* segment size can't change between kexec load and execute */
-> -	file.buf = vmalloc(segment_size);
-> -	if (!file.buf) {
-> -		ret = -ENOMEM;
-> -		goto out;
-> +	if (!ima_kexec_file.buf) {
-> +		*buffer_size = 0;
-> +		*buffer = NULL;
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-If you return -EINVAL then the caller should not look at the buffer but 
-at 'ret' (5/8). So I don't think it's necessary to initialize these 
-variables since the caller shouldn't look at them.
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-> +		pr_err("%s: Kexec file buf not allocated\n", __func__);
-> +		return -EINVAL;
->   	}
->   
-> -	file.size = segment_size;
-> -	file.read_pos = 0;
-> -	file.count = sizeof(khdr);	/* reserved space */
-> -
->   	memset(&khdr, 0, sizeof(khdr));
->   	khdr.version = 1;
-> +
-> +	/* Copy as many IMA measurements list records as possible */
->   	list_for_each_entry_rcu(qe, &ima_measurements, later) {
-> -		if (file.count < file.size) {
-> +		if (ima_kexec_file.count < ima_kexec_file.size) {
->   			khdr.count++;
-> -			ima_measurements_show(&file, qe);
-> +			ima_measurements_show(&ima_kexec_file, qe);
->   		} else {
-> -			ret = -EINVAL;
-> +			pr_err("%s: IMA log file is too big for Kexec buf\n",
-> +			       __func__);
->   			break;
->   		}
->   	}
->   
-> -	if (ret < 0)
-> -		goto out;
-> -
->   	/*
->   	 * fill in reserved space with some buffer details
->   	 * (eg. version, buffer size, number of measurements)
->   	 */
-> -	khdr.buffer_size = file.count;
-> +	khdr.buffer_size = ima_kexec_file.count;
->   	if (ima_canonical_fmt) {
->   		khdr.version = cpu_to_le16(khdr.version);
->   		khdr.count = cpu_to_le64(khdr.count);
->   		khdr.buffer_size = cpu_to_le64(khdr.buffer_size);
->   	}
-> -	memcpy(file.buf, &khdr, sizeof(khdr));
-> +	memcpy(ima_kexec_file.buf, &khdr, sizeof(khdr));
->   
->   	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
-> -			     file.buf, file.count < 100 ? file.count : 100,
-> +			     ima_kexec_file.buf, ima_kexec_file.count < 100 ?
-> +			     ima_kexec_file.count : 100,
->   			     true);
->   
-> -	*buffer_size = file.count;
-> -	*buffer = file.buf;
-> -out:
-> -	if (ret == -EINVAL)
-> -		vfree(file.buf);
-> -	return ret;
-> +	*buffer_size = ima_kexec_file.count;
-> +	*buffer = ima_kexec_file.buf;
-> +
-> +	return 0;
->   }
->   
->   /*
-> @@ -108,13 +144,20 @@ void ima_add_kexec_buffer(struct kimage *image)
->   		return;
->   	}
->   
-> -	ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
-> -				  kexec_segment_size);
-> -	if (!kexec_buffer) {
-> +	ret = ima_alloc_kexec_file_buf(kexec_segment_size);
-> +	if (ret < 0) {
->   		pr_err("Not enough memory for the kexec measurement buffer.\n");
->   		return;
->   	}
->   
-> +	ret = ima_dump_measurement_list(&kexec_buffer_size, &kexec_buffer,
-> +					kexec_segment_size);
-> +	if (ret < 0) {
-> +		pr_err("%s: Failed to dump IMA measurements. Error:%d.\n",
-> +		       __func__, ret);
-> +		return;
-> +	}
-> +
->   	kbuf.buffer = kexec_buffer;
->   	kbuf.bufsz = kexec_buffer_size;
->   	kbuf.memsz = kexec_segment_size;
-> @@ -129,6 +172,12 @@ void ima_add_kexec_buffer(struct kimage *image)
->   	image->ima_buffer_size = kexec_segment_size;
->   	image->ima_buffer = kexec_buffer;
->   
-> +	/*
-> +	 * kexec owns kexec_buffer after kexec_add_buffer() is called
-> +	 * and it will vfree() that buffer.
-> +	 */
-
-Actually, that's not quite right what I told you.   "kexec owns 
-kexec_buffer due to ima->ima_buffer and it will vfree() this buffer."
-
-
-> +	ima_reset_kexec_file(&ima_kexec_file);
-> +
->   	kexec_dprintk("kexec measurement buffer for the loaded kernel at 0x%lx.\n",
->   		      kbuf.mem);
->   }
+If you want to undo deduplication, reply with:
+#syz undup
 
