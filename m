@@ -1,136 +1,85 @@
-Return-Path: <linux-integrity+bounces-1322-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1323-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4515785D3AB
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 10:33:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19DC985D7F5
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 13:37:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 682F81C21D1A
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 09:33:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD4671F21A35
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 12:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5634A47F59;
-	Wed, 21 Feb 2024 09:28:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D296930E;
+	Wed, 21 Feb 2024 12:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="XLb70K0X";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3i4Yo6GJ";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="XLb70K0X";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3i4Yo6GJ";
-	dkim=neutral (0-bit key) header.d=gmail.com header.i=@gmail.com header.b="B0Q2A+w0"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="xuzzuTvm";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="ZQJ8zySG"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9D247F5C
-	for <linux-integrity@vger.kernel.org>; Wed, 21 Feb 2024 09:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1A65231;
+	Wed, 21 Feb 2024 12:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708507734; cv=none; b=VStIAOIMFBzJRgK1aRm4I7ZiUH3y20Th8VUYchwmG4AE4uwzhvjHG2qgT7a+XDVmeT4pK2GJD2vAgkqA8+FwCGw/BcNnW2jz8P/VFEbKQOOAiVV5zXgLTiyL4V9Nno5JatL7krURCjUUWq++B3lP2VlLe8utEP23HV9ZmyK8ers=
+	t=1708519031; cv=none; b=lZm1LOLD0FR66B657L9o6KP/mw97QFGCPXvdfcZqKGvGr/sbZjdLB1fTlfw7ILtL+czUU4ZRseMqzvK2kGdcHcPJvmo1Q53AjVUSmj9Ft4OSVH8H12zOVS9yCKvsIBh1Xfliwg1Luuqh3D8lqxCDECmHSYdCZ1jMLPnql5tGn+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708507734; c=relaxed/simple;
-	bh=Pg/PYiCKk/bqfBenhN+jaO19Z2p53QjS+bTAPZtr7X8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uAHQrCn+mEvwdq2V9lt8cJ4V4+z3JvkAXJ3xcBHLiqwpZagDNoDtXYnEsMqRAEiFSkXZs4Cp17urOJiwFWrAf4I8jOhj8LR6ZiEunXccPKosxBC58wnktMA9w4FthN93DIO3pfac/+ETefAtiJSAfYf6M50902xZghTwrlxO9/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=XLb70K0X; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3i4Yo6GJ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=XLb70K0X; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3i4Yo6GJ; dkim=neutral (0-bit key) header.d=gmail.com header.i=@gmail.com header.b=B0Q2A+w0; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
+	s=arc-20240116; t=1708519031; c=relaxed/simple;
+	bh=EV+8Kdakk6AUMifVeF8z7XA54mjPMAluhchCZOLm3/0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lisx/ECAEzKVRcHQT9xwtswNO3NdAWBid21lTOZuSMXSygsI6Aipv1PCXKeJcETjVLWA8Y6wcniGqMSlA0id+pAK8JaSYmJOfzjiwxwCTOddLO/O39mF2dqx8FGlrvfQRPxaG9BELjEpauEAdjbdxiYLkGcCiBSkGpVEVLtTAKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=xuzzuTvm; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=ZQJ8zySG; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1708519028;
+	bh=EV+8Kdakk6AUMifVeF8z7XA54mjPMAluhchCZOLm3/0=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=xuzzuTvm6nF01WesnQGCDzKx1NS0plnC01JXB3KzQsul1SXVPJi9NZvClHTlSEbpU
+	 PK2BDttotg9F/cTYu57RLsNpiEPgLXQDfxzDyVopwL1s0QmVYC84KJPyQuamUPuV2G
+	 eJtIphQq//f936I6JCOH0ACIyI1lK/x3rZhD3lvA=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id B0CAE1286FEF;
+	Wed, 21 Feb 2024 07:37:08 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id Vh-XjcP78zjU; Wed, 21 Feb 2024 07:37:06 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1708519024;
+	bh=EV+8Kdakk6AUMifVeF8z7XA54mjPMAluhchCZOLm3/0=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=ZQJ8zySGRzcl9/AjAaICWwBgktjf/1jS/VaDXjwb8czaHup+1YPaP3P9ITE3mpiBh
+	 D38BlCMMblK81NYGhciptL9QmyApl3JrTRukzhyBOjbNX0FF8POh0BOnH8U05EnOKU
+	 oK4mJRRMnRvNm9WrouTkGEpHPmbbxg0vVHhxwxZg=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 41E0B1FB4E;
-	Wed, 21 Feb 2024 09:28:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1708507730; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:list-id:
-	 list-unsubscribe:list-subscribe;
-	bh=8xyu9Hj+h69IKvciS22b2xw4Aw1MaHbSy1ltGMp4iCg=;
-	b=XLb70K0XE6AfKToW+Ujv/m5QCW6BevF4gAoUfYJBgAIf4m3MCWCOBYadXAZbSRgOsUbZuH
-	jZWY3rrLDgOVezSxtq7LtTsvOLwYnhsU/IynV+bcFCmqJ7Xkny7eK0Lvf9WVWluLAXqThO
-	JajLmUTuqcgBbrPQ6w8r6YCyIFwt9qo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1708507730;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:list-id:
-	 list-unsubscribe:list-subscribe;
-	bh=8xyu9Hj+h69IKvciS22b2xw4Aw1MaHbSy1ltGMp4iCg=;
-	b=3i4Yo6GJoGicYiMUT3YcPk1xAd81AmN19pxilMMoK/RA3vYcT444UzGuoNzFzn7TWu6/Iy
-	4S/bBnxwczGJigCw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1708507730; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:list-id:
-	 list-unsubscribe:list-subscribe;
-	bh=8xyu9Hj+h69IKvciS22b2xw4Aw1MaHbSy1ltGMp4iCg=;
-	b=XLb70K0XE6AfKToW+Ujv/m5QCW6BevF4gAoUfYJBgAIf4m3MCWCOBYadXAZbSRgOsUbZuH
-	jZWY3rrLDgOVezSxtq7LtTsvOLwYnhsU/IynV+bcFCmqJ7Xkny7eK0Lvf9WVWluLAXqThO
-	JajLmUTuqcgBbrPQ6w8r6YCyIFwt9qo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1708507730;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:list-id:
-	 list-unsubscribe:list-subscribe;
-	bh=8xyu9Hj+h69IKvciS22b2xw4Aw1MaHbSy1ltGMp4iCg=;
-	b=3i4Yo6GJoGicYiMUT3YcPk1xAd81AmN19pxilMMoK/RA3vYcT444UzGuoNzFzn7TWu6/Iy
-	4S/bBnxwczGJigCw==
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id A415013A25;
-	Wed, 21 Feb 2024 09:28:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id nNAvJlHC1WXSBwAAn2gu4w
-	(envelope-from <pvorel@suse.cz>); Wed, 21 Feb 2024 09:28:49 +0000
-From: Petr Vorel <pvorel@suse.cz>
-To: dmitry.kasatkin@gmail.com,
-	linux-integrity@vger.kernel.org
-Cc: James.Bottomley@HansenPartnership.com,
-	a.mardegan@omp.ru,
-	dbaryshkov@gmail.com,
-	ebiggers@google.com,
-	gcwilson@linux.ibm.com,
-	git@andred.net,
-	kgoldman@us.ibm.com,
-	mjg59@srcf.ucam.org,
-	patrick.ohly@intel.com,
-	patrick@puiterwijk.org,
-	petr.vorel@gmail.com,
-	roberto.sassu@huawei.com,
-	sorenson@redhat.com,
-	stefanb@linux.ibm.com,
-	stephen.smalley.work@gmail.com,
-	tianjia.zhang@linux.alibaba.com,
-	vgoyal@redhat.com,
-	vt@altlinux.org,
-	z.jasinski@samsung.com,
-	zohar@linux.ibm.com,
-	Petr Vorel <pvorel@suse.cz>
-Subject: [ima-evm-utils: PATCH v1 1/1] Change license to LGPL-2.0-or-later and GPL-2.0-or-later
-Date: Wed, 21 Feb 2024 10:28:39 +0100
-Message-ID: <9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
-References: <9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179]) (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits)) (No client certificate requested) by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864003C470 for <linux-integrity@vger.kernel.org>; Wed, 21 Feb 2024 08:11:49 +0000 (UTC)
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2d21cdbc85bso4047711fa.2 for <linux-integrity@vger.kernel.org>; Wed, 21 Feb 2024 00:11:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20230601; t=1708503107; x=1709107907; darn=vger.kernel.org; h=content-transfer-encoding:mime-version:message-id:date:subject:cc :to:from:from:to:cc:subject:date:message-id:reply-to; bh=2tbJib+kst8GjcLmTyERQIlMEjnjEiTvE+TjUqJjhh4=; b=B0Q2A+w0OyAprfBbm/k4MSk9nJ3f4VosNmxa9M5zOyK6SYaolWk+G/QMcgcvgy8Y8Z fLmByCmLpv6HA0QRRglnAYYTTmBZHfEq6CMl3wsecbliVJqp+tZpOchCly+qWDF8AriF ZRWL5oXLzVuGMYC5zEqSYCOtDJ+GS09tbYWpnzwdbh6aRTI+X8yZ1n+SORPM1Re4eLYW pk9EvmNRBiU8wqjchzCPMQVBSivOyJ1bRKN7PseMCvs2BgYw4zhYDlA2QY2rS2I4frV7 s4ohGgRGUJSA8LmY7a+LdjhUaqbNDCmXnhjT/jVr+DdwRHMniv9G1iaRdQIDSYbqZW4i IKIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1e100.net; s=20230601; t=1708503107; x=1709107907; h=content-transfer-encoding:mime-version:message-id:date:subject:cc :to:from:x-gm-message-state:from:to:cc:subject:date:message-id :reply-to; bh=2tbJib+kst8GjcLmTyERQIlMEjnjEiTvE+TjUqJjhh4=; b=fHX8pAwQUiW1BzdTSGIYCpnujKHGXM3NT6jPCjZDMeUCydmYjOWjXGFeWFPxyPbpOW Q8ryK/tWX4Qw5uRVt811wmBwzmwHlx11yo8CJgpzhy4h/WgDw0pF3Pirs2sqmgIixR1J r0MmMu9yKALXq/CkNcnWJGVDrYvyW4SEdMnr5IzCQoGAKdKu2uUpTfXdjtzi9/qGOUq8 JASJAFNDmMB2FeVQ2+sqg0mAmqFemAe+UBl+010t9mEftjjuVVu2uO957Tbn3y8/MpoL 2Z46c7Xx0qaWNkGQ4IF6rbKrWRXR74xiP2L70wDMMGmu5PrKMFj62vXc7d528FPQKiRB wOdg==
-X-Gm-Message-State: AOJu0YwTXhc3w54DBHOg4teM10czD/ly9FCEvYLIwEQGnLKxdWEjGw87 r+uYqGgt+6EhP0xFqrWYsyx8zBQixCJJE0A094Pyr3zE0SyVlgKM6ls6/gFTjGMC4kLL
-X-Google-Smtp-Source: AGHT+IGwFuQcFzmsc5LsWrg9q5WB6KU9vNa/YsSkl+MoJR2SFXVEIEjn1f712FGpelUo+GOukogYBg==
-X-Received: by 2002:a05:6512:3995:b0:512:c9ad:2cc0 with SMTP id j21-20020a056512399500b00512c9ad2cc0mr2923383lfu.34.1708503106676; Wed, 21 Feb 2024 00:11:46 -0800 (PST)
-Received: from kds.. ([212.149.142.231]) by smtp.gmail.com with ESMTPSA id e10-20020ac2546a000000b005117a6a27bcsm1556823lfn.186.2024.02.21.00.11.45 (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256); Wed, 21 Feb 2024 00:11:45 -0800 (PST)
-X-Mailer: git-send-email 2.40.1
-Precedence: bulk
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C93151286F61;
+	Wed, 21 Feb 2024 07:37:03 -0500 (EST)
+Message-ID: <7a7f8f0c1b9d124bfc01b66082abf2d8445564ce.camel@HansenPartnership.com>
+Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, Lino Sanfilippo
+ <l.sanfilippo@kunbus.com>, Alexander Steffen
+ <Alexander.Steffen@infineon.com>,  "Daniel P. Smith"
+ <dpsmith@apertussolutions.com>, Jason Gunthorpe <jgg@ziepe.ca>, Sasha Levin
+ <sashal@kernel.org>,  linux-integrity@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Ross Philipson <ross.philipson@oracle.com>, Kanth Ghatraju
+	 <kanth.ghatraju@oracle.com>, Peter Huewe <peterhuewe@gmx.de>
+Date: Wed, 21 Feb 2024 07:37:01 -0500
+In-Reply-To: <CZA9GMC718HA.1JFHTTWV563IE@seitikki>
+References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
+	 <20240131170824.6183-2-dpsmith@apertussolutions.com>
+	 <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
+	 <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
+	 <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
+	 <91f600ef-867b-4523-89be-1c0ba34f8a4c@kunbus.com>
+	 <CZA9CM3PDILC.82JMLUWMB6B7@seitikki> <CZA9GMC718HA.1JFHTTWV563IE@seitikki>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -138,98 +87,37 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: *****
-X-Spamd-Bar: +++++
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=XLb70K0X;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=3i4Yo6GJ
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [5.73 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
-	 TO_DN_SOME(0.00)[];
-	 R_MISSING_CHARSET(2.50)[];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 SUSE_ML_WHITELIST_VGER(-0.10)[];
-	 R_RATELIMIT(0.00)[to_ip_from(RLic9mzq3mmdtog88cdgw6y6f5)];
-	 DKIM_TRACE(0.00)[suse.cz:+];
-	 MX_GOOD(-0.01)[];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 MAILLIST(-0.15)[generic];
-	 FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 BAYES_HAM(-0.00)[30.95%];
-	 ARC_NA(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 RCVD_COUNT_FIVE(0.00)[6];
-	 FROM_HAS_DN(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 PRECEDENCE_BULK(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 PREVIOUSLY_DELIVERED(0.00)[linux-integrity@vger.kernel.org];
-	 HAS_LIST_UNSUB(-0.01)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MID_RHS_MATCH_TO(1.00)[];
-	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[23];
-	 RCVD_IN_DNSWL_NONE(1.00)[209.85.208.179:received];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FREEMAIL_CC(0.00)[HansenPartnership.com,omp.ru,gmail.com,google.com,linux.ibm.com,andred.net,us.ibm.com,srcf.ucam.org,intel.com,puiterwijk.org,huawei.com,redhat.com,linux.alibaba.com,altlinux.org,samsung.com,suse.cz];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Score: 5.73
-X-Rspamd-Queue-Id: 41E0B1FB4E
-X-Spam-Flag: NO
 
-From: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+On Tue, 2024-02-20 at 22:31 +0000, Jarkko Sakkinen wrote:
+> 
+> 2. Because localities are not too useful these days given TPM2's
+>    policy mechanism
 
-Currently libimaevm provided by this project is used by the tool evmctl,
-which is also provided by this project.
+Localitites are useful to the TPM2 policy mechanism.  When we get key
+policy in the kernel it will give us a way to create TPM wrapped keys
+that can only be unwrapped in the kernel if we run the kernel in a
+different locality from userspace (I already have demo patches doing
+this).
 
-An issue was reported about using libimaevm with other software. Its
-GPL2-only license makes it incompatible to use with other licenses, in
-particular GPL3-only.
+>  I cannot recall out of top of my head can
+>    you have two localities open at same time.
 
-To address this issue, change the project license to GPL-2.0-or-later
-and libimaevm to LGPL 2.0 or later.
+I think there's a misunderstanding about what localities are: they're
+effectively an additional platform supplied tag to a command.  Each
+command can therefore have one and only one locality.  The TPM doesn't
+have a concept of which locality is open; if you look at the reference
+implementation, the simulator has a __plat__LocalitySet() function
+which places all commands in the just set locality until you change to
+a different one.
 
-Signed-off-by: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
----
- COPYING                | 339 -----------------------------------------
- LICENSES.txt           |  13 ++
- src/evmctl.c           |  25 +--
- src/hash_info.gen      |  10 +-
- src/imaevm.h           |  25 +--
- src/libimaevm.c        |  25 +--
- src/pcr.h              |   2 +
- src/pcr_ibmtss.c       |   2 +-
- src/pcr_tss.c          |  25 +--
- src/pcr_tsspcrread.c   |  25 +--
- src/utils.c            |   2 +-
- src/utils.h            |   2 +
- tests/functions.sh     |  11 +-
- tests/gen-keys.sh      |  11 +-
- tests/ima_hash.test    |  11 +-
- tests/sign_verify.test |  11 +-
- tests/test_mmap.c      |   2 +-
- 17 files changed, 30 insertions(+), 511 deletions(-)
+However, since the way localities are implemented (i.e. what triggers
+_plat__LocalitySet()) is implementation defined, each physical TPM
+device has a different way of doing the set (for instance, for TIS
+TPM's locality is a function of the port set used to address the TPM;
+for CRB TPMs it can be an additional tag on the buffer for command
+submission).   I think the locality request/relinquish was modelled
+after some other HW, but I don't know what.
 
-Hi Dmitry,
+James
 
-I fully agree with this, but all files I added SUSE copyright with my email
-weren't touched. These files actually have no license. Therefore I have no idea
-if my ack make sense.
-
-Acked-by: Petr Vorel <pvorel@suse.cz>
-
-Kind regards,
-Petr
-
- delete mode 100644 COPYING
- create mode 100644 LICENSES.txt
-...
 
