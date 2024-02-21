@@ -1,190 +1,210 @@
-Return-Path: <linux-integrity+bounces-1359-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1360-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C39D85EBE6
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 23:40:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E48285EC05
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 23:53:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB3AB1F252CC
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 22:40:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E93E11F22153
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 22:53:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569983C099;
-	Wed, 21 Feb 2024 22:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED2B3EA8F;
+	Wed, 21 Feb 2024 22:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="b1HQ1Xjx"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="X1BGpO1C"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic306-28.consmr.mail.ne1.yahoo.com (sonic306-28.consmr.mail.ne1.yahoo.com [66.163.189.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76A43BB37
-	for <linux-integrity@vger.kernel.org>; Wed, 21 Feb 2024 22:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F483EA69
+	for <linux-integrity@vger.kernel.org>; Wed, 21 Feb 2024 22:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708555227; cv=none; b=Ei+eDhTY3iN9H0L+cN1gCka4pQuy5MkyfqE/si4ZdrRGoj1oV9e5MNIWUoWlLgzEBKrIopSd4dwo+u1nkJgYwef9TQNgqsHbwzyN/+F7pZ3qxMHbct7Fi9xpGVgjULFRVBvZycY2SGBPvyBXtUpQ1Wo/3dqiiuYVJ2dhyH8aQNc=
+	t=1708555979; cv=none; b=U9RathRtkRYFoUk8mP+Uflag/ktuIBjleCMD9tpn9sidjrV25gM9dIgMoHafnNkdSIsrKLMcOghT41O8SpUCGB74ax7a7br9gwhGSBNE0UKSymDOpkgYY5Y0o2iF71acbQN8daJnBvLUc3D5oMtyHkXw0X7Ruhemb7I2yh93yeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708555227; c=relaxed/simple;
-	bh=Nm4vohVN2MnrdmWHCzPg0IndVB+YQ0gytqLf2qE4XJA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=pmKNFnYY0pA1sgdBPiNzVHdOO9GOMWunhEU3xsR9Q/HQ0Dtp62BPpneuPoe+jdfuexP9HHKfWwo9C/dPlG73QBYRuWBPxdS9bUslJlwy0xBsIyAJdakZw6ykSp6VvF1i/hJEGfEO2xfMU8eSYRs3paydZwx2xt5JVuEWGCNTkzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=b1HQ1Xjx; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41LMNSH1001848;
-	Wed, 21 Feb 2024 22:39:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=ketIvyi/+E3D58gaoR84h46SBu1di8pPAkKAB+63l38=;
- b=b1HQ1Xjx/QBMQ0vSoMxaNenCSTVexipyrVqTbgqRKvp4rC2Px/JzK8k8TVlF6Y42i/Ut
- o3VSPK0iyHv3IEOt9fmsAT+Wde3h/HCuD5j0D95nMWhlpE7Fsrq38Ah3+D0qG8NkRthn
- u7TNFYTzWVse/wWgqnHiE+9RlMyTYJr0O4zoTDlOxeTunJnudUz+TPVAmiiNXAMxxEk3
- 5mBPGGhZY3wXNqmd/mFo18N6Vyzm2HgSV34X7jVb9VKXCe83Rh2rOfqXdbCsyxCCbqwg
- tkqu3RY8cB3U34bFCE9L+tKqQXGAtmJFi6oFqbThs/Gbcm0MG4xmdhwnqQVeRf38YRUS qw== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdswy8ers-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 22:39:54 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41LLWSAI031117;
-	Wed, 21 Feb 2024 22:39:53 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb9bm1uq5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 Feb 2024 22:39:53 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41LMdoBX13763192
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 21 Feb 2024 22:39:52 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6AAE458060;
-	Wed, 21 Feb 2024 22:39:50 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A26D35805A;
-	Wed, 21 Feb 2024 22:39:49 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.watson.ibm.com (unknown [9.31.110.109])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 21 Feb 2024 22:39:49 +0000 (GMT)
-Message-ID: <1bad88f238452bd2b86cf549ed8b7a4727795bfa.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 4/8] ima: kexec: define functions to copy IMA log at
- soft boot
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, stefanb@linux.ibm.com, ebiederm@xmission.com,
-        noodles@fb.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Date: Wed, 21 Feb 2024 17:39:34 -0500
-In-Reply-To: <20240214153827.1087657-5-tusharsu@linux.microsoft.com>
-References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
-	 <20240214153827.1087657-5-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	s=arc-20240116; t=1708555979; c=relaxed/simple;
+	bh=Rd6+5o8B1z7Uu8KRFhwIduy1ibyPyt60019HIsBYj9A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MfMZVFOuIGMjON453py0n8xv2fl06/A9+HDsc2YTKaAsIynUbWxJao/LX9w5leHFvbecAhiKsT0vqs13BcQPAirmBQ19H525JBh3eFN+vfyAm5l9mPV/Mq6TS1C9F/hGOJbLi+RXe9+pIapUCTH5wWbiHLd8rZYuVn/L7SqrF74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=X1BGpO1C; arc=none smtp.client-ip=66.163.189.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1708555976; bh=vQXRx63GUTpgFNFyiPicte7GlwliGyAPhXQerDd2nlQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=X1BGpO1C6ljjrxKfpIsSjK++ylZJ9PD2r3LuNSl/Di3kcL0cVYer0bUJyG2NbBRuuqINQvUq89knNeP/h2xV8QcmmAc2HDVRdIJKkP289Txm9Yy5JpEP5cUIBd56fbiCvKqAldb/gsKaoA7mrgu8YVq7b9KBKKjsWVd+ja5xeeLSq+/PUG+CZ0SD+opRBBwB1FfLuu31R2azALl7gDJyORNRANbljsFqNwG++OB9qGVeokbnKHDZrmBDRugGoe0Qsmme5f4yQpcYm0AS1Wiq5YVcwnKFXEqP0eH3J3uLZR9hE5kyuO1qZF8NwRiX7GFYGjsFjt5LVjRvFjDQhS+WzQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1708555976; bh=iHjgd5k4Rr54g7F1RLDZXNmXNow+s+ZFi2yvQYIrbEC=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=UkEmKRDyxG5D7yt8lEjITv9Ch5qpf/qXyPbrDABrFzUjfh4Y5fJiIm1R/Vh8GTL5shmXz3ms5uRJsYXLflHSV6KJsVE0DFFPxH6KsBPFnzu7bMLhrnqGNse5k5Ev7wzVpubGlQWvKX7eNZtJExYuEj4SEeqSRl0vgTU51gqQc1KVNtxeXzXT8sszvPvOYuFUvv1xLclytMhPIa8jkmBHPCHbpyqXRvpSN6ELt22WgmJAuWB1t+6HkF/sjWhX7kDbN6fYwWtAWVnBeCY6rq95u/iILbbsQqV3aztlxPFTOn4oubEZu+kt1JxXi1aKVdadFrXKaW0ReZuA3w+E3blksQ==
+X-YMail-OSG: jttrBygVM1k0RetLrvq9CDs_aPXkmrNVZCk6fpmYdEkS23DD29Ye5y8NGleyXS5
+ CplQ6u0EuREOrSQ9ia9_klav5E6PoiatBqbSKiGwVrK3Dft.lt0os2zL7gbk0RS3Gqn6SorT23Jc
+ vL6joNfLCtgW5HQqpPKTlyciDJTXwr.GsHYKnKKVGi9MQcdnISANhkWbjIWQQN2ah2RS4kxfYGaO
+ FdG_q7yss4TJlM_kNDe5oqAzSS0coX7Su8pqbC0ZgmTLaiV4dbjtUFOyfe_y4aOssvoNALQhccOI
+ 6KzvGCT15mrl1PEJx3rxY1DpWqveRPjJl1tuypTK_NaCnQAApnsihAZgzDhJJ9vpWoc_IWoLL8r.
+ qcBgfqYfsLxjTN41NsjKpHNUeMW2hcoG0vUEz17RUGUC0y17gdGAlMgOQoRPI4gC4c2NT1FZtmSw
+ lP4Mdd9KWbWFeMchfclmfz1VpBZWYEVfHTnnjjullL6qbpv7XOSGwVbHhPUo2DAtj_bW7T1g2KUq
+ k0b2zszUrf0RpCrlO8XYnlghtCHk4WyMGnOdcZuBiA6idlstu1sZm666P3_6cSlNaCHh.d6WUQZE
+ msMzeNMMqho8wJzbrRW697SHVXMIP4ymIgsLEQRChLgR5MbCwh0ytadjgozR.AbZXePnnpmTAJ14
+ AL84yrtPAe3CW7tM57PpKKbApHAel.5bf3vWR7PH7PjWlQef2g4P6xnB23LgXuxadWdA1Xr1daXZ
+ 2ZbiI.FJd.m_c09fstmA_L0TMf1aQPKxGe4lOZaKmbMkRSKlTp6HLb6KQa3hC2djZknZwIIs8w5c
+ .xkWOtdymmNSPcm4lt5imVrR9v47Xd2Pe_64UpmacBtyciJlWBRkw2pFNfyNcBOtZwneU_h3v1Nr
+ H_EU7YMmy2cQlyO50HlwdeHErUsXolX_BQkI9Obnjln5MA_Dh9.D8lRXwGEVbX8LQdE_qNf55tLc
+ VGWZJUBLElDQMnca2EpvPioVNw4uakDt0ZlXTTMk21hleGS3XT5Tz6N9j0NfH3172GxcqC.FzBy3
+ nf2AAWayLYdUwviTHYt87fSqEK6jcv0ziFUzymstnv4Lsg6SF4RgausR4AGP1pD1C.whlxnYYieE
+ MvlkBD6H2h280Y0_46ndqXIw.asNBt95ljA1HwMf9TudWS8511rsXLYNpLmPNkMNufld1oW6SwLV
+ ZkLMifcs5XzspOLl1y49mmcuJDFEvYr4le3zb6Dg5Vm0y_DhSvC_G3zoxNSYx3XhE9J.zB787ux7
+ p2Jldyp4ZkEX7e0TTRBYgob3FNsuIXIVKhcM4NLbgQzKfdJeZ8PTBFy5I5UU06dhOL6.1tBm_Qmp
+ HSUWCRPrwDXx_0O1yBw2xvz4HF_tIWqnaM6dV.L7yXOEvhSvEOyE7.PhgEfMcN3UY42Sgh1oa8mj
+ S2ayONKtxVBUmUMg06iXZkeftnRtIryi6njOifXLQOqB3eL6sIHsVnHpsBHaPU4YNI32Fs6GK3gu
+ BSt2NJQL7IMwLXkMr1TsqpWD.nO2GWw8Da8hIjJbfHK76d0_kugXEoMT633.MdZ0sJqZ2.YkhEZi
+ cgZsoxSs3v7BJXZYQDxqKsQ4Dq2dIBMDMfHjUuvIdLL6LO8tzKv0OkQj2e9RyeGZrkravNWVHKYT
+ 6BG2rCdXNaOM8JrCn1BSk2ruPE6siGlZlKDT.QRm4bvKdWZoJyCGxLfrAeisJRAxOrjr07ji02_E
+ bLatttiBe719gKfg1l46Hxz19FFT79Z0EOj3VeHK2kx0NLcxhAqKl9y_Wu6b0bcHTdBy7JFAx1h3
+ FzYDTVz4.uhU3J1EJYcxK9fUvObYdlg2zzmXI_xze43Sya2Y2iMyZ6e1jQwAjJeuMzW7ea_PGgaG
+ sFgvn9l5sAHuPEf2wlYNGT2nHbto.C3xtuVOoTBtS6KObT8qtA.8yZWcySnCPPFpz3G3Yx2pNgD7
+ g42m.qZX_Z.5blzlpHQ66.g0KMQ.6VmHiWo1gCufroWMqHiMoDeDXuMitE9.hMMd5QkUQVjtdAiM
+ gCUPzUTQXQIhJyBuCenQWzKbLMIS38Ve9PRbqL.4fjuhe_QKoEfG.V3k7CZQbgoT4zDhegXUbCRw
+ JcjottclNCZ1gtjxkRosLyUsD0vxW0Jd5zYM4PPPyGVeFvXoPA0kJkoJ6RrDR1Zm6JQkacq0kiQs
+ LkhZ9rL9h7DQHjQfv0L.9p7fQ5bbr4TmumgKfF_vQLjMdQv8a7NYaRYrRJfr4HHGESNVzuqgcAjB
+ fjDNnFMlNsJIRj7YoYydKE3h2tLwg75fCGIn4RfR4_888krYmZxG2EdTCNvk6ohGiwg--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 19f325b7-7748-46c2-9c57-e750cb002b56
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Wed, 21 Feb 2024 22:52:56 +0000
+Received: by hermes--production-gq1-5c57879fdf-9nrfh (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 060ea49497017965d95d3a76dc76dbf6;
+          Wed, 21 Feb 2024 22:52:54 +0000 (UTC)
+Message-ID: <b14d41b6-547b-4a1d-b2b5-0bae11454482@schaufler-ca.com>
+Date: Wed, 21 Feb 2024 14:52:50 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 13/25] smack: add hooks for fscaps operations
+Content-Language: en-US
+To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>,
+ Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>,
+ Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+ James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Jan Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi <miklos@szeredi.hu>,
+ Amir Goldstein <amir73il@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-security-module@vger.kernel.org, audit@vger.kernel.org,
+ selinux@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
+ <20240221-idmap-fscap-refactor-v2-13-3039364623bd@kernel.org>
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20240221-idmap-fscap-refactor-v2-13-3039364623bd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: khDHV2CKQKPs6IfsFba0cPIpBIXQYkQC
-X-Proofpoint-ORIG-GUID: khDHV2CKQKPs6IfsFba0cPIpBIXQYkQC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-21_09,2024-02-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- priorityscore=1501 suspectscore=0 adultscore=0 mlxlogscore=999 spamscore=0
- impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402210178
+X-Mailer: WebService/1.1.22077 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-Additional comments ...
-
-> diff --git a/security/integrity/ima/ima_kexec.c
-> b/security/integrity/ima/ima_kexec.c
-> index ccb072617c2d..1d4d6c122d82 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -12,10 +12,14 @@
->  #include <linux/kexec.h>
->  #include <linux/of.h>
->  #include <linux/ima.h>
-> +#include <linux/reboot.h>
-> +#include <asm/page.h>
->  #include "ima.h"
->  
->  #ifdef CONFIG_IMA_KEXEC
->  static struct seq_file ima_kexec_file;
-> +static void *ima_kexec_buffer;
-> +static bool ima_kexec_update_registered;
->  
->  static void ima_reset_kexec_file(struct seq_file *sf)
->  {
-> @@ -184,6 +188,48 @@ void ima_add_kexec_buffer(struct kimage *image)
->  	kexec_dprintk("kexec measurement buffer for the loaded kernel at
-> 0x%lx.\n",
->  		      kbuf.mem);
+On 2/21/2024 1:24 PM, Seth Forshee (DigitalOcean) wrote:
+> Add hooks for set/get/remove fscaps operations which perform the same
+> checks as the xattr hooks would have done for XATTR_NAME_CAPS.
+>
+> Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+> ---
+>  security/smack/smack_lsm.c | 71 ++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index 0fdbf04cc258..1eaa89dede6b 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -1530,6 +1530,74 @@ static int smack_inode_remove_acl(struct mnt_idmap *idmap,
+>  	return rc;
 >  }
-> +
-> +/*
-> + * Called during kexec execute so that IMA can update the measurement list.
-> + */
-> +static int ima_update_kexec_buffer(struct notifier_block *self,
-> +				   unsigned long action, void *data)
-> +{
-> +	return NOTIFY_OK;
-> +}
-> +
-> +struct notifier_block update_buffer_nb = {
-
-This should be defined as static.  update_buffer_nb should be prefixed with
-'ima_'.
-
-> +	.notifier_call = ima_update_kexec_buffer,
-> +};
-> +
-> +/*
-> + * Create a mapping for the source pages that contain the IMA buffer
-> + * so we can update it later.
-> + */
-> +void ima_kexec_post_load(struct kimage *image)
-> +{
-
-In ima_alloc_kexec_file_buf(), the buffer is only re-allocated if the size
-changes.  Here there doesn't seem to be way of detecting a size change.  At
-least, add a comment here indicating that kexec 'load' may be called multiple
-times.
-
-Mimi
-
-> +	if (ima_kexec_buffer) {
-> +		kimage_unmap_segment(ima_kexec_buffer);
-> +		ima_kexec_buffer = NULL;
-> +	}
-> +
-> +	if (!image->ima_buffer_addr)
-> +		return;
-> +
-> +	ima_kexec_buffer = kimage_map_segment(image,
-> +					      image->ima_buffer_addr,
-> +					      image->ima_buffer_size);
-> +	if (!ima_kexec_buffer) {
-> +		pr_err("%s: Could not map measurements buffer.\n", __func__);
-> +		return;
-> +	}
-> +
-> +	if (!ima_kexec_update_registered) {
-> +		register_reboot_notifier(&update_buffer_nb);
-> +		ima_kexec_update_registered = true;
-> +	}
-> +}
-> +
->  #endif /* IMA_KEXEC */
 >  
->  /*
+> +/**
+> + * smack_inode_set_fscaps - Smack check for setting file capabilities
+> + * @mnt_userns: the userns attached to the source mnt for this request
+> + * @detry: the object
+> + * @caps: the file capabilities
+> + * @flags: unused
+> + *
+> + * Returns 0 if the access is permitted, or an error code otherwise.
+> + */
+> +static int smack_inode_set_fscaps(struct mnt_idmap *idmap,
+> +				  struct dentry *dentry,
+> +				  const struct vfs_caps *caps, int flags)
+> +{
+> +	struct smk_audit_info ad;
+> +	int rc;
+> +
+> +	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+> +	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+> +	rc = smk_curacc(smk_of_inode(d_backing_inode(dentry)), MAY_WRITE, &ad);
+> +	rc = smk_bu_inode(d_backing_inode(dentry), MAY_WRITE, rc);
+> +	return rc;
+> +}
+> +
+> +/**
+> + * smack_inode_get_fscaps - Smack check for getting file capabilities
+> + * @dentry: the object
+> + *
+> + * Returns 0 if access is permitted, an error code otherwise
+> + */
+> +static int smack_inode_get_fscaps(struct mnt_idmap *idmap,
+> +				  struct dentry *dentry)
+> +{
+> +	struct smk_audit_info ad;
+> +	int rc;
+> +
+> +	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+> +	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+> +
+> +	rc = smk_curacc(smk_of_inode(d_backing_inode(dentry)), MAY_READ, &ad);
+> +	rc = smk_bu_inode(d_backing_inode(dentry), MAY_READ, rc);
+> +	return rc;
+> +}
+> +
+> +/**
+> + * smack_inode_remove_acl - Smack check for removing file capabilities
 
+s/smack_inode_remove_acl/smack_inode_remove_fscaps/
+
+> + * @idmap: idmap of the mnt this request came from
+> + * @dentry: the object
+> + *
+> + * Returns 0 if access is permitted, an error code otherwise
+> + */
+> +static int smack_inode_remove_fscaps(struct mnt_idmap *idmap,
+> +				     struct dentry *dentry)
+> +{
+> +	struct smk_audit_info ad;
+> +	int rc;
+> +
+> +	rc = cap_inode_removexattr(idmap, dentry, XATTR_NAME_CAPS);
+> +	if (rc != 0)
+> +		return rc;
+> +
+> +	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+> +	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+> +
+> +	rc = smk_curacc(smk_of_inode(d_backing_inode(dentry)), MAY_WRITE, &ad);
+> +	rc = smk_bu_inode(d_backing_inode(dentry), MAY_WRITE, rc);
+> +	return rc;
+> +}
+> +
+>  /**
+>   * smack_inode_getsecurity - get smack xattrs
+>   * @idmap: idmap of the mount
+> @@ -5045,6 +5113,9 @@ static struct security_hook_list smack_hooks[] __ro_after_init = {
+>  	LSM_HOOK_INIT(inode_set_acl, smack_inode_set_acl),
+>  	LSM_HOOK_INIT(inode_get_acl, smack_inode_get_acl),
+>  	LSM_HOOK_INIT(inode_remove_acl, smack_inode_remove_acl),
+> +	LSM_HOOK_INIT(inode_set_fscaps, smack_inode_set_fscaps),
+> +	LSM_HOOK_INIT(inode_get_fscaps, smack_inode_get_fscaps),
+> +	LSM_HOOK_INIT(inode_remove_fscaps, smack_inode_remove_fscaps),
+>  	LSM_HOOK_INIT(inode_getsecurity, smack_inode_getsecurity),
+>  	LSM_HOOK_INIT(inode_setsecurity, smack_inode_setsecurity),
+>  	LSM_HOOK_INIT(inode_listsecurity, smack_inode_listsecurity),
+>
 
