@@ -1,293 +1,237 @@
-Return-Path: <linux-integrity+bounces-1331-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1332-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C91B685E929
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 21:38:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DE5785EA1B
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 22:25:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57A36283469
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 20:38:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AB9A1F2438C
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 21:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C0F85C52;
-	Wed, 21 Feb 2024 20:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E5401272B2;
+	Wed, 21 Feb 2024 21:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="S4GTQTNH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="piyl8rIr"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618A780610;
-	Wed, 21 Feb 2024 20:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0518045C10;
+	Wed, 21 Feb 2024 21:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708547895; cv=none; b=MCcZhaXYgIMFa84xY1/0At2mS38nQqrcZJfxafHURVMzjxq2Gaqmb51s14+Cr5ifSUhlLJO/RN4XrMjD2CS2BRCVhqEWZrvBp1iZgeuDjiKMAmxnFzvi1zy93BbXX/CkcYvvmMkW/bjHVCytIq46M8kpCZLjLEovTc9NqS9Em+s=
+	t=1708550706; cv=none; b=GwJOntZ02HQbFIZvNXdO3u+1sovaoa66xOyDEgHt8CF10O3W2KnVS0Q9xvpk/qHAVmWttB9pKXb+wnb/6O9PQ6qEn37fwO7mxLeu2/3Rm/xWPHGhR/eCBWUI5swumfqY6Xzjv+UkBs69gmTFuYVYLsyoYDUNgs92lEdaN4aZKQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708547895; c=relaxed/simple;
-	bh=I/DY6z8iepvKaIIyOWw2DaiZiDo7l7TREvRQVddmbhI=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=E1JrSsQjIl4RJQEZ8SnCVFOeywZYqo2ztQlCEbRyl5oLziW3fyFcwl/B4lUf8/GZKY3pzRY6CsLWYu3OnASXzYBoRl/Vjjxb7zFg9Ty0tRmQ+cZz0ykw12r4tzv5D5P6O1yZd0dnKrKw2BLeEvHcObIC8Ey6PYJdFppPhqTrhfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=S4GTQTNH; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.17.2/8.17.1) with ESMTPSA id 41LKbSZv4150814
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 21 Feb 2024 12:37:28 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 41LKbSZv4150814
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024021201; t=1708547850;
-	bh=wZe+pzvmKGW8dDc4NzUwS8b+P+8iJHoRmhS8844tchY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=S4GTQTNHxB+sljASMnNjXqY+w1ctwJCmRVSC4Fv0cmcDKI2n6x33I7WBfJkKvuf0d
-	 pwbyJDK/EY/DM7C9BcPikhRplUIi5Rc0KPXf+IW4w+AUaszLrZ5XVcF4IobP6PBhUc
-	 50R6Ico7S5fHeNBunqOw3yscrB61NHLvQ36cg4ORsc8JXCpD7jVZXUCnwGuL0vq9mM
-	 EIUk5zseXyO6uLx8U/edkYY5gRrk4hLjDPwcd3KoGZsOVYnbHGLqLU0xNZBVvlXGRW
-	 TxUfiX+TAEDdfpVDVNuGV24yzVhioDDhgw6Z+kR66utuOqcvzDqJC+ZtCFPaNeHKbM
-	 O5Y9GBZj1Gyuw==
-Date: Wed, 21 Feb 2024 12:37:25 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: ross.philipson@oracle.com, Ard Biesheuvel <ardb@kernel.org>
-CC: linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
-        linux-efi@vger.kernel.org, dpsmith@apertussolutions.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, mjg59@srcf.ucam.org,
-        James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
-        nivedita@alum.mit.edu, herbert@gondor.apana.org.au,
-        davem@davemloft.net, kanth.ghatraju@oracle.com,
-        trenchboot-devel@googlegroups.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v8_15/15=5D_x86=3A_EFI_stub_D?= =?US-ASCII?Q?RTM_launch_support_for_Secure_Launch?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <dc53f100-062b-47ae-abc8-5414ce8d041c@oracle.com>
-References: <20240214221847.2066632-1-ross.philipson@oracle.com> <20240214221847.2066632-16-ross.philipson@oracle.com> <CAMj1kXF3k_c4Wn9GU+NC_+_aYfDpAzAUnfR=A4L_T+re1H3G=w@mail.gmail.com> <dc53f100-062b-47ae-abc8-5414ce8d041c@oracle.com>
-Message-ID: <C98F883A-31D5-4F67-97FF-4AEFAADDDC74@zytor.com>
+	s=arc-20240116; t=1708550706; c=relaxed/simple;
+	bh=pEK3ogWcsMBDjVNEBVGWfKJWNZ+VqsOdUsw3KYnCmp8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XxQM6N+2dFkG6RXETas84vZtt9pE40ZqVRb+zg/aoYdYMH1tf/ldg8e802FSpg6aTlG79wvOKMnNFSgKpFGiZTSWlTR0mtVpI1v9m6A55D7XYVswbgOZMPJq4Sc9147FpTfa1zG+UwUArex4r/VF1WBgAsPgs9bppNsOCbkrHhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=piyl8rIr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97571C433F1;
+	Wed, 21 Feb 2024 21:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708550705;
+	bh=pEK3ogWcsMBDjVNEBVGWfKJWNZ+VqsOdUsw3KYnCmp8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=piyl8rIri2UZhWzO6yo1zioRkeNE/JkVgB3rClW62lgtZU6x+atyxbvPRC53LyB9y
+	 +rQOfeFuwJDF9rdObfhGRkA4KcAOp2jSPef+XUItB4AB5DhrZRoPmOWoB+4Iylq4O9
+	 Zq5+yJ2bSUBg5kaK7cPLvL7av1/eC939h5zuDd24tZIzPDDdTToGX8AKM8GH47rCzL
+	 vrOlfV3F25jmB0OTV6awbrPd7u0jIuVLDFrMbHzC0gneDLTln8QSPFNigBHVoDTupU
+	 SIR55iv/mcT8wbR4LnxJqC5G5MuMw246MMUT11yPMmVuDTzC7J/C+Y21jUVgvnXy0P
+	 bHDlFSvHq7nBA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78138C5478A;
+	Wed, 21 Feb 2024 21:25:05 +0000 (UTC)
+From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
+Subject: [PATCH v2 00/25] fs: use type-safe uid representation for
+ filesystem capabilities
+Date: Wed, 21 Feb 2024 15:24:31 -0600
+Message-Id: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA9q1mUC/22NQQrCMBBFr1JmbSRJSVBX3kO6mKSTNljTkmhQS
+ u/u2LWbgfeZx1uhUI5U4NKskKnGEufEoA8N+BHTQCL2zKClbqVRmvGBiwjF880U0D/nLGzrrAo
+ osbUBWHVYSLiMyY8sp9c08bjwe3zvrVvHPMbC7mdPV/Vb94pS+vy/UpWQokeD2kpzQuOud8qJp
+ uOcB+i2bfsCF+jp6c4AAAA=
+To: Christian Brauner <brauner@kernel.org>, 
+ Seth Forshee <sforshee@kernel.org>, Serge Hallyn <serge@hallyn.com>, 
+ Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
+ James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Ondrej Mosnacek <omosnace@redhat.com>, 
+ Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, 
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi <miklos@szeredi.hu>, 
+ Amir Goldstein <amir73il@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
+ selinux@vger.kernel.org, linux-integrity@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6763; i=sforshee@kernel.org;
+ h=from:subject:message-id; bh=pEK3ogWcsMBDjVNEBVGWfKJWNZ+VqsOdUsw3KYnCmp8=; 
+ =?utf-8?q?b=3DowEBbQGS/pANAwAKAVMDma7l9DHJAcsmYgBl1moWoa2PeA8gvUi+F8nAKw73u?=
+ =?utf-8?q?YewhAhfWqEh/fe7_8SlhL/2JATMEAAEKAB0WIQSQnt+rKAvnETy4Hc9TA5mu5fQxy?=
+ =?utf-8?q?QUCZdZqFgAKCRBTA5mu5fQxydf1B/_0S9qlm7Hricn6XNcEnh8kf6deH57UoqT/zH?=
+ =?utf-8?q?u3R0D/8Akk4J0UyDpVDieeGAtq3ACBYdyvi4vPsVaSW_SYt2h7VB4KM+MtzGq234o?=
+ =?utf-8?q?SynaMZ/DoUgp3MWk/w0YrmGr947zFeiT8CyHfQ+n4lRPEnzlZKLdoEjhI_4ZXVPBa?=
+ =?utf-8?q?I390rByk0SGuKf7Cb8WIIReJ36MToptFKtKwN777xdEWc8TDtyvVSzMBGkTo0Dmt9?=
+ =?utf-8?q?Yny3w7_UpOW68h853T9SsFtY9z/O0Qwi66H6SWGNNe2LcCKN5y3EiOKQ2CSGI/vNo?=
+ =?utf-8?q?OecRjdw3LTvJ364qtzRc?= w+//WGGw9OOVYRUfBHjqDdeElgsYiN
+X-Developer-Key: i=sforshee@kernel.org; a=openpgp;
+ fpr=2ABCA7498D83E1D32D51D3B5AB4800A62DB9F73A
+X-Endpoint-Received:
+ by B4 Relay for sforshee@kernel.org/default with auth_id=103
 
-On February 21, 2024 12:17:30 PM PST, ross=2Ephilipson@oracle=2Ecom wrote:
->On 2/15/24 1:01 AM, Ard Biesheuvel wrote:
->> On Wed, 14 Feb 2024 at 23:32, Ross Philipson <ross=2Ephilipson@oracle=
-=2Ecom> wrote:
->>>=20
->>> This support allows the DRTM launch to be initiated after an EFI stub
->>> launch of the Linux kernel is done=2E This is accomplished by providin=
-g
->>> a handler to jump to when a Secure Launch is in progress=2E This has t=
-o be
->>> called after the EFI stub does Exit Boot Services=2E
->>>=20
->>> Signed-off-by: Ross Philipson <ross=2Ephilipson@oracle=2Ecom>
->>> ---
->>>   drivers/firmware/efi/libstub/x86-stub=2Ec | 55 +++++++++++++++++++++=
-++++
->>>   1 file changed, 55 insertions(+)
->>>=20
->>> diff --git a/drivers/firmware/efi/libstub/x86-stub=2Ec b/drivers/firmw=
-are/efi/libstub/x86-stub=2Ec
->>> index 0d510c9a06a4=2E=2E4df2cf539194 100644
->>> --- a/drivers/firmware/efi/libstub/x86-stub=2Ec
->>> +++ b/drivers/firmware/efi/libstub/x86-stub=2Ec
->>> @@ -9,6 +9,7 @@
->>>   #include <linux/efi=2Eh>
->>>   #include <linux/pci=2Eh>
->>>   #include <linux/stddef=2Eh>
->>> +#include <linux/slr_table=2Eh>
->>>=20
->>>   #include <asm/efi=2Eh>
->>>   #include <asm/e820/types=2Eh>
->>> @@ -810,6 +811,57 @@ static efi_status_t efi_decompress_kernel(unsigne=
-d long *kernel_entry)
->>>          return EFI_SUCCESS;
->>>   }
->>>=20
->>> +static void efi_secure_launch(struct boot_params *boot_params)
->>> +{
->>> +       struct slr_entry_uefi_config *uefi_config;
->>> +       struct slr_uefi_cfg_entry *uefi_entry;
->>> +       struct slr_entry_dl_info *dlinfo;
->>> +       efi_guid_t guid =3D SLR_TABLE_GUID;
->>> +       struct slr_table *slrt;
->>> +       u64 memmap_hi;
->>> +       void *table;
->>> +       u8 buf[64] =3D {0};
->>> +
->>=20
->> If you add a flex array to slr_entry_uefi_config as I suggested in
->> response to the other patch, we could simplify this substantially
->
->I feel like there is some reason why we did not use flex arrays=2E We wer=
-e talking and we seem to remember we used to use them and someone asked us =
-to remove them=2E We are still looking into it=2E But if we can go back to =
-them, I will take all the changes you recommended here=2E
->
->Thanks
->Ross
->
->>=20
->> static struct slr_entry_uefi_config cfg =3D {
->>          =2Ehdr=2Etag        =3D SLR_ENTRY_UEFI_CONFIG,
->>          =2Ehdr=2Esize       =3D sizeof(cfg),
->>          =2Erevision       =3D SLR_UEFI_CONFIG_REVISION,
->>          =2Enr_entries     =3D 1,
->>          =2Eentries[0]     =3D {
->>                  =2Epcr    =3D 18,
->>                  =2Eevt_info =3D "Measured UEFI memory map",
->>          },
->> };
->>=20
->> cfg=2Eentries[0]=2Ecfg  =3D boot_params->efi_info=2Eefi_memmap |
->>                        (u64)boot_params->efi_info=2Eefi_memmap_hi << 32=
-;
->> cfg=2Eentries[0]=2Esize =3D boot_params->efi_info=2Eefi_memmap_size;
->>=20
->>=20
->>=20
->>> +       table =3D get_efi_config_table(guid);
->>> +
->>> +       /*
->>> +        * The presence of this table indicated a Secure Launch
->>> +        * is being requested=2E
->>> +        */
->>> +       if (!table)
->>> +               return;
->>> +
->>> +       slrt =3D (struct slr_table *)table;
->>> +
->>> +       if (slrt->magic !=3D SLR_TABLE_MAGIC)
->>> +               return;
->>> +
->>=20
->> slrt =3D (struct slr_table *)get_efi_config_table(guid);
->> if (!slrt || slrt->magic !=3D SLR_TABLE_MAGIC)
->>          return;
->>=20
->>> +       /* Add config information to measure the UEFI memory map */
->>> +       uefi_config =3D (struct slr_entry_uefi_config *)buf;
->>> +       uefi_config->hdr=2Etag =3D SLR_ENTRY_UEFI_CONFIG;
->>> +       uefi_config->hdr=2Esize =3D sizeof(*uefi_config) + sizeof(*uef=
-i_entry);
->>> +       uefi_config->revision =3D SLR_UEFI_CONFIG_REVISION;
->>> +       uefi_config->nr_entries =3D 1;
->>> +       uefi_entry =3D (struct slr_uefi_cfg_entry *)(buf + sizeof(*uef=
-i_config));
->>> +       uefi_entry->pcr =3D 18;
->>> +       uefi_entry->cfg =3D boot_params->efi_info=2Eefi_memmap;
->>> +       memmap_hi =3D boot_params->efi_info=2Eefi_memmap_hi;
->>> +       uefi_entry->cfg |=3D memmap_hi << 32;
->>> +       uefi_entry->size =3D boot_params->efi_info=2Eefi_memmap_size;
->>> +       memcpy(&uefi_entry->evt_info[0], "Measured UEFI memory map",
->>> +               strlen("Measured UEFI memory map"));
->>> +
->>=20
->> Drop all of this
->>=20
->>> +       if (slr_add_entry(slrt, (struct slr_entry_hdr *)uefi_config))
->>=20
->> if (slr_add_entry(slrt, &uefi_config=2Ehdr))
->>=20
->>=20
->>> +               return;
->>> +
->>> +       /* Jump through DL stub to initiate Secure Launch */
->>> +       dlinfo =3D (struct slr_entry_dl_info *)
->>> +               slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_DL_INFO);
->>> +
->>> +       asm volatile ("jmp *%%rax"
->>> +                     : : "a" (dlinfo->dl_handler), "D" (&dlinfo->bl_c=
-ontext));
->>=20
->> Fix the prototype and just do
->>=20
->> dlinfo->dl_handler(&dlinfo->bl_context);
->> unreachable();
->>=20
->>=20
->> So in summary, this becomes
->>=20
->> static void efi_secure_launch(struct boot_params *boot_params)
->> {
->>          static struct slr_entry_uefi_config cfg =3D {
->>                  =2Ehdr=2Etag        =3D SLR_ENTRY_UEFI_CONFIG,
->>                  =2Ehdr=2Esize       =3D sizeof(cfg),
->>                  =2Erevision       =3D SLR_UEFI_CONFIG_REVISION,
->>                  =2Enr_entries     =3D 1,
->>                  =2Eentries[0]     =3D {
->>                          =2Epcr    =3D 18,
->>                          =2Eevt_info =3D "Measured UEFI memory map",
->>                  },
->>          };
->>          struct slr_entry_dl_info *dlinfo;
->>          efi_guid_t guid =3D SLR_TABLE_GUID;
->>          struct slr_table *slrt;
->>=20
->>          /*
->>           * The presence of this table indicated a Secure Launch
->>           * is being requested=2E
->>           */
->>          slrt =3D (struct slr_table *)get_efi_config_table(guid);
->>          if (!slrt || slrt->magic !=3D SLR_TABLE_MAGIC)
->>                  return;
->>=20
->>          cfg=2Eentries[0]=2Ecfg  =3D boot_params->efi_info=2Eefi_memmap=
- |
->>                                (u64)boot_params->efi_info=2Eefi_memmap_=
-hi << 32;
->>          cfg=2Eentries[0]=2Esize =3D boot_params->efi_info=2Eefi_memmap=
-_size;
->>=20
->>          if (slr_add_entry(slrt, &cfg=2Ehdr))
->>                  return;
->>=20
->>          /* Jump through DL stub to initiate Secure Launch */
->>          dlinfo =3D (struct slr_entry_dl_info *)
->>                   slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_DL_INFO);
->>=20
->>          dlinfo->dl_handler(&dlinfo->bl_context);
->>=20
->>          unreachable();
->> }
->>=20
->>=20
->>> +}
->>> +
->>>   static void __noreturn enter_kernel(unsigned long kernel_addr,
->>>                                      struct boot_params *boot_params)
->>>   {
->>> @@ -934,6 +986,9 @@ void __noreturn efi_stub_entry(efi_handle_t handle=
-,
->>>                  goto fail;
->>>          }
->>>=20
->>> +       /* If a Secure Launch is in progress, this never returns */
->>=20
->> if (IS_ENABLED(CONFIG_SECURE_LAUNCH))
->>=20
->>> +       efi_secure_launch(boot_params);
->>> +
->>>          /*
->>>           * Call the SEV init code while still running with the firmwa=
-re's
->>>           * GDT/IDT, so #VC exceptions will be handled by EFI=2E
->>> --
->>> 2=2E39=2E3
->>>=20
->>=20
->
+This series converts filesystem capabilities from passing around raw
+xattr data to using a kernel-internal representation with type safe
+uids, similar to the conversion done previously for posix ACLs.
+Currently fscaps representations in the kernel have two different
+instances of unclear or confused types:
 
-Linux kernel code doesn't use VLAs because of the limited stack size, and =
-VLAs or alloca() makes stack size tracking impossible=2E Although this tech=
-nically speaking runs in a different environment, it is easier to enforce t=
-he constraint globally=2E
+- fscaps are generally passed around in the raw xattr form, with the
+  rootid sometimes containing the user uid value and at other times
+  containing the filesystem value.
+- The existing kernel-internal representation of fscaps,
+  cpu_vfs_cap_data, uses the kuid_t type, but the value stored is
+  actually a vfsuid.
+
+This series eliminates this confusion by converting the xattr data to
+the kernel representation near the userspace and filesystem boundaries,
+using the kernel representation within the vfs and commoncap code. The
+internal representation is renamed to vfs_caps to reflect this broader
+use, and the rootid is changed to a vfsuid_t to correctly identify the
+type of uid which it contains.
+
+New vfs interfaces are added to allow for getting and setting fscaps
+using the kernel representation. This requires the addition of new inode
+operations to allow overlayfs to handle fscaps properly; all other
+filesystems fall back to a generic implementation. The top-level vfs
+xattr interfaces will now reject fscaps xattrs, though the lower-level
+interfaces continue to accept them for reading and writing the raw xattr
+data.
+
+Based on previous feedback, new security hooks are added for fscaps
+operations. These are really only needed for EVM, and the selinux and
+smack implementations just peform the same operations that the
+equivalent xattr hooks would have done. Note too that this has not yet
+been updated based on the changes to make EVM into an LSM.
+
+The remainder of the changes are preparatory work, addition of helpers
+for converting between the xattr and kernel fscaps representation, and
+various updates to use the kernel representation and new interfaces.
+
+I have tested this code with xfstests, ltp, libcap2, and libcap-ng with
+no regressions found.
+
+To: Christian Brauner <brauner@kernel.org>
+To: Serge Hallyn <serge@hallyn.com>
+To: Paul Moore <paul@paul-moore.com>
+To: Eric Paris <eparis@redhat.com>
+To: James Morris <jmorris@namei.org>
+To: Alexander Viro <viro@zeniv.linux.org.uk>
+To: Miklos Szeredi <miklos@szeredi.hu>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc:  <linux-kernel@vger.kernel.org>
+Cc:  <linux-fsdevel@vger.kernel.org>
+Cc:  <linux-security-module@vger.kernel.org>
+Cc:  <audit@vger.kernel.org>
+Cc:  <linux-unionfs@vger.kernel.org>
+Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+
+--- Changes in v2:
+- Documented new inode operations in
+  Documentation/filesystems/{vfs,locking}.rst.
+- Changed types for sizes in function arguments and return values to
+  size_t/ssize_t.
+- Renamed flags arguments to setxattr_flags for clarity.
+- Removed memory allocation when reading fscaps xattrs.
+- Updated get_vfs_caps_from_disk() to use vfs_get_fscaps() and updated
+  comments to explain how these functions are different.
+- Updates/fixes to kernel-doc comments.
+- Remove unnecessary type cast.
+- Rename __vfs_{get,remove}_fscaps() to vfs_{get,remove}_fscaps_nosec().
+- Add missing fsnotify_xattr() call in vfs_set_fscaps().
+- Add fscaps security hooks along with appropriate handlers in selinux,
+  smack, and evm.
+- Remove remove_fscaps inode op in favor of passing NULL to set_fscaps.
+- Added static asserts for compatibility of vfs_cap_data and
+  vfs_ns_cap_data.
+- ovl: remove unnecessary check around ovl_copy_up(), and add check
+  before copyint up fscaps for removal that the fscaps actually exist on
+  the lower inode.
+- ovl: install fscaps handlers for all inode types
+- Add is_fscaps_xattr() helper and use it in place of open-coded strcmps
+- Link to v1: https://lore.kernel.org/r/20231129-idmap-fscap-refactor-v1-0-da5a26058a5b@kernel.org
+
+---
+Seth Forshee (DigitalOcean) (25):
+      mnt_idmapping: split out core vfs[ug]id_t definitions into vfsid.h
+      mnt_idmapping: include cred.h
+      capability: add static asserts for comapatibility of vfs_cap_data and vfs_ns_cap_data
+      capability: rename cpu_vfs_cap_data to vfs_caps
+      capability: use vfsuid_t for vfs_caps rootids
+      capability: provide helpers for converting between xattrs and vfs_caps
+      capability: provide a helper for converting vfs_caps to xattr for userspace
+      xattr: add is_fscaps_xattr() helper
+      commoncap: use is_fscaps_xattr()
+      xattr: use is_fscaps_xattr()
+      security: add hooks for set/get/remove of fscaps
+      selinux: add hooks for fscaps operations
+      smack: add hooks for fscaps operations
+      evm: add support for fscaps security hooks
+      security: call evm fscaps hooks from generic security hooks
+      fs: add inode operations to get/set/remove fscaps
+      fs: add vfs_get_fscaps()
+      fs: add vfs_set_fscaps()
+      fs: add vfs_remove_fscaps()
+      ovl: add fscaps handlers
+      ovl: use vfs_{get,set}_fscaps() for copy-up
+      fs: use vfs interfaces for capabilities xattrs
+      commoncap: remove cap_inode_getsecurity()
+      commoncap: use vfs fscaps interfaces
+      vfs: return -EOPNOTSUPP for fscaps from vfs_*xattr()
+
+ Documentation/filesystems/locking.rst |   4 +
+ Documentation/filesystems/vfs.rst     |  17 ++
+ MAINTAINERS                           |   1 +
+ fs/overlayfs/copy_up.c                |  72 ++---
+ fs/overlayfs/dir.c                    |   2 +
+ fs/overlayfs/inode.c                  |  72 +++++
+ fs/overlayfs/overlayfs.h              |   5 +
+ fs/xattr.c                            | 280 +++++++++++++++++-
+ include/linux/capability.h            |  23 +-
+ include/linux/evm.h                   |  39 +++
+ include/linux/fs.h                    |  12 +
+ include/linux/lsm_hook_defs.h         |   7 +
+ include/linux/mnt_idmapping.h         |  67 +----
+ include/linux/security.h              |  38 ++-
+ include/linux/vfsid.h                 |  74 +++++
+ include/linux/xattr.h                 |   5 +
+ include/uapi/linux/capability.h       |  13 +
+ kernel/auditsc.c                      |   9 +-
+ security/commoncap.c                  | 529 ++++++++++++++++++----------------
+ security/integrity/evm/evm_main.c     |  60 ++++
+ security/security.c                   |  80 +++++
+ security/selinux/hooks.c              |  26 ++
+ security/smack/smack_lsm.c            |  71 +++++
+ 23 files changed, 1144 insertions(+), 362 deletions(-)
+---
+base-commit: 841c35169323cd833294798e58b9bf63fa4fa1de
+change-id: 20230512-idmap-fscap-refactor-63b61fa0a36f
+
+Best regards,
+-- 
+Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+
 
