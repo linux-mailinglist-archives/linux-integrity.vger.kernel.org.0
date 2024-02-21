@@ -1,145 +1,182 @@
-Return-Path: <linux-integrity+bounces-1356-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1358-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8339085EABF
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 22:28:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA8385EB68
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 22:52:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22FF41F22604
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 21:28:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DA111F2279A
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 Feb 2024 21:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FF11482E8;
-	Wed, 21 Feb 2024 21:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1471F126F2A;
+	Wed, 21 Feb 2024 21:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BRSh2cwD"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YyT8QR/K"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B8A12FB30;
-	Wed, 21 Feb 2024 21:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563C283A1F
+	for <linux-integrity@vger.kernel.org>; Wed, 21 Feb 2024 21:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708550707; cv=none; b=HboMgOmEtxyZzmQz11Tm7Lk3fo3OuwWTst9YoQPvjuqUbl1ovYXElMcqjWaFejy/0pUv0+5EApHPNM48ZUjBws14w5Mls7QdQs3v/XNUMXQmTaIxGc78Ld+sgw+BnS6RtN90fkGEZGsu8xD07qaLbi5Hh459XOZ1lbiqf02K6EM=
+	t=1708552373; cv=none; b=C9dcqdQAcd0wmdeBFlIox0EaiTa9bdcofEgFrmK0PkorRiGYN17JIZ4QKCT08bq2ONwy/GMYGTertJ2lRO48x1ekqmd6HVa5PMyAg1O7b604FZdzJpKU9s54Ok75GsLpiSXGxiKCU/jcbZLKg3+r9kvuJDxel+rI3+3rrcmguyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708550707; c=relaxed/simple;
-	bh=JkAYnCkvvJdZGpxH4b0zbmLDehUJl7XVpS/k3t/jU9U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=H6PhMTWwGgklOkwQJCKeHQcxiEedR+0GdGaerzK943HYZmQ6J6MP9aSW6RMmqCzXfH368n/FRkpQR74HO///+emAlOr5AjC0QoPvhUaIIAGoXFbMyW8xa6r9K35irZhu4cSmN9dLwNLs2+09gAkxMh3LThm1I+Q9UK3D6C8Qp7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BRSh2cwD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73227C41679;
-	Wed, 21 Feb 2024 21:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708550707;
-	bh=JkAYnCkvvJdZGpxH4b0zbmLDehUJl7XVpS/k3t/jU9U=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BRSh2cwDivQmO5cvnVkqxeC7Nu/3tUOtiCSGbP9nzwTtRBOai53XjC60y7iBHWVCL
-	 Dx94tHN+ntUevMHXYVUbAS96T3OzjNnBeM8g6bT+w0cgsa+m/9GIMoWSOpL3L109Dy
-	 p/jRXZVKK3Qjitov8q4GUy+frcJTU6YE5Ie3LnK3jmqZAXOJeDLPo4jOozcggPjlcT
-	 bz3P6FSFwLZzaSt/6n//M6/PaXd4R8vES39SkmRstrtljgGBEWOAKbkiv5Bhk6T9n2
-	 Pw+aGyaiA2KT1m8IKWHDlgRepdSTF3fyENURSQ5hgUUZSI7XfpBd46oydQjBI3KyjM
-	 z/g84a8N8kCRQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6283CC48BEB;
-	Wed, 21 Feb 2024 21:25:07 +0000 (UTC)
-From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-Date: Wed, 21 Feb 2024 15:24:56 -0600
-Subject: [PATCH v2 25/25] vfs: return -EOPNOTSUPP for fscaps from
- vfs_*xattr()
+	s=arc-20240116; t=1708552373; c=relaxed/simple;
+	bh=+ZC9+iF75snfd/xPCnOp8+MHpL8blh4xmxophRxdde4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=KnIh3fnd1gaFN22dt/tp2EX9d2SWg+5yVZUfl9Tfu11BAUOcO+dhUMTorK3473LKiJN1WozbSYjqwLL/czJRZu7Bnda8cLgqtKDYgPJJ4m+GIfih5g046r8CtTMVOqXZkaZE1ZXMGxbbzW7GcBBbFOW4w8iaFCaclAtcJD4UqdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YyT8QR/K; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41LLc9aL029654;
+	Wed, 21 Feb 2024 21:52:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=hPklnWNvH4Hh82OPtREJD31DChKxWmRmIvjYQSw71jk=;
+ b=YyT8QR/KedplJa9QizKmFoZae45a8LFJAXx8BBn1W0+ahKVoFD3t6Kh8EAZXN7vyi4jY
+ f/l9G5v0+XK7x+/bA5QoDxgjs3IQLX/dBNxHFKYVx659DTo6JrCRm63Jp4sDtilUc/hd
+ LxG8skkW2phZHnlQ8GAB+i9NmNX3bznrmiNSILVf+qwfGUvC5jF03R20RcuYem15tHwh
+ pUk2gjMWa7gO7z/QRS7CkeJcz141PF5DG68DleTE3h6AN6HT4fpx02c84C5g+QasSqtJ
+ 2vFrnW2biMPk6xrsz+SP8+qnx2oEdLbKO/s6PirPads/G4Dr76+rm33UWAOUVoDkKUI4 Fg== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wds8mr7nw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Feb 2024 21:52:24 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41LJAwmX003620;
+	Wed, 21 Feb 2024 21:52:23 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb74ttaq3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 Feb 2024 21:52:23 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41LLqLIK45220122
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 21 Feb 2024 21:52:23 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DBD685806F;
+	Wed, 21 Feb 2024 21:52:20 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AF03458071;
+	Wed, 21 Feb 2024 21:52:19 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.watson.ibm.com (unknown [9.31.110.109])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 21 Feb 2024 21:52:19 +0000 (GMT)
+Message-ID: <c19a84a7bf2f8313540eacdb2047ca5083dc8c1f.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 4/8] ima: kexec: define functions to copy IMA log at
+ soft boot
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        Stefan Berger
+	 <stefanb@linux.ibm.com>, roberto.sassu@huaweicloud.com,
+        roberto.sassu@huawei.com, eric.snowberg@oracle.com,
+        ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+Date: Wed, 21 Feb 2024 16:52:14 -0500
+In-Reply-To: <6c7158ef-2b12-4ba4-afc5-7618357d3aa4@linux.microsoft.com>
+References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
+	 <20240214153827.1087657-5-tusharsu@linux.microsoft.com>
+	 <4189d465-dafc-4cf8-80d2-972f60bb6214@linux.ibm.com>
+	 <6c7158ef-2b12-4ba4-afc5-7618357d3aa4@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240221-idmap-fscap-refactor-v2-25-3039364623bd@kernel.org>
-References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
-In-Reply-To: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
-To: Christian Brauner <brauner@kernel.org>, 
- Seth Forshee <sforshee@kernel.org>, Serge Hallyn <serge@hallyn.com>, 
- Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
- James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
- Jan Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
- Ondrej Mosnacek <omosnace@redhat.com>, 
- Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, 
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
- Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi <miklos@szeredi.hu>, 
- Amir Goldstein <amir73il@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
- selinux@vger.kernel.org, linux-integrity@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1556; i=sforshee@kernel.org;
- h=from:subject:message-id; bh=JkAYnCkvvJdZGpxH4b0zbmLDehUJl7XVpS/k3t/jU9U=; 
- =?utf-8?q?b=3DowEBbQGS/pANAwAKAVMDma7l9DHJAcsmYgBl1mouT6WPJX7a66eMZi03rVY0Q?=
- =?utf-8?q?ujcBq9Oshkq0LfM_Tuo4JCOJATMEAAEKAB0WIQSQnt+rKAvnETy4Hc9TA5mu5fQxy?=
- =?utf-8?q?QUCZdZqLgAKCRBTA5mu5fQxyYCgB/_945jyUfmMhsxGudorl5vI3QR/Ixu+abEbAK?=
- =?utf-8?q?QoQWFIgQCflgI7lEzlE8Gpqk4PF6fP+Z4ZfP0ipIhZW_Hvcg61i4lw3bmENsZEOVv?=
- =?utf-8?q?ExwPI4miDqPaQYM5MgS72JjInytlPLdJ5J9YHHPBvYMhUlUJvF4NzVBC1_9E242eb?=
- =?utf-8?q?zj+LwCGygOgJWhED2lY/Hb6uyrRFm1Cz7HpnhwU6iLvmwzI2zV1OW2VbkuTMnKBAY?=
- =?utf-8?q?o6R6P4_c+pauDINbyl1S9IwKjV1/Nmp3njKa6CF4FcIE+hdhnDFMdvpB7KmRK/3vS?=
- =?utf-8?q?9yDqlhgFpDIuqkf8wNp7?= kOXGHoNmPjZ5soY0mZi+wE1d1xksOV
-X-Developer-Key: i=sforshee@kernel.org; a=openpgp;
- fpr=2ABCA7498D83E1D32D51D3B5AB4800A62DB9F73A
-X-Endpoint-Received:
- by B4 Relay for sforshee@kernel.org/default with auth_id=103
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N8A7nTplZfW8oLbWDsnXBItDzvgv0Jnj
+X-Proofpoint-GUID: N8A7nTplZfW8oLbWDsnXBItDzvgv0Jnj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-21_09,2024-02-21_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 mlxscore=0 lowpriorityscore=0
+ spamscore=0 clxscore=1015 suspectscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402210171
 
-Now that the new vfs-level interfaces are fully supported and all code
-has been converted to use them, stop permitting use of the top-level vfs
-xattr interfaces for capabilities xattrs. Unlike with ACLs we still need
-to be able to work with fscaps xattrs using lower-level interfaces in a
-handful of places, so only use of the top-level xattr interfaces is
-restricted.
+On Wed, 2024-02-14 at 22:55 -0800, Tushar Sugandhi wrote:
+> 
+> On 2/14/24 12:47, Stefan Berger wrote:
+> > 
+> > On 2/14/24 10:38, Tushar Sugandhi wrote:
+> ...
+> <snip/>
+> ...
+> > > +void kimage_file_post_load(struct kimage *image)
+> > > +{
+> > > +    ima_kexec_post_load(image);
+> > > +}
+> > > +
+> > 
+> > We get this here at this point but it disappears later -- missing header?
+> > 
+> > kernel/kexec_file.c:189:6: warning: no previous prototype for 
+> > ‘kimage_file_post_load’ [-Wmissing-prototypes]
+> >    189 | void kimage_file_post_load(struct kimage *image)
+> >        |      ^~~~~~~~~~~~~~~~~~~~~
+> > 
+> > 
+> Thanks Stefan.
+> I was also getting it. 
+> But couldn't figure out why. And I was puzzled why it was going away.
+> 
+> Since kimage_file_post_load() is called from the same file in patch 5/8,
+> I don't see a need of declaring it in a header file like 
+> include/linux/kexec.h.
 
-Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
----
- fs/xattr.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Before trying to "fix" it, is there a need for a wrapper around
+ima_kexec_post_load().  ima_add_kexec_buffer() is called directly.
 
-diff --git a/fs/xattr.c b/fs/xattr.c
-index 30eff6bc4f6d..2b8214c9534f 100644
---- a/fs/xattr.c
-+++ b/fs/xattr.c
-@@ -534,6 +534,9 @@ vfs_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 	const void  *orig_value = value;
- 	int error;
- 
-+	if (WARN_ON_ONCE(is_fscaps_xattr(name)))
-+		return -EOPNOTSUPP;
-+
- retry_deleg:
- 	inode_lock(inode);
- 	error = __vfs_setxattr_locked(idmap, dentry, name, value, size,
-@@ -649,6 +652,9 @@ vfs_getxattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 	struct inode *inode = dentry->d_inode;
- 	int error;
- 
-+	if (WARN_ON_ONCE(is_fscaps_xattr(name)))
-+		return -EOPNOTSUPP;
-+
- 	error = xattr_permission(idmap, inode, name, MAY_READ);
- 	if (error)
- 		return error;
-@@ -788,6 +794,9 @@ vfs_removexattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 	struct inode *delegated_inode = NULL;
- 	int error;
- 
-+	if (WARN_ON_ONCE(is_fscaps_xattr(name)))
-+		return -EOPNOTSUPP;
-+
- retry_deleg:
- 	inode_lock(inode);
- 	error = __vfs_removexattr_locked(idmap, dentry,
+Mimi
 
--- 
-2.43.0
+> 
+> Making kimage_file_post_load() local static resolves the warning.
+> But then it throws "defined but not used" warning. I will have to call 
+> it from kexec_file_load syscall in this patch (4/8) instead 5/8 to 
+> resolve that warning.
+> 
+> I will make the function a stub function in this patch and
+> make it call ima_kexec_post_load(image) in the next patch to avoid any 
+> potential bisect safe issues.
+> 
+> It aligns with the goals of patch 4/8 and 5/8 anyways.
+> 
+> +static void kimage_file_post_load(struct kimage *image)
+> +{
+> +	/*
+> +	 * this will call ima_kexec_post_load(image) to map the segment
+> +	 * and register the reboot notifier for moving the IMA log at
+> +	 * kexec execute
+> +	 */
+> +}
+> +
+> 
+> 
+> @@ -410,6 +410,9 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, 
+> int, initrd_fd,
+>          kimage_terminate(image);
+> +    if (!(flags & KEXEC_FILE_ON_CRASH))
+> +        kimage_file_post_load(image);
+> +
+> 
+> ...
+> ...<snip/>
+> ...
+> 
+> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> Thanks for the tag. I will apply it on the next version.
+> 
+> ~Tushar
 
 
