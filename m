@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-1385-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1388-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C88F185FC33
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 16:22:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6569085FC52
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 16:28:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FBD81F25FE8
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 15:22:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96E081C21BBD
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 15:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BCE214AD2C;
-	Thu, 22 Feb 2024 15:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 567B714AD33;
+	Thu, 22 Feb 2024 15:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wh2e4QBZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UTNThF7g"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA691353E2;
-	Thu, 22 Feb 2024 15:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D9D39FC7;
+	Thu, 22 Feb 2024 15:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708615373; cv=none; b=jkN4VUzrIt1zhNEuN6aFoCo3wLd8w2sP+UTgx8MrS7yFHIGKNHTg7DbDCCWcKx0VmXPhF1kPA82T0rx+ctxvpHGW26pfj0nRrVtuWeJmm1Toy1iZeKwh3WCVs+562AXcnblQgO1WZ1OaC91n9mtB/tQBJWbBNaxQ/KqEofxdWkw=
+	t=1708615679; cv=none; b=W22T/z2A85CvFeH/kZBcOSubGQNWf8Vn1LDi+O32KDQ6mZREngdzHxyuiNDbBQfWvSP3TwoiS8A8HPkU/QOqkFchCT19knx09tk+j76n/fjACCThH2F1bQ0zKOsWPXyY1f2DVqOvTQ2BL1dJYr6cX8GpFpG4sJK2T0oS8fr4EBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708615373; c=relaxed/simple;
-	bh=nIRV4TxaPa6vXCVCxIMnFBsUIz9LyGcVVI0m7g2TYzo=;
+	s=arc-20240116; t=1708615679; c=relaxed/simple;
+	bh=b+/c1g1bevjJS6ENQgxxzjivp4907xG9QQXiNgmqTj8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t4mmP1YkLnjtYHML+/qe9bmNA2RISoEjxzxTJ+sft3/ySA72n5nXTZ0i8ry041jc81Gxp2Rf1w0+X/wSC/y+mlxBqhI1KNxNKOyRVbDN/Mo5idhEA+pghB+7c9jaj3PXAml9AXXJzDSsZEcqGEkX1uiy/WseicWsxoXESLxgYj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wh2e4QBZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73EC1C433F1;
-	Thu, 22 Feb 2024 15:22:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=a3jiCuznv23xcvfefuQujkqAh7VDrRv2VBdyjasynmWhHEvN+S2cst5qgH5e2Hg0dnGp6vDGwXjADNQ9BWs/1B4+a5qewJNGWw0zVZ0z6qMmoCr0nZf1Xzx3ZjIJT7HxAJRhA1pZw+4mQkSGPT0UydKTILLKfoQq7nHyRmrWhMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UTNThF7g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BF5C433F1;
+	Thu, 22 Feb 2024 15:27:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708615372;
-	bh=nIRV4TxaPa6vXCVCxIMnFBsUIz9LyGcVVI0m7g2TYzo=;
+	s=k20201202; t=1708615678;
+	bh=b+/c1g1bevjJS6ENQgxxzjivp4907xG9QQXiNgmqTj8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wh2e4QBZn3IKMQYquvwDC4G6Wa8GTvdSdj+VkXWMspmApkYgGrH1IyNao+davZ9+N
-	 ph8/Dd0MxAckccCoxqRklZd4f9Gz32tTkspW1XZRNfBJEDdXdlKyZSvguG5P7DZNYE
-	 EYl53YqMTdXoVOhGJ4txQFTCQkwmx/zbFQAUZkWMarulGNDo7JqC0/Uw1KnarHwJco
-	 Kl7oSE/lQe4bqaa5oJMI6SfNazuEH9BGmBMNT4DeC86K7ONswklCHrq8nHhvlhhYuv
-	 e2F0Bputl9nA/cfmX957EaLzp9x7nWnpItnBESthxAszfsN0yV88BByS6giewzIbGR
-	 TR/hyUk/BCbHg==
-Date: Thu, 22 Feb 2024 16:22:44 +0100
+	b=UTNThF7gTQurO5gdJ1GkI+CaFtktmaiJxxkHcV8C6mOXZmDmZndo3Eend4/T+PPZ1
+	 OecMMs9q6H0fyqzWuRIEOLvguIG5tCiDI3ok4ALjmGF9A316+J38Bd1PVzWqiOyTvX
+	 7QPL1hZKe3EDURzVhYdtZEpv6XcqVlH5z31pKdyKY1AZHNMOEakzwvsjU4jXMxxoSA
+	 DdFVnfIHSh0YnUrEjAraDFTpmT2ajq6N9QDwulqfdSLNDDWq5UYSfXRaF4qTJXv57I
+	 ZH2lHiVy1Czeym3zx9SuBYLK33jTyNuNX5ae8Z0Et6AVVneuy5H+MKB1oWev60wKzG
+	 n2OiDppEBRI+A==
+Date: Thu, 22 Feb 2024 16:27:50 +0100
 From: Christian Brauner <brauner@kernel.org>
 To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
 Cc: Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>, 
@@ -55,11 +55,10 @@ Cc: Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>,
 	Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
 	linux-security-module@vger.kernel.org, audit@vger.kernel.org, selinux@vger.kernel.org, 
 	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v2 07/25] capability: provide a helper for converting
- vfs_caps to xattr for userspace
-Message-ID: <20240222-amortisieren-geblendet-6e977e2d572c@brauner>
+Subject: Re: [PATCH v2 00/25] fs: use type-safe uid representation for
+ filesystem capabilities
+Message-ID: <20240222-fluchen-viren-50e216b653fb@brauner>
 References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
- <20240221-idmap-fscap-refactor-v2-7-3039364623bd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -68,31 +67,55 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240221-idmap-fscap-refactor-v2-7-3039364623bd@kernel.org>
+In-Reply-To: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
 
-On Wed, Feb 21, 2024 at 03:24:38PM -0600, Seth Forshee (DigitalOcean) wrote:
-> cap_inode_getsecurity() implements a handful of policies for capability
-> xattrs read by userspace:
+On Wed, Feb 21, 2024 at 03:24:31PM -0600, Seth Forshee (DigitalOcean) wrote:
+> This series converts filesystem capabilities from passing around raw
+> xattr data to using a kernel-internal representation with type safe
+> uids, similar to the conversion done previously for posix ACLs.
+> Currently fscaps representations in the kernel have two different
+> instances of unclear or confused types:
 > 
->  - It returns EINVAL if the on-disk capability is in v1 format.
+> - fscaps are generally passed around in the raw xattr form, with the
+>   rootid sometimes containing the user uid value and at other times
+>   containing the filesystem value.
+> - The existing kernel-internal representation of fscaps,
+>   cpu_vfs_cap_data, uses the kuid_t type, but the value stored is
+>   actually a vfsuid.
 > 
->  - It masks off all bits in magic_etc except for the version and
->    VFS_CAP_FLAGS_EFFECTIVE.
+> This series eliminates this confusion by converting the xattr data to
+> the kernel representation near the userspace and filesystem boundaries,
+> using the kernel representation within the vfs and commoncap code. The
+> internal representation is renamed to vfs_caps to reflect this broader
+> use, and the rootid is changed to a vfsuid_t to correctly identify the
+> type of uid which it contains.
 > 
->  - v3 capabilities are converted to v2 format if the rootid returned to
->    userspace would be 0 or if the rootid corresponds to root in an
->    ancestor user namespace.
+> New vfs interfaces are added to allow for getting and setting fscaps
+> using the kernel representation. This requires the addition of new inode
+> operations to allow overlayfs to handle fscaps properly; all other
+> filesystems fall back to a generic implementation. The top-level vfs
+> xattr interfaces will now reject fscaps xattrs, though the lower-level
+> interfaces continue to accept them for reading and writing the raw xattr
+> data.
 > 
->  - It returns EOVERFLOW for a v3 capability whose rootid does not map to
->    a valid id in current_user_ns() or to root in an ancestor namespace.
+> Based on previous feedback, new security hooks are added for fscaps
+> operations. These are really only needed for EVM, and the selinux and
+> smack implementations just peform the same operations that the
+> equivalent xattr hooks would have done. Note too that this has not yet
+> been updated based on the changes to make EVM into an LSM.
 > 
-> These policies must be maintained when converting vfs_caps to an xattr
-> for userspace. Provide a vfs_caps_to_user_xattr() helper which will
-> enforce these policies.
-> 
-> Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-> ---
+> The remainder of the changes are preparatory work, addition of helpers
+> for converting between the xattr and kernel fscaps representation, and
+> various updates to use the kernel representation and new interfaces.
 
-Looks good,
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+I still think that the generic_{get,set,remove}_fscaps() helpers falling
+back to plain *vfs_*xattr() calls is a hackish. So ideally I'd like to
+see this killed in a follow-up series and make all fses that support
+them use the inode operation.
+
+> 
+> I have tested this code with xfstests, ltp, libcap2, and libcap-ng with
+> no regressions found.
+
++1
 
