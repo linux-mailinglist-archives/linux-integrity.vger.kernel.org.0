@@ -1,185 +1,146 @@
-Return-Path: <linux-integrity+bounces-1371-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1372-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DD1385EE26
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 01:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 324BF85EEC6
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 02:48:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1DC31C21AA0
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 00:37:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 626021C2198D
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 01:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05E2134DE;
-	Thu, 22 Feb 2024 00:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C236080C;
+	Thu, 22 Feb 2024 01:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="AWuD0seQ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lOsqQd87"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5D1F516
-	for <linux-integrity@vger.kernel.org>; Thu, 22 Feb 2024 00:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC283168AC
+	for <linux-integrity@vger.kernel.org>; Thu, 22 Feb 2024 01:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708562241; cv=none; b=qWWSpAiYNydgSdxdKB3J3GGjyGpNG9fzwYsK4X/XujV8sN0Geql7JbqSJq6DS7Z+fZN2dc5CB/+mH3uyExQAFvRE5NKK2yIu+mQBTM8mSMI5iATGHWrzB2saCtybpVVnRiWtm25tLe6qmzScAWNTdugUHZKa9lRQ/A1nt4JWm/E=
+	t=1708566517; cv=none; b=p58D89UD/cuetSwrCw7DUnnN0oUDfE6EJcm/v+RPmLiY/gxu4kCMJpk6V1OOtrkE/dcZbVtSjj9LHTJzhosLPT9mGwwOA6uNIN4j7e/69F+8e4p7ADipkz08zgqXVSKdskr8ZE3yL0pmP00WQdDfqKKiHGfeDtRoDEyYaI47qp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708562241; c=relaxed/simple;
-	bh=7DLu0D8bl4lB3TJjeIvbjOxLuBH7rI9+0zdimRyeniw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cG5zgeBFZPY/ojPet0uuBKvONqpYyFOjOoZdnzq5cqTCTEg2RD6T7pZaakN+AvelUnu2UTu9wIyKGG/l4owuiANOqHCiRNrtXfY8ZSBUOZC6sMVkmgSj+zN70PRBUWmmaTm7F+0ZuL/RvTKk5m6MF5xlaRtMICaKQe3E76/CPp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=AWuD0seQ; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dcc86086c9fso1441740276.3
-        for <linux-integrity@vger.kernel.org>; Wed, 21 Feb 2024 16:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1708562235; x=1709167035; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jwPQ5FFRE9HZKwgqe28p5vX79kU4E42ICEiVSyqmmE4=;
-        b=AWuD0seQuxSM2pg0KIzolmz4hQH1C41vVmswetXZTFhY3U9URmpE2Pgb7noqrjhFS0
-         VJk3Sl6DDsdf6yJRWe6gnSmX7JEYNgaVCjwPIvzOOdSCm56/FDqMunkl3DljsKWg3pcF
-         I0z2wtASZJeVNgrB8l6qlNHv1CKzgv7O6GGe8c9usAFQGmJGvXuolkvHh8EtXq+6VFJp
-         /1H2mU21yxv0IShaoj69664uEYmfuDXQTPysbdZeyzHmPZe+H89Zuzk/lLgGlTUBOW1R
-         5PV2VZZtF11n/6oLieojmDAtTLBF2pYFzJxIXlczJcHYGaxDe1x5Yy6r/ufCQWwGqQxT
-         jxew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708562235; x=1709167035;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jwPQ5FFRE9HZKwgqe28p5vX79kU4E42ICEiVSyqmmE4=;
-        b=WzdQosHLYzXplkxM4szq5odjkQEteAddQssAquWBzenrFHa2BnmboFpKBiJo8akXtc
-         CNE63UjB3J1oGCSEaFW8pnC8U4nALdxR06jNjT2DSBgcHY/6TgoXUSlhQp+n0irpNWfW
-         AmDL777t2fi5eEbgvO2R5mDuljml76W7QvSNAQcYnKljavP3HXbeiWVxORwsm0LjDoTr
-         0vy1B9BelQxunVGAqIb9mDkj0lHj9UeO6EzhIcrhEgymJ8lQiDapx0aDg4txEBqIokxG
-         eH/3hYq12iX7l4HP/z3ZED+a3r6pQmncIHoJASbuFfIfze6TsDlUOSzTdrkaKm49LwfB
-         3duQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWPVANGkFCEyVk4/uIX8/LsYiucmSqKFGYBThjQpifMuQH9LZ3GS3eqxIvHp3qHGU8Ge/U5LsUUN5M4qVcrC8WcYBbzJ4xGt5/uGLLCy8NR
-X-Gm-Message-State: AOJu0YyyELfHAl0KA/QXQDiboNfKI3g7gyMMZHs+N+eVCrRV9TF7HAGB
-	kOrLPhcI6ONz3KK/W0FamzEr9m8XVB7yvyrCz1FxMT7pJBWy5tJa9QfqbS/TVlLnebuTxLHtR9+
-	X3LrwYofd89wG9gSfFm3DmbIBRTiJ8OR1b/MZ
-X-Google-Smtp-Source: AGHT+IGAQ7Reayqcx5n6/kxK9gU1bvXz8FuxziZlj261BGCiV7fv0a2bbFUmVeZ6atHIXCyxpJlOV4CfjUbIVyi2enc=
-X-Received: by 2002:a25:cec1:0:b0:dcc:eb38:199c with SMTP id
- x184-20020a25cec1000000b00dcceb38199cmr971381ybe.56.1708562235099; Wed, 21
- Feb 2024 16:37:15 -0800 (PST)
+	s=arc-20240116; t=1708566517; c=relaxed/simple;
+	bh=7xbqjzkJsujfxwPn/1/LiCpqSysgFsJHYRktpaqu/P0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=IKleULAHzwWzX58XdznITS55wtO1qTiLlAX72ZIW+B5Sm72HuTuMcs7qQFJe8yLHtvGujDdmWvwG2F7c6FqigkiocnS7MSkCvCrWdSNdb+wzGwknWXk2uKvX7z5DdY434RgASeMb3FTMK+UUXchtYqLWp8lApytI/R+aVZTBXAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lOsqQd87; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41M1Gqpu032151;
+	Thu, 22 Feb 2024 01:47:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Xju1T3kaNJcv/xymaE79FVk7EEUpQgcxMygpLqc5hiQ=;
+ b=lOsqQd871/XHyFCq/3AYDUCQLFeZ68JF4SheP0+DoBm7M6eGUhDG4NOeDig788geIvxy
+ RZVNn2O/ApaNbzADveMOScf+2bBMQw47Kc2on+8XULRM2OYZt0DC8eXfK/sk/Tb5UG5X
+ 8Ij6kCczahKNQQlGYcVtH/QTBkvA3W00ZVbCBUu8Xcf7Is3TdI/HsHKOb0NFxoL/xOab
+ OUZiginNh3yOJhxNAbRl7P2iQkc7Pfkx5QtTP23FWuH5YG4Syaxl+UlPWQZzA/9Fq13a
+ GVK18XkE0ICvadycrzrdU+53vHYi/a5ITMN/DfHyKJ5C3E/XeluA6MLJuY1CkGP9/v75 TA== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdurehc53-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 22 Feb 2024 01:47:57 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41M0KTpf014343;
+	Thu, 22 Feb 2024 01:47:57 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb9u2tmm8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 22 Feb 2024 01:47:57 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41M1ls9I5637104
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 22 Feb 2024 01:47:56 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5708358043;
+	Thu, 22 Feb 2024 01:47:54 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 22BDB58065;
+	Thu, 22 Feb 2024 01:47:53 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.133.105])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 22 Feb 2024 01:47:52 +0000 (GMT)
+Message-ID: <fa85d215803c380ea06669703b9f101e8ec64fb4.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 5/8] ima: kexec: move IMA log copy from kexec load to
+ execute
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, stefanb@linux.ibm.com, ebiederm@xmission.com,
+        noodles@fb.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
+Date: Wed, 21 Feb 2024 20:47:52 -0500
+In-Reply-To: <20240214153827.1087657-6-tusharsu@linux.microsoft.com>
+References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
+	 <20240214153827.1087657-6-tusharsu@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
- <20240221-idmap-fscap-refactor-v2-15-3039364623bd@kernel.org>
- <CAHC9VhRQ7Xa2_rAjKYA_nkpmfUd9jn2D0SNcb6SjQFg=k8rn=w@mail.gmail.com> <ZdaTPV/Ngd8ed/p5@do-x1extreme>
-In-Reply-To: <ZdaTPV/Ngd8ed/p5@do-x1extreme>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 21 Feb 2024 19:37:04 -0500
-Message-ID: <CAHC9VhS8h-A61b8DzbOBSxSH6WBDZkHBQGuT=DVq1n5gHfx6jA@mail.gmail.com>
-Subject: Re: [PATCH v2 15/25] security: call evm fscaps hooks from generic
- security hooks
-To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
-	James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qZCeno6HZx8Ym3DQSAKJ6eaxIZn_0uJA
+X-Proofpoint-GUID: qZCeno6HZx8Ym3DQSAKJ6eaxIZn_0uJA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-21_10,2024-02-21_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
+ adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402220012
 
-On Wed, Feb 21, 2024 at 7:20=E2=80=AFPM Seth Forshee (DigitalOcean)
-<sforshee@kernel.org> wrote:
-> On Wed, Feb 21, 2024 at 06:43:43PM -0500, Paul Moore wrote:
-> > On Wed, Feb 21, 2024 at 4:25=E2=80=AFPM Seth Forshee (DigitalOcean)
-> > <sforshee@kernel.org> wrote:
-> > >
-> > > Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-> > > ---
-> > >  security/security.c | 15 +++++++++++++--
-> > >  1 file changed, 13 insertions(+), 2 deletions(-)
-> >
-> > First off, you've got to write *something* for the commit description,
-> > even if it is just a single sentence.
-> >
-> > > diff --git a/security/security.c b/security/security.c
-> > > index 0d210da9862c..f515d8430318 100644
-> > > --- a/security/security.c
-> > > +++ b/security/security.c
-> > > @@ -2365,9 +2365,14 @@ int security_inode_remove_acl(struct mnt_idmap=
- *idmap,
-> > >  int security_inode_set_fscaps(struct mnt_idmap *idmap, struct dentry=
- *dentry,
-> > >                               const struct vfs_caps *caps, int flags)
-> > >  {
-> > > +       int ret;
-> > > +
-> > >         if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-> > >                 return 0;
-> > > -       return call_int_hook(inode_set_fscaps, 0, idmap, dentry, caps=
-, flags);
-> > > +       ret =3D call_int_hook(inode_set_fscaps, 0, idmap, dentry, cap=
-s, flags);
-> > > +       if (ret)
-> > > +               return ret;
-> > > +       return evm_inode_set_fscaps(idmap, dentry, caps, flags);
-> > >  }
-> > >
-> > >  /**
-> > > @@ -2387,6 +2392,7 @@ void security_inode_post_set_fscaps(struct mnt_=
-idmap *idmap,
-> > >         if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-> > >                 return;
-> > >         call_void_hook(inode_post_set_fscaps, idmap, dentry, caps, fl=
-ags);
-> > > +       evm_inode_post_set_fscaps(idmap, dentry, caps, flags);
-> > >  }
-> > >
-> > >  /**
-> > > @@ -2415,9 +2421,14 @@ int security_inode_get_fscaps(struct mnt_idmap=
- *idmap, struct dentry *dentry)
-> > >   */
-> > >  int security_inode_remove_fscaps(struct mnt_idmap *idmap, struct den=
-try *dentry)
-> > >  {
-> > > +       int ret;
-> > > +
-> > >         if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-> > >                 return 0;
-> > > -       return call_int_hook(inode_remove_fscaps, 0, idmap, dentry);
-> > > +       ret =3D call_int_hook(inode_remove_fscaps, 0, idmap, dentry);
-> > > +       if (ret)
-> > > +               return ret;
-> > > +       return evm_inode_remove_fscaps(dentry);
-> > >  }
-> >
-> > If you take a look at linux-next or the LSM tree's dev branch you'll
-> > see that we've gotten rid of the dedicated IMA and EVM hooks,
-> > promoting both IMA and EVM to "proper" LSMs that leverage the existing
-> > LSM hook infrastructure.  In this patchset, and moving forward, please
-> > don't add dedicated IMA/EVM hooks like this, instead register them as
-> > LSM hook implementations with LSM_HOOK_INIT().
->
-> Yeah, I'm aware that work was going on and got applied recently. I've
-> been assuming this change will go in through the vfs tree though, and I
-> wasn't sure how you and Al/Christian would want to handle that
-> dependency between your trees, so I held off on updating based off the
-> LSM tree. I'm happy to update this for the next round though.
 
-Okay, good, I just wanted to make sure you were aware of the changes.
-Since the merge window is only a couple of weeks away I'm guessing
-this isn't something we'll need to worry about in Linus' tree as the
-LSM/IMA/EVM changes are slated to go up during the next merge window
-and I'm guessing this will likely go in after that, targeting the
-following merge window at the earliest.
+> @@ -195,7 +181,34 @@ void ima_add_kexec_buffer(struct kimage *image)
+>  static int ima_update_kexec_buffer(struct notifier_block *self,
+>  				   unsigned long action, void *data)
+>  {
+> -	return NOTIFY_OK;
+> +	void *buf = NULL;
+> +	size_t buf_size;
+> +	int ret = NOTIFY_OK;
+> +
+> +	if (!kexec_in_progress) {
+> +		pr_info("%s: No kexec in progress.\n", __func__);
+> +		return ret;
+> +	}
+> +
+> +	if (!ima_kexec_buffer) {
+> +		pr_err("%s: Kexec buffer not set.\n", __func__);
+> +		return ret;
+> +	}
 
---=20
-paul-moore.com
+pr_ messages should already be prefixed with the module name.  There shouldn't
+be a need to include the function name as well.
+
+> +	ret = ima_dump_measurement_list(&buf_size, &buf,
+> +					kexec_segment_size);
+> +
+> +	if (!buf) {
+> +		pr_err("%s: Dump measurements failed. Error:%d\n",
+> +		       __func__, ret);
+> +		goto out;
+> +	}
+> +	memcpy(ima_kexec_buffer, buf, buf_size);
+> +out:
+> +	kimage_unmap_segment(ima_kexec_buffer);
+> +	ima_kexec_buffer = NULL;
+> +
+> +	return ret;
+>  }
+>  
+>  struct notifier_block update_buffer_nb = {
+
 
