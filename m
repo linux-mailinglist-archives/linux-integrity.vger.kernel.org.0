@@ -1,146 +1,181 @@
-Return-Path: <linux-integrity+bounces-1372-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1373-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 324BF85EEC6
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 02:48:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E839785EED8
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 03:03:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 626021C2198D
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 01:48:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A9581C218C1
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 02:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C236080C;
-	Thu, 22 Feb 2024 01:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF78F14284;
+	Thu, 22 Feb 2024 02:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lOsqQd87"
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="Myd74kcu"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC283168AC
-	for <linux-integrity@vger.kernel.org>; Thu, 22 Feb 2024 01:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0105813AEA
+	for <linux-integrity@vger.kernel.org>; Thu, 22 Feb 2024 02:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708566517; cv=none; b=p58D89UD/cuetSwrCw7DUnnN0oUDfE6EJcm/v+RPmLiY/gxu4kCMJpk6V1OOtrkE/dcZbVtSjj9LHTJzhosLPT9mGwwOA6uNIN4j7e/69F+8e4p7ADipkz08zgqXVSKdskr8ZE3yL0pmP00WQdDfqKKiHGfeDtRoDEyYaI47qp4=
+	t=1708567403; cv=none; b=eEJJslbHKiPGUzqSgQKap/rpcWXlZSSg6mn7awPkHLrulvnfkmbH71g6L4oNr2xZnWZkTpfsHxB0VPr2/7Da861sTi1/Y0F67iBKO2gxDKQCUbZCDk8+324SgIUXyTvC0R4I5D9F64IMu8TsCAHu7u73WsS+ISCiyosuUoneQI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708566517; c=relaxed/simple;
-	bh=7xbqjzkJsujfxwPn/1/LiCpqSysgFsJHYRktpaqu/P0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=IKleULAHzwWzX58XdznITS55wtO1qTiLlAX72ZIW+B5Sm72HuTuMcs7qQFJe8yLHtvGujDdmWvwG2F7c6FqigkiocnS7MSkCvCrWdSNdb+wzGwknWXk2uKvX7z5DdY434RgASeMb3FTMK+UUXchtYqLWp8lApytI/R+aVZTBXAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lOsqQd87; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41M1Gqpu032151;
-	Thu, 22 Feb 2024 01:47:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=Xju1T3kaNJcv/xymaE79FVk7EEUpQgcxMygpLqc5hiQ=;
- b=lOsqQd871/XHyFCq/3AYDUCQLFeZ68JF4SheP0+DoBm7M6eGUhDG4NOeDig788geIvxy
- RZVNn2O/ApaNbzADveMOScf+2bBMQw47Kc2on+8XULRM2OYZt0DC8eXfK/sk/Tb5UG5X
- 8Ij6kCczahKNQQlGYcVtH/QTBkvA3W00ZVbCBUu8Xcf7Is3TdI/HsHKOb0NFxoL/xOab
- OUZiginNh3yOJhxNAbRl7P2iQkc7Pfkx5QtTP23FWuH5YG4Syaxl+UlPWQZzA/9Fq13a
- GVK18XkE0ICvadycrzrdU+53vHYi/a5ITMN/DfHyKJ5C3E/XeluA6MLJuY1CkGP9/v75 TA== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wdurehc53-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 01:47:57 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41M0KTpf014343;
-	Thu, 22 Feb 2024 01:47:57 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb9u2tmm8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 01:47:57 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41M1ls9I5637104
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Feb 2024 01:47:56 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5708358043;
-	Thu, 22 Feb 2024 01:47:54 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 22BDB58065;
-	Thu, 22 Feb 2024 01:47:53 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.133.105])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 22 Feb 2024 01:47:52 +0000 (GMT)
-Message-ID: <fa85d215803c380ea06669703b9f101e8ec64fb4.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 5/8] ima: kexec: move IMA log copy from kexec load to
- execute
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, stefanb@linux.ibm.com, ebiederm@xmission.com,
-        noodles@fb.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-Date: Wed, 21 Feb 2024 20:47:52 -0500
-In-Reply-To: <20240214153827.1087657-6-tusharsu@linux.microsoft.com>
-References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
-	 <20240214153827.1087657-6-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	s=arc-20240116; t=1708567403; c=relaxed/simple;
+	bh=JRupkqtOY1jWzd/kLbCtgp183MTrg3adCZsTzQc2mQg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rcIRnrZ12S7eu+W4h/OJpMAd+9OyYB+wlAGgFE51aGrSvo6p6A3nYemxCu48gMCy126L7b9ftnI54SJ1KG0aPq0DKsjarw0fpzjq0OOkv+ijBX6uFgCwQ/n4Ls8Tu67+9TRD1Ao2fS8uNDsgQF4Q1dUH4YwKKViK+7rygNFYvCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=Myd74kcu; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4125e435b38so39790775e9.0
+        for <linux-integrity@vger.kernel.org>; Wed, 21 Feb 2024 18:03:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=citrix.com; s=google; t=1708567400; x=1709172200; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RpCgjNX1LqPX7oZGVuldx9UiwfGbtf89koJSaGuEDxQ=;
+        b=Myd74kcur8vH1I3zmXPqZUmeM5zBeOLvHMqgEu654WOdpzz2U0+KzfJCVPGnEDV9Z1
+         3u8TrpzQqiotDZVjyrdIUIlJpP9n+jXcduSgdmN22sU9FBXLCdql6YLdTDrqiOsXU9Pf
+         Br0vBaZehS8dgnBO76KtsxmJLc3iEu6r32AKM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708567400; x=1709172200;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RpCgjNX1LqPX7oZGVuldx9UiwfGbtf89koJSaGuEDxQ=;
+        b=wkNmOCfVt9mgcPcSk+t607cv11if4EmGFj2b1cSxCzjPt5MnUgzWc4FPUgxnELKFZt
+         RVwTMfegsGOPgBGLsN9XL9o5Brz+tHsYCqgEXDrBLWiJ3NsXH7soudz4jB2hJWzU+UdQ
+         hcnoUpKtcxo/Py6ALfg+Neaof5XSiPMgNkVvMJtXrnHJ4cAKsxGu6YRuI/gXQh5JZr6n
+         FqtSc+Ldpj7nmwoIJ4CEfhMaKJ/bJu9ghLlAyhet7/p1Cm6mhq9DeiGdCZRC7GJ03Mta
+         ULUfGu1ljG/y2oKbJxUSQbB8EuKLsA9I7UdL+SGSZ9t/UuvK6I1Y9oE1jqt/E6tNa3zm
+         Udsw==
+X-Forwarded-Encrypted: i=1; AJvYcCW3dTinZ7bhyPpKTtwhV+Tf9+z1zKWj8WIGPi485odtwZgfozGbwsguoDNwusc+29hKwefzWw2BU110WqFPupzyYd3bF3COTUvRH03bYvP8
+X-Gm-Message-State: AOJu0YztnW2GcYOALkGN5kKVlbLZLmQQ642uIr+BFn2f4UMvDeNOK9AA
+	QGJBbdBea39I4ph5lYVWbtFjwBAoatqSbwykbFd4E+XSPi5WsjK/v4V16HWfS30=
+X-Google-Smtp-Source: AGHT+IF17JfDiQPU6La0me//6yi5Ziq+H6StnWpBIOWkvLcTMKHIezhdF+lH9T4BxYSFO+mETuw9kA==
+X-Received: by 2002:a05:600c:22c6:b0:411:ef17:9c46 with SMTP id 6-20020a05600c22c600b00411ef179c46mr14985747wmg.39.1708567400316;
+        Wed, 21 Feb 2024 18:03:20 -0800 (PST)
+Received: from [192.168.1.10] (host-92-3-248-192.as13285.net. [92.3.248.192])
+        by smtp.gmail.com with ESMTPSA id f9-20020a05600c44c900b00411e3cc0e0asm19318507wmo.44.2024.02.21.18.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Feb 2024 18:03:20 -0800 (PST)
+Message-ID: <08ac69b4-4d12-4454-aa16-40db7e54816f@citrix.com>
+Date: Thu, 22 Feb 2024 02:03:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 04/15] x86: Secure Launch Resource Table header file
+Content-Language: en-GB
+To: Ard Biesheuvel <ardb@kernel.org>,
+ Ross Philipson <ross.philipson@oracle.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, dpsmith@apertussolutions.com, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+ mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
+ peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
+ nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
+ kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+References: <20240214221847.2066632-1-ross.philipson@oracle.com>
+ <20240214221847.2066632-5-ross.philipson@oracle.com>
+ <CAMj1kXGaMfUAR85jpeS2JxcmWBbpkzroCVZOtwa3WDQwStDjMw@mail.gmail.com>
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
+ 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
+ 6+ahAA==
+In-Reply-To: <CAMj1kXGaMfUAR85jpeS2JxcmWBbpkzroCVZOtwa3WDQwStDjMw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qZCeno6HZx8Ym3DQSAKJ6eaxIZn_0uJA
-X-Proofpoint-GUID: qZCeno6HZx8Ym3DQSAKJ6eaxIZn_0uJA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-21_10,2024-02-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
- adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402220012
 
+On 15/02/2024 8:08 am, Ard Biesheuvel wrote:
+> On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
+>> +/*
+>> + * Primary SLR Table Header
 
-> @@ -195,7 +181,34 @@ void ima_add_kexec_buffer(struct kimage *image)
->  static int ima_update_kexec_buffer(struct notifier_block *self,
->  				   unsigned long action, void *data)
->  {
-> -	return NOTIFY_OK;
-> +	void *buf = NULL;
-> +	size_t buf_size;
-> +	int ret = NOTIFY_OK;
-> +
-> +	if (!kexec_in_progress) {
-> +		pr_info("%s: No kexec in progress.\n", __func__);
-> +		return ret;
-> +	}
-> +
-> +	if (!ima_kexec_buffer) {
-> +		pr_err("%s: Kexec buffer not set.\n", __func__);
-> +		return ret;
-> +	}
+I know it's just a comment, but SLR ought to be written in longhand here.
 
-pr_ messages should already be prefixed with the module name.  There shouldn't
-be a need to include the function name as well.
+>> + */
+>> +struct slr_table {
+>> +       u32 magic;
+>> +       u16 revision;
+>> +       u16 architecture;
+>> +       u32 size;
+>> +       u32 max_size;
+>> +       /* entries[] */
+>> +} __packed;
+> Packing this struct has no effect on the layout so better drop the
+> __packed here. If this table is part of a structure that can appear
+> misaligned in memory, better to pack the outer struct or deal with it
+> there in another way.
 
-> +	ret = ima_dump_measurement_list(&buf_size, &buf,
-> +					kexec_segment_size);
-> +
-> +	if (!buf) {
-> +		pr_err("%s: Dump measurements failed. Error:%d\n",
-> +		       __func__, ret);
-> +		goto out;
-> +	}
-> +	memcpy(ima_kexec_buffer, buf, buf_size);
-> +out:
-> +	kimage_unmap_segment(ima_kexec_buffer);
-> +	ima_kexec_buffer = NULL;
-> +
-> +	return ret;
->  }
->  
->  struct notifier_block update_buffer_nb = {
+As you note, __packed does two things not one.
 
+The consumer of the random integer that is expected to be a pointer to a
+struct lsr_table doesn't know whether it was invoked by a 16bit
+bootloader or a 32bit bootloader, and this really does make a difference
+for an ABI described only in C.
+
+Then again, we're holding off on setting the spec in stone until there's
+an agreement in principle, so we could retrofit a statement about the
+expected alignment of this structure in memory.
+
+The sane choices are either 8b alignment (there are uint64_t's in
+entires[], but I also see there are some misaligned uint64_t's too,
+which is dull), or using the good old x86 fallback or paragraph
+alignment just in case we really want to extend it with a uint128_t in
+future.
+
+Thoughts?
+
+~Andrew
 
