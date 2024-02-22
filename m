@@ -1,74 +1,75 @@
-Return-Path: <linux-integrity+bounces-1387-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1386-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94D8285FC51
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 16:26:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4208985FC50
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 16:26:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E4D51F263AA
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 15:26:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 691EB28BC90
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 15:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F0214AD2C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54921149013;
 	Thu, 22 Feb 2024 15:26:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VwCbImPh"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eYqwki7v"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA200148FE6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C83A1482E9
 	for <linux-integrity@vger.kernel.org>; Thu, 22 Feb 2024 15:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708615612; cv=none; b=hprk9YJXv8cKlTdJf30onZCCdCmmd8F0qExV6g4Nd60LlJpzShuNxrns577FZxhPfAZchv3PnAOv5cwPiVzXOju9E1Zq8IyYrEFMlbZ1Ud+TMRNjj0ui26h+14kU1OT+8qJMib6OWUTnc+KtoGcbcJO1XWQ7O0YUyJHN3hTMlsk=
+	t=1708615612; cv=none; b=VCNb7oR84IugZ7PEGbUteUMv0KHgY/ztCQji3MMx+LbVO8wPF/yjI0bImlh28nIjoggISJMMoXgfYIHIt/51UPqLQlo/4y8gC3hRBAos4wyte/oX3h3qxCV7kt5p2Nw6mMxZv9PsNv/+bVrw4HqoPayYtiC1RnaVK+4wQFgOBZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708615612; c=relaxed/simple;
-	bh=4nYoMLWgGDKcKdFLALhsVO0JG+ULM5zHWSE0KHsVL7w=;
+	bh=yPs/9MCvAEgPU2dL0rz5lIwinxZXUcQ/O1O6wj9tT9c=;
 	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:Mime-Version; b=CfmaQqW403srBF0jaWL89wzsA5l5qMqRNt0zJrB6MyhS8hpFfo+B4/zKbr6GAeuvM0Y39KZwb/Gm8fgJ9qlAh0e6X/zoIf9JcuSP5Ce2EsRujizJ6slIGd6xIAk9w468tnUhdWasJTjYY3G1oCaQb1T0MJWy+FB6yn2FjrLDnpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VwCbImPh; arc=none smtp.client-ip=148.163.156.1
+	 Date:Mime-Version; b=jfqTwnJe3qKbxmPz6aRrAQmuOBfMa5Q2IteXSV6Sxi4uMN50voNuUC1oPxWD9BuEyOmwAat4F23ehW/T2juL3c0odec7TCFT4F6ZMXExBDB98zjCz0Au9nj+KIEy/LWIHpBydLP0lD0Sa6HCrx0hK3oVmuQB5Me3wT1TzOiLy8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eYqwki7v; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41MF7DtX025764;
-	Thu, 22 Feb 2024 15:26:24 GMT
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41MF7AiQ025669;
+	Thu, 22 Feb 2024 15:26:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : in-reply-to : references : content-type : date :
  mime-version : content-transfer-encoding; s=pp1;
- bh=6is4J6faMXa825k9ObNr0T510me85j4o6wij3IOHWAQ=;
- b=VwCbImPhUWrtNPGrh9gLNOPWGvykpkUXTYYTQJSfNOLVCapry3121UjEh6Abo1tc0ZTn
- ZJ7CM20pSJXANlWorl0lSd8ezTz2Z7roXw16R61Hs8Fxs1u44wwlsqoo0gHz+zxxZe15
- q2oQpIpVvRkDVj5W8HI30e6M4r2/2X5ZDMEt7DKhQnSDbnx6E0WNZABX1XMRbFDxUTL9
- PV10fdF2bX/9YIg59Uah91cTZdkCDqTWIek8Yb9rAbh55MghykuSaDbeIl2Y9UZOMYvC
- RASnZNeY0q92y6lB4w01paY7wrVA7WnAEV/3T+F5lVrBNmBh1YWrBpMSwMQ/Kp0Om/5R bg== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3we8mkghgc-1
+ bh=4c5Ch3b5+d7XfrRUSS2n7mwD85IKo3ivrFMXtB1Q1z4=;
+ b=eYqwki7vXgfNX6B0sTpBGetEBrj4832MwnjBtS1JRd3T6c0w8dkx8DdZVLtMtLEitGqa
+ 3xvfQTsrN1df/j6HU/ULJmaCjzzSWuWYHRMy0lpYWuL4JT7uP5vQFfKTkZPySnLjYkrD
+ 2gM34SlJ6WOpFvtCCSfwRY7itlk2cOtzwUVo/EunURmH+bjWl4lUI5enj6gvkDoHRy0Q
+ r7ZQ54HglB/LWkT5y9mn5/MPcdxUi0Zn89h6poI0jpbXSoI13coMorpOKcYm3RwkqqbI
+ 9sNbncv/pbda1E7w1A+sskP//MGSQoJmQbUobL3H2gV3f8Rfy0p2yA7MgYybBaUjq6Ye Zw== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3we8mkghdu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 15:26:23 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41ME5wuQ013470;
-	Thu, 22 Feb 2024 15:26:22 GMT
+	Thu, 22 Feb 2024 15:26:19 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41MDpI2R003596;
+	Thu, 22 Feb 2024 15:26:18 GMT
 Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb7h0q8xn-1
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb74tya2t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 15:26:22 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41MFQKZ711207180
+	Thu, 22 Feb 2024 15:26:18 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41MFQF1O7209478
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Feb 2024 15:26:22 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D3CD158063;
-	Thu, 22 Feb 2024 15:26:18 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9B6205805D;
-	Thu, 22 Feb 2024 15:26:17 +0000 (GMT)
+	Thu, 22 Feb 2024 15:26:17 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B803858045;
+	Thu, 22 Feb 2024 15:26:15 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9161058068;
+	Thu, 22 Feb 2024 15:26:14 +0000 (GMT)
 Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.99.109])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 22 Feb 2024 15:26:17 +0000 (GMT)
-Message-ID: <c87163b6aae92acec40a98217a4e65b9af4ece2a.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 7/8] ima: make the kexec extra memory configurable
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 22 Feb 2024 15:26:14 +0000 (GMT)
+Message-ID: <cba09611c2e069be49faca2f137d99c772635831.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 6/8] ima: suspend measurements during buffer copy at
+ kexec execute
 From: Mimi Zohar <zohar@linux.ibm.com>
 To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
         roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
@@ -76,11 +77,11 @@ To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
         noodles@fb.com, bauermann@kolabnow.com,
         linux-integrity@vger.kernel.org, kexec@lists.infradead.org
 Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-In-Reply-To: <20240214153827.1087657-8-tusharsu@linux.microsoft.com>
+In-Reply-To: <20240214153827.1087657-7-tusharsu@linux.microsoft.com>
 References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
-	 <20240214153827.1087657-8-tusharsu@linux.microsoft.com>
+	 <20240214153827.1087657-7-tusharsu@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-Date: Thu, 22 Feb 2024 09:13:23 -0500
+Date: Thu, 22 Feb 2024 09:14:36 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -90,8 +91,8 @@ Mime-Version: 1.0
 X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HC6JejxVUzYnxr6d_wM70qqaa8GdR82q
-X-Proofpoint-ORIG-GUID: HC6JejxVUzYnxr6d_wM70qqaa8GdR82q
+X-Proofpoint-GUID: 2dd6iHc-c8TSKOXOb2vcu3SPHgn0BThY
+X-Proofpoint-ORIG-GUID: 2dd6iHc-c8TSKOXOb2vcu3SPHgn0BThY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-22_11,2024-02-22_01,2023-05-22_02
@@ -104,91 +105,173 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malware
 Hi Tushar,
 
 On Wed, 2024-02-14 at 07:38 -0800, Tushar Sugandhi wrote:
-> The extra memory allocated for carrying the IMA measurement list across
-> kexec is hard-coded as half a PAGE.  Make it configurable.
+> New measurements added to the IMA log while the log is being copied
+> during the kexec 'execute' may not get copied over.
+
+As long as there is enough memory for the additional records, isn't the problem
+"after" copying the mesaurement list records, not during?
+
+> This can cause the
+> measurement log to be out of sync with the TPM PCRs that IMA extends,
+> which could result in breaking the integrity of the measurements after
+> kexec soft reboot.
 > 
-> Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
-> extra memory (in kb) to be allocated for IMA measurements added during
-> kexec soft reboot.  Ensure the default value of the option is set such
-> that extra half a page of memory for additional measurements is allocated
-> for the additional measurements.
+> Implement and call the functions ima_measurements_suspend() and 
+> ima_measurements_resume() from ima_update_kexec_buffer().
+
+After copying the measurement list records, would not be the time to resume
+taking additional measurements.
+
+> Add a check in the ima_add_template_entry() function not to measure
+> events when 'suspend_ima_measurements' flag is set.
 > 
-> Update ima_add_kexec_buffer() function to allocate memory based on the
-> Kconfig option value, rather than the currently hard-coded one.
+> This ensures the integrity of the IMA log while it is being copied over
+> to the new Kernel during kexec 'execute'.
 > 
-> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
 > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 > Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 > ---
->  security/integrity/ima/Kconfig     |  9 +++++++++
->  security/integrity/ima/ima_kexec.c | 15 ++++++++++-----
->  2 files changed, 19 insertions(+), 5 deletions(-)
+>  security/integrity/ima/ima.h       |  2 ++
+>  security/integrity/ima/ima_kexec.c |  7 +++++++
+>  security/integrity/ima/ima_queue.c | 32 ++++++++++++++++++++++++++++++
+>  3 files changed, 41 insertions(+)
 > 
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index b98bfe9efd0c..4c0fc53d6aa3 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -320,4 +320,13 @@ config IMA_DISABLE_HTABLE
->  	help
->  	   This option disables htable to allow measurement of duplicate
-> records.
->  
-> +config IMA_KEXEC_EXTRA_MEMORY_KB
-> +	int
-> +	depends on IMA_KEXEC
-> +	default 0
-> +	help
-> +	  IMA_KEXEC_EXTRA_MEMORY_KB determines the extra memory to be
-> +	  allocated (in kb) for IMA measurements added during kexec soft reboot.
-> +	  If set to the default value, an extra half a page of memory for those
-> +	  additional measurements will be allocated.
->  endif
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index c29db699c996..49a6047dd8eb 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -161,6 +161,8 @@ bool ima_template_has_modsig(const struct
+> ima_template_desc *ima_template);
+>  int ima_restore_measurement_entry(struct ima_template_entry *entry);
+>  int ima_restore_measurement_list(loff_t bufsize, void *buf);
+>  int ima_measurements_show(struct seq_file *m, void *v);
+> +void ima_measurements_suspend(void);
+> +void ima_measurements_resume(void);
+>  unsigned long ima_get_binary_runtime_size(void);
+>  int ima_init_template(void);
+>  void ima_init_template_list(void);
 > diff --git a/security/integrity/ima/ima_kexec.c
 > b/security/integrity/ima/ima_kexec.c
-> index dbeeb7f1355e..50903d4ce880 100644
+> index 98fc9b9782a2..dbeeb7f1355e 100644
 > --- a/security/integrity/ima/ima_kexec.c
 > +++ b/security/integrity/ima/ima_kexec.c
-> @@ -126,6 +126,7 @@ void ima_add_kexec_buffer(struct kimage *image)
->  				  .buf_min = 0, .buf_max = ULONG_MAX,
->  				  .top_down = true };
->  	unsigned long binary_runtime_size;
-> +	unsigned long extra_size;
+> @@ -184,6 +184,7 @@ static int ima_update_kexec_buffer(struct notifier_block
+> *self,
+>  	void *buf = NULL;
+>  	size_t buf_size;
+>  	int ret = NOTIFY_OK;
+> +	bool resume = false;
 >  
->  	/* use more understandable variable names than defined in kbuf */
->  	void *kexec_buffer = NULL;
-> @@ -133,15 +134,19 @@ void ima_add_kexec_buffer(struct kimage *image)
->  	int ret;
+>  	if (!kexec_in_progress) {
+>  		pr_info("%s: No kexec in progress.\n", __func__);
+> @@ -195,12 +196,15 @@ static int ima_update_kexec_buffer(struct notifier_block
+> *self,
+>  		return ret;
+>  	}
 >  
->  	/*
-> -	 * Reserve an extra half page of memory for additional measurements
-> -	 * added during the kexec load.
-> +	 * Reserve extra memory for measurements added during kexec.
->  	 */
-> -	binary_runtime_size = ima_get_binary_runtime_size();
-> +	if (CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB <= 0)
-> +		extra_size = PAGE_SIZE / 2;
-> +	else
-> +		extra_size = CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB * 1024;
-> +	binary_runtime_size = ima_get_binary_runtime_size() + extra_size;
-
-It's clearer if the 'extra_size' is added to the segment_size, not the
-binary_runtime_size.  Please revert this change.
-
+> +	ima_measurements_suspend();
 > +
->  	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
->  		kexec_segment_size = ULONG_MAX;
->  	else
-> -		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
-> -					   PAGE_SIZE / 2, PAGE_SIZE);
-> +		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
+>  	ret = ima_dump_measurement_list(&buf_size, &buf,
+>  					kexec_segment_size);
+>  
+>  	if (!buf) {
+>  		pr_err("%s: Dump measurements failed. Error:%d\n",
+>  		       __func__, ret);
+> +		resume = true;
 
-Please replace binary_runtime_size with "ima_get_binary_runtime_size() +
-extra_size".
+Only on failure to copy the measurement list records will measurements be
+"resumed".  Measurements will be suspended from when the IMA reboot notifier is
+called until reboot.
+
+The patch suject line, description and comments don't match the code.  There is
+no "during buffer copy" in "ima: suspend measurements during buffer copy at
+kexec execute".  Measurements are suspended.
+
+The question is whether you could suspend measurements a bit later, just after
+copying the measurement records.
+
+>  		goto out;
+>  	}
+>  	memcpy(ima_kexec_buffer, buf, buf_size);
+> @@ -208,6 +212,9 @@ static int ima_update_kexec_buffer(struct notifier_block
+> *self,
+>  	kimage_unmap_segment(ima_kexec_buffer);
+>  	ima_kexec_buffer = NULL;
+>  
+> +	if (resume)
+> +		ima_measurements_resume();
+> +
+
+What is the point in resuming the measurement list on failure to copy them?
+
+>  	return ret;
+>  }
+>  
+> diff --git a/security/integrity/ima/ima_queue.c
+> b/security/integrity/ima/ima_queue.c
+> index 532da87ce519..5946a26a2849 100644
+> --- a/security/integrity/ima/ima_queue.c
+> +++ b/security/integrity/ima/ima_queue.c
+> @@ -44,6 +44,11 @@ struct ima_h_table ima_htable = {
+>   */
+>  static DEFINE_MUTEX(ima_extend_list_mutex);
+>  
+> +/*
+> + * Used internally by the kernel to suspend-resume ima measurements.
+> + */
+> +static atomic_t suspend_ima_measurements;
+> +
+>  /* lookup up the digest value in the hash table, and return the entry */
+>  static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
+>  						       int pcr)
+> @@ -148,6 +153,20 @@ static int ima_pcr_extend(struct tpm_digest *digests_arg,
+> int pcr)
+>  	return result;
+>  }
+>  
+> +void ima_measurements_suspend(void)
+> +{
+> +	mutex_lock(&ima_extend_list_mutex);
+> +	atomic_set(&suspend_ima_measurements, 1);
+> +	mutex_unlock(&ima_extend_list_mutex);
+> +}
+> +
+> +void ima_measurements_resume(void)
+> +{
+> +	mutex_lock(&ima_extend_list_mutex);
+> +	atomic_set(&suspend_ima_measurements, 0);
+> +	mutex_unlock(&ima_extend_list_mutex);
+> +}
+> +
+>  /*
+>   * Add template entry to the measurement list and hash table, and
+>   * extend the pcr.
+> @@ -176,6 +195,19 @@ int ima_add_template_entry(struct ima_template_entry
+> *entry, int violation,
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * suspend_ima_measurements will be set if the system is
+> +	 * undergoing kexec soft boot to a new kernel.
+> +	 * suspending measurements in this short window ensures the
+> +	 * consistency of the IMA measurement list during copying
+> +	 * of the kexec buffer.
+> +	 */
+
+Either remove the 2nd sentence "suspending measurements in this short window
+..." or explain what is meant by "short window".
 
 Mimi
 
->  	if ((kexec_segment_size == ULONG_MAX) ||
->  	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
->  		pr_err("Binary measurement list too large.\n");
+> +	if (atomic_read(&suspend_ima_measurements)) {
+> +		audit_cause = "measurements_suspended";
+> +		audit_info = 0;
+> +		goto out;
+> +	}
+> +
+>  	result = ima_add_digest_entry(entry,
+>  				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
+>  	if (result < 0) {
 
 
