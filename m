@@ -1,277 +1,405 @@
-Return-Path: <linux-integrity+bounces-1386-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1384-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4208985FC50
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 16:26:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89FC385FC29
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 16:20:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 691EB28BC90
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 15:26:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 009D61F24A0E
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 15:20:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54921149013;
-	Thu, 22 Feb 2024 15:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E6E14C5AA;
+	Thu, 22 Feb 2024 15:20:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eYqwki7v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqftgMjW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C83A1482E9
-	for <linux-integrity@vger.kernel.org>; Thu, 22 Feb 2024 15:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFCE14C586;
+	Thu, 22 Feb 2024 15:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708615612; cv=none; b=VCNb7oR84IugZ7PEGbUteUMv0KHgY/ztCQji3MMx+LbVO8wPF/yjI0bImlh28nIjoggISJMMoXgfYIHIt/51UPqLQlo/4y8gC3hRBAos4wyte/oX3h3qxCV7kt5p2Nw6mMxZv9PsNv/+bVrw4HqoPayYtiC1RnaVK+4wQFgOBZI=
+	t=1708615217; cv=none; b=pEh8HaDtR2+20lqKM9CdlGsnUKvai9G0dsr7EPhhNXtdSewyCoOvmFMg2MAEr1DZP7kxJAePik1fr6q+y1U7ZAQxShTSFQL08Iz1fsFftJ00l/l67dE6wthAw46lwxZ4ybGHPvZTtO+QW2uqpwtFz6xxI0/CTEl3A6itWkXGp6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708615612; c=relaxed/simple;
-	bh=yPs/9MCvAEgPU2dL0rz5lIwinxZXUcQ/O1O6wj9tT9c=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:Mime-Version; b=jfqTwnJe3qKbxmPz6aRrAQmuOBfMa5Q2IteXSV6Sxi4uMN50voNuUC1oPxWD9BuEyOmwAat4F23ehW/T2juL3c0odec7TCFT4F6ZMXExBDB98zjCz0Au9nj+KIEy/LWIHpBydLP0lD0Sa6HCrx0hK3oVmuQB5Me3wT1TzOiLy8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eYqwki7v; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41MF7AiQ025669;
-	Thu, 22 Feb 2024 15:26:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : in-reply-to : references : content-type : date :
- mime-version : content-transfer-encoding; s=pp1;
- bh=4c5Ch3b5+d7XfrRUSS2n7mwD85IKo3ivrFMXtB1Q1z4=;
- b=eYqwki7vXgfNX6B0sTpBGetEBrj4832MwnjBtS1JRd3T6c0w8dkx8DdZVLtMtLEitGqa
- 3xvfQTsrN1df/j6HU/ULJmaCjzzSWuWYHRMy0lpYWuL4JT7uP5vQFfKTkZPySnLjYkrD
- 2gM34SlJ6WOpFvtCCSfwRY7itlk2cOtzwUVo/EunURmH+bjWl4lUI5enj6gvkDoHRy0Q
- r7ZQ54HglB/LWkT5y9mn5/MPcdxUi0Zn89h6poI0jpbXSoI13coMorpOKcYm3RwkqqbI
- 9sNbncv/pbda1E7w1A+sskP//MGSQoJmQbUobL3H2gV3f8Rfy0p2yA7MgYybBaUjq6Ye Zw== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3we8mkghdu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 15:26:19 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41MDpI2R003596;
-	Thu, 22 Feb 2024 15:26:18 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wb74tya2t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Feb 2024 15:26:18 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41MFQF1O7209478
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Feb 2024 15:26:17 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B803858045;
-	Thu, 22 Feb 2024 15:26:15 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9161058068;
-	Thu, 22 Feb 2024 15:26:14 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.99.109])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 22 Feb 2024 15:26:14 +0000 (GMT)
-Message-ID: <cba09611c2e069be49faca2f137d99c772635831.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 6/8] ima: suspend measurements during buffer copy at
- kexec execute
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, stefanb@linux.ibm.com, ebiederm@xmission.com,
-        noodles@fb.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Cc: code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com
-In-Reply-To: <20240214153827.1087657-7-tusharsu@linux.microsoft.com>
-References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
-	 <20240214153827.1087657-7-tusharsu@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Date: Thu, 22 Feb 2024 09:14:36 -0500
+	s=arc-20240116; t=1708615217; c=relaxed/simple;
+	bh=bml6ArFFJiK9FnYAWmn7RGCZrjEyDDwWD5hm+jZMO0o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nnimt7SFlpu2SKl+TofhDE6clODJ1ZJYh4lss+FHPi2xnKGUL/1Ey543rcMoe+wyYnGikLRIgf+oKMQ8yI3Yb3H4YlWehfE89TtP2djAOZilmlaWzWS+ANRx/BBX5mgs6+9cUg7WXA/YuX0kkexv5s9RwNdKCKI7mp0Cu0+meMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqftgMjW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3351DC433C7;
+	Thu, 22 Feb 2024 15:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708615216;
+	bh=bml6ArFFJiK9FnYAWmn7RGCZrjEyDDwWD5hm+jZMO0o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gqftgMjWYOF9UPiyM8r9+2nv8zPGgJDKe7h4qZcmhX8n6WCVe/NIJDb7JIxYL5WeQ
+	 h9Pf+CJ8nHdi3DuCu34SgjvFDP7e1lP3LXl8N3riHnp5XoOM+N0XOKUbjl1a71PmSk
+	 +IvV0WxzzNHQJRsAr5OHPsbwPlppuJHq0+VGF0in9geLIlTrLRB9/TZDaiT5C/4kiS
+	 VKf7+ttF2Ovqs7aHvwMd9iS0g9PwfoW6r1nKbBYm+eYw4wBy3ET7GyFrP5bzi8Gt0w
+	 9eTr97ZAUn/ngpuRKDfU9HT3AJlBlyihrNFE0KIFjA9Pnt9LyfoWxEHEfNP71+Z8fS
+	 4q3RZvbTlzBeg==
+Date: Thu, 22 Feb 2024 16:20:08 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
+Cc: Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>, 
+	Eric Paris <eparis@redhat.com>, James Morris <jmorris@namei.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, audit@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
+Subject: Re: [PATCH v2 06/25] capability: provide helpers for converting
+ between xattrs and vfs_caps
+Message-ID: <20240222-wieweit-eiskunstlauf-0dbab2007754@brauner>
+References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
+ <20240221-idmap-fscap-refactor-v2-6-3039364623bd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2dd6iHc-c8TSKOXOb2vcu3SPHgn0BThY
-X-Proofpoint-ORIG-GUID: 2dd6iHc-c8TSKOXOb2vcu3SPHgn0BThY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-22_11,2024-02-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 spamscore=0 clxscore=1015
- bulkscore=0 impostorscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2402220123
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240221-idmap-fscap-refactor-v2-6-3039364623bd@kernel.org>
 
-Hi Tushar,
-
-On Wed, 2024-02-14 at 07:38 -0800, Tushar Sugandhi wrote:
-> New measurements added to the IMA log while the log is being copied
-> during the kexec 'execute' may not get copied over.
-
-As long as there is enough memory for the additional records, isn't the problem
-"after" copying the mesaurement list records, not during?
-
-> This can cause the
-> measurement log to be out of sync with the TPM PCRs that IMA extends,
-> which could result in breaking the integrity of the measurements after
-> kexec soft reboot.
+On Wed, Feb 21, 2024 at 03:24:37PM -0600, Seth Forshee (DigitalOcean) wrote:
+> To pass around vfs_caps instead of raw xattr data we will need to
+> convert between the two representations near userspace and disk
+> boundaries. We already convert xattrs from disks to vfs_caps, so move
+> that code into a helper, and change get_vfs_caps_from_disk() to use the
+> helper.
 > 
-> Implement and call the functions ima_measurements_suspend() and 
-> ima_measurements_resume() from ima_update_kexec_buffer().
-
-After copying the measurement list records, would not be the time to resume
-taking additional measurements.
-
-> Add a check in the ima_add_template_entry() function not to measure
-> events when 'suspend_ima_measurements' flag is set.
+> When converting vfs_caps to xattrs we have different considerations
+> depending on the destination of the xattr data. For xattrs which will be
+> written to disk we need to reject the xattr if the rootid does not map
+> into the filesystem's user namespace, whereas xattrs read by userspace
+> may need to undergo a conversion from v3 to v2 format when the rootid
+> does not map. So this helper is split into an internal and an external
+> interface. The internal interface does not return an error if the rootid
+> has no mapping in the target user namespace and will be used for
+> conversions targeting userspace. The external interface returns
+> EOVERFLOW if the rootid has no mapping and will be used for all other
+> conversions.
 > 
-> This ensures the integrity of the IMA log while it is being copied over
-> to the new Kernel during kexec 'execute'.
-> 
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
 > ---
->  security/integrity/ima/ima.h       |  2 ++
->  security/integrity/ima/ima_kexec.c |  7 +++++++
->  security/integrity/ima/ima_queue.c | 32 ++++++++++++++++++++++++++++++
->  3 files changed, 41 insertions(+)
+>  include/linux/capability.h |  10 ++
+>  security/commoncap.c       | 228 +++++++++++++++++++++++++++++++++++----------
+>  2 files changed, 187 insertions(+), 51 deletions(-)
 > 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index c29db699c996..49a6047dd8eb 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -161,6 +161,8 @@ bool ima_template_has_modsig(const struct
-> ima_template_desc *ima_template);
->  int ima_restore_measurement_entry(struct ima_template_entry *entry);
->  int ima_restore_measurement_list(loff_t bufsize, void *buf);
->  int ima_measurements_show(struct seq_file *m, void *v);
-> +void ima_measurements_suspend(void);
-> +void ima_measurements_resume(void);
->  unsigned long ima_get_binary_runtime_size(void);
->  int ima_init_template(void);
->  void ima_init_template_list(void);
-> diff --git a/security/integrity/ima/ima_kexec.c
-> b/security/integrity/ima/ima_kexec.c
-> index 98fc9b9782a2..dbeeb7f1355e 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -184,6 +184,7 @@ static int ima_update_kexec_buffer(struct notifier_block
-> *self,
->  	void *buf = NULL;
->  	size_t buf_size;
->  	int ret = NOTIFY_OK;
-> +	bool resume = false;
->  
->  	if (!kexec_in_progress) {
->  		pr_info("%s: No kexec in progress.\n", __func__);
-> @@ -195,12 +196,15 @@ static int ima_update_kexec_buffer(struct notifier_block
-> *self,
->  		return ret;
->  	}
->  
-> +	ima_measurements_suspend();
-> +
->  	ret = ima_dump_measurement_list(&buf_size, &buf,
->  					kexec_segment_size);
->  
->  	if (!buf) {
->  		pr_err("%s: Dump measurements failed. Error:%d\n",
->  		       __func__, ret);
-> +		resume = true;
-
-Only on failure to copy the measurement list records will measurements be
-"resumed".  Measurements will be suspended from when the IMA reboot notifier is
-called until reboot.
-
-The patch suject line, description and comments don't match the code.  There is
-no "during buffer copy" in "ima: suspend measurements during buffer copy at
-kexec execute".  Measurements are suspended.
-
-The question is whether you could suspend measurements a bit later, just after
-copying the measurement records.
-
->  		goto out;
->  	}
->  	memcpy(ima_kexec_buffer, buf, buf_size);
-> @@ -208,6 +212,9 @@ static int ima_update_kexec_buffer(struct notifier_block
-> *self,
->  	kimage_unmap_segment(ima_kexec_buffer);
->  	ima_kexec_buffer = NULL;
->  
-> +	if (resume)
-> +		ima_measurements_resume();
-> +
-
-What is the point in resuming the measurement list on failure to copy them?
-
->  	return ret;
+> diff --git a/include/linux/capability.h b/include/linux/capability.h
+> index eb46d346bbbc..a0893ac4664b 100644
+> --- a/include/linux/capability.h
+> +++ b/include/linux/capability.h
+> @@ -209,6 +209,16 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+>  		ns_capable(ns, CAP_SYS_ADMIN);
 >  }
 >  
-> diff --git a/security/integrity/ima/ima_queue.c
-> b/security/integrity/ima/ima_queue.c
-> index 532da87ce519..5946a26a2849 100644
-> --- a/security/integrity/ima/ima_queue.c
-> +++ b/security/integrity/ima/ima_queue.c
-> @@ -44,6 +44,11 @@ struct ima_h_table ima_htable = {
+> +/* helpers to convert between xattr and in-kernel representations */
+> +int vfs_caps_from_xattr(struct mnt_idmap *idmap,
+> +			struct user_namespace *src_userns,
+> +			struct vfs_caps *vfs_caps,
+> +			const void *data, size_t size);
+> +ssize_t vfs_caps_to_xattr(struct mnt_idmap *idmap,
+> +			  struct user_namespace *dest_userns,
+> +			  const struct vfs_caps *vfs_caps,
+> +			  void *data, size_t size);
+> +
+>  /* audit system wants to get cap info from files as well */
+>  int get_vfs_caps_from_disk(struct mnt_idmap *idmap,
+>  			   const struct dentry *dentry,
+> diff --git a/security/commoncap.c b/security/commoncap.c
+> index a0b5c9740759..7531c9634997 100644
+> --- a/security/commoncap.c
+> +++ b/security/commoncap.c
+> @@ -619,54 +619,41 @@ static inline int bprm_caps_from_vfs_caps(struct vfs_caps *caps,
+>  }
+>  
+>  /**
+> - * get_vfs_caps_from_disk - retrieve vfs caps from disk
+> + * vfs_caps_from_xattr - convert raw caps xattr data to vfs_caps
+>   *
+> - * @idmap:	idmap of the mount the inode was found from
+> - * @dentry:	dentry from which @inode is retrieved
+> - * @cpu_caps:	vfs capabilities
+> + * @idmap:      idmap of the mount the inode was found from
+> + * @src_userns: user namespace for ids in xattr data
+> + * @vfs_caps:   destination buffer for vfs_caps data
+> + * @data:       rax xattr caps data
+> + * @size:       size of xattr data
+>   *
+> - * Extract the on-exec-apply capability sets for an executable file.
+> + * Converts a raw security.capability xattr into the kernel-internal
+> + * capabilities format.
+>   *
+> - * If the inode has been found through an idmapped mount the idmap of
+> - * the vfsmount must be passed through @idmap. This function will then
+> - * take care to map the inode according to @idmap before checking
+> - * permissions. On non-idmapped mounts or if permission checking is to be
+> - * performed on the raw inode simply pass @nop_mnt_idmap.
+> + * If the xattr is being read or written through an idmapped mount the
+> + * idmap of the vfsmount must be passed through @idmap. This function
+> + * will then take care to map the rootid according to @idmap.
+> + *
+> + * Return: On success, return 0; on error, return < 0.
 >   */
->  static DEFINE_MUTEX(ima_extend_list_mutex);
+> -int get_vfs_caps_from_disk(struct mnt_idmap *idmap,
+> -			   const struct dentry *dentry,
+> -			   struct vfs_caps *cpu_caps)
+> +int vfs_caps_from_xattr(struct mnt_idmap *idmap,
+> +			struct user_namespace *src_userns,
+> +			struct vfs_caps *vfs_caps,
+> +			const void *data, size_t size)
+>  {
+> -	struct inode *inode = d_backing_inode(dentry);
+>  	__u32 magic_etc;
+> -	int size;
+> -	struct vfs_ns_cap_data data, *nscaps = &data;
+> -	struct vfs_cap_data *caps = (struct vfs_cap_data *) &data;
+> +	const struct vfs_ns_cap_data *ns_caps = data;
+> +	struct vfs_cap_data *caps = (struct vfs_cap_data *)ns_caps;
+>  	kuid_t rootkuid;
+> -	vfsuid_t rootvfsuid;
+> -	struct user_namespace *fs_ns;
+> -
+> -	memset(cpu_caps, 0, sizeof(struct vfs_caps));
+> -
+> -	if (!inode)
+> -		return -ENODATA;
 >  
-> +/*
-> + * Used internally by the kernel to suspend-resume ima measurements.
-> + */
-> +static atomic_t suspend_ima_measurements;
-> +
->  /* lookup up the digest value in the hash table, and return the entry */
->  static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
->  						       int pcr)
-> @@ -148,6 +153,20 @@ static int ima_pcr_extend(struct tpm_digest *digests_arg,
-> int pcr)
->  	return result;
->  }
+> -	fs_ns = inode->i_sb->s_user_ns;
+> -	size = __vfs_getxattr((struct dentry *)dentry, inode,
+> -			      XATTR_NAME_CAPS, &data, XATTR_CAPS_SZ);
+> -	if (size == -ENODATA || size == -EOPNOTSUPP)
+> -		/* no data, that's ok */
+> -		return -ENODATA;
+> -
+> -	if (size < 0)
+> -		return size;
+> +	memset(vfs_caps, 0, sizeof(*vfs_caps));
 >  
-> +void ima_measurements_suspend(void)
-> +{
-> +	mutex_lock(&ima_extend_list_mutex);
-> +	atomic_set(&suspend_ima_measurements, 1);
-> +	mutex_unlock(&ima_extend_list_mutex);
-> +}
-> +
-> +void ima_measurements_resume(void)
-> +{
-> +	mutex_lock(&ima_extend_list_mutex);
-> +	atomic_set(&suspend_ima_measurements, 0);
-> +	mutex_unlock(&ima_extend_list_mutex);
-> +}
-> +
->  /*
->   * Add template entry to the measurement list and hash table, and
->   * extend the pcr.
-> @@ -176,6 +195,19 @@ int ima_add_template_entry(struct ima_template_entry
-> *entry, int violation,
->  		}
+>  	if (size < sizeof(magic_etc))
+>  		return -EINVAL;
+>  
+> -	cpu_caps->magic_etc = magic_etc = le32_to_cpu(caps->magic_etc);
+> +	vfs_caps->magic_etc = magic_etc = le32_to_cpu(caps->magic_etc);
+>  
+> -	rootkuid = make_kuid(fs_ns, 0);
+> +	rootkuid = make_kuid(src_userns, 0);
+>  	switch (magic_etc & VFS_CAP_REVISION_MASK) {
+>  	case VFS_CAP_REVISION_1:
+>  		if (size != XATTR_CAPS_SZ_1)
+> @@ -679,39 +666,178 @@ int get_vfs_caps_from_disk(struct mnt_idmap *idmap,
+>  	case VFS_CAP_REVISION_3:
+>  		if (size != XATTR_CAPS_SZ_3)
+>  			return -EINVAL;
+> -		rootkuid = make_kuid(fs_ns, le32_to_cpu(nscaps->rootid));
+> +		rootkuid = make_kuid(src_userns, le32_to_cpu(ns_caps->rootid));
+>  		break;
+>  
+>  	default:
+>  		return -EINVAL;
 >  	}
 >  
+> -	rootvfsuid = make_vfsuid(idmap, fs_ns, rootkuid);
+> -	if (!vfsuid_valid(rootvfsuid))
+> -		return -ENODATA;
+> +	vfs_caps->rootid = make_vfsuid(idmap, src_userns, rootkuid);
+> +	if (!vfsuid_valid(vfs_caps->rootid))
+> +		return -EOVERFLOW;
+>  
+> -	/* Limit the caps to the mounter of the filesystem
+> -	 * or the more limited uid specified in the xattr.
+> +	vfs_caps->permitted.val = le32_to_cpu(caps->data[0].permitted);
+> +	vfs_caps->inheritable.val = le32_to_cpu(caps->data[0].inheritable);
+> +
 > +	/*
-> +	 * suspend_ima_measurements will be set if the system is
-> +	 * undergoing kexec soft boot to a new kernel.
-> +	 * suspending measurements in this short window ensures the
-> +	 * consistency of the IMA measurement list during copying
-> +	 * of the kexec buffer.
-> +	 */
+> +	 * Rev1 had just a single 32-bit word, later expanded
+> +	 * to a second one for the high bits
+>  	 */
+> -	if (!rootid_owns_currentns(rootvfsuid))
+> -		return -ENODATA;
+> +	if ((magic_etc & VFS_CAP_REVISION_MASK) != VFS_CAP_REVISION_1) {
+> +		vfs_caps->permitted.val += (u64)le32_to_cpu(caps->data[1].permitted) << 32;
+> +		vfs_caps->inheritable.val += (u64)le32_to_cpu(caps->data[1].inheritable) << 32;
 
-Either remove the 2nd sentence "suspending measurements in this short window
-..." or explain what is meant by "short window".
+That + makes this even more difficult to read. This should be rewritten.
 
-Mimi
-
-> +	if (atomic_read(&suspend_ima_measurements)) {
-> +		audit_cause = "measurements_suspended";
-> +		audit_info = 0;
-> +		goto out;
 > +	}
 > +
->  	result = ima_add_digest_entry(entry,
->  				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
->  	if (result < 0) {
+> +	vfs_caps->permitted.val &= CAP_VALID_MASK;
+> +	vfs_caps->inheritable.val &= CAP_VALID_MASK;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Inner implementation of vfs_caps_to_xattr() which does not return an
+> + * error if the rootid does not map into @dest_userns.
+> + */
+> +static ssize_t __vfs_caps_to_xattr(struct mnt_idmap *idmap,
+> +				   struct user_namespace *dest_userns,
+> +				   const struct vfs_caps *vfs_caps,
+> +				   void *data, size_t size)
+> +{
+> +	struct vfs_ns_cap_data *ns_caps = data;
+> +	struct vfs_cap_data *caps = (struct vfs_cap_data *)ns_caps;
+> +	kuid_t rootkuid;
+> +	uid_t rootid;
+> +
+> +	memset(ns_caps, 0, size);
+> +
+> +	rootid = 0;
+> +	switch (vfs_caps->magic_etc & VFS_CAP_REVISION_MASK) {
+> +	case VFS_CAP_REVISION_1:
+> +		if (size < XATTR_CAPS_SZ_1)
+> +			return -EINVAL;
+> +		size = XATTR_CAPS_SZ_1;
+> +		break;
+> +	case VFS_CAP_REVISION_2:
+> +		if (size < XATTR_CAPS_SZ_2)
+> +			return -EINVAL;
+> +		size = XATTR_CAPS_SZ_2;
+> +		break;
+> +	case VFS_CAP_REVISION_3:
+> +		if (size < XATTR_CAPS_SZ_3)
+> +			return -EINVAL;
+> +		size = XATTR_CAPS_SZ_3;
+> +		rootkuid = from_vfsuid(idmap, dest_userns, vfs_caps->rootid);
+> +		rootid = from_kuid(dest_userns, rootkuid);
+> +		ns_caps->rootid = cpu_to_le32(rootid);
+> +		break;
+>  
+> -	cpu_caps->permitted.val = le32_to_cpu(caps->data[0].permitted);
+> -	cpu_caps->inheritable.val = le32_to_cpu(caps->data[0].inheritable);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	caps->magic_etc = cpu_to_le32(vfs_caps->magic_etc);
+> +
+> +	caps->data[0].permitted = cpu_to_le32(lower_32_bits(vfs_caps->permitted.val));
+> +	caps->data[0].inheritable = cpu_to_le32(lower_32_bits(vfs_caps->inheritable.val));
+>  
+>  	/*
+>  	 * Rev1 had just a single 32-bit word, later expanded
+>  	 * to a second one for the high bits
+>  	 */
+> -	if ((magic_etc & VFS_CAP_REVISION_MASK) != VFS_CAP_REVISION_1) {
+> -		cpu_caps->permitted.val += (u64)le32_to_cpu(caps->data[1].permitted) << 32;
+> -		cpu_caps->inheritable.val += (u64)le32_to_cpu(caps->data[1].inheritable) << 32;
+> +	if ((vfs_caps->magic_etc & VFS_CAP_REVISION_MASK) != VFS_CAP_REVISION_1) {
+> +		caps->data[1].permitted =
+> +			cpu_to_le32(upper_32_bits(vfs_caps->permitted.val));
+> +		caps->data[1].inheritable =
+> +			cpu_to_le32(upper_32_bits(vfs_caps->inheritable.val));
+>  	}
+>  
+> -	cpu_caps->permitted.val &= CAP_VALID_MASK;
+> -	cpu_caps->inheritable.val &= CAP_VALID_MASK;
+> +	return size;
+> +}
+> +
+> +
+> +/**
+> + * vfs_caps_to_xattr - convert vfs_caps to raw caps xattr data
+> + *
+> + * @idmap:       idmap of the mount the inode was found from
+> + * @dest_userns: user namespace for ids in xattr data
+> + * @vfs_caps:    source vfs_caps data
+> + * @data:        destination buffer for rax xattr caps data
+> + * @size:        size of the @data buffer
+> + *
+> + * Converts a kernel-internal capability into the raw security.capability
+> + * xattr format.
+> + *
+> + * If the xattr is being read or written through an idmapped mount the
+> + * idmap of the vfsmount must be passed through @idmap. This function
+> + * will then take care to map the rootid according to @idmap.
+> + *
+> + * Return: On success, return the size of the xattr data. On error,
+> + * return < 0.
+> + */
+> +ssize_t vfs_caps_to_xattr(struct mnt_idmap *idmap,
+> +			  struct user_namespace *dest_userns,
+> +			  const struct vfs_caps *vfs_caps,
+> +			  void *data, size_t size)
+> +{
+> +	struct vfs_ns_cap_data *caps = data;
+> +	int ret;
 
+This should very likely be ssize_t ret.
+
+> +
+> +	ret = __vfs_caps_to_xattr(idmap, dest_userns, vfs_caps, data, size);
+> +	if (ret > 0 &&
+> +	    (vfs_caps->magic_etc & VFS_CAP_REVISION_MASK) == VFS_CAP_REVISION_3 &&
+> +	     le32_to_cpu(caps->rootid) == (uid_t)-1)
+> +		return -EOVERFLOW;
+> +	return ret;
+> +}
+> +
+> +/**
+> + * get_vfs_caps_from_disk - retrieve vfs caps from disk
+> + *
+> + * @idmap:	idmap of the mount the inode was found from
+> + * @dentry:	dentry from which @inode is retrieved
+> + * @cpu_caps:	vfs capabilities
+> + *
+> + * Extract the on-exec-apply capability sets for an executable file.
+> + *
+> + * If the inode has been found through an idmapped mount the idmap of
+> + * the vfsmount must be passed through @idmap. This function will then
+> + * take care to map the inode according to @idmap before checking
+> + * permissions. On non-idmapped mounts or if permission checking is to be
+> + * performed on the raw inode simply pass @nop_mnt_idmap.
+> + */
+> +int get_vfs_caps_from_disk(struct mnt_idmap *idmap,
+> +			   const struct dentry *dentry,
+> +			   struct vfs_caps *cpu_caps)
+> +{
+> +	struct inode *inode = d_backing_inode(dentry);
+> +	int size, ret;
+> +	struct vfs_ns_cap_data data, *nscaps = &data;
+> +
+> +	if (!inode)
+> +		return -ENODATA;
+>  
+> -	cpu_caps->rootid = rootvfsuid;
+> +	size = __vfs_getxattr((struct dentry *)dentry, inode,
+> +			      XATTR_NAME_CAPS, &data, XATTR_CAPS_SZ);
+> +	if (size == -ENODATA || size == -EOPNOTSUPP)
+> +		/* no data, that's ok */
+> +		return -ENODATA;
+> +
+> +	if (size < 0)
+> +		return size;
+> +
+> +	ret = vfs_caps_from_xattr(idmap, inode->i_sb->s_user_ns,
+> +				  cpu_caps, nscaps, size);
+> +	if (ret == -EOVERFLOW)
+> +		return -ENODATA;
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Limit the caps to the mounter of the filesystem
+> +	 * or the more limited uid specified in the xattr.
+> +	 */
+> +	if (!rootid_owns_currentns(cpu_caps->rootid))
+> +		return -ENODATA;
+>  
+>  	return 0;
+>  }
+> 
+> -- 
+> 2.43.0
+> 
 
