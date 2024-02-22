@@ -1,133 +1,148 @@
-Return-Path: <linux-integrity+bounces-1376-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1377-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18E8A85F3ED
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 10:06:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7781185F477
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 10:35:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 419891F2238C
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 09:06:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02CCF1F25942
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 09:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99B837157;
-	Thu, 22 Feb 2024 09:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05E8F39AED;
+	Thu, 22 Feb 2024 09:34:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="itN9fHp6";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="itN9fHp6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jcncjh+y"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796B436B02;
-	Thu, 22 Feb 2024 09:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1DF381B8;
+	Thu, 22 Feb 2024 09:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708592778; cv=none; b=bzc+RWPk8dQsK0v7rJ6haPENlYZI5ijUg9D/qKDVSI+l010bfu0fAR2DraBblKmCIoJP6JPB6s8pWofmo2986997FtEHddVUEZcOYy7PcIZVl/7nRH/zNjCuNOr0HnMvqftOxxn8qXmJebGwu4iOM2oNo4IC8HAqqZ4LA7eryvw=
+	t=1708594477; cv=none; b=JIJOSI6gqesvyLcLjtXUdf5Jv/V6W7py8gT8WMeX/fX0HDxlC5QdLJFQunvvsC+XWoh+hRX34Fw53i7g4yUo03C/6gSXrHskyYaPS1RNLCnXwUGc9yH0bzZLEagQWWaElWH/FXZK0sbGGmSPyqEsIvQ5p31S6a+j8sBajtNrDuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708592778; c=relaxed/simple;
-	bh=A6qL6LYkEgzw3jQG0rBz2GpF63+UvR4JQcTowuWGOf0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UsHTC3JQ1ZMqZxAjQt98pmDH8sN41glfSbDdORdPRvIhl5Ky9uqxxh7oUwMxnaaSbcEoFBOUHtGEwzLjs+JNroauMCo8BCtFKluk6uIf6/XMsDn6dWTA2QpFs08OMNEKcil6hArKYPyNrBXbkNj4t5C1uPAVYXujLBwYeX25kjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=itN9fHp6; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=itN9fHp6; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1708592772;
-	bh=A6qL6LYkEgzw3jQG0rBz2GpF63+UvR4JQcTowuWGOf0=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=itN9fHp6Ii5Ewe0zC5vLvsC64OtBvfUAs8QWc2f8E7xIWfbWjoEZkSjpHcFPGso75
-	 llwFR7iHXgEdS127Bd3osGqbyPelaAlc7COS5wxMHRGDqnwwtDyRkgnYMYkOeUJoSL
-	 XXgsG19oOEUOcfKk2VXaVMP+nH6v3OxvbTDDEfsI=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id AED4B1286587;
-	Thu, 22 Feb 2024 04:06:12 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id irqCIaH1qFpv; Thu, 22 Feb 2024 04:06:12 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1708592772;
-	bh=A6qL6LYkEgzw3jQG0rBz2GpF63+UvR4JQcTowuWGOf0=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=itN9fHp6Ii5Ewe0zC5vLvsC64OtBvfUAs8QWc2f8E7xIWfbWjoEZkSjpHcFPGso75
-	 llwFR7iHXgEdS127Bd3osGqbyPelaAlc7COS5wxMHRGDqnwwtDyRkgnYMYkOeUJoSL
-	 XXgsG19oOEUOcfKk2VXaVMP+nH6v3OxvbTDDEfsI=
-Received: from [10.236.41.91] (unknown [88.128.88.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 73B0B1286557;
-	Thu, 22 Feb 2024 04:06:09 -0500 (EST)
-Message-ID: <354bf802d27ea995858e41dd90d9a83ffc6739aa.camel@HansenPartnership.com>
-Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, Lino Sanfilippo
- <l.sanfilippo@kunbus.com>, Alexander Steffen
- <Alexander.Steffen@infineon.com>,  "Daniel P. Smith"
- <dpsmith@apertussolutions.com>, Jason Gunthorpe <jgg@ziepe.ca>, Sasha Levin
- <sashal@kernel.org>,  linux-integrity@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Ross Philipson <ross.philipson@oracle.com>, Kanth Ghatraju
-	 <kanth.ghatraju@oracle.com>, Peter Huewe <peterhuewe@gmx.de>
-Date: Thu, 22 Feb 2024 10:06:05 +0100
-In-Reply-To: <CZB0I9OAGNHT.1HTSJU3925RBY@seitikki>
-References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
-	 <20240131170824.6183-2-dpsmith@apertussolutions.com>
-	 <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
-	 <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
-	 <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
-	 <91f600ef-867b-4523-89be-1c0ba34f8a4c@kunbus.com>
-	 <CZA9CM3PDILC.82JMLUWMB6B7@seitikki> <CZA9GMC718HA.1JFHTTWV563IE@seitikki>
-	 <7a7f8f0c1b9d124bfc01b66082abf2d8445564ce.camel@HansenPartnership.com>
-	 <CZB0I9OAGNHT.1HTSJU3925RBY@seitikki>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1708594477; c=relaxed/simple;
+	bh=twL/O1XH0IQ5h96lKQERqeU1tJQqEQZBVZgUwRHwFlE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rgl7GoSuYLRHYuqMBR7WgcaBEuK0sdzC/p0irirQ1u5TTKkS6YLQEeGbyG64vo1EMKGJcRYpxF9WyXeq0fQ8OPsftYzCZyMh10zjBDyzg8T245/lSa5hNVj4uYRFxNQoJjBPlumiJkLKl+eoJmAwza91NItDZ2Iyxj8Z1NVLsaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jcncjh+y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44EEBC43141;
+	Thu, 22 Feb 2024 09:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708594477;
+	bh=twL/O1XH0IQ5h96lKQERqeU1tJQqEQZBVZgUwRHwFlE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Jcncjh+y1tVYMLld1ZQCZGfPYyIJx2iPpfQCPBbIimujG7o+Rsyys/8gzP/O+f8fV
+	 XOw/s6eUtIWCcllKyiMXgacGO5soYfbkHQ0+NEEZ1gf3hemDhVJMrG2sP09NaH4g7F
+	 zIT9AVu3pe4nydblV2OzqtI7v3ecEuxyolBXXh7dv59kcBCbNk743kWTeJpm7gbrhf
+	 aSNV0DhaTVcL7JmzUO3hEtIFNjBvGVXrv1o51RaGkEDegP1D8rP4jybV2Zb51efNJ/
+	 AfOCtZWZEd7T9tbA94bHp6B457qYv3iIAGeOTxTd+X6rzol00H4VwsfSOeaQmwWuO/
+	 U/sJm+TlQIz0g==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-512bb2ed1f7so5312002e87.3;
+        Thu, 22 Feb 2024 01:34:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVQ22YKiAVOxtggukaswkT77pnt1EJZZz6x97G8M6UBZ6FHZnRuhmSQncU1xpSkcit4Vt3XhL++5WQl+hbknI+MhTEiGBGDOtcZB3l5Nu98qIQvPOwcDlss4xDoChdKRhnb/iLfAfaj2lJUI0COSfhPGvvBsl5DdmY+c56gBUQ2aXqcE77TmpxenpgYMnRtzCZ+mnrsZxFDrVvOVhhGqL+E+WjU0o+hm5eHzqSW3Dlc146WpEtR1QVspCS/4m8ehKP0
+X-Gm-Message-State: AOJu0YyE6cNzBIH8VHs9iqbW9H9uBBn/HEuHwXYL5mTt92wH8EqW+pPz
+	4d0yWFTwt0qX09rLGuIW5abbynHmYobuY9+osvDu0Pl/tUqXgyf1T1H1NIKq2KRKQZQo7QxJAe/
+	VLFrB+awZsnz0TD0GuMwr1A48/80=
+X-Google-Smtp-Source: AGHT+IFgnHge1ffZxf+MbWd8mZJewYby/ooDbKKmh7V38xeDaM5XPDlRS942sAJqjVoJxG0ZgpzQmoetZB69KZLL9/Y=
+X-Received: by 2002:a05:6512:b0f:b0:512:d5ca:eb2f with SMTP id
+ w15-20020a0565120b0f00b00512d5caeb2fmr3086686lfu.52.1708594475263; Thu, 22
+ Feb 2024 01:34:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240214221847.2066632-1-ross.philipson@oracle.com>
+ <20240214221847.2066632-7-ross.philipson@oracle.com> <CAMj1kXEmMBY_jc0uM5UgZbuZ3-C7NPKzg5AScaunyu9XzLgzZA@mail.gmail.com>
+ <98ad92bb-ef17-4c15-88ba-252db2a2e738@citrix.com>
+In-Reply-To: <98ad92bb-ef17-4c15-88ba-252db2a2e738@citrix.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 22 Feb 2024 10:34:23 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFTu+bV2kQhAyu15hrYai20NcBLb4Zu8XG2Y-XjL0f+rw@mail.gmail.com>
+Message-ID: <CAMj1kXFTu+bV2kQhAyu15hrYai20NcBLb4Zu8XG2Y-XjL0f+rw@mail.gmail.com>
+Subject: Re: [PATCH v8 06/15] x86: Add early SHA support for Secure Launch
+ early measurements
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-efi@vger.kernel.org, dpsmith@apertussolutions.com, tglx@linutronix.de, 
+	mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, 
+	mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, 
+	jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, kanth.ghatraju@oracle.com, 
+	trenchboot-devel@googlegroups.com, Eric Biggers <ebiggers@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2024-02-21 at 19:43 +0000, Jarkko Sakkinen wrote:
-> On Wed Feb 21, 2024 at 12:37 PM UTC, James Bottomley wrote:
-> > On Tue, 2024-02-20 at 22:31 +0000, Jarkko Sakkinen wrote:
-[...]
-> > >  I cannot recall out of top of my head can
-> > >    you have two localities open at same time.
-> > 
-> > I think there's a misunderstanding about what localities are:
-> > they're effectively an additional platform supplied tag to a
-> > command.  Each command can therefore have one and only one
-> > locality.  The TPM doesn't
-> 
-> Actually this was not unclear at all. I even read the chapters from
-> Ariel Segall's yesterday as a refresher.
-> 
-> I was merely asking that if TPM_ACCESS_X is not properly cleared and
-> you se TPM_ACCESS_Y where Y < X how does the hardware react as the
-> bug report is pretty open ended and not very clear of the steps
-> leading to unwanted results.
+On Thu, 22 Feb 2024 at 04:05, Andrew Cooper <andrew.cooper3@citrix.com> wrote:
+>
+> On 15/02/2024 8:17 am, Ard Biesheuvel wrote:
+> > On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
+> >> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+> >>
+> >> The SHA algorithms are necessary to measure configuration information into
+> >> the TPM as early as possible before using the values. This implementation
+> >> uses the established approach of #including the SHA libraries directly in
+> >> the code since the compressed kernel is not uncompressed at this point.
+> >>
+> >> The SHA code here has its origins in the code from the main kernel:
+> >>
+> >> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
+> >>
+> >> A modified version of this code was introduced to the lib/crypto/sha1.c
+> >> to bring it in line with the sha256 code and allow it to be pulled into the
+> >> setup kernel in the same manner as sha256 is.
+> >>
+> >> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+> >> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+> > We have had some discussions about this, and you really need to
+> > capture the justification in the commit log for introducing new code
+> > that implements an obsolete and broken hashing algorithm.
+> >
+> > SHA-1 is broken and should no longer be used for anything. Introducing
+> > new support for a highly complex boot security feature, and then
+> > relying on SHA-1 in the implementation makes this whole effort seem
+> > almost futile, *unless* you provide some rock solid reasons here why
+> > this is still safe.
+> >
+> > If the upshot would be that some people are stuck with SHA-1 so they
+> > won't be able to use this feature, then I'm not convinced we should
+> > obsess over that.
+>
+> To be absolutely crystal clear here.
+>
+> The choice of hash algorithm(s) are determined by the OEM and the
+> platform, not by Linux.
+>
+> Failing to (at least) cap a PCR in a bank which the OEM/platform left
+> active is a security vulnerability.  It permits the unsealing of secrets
+> if an attacker can replay a good set of measurements into an unused bank.
+>
+> The only way to get rid of the requirement for SHA-1 here is to lobby
+> the IHVs/OEMs, or perhaps the TCG, to produce/spec a platform where the
+> SHA-1 banks can be disabled.  There are no known such platforms in the
+> market today, to the best of our knowledge.
+>
 
-So TPM_ACCESS_X is *not* a generic TPM thing, it's a TIS interface
-specific thing.  Now the TIS interface seems to be dominating, so
-perhaps it is the correct programming model for us to follow, but not
-all current TPMs adhere to it.
+OK, so mainline Linux does not support secure launch at all today. At
+this point, we need to decide whether or not tomorrow's mainline Linux
+will support secure launch with SHA1 or without, right?
 
-> With a quick check from [1] could not spot the conflict reaction but
-> it is probably there.
+And the point you are making here is that we need SHA-1 not only to a)
+support systems that are on TPM 1.2 and support nothing else, but also
+to b) ensure that crypto agile TPM 2.0 with both SHA-1 and SHA-256
+enabled can be supported in a safe manner, which would involve
+measuring some terminating event into the SHA-1 PCRs to ensure they
+are not left in a dangling state that might allow an adversary to
+trick the TPM into unsealing a secret that it shouldn't.
 
-The way platforms should handle localities is now detailed in the TCG
-library code snippets (part 4 Supporting Routines - Code):
-
-https://trustedcomputinggroup.org/resource/tpm-library-specification/
-
-It's the _plat__LocalityGet/Set in Appendix C
-
-The implementation documented there is what the TPM reference
-implementation follows.
-
-James
-
+So can we support b) without a), and if so, does measuring an
+arbitrary dummy event into a PCR that is only meant to keep sealed
+forever really require a SHA-1 implementation, or could we just use an
+arbitrary (not even random) sequence of 160 bits and use that instead?
 
