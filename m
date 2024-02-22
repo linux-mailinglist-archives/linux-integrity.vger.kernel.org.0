@@ -1,72 +1,58 @@
-Return-Path: <linux-integrity+bounces-1378-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1379-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C91A585F83A
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 13:31:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0246B85FA83
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 14:58:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08545B266B2
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 12:31:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC11A282315
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 Feb 2024 13:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC80D63CB4;
-	Thu, 22 Feb 2024 12:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45ED458ADF;
+	Thu, 22 Feb 2024 13:58:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="nQhAYbvy"
+	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="kdQUKRiX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D897B634E4
-	for <linux-integrity@vger.kernel.org>; Thu, 22 Feb 2024 12:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708605055; cv=none; b=WEDMaMCNFD0XZ3Hje0LkFduQ3B6XQk9vcWKSJDsnuap35OXKRbbG/meUxkPppNa9COMntr+dIdBx2C7em7Ts9YxvzBKta8E02/A/pM6awsjQISrJFWoCKD8btSO7z9XOyBdLvZQSHb8etbEtYuVTnIlO09pi8MqTXUDygVJzbLw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708605055; c=relaxed/simple;
-	bh=MrBNqlbyxP3DrROkVXIP046XgIKyGSNJYrmBX+jdlDA=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88A5134CC2;
+	Thu, 22 Feb 2024 13:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708610307; cv=pass; b=O/xNImC0GKSEONuIY/JVVy0qcs/ZahBX9FCRSnxEz+6Ephj27mxlYqiG9ej001dXRHllJsK3WVAFe79bfiGbxPKqkf9vzEdInzUAa7FO+FGo8nYCRaHinrGaeBguLX7rpXUDviGajhGtSJYPanwfWo42P6cEapJeh8UYmUq/QyQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708610307; c=relaxed/simple;
+	bh=0nZv+wg21e2+IJAoWoz5tN561DDxkxRps2XuzwPDWyg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FyePn9c2qYiS89AeWSVZBNVroRA8gdpk0OW5EDYYi0NRBbrQ9M28TDIgH5UvI7jv57HnMZPgKJ+/wdBPhAirHkllyiBHTH3+MLAiG/Iquv4kkG8U/4Oaky74vbLNOswrRWYEi2kBBS4TxXpinqDk6o+bQxf4NTul6Qm8LdB3qbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=nQhAYbvy; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a3ddc13bbb3so138781766b.0
-        for <linux-integrity@vger.kernel.org>; Thu, 22 Feb 2024 04:30:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=citrix.com; s=google; t=1708605052; x=1709209852; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rtMJTU0KaK69D2gKtHaxXyryfBE+awWVy+sf0VRiX1M=;
-        b=nQhAYbvyMssdQPiXRiaCoqsyDuAiAs1fFodFrXH7ciLuQDsjQSV0nv5XMpFbHhzT9K
-         d0NRw7Z2AU0dOTm+eufwjNq9yaM1vvSHSl5WSy1RvQ9eMj/le1LMxvRd/POnEbeIOQKb
-         lxVpeoe+AOzKxfaJNaffihJBUAHUUZ5FXrQtY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708605052; x=1709209852;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rtMJTU0KaK69D2gKtHaxXyryfBE+awWVy+sf0VRiX1M=;
-        b=wTUP0g0edRWNitCuI/P8NIEZFU5q1rT6Gwvly9Cp20Xuy1h2OPaBLpnXox1uQrulHx
-         y+UPsa9NkoCGZVBUKviQSWiAtsLhBXZMEtSokvFnAxqGYmP+acJiUtkmTJB4fjIt5vLV
-         otLYsnUwqf9xmIgKiALmmIaTiTRd1mmYSdR1TEVBzE0OinWfOpTqFMciq1rtqtODLoH4
-         YSp8B2GWtByAyQwxeOjeZqK0j6EZHdq7Azf2VlCgv2dpPBemdNZ7mWXfsgVYbdwYZU/a
-         xCNbDW3vIcnKoAQs7I7o/ATTIrJ7s0P+SY7EUd6OCxc5BPr7WbWZmioUokQlQ7qjgpsI
-         D33w==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ1L6czyknQZaCbWq7SufD53u4pDJQI6Pq4GrUf3N9hr25za9KeI0iwjX65njzbsGgwj4KOWzGsjut3AsDhY5sx5Fx0BE/XUdaikNp0wgT
-X-Gm-Message-State: AOJu0YzQwS3h3PheY0k+XV0tCbFZX20pp6DPEH4YTjfUxB76Cm382y5z
-	i9ZKY2Cu261uPtfRo8KhTK55uE6MsEzFT/YiUWs1hAxfK29z4x5g72cBUX4qfceDxUJZkW2Aevs
-	u
-X-Google-Smtp-Source: AGHT+IFPuQzpowOl3k/GPdUR9TfMIP5AhN9fSjb+vcvG0GakAp/U3UXOgAHES4kjT6cIQFre3AyF/w==
-X-Received: by 2002:a17:906:2b0e:b0:a3e:8bd8:b711 with SMTP id a14-20020a1709062b0e00b00a3e8bd8b711mr1842289ejg.37.1708605052106;
-        Thu, 22 Feb 2024 04:30:52 -0800 (PST)
-Received: from [10.80.67.149] (default-46-102-197-194.interdsl.co.uk. [46.102.197.194])
-        by smtp.gmail.com with ESMTPSA id cw4-20020a170907160400b00a3e45fa1c77sm5071178ejd.55.2024.02.22.04.30.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 04:30:51 -0800 (PST)
-Message-ID: <1a8e69a7-89eb-4d36-94d6-0da662d8b72f@citrix.com>
-Date: Thu, 22 Feb 2024 12:30:50 +0000
+	 In-Reply-To:Content-Type; b=PLihGKSbGOB79F56NlkWe5l1gKp0qXm9bkIRT3/hT5THfrfkp9LZDeAmCBBGpgltxsEaRAlcfVpTXZbZbAj0/ew4Ji/IDC2lA5h270g+2Yg+vqJ8Tz7sDIv/pXHpxBU6B2Rw+e9qyik8rPUSEy71T7Eh+brRa3nXaQETao+3SSs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=kdQUKRiX; arc=pass smtp.client-ip=136.143.188.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
+ARC-Seal: i=1; a=rsa-sha256; t=1708610250; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=cHub6epmobdZVnGj8YMH2ybbVIPn7E0HfOR+Za7lnnjBbrMuXJ+YEsJdAa4yyHu8wV7uqL7+CCwUa7/1yEq6cYYaAfxff7NrUxMfOy/X6nWJSI4lKnFT5v0+JlHFAMu70jnmpttDZm8BJSfb6HVV+hnLZaBrCvDDIJdBHHoL0W4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1708610250; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Y83exyPy9st5PBYw7nPtC9FL3Mvmc5XFbN033jciyfA=; 
+	b=mRQ1I4xyfS8mqOGqs6LTsADo6PTaYzdju5mZdfdKCC5GNWmuX26HSRvJwpGkD4HwLOAOzrGpF16FIR1xukVSbX5HeqPCsswG0qsKc1qSxF9y9qcR4Ieq+Snf9VyUhMgRanFnlDGB8Et4LIyrZjKhPTtNNjTN4uiQAF0qYnic80g=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=apertussolutions.com;
+	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+	dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1708610250;
+	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=Y83exyPy9st5PBYw7nPtC9FL3Mvmc5XFbN033jciyfA=;
+	b=kdQUKRiXO+b/CGWjER4qU7sfdtjxiVPhauuppMpzjmEhCQb+e2ebgYuCH4SYCORG
+	yOdZIgVgEhYKX3Th24MomoturmlwITCXXn0iEGgB2wo0db6N+zQKfTNYr83kDBR4Hge
+	+ZzuP4pfQwTBLoQd3VMTB4+Dk+kIOQq4KOsZbmCM=
+Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+	with SMTPS id 1708610247838305.8350062521944; Thu, 22 Feb 2024 05:57:27 -0800 (PST)
+Message-ID: <c5bd3ee4-4bf1-4e9a-8e5d-12ee8e195d3d@apertussolutions.com>
+Date: Thu, 22 Feb 2024 08:57:24 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -74,165 +60,132 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 06/15] x86: Add early SHA support for Secure Launch
- early measurements
-Content-Language: en-GB
+Subject: Re: [PATCH v8 14/15] x86: Secure Launch late initcall platform module
+Content-Language: en-US
 To: Ard Biesheuvel <ardb@kernel.org>,
- Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ Ross Philipson <ross.philipson@oracle.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, dpsmith@apertussolutions.com, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+ linux-efi@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+ bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
  mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
  peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
  nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
- kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
- Eric Biggers <ebiggers@kernel.org>
+ kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
 References: <20240214221847.2066632-1-ross.philipson@oracle.com>
- <20240214221847.2066632-7-ross.philipson@oracle.com>
- <CAMj1kXEmMBY_jc0uM5UgZbuZ3-C7NPKzg5AScaunyu9XzLgzZA@mail.gmail.com>
- <98ad92bb-ef17-4c15-88ba-252db2a2e738@citrix.com>
- <CAMj1kXFTu+bV2kQhAyu15hrYai20NcBLb4Zu8XG2Y-XjL0f+rw@mail.gmail.com>
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
- 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
- 6+ahAA==
-In-Reply-To: <CAMj1kXFTu+bV2kQhAyu15hrYai20NcBLb4Zu8XG2Y-XjL0f+rw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <20240214221847.2066632-15-ross.philipson@oracle.com>
+ <CAMj1kXHXt6z94JCM2C5rLz-n9nGA46bb1eMbqcP5e7K9+NzPSg@mail.gmail.com>
+From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
+ 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
+In-Reply-To: <CAMj1kXHXt6z94JCM2C5rLz-n9nGA46bb1eMbqcP5e7K9+NzPSg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-On 22/02/2024 9:34 am, Ard Biesheuvel wrote:
-> On Thu, 22 Feb 2024 at 04:05, Andrew Cooper <andrew.cooper3@citrix.com> wrote:
->> On 15/02/2024 8:17 am, Ard Biesheuvel wrote:
->>> On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
->>>> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
->>>>
->>>> The SHA algorithms are necessary to measure configuration information into
->>>> the TPM as early as possible before using the values. This implementation
->>>> uses the established approach of #including the SHA libraries directly in
->>>> the code since the compressed kernel is not uncompressed at this point.
->>>>
->>>> The SHA code here has its origins in the code from the main kernel:
->>>>
->>>> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
->>>>
->>>> A modified version of this code was introduced to the lib/crypto/sha1.c
->>>> to bring it in line with the sha256 code and allow it to be pulled into the
->>>> setup kernel in the same manner as sha256 is.
->>>>
->>>> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
->>>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
->>> We have had some discussions about this, and you really need to
->>> capture the justification in the commit log for introducing new code
->>> that implements an obsolete and broken hashing algorithm.
->>>
->>> SHA-1 is broken and should no longer be used for anything. Introducing
->>> new support for a highly complex boot security feature, and then
->>> relying on SHA-1 in the implementation makes this whole effort seem
->>> almost futile, *unless* you provide some rock solid reasons here why
->>> this is still safe.
->>>
->>> If the upshot would be that some people are stuck with SHA-1 so they
->>> won't be able to use this feature, then I'm not convinced we should
->>> obsess over that.
->> To be absolutely crystal clear here.
+On 2/15/24 03:40, Ard Biesheuvel wrote:
+> On Wed, 14 Feb 2024 at 23:32, Ross Philipson <ross.philipson@oracle.com> wrote:
 >>
->> The choice of hash algorithm(s) are determined by the OEM and the
->> platform, not by Linux.
+>> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
 >>
->> Failing to (at least) cap a PCR in a bank which the OEM/platform left
->> active is a security vulnerability.  It permits the unsealing of secrets
->> if an attacker can replay a good set of measurements into an unused bank.
+>> The Secure Launch platform module is a late init module. During the
+>> init call, the TPM event log is read and measurements taken in the
+>> early boot stub code are located. These measurements are extended
+>> into the TPM PCRs using the mainline TPM kernel driver.
 >>
->> The only way to get rid of the requirement for SHA-1 here is to lobby
->> the IHVs/OEMs, or perhaps the TCG, to produce/spec a platform where the
->> SHA-1 banks can be disabled.  There are no known such platforms in the
->> market today, to the best of our knowledge.
+>> The platform module also registers the securityfs nodes to allow
+>> access to TXT register fields on Intel along with the fetching of
+>> and writing events to the late launch TPM log.
 >>
-> OK, so mainline Linux does not support secure launch at all today. At
-> this point, we need to decide whether or not tomorrow's mainline Linux
-> will support secure launch with SHA1 or without, right?
+>> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+>> Signed-off-by: garnetgrimm <grimmg@ainfosec.com>
+>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+> 
+> There is an awful amount of code that executes between the point where
+> the measurements are taken and the point where they are loaded into
+> the PCRs. All of this code could subvert the boot flow and hide this
+> fact, by replacing the actual taken measurement values with the known
+> 'blessed' ones that will unseal the keys and/or phone home to do a
+> successful remote attestation.
 
-I'd argue that's a slightly unfair characterisation.
+To set context, in general the motivation to employ an RTM, Static or 
+Dynamic, integrity solution is to enable external platform validation, 
+aka attestation. These trust chains are constructed from the principle 
+of measure and execute that rely on the presence of a RoT for Storage 
+(RTS) and a RoT for Reporting (RTR). Under the TCG architecture adopted 
+by x86 vendors and now recently by Arm, those roles are fulfilled by the 
+TPM. With this context, lets layout the assumptive trusts being made here,
+   1. The CPU GETSEC instruction functions correctly
+   2. The IOMMU, and by extension the PMRs, functions correctly
+   2. The ACM authentication process functions correctly
+   3. The ACM functions correctly
+   4. The TPM interactions function correctly
+   5. The TPM functions correctly
 
-We want tomorrow's mainline to support Secure Launch.  What that entails
-under the hood is largely outside of the control of the end user.
+With this basis, let's explore your assertion here. The assertion breaks 
+down into two scenarios. The first is that the at-rest kernel binary is 
+corrupt, unintentionally (bug) or maliciously, either of which does not 
+matter for the situation. For the sake of simplicity, corruption of the 
+Linux kernel during loading or before the DRTM Event is considered an 
+equivalent to corruption of the kernel at-rest. The second is that the 
+kernel binary was corrupted in memory at some point after the DRTM event 
+occurs.
 
-> And the point you are making here is that we need SHA-1 not only to a)
-> support systems that are on TPM 1.2 and support nothing else, but also
-> to b) ensure that crypto agile TPM 2.0 with both SHA-1 and SHA-256
-> enabled can be supported in a safe manner, which would involve
-> measuring some terminating event into the SHA-1 PCRs to ensure they
-> are not left in a dangling state that might allow an adversary to
-> trick the TPM into unsealing a secret that it shouldn't.
+For both scenarios, the ACM will correctly configure the IOMMU PMRs to 
+ensure the kernel can no longer be tampered with in memory. After which, 
+the ACM will then accurately measure the kernel (bzImage) and safely 
+store the measurement in the TPM.
 
-Yes.  Also c) because if the end user wants to use SHA-1, they should be
-able to.
+In the first scenario, the TPM will accurately report the kernel 
+measurement in the attestation. The attestation authority will be able 
+to detect if an invalid kernel was started and can take whatever 
+remediation actions it may employ.
 
-> So can we support b) without a), and if so, does measuring an
-> arbitrary dummy event into a PCR that is only meant to keep sealed
-> forever really require a SHA-1 implementation, or could we just use an
-> arbitrary (not even random) sequence of 160 bits and use that instead?
-
-a) and b) are in principle independent, but we cannot support b) without
-SHA-1.
-
-To cap a PCR, the event log still needs to be kept accurate, and that's
-at least one SHA-1 calculation.  If you were to simply extend a dummy
-value, the system hopefully fails safe, but the user gets "something
-went wrong, you're on your own", rather than "we intentionally blocked
-the use of SHA-1, everything is good".
-
-And frankly, you need SHA-1 just to read the event log, if any component
-(including TXT itself) wrote a SHA-1 entry into it.
+In the second scenario, any attempt to corrupt the binary after the ACM 
+has configured the IOMMU PMR will fail.
 
 
-To be blunt.  SHA-1 support is not viably optional today as far as
-Secure Launch is concerned.  If there's a suitable Kconfig symbol to use
-for people who want a completely SHA-1-less kernel, then we can make
-Secure Launch depend on that until such time as the hardware ecosystem
-has caught up.
+> At the very least, this should be documented somewhere. And if at all
+> possible, it should also be documented why this is ok, and to what
+> extent it limits the provided guarantees compared to a true D-RTM boot
+> where the early boot code measures straight into the TPMs before
+> proceeding.
 
-~Andrew
+I can add a rendition of the above into the existing section of the 
+documentation patch that already discusses separation of the measurement 
+from the TPM recording code. As to the limits it incurs on the DRTM 
+integrity, as explained above, I submit there are none.
+
+v/r,
+dps
 
