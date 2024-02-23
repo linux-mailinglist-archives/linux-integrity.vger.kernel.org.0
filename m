@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-1404-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1405-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0359F860BDF
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 09:11:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC36C860C2F
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 09:24:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFBE228386B
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 08:11:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB3AE1C21B8C
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 08:24:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09F7817552;
-	Fri, 23 Feb 2024 08:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B1917BD8;
+	Fri, 23 Feb 2024 08:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+4azPBF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m8qlj/Q/"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0885171A6;
-	Fri, 23 Feb 2024 08:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405811799D;
+	Fri, 23 Feb 2024 08:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708675853; cv=none; b=TxhyIyl8jlBcjA/ezdj5KbkENTy0+E9GhBi8lpln9SmXvRI58dp9YTOeTcv4oukDDq0ceE+Z0DQPRiIx31asq8vBrIGXIZ90C4W7RegLUTNNxyzTH4YxaIkdXb2ifPzEFyPOzh+hBtz0a1l4PDZ4I0SJO3OJrwQL4/F98GM2F3I=
+	t=1708676630; cv=none; b=X1Qz4RtlWvIUUbbO3q0MTHkF1EY4mxC3z75Ei2ZWVzrtqIeQTRsuSXKTK3keIPvu/Bp7Me90STChbNIAeU12N+9zJjoBPWKUgpnjWJ/hop55S5NkECh2JjUY+rpRRH+2Hiqk2jRhkWZffgYsjXhaqUbbiIkKAaLhp6QcL19esnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708675853; c=relaxed/simple;
-	bh=G58eG4LAAef5vMNI29H63UmRbuDbS1Aa5HYHb5xMBms=;
+	s=arc-20240116; t=1708676630; c=relaxed/simple;
+	bh=2pRL/DHKpNavrBYCEdxRER3bzRbwjnSyn6+Le6BPexg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VIwwtCMLU8N8L35sMkKQYIkbrDFzEEDm87tXdf6y7NHOzs74zCM0Z3hAKRxdO+VURFN9D0Ei29cVbIZeVYxmwyQ+RTvm5ehY4DeIX+fu6Zgfz8zKOMWzUIXD7A1LS4bDvV+g6eM3EMG2HnCbsN7GkKuq2z+aR7kyO/i5H5fqH6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+4azPBF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08253C433C7;
-	Fri, 23 Feb 2024 08:10:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ac87q6aZBK/3JNK21bN1j9x/Rf/4nF4bp9bXtZUcO6iFOy2r3z4pn3a8AKwGkaF0uVhfRa11R0uFwtKAT/VxwuBtrDnpq08xb7GSbPDx4egY6VJe2vixl8Y7hKGbvuWbIIWfi7Q+iVGEdhW7v1h3F6hVFso+Y53lLIeSobCxY3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m8qlj/Q/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6724CC433C7;
+	Fri, 23 Feb 2024 08:23:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708675853;
-	bh=G58eG4LAAef5vMNI29H63UmRbuDbS1Aa5HYHb5xMBms=;
+	s=k20201202; t=1708676629;
+	bh=2pRL/DHKpNavrBYCEdxRER3bzRbwjnSyn6+Le6BPexg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f+4azPBFpDsYrpCsm+Z4FHfyVeKBwkCE2CMDekQluaV859vQvV9yJ3gJ17zYyP50W
-	 d6cC6/GvZ98hx+Te/n55UOwPIYML+e9UIOn9DYyS6tNYi9bI1Bjf9MZMHHzT1M6Rl1
-	 Q7TSQK2crhB7CD38zOhaBjbTrXdHkJ/yYS4qdHD8dIMHxG1RE5Ul0CvO5WdLvbdq2n
-	 lr9QjLyNPcfzUz/gEQeM04XwmKMaQG0qIkZPN0SK+F1Wd8dW0poWMRnOD44bMjaTOU
-	 fKokSCYrZ2KNND2zcTij0/pwg2LGRxREgIQhmsH6ATqfvxKqOombIpycmPjN+cvWGR
-	 t2ETJKasCwXaA==
-Date: Fri, 23 Feb 2024 09:10:45 +0100
+	b=m8qlj/Q/6twHNGmgMEhqf+gHAUuT1pceqZRy6RPWg+g5+1yAQGO2v7RW9qTnvz3gH
+	 GnL3Hppha6HjbhiG49JDkujP9bNdPRFlNagkOllw1++EXolSNuM8IKPZ6/2Nuhxpwk
+	 EOaQwj8bQZrl5NagUA2ropmzLvgV0rj6LGLvPNRRPCZokhBDJS8OnSu9qZZhdc/sFt
+	 bH1FhG4aD11dzFXA4WiIYCL/ac1hi6Ae/wl5z7mmW59Ub1+EoWslwPn3W1tAjqIhsj
+	 YlJim2O3buoF+rsuZy/6sZ8VIgAgKHSMU+GTEcIEm58qK6YW/YHZiTVrXKAN7bDWNp
+	 au/oLYyVUv1mg==
+Date: Fri, 23 Feb 2024 09:23:42 +0100
 From: Christian Brauner <brauner@kernel.org>
 To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
 Cc: Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>, 
@@ -55,10 +55,10 @@ Cc: Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>,
 	Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
 	linux-security-module@vger.kernel.org, audit@vger.kernel.org, selinux@vger.kernel.org, 
 	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v2 10/25] xattr: use is_fscaps_xattr()
-Message-ID: <20240223-pfand-absaugen-44b5534dfcf9@brauner>
+Subject: Re: [PATCH v2 11/25] security: add hooks for set/get/remove of fscaps
+Message-ID: <20240223-anfallen-kegeln-4550c939a31a@brauner>
 References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
- <20240221-idmap-fscap-refactor-v2-10-3039364623bd@kernel.org>
+ <20240221-idmap-fscap-refactor-v2-11-3039364623bd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,9 +67,14 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240221-idmap-fscap-refactor-v2-10-3039364623bd@kernel.org>
+In-Reply-To: <20240221-idmap-fscap-refactor-v2-11-3039364623bd@kernel.org>
 
-On Wed, Feb 21, 2024 at 03:24:41PM -0600, Seth Forshee (DigitalOcean) wrote:
+On Wed, Feb 21, 2024 at 03:24:42PM -0600, Seth Forshee (DigitalOcean) wrote:
+> In preparation for moving fscaps out of the xattr code paths, add new
+> security hooks. These hooks are largely needed because common kernel
+> code will pass around struct vfs_caps pointers, which EVM will need to
+> convert to raw xattr data for verification and updates of its hashes.
+> 
 > Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
 > ---
 
