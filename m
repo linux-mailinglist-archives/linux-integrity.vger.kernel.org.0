@@ -1,100 +1,138 @@
-Return-Path: <linux-integrity+bounces-1413-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1414-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 294B2861212
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 13:59:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B081C8615D2
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 16:30:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7F431F22B9A
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 12:59:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D28A41C2424D
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 15:30:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699F57E579;
-	Fri, 23 Feb 2024 12:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578808288A;
+	Fri, 23 Feb 2024 15:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJp2IlZM"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ivnTwe1D"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427467CF21;
-	Fri, 23 Feb 2024 12:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517694C79
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 15:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708693134; cv=none; b=NZGd4daou+RsI3bPbpdCGnTiljQ6MJPzi1m8X6UD0xgWgWHDOmEowUNd0nC/izVR/r9wPm8yB1kd11UCM9qT8Ja2EnNwg32AjDwuf1jd6nsD62OC4btJTRmm7q4PmYJuQJR7SKa/A9e32DiHNG9ee/PksGJIcDEelHr+1l2oT7s=
+	t=1708702242; cv=none; b=kcuuQaAdMJb68a+Bw4ZDM8Td5t1A9nh4OrQN1CYC5sfOkfc7Ng9HidTVOKY1zp6Kc26kxy53qCvbC8DgfsY9ZP1UZuOBeLhcYpV9Ptcz418d8HdBr1QZBA0cHmAJ9x94oPL1GtBKlZT0VjtRyoNTUoATZDIyiUk6koRg3gQ4JrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708693134; c=relaxed/simple;
-	bh=QbCeKgCF+2cvriyW1QLoaWdnb5N532ueeh9KURAIqHs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=j/mrZK37dqQkRWOKoyXGRPvcN6uPGK+fOelPK4kw6XMosuT9DDYTy7lfRndJ+nOLkDoHz+BTz3rbGv0BCC9N9NNcE7T2HYvOSVfVsAE4CKIpqrJdK8sqX7rgHh/BrGwcc9CnBbzaE0Ia8tNtfIwzDIb2UnBmFlJ20PLO53MdK50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJp2IlZM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8429C433F1;
-	Fri, 23 Feb 2024 12:58:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708693133;
-	bh=QbCeKgCF+2cvriyW1QLoaWdnb5N532ueeh9KURAIqHs=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=iJp2IlZMJYf0zTzXwC1xyC2pXfRwRwx4+mMd5aQll5KR53OKz4VvvgOvhQQs/Rdue
-	 QwYtvvjPvkUpyJwfWICaajy60aetP/WKZihlJ4f5BcL1pxqdqG1UILGD4zyaVYBwLL
-	 gd24/y5f+VF9t6rfBXbE08h9IvyAlWRFxn3D1cnlSkE+aqm9fi9SAsEWG6oMdROjJZ
-	 B6Gq/zkvlLlCvD4GzPD1FBjVNsExVVB7CvBm+TpJTj5X9XiwRFgtQeQEyplG4jGP+T
-	 QOGp6Tf1STo88TjkxlMaoltYPZO/cRKtYxMwpMBshHSxbS3rzaVjd9dRXb1QpwUJ//
-	 5KD28RF0n899w==
+	s=arc-20240116; t=1708702242; c=relaxed/simple;
+	bh=ycQLaq8XK6OTOU0OPBxiiOITC5NqcuA88N02tOVCpak=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JHhjG6Ux4Kv6j2EoxIvj7/+ue9Qn4x1ioUVjOQ+4wCItruWhDBSPB9YgwsILNn+yiOSdnitYmVNbt1/ehAAfEQfrFTUUvr+nsE6cX8uKp1xLExpdHVEHRmTJDyl0gHtVabKwyakr+APbcu/GbzTna4/dP6VdbTUweGCjl6JNNUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ivnTwe1D; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41NF2DgL014856;
+	Fri, 23 Feb 2024 15:30:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Q1yLUe/j8gmnJRu979025ErSBpUyq0rMbWl+yF33yRY=;
+ b=ivnTwe1DFI4OZEt70Zy5OilfRPkzybTwbCAIvziw5GnuBymcMHd1p1iQHoffqbsCKweD
+ B01AHB2/DQNVBnFJO8L6teVPRdmNtdX2SN004TnJLnbDcFuAT7QS/z1XUH7Fe8cWbQEf
+ OsaLlyuka2ELyCgBVw234jvtSNg0NcTfrHFAg/tU7frmQgGj4qUyabtrwfW39DJ3Vw9H
+ m1Jcse7u/i+xbblrllJR2d30he3NAjxMeXUQFLBHZoFCc5H4wiWi7Lxvzf5D3tA6AOUZ
+ iwcbjd1jjSLp2Pq65O/8oZ+guBn+v5c16JJoIOdWN1VlYBW/AIsf5XyfszGo65oLhA3W gA== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wewn98sxn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 15:30:25 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41NDJhV4013522;
+	Fri, 23 Feb 2024 15:30:24 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb7h0xes5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 15:30:24 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41NFUKdU8586214
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 23 Feb 2024 15:30:23 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AA40558075;
+	Fri, 23 Feb 2024 15:30:20 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2958C58068;
+	Fri, 23 Feb 2024 15:30:20 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 23 Feb 2024 15:30:20 +0000 (GMT)
+From: Stefan Berger <stefanb@linux.ibm.com>
+To: linux-integrity@vger.kernel.org
+Cc: zohar@linux.ibm.com, roberto.sassu@huawei.com, vt@altlinux.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH v2 ima-evm-utils 0/6] Deprecate sign_hash and add provider support
+Date: Fri, 23 Feb 2024 10:30:08 -0500
+Message-ID: <20240223153014.4048133-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 23 Feb 2024 14:58:49 +0200
-Message-Id: <CZCH5V83WBBV.20JR0RC1GJVJY@suppilovahvero>
-To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>, "Alexander Steffen"
- <Alexander.Steffen@infineon.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Sasha
- Levin" <sashal@kernel.org>, <linux-integrity@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Kanth Ghatraju"
- <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.de>
-Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
- <20240131170824.6183-2-dpsmith@apertussolutions.com>
- <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
- <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
- <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
- <91f600ef-867b-4523-89be-1c0ba34f8a4c@kunbus.com>
- <CZA9ADCGOTQT.LB5XHZZVTWVH@seitikki>
- <88b75c9c-98ab-4474-8112-6a27d11a2fdf@apertussolutions.com>
-In-Reply-To: <88b75c9c-98ab-4474-8112-6a27d11a2fdf@apertussolutions.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6Wf802iyyjzd6YoSeUoauT-heERJG_zA
+X-Proofpoint-GUID: 6Wf802iyyjzd6YoSeUoauT-heERJG_zA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-23_01,2024-02-23_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 impostorscore=0 mlxscore=0
+ spamscore=0 adultscore=0 suspectscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402230112
 
-On Fri Feb 23, 2024 at 3:58 AM EET, Daniel P. Smith wrote:
-> > Just adding here that I wish we also had a log transcript of bug, which
-> > is right now missing. The explanation believable enough to move forward
-> > but I still wish to see a log transcript.
->
-> That will be forth coming.
+This series deprecates the sign_hash function and introduces
+imaevm_signhash that requires the necessary parameters to be passed rather
+than relying on the global imaevm_params variable. This way we can remove
+the usage of imaevm_params for the OpenSSL engine and the keyid.
 
-I did not respond yet to other responses that you've given in the past=20
-12'ish hours or so (just woke up) but I started to think how all this
-great and useful information would be best kept in memory. Some of it
-has been discussed in the past but there is lot of small details that
-are too easily forgotten.
+Add support for an OpenSSL provider. The choice of engine versus provider
+is implemented using a struct imaevm_ossl_access that wraps the engine or
+provider parameters. It also provides a type field where the user can
+choose one or the other. imaevm_signhash takes this structure as an optional
+parameter to support engines and providers.
 
-I'd think the best "documentation" approach here would be inject the
-spec references to the sites where locality behaviour is changed so
-that it is easy in future cross-reference them, and least of risk
-of having code changes that would break anything. I think this way
-all the information that you provided is best preserved for the
-future.
+Also extend existing test cases with tests with a pkcs11 provider.
 
-Thanks a lot for great and informative responses!
+Regards,
+   Stefan
 
-> v/r,
-> dps
+v2:
+ - Fixed some minor issues
 
-BR, Jarkko
+Stefan Berger (6):
+  headers: Remove usage of CONFIG_IMA_EVM_ENGINE from public header
+  Pass ENGINE and keyid through to function using them
+  evmctl: Replace deprecated sign_hash with imaevm_signhash
+  Add support for OpenSSL provider to the library and evmctl
+  tests: Add pkcs11 test using provider
+  ci: Install pkcs11-provider where available
+
+ ci/alt.sh              |   2 +
+ ci/debian.sh           |   1 +
+ ci/fedora.sh           |   1 +
+ ci/tumbleweed.sh       |   2 +
+ configure.ac           |   6 ++
+ src/Makefile.am        |  21 +++-
+ src/evmctl.c           | 124 +++++++++++++++++------
+ src/imaevm.h           |  39 +++++++-
+ src/libimaevm.c        | 217 ++++++++++++++++++++++++++++++++++-------
+ tests/functions.sh     |   1 -
+ tests/sign_verify.test |  19 +++-
+ 11 files changed, 356 insertions(+), 77 deletions(-)
+
+-- 
+2.43.2
+
 
