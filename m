@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1450-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1451-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50866861E17
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 21:48:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5672E861E25
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 21:50:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 062F91F25D37
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 20:48:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5ECEAB20A19
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 20:50:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A45D146E9F;
-	Fri, 23 Feb 2024 20:44:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6665143C63;
+	Fri, 23 Feb 2024 20:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IYqvQTmn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kn6Q8OKE"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65B1179A8;
-	Fri, 23 Feb 2024 20:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C13612CD85;
+	Fri, 23 Feb 2024 20:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708721093; cv=none; b=gOW7Pr7+YQf4bCWTzIhNkiUxB7U4m7Dj8X0qpCiaYIcOIgJKw2jyRUCB+HL53wTwA6dcLcXOqJcGTkFRKKK0No60YYHfhMRdjNKGg5JGT5dDBEGpEnKM8pNRW3XCq1rc226p6mz/vtbev/8Tx7VokjepmuPTIHmi8YQpyWGGF6Q=
+	t=1708721448; cv=none; b=s7VkKhfMUXaXhPIUe6qBeUNoqYCvS4Znbz5h5kY6cuZHwgkZiR6e5vEMONfOs7BdDEqbqquFzuGaY050JdHfnm/pTKDYEl9HxjeSvrsagQ0dQYHwu5ZjU7RJJmOVM+tBhWJUtcmYJIga15hgkGvuhpZDBPUygeriE7kKLlFmbiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708721093; c=relaxed/simple;
-	bh=81yMsgnNPtyxWeBwSw7QL9ejxblFCxtOK+JB/uT5avw=;
+	s=arc-20240116; t=1708721448; c=relaxed/simple;
+	bh=PweppluXkvW8Lq4TMFJBzXOsYg6FGYfRiMivvD/uW4c=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=t/s4xH66zijNd8VTS8cE0FsV7jeCG4lS83ROQsHqY19Rb5S6gK3N5Ah03gfqU5y+XJzHzzR+IXpcKfl1tg9PYVr+nnStwmwSOtw8K5zR3TU2g6QA9oVCXDy/WdQuMuIVsPd4OicfBmdYR0bCHdbWKdDFxMILI+pSw1K4XB6Zus8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IYqvQTmn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E3C3C433C7;
-	Fri, 23 Feb 2024 20:44:50 +0000 (UTC)
+	 References:In-Reply-To; b=MKpHXqG62x71Av1fSps0QHOYNgyQF3G4I1/IoBPX1k8HTGMlViNm5ux66uenfG3/XR+FbDS0LDOq/g9j3UHHOmmg1JEop9wvToAifha2hp+zYJ1KQasI6w5veeUNqJcr9VqsAV34sinA1mrBg1q7rBvorwYzmjPSt7CI2UKLWlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kn6Q8OKE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F2CC433F1;
+	Fri, 23 Feb 2024 20:50:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708721092;
-	bh=81yMsgnNPtyxWeBwSw7QL9ejxblFCxtOK+JB/uT5avw=;
+	s=k20201202; t=1708721448;
+	bh=PweppluXkvW8Lq4TMFJBzXOsYg6FGYfRiMivvD/uW4c=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=IYqvQTmnoiByiLmEB90ugg69ZgcLiroI2x+zzB6fFua8K1J3aav+uaE6e7/n/d6nS
-	 MzCXd6MMhCuAjVjNGUN7+rfVx2zpsV42Jc3lLYXjfCjjTEaCJwKTOmbVoWc5q1DDVr
-	 B5E1pY53PgoxUP1l49VkH3wDJ+Orb+eAJYkcYNAOZUc3JJ/hrEpJIn0K71wtP9JNdn
-	 vJ6//PUgGG5ZJ19nFSpd8AlWOLT92tjlBq9RTnQxnkMvswAgO4sY3aHYFB6UV3femx
-	 tswbUEM/tSUGQzoe+oicsNr3K0BG6+7RiSSJvFOjaXlT32c2tR36LBvSXt3CCgOcA2
-	 G5dEB0VmZSQrg==
+	b=Kn6Q8OKEAocDYsJkdulyJF53gQRvwhsW/5N4N8815Do4wwL1Nl7m/IZ0ar8j2yJbk
+	 hE2w4nnWnSOmy4WOMRYi40GmSDx+s2lP0wXbcWl1eF988JSgprEWMJ8gXcBmxmMwhy
+	 Wl/YLCyMDfIicd0AUmYEqdcd0oxwVgXJZ4vC+Kw3tZhxDJP+r5MBz/iuNx5NzvEc5F
+	 69YrTeSrLAr7Mnx0tuRdB96jhbsOjmwGdQrIHOcG0taOlkXWmHZ3PV0hplj/fcbta2
+	 LnuTn19vI9I+9zcZYf+RlhSrq/vhbkmzsOVQ8gpeYt6dMRb0FP72/MoZwcWZd9frT1
+	 v8W/yehX/mz/A==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,8 +49,8 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 23 Feb 2024 22:44:48 +0200
-Message-Id: <CZCR2N9XKXJQ.32FMAU50UOLT2@suppilovahvero>
+Date: Fri, 23 Feb 2024 22:50:43 +0200
+Message-Id: <CZCR76MKS60B.UHM5MC0SBOQY@suppilovahvero>
 Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Kanth Ghatraju"
  <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.de>
 Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
@@ -67,74 +67,126 @@ References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
  <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
  <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
  <91f600ef-867b-4523-89be-1c0ba34f8a4c@kunbus.com>
- <8692fcf6-2e67-45b4-b809-7723f30736a2@apertussolutions.com>
-In-Reply-To: <8692fcf6-2e67-45b4-b809-7723f30736a2@apertussolutions.com>
+ <CZA9CM3PDILC.82JMLUWMB6B7@seitikki> <CZA9GMC718HA.1JFHTTWV563IE@seitikki>
+ <4bd31b91-1f6a-4081-9ad8-e5fae29d0dd7@apertussolutions.com>
+In-Reply-To: <4bd31b91-1f6a-4081-9ad8-e5fae29d0dd7@apertussolutions.com>
 
-On Fri Feb 23, 2024 at 3:56 AM EET, Daniel P. Smith wrote:
-> On 2/20/24 15:54, Lino Sanfilippo wrote:
-> > Hi,
+On Fri Feb 23, 2024 at 3:57 AM EET, Daniel P. Smith wrote:
+> On 2/20/24 17:31, Jarkko Sakkinen wrote:
+> > On Tue Feb 20, 2024 at 10:26 PM UTC, Jarkko Sakkinen wrote:
+> >> On Tue Feb 20, 2024 at 8:54 PM UTC, Lino Sanfilippo wrote:
+> >>> for (i =3D 0; i <=3D MAX_LOCALITY; i++)
+> >>> 	__tpm_tis_relinquish_locality(priv, i);
+> >>
+> >> I'm pretty unfamiliar with Intel TXT so asking a dummy question:
+> >> if Intel TXT uses locality 2 I suppose we should not try to
+> >> relinquish it, or?
+> >>
+> >> AFAIK, we don't have a symbol called MAX_LOCALITY.
 > >=20
-> > On 20.02.24 19:42, Alexander Steffen wrote:
-> >> ATTENTION: This e-mail is from an external sender. Please check attach=
-ments and links before opening e.g. with mouseover.
-> >>
-> >>
-> >> On 02.02.2024 04:08, Lino Sanfilippo wrote:
-> >>> On 01.02.24 23:21, Jarkko Sakkinen wrote:
-> >>>
-> >>>>
-> >>>> On Wed Jan 31, 2024 at 7:08 PM EET, Daniel P. Smith wrote:
-> >>>>> Commit 933bfc5ad213 introduced the use of a locality counter to con=
-trol when a
-> >>>>> locality request is allowed to be sent to the TPM. In the commit, t=
-he counter
-> >>>>> is indiscriminately decremented. Thus creating a situation for an i=
-nteger
-> >>>>> underflow of the counter.
-> >>>>
-> >>>> What is the sequence of events that leads to this triggering the
-> >>>> underflow? This information should be represent in the commit messag=
-e.
-> >>>>
-> >>>
-> >>> AFAIU this is:
-> >>>
-> >>> 1. We start with a locality_counter of 0 and then we call tpm_tis_req=
-uest_locality()
-> >>> for the first time, but since a locality is (unexpectedly) already ac=
-tive
-> >>> check_locality() and consequently __tpm_tis_request_locality() return=
- "true".
-> >>
-> >> check_locality() returns true, but __tpm_tis_request_locality() return=
-s
-> >> the requested locality. Currently, this is always 0, so the check for
-> >> !ret will always correctly indicate success and increment the
-> >> locality_count.
-> >>
+> > OK it was called TPM_MAX_LOCALITY :-) I had the patch set applied
+> > in one branch but looked up with wrong symbol name.
 > >=20
-> > Will the TPM TIS CORE ever (have to) request another locality than 0? M=
-aybe the best would
-> > be to hardcode TPM_ACCESS(0) and get rid of all the locality parameters=
- that are
-> > passed from one function to another.
-> > But this is rather code optimization and not really required to fix the=
- reported bug.
+> > So I reformalize my question to two parts:
+> >=20
+> > 1. Why does TXT leave locality 2 open in the first place? I did
+> >     not see explanation. Isn't this a bug in TXT?
 >
-> Actually, doing so will break the TPM API. The function=20
-> tpm_tis_request_locality() is registered as the locality handler,=20
->   int (*request_locality)(struct tpm_chip *chip, int loc), in the tis=20
-> instance of struct tpm_class_ops{}. This is the API used by the Secure=20
-> Launch series to open Locality2 for the measurements it must record.
+> It does so because that is what the TCG D-RTM specification requires.=20
+> See Section 5.3.4.10 of the TCG D-RTM specification[1], the first=20
+> requirement is, "The DLME SHALL receive control with access to Locality 2=
+."
 
-OK, based on James' earlier feedback on possibility to have kernel
-specific locality and this , and some reconsideration of my position on
-the topic, and reading all these great and informative responses, I
-think I went too far with this :-)
+From below also the locality enumeration would be good to have
+documented (as a reminder).
 
 >
-> v/r,
-> dps
+> > 2. Because localities are not too useful these days given TPM2's
+> >     policy mechanism I cannot recall out of top of my head can
+> >     you have two localities open at same time. So what kind of
+> >     conflict happens when you try to open locality 0 and have
+> >     locality 2 open?
+>
+> I would disagree and would call your attention to the TCG's=20
+> definition/motivation for localities, Section 3.2 of Client PTP=20
+> specification[2].
+>
+> "=E2=80=9CLocality=E2=80=9D is an assertion to the TPM that a command=E2=
+=80=99s source is=20
+> associated with a particular component. Locality can be thought of as a=
+=20
+> hardware-based authorization. The TPM is not actually aware of the=20
+> nature of the relationship between the locality and the component. The=20
+> ability to reset and extend notwithstanding, it is important to note=20
+> that, from a PCR =E2=80=9Cusage=E2=80=9D perspective, there is no hierarc=
+hical=20
+> relationship between different localities. The TPM simply enforces=20
+> locality restrictions on TPM assets (such as PCR or SEALed blobs)."
+>
+> As stated, from the TPM specification perspective, it is not aware of=20
+> this mapping to components and leaves it to the platform to enforce.
+
+Yeah, TPM is a passive component, not active actor, in everything.
+
+The way I see locality as way to separate e.g. kernel and user space
+driver TPM transactions is pretty much like actor-dependent salt
+(e.g. if 0 was for user space and 1 was for kernel).
+
+>
+> "The protection and separation of the localities (and therefore the=20
+> association with the associated components) is entirely the=20
+> responsibility of the platform components. Platform components,=20
+> including the OS, may provide the separation of localities using=20
+> protection mechanisms such as virtual memory or paging."
+>
+> The x86 manufactures opted to adopt the D-RTM specification which=20
+> defines the components as follows:
+>
+> Locality 4: Usually associated with the CPU executing microcode. This is=
+=20
+> used to establish the Dynamic RTM.
+> Locality 3: Auxiliary components. Use of this is optional and, if used,=
+=20
+> it is implementation dependent.
+> Locality 2: Dynamically Launched OS (Dynamic OS) =E2=80=9Cruntime=E2=80=
+=9D environment.
+> Locality 1: An environment for use by the Dynamic OS.
+> Locality 0: The Static RTM, its chain of trust and its environment.
+>
+> And the means to protect and separate those localities are encoded in=20
+> the x86 chipset, i.e A D-RTM Event must be used to access any of the=20
+> D-RTM Localities (Locality1 - Locality4).
+>
+> For Intel, Locality 4 can only be accessed when a dedicated signal=20
+> between the CPU and the chipset is raised, thus only allowing the CPU to=
+=20
+> utilize Locality 4. The CPU will then close Locality 4, authenticate and=
+=20
+> give control to the ACM with access to Locality 3. When the ACM is=20
+> complete, it will instruct the chipset to lock Locality 3 and give=20
+> control to the DLME (MLE in Intel parlance) with Locality 2 open. It is=
+=20
+> up to the DLME, the Linux kernel in this case, to decide how to assign=20
+> components to Locality 1 and 2.
+>
+> As to proposals to utilize localities by the Linux kernel, the only one=
+=20
+> I was aware of was dropped because they couldn't open the higher localiti=
+es.
+>
+> I would also highlight that the D-RTM implementation guide for Arm=20
+> allows for a hardware D-RTM event, which the vendor may choose to=20
+> implement a hardware/CPU enforced access to TPM localities. Thus, the=20
+> ability to support localities will also become a requirement for certain=
+=20
+> Arm CPUs.
+>
+> [1]=20
+> https://trustedcomputinggroup.org/wp-content/uploads/TCG_D-RTM_Architectu=
+re_v1-0_Published_06172013.pdf
+> [2]=20
+> https://trustedcomputinggroup.org/wp-content/uploads/PC-Client-Specific-P=
+latform-TPM-Profile-for-TPM-2p0-v1p05p_r14_pub.pdf
 
 BR, Jarkko
 
