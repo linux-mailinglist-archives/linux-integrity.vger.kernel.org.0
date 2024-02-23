@@ -1,171 +1,100 @@
-Return-Path: <linux-integrity+bounces-1412-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1413-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1FC4860E1D
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 10:37:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 294B2861212
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 13:59:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19429B2449A
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 09:37:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7F431F22B9A
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 12:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97F7D5C8FC;
-	Fri, 23 Feb 2024 09:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699F57E579;
+	Fri, 23 Feb 2024 12:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lTO9NyHW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJp2IlZM"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541DD5B687;
-	Fri, 23 Feb 2024 09:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427467CF21;
+	Fri, 23 Feb 2024 12:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708681021; cv=none; b=bgDgajhkJEr/pSgA3q6NkyxSiAEZxd4v18FraoJXUMdZXsmOfwsNcn+9yCD0hpRszkjg2nsdxePQdDXz/PZJ96Um+8H/L+61blsG8XlMpbi4nampJldhwpCX4nlaZJZndYizNysBuaa/w96h4BFUvp0ucY4Bhi68a8PFrcL3Lg8=
+	t=1708693134; cv=none; b=NZGd4daou+RsI3bPbpdCGnTiljQ6MJPzi1m8X6UD0xgWgWHDOmEowUNd0nC/izVR/r9wPm8yB1kd11UCM9qT8Ja2EnNwg32AjDwuf1jd6nsD62OC4btJTRmm7q4PmYJuQJR7SKa/A9e32DiHNG9ee/PksGJIcDEelHr+1l2oT7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708681021; c=relaxed/simple;
-	bh=WmJ0OMw0PMDqgKg1zGlDpZIg7VOeRdS3myN/hyG1fUo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hMH35kTPft1B73Rfifw+4Bf1ltJdzz7K2XE+ZOnB3AOq0b2hgVXE4OTboW0EMqm/rSB3m5NOkglITgiR5oTwPxXZOlBQkTYzmD0yCNA7p4XOVQQh8SAktXstqfq9nZIamno4ndR0kT5EAR2YxdzfXL0a8Gs3rjb/NY8TLX4o4AA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lTO9NyHW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FCAC43601;
-	Fri, 23 Feb 2024 09:37:00 +0000 (UTC)
+	s=arc-20240116; t=1708693134; c=relaxed/simple;
+	bh=QbCeKgCF+2cvriyW1QLoaWdnb5N532ueeh9KURAIqHs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=j/mrZK37dqQkRWOKoyXGRPvcN6uPGK+fOelPK4kw6XMosuT9DDYTy7lfRndJ+nOLkDoHz+BTz3rbGv0BCC9N9NNcE7T2HYvOSVfVsAE4CKIpqrJdK8sqX7rgHh/BrGwcc9CnBbzaE0Ia8tNtfIwzDIb2UnBmFlJ20PLO53MdK50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJp2IlZM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8429C433F1;
+	Fri, 23 Feb 2024 12:58:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708681021;
-	bh=WmJ0OMw0PMDqgKg1zGlDpZIg7VOeRdS3myN/hyG1fUo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=lTO9NyHW+QOcMkPuRJcotERPkR/T2h9Kq86+n167xu60btQS459z0+tDwQV9XtMkF
-	 CCzImEA3iAnuVeKfshq3AGjapuUcNQ2z+0C3diuj1m7yJl6nabO3pjg5uK8hE2R/4I
-	 nU/fJ+g+YZnImI/WG2V1kvg/CNU1ux5b7YpQKc0k+M09ttWcGpefZhfZtYlfr/Vsiz
-	 zG006FszQVM54ch5S67QwNbU22wRqoal5Way327q1cACUXVIVY8J+rWHhRVDi78YzE
-	 /LR62mm8Zc8HPECYu4ZYElfIj9f9T7E49tbsdxG++WabH4jk93AVVcCMa2QiiQtUCJ
-	 jq0wikgl2s6mg==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d27184197cso1639191fa.1;
-        Fri, 23 Feb 2024 01:37:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVajRbhKxKDUOBNrxxeomu+tpNNdhYP3QZM3Loz210OkE2NuYEewOg4fhyIqH1ledLZOoC4nsUUZZiXcyRFh2Ga3wuFGTt9N7Pwf72cNBUGgJ4/JuE0oFhxpBebaOq/jMUd1jZDJPuqi50ZBsopRFFrkWonv4gsPw66j4Jl3bbJQjS++KUVMYO7QhnuoItxKLhlcqJXZRLFcQYPPbN6sSIobKC/+NSNdHifM0gKJ+4/MaAdHizOA8LnwtM5m2De5+mm
-X-Gm-Message-State: AOJu0YwCAjxfObg14yC/nvrXh6FdBpJENqhDbb/7CDnjzGkq8ngSfk4g
-	YTQULkwqMDE40HxSnZEWxICBTr4IRm1ciTWzJMYf+MWM8HQz+NwscCUMoMiXGx/ZbTjDrcM29IJ
-	nX8I/QgHyIVHbrkOZLTbWso+sqrk=
-X-Google-Smtp-Source: AGHT+IG8RzI+KlFZjtnX9Ar8ORCwXhB3wnST2X3XRz5ROmCtiTukZgWnN7bJJrkNqPIDPlBotgqwm3wzCz7lultVJL8=
-X-Received: by 2002:a2e:a30f:0:b0:2d2:40d7:9a55 with SMTP id
- l15-20020a2ea30f000000b002d240d79a55mr940682lje.4.1708681019139; Fri, 23 Feb
- 2024 01:36:59 -0800 (PST)
+	s=k20201202; t=1708693133;
+	bh=QbCeKgCF+2cvriyW1QLoaWdnb5N532ueeh9KURAIqHs=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=iJp2IlZMJYf0zTzXwC1xyC2pXfRwRwx4+mMd5aQll5KR53OKz4VvvgOvhQQs/Rdue
+	 QwYtvvjPvkUpyJwfWICaajy60aetP/WKZihlJ4f5BcL1pxqdqG1UILGD4zyaVYBwLL
+	 gd24/y5f+VF9t6rfBXbE08h9IvyAlWRFxn3D1cnlSkE+aqm9fi9SAsEWG6oMdROjJZ
+	 B6Gq/zkvlLlCvD4GzPD1FBjVNsExVVB7CvBm+TpJTj5X9XiwRFgtQeQEyplG4jGP+T
+	 QOGp6Tf1STo88TjkxlMaoltYPZO/cRKtYxMwpMBshHSxbS3rzaVjd9dRXb1QpwUJ//
+	 5KD28RF0n899w==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240214221847.2066632-1-ross.philipson@oracle.com>
- <20240214221847.2066632-15-ross.philipson@oracle.com> <CAMj1kXHXt6z94JCM2C5rLz-n9nGA46bb1eMbqcP5e7K9+NzPSg@mail.gmail.com>
- <c5bd3ee4-4bf1-4e9a-8e5d-12ee8e195d3d@apertussolutions.com>
-In-Reply-To: <c5bd3ee4-4bf1-4e9a-8e5d-12ee8e195d3d@apertussolutions.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 23 Feb 2024 10:36:46 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEUdj+==Ud_YWP2FP05St3KDsduzUMsOZzu9LRsLVsLVA@mail.gmail.com>
-Message-ID: <CAMj1kXEUdj+==Ud_YWP2FP05St3KDsduzUMsOZzu9LRsLVsLVA@mail.gmail.com>
-Subject: Re: [PATCH v8 14/15] x86: Secure Launch late initcall platform module
-To: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Cc: Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-efi@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	hpa@zytor.com, dave.hansen@linux.intel.com, mjg59@srcf.ucam.org, 
-	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, jarkko@kernel.org, 
-	jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, kanth.ghatraju@oracle.com, 
-	trenchboot-devel@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 23 Feb 2024 14:58:49 +0200
+Message-Id: <CZCH5V83WBBV.20JR0RC1GJVJY@suppilovahvero>
+To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, "Lino Sanfilippo"
+ <l.sanfilippo@kunbus.com>, "Alexander Steffen"
+ <Alexander.Steffen@infineon.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Sasha
+ Levin" <sashal@kernel.org>, <linux-integrity@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Kanth Ghatraju"
+ <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.de>
+Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.15.2
+References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
+ <20240131170824.6183-2-dpsmith@apertussolutions.com>
+ <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
+ <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
+ <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
+ <91f600ef-867b-4523-89be-1c0ba34f8a4c@kunbus.com>
+ <CZA9ADCGOTQT.LB5XHZZVTWVH@seitikki>
+ <88b75c9c-98ab-4474-8112-6a27d11a2fdf@apertussolutions.com>
+In-Reply-To: <88b75c9c-98ab-4474-8112-6a27d11a2fdf@apertussolutions.com>
 
-On Thu, 22 Feb 2024 at 14:58, Daniel P. Smith
-<dpsmith@apertussolutions.com> wrote:
+On Fri Feb 23, 2024 at 3:58 AM EET, Daniel P. Smith wrote:
+> > Just adding here that I wish we also had a log transcript of bug, which
+> > is right now missing. The explanation believable enough to move forward
+> > but I still wish to see a log transcript.
 >
-> On 2/15/24 03:40, Ard Biesheuvel wrote:
-> > On Wed, 14 Feb 2024 at 23:32, Ross Philipson <ross.philipson@oracle.com> wrote:
-> >>
-> >> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-> >>
-> >> The Secure Launch platform module is a late init module. During the
-> >> init call, the TPM event log is read and measurements taken in the
-> >> early boot stub code are located. These measurements are extended
-> >> into the TPM PCRs using the mainline TPM kernel driver.
-> >>
-> >> The platform module also registers the securityfs nodes to allow
-> >> access to TXT register fields on Intel along with the fetching of
-> >> and writing events to the late launch TPM log.
-> >>
-> >> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
-> >> Signed-off-by: garnetgrimm <grimmg@ainfosec.com>
-> >> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
-> >
-> > There is an awful amount of code that executes between the point where
-> > the measurements are taken and the point where they are loaded into
-> > the PCRs. All of this code could subvert the boot flow and hide this
-> > fact, by replacing the actual taken measurement values with the known
-> > 'blessed' ones that will unseal the keys and/or phone home to do a
-> > successful remote attestation.
->
-> To set context, in general the motivation to employ an RTM, Static or
-> Dynamic, integrity solution is to enable external platform validation,
-> aka attestation. These trust chains are constructed from the principle
-> of measure and execute that rely on the presence of a RoT for Storage
-> (RTS) and a RoT for Reporting (RTR). Under the TCG architecture adopted
-> by x86 vendors and now recently by Arm, those roles are fulfilled by the
-> TPM. With this context, lets layout the assumptive trusts being made here,
->    1. The CPU GETSEC instruction functions correctly
->    2. The IOMMU, and by extension the PMRs, functions correctly
->    2. The ACM authentication process functions correctly
->    3. The ACM functions correctly
->    4. The TPM interactions function correctly
->    5. The TPM functions correctly
->
-> With this basis, let's explore your assertion here. The assertion breaks
-> down into two scenarios. The first is that the at-rest kernel binary is
-> corrupt, unintentionally (bug) or maliciously, either of which does not
-> matter for the situation. For the sake of simplicity, corruption of the
-> Linux kernel during loading or before the DRTM Event is considered an
-> equivalent to corruption of the kernel at-rest. The second is that the
-> kernel binary was corrupted in memory at some point after the DRTM event
-> occurs.
->
-> For both scenarios, the ACM will correctly configure the IOMMU PMRs to
-> ensure the kernel can no longer be tampered with in memory. After which,
-> the ACM will then accurately measure the kernel (bzImage) and safely
-> store the measurement in the TPM.
->
-> In the first scenario, the TPM will accurately report the kernel
-> measurement in the attestation. The attestation authority will be able
-> to detect if an invalid kernel was started and can take whatever
-> remediation actions it may employ.
->
-> In the second scenario, any attempt to corrupt the binary after the ACM
-> has configured the IOMMU PMR will fail.
->
->
+> That will be forth coming.
 
-This protects the memory image from external masters after the
-measurement has been taken.
+I did not respond yet to other responses that you've given in the past=20
+12'ish hours or so (just woke up) but I started to think how all this
+great and useful information would be best kept in memory. Some of it
+has been discussed in the past but there is lot of small details that
+are too easily forgotten.
 
-So any external influences in the time window between taking the
-measurements and loading them into the PCRs are out of scope here, I
-guess?
+I'd think the best "documentation" approach here would be inject the
+spec references to the sites where locality behaviour is changed so
+that it is easy in future cross-reference them, and least of risk
+of having code changes that would break anything. I think this way
+all the information that you provided is best preserved for the
+future.
 
-Maybe it would help (or if I missed it - apologies) to include a
-threat model here. I suppose physical tampering is out of scope?
+Thanks a lot for great and informative responses!
 
-> > At the very least, this should be documented somewhere. And if at all
-> > possible, it should also be documented why this is ok, and to what
-> > extent it limits the provided guarantees compared to a true D-RTM boot
-> > where the early boot code measures straight into the TPMs before
-> > proceeding.
->
-> I can add a rendition of the above into the existing section of the
-> documentation patch that already discusses separation of the measurement
-> from the TPM recording code. As to the limits it incurs on the DRTM
-> integrity, as explained above, I submit there are none.
->
+> v/r,
+> dps
 
-Thanks for the elaborate explananation. And yes, please document this
-with the changes.
+BR, Jarkko
 
