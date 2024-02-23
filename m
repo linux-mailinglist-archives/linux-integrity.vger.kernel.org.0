@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1449-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1450-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 842BC861DE8
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 21:44:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50866861E17
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 21:48:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 123B8289CDF
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 20:44:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 062F91F25D37
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 20:48:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6541482F1;
-	Fri, 23 Feb 2024 20:42:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A45D146E9F;
+	Fri, 23 Feb 2024 20:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I5J+TKJX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IYqvQTmn"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4540146E76;
-	Fri, 23 Feb 2024 20:42:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65B1179A8;
+	Fri, 23 Feb 2024 20:44:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708720948; cv=none; b=Z6xeEwJQfHL6tIFH5C5RTc6w1Glq+cAC3lV7KaYzUvO5yh9ispGiFYfTttzLJTBXLIQqJGc5Z0//7FG0wVT1kEORDMR4ZyTmQzz4A97n1K5Bv5dFQXwb5z5ZF6IAPguCZm8l8zbR6oiJNv7Fw8FLmPiCYwgwAEAY1QnQ/Di+6IE=
+	t=1708721093; cv=none; b=gOW7Pr7+YQf4bCWTzIhNkiUxB7U4m7Dj8X0qpCiaYIcOIgJKw2jyRUCB+HL53wTwA6dcLcXOqJcGTkFRKKK0No60YYHfhMRdjNKGg5JGT5dDBEGpEnKM8pNRW3XCq1rc226p6mz/vtbev/8Tx7VokjepmuPTIHmi8YQpyWGGF6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708720948; c=relaxed/simple;
-	bh=pHoXDnwutfbyjqrkBCrccDqh2gu3zSNO5OYOn7Rd5Dg=;
+	s=arc-20240116; t=1708721093; c=relaxed/simple;
+	bh=81yMsgnNPtyxWeBwSw7QL9ejxblFCxtOK+JB/uT5avw=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=l2HYpP9aY81yGHPQ9mSpf4BbukrzKl1zeck9HKHUiEOieT+VagQV0Y1qECyPD/tL+R37HD1uyLCykvSIdqbzZz489xwMOvAJC/lY7DIcFoSxPdvJY8E27TINr/Ugrn9mNRum14OacFWpJy1Lz5lWaCjpyf+GpY9BCrn7jn+jskk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I5J+TKJX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95CFC433F1;
-	Fri, 23 Feb 2024 20:42:25 +0000 (UTC)
+	 References:In-Reply-To; b=t/s4xH66zijNd8VTS8cE0FsV7jeCG4lS83ROQsHqY19Rb5S6gK3N5Ah03gfqU5y+XJzHzzR+IXpcKfl1tg9PYVr+nnStwmwSOtw8K5zR3TU2g6QA9oVCXDy/WdQuMuIVsPd4OicfBmdYR0bCHdbWKdDFxMILI+pSw1K4XB6Zus8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IYqvQTmn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E3C3C433C7;
+	Fri, 23 Feb 2024 20:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708720948;
-	bh=pHoXDnwutfbyjqrkBCrccDqh2gu3zSNO5OYOn7Rd5Dg=;
+	s=k20201202; t=1708721092;
+	bh=81yMsgnNPtyxWeBwSw7QL9ejxblFCxtOK+JB/uT5avw=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=I5J+TKJXSsh/1Pd/kcCSDm5W0Zo/GXHSvaEAGbwlJyh7hyFMYwS8sSeMfDyFEyfbp
-	 omK/t9h3JjNiNcFWT2M48tbNCbfWYwf/ap10zB986ogizIRRfxB2zsni3Hs+j8D1MV
-	 wdG9R5XASvCB5cwH1fcAYaG+zC+dBsnM06UOI3UGoK0Ohu632/6eiA2lx9M6K2I27Y
-	 Q2PgnrRDdwu2/0KzPuGdMP3ByC4H+1sQRjiByvWlagGVqXCvB7DV/yWIK2nTPMxXPr
-	 Qg6utD1NfgGXYKOy0jayxr26lN0r3YHN3HNeO1m1EUFf0l3K1pranyPPOuQqgCkgnv
-	 JUo32pR6bc8RA==
+	b=IYqvQTmnoiByiLmEB90ugg69ZgcLiroI2x+zzB6fFua8K1J3aav+uaE6e7/n/d6nS
+	 MzCXd6MMhCuAjVjNGUN7+rfVx2zpsV42Jc3lLYXjfCjjTEaCJwKTOmbVoWc5q1DDVr
+	 B5E1pY53PgoxUP1l49VkH3wDJ+Orb+eAJYkcYNAOZUc3JJ/hrEpJIn0K71wtP9JNdn
+	 vJ6//PUgGG5ZJ19nFSpd8AlWOLT92tjlBq9RTnQxnkMvswAgO4sY3aHYFB6UV3femx
+	 tswbUEM/tSUGQzoe+oicsNr3K0BG6+7RiSSJvFOjaXlT32c2tR36LBvSXt3CCgOcA2
+	 G5dEB0VmZSQrg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,15 +49,13 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 23 Feb 2024 22:42:23 +0200
-Message-Id: <CZCR0STNHQZ7.WQ6RUYVPYKZI@suppilovahvero>
+Date: Fri, 23 Feb 2024 22:44:48 +0200
+Message-Id: <CZCR2N9XKXJQ.32FMAU50UOLT2@suppilovahvero>
 Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Kanth Ghatraju"
- <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.dekkjkj>
+ <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.de>
 Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Daniel P. Smith"
- <dpsmith@apertussolutions.com>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Lino Sanfilippo"
+To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, "Lino Sanfilippo"
  <l.sanfilippo@kunbus.com>, "Alexander Steffen"
  <Alexander.Steffen@infineon.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Sasha
  Levin" <sashal@kernel.org>, <linux-integrity@vger.kernel.org>,
@@ -69,90 +67,74 @@ References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
  <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
  <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
  <91f600ef-867b-4523-89be-1c0ba34f8a4c@kunbus.com>
- <CZA9CM3PDILC.82JMLUWMB6B7@seitikki> <CZA9GMC718HA.1JFHTTWV563IE@seitikki>
- <7a7f8f0c1b9d124bfc01b66082abf2d8445564ce.camel@HansenPartnership.com>
- <CZB0I9OAGNHT.1HTSJU3925RBY@seitikki>
- <f1a54774-9a44-4400-91e2-358facc12191@apertussolutions.com>
- <CZCQZ5FTCCB5.GIN1NU7G5S0@suppilovahvero>
-In-Reply-To: <CZCQZ5FTCCB5.GIN1NU7G5S0@suppilovahvero>
+ <8692fcf6-2e67-45b4-b809-7723f30736a2@apertussolutions.com>
+In-Reply-To: <8692fcf6-2e67-45b4-b809-7723f30736a2@apertussolutions.com>
 
-On Fri Feb 23, 2024 at 10:40 PM EET, Jarkko Sakkinen wrote:
-> On Fri Feb 23, 2024 at 3:57 AM EET, Daniel P. Smith wrote:
-> > On 2/21/24 14:43, Jarkko Sakkinen wrote:
-> > > On Wed Feb 21, 2024 at 12:37 PM UTC, James Bottomley wrote:
-> > >> On Tue, 2024-02-20 at 22:31 +0000, Jarkko Sakkinen wrote:
-> > >>>
-> > >>> 2. Because localities are not too useful these days given TPM2's
-> > >>>  =C2=A0=C2=A0 policy mechanism
-> > >>
-> > >> Localitites are useful to the TPM2 policy mechanism.  When we get ke=
-y
-> > >> policy in the kernel it will give us a way to create TPM wrapped key=
+On Fri Feb 23, 2024 at 3:56 AM EET, Daniel P. Smith wrote:
+> On 2/20/24 15:54, Lino Sanfilippo wrote:
+> > Hi,
+> >=20
+> > On 20.02.24 19:42, Alexander Steffen wrote:
+> >> ATTENTION: This e-mail is from an external sender. Please check attach=
+ments and links before opening e.g. with mouseover.
+> >>
+> >>
+> >> On 02.02.2024 04:08, Lino Sanfilippo wrote:
+> >>> On 01.02.24 23:21, Jarkko Sakkinen wrote:
+> >>>
+> >>>>
+> >>>> On Wed Jan 31, 2024 at 7:08 PM EET, Daniel P. Smith wrote:
+> >>>>> Commit 933bfc5ad213 introduced the use of a locality counter to con=
+trol when a
+> >>>>> locality request is allowed to be sent to the TPM. In the commit, t=
+he counter
+> >>>>> is indiscriminately decremented. Thus creating a situation for an i=
+nteger
+> >>>>> underflow of the counter.
+> >>>>
+> >>>> What is the sequence of events that leads to this triggering the
+> >>>> underflow? This information should be represent in the commit messag=
+e.
+> >>>>
+> >>>
+> >>> AFAIU this is:
+> >>>
+> >>> 1. We start with a locality_counter of 0 and then we call tpm_tis_req=
+uest_locality()
+> >>> for the first time, but since a locality is (unexpectedly) already ac=
+tive
+> >>> check_locality() and consequently __tpm_tis_request_locality() return=
+ "true".
+> >>
+> >> check_locality() returns true, but __tpm_tis_request_locality() return=
 s
-> > >> that can only be unwrapped in the kernel if we run the kernel in a
-> > >> different locality from userspace (I already have demo patches doing
-> > >> this).
-> > >=20
-> > > Let's keep this discussion in scope, please.
-> > >=20
-> > > Removing useless code using registers that you might have some actual=
-ly
-> > > useful use is not wrong thing to do. It is better to look at things f=
-rom
-> > > clean slate when the time comes.
-> > >=20
-> > >>>   I cannot recall out of top of my head can
-> > >>>  =C2=A0=C2=A0 you have two localities open at same time.
-> > >>
-> > >> I think there's a misunderstanding about what localities are: they'r=
-e
-> > >> effectively an additional platform supplied tag to a command.  Each
-> > >> command can therefore have one and only one locality.  The TPM doesn=
-'t
-> > >=20
-> > > Actually this was not unclear at all. I even read the chapters from
-> > > Ariel Segall's yesterday as a refresher.
-> > >=20
-> > > I was merely asking that if TPM_ACCESS_X is not properly cleared and =
-you
-> > > se TPM_ACCESS_Y where Y < X how does the hardware react as the bug
-> > > report is pretty open ended and not very clear of the steps leading t=
-o
-> > > unwanted results.
-> > >=20
-> > > With a quick check from [1] could not spot the conflict reaction but
-> > > it is probably there.
-> >
-> > The expected behavior is explained in the Informative Comment of sectio=
-n=20
-> > 6.5.2.4 of the Client PTP spec[1]:
-> >
-> > "The purpose of this register is to allow the processes operating at th=
-e=20
-> > various localities to share the TPM. The basic notion is that any=20
-> > locality can request access to the TPM by setting the=20
-> > TPM_ACCESS_x.requestUse field using its assigned TPM_ACCESS_x register=
-=20
-> > address. If there is no currently set locality, the TPM sets current=20
-> > locality to the requesting one and allows operations only from that=20
-> > locality. If the TPM is currently at another locality, the TPM keeps th=
-e=20
-> > request pending until the currently executing locality frees the TPM.=
-=20
+> >> the requested locality. Currently, this is always 0, so the check for
+> >> !ret will always correctly indicate success and increment the
+> >> locality_count.
+> >>
+> >=20
+> > Will the TPM TIS CORE ever (have to) request another locality than 0? M=
+aybe the best would
+> > be to hardcode TPM_ACCESS(0) and get rid of all the locality parameters=
+ that are
+> > passed from one function to another.
+> > But this is rather code optimization and not really required to fix the=
+ reported bug.
 >
-> Right.
->
-> I'd think it would make sense to document the basic dance like this as
-> part of kdoc for request_locality:
->
-> * Setting TPM_ACCESS_x.requestUse:
-> *  1. No locality reserved =3D> set locality.
-> *  2. Locality reserved =3D> set pending.
->
-> I.e. easy reminder with enough granularity.
+> Actually, doing so will break the TPM API. The function=20
+> tpm_tis_request_locality() is registered as the locality handler,=20
+>   int (*request_locality)(struct tpm_chip *chip, int loc), in the tis=20
+> instance of struct tpm_class_ops{}. This is the API used by the Secure=20
+> Launch series to open Locality2 for the measurements it must record.
 
-Also for any non-TPM kernel developer this should be enough to get the
-basic gist of the mechanism without spending too much time reading.
+OK, based on James' earlier feedback on possibility to have kernel
+specific locality and this , and some reconsideration of my position on
+the topic, and reading all these great and informative responses, I
+think I went too far with this :-)
+
+>
+> v/r,
+> dps
 
 BR, Jarkko
 
