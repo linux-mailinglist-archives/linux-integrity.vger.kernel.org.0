@@ -1,79 +1,79 @@
-Return-Path: <linux-integrity+bounces-1416-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1419-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D474B8615D4
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 16:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BD4ED8615D8
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 16:31:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E48141C242EE
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 15:30:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D89231C24189
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 15:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472D882C60;
-	Fri, 23 Feb 2024 15:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32AAD823A7;
+	Fri, 23 Feb 2024 15:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RqsRxTDR"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AoucNGDG"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BC48287B
-	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 15:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8E881AC6
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 15:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708702243; cv=none; b=cm9LuWpMJH7jkZBYGm/JSW0JGBmZfNilknU4tf8Ao9vR+oj3htP+4CXgxz689xdsx22QwdNzvMKMIKvDk4MUEOgxCjylavl3KL1U771k10NN7JNVKF26dh9RHdtJIEgW91pwnL2egnmOtJs3WOro85myyfxYDcs7amMt3QXht+I=
+	t=1708702271; cv=none; b=CF/Thw6FHzKPBc9BhzotfTyN69YerogPEn9gem/cDSB5zzmKzcCfy+am9z7UwetccBP4wWdCyN0SGBdvueNgl10gna9TXOXx4lgFdT6Vwip8XQJr6btIceW7Dz9DiV4KXCwX086+g3mfJZiVutCnsIhER8tMD1j6ufcjO+aYKNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708702243; c=relaxed/simple;
-	bh=MMOhs8IMhjkKyLKEqVp56JSS/96sckjdPgLlbWpdYew=;
+	s=arc-20240116; t=1708702271; c=relaxed/simple;
+	bh=7aDDw6axSZhIXmeyVJ5X0Ga7FLRTIgt8eeWrnJ8ibFk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iPswlXf5zIkP/8lV2yatDTDGNlQlylWJVcwakG78S3W8Ji/Rfj5JF+SVYO8Bs1YVZF0pjtfqQhXCHYP7EFr+Tz2gIEMCzeWcOVdqaJfh5SLrlTsFyltelPe7swh8XmV45wb30E3f/3d3186jg0HVpszIqUkh82A6AzD5njqTX0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RqsRxTDR; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=M+zmYJX+RsUhoF7O1eJXvyQzb1llB7sPfoSEyGSBcH0QKlT03ZPdylZL6Hu7PLyDgrIzhFGORV6rDrAQvg9FKnNyp2kh18FDxm6OboQl1YpK0+6zUx+VtcRP8phIH5MA/QVkEgpoTeGNuZDOUIKSRdHpdmROOKX9I96HtHhZkAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AoucNGDG; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41NF2Tpu020056;
-	Fri, 23 Feb 2024 15:30:26 GMT
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41NEDXPr000819;
+	Fri, 23 Feb 2024 15:30:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=ZblQrsTqyKVUHGgpLi2kCYwUc+TITQAxtoudCdwuxGk=;
- b=RqsRxTDRTaZz6JK47J1JBlzUjwszhOmjqYEYjj7d968U6ouWMEnpX1BqxLQeaS0eTtpS
- R/OQz++lLdrXrORpDzyokW1bZWXjnky1uiaaX6A9+uLvkP99ORyHNlMqtLepygpWSxP8
- xQp0ISnw6kdq4AXxByeLZxh8X7aibcFkIao0Li2dOG98v/n2fGdB8wGTApNTxu6q/IuY
- Fb8E8+gHoSIB6nBmlFMdAL52VPOAqonKEvJNi6YVvCoDZun4gFyW9BInxkx3pdTTpSjm
- B2D7EhOdOqdOarZ4dQQ7Cxq9airbl6z2vEf33uB5Rzfv2sP9nK37gByPTMsoSRyxKbgI Lw== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wewn7gnr6-1
+ bh=IjmbAeuFVX32mVIappYWX81tArzk3M87IaPnLUIZL8I=;
+ b=AoucNGDGIBuNJh8kxJhSbGoec2XJDMWcJ+4rfls/cjJ+T5aNfXnO6b8rn71mTY9smLmw
+ sB322fU5sSTSt56hDVeOUsWQnAStl7uGNQCSK/jP9UM+DAEmq7YJFDYKElWVu0POUF8r
+ et5bmf2/+z2d7ySGwvGsv76sawV5zJXU7c13ZJKLPIE0+PMZqnYoEVraIdCeonJZtsWT
+ BRKhJbeeozG3llredyokaBF4Cbbavk5KUaKbwd2JFwPqmzcU+XakKlmoCShAuc00EzM0
+ sGPS79FPEmyLo/M7zbP4kGk/Wi0wDnZgxYTrPd2Xt8ce8AdrH9ag81EKveSajWcwmm1m 1w== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wevxdt440-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 15:30:55 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41NEBnsC017261;
+	Fri, 23 Feb 2024 15:30:26 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb8mmx2sd-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Fri, 23 Feb 2024 15:30:26 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41NDd87D013470;
-	Fri, 23 Feb 2024 15:30:25 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb7h0xesc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Feb 2024 15:30:25 +0000
 Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41NFUMG933161928
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41NFUMF042271038
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Fri, 23 Feb 2024 15:30:24 GMT
 Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1B5685803F;
+	by IMSVA (Postfix) with ESMTP id BF58958064;
 	Fri, 23 Feb 2024 15:30:22 +0000 (GMT)
 Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8E7275807A;
-	Fri, 23 Feb 2024 15:30:21 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 3E80758060;
+	Fri, 23 Feb 2024 15:30:22 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
 	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 23 Feb 2024 15:30:21 +0000 (GMT)
+	Fri, 23 Feb 2024 15:30:22 +0000 (GMT)
 From: Stefan Berger <stefanb@linux.ibm.com>
 To: linux-integrity@vger.kernel.org
 Cc: zohar@linux.ibm.com, roberto.sassu@huawei.com, vt@altlinux.org,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v2 ima-evm-utils 2/6] Pass ENGINE and keyid through to function using them
-Date: Fri, 23 Feb 2024 10:30:10 -0500
-Message-ID: <20240223153014.4048133-3-stefanb@linux.ibm.com>
+Subject: [PATCH v2 ima-evm-utils 3/6] evmctl: Replace deprecated sign_hash with imaevm_signhash
+Date: Fri, 23 Feb 2024 10:30:11 -0500
+Message-ID: <20240223153014.4048133-4-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.43.2
 In-Reply-To: <20240223153014.4048133-1-stefanb@linux.ibm.com>
 References: <20240223153014.4048133-1-stefanb@linux.ibm.com>
@@ -85,318 +85,241 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qij8RufzTzqekV6Vv9lTOqkVfD9oLspG
-X-Proofpoint-ORIG-GUID: qij8RufzTzqekV6Vv9lTOqkVfD9oLspG
+X-Proofpoint-ORIG-GUID: sE5yq11IFiTm6hoEgWVKlC7VfmxAFIiP
+X-Proofpoint-GUID: sE5yq11IFiTm6hoEgWVKlC7VfmxAFIiP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-23_01,2024-02-23_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- malwarescore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
- spamscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ mlxlogscore=848 phishscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2402230112
 
-Pass the ENGINE and keyid all the way through to the function that is
-using them and deprecate sign_hash since it needs to pass these parameters
-from the global imaevm_params. Define a new API call imaevm_signhash that
-takes all necessary variables as parameters.
-
-In preparation of support for OpenSSL providers, wrap the ENGINE in a
-union inside a struct imaevm_ossl_access and add a type for the selection
-of the ENGINE or provider later on.
+Replace the deprecated sign_hash with imaevm_signhash. Define local
+variables to pass the choice of signature version, key id, and whether
+to use an OpenSSL engine to imaevm_signhash.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- src/imaevm.h    |  26 ++++++++-
- src/libimaevm.c | 144 ++++++++++++++++++++++++++++++++++++------------
- 2 files changed, 134 insertions(+), 36 deletions(-)
+ src/evmctl.c | 75 +++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 45 insertions(+), 30 deletions(-)
 
-diff --git a/src/imaevm.h b/src/imaevm.h
-index 6a52afb..6764604 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -51,7 +51,10 @@
- #include <openssl/opensslconf.h>
+diff --git a/src/evmctl.c b/src/evmctl.c
+index d050b5e..20f34dd 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -147,6 +147,14 @@ static char *g_keypass;
+ #define HMAC_FLAG_CAPS_SET	0x0002
  
- #if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DYNAMIC_ENGINE)
--#include <openssl/engine.h>
-+# include <openssl/engine.h>
-+#else
-+struct engine_st;
-+typedef struct engine_st ENGINE; /* unused when no engine support */
- #endif
- 
- #ifdef USE_FPRINTF
-@@ -250,7 +253,9 @@ void calc_keyid_v2(uint32_t *keyid, char *str, EVP_PKEY *pkey);
- int key2bin(RSA *key, unsigned char *pub);
- uint32_t imaevm_read_keyid(const char *certfile);
- 
--int sign_hash(const char *algo, const unsigned char *hash, int size, const char *keyfile, const char *keypass, unsigned char *sig);
-+IMAEVM_DEPRECATED int sign_hash(const char *algo, const unsigned char *hash,
-+				int size, const char *keyfile, const char *keypass,
-+				unsigned char *sig);
- IMAEVM_DEPRECATED int ima_calc_hash(const char *file, uint8_t *hash);
- IMAEVM_DEPRECATED int verify_hash(const char *file, const unsigned char *hash,
- 				  int size, unsigned char *sig, int siglen);
-@@ -259,7 +264,24 @@ IMAEVM_DEPRECATED int ima_verify_signature(const char *file, unsigned char *sig,
- 					   int digestlen);
- IMAEVM_DEPRECATED void init_public_keys(const char *keyfiles);
- 
-+struct imaevm_ossl_access {
-+	int type;
-+#define IMAEVM_OSSL_ACCESS_TYPE_NONE   0
-+#define IMAEVM_OSSL_ACCESS_TYPE_ENGINE 1  /* also: engine field exists */
-+	union {
-+		ENGINE *engine;
-+	} u;
-+};
+ static unsigned long hmac_flags;
++static uint32_t imaevm_keyid;
++static struct imaevm_ossl_access access_info;
++static long sigflags;
 +
-+#define IMAEVM_SIGFLAG_SIGNATURE_V1	(1 << 0) /* v1 signature; deprecated */
-+#define IMAEVM_SIGFLAGS_SUPPORT		(1 << 0) /* mask of all supported flags */
-+
- int ima_calc_hash2(const char *file, const char *hash_algo, uint8_t *hash);
-+int imaevm_signhash(const char *hashalgo, const unsigned char *hash, int size,
-+		    const char *keyfile, const char *keypass,
-+		    unsigned char *sig, long sigflags,
-+		    const struct imaevm_ossl_access *access_info,
-+		    uint32_t keyid);
- int imaevm_verify_hash(struct public_key_entry *public_keys, const char *file,
- 		       const char *hash_algo, const unsigned char *hash,
- 		       int size, unsigned char *sig, int siglen);
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index ce4f6f7..91af613 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -1031,33 +1031,53 @@ uint32_t imaevm_read_keyid(const char *certfile)
- 	return ntohl(keyid_be);
- }
- 
--static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
-+static EVP_PKEY *read_priv_pkey_engine(ENGINE *e, const char *keyfile,
-+				       const char *keypass, uint32_t keyid)
- {
--	FILE *fp;
--	EVP_PKEY *pkey = NULL;
--
--	if (!strncmp(keyfile, "pkcs11:", 7)) {
- #ifdef CONFIG_IMA_EVM_ENGINE
--		if (!imaevm_params.keyid) {
--			log_err("When using a pkcs11 URI you must provide the keyid with an option\n");
--			return NULL;
--		}
-+	EVP_PKEY *pkey;
- 
--		if (keypass) {
--			if (!ENGINE_ctrl_cmd_string(imaevm_params.eng, "PIN", keypass, 0)) {
--				log_err("Failed to set the PIN for the private key\n");
--				goto err_engine;
--			}
--		}
--		pkey = ENGINE_load_private_key(imaevm_params.eng, keyfile, NULL, NULL);
--		if (!pkey) {
--			log_err("Failed to load private key %s\n", keyfile);
-+	if (!keyid) {
-+		log_err("When using a pkcs11 URI you must provide the keyid with an option\n");
-+		return NULL;
-+	}
-+
-+	if (keypass) {
-+		if (!ENGINE_ctrl_cmd_string(e, "PIN", keypass, 0)) {
-+			log_err("Failed to set the PIN for the private key\n");
- 			goto err_engine;
- 		}
--#else
--		log_err("OpenSSL \"engine\" support is disabled\n");
-+	}
-+	pkey = ENGINE_load_private_key(e, keyfile, NULL, NULL);
-+	if (!pkey) {
-+		log_err("Failed to load private key %s\n", keyfile);
- 		goto err_engine;
-+	}
-+	return pkey;
-+
-+err_engine:
-+	output_openssl_errors();
-+	return NULL;
-+#else
-+	log_err("OpenSSL \"engine\" support is disabled\n");
-+	return NULL;
- #endif
-+}
-+
-+static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass,
-+				const struct imaevm_ossl_access *access_info,
-+				uint32_t keyid)
++static inline bool use_x509(long sigflags)
 +{
-+	FILE *fp;
-+	EVP_PKEY *pkey = NULL;
-+
-+	if (!strncmp(keyfile, "pkcs11:", 7)) {
-+		switch (access_info->type) {
-+		case IMAEVM_OSSL_ACCESS_TYPE_ENGINE:
-+			pkey = read_priv_pkey_engine(access_info->u.engine,
-+						     keyfile, keypass, keyid);
-+			break;
-+		}
- 	} else {
- 		fp = fopen(keyfile, "r");
- 		if (!fp) {
-@@ -1076,18 +1096,17 @@ static EVP_PKEY *read_priv_pkey(const char *keyfile, const char *keypass)
++	return (sigflags & IMAEVM_SIGFLAG_SIGNATURE_V1) == 0;
++}
  
- 	return pkey;
+ typedef int (*find_cb_t)(const char *path);
+ static int find(const char *path, int dts, find_cb_t func);
+@@ -577,7 +585,8 @@ static int sign_evm(const char *file, char *hash_algo, const char *key)
+ 		return len;
+ 	assert(len <= sizeof(hash));
  
--err_engine:
--	output_openssl_errors();
--	return NULL;
- }
+-	len = sign_hash(hash_algo, hash, len, key, g_keypass, sig + 1);
++	len = imaevm_signhash(hash_algo, hash, len, key, g_keypass,
++			      sig + 1, sigflags, &access_info, imaevm_keyid);
+ 	if (len <= 1)
+ 		return len;
+ 	assert(len < sizeof(sig));
+@@ -663,7 +672,8 @@ static int sign_ima(const char *file, char *hash_algo, const char *key)
+ 		return len;
+ 	assert(len <= sizeof(hash));
  
- #if CONFIG_SIGV1
--static RSA *read_priv_key(const char *keyfile, const char *keypass)
-+static RSA *read_priv_key(const char *keyfile, const char *keypass,
-+			  const struct imaevm_ossl_access *access_info,
-+			  uint32_t keyid)
- {
- 	EVP_PKEY *pkey;
+-	len = sign_hash(hash_algo, hash, len, key, g_keypass, sig + 1);
++	len = imaevm_signhash(hash_algo, hash, len, key, g_keypass,
++			      sig + 1, sigflags, &access_info, imaevm_keyid);
+ 	if (len <= 1)
+ 		return len;
+ 	assert(len < sizeof(sig));
+@@ -844,8 +854,9 @@ static int cmd_sign_hash(struct command *cmd)
+ 				continue;
+ 			}
+ 
+-			siglen = sign_hash(algo, sigv3_hash, hashlen / 2,
+-					   key, g_keypass, sig + 1);
++			siglen = imaevm_signhash(algo, sigv3_hash, hashlen / 2,
++						 key, g_keypass, sig + 1, sigflags,
++						 &access_info, imaevm_keyid);
+ 
+ 			sig[0] = IMA_VERITY_DIGSIG;
+ 			sig[1] = DIGSIG_VERSION_3;	/* sigv3 */
+@@ -856,8 +867,10 @@ static int cmd_sign_hash(struct command *cmd)
+ 			assert(hashlen / 2 <= sizeof(hash));
+ 			hex2bin(hash, line, hashlen / 2);
+ 
+-			siglen = sign_hash(g_hash_algo, hash,
+-					   hashlen / 2, key, g_keypass, sig + 1);
++			siglen = imaevm_signhash(g_hash_algo, hash,
++						 hashlen / 2, key, g_keypass,
++						 sig + 1, sigflags,
++						 &access_info, imaevm_keyid);
+ 			sig[0] = EVM_IMA_XATTR_DIGSIG;
+ 		}
+ 
+@@ -963,7 +976,7 @@ static int cmd_verify_evm(struct command *cmd)
+ 		return -1;
+ 	}
+ 
+-	if (imaevm_params.x509) {
++	if (use_x509(sigflags)) {
+ 		if (imaevm_params.keyfile) /* Support multiple public keys */
+ 			err = imaevm_init_public_keys(imaevm_params.keyfile,
+ 						      &public_keys);
+@@ -1026,7 +1039,7 @@ static int cmd_verify_ima(struct command *cmd)
+ 		return -1;
+ 	}
+ 
+-	if (imaevm_params.x509) {
++	if (use_x509(sigflags)) {
+ 		if (imaevm_params.keyfile) /* Support multiple public keys */
+ 			err = imaevm_init_public_keys(imaevm_params.keyfile,
+ 						      &public_keys);
+@@ -1061,15 +1074,12 @@ static int cmd_convert(struct command *cmd)
+ 	uint8_t keyid[8];
  	RSA *key;
  
--	pkey = read_priv_pkey(keyfile, keypass);
-+	pkey = read_priv_pkey(keyfile, keypass, access_info, keyid);
- 	if (!pkey)
- 		return NULL;
- 	key = EVP_PKEY_get1_RSA(pkey);
-@@ -1113,7 +1132,9 @@ static int get_hash_algo_v1(const char *algo)
- 
- static int sign_hash_v1(const char *hashalgo, const unsigned char *hash,
- 			int size, const char *keyfile, const char *keypass,
--			unsigned char *sig)
-+			unsigned char *sig,
-+			const struct imaevm_ossl_access *access_info,
-+			uint32_t keyid)
- {
- 	int len = -1, hashalgo_idx;
- 	SHA_CTX ctx;
-@@ -1147,7 +1168,7 @@ static int sign_hash_v1(const char *hashalgo, const unsigned char *hash,
- 	log_info("hash(%s): ", hashalgo);
- 	log_dump(hash, size);
- 
--	key = read_priv_key(keyfile, keypass);
-+	key = read_priv_key(keyfile, keypass, access_info, keyid);
- 	if (!key)
- 		return -1;
- 
-@@ -1201,7 +1222,9 @@ out:
-  */
- static int sign_hash_v2(const char *algo, const unsigned char *hash,
- 			int size, const char *keyfile, const char *keypass,
--			unsigned char *sig)
-+			unsigned char *sig,
-+			const struct imaevm_ossl_access *access_info,
-+			uint32_t keyid)
- {
- 	struct signature_v2_hdr *hdr;
- 	int len = -1;
-@@ -1211,7 +1234,6 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
- 	const EVP_MD *md;
- 	size_t sigsize;
- 	const char *st;
--	uint32_t keyid;
- 
- 	if (!hash) {
- 		log_err("sign_hash_v2: hash is null\n");
-@@ -1236,7 +1258,7 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
- 	log_info("hash(%s): ", algo);
- 	log_dump(hash, size);
- 
--	pkey = read_priv_pkey(keyfile, keypass);
-+	pkey = read_priv_pkey(keyfile, keypass, access_info, keyid);
- 	if (!pkey)
- 		return -1;
- 
-@@ -1259,8 +1281,8 @@ static int sign_hash_v2(const char *algo, const unsigned char *hash,
+-	imaevm_params.x509 = 0;
+-
+ 	inkey = g_argv[optind++];
+ 	if (!inkey) {
+-		inkey = imaevm_params.x509 ? "/etc/keys/x509_evm.der" :
+-					     "/etc/keys/pubkey_evm.pem";
++		inkey = "/etc/keys/pubkey_evm.pem";
  	}
- #endif
  
--	if (imaevm_params.keyid)
--		keyid = htonl(imaevm_params.keyid);
-+	if (keyid)
-+		keyid = htonl(keyid);
- 	else {
- 		int keyid_read_failed = read_keyid_from_cert(&keyid, keyfile, false);
+-	key = read_pub_key(inkey, imaevm_params.x509);
++	key = read_pub_key(inkey, 0);
+ 	if (!key)
+ 		return 1;
  
-@@ -1303,17 +1325,71 @@ err:
- 	return len;
- }
+@@ -1094,7 +1104,7 @@ static int cmd_import(struct command *cmd)
  
-+static int check_ossl_access(const struct imaevm_ossl_access *access_info)
-+{
-+	switch (access_info->type) {
-+	case IMAEVM_OSSL_ACCESS_TYPE_NONE:
-+#ifdef CONFIG_IMA_EVM_ENGINE
-+	case IMAEVM_OSSL_ACCESS_TYPE_ENGINE:
-+#endif
-+		return 0;
-+
-+	default:
-+		errno = EINVAL;
-+		return -1;
-+	}
-+}
-+
-+int imaevm_signhash(const char *hashalgo, const unsigned char *hash, int size,
-+		    const char *keyfile, const char *keypass,
-+		    unsigned char *sig, long sigflags,
-+		    const struct imaevm_ossl_access *access_info,
-+		    uint32_t keyid)
-+{
-+	int rc;
-+
-+	if (access_info) {
-+		rc = check_ossl_access(access_info);
-+		if (rc)
-+			return rc;
-+	}
-+	if (sigflags & ~IMAEVM_SIGFLAGS_SUPPORT) {
-+		/* unsupported flag */
-+		errno = EINVAL;
-+		return -1;
-+	}
-+
-+	if (sigflags & IMAEVM_SIGFLAG_SIGNATURE_V1) {
-+#if CONFIG_SIGV1
-+		return sign_hash_v1(hashalgo, hash, size, keyfile, keypass, sig,
-+				    access_info, keyid);
-+#else
-+		log_info("Signature version 1 deprecated.");
-+		return -1;
-+#endif
-+	}
-+
-+	return sign_hash_v2(hashalgo, hash, size, keyfile, keypass, sig,
-+			    access_info, keyid);
-+}
-+
+ 	inkey = g_argv[optind++];
+ 	if (!inkey) {
+-		inkey = imaevm_params.x509 ? "/etc/keys/x509_evm.der" :
++		inkey = use_x509(sigflags) ? "/etc/keys/x509_evm.der" :
+ 					     "/etc/keys/pubkey_evm.pem";
+ 	} else
+ 		ring = g_argv[optind++];
+@@ -1124,8 +1134,8 @@ static int cmd_import(struct command *cmd)
+ 		}
+ 	}
  
- int sign_hash(const char *hashalgo, const unsigned char *hash, int size, const char *keyfile, const char *keypass, unsigned char *sig)
- {
-+	const struct imaevm_ossl_access access_info = {
-+		.type = IMAEVM_OSSL_ACCESS_TYPE_ENGINE,
-+		.u.engine = imaevm_params.eng,
-+	};
- 	if (!keypass)	/* Avoid breaking existing libimaevm usage */
- 		keypass = imaevm_params.keypass;
+-	if (imaevm_params.x509) {
+-		EVP_PKEY *pkey = read_pub_pkey(inkey, imaevm_params.x509);
++	if (use_x509(sigflags)) {
++		EVP_PKEY *pkey = read_pub_pkey(inkey, 1);
  
- 	if (imaevm_params.x509)
--		return sign_hash_v2(hashalgo, hash, size, keyfile, keypass, sig);
-+		return sign_hash_v2(hashalgo, hash, size, keyfile, keypass, sig,
-+				    &access_info, imaevm_params.keyid);
+ 		if (!pkey)
+ 			return 1;
+@@ -1138,7 +1148,7 @@ static int cmd_import(struct command *cmd)
+ 		EVP_PKEY_free(pkey);
+ 	} else {
  #if CONFIG_SIGV1
- 	else
--		return sign_hash_v1(hashalgo, hash, size, keyfile, keypass, sig);
-+		return sign_hash_v1(hashalgo, hash, size, keyfile, keypass, sig,
-+				    &access_info, imaevm_params.keyid);
+-		RSA *key = read_pub_key(inkey, imaevm_params.x509);
++		RSA *key = read_pub_key(inkey, 0);
+ 
+ 		if (!key)
+ 			return 1;
+@@ -1153,8 +1163,8 @@ static int cmd_import(struct command *cmd)
+ 
+ 	log_info("Importing public key %s from file %s into keyring %d\n", name, inkey, id);
+ 
+-	id = add_key(imaevm_params.x509 ? "asymmetric" : "user",
+-		     imaevm_params.x509 ? NULL : name, pub, len, id);
++	id = add_key(use_x509(sigflags) ? "asymmetric" : "user",
++		     use_x509(sigflags) ? NULL : name, pub, len, id);
+ 	if (id < 0) {
+ 		log_err("add_key failed\n");
+ 		err = id;
+@@ -3106,7 +3116,7 @@ int main(int argc, char *argv[])
+ 				hmac_flags |= HMAC_FLAG_NO_UUID;
+ 			break;
+ 		case '1':
+-			imaevm_params.x509 = 0;
++			sigflags |= IMAEVM_SIGFLAG_SIGNATURE_V1;
+ 			break;
+ 		case 'k':
+ 			imaevm_params.keyfile = optarg;
+@@ -3172,11 +3182,12 @@ int main(int argc, char *argv[])
+ 			break;
+ #if CONFIG_IMA_EVM_ENGINE
+ 		case 139: /* --engine e */
+-			imaevm_params.eng = setup_engine(optarg);
+-			if (!imaevm_params.eng) {
++			access_info.u.engine = setup_engine(optarg);
++			if (!access_info.u.engine) {
+ 				log_info("setup_engine failed\n");
+ 				goto error;
+ 			}
++			access_info.type = IMAEVM_OSSL_ACCESS_TYPE_ENGINE;
+ 			break;
  #endif
- 	log_info("Signature version 1 deprecated.");
- 	return -1;
+ 		case 140: /* --xattr-user */
+@@ -3210,7 +3221,7 @@ int main(int argc, char *argv[])
+ 				log_err("Invalid keyid value.\n");
+ 				exit(1);
+ 			}
+-			imaevm_params.keyid = keyid;
++			imaevm_keyid = keyid;
+ 			break;
+ 		case 145:
+ 			keyid = imaevm_read_keyid(optarg);
+@@ -3218,7 +3229,7 @@ int main(int argc, char *argv[])
+ 				log_err("Error reading keyid.\n");
+ 				exit(1);
+ 			}
+-			imaevm_params.keyid = keyid;
++			imaevm_keyid = keyid;
+ 			break;
+ 		case 146:
+ 			veritysig = 1;
+@@ -3241,12 +3252,16 @@ int main(int argc, char *argv[])
+ 		g_keypass = getenv("EVMCTL_KEY_PASSWORD");
+ 
+ 	if (imaevm_params.keyfile != NULL &&
+-	    imaevm_params.eng == NULL &&
++	    access_info.type == IMAEVM_OSSL_ACCESS_TYPE_NONE &&
+ 	    !strncmp(imaevm_params.keyfile, "pkcs11:", 7)) {
+ #if CONFIG_IMA_EVM_ENGINE
+-		imaevm_params.eng = setup_engine("pkcs11");
++		if (access_info.type == IMAEVM_OSSL_ACCESS_TYPE_NONE) {
++			access_info.u.engine = setup_engine("pkcs11");
++			if (access_info.u.engine)
++				access_info.type = IMAEVM_OSSL_ACCESS_TYPE_ENGINE;
++		}
+ #endif
+-		if (!imaevm_params.eng)
++		if (access_info.type == IMAEVM_OSSL_ACCESS_TYPE_NONE)
+ 			goto error;
+ 	}
+ 
+@@ -3272,9 +3287,9 @@ int main(int argc, char *argv[])
+ 
+ error:
+ #if CONFIG_IMA_EVM_ENGINE
+-	if (imaevm_params.eng) {
+-		ENGINE_finish(imaevm_params.eng);
+-		ENGINE_free(imaevm_params.eng);
++	if (access_info.type == IMAEVM_OSSL_ACCESS_TYPE_ENGINE) {
++		ENGINE_finish(access_info.u.engine);
++		ENGINE_free(access_info.u.engine);
+ #if OPENSSL_API_COMPAT < 0x10100000L
+ 		ENGINE_cleanup();
+ #endif
 -- 
 2.43.2
 
