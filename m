@@ -1,691 +1,344 @@
-Return-Path: <linux-integrity+bounces-1421-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1422-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2564286164B
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 16:51:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28D57861837
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 17:42:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5EE31F25898
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 15:51:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50D4D1C21A55
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 16:42:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC75F82C7E;
-	Fri, 23 Feb 2024 15:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21656186A;
+	Fri, 23 Feb 2024 16:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CIJK3Km4"
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="Rnnxl9kS"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9389C8288F;
-	Fri, 23 Feb 2024 15:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC007128388
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 16:42:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708703480; cv=none; b=UFXnPGgv0/MHq8uN8RVhmY3gZeIa/a+4JnPwpvamVfkjdLfOgwgeOI+BDUDTyCW2rnJj/GxvVp/Hf405P2T6874gqhTlzCfkN9RPSh1hF1M4K4Niy/9AOLGFEFD6e4nY2p/exLkHf3AVw7I/oYqavbg606zsJbolPdkkuu/BG90=
+	t=1708706540; cv=none; b=U0+OZrBCVc/dROCatWUr4+hvJ6CmFsYkUxeURSZBwUANJ23x6W4qfZhhbmmvQSB/HXc5BvfSfm42dGueF+UDOg3++7OVl3Kxk7RT6ml6bNRZYJo9EGZFcKmvhUewkFBK5fzYhERI1bgnFLVRlbQbt7zFxrKLYhqtyLQx61Ss1Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708703480; c=relaxed/simple;
-	bh=yujGdTXbiMO7zXVwAIVrsA48Z+lcBTqAUs3ROhvmWXg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=iQ3OrsTX/f4WuhitaXVupPYhx2nOLt8QcrA/6SGg7qdZYhGZCqS5Xl/WdUcD+m4hcCfhZfPxdOJM2cjpcb3Bj/pinbEdSixR1+rVIc7himj/MAf2BJbpjsbAQbakdy0FvZlOW5xK3RkXik3cMHyKZX4ObHigfW9cNMcX/KLdNVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CIJK3Km4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E06C433F1;
-	Fri, 23 Feb 2024 15:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708703480;
-	bh=yujGdTXbiMO7zXVwAIVrsA48Z+lcBTqAUs3ROhvmWXg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CIJK3Km4ekhthkNHoFV9u7rZHv6Nw0EMV70orph/boX+yCCbaFCm7W+iWIbYmBHMo
-	 /6NzUlokKM8JTMXNzZw1o+WfgkL7nR73wtIe6ZDpBFJi9JrHKEgrtqBKuOO6yA+fZk
-	 sx5sQN4uzYU6TaRXGoiQkaVjSR65ovwTujvHXVzxIozSyw10xDOYceU6UDbvAjqDx2
-	 sEq06Kp0RKZEgodfXDSHQ+HkyTa3ZfJKGJi6/CBTE/uEaVdGDI69XK3uiI1vBq/RQX
-	 Qk8Tm7DJ0zLd4zNoe4SuzX4fHeYapaY9oiknwU5Mj95VSLB6YZykFvOI84SaDumyDG
-	 zIOmVqA+R3kzw==
+	s=arc-20240116; t=1708706540; c=relaxed/simple;
+	bh=tzZ5vRou2tzwpiknAbcgvaY03gJD6AH4Ovlu8u2D8nE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E9Rqep1RqsAtx7+JE/8D1Ah8P4HxpyWefightJJvT3bkk4bwE9okPIQ2k6LqtR5kV9y69EV8AkR00Xu5qV4adVj0VvQmt5hcUQDNg9EsGhc8wRl61tfhwwoIzAtIcnIwhjd2Cu74oAc3delIM6XbG1bY9a/1qhBEh34sok5FGUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=Rnnxl9kS; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-512be6fda52so714896e87.0
+        for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 08:42:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=citrix.com; s=google; t=1708706536; x=1709311336; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qoLuBOTBYwo+qwBs59lcs6973WjeFSpK73YZ5Iw2Km4=;
+        b=Rnnxl9kSa7KrbBm6ey3tFDwIUFl3iGJfUhFX51OlJjp/NL9R+LCjXseVt4sjBDbOQS
+         osAnBZA8jImab66xW4cG3/YUrN4EiBGJnVNmj/yWEvyX7+/q2k+45PCO6z3jumO02XiM
+         ++pi0OAoFJWStxXyzi1xFUSxuFJZd2KisG+AY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708706536; x=1709311336;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qoLuBOTBYwo+qwBs59lcs6973WjeFSpK73YZ5Iw2Km4=;
+        b=YySeWwaq3K50lePEaWalqsZDNLNMuzJlJgt2SYusl8gx70qScB9GNNeS2nVSS5A+2E
+         CvBL3WISlDGkKABcJuz1qgHRLlrP183jCRCFgg5ypifPLAmXzMa6kuJViFQ743Kg9jsc
+         yDbEbGAFblf6JKRYOGMO6vQg1igWzs84Ax+nsTFhFLKfnoxmsZQp25ubKnVOo5T8Gkow
+         jrf6xkfMvOZP5HJN15CEWxqVJwoXruWqX4GHxbPs33WLQ/aY/pjfY1632R0jLIeToOX2
+         D8ZfaOpSqGffaILXJC82pjsd6jN533ruK+Y516bph2SmW63rpb5qAcspFwLevDehXAJS
+         p+uw==
+X-Forwarded-Encrypted: i=1; AJvYcCWltLnEk+7qR8GkKJtA3Up37J4ZSEn9Rvw29AwPXwNWhPs19q/VmSXzBjmPC0CSdy+txKm5qzOHejy7rxDtq3RuL8MXMwnf3ca+AZIq7/zz
+X-Gm-Message-State: AOJu0YyH9mIHtl7y5b34cxNVIOY0RBqzDLEnQM1xf+Ajt5cBA/2nYyku
+	i4cZPerAg/buR5zRw3zk9R6jcuaywAi3MMzYBXAeGl1xE4nVO4aKHbaswLDsECQ=
+X-Google-Smtp-Source: AGHT+IFVg0FkzeWFv8VAUtlKSwt788AmJwtS0qsDMb5sOGtHb2BLbj86xPtSi/VfS0UFWwlNIJXZJA==
+X-Received: by 2002:a05:6512:3b0f:b0:512:be84:f49d with SMTP id f15-20020a0565123b0f00b00512be84f49dmr227672lfv.63.1708706535842;
+        Fri, 23 Feb 2024 08:42:15 -0800 (PST)
+Received: from [10.80.67.149] (default-46-102-197-194.interdsl.co.uk. [46.102.197.194])
+        by smtp.gmail.com with ESMTPSA id x4-20020a0ce244000000b0068f2d2f64d1sm8403702qvl.32.2024.02.23.08.42.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Feb 2024 08:42:15 -0800 (PST)
+Message-ID: <431a0b3a-47e5-4e61-a7fc-31cdf56f4e4c@citrix.com>
+Date: Fri, 23 Feb 2024 16:42:11 +0000
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 06/15] x86: Add early SHA support for Secure Launch
+ early measurements
+Content-Language: en-GB
+To: Ard Biesheuvel <ardb@kernel.org>,
+ Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, dpsmith@apertussolutions.com, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+ mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
+ peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
+ nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
+ kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
+ Eric Biggers <ebiggers@kernel.org>
+References: <20240214221847.2066632-1-ross.philipson@oracle.com>
+ <20240214221847.2066632-7-ross.philipson@oracle.com>
+ <CAMj1kXEmMBY_jc0uM5UgZbuZ3-C7NPKzg5AScaunyu9XzLgzZA@mail.gmail.com>
+ <98ad92bb-ef17-4c15-88ba-252db2a2e738@citrix.com>
+ <CAMj1kXFTu+bV2kQhAyu15hrYai20NcBLb4Zu8XG2Y-XjL0f+rw@mail.gmail.com>
+ <1a8e69a7-89eb-4d36-94d6-0da662d8b72f@citrix.com>
+ <CAMj1kXEvmGy9RJo4s8tECsFj2dufZ8jBPoJOEtkcGUoj+x2qsw@mail.gmail.com>
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
+ 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
+ 6+ahAA==
+In-Reply-To: <CAMj1kXEvmGy9RJo4s8tECsFj2dufZ8jBPoJOEtkcGUoj+x2qsw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 23 Feb 2024 17:51:17 +0200
-Message-Id: <CZCKTWU6ZCC9.2UTEQPEVICYHL@suppilovahvero>
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
- <linux-integrity@vger.kernel.org>
-Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
-Subject: Re: [PATCH v7 12/21] tpm: Add NULL primary creation
-X-Mailer: aerc 0.15.2
-References: <20240213171334.30479-1-James.Bottomley@HansenPartnership.com>
- <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
-In-Reply-To: <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue Feb 13, 2024 at 7:13 PM EET, James Bottomley wrote:
-> The session handling code uses a "salted" session, meaning a session
-> whose salt is encrypted to the public part of another TPM key so an
-> observer cannot obtain it (and thus deduce the session keys).  This
-> patch creates and context saves in the tpm_chip area the primary key
-> of the NULL hierarchy for this purpose.
+On 23/02/2024 9:27 am, Ard Biesheuvel wrote:
+> On Thu, 22 Feb 2024 at 13:30, Andrew Cooper <andrew.cooper3@citrix.com> wrote:
+>> On 22/02/2024 9:34 am, Ard Biesheuvel wrote:
+>>> On Thu, 22 Feb 2024 at 04:05, Andrew Cooper <andrew.cooper3@citrix.com> wrote:
+>>>> On 15/02/2024 8:17 am, Ard Biesheuvel wrote:
+>>>>> On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
+>>>>>> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+>>>>>>
+>>>>>> The SHA algorithms are necessary to measure configuration information into
+>>>>>> the TPM as early as possible before using the values. This implementation
+>>>>>> uses the established approach of #including the SHA libraries directly in
+>>>>>> the code since the compressed kernel is not uncompressed at this point.
+>>>>>>
+>>>>>> The SHA code here has its origins in the code from the main kernel:
+>>>>>>
+>>>>>> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
+>>>>>>
+>>>>>> A modified version of this code was introduced to the lib/crypto/sha1.c
+>>>>>> to bring it in line with the sha256 code and allow it to be pulled into the
+>>>>>> setup kernel in the same manner as sha256 is.
+>>>>>>
+>>>>>> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+>>>>>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+>>>>> We have had some discussions about this, and you really need to
+>>>>> capture the justification in the commit log for introducing new code
+>>>>> that implements an obsolete and broken hashing algorithm.
+>>>>>
+>>>>> SHA-1 is broken and should no longer be used for anything. Introducing
+>>>>> new support for a highly complex boot security feature, and then
+>>>>> relying on SHA-1 in the implementation makes this whole effort seem
+>>>>> almost futile, *unless* you provide some rock solid reasons here why
+>>>>> this is still safe.
+>>>>>
+>>>>> If the upshot would be that some people are stuck with SHA-1 so they
+>>>>> won't be able to use this feature, then I'm not convinced we should
+>>>>> obsess over that.
+>>>> To be absolutely crystal clear here.
+>>>>
+>>>> The choice of hash algorithm(s) are determined by the OEM and the
+>>>> platform, not by Linux.
+>>>>
+>>>> Failing to (at least) cap a PCR in a bank which the OEM/platform left
+>>>> active is a security vulnerability.  It permits the unsealing of secrets
+>>>> if an attacker can replay a good set of measurements into an unused bank.
+>>>>
+>>>> The only way to get rid of the requirement for SHA-1 here is to lobby
+>>>> the IHVs/OEMs, or perhaps the TCG, to produce/spec a platform where the
+>>>> SHA-1 banks can be disabled.  There are no known such platforms in the
+>>>> market today, to the best of our knowledge.
+>>>>
+>>> OK, so mainline Linux does not support secure launch at all today. At
+>>> this point, we need to decide whether or not tomorrow's mainline Linux
+>>> will support secure launch with SHA1 or without, right?
+>> I'd argue that's a slightly unfair characterisation.
+>>
+> Fair enough. I'm genuinely trying to have a precise understanding of
+> this, not trying to be dismissive.
+
+Sure, and neither am I.  (And frankly, I vastly prefer this reasoned
+discussion to prior ones.)
+
+Secure Launch technology really is used today as out-of-tree code, and
+it has taken ~15y to get to this point of doing it nicely in an
+ecosystem that is wider than just Linux.  (Not a criticism, just an
+observation)
+
+We're looking not to get blocked with a brand new objection which
+approximates to "it's now not perfect, therefore you can't have
+something that's still a lot better than nothing".
+
+A major reason why the hardware ecosystem is out of date is because
+almost no-one uses it, because it's horribly complicated to configure,
+because it's a set of large out-of-tree patche series against your
+bootloader, hypervisor and kernel.
+
+The goal of the Trenchboot project is to make it easy to use (i.e.
+upstream support in the relevant projects), so that more people can use
+it, in order to drive the hardware ecosystem forward.
+
+Very seriously - Linux taking this series, even off by default and with
+a "SHA-1 considered hazardous for your health" warning somewhere, will
+still have a material positive impact in getting the hardware ecosystem
+to improve.  It is, by far and away, the best thing that we (Trenchboot)
+can do in order to move towards a SHA-1-less future.
+
+Trenchboot do have a specific intent to get to that future, and beyond,
+but it's a multi-year task.
+
+
+>> We want tomorrow's mainline to support Secure Launch.  What that entails
+>> under the hood is largely outside of the control of the end user.
+>>
+> So the debate is really whether it makes sense at all to support
+> Secure Launch on systems that are stuck on an obsolete and broken hash
+> algorithm. This is not hyperbole: SHA-1 is broken today and once these
+> changes hit production 1-2 years down the line, the situation will
+> only have deteriorated. And another 2-3 years later, we will be the
+> ones chasing obscure bugs on systems that were already obsolete when
+> this support was added.
+
+There are indeed collisions, and this will indeed get worse over time.
+
+But right now it still takes nation-state (or certain corporation)
+resources to calculate a collision, and that would have to be specific
+to the exact firmware/settings/hypervisor/kernel/initrd configuration of
+the target device.
+
+Google et al invested the effort in SHAttered in order to drive change
+in the industry, but that doesn't mean it's viable as a general attack
+yet.  There are far more cost effective options, even a $4 wrench...
+
+> So what is the value proposition here? An end user today, who is
+> mindful enough of security to actively invest the effort to migrate
+> their system from ordinary measured boot to secure launch, is really
+> going to do so on a system that only implements SHA-1 support?
+
+Oh both Intel and AMD, the base technology is around in all platforms
+the support virt.
+
+On Intel, it's SKU-limited to vPRO, but platforms with fTPM2.0 have been
+generally SHA1+SHA256 capable for years now.  A security conscious end
+user would just want to cap the SHA1 banks and run with SHA256.
+
+Furthermore, when the attestation is based on a SHA1+SHA256 measurement,
+the attestor can spot and reject SHA1 collisions, so this configuration
+really should be safe to the concerns raised here.
+
+On AMD, it's not SKU-limited.  However, their fTPM2.0 isn't SKINIT
+compatible, and we were basically told "show us people using SKINIT
+first".  I'm not sure if we've got as far as trying to an LPC TPM 2.0 on
+AMD yet.  Even bus interception attacks can be defended against with TPM
+encrypted sessions,  but we put this in the "not for v1" bucket.
+
+
+It's not a secret - the intent of getting this technology more-generally
+usable (and therefore used) is to be able to go back to Intel and say
+"hey notice how AMD give this technology to everyone", and to say AMD
+"hey notice how Intel have this working with TPM2".  Both have been
+persuaded along this direction by Microsoft by virtue of including the
+Pluton IP blob in the main CPU package.
+
+>>> And the point you are making here is that we need SHA-1 not only to a)
+>>> support systems that are on TPM 1.2 and support nothing else, but also
+>>> to b) ensure that crypto agile TPM 2.0 with both SHA-1 and SHA-256
+>>> enabled can be supported in a safe manner, which would involve
+>>> measuring some terminating event into the SHA-1 PCRs to ensure they
+>>> are not left in a dangling state that might allow an adversary to
+>>> trick the TPM into unsealing a secret that it shouldn't.
+>> Yes.  Also c) because if the end user wants to use SHA-1, they should be
+>> able to.
+>>
+> The end user can do whatever they want, of course. Whether it belongs
+> in the upstream is an entirely different matter, though, especially
+> because we will effectively be forced to support this forever.
 >
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 >
-> ---
-> v6: split out of original HMAC patch update config name
-> v7: rename null seed parameters
-> ---
->  drivers/char/tpm/Kconfig         |  11 ++
->  drivers/char/tpm/Makefile        |   1 +
->  drivers/char/tpm/tpm.h           |  10 ++
->  drivers/char/tpm/tpm2-cmd.c      |   5 +
->  drivers/char/tpm/tpm2-sessions.c | 276 +++++++++++++++++++++++++++++++
->  include/linux/tpm.h              |  49 ++++++
->  6 files changed, 352 insertions(+)
->  create mode 100644 drivers/char/tpm/tpm2-sessions.c
+>>> So can we support b) without a), and if so, does measuring an
+>>> arbitrary dummy event into a PCR that is only meant to keep sealed
+>>> forever really require a SHA-1 implementation, or could we just use an
+>>> arbitrary (not even random) sequence of 160 bits and use that instead?
+>> a) and b) are in principle independent, but we cannot support b) without
+>> SHA-1.
+>>
+>> To cap a PCR, the event log still needs to be kept accurate, and that's
+>> at least one SHA-1 calculation.  If you were to simply extend a dummy
+>> value, the system hopefully fails safe, but the user gets "something
+>> went wrong, you're on your own", rather than "we intentionally blocked
+>> the use of SHA-1, everything is good".
+>>
+>> And frankly, you need SHA-1 just to read the event log, if any component
+>> (including TXT itself) wrote a SHA-1 entry into it.
+>>
+>>
+>> To be blunt.  SHA-1 support is not viably optional today as far as
+>> Secure Launch is concerned.  If there's a suitable Kconfig symbol to use
+>> for people who want a completely SHA-1-less kernel, then we can make
+>> Secure Launch depend on that until such time as the hardware ecosystem
+>> has caught up.
+>>
+> Yes, this crossed my mind as well. There is a Kconfig symbol
+> CRYPTO_USER_API_ENABLE_OBSOLETE I added a while ago for a similar
+> purpose.
 >
-> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> index 927088b2c3d3..e3c39a83171b 100644
-> --- a/drivers/char/tpm/Kconfig
-> +++ b/drivers/char/tpm/Kconfig
-> @@ -27,6 +27,17 @@ menuconfig TCG_TPM
-> =20
->  if TCG_TPM
-> =20
-> +config TCG_TPM2_HMAC
-> +	bool "Use encrypted and HMACd transactions on the TPM bus"
-
-How about simply "Use HMAC-encrypted transactions"
-
-The details are anyway in the description.
-
-> +	default y
-> +	help
-> +          Setting this causes us to deploy a scheme which uses request
-          ~~~
-
-extra spaces
-
-> +	  and response HMACs in addition to encryption for
-> +	  communicating with the TPM to prevent or detect bus snooping
-> +	  and interposer attacks (see tpm-security.rst).  Saying Y
-> +	  here adds some encryption overhead to all kernel to TPM
-> +	  transactions.
-> +
->  config HW_RANDOM_TPM
->  	bool "TPM HW Random Number Generator support"
->  	depends on TCG_TPM && HW_RANDOM && !(TCG_TPM=3Dy && HW_RANDOM=3Dm)
-> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-> index ad3594e383e1..4c695b0388f3 100644
-> --- a/drivers/char/tpm/Makefile
-> +++ b/drivers/char/tpm/Makefile
-> @@ -17,6 +17,7 @@ tpm-y +=3D eventlog/tpm1.o
->  tpm-y +=3D eventlog/tpm2.o
->  tpm-y +=3D tpm-buf.o
-> =20
-> +tpm-$(CONFIG_TCG_TPM2_HMAC) +=3D tpm2-sessions.o
->  tpm-$(CONFIG_ACPI) +=3D tpm_ppi.o eventlog/acpi.o
->  tpm-$(CONFIG_EFI) +=3D eventlog/efi.o
->  tpm-$(CONFIG_OF) +=3D eventlog/of.o
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index cbc9d1e2974d..6b8b9956ba69 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -321,4 +321,14 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
->  void tpm_bios_log_teardown(struct tpm_chip *chip);
->  int tpm_dev_common_init(void);
->  void tpm_dev_common_exit(void);
-> +
-> +#ifdef CONFIG_TCG_TPM2_HMAC
-> +int tpm2_sessions_init(struct tpm_chip *chip);
-
-I'm sorry but "sessions" and "init" are the worst possible terminology I
-could every pick when trying to make a function that self-documents
-itself :-)
-
-I'd like to see here well-scoped name so that it is easy to connect
-this to its purpose when reviewing some other patches.
-
-
-> +#else
-> +static inline int tpm2_sessions_init(struct tpm_chip *chip)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->  #endif
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 93545be190a5..b0e72fb563d9 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -759,6 +759,11 @@ int tpm2_auto_startup(struct tpm_chip *chip)
->  		rc =3D 0;
->  	}
-> =20
-> +	if (rc)
-> +		goto out;
-> +
-> +	rc =3D tpm2_sessions_init(chip);
-> +
->  out:
->  	/*
->  	 * Infineon TPM in field upgrade mode will return no data for the numbe=
-r
-> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-ses=
-sions.c
-> new file mode 100644
-> index 000000000000..9fc263ee02c2
-> --- /dev/null
-> +++ b/drivers/char/tpm/tpm2-sessions.c
-> @@ -0,0 +1,276 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (C) 2018 James.Bottomley@HansenPartnership.com
-> + *
-
-useless extra line in the commment
-
-> + */
-> +
-> +#include "tpm.h"
-> +
-
-spurious newline
-
-> +#include <asm/unaligned.h>
-
-spurious newline
-> +
-> +#include <crypto/aes.h>
-
-spurious newline
-> +
-> +/* if you change to AES256, you only need change this */
-> +#define AES_KEYBYTES	AES_KEYSIZE_128
-
-AES_KEY_BYTES. Also the comment is talking about changing something
-without documenting what it is. Even not having the comment at all
-would be less confusing.
-
-> +
-spurious newline
-
-> +#define AES_KEYBITS	(AES_KEYBYTES*8)
-
-AES_KEY_BITS
-
-Also, documentation missing.
-
-> +
-
-Documentation missing for "tpm2_parse_create_primary". It is a complex
-function despite being not exported so definitely needs documentation.
-
-
-> +static int tpm2_parse_create_primary(struct tpm_chip *chip, struct tpm_b=
-uf *buf,
-> +				     u32 *nullkey)
-                                          ~~~~~~~
-					  null_key
-
-> +{
-> +	struct tpm_header *head =3D (struct tpm_header *)buf->data;
-> +	off_t offset_r =3D TPM_HEADER_SIZE, offset_t;
-> +	u16 len =3D TPM_HEADER_SIZE;
-> +	u32 tot_len =3D be32_to_cpu(head->length);
-
-no good reason to use more confusing namme "tot_len", instead of more
-readable "total_len".
-
-> +	u32 val, parm_len;
-> +
-> +	*nullkey =3D tpm_buf_read_u32(buf, &offset_r);
-> +	parm_len =3D tpm_buf_read_u32(buf, &offset_r);
-        ~~~~~~~~
-	param_len
-
-> +	/*
-> +	 * parm_len doesn't include the header, but all the other
-> +	 * lengths and offsets do, so add it to parm len to make
-> +	 * the comparisons easier
-> +	 */
-> +	parm_len +=3D TPM_HEADER_SIZE;
-> +
-> +	if (parm_len + 8 > tot_len)
-> +		return -EINVAL;
-> +	len =3D tpm_buf_read_u16(buf, &offset_r);
-> +	offset_t =3D offset_r;
-> +	/* now we have the public area, compute the name of the object */
-> +	put_unaligned_be16(TPM_ALG_SHA256, chip->null_key_name);
-> +	sha256(&buf->data[offset_r], len, chip->null_key_name + 2);
-> +
-> +	/* validate the public key */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	/* key type (must be what we asked for) */
-> +	if (val !=3D TPM_ALG_ECC)
-> +		return -EINVAL;
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	/* name algorithm */
-> +	if (val !=3D TPM_ALG_SHA256)
-> +		return -EINVAL;
-> +	val =3D tpm_buf_read_u32(buf, &offset_t);
-> +	/* object properties */
-> +	if (val !=3D (TPM2_OA_NO_DA |
-> +		    TPM2_OA_FIXED_TPM |
-> +		    TPM2_OA_FIXED_PARENT |
-> +		    TPM2_OA_SENSITIVE_DATA_ORIGIN |
-> +		    TPM2_OA_USER_WITH_AUTH |
-> +		    TPM2_OA_DECRYPT |
-> +		    TPM2_OA_RESTRICTED))
-
-Please make define a mask constant for these bits and use it here
-instead. There's just too many and make the code really unredable.
-I'd even suggesting documenting that constant with some rationale
-for the mask.
-
-Here the logic is obviously to fix the primary key to the exact
-chip and make unmovable (cannot be migrated), isn't it? That would
-perfectly sufficient documentation for the constant, or along the
-lines.
-
-
-> +		return -EINVAL;
-> +	/* auth policy (empty) */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D 0)
-> +		return -EINVAL;
-
-I'd add empty line betwen each of these checks to make it more
-readable.
-
-> +	/* symmetric key parameters */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D TPM_ALG_AES)
-> +		return -EINVAL;
-> +	/* symmetric key length */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D AES_KEYBITS)
-> +		return -EINVAL;
-> +	/* symmetric encryption scheme */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D TPM_ALG_CFB)
-> +		return -EINVAL;
-> +	/* signing scheme */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D TPM_ALG_NULL)
-> +		return -EINVAL;
-> +	/* ECC Curve */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D TPM2_ECC_NIST_P256)
-> +		return -EINVAL;
-> +	/* KDF Scheme */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D TPM_ALG_NULL)
-> +		return -EINVAL;
-> +	/* x point */
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D EC_PT_SZ)
-> +		return -EINVAL;
-> +	memcpy(chip->null_ec_key_x, &buf->data[offset_t], val);
-> +	offset_t +=3D val;
-> +	val =3D tpm_buf_read_u16(buf, &offset_t);
-> +	if (val !=3D EC_PT_SZ)
-> +		return -EINVAL;
-> +	memcpy(chip->null_ec_key_y, &buf->data[offset_t], val);
-> +	offset_t +=3D val;
-> +
-> +	/* original length of the whole TPM2B */
-> +	offset_r +=3D len;
-> +
-> +	/* should have exactly consumed the TPM2B public structure */
-> +	if (offset_t !=3D offset_r)
-> +		return -EINVAL;
-> +	if (offset_r > parm_len)
-> +		return -EINVAL;
-> +	/* creation data (skip) */
-> +	len =3D tpm_buf_read_u16(buf, &offset_r);
-> +	offset_r +=3D len;
-> +	if (offset_r > parm_len)
-> +		return -EINVAL;
-> +	/* creation digest (must be sha256) */
-> +	len =3D tpm_buf_read_u16(buf, &offset_r);
-> +	offset_r +=3D len;
-> +	if (len !=3D SHA256_DIGEST_SIZE || offset_r > parm_len)
-> +		return -EINVAL;
-> +	/* TPMT_TK_CREATION follows */
-> +	/* tag, must be TPM_ST_CREATION (0x8021) */
-> +	val =3D tpm_buf_read_u16(buf, &offset_r);
-> +	if (val !=3D TPM2_ST_CREATION || offset_r > parm_len)
-> +		return -EINVAL;
-> +	/* hierarchy (must be NULL) */
-> +	val =3D tpm_buf_read_u32(buf, &offset_r);
-> +	if (val !=3D TPM2_RH_NULL || offset_r > parm_len)
-> +		return -EINVAL;
-> +	/* the ticket digest HMAC (might not be sha256) */
-> +	len =3D tpm_buf_read_u16(buf, &offset_r);
-> +	offset_r +=3D len;
-> +	if (offset_r > parm_len)
-> +		return -EINVAL;
-> +	/*
-> +	 * finally we have the name, which is a sha256 digest plus a 2
-> +	 * byte algorithm type
-> +	 */
-> +	len =3D tpm_buf_read_u16(buf, &offset_r);
-> +	if (offset_r + len !=3D parm_len + 8)
-> +		return -EINVAL;
-> +	if (len !=3D SHA256_DIGEST_SIZE + 2)
-> +		return -EINVAL;
-> +
-> +	if (memcmp(chip->null_key_name, &buf->data[offset_r],
-> +		   SHA256_DIGEST_SIZE + 2) !=3D 0) {
-> +		dev_err(&chip->dev, "NULL Seed name comparison failed\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
+> I am still disappointed that we have to go down this path, but I
+> understand the concerns now that you have explained them to me (again)
+> in more detail.
 >
+> These considerations need to be recorded in the documentation or
+> commit logs as well, so that we can easily refer back to them without
+> having to dig through the mail archives.
 
-documentation missing:
+Yes, and I agree.  We're not looking to try and force this in with
+underhand tactics.
 
-> +static int tpm2_create_primary(struct tpm_chip *chip, u32 hierarchy, u32=
- *handle)
-> +{
-> +	int rc;
-> +	struct tpm_buf buf;
-> +	struct tpm_buf template;
-> +
-> +	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE_PRIMARY);
-> +	if (rc)
-> +		return rc;
-> +
-> +	rc =3D tpm_buf_init_sized(&template);
-> +	if (rc) {
-> +		tpm_buf_destroy(&buf);
-> +		return rc;
-> +	}
-> +
-> +	/*
-> +	 * create the template.  Note: in order for userspace to
-> +	 * verify the security of the system, it will have to create
-> +	 * and certify this NULL primary, meaning all the template
-> +	 * parameters will have to be identical, so conform exactly to
-> +	 * the TCG TPM v2.0 Provisioning Guidance for the SRK ECC
-> +	 * key
-> +	 */
-> +
-> +	/* key type */
-> +	tpm_buf_append_u16(&template, TPM_ALG_ECC);
-> +	/* name algorithm */
-> +	tpm_buf_append_u16(&template, TPM_ALG_SHA256);
-> +	/* object properties */
-> +	tpm_buf_append_u32(&template, TPM2_OA_NO_DA |
-> +			   TPM2_OA_FIXED_TPM |
-> +			   TPM2_OA_FIXED_PARENT |
-> +			   TPM2_OA_SENSITIVE_DATA_ORIGIN |
-> +			   TPM2_OA_USER_WITH_AUTH |
-> +			   TPM2_OA_DECRYPT |
-> +			   TPM2_OA_RESTRICTED);
-> +	/* sauth policy (empty) */
-> +	tpm_buf_append_u16(&template, 0);
-> +
-> +	/* BEGIN parameters: key specific; for ECC*/
-> +	/* symmetric algorithm */
-> +	tpm_buf_append_u16(&template, TPM_ALG_AES);
-> +	/* bits for symmetric algorithm */
-> +	tpm_buf_append_u16(&template, 128);
-> +	/* algorithm mode (must be CFB) */
-> +	tpm_buf_append_u16(&template, TPM_ALG_CFB);
-> +	/* scheme (NULL means any scheme) */
-> +	tpm_buf_append_u16(&template, TPM_ALG_NULL);
-> +	/* ECC Curve ID */
-> +	tpm_buf_append_u16(&template, TPM2_ECC_NIST_P256);
-> +	/* KDF Scheme */
-> +	tpm_buf_append_u16(&template, TPM_ALG_NULL);
-> +	/* unique: key specific; for ECC it is two points */
-> +	tpm_buf_append_u16(&template, 0);
-> +	tpm_buf_append_u16(&template, 0);
-> +	/* END parameters */
-> +
-> +	/* primary handle */
-> +	tpm_buf_append_u32(&buf, hierarchy);
-> +	tpm_buf_append_empty_auth(&buf, TPM2_RS_PW);
-> +	/* sensitive create size is 4 for two empty buffers */
-> +	tpm_buf_append_u16(&buf, 4);
-> +	/* sensitive create auth data (empty) */
-> +	tpm_buf_append_u16(&buf, 0);
-> +	/* sensitive create sensitive data (empty) */
-> +	tpm_buf_append_u16(&buf, 0);
-> +	/* the public template */
-> +	tpm_buf_append(&buf, template.data, template.length);
-> +	tpm_buf_destroy(&template);
-> +	/* outside info (empty) */
-> +	tpm_buf_append_u16(&buf, 0);
-> +	/* creation PCR (none) */
-> +	tpm_buf_append_u32(&buf, 0);
-> +
-> +	rc =3D tpm_transmit_cmd(chip, &buf, 0,
-> +			      "attempting to create NULL primary");
-> +
-> +	if (rc =3D=3D TPM2_RC_SUCCESS)
-> +		rc =3D tpm2_parse_create_primary(chip, &buf, handle);
-> +
-> +	tpm_buf_destroy(&buf);
-> +
-> +	return rc;
-> +}
-> +
-> +static int tpm2_create_null_primary(struct tpm_chip *chip)
-> +{
-> +	u32 nullkey;
-            ~~~~~~~
-	    null_key
-  =20
+But a blind "nack to any SHA-1" is similarly damaging in the opposite
+direction.
 
-> +	int rc;
-> +
-> +	rc =3D tpm2_create_primary(chip, TPM2_RH_NULL, &nullkey);
-> +
-> +	if (rc =3D=3D TPM2_RC_SUCCESS) {
-> +		unsigned int offset =3D 0; /* dummy offset for null key context */
-> +
-> +		rc =3D tpm2_save_context(chip, nullkey, chip->null_key_context,
-> +				       sizeof(chip->null_key_context), &offset);
-> +		tpm2_flush_context(chip, nullkey);
-> +	}
-> +
-> +	return rc;
-> +}
-> +
-> +/**
-> + * tpm2_sessions_init() - start of day initialization for the sessions c=
-ode
-> + * @chip: TPM chip
-> + *
-> + * Derive and context save the null primary and allocate memory in the
-> + * struct tpm_chip for the authorizations.
-
-isn't this exactly for HMAC authorization at least in the patch set
-scope? plural confuses me here.
-
-> + */
-> +int tpm2_sessions_init(struct tpm_chip *chip)
-> +{
-> +	int rc;
-> +
-> +	rc =3D tpm2_create_null_primary(chip);
-> +	if (rc)
-> +		dev_err(&chip->dev, "TPM: security failed (NULL seed derivation): %d\n=
-", rc);
-> +
-> +	return rc;
-> +}
-> +EXPORT_SYMBOL(tpm2_sessions_init);
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 6be263509e81..3060ab794afb 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -35,12 +35,15 @@ struct trusted_key_options;
->  enum tpm_algorithms {
->  	TPM_ALG_ERROR		=3D 0x0000,
->  	TPM_ALG_SHA1		=3D 0x0004,
-> +	TPM_ALG_AES		=3D 0x0006,
->  	TPM_ALG_KEYEDHASH	=3D 0x0008,
->  	TPM_ALG_SHA256		=3D 0x000B,
->  	TPM_ALG_SHA384		=3D 0x000C,
->  	TPM_ALG_SHA512		=3D 0x000D,
->  	TPM_ALG_NULL		=3D 0x0010,
->  	TPM_ALG_SM3_256		=3D 0x0012,
-> +	TPM_ALG_ECC		=3D 0x0023,
-> +	TPM_ALG_CFB		=3D 0x0043,
->  };
-> =20
->  /*
-> @@ -49,6 +52,11 @@ enum tpm_algorithms {
->   */
->  #define TPM_MAX_HASHES	5
-> =20
-> +enum tpm2_curves {
-> +	TPM2_ECC_NONE		=3D 0x0000,
-> +	TPM2_ECC_NIST_P256	=3D 0x0003,
-> +};
-> +
->  struct tpm_digest {
->  	u16 alg_id;
->  	u8 digest[TPM_MAX_DIGEST_SIZE];
-> @@ -116,6 +124,20 @@ struct tpm_chip_seqops {
->  	const struct seq_operations *seqops;
->  };
-> =20
-> +/* fixed define for the curve we use which is NIST_P256 */
-> +#define EC_PT_SZ	32
-> +
-> +/*
-> + * fixed define for the size of a name.  This is actually HASHALG size
-> + * plus 2, so 32 for SHA256
-> + */
-> +#define TPM2_NAME_SIZE	34
-> +
-> +/*
-> + * The maximum size for an object context
-> + */
-> +#define TPM2_MAX_CONTEXT_SIZE 4096
-> +
->  struct tpm_chip {
->  	struct device dev;
->  	struct device devs;
-> @@ -170,6 +192,14 @@ struct tpm_chip {
-> =20
->  	/* active locality */
->  	int locality;
-> +
-> +#ifdef CONFIG_TCG_TPM2_HMAC
-> +	/* details for communication security via sessions */
-> +	u8 null_key_context[TPM2_MAX_CONTEXT_SIZE]; /* context for NULL seed */
-
-	/* Saved context of the null seed: */
-
-I like the description on top because they suffer less alignment
-issues and can have more verbose explanation. "context for NULL
-seed" is good as no comment at all./
-
-> +	u8 null_key_name[TPM2_NAME_SIZE];	 /* name of NULL seed */
-
-	/* Digest of the public area: */
-
-This is not totally accurate but way more documenting than the
-current description, which is tautology, i.e. you are saying that
-"name is name" in the comment leaving the reader questioning what
-the heck is name.
-
-Not totally accurate i.e. missing concatenated alg identifier but
-good enough...
-
-
-> +	u8 null_ec_key_x[EC_PT_SZ];
-> +	u8 null_ec_key_y[EC_PT_SZ];
-> +#endif
-
-this is now very nice clean and udnerstandable:
-
-I'd prefer tho this formatting:
-
-	/* Name of the NULL seed: */
-	u8 null_key_name[TPM2_NAME_SIZE];
-
-
->  };
-> =20
->  #define TPM_HEADER_SIZE		10
-> @@ -194,6 +224,7 @@ enum tpm2_timeouts {
->  enum tpm2_structures {
->  	TPM2_ST_NO_SESSIONS	=3D 0x8001,
->  	TPM2_ST_SESSIONS	=3D 0x8002,
-> +	TPM2_ST_CREATION	=3D 0x8021,
->  };
-> =20
->  /* Indicates from what layer of the software stack the error comes from =
-*/
-> @@ -243,6 +274,7 @@ enum tpm2_command_codes {
->  };
-> =20
->  enum tpm2_permanent_handles {
-> +	TPM2_RH_NULL		=3D 0x40000007,
->  	TPM2_RS_PW		=3D 0x40000009,
->  };
-> =20
-> @@ -318,7 +350,11 @@ struct tpm_buf {
->  enum tpm2_object_attributes {
->  	TPM2_OA_FIXED_TPM		=3D BIT(1),
->  	TPM2_OA_FIXED_PARENT		=3D BIT(4),
-> +	TPM2_OA_SENSITIVE_DATA_ORIGIN	=3D BIT(5),
->  	TPM2_OA_USER_WITH_AUTH		=3D BIT(6),
-> +	TPM2_OA_NO_DA			=3D BIT(10),
-> +	TPM2_OA_RESTRICTED		=3D BIT(16),
-> +	TPM2_OA_DECRYPT			=3D BIT(17),
->  };
-> =20
-
-Here would be a great place to declarate aforementioned mask.
-
->  enum tpm2_session_attributes {
-> @@ -373,6 +409,15 @@ extern int tpm_pcr_extend(struct tpm_chip *chip, u32=
- pcr_idx,
->  extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
->  extern struct tpm_chip *tpm_default_chip(void);
->  void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
-
-please add empty line here.
-
-> +static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 ha=
-ndle)
-> +{
-> +	/* simple authorization for empty auth */
-> +	tpm_buf_append_u32(buf, 9);		/* total length of auth */
-> +	tpm_buf_append_u32(buf, handle);
-> +	tpm_buf_append_u16(buf, 0);		/* nonce len */
-> +	tpm_buf_append_u8(buf, 0);		/* attributes */
-> +	tpm_buf_append_u16(buf, 0);		/* hmac len */
-> +}
->  #else
->  static inline int tpm_is_tpm2(struct tpm_chip *chip)
->  {
-> @@ -399,5 +444,9 @@ static inline struct tpm_chip *tpm_default_chip(void)
->  {
->  	return NULL;
->  }
-> +
-> +static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 ha=
-ndle)
-> +{
-> +}
->  #endif
->  #endif
-
-I skipped first eleven patches because they are completed. This patch
-will be finished once all the numerous style issues have been fixed.
-Approach is totally correct...
-
-BR, Jarkko
+~Andrew
 
