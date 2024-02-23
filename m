@@ -1,192 +1,116 @@
-Return-Path: <linux-integrity+bounces-1451-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1452-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5672E861E25
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 21:50:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CF3B861F49
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 22:54:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5ECEAB20A19
-	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 20:50:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 979D01C216F3
+	for <lists+linux-integrity@lfdr.de>; Fri, 23 Feb 2024 21:54:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6665143C63;
-	Fri, 23 Feb 2024 20:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 973201482F2;
+	Fri, 23 Feb 2024 21:54:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kn6Q8OKE"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MTEhndBP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C13612CD85;
-	Fri, 23 Feb 2024 20:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9EEF1F600
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708721448; cv=none; b=s7VkKhfMUXaXhPIUe6qBeUNoqYCvS4Znbz5h5kY6cuZHwgkZiR6e5vEMONfOs7BdDEqbqquFzuGaY050JdHfnm/pTKDYEl9HxjeSvrsagQ0dQYHwu5ZjU7RJJmOVM+tBhWJUtcmYJIga15hgkGvuhpZDBPUygeriE7kKLlFmbiQ=
+	t=1708725264; cv=none; b=egNZGKxBJZ53ghET4VFxsfoKW6YXwFvlr79X+Ka4TvKK54vzlVChDt+gngeyOKYWt5oM5eU1Lr3zoGf3QCrLSS6mOhDrImLHq9hhG9lnmbyjVzvMr/OYdZX+4Ldy0oLBlK3D1eWUZ4Wy8gspdLtIT5jCdAvvlP3n+zNfwljKkwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708721448; c=relaxed/simple;
-	bh=PweppluXkvW8Lq4TMFJBzXOsYg6FGYfRiMivvD/uW4c=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=MKpHXqG62x71Av1fSps0QHOYNgyQF3G4I1/IoBPX1k8HTGMlViNm5ux66uenfG3/XR+FbDS0LDOq/g9j3UHHOmmg1JEop9wvToAifha2hp+zYJ1KQasI6w5veeUNqJcr9VqsAV34sinA1mrBg1q7rBvorwYzmjPSt7CI2UKLWlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kn6Q8OKE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F2CC433F1;
-	Fri, 23 Feb 2024 20:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708721448;
-	bh=PweppluXkvW8Lq4TMFJBzXOsYg6FGYfRiMivvD/uW4c=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Kn6Q8OKEAocDYsJkdulyJF53gQRvwhsW/5N4N8815Do4wwL1Nl7m/IZ0ar8j2yJbk
-	 hE2w4nnWnSOmy4WOMRYi40GmSDx+s2lP0wXbcWl1eF988JSgprEWMJ8gXcBmxmMwhy
-	 Wl/YLCyMDfIicd0AUmYEqdcd0oxwVgXJZ4vC+Kw3tZhxDJP+r5MBz/iuNx5NzvEc5F
-	 69YrTeSrLAr7Mnx0tuRdB96jhbsOjmwGdQrIHOcG0taOlkXWmHZ3PV0hplj/fcbta2
-	 LnuTn19vI9I+9zcZYf+RlhSrq/vhbkmzsOVQ8gpeYt6dMRb0FP72/MoZwcWZd9frT1
-	 v8W/yehX/mz/A==
+	s=arc-20240116; t=1708725264; c=relaxed/simple;
+	bh=acSyOYPGsKbnT3j5HW3/XAUyx9Mlch7wh+yuYGa+i0g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=JvcL6JBD0GDEI6utXRn47tLrzmuPDX3SuWIDThoVSIFdMr1hIgBp/0GtgIBmVHZzl/LrbWjmPAh0vjxrWtkaOt1Gj67ZJxQQfU9dKNI2tR6SPoQV4F89fY1uAUIpeiRP/7ifRrqw3dA7c+bDjE4d2/AiCDaupS+KRv4v8kzi+Zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MTEhndBP; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41NLQYi9025773
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HUcbR5hNHBliJdRKRF5bPA9XRhchGbUfQLxc7tPJAYg=;
+ b=MTEhndBPw6yFOamYJ3CrG1OtZyke1viVwNtubIMijMoVlIaBLlHU9AYqycrsmja/kRTw
+ 589VvkxovR26qnfxLcFsuq/L+7nI5HlkS9deN+NzUf1tFWt0j9Pu1kFBlCmhSBRkVlJk
+ DZXl/WhuAsL23XU47PU5z2JUrkqAaiU2iExGTSk8MYvX+0zfPHJMJeZNK+Uoh4r1J+Ny
+ /7SguXi3mSf0dp2WYiYKem6UJ2WKhx5A0WvXNS4FQZt7ZPOboZv2KRed8WP9LvavfYjW
+ Vtzb9FbBGnKZL9yHrUMGelPw+oGXwrI+Q3M3UPQ45qbVh7z3FzSBfe1s1nFta2hPoxn3 pA== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wf0nnkr89-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:21 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41NLPBot013472
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:21 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wb7h10p4d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:21 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41NLsICo15860352
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:20 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1F99558059
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:18 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EBB7158067
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:14 +0000 (GMT)
+Received: from [9.2.202.85] (unknown [9.2.202.85])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP
+	for <linux-integrity@vger.kernel.org>; Fri, 23 Feb 2024 21:54:12 +0000 (GMT)
+Message-ID: <b5ee92ba-6f05-4ff6-92b7-700235abfd7e@linux.ibm.com>
+Date: Fri, 23 Feb 2024 16:54:11 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 23 Feb 2024 22:50:43 +0200
-Message-Id: <CZCR76MKS60B.UHM5MC0SBOQY@suppilovahvero>
-Cc: "Ross Philipson" <ross.philipson@oracle.com>, "Kanth Ghatraju"
- <kanth.ghatraju@oracle.com>, "Peter Huewe" <peterhuewe@gmx.de>
-Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>, "Alexander Steffen"
- <Alexander.Steffen@infineon.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Sasha
- Levin" <sashal@kernel.org>, <linux-integrity@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.15.2
-References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
- <20240131170824.6183-2-dpsmith@apertussolutions.com>
- <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
- <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
- <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
- <91f600ef-867b-4523-89be-1c0ba34f8a4c@kunbus.com>
- <CZA9CM3PDILC.82JMLUWMB6B7@seitikki> <CZA9GMC718HA.1JFHTTWV563IE@seitikki>
- <4bd31b91-1f6a-4081-9ad8-e5fae29d0dd7@apertussolutions.com>
-In-Reply-To: <4bd31b91-1f6a-4081-9ad8-e5fae29d0dd7@apertussolutions.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [ima-evm-utils: PATCH v1 1/1] Change license to LGPL-2.0-or-later
+ and GPL-2.0-or-later
+Content-Language: en-US
+To: linux-integrity@vger.kernel.org
+References: <9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
+From: Ken Goldman <kgold@linux.ibm.com>
+In-Reply-To: <9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: OPmiqqG81UdY7PgXptPvt3fVSSqKVZBH
+X-Proofpoint-GUID: OPmiqqG81UdY7PgXptPvt3fVSSqKVZBH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-23_06,2024-02-23_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ bulkscore=0 impostorscore=0 adultscore=0 clxscore=1011 suspectscore=0
+ mlxlogscore=761 lowpriorityscore=0 phishscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402230157
 
-On Fri Feb 23, 2024 at 3:57 AM EET, Daniel P. Smith wrote:
-> On 2/20/24 17:31, Jarkko Sakkinen wrote:
-> > On Tue Feb 20, 2024 at 10:26 PM UTC, Jarkko Sakkinen wrote:
-> >> On Tue Feb 20, 2024 at 8:54 PM UTC, Lino Sanfilippo wrote:
-> >>> for (i =3D 0; i <=3D MAX_LOCALITY; i++)
-> >>> 	__tpm_tis_relinquish_locality(priv, i);
-> >>
-> >> I'm pretty unfamiliar with Intel TXT so asking a dummy question:
-> >> if Intel TXT uses locality 2 I suppose we should not try to
-> >> relinquish it, or?
-> >>
-> >> AFAIK, we don't have a symbol called MAX_LOCALITY.
-> >=20
-> > OK it was called TPM_MAX_LOCALITY :-) I had the patch set applied
-> > in one branch but looked up with wrong symbol name.
-> >=20
-> > So I reformalize my question to two parts:
-> >=20
-> > 1. Why does TXT leave locality 2 open in the first place? I did
-> >     not see explanation. Isn't this a bug in TXT?
->
-> It does so because that is what the TCG D-RTM specification requires.=20
-> See Section 5.3.4.10 of the TCG D-RTM specification[1], the first=20
-> requirement is, "The DLME SHALL receive control with access to Locality 2=
-."
 
-From below also the locality enumeration would be good to have
-documented (as a reminder).
 
->
-> > 2. Because localities are not too useful these days given TPM2's
-> >     policy mechanism I cannot recall out of top of my head can
-> >     you have two localities open at same time. So what kind of
-> >     conflict happens when you try to open locality 0 and have
-> >     locality 2 open?
->
-> I would disagree and would call your attention to the TCG's=20
-> definition/motivation for localities, Section 3.2 of Client PTP=20
-> specification[2].
->
-> "=E2=80=9CLocality=E2=80=9D is an assertion to the TPM that a command=E2=
-=80=99s source is=20
-> associated with a particular component. Locality can be thought of as a=
-=20
-> hardware-based authorization. The TPM is not actually aware of the=20
-> nature of the relationship between the locality and the component. The=20
-> ability to reset and extend notwithstanding, it is important to note=20
-> that, from a PCR =E2=80=9Cusage=E2=80=9D perspective, there is no hierarc=
-hical=20
-> relationship between different localities. The TPM simply enforces=20
-> locality restrictions on TPM assets (such as PCR or SEALed blobs)."
->
-> As stated, from the TPM specification perspective, it is not aware of=20
-> this mapping to components and leaves it to the platform to enforce.
+On 2/21/2024 3:11 AM, Dmitry Kasatkin wrote:
+> Currently libimaevm provided by this project is used by the tool evmctl,
+> which is also provided by this project.
+> 
+> An issue was reported about using libimaevm with other software. Its
+> GPL2-only license makes it incompatible to use with other licenses, in
+> particular GPL3-only.
+> 
+> To address this issue, change the project license to GPL-2.0-or-later
+> and libimaevm to LGPL 2.0 or later.
+> 
+> Signed-off-by: Dmitry Kasatkin<dmitry.kasatkin@gmail.com>
 
-Yeah, TPM is a passive component, not active actor, in everything.
-
-The way I see locality as way to separate e.g. kernel and user space
-driver TPM transactions is pretty much like actor-dependent salt
-(e.g. if 0 was for user space and 1 was for kernel).
-
->
-> "The protection and separation of the localities (and therefore the=20
-> association with the associated components) is entirely the=20
-> responsibility of the platform components. Platform components,=20
-> including the OS, may provide the separation of localities using=20
-> protection mechanisms such as virtual memory or paging."
->
-> The x86 manufactures opted to adopt the D-RTM specification which=20
-> defines the components as follows:
->
-> Locality 4: Usually associated with the CPU executing microcode. This is=
-=20
-> used to establish the Dynamic RTM.
-> Locality 3: Auxiliary components. Use of this is optional and, if used,=
-=20
-> it is implementation dependent.
-> Locality 2: Dynamically Launched OS (Dynamic OS) =E2=80=9Cruntime=E2=80=
-=9D environment.
-> Locality 1: An environment for use by the Dynamic OS.
-> Locality 0: The Static RTM, its chain of trust and its environment.
->
-> And the means to protect and separate those localities are encoded in=20
-> the x86 chipset, i.e A D-RTM Event must be used to access any of the=20
-> D-RTM Localities (Locality1 - Locality4).
->
-> For Intel, Locality 4 can only be accessed when a dedicated signal=20
-> between the CPU and the chipset is raised, thus only allowing the CPU to=
-=20
-> utilize Locality 4. The CPU will then close Locality 4, authenticate and=
-=20
-> give control to the ACM with access to Locality 3. When the ACM is=20
-> complete, it will instruct the chipset to lock Locality 3 and give=20
-> control to the DLME (MLE in Intel parlance) with Locality 2 open. It is=
-=20
-> up to the DLME, the Linux kernel in this case, to decide how to assign=20
-> components to Locality 1 and 2.
->
-> As to proposals to utilize localities by the Linux kernel, the only one=
-=20
-> I was aware of was dropped because they couldn't open the higher localiti=
-es.
->
-> I would also highlight that the D-RTM implementation guide for Arm=20
-> allows for a hardware D-RTM event, which the vendor may choose to=20
-> implement a hardware/CPU enforced access to TPM localities. Thus, the=20
-> ability to support localities will also become a requirement for certain=
-=20
-> Arm CPUs.
->
-> [1]=20
-> https://trustedcomputinggroup.org/wp-content/uploads/TCG_D-RTM_Architectu=
-re_v1-0_Published_06172013.pdf
-> [2]=20
-> https://trustedcomputinggroup.org/wp-content/uploads/PC-Client-Specific-P=
-latform-TPM-Profile-for-TPM-2p0-v1p05p_r14_pub.pdf
-
-BR, Jarkko
+Acked-by: Ken Goldman <kgold@linux.ibm.com>
 
