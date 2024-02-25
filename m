@@ -1,119 +1,113 @@
-Return-Path: <linux-integrity+bounces-1456-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1457-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39503862A10
-	for <lists+linux-integrity@lfdr.de>; Sun, 25 Feb 2024 12:23:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B198862AF7
+	for <lists+linux-integrity@lfdr.de>; Sun, 25 Feb 2024 16:15:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 689D01C20A18
-	for <lists+linux-integrity@lfdr.de>; Sun, 25 Feb 2024 11:23:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C56872810B4
+	for <lists+linux-integrity@lfdr.de>; Sun, 25 Feb 2024 15:15:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18967101CF;
-	Sun, 25 Feb 2024 11:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C360171BB;
+	Sun, 25 Feb 2024 15:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="bj/mDHYi"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aUqbc7RA"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDB1DDDF;
-	Sun, 25 Feb 2024 11:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708860219; cv=pass; b=nxY9boCLzMIGMnYBOJdzYH06PKutrtmK7/krFtY5HZkbTFqP8jntnQ0zvvkR3Z5xzCJV9XZd1QmuS8S6k8LTMF34HnurBdMfXm0oylf3zJdnqeOX38AxjD25DoGEXfeNm7Focww7v16tzzACYPVII4d//Sm70bLgiGhTT1+kUUQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708860219; c=relaxed/simple;
-	bh=kzsJOSbdO9aCNroEz/CW0AsE5F4Ewh3SNdXG8BVHGJE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ROVui6SttoCx7vqYGKK22QiOsxe1lpyAG8SdtG8QEuojucTG9oodFI8f0c1wuEh2AYbqakOKQE6IRheQ8IWB6gxVutpPtQzYeu87jguNA/cSe6H0yxZbK8bvDkNnE6HNWfktDkhgyh+N2+lN/A1EylJZywncSkWocJosYE8Mrw4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=bj/mDHYi; arc=pass smtp.client-ip=136.143.188.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1708860204; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=cKz2B5fRi/61Qzy519l5Xxy7AcPV/OPTWEiigBJPKAPyp1Ggs5fLKMcs/CLNbIODAW5r40zqF5XorVeaRKqfADp+UcM8SjFq0CIhbZCtTcm+zOLUuCff1x2TBjfSDc2GjutF7ptN41z0GtpodGx5hWyOqszszoWMYg0m1gE5VqE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1708860204; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=wfGoqZDkKgvNv8khUbgxCQPjnWH1gdlTXy979s/5nUg=; 
-	b=B/SrW+JNxEnkFylMLVss30/YsNShVCHXdUuukDG7xVYiLdCGt3y7Y0Xo/q7tUdYgM5JwW2cd3/ajodtMn2IqbAqMNXT8Tr3GaM2nVfrBGvU+UAiApIp4zrwFINQWBHlE9SYPtDm71VqiuFPvqj2/uJXLx0gkCac7GDOyM8lavfk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=apertussolutions.com;
-	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1708860204;
-	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=wfGoqZDkKgvNv8khUbgxCQPjnWH1gdlTXy979s/5nUg=;
-	b=bj/mDHYit8XjJY2O2rEePk9H/E6SR2P4LqdM+hvx3B44c+uWiqUvOK7YyJmFvVAl
-	D9pwjuqxAEwHEJFzXmoJv5rNhCC5RVjoHJqB5L/poM4ci35G1OUfLt/aJVfsrcgE6jA
-	xCVIP7e22AqA1ogTCkkSysXCwDNAwq+8LWZaYH14=
-Received: from [10.10.1.126] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-	with SMTPS id 170886020157550.311343935882974; Sun, 25 Feb 2024 03:23:21 -0800 (PST)
-Message-ID: <44267c53-496d-4e41-896a-623673d938cb@apertussolutions.com>
-Date: Sun, 25 Feb 2024 06:23:13 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8531B14F98
+	for <linux-integrity@vger.kernel.org>; Sun, 25 Feb 2024 15:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708874088; cv=none; b=i5GsPu1gd2H4BCsJueKXVaLbMgvKQeRU3LRW3eQ14hlMRzdqd7XS2BTmuNe7viqkHFQIvSDgM4BoSPYQXTdkAeug2Lxjc+lxOD340YWjgVhFh+atg8EQe7/B7NxveuAnag0iaPUhajxBjmvR6b+tXmx7kZaJ04qvIB4qU55bAaI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708874088; c=relaxed/simple;
+	bh=sUiTSkzm520oHlE2Wt7zs6qH6fycsoCrqDvhHTq28MA=;
+	h=Content-Type:Mime-Version:Date:Message-Id:To:Cc:Subject:From:
+	 In-Reply-To; b=DdMwUBKV4PM0Z8uKZxOvwfZ/GbVZsxfMp1t/+NO5xiU68xWzLHKsuHHYHyXVpfNd3DOFDXRgaNalmuq+DS3tR5slJh8L2on6O8Apy4TMV1e4r9GEWmaZCm7ugFzNgjaXR7kSAPFCJgBCWFDH+R1IElh93w5zfHlKfZCLzVEY6w8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aUqbc7RA; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708874085;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to; bh=sUiTSkzm520oHlE2Wt7zs6qH6fycsoCrqDvhHTq28MA=;
+	b=aUqbc7RAp9WNt82bGho4FrZhJf+CrUDcW10iIYgdvSrVKS92UPoCAMMtYQRdHMg1SRZQud
+	h6A2CGuoZnJzydN9Rk6NcvTGG4/y+SCceQKtVxlQHGBVWKVHoIq0X7Y2nC5Bw9FVNfgnfH
+	Yo1zqtvfVf1vjqXhJqxglCLS3nPNR80=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-661-ndoAgA1OP5e93luYZnYrLw-1; Sun,
+ 25 Feb 2024 10:14:39 -0500
+X-MC-Unique: ndoAgA1OP5e93luYZnYrLw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40CF53C025D2;
+	Sun, 25 Feb 2024 15:14:38 +0000 (UTC)
+Received: from localhost (unknown [10.96.134.2])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C25852166AE8;
+	Sun, 25 Feb 2024 15:14:29 +0000 (UTC)
+Content-Type: multipart/signed;
+ boundary=6b0cba759d1417228dbf87ca1baf25c96b6bf983e996b0817fb2b7fe487a;
+ micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
-To: Jarkko Sakkinen <jarkko@kernel.org>,
- Lino Sanfilippo <l.sanfilippo@kunbus.com>,
- Alexander Steffen <Alexander.Steffen@infineon.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Sasha Levin <sashal@kernel.org>,
- linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Ross Philipson <ross.philipson@oracle.com>,
- Kanth Ghatraju <kanth.ghatraju@oracle.com>, Peter Huewe <peterhuewe@gmx.de>
-References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
- <20240131170824.6183-2-dpsmith@apertussolutions.com>
- <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
- <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
- <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
- <91f600ef-867b-4523-89be-1c0ba34f8a4c@kunbus.com>
- <CZA9ADCGOTQT.LB5XHZZVTWVH@seitikki>
- <88b75c9c-98ab-4474-8112-6a27d11a2fdf@apertussolutions.com>
- <CZCH5V83WBBV.20JR0RC1GJVJY@suppilovahvero>
-Content-Language: en-US
-From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-In-Reply-To: <CZCH5V83WBBV.20JR0RC1GJVJY@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Mime-Version: 1.0
+Date: Sun, 25 Feb 2024 12:14:18 -0300
+Message-Id: <CZE9AOYD1M2A.3ABMLN87MYB0A@redhat.com>
+To: <dmitry.kasatkin@gmail.com>
+Cc: <James.Bottomley@HansenPartnership.com>, <a.mardegan@omp.ru>,
+ <dbaryshkov@gmail.com>, <ebiggers@google.com>, <gcwilson@linux.ibm.com>,
+ <git@andred.net>, <kgoldman@us.ibm.com>, <linux-integrity@vger.kernel.org>,
+ <mjg59@srcf.ucam.org>, <patrick.ohly@intel.com>, <patrick@puiterwijk.org>,
+ <petr.vorel@gmail.com>, <roberto.sassu@huawei.com>, <sorenson@redhat.com>,
+ <stefanb@linux.ibm.com>, <stephen.smalley.work@gmail.com>,
+ <tianjia.zhang@linux.alibaba.com>, <vgoyal@redhat.com>, <vt@altlinux.org>,
+ <z.jasinski@samsung.com>, <zohar@linux.ibm.com>
+Subject: Re: [ima-evm-utils: PATCH v1 1/1] Change license to
+ LGPL-2.0-or-later and GPL-2.0-or-later
+From: "Bruno Meneguele" <bmeneg@redhat.com>
+In-Reply-To: <9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
 
-On 2/23/24 07:58, Jarkko Sakkinen wrote:
-> On Fri Feb 23, 2024 at 3:58 AM EET, Daniel P. Smith wrote:
->>> Just adding here that I wish we also had a log transcript of bug, which
->>> is right now missing. The explanation believable enough to move forward
->>> but I still wish to see a log transcript.
->>
->> That will be forth coming.
-> 
-> I did not respond yet to other responses that you've given in the past
-> 12'ish hours or so (just woke up) but I started to think how all this
-> great and useful information would be best kept in memory. Some of it
-> has been discussed in the past but there is lot of small details that
-> are too easily forgotten.
-> 
-> I'd think the best "documentation" approach here would be inject the
-> spec references to the sites where locality behaviour is changed so
-> that it is easy in future cross-reference them, and least of risk
-> of having code changes that would break anything. I think this way
-> all the information that you provided is best preserved for the
-> future.
-> 
-> Thanks a lot for great and informative responses!
+--6b0cba759d1417228dbf87ca1baf25c96b6bf983e996b0817fb2b7fe487a
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-No problem at all.
+Hi Dmitry (and Mimi, thanks for the heads-up).
 
-Here is a serial output[1] from a dynamic launch using Linux Secure 
-Launch v7[2] with one additional patch[3] to dump TPM driver state.
+Acked-by: Bruno Meneguele <bmeneg@redhat.com>
 
-[1] https://paste.debian.net/1308538/
-[2] 
-https://lore.kernel.org/lkml/scpu273f2mprr2uvjlyk2xrjjtcduhse2eb45lmj7givn6jh4u@i2v4f2vbldu4/T/
-[3] https://paste.debian.net/1308539/
+--=20
+Bruno Meneguele
+PGP Key: http://bmeneg.com/pubkey.txt
+
+
+--6b0cba759d1417228dbf87ca1baf25c96b6bf983e996b0817fb2b7fe487a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFGBAABCAAwFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmXbWUoSHGJtZW5lZ0By
+ZWRoYXQuY29tAAoJEGHUZBUfkaJD8RAH/1/43mr6qkzGxZL5/zgDxgWMUWjb59d+
+GfeAW4C8pomlB2SqfEUAUUfeP19/bGM8qVrbNg1RkCeKOOcj2UZ7IQO6E2wLVaps
+h6P9BX4HwNPtp2tCUxrcmAIu0XcknW23UockhAWLR6fUbEdd0dzNy5Qb0akDkQIc
+y58DOMA3yxg88sZ1LnLufPlD/khz9SJTI7LnObK8uugQWpUwaF010TPuzmbqIEmT
+0aRmEMMGF6Fq+Xz4mZn8hPUGYxV5E/JZS/HQ62Xen1tqfQS1CJ4Ua7qI5QKbKvE2
+w0wRpobuEy876BAhjVVYnfiRhyWS2r1wJmffgT4LLJUSvq1AUV+akck=
+=jeVS
+-----END PGP SIGNATURE-----
+
+--6b0cba759d1417228dbf87ca1baf25c96b6bf983e996b0817fb2b7fe487a--
+
 
