@@ -1,113 +1,230 @@
-Return-Path: <linux-integrity+bounces-1457-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1458-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B198862AF7
-	for <lists+linux-integrity@lfdr.de>; Sun, 25 Feb 2024 16:15:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32C7A862D65
+	for <lists+linux-integrity@lfdr.de>; Sun, 25 Feb 2024 23:20:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C56872810B4
-	for <lists+linux-integrity@lfdr.de>; Sun, 25 Feb 2024 15:15:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C20A1C20C4F
+	for <lists+linux-integrity@lfdr.de>; Sun, 25 Feb 2024 22:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C360171BB;
-	Sun, 25 Feb 2024 15:14:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7456E1BC26;
+	Sun, 25 Feb 2024 22:20:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aUqbc7RA"
+	dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b="ZWzz/A1+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8531B14F98
-	for <linux-integrity@vger.kernel.org>; Sun, 25 Feb 2024 15:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB0D1B951
+	for <linux-integrity@vger.kernel.org>; Sun, 25 Feb 2024 22:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708874088; cv=none; b=i5GsPu1gd2H4BCsJueKXVaLbMgvKQeRU3LRW3eQ14hlMRzdqd7XS2BTmuNe7viqkHFQIvSDgM4BoSPYQXTdkAeug2Lxjc+lxOD340YWjgVhFh+atg8EQe7/B7NxveuAnag0iaPUhajxBjmvR6b+tXmx7kZaJ04qvIB4qU55bAaI=
+	t=1708899639; cv=none; b=FIeCs/W351iEMd8HwFvsbNM8TKQnl+6Dm5cLxiR8r66PzRM4Ls+VGF7Qulap2hATEaNKAeATsgsHKDuLzPyIX+MQMUxaZuuzzdRxOF/3zwBHIIs1wp1AEUERGm43VCcAANMZnybGWHeIU+Xl194iunsCmLnNzOAs8snC1FatTEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708874088; c=relaxed/simple;
-	bh=sUiTSkzm520oHlE2Wt7zs6qH6fycsoCrqDvhHTq28MA=;
-	h=Content-Type:Mime-Version:Date:Message-Id:To:Cc:Subject:From:
-	 In-Reply-To; b=DdMwUBKV4PM0Z8uKZxOvwfZ/GbVZsxfMp1t/+NO5xiU68xWzLHKsuHHYHyXVpfNd3DOFDXRgaNalmuq+DS3tR5slJh8L2on6O8Apy4TMV1e4r9GEWmaZCm7ugFzNgjaXR7kSAPFCJgBCWFDH+R1IElh93w5zfHlKfZCLzVEY6w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aUqbc7RA; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708874085;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to; bh=sUiTSkzm520oHlE2Wt7zs6qH6fycsoCrqDvhHTq28MA=;
-	b=aUqbc7RAp9WNt82bGho4FrZhJf+CrUDcW10iIYgdvSrVKS92UPoCAMMtYQRdHMg1SRZQud
-	h6A2CGuoZnJzydN9Rk6NcvTGG4/y+SCceQKtVxlQHGBVWKVHoIq0X7Y2nC5Bw9FVNfgnfH
-	Yo1zqtvfVf1vjqXhJqxglCLS3nPNR80=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-661-ndoAgA1OP5e93luYZnYrLw-1; Sun,
- 25 Feb 2024 10:14:39 -0500
-X-MC-Unique: ndoAgA1OP5e93luYZnYrLw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40CF53C025D2;
-	Sun, 25 Feb 2024 15:14:38 +0000 (UTC)
-Received: from localhost (unknown [10.96.134.2])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C25852166AE8;
-	Sun, 25 Feb 2024 15:14:29 +0000 (UTC)
-Content-Type: multipart/signed;
- boundary=6b0cba759d1417228dbf87ca1baf25c96b6bf983e996b0817fb2b7fe487a;
- micalg=pgp-sha256; protocol="application/pgp-signature"
+	s=arc-20240116; t=1708899639; c=relaxed/simple;
+	bh=UXS6o52/gxylcEk77QTCs8vWUzpJEIdKr/eTjoCMKJk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P6ZNsWGk36G8AuR2Vflo78boDfwkH6VFrynqSxtJ1H0LB12DBMHW1JapmsrjUu+mrIB260Vphk3MezImIJ8uZ+tw9nSCE6i2ovG9ISmdKcOUEwUkYRbkQra3GbrGFs7XOlWM4P7pUx23q8lzP9K5PG/6mRf7wn+feM++5n5ndtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at; spf=pass smtp.mailfrom=sigma-star.at; dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b=ZWzz/A1+; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sigma-star.at
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-563bb51c36eso2369981a12.2
+        for <linux-integrity@vger.kernel.org>; Sun, 25 Feb 2024 14:20:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sigma-star.at; s=google; t=1708899634; x=1709504434; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vcAAMbo5fPSeSlUc+G3Ds0RoWmjIC7d5lnGAqCLP7+0=;
+        b=ZWzz/A1+/0hUq9nDjW7N3dGG7LW0a25pVAl4SI7JWbix8Ltz4Y5g7CQa0X19SpZvrt
+         m0GmEH/4k1aw2+YaXYQWzMvA49bfciqVUt/kubYMWAfGocim+0pbUwS4a90JpIm+UucR
+         rdSrZ1sCdsthEBmpbj9+wTzVstNYGC3tqeE5NZ7Temc2jwHK6oo5aHlSF8hvuMrITMcu
+         5l9wPI4BUwWVFm9OQP+ykoWDa0GS+o/3IPjv+EWumaiPBhxHrDdk1HvypueugaWP8lA6
+         e17B5V0hWi03vQZfx1NVYorirpMQDGTkg/zoCRONcwXcJLnRJgbr96bJ39Hv7REZ5rX+
+         00jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708899634; x=1709504434;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vcAAMbo5fPSeSlUc+G3Ds0RoWmjIC7d5lnGAqCLP7+0=;
+        b=nkgHmAoDYIFPDRaX5FJ0rlkQh5kecyj8JAp0azqYi1J+ZUWk4BIlsylMQCKpPJ3b2F
+         /wpFguecQvbLDvG/3UnXrgoqkVoxoJyJ5F6y0PYyHQGfKDGVW831Lxhv4TH0kzu7+S3G
+         ezyYwuUwVr1RxgSmzwUrZmLHbIj48QPiSETGfxU5o32aUXYQnVFOu1x3/YZIHq1SAl70
+         kxoS4Enybi+lTobtLa3vVNuy4NhFtBCscmhNo4AHvs1SReaQBXFtcRleRBwXeNQmDQ8T
+         VaydAGNFWK2tOWytRlsbyze8Mc5432itzdsWD/znELFHD+oRGsDq4V851EhIXt67lqsF
+         uV4A==
+X-Forwarded-Encrypted: i=1; AJvYcCXOIYrbZ16QbP6SzixiPhQdhysrwCM+eo8gnZfxuz73kj1DCTFTWrB0gnktQqBbKjr61onIGzNeO/cEQVrXRA5cwdT9nPq5mY2XZpIraZ/v
+X-Gm-Message-State: AOJu0Yzxw9VeZ9tDLx3g6DlnE9dkr8tHjGRoVBmsaB66Y7Y58DdIpoKW
+	fvqOyzjw7ENRKsw9gT1KSa4tfLbX2xNGtH0mAx96K7HbbPmTPgRNHtDSo43B0Ps=
+X-Google-Smtp-Source: AGHT+IG5bJ/fK8sFX2rG8b+VDYEkiBFr76ZXZ4JyDKWlPw45GhDGbdPCrTlUaWepqwiGPkAAQmeUww==
+X-Received: by 2002:a17:906:3c18:b0:a3e:d5ac:9995 with SMTP id h24-20020a1709063c1800b00a3ed5ac9995mr3150880ejg.59.1708899633957;
+        Sun, 25 Feb 2024 14:20:33 -0800 (PST)
+Received: from blindfold.localnet (84-115-239-180.cable.dynamic.surfer.at. [84.115.239.180])
+        by smtp.gmail.com with ESMTPSA id h4-20020a1709062dc400b00a3f355aeb0bsm1828968eji.131.2024.02.25.14.20.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Feb 2024 14:20:33 -0800 (PST)
+From: Richard Weinberger <richard@sigma-star.at>
+To: Mimi Zohar <zohar@linux.ibm.com>, James Bottomley <jejb@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, upstream@sigma-star.at, David Howells <dhowells@redhat.com>
+Cc: Shawn Guo <shawnguo@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, "kernel@pengutronix.de" <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
+	Ahmad Fatoum <a.fatoum@pengutronix.de>, 
+	sigma star Kernel Team <upstream+dcp@sigma-star.at>, Li Yang <leoyang.li@nxp.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Tejun Heo <tj@kernel.org>, 
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>, linux-doc@vger.kernel.org, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>, 
+	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linuxppc-dev@lists.ozlabs.org, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, David Gstir <david@sigma-star.at>
+Subject: Re: [PATCH v5 0/6] DCP as trusted keys backend
+Date: Sun, 25 Feb 2024 23:20:31 +0100
+Message-ID: <1733761.uacIGzncQW@somecomputer>
+In-Reply-To: <47439997.XUcTiDjVJD@somecomputer>
+References: <20231215110639.45522-1-david@sigma-star.at> <7AED262F-9387-446D-B11A-C549C02542F9@sigma-star.at> <47439997.XUcTiDjVJD@somecomputer>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Date: Sun, 25 Feb 2024 12:14:18 -0300
-Message-Id: <CZE9AOYD1M2A.3ABMLN87MYB0A@redhat.com>
-To: <dmitry.kasatkin@gmail.com>
-Cc: <James.Bottomley@HansenPartnership.com>, <a.mardegan@omp.ru>,
- <dbaryshkov@gmail.com>, <ebiggers@google.com>, <gcwilson@linux.ibm.com>,
- <git@andred.net>, <kgoldman@us.ibm.com>, <linux-integrity@vger.kernel.org>,
- <mjg59@srcf.ucam.org>, <patrick.ohly@intel.com>, <patrick@puiterwijk.org>,
- <petr.vorel@gmail.com>, <roberto.sassu@huawei.com>, <sorenson@redhat.com>,
- <stefanb@linux.ibm.com>, <stephen.smalley.work@gmail.com>,
- <tianjia.zhang@linux.alibaba.com>, <vgoyal@redhat.com>, <vt@altlinux.org>,
- <z.jasinski@samsung.com>, <zohar@linux.ibm.com>
-Subject: Re: [ima-evm-utils: PATCH v1 1/1] Change license to
- LGPL-2.0-or-later and GPL-2.0-or-later
-From: "Bruno Meneguele" <bmeneg@redhat.com>
-In-Reply-To: <9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.6
-
---6b0cba759d1417228dbf87ca1baf25c96b6bf983e996b0817fb2b7fe487a
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Dmitry (and Mimi, thanks for the heads-up).
+Mimi, James, Jarkko, David,
 
-Acked-by: Bruno Meneguele <bmeneg@redhat.com>
+you remained silent for a whole release cycle.
+Is there anything we can do to get this forward?
 
---=20
-Bruno Meneguele
-PGP Key: http://bmeneg.com/pubkey.txt
+Thanks,
+//richard
+
+Am Dienstag, 13. Februar 2024, 10:59:56 CET schrieb Richard Weinberger:
+> Am Montag, 5. Februar 2024, 09:39:07 CET schrieb David Gstir:
+> > Hi,
+> >=20
+> > > On 15.12.2023, at 12:06, David Gstir <david@sigma-star.at> wrote:
+> > >=20
+> > > This is a revival of the previous patch set submitted by Richard Wein=
+berger:
+> > > https://lore.kernel.org/linux-integrity/20210614201620.30451-1-richar=
+d@nod.at/
+> > >=20
+> > > v4 is here:
+> > > https://lore.kernel.org/keyrings/20231024162024.51260-1-david@sigma-s=
+tar.at/
+> > >=20
+> > > v4 -> v5:
+> > > - Make Kconfig for trust source check scalable as suggested by Jarkko=
+ Sakkinen
+> > > - Add Acked-By from Herbert Xu to patch #1 - thanks!
+> > > v3 -> v4:
+> > > - Split changes on MAINTAINERS and documentation into dedicated patch=
+es
+> > > - Use more concise wording in commit messages as suggested by Jarkko =
+Sakkinen
+> > > v2 -> v3:
+> > > - Addressed review comments from Jarkko Sakkinen
+> > > v1 -> v2:
+> > > - Revive and rebase to latest version
+> > > - Include review comments from Ahmad Fatoum
+> > >=20
+> > > The Data CoProcessor (DCP) is an IP core built into many NXP SoCs such
+> > > as i.mx6ull.
+> > >=20
+> > > Similar to the CAAM engine used in more powerful SoCs, DCP can AES-
+> > > encrypt/decrypt user data using a unique, never-disclosed,
+> > > device-specific key. Unlike CAAM though, it cannot directly wrap and
+> > > unwrap blobs in hardware. As DCP offers only the bare minimum feature
+> > > set and a blob mechanism needs aid from software. A blob in this case
+> > > is a piece of sensitive data (e.g. a key) that is encrypted and
+> > > authenticated using the device-specific key so that unwrapping can on=
+ly
+> > > be done on the hardware where the blob was wrapped.
+> > >=20
+> > > This patch series adds a DCP based, trusted-key backend and is similar
+> > > in spirit to the one by Ahmad Fatoum [0] that does the same for CAAM.
+> > > It is of interest for similar use cases as the CAAM patch set, but for
+> > > lower end devices, where CAAM is not available.
+> > >=20
+> > > Because constructing and parsing the blob has to happen in software,
+> > > we needed to decide on a blob format and chose the following:
+> > >=20
+> > > struct dcp_blob_fmt {
+> > > __u8 fmt_version;
+> > > __u8 blob_key[AES_KEYSIZE_128];
+> > > __u8 nonce[AES_KEYSIZE_128];
+> > > __le32 payload_len;
+> > > __u8 payload[];
+> > > } __packed;
+> > >=20
+> > > The `fmt_version` is currently 1.
+> > >=20
+> > > The encrypted key is stored in the payload area. It is AES-128-GCM
+> > > encrypted using `blob_key` and `nonce`, GCM auth tag is attached at
+> > > the end of the payload (`payload_len` does not include the size of
+> > > the auth tag).
+> > >=20
+> > > The `blob_key` itself is encrypted in AES-128-ECB mode by DCP using
+> > > the OTP or UNIQUE device key. A new `blob_key` and `nonce` are genera=
+ted
+> > > randomly, when sealing/exporting the DCP blob.
+> > >=20
+> > > This patchset was tested with dm-crypt on an i.MX6ULL board.
+> > >=20
+> > > [0] https://lore.kernel.org/keyrings/20220513145705.2080323-1-a.fatou=
+m@pengutronix.de/
+> > >=20
+> > > David Gstir (6):
+> > >  crypto: mxs-dcp: Add support for hardware-bound keys
+> > >  KEYS: trusted: improve scalability of trust source config
+> > >  KEYS: trusted: Introduce NXP DCP-backed trusted keys
+> > >  MAINTAINERS: add entry for DCP-based trusted keys
+> > >  docs: document DCP-backed trusted keys kernel params
+> > >  docs: trusted-encrypted: add DCP as new trust source
+> > >=20
+> > > .../admin-guide/kernel-parameters.txt         |  13 +
+> > > .../security/keys/trusted-encrypted.rst       |  85 +++++
+> > > MAINTAINERS                                   |   9 +
+> > > drivers/crypto/mxs-dcp.c                      | 104 +++++-
+> > > include/keys/trusted_dcp.h                    |  11 +
+> > > include/soc/fsl/dcp.h                         |  17 +
+> > > security/keys/trusted-keys/Kconfig            |  18 +-
+> > > security/keys/trusted-keys/Makefile           |   2 +
+> > > security/keys/trusted-keys/trusted_core.c     |   6 +-
+> > > security/keys/trusted-keys/trusted_dcp.c      | 311 ++++++++++++++++++
+> > > 10 files changed, 562 insertions(+), 14 deletions(-)
+> > > create mode 100644 include/keys/trusted_dcp.h
+> > > create mode 100644 include/soc/fsl/dcp.h
+> > > create mode 100644 security/keys/trusted-keys/trusted_dcp.c
+> >=20
+> > Jarkko, Mimi, David do you need anything from my side for these patches=
+ to get them merged?
+>=20
+> Friendly ping also from my side. :-)
+>=20
+> Thanks,
+> //richard
+>=20
+> --=20
+> =E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8Bsigma star gmbh | Eduard-Bod=
+em-Gasse 6, 6020 Innsbruck, AUT
+> UID/VAT Nr: ATU 66964118 | FN: 374287y
+>=20
 
 
---6b0cba759d1417228dbf87ca1baf25c96b6bf983e996b0817fb2b7fe487a
-Content-Type: application/pgp-signature; name="signature.asc"
+=2D-=20
+=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8Bsigma star gmbh | Eduard-Bodem=
+=2DGasse 6, 6020 Innsbruck, AUT
+UID/VAT Nr: ATU 66964118 | FN: 374287y
 
------BEGIN PGP SIGNATURE-----
-
-iQFGBAABCAAwFiEEdWo6nTbnZdbDmXutYdRkFR+RokMFAmXbWUoSHGJtZW5lZ0By
-ZWRoYXQuY29tAAoJEGHUZBUfkaJD8RAH/1/43mr6qkzGxZL5/zgDxgWMUWjb59d+
-GfeAW4C8pomlB2SqfEUAUUfeP19/bGM8qVrbNg1RkCeKOOcj2UZ7IQO6E2wLVaps
-h6P9BX4HwNPtp2tCUxrcmAIu0XcknW23UockhAWLR6fUbEdd0dzNy5Qb0akDkQIc
-y58DOMA3yxg88sZ1LnLufPlD/khz9SJTI7LnObK8uugQWpUwaF010TPuzmbqIEmT
-0aRmEMMGF6Fq+Xz4mZn8hPUGYxV5E/JZS/HQ62Xen1tqfQS1CJ4Ua7qI5QKbKvE2
-w0wRpobuEy876BAhjVVYnfiRhyWS2r1wJmffgT4LLJUSvq1AUV+akck=
-=jeVS
------END PGP SIGNATURE-----
-
---6b0cba759d1417228dbf87ca1baf25c96b6bf983e996b0817fb2b7fe487a--
 
 
