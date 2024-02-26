@@ -1,111 +1,106 @@
-Return-Path: <linux-integrity+bounces-1461-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1462-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF31C866A4A
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 07:50:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60F75866F43
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 10:52:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA868B21ACB
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 06:50:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1597A1F2192E
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 09:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BE8C1BC4A;
-	Mon, 26 Feb 2024 06:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAFD94A99C;
+	Mon, 26 Feb 2024 09:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="evbXDi+5";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="VDabwXod"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HXu9YeOJ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B041BC22;
-	Mon, 26 Feb 2024 06:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0AF4481AD;
+	Mon, 26 Feb 2024 09:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708930205; cv=none; b=QtJJKr2XlajzFiv1cAn8Tm2/azx/SAziPP7Adp49EtfT0SOfXV8n1TazkLTnAHK7X8VtYTN1nXCDrxsO1JPkfKZ7Eg+C3DJ9hd8cE6KovMPnXE4f4+DZ53/YPgCkPG+hXCWArbXApqURQXHSFQzPmoJg7FEXdkNLoCyARHIwGdw=
+	t=1708939040; cv=none; b=JqmoZgZgfS+ixqVvLnpNo8QnpyOfk1wakUQAmhScPe1Ztg/BE726PS0jDynIp+9zRs80KRcMXiVRGRZwNKrjI6Zxx2zOFnJNHcF4CiuS0Kzgz9MZEjTOLjXAWj2UlHqe9aucCbengxkYHJk7wZ8xtUAy6BXdFY/8WofzYzL6NtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708930205; c=relaxed/simple;
-	bh=utfovlb6iGUZxJTgTBi8R7FxTD70n5B62sNrBoBhyyo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PRh53UY1EL+y7wA6BV2cyJ5jQ+7/um7pzWcABDro4iZC9yMHQf6uK275CAC2HS2S+kGGDKfTx4avp7hMeD16McggJTeh0t+jVFkTXsPCODIT0GVwVhuTQ8SuH26EVabQBttTCASG7lYX/2oeg1kY8ePnLPZ7tBuK0fuQqwVk2BY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=evbXDi+5; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=VDabwXod; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1708930202;
-	bh=utfovlb6iGUZxJTgTBi8R7FxTD70n5B62sNrBoBhyyo=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=evbXDi+5y4qsEvfaC10gugiTHz1v8yEUa4W18CGGxbEADM3eXPqDxCNIGAKZzENvl
-	 cOyOMqV478c5lTuKK9+KVodbXvCrXGA16jDwG8QovdUExB6oce55q2SnHx8C4WyYIP
-	 th+nm9lsin2m/edb97raB3lh5GqmjRBF5blZkGFI=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2BCF612860BE;
-	Mon, 26 Feb 2024 01:50:02 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id Xq4EyvsWYnr9; Mon, 26 Feb 2024 01:50:02 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1708930201;
-	bh=utfovlb6iGUZxJTgTBi8R7FxTD70n5B62sNrBoBhyyo=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=VDabwXodFPoDcsWGjmfMp3Gam3xyimZZDgHiLNahVqSyfNTc2TnPSlLPjXYbGCboZ
-	 w0pZGXFnM7z5g43nL75edUoLySO8fcsIBnON5BqS5kSR/YHQDvfWnYz6BUtUJkb8/2
-	 +XTz+CuHP0BraUineL5yewplLcOJEPFCt4EcoZHs=
-Received: from [10.0.15.72] (unknown [49.231.15.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BF32312860BC;
-	Mon, 26 Feb 2024 01:49:59 -0500 (EST)
-Message-ID: <eaa5107ac4f982b6fd6e80b522643a591e719dc9.camel@HansenPartnership.com>
-Subject: Re: [PATCH] MAINTAINERS: Update W's for KEYS/KEYRINGS_INTEGRITY and
- TPM DEVICE RIVER
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Mimi Zohar <zohar@linux.ibm.com>, Peter
-	Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org
-Date: Mon, 26 Feb 2024 13:49:50 +0700
-In-Reply-To: <20240226062245.2279635-1-jarkko@kernel.org>
-References: <20240226062245.2279635-1-jarkko@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1708939040; c=relaxed/simple;
+	bh=TDPshTEB2YgsSzMjFOliwieaa4N3m+QIe+o0VAqCL30=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=GAXBXatlOrAZXkL/tWrRUW82HMHz3nbagFVQPcsyirRRohAoU0d4FgoamT8AmCSuWvIkaodjKEWbIp7iMqVyn4QDdTkP9ACtUZwCk5EnuXxpYQMOwcHNvDtmwABMJ3xp08zDqIp/v/xlgCDW5DQFZHBzRl69gyv1ppLt/tdjDI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HXu9YeOJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB87C433F1;
+	Mon, 26 Feb 2024 09:17:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708939040;
+	bh=TDPshTEB2YgsSzMjFOliwieaa4N3m+QIe+o0VAqCL30=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=HXu9YeOJLt1Yvf8NXTZ1efm0443uX2U1V2DLHVLDjanw7eFOgW7x2+1m103AC/PZK
+	 WXamFGx2xgSh7mVv/kXFnpgIE9Ch3mU5XP+4HQ02nLndcsNVMiSm9vuUANAHNQbjM7
+	 aNRDSIORRFc3AdpzsAw+aQzpxyQzkjg/OuOEe2AicvH/xDk71DkEKXiNOEUtyGgcU2
+	 5DpSDGRzkIpDdtqF7BzdhFkBJaizksaEHqsoj4PbPCeYLLJ31diCmfAV27euPJvF4M
+	 hqsBUHxgrjvyCxzCRVR+V2KdU3tVlT26TPFhxLyoiAkCsMSOHhPibfQyZ7iWb69/lR
+	 T8Taz6GzuK1OQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 26 Feb 2024 11:17:11 +0200
+Message-Id: <CZEWBSXM7LHU.15UW6P0T61VBN@suppilovahvero>
+Subject: Re: [PATCH v5 0/6] DCP as trusted keys backend
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Richard Weinberger" <richard@sigma-star.at>, "Mimi Zohar"
+ <zohar@linux.ibm.com>, "James Bottomley" <jejb@linux.ibm.com>, "Herbert Xu"
+ <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
+ <upstream@sigma-star.at>, "David Howells" <dhowells@redhat.com>
+Cc: "Shawn Guo" <shawnguo@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Sascha Hauer" <s.hauer@pengutronix.de>, "kernel@pengutronix.de"
+ <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "NXP Linux
+ Team" <linux-imx@nxp.com>, "Ahmad Fatoum" <a.fatoum@pengutronix.de>, "sigma
+ star Kernel Team" <upstream+dcp@sigma-star.at>, "Li Yang"
+ <leoyang.li@nxp.com>, "Paul Moore" <paul@paul-moore.com>, "James Morris"
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Paul E.
+ McKenney" <paulmck@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Rafael J. Wysocki"
+ <rafael.j.wysocki@intel.com>, "Tejun Heo" <tj@kernel.org>, "Steven Rostedt
+ (Google)" <rostedt@goodmis.org>, <linux-doc@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+ "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+ "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
+ "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "David Gstir"
+ <david@sigma-star.at>
+X-Mailer: aerc 0.15.2
+References: <20231215110639.45522-1-david@sigma-star.at>
+ <7AED262F-9387-446D-B11A-C549C02542F9@sigma-star.at>
+ <47439997.XUcTiDjVJD@somecomputer> <1733761.uacIGzncQW@somecomputer>
+In-Reply-To: <1733761.uacIGzncQW@somecomputer>
 
-On Mon, 2024-02-26 at 08:22 +0200, Jarkko Sakkinen wrote:
-> Add TPM driver test suite URL to the MAINTAINERS files and move the
-> wiki
-> URL to more appropriate location.
-> 
-> Link: https://gitlab.com/jarkkojs/linux-tpmdd-test
-> Link: https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Peter Huewe <peterhuewe@gmx.de>
-> Cc: linux-integrity@vger.kernel.org
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
->  MAINTAINERS | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index bf77be03fb2b..6380c1109b86 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11947,6 +11947,7 @@ M:      Mimi Zohar <zohar@linux.ibm.com>
->  L:     linux-integrity@vger.kernel.org
->  L:     keyrings@vger.kernel.org
->  S:     Supported
-> +W:     https://kernsec.org/wiki/index.php/inux_Kernel_Integrity
-                                             ^
-                                         Missing L
+On Mon Feb 26, 2024 at 12:20 AM EET, Richard Weinberger wrote:
+> Mimi, James, Jarkko, David,
+>
+> you remained silent for a whole release cycle.
+> Is there anything we can do to get this forward?
+>
+> Thanks,
+> //richard
 
-James
+Thanks for reminding.
 
+From my side, I've had pretty busy month as I've adapted to a new work
+project: https://sochub.fi/
+
+I exported the thread [1] and will look into it within this or next week
+in detail (thus the large'ish time window).
+
+[1] https://lore.kernel.org/linux-integrity/1733761.uacIGzncQW@somecomputer=
+/t.mbox.gz
+
+BR, Jarkko
 
