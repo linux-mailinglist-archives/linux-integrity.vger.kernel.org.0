@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1462-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1463-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60F75866F43
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 10:52:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ACEC866F50
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 10:53:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1597A1F2192E
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 09:52:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CC381C23DFA
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 09:53:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAFD94A99C;
-	Mon, 26 Feb 2024 09:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AE2B1CFAD;
+	Mon, 26 Feb 2024 09:20:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HXu9YeOJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWFYUrNp"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0AF4481AD;
-	Mon, 26 Feb 2024 09:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444ED1CFA8;
+	Mon, 26 Feb 2024 09:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708939040; cv=none; b=JqmoZgZgfS+ixqVvLnpNo8QnpyOfk1wakUQAmhScPe1Ztg/BE726PS0jDynIp+9zRs80KRcMXiVRGRZwNKrjI6Zxx2zOFnJNHcF4CiuS0Kzgz9MZEjTOLjXAWj2UlHqe9aucCbengxkYHJk7wZ8xtUAy6BXdFY/8WofzYzL6NtE=
+	t=1708939250; cv=none; b=ATtGz+Cxnz4I6SUhG18nMN0fUjO0W4avC+RnOcV8Rv9Y1VxctpluAjV7LN+z5K1dkx5ek45ehErU7c1fgFTZfSXOuJ+aGsTlCFGOkKRVLqj10nON0KYI9ZvvhQ8F2ZTk35Jl/4XbLcK5J0kNYU7gzeAFZxp6+2VS2UJC1SUyokI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708939040; c=relaxed/simple;
-	bh=TDPshTEB2YgsSzMjFOliwieaa4N3m+QIe+o0VAqCL30=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=GAXBXatlOrAZXkL/tWrRUW82HMHz3nbagFVQPcsyirRRohAoU0d4FgoamT8AmCSuWvIkaodjKEWbIp7iMqVyn4QDdTkP9ACtUZwCk5EnuXxpYQMOwcHNvDtmwABMJ3xp08zDqIp/v/xlgCDW5DQFZHBzRl69gyv1ppLt/tdjDI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HXu9YeOJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB87C433F1;
-	Mon, 26 Feb 2024 09:17:13 +0000 (UTC)
+	s=arc-20240116; t=1708939250; c=relaxed/simple;
+	bh=/UeRed/g2dvEogajnUSGfibzVL58QJsfGr5Ye7NLJ6A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=OeXUeIbnTgfxXmn7++mPj7zlPVq4YKQGiYhU+PWqoZZSI1pz95WZ3oKe+Xh+o81w8uOwbv1dXarkJbQttOjbNKXqJIGFizc6DdFIXZ3+e6X+/1JLHte468LubAx0fa4niUDzs8jt7jc92R2SAqljTr5DJQIvpjoIrGufP7h9I6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWFYUrNp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD02C43609;
+	Mon, 26 Feb 2024 09:20:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708939040;
-	bh=TDPshTEB2YgsSzMjFOliwieaa4N3m+QIe+o0VAqCL30=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=HXu9YeOJLt1Yvf8NXTZ1efm0443uX2U1V2DLHVLDjanw7eFOgW7x2+1m103AC/PZK
-	 WXamFGx2xgSh7mVv/kXFnpgIE9Ch3mU5XP+4HQ02nLndcsNVMiSm9vuUANAHNQbjM7
-	 aNRDSIORRFc3AdpzsAw+aQzpxyQzkjg/OuOEe2AicvH/xDk71DkEKXiNOEUtyGgcU2
-	 5DpSDGRzkIpDdtqF7BzdhFkBJaizksaEHqsoj4PbPCeYLLJ31diCmfAV27euPJvF4M
-	 hqsBUHxgrjvyCxzCRVR+V2KdU3tVlT26TPFhxLyoiAkCsMSOHhPibfQyZ7iWb69/lR
-	 T8Taz6GzuK1OQ==
+	s=k20201202; t=1708939249;
+	bh=/UeRed/g2dvEogajnUSGfibzVL58QJsfGr5Ye7NLJ6A=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=LWFYUrNpuVrGfyaCTHcJ0njC8oeIZeFIlxTf3Oq8vJ0GqEDu1R20h+/USNlHpKUeT
+	 2u88KntporUe1ncLhL9kw6o/MHuifazh+2rwo3rjkI6XeXVCnJxCYVtKwZqJqGTZDV
+	 K78kPtL3jgy1PYDS90InPI5QloHPHXS9IZovly8bfTTLXzYdRGVEn1NXsnSTQ+wHSK
+	 7roFPdCxO6OAvZK5MfGrapyUovLB4S01jnnDDqpU5YMb4/v5hnzh3nJoFzLNZQ4YAb
+	 awNA0NjpezdEPac1QWji6C0j3sPvhDRYOPwO/TOjeHduZkgSn84BV/cY9pucUUWcz9
+	 L0y5n6xu6VY+Q==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,58 +49,43 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 26 Feb 2024 11:17:11 +0200
-Message-Id: <CZEWBSXM7LHU.15UW6P0T61VBN@suppilovahvero>
-Subject: Re: [PATCH v5 0/6] DCP as trusted keys backend
+Date: Mon, 26 Feb 2024 11:20:46 +0200
+Message-Id: <CZEWEJNBXC8P.XR6UVZKSDMDY@suppilovahvero>
+Cc: "Jason Gunthorpe" <jgg@ziepe.ca>, "Mimi Zohar" <zohar@linux.ibm.com>,
+ "Peter Huewe" <peterhuewe@gmx.de>, <linux-integrity@vger.kernel.org>,
+ "LKML" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: Update W's for KEYS/KEYRINGS_INTEGRITY and
+ TPM DEVICE RIVER
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Richard Weinberger" <richard@sigma-star.at>, "Mimi Zohar"
- <zohar@linux.ibm.com>, "James Bottomley" <jejb@linux.ibm.com>, "Herbert Xu"
- <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
- <upstream@sigma-star.at>, "David Howells" <dhowells@redhat.com>
-Cc: "Shawn Guo" <shawnguo@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- "Sascha Hauer" <s.hauer@pengutronix.de>, "kernel@pengutronix.de"
- <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "NXP Linux
- Team" <linux-imx@nxp.com>, "Ahmad Fatoum" <a.fatoum@pengutronix.de>, "sigma
- star Kernel Team" <upstream+dcp@sigma-star.at>, "Li Yang"
- <leoyang.li@nxp.com>, "Paul Moore" <paul@paul-moore.com>, "James Morris"
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Paul E.
- McKenney" <paulmck@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, "Tejun Heo" <tj@kernel.org>, "Steven Rostedt
- (Google)" <rostedt@goodmis.org>, <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
- "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "David Gstir"
- <david@sigma-star.at>
+To: "Paul Menzel" <pmenzel@molgen.mpg.de>
 X-Mailer: aerc 0.15.2
-References: <20231215110639.45522-1-david@sigma-star.at>
- <7AED262F-9387-446D-B11A-C549C02542F9@sigma-star.at>
- <47439997.XUcTiDjVJD@somecomputer> <1733761.uacIGzncQW@somecomputer>
-In-Reply-To: <1733761.uacIGzncQW@somecomputer>
+References: <20240226062245.2279635-1-jarkko@kernel.org>
+ <1ab10318-5e3d-417c-9984-7b17f4e386e3@molgen.mpg.de>
+In-Reply-To: <1ab10318-5e3d-417c-9984-7b17f4e386e3@molgen.mpg.de>
 
-On Mon Feb 26, 2024 at 12:20 AM EET, Richard Weinberger wrote:
-> Mimi, James, Jarkko, David,
+On Mon Feb 26, 2024 at 8:35 AM EET, Paul Menzel wrote:
+> Dear Jarkko,
 >
-> you remained silent for a whole release cycle.
-> Is there anything we can do to get this forward?
 >
-> Thanks,
-> //richard
+> Thank you for your patch. Two nits:
+>
+> s/RIVER/DRIVER/
 
-Thanks for reminding.
+lol, thanks for picking up this ;-)
 
-From my side, I've had pretty busy month as I've adapted to a new work
-project: https://sochub.fi/
+>
+> Am 26.02.24 um 07:22 schrieb Jarkko Sakkinen:
+> > Add TPM driver test suite URL to the MAINTAINERS files and move the wik=
+i
+>
+> s/files/file/
+>
+> > URL to more appropriate location.
+>
+> (Two commits would make the commit message shorter.)
 
-I exported the thread [1] and will look into it within this or next week
-in detail (thus the large'ish time window).
-
-[1] https://lore.kernel.org/linux-integrity/1733761.uacIGzncQW@somecomputer=
-/t.mbox.gz
+I think I just remove link-tags as there is not much else than the links
+in the actual change (trivial to pick them up from there).
 
 BR, Jarkko
 
