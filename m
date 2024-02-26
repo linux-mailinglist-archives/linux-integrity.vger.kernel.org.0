@@ -1,181 +1,171 @@
-Return-Path: <linux-integrity+bounces-1468-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1469-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 487CA867576
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 13:45:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBAA9867B51
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 17:14:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC2861F242C6
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 12:45:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E469AB27C7A
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 16:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6F07F475;
-	Mon, 26 Feb 2024 12:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F5F12BF1C;
+	Mon, 26 Feb 2024 16:06:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b="A+BOZT7K"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BxUBcDx9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp2.infineon.com (smtp2.infineon.com [217.10.52.18])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4007A1D54B;
-	Mon, 26 Feb 2024 12:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.52.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744C712BEBD
+	for <linux-integrity@vger.kernel.org>; Mon, 26 Feb 2024 16:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708951510; cv=none; b=l3ruT69LkFlUH88XUZo+8shGVcdimbnSOai1JAvrRPddJXxIMd1QTEktLrbU+mZbsnyUQrnLaBH7jlwNPrAnblW/NokPBnxvrFUDVEk5PrpalyC+SUrfLe/cQ5Px515YGhPL5nTqNM48WgtTerErzl07w9UtUah+4wK+kR2Nnxo=
+	t=1708963612; cv=none; b=i5zb5/nRWbTyJSbfIE2TU+s0jTSCS6EYIXGhmffs1A9d2e5jHzdVeHRtwI0HBMxu9GNHShGSfzct+7BmvVwkBhzqJY2AlOldsGjkwj7KXG5TJYEk/PcPfvgecnsUBtqiDKgZzE1iULrtEDftXWxIywokK7OFT42Aqet0wt4MsIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708951510; c=relaxed/simple;
-	bh=uopANXtSJT51k4uIm3FZj2qxgzsKx67DpU6Vep4VvQU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=n254ky+SS0yX9HR7ona3hZvArTcc2O2W7Ip4mUWcF863vZgeQOP6KyZ0U2XgpRX34k2uxskY4T6T9Qvzb0KLLpJg6k47Yjt4xtl1HiPUtruvY1bD+l8MTnPjeoUAbpsLDnss6qc7fuK/DzbPtSQGpI5RhmHIM3BGF1bzDO4tJtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infineon.com; spf=pass smtp.mailfrom=infineon.com; dkim=pass (1024-bit key) header.d=infineon.com header.i=@infineon.com header.b=A+BOZT7K; arc=none smtp.client-ip=217.10.52.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infineon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infineon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1708951509; x=1740487509;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uopANXtSJT51k4uIm3FZj2qxgzsKx67DpU6Vep4VvQU=;
-  b=A+BOZT7KA3BZTWASeXZ5D2m8w64M+6DJk98LVJ/ywMFq2UP4H12ejBH6
-   nKnXi1+PJ9LrQX+4Fe/1MaN1RcWauWCFro/OGjQ5Tchdre1zVH5J0bzbc
-   IdjUlS7RDap4wzCamWWrLUb0cHu3vVg5EZSC7aLAk2LprAs1u07WlHzvi
-   Q=;
-X-IronPort-AV: E=McAfee;i="6600,9927,10995"; a="69010008"
-X-IronPort-AV: E=Sophos;i="6.06,185,1705359600"; 
-   d="scan'208";a="69010008"
-Received: from unknown (HELO MUCSE814.infineon.com) ([172.23.29.40])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2024 13:43:57 +0100
-Received: from KLUSE844.infineon.com (172.28.156.184) by MUCSE814.infineon.com
- (172.23.29.40) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 26 Feb
- 2024 13:43:56 +0100
-Received: from [10.160.239.31] (10.160.239.31) by KLUSE844.infineon.com
- (172.28.156.184) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 26 Feb
- 2024 13:43:56 +0100
-Message-ID: <fd34e752-b6ce-4880-9ef5-4feda985bf42@infineon.com>
-Date: Mon, 26 Feb 2024 13:43:55 +0100
+	s=arc-20240116; t=1708963612; c=relaxed/simple;
+	bh=MmLt2fo829BvMcjmIOq2FZxriKsoaKUGit95QWHkJI4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=Mr5BohDMqv4wnn50PI7hvi0hxLahxuaC7udXs/RjmyAHRLDVTE/yV2XncKmuarzC+i6DkRM4Zru2/TvQyp1Xvheu0SSoZsMw4zlXwywe4gXItl4EOkbdmXOarqMeIqC9D1VCyRH3UE0r8Uy0AOnBwaV8LHLqZZis/ok1dQNPEYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BxUBcDx9; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41QFQoji030017;
+	Mon, 26 Feb 2024 16:06:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=yIJ/Llk/A7MZ/Bh4KYPG9K7QxaGBy6eRQKL8KdmrgLE=;
+ b=BxUBcDx9pb/yMYXLtRQwNJgQXjm0pGmWuZodiF5HIL2MDV5ueBbUfRAzxy6iJcLBXvxC
+ 1tNvAwjCs25cfaXMb1F13k1lmwRpT/5tmv7n8tQwhJN0pcJM0V8U6OTFgxZHqMITAheE
+ QeEu7dMndxpeo61lUSsE9BJ7f4mSrFfs9hVPQpslZYFyNZRPJEp8bQRn65C4hQJGXOfF
+ diS8jR0aCc1AAOEASK8Yrok6mnaZjWo9RjqD5S2AoFCQ6xKI4HkV1wsFXu6s0J3daa8X
+ pzwsfYbDp2jODaN2hNlMENC1kEihPdR56gEs7MhHXiGHa1cLVM4vDfHkKZAEZCDzWloG kg== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wgujb46je-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 26 Feb 2024 16:06:42 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41QFfiKK008852;
+	Mon, 26 Feb 2024 16:06:41 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wftstageq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 26 Feb 2024 16:06:41 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41QG6da322020434
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 26 Feb 2024 16:06:41 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0ED0F58067;
+	Mon, 26 Feb 2024 16:06:39 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9120058055;
+	Mon, 26 Feb 2024 16:06:38 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.183.51])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 26 Feb 2024 16:06:38 +0000 (GMT)
+Message-ID: <a9f8d72bcc13156fc074acd0ec3b063436f608b0.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 ima-evm-utils 2/6] Pass ENGINE and keyid through to
+ function using them
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc: roberto.sassu@huawei.com, vt@altlinux.org
+Date: Mon, 26 Feb 2024 11:06:38 -0500
+In-Reply-To: <20240223153014.4048133-3-stefanb@linux.ibm.com>
+References: <20240223153014.4048133-1-stefanb@linux.ibm.com>
+	 <20240223153014.4048133-3-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] tpm: protect against locality counter underflow
-To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, Lino Sanfilippo
-	<l.sanfilippo@kunbus.com>, Jarkko Sakkinen <jarkko@kernel.org>, "Jason
- Gunthorpe" <jgg@ziepe.ca>, Sasha Levin <sashal@kernel.org>,
-	<linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: Ross Philipson <ross.philipson@oracle.com>, Kanth Ghatraju
-	<kanth.ghatraju@oracle.com>, Peter Huewe <peterhuewe@gmx.de>
-References: <20240131170824.6183-1-dpsmith@apertussolutions.com>
- <20240131170824.6183-2-dpsmith@apertussolutions.com>
- <CYU3CFW08DAA.29DJY7SJYPJJZ@suppilovahvero>
- <2ba9a96e-f93b-48e2-9ca0-48318af7f9b1@kunbus.com>
- <ae3fecc4-7b76-4607-8749-045e17941923@infineon.com>
- <f52546f1-acca-4915-924c-cdd2018215d5@apertussolutions.com>
-From: Alexander Steffen <Alexander.Steffen@infineon.com>
-In-Reply-To: <f52546f1-acca-4915-924c-cdd2018215d5@apertussolutions.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MUCSE822.infineon.com (172.23.29.53) To
- KLUSE844.infineon.com (172.28.156.184)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Y-wuWHiJe3JOy9vQgGwvg2xMZ1wWKb1Y
+X-Proofpoint-GUID: Y-wuWHiJe3JOy9vQgGwvg2xMZ1wWKb1Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-26_11,2024-02-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 adultscore=0 impostorscore=0 mlxlogscore=999
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311290000 definitions=main-2402260122
 
-On 23.02.2024 02:55, Daniel P. Smith wrote:
-> On 2/20/24 13:42, Alexander Steffen wrote:
->> On 02.02.2024 04:08, Lino Sanfilippo wrote:
->>> On 01.02.24 23:21, Jarkko Sakkinen wrote:
->>>
->>>>
->>>> On Wed Jan 31, 2024 at 7:08 PM EET, Daniel P. Smith wrote:
->>>>> Commit 933bfc5ad213 introduced the use of a locality counter to
->>>>> control when a
->>>>> locality request is allowed to be sent to the TPM. In the commit,
->>>>> the counter
->>>>> is indiscriminately decremented. Thus creating a situation for an
->>>>> integer
->>>>> underflow of the counter.
->>>>
->>>> What is the sequence of events that leads to this triggering the
->>>> underflow? This information should be represent in the commit message.
->>>>
->>>
->>> AFAIU this is:
->>>
->>> 1. We start with a locality_counter of 0 and then we call
->>> tpm_tis_request_locality()
->>> for the first time, but since a locality is (unexpectedly) already 
->>> active
->>> check_locality() and consequently __tpm_tis_request_locality() return
->>> "true".
->>
->> check_locality() returns true, but __tpm_tis_request_locality() returns
->> the requested locality. Currently, this is always 0, so the check for
->> !ret will always correctly indicate success and increment the
->> locality_count.
->>
->> But since theoretically a locality != 0 could be requested, the correct
->> fix would be to check for something like ret >= 0 or ret == l instead of
->> !ret. Then the counter will also be incremented correctly for localities
->> != 0, and no underflow will happen later on. Therefore, explicitly
->> checking for an underflow is unnecessary and hides the real problem.
->>
+Hi Stefan,
+
+"Pass ENGINE and keyid through to function using them" describes what the patch
+does, but not the reason for the patch.  Please update the patch description
+Subject line and similarly the cover letter Subject line.
+
+
+On Fri, 2024-02-23 at 10:30 -0500, Stefan Berger wrote:
+> Pass the ENGINE and keyid all the way through to the function that is
+> using them and deprecate sign_hash since it needs to pass these parameters
+> from the global imaevm_params. Define a new API call imaevm_signhash that
+> takes all necessary variables as parameters.
+
+The motiviation for this patch is missing.
+
+Instead of relying on imaevm_params.engine and imaevm_params.keyid global
+variables, which are not concurrency-safe, define a new library function
+imaevm_signhash() function with the engine and keyid as parameters.
+
+Pass the ENGINE and keyid ...
+
 > 
-> My apologies, but I will have to humbly disagree from a fundamental
-> level here. If a state variable has bounds, then those bounds should be
-> enforced when the variable is being manipulated.
+> In preparation of support for OpenSSL providers, wrap the ENGINE in a
+> union inside a struct imaevm_ossl_access and add a type for the selection
+> of the ENGINE or provider later on.
 
-That's fine, but that is not what your proposed fix does.
+(If possible) Make sign_hash() a wrapper for imaevm_signhash().
 
-tpm_tis_request_locality and tpm_tis_relinquish_locality are meant to be 
-called in pairs: for every (successful) call to tpm_tis_request_locality 
-there *must* be a corresponding call to tpm_tis_relinquish_locality 
-afterwards. Unfortunately, in C there is no language construct to 
-enforce that (nothing like a Python context manager), so instead 
-locality_count is used to count the number of successful calls to 
-tpm_tis_request_locality, so that tpm_tis_relinquish_locality can wait 
-to actually relinquish the locality until the last expected call has 
-happened (you can think of that as a Python RLock, to stay with the 
-Python analogies).
+Deprecate sign_hash().
 
-So if locality_count ever gets negative, that is certainly a bug 
-somewhere. But your proposed fix hides this bug, by allowing 
-tpm_tis_relinquish_locality to be called more often than 
-tpm_tis_request_locality. You could have added something like 
-BUG_ON(priv->locality_count == 0) before decrementing the counter. That 
-would really enforce the bounds, without hiding the bug, and I would be 
-fine with that.
-
-Of course, that still leaves the actual bug to be fixed. In this case, 
-there is no mismatch between the calls to tpm_tis_request_locality and 
-tpm_tis_relinquish_locality. It is just (as I said before) that the 
-counting of successful calls in tpm_tis_request_locality is broken for 
-localities != 0, so that is what you need to fix.
-
-> Assuming that every
-> path leading to the variable manipulation code has ensured proper
-> manipulation is just that, an assumption. When assumptions fail is how
-> bugs and vulnerabilities occur.
 > 
-> To your point, does this full address the situation experienced, I would
-> say it does not. IMHO, the situation is really a combination of both
-> patch 1 and patch 2, but the request was to split the changes for
-> individual discussion. We selected this one as being the fixes for two
-> reasons. First, it blocks the underflow such that when the Secure Launch
-> series opens Locality 2, it will get incremented at that time and the
-> internal locality tracking state variables will end up with the correct
-> values. Thus leading to the relinquish succeeding at kernel shutdown.
-> Second, it provides a stronger defensive coding practice.
-> 
-> Another reason that this works as a fix is that the TPM specification
-> requires the registers to be mirrored across all localities, regardless
-> of the active locality. While all the request/relinquishes for Locality
-> 0 sent by the early code do not succeed, obtaining the values via the
-> Locality 0 registers are still guaranteed to be correct.
-> 
-> v/r,
-> dps
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+
+[...]
+
+>  int sign_hash(const char *hashalgo, const unsigned char *hash, int size,
+> const char *keyfile, const char *keypass, unsigned char *sig)
+>  {
+> +	const struct imaevm_ossl_access access_info = {
+> +		.type = IMAEVM_OSSL_ACCESS_TYPE_ENGINE,
+> +		.u.engine = imaevm_params.eng,
+> +	};
+>  	if (!keypass)	/* Avoid breaking existing libimaevm usage */
+>  		keypass = imaevm_params.keypass;
+>  
+>  	if (imaevm_params.x509)
+> -		return sign_hash_v2(hashalgo, hash, size, keyfile, keypass,
+> sig);
+> +		return sign_hash_v2(hashalgo, hash, size, keyfile, keypass, sig,
+> +				    &access_info, imaevm_params.keyid);
+>  #if CONFIG_SIGV1
+>  	else
+> -		return sign_hash_v1(hashalgo, hash, size, keyfile, keypass,
+> sig);
+> +		return sign_hash_v1(hashalgo, hash, size, keyfile, keypass, sig,
+> +				    &access_info, imaevm_params.keyid);
+
+If possible sign_hash() should become a wrapper for imaevm_signhash().
+
+>  #endif
+>  	log_info("Signature version 1 deprecated.");
+
+>  	return -1;
+
+
+thanks,
+
+Mimi
 
 
