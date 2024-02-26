@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1463-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1464-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ACEC866F50
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 10:53:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04F91866F73
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 10:56:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CC381C23DFA
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 09:53:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B52CD2877A2
+	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 09:56:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AE2B1CFAD;
-	Mon, 26 Feb 2024 09:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F0154663;
+	Mon, 26 Feb 2024 09:26:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWFYUrNp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tCsSThtx"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444ED1CFA8;
-	Mon, 26 Feb 2024 09:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BA1D53E;
+	Mon, 26 Feb 2024 09:26:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708939250; cv=none; b=ATtGz+Cxnz4I6SUhG18nMN0fUjO0W4avC+RnOcV8Rv9Y1VxctpluAjV7LN+z5K1dkx5ek45ehErU7c1fgFTZfSXOuJ+aGsTlCFGOkKRVLqj10nON0KYI9ZvvhQ8F2ZTk35Jl/4XbLcK5J0kNYU7gzeAFZxp6+2VS2UJC1SUyokI=
+	t=1708939567; cv=none; b=rDmwag8WejgfG0ic5BqRhyHBtxKGauU5UPqVd4GEBksd/ElBEZrIxVoHkFwE2VCJt1tXPRT2l0B35KlGtwl8z3H1e/Nxsbbmqd8/3yukgREDSMHwOygpsLCi9afv6OPWCaOR644gpqj7hw2sWrJar6nPbuzv4LhHl5DuwSeZ5yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708939250; c=relaxed/simple;
-	bh=/UeRed/g2dvEogajnUSGfibzVL58QJsfGr5Ye7NLJ6A=;
+	s=arc-20240116; t=1708939567; c=relaxed/simple;
+	bh=rhKsZfosCmhfCCGc9/653wNP0wWHZyBXR7wGPOOIK9E=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=OeXUeIbnTgfxXmn7++mPj7zlPVq4YKQGiYhU+PWqoZZSI1pz95WZ3oKe+Xh+o81w8uOwbv1dXarkJbQttOjbNKXqJIGFizc6DdFIXZ3+e6X+/1JLHte468LubAx0fa4niUDzs8jt7jc92R2SAqljTr5DJQIvpjoIrGufP7h9I6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWFYUrNp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD02C43609;
-	Mon, 26 Feb 2024 09:20:48 +0000 (UTC)
+	 References:In-Reply-To; b=hWpV4PMWpfiSud/QAbWXGifdx8l4V0S6+z49jtwXn9bIOCUsJN571gZiE4RhHOZBycSTGVrqk4UVKhXl/Tm1Jff/ZQXzSwlu9EVVemQXomKJgqw13EO3lULAVxkOaPE4DwH0BpAZnBj8JnP83yoD2Q5O5hHqcqsyf3/0CrAhyi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tCsSThtx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD094C433F1;
+	Mon, 26 Feb 2024 09:26:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708939249;
-	bh=/UeRed/g2dvEogajnUSGfibzVL58QJsfGr5Ye7NLJ6A=;
+	s=k20201202; t=1708939567;
+	bh=rhKsZfosCmhfCCGc9/653wNP0wWHZyBXR7wGPOOIK9E=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=LWFYUrNpuVrGfyaCTHcJ0njC8oeIZeFIlxTf3Oq8vJ0GqEDu1R20h+/USNlHpKUeT
-	 2u88KntporUe1ncLhL9kw6o/MHuifazh+2rwo3rjkI6XeXVCnJxCYVtKwZqJqGTZDV
-	 K78kPtL3jgy1PYDS90InPI5QloHPHXS9IZovly8bfTTLXzYdRGVEn1NXsnSTQ+wHSK
-	 7roFPdCxO6OAvZK5MfGrapyUovLB4S01jnnDDqpU5YMb4/v5hnzh3nJoFzLNZQ4YAb
-	 awNA0NjpezdEPac1QWji6C0j3sPvhDRYOPwO/TOjeHduZkgSn84BV/cY9pucUUWcz9
-	 L0y5n6xu6VY+Q==
+	b=tCsSThtxIEs0BWU27p1URISK+m4fGl9Y5sVs2O/E+a3CyrvayclzVFW4ol9HkAVza
+	 TykVzfOfRP/mqsygjo95992jS5ZuTH/Rbn8hV+Ze89eaKEUDm2NLJP6v/ErCHLICYT
+	 v7jYXIJHF4SSrFQFpjhhsRBiE2KZHFWUPsEc/t8JFXeD73fCzCtEqJJeWrteAyZRjL
+	 nQum5fZL7XkZIIoyZM0A4qsiF9MKRlDj2T16YKaQNqVYd3e0JKggxne6nzFUIQ7TzF
+	 K1HZnxPSaR0UYK49DOOBxN3XUUvcznDBw6NsxIqAv+7vFa1nAVvBXC5ltNv9qCXeMh
+	 BHlzZbNM9KqfQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,43 +49,59 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 26 Feb 2024 11:20:46 +0200
-Message-Id: <CZEWEJNBXC8P.XR6UVZKSDMDY@suppilovahvero>
+Date: Mon, 26 Feb 2024 11:26:03 +0200
+Message-Id: <CZEWILFMZ5L1.2TCZXVS7GTDKZ@suppilovahvero>
 Cc: "Jason Gunthorpe" <jgg@ziepe.ca>, "Mimi Zohar" <zohar@linux.ibm.com>,
- "Peter Huewe" <peterhuewe@gmx.de>, <linux-integrity@vger.kernel.org>,
- "LKML" <linux-kernel@vger.kernel.org>
+ "Peter Huewe" <peterhuewe@gmx.de>, <linux-integrity@vger.kernel.org>
 Subject: Re: [PATCH] MAINTAINERS: Update W's for KEYS/KEYRINGS_INTEGRITY and
  TPM DEVICE RIVER
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Paul Menzel" <pmenzel@molgen.mpg.de>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-kernel@vger.kernel.org>
 X-Mailer: aerc 0.15.2
 References: <20240226062245.2279635-1-jarkko@kernel.org>
- <1ab10318-5e3d-417c-9984-7b17f4e386e3@molgen.mpg.de>
-In-Reply-To: <1ab10318-5e3d-417c-9984-7b17f4e386e3@molgen.mpg.de>
+ <eaa5107ac4f982b6fd6e80b522643a591e719dc9.camel@HansenPartnership.com>
+In-Reply-To: <eaa5107ac4f982b6fd6e80b522643a591e719dc9.camel@HansenPartnership.com>
 
-On Mon Feb 26, 2024 at 8:35 AM EET, Paul Menzel wrote:
-> Dear Jarkko,
->
->
-> Thank you for your patch. Two nits:
->
-> s/RIVER/DRIVER/
-
-lol, thanks for picking up this ;-)
-
->
-> Am 26.02.24 um 07:22 schrieb Jarkko Sakkinen:
-> > Add TPM driver test suite URL to the MAINTAINERS files and move the wik=
-i
->
-> s/files/file/
->
+On Mon Feb 26, 2024 at 8:49 AM EET, James Bottomley wrote:
+> On Mon, 2024-02-26 at 08:22 +0200, Jarkko Sakkinen wrote:
+> > Add TPM driver test suite URL to the MAINTAINERS files and move the
+> > wiki
 > > URL to more appropriate location.
+> >=20
+> > Link: https://gitlab.com/jarkkojs/linux-tpmdd-test
+> > Link: https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
+> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > Cc: Peter Huewe <peterhuewe@gmx.de>
+> > Cc: linux-integrity@vger.kernel.org
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > =C2=A0MAINTAINERS | 3 ++-
+> > =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index bf77be03fb2b..6380c1109b86 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -11947,6 +11947,7 @@ M:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Mimi Zoha=
+r <zohar@linux.ibm.com>
+> > =C2=A0L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0linux-integrity@vger.kernel.org
+> > =C2=A0L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0keyrings@vger.kernel.org
+> > =C2=A0S:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Supported
+> > +W:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0https://kernsec.org/wiki/index.php/inu=
+x_Kernel_Integrity
+>                                              ^
+>                                          Missing L
 >
-> (Two commits would make the commit message shorter.)
+> James
 
-I think I just remove link-tags as there is not much else than the links
-in the actual change (trivial to pick them up from there).
+Thanks! I'll fixup that.
+
+"linux-tpmdd-test" is the suite that I'm using to test your patch set.
+It has swtpm integrated. I wonder if there was easy to way to tweak
+swtpm to emulate "interposer", i.e. reset its state while it is
+running (preferably not by restarting it).
 
 BR, Jarkko
 
