@@ -1,101 +1,259 @@
-Return-Path: <linux-integrity+bounces-1482-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1483-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855A7868300
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 22:27:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CC2D8691CD
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Feb 2024 14:29:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26ECF1F274DD
-	for <lists+linux-integrity@lfdr.de>; Mon, 26 Feb 2024 21:27:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC4B51F239AB
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Feb 2024 13:29:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ECF113173B;
-	Mon, 26 Feb 2024 21:26:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0251C145344;
+	Tue, 27 Feb 2024 13:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XqhMdDGw"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A391E880
-	for <linux-integrity@vger.kernel.org>; Mon, 26 Feb 2024 21:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1B0145320;
+	Tue, 27 Feb 2024 13:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708982779; cv=none; b=eBg4LuMq5dJ0HVwFdUxJ3u3brNFCq4fpiWprPL9sPwIU0zCYcJ37+foPSyFhFGtBKY10uc2Yunj/Mzjmw/v16cXzmdSvKiQFePSGnST9T2z97y7FxsDVQoEFA4TPRSi1bFMjw+8m880XR1ndNVvIPy/GQ/rJmYwg+CHq04e/BZk=
+	t=1709040514; cv=none; b=f4ja+QGoqSJj1lKCJzLieSsdgGR/diefmiTST77ICljb7gMlD9dv1ro2CqfR9FmaswTneEVqXimVbEJUqMVhDCW8W37qjUjND1gqnhlV4KCe8fZGBj3nAM711qHG96/NG2DJLaT0k8QTuGnk5Di4QEG6StQwsg8HihJfAi3jyS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708982779; c=relaxed/simple;
-	bh=ocyp3J12temD/A1wD6ETKBJ5HK67PYdKqlU8YnAmU9E=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KxdnBGk5a+gO9al/FpwyxNDSrnELW6PP56mf+k48guKBjdeZazVh2T15uCkMVDMmJtEUxcaAPONPedj/nWZj2Vhq/8LJIUGjkYiS6NpAki6nxlnb4mEhQbZrCcd14Nm7NXvTRu7ba3Zejk65z3SjNgrsiJzj26fv5CMb4PH1OKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=andred.net; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=andred.net
+	s=arc-20240116; t=1709040514; c=relaxed/simple;
+	bh=zru7ObNNKkQqccBKGdjO4JlNuuwVy5ujT0QSm0dUZfY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dOTITVbzkRWM3JQgmlgPldnVEEqlW3XUqz956DbjDsn2K91/Hyr0lmKWRTwM6KMJ7+l1gGdjoHt2b+jdZsldaqyrAWtND9+md0qh4yAF5SUBVDOVROxXF0AplSNTecDvN3Xe3szJrLZOlxUgob9fPJuDQc3hq0OCb6fT1pyxUK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XqhMdDGw; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-412a7b68809so7739985e9.0
-        for <linux-integrity@vger.kernel.org>; Mon, 26 Feb 2024 13:26:16 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-42e7e8e7c09so5959381cf.1;
+        Tue, 27 Feb 2024 05:28:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709040510; x=1709645310; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sA3eGpdy0V1trjnCYXdrUG6FXIcsye2wJjLbDY0NJk8=;
+        b=XqhMdDGwh8qeJuw5TKIfabet8iRADsTgCEWViON/4WPjJbZDOe8h/NDobRN1wZQdUq
+         +Y7p795dCNDcwH7f0F20HHz9SmOcJPcGiloAaUqbZ2Hxp8nambdOSG3nCaaXGEZETwrB
+         BzZr73CjF1LEqHiPG8Il17bfLxzO3Ab9D9YM5wGOHoa3AX3fLtdzwbjbCrYpqZhGVzU1
+         DeZRwm///ooTMDHZC8/LI4r6GRatsfmrie38CBmHmdEz2L4LyCg1RY29L4DsJsInepgZ
+         oZ+wPmdceobvJjfwxcWJCwWPM9e/fQdJZ034prVwjvLq0i+o3QoNI4+W8x/V5WrkwSnm
+         3Jaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708982775; x=1709587575;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ocyp3J12temD/A1wD6ETKBJ5HK67PYdKqlU8YnAmU9E=;
-        b=mog5d29Jc3v2U81YZ+vGr3RYZ8mIM2BuHFN6Tu3E0mvkNtu0Fn00DntCM/2Z1B7ymh
-         MLCRjlhr5vQZ32epluC4EwuSL48k/Aan9aYisGi45CEhgu1bKmXdCzQLsOyUkCU+E/If
-         bbNm98XXhLbgkPaPbq1groVnP4Jz+/mVDjb4mEzSgWsLLNU1J44S27FsSF33cSABJu+5
-         PTxj5oqpXK7IA3pS5EiZ5SJjVfxAiWjmBCOjMrWFaKy3j/6ob5FSWyHtJ4cvDJXEGKrL
-         Mt844yX4fv8kKWeLYQxr1ceu8EE0pO1on8ArihYqnHV0g5aYD/ib5ewsyguPwSfAPinb
-         4Zrg==
-X-Forwarded-Encrypted: i=1; AJvYcCV10y88yFD/9nvRgWYjj7wiBhyhm0rBa/qNNmOwaWReGnHdUbcKyoIwlfQfKspp/R0eI7RSi8Z9QvwCYchQJLmINxl6ZMjram8zxcMwIcdG
-X-Gm-Message-State: AOJu0YzQ/liCGUR/eDw8+a0Oadg7pL9d3hL33KhmOzAnPTFpd8AClgpT
-	8vEmuUmEN9Zkwn/RHJ+xE8wch9N2sdLaIv75G0picV7dFPdwEsHqAZa+vhJeNJo=
-X-Google-Smtp-Source: AGHT+IFLIx2xH8xz+7b8FU5gtfUjwL/R4TG0UNSjO4JDYcuYJoXc7NZe/8t1Vmz/dE247apogg+3Sg==
-X-Received: by 2002:a05:600c:1989:b0:412:9bfa:4a with SMTP id t9-20020a05600c198900b004129bfa004amr4531822wmq.23.1708982775035;
-        Mon, 26 Feb 2024 13:26:15 -0800 (PST)
-Received: from salami.lan ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id bd22-20020a05600c1f1600b00412a38e732csm5615897wmb.35.2024.02.26.13.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Feb 2024 13:26:14 -0800 (PST)
-Message-ID: <da05e5f88ec57c357978185c65ba1498e2cfd28e.camel@andred.net>
-Subject: Re: [ima-evm-utils: PATCH v1 1/1] Change license to
- LGPL-2.0-or-later and GPL-2.0-or-later
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <git@andred.net>
-To: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	linux-integrity@vger.kernel.org
-Cc: a.mardegan@omp.ru, dbaryshkov@gmail.com, ebiggers@google.com, 
- sorenson@redhat.com, gcwilson@linux.ibm.com, 
- James.Bottomley@HansenPartnership.com, kgoldman@us.ibm.com,
- mjg59@srcf.ucam.org,  zohar@linux.ibm.com, patrick.ohly@intel.com,
- patrick@puiterwijk.org,  petr.vorel@gmail.com, roberto.sassu@huawei.com,
- stefanb@linux.ibm.com,  stephen.smalley.work@gmail.com,
- tianjia.zhang@linux.alibaba.com, vt@altlinux.org,  vgoyal@redhat.com,
- z.jasinski@samsung.com
-Date: Mon, 26 Feb 2024 21:26:12 +0000
-In-Reply-To: <9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
-References: 
-	<9205ed32da8814d8c4d9bde5a03d92c7588f1d9a.1708503094.git.dmitry.kasatkin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3-1 
+        d=1e100.net; s=20230601; t=1709040510; x=1709645310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sA3eGpdy0V1trjnCYXdrUG6FXIcsye2wJjLbDY0NJk8=;
+        b=Me92wfj+UPknIJtr4k6NmfkLZg/ELobuXnDuSoukYFoAqNVfNDAyseKByNVAKKBgip
+         mNEmRZH35KO8zrkEQHaIlnET+LCV9rcV3jsMy7+ubMGD6MWuKzz1kXUU0fmTj/sa+HMm
+         Sp3klKAhqd7CSLGqLhAZYlcYwh101oD2//oNZyKKvkkBIF6A6sAHDIpuXbI6gtPkFtNf
+         VYexkoiuTxQ1aoJ63GWhPKJe65BH6S4pmuowP9M9Dk9iXuFVqxD6UmvUx5GlLntpcfX7
+         ichoRmn9881T+/1XcWXDvELjxJYl9MeO5MUDvns09EAbEQPc05DW5nTY7QDpj2kb87jq
+         aSsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXZXq/A7TYlBqpY2xdTxBE4F8CeMR22DaT/5m+y2blYiFoNwfSGKTeF9kkG2NTKJXQyme+7jm3pEpA/OS7kA2aivu/stKthYxT0G5qbRKFOkJBAXU42xWa0JcLHe628ta+/0jYl7/Zw4fQXOxfOrRMrQ6HOj/rfCdX2VDbrukacNQN/Q9lYkUeJF4Y5NgqTAUqTnDLHQDvZj0UDEIOkiGaLd2ouYu0ZaURUB/zu4REdSZntts+Crfr0Adb4Z8BfbdnL++teniDceORYkm9l+Z8E8PupZ90J4MZE68EoSZfJn5KgNttFfoLeU5MNcmq0zLf8sNlar5DD89zZSsw0OVVqKGqolTk1zxqXr32aPeTQ1P3vR9WrfA6i7o9cF8U=
+X-Gm-Message-State: AOJu0YwNr0XY4GJw0tMeZryvjZ2m5kGzO8U7ILUDtcAfI8IxU31VehxK
+	oVCTEUIBBmePyHxVO95rML3jOno09dMe0rTlq9tGGYs66ybiXjmezP1VV9j8KlR+PaYbSDSH34e
+	kiI1JSQ1q8zfD2MiEtFCHLWILWx0=
+X-Google-Smtp-Source: AGHT+IHd1fYGCovL5jMrwGyPD3t9BUZlBl4i58kM3c7T6/2cjncdv2UjHD2jwvbN+FNdJ7hm/vJBg7tdpkEc9efldco=
+X-Received: by 2002:ac8:5bd2:0:b0:42e:8a6b:5d00 with SMTP id
+ b18-20020ac85bd2000000b0042e8a6b5d00mr4856001qtb.26.1709040510180; Tue, 27
+ Feb 2024 05:28:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org> <20240221-idmap-fscap-refactor-v2-20-3039364623bd@kernel.org>
+In-Reply-To: <20240221-idmap-fscap-refactor-v2-20-3039364623bd@kernel.org>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Tue, 27 Feb 2024 15:28:18 +0200
+Message-ID: <CAOQ4uxjvrFuz2iCiO9dsOnear+qN=M+GFW-eEOZU5uCzBkTwLQ@mail.gmail.com>
+Subject: Re: [PATCH v2 20/25] ovl: add fscaps handlers
+To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>, 
+	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
+	James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi <miklos@szeredi.hu>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	audit@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2024-02-21 at 10:11 +0200, Dmitry Kasatkin wrote:
-> Currently libimaevm provided by this project is used by the tool evmctl,
-> which is also provided by this project.
->=20
-> An issue was reported about using libimaevm with other software. Its
-> GPL2-only license makes it incompatible to use with other licenses, in
-> particular GPL3-only.
->=20
-> To address this issue, change the project license to GPL-2.0-or-later
-> and libimaevm to LGPL 2.0 or later.
->=20
-> Signed-off-by: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+On Wed, Feb 21, 2024 at 11:25=E2=80=AFPM Seth Forshee (DigitalOcean)
+<sforshee@kernel.org> wrote:
+>
+> Add handlers which read fs caps from the lower or upper filesystem and
+> write/remove fs caps to the upper filesystem, performing copy-up as
+> necessary.
+>
+> While fscaps only really make sense on regular files, the general policy
+> is to allow most xattr namespaces on all different inode types, so
+> fscaps handlers are installed in the inode operations for all types of
+> inodes.
+>
+> Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+> ---
+>  fs/overlayfs/dir.c       |  2 ++
+>  fs/overlayfs/inode.c     | 72 ++++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  fs/overlayfs/overlayfs.h |  5 ++++
+>  3 files changed, 79 insertions(+)
+>
+> diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
+> index 0f8b4a719237..4ff360fe10c9 100644
+> --- a/fs/overlayfs/dir.c
+> +++ b/fs/overlayfs/dir.c
+> @@ -1307,6 +1307,8 @@ const struct inode_operations ovl_dir_inode_operati=
+ons =3D {
+>         .get_inode_acl  =3D ovl_get_inode_acl,
+>         .get_acl        =3D ovl_get_acl,
+>         .set_acl        =3D ovl_set_acl,
+> +       .get_fscaps     =3D ovl_get_fscaps,
+> +       .set_fscaps     =3D ovl_set_fscaps,
+>         .update_time    =3D ovl_update_time,
+>         .fileattr_get   =3D ovl_fileattr_get,
+>         .fileattr_set   =3D ovl_fileattr_set,
+> diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
+> index c63b31a460be..7a8978ea6fe1 100644
+> --- a/fs/overlayfs/inode.c
+> +++ b/fs/overlayfs/inode.c
+> @@ -568,6 +568,72 @@ int ovl_set_acl(struct mnt_idmap *idmap, struct dent=
+ry *dentry,
+>  }
+>  #endif
+>
+> +int ovl_get_fscaps(struct mnt_idmap *idmap, struct dentry *dentry,
+> +                  struct vfs_caps *caps)
+> +{
+> +       int err;
+> +       const struct cred *old_cred;
+> +       struct path realpath;
+> +
+> +       ovl_path_real(dentry, &realpath);
+> +       old_cred =3D ovl_override_creds(dentry->d_sb);
+> +       err =3D vfs_get_fscaps(mnt_idmap(realpath.mnt), realpath.dentry, =
+caps);
+> +       revert_creds(old_cred);
+> +       return err;
+> +}
+> +
+> +int ovl_set_fscaps(struct mnt_idmap *idmap, struct dentry *dentry,
+> +                  const struct vfs_caps *caps, int setxattr_flags)
+> +{
+> +       int err;
+> +       struct ovl_fs *ofs =3D OVL_FS(dentry->d_sb);
+> +       struct dentry *upperdentry =3D ovl_dentry_upper(dentry);
+> +       struct dentry *realdentry =3D upperdentry ?: ovl_dentry_lower(den=
+try);
+> +       const struct cred *old_cred;
+> +
+> +       /*
+> +        * If the fscaps are to be remove from a lower file, check that t=
+hey
+> +        * exist before copying up.
+> +        */
 
-Acked-by: Andr=C3=A9 Draszik <git@andred.net>
+Don't you need to convert -ENODATA to 0 return value in this case?
+
+> +       if (!caps && !upperdentry) {
+> +               struct path realpath;
+> +               struct vfs_caps lower_caps;
+> +
+> +               ovl_path_lower(dentry, &realpath);
+> +               old_cred =3D ovl_override_creds(dentry->d_sb);
+> +               err =3D vfs_get_fscaps(mnt_idmap(realpath.mnt), realdentr=
+y,
+> +                                    &lower_caps);
+> +               revert_creds(old_cred);
+> +               if (err)
+> +                       goto out;
+> +       }
+> +
+> +       err =3D ovl_want_write(dentry);
+> +       if (err)
+> +               goto out;
+> +
+
+ovl_want_write() should after ovl_copy_up(), see:
+162d06444070 ("ovl: reorder ovl_want_write() after ovl_inode_lock()")
 
 
+> +       err =3D ovl_copy_up(dentry);
+> +       if (err)
+> +               goto out_drop_write;
+> +       upperdentry =3D ovl_dentry_upper(dentry);
+> +
+> +       old_cred =3D ovl_override_creds(dentry->d_sb);
+> +       if (!caps)
+> +               err =3D vfs_remove_fscaps(ovl_upper_mnt_idmap(ofs), upper=
+dentry);
+> +       else
+> +               err =3D vfs_set_fscaps(ovl_upper_mnt_idmap(ofs), upperden=
+try,
+> +                                    caps, setxattr_flags);
+> +       revert_creds(old_cred);
+> +
+> +       /* copy c/mtime */
+> +       ovl_copyattr(d_inode(dentry));
+> +
+> +out_drop_write:
+> +       ovl_drop_write(dentry);
+> +out:
+> +       return err;
+> +}
+> +
+>  int ovl_update_time(struct inode *inode, int flags)
+>  {
+>         if (flags & S_ATIME) {
+> @@ -747,6 +813,8 @@ static const struct inode_operations ovl_file_inode_o=
+perations =3D {
+>         .get_inode_acl  =3D ovl_get_inode_acl,
+>         .get_acl        =3D ovl_get_acl,
+>         .set_acl        =3D ovl_set_acl,
+> +       .get_fscaps     =3D ovl_get_fscaps,
+> +       .set_fscaps     =3D ovl_set_fscaps,
+>         .update_time    =3D ovl_update_time,
+>         .fiemap         =3D ovl_fiemap,
+>         .fileattr_get   =3D ovl_fileattr_get,
+> @@ -758,6 +826,8 @@ static const struct inode_operations ovl_symlink_inod=
+e_operations =3D {
+>         .get_link       =3D ovl_get_link,
+>         .getattr        =3D ovl_getattr,
+>         .listxattr      =3D ovl_listxattr,
+> +       .get_fscaps     =3D ovl_get_fscaps,
+> +       .set_fscaps     =3D ovl_set_fscaps,
+>         .update_time    =3D ovl_update_time,
+>  };
+>
+> @@ -769,6 +839,8 @@ static const struct inode_operations ovl_special_inod=
+e_operations =3D {
+>         .get_inode_acl  =3D ovl_get_inode_acl,
+>         .get_acl        =3D ovl_get_acl,
+>         .set_acl        =3D ovl_set_acl,
+> +       .get_fscaps     =3D ovl_get_fscaps,
+> +       .set_fscaps     =3D ovl_set_fscaps,
+>         .update_time    =3D ovl_update_time,
+>  };
+>
 
+
+Sorry, I did not understand the explanation why fscaps ops are needed
+for non regular files. It does not look right to me.
+
+Thanks,
+Amir.
 
