@@ -1,154 +1,139 @@
-Return-Path: <linux-integrity+bounces-1485-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1486-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A69F8699A0
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Feb 2024 16:02:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEFA6869F01
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Feb 2024 19:22:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46C2DB29212
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Feb 2024 15:01:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68A0D28FE68
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Feb 2024 18:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03901487D8;
-	Tue, 27 Feb 2024 14:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EA83146015;
+	Tue, 27 Feb 2024 18:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tsXgDuZq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t+xS4utr"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75454145343;
-	Tue, 27 Feb 2024 14:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77571448C7;
+	Tue, 27 Feb 2024 18:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709045872; cv=none; b=QrcgrKWhHO/FCgxbhaFyJXx2XewJv/JaA0FIEJNawqYimE5M6YwwpUCSLDI5tEo0wUM3u8iZMsxeepepVDKM5cL8iAIE2g59IK2FaRObYnPSv2F3hIJ9P6TCVq8XbScvDg8B2tou3UaKGsWmBqtM+Ix7ejxusJBg9IBX4SCwbfs=
+	t=1709058159; cv=none; b=ZPvJvK/GQkNYyOFiPomhVApOg735T3vxjo6PYNpWbFgsxOAjkbxayyAD8CVSVuaszOjY8jPpJ6wCLXpqK9ZqF6M4UU573fGm58CmFTyxMEC9QA4diMYlsGUkXa1qaScp8m8OtZtBSLHi6jSlWSWOeEI1yMq6dbJzKOC6qL32jks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709045872; c=relaxed/simple;
-	bh=wmEclif75z08Y7k+kYIcq9r8njHDzniHYzsVWuX5qXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nvcEbAN/CYonehRsQzbHPhoEnmFJbVdD71rxtQpTCDz1+LJmal3gxNKQUcW772uVU+78sxbhiBDrvW4ovnhLIqIMUnLFZGCk4nJJzSYjMT4FSeuSoLRY8RTDC/vP7liQk2qd9l1+9nNXNvwzEMLmC4CHOTFaYeGwwn4ci4ruHxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tsXgDuZq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB6BC433F1;
-	Tue, 27 Feb 2024 14:57:52 +0000 (UTC)
+	s=arc-20240116; t=1709058159; c=relaxed/simple;
+	bh=t2X04j+6tfN8ZmDHgEQnpC0hzPKjfflCDkJqlGYzc7o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Vtben52FNEpNcDzKqrjX8Tn88+oaN7VKHJBsKc4H+0/lymyypwDaZ+6ArgPfaV8eQiPEBvan3CYuot1eTh/Ja8lvm+bxYFCUDf13bw20U+6BQa2yAcEXWfV5oOrTtzzbOl3JNa/+SO/I48JXXI7khV2BdCF8uWUlM88FacJloDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t+xS4utr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2636C433C7;
+	Tue, 27 Feb 2024 18:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709045872;
-	bh=wmEclif75z08Y7k+kYIcq9r8njHDzniHYzsVWuX5qXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tsXgDuZqZaxkgTGkVT4vgZZkifzs/XhauPG/Z8VblgKg3JYBuzgPCH2sN/AOfYAsz
-	 Cizp02wJoy2Js13JQt0E+Zl0HHvCGA3oZPWP9ioF8VBtoICsQTFvdJzNjP0YHkL+jx
-	 ZIEk0/YHOPTJNdkd9MEZU1P/jrlu9PFKFSfTKXyWBhplucxucznwgrqof5c5iGRM/2
-	 tUKDL8CJyGhfVnM/DYhRi1QnqmdGaigiZHrlvcPEAFN5h7QksWvunvY47bRRJDFmc2
-	 IfgbTjgpxKGsD+8Gs+Bdb72wnC6/I2S3F3cVc+DfaWBszVKJLxEdYDxu+6MSCu1WCQ
-	 xKCvkJWQbWn0Q==
-Date: Tue, 27 Feb 2024 08:57:51 -0600
-From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>,
-	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
-	James Morris <jmorris@namei.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Miklos Szeredi <miklos@szeredi.hu>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, audit@vger.kernel.org,
-	selinux@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v2 20/25] ovl: add fscaps handlers
-Message-ID: <Zd34b4Lw9hOHJYr2@do-x1extreme>
-References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
- <20240221-idmap-fscap-refactor-v2-20-3039364623bd@kernel.org>
- <CAOQ4uxjvrFuz2iCiO9dsOnear+qN=M+GFW-eEOZU5uCzBkTwLQ@mail.gmail.com>
+	s=k20201202; t=1709058158;
+	bh=t2X04j+6tfN8ZmDHgEQnpC0hzPKjfflCDkJqlGYzc7o=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=t+xS4utrMWntP2B/9DJJ/zz8WsOFQeKVMpDXoItRXCD93ze4LlLHJxBMnpyqTOq4v
+	 Xy0Hqil1rSY+mZO5DUY7uO9MqmpzbVvvb/6MMXJj9qPU6uDh7V56tIQJVdk6YCbNRo
+	 CYQ4sP+Iyo8E2VaBK9UgCb0ERsdnLipW3uk1yA28ABCiBNGbfLpa2f64iMyVFyI8DC
+	 v7g9cldhUXk6C9XaST/V1xcUe/zvUiT9qNYVJcGP8FR8Ljc5o2r8h19rzXYn1+PxIN
+	 FoND9OVZuw0oYNiBsD6v77Fd8ipNN2dtY74Tle4ssrT+5tVPSdwgfTKovI7SQ9BA/O
+	 BSYdUTxLAQjEg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxjvrFuz2iCiO9dsOnear+qN=M+GFW-eEOZU5uCzBkTwLQ@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 27 Feb 2024 20:22:34 +0200
+Message-Id: <CZG2JXJ83L7K.32PU7BZTQNHLV@kernel.org>
+Cc: "Jason Gunthorpe" <jgg@ziepe.ca>, "Mimi Zohar" <zohar@linux.ibm.com>,
+ "Peter Huewe" <peterhuewe@gmx.de>, <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: Update W's for KEYS/KEYRINGS_INTEGRITY and
+ TPM DEVICE RIVER
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240226062245.2279635-1-jarkko@kernel.org>
+ <eaa5107ac4f982b6fd6e80b522643a591e719dc9.camel@HansenPartnership.com>
+ <CZEWILFMZ5L1.2TCZXVS7GTDKZ@suppilovahvero>
+ <3bae009a24a55902d93e4055ecd13f9f54cdbb37.camel@HansenPartnership.com>
+In-Reply-To: <3bae009a24a55902d93e4055ecd13f9f54cdbb37.camel@HansenPartnership.com>
 
-On Tue, Feb 27, 2024 at 03:28:18PM +0200, Amir Goldstein wrote:
-> > +int ovl_set_fscaps(struct mnt_idmap *idmap, struct dentry *dentry,
-> > +                  const struct vfs_caps *caps, int setxattr_flags)
-> > +{
-> > +       int err;
-> > +       struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
-> > +       struct dentry *upperdentry = ovl_dentry_upper(dentry);
-> > +       struct dentry *realdentry = upperdentry ?: ovl_dentry_lower(dentry);
-> > +       const struct cred *old_cred;
-> > +
-> > +       /*
-> > +        * If the fscaps are to be remove from a lower file, check that they
-> > +        * exist before copying up.
-> > +        */
-> 
-> Don't you need to convert -ENODATA to 0 return value in this case?
+On Mon Feb 26, 2024 at 12:11 PM EET, James Bottomley wrote:
+> On Mon, 2024-02-26 at 11:26 +0200, Jarkko Sakkinen wrote:
+> > On Mon Feb 26, 2024 at 8:49 AM EET, James Bottomley wrote:
+> > > On Mon, 2024-02-26 at 08:22 +0200, Jarkko Sakkinen wrote:
+> > > > Add TPM driver test suite URL to the MAINTAINERS files and move
+> > > > the
+> > > > wiki
+> > > > URL to more appropriate location.
+> > > >=20
+> > > > Link: https://gitlab.com/jarkkojs/linux-tpmdd-test
+> > > > Link: https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
+> > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > > > Cc: Peter Huewe <peterhuewe@gmx.de>
+> > > > Cc: linux-integrity@vger.kernel.org
+> > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > ---
+> > > > =C2=A0MAINTAINERS | 3 ++-
+> > > > =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+> > > >=20
+> > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > index bf77be03fb2b..6380c1109b86 100644
+> > > > --- a/MAINTAINERS
+> > > > +++ b/MAINTAINERS
+> > > > @@ -11947,6 +11947,7 @@ M:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Mimi =
+Zohar <zohar@linux.ibm.com>
+> > > > =C2=A0L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0linux-integrity@vger.kernel.o=
+rg
+> > > > =C2=A0L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0keyrings@vger.kernel.org
+> > > > =C2=A0S:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Supported
+> > > > +W:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0https://kernsec.org/wiki/index.php=
+/inux_Kernel_Integrity
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 Missing L
+> > >=20
+> > > James
+> >=20
+> > Thanks! I'll fixup that.
+> >=20
+> > "linux-tpmdd-test" is the suite that I'm using to test your patch
+> > set. It has swtpm integrated. I wonder if there was easy to way to
+> > tweak swtpm to emulate "interposer", i.e. reset its state while it is
+> > running (preferably not by restarting it).
+>
+> The way I do it is to use a qemu patch
+>
+> https://lore.kernel.org/qemu-devel/20231004184219.6594-1-jejb@linux.ibm.c=
+om/
+>
+> which allows qemu to connect to the mssim (or ibmswtpm2) TPM over an
+> inet socket which means I can execute TPM commands from the host (like
+> resetting the TPM) as well as the guest and snoop the TPM traffic.
 
-Do you mean that trying to remove an xattr that does not exist should
-return 0? Standard behavior is to return -ENODATA in this situation.
+To which exact and most recent possible QEMU version I can apply that
+cleanly?
 
-> 
-> > +       if (!caps && !upperdentry) {
-> > +               struct path realpath;
-> > +               struct vfs_caps lower_caps;
-> > +
-> > +               ovl_path_lower(dentry, &realpath);
-> > +               old_cred = ovl_override_creds(dentry->d_sb);
-> > +               err = vfs_get_fscaps(mnt_idmap(realpath.mnt), realdentry,
-> > +                                    &lower_caps);
-> > +               revert_creds(old_cred);
-> > +               if (err)
-> > +                       goto out;
-> > +       }
-> > +
-> > +       err = ovl_want_write(dentry);
-> > +       if (err)
-> > +               goto out;
-> > +
-> 
-> ovl_want_write() should after ovl_copy_up(), see:
-> 162d06444070 ("ovl: reorder ovl_want_write() after ovl_inode_lock()")
+My build configuration builds both QEMU and swtpm [1] for every build so
+I could pick that patch, copy it to board/qemu/patches/qemu, and set the
+version in the BuildRoot configuration appropriately.
 
-Fixed.
+[1]
+https://gitlab.com/jarkkojs/linux-tpmdd-test/-/tree/main/package/libtpms
+https://gitlab.com/jarkkojs/linux-tpmdd-test/-/tree/main/package/swtpm
 
-> > @@ -758,6 +826,8 @@ static const struct inode_operations ovl_symlink_inode_operations = {
-> >         .get_link       = ovl_get_link,
-> >         .getattr        = ovl_getattr,
-> >         .listxattr      = ovl_listxattr,
-> > +       .get_fscaps     = ovl_get_fscaps,
-> > +       .set_fscaps     = ovl_set_fscaps,
-> >         .update_time    = ovl_update_time,
-> >  };
-> >
-> > @@ -769,6 +839,8 @@ static const struct inode_operations ovl_special_inode_operations = {
-> >         .get_inode_acl  = ovl_get_inode_acl,
-> >         .get_acl        = ovl_get_acl,
-> >         .set_acl        = ovl_set_acl,
-> > +       .get_fscaps     = ovl_get_fscaps,
-> > +       .set_fscaps     = ovl_set_fscaps,
-> >         .update_time    = ovl_update_time,
-> >  };
-> >
-> 
-> 
-> Sorry, I did not understand the explanation why fscaps ops are needed
-> for non regular files. It does not look right to me.
-
-The kernel does not forbid XATTR_NAME_CAPS for non-regular files and
-will internally even try to read them from non-regular files during
-killpriv checks. If we do not add handlers then we will end up using the
-normal ovl xattr handlers, which call vfs_*xattr(). These will return an
-error for fscaps xattrs after this series, which would be a change in
-behavior for overlayfs and make it behave differently from other
-filesystems.
+BR, Jarkko
 
