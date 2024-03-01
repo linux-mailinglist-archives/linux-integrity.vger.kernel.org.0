@@ -1,211 +1,136 @@
-Return-Path: <linux-integrity+bounces-1529-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1530-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 353FD86E009
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 12:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BF9686E15A
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 13:54:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B205D1F2305A
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 11:20:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41DC61F22DB7
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 12:54:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C376BFC6;
-	Fri,  1 Mar 2024 11:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C6D41C89;
+	Fri,  1 Mar 2024 12:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b="A1Xc3mzp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOegZl9p"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bee.tesarici.cz (bee.tesarici.cz [37.205.15.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845F76995C
-	for <linux-integrity@vger.kernel.org>; Fri,  1 Mar 2024 11:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.15.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D3E40BE4;
+	Fri,  1 Mar 2024 12:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709292050; cv=none; b=Tmf/mS5b09aFQtaXPo/9fwfItxgoNwr3X8epQmX0CcLeiZ9G0yXYRgLX/QHlY/J83zGyQ4Xgf+ntgmieQrDWxNLMApBmhN6hTljLuq/j61OPcB48ghnBNbunBmmlgEfxfjnFqEgtVLrl1Io9cJS1TPdbSVXalVm+Lo13Iz+YXMU=
+	t=1709297662; cv=none; b=gKQNM4fzlemsDZqxHGnIZDbGpd2btv2u3LGJ1siSrvyIdwpj3tGDuJVGRmrpVA9aSUPc3aQiF9Qr8WZTdYWnL6F0ZDD4JZm4vbZ0hgil2AL+LzHXJdK+vUxMXwIto4T83+AN/rQ+C1xDRzu3ieLRw/zIuKnhhPRRylmMOrRvdmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709292050; c=relaxed/simple;
-	bh=T8U5F/5ZmzCqOBKhn+Yu6eZsSN3WS941AB/N2BZgfE0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WAhkAgXeT87iIhTwhfomlmRO2aMgFezdXvxGAWXK/XlLk3N6dOebB4tA0No9zwY0nRwC6E45Oev/JA8FG9WXtkMzEukxhIFSlp6/A2u+z0JadmTt+jWRKEXMLv23TDMzC3I/31Z51xYpdwlVnoBOI6nEQ2vyB0VJn1osQQMbbfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tesarici.cz; spf=pass smtp.mailfrom=tesarici.cz; dkim=pass (2048-bit key) header.d=tesarici.cz header.i=@tesarici.cz header.b=A1Xc3mzp; arc=none smtp.client-ip=37.205.15.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tesarici.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tesarici.cz
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by bee.tesarici.cz (Postfix) with ESMTPSA id AEAF41C0A52;
-	Fri,  1 Mar 2024 12:12:23 +0100 (CET)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=quarantine dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tesarici.cz; s=mail;
-	t=1709291543; bh=XSBoTq4bOiHd3evrpzuKLxQ+GPngWacdjSd3NjxyXYA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=A1Xc3mzpSkj+2F0Q4cYvRYPKN3N3f34JUAEo1H+VFC//ZfwOePXof1W0359zO0pYK
-	 qAQJpcnWlHVzewjVyOYWZxLoqBrqVZhTmJDIY/1CWU/dGln+6Q06XQJCC2zC/fVWwM
-	 xc2PKeGkgdig3dnQInjmHcaUCyzL24u3JcYNxMOjCRgRXYnQeWw8/zn2R8F43NERqu
-	 glsEOivimXeyt/nizkmla0bRaax/Pr5q2JfyF71QHExQFMNA00956PS25G1FfVh8pI
-	 aCxNjCPf5bqwcTUDfd7xQaZ2+WWMdhTxIdOCp9hWSBKKpxcY99WHjmOKb+je7UTEAl
-	 xOjH/4Zama8Mg==
-Date: Fri, 1 Mar 2024 12:12:22 +0100
-From: Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Cc: zohar@linux.ibm.com, roberto.sassu@huaweicloud.com,
- roberto.sassu@huawei.com, eric.snowberg@oracle.com, stefanb@linux.ibm.com,
- ebiederm@xmission.com, noodles@fb.com, bauermann@kolabnow.com,
- linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
- code@tyhicks.com, nramas@linux.microsoft.com, paul@paul-moore.com,
- bhe@redhat.com
-Subject: Re: [PATCH v5 4/8] ima: kexec: define functions to copy IMA log at
- soft boot
-Message-ID: <20240301121222.7d03756e@meshulam.tesarici.cz>
-In-Reply-To: <20240214153827.1087657-5-tusharsu@linux.microsoft.com>
-References: <20240214153827.1087657-1-tusharsu@linux.microsoft.com>
-	<20240214153827.1087657-5-tusharsu@linux.microsoft.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.39; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1709297662; c=relaxed/simple;
+	bh=t89dHoO9bnrvVzN2QBdLQzcy9IB8Yy8zK1DVwzYtJLU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kTR9+GXbZjEElDJq7r0SwUuP/RwctYAFTzysvMFkxUNMUsYdW6mZlZ/G03VUNbBbq7vik6FusQDn57kZRSwp/m2EcFDnmu0gKKNctrHmhfFkcpEVFaipGwQlXIXJYiRNVSZNWrIrlxSaSP5VM6O88dqQ8PHV5hXUHgl7FORpnMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOegZl9p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C649FC433C7;
+	Fri,  1 Mar 2024 12:54:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709297661;
+	bh=t89dHoO9bnrvVzN2QBdLQzcy9IB8Yy8zK1DVwzYtJLU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QOegZl9pozxzAbNhZv0jA1i+vi3ItTby1MFSlr85hLGQhHFfLDxrb01Ceft8ywLFL
+	 LZ3cQODIhl86m39/bVdMjbCEGtXEN/QMGOahwbFOylrsu1CQrG61u7Mp9u04yFsgOw
+	 W57pcEh7jkhTp99h8FyYr8ewF5aOeSMjxSVk28NEaFvIINTfHFRoVVsdhKWyvoqgmO
+	 co4E/QYluflcEX5cUQnbbEfUG7q0AkEwjGZrlg6hmhebo54BNR3f+fBHClu3SVGAL/
+	 t6dpupiMJRB0ZDmFBluzhc/umtXAqkNtVyElMzMTlFv7n3rkzHzHcEfhi1TB5X/T0+
+	 7toYd61I6SV/w==
+Date: Fri, 1 Mar 2024 13:54:13 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>, 
+	Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
+	James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, audit@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
+Subject: Re: [PATCH v2 14/25] evm: add support for fscaps security hooks
+Message-ID: <20240301-zucht-umfeld-9a923a7d070a@brauner>
+References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
+ <20240221-idmap-fscap-refactor-v2-14-3039364623bd@kernel.org>
+ <15a69385b49c4f8626f082bc9b957132388414fb.camel@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <15a69385b49c4f8626f082bc9b957132388414fb.camel@huaweicloud.com>
 
-On Wed, 14 Feb 2024 07:38:23 -0800
-Tushar Sugandhi <tusharsu@linux.microsoft.com> wrote:
-
-> IMA log is copied to the new Kernel during kexec 'load' using 
-> ima_dump_measurement_list().  The log copy at kexec 'load' may result in
-> loss of IMA measurements during kexec soft reboot.  It needs to be copied
-> over during kexec 'execute'.  Setup the needed infrastructure to move the
-> IMA log copy from kexec 'load' to 'execute'. 
+On Fri, Mar 01, 2024 at 10:19:13AM +0100, Roberto Sassu wrote:
+> On Wed, 2024-02-21 at 15:24 -0600, Seth Forshee (DigitalOcean) wrote:
+> > Support the new fscaps security hooks by converting the vfs_caps to raw
+> > xattr data and then handling them the same as other xattrs.
 > 
-> Define a new IMA hook ima_update_kexec_buffer() as a stub function.
-> It will be used to call ima_dump_measurement_list() during kexec 
-> 'execute'.   
+> Hi Seth
 > 
-> Implement kimage_file_post_load() and ima_kexec_post_load() functions
-> to be invoked after the new Kernel image has been loaded for kexec.
-> ima_kexec_post_load() maps the IMA buffer to a segment in the newly
-> loaded Kernel.  It also registers the reboot notifier_block to trigger
-> ima_update_kexec_buffer() at exec 'execute'.
+> I started looking at this patch set.
 > 
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> ---
->  include/linux/ima.h                |  3 ++
->  kernel/kexec_file.c                |  5 ++++
->  security/integrity/ima/ima_kexec.c | 46 ++++++++++++++++++++++++++++++
->  3 files changed, 54 insertions(+)
+> The first question I have is if you are also going to update libcap
+> (and also tar, I guess), since both deal with the raw xattr.
 > 
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index 86b57757c7b1..006db20f852d 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -49,6 +49,9 @@ static inline void ima_appraise_parse_cmdline(void) {}
->  
->  #ifdef CONFIG_IMA_KEXEC
->  extern void ima_add_kexec_buffer(struct kimage *image);
-> +extern void ima_kexec_post_load(struct kimage *image);
-> +#else
-> +static inline void ima_kexec_post_load(struct kimage *image) {}
->  #endif
->  
->  #else
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 0e3689bfb0bb..fe59cb7c179d 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -186,6 +186,11 @@ kimage_validate_signature(struct kimage *image)
->  }
->  #endif
->  
-> +void kimage_file_post_load(struct kimage *image)
-> +{
-> +	ima_kexec_post_load(image);
-> +}
-> +
->  /*
->   * In file mode list of segments is prepared by kernel. Copy relevant
->   * data from user space, do error checking, prepare segment list
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index ccb072617c2d..1d4d6c122d82 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -12,10 +12,14 @@
->  #include <linux/kexec.h>
->  #include <linux/of.h>
->  #include <linux/ima.h>
-> +#include <linux/reboot.h>
-> +#include <asm/page.h>
->  #include "ima.h"
->  
->  #ifdef CONFIG_IMA_KEXEC
->  static struct seq_file ima_kexec_file;
-> +static void *ima_kexec_buffer;
-> +static bool ima_kexec_update_registered;
->  
->  static void ima_reset_kexec_file(struct seq_file *sf)
->  {
-> @@ -184,6 +188,48 @@ void ima_add_kexec_buffer(struct kimage *image)
->  	kexec_dprintk("kexec measurement buffer for the loaded kernel at 0x%lx.\n",
->  		      kbuf.mem);
->  }
-> +
-> +/*
-> + * Called during kexec execute so that IMA can update the measurement list.
-> + */
-> +static int ima_update_kexec_buffer(struct notifier_block *self,
-> +				   unsigned long action, void *data)
-> +{
-> +	return NOTIFY_OK;
-> +}
-> +
-> +struct notifier_block update_buffer_nb = {
-> +	.notifier_call = ima_update_kexec_buffer,
-> +};
-> +
-> +/*
-> + * Create a mapping for the source pages that contain the IMA buffer
-> + * so we can update it later.
-> + */
-> +void ima_kexec_post_load(struct kimage *image)
-> +{
-> +	if (ima_kexec_buffer) {
-> +		kimage_unmap_segment(ima_kexec_buffer);
-> +		ima_kexec_buffer = NULL;
-> +	}
-> +
-> +	if (!image->ima_buffer_addr)
-> +		return;
-> +
-> +	ima_kexec_buffer = kimage_map_segment(image,
-> +					      image->ima_buffer_addr,
-> +					      image->ima_buffer_size);
-> +	if (!ima_kexec_buffer) {
-> +		pr_err("%s: Could not map measurements buffer.\n", __func__);
-> +		return;
-> +	}
-> +
-> +	if (!ima_kexec_update_registered) {
-> +		register_reboot_notifier(&update_buffer_nb);
+> From IMA/EVM perspective (Mimi will add on that), I guess it is
+> important that files with a signature/HMAC continue to be accessible
+> after applying this patch set.
+> 
+> Looking at the code, it seems the case (if I understood correctly,
+> vfs_getxattr_alloc() is still allowed).
+> 
+> To be sure that everything works, it would be really nice if you could
+> also extend our test suite:
+> 
+> https://github.com/mimizohar/ima-evm-utils/blob/next-testing/tests/portable_signatures.test
+> 
+> and
+> 
+> https://github.com/mimizohar/ima-evm-utils/blob/next-testing/tests/evm_hmac.test
+> 
+> 
+> The first test we would need to extend is check_cp_preserve_xattrs,
+> which basically does a cp -a. We would need to set fscaps in the
+> origin, copy to the destination, and see if the latter is accessible.
+> 
+> I would also extend:
+> 
+> check_tar_extract_xattrs_different_owner
+> check_tar_extract_xattrs_same_owner
+> check_metadata_change
+> check_evm_revalidate
+> check_evm_portable_sig_ima_appraisal
+> check_evm_portable_sig_ima_measurement_list
+> 
+> It should not be too complicated. The purpose would be to exercise your
+> code below.
+> 
+> 
+> Regarding the second test, we would need to extend just check_evm_hmac.
+> 
+> 
+> Just realized, before extending the tests, it would be necessary to
+> modify also evmctl.c, to retrieve fscaps through the new interfaces,
+> and to let users provide custom fscaps the HMAC or portable signature
+> is calculated on.
 
-Specifically this means that the notifier is run from kernel_kexec()
-through kernel_restart_prepare(). At that point the kernel is still
-running at full speed, i.e. new IMA measurements can be added to the
-list.
-
-I believe it would be better to add a "kexec late notifier list" which
-would be notified just before kmsg_dump() in kernel_kexec(). Functions
-on that list would be called in a more quiet context, i.e. after other
-CPUs and most devices have been shut down.
-
-I can see that the current proposal does not address passing the IMA
-measurements to a panic kernel, but I'm adding Baoquan nevertheless.
-Would it make sense to implement such a late notifier list for the
-crash kexec case. I know that in general, it is no good idea to run
-more code in a crashed kernel context, but what about self-contained
-things like copying IMA measurements?
-
-Petr T
+While request for tests are obviously fine they should be added by the
+respective experts for IMA/EVM in this case. I don't think it's
+appropriate to expect Seth to do that especially because you seem to
+imply that you currently don't have any tests for fscaps at all. We're
+always happy to test things and if that'd be adding new IMA/EVM specific
+features than it would be something to discuss but really we're
+refactoring so the fact that you don't have tests we can run is not the
+fault of this patchset and IMA/EVM is just a small portion of it. 
 
