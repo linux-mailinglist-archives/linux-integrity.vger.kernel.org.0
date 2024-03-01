@@ -1,115 +1,135 @@
-Return-Path: <linux-integrity+bounces-1533-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1534-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FCA086E333
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 15:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2401D86E380
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 15:40:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FD351C21793
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 14:20:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54DC91C22DF7
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 14:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77CC86E5EB;
-	Fri,  1 Mar 2024 14:20:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A033A8EF;
+	Fri,  1 Mar 2024 14:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nEIu0Rxy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YkTYwZHI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034CE69D0D
-	for <linux-integrity@vger.kernel.org>; Fri,  1 Mar 2024 14:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F3E442A;
+	Fri,  1 Mar 2024 14:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709302808; cv=none; b=C4rKJ9KPkzvpzOvkvJS143xFM16mVFaF+mwiByuChOwulRH9da4p1Ay18/MsokP+Y2YyDOrngbmXclpJOm8yOywK0p14O+98V6Rll0eZEmnIJWyzCcfbfkXzZybarq+BskE26whEKgKtZPPcwztONq3MZLeIXKv31SBDeeJcm+0=
+	t=1709303990; cv=none; b=WGw+yuhpsZRQGYbCWNYjZmJe0IVoqJfR8Bk803izm4apQje9HMhyBJBGYf6Nf8sn2a2oZyUBjW0IxIxFjUQPPbDF7nOd/JDXmVdU4SU8MXxQFHCZ9PZOaOMl9zjJT4dnsJXAssRta7GExRjDjBCWsgbr0Pic0wmCTLcvaVS8jTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709302808; c=relaxed/simple;
-	bh=IwUMa05Nt1Mmt7HyJrfe1qkwgl/kyDBIChZGtlRbdUI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aanlleMj73sHkui5mBp63jOnYGzlK2Ruei00SVfOKsBNy5R5LjbUsjIqsp4e/JkP+8p4XTigeoA89IOqnHXCzTMFcSnG5i3UYctmPQ7evIAWDe6JtEB4hGNtIAuUMp0pnKi8C5dnihfYUoqldNjKzu+icONqV4Tfp3O0ji3fB2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nEIu0Rxy; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 421CUTC9008197
-	for <linux-integrity@vger.kernel.org>; Fri, 1 Mar 2024 14:20:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=3Kow/laPkPe+zN5lTVdGHiZb++H4dCK82LxTdGjFn18=;
- b=nEIu0Rxy5awv/vu53YhKUsuCF3su1XJpPmw+x5HFAl+4KgB2aL5XKbzl3oQGtE9k2li+
- H9vPd4/vF3d1fT/CJpnRPwlnHV0jAdKQ6qoS2j0MQaEV0YO1RuyitESPSQIk5RV33Aap
- fmTT3nMUFe7vaPof+LnHZ1BHa5SCqUNFGQQ0EZZbVpKKjYnsuMJZdlmjMRbkGWyiLIUd
- HRq5QW84xpRoWJgi7dmK8rk04ZPNm4aPDuq2LvMuzcqzS4M5FPY5+KtJucW55p4k8/Ho
- +tYp60w9Rwip4dU2D+bOWaTBoadiesT7EJcj5OX6HblxLhx1k9m65oAilh+zv/YjxbTx Qw== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wkf34ts6q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Fri, 01 Mar 2024 14:20:05 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 421CIaW3024122
-	for <linux-integrity@vger.kernel.org>; Fri, 1 Mar 2024 14:20:05 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wfw0kvj9r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Fri, 01 Mar 2024 14:20:05 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 421EK2aB29426144
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 1 Mar 2024 14:20:04 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2726958054;
-	Fri,  1 Mar 2024 14:20:02 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B16335805A;
-	Fri,  1 Mar 2024 14:20:01 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  1 Mar 2024 14:20:01 +0000 (GMT)
-From: Stefan Berger <stefanb@linux.ibm.com>
-To: linux-integrity@vger.kernel.org
-Cc: zohar@linux.ibm.com, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [ima-evm-utils PATCH] Add missing newline to error message
-Date: Fri,  1 Mar 2024 09:19:54 -0500
-Message-ID: <20240301141954.358972-1-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1709303990; c=relaxed/simple;
+	bh=hxhuvMYF4B3Dog5TINXGHY1tM8RGbN4JK+KayqqRuxo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W/Ga5q6nw+Gke7sHTyVYku08FrGEkcg7liixt0wduQIxopoKc0PMSAfCNHYC1BTyFNNRhTt9tV66hCiMUCPIwz6gG/OppHnnKV7XRvcvYfCGrqW0XsQdGqAlNnj/WjhJYD9O0vPX0NAZHJRyviXB0or4ma2hU8nzElg+vOwEhGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YkTYwZHI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676C9C433C7;
+	Fri,  1 Mar 2024 14:39:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709303989;
+	bh=hxhuvMYF4B3Dog5TINXGHY1tM8RGbN4JK+KayqqRuxo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YkTYwZHIPbpwdds7MCHekEZIpXeMkc994OXWtMlhE2HLlHz1HRtOqxs0YJJ4pNWKC
+	 PJMC2lMg0K4RYccYFEG5FHLGnOx6ChUfr0h9xGGQ4+cvZfhic8DrWEyFDne1BaV3Rj
+	 3WPvSOBxcctqjKRJqbovZgzTnmPE8Fa7zlPzlx6f0BshJNkd3zjo65vobG/R22s3K7
+	 tdFcaxj31SrPEUz6Eoijz6AedsUpSuXefn86R/846mGnFQ2g4DdyFItnw1hwssRh7O
+	 LboBYFH+1vgzL5Bold2ITr4bGuLtkAtJZ17346ntLqf72vpYtgpOS1fUgExwlgywc/
+	 SwpC/1pignJ6g==
+Date: Fri, 1 Mar 2024 08:39:48 -0600
+From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>,
+	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+	James Morris <jmorris@namei.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, audit@vger.kernel.org,
+	selinux@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
+Subject: Re: [PATCH v2 14/25] evm: add support for fscaps security hooks
+Message-ID: <ZeHotBrI0aYd2HeA@do-x1extreme>
+References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
+ <20240221-idmap-fscap-refactor-v2-14-3039364623bd@kernel.org>
+ <15a69385b49c4f8626f082bc9b957132388414fb.camel@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: twALjARBnAJI9rNJOGU8GuM34zY316vj
-X-Proofpoint-ORIG-GUID: twALjARBnAJI9rNJOGU8GuM34zY316vj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-01_14,2024-03-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxscore=0 bulkscore=0 malwarescore=0 mlxlogscore=862 priorityscore=1501
- suspectscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2403010119
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15a69385b49c4f8626f082bc9b957132388414fb.camel@huaweicloud.com>
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- src/libimaevm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Mar 01, 2024 at 10:19:13AM +0100, Roberto Sassu wrote:
+> On Wed, 2024-02-21 at 15:24 -0600, Seth Forshee (DigitalOcean) wrote:
+> > Support the new fscaps security hooks by converting the vfs_caps to raw
+> > xattr data and then handling them the same as other xattrs.
+> 
+> Hi Seth
+> 
+> I started looking at this patch set.
+> 
+> The first question I have is if you are also going to update libcap
+> (and also tar, I guess), since both deal with the raw xattr.
 
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index 89330c4..f1dcb2d 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -227,7 +227,7 @@ int ima_calc_hash2(const char *file, const char *hash_algo, uint8_t *hash)
- 		err = add_file_hash(file, pctx);
- 		break;
- 	default:
--		log_err("Unsupported file type (0x%x)", st.st_mode & S_IFMT);
-+		log_err("Unsupported file type (0x%x)\n", st.st_mode & S_IFMT);
- 		err = -1;
- 		goto err;
- 	}
--- 
-2.44.0
+There are no changes needed for userspace; it will still deal with raw
+xattrs. As I mentioned in the cover letter, capabilities tests from
+libcap2, libcap-ng, ltp, and xfstests all pass against this sereies.
+That's with no modifications to userspace.
 
+> From IMA/EVM perspective (Mimi will add on that), I guess it is
+> important that files with a signature/HMAC continue to be accessible
+> after applying this patch set.
+> 
+> Looking at the code, it seems the case (if I understood correctly,
+> vfs_getxattr_alloc() is still allowed).
+
+So this is something that would change based on Christian's request to
+stop using the xattr handlers entirely for fscaps as was done for acls.
+I see how this would impact EVM, but we should be able to deal with it.
+
+I am a little curious now about this code in evm_calc_hmac_or_hash():
+
+		size = vfs_getxattr_alloc(&nop_mnt_idmap, dentry, xattr->name,
+					  &xattr_value, xattr_size, GFP_NOFS);
+		if (size == -ENOMEM) {
+			error = -ENOMEM;
+			goto out;
+		}
+		if (size < 0)
+			continue;
+
+		user_space_size = vfs_getxattr(&nop_mnt_idmap, dentry,
+					       xattr->name, NULL, 0);
+		if (user_space_size != size)
+			pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n",
+				 dentry->d_name.name, xattr->name, size,
+				 user_space_size);
+
+Because with the current fscaps code you actually could end up getting
+different sizes from these two interfaces, as vfs_getxattr_alloc() reads
+the xattr directly from disk but vfs_getxattr() goes through
+cap_inode_getsecurity(), which may do conversion between v2 and v3
+formats which are different sizes.
+
+Thanks,
+Seth
 
