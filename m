@@ -1,110 +1,78 @@
-Return-Path: <linux-integrity+bounces-1540-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1541-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC5F86E900
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 20:03:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67B0F86EAAF
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 21:50:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2484B1F28E50
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 19:03:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BFA0B23E92
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 20:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1353A8E3;
-	Fri,  1 Mar 2024 19:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8164535B9;
+	Fri,  1 Mar 2024 20:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pOzLd2kh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOkTKbyN"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462C939AE3;
-	Fri,  1 Mar 2024 19:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C291F535AE
+	for <linux-integrity@vger.kernel.org>; Fri,  1 Mar 2024 20:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709319620; cv=none; b=rRX421dCvk8ouUT7ONm5vuQ5nVvt50sVR017btgFztnQzcXooqsNr2rFGjz9gDu9/1emkN5wCUtYGyg8/fl1MVsz0O+07rD0bt7IaLVLO6sEkcOEiW6TfBSfyBd7+wezlzR+Pz0a7PcDj/lUtAq+pPbvKu/7j2xZl8wsd28F0vk=
+	t=1709326156; cv=none; b=Dn/XUfH+SNIoxVzgjP+SPme3zeKVOmcnKVkt6JK7/XftI6etO6z9vGkm1G7OEAjCcD7hxphjo89DeRIssBFkryxM4ua4aMi5cya2d7gkBdr36HWJKbZhcX0sX5p8In39Xd/ajTlyU3G2EDWkN00cbzhDnNAZT8+XUqGUAwwsbkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709319620; c=relaxed/simple;
-	bh=CxB7W6l1Tq9Zrm8obA30+CBf87HBfjcY2NxOsDja4tc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vu4ezvRaMxoNnCPf6sHt/NnWAjtHzqAbwX7OScTb66ZqymeY/UFGmiwEQpZNiCzK5yizlWWggyLM4jR2QoGD/Sqhwn0u94KLu2BVa8/wk89U8f0V+fzFRAj2SguXl31QQlHUEet7C4kfGk9PXQWIkV4gZJEXQbqXhWO4D1fpToE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pOzLd2kh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5540C433F1;
-	Fri,  1 Mar 2024 19:00:19 +0000 (UTC)
+	s=arc-20240116; t=1709326156; c=relaxed/simple;
+	bh=oqTpUExjsprmUSKxgnE9dKR17auDKOqRf0mO53Mw4L0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
+	 References:In-Reply-To; b=ZyYMbkJGocUX/clLL3BWxvqbuRJyJqsS4CsLNCx7kc4cs2mr6qc/njI1islgb02V6Ya60z9qyUh6BIdDMskOusmeSjSUYD6UNKd9EsKyZO/vUKy6lLKO1M/96izxQLfblaqccm0UH8fnxTxTporjPj6PjgMwvMHXLm0UkrGVOlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOkTKbyN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1D0C433F1;
+	Fri,  1 Mar 2024 20:49:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709319619;
-	bh=CxB7W6l1Tq9Zrm8obA30+CBf87HBfjcY2NxOsDja4tc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pOzLd2khb4RM9yVRZBKtLsYAGgslVXJE6WX7uusLNOBVMlWp/y1vL0AyGGMGGPI59
-	 7mdOWXRG2QEB6ScIwCwvk3UMV5Hw3R1Ti69/5V4cG6dq+MiM5W6kBBYCdwldHSQOc8
-	 UBmEm8x3eAFkhucdMQ/yXh3PXBtY21uVlYTtl3IA8RF4YuttFqeGPexqSuJmNXzY6r
-	 Boyj3E93hWzyEJmqqPdZopzPGxAdAIgSPQ3FMVxtZmpe0bJzuL+9XhRGvampdbny/D
-	 7TGVxPidmAJOjzynDBXwd/RddfG4tO9kMY7DH4C8cyANeS22JuQjTjhL7KouXmpwwF
-	 W70yLAG0DXNYA==
-Date: Fri, 1 Mar 2024 13:00:18 -0600
-From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>,
-	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
-	James Morris <jmorris@namei.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Amir Goldstein <amir73il@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, audit@vger.kernel.org,
-	selinux@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v2 06/25] capability: provide helpers for converting
- between xattrs and vfs_caps
-Message-ID: <ZeIlwkUx5lNBrdS9@do-x1extreme>
-References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
- <20240221-idmap-fscap-refactor-v2-6-3039364623bd@kernel.org>
- <7633ab5d5359116a602cdc8f85afd2561047960e.camel@huaweicloud.com>
+	s=k20201202; t=1709326156;
+	bh=oqTpUExjsprmUSKxgnE9dKR17auDKOqRf0mO53Mw4L0=;
+	h=Date:Subject:From:To:References:In-Reply-To:From;
+	b=QOkTKbyNv/c/ohgbRCSa2rBEMWprh4Q1e+WuWy2tStTdF8r2hvrqxqk9fZqFHUZmv
+	 URuDcfle7QSZM1MU/HzdF80jCFOyOLv0k3vuyAibbG0dWFEW7sp0sLbTu1X+ZNczcF
+	 zSNpv0LNoVpFCjWDzTPE9kej7w0sYBUKRJbp3ILuvft5h1KZXrRNjtzoKCf15AIOEZ
+	 kMEloLhjWpjRS8RBBYwaFt6nQAk4dqWLnncX2Ui1DZeRFcglM9iXBLjxWuow3HsE8G
+	 z24MntZR9Vyka5hGEYBg+AnAFQ/dejU7fg20EL+9EcYKgNcj7iYuDDyiZNOgpZQgob
+	 E1axC0YCRkXrA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7633ab5d5359116a602cdc8f85afd2561047960e.camel@huaweicloud.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 01 Mar 2024 22:49:13 +0200
+Message-Id: <CZIPJU62MHD6.QU71KYEKBQHN@suppilovahvero>
+Subject: Re: TPM error path on probe
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, "Tim Harvey"
+ <tharvey@gateworks.com>, <linux-integrity@vger.kernel.org>, "Peter Huewe"
+ <peterhuewe@gmx.de>, "Lino Sanfilippo" <l.sanfilippo@kunbus.com>, "Linux
+ ARM Mailing List" <linux-arm-kernel@lists.infradead.org>
+X-Mailer: aerc 0.15.2
+References: <CAJ+vNU2irDtEn=VD7N2ySofr5wTeko6OHy-QD_SLLZudOwWj0A@mail.gmail.com> <6976a0ea-592b-4a04-81ac-9ed50a7f0a8f@gmx.de>
+In-Reply-To: <6976a0ea-592b-4a04-81ac-9ed50a7f0a8f@gmx.de>
 
-On Fri, Mar 01, 2024 at 05:30:55PM +0100, Roberto Sassu wrote:
-> > +/*
-> > + * Inner implementation of vfs_caps_to_xattr() which does not return an
-> > + * error if the rootid does not map into @dest_userns.
-> > + */
-> > +static ssize_t __vfs_caps_to_xattr(struct mnt_idmap *idmap,
-> > +				   struct user_namespace *dest_userns,
-> > +				   const struct vfs_caps *vfs_caps,
-> > +				   void *data, size_t size)
-> > +{
-> > +	struct vfs_ns_cap_data *ns_caps = data;
-> > +	struct vfs_cap_data *caps = (struct vfs_cap_data *)ns_caps;
-> > +	kuid_t rootkuid;
-> > +	uid_t rootid;
-> > +
-> > +	memset(ns_caps, 0, size);
-> 
-> size -> sizeof(*ns_caps) (or an equivalent change)
+On Thu Feb 29, 2024 at 9:08 AM EET, Lino Sanfilippo wrote:
+> I posted a fix for this issue a few weeks ago:
+> https://lore.kernel.org/all/20240201113646.31734-1-l.sanfilippo@kunbus.co=
+m/
+>
+> It is already included in Jarkos tree.
 
-This is zeroing out the passed buffer, so it should use the size passed
-for the buffer. sizeof(*ns_caps) could potentially be more than the size
-of the buffer.
+sanity checked, it is there! making pull request next week
 
-Maybe it would be clearer if it was memset(data, 0, size)?
+>
+> BR,
+> Lino
 
-> I was zeroing more (the size of the buffer passed to vfs_getxattr()).
-> 
-> Roberto
+BR, Jarkko
 
