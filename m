@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-1539-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1540-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0561C86E8BD
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 19:52:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EC5F86E900
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 20:03:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93AB61F21130
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 18:52:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2484B1F28E50
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Mar 2024 19:03:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5730A3C08F;
-	Fri,  1 Mar 2024 18:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1353A8E3;
+	Fri,  1 Mar 2024 19:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YEgSFkvE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pOzLd2kh"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130BD39FF2;
-	Fri,  1 Mar 2024 18:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462C939AE3;
+	Fri,  1 Mar 2024 19:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709319005; cv=none; b=qM/0+6AwdcxlDjLBes/JB5+gq0TO2eCOjXvRHqgIAR8xjfmByWavyVqDvou46WyXaRVcmI5/sV8qMoE4fQrZt/3yVachcBOX9ItqjP/D3wz7f/3sqdI/SWNIFwh1Jl0lf6Ne7D5xDrZhC36f+CSLnWa6t8jefIA9xVcS8uAOat8=
+	t=1709319620; cv=none; b=rRX421dCvk8ouUT7ONm5vuQ5nVvt50sVR017btgFztnQzcXooqsNr2rFGjz9gDu9/1emkN5wCUtYGyg8/fl1MVsz0O+07rD0bt7IaLVLO6sEkcOEiW6TfBSfyBd7+wezlzR+Pz0a7PcDj/lUtAq+pPbvKu/7j2xZl8wsd28F0vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709319005; c=relaxed/simple;
-	bh=tLJu7ylBVLKDcDz0H2Gy43nmkrZwb++Fe+dzgeQcDT4=;
+	s=arc-20240116; t=1709319620; c=relaxed/simple;
+	bh=CxB7W6l1Tq9Zrm8obA30+CBf87HBfjcY2NxOsDja4tc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AlYnCfNHwQvMITNhGwDzkR8qk5ekHNwB76MZJ996CF6wyg0kZD2UUAmmoEx4YpwpNIuWq/VMbpD5/HP5etK4/mJrPDHyO+1dBNQAn9eb2T/1gu0XsM+zFWGELZJAe+7Q9Bbal+HHdImzdird0q9K4avKRfgj8J1sVn5Nv5D83IY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YEgSFkvE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EABAC433C7;
-	Fri,  1 Mar 2024 18:50:04 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vu4ezvRaMxoNnCPf6sHt/NnWAjtHzqAbwX7OScTb66ZqymeY/UFGmiwEQpZNiCzK5yizlWWggyLM4jR2QoGD/Sqhwn0u94KLu2BVa8/wk89U8f0V+fzFRAj2SguXl31QQlHUEet7C4kfGk9PXQWIkV4gZJEXQbqXhWO4D1fpToE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pOzLd2kh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5540C433F1;
+	Fri,  1 Mar 2024 19:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709319004;
-	bh=tLJu7ylBVLKDcDz0H2Gy43nmkrZwb++Fe+dzgeQcDT4=;
+	s=k20201202; t=1709319619;
+	bh=CxB7W6l1Tq9Zrm8obA30+CBf87HBfjcY2NxOsDja4tc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YEgSFkvEmZJVkzuvCkuWj3Iuk3RWW5AkWQk1LOkhZIsdBGOyuVWDf2rX7zH7R07a5
-	 hbFmyKz/cJXxMq5rnzAzlik6vYxKVw6Vhis+L++9H+3mossKO/mLWZ10lyBgk1N/0O
-	 JylGz2aTWcWuAq4AEyd7FESvDeof23w3v3HW5IvPgbRPcWSZTConXL3NDB+LAw8hER
-	 zwT9jATJZWX1+9DjIwjKiSP61NRHohkFV9dybsfNRQjeFA0DsgCP/3tRoYnv41hw5x
-	 S4DUFTNSl/JhfA3nlBV/Y8VuVI7JuEUKYaEYpOBpzLfN2iaQw5lgpjziH2R3m+Qth5
-	 NLHd5VFZPV2fw==
-Date: Fri, 1 Mar 2024 12:50:03 -0600
+	b=pOzLd2khb4RM9yVRZBKtLsYAGgslVXJE6WX7uusLNOBVMlWp/y1vL0AyGGMGGPI59
+	 7mdOWXRG2QEB6ScIwCwvk3UMV5Hw3R1Ti69/5V4cG6dq+MiM5W6kBBYCdwldHSQOc8
+	 UBmEm8x3eAFkhucdMQ/yXh3PXBtY21uVlYTtl3IA8RF4YuttFqeGPexqSuJmNXzY6r
+	 Boyj3E93hWzyEJmqqPdZopzPGxAdAIgSPQ3FMVxtZmpe0bJzuL+9XhRGvampdbny/D
+	 7TGVxPidmAJOjzynDBXwd/RddfG4tO9kMY7DH4C8cyANeS22JuQjTjhL7KouXmpwwF
+	 W70yLAG0DXNYA==
+Date: Fri, 1 Mar 2024 13:00:18 -0600
 From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
 To: Roberto Sassu <roberto.sassu@huaweicloud.com>
 Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>,
@@ -63,11 +63,12 @@ Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>,
 	linux-security-module@vger.kernel.org, audit@vger.kernel.org,
 	selinux@vger.kernel.org, linux-integrity@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v2 11/25] security: add hooks for set/get/remove of fscaps
-Message-ID: <ZeIjW9JUeAqd0D85@do-x1extreme>
+Subject: Re: [PATCH v2 06/25] capability: provide helpers for converting
+ between xattrs and vfs_caps
+Message-ID: <ZeIlwkUx5lNBrdS9@do-x1extreme>
 References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
- <20240221-idmap-fscap-refactor-v2-11-3039364623bd@kernel.org>
- <c5b496e53dac2b4b5402cc5aa9a09178d63323b7.camel@huaweicloud.com>
+ <20240221-idmap-fscap-refactor-v2-6-3039364623bd@kernel.org>
+ <7633ab5d5359116a602cdc8f85afd2561047960e.camel@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -76,42 +77,34 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c5b496e53dac2b4b5402cc5aa9a09178d63323b7.camel@huaweicloud.com>
+In-Reply-To: <7633ab5d5359116a602cdc8f85afd2561047960e.camel@huaweicloud.com>
 
-On Fri, Mar 01, 2024 at 04:59:16PM +0100, Roberto Sassu wrote:
-> On Wed, 2024-02-21 at 15:24 -0600, Seth Forshee (DigitalOcean) wrote:
-> > In preparation for moving fscaps out of the xattr code paths, add new
-> > security hooks. These hooks are largely needed because common kernel
-> > code will pass around struct vfs_caps pointers, which EVM will need to
-> > convert to raw xattr data for verification and updates of its hashes.
-> > 
-> > Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-> > ---
-> >  include/linux/lsm_hook_defs.h |  7 +++++
-> >  include/linux/security.h      | 33 +++++++++++++++++++++
-> >  security/security.c           | 69 +++++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 109 insertions(+)
-> > 
-> > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> > index 76458b6d53da..7b3c23f9e4a5 100644
-> > --- a/include/linux/lsm_hook_defs.h
-> > +++ b/include/linux/lsm_hook_defs.h
-> > @@ -152,6 +152,13 @@ LSM_HOOK(int, 0, inode_get_acl, struct mnt_idmap *idmap,
-> >  	 struct dentry *dentry, const char *acl_name)
-> >  LSM_HOOK(int, 0, inode_remove_acl, struct mnt_idmap *idmap,
-> >  	 struct dentry *dentry, const char *acl_name)
-> > +LSM_HOOK(int, 0, inode_set_fscaps, struct mnt_idmap *idmap,
-> > +	 struct dentry *dentry, const struct vfs_caps *caps, int flags);
-> > +LSM_HOOK(void, LSM_RET_VOID, inode_post_set_fscaps, struct mnt_idmap *idmap,
-> > +	 struct dentry *dentry, const struct vfs_caps *caps, int flags);
-> > +LSM_HOOK(int, 0, inode_get_fscaps, struct mnt_idmap *idmap, struct dentry *dentry);
-> > +LSM_HOOK(int, 0, inode_remove_fscaps, struct mnt_idmap *idmap,
-> > +	 struct dentry *dentry);
+On Fri, Mar 01, 2024 at 05:30:55PM +0100, Roberto Sassu wrote:
+> > +/*
+> > + * Inner implementation of vfs_caps_to_xattr() which does not return an
+> > + * error if the rootid does not map into @dest_userns.
+> > + */
+> > +static ssize_t __vfs_caps_to_xattr(struct mnt_idmap *idmap,
+> > +				   struct user_namespace *dest_userns,
+> > +				   const struct vfs_caps *vfs_caps,
+> > +				   void *data, size_t size)
+> > +{
+> > +	struct vfs_ns_cap_data *ns_caps = data;
+> > +	struct vfs_cap_data *caps = (struct vfs_cap_data *)ns_caps;
+> > +	kuid_t rootkuid;
+> > +	uid_t rootid;
+> > +
+> > +	memset(ns_caps, 0, size);
 > 
-> Uhm, there should not be semicolons here.
+> size -> sizeof(*ns_caps) (or an equivalent change)
 
-Yes, I've fixed this already for the next version.
+This is zeroing out the passed buffer, so it should use the size passed
+for the buffer. sizeof(*ns_caps) could potentially be more than the size
+of the buffer.
 
-Thanks,
-Seth
+Maybe it would be clearer if it was memset(data, 0, size)?
+
+> I was zeroing more (the size of the buffer passed to vfs_getxattr()).
+> 
+> Roberto
 
