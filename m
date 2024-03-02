@@ -1,59 +1,59 @@
-Return-Path: <linux-integrity+bounces-1544-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1545-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE35A86F137
-	for <lists+linux-integrity@lfdr.de>; Sat,  2 Mar 2024 17:23:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46F9C86F15A
+	for <lists+linux-integrity@lfdr.de>; Sat,  2 Mar 2024 17:37:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 648B4B22626
-	for <lists+linux-integrity@lfdr.de>; Sat,  2 Mar 2024 16:23:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B24E1C20D14
+	for <lists+linux-integrity@lfdr.de>; Sat,  2 Mar 2024 16:37:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D28E20300;
-	Sat,  2 Mar 2024 16:22:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91D0B22627;
+	Sat,  2 Mar 2024 16:37:25 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EE31B277
-	for <linux-integrity@vger.kernel.org>; Sat,  2 Mar 2024 16:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94ED31D69B
+	for <linux-integrity@vger.kernel.org>; Sat,  2 Mar 2024 16:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709396577; cv=none; b=aqCSRFGhSsOVrNNQVrEdwMKOHcdJMH4IyYAXFk3WOUmw/JSp6LdZCVcLEJV+96J/521f84C6IzjTHlVFUWs167Ecw3qbPrGOtOHfqPcz3tGVfCVqzr9wlP3zoXgXNMZza28k3i0aQL1J6WslqXZK3Z1zGfPXsN7jtNFsJGylcjI=
+	t=1709397445; cv=none; b=EoiwwtdRpOyWxKh7W+eXKawYA21SMOU0TNa+pqzQL22oD9Aew6k01NUnIKzaH7QKwEf1Ii8JQHLWy9PdErNwRMA85bccyLxU/KRh0yCs5wnEFcuYih0GYG6p/hxeHkbFEAogdWnGcwVthT7b7lvm8DOVZYykGGrukWqOusMV8Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709396577; c=relaxed/simple;
-	bh=XURcPi80ktqpwDBSxPxq7g3Gl8HnCoFYrRqz0mcbS8A=;
+	s=arc-20240116; t=1709397445; c=relaxed/simple;
+	bh=9IC3fMEoEfXo3NNBOsCfC/33CDE0noCZBrsTmZNyk4k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TV7BLK/08/r5ixNuehcErNZTcGbdtPcRW+lJSOAiqbwGcw5ma4lfsSonydNYR4fgitnrY52LpMzmZlmrLcnK34Ehz9Ka677qp2ONlO3mkpgnHiuT/WF729Om6INizAoQ+v4CKHLYQVkq0jCK+sRoLPLfIcmKi5EhmmJkhBnWijo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=redhat.com; arc=none smtp.client-ip=209.85.222.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=L6DsKwe52AmBH8VzZV48EbnUHF07ZHzmAzTpP/mIsrsRE4fFUvgldp4TTCxtS5WfLdiTOB/ee/T0jMM1/gcmP1VWuLExs+/ZgIOQPcrxZomsCs67GzITGtaChWKdCX4GPbwsHN6ovVxq+LZT/+0puzFOh7jZOtMAzfesTXMIXg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=redhat.com; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-787b0b1deeaso154064585a.3
-        for <linux-integrity@vger.kernel.org>; Sat, 02 Mar 2024 08:22:54 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-69032f12786so6503316d6.1
+        for <linux-integrity@vger.kernel.org>; Sat, 02 Mar 2024 08:37:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709396573; x=1710001373;
+        d=1e100.net; s=20230601; t=1709397441; x=1710002241;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9CTJvFhGy1Bzd3KvOdnEpD8D/Edct8dik+Axa8R/H/U=;
-        b=AQfcoDpric3gfFG9C0IzLfDT6LseB72MrlSX0fQjW0EXkqMobp83ipoheMJ3KEuzcl
-         a4RdI/uICR4G2WAO4r96a/zsjhLTEUBg+NRFJT3JIJaRRkxhCoIfo4Ovoo+o160Qz2iE
-         bWBpaS1ylDUrquyjnlnxaacZNQz1Y8+GrQXEPG6zbKBnsF3fnPZU/Nn5t+l2NwhtKyha
-         VtA62SH3JLR86DnqIWYLfp4NV+RqhMKC9WheE33OHscMHypHFoD/hvn6MCo6Oiwfw2Ko
-         PAJcBLlE2bEdW14fj+bFiLInqCTAp1JE6qTrX3367Ctf5MjQErHWfmqiu4TYRP/ee3i2
-         nvQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ8l6HO9uCvsm5ss/oJNuZmbu6cRjILDDEHKmQhmkpqmXxMm3jO6FMb49NkQI/H/hVeZlOe8GLnkRcwpuGjnm0uiRFZLgtLLXQ7npUzLcW
-X-Gm-Message-State: AOJu0YxIK8WD7jutBw2O8v3CoBgNBzCa6/Jx0wz6RYsDtTOj6TJn7Y4G
-	TeVUruif/jrZmu62QLnnD6keRLtF++v3b3uDbFx95rVrxwCrSdGdURcmapPILQ==
-X-Google-Smtp-Source: AGHT+IH3W/XkrKR76p3+gwmEVhV4Af7xAoXDhhzOgTPCdCMEIBZjGKC5F+gRt7thhAcDDjvRoB1Eow==
-X-Received: by 2002:a05:620a:1794:b0:788:20a6:518a with SMTP id ay20-20020a05620a179400b0078820a6518amr910312qkb.66.1709396573481;
-        Sat, 02 Mar 2024 08:22:53 -0800 (PST)
+        bh=1bU93HGrxoKEjIsJ9NGLvb4RDQbkWY7Y2iFs9PS//8I=;
+        b=PNpfGq1JN3OtzjDv2IDcOAZiLUFBATr9/puHTE5rehfxBNVeY+m51vO0Mh8hMXpE/n
+         Lj9ZtAct+2j30NbPMvdVw22f6tmUG00sBk4EXxxaKA7zvHLrFkIl5lfb1oHRS6ytnDXY
+         wBNd7CdCaCdsCXSp8sTXym1Nk5uN2DbG8io/vN4mXf/foRE1GXHdGsru9IoA6KjOWo5Y
+         z2BUkWsq0xhGgq1fxvGrQqgm34M+93mISK95zRJHzU6rK0gZDFIf7H1PcJs/D3B9G+ek
+         GO7ElZr+SAcGc7SMAS953/Knt1uUgbSUacw3UPzoy5M0wiyIgy6UcxUVsQCRT+OKejR9
+         3zOw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4y0io48Cj/eLwCDQHxF7TXswkMRXy70XGuOsptucNyhiMyHhcXYvK6joslpDqcXgK9ixe5j+IOZ5lnLti397LnDS8Q8hvZmThbRhLlMM0
+X-Gm-Message-State: AOJu0Yx/yAXdor9FNhc9Ryh4jaQgEiWi45MxTG3wtJPP7Gsb5DkEiq8W
+	wBI4NMuX28HgPnl5y9zeQVOg6wO0uobaCXp00xKisUPwkewgwvhcxJeyOHZEuQ==
+X-Google-Smtp-Source: AGHT+IGWfJd4hsp4cquzrMgFaq/8ztZK/NQH0jQErvnt6KcdvzJSodCboJ3PnepuNNUxb0g3iW3fHA==
+X-Received: by 2002:a0c:f885:0:b0:690:4916:4de9 with SMTP id u5-20020a0cf885000000b0069049164de9mr4614368qvn.34.1709397441567;
+        Sat, 02 Mar 2024 08:37:21 -0800 (PST)
 Received: from localhost (pool-68-160-141-91.bstnma.fios.verizon.net. [68.160.141.91])
-        by smtp.gmail.com with ESMTPSA id c17-20020a05620a0cf100b007881eb5683fsm280597qkj.2.2024.03.02.08.22.52
+        by smtp.gmail.com with ESMTPSA id ks30-20020a056214311e00b0068ffde5efb0sm3123189qvb.49.2024.03.02.08.37.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Mar 2024 08:22:53 -0800 (PST)
-Date: Sat, 2 Mar 2024 11:22:50 -0500
+        Sat, 02 Mar 2024 08:37:21 -0800 (PST)
+Date: Sat, 2 Mar 2024 11:37:20 -0500
 From: Mike Snitzer <snitzer@kernel.org>
 To: Fan Wu <wufan@linux.microsoft.com>
 Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
@@ -68,7 +68,7 @@ Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
 	Deven Bowers <deven.desai@linux.microsoft.com>
 Subject: Re: [RFC PATCH v13 14/20] dm verity: consume root hash digest and
  signature data via LSM hook
-Message-ID: <ZeNSWgnKMldcb_jp@redhat.com>
+Message-ID: <ZeNVwBkbw2HlMRfa@redhat.com>
 References: <1709168102-7677-1-git-send-email-wufan@linux.microsoft.com>
  <1709168102-7677-15-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
@@ -180,6 +180,17 @@ Fan Wu <wufan@linux.microsoft.com> wrote:
 >  #include "dm-verity.h"
 >  #include "dm-verity-fec.h"
 >  #include "dm-verity-verify-sig.h"
+
+Why are you including dm-core.h? (DM targets really shouldn't need it).
+
+And from that header:
+
+/*
+ * DM core internal structures used directly by dm.c, dm-rq.c and dm-table.c.
+ * DM targets must _not_ deference a mapped_device or dm_table to directly
+ * access their members!
+ */
+
 > @@ -22,6 +23,9 @@
 >  #include <linux/scatterlist.h>
 >  #include <linux/string.h>
@@ -239,11 +250,6 @@ Fan Wu <wufan@linux.microsoft.com> wrote:
 > +}
 > +#endif /* CONFIG_IPE_PROP_DM_VERITY */
 > +
-
-Please move verity_init_sig() to be at beginning of same #ifdef block
-as verity_free_sig() above.  Also, please add blank lines between
-#ifdef, #else and #endif.
-
 >  /*
 >   * Target parameters:
 >   *	<version>	The current format is version 1.
@@ -275,6 +281,15 @@ as verity_free_sig() above.  Also, please add blank lines between
 > +
 > +	v = ti->private;
 > +	bdev = dm_table_get_md(ti->table)->disk->part0;
+
+Must be for dereferencing mapped_device struct here ^
+
+Please remove the dm-core.h include and use this instead:
+
+struct gendisk *disk = dm_disk(dm_table_get_md(ti->table));
+
+Mike
+
 > +	root_digest.digest = v->root_digest;
 > +	root_digest.digest_len = v->digest_size;
 > +	root_digest.alg = v->alg_name;
@@ -291,9 +306,7 @@ as verity_free_sig() above.  Also, please add blank lines between
 > +}
 > +#endif /* CONFIG_IPE_PROP_DM_VERITY */
 > +
-
-Again, blank line after #ifdef and before #endif
-
-Thanks,
-Mike
+>  static struct target_type verity_target = {
+>  	.name		= "verity",
+>  	.features	= DM_TARGET_SINGLETON | DM_TARGET_IMMUTABLE,
 
