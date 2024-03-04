@@ -1,58 +1,61 @@
-Return-Path: <linux-integrity+bounces-1556-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1557-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 531DB870C02
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Mar 2024 22:00:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3339E870CAE
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Mar 2024 22:28:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F646283B88
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Mar 2024 21:00:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 620181C249E6
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Mar 2024 21:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA96510A1A;
-	Mon,  4 Mar 2024 21:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46FCA43AAE;
+	Mon,  4 Mar 2024 21:27:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o3NUKu1D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R3lsQydi"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB2FE542;
-	Mon,  4 Mar 2024 21:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1966D1F60A;
+	Mon,  4 Mar 2024 21:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709586028; cv=none; b=EIC3x4vwZoC83Z2BhBTydny5hCg8CYYsq0+TDNPzzF5i+7so3VonT04Qhv9oq5ZQCefMCZgjBBxcw/6AU2v9tahWzJwGO8hD9QmUashBkaDfsgLxbqgCOQSDZl9WVK9X0y0V4G6be7SNTyzRMS875k3e9JmO2uG0W8nR0EzN9nE=
+	t=1709587659; cv=none; b=UJTQjP6+Rq+EwaTC60wBFkQQVnoInR0P+0f58Qb8Ec9uqcB+OT8RUeu5N6EAYcaOAcQ3Kb2g88J9h4pdXNi2jwgl9GzA6Dp2AR/OhHGVWpRMgFFcBlcD+q+mNoG9bZL62qp/MtEyIMsynmTPBomRxqDVMR/g0xfpe5eVjMw+rMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709586028; c=relaxed/simple;
-	bh=Uc72TsYnh8JUOjGwrPZbuhoEBO5wvmtcnyzgyQEqjBM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SS1O5P+XzWgPqqXWWscv/W/QYzWSbOPsESx2QNR2nH7rFuQHcnYn0mkuq7QuCnVDFIqyqW7G0UGQBJO7bvC6H3+9wX/JF7MYx83nHvPJdbBU2ufNk3PICqSrvCy7Z7JYsEAvC9kBaWOgvp2DfuVOqRxkXpzwm4fwKB4jYBACAKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o3NUKu1D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6167C433C7;
-	Mon,  4 Mar 2024 21:00:27 +0000 (UTC)
+	s=arc-20240116; t=1709587659; c=relaxed/simple;
+	bh=UY6mUVzXU4C6/zwtBskI3ysdKqTN2J6STcG/R2urtLI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XREsXjMI1h2tKrZVzFKi7mPRbDjxTpirNHCoda38xh0w0gxx9ABsz0ckUpamWTdckC3r5alMtsIAFXTb58pJ3KxHcq7txelvXZJnk00Ml56yJsEwjYvuSsK4lYOSoxqYMltZJcAWPWVoEpYwESPAbiI4QkNfQpU/Q0JD86Wk17I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R3lsQydi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75524C433C7;
+	Mon,  4 Mar 2024 21:27:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709586028;
-	bh=Uc72TsYnh8JUOjGwrPZbuhoEBO5wvmtcnyzgyQEqjBM=;
+	s=k20201202; t=1709587658;
+	bh=UY6mUVzXU4C6/zwtBskI3ysdKqTN2J6STcG/R2urtLI=;
 	h=From:To:Cc:Subject:Date:From;
-	b=o3NUKu1DRo8zQrm5vcb5gyuPnyW0j99q5QrM6MRctNN5GLijcBe017ychBKqshCoS
-	 oTA2za1W4aI1CBK+pPb1dmBOwKnevpmtZPyA5HveF2QpUetN1TA2mBVwndKJW3gXx5
-	 94V4jc3x0LtvFBQY6xw1j+4FxpRVAa3M1FxsVU0X7n8oo9wm4ILA6bgJ+bc//Tbamq
-	 CTe0LO/AE3k0oMhctLwhHax2D4DoHBafWNxkU/VFxTRoPT6d/qZBgb//filiWAvB0q
-	 xjTQ4IUb0StLGSXF9WWmallFfuqs/b9IisNQztWJBaJrhlK8ceqjLj0cjwV3VVa/kh
-	 deClD2/6POtkA==
+	b=R3lsQydiQPWi5DbHFUwZapv7I50IhUlpLYZSaKykoZ3dmPjxLt5XgfYVal0mIYicQ
+	 ZmzjtA5DRR6ua4surkSF3tWeFFMWgIQ91vYAzLqSkJB4m89NJSFKiKpO9vjkNpW2OQ
+	 elEvhcN3n47mWEm/EEN/W9e1h3K7g8DLnyQ28ffrXeNjCfAm0F0bvzsXNU+n/t1CsY
+	 oPXEpJHQ8PEYP3kJL5ZKF+4bcpsLZtl/E8sAcC3pJhfDyHB2ekNBXNvVSl83KuZ4NL
+	 9SBqKMLJ8P46negLZTlVmXDfmb9ou8VxfhT7SqSX7rM+BFYC5YLVObHtQBxtbvQu3Y
+	 MOjPBv4m4sZdA==
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-kernel@vger.kernel.org
+To: linux-doc@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"Daniel P . Smith" <dpsmith@apertussolutions.com>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
-	Mimi Zohar <zohar@linux.ibm.com>,
 	Peter Huewe <peterhuewe@gmx.de>,
 	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Alexander Steffen <Alexander.Steffen@infineon.com>,
 	keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: [PATCH v2] MAINTAINERS: Update W's for KEYS/KEYRINGS_INTEGRITY and TPM DEVICE DRIVER
-Date: Mon,  4 Mar 2024 23:00:19 +0200
-Message-Id: <20240304210019.34018-1-jarkko@kernel.org>
+	linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org
+Subject: [PATCH] Documentation: tpm_tis
+Date: Mon,  4 Mar 2024 23:27:34 +0200
+Message-Id: <20240304212734.43213-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -62,48 +65,76 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add TPM driver test suite URL to the MAINTAINERS files and move the wiki
-URL to more appropriate location.
+Based recent discussions on LKML, provide preliminary bits of tpm_tis_core
+dependent drivers. Includes only bare essentials but can be extended later
+on case by case. This way some people may even want to read it later on.
 
-Link: https://gitlab.com/jarkkojs/linux-tpmdd-test
-Link: https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
+Cc: Jonathan Corbet <corbet@lwn.net>
+CC: Daniel P. Smith <dpsmith@apertussolutions.com>
+Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
 Cc: Peter Huewe <peterhuewe@gmx.de>
 Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
 Cc: keyrings@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 Cc: linux-integrity@vger.kernel.org
-Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
-v2:
-- Fix typos: https://lore.kernel.org/linux-integrity/eaa5107ac4f982b6fd6e80b522643a591e719dc9.camel@HansenPartnership.com/
-- Fix typos and added ack: https://lore.kernel.org/linux-integrity/1ab10318-5e3d-417c-9984-7b17f4e386e3@molgen.mpg.de/
----
- MAINTAINERS | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/security/tpm/index.rst   |  1 +
+ Documentation/security/tpm/tpm_tis.rst | 30 ++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 Documentation/security/tpm/tpm_tis.rst
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bf77be03fb2b..99e0466663fe 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11947,6 +11947,7 @@ M:	Mimi Zohar <zohar@linux.ibm.com>
- L:	linux-integrity@vger.kernel.org
- L:	keyrings@vger.kernel.org
- S:	Supported
-+W:	https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
- F:	security/integrity/platform_certs
+diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
+index fc40e9f23c85..f27a17f60a96 100644
+--- a/Documentation/security/tpm/index.rst
++++ b/Documentation/security/tpm/index.rst
+@@ -5,6 +5,7 @@ Trusted Platform Module documentation
+ .. toctree::
  
- KFENCE
-@@ -22278,7 +22279,7 @@ M:	Jarkko Sakkinen <jarkko@kernel.org>
- R:	Jason Gunthorpe <jgg@ziepe.ca>
- L:	linux-integrity@vger.kernel.org
- S:	Maintained
--W:	https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
-+W:	https://gitlab.com/jarkkojs/linux-tpmdd-test
- Q:	https://patchwork.kernel.org/project/linux-integrity/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
- F:	drivers/char/tpm/
+    tpm_event_log
++   tpm_tis
+    tpm_vtpm_proxy
+    xen-tpmfront
+    tpm_ftpm_tee
+diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/security/tpm/tpm_tis.rst
+new file mode 100644
+index 000000000000..3cec0216a169
+--- /dev/null
++++ b/Documentation/security/tpm/tpm_tis.rst
+@@ -0,0 +1,30 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=========================
++TPM FIFO interface Driver
++=========================
++
++FIFO (First-In-First-Out) is the name of the hardware interface used by the
++`tpm_tis_core` dependent drivers. The prefix "tis" is named after TPM
++Interface Specification, which is the hardware interface specification for
++TPM 1.x chips.
++
++Communication is based on a 5 KiB buffer shared by the TPM chip through a
++hardware bus or memory map. The buffer is further split to five equal size
++buffers, which provide equivalent sets of registers for communication
++between CPU and TPM. The communication end points are called *localities*
++in the TCG terminology.
++
++When a kernel wants to send a commands to the TPM chip, it first reserves
++locality 0 by setting `requestUse` bit in `TPM_ACCESS` register. The bit is
++cleared by the chip when the access is granted. Once completed its
++communication, it sets `activeLocity` bit in the same register.
++
++Pending localities are served in order by the chip descending orderm and
++one at a time:
++
++- Locality 0 has the lowest priority.
++- Locality 5 has the highest priotiy.
++
++Further information on purpose and meaning of the localities can be found
++from section 3.2 of TCG PC Client Platform TPM Profile Specification.
 -- 
 2.40.1
 
