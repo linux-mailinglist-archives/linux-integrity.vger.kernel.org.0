@@ -1,59 +1,68 @@
-Return-Path: <linux-integrity+bounces-1547-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1548-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0087586FB74
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Mar 2024 09:16:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4986E86FC7A
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Mar 2024 09:56:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9871282075
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Mar 2024 08:16:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0012E1F223E6
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Mar 2024 08:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0AB171C4;
-	Mon,  4 Mar 2024 08:15:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D51C219E2;
+	Mon,  4 Mar 2024 08:53:13 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30F7134B7;
-	Mon,  4 Mar 2024 08:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333A61AADE;
+	Mon,  4 Mar 2024 08:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709540153; cv=none; b=YZqP5zJ87aUh3Uv4uhBZwVvY0D9AopnvOM5o4W6IsAFMRaBhTDZ2/hrjXZsbaZZj84SAiRRVzOo7LozDd9Pl8YNTKGuBx/vmQ63VRMexkqVkwByjsLI3vOWZlGXFtZEL64JJbtRlixlQ51SJqcg8lnRLKJcifVUJcLZwBPbXchw=
+	t=1709542393; cv=none; b=AfrH2ZbxTkSxHWrrZ4sWTrGYqwVlz9yg9nlGi7dwZDjA7YAOSbHqELS9Kgx2Vpuo5PnKjv2gQpWxStn0aLgXSMb1hmKWE2pfBFDqu4l/vAbT2KqNbLTtqzXM5VY5hqw3awaJ+3pDUrB5RTZHWPnG2dZ5rFzCv4eTN/OLgAdq+5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709540153; c=relaxed/simple;
-	bh=pP51C4sP9CSG8FOpmcCbOPSbjYojvwquvBvojm83E1k=;
+	s=arc-20240116; t=1709542393; c=relaxed/simple;
+	bh=lZjS9KQIklaHVo9RkVEZuFyeCOlTaULg5xVUzMo42g8=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=E2/7zMDYyDoNyhjezd+kdj4lECI12p8S3+GBz8KXdB7ocA/fjmMyVWriyylZAyRsgF8OG9GuRL7zWOdy/FvO8/vrQYg7oHQjUK/UwAo8GRZ8AL9cE0t26esFm+BHnXwZVPijNQZ6RX0rYC4AXNK5gg5n+yxR0RrtV+g0Zpl6HLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+	 Content-Type:MIME-Version; b=EQ1NQ3wO6Gwth6QvYrgyn6XOCr+4BwbQBPJtbuN1CjvWRvwCUT9N6w7CjByimBsxwjFWgBKmwM+/sLd45+vjfM0wpsky6fwnLLF/y7gmc4x0XLWMXqz7KQc8/awWvKnIeqFXntz8MAieOClHkg8+P5TOA/bjKEhjOyx3IEdxNDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4TpB1w5YTQz9yLsw;
-	Mon,  4 Mar 2024 16:00:04 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4TpBQV4KnCz9xGgj;
+	Mon,  4 Mar 2024 16:17:54 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 38161140796;
-	Mon,  4 Mar 2024 16:15:36 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id ABC0A14068C;
+	Mon,  4 Mar 2024 16:33:26 +0800 (CST)
 Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwCHvSEdg+Vlt+imAw--.57242S2;
-	Mon, 04 Mar 2024 09:15:35 +0100 (CET)
-Message-ID: <51ee454cf93c24afbfc9f159a1b8428d9d6e3be7.camel@huaweicloud.com>
-Subject: Re: [syzbot] [integrity?] [lsm?] KMSAN: uninit-value in
- ima_add_template_entry
+	by APP2 (Coremail) with SMTP id GxC2BwAH9CdGh+VluhunAw--.56753S2;
+	Mon, 04 Mar 2024 09:33:26 +0100 (CET)
+Message-ID: <be91c7158b1b9bed35aa9c3205e8f8e467778a5f.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 06/25] capability: provide helpers for converting
+ between xattrs and vfs_caps
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>, syzbot
-	 <syzbot+7bc44a489f0ef0670bd5@syzkaller.appspotmail.com>, 
-	syzkaller-bugs@googlegroups.com, Gao Xiang <xiang@kernel.org>, Chao Yu
-	 <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>, Jeffle Xu
-	 <jefflexu@linux.alibaba.com>
-Cc: linux-kernel@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
-	linux-integrity@vger.kernel.org, zohar@linux.ibm.com
-Date: Mon, 04 Mar 2024 09:15:21 +0100
-In-Reply-To: <ab2a337d-c2dd-437d-9ab8-e3b837f1ff1a@I-love.SAKURA.ne.jp>
-References: <0000000000002be12a0611ca7ff8@google.com>
-	 <40746a9ae6d2e76d748ec0bf7710bba7e49a53ac.camel@huaweicloud.com>
-	 <ab2a337d-c2dd-437d-9ab8-e3b837f1ff1a@I-love.SAKURA.ne.jp>
+To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, Serge Hallyn <serge@hallyn.com>,
+  Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, James
+ Morris <jmorris@namei.org>,  Alexander Viro <viro@zeniv.linux.org.uk>, Jan
+ Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>,  Casey Schaufler
+ <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>, Jonathan Corbet <corbet@lwn.net>, Miklos Szeredi
+ <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>, 
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, audit@vger.kernel.org, 
+ selinux@vger.kernel.org, linux-integrity@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
+Date: Mon, 04 Mar 2024 09:33:06 +0100
+In-Reply-To: <ZeIlwkUx5lNBrdS9@do-x1extreme>
+References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
+	 <20240221-idmap-fscap-refactor-v2-6-3039364623bd@kernel.org>
+	 <7633ab5d5359116a602cdc8f85afd2561047960e.camel@huaweicloud.com>
+	 <ZeIlwkUx5lNBrdS9@do-x1extreme>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.4-0ubuntu2 
@@ -63,11 +72,11 @@ List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwCHvSEdg+Vlt+imAw--.57242S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw15tFyxZw47Gw4kCw4UArb_yoWrWr4fpF
-	ZIgFWxAr48Jry8Jr1xJw1qgw17KryvkrWUGw18J34Iv3W0yry7Jr18tryrXrZrGryUAF4v
-	yr4xZryUKr1xZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:GxC2BwAH9CdGh+VluhunAw--.56753S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF1Uur1fKFWxWryDZw1UKFg_yoW8WFyDpF
+	y3K3Z8KFs2qr1Ygr48Jr45Aa1SkFyrJry7WayUCas0y3Wqgr13AFy09a48uFy5uw4kGr15
+	XFs0yas8Cry3AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
 	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
 	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
@@ -75,123 +84,70 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxCw15tFyxZw47Gw4kCw4UArb_yoWrWr4fpF
 	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
 	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
 	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
 	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj5rvpAAAsp
+	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBF1jj5rvqQACsm
 
-On Sun, 2024-03-03 at 23:54 +0900, Tetsuo Handa wrote:
-> On 2024/02/20 19:40, Roberto Sassu wrote:
-> > On Mon, 2024-02-19 at 22:41 -0800, syzbot wrote:
-> > > Hello,
-> > >=20
-> > > syzbot found the following issue on:
-> > >=20
-> > > HEAD commit:    4f5e5092fdbf Merge tag 'net-6.8-rc5' of git://git.ker=
-nel.o..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D135ba81c1=
-80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3De3dd779fb=
-a027968
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D7bc44a489f0=
-ef0670bd5
-> > > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for=
- Debian) 2.40
+On Fri, 2024-03-01 at 13:00 -0600, Seth Forshee (DigitalOcean) wrote:
+> On Fri, Mar 01, 2024 at 05:30:55PM +0100, Roberto Sassu wrote:
+> > > +/*
+> > > + * Inner implementation of vfs_caps_to_xattr() which does not return=
+ an
+> > > + * error if the rootid does not map into @dest_userns.
+> > > + */
+> > > +static ssize_t __vfs_caps_to_xattr(struct mnt_idmap *idmap,
+> > > +				   struct user_namespace *dest_userns,
+> > > +				   const struct vfs_caps *vfs_caps,
+> > > +				   void *data, size_t size)
+> > > +{
+> > > +	struct vfs_ns_cap_data *ns_caps =3D data;
+> > > +	struct vfs_cap_data *caps =3D (struct vfs_cap_data *)ns_caps;
+> > > +	kuid_t rootkuid;
+> > > +	uid_t rootid;
+> > > +
+> > > +	memset(ns_caps, 0, size);
+> >=20
+> > size -> sizeof(*ns_caps) (or an equivalent change)
 >=20
-> > I would add the VFS people in CC, in case they have some ideas.
->=20
-> This is an erofs bug. Since the filesystem image in the reproducer
-> is crafted, decompression generates bogus result and
-> z_erofs_transform_plain() misbehaves.
+> This is zeroing out the passed buffer, so it should use the size passed
+> for the buffer. sizeof(*ns_caps) could potentially be more than the size
+> of the buffer.
 
-Thank you Tetsuo, and Gao Xiang for fixing it!
+Uhm, then maybe the problem is that you are passing the wrong argument?
+
+ssize_t
+do_getxattr(struct mnt_idmap *idmap, struct dentry *d,
+	struct xattr_ctx *ctx)
+{
+	ssize_t error;
+	char *kname =3D ctx->kname->name;
+
+	if (is_fscaps_xattr(kname)) {
+		struct vfs_caps caps;
+		struct vfs_ns_cap_data data;
+		int ret;
+
+		ret =3D vfs_get_fscaps(idmap, d, &caps);
+		if (ret)
+			return ret;
+		/*
+		 * rootid is already in the mount idmap, so pass nop_mnt_idmap
+		 * so that it won't be mapped.
+		 */
+		ret =3D vfs_caps_to_user_xattr(&nop_mnt_idmap, current_user_ns(),
+					     &caps, &data, ctx->size);
+
+
+ctx->size in my case is 1024 bytes.
 
 Roberto
 
-> You can obtain a single-threaded reproducer from
-> https://syzkaller.appspot.com/x/repro.c?x=3D1256096a180000 with below dif=
-f.
+> Maybe it would be clearer if it was memset(data, 0, size)?
 >=20
-> ----------------------------------------
-> --- old/1256096a180000.c
-> +++ new/1256096a180000.c
-> @@ -676,6 +676,6 @@
->    syscall(__NR_mmap, /*addr=3D*/0x21000000ul, /*len=3D*/0x1000ul, /*prot=
-=3D*/0ul,
->            /*flags=3DMAP_FIXED|MAP_ANONYMOUS|MAP_PRIVATE*/ 0x32ul, /*fd=
-=3D*/-1,
->            /*offset=3D*/0ul);
-> -  loop();
-> +  execute_one();
->    return 0;
->  }
-> ----------------------------------------
->=20
-> With CONFIG_EROFS_FS_DEBUG=3Dy, the reproducer hits DBG_BUGON().
-> With debug printk() shown below, you can get output shown below.
->=20
-> ----------------------------------------
-> diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
-> index d4cee95af14c..f221133a0731 100644
-> --- a/fs/erofs/decompressor.c
-> +++ b/fs/erofs/decompressor.c
-> @@ -323,7 +323,11 @@ static int z_erofs_transform_plain(struct z_erofs_de=
-compress_req *rq,
->  	unsigned int cur =3D 0, ni =3D 0, no, pi, po, insz, cnt;
->  	u8 *kin;
-> =20
-> -	DBG_BUGON(rq->outputsize > rq->inputsize);
-> +	if (rq->outputsize > rq->inputsize) {
-> +		pr_err("rq->inputsize=3D%u rq->outputsize=3D%u\n", rq->inputsize, rq->=
-outputsize);
-> +		pr_err("rq->pageofs_in=3D%u rq->pageofs_out=3D%u\n", rq->pageofs_in, r=
-q->pageofs_out);
-> +		pr_err("nrpages_in=3D%u nrpages_out=3D%u\n", nrpages_in, nrpages_out);
-> +	}
->  	if (rq->alg =3D=3D Z_EROFS_COMPRESSION_INTERLACED) {
->  		cur =3D bs - (rq->pageofs_out & (bs - 1));
->  		pi =3D (rq->pageofs_in + rq->inputsize - cur) & ~PAGE_MASK;
-> @@ -352,7 +356,8 @@ static int z_erofs_transform_plain(struct z_erofs_dec=
-ompress_req *rq,
->  		do {
->  			no =3D (rq->pageofs_out + cur + pi) >> PAGE_SHIFT;
->  			po =3D (rq->pageofs_out + cur + pi) & ~PAGE_MASK;
-> -			DBG_BUGON(no >=3D nrpages_out);
-> +			if (no >=3D nrpages_out)
-> +				pr_err("no=3D%u nrpages_out=3D%u\n", no, nrpages_out);
->  			cnt =3D min(insz - pi, PAGE_SIZE - po);
->  			if (rq->out[no] =3D=3D rq->in[ni]) {
->  				memmove(kin + po,
-> @@ -366,7 +371,8 @@ static int z_erofs_transform_plain(struct z_erofs_dec=
-ompress_req *rq,
->  		} while (pi < insz);
->  		kunmap_local(kin);
->  	}
-> -	DBG_BUGON(ni > nrpages_in);
-> +	if (ni > nrpages_in)
-> +		pr_err("ni=3D%u nrpages_in=3D%u\n", ni, nrpages_in);
->  	return 0;
->  }
-> =20
-> ----------------------------------------
->=20
-> ----------------------------------------
-> [  138.991810][ T2983] loop0: detected capacity change from 0 to 16
-> [  139.804002][ T2983] erofs: (device loop0): mounted with root inode @ n=
-id 36.
-> [  139.810464][   T87] erofs: rq->inputsize=3D4096 rq->outputsize=3D8194
-> [  139.821540][   T87] erofs: rq->pageofs_in=3D0 rq->pageofs_out=3D0
-> [  139.824347][   T87] erofs: nrpages_in=3D1 nrpages_out=3D3
-> [  139.827008][   T87] erofs: ni=3D3 nrpages_in=3D1
-> [  139.873777][ T2983] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> [  139.881268][ T2983] BUG: KMSAN: uninit-value in ima_add_template_entry=
-+0x626/0xa80
-> ----------------------------------------
->=20
-> #syz set subsystems: erofs
+> > I was zeroing more (the size of the buffer passed to vfs_getxattr()).
+> >=20
+> > Roberto
 
 
