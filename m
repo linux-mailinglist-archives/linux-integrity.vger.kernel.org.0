@@ -1,53 +1,44 @@
-Return-Path: <linux-integrity+bounces-1573-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1574-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 508F4872184
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 15:34:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 728998722C2
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 16:28:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05B731F22C76
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 14:34:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E0B42888A8
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 15:28:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C22E41C6B;
-	Tue,  5 Mar 2024 14:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/0nMbmG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7244F1272D7;
+	Tue,  5 Mar 2024 15:26:52 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1078986AC2;
-	Tue,  5 Mar 2024 14:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DE212A152;
+	Tue,  5 Mar 2024 15:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709649239; cv=none; b=b6r5xlG5cgnNzP/QhDNQmKDQK5QHEw+A0Du5+4cFi+oyuZr1oGk87iPltMVLHaVrT5Y7hqL+/2eVwejuDs1ursVCUwCPfuOe+2C13yUjlVr5lvKEelc1pJndljRS+oscDbUL+XkWI1nlxhqWDZzoGuKnmrbCEE9mtgedKhGm+RQ=
+	t=1709652412; cv=none; b=jV3mMGXaGPWd27ULhksLTINqSH0Rss+VknDHfTg/p+JfHa53/jK2T97ADOES00jb8RP1I7pevVpiK+fk1cgz3O7kgKdyg1bWszrj/HrblSuK8Q3EXkzekswpZ07OE4XgOumPNzPX7bQHI7FGdVZRofg64yTkCaVxlTSxG0eUjQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709649239; c=relaxed/simple;
-	bh=eBiqSkWyhcWNjSZwXg5KFgXsg8vQMzr1zNnOysu8a2M=;
+	s=arc-20240116; t=1709652412; c=relaxed/simple;
+	bh=GRLqdqtSoP2VvufUGAGP/Ugnj3LtcoOOYKX/7xCkD5I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bem73UcUUVH3lljhw/NJ0bq3+DfHDi4G8cGfS9sLh6TUivw8DFuu1vexg+BwqED0/DtTZKuDZ+QfgstRgGtabTegfH8oWXaK6d0F4WzE4jpTt7dlBcVsSQ0Iz/opKm2ONDR5Yv4eyN81wPmyIx81ucByEGviR/2l8nv5Mr8sK+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/0nMbmG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED39C43390;
-	Tue,  5 Mar 2024 14:33:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709649238;
-	bh=eBiqSkWyhcWNjSZwXg5KFgXsg8vQMzr1zNnOysu8a2M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z/0nMbmGohSXfrmGLUjMCdBQKtS+6Mqgc/CybNiPKfef7dy3X5VTK4bBqHIXZH75B
-	 v8evXrJUgaOTbPuAc5Pli+KFqPUyG4xBTsz+48TRzODfYRLCaSXR3434RSZpudsDnD
-	 neV4Q4mXN9qGiIJaRS0BjIIm6dgpL7lRbN2FtjaZETUtVhp7iIeqSAknWpH5I2uCzW
-	 BoYT2+Hs/Nh4aRYwRPwznbZOYjTe5W0r1LAmLMck1yHiz5wvufXZIR2+tg8h64p/24
-	 XWI8e+u8QuknCVXQ0gF+fnVYBR7Iu5WcIk+mufKRa6/8OfRU2pdAOfI6U6EvbsdfuC
-	 tv15LmvPhn0vA==
-Date: Tue, 5 Mar 2024 08:33:57 -0600
-From: Seth Forshee <sforshee@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eegI2e9KgZUMiB1wv579kthRsZZEIZ9KvPQdLufmbD7Yy3cQPnZb3bgRjUtOV2TWk5LkoBGtpdva0xsvRkZmDnkt8oMBhUOZpQj3jFpwQn7cY5WVQf9L77gh/k3uuMP77VbIHMFYn4s3qbMujaTjnyAAqpHviNj8EqaHfxcUMQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id 7336452B; Tue,  5 Mar 2024 09:17:53 -0600 (CST)
+Date: Tue, 5 Mar 2024 09:17:53 -0600
+From: "Serge E. Hallyn" <serge@hallyn.com>
 To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+Cc: linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
+	linux-integrity@vger.kernel.org,
 	linux-security-module@vger.kernel.org
 Subject: Re: [PATCH] xattr: restrict vfs_getxattr_alloc() allocation size
-Message-ID: <ZectVeZtw/EmfAUA@do-x1extreme>
+Message-ID: <20240305151753.GA15883@mail.hallyn.com>
 References: <20240305-effekt-luftzug-51913178f6cd@brauner>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -73,7 +64,27 @@ On Tue, Mar 05, 2024 at 01:27:06PM +0100, Christian Brauner wrote:
 > Link: https://lore.kernel.org/r/ZeXcQmHWcYvfCR93@do-x1extreme [1]
 > Signed-off-by: Christian Brauner <brauner@kernel.org>
 
-Makes sense.
+Acked-by: Serge Hallyn <serge@hallyn.com>
 
-Reviewed-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+> ---
+>  fs/xattr.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index 09d927603433..a53c930e3018 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -395,6 +395,9 @@ vfs_getxattr_alloc(struct mnt_idmap *idmap, struct dentry *dentry,
+>  	if (error < 0)
+>  		return error;
+>  
+> +	if (error > XATTR_SIZE_MAX)
+> +		return -E2BIG;
+> +
+>  	if (!value || (error > xattr_size)) {
+>  		value = krealloc(*xattr_value, error + 1, flags);
+>  		if (!value)
+> -- 
+> 2.43.0
+> 
 
