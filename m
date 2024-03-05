@@ -1,161 +1,155 @@
-Return-Path: <linux-integrity+bounces-1567-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1568-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF5C6871282
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 02:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FFAC871934
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 10:12:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10A12285110
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 01:52:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 213C1281674
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 09:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E7917C79;
-	Tue,  5 Mar 2024 01:52:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7634850276;
+	Tue,  5 Mar 2024 09:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nSzLJu53"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VHAMZBJR"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E162F43;
-	Tue,  5 Mar 2024 01:52:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304B84DA1F;
+	Tue,  5 Mar 2024 09:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709603566; cv=none; b=fiyyAG7Gyqizo9cc8QXKhnTqmC9Qj59eS9jGDrdoiK3y3+YbT5HkqxboGdQx45Vv2Nv5EBukpa1Y6vK8Gby+xq1uduV2JAk2LN2M5BTVX+DEyv1hP2gvyhnMSnf1lnhxF9VKsOks9xr66+ixYY9OhXdkNkEWg+FLYSKcmDhObHU=
+	t=1709629936; cv=none; b=gACL2+hl1sY0dlb/04uxAT7bIt62Jh3kNvkMz+l3XUkiqMbrw2GSZooMHe66B4h44uXNHUQCI+Y8kQNddOnRznWGEA9L3OCzWB+VIPxgDBgUvxHskWZDKzUyA6fRw4QM7yEGDZ0ZUVA+YJ8rSN0EsW6NdvD3Rlfe0+0uxwwCG5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709603566; c=relaxed/simple;
-	bh=GRusyfa8TF2Nxs4bQB9i2a/gKinpT0tnMyNb3mj5cYE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=EQGXcWBwrLlj5jHMPssAc/2tCAX5WQYRy3DwATWg2T9PFF7nsiEDnoDW1VKzkI3pkNoXg0bn+jEKx8t/hDgagvRQfdZRRvCGoo/BrnAQSLwjD5vVWNggRxXDM2b1wRmDlZUGONSapA0NxlqC8EhN/1TlfCRQ0a0Yz89shS9cKlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nSzLJu53; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BEDC433F1;
-	Tue,  5 Mar 2024 01:52:43 +0000 (UTC)
+	s=arc-20240116; t=1709629936; c=relaxed/simple;
+	bh=LQj0UdUDprFZhCk/sD0ivlB0RR+zzlR48MZkUdMbHFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DySCKimLNW2oEK1/x35V1r9zaCURNEc9yFY4AzfV7QJVj5FTwR4xS6tI77dkCbfXlsRczfcNRut3lZElc8KHFTpsV9GILKyGcnqNl5wJEkSekvTQ3ooK9fIp2VjLPT3uAqF+oeIb4mO/upAKyANrqVFnGH+hT1ar+88CrKF7JH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VHAMZBJR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A036AC433C7;
+	Tue,  5 Mar 2024 09:12:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709603566;
-	bh=GRusyfa8TF2Nxs4bQB9i2a/gKinpT0tnMyNb3mj5cYE=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=nSzLJu53wk1f1qMdYraehDndWs5Mo7yDzC6+kuwoc2efv4CimLQg4plE4s9+yR4gb
-	 jTpE1cOz9iKYGdYFkDi1JdfOObk2dJ4OwfIYNsQzkpk7sdzVrwUYNzaZD4CA301ShZ
-	 05MzEAFbN3DeADUIRitKnOvf8Hg5zw4Ax3zkCL9pmKZqWX92h7RT122GoQ8vJY3YyL
-	 C/73Y1D7B+lk5vHgm1Z8IK8SnTidEQJprV46M/7RQsq8i4/DjzBIOPHWuA7MCWD7gq
-	 aVAXBuf08xk+mlp+IzF4QrMVsZ2SkR7FMMbAwmV+x8zakfguT/xcQQ4TwW7GnPiifb
-	 tPhSJOgArc0Ag==
+	s=k20201202; t=1709629935;
+	bh=LQj0UdUDprFZhCk/sD0ivlB0RR+zzlR48MZkUdMbHFg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VHAMZBJR6iOLpsCagpRqBCTT6yOZZ/40nSbEHm6Deht9E7xa7MAJBGLwYAxT5N2AV
+	 qKjKeS42MQwQu7B5CNdNODxPK5aWJqje6X5cwSnQCQO/J8u9OD+EYKLBylhsMcO+at
+	 8TRgDbije51zVdjQ62cqeSPZjsLBGjbwyp7Y99g21Nvq0FFm3qGWM2vePr6XAvEkSA
+	 6ZsVoWMJrOh2P6znfrm73CEmJi+M4ZLE+YgpIoHKC08tRCPt9NELXlToCkxgpdgnfw
+	 N3KdD4dsQs1c+7TQ+Uu+dAlE17b+m/G1nzKWMh9cawmAj6ozeLIy2zCxLSioPfMW8y
+	 azUpWTy5lw/7w==
+Date: Tue, 5 Mar 2024 10:12:06 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
+Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, 
+	Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
+	James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, audit@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
+Subject: Re: [PATCH v2 24/25] commoncap: use vfs fscaps interfaces
+Message-ID: <20240305-fachjargon-abmontieren-75b1d6c67a83@brauner>
+References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
+ <20240221-idmap-fscap-refactor-v2-24-3039364623bd@kernel.org>
+ <dcbd9e7869d2fcce69546b53851d694b8ebad54e.camel@huaweicloud.com>
+ <ZeXpbOsdRTbLsYe9@do-x1extreme>
+ <a7124afa6bed2fcadcb66efa08e256828cd6f8ab.camel@huaweicloud.com>
+ <ZeX9MRhU/EGhHkCY@do-x1extreme>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 05 Mar 2024 03:52:41 +0200
-Message-Id: <CZLFVTVPBFB4.3IIZULN3LKZGI@kernel.org>
-Subject: Re: [PATCH] Documentation: tpm_tis
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Randy Dunlap" <rdunlap@infradead.org>, <linux-doc@vger.kernel.org>
-Cc: "Jonathan Corbet" <corbet@lwn.net>, "Daniel P . Smith"
- <dpsmith@apertussolutions.com>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Peter Huewe"
- <peterhuewe@gmx.de>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Alexander Steffen"
- <Alexander.Steffen@infineon.com>, <keyrings@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240304212734.43213-1-jarkko@kernel.org>
- <aed28265-d677-491a-a045-24b351854b24@infradead.org>
-In-Reply-To: <aed28265-d677-491a-a045-24b351854b24@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZeX9MRhU/EGhHkCY@do-x1extreme>
 
-On Tue Mar 5, 2024 at 12:53 AM EET, Randy Dunlap wrote:
->
->
-> On 3/4/24 13:27, Jarkko Sakkinen wrote:
-> > Based recent discussions on LKML, provide preliminary bits of tpm_tis_c=
-ore
-> > dependent drivers. Includes only bare essentials but can be extended la=
-ter
-> > on case by case. This way some people may even want to read it later on=
-.
-> >=20
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > CC: Daniel P. Smith <dpsmith@apertussolutions.com>
-> > Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > Cc: Peter Huewe <peterhuewe@gmx.de>
-> > Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
-> > Cc: keyrings@vger.kernel.org
-> > Cc: linux-doc@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-integrity@vger.kernel.org
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> >  Documentation/security/tpm/index.rst   |  1 +
-> >  Documentation/security/tpm/tpm_tis.rst | 30 ++++++++++++++++++++++++++
-> >  2 files changed, 31 insertions(+)
-> >  create mode 100644 Documentation/security/tpm/tpm_tis.rst
-> >=20
->
-> > diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/sec=
-urity/tpm/tpm_tis.rst
-> > new file mode 100644
-> > index 000000000000..3cec0216a169
-> > --- /dev/null
-> > +++ b/Documentation/security/tpm/tpm_tis.rst
-> > @@ -0,0 +1,30 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> > +TPM FIFO interface Driver
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> > +
-> > +FIFO (First-In-First-Out) is the name of the hardware interface used b=
-y the
-> > +`tpm_tis_core` dependent drivers. The prefix "tis" is named after TPM
-> > +Interface Specification, which is the hardware interface specification=
- for
-> > +TPM 1.x chips.
-> > +
-> > +Communication is based on a 5 KiB buffer shared by the TPM chip throug=
-h a
-> > +hardware bus or memory map. The buffer is further split to five equal =
-size
-> > +buffers, which provide equivalent sets of registers for communication
-> > +between CPU and TPM. The communication end points are called *localiti=
-es*
-> > +in the TCG terminology.
-> > +
-> > +When a kernel wants to send a commands to the TPM chip, it first reser=
-ves
-> > +locality 0 by setting `requestUse` bit in `TPM_ACCESS` register. The b=
-it is
-> > +cleared by the chip when the access is granted. Once completed its
-> > +communication, it sets `activeLocity` bit in the same register.
->
->       Is that              activeLocality ?
+On Mon, Mar 04, 2024 at 10:56:17AM -0600, Seth Forshee (DigitalOcean) wrote:
+> On Mon, Mar 04, 2024 at 05:17:57PM +0100, Roberto Sassu wrote:
+> > On Mon, 2024-03-04 at 09:31 -0600, Seth Forshee (DigitalOcean) wrote:
+> > > On Mon, Mar 04, 2024 at 11:19:54AM +0100, Roberto Sassu wrote:
+> > > > On Wed, 2024-02-21 at 15:24 -0600, Seth Forshee (DigitalOcean) wrote:
+> > > > > Use the vfs interfaces for fetching file capabilities for killpriv
+> > > > > checks and from get_vfs_caps_from_disk(). While there, update the
+> > > > > kerneldoc for get_vfs_caps_from_disk() to explain how it is different
+> > > > > from vfs_get_fscaps_nosec().
+> > > > > 
+> > > > > Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+> > > > > ---
+> > > > >  security/commoncap.c | 30 +++++++++++++-----------------
+> > > > >  1 file changed, 13 insertions(+), 17 deletions(-)
+> > > > > 
+> > > > > diff --git a/security/commoncap.c b/security/commoncap.c
+> > > > > index a0ff7e6092e0..751bb26a06a6 100644
+> > > > > --- a/security/commoncap.c
+> > > > > +++ b/security/commoncap.c
+> > > > > @@ -296,11 +296,12 @@ int cap_capset(struct cred *new,
+> > > > >   */
+> > > > >  int cap_inode_need_killpriv(struct dentry *dentry)
+> > > > >  {
+> > > > > -	struct inode *inode = d_backing_inode(dentry);
+> > > > > +	struct vfs_caps caps;
+> > > > >  	int error;
+> > > > >  
+> > > > > -	error = __vfs_getxattr(dentry, inode, XATTR_NAME_CAPS, NULL, 0);
+> > > > > -	return error > 0;
+> > > > > +	/* Use nop_mnt_idmap for no mapping here as mapping is unimportant */
+> > > > > +	error = vfs_get_fscaps_nosec(&nop_mnt_idmap, dentry, &caps);
+> > > > > +	return error == 0;
+> > > > >  }
+> > > > >  
+> > > > >  /**
+> > > > > @@ -323,7 +324,7 @@ int cap_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry)
+> > > > >  {
+> > > > >  	int error;
+> > > > >  
+> > > > > -	error = __vfs_removexattr(idmap, dentry, XATTR_NAME_CAPS);
+> > > > > +	error = vfs_remove_fscaps_nosec(idmap, dentry);
+> > > > 
+> > > > Uhm, I see that the change is logically correct... but the original
+> > > > code was not correct, since the EVM post hook is not called (thus the
+> > > > HMAC is broken, or an xattr change is allowed on a portable signature
+> > > > which should be not).
+> > > > 
+> > > > For completeness, the xattr change on a portable signature should not
+> > > > happen in the first place, so cap_inode_killpriv() would not be called.
+> > > > However, since EVM allows same value change, we are here.
+> > > 
+> > > I really don't understand EVM that well and am pretty hesitant to try an
+> > > change any of the logic around it. But I'll hazard a thought: should EVM
+> > > have a inode_need_killpriv hook which returns an error in this
+> > > situation?
+> > 
+> > Uhm, I think it would not work without modifying
+> > security_inode_need_killpriv() and the hook definition.
+> > 
+> > Since cap_inode_need_killpriv() returns 1, the loop stops and EVM would
+> > not be invoked. We would need to continue the loop and let EVM know
+> > what is the current return value. Then EVM can reject the change.
+> > 
+> > An alternative way would be to detect that actually we are setting the
+> > same value for inode metadata, and maybe not returning 1 from
+> > cap_inode_need_killpriv().
+> > 
+> > I would prefer the second, since EVM allows same value change and we
+> > would have an exception if there are fscaps.
+> > 
+> > This solves only the case of portable signatures. We would need to
+> > change cap_inode_need_killpriv() anyway to update the HMAC for mutable
+> > files.
+> 
+> I see. In any case this sounds like a matter for a separate patch
+> series.
 
-Yes.
-
->
-> > +
-> > +Pending localities are served in order by the chip descending orderm a=
-nd
-> > +one at a time:
-> > +
-> > +- Locality 0 has the lowest priority.
-> > +- Locality 5 has the highest priotiy.
->
->                                 priority.
->
-> > +
-> > +Further information on purpose and meaning of the localities can be fo=
-und
-> > +from section 3.2 of TCG PC Client Platform TPM Profile Specification.
-
-Thanks for the remarks. Too many typos but at least I think the story is
-is understandable and describes pretty well key elements of tpm_tis_core.
-
-BR, Jarkko
+Agreed.
 
