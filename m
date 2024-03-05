@@ -1,129 +1,96 @@
-Return-Path: <linux-integrity+bounces-1569-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1570-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05E26871EDB
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 13:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A9F64871F2E
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 13:29:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B53BC28789D
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 12:17:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59742288860
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 12:29:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 481C25C612;
-	Tue,  5 Mar 2024 12:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 507255B5AA;
+	Tue,  5 Mar 2024 12:27:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qvDZjgOt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VtvVEKGh"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A165C602;
-	Tue,  5 Mar 2024 12:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196E65C91C;
+	Tue,  5 Mar 2024 12:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709640929; cv=none; b=gEim7u3C+F/+ublZrm1ZwFSZ2H+ILpOBF1A5zM+TenxqzcI8NuEP1Odj7a68ka++LDd/f+pKkDHqtHPc2CyUvcPKkiifC8twTnXDpuSgtmkonSYsHF98+id52mbsnzIHnaYD/o0PMqU4+cK3bgnFXs/+pFfkmCLBxJg0DZy2p3A=
+	t=1709641662; cv=none; b=CoxyBGxIrgKQWSEXElZjzYQwGuvcmLQf3ao0Y9EW/JwV60Cvzl4bDqtrwCqrkOB3ozuftPPGLz4fs1W3/NK48gehUqx6hM6+gvCwIbVHE1BAO160giN5J9Fk4Ia8WM0TYlVsvMaV5d762KR1Vs8KWnvgKLkBzv2CfCrHp3fTJuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709640929; c=relaxed/simple;
-	bh=8XVY4yDvTbI92l/7aGIsmQNytdvsX7b8EhXWeJNDsv8=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=bS7R6XMt7+spS6USlYWcRIQNALP1nVgMtlc4fjuU2PKjTqEmpR/ceKkUYvtfunfvW21PlL+knGAKRD3uYi9yYj/MKQXK5oEfHh1d+2Ifa69ccuCoBZtttmV/X6rQFxrYBZwCm3fnLb20YOZFmUmA3TBjfGFj1lKYAjekL+4nHAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qvDZjgOt; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 425C2x3L007898;
-	Tue, 5 Mar 2024 12:15:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=2B5vC5/EsMpHo+R4RtClTfGr+IYp86B+aXqVoME+TRQ=;
- b=qvDZjgOtR446fZ6q9smD4Dwrtw7aCimSQGxIHRYO354t2Al9/a3Gt/Mg+dRYf9rtyqVO
- Kw8HyzWZTWSh9BKetx2ukrDddo/YDgOfx7yLPw4Bfa/PknXJwgu72xqe+lChPQ9zEFjl
- YyCxxLW0AH0ExkRJCKhw4AackBSvesQqKxGXt0kwoBiv4s7NMnqMXKf7P6BRqcpaqY89
- dsa2cVdfdJmMQ2ZHgPjnMLMe69TOW0N2zlm0C4U20kkDqzdYE7EEN/Cc/p/23nT+y3Pj
- RZEePT3QCUEBVFQ2I4ecXYOrgNAW4bav1kRWKuMRydZKSj1LKAWB+E7w9HrUguuqKFDj hw== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wp3248dr4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Mar 2024 12:15:19 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 425A5gF4025387;
-	Tue, 5 Mar 2024 12:15:19 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wmetyfhr4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Mar 2024 12:15:19 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 425CFGat30998952
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 5 Mar 2024 12:15:18 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 864A95806F;
-	Tue,  5 Mar 2024 12:15:16 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3B9E458051;
-	Tue,  5 Mar 2024 12:15:16 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.160.159])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  5 Mar 2024 12:15:16 +0000 (GMT)
-Message-ID: <987924a8c1e3e4e99a483e432f1418518af0b7aa.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: subsystem update for v6.8-rcX
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel
-	 <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date: Tue, 05 Mar 2024 07:15:15 -0500
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: z5zaDE47WWQw6Y0qibrKsr02IJuVICjp
-X-Proofpoint-ORIG-GUID: z5zaDE47WWQw6Y0qibrKsr02IJuVICjp
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1709641662; c=relaxed/simple;
+	bh=9Hv0NhDd5yJ2rN0EquGuHE0G93tjK43hLajBYWiBYns=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eu6sGvcXGS4hHQjfqlInF55v2ugxT6kq4+K7b/YeHcPat5qAMvLVtjYAfIdOoNFu5Tkh52/HmCIxmNkQpeFLMnXQAuq431ZRPl+QQgxOl8/5o86/ud740+JpTGOMJRT+cz0ETqpi3GRV6zcHrv6Hh6fBCVeqFB5TWeQyYVySLW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VtvVEKGh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB8FC43390;
+	Tue,  5 Mar 2024 12:27:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709641661;
+	bh=9Hv0NhDd5yJ2rN0EquGuHE0G93tjK43hLajBYWiBYns=;
+	h=From:To:Cc:Subject:Date:From;
+	b=VtvVEKGhn0ktSseMhbKlABxyzsDGI00ZprGz2oNogIMoDbc77/2pwNo2P5YUE8jEs
+	 5pdBQGkgR+9zB37m8ZDXOHGOSMB1V1fVEr7klH6Xe+0ROv6/Eqx5gxKdsmLLjst5Vm
+	 +Xp7QNSZCS/4voxzoc4esVKF92b1PYeFMInK1HNpS5SsdRpu7zDHwf1EijUtlG14sV
+	 5AF93MQV0c8pUKBdp6v0n5Yq8e3feRy5T8S0YfjZTBhOKTXp7Vumicr6EgsUnAt/Fy
+	 cQMJzmgoFU+3tReEwBJg6OmH7zwx4STR5jKh5tBbZDMR21pQLl/m+QLstHw/fSlXy0
+	 wVgqULvZu0bfw==
+From: Christian Brauner <brauner@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH] xattr: restrict vfs_getxattr_alloc() allocation size
+Date: Tue,  5 Mar 2024 13:27:06 +0100
+Message-ID: <20240305-effekt-luftzug-51913178f6cd@brauner>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-05_08,2024-03-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
- spamscore=0 phishscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2403050098
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1232; i=brauner@kernel.org; h=from:subject:message-id; bh=9Hv0NhDd5yJ2rN0EquGuHE0G93tjK43hLajBYWiBYns=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQ+59/W31H893LfGUGB9MXhRwPefne3Y1d1inio3R18p 6UvKym3o5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCL2Xgz/C1f9XX31XhrHpDO6 91IkjJU3Xn3ZWNh7r1D5yP37y72PJDP8U4988NZ/1+bMmByhTf49ht/kPGZ9m1UT1yYyR5/pzEp hPgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+The vfs_getxattr_alloc() interface is a special-purpose in-kernel api
+that does a racy query-size+allocate-buffer+retrieve-data. It is used by
+EVM, IMA, and fscaps to retrieve xattrs. Recently, we've seen issues
+where 9p returned values that amount to allocating about 8000GB worth of
+memory (cf. [1]). That's now fixed in 9p. But vfs_getxattr_alloc() has
+no reason to allow getting xattr values that are larger than
+XATTR_MAX_SIZE as that's the limit we use for setting and getting xattr
+values and nothing currently goes beyond that limit afaict. Let it check
+for that and reject requests that are larger than that.
 
-Here's a single fix to eliminate an unnecessary msg.
+Link: https://lore.kernel.org/r/ZeXcQmHWcYvfCR93@do-x1extreme [1]
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ fs/xattr.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-thanks,
-
-Mimi
-
-The following changes since commit 841c35169323cd833294798e58b9bf63fa4fa1de:
-
-  Linux 6.8-rc4 (2024-02-11 12:18:13 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/ tags/integrity-v6.8-fix
-
-for you to fetch changes up to 85445b96429057d87446bcb24ec0cac9ea9c7fdf:
-
-  integrity: eliminate unnecessary "Problem loading X.509 certificate" msg (2024-02-16 08:04:17 -0500)
-
-----------------------------------------------------------------
-integrity-v6.8-fix
-
-----------------------------------------------------------------
-Coiby Xu (1):
-      integrity: eliminate unnecessary "Problem loading X.509 certificate" msg
-
- security/integrity/digsig.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+diff --git a/fs/xattr.c b/fs/xattr.c
+index 09d927603433..a53c930e3018 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -395,6 +395,9 @@ vfs_getxattr_alloc(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	if (error < 0)
+ 		return error;
+ 
++	if (error > XATTR_SIZE_MAX)
++		return -E2BIG;
++
+ 	if (!value || (error > xattr_size)) {
+ 		value = krealloc(*xattr_value, error + 1, flags);
+ 		if (!value)
+-- 
+2.43.0
 
 
