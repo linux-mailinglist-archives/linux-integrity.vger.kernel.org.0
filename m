@@ -1,90 +1,115 @@
-Return-Path: <linux-integrity+bounces-1574-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1575-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 728998722C2
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 16:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB1F987230B
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 16:44:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E0B42888A8
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 15:28:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 634D02898F1
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 15:44:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7244F1272D7;
-	Tue,  5 Mar 2024 15:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D501272CB;
+	Tue,  5 Mar 2024 15:44:08 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DE212A152;
-	Tue,  5 Mar 2024 15:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A93085944;
+	Tue,  5 Mar 2024 15:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709652412; cv=none; b=jV3mMGXaGPWd27ULhksLTINqSH0Rss+VknDHfTg/p+JfHa53/jK2T97ADOES00jb8RP1I7pevVpiK+fk1cgz3O7kgKdyg1bWszrj/HrblSuK8Q3EXkzekswpZ07OE4XgOumPNzPX7bQHI7FGdVZRofg64yTkCaVxlTSxG0eUjQE=
+	t=1709653448; cv=none; b=XrBa6uqePs2OPwaZqIoyFOK/cLT84ZczEWkToFGfefg3Nz+M2f3ljZVKHoZfBcs3Jn8Olh5HSMzGHQJlmGHQ1WKo1sEMJtjOSFbTopmo1tWjNXruknVG4QsY+5gIMekhRrS5ynrFR53KhJn8vwp7Gw4PTj0640jvm0SC1Y+sk2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709652412; c=relaxed/simple;
-	bh=GRLqdqtSoP2VvufUGAGP/Ugnj3LtcoOOYKX/7xCkD5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eegI2e9KgZUMiB1wv579kthRsZZEIZ9KvPQdLufmbD7Yy3cQPnZb3bgRjUtOV2TWk5LkoBGtpdva0xsvRkZmDnkt8oMBhUOZpQj3jFpwQn7cY5WVQf9L77gh/k3uuMP77VbIHMFYn4s3qbMujaTjnyAAqpHviNj8EqaHfxcUMQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id 7336452B; Tue,  5 Mar 2024 09:17:53 -0600 (CST)
-Date: Tue, 5 Mar 2024 09:17:53 -0600
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] xattr: restrict vfs_getxattr_alloc() allocation size
-Message-ID: <20240305151753.GA15883@mail.hallyn.com>
-References: <20240305-effekt-luftzug-51913178f6cd@brauner>
+	s=arc-20240116; t=1709653448; c=relaxed/simple;
+	bh=MnnHCdDfPrQPB8WD5/lqBatvO68cm49it20wP3Yp/aY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SGdLYjcXLWBCitB1HPozNI2e3Gglt4G/vxWR/2b2NfVKoLoEx0icMYV2XAbSrJKGMNT5yty6D+7W19oKffH79FfFkadvqSYDsi57YvLbSNFGHausjBmQdaZdQbGq/0NcFqMHREOFCIFLvxk953oM9du7yG6H/9LEyzIe1qZRdMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [141.14.220.34] (g34.guest.molgen.mpg.de [141.14.220.34])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 92E3261E5FE36;
+	Tue,  5 Mar 2024 16:43:49 +0100 (CET)
+Message-ID: <84dd5c01-906c-4e13-9d8c-e5350f718d56@molgen.mpg.de>
+Date: Tue, 5 Mar 2024 16:43:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305-effekt-luftzug-51913178f6cd@brauner>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tpm,tpm_tis: Avoid warning splat at shutdown
+Content-Language: en-US
+To: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc: jarkko@kernel.org, peterhuewe@gmx.de, LinoSanfilippo@gmx.de,
+ p.rosenberger@kunbus.com, lukas@wunner.de, jgg@ziepe.ca,
+ linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20240201113646.31734-1-l.sanfilippo@kunbus.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20240201113646.31734-1-l.sanfilippo@kunbus.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 05, 2024 at 01:27:06PM +0100, Christian Brauner wrote:
-> The vfs_getxattr_alloc() interface is a special-purpose in-kernel api
-> that does a racy query-size+allocate-buffer+retrieve-data. It is used by
-> EVM, IMA, and fscaps to retrieve xattrs. Recently, we've seen issues
-> where 9p returned values that amount to allocating about 8000GB worth of
-> memory (cf. [1]). That's now fixed in 9p. But vfs_getxattr_alloc() has
-> no reason to allow getting xattr values that are larger than
-> XATTR_MAX_SIZE as that's the limit we use for setting and getting xattr
-> values and nothing currently goes beyond that limit afaict. Let it check
-> for that and reject requests that are larger than that.
+Dear Lino,
+
+
+Thank you for the patch.
+
+Am 01.02.24 um 12:36 schrieb Lino Sanfilippo:
+> If interrupts are not activated the work struct 'free_irq_work' is not
+> initialized. This results in a warning splat at module shutdown.
 > 
-> Link: https://lore.kernel.org/r/ZeXcQmHWcYvfCR93@do-x1extreme [1]
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-
-Acked-by: Serge Hallyn <serge@hallyn.com>
-
+> Fix this by always initializing the work regardless of whether interrupts
+> are activated or not.
+> 
+> cc: stable@vger.kernel.org
+> Fixes: 481c2d14627d ("tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs")
+> Reported-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Closes: https://lore.kernel.org/all/CX32RFOMJUQ0.3R4YCL9MDCB96@kernel.org/
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > ---
->  fs/xattr.c | 3 +++
->  1 file changed, 3 insertions(+)
+>   drivers/char/tpm/tpm_tis_core.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/fs/xattr.c b/fs/xattr.c
-> index 09d927603433..a53c930e3018 100644
-> --- a/fs/xattr.c
-> +++ b/fs/xattr.c
-> @@ -395,6 +395,9 @@ vfs_getxattr_alloc(struct mnt_idmap *idmap, struct dentry *dentry,
->  	if (error < 0)
->  		return error;
->  
-> +	if (error > XATTR_SIZE_MAX)
-> +		return -E2BIG;
-> +
->  	if (!value || (error > xattr_size)) {
->  		value = krealloc(*xattr_value, error + 1, flags);
->  		if (!value)
-> -- 
-> 2.43.0
-> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 1b350412d8a6..64c875657687 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -919,8 +919,6 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+>   	int rc;
+>   	u32 int_status;
+>   
+> -	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+> -
+>   	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+>   				       tis_int_handler, IRQF_ONESHOT | flags,
+>   				       dev_name(&chip->dev), chip);
+> @@ -1132,6 +1130,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>   	priv->phy_ops = phy_ops;
+>   	priv->locality_count = 0;
+>   	mutex_init(&priv->locality_count_mutex);
+> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+>   
+>   	dev_set_drvdata(&chip->dev, priv);
+
+This is commit d6fb14208e22 in jarkko/next.
+
+I tested this patch on top of Linux 6.8-rc7 on a Dell OptiPlex 5055 [1] 
+and it fixes the issue there too.
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://lore.kernel.org/all/CYJ163J3I09U.2XMVZ0BLWV1Y1@seitikki/
 
