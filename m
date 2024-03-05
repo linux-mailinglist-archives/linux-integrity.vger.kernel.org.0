@@ -1,57 +1,53 @@
-Return-Path: <linux-integrity+bounces-1572-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1573-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16A92872103
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 15:00:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 508F4872184
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 15:34:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 480BF1C223F1
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 14:00:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05B731F22C76
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 14:34:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A6C285C7D;
-	Tue,  5 Mar 2024 14:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C22E41C6B;
+	Tue,  5 Mar 2024 14:33:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lkYGzngk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/0nMbmG"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C1D8612C;
-	Tue,  5 Mar 2024 14:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1078986AC2;
+	Tue,  5 Mar 2024 14:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709647201; cv=none; b=NOGxa2Xaxzb8dZYCpKnU3nXYyvT3YZgwobsgLbd3Nhd+a0HbrBLvMN3oYQutVJX6OgivVvC9zpeIXJGGxc/COiTSy8UPIOwCQ5Edb2v1Wt4k0yfkizK+65pKeU2tdq0IJ3GaP2UeqG3aX5DBeiS2twP0AKfcZeqo4j2ox0rQLY8=
+	t=1709649239; cv=none; b=b6r5xlG5cgnNzP/QhDNQmKDQK5QHEw+A0Du5+4cFi+oyuZr1oGk87iPltMVLHaVrT5Y7hqL+/2eVwejuDs1ursVCUwCPfuOe+2C13yUjlVr5lvKEelc1pJndljRS+oscDbUL+XkWI1nlxhqWDZzoGuKnmrbCEE9mtgedKhGm+RQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709647201; c=relaxed/simple;
-	bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=;
+	s=arc-20240116; t=1709649239; c=relaxed/simple;
+	bh=eBiqSkWyhcWNjSZwXg5KFgXsg8vQMzr1zNnOysu8a2M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DnbOOCNIftlonK7d+Z9UpfJEQGTHBopsbPTlNJSX4oMMRADTV065bu5Nup6i6Vc0uZDRBsGROs5PVdyxgfeRfq4ljMVakQsQ7ce2b5DflZvX5mXsTj1rdtt1ewG7t9E7I+ktvR9mOT+amC8m55MHJityA65GFchiTb/R+rr515o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lkYGzngk; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=lkYGzngkN4KeD9AeqK0py5VOT+
-	OS4WQl6feET5X6ScYZm3bOOv+D14V9xiaQfTBra9ddd8mkpAEJpHC38SUFOgq2suj0KgULBpYNoED
-	7y71hcIdPsLoOXq1kSvAx7YwLa4OlXM1jLAmZGMMjqZURALMVRB4MlVsmdZloxJfb8nZgzE2ByuE1
-	TyIPzM18NH62FktU5paFhmP/ufXzqH1H/+QL/4wTTLZ9cjZxR3fSSGfLBAgw4M06p9Vpf96lZUl+8
-	RK03scoEjnN46EvJoFkNgTfAoOuSZm7eTPoPwqf3569xDng4ihGdnTJ2P5cx0buKxhDiA0O80SUNE
-	rpgQQ/JA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rhVKp-0000000DvnQ-1ltE;
-	Tue, 05 Mar 2024 13:59:59 +0000
-Date: Tue, 5 Mar 2024 05:59:59 -0800
-From: Christoph Hellwig <hch@infradead.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bem73UcUUVH3lljhw/NJ0bq3+DfHDi4G8cGfS9sLh6TUivw8DFuu1vexg+BwqED0/DtTZKuDZ+QfgstRgGtabTegfH8oWXaK6d0F4WzE4jpTt7dlBcVsSQ0Iz/opKm2ONDR5Yv4eyN81wPmyIx81ucByEGviR/2l8nv5Mr8sK+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/0nMbmG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED39C43390;
+	Tue,  5 Mar 2024 14:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709649238;
+	bh=eBiqSkWyhcWNjSZwXg5KFgXsg8vQMzr1zNnOysu8a2M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z/0nMbmGohSXfrmGLUjMCdBQKtS+6Mqgc/CybNiPKfef7dy3X5VTK4bBqHIXZH75B
+	 v8evXrJUgaOTbPuAc5Pli+KFqPUyG4xBTsz+48TRzODfYRLCaSXR3434RSZpudsDnD
+	 neV4Q4mXN9qGiIJaRS0BjIIm6dgpL7lRbN2FtjaZETUtVhp7iIeqSAknWpH5I2uCzW
+	 BoYT2+Hs/Nh4aRYwRPwznbZOYjTe5W0r1LAmLMck1yHiz5wvufXZIR2+tg8h64p/24
+	 XWI8e+u8QuknCVXQ0gF+fnVYBR7Iu5WcIk+mufKRa6/8OfRU2pdAOfI6U6EvbsdfuC
+	 tv15LmvPhn0vA==
+Date: Tue, 5 Mar 2024 08:33:57 -0600
+From: Seth Forshee <sforshee@kernel.org>
 To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Seth Forshee <sforshee@kernel.org>,
-	linux-integrity@vger.kernel.org,
+Cc: linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
 	linux-security-module@vger.kernel.org
 Subject: Re: [PATCH] xattr: restrict vfs_getxattr_alloc() allocation size
-Message-ID: <ZeclX-ITKr8pHjAJ@infradead.org>
+Message-ID: <ZectVeZtw/EmfAUA@do-x1extreme>
 References: <20240305-effekt-luftzug-51913178f6cd@brauner>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -62,9 +58,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20240305-effekt-luftzug-51913178f6cd@brauner>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Looks good:
+On Tue, Mar 05, 2024 at 01:27:06PM +0100, Christian Brauner wrote:
+> The vfs_getxattr_alloc() interface is a special-purpose in-kernel api
+> that does a racy query-size+allocate-buffer+retrieve-data. It is used by
+> EVM, IMA, and fscaps to retrieve xattrs. Recently, we've seen issues
+> where 9p returned values that amount to allocating about 8000GB worth of
+> memory (cf. [1]). That's now fixed in 9p. But vfs_getxattr_alloc() has
+> no reason to allow getting xattr values that are larger than
+> XATTR_MAX_SIZE as that's the limit we use for setting and getting xattr
+> values and nothing currently goes beyond that limit afaict. Let it check
+> for that and reject requests that are larger than that.
+> 
+> Link: https://lore.kernel.org/r/ZeXcQmHWcYvfCR93@do-x1extreme [1]
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Makes sense.
+
+Reviewed-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
 
