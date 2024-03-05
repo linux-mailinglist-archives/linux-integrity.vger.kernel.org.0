@@ -1,155 +1,129 @@
-Return-Path: <linux-integrity+bounces-1568-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1569-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FFAC871934
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 10:12:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05E26871EDB
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 13:17:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 213C1281674
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 09:12:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B53BC28789D
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 Mar 2024 12:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7634850276;
-	Tue,  5 Mar 2024 09:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 481C25C612;
+	Tue,  5 Mar 2024 12:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VHAMZBJR"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qvDZjgOt"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304B84DA1F;
-	Tue,  5 Mar 2024 09:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A165C602;
+	Tue,  5 Mar 2024 12:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709629936; cv=none; b=gACL2+hl1sY0dlb/04uxAT7bIt62Jh3kNvkMz+l3XUkiqMbrw2GSZooMHe66B4h44uXNHUQCI+Y8kQNddOnRznWGEA9L3OCzWB+VIPxgDBgUvxHskWZDKzUyA6fRw4QM7yEGDZ0ZUVA+YJ8rSN0EsW6NdvD3Rlfe0+0uxwwCG5Y=
+	t=1709640929; cv=none; b=gEim7u3C+F/+ublZrm1ZwFSZ2H+ILpOBF1A5zM+TenxqzcI8NuEP1Odj7a68ka++LDd/f+pKkDHqtHPc2CyUvcPKkiifC8twTnXDpuSgtmkonSYsHF98+id52mbsnzIHnaYD/o0PMqU4+cK3bgnFXs/+pFfkmCLBxJg0DZy2p3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709629936; c=relaxed/simple;
-	bh=LQj0UdUDprFZhCk/sD0ivlB0RR+zzlR48MZkUdMbHFg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DySCKimLNW2oEK1/x35V1r9zaCURNEc9yFY4AzfV7QJVj5FTwR4xS6tI77dkCbfXlsRczfcNRut3lZElc8KHFTpsV9GILKyGcnqNl5wJEkSekvTQ3ooK9fIp2VjLPT3uAqF+oeIb4mO/upAKyANrqVFnGH+hT1ar+88CrKF7JH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VHAMZBJR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A036AC433C7;
-	Tue,  5 Mar 2024 09:12:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709629935;
-	bh=LQj0UdUDprFZhCk/sD0ivlB0RR+zzlR48MZkUdMbHFg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VHAMZBJR6iOLpsCagpRqBCTT6yOZZ/40nSbEHm6Deht9E7xa7MAJBGLwYAxT5N2AV
-	 qKjKeS42MQwQu7B5CNdNODxPK5aWJqje6X5cwSnQCQO/J8u9OD+EYKLBylhsMcO+at
-	 8TRgDbije51zVdjQ62cqeSPZjsLBGjbwyp7Y99g21Nvq0FFm3qGWM2vePr6XAvEkSA
-	 6ZsVoWMJrOh2P6znfrm73CEmJi+M4ZLE+YgpIoHKC08tRCPt9NELXlToCkxgpdgnfw
-	 N3KdD4dsQs1c+7TQ+Uu+dAlE17b+m/G1nzKWMh9cawmAj6ozeLIy2zCxLSioPfMW8y
-	 azUpWTy5lw/7w==
-Date: Tue, 5 Mar 2024 10:12:06 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, 
-	Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>, 
-	James Morris <jmorris@namei.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jan Kara <jack@suse.cz>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, audit@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, linux-unionfs@vger.kernel.org
-Subject: Re: [PATCH v2 24/25] commoncap: use vfs fscaps interfaces
-Message-ID: <20240305-fachjargon-abmontieren-75b1d6c67a83@brauner>
-References: <20240221-idmap-fscap-refactor-v2-0-3039364623bd@kernel.org>
- <20240221-idmap-fscap-refactor-v2-24-3039364623bd@kernel.org>
- <dcbd9e7869d2fcce69546b53851d694b8ebad54e.camel@huaweicloud.com>
- <ZeXpbOsdRTbLsYe9@do-x1extreme>
- <a7124afa6bed2fcadcb66efa08e256828cd6f8ab.camel@huaweicloud.com>
- <ZeX9MRhU/EGhHkCY@do-x1extreme>
+	s=arc-20240116; t=1709640929; c=relaxed/simple;
+	bh=8XVY4yDvTbI92l/7aGIsmQNytdvsX7b8EhXWeJNDsv8=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=bS7R6XMt7+spS6USlYWcRIQNALP1nVgMtlc4fjuU2PKjTqEmpR/ceKkUYvtfunfvW21PlL+knGAKRD3uYi9yYj/MKQXK5oEfHh1d+2Ifa69ccuCoBZtttmV/X6rQFxrYBZwCm3fnLb20YOZFmUmA3TBjfGFj1lKYAjekL+4nHAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qvDZjgOt; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 425C2x3L007898;
+	Tue, 5 Mar 2024 12:15:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=2B5vC5/EsMpHo+R4RtClTfGr+IYp86B+aXqVoME+TRQ=;
+ b=qvDZjgOtR446fZ6q9smD4Dwrtw7aCimSQGxIHRYO354t2Al9/a3Gt/Mg+dRYf9rtyqVO
+ Kw8HyzWZTWSh9BKetx2ukrDddo/YDgOfx7yLPw4Bfa/PknXJwgu72xqe+lChPQ9zEFjl
+ YyCxxLW0AH0ExkRJCKhw4AackBSvesQqKxGXt0kwoBiv4s7NMnqMXKf7P6BRqcpaqY89
+ dsa2cVdfdJmMQ2ZHgPjnMLMe69TOW0N2zlm0C4U20kkDqzdYE7EEN/Cc/p/23nT+y3Pj
+ RZEePT3QCUEBVFQ2I4ecXYOrgNAW4bav1kRWKuMRydZKSj1LKAWB+E7w9HrUguuqKFDj hw== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wp3248dr4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Mar 2024 12:15:19 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 425A5gF4025387;
+	Tue, 5 Mar 2024 12:15:19 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wmetyfhr4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 05 Mar 2024 12:15:19 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 425CFGat30998952
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 5 Mar 2024 12:15:18 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 864A95806F;
+	Tue,  5 Mar 2024 12:15:16 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3B9E458051;
+	Tue,  5 Mar 2024 12:15:16 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.160.159])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  5 Mar 2024 12:15:16 +0000 (GMT)
+Message-ID: <987924a8c1e3e4e99a483e432f1418518af0b7aa.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity: subsystem update for v6.8-rcX
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel
+	 <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date: Tue, 05 Mar 2024 07:15:15 -0500
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: z5zaDE47WWQw6Y0qibrKsr02IJuVICjp
+X-Proofpoint-ORIG-GUID: z5zaDE47WWQw6Y0qibrKsr02IJuVICjp
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZeX9MRhU/EGhHkCY@do-x1extreme>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-05_08,2024-03-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
+ spamscore=0 phishscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2403050098
 
-On Mon, Mar 04, 2024 at 10:56:17AM -0600, Seth Forshee (DigitalOcean) wrote:
-> On Mon, Mar 04, 2024 at 05:17:57PM +0100, Roberto Sassu wrote:
-> > On Mon, 2024-03-04 at 09:31 -0600, Seth Forshee (DigitalOcean) wrote:
-> > > On Mon, Mar 04, 2024 at 11:19:54AM +0100, Roberto Sassu wrote:
-> > > > On Wed, 2024-02-21 at 15:24 -0600, Seth Forshee (DigitalOcean) wrote:
-> > > > > Use the vfs interfaces for fetching file capabilities for killpriv
-> > > > > checks and from get_vfs_caps_from_disk(). While there, update the
-> > > > > kerneldoc for get_vfs_caps_from_disk() to explain how it is different
-> > > > > from vfs_get_fscaps_nosec().
-> > > > > 
-> > > > > Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-> > > > > ---
-> > > > >  security/commoncap.c | 30 +++++++++++++-----------------
-> > > > >  1 file changed, 13 insertions(+), 17 deletions(-)
-> > > > > 
-> > > > > diff --git a/security/commoncap.c b/security/commoncap.c
-> > > > > index a0ff7e6092e0..751bb26a06a6 100644
-> > > > > --- a/security/commoncap.c
-> > > > > +++ b/security/commoncap.c
-> > > > > @@ -296,11 +296,12 @@ int cap_capset(struct cred *new,
-> > > > >   */
-> > > > >  int cap_inode_need_killpriv(struct dentry *dentry)
-> > > > >  {
-> > > > > -	struct inode *inode = d_backing_inode(dentry);
-> > > > > +	struct vfs_caps caps;
-> > > > >  	int error;
-> > > > >  
-> > > > > -	error = __vfs_getxattr(dentry, inode, XATTR_NAME_CAPS, NULL, 0);
-> > > > > -	return error > 0;
-> > > > > +	/* Use nop_mnt_idmap for no mapping here as mapping is unimportant */
-> > > > > +	error = vfs_get_fscaps_nosec(&nop_mnt_idmap, dentry, &caps);
-> > > > > +	return error == 0;
-> > > > >  }
-> > > > >  
-> > > > >  /**
-> > > > > @@ -323,7 +324,7 @@ int cap_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry)
-> > > > >  {
-> > > > >  	int error;
-> > > > >  
-> > > > > -	error = __vfs_removexattr(idmap, dentry, XATTR_NAME_CAPS);
-> > > > > +	error = vfs_remove_fscaps_nosec(idmap, dentry);
-> > > > 
-> > > > Uhm, I see that the change is logically correct... but the original
-> > > > code was not correct, since the EVM post hook is not called (thus the
-> > > > HMAC is broken, or an xattr change is allowed on a portable signature
-> > > > which should be not).
-> > > > 
-> > > > For completeness, the xattr change on a portable signature should not
-> > > > happen in the first place, so cap_inode_killpriv() would not be called.
-> > > > However, since EVM allows same value change, we are here.
-> > > 
-> > > I really don't understand EVM that well and am pretty hesitant to try an
-> > > change any of the logic around it. But I'll hazard a thought: should EVM
-> > > have a inode_need_killpriv hook which returns an error in this
-> > > situation?
-> > 
-> > Uhm, I think it would not work without modifying
-> > security_inode_need_killpriv() and the hook definition.
-> > 
-> > Since cap_inode_need_killpriv() returns 1, the loop stops and EVM would
-> > not be invoked. We would need to continue the loop and let EVM know
-> > what is the current return value. Then EVM can reject the change.
-> > 
-> > An alternative way would be to detect that actually we are setting the
-> > same value for inode metadata, and maybe not returning 1 from
-> > cap_inode_need_killpriv().
-> > 
-> > I would prefer the second, since EVM allows same value change and we
-> > would have an exception if there are fscaps.
-> > 
-> > This solves only the case of portable signatures. We would need to
-> > change cap_inode_need_killpriv() anyway to update the HMAC for mutable
-> > files.
-> 
-> I see. In any case this sounds like a matter for a separate patch
-> series.
+Hi Linus,
 
-Agreed.
+Here's a single fix to eliminate an unnecessary msg.
+
+thanks,
+
+Mimi
+
+The following changes since commit 841c35169323cd833294798e58b9bf63fa4fa1de:
+
+  Linux 6.8-rc4 (2024-02-11 12:18:13 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/ tags/integrity-v6.8-fix
+
+for you to fetch changes up to 85445b96429057d87446bcb24ec0cac9ea9c7fdf:
+
+  integrity: eliminate unnecessary "Problem loading X.509 certificate" msg (2024-02-16 08:04:17 -0500)
+
+----------------------------------------------------------------
+integrity-v6.8-fix
+
+----------------------------------------------------------------
+Coiby Xu (1):
+      integrity: eliminate unnecessary "Problem loading X.509 certificate" msg
+
+ security/integrity/digsig.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
 
