@@ -1,134 +1,244 @@
-Return-Path: <linux-integrity+bounces-1597-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1598-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A287873BB6
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 17:08:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DD52873CBB
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 17:57:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED56D1F21D0B
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 16:08:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3AD8B2154A
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 16:57:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3533313540F;
-	Wed,  6 Mar 2024 16:08:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 148911386D3;
+	Wed,  6 Mar 2024 16:57:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RXPwStUE"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="sV2DtKmZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic304-27.consmr.mail.ne1.yahoo.com (sonic304-27.consmr.mail.ne1.yahoo.com [66.163.191.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE94135401;
-	Wed,  6 Mar 2024 16:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D136B605DC
+	for <linux-integrity@vger.kernel.org>; Wed,  6 Mar 2024 16:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.191.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709741317; cv=none; b=eCJwb52rY4kB7GZeLSB7hDaUGH7HUJoeLwbLGk8BQ48APTL9+pI7Xi1DtbQt/vqWiTlzCzRUpESPWxIc3VLKqp3YyD0ehjZaSAnKfHTwu/v4Y10XAGQtohrDn9or6wz4PtwAHDUN3MLmMayqKdWXb0XDg23c8p3VAWkmlVU1odc=
+	t=1709744229; cv=none; b=MTqFYYG/uhnOiozG6z1G/k1Hm2g7heVo83nIQoQ6FSW4IeQ4Y6Ue8sA1GpTtGxYKVWEwcRHpRgXqFK+AWmAWJfxRbFrFc6Dtbe/ENFYvTuc+mtYQgZjl0QeEbENUQwtoVU5OYiFyBgnIXel9DYI4gRbDzxsiaiMg/GAeWdFZR44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709741317; c=relaxed/simple;
-	bh=LGcNDDbG42U9lX5rQysNgwS6e76I7h8OyMh9iGSYW80=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=k6S/4v/jjvquP4f3qKyAfie8YAcWpwsZIPv8OR8659ak5PXCUdV1CY+y4BVb70id9z60hQn1IA0O1Bx5PyUcS62caWoE9BWaQ/17O80kBLpWi3gMs6Q0fTiTJW9Rfo1y5EiR40Ie7Dqq0+W3G0Ms4/fCLrY/5WaQ1Zis8G3D7Fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RXPwStUE; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 426G7fqJ022425;
-	Wed, 6 Mar 2024 16:08:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=0j9gJbumXd6zptHGYG2RBhG8qWhL+f6Mp6U0BlqtkhY=;
- b=RXPwStUE1l4/wZgEkrc1LzWck6QKS+znwOCma8fT0r5vBCSy1tkjh1omF5jozzzHx1fY
- TuPU0IzL4BQ+sKYx211xuc6bE0/0eUkluujE0PkEX6w/AbaghM3wvuGDE2X6OYdYjrxc
- bsT2OfPsOOjGA/UenXqpzouYbvyODCdn84Gvgd34WxGsGGcKgOsTYvZyrgAvWXvyjQdy
- YIWWGJVr5AMypETus7hGk7sH+JKpeU4ojN2qoT8LZQR15UXjsrDu5vVwzGBpGQ7TAwqD
- TccavYQpS3hPgliUeZWgMNEQ4zxCJH6G4fCzPMiG1tc0SMQOr/HSCjoGxPcbg0PXC9Q6 sg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wpuqn01fw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 16:08:26 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 426G8JD7025311;
-	Wed, 6 Mar 2024 16:08:26 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wpuqn01f1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 16:08:26 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 426FtCAc006067;
-	Wed, 6 Mar 2024 16:08:25 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wmeet7xj5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 16:08:25 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 426G8L8W27459926
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 6 Mar 2024 16:08:23 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 69A5158067;
-	Wed,  6 Mar 2024 16:08:21 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D0BF558052;
-	Wed,  6 Mar 2024 16:08:20 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  6 Mar 2024 16:08:20 +0000 (GMT)
-Message-ID: <b6f74cd0-d1c8-4a6f-a05d-364595c5b079@linux.ibm.com>
-Date: Wed, 6 Mar 2024 11:08:20 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] Preserve TPM log across kexec
-Content-Language: en-US
-To: mpe@ellerman.id.au, linux-integrity@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc: linux-kernel@vger.kernel.org, jarkko@kernel.org, rnsastry@linux.ibm.com,
-        peterhuewe@gmx.de, viparash@in.ibm.com
-References: <20240306155511.974517-1-stefanb@linux.ibm.com>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240306155511.974517-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: CizILsSMrSfNKbP7kCQ9XhxIyaOzFfT8
-X-Proofpoint-GUID: Vt9-ZaL_JWo0hGOQxy1b3juNtgpFLarn
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1709744229; c=relaxed/simple;
+	bh=DB+sDU/M+USWi3IkAkYPXXij67XzJa642gnHaaSiOns=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HMCXgtQY9NZjkuQDN7NY581V5XMRMcFgi7jR1ItLFXjQgbqToRTN+uLOwEIgnCV7F9GyV8Oc1OuR1ZgR3CZFm7TB2ds8vR67RtaPJs+fVuFYS926PHUKT2BOLxpLlsZ9HgWXXpy3jfl0LczPhVUANnBYDjOoIjub0npvEmQZ+gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=sV2DtKmZ; arc=none smtp.client-ip=66.163.191.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1709744225; bh=aNAjDWeJw8zalTZ9wVamqZVMgmFVPK14WsEI1ujAZJI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=sV2DtKmZjaL+uTYLBLxqOx9SLTVY6RykUqUdzRvsIYKJ2t2YgZnqcQW5lA3JpTGkyBn4vfHV+dGOn6F6tQHpldS0cAo6Xd+DZ9nzFSEeDGRLNaXbf3jmLJGPgJjmRqS2DKrxUY3+1gqhhjX7haST495VT4tRm/vdcQ+ZRg16T0lC5W17wTKroJyqprEKhXueeHg7nEonxLUrW3ypNNICycWUnItSXBFNurO99CufaynGXpTIQpEJbEJspPxpyCB6B65zY0HnymFvInWbcEftLjOmudFGq2JWgE0tnbJykbFAh915xCIxppVVxipb8BmvwtpH2DPYTESgZDGUbqQw+w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1709744225; bh=hT99byMjlTQzPqMcbNopNL4TqhusiS8HbWUebtdcOX9=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ajHZ+N6uNm5s+E/fUSYDSrjRrRo5ah2w+QQHlRMOaQonm/z/xWZ3JSXYKiQUyUXv1kJf9CkiymgOMMuq/ExOYYMMcF36VZaS6mNXpDOwfrvhOYxp1HqeZggwKpzwNuX/lKivRbksdvpp2CPK582aDSWIlcvdcZlB6XsVKFILPrR9q0dqdlNDTaU9HxUJrlZgcU9DrZFGZ74sCImLX06KBUBRYOVJXqsUo1xaScwmQxSceUPBrz0Fds2xp+mHSIGlpnRZq7yTQZiX3yPSWIYwSivQ9Yf5aMCu1WaWjjMuBtebzI1f/HFmzMMAIHYG4KdAB+wQnvVDQspS7anZmaAqZg==
+X-YMail-OSG: bGf.osIVM1kTnWYb0egr0H0.6XCAHkRpE7FKdQE3BTVHCIfehvfwRRIYzVzZbj6
+ TAslbBVQqhpaOCWxumDFKBt8BrKxE0MqJFPqGoek50I6gIy4WAy0VAqEaYZLktXlwULsm.58TOPD
+ Ang.fYwEBq5Q.eUgVV0q._.UYebj3c5Pi4GmFlUHxba1QypBJWodTOUjXp_w7zUGc4Nmq7twr35.
+ 75a5pdJ9u.YZVnOwDH2SOubyCrRb1cXm623Hpud.OGRKnV.FlKAyvpJnZ_raFSAP2ceFrJe6xioj
+ Nb2q3O39QMDK_1DbbFGifYU8o57R8quIcpsY.FKAaBJVzB54.BpYnm8eiciy.s1wGAxOCXgnxrNC
+ CnnJYO.qX68.3lAszqiob1bs5OSxSGlfcZ5S7I9YP6a3wklYlMBWCZkLfrHXV2Tab5PJWTbP9V2w
+ 0KmTxNj6aymcR0T9.S7lc3y8y3gM43ElZWrnq8M5FMmg7v0YArckcr0ehm9lrGpQkgZDRpAJxy0Q
+ m1Vh0ewRIpT_vgqtZjpYn73bCRFFH39YXB9q7j0S4Y7l_hw8bJIVnbt87dNKQQbeQAH9bRTBJYbO
+ RQ1oFoDTyyI0sOzLgqdbjG4xNPbc6pfdbRSP4GNrihv.QaoQrwEpokXlcYAuS74DSbvIoGQfmIU6
+ h8vsdhHpDaSwMz2s3Nq2u5UWYzR6ReKsp713_Hq_bJTgyQmwHy_EsvLym9gNjjU.QY6plPT9ldE9
+ FqGBiSFNkOT53xW0MrCn9iwKxGmodVuSZsEMg3T3QT2azV9sqh0k29doZQ10f0iWRz4FXW5.cq0F
+ Q6X6XqGatQTs.KqH.eFmx8fud7w3UJ2Wh18geOBJbenQivNR4djdmPWZfzAfZP9pm7a_Ttmufrk2
+ 9Hvush5dDpqpmeokFi6k_ZWg7ixtpbS7WhhBZz7GFxk487RmXkwwqR622IKik6QPBgHUu8eSDv3U
+ M_D6x13XlMUuzP1MVpgRzpP6eptmZYeHuDxXQ3wnR8wb5SOqj8Tjaa2WQqP5OgxtvETphl1WKAFS
+ IJv_4Z_Z4HLP1Pw0_kXhUZB3zQRq_XCXU_9UMX.eh2tNrErjXb4tkmDv8HDKE7GJyiVQsAzxYbQk
+ KTvFkdfVpmsxTzl7aBuG9t1cUg7P7BXhDK_XfFLz61eWq9bxFx_ntt.C_b0txNYCG1SzFu70tvJB
+ wSwBFWNNtPizmWRu6OL.GCWP0jjR8WMniItwA2i_7vQLm8pphLeiXWmq49zE5J9e6jlO4TARznU7
+ ZWnbQnv.bYvMbIORhxml_wgeOB_v6VAqM_8_5FJsml7KYemCH2IjJVYJKcWR93aG2MWx2fy9Fuuh
+ igYCdnOpTqrnMmK.wJ14MuzSMVLzx5ziQs1yNCZ9iP7ucDLPtbmnTc.wT5t7hvXlbrOo3UMKrYX6
+ G2v46sjA3FOXVJt3_O8neKpJT1iOiD77NeXC8LjypMAXKijwDd.7kPVb5b_islB.hHvwdCnpaoSM
+ Gb8swX_Cte4.nlEQzllzViLpAflUMxnT6lKH6i3c.PzZjzuslS1Y8MsxRzv5sjhBTOcM2TMboFZf
+ rZLkTVTB3WUSymoVsctVo1cOuihEVDCU_6jC7_MGoo3.FAnWS5ryfbm.9hF_CsP_JmbrbpEBRbNm
+ ZdUU9lcLmEs8_sKkv1j8ldClY60r51VFAcunt7HJO4yX1VvFqPv7pkzya3x_gksv6YX7Wfs_PINm
+ uVtk7pNYHHPr4Om85xLTrWsfztg2q1UZqZ7YAG.5guLVx1NDWqKM8gin2hp37sxxmfR.at3c363d
+ rS0wR0LxESCofSB3JukhBBXL2gI6CzH0epiKIJCOP5_.ah1XMewQTRK.8cBPHS0PXfoEDfnYsKkF
+ beAkXHNUMfSbX25Jk8VZcLy0ONnj9ZlgSip4wxPL5Gmg7xmSZVpAQj.LzAag663p4c.0h1WhamBj
+ 981WxySdIxLZlI22ZQI7m1.ThV4yuMjQqNMzO1xhHBBNe.bdZShrmwW7w3Ad1m2u.r_1frYZPkfO
+ CNIKC3H8e4RBG89NrgB_vNkEliNBpx6dSDhvt0RAjyYnnt6v_636.bg5JgI_8N5SSjhxsycHANUk
+ etm.404j_sfJHOZZjp8_cXEwbHwqrg.t_WZr7toIxuHWiIp0zDcyYZfVNxWIapl.bR3wT36d6f6j
+ qDE507ELgaIfFQ5PIgXnDIs.5MAhFKEQtQETpXa2wN17njfArJl.TS4JS.peP34uILF5m0o051Hb
+ 3.ezG8IJFfS3yrB8I60q.7hvrLZv6LMuiskZCcWSZmtO__qfvRZUD2x6_nbDkPkja.StcqYRBJtj
+ jRESLtrcr
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 8a719fc2-1256-4236-bddd-8849d178ba2e
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Wed, 6 Mar 2024 16:57:05 +0000
+Received: by hermes--production-gq1-5c57879fdf-kht2b (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 58294bfc0cc78b4b24de1cb3e48bb175;
+          Wed, 06 Mar 2024 16:56:59 +0000 (UTC)
+Message-ID: <5c99f987-d359-4366-984f-fe36fcff601b@schaufler-ca.com>
+Date: Wed, 6 Mar 2024 08:56:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-06_10,2024-03-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 clxscore=1015
- spamscore=0 suspectscore=0 mlxscore=0 malwarescore=0 bulkscore=0
- mlxlogscore=895 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2403060130
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v39 01/42] integrity: disassociate ima_filter_rule from
+ security_audit_rule
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, paul@paul-moore.com,
+ linux-security-module@vger.kernel.org
+Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+ john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+ stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+ mic@digikod.net, linux-integrity@vger.kernel.org,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20231215221636.105680-1-casey@schaufler-ca.com>
+ <20231215221636.105680-2-casey@schaufler-ca.com>
+ <d4cbe23822f7fdac900d1ebd5da9865d8bb96977.camel@huaweicloud.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <d4cbe23822f7fdac900d1ebd5da9865d8bb96977.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.22129 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
+On 3/6/2024 1:54 AM, Roberto Sassu wrote:
+> On Fri, 2023-12-15 at 14:15 -0800, Casey Schaufler wrote:
+>> Create real functions for the ima_filter_rule interfaces.
+>> These replace #defines that obscure the reuse of audit
+>> interfaces. The new functions are put in security.c because
+>> they use security module registered hooks that we don't
+>> want exported.
+> Beginner question: what makes IMA special, that the audit subsystem
+> does not need an AUDIT_LSM field to do the same that IMA would do?
+>
+> In other words, why can't we add the lsm_id parameter to
+> security_audit_*() functions, so that IMA can just call those?
 
+I have never liked the reuse of the audit filter functions, especially
+the way that they're hidden behind #define. The assumption that the
+two facilities (audit and IMA) are going to use them the same way, and
+that they will never diverge in their requirements, has always seemed
+questionable.
 
-On 3/6/24 10:55, Stefan Berger wrote:
-> This series resolves an issue on PowerVM and KVM on Power where the memory
-> the TPM log was held in may become inaccessible or corrupted after a kexec
-> soft reboot. The solution on these two platforms is to store the whole log
-> in the device tree because the device tree is preserved across a kexec with
-> either of the two kexec syscalls.
-> 
-FYI: This was the previous attempt that didn't work with the older kexec 
-syscall: 
-https://lore.kernel.org/lkml/4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com/T/#m158630d214837e41858b03d4b025e6f96cb8f251
+In most cases audit needs an lsmblob rather than a secid+lsm_id pair,
+as there is information required about all the LSMs, not just the one
+actively involved.
 
-> Regards,
->     Stefan
-> 
-> Stefan Berger (2):
->    powerpc/prom_init: Replace linux,sml-base/sml-size with linux,sml-log
->    tpm: of: If available Use linux,sml-log to get the log and its size
-> 
->   arch/powerpc/kernel/prom_init.c |  8 ++------
->   drivers/char/tpm/eventlog/of.c  | 36 ++++++++++-----------------------
->   2 files changed, 13 insertions(+), 31 deletions(-)
-> 
+>
+> Thanks
+>
+> Roberto
+>
+>> Acked-by: Paul Moore <paul@paul-moore.com>
+>> Reviewed-by: John Johansen <john.johansen@canonical.com>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> To: Mimi Zohar <zohar@linux.ibm.com>
+>> Cc: linux-integrity@vger.kernel.org
+>> ---
+>>  include/linux/security.h     | 24 ++++++++++++++++++++++++
+>>  security/integrity/ima/ima.h | 26 --------------------------
+>>  security/security.c          | 21 +++++++++++++++++++++
+>>  3 files changed, 45 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/include/linux/security.h b/include/linux/security.h
+>> index 750130a7b9dd..4790508818ee 100644
+>> --- a/include/linux/security.h
+>> +++ b/include/linux/security.h
+>> @@ -2009,6 +2009,30 @@ static inline void security_audit_rule_free(void *lsmrule)
+>>  #endif /* CONFIG_SECURITY */
+>>  #endif /* CONFIG_AUDIT */
+>>  
+>> +#if defined(CONFIG_IMA_LSM_RULES) && defined(CONFIG_SECURITY)
+>> +int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule);
+>> +int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule);
+>> +void ima_filter_rule_free(void *lsmrule);
+>> +
+>> +#else
+>> +
+>> +static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
+>> +					   void **lsmrule)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
+>> +					    void *lsmrule)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static inline void ima_filter_rule_free(void *lsmrule)
+>> +{ }
+>> +
+>> +#endif /* defined(CONFIG_IMA_LSM_RULES) && defined(CONFIG_SECURITY) */
+>> +
+>>  #ifdef CONFIG_SECURITYFS
+>>  
+>>  extern struct dentry *securityfs_create_file(const char *name, umode_t mode,
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index c29db699c996..560d6104de72 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -420,32 +420,6 @@ static inline void ima_free_modsig(struct modsig *modsig)
+>>  }
+>>  #endif /* CONFIG_IMA_APPRAISE_MODSIG */
+>>  
+>> -/* LSM based policy rules require audit */
+>> -#ifdef CONFIG_IMA_LSM_RULES
+>> -
+>> -#define ima_filter_rule_init security_audit_rule_init
+>> -#define ima_filter_rule_free security_audit_rule_free
+>> -#define ima_filter_rule_match security_audit_rule_match
+>> -
+>> -#else
+>> -
+>> -static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
+>> -				       void **lsmrule)
+>> -{
+>> -	return -EINVAL;
+>> -}
+>> -
+>> -static inline void ima_filter_rule_free(void *lsmrule)
+>> -{
+>> -}
+>> -
+>> -static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
+>> -					void *lsmrule)
+>> -{
+>> -	return -EINVAL;
+>> -}
+>> -#endif /* CONFIG_IMA_LSM_RULES */
+>> -
+>>  #ifdef	CONFIG_IMA_READ_POLICY
+>>  #define	POLICY_FILE_FLAGS	(S_IWUSR | S_IRUSR)
+>>  #else
+>> diff --git a/security/security.c b/security/security.c
+>> index d7b15ea67c3f..8e5379a76369 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -5350,6 +5350,27 @@ int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
+>>  }
+>>  #endif /* CONFIG_AUDIT */
+>>  
+>> +#ifdef CONFIG_IMA_LSM_RULES
+>> +/*
+>> + * The integrity subsystem uses the same hooks as
+>> + * the audit subsystem.
+>> + */
+>> +int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule)
+>> +{
+>> +	return call_int_hook(audit_rule_init, 0, field, op, rulestr, lsmrule);
+>> +}
+>> +
+>> +void ima_filter_rule_free(void *lsmrule)
+>> +{
+>> +	call_void_hook(audit_rule_free, lsmrule);
+>> +}
+>> +
+>> +int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
+>> +{
+>> +	return call_int_hook(audit_rule_match, 0, secid, field, op, lsmrule);
+>> +}
+>> +#endif /* CONFIG_IMA_LSM_RULES */
+>> +
+>>  #ifdef CONFIG_BPF_SYSCALL
+>>  /**
+>>   * security_bpf() - Check if the bpf syscall operation is allowed
 
