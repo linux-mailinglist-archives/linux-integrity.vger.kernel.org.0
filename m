@@ -1,244 +1,270 @@
-Return-Path: <linux-integrity+bounces-1598-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1599-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD52873CBB
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 17:57:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8864B874393
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 00:12:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3AD8B2154A
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 16:57:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC05C1C2138A
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 23:12:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 148911386D3;
-	Wed,  6 Mar 2024 16:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92301C6A0;
+	Wed,  6 Mar 2024 23:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="sV2DtKmZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5TM8UuJ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sonic304-27.consmr.mail.ne1.yahoo.com (sonic304-27.consmr.mail.ne1.yahoo.com [66.163.191.153])
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D136B605DC
-	for <linux-integrity@vger.kernel.org>; Wed,  6 Mar 2024 16:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.191.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271B7CA4E
+	for <linux-integrity@vger.kernel.org>; Wed,  6 Mar 2024 23:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709744229; cv=none; b=MTqFYYG/uhnOiozG6z1G/k1Hm2g7heVo83nIQoQ6FSW4IeQ4Y6Ue8sA1GpTtGxYKVWEwcRHpRgXqFK+AWmAWJfxRbFrFc6Dtbe/ENFYvTuc+mtYQgZjl0QeEbENUQwtoVU5OYiFyBgnIXel9DYI4gRbDzxsiaiMg/GAeWdFZR44=
+	t=1709766742; cv=none; b=c5+fmKbuA1WyeCAZgu7Y9oGUDYqKJ4/PF0o2aPve3IJS7U/HWwfvjBiZ7TKRg6OlJcw0hZM3XsaTBRnhYF+2an+UXa6j/z3FzQDYvkkCnZ2395SrbYmlq4Wsn1cn1hHMq98h0MXD5MFGQK2GGVLwmhmp8uoy64mLRb4Ecq3sHCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709744229; c=relaxed/simple;
-	bh=DB+sDU/M+USWi3IkAkYPXXij67XzJa642gnHaaSiOns=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HMCXgtQY9NZjkuQDN7NY581V5XMRMcFgi7jR1ItLFXjQgbqToRTN+uLOwEIgnCV7F9GyV8Oc1OuR1ZgR3CZFm7TB2ds8vR67RtaPJs+fVuFYS926PHUKT2BOLxpLlsZ9HgWXXpy3jfl0LczPhVUANnBYDjOoIjub0npvEmQZ+gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=sV2DtKmZ; arc=none smtp.client-ip=66.163.191.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1709744225; bh=aNAjDWeJw8zalTZ9wVamqZVMgmFVPK14WsEI1ujAZJI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=sV2DtKmZjaL+uTYLBLxqOx9SLTVY6RykUqUdzRvsIYKJ2t2YgZnqcQW5lA3JpTGkyBn4vfHV+dGOn6F6tQHpldS0cAo6Xd+DZ9nzFSEeDGRLNaXbf3jmLJGPgJjmRqS2DKrxUY3+1gqhhjX7haST495VT4tRm/vdcQ+ZRg16T0lC5W17wTKroJyqprEKhXueeHg7nEonxLUrW3ypNNICycWUnItSXBFNurO99CufaynGXpTIQpEJbEJspPxpyCB6B65zY0HnymFvInWbcEftLjOmudFGq2JWgE0tnbJykbFAh915xCIxppVVxipb8BmvwtpH2DPYTESgZDGUbqQw+w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1709744225; bh=hT99byMjlTQzPqMcbNopNL4TqhusiS8HbWUebtdcOX9=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ajHZ+N6uNm5s+E/fUSYDSrjRrRo5ah2w+QQHlRMOaQonm/z/xWZ3JSXYKiQUyUXv1kJf9CkiymgOMMuq/ExOYYMMcF36VZaS6mNXpDOwfrvhOYxp1HqeZggwKpzwNuX/lKivRbksdvpp2CPK582aDSWIlcvdcZlB6XsVKFILPrR9q0dqdlNDTaU9HxUJrlZgcU9DrZFGZ74sCImLX06KBUBRYOVJXqsUo1xaScwmQxSceUPBrz0Fds2xp+mHSIGlpnRZq7yTQZiX3yPSWIYwSivQ9Yf5aMCu1WaWjjMuBtebzI1f/HFmzMMAIHYG4KdAB+wQnvVDQspS7anZmaAqZg==
-X-YMail-OSG: bGf.osIVM1kTnWYb0egr0H0.6XCAHkRpE7FKdQE3BTVHCIfehvfwRRIYzVzZbj6
- TAslbBVQqhpaOCWxumDFKBt8BrKxE0MqJFPqGoek50I6gIy4WAy0VAqEaYZLktXlwULsm.58TOPD
- Ang.fYwEBq5Q.eUgVV0q._.UYebj3c5Pi4GmFlUHxba1QypBJWodTOUjXp_w7zUGc4Nmq7twr35.
- 75a5pdJ9u.YZVnOwDH2SOubyCrRb1cXm623Hpud.OGRKnV.FlKAyvpJnZ_raFSAP2ceFrJe6xioj
- Nb2q3O39QMDK_1DbbFGifYU8o57R8quIcpsY.FKAaBJVzB54.BpYnm8eiciy.s1wGAxOCXgnxrNC
- CnnJYO.qX68.3lAszqiob1bs5OSxSGlfcZ5S7I9YP6a3wklYlMBWCZkLfrHXV2Tab5PJWTbP9V2w
- 0KmTxNj6aymcR0T9.S7lc3y8y3gM43ElZWrnq8M5FMmg7v0YArckcr0ehm9lrGpQkgZDRpAJxy0Q
- m1Vh0ewRIpT_vgqtZjpYn73bCRFFH39YXB9q7j0S4Y7l_hw8bJIVnbt87dNKQQbeQAH9bRTBJYbO
- RQ1oFoDTyyI0sOzLgqdbjG4xNPbc6pfdbRSP4GNrihv.QaoQrwEpokXlcYAuS74DSbvIoGQfmIU6
- h8vsdhHpDaSwMz2s3Nq2u5UWYzR6ReKsp713_Hq_bJTgyQmwHy_EsvLym9gNjjU.QY6plPT9ldE9
- FqGBiSFNkOT53xW0MrCn9iwKxGmodVuSZsEMg3T3QT2azV9sqh0k29doZQ10f0iWRz4FXW5.cq0F
- Q6X6XqGatQTs.KqH.eFmx8fud7w3UJ2Wh18geOBJbenQivNR4djdmPWZfzAfZP9pm7a_Ttmufrk2
- 9Hvush5dDpqpmeokFi6k_ZWg7ixtpbS7WhhBZz7GFxk487RmXkwwqR622IKik6QPBgHUu8eSDv3U
- M_D6x13XlMUuzP1MVpgRzpP6eptmZYeHuDxXQ3wnR8wb5SOqj8Tjaa2WQqP5OgxtvETphl1WKAFS
- IJv_4Z_Z4HLP1Pw0_kXhUZB3zQRq_XCXU_9UMX.eh2tNrErjXb4tkmDv8HDKE7GJyiVQsAzxYbQk
- KTvFkdfVpmsxTzl7aBuG9t1cUg7P7BXhDK_XfFLz61eWq9bxFx_ntt.C_b0txNYCG1SzFu70tvJB
- wSwBFWNNtPizmWRu6OL.GCWP0jjR8WMniItwA2i_7vQLm8pphLeiXWmq49zE5J9e6jlO4TARznU7
- ZWnbQnv.bYvMbIORhxml_wgeOB_v6VAqM_8_5FJsml7KYemCH2IjJVYJKcWR93aG2MWx2fy9Fuuh
- igYCdnOpTqrnMmK.wJ14MuzSMVLzx5ziQs1yNCZ9iP7ucDLPtbmnTc.wT5t7hvXlbrOo3UMKrYX6
- G2v46sjA3FOXVJt3_O8neKpJT1iOiD77NeXC8LjypMAXKijwDd.7kPVb5b_islB.hHvwdCnpaoSM
- Gb8swX_Cte4.nlEQzllzViLpAflUMxnT6lKH6i3c.PzZjzuslS1Y8MsxRzv5sjhBTOcM2TMboFZf
- rZLkTVTB3WUSymoVsctVo1cOuihEVDCU_6jC7_MGoo3.FAnWS5ryfbm.9hF_CsP_JmbrbpEBRbNm
- ZdUU9lcLmEs8_sKkv1j8ldClY60r51VFAcunt7HJO4yX1VvFqPv7pkzya3x_gksv6YX7Wfs_PINm
- uVtk7pNYHHPr4Om85xLTrWsfztg2q1UZqZ7YAG.5guLVx1NDWqKM8gin2hp37sxxmfR.at3c363d
- rS0wR0LxESCofSB3JukhBBXL2gI6CzH0epiKIJCOP5_.ah1XMewQTRK.8cBPHS0PXfoEDfnYsKkF
- beAkXHNUMfSbX25Jk8VZcLy0ONnj9ZlgSip4wxPL5Gmg7xmSZVpAQj.LzAag663p4c.0h1WhamBj
- 981WxySdIxLZlI22ZQI7m1.ThV4yuMjQqNMzO1xhHBBNe.bdZShrmwW7w3Ad1m2u.r_1frYZPkfO
- CNIKC3H8e4RBG89NrgB_vNkEliNBpx6dSDhvt0RAjyYnnt6v_636.bg5JgI_8N5SSjhxsycHANUk
- etm.404j_sfJHOZZjp8_cXEwbHwqrg.t_WZr7toIxuHWiIp0zDcyYZfVNxWIapl.bR3wT36d6f6j
- qDE507ELgaIfFQ5PIgXnDIs.5MAhFKEQtQETpXa2wN17njfArJl.TS4JS.peP34uILF5m0o051Hb
- 3.ezG8IJFfS3yrB8I60q.7hvrLZv6LMuiskZCcWSZmtO__qfvRZUD2x6_nbDkPkja.StcqYRBJtj
- jRESLtrcr
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 8a719fc2-1256-4236-bddd-8849d178ba2e
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Wed, 6 Mar 2024 16:57:05 +0000
-Received: by hermes--production-gq1-5c57879fdf-kht2b (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 58294bfc0cc78b4b24de1cb3e48bb175;
-          Wed, 06 Mar 2024 16:56:59 +0000 (UTC)
-Message-ID: <5c99f987-d359-4366-984f-fe36fcff601b@schaufler-ca.com>
-Date: Wed, 6 Mar 2024 08:56:57 -0800
+	s=arc-20240116; t=1709766742; c=relaxed/simple;
+	bh=rH9Z/DtLyGYzmi1hIEaR2lVuyQZCZojIcMcWQIwvFGI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=B6oE1BGuoqpT13gUfVNdaseQw4z+CQel2CPGCo0Ng9xoOLj4VBbYXyuOp5s/3GjzNGnqBYF7XrktzdpCouzFxba7oQ1M4oR3U5LbhPkxVQtHDtspq7Y1T97MHw8bv18TAKmEKztIoibTam9FU4Wv7Gt31sflJ77fuUCmLk1immo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d5TM8UuJ; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dc6d8bd612dso274145276.1
+        for <linux-integrity@vger.kernel.org>; Wed, 06 Mar 2024 15:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709766740; x=1710371540; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRXAHyu+wIAaaDZN+VkwZ72bRDgl2trC3EHAkiNmP7M=;
+        b=d5TM8UuJDZTu7rbcIudy7c/Iux3P3Jcnjh96ombFnJ6jsuMajn2C9N1RW6SEgwzCSi
+         TiyceZDS5N/rwqNubCEBMXzHJCIzJ4FMgvWjKgaRnFPUQK2Gs0CYdf61+d66IryEsZcu
+         1hX+7K9i2s7jaPbveLK53my61dcZ3s5OtBt1kbrEqdxEUgyDngpm4FV4zsLgh+SVAJav
+         koWSvUnrladx+Gv1d7WXKj6HKuCLrJRAG0aaRwEBXSzMP2tuKfxkzE5OZKzsxwf4Vf9p
+         TyAa4gAjBoEKGDiXxF6ahSV/A/pIpQBPFQOa+XcoXMm4Tr1pGJOb4APPkoYdEZzraagP
+         8GtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709766740; x=1710371540;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vRXAHyu+wIAaaDZN+VkwZ72bRDgl2trC3EHAkiNmP7M=;
+        b=i6PX65F6H9zLWMCLzyi9mNqS+pAR+bcC/T8jvKmXPRpp0tGAjwNRkIdXnTVOAXZWq4
+         fxtBBgUUfWAW3VLM+CkJZRjH8SaD5c4j7aWosvz7sYpRV+RWYLINj7LUJMLgItTVrrgo
+         V1yke3D7v4I2rkRnYPLi4JzlLYDvbCWzK2kgTnNlkLrUyLfE1sYqw/oBsgJ24LeaKeCD
+         BmHDuDgMfw+Je3Tr5Bf9lokVE25E07fs/npfYClZwDnUS1YCQ1nGnfz0iJjBpnDe+0QN
+         dMkjC/bWm749gLROuN5smpljqpHvHVF0/bMPYnYT4neLPKdWNONjSxfDlWpmkzCbDdlM
+         LdQw==
+X-Forwarded-Encrypted: i=1; AJvYcCVwH3IOI2V2dtl9ctDiw7wrxQMIMfj0d8c7T7XfSmOYUYXjAOL3pwq4qOkeBFXicd3jgfxUnD1LbRAK8esmDdiCztFhCeAECgMN9KBBXtCy
+X-Gm-Message-State: AOJu0YxDFawjzQ/xEq6Oo5L0kOpkOko6b/b6gIBL6iwNKbqO7WfhhhVs
+	meSARtVbTpJ7ZYqB34CghCqaOnmYOdM49uJmirZ1PZqeIfWI2Erxp/D9XRqV482ATE+morZUQZJ
+	W8Rz0RdyBbwH8goFGRHrOmhgSotk=
+X-Google-Smtp-Source: AGHT+IGHioYIY22PS1pivTB6KySOH/du1NBWgBffG03Tv1pWWvOgxJ79K2DZ0fuF8p2upg8QTHjsPBJjopl8t9581aU=
+X-Received: by 2002:a25:bb0e:0:b0:dc6:54c5:285c with SMTP id
+ z14-20020a25bb0e000000b00dc654c5285cmr14170082ybg.0.1709766739972; Wed, 06
+ Mar 2024 15:12:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v39 01/42] integrity: disassociate ima_filter_rule from
- security_audit_rule
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, paul@paul-moore.com,
- linux-security-module@vger.kernel.org
-Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
- john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
- stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
- mic@digikod.net, linux-integrity@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20231215221636.105680-1-casey@schaufler-ca.com>
- <20231215221636.105680-2-casey@schaufler-ca.com>
- <d4cbe23822f7fdac900d1ebd5da9865d8bb96977.camel@huaweicloud.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <d4cbe23822f7fdac900d1ebd5da9865d8bb96977.camel@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.22129 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+From: Adam Alves <adamoa@gmail.com>
+Date: Wed, 6 Mar 2024 20:12:08 -0300
+Message-ID: <CAHwaaX_6OYVy8o8nUjYhNjAV+j28QGLSHxpWxoMDxiBzT2Z50Q@mail.gmail.com>
+Subject: [PATCH] Fix TPM chip hanging system before suspend/shutdown
+To: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/6/2024 1:54 AM, Roberto Sassu wrote:
-> On Fri, 2023-12-15 at 14:15 -0800, Casey Schaufler wrote:
->> Create real functions for the ima_filter_rule interfaces.
->> These replace #defines that obscure the reuse of audit
->> interfaces. The new functions are put in security.c because
->> they use security module registered hooks that we don't
->> want exported.
-> Beginner question: what makes IMA special, that the audit subsystem
-> does not need an AUDIT_LSM field to do the same that IMA would do?
->
-> In other words, why can't we add the lsm_id parameter to
-> security_audit_*() functions, so that IMA can just call those?
+Some buggy firmwares might require the TPM device to be in default
+locality (Locality 0) before suspend or shutdown. Failing to do so
+would leave the system in a hanged state before sleep or power off
+(after =E2=80=9Creboot: Power down=E2=80=9D message). Such is the case for =
+the ASUSTeK
+COMPUTER INC. TUF GAMING B460M-PLUS board, I believe this might be the
+case for several other boards based on the bugs I have found on the
+internet while trying to find out how to fix my specific issue. Most
+forums suggest the user to disable the TPM device on firmware BIOS in
+order to work around this specific issue, which disables several nice
+security features provided by TPM, such as secure boot attestation,
+automatic decryption and hardware random generator.
 
-I have never liked the reuse of the audit filter functions, especially
-the way that they're hidden behind #define. The assumption that the
-two facilities (audit and IMA) are going to use them the same way, and
-that they will never diverge in their requirements, has always seemed
-questionable.
+My PC would hang on almost every shutdown/suspend until I started
+testing this patch and so far in the past week I haven=E2=80=99t experience=
+d
+any problems anymore.
 
-In most cases audit needs an lsmblob rather than a secid+lsm_id pair,
-as there is information required about all the LSMs, not just the one
-actively involved.
+I suspect that the root cause on my specific board is that after the
+ACPI command to put the device to S3 or S5, some firmware
+application/driver will try to use the TPM chip expecting it to be in
+Locality 0 as expected by TCG PC Client Platform Firmware Profile
+Version 1.06 Revision 52 (3.1.1 =E2=80=93 Pre-OS Environment) and then when=
+ it
+fails to do so it simply halts the whole system.
 
->
-> Thanks
->
-> Roberto
->
->> Acked-by: Paul Moore <paul@paul-moore.com>
->> Reviewed-by: John Johansen <john.johansen@canonical.com>
->> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->> To: Mimi Zohar <zohar@linux.ibm.com>
->> Cc: linux-integrity@vger.kernel.org
->> ---
->>  include/linux/security.h     | 24 ++++++++++++++++++++++++
->>  security/integrity/ima/ima.h | 26 --------------------------
->>  security/security.c          | 21 +++++++++++++++++++++
->>  3 files changed, 45 insertions(+), 26 deletions(-)
->>
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index 750130a7b9dd..4790508818ee 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -2009,6 +2009,30 @@ static inline void security_audit_rule_free(void *lsmrule)
->>  #endif /* CONFIG_SECURITY */
->>  #endif /* CONFIG_AUDIT */
->>  
->> +#if defined(CONFIG_IMA_LSM_RULES) && defined(CONFIG_SECURITY)
->> +int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule);
->> +int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule);
->> +void ima_filter_rule_free(void *lsmrule);
->> +
->> +#else
->> +
->> +static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
->> +					   void **lsmrule)
->> +{
->> +	return 0;
->> +}
->> +
->> +static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
->> +					    void *lsmrule)
->> +{
->> +	return 0;
->> +}
->> +
->> +static inline void ima_filter_rule_free(void *lsmrule)
->> +{ }
->> +
->> +#endif /* defined(CONFIG_IMA_LSM_RULES) && defined(CONFIG_SECURITY) */
->> +
->>  #ifdef CONFIG_SECURITYFS
->>  
->>  extern struct dentry *securityfs_create_file(const char *name, umode_t mode,
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index c29db699c996..560d6104de72 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -420,32 +420,6 @@ static inline void ima_free_modsig(struct modsig *modsig)
->>  }
->>  #endif /* CONFIG_IMA_APPRAISE_MODSIG */
->>  
->> -/* LSM based policy rules require audit */
->> -#ifdef CONFIG_IMA_LSM_RULES
->> -
->> -#define ima_filter_rule_init security_audit_rule_init
->> -#define ima_filter_rule_free security_audit_rule_free
->> -#define ima_filter_rule_match security_audit_rule_match
->> -
->> -#else
->> -
->> -static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
->> -				       void **lsmrule)
->> -{
->> -	return -EINVAL;
->> -}
->> -
->> -static inline void ima_filter_rule_free(void *lsmrule)
->> -{
->> -}
->> -
->> -static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
->> -					void *lsmrule)
->> -{
->> -	return -EINVAL;
->> -}
->> -#endif /* CONFIG_IMA_LSM_RULES */
->> -
->>  #ifdef	CONFIG_IMA_READ_POLICY
->>  #define	POLICY_FILE_FLAGS	(S_IWUSR | S_IRUSR)
->>  #else
->> diff --git a/security/security.c b/security/security.c
->> index d7b15ea67c3f..8e5379a76369 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -5350,6 +5350,27 @@ int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
->>  }
->>  #endif /* CONFIG_AUDIT */
->>  
->> +#ifdef CONFIG_IMA_LSM_RULES
->> +/*
->> + * The integrity subsystem uses the same hooks as
->> + * the audit subsystem.
->> + */
->> +int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule)
->> +{
->> +	return call_int_hook(audit_rule_init, 0, field, op, rulestr, lsmrule);
->> +}
->> +
->> +void ima_filter_rule_free(void *lsmrule)
->> +{
->> +	call_void_hook(audit_rule_free, lsmrule);
->> +}
->> +
->> +int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
->> +{
->> +	return call_int_hook(audit_rule_match, 0, secid, field, op, lsmrule);
->> +}
->> +#endif /* CONFIG_IMA_LSM_RULES */
->> +
->>  #ifdef CONFIG_BPF_SYSCALL
->>  /**
->>   * security_bpf() - Check if the bpf syscall operation is allowed
+This issue might be related to the following bug:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217890
+
+Enable a user to configure the kernel
+through =E2=80=9Ctpm.locality_on_suspend=3D1=E2=80=9D boot parameter so tha=
+t the locality
+is set before suspend/shutdown in order to diagnose whether or not the
+board is one of the buggy ones that require this workaround. Since this
+bug is related to the board/platform instead of the specific TPM chip,
+call dmi_check_system on the tpm_init function so that this setting is
+automatically enabled for boards specified in code (ASUS TUF GAMING
+B460M-PLUS already included) =E2=80=93 automatic configuration only works i=
+n
+case CONFIG_DMI is set though, since dmi_check_system is a non-op when
+CONFIG_DMI is not set.
+
+In case =E2=80=9Ctpm.locality_on_suspend=3D0=E2=80=9D (the default) don't c=
+hange any
+behavior thus preserving current functionality of any other board
+except ASUSTeK COMPUTER INC. TUF GAMING B460M-PLUS and possibly future
+boards as we successfully diagnose other boards with the same issue
+fixed by using =E2=80=9Ctpm.locality_on_suspend=3D1=E2=80=9D.
+
+Signed-off-by: Adam Alves <adamoa@gmail.com>
+
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 42b1062e33cd..8fdf7a137a94 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -139,6 +139,9 @@ void tpm_chip_stop(struct tpm_chip *chip)
+ {
+  tpm_go_idle(chip);
+  tpm_relinquish_locality(chip);
++ // If locality is to be preserved, we need to make sure it is Locality 0.
++ if (chip->flags & TPM_CHIP_PRESERVE_LOCALITY)
++ tpm_request_locality(chip);
+  tpm_clk_disable(chip);
+ }
+ EXPORT_SYMBOL_GPL(tpm_chip_stop);
+@@ -291,6 +294,9 @@ int tpm_class_shutdown(struct device *dev)
+ {
+  struct tpm_chip *chip =3D container_of(dev, struct tpm_chip, dev);
+
++ if (tpm_locality_on_suspend)
++ chip->flags |=3D TPM_CHIP_PRESERVE_LOCALITY;
++
+  down_write(&chip->ops_sem);
+  if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+  if (!tpm_chip_start(chip)) {
+@@ -668,6 +674,9 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
+  */
+ void tpm_chip_unregister(struct tpm_chip *chip)
+ {
++ if (tpm_locality_on_suspend)
++ chip->flags |=3D TPM_CHIP_PRESERVE_LOCALITY;
++
+  tpm_del_legacy_sysfs(chip);
+  if (tpm_is_hwrng_enabled(chip))
+  hwrng_unregister(&chip->hwrng);
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interf=
+ace.c
+index 66b16d26eecc..8aeea2dee0a8 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -26,6 +26,7 @@
+ #include <linux/suspend.h>
+ #include <linux/freezer.h>
+ #include <linux/tpm_eventlog.h>
++#include <linux/dmi.h>
+
+ #include "tpm.h"
+
+@@ -382,6 +383,34 @@ int tpm_auto_startup(struct tpm_chip *chip)
+  return rc;
+ }
+
++/*
++ * Bug workaround - some boards expect the TPM to be on ready
++ * state before suspend/shutdown, otherwise suspend and shutdown might
++ * hang the system, so we need to adjust suspend code for handling this.
++ */
++bool tpm_locality_on_suspend;
++module_param_named(locality_on_suspend, tpm_locality_on_suspend, bool, 064=
+4);
++MODULE_PARM_DESC(locality_on_suspend, "The firmware expects TPM to be
+at locality 0 before suspend/shutdown.");
++
++static int __init tpm_set_locality_on_suspend(const struct
+dmi_system_id *system_id)
++{
++ pr_info("Board %s: TPM locality preserved before
+suspend/shutdown.\n", system_id->ident);
++ tpm_locality_on_suspend =3D true;
++
++ return 0;
++}
++
++static const struct dmi_system_id tpm_board_quirks[] __initconst =3D {
++ {
++ .ident =3D "TUF GAMING B460M-PLUS",
++ .matches =3D {
++ DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),
++ DMI_MATCH(DMI_BOARD_NAME, "TUF GAMING B460M-PLUS"),
++ },
++ .callback =3D tpm_set_locality_on_suspend,
++ },
++};
++
+ /*
+  * We are about to suspend. Save the TPM state
+  * so that it can be restored.
+@@ -394,6 +423,9 @@ int tpm_pm_suspend(struct device *dev)
+  if (!chip)
+  return -ENODEV;
+
++ if (tpm_locality_on_suspend)
++ chip->flags |=3D TPM_CHIP_PRESERVE_LOCALITY;
++
+  if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+  goto suspended;
+
+@@ -431,7 +463,7 @@ int tpm_pm_resume(struct device *dev)
+  if (chip =3D=3D NULL)
+  return -ENODEV;
+
+- chip->flags &=3D ~TPM_CHIP_FLAG_SUSPENDED;
++ chip->flags &=3D ~(TPM_CHIP_PRESERVE_LOCALITY | TPM_CHIP_FLAG_SUSPENDED);
+
+  /*
+  * Guarantee that SUSPENDED is written last, so that hwrng does not
+@@ -476,6 +508,8 @@ static int __init tpm_init(void)
+ {
+  int rc;
+
++ dmi_check_system(tpm_board_quirks);
++
+  rc =3D class_register(&tpm_class);
+  if (rc) {
+  pr_err("couldn't create tpm class\n");
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 61445f1dc46d..f2657b611b81 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -236,6 +236,7 @@ extern dev_t tpm_devt;
+ extern const struct file_operations tpm_fops;
+ extern const struct file_operations tpmrm_fops;
+ extern struct idr dev_nums_idr;
++extern bool tpm_locality_on_suspend;
+
+ ssize_t tpm_transmit(struct tpm_chip *chip, u8 *buf, size_t bufsiz);
+ int tpm_get_timeouts(struct tpm_chip *);
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 4ee9d13749ad..7717f484ac25 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -284,6 +284,7 @@ enum tpm_chip_flags {
+  TPM_CHIP_FLAG_FIRMWARE_UPGRADE =3D BIT(7),
+  TPM_CHIP_FLAG_SUSPENDED =3D BIT(8),
+  TPM_CHIP_FLAG_HWRNG_DISABLED =3D BIT(9),
++ TPM_CHIP_PRESERVE_LOCALITY =3D BIT(10),
+ };
+
+ #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
 
