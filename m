@@ -1,184 +1,134 @@
-Return-Path: <linux-integrity+bounces-1596-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1597-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254F9873B4B
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 16:56:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A287873BB6
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 17:08:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 11F8BB22336
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 15:56:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED56D1F21D0B
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Mar 2024 16:08:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE3313664C;
-	Wed,  6 Mar 2024 15:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3533313540F;
+	Wed,  6 Mar 2024 16:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UiFIyMn7"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RXPwStUE"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72ADB5B664;
-	Wed,  6 Mar 2024 15:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE94135401;
+	Wed,  6 Mar 2024 16:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709740537; cv=none; b=sv8HVCzZ1o0TP742ys/ip+mGV8/LekvDZEmN88LyuiYHkEyN/rm9y5NjBmHO3F0SDaKNEWKziI29AFi9k2PJ/rTwbkcyxDeRTZ2l7YEqQcITenRyVqNnQyRVZLVdtil2xnBo2dRq+r0K6NZnszp5wt+Rlep6EChBnbqnwzTE/S4=
+	t=1709741317; cv=none; b=eCJwb52rY4kB7GZeLSB7hDaUGH7HUJoeLwbLGk8BQ48APTL9+pI7Xi1DtbQt/vqWiTlzCzRUpESPWxIc3VLKqp3YyD0ehjZaSAnKfHTwu/v4Y10XAGQtohrDn9or6wz4PtwAHDUN3MLmMayqKdWXb0XDg23c8p3VAWkmlVU1odc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709740537; c=relaxed/simple;
-	bh=Z+200TIFPIJrfmEGNfAITwyHGFuIZSAX44aORegzy3M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=odDNKltSOQab0bBwmZ07V7RK9/9zl6AnwEkH1IVVgCpRYJgIBhDoIoh7brNj9E4i41E4k6ph1Fc2risneTcDIeu3dZ6oI20O1kh3YE88oJ3JSL1oWvoygONAkhs798AXKuXb2J1MzYhuRqq02PhuBUweSXJzjwBbyrfmE2rLSp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UiFIyMn7; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1709741317; c=relaxed/simple;
+	bh=LGcNDDbG42U9lX5rQysNgwS6e76I7h8OyMh9iGSYW80=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=k6S/4v/jjvquP4f3qKyAfie8YAcWpwsZIPv8OR8659ak5PXCUdV1CY+y4BVb70id9z60hQn1IA0O1Bx5PyUcS62caWoE9BWaQ/17O80kBLpWi3gMs6Q0fTiTJW9Rfo1y5EiR40Ie7Dqq0+W3G0Ms4/fCLrY/5WaQ1Zis8G3D7Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RXPwStUE; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 426FfEHh012501;
-	Wed, 6 Mar 2024 15:55:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Usr/mQf5MJ3c5dVUkipMXdy38/fgnF+c3+QsiYGiLbY=;
- b=UiFIyMn7L4L4TekxCwjbag6GlbfjwDaWMTM0+8YXxdvtWuQKtkfq8grYd/Jlz/QPKsso
- 3qvqeXp6fMSdE18eQ2emfzd8B4lcNs8aofE4BXnrc5cBAHo0sR34dHs9bKz9v302tJPA
- lI9aM63tJlKAfdyZOwpAHfZtwImtOhGwZTzog4ZJbL/91asP3oUYgZ8LmHEaeIJoZcH9
- xzxYv8Q/gm2pFx3I71w89lHAZio1r/EM5smCzwaHJ7+YQQkWOSsXX2phm1QQdWkNFClA
- 7ld6mnqr0BjA2HeVgj5RAcptP5jeBCpLTyHXvW6eTRqoJC7CEuMKb8hG+m3x+kp7CQ+s oA== 
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 426G7fqJ022425;
+	Wed, 6 Mar 2024 16:08:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=0j9gJbumXd6zptHGYG2RBhG8qWhL+f6Mp6U0BlqtkhY=;
+ b=RXPwStUE1l4/wZgEkrc1LzWck6QKS+znwOCma8fT0r5vBCSy1tkjh1omF5jozzzHx1fY
+ TuPU0IzL4BQ+sKYx211xuc6bE0/0eUkluujE0PkEX6w/AbaghM3wvuGDE2X6OYdYjrxc
+ bsT2OfPsOOjGA/UenXqpzouYbvyODCdn84Gvgd34WxGsGGcKgOsTYvZyrgAvWXvyjQdy
+ YIWWGJVr5AMypETus7hGk7sH+JKpeU4ojN2qoT8LZQR15UXjsrDu5vVwzGBpGQ7TAwqD
+ TccavYQpS3hPgliUeZWgMNEQ4zxCJH6G4fCzPMiG1tc0SMQOr/HSCjoGxPcbg0PXC9Q6 sg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wpu0b8ves-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wpuqn01fw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 15:55:21 +0000
+	Wed, 06 Mar 2024 16:08:26 +0000
 Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 426FpejY013295;
-	Wed, 6 Mar 2024 15:55:20 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wpu0b8ve5-1
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 426G8JD7025311;
+	Wed, 6 Mar 2024 16:08:26 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wpuqn01f1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 15:55:20 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 426F6RJA024172;
-	Wed, 6 Mar 2024 15:55:19 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wpjwsavk1-1
+	Wed, 06 Mar 2024 16:08:26 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 426FtCAc006067;
+	Wed, 6 Mar 2024 16:08:25 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wmeet7xj5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 15:55:19 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 426FtG2223003856
+	Wed, 06 Mar 2024 16:08:25 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 426G8L8W27459926
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 6 Mar 2024 15:55:18 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 113A45806A;
-	Wed,  6 Mar 2024 15:55:16 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 82AEA58063;
-	Wed,  6 Mar 2024 15:55:15 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  6 Mar 2024 15:55:15 +0000 (GMT)
-From: Stefan Berger <stefanb@linux.ibm.com>
+	Wed, 6 Mar 2024 16:08:23 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 69A5158067;
+	Wed,  6 Mar 2024 16:08:21 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D0BF558052;
+	Wed,  6 Mar 2024 16:08:20 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  6 Mar 2024 16:08:20 +0000 (GMT)
+Message-ID: <b6f74cd0-d1c8-4a6f-a05d-364595c5b079@linux.ibm.com>
+Date: Wed, 6 Mar 2024 11:08:20 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] Preserve TPM log across kexec
+Content-Language: en-US
 To: mpe@ellerman.id.au, linux-integrity@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
 Cc: linux-kernel@vger.kernel.org, jarkko@kernel.org, rnsastry@linux.ibm.com,
-        peterhuewe@gmx.de, viparash@in.ibm.com,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the log and its size
-Date: Wed,  6 Mar 2024 10:55:11 -0500
-Message-ID: <20240306155511.974517-3-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240306155511.974517-1-stefanb@linux.ibm.com>
+        peterhuewe@gmx.de, viparash@in.ibm.com
 References: <20240306155511.974517-1-stefanb@linux.ibm.com>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20240306155511.974517-1-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CizILsSMrSfNKbP7kCQ9XhxIyaOzFfT8
+X-Proofpoint-GUID: Vt9-ZaL_JWo0hGOQxy1b3juNtgpFLarn
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: v1AkH8xdovcYzxmPLMeXK36wofKzc84i
-X-Proofpoint-ORIG-GUID: Y3YmOQTZKs9OZ440swdZFKX77D_9Jsr9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-03-06_10,2024-03-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 malwarescore=0 suspectscore=0 phishscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2403060127
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 clxscore=1015
+ spamscore=0 suspectscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=895 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2403060130
 
-If linux,sml-log is available use it to get the TPM log rather than the
-pointer found in linux,sml-base. This resolves an issue on PowerVM and KVM
-on Power where after a kexec the memory pointed to by linux,sml-base may
-have been corrupted. Also, linux,sml-log has replaced linux,sml-base and
-linux,sml-size on these two platforms.
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- drivers/char/tpm/eventlog/of.c | 36 +++++++++++-----------------------
- 1 file changed, 11 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-index 930fe43d5daf..e37196e64ef1 100644
---- a/drivers/char/tpm/eventlog/of.c
-+++ b/drivers/char/tpm/eventlog/of.c
-@@ -54,8 +54,8 @@ int tpm_read_log_of(struct tpm_chip *chip)
- 	const u32 *sizep;
- 	const u64 *basep;
- 	struct tpm_bios_log *log;
-+	const void *logp;
- 	u32 size;
--	u64 base;
- 
- 	log = &chip->log;
- 	if (chip->dev.parent && chip->dev.parent->of_node)
-@@ -66,37 +66,23 @@ int tpm_read_log_of(struct tpm_chip *chip)
- 	if (of_property_read_bool(np, "powered-while-suspended"))
- 		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
- 
--	sizep = of_get_property(np, "linux,sml-size", NULL);
--	basep = of_get_property(np, "linux,sml-base", NULL);
--	if (sizep == NULL && basep == NULL)
--		return tpm_read_log_memory_region(chip);
--	if (sizep == NULL || basep == NULL)
--		return -EIO;
--
--	/*
--	 * For both vtpm/tpm, firmware has log addr and log size in big
--	 * endian format. But in case of vtpm, there is a method called
--	 * sml-handover which is run during kernel init even before
--	 * device tree is setup. This sml-handover function takes care
--	 * of endianness and writes to sml-base and sml-size in little
--	 * endian format. For this reason, vtpm doesn't need conversion
--	 * but physical tpm needs the conversion.
--	 */
--	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
--	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-+	logp = of_get_property(np, "linux,sml-log", &size);
-+	if (logp == NULL) {
-+		sizep = of_get_property(np, "linux,sml-size", NULL);
-+		basep = of_get_property(np, "linux,sml-base", NULL);
-+		if (sizep == NULL && basep == NULL)
-+			return tpm_read_log_memory_region(chip);
-+		if (sizep == NULL || basep == NULL)
-+			return -EIO;
-+		logp = __va(be64_to_cpup((__force __be64 *)basep));
- 		size = be32_to_cpup((__force __be32 *)sizep);
--		base = be64_to_cpup((__force __be64 *)basep);
--	} else {
--		size = *sizep;
--		base = *basep;
- 	}
--
- 	if (size == 0) {
- 		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
- 		return -EIO;
- 	}
- 
--	log->bios_event_log = devm_kmemdup(&chip->dev, __va(base), size, GFP_KERNEL);
-+	log->bios_event_log = devm_kmemdup(&chip->dev, logp, size, GFP_KERNEL);
- 	if (!log->bios_event_log)
- 		return -ENOMEM;
- 
--- 
-2.43.0
+On 3/6/24 10:55, Stefan Berger wrote:
+> This series resolves an issue on PowerVM and KVM on Power where the memory
+> the TPM log was held in may become inaccessible or corrupted after a kexec
+> soft reboot. The solution on these two platforms is to store the whole log
+> in the device tree because the device tree is preserved across a kexec with
+> either of the two kexec syscalls.
+> 
+FYI: This was the previous attempt that didn't work with the older kexec 
+syscall: 
+https://lore.kernel.org/lkml/4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com/T/#m158630d214837e41858b03d4b025e6f96cb8f251
 
+> Regards,
+>     Stefan
+> 
+> Stefan Berger (2):
+>    powerpc/prom_init: Replace linux,sml-base/sml-size with linux,sml-log
+>    tpm: of: If available Use linux,sml-log to get the log and its size
+> 
+>   arch/powerpc/kernel/prom_init.c |  8 ++------
+>   drivers/char/tpm/eventlog/of.c  | 36 ++++++++++-----------------------
+>   2 files changed, 13 insertions(+), 31 deletions(-)
+> 
 
