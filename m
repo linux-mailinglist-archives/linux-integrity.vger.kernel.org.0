@@ -1,250 +1,261 @@
-Return-Path: <linux-integrity+bounces-1648-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1650-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4C1F875763
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AD133875775
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:49:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30D9A1F220A4
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 19:42:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2529A1F21072
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 19:49:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB1A1EB56;
-	Thu,  7 Mar 2024 19:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877F31369A6;
+	Thu,  7 Mar 2024 19:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLlje8YZ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hxHfffWC"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DDD1DA2F;
-	Thu,  7 Mar 2024 19:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95086136991;
+	Thu,  7 Mar 2024 19:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709840547; cv=none; b=PxTqM7/CJCGB8n5Ua8zhfsHOoXbHNfoujMbUUkgF+o39UlzMLiwPIlMEf/kLQJCUjSAq1WqSix4EyTdL3DWcxu3NoJ2EJYOgy/GNqs8Pf8JuMu3GqDrspUJM1D4ZqGbPUq/vlVjrAheLgu+kr/26wj8BCSm5hqjLtYwwKrGiKFE=
+	t=1709840936; cv=none; b=ptU5RbnIZxNXv5P/j8g2an30ppJPoB1sabuE5Z9Cn40nabUL3QIIOgXD6dX9wlOZGtJajDMjqDHcV++J+8jo/i2o4TslpIj+8gZky6UcI2RXQ6npxVBa5fGU548BG2gm7PZ9W3BsUn0O0P3QC/MBdFBZIsJ8CsYVR5Cbq04Mi04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709840547; c=relaxed/simple;
-	bh=qz91IfpR2khWQBdc4b04wK10c+KwvPUkD0bnN50FDT0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=eob6Zy12NWyHb3PRUOZCnhvNGzPvPnmZjL2QHl5OcN0V9WZnfASzJWlQ/5YiG015c71Q8yx4XC2JQqM7mIkiqFo6w84hqyxG9xkG1SIQrqhXwhgb7zbBC7sFNs49NhD8o6XjZOxC2VIYaT24ermN0qqv8ZXlk1QUjd3a2N3lAWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLlje8YZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D198C433F1;
-	Thu,  7 Mar 2024 19:42:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709840547;
-	bh=qz91IfpR2khWQBdc4b04wK10c+KwvPUkD0bnN50FDT0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=fLlje8YZKtbGPHjwWDZ8F+0QtG16vVPKZM+9izTtVCN9RGYOXEwFAC89LFl2fDU5P
-	 ugUYDhfGkN4C73l5a8pG9oExc+0hj2/ErZKk3XdVazzVWpKiJcgO6UtfmMJeRdYpY3
-	 d08hb9aCmofJvQAd4Y8AVPm+9rY4MhN+l22J+MpSQdI3IysZmKNL+Z5q0cZXTlVSTJ
-	 XLlzid2gQghZYuYFL1+rP5pwdsnTy/7tKILx8zznXAaIPetlUwL8Ihk4ML54V+fNO5
-	 eM2SV7wX3GLixfGmvVswCu7lYx24MtbyAdnE4U/zzOpXM+xOSQorE9HiQ+9HEUx2kI
-	 Iw1fbuGoIJwUQ==
+	s=arc-20240116; t=1709840936; c=relaxed/simple;
+	bh=PfjtiY5BSu9RUY9kEDtgOzs9DcwZeom0ZTjw0QvKakM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=s1PywRwSLnqxrN+9loWoth4WD/iP1eFgFzPbgB99Wo8uXGnB1P206QeibTjWTIBed40ZZAm2IS6/yqZuCrFvfsnMtntNg2IrtHoO2WvodnXVw/tMudtnRbzJZEBY4yJF0uwUbjJQP9PW0+gNYTwq2IcJSYI08nqPPcZhFUi/34A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hxHfffWC; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 427JRCZ0017075;
+	Thu, 7 Mar 2024 19:48:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=LGTv9dsjx32u/5Ptx7ie3IIAHZQQyKvXYvldp9BGYzA=;
+ b=hxHfffWCBr5Y7eMEK2h3MWuBDE47SthGutZLaqnZXKPvKzXI4AC+nj6ocz49LzDdnYfc
+ WH0XGBhF8E/+nJ7M5YjiY0atDCEHkHUn5wofFUfV7yjerXPzR8KTcc+YXch1xblx4iih
+ u8lZcLsRt5KyjeUb9Fr6YcMMP1UkkOuBsh8BxZE/05oKe6jnwKAoH2biIusneXiMfWXY
+ 1aG1YAzV9iMZiDtqDgM0oMrdsZL9pws2bfftySYCtmJ2ZwH0rgrKyKde7LQ7OE+XoYo1
+ srW0PQuT0orw6nqkGDw9HxpbgVoYdfjzMDuLwEU+3u16/3GI5Xrflfd3+8XDH+dnAm5o Cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wqkrb8bxk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Mar 2024 19:48:11 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 427JeDSO026378;
+	Thu, 7 Mar 2024 19:48:10 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wqkrb8bwx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Mar 2024 19:48:10 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 427J7Ro6026212;
+	Thu, 7 Mar 2024 19:42:44 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wmfep7sx1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Mar 2024 19:42:44 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 427Jgfq729950264
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 Mar 2024 19:42:43 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6A5B25805D;
+	Thu,  7 Mar 2024 19:42:41 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 096A358061;
+	Thu,  7 Mar 2024 19:42:40 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.133.222])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  7 Mar 2024 19:42:39 +0000 (GMT)
+Message-ID: <2f2d07c33170b6ed06f72e927a0d31989bca7c85.camel@linux.ibm.com>
+Subject: Re: [RFC][PATCH 2/8] ima: Nest iint mutex for DIGEST_LIST_CHECK hook
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl,
+        hch@lst.de, mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
+        dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com,
+        ppavlu@suse.com, petr.vorel@gmail.com, petrtesarik@huaweicloud.com,
+        mzerqung@0pointer.de, kgold@linux.ibm.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date: Thu, 07 Mar 2024 14:42:39 -0500
+In-Reply-To: <20240214143525.2205481-3-roberto.sassu@huaweicloud.com>
+References: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
+	 <20240214143525.2205481-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Mar 2024 21:42:24 +0200
-Message-Id: <CZNRVY6T40AO.KP9YRYGKIP9Q@kernel.org>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>, <linux-integrity@vger.kernel.org>,
- <regressions@lists.linux.dev>
-Subject: Re: tpm_tis_remove: `WARNING: CPU: 6 PID: 265 at
- kernel/workqueue.c:3397 __flush_work.isra.0+0x29f/0x2c0`
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Paul Menzel" <pmenzel@molgen.mpg.de>
-X-Mailer: aerc 0.17.0
-References: <e2e17227-9e8f-430b-80fc-9ca9eac1f69a@molgen.mpg.de>
- <CYU446SNXUK4.23H8L9VRKXEFV@suppilovahvero>
- <ef39fcc6-a9a2-4662-9ee1-686539547252@molgen.mpg.de>
-In-Reply-To: <ef39fcc6-a9a2-4662-9ee1-686539547252@molgen.mpg.de>
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9q3FLHGm8L4aqkf7QjKJUbXERS_yyoBH
+X-Proofpoint-ORIG-GUID: T-KG-TwXTy6r_BBRcBSwABmX6NIDzyu9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-07_14,2024-03-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2403070139
 
-On Tue Mar 5, 2024 at 5:52 PM EET, Paul Menzel wrote:
-> #regzbot fixed-by: d6fb14208e22c7bb6f54cb9df960bfc21e4663e3
->
-> Dear Jarkko,
->
->
-> Am 02.02.24 um 00:02 schrieb Jarkko Sakkinen:
-> > On Tue Jan 16, 2024 at 4:44 PM EET, Paul Menzel wrote:
-> >> #regzbot introduced: v5.15.131..v6.6.11
->
-> >> On a Dell OptiPlex 5055 with an AMD Ryzen, Linux always logged the err=
-or
-> >>       tpm_tis: probe of MSFT0101:00 failed with error -1
-> >>
-> >> but upgrading from 5.15.131 to 6.6.11, the warning below is also logge=
-d:
-> >>
-> >> ```
-> >> [    0.000000] Linux version 6.6.11.mx64.460 (root@theinternet.molgen.=
-mpg.de) (gcc (GCC) 12.2.0, GNU ld (GNU Binutils) 2.41) #1 SMP PREEMPT_DYNAM=
-IC Thu Jan 11 16:15:43 CET 2024
-> >> [    0.000000] Command line: BOOT_IMAGE=3D/boot/bzImage-6.6.11.mx64.46=
-0 root=3DLABEL=3Droot ro crashkernel=3D64G-:256M console=3DttyS0,115200n8 c=
-onsole=3Dtty0 init=3D/bin/systemd audit=3D0 random.trust_cpu=3Don systemd.u=
-nified_cgroup_hierarchy
-> >> [=E2=80=A6]
-> >> [    0.000000] DMI: Dell Inc. OptiPlex 5055 Ryzen CPU/0P03DX, BIOS 1.1=
-.20 05/31/2019
-> >> [=E2=80=A6]
-> >> [   12.092264] WARNING: CPU: 6 PID: 265 at kernel/workqueue.c:3397 __f=
-lush_work.isra.0+0x29f/0x2c0
-> >> [   12.103259] Modules linked in: snd_hda_intel(+) tg3(+) kvm(+) snd_i=
-ntel_dspcfg snd_hda_codec snd_hda_core snd_pcm snd_timer libphy drm_ttm_hel=
-per ttm snd video k10temp soundcore i2c_piix4 irqbypass tpm_tis(+) tpm_tis_=
-core efi_pstore tpm wmi_bmof rng_core wmi crc32c_intel pstore acpi_cpufreq =
-nfsd auth_rpcgss oid_registry nfs_acl lockd grace sunrpc efivarfs ip_tables=
- x_tables ipv6 autofs4
-> >> [   12.143539] CPU: 6 PID: 265 Comm: systemd-udevd Not tainted 6.6.11.=
-mx64.460 #1
-> >> [   12.152698] Hardware name: Dell Inc. OptiPlex 5055 Ryzen CPU/0P03DX=
-, BIOS 1.1.20 05/31/2019
-> >> [   12.162512] RIP: 0010:__flush_work.isra.0+0x29f/0x2c0
-> >> [   12.168674] Code: 8b 04 25 80 cf 02 00 48 89 44 24 40 48 8b 53 40 8=
-b 43 30 e9 b3 fe ff ff 40 30 f6 4c 8b 36 e9 f2 fd ff ff 0f 0b e9 3b ff ff f=
-f <0f> 0b e9 34 ff ff ff 0f 0b e9 d8 fe ff ff 0f 0b e9 a9 fe ff ff e8
-> >> [   12.188375] RSP: 0018:ffffc90000ab7a10 EFLAGS: 00010246
-> >> [   12.194699] RAX: 0000000000000000 RBX: ffff888108f79b28 RCX: 000000=
-0000000000
-> >> [   12.202894] RDX: ffffc90000ab7a10 RSI: ffffc90000b10008 RDI: ffffc9=
-0000ab7a58
-> >> [   12.211107] RBP: ffff888108f79b68 R08: 0000000000000002 R09: 000000=
-0000000000
-> >> [   12.219305] R10: 0000000000000001 R11: 0000000000000000 R12: 000000=
-0000000001
-> >> [   12.227499] R13: ffff888108f79b38 R14: 00000000ffffffff R15: 000000=
-0000fe1050
-> >> [   12.235706] FS:  00007f2cf22c2800(0000) GS:ffff88840eb80000(0000) k=
-nlGS:0000000000000000
-> >> [   12.244871] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >> [   12.251670] CR2: 00000000006878e8 CR3: 000000010ca66000 CR4: 000000=
-00003506e0
-> >> [   12.259901] Call Trace:
-> >> [   12.263395]  <TASK>
-> >> [   12.266521]  ? __warn+0x81/0x140
-> >> [   12.270776]  ? __flush_work.isra.0+0x29f/0x2c0
-> >> [   12.276235]  ? report_bug+0x171/0x1a0
-> >> [   12.280803]  ? handle_bug+0x3c/0x70
-> >> [   12.285352]  ? exc_invalid_op+0x17/0x70
-> >> [   12.290203]  ? asm_exc_invalid_op+0x1a/0x20
-> >> [   12.295397]  ? __flush_work.isra.0+0x29f/0x2c0
-> >> [   12.300807]  tpm_tis_remove+0xaa/0x100 [tpm_tis_core]
-> >> [   12.306872]  tpm_tis_core_init+0x234/0xfa0 [tpm_tis_core]
-> >> [   12.313280]  tpm_tis_plat_probe+0xd0/0x110 [tpm_tis]
-> >> [   12.319139]  platform_probe+0x44/0xa0
-> >> [   12.323796]  really_probe+0xd0/0x3e0
-> >> [   12.328384]  ? __pfx___driver_attach+0x10/0x10
-> >> [   12.334129]  __driver_probe_device+0x80/0x160
-> >> [   12.339803]  driver_probe_device+0x1f/0x90
-> >> [   12.344831]  __driver_attach+0xf8/0x1c0
-> >> [   12.349568]  bus_for_each_dev+0x88/0xd0
-> >> [   12.354298]  bus_add_driver+0xf9/0x220
-> >> [   12.358919]  driver_register+0x59/0x100
-> >> [   12.363623]  ? __pfx_init_tis+0x10/0x10 [tpm_tis]
-> >> [   12.369198]  init_tis+0x39/0xff0 [tpm_tis]
-> >> [   12.374172]  ? srso_return_thunk+0x5/0x10
-> >> [   12.379044]  do_one_initcall+0x66/0x240
-> >> [   12.383751]  do_init_module+0x60/0x230
-> >> [   12.388357]  init_module_from_file+0x86/0xc0
-> >> [   12.393483]  idempotent_init_module+0x120/0x2b0
-> >> [   12.398869]  __x64_sys_finit_module+0x65/0xc0
-> >> [   12.404082]  do_syscall_64+0x46/0x90
-> >> [   12.408506]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-> >> [   12.414411] RIP: 0033:0x7f2cf1d1ed09
-> >> [   12.418831] Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 0=
-0 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 0=
-5 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c7 20 0d 00 f7 d8 64 89 01 48
-> >> [   12.438506] RSP: 002b:00007ffc335d02f8 EFLAGS: 00000246 ORIG_RAX: 0=
-000000000000139
-> >> [   12.446965] RAX: ffffffffffffffda RBX: 0000000000674390 RCX: 00007f=
-2cf1d1ed09
-> >> [   12.454993] RDX: 0000000000000000 RSI: 00007f2cf1a0f54b RDI: 000000=
-0000000010
-> >> [   12.463013] RBP: 00007f2cf1a0f54b R08: 0000000000000000 R09: 000000=
-0000000002
-> >> [   12.471025] R10: 0000000000000010 R11: 0000000000000246 R12: 000000=
-0000000000
-> >> [   12.479059] R13: 00000000007700f0 R14: 0000000000020000 R15: 000000=
-0000679d90
-> >> [   12.487092]  </TASK>
-> >> [   12.490162] ---[ end trace 0000000000000000 ]---
-> >> [   12.498048] tpm_tis: probe of MSFT0101:00 failed with error -1
-> >> ```
-> >>
-> >> ```
-> >> $ scripts/decodecode < /scratch/tmp/linux-6.6.11-schokokeks.txt
-> >> [ 12.418831] Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 =
-48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 =
-<48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c7 20 0d 00 f7 d8 64 89 01 48
-> >> All code
-> >> =3D=3D=3D=3D=3D=3D=3D=3D
-> >>      0:	08 44 89 e0          	or     %al,-0x20(%rcx,%rcx,4)
-> >>      4:	5b                   	pop    %rbx
-> >>      5:	41 5c                	pop    %r12
-> >>      7:	c3                   	ret
-> >>      8:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
-> >>      f:	00 00
-> >>     11:	48 89 f8             	mov    %rdi,%rax
-> >>     14:	48 89 f7             	mov    %rsi,%rdi
-> >>     17:	48 89 d6             	mov    %rdx,%rsi
-> >>     1a:	48 89 ca             	mov    %rcx,%rdx
-> >>     1d:	4d 89 c2             	mov    %r8,%r10
-> >>     20:	4d 89 c8             	mov    %r9,%r8
-> >>     23:	4c 8b 4c 24 08       	mov    0x8(%rsp),%r9
-> >>     28:	0f 05                	syscall
-> >>     2a:*	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax		<-- tr=
-apping instruction
-> >=20
-> > There's something odd in this disassembly given the "syscall" opcode.
-> >=20
-> >>     30:	73 01                	jae    0x33
-> >>     32:	c3                   	ret
-> >>     33:	48 8b 0d c7 20 0d 00 	mov    0xd20c7(%rip),%rcx        # 0xd21=
-01
-> >>     3a:	f7 d8                	neg    %eax
-> >>     3c:	64 89 01             	mov    %eax,%fs:(%rcx)
-> >>     3f:	48                   	rex.W
-> >>
-> >> Code starting with the faulting instruction
-> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>      0:	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax
-> >>      6:	73 01                	jae    0x9
-> >>      8:	c3                   	ret
-> >>      9:	48 8b 0d c7 20 0d 00 	mov    0xd20c7(%rip),%rcx        # 0xd20=
-d7
-> >>     10:	f7 d8                	neg    %eax
-> >>     12:	64 89 01             	mov    %eax,%fs:(%rcx)
-> >>     15:	48                   	rex.W
-> >> ```
-> >>
-> >> Please find all the Linux messages attached. Bisecting is unfortunatel=
-y
-> >> not easily doable.
->
-> > I reported a workqueue flush issue while ago but had forgotten it:
-> >=20
-> > https://lore.kernel.org/all/CX32RFOMJUQ0.3R4YCL9MDCB96@kernel.org/f
-> >=20
-> > However, Lino sent a fix for it:
-> >=20
-> > https://lore.kernel.org/linux-integrity/20240201113646.31734-1-l.sanfil=
-ippo@kunbus.com/
-> >=20
-> > Would be useful to know if that is the same wq issue also here.
->
-> Yes, commit d6fb14208e22 (tpm,tpm_tis: Avoid warning splat at shutdown)=
-=20
-> on top of Linux 6.8-rc7+ (also a unrelated USB patch) fixed it on the=20
-> Dell OptiPlex 5055.
+On Wed, 2024-02-14 at 15:35 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Invoking digest_cache_get() inside the iint->mutex critical region can
+> cause deadlocks due to the fact that IMA can be recursively invoked for
+> reading the digest list. The deadlock would occur if the digest_cache LSM
+> attempts to read the same inode that is already locked by IMA.
+> 
+> However, since the digest_cache LSM makes sure that the above situation
+> never happens, as it checks the inodes, it is safe to call
+> digest_cache_get() inside the critical region and nest the iint->mutex
+> when the DIGEST_LIST_CHECK hook is executed.
+> 
+> Add a lockdep subclass to the iint->mutex, that is 0 if the IMA hook
+> executed is not DIGEST_LIST_CHECK, and 1 when it is. Since lockdep allows
+> nesting with higher classes and subclasses, that effectively eliminates the
+> warning about the unsafe lock.
+> 
+> Pass the new lockdep subclass (nested variable) from ima_inode_get() to
+> ima_iint_init_always() and ima_iint_lockdep_annotate().
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/ima/ima.h      |  2 +-
+>  security/integrity/ima/ima_iint.c | 11 ++++++-----
+>  security/integrity/ima/ima_main.c |  6 +++---
+>  3 files changed, 10 insertions(+), 9 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index cea4517e73ab..c9140a57b591 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -216,7 +216,7 @@ static inline void ima_inode_set_iint(const struct inode
+> *inode,
+>  }
+>  
+>  struct ima_iint_cache *ima_iint_find(struct inode *inode);
+> -struct ima_iint_cache *ima_inode_get(struct inode *inode);
+> +struct ima_iint_cache *ima_inode_get(struct inode *inode, bool nested);
+>  void ima_inode_free(struct inode *inode);
+>  void __init ima_iintcache_init(void);
+>  
+> diff --git a/security/integrity/ima/ima_iint.c
+> b/security/integrity/ima/ima_iint.c
+> index e7c9c216c1c6..b4f476fae437 100644
+> --- a/security/integrity/ima/ima_iint.c
+> +++ b/security/integrity/ima/ima_iint.c
+> @@ -41,7 +41,7 @@ struct ima_iint_cache *ima_iint_find(struct inode *inode)
+>   * See ovl_lockdep_annotate_inode_mutex_key() for more details.
+>   */
+>  static inline void ima_iint_lockdep_annotate(struct ima_iint_cache *iint,
+> -					     struct inode *inode)
+> +					     struct inode *inode, bool nested)
+>  {
+>  #ifdef CONFIG_LOCKDEP
+>  	static struct lock_class_key ima_iint_mutex_key[IMA_MAX_NESTING];
 
-OK, good to hear and thank you for reporting this!
 
-BR, Jarkko
+"nested" is being pushed all the way down to here, perhaps I'm missing
+something, but I don't see it being used in any of the patches.
+
+Mimi
+
+> @@ -56,7 +56,7 @@ static inline void ima_iint_lockdep_annotate(struct
+> ima_iint_cache *iint,
+>  }
+>  
+>  static void ima_iint_init_always(struct ima_iint_cache *iint,
+> -				 struct inode *inode)
+> +				 struct inode *inode, bool nested)
+>  {
+>  	iint->ima_hash = NULL;
+>  	iint->version = 0;
+> @@ -69,7 +69,7 @@ static void ima_iint_init_always(struct ima_iint_cache
+> *iint,
+>  	iint->ima_creds_status = INTEGRITY_UNKNOWN;
+>  	iint->measured_pcrs = 0;
+>  	mutex_init(&iint->mutex);
+> -	ima_iint_lockdep_annotate(iint, inode);
+> +	ima_iint_lockdep_annotate(iint, inode, nested);
+>  }
+>  
+>  static void ima_iint_free(struct ima_iint_cache *iint)
+> @@ -82,13 +82,14 @@ static void ima_iint_free(struct ima_iint_cache *iint)
+>  /**
+>   * ima_inode_get - Find or allocate an iint associated with an inode
+>   * @inode: Pointer to the inode
+> + * @nested: Whether or not the iint->mutex lock can be nested
+>   *
+>   * Find an iint associated with an inode, and allocate a new one if not
+> found.
+>   * Caller must lock i_mutex.
+>   *
+>   * Return: An iint on success, NULL on error.
+>   */
+> -struct ima_iint_cache *ima_inode_get(struct inode *inode)
+> +struct ima_iint_cache *ima_inode_get(struct inode *inode, bool nested)
+>  {
+>  	struct ima_iint_cache *iint;
+>  
+> @@ -100,7 +101,7 @@ struct ima_iint_cache *ima_inode_get(struct inode *inode)
+>  	if (!iint)
+>  		return NULL;
+>  
+> -	ima_iint_init_always(iint, inode);
+> +	ima_iint_init_always(iint, inode, nested);
+>  
+>  	inode->i_flags |= S_IMA;
+>  	ima_inode_set_iint(inode, iint);
+> diff --git a/security/integrity/ima/ima_main.c
+> b/security/integrity/ima/ima_main.c
+> index 780627b0cde7..18285fc8ac07 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -248,7 +248,7 @@ static int process_measurement(struct file *file, const
+> struct cred *cred,
+>  	inode_lock(inode);
+>  
+>  	if (action) {
+> -		iint = ima_inode_get(inode);
+> +		iint = ima_inode_get(inode, func == DIGEST_LIST_CHECK);
+>  		if (!iint)
+>  			rc = -ENOMEM;
+>  	}
+> @@ -699,7 +699,7 @@ static void ima_post_create_tmpfile(struct mnt_idmap
+> *idmap,
+>  		return;
+>  
+>  	/* Nothing to do if we can't allocate memory */
+> -	iint = ima_inode_get(inode);
+> +	iint = ima_inode_get(inode, false);
+>  	if (!iint)
+>  		return;
+>  
+> @@ -731,7 +731,7 @@ static void ima_post_path_mknod(struct mnt_idmap *idmap,
+> struct dentry *dentry)
+>  		return;
+>  
+>  	/* Nothing to do if we can't allocate memory */
+> -	iint = ima_inode_get(inode);
+> +	iint = ima_inode_get(inode, false);
+>  	if (!iint)
+>  		return;
+>  
+
 
