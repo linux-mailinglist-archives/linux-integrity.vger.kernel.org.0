@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1656-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1657-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 237808757D2
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 21:03:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0D568757EB
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 21:05:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C040F1F21121
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:03:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5009BB24AC9
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0A5137C44;
-	Thu,  7 Mar 2024 20:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015B9137C54;
+	Thu,  7 Mar 2024 20:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z8bw2KnL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLKfRRvo"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F5E12DDB6;
-	Thu,  7 Mar 2024 20:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB72A1369B9;
+	Thu,  7 Mar 2024 20:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709841827; cv=none; b=jCR481fY9o7botmaouL+1ztmHHLo8SyMmY/xYCYbiU3lAcCt7FDAVQw87P3XD8PBuRRObfI1m8OBWJeDSUb7HZzY+P3rSfHIjBGP445G6Mv6jXsafvqoRFiwd51IgLT5xVj35ojGmUAfBI7SfilX/FwF7FNU9SauyLq+bviWNGc=
+	t=1709841950; cv=none; b=L4sDlatTZUSPuB78uKD8O5kET++yD5AKVlXvX70MRLFr+05kUmCEigt4RXuQ3l607Wsf7jt9yb7WVdZIQ1blmqhp0tqek7jR+Z3FJxldyCDiiauIajpzLKMbgXGv0+jQjfih5bsB0dZxkFHioxxMoJ/F3aw1z2vtx23r1TdV8WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709841827; c=relaxed/simple;
-	bh=or5Zvybbh12HQg7S8mcZwU/rF56iK4Dh3wM0cLoYlEc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=SLC9XMzFRp0ZfLutpXD+ROoL6zJJ/XIV+M6KRZgWC5NvbtMXaawxQyvYhPBHJO5d0idWvpQcZQOBOmoP4tjw25ZF+I2k8QyjPWGz6QRjN4fOzCp0CM47cac0lmPuCOkeaIoIZqAl3H8XNdTA7RSrG6cHgivLjj8L3yjic1YUQHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z8bw2KnL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B744C433C7;
-	Thu,  7 Mar 2024 20:03:44 +0000 (UTC)
+	s=arc-20240116; t=1709841950; c=relaxed/simple;
+	bh=78Rsj3O/7ufaekATx69zosteYwT6oeClJL8QONwmeTE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Or+yr7mN76eyfvpDRZJtd2vuTfwWlA9UVezZEQ9dGnfG+yE/EDZpzdvIYWyjLRkktK1gMzdZkug6sU7eGy28SDSdBxzPCPE7MiM4XE3oGl4IxEvaMkWyPgXJvRLxXZfzR5HF8Jy5+LQqQdGq+r1nuCwxCfhZFFKEQrnEZMQYRCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLKfRRvo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F44C433C7;
+	Thu,  7 Mar 2024 20:05:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709841826;
-	bh=or5Zvybbh12HQg7S8mcZwU/rF56iK4Dh3wM0cLoYlEc=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=Z8bw2KnL9h2VF5BY9Of5RtEtKlkqKBMS/rtPkIOoggVHTD/QPBHl0whGqJ6IKsIJr
-	 1uprv6G470KbGQlskspYIjACQCx4/e1za0UZtLhKBh60tffrLdoXArrf5cKMH3vAfP
-	 VVCWLds0z/cn8d4PVjSsiiQ2Ai2lDQ/SsydQ4rJJu7+QMxo9duUnTl0uHtumkesK6J
-	 3BU50J6Rrt0y4zG62zoer1d/BdJCq4StnlKo+74DYvBZ0MjZ09q8CT1n29uG/t09qd
-	 9f1urCjZuJRsUF8GzAmc69qg2Y1AXj5bKZ8ea2MI+ICGhbDJzudgmavWNaNwuKmu5m
-	 MCBA6FXGb6iMw==
+	s=k20201202; t=1709841950;
+	bh=78Rsj3O/7ufaekATx69zosteYwT6oeClJL8QONwmeTE=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=FLKfRRvo1oaqVmm36Ci4l/y+mhDJg2A7ME0Dvc2Lr4Vzr5i1i/EtQhRsHG+18jAIj
+	 rvG97J3ZSzhlgBLxNPyqlmEoLSRAtgyOAsoyBBX593XX3XsMnfKMc/A4iJmaXdAiCd
+	 AhaqCOHmB0WfvTwNXEMCiwEHw2laOSaY5mduW5GGDuR+6XOG/CvXhHSNoy99snTzSR
+	 uAC0xy9XWijo6rbgHMyhoK6YQYokkscw96oG/We7m2+kNq9a3nRCWcptWmyYYndU3B
+	 wx+hGU92xPgcifhXHZNnvUvlpS6127tTgb5tpb9vlfheiDq2RgYjztgLKYBV33ILKD
+	 0OjpLYYxwyOiw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,60 +49,80 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Mar 2024 22:03:43 +0200
-Message-Id: <CZNSC9QUG8LK.372GE869GH81Q@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Christian Brauner"
- <brauner@kernel.org>, <linux-fsdevel@vger.kernel.org>
-Cc: "Seth Forshee" <sforshee@kernel.org>, <linux-integrity@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH] xattr: restrict vfs_getxattr_alloc() allocation size
+Date: Thu, 07 Mar 2024 22:05:46 +0200
+Message-Id: <CZNSDUEJ4P9S.235D7ZCOV738N@kernel.org>
+Cc: <peterhuewe@gmx.de>, <LinoSanfilippo@gmx.de>,
+ <p.rosenberger@kunbus.com>, <lukas@wunner.de>, <jgg@ziepe.ca>,
+ <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <stable@vger.kernel.org>
+Subject: Re: [PATCH] tpm,tpm_tis: Avoid warning splat at shutdown
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Paul Menzel" <pmenzel@molgen.mpg.de>, "Lino Sanfilippo"
+ <l.sanfilippo@kunbus.com>
 X-Mailer: aerc 0.17.0
-References: <20240305-effekt-luftzug-51913178f6cd@brauner>
- <CZNSASBASJBK.R8MZW6X5VKMF@kernel.org>
-In-Reply-To: <CZNSASBASJBK.R8MZW6X5VKMF@kernel.org>
+References: <20240201113646.31734-1-l.sanfilippo@kunbus.com>
+ <84dd5c01-906c-4e13-9d8c-e5350f718d56@molgen.mpg.de>
+In-Reply-To: <84dd5c01-906c-4e13-9d8c-e5350f718d56@molgen.mpg.de>
 
-On Thu Mar 7, 2024 at 10:01 PM EET, Jarkko Sakkinen wrote:
-> On Tue Mar 5, 2024 at 2:27 PM EET, Christian Brauner wrote:
-> > The vfs_getxattr_alloc() interface is a special-purpose in-kernel api
-> > that does a racy query-size+allocate-buffer+retrieve-data. It is used b=
-y
-> > EVM, IMA, and fscaps to retrieve xattrs. Recently, we've seen issues
-> > where 9p returned values that amount to allocating about 8000GB worth o=
-f
-> > memory (cf. [1]). That's now fixed in 9p. But vfs_getxattr_alloc() has
-> > no reason to allow getting xattr values that are larger than
-> > XATTR_MAX_SIZE as that's the limit we use for setting and getting xattr
-> > values and nothing currently goes beyond that limit afaict. Let it chec=
-k
-> > for that and reject requests that are larger than that.
-> >
-> > Link: https://lore.kernel.org/r/ZeXcQmHWcYvfCR93@do-x1extreme [1]
-> > Signed-off-by: Christian Brauner <brauner@kernel.org>
-> > ---
-> >  fs/xattr.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/fs/xattr.c b/fs/xattr.c
-> > index 09d927603433..a53c930e3018 100644
-> > --- a/fs/xattr.c
-> > +++ b/fs/xattr.c
-> > @@ -395,6 +395,9 @@ vfs_getxattr_alloc(struct mnt_idmap *idmap, struct =
-dentry *dentry,
-> >  	if (error < 0)
-> >  		return error;
-> > =20
-> > +	if (error > XATTR_SIZE_MAX)
-> > +		return -E2BIG;
-> > +
-> >  	if (!value || (error > xattr_size)) {
-> >  		value =3D krealloc(*xattr_value, error + 1, flags);
-> >  		if (!value)
+On Tue Mar 5, 2024 at 5:43 PM EET, Paul Menzel wrote:
+> Dear Lino,
 >
-> I wonder if this should even categorized as a bug fix and get
-> backported. Good catch!
+>
+> Thank you for the patch.
+>
+> Am 01.02.24 um 12:36 schrieb Lino Sanfilippo:
+> > If interrupts are not activated the work struct 'free_irq_work' is not
+> > initialized. This results in a warning splat at module shutdown.
+> >=20
+> > Fix this by always initializing the work regardless of whether interrup=
+ts
+> > are activated or not.
+> >=20
+> > cc: stable@vger.kernel.org
+> > Fixes: 481c2d14627d ("tpm,tpm_tis: Disable interrupts after 1000 unhand=
+led IRQs")
+> > Reported-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > Closes: https://lore.kernel.org/all/CX32RFOMJUQ0.3R4YCL9MDCB96@kernel.o=
+rg/
+> > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> > ---
+> >   drivers/char/tpm/tpm_tis_core.c | 3 +--
+> >   1 file changed, 1 insertion(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
+_core.c
+> > index 1b350412d8a6..64c875657687 100644
+> > --- a/drivers/char/tpm/tpm_tis_core.c
+> > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > @@ -919,8 +919,6 @@ static int tpm_tis_probe_irq_single(struct tpm_chip=
+ *chip, u32 intmask,
+> >   	int rc;
+> >   	u32 int_status;
+> >  =20
+> > -	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+> > -
+> >   	rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+> >   				       tis_int_handler, IRQF_ONESHOT | flags,
+> >   				       dev_name(&chip->dev), chip);
+> > @@ -1132,6 +1130,7 @@ int tpm_tis_core_init(struct device *dev, struct =
+tpm_tis_data *priv, int irq,
+> >   	priv->phy_ops =3D phy_ops;
+> >   	priv->locality_count =3D 0;
+> >   	mutex_init(&priv->locality_count_mutex);
+> > +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+> >  =20
+> >   	dev_set_drvdata(&chip->dev, priv);
+>
+> This is commit d6fb14208e22 in jarkko/next.
+>
+> I tested this patch on top of Linux 6.8-rc7 on a Dell OptiPlex 5055 [1]=
+=20
+> and it fixes the issue there too.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Thanks!
+
+If you don't mind I'll add your tested-by to the commit before I send
+my next pull request to Linus?
 
 BR, Jarkko
 
