@@ -1,142 +1,125 @@
-Return-Path: <linux-integrity+bounces-1631-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1632-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F3E4875200
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 15:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 103BF875292
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 16:01:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 804DF1C230B9
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 14:37:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09D9A1C2292C
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 15:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 737FB1EB41;
-	Thu,  7 Mar 2024 14:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E13F12DDBE;
+	Thu,  7 Mar 2024 15:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iKjuyOrZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72E941C65;
-	Thu,  7 Mar 2024 14:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B0812D754;
+	Thu,  7 Mar 2024 15:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709822205; cv=none; b=g7B2k/su1VDiRVUmy1+yzIa55goG7MeKx7TmEB8iFYpcmSrwdw2BKG85w3IV9vgxO+WXysoM9wPa2n9vegO1WNhNtzc1FrojK3t2is0PZNVXpWVrL+RSZNIsMEX7uGb1P0dmGguogzCsYmnvS3AnBlpNptBmDrQAm2xUkvdJyTA=
+	t=1709823703; cv=none; b=hhlWKob9Q8MvR4/qKBnQdgJ5P80Bd/3ZCPdA5mL1q8lc9KvpDKWX7f3FayhIZkov0GCdsDIG5zTwKdIIpTp48SsmzV5CDL25TiSxTP57wk8ZVLY6XnOUvOEUXwsqidycCvmnd8Qz/9KHj7XYXRsPcTVHo5z6Jte17XgytLlr44M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709822205; c=relaxed/simple;
-	bh=fBgd/xX7Uh3OPchqwmFNdogp9X5rg4dHxjtoKMkjoqU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ehuXXjYUDTO6ExlxOwqnoxybXWhfB9uOBzfQogqlM8jreWd+CT1NA+3avsyHyv7r0k+pZY1hGdbcLCwzmvPahqpk25N8I7R8pIHrDKBV5KAdO6TdoPsW33yBBkRG7p5/DhqW8tutZkv1Vfmoc30o9s8q4a1HdZaAObGwnPqV9y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4TrBFK1KkJz9xFrK;
-	Thu,  7 Mar 2024 22:16:53 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 9CC6B14061B;
-	Thu,  7 Mar 2024 22:36:29 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDHvhfi0OllmZnkAw--.17428S2;
-	Thu, 07 Mar 2024 15:36:29 +0100 (CET)
-Message-ID: <5a08af42118541c87ce0b173d03217c3623adce2.camel@huaweicloud.com>
-Subject: Re: [PATCH] evm: Change vfs_getxattr() with __vfs_getxattr() in
- evm_calc_hmac_or_hash()
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Seth Forshee <sforshee@kernel.org>
-Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com,  paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com,  linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org,  linux-kernel@vger.kernel.org,
- Roberto Sassu <roberto.sassu@huawei.com>,  stable@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, Christian Brauner <brauner@kernel.org>
-Date: Thu, 07 Mar 2024 15:36:14 +0100
-In-Reply-To: <ZenPtCfh6CyD2xz5@do-x1extreme>
-References: <20240307122240.3560688-1-roberto.sassu@huaweicloud.com>
-	 <ZenPtCfh6CyD2xz5@do-x1extreme>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1709823703; c=relaxed/simple;
+	bh=eNFxKcWlEdHQbJlCDhgLyCDMNEl0/5OPCQ3E9Gp/e7M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Iv9ejwsSUEuf8kA2qEnAXyLi+AspATzqIOSge5lBeXn+dGie6F6+TQ4D19KZ53SovueVR33IobJcnw59ETEvHutCRKz8Acst8jHXLDB0Q/4L4Jrc9vdaBmUCEDtCn54d7EoN4kGABTx2rx6/K2yE8sBJVIA9zVJ3rcIYEWWXBLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iKjuyOrZ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 427EhKq9004082;
+	Thu, 7 Mar 2024 15:01:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=INNS7wXY+uyGYWsmpIcvwWMcJdOC94K2KLNkCD8oXrw=;
+ b=iKjuyOrZKMPHy2SF+lj9F/lmlcc6wGtxI0ycOrUXbPhxvo2QviUOEh6nO2wFQc0TYwX8
+ JXqnzuIsAaN9wqvUYnN7ADJzYDwlPejigzgf+xNXFzBqa1kJxkdQATBrho3gZhQe7A9f
+ oa+K7yu94VYC7tzzqmENMzwN0S8Mbjsqs592UnH3AOhJ6zcM1Gixpv/9j5BzX8OOwvY8
+ ugdB9lJvPqOWylDPoaVl/nphLBYg300PchNfUiY3JdbEU4ZUF5W+HdAVoViFpBmt877b
+ c33MDOx//7i/9j3QJVEAMzK2Y4tlaCDGTQdCRqQwv9NECNfZamwM+c0eWRPvd1umlABx Nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wqfdkhmw2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Mar 2024 15:01:20 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 427EX8eu019521;
+	Thu, 7 Mar 2024 15:01:16 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wqfdkhm9b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Mar 2024 15:01:15 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 427CLCic006046;
+	Thu, 7 Mar 2024 15:00:58 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wmeetegms-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Mar 2024 15:00:58 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 427F0s7017498850
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 Mar 2024 15:00:56 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4F36058064;
+	Thu,  7 Mar 2024 15:00:54 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C712C5806F;
+	Thu,  7 Mar 2024 15:00:53 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  7 Mar 2024 15:00:53 +0000 (GMT)
+Message-ID: <90a14b5f-6976-4941-a623-ae31dfa33899@linux.ibm.com>
+Date: Thu, 7 Mar 2024 10:00:53 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwDHvhfi0OllmZnkAw--.17428S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KrWkZFyrZryUuw43ZFy3twb_yoW8tr1fpF
-	WYkanrKrn5Jry5Cas5GF4DAayF93y5Xr4jkrsFv340v3ZrXrn7Zr93Wr13uryF9r1xtwn5
-	tw4qqFyYywnxA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-	AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-	6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj5cYAAAAs3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the
+ log and its size
+Content-Language: en-US
+To: Michael Ellerman <mpe@ellerman.id.au>, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: linux-kernel@vger.kernel.org, jarkko@kernel.org, rnsastry@linux.ibm.com,
+        peterhuewe@gmx.de, viparash@in.ibm.com
+References: <20240306155511.974517-1-stefanb@linux.ibm.com>
+ <20240306155511.974517-3-stefanb@linux.ibm.com> <87h6hinwzw.fsf@mail.lhotse>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <87h6hinwzw.fsf@mail.lhotse>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Gv38LkoCS3PkLxRFplGlkVvN24IeWssB
+X-Proofpoint-ORIG-GUID: GqBNiazuMisAY30rZktBh8dnkqQY6ci-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-07_08,2024-03-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=917 suspectscore=0 spamscore=0
+ malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2403070087
 
-On Thu, 2024-03-07 at 08:31 -0600, Seth Forshee wrote:
-> On Thu, Mar 07, 2024 at 01:22:39PM +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >=20
-> > Use __vfs_getxattr() instead of vfs_getxattr(), in preparation for
-> > deprecating using the vfs_ interfaces for retrieving fscaps.
-> >=20
-> > __vfs_getxattr() is only used for debugging purposes, to check if kerne=
-l
-> > space and user space see the same xattr value.
->=20
-> __vfs_getxattr() won't give you the value as seen by userspace though.
-> Userspace goes through vfs_getxattr() -> xattr_getsecurity() ->
-> cap_inode_getsecurity(), which does the conversion to the value
-> userspace sees. __vfs_getxattr() just gives the raw disk data.
->=20
-> I'm also currently working on changes to my fscaps series that will make
-> it so that __vfs_getxattr() also cannot be used to read fscaps xattrs.
-> I'll fix this and other code in EVM which will be broken by that change
-> as part of the next version too.
 
-You are right, thank you!
 
-Roberto
+On 3/7/24 05:42, Michael Ellerman wrote:
+> Stefan Berger <stefanb@linux.ibm.com> writes:
+>> If linux,sml-log is available use it to get the TPM log rather than the
+>> pointer found in linux,sml-base. This resolves an issue on PowerVM and KVM
+>> on Power where after a kexec the memory pointed to by linux,sml-base may
+>> have been corrupted. Also, linux,sml-log has replaced linux,sml-base and
+>> linux,sml-size on these two platforms.
+> 
+> It would be good to mention that powernv platforms (sometimes called
+> Open Power or bare metal) still use linux,sml-base/size, via skiboot.
 
-> >=20
-> > Cc: stable@vger.kernel.org # 5.14.x
-> > Cc: linux-fsdevel@vger.kernel.org
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-> > Fixes: 907a399de7b0 ("evm: Check xattr size discrepancy between kernel =
-and user")
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  security/integrity/evm/evm_crypto.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/e=
-vm/evm_crypto.c
-> > index b1ffd4cc0b44..168d98c63513 100644
-> > --- a/security/integrity/evm/evm_crypto.c
-> > +++ b/security/integrity/evm/evm_crypto.c
-> > @@ -278,8 +278,8 @@ static int evm_calc_hmac_or_hash(struct dentry *den=
-try,
-> >  		if (size < 0)
-> >  			continue;
-> > =20
-> > -		user_space_size =3D vfs_getxattr(&nop_mnt_idmap, dentry,
-> > -					       xattr->name, NULL, 0);
-> > +		user_space_size =3D __vfs_getxattr(dentry, inode, xattr->name,
-> > +						 NULL, 0);
-> >  		if (user_space_size !=3D size)
-> >  			pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n"=
-,
-> >  				 dentry->d_name.name, xattr->name, size,
-> > --=20
-> > 2.34.1
-> >=20
-
+Will do in v2.
 
