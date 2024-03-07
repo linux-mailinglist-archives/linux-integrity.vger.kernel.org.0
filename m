@@ -1,178 +1,164 @@
-Return-Path: <linux-integrity+bounces-1665-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1666-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB5858759C6
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 22:52:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0460E875A1C
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 23:17:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4530A28150B
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 21:52:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82C761F21072
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 22:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D54135A5C;
-	Thu,  7 Mar 2024 21:52:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6F4613B795;
+	Thu,  7 Mar 2024 22:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQINbUxQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ktTQ+DkF"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBCF131E3C;
-	Thu,  7 Mar 2024 21:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE6813BAD4
+	for <linux-integrity@vger.kernel.org>; Thu,  7 Mar 2024 22:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709848339; cv=none; b=Lb1pe21DrfHlO2k4sEz4MrQ/YKOx09iroZlrobcjTfjaF8X/QicaG+eQGxN4HR9eXVSl6W+iIDo0by7aQXN2aoxGN+HfbwjtEXR52EPrl8l8DXh3FybTVbZdu7DxgcmxIZ8GZfwtaIKTjWNf7OpnbvfhbcZyRxtHflxnPMO2aI8=
+	t=1709849849; cv=none; b=FOixh6NScwN3Hz2D+JS+jdTlrPqK6Dile35PDb4JtH4k4OdTMVn4MbxY1wfScxOQtXyH2PvzQ0kaTtub5yshuR/DKFavPuC+bC2On8uMkYsv1ysQX4OCSTP6aObVI5XQ38d7rt2DVBS/wVi/2fY7rCz60eWyLjibnbBJoiyozwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709848339; c=relaxed/simple;
-	bh=c7A0XMkbXZAFW7+3KxHmXP0sKvgNAhuc223K2RQHkmc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WQPODJ3EywbRWDdrSVLZ6mShcNOh1Nu7ssDlJu6a4zCwhF43E9QqRolyMX3ce5gfC9agJ2XjBa9rDB3dwklxVK+007Z98LFR6g7nZhAAJcnY5a2JEL5m4ivb+cLMVrMKyKhBVtAclBI/vbU6lX35GsJ9zo9ocVWL9UwExJCHTbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQINbUxQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F779C433C7;
-	Thu,  7 Mar 2024 21:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709848339;
-	bh=c7A0XMkbXZAFW7+3KxHmXP0sKvgNAhuc223K2RQHkmc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NQINbUxQhR3TSRNApvgE1q8yLZipCir5NX4vAyKZrEeuPk/hrrrc/89iu5eVOKPY0
-	 vPHFtxqu2SrCjp81LcYDB76Jqz49DHQmieHjpbXzLhgNU+0gMJuU6vOd0UaEBSkBzX
-	 ec3nb59LmoL9zYCW57MPAf0kXPbFEI8Ct8CoFpF/jWurfroFwtqhLicm7mKr4U3OLa
-	 pYQ+XGQh0h6Ijfhj6B1kXkMN9s3sTt8JXyufrtuwwBudAm3JxN+bXeOo+n/b31utCY
-	 /Mx+nk/XR7uxXDu/DE2ArbKN+JWuuz6AlJWsf7i6NV96Pf/2DmSHruuXhu4C9FbufS
-	 ycJiWPGzinKIQ==
-Date: Thu, 7 Mar 2024 15:52:14 -0600
-From: Rob Herring <robh@kernel.org>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	jarkko@kernel.org, rnsastry@linux.ibm.com, peterhuewe@gmx.de,
-	viparash@in.ibm.com
-Subject: Re: [PATCH 1/2] powerpc/prom_init: Replace linux,sml-base/sml-size
- with linux,sml-log
-Message-ID: <20240307215214.GB3110385-robh@kernel.org>
-References: <20240306155511.974517-1-stefanb@linux.ibm.com>
- <20240306155511.974517-2-stefanb@linux.ibm.com>
- <87jzmenx2c.fsf@mail.lhotse>
+	s=arc-20240116; t=1709849849; c=relaxed/simple;
+	bh=el81ln6XAgZeNQn9GhoaHQJOgSEAVnD65JLP5Ix8n3c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pfXXdMsdzre0lDXuaNzFuGrTZbqOZ/w4iRr4++0MroVaduwuVSSLyIhtU7gZMaYDkF06FV0O5cJ9XovZfVrXhe4wACxzGR4Gw11OdcNAa3+WGGvLDPqYp1h4uxFsuM8b4amkVAJzvIZ5R1xtJEK3rFjjeNTtMeCxWrmoUrGFWOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ktTQ+DkF; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc23bf7e5aaso1408617276.0
+        for <linux-integrity@vger.kernel.org>; Thu, 07 Mar 2024 14:17:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709849847; x=1710454647; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5i4nWr8S2Ps6+IO4mf7w2td+iD4KuHaR0PERGp8huRI=;
+        b=ktTQ+DkFizNbIMjqjVmx0Z8A5CaP6dyujlxl4tfLI22pgzL89TUDNpIBrHHuPkXp+z
+         nIlGANWk/xC2YRL3ztWAlOMcqUtCpb/TdWyilrGHr45zRnhkPOaboik3oUkTb1AxbWg/
+         Q7Xq2YX8j1WacIeLOrxkaBiMeJgphThLojS13jamPePy7cdFUcnPUCXRQB0u2IQNdEPO
+         E1hF0jdrz8WdXBBDEkfn7kUTBjyEukDJapRCXMwHr07eIRuXe1GGr8JlZTFAyP4xaDG+
+         rXkFC8LKOs8MKuPSENcR6QmtXfAmet4U8KhWqC0DgyqybcVzI68RJRARMq5S3ItZBDqL
+         V+rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709849847; x=1710454647;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5i4nWr8S2Ps6+IO4mf7w2td+iD4KuHaR0PERGp8huRI=;
+        b=kJX1va09Tu3t3GU7xh27+FoWdpAxsa38wCVob6K+1aedviBGSILFzBGgU7gB+j+xps
+         p5k0bjGWiMe/Rx4kExgRaHW4pIFf1koAGt3tJ9vVmyOrZPxZJgZM1aBOIPc8DA4hiQdY
+         tVHv8h8gc9YQ+GZnzj07Oim6upjtSun4Dl2wNB5yqaVd2bPKiTs6lxPGW3ZursuqBdaz
+         y26ITDjrJrW6aoDHDvXIdIX5sMTvHcsP6ckKlpCx0Pu42Twwnn/Y4dLbAQ86Uz7Da7ZX
+         jUG0kCkxSoxioDPU8BVNwk7lvFvsevlN2gsgiAVXNgbKSBnSj2CqPQ0lx1UDALXuKgny
+         /Vbg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1v51IhMFGjcLBEzlr1hzrtVub5cC/NkFzXkubHXdFF8ZmFf+2CQmk0a/teipIaOlcLK9OV/GT3Dbl1VHXsvlw9EDUA6+KXxix6j4UbiMB
+X-Gm-Message-State: AOJu0Yw9YlaY38lkfnhbEN+dAR399Bhn+U1FFl9uPDz+MGRVqrwYk15U
+	HuyEGXKsoRF7Xp66IYNY5O2nHL30we4teu7ifDUzoL9kzfsP+ap6nTx+PnVv1WnlXbMcKyNyTXJ
+	rQGNgG4ouMgTsR1NcAfmKm/p15x0VGD7t9xY=
+X-Google-Smtp-Source: AGHT+IHm/+3S9ZlmbDFr0tAwN+EpsNi9UjcGqW9YhzQvpjcb8vM9S84oY3Df+/zJt90kVcAWfPCpfhtbjJwZz3HYJbE=
+X-Received: by 2002:a25:8746:0:b0:dcd:59e4:620c with SMTP id
+ e6-20020a258746000000b00dcd59e4620cmr17920676ybn.49.1709849846932; Thu, 07
+ Mar 2024 14:17:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87jzmenx2c.fsf@mail.lhotse>
+References: <20240307000331.14848-1-adamoa@gmail.com> <20240307000331.14848-2-adamoa@gmail.com>
+ <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
+In-Reply-To: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
+From: Adam Alves <adamoa@gmail.com>
+Date: Thu, 7 Mar 2024 19:17:15 -0300
+Message-ID: <CAHwaaX_Am9zM4PUES11RT5QRs+4QNuRyOw7gBqvcHiDLokRKKg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Fix TPM chip hanging system before suspend/shutdown
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 07, 2024 at 09:41:31PM +1100, Michael Ellerman wrote:
-> Stefan Berger <stefanb@linux.ibm.com> writes:
-> > linux,sml-base holds the address of a buffer with the TPM log. This
-> > buffer may become invalid after a kexec and therefore embed the whole TPM
-> > log in linux,sml-log. This helps to protect the log since it is properly
-> > carried across a kexec with both of the kexec syscalls.
+Thank you for the instructions!
+
+First I used gmail and even setting it to text only it destroyed
+formatting. Later I set up git to send the e-mail directly.
+
+I read everything you asked again and implemented all suggestions,
+sending it right away.
+
+Em qui., 7 de mar. de 2024 =C3=A0s 16:54, Jarkko Sakkinen
+<jarkko@kernel.org> escreveu:
+>
+> On Thu Mar 7, 2024 at 2:03 AM EET, Adam Alves wrote:
+> > My PC would hang on almost every shutdown/suspend until I started
+> > testing this patch and so far in the past week I haven=E2=80=99t experi=
+enced
+> > any problems anymore.
 > >
-> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > I suspect that the root cause on my specific board is that after the
+> > ACPI command to put the device to S3 or S5, some firmware
+> > application/driver will try to use the TPM chip expecting it to be in
+> > Locality 0 as expected by TCG PC Client Platform Firmware Profile
+> > Version 1.06 Revision 52 (3.1.1 =E2=80=93 Pre-OS Environment) and then =
+when it
+> > fails to do so it simply halts the whole system.
+> >
+> > This issue might be related to the following bug:
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D217890
+> >
+> > Enable a user to configure the kernel
+> > through =E2=80=9Ctpm.locality_on_suspend=3D1=E2=80=9D boot parameter so=
+ that the locality
+> > is set before suspend/shutdown in order to diagnose whether or not the
+> > board is one of the buggy ones that require this workaround. Since this
+> > bug is related to the board/platform instead of the specific TPM chip,
+> > call dmi_check_system on the tpm_init function so that this setting is
+> > automatically enabled for boards specified in code (ASUS TUF GAMING
+> > B460M-PLUS already included) =E2=80=93 automatic configuration only wor=
+ks in
+> > case CONFIG_DMI is set though, since dmi_check_system is a non-op when
+> > CONFIG_DMI is not set.
+> >
+> > In case =E2=80=9Ctpm.locality_on_suspend=3D0=E2=80=9D (the default) don=
+'t change any
+> > behavior thus preserving current functionality of any other board
+> > except ASUSTeK COMPUTER INC. TUF GAMING B460M-PLUS and possibly future
+> > boards as we successfully diagnose other boards with the same issue
+> > fixed by using =E2=80=9Ctpm.locality_on_suspend=3D1=E2=80=9D.
+> >
+> > Signed-off-by: Adam Alves <adamoa@gmail.com>
 > > ---
-> >  arch/powerpc/kernel/prom_init.c | 8 ++------
-> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> >  drivers/char/tpm/tpm-chip.c      |  9 ++++++++
+> >  drivers/char/tpm/tpm-interface.c | 36 +++++++++++++++++++++++++++++++-
+> >  drivers/char/tpm/tpm.h           |  1 +
+> >  include/linux/tpm.h              |  1 +
+> >  4 files changed, 46 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
-> > index e67effdba85c..41268c30de4c 100644
-> > --- a/arch/powerpc/kernel/prom_init.c
-> > +++ b/arch/powerpc/kernel/prom_init.c
-> > @@ -1956,12 +1956,8 @@ static void __init prom_instantiate_sml(void)
-> >  
-> >  	reserve_mem(base, size);
-> >  
-> > -	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-base",
-> > -		     &base, sizeof(base));
-> > -	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-size",
-> > -		     &size, sizeof(size));
-> > -
-> > -	prom_debug("sml base     = 0x%llx\n", base);
-> > +	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-log",
-> > +		     (void *)base, size);
-> 
-> As we discussed via chat, doing it this way sucks the full content of
-> the log back into Open Firmware. 
-> 
-> That relies on OF handling such big properties, and also means more
-> memory will be consumed, which can cause problems early in boot.
-> 
-> A better solution is to explicitly add the log to the FDT in the
-> flattening phase.
-> 
-
-Why can't you just use /reserved-memory here? That should be preserved 
-from one kernel entry to the next.
+> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> > index 42b1062e33cd..8fdf7a137a94 100644
+> > --- a/drivers/char/tpm/tpm-chip.c
+> > +++ b/drivers/char/tpm/tpm-chip.c
+> > @@ -139,6 +139,9 @@ void tpm_chip_stop(struct tpm_chip *chip)
+> >  {
+> >       tpm_go_idle(chip);
+> >       tpm_relinquish_locality(chip);
+> > +     // If locality is to be preserved, we need to make sure it is Loc=
+ality 0.
+>
+> If you put that kind C++ comment you should also check out
+> https://www.kernel.org/doc/html/latest/process/coding-style.html
+>
+> Other stuff that I said in my earlier response still applies.
+>
+> BR, Jarkko
 
 
-> Also adding the new linux,sml-log property should be accompanied by a
-> change to the device tree binding.
-> 
-> The syntax is not very obvious to me, but possibly something like?
-> 
-> diff --git a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
-> index 50a3fd31241c..cd75037948bc 100644
-> --- a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
-> +++ b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
-> @@ -74,8 +74,6 @@ required:
->    - ibm,my-dma-window
->    - ibm,my-drc-index
->    - ibm,loc-code
-> -  - linux,sml-base
-> -  - linux,sml-size
 
-Dropping required properties is an ABI break. If you drop them, an older 
-OS version won't work.
-
->  
->  allOf:
->    - $ref: tpm-common.yaml#
-> diff --git a/Documentation/devicetree/bindings/tpm/tpm-common.yaml b/Documentation/devicetree/bindings/tpm/tpm-common.yaml
-> index 3c1241b2a43f..616604707c95 100644
-> --- a/Documentation/devicetree/bindings/tpm/tpm-common.yaml
-> +++ b/Documentation/devicetree/bindings/tpm/tpm-common.yaml
-> @@ -25,6 +25,11 @@ properties:
->        base address of reserved memory allocated for firmware event log
->      $ref: /schemas/types.yaml#/definitions/uint64
->  
-> +  linux,sml-log:
-
-Why is this Linux specific?
-
-> +    description:
-> +      Content of firmware event log
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +
->    linux,sml-size:
->      description:
->        size of reserved memory allocated for firmware event log
-> @@ -53,15 +58,22 @@ dependentRequired:
->    linux,sml-base: ['linux,sml-size']
->    linux,sml-size: ['linux,sml-base']
->  
-> -# must only have either memory-region or linux,sml-base
-> +# must only have either memory-region or linux,sml-base/size or linux,sml-log
->  # as well as either resets or reset-gpios
->  dependentSchemas:
->    memory-region:
->      properties:
->        linux,sml-base: false
-> +      linux,sml-log: false
->    linux,sml-base:
->      properties:
->        memory-region: false
-> +      linux,sml-log: false
-> +  linux,sml-log:
-> +    properties:
-> +      memory-region: false
-> +      linux,sml-base: false
-> +      linux,sml-size: false
->    resets:
->      properties:
->        reset-gpios: false
-> 
-> 
-> cheers
+--=20
+Adam Oliveira Alves
 
