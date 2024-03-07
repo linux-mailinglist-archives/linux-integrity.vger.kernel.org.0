@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1654-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1655-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73AD38757C6
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 21:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 141498757CA
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 21:01:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 294391F24AA6
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:00:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCFAE1F21593
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA1A1369A6;
-	Thu,  7 Mar 2024 20:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88298137C36;
+	Thu,  7 Mar 2024 20:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EB5ihk9x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCrstuBN"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A939136995;
-	Thu,  7 Mar 2024 20:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBC11369BB;
+	Thu,  7 Mar 2024 20:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709841615; cv=none; b=KqAGhqdSwKaJ4rCz6KQOwMLzBwBn4MFBTz1EcA+VpSWte5uqWG/z0JsSwphDsCblmA0tulWgHzNELjsXp8i+P0bBgZaUubbwAShkdI4UA9sVNXcPhSdIMnUgpkiV8gMc1QJccQE63eCd5wgvDAo5alB5c1WHaVHQ1t7ucqFeBA0=
+	t=1709841710; cv=none; b=c71zHSjbB2L0f7cCV45sua/Hdo8Kst3sICzqAte9GHUaXV7mEmCIStc9beLMs52kj01voChPshVB1DARdKisb5jGYFCEGJUnOm3nMsp6GY8zE29Q8TILMgCl9yMe0CzUL//Kqrq45i+VH7OZZBJCu2kLsCQY1hjM3rMxFJ+X6uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709841615; c=relaxed/simple;
-	bh=hHVUKE05J5hWZW3aCoiEn6Z8Rlg4XXsS0ZJFK6atvm4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=MjRWONakNCwbKnVrgn7GurO2as6U6GcBEDear6nJbHxWqSR7Kc923IcUDEyW363dO9Su1OrP8Gf8b6IfkHF99FYrd65xP0odKjdzOyBBC3V5sXcTTSOoRiqAhKDrwTWNKxhcqBg3fOIh9YqvcrTpaZ6H70T9UzlqJ24ihtxkzVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EB5ihk9x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6863C433C7;
-	Thu,  7 Mar 2024 20:00:12 +0000 (UTC)
+	s=arc-20240116; t=1709841710; c=relaxed/simple;
+	bh=hm84kKA+agsubOGm1+LlamcrcgNE0elQViO53M8e5vw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=megXHU0GLHsterQs3VHfm6Lc6YUOChqjyANH5g2XcSbLOTICbL5+w2rW0BkTd6Q//sZjhGKGgiglK/N3pCvCO3RyjSCimFT1SE5LrMWeyqBGH8r0XQJeGmmFWHmUr/oS2i6IgOkM8YE55v6oJMXm/NFHel2ToEeq0c54gqigE9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nCrstuBN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC2E6C433F1;
+	Thu,  7 Mar 2024 20:01:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709841614;
-	bh=hHVUKE05J5hWZW3aCoiEn6Z8Rlg4XXsS0ZJFK6atvm4=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=EB5ihk9xAs3LimzpDSuTx86WiERojQbp6l23Uruma8ryd5emdLC6GWdpaR/Pah6Gz
-	 /nJx8NvseHYj6MPnjrjQ2vZsPXw79kBh97MIb/YkzvIP6XmALSmqwGWVizRc2ZCe92
-	 z/VEbsToQl+nqJXgdl583vnahIVoUG30MGmRa3vdDd9HMPEtDPdEDlTOvDvrxYfNNm
-	 alCJZBe08I1sunPYH/WVQIjuoZxJUjNC33lThq85LUus45sPfI23YzduxwNeM3c+LT
-	 AKaiszpmyG7d/TIQMaCS95CjLDMFyjDR9pxg9EkaRLwrtIAUqpp7+Ai/1ADAC/b2RV
-	 X5et78TkappFw==
+	s=k20201202; t=1709841709;
+	bh=hm84kKA+agsubOGm1+LlamcrcgNE0elQViO53M8e5vw=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=nCrstuBNWGMyRdB5B1+AtiMquqTfz78AvfEfXy/Koy972kXN2U+kiun022JTjIW+Q
+	 I+Kvk9NNKcXq0jvNIaRJeBi0Rk1+y7YCSmv+5RhjmuGrPZDSZz7wDp2g0fYtvwS0gm
+	 URcMLyL3ypMC1bLDiCMdeG7TNW6nAi6KA7wvAtwfUXLnV4vhsp6JLXEiKp5STtodkb
+	 XtsbrEdh5FkFp+2d15RTRyRUMMBezn+z5Dh+51934xKArsgW0evGf/XGeD6K/JMKIY
+	 ECgYrlHl1dDovWyPlk1m64eGGiy1nMc8JaMccUrwKpDdZc6TohOvjNTwNb68RAtJlO
+	 c3RIlOLQxNXfg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,41 +49,53 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Mar 2024 22:00:10 +0200
-Message-Id: <CZNS9K4BJPQ8.2MD4WZS8YMI3W@kernel.org>
-Subject: Re: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the
- log and its size
+Date: Thu, 07 Mar 2024 22:01:46 +0200
+Message-Id: <CZNSASBASJBK.R8MZW6X5VKMF@kernel.org>
+Cc: "Seth Forshee" <sforshee@kernel.org>, <linux-integrity@vger.kernel.org>,
+ <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH] xattr: restrict vfs_getxattr_alloc() allocation size
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Stefan Berger"
- <stefanb@linux.ibm.com>, <mpe@ellerman.id.au>,
- <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-Cc: <linux-kernel@vger.kernel.org>, <rnsastry@linux.ibm.com>,
- <peterhuewe@gmx.de>, <viparash@in.ibm.com>
+To: "Christian Brauner" <brauner@kernel.org>,
+ <linux-fsdevel@vger.kernel.org>
 X-Mailer: aerc 0.17.0
-References: <20240306155511.974517-1-stefanb@linux.ibm.com>
- <20240306155511.974517-3-stefanb@linux.ibm.com>
- <CZNS7FO53BHK.6NO93P0C0VY5@kernel.org>
-In-Reply-To: <CZNS7FO53BHK.6NO93P0C0VY5@kernel.org>
+References: <20240305-effekt-luftzug-51913178f6cd@brauner>
+In-Reply-To: <20240305-effekt-luftzug-51913178f6cd@brauner>
 
-On Thu Mar 7, 2024 at 9:57 PM EET, Jarkko Sakkinen wrote:
-> in short summary: s/Use/use/
+On Tue Mar 5, 2024 at 2:27 PM EET, Christian Brauner wrote:
+> The vfs_getxattr_alloc() interface is a special-purpose in-kernel api
+> that does a racy query-size+allocate-buffer+retrieve-data. It is used by
+> EVM, IMA, and fscaps to retrieve xattrs. Recently, we've seen issues
+> where 9p returned values that amount to allocating about 8000GB worth of
+> memory (cf. [1]). That's now fixed in 9p. But vfs_getxattr_alloc() has
+> no reason to allow getting xattr values that are larger than
+> XATTR_MAX_SIZE as that's the limit we use for setting and getting xattr
+> values and nothing currently goes beyond that limit afaict. Let it check
+> for that and reject requests that are larger than that.
 >
-> On Wed Mar 6, 2024 at 5:55 PM EET, Stefan Berger wrote:
-> > If linux,sml-log is available use it to get the TPM log rather than the
-> > pointer found in linux,sml-base. This resolves an issue on PowerVM and =
-KVM
-> > on Power where after a kexec the memory pointed to by linux,sml-base ma=
-y
-> > have been corrupted. Also, linux,sml-log has replaced linux,sml-base an=
-d
-> > linux,sml-size on these two platforms.
-> >
-> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Link: https://lore.kernel.org/r/ZeXcQmHWcYvfCR93@do-x1extreme [1]
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
+> ---
+>  fs/xattr.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> So shouldn't this have a fixed tag, or not?
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index 09d927603433..a53c930e3018 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -395,6 +395,9 @@ vfs_getxattr_alloc(struct mnt_idmap *idmap, struct de=
+ntry *dentry,
+>  	if (error < 0)
+>  		return error;
+> =20
+> +	if (error > XATTR_SIZE_MAX)
+> +		return -E2BIG;
+> +
+>  	if (!value || (error > xattr_size)) {
+>  		value =3D krealloc(*xattr_value, error + 1, flags);
+>  		if (!value)
 
-In English: do we want this to be backported to stable kernel releases or n=
-ot?
+I wonder if this should even categorized as a bug fix and get
+backported. Good catch!
 
 BR, Jarkko
 
