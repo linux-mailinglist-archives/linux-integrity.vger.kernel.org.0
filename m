@@ -1,121 +1,116 @@
-Return-Path: <linux-integrity+bounces-1629-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1630-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E8E5874EE4
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 13:23:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42B938751E9
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 15:32:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A477281CCC
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 12:23:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC51BB284DF
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 14:32:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06D812AAEA;
-	Thu,  7 Mar 2024 12:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76E511DFF9;
+	Thu,  7 Mar 2024 14:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pbC0xNQQ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BC512AADB;
-	Thu,  7 Mar 2024 12:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462501C6AD;
+	Thu,  7 Mar 2024 14:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709814199; cv=none; b=l/vmhALvqDXz2wQRIHU7WgAr7OavW/ilF+TmWPEVV2ZZ2Zw03hhNk22BeNfKj2OlVVtA1bm8T7BDmWyzR+Pq7PpNFebXIRfijzrFXoSU6+vc69gFCgNL/bu9XKrw8J0elymWM7aUEHtiIf4gMp+JsyKlHa76cyilkQuOP/iTQcQ=
+	t=1709821878; cv=none; b=JLTMofrpG0vu0KdX45+x1wwonHgyZF4IzuzjASSQBXvZRbBVkJH8b6mIjX43wUI8P/TEYgE9WacgZHa7fk/SlnjnIXRzsd322fw8j9QxLnpJJwQVEOeIH91c3KRCRsbrEKbgy9lLTaKLsDxyZ0V//cURJhN2OUsXPMU9tgE8bzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709814199; c=relaxed/simple;
-	bh=47347CDrcctM5q9XZgq8/xM8yKL2YcYdeT0/hb+myVo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bsJXsEKo8DKwWzf769ANwnzjJzyouVu12lsB/Ys8Gqlm8qzEEnaP8t8Q7YNtnftHc0gWjH+gX6FxS9OQcoyyGugLztxogp05KCcTeqhBAG/wsNAm6NvyUhTZi68lNXDPHTnpr6/M0sQZRpshnrBp3kVnFEgDDYRABN3hxy5W1jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Tr7HG3lf7z9xxml;
-	Thu,  7 Mar 2024 20:03:22 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id AB30214037C;
-	Thu,  7 Mar 2024 20:23:07 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwA3LxihselliRTjAw--.14417S2;
-	Thu, 07 Mar 2024 13:23:07 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com
-Cc: linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	stable@vger.kernel.org,
+	s=arc-20240116; t=1709821878; c=relaxed/simple;
+	bh=BoCuQpnKvXZmgHfTbdIlDgZOctJUi4njjxRSp+4CH5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uGqIl3yr7+IWt1DEOeu9qZRzgggzbrGdPVNsXTsyzP5SHoMcUnVkb7aHoGlpksow2r0lUNbwsc6YM6of17o+JmCO7ieavRXPPo5Grx12tZO2IXM37QclyL8QT164n4JPmp68/8zauH5Dxt0Yi82UuFdlm/3n/tsA3KGaryrOp2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pbC0xNQQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B15B7C433C7;
+	Thu,  7 Mar 2024 14:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709821877;
+	bh=BoCuQpnKvXZmgHfTbdIlDgZOctJUi4njjxRSp+4CH5U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pbC0xNQQrGejHQ2bitaJqqjSkMc3ngNCgVrKc4lmct9ZugZ4DVuNDalUqhOcmAfoB
+	 6fb3JKk/IYaOyPrqxkA5sNEZYYIpkwxcT8jt1fbFlcadr4RyVWEI9mz0lih8Fp01Kd
+	 uZ6nzAfci7WUsMGdOgDiNZKFx4zD2j3t+FvGKStRleoiz5tPTH83HX5pxO6+P8CTtN
+	 0ujkoGBENcgy6n0Az2w3IC/eH0XBg3+MCgnpnVSsWwHPXBHZ3IAVDv8nm9/bdmBw6C
+	 /YawpO4sw+i+UQ8k7YDcO2dOMO4IJ/r10vfitQxgRLLcadLplEQujRsmwV+RBhqLVR
+	 oMu7jY1yZUVeA==
+Date: Thu, 7 Mar 2024 08:31:16 -0600
+From: Seth Forshee <sforshee@kernel.org>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>, stable@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
-	Christian Brauner <brauner@kernel.org>,
-	Seth Forshee <sforshee@kernel.org>
-Subject: [PATCH] evm: Change vfs_getxattr() with __vfs_getxattr() in evm_calc_hmac_or_hash()
-Date: Thu,  7 Mar 2024 13:22:39 +0100
-Message-Id: <20240307122240.3560688-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH] evm: Change vfs_getxattr() with __vfs_getxattr() in
+ evm_calc_hmac_or_hash()
+Message-ID: <ZenPtCfh6CyD2xz5@do-x1extreme>
+References: <20240307122240.3560688-1-roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwA3LxihselliRTjAw--.14417S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw4rCw4DAr15Jw45JF17trb_yoW8GFykpF
-	W5Ka9rKrn5JryrKas5GF4kAayF93yUXr47KrsxAa4Iv3Z8ZryxZr92qry7uryFvr18trn5
-	J3yqqr1Yyw13A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAF
-	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-	7IU8imRUUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj5cVqAABsT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240307122240.3560688-1-roberto.sassu@huaweicloud.com>
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Mar 07, 2024 at 01:22:39PM +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Use __vfs_getxattr() instead of vfs_getxattr(), in preparation for
+> deprecating using the vfs_ interfaces for retrieving fscaps.
+> 
+> __vfs_getxattr() is only used for debugging purposes, to check if kernel
+> space and user space see the same xattr value.
 
-Use __vfs_getxattr() instead of vfs_getxattr(), in preparation for
-deprecating using the vfs_ interfaces for retrieving fscaps.
+__vfs_getxattr() won't give you the value as seen by userspace though.
+Userspace goes through vfs_getxattr() -> xattr_getsecurity() ->
+cap_inode_getsecurity(), which does the conversion to the value
+userspace sees. __vfs_getxattr() just gives the raw disk data.
 
-__vfs_getxattr() is only used for debugging purposes, to check if kernel
-space and user space see the same xattr value.
+I'm also currently working on changes to my fscaps series that will make
+it so that __vfs_getxattr() also cannot be used to read fscaps xattrs.
+I'll fix this and other code in EVM which will be broken by that change
+as part of the next version too.
 
-Cc: stable@vger.kernel.org # 5.14.x
-Cc: linux-fsdevel@vger.kernel.org
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-Fixes: 907a399de7b0 ("evm: Check xattr size discrepancy between kernel and user")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/evm/evm_crypto.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index b1ffd4cc0b44..168d98c63513 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -278,8 +278,8 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
- 		if (size < 0)
- 			continue;
- 
--		user_space_size = vfs_getxattr(&nop_mnt_idmap, dentry,
--					       xattr->name, NULL, 0);
-+		user_space_size = __vfs_getxattr(dentry, inode, xattr->name,
-+						 NULL, 0);
- 		if (user_space_size != size)
- 			pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n",
- 				 dentry->d_name.name, xattr->name, size,
--- 
-2.34.1
-
+> 
+> Cc: stable@vger.kernel.org # 5.14.x
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+> Fixes: 907a399de7b0 ("evm: Check xattr size discrepancy between kernel and user")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/evm/evm_crypto.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+> index b1ffd4cc0b44..168d98c63513 100644
+> --- a/security/integrity/evm/evm_crypto.c
+> +++ b/security/integrity/evm/evm_crypto.c
+> @@ -278,8 +278,8 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+>  		if (size < 0)
+>  			continue;
+>  
+> -		user_space_size = vfs_getxattr(&nop_mnt_idmap, dentry,
+> -					       xattr->name, NULL, 0);
+> +		user_space_size = __vfs_getxattr(dentry, inode, xattr->name,
+> +						 NULL, 0);
+>  		if (user_space_size != size)
+>  			pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n",
+>  				 dentry->d_name.name, xattr->name, size,
+> -- 
+> 2.34.1
+> 
 
