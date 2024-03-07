@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1657-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1658-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0D568757EB
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 21:05:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFDEF8757F7
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 21:11:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5009BB24AC9
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:05:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B5DC281D61
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015B9137C54;
-	Thu,  7 Mar 2024 20:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EB1137C52;
+	Thu,  7 Mar 2024 20:11:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLKfRRvo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dwYf4VUQ"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB72A1369B9;
-	Thu,  7 Mar 2024 20:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A97D130AD0;
+	Thu,  7 Mar 2024 20:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709841950; cv=none; b=L4sDlatTZUSPuB78uKD8O5kET++yD5AKVlXvX70MRLFr+05kUmCEigt4RXuQ3l607Wsf7jt9yb7WVdZIQ1blmqhp0tqek7jR+Z3FJxldyCDiiauIajpzLKMbgXGv0+jQjfih5bsB0dZxkFHioxxMoJ/F3aw1z2vtx23r1TdV8WY=
+	t=1709842286; cv=none; b=lsAQWvYf73UPPh/S6hRXzbdTanvQEBk2BKdsnwxG/TWsA8+5QfOefpIDS6qYoYy57HDyCOv57qmLpWzrlPoWXLbwt0CdM3i/e8ZPj17M3EfEHe3G+zjeiozZIa0rEN1NKDsX+4xvwh1MFqCRIiOO3JpbjY14UJ0pKgA4plGcCVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709841950; c=relaxed/simple;
-	bh=78Rsj3O/7ufaekATx69zosteYwT6oeClJL8QONwmeTE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Or+yr7mN76eyfvpDRZJtd2vuTfwWlA9UVezZEQ9dGnfG+yE/EDZpzdvIYWyjLRkktK1gMzdZkug6sU7eGy28SDSdBxzPCPE7MiM4XE3oGl4IxEvaMkWyPgXJvRLxXZfzR5HF8Jy5+LQqQdGq+r1nuCwxCfhZFFKEQrnEZMQYRCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLKfRRvo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F44C433C7;
-	Thu,  7 Mar 2024 20:05:48 +0000 (UTC)
+	s=arc-20240116; t=1709842286; c=relaxed/simple;
+	bh=PRBFZzxdnpbyh1YzxY3vy1NxVesh8HXasBP1ah/s4Iw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=SUu4pbuTzMUpaA2gUtV08S74/XKGWeV1i2Wgbi3sLr6lL7myWVV/85JYP8u//1CivHmMFcCqnqxGcCrq+HWxvCBPikV0O9OM37c7HH/Lpe8bLCt6bQiW1N1tZMivFk2Yu+fDLlg0T+f4wy7L5ogIuLOb+A6V9dkZzl4X4wbn25Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dwYf4VUQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAC9C433A6;
+	Thu,  7 Mar 2024 20:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709841950;
-	bh=78Rsj3O/7ufaekATx69zosteYwT6oeClJL8QONwmeTE=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=FLKfRRvo1oaqVmm36Ci4l/y+mhDJg2A7ME0Dvc2Lr4Vzr5i1i/EtQhRsHG+18jAIj
-	 rvG97J3ZSzhlgBLxNPyqlmEoLSRAtgyOAsoyBBX593XX3XsMnfKMc/A4iJmaXdAiCd
-	 AhaqCOHmB0WfvTwNXEMCiwEHw2laOSaY5mduW5GGDuR+6XOG/CvXhHSNoy99snTzSR
-	 uAC0xy9XWijo6rbgHMyhoK6YQYokkscw96oG/We7m2+kNq9a3nRCWcptWmyYYndU3B
-	 wx+hGU92xPgcifhXHZNnvUvlpS6127tTgb5tpb9vlfheiDq2RgYjztgLKYBV33ILKD
-	 0OjpLYYxwyOiw==
+	s=k20201202; t=1709842285;
+	bh=PRBFZzxdnpbyh1YzxY3vy1NxVesh8HXasBP1ah/s4Iw=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=dwYf4VUQ+8MNiFFZOdC5+Xg2Q6c6ZutnWss0KZMLp8KlC8GDhhSlnMpJbLNM/z6eV
+	 IlXT0LgZE000dtOPKKG4nUzX4daZFcfjq81v3Z2KL6poa6s+aKSM9Y6zXp83bb1oLX
+	 vf7H/wbVBC1SkcE1cV7c9XRVVcThE2GaFeAGxtKYgQAXvMLpJQC7lJuxf8znez1+nG
+	 tE2kFPtPqel/nooorKOw1X+MuvznCTPh8UYE29mc4gbm6Th3I4tei7YmQXbyFngbKC
+	 w/rlOojq3q9qQKvHj/LjNM7A0cm2xCrnL1WjF0nXIo0td7VBd5cfIXxpPvmqxgA+tQ
+	 kHDV8NBkmu/hw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,80 +49,55 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Mar 2024 22:05:46 +0200
-Message-Id: <CZNSDUEJ4P9S.235D7ZCOV738N@kernel.org>
-Cc: <peterhuewe@gmx.de>, <LinoSanfilippo@gmx.de>,
- <p.rosenberger@kunbus.com>, <lukas@wunner.de>, <jgg@ziepe.ca>,
- <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <stable@vger.kernel.org>
-Subject: Re: [PATCH] tpm,tpm_tis: Avoid warning splat at shutdown
+Date: Thu, 07 Mar 2024 22:11:21 +0200
+Message-Id: <CZNSI4DXQMH4.2IYN7ZDJEBG59@kernel.org>
+To: "Stefan Berger" <stefanb@linux.ibm.com>, <mpe@ellerman.id.au>,
+ <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Cc: <linux-kernel@vger.kernel.org>, <rnsastry@linux.ibm.com>,
+ <peterhuewe@gmx.de>, <viparash@in.ibm.com>
+Subject: Re: [PATCH 1/2] powerpc/prom_init: Replace linux,sml-base/sml-size
+ with linux,sml-log
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Paul Menzel" <pmenzel@molgen.mpg.de>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>
 X-Mailer: aerc 0.17.0
-References: <20240201113646.31734-1-l.sanfilippo@kunbus.com>
- <84dd5c01-906c-4e13-9d8c-e5350f718d56@molgen.mpg.de>
-In-Reply-To: <84dd5c01-906c-4e13-9d8c-e5350f718d56@molgen.mpg.de>
+References: <20240306155511.974517-1-stefanb@linux.ibm.com>
+ <20240306155511.974517-2-stefanb@linux.ibm.com>
+In-Reply-To: <20240306155511.974517-2-stefanb@linux.ibm.com>
 
-On Tue Mar 5, 2024 at 5:43 PM EET, Paul Menzel wrote:
-> Dear Lino,
->
->
-> Thank you for the patch.
->
-> Am 01.02.24 um 12:36 schrieb Lino Sanfilippo:
-> > If interrupts are not activated the work struct 'free_irq_work' is not
-> > initialized. This results in a warning splat at module shutdown.
-> >=20
-> > Fix this by always initializing the work regardless of whether interrup=
-ts
-> > are activated or not.
-> >=20
-> > cc: stable@vger.kernel.org
-> > Fixes: 481c2d14627d ("tpm,tpm_tis: Disable interrupts after 1000 unhand=
-led IRQs")
-> > Reported-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > Closes: https://lore.kernel.org/all/CX32RFOMJUQ0.3R4YCL9MDCB96@kernel.o=
-rg/
-> > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > ---
-> >   drivers/char/tpm/tpm_tis_core.c | 3 +--
-> >   1 file changed, 1 insertion(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
-_core.c
-> > index 1b350412d8a6..64c875657687 100644
-> > --- a/drivers/char/tpm/tpm_tis_core.c
-> > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > @@ -919,8 +919,6 @@ static int tpm_tis_probe_irq_single(struct tpm_chip=
- *chip, u32 intmask,
-> >   	int rc;
-> >   	u32 int_status;
-> >  =20
-> > -	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
-> > -
-> >   	rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
-> >   				       tis_int_handler, IRQF_ONESHOT | flags,
-> >   				       dev_name(&chip->dev), chip);
-> > @@ -1132,6 +1130,7 @@ int tpm_tis_core_init(struct device *dev, struct =
-tpm_tis_data *priv, int irq,
-> >   	priv->phy_ops =3D phy_ops;
-> >   	priv->locality_count =3D 0;
-> >   	mutex_init(&priv->locality_count_mutex);
-> > +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
-> >  =20
-> >   	dev_set_drvdata(&chip->dev, priv);
->
-> This is commit d6fb14208e22 in jarkko/next.
->
-> I tested this patch on top of Linux 6.8-rc7 on a Dell OptiPlex 5055 [1]=
-=20
-> and it fixes the issue there too.
+On Wed Mar 6, 2024 at 5:55 PM EET, Stefan Berger wrote:
+> linux,sml-base holds the address of a buffer with the TPM log. This
+> buffer may become invalid after a kexec and therefore embed the whole TPM
+> log in linux,sml-log. This helps to protect the log since it is properly
+> carried across a kexec with both of the kexec syscalls.
 
-Thanks!
+So, I see only description of the problem but nothing how it gets
+addressed.
 
-If you don't mind I'll add your tested-by to the commit before I send
-my next pull request to Linus?
+>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  arch/powerpc/kernel/prom_init.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_i=
+nit.c
+> index e67effdba85c..41268c30de4c 100644
+> --- a/arch/powerpc/kernel/prom_init.c
+> +++ b/arch/powerpc/kernel/prom_init.c
+> @@ -1956,12 +1956,8 @@ static void __init prom_instantiate_sml(void)
+> =20
+>  	reserve_mem(base, size);
+> =20
+> -	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-base",
+> -		     &base, sizeof(base));
+> -	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-size",
+> -		     &size, sizeof(size));
+> -
+> -	prom_debug("sml base     =3D 0x%llx\n", base);
+> +	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-log",
+> +		     (void *)base, size);
+>  	prom_debug("sml size     =3D 0x%x\n", size);
+> =20
+>  	prom_debug("prom_instantiate_sml: end...\n");
 
 BR, Jarkko
 
