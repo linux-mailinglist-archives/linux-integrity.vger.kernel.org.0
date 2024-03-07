@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1652-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1653-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9EC58757A9
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:55:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD4DA8757AE
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:57:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03505B2495D
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 19:55:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 294ABB24DE3
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 19:57:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA025136995;
-	Thu,  7 Mar 2024 19:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B20E9136995;
+	Thu,  7 Mar 2024 19:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DD0fD3+U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rgt1cBUs"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E4E1350D6
-	for <linux-integrity@vger.kernel.org>; Thu,  7 Mar 2024 19:54:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABB61EB56;
+	Thu,  7 Mar 2024 19:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709841281; cv=none; b=Xt5iylOYvy9mNDXrM3rX6TDZhzYapI9uGpUjxpu+0/bcqaS5/fkf5Vuknvq3E3blqGUBsEzu259kdS5W2I4cWiAoiH2cvNUk4SKGnm9sTZaBTBHnsWlFHRL++QMXQ3dsSp8SI40nKWPvDJhRLXdbXD9dZQW56NTmgcmjstNHmV4=
+	t=1709841448; cv=none; b=noriz84jGVyGqnNqSnO1eT7vXrodz3GtakqEDGDcHEWLnr7WEZNljtYqEWQJ+i3WFchH9m0PRVeZ5WI4nlfixqe1xhBrmnJz4KHoMj+02meWfNSLT3uzFnO5WcjUzedNVvtaq/rtYVioOAfE5aRJApPHHoUyFOy+X01fHECA1mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709841281; c=relaxed/simple;
-	bh=PcYSwwZYKidNMSyMs/Wf1rDiiXJ4spsT21LelZwLxos=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=FojN2IpG2g56+8FFEPinFmK9K7X/REcGZnxvsl4wXm7s0f54+yHwk1XX4l16ZZT1uv5BoSIOqpr3PqoU2v810cMLUvl56UeR3X3LbDkGQyBfrtI8Plk4xad2OvLmypU6rPYGJr8vgEFzDgmfQN5gTv2H29xN9ND2s2dhThwiuEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DD0fD3+U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 889F7C433C7;
-	Thu,  7 Mar 2024 19:54:39 +0000 (UTC)
+	s=arc-20240116; t=1709841448; c=relaxed/simple;
+	bh=fOsKn2f9zmPGdpFx8KnXbnRFneCgwvg7ZyYzVHMdDUQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=hf6Dohlh1j7rLg4/5Iz2la45cpFnDAtJv5WV9w6C/GfMnwbZbiS0YyU9AHi+jWYVuanRMPrbBF0xjlvgnJ//bnnoYaZ9cbhNKzNIjMjPT2i1dStrjADsverYBTWyRF9jWuqfcXhSiWHDaDPT/WzXRMU/YcoLLbjP8HyUGujW28I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rgt1cBUs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4858FC433F1;
+	Thu,  7 Mar 2024 19:57:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709841280;
-	bh=PcYSwwZYKidNMSyMs/Wf1rDiiXJ4spsT21LelZwLxos=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=DD0fD3+UUifv1S6Gilhx1HvWMLO0amXPhusGvZyZHsIZYMDi3yLVvs/mKkS1hA6HN
-	 34n00JBIDAY0WF8GERSqcvvusyMtTlDI61cBNhdZXygF/7U65fB3Enw23vJIl5lma3
-	 cOEREaOs9HQSqwlzMwDWDLAqNUPkAyqz9FLne5AONBtTHb2aGPC9QAXwrmxInzUIIn
-	 AjKi8I3AIV6lLQ70jMsZEggkykrBNl8YBlaQSiHEBumM2USWEhLgxrcfn3iRZg9Fzr
-	 UQj85KXD+ZKAoNwposueRnh/5ZxgLlaFcykYv9PPtT+eNusw1VXWgUPZTxVq+0nDQY
-	 PbWv2g70nK/Mg==
+	s=k20201202; t=1709841448;
+	bh=fOsKn2f9zmPGdpFx8KnXbnRFneCgwvg7ZyYzVHMdDUQ=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=Rgt1cBUsraDPPk+fgftIJwCdAGYpX0MO1sI2vhONF8NqS0poeL5TMd/ZfmmyC48Vu
+	 KCcSkw/FZSRWxbcxLewqonJaQYViDP2xI7+SDf9GuxSJnQydNWCRIWOwGlmAylkWVY
+	 QADULHnRfDANW6HA8eCzAyjhDCmYTRetwPZ0K/TGXv4907WA0b7NXb+xcp5hBh1oPt
+	 vsNfmGjUmNAy558xV2ABlZkTsZqSEBtAcEbH9qF1fF6mkfEKC5BoeGlWq/lZGwZzlv
+	 thYRCZY3VuEuDC4WHb7h7nBWE2BVbL/p1aaVNDlYKHUawdPCXDiTTCb38sRb0GmIDX
+	 ZBkRamVC2ULYg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,77 +49,105 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Mar 2024 21:54:37 +0200
-Message-Id: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
-Cc: "Jason Gunthorpe" <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH 1/1] Fix TPM chip hanging system before suspend/shutdown
+Date: Thu, 07 Mar 2024 21:57:24 +0200
+Message-Id: <CZNS7FO53BHK.6NO93P0C0VY5@kernel.org>
+Subject: Re: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the
+ log and its size
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Adam Alves" <adamoa@gmail.com>, "Peter Huewe" <peterhuewe@gmx.de>
+To: "Stefan Berger" <stefanb@linux.ibm.com>, <mpe@ellerman.id.au>,
+ <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Cc: <linux-kernel@vger.kernel.org>, <rnsastry@linux.ibm.com>,
+ <peterhuewe@gmx.de>, <viparash@in.ibm.com>
 X-Mailer: aerc 0.17.0
-References: <20240307000331.14848-1-adamoa@gmail.com>
- <20240307000331.14848-2-adamoa@gmail.com>
-In-Reply-To: <20240307000331.14848-2-adamoa@gmail.com>
+References: <20240306155511.974517-1-stefanb@linux.ibm.com>
+ <20240306155511.974517-3-stefanb@linux.ibm.com>
+In-Reply-To: <20240306155511.974517-3-stefanb@linux.ibm.com>
 
-On Thu Mar 7, 2024 at 2:03 AM EET, Adam Alves wrote:
-> My PC would hang on almost every shutdown/suspend until I started
-> testing this patch and so far in the past week I haven=E2=80=99t experien=
-ced
-> any problems anymore.
+in short summary: s/Use/use/
+
+On Wed Mar 6, 2024 at 5:55 PM EET, Stefan Berger wrote:
+> If linux,sml-log is available use it to get the TPM log rather than the
+> pointer found in linux,sml-base. This resolves an issue on PowerVM and KV=
+M
+> on Power where after a kexec the memory pointed to by linux,sml-base may
+> have been corrupted. Also, linux,sml-log has replaced linux,sml-base and
+> linux,sml-size on these two platforms.
 >
-> I suspect that the root cause on my specific board is that after the
-> ACPI command to put the device to S3 or S5, some firmware
-> application/driver will try to use the TPM chip expecting it to be in
-> Locality 0 as expected by TCG PC Client Platform Firmware Profile
-> Version 1.06 Revision 52 (3.1.1 =E2=80=93 Pre-OS Environment) and then wh=
-en it
-> fails to do so it simply halts the whole system.
->
-> This issue might be related to the following bug:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D217890
->
-> Enable a user to configure the kernel
-> through =E2=80=9Ctpm.locality_on_suspend=3D1=E2=80=9D boot parameter so t=
-hat the locality
-> is set before suspend/shutdown in order to diagnose whether or not the
-> board is one of the buggy ones that require this workaround. Since this
-> bug is related to the board/platform instead of the specific TPM chip,
-> call dmi_check_system on the tpm_init function so that this setting is
-> automatically enabled for boards specified in code (ASUS TUF GAMING
-> B460M-PLUS already included) =E2=80=93 automatic configuration only works=
- in
-> case CONFIG_DMI is set though, since dmi_check_system is a non-op when
-> CONFIG_DMI is not set.
->
-> In case =E2=80=9Ctpm.locality_on_suspend=3D0=E2=80=9D (the default) don't=
- change any
-> behavior thus preserving current functionality of any other board
-> except ASUSTeK COMPUTER INC. TUF GAMING B460M-PLUS and possibly future
-> boards as we successfully diagnose other boards with the same issue
-> fixed by using =E2=80=9Ctpm.locality_on_suspend=3D1=E2=80=9D.
->
-> Signed-off-by: Adam Alves <adamoa@gmail.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+
+So shouldn't this have a fixed tag, or not?
+
 > ---
->  drivers/char/tpm/tpm-chip.c      |  9 ++++++++
->  drivers/char/tpm/tpm-interface.c | 36 +++++++++++++++++++++++++++++++-
->  drivers/char/tpm/tpm.h           |  1 +
->  include/linux/tpm.h              |  1 +
->  4 files changed, 46 insertions(+), 1 deletion(-)
+>  drivers/char/tpm/eventlog/of.c | 36 +++++++++++-----------------------
+>  1 file changed, 11 insertions(+), 25 deletions(-)
 >
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 42b1062e33cd..8fdf7a137a94 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -139,6 +139,9 @@ void tpm_chip_stop(struct tpm_chip *chip)
->  {
->  	tpm_go_idle(chip);
->  	tpm_relinquish_locality(chip);
-> +	// If locality is to be preserved, we need to make sure it is Locality =
-0.
+> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/o=
+f.c
+> index 930fe43d5daf..e37196e64ef1 100644
+> --- a/drivers/char/tpm/eventlog/of.c
+> +++ b/drivers/char/tpm/eventlog/of.c
+> @@ -54,8 +54,8 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  	const u32 *sizep;
+>  	const u64 *basep;
+>  	struct tpm_bios_log *log;
+> +	const void *logp;
+>  	u32 size;
+> -	u64 base;
+> =20
+>  	log =3D &chip->log;
+>  	if (chip->dev.parent && chip->dev.parent->of_node)
+> @@ -66,37 +66,23 @@ int tpm_read_log_of(struct tpm_chip *chip)
+>  	if (of_property_read_bool(np, "powered-while-suspended"))
+>  		chip->flags |=3D TPM_CHIP_FLAG_ALWAYS_POWERED;
+> =20
+> -	sizep =3D of_get_property(np, "linux,sml-size", NULL);
+> -	basep =3D of_get_property(np, "linux,sml-base", NULL);
+> -	if (sizep =3D=3D NULL && basep =3D=3D NULL)
+> -		return tpm_read_log_memory_region(chip);
+> -	if (sizep =3D=3D NULL || basep =3D=3D NULL)
+> -		return -EIO;
+> -
+> -	/*
+> -	 * For both vtpm/tpm, firmware has log addr and log size in big
+> -	 * endian format. But in case of vtpm, there is a method called
+> -	 * sml-handover which is run during kernel init even before
+> -	 * device tree is setup. This sml-handover function takes care
+> -	 * of endianness and writes to sml-base and sml-size in little
+> -	 * endian format. For this reason, vtpm doesn't need conversion
+> -	 * but physical tpm needs the conversion.
+> -	 */
+> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
+> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
+> +	logp =3D of_get_property(np, "linux,sml-log", &size);
+> +	if (logp =3D=3D NULL) {
+> +		sizep =3D of_get_property(np, "linux,sml-size", NULL);
+> +		basep =3D of_get_property(np, "linux,sml-base", NULL);
+> +		if (sizep =3D=3D NULL && basep =3D=3D NULL)
+> +			return tpm_read_log_memory_region(chip);
+> +		if (sizep =3D=3D NULL || basep =3D=3D NULL)
+> +			return -EIO;
+> +		logp =3D __va(be64_to_cpup((__force __be64 *)basep));
+>  		size =3D be32_to_cpup((__force __be32 *)sizep);
+> -		base =3D be64_to_cpup((__force __be64 *)basep);
+> -	} else {
+> -		size =3D *sizep;
+> -		base =3D *basep;
+>  	}
+> -
+>  	if (size =3D=3D 0) {
+>  		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
+>  		return -EIO;
+>  	}
+> =20
+> -	log->bios_event_log =3D devm_kmemdup(&chip->dev, __va(base), size, GFP_=
+KERNEL);
+> +	log->bios_event_log =3D devm_kmemdup(&chip->dev, logp, size, GFP_KERNEL=
+);
+>  	if (!log->bios_event_log)
+>  		return -ENOMEM;
+> =20
 
-If you put that kind C++ comment you should also check out
-https://www.kernel.org/doc/html/latest/process/coding-style.html
-
-Other stuff that I said in my earlier response still applies.
+Looks pretty good other than that.
 
 BR, Jarkko
 
