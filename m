@@ -1,139 +1,277 @@
-Return-Path: <linux-integrity+bounces-1667-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1668-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA16B875A4E
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 23:32:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DDE0875A75
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 23:52:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A3CB2840F3
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 22:32:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4126B213A0
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 22:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1879A1D54D;
-	Thu,  7 Mar 2024 22:32:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5EB71E86E;
+	Thu,  7 Mar 2024 22:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MDJVHqRc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fEZJYw1l"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4133DEAC5;
-	Thu,  7 Mar 2024 22:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B470B3C473
+	for <linux-integrity@vger.kernel.org>; Thu,  7 Mar 2024 22:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709850751; cv=none; b=JVhJcc/84zSWjxTPYXu5Y8DI+yW8EeCZNwT5YE2NGX/cduSCCiBtC8EJq6HPdBA1NIMTM1fIuBSHqlcg7wAknwVUFzlWf9ec2wk7AzFLTHX0KS0ZfkN3WoQgYou7B2+p5t2+HLZ5fEpx5QTrzIvv8VHanL0CO4DaqizqxtuFsLY=
+	t=1709851953; cv=none; b=mO5B99vlKFUMWyuqsbR9fPMNw7AB6XCalXz70QCpOx4BgsUjZoDBbCspAbBq4HDUfJA862ug6vligbQlgssW3ZyGVZ7V91ThKHBFFQEYYc8F8ZdcxtYgZrtPENZRH59fBlj5FzHcE/iRw8TTUHEzEl9dHbZfmcSBCYYcPO7ZDIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709850751; c=relaxed/simple;
-	bh=u4cpstnscbWR8dmXfx6Sy/c8Zz7Bb/PV+G7RDLhBWfg=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=TnKYXbrhQKXF3OJlxicEke0bIGTW+OSG+LKBCMM77vdKH/1Cvq218U1IncAgR20eoKy9JJQ5ASevy84hNgivfmxkKAKTFPmOFhxHpVmb9VkQAd04Sal/80D9z3VlItN7MplxFXyRtMv9LWn4RS1diCtfIBfU3IxVIyIeDpsv7gE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MDJVHqRc; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 427MP8Sl014312;
-	Thu, 7 Mar 2024 22:32:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=7KJaeb4WPG6XTg1zWaL5lAvmQqbTahirLRchW6PR/yY=;
- b=MDJVHqRctt51+2y8MPZus1Qbz/yn3RdldHAVOpXwDxJOT1u7VQpZ08spXwcrc/7toSAE
- PSUyVJzhg64pAAToBic4Q1nyQj53YqqcG2vq2TpoRSTWIYgb0OyuzT6b0Qmu2q5CT4Am
- CvVRVdV9xvFdn2wZqpc0f5rXtwwAhkbeHfxRbep0NgoGwBgRSRSWAhwD6O/31JxNDqU+
- frv/qNJQS3SWhtbDW8jIZlP2V6xn6glDAG3L3f4vjVa2PhtMZ2aRUC/GxkgwxeWe700H
- wHmtIrsxqw/zcdNDSJjag7jy1cmvNbMenNR0jyDfmBZaQdCRdnQiwMaMVlX80EacFfMo 9A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wqpbtr4u2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Mar 2024 22:32:16 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 427MQIcl016977;
-	Thu, 7 Mar 2024 22:32:15 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wqpbtr4th-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Mar 2024 22:32:15 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 427LARAX024211;
-	Thu, 7 Mar 2024 22:32:15 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wpjwskx2e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Mar 2024 22:32:15 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 427MWBuk30343646
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 7 Mar 2024 22:32:14 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C67F558059;
-	Thu,  7 Mar 2024 22:32:11 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CB2F658063;
-	Thu,  7 Mar 2024 22:32:10 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  7 Mar 2024 22:32:10 +0000 (GMT)
-Message-ID: <38981112-9091-46d4-a815-8a5f47e15bb2@linux.ibm.com>
-Date: Thu, 7 Mar 2024 17:32:09 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] Preserve TPM log across kexec
-Content-Language: en-US
-To: Rob Herring <robh@kernel.org>
-Cc: mpe@ellerman.id.au, linux-integrity@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        jarkko@kernel.org, rnsastry@linux.ibm.com, peterhuewe@gmx.de,
-        viparash@in.ibm.com
-References: <20240306155511.974517-1-stefanb@linux.ibm.com>
- <b6f74cd0-d1c8-4a6f-a05d-364595c5b079@linux.ibm.com>
- <20240307214245.GA3110385-robh@kernel.org>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240307214245.GA3110385-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Gfox5Ao2_x58Z2tumrcR_iJRlYjt0JFa
-X-Proofpoint-ORIG-GUID: z6y-P8Opt4OzWbVuDpYT0M4qYmYm-6dZ
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1709851953; c=relaxed/simple;
+	bh=osYdqzS3K3CjtVNMksITHmUdUVyVqNyYbt+C7RwHI9A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ikRFt3psiiEk+JbWeeoGoDgf8kAi+ihmPAm/Y+BjimFOcqaymjwreIFUbQR4Y9vi3spwDPRElY5BcsldrAn1hxyA4EtmoryFK4GOnSr2/KFWTn3LcMoq0hu6TCjp7albeBf+JRXPxnzVVsQS1iYSOrKUlrjmxBy8q+Xmb3bVEdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fEZJYw1l; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1dcad814986so11989715ad.0
+        for <linux-integrity@vger.kernel.org>; Thu, 07 Mar 2024 14:52:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709851950; x=1710456750; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5fdA8qIvPbvTcdiZdxil+/8M1k3wps25sBwFaDrYxLw=;
+        b=fEZJYw1lpk/01Ia8hPA7JgeDidvO4HJPwgMplg5mg0P001JcJGf0zZp3J3y9utLO9m
+         4609DdYbSmV5hebNXgaZ/sC5lgT0n8N3HM0THcImpGtFx3YhVBlkXmYpqMCmftqg+CmL
+         CxYY7RcR2VqPFt1MCReILYWBfvGNhlR5RZqSfsr7aH3gzNzMMgPKzhzEa3chnKZ5w73I
+         bH2HeBXH9vaKHyF7ybUQeyEBROvoQj4Sg8syEa/m6rk65zqCVl9FeRoF4aruF8eg4nCA
+         1zQ/CFuSDkbXk5xC8NyD53Op0Bb45nCgKgwPNnFlyNdjxHGDZ4G05wRIb9hOCLe14Zga
+         wfFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709851950; x=1710456750;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5fdA8qIvPbvTcdiZdxil+/8M1k3wps25sBwFaDrYxLw=;
+        b=mkEAv+HF5eVlkGFIeh+lcAlgO9q5zeKg1ApgxwhKmkt3tIrwAKRyTy2j1tJ0BpE92v
+         B/9RHe6D4NQe//GwSu71dCtizZDfRalMW6dwY9aMzFduDeTz6AcyGG3kBinerSKmA/v2
+         8U2FNioL/Cnol0EoW+QRAciXr1XaGa1Dx776CE5bt5H0/mkPOTc48bahoffhHf+KrfgJ
+         dmyVb/3JZGY78+otRnyvXSJywUVIp9A2LT76ov0lEPtk3TamxZHTxGt16fWXUPUW2wiG
+         E7SxU02YC7keym5bUblTaPL3Ggz9DAGVpVGMz2dZISkM35MEYMUYa5oLscOPGlM71ScH
+         GFrg==
+X-Forwarded-Encrypted: i=1; AJvYcCXlgVvFM0j7+glBDBMTf+sMWuAHKaBlKun0leMd+aY5mS1feaKGGkymJmV9DdX0mBsWRuksi+Xl8fX9E4mhKoI35CnTnCowXU4KtHHNZnnM
+X-Gm-Message-State: AOJu0YyXCysg7cU/zjJDBmcttfGoe/XVW9zfwOvGTAetP3coSe76AKxF
+	/yzlY7AFplCt8fbackR+WGy+uIN16LmYXqc2dPRhiwCVeCXYRLWevXTunB3Ku/E=
+X-Google-Smtp-Source: AGHT+IEKMzIY2PDvbowsF9ICn4Yc5QRaikTZVkGtdt1//EbULgH/LkfhuNU4CG2dnTwc8AGC4c691w==
+X-Received: by 2002:a17:903:40cf:b0:1dd:67de:be5e with SMTP id t15-20020a17090340cf00b001dd67debe5emr300781pld.15.1709851949791;
+        Thu, 07 Mar 2024 14:52:29 -0800 (PST)
+Received: from adampc.internal.adamoa.com.br ([2804:431:c7c0:eeea:3e7c:3fff:fe3b:efe2])
+        by smtp.gmail.com with ESMTPSA id q10-20020a170902daca00b001dd3ea391f4sm3797013plx.177.2024.03.07.14.52.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Mar 2024 14:52:29 -0800 (PST)
+From: Adam Alves <adamoa@gmail.com>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	Adam Alves <adamoa@gmail.com>
+Subject: [PATCH v2] tpm: Fix suspend/shutdown on some boards by preserving chip Locality
+Date: Thu,  7 Mar 2024 19:49:57 -0300
+Message-ID: <20240307224957.29432-1-adamoa@gmail.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
+References: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-07_17,2024-03-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=858 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2311290000 definitions=main-2403070162
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Some buggy firmware might require the TPM device to be in default
+locality (Locality 0) before suspend or shutdown. Failing to do so
+would leave the system in a hanged state before sleep or power off
+(after “reboot: Power down” message). Such is the case for the ASUSTeK
+COMPUTER INC. TUF GAMING B460M-PLUS board, I believe this might be the
+case for several other boards based on some bugs over the internet
+while trying to find out how to fix my specific issue. Most forums
+suggest the user to disable the TPM device on firmware BIOS in order to
+work around this specific issue, which disables several security
+features provided by TPM.
 
+The root cause might be that after the ACPI command to put the device
+to S3 or S5, some firmware application/driver will try to use the TPM
+chip expecting it to be in Locality 0 as expected by TCG PC Client
+Platform Firmware Profile Version 1.06 Revision 52 (3.1.1 – Pre-OS
+Environment) and then when it fails to do so it simply halts the
+whole system.
 
-On 3/7/24 16:42, Rob Herring wrote:
-> On Wed, Mar 06, 2024 at 11:08:20AM -0500, Stefan Berger wrote:
->>
->>
->> On 3/6/24 10:55, Stefan Berger wrote:
->>> This series resolves an issue on PowerVM and KVM on Power where the memory
->>> the TPM log was held in may become inaccessible or corrupted after a kexec
->>> soft reboot. The solution on these two platforms is to store the whole log
->>> in the device tree because the device tree is preserved across a kexec with
->>> either of the two kexec syscalls.
->>>
->> FYI: This was the previous attempt that didn't work with the older kexec
->> syscall: https://lore.kernel.org/lkml/4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com/T/#m158630d214837e41858b03d4b025e6f96cb8f251
-> 
-> Doesn't everyone else still need that? Is powerpc the only ones that
-Are you referring to the old series with 'that' ? I more or less had to 
-abandon it because it wouldn't solve the problem for the old kexec 
-syscall, so that's why I am embedding the whole log now in the 
-devicetree since the DT is properly carried across the kexec soft reboot 
-on PowerVM and KVM for Power. Maybe other platforms will (have to) 
-follow, but I don't know.
+Enable a user to configure the kernel through
+“tpm.locality_on_suspend=1” boot parameter so that the locality is set
+before suspend/shutdown in order to diagnose whether or not the board is
+one of the buggy ones that require this workaround. Since this bug is
+related to the board/platform instead of the specific TPM chip, call
+dmi_check_system on the tpm_init function so that this setting is
+automatically enabled for boards specified in code (ASUS TUF GAMING
+B460M-PLUS already included) – automatic configuration only works in
+case CONFIG_DMI is set though, since dmi_check_system is a non-op when
+CONFIG_DMI is not set.
 
-> care about the old kexec syscall?
-> 
-> Rob
+In case “tpm.locality_on_suspend=0” (the default) don't change any
+behavior thus preserving current functionality of any other board
+except ASUSTeK COMPUTER INC. TUF GAMING B460M-PLUS and possibly future
+boards as we successfully diagnose other boards with the same issue
+fixed by using “tpm.locality_on_suspend=1”.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217890
+Signed-off-by: Adam Alves <adamoa@gmail.com>
+---
+v1->v2: fix formatting issues and simplified tpm_chip_stop code.
+
+ drivers/char/tpm/tpm-chip.c      | 12 +++++++++++
+ drivers/char/tpm/tpm-interface.c | 37 ++++++++++++++++++++++++++++++++
+ drivers/char/tpm/tpm.h           |  1 +
+ include/linux/tpm.h              |  1 +
+ 4 files changed, 51 insertions(+)
+
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 42b1062e33cd..a183e1355289 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -137,6 +137,12 @@ EXPORT_SYMBOL_GPL(tpm_chip_start);
+  */
+ void tpm_chip_stop(struct tpm_chip *chip)
+ {
++	if (chip->flags & TPM_CHIP_FLAG_PRESERVE_LOCALITY) {
++		if (chip->locality != 0)
++			tpm_request_locality(chip);
++		return;
++	}
++
+ 	tpm_go_idle(chip);
+ 	tpm_relinquish_locality(chip);
+ 	tpm_clk_disable(chip);
+@@ -291,6 +297,9 @@ int tpm_class_shutdown(struct device *dev)
+ {
+ 	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
+ 
++	if (tpm_locality_on_suspend)
++		chip->flags |= TPM_CHIP_FLAG_PRESERVE_LOCALITY;
++
+ 	down_write(&chip->ops_sem);
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+ 		if (!tpm_chip_start(chip)) {
+@@ -668,6 +677,9 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
+  */
+ void tpm_chip_unregister(struct tpm_chip *chip)
+ {
++	if (tpm_locality_on_suspend)
++		chip->flags |= TPM_CHIP_FLAG_PRESERVE_LOCALITY;
++
+ 	tpm_del_legacy_sysfs(chip);
+ 	if (tpm_is_hwrng_enabled(chip))
+ 		hwrng_unregister(&chip->hwrng);
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 66b16d26eecc..7f770ea98402 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -26,6 +26,7 @@
+ #include <linux/suspend.h>
+ #include <linux/freezer.h>
+ #include <linux/tpm_eventlog.h>
++#include <linux/dmi.h>
+ 
+ #include "tpm.h"
+ 
+@@ -382,6 +383,36 @@ int tpm_auto_startup(struct tpm_chip *chip)
+ 	return rc;
+ }
+ 
++/*
++ * Bug workaround - some boards expect the TPM to be on Locality 0
++ * before suspend/shutdown, halting the system otherwise before
++ * suspend and shutdown. Change suspend behavior for these cases.
++ */
++bool tpm_locality_on_suspend;
++module_param_named(locality_on_suspend, tpm_locality_on_suspend, bool, 0644);
++MODULE_PARM_DESC(locality_on_suspend,
++		 "Put TPM at locality 0 before suspend/shutdown.");
++
++static int __init tpm_set_locality_on_suspend(const struct dmi_system_id *system_id)
++{
++	pr_info("Board %s: TPM locality preserved before suspend/shutdown.\n",
++		system_id->ident);
++	tpm_locality_on_suspend = true;
++
++	return 0;
++}
++
++static const struct dmi_system_id tpm_board_quirks[] __initconst = {
++	{
++		.ident = "TUF GAMING B460M-PLUS",
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),
++			DMI_MATCH(DMI_BOARD_NAME, "TUF GAMING B460M-PLUS"),
++		},
++		.callback = tpm_set_locality_on_suspend,
++	},
++};
++
+ /*
+  * We are about to suspend. Save the TPM state
+  * so that it can be restored.
+@@ -394,6 +425,9 @@ int tpm_pm_suspend(struct device *dev)
+ 	if (!chip)
+ 		return -ENODEV;
+ 
++	if (tpm_locality_on_suspend)
++		chip->flags |= TPM_CHIP_FLAG_PRESERVE_LOCALITY;
++
+ 	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+ 		goto suspended;
+ 
+@@ -431,6 +465,7 @@ int tpm_pm_resume(struct device *dev)
+ 	if (chip == NULL)
+ 		return -ENODEV;
+ 
++	chip->flags &= ~TPM_CHIP_FLAG_PRESERVE_LOCALITY;
+ 	chip->flags &= ~TPM_CHIP_FLAG_SUSPENDED;
+ 
+ 	/*
+@@ -476,6 +511,8 @@ static int __init tpm_init(void)
+ {
+ 	int rc;
+ 
++	dmi_check_system(tpm_board_quirks);
++
+ 	rc = class_register(&tpm_class);
+ 	if (rc) {
+ 		pr_err("couldn't create tpm class\n");
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 61445f1dc46d..f2657b611b81 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -236,6 +236,7 @@ extern dev_t tpm_devt;
+ extern const struct file_operations tpm_fops;
+ extern const struct file_operations tpmrm_fops;
+ extern struct idr dev_nums_idr;
++extern bool tpm_locality_on_suspend;
+ 
+ ssize_t tpm_transmit(struct tpm_chip *chip, u8 *buf, size_t bufsiz);
+ int tpm_get_timeouts(struct tpm_chip *);
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 4ee9d13749ad..1fbb33f386d1 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -284,6 +284,7 @@ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_FIRMWARE_UPGRADE		= BIT(7),
+ 	TPM_CHIP_FLAG_SUSPENDED			= BIT(8),
+ 	TPM_CHIP_FLAG_HWRNG_DISABLED		= BIT(9),
++	TPM_CHIP_FLAG_PRESERVE_LOCALITY		= BIT(10),
+ };
+ 
+ #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
+-- 
+2.44.0
+
 
