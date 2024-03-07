@@ -1,191 +1,121 @@
-Return-Path: <linux-integrity+bounces-1628-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1629-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC416874D9F
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 12:39:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E8E5874EE4
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 13:23:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28350B23BE1
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 11:39:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A477281CCC
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 12:23:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5C412A15D;
-	Thu,  7 Mar 2024 11:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="PmShF53T"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06D812AAEA;
+	Thu,  7 Mar 2024 12:23:19 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2C4126F39;
-	Thu,  7 Mar 2024 11:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BC512AADB;
+	Thu,  7 Mar 2024 12:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709811459; cv=none; b=Sscq3cOsue7I1w38+S1ZbfUXTMbh+WU1h4KO8am0cH7ueaJ6UsSYckiMZBADlY+nVTtFpfF0iXr2YdIArsFGjngYKRY+ES+wAjauNfqrsdWqx8yKMO2wwMequmbs7WMxHwsD3BR2xhfGq3Yys/boetmb24qV+dl5+YniJncU9jc=
+	t=1709814199; cv=none; b=l/vmhALvqDXz2wQRIHU7WgAr7OavW/ilF+TmWPEVV2ZZ2Zw03hhNk22BeNfKj2OlVVtA1bm8T7BDmWyzR+Pq7PpNFebXIRfijzrFXoSU6+vc69gFCgNL/bu9XKrw8J0elymWM7aUEHtiIf4gMp+JsyKlHa76cyilkQuOP/iTQcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709811459; c=relaxed/simple;
-	bh=bzo9Wfyr1Xgx6msDtriXR11PddtGvGUYjz6kRXVoZDM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rNbVp3eBTLuGejWoqluNCYI43HnZgYUOl1YXQTbkuK9ImDQFyyxzzYjDCLBzcnKdANHn6TPWO2UGVWZuGZiq+l3qDuVLGht8eNJ5RY8dY37McMnf5IFaOT47FNK6ytMoFjGO+w3E0WxKo1cI2WGUOWVfG11Pk2GW3f2Uav5K+/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=PmShF53T; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1709811457; x=1741347457;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bzo9Wfyr1Xgx6msDtriXR11PddtGvGUYjz6kRXVoZDM=;
-  b=PmShF53TzEnTKURp0YrmEXQjzMYTWOiKykI0gZ+jO/9nN9Mqv1mpQkbB
-   pBWwxVhJfk84vMxShCTKMBtBPDSI/DykKU8VIIOpdmnbgk6r6fee4rY2f
-   CwwYkn8fXAh2MAAlzUR8anAuGqbbeAl6j736s5Ji0u3k8CSuVPdLYmkJN
-   71P1x4plIfz8e7bGpQmaqt9mDYP//3xg4k9GlrKlMyOZwa1RqPMMiS/oC
-   FZ+3CZq5LRucBvTJvxvmrf1GrU7/0CkeiVYZrwNBlr8jgHx5LjBHa2LqP
-   CSv8Gk8F7wqlKyR7eLiZQUtueoazIPbfButUoMtsCATo7uE23q/QVOJkv
-   w==;
-X-CSE-ConnectionGUID: vGKddyPVT5y+FgobIIh7Vw==
-X-CSE-MsgGUID: kumRBleARg+kz1/1CMIDRA==
-X-IronPort-AV: E=Sophos;i="6.07,211,1708412400"; 
-   d="asc'?scan'208";a="17329607"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Mar 2024 04:37:35 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 7 Mar 2024 04:36:24 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 7 Mar 2024 04:36:22 -0700
-Date: Thu, 7 Mar 2024 11:35:37 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Stefan Berger <stefanb@linux.ibm.com>
-CC: <mpe@ellerman.id.au>, <linux-integrity@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-	<jarkko@kernel.org>, <rnsastry@linux.ibm.com>, <peterhuewe@gmx.de>,
-	<viparash@in.ibm.com>
-Subject: Re: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the
- log and its size
-Message-ID: <20240307-chill-roundup-44a73c50aebc@wendy>
-References: <20240306155511.974517-1-stefanb@linux.ibm.com>
- <20240306155511.974517-3-stefanb@linux.ibm.com>
+	s=arc-20240116; t=1709814199; c=relaxed/simple;
+	bh=47347CDrcctM5q9XZgq8/xM8yKL2YcYdeT0/hb+myVo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bsJXsEKo8DKwWzf769ANwnzjJzyouVu12lsB/Ys8Gqlm8qzEEnaP8t8Q7YNtnftHc0gWjH+gX6FxS9OQcoyyGugLztxogp05KCcTeqhBAG/wsNAm6NvyUhTZi68lNXDPHTnpr6/M0sQZRpshnrBp3kVnFEgDDYRABN3hxy5W1jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Tr7HG3lf7z9xxml;
+	Thu,  7 Mar 2024 20:03:22 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id AB30214037C;
+	Thu,  7 Mar 2024 20:23:07 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwA3LxihselliRTjAw--.14417S2;
+	Thu, 07 Mar 2024 13:23:07 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com
+Cc: linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	stable@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>
+Subject: [PATCH] evm: Change vfs_getxattr() with __vfs_getxattr() in evm_calc_hmac_or_hash()
+Date: Thu,  7 Mar 2024 13:22:39 +0100
+Message-Id: <20240307122240.3560688-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="pGsz+08ahPIBPDcV"
-Content-Disposition: inline
-In-Reply-To: <20240306155511.974517-3-stefanb@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwA3LxihselliRTjAw--.14417S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw4rCw4DAr15Jw45JF17trb_yoW8GFykpF
+	W5Ka9rKrn5JryrKas5GF4kAayF93yUXr47KrsxAa4Iv3Z8ZryxZr92qry7uryFvr18trn5
+	J3yqqr1Yyw13A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAF
+	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU8imRUUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj5cVqAABsT
 
---pGsz+08ahPIBPDcV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-On Wed, Mar 06, 2024 at 10:55:11AM -0500, Stefan Berger wrote:
-> If linux,sml-log is available use it to get the TPM log rather than the
-> pointer found in linux,sml-base. This resolves an issue on PowerVM and KVM
-> on Power where after a kexec the memory pointed to by linux,sml-base may
-> have been corrupted. Also, linux,sml-log has replaced linux,sml-base and
-> linux,sml-size on these two platforms.
+Use __vfs_getxattr() instead of vfs_getxattr(), in preparation for
+deprecating using the vfs_ interfaces for retrieving fscaps.
 
-Those two properties are documented, but linux,sml-log is not, nor can I
-find patches on the list documenting it.
-There should be a patch adding this to tmp-common.yaml.
+__vfs_getxattr() is only used for debugging purposes, to check if kernel
+space and user space see the same xattr value.
 
-Cheers,
-Conor.
+Cc: stable@vger.kernel.org # 5.14.x
+Cc: linux-fsdevel@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+Fixes: 907a399de7b0 ("evm: Check xattr size discrepancy between kernel and user")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/evm/evm_crypto.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  drivers/char/tpm/eventlog/of.c | 36 +++++++++++-----------------------
->  1 file changed, 11 insertions(+), 25 deletions(-)
->=20
-> diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/o=
-f.c
-> index 930fe43d5daf..e37196e64ef1 100644
-> --- a/drivers/char/tpm/eventlog/of.c
-> +++ b/drivers/char/tpm/eventlog/of.c
-> @@ -54,8 +54,8 @@ int tpm_read_log_of(struct tpm_chip *chip)
->  	const u32 *sizep;
->  	const u64 *basep;
->  	struct tpm_bios_log *log;
-> +	const void *logp;
->  	u32 size;
-> -	u64 base;
-> =20
->  	log =3D &chip->log;
->  	if (chip->dev.parent && chip->dev.parent->of_node)
-> @@ -66,37 +66,23 @@ int tpm_read_log_of(struct tpm_chip *chip)
->  	if (of_property_read_bool(np, "powered-while-suspended"))
->  		chip->flags |=3D TPM_CHIP_FLAG_ALWAYS_POWERED;
-> =20
-> -	sizep =3D of_get_property(np, "linux,sml-size", NULL);
-> -	basep =3D of_get_property(np, "linux,sml-base", NULL);
-> -	if (sizep =3D=3D NULL && basep =3D=3D NULL)
-> -		return tpm_read_log_memory_region(chip);
-> -	if (sizep =3D=3D NULL || basep =3D=3D NULL)
-> -		return -EIO;
-> -
-> -	/*
-> -	 * For both vtpm/tpm, firmware has log addr and log size in big
-> -	 * endian format. But in case of vtpm, there is a method called
-> -	 * sml-handover which is run during kernel init even before
-> -	 * device tree is setup. This sml-handover function takes care
-> -	 * of endianness and writes to sml-base and sml-size in little
-> -	 * endian format. For this reason, vtpm doesn't need conversion
-> -	 * but physical tpm needs the conversion.
-> -	 */
-> -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
-> -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-> +	logp =3D of_get_property(np, "linux,sml-log", &size);
-> +	if (logp =3D=3D NULL) {
-> +		sizep =3D of_get_property(np, "linux,sml-size", NULL);
-> +		basep =3D of_get_property(np, "linux,sml-base", NULL);
-> +		if (sizep =3D=3D NULL && basep =3D=3D NULL)
-> +			return tpm_read_log_memory_region(chip);
-> +		if (sizep =3D=3D NULL || basep =3D=3D NULL)
-> +			return -EIO;
-> +		logp =3D __va(be64_to_cpup((__force __be64 *)basep));
->  		size =3D be32_to_cpup((__force __be32 *)sizep);
-> -		base =3D be64_to_cpup((__force __be64 *)basep);
-> -	} else {
-> -		size =3D *sizep;
-> -		base =3D *basep;
->  	}
-> -
->  	if (size =3D=3D 0) {
->  		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
->  		return -EIO;
->  	}
-> =20
-> -	log->bios_event_log =3D devm_kmemdup(&chip->dev, __va(base), size, GFP_=
-KERNEL);
-> +	log->bios_event_log =3D devm_kmemdup(&chip->dev, logp, size, GFP_KERNEL=
-);
->  	if (!log->bios_event_log)
->  		return -ENOMEM;
-> =20
-> --=20
-> 2.43.0
->=20
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index b1ffd4cc0b44..168d98c63513 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -278,8 +278,8 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+ 		if (size < 0)
+ 			continue;
+ 
+-		user_space_size = vfs_getxattr(&nop_mnt_idmap, dentry,
+-					       xattr->name, NULL, 0);
++		user_space_size = __vfs_getxattr(dentry, inode, xattr->name,
++						 NULL, 0);
+ 		if (user_space_size != size)
+ 			pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n",
+ 				 dentry->d_name.name, xattr->name, size,
+-- 
+2.34.1
 
---pGsz+08ahPIBPDcV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZemmegAKCRB4tDGHoIJi
-0geZAQDRqcSLRqXvICr64TJ1WsNpahDiNbtCA9bLKrnnkQKChwEAqoh88ZpfefYJ
-7KQ6U0WmddS80c0+qFeqxjEqa1WH5gM=
-=oHvc
------END PGP SIGNATURE-----
-
---pGsz+08ahPIBPDcV--
 
