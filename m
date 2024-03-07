@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1645-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1646-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882DB87570D
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:24:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B707875730
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 20:30:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACAEF1C215A8
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 19:24:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50FA2285978
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Mar 2024 19:30:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2082113665A;
-	Thu,  7 Mar 2024 19:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FC5136664;
+	Thu,  7 Mar 2024 19:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QFzn8xZK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T/xFY79D"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEC4136643;
-	Thu,  7 Mar 2024 19:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D911AACA;
+	Thu,  7 Mar 2024 19:30:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709839448; cv=none; b=Zij2j6see8ZOz60NQPEjgo0IFwr6DGirAUMmXCU7RAY72X0HSQjf3lPc7/bicQw6fcsW3uJxbnXuZwPsccB17NcrrtFrWBaiM67nhgqWIKhV8/XKtrScHQcsieGpzysyMHQqaisUKAl2Jd4QOFQ7BpKRng+Xydp7MeH1G3VjVOs=
+	t=1709839833; cv=none; b=uU3wF4UrHkjNgj3LiRUFhARM0TiL2WbGmLKTnccEjVbWhn6qAIHCqcV3YLNVsKiNrkiiMOdw8eoh6naAZ21xWOR73yCqJZhSubW8mYiTZd43t7bQQzPnIxKapmHy9bCXJrOcN654lqS+PSe4d2xTVzBjyf41BjjWGBRC4ZRYYOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709839448; c=relaxed/simple;
-	bh=VmDl/PZkEPMDzeu4mqXBrn0+YmIU9eU6ecMjun+f7oI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=keVWkRmi3LmnmFgU02xsOPcvSRS6I4eVijAVvZ6I0YMgxfoujFY1jZ1F8kI1nwzPHyPVWPUV9jO5lC/xPv5PuSsHqRBFb87jvgF9VvtLbNJX1I9MRAnW87poq49MrssNj4t3WiPH6G11VecbY9Vh8WHfXHSeGik4QlexulN/9J0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QFzn8xZK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA77C433F1;
-	Thu,  7 Mar 2024 19:24:00 +0000 (UTC)
+	s=arc-20240116; t=1709839833; c=relaxed/simple;
+	bh=e1RnfxVhzeQJFU4w6fYYaD7Hga9Gkw00dIdsYdCM/Yk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=kOBPhace4EVReC4DjKKHjaoGYT2JHbmGy2gLqQolMCJIKqvrzx8GU/onXy8gmpHcvg4JAbY+TmtytXbYc1rwMYCWm+b4TS4Two9WCsTVZWBEns9eOhB9ELZwLHAzyCXQz0bT/UJjJZblyJg56jlb+gqvtN4hin59VzjysDzRvQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T/xFY79D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 934D4C433F1;
+	Thu,  7 Mar 2024 19:30:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709839447;
-	bh=VmDl/PZkEPMDzeu4mqXBrn0+YmIU9eU6ecMjun+f7oI=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=QFzn8xZK4+32Z3U+qZmhaI1yrXSrdQb5mKemR8jBArf/3b5lx/sR4wwmdZ38E7yPV
-	 V34AUC8zn3Rg2JpStwl1ZRcnC/U/SXxds6D+lC8SgOM7f/TvFnpKlBSSbx4LxWX9rv
-	 9NLHTmazaR2cNQvPUEgSNGPakur7eCVmqsvHh/bjGUe/kQ/+CwT97aGIjb7Asq2Nwd
-	 1Q+xrHa6i34WTClpbgFUeqPsT9Iv2KYH+jv7L6Mn0RlaU+eJeZc1v9AfThGqprvNCv
-	 YxnlSo1GO+pQpaa/AcYFK5NtXHVirOr8tfZ5TOtZrBWapDVYKXQB9AUZisQNOPjSON
-	 wzHaNyVcsCFZw==
+	s=k20201202; t=1709839832;
+	bh=e1RnfxVhzeQJFU4w6fYYaD7Hga9Gkw00dIdsYdCM/Yk=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=T/xFY79DhNy2Ip9yEQSaBUOHEIRaToVN3OUGuNgegnPLxiUBMQRUfh8oYA6dm2/4k
+	 IZCpNTv0TyQwJ5Bp298JpmhtfIuobTaQjMj5KVQ+jnZ9OJ54Z33cKQDZus+6vpnHAo
+	 YeGtcADjvrdhu9Z/+UhxNPEe/I/Ozid6bdkaNdFJDEe8fhqh8Mbz+m3lyhzkLuuhy2
+	 2lz0k7vqU66NhEqnnOKUGUY+rgQtoizsyp3QnJcb0sKxFOvKSC22J5tqMAomskBfTE
+	 rNw9tvxraOXOWahDsLzwcs2vyzC5izkP+Xrh+BzId7xsbWzyMiLZzwfJCNr3DR6fUI
+	 KRisHDWwqafzg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,14 +49,8 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 07 Mar 2024 21:23:58 +0200
-Message-Id: <CZNRHU6AFXM0.3A87OQA993HG@kernel.org>
-Subject: Re: [PATCH v6 3/6] KEYS: trusted: Introduce NXP DCP-backed trusted
- keys
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "David Gstir" <david@sigma-star.at>, "Mimi Zohar" <zohar@linux.ibm.com>,
- "James Bottomley" <jejb@linux.ibm.com>, "Herbert Xu"
- <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
+Date: Thu, 07 Mar 2024 21:30:23 +0200
+Message-Id: <CZNRMR5YZPQO.1QBLW62A6S840@kernel.org>
 Cc: "Shawn Guo" <shawnguo@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
  "Sascha Hauer" <s.hauer@pengutronix.de>, "Pengutronix Kernel Team"
  <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "NXP Linux
@@ -74,13 +68,19 @@ Cc: "Shawn Guo" <shawnguo@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
  <linux-arm-kernel@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
  <linux-security-module@vger.kernel.org>, "Richard Weinberger"
  <richard@nod.at>, "David Oberhollenzer" <david.oberhollenzer@sigma-star.at>
+Subject: Re: [PATCH v6 3/6] KEYS: trusted: Introduce NXP DCP-backed trusted
+ keys
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "David Gstir" <david@sigma-star.at>, "Mimi Zohar" <zohar@linux.ibm.com>,
+ "James Bottomley" <jejb@linux.ibm.com>, "Herbert Xu"
+ <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
 X-Mailer: aerc 0.17.0
 References: <20240307153842.80033-1-david@sigma-star.at>
  <20240307153842.80033-4-david@sigma-star.at>
 In-Reply-To: <20240307153842.80033-4-david@sigma-star.at>
 
-On Thu Mar 7, 2024 at 5:38 PM EET, David Gstir wrote:> DCP (Data Co-Process=
-or) is the little brother of NXP's CAAM IP.
+On Thu Mar 7, 2024 at 5:38 PM EET, David Gstir wrote:
+> DCP (Data Co-Processor) is the little brother of NXP's CAAM IP.
 > Beside of accelerated crypto operations, it also offers support for
 > hardware-bound keys. Using this feature it is possible to implement a blo=
 b
@@ -496,6 +496,9 @@ N,
 > +	static const u8 bad[] =3D {0x9a, 0xda, 0xe0, 0x54, 0xf6, 0x3d, 0xfa, 0x=
 ff,
 > +				 0x5e, 0xa1, 0x8e, 0x45, 0xed, 0xf6, 0xea, 0x6f};
+=20
+ nit: inline comment about 'bad'.
+
 > +	void *buf =3D NULL;
 > +	int ret =3D 0;
 > +
@@ -533,28 +536,11 @@ ff,
 > +	ret =3D test_for_zero_key();
 > +	if (ret) {
 > +		pr_err("Test for zero'ed keys failed: %i\n", ret);
-> +
-> +		return -EINVAL;
-> +	}
-> +
-> +	return register_key_type(&key_type_trusted);
-> +}
-> +
-> +static void trusted_dcp_exit(void)
-> +{
-> +	unregister_key_type(&key_type_trusted);
-> +}
-> +
-> +struct trusted_key_ops dcp_trusted_key_ops =3D {
-> +	.exit =3D trusted_dcp_exit,
-> +	.init =3D trusted_dcp_init,
-> +	.seal =3D trusted_dcp_seal,
-> +	.unseal =3D trusted_dcp_unseal,
-> +	.migratable =3D 0,
-> +};
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+I'm not sure whether this should err or warn.
+
+What sort of situations can cause the test the fail (e.g.
+adversary/interposer, bad configuration etc.).
 
 BR, Jarkko
-
 
