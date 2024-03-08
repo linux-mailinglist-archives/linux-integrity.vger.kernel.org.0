@@ -1,216 +1,239 @@
-Return-Path: <linux-integrity+bounces-1681-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1682-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FF9F876814
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Mar 2024 17:09:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE7378768C2
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Mar 2024 17:46:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C30981F22BAF
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Mar 2024 16:09:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCD391C212C5
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Mar 2024 16:46:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A33E25634;
-	Fri,  8 Mar 2024 16:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nLD93Dr9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE398C1A;
+	Fri,  8 Mar 2024 16:46:25 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7A3208A4;
-	Fri,  8 Mar 2024 16:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1111236D;
+	Fri,  8 Mar 2024 16:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709914139; cv=none; b=BCcqyfNBdCj0X/3Xk5J2Up+74ncaaHbDqB6DNVHd4LXZ1O7Pgw6C+o6RST2D4X2lD3CtonEr5DRzdGJ6Um7CM024gMmRXcP1IxE9RNTd0acV5AcMwe9m2SOKSn07SdUHnvvDlCbSGDKYWETsDYSGrXzZIHCGPKuV0k5jxQj+wKg=
+	t=1709916385; cv=none; b=EY9WJppOM4McWhbFbOeMRjGLbsswRa3QlwSTStxCI8+Fm6aetpEe8OfiUC/p0tXMc7h1YW3pLg7e5jvglQbQBcMhpQZPtqXrFvRj7fXqafKy7M8/99p+eUx/SK7ZV/cMPa0kMRjCOqWKVYodSfpf84FNqiddiw/39u8yNECAdd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709914139; c=relaxed/simple;
-	bh=6SXOr1Iy8XNCRAMEN6pXGlhAS7VYMWHq6m6o9qQybHY=;
+	s=arc-20240116; t=1709916385; c=relaxed/simple;
+	bh=Q9JbJgy4s95+FVzuI2yxuPSyR9uhk2IBqK8U1Ci2sa0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=BQ85VoMXjbBOtZGnI8uFPU7oviLkeb4ab7n/Y/qddlh9j1v7EeOU/RIdYCPadKzDYJN17K0h4xyNkggWSiJHS1gXZCHuDg+HA93tjH5GU+YhOphY78920ex+eWX6Cm5SfpKLZvtVnPFklH5kOjh6Y52/gw/93pa5XIHeHj6/LOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nLD93Dr9; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 428FqHgk006767;
-	Fri, 8 Mar 2024 16:08:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=rqvCQHQSaJB4tbEh2EpaGjIG0ekuTz9t/hBKYIfpR1Y=;
- b=nLD93Dr940U6xPonyTT9pl6Pl62wcUIPfDsOmQuw6gGBiBVMUurenkPHymTFBmU1781t
- 8hXxySqD7b3qvMl+aeq67P9Ea0ttt5jwxdivOqan/z6BoJkhyM7drqt7gcNFyUbkWK+x
- /0hIwHWtfUrtNUIPz/DSYbDAfGTB75Jn/mDoyF2F7ssyFBQtlu7kaDUlmze7cyCpmyWb
- WFxrWAjlidid1pRwM6SMrR29GVrT/DoVkqLVay4ZWGXY80CWNUOXaCBZw+GmlQK5V2GY
- lOwI4MV0sUBo5te+OPHcq1W0LmQEh3Dq/8kMqOJJTRAU+3xKT2LbDSSJOTywIG7DSQXY Yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wr5pj8b4w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 Mar 2024 16:08:13 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 428G6jsL018936;
-	Fri, 8 Mar 2024 16:08:12 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wr5pj8b49-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 Mar 2024 16:08:12 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 428DTCm9024163;
-	Fri, 8 Mar 2024 16:08:11 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wpjwsrner-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 Mar 2024 16:08:11 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 428G88Gd37683702
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 8 Mar 2024 16:08:10 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6033258072;
-	Fri,  8 Mar 2024 16:08:08 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0194258064;
-	Fri,  8 Mar 2024 16:08:07 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.150.204])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  8 Mar 2024 16:08:06 +0000 (GMT)
-Message-ID: <acfb4159b16b84d8fa1517d6870edaaaadf901c8.camel@linux.ibm.com>
+	 Content-Type:MIME-Version; b=UG7JV29LabZK0eJGDGDjnuISBlF2+hMuzw8yZespSIm8ek95jnvyrAtIm/u9DEYHsnxtWyceLXC13qRN/lTlCGdAitAgSMYb+e8pUpUUmxt4jBlKRiQWY6ZCDDVAbOIjBGgBNGJ13Y7hTDIblmsb/dIebSNniRCdYMPfMxZ8OCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Trrm457q1z9yjbF;
+	Sat,  9 Mar 2024 00:12:20 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 6A32E140590;
+	Sat,  9 Mar 2024 00:27:52 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwDXyxR3POtl6xr2Aw--.9011S2;
+	Fri, 08 Mar 2024 17:27:51 +0100 (CET)
+Message-ID: <523a37b29820fe98151b1d608f77b88cc026a91d.camel@huaweicloud.com>
 Subject: Re: [RFC][PATCH 6/8] ima: Use digest cache for measurement
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
-        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl,
-        hch@lst.de, mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
-        dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com,
-        ppavlu@suse.com, petr.vorel@gmail.com, petrtesarik@huaweicloud.com,
-        mzerqung@0pointer.de, kgold@linux.ibm.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date: Fri, 08 Mar 2024 11:08:06 -0500
-In-Reply-To: <20240214143525.2205481-7-roberto.sassu@huaweicloud.com>
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, corbet@lwn.net,
+ dmitry.kasatkin@gmail.com,  eric.snowberg@oracle.com, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl,
+ hch@lst.de,  mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
+ dhowells@redhat.com,  jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com,
+ petr.vorel@gmail.com,  petrtesarik@huaweicloud.com, mzerqung@0pointer.de,
+ kgold@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date: Fri, 08 Mar 2024 17:27:31 +0100
+In-Reply-To: <acfb4159b16b84d8fa1517d6870edaaaadf901c8.camel@linux.ibm.com>
 References: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
 	 <20240214143525.2205481-7-roberto.sassu@huaweicloud.com>
+	 <acfb4159b16b84d8fa1517d6870edaaaadf901c8.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qqpIrBqEDS0LeBEA8Jzro8IoOjhRTb2R
-X-Proofpoint-GUID: GFNkQnj3kCNuQprUSV6gG5Zkx44eG_VH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-08_08,2024-03-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
- adultscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2403080129
+MIME-Version: 1.0
+X-CM-TRANSID:LxC2BwDXyxR3POtl6xr2Aw--.9011S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJw1kXF48KFy7CFykuF48JFb_yoW7Gr18pa
+	97uF12kFs5Wr1fGF13Aa12vF4xtrWktF47Jws8WF1Yyan8Xrn29w1rtw15ZryfAr48Za17
+	tF4UKrsxZF1qvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+	WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+	0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIY
+	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+	v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUoj
+	jgUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj5ckyQAEsZ
 
-Hi Roberto,
+On Fri, 2024-03-08 at 11:08 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+>=20
+> > diff --git a/security/integrity/ima/ima_main.c
+> > b/security/integrity/ima/ima_main.c
+> > index 3fc48214850a..48a09747ae7a 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -222,7 +222,9 @@ static int process_measurement(struct file *file, c=
+onst
+> > struct cred *cred,
+> >  	bool violation_check;
+> >  	enum hash_algo hash_algo;
+> >  	unsigned int allowed_algos =3D 0;
+> > -	u64 verif_mask =3D 0;
+> > +	u64 verif_mask =3D 0, *verif_mask_ptr, policy_mask =3D 0, allow_mask =
+=3D 0;
+> > +	struct digest_cache *digest_cache =3D NULL, *found_cache;
+> > +	digest_cache_found_t found;
+> > =20
+> >  	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+> >  		return 0;
+> > @@ -233,7 +235,7 @@ static int process_measurement(struct file *file, c=
+onst
+> > struct cred *cred,
+> >  	 */
+> >  	action =3D ima_get_action(file_mnt_idmap(file), inode, cred, secid,
+> >  				mask, func, &pcr, &template_desc, NULL,
+> > -				&allowed_algos, NULL);
+> > +				&allowed_algos, &policy_mask);
+> >  	violation_check =3D ((func =3D=3D FILE_CHECK || func =3D=3D MMAP_CHEC=
+K ||
+> >  			    func =3D=3D MMAP_CHECK_REQPROT) &&
+> >  			   (ima_policy_flag & IMA_MEASURE));
+> > @@ -364,10 +366,34 @@ static int process_measurement(struct file *file,=
+ const
+> > struct cred *cred,
+> >  	if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
+> >  		pathname =3D ima_d_path(&file->f_path, &pathbuf, filename);
+> > =20
+> > +	/*
+> > +	 * For now we don't support nested verification with digest caches.
+>=20
+> I haven't reviewed the digest_cache LSM patch set yet.  What does 'nested=
+' mean
+> in this context?  Why mention it here?
 
-> diff --git a/security/integrity/ima/ima_main.c
-> b/security/integrity/ima/ima_main.c
-> index 3fc48214850a..48a09747ae7a 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -222,7 +222,9 @@ static int process_measurement(struct file *file, const
-> struct cred *cred,
->  	bool violation_check;
->  	enum hash_algo hash_algo;
->  	unsigned int allowed_algos = 0;
-> -	u64 verif_mask = 0;
-> +	u64 verif_mask = 0, *verif_mask_ptr, policy_mask = 0, allow_mask = 0;
-> +	struct digest_cache *digest_cache = NULL, *found_cache;
-> +	digest_cache_found_t found;
->  
->  	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
->  		return 0;
-> @@ -233,7 +235,7 @@ static int process_measurement(struct file *file, const
-> struct cred *cred,
->  	 */
->  	action = ima_get_action(file_mnt_idmap(file), inode, cred, secid,
->  				mask, func, &pcr, &template_desc, NULL,
-> -				&allowed_algos, NULL);
-> +				&allowed_algos, &policy_mask);
->  	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK ||
->  			    func == MMAP_CHECK_REQPROT) &&
->  			   (ima_policy_flag & IMA_MEASURE));
-> @@ -364,10 +366,34 @@ static int process_measurement(struct file *file, const
-> struct cred *cred,
->  	if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
->  		pathname = ima_d_path(&file->f_path, &pathbuf, filename);
->  
-> +	/*
-> +	 * For now we don't support nested verification with digest caches.
+This is the reason for the check func !=3D DIGEST_LIST_CHECK. Before I
+had this check in validate_rule(), but then realized that I would have
+to reject rules without 'func=3D'.
 
-I haven't reviewed the digest_cache LSM patch set yet.  What does 'nested' mean
-in this context?  Why mention it here?
+Not doing this check means that we could use digest caches also for
+verifying digest lists (this is the meaning of nested verification).
+This possibility is actually not remote, we would need this
+functionality to verify Debian-based distributions.
 
-> +	 * Since we allow IMA policy rules without func=, we have to enforce
-> +	 * this restriction here.
-> +	 */
-> +	if (rc == 0 && policy_mask && func != DIGEST_LIST_CHECK)
-> +		digest_cache = digest_cache_get(file_dentry(file));
+Now, leaving aside the fact that Debian packages still use MD5 for
+checksums (I heard that they would like to switch to SHA256 but didn't
+verify if it happened), this would be the chain of verification:
 
-So whether or not a DIGEST_LIST_CHECK policy rule even exists,
-digest_cache_get() will be called.  Similarly, even if a digest_cache list
-hasn't been measured or appraised, digest_cache_get() will be called.
+/bin/cat -> md5sums -> coreutils (DEB pkg) -> Packages.gz -> Release
 
-Basically every file in policy will check the digest_cache.
+Release is the only file signed with PGP.
 
-> +
-> +	if (digest_cache) {
-> +		found = digest_cache_lookup(file_dentry(file), digest_cache,
-> +					    iint->ima_hash->digest,
-> +					    iint->ima_hash->algo);
-> +		/* AND what is allowed by the policy, and what IMA verified. */
-> +		if (found) {
-> +			found_cache = digest_cache_from_found_t(found);
-> +			verif_mask_ptr = digest_cache_verif_get(found_cache,
-> +								"ima");
+I already tried to verify a chain, it works, but I didn't want to
+include too many functionality at the beginning. DEB format is not yet
+supported, for RPMs chained verification it is not needed.
 
-Instead of using "verif_{set,get}' consider using '{set,get}_usage', where usage
-here means measure or appraise.
+It would be fantastic if md5sums (or sha256sums) is directly signed
+tough.
 
-> +			if (verif_mask_ptr)
-> +				allow_mask = policy_mask & *verif_mask_ptr;
-> +		}
-> +
-> +		digest_cache_put(digest_cache);
-> +	}
-> +
+> > +	 * Since we allow IMA policy rules without func=3D, we have to enforc=
+e
+> > +	 * this restriction here.
+> > +	 */
+> > +	if (rc =3D=3D 0 && policy_mask && func !=3D DIGEST_LIST_CHECK)
+> > +		digest_cache =3D digest_cache_get(file_dentry(file));
+>=20
+> So whether or not a DIGEST_LIST_CHECK policy rule even exists,
+> digest_cache_get() will be called.  Similarly, even if a digest_cache lis=
+t
+> hasn't been measured or appraised, digest_cache_get() will be called.
+>=20
+> Basically every file in policy will check the digest_cache.
 
-I'm wondering if it makes sense to create IMA wrappers for each of the
-digest_cache functions - checking the digest_cache for the hash, setting the
-digest_cache permitted usage, etc - and put all of them in a separate
-ima_digest_cache.c file.  The file would only be included in the Makefile if
-digest_cache is configured.
+Only if there is 'digest_cache=3Dcontent' in the matching rule.
 
-In this file you could define a static local global variable to detect whether
-the digest_cache is ready to be used.  Only after successfully measuring and
-appraising a digest_cache list, based on policy, set the variable.
+> > +
+> > +	if (digest_cache) {
+> > +		found =3D digest_cache_lookup(file_dentry(file), digest_cache,
+> > +					    iint->ima_hash->digest,
+> > +					    iint->ima_hash->algo);
+> > +		/* AND what is allowed by the policy, and what IMA verified. */
+> > +		if (found) {
+> > +			found_cache =3D digest_cache_from_found_t(found);
+> > +			verif_mask_ptr =3D digest_cache_verif_get(found_cache,
+> > +								"ima");
+>=20
+> Instead of using "verif_{set,get}' consider using '{set,get}_usage', wher=
+e usage
+> here means measure or appraise.
 
->  	if (action & IMA_MEASURE)
->  		ima_store_measurement(iint, file, pathname,
->  				      xattr_value, xattr_len, modsig, pcr,
-> -				      template_desc);
-> +				      template_desc, allow_mask);
+Usage might make sense for IMA, not sure for any other user.
 
-'allowed_usage'?
+> > +			if (verif_mask_ptr)
+> > +				allow_mask =3D policy_mask & *verif_mask_ptr;
+> > +		}
+> > +
+> > +		digest_cache_put(digest_cache);
+> > +	}
+> > +
+>=20
+> I'm wondering if it makes sense to create IMA wrappers for each of the
+> digest_cache functions - checking the digest_cache for the hash, setting =
+the
+> digest_cache permitted usage, etc - and put all of them in a separate
+> ima_digest_cache.c file.  The file would only be included in the Makefile=
+ if
+> digest_cache is configured.
 
->  	if (rc == 0 && (action & IMA_APPRAISE_SUBMASK)) {
->  		rc = ima_check_blacklist(iint, modsig, pcr);
->  		if (rc != -EPERM) {
+It would be fine for me.
 
-thanks,
+> In this file you could define a static local global variable to detect wh=
+ether
+> the digest_cache is ready to be used.  Only after successfully measuring =
+and
+> appraising a digest_cache list, based on policy, set the variable.
 
-Mimi
+Ok, something similar to ima_policy_flag.
+
+> >  	if (action & IMA_MEASURE)
+> >  		ima_store_measurement(iint, file, pathname,
+> >  				      xattr_value, xattr_len, modsig, pcr,
+> > -				      template_desc);
+> > +				      template_desc, allow_mask);
+>=20
+> 'allowed_usage'?
+
+Sure, I started renaming them.
+
+Thanks
+
+Roberto
+
+> >  	if (rc =3D=3D 0 && (action & IMA_APPRAISE_SUBMASK)) {
+> >  		rc =3D ima_check_blacklist(iint, modsig, pcr);
+> >  		if (rc !=3D -EPERM) {
+>=20
+> thanks,
+>=20
+> Mimi
 
 
