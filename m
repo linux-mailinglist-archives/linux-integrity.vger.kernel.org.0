@@ -1,280 +1,218 @@
-Return-Path: <linux-integrity+bounces-1672-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1673-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 030708760FE
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Mar 2024 10:34:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40F1087623D
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Mar 2024 11:39:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6C47284477
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Mar 2024 09:34:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3506A1C211CB
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Mar 2024 10:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE2E53391;
-	Fri,  8 Mar 2024 09:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EDEA55C3E;
+	Fri,  8 Mar 2024 10:37:25 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95D252F89
-	for <linux-integrity@vger.kernel.org>; Fri,  8 Mar 2024 09:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9B855E62;
+	Fri,  8 Mar 2024 10:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709890466; cv=none; b=pflYsvG0hNgbt9MEX0XLX5Z1nyhYRbXoXx+D4m+UEVwlbogQimMIRCBDbXQHzgFvN3dpFzgfSS/tnc2pOQa+R+XWUhTH4CkDVzbMnZ1+du1ZwAjRjn8UQGBBBJ4n6mp5w7H9oWABVAdlF8n6QNP9P5ZKukpSz7Cbt/4jTV7YWqs=
+	t=1709894245; cv=none; b=lfOHHMa6kOsSkersil1tIiQT7NdzlnRh1SiNk+OJV8wwTGR0szrfzK6x/OPZTOdMUQzjUccSrkbpHN8QRjNMpqH2c9xgcfkPGnQkj/g7a05VTVTb+aFM2VaYYnkFULgvvaCmuv+4uylOwax+zH8vKXUiJ9fKhTU/Z354q3eM7io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709890466; c=relaxed/simple;
-	bh=clOovKNwBnI/k6gTU45si/rIBxcMlsAY1KzWhLsgeB4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ibyy0/ix3ntLoT78IS5Uc9xu4YIoJC509taEv1WnUk5i+2jNTIDbrMEo0y8Vxa4utz+1hAV6vh84b0+MNnPMCtYbiK+tvacweR4wcIaJ+BNLu06AQ9w3hFV+fZcmaAED1VObWQMdEm+8GqmpBMx02ATcg6/BhRTsDFBK8i/LQlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.2] (ip5f5af28c.dynamic.kabel-deutschland.de [95.90.242.140])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 9AAE261E5FE04;
-	Fri,  8 Mar 2024 10:33:59 +0100 (CET)
-Message-ID: <61067410-5cbe-4b28-a31c-f994933f310d@molgen.mpg.de>
-Date: Fri, 8 Mar 2024 10:33:58 +0100
+	s=arc-20240116; t=1709894245; c=relaxed/simple;
+	bh=MDdQ3beQ1q4madF/M56EEmJ1IyDRizOjzaekKCVL1RY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BAWEHkyH6NN6O3IJr1jDPPoFZePJFKO37JbFYPggA0kksroZHxGzTT3uSRkRdw/U3jCnMeEkjIj3ECKVLe6P4DlnGFcvfZi9C0Ml3O981dEG2cpEbJxNOduB3u/HsUvYopE67hv11JFVtygNEZV8URQZNtM7up/ZW2rTqdYel8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Trhth3TbGz9xrN2;
+	Fri,  8 Mar 2024 18:17:32 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 59304140558;
+	Fri,  8 Mar 2024 18:37:09 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwBXTBVE6uplNCHyAw--.7639S2;
+	Fri, 08 Mar 2024 11:37:08 +0100 (CET)
+Message-ID: <e10207bd82ee13fb088f9efc12e10a5478b6926d.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH 4/8] ima: Add digest_cache_measure and
+ digest_cache_appraise boot-time policies
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, corbet@lwn.net,
+ dmitry.kasatkin@gmail.com,  eric.snowberg@oracle.com, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl,
+ hch@lst.de,  mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
+ dhowells@redhat.com,  jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com,
+ petr.vorel@gmail.com,  petrtesarik@huaweicloud.com, mzerqung@0pointer.de,
+ kgold@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date: Fri, 08 Mar 2024 11:36:48 +0100
+In-Reply-To: <ed5df367582f0c5e212638a12204fd20fd8e46e5.camel@linux.ibm.com>
+References: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
+	 <20240214143525.2205481-5-roberto.sassu@huaweicloud.com>
+	 <ed5df367582f0c5e212638a12204fd20fd8e46e5.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] tpm: Fix suspend/shutdown on some boards by preserving
- chip Locality
-Content-Language: en-US
-To: Adam Alves <adamoa@gmail.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-References: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
- <20240307224957.29432-1-adamoa@gmail.com>
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20240307224957.29432-1-adamoa@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwBXTBVE6uplNCHyAw--.7639S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw43Ww45WFy3Gr4xKF45ZFb_yoWrCF43pa
+	yDCF1YkFWDur1fAw1ava18ur4Fy39agF43XayUJ345Ars5XFn2k3W8Aa45urWUZw48X3Z2
+	yF4UKr47W34DZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkK14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+	c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+	Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ73D
+	UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj5shHQABsC
 
-Dear Adam,
+On Thu, 2024-03-07 at 15:17 -0500, Mimi Zohar wrote:
+> On Wed, 2024-02-14 at 15:35 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> >=20
+> > Specify the 'digest_cache_measure' boot-time policy with 'ima_policy=3D=
+' in
+> > the kernel command line
+>=20
+> The 'built-in' policies may be specified on the boot command line.  Pleas=
+e
+> update Subject line, to user the term "built-in" as well as here.
 
+Ok, will do.
 
-Thank you very much for analyzing the problem and finding a fix. I have 
-some small nits and questions. The current state is alright. Should you 
-send another version, that you could address the nits.
+> >  to add the following rule at the beginning of the
+> > IMA policy, before other rules:
+>=20
+> Comments below...
+>=20
+> >=20
+> > measure func=3DDIGEST_LIST_CHECK pcr=3D12
+> >=20
+> > which will measure digest lists into PCR 12 (or the value in
+> > CONFIG_IMA_DIGEST_CACHE_MEASURE_PCR_IDX).
+> >=20
+> > 'digest_cache_measure' also adds 'digest_cache=3Dcontent pcr=3D12' to t=
+he other
+> > measure rules, if they have a compatible IMA hook. The PCR value still
+> > comes from CONFIG_IMA_DIGEST_CACHE_MEASURE_PCR_IDX.
+> >=20
+> > Specify 'digest_cache_appraise' to add the following rule at the beginn=
+ing,
+> > before other rules:
+> >=20
+> > appraise func=3DDIGEST_LIST_CHECK appraise_type=3Dimasig|modsig
+> >=20
+> > which will appraise digest lists with IMA signatures or module-style
+> > appended signatures.
+> >=20
+> > 'digest_cache_appraise' also adds 'digest_cache=3Dcontent' to the other
+> > appraise rules, if they have a compatible IMA hook.
+> >=20
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  .../admin-guide/kernel-parameters.txt         | 15 ++++++-
+> >  security/integrity/ima/Kconfig                | 10 +++++
+> >  security/integrity/ima/ima_policy.c           | 45 +++++++++++++++++++
+> >  3 files changed, 69 insertions(+), 1 deletion(-)
+>=20
+> [...]
+> =20
+> > @@ -971,6 +1006,16 @@ void __init ima_init_policy(void)
+> >  {
+> >  	int build_appraise_entries, arch_entries;
+> > =20
+> > +	/*
+> > +	 * We need to load digest cache rules at the beginning, to avoid dont=
+_
+> > +	 * rules causing ours to not be reached.
+> > +	 */
+>=20
+> "lockdown" trusts IMA to measure and appraise kernel modules, if the rule
+> exists.  Placing the digest_cache first breaks this trust.
 
+The new rules don't prevent other rules to be reached, since they are
+'do' and not 'don_t' rules.
 
-Am 07.03.24 um 23:49 schrieb Adam Alves:
-> Some buggy firmware might require the TPM device to be in default
-> locality (Locality 0) before suspend or shutdown. Failing to do so
-> would leave the system in a hanged state before sleep or power off
-> (after “reboot: Power down” message).
+If the kernel reads a file with file ID READING_MODULE, that would
+still be matched by rules with 'func=3DMODULE_CHECK', even if there are
+rules with 'func=3DDIGEST_LIST_CHECK', which will be instead matched when
+there is a kernel read with file ID READING_DIGEST_LIST.
 
-Out of curiosity, would reboot work?
+We can talk about the rule modification. Speaking of appraising kernel
+modules, setting 'ima_policy=3Ddigest_cache_appraise' in the kernel
+command line would have the effect of changing:
 
-> Such is the case for the ASUSTeK COMPUTER INC. TUF GAMING B460M-PLUS
-> board, I believe this might be the case for several other boards
-> based on some bugs over the internet while trying to find out how to
-> fix my specific issue. Most forums suggest the user to disable the
-> TPM device on firmware BIOS in order to work around this specific
-> issue, which disables several security features provided by TPM. >
-> The root cause might be that after the ACPI command to put the device
-> to S3 or S5, some firmware application/driver will try to use the TPM
-> chip expecting it to be in Locality 0 as expected by TCG PC Client
-> Platform Firmware Profile Version 1.06 Revision 52 (3.1.1 – Pre-OS
-> Environment) and then when it fails to do so it simply halts the
-> whole system.
-> 
-> Enable a user to configure the kernel through
-> “tpm.locality_on_suspend=1” boot parameter so that the locality is set
+appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig
 
-I’d use `` from Markdown.
+to:
 
-> before suspend/shutdown in order to diagnose whether or not the board is
-> one of the buggy ones that require this workaround. Since this bug is
-> related to the board/platform instead of the specific TPM chip, call
-> dmi_check_system on the tpm_init function so that this setting is
-> automatically enabled for boards specified in code (ASUS TUF GAMING
-> B460M-PLUS already included) – automatic configuration only works in
-> case CONFIG_DMI is set though, since dmi_check_system is a non-op when
-> CONFIG_DMI is not set.
+appraise func=3DDIGEST_LIST_CHECK appraise_type=3Dimasig|modsig
+appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig digest_cache=3Dc=
+ontent
 
-Could you please document the TPM for completeness?
+The effect of this would be that, if the kernel does not have
+security.ima or an appended signature, appraisal will be still
+successful by verifying the signature (in the xattr or appended) of the
+digest list, and looking up the digest of the kernel module in that
+digest list.
 
-> In case “tpm.locality_on_suspend=0” (the default) don't change any
-> behavior thus preserving current functionality of any other board
-> except ASUSTeK COMPUTER INC. TUF GAMING B460M-PLUS and possibly future
-> boards as we successfully diagnose other boards with the same issue
-> fixed by using “tpm.locality_on_suspend=1”.
+> From a trusted and secure boot perspective, the architecture specific pol=
+icy
+> rules should not be ignored.
 
-Is the exception useful, if a user explicitly requests to disable the 
-behavior? I was thinking for a case, where a newer system firmware has a 
-fix (and the DMI check would need to be extended).
+I'm still missing how the architecture-specific policy would be
+ignored.
 
-For completeness, I’d mention/paste the new log message.
+> Putting the digest_cache before any other rules
+> will limit others from being able to use digest_cache.
 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217890
-> Signed-off-by: Adam Alves <adamoa@gmail.com>
+Sorry, didn't understand.
 
-Should this be backported to the stable series?
+Let me just remark that measuring/appraising a digest list is a
+necessary condition for using the digest cache built from that digest
+list.
 
-> ---
-> v1->v2: fix formatting issues and simplified tpm_chip_stop code.
-> 
->   drivers/char/tpm/tpm-chip.c      | 12 +++++++++++
->   drivers/char/tpm/tpm-interface.c | 37 ++++++++++++++++++++++++++++++++
->   drivers/char/tpm/tpm.h           |  1 +
->   include/linux/tpm.h              |  1 +
->   4 files changed, 51 insertions(+)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 42b1062e33cd..a183e1355289 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -137,6 +137,12 @@ EXPORT_SYMBOL_GPL(tpm_chip_start);
->    */
->   void tpm_chip_stop(struct tpm_chip *chip)
->   {
-> +	if (chip->flags & TPM_CHIP_FLAG_PRESERVE_LOCALITY) {
-> +		if (chip->locality != 0)
-> +			tpm_request_locality(chip);
-> +		return;
-> +	}
-> +
->   	tpm_go_idle(chip);
->   	tpm_relinquish_locality(chip);
->   	tpm_clk_disable(chip);
-> @@ -291,6 +297,9 @@ int tpm_class_shutdown(struct device *dev)
->   {
->   	struct tpm_chip *chip = container_of(dev, struct tpm_chip, dev);
->   
-> +	if (tpm_locality_on_suspend)
-> +		chip->flags |= TPM_CHIP_FLAG_PRESERVE_LOCALITY;
-> +
->   	down_write(&chip->ops_sem);
->   	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
->   		if (!tpm_chip_start(chip)) {
-> @@ -668,6 +677,9 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
->    */
->   void tpm_chip_unregister(struct tpm_chip *chip)
->   {
-> +	if (tpm_locality_on_suspend)
-> +		chip->flags |= TPM_CHIP_FLAG_PRESERVE_LOCALITY;
-> +
->   	tpm_del_legacy_sysfs(chip);
->   	if (tpm_is_hwrng_enabled(chip))
->   		hwrng_unregister(&chip->hwrng);
-> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> index 66b16d26eecc..7f770ea98402 100644
-> --- a/drivers/char/tpm/tpm-interface.c
-> +++ b/drivers/char/tpm/tpm-interface.c
-> @@ -26,6 +26,7 @@
->   #include <linux/suspend.h>
->   #include <linux/freezer.h>
->   #include <linux/tpm_eventlog.h>
-> +#include <linux/dmi.h>
->   
->   #include "tpm.h"
->   
-> @@ -382,6 +383,36 @@ int tpm_auto_startup(struct tpm_chip *chip)
->   	return rc;
->   }
->   
-> +/*
-> + * Bug workaround - some boards expect the TPM to be on Locality 0
-> + * before suspend/shutdown, halting the system otherwise before
-> + * suspend and shutdown. Change suspend behavior for these cases.
-> + */
-> +bool tpm_locality_on_suspend;
-> +module_param_named(locality_on_suspend, tpm_locality_on_suspend, bool, 0644);
-> +MODULE_PARM_DESC(locality_on_suspend,
-> +		 "Put TPM at locality 0 before suspend/shutdown.");
+Not doing that has the same effect of a negative digest lookup, even if
+that digest was in the digest list.
 
-I was wondering, if there is a name, that would make clear, that it is 
-not only during suspend. But I couldn’t come up with one.
+> Instead of putting the digest_cache_{measure,appraise} built-in policies =
+first,
+> skip loading the dont_measure_rules.
 
-> +
-> +static int __init tpm_set_locality_on_suspend(const struct dmi_system_id *system_id)
-> +{
-> +	pr_info("Board %s: TPM locality preserved before suspend/shutdown.\n",
-> +		system_id->ident);
-> +	tpm_locality_on_suspend = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct dmi_system_id tpm_board_quirks[] __initconst = {
-> +	{
-> +		.ident = "TUF GAMING B460M-PLUS",
-> +		.matches = {
-> +			DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),
-> +			DMI_MATCH(DMI_BOARD_NAME, "TUF GAMING B460M-PLUS"),
-> +		},
-> +		.callback = tpm_set_locality_on_suspend,
-> +	},
-> +};
-> +
->   /*
->    * We are about to suspend. Save the TPM state
->    * so that it can be restored.
-> @@ -394,6 +425,9 @@ int tpm_pm_suspend(struct device *dev)
->   	if (!chip)
->   		return -ENODEV;
->   
-> +	if (tpm_locality_on_suspend)
-> +		chip->flags |= TPM_CHIP_FLAG_PRESERVE_LOCALITY;
-> +
->   	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
->   		goto suspended;
->   
-> @@ -431,6 +465,7 @@ int tpm_pm_resume(struct device *dev)
->   	if (chip == NULL)
->   		return -ENODEV;
->   
-> +	chip->flags &= ~TPM_CHIP_FLAG_PRESERVE_LOCALITY;
->   	chip->flags &= ~TPM_CHIP_FLAG_SUSPENDED;
->   
->   	/*
-> @@ -476,6 +511,8 @@ static int __init tpm_init(void)
->   {
->   	int rc;
->   
-> +	dmi_check_system(tpm_board_quirks);
-> +
->   	rc = class_register(&tpm_class);
->   	if (rc) {
->   		pr_err("couldn't create tpm class\n");
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 61445f1dc46d..f2657b611b81 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -236,6 +236,7 @@ extern dev_t tpm_devt;
->   extern const struct file_operations tpm_fops;
->   extern const struct file_operations tpmrm_fops;
->   extern struct idr dev_nums_idr;
-> +extern bool tpm_locality_on_suspend;
->   
->   ssize_t tpm_transmit(struct tpm_chip *chip, u8 *buf, size_t bufsiz);
->   int tpm_get_timeouts(struct tpm_chip *);
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 4ee9d13749ad..1fbb33f386d1 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -284,6 +284,7 @@ enum tpm_chip_flags {
->   	TPM_CHIP_FLAG_FIRMWARE_UPGRADE		= BIT(7),
->   	TPM_CHIP_FLAG_SUSPENDED			= BIT(8),
->   	TPM_CHIP_FLAG_HWRNG_DISABLED		= BIT(9),
-> +	TPM_CHIP_FLAG_PRESERVE_LOCALITY		= BIT(10),
->   };
->   
->   #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
+It does not seem a good idea. We still want to avoid
+measurements/appraisal in the pseudo filesystems.
 
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Roberto
 
+> Mimi
+>=20
+> > +	if (ima_digest_cache_measure)
+> > +		add_rules(&measure_digest_cache_rule, 1, IMA_DEFAULT_POLICY);
+> > +
+> > +	if (ima_digest_cache_appraise)
+> > +		add_rules(&appraise_digest_cache_rule, 1, IMA_DEFAULT_POLICY);
+> > +
+> >  	/* if !ima_policy, we load NO default rules */
+> >  	if (ima_policy)
+> >  		add_rules(dont_measure_rules, ARRAY_SIZE(dont_measure_rules),
 
-Kind regards,
-
-Paul
 
