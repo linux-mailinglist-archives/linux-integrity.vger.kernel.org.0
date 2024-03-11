@@ -1,47 +1,81 @@
-Return-Path: <linux-integrity+bounces-1709-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1710-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A9BF87876F
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 19:36:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ACFB878882
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 20:11:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D49D11F2227C
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 18:36:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FDBEB210CC
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 19:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2640F53E0D;
-	Mon, 11 Mar 2024 18:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E647E5467A;
+	Mon, 11 Mar 2024 19:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="mFz9z8ar"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PZMUJ6f3"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A965439AFF;
-	Mon, 11 Mar 2024 18:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B7140847;
+	Mon, 11 Mar 2024 19:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710182066; cv=none; b=lMg9vg6/+kwtMK2lx+l/Pjc2vEn9rYx1JaZU1fPuc15sCGqp+b1G1//7UQhSMVAY9au1dajpDtnpfWHgy/+8zxMHuPUvTbtmqZ12R04SWMP2yiu1DXGbVsRZjz+j5Wj3+Tf0e1So8VLmgD0kj/owR8HT08b4NnfNc7pvitHtP34=
+	t=1710184290; cv=none; b=GeG/wfRqqok2GvN6ZanMDy9pFBRI6eW3jtSY7nrrlmtvUj5Q/FTLLCbQOtlzKFsSTmDXKJKTWMuj5weOn7eq6dRkReldEtYmgg3Au9YGH9Ti1zeX5s6bjmQFz+Ot5YEpaK9JHw/mm5r0cY5v3dIKUCN6Rpg32qZvMj1UJ2OyhiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710182066; c=relaxed/simple;
-	bh=yuuZpbBSCUVSrGY6ZKhBWY/+6yGrO/sdr6mf+50hinw=;
+	s=arc-20240116; t=1710184290; c=relaxed/simple;
+	bh=4LwPqX5B/kedEJN2uWC05iOjLmcODFip9S5O4WyitH8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R5MT0nE4e8Y9r/AbWOY7fdYfZEJDU1dtgGjLZDgr9XCwjvZ8RNkxssTMozF0NbQTL5BtbUTTa5bc/5863v3BDB1XBi+s5pQH9bN4w/ngefv/doDu6oIckLogx4rRGD0x2dS7nt8FksA3k6S0edWC01jbYYeKgRbqDZYMA5znT1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=mFz9z8ar; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.106.151] (unknown [131.107.8.87])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 1198520B74C0;
-	Mon, 11 Mar 2024 11:34:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1198520B74C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1710182063;
-	bh=RZfhJKtA70RVNfOir8lzr0ciKj5PtunMNDoxTSux7fE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mFz9z8arBOPU8v6pO+Y+J35vQvitl8VqPkIYNZGGSUMjWOwFkbgdsn/fsaTtgIIqj
-	 lm65//Wy3qUMogCm1d3VAgU6qHyzhgARwjBJkoNDAWrpqSE11KxCysxx2ZEwdIUI3b
-	 24ndee37du0KS1BRqLoK1y7EAEhmBpQEWFXCie8w=
-Message-ID: <553f0f09-45b4-4f4b-9b91-b3c2fe5d6030@linux.microsoft.com>
-Date: Mon, 11 Mar 2024 11:34:22 -0700
+	 In-Reply-To:Content-Type; b=phhsMo5AbAzNYfz5CT2orzkoIYFfHR3ofo0/0j5B0ln+6CTmgJl6ynbw87FfewF1szTtHl+zbRcMqvPaYppjDkguYU4jVSLBoMm2alUSQ7KQdDuXlFOiM0aHLbqAPjwsXUyMJ7zqwlb8frhWwYRzfjAusTT7pVu+7l0UinjAxoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PZMUJ6f3; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42BJ7luc011988;
+	Mon, 11 Mar 2024 19:11:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cIC28NXyFQhnrE2WQSAna546CA7ZxTgRRfuoymC5yiU=;
+ b=PZMUJ6f3AjMW2ZGqu1bXK12KjSIbvvGlefIKWVL4BIXvo4A/4fghfvVwFpMzv2ByyICj
+ tnxi1qwYsFcCEStcZIhrIvVFbv6Z9yDoXfrPoU9UaL6qOXAyVABmZ4iO/bJhc6uTLrZv
+ 7LHbYthp8R0V+xAQOzoDwtEmv7aO5GEe7Jd+eTnd6AQ0HQzRwSO0bu5xwvlJ+TtWqRMk
+ TdtxD5FrZ8fUL5hw7WIQhPZ2koz1tNHumrjQqgMTMy19VcwGhpySnx7w1xVNpmOih31H
+ ybfrKzrMRAA6ujCJzQFOml8ZWNE4dj48Dlre8oRXGL0jCqYoLasn1Llum9h7zTXuc18/ 4A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wt7uar1p7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Mar 2024 19:11:13 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42BJ98Nm016204;
+	Mon, 11 Mar 2024 19:11:12 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wt7uar1hr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Mar 2024 19:11:12 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42BGXkRH014887;
+	Mon, 11 Mar 2024 19:10:44 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ws33njfs8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Mar 2024 19:10:43 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42BJAguG46924208
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 11 Mar 2024 19:10:43 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 83A3158055;
+	Mon, 11 Mar 2024 19:10:42 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 91E095805B;
+	Mon, 11 Mar 2024 19:10:41 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 11 Mar 2024 19:10:41 +0000 (GMT)
+Message-ID: <2c9dc099-f450-40af-9723-27ca2b69afdc@linux.ibm.com>
+Date: Mon, 11 Mar 2024 15:10:40 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,160 +83,90 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v14 05/19] initramfs|security: Add a security hook to
- do_populate_rootfs()
-Content-Language: en-CA
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
- zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu,
- ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
- eparis@redhat.com, paul@paul-moore.com
-Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org,
- linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
- audit@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
- <1709768084-22539-6-git-send-email-wufan@linux.microsoft.com>
- <cff886eef84ced5b4dfac1be7572dc8d06b63792.camel@huaweicloud.com>
-From: Fan Wu <wufan@linux.microsoft.com>
-In-Reply-To: <cff886eef84ced5b4dfac1be7572dc8d06b63792.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v2 1/3] powerpc/prom_init: Replace
+ linux,sml-base/sml-size with linux,sml-log
+Content-Language: en-US
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "rnsastry@linux.ibm.com" <rnsastry@linux.ibm.com>,
+        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "viparash@in.ibm.com" <viparash@in.ibm.com>
+References: <20240311132030.1103122-1-stefanb@linux.ibm.com>
+ <20240311132030.1103122-2-stefanb@linux.ibm.com>
+ <0bde9a6f-e002-452e-8610-8d4040fb0b86@csgroup.eu>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <0bde9a6f-e002-452e-8610-8d4040fb0b86@csgroup.eu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: q89qBJgZ5Gn7UriGH1PV_pfbJEKXRzzy
+X-Proofpoint-GUID: K94-f5m9lfd12jL9cXHK1-N4_xfkabyb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-11_11,2024-03-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 spamscore=0 impostorscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311290000 definitions=main-2403110146
 
 
 
-On 3/11/2024 7:53 AM, Roberto Sassu wrote:
-> On Wed, 2024-03-06 at 15:34 -0800, Fan Wu wrote:
->> This patch introduces a new hook to notify security system that the
->> content of initramfs has been unpacked into the rootfs.
+On 3/11/24 13:24, Christophe Leroy wrote:
+> 
+> 
+> Le 11/03/2024 à 14:20, Stefan Berger a écrit :
+>> linux,sml-base holds the address of a buffer with the TPM log. This
+>> buffer may become invalid after a kexec. To avoid accessing an invalid
+>> address or corrupted buffer, embed the whole TPM log in the device tree
+>> property linux,sml-log. This helps to protect the log since it is
+>> properly carried across a kexec soft reboot with both of the kexec
+>> syscalls.
 >>
->> Upon receiving this notification, the security system can activate
->> a policy to allow only files that originated from the initramfs to
->> execute or load into kernel during the early stages of booting.
+>> Avoid having the firmware ingest the whole TPM log when calling
+>> prom_setprop but only create the linux,sml-log property as a place holder.
+>> Insert the actual TPM log during the tree flattening phase.
 >>
->> This approach is crucial for minimizing the attack surface by
->> ensuring that only trusted files from the initramfs are operational
->> in the critical boot phase.
->>
->> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
->>
+>> Fixes: 4a727429abec ("PPC64: Add support for instantiating SML from Open Firmware")
+>> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 >> ---
->> v1-v11:
->>    + Not present
->>
->> v12:
->>    + Introduced
->>
->> v13:
->>    + Rename the hook name to initramfs_populated()
->>
->> v14:
->>    + No changes
->> ---
->>   include/linux/lsm_hook_defs.h |  2 ++
->>   include/linux/security.h      |  8 ++++++++
->>   init/initramfs.c              |  3 +++
->>   security/security.c           | 10 ++++++++++
->>   4 files changed, 23 insertions(+)
->>
->> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
->> index 76458b6d53da..e0f50789a18f 100644
->> --- a/include/linux/lsm_hook_defs.h
->> +++ b/include/linux/lsm_hook_defs.h
->> @@ -425,3 +425,5 @@ LSM_HOOK(int, 0, uring_override_creds, const struct cred *new)
->>   LSM_HOOK(int, 0, uring_sqpoll, void)
->>   LSM_HOOK(int, 0, uring_cmd, struct io_uring_cmd *ioucmd)
->>   #endif /* CONFIG_IO_URING */
->> +
->> +LSM_HOOK(void, LSM_RET_VOID, initramfs_populated, void)
-> 
-> I don't know, but why there is no super_block as parameter?
-> 
-> And, wouldn't be better to rely on existing hooks to identify inodes in
-> the initial ram disk?
-> 
-> (gdb) p *file->f_path.dentry->d_inode->i_sb->s_type
-> $3 = {name = 0xffffffff826058a9 "rootfs"
-> 
-> That could also help if you want to enforce action based on the
-> filesystem name (and why not on the UUID too).
-> 
-> Roberto
->
-We are not passing any parameter here because when populating the 
-initramfs, the rootfs can be accessed via current->fs->root. In the next 
-patch, we use ipe_sb(current->fs->root.mnt->mnt_sb)->initramfs = true; 
-to mark the initramfs via a security blob.
 
-The hook here is used only to signal that files are unpacked into the 
-rootfs. The hook won't be triggered if initramfs is not enabled.
+>> @@ -2645,6 +2645,17 @@ static void __init scan_dt_build_struct(phandle node, unsigned long *mem_start,
+>>    		}
+>>    		prev_name = sstart + soff;
+>>    
+>> +		if (!prom_strcmp("linux,sml-log", pname)) {
+>> +			/* push property head */
+>> +			dt_push_token(OF_DT_PROP, mem_start, mem_end);
+>> +			dt_push_token(sml_size, mem_start, mem_end);
+>> +			dt_push_token(soff, mem_start, mem_end);
+>> +			/* push property content */
+>> +			valp = make_room(mem_start, mem_end, sml_size, 1);
+>> +			memcpy(valp, (void *)sml_base, sml_size);
+> 
+> You can't cast a u64 into a pointer. If sml_base is an address, it must
+> be declared as an unsigned long.
+> 
+> Build with pmac32_defconfig :
+> 
+>     CC      arch/powerpc/kernel/prom_init.o
+> arch/powerpc/kernel/prom_init.c: In function 'scan_dt_build_struct':
+> arch/powerpc/kernel/prom_init.c:2663:38: error: cast to pointer from
+> integer of different size [-Werror=int-to-pointer-cast]
+>    2663 |                         memcpy(valp, (void *)sml_base, sml_size);
+>         |                                      ^
+> cc1: all warnings being treated as errors
+> make[4]: *** [scripts/Makefile.build:243:
+> arch/powerpc/kernel/prom_init.o] Error 1
 
-Regarding the approach of using the filesystem's name attribute to 
-identify files in initramfs, it will treat all files from a filesystem 
-named "rootfs" as initramfs files, which could potentially be exploited 
-by malicious users. For example, an attacker could override the name of 
-an existing filesystem and then load malicious kernel modules from it. 
-The LSM would think the kernel modules are from initramfs and allow 
-them, which is not what we want.
+Next round will have this block under #ifdef CONFIG_PPC64.
 
-Also, the rootfs is a ramfs, which doesn't have a UUID, so we couldn't 
-use UUID to identify it.
-
--Fan
-
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index d0eb20f90b26..619e17e59532 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -2167,4 +2167,12 @@ static inline int security_uring_cmd(struct io_uring_cmd *ioucmd)
->>   #endif /* CONFIG_SECURITY */
->>   #endif /* CONFIG_IO_URING */
->>   
->> +#ifdef CONFIG_SECURITY
->> +extern void security_initramfs_populated(void);
->> +#else
->> +static inline void security_initramfs_populated(void)
->> +{
->> +}
->> +#endif /* CONFIG_SECURITY */
->> +
->>   #endif /* ! __LINUX_SECURITY_H */
->> diff --git a/init/initramfs.c b/init/initramfs.c
->> index 76deb48c38cb..140619a583ff 100644
->> --- a/init/initramfs.c
->> +++ b/init/initramfs.c
->> @@ -18,6 +18,7 @@
->>   #include <linux/init_syscalls.h>
->>   #include <linux/task_work.h>
->>   #include <linux/umh.h>
->> +#include <linux/security.h>
->>   
->>   static __initdata bool csum_present;
->>   static __initdata u32 io_csum;
->> @@ -720,6 +721,8 @@ static void __init do_populate_rootfs(void *unused, async_cookie_t cookie)
->>   #endif
->>   	}
->>   
->> +	security_initramfs_populated();
->> +
->>   done:
->>   	/*
->>   	 * If the initrd region is overlapped with crashkernel reserved region,
->> diff --git a/security/security.c b/security/security.c
->> index f168bc30a60d..26c28db211fd 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -5619,3 +5619,13 @@ int security_uring_cmd(struct io_uring_cmd *ioucmd)
->>   	return call_int_hook(uring_cmd, 0, ioucmd);
->>   }
->>   #endif /* CONFIG_IO_URING */
->> +
->> +/**
->> + * security_initramfs_populated() - Notify LSMs that initramfs has been loaded
->> + *
->> + * Tells the LSMs the initramfs has been unpacked into the rootfs.
->> + */
->> +void security_initramfs_populated(void)
->> +{
->> +	call_void_hook(initramfs_populated);
->> +}
+Thanks.
 
