@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1716-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1717-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58CE987895C
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 21:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5555C878966
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 21:25:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFEAA2820E7
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 20:21:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F175282099
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 20:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7830E56745;
-	Mon, 11 Mar 2024 20:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AA7956759;
+	Mon, 11 Mar 2024 20:25:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRZCIsUw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ts5HPB10"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C6A53E2C;
-	Mon, 11 Mar 2024 20:21:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E367C56B70;
+	Mon, 11 Mar 2024 20:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710188503; cv=none; b=NhfWsiOQWN+32ruee9l+uTbzXCXy3p7HBsKIeGYDdh47BRfrfEHOuWP8TBZDzJ1I6oCKRQQxRvXQprGAPGeXBeoqi2buVoe+u5ljGYn4K6ZGTgbYMQM63+AwAGaBpcn/zCuV+8d/+0brx0VliqDN3Zw7EiRQ1Q/RiFFlCcgsYxQ=
+	t=1710188734; cv=none; b=Ioe9LVk5pON3SnyEnclqvlcSECzzIoJW4kbKhukEQAKf03uwQgmt0G2oL2MkpHoZsKA7FYTy+hGNvtm/PGA5800zpJ1zMKdbMCepbHAH84ZnGI7c3sXAiwc19P2uJs3eBaWkv8+hPWwPEDL4DrADvCvB44HCufv+9f356p3JwO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710188503; c=relaxed/simple;
-	bh=m0g91sXKYJS/kIzIdqTu2G6HaWEmgoKbDue6b3HELzA=;
+	s=arc-20240116; t=1710188734; c=relaxed/simple;
+	bh=g7a7Yd9Z2FNA7ZNNxwAmkonp9MHBpjW9SwXw2aB1x7Y=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=D7gD8ONUIFToxXSowm0jMjeuf2N9HcuVwOM73rdWXn6u+RNsbsRTb+l9Cjr/y54glTRlbU888E9qm6/JFBtPUfoANz1EJcQPVwmEJRFkZ8NSy0IW0h+8nXduIfwRAZn90xXowAEF+dhzv8s1z7DfNJzgWMJSG46iOpSp2kEhmak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRZCIsUw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D49C433C7;
-	Mon, 11 Mar 2024 20:21:40 +0000 (UTC)
+	 References:In-Reply-To; b=PGDrYwl8x8TY/xGCvOs8mBuo0bV72woGYYjrVmlRe8wKG3vgyF6zVq0uvelUTPFJq8JhGHOAUqeBbMd5MfgGA/+++Jb7xojZ1umRAmr6L1Z23aFDGrccOCYZaismeYQKopSisKXN7zHs7xDbJwO2TtVYQhdYhM1qio7h1O1Ovpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ts5HPB10; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E112C433C7;
+	Mon, 11 Mar 2024 20:25:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710188502;
-	bh=m0g91sXKYJS/kIzIdqTu2G6HaWEmgoKbDue6b3HELzA=;
+	s=k20201202; t=1710188733;
+	bh=g7a7Yd9Z2FNA7ZNNxwAmkonp9MHBpjW9SwXw2aB1x7Y=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=fRZCIsUw+ltmZpj7Ioa6QyF4bBXq0ClTyx5UbpaGj0BwwmhEKNap0i2kmsFvMTfYH
-	 uAF252gxfBFsafjM9Yuk4LafJYv3Me+15/ThPDqUT/zg6IVy0kX5DdZAEfIwHN5CJa
-	 kaWzEkGHE7xv/n1Re/hQ6Xh2eldHCz0IXefPxRAdP4TN6IF7a3sTG3G7rzjwPKzjFm
-	 9x7SzQmlcJu6w9SEwD1WoiYIV/WJ86JSJ9WMmBIwMVMwH/b8Ox9dwWhkJV1+UUAUt4
-	 SeFUzsKgAL8hqx2FabponQ8JhErgPZBo8wt5HWubHhzrwi+E8LQSEkDhXyw5hd4fY/
-	 Ptdw0KX8aKSVg==
+	b=ts5HPB10Yzocx5ksgB6BXT+IQ91RE0lxy/Cn2rVAmOfCBeg1JKO5qMbDb59q2M/d6
+	 7lOpz73M9iD2r7KBDgSDjbZocgUADPNWhV9Z6CVLLZewE/zuSv91vYPvxcnRgL1XTC
+	 rrGy4QHmapS9zrOo6HwBcHMdbP7c0HefCb50lcU5OZQUVqM/PlXmppxU1eGSwZSUbb
+	 rKZTD2wjH1vbWvjtiwxSYxMJNnOokgfaqny1AZPdP1ddomWqh1pzICw7ZmOYTZHQwG
+	 9+FG36fiYbDDofOFM4Q/j7GYyLLoTFBxlP3CFjPOZV0a5wAoABPzGegBxJzO8T/6ap
+	 nXVQlxNEktOrQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,43 +49,39 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 Mar 2024 22:21:38 +0200
-Message-Id: <CZR7866WNY28.3KDPSXW81I82N@kernel.org>
+Date: Mon, 11 Mar 2024 22:25:29 +0200
+Message-Id: <CZR7B45P71XS.53XNZD9FWZSL@kernel.org>
 Cc: <linux-kernel@vger.kernel.org>, <rnsastry@linux.ibm.com>,
  <peterhuewe@gmx.de>, <viparash@in.ibm.com>, <devicetree@vger.kernel.org>,
  <jsnitsel@redhat.com>
-Subject: Re: [RFC PATCH v2 1/3] powerpc/prom_init: Replace
- linux,sml-base/sml-size with linux,sml-log
+Subject: Re: [RFC PATCH v2 3/3] tpm: of: If available use linux,sml-log to
+ get the log and its size
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
 To: "Stefan Berger" <stefanb@linux.ibm.com>, <mpe@ellerman.id.au>,
  <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
 X-Mailer: aerc 0.17.0
 References: <20240311132030.1103122-1-stefanb@linux.ibm.com>
- <20240311132030.1103122-2-stefanb@linux.ibm.com>
-In-Reply-To: <20240311132030.1103122-2-stefanb@linux.ibm.com>
+ <20240311132030.1103122-4-stefanb@linux.ibm.com>
+In-Reply-To: <20240311132030.1103122-4-stefanb@linux.ibm.com>
 
 On Mon Mar 11, 2024 at 3:20 PM EET, Stefan Berger wrote:
-> linux,sml-base holds the address of a buffer with the TPM log. This
-> buffer may become invalid after a kexec. To avoid accessing an invalid
-> address or corrupted buffer, embed the whole TPM log in the device tree
-> property linux,sml-log. This helps to protect the log since it is
-> properly carried across a kexec soft reboot with both of the kexec
-> syscalls.
-
-- Describe the environment where TPM log gets corrupted.
-- Describe why TPM log gets corrupted on kexec.
-
+> If linux,sml-log is available use it to get the TPM log rather than the
+> pointer found in linux,sml-base. This resolves an issue on PowerVM and KV=
+M
+> on Power where after a kexec the memory pointed to by linux,sml-base may
+> have become inaccessible or corrupted. Also, linux,sml-log has replaced
+> linux,sml-base and linux,sml-size on these two platforms.
 >
-> Avoid having the firmware ingest the whole TPM log when calling
-> prom_setprop but only create the linux,sml-log property as a place holder=
-.
-> Insert the actual TPM log during the tree flattening phase.
+> Keep the handling of linux,sml-base/sml-size for powernv platforms that
+> provide the two properties via skiboot.
+>
+> Fixes: c5df39262dd5 ("drivers/char/tpm: Add securityfs support for event =
+log")
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 
-This commit message should shed some light about reasons of the
-corruption in order to conclude that it should be fixed up like
-this. I.e. why the "post-state" is a legit state where can be
-continued despite a log being corrupted. Especially in security
-features this is pretty essential information.
+I'm worried about not being up to date and instead using "cached" values
+when verifying anything from a security chip. Does this guarantee that
+TPM log is corrupted and will not get updated somehow?
 
 BR, Jarkko
 
