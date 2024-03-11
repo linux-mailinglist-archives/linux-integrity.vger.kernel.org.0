@@ -1,184 +1,377 @@
-Return-Path: <linux-integrity+bounces-1707-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1708-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 249AB878699
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 18:47:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9359878709
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 19:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47E3C1C21032
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 17:47:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C8BD28118B
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 18:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6568524C3;
-	Mon, 11 Mar 2024 17:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F385653819;
+	Mon, 11 Mar 2024 18:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YCr3TBI/"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VHtK0knn"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8AA2D781
-	for <linux-integrity@vger.kernel.org>; Mon, 11 Mar 2024 17:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 255B01EB5C;
+	Mon, 11 Mar 2024 18:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710179246; cv=none; b=nDTZJfrnB8L+gTDQo5vfj507UELxgRiC7CiM6Zve5Iz9I+BrpFM20trWXiNdxyyMYKnLBrQFryvpWfIVjMvdWOUZPNzCZEevkmOng7UPHKo67R2qBYsTBSx7F+pSRJKISjrhm2VUVcDTuIQdrOwuvwxB6FvxNxm1kurFGp8gAls=
+	t=1710180658; cv=none; b=AXJkU2UvnLl0q8dsi67WghPEVQ/sbyq7WNFLdo1IXDsaPffHi8igThayP2ZfKS15oKfPyaJDpsJTvze81RbwWoesP3yr4/hfy3QnztBe7s4tQ3/5UyziKh9ZYPAiTTfWJcDhRl3ouJ5OzohqjNz/lrU6jL4nkHB/Buts0JbmkI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710179246; c=relaxed/simple;
-	bh=r7uClMLuZYE7AgrhsTWV2qszim5tbe2WKWP659ugFwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J8ZngCxewK6sgoPe8v+UK8ybuzCIH+GHX4OIkvBtP1LiUb4mSC29pQGJPUnR26/3ZrQtGHAe4LJ/fIJKxkc1Pl8wTQ8hv5VnVsCTqJgSe+OEQAOCLrPuAnVoHtAUXah9NYcBVk73A+pTuGioswdnb/FiPAPnDsrFdFR6W+uDiw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YCr3TBI/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1710179243;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e3tUcIlJ5o5Hs/7+gdyglVV0O0xMiKwtCqd2APcSMtU=;
-	b=YCr3TBI/ENR1AkFjyEC9HN8lU7DyV0Yx9vVQpC2Ue5fEHaeSSL6abopXJkC+1W+OiX5TOY
-	aJkD+Doa7e4QvgvSa+vmgsevFuTaD1qNWGiqfjxx8RidKOBbQ63C1Rqk1jVkVWH8rnbxOI
-	yxnekcZDM0jA8kEDtAA4HJjLY2jfIxU=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-329-uYffEbbqNTORZqlg-0CpCA-1; Mon, 11 Mar 2024 13:47:22 -0400
-X-MC-Unique: uYffEbbqNTORZqlg-0CpCA-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-69053b3145fso55532766d6.3
-        for <linux-integrity@vger.kernel.org>; Mon, 11 Mar 2024 10:47:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710179241; x=1710784041;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e3tUcIlJ5o5Hs/7+gdyglVV0O0xMiKwtCqd2APcSMtU=;
-        b=InqrHvOC1fGmGW0U38fh1PuLXysiBxRVknbuCasH3rR3oAu/nn0Qxh7LqWcgimyu22
-         YS30l76rv5UMmt46o/bh4NyNE4dcs3N7UfN1UwDtsmnihA0cQRmSeEV6AXaDN3HpzO3W
-         p194CZLNwzTurm5WI0Yv1gb+zwWZxN0NhI6KTlELklt8budXeoLICjfJunUxr6sxumbs
-         RgzlLILPKzeztA4Z8+nUyHEScxAwFsBoOuumLYSgVFa16QO+3F4g+gghgkRFv/OPp9p0
-         eE+7exXMBYpzeHfER8q2L7+Csjf9iq4uwkBF+VyKJMAPoFtErWrCqTHXR40wr8lchARZ
-         jBAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUxpMgStjmWHe89nvATijF1sAfGZaOhLJZ/piAjica572oWnlzFqtvuJFL3JXk9MAD5OBC7p+BUEs4Xcj9q55KzLXgb2lhx8SApTqYWa3rR
-X-Gm-Message-State: AOJu0Ywk8OeXMRRdSeq8wTusxaabS15s8PmTiDb2ZYv/rbTF0YOLUeaa
-	ETrQRD68fqBytHGrLMFS+vf49/79Xr/SzUcmE4hEPiuarxsyczFYkFeot7+MJtTn+GQIH68F5s4
-	BHa3DdRcP9zZVMFfVacYp0saK8yabkVkr8WjUowPMCQdL9sP6xG2Pl5zes0S+CzWF+w==
-X-Received: by 2002:a05:6214:247:b0:690:db88:9eb with SMTP id k7-20020a056214024700b00690db8809ebmr1672464qvt.50.1710179241540;
-        Mon, 11 Mar 2024 10:47:21 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGKkd3g/GU6B6xqvPUivb+7iFgK8i45ZkaZeEfZReIDlgxd3Q+6lkyFcUHq8gFduAC17Jv0uw==
-X-Received: by 2002:a05:6214:247:b0:690:db88:9eb with SMTP id k7-20020a056214024700b00690db8809ebmr1672446qvt.50.1710179241228;
-        Mon, 11 Mar 2024 10:47:21 -0700 (PDT)
-Received: from localhost (ip70-163-216-141.ph.ph.cox.net. [70.163.216.141])
-        by smtp.gmail.com with ESMTPSA id n13-20020a0cfbcd000000b00690bb839b5bsm2842551qvp.135.2024.03.11.10.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Mar 2024 10:47:20 -0700 (PDT)
-Date: Mon, 11 Mar 2024 10:47:19 -0700
-From: Jerry Snitselaar <jsnitsel@redhat.com>
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: mpe@ellerman.id.au, linux-integrity@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, jarkko@kernel.org, 
-	rnsastry@linux.ibm.com, peterhuewe@gmx.de, viparash@in.ibm.com, 
-	devicetree@vger.kernel.org
-Subject: Re: [RFC PATCH v2 1/3] powerpc/prom_init: Replace
- linux,sml-base/sml-size with linux,sml-log
-Message-ID: <s2a42qzx4pp7fvgde4p5t7pcwsop4wlm266e2gdgr2gb5y77cn@udrmavhiwqoo>
-References: <20240311132030.1103122-1-stefanb@linux.ibm.com>
- <20240311132030.1103122-2-stefanb@linux.ibm.com>
+	s=arc-20240116; t=1710180658; c=relaxed/simple;
+	bh=IlpA1JdDk979yXLkGRM+oxDPT5bK6ueS7QlDrgRmw7A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O/hEhQkH90K0KcfcNS+AEAKvBY6E+b+upqKDd5tMtnngwcLkFVJfkuKHWVhnVKtGs2/w4vxrcvohrhPMKUgbL+onOoCULSnW3dvl5hBbyS7mi5rgpac910Bu2iqmK+BMH1eCxMZEoS6w3CcJBq3e+a8nDoPbwbH9gAQqT3mKmkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VHtK0knn; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [131.107.8.87])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 7F32B20B74C0;
+	Mon, 11 Mar 2024 11:10:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7F32B20B74C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1710180654;
+	bh=xbhwVp3nppXLf2bz4+VzXn2ef5pW4ZLtcKrUCC0s6oc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VHtK0knneBY7bnXaWkXbbfxbekWNaF5L4lbPiC/aa3AtSGgdPCPYKfdfXtJW/PBBn
+	 GtDWVCu1XMqQXuRkVdSWyHkLl/IFY5005VvSho8vmiA6qMUChbzHUaNbJx58XqMqsO
+	 gapRoOZxJB3uq1+eg7Lhx54WmiZstmlselC1Y+54=
+Message-ID: <9b02176a-3842-460c-a78f-f4d4debfde5b@linux.microsoft.com>
+Date: Mon, 11 Mar 2024 11:10:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240311132030.1103122-2-stefanb@linux.ibm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v14 01/19] security: add ipe lsm
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+ zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu,
+ ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+ eparis@redhat.com, paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Deven Bowers <deven.desai@linux.microsoft.com>
+References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
+ <1709768084-22539-2-git-send-email-wufan@linux.microsoft.com>
+ <21597a6e143e4110d0103ef1421ac87fa98b7f32.camel@huaweicloud.com>
+Content-Language: en-CA
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <21597a6e143e4110d0103ef1421ac87fa98b7f32.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 11, 2024 at 09:20:28AM -0400, Stefan Berger wrote:
-> linux,sml-base holds the address of a buffer with the TPM log. This
-> buffer may become invalid after a kexec. To avoid accessing an invalid
-> address or corrupted buffer, embed the whole TPM log in the device tree
-> property linux,sml-log. This helps to protect the log since it is
-> properly carried across a kexec soft reboot with both of the kexec
-> syscalls.
+
+
+On 3/11/2024 7:25 AM, Roberto Sassu wrote:
+> On Wed, 2024-03-06 at 15:34 -0800, Fan Wu wrote:
+>> From: Deven Bowers <deven.desai@linux.microsoft.com>
+>>
+>> Integrity Policy Enforcement (IPE) is an LSM that provides an
+>> complimentary approach to Mandatory Access Control than existing LSMs
+>> today.
+>>
+>> Existing LSMs have centered around the concept of access to a resource
+>> should be controlled by the current user's credentials. IPE's approach,
+>> is that access to a resource should be controlled by the system's trust
+>> of a current resource.
+>>
+>> The basis of this approach is defining a global policy to specify which
+>> resource can be trusted.
+>>
+>> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
+>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+>> ---
+>> v2:
+>>    + Split evaluation loop, access control hooks,
+>>      and evaluation loop from policy parser and userspace
+>>      interface to pass mailing list character limit
+>>
+>> v3:
+>>    + Move ipe_load_properties to patch 04.
+>>    + Remove useless 0-initializations
+>>    + Prefix extern variables with ipe_
+>>    + Remove kernel module parameters, as these are
+>>      exposed through sysctls.
+>>    + Add more prose to the IPE base config option
+>>      help text.
+>>    + Use GFP_KERNEL for audit_log_start.
+>>    + Remove unnecessary caching system.
+>>    + Remove comments from headers
+>>    + Use rcu_access_pointer for rcu-pointer null check
+>>    + Remove usage of reqprot; use prot only.
+>>    + Move policy load and activation audit event to 03/12
+>>
+>> v4:
+>>    + Remove sysctls in favor of securityfs nodes
+>>    + Re-add kernel module parameters, as these are now
+>>      exposed through securityfs.
+>>    + Refactor property audit loop to a separate function.
+>>
+>> v5:
+>>    + fix minor grammatical errors
+>>    + do not group rule by curly-brace in audit record,
+>>      reconstruct the exact rule.
+>>
+>> v6:
+>>    + No changes
+>>
+>> v7:
+>>    + Further split lsm creation into a separate commit from the
+>>      evaluation loop and audit system, for easier review.
+>>
+>>    + Introduce the concept of an ipe_context, a scoped way to
+>>      introduce execution policies, used initially for allowing for
+>>      kunit tests in isolation.
+>>
+>> v8:
+>>    + Follow lsmname_hook_name convention for lsm hooks.
+>>    + Move LSM blob accessors to ipe.c and mark LSM blobs as static.
+>>
+>> v9:
+>>    + Remove ipe_context for simplification
+>>
+>> v10:
+>>    + Add github url
+>>
+>> v11:
+>>    + Correct github url
+>>    + Move ipe before bpf
+>>
+>> v12:
+>>    + Switch to use lsm_id instead of string for lsm name
+>>
+>> v13:
+>>    + No changes
+>>
+>> v14:
+>>    + No changes
+>> ---
+>>   MAINTAINERS              |  7 +++++++
+>>   include/uapi/linux/lsm.h |  1 +
+>>   security/Kconfig         | 11 ++++++-----
+>>   security/Makefile        |  1 +
+>>   security/ipe/Kconfig     | 17 +++++++++++++++++
+>>   security/ipe/Makefile    |  9 +++++++++
+>>   security/ipe/ipe.c       | 41 ++++++++++++++++++++++++++++++++++++++++
+>>   security/ipe/ipe.h       | 16 ++++++++++++++++
+>>   security/security.c      |  3 ++-
+>>   9 files changed, 100 insertions(+), 6 deletions(-)
+>>   create mode 100644 security/ipe/Kconfig
+>>   create mode 100644 security/ipe/Makefile
+>>   create mode 100644 security/ipe/ipe.c
+>>   create mode 100644 security/ipe/ipe.h
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 13158047f2af..8517011f88ff 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -10650,6 +10650,13 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+>>   F:	security/integrity/
+>>   F:	security/integrity/ima/
+>>   
+>> +INTEGRITY POLICY ENFORCEMENT (IPE)
+>> +M:	Fan Wu <wufan@linux.microsoft.com>
+>> +L:	linux-security-module@vger.kernel.org
+>> +S:	Supported
+>> +T:	git https://github.com/microsoft/ipe.git
+>> +F:	security/ipe/
+>> +
+>>   INTEL 810/815 FRAMEBUFFER DRIVER
+>>   M:	Antonino Daplas <adaplas@gmail.com>
+>>   L:	linux-fbdev@vger.kernel.org
+>> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
+>> index f8aef9ade549..43e2fb32745a 100644
+>> --- a/include/uapi/linux/lsm.h
+>> +++ b/include/uapi/linux/lsm.h
+>> @@ -62,6 +62,7 @@ struct lsm_ctx {
+>>   #define LSM_ID_LOCKDOWN		108
+>>   #define LSM_ID_BPF		109
+>>   #define LSM_ID_LANDLOCK		110
+>> +#define LSM_ID_IPE		111
+>>   
+>>   /*
+>>    * LSM_ATTR_XXX definitions identify different LSM attributes
+>> diff --git a/security/Kconfig b/security/Kconfig
+>> index 52c9af08ad35..cc7adfbb6b96 100644
+>> --- a/security/Kconfig
+>> +++ b/security/Kconfig
+>> @@ -194,6 +194,7 @@ source "security/yama/Kconfig"
+>>   source "security/safesetid/Kconfig"
+>>   source "security/lockdown/Kconfig"
+>>   source "security/landlock/Kconfig"
+>> +source "security/ipe/Kconfig"
+>>   
+>>   source "security/integrity/Kconfig"
+>>   
+>> @@ -233,11 +234,11 @@ endchoice
+>>   
+>>   config LSM
+>>   	string "Ordered list of enabled LSMs"
+>> -	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,bpf" if DEFAULT_SECURITY_SMACK
+>> -	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,bpf" if DEFAULT_SECURITY_APPARMOR
+>> -	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,bpf" if DEFAULT_SECURITY_TOMOYO
+>> -	default "landlock,lockdown,yama,loadpin,safesetid,bpf" if DEFAULT_SECURITY_DAC
+>> -	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,bpf"
+>> +	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,apparmor,ipe,bpf" if DEFAULT_SECURITY_SMACK
+>> +	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smack,tomoyo,ipe,bpf" if DEFAULT_SECURITY_APPARMOR
+>> +	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,ipe,bpf" if DEFAULT_SECURITY_TOMOYO
+>> +	default "landlock,lockdown,yama,loadpin,safesetid,ipe,bpf" if DEFAULT_SECURITY_DAC
+>> +	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,apparmor,ipe,bpf"
+>>   	help
+>>   	  A comma-separated list of LSMs, in initialization order.
+>>   	  Any LSMs left off this list, except for those with order
+>> diff --git a/security/Makefile b/security/Makefile
+>> index 59f238490665..cc0982214b84 100644
+>> --- a/security/Makefile
+>> +++ b/security/Makefile
+>> @@ -25,6 +25,7 @@ obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
+>>   obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
+>>   obj-$(CONFIG_BPF_LSM)			+= bpf/
+>>   obj-$(CONFIG_SECURITY_LANDLOCK)		+= landlock/
+>> +obj-$(CONFIG_SECURITY_IPE)		+= ipe/
+>>   
+>>   # Object integrity file lists
+>>   obj-$(CONFIG_INTEGRITY)			+= integrity/
+>> diff --git a/security/ipe/Kconfig b/security/ipe/Kconfig
+>> new file mode 100644
+>> index 000000000000..e4875fb04883
+>> --- /dev/null
+>> +++ b/security/ipe/Kconfig
+>> @@ -0,0 +1,17 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +#
+>> +# Integrity Policy Enforcement (IPE) configuration
+>> +#
+>> +
+>> +menuconfig SECURITY_IPE
+>> +	bool "Integrity Policy Enforcement (IPE)"
+>> +	depends on SECURITY && SECURITYFS
+>> +	select PKCS7_MESSAGE_PARSER
+>> +	select SYSTEM_DATA_VERIFICATION
+>> +	help
+>> +	  This option enables the Integrity Policy Enforcement LSM
+>> +	  allowing users to define a policy to enforce a trust-based access
+>> +	  control. A key feature of IPE is a customizable policy to allow
+>> +	  admins to reconfigure trust requirements on the fly.
+>> +
+>> +	  If unsure, answer N.
+>> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+>> new file mode 100644
+>> index 000000000000..f7a80d0f18f8
+>> --- /dev/null
+>> +++ b/security/ipe/Makefile
+>> @@ -0,0 +1,9 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +#
+>> +# Copyright (C) Microsoft Corporation. All rights reserved.
+>> +#
+>> +# Makefile for building the IPE module as part of the kernel tree.
+>> +#
+>> +
+>> +obj-$(CONFIG_SECURITY_IPE) += \
+>> +	ipe.o \
+>> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+>> new file mode 100644
+>> index 000000000000..b013aed15e73
+>> --- /dev/null
+>> +++ b/security/ipe/ipe.c
+>> @@ -0,0 +1,41 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) Microsoft Corporation. All rights reserved.
+>> + */
+>> +#include <uapi/linux/lsm.h>
+>> +
+>> +#include "ipe.h"
+>> +
+>> +static struct lsm_blob_sizes ipe_blobs __ro_after_init = {
+>> +};
+>> +
+>> +static const struct lsm_id ipe_lsmid = {
+>> +	.name = "ipe",
+>> +	.id = LSM_ID_IPE,
+>> +};
+>> +
+>> +static struct security_hook_list ipe_hooks[] __ro_after_init = {
+>> +};
+>> +
+>> +/**
+>> + * ipe_init - Entry point of IPE.
+>> + *
+>> + * This is called at LSM init, which happens occurs early during kernel
+>> + * start up. During this phase, IPE registers its hooks and loads the
+>> + * builtin boot policy.
+>> + * Return:
+>> + * * 0		- OK
+>> + * * -ENOMEM	- Out of memory
+>> + */
+>> +static int __init ipe_init(void)
+>> +{
+>> +	security_add_hooks(ipe_hooks, ARRAY_SIZE(ipe_hooks), &ipe_lsmid);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +DEFINE_LSM(ipe) = {
+>> +	.name = "ipe",
+>> +	.init = ipe_init,
+>> +	.blobs = &ipe_blobs,
+>> +};
+>> diff --git a/security/ipe/ipe.h b/security/ipe/ipe.h
+>> new file mode 100644
+>> index 000000000000..a1c68d0fc2e0
+>> --- /dev/null
+>> +++ b/security/ipe/ipe.h
+>> @@ -0,0 +1,16 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) Microsoft Corporation. All rights reserved.
+>> + */
+>> +
+>> +#ifndef _IPE_H
+>> +#define _IPE_H
+>> +
+>> +#ifdef pr_fmt
+>> +#undef pr_fmt
+>> +#endif
+>> +#define pr_fmt(fmt) "IPE: " fmt
+>> +
+>> +#include <linux/lsm_hooks.h>
+>> +
+>> +#endif /* _IPE_H */
+>> diff --git a/security/security.c b/security/security.c
+>> index 7035ee35a393..f168bc30a60d 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -51,7 +51,8 @@
+>>   	(IS_ENABLED(CONFIG_SECURITY_SAFESETID) ? 1 : 0) + \
+>>   	(IS_ENABLED(CONFIG_SECURITY_LOCKDOWN_LSM) ? 1 : 0) + \
+>>   	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
+>> -	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0))
+>> +	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0) + \
+>> +	(IS_ENABLED(CONFIG_SECURITY_IPE) ? 1 : 0))
 > 
-> Avoid having the firmware ingest the whole TPM log when calling
-> prom_setprop but only create the linux,sml-log property as a place holder.
-> Insert the actual TPM log during the tree flattening phase.
+> Hi Fan
 > 
-> Fixes: 4a727429abec ("PPC64: Add support for instantiating SML from Open Firmware")
-> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  arch/powerpc/kernel/prom_init.c | 27 +++++++++++++++++++--------
->  1 file changed, 19 insertions(+), 8 deletions(-)
+> you would also need to update
+> tools/testing/selftests/lsm/lsm_list_modules_test.c.
 > 
-> diff --git a/arch/powerpc/kernel/prom_init.c b/arch/powerpc/kernel/prom_init.c
-> index e67effdba85c..6f7ca72013c2 100644
-> --- a/arch/powerpc/kernel/prom_init.c
-> +++ b/arch/powerpc/kernel/prom_init.c
-> @@ -211,6 +211,8 @@ static cell_t __prombss regbuf[1024];
->  
->  static bool  __prombss rtas_has_query_cpu_stopped;
->  
-> +static u64 __prombss sml_base;
-> +static u32 __prombss sml_size;
+> Roberto
+>   
+>>   /*
+>>    * These are descriptions of the reasons that can be passed to the
 
-Should inside an #ifdef CONFIG_PPC64 since prom_instantiate_sml() is?
+Hi Roberto,
 
->  
->  /*
->   * Error results ... some OF calls will return "-1" on error, some
-> @@ -1954,17 +1956,15 @@ static void __init prom_instantiate_sml(void)
->  	}
->  	prom_printf(" done\n");
->  
-> -	reserve_mem(base, size);
-> -
-> -	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-base",
-> -		     &base, sizeof(base));
-> -	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-size",
-> -		     &size, sizeof(size));
-> -
-> -	prom_debug("sml base     = 0x%llx\n", base);
-> +	/* Add property now, defer adding log to tree flattening phase */
-> +	prom_setprop(ibmvtpm_node, "/vdevice/vtpm", "linux,sml-log",
-> +		     NULL, 0);
->  	prom_debug("sml size     = 0x%x\n", size);
->  
->  	prom_debug("prom_instantiate_sml: end...\n");
-> +
-> +	sml_base = base;
-> +	sml_size = size;
->  }
->  
->  /*
-> @@ -2645,6 +2645,17 @@ static void __init scan_dt_build_struct(phandle node, unsigned long *mem_start,
->  		}
->  		prev_name = sstart + soff;
->  
-> +		if (!prom_strcmp("linux,sml-log", pname)) {
-> +			/* push property head */
-> +			dt_push_token(OF_DT_PROP, mem_start, mem_end);
-> +			dt_push_token(sml_size, mem_start, mem_end);
-> +			dt_push_token(soff, mem_start, mem_end);
-> +			/* push property content */
-> +			valp = make_room(mem_start, mem_end, sml_size, 1);
-> +			memcpy(valp, (void *)sml_base, sml_size);
-> +			*mem_start = ALIGN(*mem_start, 4);
-> +			continue;
-> +		}
+Thanks for the info. I will also update that file.
 
-Same question as above.
-
-Regards,
-Jerry
-
->  		/* get length */
->  		l = call_prom("getproplen", 2, 1, node, pname);
->  
-> -- 
-> 2.43.0
-> 
-
+-Fan
 
