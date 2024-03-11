@@ -1,159 +1,132 @@
-Return-Path: <linux-integrity+bounces-1689-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1690-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 331EA87803C
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 14:02:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B41CD878060
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 14:21:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89C0FB211F1
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 13:02:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D779F1C20993
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 13:21:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7163C08F;
-	Mon, 11 Mar 2024 13:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 203A53D541;
+	Mon, 11 Mar 2024 13:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DeEgByOJ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aB0Qh6IM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19E022F07;
-	Mon, 11 Mar 2024 13:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809D43C47D;
+	Mon, 11 Mar 2024 13:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710162159; cv=none; b=DDhUWQjqO0QwqvssBRRaet2TWF7hTbub/EUFEQidCeCLPIFWLWFahze4aVuyjLfbd0eAkWQmSJJjyBJ1VtyG1TadZHLAFr7/8c5C0MyqvO9lPOTyY21aOqDG9Mp4C6F+VdblCQLsSaCbxj/EK4cZMUsFUI7mp5B7scO5sgZFee0=
+	t=1710163259; cv=none; b=VD5RM5yb4rtA1z6COX3owDZV45F9M02EV1OxIG6WZyYmJRhVJgoabYgRDEuSQRAw53zroc7sg4Fl9sTUD/Vucj/PWXXaWzGI5hcYbItFSKwzdXUulYRlXGqq4dkBQH47zuGcGiEEKAMN0Va4qZu978glLjeynOUKuYWBHHvTstA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710162159; c=relaxed/simple;
-	bh=b2m6reMxwKCNgla1SqFeghA07C0xRGg0cSYvjVVdNuY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=ju1XMa8b0uC0eWp7+AuRRkBGx9wFIVq2gZoHvvXEM4tZt8wqJZ2pGyPVFSSsADT1zAUAC95l4Id4B7ZjnYWHWaoARDWMprSygPFV6F4E7KYPiNAmpQbwmHPQLczikVagqc79C4+6zN+Pd9RMQFaZwF141X6tUZ6stfHqZWhwYSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DeEgByOJ; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1710163259; c=relaxed/simple;
+	bh=L8tgnmjJu0pZA9NyfyfkDIi6Ml7LyUf1NDZqAO2rndM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LNTbvZEkNBpEBZFCBQDVSJsBLzCP4kfqocSTNypu1cFAppsYx68pW2SiGX3KQn47b5fLcNhJwmU57Psl3rHXXxdGhnnnEitvXe6uhVO73447KlxIL10Xx/4+hVXLTPj/WeUr4E4QPw1j7Uq8bo01d1kYcmqwDP4hS3Nsw7KYPV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aB0Qh6IM; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42BCu8vr002031;
-	Mon, 11 Mar 2024 13:01:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=WzlWfdHMjTYsdI0QpojR5FBtLlPJTOzFYIM7zvBRPGw=;
- b=DeEgByOJThF3FrX2pYJicKA6T+K0OxkScpwFL2g+lyYfE30RkbVVvm2UYdAmOch8cwLN
- FCvkC2pkHQRMpBOZ+Bs1kbGS3XiF1OQLriE8ACtrglS6sbOPYmZA+0b0VYBMvbXkKA4n
- viYkf8Zn3frs3xnahlUkc9ThpU1HZOplj6KNWP8mEm9wZjne2NPVBeIeYlDMW8aDaP+W
- LS6blA51Q8Yv0D3lhJkbQ9qa0CHNc+VwTwbvvwfqgzVjREaVOfvzFhFr6Z1rfh9D966f
- G8ufpikofzR4VhMwKR8vCULXZ61cCH9ggDZv45D58AxUY1PRTYRyAHKreHhiF/POCSC8 hQ== 
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42BCI8Jw005870;
+	Mon, 11 Mar 2024 13:20:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Bi0JfFIbxmrcO+JuI0s9tGF/rGitvqCliyhjBRUI4WQ=;
+ b=aB0Qh6IMn9z1nanQJpB/CND3ub4ikrLKpxlETU57Cnau4ghjmEUdxP5m73op+JTLZIfN
+ ywT338ZmIyPLt1JbGrxyGyyUZYjjTuhKraxGsjGMnnu1yMd5g+S7aA1k+743nEBO783r
+ /XU1DrDoUzoIl0I1Rr/s9wlgFvAl0d5UOPdbFYsXm8uN8U60S1uUSTouNJqJ9YHQBNFh
+ ikc/xwpUEsIHZWeVPrdpp6uxiR0TGcuEnxt44NCByexrxJZLz2ZikSzEKKRzjOvxyc8A
+ egQma2RZg5N4GkbKp5jaYJvsO62CLngjT7TtclDKwtOjgPEQtKCre418X34QppPZFkIm LA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wt1yk8gwm-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wt1ub18s9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Mar 2024 13:01:16 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42BCwi7C009716;
-	Mon, 11 Mar 2024 13:01:16 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wt1yk8gs6-1
+	Mon, 11 Mar 2024 13:20:46 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42BCdvp5002135;
+	Mon, 11 Mar 2024 13:20:46 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wt1ub18rv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Mar 2024 13:01:15 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42BCx5wO015485;
-	Mon, 11 Mar 2024 13:01:08 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ws2fygrh3-1
+	Mon, 11 Mar 2024 13:20:46 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42BCWaqc018575;
+	Mon, 11 Mar 2024 13:20:45 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ws4t1r7d0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Mar 2024 13:01:08 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42BD16MZ34144698
+	Mon, 11 Mar 2024 13:20:45 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42BDKfLL49873394
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 11 Mar 2024 13:01:08 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 78BAF5805E;
-	Mon, 11 Mar 2024 13:01:06 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5C7EA5805B;
-	Mon, 11 Mar 2024 13:01:04 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.133.174])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 11 Mar 2024 13:01:04 +0000 (GMT)
-Message-ID: <3d937327f3c91351c3c3cd4877c121b9b1405868.camel@linux.ibm.com>
-Subject: Re: [RFC][PATCH 4/8] ima: Add digest_cache_measure and
- digest_cache_appraise boot-time policies
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
-        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl,
-        hch@lst.de, mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
-        dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com,
-        ppavlu@suse.com, petr.vorel@gmail.com, petrtesarik@huaweicloud.com,
-        mzerqung@0pointer.de, kgold@linux.ibm.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date: Mon, 11 Mar 2024 09:01:03 -0400
-In-Reply-To: <20240214143525.2205481-5-roberto.sassu@huaweicloud.com>
-References: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
-	 <20240214143525.2205481-5-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
+	Mon, 11 Mar 2024 13:20:44 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A692F58052;
+	Mon, 11 Mar 2024 13:20:41 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0944F5806B;
+	Mon, 11 Mar 2024 13:20:41 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 11 Mar 2024 13:20:40 +0000 (GMT)
+From: Stefan Berger <stefanb@linux.ibm.com>
+To: mpe@ellerman.id.au, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: linux-kernel@vger.kernel.org, jarkko@kernel.org, rnsastry@linux.ibm.com,
+        peterhuewe@gmx.de, viparash@in.ibm.com, devicetree@vger.kernel.org,
+        jsnitsel@redhat.com, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [RFC PATCH v2 0/3] Preserve TPM log across kexec
+Date: Mon, 11 Mar 2024 09:20:27 -0400
+Message-ID: <20240311132030.1103122-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 99p9g0zYnCT7adUFJCgNmr0A3rZT0qII
-X-Proofpoint-GUID: xUGCBjq3AdhUXUp0olxrxUrIm-1VapzA
+X-Proofpoint-GUID: Xr-xHkLmF9h3KYaSDuSM45usL_Xs_Pz6
+X-Proofpoint-ORIG-GUID: jSeJUwI5ej7dkFGgywgbufOlky76KrWw
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-03-11_08,2024-03-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 spamscore=0 phishscore=0 malwarescore=0 clxscore=1015
- mlxscore=0 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2403110098
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 impostorscore=0 adultscore=0 clxscore=1011
+ bulkscore=0 mlxlogscore=736 malwarescore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2403110100
 
-On Wed, 2024-02-14 at 15:35 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Specify the 'digest_cache_measure' boot-time policy with 'ima_policy=' in
-> the kernel command line to add the following rule at the beginning of the
-> IMA policy, before other rules:
-> 
-> measure func=DIGEST_LIST_CHECK pcr=12
-> 
-> which will measure digest lists into PCR 12 (or the value in
-> CONFIG_IMA_DIGEST_CACHE_MEASURE_PCR_IDX).
-> 
-> 'digest_cache_measure' also adds 'digest_cache=content pcr=12' to the other
-> measure rules, if they have a compatible IMA hook. The PCR value still
-> comes from CONFIG_IMA_DIGEST_CACHE_MEASURE_PCR_IDX.
-> 
-> Specify 'digest_cache_appraise' to add the following rule at the beginning,
-> before other rules:
-> 
-> appraise func=DIGEST_LIST_CHECK appraise_type=imasig|modsig
-> 
-> which will appraise digest lists with IMA signatures or module-style
-> appended signatures.
-> 
-> 'digest_cache_appraise' also adds 'digest_cache=content' to the other
-> appraise rules, if they have a compatible IMA hook.
+This series resolves an issue on PowerVM and KVM on Power where the memory
+the TPM log was held in may become inaccessible or corrupted after a kexec
+soft reboot. The solution on these two platforms is to store the whole log
+in the device tree because the device tree is preserved across a kexec with
+either of the two kexec syscalls.
 
-Defining two new built-in policies - digest_cache_measure, digest_cache_appraise
-- in a single patch would be acceptable, if there wasn't anything else going on.
+Regards,
+   Stefan
 
-Changing other policy rules should not be made in this patch.  A clear
-explanation as to why other policy rules need to be modified is needed.  It
-shouldn't be hidden here.
+v2:
+ - Added DT bindings patch (2/3)
+ - Reformulated commit messages and addded Fixes tags
+ - Follow Michael's suggestion on prom_init patch (1/3)
 
-thanks,
+Stefan Berger (3):
+  powerpc/prom_init: Replace linux,sml-base/sml-size with linux,sml-log
+  dt-bindings: tpm: Add linux,sml-log to ibm,vtpm.yaml
+  tpm: of: If available use linux,sml-log to get the log and its size
 
-Mimi
+ .../devicetree/bindings/tpm/ibm,vtpm.yaml     | 20 +++++++++--
+ .../devicetree/bindings/tpm/tpm-common.yaml   | 14 +++++++-
+ arch/powerpc/kernel/prom_init.c               | 27 +++++++++-----
+ drivers/char/tpm/eventlog/of.c                | 36 ++++++-------------
+ 4 files changed, 61 insertions(+), 36 deletions(-)
 
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> 
+-- 
+2.43.0
 
 
