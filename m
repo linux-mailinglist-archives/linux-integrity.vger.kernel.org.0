@@ -1,125 +1,182 @@
-Return-Path: <linux-integrity+bounces-1686-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1687-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4389E876E70
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Mar 2024 02:14:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C484E877C4C
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 10:12:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B9E11C20933
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Mar 2024 01:14:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 646761F21124
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 09:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4671216423;
-	Sat,  9 Mar 2024 01:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Y1ZITEOE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEF214287;
+	Mon, 11 Mar 2024 09:12:37 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B1E11187
-	for <linux-integrity@vger.kernel.org>; Sat,  9 Mar 2024 01:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E337214271;
+	Mon, 11 Mar 2024 09:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709946871; cv=none; b=qszR5AXemm4Q9plCub7gZs4KWkU2zcPWkf9ANXJT7FWPV7fJeZASpCYzsVHK2+qugLLRA16BUhCKDB/4107RQvz2GcdrUW3Os4CgO/wR93OX3OE2OMsDsjp2L3ZI4Tg9ZIL14NjOoypXqA4+7K6hnGL2Ee21AEMWkD2msI+zkoA=
+	t=1710148357; cv=none; b=LqK2bGfPxqqJX+xmAFF2zhb1j/Q2CqwPAkiJlZbbJUtpZ9GClZEylLrzKGhjOauqV5MvzQadVPWgrWCN3MGqt4/4GPBk8hPZuJ78NOmI5Ney5buHw9mJLT5iaO2AxmZ1/tOcLq0OBM15YeRrKFZMKkL4PUEazQEAZMGSML7ydFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709946871; c=relaxed/simple;
-	bh=PVSSW/TRZScbGAXptUtzNMhjOI0JAjP3o2LHf4YtFlE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ufZyJZWL/E8Tu+Y7TOfR3POfg4Z1BJh5pv5KpjavKrUSVf1zpgrfueCRsQhj7gboE1uXJEe071keJWfjo8BKsxyXIazCxWhtUFQuNi8Q3c1nYHIKPi9MuptStJezqSLmhJMOy0fcwYo4iAr22NnKANlIsb+M4ouifCYb4ZvvY18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Y1ZITEOE; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dc6d8bd612dso2689281276.1
-        for <linux-integrity@vger.kernel.org>; Fri, 08 Mar 2024 17:14:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1709946868; x=1710551668; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KPz2z6DvnJxq/mvZY2AzEM7nepXgQps0sd3FnWYy8AY=;
-        b=Y1ZITEOEQMcPGo0IG+gwiGch8CnQXfEH4HEZKP2VNMxLUEtC0/XKnlmtFb01oTOAoM
-         bUlhF//VTz39WdyQJ4aNxBCGDXS2HHz8fRKSaeXfnzQg/WmzaJdmlHo4tS+0cUaCQBMS
-         pUqke+3r86nVSAScKNFYk/sFgex4OoZh72SHtjI0gIV2MIR72aHwQcSQLpNqlG92Vp3L
-         cdKjHiDqA44uJNzOECaQdtY14Z5kBvXFj6Q7wfZWgwbuYjW9o3QX6cQSt3btbzM7Tak3
-         mE7eNvUokKYai8U35gAQ+n09p7inXwVrvXZLcL7JCci6k5+Q2SDk1+MZ8k25c8zXXXre
-         CZHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709946868; x=1710551668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KPz2z6DvnJxq/mvZY2AzEM7nepXgQps0sd3FnWYy8AY=;
-        b=IvouW92zLc70FONG6Jm2bO3RIhF3uWp5bpUIINgkadgOH59nDnn35H5U7sqH2y/WiL
-         qxGU3mKCh2SGpTvbluHxWUg6zcxem0wwUEt89vzUXnMaNG3wzUwGaAVn5UsYaHf93dMy
-         bo+irK4epvGthbeDIi4Qj5QQNMimUWbZYCphrFbDdeAgBfAZcqOMfWrmArkY4sDP6aS0
-         4Hgpelt+F4lkErf0heCntAoHhMxeoUHOKxvU0Sfh1ohAZCaPiB3n3OvBWiA5Fikf9qTJ
-         bPhqWWcLzzBN8E28lkaaIToV0wuPz006qENP054JeaO+njXkEmrGbnbICH7L0t2fdhY2
-         jh3w==
-X-Forwarded-Encrypted: i=1; AJvYcCXPtjmvhrqOQsZJqHHOIJcFFhYxo5ysG06/k2tCbwUq24hbQz/C3Sci22dr39xqjoKlIYPRrYu/uuwm/5i5ohWls2yMsuu6/6nkJtpuBnLo
-X-Gm-Message-State: AOJu0YyXtoPc6ztgJP9NTpMPNbpfwU7fdCjz0wqX8Nco8gEkNy6wkm2l
-	XrF6B/paF/sSWRvZBxaHcALgaNNO0v8ntIlwzY53VJQxO4J4qZgljOgYTz8EZF39rzOPnsI6QT+
-	ODueeRbWrcwURlFZHL4r1NoxCHZ7qhmgm/1Ai
-X-Google-Smtp-Source: AGHT+IG/iVw0xp4cUGbrbuHW4JP6YIUG2WhfFnWUrnT+aZkEjbYKTgvQfRu4/7uLG7cpfDOqG4dr9VoK5RFcwZhesog=
-X-Received: by 2002:a25:b227:0:b0:dcd:1043:23c with SMTP id
- i39-20020a25b227000000b00dcd1043023cmr780907ybj.1.1709946868255; Fri, 08 Mar
- 2024 17:14:28 -0800 (PST)
+	s=arc-20240116; t=1710148357; c=relaxed/simple;
+	bh=mwhr+GeZD2Fwv7OWp5evIy1WT7xupje/d5vp5keqrbc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MQ+TKucdRx86OLfFAqu3D2IKhm/CJ8Lh/AaD39If6WvSanNQA6Q9luK+47VC9ikyLBZW9KvsjdT7qmY85BN+0B85tUZyn5nT7BY2iT3WB/kB1SOGZazQDTwvBxp3Z/VCG9cr8dzvqBzetaCjzXDueKZWwj+6C/kbRyRwv2e8VnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4TtVy01X1Vz9y0kN;
+	Mon, 11 Mar 2024 16:56:40 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 1EEF5140ED8;
+	Mon, 11 Mar 2024 17:12:15 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwCHcibeyu5l0rgXBA--.16486S2;
+	Mon, 11 Mar 2024 10:12:14 +0100 (CET)
+Message-ID: <4bac45ced03f82c2f3775684368e22db5dafea11.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH 8/8] ima: Detect if digest cache changed since last
+ measurement/appraisal
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, corbet@lwn.net,
+ dmitry.kasatkin@gmail.com,  eric.snowberg@oracle.com, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl,
+ hch@lst.de,  mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
+ dhowells@redhat.com,  jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com,
+ petr.vorel@gmail.com,  petrtesarik@huaweicloud.com, mzerqung@0pointer.de,
+ kgold@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date: Mon, 11 Mar 2024 10:11:54 +0100
+In-Reply-To: <ddb1c28356fb8a4dcca9bff6dc206802d7981bb8.camel@linux.ibm.com>
+References: <20240214143525.2205481-1-roberto.sassu@huaweicloud.com>
+	 <20240214143525.2205481-9-roberto.sassu@huaweicloud.com>
+	 <ddb1c28356fb8a4dcca9bff6dc206802d7981bb8.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 8 Mar 2024 20:14:17 -0500
-Message-ID: <CAHC9VhQ90Z9HbSJWxNoH20_b92m6_5QWJAJ9ZkSR_1PWUAvCsw@mail.gmail.com>
-Subject: Re: [RFC PATCH v14 00/19] Integrity Policy Enforcement LSM (IPE)
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, 
-	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, 
-	snitzer@kernel.org, eparis@redhat.com, linux-doc@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org, 
-	dm-devel@lists.linux.dev, audit@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:GxC2BwCHcibeyu5l0rgXBA--.16486S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGF15ury7ArW3WF1rGw43GFg_yoW5XFW7pa
+	93CF1UKF4rZrW3G3W7Aa12vF18trZaqF4xua1Ygw1fArs5Xr9Yyw4rAw1UWry8Cr4UZanF
+	qw4Ygrs8Z3WDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkK14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+	c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+	Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ73D
+	UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj5szTAABsC
 
-On Wed, Mar 6, 2024 at 6:34=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> w=
-rote:
->
-> Overview:
-> ---------
->
-> IPE is a Linux Security Module which takes a complimentary approach to
-> access control. Whereas existing mandatory access control mechanisms
-> base their decisions on labels and paths, IPE instead determines
-> whether or not an operation should be allowed based on immutable
-> security properties of the system component the operation is being
-> performed on.
->
-> IPE itself does not mandate how the security property should be
-> evaluated, but relies on an extensible set of external property providers
-> to evaluate the component. IPE makes its decision based on reference
-> values for the selected properties, specified in the IPE policy.
->
-> The reference values represent the value that the policy writer and the
-> local system administrator (based on the policy signature) trust for the
-> system to accomplish the desired tasks.
->
-> One such provider is for example dm-verity, which is able to represent
-> the integrity property of a partition (its immutable state) with a digest=
-.
->
-> IPE is compiled under CONFIG_SECURITY_IPE.
+On Fri, 2024-03-08 at 12:35 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+>=20
+> > b/security/integrity/ima/ima_main.c
+> > index a66522a22cbc..e1b2f5737753 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -301,6 +301,15 @@ static int process_measurement(struct file *file, =
+const
+> > struct cred *cred,
+> >  		}
+> >  	}
+> > =20
+> > +	/* Check if digest cache changed since last measurement/appraisal. */
+> > +	if (iint->digest_cache &&
+> > +	    digest_cache_changed(inode, iint->digest_cache)) {
+> > +		iint->flags &=3D ~IMA_DONE_MASK;
+> > +		iint->measured_pcrs =3D 0;
+> > +		digest_cache_put(iint->digest_cache);
+> > +		iint->digest_cache =3D NULL;
+> > +	}
+> > +
+> >  	/* Determine if already appraised/measured based on bitmask
+> >  	 * (IMA_MEASURE, IMA_MEASURED, IMA_XXXX_APPRAISE, IMA_XXXX_APPRAISED,
+> >  	 *  IMA_AUDIT, IMA_AUDITED)
+> > @@ -371,8 +380,15 @@ static int process_measurement(struct file *file, =
+const
+> > struct cred *cred,
+> >  	 * Since we allow IMA policy rules without func=3D, we have to enforc=
+e
+> >  	 * this restriction here.
+> >  	 */
+> > -	if (rc =3D=3D 0 && policy_mask && func !=3D DIGEST_LIST_CHECK)
+> > -		digest_cache =3D digest_cache_get(file_dentry(file));
+> > +	if (rc =3D=3D 0 && policy_mask && func !=3D DIGEST_LIST_CHECK) {
+> > +		if (!iint->digest_cache) {
+> > +			/* Released by ima_iint_free(). */
+> > +			digest_cache =3D digest_cache_get(file_dentry(file));
+> > +			iint->digest_cache =3D digest_cache;
+> > +		} else {
+> > +			digest_cache =3D iint->digest_cache;
+> > +		}
+>=20
+> Simple cleanup:
+> 		if (!iint->digest_cache)
+> 			iint->digest_cache =3Ddigest_cache_get(file_dentry(file));
+>=20
+> 		digest_cache =3D iint->digest_cache;
 
-All of this looks reasonable to me, I see there have been some minor
-spelling/grammar corrections made, but nothing too serious.  If we can
-get ACKs from the fsverity and device-mapper folks I can merge this
-once the upcoming merge window closes in a few weeks.
+Thanks.
 
---=20
-paul-moore.com
+> > +	}
+> > =20
+> >  	if (digest_cache) {
+> >  		found =3D digest_cache_lookup(file_dentry(file), digest_cache,
+> > @@ -386,8 +402,6 @@ static int process_measurement(struct file *file, c=
+onst
+> > struct cred *cred,
+> >  			if (verif_mask_ptr)
+> >  				allow_mask =3D policy_mask & *verif_mask_ptr;
+> >  		}
+> > -
+> > -		digest_cache_put(digest_cache);
+>=20
+> Keeping a reference to the digest_cache list for each file in the iint ca=
+che
+> until the file is re-accessed, might take a while to free.
+
+Yes, that is the drawback...
+
+> I'm wondering if it necessary to keep a reference to the digest_cache.  O=
+r is it
+> possible to just compare the existing iint->digest_cache pointer with the
+> current digest_cache pointer?
+
+If the pointer value is the same, it does not guarantee that it is the
+same digest cache used for the previous verification. It might have
+been freed and reallocated.
+
+Maybe, if the digest_cache LSM is able to notify to IMA that the digest
+cache changed, so that IMA resets its flags in the integrity metadata,
+we would not need to pin it.
+
+Roberto
+
+> thanks,
+>=20
+> Mimi
+>=20
+> >  	}
+> > =20
+> >  	if (action & IMA_MEASURE)
+>=20
+
 
