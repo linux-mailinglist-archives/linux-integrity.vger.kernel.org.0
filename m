@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1714-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1715-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9620878944
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 21:07:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A090187894D
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 21:09:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 689511F21A16
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 20:07:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 561C81F217A8
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Mar 2024 20:09:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D8965674A;
-	Mon, 11 Mar 2024 20:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 029EA5674A;
+	Mon, 11 Mar 2024 20:09:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qpKTJnaU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oEkPviPq"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BAB52F82;
-	Mon, 11 Mar 2024 20:07:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE7054F95;
+	Mon, 11 Mar 2024 20:09:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710187648; cv=none; b=A5w1up8yzpky1u/PEFT8k6dnT6lHOVUmvkFEMgn+mOL5Pl03S4XRIoE+gVMxtD5Jcf2Cl1bOt/ScmOHJdARO/XLXceZFo/trIwv7IKVFVntnni+JKfLMzGtdGSWzbFgQwDi+q9vehOiyGdaxeOH7owDlIXyd6txnBSUs9UQDy9A=
+	t=1710187768; cv=none; b=aARDD1M0+h2/tB8P4XZjN9H33sAneRa0uEH+g5r2vOYWpWdJvkioeCwBwazweA9kMiAV3uwaI04vNlMeAbHEg4hH4phK76v46goQ3jedA3N2y06IlsQQlE24UWlwdxuFg4BvK332cT7DYt/TBqPdwUuRCGzhyUHSI2gNjD+x9Vw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710187648; c=relaxed/simple;
-	bh=WBtBCCMn2JMwUS5VVGHL+yTt7qkPpG1ZJQA8yWr+M5w=;
+	s=arc-20240116; t=1710187768; c=relaxed/simple;
+	bh=rMv/IEo93hGWvO+dcxdINAvp+DT2JdcLL0XiT32U3XE=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=bG6w2vd26Z3a9bPZd5Yu5/LbJz2G/MAXsAP21Sk5WRQrcYLPnk+seuRBTlaseyTIhE12Pi7Hn83Llf/p2S47pB6NkbeTrHANpPuFkxKyQP2rJfjrV5neu4W8eT8Vp+cHS9n7Tl1JUWl1JgIqFI+IofAwvqx+hSQdOIQWbbn2Zro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qpKTJnaU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DBBCC433F1;
-	Mon, 11 Mar 2024 20:07:21 +0000 (UTC)
+	 References:In-Reply-To; b=M2yp9qY7dk6hDpYYwfzLhMsITagaX16qbTSjQXRcrh4qqug1PZPBwWwHQBp7gU6e53j89yXrESqr2CE7PXN4FZiPj5m5eE0cPdVfdA7txOsVfry29Xy4G5JEhy81riRNqzVAI86EQuaUs2lmK02pU3gZfx0Oqx0YjLCi7XxY76E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oEkPviPq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA00DC433F1;
+	Mon, 11 Mar 2024 20:09:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710187648;
-	bh=WBtBCCMn2JMwUS5VVGHL+yTt7qkPpG1ZJQA8yWr+M5w=;
+	s=k20201202; t=1710187768;
+	bh=rMv/IEo93hGWvO+dcxdINAvp+DT2JdcLL0XiT32U3XE=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=qpKTJnaURjnr9qyMxxS06UflehxFUN6v0OqYQKl6DqRi1nweRVVV/ivK1D5TMqyUe
-	 Go3Ar0AuaK6I7kVk1CdNT9w1bSz26h92HPVVGtPkpGcCqw3VXKlZSK1lxVU3tFP1hu
-	 CBoQTBN7JDL2FRIWrHHc8Gu09GGXq5pYvbFPRFJBNc3GXeL54y441hKHV+TmCLqTo+
-	 ViEDNTStK3tlBuz3EG/eoeOvj52RkgMZD13LEiA/dOCeFD8J3qagtJUO2vFm6a2XWp
-	 ZugulwiUUCbthW5vQ8oE9hwGR+oRtQY9o46qnBscOszPbc5RGMAMEMqkv54kJKxdHs
-	 17b+JtrrT6lWg==
+	b=oEkPviPqTzS0MunoGUWYVZ4vNTCu9OZn6+yQ1mTPisR8i+2LVEnHGkJ8TZkbgn7Zb
+	 7JZ/hYVCI3Iss4qIBT+JLDCW0nzRCZoNDBo4GKlMW/tYU9IYwHvro4tXG957uFrMNc
+	 zi2/P4NhcmV8UvStv1rPWyUMfGT1mG9G2L938J+GTZxCxs0FXNFY0r3p45mEw9sbDN
+	 0uqSh+T6tl7twl6OL8hFZjvzezmtwgBH8lfT6PAiNu6Fc+1cK92LguzVJlXwbBazRV
+	 86e6wFIqK2vA4t5An5p1twwadYfL0qrNZVYsWNKpc2VloMt7kABcwSTWZ0pXuN/6gD
+	 vl7JhDb4yjh6w==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,73 +49,57 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 Mar 2024 22:07:19 +0200
-Message-Id: <CZR6X7KLX6NC.1BH2NHDTNL3C@kernel.org>
-Cc: "Mimi Zohar" <zohar@linux.ibm.com>, "James Bottomley"
- <jejb@linux.ibm.com>, "Herbert Xu" <herbert@gondor.apana.org.au>, "David S.
- Miller" <davem@davemloft.net>, "Shawn Guo" <shawnguo@kernel.org>, "Jonathan
- Corbet" <corbet@lwn.net>, "Sascha Hauer" <s.hauer@pengutronix.de>,
- "kernel@pengutronix.de" <kernel@pengutronix.de>, "Fabio Estevam"
- <festevam@gmail.com>, "NXP Linux Team" <linux-imx@nxp.com>, "Ahmad Fatoum"
- <a.fatoum@pengutronix.de>, "sigma star Kernel Team"
- <upstream+dcp@sigma-star.at>, "David Howells" <dhowells@redhat.com>, "Li
- Yang" <leoyang.li@nxp.com>, "Paul Moore" <paul@paul-moore.com>, "James
- Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Paul E.
- McKenney" <paulmck@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, "Tejun Heo" <tj@kernel.org>, "Steven Rostedt
- (Google)" <rostedt@goodmis.org>, <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
- "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "Richard Weinberger"
- <richard@nod.at>, "David Oberhollenzer" <david.oberhollenzer@sigma-star.at>
-Subject: Re: [PATCH v6 3/6] KEYS: trusted: Introduce NXP DCP-backed trusted
- keys
+Date: Mon, 11 Mar 2024 22:09:24 +0200
+Message-Id: <CZR6YT6T2RS0.KKPTUAAVXMXF@kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <rnsastry@linux.ibm.com>,
+ <peterhuewe@gmx.de>, <viparash@in.ibm.com>
+Subject: Re: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the
+ log and its size
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "David Gstir" <david@sigma-star.at>
+To: "Stefan Berger" <stefanb@linux.ibm.com>, <mpe@ellerman.id.au>,
+ <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
 X-Mailer: aerc 0.17.0
-References: <20240307153842.80033-1-david@sigma-star.at>
- <20240307153842.80033-4-david@sigma-star.at>
- <CZNRMR5YZPQO.1QBLW62A6S840@kernel.org>
- <655221B7-634C-4493-A781-CF014DFFC8BF@sigma-star.at>
-In-Reply-To: <655221B7-634C-4493-A781-CF014DFFC8BF@sigma-star.at>
+References: <20240306155511.974517-1-stefanb@linux.ibm.com>
+ <20240306155511.974517-3-stefanb@linux.ibm.com>
+ <CZNS7FO53BHK.6NO93P0C0VY5@kernel.org>
+ <CZNS9K4BJPQ8.2MD4WZS8YMI3W@kernel.org>
+ <663a3834-056e-4dda-99dd-16ee8734100e@linux.ibm.com>
+In-Reply-To: <663a3834-056e-4dda-99dd-16ee8734100e@linux.ibm.com>
 
-On Fri Mar 8, 2024 at 9:17 AM EET, David Gstir wrote:
-> Hi Jarkko,
+On Fri Mar 8, 2024 at 2:17 PM EET, Stefan Berger wrote:
 >
-> > On 07.03.2024, at 20:30, Jarkko Sakkinen <jarkko@kernel.org> wrote:
 >
-> [...]
->
-> >> +
-> >> +static int trusted_dcp_init(void)
-> >> +{
-> >> + int ret;
-> >> +
-> >> + if (use_otp_key)
-> >> + pr_info("Using DCP OTP key\n");
-> >> +
-> >> + ret =3D test_for_zero_key();
-> >> + if (ret) {
-> >> + pr_err("Test for zero'ed keys failed: %i\n", ret);
+> On 3/7/24 15:00, Jarkko Sakkinen wrote:
+> > On Thu Mar 7, 2024 at 9:57 PM EET, Jarkko Sakkinen wrote:
+> >> in short summary: s/Use/use/
+> >>
+> >> On Wed Mar 6, 2024 at 5:55 PM EET, Stefan Berger wrote:
+> >>> If linux,sml-log is available use it to get the TPM log rather than t=
+he
+> >>> pointer found in linux,sml-base. This resolves an issue on PowerVM an=
+d KVM
+> >>> on Power where after a kexec the memory pointed to by linux,sml-base =
+may
+> >>> have been corrupted. Also, linux,sml-log has replaced linux,sml-base =
+and
+> >>> linux,sml-size on these two platforms.
+> >>>
+> >>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> >>
+> >> So shouldn't this have a fixed tag, or not?
 > >=20
-> > I'm not sure whether this should err or warn.
-> >=20
-> > What sort of situations can cause the test the fail (e.g.
-> > adversary/interposer, bad configuration etc.).
+> > In English: do we want this to be backported to stable kernel releases =
+or not?
 >
-> This occurs when the hardware is not in "secure mode". I.e. it=E2=80=99s =
-a bad configuration issue.
-> Once the board is properly configured, this will never trigger again.
-> Do you think a warning is better for this then?
+> Ideally, yes. v3 will have 3 patches and all 3 of them will have to be=20
+> backported *together* and not applied otherwise if any one of them=20
+> fails. Can this be 'guaranteed'?
 
-Bad configuration is not unexpected configuration so it cannot possibly
-be an error situation as far as Linux is considered. So warning is=20
-appropriate here I'd figure.
+All of them will end up to stable if the following conditions hold:
+
+- All have a fixes tag.
+- All have "Cc: stable@vger.kernel.org".
+- We agree in the review process that they are all legit fixes.
 
 BR, Jarkko
 
