@@ -1,76 +1,81 @@
-Return-Path: <linux-integrity+bounces-1739-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1741-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5BD7879BEE
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 19:51:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19825879C1F
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 20:09:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32D8AB25C5B
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 18:51:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C4DC1F23A69
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 19:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEFC1420DF;
-	Tue, 12 Mar 2024 18:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C49C614262B;
+	Tue, 12 Mar 2024 19:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="r6rigTx1"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rRUaChy0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sonic306-27.consmr.mail.ne1.yahoo.com (sonic306-27.consmr.mail.ne1.yahoo.com [66.163.189.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EE81420A6
-	for <linux-integrity@vger.kernel.org>; Tue, 12 Mar 2024 18:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3611142634;
+	Tue, 12 Mar 2024 19:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710269488; cv=none; b=JHvajktZ57TMAxIaP35tetQmcdBYS10J5F089FLBPhXYOOoCPKafbLpXRI2s3atNcf68WaAdngxZMpeelQhig8QHM73NV45PCiZWMLF8PHy6hg0PhOikNSmp2WZCFp8FXzdVYNbkMP1XVDw0HNjr6wh26dLnC4DRcycG7o02E6Q=
+	t=1710270546; cv=none; b=ZfWKkCJkxDsMeYMm5EAOvHd0z0aCSsij6JLN/BuGkafnpKE4VN8F1Ze07Grs4O/bz5cGe58/Eokwg7uAHBAUagwmrvymZA8Z/oHn+mQNroi2+r7dvk9Gl3bH/po/E4TX2QhxEPCcbvpY8z5cBoHleMaRTytiVE7J0U9aZYA9jJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710269488; c=relaxed/simple;
-	bh=lYJ68qCJj9s6NmpqrgZ2poblEliQVIufa8sFiTqeojI=;
+	s=arc-20240116; t=1710270546; c=relaxed/simple;
+	bh=JZX5DPUe2Tn3QeB1xQN2/1/4oqxHA8hTmLbS2TW1Gw4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IxO8F8wrDCPXFGUNKEmCJiB8cBFYPkteWJ6FGFRziNASS/sTkmuES8TrzmITFnX17z5ZOne+nksMm1KnjzYJM/sd7YLKCC36Eh4NkOr1EjXEJUEBkSRvUHrfUuJv9HS2DaqpK5VbqehZypG1k84CXGE8I0xckG2FKOMJn/r4cq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=r6rigTx1; arc=none smtp.client-ip=66.163.189.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1710269485; bh=lYJ68qCJj9s6NmpqrgZ2poblEliQVIufa8sFiTqeojI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=r6rigTx14JPynU5qRTWbh+by/HS9qNFry+a2PuixUw5RPmaPHTwiex8hw7fkbY59as9GeXqIReuTShMsD42FN3NHXgaE+9Rp46pY6FlcRlIROgyCujKDKX4ciWF+c1DINQsf7hmrtgIIkfrXpDjS4GVOsBQEaYAb+r/iAwrrpABlfPZutbh8lYuJ0NY5s2+SVuv3OF+6EN+xNJcDa5vuGLQqzIoH7OFoPv4E8gBxXE7kO2mKqLQHQkArMa2h5bXViAeGJ1GrvxG1iP52sjuKHin++yqUSxKe2f7pzGEsJh1oosp07186m59UXbGjxWV12Cf94ZtSXv1paFrJNPUeeg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1710269485; bh=guznvln6aQ2vnACE+hk5PJrBA1s9s67fzj015pktdNu=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=tByuAvMGTBqoDE5okVLbCCCZnOk7fUFenkPFmR5edu/Zv1Bp4+iB+yHx6SfA+br3Vj+XU3M86TzPUMJ0GQg/gRgRVIJZcBKBmlVAhu9MDB0E2Ft/OAngpKPGlYBL4oFG0AgRPJm7IlBlCaHrotBebzcG/dsD1F0jyHip1EoxGX0fPLEehjV21zlWNbLRCVO+toHFdX7ZqspO/vdmzG98fIYtr7lchYV5zXLpfDTWIL1VrWyZRAw2TaDpqn22OZNRtBuLQ+B2yr7781pIvUWz3Uzr1bzg7P8YYesuIQnQQTHtmHniCf3h1kV6DEHslPqmkapgt8r9Tjx8H7r8tfzduA==
-X-YMail-OSG: lvVQTiQVM1lOLlRRmW7u8PSQ.K_cKDF6wVTt7YBm0jb4Q5Th.OevK_8jqpkv5Ak
- 642oeBp8cD.S6H4KNE7zbE7ZtBBJsLxaFV._GJ1h6v_gqUXw05bRkYzNsasPNnFw22dcQKxkbJqi
- lOvCtnMhVXMTT6WIz3k9Qbi7XMYDh516q59dTBTOqO8fT3DA.BTnLnR4opLvXPN8da2VvtbM44ii
- zwHYYcaTD5Lx16DSASgKvYvJGlj3yXN4S5pd2xEKFjYN1pscupooyNcRRDBUd.w4YrdHBguriLFd
- jmJXXPj12uS4xMLS0OLRqgw96GntHHrefkDQSQMHk24e.trLPBkrJUXoV41aRiYG0NMJ6aVdlKho
- FLOqsqCtFtImd.RqVTPxfRhTh8Q.SKAMqmG0wMj.ycOA5R65L_9g908JMC_mRB.APSXAFFwAg4S5
- ovo1ZlbY2mSkaJSjsDMskM0bZy1JP3gVzLg17iCCZi07rxXu0qTyXhvoL6H5EaXSygmJ_YtI9c3t
- iNm4nZnVj3DSnd6qCMn8l5F6Jpl_kCm3fYNIUd5gceIJJD3lPDg8TB_vFFci7.nrM5Iy4bJRMhId
- HpS1JGTLAHPfg7kRs662oXQmj.JyhbSAmu54zVWKte5M7MbeeTIw_du1avma.JNaUgbf4454Vd74
- uoaMuY0cVv1XxtV4tBUD6_fK73OzqATT9flpoVBoQMDkKhkHNc1VqhUO1d7z2zYoNt5E0HBf15Ki
- Aun4OADWX.DmrVYXm6e1SrVMuB.t5VAQh5avNLY0E6cKGiYxBOJV6cKEAAg0kiTIj9uuzOc9_9tZ
- LaazvcdIpel1yiFUa9Q6nT_e6laK8ZIF.s0eTh8ogl02.Rz7Vy5MeZIyKhVMTiZh.QJFPiHZFYSA
- m6m6h5NeAO5Y4ijyG0Esfxbre8GAjatkGpWUgoIk2WrSwFo0qF1H9k.v8PLmTEzPxTBXyxfmoPhs
- G_Wf4ck7kyKYs5RVKTirbcqUlzlB2Eabu3zw9qA7KyfklqXK8o.gnhg.y0nUdEecDIHG_ClQ7bBU
- OUpaeeya.sPlhOX0jVgZdMzVxKmFUbDGWVrAllAIu3N385umQHSqc2RED6Y2y9ysJHTp8e.gVZQ.
- U1fAEhCi_2Rm_19oeF7sT7LafsCTmsK3qVjMKCIxRCH5MTstwheMwZLHf7Vz3pDX6vkr96eJg9eN
- d3Mdtg1DTGA4zOQ1SsQQaWxpWB6HfrEbAUN9vM5VCL_O.Iu6RW34tVwNgOfpyj7BAkRJ5Uwh6Ov8
- 7yAlXgD2poCMbFpHTnJNQId0JLEVQ15MCVTCtSyEyVC_jRHZi.xqVelgQlY7fG.bK6hIpwd4p80K
- TVO4pWyuxEGw4tlTIXFx5yNHpxbSgbcCVU8haZWgDSY9pM5mHwT7j0IvdXf0paqG65QnAqNvPGEE
- uZmKLmVc5TdjreBrfqiRmJu5faRCXyCtrS7vk.gX07T_JtaUuF8xWmIAAXALqEEcqQ3Go7vTB5uJ
- t4tJ35uoHxucCdzVxuQCjIHHt6ZaSpKLwVJzWYESilDmtioFgrhey41575kzJz9kTvX9_G.qc5c4
- GSmUcnOJMPRf_eADOLmCc3v.3dUvGNsPdeouDHAMnTU9elwc4mRTDlIMvJDp0InVTvgKE4os6oCB
- 7Ri0UyP3muh2Ql0NWF3okexM6H0ITeBRzmjehPeItQhQVRA2.rMdOMrI8TmF.6w2iLDOTAVhMdmN
- o9.86tb55aH6gyqSgvS725X3iCYMIgsWgDzcvlTKPxJBUiHMyTkJy02GmKEDKvp6AAfak3L9ZJFO
- kdDWkjng2OYt8.Ou5WRFOoxPrXKn1C7h5Dy2WtOfn75WAlI_cSDmzAVlYQ94jpp6z2rouFrpJsGw
- 9qRwCyidn4725jqjTG.7tLO3quwp7F8.L0LlW8yIaDhkQnFJCKHAhHqunRGIxgMwHiLrCxDz2Ldf
- CvZOtRF3uIopySC6Cvw4xZebEq2fBIkU_arY4CAW.GAZr6faVjQlxJwE28QydMsuH2eYLG67Hyso
- rRzI0O6q9rM6F.uOFhdU7fkYRm51Sasu._x_Wbf5Glf7aJXCmdqMuOTMhnZkrDz9KsWA7OcxRbHq
- 1cvPd8EKBGEmAGJg565znA3L1BZhxyz_2q05SukGr1GVGCzghOgt3d5ED_AMCUQ9_jRvWipVPTsq
- SoJ96JJyftcwQGCkNrURT1OZBDCb9m3oTT52OPXzb4C_PvF2CFc3ZmvXa0YdsRRt1_oE.jg4AnvJ
- g2J5EAMCubnan9GmOjRtOfj23IlY.EASbKz9AEJN4hQ--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 473a33d2-9797-4f38-8d7b-df1ee892c69d
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Tue, 12 Mar 2024 18:51:25 +0000
-Received: by hermes--production-gq1-5c57879fdf-hjdnf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 7827e58d8a097c72fc3e89eabf3f0a6a;
-          Tue, 12 Mar 2024 18:51:22 +0000 (UTC)
-Message-ID: <568fae5e-a6d4-4832-a1a1-ac3f4f93d650@schaufler-ca.com>
-Date: Tue, 12 Mar 2024 11:51:20 -0700
+	 In-Reply-To:Content-Type; b=V8FBb7LwIhr1dngarmgSl61eYIJolMoXN7SXSgLWD6VugviSVSAIHSYGw/RlEuhJ8r3oMNvh353dggaFLTXH03TxYLJ7ZOIBwkByKwQSpn7pAW2uPRCiZYACJN+G0WOvoknz9MaO2xN2yos6rGW2GZkwnFxpujQkCtWrT8jHpdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rRUaChy0; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42CIuxSN002406;
+	Tue, 12 Mar 2024 19:08:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=SlihXnpmGmd9lmDDDePxLPY4NbCMyKzYmvjmqDLRl9U=;
+ b=rRUaChy0KA5/hHLyo675GDpV0QrUkz62ncB+8fo4SO2nQyKV9JcnT7nZw5h5DbN4vXg4
+ +bHMK31vBY45Bz57eQ5Ck6LwtEGoxeNwdDxh1H2by/TXTWvzHz75ZUjWFlwAd0zKl+EO
+ psZGNZJ+du6FJSj00g+fKtcVZ0JxMTF7SccxZCFuWjyDzSYJDpBYVgFq3jR6RK7DTpqa
+ W40To1xld54p4bsNJgzF28KUWxeP07EhJ6hQj9C8hIhjkI8IPUi+4ybMjHnA+MouASgO
+ YqbjETNSB67DoPiyJfmFDrzHfne4b+FZp93Poriqya28Sbzcq1KUCsNbvsCEXm93oSL3 nQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wtvsa87er-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Mar 2024 19:08:54 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42CIuwWp002332;
+	Tue, 12 Mar 2024 19:08:53 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wtvsa87e3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Mar 2024 19:08:53 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42CIon3c020437;
+	Tue, 12 Mar 2024 19:08:52 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ws3km0x86-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Mar 2024 19:08:52 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42CJ8nIG17498482
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 12 Mar 2024 19:08:51 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DE7EE58059;
+	Tue, 12 Mar 2024 19:08:48 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 23A6558065;
+	Tue, 12 Mar 2024 19:08:48 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 12 Mar 2024 19:08:48 +0000 (GMT)
+Message-ID: <e1b818ae-c932-4d25-98a5-26b258b63365@linux.ibm.com>
+Date: Tue, 12 Mar 2024 15:08:47 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -78,67 +83,85 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v14 15/19] fsverity: consume builtin signature via LSM
- hook
+Subject: Re: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the
+ log and its size
 Content-Language: en-US
-To: Fan Wu <wufan@linux.microsoft.com>, Eric Biggers <ebiggers@kernel.org>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
- tytso@mit.edu, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
- eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
- dm-devel@lists.linux.dev, audit@vger.kernel.org,
- linux-kernel@vger.kernel.org, Deven Bowers
- <deven.desai@linux.microsoft.com>, Casey Schaufler <casey@schaufler-ca.com>
-References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
- <1709768084-22539-16-git-send-email-wufan@linux.microsoft.com>
- <20240312025712.GE1182@sol.localdomain>
- <20240312030712.GF1182@sol.localdomain>
- <51810153-eb6e-40f7-b5d0-5f72c2f4ee9b@linux.microsoft.com>
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <51810153-eb6e-40f7-b5d0-5f72c2f4ee9b@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.22129 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+To: Jarkko Sakkinen <jarkko@kernel.org>,
+        Michael Ellerman
+ <mpe@ellerman.id.au>,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc: linux-kernel@vger.kernel.org, rnsastry@linux.ibm.com, peterhuewe@gmx.de,
+        viparash@in.ibm.com
+References: <20240306155511.974517-1-stefanb@linux.ibm.com>
+ <20240306155511.974517-3-stefanb@linux.ibm.com>
+ <CZNS7FO53BHK.6NO93P0C0VY5@kernel.org>
+ <CZNS9K4BJPQ8.2MD4WZS8YMI3W@kernel.org>
+ <663a3834-056e-4dda-99dd-16ee8734100e@linux.ibm.com>
+ <877ci74u0w.fsf@mail.lhotse> <CZRW3GY5O5C0.R5HY5SOFCFJA@kernel.org>
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <CZRW3GY5O5C0.R5HY5SOFCFJA@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FmkvrwcYsISQ2f9e8fbNFAVaaIupA038
+X-Proofpoint-GUID: KbovTr4OsFOA-wqfFNJciTwuXBLAzX0K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-12_12,2024-03-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ mlxscore=0 malwarescore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
+ phishscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2403120146
 
-On 3/12/2024 11:14 AM, Fan Wu wrote:
->
->
-> On 3/11/2024 8:07 PM, Eric Biggers wrote:
->> On Mon, Mar 11, 2024 at 07:57:12PM -0700, Eric Biggers wrote:
+
+
+On 3/12/24 11:50, Jarkko Sakkinen wrote:
+> On Tue Mar 12, 2024 at 12:35 PM EET, Michael Ellerman wrote:
+>> Stefan Berger <stefanb@linux.ibm.com> writes:
+>>> On 3/7/24 15:00, Jarkko Sakkinen wrote:
+>>>> On Thu Mar 7, 2024 at 9:57 PM EET, Jarkko Sakkinen wrote:
+>>>>> in short summary: s/Use/use/
+>>>>>
+>>>>> On Wed Mar 6, 2024 at 5:55 PM EET, Stefan Berger wrote:
+>>>>>> If linux,sml-log is available use it to get the TPM log rather than the
+>>>>>> pointer found in linux,sml-base. This resolves an issue on PowerVM and KVM
+>>>>>> on Power where after a kexec the memory pointed to by linux,sml-base may
+>>>>>> have been corrupted. Also, linux,sml-log has replaced linux,sml-base and
+>>>>>> linux,sml-size on these two platforms.
+>>>>>>
+>>>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>>>>
+>>>>> So shouldn't this have a fixed tag, or not?
+>>>>
+>>>> In English: do we want this to be backported to stable kernel releases or not?
 >>>
->>> As I've said before, this commit message needs some work.  It
->>> currently doesn't
->>> say anything about what the patch actually does.
->>>
->>> BTW, please make sure you're Cc'ing the fsverity mailing list
->>> (fsverity@lists.linux.dev), not fscrypt
->>> (linux-fscrypt@vger.kernel.org).
+>>> Ideally, yes. v3 will have 3 patches and all 3 of them will have to be
+>>> backported *together* and not applied otherwise if any one of them
+>>> fails. Can this be 'guaranteed'?
 >>
->> Also, I thought this patch was using a new LSM hook, but I now see
->> that you're
->> actually abusing the existing security_inode_setsecurity() LSM hook. 
->> Currently
->> that hook is called when an xattr is set.  I don't see any precedent for
->> overloading it for other purposes.  This seems problematic, as it
->> means that a
->> request to set an xattr with the name you chose
->> ("fsverity.builtin-sig") will be
->> interpreted by LSMs as the fsverity builtin signature.  A dedicated
->> LSM hook may
->> be necessary to avoid issues with overloading the existing xattr hook
->> like this.
+>> You can use Depends-on: <previous commit SHA> to indicate the relationship.
 >>
->> - Eric
->
-> Thanks for the suggestion. I found that using
-> security_inode_setsecurity() causes issues with SMACK's
-> inode_setsecurity() hook. I will crate a dedicated new hook like
-> security_inode_setsig() in the next version.
+>> cheers
+> 
+> Thanks, I've missed depends-on tag.
+> 
+> Stefan, please add also "Cc: stable@vger.kernel.org" just to make sure
+> that I don't forget to add it.
 
-What is the issue you encountered with the Smack hook?
+Yeah, once we know whether this is the way forward or not... I posted v2 
+as RFC to figure this out.
 
->
-> -Fan
->
+v2's 2/3 patch will only apply to 6.8. To avoid any inconsistencies 
+between code and bindings we cannot even go further back with this 
+series (IFF it's the way forward at all). So I am inclined to remove the 
+Fixes tags. I also find little under Documentation about the Depends-on 
+tag and what it's supposed to be formatted like -- a commit hash of 1/3 
+appearing in 2/3 for example? The commit hash is not stable at this 
+point so I couldn't created it.
+
+> Right, and since these are so small scoped commits, and bug fixes in
+> particular, it is also possible to do PR during the release cycle.
+> 
+> BR, Jarkko
 
