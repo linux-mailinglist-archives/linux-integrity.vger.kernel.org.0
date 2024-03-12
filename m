@@ -1,151 +1,99 @@
-Return-Path: <linux-integrity+bounces-1736-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1737-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B1268798D9
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 17:22:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CD21879B13
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 19:14:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFA1B1F21E9A
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 16:22:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 474D31C2257B
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 18:14:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BF897D3E9;
-	Tue, 12 Mar 2024 16:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F4D813956A;
+	Tue, 12 Mar 2024 18:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OW4iOzSu"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="AwsfC1qr"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6DFA7CF29;
-	Tue, 12 Mar 2024 16:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8311386D1;
+	Tue, 12 Mar 2024 18:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710260561; cv=none; b=eiwxrV9/yNVlS7VbIjghlDBHzI4tCHSMDqso6r9V5LB+yPij/EH8nF7/Rdz/5/k0p2PPuwsLUE9Cru5BfU085cWlBY90GQiydICaN60+9yhzIndPCAkp9agiGvOr4vXclBtV01yHvnyRl+3ya+TceBieJvlU8PByTpptLlWllgc=
+	t=1710267268; cv=none; b=ii6o9wR6T65P0zZx966Y/WiySMhdoCoA7KxmgoB7GTtnGB1N+YrrPLAVdYGNwQPu2x6XKffh8p9ZPig73ta4iIpXSdUKEozS8Wnqr8kPB0LNamzHFAb0BEYmr8VzW/6P88G1OFSD0xGaMbz4v1TRugz/vVEVagC43Ys8q4YlL7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710260561; c=relaxed/simple;
-	bh=Ipf9zvhfvGw0qCLSPFs+Ov5pJgxtwIC4HDz+MvRXcl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TIPiE18UNR9zTzV2zfWi0o6vUba0qTyfiqgqZC4akdjwKI1XmjPaYosvQzu0UtHlsf63qbuuOVDBMrU/v4GMbO9QnibSxcQoomojJg4Sw2f4XKjR5UMjk+dTiutOp2LzeVsR4+lRxUyUAf+uwDnhD5u8r5XpDyDlmcBehpNuaQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OW4iOzSu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97175C433F1;
-	Tue, 12 Mar 2024 16:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710260560;
-	bh=Ipf9zvhfvGw0qCLSPFs+Ov5pJgxtwIC4HDz+MvRXcl4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OW4iOzSuv4zzNFrLCz3VFKXt6F0ivI5jn4vCa1mqs2H6hgz2795jLI6HYxlb64Fwp
-	 nkbwtAtOuyivEwR1x8+/ZzmhqijkPRkUFUQeov6NPZy1axHDC8QpnbQEBsvpq95PWD
-	 beuftpHwgPAQ+PXkbHtiPZcRr5HxAhqF8xwJzJEEENED2oo+oooatgb8CrRr6+Njnu
-	 luU0iIyj6rtK/80WTEqIicYC4BdtDnpsGaySgtRRRVtawTW0siGOAEnBGEWCwlxMjX
-	 lFaFzgKirwKjAKcR46cYWc7zxjB6hRfIseNIVtwtdVDBNdZ3GzCS7VnrBea0SZU9zL
-	 C9OvBJqVWR7wA==
-Date: Tue, 12 Mar 2024 10:22:38 -0600
-From: Rob Herring <robh@kernel.org>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	jarkko@kernel.org, rnsastry@linux.ibm.com, peterhuewe@gmx.de,
-	viparash@in.ibm.com
-Subject: Re: [PATCH 1/2] powerpc/prom_init: Replace linux,sml-base/sml-size
- with linux,sml-log
-Message-ID: <20240312162238.GA2308643-robh@kernel.org>
-References: <20240306155511.974517-1-stefanb@linux.ibm.com>
- <20240306155511.974517-2-stefanb@linux.ibm.com>
- <87jzmenx2c.fsf@mail.lhotse>
- <20240307215214.GB3110385-robh@kernel.org>
- <851536a5-ad8f-4d65-8c33-707e2fe762df@linux.ibm.com>
- <20240308205751.GA1249866-robh@kernel.org>
- <87a5n34u5p.fsf@mail.lhotse>
+	s=arc-20240116; t=1710267268; c=relaxed/simple;
+	bh=+Nv8FE2GFtnryYnuFjMt1J6p/3YJi1lq7lWALWFCNLU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nbeMscGtO2pS7tzkLpR05Jywxs2MDt5HsSKG67uBqgrwl4Ehq6JI2wWw4RaDB7L/0N06tKjolxDsvWm5BnFVuqFNNSfjfZOGnla4KzcYtlp+fUT8bzOVP6ezKZn64lYFmp0zwAE9KUP+o4o3VMesMnkJzviG+NjUpqCVr96FRv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=AwsfC1qr; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [167.220.2.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 4696020B74C0;
+	Tue, 12 Mar 2024 11:14:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4696020B74C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1710267266;
+	bh=7A1zrZAVHXKGttwPdOtLQCc2bRvvqSB12WrZItI5omI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AwsfC1qrQaxGBl/fdJD2faD0hl9FFmeBlCLlRgyTQvlkdWZDaVw25t2K6lGQPegFI
+	 ykP/qN5yTVNTrsLADx0NdOTg2ngKpt+eyntjyybMaNeHjRlIHLVMavUDIz0AnD7mpo
+	 jkZW9SEWeZfy1Nfhg8NaYxMEU0DhvLjCIcb3CkWY=
+Message-ID: <51810153-eb6e-40f7-b5d0-5f72c2f4ee9b@linux.microsoft.com>
+Date: Tue, 12 Mar 2024 11:14:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a5n34u5p.fsf@mail.lhotse>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v14 15/19] fsverity: consume builtin signature via LSM
+ hook
+Content-Language: en-CA
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+ tytso@mit.edu, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+ eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+ dm-devel@lists.linux.dev, audit@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
+References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
+ <1709768084-22539-16-git-send-email-wufan@linux.microsoft.com>
+ <20240312025712.GE1182@sol.localdomain>
+ <20240312030712.GF1182@sol.localdomain>
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <20240312030712.GF1182@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 12, 2024 at 09:32:50PM +1100, Michael Ellerman wrote:
-> Rob Herring <robh@kernel.org> writes:
-> > On Fri, Mar 08, 2024 at 07:23:35AM -0500, Stefan Berger wrote:
-> >> On 3/7/24 16:52, Rob Herring wrote:
-> >> > On Thu, Mar 07, 2024 at 09:41:31PM +1100, Michael Ellerman wrote:
-> >> > > Stefan Berger <stefanb@linux.ibm.com> writes:
-> >> > > > linux,sml-base holds the address of a buffer with the TPM log. This
-> >> > > > buffer may become invalid after a kexec and therefore embed the whole TPM
-> >> > > > log in linux,sml-log. This helps to protect the log since it is properly
-> >> > > > carried across a kexec with both of the kexec syscalls.
-> >> > > > 
-> >> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> >> > > > ---
-> >> > > >   arch/powerpc/kernel/prom_init.c | 8 ++------
-> >> > > >   1 file changed, 2 insertions(+), 6 deletions(-)
-> >> > > > 
-> >> 
-> >> > 
-> >> > 
-> >> > > Also adding the new linux,sml-log property should be accompanied by a
-> >> > > change to the device tree binding.
-> >> > > 
-> >> > > The syntax is not very obvious to me, but possibly something like?
-> >> > > 
-> >> > > diff --git a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
-> >> > > index 50a3fd31241c..cd75037948bc 100644
-> >> > > --- a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
-> >> > > +++ b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
-> >> > > @@ -74,8 +74,6 @@ required:
-> >> > >     - ibm,my-dma-window
-> >> > >     - ibm,my-drc-index
-> >> > >     - ibm,loc-code
-> >> > > -  - linux,sml-base
-> >> > > -  - linux,sml-size
-> >> > 
-> >> > Dropping required properties is an ABI break. If you drop them, an older
-> >> > OS version won't work.
-> >> 
-> >> 1) On PowerVM and KVM on Power these two properties were added in the Linux
-> >> code. I replaced the creation of these properties with creation of
-> >> linux,sml-log (1/2 in this series). I also replaced the handling of
-> >> these two (2/2 in this series) for these two platforms but leaving it for
-> >> powernv systems where the firmware creates these.
-> >
-> > Okay, I guess your case is not a ABI break if the kernel is populating 
-> > it and the same kernel consumes it. 
-> >
-> > You failed to answer my question on using /reserved-memory. Again, why 
-> > can't that be used? That is the standard way we prevent chunks of memory 
-> > from being clobbered.
+
+
+On 3/11/2024 8:07 PM, Eric Biggers wrote:
+> On Mon, Mar 11, 2024 at 07:57:12PM -0700, Eric Biggers wrote:
+>>
+>> As I've said before, this commit message needs some work.  It currently doesn't
+>> say anything about what the patch actually does.
+>>
+>> BTW, please make sure you're Cc'ing the fsverity mailing list
+>> (fsverity@lists.linux.dev), not fscrypt (linux-fscrypt@vger.kernel.org).
 > 
-> Yes I think that would mostly work. I don't see support for
-> /reserved-memory in kexec-tools, so that would need fixing I think.
+> Also, I thought this patch was using a new LSM hook, but I now see that you're
+> actually abusing the existing security_inode_setsecurity() LSM hook.  Currently
+> that hook is called when an xattr is set.  I don't see any precedent for
+> overloading it for other purposes.  This seems problematic, as it means that a
+> request to set an xattr with the name you chose ("fsverity.builtin-sig") will be
+> interpreted by LSMs as the fsverity builtin signature.  A dedicated LSM hook may
+> be necessary to avoid issues with overloading the existing xattr hook like this.
 > 
-> My logic was that the memory is not special. It's just a buffer we
-> allocated during early boot to store the log. There isn't anything else
-> in the system that relies on that memory remaining untouched. So it
-> seemed cleaner to just put the log in the device tree, rather than a
-> pointer to it.
+> - Eric
 
-My issue is we already have 2 ways to describe the log to the OS. I 
-don't see a good reason to add a 3rd way. (Though it might actually be a 
-4th way, because the chosen property for the last attempt was accepted 
-to dtschema yet the code has been abandoned.)
+Thanks for the suggestion. I found that using 
+security_inode_setsecurity() causes issues with SMACK's 
+inode_setsecurity() hook. I will crate a dedicated new hook like 
+security_inode_setsig() in the next version.
 
-If you put the log into the DT, then the memory for the log remains 
-untouched too because the FDT remains untouched. For reserved-memory 
-regions, the OS is free to free them if it knows what the region is and 
-that it is no longer needed. IOW, if freeing the log memory is desired, 
-then the suggested approach doesn't work.
-
-> 
-> Having the log external to the device tree creates several problems,
-> like the crash kernel region colliding with it, it being clobbered by
-> kexec, etc.
-
-We have multiple regions to pass/maintain thru kexec, so how does having 
-one less really matter?
-
-Rob
+-Fan
 
