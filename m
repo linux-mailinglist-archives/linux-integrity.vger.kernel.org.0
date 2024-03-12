@@ -1,145 +1,129 @@
-Return-Path: <linux-integrity+bounces-1728-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1729-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA6ED8792BF
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 12:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 787FC8794D8
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 14:12:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4F631C214CF
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 11:11:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA5A61C2180F
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 13:12:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBEE579949;
-	Tue, 12 Mar 2024 11:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD10A79B91;
+	Tue, 12 Mar 2024 13:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="AeF5oxQS"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FBA69D0C;
-	Tue, 12 Mar 2024 11:11:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1944F5820A
+	for <linux-integrity@vger.kernel.org>; Tue, 12 Mar 2024 13:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710241875; cv=none; b=opvACLjuJq+rHsFT4DtNIgmZbENNJoboC+MOO/ql2qkCjKUHs9Qo+dlMQwHRJepynq9/K7OXeTnKRTcPMV4thdqnjW83KQoS6lxyvwJzs6JZOOa2E2eiTrLEFSfhmvznexTD5oHbivZ4UN2RG/8157F84X6h7Iyarstv5Kp3Jlw=
+	t=1710249138; cv=none; b=VLW7ZKzkZcVMNdXoKWcqcKRMc/syygYbuhs5nk46FcSXx+TX4fA9d++Ph+gzwpHCLHOu9dDjsIAWZZeak7OyTzxnlPn4wMItMsyvlsOtrFik31UEHMwVrjfW6WCcF9/z9HD3gYlw3v3B9jBvyW533ykTosrrDuWZtyJEH8YxTeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710241875; c=relaxed/simple;
-	bh=5szbvSG9JnrvwDFGxsynaJ40kTIHT7cLhwAkgTEXuR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dNtQSYkGliuwjqfdMnoCFtxRNaIRX/Px38cpTp0T7loA5J8J1RwWKwBlnxt8NMULUzuWWCBW129gAlhlmFq/X677laD39aw6bD61zQjA0ap/5gzx/MFcEcKuW88XWs5/Rxe1PZZ9niQJZwK5GxKGnTg8XemDh4tEmkml67Swaa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout3.hostsharing.net (Postfix) with ESMTPS id E95E1100DA1D9;
-	Tue, 12 Mar 2024 12:11:09 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id AFE422BC2D8; Tue, 12 Mar 2024 12:11:09 +0100 (CET)
-Date: Tue, 12 Mar 2024 12:11:09 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: mpe@ellerman.id.au, linux-integrity@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	jarkko@kernel.org, rnsastry@linux.ibm.com, peterhuewe@gmx.de,
-	viparash@in.ibm.com, devicetree@vger.kernel.org,
-	jsnitsel@redhat.com, Nayna Jain <nayna@linux.ibm.com>
-Subject: Re: [RFC PATCH v2 2/3] dt-bindings: tpm: Add linux,sml-log to
- ibm,vtpm.yaml
-Message-ID: <ZfA4TZspY7oOQ4vz@wunner.de>
-References: <20240311132030.1103122-1-stefanb@linux.ibm.com>
- <20240311132030.1103122-3-stefanb@linux.ibm.com>
+	s=arc-20240116; t=1710249138; c=relaxed/simple;
+	bh=5rt+RWbBJPhAUl1uqDwh5UWlve/OPz4PeCvfGqj3MHQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e/zlkqerQTb7Qpi6qkoKzvhwiFb2z0A4/v8a2Bev2Qa1oQl/xsJ7jYW4k6R1K5ytQFe+AIIbk80CcNSrpSqHHlQu/r6gsK+SAErWltzVmCv+Znid2etSCIljmdnPBYn8QASeq3iKwb4DtU5gVFoHNHrPj+KoCgRQPTv2bDPwy/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=AeF5oxQS; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-609eb87a847so42020447b3.0
+        for <linux-integrity@vger.kernel.org>; Tue, 12 Mar 2024 06:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1710249136; x=1710853936; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xGm6l1YRLh5BPGXSeJhTa5Xkczn4uT6yuT0rED+ytkk=;
+        b=AeF5oxQSugPKh8jPGo1deH2heQlPo67Gx8uPfkXw+A6XRCMxKrmhop4RTi2Raye9w5
+         td3/8L7cAv6COx2n55EwL5JReK1i4P5PPiYypoSIGkwLVHIPPS/nIssVhO6EvVoiSdwa
+         25PWyN9KMeoyTR/gJFW6FP+77dd1uhGAFDEy7I0P298m/ZrujwVNmzfBJ57RnEVJRnz7
+         hFIHzsvn0BzaDpDVS99DEsWFQFKYhVbuQt8C8bZjIr3opLAh5ipZEgkQMXlkanYGp1ue
+         yhcJEtkhHMAz7ALFS6U3xG0xIZj2H6Bi1chBbMLE5wbZkq+AccKzNCXCc5KD/mfWZoRg
+         cqCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710249136; x=1710853936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xGm6l1YRLh5BPGXSeJhTa5Xkczn4uT6yuT0rED+ytkk=;
+        b=IJRafb+fjd9slkIxfzCl6TiCMOfQ0UJmfKDzGgqI2rwDPvrcM0vgkGo564tRkTInTJ
+         XVDqujK49PVwyNcfdR77aTDsj771kSfP3E+TRiAR70LfB/sSYf/vgoKMv9p6aG+rk6tX
+         pbLe7gDdAZ5TgpBE6Sn58oeOjWWbhjaJqMQqiONjBrTM3hNP0/3kuHpP+3jhrYEyako0
+         tD4Y+KYWOxD6K7LXwGIPDaqZHt563ZPfjGGqbfcr1ZOcILKCMxPLV/dRNorDJVEy4krp
+         fKutj/MxOiGqr2JLwKfFwcHsrTYWvYoers2ZYUV4FE5QCywmOhodfvvzoycFzLiK/kLJ
+         x/1A==
+X-Forwarded-Encrypted: i=1; AJvYcCW+S3a/InrejIko58xzRoXBRdeeTGNRjotZQBOBTbgqTxF3KocpNvav5hmkuXFsSSXGOrQurfLHYxSC2oNMXRz+b+QMsPuz2pN01vEzbcz3
+X-Gm-Message-State: AOJu0Yz2fYSwF6qAsofL0Our4AyvfJMnD/jE3ngX0iY4N0dvA01kij3O
+	8QuNLyj8yEPnFTumi8VfPHjMvDuG5ah9AjZz+jqkHnWxMxHNv3Lts2JgabojJHlsJzBVP8q6J10
+	qs6jrwx3UJG/SIEf7vQfP97WFqKjZNq8LTlcZ
+X-Google-Smtp-Source: AGHT+IEdiOBkJ+adeSqv+rNybEPwNkGGa7iFCLcf94f4++BXPp1TK3JUSZqCbU2Yvqne0MvrzB+F7Mt8oGlgCeTEfL8=
+X-Received: by 2002:a05:6902:2841:b0:dcd:b806:7446 with SMTP id
+ ee1-20020a056902284100b00dcdb8067446mr6722695ybb.1.1710249136161; Tue, 12 Mar
+ 2024 06:12:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240311132030.1103122-3-stefanb@linux.ibm.com>
+References: <1709768084-22539-1-git-send-email-wufan@linux.microsoft.com>
+ <1709768084-22539-16-git-send-email-wufan@linux.microsoft.com>
+ <20240312025712.GE1182@sol.localdomain> <20240312030712.GF1182@sol.localdomain>
+In-Reply-To: <20240312030712.GF1182@sol.localdomain>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 12 Mar 2024 09:12:05 -0400
+Message-ID: <CAHC9VhSSWNa1qwZrWtj-ERFjN9QKR7fz17yb9903P_a2k6ewaQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v14 15/19] fsverity: consume builtin signature via LSM hook
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, 
+	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, 
+	agk@redhat.com, snitzer@kernel.org, eparis@redhat.com, 
+	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 11, 2024 at 09:20:29AM -0400, Stefan Berger wrote:
-> Add linux,sml-log, which carries the firmware TPM log in a uint8-array, to
-> the properties. Either this property is required or both linux,sml-base and
-> linux,sml-size are required. Add a test case for verification.
-> 
-> Fixes: 82003e0487fb ("Documentation: tpm: add the IBM Virtual TPM device tree binding documentation")
+On Mon, Mar 11, 2024 at 11:07=E2=80=AFPM Eric Biggers <ebiggers@kernel.org>=
+ wrote:
+> On Mon, Mar 11, 2024 at 07:57:12PM -0700, Eric Biggers wrote:
+> >
+> > As I've said before, this commit message needs some work.  It currently=
+ doesn't
+> > say anything about what the patch actually does.
+> >
+> > BTW, please make sure you're Cc'ing the fsverity mailing list
+> > (fsverity@lists.linux.dev), not fscrypt (linux-fscrypt@vger.kernel.org)=
+.
+>
+> Also, I thought this patch was using a new LSM hook, but I now see that y=
+ou're
+> actually abusing the existing security_inode_setsecurity() LSM hook.  Cur=
+rently
+> that hook is called when an xattr is set.  I don't see any precedent for
+> overloading it for other purposes.
 
-The Fixes tag is confusing.  The patch won't even apply cleanly to the
-v4.10 commit referenced here as the conversion to yaml happened only
-recently with v6.8.
+I'm not really bothered by this, and if it proves to be a problem in
+the future we can swap it for a new hook; we don't include the LSM
+in-kernel API in any stable API guarantees.
 
-Why is the Fixes tag necessary in the first place?  Same question for
-the other patches in the series.  This looks like feature work rather
-than a fix.  Not sure whether it satisfies the "obviously correct"
-rule per Documentation/process/stable-kernel-rules.rst.
+> This seems problematic, as it means that a
+> request to set an xattr with the name you chose ("fsverity.builtin-sig") =
+will be
+> interpreted by LSMs as the fsverity builtin signature.  A dedicated LSM h=
+ook may
+> be necessary to avoid issues with overloading the existing xattr hook lik=
+e this.
 
+Would you be more comfortable if the name was in an IPE related space,
+for example something like "ipe.fsverity-sig"?
 
-> --- a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
-> +++ b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
-> @@ -74,8 +74,6 @@ required:
->    - ibm,my-dma-window
->    - ibm,my-drc-index
->    - ibm,loc-code
-> -  - linux,sml-base
-> -  - linux,sml-size
-
-I assume that either these two or the new "linux,sml-log" property
-are (still) required?  If so, a quick grep through the bindings
-(e.g. auxdisplay/img,ascii-lcd.yaml) shows that the following
-might work:
-
-required:
-  - ...
-
-oneOf:
-  - required:
-      - linux,sml-base
-  - required:
-      - linux,sml-log
-
-
-> --- a/Documentation/devicetree/bindings/tpm/tpm-common.yaml
-> +++ b/Documentation/devicetree/bindings/tpm/tpm-common.yaml
-> @@ -30,6 +30,11 @@ properties:
->        size of reserved memory allocated for firmware event log
->      $ref: /schemas/types.yaml#/definitions/uint32
->  
-> +  linux,sml-log:
-> +    description:
-> +      Content of firmware event log
-
-Please add one or two sentences of context so that readers don't
-need to use git blame + git log to find out what this is for.
-(Mention at least that the property may be used to pass the log
-to a kexec kernel.)
-
-
-> -# must only have either memory-region or linux,sml-base
-> +# must only have either memory-region or linux,sml-base/size or linux,sml-log
->  # as well as either resets or reset-gpios
->  dependentSchemas:
->    memory-region:
->      properties:
->        linux,sml-base: false
-> +      linux,sml-log: false
->    linux,sml-base:
->      properties:
->        memory-region: false
-> +      linux,sml-log: false
-> +  linux,sml-log:
-> +    properties:
-> +      memory-region: false
-> +      linux,sml-base: false
-> +      linux,sml-size: false
-
-Could you add "linux,sml-size: false" to "memory-region" as well
-while at it for consistency?
-
-Thanks,
-
-Lukas
+--=20
+paul-moore.com
 
