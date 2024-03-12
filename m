@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1732-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1733-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51A28879758
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 16:18:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE9408797D9
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 16:43:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8259D1C20ED1
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 15:18:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99E54286FE9
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 15:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578FF33E5;
-	Tue, 12 Mar 2024 15:18:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569397C6DF;
+	Tue, 12 Mar 2024 15:43:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h1Lmwl5P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TemBDO3n"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B25E7BB04;
-	Tue, 12 Mar 2024 15:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DBF79B65;
+	Tue, 12 Mar 2024 15:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710256732; cv=none; b=sJTii9dSzgt4yIIUMSXp2l1Whs6rjG6zOpP1KvNu44QLs/Qqc6MDICUGX7FttjVyg1lx+pqExYl7bQkQ0DJjA5m6ruOy0nHL2jzOwzpq+v602Q/E5nll8oNbkyP87dBIRAqoToTLg5R5EoyVZuqwIVI2eiXJbgJMS2hsTFdsKSA=
+	t=1710258186; cv=none; b=GV4Ev5kMvke3HhqQh/j9XpNV+u8ieOO4J3FTjMJzkrMBq43mYJYqyJ3iaxwX1dYlRHPqjFVqQSJdDdOxXSR+AqH8d/yYlgoYmJofe9KvroKpGjVl3azdVxlJqdhwQNJk+ugbypG/vUoyE8ZOp7yRQpCHO4l4P+66b1Q08L8Yu34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710256732; c=relaxed/simple;
-	bh=e9D3nRiUkzwoDNU1WO9Mvab1qnoYPq79dDij4jjwu3k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DIV1v4BikQ5votpyOmv7W3jlNrfUs21j4+mxn8oVwlcjEa9B0D6SS+sJkuZr0j9LSNX4Iwndn/6iAwnufkGX3P49vH3Ig0jOV9gnf/8dIF+wDYkZ6DGCTgdy31H7YEcdxmu1uIGkbqqo69Y0PC8KTH3aaFQyLGMEpcOroJMCwJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h1Lmwl5P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74728C433F1;
-	Tue, 12 Mar 2024 15:18:47 +0000 (UTC)
+	s=arc-20240116; t=1710258186; c=relaxed/simple;
+	bh=saSsJLPGKVqRyifWAvITNA+MsAjtts2uqCkZdCGrjgs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=ekeFA6reD+erHbw4vaE4wLZnceCBCD1z60Kj492/vfK0FIE8RWWDHqkWNKNA5MB+wgWxvbu1Nd98L8/EA0aG5ygSiM6AUr8TlxJ43kUatsuNqjM18y++1fpBLo+DRxGMpSRIuQWKIhAYsHjz3gVZpiBP6Jn266bfjnbpSzujd8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TemBDO3n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F2CC433C7;
+	Tue, 12 Mar 2024 15:43:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710256731;
-	bh=e9D3nRiUkzwoDNU1WO9Mvab1qnoYPq79dDij4jjwu3k=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=h1Lmwl5P+pE/kbBOvKdZOZM25nEbfDfgOnhEj7uMpL3lrvqSkVH9DeyjsZEf7DTHn
-	 hE+C1iPnYAEHMQA1AkgjHn1CDxlvyhvh92FjY/rUU57Pura7j3mc/fwaDBHM0YxPTJ
-	 EuoUD49zHXeU5FjxnjVBGrnmBZIibE94K4SxGOVFkYeERZITcH2CIZ7Ggl+fqv6eoh
-	 IeaxrCO5fembgp1vdfcOdBpTepENLylh42LBlMDfzVapAhKGludQ50rVeZJO1++Zzs
-	 ezP/6E7bAq6njdK/Y/+nWz0kYO4KifZtj2dwllKvMBdw9TGXv7C5OxDFZpWF+4z+48
-	 mk2gdGgwHJZMw==
+	s=k20201202; t=1710258185;
+	bh=saSsJLPGKVqRyifWAvITNA+MsAjtts2uqCkZdCGrjgs=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=TemBDO3nAYXN5PjNextlJQDVn+cFCmHn/AifJjXH6yecbnsdNN8Ous1QY12Ws6cGx
+	 2eRXf8mSyuVI3HwcyjjVcIk91kh534i8hyGyDbalN1eZXfkQs8Pu56OJvudVLCWp2N
+	 fPdsDzwUn+99Jh8zVJwhktzAUB1IG0habTa2gU7ksuArwToqzBSa4vmVRZNSsKrp1s
+	 fjKckEktCEAjODpf8UymIbvTGSTv1tpJyXHGaFaWJSsUinXKYRGwerCLQ2p5D3yzM8
+	 QsDbA09IbM0jG5La0Z+u23T/tBCKlpI3Xg4/J7AIfG6p9yk0veQNhXzNbAmvlykzNi
+	 iWrLDRvuUxmAw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,55 +49,80 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 12 Mar 2024 17:18:45 +0200
-Message-Id: <CZRVET5930A0.3KM5Q2BAH05LT@kernel.org>
-Cc: "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
- "David Howells" <dhowells@redhat.com>, "David Woodhouse"
- <dwmw2@infradead.org>, "herbert@gondor.apana.org.au"
- <herbert@gondor.apana.org.au>, "davem@davemloft.net" <davem@davemloft.net>,
- "Ard Biesheuvel" <ardb@kernel.org>, "paul@paul-moore.com"
- <paul@paul-moore.com>, "jmorris@namei.org" <jmorris@namei.org>,
- "serge@hallyn.com" <serge@hallyn.com>, "zohar@linux.ibm.com"
- <zohar@linux.ibm.com>, "roberto.sassu@huawei.com"
- <roberto.sassu@huawei.com>, "dmitry.kasatkin@gmail.com"
- <dmitry.kasatkin@gmail.com>, "mic@digikod.net" <mic@digikod.net>,
- "casey@schaufler-ca.com" <casey@schaufler-ca.com>, "stefanb@linux.ibm.com"
- <stefanb@linux.ibm.com>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "keyrings@vger.kernel.org"
- <keyrings@vger.kernel.org>, "linux-crypto@vger.kernel.org"
- <linux-crypto@vger.kernel.org>, "linux-efi@vger.kernel.org"
- <linux-efi@vger.kernel.org>, "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH RFC 1/8] certs: Introduce ability to link to a system
- key
+Date: Tue, 12 Mar 2024 17:43:01 +0200
+Message-Id: <CZRVXE96ZZA8.33VFES8S07YS9@kernel.org>
+Subject: Re: [RFC PATCH v2 3/3] tpm: of: If available use linux,sml-log to
+ get the log and its size
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Eric Snowberg" <eric.snowberg@oracle.com>
+To: "Stefan Berger" <stefanb@linux.ibm.com>, <mpe@ellerman.id.au>,
+ <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Cc: <linux-kernel@vger.kernel.org>, <rnsastry@linux.ibm.com>,
+ <peterhuewe@gmx.de>, <viparash@in.ibm.com>, <devicetree@vger.kernel.org>,
+ <jsnitsel@redhat.com>
 X-Mailer: aerc 0.17.0
-References: <20240311161111.3268190-1-eric.snowberg@oracle.com>
- <20240311161111.3268190-2-eric.snowberg@oracle.com>
- <CZR5W1VPAVJC.2VZOSD53YNT9I@kernel.org>
- <77AE4DEA-9474-44A1-88DC-852523C36797@oracle.com>
-In-Reply-To: <77AE4DEA-9474-44A1-88DC-852523C36797@oracle.com>
+References: <20240311132030.1103122-1-stefanb@linux.ibm.com>
+ <20240311132030.1103122-4-stefanb@linux.ibm.com>
+ <CZR7B45P71XS.53XNZD9FWZSL@kernel.org>
+ <916fb19b-daf8-4c1b-bc25-f071d2b3ae33@linux.ibm.com>
+In-Reply-To: <916fb19b-daf8-4c1b-bc25-f071d2b3ae33@linux.ibm.com>
 
-On Mon Mar 11, 2024 at 11:31 PM EET, Eric Snowberg wrote:
+On Mon Mar 11, 2024 at 10:33 PM EET, Stefan Berger wrote:
 >
 >
-> > On Mar 11, 2024, at 1:18=E2=80=AFPM, Jarkko Sakkinen <jarkko@kernel.org=
-> wrote:
+> On 3/11/24 16:25, Jarkko Sakkinen wrote:
+> > On Mon Mar 11, 2024 at 3:20 PM EET, Stefan Berger wrote:
+> >> If linux,sml-log is available use it to get the TPM log rather than th=
+e
+> >> pointer found in linux,sml-base. This resolves an issue on PowerVM and=
+ KVM
+> >> on Power where after a kexec the memory pointed to by linux,sml-base m=
+ay
+> >> have become inaccessible or corrupted. Also, linux,sml-log has replace=
+d
+> >> linux,sml-base and linux,sml-size on these two platforms.
+> >>
+> >> Keep the handling of linux,sml-base/sml-size for powernv platforms tha=
+t
+> >> provide the two properties via skiboot.
+> >>
+> >> Fixes: c5df39262dd5 ("drivers/char/tpm: Add securityfs support for eve=
+nt log")
+> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 > >=20
-> > On Mon Mar 11, 2024 at 6:11 PM EET, Eric Snowberg wrote:
-> >> + return -1;
-> >=20
-> > Missed this one: why a magic number?
+> > I'm worried about not being up to date and instead using "cached" value=
+s
+> > when verifying anything from a security chip. Does this guarantee that
+> > TPM log is corrupted and will not get updated somehow?
 >
-> Good point, I'll change this to return -ENOKEY.  Thanks.
+>
+> What do you mean 'guarantee that TPM log is corrupted'?
 
-Either that or a boolean function, which ever fits to the overall
-flow better... The upside of error code is less branching in the call
-sites. The upside of boolean is that caller exactly knows all the
-values that ever should come out as a result.
+I presume that this is for power architecture but I have no idea what
+leads log being corrupted, and is the scope all of that that arch or
+some subset of CPUs.
 
-Your choice ofc.
+The commit message is not very detailed on kexec scenario. It more like
+assumes that reader knows all the detail beforehand. So probably this
+will start to make sense once the backing story is improved, that's
+all.
+
+> The TPM was handed over from the firmware to Linux and the firmware then=
+=20
+> freed all memory associated with the log and will then not create a new=
+=20
+> log or touch the TPM or do anything that would require an update to the=
+=20
+> handed-over log. Linux also does not append to the firmware log. So=20
+> whatever we now find in linux,sml-log would be the latest firmware log=20
+> and the state of the 'firmware PCRs' computed from it should correspond=
+=20
+> to the current state of the 'firmware PCRs'.
+
+So on what CPU this happens and is there any bigger picture for that
+design choice in the firmware?
+
+If it is a firmware bug, this should emit FW_BUG log message. If not,
+then this commit message should provide the necessary context.
 
 BR, Jarkko
 
