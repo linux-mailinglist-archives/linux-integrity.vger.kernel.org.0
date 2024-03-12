@@ -1,67 +1,68 @@
-Return-Path: <linux-integrity+bounces-1726-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1727-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE076879212
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 11:33:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18BCD87923B
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 11:36:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92F1B1F21CDA
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 10:33:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A68751F21DF7
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 10:36:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18CBE3C684;
-	Tue, 12 Mar 2024 10:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A8446997E;
+	Tue, 12 Mar 2024 10:35:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="WhjR2Xpx"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="fSkUOcUx"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FB635F18;
-	Tue, 12 Mar 2024 10:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECD135F18;
+	Tue, 12 Mar 2024 10:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710239578; cv=none; b=PaySdLaYjDQGM4SqVSZJ5ceA1egnAXf9F8Liy5b8Vh6z9ctlLj2Z1hdxP3UsDnm4J+MDekWJpoMLAChM7a/2tlP73mxY9vfNppOXsmzhZv4Apc4v2+yrXvtMCJmaiU0bqZqkfMcf+mtB17T4toPeRCq21T4WOYjt5d37wgXQo+I=
+	t=1710239748; cv=none; b=uXOCZJgqX0fzD2xFMQ8ZH+brjlpz7FcA7RqmHEydBtLU/DNcUuG45/O825aGvsnau31GSUOc8qL4loYO9c1o+vjPT59vcTyVhSjwy+HsSj4HXjZF3DzF+paLb/6wxEZT8HU+CDJncadbCosVD2HtRzeshVxJ1mVSERlpPU+Ib3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710239578; c=relaxed/simple;
-	bh=7IM+v4sCwMimkJ1ZXA117FFaV50XcO43VM3+gBWy65g=;
+	s=arc-20240116; t=1710239748; c=relaxed/simple;
+	bh=3Ren6oCQrE76vKh+CCJiqBhAuW8cn+/gbi++0hCSJYo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Uf5+cM/U4XYANz7zOMtaaYQL503epQldxpVdUqJlzXw6oKuFO4ZLmE1/V7gsy4tJ/miuN9HUN2Les2zzoN5EnU/n5G3aceeIvmVLuxIhTfsBnFi6RGYjNw3GLLVuFF6ITLPQ4biTS4z+kEkfJcA/Xt5bDVgegFFKZoNxTesAKa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=WhjR2Xpx; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=GLCKJDqDsF0WQhDqQIjD6hD1O3pj0saj91qvB0JN6ePJtVVgTlYjS/LTdr20KiZKuAkjtuClI5KGyyI1gHhU5oPDfLdnxxPnEVXV0rKwOjiPp6yhrVZd+k4kLeelW3wavxO4bg6julM3KpFhelc7t3IW0vyoXSUqkzlMiECCuYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=fSkUOcUx; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1710239571;
-	bh=WAJdAg2kSVxd3biZa1Q3GiQlxvq8aCBQjEnXtrdMZQc=;
+	s=201909; t=1710239743;
+	bh=RZEfYiLTkNnDL11Vo6sbxwGAoRDVBPoFLJr3cr56jVk=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=WhjR2XpxEiPKrQ1UxYUIKDVVtrEY/A16XeUHH+p3tVkIPYZbSPSK7huCOZ9+EGJrn
-	 jmmBglW76EAQAZA0xMrdgDmIsfa7yJuLAhdZ4QjZXTuYz6VdgH0pQipie0omSQtxi3
-	 x0OIJJhmBV1opHy0gGEjVxsiPU5Jz2Cmnu8bJ7d2HyT/sVcCWrZB4t+jwDCorJ/Z7g
-	 Uq0eSwfQ4vOLUiMhEG5uX0nWXbzcfKfjE5DJA+PEHbyCPfhMCkz1u54ZfiRFBIN3tS
-	 QSJqAF3zo/BRQ3x+xIdcnEKIFkh31tl6eZziDO+eCpeXZtS/mbdIf6EcPtKcnImw6k
-	 DwgrCoGA7JCEA==
+	b=fSkUOcUxT9cjPVrU6sP8jJWYfWnjxzJLfKf1w6I4iWC+czN6ATNMjWO3u4Ol/6NIA
+	 klGcwVNW/8svX8Sa0TDuNXmzpmRaIWCIIJiAZwux8+TQ3uC3zJKgS+4d8VliKauaaY
+	 QdI3599p5DxoYz1/zN+FEVUnepZ4ntyegPliodd6Q0GAAbzech0kGB5Sx2JeG/YXdz
+	 RK3wuxQVdXT+La7rI/Bh4+uNV4SHIuCZXcVn2QbzLvPia4W0BFpkoWtyvQOi29Hrqo
+	 QNBAi86yP7jeyw45oqpE9N7aCxKKaxoPn9m8zJIHkxcpuba/Z1fMqcONSLaWpLv5kc
+	 BYSV9xOI9uHDA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tv92W2Nl8z4wcq;
-	Tue, 12 Mar 2024 21:32:51 +1100 (AEDT)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Tv95q63Rvz4x0t;
+	Tue, 12 Mar 2024 21:35:43 +1100 (AEDT)
 From: Michael Ellerman <mpe@ellerman.id.au>
-To: Rob Herring <robh@kernel.org>, Stefan Berger <stefanb@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, jarkko@kernel.org, rnsastry@linux.ibm.com,
- peterhuewe@gmx.de, viparash@in.ibm.com
-Subject: Re: [PATCH 1/2] powerpc/prom_init: Replace linux,sml-base/sml-size
- with linux,sml-log
-In-Reply-To: <20240308205751.GA1249866-robh@kernel.org>
+To: Stefan Berger <stefanb@linux.ibm.com>, Jarkko Sakkinen
+ <jarkko@kernel.org>, linux-integrity@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org
+Cc: linux-kernel@vger.kernel.org, rnsastry@linux.ibm.com, peterhuewe@gmx.de,
+ viparash@in.ibm.com
+Subject: Re: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the
+ log and its size
+In-Reply-To: <663a3834-056e-4dda-99dd-16ee8734100e@linux.ibm.com>
 References: <20240306155511.974517-1-stefanb@linux.ibm.com>
- <20240306155511.974517-2-stefanb@linux.ibm.com>
- <87jzmenx2c.fsf@mail.lhotse> <20240307215214.GB3110385-robh@kernel.org>
- <851536a5-ad8f-4d65-8c33-707e2fe762df@linux.ibm.com>
- <20240308205751.GA1249866-robh@kernel.org>
-Date: Tue, 12 Mar 2024 21:32:50 +1100
-Message-ID: <87a5n34u5p.fsf@mail.lhotse>
+ <20240306155511.974517-3-stefanb@linux.ibm.com>
+ <CZNS7FO53BHK.6NO93P0C0VY5@kernel.org>
+ <CZNS9K4BJPQ8.2MD4WZS8YMI3W@kernel.org>
+ <663a3834-056e-4dda-99dd-16ee8734100e@linux.ibm.com>
+Date: Tue, 12 Mar 2024 21:35:43 +1100
+Message-ID: <877ci74u0w.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -70,68 +71,29 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-Rob Herring <robh@kernel.org> writes:
-> On Fri, Mar 08, 2024 at 07:23:35AM -0500, Stefan Berger wrote:
->> On 3/7/24 16:52, Rob Herring wrote:
->> > On Thu, Mar 07, 2024 at 09:41:31PM +1100, Michael Ellerman wrote:
->> > > Stefan Berger <stefanb@linux.ibm.com> writes:
->> > > > linux,sml-base holds the address of a buffer with the TPM log. This
->> > > > buffer may become invalid after a kexec and therefore embed the whole TPM
->> > > > log in linux,sml-log. This helps to protect the log since it is properly
->> > > > carried across a kexec with both of the kexec syscalls.
->> > > > 
->> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> > > > ---
->> > > >   arch/powerpc/kernel/prom_init.c | 8 ++------
->> > > >   1 file changed, 2 insertions(+), 6 deletions(-)
->> > > > 
+Stefan Berger <stefanb@linux.ibm.com> writes:
+> On 3/7/24 15:00, Jarkko Sakkinen wrote:
+>> On Thu Mar 7, 2024 at 9:57 PM EET, Jarkko Sakkinen wrote:
+>>> in short summary: s/Use/use/
+>>>
+>>> On Wed Mar 6, 2024 at 5:55 PM EET, Stefan Berger wrote:
+>>>> If linux,sml-log is available use it to get the TPM log rather than the
+>>>> pointer found in linux,sml-base. This resolves an issue on PowerVM and KVM
+>>>> on Power where after a kexec the memory pointed to by linux,sml-base may
+>>>> have been corrupted. Also, linux,sml-log has replaced linux,sml-base and
+>>>> linux,sml-size on these two platforms.
+>>>>
+>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>>
+>>> So shouldn't this have a fixed tag, or not?
 >> 
->> > 
->> > 
->> > > Also adding the new linux,sml-log property should be accompanied by a
->> > > change to the device tree binding.
->> > > 
->> > > The syntax is not very obvious to me, but possibly something like?
->> > > 
->> > > diff --git a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
->> > > index 50a3fd31241c..cd75037948bc 100644
->> > > --- a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
->> > > +++ b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
->> > > @@ -74,8 +74,6 @@ required:
->> > >     - ibm,my-dma-window
->> > >     - ibm,my-drc-index
->> > >     - ibm,loc-code
->> > > -  - linux,sml-base
->> > > -  - linux,sml-size
->> > 
->> > Dropping required properties is an ABI break. If you drop them, an older
->> > OS version won't work.
->> 
->> 1) On PowerVM and KVM on Power these two properties were added in the Linux
->> code. I replaced the creation of these properties with creation of
->> linux,sml-log (1/2 in this series). I also replaced the handling of
->> these two (2/2 in this series) for these two platforms but leaving it for
->> powernv systems where the firmware creates these.
+>> In English: do we want this to be backported to stable kernel releases or not?
 >
-> Okay, I guess your case is not a ABI break if the kernel is populating 
-> it and the same kernel consumes it. 
->
-> You failed to answer my question on using /reserved-memory. Again, why 
-> can't that be used? That is the standard way we prevent chunks of memory 
-> from being clobbered.
+> Ideally, yes. v3 will have 3 patches and all 3 of them will have to be 
+> backported *together* and not applied otherwise if any one of them 
+> fails. Can this be 'guaranteed'?
 
-Yes I think that would mostly work. I don't see support for
-/reserved-memory in kexec-tools, so that would need fixing I think.
-
-My logic was that the memory is not special. It's just a buffer we
-allocated during early boot to store the log. There isn't anything else
-in the system that relies on that memory remaining untouched. So it
-seemed cleaner to just put the log in the device tree, rather than a
-pointer to it.
-
-Having the log external to the device tree creates several problems,
-like the crash kernel region colliding with it, it being clobbered by
-kexec, etc.
+You can use Depends-on: <previous commit SHA> to indicate the relationship.
 
 cheers
 
