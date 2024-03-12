@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1733-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1734-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE9408797D9
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 16:43:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A450879857
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 16:51:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99E54286FE9
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 15:43:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABC3F1C21561
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 15:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569397C6DF;
-	Tue, 12 Mar 2024 15:43:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3067CF29;
+	Tue, 12 Mar 2024 15:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TemBDO3n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I9FnK3zr"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DBF79B65;
-	Tue, 12 Mar 2024 15:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C7479B65;
+	Tue, 12 Mar 2024 15:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710258186; cv=none; b=GV4Ev5kMvke3HhqQh/j9XpNV+u8ieOO4J3FTjMJzkrMBq43mYJYqyJ3iaxwX1dYlRHPqjFVqQSJdDdOxXSR+AqH8d/yYlgoYmJofe9KvroKpGjVl3azdVxlJqdhwQNJk+ugbypG/vUoyE8ZOp7yRQpCHO4l4P+66b1Q08L8Yu34=
+	t=1710258661; cv=none; b=lQg13iAeN2cltKUwn6A9U0rwMBJPc2gu+PMokP5ZBpNOhweuGUlONZthbCwz3Kin0PSOx6oXXOyhYuyUxhsrxJmZ9R3MCGppw+fJukOM4iTXNX9Tn8qGbIyd51gXhP21bkeQo4CklxYOf9PbAKcDCNDswR1ExjFWIo5+3J6tXs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710258186; c=relaxed/simple;
-	bh=saSsJLPGKVqRyifWAvITNA+MsAjtts2uqCkZdCGrjgs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=ekeFA6reD+erHbw4vaE4wLZnceCBCD1z60Kj492/vfK0FIE8RWWDHqkWNKNA5MB+wgWxvbu1Nd98L8/EA0aG5ygSiM6AUr8TlxJ43kUatsuNqjM18y++1fpBLo+DRxGMpSRIuQWKIhAYsHjz3gVZpiBP6Jn266bfjnbpSzujd8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TemBDO3n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F2CC433C7;
-	Tue, 12 Mar 2024 15:43:03 +0000 (UTC)
+	s=arc-20240116; t=1710258661; c=relaxed/simple;
+	bh=kntAY869wNjBhGqs4WVgCSk3Kuy6c3FLEZCqfnnjbPI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=efz9ub9aDNYY7T3M7tNS5vzOafmSrNtpH6iLCoNivWd9VXDEyv3dKre6O16tDl+hC7igRcnpituPaJzRllF7xMPmJJwlaHJZKt6iGaSDkNOE99LfrW1T4X/saV3I90G60IxqnaXF3Aypk56pji/iQVvOape9ZjkqcXIZXpqJX0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I9FnK3zr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A9AC433F1;
+	Tue, 12 Mar 2024 15:50:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710258185;
-	bh=saSsJLPGKVqRyifWAvITNA+MsAjtts2uqCkZdCGrjgs=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=TemBDO3nAYXN5PjNextlJQDVn+cFCmHn/AifJjXH6yecbnsdNN8Ous1QY12Ws6cGx
-	 2eRXf8mSyuVI3HwcyjjVcIk91kh534i8hyGyDbalN1eZXfkQs8Pu56OJvudVLCWp2N
-	 fPdsDzwUn+99Jh8zVJwhktzAUB1IG0habTa2gU7ksuArwToqzBSa4vmVRZNSsKrp1s
-	 fjKckEktCEAjODpf8UymIbvTGSTv1tpJyXHGaFaWJSsUinXKYRGwerCLQ2p5D3yzM8
-	 QsDbA09IbM0jG5La0Z+u23T/tBCKlpI3Xg4/J7AIfG6p9yk0veQNhXzNbAmvlykzNi
-	 iWrLDRvuUxmAw==
+	s=k20201202; t=1710258661;
+	bh=kntAY869wNjBhGqs4WVgCSk3Kuy6c3FLEZCqfnnjbPI=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=I9FnK3zrII1xwFK/Fiw8498wJ2DZRNOF1Pjf/F6wirop9Q2YvgEX+VJ8wty50fav+
+	 Ad9cY5qKToHlp99zxRnXZtRZMz3mJMf1NnaESuAYbgH8r5pQhpc9Ydk1vDaiVDj4dU
+	 aLndCxdr47j9qH26XVlolYbHItTaRxEBRJ92aPxUtUrDZ7tL1W4IWVU8RHOlKxbfa6
+	 PRo13SA1SRkzv2L55A4MERIQYxaCNkciyKGyiXAgo1rM9KC8m8cxtVyTdvFPxno6h5
+	 nOG3SntuP6/Z8D89avNSUv/y6VKk/dSU+8bBgcUzeAZtToyvY2+N0eKbsVeqwBY1U9
+	 D0aZDtfpQqDjA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,80 +49,66 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 12 Mar 2024 17:43:01 +0200
-Message-Id: <CZRVXE96ZZA8.33VFES8S07YS9@kernel.org>
-Subject: Re: [RFC PATCH v2 3/3] tpm: of: If available use linux,sml-log to
- get the log and its size
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Stefan Berger" <stefanb@linux.ibm.com>, <mpe@ellerman.id.au>,
- <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Date: Tue, 12 Mar 2024 17:50:57 +0200
+Message-Id: <CZRW3GY5O5C0.R5HY5SOFCFJA@kernel.org>
 Cc: <linux-kernel@vger.kernel.org>, <rnsastry@linux.ibm.com>,
- <peterhuewe@gmx.de>, <viparash@in.ibm.com>, <devicetree@vger.kernel.org>,
- <jsnitsel@redhat.com>
+ <peterhuewe@gmx.de>, <viparash@in.ibm.com>
+Subject: Re: [PATCH 2/2] tpm: of: If available Use linux,sml-log to get the
+ log and its size
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Michael Ellerman" <mpe@ellerman.id.au>, "Stefan Berger"
+ <stefanb@linux.ibm.com>, <linux-integrity@vger.kernel.org>,
+ <linuxppc-dev@lists.ozlabs.org>
 X-Mailer: aerc 0.17.0
-References: <20240311132030.1103122-1-stefanb@linux.ibm.com>
- <20240311132030.1103122-4-stefanb@linux.ibm.com>
- <CZR7B45P71XS.53XNZD9FWZSL@kernel.org>
- <916fb19b-daf8-4c1b-bc25-f071d2b3ae33@linux.ibm.com>
-In-Reply-To: <916fb19b-daf8-4c1b-bc25-f071d2b3ae33@linux.ibm.com>
+References: <20240306155511.974517-1-stefanb@linux.ibm.com>
+ <20240306155511.974517-3-stefanb@linux.ibm.com>
+ <CZNS7FO53BHK.6NO93P0C0VY5@kernel.org>
+ <CZNS9K4BJPQ8.2MD4WZS8YMI3W@kernel.org>
+ <663a3834-056e-4dda-99dd-16ee8734100e@linux.ibm.com>
+ <877ci74u0w.fsf@mail.lhotse>
+In-Reply-To: <877ci74u0w.fsf@mail.lhotse>
 
-On Mon Mar 11, 2024 at 10:33 PM EET, Stefan Berger wrote:
->
->
-> On 3/11/24 16:25, Jarkko Sakkinen wrote:
-> > On Mon Mar 11, 2024 at 3:20 PM EET, Stefan Berger wrote:
-> >> If linux,sml-log is available use it to get the TPM log rather than th=
-e
-> >> pointer found in linux,sml-base. This resolves an issue on PowerVM and=
- KVM
-> >> on Power where after a kexec the memory pointed to by linux,sml-base m=
-ay
-> >> have become inaccessible or corrupted. Also, linux,sml-log has replace=
-d
-> >> linux,sml-base and linux,sml-size on these two platforms.
-> >>
-> >> Keep the handling of linux,sml-base/sml-size for powernv platforms tha=
-t
-> >> provide the two properties via skiboot.
-> >>
-> >> Fixes: c5df39262dd5 ("drivers/char/tpm: Add securityfs support for eve=
-nt log")
-> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> >=20
-> > I'm worried about not being up to date and instead using "cached" value=
-s
-> > when verifying anything from a security chip. Does this guarantee that
-> > TPM log is corrupted and will not get updated somehow?
->
->
-> What do you mean 'guarantee that TPM log is corrupted'?
-
-I presume that this is for power architecture but I have no idea what
-leads log being corrupted, and is the scope all of that that arch or
-some subset of CPUs.
-
-The commit message is not very detailed on kexec scenario. It more like
-assumes that reader knows all the detail beforehand. So probably this
-will start to make sense once the backing story is improved, that's
-all.
-
-> The TPM was handed over from the firmware to Linux and the firmware then=
+On Tue Mar 12, 2024 at 12:35 PM EET, Michael Ellerman wrote:
+> Stefan Berger <stefanb@linux.ibm.com> writes:
+> > On 3/7/24 15:00, Jarkko Sakkinen wrote:
+> >> On Thu Mar 7, 2024 at 9:57 PM EET, Jarkko Sakkinen wrote:
+> >>> in short summary: s/Use/use/
+> >>>
+> >>> On Wed Mar 6, 2024 at 5:55 PM EET, Stefan Berger wrote:
+> >>>> If linux,sml-log is available use it to get the TPM log rather than =
+the
+> >>>> pointer found in linux,sml-base. This resolves an issue on PowerVM a=
+nd KVM
+> >>>> on Power where after a kexec the memory pointed to by linux,sml-base=
+ may
+> >>>> have been corrupted. Also, linux,sml-log has replaced linux,sml-base=
+ and
+> >>>> linux,sml-size on these two platforms.
+> >>>>
+> >>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> >>>
+> >>> So shouldn't this have a fixed tag, or not?
+> >>=20
+> >> In English: do we want this to be backported to stable kernel releases=
+ or not?
+> >
+> > Ideally, yes. v3 will have 3 patches and all 3 of them will have to be=
 =20
-> freed all memory associated with the log and will then not create a new=
-=20
-> log or touch the TPM or do anything that would require an update to the=
-=20
-> handed-over log. Linux also does not append to the firmware log. So=20
-> whatever we now find in linux,sml-log would be the latest firmware log=20
-> and the state of the 'firmware PCRs' computed from it should correspond=
-=20
-> to the current state of the 'firmware PCRs'.
+> > backported *together* and not applied otherwise if any one of them=20
+> > fails. Can this be 'guaranteed'?
+>
+> You can use Depends-on: <previous commit SHA> to indicate the relationshi=
+p.
+>
+> cheers
 
-So on what CPU this happens and is there any bigger picture for that
-design choice in the firmware?
+Thanks, I've missed depends-on tag.
 
-If it is a firmware bug, this should emit FW_BUG log message. If not,
-then this commit message should provide the necessary context.
+Stefan, please add also "Cc: stable@vger.kernel.org" just to make sure
+that I don't forget to add it.
+
+Right, and since these are so small scoped commits, and bug fixes in
+particular, it is also possible to do PR during the release cycle.
 
 BR, Jarkko
 
