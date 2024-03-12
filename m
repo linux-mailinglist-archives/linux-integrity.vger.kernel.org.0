@@ -1,222 +1,103 @@
-Return-Path: <linux-integrity+bounces-1731-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1732-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83D7F8795CC
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 15:14:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51A28879758
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 16:18:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B4A9283D1C
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 14:14:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8259D1C20ED1
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Mar 2024 15:18:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591227AE61;
-	Tue, 12 Mar 2024 14:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578FF33E5;
+	Tue, 12 Mar 2024 15:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VLEM8cLn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h1Lmwl5P"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6287AE4E;
-	Tue, 12 Mar 2024 14:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B25E7BB04;
+	Tue, 12 Mar 2024 15:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710252789; cv=none; b=ZSbl/CKUQMiHOSaJ5FA82IwL5plWiLJmTZTTvoOz3KcSElyrRD3sOePJAhkE31NZfq9JG/XMVgnMMugNxU9+IuENIZm9IgDBVqdwX8B+kBQMyiWo68KnDURlRPvX5IhgV6MkmGLbqFZhQ/TPxOlardxtmSafw4kcf8fcPMo8BR4=
+	t=1710256732; cv=none; b=sJTii9dSzgt4yIIUMSXp2l1Whs6rjG6zOpP1KvNu44QLs/Qqc6MDICUGX7FttjVyg1lx+pqExYl7bQkQ0DJjA5m6ruOy0nHL2jzOwzpq+v602Q/E5nll8oNbkyP87dBIRAqoToTLg5R5EoyVZuqwIVI2eiXJbgJMS2hsTFdsKSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710252789; c=relaxed/simple;
-	bh=p3Bfd3KPUb2xfSPghKDEQFSWtw3zkwmPyWErXe5BUv4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tO5VosfaET+WDG/yNHyMN/P4JhNldAJY8PygoxZqTmS5LGIEr4+mnR5A8T6UFjb8xOhGvt7I197GO0/G3POUsk40Y8vBW/HmcPnlc+TK5YGLlSapxZwDygah+uaSaWJ7P7zPlzP/gnrNLrn3tRElAW07f56iHw1JFA5PdBwhjFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VLEM8cLn; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42CDxwCu013802;
-	Tue, 12 Mar 2024 14:12:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=C/7Wo3Do9rVfY4C0hJPRuEoQ8N6r53SaOQYqtVwZzig=;
- b=VLEM8cLnKe7hSl2BHsW5/6ET7DMGZHe1WlNQnCSs/9y/UMGi7F6LibLPkyTQFZGdi0h/
- ebMEVYj8o1i2M48eR6qdKIeYsOjTCw7YdKvYL4BQpr+iAmEJaKLDODZPlIWuzHx4p6qr
- 4Rkg0nRl373kvJiSMigLb5pHaNSMDcy6x8nTvPBg6/whjtSs1IA9RDCn0WfI+pnq1St4
- JbxJ5XtzKCYmCw6DWHdqqYC5pvCinbmYXOF+JcnNYqqXBdjGsrBnbL0MaR4SIFN79RH+
- 3Xrmd22/2m5tiHK8OOUBhUT4PZW/HQdudV2glipjNNORSRuY58pO6EzazNuEG2pSNWUB nA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wtre507sk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Mar 2024 14:12:47 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42CE06Lw014522;
-	Tue, 12 Mar 2024 14:12:47 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wtre507s3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Mar 2024 14:12:47 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42CBNxhS018128;
-	Tue, 12 Mar 2024 14:12:46 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ws23t7q89-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Mar 2024 14:12:46 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42CEChpw44433916
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 Mar 2024 14:12:45 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 014A65806B;
-	Tue, 12 Mar 2024 14:12:43 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ECE5F58059;
-	Tue, 12 Mar 2024 14:12:41 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 12 Mar 2024 14:12:41 +0000 (GMT)
-Message-ID: <cbe526b1-b044-48ac-896e-6037a85171ea@linux.ibm.com>
-Date: Tue, 12 Mar 2024 10:12:41 -0400
+	s=arc-20240116; t=1710256732; c=relaxed/simple;
+	bh=e9D3nRiUkzwoDNU1WO9Mvab1qnoYPq79dDij4jjwu3k=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=DIV1v4BikQ5votpyOmv7W3jlNrfUs21j4+mxn8oVwlcjEa9B0D6SS+sJkuZr0j9LSNX4Iwndn/6iAwnufkGX3P49vH3Ig0jOV9gnf/8dIF+wDYkZ6DGCTgdy31H7YEcdxmu1uIGkbqqo69Y0PC8KTH3aaFQyLGMEpcOroJMCwJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h1Lmwl5P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74728C433F1;
+	Tue, 12 Mar 2024 15:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710256731;
+	bh=e9D3nRiUkzwoDNU1WO9Mvab1qnoYPq79dDij4jjwu3k=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=h1Lmwl5P+pE/kbBOvKdZOZM25nEbfDfgOnhEj7uMpL3lrvqSkVH9DeyjsZEf7DTHn
+	 hE+C1iPnYAEHMQA1AkgjHn1CDxlvyhvh92FjY/rUU57Pura7j3mc/fwaDBHM0YxPTJ
+	 EuoUD49zHXeU5FjxnjVBGrnmBZIibE94K4SxGOVFkYeERZITcH2CIZ7Ggl+fqv6eoh
+	 IeaxrCO5fembgp1vdfcOdBpTepENLylh42LBlMDfzVapAhKGludQ50rVeZJO1++Zzs
+	 ezP/6E7bAq6njdK/Y/+nWz0kYO4KifZtj2dwllKvMBdw9TGXv7C5OxDFZpWF+4z+48
+	 mk2gdGgwHJZMw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 2/3] dt-bindings: tpm: Add linux,sml-log to
- ibm,vtpm.yaml
-Content-Language: en-US
-To: Lukas Wunner <lukas@wunner.de>
-Cc: mpe@ellerman.id.au, linux-integrity@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        jarkko@kernel.org, rnsastry@linux.ibm.com, peterhuewe@gmx.de,
-        viparash@in.ibm.com, devicetree@vger.kernel.org, jsnitsel@redhat.com,
-        Nayna Jain <nayna@linux.ibm.com>
-References: <20240311132030.1103122-1-stefanb@linux.ibm.com>
- <20240311132030.1103122-3-stefanb@linux.ibm.com> <ZfA4TZspY7oOQ4vz@wunner.de>
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <ZfA4TZspY7oOQ4vz@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Jlo8b5KaqDw2EQmqvwb7imfqs1qNC_2U
-X-Proofpoint-GUID: SlFIL06VJjfnVsAKMoTBGlqmFhgtVArT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-12_08,2024-03-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 bulkscore=0 phishscore=0 malwarescore=0
- impostorscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2403120108
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 12 Mar 2024 17:18:45 +0200
+Message-Id: <CZRVET5930A0.3KM5Q2BAH05LT@kernel.org>
+Cc: "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+ "David Howells" <dhowells@redhat.com>, "David Woodhouse"
+ <dwmw2@infradead.org>, "herbert@gondor.apana.org.au"
+ <herbert@gondor.apana.org.au>, "davem@davemloft.net" <davem@davemloft.net>,
+ "Ard Biesheuvel" <ardb@kernel.org>, "paul@paul-moore.com"
+ <paul@paul-moore.com>, "jmorris@namei.org" <jmorris@namei.org>,
+ "serge@hallyn.com" <serge@hallyn.com>, "zohar@linux.ibm.com"
+ <zohar@linux.ibm.com>, "roberto.sassu@huawei.com"
+ <roberto.sassu@huawei.com>, "dmitry.kasatkin@gmail.com"
+ <dmitry.kasatkin@gmail.com>, "mic@digikod.net" <mic@digikod.net>,
+ "casey@schaufler-ca.com" <casey@schaufler-ca.com>, "stefanb@linux.ibm.com"
+ <stefanb@linux.ibm.com>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "keyrings@vger.kernel.org"
+ <keyrings@vger.kernel.org>, "linux-crypto@vger.kernel.org"
+ <linux-crypto@vger.kernel.org>, "linux-efi@vger.kernel.org"
+ <linux-efi@vger.kernel.org>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH RFC 1/8] certs: Introduce ability to link to a system
+ key
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Eric Snowberg" <eric.snowberg@oracle.com>
+X-Mailer: aerc 0.17.0
+References: <20240311161111.3268190-1-eric.snowberg@oracle.com>
+ <20240311161111.3268190-2-eric.snowberg@oracle.com>
+ <CZR5W1VPAVJC.2VZOSD53YNT9I@kernel.org>
+ <77AE4DEA-9474-44A1-88DC-852523C36797@oracle.com>
+In-Reply-To: <77AE4DEA-9474-44A1-88DC-852523C36797@oracle.com>
 
+On Mon Mar 11, 2024 at 11:31 PM EET, Eric Snowberg wrote:
+>
+>
+> > On Mar 11, 2024, at 1:18=E2=80=AFPM, Jarkko Sakkinen <jarkko@kernel.org=
+> wrote:
+> >=20
+> > On Mon Mar 11, 2024 at 6:11 PM EET, Eric Snowberg wrote:
+> >> + return -1;
+> >=20
+> > Missed this one: why a magic number?
+>
+> Good point, I'll change this to return -ENOKEY.  Thanks.
 
+Either that or a boolean function, which ever fits to the overall
+flow better... The upside of error code is less branching in the call
+sites. The upside of boolean is that caller exactly knows all the
+values that ever should come out as a result.
 
-On 3/12/24 07:11, Lukas Wunner wrote:
-> On Mon, Mar 11, 2024 at 09:20:29AM -0400, Stefan Berger wrote:
->> Add linux,sml-log, which carries the firmware TPM log in a uint8-array, to
->> the properties. Either this property is required or both linux,sml-base and
->> linux,sml-size are required. Add a test case for verification.
->>
->> Fixes: 82003e0487fb ("Documentation: tpm: add the IBM Virtual TPM device tree binding documentation")
-> 
-> The Fixes tag is confusing.  The patch won't even apply cleanly to the
-> v4.10 commit referenced here as the conversion to yaml happened only
-> recently with v6.8.
+Your choice ofc.
 
-Then that's as far back (6.8) as the series may be applied. I put the 
-Fixes tag on the first appearance of sml-base/sml-size since for kexec 
-this was never correct.
-
-> 
-> Why is the Fixes tag necessary in the first place?  Same question for
-> the other patches in the series.  This looks like feature work rather
-> than a fix.  Not sure whether it satisfies the "obviously correct"
-> rule per Documentation/process/stable-kernel-rules.rst.
-
-
-It is a fix for the interaction of the TPM firmware log with kexec. The 
-sml-base buffer pointer was never protected across a kexec.
-
-> 
-> 
->> --- a/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
->> +++ b/Documentation/devicetree/bindings/tpm/ibm,vtpm.yaml
->> @@ -74,8 +74,6 @@ required:
->>     - ibm,my-dma-window
->>     - ibm,my-drc-index
->>     - ibm,loc-code
->> -  - linux,sml-base
->> -  - linux,sml-size
-> 
-> I assume that either these two or the new "linux,sml-log" property
-> are (still) required?  If so, a quick grep through the bindings
-> (e.g. auxdisplay/img,ascii-lcd.yaml) shows that the following
-> might work:
-> 
-> required:
->    - ...
-> 
-> oneOf:
->    - required:
->        - linux,sml-base
->    - required:
->        - linux,sml-log
-> 
-You're right, they need to be here since examples could now omit 
-sml-base or sml-log. I added them. Thanks.
-
-> 
->> --- a/Documentation/devicetree/bindings/tpm/tpm-common.yaml
->> +++ b/Documentation/devicetree/bindings/tpm/tpm-common.yaml
->> @@ -30,6 +30,11 @@ properties:
->>         size of reserved memory allocated for firmware event log
->>       $ref: /schemas/types.yaml#/definitions/uint32
->>   
->> +  linux,sml-log:
->> +    description:
->> +      Content of firmware event log
-> 
-> Please add one or two sentences of context so that readers don't
-> need to use git blame + git log to find out what this is for.
-> (Mention at least that the property may be used to pass the log
-> to a kexec kernel.)
-
-Ok, will do:
-
-Content of firmware event log embedded in device tree to be safely 
-carried across a kexec soft reboot.
-
-
-
-> 
-> 
->> -# must only have either memory-region or linux,sml-base
->> +# must only have either memory-region or linux,sml-base/size or linux,sml-log
->>   # as well as either resets or reset-gpios
->>   dependentSchemas:
->>     memory-region:
->>       properties:
->>         linux,sml-base: false
->> +      linux,sml-log: false
->>     linux,sml-base:
->>       properties:
->>         memory-region: false
->> +      linux,sml-log: false
->> +  linux,sml-log:
->> +    properties:
->> +      memory-region: false
->> +      linux,sml-base: false
->> +      linux,sml-size: false
-> 
-> Could you add "linux,sml-size: false" to "memory-region" as well
-> while at it for consistency?
-
-Done. Thanks.
-
-    Stefan
-> 
-> Thanks,
-> 
-> Lukas
+BR, Jarkko
 
