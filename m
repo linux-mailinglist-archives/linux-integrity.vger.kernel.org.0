@@ -1,479 +1,677 @@
-Return-Path: <linux-integrity+bounces-1751-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1753-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48A5E87C14C
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Mar 2024 17:32:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 035FB87D837
+	for <lists+linux-integrity@lfdr.de>; Sat, 16 Mar 2024 04:36:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F203F282D48
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Mar 2024 16:32:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0596D1C21052
+	for <lists+linux-integrity@lfdr.de>; Sat, 16 Mar 2024 03:36:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2CCB54F8D;
-	Thu, 14 Mar 2024 16:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC69F6AA1;
+	Sat, 16 Mar 2024 03:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dfS+eR7X"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="rfGKosMr"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C62F1A38D0
-	for <linux-integrity@vger.kernel.org>; Thu, 14 Mar 2024 16:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8D794689;
+	Sat, 16 Mar 2024 03:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710433957; cv=none; b=lJdrqeJm0X/ws6E+DfjNHMaaafwdLsCRsPCiygvE1RgaLAsWWm0QsAv+/F1QLx7c+E2WuQvtc6HzYHkxHN9/dRBRZbduVcTTqYrv2Dqo+vuwz4/gG8HJz7NBmVlc90qOBsDyl4iEaJLioFourW4H0iPtMruTE3kdcXs/hEdIQT8=
+	t=1710560156; cv=none; b=e+pkFShBF776jkONYZYKApT09YkAx53y+bsvLMfFkSy5Prc4I+E1esXnfgKVU0JmCmGWblLRlhiTds8BXvqX0NBua519IHXSBUNHFLloJ4zEKN95C13+p+EtHrNlhpKbUjvivbnEkr2482pW4d7PznAUF6ouE5G+T2jTaz+A7nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710433957; c=relaxed/simple;
-	bh=Qe0t1TcVCEruv07rlH97vl9/LqQYFcy9xuXa+O0WrxA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hexs6vTauSF5XQ+8tk2OelEh+vqF5U97kTJxLNj2YeswZ46RSsG3t65JA+/vlnt8VsD1sOqC6148gWRs82vdcLTfoOdjcnxlcZdoE3MMsgjo/XRR74mpsahP28L0uzqxZMlT/YbmX2392vyE4yTQQRI8eTqTzsjFxeduPwXkwnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dfS+eR7X; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dcd7c526cc0so1017501276.1
-        for <linux-integrity@vger.kernel.org>; Thu, 14 Mar 2024 09:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710433954; x=1711038754; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uds1Z9DImfymo58ipQzTwJmV/E26K8CLwyM1MakUJRg=;
-        b=dfS+eR7XbZ/H5F0TnAm2jE/owIAovqGAgXGmja7BDxAY+QsbRx07gfUfULXf2ZyVDX
-         3OODtBGl/1ghzvd7Ar3nZ70NJDlZS8AuEdR/kxlQ1DzV+E7PLFRonX4F+u09k89+uPWx
-         CLgDN6r2TPVntAdmBqOV/y5n7Izp+rcYJG8d2SjUabmVr5+YILZ3oLBp90uhrQGbnntf
-         d0UmMaciH6sDMOea6v51gMKSkiIx4f4ZwWdreQDgJ/whyhQVYYrBeMNw26uJan7uUj9N
-         palIE1sxgeTh2oAkbFk52XTySb5D2eiLGqA62qMTImwG+6aLJRz79LfWg0EnSYmnz3ro
-         gq5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710433954; x=1711038754;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uds1Z9DImfymo58ipQzTwJmV/E26K8CLwyM1MakUJRg=;
-        b=NqKGnNdt7asJqWtluUabrfrctwi2mgritkvS3He//WCWN1oRRNDo7kdcfxNe+KCBHw
-         HTsKJ3a30nX2wUTWvodTzGfzA7r580aKzgNx2POpChuyxxBC6NOICaBcsaZNB9HpWJLJ
-         mig57Izn7gLl/wmhIeZ8tXJwQ/FQoqYvULuFfiDlh4JJRHPgqr+ZVKtKaMHHD0z+tt47
-         t+iohkGO5LqDMbWA00izZitOGadGycPei/EcSziPfXSuPEiRInFFyqMMOv8muhtSxc3m
-         Ro5PIIGhLjXVca1aqW3NF5VUCX5pUF9IL1Zvi/D09aS0DMzSONIfr9tx0Pbmf6RoPTvN
-         /XnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCULX8SPORhio+3vhFZdJj/jirYrqmZK8J7f2eaUwxlcaTlbPqSLuofUDvylOzepejz7TVOMibeeRHwV4tOPlFNLd1CPq60BPL0BtrM3qgLa
-X-Gm-Message-State: AOJu0Yw9UcByzHAAzAH2dpiLVuDhJiO3EXPjroM2mV045xsh9uoypKag
-	gj2sHzsVHoTcdY4DO+s6g7ykbjcXY/uyjf3QBmlkHIcqXOQL+TCqHbtD3t9609mH51xOxbhDgkh
-	CpsSvmxMK8if6djgY+McNJbY1ycg=
-X-Google-Smtp-Source: AGHT+IGxHg9xwMytALaTbibPJMILtEZ+ZV+B3BfFy58d6S/HdtshHDoaOvaime7bkYeISzbbqiW7WDFY0Ef10XUCFS8=
-X-Received: by 2002:a25:1485:0:b0:dcf:411f:e78 with SMTP id
- 127-20020a251485000000b00dcf411f0e78mr1858492ybu.25.1710433954337; Thu, 14
- Mar 2024 09:32:34 -0700 (PDT)
+	s=arc-20240116; t=1710560156; c=relaxed/simple;
+	bh=c740wTqD8bMLD38aCzGan0oYiTvMK10RGcpZmw1UHeg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=jxU9HzYMMxb3+Ki4QVHJVsZNI5IY4D2tjX//8FaWwkiauSakgvHjSMJAiVtvXhOHcq5WU/+dKe+N9AUWJcu7rXhC3h0AkS5MwykdzLqRQ8pBp+/g4ilIFznXqySjMuy1xd0haj8u5iVTETmWqTV13i2SBwCPns6nEOXlnPhtOaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=rfGKosMr; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+	id 21D7E20B74C0; Fri, 15 Mar 2024 20:35:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 21D7E20B74C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1710560153;
+	bh=Aboxj7lHpjIZYTbYJfggRHruyXpblNvpyR36NJSiRWY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rfGKosMrYaQ9IhhOW/gmRkZvN29W5CYP9LxcvQ92xfQy3VEfxEjPGP+QsOc2KPq0N
+	 kM76L/iGmuoC3OHKS1OehHB0KgMpezU14E2Fx7g9MnA/TlEqFYibdRvyw8Tuk3d2Wh
+	 z7iPVX/fzH56wwfCiFb1qqr/4uag1k07wzcL6Fqg=
+From: Fan Wu <wufan@linux.microsoft.com>
+To: corbet@lwn.net,
+	zohar@linux.ibm.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	tytso@mit.edu,
+	ebiggers@kernel.org,
+	axboe@kernel.dk,
+	agk@redhat.com,
+	snitzer@kernel.org,
+	eparis@redhat.com,
+	paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	fsverity@lists.linux.dev,
+	linux-block@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fan Wu <wufan@linux.microsoft.com>
+Subject: [RFC PATCH v15 00/21] Integrity Policy Enforcement LSM (IPE)
+Date: Fri, 15 Mar 2024 20:35:30 -0700
+Message-Id: <1710560151-28904-1-git-send-email-wufan@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org> <20240307224957.29432-1-adamoa@gmail.com>
- <CZR6VBRUEPKW.26B7HTOJZ0ANX@kernel.org> <CAHwaaX8bWOFW2bi6tKpxgf2Cp_vKg5Eqhq618VEur98s+OmD=A@mail.gmail.com>
- <CAHwaaX-j37rq4+DCNSRAgPmeQmrYZiX2sLv4ugBjPJSj9LPxcg@mail.gmail.com>
-In-Reply-To: <CAHwaaX-j37rq4+DCNSRAgPmeQmrYZiX2sLv4ugBjPJSj9LPxcg@mail.gmail.com>
-From: Adam Alves <adamoa@gmail.com>
-Date: Thu, 14 Mar 2024 13:32:23 -0300
-Message-ID: <CAHwaaX9awXmwH7H26mLfKEk=OHB+BtUAy_6Hrp6RwJ79e5juCA@mail.gmail.com>
-Subject: Re: [PATCH v2] tpm: Fix suspend/shutdown on some boards by preserving
- chip Locality
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Fixing a typo: I patched the 6.8.0 kernel.
+Overview:
+---------
 
-Em qui., 14 de mar. de 2024 =C3=A0s 13:31, Adam Alves <adamoa@gmail.com> es=
-creveu:
->
-> Hi Jarkko,
->
-> I have an update here. I would like you to check if it makes sense
-> before I submit a patch.
->
-> The problem might be related to the chip itself which leaves the idle
-> state whenever the locality is relinquished.
->
-> I probed the chip while operating and noted that the
-> TPM_CRB_CTRL_STS_0.tpmIdle bit (located at `regs_t->ctrl_sts` on
-> `crb_priv` structure in tpm_crb.c) is always cleared whenever the
-> locality is relinquished.
->
-> The result is that this chip never becomes idle since after going idle
-> the locality is relinquished (`tpm_chip_stop` function in tpm-chip.c).
->
-> I patched the 7.8.0 kernel for bypassing the `tpm_relinquish_locality`
-> call and so far the PC is suspending and power off normally,
-> TPM_CRB_CTRL_STS_0.tpmIdle remains set whenever the device is not used
-> now.
->
-> I believe this is related to this specific chip, if the fix remains
-> working for 2 weeks I will submit the patch. Please advise me if it
-> makes sense.
->
-> Best regards,
-> Adam
->
-> Em qua., 13 de mar. de 2024 =C3=A0s 14:02, Adam Alves <adamoa@gmail.com> =
-escreveu:
-> >
-> > Hi Jarkko,
-> >
-> > Thank you very much for kindly reviewing this proposal.
-> >
-> > After one week without any issues with my PC hanging, it happened
-> > again. It seems that the fix I am proposing is not final (it only
-> > reduced the frequency since it always happened when I shutdown after
-> > couple hours of power up time and now it only happened after two weeks
-> > with a similar usage rate).
-> >
-> > I will share with you the data you requested below.
-> >
-> > > The lacking information here is the CPU model (/proc/cpuinfo), on
-> > > which kernel version the bug was produced and what kind of TPM the
-> > > system has (discrete chip or firmware TPM should be easy to check
-> > > from BIOS).
-> >
-> > CPU model: Intel(R) Core(TM) i7-10700F CPU @ 2.90GHz
-> > I am attaching data from /proc/cpuinfo
-> >
-> > TPM: No info on mainboard documentation regarding TPM. BIOS is not
-> > clear whether or not it is discrete or firmware. Based on dmidecode
-> > (attached) I get the following:
-> > TPM Device
-> >         Vendor ID: INTC
-> >         Specification Version: 2.0
-> >         Firmware Revision: 500.16
-> >         Description: INTEL
-> >         Characteristics:
-> >                 Family configurable via platform software support
-> >         OEM-specific Information: 0x00000000
-> > I also extracted TPM_CRB_INTF_ID_0 from the TPM: `a13a808600084311`
-> > (Vendor ID 8086, Device ID a13a, Revision ID 00). The only match I
-> > found while browsing for this device ID is 100 Series/C230 Series
-> > Chipset Family MEI Controller #1, which is a PCI device, so it might
-> > not be related to the TPM.
-> >
-> > The driver bound to the tpm0 device is tpm_crb. The disassembled TPM2
-> > ACPI table is also attached in case it helps.
-> >
-> > The bug was reproduced from upstream kernel version 6.8.0 (attached
-> > build .config that I used).
-> >
-> > > Also, which firmwre version you have and have you tested with the
-> > > most up to date firmware (BIOS)?
-> >
-> > I have the most updated firmware provided by ASUS: TUF GAMING
-> > B460M-PLUS BIOS 1601
-> >
-> > > What is "the ACPI command"? Refer to concrete items instead of
-> > > asking to guess what you is the ACPI command for you.
-> >
-> > I enabled ACPI_DEBUG on my kernel to know where the it was actually
-> > hanging. The last function is actually the last function that should
-> > be called by the kernel for a successful shutdown:
-> > hwsleep-0078 hw_legacy_sleep       : Entering sleep state [S5]^M
-> > hwregs-0460 hw_write_pm1_control  : ----Entry^M
-> > hwvalid-0097 hw_validate_io_request: ----Entry^M
-> > hwvalid-0111 hw_validate_io_request: Address 0000000000001804
-> > LastAddress 0000000000001805 Length 2  hwvalid-0128
-> > hw_validate_io_request: ----Exit- AE_OK^M
-> > hwregs-0360 hw_write              : Wrote: 0000000000001C01 width 16
-> > to 0000000000001804 (SystemIO)^M
-> > hwregs-0473 hw_write_pm1_control  : ----Exit- AE_OK^M
-> > hwregs-0460 hw_write_pm1_control  : ----Entry^M
-> > hwvalid-0097 hw_validate_io_request: ----Entry^M
-> > hwvalid-0111 hw_validate_io_request: Address 0000000000001804
-> > LastAddress 0000000000001805 Length 2  hwvalid-0128
-> > hw_validate_io_request: ----Exit- AE_OK^M
-> >
-> > It is writing both SLP_TYP + SLP_EN to ACPI PM1b_CNT registers (as
-> > expected by specification). I checked the flags and it is in line with
-> > the flags required by the system ACPI tables.
-> >
-> > I understand from that that the system is hanging after ACPI firmware
-> > takes over. The same issue happens if I force a EFI shutdown.
-> >
-> > Since the the BUG has appeared again even with the fix implemented, I
-> > am holding this patch for now until I find a solution that permanently
-> > fixes the issue. The next time I try to submit a patch that will
-> > comply with all your suggestions, thank you very much.
-> >
-> > I would appreciate if you had any hint on how I could keep digging to
-> > find the issue that might be causing this bug. This is an issue that
-> > only happens when I shutdown from Linux and my TPM is activated in
-> > BIOS. That's why my guess is that this is what should be causing it.
-> > From Windows, shutdown is always flawless.
-> >
-> > Best regards,
-> > Adam
-> >
-> > >
-> > > > chip expecting it to be in Locality 0 as expected by TCG PC Client
-> > > > Platform Firmware Profile Version 1.06 Revision 52 (3.1.1 =E2=80=93=
- Pre-OS
-> > > > Environment) and then when it fails to do so it simply halts the
-> > > > whole system.
-> > >
-> > > We don't speculate about the root cause here, only document it.
-> > > Please move this paragraph before diffstat (see below)>
-> > >
-> > > > Enable a user to configure the kernel through
-> > > > =E2=80=9Ctpm.locality_on_suspend=3D1=E2=80=9D boot parameter so tha=
-t the locality is set
-> > > > before suspend/shutdown in order to diagnose whether or not the boa=
-rd is
-> > > > one of the buggy ones that require this workaround. Since this bug =
-is
-> > > > related to the board/platform instead of the specific TPM chip, cal=
-l
-> > > > dmi_check_system on the tpm_init function so that this setting is
-> > > > automatically enabled for boards specified in code (ASUS TUF GAMING
-> > > > B460M-PLUS already included) =E2=80=93 automatic configuration only=
- works in
-> > > > case CONFIG_DMI is set though, since dmi_check_system is a non-op w=
-hen
-> > > > CONFIG_DMI is not set.
-> > >
-> > > Please describe what the *kernel command-line" (for clarity
-> > > sake) semantically means.
-> > >
-> > > Also please remove anything about diangnosing. We care only
-> > > about fixes.
-> > >
-> > > >
-> > > > In case =E2=80=9Ctpm.locality_on_suspend=3D0=E2=80=9D (the default)=
- don't change any
-> > > > behavior thus preserving current functionality of any other board
-> > > > except ASUSTeK COMPUTER INC. TUF GAMING B460M-PLUS and possibly fut=
-ure
-> > > > boards as we successfully diagnose other boards with the same issue
-> > > > fixed by using =E2=80=9Ctpm.locality_on_suspend=3D1=E2=80=9D.
-> > >
-> > > This neither documents the default value. I'm also lost did setting
-> > > this "1" or "0" fix the issue in your case?
-> > >
-> > > So: firmware version and being up-to-date is important and also this
-> > > needs to be reproduciable with the mainline Linux tree, not distro
-> > > kernel or custom kernel.
-> > >
-> > > >
-> > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217890
-> > > > Signed-off-by: Adam Alves <adamoa@gmail.com>
-> > > > ---
-> > >
-> > > <cover letter>
-> > >
-> > > OK, I'll try to check what is done here but please re-read
-> > > "describing your changes" before sending next version:
-> > >
-> > > https://www.kernel.org/doc/html/latest/process/submitting-patches.htm=
-l#describe-your-changes
-> > >
-> > > > v1->v2: fix formatting issues and simplified tpm_chip_stop code.
-> > > >
-> > > >  drivers/char/tpm/tpm-chip.c      | 12 +++++++++++
-> > > >  drivers/char/tpm/tpm-interface.c | 37 ++++++++++++++++++++++++++++=
-++++
-> > > >  drivers/char/tpm/tpm.h           |  1 +
-> > > >  include/linux/tpm.h              |  1 +
-> > > >  4 files changed, 51 insertions(+)
-> > > >
-> > > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chi=
-p.c
-> > > > index 42b1062e33cd..a183e1355289 100644
-> > > > --- a/drivers/char/tpm/tpm-chip.c
-> > > > +++ b/drivers/char/tpm/tpm-chip.c
-> > > > @@ -137,6 +137,12 @@ EXPORT_SYMBOL_GPL(tpm_chip_start);
-> > > >   */
-> > > >  void tpm_chip_stop(struct tpm_chip *chip)
-> > > >  {
-> > > > +     if (chip->flags & TPM_CHIP_FLAG_PRESERVE_LOCALITY) {
-> > >
-> > > The commit message did not explain what this flag is and what is its
-> > > purpose.
-> > >
-> > > Also why you need to populate global flag inside chip, or the value
-> > > of it?
-> > >
-> > > Why this is not just:
-> > >
-> > >         if (tpm_locality_on_suspend) {
-> > > ?
-> > >
-> > >
-> > > > +             if (chip->locality !=3D 0)
-> > > > +                     tpm_request_locality(chip);
-> > >
-> > > This will unconditionally skip calling tpm_request_locality() because
-> > > Linux only uses locality 0. Not sure what good does this make.
-> > >
-> > > > +             return;
-> > > > +     }
-> > > > +
-> > > >       tpm_go_idle(chip);
-> > > >       tpm_relinquish_locality(chip);
-> > > >       tpm_clk_disable(chip);
-> > > > @@ -291,6 +297,9 @@ int tpm_class_shutdown(struct device *dev)
-> > > >  {
-> > > >       struct tpm_chip *chip =3D container_of(dev, struct tpm_chip, =
-dev);
-> > > >
-> > > > +     if (tpm_locality_on_suspend)
-> > > > +             chip->flags |=3D TPM_CHIP_FLAG_PRESERVE_LOCALITY;
-> > > > +
-> > > >       down_write(&chip->ops_sem);
-> > > >       if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-> > > >               if (!tpm_chip_start(chip)) {
-> > > > @@ -668,6 +677,9 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
-> > > >   */
-> > > >  void tpm_chip_unregister(struct tpm_chip *chip)
-> > > >  {
-> > > > +     if (tpm_locality_on_suspend)
-> > > > +             chip->flags |=3D TPM_CHIP_FLAG_PRESERVE_LOCALITY;
-> > > > +
-> > > >       tpm_del_legacy_sysfs(chip);
-> > > >       if (tpm_is_hwrng_enabled(chip))
-> > > >               hwrng_unregister(&chip->hwrng);
-> > > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tp=
-m-interface.c
-> > > > index 66b16d26eecc..7f770ea98402 100644
-> > > > --- a/drivers/char/tpm/tpm-interface.c
-> > > > +++ b/drivers/char/tpm/tpm-interface.c
-> > > > @@ -26,6 +26,7 @@
-> > > >  #include <linux/suspend.h>
-> > > >  #include <linux/freezer.h>
-> > > >  #include <linux/tpm_eventlog.h>
-> > > > +#include <linux/dmi.h>
-> > > >
-> > > >  #include "tpm.h"
-> > > >
-> > > > @@ -382,6 +383,36 @@ int tpm_auto_startup(struct tpm_chip *chip)
-> > > >       return rc;
-> > > >  }
-> > > >
-> > > > +/*
-> > > > + * Bug workaround - some boards expect the TPM to be on Locality 0
-> > > > + * before suspend/shutdown, halting the system otherwise before
-> > > > + * suspend and shutdown. Change suspend behavior for these cases.
-> > > > + */
-> > > > +bool tpm_locality_on_suspend;
-> > > > +module_param_named(locality_on_suspend, tpm_locality_on_suspend, b=
-ool, 0644);
-> > > > +MODULE_PARM_DESC(locality_on_suspend,
-> > > > +              "Put TPM at locality 0 before suspend/shutdown.");
-> > > > +
-> > > > +static int __init tpm_set_locality_on_suspend(const struct dmi_sys=
-tem_id *system_id)
-> > > > +{
-> > > > +     pr_info("Board %s: TPM locality preserved before suspend/shut=
-down.\n",
-> > > > +             system_id->ident);
-> > >
-> > > Please remove pr_info(), we do not want to bloat klog.
-> > >
-> > > > +     tpm_locality_on_suspend =3D true;
-> > > > +
-> > > > +     return 0;
-> > > > +}
-> > > > +
-> > > > +static const struct dmi_system_id tpm_board_quirks[] __initconst =
-=3D {
-> > >
-> > > The commit message did not introduce this. Also should have inline
-> > > documentation.
-> > >
-> > > /*
-> > >  * What the heck this.
-> > >  */
-> > >
-> > > > +     {
-> > > > +             .ident =3D "TUF GAMING B460M-PLUS",
-> > > > +             .matches =3D {
-> > > > +                     DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER=
- INC."),
-> > > > +                     DMI_MATCH(DMI_BOARD_NAME, "TUF GAMING B460M-P=
-LUS"),
-> > > > +             },
-> > > > +             .callback =3D tpm_set_locality_on_suspend,
-> > > > +     },
-> > > > +};
-> > > > +
-> > > >  /*
-> > > >   * We are about to suspend. Save the TPM state
-> > > >   * so that it can be restored.
-> > > > @@ -394,6 +425,9 @@ int tpm_pm_suspend(struct device *dev)
-> > > >       if (!chip)
-> > > >               return -ENODEV;
-> > > >
-> > > > +     if (tpm_locality_on_suspend)
-> > > > +             chip->flags |=3D TPM_CHIP_FLAG_PRESERVE_LOCALITY;
-> > > > +
-> > > >       if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
-> > > >               goto suspended;
-> > > >
-> > > > @@ -431,6 +465,7 @@ int tpm_pm_resume(struct device *dev)
-> > > >       if (chip =3D=3D NULL)
-> > > >               return -ENODEV;
-> > > >
-> > > > +     chip->flags &=3D ~TPM_CHIP_FLAG_PRESERVE_LOCALITY;
-> > > >       chip->flags &=3D ~TPM_CHIP_FLAG_SUSPENDED;
-> > > >
-> > > >       /*
-> > > > @@ -476,6 +511,8 @@ static int __init tpm_init(void)
-> > > >  {
-> > > >       int rc;
-> > > >
-> > > > +     dmi_check_system(tpm_board_quirks);
-> > > > +
-> > > >       rc =3D class_register(&tpm_class);
-> > > >       if (rc) {
-> > > >               pr_err("couldn't create tpm class\n");
-> > > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > > > index 61445f1dc46d..f2657b611b81 100644
-> > > > --- a/drivers/char/tpm/tpm.h
-> > > > +++ b/drivers/char/tpm/tpm.h
-> > > > @@ -236,6 +236,7 @@ extern dev_t tpm_devt;
-> > > >  extern const struct file_operations tpm_fops;
-> > > >  extern const struct file_operations tpmrm_fops;
-> > > >  extern struct idr dev_nums_idr;
-> > > > +extern bool tpm_locality_on_suspend;
-> > > >
-> > > >  ssize_t tpm_transmit(struct tpm_chip *chip, u8 *buf, size_t bufsiz=
-);
-> > > >  int tpm_get_timeouts(struct tpm_chip *);
-> > > > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > > > index 4ee9d13749ad..1fbb33f386d1 100644
-> > > > --- a/include/linux/tpm.h
-> > > > +++ b/include/linux/tpm.h
-> > > > @@ -284,6 +284,7 @@ enum tpm_chip_flags {
-> > > >       TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-> > > >       TPM_CHIP_FLAG_SUSPENDED                 =3D BIT(8),
-> > > >       TPM_CHIP_FLAG_HWRNG_DISABLED            =3D BIT(9),
-> > > > +     TPM_CHIP_FLAG_PRESERVE_LOCALITY         =3D BIT(10),
-> > > >  };
-> > > >
-> > > >  #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
-> > >
-> > >
-> > > BR, Jarkko
-> >
-> >
-> >
-> > --
-> > Adam Oliveira Alves
->
->
->
-> --
-> Adam Oliveira Alves
+IPE is a Linux Security Module which takes a complimentary approach to
+access control. Whereas existing mandatory access control mechanisms
+base their decisions on labels and paths, IPE instead determines
+whether or not an operation should be allowed based on immutable
+security properties of the system component the operation is being
+performed on.
 
+IPE itself does not mandate how the security property should be
+evaluated, but relies on an extensible set of external property providers
+to evaluate the component. IPE makes its decision based on reference
+values for the selected properties, specified in the IPE policy.
 
+The reference values represent the value that the policy writer and the
+local system administrator (based on the policy signature) trust for the
+system to accomplish the desired tasks.
 
---=20
-Adam Oliveira Alves
+One such provider is for example dm-verity, which is able to represent
+the integrity property of a partition (its immutable state) with a digest.
+
+IPE is compiled under CONFIG_SECURITY_IPE.
+
+Use Cases
+---------
+
+IPE works best in fixed-function devices: Devices in which their purpose
+is clearly defined and not supposed to be changed (e.g. network firewall
+device in a data center, an IoT device, etcetera), where all software and
+configuration is built and provisioned by the system owner.
+
+IPE is a long-way off for use in general-purpose computing: the Linux
+community as a whole tends to follow a decentralized trust model,
+known as the web of trust, which IPE has no support for as of  yet.
+There are exceptions, such as the case where a Linux distribution
+vendor trusts only their own keys, where IPE can successfully be used
+to enforce the trust requirement.
+
+Additionally, while most packages are signed today, the files inside
+the packages (for instance, the executables), tend to be unsigned. This
+makes it difficult to utilize IPE in systems where a package manager is
+expected to be functional, without major changes to the package manager
+and ecosystem behind it.
+
+DIGLIM[1] is a system that when combined with IPE, could be used to
+enable general purpose computing scenarios.
+
+Policy:
+-------
+
+IPE policy is a plain-text policy composed of multiple statements
+over several lines. There is one required line, at the top of the
+policy, indicating the policy name, and the policy version, for
+instance:
+
+  policy_name=Ex_Policy policy_version=0.0.0
+
+The policy version indicates the current version of the policy. This is
+used to prevent roll-back of policy to potentially insecure previous
+versions of the policy.
+
+The next portion of IPE policy, are rules. Rules are formed by key=value
+pairs, known as properties. IPE rules require two keys: "action", which
+determines what IPE does when it encounters a match against the policy
+and "op", which determines when that rule should be evaluated.
+
+Thus, a minimal rule is:
+
+  op=EXECUTE action=ALLOW
+
+This example rule will allow any execution. A rule is required to have the
+"op" property as the first token of a rule, and the "action" as the last
+token of the rule.
+
+Additional properties are used to restrict attributes about the files being
+evaluated. These properties are intended to be deterministic attributes
+that are resident in the kernel.
+
+For example:
+
+  op=EXECUTE dmverity_signature=FALSE action=DENY
+
+This rule with property dmverity_signature will deny any file not from
+a signed dmverity volume to be executed.
+
+All available properties for IPE described in the documentation patch of
+this series.
+
+Rules are evaluated top-to-bottom. As a result, any revocation rules,
+or denies should be placed early in the file to ensure that these rules
+are evaluated before a rule with "action=ALLOW" is hit.
+
+Any unknown syntax in IPE policy will result in a fatal error to parse
+the policy.
+
+Additionally, a DEFAULT operation must be set for all understood
+operations within IPE. For policies to remain completely forwards
+compatible, it is recommended that users add a "DEFAULT action=ALLOW"
+and override the defaults on a per-operation basis.
+
+For more information about the policy syntax, see the kernel
+documentation page.
+
+Early Usermode Protection:
+--------------------------
+
+IPE can be provided with a policy at startup to load and enforce.
+This is intended to be a minimal policy to get the system to a state
+where userspace is setup and ready to receive commands, at which
+point a policy can be deployed via securityfs. This "boot policy" can be
+specified via the config, SECURITY_IPE_BOOT_POLICY, which accepts a path
+to a plain-text version of the IPE policy to apply. This policy will be
+compiled into the kernel. If not specified, IPE will be disabled until a
+policy is deployed and activated through the method above.
+
+Policy Examples:
+----------------
+
+Allow all:
+
+  policy_name=Allow_All policy_version=0.0.0
+  DEFAULT action=ALLOW
+
+Allow only initramfs:
+
+  policy_name=Allow_All_Initramfs policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE boot_verified=TRUE action=ALLOW
+
+Allow any signed dm-verity volume and the initramfs:
+
+  policy_name=AllowSignedAndInitramfs policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE boot_verified=TRUE action=ALLOW
+  op=EXECUTE dmverity_signature=TRUE action=ALLOW
+
+Prohibit execution from a specific dm-verity volume, while allowing
+all signed volumes and the initramfs:
+
+  policy_name=ProhibitSingleVolume policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE dmverity_roothash=sha256:401fcec5944823ae12f62726e8184407a5fa9599783f030dec146938 action=DENY
+  op=EXECUTE boot_verified=TRUE action=ALLOW
+  op=EXECUTE dmverity_signature=TRUE action=ALLOW
+
+Allow only a specific dm-verity volume:
+
+  policy_name=AllowSpecific policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE dmverity_roothash=sha256:401fcec5944823ae12f62726e8184407a5fa9599783f030dec146938 action=ALLOW
+
+Allow any signed fs-verity file
+
+  policy_name=AllowSignedFSVerity policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE fsverity_signature=TRUE action=ALLOW
+
+Deny a specific fs-verity file:
+
+  policy_name=ProhibitSpecificFSVF policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE fsverity_digest=sha256:fd88f2b8824e197f850bf4c5109bea5cf0ee38104f710843bb72da796ba5af9e action=DENY
+  op=EXECUTE boot_verified=TRUE action=ALLOW
+  op=EXECUTE dmverity_signature=TRUE action=ALLOW
+
+Deploying Policies:
+-------------------
+
+First sign a plain text policy, with a certificate that is present in
+the SYSTEM_TRUSTED_KEYRING of your test machine. Through openssl, the
+signing can be done via:
+
+  openssl smime -sign -in "$MY_POLICY" -signer "$MY_CERTIFICATE" \
+    -inkey "$MY_PRIVATE_KEY" -outform der -noattr -nodetach \
+    -out "$MY_POLICY.p7s"
+
+Then, simply cat the file into the IPE's "new_policy" securityfs node:
+
+  cat "$MY_POLICY.p7s" > /sys/kernel/security/ipe/new_policy
+
+The policy should now be present under the policies/ subdirectory, under
+its "policy_name" attribute.
+
+The policy is now present in the kernel and can be marked as active,
+via the securityfs node:
+
+  echo 1 > "/sys/kernel/security/ipe/$MY_POLICY_NAME/active"
+
+This will now mark the policy as active and the system will be enforcing
+$MY_POLICY_NAME.
+
+There is one requirement when marking a policy as active, the policy_version
+attribute must either increase, or remain the same as the currently running
+policy.
+
+Policies can be updated via:
+
+  cat "$MY_UPDATED_POLICY.p7s" > \
+    "/sys/kernel/security/ipe/policies/$MY_POLICY_NAME/update"
+
+Additionally, policies can be deleted via the "delete" securityfs
+node. Simply write "1" to the corresponding node in the policy folder:
+
+  echo 1 > "/sys/kernel/security/ipe/policies/$MY_POLICY_NAME/delete"
+
+There is only one requirement to delete policies, the policy being
+deleted must not be the active policy.
+
+NOTE: Any securityfs write to IPE's nodes will require CAP_MAC_ADMIN.
+
+Integrations:
+-------------
+
+This patch series adds support for fsverity via digest and signature
+(fsverity_signature and fsverity_digest), dm-verity by digest and
+signature (dmverity_signature and dmverity_roothash), and trust for
+the initramfs (boot_verified).
+
+Please see the documentation patch for more information about the
+integrations available.
+
+Testing:
+--------
+
+KUnit Tests are available. Recommended kunitconfig:
+
+    CONFIG_KUNIT=y
+    CONFIG_SECURITY=y
+    CONFIG_SECURITYFS=y
+    CONFIG_PKCS7_MESSAGE_PARSER=y
+    CONFIG_SYSTEM_DATA_VERIFICATION=y
+    CONFIG_FS_VERITY=y
+    CONFIG_FS_VERITY_BUILTIN_SIGNATURES=y
+    CONFIG_BLOCK=y
+    CONFIG_MD=y
+    CONFIG_BLK_DEV_DM=y
+    CONFIG_DM_VERITY=y
+    CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=y
+    CONFIG_NET=y
+    CONFIG_AUDIT=y
+    CONFIG_AUDITSYSCALL=y
+    CONFIG_BLK_DEV_INITRD=y
+
+    CONFIG_SECURITY_IPE=y
+    CONFIG_IPE_PROP_DM_VERITY=y
+    CONFIG_IPE_PROP_FS_VERITY=y
+    CONFIG_SECURITY_IPE_KUNIT_TEST=y
+
+Simply run:
+
+    make ARCH=um mrproper
+    ./tools/testing/kunit/kunit.py run --kunitconfig <path/to/config>
+
+And the tests will execute and report the result.
+
+In addition, IPE has a python based integration
+test suite https://github.com/microsoft/ipe/tree/test-suite that
+can test both user interfaces and enforcement functionalities.
+
+Documentation:
+--------------
+
+There is both documentation available on github at
+https://microsoft.github.io/ipe, and Documentation in this patch series,
+to be added in-tree.
+
+Known Gaps:
+-----------
+
+IPE has two known gaps:
+
+1. IPE cannot verify the integrity of anonymous executable memory, such as
+  the trampolines created by gcc closures and libffi (<3.4.2), or JIT'd code.
+  Unfortunately, as this is dynamically generated code, there is no way
+  for IPE to ensure the integrity of this code to form a trust basis. In all
+  cases, the return result for these operations will be whatever the admin
+  configures the DEFAULT action for "EXECUTE".
+
+2. IPE cannot verify the integrity of interpreted languages' programs when
+  these scripts invoked via ``<interpreter> <file>``. This is because the
+  way interpreters execute these files, the scripts themselves are not
+  evaluated as executable code through one of IPE's hooks. Interpreters
+  can be enlightened to the usage of IPE by trying to mmap a file into
+  executable memory (+X), after opening the file and responding to the
+  error code appropriately. This also applies to included files, or high
+  value files, such as configuration files of critical system components.
+
+Appendix:
+---------
+
+A. IPE Github Repository: https://github.com/microsoft/ipe
+B. IPE Users' Guide: Documentation/admin-guide/LSM/ipe.rst
+
+References:
+-----------
+
+1: https://lore.kernel.org/bpf/4d6932e96d774227b42721d9f645ba51@huawei.com/
+
+FAQ:
+----
+
+Q: What is the difference between IMA and IPE?
+
+A: See the documentation patch for more on this topic.
+
+Previous Postings
+-----------------
+
+v1: https://lore.kernel.org/all/20200406181045.1024164-1-deven.desai@linux.microsoft.com/
+v2: https://lore.kernel.org/all/20200406221439.1469862-1-deven.desai@linux.microsoft.com/
+v3: https://lore.kernel.org/all/20200415162550.2324-1-deven.desai@linux.microsoft.com/
+v4: https://lore.kernel.org/all/20200717230941.1190744-1-deven.desai@linux.microsoft.com/
+v5: https://lore.kernel.org/all/20200728213614.586312-1-deven.desai@linux.microsoft.com/
+v6: https://lore.kernel.org/all/20200730003113.2561644-1-deven.desai@linux.microsoft.com/
+v7: https://lore.kernel.org/all/1634151995-16266-1-git-send-email-deven.desai@linux.microsoft.com/
+v8: https://lore.kernel.org/all/1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com/
+v9: https://lore.kernel.org/lkml/1675119451-23180-1-git-send-email-wufan@linux.microsoft.com/
+v10: https://lore.kernel.org/lkml/1687986571-16823-1-git-send-email-wufan@linux.microsoft.com/
+v11: https://lore.kernel.org/lkml/1696457386-3010-1-git-send-email-wufan@linux.microsoft.com/
+v12: https://lore.kernel.org/lkml/1706654228-17180-1-git-send-email-wufan@linux.microsoft.com/
+v13: https://lore.kernel.org/lkml/1709168102-7677-1-git-send-email-wufan@linux.microsoft.com/
+v14: https://lore.kernel.org/lkml/1709768084-22539-1-git-send-email-wufan@linux.microsoft.com/
+
+Changelog:
+----------
+
+v2:
+  Split the second patch of the previous series into two.
+  Minor corrections in the cover-letter and documentation
+  comments regarding CAP_MAC_ADMIN checks in IPE.
+
+v3:
+  Address various comments by Jann Horn. Highlights:
+    Switch various audit allocators to GFP_KERNEL.
+    Utilize rcu_access_pointer() in various locations.
+    Strip out the caching system for properties
+    Strip comments from headers
+    Move functions around in patches
+    Remove kernel command line parameters
+    Reconcile the race condition on the delete node for policy by
+      expanding the policy critical section.
+
+  Address a few comments by Jonathan Corbet around the documentation
+    pages for IPE.
+
+  Fix an issue with the initialization of IPE policy with a "-0"
+    version, caused by not initializing the hlist entries before
+    freeing.
+
+v4:
+  Address a concern around IPE's behavior with unknown syntax.
+    Specifically, make any unknown syntax a fatal error instead of a
+    warning, as suggested by Mickaël Salaün.
+  Introduce a new securityfs node, $securityfs/ipe/property_config,
+    which provides a listing of what properties are enabled by the
+    kernel and their versions. This allows usermode to predict what
+    policies should be allowed.
+  Strip some comments from c files that I missed.
+  Clarify some documentation comments around 'boot_verified'.
+    While this currently does not functionally change the property
+    itself, the distinction is important when IPE can enforce verified
+    reads. Additionally, 'KERNEL_READ' was omitted from the documentation.
+    This has been corrected.
+  Change SecurityFS and SHA1 to a reverse dependency.
+  Update the cover-letter with the updated behavior of unknown syntax.
+  Remove all sysctls, making an equivalent function in securityfs.
+  Rework the active/delete mechanism to be a node under the policy in
+    $securityfs/ipe/policies.
+  The kernel command line parameters ipe.enforce and ipe.success_audit
+    have returned as this functionality is no longer exposed through
+    sysfs.
+
+v5:
+  Correct some grammatical errors reported by Randy Dunlap.
+  Fix some warnings reported by kernel test bot.
+  Change convention around security_bdev_setsecurity. -ENOSYS
+    is now expected if an LSM does not implement a particular @name,
+    as suggested by Casey Schaufler.
+  Minor string corrections related to the move from sysfs to securityfs
+  Correct a spelling of an #ifdef for the permissive argument.
+  Add the kernel parameters re-added to the documentation.
+  Fix a minor bug where the mode being audited on permissive switch
+    was the original mode, not the mode being swapped to.
+  Cleanup doc comments, fix some whitespace alignment issues.
+
+v6:
+  Change if statement condition in security_bdev_setsecurity to be
+    more concise, as suggested by Casey Schaufler and Al Viro
+  Drop the 6th patch in the series, "dm-verity move signature check..."
+    due to numerous issues, and it ultimately providing no real value.
+  Fix the patch tree - the previous iteration appears to have been in a
+    torn state (patches 8+9 were merged). This has since been corrected.
+
+v7:
+  * Reword cover letter to more accurate convey IPE's purpose
+    and latest updates.
+  * Refactor series to:
+      1. Support a context structure, enabling:
+          1. Easier Testing via KUNIT
+          2. A better architecture for future designs
+      2. Make parser code cleaner
+  * Move patch 01/12 to [14/16] of the series
+  * Split up patch 02/12 into four parts:
+      1. context creation [01/16]
+      2. audit [07/16]
+      3. evaluation loop [03/16]
+      4. access control hooks [05/16]
+      5. permissive mode [08/16]
+  * Split up patch 03/12 into two parts:
+      1. parser [02/16]
+      2. userspace interface [04/16]
+  * Reword and refactor patch 04/12 to [09/16]
+  * Squash patch 05/12, 07/12, 09/12 to [10/16]
+  * Squash patch 08/12, 10/12 to [11/16]
+  * Change audit records to MAC region (14XX) from Integrity region (18XX)
+  * Add FSVerity Support
+  * Interface changes:
+      1. "raw" was renamed to "pkcs7" and made read only
+      2. "raw"'s write functionality (update a policy) moved to "update"
+      3. introduced "version", "policy_name" nodes.
+      4. "content" renamed to "policy"
+      5. The boot policy can now be updated like any other policy.
+  * Add additional developer-level documentation
+  * Update admin-guide docs to reflect changes.
+  * Kunit tests
+  * Dropped CONFIG_SECURITY_IPE_PERMISSIVE_SWITCH - functionality can
+    easily come later with a small patch.
+  * Use partition0 for block_device for dm-verity patch
+
+v8:
+  * Add changelog information to individual commits
+  * A large number of changes to the audit patch.
+  * split fs/ & security/ changes to two separate patches.
+  * split block/, security/ & drivers/md/ changes to separate patches.
+  * Add some historical context to what lead to the creation of IPE
+    in the documentation patch.
+  * Cover-letter changes suggested by Roberto Sassu.
+
+v9:
+  * Rewrite IPE parser to use kernel match_table parser.
+  * Adapt existing IPE properties to the new parser.
+  * Remove ipe_context, quote policy syntax, kernel_read for simplicity.
+  * Add new function in the security file system to delete IPE policy.
+  * Make IPE audit builtin and change several audit formats.
+  * Make boot_verified property builtin
+
+v10:
+  * Address various code style/format issues
+  * Correct the rcu locking for active policy
+  * Fix memleak bugs in the parser, optimize the parser per upstream feedback
+  * Adding new audit events for IPE and update audit formats
+  * Make the dmverity property auto selected
+  * Adding more context in the commit messages
+
+v11:
+  * Address various code style/format issues
+  * Add finalize hook to device mapper
+  * move the security hook for dm-verity to the new device mapper finalize hook
+
+v12:
+  * Address locking issues
+  * Change the implementation of boot_verified to trust initramfs only
+  * Update audit format for IPE decision events
+  * Refactor code for lsm_id
+  * Add IPE test suite link
+
+v13:
+  * Rename the new security hook in initramfs
+  * Make the policy grammar independent of kernel config
+  * Correct IPE audit format
+  * Refactor policy update code
+
+v14:
+  * Add more code comments/docs for dmverity/fsverity
+  * Fix incorrect code usage and format in dmverity
+  * Drop one accepted commit of dmverity
+
+v15:
+  * Fix grammar issues
+  * Add more documentation to fsverity
+  * Switch security hooks from *_setsecurity() to *_setintegrity()
+  * Cleanup unnecessary headers
+
+Deven Bowers (13):
+  security: add ipe lsm
+  ipe: add policy parser
+  ipe: add evaluation loop
+  ipe: add LSM hooks on execution and kernel read
+  ipe: add userspace interface
+  uapi|audit|ipe: add ipe auditing support
+  ipe: add permissive toggle
+  block|security: add LSM blob to block_device
+  dm verity: consume root hash digest and signature data via LSM hook
+  ipe: add support for dm-verity as a trust provider
+  scripts: add boot policy generation program
+  ipe: kunit test for parser
+  documentation: add ipe documentation
+
+Fan Wu (8):
+  initramfs|security: Add a security hook to do_populate_rootfs()
+  ipe: introduce 'boot_verified' as a trust provider
+  security: add new securityfs delete function
+  security: add security_bdev_setintegrity() hook
+  dm: add finalize hook to target_type
+  security: add security_inode_setintegrity() hook
+  fsverity: consume builtin signature via LSM hook
+  ipe: enable support for fs-verity as a trust provider
+
+ Documentation/admin-guide/LSM/index.rst       |   1 +
+ Documentation/admin-guide/LSM/ipe.rst         | 774 ++++++++++++++++++
+ .../admin-guide/kernel-parameters.txt         |  12 +
+ Documentation/filesystems/fsverity.rst        |  13 +-
+ Documentation/security/index.rst              |   1 +
+ Documentation/security/ipe.rst                | 444 ++++++++++
+ MAINTAINERS                                   |  10 +
+ block/bdev.c                                  |   7 +
+ drivers/md/dm-verity-target.c                 |  73 ++
+ drivers/md/dm-verity.h                        |   6 +
+ drivers/md/dm.c                               |  12 +
+ fs/verity/fsverity_private.h                  |   2 +-
+ fs/verity/open.c                              |  24 +-
+ fs/verity/signature.c                         |   5 +-
+ include/linux/blk_types.h                     |   3 +
+ include/linux/device-mapper.h                 |   9 +
+ include/linux/dm-verity.h                     |  12 +
+ include/linux/lsm_hook_defs.h                 |  11 +
+ include/linux/lsm_hooks.h                     |   1 +
+ include/linux/security.h                      |  48 ++
+ include/uapi/linux/audit.h                    |   3 +
+ include/uapi/linux/lsm.h                      |   1 +
+ init/initramfs.c                              |   3 +
+ scripts/Makefile                              |   1 +
+ scripts/ipe/Makefile                          |   2 +
+ scripts/ipe/polgen/.gitignore                 |   2 +
+ scripts/ipe/polgen/Makefile                   |   5 +
+ scripts/ipe/polgen/polgen.c                   | 145 ++++
+ security/Kconfig                              |  11 +-
+ security/Makefile                             |   1 +
+ security/inode.c                              |  25 +
+ security/ipe/.gitignore                       |   2 +
+ security/ipe/Kconfig                          |  75 ++
+ security/ipe/Makefile                         |  31 +
+ security/ipe/audit.c                          | 279 +++++++
+ security/ipe/audit.h                          |  19 +
+ security/ipe/digest.c                         | 120 +++
+ security/ipe/digest.h                         |  26 +
+ security/ipe/eval.c                           | 375 +++++++++
+ security/ipe/eval.h                           |  64 ++
+ security/ipe/fs.c                             | 247 ++++++
+ security/ipe/fs.h                             |  16 +
+ security/ipe/hooks.c                          | 284 +++++++
+ security/ipe/hooks.h                          |  52 ++
+ security/ipe/ipe.c                            |  98 +++
+ security/ipe/ipe.h                            |  26 +
+ security/ipe/policy.c                         | 229 ++++++
+ security/ipe/policy.h                         |  98 +++
+ security/ipe/policy_fs.c                      | 468 +++++++++++
+ security/ipe/policy_parser.c                  | 548 +++++++++++++
+ security/ipe/policy_parser.h                  |  11 +
+ security/ipe/policy_tests.c                   | 294 +++++++
+ security/security.c                           | 138 +++-
+ .../selftests/lsm/lsm_list_modules_test.c     |   3 +
+ 54 files changed, 5159 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/admin-guide/LSM/ipe.rst
+ create mode 100644 Documentation/security/ipe.rst
+ create mode 100644 include/linux/dm-verity.h
+ create mode 100644 scripts/ipe/Makefile
+ create mode 100644 scripts/ipe/polgen/.gitignore
+ create mode 100644 scripts/ipe/polgen/Makefile
+ create mode 100644 scripts/ipe/polgen/polgen.c
+ create mode 100644 security/ipe/.gitignore
+ create mode 100644 security/ipe/Kconfig
+ create mode 100644 security/ipe/Makefile
+ create mode 100644 security/ipe/audit.c
+ create mode 100644 security/ipe/audit.h
+ create mode 100644 security/ipe/digest.c
+ create mode 100644 security/ipe/digest.h
+ create mode 100644 security/ipe/eval.c
+ create mode 100644 security/ipe/eval.h
+ create mode 100644 security/ipe/fs.c
+ create mode 100644 security/ipe/fs.h
+ create mode 100644 security/ipe/hooks.c
+ create mode 100644 security/ipe/hooks.h
+ create mode 100644 security/ipe/ipe.c
+ create mode 100644 security/ipe/ipe.h
+ create mode 100644 security/ipe/policy.c
+ create mode 100644 security/ipe/policy.h
+ create mode 100644 security/ipe/policy_fs.c
+ create mode 100644 security/ipe/policy_parser.c
+ create mode 100644 security/ipe/policy_parser.h
+ create mode 100644 security/ipe/policy_tests.c
+
+--
+2.44.0
+
 
