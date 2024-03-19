@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1791-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1792-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71F738805D7
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 21:07:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15C28880628
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 21:43:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A0DD1F230AC
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 20:07:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85810282DAA
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 20:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1505FB86;
-	Tue, 19 Mar 2024 20:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89CB53BBDC;
+	Tue, 19 Mar 2024 20:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nGsz5KCV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEOo/Twb"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF705FB81
-	for <linux-integrity@vger.kernel.org>; Tue, 19 Mar 2024 20:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DFB23BB38;
+	Tue, 19 Mar 2024 20:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710878850; cv=none; b=IJVSQ+4ujhtHRO4NyAWclc9BVYsO3QGEjn1doQLaQsVZ8LOiZRC8sVCa6VRxP7Cu1WWAN8I+0uiI7quNQuErmgvMcQV2TCZPXCthAViZV2sSyAnpv0XclGa23u2wxi7r/GoSVxkd3XL3mnf+A64JuOa8oNso9QTxVukL5KqXsxE=
+	t=1710881012; cv=none; b=BhrSns6OtNDtOwNcZ/dShwiO1r8tEW0L9HB00GBZ9F3pimYq4L+CsYkHdPbF/s0tZVlP6pwJJagndt1WLxfdhuSWBdWLWaCZxD+UGYT3q5c/lasshW0c095is2kI0R7K1P5Do4LsGoySeUmJXZYQmO8w27d6ECGPG1ASO9OM8tI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710878850; c=relaxed/simple;
-	bh=Ieoo0q0TiYj78kVEedUaHeCKTl5LxiNupXcsPfqikcs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=J8/SIBg9m9aCALnLgNVRvvZMRfIAB+7OqRITM9F78v3QH5U1fFoUTUAgw6jZL8N7JWj2SVP/4mNWLfPpWG0YJ1tMb/+l7TIPSE6LGnAQd9MLOozvvdOpjYOR4sC8h3CZqo6J7s17eYSqsRWG8HglX6JkJ+EyyrHUr8dYKZy52dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nGsz5KCV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89434C433C7;
-	Tue, 19 Mar 2024 20:07:28 +0000 (UTC)
+	s=arc-20240116; t=1710881012; c=relaxed/simple;
+	bh=l66zTaS3iIbt2drJxrv68MnYKqMvhoTk3Lhw/r+aN4c=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=tHxv7Q99Y5Gt+s/f0a0Xr3PQ/g4WDQpCL+Xf1lSSMsaWQCcVkb81nSpdMR2MSJT3tsxfE5UIGS4f2LUK5X+9b3rfjXG7XtDaykV30mw8p+mu4XU2Ox6XCIk/2YPW+QHeR5yWUsH6hUJNzmv3CrNwIeLZKkk8M0yJgIdpkJdroMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEOo/Twb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 594D7C433C7;
+	Tue, 19 Mar 2024 20:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710878849;
-	bh=Ieoo0q0TiYj78kVEedUaHeCKTl5LxiNupXcsPfqikcs=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=nGsz5KCVoGzZpEKW1NCjz1edHpy4A1TX1k0iAuvWKKesVwsFR5jPSlxkh6qDw8BVN
-	 AYl7QUeNZa12vg4rTJcH60qR42caDVLxNxbaYrep3LV/0d2q54vPxaGZ5h3lG5Io6H
-	 DeRSCnJAcXiRRbsval6WbgQNfgvp5fQqxnJ1Lu/26tp1xxI9tyf/aKt1GYBdNQB0hp
-	 yVCbItEVz1nCJoiPPVkcOQDBeQdQJGgeTowho0CP31ST1gAr7RvvMUYwsgzaEMuQwt
-	 bhWu4gI/5pcguouTu4mBjpLnFzSStjBobckmU/vehSbTxggKXqKSjTC8ALMvHTIzal
-	 GpEovZ0Afcqmw==
+	s=k20201202; t=1710881011;
+	bh=l66zTaS3iIbt2drJxrv68MnYKqMvhoTk3Lhw/r+aN4c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AEOo/Twb8QSdW4k0JLHhm5FEwLyp3cQ6wBQiX5jNMTs/IKhv+IjED535s2nSyBelk
+	 17x+figjKpuFFOvnarfQrIyB/nvvtfrIFXyl0XqtdHekLhgCvYjqIj1IqVW0rog693
+	 rYfNfL5j18iCzOFmPp2K7R0IqpkXKVy5ZI5UWXfWU//ja+D6U/MaN9OKZXQqrT6m8O
+	 WvRByrE+Avn8ceIttRVhNJ0J+EhymnLZFBe7J/I/MtqeQfa8iFgNzJqVNoVUTKK53d
+	 T/+p8HPOaAViEF7DdqAVcM6a5mpu/3e2uWl+utEiUM93YLy5gsWFccKNvOOc+2qYsh
+	 0NbdCJvGAY8gA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,46 +49,98 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 19 Mar 2024 22:07:26 +0200
-Message-Id: <CZXZXNPX9VUP.1VOSQNSGQYX7A@kernel.org>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH v2] tpm: Fix suspend/shutdown on some boards by
- preserving chip Locality
+Date: Tue, 19 Mar 2024 22:43:28 +0200
+Message-Id: <CZY0P8Z9MKWI.UDXUUC9BD43U@kernel.org>
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Adam Alves" <adamoa@gmail.com>
+To: "Jarkko Sakkinen" <jarkko@kernel.org>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>, <linux-kernel@vger.kernel.org>
+Cc: "Jason Gunthorpe" <jgg@ziepe.ca>, "Mimi Zohar" <zohar@linux.ibm.com>,
+ "Peter Huewe" <peterhuewe@gmx.de>, <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: Update W's for KEYS/KEYRINGS_INTEGRITY and
+ TPM DEVICE RIVER
 X-Mailer: aerc 0.15.2
-References: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
- <20240307224957.29432-1-adamoa@gmail.com>
- <CZR6VBRUEPKW.26B7HTOJZ0ANX@kernel.org>
- <CAHwaaX8bWOFW2bi6tKpxgf2Cp_vKg5Eqhq618VEur98s+OmD=A@mail.gmail.com>
- <CAHwaaX-j37rq4+DCNSRAgPmeQmrYZiX2sLv4ugBjPJSj9LPxcg@mail.gmail.com>
-In-Reply-To: <CAHwaaX-j37rq4+DCNSRAgPmeQmrYZiX2sLv4ugBjPJSj9LPxcg@mail.gmail.com>
+References: <20240226062245.2279635-1-jarkko@kernel.org>
+ <eaa5107ac4f982b6fd6e80b522643a591e719dc9.camel@HansenPartnership.com>
+ <CZEWILFMZ5L1.2TCZXVS7GTDKZ@suppilovahvero>
+ <3bae009a24a55902d93e4055ecd13f9f54cdbb37.camel@HansenPartnership.com>
+ <CZG2JXJ83L7K.32PU7BZTQNHLV@kernel.org>
+In-Reply-To: <CZG2JXJ83L7K.32PU7BZTQNHLV@kernel.org>
 
-On Thu Mar 14, 2024 at 6:31 PM EET, Adam Alves wrote:
-> Hi Jarkko,
+On Tue Feb 27, 2024 at 8:22 PM EET, Jarkko Sakkinen wrote:
+> On Mon Feb 26, 2024 at 12:11 PM EET, James Bottomley wrote:
+> > On Mon, 2024-02-26 at 11:26 +0200, Jarkko Sakkinen wrote:
+> > > On Mon Feb 26, 2024 at 8:49 AM EET, James Bottomley wrote:
+> > > > On Mon, 2024-02-26 at 08:22 +0200, Jarkko Sakkinen wrote:
+> > > > > Add TPM driver test suite URL to the MAINTAINERS files and move
+> > > > > the
+> > > > > wiki
+> > > > > URL to more appropriate location.
+> > > > >=20
+> > > > > Link: https://gitlab.com/jarkkojs/linux-tpmdd-test
+> > > > > Link: https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
+> > > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > > > > Cc: Peter Huewe <peterhuewe@gmx.de>
+> > > > > Cc: linux-integrity@vger.kernel.org
+> > > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > > ---
+> > > > > =C2=A0MAINTAINERS | 3 ++-
+> > > > > =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+> > > > >=20
+> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > > index bf77be03fb2b..6380c1109b86 100644
+> > > > > --- a/MAINTAINERS
+> > > > > +++ b/MAINTAINERS
+> > > > > @@ -11947,6 +11947,7 @@ M:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Mim=
+i Zohar <zohar@linux.ibm.com>
+> > > > > =C2=A0L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0linux-integrity@vger.kernel=
+.org
+> > > > > =C2=A0L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0keyrings@vger.kernel.org
+> > > > > =C2=A0S:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Supported
+> > > > > +W:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0https://kernsec.org/wiki/index.p=
+hp/inux_Kernel_Integrity
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 Missing L
+> > > >=20
+> > > > James
+> > >=20
+> > > Thanks! I'll fixup that.
+> > >=20
+> > > "linux-tpmdd-test" is the suite that I'm using to test your patch
+> > > set. It has swtpm integrated. I wonder if there was easy to way to
+> > > tweak swtpm to emulate "interposer", i.e. reset its state while it is
+> > > running (preferably not by restarting it).
+> >
+> > The way I do it is to use a qemu patch
+> >
+> > https://lore.kernel.org/qemu-devel/20231004184219.6594-1-jejb@linux.ibm=
+.com/
+> >
+> > which allows qemu to connect to the mssim (or ibmswtpm2) TPM over an
+> > inet socket which means I can execute TPM commands from the host (like
+> > resetting the TPM) as well as the guest and snoop the TPM traffic.
 >
-> I have an update here. I would like you to check if it makes sense
-> before I submit a patch.
+> To which exact and most recent possible QEMU version I can apply that
+> cleanly?
 >
-> The problem might be related to the chip itself which leaves the idle
-> state whenever the locality is relinquished.
-
-There's no real discrete chip. It is a TPM living in the firmware,
-namely management engine.
-
-So first thing to check would be to update the BIOS entirely.
-
-> I probed the chip while operating and noted that the
-> TPM_CRB_CTRL_STS_0.tpmIdle bit (located at `regs_t->ctrl_sts` on
-> `crb_priv` structure in tpm_crb.c) is always cleared whenever the
-> locality is relinquished.
+> My build configuration builds both QEMU and swtpm [1] for every build so
+> I could pick that patch, copy it to board/qemu/patches/qemu, and set the
+> version in the BuildRoot configuration appropriately.
 >
-> The result is that this chip never becomes idle since after going idle
-> the locality is relinquished (`tpm_chip_stop` function in tpm-chip.c).
+> [1]
+> https://gitlab.com/jarkkojs/linux-tpmdd-test/-/tree/main/package/libtpms
+> https://gitlab.com/jarkkojs/linux-tpmdd-test/-/tree/main/package/swtpm
 
-This can be verified as tpm_crb does print "goIdle timed out" if it does
-not go to idle. Should be visible in klog.
+Friendly ping. Still looking forward to test.
+
+I cannot recall exact review comments for v7 but what I can recall is
+that they were cosmetic.
 
 BR, Jarkko
 
