@@ -1,171 +1,141 @@
-Return-Path: <linux-integrity+bounces-1806-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1807-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AABB08807FF
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 00:02:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C72F588082A
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 00:27:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62B752840EF
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 23:01:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0439B1C20D85
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 23:27:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745315FBAA;
-	Tue, 19 Mar 2024 23:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7393364D4;
+	Tue, 19 Mar 2024 23:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="b+qbfDO7"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MILY0DzQ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EED5FB8B
-	for <linux-integrity@vger.kernel.org>; Tue, 19 Mar 2024 23:00:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009DD5FB87;
+	Tue, 19 Mar 2024 23:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710889257; cv=none; b=qUuxXEedXJy0aMQ7HpkOkfw23JqSW8fIUlTGo1O81yn17wgZT2EMkI5HD/U4/D65cA0deCe15HQekELnoERuLmfHX+y9tVK1OqxS+LWRa59yZmIbZpgW9JAXhpsWOFyKMHRSeqcfJjPbR9XQE65g5Z+0W/DGChdtdKsc2EhHsRI=
+	t=1710890839; cv=none; b=cjHke/n+MKFDnFFkz/Cb4WW+oZTJYXBeF6X7IO7wtLLfZLU1/AHG4R7Shw8wzqvo+TA7uDggVJLwGIRuNGq00dY3fm7ePDYwJIewNoQAqMhHQvlwguq5Mw49r+TcqU5NK2ZH0OQSSgdX8+tECJhB1cYijocX5iFqWllk7f3aCME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710889257; c=relaxed/simple;
-	bh=SI71iR5Y7Um8R7vAzXhLobI13BqpnZIrQxroXe8te6E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gPUWOLZBgw9ucOOHFGbne67zKYnLspgQN4x36qaVc26IslwVpQo4QBfbaCwNmsLToBNo1UD1i6j8AW0t2NT6juZ4wvqsgOOtaQiMmI2MQpuRtvJFxoIgXIzKlqarHpwbXEZ4eFrZ57Z5oQIMAmRUXU05vvVKAxDBlM9dO8VtgUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=b+qbfDO7; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dc742543119so5692197276.0
-        for <linux-integrity@vger.kernel.org>; Tue, 19 Mar 2024 16:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1710889254; x=1711494054; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PhNnIPgHxerhIOr4RTfHPmKF6x9l0/Ckh/RvMFabA+Y=;
-        b=b+qbfDO7wmcG8jPLrK6zidKtZ6Fo29Rscdsdd3YbzTtIeUXDZOo+yyn7PVBsOjad+Z
-         5/9iOmrr9C7sPCy+W4tQBgX8KOZyxyQ9S9ZsH6HelkObSIxJA9T3K1aw/SsRRvbpHnNu
-         XRY6oI2u8zOQHfzaRwO6XXKzVmZfRFguA1xcsvLxTxHRJwef3e8wVTwJhjyts00x+FSZ
-         zqFvQbeq2rYMq6cfP04ZCxaOcUwTVbyTXP3O3gKxtb23tf5mcZHIeUAI0JbC4YCTblTv
-         HhfBcKaA3IV4OQO74ICVeAf4IaSmLHpRC/amkw7YIRMJMOnW6VVQ7SAkicE3cP5qMjiE
-         bCUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710889254; x=1711494054;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PhNnIPgHxerhIOr4RTfHPmKF6x9l0/Ckh/RvMFabA+Y=;
-        b=uwQFDgcJRoHttKj8AtVIT7pNggvTm3Se7ViVFCftr2yiG/YG6L3Qb1UEClyQfT/WSo
-         cRCBc8dI6LQbqnRh73KXb9bUqevB5X/f+A363I2x3IPhcDnjOyImn3jOyBhvJs7bD5XQ
-         6ng2YBS7RtqRauq/LMs6qFGcIJDC+4k3PPKdZNBWPSbHEQ9WNsDfJkyFzDgRlXzySvIg
-         ALelJNtOvUPRwIoaQNDzssvqGnK+O0wgfFujg/ue2Z8EACkwLQbvzD3S3/DFYPYxsueh
-         7egBUqTmkf3k9o6JFF0R0MHAvjvcFloDEEuO4FezccOqjd6iVwVW1RQEOMwWZsoCex62
-         zpUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8KFEAGzIGnZWnUENZ/soxACe9raIwwNyMY1xF+Xe8WAffKtcGEwpvr9Pu3kPYhiyHHXW3xjlwTEvCUXrmdaIXs42t3qPrHnXS+iPH6vP3
-X-Gm-Message-State: AOJu0Yx2TAI8M3OkgvpWAeXczVYZZ/PupLPQzSjVXX3Zj2AEALXygG+7
-	7H3OBGKgQWTbo7LpAw7ZLK1+IlC+yggIYpQbojOFf6kqsLLtpUoNtyBG7PH0nOU80CQxagKT+R4
-	/SY0eLZaUt9snbzhKfn6mmz+pQjVny/lVf0qu
-X-Google-Smtp-Source: AGHT+IHMUIIIwsUIMpmgPc4Sro0qw/3fx6zM2LSAJ369atAEbEsfSVNxqySeZsH++rtDdEJkgBUDk7WxQwVaCN1faZ4=
-X-Received: by 2002:a25:f40c:0:b0:dc7:2401:df4e with SMTP id
- q12-20020a25f40c000000b00dc72401df4emr12122020ybd.39.1710889254575; Tue, 19
- Mar 2024 16:00:54 -0700 (PDT)
+	s=arc-20240116; t=1710890839; c=relaxed/simple;
+	bh=n9hJKPDTxTJEfGF00HWBydZQG0tQd8kHTr6mql/7gpY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=cMH0CZ9/Z6fof50dgcETM501kLBxLhvKcCRB3cMj4zFGyJiTvyfAwmiSpR5FLAleK68tbEXCuPAyZKFsqNUaHesd/vpAKPKg5wbXD2uDhddU3wYlcYKbQhVFmuh6VF4fiZt+LstpVVzdFOzX5TKYzflxPtqTod7o9nDP+sf2x0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MILY0DzQ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42JNBJDE005139;
+	Tue, 19 Mar 2024 23:27:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=KT4mNfO5o+rkVdaLLiWXiMPJK6QQlVazM68bG532oFk=;
+ b=MILY0DzQUbBH/Zzhy4xhDfxLRNsWgXsRgdzYoSo7RaXJMMSk4QJ78CtyIzWJdxPZX11E
+ 7Mg8YDJf0gI04d9A3g6iZRo88sryRfn+SjBCax2r5aK5IXKb1iIlUjcZIZrIRSBqEtPo
+ EKeTknIISJalWuve5+ZxUY+GpLDxuKoAdVTU8942YZCXGO6vol5QnrT8c3R4RlOYI3/x
+ O0jVWP9e/YFvPNuDNdSL3lJ+ZJ/u7GsvfIir3A3zqoAwiTXg/3drPaAbXdPXfdizqc/s
+ WKlCANpbo763pV4s/aCAhIQ1noOGYdNhBNICBoQ5uFh46Oa7IYMpQhEXfMhASPHgUxhK EQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyhffga22-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Mar 2024 23:27:03 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42JNR3te027009;
+	Tue, 19 Mar 2024 23:27:03 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyhffga21-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Mar 2024 23:27:03 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42JKRFYe002815;
+	Tue, 19 Mar 2024 23:27:02 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wwrf2jajb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Mar 2024 23:27:02 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42JNQxjR21496396
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 19 Mar 2024 23:27:02 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A0A675805C;
+	Tue, 19 Mar 2024 23:26:59 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 66EDC58058;
+	Tue, 19 Mar 2024 23:26:58 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.80.83])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 19 Mar 2024 23:26:58 +0000 (GMT)
+Message-ID: <7f4a9464a5582e7f1b0feb180bb198b44bb278c0.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 08/10] evm: Enforce signatures on unsupported
+ filesystem for EVM_INIT_X509
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-unionfs@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, roberto.sassu@huawei.com, amir73il@gmail.com,
+        brauner@kernel.org, miklos@szeredi.hu
+Date: Tue, 19 Mar 2024 19:26:57 -0400
+In-Reply-To: <20240223172513.4049959-9-stefanb@linux.ibm.com>
+References: <20240223172513.4049959-1-stefanb@linux.ibm.com>
+	 <20240223172513.4049959-9-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <1710560151-28904-1-git-send-email-wufan@linux.microsoft.com>
- <1710560151-28904-18-git-send-email-wufan@linux.microsoft.com> <20240318052937.GC63337@sol.localdomain>
-In-Reply-To: <20240318052937.GC63337@sol.localdomain>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 19 Mar 2024 19:00:43 -0400
-Message-ID: <CAHC9VhTZ+xAiApjXqz9V_HHwQ0RdW7mWLGjm9zK=ZuhPqb1tgg@mail.gmail.com>
-Subject: Re: [RFC PATCH v15 17/21] fsverity: consume builtin signature via LSM hook
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, 
-	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, 
-	agk@redhat.com, snitzer@kernel.org, eparis@redhat.com, 
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: MV5-4AaJmUZr_ILvF1ZFbSmYl5l6Ejj4
+X-Proofpoint-GUID: cDOQUTGmD65oKLSwel36uzjFzk1A7WtH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-19_09,2024-03-18_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 mlxscore=0
+ malwarescore=0 mlxlogscore=999 clxscore=1015 spamscore=0 phishscore=0
+ suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2403140000 definitions=main-2403190180
 
-On Mon, Mar 18, 2024 at 1:29=E2=80=AFAM Eric Biggers <ebiggers@kernel.org> =
-wrote:
-> On Fri, Mar 15, 2024 at 08:35:47PM -0700, Fan Wu wrote:
-> > fsverity represents a mechanism to support both integrity and
-> > authenticity protection of a file, supporting both signed and unsigned
-> > digests.
+On Fri, 2024-02-23 at 12:25 -0500, Stefan Berger wrote:
+> Unsupported filesystems currently do not enforce any signatures. Add
+> support for signature enforcement of the "original" and "portable &
+> immutable" signatures when EVM_INIT_X509 is enabled.
+> 
+> The "original" signature type contains filesystem specific metadata.
+> Thus it cannot be copied up and verified. However with EVM_INIT_X509
+> and EVM_ALLOW_METADATA_WRITES enabled, the "original" file signature
+> may be written.
+> 
+> When EVM_ALLOW_METADATA_WRITES is not set or once it is removed from
+> /sys/kernel/security/evm by setting EVM_INIT_HMAC for example, it is not
+> possible to write or remove xattrs on the overlay filesystem.
 
-...
+This paragraph is currently correct, but at some point EVM_ALLOW_METADATA_WRITES
+will be deprecated.  Refer to commit 1434c6a1d32a ("evm: Deprecate
+EVM_ALLOW_METADATA_WRITES").
 
-> > diff --git a/fs/verity/signature.c b/fs/verity/signature.c
-> > index 90c07573dd77..d4ed03a114e9 100644
-> > --- a/fs/verity/signature.c
-> > +++ b/fs/verity/signature.c
-> > @@ -41,7 +41,10 @@ static struct key *fsverity_keyring;
-> >   * @sig_size: size of signature in bytes, or 0 if no signature
-> >   *
-> >   * If the file includes a signature of its fs-verity file digest, veri=
-fy it
-> > - * against the certificates in the fs-verity keyring.
-> > + * against the certificates in the fs-verity keyring. Note that verifi=
-cation
-> > + * happens as long as the file's signature exists regardless of the st=
-ate of
-> > + * fsverity_require_signatures, and the IPE LSM relies on this behavio=
-r
-> > + * to save the verified file signature of the file into security blobs=
-.
->
-> "save the verified file signature of the file into security blobs" isn't =
-what
-> IPE actually does, though.  And even if it was, it would not explain why =
-IPE
-> expects the signature to be verified.
+Mimi
 
-We probably need to abstract away the IPE specific comments here as
-these are general LSM hooks and could be used by additional LSMs in
-the future.  How about something like the following?
+> 
+> This change still prevents EVM from writing HMAC signatures on
+> unsupported filesystem when EVM_INIT_HMAC is enabled.
+> 
+> Co-developed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 
-"Note that signatures are verified regardless of the state of the
-'fsverity_require_signatures' variable and the LSM subsystem relies
-on this behavior to help enforce file integrity policies.  Please
-discuss changes with the LSM list (thank you!)."
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 
-> > diff --git a/include/linux/security.h b/include/linux/security.h
-> > index 0885866b261e..edd12c0a673a 100644
-> > --- a/include/linux/security.h
-> > +++ b/include/linux/security.h
-> > @@ -86,6 +86,7 @@ enum lsm_event {
-> >  enum lsm_intgr_type {
-> >       LSM_INTGR_DMV_SIG,
-> >       LSM_INTGR_DMV_ROOTHASH,
-> > +     LSM_INTGR_FSV_SIG,
-> >       __LSM_INTGR_MAX
-> >  };
->
-> These are hard to understand because they are abbreviated too much.  And =
-again,
-> there are multiple type of fsverity signatures.  How about:
->
-> enum lsm_integrity_type {
->         LSM_INTEGRITY_DM_VERITY_SIG,
->         LSM_INTEGRITY_DM_VERITY_ROOT_HASH,
->         LSM_INTEGRITY_FS_VERITY_BUILTIN_SIG,
->         __LSM_INTEGRITY_MAX
-> };
 
-Ugh.  I'm willing to concede that the existing enums are probably a
-bit too terse, but the suggestions above are a bit too long for my
-tastes (and my typin' fingers).  How about a compromise like that
-below?
-
-  enum lsm_integrity_type {
-    LSM_INT_DMVERITY_SIG,
-    LSM_INT_DMVERITY_ROOTHASH,
-    LSM_INT_FSVERITY_BUILTINSIG,
-  };
-
---=20
-paul-moore.com
 
