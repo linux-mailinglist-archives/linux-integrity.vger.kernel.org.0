@@ -1,146 +1,108 @@
-Return-Path: <linux-integrity+bounces-1792-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1793-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15C28880628
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 21:43:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62D25880645
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 21:50:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85810282DAA
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 20:43:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE01D1F24681
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 20:50:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89CB53BBDC;
-	Tue, 19 Mar 2024 20:43:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABF513BBED;
+	Tue, 19 Mar 2024 20:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEOo/Twb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/3cNKzf"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DFB23BB38;
-	Tue, 19 Mar 2024 20:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C8C3BBE7;
+	Tue, 19 Mar 2024 20:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710881012; cv=none; b=BhrSns6OtNDtOwNcZ/dShwiO1r8tEW0L9HB00GBZ9F3pimYq4L+CsYkHdPbF/s0tZVlP6pwJJagndt1WLxfdhuSWBdWLWaCZxD+UGYT3q5c/lasshW0c095is2kI0R7K1P5Do4LsGoySeUmJXZYQmO8w27d6ECGPG1ASO9OM8tI=
+	t=1710881428; cv=none; b=GvqoUfT4ka3yVB0tgH1QhaZ4NU2b2egcSDElJmiGfsgVpjIZ/cJ1R8bh3+dfW9jbcEgOMlW52Uwp3qI+LaFP4FFHj0uOkuvmx2y4AJh1sLvc0oMEB+JjYbyyOnO4iuCHN4DnvF0G1bbl0CinJwFIr8FSy/UMHtHW0J7T73aJ1sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710881012; c=relaxed/simple;
-	bh=l66zTaS3iIbt2drJxrv68MnYKqMvhoTk3Lhw/r+aN4c=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=tHxv7Q99Y5Gt+s/f0a0Xr3PQ/g4WDQpCL+Xf1lSSMsaWQCcVkb81nSpdMR2MSJT3tsxfE5UIGS4f2LUK5X+9b3rfjXG7XtDaykV30mw8p+mu4XU2Ox6XCIk/2YPW+QHeR5yWUsH6hUJNzmv3CrNwIeLZKkk8M0yJgIdpkJdroMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEOo/Twb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 594D7C433C7;
-	Tue, 19 Mar 2024 20:43:30 +0000 (UTC)
+	s=arc-20240116; t=1710881428; c=relaxed/simple;
+	bh=ax4r2DBaBvshd+m31sBVKdKua94Y5tDgpvNWLRBYi1A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DxA1syt8iSe5C31h36Wx2pmDQ/TefD54JJ943O0sObEXXc/4gBvjtWjK0K7bUtn4KIOebtsM3clPU8ylprzvBn6d+Iazlc3N4LxwbeIP6llFfLb8Gx+xxMir+ooTDIQKUoqTiWQm+y7euJc1vKJYvv5slr9mnmL3RssedhNVo+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/3cNKzf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 972B4C433F1;
+	Tue, 19 Mar 2024 20:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710881011;
-	bh=l66zTaS3iIbt2drJxrv68MnYKqMvhoTk3Lhw/r+aN4c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AEOo/Twb8QSdW4k0JLHhm5FEwLyp3cQ6wBQiX5jNMTs/IKhv+IjED535s2nSyBelk
-	 17x+figjKpuFFOvnarfQrIyB/nvvtfrIFXyl0XqtdHekLhgCvYjqIj1IqVW0rog693
-	 rYfNfL5j18iCzOFmPp2K7R0IqpkXKVy5ZI5UWXfWU//ja+D6U/MaN9OKZXQqrT6m8O
-	 WvRByrE+Avn8ceIttRVhNJ0J+EhymnLZFBe7J/I/MtqeQfa8iFgNzJqVNoVUTKK53d
-	 T/+p8HPOaAViEF7DdqAVcM6a5mpu/3e2uWl+utEiUM93YLy5gsWFccKNvOOc+2qYsh
-	 0NbdCJvGAY8gA==
+	s=k20201202; t=1710881428;
+	bh=ax4r2DBaBvshd+m31sBVKdKua94Y5tDgpvNWLRBYi1A=;
+	h=From:To:Cc:Subject:Date:From;
+	b=R/3cNKzf2jLJ97PHp8Dd5/NvqtmBPQrxbIcnPIKYyUYhlu8hOVDzj7no7Em5qwsHl
+	 d/Gd5G6O6pC5KmhIhSK7bM7NcemPynNe9GSOvsq9fE2CTjLoPNVsuaoD3WR3dHdH17
+	 snITfNRUWvLEB4/641UIgQeoRBIlTiLGlnEtCNx/muLbF6vVjoY6ecC/lcXN/kNP8z
+	 MVYAoF75EowkV5belwjQcdbJYbPOWYZiBMx6X6v6HxGuJroqzlPtlc1XQO/7tnaJ1z
+	 WpFboS+WnGLCcp93xzdRc1dy5jQhFSTFQT9G48qnufOSEbYVHOicNnaGRjj9Sa2ohy
+	 07RcKF9Il2J2w==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] MAINTAINERS: Update URL's for KEYS/KEYRINGS_INTEGRITY and TPM DEVICE DRIVER
+Date: Tue, 19 Mar 2024 22:50:11 +0200
+Message-ID: <20240319205012.54577-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 19 Mar 2024 22:43:28 +0200
-Message-Id: <CZY0P8Z9MKWI.UDXUUC9BD43U@kernel.org>
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, <linux-kernel@vger.kernel.org>
-Cc: "Jason Gunthorpe" <jgg@ziepe.ca>, "Mimi Zohar" <zohar@linux.ibm.com>,
- "Peter Huewe" <peterhuewe@gmx.de>, <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: Update W's for KEYS/KEYRINGS_INTEGRITY and
- TPM DEVICE RIVER
-X-Mailer: aerc 0.15.2
-References: <20240226062245.2279635-1-jarkko@kernel.org>
- <eaa5107ac4f982b6fd6e80b522643a591e719dc9.camel@HansenPartnership.com>
- <CZEWILFMZ5L1.2TCZXVS7GTDKZ@suppilovahvero>
- <3bae009a24a55902d93e4055ecd13f9f54cdbb37.camel@HansenPartnership.com>
- <CZG2JXJ83L7K.32PU7BZTQNHLV@kernel.org>
-In-Reply-To: <CZG2JXJ83L7K.32PU7BZTQNHLV@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue Feb 27, 2024 at 8:22 PM EET, Jarkko Sakkinen wrote:
-> On Mon Feb 26, 2024 at 12:11 PM EET, James Bottomley wrote:
-> > On Mon, 2024-02-26 at 11:26 +0200, Jarkko Sakkinen wrote:
-> > > On Mon Feb 26, 2024 at 8:49 AM EET, James Bottomley wrote:
-> > > > On Mon, 2024-02-26 at 08:22 +0200, Jarkko Sakkinen wrote:
-> > > > > Add TPM driver test suite URL to the MAINTAINERS files and move
-> > > > > the
-> > > > > wiki
-> > > > > URL to more appropriate location.
-> > > > >=20
-> > > > > Link: https://gitlab.com/jarkkojs/linux-tpmdd-test
-> > > > > Link: https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
-> > > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > > > Cc: Mimi Zohar <zohar@linux.ibm.com>
-> > > > > Cc: Peter Huewe <peterhuewe@gmx.de>
-> > > > > Cc: linux-integrity@vger.kernel.org
-> > > > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > > > ---
-> > > > > =C2=A0MAINTAINERS | 3 ++-
-> > > > > =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
-> > > > >=20
-> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > > index bf77be03fb2b..6380c1109b86 100644
-> > > > > --- a/MAINTAINERS
-> > > > > +++ b/MAINTAINERS
-> > > > > @@ -11947,6 +11947,7 @@ M:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Mim=
-i Zohar <zohar@linux.ibm.com>
-> > > > > =C2=A0L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0linux-integrity@vger.kernel=
-.org
-> > > > > =C2=A0L:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0keyrings@vger.kernel.org
-> > > > > =C2=A0S:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Supported
-> > > > > +W:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0https://kernsec.org/wiki/index.p=
-hp/inux_Kernel_Integrity
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 Missing L
-> > > >=20
-> > > > James
-> > >=20
-> > > Thanks! I'll fixup that.
-> > >=20
-> > > "linux-tpmdd-test" is the suite that I'm using to test your patch
-> > > set. It has swtpm integrated. I wonder if there was easy to way to
-> > > tweak swtpm to emulate "interposer", i.e. reset its state while it is
-> > > running (preferably not by restarting it).
-> >
-> > The way I do it is to use a qemu patch
-> >
-> > https://lore.kernel.org/qemu-devel/20231004184219.6594-1-jejb@linux.ibm=
-.com/
-> >
-> > which allows qemu to connect to the mssim (or ibmswtpm2) TPM over an
-> > inet socket which means I can execute TPM commands from the host (like
-> > resetting the TPM) as well as the guest and snoop the TPM traffic.
->
-> To which exact and most recent possible QEMU version I can apply that
-> cleanly?
->
-> My build configuration builds both QEMU and swtpm [1] for every build so
-> I could pick that patch, copy it to board/qemu/patches/qemu, and set the
-> version in the BuildRoot configuration appropriately.
->
-> [1]
-> https://gitlab.com/jarkkojs/linux-tpmdd-test/-/tree/main/package/libtpms
-> https://gitlab.com/jarkkojs/linux-tpmdd-test/-/tree/main/package/swtpm
+Add TPM driver test suite URL to the MAINTAINERS files and move the wiki
+URL to more appropriate location.
 
-Friendly ping. Still looking forward to test.
+Link: https://gitlab.com/jarkkojs/linux-tpmdd-test
+Link: https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: linux-integrity@vger.kernel.org
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v2:
+- Typo fix: https://lore.kernel.org/all/eaa5107ac4f982b6fd6e80b522643a591e719dc9.camel@HansenPartnership.com/
+- Typo fix: https://lore.kernel.org/all/1ab10318-5e3d-417c-9984-7b17f4e386e3@molgen.mpg.de/
+---
+ MAINTAINERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I cannot recall exact review comments for v7 but what I can recall is
-that they were cosmetic.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1339918df52a..01dc4940fc06 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12015,6 +12015,7 @@ M:	Mimi Zohar <zohar@linux.ibm.com>
+ L:	linux-integrity@vger.kernel.org
+ L:	keyrings@vger.kernel.org
+ S:	Supported
++W:	https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
+ F:	security/integrity/platform_certs
+ 
+ KFENCE
+@@ -22344,7 +22345,7 @@ M:	Jarkko Sakkinen <jarkko@kernel.org>
+ R:	Jason Gunthorpe <jgg@ziepe.ca>
+ L:	linux-integrity@vger.kernel.org
+ S:	Maintained
+-W:	https://kernsec.org/wiki/index.php/Linux_Kernel_Integrity
++W:	https://gitlab.com/jarkkojs/linux-tpmdd-test
+ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+ F:	drivers/char/tpm/
+-- 
+2.44.0
 
-BR, Jarkko
 
