@@ -1,91 +1,92 @@
-Return-Path: <linux-integrity+bounces-1802-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1796-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 037C7880798
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 23:56:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3577F880773
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 23:52:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35BCE1C2282B
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 22:56:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA23F1C221D3
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 22:52:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A9D40BF2;
-	Tue, 19 Mar 2024 22:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3865E40BF2;
+	Tue, 19 Mar 2024 22:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bdXBL9s0"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="P6Ogfuac"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493753FBB1;
-	Tue, 19 Mar 2024 22:55:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E365FDD3;
+	Tue, 19 Mar 2024 22:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710888921; cv=none; b=dUnvyl+dB1MT6DGmldFEVF3rZwrm+JiXtJdcdaBBhhE0zuttS6l3oimtBR0vkQKVCwlpKjBjo29NNWCtR27urNXjS53NAB5PA5jZTRgNgtnLI37jx9j4QYP8juxXa8xJP4l6rZJ35PV3d4QosClQeK+DGaQLSu74nSXvOkqd/z0=
+	t=1710888710; cv=none; b=JsHY11tpUaDez4QN8Rio/+o85CUbMsTzFVEjQgYTgyCnIZwy0G8c+uTjSTuFp9V48SWy218qcJE07WEbX+FgImoKgQl1D3LhhAAaizer7ZahqIv6qZHJa0rAa+ThKAXVG43umYqGlXRy1bPbJ2p/DJWuDK8h5tKq1nNxfxtb5mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710888921; c=relaxed/simple;
-	bh=fLjxN0Sk5KrBVRj/F43291DNmPrPvvUPq+zN5q/P3rA=;
+	s=arc-20240116; t=1710888710; c=relaxed/simple;
+	bh=IU1PCXQe1NSdbBnY4sTGTjqiGnGliYg75WlahJ675b4=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=lBQCEbP3BfM9ZcBDgEYvbmOnw3vbBAzg130Lre0OVr94lTIkvuIC9cq2c13X9T0xsslVvJ+gz7p4Es1R/okQJXm9zfWSyLGJvLNj5ssrsKqyA9ZITFKb0MUazGK3K8Yd0pZvGcSB89ZpzkcoBsXy2r+37usX4WgbBZJ9CAtQWmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bdXBL9s0; arc=none smtp.client-ip=148.163.156.1
+	 Content-Type:Mime-Version; b=VJVuSRRxhwaqP9gdwSjHYl9kuXoPtjW/14JYmllJ2dkUz779+Fzpn719M1x/KtDMPEXog+e0ZAsINuZHp5g3mYuH0zRcLuQVok7xvf6v7cgzoPyZliFYFCxpVTbs2VC/fRaBjIIiXeCkqIXnMtBp+cmemaWVfFl0NxpkTU7geHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=P6Ogfuac; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42JMk5on029729;
-	Tue, 19 Mar 2024 22:55:08 GMT
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42JLewjK024577;
+	Tue, 19 Mar 2024 22:51:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  mime-version : content-transfer-encoding; s=pp1;
- bh=xEWRN1kQtdflhyrl2Pxa7AJCVUu9MrlZm0JM8RwO/9o=;
- b=bdXBL9s072ucTw/T756cHbAiv3eHX4VX1bzTqEI/PGp9Ehbyi0QZb2VNMLiaOUqyF53d
- w45hcKopSlSpaQPhsENGAAn7Rcuj/e+JqMOehOOB1OlgWK+7kyVKivfo0FyVm8V0UwpO
- hf/+meSzkh/WYcmVeAKfcVS/TUhvUVtEwpwQo0qwCXB6CJb7b7Xfs9LRbVW04NL2le0f
- dchd9UOlPh8WXcbMt+SbOnyBCvyK6O/KWKjmHX2UunkewiCPk74aUtTVZDqbl8A6eD30
- IAaGfJSN3WCrSPHsHGbE/6lOqbt4dwFF1dRShpV+aAf2tmCIFWD4ZlATNrMpx19o4zeH iw== 
+ bh=SU/WmQVRnDFhOMmtaXP3ay9X1IDxE95+NRNPtSj9LQY=;
+ b=P6OgfuacAmbiXGR9HLmE+e1I/uh7ihnzs4Cabq0G6r/nfG+4/95DAtozri4UUfP/us9E
+ V1RqP55pUe0yElXDI0AciZu5IZDAyhLcM/vQWNsRgJAd2QEPsDs1htNzj77a46Rk+WGx
+ bJ0DDcPwPlvm6pxbjNV1b+YVuY6bdyBjTppQb5ZABAR+dTsplFByq35ehlc7o4AISZ5d
+ 2S3U91qqhO74Am9274bqGtmRHg2Dv2ZJ8BILsR8oxsB0Fu7ASOiaotrF314yW33cebjY
+ edhmjcr911SL1IyOCcwIb0+vRwIAVuKlaYzHo5ktgT0YQh6UPFXJSZF44PkzBhGEZG1j 6g== 
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyjx0g397-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyg2qgfyk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Mar 2024 22:55:08 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42JMt7iA011599;
-	Tue, 19 Mar 2024 22:55:07 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyjx0g35t-1
+	Tue, 19 Mar 2024 22:51:22 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42JMpLm6010859;
+	Tue, 19 Mar 2024 22:51:21 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyg2qgfyg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Mar 2024 22:55:07 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42JL1JNs002780;
-	Tue, 19 Mar 2024 22:50:43 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wwrf2j58e-1
+	Tue, 19 Mar 2024 22:51:21 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42JKjCkF010073;
+	Tue, 19 Mar 2024 22:51:20 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wxvauykhx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Mar 2024 22:50:43 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42JMofpc21758708
+	Tue, 19 Mar 2024 22:51:20 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42JMpH6T41747044
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 Mar 2024 22:50:43 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E7B1F58068;
-	Tue, 19 Mar 2024 22:50:40 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0A43A58056;
-	Tue, 19 Mar 2024 22:50:40 +0000 (GMT)
+	Tue, 19 Mar 2024 22:51:19 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9436D58059;
+	Tue, 19 Mar 2024 22:51:17 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EC20B58055;
+	Tue, 19 Mar 2024 22:51:16 +0000 (GMT)
 Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.80.83])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 19 Mar 2024 22:50:39 +0000 (GMT)
-Message-ID: <9daaa1d12d351bca982b28830354f86f7ef97b6f.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 01/10] ima: Rename backing_inode to real_inode
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 19 Mar 2024 22:51:16 +0000 (GMT)
+Message-ID: <45f3d3c56a140d174e8234198124c1d2e1712f64.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 03/10] evm: Implement per signature type decision in
+ security_inode_copy_up_xattr
 From: Mimi Zohar <zohar@linux.ibm.com>
 To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
         linux-security-module@vger.kernel.org, linux-unionfs@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, paul@paul-moore.com, jmorris@namei.org,
         serge@hallyn.com, roberto.sassu@huawei.com, amir73il@gmail.com,
         brauner@kernel.org, miklos@szeredi.hu
-Date: Tue, 19 Mar 2024 18:50:39 -0400
-In-Reply-To: <20240223172513.4049959-2-stefanb@linux.ibm.com>
+Date: Tue, 19 Mar 2024 18:51:16 -0400
+In-Reply-To: <20240223172513.4049959-4-stefanb@linux.ibm.com>
 References: <20240223172513.4049959-1-stefanb@linux.ibm.com>
-	 <20240223172513.4049959-2-stefanb@linux.ibm.com>
+	 <20240223172513.4049959-4-stefanb@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
 Precedence: bulk
@@ -96,34 +97,30 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jvYkY3ss7LvP5Zm-XbPVGn_4UYQFYrFN
-X-Proofpoint-GUID: cqs4CkSCMlhN4GqJuCVj4XPxha8djzpE
+X-Proofpoint-GUID: i8FJ9rBkXC0xX0Ei8BS5wURKlyPCn43u
+X-Proofpoint-ORIG-GUID: FRDB_SQk1rFHaHJOT17cBwsHNcicwSOr
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-03-19_09,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=693
- priorityscore=1501 spamscore=0 bulkscore=0 clxscore=1015 malwarescore=0
- adultscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ clxscore=1015 mlxlogscore=888 priorityscore=1501 lowpriorityscore=0
+ phishscore=0 malwarescore=0 impostorscore=0 mlxscore=0 spamscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2403140000 definitions=main-2403190176
 
-Hi Stefan,
-
 On Fri, 2024-02-23 at 12:25 -0500, Stefan Berger wrote:
-> Rename the backing_inode variable to real_inode since it gets its value
-> from real_inode().
+> To support "portable and immutable signatures" on otherwise unsupported
+> filesystems, determine the EVM signature type by the content of a file's
+> xattr. If the file has the appropriate signature type then allow it to be
+> copied up. All other signature types are discarded as before.
 > 
-> Suggested-by: Amir Goldstein <amir73il@gmail.com>
+> "Portable and immutable" EVM signatures can be copied up by stacked file-
+> system since the metadata their signature covers does not include file-
+> system-specific data such as a file's inode number, generation, and UUID.
+> 
 > Co-developed-by: Mimi Zohar <zohar@linux.ibm.com>
 > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Amir Goldstein <amir73il@gmail.com>
-
-Thanks for adding me as a co-developer.  The "Co-developed-by" tag needs to be
-followed immediately by their "Signed-off-by" tag.  I'll need to move it
-immediately before my "Signed-off-by" tag.
 
 Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-
-Mimi
 
 
