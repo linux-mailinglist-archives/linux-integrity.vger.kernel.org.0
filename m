@@ -1,347 +1,91 @@
-Return-Path: <linux-integrity+bounces-1789-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1790-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7A99880507
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 19:44:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1B3A8805B8
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 20:57:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB5711C22176
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 18:44:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 777DC1F22B3C
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 19:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3A039FC6;
-	Tue, 19 Mar 2024 18:44:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9C9D535A9;
+	Tue, 19 Mar 2024 19:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="ohl1YzCB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u2k0qm1L"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AC639FD8
-	for <linux-integrity@vger.kernel.org>; Tue, 19 Mar 2024 18:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9634352F79
+	for <linux-integrity@vger.kernel.org>; Tue, 19 Mar 2024 19:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710873856; cv=none; b=W+NK2KrpSkUHJSNxfda1cgoAsRDIuq1s4JRz3ic3n2mKTDYZ0ytBUlp8xP1RLySZF8o+Tmgo2ZhjkSP+j4sPmiFf7C/u7H4KtIIG6r1S9/DqDQc57zKwaYsDWbN4xpgVYGpbN03/mEcbHxSTgZSRQTlKiQMb/jIwgt+bNSrd6UQ=
+	t=1710878261; cv=none; b=SlGic9SU+WI1NH4zMdLtqCMglNtrnvJV8xT4lycrqa9g5IvpiA7mTRmsYLEKLraNwJFjVhRmeOP/U5F0LtRK56f4/y0LdloYOJFzPU/zEzhdwNzbuNfXMzQInlumthuNJSDT2DYIUKtlUUhOwg1w3GJuzG79zqvWv8bEWbPlreM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710873856; c=relaxed/simple;
-	bh=iYAowg/p3SZt/jzyDoICds4PpBwrKLStcTMZ4bVn/rI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i64GZDcQeNl/ihLIm+VbdT2YQN/J9gQe0tEVrx1gzsDfTgT+G9AtraA4S86n98U4EvYcjZukQClPhlQ5sRdUie3zdm9tMxxQ0NYR1aeUMZ9KypvDASBqM8j+x0glI3c2UgKEEuQWL6B+GLL4rSRU7r3CspZ1LreY5n94dEcAmzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=ohl1YzCB; arc=none smtp.client-ip=44.202.169.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
-Received: from eig-obgw-6010a.ext.cloudfilter.net ([10.0.30.248])
-	by cmsmtp with ESMTPS
-	id md6zrTyjAl9dRmeRYrLGHD; Tue, 19 Mar 2024 18:44:12 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id meRXrdxrZQufZmeRXrf6js; Tue, 19 Mar 2024 18:44:12 +0000
-X-Authority-Analysis: v=2.4 cv=eK4Vjmp1 c=1 sm=1 tr=0 ts=65f9dcfc
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=UtBFqMlDG83dypD0sxEoAQ==:17
- a=IkcTkHD0fZMA:10 a=K6JAEmCyrfEA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
- a=d3QQw60kZKcH4I2Fy2IA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ydgYrx4mSNkCluaznyOIwLt873FVEZ38n23EhvbjbYg=; b=ohl1YzCBoSgJM3bZqMkwrinrCd
-	TJXoN2aGs/7ypt907+FfzadI8+O7PJK1DUjo32eRE5j4xShV0YLhFmYCoTfmBqDer5Sg1NmL3wm3M
-	NpXy383Y4hxJSnhzn3rzVIgdCOZAMuj4gTGkoIqp7EU4lJ6DMkimyA3QXrsvHSysto2jtd9zAKDcz
-	aPxOlGudB99Mg7MenOEkXy4fJPqa2uj1r7PK3vWT9YyBsre+ffHApCf2mRkiv6riMCmk7goCqISq8
-	fVZSPJS4FSrYsTjxcQPQVz9MfhnbCmnXaXOKvXFvG23FFYrgWdpnqOG2UWrGySG8KN63Mo5ps1UYB
-	llvAOYTQ==;
-Received: from [201.172.174.229] (port=46584 helo=[192.168.15.10])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1rmeRW-00047P-3C;
-	Tue, 19 Mar 2024 13:44:11 -0500
-Message-ID: <626c234a-64ab-4449-a6d8-faeb24dd0abf@embeddedor.com>
-Date: Tue, 19 Mar 2024 12:44:09 -0600
+	s=arc-20240116; t=1710878261; c=relaxed/simple;
+	bh=uMOCg+ZAP/LU5NrbSRFjAsa6VME85PBDTSuxQnzbPls=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=TIvNedosDlZsenZojBmzradP0z7d/opHHCuZLDiSS/Fcv8EJbliVzWa1mJHzcpnY2iWrDdWZSZ/9LVj6TFJVciShVsRv9tbhdHeJw+fD48rwRfG1xLLlSkMU5Uv3N4S+rdrQFZ6flnDYDMNtygSUFjIY+CjGsBd5ktKyu5u2B1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u2k0qm1L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 583E8C433C7;
+	Tue, 19 Mar 2024 19:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710878261;
+	bh=uMOCg+ZAP/LU5NrbSRFjAsa6VME85PBDTSuxQnzbPls=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=u2k0qm1LS3U9RG+L6V2tsbSg4yeTnTT8PMufvtzCPIr4VTTap2njB58slWK0ekd3G
+	 2Z+5HZhDSVLcFHRoOWWQYaJI5FVlr5o+wwcgYRIF7O+0VuxhJ9Wre6ap3oIypIRA4v
+	 uAqOPqWAo/p8HDoSGS9oj6nnhUrDM3PSv+Z0Db7i9BX7GUya1E9epZU7w0wsWoXPK7
+	 ou5UQ8SullKrUTob4fTl2W7DV8vtlugiYxtV1+C7PYjE/hrRSM1XQY8qtWjbsE30GM
+	 exjVBNJ+IPXx4YWWSbN75BVkVWiohOorcGkUOLWlaF5BmaaW/lwilf1TtxjiYKaNpP
+	 14uW6CeH3Mrdg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] integrity: Avoid -Wflex-array-member-not-at-end
- warnings
-Content-Language: en-US
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- Kees Cook <keescook@chromium.org>
-References: <ZeYKWrXvACBBrAP8@neat>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <ZeYKWrXvACBBrAP8@neat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 201.172.174.229
-X-Source-L: No
-X-Exim-ID: 1rmeRW-00047P-3C
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.15.10]) [201.172.174.229]:46584
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 5
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfIAwjhMsSnEdeNxCu5hnoDtB3JsasOoM37yiIfi93VX+WRj0ChbGVu5GfL8V/rvNwq05kYk1d4STn+zrP2M+TQNCeIwPffGU7uenE6f4ys5zVdZ2UzGt
- xi72mpYj/aJeTh8FZ3XJpKb6KbNbDN+zmBIW32nnm5pY/7Xxp/TQpwNi08rAyU8jpwJ1++HyyeIg3oQhADfHFCvJOLf9AD+aM93LBU/MI+/mveTAC1nDgDJf
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 19 Mar 2024 21:57:37 +0200
+Message-Id: <CZXZQ544YVAZ.UHT0KAH0B7J2@kernel.org>
+Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH v2] tpm: Fix suspend/shutdown on some boards by
+ preserving chip Locality
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Adam Alves" <adamoa@gmail.com>
+X-Mailer: aerc 0.15.2
+References: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
+ <20240307224957.29432-1-adamoa@gmail.com>
+ <CZR6VBRUEPKW.26B7HTOJZ0ANX@kernel.org>
+ <CAHwaaX8bWOFW2bi6tKpxgf2Cp_vKg5Eqhq618VEur98s+OmD=A@mail.gmail.com>
+In-Reply-To: <CAHwaaX8bWOFW2bi6tKpxgf2Cp_vKg5Eqhq618VEur98s+OmD=A@mail.gmail.com>
 
-Hi all,
+On Wed Mar 13, 2024 at 7:02 PM EET, Adam Alves wrote:
+> Hi Jarkko,
+>
+> Thank you very much for kindly reviewing this proposal.
+>
+> After one week without any issues with my PC hanging, it happened
+> again. It seems that the fix I am proposing is not final (it only
+> reduced the frequency since it always happened when I shutdown after
+> couple hours of power up time and now it only happened after two weeks
+> with a similar usage rate).
+>
+> I will share with you the data you requested below.
 
-Friendly ping: who can take this, please? :)
+Thanks I'll definitely check these in detail.
 
-Thanks!
---
-Gustavo
+Any possible bug fix (if we decide to fix anything) is tpm_crb.c
+including possible kernel command-line parameters or whatever. The
+current proposal affects all the possible pieces of TPM hardware so
+in all cases it is unacceptable.
 
-On 3/4/24 11:52, Gustavo A. R. Silva wrote:
-> -Wflex-array-member-not-at-end is coming in GCC-14, and we are getting
-> ready to enable it globally.
-> 
-> There is currently an object (`hdr)` in `struct ima_max_digest_data`
-> that contains a flexible structure (`struct ima_digest_data`):
-> 
->   struct ima_max_digest_data {
-> 	struct ima_digest_data hdr;
->          u8 digest[HASH_MAX_DIGESTSIZE];
->   } __packed;
-> 
-> So, in order to avoid ending up with a flexible-array member in the
-> middle of another struct, we use the `struct_group_tagged()` helper to
-> separate the flexible array from the rest of the members in the flexible
-> structure:
-> 
-> struct ima_digest_data {
->          struct_group_tagged(ima_digest_data_hdr, hdr,
-> 
-> 	... the rest of the members
-> 
->          );
->          u8 digest[];
-> } __packed;
-> 
-> With the change described above, we can now declare an object of the
-> type of the tagged struct, without embedding the flexible array in the
-> middle of another struct:
-> 
->   struct ima_max_digest_data {
->          struct ima_digest_data_hdr hdr;
->          u8 digest[HASH_MAX_DIGESTSIZE];
->   } __packed;
-> 
-> We also use `container_of()` whenever we need to retrieve a pointer to
-> the flexible structure.
-> 
-> So, with these changes, fix the following warnings:
-> 
-> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->   security/integrity/ima/ima_api.c          |  6 ++++--
->   security/integrity/ima/ima_appraise.c     |  4 +++-
->   security/integrity/ima/ima_init.c         |  6 ++++--
->   security/integrity/ima/ima_main.c         |  6 ++++--
->   security/integrity/ima/ima_template_lib.c | 10 ++++++----
->   security/integrity/integrity.h            |  4 +++-
->   6 files changed, 24 insertions(+), 12 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-> index b37d043d5748..c7c8d1bffb17 100644
-> --- a/security/integrity/ima/ima_api.c
-> +++ b/security/integrity/ima/ima_api.c
-> @@ -247,6 +247,8 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
->   	struct inode *real_inode = d_real_inode(file_dentry(file));
->   	const char *filename = file->f_path.dentry->d_name.name;
->   	struct ima_max_digest_data hash;
-> +	struct ima_digest_data *hash_hdr = container_of(&hash.hdr,
-> +						struct ima_digest_data, hdr);
->   	struct kstat stat;
->   	int result = 0;
->   	int length;
-> @@ -286,9 +288,9 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
->   			result = -ENODATA;
->   		}
->   	} else if (buf) {
-> -		result = ima_calc_buffer_hash(buf, size, &hash.hdr);
-> +		result = ima_calc_buffer_hash(buf, size, hash_hdr);
->   	} else {
-> -		result = ima_calc_file_hash(file, &hash.hdr);
-> +		result = ima_calc_file_hash(file, hash_hdr);
->   	}
->   
->   	if (result && result != -EBADF && result != -EINVAL)
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index 3497741caea9..656c709b974f 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -378,7 +378,9 @@ static int xattr_verify(enum ima_hooks func, struct ima_iint_cache *iint,
->   		}
->   
->   		rc = calc_file_id_hash(IMA_VERITY_DIGSIG, iint->ima_hash->algo,
-> -				       iint->ima_hash->digest, &hash.hdr);
-> +				       iint->ima_hash->digest,
-> +				       container_of(&hash.hdr,
-> +					       struct ima_digest_data, hdr));
->   		if (rc) {
->   			*cause = "sigv3-hashing-error";
->   			*status = INTEGRITY_FAIL;
-> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-> index 393f5c7912d5..4e208239a40e 100644
-> --- a/security/integrity/ima/ima_init.c
-> +++ b/security/integrity/ima/ima_init.c
-> @@ -48,12 +48,14 @@ static int __init ima_add_boot_aggregate(void)
->   	struct ima_event_data event_data = { .iint = iint,
->   					     .filename = boot_aggregate_name };
->   	struct ima_max_digest_data hash;
-> +	struct ima_digest_data *hash_hdr = container_of(&hash.hdr,
-> +						struct ima_digest_data, hdr);
->   	int result = -ENOMEM;
->   	int violation = 0;
->   
->   	memset(iint, 0, sizeof(*iint));
->   	memset(&hash, 0, sizeof(hash));
-> -	iint->ima_hash = &hash.hdr;
-> +	iint->ima_hash = hash_hdr;
->   	iint->ima_hash->algo = ima_hash_algo;
->   	iint->ima_hash->length = hash_digest_size[ima_hash_algo];
->   
-> @@ -70,7 +72,7 @@ static int __init ima_add_boot_aggregate(void)
->   	 * is not found.
->   	 */
->   	if (ima_tpm_chip) {
-> -		result = ima_calc_boot_aggregate(&hash.hdr);
-> +		result = ima_calc_boot_aggregate(hash_hdr);
->   		if (result < 0) {
->   			audit_cause = "hashing_error";
->   			goto err_out;
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index c84e8c55333d..0d3a7c864fd4 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -941,6 +941,8 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
->   					    .buf_len = size};
->   	struct ima_template_desc *template;
->   	struct ima_max_digest_data hash;
-> +	struct ima_digest_data *hash_hdr = container_of(&hash.hdr,
-> +						struct ima_digest_data, hdr);
->   	char digest_hash[IMA_MAX_DIGEST_SIZE];
->   	int digest_hash_len = hash_digest_size[ima_hash_algo];
->   	int violation = 0;
-> @@ -979,7 +981,7 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
->   	if (!pcr)
->   		pcr = CONFIG_IMA_MEASURE_PCR_IDX;
->   
-> -	iint.ima_hash = &hash.hdr;
-> +	iint.ima_hash = hash_hdr;
->   	iint.ima_hash->algo = ima_hash_algo;
->   	iint.ima_hash->length = hash_digest_size[ima_hash_algo];
->   
-> @@ -990,7 +992,7 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
->   	}
->   
->   	if (buf_hash) {
-> -		memcpy(digest_hash, hash.hdr.digest, digest_hash_len);
-> +		memcpy(digest_hash, hash_hdr->digest, digest_hash_len);
->   
->   		ret = ima_calc_buffer_hash(digest_hash, digest_hash_len,
->   					   iint.ima_hash);
-> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-> index 6cd0add524cd..74198d7619da 100644
-> --- a/security/integrity/ima/ima_template_lib.c
-> +++ b/security/integrity/ima/ima_template_lib.c
-> @@ -339,6 +339,8 @@ int ima_eventdigest_init(struct ima_event_data *event_data,
->   			 struct ima_field_data *field_data)
->   {
->   	struct ima_max_digest_data hash;
-> +	struct ima_digest_data *hash_hdr = container_of(&hash.hdr,
-> +						struct ima_digest_data, hdr);
->   	u8 *cur_digest = NULL;
->   	u32 cur_digestsize = 0;
->   	struct inode *inode;
-> @@ -358,7 +360,7 @@ int ima_eventdigest_init(struct ima_event_data *event_data,
->   	if ((const char *)event_data->filename == boot_aggregate_name) {
->   		if (ima_tpm_chip) {
->   			hash.hdr.algo = HASH_ALGO_SHA1;
-> -			result = ima_calc_boot_aggregate(&hash.hdr);
-> +			result = ima_calc_boot_aggregate(hash_hdr);
->   
->   			/* algo can change depending on available PCR banks */
->   			if (!result && hash.hdr.algo != HASH_ALGO_SHA1)
-> @@ -368,7 +370,7 @@ int ima_eventdigest_init(struct ima_event_data *event_data,
->   				memset(&hash, 0, sizeof(hash));
->   		}
->   
-> -		cur_digest = hash.hdr.digest;
-> +		cur_digest = hash_hdr->digest;
->   		cur_digestsize = hash_digest_size[HASH_ALGO_SHA1];
->   		goto out;
->   	}
-> @@ -379,14 +381,14 @@ int ima_eventdigest_init(struct ima_event_data *event_data,
->   	inode = file_inode(event_data->file);
->   	hash.hdr.algo = ima_template_hash_algo_allowed(ima_hash_algo) ?
->   	    ima_hash_algo : HASH_ALGO_SHA1;
-> -	result = ima_calc_file_hash(event_data->file, &hash.hdr);
-> +	result = ima_calc_file_hash(event_data->file, hash_hdr);
->   	if (result) {
->   		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode,
->   				    event_data->filename, "collect_data",
->   				    "failed", result, 0);
->   		return result;
->   	}
-> -	cur_digest = hash.hdr.digest;
-> +	cur_digest = hash_hdr->digest;
->   	cur_digestsize = hash.hdr.length;
->   out:
->   	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
-> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-> index 50d6f798e613..fc1952da02ea 100644
-> --- a/security/integrity/integrity.h
-> +++ b/security/integrity/integrity.h
-> @@ -44,6 +44,7 @@ struct evm_xattr {
->   #define IMA_MAX_DIGEST_SIZE	HASH_MAX_DIGESTSIZE
->   
->   struct ima_digest_data {
-> +	struct_group_tagged(ima_digest_data_hdr, hdr,
->   	u8 algo;
->   	u8 length;
->   	union {
-> @@ -57,6 +58,7 @@ struct ima_digest_data {
->   		} ng;
->   		u8 data[2];
->   	} xattr;
-> +	);
->   	u8 digest[];
->   } __packed;
->   
-> @@ -65,7 +67,7 @@ struct ima_digest_data {
->    * with the maximum hash size, define ima_max_digest_data struct.
->    */
->   struct ima_max_digest_data {
-> -	struct ima_digest_data hdr;
-> +	struct ima_digest_data_hdr hdr;
->   	u8 digest[HASH_MAX_DIGESTSIZE];
->   } __packed;
->   
+Do you have dmesg/journactl transcript? Did you try to update the
+firmware?
+
+BR, Jarkko
 
