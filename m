@@ -1,131 +1,129 @@
-Return-Path: <linux-integrity+bounces-1795-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1802-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E0418806DB
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 22:41:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 037C7880798
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 23:56:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99A321F22B63
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 21:41:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35BCE1C2282B
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Mar 2024 22:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8940B3EA77;
-	Tue, 19 Mar 2024 21:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A9D40BF2;
+	Tue, 19 Mar 2024 22:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Djr6gop+"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bdXBL9s0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653613C488
-	for <linux-integrity@vger.kernel.org>; Tue, 19 Mar 2024 21:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493753FBB1;
+	Tue, 19 Mar 2024 22:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710884472; cv=none; b=EpIVfgbfxk8X3gXiQEoNROUR6FgCyhGW6mY94aHfctf36e0i1N3VRPJLkXSDgHSp8CPtILPJoxu0JWn371/h/MJxagt3lwEkJnd//7fp22MuWdKMEcUQr1thOY9yt3mG401zDYRTsJqTUnLlNCfb6eRdniooq2689gnFw+AniAs=
+	t=1710888921; cv=none; b=dUnvyl+dB1MT6DGmldFEVF3rZwrm+JiXtJdcdaBBhhE0zuttS6l3oimtBR0vkQKVCwlpKjBjo29NNWCtR27urNXjS53NAB5PA5jZTRgNgtnLI37jx9j4QYP8juxXa8xJP4l6rZJ35PV3d4QosClQeK+DGaQLSu74nSXvOkqd/z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710884472; c=relaxed/simple;
-	bh=28Z7ebjVPvspZTuSeXh1/vWTK0HeGMo2Ovw7JyP+nVM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=rbv9XPsJiqGBKv55HeOtZRJEvyvgptKiIwlocVWlyWrraaKcdq8qcQR8Kj2Ab+EuSHvcXf5I8F5M7G7o16aq/znFCkjZzJiil5TVYgR5kXiLmZNWji6iv3swnmVk0A/1nknOHDk/Tk5y1GJsMKatokJ3lOlzydE90sMiZ2a6fqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Djr6gop+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4522C433C7;
-	Tue, 19 Mar 2024 21:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710884471;
-	bh=28Z7ebjVPvspZTuSeXh1/vWTK0HeGMo2Ovw7JyP+nVM=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=Djr6gop+/Ek0fWTRv+j8F5mq7CAiRRtR9e0Mu6pbpfzKOC9igKL88DbOjjRH1+vQs
-	 FBb9POHd75qFubfnv5yjPEEMs0aaDoVRdzY4XLuGX0t9NAcAZ977Hj6xgGA6jeK7q+
-	 2ju40/71YvRkwSrGxkZ0FnZdGrFzcWTdQx+a474rzA001a5xiHrpP7uKCMe3LMrgcq
-	 wFiIiRtonHNMrWqGkbpFbeJWO0V2+3XKk7akwZt8nGY92GZQraq9mc8QkOfE9YNdS1
-	 FwKDe2zWzivGo3myqemvFjtc3dddc9X2esLAlY+fQcImRDDEKs0lRyUZc0AQNRT5XV
-	 D3NBzlG28kROg==
+	s=arc-20240116; t=1710888921; c=relaxed/simple;
+	bh=fLjxN0Sk5KrBVRj/F43291DNmPrPvvUPq+zN5q/P3rA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=lBQCEbP3BfM9ZcBDgEYvbmOnw3vbBAzg130Lre0OVr94lTIkvuIC9cq2c13X9T0xsslVvJ+gz7p4Es1R/okQJXm9zfWSyLGJvLNj5ssrsKqyA9ZITFKb0MUazGK3K8Yd0pZvGcSB89ZpzkcoBsXy2r+37usX4WgbBZJ9CAtQWmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bdXBL9s0; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42JMk5on029729;
+	Tue, 19 Mar 2024 22:55:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=xEWRN1kQtdflhyrl2Pxa7AJCVUu9MrlZm0JM8RwO/9o=;
+ b=bdXBL9s072ucTw/T756cHbAiv3eHX4VX1bzTqEI/PGp9Ehbyi0QZb2VNMLiaOUqyF53d
+ w45hcKopSlSpaQPhsENGAAn7Rcuj/e+JqMOehOOB1OlgWK+7kyVKivfo0FyVm8V0UwpO
+ hf/+meSzkh/WYcmVeAKfcVS/TUhvUVtEwpwQo0qwCXB6CJb7b7Xfs9LRbVW04NL2le0f
+ dchd9UOlPh8WXcbMt+SbOnyBCvyK6O/KWKjmHX2UunkewiCPk74aUtTVZDqbl8A6eD30
+ IAaGfJSN3WCrSPHsHGbE/6lOqbt4dwFF1dRShpV+aAf2tmCIFWD4ZlATNrMpx19o4zeH iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyjx0g397-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Mar 2024 22:55:08 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42JMt7iA011599;
+	Tue, 19 Mar 2024 22:55:07 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyjx0g35t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Mar 2024 22:55:07 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42JL1JNs002780;
+	Tue, 19 Mar 2024 22:50:43 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wwrf2j58e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Mar 2024 22:50:43 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42JMofpc21758708
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 19 Mar 2024 22:50:43 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E7B1F58068;
+	Tue, 19 Mar 2024 22:50:40 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0A43A58056;
+	Tue, 19 Mar 2024 22:50:40 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.80.83])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 19 Mar 2024 22:50:39 +0000 (GMT)
+Message-ID: <9daaa1d12d351bca982b28830354f86f7ef97b6f.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 01/10] ima: Rename backing_inode to real_inode
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-unionfs@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, roberto.sassu@huawei.com, amir73il@gmail.com,
+        brauner@kernel.org, miklos@szeredi.hu
+Date: Tue, 19 Mar 2024 18:50:39 -0400
+In-Reply-To: <20240223172513.4049959-2-stefanb@linux.ibm.com>
+References: <20240223172513.4049959-1-stefanb@linux.ibm.com>
+	 <20240223172513.4049959-2-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 19 Mar 2024 23:41:09 +0200
-Message-Id: <CZY1XEOMDK7V.V71NXQCTEI5N@kernel.org>
-Subject: Re: [PATCH v2] tpm: Fix suspend/shutdown on some boards by
- preserving chip Locality
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Adam Alves" <adamoa@gmail.com>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.15.2
-References: <CZNS5B6JRFLS.28TOPENHJIKCQ@kernel.org>
- <20240307224957.29432-1-adamoa@gmail.com>
- <CZR6VBRUEPKW.26B7HTOJZ0ANX@kernel.org>
- <CAHwaaX8bWOFW2bi6tKpxgf2Cp_vKg5Eqhq618VEur98s+OmD=A@mail.gmail.com>
- <CZXZQ544YVAZ.UHT0KAH0B7J2@kernel.org>
- <CZY1V4JMNR4U.3GTTNERY5MA6K@kernel.org>
-In-Reply-To: <CZY1V4JMNR4U.3GTTNERY5MA6K@kernel.org>
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jvYkY3ss7LvP5Zm-XbPVGn_4UYQFYrFN
+X-Proofpoint-GUID: cqs4CkSCMlhN4GqJuCVj4XPxha8djzpE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-19_09,2024-03-18_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=693
+ priorityscore=1501 spamscore=0 bulkscore=0 clxscore=1015 malwarescore=0
+ adultscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2403140000 definitions=main-2403190176
 
-On Tue Mar 19, 2024 at 11:38 PM EET, Jarkko Sakkinen wrote:
-> On Tue Mar 19, 2024 at 9:57 PM EET, Jarkko Sakkinen wrote:
-> > On Wed Mar 13, 2024 at 7:02 PM EET, Adam Alves wrote:
-> > > Hi Jarkko,
-> > >
-> > > Thank you very much for kindly reviewing this proposal.
-> > >
-> > > After one week without any issues with my PC hanging, it happened
-> > > again. It seems that the fix I am proposing is not final (it only
-> > > reduced the frequency since it always happened when I shutdown after
-> > > couple hours of power up time and now it only happened after two week=
-s
-> > > with a similar usage rate).
-> > >
-> > > I will share with you the data you requested below.
-> >
-> > Thanks I'll definitely check these in detail.
-> >
-> > Any possible bug fix (if we decide to fix anything) is tpm_crb.c
-> > including possible kernel command-line parameters or whatever. The
-> > current proposal affects all the possible pieces of TPM hardware so
-> > in all cases it is unacceptable.
-> >
-> > Do you have dmesg/journactl transcript? Did you try to update the
-> > firmware?
->
-> OK so I do have ASUS motherboard and my TPM2 ACPI table is almost the
-> same match but:
->
-> BIOS Information
->         Vendor: American Megatrends Inc.
->         Version: 2212
->         Release Date: 12/13/2022
->         Address: 0xF0000
->         Runtime Size: 64 kB
->         ROM Size: 24 MB
->
-> Where as in you dmidecode.txt:
->
-> Handle 0x0000, DMI type 0, 26 bytes
-> BIOS Information
-> 	Vendor: American Megatrends Inc.
-> 	Version: 1601
-> 	Release Date: 02/11/2022
-> 	Address: 0xF0000
-> 	Runtime Size: 64 kB
-> 	ROM Size: 16 MB
->
-> So at least the BIOS version is older. Can you update BIOS and see if
-> that could possibly fix the issue?
->
-> Make sure that it contains update for both BIOS and Management Engine.
+Hi Stefan,
 
-AND if you end up still proposing any fix please make sure that it only
-changes tpm_crb.c so that there is something to analyze. Sprinkled
-arbitrary changes are not something we can really not say much.
+On Fri, 2024-02-23 at 12:25 -0500, Stefan Berger wrote:
+> Rename the backing_inode variable to real_inode since it gets its value
+> from real_inode().
+> 
+> Suggested-by: Amir Goldstein <amir73il@gmail.com>
+> Co-developed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Amir Goldstein <amir73il@gmail.com>
 
-If you don't know exactly what you are fixing and why please try to keep
-the fix local to the issue. But yeah, BIOS update is really the first
-trial here.
+Thanks for adding me as a co-developer.  The "Co-developed-by" tag needs to be
+followed immediately by their "Signed-off-by" tag.  I'll need to move it
+immediately before my "Signed-off-by" tag.
 
-BR, Jarkko
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+
+Mimi
+
 
