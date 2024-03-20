@@ -1,117 +1,127 @@
-Return-Path: <linux-integrity+bounces-1820-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1821-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12BB48817C6
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 20:18:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2719E8818A0
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 21:31:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C16E6281D22
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 19:18:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC14AB22F16
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 20:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F31098527E;
-	Wed, 20 Mar 2024 19:18:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64EC3EA9C;
+	Wed, 20 Mar 2024 20:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MR24ANJQ"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="eJR6sbSR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFB86AFAE
-	for <linux-integrity@vger.kernel.org>; Wed, 20 Mar 2024 19:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3673B1B7F5;
+	Wed, 20 Mar 2024 20:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710962312; cv=none; b=NTcR8JnywkqSBrDvG/BFXr1uoRs2cTMTSsy8LF9qcJXqaMwffdytL7PxGqud81xaRu7L1V/Ardhfj1MA/lDScdki5eU4kUMiCDXmGKlvoMHmQUQGj1RicXbwUMBBuKDKNIV3t3JYBZz0QXYpFy6nG7qGgCDraH0LfD0q+h6qqz4=
+	t=1710966668; cv=none; b=ntTHjbstj7TqGtgJZBpKW4Gpa4iJgDUw0NILCb6BWSxva7cuYba3T96zf2JJGYPAOGa2quL59a4+jU6XDvHK5FvJ62H8WsceP6L9sVY7zSot96sxKYyYTpCc66YjYxmh8hKjDMAPGALXLAAdHQZjWb8N+DLQyvTFyBK3ChqOafA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710962312; c=relaxed/simple;
-	bh=WsIxuOvN+bREjV/jSLqsWTry9lp6MJbn9jY4EuvPeIY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S4ZHMBIWWAWlOxg5IkxY/kbaNoh1qbXg3Lf+FZaRDwgpvhFeRWy024oguVflhnXsZ/U5oAloNV1qIEYNdyOhbpjlSJF2fQrrRHd+sz7Q99drCsLj8RirtgC/TMYFdbR+dVI6wuL/7ENiFb/5vrLTB6EBB5B3/Y6sGK7XBiTuTNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MR24ANJQ; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1def3340682so880745ad.1
-        for <linux-integrity@vger.kernel.org>; Wed, 20 Mar 2024 12:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710962311; x=1711567111; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s/2j7GJ/f78pTOgS8fiGqzLoshe938vqQPVEMBHr3eg=;
-        b=MR24ANJQLxhb9V78hlLo48sQsdKtfV6EKQJXFUVwHXjRqL/wvAdY6pCVfnKYXxe5kJ
-         n51iuJtk2MVjMJh1LDpcAGYDcIU/L97bDkC5uRLHId2YDL+9LbAFO23I7mg1n0E08gTs
-         qutg+4XfWZdTZ01FdwUu+7RZ7nt1nfzsDZJrd4uhBFKDQlmBKL6+8yd28dJR74p4zogA
-         BZGx6+UXiYjD632MCYwV2WxMs4Uhz3TG9RDR1BcJe5Pnhxrd+aPfryyJqHNUf5RHF/kh
-         6L8hABGoIq+SqwCsaSQf96llGrtTujMq7iS9peZX5ioDgNGX4T5GEsEGw2D+2sB4K0fH
-         XvQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710962311; x=1711567111;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s/2j7GJ/f78pTOgS8fiGqzLoshe938vqQPVEMBHr3eg=;
-        b=GnusCc8yFwcWkpVPyi67OHjrQoUOzNG7WRaXlToNAwolaSxpOOK/X2Yov9RTPzm5UC
-         htcNaQ24viujkGp/lXHkeNSQMu6+u7xOjDG2h9LvvsZy08QFH8IF2a50Y23kh6tuBDtO
-         9GU3Z5Ci1AyMsmS3bAWxgKBunWHSoECVUuFVk5qIAc5Rwh+Klw5xpykIkNxwOnmCc4a3
-         aBROhthKbpLj4IQRXfp/5Mr5sQaBwtFkB26vgQW/YGId3mv17qp6Pn6YvYzIS4kdfyFD
-         a8Rq5ZOSK+Uzs0SYWAjP8iQDc0UjEf7Ic3Lwy6euCT91mknKJZsCmb9nb6v1quFXj+uN
-         SMSA==
-X-Forwarded-Encrypted: i=1; AJvYcCWc39hXuojtvvc0N4n3bCePkLj/PoV0GOtpv2U2XmIFnpzmSDWbTz5mt9C0ZcKGLHTxq2VVLXr/gv8HODzCcdZBKSQ3XOYF2yUEL1bTPVR0
-X-Gm-Message-State: AOJu0YzQfeLqTVm5CcP3ZPZE6JEJ9Mt73uOt78eMPTb5T5iW9Ak1OcJy
-	vnhK4wDun88agyAWZbQB3Lbt8HIB7E5NPKeBb0ueoQ21jW7CJrFxD9yWgkWL9Q==
-X-Google-Smtp-Source: AGHT+IEOmO0s28VdHmgSPVGkidyNRf3nr2YZr0lrY5hMddb2XFotVXNAvEfg68IohlQddQyxy2ZaFg==
-X-Received: by 2002:a17:903:124b:b0:1de:ff81:f650 with SMTP id u11-20020a170903124b00b001deff81f650mr8038158plh.10.1710962310458;
-        Wed, 20 Mar 2024 12:18:30 -0700 (PDT)
-Received: from google.com (34.85.168.34.bc.googleusercontent.com. [34.168.85.34])
-        by smtp.gmail.com with ESMTPSA id q12-20020a170902a3cc00b001dd744f97d0sm12742081plb.273.2024.03.20.12.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Mar 2024 12:18:29 -0700 (PDT)
-Date: Wed, 20 Mar 2024 19:18:25 +0000
-From: Eric Biggers <ebiggers@google.com>
-To: Matthew Garrett <mjg59@srcf.ucam.org>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	linux-integrity@vger.kernel.org,
-	Alberto Mardegan <a.mardegan@omp.ru>,
-	Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>,
-	Patrick Ohly <patrick.ohly@intel.com>,
-	Patrick Uiterwijk <patrick@puiterwijk.org>,
-	Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-	Matthew Garrett <mjg59@google.com>
-Subject: Re: [ima-evm-utils: PATCH v2 1/1] Change license to
- LGPL-2.0-or-later and GPL-2.0-or-later
-Message-ID: <20240320191825.GA2316017@google.com>
-References: <103252ffff09c607e83c887cab2e0af5404d62ff.1710774200.git.dmitry.kasatkin@gmail.com>
- <CACE9dm8rjanQ8eKDJfD3Rj1GCYzk2MGidAkuiMo8ZZ4dduubQg@mail.gmail.com>
- <ZfiTJw1JVNyS8e/G@srcf.ucam.org>
+	s=arc-20240116; t=1710966668; c=relaxed/simple;
+	bh=ftELp+AQpN+pT8FlMdTcA2etrhKsXPl9MtAA44puBeI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ijefk5s138sULWnYRdKFBJPfsky3ggqrF5mLjv+rdtxpIQqBEQ++OTUaBQUo0NNdZgYO9x45uMoPQqGzHN8+mwA+JUESfiUGBLWOOJCuirFPh7Igjpu12A6rpm6Twt7AEFA18sx0Jpx5BAwpVVck4A3MyT9/QYzwx/Lg5w5/ufg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=eJR6sbSR; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [167.220.2.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 8A6A720B74C3;
+	Wed, 20 Mar 2024 13:31:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8A6A720B74C3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1710966666;
+	bh=LjNajcTf5mT64oJtdPlWYXohXjlD7KHbVX6iVtTNaxM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eJR6sbSRnr7jKg1NOAoDHQjhMsLt2lbwNoUurE8453RHuwOP/lav2yod0rrGbe9p7
+	 245ClYUHJ3mecsRXR37rNvTVNg31oEz2ju7BzIZHeIZvg4e6hxTcCVU/+vwVA50149
+	 LDRtRn74I/Tmd9JYCYNcR6ERNpSTh8T0MVBo+5G8=
+Message-ID: <a69805c7-7b8a-44ee-9b32-f9314b5a9763@linux.microsoft.com>
+Date: Wed, 20 Mar 2024 13:31:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZfiTJw1JVNyS8e/G@srcf.ucam.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v15 12/21] security: add security_bdev_setintegrity()
+ hook
+Content-Language: en-CA
+To: Jarkko Sakkinen <jarkko@kernel.org>, Paul Moore <paul@paul-moore.com>,
+ corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+ tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
+ snitzer@kernel.org, eparis@redhat.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1710560151-28904-13-git-send-email-wufan@linux.microsoft.com>
+ <f5cf9d285bd5f09bbc3f79b0800d37fc@paul-moore.com>
+ <CZYFP5S04YTK.23AJMKWQWVCR8@kernel.org>
+ <CZYFR8LEEQB1.8C0J9KCTF8CB@kernel.org>
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <CZYFR8LEEQB1.8C0J9KCTF8CB@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
 
-On Mon, Mar 18, 2024 at 07:16:55PM +0000, Matthew Garrett wrote:
-> On Mon, Mar 18, 2024 at 05:42:59PM +0200, Dmitry Kasatkin wrote:
+
+On 3/20/2024 1:31 AM, Jarkko Sakkinen wrote:
+> On Wed Mar 20, 2024 at 10:28 AM EET, Jarkko Sakkinen wrote:
+>> On Wed Mar 20, 2024 at 1:00 AM EET, Paul Moore wrote:
+>>> On Mar 15, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
+>>>>
+>>>> This patch introduces a new hook to save block device's integrity
+>>>> data. For example, for dm-verity, LSMs can use this hook to save
+>>>> the roothash signature of a dm-verity into the security blob,
+>>>> and LSMs can make access decisions based on the data inside
+>>>> the signature, like the signer certificate.
+>>>>
+>>>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+>>>>
+>>>> --
+>>>> v1-v14:
+>>>>    + Not present
+>>>>
+>>>> v15:
+>>>>    + Introduced
+>>>>
+>>>> ---
+>>>>   include/linux/lsm_hook_defs.h |  2 ++
+>>>>   include/linux/security.h      | 14 ++++++++++++++
+>>>>   security/security.c           | 28 ++++++++++++++++++++++++++++
+>>>>   3 files changed, 44 insertions(+)
+>>>
+>>> I'm not sure why you made this a separate patch, help?  If there is
+>>> no significant reason why this is separate, please squash it together
+>>> with patch 11/21.
+>>
+>> Off-topic: it is weird to have *RFC* patch set at v15.
+>>
+>> RFC by de-facto is something that can be safely ignored if you don't
+>> have bandwidth. 15 versions of anything that can be safely ignored
+>> is by definition spamming :-) I mean just conceptually.
+>>
+>> So does the RFC still hold or what the heck is going on with this one?
+>>
+>> Haven't followed for some time now...
 > 
-> > Hello,
-> > 
-> > Added all those who have not responded so far.
-> > Please respond.
+> I mean if this RFC trend continues I'll just put auto-filter for this
+> thread to put straight to the bin.  There's enough non-RFC patch sets
+> to review.
 > 
-> All my contributions are owned by Google, not me, so I can't ack a 
-> relicense of them. opensource@google.com may be able to help you? Sorry 
-> about that!
+> BR, Jarkko
 
-I reached out to the opensource-licensing team internally and got permission to
-approve the relicense for all Google contributions including Matthew's.  So feel
-free to add:
+Sorry about the confusion with the RFC tag – I wasn't fully aware of its 
+conventional meaning and how it's perceived in terms of importance and 
+urgency. Point taken, and I'll make sure to remove the RFC tag for 
+future submissions. Definitely not my intention to clog up the workflow 
+or seem like I'm spamming.
 
-Acked-by: Eric Biggers <ebiggers@google.com> # all Google contributions
-
-- Eric
+-Fan
 
