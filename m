@@ -1,173 +1,161 @@
-Return-Path: <linux-integrity+bounces-1814-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1815-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21F20881178
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 13:07:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5407988134B
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 15:28:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40B5B1C22BED
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 12:07:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDD3DB22FDF
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 14:28:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3600B3FB82;
-	Wed, 20 Mar 2024 12:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16146446AE;
+	Wed, 20 Mar 2024 14:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="m8QJ+Hsb"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fLFDBs8w"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715A13FBAF
-	for <linux-integrity@vger.kernel.org>; Wed, 20 Mar 2024 12:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840B8481A0;
+	Wed, 20 Mar 2024 14:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710936450; cv=none; b=HPBKd1tJhm+d2NuS9c1Ij1GfUOMefXO6crlbQmfXq8k58qrBww1pSYqOD2caZloK0aZKslTpOUA1G9DE27we/c7sKFXGBCdRwZywzFpAShjpD3nHKHdfNpwcNfD7R+QPhDPq8QLMiZuSbnDoyI0Q/edepwoSrIpnTXCmIsbdNL4=
+	t=1710944888; cv=none; b=UH/sPBRpBhXf1DM9XHCGF3c5OQuZi4SMxO7R7VidA4JofWJN0+ufADToCy5MoLsE+FVNT248SjvoSm4TsRk/l6PhXVXQu4T8Xl7c07TF7zlWqXxZNIlgDGtJQP1cRwPp/AWq9uScYLxjmHpaiTcfLHPRd75OMTdZwtXDKNNqgUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710936450; c=relaxed/simple;
-	bh=Khz7txyOG2yC3ms7Ybv9bNvsDJqRdqVjCIq2go5Q3Kw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=UcVySGqxf2HsU15bl2Tzy79CFaGxYPZB+J7byUdCmKz1KelCPYn12GFFsHb1ynOqwA8qTesbfbYJMRzYXq8/Gaz8UhgyVmX87Nau1O6xsPpfII3bOOhykdTmMsFz6Qxcj1V0QjJG1orBqi5w8rJ3iMJZLJD8MRjMDTgRTcQsejw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=m8QJ+Hsb; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42KBnbAX017889;
-	Wed, 20 Mar 2024 12:07:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=UhrnHiHAUA3IAuufRfp1jH0X67rR46uTn8lNYwN4BpY=;
- b=m8QJ+HsbQUNdJc3/B23WpxGkyu9/Np92euAUS6FzRTpLGZdEZFcSIq4d2y1nk4poThAW
- VcaYkowQDaGLZ9gPN3JOMDALwi/uP/CKBI7x+hI2ZTol4XM7c36RDvxPeCW0CXY/58oX
- k5CpOcXFMzl+PFl0d/7da2IEVvFE9wQnrRheRHcduFSBi4/QgXCZ5L30T8aN6j9eisGV
- ddJdV98YXFCA3AUjQV/u74lYn9SwlzsFLEZsPfNsVKeD8GpkNLG0J64cDcu68eZlFSBp
- kp2MPqyRUxQWWQ+cO9JMdVwdCS4TiOuFCHkdeVtT2ax2E07rLoqOnDYBoWJBvVR7/Bsy Fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyxbr854p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Mar 2024 12:07:17 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42KC70KE015731;
-	Wed, 20 Mar 2024 12:07:16 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wyxbr854n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Mar 2024 12:07:16 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42KAsT5D017203;
-	Wed, 20 Mar 2024 12:07:16 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wwnrtec1g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 Mar 2024 12:07:15 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42KC7Dlo15598288
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 20 Mar 2024 12:07:15 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 367C658066;
-	Wed, 20 Mar 2024 12:07:13 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8FE9D5806E;
-	Wed, 20 Mar 2024 12:07:12 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.14.104])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 20 Mar 2024 12:07:12 +0000 (GMT)
-Message-ID: <eb70d9dbb54da5606eda1ecb8a87d653d801f441.camel@linux.ibm.com>
-Subject: Re: [PATCH v4] ima: add crypto agility support for template-hash
- algorithm
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Enrico Bravi <enrico.bravi@polito.it>, linux-integrity@vger.kernel.org,
-        dmitry.kasatkin@gmail.com
-Cc: roberto.sassu@huawei.com, Silvia Sisinni <silvia.sisinni@polito.it>
-Date: Wed, 20 Mar 2024 08:07:12 -0400
-In-Reply-To: <f2ed3e2a-9052-4a95-b31f-85047a01d1dd@polito.it>
-References: <20240308104953.743847-1-enrico.bravi@polito.it>
-	 <18e212c7d947e8a39297fd84e1765d2bc0e82140.camel@linux.ibm.com>
-	 <f2ed3e2a-9052-4a95-b31f-85047a01d1dd@polito.it>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
+	s=arc-20240116; t=1710944888; c=relaxed/simple;
+	bh=6gGnkvQ8A2COzp2E7sFsQr6WlVhSguQXJNANqH+jlSc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gmCGtrMP957Nu2muhhHM80lmEM0Ozueu74K1keLAw5DRHgr/0tr2rn6GPdNlTF4f9eoZt9euLdMo7Uycqp3CNuJwt8DBgY+G9ouFibRQdMKCgh/vO4tfmNKe8vPJ2Qb1qOhBuKe99weLVg3XosuWQWHzOBXBQKmLgsg8Gupi61Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fLFDBs8w; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=QC7UpnziKdVGcCkCO2/9r9IHLlpWewda2Br4C2weMl4=; b=fLFDBs8w/irHfcXmClsgGb/Iyt
+	Nw2D4zh8HqCN2lH/Bc1fq5++b7W16p2VHC4c4FatpM+niIZQJu3eClNEdRu5mxtJlqU4O2OWNR9m0
+	2OQmjVEAOOxqV0jq2bU9LuniyklAMoSvxwGxpOZvEnqmsPT7ky5xmsbOfqS7VT+uCi8rSKsR5CPgf
+	We8iELIjsLzuhxle6YwMQmBbYy3DG2Uk5KVtO/sRHmkEpXiCMDUrns7S2qvR99galwTLCBo0Zn2TJ
+	w2v43QbW+Ptw/z2efN1MXr607mWpHq71B44t7tqMyP4uhcAM/oIw6wWxI1s7bXGuqVKKRnRzxc8KV
+	am2xQLtA==;
+Received: from [50.53.2.121] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rmwvC-0000000HRGR-26Ml;
+	Wed, 20 Mar 2024 14:28:02 +0000
+Message-ID: <4550b40f-658f-4795-a7e1-ac9100c657df@infradead.org>
+Date: Wed, 20 Mar 2024 07:27:59 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Documentation: tpm_tis
+Content-Language: en-US
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ "Daniel P . Smith" <dpsmith@apertussolutions.com>,
+ Lino Sanfilippo <l.sanfilippo@kunbus.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Peter Huewe <peterhuewe@gmx.de>,
+ James Bottomley <James.Bottomley@HansenPartnership.com>,
+ Alexander Steffen <Alexander.Steffen@infineon.com>,
+ keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240320085601.40450-1-jarkko@kernel.org>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240320085601.40450-1-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NgytyfgG2vnrJGrPV3Zodh_vWHYRQWYa
-X-Proofpoint-GUID: _mhVSSTKtcrWaRYHOVs4hb_K6CwcvH-h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-20_08,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- mlxlogscore=999 priorityscore=1501 phishscore=0 malwarescore=0
- adultscore=0 impostorscore=0 spamscore=0 clxscore=1015 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403140000 definitions=main-2403200096
 
+Hi,
 
-> > > diff --git a/security/integrity/ima/ima_fs.c
-> > > b/security/integrity/ima/ima_fs.c
-> > > index cd1683dad3bf..475ab368e32f 100644
-> > > --- a/security/integrity/ima/ima_fs.c
-> > > +++ b/security/integrity/ima/ima_fs.c
-> > > @@ -116,9 +116,13 @@ void ima_putc(struct seq_file *m, void *data, int
-> > > datalen)
-> > >  		seq_putc(m, *(char *)data++);
-> > >  }
-> > >  
-> > > +static struct dentry **ima_ascii_measurements_files;
-> > > +static struct dentry **ima_binary_measurements_files;
-> > 
-> > The variable naming isn't quite right.  It's defined as a 'struct dentry',
-> > but
-> > the name is '*_files'.  Why not just name the variables 'ima_{ascii, binary}
-> > _measurements'?
+On 3/20/24 01:56, Jarkko Sakkinen wrote:
+> Based recent discussions on LKML, provide preliminary bits of tpm_tis_core
+> dependent drivers. Includes only bare essentials but can be extended later
+> on case by case. This way some people may even want to read it later on.
 > 
-> Hi Mimi,
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> CC: Daniel P. Smith <dpsmith@apertussolutions.com>
+> Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Peter Huewe <peterhuewe@gmx.de>
+> Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-integrity@vger.kernel.org
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Hi Enrico,
+Makes sense to me. Thanks.
 
-> thank you for pointing that out. What do you think of naming them 'ima_{ascii,
-> binary}_securityfs_measurement_lists', to have also coherence with the names
-> of
-> the new functions defined.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-As these are static variables, prefixing them with 'ima_' isn't necessary. 
-Either way is fine.
-
-> > > +static void remove_measurements_list_files(struct dentry **files)
-> > 
-> > And remove '_files' from the function name.  Perhaps rename it
-> > remove_measurement_lists or remove_securityfs_measurement_lists.
-> > 
-> > > +{
-> > > +	int i;
-> > > +
-> > > +	if (files) {
-> > > +		for (i = 0; i < ima_measurements_files_count; i++)
-> > > +			securityfs_remove(files[i]);
-> > > +
-> > > +		kfree(files);
-> > > +	}
-> > > +}
-> > > +
-> > > +static int create_measurements_list_files(void)
-> > 
-> > And remove '_files' from the function name.  Perhaps rename it to
-> > create_measurement_lists or create_securityfs_measurement_lists.
+> ---
+> v2:
+> - Fixed errors reported by Randy:
+>   https://lore.kernel.org/all/aed28265-d677-491a-a045-24b351854b24@infradead.org/
+> - Improved the text a bit to have a better presentation.
+> ---
+>  Documentation/security/tpm/index.rst   |  1 +
+>  Documentation/security/tpm/tpm_tis.rst | 30 ++++++++++++++++++++++++++
+>  2 files changed, 31 insertions(+)
+>  create mode 100644 Documentation/security/tpm/tpm_tis.rst
 > 
-> I think that keeping this structure for the names
-> 'remove_securityfs_measurement_lists' and
-> 'create_securityfs_measurement_lists'
-> makes sense.
+> diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
+> index fc40e9f23c85..f27a17f60a96 100644
+> --- a/Documentation/security/tpm/index.rst
+> +++ b/Documentation/security/tpm/index.rst
+> @@ -5,6 +5,7 @@ Trusted Platform Module documentation
+>  .. toctree::
+>  
+>     tpm_event_log
+> +   tpm_tis
+>     tpm_vtpm_proxy
+>     xen-tpmfront
+>     tpm_ftpm_tee
+> diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/security/tpm/tpm_tis.rst
+> new file mode 100644
+> index 000000000000..b331813b3c45
+> --- /dev/null
+> +++ b/Documentation/security/tpm/tpm_tis.rst
+> @@ -0,0 +1,30 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=========================
+> +TPM FIFO interface Driver
+> +=========================
+> +
+> +FIFO (First-In-First-Out) is the name of the hardware interface used by the
+> +tpm_tis_core dependent drivers. The prefix "tis" comes from the TPM Interface
+> +Specification, which is the hardware interface specification for TPM 1.x chips.
+> +
+> +Communication is based on a 5 KiB buffer shared by the TPM chip through a
+> +hardware bus or memory map, depending on the physical wiring. The buffer is
+> +further split into five equal-size buffers, which provide equivalent sets of
+> +registers for communication between the CPU and TPM. These communication
+> +endpoints are called localities in the TCG terminology.
+> +
+> +When the kernel wants to send commands to the TPM chip, it first reserves
+> +locality 0 by setting the requestUse bit in the TPM_ACCESS register. The bit is
+> +cleared by the chip when the access is granted. Once it completes its
+> +communication, the kernel writes the TPM_ACCESS.activeLocality bit. This
+> +informs the chip that the locality has been relinquished.
+> +
+> +Pending localities are served in order by the chip in descending order, one at
+> +a time:
+> +
+> +- Locality 0 has the lowest priority.
+> +- Locality 5 has the highest priority.
+> +
+> +Further information on the purpose and meaning of the localities can be found
+> +in section 3.2 of the TCG PC Client Platform TPM Profile Specification.
 
-Agreed.
-
-thanks,
-
-Mimi
-
+-- 
+#Randy
 
