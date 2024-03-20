@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1809-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1810-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD7D2880CFE
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 09:28:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8A6E880D0B
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 09:31:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44FCBB21485
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 08:28:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08A811C22DE3
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 08:31:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F104F3717B;
-	Wed, 20 Mar 2024 08:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044532C68F;
+	Wed, 20 Mar 2024 08:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+rqknd1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKpWsAr4"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77F8101E8;
-	Wed, 20 Mar 2024 08:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38A4374D1;
+	Wed, 20 Mar 2024 08:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710923324; cv=none; b=mP+rjU8eXFLkZ3PIRENSQgpk8Mmft8SPu4cTYFp3AcRdNCFEPG9/AT9dBMDqrWZSKnINDEgCQQuRFKJ1zulwBEout/J8e6q3eoLWlXUJDjDJstyy0h1PahiS2w1TcYd5Yg/bVEiVS2s96cPeBUV9l/jklPpeAAyTGCeu4z+88Qw=
+	t=1710923487; cv=none; b=kAhXX2VgJ5N2XeI+u7raujJISqegPsM2XumTnGuTK00HElmotvgTYPvDGGmqlPv+ILe6l0HRoIynh2QJDBmfiK05yb1yHaUnq7Q7cJw1uxsLzx1tdaLNFgWC71Dx7HmzYGNEAJx6EawVfCtD9s9aA/WSbqfqbo9uK6CqWgAVHeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710923324; c=relaxed/simple;
-	bh=BWNgmr1UI8Ez2Yk8JxGhv2jILFoV7E237Mqwin2G1xU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=hausd+UiYuHv5zj3MO1oKJcxcj9MmB8HjeZhHTURzzK62v7C6JdVhjwTU5YAiw0KTxhLoAPcf45rfVnkFQ6GnQgwxfLbSGYAlqOxubsE7fNBchFVpJ8f431dBqzJ9jeeO4/Xy6Cr/UcovTvCOJFC/PEtmyAbEois4CoGHoquSBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+rqknd1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DB8C433F1;
-	Wed, 20 Mar 2024 08:28:40 +0000 (UTC)
+	s=arc-20240116; t=1710923487; c=relaxed/simple;
+	bh=uYuOLvaXC5zSq3rbHgQsBek5irtHYbjs7ZmCE5k/uss=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=gVa19b7jQc023Q3T8xaD8kRSecTfXwrkxmBT5fUL7zItTBBxVzvfduegmp1mLGJ/bKwGLrg8HDQWHOvAfTXuVK2GuuPN5lQWtRIMxSNSJQ8gTe4ZpFau5SQX2IOEfHlb/av9+5Qey/QC+rnXvxX6alwtCJAe5jR7ROwi/Xhcr5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKpWsAr4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C74C43390;
+	Wed, 20 Mar 2024 08:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710923324;
-	bh=BWNgmr1UI8Ez2Yk8JxGhv2jILFoV7E237Mqwin2G1xU=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=Z+rqknd11Xq+RxpQ3lOa2Uc20j2piizrSxUqNkCmdP1FQ39nD+481V0wtS5iKppBt
-	 dhwwp+ZhJKG90Z7IQFnHeG7lKyvY56576olFr+46vsI3SBRIE3fafp6AS7fneglF8l
-	 pEd+7SjXv8owZkIWAuebthTIB0bmCwtSGLN1itKiNkN8l8DaPkrqchOS/F8OE3nH7Q
-	 wJYYPVpRX7L/78U68unPdvDX8prEnKpuR7XXUVHzHn20sdQtl+wGK5mFrfdRLZJtto
-	 mZHoJKW9S3zezgO/5IIN2p3bK6WAyc69ODlVC/LLzP2RNdqhHxuXwaM+jMyGnpzyVI
-	 drRgIQTjnw8qA==
+	s=k20201202; t=1710923487;
+	bh=uYuOLvaXC5zSq3rbHgQsBek5irtHYbjs7ZmCE5k/uss=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=sKpWsAr4TQ5rJV1WPhGCeqlhhUwoMVPpLdKthHy3bJrVYHFHZts4lMprouJz0I6eG
+	 WSGIgnXJVxT2yfrbfqjWJwR1xQEMd2bfzn/sDtwPtTcRYCpsC/4aSdhmgqdmtuXSUP
+	 RjYeeVQPvPM6kmVEPMwynycGLfB/KvylQNpUeg+wYzGwmk+nRJGdtS7P2hSeh1Mksa
+	 Qc/GE9Gl9vV/KQf1tCmkv6fplFpS1ArvtJEcwM/jiuI6DZdG96JI9uu2n+cBbZcDkH
+	 TdC5SArIBmgJEFk1ouTq9JnFB5BNeXKwDSPGREG7Mi92MVJy0RomdjJKSOuaX7IqOt
+	 CE+j33cNYxpbw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,13 +49,8 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 20 Mar 2024 10:28:38 +0200
-Message-Id: <CZYFP5S04YTK.23AJMKWQWVCR8@kernel.org>
-To: "Paul Moore" <paul@paul-moore.com>, "Fan Wu"
- <wufan@linux.microsoft.com>, <corbet@lwn.net>, <zohar@linux.ibm.com>,
- <jmorris@namei.org>, <serge@hallyn.com>, <tytso@mit.edu>,
- <ebiggers@kernel.org>, <axboe@kernel.dk>, <agk@redhat.com>,
- <snitzer@kernel.org>, <eparis@redhat.com>
+Date: Wed, 20 Mar 2024 10:31:21 +0200
+Message-Id: <CZYFR8LEEQB1.8C0J9KCTF8CB@kernel.org>
 Cc: <linux-doc@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
  <linux-security-module@vger.kernel.org>, <fsverity@lists.linux.dev>,
  <linux-block@vger.kernel.org>, <dm-devel@lists.linux.dev>,
@@ -63,48 +58,60 @@ Cc: <linux-doc@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
 Subject: Re: [PATCH RFC v15 12/21] security: add
  security_bdev_setintegrity() hook
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Paul Moore"
+ <paul@paul-moore.com>, "Fan Wu" <wufan@linux.microsoft.com>,
+ <corbet@lwn.net>, <zohar@linux.ibm.com>, <jmorris@namei.org>,
+ <serge@hallyn.com>, <tytso@mit.edu>, <ebiggers@kernel.org>,
+ <axboe@kernel.dk>, <agk@redhat.com>, <snitzer@kernel.org>,
+ <eparis@redhat.com>
 X-Mailer: aerc 0.15.2
 References: <1710560151-28904-13-git-send-email-wufan@linux.microsoft.com>
  <f5cf9d285bd5f09bbc3f79b0800d37fc@paul-moore.com>
-In-Reply-To: <f5cf9d285bd5f09bbc3f79b0800d37fc@paul-moore.com>
+ <CZYFP5S04YTK.23AJMKWQWVCR8@kernel.org>
+In-Reply-To: <CZYFP5S04YTK.23AJMKWQWVCR8@kernel.org>
 
-On Wed Mar 20, 2024 at 1:00 AM EET, Paul Moore wrote:
-> On Mar 15, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
-> >=20
-> > This patch introduces a new hook to save block device's integrity
-> > data. For example, for dm-verity, LSMs can use this hook to save
-> > the roothash signature of a dm-verity into the security blob,
-> > and LSMs can make access decisions based on the data inside
-> > the signature, like the signer certificate.
-> >=20
-> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> >=20
-> > --
-> > v1-v14:
-> >   + Not present
-> >=20
-> > v15:
-> >   + Introduced
-> >=20
-> > ---
-> >  include/linux/lsm_hook_defs.h |  2 ++
-> >  include/linux/security.h      | 14 ++++++++++++++
-> >  security/security.c           | 28 ++++++++++++++++++++++++++++
-> >  3 files changed, 44 insertions(+)
+On Wed Mar 20, 2024 at 10:28 AM EET, Jarkko Sakkinen wrote:
+> On Wed Mar 20, 2024 at 1:00 AM EET, Paul Moore wrote:
+> > On Mar 15, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
+> > >=20
+> > > This patch introduces a new hook to save block device's integrity
+> > > data. For example, for dm-verity, LSMs can use this hook to save
+> > > the roothash signature of a dm-verity into the security blob,
+> > > and LSMs can make access decisions based on the data inside
+> > > the signature, like the signer certificate.
+> > >=20
+> > > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> > >=20
+> > > --
+> > > v1-v14:
+> > >   + Not present
+> > >=20
+> > > v15:
+> > >   + Introduced
+> > >=20
+> > > ---
+> > >  include/linux/lsm_hook_defs.h |  2 ++
+> > >  include/linux/security.h      | 14 ++++++++++++++
+> > >  security/security.c           | 28 ++++++++++++++++++++++++++++
+> > >  3 files changed, 44 insertions(+)
+> >
+> > I'm not sure why you made this a separate patch, help?  If there is
+> > no significant reason why this is separate, please squash it together
+> > with patch 11/21.
 >
-> I'm not sure why you made this a separate patch, help?  If there is
-> no significant reason why this is separate, please squash it together
-> with patch 11/21.
+> Off-topic: it is weird to have *RFC* patch set at v15.
+>
+> RFC by de-facto is something that can be safely ignored if you don't
+> have bandwidth. 15 versions of anything that can be safely ignored
+> is by definition spamming :-) I mean just conceptually.
+>
+> So does the RFC still hold or what the heck is going on with this one?
+>
+> Haven't followed for some time now...
 
-Off-topic: it is weird to have *RFC* patch set at v15.
-
-RFC by de-facto is something that can be safely ignored if you don't
-have bandwidth. 15 versions of anything that can be safely ignored
-is by definition spamming :-) I mean just conceptually.
-
-So does the RFC still hold or what the heck is going on with this one?
-
-Haven't followed for some time now...
+I mean if this RFC trend continues I'll just put auto-filter for this
+thread to put straight to the bin.  There's enough non-RFC patch sets
+to review.
 
 BR, Jarkko
 
