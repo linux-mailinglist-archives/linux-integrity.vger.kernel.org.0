@@ -1,117 +1,148 @@
-Return-Path: <linux-integrity+bounces-1810-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1811-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8A6E880D0B
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 09:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D0CA880E00
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 09:56:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08A811C22DE3
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 08:31:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD55A1C22C80
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Mar 2024 08:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044532C68F;
-	Wed, 20 Mar 2024 08:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCFA53BB47;
+	Wed, 20 Mar 2024 08:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKpWsAr4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LDzu7bX+"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38A4374D1;
-	Wed, 20 Mar 2024 08:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2113BB35;
+	Wed, 20 Mar 2024 08:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710923487; cv=none; b=kAhXX2VgJ5N2XeI+u7raujJISqegPsM2XumTnGuTK00HElmotvgTYPvDGGmqlPv+ILe6l0HRoIynh2QJDBmfiK05yb1yHaUnq7Q7cJw1uxsLzx1tdaLNFgWC71Dx7HmzYGNEAJx6EawVfCtD9s9aA/WSbqfqbo9uK6CqWgAVHeA=
+	t=1710924966; cv=none; b=qpxnyAyD/C4aylWnwPZR8fEtcKttWMEDwTunLdqv7UpcjV0myUuYWpPb2hpODmkWEdYrL3OXiZHmyT/wMyJoDWAMg1m89TR0C+dnoQK/5IvhZXKr7kZAcBgR7AfrdAWVe5oX3krz69cJIqh+kHCN0SkgOXT4ETNq0tqlLXdp0Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710923487; c=relaxed/simple;
-	bh=uYuOLvaXC5zSq3rbHgQsBek5irtHYbjs7ZmCE5k/uss=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=gVa19b7jQc023Q3T8xaD8kRSecTfXwrkxmBT5fUL7zItTBBxVzvfduegmp1mLGJ/bKwGLrg8HDQWHOvAfTXuVK2GuuPN5lQWtRIMxSNSJQ8gTe4ZpFau5SQX2IOEfHlb/av9+5Qey/QC+rnXvxX6alwtCJAe5jR7ROwi/Xhcr5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKpWsAr4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C74C43390;
-	Wed, 20 Mar 2024 08:31:22 +0000 (UTC)
+	s=arc-20240116; t=1710924966; c=relaxed/simple;
+	bh=LGyKYM8XcN8nBnrxBDrb0mYgitWNCQAUDnZ3X2WeWo8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K/kN/j2pNY5PYFjcIYqUTSmVTk9TnB//XlqkIHUvM1moNUk5T0dewB+VWom3VginEdYfb8ITV/Zdx13oihkPQFu+gZT53LCNocPvsfH6ZYy2gGKxi0gckArNZQ+FEQWh4l6JjuQ2lhXZcR5xNzcU9RFxiDBna6UGAHRKogw7SR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LDzu7bX+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61EBC433F1;
+	Wed, 20 Mar 2024 08:56:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710923487;
-	bh=uYuOLvaXC5zSq3rbHgQsBek5irtHYbjs7ZmCE5k/uss=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=sKpWsAr4TQ5rJV1WPhGCeqlhhUwoMVPpLdKthHy3bJrVYHFHZts4lMprouJz0I6eG
-	 WSGIgnXJVxT2yfrbfqjWJwR1xQEMd2bfzn/sDtwPtTcRYCpsC/4aSdhmgqdmtuXSUP
-	 RjYeeVQPvPM6kmVEPMwynycGLfB/KvylQNpUeg+wYzGwmk+nRJGdtS7P2hSeh1Mksa
-	 Qc/GE9Gl9vV/KQf1tCmkv6fplFpS1ArvtJEcwM/jiuI6DZdG96JI9uu2n+cBbZcDkH
-	 TdC5SArIBmgJEFk1ouTq9JnFB5BNeXKwDSPGREG7Mi92MVJy0RomdjJKSOuaX7IqOt
-	 CE+j33cNYxpbw==
+	s=k20201202; t=1710924966;
+	bh=LGyKYM8XcN8nBnrxBDrb0mYgitWNCQAUDnZ3X2WeWo8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LDzu7bX+x9PSrTH6Xd7JrdDYEcfYLME/QLFo1J+0xPMv1zNhFevPQCPqnFR9nv8p6
+	 pYlxrN1Ua9lqNZOrbuqcybpYY+DZyMZ2QJM2eny/cWSGT0NCr8ch6Z/yeW8XZ926VK
+	 e/iyuMLZyuy113N3ksFxYvrYulgE/baZWZNXi54QFIERh8b7I/LN4Fho2GZ4n0fsQv
+	 7TI9FByBBJ5jo6k+SRty5qb9gQ6cdYZ3LcJM2wWlT5jps1tzc6uu12swfzlwIm9atN
+	 m54GlPIVXAJEh4iFU0V9uZ4aZee8AUBymlPH44qBB5mKnqAOAg6YT/z9/8fK22sQ0x
+	 PVQ2dDa7BgSiQ==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"Daniel P . Smith" <dpsmith@apertussolutions.com>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Alexander Steffen <Alexander.Steffen@infineon.com>,
+	keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v2] Documentation: tpm_tis
+Date: Wed, 20 Mar 2024 10:56:01 +0200
+Message-ID: <20240320085601.40450-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 20 Mar 2024 10:31:21 +0200
-Message-Id: <CZYFR8LEEQB1.8C0J9KCTF8CB@kernel.org>
-Cc: <linux-doc@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>, <fsverity@lists.linux.dev>,
- <linux-block@vger.kernel.org>, <dm-devel@lists.linux.dev>,
- <audit@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v15 12/21] security: add
- security_bdev_setintegrity() hook
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Paul Moore"
- <paul@paul-moore.com>, "Fan Wu" <wufan@linux.microsoft.com>,
- <corbet@lwn.net>, <zohar@linux.ibm.com>, <jmorris@namei.org>,
- <serge@hallyn.com>, <tytso@mit.edu>, <ebiggers@kernel.org>,
- <axboe@kernel.dk>, <agk@redhat.com>, <snitzer@kernel.org>,
- <eparis@redhat.com>
-X-Mailer: aerc 0.15.2
-References: <1710560151-28904-13-git-send-email-wufan@linux.microsoft.com>
- <f5cf9d285bd5f09bbc3f79b0800d37fc@paul-moore.com>
- <CZYFP5S04YTK.23AJMKWQWVCR8@kernel.org>
-In-Reply-To: <CZYFP5S04YTK.23AJMKWQWVCR8@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed Mar 20, 2024 at 10:28 AM EET, Jarkko Sakkinen wrote:
-> On Wed Mar 20, 2024 at 1:00 AM EET, Paul Moore wrote:
-> > On Mar 15, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
-> > >=20
-> > > This patch introduces a new hook to save block device's integrity
-> > > data. For example, for dm-verity, LSMs can use this hook to save
-> > > the roothash signature of a dm-verity into the security blob,
-> > > and LSMs can make access decisions based on the data inside
-> > > the signature, like the signer certificate.
-> > >=20
-> > > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> > >=20
-> > > --
-> > > v1-v14:
-> > >   + Not present
-> > >=20
-> > > v15:
-> > >   + Introduced
-> > >=20
-> > > ---
-> > >  include/linux/lsm_hook_defs.h |  2 ++
-> > >  include/linux/security.h      | 14 ++++++++++++++
-> > >  security/security.c           | 28 ++++++++++++++++++++++++++++
-> > >  3 files changed, 44 insertions(+)
-> >
-> > I'm not sure why you made this a separate patch, help?  If there is
-> > no significant reason why this is separate, please squash it together
-> > with patch 11/21.
->
-> Off-topic: it is weird to have *RFC* patch set at v15.
->
-> RFC by de-facto is something that can be safely ignored if you don't
-> have bandwidth. 15 versions of anything that can be safely ignored
-> is by definition spamming :-) I mean just conceptually.
->
-> So does the RFC still hold or what the heck is going on with this one?
->
-> Haven't followed for some time now...
+Based recent discussions on LKML, provide preliminary bits of tpm_tis_core
+dependent drivers. Includes only bare essentials but can be extended later
+on case by case. This way some people may even want to read it later on.
 
-I mean if this RFC trend continues I'll just put auto-filter for this
-thread to put straight to the bin.  There's enough non-RFC patch sets
-to review.
+Cc: Jonathan Corbet <corbet@lwn.net>
+CC: Daniel P. Smith <dpsmith@apertussolutions.com>
+Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc: keyrings@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-integrity@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v2:
+- Fixed errors reported by Randy:
+  https://lore.kernel.org/all/aed28265-d677-491a-a045-24b351854b24@infradead.org/
+- Improved the text a bit to have a better presentation.
+---
+ Documentation/security/tpm/index.rst   |  1 +
+ Documentation/security/tpm/tpm_tis.rst | 30 ++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 Documentation/security/tpm/tpm_tis.rst
 
-BR, Jarkko
+diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
+index fc40e9f23c85..f27a17f60a96 100644
+--- a/Documentation/security/tpm/index.rst
++++ b/Documentation/security/tpm/index.rst
+@@ -5,6 +5,7 @@ Trusted Platform Module documentation
+ .. toctree::
+ 
+    tpm_event_log
++   tpm_tis
+    tpm_vtpm_proxy
+    xen-tpmfront
+    tpm_ftpm_tee
+diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/security/tpm/tpm_tis.rst
+new file mode 100644
+index 000000000000..b331813b3c45
+--- /dev/null
++++ b/Documentation/security/tpm/tpm_tis.rst
+@@ -0,0 +1,30 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=========================
++TPM FIFO interface Driver
++=========================
++
++FIFO (First-In-First-Out) is the name of the hardware interface used by the
++tpm_tis_core dependent drivers. The prefix "tis" comes from the TPM Interface
++Specification, which is the hardware interface specification for TPM 1.x chips.
++
++Communication is based on a 5 KiB buffer shared by the TPM chip through a
++hardware bus or memory map, depending on the physical wiring. The buffer is
++further split into five equal-size buffers, which provide equivalent sets of
++registers for communication between the CPU and TPM. These communication
++endpoints are called localities in the TCG terminology.
++
++When the kernel wants to send commands to the TPM chip, it first reserves
++locality 0 by setting the requestUse bit in the TPM_ACCESS register. The bit is
++cleared by the chip when the access is granted. Once it completes its
++communication, the kernel writes the TPM_ACCESS.activeLocality bit. This
++informs the chip that the locality has been relinquished.
++
++Pending localities are served in order by the chip in descending order, one at
++a time:
++
++- Locality 0 has the lowest priority.
++- Locality 5 has the highest priority.
++
++Further information on the purpose and meaning of the localities can be found
++in section 3.2 of the TCG PC Client Platform TPM Profile Specification.
+-- 
+2.44.0
+
 
