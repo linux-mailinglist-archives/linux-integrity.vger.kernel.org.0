@@ -1,158 +1,188 @@
-Return-Path: <linux-integrity+bounces-1828-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1829-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9825885A13
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 14:47:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E53A885A33
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 14:59:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99EBB285152
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 13:47:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 817B01C213C3
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 13:59:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83D984A3B;
-	Thu, 21 Mar 2024 13:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE96484A59;
+	Thu, 21 Mar 2024 13:58:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="hdcQaOgQ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rpoAc7mb"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com [136.143.188.51])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8E2224F2;
-	Thu, 21 Mar 2024 13:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711028814; cv=pass; b=L8MHp0jjefmEAjZVx+QQPuHMQsYkFSvvmFe9J7iR9nlS9MVaf45OBrXlK3YjRndY9z3liu2Tr67G3LHxj57IUALfmSHKB+FHPFBgCZvQ3rI7yrSizVqXqK8QfAJ7nC9rpus7BKpM4spXcI76tEwLi8PdYaRTAFRiTCeXzD2pJSk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711028814; c=relaxed/simple;
-	bh=x2ZyPeNOVWT4NgG0OiIppgda41Qexy4HYwyfAmD6nps=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e3W8urJQKrEZtP5r/vksDN2GD16wBsVCpCJVIVobK6gglfYiS+QKm7YH5wzhbRGGc0L3cItWGFhYX934UtZeLUFXLxPUWkRkvyKC+Ev0oi6uUWXBxUfynpECYVAnrZd0GbX5uoEZwn8S/1oq7TuczeNxHR17KGTzRi0FSLhlRT4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=hdcQaOgQ; arc=pass smtp.client-ip=136.143.188.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1711028754; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=CoXqJ3Q8+YqQfYIIFBcz82q3mokSxkvviaxPi4pkUD+LjFal9ccirN+mJk0Nzatpl6IdkL6iOjJDVbSZc+0e5c8r+A/Bw7EDEpffaiThmFmkiTZVTyEuPi+UdaXHn+PkPxj0o7aQ1CUIEqFuu/ahEnLqi3DUbM7Dnu0UlUXEAsI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1711028754; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=c7mypxhq24TwOwkk7go39gJ4c0j/SRaCVim+D2aCUwM=; 
-	b=VUaIOr1KbJ0KxovSfsJci8oMzSIj/D/jii5gedBAJMtL0tFbNRO0QhKSLxn1xQ6c/71dxXYiNywfjZ30cn3JxAGhGmvEy80xWwROescoqWHU2+TnTbW5odgJ1703JmWyVCUTkrH8kWpEpc8qURhSOaO/nzqD1EUkDbIZg7pePZQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=apertussolutions.com;
-	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1711028754;
-	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=c7mypxhq24TwOwkk7go39gJ4c0j/SRaCVim+D2aCUwM=;
-	b=hdcQaOgQMk0VA4dgzM/w40MGd1Cw5xYr+kL7eHwooHcb4C1CCdE7g+AdeGiHI/EV
-	MyI6C8mt4V1ErCsymDkOr5guRp2Dm9XRioTMj+Ztf/nMVtdYr5vO3is54gGx8Do4uQB
-	BFqlTWRhEaKpAA5tPxXuoQyvGMWQERrnnAN1hTq8=
-Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-	with SMTPS id 1711028752479775.6868681111625; Thu, 21 Mar 2024 06:45:52 -0700 (PDT)
-Message-ID: <9d01a6d2-4dd9-4331-8fc9-b01c07cfdbb5@apertussolutions.com>
-Date: Thu, 21 Mar 2024 09:45:48 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A5F82D86;
+	Thu, 21 Mar 2024 13:58:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711029536; cv=none; b=h1dWgUZIeOMbEegUlRd8GNN4ljy145xSQmx4RVAvkdYL/A8cW7uCuMasUoHG73AlxcyEGwzUm6u2++2iFAPtpUKTyKj6kFfJ9RT0WYo91FRSYj8I1ePO/IBifP9slEEPg2CLE9mzJboJdYO7f0LHhQAhv7OugUqT7VAHLMnrt5U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711029536; c=relaxed/simple;
+	bh=HPFUfXcjh9xUQ2o4yoAZg0WXqjhPAAlp6RwOP/jeKCw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=NVVPyQfmA8140QXfwm73t/7Vn87x08AhDVW/REktBIhFmcbQCUABw4PZnsw0f5YigwPFI3qAfwMV3Pbl4IkfTCqd/jTw4pCOs8aCs1roXAvSpq0csWlpYhsCiePte/EvNxV9c6Z68mFm6oinN5C0s+GLtmHBFZJ5xyfKMXGKJhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rpoAc7mb; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42LCm5NZ008641;
+	Thu, 21 Mar 2024 13:58:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=eWM4TWj+zZPR08g9wS1AAFFSzeMGDPAIQ+pCPf4MFe0=;
+ b=rpoAc7mbhihYAII22azxL74DzRLCpsm2Tdb9ZCl1uoQskOSiPTjz73hqB+Uf3V34KA4G
+ XRYq8Q0hxbcZbYoiBsx+mZGgS1qdj9/BstSGzEz4TibAnWVUZq61skw28fgj3Vpnz8FL
+ kiwiKgW7fdDqQ5QirKTnykxPXswnedlz9gkV3lvD+2uCEwjZRFmqPEXdWASgsGRHR98c
+ VVy/mG4D/uZkxqYc2npSZk3hhiOez7TK3WA2kN/G8Vb+5+0dY+IsMWUCCQ8GIfPX3e6q
+ S6XzMWG/LvMTY2Zgh2ZkERZi8gmiJz3FxeYlBnxwWuDOiYX/WcAoL2IOODP6qXu4KZ9r +A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x0n6wr8hp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 13:58:38 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42LDwb3S028244;
+	Thu, 21 Mar 2024 13:58:37 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x0n6wr8h1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 13:58:37 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42LBM934010083;
+	Thu, 21 Mar 2024 13:58:36 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wxvavah10-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 13:58:36 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42LDwXBK7340662
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 21 Mar 2024 13:58:35 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C5BF85808F;
+	Thu, 21 Mar 2024 13:58:31 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2BF085807C;
+	Thu, 21 Mar 2024 13:58:31 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.40.138])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 21 Mar 2024 13:58:31 +0000 (GMT)
+Message-ID: <267f340e1b309cff2fab01f83a141ee465296907.camel@linux.ibm.com>
+Subject: Re: [PATCH v3][next] integrity: Avoid
+ -Wflex-array-member-not-at-end warnings
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date: Thu, 21 Mar 2024 09:58:30 -0400
+In-Reply-To: <ZfuzWku+ip4fsZrb@neat>
+References: <ZfuzWku+ip4fsZrb@neat>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 01/15] x86/boot: Place kernel_info at a fixed offset
-Content-Language: en-US
-To: Ard Biesheuvel <ardb@kernel.org>,
- Ross Philipson <ross.philipson@oracle.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
- mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
- peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
- nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
- kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-References: <20240214221847.2066632-1-ross.philipson@oracle.com>
- <20240214221847.2066632-2-ross.philipson@oracle.com>
- <CAMj1kXH3Gvr3vDRLDdXuc0s7ZAQYE6+D7tmCRBjJWwWt2fn4-w@mail.gmail.com>
-From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
- 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
-In-Reply-To: <CAMj1kXH3Gvr3vDRLDdXuc0s7ZAQYE6+D7tmCRBjJWwWt2fn4-w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -PQQ-S8rn1ftx9JS2MJlj6S1u3AoIdvq
+X-Proofpoint-ORIG-GUID: ZUNX21kpOw7k7GpDeTPF6HPVVI0NDsN8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-21_10,2024-03-18_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 impostorscore=0 mlxscore=0
+ priorityscore=1501 bulkscore=0 suspectscore=0 mlxlogscore=898 spamscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2403140000 definitions=main-2403210100
 
-Hi Ard!
-
-On 2/15/24 02:56, Ard Biesheuvel wrote:
-> On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
->>
->> From: Arvind Sankar <nivedita@alum.mit.edu>
->>
->> There are use cases for storing the offset of a symbol in kernel_info.
->> For example, the trenchboot series [0] needs to store the offset of the
->> Measured Launch Environment header in kernel_info.
->>
+On Wed, 2024-03-20 at 22:11 -0600, Gustavo A. R. Silva wrote:
+> -Wflex-array-member-not-at-end is coming in GCC-14, and we are getting
+> ready to enable it globally.
 > 
-> Why? Is this information consumed by the bootloader?
+> There is currently an object (`hdr)` in `struct ima_max_digest_data`
+> that contains a flexible structure (`struct ima_digest_data`):
+> 
+>  struct ima_max_digest_data {
+> 	struct ima_digest_data hdr;
+>         u8 digest[HASH_MAX_DIGESTSIZE];
+>  } __packed;
+> 
+> So, in order to avoid ending up with a flexible-array member in the
+> middle of a struct, we use the `__struct_group()` helper to separate
+> the flexible array from the rest of the members in the flexible
+> structure:
+> 
+> struct ima_digest_data {
+>         __struct_group(ima_digest_data_hdr, hdr, __packed,
+> 
+> 	... the rest of the members
+> 
+>         );
+>         u8 digest[];
+> } __packed;
+> 
+> With the change described above, we can now declare an object of the
+> type of the tagged `struct ima_digest_data_hdr`, without embedding the
+> flexible array in the middle of another struct:
+> 
+>  struct ima_max_digest_data {
+>         struct ima_digest_data_hdr hdr;
+>         u8 digest[HASH_MAX_DIGESTSIZE];
+>  } __packed;
+> 
 
-Yes, the bootloader needs a standardized means to find the offset of the 
-MLE header, which communicates a set of meta-data needed by the DCE in 
-order to set up for and start the loaded kernel. Arm will also need to 
-provide a similar metadata structure and alternative entry point (or a 
-complete rewrite of the existing entry point), as the current Arm entry 
-point is in direct conflict with Arm DRTM specification.
+And similarly for 'struct evm_digest'.
 
-> I'd like to get away from x86 specific hacks for boot code and boot
-> images, so I would like to explore if we can avoid kernel_info, or at
-> least expose it in a generic way. We might just add a 32-bit offset
-> somewhere in the first 64 bytes of the bootable image: this could
-> co-exist with EFI bootable images, and can be implemented on arm64,
-> RISC-V and LoongArch as well.
 
-With all due respect, I would not refer to boot params and the kern_info 
-extension designed by the x86 maintainers as a hack. It is the 
-well-defined boot protocol for x86, just as Arm has its own boot 
-protocol around Device Tree.
+> We also use `container_of()` whenever we need to retrieve a pointer to
+> the flexible structure.
+> 
+> So, with these changes, fix the following warnings:
+> 
+> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible
+> array member is not at the end of another structure [-Wflex-array-member-not-
+> at-end]
+> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible
+> array member is not at the end of another structure [-Wflex-array-member-not-
+> at-end]
+> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible
+> array member is not at the end of another structure [-Wflex-array-member-not-
+> at-end]
 
-We would gladly adopt a cross arch/cross image type, zImage and bzImage, 
-means to embedded meta-data about the kernel that can be discovered by a 
-bootloader. Otherwise, we are relegated to doing a per arch/per image 
-type discovery mechanism. If you have any suggestions that are cross 
-arch/cross image type that we could explore, we would be grateful and 
-willing to investigate how to adopt such a method.
+I assume these messages are gone.
 
-V/r,
-Daniel
+thanks,
+
+Mimi
+
+
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+> Changes in v3:
+>  - struct ima_digest_data is a packed structure. So, to keep things
+>    consistent, use the attribute __packed on the tagged struct 
+>    ima_digest_data_hdr. For this, we use __struct_group() instead of
+>    struct_group_tagged(). Update the changelog text, accordingly.
+> 
+> Changes in v2:
+>  - Include changes for `struct evm_digest` (Mimi Zohar)
+> 
+
 
