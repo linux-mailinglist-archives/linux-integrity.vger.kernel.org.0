@@ -1,229 +1,218 @@
-Return-Path: <linux-integrity+bounces-1830-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1831-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC836885A6B
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 15:12:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03FD885B9C
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 16:26:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 363D31F216A5
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 14:12:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1D121C21449
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 15:26:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C049984FD0;
-	Thu, 21 Mar 2024 14:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E989185943;
+	Thu, 21 Mar 2024 15:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="Dxc2Zkqh"
+	dkim=pass (1024-bit key) header.d=politoit.onmicrosoft.com header.i=@politoit.onmicrosoft.com header.b="bSrMQZOd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com [136.143.188.51])
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2104.outbound.protection.outlook.com [40.107.104.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731F484FCC;
-	Thu, 21 Mar 2024 14:12:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB7D3A1DD
+	for <linux-integrity@vger.kernel.org>; Thu, 21 Mar 2024 15:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.104
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711030365; cv=pass; b=FZv1wav0mOaUALpVtZnkl9Mw4y6zOBvHAgW/A4R3u/qxzCw+e3gYhw6J3bksMZGYeOxrJntYueEKAlpyaujRBSDYmORzVGAT4bqVeX9kC/pxLVEcpmFy69eeduoinaV79h7UbumC4UoMwMcjqx/o4xdN42ruJq7/4tnlJlFsmXk=
+	t=1711034802; cv=fail; b=HNrUpUbbulwk47864IRdhnGDGVf8gzoXI7hFwTPhaOPVcZCs0aFJ/DQ8UeuZG00/+ZVRzhm6fakNnBi+UtQfqM3yGr8eYY73vifw9bMmYfgS/nGcxayjaPGVSp5QJjY7tPjkYzBShp1GRpXL9VVtFehgEZ93AL5GZ/dXHplRWv8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711030365; c=relaxed/simple;
-	bh=n/4358FmQRHscPMWI0MY4CrcN5nOShQw37Npr/gIyX8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k5TzzjbOqLXX2gZjfaOrRKBN17Gn6gTIFfpV149EDVvLO6dck731XMLLAh4X8az8nlxg71nXvym2rYwh0OC78cpFTWx/0o501hUQoUA6KuTSY+yiWEkh8R/Q2daRWX4PpqQY6clxVzPcxqv8dbGzc8Xt9gCQnpVoSVh9b+W5jkc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=Dxc2Zkqh; arc=pass smtp.client-ip=136.143.188.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1711030323; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Xn4nh6v2LLqnzPV2I7j4/ac9rvsbeDIPqr6Bb9xDsPI29uIC/t9HQpXJ99nPXXfo45VKDOhy+8WkMDQegmWk9A/Yk4fsn+kJut7A1EWC7zV54Rlg+6kddWhloP797eIib7otqQekQIhOa0IGOtpXna3ev7tj0/vcX2q2QhF0vA8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1711030323; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ZFDutfvhklXcK4cqq5JiEfITG/oIyUGfvA9UGjBd4cw=; 
-	b=c4NsVlOQNh/Jv+X5Q89kNTITBp3fJ+WlTxGPYecZe3DxNgn27FJ4xS3KgnOHTWureGFhQA5cB+xQssQR0sWHqrjQT4s+hlV4ksr0pi1cqstFsmyPVp2UF6HyWBediDmw+nEXv4OcqIJYBNamL9hBtIKvZ1CE6gfNgLiziv0f9SI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=apertussolutions.com;
-	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1711030323;
-	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=ZFDutfvhklXcK4cqq5JiEfITG/oIyUGfvA9UGjBd4cw=;
-	b=Dxc2Zkqhq1eNTm9uHvdeeGr0h30yHEwUKaWGdtmM9gQOeoP84bftmkFvcmgrcOE0
-	NUmAcOHSzL6x0M/bixt4gL0RewCouR04kxzuJ2SwoS4UYQmS0J9lxGR9lrm+Vp6PVAQ
-	MFzFWznnC0XomEKgsTmJWkXNCfSNeU8VreL7LuiY=
-Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-	with SMTPS id 17110303216563.5761394895970398; Thu, 21 Mar 2024 07:12:01 -0700 (PDT)
-Message-ID: <66cded21-448b-47e1-a94c-aed94cc40dcd@apertussolutions.com>
-Date: Thu, 21 Mar 2024 10:11:57 -0400
+	s=arc-20240116; t=1711034802; c=relaxed/simple;
+	bh=O2H9vmJ502j6UX9PxlChLKS5T+o+u/TZD0lHA29ijLQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=mghy0zcNUL2CKh6qSZS+qB827LJXrzJE0lRRIkRSmLBxSD9ZfKmS96qmmlUrRFMRDoabRJnbUvis7xgfmhi8Juk3HiDv26R4B5u/+Gu2WjsCB2l2fq7n0CEXmTc0KvILmaMR55rIf3eljytDBBQwD0+APmtf7Xd7/R6xhsVxiRU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=polito.it; spf=pass smtp.mailfrom=polito.it; dkim=pass (1024-bit key) header.d=politoit.onmicrosoft.com header.i=@politoit.onmicrosoft.com header.b=bSrMQZOd; arc=fail smtp.client-ip=40.107.104.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=polito.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=polito.it
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C7pvTzh1Soaw5aYtLo4PPGbqB9FX+4EK4Re8UfwmlA+J69JYGjaw8ro358XmDKGZTKKYwJQcaTAxs0Zu63/VdlvYysFUP56DLMQ0Jb5QGRiSW57nxOSCUkWy126iIOrDAYeF+2+Iu07ubeNA0aL5RN3MtHWc71yA5kfVBxd3Vi40hZt9+jBb4oaLNB5PaFhtZVY31e4gQyQlDeIj1S6GhML2Bh55sYIVws1sBdcQjVQbK9vpBD6PIBihxI2bd8BjS12+vy3vWLGgWDv2+UXl4Z9Ogif+gywSLUX+h/gIyJyAM3oYQTnrJxrxI1avz026Tfp5eIttbUe5h5lx+l0D2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=foFZPmSFxIpLlB09L6w4Ps2aqEikidUP9cAyRLGsibA=;
+ b=aLmK92Nzoyb0DjmBFeJko8lxM2/abnmUfZK5CwysDSD7VFlM2zG5am839vrMTaA16qZlezRw5TeJ+PwsoO4TGt4bIuq/Hprxq3vLJ6dxkeaurcNM3KLKXvx7UGUWi+KAqsOzcuX3lDTgP9nISvziuhBG5Pd3Z1YnR/V8zPRkKp7wOFggthjFxChXDyWYnn6G8Lt4a6dcpwctDtB0ChpGVsUEEjrxP/m5b+N1P0dnyuYG9jleVQUJNAsmnzb+8tlPTMHN8I35pBlgrBDYUg7lo7jLS2t0xZQsR57Y1Xo0mG2WdLYUn1XMVl55BRZl1ih4I5psErED1hMHBKMqXaUMgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=polito.it; dmarc=pass action=none header.from=polito.it;
+ dkim=pass header.d=polito.it; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=politoit.onmicrosoft.com; s=selector2-politoit-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=foFZPmSFxIpLlB09L6w4Ps2aqEikidUP9cAyRLGsibA=;
+ b=bSrMQZOd6qyAcMXbGhkAT6fIx2/9wR+6YbpwxeqOev+FabbrcAHYZBPB732P+s6kDmAy4pg/i791pRPG0QY6HYpqyjH5XGJUh75E5wnQRyjJEKZT6Ts/Sd1eU77kZcavKWZbSI70ObIY0MeuSGodUF9mBrOjAptPj3sWYktb3jY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=polito.it;
+Received: from AS2PR05MB9840.eurprd05.prod.outlook.com (2603:10a6:20b:5f5::20)
+ by PAXPR05MB8526.eurprd05.prod.outlook.com (2603:10a6:102:1a3::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.29; Thu, 21 Mar
+ 2024 15:26:36 +0000
+Received: from AS2PR05MB9840.eurprd05.prod.outlook.com
+ ([fe80::9351:e76:ff6d:29ba]) by AS2PR05MB9840.eurprd05.prod.outlook.com
+ ([fe80::9351:e76:ff6d:29ba%7]) with mapi id 15.20.7386.025; Thu, 21 Mar 2024
+ 15:26:36 +0000
+Message-ID: <6b5da02f-de8e-4633-bf46-de7fbfa1db5b@polito.it>
+Date: Thu, 21 Mar 2024 16:26:34 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] ima: add crypto agility support for template-hash
+ algorithm
+To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+ dmitry.kasatkin@gmail.com
+Cc: roberto.sassu@huawei.com, Silvia Sisinni <silvia.sisinni@polito.it>
+References: <20240308104953.743847-1-enrico.bravi@polito.it>
+ <18e212c7d947e8a39297fd84e1765d2bc0e82140.camel@linux.ibm.com>
+ <f2ed3e2a-9052-4a95-b31f-85047a01d1dd@polito.it>
+ <eb70d9dbb54da5606eda1ecb8a87d653d801f441.camel@linux.ibm.com>
+Content-Language: en-US, it
+From: Enrico Bravi <enrico.bravi@polito.it>
+In-Reply-To: <eb70d9dbb54da5606eda1ecb8a87d653d801f441.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0082.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:22::15) To AS2PR05MB9840.eurprd05.prod.outlook.com
+ (2603:10a6:20b:5f5::20)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 14/15] x86: Secure Launch late initcall platform module
-Content-Language: en-US
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
- mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
- peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
- nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
- kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-References: <20240214221847.2066632-1-ross.philipson@oracle.com>
- <20240214221847.2066632-15-ross.philipson@oracle.com>
- <CAMj1kXHXt6z94JCM2C5rLz-n9nGA46bb1eMbqcP5e7K9+NzPSg@mail.gmail.com>
- <c5bd3ee4-4bf1-4e9a-8e5d-12ee8e195d3d@apertussolutions.com>
- <CAMj1kXEUdj+==Ud_YWP2FP05St3KDsduzUMsOZzu9LRsLVsLVA@mail.gmail.com>
-From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
- 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
-In-Reply-To: <CAMj1kXEUdj+==Ud_YWP2FP05St3KDsduzUMsOZzu9LRsLVsLVA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS2PR05MB9840:EE_|PAXPR05MB8526:EE_
+X-MS-Office365-Filtering-Correlation-Id: 79f61c16-9e43-497b-1427-08dc49bb4bed
+X-politoEOL-CGPAlias: 1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	kavpuH/VWsqqCARM+YlknYP3t9ESKXHuch2ChgIHPaKHqLyWKk8jj4xCO3+5w7pCkBrhf42G9ExDnPjiir0gDB6FsZB3bJq3qOJ3lZYHezsV+zgUs7R+N8Nt4GcEidWBrMEBVEzkc8EcAhYb8jgAP1Wjsj9inhuVYnl+YJx/UnxYoRoo0EyNY1FtChQ7I9bvZQolj8awLzhji5AJGdofXP9Bnvj1BPpCnXcMgUAGUKyZTMAst9SK+WyjjVg4W8h6EajgzrBm63L8kG1CFcxb0WDKBBW0zlaa6Y5CoIxDJibI/IHmysl84nX3zxHMJAQXjtuf8Sy4ZgWNCKaQt03S6q/Xvz0wpUxMVMpPUjR+AD7mn3kwfFuqZMO2022+WxTSVtAMZGqWfn1qpdpZjDb4BUMKRTFXCz7a4zuzon4A29tQStYzQH+uhA9nph6SkngZ4Nn44WSD0wEqKbVIqtglE50nhTRjkm/BNyWv1Fcn2WPZXApcYzFHGw/pCtsfSzd8DGJ4HbnAqB20VkJ//yR0qKSnnWdGu6f58RJyyxmeXm8OLU4J1o+Tp5qdKy4M/RUFQB41LSnF05uoCIvrkC8Es1IZuE3/4OZSaosQA95OTZaal6nCX2AyIi8Jo1K1sYXCz3yLJhM6BTzZkzsP8RPgg/2rAw5cTWnfZQMZie7ay1o=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR05MB9840.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Sm4reEtXRUFZZ1ZnT3ZMNGRndVgxdlBIaGxwMU43aVFZRDkzbXQxcFYvZ01j?=
+ =?utf-8?B?dTRIV0lxQll2S2JvL2tCdG1XTXo0L29jczZrWXQwVDRZZktLeFN5VXYxcWps?=
+ =?utf-8?B?VjQzSVdMb0kyZm51QjJ0TUdlUmlHV2owWUkyR0JSU2Fzc2IvbGQ3d0t5NWFN?=
+ =?utf-8?B?U1Q2cTRvT0dYeTc2SzdNc0pMZWRKZWxNQmVQT29WbWJ5T0dVSUxXb203MkVM?=
+ =?utf-8?B?Z0N3WmJnN0FqaTJqNXdwZXZJY1VPUzBzRTU0Y1NYWXBKN29hb08vek1sbVBj?=
+ =?utf-8?B?OVgweVBIc0psTC8wQmw1V29hNmxpYWZpajROUUsraDB5UnZMS2sxUWJneWRn?=
+ =?utf-8?B?OTNpN3gyNTl3YkNpRVlLS0V3NndRYmt6QVpSRDNqcGdwYmtFT3hKdzViQ21U?=
+ =?utf-8?B?amZ4anZ2eDJndHliYW45bUZ1WkdhUURhaWZ1ODJyMGJCUUFMdVdBRVh2bTJa?=
+ =?utf-8?B?RmgzbjdsVWtSYWVYTFpybUwzT3lXaE9IR0NUcy9yekw5SE1nVjBnZFViRHNT?=
+ =?utf-8?B?WFBNMzJBZ1dUem50R1VibXdkYmpBbURybzdnekN2NzYycEtmejFIYms0MXl4?=
+ =?utf-8?B?aUIzWG50OWZSQmViY0xCQkNyaFdtb25BU05vQW81bG1NUzJkR0pSYTVsNXF0?=
+ =?utf-8?B?K2J3R1FSTHFVREVoNUtpcENzd083aUVNTFYxVVlZczVnNjIzeFc5aWRxcWdq?=
+ =?utf-8?B?NVdLTmpoclFsbDdhRU9PazNmSUJLNkgwY1pMRldvOFBNNmRzVzlsaVkwNzNs?=
+ =?utf-8?B?cXpUUDJ5amVmMWhnU0VqemEvVExpMlBIUGNvR2JmNFhuMW51b0djcXJWaFdj?=
+ =?utf-8?B?N284YTJXZlk2UFJLTVV4Tk54U2pqWmEvcVdUODRtRDN3LzdWSVlXZnAxNnpE?=
+ =?utf-8?B?SE1Kc2NrSjRYeTkvVHJyQm53a1VRR1cwWUN0ZVk1VXdzRW1vcHdXTHFJWjdV?=
+ =?utf-8?B?RW5hdHNKTmkzSzlIWlBONmlzeWxmaTB4cTAzaVl0N1daMXF3anRNc25ucW91?=
+ =?utf-8?B?T1Z1RVBINnFyUUJSNnU3T3Y3REhDTUZQc09DYUY3L3pVWWkwS0o4U2FxODVS?=
+ =?utf-8?B?bU5LUngxRmtlZUVuN3o0dGVkOWtjSVUwY0xyV2Jwa3hpMjhJeWI0WGtNVXN2?=
+ =?utf-8?B?cWJqRzJ6eHFKQUFxOEQ1ZDN5bGN3bHZXVEgydFd6Y1JicGxwR2ZiQ05UUmRX?=
+ =?utf-8?B?OERDTWRiS3dYL0ZXL25WR2F0WVpjSDA2TTRZaUZyS01oZ01WT0s4ZE9wcmtu?=
+ =?utf-8?B?Vlg2QmN1VERGQi9TR2V0bXhkRGNMUUlyYnBvOXFCS0JmUjZ3RG9uZHRJZmVO?=
+ =?utf-8?B?RVhyYXFLVll3L2VSOWVwRHBxZXBZUUdIV0ZzSkdGdzBnZTBhaDZnMENmOE5k?=
+ =?utf-8?B?SDJ6SWJqWHAxemx4ZDFwSHNhMTdIVGwzM28vMFRmaTNPby9IYWlmdXdFenV0?=
+ =?utf-8?B?QmJEb0puR1VZUXRZS3N2TlRycHBHcHk3VkYxQ2FTUS9BMXF4dW5PVCtnODBR?=
+ =?utf-8?B?eEVRRkJ4bXg2azdyWHFsWUErZ3BPSlFjYXNPN1d6UWc1SkZmZGhaN1VzdzRp?=
+ =?utf-8?B?a1dWSzI2STlJSVBRVmd0bjZRbVIzOU9KR1hYYXVJNTRFSEx1MlN1cUdDVFZn?=
+ =?utf-8?B?dmRSd1NpTkhZTUN4TUdubDByTUNLZ3Z5RWhIU2JhL0ZBcmRuNi9VYzREck9m?=
+ =?utf-8?B?UFhIUjE5SDZ2Y2Mrbncxa0MvamVlRXBSVmJEUnZMN1FYN1hxbXhRRzM1R2pN?=
+ =?utf-8?B?TXNuV2hNTXVvUnE4bVZMVVU4NXZ6MlNHVmxYSGVUWGQ4NkV4My95K2xXaGNS?=
+ =?utf-8?B?UTBGcEt1YVFFbU9KN2dLdVZFTDlrYnFLcDl6d1loYk05a1Yvam44am00bjNn?=
+ =?utf-8?B?WFg1UUdmQmZrc3dHS0I3TWNCUk9qejBXMitqcmI0NW1sRzNhRFl5N0xZb3BG?=
+ =?utf-8?B?YjhublJoakRpMnRzeGh2NVlVZjVTVGNVSVVpNENsN0xDelQ2cUxTcStLdUxh?=
+ =?utf-8?B?NUdEWnUwdThFU2JiWnJQQTVyL2RyNUVQYXRKSTdaSm5BbmRSTExCOGJjQkFV?=
+ =?utf-8?B?MmRWY2ZCMnVmUFJYZlROMk9NampiSUkrSk1jMElPNGFXWlVOb1lYT2NVMUdr?=
+ =?utf-8?Q?SCUQrW7W21/uV7YpJJqfgEFiA?=
+X-OriginatorOrg: polito.it
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79f61c16-9e43-497b-1427-08dc49bb4bed
+X-MS-Exchange-CrossTenant-AuthSource: AS2PR05MB9840.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2024 15:26:36.2463
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 2a05ac92-2049-4a26-9b34-897763efc8e2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8g3d1ffAe0Jj2EaTmA7H7ZE8VcGvVDeRDkm50hbVwuqi1JVhGsslpP8STIpGanSQWtSLwlzLeGw4p/4XxYVGhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR05MB8526
 
-Hi Ard,
-
-On 2/23/24 04:36, Ard Biesheuvel wrote:
-> On Thu, 22 Feb 2024 at 14:58, Daniel P. Smith
-> <dpsmith@apertussolutions.com> wrote:
->>
->> On 2/15/24 03:40, Ard Biesheuvel wrote:
->>> On Wed, 14 Feb 2024 at 23:32, Ross Philipson <ross.philipson@oracle.com> wrote:
->>>>
->>>> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
->>>>
->>>> The Secure Launch platform module is a late init module. During the
->>>> init call, the TPM event log is read and measurements taken in the
->>>> early boot stub code are located. These measurements are extended
->>>> into the TPM PCRs using the mainline TPM kernel driver.
->>>>
->>>> The platform module also registers the securityfs nodes to allow
->>>> access to TXT register fields on Intel along with the fetching of
->>>> and writing events to the late launch TPM log.
->>>>
->>>> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
->>>> Signed-off-by: garnetgrimm <grimmg@ainfosec.com>
->>>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+On 20/03/24 13:07, Mimi Zohar wrote:
+> 
+>>>> diff --git a/security/integrity/ima/ima_fs.c
+>>>> b/security/integrity/ima/ima_fs.c
+>>>> index cd1683dad3bf..475ab368e32f 100644
+>>>> --- a/security/integrity/ima/ima_fs.c
+>>>> +++ b/security/integrity/ima/ima_fs.c
+>>>> @@ -116,9 +116,13 @@ void ima_putc(struct seq_file *m, void *data, int
+>>>> datalen)
+>>>>  		seq_putc(m, *(char *)data++);
+>>>>  }
+>>>>  
+>>>> +static struct dentry **ima_ascii_measurements_files;
+>>>> +static struct dentry **ima_binary_measurements_files;
 >>>
->>> There is an awful amount of code that executes between the point where
->>> the measurements are taken and the point where they are loaded into
->>> the PCRs. All of this code could subvert the boot flow and hide this
->>> fact, by replacing the actual taken measurement values with the known
->>> 'blessed' ones that will unseal the keys and/or phone home to do a
->>> successful remote attestation.
+>>> The variable naming isn't quite right.  It's defined as a 'struct dentry',
+>>> but
+>>> the name is '*_files'.  Why not just name the variables 'ima_{ascii, binary}
+>>> _measurements'?
 >>
->> To set context, in general the motivation to employ an RTM, Static or
->> Dynamic, integrity solution is to enable external platform validation,
->> aka attestation. These trust chains are constructed from the principle
->> of measure and execute that rely on the presence of a RoT for Storage
->> (RTS) and a RoT for Reporting (RTR). Under the TCG architecture adopted
->> by x86 vendors and now recently by Arm, those roles are fulfilled by the
->> TPM. With this context, lets layout the assumptive trusts being made here,
->>     1. The CPU GETSEC instruction functions correctly
->>     2. The IOMMU, and by extension the PMRs, functions correctly
->>     2. The ACM authentication process functions correctly
->>     3. The ACM functions correctly
->>     4. The TPM interactions function correctly
->>     5. The TPM functions correctly
->>
->> With this basis, let's explore your assertion here. The assertion breaks
->> down into two scenarios. The first is that the at-rest kernel binary is
->> corrupt, unintentionally (bug) or maliciously, either of which does not
->> matter for the situation. For the sake of simplicity, corruption of the
->> Linux kernel during loading or before the DRTM Event is considered an
->> equivalent to corruption of the kernel at-rest. The second is that the
->> kernel binary was corrupted in memory at some point after the DRTM event
->> occurs.
->>
->> For both scenarios, the ACM will correctly configure the IOMMU PMRs to
->> ensure the kernel can no longer be tampered with in memory. After which,
->> the ACM will then accurately measure the kernel (bzImage) and safely
->> store the measurement in the TPM.
->>
->> In the first scenario, the TPM will accurately report the kernel
->> measurement in the attestation. The attestation authority will be able
->> to detect if an invalid kernel was started and can take whatever
->> remediation actions it may employ.
->>
->> In the second scenario, any attempt to corrupt the binary after the ACM
->> has configured the IOMMU PMR will fail.
->>
->>
+>> Hi Mimi,
 > 
-> This protects the memory image from external masters after the
-> measurement has been taken.
-
-It blocks access before the measurement is taken.
-
-> So any external influences in the time window between taking the
-> measurements and loading them into the PCRs are out of scope here, I
-> guess?
-
-Correct, as long as the assumption that the user configured the kernel 
-to program the IOMMU correctly after gaining control. In early versions 
-of this series the correct IOMMU configuration was enforced. This was 
-changed due to objections that the user should be free to configure the 
-system how they see fit, even if it results in an insecure system.
-
-> Maybe it would help (or if I missed it - apologies) to include a
-> threat model here. I suppose physical tampering is out of scope?
-
-I can take a look at what other security capabilities have documented in 
-this area and provide a similar level of explanation.
-
-I would not say physical tampering is out, I would say that it is 
-supported to the degree to which the TPM was designed to mitigate it.
-
->>> At the very least, this should be documented somewhere. And if at all
->>> possible, it should also be documented why this is ok, and to what
->>> extent it limits the provided guarantees compared to a true D-RTM boot
->>> where the early boot code measures straight into the TPMs before
->>> proceeding.
->>
->> I can add a rendition of the above into the existing section of the
->> documentation patch that already discusses separation of the measurement
->> from the TPM recording code. As to the limits it incurs on the DRTM
->> integrity, as explained above, I submit there are none.
->>
+> Hi Enrico,
 > 
-> Thanks for the elaborate explananation. And yes, please document this
-> with the changes.
+>> thank you for pointing that out. What do you think of naming them 'ima_{ascii,
+>> binary}_securityfs_measurement_lists', to have also coherence with the names
+>> of
+>> the new functions defined.
+> 
+> As these are static variables, prefixing them with 'ima_' isn't necessary. 
+> Either way is fine.
 
-Ack.
+Hi Mimi,
 
-V/r,
-Daniel
+perfect, in this way they would be even shorter.
+
+Thank you,
+
+Enrico
+
+>>>> +static void remove_measurements_list_files(struct dentry **files)
+>>>
+>>> And remove '_files' from the function name.  Perhaps rename it
+>>> remove_measurement_lists or remove_securityfs_measurement_lists.
+>>>
+>>>> +{
+>>>> +	int i;
+>>>> +
+>>>> +	if (files) {
+>>>> +		for (i = 0; i < ima_measurements_files_count; i++)
+>>>> +			securityfs_remove(files[i]);
+>>>> +
+>>>> +		kfree(files);
+>>>> +	}
+>>>> +}
+>>>> +
+>>>> +static int create_measurements_list_files(void)
+>>>
+>>> And remove '_files' from the function name.  Perhaps rename it to
+>>> create_measurement_lists or create_securityfs_measurement_lists.
+>>
+>> I think that keeping this structure for the names
+>> 'remove_securityfs_measurement_lists' and
+>> 'create_securityfs_measurement_lists'
+>> makes sense.
+> 
+> Agreed.
+> 
+> thanks,
+> 
+> Mimi
 
