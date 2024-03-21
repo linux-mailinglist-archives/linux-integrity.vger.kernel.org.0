@@ -1,202 +1,151 @@
-Return-Path: <linux-integrity+bounces-1838-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1839-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAE9B885D94
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 17:36:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB756885ECC
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 17:55:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E854EB2292C
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 16:35:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD5C01C23048
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 16:55:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7522E570;
-	Thu, 21 Mar 2024 16:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01DD131748;
+	Thu, 21 Mar 2024 16:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pY10ZF/k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p0QhQBUf"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7138ABE6F;
-	Thu, 21 Mar 2024 16:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B956130E54;
+	Thu, 21 Mar 2024 16:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711038953; cv=none; b=NLczad6a+W67B/Ff0+7OpqxTuNWWEVuhlE6lsbfZOkFvAc4LbQQASkq/3WI+FC6B6s9ZA9i1zeib4VFaBd6rvRn5rC0WgRyo4hBPIrBTyNKdqlfDCqhN4xEVQU3Zf3bEtzSNtvdjmu/kWxaHXJeGJVcuve+aYLYYnSUWRbPs2Lw=
+	t=1711039538; cv=none; b=GlbNprUdKcZ5mIV5WYfG5Tbq2xzz3bnv7MnY2h6u6jWPuM5pNk1nbg0PPmJ9c+w7sAPqWW+x1Hoye4aNprxXMt3Lme24S1tQ566+cbdsaZcFohI0A/E5Gi6ntu9efqhpDjpMkphCv6HOkzlGGpnYFxiFiWL24n3oDpBMcWfhOA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711038953; c=relaxed/simple;
-	bh=q6TIVC1DLugr+5uXp6uTbF4gnwhZTC7lhWhpCJCilxU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=sHK5/YxFHcVKOD4S40d2c3EKuj1yGDfkFaTn/dpsA3yMc9QuFGq2gZYFblUkwh6Fnkru+HYDXL/Sk8JK8TmvQknk710SP5OXuty8xK0TTELq0fSCHuvup2tEENFP75MT4GO5Ka1PnCTN0nZEdnTSV249XhHSU1Of82CDlRQqZKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pY10ZF/k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1811EC433C7;
-	Thu, 21 Mar 2024 16:35:49 +0000 (UTC)
+	s=arc-20240116; t=1711039538; c=relaxed/simple;
+	bh=nPVWYcFVife9z6PvN7CZBdrGkGPDFZARTn8Jlbi06jo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k8Y0fuyQKSLoVwiPVSRFhns/kEWUOlQrcZsVrNTeBslGvIRj0ZhudE3aRvjEPj63D0USUfKZJ8c787auZgXKxbXe2pOkp0y7evzfh6OHM6nFgsK1W+vOtNafWajWbIXCBU8L7vNvNIEgaDCpYmsrA/L41o6KzgjgP+nBi0F7r0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p0QhQBUf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6728AC433C7;
+	Thu, 21 Mar 2024 16:45:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711038952;
-	bh=q6TIVC1DLugr+5uXp6uTbF4gnwhZTC7lhWhpCJCilxU=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=pY10ZF/k5TrBvZTao5UgCEUwmL6cYyQJzwXARqWA7e2+YHF4bkVD+ifD/5VQf6ZD7
-	 VRcu06eq3JkngTZaL+gcjmtgM6ZvWZIxWD5YF+asRXlUbVuf5SLk0MyPQQnxL0CtzM
-	 ZGNWWiC8w33K1geBTFYKpV//Q6Id2FRPt5ptbh70OZsejyFIFCaZdyX0mM50Neo0Az
-	 QS4/UJ72XWx49Kj1iax7MxNhZhCxLcX1UGK/dHAZjUEBRmZlgLC6bOLPodFdtZWmDb
-	 /pkBV42X3KIuv3tOFy/LOeJYdeqFmuO/3SeMB8WN49L1ZKuprMzIwxhOunvrcrldif
-	 /KLbFduDu3b7Q==
+	s=k20201202; t=1711039538;
+	bh=nPVWYcFVife9z6PvN7CZBdrGkGPDFZARTn8Jlbi06jo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=p0QhQBUfqBhYa0QHOFz2qzWrrtUZmGwvBVc1ven3CagVdge1xOMt6mi5/CAbFumaG
+	 lLVDLvYdAJA48kGHY0T3BLbfFR0xuoLsnMHIvmvK+RlZKfNqM+eAuExhhPfqxdTUdW
+	 K4KYpS+aA4PRgIzSJ7zbsuxC93sUc0oZPMVS0Jbj65Ggwgq39IW/tsLsnZdokrIHwP
+	 05WBoKY82KPsnR8Gm04ENhFBmDSCPkGSDQM8sWRJxszfcvRE1feRkX1PHWWWcrNagA
+	 6S8wF9mdknt7/Y2QlcfwFarDDJBf9FEVbz8iqHNBI0iVCjMzQR9u1osUuDF4tmuENu
+	 GByjFZx4UYAgQ==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"Daniel P . Smith" <dpsmith@apertussolutions.com>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Alexander Steffen <Alexander.Steffen@infineon.com>,
+	keyrings@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v3] Documentation: tpm_tis
+Date: Thu, 21 Mar 2024 18:43:07 +0200
+Message-ID: <20240321164314.14732-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 21 Mar 2024 18:35:48 +0200
-Message-Id: <CZZKOPED6NBT.1SQX7TOJJ591D@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Stefan Berger"
- <stefanb@linux.ibm.com>, <linux-integrity@vger.kernel.org>
-Cc: "Jonathan Corbet" <corbet@lwn.net>, "Daniel P . Smith"
- <dpsmith@apertussolutions.com>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Peter Huewe"
- <peterhuewe@gmx.de>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Alexander Steffen"
- <Alexander.Steffen@infineon.com>, <keyrings@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Randy Dunlap"
- <rdunlap@infradead.org>
-Subject: Re: [PATCH v2] Documentation: tpm_tis
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240320085601.40450-1-jarkko@kernel.org>
- <afc9471c-1c28-4384-82c1-29464ca1fb1f@linux.ibm.com>
- <CZZJQR121P7H.3QS68A6320S32@kernel.org>
- <d957dbd3-4975-48d7-abc5-1a01c0959ea3@linux.ibm.com>
- <CZZKGEUSMI8F.CKFDVBIF1S4R@kernel.org>
- <CZZKMB1B4P0T.26A4YJHD9VJCP@kernel.org>
-In-Reply-To: <CZZKMB1B4P0T.26A4YJHD9VJCP@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu Mar 21, 2024 at 6:32 PM EET, Jarkko Sakkinen wrote:
-> On Thu Mar 21, 2024 at 6:24 PM EET, Jarkko Sakkinen wrote:
-> > On Thu Mar 21, 2024 at 6:09 PM EET, Stefan Berger wrote:
-> > >
-> > >
-> > > On 3/21/24 11:51, Jarkko Sakkinen wrote:
-> > > > On Wed Mar 20, 2024 at 6:15 PM EET, Stefan Berger wrote:
-> > > >>
-> > > >>
-> > > >> On 3/20/24 04:56, Jarkko Sakkinen wrote:
-> > > >>> Based recent discussions on LKML, provide preliminary bits of tpm=
-_tis_core
-> > > >>> dependent drivers. Includes only bare essentials but can be exten=
-ded later
-> > > >>> on case by case. This way some people may even want to read it la=
-ter on.
-> > > >>>
-> > > >>> Cc: Jonathan Corbet <corbet@lwn.net>
-> > > >>> CC: Daniel P. Smith <dpsmith@apertussolutions.com>
-> > > >>> Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > > >>> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > >>> Cc: Peter Huewe <peterhuewe@gmx.de>
-> > > >>> Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > > >>> Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
-> > > >>> Cc: keyrings@vger.kernel.org
-> > > >>> Cc: linux-doc@vger.kernel.org
-> > > >>> Cc: linux-kernel@vger.kernel.org
-> > > >>> Cc: linux-integrity@vger.kernel.org
-> > > >>> Cc: Randy Dunlap <rdunlap@infradead.org>
-> > > >>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > >>> ---
-> > > >>> v2:
-> > > >>> - Fixed errors reported by Randy:
-> > > >>>     https://lore.kernel.org/all/aed28265-d677-491a-a045-24b351854=
-b24@infradead.org/
-> > > >>> - Improved the text a bit to have a better presentation.
-> > > >>> ---
-> > > >>>    Documentation/security/tpm/index.rst   |  1 +
-> > > >>>    Documentation/security/tpm/tpm_tis.rst | 30 ++++++++++++++++++=
-++++++++
-> > > >>>    2 files changed, 31 insertions(+)
-> > > >>>    create mode 100644 Documentation/security/tpm/tpm_tis.rst
-> > > >>>
-> > > >>> diff --git a/Documentation/security/tpm/index.rst b/Documentation=
-/security/tpm/index.rst
-> > > >>> index fc40e9f23c85..f27a17f60a96 100644
-> > > >>> --- a/Documentation/security/tpm/index.rst
-> > > >>> +++ b/Documentation/security/tpm/index.rst
-> > > >>> @@ -5,6 +5,7 @@ Trusted Platform Module documentation
-> > > >>>    .. toctree::
-> > > >>>   =20
-> > > >>>       tpm_event_log
-> > > >>> +   tpm_tis
-> > > >>>       tpm_vtpm_proxy
-> > > >>>       xen-tpmfront
-> > > >>>       tpm_ftpm_tee
-> > > >>> diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentati=
-on/security/tpm/tpm_tis.rst
-> > > >>> new file mode 100644
-> > > >>> index 000000000000..b331813b3c45
-> > > >>> --- /dev/null
-> > > >>> +++ b/Documentation/security/tpm/tpm_tis.rst
-> > > >>> @@ -0,0 +1,30 @@
-> > > >>> +.. SPDX-License-Identifier: GPL-2.0
-> > > >>> +
-> > > >>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> > > >>> +TPM FIFO interface Driver
-> > > >>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> > > >>> +
-> > > >>> +FIFO (First-In-First-Out) is the name of the hardware interface =
-used by the
-> > > >>
-> > > >> FIFO is the type. I am surprised you call it a 'name'. I would say=
- TIS
-> > > >> is the 'name'.
-> > > >=20
-> > > > It's what the official specification calls it [1].
-> > > >=20
-> > > >=20
-> > > >>
-> > > >>> +tpm_tis_core dependent drivers. The prefix "tis" comes from the =
-TPM Interface
-> > > >>
-> > > >> tis is a tla -- a three letter *acronym*. You aren't using it as a=
- 'prefix'.
-> > > >=20
-> > > > I don't know what "tla" means.
-> > > >=20
-> > > >>
-> > > >>> +Specification, which is the hardware interface specification for=
- TPM 1.x chips.
-> > > >>
-> > > >> It's also available for TPM2.
-> > > >  =20
-> > > > Yes, but TIS is the name used by the legacy specification.
-> > >
-> > >
-> > > The point is that TIS is not just a TPM 1.x interface but also used f=
-or=20
-> > > TPM 2.
-> >
-> >
-> > FIFO interface is what is  used in the spec so I'll stick to that.
->
-> E.g. Table 15 - *FIFO* Interface Identifier Register
->
-> Not *TIS* Inteface Identifier Register.
->
-> I don't want to invent my own terminology here and this the spec
-> that we usually refer in every possible discussion around the topic.
+Based recent discussions on LKML, provide preliminary bits of tpm_tis_core
+dependent drivers. Includes only bare essentials but can be extended later
+on case by case. This way some people may even want to read it later on.
 
-That table actually also clarifies this pretty well, see interface type:
+Cc: Jonathan Corbet <corbet@lwn.net>
+CC: Daniel P. Smith <dpsmith@apertussolutions.com>
+Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc: keyrings@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-integrity@vger.kernel.org
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v3:
+- Fixed incorrect buffer size:
+  https://lore.kernel.org/linux-integrity/d957dbd3-4975-48d7-abc5-1a01c0959ea3@linux.ibm.com/
+v2:
+- Fixed errors reported by Randy:
+  https://lore.kernel.org/all/aed28265-d677-491a-a045-24b351854b24@infradead.org/
+- Improved the text a bit to have a better presentation.
+---
+ Documentation/security/tpm/index.rst   |  1 +
+ Documentation/security/tpm/tpm_tis.rst | 30 ++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 Documentation/security/tpm/tpm_tis.rst
 
-0000 =E2=80=93 FIFO interface as defined in PTP for TPM 2.0 is active.
-0001 =E2=80=93 CRB interface is active.
-1111 =E2=80=93 FIFO interface as defined in TIS1.3 is active (all other fie=
-lds
-of this register are don=E2=80=99t care).
-
-E.g. FIFO interface can be configured according to TIS 1.3 specification
-but the interface is still referred as FIFO interface in the current
-spec.
-
-BR, Jarkko
+diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
+index fc40e9f23c85..f27a17f60a96 100644
+--- a/Documentation/security/tpm/index.rst
++++ b/Documentation/security/tpm/index.rst
+@@ -5,6 +5,7 @@ Trusted Platform Module documentation
+ .. toctree::
+ 
+    tpm_event_log
++   tpm_tis
+    tpm_vtpm_proxy
+    xen-tpmfront
+    tpm_ftpm_tee
+diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/security/tpm/tpm_tis.rst
+new file mode 100644
+index 000000000000..078b75666086
+--- /dev/null
++++ b/Documentation/security/tpm/tpm_tis.rst
+@@ -0,0 +1,30 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=========================
++TPM FIFO interface Driver
++=========================
++
++FIFO (First-In-First-Out) is the name of the hardware interface used by the
++tpm_tis_core dependent drivers. The prefix "tis" comes from the TPM Interface
++Specification, which is the hardware interface specification for TPM 1.x chips.
++
++Communication is based on a 20 KiB buffer shared by the TPM chip through a
++hardware bus or memory map, depending on the physical wiring. The buffer is
++further split into five equal-size 4 KiB buffers, which provide equivalent
++sets of registers for communication between the CPU and TPM. These
++communication endpoints are called localities in the TCG terminology.
++
++When the kernel wants to send commands to the TPM chip, it first reserves
++locality 0 by setting the requestUse bit in the TPM_ACCESS register. The bit is
++cleared by the chip when the access is granted. Once it completes its
++communication, the kernel writes the TPM_ACCESS.activeLocality bit. This
++informs the chip that the locality has been relinquished.
++
++Pending localities are served in order by the chip in descending order, one at
++a time:
++
++- Locality 0 has the lowest priority.
++- Locality 5 has the highest priority.
++
++Further information on the purpose and meaning of the localities can be found
++in section 3.2 of the TCG PC Client Platform TPM Profile Specification.
+-- 
+2.43.0
 
 
