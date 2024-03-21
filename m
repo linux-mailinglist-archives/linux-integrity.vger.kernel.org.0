@@ -1,188 +1,152 @@
-Return-Path: <linux-integrity+bounces-1822-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1823-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B65A1881A9C
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 02:20:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8110C881AC3
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 02:51:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85BED1C20C2B
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 01:20:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BE6C281CE1
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 01:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17D1DECC;
-	Thu, 21 Mar 2024 01:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3255110E9;
+	Thu, 21 Mar 2024 01:51:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="d0MBLGU9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ap+7oJDE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536B4811;
-	Thu, 21 Mar 2024 01:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18841877
+	for <linux-integrity@vger.kernel.org>; Thu, 21 Mar 2024 01:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710984007; cv=none; b=XaSatWESCGqXeba/VytSZpdoqeJZEtjQr2G1A65AoC2XzHQ2zjhRsTlOB5XsMjIu0xO8GbQKV4hTMOgGB7jQuNTqTVYBxSQ57DYiAlfVdCh6InvYHGvEwKp4sULgd4yloElFmWndzYq5VGo79q7FZnBgNQPEpCFlH8HHUPezJfQ=
+	t=1710985905; cv=none; b=gvBMuRHOT6pZjr96lTbHYAQLoDZCkm/z+XltTI7gft1ZMb3KqoqJ3A5O4SaCEQtzH5Fm0sNXE3lnC1SJyB42cuDlZeZF001ROsGNSVLKh8FJqCHfNxvWywA4dub38/EQP93aT5eN4XxSSRji6+vObse0d+D9+TVS+T22LDG+ffg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710984007; c=relaxed/simple;
-	bh=RsNA/5JZKebCm6fRja9FmKgCaXXHLp5WhpCmkZu+xNw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=jHxY4m3on7JRxyMzb9aLB+X+orG0yzTnwQLjsLSO/HEYo22ecunrxNZZhh/b0p6uMxSL9Ov8Ux9PQJsNy0qYrG+C3/T3FEEBLBBki2PtToCrx4o7pVreh+ncD0VyLB990JVAqr8CCrukTvyb8BRwpp/wSanZNlGT5QHzk+mpXUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=d0MBLGU9; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42L0Ym7b006617;
-	Thu, 21 Mar 2024 01:19:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=KqJFUYVMHiOldIb0TF5vITt6dEK34rJkS96KxpU6txs=;
- b=d0MBLGU93kXYjugHUEUli3MmgToKh6lc1NA7DaLB0N0G+fcRbT5lMx4GHwOzcSiCflDs
- avVE6ME9Dem6Ixn6wlSmVSAIYrPYTuZ2OZLbsIdO6De1+0thioyy0+5sp5llgzEGgkuG
- nlv81a+ajzI3u5BoJvIvPujdj3Hskbrw6cJUAmFXMzPFSakJLZzHo42tpM4CEWz69Q1W
- r+MNDmZTnXMxYQoHV9cXo3e9W5uOs5rlW8OJwQRk4rxjsL7yuccWjpLopMGC7h2f8h1k
- C+l2EgQaNzJCRXK0leJfbvN4yOVeFS+YzMYol4/WUVi5F2tlTMr39P3Gb8rwnKyCZvNH KA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x05ts8kg8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Mar 2024 01:19:42 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 42L1JfTt015814;
-	Thu, 21 Mar 2024 01:19:41 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x05ts8kg6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Mar 2024 01:19:41 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42L0N4cV011582;
-	Thu, 21 Mar 2024 01:19:40 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wwq8m9tyt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Mar 2024 01:19:40 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42L1JbYH45220162
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 Mar 2024 01:19:39 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 679525805C;
-	Thu, 21 Mar 2024 01:19:37 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B3C9F58051;
-	Thu, 21 Mar 2024 01:19:36 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.94.57])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 Mar 2024 01:19:36 +0000 (GMT)
-Message-ID: <bbae0060d6ed7a0b033dc07e8d26c9d68585080b.camel@linux.ibm.com>
-Subject: Re: [PATCH][next] integrity: Avoid -Wflex-array-member-not-at-end
- warnings
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Roberto Sassu
- <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Kees Cook
-	 <keescook@chromium.org>
-Date: Wed, 20 Mar 2024 21:19:36 -0400
-In-Reply-To: <ZeYKWrXvACBBrAP8@neat>
-References: <ZeYKWrXvACBBrAP8@neat>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
+	s=arc-20240116; t=1710985905; c=relaxed/simple;
+	bh=N18TyZk+5FN97FhpqxU2P8gGI4l0oR2+vuUn8jj7rOU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b1bxFBUH/acfQV5kDm2xKTbXadISIR8zOKGc0/QBR3ZsKimgmrQTm9vbjCWUtufL/PcgdfUXEaEDnBWLHuxhQ69zzdlv1hhfLOLHsICkIvbrAknEZe4w8AMIn/d2BTPgKYS5g4LeuTWJWbdKnjfxlDK/bWxbQvAQxZtmOFjJhWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ap+7oJDE; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a46ba938de0so59803366b.3
+        for <linux-integrity@vger.kernel.org>; Wed, 20 Mar 2024 18:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710985901; x=1711590701; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aKvIzRuyqOk6U1xGcaoZ6LCx0BJNduwsimmCxwGiZkk=;
+        b=Ap+7oJDECrDKv6EiVCunPMQUGCJQOuGz6I8IQL4t44VfBZmo0SSPGhaGHB4/HzvIY9
+         zf8sm7AbcnjQYgU4fE9LsuZf1fX6m303ooMhM4bnR1XTKKwDfpcC7vUa/xtjTaP1f0Tr
+         KRgxA9dTjZFoWlJrkcus3CXIuY2ooMLswHzrW6TIklnxurpCn9PJaCTo+LK1rGkqKeoM
+         gsy5k0j/erAqdbIxIZS81lFFk44Ul7gAVcU6S7BCsZoQg73yPqo5A84YEuGrSmY7V+A5
+         jhh7RBy0b3w7lS9cK/JTXZgoWWx8tDVqRonYPAdvVDqURd0NsYPl6qouEWR60/bx0h/4
+         Qs3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710985901; x=1711590701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aKvIzRuyqOk6U1xGcaoZ6LCx0BJNduwsimmCxwGiZkk=;
+        b=YVDbzuiQJVMw+qceUPlM41G2kL49jPmCCKWUPEKj8InN6vpDBVZEDvkr73v7LF30Bv
+         1UTWKRToUrfKuQ7kDfm0L/Se6mPqIXO7lF+wDFGvs02ysl3texGmErUiJE+F4KSzCKnL
+         lkUHs3BKJvL1uFsWtypQdtigRnsxAkfooQFArcSQFFOZcrTCyI2BEodt/btfXdP1ntI9
+         iOmtOj4o8RdMlgHzjcOfC7vKd0g5Ap6P3Mr3iAJ7ZWku9uLFRWsfjwKmgxUXmx787hKh
+         hdIFnO43ZYbI245Sf5T62CsXvM5T/fb5o5Wbi+U/O8rEQY41gZJeRVPeGlguHPyLig0h
+         /GXw==
+X-Gm-Message-State: AOJu0YxNZBPf0OQyyHqGPL2OywOODhHx/kit7142XkQ2OU4fVyO7E+z4
+	Q5qgioLLTCsTvnIgxH005QxO99zp397XvT3eLVKE539+5iy4U11Za7VL5SiWquYUoclDrzV+W9I
+	LJXfbgy5yUVpbxXX/fQCxPcOrZWcsJd/G
+X-Google-Smtp-Source: AGHT+IEaxDbjzgcipzp7ZGa2wGbMnAqp/8iwQeSFIIqM3ZonDXit7R2d8pmAUtp2hNDxmEVUkh2Nh0sEhDQc+8uvsEc=
+X-Received: by 2002:a17:906:b001:b0:a46:c449:c6c5 with SMTP id
+ v1-20020a170906b00100b00a46c449c6c5mr6566451ejy.20.1710985900811; Wed, 20 Mar
+ 2024 18:51:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _y9Apma0B-Un1vvdG49kx4BrQis0celO
-X-Proofpoint-ORIG-GUID: 4-rXkoYoiEkQ1CnyscYFsfX3nWOJ-4rL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-20_14,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=956
- impostorscore=0 priorityscore=1501 clxscore=1011 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403140000 definitions=main-2403210007
+MIME-Version: 1.0
+References: <103252ffff09c607e83c887cab2e0af5404d62ff.1710774200.git.dmitry.kasatkin@gmail.com>
+In-Reply-To: <103252ffff09c607e83c887cab2e0af5404d62ff.1710774200.git.dmitry.kasatkin@gmail.com>
+From: Dmitry Baryshkov <dbaryshkov@gmail.com>
+Date: Thu, 21 Mar 2024 03:51:29 +0200
+Message-ID: <CALT56yM_i5PRyD7QBZ3enRUH9Mok7wmR+tki0GqVcFzmTA1_uA@mail.gmail.com>
+Subject: Re: [ima-evm-utils: PATCH v2 1/1] Change license to LGPL-2.0-or-later
+ and GPL-2.0-or-later
+To: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: linux-integrity@vger.kernel.org, 
+	Dmitry Kasatkin <dmitry.kasatkin@huawei.com>, Petr Vorel <pvorel@suse.cz>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>, 
+	Vitaly Chikunov <vt@altlinux.org>, Ken Goldman <kgold@linux.ibm.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Bruno Meneguele <bmeneg@redhat.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, George Wilson <gcwilson@linux.ibm.com>, 
+	Tergel Myanganbayar <tergelmyanganbayar2024@u.northwestern.edu>, 
+	=?UTF-8?Q?Andr=C3=A9_Draszik?= <git@andred.net>, 
+	Frank Sorenson <sorenson@redhat.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Vivek Goyal <vgoyal@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Gustavo,
+On Mon, 18 Mar 2024 at 17:08, Dmitry Kasatkin <dmitry.kasatkin@gmail.com> w=
+rote:
+>
+> Currently libimaevm provided by this project is used by the tool evmctl,
+> which is also provided by this project.
+>
+> An issue was reported about using libimaevm with other software. Its
+> GPL2-only license makes it incompatible to use with other licenses, in
+> particular GPL3-only.
+>
+> To address this issue, change the project license to GPL-2.0-or-later
+> and libimaevm to LGPL 2.0 or later.
+>
+> This patch includes all acks received so far.
+>
+> Signed-off-by: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> Acked-by: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
+> Acked-by: Petr Vorel <pvorel@suse.cz>
+> Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+> Acked-by: Stefan Berger <stefanb@linux.ibm.com>
+> Acked-by: Vitaly Chikunov <vt@altlinux.org>
+> Acked-by: Ken Goldman <kgold@linux.ibm.com>
+> Acked-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> Acked-by: Bruno Meneguele <bmeneg@redhat.com>
+> Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Acked-by: George Wilson <gcwilson@linux.ibm.com>
+> Acked-by: Tergel Myanganbayar <tergelmyanganbayar2024@u.northwestern.edu>
+> Acked-by: Andr=C3=A9 Draszik <git@andred.net>
+> Acked-by: Frank Sorenson <sorenson@redhat.com>
+> Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+> Acked-by: Vivek Goyal <vgoyal@redhat.com>
+> ---
+>  COPYING                | 339 -----------------------------------------
+>  LICENSES.txt           |  13 ++
+>  src/evmctl.c           |  25 +--
+>  src/hash_info.gen      |  10 +-
+>  src/imaevm.h           |  25 +--
+>  src/libimaevm.c        |  25 +--
+>  src/pcr.h              |   2 +
+>  src/pcr_ibmtss.c       |   2 +-
+>  src/pcr_tss.c          |  25 +--
+>  src/pcr_tsspcrread.c   |  25 +--
+>  src/utils.c            |   2 +-
+>  src/utils.h            |   2 +
+>  tests/functions.sh     |  11 +-
+>  tests/gen-keys.sh      |  11 +-
+>  tests/ima_hash.test    |  11 +-
+>  tests/sign_verify.test |  11 +-
+>  tests/test_mmap.c      |   2 +-
+>  17 files changed, 30 insertions(+), 511 deletions(-)
+>  delete mode 100644 COPYING
+>  create mode 100644 LICENSES.txt
 
-Sorry for the delay...
+Acked-by: Dmitry Baryshkov <dbaryshkov@gmail.com>
 
-On Mon, 2024-03-04 at 11:52 -0600, Gustavo A. R. Silva wrote:
-> -Wflex-array-member-not-at-end is coming in GCC-14, and we are getting
-> ready to enable it globally.
-> 
-> There is currently an object (`hdr)` in `struct ima_max_digest_data`
-> that contains a flexible structure (`struct ima_digest_data`):
-> 
->  struct ima_max_digest_data {
-> 	struct ima_digest_data hdr;
->         u8 digest[HASH_MAX_DIGESTSIZE];
->  } __packed;
-> 
-> So, in order to avoid ending up with a flexible-array member in the
-> middle of another struct, we use the `struct_group_tagged()` helper to
-> separate the flexible array from the rest of the members in the flexible
-> structure:
-> 
-> struct ima_digest_data {
->         struct_group_tagged(ima_digest_data_hdr, hdr,
-> 
-> 	... the rest of the members
-> 
->         );
->         u8 digest[];
-> } __packed;
-> 
-> With the change described above, we can now declare an object of the
-> type of the tagged struct, without embedding the flexible array in the
-> middle of another struct:
-> 
->  struct ima_max_digest_data {
->         struct ima_digest_data_hdr hdr;
->         u8 digest[HASH_MAX_DIGESTSIZE];
->  } __packed;
-> 
-> We also use `container_of()` whenever we need to retrieve a pointer to
-> the flexible structure.
-
-Nice!
-
-> 
-> So, with these changes, fix the following warnings:
-> 
-> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible
-> array member is not at the end of another structure [-Wflex-array-member-not-
-> at-end]
-> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible
-> array member is not at the end of another structure [-Wflex-array-member-not-
-> at-end]
-> security/integrity/evm/evm.h:45:32: warning: structure containing a flexible
-> array member is not at the end of another structure [-Wflex-array-member-not-
-> at-end]
-
-A similar change would need to be made to struct evm_digest:
-
-struct evm_digest {
-        struct ima_digest_data hdr;
-        char digest[IMA_MAX_DIGEST_SIZE];
-} __packed;
-
-Is there are another patch?
-
-Mimi
-
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> 
-
+--
+With best wishes
+Dmitry
 
