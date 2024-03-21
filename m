@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-1825-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1826-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 217DE881BAE
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 04:55:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFEA3881BD4
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 05:11:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AD3C1F21AC9
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 03:55:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FAC61C21640
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Mar 2024 04:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99A4BBA45;
-	Thu, 21 Mar 2024 03:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E06FBE6F;
+	Thu, 21 Mar 2024 04:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pxD759W6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qvvwy3Vc"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C24B672;
-	Thu, 21 Mar 2024 03:55:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC04BA56;
+	Thu, 21 Mar 2024 04:11:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710993316; cv=none; b=KBQcExiGUXs97+tNZS22rbFgW/Sk7C/nJx4bhJAgUxEG/r0ZX+DVujlJlXdH9Vnb3/FzvKazO2a864qOxSD6cnbrc674fmm4plbPplt2yDL7wy6VWVXB8T9mM3wDv7zJiDmkduvaWfMqphy8P2JMXBhugPBqlxhMRS78H0VGIwA=
+	t=1710994270; cv=none; b=fC/tnOq4kREYLEsjoIS8/cnWiPIxnzVBKxuL4ny6oQrKOzjuE+91rETViIkQ+ehd/7Cb72vVdla7Pit7yxkTO0L66lbjySNRDnVrAhpYpzWbUxUPDIAA4G5wuCc1WHrmcdv0Maw2NEJPnydncDADcQa0q1GboNy91BJEuqwG/oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710993316; c=relaxed/simple;
-	bh=behkTW4UbUbVkOiZEW/kHWHwH6KT5XzXJGZlENDwKdw=;
+	s=arc-20240116; t=1710994270; c=relaxed/simple;
+	bh=nUhN6swPTdLBPcD6e634txdLP2fFPv5dfLhySEmjXMQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nR+wBGfX8nPZiRDTfE9VFxeqWrkMfPrGwL0MR1J2hP6uNLfLm+8wXRX9vMEFucVqjvDS3n5cVjtFaDCtB0lQxYoi1aCGeBhqxq3aRGcwgsaJAFtjBh4JkXy/qhkzBODt3GZb0cqd3EXUIR39GDFc5dh1d88iVdlIBliL0gdwDzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pxD759W6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF8BC433C7;
-	Thu, 21 Mar 2024 03:55:14 +0000 (UTC)
+	 Content-Disposition; b=j0NR/ee31ShhCOQcKTFpaBiVLuQh2NXUNDESn0ppA8GHMoKeYOzcl2UVotTQnsXr7PbSANiM5mvIz1jg4pg6+kGWj8RJHU+pHVaquF50XT2y+3ZfvOE3z9+dJalYw0TlvFYLcdP8Cgg6Lnu79y4IZ9+NFZ0r7yj++RKFvQKV2AI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qvvwy3Vc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD9F7C433C7;
+	Thu, 21 Mar 2024 04:11:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710993316;
-	bh=behkTW4UbUbVkOiZEW/kHWHwH6KT5XzXJGZlENDwKdw=;
+	s=k20201202; t=1710994269;
+	bh=nUhN6swPTdLBPcD6e634txdLP2fFPv5dfLhySEmjXMQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=pxD759W6OhVW5JTs6GHkfzj4kiiqO3Ugy5D+zOOiKn2o5lSuW5LBsITXrZ/R+utbS
-	 dxGN9IMnw/N5Ln1KC+kwVO+4kfqeLL+/9zqAiqNQpiKcUPPfmMOD9IN0DXMyWRH7Lu
-	 vTSbfB+7cKfOL+/SO3EugKYxGXkpW1SZc7Y+lxoCz17ACm7RdvHA++dSZGzVqZ4gN3
-	 leuS5gS0mgSa1FVUdmRQ9OZ8JXcglindWgAPhS+v/mM1cSsDJdknCRbBeZs3jq72FW
-	 9rhnSbyN6eHVYriu51vcpgigVnq1M7cs6wOUKCBAXrQ1UIWCUbi+a6H2R785bkasKS
-	 qP9RoWJwmStqw==
-Date: Wed, 20 Mar 2024 21:55:12 -0600
+	b=qvvwy3VcQ2w5PhNPSt/CZb0+WNKfNTTnrpzo3UPN776f7WuJe7SYMHaSZR6svGYJa
+	 biYTZmPzYGqciKCxdG+oQLx0TK3cgFTvJxGxiSJJZuh8HT6UtXZ6SkEgEjctPkQdNk
+	 +cVgwXCxFmX50dkJOW8wK2u3l64W3e86q7IcDA5JqOIw+DXnDoV1iglfmpTFkBYK5y
+	 86fW3iHCqF+pm7kptxh1T9eGWVtQY8GikA5qFjrG+W30oXmyU4Rz4lGyo4cKmxT+H3
+	 lYvFh3jB6EJqQEYxfhYDEkQZvUTNT6dEt2q+8ctNLUHyceaYdFTcBtuYS3l7a6xRie
+	 7Lmr4v6BdjwyA==
+Date: Wed, 20 Mar 2024 22:11:06 -0600
 From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 To: Mimi Zohar <zohar@linux.ibm.com>,
 	Roberto Sassu <roberto.sassu@huawei.com>,
@@ -53,9 +53,9 @@ Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	linux-hardening@vger.kernel.org
-Subject: [PATCH v2][next] integrity: Avoid -Wflex-array-member-not-at-end
+Subject: [PATCH v3][next] integrity: Avoid -Wflex-array-member-not-at-end
  warnings
-Message-ID: <ZfuvoIj+AJHjCdTs@neat>
+Message-ID: <ZfuzWku+ip4fsZrb@neat>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -77,12 +77,12 @@ that contains a flexible structure (`struct ima_digest_data`):
  } __packed;
 
 So, in order to avoid ending up with a flexible-array member in the
-middle of a struct, we use the `struct_group_tagged()` helper to
-separate the flexible array from the rest of the members in the flexible
+middle of a struct, we use the `__struct_group()` helper to separate
+the flexible array from the rest of the members in the flexible
 structure:
 
 struct ima_digest_data {
-        struct_group_tagged(ima_digest_data_hdr, hdr,
+        __struct_group(ima_digest_data_hdr, hdr, __packed,
 
 	... the rest of the members
 
@@ -91,8 +91,8 @@ struct ima_digest_data {
 } __packed;
 
 With the change described above, we can now declare an object of the
-type of the tagged struct, without embedding the flexible array in the
-middle of another struct:
+type of the tagged `struct ima_digest_data_hdr`, without embedding the
+flexible array in the middle of another struct:
 
  struct ima_max_digest_data {
         struct ima_digest_data_hdr hdr;
@@ -110,8 +110,15 @@ security/integrity/evm/evm.h:45:32: warning: structure containing a flexible arr
 
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
+Changes in v3:
+ - struct ima_digest_data is a packed structure. So, to keep things
+   consistent, use the attribute __packed on the tagged struct 
+   ima_digest_data_hdr. For this, we use __struct_group() instead of
+   struct_group_tagged(). Update the changelog text, accordingly.
+
 Changes in v2:
  - Include changes for `struct evm_digest` (Mimi Zohar)
+ 
 
  security/integrity/evm/evm.h              |  2 +-
  security/integrity/ima/ima_api.c          |  6 ++++--
@@ -284,14 +291,14 @@ index 6cd0add524cd..74198d7619da 100644
  out:
  	return ima_eventdigest_init_common(cur_digest, cur_digestsize,
 diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 50d6f798e613..fc1952da02ea 100644
+index 50d6f798e613..3847a23509f1 100644
 --- a/security/integrity/integrity.h
 +++ b/security/integrity/integrity.h
 @@ -44,6 +44,7 @@ struct evm_xattr {
  #define IMA_MAX_DIGEST_SIZE	HASH_MAX_DIGESTSIZE
  
  struct ima_digest_data {
-+	struct_group_tagged(ima_digest_data_hdr, hdr,
++	__struct_group(ima_digest_data_hdr, hdr, __packed,
  	u8 algo;
  	u8 length;
  	union {
