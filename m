@@ -1,172 +1,206 @@
-Return-Path: <linux-integrity+bounces-1843-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1844-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D354B886C31
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 Mar 2024 13:36:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 681EC886DF7
+	for <lists+linux-integrity@lfdr.de>; Fri, 22 Mar 2024 15:04:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 120BA1C222CA
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 Mar 2024 12:36:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 795C21C21387
+	for <lists+linux-integrity@lfdr.de>; Fri, 22 Mar 2024 14:04:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C173FE28;
-	Fri, 22 Mar 2024 12:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CAE546426;
+	Fri, 22 Mar 2024 14:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u/P+vTaH"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aEFVnYEn"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590322F844;
-	Fri, 22 Mar 2024 12:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12F920DD2;
+	Fri, 22 Mar 2024 14:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711110950; cv=none; b=GBP633D0mUZBXJU15Rmcqqhx/W2pjsmbXvAv0HZGaztR27kFnDhBXzmDfrIuCNFIuhWoSk/5ZT+Cq5wiroukp3q6gmcAf7gX3xWXHWPeb5tiVpd+gid3H8FAAc7RyjSFkFNwdDXQeDcll6lkW9kILu2xjkaSbLihLVSFoN1tDUo=
+	t=1711116237; cv=none; b=PM7t0QL1d01WVbUCNNEsvtrmCv9HQCxsRSPHOAoF7r69fat3OcjbrMPnE51CEWNDqlZdUuICMAYVTC68MpKpVZqqFlMg9RaNBLwMJ4bEgO/29Cr1iqxcCqlSvwA+yryIQ0KKv82JsepHkR/r7dqunGSp8kEvMjMWrz8LJMBgw8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711110950; c=relaxed/simple;
-	bh=DIU/riHW7d/Q828EtRoJMXqE8kp8ZnSjYwedK5XPRbA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W7C3pUp6GAb9CYmMtAcJX3YTiXoXZGay86lpN+DotnckeUPvFCOobBi56peNtzZK6xovrxfd8sK07z+M5KyI8cGQAsXSr6RF4gCm7DJ/pVAd9tncs98ynRovyFLyM6hx368SXdS7trCr1RZ4oN5BJ/ltgZjGmngm0evi5df0cCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u/P+vTaH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF17C433F1;
-	Fri, 22 Mar 2024 12:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711110949;
-	bh=DIU/riHW7d/Q828EtRoJMXqE8kp8ZnSjYwedK5XPRbA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=u/P+vTaHBL1Qwg9rMUybG08tJuaCL6vcumDRR7PHiRZWZa0Ku+VsguA6Jz/oYwY/Y
-	 qNNIoY2JogVZ1Ih34hgni6rT+X0sJF9I3IoX44804pCZ7LbSe3umt2A5+eqqmmLAiM
-	 AUmjdLAmJGbLoBKHalDymv2gFjrcc/2aEUdPpgJpY2wEqv2Rq7FOxNtzSv0t8bS7cC
-	 AncIoFdtkl1HZmLT46qeG+GrUD80IwC58ceIku1ALmyCFxfPw6P6JRGyzbAMvlCjWC
-	 97XsAbbG1AQeTTAN6L4XZNUyXSmtZnEbDSZ33HwDvGBjmNtvCJ428TANpIUMF1rXwd
-	 Z9ItmEWNNiCQQ==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	"Daniel P . Smith" <dpsmith@apertussolutions.com>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Alexander Steffen <Alexander.Steffen@infineon.com>,
-	keyrings@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	netdev@vger.kernel.org (open list:PTP HARDWARE CLOCK SUPPORT:Keyword:(?:\b|_)ptp(?:\b|_))
-Subject: [PATCH v4] Documentation: tpm_tis
-Date: Fri, 22 Mar 2024 14:35:36 +0200
-Message-ID: <20240322123542.24158-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1711116237; c=relaxed/simple;
+	bh=GTwkfSYY8fF/JTgbFZ19PtI5w8z3w4e7RmofZKCLLX4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HRcLP46Ls1cyM5u1XacdFBTuL+No+dpnmNJKRSKoTlEVmOfmt0VRDBtaJoRFoLDENNPHMCDvVDr4eG2zrP3vdBOaIuBYm2qLTaL9aDZinhpDB8DJMWv701k4n3pXIZec++OLBt9/BvGTALAKG1NUZvtc7uL2f/5laXm1osxPk4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aEFVnYEn; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42MDrlfG007691;
+	Fri, 22 Mar 2024 14:03:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=8LjoMCe0DGuL79iPsx8E9aBSx33d5vNWq5IDmlmWEHU=;
+ b=aEFVnYEnrQo9X9eTn62cMAsHDBd/9O/L+fBvpgxfId66LX1+lwzS3aT00ptCVhGhv4nO
+ J6/jHPfzD2DDbINY+8EluYrNxC/M8yfULoAO4e4muViayzwOYgme0kxJ/IhZZKodKnNX
+ KzJcBXk7FyYKd3bHmNihaoyfowBMaWwHtCdmZZJK5/3MhGATGldGb29OhnhcRmxbNrk+
+ 2rv+JBmK0+Iya2IiDNHhYf7QDiHOMUrzIXr4NJ+F2Ness7X8PFoMRRW02Pmy+61q9As8
+ ZWyy7zEDcOBRxKh9LAJZTwEmJd9380VdaIhHvu1xTrpHEVLblcwJq0RuJJKLXKhvKhYF Uw== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x1b91033h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 22 Mar 2024 14:03:29 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42MDh8lM026678;
+	Fri, 22 Mar 2024 14:03:29 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3x0x1756yv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 22 Mar 2024 14:03:29 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42ME3PZl26411734
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 22 Mar 2024 14:03:27 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7454C58065;
+	Fri, 22 Mar 2024 14:03:25 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 085DD58068;
+	Fri, 22 Mar 2024 14:03:25 +0000 (GMT)
+Received: from sbct-3.bos2.lab (unknown [9.47.158.153])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 22 Mar 2024 14:03:24 +0000 (GMT)
+From: Stefan Berger <stefanb@linux.ibm.com>
+To: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        roberto.sassu@huawei.com, Stefan Berger <stefanb@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH] ima: Fix use-after-free on a dentry's dname.name
+Date: Fri, 22 Mar 2024 10:03:12 -0400
+Message-ID: <20240322140312.1804404-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.44.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: i-UhdwlGxaLYS8DRbaBtV0I1H82ZOiJr
+X-Proofpoint-ORIG-GUID: i-UhdwlGxaLYS8DRbaBtV0I1H82ZOiJr
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-22_08,2024-03-21_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 impostorscore=0 phishscore=0 spamscore=0
+ mlxscore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2403210000 definitions=main-2403220099
 
-Based recent discussions on LKML, provide preliminary bits of tpm_tis_core
-dependent drivers. Includes only bare essentials but can be extended later
-on case by case. This way some people may even want to read it later on.
+->d_name.name can change on rename and the earlier value can be freed;
+there are conditions sufficient to stabilize it (->d_lock on dentry,
+->d_lock on its parent, ->i_rwsem exclusive on the parent's inode,
+rename_lock), but none of those are met at any of the sites. Take a stable
+snapshot of the name instead.
 
-Cc: Jonathan Corbet <corbet@lwn.net>
-CC: Daniel P. Smith <dpsmith@apertussolutions.com>
-Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
-Cc: keyrings@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Link: https://lore.kernel.org/all/20240202182732.GE2087318@ZenIV/
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
-v4:
-- Extended the text to address some of Stefan's concerns with v2.
-- Had to unfortunately remove Randy's reviewed-by because of this, given
-  the amount of text added.
-v3:
-- Fixed incorrect buffer size:
-  https://lore.kernel.org/linux-integrity/d957dbd3-4975-48d7-abc5-1a01c0959ea3@linux.ibm.com/
-v2:
-- Fixed errors reported by Randy:
-  https://lore.kernel.org/all/aed28265-d677-491a-a045-24b351854b24@infradead.org/
-- Improved the text a bit to have a better presentation.
----
- Documentation/security/tpm/index.rst   |  1 +
- Documentation/security/tpm/tpm_tis.rst | 46 ++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
- create mode 100644 Documentation/security/tpm/tpm_tis.rst
+ security/integrity/ima/ima_api.c          | 16 ++++++++++++----
+ security/integrity/ima/ima_template_lib.c | 17 ++++++++++++++---
+ 2 files changed, 26 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
-index fc40e9f23c85..f27a17f60a96 100644
---- a/Documentation/security/tpm/index.rst
-+++ b/Documentation/security/tpm/index.rst
-@@ -5,6 +5,7 @@ Trusted Platform Module documentation
- .. toctree::
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index b37d043d5748..1856981e33df 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -245,8 +245,8 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
+ 	const char *audit_cause = "failed";
+ 	struct inode *inode = file_inode(file);
+ 	struct inode *real_inode = d_real_inode(file_dentry(file));
+-	const char *filename = file->f_path.dentry->d_name.name;
+ 	struct ima_max_digest_data hash;
++	struct name_snapshot filename;
+ 	struct kstat stat;
+ 	int result = 0;
+ 	int length;
+@@ -317,9 +317,13 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
+ 		if (file->f_flags & O_DIRECT)
+ 			audit_cause = "failed(directio)";
  
-    tpm_event_log
-+   tpm_tis
-    tpm_vtpm_proxy
-    xen-tpmfront
-    tpm_ftpm_tee
-diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/security/tpm/tpm_tis.rst
-new file mode 100644
-index 000000000000..b448ea3db71d
---- /dev/null
-+++ b/Documentation/security/tpm/tpm_tis.rst
-@@ -0,0 +1,46 @@
-+.. SPDX-License-Identifier: GPL-2.0
++		take_dentry_name_snapshot(&filename, file->f_path.dentry);
 +
-+=========================
-+TPM FIFO interface driver
-+=========================
+ 		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode,
+-				    filename, "collect_data", audit_cause,
+-				    result, 0);
++				    filename.name.name, "collect_data",
++				    audit_cause, result, 0);
 +
-+TCG PTP Specification defines two interface types: FIFO and CRB. The former is
-+based on sequenced read and write operations,  and the latter is based on a
-+buffer containing the full command or response.
++		release_dentry_name_snapshot(&filename);
+ 	}
+ 	return result;
+ }
+@@ -432,6 +436,7 @@ void ima_audit_measurement(struct ima_iint_cache *iint,
+  */
+ const char *ima_d_path(const struct path *path, char **pathbuf, char *namebuf)
+ {
++	struct name_snapshot filename;
+ 	char *pathname = NULL;
+ 
+ 	*pathbuf = __getname();
+@@ -445,7 +450,10 @@ const char *ima_d_path(const struct path *path, char **pathbuf, char *namebuf)
+ 	}
+ 
+ 	if (!pathname) {
+-		strscpy(namebuf, path->dentry->d_name.name, NAME_MAX);
++		take_dentry_name_snapshot(&filename, path->dentry);
++		strscpy(namebuf, filename.name.name, NAME_MAX);
++		release_dentry_name_snapshot(&filename);
 +
-+FIFO (First-In-First-Out) interface is used by the tpm_tis_core dependent
-+drivers. Originally Linux had only a driver called tpm_tis, which covered
-+memory mapped (aka MMIO) interface but it was later on extended to cover other
-+physical interfaces supported by the TCG standard.
+ 		pathname = namebuf;
+ 	}
+ 
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index 6cd0add524cd..3b2cb8f1002e 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -483,7 +483,10 @@ static int ima_eventname_init_common(struct ima_event_data *event_data,
+ 				     bool size_limit)
+ {
+ 	const char *cur_filename = NULL;
++	struct name_snapshot filename;
+ 	u32 cur_filename_len = 0;
++	bool snapshot = false;
++	int ret;
+ 
+ 	BUG_ON(event_data->filename == NULL && event_data->file == NULL);
+ 
+@@ -496,7 +499,10 @@ static int ima_eventname_init_common(struct ima_event_data *event_data,
+ 	}
+ 
+ 	if (event_data->file) {
+-		cur_filename = event_data->file->f_path.dentry->d_name.name;
++		take_dentry_name_snapshot(&filename,
++					  event_data->file->f_path.dentry);
++		snapshot = true;
++		cur_filename = filename.name.name;
+ 		cur_filename_len = strlen(cur_filename);
+ 	} else
+ 		/*
+@@ -505,8 +511,13 @@ static int ima_eventname_init_common(struct ima_event_data *event_data,
+ 		 */
+ 		cur_filename_len = IMA_EVENT_NAME_LEN_MAX;
+ out:
+-	return ima_write_template_field_data(cur_filename, cur_filename_len,
+-					     DATA_FMT_STRING, field_data);
++	ret = ima_write_template_field_data(cur_filename, cur_filename_len,
++					    DATA_FMT_STRING, field_data);
 +
-+For legacy compliance the original MMIO driver is called tpm_tis and the
-+framework for FIFO drivers is named as tpm_tis_core. The postfix "tis" in
-+tpm_tis comes from the TPM Interface Specification, which is the hardware
-+interface specification for TPM 1.x chips.
++	if (snapshot)
++		release_dentry_name_snapshot(&filename);
 +
-+Communication is based on a 20 KiB buffer shared by the TPM chip through a
-+hardware bus or memory map, depending on the physical wiring. The buffer is
-+further split into five equal-size 4 KiB buffers, which provide equivalent
-+sets of registers for communication between the CPU and TPM. These
-+communication endpoints are called localities in the TCG terminology.
-+
-+When the kernel wants to send commands to the TPM chip, it first reserves
-+locality 0 by setting the requestUse bit in the TPM_ACCESS register. The bit is
-+cleared by the chip when the access is granted. Once it completes its
-+communication, the kernel writes the TPM_ACCESS.activeLocality bit. This
-+informs the chip that the locality has been relinquished.
-+
-+Pending localities are served in order by the chip in descending order, one at
-+a time:
-+
-+- Locality 0 has the lowest priority.
-+- Locality 5 has the highest priority.
-+
-+Further information on the purpose and meaning of the localities can be found
-+in section 3.2 of the TCG PC Client Platform TPM Profile Specification.
-+
-+References
-+==========
-+
-+TCG PC Client Platform TPM Profile (PTP) Specification
-+https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
++	return ret;
+ }
+ 
+ /*
 -- 
 2.43.0
 
