@@ -1,58 +1,58 @@
-Return-Path: <linux-integrity+bounces-1847-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1848-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 364E2887632
-	for <lists+linux-integrity@lfdr.de>; Sat, 23 Mar 2024 01:40:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBEEA887662
+	for <lists+linux-integrity@lfdr.de>; Sat, 23 Mar 2024 02:34:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 996E11F225D5
-	for <lists+linux-integrity@lfdr.de>; Sat, 23 Mar 2024 00:39:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71EEF283DD4
+	for <lists+linux-integrity@lfdr.de>; Sat, 23 Mar 2024 01:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72567E1;
-	Sat, 23 Mar 2024 00:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1DBEC2;
+	Sat, 23 Mar 2024 01:34:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="EIcEU6Es"
+	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="V0YnjjmU"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com [136.143.188.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3E17F;
-	Sat, 23 Mar 2024 00:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FC6A31;
+	Sat, 23 Mar 2024 01:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711154394; cv=pass; b=QbXIaI/40W7fUFS/0MBp2O+PWcQus29K8Vqt+qmtxz/zX1QnCvsCMnjxHq58QaMOsy4sz94UgXQ6UuAb3rKUbn4F0B6G3d782Y7acILRsPagB2TfX/43yZYDe7tkcd/1wSPArEzgwDE+2ZOidGsc8KoeNh+A7eLtgvVHorPhdiU=
+	t=1711157675; cv=pass; b=Z3bb8jjGWAP5v9ecWBzBvrMOlnc0Mp92ZRfBid6an3mLFWtwpowDrp0wJzSDnQxw6esmVRB8BCSrlubzbmSKV5esOLv2pXhh/pFdYbnPBPR7B/1rcqDHjrRlGFMg4Z6kjRid3d9pYTAWYhuroaOfYz1YP7obsUG3w11Ze5IUWzo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711154394; c=relaxed/simple;
-	bh=IZQstQMtLD3a/Oiu8dc2nBD7fX2kaYx9Q+6x+U1Cem4=;
+	s=arc-20240116; t=1711157675; c=relaxed/simple;
+	bh=Pcc+e6eivZ3tG225DvlUBIsuw9gooMR9r1KyZYl9irU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kcd4x5diRSUeF26buqQf0rS4/ZoQMVaPHjIQZiI/aueMUplLzSf5gA8AUvQmBdyRKTF/9q6iyEA1hhNzlsD18YiYGpKETvZ4KJZCQbdb5e3dfcYPIPiu9SdGNNuwDLFwzSVkamEt4RhuN7sylSdMJk3VJLrYShRNpaCV7q4XEUo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=EIcEU6Es; arc=pass smtp.client-ip=136.143.188.51
+	 In-Reply-To:Content-Type; b=VtCBBHk2njlM8IQ6WwSYmd/Tvjd+aekLzwsGtepqisu6hkLUh1BMXT95jz5hqpW0kQQExtNv+3dexwCwWY/c/sdcWIJ5PzmzQjncRi2YE/3psnZpOkI9bFscW5wGgHiZqhay/LM+sslZe+Xc6j5+GaZW+04KbSrYJzKUpff4ioI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=V0YnjjmU; arc=pass smtp.client-ip=136.143.188.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1711154373; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1711157626; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=B9pYW7lj4Z+uzq8AVE59XgvOsa93f9twCyqtyoFPlzSbLQPHcEob7aJcECp3iXUZRB+gx+eTI0F/XAp+65/19mCrLmqKJlgNlP8Sd9p+FKSon3Kj0DZVO/vICX5U7+LpY3vKC1kULzQIw0a4FYiVLpbD/xJvCMF44D8am++9DrM=
+	b=Y0P/6LGXB6XbnIcWo4Qk8zcdc8Jw+lAadY5AVPmkdkTcjKL1xfq/phucxRZdbbNgfKSheA1gZ2TCgQmpSop9a93QySuKrHzUX9cA/llTHTSpSkXW+MnPVF1RuubNen2kklKjmr1fhdL+1VTSotCBBBygMpSAIKA4weDZR7NPjbo=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1711154373; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=v374hk794r7O7dlfZ3++1YAoZDq+f+3n63wl9EofYp0=; 
-	b=K0RIUa0w8z+L0nW6SB3OHj2yC5QBPYG/c+AvaetYekQR+KKTKgSkeUtN7TqkinP9qLrMXVBdEpzpnX1BJ6AT8IVg69nKGT+8o12634DBBbmlDcTWhzdAlDemFA8A0MgENa9cPTEQQZvYbhZG5y9ErkKTcFjma7yj8/peHxfcibk=
+	t=1711157626; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=zTwwKIN0GuMJg2NfAmR7tXmcZNVQ9X8RONWejAf+ILA=; 
+	b=KDRxtlHCwaLfbAAuvARZF6Zb1Yd9S4Wk7hw94ajl31mDeFrjtRGKo03f3oU0hbeYXY+Twf6jhUzk66U3KG0HakCt85ulldco9lnwqTycdGJ/nGtzkdpct84+lOyaIr0+1VU+BLWyQm0sidgRu09Q3t6da3gTLqs77MzOejmgKmM=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=apertussolutions.com;
 	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
 	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1711154373;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1711157626;
 	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
 	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=v374hk794r7O7dlfZ3++1YAoZDq+f+3n63wl9EofYp0=;
-	b=EIcEU6EsHgfVe0rfIb7aY73zggM+qzonYfbN78n82ngAO+DUOJuVyhWeWYtBS07/
-	iP4EjUNBQp4jcl9eiDeP2Azf84Y/FPWdUqYTC5iyt1/X1O1Zgz1qRr63rW4qjEp1le7
-	MtfAscIcWCZ/54N5Jr/5fFY/nzrWG8ZIWWWSVK/Y=
+	bh=zTwwKIN0GuMJg2NfAmR7tXmcZNVQ9X8RONWejAf+ILA=;
+	b=V0YnjjmUHOoqSu0E6ecOozxCpL45ni+sdwedBmm/G4ETjsKhjJ9rjKO5YeE+1DyK
+	8x6FH+Z/xHt3BdkK9FPNXFzVS1wE10LyGtbPUcYy13Uwzinw3iZREXxoO1pIcB+2Gnz
+	gro6z8WYudke6koxfL07M5d2VG3TE55huGqNCVv0=
 Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-	with SMTPS id 1711154370859958.6393373374815; Fri, 22 Mar 2024 17:39:30 -0700 (PDT)
-Message-ID: <5a494de5-b004-440c-bcdf-7bdfa3a8c508@apertussolutions.com>
-Date: Fri, 22 Mar 2024 20:39:28 -0400
+	with SMTPS id 1711157624195513.236242023147; Fri, 22 Mar 2024 18:33:44 -0700 (PDT)
+Message-ID: <e52bbf77-4a80-4ebd-88f2-39e9b4063044@apertussolutions.com>
+Date: Fri, 22 Mar 2024 21:33:41 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -60,20 +60,24 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] Documentation: tpm_tis
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>,
- Lino Sanfilippo <l.sanfilippo@kunbus.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Peter Huewe <peterhuewe@gmx.de>,
- James Bottomley <James.Bottomley@HansenPartnership.com>,
- Alexander Steffen <Alexander.Steffen@infineon.com>,
- keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
- Richard Cochran <richardcochran@gmail.com>,
- "open list:PTP HARDWARE CLOCK SUPPORT:Keyword:(?:b|_)ptp(?:b|_)"
- <netdev@vger.kernel.org>
-References: <20240322123542.24158-1-jarkko@kernel.org>
+Subject: Re: [PATCH v8 01/15] x86/boot: Place kernel_info at a fixed offset
 Content-Language: en-US
+To: "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Ross Philipson <ross.philipson@oracle.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+ bp@alien8.de, dave.hansen@linux.intel.com, mjg59@srcf.ucam.org,
+ James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, jarkko@kernel.org,
+ jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu,
+ herbert@gondor.apana.org.au, davem@davemloft.net, kanth.ghatraju@oracle.com,
+ trenchboot-devel@googlegroups.com
+References: <20240214221847.2066632-1-ross.philipson@oracle.com>
+ <20240214221847.2066632-2-ross.philipson@oracle.com>
+ <CAMj1kXH3Gvr3vDRLDdXuc0s7ZAQYE6+D7tmCRBjJWwWt2fn4-w@mail.gmail.com>
+ <9d01a6d2-4dd9-4331-8fc9-b01c07cfdbb5@apertussolutions.com>
+ <32FDA47A-C87F-406F-A0B9-3AA1BB2EBAFB@zytor.com>
 From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
 Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
  xsJuBFYrueARCACPWL3r2bCSI6TrkIE/aRzj4ksFYPzLkJbWLZGBRlv7HQLvs6i/K4y/b4fs
@@ -106,144 +110,47 @@ Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
  ke943EIUts9CmFAHt8cNPYOPRd20pPu4VFNBuT4fv9Ys0iv0XGCEP+sos7/pgJ3gV3pCOric
  p15jV4PCYQQYEQgACQUCViu54AIbDAAKCRBTc6WbYpR8Khu7AP9NJrBUn94C/3PeNbtQlEGZ
  NV46Mx5HF0P27lH3sFpNrwD/dVdZ5PCnHQYBZ287ZxVfVr4Zuxjo5yJbRjT93Hl0vMY=
-In-Reply-To: <20240322123542.24158-1-jarkko@kernel.org>
+In-Reply-To: <32FDA47A-C87F-406F-A0B9-3AA1BB2EBAFB@zytor.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-ZohoMailClient: External
 
-Hi Jarkko,
-
-On 3/22/24 08:35, Jarkko Sakkinen wrote:
-> Based recent discussions on LKML, provide preliminary bits of tpm_tis_core
-> dependent drivers. Includes only bare essentials but can be extended later
-> on case by case. This way some people may even want to read it later on.
+On 3/22/24 10:18, H. Peter Anvin wrote:
+> On March 21, 2024 6:45:48 AM PDT, "Daniel P. Smith" <dpsmith@apertussolutions.com> wrote:
+>> Hi Ard!
+>>
+>> On 2/15/24 02:56, Ard Biesheuvel wrote:
+>>> On Wed, 14 Feb 2024 at 23:31, Ross Philipson <ross.philipson@oracle.com> wrote:
+>>>>
+>>>> From: Arvind Sankar <nivedita@alum.mit.edu>
+>>>>
+>>>> There are use cases for storing the offset of a symbol in kernel_info.
+>>>> For example, the trenchboot series [0] needs to store the offset of the
+>>>> Measured Launch Environment header in kernel_info.
+>>>>
+>>>
+>>> Why? Is this information consumed by the bootloader?
+>>
+>> Yes, the bootloader needs a standardized means to find the offset of the MLE header, which communicates a set of meta-data needed by the DCE in order to set up for and start the loaded kernel. Arm will also need to provide a similar metadata structure and alternative entry point (or a complete rewrite of the existing entry point), as the current Arm entry point is in direct conflict with Arm DRTM specification.
+>>
+>>> I'd like to get away from x86 specific hacks for boot code and boot
+>>> images, so I would like to explore if we can avoid kernel_info, or at
+>>> least expose it in a generic way. We might just add a 32-bit offset
+>>> somewhere in the first 64 bytes of the bootable image: this could
+>>> co-exist with EFI bootable images, and can be implemented on arm64,
+>>> RISC-V and LoongArch as well.
+>>
+>> With all due respect, I would not refer to boot params and the kern_info extension designed by the x86 maintainers as a hack. It is the well-defined boot protocol for x86, just as Arm has its own boot protocol around Device Tree.
+>>
+>> We would gladly adopt a cross arch/cross image type, zImage and bzImage, means to embedded meta-data about the kernel that can be discovered by a bootloader. Otherwise, we are relegated to doing a per arch/per image type discovery mechanism. If you have any suggestions that are cross arch/cross image type that we could explore, we would be grateful and willing to investigate how to adopt such a method.
+>>
+>> V/r,
+>> Daniel
 > 
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> CC: Daniel P. Smith <dpsmith@apertussolutions.com>
-> Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Peter Huewe <peterhuewe@gmx.de>
-> Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Cc: Alexander Steffen <Alexander.Steffen@infineon.com>
-> Cc: keyrings@vger.kernel.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-integrity@vger.kernel.org
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> v4:
-> - Extended the text to address some of Stefan's concerns with v2.
-> - Had to unfortunately remove Randy's reviewed-by because of this, given
->    the amount of text added.
-> v3:
-> - Fixed incorrect buffer size:
->    https://lore.kernel.org/linux-integrity/d957dbd3-4975-48d7-abc5-1a01c0959ea3@linux.ibm.com/
-> v2:
-> - Fixed errors reported by Randy:
->    https://lore.kernel.org/all/aed28265-d677-491a-a045-24b351854b24@infradead.org/
-> - Improved the text a bit to have a better presentation.
-> ---
->   Documentation/security/tpm/index.rst   |  1 +
->   Documentation/security/tpm/tpm_tis.rst | 46 ++++++++++++++++++++++++++
->   2 files changed, 47 insertions(+)
->   create mode 100644 Documentation/security/tpm/tpm_tis.rst
-> 
-> diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
-> index fc40e9f23c85..f27a17f60a96 100644
-> --- a/Documentation/security/tpm/index.rst
-> +++ b/Documentation/security/tpm/index.rst
-> @@ -5,6 +5,7 @@ Trusted Platform Module documentation
->   .. toctree::
->   
->      tpm_event_log
-> +   tpm_tis
->      tpm_vtpm_proxy
->      xen-tpmfront
->      tpm_ftpm_tee
-> diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/security/tpm/tpm_tis.rst
-> new file mode 100644
-> index 000000000000..b448ea3db71d
-> --- /dev/null
-> +++ b/Documentation/security/tpm/tpm_tis.rst
-> @@ -0,0 +1,46 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=========================
-> +TPM FIFO interface driver
-> +=========================
-> +
-> +TCG PTP Specification defines two interface types: FIFO and CRB. The former is
+> To be fair, the way things are going UEFI, i.e. PE/COFF, is becoming the new standard format. Yes, ELF would have been better, but...
 
-I believe in the spec, the authors were specific to classify these as 
-software interfaces. Not sure if you would want to carry that 
-distinction into this document.
-
-> +based on sequenced read and write operations,  and the latter is based on a
-> +buffer containing the full command or response.
-> +
-> +FIFO (First-In-First-Out) interface is used by the tpm_tis_core dependent
-> +drivers. Originally Linux had only a driver called tpm_tis, which covered
-> +memory mapped (aka MMIO) interface but it was later on extended to cover other
-> +physical interfaces supported by the TCG standard.
-
-Would it be worth clarifying here that one of those interfaces is 
-defined in the Mobile TPM specification, which also refers to its 
-interface as the CRB interface. In the past, this has caused great 
-confusion when working with individuals from the embedded community, 
-e.g., Arm. The Mobile TPM CRB interface, which can also be found being 
-used by some generations of AMD fTPM, is a doorbell style interface 
-using general-purpose memory. I would also point out that the Mobile TPM 
-CRB interface does not provide for the concept of localities.
-
-In relation to the MMIO backed interfaces, I have heard comment that the 
-software interfaces were not meant to require the physical interface be 
-MMIO. In fact, in section 9.2, "Hardware Implementation of a TPM in a PC 
-Client Platform", there is a comment about Locality 4 registers being 
-accessible via an implementation specific mechanism other than MMIO. 
-Additionally, there were some discussions about clarifying the PTP on 
-how the software interfaces might be expected to work for a 
-general-purpose memory backed implementation.
-
-> +For legacy compliance the original MMIO driver is called tpm_tis and the
-> +framework for FIFO drivers is named as tpm_tis_core. The postfix "tis" in
-> +tpm_tis comes from the TPM Interface Specification, which is the hardware
-> +interface specification for TPM 1.x chips.
-> +
-> +Communication is based on a 20 KiB buffer shared by the TPM chip through a
-> +hardware bus or memory map, depending on the physical wiring. The buffer is
-> +further split into five equal-size 4 KiB buffers, which provide equivalent
-> +sets of registers for communication between the CPU and TPM. These
-> +communication endpoints are called localities in the TCG terminology.
-> +
-> +When the kernel wants to send commands to the TPM chip, it first reserves
-> +locality 0 by setting the requestUse bit in the TPM_ACCESS register. The bit is
-> +cleared by the chip when the access is granted. Once it completes its
-> +communication, the kernel writes the TPM_ACCESS.activeLocality bit. This
-> +informs the chip that the locality has been relinquished.
-> +
-> +Pending localities are served in order by the chip in descending order, one at
-> +a time:
-
-I think I get what you are trying to say, but I find the wording here 
-could be a bit misleading. Instead of saying they are served in order, I 
-would suggest saying something to the extent that: there are five 
-localities, more than one can be requested at a time, but only one will 
-ever be active. Selection priority when multiple requests are pending is 
-detailed in the Informative comment on locality priority in Section 
-6.2.1, "TPM Locality Levels".
-
-> +- Locality 0 has the lowest priority.
-> +- Locality 5 has the highest priority.
-
-Do you mean Locality 4?
-
-> +Further information on the purpose and meaning of the localities can be found
-> +in section 3.2 of the TCG PC Client Platform TPM Profile Specification.
-> +
-> +References
-> +==========
-> +
-> +TCG PC Client Platform TPM Profile (PTP) Specification
-> +https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
+Fully agree with the ELF sentiment. We started looking to see if PE/COFF 
+has something similar to a ELF NOTE, but figured maybe this has been 
+solved for other cases. If that is not the case or there are not any 
+suggestions, then we can see what we can devise.
 
