@@ -1,103 +1,152 @@
-Return-Path: <linux-integrity+bounces-1851-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1852-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8365D887B66
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 Mar 2024 03:14:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08F80887D9C
+	for <lists+linux-integrity@lfdr.de>; Sun, 24 Mar 2024 17:50:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 131231F2201A
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 Mar 2024 02:14:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1BCA281619
+	for <lists+linux-integrity@lfdr.de>; Sun, 24 Mar 2024 16:50:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D7B31A38EE;
-	Sun, 24 Mar 2024 02:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bc96guzj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F791862F;
+	Sun, 24 Mar 2024 16:50:37 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2464D81E;
-	Sun, 24 Mar 2024 02:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03756171D1;
+	Sun, 24 Mar 2024 16:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711246483; cv=none; b=dKN3vc6aYyRMFRGtImvbk4vt6GzFLQACYyFHMCorlkMqMLrMBIAW5XowM3Jl2VG7QdxwYrFASpDz7Pi4DRqL4sL+23Xc7pGgNxI6KWicgNFfp5/njxMEm9V0+5+lX8j0/bGqWmnlNnhiliWSyBTgVMXhDSmzieK2rfdD9whP3Hg=
+	t=1711299037; cv=none; b=s3ATE9PF+1J875MCaAxsL/K4heWSn06ZYsztn3M+ouSnA7JYZKLFXbaKbEgY9zTH9qts4dzTZJVv1ASeLQLjbkXJ8Jx6bT/q0Nr+CmPCQDrrorMwfwcIVHa555x55GsHz6Y85rfE457MkALwno3BcMlMWct1mf3c8ocHYvC2Yro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711246483; c=relaxed/simple;
-	bh=4i4BgjkutHOyxQNBbaoCLs26rtfvwXtsWOZ6p4wy4TA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=CUP/7swT3ngGLTsqr23LDxt25j+WMjXUJJtMsTCRiUw495DQnykwp7gL7d5VJd/K1aIHo1isfSNEtqsVLVpN6/xZE8LkzX8Al6Ay0KJFELrGKFiFbSEcd/CQxuQaQXh30G51jU1YBhf7Y+6m9hCD+heR2wLC2ho1+WisZA4Nrqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bc96guzj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775F5C433C7;
-	Sun, 24 Mar 2024 02:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711246482;
-	bh=4i4BgjkutHOyxQNBbaoCLs26rtfvwXtsWOZ6p4wy4TA=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=bc96guzjjAsYjbVDO+YyU4yBxKS1Ck/FggYXeZl8u1pK2+3HPIawKkdEbN36ROUbo
-	 YGU2GFGInWBVOFdVyTJDlTNuPrT91E2pX0y8TTX5xnRHSV1A2rGBDLgITEGDb6EiET
-	 wklKd4ULsv3bZNePrujdNvd4G2Vx5803sOW97gUJScFhMUFpIgssAC4dNUUO0Tp1aF
-	 GtbitDPA26U/a3WdxcbNexfQ7CTjKAAmZDh2VQrgE/XbQ4YlIrIGoYqu6b8sGLATfJ
-	 PHf6jQPq5JDl9H80ylo0VTLYIomQobjwN5p8oi7muAzHeSmYpvR+SGyrtFS4BmO5p+
-	 7ITEHSUQTNmcg==
+	s=arc-20240116; t=1711299037; c=relaxed/simple;
+	bh=XTqqWBJYofix9/upqo66g0+ko3ZgqhuOv6+PQmT0aqg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=RXwBpy6A2kStUAxAEXCUpGiakRjrMWzWoB/2rh3S0e39NEfuRNwLhM+tYz73qZR1FNLId5LPVTP2N5mdpoWwcvRoXeaqdi2Q19ZDO9Teu4z5BF0MiCHO6bEszltnfb3cwd0VjaGsGwpc0M7bbIqPEwKijgMf+lXRYER8dkfuy4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4V2hlZ1fj7z6K7JS;
+	Mon, 25 Mar 2024 00:46:02 +0800 (CST)
+Received: from frapeml100008.china.huawei.com (unknown [7.182.85.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id 401151400DB;
+	Mon, 25 Mar 2024 00:50:25 +0800 (CST)
+Received: from frapeml500005.china.huawei.com (7.182.85.13) by
+ frapeml100008.china.huawei.com (7.182.85.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Sun, 24 Mar 2024 17:50:24 +0100
+Received: from frapeml500005.china.huawei.com ([7.182.85.13]) by
+ frapeml500005.china.huawei.com ([7.182.85.13]) with mapi id 15.01.2507.035;
+ Sun, 24 Mar 2024 17:50:24 +0100
+From: Roberto Sassu <roberto.sassu@huawei.com>
+To: Al Viro <viro@zeniv.linux.org.uk>, Steve French <smfrench@gmail.com>
+CC: LKML <linux-kernel@vger.kernel.org>, linux-fsdevel
+	<linux-fsdevel@vger.kernel.org>, CIFS <linux-cifs@vger.kernel.org>, "Paulo
+ Alcantara" <pc@manguebit.com>, Christian Brauner <christian@brauner.io>,
+	"Mimi Zohar" <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
+	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+	"linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>
+Subject: RE: kernel crash in mknod
+Thread-Topic: kernel crash in mknod
+Thread-Index: AQHafag2XY/u/k17xEe65QyoT7TnEbFGUTAAgADHHcA=
+Date: Sun, 24 Mar 2024 16:50:24 +0000
+Message-ID: <3441a4a1140944f5b418b70f557bca72@huawei.com>
+References: <CAH2r5msAVzxCUHHG8VKrMPUKQHmBpE6K9_vjhgDa1uAvwx4ppw@mail.gmail.com>
+ <20240324054636.GT538574@ZenIV>
+In-Reply-To: <20240324054636.GT538574@ZenIV>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 24 Mar 2024 04:14:36 +0200
-Message-Id: <D01M8YKG5ZG0.287OTMCUU2KP5@kernel.org>
-Subject: Re: [PATCH v4] Documentation: tpm_tis
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Daniel P. Smith"
- <dpsmith@apertussolutions.com>, <linux-integrity@vger.kernel.org>
-Cc: "Jonathan Corbet" <corbet@lwn.net>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Peter Huewe"
- <peterhuewe@gmx.de>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Alexander Steffen"
- <Alexander.Steffen@infineon.com>, <keyrings@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Randy Dunlap"
- <rdunlap@infradead.org>, "Richard Cochran" <richardcochran@gmail.com>,
- "open list:PTP HARDWARE CLOCK SUPPORT:Keyword:(?:b|_)ptp(?:b|_)"
- <netdev@vger.kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240322123542.24158-1-jarkko@kernel.org>
- <5a494de5-b004-440c-bcdf-7bdfa3a8c508@apertussolutions.com>
- <D01CLI2TC5SZ.1A48PDHM5F3UA@kernel.org>
-In-Reply-To: <D01CLI2TC5SZ.1A48PDHM5F3UA@kernel.org>
+MIME-Version: 1.0
 
-On Sat Mar 23, 2024 at 8:40 PM EET, Jarkko Sakkinen wrote:
-> > Would it be worth clarifying here that one of those interfaces is=20
-> > defined in the Mobile TPM specification, which also refers to its=20
-> > interface as the CRB interface. In the past, this has caused great=20
-> > confusion when working with individuals from the embedded community,=20
-> > e.g., Arm. The Mobile TPM CRB interface, which can also be found being=
-=20
-> > used by some generations of AMD fTPM, is a doorbell style interface=20
-> > using general-purpose memory. I would also point out that the Mobile TP=
-M=20
-> > CRB interface does not provide for the concept of localities.
->
-> I don't necessarily disagree but it is out of scope for this. I'm not
-> sure tho why "mobile" CRB would ever need that sort of separate
-> dicussion.
->
-> Some CRB implementations have localities some don't, and also fTPM
-> implementations on x86 vary, no need to state that separately for
-> mobile.
+> From: Al Viro [mailto:viro@ftp.linux.org.uk] On Behalf Of Al Viro
+> Sent: Sunday, March 24, 2024 6:47 AM
+> On Sun, Mar 24, 2024 at 12:00:15AM -0500, Steve French wrote:
+> > Anyone else seeing this kernel crash in do_mknodat (I see it with a
+> > simple "mkfifo" on smb3 mount).  I started seeing this in 6.9-rc (did
+> > not see it in 6.8).   I did not see it with the 3/12/23 mainline
+> > (early in the 6.9-rc merge Window) but I do see it in the 3/22 build
+> > so it looks like the regression was introduced by:
+>=20
+> 	FWIW, successful ->mknod() is allowed to return 0 and unhash
+> dentry, rather than bothering with lookups.  So commit in question
+> is bogus - lack of error does *NOT* mean that you have struct inode
+> existing, let alone attached to dentry.  That kind of behaviour
+> used to be common for network filesystems more than just for ->mknod(),
+> the theory being "if somebody wants to look at it, they can bloody
+> well pay the cost of lookup after dcache miss".
+>=20
+> Said that, the language in D/f/vfs.rst is vague as hell and is very easy
+> to misread in direction of "you must instantiate".
+>=20
+> Thankfully, there's no counterpart with mkdir - *there* it's not just
+> possible, it's inevitable in some cases for e.g. nfs.
+>=20
+> What the hell is that hook doing in non-S_IFREG cases, anyway?  Move it
+> up and be done with it...
 
-I.e. the variance exist but it is not "mobile" specific.
+Hi Al
 
-E.g. when I developed tpm_crb in 2014 at that time Intel PTT only
-had a single locality (AFAIK later multiple localities were added
-to support TXT).
+thanks for the patch. Indeed, it was like that before, when instead of
+an LSM hook there was an IMA call.
 
-In all cases this tpm_crb discussion is not really part of tpm_tis
-discussion.
+However, I thought, since we were promoting it as an LSM hook,
+we should be as generic possible, and support more usages than
+what was needed for IMA.
 
-BR, Jarkko
+> diff --git a/fs/namei.c b/fs/namei.c
+> index ceb9ddf8dfdd..821fe0e3f171 100644
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -4050,6 +4050,8 @@ static int do_mknodat(int dfd, struct filename *nam=
+e, umode_t mode,
+>  		case 0: case S_IFREG:
+>  			error =3D vfs_create(idmap, path.dentry->d_inode,
+>  					   dentry, mode, true);
+> +			if (!error)
+> +				error =3D security_path_post_mknod(idmap, dentry);
+
+Minor issue, security_path_post_mknod() does not return an error.
+
+Also, please update the description of security_path_post_mknod() to say
+that it is not going to be called for non-regular files.
+
+Hopefully, Paul also agrees with this change.
+
+Other than that, please add my:
+
+Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Thanks
+
+Roberto
+
+>  			break;
+>  		case S_IFCHR: case S_IFBLK:
+>  			error =3D vfs_mknod(idmap, path.dentry->d_inode,
+> @@ -4061,10 +4063,6 @@ static int do_mknodat(int dfd, struct filename *na=
+me, umode_t mode,
+>  			break;
+>  	}
+>=20
+> -	if (error)
+> -		goto out2;
+> -
+> -	security_path_post_mknod(idmap, dentry);
+>  out2:
+>  	done_path_create(&path, dentry);
+>  	if (retry_estale(error, lookup_flags)) {
 
