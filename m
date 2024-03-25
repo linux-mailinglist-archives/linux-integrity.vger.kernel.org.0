@@ -1,113 +1,117 @@
-Return-Path: <linux-integrity+bounces-1857-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1858-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9577E88AF34
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 20:02:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43D3E88AB60
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 18:21:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8105B46F5D
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 17:21:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEA691FA1F2A
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 17:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5038F3DAC03;
-	Mon, 25 Mar 2024 16:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00A845953;
+	Mon, 25 Mar 2024 16:06:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fq6VwD3d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eVfZdiPM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58A4F4C7D;
-	Mon, 25 Mar 2024 16:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A90E42058;
+	Mon, 25 Mar 2024 16:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711382763; cv=none; b=B7wSARw60ttzEDSx/BEhRiZerh9s4iTIkJjeMyxCStXHsqOKIiSiaSgoi+it6V5Zw4qbbLV2mBbjeiAT/+KMHtsjfKK55sovBc/aLv/krw3QLo9ZjT/Ck3JaWnLSmPilvsYUTOV89E+BR8nekB9fe6jnlh+4CTSIPKjuhlq9asM=
+	t=1711382788; cv=none; b=sJFrT+aXUayJxyHWLd/8iTwF0pm3Mvel61zwZN0ea53WY/7NWmCpZNaXmyA8P022fnIXSoLjHfNLtFcWO8ylD/C+jDJN1Ls4166OkzBNv7xbRdUR6a+axXZn10yr4B3zPg4NZAqwXAShbIyfUR5JsI4w3TpxnMwvpU7YP2UENi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711382763; c=relaxed/simple;
-	bh=dVVLMKHbPKk5loN9gGOiMZFD4IZunaqsL/JFE4p+Ias=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pCP76YRMxPbAT8RoQ7SrHOFb4SqKRmYsbUuqe2YkLAovcQ5cogoIH3kOjH4OLVwjYGhVScJSjVPJ4ZWOIK1q8Pxd8JNShvydZezGWjNRaE+k5qOMdWRc1QFXxSWKPOiN829T4Y09mAqxRFsWzdXfB0r1dXBiPlKjbTLhMatG+v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fq6VwD3d; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42PDriIS019480;
-	Mon, 25 Mar 2024 16:06:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=dVVLMKHbPKk5loN9gGOiMZFD4IZunaqsL/JFE4p+Ias=;
- b=fq6VwD3dH0rSOA4mVE74gf8EJt4eEAM0nM5Mj/OyMSSVU43GXIST/CFJAWOh2Sgud45h
- X/TrHWvkQGu3gnb7iwIi+R997zxJJdUelyfV49ld2vLhM3QESGYUp7N6QoQTbBXbWCLo
- KySRkqKO834WYNNYW0VR7U73jSZvQHFnwCE2W/0vNYOhmOLbO+J7GF6LKT9O8pCdplOk
- f35mRpDnOJk9qi3VgsPrvgC/Y48LjOsuaPxzzcKx1tG7IKVRzp67Jgv0wiyFqbl4kzWB
- sjNA3Q03BMyWGrIHZJQVIAIqgP8CN5aBEoI1tumgX6VfWZdaDQ9MkXmBtIDJzdJlwpaE /Q== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x36e68udm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Mar 2024 16:05:59 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42PFvhxp003753;
-	Mon, 25 Mar 2024 16:05:31 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3x2c42hnyg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Mar 2024 16:05:31 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42PG5SYJ22676032
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 25 Mar 2024 16:05:30 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D059F58052;
-	Mon, 25 Mar 2024 16:05:28 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9521858063;
-	Mon, 25 Mar 2024 16:05:28 +0000 (GMT)
-Received: from [9.2.202.85] (unknown [9.2.202.85])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 25 Mar 2024 16:05:28 +0000 (GMT)
-Message-ID: <8ff7a52e-1a0d-4d07-b8e2-9f91ebda9c2e@linux.ibm.com>
-Date: Mon, 25 Mar 2024 12:05:26 -0400
+	s=arc-20240116; t=1711382788; c=relaxed/simple;
+	bh=1PB12qwX1m7ibvKTM38Q6edyBz/Zn9xgeMYGi1UalZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VY3X/tNrP2ktAKfZ2pf9r8szIfTlUGgtVdaRWutr9ANfqwlpFdokT62L+8Aw4ZO+mjikN5BlNAUwQjxKsVepJg1Hjg1s13QO+m0re8RKjUiN78oRuPsPGAYDWIGcVoitVUWJL4EV2Th7PoRsD7okcGA7+qEhy/MitqLuI+ux/Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eVfZdiPM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2E5BC433F1;
+	Mon, 25 Mar 2024 16:06:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711382788;
+	bh=1PB12qwX1m7ibvKTM38Q6edyBz/Zn9xgeMYGi1UalZ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eVfZdiPMmiCdovQqrgQl0y4VTUefn0+efhOIEy23YjeklTAIaxz2QyVeYn3xIvQ8V
+	 crFQl6aO3LIaA1g91QX7ErXLxDeZBoZZcPpb9ZEz4qXLBsH4u5Q0bHOxb2wV0o/gR5
+	 51aTA9O8xY8yr4CwNZrBczwQ79docEW2zvxtN8R4ZWDfbsA0Q2UPJij3mhKVW/ergS
+	 6WNrdfQARy1iiVkPLXtcdvtSep9r5tzHsjPOr35+S0plnyso7q4bQC62FUtR9G1GB3
+	 3mBjfdh5ZqoPeXbKy7zUkrxG0V4B9HtCwluV8jspZKKNYGAOttiItywQTjLvLoCjuf
+	 juf0P4dlpSPKA==
+Date: Mon, 25 Mar 2024 17:06:22 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Steve French <smfrench@gmail.com>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
+	CIFS <linux-cifs@vger.kernel.org>, Paulo Alcantara <pc@manguebit.com>, 
+	Christian Brauner <christian@brauner.io>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Paul Moore <paul@paul-moore.com>, 
+	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>
+Subject: Re: kernel crash in mknod
+Message-ID: <20240325-beugen-kraftvoll-1390fd52d59c@brauner>
+References: <CAH2r5msAVzxCUHHG8VKrMPUKQHmBpE6K9_vjhgDa1uAvwx4ppw@mail.gmail.com>
+ <20240324054636.GT538574@ZenIV>
+ <3441a4a1140944f5b418b70f557bca72@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Issue with TPM2 Encrypt/Decrypt Functionality and TSS API
- Integration
-To: Samuel Lee <slee@gateworks.com>, tpm2@lists.linux.dev
-Cc: linux-integrity@vger.kernel.org
-References: <CAGL1gLNsEPXG6dXXJLk2Ucd_UAjMoa3_OS=uca5G4FvPjAMPNg@mail.gmail.com>
-Content-Language: en-US
-From: Ken Goldman <kgold@linux.ibm.com>
-In-Reply-To: <CAGL1gLNsEPXG6dXXJLk2Ucd_UAjMoa3_OS=uca5G4FvPjAMPNg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4MD60MkRdidG_eIRKqHTOswqsHkNs-9_
-X-Proofpoint-ORIG-GUID: 4MD60MkRdidG_eIRKqHTOswqsHkNs-9_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-25_12,2024-03-21_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- bulkscore=0 spamscore=0 phishscore=0 suspectscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=851 impostorscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403210000 definitions=main-2403250090
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3441a4a1140944f5b418b70f557bca72@huawei.com>
 
-This indicates that the TSS is trying to connect to a
-TPM over a socket interface. This is typical for a software TPM
-aka a TPM simulator.
+On Sun, Mar 24, 2024 at 04:50:24PM +0000, Roberto Sassu wrote:
+> > From: Al Viro [mailto:viro@ftp.linux.org.uk] On Behalf Of Al Viro
+> > Sent: Sunday, March 24, 2024 6:47 AM
+> > On Sun, Mar 24, 2024 at 12:00:15AM -0500, Steve French wrote:
+> > > Anyone else seeing this kernel crash in do_mknodat (I see it with a
+> > > simple "mkfifo" on smb3 mount).  I started seeing this in 6.9-rc (did
+> > > not see it in 6.8).   I did not see it with the 3/12/23 mainline
+> > > (early in the 6.9-rc merge Window) but I do see it in the 3/22 build
+> > > so it looks like the regression was introduced by:
+> > 
+> > 	FWIW, successful ->mknod() is allowed to return 0 and unhash
+> > dentry, rather than bothering with lookups.  So commit in question
+> > is bogus - lack of error does *NOT* mean that you have struct inode
+> > existing, let alone attached to dentry.  That kind of behaviour
+> > used to be common for network filesystems more than just for ->mknod(),
+> > the theory being "if somebody wants to look at it, they can bloody
+> > well pay the cost of lookup after dcache miss".
+> > 
+> > Said that, the language in D/f/vfs.rst is vague as hell and is very easy
+> > to misread in direction of "you must instantiate".
+> > 
+> > Thankfully, there's no counterpart with mkdir - *there* it's not just
+> > possible, it's inevitable in some cases for e.g. nfs.
+> > 
+> > What the hell is that hook doing in non-S_IFREG cases, anyway?  Move it
+> > up and be done with it...
+> 
+> Hi Al
+> 
+> thanks for the patch. Indeed, it was like that before, when instead of
+> an LSM hook there was an IMA call.
 
-I suspect that you do not have a TPM simulator running.
+Could you please start adding lore links into your commit messages for
+all messages that are sent to a mailing list? It really makes tracking
+down the original thread a lot easier.
 
-On 3/5/2024 5:31 PM, Samuel Lee wrote:
-> # tsscreateprimary -hi p -st -opu primary.pub
-> TSS_Socket_Open: Error on connect to localhost:2321
-> TSS_Socket_Open: client connect: error 111 Connection refused
-> createprimary: failed, rc 000b0008
-> TSS_RC_NO_CONNECTION - Failure connecting to lower layer
+> However, I thought, since we were promoting it as an LSM hook,
+> we should be as generic possible, and support more usages than
+> what was needed for IMA.
+
+I'm a bit confused now why this is taking a dentry. Nothing in IMA or
+EVM cares about the dentry for these hooks so it really should have take
+an inode in the first place?
+
+And one minor other question I just realized. Why are some of the new
+hooks called security_path_post_mknod() when they aren't actually taking
+a path in contrast to say
+security_path_{chown,chmod,mknod,chroot,truncate}() that do.
 
