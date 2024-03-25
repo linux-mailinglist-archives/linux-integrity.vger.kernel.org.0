@@ -1,125 +1,116 @@
-Return-Path: <linux-integrity+bounces-1855-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1856-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF650889657
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 09:49:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAA0888AB5D
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 18:21:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2F7D1C30182
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 08:49:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83B2A2E4EBB
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 17:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63127146A7C;
-	Mon, 25 Mar 2024 05:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93A345C900;
+	Mon, 25 Mar 2024 16:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IW3oS+vk"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mMF+IEqQ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11502153568;
-	Mon, 25 Mar 2024 02:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391EA5C8FC;
+	Mon, 25 Mar 2024 16:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711332789; cv=none; b=u7REQ7lAzJE27FtSPJ1eSaA5qN0mvEhGELx5KLu7mFDtGkmiWdlIWfp21k78JdllIhO//sDXhPAUsfbh/vMkGt+dQGEXXgrUdx41IkRb3wCemAJnrlLDvob0Dfn42azqF+4jn3mVSMq6+MYtJGIMuO5JDf6RhBDkk/o2r9S0UbU=
+	t=1711382609; cv=none; b=IAK05FPT0CmtL9ui68e53e/Uo+uDl3kCY23PlWPlg8tQM26F1xAB/x7breOj6kkLxxq8uABfAgRUoLgM9xv2jPGRNBOmp+ExI52yc6jk3Jr5Q6vOJ5hgKjfd1GpRTlI0VDp7x8QoU9ZYFUikEJB9omaUn4mPb7zzbpsOa1NPL3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711332789; c=relaxed/simple;
-	bh=OQ6DaWqLtLK0mHL2i6HS0EPqyqAvookaS2ecZGz/nWM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=g43doJD1Zwd+SjGFr2tDawQRyGxaqDWtHOLzHbbPbdlZEifs5MViBVSEdcqAq4MXmI+EdlTb8RCW8B/c0Gl7UUu7O5d1K+qyZXe2jCfHGN1ApxYSjBtyyzvY+nuAnF/lYyilRgmLDNgJoFct7k0iusd1Lr+w+/W9TO8YCmiI934=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IW3oS+vk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A56A5C4166B;
-	Mon, 25 Mar 2024 02:13:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711332787;
-	bh=OQ6DaWqLtLK0mHL2i6HS0EPqyqAvookaS2ecZGz/nWM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=IW3oS+vkvE1rg2omkWdnXg451W2R8QWxmUug1tn/Bg6l3cfmeu1XEIle4W9BtNPp4
-	 0oal/S4apZS+BzY3gBaCjlntTY0jgQlz1t3PTdy9XjaTcskT+il7ElSZAp+JWMzJPx
-	 t4H/ihZGECuHFrRbX8V87SXD5ftRGwC5bn6CdPejAvtWiLKQtnbNuipuyb5sBYBBYm
-	 r76u6K1eEb3PqAdmigNT4nSlFA/s5U3UgALZVL8Mu6HumRAnW3tR7xT39q806nrvhq
-	 m7JZPsTIIGWptqQY1qCZ3jSIb5cnxMaBAWbnn/lCp4J/k3we+Ge3Bv+ms0rQoNcWaw
-	 NOIkisLFJZphg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90BCDD2D0E3;
-	Mon, 25 Mar 2024 02:13:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1711382609; c=relaxed/simple;
+	bh=lqLEd5huLtgmKEsfrk97E+iShwK9un0d/cE9W3qxfNA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P5kdPXYXJGQq7WnvC8jwXZPaDQalSM4O2ooVERKquw01qEFQO1Rz9MzNkQP+7Kp5nGiEjh6oAj3FignLLwv0hfRW6SDqUkekiQ+sTF1Fi8YTfytnDX62240BD+PthLjAzegaUiPDPLepagxAvZGFW8wq8bVZXTDI9ft2O+o719o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mMF+IEqQ; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42PDOcuQ000609;
+	Mon, 25 Mar 2024 16:03:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ysViygD1U7IgI4tE+Ni1R03dcM4gag7kWP+7mggR5xs=;
+ b=mMF+IEqQa4HckZQ7n+uxNtAIc87dslMpaLWRNUc6Sk0PhnJcyJ0W5bWW0wN4WiDuRAgi
+ wq99hbeiA7mQT3p9xYwlCMNCxrq8tFDAfkyb247MhoFE58p9MZ+vl3CEd6rv2zfv6JIu
+ SkS9DGecNqnThd4by44bYKd5v8MFcPGZp811Cz8aaS5VgzsiWimlJfBy7yxl+XiBEsNg
+ hTaKKvjelloEUJyJ+SGm5H9x+ZS6DRozHcdZKDqeXP1Vu2OCHQw4H5j9ZqnG13bSMqC3
+ GAgSFc7R9UnY482cgMJhv7A0HkG+++YaSK5pJ+/EjRPlK4iGnUr6QJyBwZWTNyduZWrv Ww== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x36e68u9a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Mar 2024 16:03:21 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42PEGq5x028623;
+	Mon, 25 Mar 2024 16:03:20 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3x2adp25yh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Mar 2024 16:03:20 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42PG3H2554722884
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 25 Mar 2024 16:03:19 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5EE6A58067;
+	Mon, 25 Mar 2024 16:03:17 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 24FD258066;
+	Mon, 25 Mar 2024 16:03:17 +0000 (GMT)
+Received: from [9.2.202.85] (unknown [9.2.202.85])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 25 Mar 2024 16:03:17 +0000 (GMT)
+Message-ID: <7580c505-7db9-4a34-887b-888918ea11b7@linux.ibm.com>
+Date: Mon, 25 Mar 2024 12:03:15 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 00/32] spi: get rid of some legacy macros
-From: patchwork-bot+chrome-platform@kernel.org
-Message-Id: 
- <171133278756.9916.16032493309661657935.git-patchwork-notify@kernel.org>
-Date: Mon, 25 Mar 2024 02:13:07 +0000
-References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
-In-Reply-To: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40pengutronix=2Ede=3E?=@codeaurora.org
-Cc: broonie@kernel.org, kernel@pengutronix.de, mdf@kernel.org,
- hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
- linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
- alex.aring@gmail.com, stefan@datenfreihafen.org, miquel.raynal@bootlin.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- linux-wpan@vger.kernel.org, netdev@vger.kernel.org, lars@metafoo.de,
- Michael.Hennerich@analog.com, jic23@kernel.org, linux-iio@vger.kernel.org,
- dmitry.torokhov@gmail.com, Jonathan.Cameron@huawei.com,
- linux-input@vger.kernel.org, gregkh@linuxfoundation.org,
- andriy.shevchenko@linux.intel.com, ulf.hansson@linaro.org,
- martin.tuma@digiteqautomotive.com, mchehab@kernel.org,
- linux-media@vger.kernel.org, serjk@netup.ru, arnd@arndb.de,
- yangyingliang@huawei.com, linux-mmc@vger.kernel.org, richard@nod.at,
- vigneshr@ti.com, robh@kernel.org, amit.kumar-mahapatra@amd.com,
- alsa-devel@alsa-project.org, linux-mtd@lists.infradead.org, horms@kernel.org,
- ronald.wahl@raritan.com, bleung@chromium.org, tzungbi@kernel.org,
- groeck@chromium.org, chrome-platform@lists.linux.dev, michal.simek@amd.com,
- jcmvbkbc@gmail.com, linux-spi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, andersson@kernel.org,
- konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
- matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
- linux-mediatek@lists.infradead.org, tzimmermann@suse.de, javierm@redhat.com,
- sam@ravnborg.org, dri-devel@lists.freedesktop.org,
- linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
- vireshk@kernel.org, rmfrfs@gmail.com, johan@kernel.org, elder@kernel.org,
- greybus-dev@lists.linaro.org, peterhuewe@gmx.de, jarkko@kernel.org,
- jgg@ziepe.ca, linux-integrity@vger.kernel.org, herve.codina@bootlin.com,
- krzysztof.kozlowski@linaro.org, linux-usb@vger.kernel.org, deller@gmx.de,
- dario.binacchi@amarulasolutions.com, kvalo@kernel.org, dmantipov@yandex.ru,
- libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
- corbet@lwn.net, bhelgaas@google.com, james.clark@arm.com,
- linux-doc@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: Issue with TPM2 Encrypt/Decrypt Functionality and TSS API
+ Integration
+To: Samuel Lee <slee@gateworks.com>, tpm2@lists.linux.dev
+Cc: linux-integrity@vger.kernel.org
+References: <CAGL1gLNsEPXG6dXXJLk2Ucd_UAjMoa3_OS=uca5G4FvPjAMPNg@mail.gmail.com>
+Content-Language: en-US
+From: Ken Goldman <kgold@linux.ibm.com>
+In-Reply-To: <CAGL1gLNsEPXG6dXXJLk2Ucd_UAjMoa3_OS=uca5G4FvPjAMPNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ohvPOignfPDhzPmtPdDMKzJsiAcCtIYT
+X-Proofpoint-ORIG-GUID: ohvPOignfPDhzPmtPdDMKzJsiAcCtIYT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-25_12,2024-03-21_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ bulkscore=0 spamscore=0 phishscore=0 suspectscore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=999 impostorscore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2403210000 definitions=main-2403250089
 
-Hello:
+The TPM 2.0 Library specification is a library of possible functions.  A 
+platform specific specification (e.g., PC Client) specifies which 
+commands are mandatory.
 
-This patch was applied to chrome-platform/linux.git (for-next)
-by Mark Brown <broonie@kernel.org>:
+I assume that the TPM you are using does not implement TPM2 Encrypt/Decrypt.
 
-On Wed,  7 Feb 2024 19:40:14 +0100 you wrote:
-> Changes since v2
-> (https://lore.kernel.org/linux-spi/cover.1705944943.git.u.kleine-koenig@pengutronix.de):
+In general, check the platform specific specification and use only
+mandatory features for interoperability.
+
+On 3/5/2024 5:31 PM, Samuel Lee wrote:
+> Dear TPM 2.0 Mailing List Community,
 > 
->  - Drop patch "mtd: rawnand: fsl_elbc: Let .probe retry if local bus is
->    missing" which doesn't belong into this series.
->  - Fix a build failure noticed by the kernel build bot in
->    drivers/spi/spi-au1550.c. (I failed to catch this because this driver
->    is mips only, but not enabled in a mips allmodconfig. That's a bit
->    unfortunate, but not easily fixable.)
->  - Add the Reviewed-by: and Acked-by: tags I received for v2.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3,15/32] platform/chrome: cros_ec_spi: Follow renaming of SPI "master" to "controller"
-    https://git.kernel.org/chrome-platform/c/85ad0ec049a7
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> I am currently facing an issue while attempting to utilize the TPM2
+> Encrypt/Decrypt functionality in conjunction with the TSS API
+> integration.
 
