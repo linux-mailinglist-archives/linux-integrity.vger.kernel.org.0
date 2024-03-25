@@ -1,49 +1,49 @@
-Return-Path: <linux-integrity+bounces-1854-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1855-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC2C18899AE
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 11:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF650889657
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 09:49:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 187411C32AEB
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 10:15:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2F7D1C30182
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Mar 2024 08:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2048412FB06;
-	Mon, 25 Mar 2024 05:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63127146A7C;
+	Mon, 25 Mar 2024 05:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgoRuOdI"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IW3oS+vk"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11CD414A60C;
-	Mon, 25 Mar 2024 01:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11502153568;
+	Mon, 25 Mar 2024 02:13:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711331664; cv=none; b=sSuaLpwRfNybwqx9rJC1y3PEoMeMB6zwNkyidL6r8PV9r4JekYmRqhqQX2IMfp+ae2NQ6xXeCnNbknxo7or44MiJ3GMv4b/uIZEVmskBpx+SXTiZL3ZIlafuQxxwF8SiQntapoC7pXvBxtZZI7rdZFwd1RDFGP1Fk9Ef3PsndJ8=
+	t=1711332789; cv=none; b=u7REQ7lAzJE27FtSPJ1eSaA5qN0mvEhGELx5KLu7mFDtGkmiWdlIWfp21k78JdllIhO//sDXhPAUsfbh/vMkGt+dQGEXXgrUdx41IkRb3wCemAJnrlLDvob0Dfn42azqF+4jn3mVSMq6+MYtJGIMuO5JDf6RhBDkk/o2r9S0UbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711331664; c=relaxed/simple;
-	bh=rcdcVMOwAqKdq7n5jkVq5QjE+E4mBd0LmLt5lwYal+k=;
+	s=arc-20240116; t=1711332789; c=relaxed/simple;
+	bh=OQ6DaWqLtLK0mHL2i6HS0EPqyqAvookaS2ecZGz/nWM=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Yj+QdkRr4y9q5QpB65Dp07l27AOF503LHG04+ujNLmAQ3O6GaKctmL5H3lC8y30l3l7j4Tmo6FTGn+yZLajytTRLkUqGGy5xUsyg9WQ1uCKow2xsuZ+RzP1I6dUwKzTboXn1D4SiNerLzx/9jpQt13y65UFGvU4h5g2vrmT9JGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgoRuOdI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A08FAC4166A;
-	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=g43doJD1Zwd+SjGFr2tDawQRyGxaqDWtHOLzHbbPbdlZEifs5MViBVSEdcqAq4MXmI+EdlTb8RCW8B/c0Gl7UUu7O5d1K+qyZXe2jCfHGN1ApxYSjBtyyzvY+nuAnF/lYyilRgmLDNgJoFct7k0iusd1Lr+w+/W9TO8YCmiI934=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IW3oS+vk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A56A5C4166B;
+	Mon, 25 Mar 2024 02:13:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711331662;
-	bh=rcdcVMOwAqKdq7n5jkVq5QjE+E4mBd0LmLt5lwYal+k=;
+	s=k20201202; t=1711332787;
+	bh=OQ6DaWqLtLK0mHL2i6HS0EPqyqAvookaS2ecZGz/nWM=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=UgoRuOdIKc1atcNCSy+fGMyIxd2EIL85aFzdiUP5IhrVwfyLuX4y1UYA/UQBPsAMD
-	 3sCV/0MeXlbM7sefeRf+lmdvdlgZ0TKvCfmEeGYkPwifpZb/yub4hlREVfgCNhRtZz
-	 ZiY0yetiX2oMC1bHns3loNE8fmm9pIIDXR7KvrkZSK4WdOtTGUmUud3p6vcyL60zKX
-	 9BjSBTkapaueuWOl6AMlmsqrYlvbxlrUS29IKX7go0Y/Tq8wfA4UxOJ9FCpuAE+CY5
-	 CxMUxLEonlCV+T0zvdc8MGEzb5H247rE1FolcBQONxia7RxxTo1NzWXjR86IfgfIYv
-	 gVtR4ZEqxDVIw==
+	b=IW3oS+vkvE1rg2omkWdnXg451W2R8QWxmUug1tn/Bg6l3cfmeu1XEIle4W9BtNPp4
+	 0oal/S4apZS+BzY3gBaCjlntTY0jgQlz1t3PTdy9XjaTcskT+il7ElSZAp+JWMzJPx
+	 t4H/ihZGECuHFrRbX8V87SXD5ftRGwC5bn6CdPejAvtWiLKQtnbNuipuyb5sBYBBYm
+	 r76u6K1eEb3PqAdmigNT4nSlFA/s5U3UgALZVL8Mu6HumRAnW3tR7xT39q806nrvhq
+	 m7JZPsTIIGWptqQY1qCZ3jSIb5cnxMaBAWbnn/lCp4J/k3we+Ge3Bv+ms0rQoNcWaw
+	 NOIkisLFJZphg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 886E5D2D0E3;
-	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90BCDD2D0E3;
+	Mon, 25 Mar 2024 02:13:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -55,8 +55,8 @@ Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH v3 00/32] spi: get rid of some legacy macros
 From: patchwork-bot+chrome-platform@kernel.org
 Message-Id: 
- <171133166255.9916.6727664409114778134.git-patchwork-notify@kernel.org>
-Date: Mon, 25 Mar 2024 01:54:22 +0000
+ <171133278756.9916.16032493309661657935.git-patchwork-notify@kernel.org>
+Date: Mon, 25 Mar 2024 02:13:07 +0000
 References: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
 In-Reply-To: <cover.1707324793.git.u.kleine-koenig@pengutronix.de>
 To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40pengutronix=2Ede=3E?=@codeaurora.org
@@ -95,7 +95,7 @@ Cc: broonie@kernel.org, kernel@pengutronix.de, mdf@kernel.org,
 
 Hello:
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
+This patch was applied to chrome-platform/linux.git (for-next)
 by Mark Brown <broonie@kernel.org>:
 
 On Wed,  7 Feb 2024 19:40:14 +0100 you wrote:
