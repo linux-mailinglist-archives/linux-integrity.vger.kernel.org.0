@@ -1,182 +1,154 @@
-Return-Path: <linux-integrity+bounces-1883-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1884-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC17788F112
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Mar 2024 22:38:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF8A88F5BE
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 04:09:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2043CB23054
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Mar 2024 21:38:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA4F01C28B2F
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 03:09:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B933B152E03;
-	Wed, 27 Mar 2024 21:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE8C2DF9F;
+	Thu, 28 Mar 2024 03:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PYN9fpsO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iblpSu+M"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E0B14D45E;
-	Wed, 27 Mar 2024 21:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C962D622;
+	Thu, 28 Mar 2024 03:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711575508; cv=none; b=eq+DUfACvS/jditN4RvF4uGI7T1/iZC1iggGbUz63tnsOsfb1S92JSo2o4pyZByKrZnv8Vn02n4AsIHPXwoGO5MtnyckD+DNlOvHsbdeeTBlPGlqXzTbr2dBQhjdvSEjIP7OfzR+WvFD5Z12khbnOUrlgPHepGEDmh0xSl/+VUY=
+	t=1711595341; cv=none; b=Ed7hGeEeQTlfAotWhifcUVcjIpkY/GbPC0ykJqc4AtCRs+o1aXM6nEEwO3XThr1OuibX5ZIftxsxNDnizLBcuzYvN2MqOmukWcHsXlxWKdkuoVDPqbqCSxZ7Bp/58kl5x1pIsvMOAkaCTrD3OrI4VDtBnk3vSoO5OmAfTbHhm2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711575508; c=relaxed/simple;
-	bh=E46rS6DyZmgWjFTs2IiXMR5Dedgyiw2lergIZcqtSws=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=hGAz6T7UPfwaK58CmSMrgs0/2GvVr3KBz+516elGbOU8WPhO8ay6QYMIAwKngHYGS0+D055Snmrm3iT252Tw6EDHDF8GJLG+jxKQLEV6V6d7YSDuuKM8Grr/oDPCMXBLAUE1Cd265oHBVkCPLzYwMJPOQwa+oAJbKfvv0li/Nho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PYN9fpsO; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42RLcDj0020492;
-	Wed, 27 Mar 2024 21:38:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : in-reply-to : references : content-type : date :
- content-transfer-encoding : mime-version; s=pp1;
- bh=ReoEszQrwUGqXYrgmhSzYi1cHR7YwjwuX0hpchvcg3g=;
- b=PYN9fpsOnNBMVgss0OKLnZJR3K2T5JBpKmBHhC1h7GL7v0SJ6bOXx/1mqjZdjac69ABx
- Lwv7JX/Ijm5KjoWkTrWwCx7VE372CreKn4cad9p5a6zZENrK4nULYm81bNCTEQJEMUQI
- gOQdoNSGIchfPEI/dWAt0wyEv/KQalu6M00Inw47yd2UOXL+/oa6sbhQFBRQeMYjZFU2
- lqCmL0usbh098xu5vaUhxdONaI7xNaXFSbO46hrIsz5HpoONDLB3MbqRzHl4SvqNoJmf
- sy+Rqwt5QG2OMIx2RBGvnd19rBp5KA+alHYSHsSAclgQ4KE118PAGeQCagsjK2UfVXnJ XA== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x4ufc0090-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Mar 2024 21:38:13 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42RJNfEX028620;
-	Wed, 27 Mar 2024 21:38:12 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3x2adphecq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Mar 2024 21:38:12 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42RLc9aG39256584
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 27 Mar 2024 21:38:12 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B59F858060;
-	Wed, 27 Mar 2024 21:38:09 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ED5E05803F;
-	Wed, 27 Mar 2024 21:38:08 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.watson.ibm.com (unknown [9.31.110.109])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 27 Mar 2024 21:38:08 +0000 (GMT)
-Message-ID: <80b2e479bc0c520423885a16dd46e0201a1c9418.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: define an init_module critical data record
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org, linux-integrity@vger.kernel.org,
-        Roberto
-	Sassu <roberto.sassu@huawei.com>,
-        linux-kernel@vger.kernel.org, Ken Goldman
-	 <kgold@linux.ibm.com>
-In-Reply-To: <D04OU424128P.22TP02GW2CJCT@kernel.org>
-References: <20240327150019.81477-1-zohar@linux.ibm.com>
-	 <D04OU424128P.22TP02GW2CJCT@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Date: Wed, 27 Mar 2024 17:37:57 -0400
-X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9Iy7kmUzA82cNmVKfLSL1jGoLpxmXH_g
-X-Proofpoint-GUID: 9Iy7kmUzA82cNmVKfLSL1jGoLpxmXH_g
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1711595341; c=relaxed/simple;
+	bh=nABLxb6h1Qjjq0SWW/DOT1BK8XdLbDeksfd3ZdK0Bpo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=QtmXbvfhlsx49chnMeShwxVxM6Fv3gzNUi8YTE8eVrhb9EwKedx2ILLMiFL8CEVFVQcXytpGpX8F0yYiInL9dlGHZI08NOp0ZOPQpH3RJ+CfG9Cqk6e3sJVHMx8/PeAhi8jzE/cFORVW0ndbkwb8uH+KtbDzW1I0bjCOZrzGJqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iblpSu+M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476F3C433C7;
+	Thu, 28 Mar 2024 03:08:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711595340;
+	bh=nABLxb6h1Qjjq0SWW/DOT1BK8XdLbDeksfd3ZdK0Bpo=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=iblpSu+Mhd6FpFhdEE0gklvAqe79T5CeTdZl4hBK3S0p9BUHUGVo93nECPqIfUYoS
+	 o8c/Lm9DL6bBAV7+jcjwNMDqtrWFOm+wasiEuESIwPZTdkrLpDaN/eDJo9uoY0enVV
+	 xdbxDP3WU9CFZSY9T8EJVT+OjtIk3OPb1wCzccdg/7IFs4xRQCAL6RNdL+6j8oG/Om
+	 EVldwU6Uvho0emU2TwfAkyY2Q8sIWfxvDgsWhG0VcHMdbECJppoIctldl4NKnq5062
+	 TzOkfgABNro+CmKZT03kEqlR0qrGMAbVgFaZwY8glJmF2bQjFT3UsE2dCww32oCkyK
+	 ZHd5cihxwe4Hg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-27_18,2024-03-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- spamscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403210000 definitions=main-2403270154
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 28 Mar 2024 05:08:56 +0200
+Message-Id: <D051WQKNXETS.1O1TI7O2DPT1Z@kernel.org>
+Cc: <linux-modules@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+ "Roberto Sassu" <roberto.sassu@huawei.com>, <linux-kernel@vger.kernel.org>,
+ "Ken Goldman" <kgold@linux.ibm.com>
+Subject: Re: [PATCH] ima: define an init_module critical data record
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Mimi Zohar" <zohar@linux.ibm.com>, "Luis Chamberlain"
+ <mcgrof@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240327150019.81477-1-zohar@linux.ibm.com>
+ <D04OU424128P.22TP02GW2CJCT@kernel.org>
+ <80b2e479bc0c520423885a16dd46e0201a1c9418.camel@linux.ibm.com>
+In-Reply-To: <80b2e479bc0c520423885a16dd46e0201a1c9418.camel@linux.ibm.com>
 
-On Wed, 2024-03-27 at 18:54 +0200, Jarkko Sakkinen wrote:
-> On Wed Mar 27, 2024 at 5:00 PM EET, Mimi Zohar wrote:
-> > The init_module syscall loads an ELF image into kernel space without
-> > measuring the buffer containing the ELF image.  To close this kernel
-> > module integrity gap, define a new critical-data record which includes
-> > the hash of the ELF image.
-> > 
-> > Instead of including the buffer data in the IMA measurement list,
-> > include the hash of the buffer data to avoid large IMA measurement
-> > list records.  The buffer data hash would be the same value as the
-> > finit_module syscall file hash.
-> > 
-> > To enable measuring the init_module buffer and other critical data from
-> > boot, define "ima_policy=critical_data" on the boot command line.  Since
-> > builtin policies are not persistent, a custom IMA policy must include
-> > the rule as well: measure func=CRITICAL_DATA label=modules
-> > 
-> > To verify the template data hash value, first convert the buffer data
-> > hash to binary:
-> > grep "init_module" \
-> > 	/sys/kernel/security/integrity/ima/ascii_runtime_measurements | \
-> > 	tail -1 | cut -d' ' -f 6 | xxd -r -p | sha256sum
-> > 
-> > Reported-by: Ken Goldman <kgold@linux.ibm.com>
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > ---
-> >  security/integrity/ima/ima_main.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/security/integrity/ima/ima_main.c
-> > b/security/integrity/ima/ima_main.c
-> > index c84e8c55333d..4b4348d681a6 100644
-> > --- a/security/integrity/ima/ima_main.c
-> > +++ b/security/integrity/ima/ima_main.c
-> > @@ -902,6 +902,13 @@ static int ima_post_load_data(char *buf, loff_t size,
-> >  		return 0;
-> >  	}
-> >  
-> > +	/*
-> > +	 * Measure the init_module syscall buffer containing the ELF image.
-> > +	 */
-> > +	if (load_id == LOADING_MODULE)
-> > +		ima_measure_critical_data("modules", "init_module",
-> > +					  buf, size, true, NULL, 0);
-> 
-> No reason not to ack but could be just as well (passing checkpatch):
+On Wed Mar 27, 2024 at 11:37 PM EET, Mimi Zohar wrote:
+> On Wed, 2024-03-27 at 18:54 +0200, Jarkko Sakkinen wrote:
+> > On Wed Mar 27, 2024 at 5:00 PM EET, Mimi Zohar wrote:
+> > > The init_module syscall loads an ELF image into kernel space without
+> > > measuring the buffer containing the ELF image.  To close this kernel
+> > > module integrity gap, define a new critical-data record which include=
+s
+> > > the hash of the ELF image.
+> > >=20
+> > > Instead of including the buffer data in the IMA measurement list,
+> > > include the hash of the buffer data to avoid large IMA measurement
+> > > list records.  The buffer data hash would be the same value as the
+> > > finit_module syscall file hash.
+> > >=20
+> > > To enable measuring the init_module buffer and other critical data fr=
+om
+> > > boot, define "ima_policy=3Dcritical_data" on the boot command line.  =
+Since
+> > > builtin policies are not persistent, a custom IMA policy must include
+> > > the rule as well: measure func=3DCRITICAL_DATA label=3Dmodules
+> > >=20
+> > > To verify the template data hash value, first convert the buffer data
+> > > hash to binary:
+> > > grep "init_module" \
+> > > 	/sys/kernel/security/integrity/ima/ascii_runtime_measurements | \
+> > > 	tail -1 | cut -d' ' -f 6 | xxd -r -p | sha256sum
+> > >=20
+> > > Reported-by: Ken Goldman <kgold@linux.ibm.com>
+> > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > ---
+> > >  security/integrity/ima/ima_main.c | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> > >=20
+> > > diff --git a/security/integrity/ima/ima_main.c
+> > > b/security/integrity/ima/ima_main.c
+> > > index c84e8c55333d..4b4348d681a6 100644
+> > > --- a/security/integrity/ima/ima_main.c
+> > > +++ b/security/integrity/ima/ima_main.c
+> > > @@ -902,6 +902,13 @@ static int ima_post_load_data(char *buf, loff_t =
+size,
+> > >  		return 0;
+> > >  	}
+> > > =20
+> > > +	/*
+> > > +	 * Measure the init_module syscall buffer containing the ELF image.
+> > > +	 */
+> > > +	if (load_id =3D=3D LOADING_MODULE)
+> > > +		ima_measure_critical_data("modules", "init_module",
+> > > +					  buf, size, true, NULL, 0);
+> >=20
+> > No reason not to ack but could be just as well (passing checkpatch):
+>
+> Please review the tag usage as defined in=20
+> https://docs.kernel.org/process/submitting-patches.html.
+>
+> >=20
+> > 	if (load_id =3D=3D LOADING_MODULE)
+> > 		ima_measure_critical_data("modules", "init_module", buf, size,
+> > true, NULL, 0);
+> >=20
+> > < 100 characters
+>
+> From what I understand, it's still preferable to stay under the 80 charac=
+ter
+> limit, but checkpatch.pl will not complain.  From=20
+> https://www.kernel.org/doc/Documentation/process/maintainer-tip.rst:
+>
+> "The 80 character rule is not a strict rule, so please use common sense w=
+hen
+> breaking lines. Especially format strings should never be broken up."
 
-Please review the tag usage as defined in 
-https://docs.kernel.org/process/submitting-patches.html.
+I agree with that is your decision to make (as maintainer of
+IMA)!
 
-> 
-> 	if (load_id == LOADING_MODULE)
-> 		ima_measure_critical_data("modules", "init_module", buf, size,
-> true, NULL, 0);
-> 
-> < 100 characters
+BTW, I guess process/coding-style.rst would be better ref
+here because maintainer-tip.rst is meant only for arch/x86
+tree (aka tip.git).
 
-From what I understand, it's still preferable to stay under the 80 character
-limit, but checkpatch.pl will not complain.  From 
-https://www.kernel.org/doc/Documentation/process/maintainer-tip.rst:
+That said, both maintainer-tip.rst and coding-style.rst recommend
+the same 80 character length. I have no idea whether 80 or 100
+character should be considered as "recommended".
 
-"The 80 character rule is not a strict rule, so please use common sense when
-breaking lines. Especially format strings should never be broken up."
+The formatted string example is somewhat weird too because you
+should not break that even if it was 150 characters so it does
+not have any relation to 100 character limit...
 
-> 
-> > +
-> >  	return 0;
-> >  }
-> >  
-> 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-Thanks!
-
-Mimi
-
+R, Jarkko
 
