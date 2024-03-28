@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1918-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1919-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 789EA890BDE
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 21:48:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DCF1890BE4
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 21:48:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CA2A1C312D2
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 20:48:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B060C1F27E90
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 20:48:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DEA613AD28;
-	Thu, 28 Mar 2024 20:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B510137774;
+	Thu, 28 Mar 2024 20:48:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSy2SRu1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lg4YQqTq"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5514D13A414;
-	Thu, 28 Mar 2024 20:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E34A27446;
+	Thu, 28 Mar 2024 20:48:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711658816; cv=none; b=tNihHNn4aaeSF45dsfex4+BvxapLabXBNC1DO1XdyJKa+tFqma1K7Z+MVOsrbNQvxyOL3+ABzSzsxbiWTx77a4PAvqfPXBb9FFMF5fQ0/8R3H/ABZYyQixlpdy+3ejvxMCvBdXDJ1IArmu0tfAgzzRTM348Ygkkj5VfhWiuqXlY=
+	t=1711658883; cv=none; b=mile2NFAFZTbYAOC6vzcO174T5AJtjiWKzSDYJWkguTXLJ4oL38j2xxQocFTK5Dv2rHveaWQLkhVcRAJOKJXZSncAAyXmjxLxZpl+fdujBSbGAyNO+ZwPBrVRCmifxZ/OJ3dw0N086kCpyjzkkzb3/CIjE7dGKacgi2pJjBx/7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711658816; c=relaxed/simple;
-	bh=ydPhNbCpVL+YnzYuwgDNzMkgEaxe1N9d0jo7Yt1mDxk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=V35gV1YRytiw49hqPW9pGNITyI2TOmwHz5a9EU601BwKYDPd3SaWTfbaCupjywHRBNpowS7HAS/fRfZiMi1mX52ja94HAH8Y7MFxQiRuM71KIIbxyvwf/fVlRK1cTmjxcUYeo+Kawy7fF2FQd9c9c+naWRw6rvy2pTt6VQlyE3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSy2SRu1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E12C433C7;
-	Thu, 28 Mar 2024 20:46:51 +0000 (UTC)
+	s=arc-20240116; t=1711658883; c=relaxed/simple;
+	bh=gqTYTlfwBBgcZXm1wwwUcREXO1OlHOxzRoKa0YS+7NY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ERAGHvtjk4/KXei1Y+7daiWSsb/cOao4i4ibPTycLNBdtnfqUjgaAZo6w/RN+R/3nctSYsSDvk/uTb43kvfRItKjNE2sya15rc3X/ZiJv0xv4Ht7f36+xu2YCyCDiXjyf9Ktv7ifqNdgLJ4E1HMfyb90AW8IJ55J7xuqHJE5HDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lg4YQqTq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D0C2C433C7;
+	Thu, 28 Mar 2024 20:47:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711658815;
-	bh=ydPhNbCpVL+YnzYuwgDNzMkgEaxe1N9d0jo7Yt1mDxk=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=OSy2SRu1f919Z1KlgVR7Pd+TLVIJ9qQv2cJiKlFKz4Su/go9K5r/QZpJJV1zkvMah
-	 68ep7siRVVf4ahuO090TEsId+x0NuZIT/0T6jDdkhqlownFUZOn676Q0HwCHLn4uEi
-	 vCqRv1NsQoAa0e5oXiMzOEjh2RNOwX5yaOQm8IXiFuDtieHPF4JcV9iXyB94YLGAb5
-	 Tv3z4uWAOSfHD+62PUFJJQzo5e/aLs4TsZGijF7FLtYFlVjhr9ABzM2d50NKQl4UHi
-	 9iRqsFoFdwZNEoMcdAzZkDAJLtZVG2u7BjDxPOtxSYYMFAiYjhQidUTNnPhOl6zZHA
-	 a/s6Cq3MMpUGA==
+	s=k20201202; t=1711658882;
+	bh=gqTYTlfwBBgcZXm1wwwUcREXO1OlHOxzRoKa0YS+7NY=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=lg4YQqTqetjhkHUa4M6dE0cLEPBNDXygOSkk8aOv3jhMLaNvu0586N8dBFqPmd/xf
+	 BlSEAz2x+ZdX5Sf6iRW0JMgpRU3qdJsFyODNxph8HpmkWd9FQAOYRW7xyulBvJiuSh
+	 /SoezZKG13ASTcxV1/pCQFl4nZGOly1H57BS3xOx3/ZXyJziNttnwuXuNN114VC9jp
+	 /XeO1pVMfug1Q/QGE/4Ybfu/aJLHyoIKeX0qY5WXHvUBQmwwDz7WrsU9QuP02VUbC9
+	 VfdWEEygQr3kqdOJNK6qqyGS2um/zV2avaIod8MWB5R7pQnihXTS4p86QvE4CAwscy
+	 H7LpNU2TD3WYw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,13 +49,8 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 28 Mar 2024 22:46:49 +0200
-Message-Id: <D05OEPT4F73G.2W6FSMMR0PVQZ@kernel.org>
-To: "Fan Wu" <wufan@linux.microsoft.com>, <corbet@lwn.net>,
- <zohar@linux.ibm.com>, <jmorris@namei.org>, <serge@hallyn.com>,
- <tytso@mit.edu>, <ebiggers@kernel.org>, <axboe@kernel.dk>,
- <agk@redhat.com>, <snitzer@kernel.org>, <eparis@redhat.com>,
- <paul@paul-moore.com>
+Date: Thu, 28 Mar 2024 22:47:56 +0200
+Message-Id: <D05OFKMW9DF7.3QI1B5EDFHWO0@kernel.org>
 Cc: <linux-doc@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
  <linux-security-module@vger.kernel.org>, <fsverity@lists.linux.dev>,
  <linux-block@vger.kernel.org>, <dm-devel@lists.linux.dev>,
@@ -63,6 +58,11 @@ Cc: <linux-doc@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
  <deven.desai@linux.microsoft.com>
 Subject: Re: [PATCH v16 02/20] ipe: add policy parser
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Fan Wu" <wufan@linux.microsoft.com>, <corbet@lwn.net>,
+ <zohar@linux.ibm.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+ <tytso@mit.edu>, <ebiggers@kernel.org>, <axboe@kernel.dk>,
+ <agk@redhat.com>, <snitzer@kernel.org>, <eparis@redhat.com>,
+ <paul@paul-moore.com>
 X-Mailer: aerc 0.17.0
 References: <1711657047-10526-1-git-send-email-wufan@linux.microsoft.com>
  <1711657047-10526-3-git-send-email-wufan@linux.microsoft.com>
@@ -246,9 +246,6 @@ On Thu Mar 28, 2024 at 10:17 PM EET, Fan Wu wrote:
 > + *
 > + * Return:
 > + * * !IS_ERR	- Success
-
-s/!IS_ERR/0/
-
 > + * * -EBADMSG	- Policy is invalid
 > + * * -ENOMEM	- Out of memory
 > + */
@@ -257,6 +254,9 @@ s/!IS_ERR/0/
 > +{
 > +	int rc =3D 0;
 > +	struct ipe_policy *new =3D NULL;
+
+In many places: reverse christmas tree would be so much more readable.
+
 > +
 > +	new =3D kzalloc(sizeof(*new), GFP_KERNEL);
 > +	if (!new)
@@ -889,6 +889,9 @@ ore
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) Microsoft Corporation. All rights reserved.
+
+The year is missing.
+
 > + */
 > +#ifndef _IPE_POLICY_PARSER_H
 > +#define _IPE_POLICY_PARSER_H
@@ -897,7 +900,6 @@ ore
 > +void free_parsed_policy(struct ipe_parsed_policy *p);
 > +
 > +#endif /* _IPE_POLICY_PARSER_H */
-
 
 BR, Jarkko
 
