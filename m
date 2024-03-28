@@ -1,339 +1,683 @@
-Return-Path: <linux-integrity+bounces-1893-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1898-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEBFC890895
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 19:50:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59764890AC8
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 21:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 549E7B2334C
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 18:50:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D801A1F263AA
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 20:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C5C41327E2;
-	Thu, 28 Mar 2024 18:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A29F013AA52;
+	Thu, 28 Mar 2024 20:17:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TtN5bh02"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ofagEg/6"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED541EA6E;
-	Thu, 28 Mar 2024 18:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9C51311B5;
+	Thu, 28 Mar 2024 20:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711651832; cv=none; b=Zi8uWS7BWxLc0HCxrOq145XDgALBns4lEyQRu4Abpl4JdNoxKNNcbf1M2OmB2dPix+OhN5qo7Hiubji0tObTYhDwtRPZ5gV6NODpQVF+LXMYVTAzICL9JhqDrprEUsc0GU8TIqX1TipSU2x2F0ouy4xJUeRK04yD0vkj6lnuSjo=
+	t=1711657052; cv=none; b=Ohq8uzy89RtoBnkSKGaDyIrOvg2eiizft1qvudjGZPFjulEbisRTJJ2MD0wX9une7DRpQ5Pu4fOfBT4s5MEwwItuU97C6mKMYDxrY3zd7f7w0Gi/8UFJJe0tasEhYMvUQHPzlZPiqpXOIYr3Lr5vOsgKI46x5a6q0VffYirQpvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711651832; c=relaxed/simple;
-	bh=v47lKJs0Ij31Lu1i4dgbBcc3S1l62Crepl3XB+i3pHk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=OOlmDNKpth6b4s8+inbdjDHMSTVjFfQ67ETTMUJjzT06QcusntklTSoy+Nd+13XfsMG1tCk4lPT0t/sXyM27NJh+YbguTUZWzBJW1xp3ZtxfpwsbeHt1MVGLS1JrQwgsQZywh819Wdj1VqF0m6SCxJUhU29ZjvZ7GDobUKr6hWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TtN5bh02; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 194FDC433C7;
-	Thu, 28 Mar 2024 18:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711651830;
-	bh=v47lKJs0Ij31Lu1i4dgbBcc3S1l62Crepl3XB+i3pHk=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=TtN5bh02FrPTKu9xC+1yTpzkaJuCahZccbAaMqgtJLIA3L/JGfowwOAoz6eY9Gt/x
-	 j1t/iJmTlhFZ1ebfpkyR3pulVZIqn25ghMzitDejpq8Idf0aMvh0Zmf6cj6ZY6YXZ5
-	 ma9ykqNCCMRrXr2gq1XRpJRV01XLbXeelLym1+jgU+w/uijmzzEP/uXsCLOFFOg6W7
-	 tub1teDBLgpxXzl8GHvd2BMBsywEkaQlU5tBGkJLoZB+7TJYYveRZoYTSTFsDk2bQh
-	 CN1sJqsJJU0vzPmplUKnRJ+7KCuz4BXg24vZsWJ/Vt8JjbhDiH0UI4+ZqGdguKTHpk
-	 xih3Pa+YcDsog==
+	s=arc-20240116; t=1711657052; c=relaxed/simple;
+	bh=q/xwdAq7kEPpyuMv1h2LFBhMFW/N5htWmm5Z7TJUCgg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=nJ3A/M2jsVaKfarzpPAvPAw1eO6w6JpFGKQ7SbJzYzxrxDkyWo1AtfvSwa7W8bdcNuX8unY0vTYLG4lnWQ6PlILOCIOSkJ0ctq5HnUWRhRwA8cjPb1vBbV2yuR0vXZZ3SD+itMbPMI9CSyqVglQ5Vx5vr5rbtB8wQVahDhEq4CM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ofagEg/6; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+	id 589F920E6AFB; Thu, 28 Mar 2024 13:17:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 589F920E6AFB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1711657048;
+	bh=0yOHhwzMjSgcC9A3jnY7sZiKOKoh9h8/ouP1JYb2294=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ofagEg/6jnJP9Ik8Fn8sxOSynEnimQNvOhzW1g4lZPvPEed5T1mu+AATB7sOx5cPa
+	 xVLYbzeSNtycbzmmR6aJ6QnWoDH9gWHY9II0F8UCP79hbV1a3MAJtiA4zsQx/GacKI
+	 Fl7BA7y9pXPPQRb0T/G8l0fHEO3DI7CIc5/xtceM=
+From: Fan Wu <wufan@linux.microsoft.com>
+To: corbet@lwn.net,
+	zohar@linux.ibm.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	tytso@mit.edu,
+	ebiggers@kernel.org,
+	axboe@kernel.dk,
+	agk@redhat.com,
+	snitzer@kernel.org,
+	eparis@redhat.com,
+	paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	fsverity@lists.linux.dev,
+	linux-block@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	audit@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fan Wu <wufan@linux.microsoft.com>
+Subject: [PATCH v16 00/20] Integrity Policy Enforcement LSM (IPE)
+Date: Thu, 28 Mar 2024 13:17:07 -0700
+Message-Id: <1711657047-10526-1-git-send-email-wufan@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 28 Mar 2024 20:50:22 +0200
-Message-Id: <D05LXJUT7T5Z.39FGAGHVQ6HZH@kernel.org>
-Cc: "Mimi Zohar" <zohar@linux.ibm.com>, "James Bottomley"
- <jejb@linux.ibm.com>, "Herbert Xu" <herbert@gondor.apana.org.au>, "David S.
- Miller" <davem@davemloft.net>, "Shawn Guo" <shawnguo@kernel.org>, "Jonathan
- Corbet" <corbet@lwn.net>, "Sascha Hauer" <s.hauer@pengutronix.de>,
- "kernel@pengutronix.de" <kernel@pengutronix.de>, "Fabio Estevam"
- <festevam@gmail.com>, "NXP Linux Team" <linux-imx@nxp.com>, "Ahmad Fatoum"
- <a.fatoum@pengutronix.de>, "sigma star Kernel Team"
- <upstream+dcp@sigma-star.at>, "David Howells" <dhowells@redhat.com>, "Li
- Yang" <leoyang.li@nxp.com>, "Paul Moore" <paul@paul-moore.com>, "James
- Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Paul E.
- McKenney" <paulmck@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, "Tejun Heo" <tj@kernel.org>, "Steven Rostedt
- (Google)" <rostedt@goodmis.org>, <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
- "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "Richard Weinberger"
- <richard@nod.at>, "David Oberhollenzer" <david.oberhollenzer@sigma-star.at>
-Subject: Re: [PATCH v7 6/6] docs: trusted-encrypted: add DCP as new trust
- source
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "David Gstir"
- <david@sigma-star.at>
-X-Mailer: aerc 0.17.0
-References: <20240327082454.13729-1-david@sigma-star.at>
- <20240327082454.13729-7-david@sigma-star.at>
- <D04N9E61QWYB.3IPEEGVPY6V8L@kernel.org>
- <A3831544-E47C-4AEB-9963-536F0B1EE8FD@sigma-star.at>
- <D05LV2A6J8X7.11895O5TC10TS@kernel.org>
-In-Reply-To: <D05LV2A6J8X7.11895O5TC10TS@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu Mar 28, 2024 at 8:47 PM EET, Jarkko Sakkinen wrote:
-> On Thu Mar 28, 2024 at 10:05 AM EET, David Gstir wrote:
-> > Jarkko,
-> >
-> > > On 27.03.2024, at 16:40, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > >=20
-> > > On Wed Mar 27, 2024 at 10:24 AM EET, David Gstir wrote:
-> > >> Update the documentation for trusted and encrypted KEYS with DCP as =
-new
-> > >> trust source:
-> > >>=20
-> > >> - Describe security properties of DCP trust source
-> > >> - Describe key usage
-> > >> - Document blob format
-> > >>=20
-> > >> Co-developed-by: Richard Weinberger <richard@nod.at>
-> > >> Signed-off-by: Richard Weinberger <richard@nod.at>
-> > >> Co-developed-by: David Oberhollenzer <david.oberhollenzer@sigma-star=
-.at>
-> > >> Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.a=
-t>
-> > >> Signed-off-by: David Gstir <david@sigma-star.at>
-> > >> ---
-> > >> .../security/keys/trusted-encrypted.rst       | 85 +++++++++++++++++=
-++
-> > >> 1 file changed, 85 insertions(+)
-> > >>=20
-> > >> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Doc=
-umentation/security/keys/trusted-encrypted.rst
-> > >> index e989b9802f92..81fb3540bb20 100644
-> > >> --- a/Documentation/security/keys/trusted-encrypted.rst
-> > >> +++ b/Documentation/security/keys/trusted-encrypted.rst
-> > >> @@ -42,6 +42,14 @@ safe.
-> > >>          randomly generated and fused into each SoC at manufacturing=
- time.
-> > >>          Otherwise, a common fixed test key is used instead.
-> > >>=20
-> > >> +     (4) DCP (Data Co-Processor: crypto accelerator of various i.MX=
- SoCs)
-> > >> +
-> > >> +         Rooted to a one-time programmable key (OTP) that is genera=
-lly burnt
-> > >> +         in the on-chip fuses and is accessible to the DCP encrypti=
-on engine only.
-> > >> +         DCP provides two keys that can be used as root of trust: t=
-he OTP key
-> > >> +         and the UNIQUE key. Default is to use the UNIQUE key, but =
-selecting
-> > >> +         the OTP key can be done via a module parameter (dcp_use_ot=
-p_key).
-> > >> +
-> > >>   *  Execution isolation
-> > >>=20
-> > >>      (1) TPM
-> > >> @@ -57,6 +65,12 @@ safe.
-> > >>=20
-> > >>          Fixed set of operations running in isolated execution envir=
-onment.
-> > >>=20
-> > >> +     (4) DCP
-> > >> +
-> > >> +         Fixed set of cryptographic operations running in isolated =
-execution
-> > >> +         environment. Only basic blob key encryption is executed th=
-ere.
-> > >> +         The actual key sealing/unsealing is done on main processor=
-/kernel space.
-> > >> +
-> > >>   * Optional binding to platform integrity state
-> > >>=20
-> > >>      (1) TPM
-> > >> @@ -79,6 +93,11 @@ safe.
-> > >>          Relies on the High Assurance Boot (HAB) mechanism of NXP So=
-Cs
-> > >>          for platform integrity.
-> > >>=20
-> > >> +     (4) DCP
-> > >> +
-> > >> +         Relies on Secure/Trusted boot process (called HAB by vendo=
-r) for
-> > >> +         platform integrity.
-> > >> +
-> > >>   *  Interfaces and APIs
-> > >>=20
-> > >>      (1) TPM
-> > >> @@ -94,6 +113,11 @@ safe.
-> > >>=20
-> > >>          Interface is specific to silicon vendor.
-> > >>=20
-> > >> +     (4) DCP
-> > >> +
-> > >> +         Vendor-specific API that is implemented as part of the DCP=
- crypto driver in
-> > >> +         ``drivers/crypto/mxs-dcp.c``.
-> > >> +
-> > >>   *  Threat model
-> > >>=20
-> > >>      The strength and appropriateness of a particular trust source f=
-or a given
-> > >> @@ -129,6 +153,13 @@ selected trust source:
-> > >>      CAAM HWRNG, enable CRYPTO_DEV_FSL_CAAM_RNG_API and ensure the d=
-evice
-> > >>      is probed.
-> > >>=20
-> > >> +  *  DCP (Data Co-Processor: crypto accelerator of various i.MX SoC=
-s)
-> > >> +
-> > >> +     The DCP hardware device itself does not provide a dedicated RN=
-G interface,
-> > >> +     so the kernel default RNG is used. SoCs with DCP like the i.MX=
-6ULL do have
-> > >> +     a dedicated hardware RNG that is independent from DCP which ca=
-n be enabled
-> > >> +     to back the kernel RNG.
-> > >> +
-> > >> Users may override this by specifying ``trusted.rng=3Dkernel`` on th=
-e kernel
-> > >> command-line to override the used RNG with the kernel's random numbe=
-r pool.
-> > >>=20
-> > >> @@ -231,6 +262,19 @@ Usage::
-> > >> CAAM-specific format.  The key length for new keys is always in byte=
-s.
-> > >> Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-> > >>=20
-> > >> +Trusted Keys usage: DCP
-> > >> +-----------------------
-> > >> +
-> > >> +Usage::
-> > >> +
-> > >> +    keyctl add trusted name "new keylen" ring
-> > >> +    keyctl add trusted name "load hex_blob" ring
-> > >> +    keyctl print keyid
-> > >> +
-> > >> +"keyctl print" returns an ASCII hex copy of the sealed key, which i=
-s in format
-> > >> +specific to this DCP key-blob implementation.  The key length for n=
-ew keys is
-> > >> +always in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bit=
-s).
-> > >> +
-> > >> Encrypted Keys usage
-> > >> --------------------
-> > >>=20
-> > >> @@ -426,3 +470,44 @@ string length.
-> > >> privkey is the binary representation of TPM2B_PUBLIC excluding the
-> > >> initial TPM2B header which can be reconstructed from the ASN.1 octed
-> > >> string length.
-> > >> +
-> > >> +DCP Blob Format
-> > >> +---------------
-> > >> +
-> > >> +The Data Co-Processor (DCP) provides hardware-bound AES keys using =
-its
-> > >> +AES encryption engine only. It does not provide direct key sealing/=
-unsealing.
-> > >> +To make DCP hardware encryption keys usable as trust source, we def=
-ine
-> > >> +our own custom format that uses a hardware-bound key to secure the =
-sealing
-> > >> +key stored in the key blob.
-> > >> +
-> > >> +Whenever a new trusted key using DCP is generated, we generate a ra=
-ndom 128-bit
-> > >> +blob encryption key (BEK) and 128-bit nonce. The BEK and nonce are =
-used to
-> > >> +encrypt the trusted key payload using AES-128-GCM.
-> > >> +
-> > >> +The BEK itself is encrypted using the hardware-bound key using the =
-DCP's AES
-> > >> +encryption engine with AES-128-ECB. The encrypted BEK, generated no=
-nce,
-> > >> +BEK-encrypted payload and authentication tag make up the blob forma=
-t together
-> > >> +with a version number, payload length and authentication tag::
-> > >> +
-> > >> +    /*
-> > >> +     * struct dcp_blob_fmt - DCP BLOB format.
-> > >> +     *
-> > >> +     * @fmt_version: Format version, currently being %1
-> > >> +     * @blob_key: Random AES 128 key which is used to encrypt @payl=
-oad,
-> > >> +     *            @blob_key itself is encrypted with OTP or UNIQUE =
-device key in
-> > >> +     *            AES-128-ECB mode by DCP.
-> > >> +     * @nonce: Random nonce used for @payload encryption.
-> > >> +     * @payload_len: Length of the plain text @payload.
-> > >> +     * @payload: The payload itself, encrypted using AES-128-GCM an=
-d @blob_key,
-> > >> +     *           GCM auth tag of size AES_BLOCK_SIZE is attached at=
- the end of it.
-> > >> +     *
-> > >> +     * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) =
-+ @payload_len +
-> > >> +     * AES_BLOCK_SIZE.
-> > >> +     */
-> > >> +    struct dcp_blob_fmt {
-> > >> +            __u8 fmt_version;
-> > >> +            __u8 blob_key[AES_KEYSIZE_128];
-> > >> +            __u8 nonce[AES_KEYSIZE_128];
-> > >> +            __le32 payload_len;
-> > >> +            __u8 payload[];
-> > >> +    } __packed;
-> > >=20
-> > > I'm thinking here given that you need to replicate the same thing tha=
-t
-> > > is in the source files. E.g. Documentation/gpu/i915.rst.
-> > >=20
-> > > The rationale would so many sources so maybe it would make sense to
-> > > maintain this in the source code.
-> > >=20
-> > > Also this documents how to generally insert documentation inline:
-> > > https://docs.kernel.org/doc-guide/kernel-doc.html
-> > >=20
-> > > I.e. I'm feeling that this is good time to improve scalability so tha=
-t
-> > > documentation will keep up to date. Also then backend specific patche=
-s
-> > > mostly go to their subdirectories and not to Documentation/ subtree
-> > > (or that would be more rare case).
-> > >=20
-> > > So a good chance to do more than just a new backend for the benefit
-> > > of the trusted keys subsystem :-)
-> > >=20
-> > > Also, later on if something is changed e.g. in the above struct you
-> > > don't have to do matching update to the documentation so it will save
-> > > time too (over time).
-> >
-> > sound good! I=E2=80=99ll maintain the blob format documentation to the =
-source and insert=20
-> > a reference in the documentation. Thanks for pointing that out!
-> >
-> > Is there anything else I can improve for this patchset? I=E2=80=99d lik=
-e to include that in v8
-> > too and make it the last iteration of this patchset.
->
-> Yeah, I don't enforce you to convert all the existing work to this
-> model, but we could use this as a reference for that work.
+Overview:
+---------
 
-I mean that way documentation update will become more natural part of
-the code update and less frustrating to do which usually encourages
-to document stuff better and also later on tweak and improve it.
+IPE is a Linux Security Module which takes a complimentary approach to
+access control. Whereas existing mandatory access control mechanisms
+base their decisions on labels and paths, IPE instead determines
+whether or not an operation should be allowed based on immutable
+security properties of the system component the operation is being
+performed on.
 
-So yeah I feel that GPU documentation in kernel is doing lot's of things
-right, and other subsystems should follow. I.e. it is good reference
-model for trusted keys documentation, and said I'm cool with realizing
-this for only this new key type :-) Otherwise, finishing this patch set
-will torture for you and also for me if it tries to fix everything.
+IPE itself does not mandate how the security property should be
+evaluated, but relies on an extensible set of external property providers
+to evaluate the component. IPE makes its decision based on reference
+values for the selected properties, specified in the IPE policy.
 
-BR, Jarkko
+The reference values represent the value that the policy writer and the
+local system administrator (based on the policy signature) trust for the
+system to accomplish the desired tasks.
+
+One such provider is for example dm-verity, which is able to represent
+the integrity property of a partition (its immutable state) with a digest.
+
+IPE is compiled under CONFIG_SECURITY_IPE.
+
+Use Cases
+---------
+
+IPE works best in fixed-function devices: Devices in which their purpose
+is clearly defined and not supposed to be changed (e.g. network firewall
+device in a data center, an IoT device, etcetera), where all software and
+configuration is built and provisioned by the system owner.
+
+IPE is a long-way off for use in general-purpose computing: the Linux
+community as a whole tends to follow a decentralized trust model,
+known as the web of trust, which IPE has no support for as of  yet.
+There are exceptions, such as the case where a Linux distribution
+vendor trusts only their own keys, where IPE can successfully be used
+to enforce the trust requirement.
+
+Additionally, while most packages are signed today, the files inside
+the packages (for instance, the executables), tend to be unsigned. This
+makes it difficult to utilize IPE in systems where a package manager is
+expected to be functional, without major changes to the package manager
+and ecosystem behind it.
+
+DIGLIM[1] is a system that when combined with IPE, could be used to
+enable general purpose computing scenarios.
+
+Policy:
+-------
+
+IPE policy is a plain-text policy composed of multiple statements
+over several lines. There is one required line, at the top of the
+policy, indicating the policy name, and the policy version, for
+instance:
+
+  policy_name=Ex_Policy policy_version=0.0.0
+
+The policy version indicates the current version of the policy. This is
+used to prevent roll-back of policy to potentially insecure previous
+versions of the policy.
+
+The next portion of IPE policy, are rules. Rules are formed by key=value
+pairs, known as properties. IPE rules require two keys: "action", which
+determines what IPE does when it encounters a match against the policy
+and "op", which determines when that rule should be evaluated.
+
+Thus, a minimal rule is:
+
+  op=EXECUTE action=ALLOW
+
+This example rule will allow any execution. A rule is required to have the
+"op" property as the first token of a rule, and the "action" as the last
+token of the rule.
+
+Additional properties are used to restrict attributes about the files being
+evaluated. These properties are intended to be deterministic attributes
+that are resident in the kernel.
+
+For example:
+
+  op=EXECUTE dmverity_signature=FALSE action=DENY
+
+This rule with property dmverity_signature will deny any file not from
+a signed dmverity volume to be executed.
+
+All available properties for IPE described in the documentation patch of
+this series.
+
+Rules are evaluated top-to-bottom. As a result, any revocation rules,
+or denies should be placed early in the file to ensure that these rules
+are evaluated before a rule with "action=ALLOW" is hit.
+
+Any unknown syntax in IPE policy will result in a fatal error to parse
+the policy.
+
+Additionally, a DEFAULT operation must be set for all understood
+operations within IPE. For policies to remain completely forwards
+compatible, it is recommended that users add a "DEFAULT action=ALLOW"
+and override the defaults on a per-operation basis.
+
+For more information about the policy syntax, see the kernel
+documentation page.
+
+Early Usermode Protection:
+--------------------------
+
+IPE can be provided with a policy at startup to load and enforce.
+This is intended to be a minimal policy to get the system to a state
+where userspace is setup and ready to receive commands, at which
+point a policy can be deployed via securityfs. This "boot policy" can be
+specified via the config, SECURITY_IPE_BOOT_POLICY, which accepts a path
+to a plain-text version of the IPE policy to apply. This policy will be
+compiled into the kernel. If not specified, IPE will be disabled until a
+policy is deployed and activated through the method above.
+
+Policy Examples:
+----------------
+
+Allow all:
+
+  policy_name=Allow_All policy_version=0.0.0
+  DEFAULT action=ALLOW
+
+Allow only initramfs:
+
+  policy_name=Allow_All_Initramfs policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE boot_verified=TRUE action=ALLOW
+
+Allow any signed dm-verity volume and the initramfs:
+
+  policy_name=AllowSignedAndInitramfs policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE boot_verified=TRUE action=ALLOW
+  op=EXECUTE dmverity_signature=TRUE action=ALLOW
+
+Prohibit execution from a specific dm-verity volume, while allowing
+all signed volumes and the initramfs:
+
+  policy_name=ProhibitSingleVolume policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE dmverity_roothash=sha256:401fcec5944823ae12f62726e8184407a5fa9599783f030dec146938 action=DENY
+  op=EXECUTE boot_verified=TRUE action=ALLOW
+  op=EXECUTE dmverity_signature=TRUE action=ALLOW
+
+Allow only a specific dm-verity volume:
+
+  policy_name=AllowSpecific policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE dmverity_roothash=sha256:401fcec5944823ae12f62726e8184407a5fa9599783f030dec146938 action=ALLOW
+
+Allow any signed fs-verity file
+
+  policy_name=AllowSignedFSVerity policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE fsverity_signature=TRUE action=ALLOW
+
+Deny a specific fs-verity file:
+
+  policy_name=ProhibitSpecificFSVF policy_version=0.0.0
+  DEFAULT action=DENY
+
+  op=EXECUTE fsverity_digest=sha256:fd88f2b8824e197f850bf4c5109bea5cf0ee38104f710843bb72da796ba5af9e action=DENY
+  op=EXECUTE boot_verified=TRUE action=ALLOW
+  op=EXECUTE dmverity_signature=TRUE action=ALLOW
+
+Deploying Policies:
+-------------------
+
+First sign a plain text policy, with a certificate that is present in
+the SYSTEM_TRUSTED_KEYRING of your test machine. Through openssl, the
+signing can be done via:
+
+  openssl smime -sign -in "$MY_POLICY" -signer "$MY_CERTIFICATE" \
+    -inkey "$MY_PRIVATE_KEY" -outform der -noattr -nodetach \
+    -out "$MY_POLICY.p7s"
+
+Then, simply cat the file into the IPE's "new_policy" securityfs node:
+
+  cat "$MY_POLICY.p7s" > /sys/kernel/security/ipe/new_policy
+
+The policy should now be present under the policies/ subdirectory, under
+its "policy_name" attribute.
+
+The policy is now present in the kernel and can be marked as active,
+via the securityfs node:
+
+  echo 1 > "/sys/kernel/security/ipe/$MY_POLICY_NAME/active"
+
+This will now mark the policy as active and the system will be enforcing
+$MY_POLICY_NAME.
+
+There is one requirement when marking a policy as active, the policy_version
+attribute must either increase, or remain the same as the currently running
+policy.
+
+Policies can be updated via:
+
+  cat "$MY_UPDATED_POLICY.p7s" > \
+    "/sys/kernel/security/ipe/policies/$MY_POLICY_NAME/update"
+
+Additionally, policies can be deleted via the "delete" securityfs
+node. Simply write "1" to the corresponding node in the policy folder:
+
+  echo 1 > "/sys/kernel/security/ipe/policies/$MY_POLICY_NAME/delete"
+
+There is only one requirement to delete policies, the policy being
+deleted must not be the active policy.
+
+NOTE: Any securityfs write to IPE's nodes will require CAP_MAC_ADMIN.
+
+Integrations:
+-------------
+
+This patch series adds support for fsverity via digest and signature
+(fsverity_signature and fsverity_digest), dm-verity by digest and
+signature (dmverity_signature and dmverity_roothash), and trust for
+the initramfs (boot_verified).
+
+Please see the documentation patch for more information about the
+integrations available.
+
+Testing:
+--------
+
+KUnit Tests are available. Recommended kunitconfig:
+
+    CONFIG_KUNIT=y
+    CONFIG_SECURITY=y
+    CONFIG_SECURITYFS=y
+    CONFIG_PKCS7_MESSAGE_PARSER=y
+    CONFIG_SYSTEM_DATA_VERIFICATION=y
+    CONFIG_FS_VERITY=y
+    CONFIG_FS_VERITY_BUILTIN_SIGNATURES=y
+    CONFIG_BLOCK=y
+    CONFIG_MD=y
+    CONFIG_BLK_DEV_DM=y
+    CONFIG_DM_VERITY=y
+    CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=y
+    CONFIG_NET=y
+    CONFIG_AUDIT=y
+    CONFIG_AUDITSYSCALL=y
+    CONFIG_BLK_DEV_INITRD=y
+
+    CONFIG_SECURITY_IPE=y
+    CONFIG_IPE_PROP_DM_VERITY=y
+    CONFIG_IPE_PROP_FS_VERITY=y
+    CONFIG_SECURITY_IPE_KUNIT_TEST=y
+
+Simply run:
+
+    make ARCH=um mrproper
+    ./tools/testing/kunit/kunit.py run --kunitconfig <path/to/config>
+
+And the tests will execute and report the result.
+
+In addition, IPE has a python based integration
+test suite https://github.com/microsoft/ipe/tree/test-suite that
+can test both user interfaces and enforcement functionalities.
+
+Documentation:
+--------------
+
+There is both documentation available on github at
+https://microsoft.github.io/ipe, and Documentation in this patch series,
+to be added in-tree.
+
+Known Gaps:
+-----------
+
+IPE has two known gaps:
+
+1. IPE cannot verify the integrity of anonymous executable memory, such as
+  the trampolines created by gcc closures and libffi (<3.4.2), or JIT'd code.
+  Unfortunately, as this is dynamically generated code, there is no way
+  for IPE to ensure the integrity of this code to form a trust basis. In all
+  cases, the return result for these operations will be whatever the admin
+  configures the DEFAULT action for "EXECUTE".
+
+2. IPE cannot verify the integrity of interpreted languages' programs when
+  these scripts invoked via ``<interpreter> <file>``. This is because the
+  way interpreters execute these files, the scripts themselves are not
+  evaluated as executable code through one of IPE's hooks. Interpreters
+  can be enlightened to the usage of IPE by trying to mmap a file into
+  executable memory (+X), after opening the file and responding to the
+  error code appropriately. This also applies to included files, or high
+  value files, such as configuration files of critical system components.
+
+Appendix:
+---------
+
+A. IPE Github Repository: https://github.com/microsoft/ipe
+B. IPE Users' Guide: Documentation/admin-guide/LSM/ipe.rst
+
+References:
+-----------
+
+1: https://lore.kernel.org/bpf/4d6932e96d774227b42721d9f645ba51@huawei.com/
+
+FAQ:
+----
+
+Q: What is the difference between IMA and IPE?
+
+A: See the documentation patch for more on this topic.
+
+Previous Postings
+-----------------
+
+v1: https://lore.kernel.org/all/20200406181045.1024164-1-deven.desai@linux.microsoft.com/
+v2: https://lore.kernel.org/all/20200406221439.1469862-1-deven.desai@linux.microsoft.com/
+v3: https://lore.kernel.org/all/20200415162550.2324-1-deven.desai@linux.microsoft.com/
+v4: https://lore.kernel.org/all/20200717230941.1190744-1-deven.desai@linux.microsoft.com/
+v5: https://lore.kernel.org/all/20200728213614.586312-1-deven.desai@linux.microsoft.com/
+v6: https://lore.kernel.org/all/20200730003113.2561644-1-deven.desai@linux.microsoft.com/
+v7: https://lore.kernel.org/all/1634151995-16266-1-git-send-email-deven.desai@linux.microsoft.com/
+v8: https://lore.kernel.org/all/1654714889-26728-1-git-send-email-deven.desai@linux.microsoft.com/
+v9: https://lore.kernel.org/lkml/1675119451-23180-1-git-send-email-wufan@linux.microsoft.com/
+v10: https://lore.kernel.org/lkml/1687986571-16823-1-git-send-email-wufan@linux.microsoft.com/
+v11: https://lore.kernel.org/lkml/1696457386-3010-1-git-send-email-wufan@linux.microsoft.com/
+v12: https://lore.kernel.org/lkml/1706654228-17180-1-git-send-email-wufan@linux.microsoft.com/
+v13: https://lore.kernel.org/lkml/1709168102-7677-1-git-send-email-wufan@linux.microsoft.com/
+v14: https://lore.kernel.org/lkml/1709768084-22539-1-git-send-email-wufan@linux.microsoft.com/
+v15: https://lore.kernel.org/lkml/1710560151-28904-1-git-send-email-wufan@linux.microsoft.com/
+
+Changelog:
+----------
+
+v2:
+  Split the second patch of the previous series into two.
+  Minor corrections in the cover-letter and documentation
+  comments regarding CAP_MAC_ADMIN checks in IPE.
+
+v3:
+  Address various comments by Jann Horn. Highlights:
+    Switch various audit allocators to GFP_KERNEL.
+    Utilize rcu_access_pointer() in various locations.
+    Strip out the caching system for properties
+    Strip comments from headers
+    Move functions around in patches
+    Remove kernel command line parameters
+    Reconcile the race condition on the delete node for policy by
+      expanding the policy critical section.
+
+  Address a few comments by Jonathan Corbet around the documentation
+    pages for IPE.
+
+  Fix an issue with the initialization of IPE policy with a "-0"
+    version, caused by not initializing the hlist entries before
+    freeing.
+
+v4:
+  Address a concern around IPE's behavior with unknown syntax.
+    Specifically, make any unknown syntax a fatal error instead of a
+    warning, as suggested by Mickaël Salaün.
+  Introduce a new securityfs node, $securityfs/ipe/property_config,
+    which provides a listing of what properties are enabled by the
+    kernel and their versions. This allows usermode to predict what
+    policies should be allowed.
+  Strip some comments from c files that I missed.
+  Clarify some documentation comments around 'boot_verified'.
+    While this currently does not functionally change the property
+    itself, the distinction is important when IPE can enforce verified
+    reads. Additionally, 'KERNEL_READ' was omitted from the documentation.
+    This has been corrected.
+  Change SecurityFS and SHA1 to a reverse dependency.
+  Update the cover-letter with the updated behavior of unknown syntax.
+  Remove all sysctls, making an equivalent function in securityfs.
+  Rework the active/delete mechanism to be a node under the policy in
+    $securityfs/ipe/policies.
+  The kernel command line parameters ipe.enforce and ipe.success_audit
+    have returned as this functionality is no longer exposed through
+    sysfs.
+
+v5:
+  Correct some grammatical errors reported by Randy Dunlap.
+  Fix some warnings reported by kernel test bot.
+  Change convention around security_bdev_setsecurity. -ENOSYS
+    is now expected if an LSM does not implement a particular @name,
+    as suggested by Casey Schaufler.
+  Minor string corrections related to the move from sysfs to securityfs
+  Correct a spelling of an #ifdef for the permissive argument.
+  Add the kernel parameters re-added to the documentation.
+  Fix a minor bug where the mode being audited on permissive switch
+    was the original mode, not the mode being swapped to.
+  Cleanup doc comments, fix some whitespace alignment issues.
+
+v6:
+  Change if statement condition in security_bdev_setsecurity to be
+    more concise, as suggested by Casey Schaufler and Al Viro
+  Drop the 6th patch in the series, "dm-verity move signature check..."
+    due to numerous issues, and it ultimately providing no real value.
+  Fix the patch tree - the previous iteration appears to have been in a
+    torn state (patches 8+9 were merged). This has since been corrected.
+
+v7:
+  * Reword cover letter to more accurate convey IPE's purpose
+    and latest updates.
+  * Refactor series to:
+      1. Support a context structure, enabling:
+          1. Easier Testing via KUNIT
+          2. A better architecture for future designs
+      2. Make parser code cleaner
+  * Move patch 01/12 to [14/16] of the series
+  * Split up patch 02/12 into four parts:
+      1. context creation [01/16]
+      2. audit [07/16]
+      3. evaluation loop [03/16]
+      4. access control hooks [05/16]
+      5. permissive mode [08/16]
+  * Split up patch 03/12 into two parts:
+      1. parser [02/16]
+      2. userspace interface [04/16]
+  * Reword and refactor patch 04/12 to [09/16]
+  * Squash patch 05/12, 07/12, 09/12 to [10/16]
+  * Squash patch 08/12, 10/12 to [11/16]
+  * Change audit records to MAC region (14XX) from Integrity region (18XX)
+  * Add FSVerity Support
+  * Interface changes:
+      1. "raw" was renamed to "pkcs7" and made read only
+      2. "raw"'s write functionality (update a policy) moved to "update"
+      3. introduced "version", "policy_name" nodes.
+      4. "content" renamed to "policy"
+      5. The boot policy can now be updated like any other policy.
+  * Add additional developer-level documentation
+  * Update admin-guide docs to reflect changes.
+  * Kunit tests
+  * Dropped CONFIG_SECURITY_IPE_PERMISSIVE_SWITCH - functionality can
+    easily come later with a small patch.
+  * Use partition0 for block_device for dm-verity patch
+
+v8:
+  * Add changelog information to individual commits
+  * A large number of changes to the audit patch.
+  * split fs/ & security/ changes to two separate patches.
+  * split block/, security/ & drivers/md/ changes to separate patches.
+  * Add some historical context to what lead to the creation of IPE
+    in the documentation patch.
+  * Cover-letter changes suggested by Roberto Sassu.
+
+v9:
+  * Rewrite IPE parser to use kernel match_table parser.
+  * Adapt existing IPE properties to the new parser.
+  * Remove ipe_context, quote policy syntax, kernel_read for simplicity.
+  * Add new function in the security file system to delete IPE policy.
+  * Make IPE audit builtin and change several audit formats.
+  * Make boot_verified property builtin
+
+v10:
+  * Address various code style/format issues
+  * Correct the rcu locking for active policy
+  * Fix memleak bugs in the parser, optimize the parser per upstream feedback
+  * Adding new audit events for IPE and update audit formats
+  * Make the dmverity property auto selected
+  * Adding more context in the commit messages
+
+v11:
+  * Address various code style/format issues
+  * Add finalize hook to device mapper
+  * move the security hook for dm-verity to the new device mapper finalize hook
+
+v12:
+  * Address locking issues
+  * Change the implementation of boot_verified to trust initramfs only
+  * Update audit format for IPE decision events
+  * Refactor code for lsm_id
+  * Add IPE test suite link
+
+v13:
+  * Rename the new security hook in initramfs
+  * Make the policy grammar independent of kernel config
+  * Correct IPE audit format
+  * Refactor policy update code
+
+v14:
+  * Add more code comments/docs for dmverity/fsverity
+  * Fix incorrect code usage and format in dmverity
+  * Drop one accepted commit of dmverity
+
+v15:
+  * Fix grammar issues
+  * Add more documentation to fsverity
+  * Switch security hooks from *_setsecurity() to *_setintegrity()
+  * Cleanup unnecessary headers
+
+v16:
+  * Fix format issues, refactor names
+  * Further improve documentation for fsverity
+  * Fix bugs in dmverity implementation
+  * Switch to use call_int_hook() for *_setintegrity()
+
+Deven Bowers (13):
+  security: add ipe lsm
+  ipe: add policy parser
+  ipe: add evaluation loop
+  ipe: add LSM hooks on execution and kernel read
+  ipe: add userspace interface
+  uapi|audit|ipe: add ipe auditing support
+  ipe: add permissive toggle
+  block|security: add LSM blob to block_device
+  dm verity: consume root hash digest and signature data via LSM hook
+  ipe: add support for dm-verity as a trust provider
+  scripts: add boot policy generation program
+  ipe: kunit test for parser
+  documentation: add ipe documentation
+
+Fan Wu (7):
+  initramfs|security: Add a security hook to do_populate_rootfs()
+  ipe: introduce 'boot_verified' as a trust provider
+  security: add new securityfs delete function
+  dm: add finalize hook to target_type
+  security: add security_inode_setintegrity() hook
+  fsverity: consume fsverity built-in signatures via LSM hook
+  ipe: enable support for fs-verity as a trust provider
+
+ Documentation/admin-guide/LSM/index.rst       |   1 +
+ Documentation/admin-guide/LSM/ipe.rst         | 773 ++++++++++++++++++
+ .../admin-guide/kernel-parameters.txt         |  12 +
+ Documentation/filesystems/fsverity.rst        |  29 +-
+ Documentation/security/index.rst              |   1 +
+ Documentation/security/ipe.rst                | 444 ++++++++++
+ MAINTAINERS                                   |  10 +
+ block/bdev.c                                  |   7 +
+ drivers/md/dm-verity-target.c                 |  83 ++
+ drivers/md/dm-verity.h                        |   6 +
+ drivers/md/dm.c                               |  12 +
+ fs/verity/fsverity_private.h                  |   2 +-
+ fs/verity/open.c                              |  23 +-
+ fs/verity/signature.c                         |   6 +-
+ include/linux/blk_types.h                     |   3 +
+ include/linux/device-mapper.h                 |   9 +
+ include/linux/dm-verity.h                     |  12 +
+ include/linux/lsm_hook_defs.h                 |   9 +
+ include/linux/lsm_hooks.h                     |   1 +
+ include/linux/security.h                      |  47 ++
+ include/uapi/linux/audit.h                    |   3 +
+ include/uapi/linux/lsm.h                      |   1 +
+ init/initramfs.c                              |   3 +
+ scripts/Makefile                              |   1 +
+ scripts/ipe/Makefile                          |   2 +
+ scripts/ipe/polgen/.gitignore                 |   2 +
+ scripts/ipe/polgen/Makefile                   |   5 +
+ scripts/ipe/polgen/polgen.c                   | 145 ++++
+ security/Kconfig                              |  11 +-
+ security/Makefile                             |   1 +
+ security/inode.c                              |  25 +
+ security/ipe/.gitignore                       |   2 +
+ security/ipe/Kconfig                          |  76 ++
+ security/ipe/Makefile                         |  31 +
+ security/ipe/audit.c                          | 279 +++++++
+ security/ipe/audit.h                          |  19 +
+ security/ipe/digest.c                         | 120 +++
+ security/ipe/digest.h                         |  26 +
+ security/ipe/eval.c                           | 375 +++++++++
+ security/ipe/eval.h                           |  64 ++
+ security/ipe/fs.c                             | 247 ++++++
+ security/ipe/fs.h                             |  16 +
+ security/ipe/hooks.c                          | 289 +++++++
+ security/ipe/hooks.h                          |  52 ++
+ security/ipe/ipe.c                            |  98 +++
+ security/ipe/ipe.h                            |  26 +
+ security/ipe/policy.c                         | 229 ++++++
+ security/ipe/policy.h                         |  98 +++
+ security/ipe/policy_fs.c                      | 468 +++++++++++
+ security/ipe/policy_parser.c                  | 548 +++++++++++++
+ security/ipe/policy_parser.h                  |  11 +
+ security/ipe/policy_tests.c                   | 294 +++++++
+ security/security.c                           | 122 ++-
+ .../selftests/lsm/lsm_list_modules_test.c     |   3 +
+ 54 files changed, 5171 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/admin-guide/LSM/ipe.rst
+ create mode 100644 Documentation/security/ipe.rst
+ create mode 100644 include/linux/dm-verity.h
+ create mode 100644 scripts/ipe/Makefile
+ create mode 100644 scripts/ipe/polgen/.gitignore
+ create mode 100644 scripts/ipe/polgen/Makefile
+ create mode 100644 scripts/ipe/polgen/polgen.c
+ create mode 100644 security/ipe/.gitignore
+ create mode 100644 security/ipe/Kconfig
+ create mode 100644 security/ipe/Makefile
+ create mode 100644 security/ipe/audit.c
+ create mode 100644 security/ipe/audit.h
+ create mode 100644 security/ipe/digest.c
+ create mode 100644 security/ipe/digest.h
+ create mode 100644 security/ipe/eval.c
+ create mode 100644 security/ipe/eval.h
+ create mode 100644 security/ipe/fs.c
+ create mode 100644 security/ipe/fs.h
+ create mode 100644 security/ipe/hooks.c
+ create mode 100644 security/ipe/hooks.h
+ create mode 100644 security/ipe/ipe.c
+ create mode 100644 security/ipe/ipe.h
+ create mode 100644 security/ipe/policy.c
+ create mode 100644 security/ipe/policy.h
+ create mode 100644 security/ipe/policy_fs.c
+ create mode 100644 security/ipe/policy_parser.c
+ create mode 100644 security/ipe/policy_parser.h
+ create mode 100644 security/ipe/policy_tests.c
+
+--
+2.44.0
+
 
