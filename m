@@ -1,357 +1,122 @@
-Return-Path: <linux-integrity+bounces-1885-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1886-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 491EA88F9AA
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 09:06:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB42688FD75
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 11:54:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFE0A1F30158
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 08:06:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6ED5929432C
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 10:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DFA955E6C;
-	Thu, 28 Mar 2024 08:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b="WaP4xcod"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B4E7D08F;
+	Thu, 28 Mar 2024 10:54:06 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477DA54777
-	for <linux-integrity@vger.kernel.org>; Thu, 28 Mar 2024 08:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973054C62E;
+	Thu, 28 Mar 2024 10:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711613142; cv=none; b=efd7Du+8f4VafLQGPtm0+TW0Yibmv/F6+VTjiaM9b/iuN0BzUCRMjNLPTVmRZ3d/SkwwtWSFINGAsYx2/gRcbbsOBfrDfXxWQmvJ8GLz6dHOF4+Ixprylwp7dw539xdRl+pWKe/IvAu5YFA5UXnuFpeivrl54pARm9C8gmpuPZ0=
+	t=1711623246; cv=none; b=PmSF7i1Zmrzfir/+WP6YWFx91Y7GCdbpsZ4TxEpR1ZpAmBLfdR3o8uZ+rYg/7m92hrCAgSegyvIIppel/52n17T7PE5y0KBS2cSlo1G7kzUkA9WHLTj0CxmePn8Ch24PJCZcSBxNKrdrHNTg4/zAs9lDpZeVGOy2oOnLk9kl7cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711613142; c=relaxed/simple;
-	bh=yjnhXmaMnVEbDN87O8WMVQMObw//YS/XVKq+IiQQtI0=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=WZ/2uiCuPSJNHw4rqJWAY5ZF/qO5ZxLfAvhcA9pRWva4/FWcauY8vDC6YIu1AOnii8WT8k6u0vVqFPsvG7i5oC8SamsV2JFVzGPJHzP7KYyrrOnxKbjdyzH1HjfU9pwWsBr5lLebgEScyDyoMoDeJqx1fcWyWkMVTgb6mptpG1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at; spf=pass smtp.mailfrom=sigma-star.at; dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b=WaP4xcod; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sigma-star.at
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-515c3eeea5dso569387e87.1
-        for <linux-integrity@vger.kernel.org>; Thu, 28 Mar 2024 01:05:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sigma-star.at; s=google; t=1711613137; x=1712217937; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HjvmSG9QLL+8JxFPMAhTrQfWNaL+EODKgEV1lHWuZn0=;
-        b=WaP4xcoddk73Nw4PJr7tcYsjC8ODRZbNEVLML3noy2BGlgMUOq7AFj6D3+3jh2f8kx
-         uMrbU9cKr/pyFviAp7nXuTD69BJAeFJVU7r1Sn5nKvIHj74Vs5e4WrBxDjsPmOIWX383
-         UXnziBdZQtmpIPZaGvUiFs38rtz9zgczH7yyy3B0QMDdKmbKNzKvPL0JmNUUI3kCQ8y+
-         EE/cVPx8sMk+38vWaqrk4ypO18Tu6amGI67p4P6lLep29uIR2lBGEKrwUAHr3GeQnXF2
-         vHeLtlrv1dBqKwQWAaC+YAmrvnClqF0JPDqUDg4pD6PB9kcHLA2A6UGIw2rsLe9rGsXD
-         J2eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711613137; x=1712217937;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HjvmSG9QLL+8JxFPMAhTrQfWNaL+EODKgEV1lHWuZn0=;
-        b=MPMJJEq2YYMsgNAXKIiMGAnxLYt34HTS9IltMGrxu3SO1b9rAbD7W6QNadHujbolQY
-         9lXDJKzVSv4CwsP99nPGbZOrr9b3/LtWDmj3aiaUUrZYBXqym/CKgJOlTp9qcL5+dpH5
-         m/T7md8Q98+MXfWQNxePvFA/mVSbirwoGxjH+v/N7CtKoH57OYI4cO5w3tSurXWU5yIM
-         xgSX19Vu9Yz6PSDEQw98sMmYZGWL/mmp8cyhB3Zd9nNv45SGqjk+4x8OkPnYk3rxANDV
-         FP6VWTPk04fcCQ0Lcy32vtDPUmR/EhAoBTYVnM5H8R+M1NW9D3ZUukIjQxyBwF1LhiLH
-         joPw==
-X-Forwarded-Encrypted: i=1; AJvYcCWKEdGbDXakmVvBLDua3t2PQYQns4u369zYqEp/HpXPsVfECfWtQYZ3KSo+gRQHgZSvyNCy3pk9dNz+kmdFtM/MCOv4diETdEU5JQiQBDF9
-X-Gm-Message-State: AOJu0Yyit3FDY5yyPHU3480e7fwAZ4v/eZOhgpk2enD+jjVPyJmVitWI
-	I4Z26eVeGB/zSiWkwVYOLWCKfk/c6HuHR2sAn7LWBf2zY8BLmNQ7M5ziA9wAf30=
-X-Google-Smtp-Source: AGHT+IFrYwSIqg79NLq2byoG3OlkUZikLzETvtMHvIzq87EemGEvn6YgogXjKDwDSMwvzIJu/C/jBA==
-X-Received: by 2002:a05:6512:312d:b0:513:4a0c:b83d with SMTP id p13-20020a056512312d00b005134a0cb83dmr1263720lfd.46.1711613137216;
-        Thu, 28 Mar 2024 01:05:37 -0700 (PDT)
-Received: from smtpclient.apple ([82.150.214.1])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05600c468c00b00413eb5aa694sm1444424wmo.38.2024.03.28.01.05.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 28 Mar 2024 01:05:36 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1711623246; c=relaxed/simple;
+	bh=YQRBwIKyXMFpVXmOargCtb2gMHL7sG7XI5XG2RQxFsM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I1xsb2B5fuvSVeM/WLEdVV0vu79eygLpMRqdLHfc4EVmZ5IatG8aEboWshAfC5rzhka+tu5FoJbtQpi6lMMOeYGrISVCx1ppW2dxH8zAmHCWRChOeI/3BLLVu2GGji/fPdpMGGTHOtPv6Vtq1YYPZPIW1HRqqvxra2ZNkLbuW7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4V50Nw6SYJz9xqx4;
+	Thu, 28 Mar 2024 18:37:52 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 3F8F2140417;
+	Thu, 28 Mar 2024 18:53:55 +0800 (CST)
+Received: from [10.81.200.225] (unknown [10.81.200.225])
+	by APP2 (Coremail) with SMTP id GxC2BwAnEyc4TAVmFhodBQ--.8703S2;
+	Thu, 28 Mar 2024 11:53:54 +0100 (CET)
+Message-ID: <4a0b28ba-be57-4443-b91e-1a744a0feabf@huaweicloud.com>
+Date: Thu, 28 Mar 2024 12:53:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
-Subject: Re: [PATCH v7 6/6] docs: trusted-encrypted: add DCP as new trust
- source
-From: David Gstir <david@sigma-star.at>
-In-Reply-To: <D04N9E61QWYB.3IPEEGVPY6V8L@kernel.org>
-Date: Thu, 28 Mar 2024 09:05:24 +0100
-Cc: Mimi Zohar <zohar@linux.ibm.com>,
- James Bottomley <jejb@linux.ibm.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>,
- Shawn Guo <shawnguo@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- "kernel@pengutronix.de" <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- NXP Linux Team <linux-imx@nxp.com>,
- Ahmad Fatoum <a.fatoum@pengutronix.de>,
- sigma star Kernel Team <upstream+dcp@sigma-star.at>,
- David Howells <dhowells@redhat.com>,
- Li Yang <leoyang.li@nxp.com>,
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: kernel crash in mknod
+To: Christian Brauner <brauner@kernel.org>,
+ Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Steve French <smfrench@gmail.com>,
+ LKML <linux-kernel@vger.kernel.org>,
+ linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+ CIFS <linux-cifs@vger.kernel.org>, Paulo Alcantara <pc@manguebit.com>,
+ Christian Brauner <christian@brauner.io>, Mimi Zohar <zohar@linux.ibm.com>,
  Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- Tejun Heo <tj@kernel.org>,
- "Steven Rostedt (Google)" <rostedt@goodmis.org>,
- linux-doc@vger.kernel.org,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org,
- "linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>,
- Richard Weinberger <richard@nod.at>,
- David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A3831544-E47C-4AEB-9963-536F0B1EE8FD@sigma-star.at>
-References: <20240327082454.13729-1-david@sigma-star.at>
- <20240327082454.13729-7-david@sigma-star.at>
- <D04N9E61QWYB.3IPEEGVPY6V8L@kernel.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-X-Mailer: Apple Mail (2.3774.500.171.1.1)
+ "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>
+References: <CAH2r5msAVzxCUHHG8VKrMPUKQHmBpE6K9_vjhgDa1uAvwx4ppw@mail.gmail.com>
+ <20240324054636.GT538574@ZenIV> <3441a4a1140944f5b418b70f557bca72@huawei.com>
+ <20240325-beugen-kraftvoll-1390fd52d59c@brauner>
+ <cb267d1c7988460094dbe19d1e7bcece@huawei.com>
+ <20240326-halbkreis-wegstecken-8d5886e54d28@brauner>
+Content-Language: en-US
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <20240326-halbkreis-wegstecken-8d5886e54d28@brauner>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:GxC2BwAnEyc4TAVmFhodBQ--.8703S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF1rZw48CryDurW8GFy8Zrb_yoWkArc_Cr
+	s0ya4UG3y7ur93AF47WF1SgrZxAFWagry7CrWkKFy7t34DJrs8JFZ0vr93Wr1UWFWfGFnI
+	kryDAa40kry2vjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+	AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
+	wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
+	k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+	1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj5vkfAAAsn
 
-Jarkko,
+On 3/26/2024 12:40 PM, Christian Brauner wrote:
+>> we can change the parameter of security_path_post_mknod() from
+>> dentry to inode?
+> 
+> If all current callers only operate on the inode then it seems the best
+> to only pass the inode. If there's some reason someone later needs a
+> dentry the hook can always be changed.
 
-> On 27.03.2024, at 16:40, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->=20
-> On Wed Mar 27, 2024 at 10:24 AM EET, David Gstir wrote:
->> Update the documentation for trusted and encrypted KEYS with DCP as =
-new
->> trust source:
->>=20
->> - Describe security properties of DCP trust source
->> - Describe key usage
->> - Document blob format
->>=20
->> Co-developed-by: Richard Weinberger <richard@nod.at>
->> Signed-off-by: Richard Weinberger <richard@nod.at>
->> Co-developed-by: David Oberhollenzer =
-<david.oberhollenzer@sigma-star.at>
->> Signed-off-by: David Oberhollenzer =
-<david.oberhollenzer@sigma-star.at>
->> Signed-off-by: David Gstir <david@sigma-star.at>
->> ---
->> .../security/keys/trusted-encrypted.rst       | 85 =
-+++++++++++++++++++
->> 1 file changed, 85 insertions(+)
->>=20
->> diff --git a/Documentation/security/keys/trusted-encrypted.rst =
-b/Documentation/security/keys/trusted-encrypted.rst
->> index e989b9802f92..81fb3540bb20 100644
->> --- a/Documentation/security/keys/trusted-encrypted.rst
->> +++ b/Documentation/security/keys/trusted-encrypted.rst
->> @@ -42,6 +42,14 @@ safe.
->>          randomly generated and fused into each SoC at manufacturing =
-time.
->>          Otherwise, a common fixed test key is used instead.
->>=20
->> +     (4) DCP (Data Co-Processor: crypto accelerator of various i.MX =
-SoCs)
->> +
->> +         Rooted to a one-time programmable key (OTP) that is =
-generally burnt
->> +         in the on-chip fuses and is accessible to the DCP =
-encryption engine only.
->> +         DCP provides two keys that can be used as root of trust: =
-the OTP key
->> +         and the UNIQUE key. Default is to use the UNIQUE key, but =
-selecting
->> +         the OTP key can be done via a module parameter =
-(dcp_use_otp_key).
->> +
->>   *  Execution isolation
->>=20
->>      (1) TPM
->> @@ -57,6 +65,12 @@ safe.
->>=20
->>          Fixed set of operations running in isolated execution =
-environment.
->>=20
->> +     (4) DCP
->> +
->> +         Fixed set of cryptographic operations running in isolated =
-execution
->> +         environment. Only basic blob key encryption is executed =
-there.
->> +         The actual key sealing/unsealing is done on main =
-processor/kernel space.
->> +
->>   * Optional binding to platform integrity state
->>=20
->>      (1) TPM
->> @@ -79,6 +93,11 @@ safe.
->>          Relies on the High Assurance Boot (HAB) mechanism of NXP =
-SoCs
->>          for platform integrity.
->>=20
->> +     (4) DCP
->> +
->> +         Relies on Secure/Trusted boot process (called HAB by =
-vendor) for
->> +         platform integrity.
->> +
->>   *  Interfaces and APIs
->>=20
->>      (1) TPM
->> @@ -94,6 +113,11 @@ safe.
->>=20
->>          Interface is specific to silicon vendor.
->>=20
->> +     (4) DCP
->> +
->> +         Vendor-specific API that is implemented as part of the DCP =
-crypto driver in
->> +         ``drivers/crypto/mxs-dcp.c``.
->> +
->>   *  Threat model
->>=20
->>      The strength and appropriateness of a particular trust source =
-for a given
->> @@ -129,6 +153,13 @@ selected trust source:
->>      CAAM HWRNG, enable CRYPTO_DEV_FSL_CAAM_RNG_API and ensure the =
-device
->>      is probed.
->>=20
->> +  *  DCP (Data Co-Processor: crypto accelerator of various i.MX =
-SoCs)
->> +
->> +     The DCP hardware device itself does not provide a dedicated RNG =
-interface,
->> +     so the kernel default RNG is used. SoCs with DCP like the =
-i.MX6ULL do have
->> +     a dedicated hardware RNG that is independent from DCP which can =
-be enabled
->> +     to back the kernel RNG.
->> +
->> Users may override this by specifying ``trusted.rng=3Dkernel`` on the =
-kernel
->> command-line to override the used RNG with the kernel's random number =
-pool.
->>=20
->> @@ -231,6 +262,19 @@ Usage::
->> CAAM-specific format.  The key length for new keys is always in =
-bytes.
->> Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
->>=20
->> +Trusted Keys usage: DCP
->> +-----------------------
->> +
->> +Usage::
->> +
->> +    keyctl add trusted name "new keylen" ring
->> +    keyctl add trusted name "load hex_blob" ring
->> +    keyctl print keyid
->> +
->> +"keyctl print" returns an ASCII hex copy of the sealed key, which is =
-in format
->> +specific to this DCP key-blob implementation.  The key length for =
-new keys is
->> +always in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 =
-bits).
->> +
->> Encrypted Keys usage
->> --------------------
->>=20
->> @@ -426,3 +470,44 @@ string length.
->> privkey is the binary representation of TPM2B_PUBLIC excluding the
->> initial TPM2B header which can be reconstructed from the ASN.1 octed
->> string length.
->> +
->> +DCP Blob Format
->> +---------------
->> +
->> +The Data Co-Processor (DCP) provides hardware-bound AES keys using =
-its
->> +AES encryption engine only. It does not provide direct key =
-sealing/unsealing.
->> +To make DCP hardware encryption keys usable as trust source, we =
-define
->> +our own custom format that uses a hardware-bound key to secure the =
-sealing
->> +key stored in the key blob.
->> +
->> +Whenever a new trusted key using DCP is generated, we generate a =
-random 128-bit
->> +blob encryption key (BEK) and 128-bit nonce. The BEK and nonce are =
-used to
->> +encrypt the trusted key payload using AES-128-GCM.
->> +
->> +The BEK itself is encrypted using the hardware-bound key using the =
-DCP's AES
->> +encryption engine with AES-128-ECB. The encrypted BEK, generated =
-nonce,
->> +BEK-encrypted payload and authentication tag make up the blob format =
-together
->> +with a version number, payload length and authentication tag::
->> +
->> +    /*
->> +     * struct dcp_blob_fmt - DCP BLOB format.
->> +     *
->> +     * @fmt_version: Format version, currently being %1
->> +     * @blob_key: Random AES 128 key which is used to encrypt =
-@payload,
->> +     *            @blob_key itself is encrypted with OTP or UNIQUE =
-device key in
->> +     *            AES-128-ECB mode by DCP.
->> +     * @nonce: Random nonce used for @payload encryption.
->> +     * @payload_len: Length of the plain text @payload.
->> +     * @payload: The payload itself, encrypted using AES-128-GCM and =
-@blob_key,
->> +     *           GCM auth tag of size AES_BLOCK_SIZE is attached at =
-the end of it.
->> +     *
->> +     * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) + =
-@payload_len +
->> +     * AES_BLOCK_SIZE.
->> +     */
->> +    struct dcp_blob_fmt {
->> +            __u8 fmt_version;
->> +            __u8 blob_key[AES_KEYSIZE_128];
->> +            __u8 nonce[AES_KEYSIZE_128];
->> +            __le32 payload_len;
->> +            __u8 payload[];
->> +    } __packed;
->=20
-> I'm thinking here given that you need to replicate the same thing that
-> is in the source files. E.g. Documentation/gpu/i915.rst.
->=20
-> The rationale would so many sources so maybe it would make sense to
-> maintain this in the source code.
->=20
-> Also this documents how to generally insert documentation inline:
-> https://docs.kernel.org/doc-guide/kernel-doc.html
->=20
-> I.e. I'm feeling that this is good time to improve scalability so that
-> documentation will keep up to date. Also then backend specific patches
-> mostly go to their subdirectories and not to Documentation/ subtree
-> (or that would be more rare case).
->=20
-> So a good chance to do more than just a new backend for the benefit
-> of the trusted keys subsystem :-)
->=20
-> Also, later on if something is changed e.g. in the above struct you
-> don't have to do matching update to the documentation so it will save
-> time too (over time).
+Ok, so the crash is likely caused by:
 
-sound good! I=E2=80=99ll maintain the blob format documentation to the =
-source and insert=20
-a reference in the documentation. Thanks for pointing that out!
+void security_path_post_mknod(struct mnt_idmap *idmap, struct dentry 
+*dentry)
+{
+         if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
 
-Is there anything else I can improve for this patchset? I=E2=80=99d like =
-to include that in v8
-too and make it the last iteration of this patchset.
+I guess we can also simply check if there is an inode attached to the 
+dentry, to minimize the changes. I can do both.
 
-Thanks,
-David=
+More technical question, do I need to do extra checks on the dentry 
+before calling security_path_post_mknod()?
+
+Thanks
+
+Roberto
+
+> For bigger changes it's also worthwhile if the object that's passed down
+> into the hook-based LSM layer is as specific as possible. If someone
+> does a change that affects lifetime rules of mounts then any hook that
+> takes a struct path argument that's unused means going through each LSM
+> that implements the hook only to find out it's not actually used.
+> Similar for dentry vs inode imho.
+
 
