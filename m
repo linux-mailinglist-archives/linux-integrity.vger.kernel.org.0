@@ -1,102 +1,118 @@
-Return-Path: <linux-integrity+bounces-1921-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1922-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB68890D6B
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 23:20:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94A4D890FF3
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Mar 2024 02:03:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E745C29C0C2
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Mar 2024 22:20:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C510A1C227D1
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Mar 2024 01:03:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F7AB13B7AE;
-	Thu, 28 Mar 2024 22:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC0D10A29;
+	Fri, 29 Mar 2024 01:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NbJm49eL"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SF1hv1YA"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C87E13B795;
-	Thu, 28 Mar 2024 22:11:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724B0A92F;
+	Fri, 29 Mar 2024 01:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711663875; cv=none; b=gYDnPeRwWDAiw010+aaNRme+hUw9d48G4cccWYVNA0UN2lk8KNw/J606svMds958LXcCelqUTE0TID9y/T53FrllDTumrisQFY2YjRFl1iNUNK7nkdtDTFGxzHjNe6Vqdwbgj+q9kUQNyouB+1wUYuyvBXLZzuJFU3m+B+u4pQU=
+	t=1711674179; cv=none; b=NbVLEteT8D2ty2HSDS8bgAzmLk/kMcobUeLsf4B5Mp96V5QtricgOmKgD0UaLE7jjOlEZYiOWzpDc+GLwGu/QLKsRGobJPyimtTlVrstzpSQno7MuvgSOTDexdW9/s/Gie/5hNCxTaIva89pKiHx8p21Melywrj1ug6NI43sbJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711663875; c=relaxed/simple;
-	bh=JVuXWZU7ypGWL4ciDE6dFgx2siJQMrXVakqC0WXbnd0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WjeDCmuy1zQEgYuBc0cmLt/E+KI2gpzycBQwmosnnTAi1GhqDTKRxyMBaBVgIdj5LgyPaMP4UK4C2itEHA0ipl6v8GxdaIBpg23DCtvsyP8WeEGWkGgoV7m+6ziOAZVXgdApHJGz+vp7swO6jKbWcA/5IzPtklv4RE9Ral8R39o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NbJm49eL; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=HnoWopqeEhgUSDrAxtnUhuDZR8QdjUiaKbpLIYgV22M=; b=NbJm49eLsaBJIDmaaGUPIwTP6s
-	RdCdHdp9gJrWgLOyWIaGiU2iEa3h0mDLeFNu8MpWBCcjIt+F1mBI8g082Y+IpFySLM/hEsNJi6SK1
-	JBk39TG18J9OCNVQporM5qOQ71kG0TDUjkZcnc4dAvsUfuM70hJvQAllMyhnggYK0MKVKGnTD8s/J
-	pwz0gob9RjN5DyrV1KCIE79TcNpQT0Fn18OWvlWWNJjye4FkmJFqE0E/qDklUsVta8jWE3bO374Mz
-	wFZ7SPWQCxzZ1K0xUYogPf2vhybumDglajK78Iq4x/BmSLLRdWq0eNniSqEvN8UThtFfomA7d21P3
-	PMZSsxhQ==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rpxxf-0000000Fs9X-3pVK;
-	Thu, 28 Mar 2024 22:11:04 +0000
-Message-ID: <cde3dc6e-ca77-445e-a4b7-fc21a934999a@infradead.org>
-Date: Thu, 28 Mar 2024 15:11:03 -0700
+	s=arc-20240116; t=1711674179; c=relaxed/simple;
+	bh=Dr1VlokoSKaC9y28ynylm4SEPgQMTWxh85ITtu46N1g=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XkVfctbHYwUmGxJ06EL6Rj90TXTh2JQbucP1T6bV9THET2i++hhptbwDP0GzuSPRIZJoniuuiSkw7u355sZqQzSnmnYdcjTVhZjx681qBsao2qjrze0UTWGGCdCububSBueDKIC8BMpqxAkM+Fn8NLzWhz/dxTqvqSEzTG0JzpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SF1hv1YA; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42SN55oe011440;
+	Fri, 29 Mar 2024 01:02:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=0dY3d4JiA2sDHJ3WMxYQw6Z9eBfTuUH6pqj6z2iebXo=;
+ b=SF1hv1YAOIAAAdmL9eYanM4UCYDfi2rpGwOEQiz/g3Y51utt3NpEhxShlMPrbpVrlyUX
+ qZgjdeEobiEVbk7khfOQ+7G3mpjFgcpJ52SeQi5tEpN44p0VOqYJ3zaaxylV6viDixIz
+ 92KObcOmeq0tKNWQb+FA7++JDLNIJ9oBlLx/8dus6/F4V1M/EQOQa1VkCJwZg8KFB/7/
+ FkJm3iUBYP+DT1SxKTmG88FSsKlm4W8ZMQ7hQtzp2X4GVF4vXPF1uC6Nnb7DkuJjpBJs
+ YAJa88ntno+vINPjKo9mp6a1ZSPRn48H3C15M35ardusysqBiYHAZUKialJnbUVuEpag 1A== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x5h9h87ku-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Mar 2024 01:02:43 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42SNFbwg025458;
+	Fri, 29 Mar 2024 01:02:41 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3x2awn8wek-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Mar 2024 01:02:41 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42T12c4f63373678
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 29 Mar 2024 01:02:41 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AE75958068;
+	Fri, 29 Mar 2024 01:02:38 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 46C7B58061;
+	Fri, 29 Mar 2024 01:02:38 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.90.219])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 29 Mar 2024 01:02:38 +0000 (GMT)
+Message-ID: <36fa018559b8d68ac9d41826148e7d36c1ecf1ab.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fix use-after-free on a dentry's dname.name
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, roberto.sassu@huawei.com,
+        Al Viro
+	 <viro@zeniv.linux.org.uk>
+Date: Thu, 28 Mar 2024 21:02:37 -0400
+In-Reply-To: <20240322140312.1804404-1-stefanb@linux.ibm.com>
+References: <20240322140312.1804404-1-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1Xy32qb6LKaXx8FmWrzWbFao4CU4K2kd
+X-Proofpoint-ORIG-GUID: 1Xy32qb6LKaXx8FmWrzWbFao4CU4K2kd
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 01/20] security: add ipe lsm
-Content-Language: en-US
-To: Jarkko Sakkinen <jarkko@kernel.org>, Fan Wu <wufan@linux.microsoft.com>,
- corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
- tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
- snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
-Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
- linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
- audit@vger.kernel.org, linux-kernel@vger.kernel.org,
- Deven Bowers <deven.desai@linux.microsoft.com>
-References: <1711657047-10526-1-git-send-email-wufan@linux.microsoft.com>
- <1711657047-10526-2-git-send-email-wufan@linux.microsoft.com>
- <D05ODONHFJ9O.3VG0HLFPA1OB0@kernel.org>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <D05ODONHFJ9O.3VG0HLFPA1OB0@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-28_19,2024-03-28_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ impostorscore=0 suspectscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=837 priorityscore=1501 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2403210000
+ definitions=main-2403290007
 
-
-
-On 3/28/24 13:45, Jarkko Sakkinen wrote:
->> +/**
->> + * ipe_init - Entry point of IPE.
->> + *
->> + * This is called at LSM init, which happens occurs early during kernel
->> + * start up. During this phase, IPE registers its hooks and loads the
->> + * builtin boot policy.
->> + * Return:
->> + * * 0		- OK
->> + * * -ENOMEM	- Out of memory
-> Just a suggestion:
+On Fri, 2024-03-22 at 10:03 -0400, Stefan Berger wrote:
+> ->d_name.name can change on rename and the earlier value can be freed;
+> there are conditions sufficient to stabilize it (->d_lock on dentry,
+> ->d_lock on its parent, ->i_rwsem exclusive on the parent's inode,
+> rename_lock), but none of those are met at any of the sites. Take a stable
+> snapshot of the name instead.
 > 
-> * 0:		OK
-> * -ENOMEM:	Out of memory (OOM)
-> 
-> Rationale being more readable (less convoluted).
-> 
-> And also sort of symmetrical how parameters are formatted in kdoc.
+> Link: https://lore.kernel.org/all/20240202182732.GE2087318@ZenIV/
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 
-It needs the " * *" to make a formatted list in the generated output.
-Otherwise the use of '- or ':' as a separator doesn't matter AFAIK.
+Thanks, Al, Stefan.
 
--- 
-#Randy
+Mimi
+
 
