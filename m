@@ -1,118 +1,181 @@
-Return-Path: <linux-integrity+bounces-1922-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1923-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A4D890FF3
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 Mar 2024 02:03:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3F1E89171F
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Mar 2024 11:56:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C510A1C227D1
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 Mar 2024 01:03:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3693F287A65
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Mar 2024 10:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC0D10A29;
-	Fri, 29 Mar 2024 01:02:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SF1hv1YA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7DA69DF5;
+	Fri, 29 Mar 2024 10:56:41 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724B0A92F;
-	Fri, 29 Mar 2024 01:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94CB364BA;
+	Fri, 29 Mar 2024 10:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711674179; cv=none; b=NbVLEteT8D2ty2HSDS8bgAzmLk/kMcobUeLsf4B5Mp96V5QtricgOmKgD0UaLE7jjOlEZYiOWzpDc+GLwGu/QLKsRGobJPyimtTlVrstzpSQno7MuvgSOTDexdW9/s/Gie/5hNCxTaIva89pKiHx8p21Melywrj1ug6NI43sbJ8=
+	t=1711709801; cv=none; b=s47UREUfTFlby6+5DDPDBItpERALFg+ethFOmdHQ3O3SJk5Ze8+rw9rAbIlrxpgChflWTkbLfEz2YUSDyHMbg89Skb6wINDg+uhiZySNKm1EzLeCzeasNxT4rxhfJhNU1wQIHLXvN7W8rvjls0zMh3D9zN4v4ZBoiE7qBcO2Cog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711674179; c=relaxed/simple;
-	bh=Dr1VlokoSKaC9y28ynylm4SEPgQMTWxh85ITtu46N1g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XkVfctbHYwUmGxJ06EL6Rj90TXTh2JQbucP1T6bV9THET2i++hhptbwDP0GzuSPRIZJoniuuiSkw7u355sZqQzSnmnYdcjTVhZjx681qBsao2qjrze0UTWGGCdCububSBueDKIC8BMpqxAkM+Fn8NLzWhz/dxTqvqSEzTG0JzpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SF1hv1YA; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 42SN55oe011440;
-	Fri, 29 Mar 2024 01:02:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=0dY3d4JiA2sDHJ3WMxYQw6Z9eBfTuUH6pqj6z2iebXo=;
- b=SF1hv1YAOIAAAdmL9eYanM4UCYDfi2rpGwOEQiz/g3Y51utt3NpEhxShlMPrbpVrlyUX
- qZgjdeEobiEVbk7khfOQ+7G3mpjFgcpJ52SeQi5tEpN44p0VOqYJ3zaaxylV6viDixIz
- 92KObcOmeq0tKNWQb+FA7++JDLNIJ9oBlLx/8dus6/F4V1M/EQOQa1VkCJwZg8KFB/7/
- FkJm3iUBYP+DT1SxKTmG88FSsKlm4W8ZMQ7hQtzp2X4GVF4vXPF1uC6Nnb7DkuJjpBJs
- YAJa88ntno+vINPjKo9mp6a1ZSPRn48H3C15M35ardusysqBiYHAZUKialJnbUVuEpag 1A== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x5h9h87ku-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Mar 2024 01:02:43 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 42SNFbwg025458;
-	Fri, 29 Mar 2024 01:02:41 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3x2awn8wek-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Mar 2024 01:02:41 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 42T12c4f63373678
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 29 Mar 2024 01:02:41 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AE75958068;
-	Fri, 29 Mar 2024 01:02:38 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 46C7B58061;
-	Fri, 29 Mar 2024 01:02:38 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.90.219])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 29 Mar 2024 01:02:38 +0000 (GMT)
-Message-ID: <36fa018559b8d68ac9d41826148e7d36c1ecf1ab.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Fix use-after-free on a dentry's dname.name
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, roberto.sassu@huawei.com,
-        Al Viro
-	 <viro@zeniv.linux.org.uk>
-Date: Thu, 28 Mar 2024 21:02:37 -0400
-In-Reply-To: <20240322140312.1804404-1-stefanb@linux.ibm.com>
-References: <20240322140312.1804404-1-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1Xy32qb6LKaXx8FmWrzWbFao4CU4K2kd
-X-Proofpoint-ORIG-GUID: 1Xy32qb6LKaXx8FmWrzWbFao4CU4K2kd
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1711709801; c=relaxed/simple;
+	bh=wXmD/wTPLUziOZNHo17aLeyr2LXTHIbWqldBHooT3mA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oAY78pFPdDUQ44pwFyD+Yuwk8AFkBbB776IM8U0dKW6E7Z5amMz57ReuqKHcdYnu85n7zt/k3muab/d9IodGWui9GNiajK6q4FPjxcpisfS/kBxd2Z0T3/gftTKl//oXgboef13/3x97pd53g5k19GonpzZbynScu80Ou3+4naE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4V5cPL1clGz9y0km;
+	Fri, 29 Mar 2024 18:40:22 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 79883140556;
+	Fri, 29 Mar 2024 18:56:23 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwDnISZMngZmVsAqBQ--.12203S2;
+	Fri, 29 Mar 2024 11:56:22 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com
+Cc: linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	viro@zeniv.linux.org.uk,
+	pc@manguebit.com,
+	christian@brauner.io,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	stable@vger.kernel.org,
+	Steve French <smfrench@gmail.com>
+Subject: [PATCH 1/2] security: Handle dentries without inode in security_path_post_mknod()
+Date: Fri, 29 Mar 2024 11:56:08 +0100
+Message-Id: <20240329105609.1566309-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-28_19,2024-03-28_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- impostorscore=0 suspectscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- clxscore=1015 bulkscore=0 mlxlogscore=837 priorityscore=1501 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2403210000
- definitions=main-2403290007
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwDnISZMngZmVsAqBQ--.12203S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrWrAFWkCw4fWw45ury8Krg_yoWrXryUpF
+	4rt3WkJr95XFy8Wr18AFy7u3WSkay5WFWUWan5Wa1ayFnxXr1jqrs2vryY9rW5tr4UGryx
+	twnFyrsxAa1qyF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
+	ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+	CY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv
+	67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+	uYvjxUxo7KDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBF1jj5vtpQABs3
 
-On Fri, 2024-03-22 at 10:03 -0400, Stefan Berger wrote:
-> ->d_name.name can change on rename and the earlier value can be freed;
-> there are conditions sufficient to stabilize it (->d_lock on dentry,
-> ->d_lock on its parent, ->i_rwsem exclusive on the parent's inode,
-> rename_lock), but none of those are met at any of the sites. Take a stable
-> snapshot of the name instead.
-> 
-> Link: https://lore.kernel.org/all/20240202182732.GE2087318@ZenIV/
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Thanks, Al, Stefan.
+Commit 08abce60d63fi ("security: Introduce path_post_mknod hook")
+introduced security_path_post_mknod(), to replace the IMA-specific call to
+ima_post_path_mknod().
 
-Mimi
+For symmetry with security_path_mknod(), security_path_post_mknod() is
+called after a successful mknod operation, for any file type, rather than
+only for regular files at the time there was the IMA call.
+
+However, as reported by VFS maintainers, successful mknod operation does
+not mean that the dentry always has an inode attached to it (for example,
+not for FIFOs on a SAMBA mount).
+
+If that condition happens, the kernel crashes when
+security_path_post_mknod() attempts to verify if the inode associated to
+the dentry is private.
+
+Add an extra check to first verify if there is an inode attached to the
+dentry, before checking if the inode is private. Also add the same check to
+the current users of the path_post_mknod hook, ima_post_path_mknod() and
+evm_post_path_mknod().
+
+Finally, use the proper helper, d_backing_inode(), to retrieve the inode
+from the dentry in ima_post_path_mknod().
+
+Cc: stable@vger.kernel.org # 6.8.x
+Reported-by: Steve French <smfrench@gmail.com>
+Closes: https://lore.kernel.org/linux-kernel/CAH2r5msAVzxCUHHG8VKrMPUKQHmBpE6K9_vjhgDa1uAvwx4ppw@mail.gmail.com/
+Fixes: 08abce60d63fi ("security: Introduce path_post_mknod hook")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/evm/evm_main.c | 6 ++++--
+ security/integrity/ima/ima_main.c | 5 +++--
+ security/security.c               | 4 +++-
+ 3 files changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 81dbade5b9b3..ec1659273fcf 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -1037,11 +1037,13 @@ static void evm_file_release(struct file *file)
+ static void evm_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ {
+ 	struct inode *inode = d_backing_inode(dentry);
+-	struct evm_iint_cache *iint = evm_iint_inode(inode);
++	struct evm_iint_cache *iint;
+ 
+-	if (!S_ISREG(inode->i_mode))
++	/* path_post_mknod hook might pass dentries without attached inode. */
++	if (!inode || !S_ISREG(inode->i_mode))
+ 		return;
+ 
++	iint = evm_iint_inode(inode);
+ 	if (iint)
+ 		iint->flags |= EVM_NEW_FILE;
+ }
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index c84e8c55333d..afc883e60cf3 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -719,10 +719,11 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+ static void ima_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ {
+ 	struct ima_iint_cache *iint;
+-	struct inode *inode = dentry->d_inode;
++	struct inode *inode = d_backing_inode(dentry);
+ 	int must_appraise;
+ 
+-	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
++	/* path_post_mknod hook might pass dentries without attached inode. */
++	if (!ima_policy_flag || !inode || !S_ISREG(inode->i_mode))
+ 		return;
+ 
+ 	must_appraise = ima_must_appraise(idmap, inode, MAY_ACCESS,
+diff --git a/security/security.c b/security/security.c
+index 7e118858b545..455f0749e1b0 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1801,7 +1801,9 @@ EXPORT_SYMBOL(security_path_mknod);
+  */
+ void security_path_post_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++	/* Not all dentries have an inode attached after mknod. */
++	if (d_backing_inode(dentry) &&
++	    unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+ 		return;
+ 	call_void_hook(path_post_mknod, idmap, dentry);
+ }
+-- 
+2.34.1
 
 
