@@ -1,173 +1,142 @@
-Return-Path: <linux-integrity+bounces-1935-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1936-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48F1E892ACB
-	for <lists+linux-integrity@lfdr.de>; Sat, 30 Mar 2024 12:26:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE160892CA4
+	for <lists+linux-integrity@lfdr.de>; Sat, 30 Mar 2024 19:48:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D6651C20DBD
-	for <lists+linux-integrity@lfdr.de>; Sat, 30 Mar 2024 11:26:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25AD41F22976
+	for <lists+linux-integrity@lfdr.de>; Sat, 30 Mar 2024 18:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5B2B364AE;
-	Sat, 30 Mar 2024 11:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D292E3E5;
+	Sat, 30 Mar 2024 18:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWMHsTVH"
+	dkim=pass (1024-bit key) header.d=system.is header.i=@system.is header.b="hpojdvj0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B112CCA3;
-	Sat, 30 Mar 2024 11:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD132C6B2
+	for <linux-integrity@vger.kernel.org>; Sat, 30 Mar 2024 18:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711797997; cv=none; b=PUBkQ27gGc2aGk8Zzd3czdf0V6Z7eAsneCCXKL3c3xemURSreGB1z+kRWaEYxMkLNq/RDCYz5Y0gK4vvrVvwGU5UN0wgK8qaojpgw4sonwlfGF6yflQ3lvneb1Njhweri6Libj2ZWbcKn55V7rAMlqG8NFAIa99oeZ7wD+1PJI4=
+	t=1711824517; cv=none; b=W4qhW8rjBH1YwZHHR8lVBisAbs7jwoApwdLL7x7O2lg3fzDIjl9HjqamkFqeXYma2Tcdy+70lVMwWD/7PkQe/bsi8FHGFvqeE479xZ3TzfBfHXbJEy5O9T8P0sjahnZ8FGietP9cAq1mk6eGoG/jUyl5yydtk/IOold2LoEVAeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711797997; c=relaxed/simple;
-	bh=Uuar7vsbKm5w+9KCxDbjk3gAMAqKDjuJHWplhv29qXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xkj5phfoeaSkUIc2YPi6siLuKQ7Zm1cs7iQpbpxaVGGajB9AxX7GBiFQhagItppygAS7OAE6on/CIcjCIiAL1hRECmLnMXwrVg69qh67CwNzukMMTN0SOCbMNWJ8FetHILIDreU0GWwQ9f0qYhMrp/HGsVHrT8n85EJcWji8JYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWMHsTVH; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711797996; x=1743333996;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Uuar7vsbKm5w+9KCxDbjk3gAMAqKDjuJHWplhv29qXw=;
-  b=FWMHsTVHj63smiHTVTzR3ag8bTxbgbACbWXXQg+pVoiwu4xZUQBIs18/
-   V0xFpFNmYIZB1C1aPNrpIr57WB84tZRhoBT4HrI1HbnTMIMak1xGFG2Lq
-   z0hmJ/6TlFxzIL2y6KEhAZJDMqG3sShdkXpZFjYrKsh0YrDdYuGkHYVcW
-   yrTu0rOCXjjJ7zKnRNbdnTV41JBgOoVg5gKDIMdNacYkw6IQ+nQviQVnL
-   1r0QYzI3XWS7gEQRkiwbLB4uv20QJeumYoOE/fsMGhJkfU72t0c8zqm2U
-   QnYqQqQ77Vqa0yxOVDUNZPK5Rn3Cx63k6Msl0X0ZMxL0fvnNVoNXwk2ok
-   w==;
-X-CSE-ConnectionGUID: oB1hdDnZTa2vMWmYDbu7Yw==
-X-CSE-MsgGUID: M5g1nIT4TUWXDXNFjMqthA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="29456970"
-X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
-   d="scan'208";a="29456970"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2024 04:26:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,166,1708416000"; 
-   d="scan'208";a="48409144"
-Received: from lkp-server01.sh.intel.com (HELO be39aa325d23) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 30 Mar 2024 04:26:28 -0700
-Received: from kbuild by be39aa325d23 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rqWqw-0004CM-1b;
-	Sat, 30 Mar 2024 11:26:26 +0000
-Date: Sat, 30 Mar 2024 19:26:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com,
-	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu,
-	ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
-	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
-	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Deven Bowers <deven.desai@linux.microsoft.com>,
-	Fan Wu <wufan@linux.microsoft.com>
-Subject: Re: [PATCH v16 11/20] block|security: add LSM blob to block_device
-Message-ID: <202403301936.l8vO4jha-lkp@intel.com>
-References: <1711657047-10526-12-git-send-email-wufan@linux.microsoft.com>
+	s=arc-20240116; t=1711824517; c=relaxed/simple;
+	bh=ChvsaYFkh1mI/1w5mZ+AqNfJp/uxVrmx4+Nf0FhGn/c=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nsKpi5tWB2hjjCXwCwT6V7Myxqfs16wt5swys2fPnsqgO2QUE66UHTVL7qTMdKpg6yvtAMwVmC2R7PjrQi6i1bOC+qOeWwHtjX/Raiu4iQrGoAaCPBQZYRYZxIcVHxjhGzhiOKl/maa7IhdOqCTVBDdljbCIQNU2pM/TiVcECJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=system.is; spf=pass smtp.mailfrom=system.is; dkim=pass (1024-bit key) header.d=system.is header.i=@system.is header.b=hpojdvj0; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=system.is
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=system.is
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4155a763f5dso2117455e9.1
+        for <linux-integrity@vger.kernel.org>; Sat, 30 Mar 2024 11:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=system.is; s=google; t=1711824513; x=1712429313; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GQpMFBQmZy3Vg/AT6nKbt/KF5VpFsVixMxIUF8A+3Os=;
+        b=hpojdvj0W4EqBFPxGIa4zVeooQmCbfdBE1scmU81E/i8N5Zr829qKekR7dluJnoVt/
+         vq6dK7L8YCdV92/sYr7f9WgRPmzfBs2yJJW1Q3vHqMwBEab+jtRZ/NH8TxN5eh+fJSpB
+         vCSw7BIa8ssPspcbNLvaFNvTg8uz4LQ3g2w/0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711824513; x=1712429313;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GQpMFBQmZy3Vg/AT6nKbt/KF5VpFsVixMxIUF8A+3Os=;
+        b=iuf5mC3am0vhXbeeZU1ZO78e5NGepYm0VvNkXXVqTDlBEqne0D7oEbpT5Ed4tvDABl
+         IscMAwo+t0THaZS9fELDnBWmuI/6yQd5tm3QwRmcop6fZTr2qLBxqiwW2A3P7bcFJCBi
+         IEAiDm9Of8mw++FKMUD24CesDQdJQTwrmgsw5vfl7H4g0ESGlnMbT+7EGLNWd++Vgeee
+         l2hSyNdzbKqS8q+4VTAvN7qjnpnx+oYUSVkk68Od9YhzAd5XJ7p9/DdL68Eg0BeiB4ml
+         uzDUa8LgCjfWpZVPK/Wvma/Wc05IPTwBFf/Sne+CrMxoTHpITgdxBPILTCs5L7ZIEaHG
+         kmqg==
+X-Forwarded-Encrypted: i=1; AJvYcCX0AXOapwcDjZO86rF+ZuHqx6b5yq13LDsBaSQK9OErGo+y6RiJQrO0mWk1xm0Vc0YolsdVqhEpidDbC2VGQWUNxAcPDGyqjOwVfYgEGOlM
+X-Gm-Message-State: AOJu0Yw6EgSOltkxnTw9gE7CT/FKwX32+YDr5XVEyXUzTFR1AFN0AUB7
+	VvOT0i/c68X4WWyD4DiXp/V7tRMNxlsxLJ58dFg3x8pPWlkqa/+SMr9XPO6pgj4=
+X-Google-Smtp-Source: AGHT+IGlSOyw7lUcJBwVAbpeOgf7maGgcyRDenhJfGb1+y5FtcmWWcZqTILIPW0uTzZHXmKfaQESng==
+X-Received: by 2002:a05:600c:1907:b0:414:8aaa:acb5 with SMTP id j7-20020a05600c190700b004148aaaacb5mr3777772wmq.16.1711824513450;
+        Sat, 30 Mar 2024 11:48:33 -0700 (PDT)
+Received: from [89.17.157.224] (224-157-17-89.fiber.hringdu.is. [89.17.157.224])
+        by smtp.gmail.com with ESMTPSA id fc11-20020a05600c524b00b0041408e16e6bsm9309717wmb.25.2024.03.30.11.48.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Mar 2024 11:48:32 -0700 (PDT)
+Message-ID: <05c7d10b23e74269efd720eedbb1773931b0ad46.camel@system.is>
+Subject: Re: [PATCH v7 12/21] tpm: Add NULL primary creation
+From: =?ISO-8859-1?Q?Gabr=EDel_Arth=FAr_?= =?ISO-8859-1?Q?P=E9tursson?=
+	 <gabriel@system.is>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>, 
+	linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org, Ard
+	Biesheuvel <ardb@kernel.org>
+Date: Sat, 30 Mar 2024 18:48:31 +0000
+In-Reply-To: <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
+References: <20240213171334.30479-1-James.Bottomley@HansenPartnership.com>
+	 <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
+Autocrypt: addr=gabriel@system.is; prefer-encrypt=mutual; keydata=LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZtUWRjOEJFQUMwWFNNT2l6Z2xsWVUxVFVpS3Y1WDNMQjVuc3JJMythVU5DTmFGTC9PdWtjU3VONitPCmNYQU1Ec1QyS3NuczF6dGVCWmhyYXVYWnc4dWFWWmpNSkRUbmE5cHoxbTM5YkFBTTZmek9aQ01BWWU0bU9VamYKemJqajV3ZlFvVXNaMDF1ekxNeUJUY0Q2SVVFRmY1QzVLU0N6TElSM0g2alp3ZDR0Z3k3dFcyb1FLL2dxOENESQpxUmVVamdmblNEeStuTElJc3ZxL3dFNFRBL0I5MFd5azlrcDVKdEM3UXRDQjhiaGN5TmVCQTcrVXVWVjhSMU9OCno3VXZyOGFnN0RiMmRTVEdTVVdQRi9Qckw5SXM3WTFBTU1FeUMxMEY4SGNTUUo3K3FhdkJ2Q3ZuVCtOUEs2V04KWmF2Q0hqU2FMditlTUFpZGcySXZCM2QzTUxISzl6NTJzK1NFdTFaVzdCRGc1bTdoTjFhSXRQK3pZaFNFSnRNTwp1cXdzTnFWSGhOU3lHNGxTKzRSR2M5QkFnaEc3QzAwN2ZPcGVBS1FZaHJFbkRHR2lkbTJvemhJMW9KVHFKblB0CkJFa1lRZUdlUjh2YVRhMEFHUkRsN3p0amdMWmpaUmM0WXVvb3Z0MEM1N2RFaWNoWVZVL3ZiUHo1WUIwa0c4SnYKb0VKQzFleU9PTHhKTmJMbXFVWThWNS84SVJpWGQ5azRMUFpMOEV0azNIYUhWMHRpWUpqUWd1MXlzT2JjaFZwTAord1JOS3JuUTh0Qml3QTJkdWhQblVjdS9FWGthUGdBK0o4cExULzFlMnVXVHhPNHNxT0ZzbG1DR1FWN1dMNXFZCkNScUExT0NoK2hQ
+ SjZHYzdYQ2U1TTYweG8wVHFBaHhuYkFqNWFxdW5pRTNML1dBbGNHUXV5d EFMMXdBUkFRQUIKdEM5SFlXSnl3NjFsYkNCQmNuUm93N3B5SUZERHFYUjFjbk56YjI0Z1BHZGhZbkpwWld4QWMzbHpkR1Z0TG1segpQb2tDVGdRVEFRZ0FPQlloQkxZbU1WWjUvWVU2cWd5d1ZVbXhQKzNjbUUzbUJRSlprSFhQQWhzQkJRc0pDQWNDCkJoVUlDUW9MQWdRV0FnTUJBaDRCQWhlQUFBb0pFRW14UCszY21FM21ISEFQL0EzOHpWQ2ZTalBkMGJXRlpNVzAKM2JLRGN5aDZCUWNRWk1zS0dEUm9MWDJSZjlobUVwZmFFSkZUZDNlR20zcUg1L0VrWERKY2FCRjhGSi9QME9PcAp1KzVHS0xtSnl5L0FBdFJYWnpSMkxSRTM4TEFXOUhzbUt5NXNUakdyK2FhRTdKT1JBOUd6dGFUUWhubG4vN3p0CkE4ZXRVTEpib2g5TCtHbW1iZW5wZWdSRXRPVy9oaFhEejJHVlZJZkRpRDRwT1ZsQXp1b1VmZC9KbHFneHZLdncKcHFkRVErdCsrMkxkWEJUOTQ3bTQ5OW9qcENZQitPbTZWMzBOd2tiVlF1RnFNejFnMlhPZStvVnVUaW44dzFWMgpxQUNlVENPcFhWZkZud1Y0L0ZqcjI2UDhHbzg4Z2ZhYVkyR29pN1A0bC9DOTJXc3F6WDc5VytSU2l3QkdXTi9hCmxNV09Ibm83SGc2anZWcXJSNjFta0d0SzU4S3RPdXpnRTAzTlBqbUMrL3I4RkhzZlFlQjcrNWFaejlyVk9Mc00KNm1vYnVpUWJqWmtJTVU5cHdkLzVWcFRtT0FBdDBPNThFb0xzd1crcm1naFhNdy81bENQZkNxL2IzR3k4RDBlSwpZWUdQME14cGdWZFVSUk1CbFFBUGkvc2xrQnNjL3lmWXZTTUhnSGFyNEk0
+ SWk2Ky8wNHg4b0Y3ZGJwbGxsb1JyCmRORE1RdDgzRlBta0NMU3l2b2Z2NC tHQWtxS2dyM3JRVy9wWTdxejRyVTFwamZSTEFGaFVrdk8zd2pocEhjU2cKaDhPdnF3a1drR1UweHZ6cHhuRHdCN2RlNmRGNDA5ODdXVG1YVmhJd2Z0VjZ0SUNwbHJhVnhWLzBiaUlCU0MvTgp3NEg3OThhaGgyNUJmZks3RThhUnJiTk0KPTQ5cU0KLS0tLS1FTkQgUEdQIFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1711657047-10526-12-git-send-email-wufan@linux.microsoft.com>
 
-Hi Fan,
+On Tue, 2024-02-13 at 12:13 -0500, James Bottomley wrote:
+> +	/* unique: key specific; for ECC it is two points */
+> +	tpm_buf_append_u16(&template, 0);
+> +	tpm_buf_append_u16(&template, 0);
 
-kernel test robot noticed the following build errors:
+Shouldn't the points be 32 bytes each in size, filled with zeros?
 
-[auto build test ERROR on device-mapper-dm/for-next]
-[also build test ERROR on axboe-block/for-next lwn/docs-next linus/master v6.9-rc1 next-20240328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The TCP TPM 2.0 Provisioning Guidance defines the SRK Template as a
+diff on top of Template L-2 (for ECC keys) as defined in the EK
+Credential Profile 2.0 document.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fan-Wu/security-add-ipe-lsm/20240329-042339
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-patch link:    https://lore.kernel.org/r/1711657047-10526-12-git-send-email-wufan%40linux.microsoft.com
-patch subject: [PATCH v16 11/20] block|security: add LSM blob to block_device
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240330/202403301936.l8vO4jha-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240330/202403301936.l8vO4jha-lkp@intel.com/reproduce)
+Template L-2 calls for the X and Y points to be of 32 bytes each,
+filled with zeros. The Provisioning Guidance does not call for zero-
+sized points.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202403301936.l8vO4jha-lkp@intel.com/
+For example, let's create an ECC Endorsement Key using the standard
+template then print its name:
 
-All errors (new ones prefixed by >>):
+   tpm2_createek -G ecc -c /dev/null -u ./ek.pub
+   tpm2_loadexternal -c n -u ./ek.pub
 
-   In file included from fs/nfs/blocklayout/blocklayout.c:41:
-   In file included from fs/nfs/blocklayout/../pnfs.h:34:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:101:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:45:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:9:
->> include/linux/security.h:1506:36: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    1506 |                                              enum lsm_integrity_type, type,
-         |                                                                       ^
-         |                                                                       int
-   include/linux/security.h:1506:34: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1506 |                                              enum lsm_integrity_type, type,
-         |                                                                     ^
-   fs/nfs/blocklayout/blocklayout.c:384:9: warning: variable 'count' set but not used [-Wunused-but-set-variable]
-     384 |         size_t count = header->args.count;
-         |                ^
-   2 warnings and 1 error generated.
---
-   In file included from fs/nfs/blocklayout/dev.c:8:
-   In file included from include/linux/nfs_fs.h:32:
-   In file included from include/linux/sunrpc/clnt.h:29:
-   In file included from include/net/ipv6.h:12:
-   In file included from include/linux/ipv6.h:101:
-   In file included from include/linux/tcp.h:19:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:45:
-   In file included from include/uapi/linux/neighbour.h:6:
-   In file included from include/linux/netlink.h:9:
-   In file included from include/net/scm.h:9:
->> include/linux/security.h:1506:36: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    1506 |                                              enum lsm_integrity_type, type,
-         |                                                                       ^
-         |                                                                       int
-   include/linux/security.h:1506:34: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-    1506 |                                              enum lsm_integrity_type, type,
-         |                                                                     ^
-   1 warning and 1 error generated.
+Equivalently using tpm2_createprimary:
 
+   perl -e 'print "\0"x64' | tpm2_createprimary -C e -o ./ek.pub -G ecc -a =
+'fixedtpm|fixedparent|sensitivedataorigin|adminwithpolicy|restricted|decryp=
+t' -L 837197674484b3f81a90cc8d46a5d724fd52d76e06520b64f2a1da1b331469aa -u -
+   tpm2_loadexternal -c n -u ./ek.pub
 
-vim +/int +1506 include/linux/security.h
+You'll find that the key's public modulus matches that of the EK
+Certificate imprinted by the manufacturer, indicating we got the
+template correct.
 
-  1504	
-  1505	static inline int security_bdev_setintegrity(struct block_device *bdev,
-> 1506						     enum lsm_integrity_type, type,
-  1507						     const void *value, size_t size)
-  1508	{
-  1509		return 0;
-  1510	}
-  1511	
+To generate a standard SRK key, the TCG TPM2 Provisioning Guidance
+states we should:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	1. set userWithAuth,
+	2. clear adminWithPolicy
+	3. set noDA, and
+	4. clear the authorization policy.
+
+There's no mention of alterations to the unique field.
+
+Let's also create the key in the null hierarchy:
+
+   perl -e 'print "\0"x64' | tpm2_createprimary -C n -o ./null.pub -G ecc -=
+a 'fixedtpm|fixedparent|sensitivedataorigin|userwithauth|noda|restricted|de=
+crypt' -u -
+   tpm2_loadexternal -c n -u ./null.pub
+
+The name does not match the kernel's name for the null key.
 
