@@ -1,147 +1,144 @@
-Return-Path: <linux-integrity+bounces-1944-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1941-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD26A893493
-	for <lists+linux-integrity@lfdr.de>; Sun, 31 Mar 2024 19:08:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F138389328A
+	for <lists+linux-integrity@lfdr.de>; Sun, 31 Mar 2024 18:11:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92F05285611
-	for <lists+linux-integrity@lfdr.de>; Sun, 31 Mar 2024 17:08:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E7A91C21D9F
+	for <lists+linux-integrity@lfdr.de>; Sun, 31 Mar 2024 16:11:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B364F15F3F5;
-	Sun, 31 Mar 2024 16:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D68145349;
+	Sun, 31 Mar 2024 16:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Ft0qMpZG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NZfWMkzK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0226814A4D8;
-	Sun, 31 Mar 2024 16:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=62.96.220.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711903429; cv=pass; b=SvjIyddp0btRcvwlpucA+LzEpJ/+/2Pyrf6kaoK3kAhmEo93QL0M1Od0CnEz9HgVQsKaVak+42vaY09IEq61evgZ/rx7Oy/Kh7Tg9HYb42Q4dAOJNdI8OJaYNTSRoULd06j8/SwpiTBnVT4Svr7z5MJmhjk6u8U0Gpbf3Mgb3E4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711903429; c=relaxed/simple;
-	bh=U43Wuq55vMxCLBzqGRdkR/mMGx+zO2GmUgWVZu6Gawg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lbpUM4u9MWori+3Z9/89dh3BkdybqHf2DfYSBITk2KbCi0omMB+jO47vrQsw3jO3QeGuVzvJ9CjwJoc//ZSubfS4mDZPQOYi3ieJXJ6SiyTaxsKeIM0o7zzJwgY7E/uJs5irETrwEzrDVTJQ2GC0SLhKtLx+ZY462H8wqDsqiU8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=fail smtp.mailfrom=linux-foundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Ft0qMpZG; arc=none smtp.client-ip=209.85.167.52; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; arc=pass smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux-foundation.org
-Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id 55E74208D7;
-	Sun, 31 Mar 2024 18:43:45 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ylLn7vdyrTRC; Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id A3F03208D1;
-	Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com A3F03208D1
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout1.secunet.com (Postfix) with ESMTP id 972D5800061;
-	Sun, 31 Mar 2024 18:43:44 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 31 Mar 2024 18:43:44 +0200
-Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
- 15.1.2507.17; Sun, 31 Mar 2024 16:36:24 +0000
-X-sender: <linux-kernel+bounces-125901-steffen.klassert=secunet.com@vger.kernel.org>
-X-Receiver: <steffen.klassert@secunet.com>
- ORCPT=rfc822;steffen.klassert@secunet.com NOTIFY=NEVER;
- X-ExtendedProps=BQAVABYAAgAAAAUAFAARAPDFCS25BAlDktII2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4YwUACwAXAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5nZSBBZG1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl2ZSBHcm91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAHQAPAAwAAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAwAAgAABQBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbixPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9ye
-	TogRmFsc2UNCg8ALwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
-X-CreatedBy: MSExchange15
-X-HeloDomain: a.mx.secunet.com
-X-ExtendedProps: BQBjAAoAsGUFfe5Q3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAAQAFCABAAAAHAAAAHN0ZWZmZW4ua2xhc3NlcnRAc2VjdW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwAAAAAABQAFAAIAAQUAYgAKAEcAAADligAABQBkAA8AAwAAAEh1Yg==
-X-Source: SMTP:Default MBX-ESSEN-02
-X-SourceIPAddress: 62.96.220.36
-X-EndOfInjectedXHeaders: 12931
-X-Virus-Scanned: by secunet
-Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.80.249; helo=am.mirrors.kernel.org; envelope-from=linux-kernel+bounces-125901-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 49D7F20764
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
-ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711837947; cv=none; b=l77b8FAmwJ8Y8V69wffkCvCFVgIbXNyD9D+KiXjKsaajQzhtMiSZh018iDhqaIb9s8MJeW44fHVNxLZLN2WcMjRahR5Ly/fg6UvtYYZGLJj4Rf5QX4zSmgKr0fmjfbfUsDmzib4zdYpvdQ4mgJNLvK1RTa7cDu6tdZPcfO+JDeg=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711837947; c=relaxed/simple;
-	bh=U43Wuq55vMxCLBzqGRdkR/mMGx+zO2GmUgWVZu6Gawg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MC2kKYr7hZxlvL4KY6eIEyVXE7a7fBRrGhPrDC0/4KsNGWlhsMhIj4cXEGurZOT0YSKrAxzHJWIz9Vk7XbeQZguP+jmFM20dS23QbMdlZHlCeFtpqxpfuheSfe6YkBVGB1lsv0z3cmlb1gvf8abB75czUYTMAg6dXTIlGZM4UfQ=
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Ft0qMpZG; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1711837944; x=1712442744; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qh7m7AzKE9zxgcmaZLpWEMMQFO2AQlI5WB3LlhW1I44=;
-        b=Ft0qMpZGU9No1lDtNY6m+QEK9VUB3iCBlXDau5eoyGUjPfc6s69wYnViDKOvrtDhts
-         4cteyZ0It7eEa6xzoND8JiNqN5EYI1zb+xyCXMFw7oyiXZJ0e159qI4flnyp2Dpvbz+y
-         8Jle660pX/0lAxvng8Eu5kDc0+bfz5sKol1pg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711837944; x=1712442744;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qh7m7AzKE9zxgcmaZLpWEMMQFO2AQlI5WB3LlhW1I44=;
-        b=lfEMUAM+dMfzcY41f91KYBX547+RMogvPRR0PjQthWIlWhVSHWzIbwu7sEvxNquojo
-         LB9IdfqF7Sm8FICm+WmB0pCA4jmHGzgIViUkkm15cPbsACrO/Rzo5Ja4vMs5oNhVcgk4
-         MkJO/+y/904AjaDmotytwZxTZYGjgskf/j7JctLiERKKeT6mWpapV9SWD0H5wQZZb3k7
-         HOoUrseuSrH/0v6ScKt5HBJWm+BiD7Ck1JaRNkxYirwQYQrQLNGH8/h0UNxHsCFv5eGP
-         IS/GcKEr7g5izm/yG0edogzyieh653U0f9kVQKXlzLaTIVqtVBE4TCOvy6jxqr1H/eMH
-         ev9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWgHYXXaMb6fNrOJJkuIza8qYpc1wrqXuou0RBLd9Do6Wm6uoSeDMn5CZg335KAstRhbrKrj9lW9iFwGMP6S3Kt/FUIil/G0L/oEC+Z
-X-Gm-Message-State: AOJu0YzLZA9EfTj3MVzMmppFC5ocFfs2cesfB3JMWxpoPSgYJbsMrUBq
-	Ui28Vf1vt9y7O8yuAVV004t7K0Hb13QJkre3vxhFl5oFMRgoG9iI/yjP/HVDzEP9wcoG+G8rh+u
-	O7B0=
-X-Google-Smtp-Source: AGHT+IHoEYY8SM7e1gU0DYFywT6hL16F+O6qLec/790twgFmLR5wjHT0zheJNExGWw5wy0xsQ6bvtA==
-X-Received: by 2002:a05:6512:2389:b0:515:be10:e288 with SMTP id c9-20020a056512238900b00515be10e288mr5056125lfv.21.1711837943767;
-        Sat, 30 Mar 2024 15:32:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXpZgzHfgiD06oGxEh+SAIJtRDeaSVAgKt6Q0rmso6FMfCAg/o+v5pJRZERHqSsk56AxUVqxa6akcQBhVuIML+7SL24kKzphr39Qi2L
-X-Received: by 2002:a19:5517:0:b0:515:90e5:4555 with SMTP id
- n23-20020a195517000000b0051590e54555mr3507469lfe.16.1711837942133; Sat, 30
- Mar 2024 15:32:22 -0700 (PDT)
-Precedence: bulk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27641143C75;
+	Sun, 31 Mar 2024 16:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711901386; cv=none; b=n/5Qi0sd6r/JAeF3jWKcxOohNY4sObr0rjksNB5vCautwoEdjq1Jk9iotceityeE7kBqoascUUlUE2HgFNFyUw54XTyuMdI/Naw60ail8QaeLzdKS2Gwz/AJyaDi5mYOwgpZBaP6VrnOdpfgCc91R0nmwx31mGrCUYg4fGjNhW4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711901386; c=relaxed/simple;
+	bh=Rb6XGdB+AQ+kJPgltpZhPihlCivUz2V/VWgrEPOniIM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=Vn4ALSiEn8Hsf+2Ko0kqYRjlPdAbLE+P+xWcbVbadqwYOF7S+Usr7NIIZWIcwWSTPTEJjCwXBdhJN1ShwXyzISJd0juVVM21YN5lTxmNUhuo0ARgJK9jdOsRD9IGUidy7nOhgpEu161hsbm12dYKGD62cf0g5ckQlckyd43/COc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NZfWMkzK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF40C433C7;
+	Sun, 31 Mar 2024 16:09:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711901385;
+	bh=Rb6XGdB+AQ+kJPgltpZhPihlCivUz2V/VWgrEPOniIM=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=NZfWMkzKTn+9jI5Vos3W+uTWpEEchFPDX8XZsv99rZQkroT5H2zBQzNF8t507/Q/J
+	 SVOsUC/KocYIEZYhTOejLf/88ip5mWd6xmoB/r+8kp/C94h5xsWrjytL98zxzNnCbI
+	 kQQO98i3Fnm+wHTBs/46FxgTkbUeCinShwLI2DaHTacU7cnwAtbyDS7HV38GZRyGMG
+	 dk4EDysZpitf4fTXFO2ckNCLVxUgpqhG3gqNVpFTihTQM4ZnziWfksQUIMVBtFIrNV
+	 Ka+UE8ur+BtUpDwNMoBdJoKIZfduJnYLe3EzwLyLNOblMFtI1ncfmkgL64GiQKyn3s
+	 Ms4s8rMGOUXPA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240326143838.15076-1-jarkko@kernel.org>
-In-Reply-To: <20240326143838.15076-1-jarkko@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 30 Mar 2024 15:32:05 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgNpPQFJyLe5dwEVH66ubviuiwM1_tjbyzQv4BytPw7dQ@mail.gmail.com>
-Message-ID: <CAHk-=wgNpPQFJyLe5dwEVH66ubviuiwM1_tjbyzQv4BytPw7dQ@mail.gmail.com>
-Subject: Re: [GIT PULL] tpmdd changes for v6.9-rc2
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, David Howells <dhowells@redhat.com>, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	keyrings@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 31 Mar 2024 19:09:42 +0300
+Message-Id: <D082E6E1VBXE.2U3RU4ZKXUZ9A@kernel.org>
+To: "Jarkko Sakkinen" <jarkko@kernel.org>,
+ =?utf-8?q?Gabr=C3=ADel_Arth=C3=BAr_P=C3=A9tursson?= <gabriel@system.is>,
+ "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
+Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH v7 12/21] tpm: Add NULL primary creation
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240213171334.30479-1-James.Bottomley@HansenPartnership.com>
+ <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
+ <05c7d10b23e74269efd720eedbb1773931b0ad46.camel@system.is>
+ <D08273C2C8HD.2QT57ZPAWPS9H@kernel.org>
+In-Reply-To: <D08273C2C8HD.2QT57ZPAWPS9H@kernel.org>
 
-On Tue, 26 Mar 2024 at 07:38, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+On Sun Mar 31, 2024 at 7:00 PM EEST, Jarkko Sakkinen wrote:
+> On Sat Mar 30, 2024 at 8:48 PM EET, Gabr=C3=ADel Arth=C3=BAr P=C3=A9turss=
+on wrote:
+> > On Tue, 2024-02-13 at 12:13 -0500, James Bottomley wrote:
+> > > +	/* unique: key specific; for ECC it is two points */
+> > > +	tpm_buf_append_u16(&template, 0);
+> > > +	tpm_buf_append_u16(&template, 0);
+> >
+> > Shouldn't the points be 32 bytes each in size, filled with zeros?
+> >
+> > The TCP TPM 2.0 Provisioning Guidance defines the SRK Template as a
+> > diff on top of Template L-2 (for ECC keys) as defined in the EK
+> > Credential Profile 2.0 document.
+> >
+> > Template L-2 calls for the X and Y points to be of 32 bytes each,
+> > filled with zeros. The Provisioning Guidance does not call for zero-
+> > sized points.
+> >
+> > For example, let's create an ECC Endorsement Key using the standard
+> > template then print its name:
+> >
+> >    tpm2_createek -G ecc -c /dev/null -u ./ek.pub
+> >    tpm2_loadexternal -c n -u ./ek.pub
+> >
+> > Equivalently using tpm2_createprimary:
+> >
+> >    perl -e 'print "\0"x64' | tpm2_createprimary -C e -o ./ek.pub -G ecc=
+ -a 'fixedtpm|fixedparent|sensitivedataorigin|adminwithpolicy|restricted|de=
+crypt' -L 837197674484b3f81a90cc8d46a5d724fd52d76e06520b64f2a1da1b331469aa =
+-u -
+> >    tpm2_loadexternal -c n -u ./ek.pub
+> >
+> > You'll find that the key's public modulus matches that of the EK
+> > Certificate imprinted by the manufacturer, indicating we got the
+> > template correct.
+> >
+> > To generate a standard SRK key, the TCG TPM2 Provisioning Guidance
+> > states we should:
+> >
+> > 	1. set userWithAuth,
+> > 	2. clear adminWithPolicy
+> > 	3. set noDA, and
+> > 	4. clear the authorization policy.
+> >
+> > There's no mention of alterations to the unique field.
+> >
+> > Let's also create the key in the null hierarchy:
+> >
+> >    perl -e 'print "\0"x64' | tpm2_createprimary -C n -o ./null.pub -G e=
+cc -a 'fixedtpm|fixedparent|sensitivedataorigin|userwithauth|noda|restricte=
+d|decrypt' -u -
+> >    tpm2_loadexternal -c n -u ./null.pub
+> >
+> > The name does not match the kernel's name for the null key.
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-v6.9-rc2
+> Null key is not provisioned, what is the motivation here?
+>
+> Not saying no, just asking for details...
+>
+> There's couple of things that lack in this patch set ATM:
+>
+> 1. Neither kselftest additions nor not even proper testing
+>    instructions. Why 21 patches and zero tests? How one should
+>    decide when the work is "complete"?
+> 2. I still don't know what version of QEMU I should patch to
+>    test corner cases from an URL, which I cannot recall :-)
+>    Highlights the first issue.
+>
+> So for the time being the patch set is NAK just because we lack
+> clear definition of done here. I revisit it only when I know how
+> to test it.
 
-So I haven't pulled this, because the subject line (and tag name)
-talks about tpmdd, but this is clearly about key handling.
+Your feedback was great because it highlights the issue that the
+excepted behaviour is non-existent at this point.
 
-Also, the actual contents seem to be very much an "update", not fixes.
-And it doesn't seem to be an actual improvement, in how it now does
-things from interrupts. That seems to be going backward rather than
-forward.
-
-            Linus
-
+BR, Jarkko
 
