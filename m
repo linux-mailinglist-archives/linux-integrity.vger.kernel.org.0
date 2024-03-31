@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1939-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1940-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64AE2893211
-	for <lists+linux-integrity@lfdr.de>; Sun, 31 Mar 2024 17:36:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD202893227
+	for <lists+linux-integrity@lfdr.de>; Sun, 31 Mar 2024 18:00:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEF981F213B9
-	for <lists+linux-integrity@lfdr.de>; Sun, 31 Mar 2024 15:36:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 934A11F216AA
+	for <lists+linux-integrity@lfdr.de>; Sun, 31 Mar 2024 16:00:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85AB4145334;
-	Sun, 31 Mar 2024 15:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F289145335;
+	Sun, 31 Mar 2024 16:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BcaeLPw3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0p89SrG"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B7814532F;
-	Sun, 31 Mar 2024 15:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F06144D1A;
+	Sun, 31 Mar 2024 16:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711899409; cv=none; b=XGXBGhLGc7rVTgbQUWboLROSuPKYk8Aedsql7ZUfaO7nkoVRiZ/m2HzE8At3uw53ChQ1pfcCMVfbCwkp/hFVEz9md6Gf4+zdDgbz9HkxKPRiSQ/JXRBB6gqsRggP75tTpuxEssPPcdQJN2xodJJjEwsMygIm6DZ1KhCstTm1Avo=
+	t=1711900831; cv=none; b=bnqvhcAgPKow4H6RjKW5YlMv8SxMgnEbg3iKEhSgdBZT5A4o7xlpd9ZsmPxPtMRg8JlBBYF17Wz9E1uCGr3kJ1Ca8ero9ju/7IXi4d1TrXXsvpZ+bynmcWT1U2PuvGdI90lxfAeJx9SRYOz2KZscnjQHWj3LbpgsRUAg5XOCC0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711899409; c=relaxed/simple;
-	bh=EO0diDbRgsZEbN2TcPtZ7YLdJoEklsL6WFWb3kUz6HI=;
+	s=arc-20240116; t=1711900831; c=relaxed/simple;
+	bh=7j5plQrPQqy/5yUjzicp9UkSgjWhKfMVImoBozbbatA=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=GV0X/CAf41Kz7pNs0R6/F3+/gPYd0e96N8+GRQXlEAymN8XmPcJP3xJVszePwitmz2S+/9FxXU+v5YkL6VK56NbgjZkZlGbw7Otfn5m4p0SJQm00Y8iSRSdiwMkykmKBdU1Zb8TTwY7WCyD25ZeUGuicYGUoNqs3cu7CwsXdT7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BcaeLPw3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D0AC433C7;
-	Sun, 31 Mar 2024 15:36:46 +0000 (UTC)
+	 References:In-Reply-To; b=Zk/nlgdUDjFTFUh7YBlKDk7QTe6FwIPVQoIgKSkiuqMT+O7x8yijmf1LpxCp+1Koe7B3XxnPV9B2KcDrqM4UVB/C8I9jc3aX/i9Nd28MNYXO8pycAm00laDxz66s3NIOqWl3+yLWtXrqJXCuKUdIf3ppoX5x9ttherKyl3uY/HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0p89SrG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E5C9C433F1;
+	Sun, 31 Mar 2024 16:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711899408;
-	bh=EO0diDbRgsZEbN2TcPtZ7YLdJoEklsL6WFWb3kUz6HI=;
+	s=k20201202; t=1711900830;
+	bh=7j5plQrPQqy/5yUjzicp9UkSgjWhKfMVImoBozbbatA=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=BcaeLPw36L04BNIfVEGloxji4Zr3k542ti7bKCWs+oUhFfDM2oNUEEoyvQh41ZOI4
-	 5ZZ+R/ZDo0VZGIO4I+Z7zAh5WCU5MIHwavTwvsMgvVKPiM7ugac3z6jZIbV8AOCG5h
-	 YQNYb7TnChvt1vHryDczJ+Q57oDSAOiQ8+GYg+6yK4lLcBIorcWqddTCf2tYhFxQxs
-	 tDvXr83DGvY2l9Z4bwd/HlFtHmm7Wjwtos3Is32h8Ygdj+ARLcmmRyeeW7zBLBuqJA
-	 hfOxXOjHNo+uKqmu9ydW0WlTNuSExLM3Ul/YLb6K0CrWj7l5DPvjGxW07Sqp+4EhiM
-	 aU8hj1IxNPZjw==
+	b=a0p89SrGcET3Dtu44mT7XjpgTQsMnzA2/ItxBgt2rah7bRnge+rhkJnz9DxIW1/PH
+	 1Qu8JuU3/N0LTlGGhwVhjM7kxYofESDouQvhJVDYKsDtlJpg7IyjegDdUsiDYXlokP
+	 JwrN75DcINSiaX0iv2qCAZfUpRHVST6WswY4Uy3atdATSmUVeKxLLObngqiEWB2JDz
+	 k+jX9JeMHAP06ldCN6vlyTk/GYCxJeAuQHbSDcyJUjCaxfHJZjuEGrbCfsueTtHpuN
+	 B98wh3nR5mtZ9u2+34DKqB/5VGilroi8UVVoEYFWQDAdDitnLPivKpFrNYh/8hBvOJ
+	 TH0djQaiiss6w==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,54 +49,90 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 31 Mar 2024 18:36:45 +0300
-Message-Id: <D081OXSNVFWG.3QW7GEWS2QYAB@kernel.org>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <keyrings@vger.kernel.org>
-Subject: Re: [GIT PULL] tpmdd changes for v6.9-rc2
+Date: Sun, 31 Mar 2024 19:00:27 +0300
+Message-Id: <D08273C2C8HD.2QT57ZPAWPS9H@kernel.org>
+Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH v7 12/21] tpm: Add NULL primary creation
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Linus Torvalds"
- <torvalds@linux-foundation.org>, <dhowells@redhat.com>
+To: =?utf-8?q?Gabr=C3=ADel_Arth=C3=BAr_P=C3=A9tursson?= <gabriel@system.is>,
+ "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.17.0
-References: <20240326143838.15076-1-jarkko@kernel.org>
- <CAHk-=wgNpPQFJyLe5dwEVH66ubviuiwM1_tjbyzQv4BytPw7dQ@mail.gmail.com>
- <D07PD5NTOXSQ.30D5V19O6KMQS@kernel.org>
-In-Reply-To: <D07PD5NTOXSQ.30D5V19O6KMQS@kernel.org>
+References: <20240213171334.30479-1-James.Bottomley@HansenPartnership.com>
+ <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
+ <05c7d10b23e74269efd720eedbb1773931b0ad46.camel@system.is>
+In-Reply-To: <05c7d10b23e74269efd720eedbb1773931b0ad46.camel@system.is>
 
-On Sun Mar 31, 2024 at 8:57 AM EEST, Jarkko Sakkinen wrote:
-> On Sun Mar 31, 2024 at 12:32 AM EET, Linus Torvalds wrote:
-> > On Tue, 26 Mar 2024 at 07:38, Jarkko Sakkinen <jarkko@kernel.org> wrote=
-:
-> > >
-> > >   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.gi=
-t tags/tpmdd-v6.9-rc2
-> >
-> > So I haven't pulled this, because the subject line (and tag name)
-> > talks about tpmdd, but this is clearly about key handling.
+On Sat Mar 30, 2024 at 8:48 PM EET, Gabr=C3=ADel Arth=C3=BAr P=C3=A9tursson=
+ wrote:
+> On Tue, 2024-02-13 at 12:13 -0500, James Bottomley wrote:
+> > +	/* unique: key specific; for ECC it is two points */
+> > +	tpm_buf_append_u16(&template, 0);
+> > +	tpm_buf_append_u16(&template, 0);
 >
-> OK, point taken and it is evolutionary issue really but definitely
-> needs to be fixed.
+> Shouldn't the points be 32 bytes each in size, filled with zeros?
 >
-> I review and test most of the stuff that goes to keyring but other
-> than trusted keys, I usually pick only few patches every now and
-> then to my tree.
+> The TCP TPM 2.0 Provisioning Guidance defines the SRK Template as a
+> diff on top of Template L-2 (for ECC keys) as defined in the EK
+> Credential Profile 2.0 document.
 >
-> So obviously we need better grounds for putting this content together.
-> So probably fastest path to that would be if e.g. David just opens me
-> push rights to his tree, and then i push the stuff that makes sense
-> to me to some branch in that tree.
+> Template L-2 calls for the X and Y points to be of 32 bytes each,
+> filled with zeros. The Provisioning Guidance does not call for zero-
+> sized points.
 >
-> In other words: David would take care of sending the final PR.
+> For example, let's create an ECC Endorsement Key using the standard
+> template then print its name:
 >
-> As per trusted keys, should I start to make a separate "trusted keys
-> PR" with its own separate tag? It's fine with me but I just need to
-> know how to move forward. E.g. now there is one new hardware backend
-> upcoming for trusted keys so now it is good to realig if any need.
+>    tpm2_createek -G ecc -c /dev/null -u ./ek.pub
+>    tpm2_loadexternal -c n -u ./ek.pub
+>
+> Equivalently using tpm2_createprimary:
+>
+>    perl -e 'print "\0"x64' | tpm2_createprimary -C e -o ./ek.pub -G ecc -=
+a 'fixedtpm|fixedparent|sensitivedataorigin|adminwithpolicy|restricted|decr=
+ypt' -L 837197674484b3f81a90cc8d46a5d724fd52d76e06520b64f2a1da1b331469aa -u=
+ -
+>    tpm2_loadexternal -c n -u ./ek.pub
+>
+> You'll find that the key's public modulus matches that of the EK
+> Certificate imprinted by the manufacturer, indicating we got the
+> template correct.
+>
+> To generate a standard SRK key, the TCG TPM2 Provisioning Guidance
+> states we should:
+>
+> 	1. set userWithAuth,
+> 	2. clear adminWithPolicy
+> 	3. set noDA, and
+> 	4. clear the authorization policy.
+>
+> There's no mention of alterations to the unique field.
+>
+> Let's also create the key in the null hierarchy:
+>
+>    perl -e 'print "\0"x64' | tpm2_createprimary -C n -o ./null.pub -G ecc=
+ -a 'fixedtpm|fixedparent|sensitivedataorigin|userwithauth|noda|restricted|=
+decrypt' -u -
+>    tpm2_loadexternal -c n -u ./null.pub
+>
+> The name does not match the kernel's name for the null key.
 
-Also using separate tag works for me. These changes are synced
-in all cases (I sync up with David or vice-versa) so that is
-equally good as far as I'm concerned.
+Null key is not provisioned, what is the motivation here?
+
+Not saying no, just asking for details...
+
+There's couple of things that lack in this patch set ATM:
+
+1. Neither kselftest additions nor not even proper testing
+   instructions. Why 21 patches and zero tests? How one should
+   decide when the work is "complete"?
+2. I still don't know what version of QEMU I should patch to
+   test corner cases from an URL, which I cannot recall :-)
+   Highlights the first issue.
+
+So for the time being the patch set is NAK just because we lack
+clear definition of done here. I revisit it only when I know how
+to test it.
 
 BR, Jarkko
 
