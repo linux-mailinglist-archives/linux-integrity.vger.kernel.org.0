@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1948-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1949-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A38E0893B31
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Apr 2024 15:05:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65455893B4A
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Apr 2024 15:18:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A42D1F21D3D
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Apr 2024 13:05:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0022B20A64
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Apr 2024 13:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C2F3E497;
-	Mon,  1 Apr 2024 13:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A76163F8C7;
+	Mon,  1 Apr 2024 13:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vs3dk4vM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olEDGg0s"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82FD3E491;
-	Mon,  1 Apr 2024 13:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785AF3A262;
+	Mon,  1 Apr 2024 13:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711976696; cv=none; b=Ox5aCCsKSyIppYfrqkL3MuJGhCf66DcYYK8xgy0pqRHbHaF1P/xxfZ46AyxeEe3ue6jvsIlpQtowB7GcsekwNzj7q3cBIMkR3a965NaA+k4JQvTYANwgsvQOiFSlu3U+FxFfLghgESTXL0NZulXs2TXLeB5TqCGyFamk3+psmN8=
+	t=1711977474; cv=none; b=fv/6JBmWxMY27aYFOpWlRyNTfkruLI8MtIK9kmoswRY5LSsjEiUQTXWord2KhqGQqNpLD4qUkJL6keHpaqHN1Bc/LQ0gydNG/8S7Bvv8arU2tPnrHBLHY2WY+ukJcCV843FpAntQkcJStzQBeb+IE4Qj46vfeMzxpdjV0IxEh/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711976696; c=relaxed/simple;
-	bh=LsKwqBI3UN17wqyHf5jITWSvh8LGm3Tkr59aZXOj3Cg=;
+	s=arc-20240116; t=1711977474; c=relaxed/simple;
+	bh=S9b4HSEM/2PDqziShOQR1wWt0JzsyhQb7gIWzGjTp8k=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=l/D7mHLugDi2Jl8YNK2tclmYrxxsZTw+2S5O8L1hKMRDk6fuidwU/QIzCuniMm3GNIzoVGFm2iSuWVnfNRvBbNG+0mF2bx1lwTr2Uf/GTRUa5wx8CNJ1Jn7VZdMOBlzkspgy4xB6iMUJHXIZcGrZn4WlPcbVj9cpnqROLr38XLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vs3dk4vM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B39C43390;
-	Mon,  1 Apr 2024 13:04:54 +0000 (UTC)
+	 References:In-Reply-To; b=QCP1E8Z81b/FV8mgWvu3JJNr2IWRVaE+argkQAou85MciYyA64Zbtn+tKYyXKbN3ENFiomFVgtHJhD2tYtq/cLm0pr5uihKOTPFOmv7UVewx/nqWkPTPW+8+AaAymYhSI/Eb21q8jIlFxxSh3jYWwyNgc+BO+3jAvgv/In8NRzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olEDGg0s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78219C433C7;
+	Mon,  1 Apr 2024 13:17:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711976696;
-	bh=LsKwqBI3UN17wqyHf5jITWSvh8LGm3Tkr59aZXOj3Cg=;
+	s=k20201202; t=1711977474;
+	bh=S9b4HSEM/2PDqziShOQR1wWt0JzsyhQb7gIWzGjTp8k=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Vs3dk4vMeKjhM2guiRDI0bhfJFP0Q5/QccS66Mr7wtCUqi9epy6BX55E7vSr/TBi8
-	 kWpeVyYzjAWDnVpM3b97I/D+XRRwVCMW5wnpun4VAaqjsB/fXtPDF6MsMUWlomMw7k
-	 DPEis1kbWRR7pl4a8aYzNPE1RotUgV3s1AoZf/vEJ7KLzvzIkZZinzLCOvonFnF4pR
-	 mL9p1vfcPQLCAWPPsBzfhvPEHp5689thlP0veF0Hr3Xx+vH+tJ8Me7/LH6iGir4Ni+
-	 83OkyE63jStCOrP0/x868TIv8lx3RvZcvBpow8J/4XkU26o/4pB1dS7DRS4SAYh7ZU
-	 KaUtZxg3n7T7Q==
+	b=olEDGg0sasK0vUUJ0DRnbTjgsazK8GojY7P25lg0oA8J0wgmQm3tm/6VNF4ydA/Gi
+	 GwV4WxqAYCvnQ6cAnangoHSUg8P3LIbEnqLprBrBUHFEPFvxeQrzJhEdl9DkDUyGRZ
+	 P+7/mkij/BJRqwJIggIfQ6Ilu/byx6Y09cBkllmUpf0Hzx74XKi+Af5YH6bnRB5ih4
+	 SMbW/egiSxPeTi2qN1NZwA8+Xp9e4QNGuafndOSDF7MBJEcR2MBgQV8m9nEn1ZyF7o
+	 upaHstcC0quBKA/wgoVAq6Wi4LVST67LlSf9otB/nL9fPWHUoHY/jN8rN+aoCiQ1Xt
+	 /FEteglNKksUg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,39 +49,50 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 01 Apr 2024 16:04:53 +0300
-Message-Id: <D08T37HYOTOJ.2P9FYL2UB0GX8@kernel.org>
-Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
-Subject: Re: [PATCH v7 12/21] tpm: Add NULL primary creation
+Date: Mon, 01 Apr 2024 16:17:50 +0300
+Message-Id: <D08TD4LASWJO.30BX8927MB1YK@kernel.org>
+Cc: <dhowells@redhat.com>, "Peter Huewe" <peterhuewe@gmx.de>, "Jason
+ Gunthorpe" <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>
+Subject: Re: [GIT PULL] tpmdd changes for v6.9-rc2
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>,
- =?utf-8?q?Gabr=C3=ADel_Arth=C3=BAr_P=C3=A9tursson?= <gabriel@system.is>,
- "James Bottomley" <James.Bottomley@HansenPartnership.com>,
- <linux-integrity@vger.kernel.org>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 X-Mailer: aerc 0.17.0
-References: <20240213171334.30479-1-James.Bottomley@HansenPartnership.com>
- <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
- <05c7d10b23e74269efd720eedbb1773931b0ad46.camel@system.is>
- <D08273C2C8HD.2QT57ZPAWPS9H@kernel.org>
- <ea2a3a9a2bea2f1af5565ed32e9584caee2fbecf.camel@system.is>
- <D08SXGNWN4PG.8KW3OIV7WTIK@kernel.org>
-In-Reply-To: <D08SXGNWN4PG.8KW3OIV7WTIK@kernel.org>
+References: <20240326143838.15076-1-jarkko@kernel.org>
+ <CAHk-=wgNpPQFJyLe5dwEVH66ubviuiwM1_tjbyzQv4BytPw7dQ@mail.gmail.com>
+ <D07PD5NTOXSQ.30D5V19O6KMQS@kernel.org>
+ <CAHk-=wi-VWatwU5Gi6n74LF66dRWCo4dUozwj_DwTBRO-wDFcA@mail.gmail.com>
+In-Reply-To: <CAHk-=wi-VWatwU5Gi6n74LF66dRWCo4dUozwj_DwTBRO-wDFcA@mail.gmail.com>
 
-On Mon Apr 1, 2024 at 3:57 PM EEST, Jarkko Sakkinen wrote:
-> > > So for the time being the patch set is NAK just because we lack
-> > > clear definition of done here. I revisit it only when I know how
-> > > to test it.
+On Sun Mar 31, 2024 at 8:01 PM EEST, Linus Torvalds wrote:
+> On Sat, 30 Mar 2024 at 22:57, Jarkko Sakkinen <jarkko@kernel.org> wrote:
 > >
-> > I want to note that I'm not affiliated with the patches' author. I'm
-> > merely an outside observer who has taken interest in the proposed
-> > changes. Wanted to share my thoughts.
+> > OK, point taken and it is evolutionary issue really but definitely
+> > needs to be fixed.
+> >
+> > I review and test most of the stuff that goes to keyring but other
+> > than trusted keys, I usually pick only few patches every now and
+> > then to my tree.
+>
+> It's perfectly fine if you send me key updates - you're listed as
+> maintainer etc, that's not a problem.
+>
+> But when I get a tag name that says "tpmdd" and a subject that says
+> "tpmdd", I'm noty expecting to then see key updates in the pull.
+>
+> So that part of my issue was literally just that your subject line and
+> tag name didn't match the contents, and that just makes me go "there's
+> something wrong here".
+>
+> So keys coming through your tree is fine per se, it's just that I want
+> the subject line etc to actually make sense.
+>
+>                     Linus
 
-I.e. thanks a lot for the feedback. It makes sense to I'm just confused
-overally of the provisioning topic as one big player (Canonical) in the
-cloud seems to break that guide, unless I missed something.
-
-It would interesting to get some feedback on this from Ubuntu developers
-but I don't know who has worked on TPM2 boot feature on that side.
+OK, I'll we'll address no problem :-) I think separate tag and
+appropriate subject line  is sufficient change as we always sync=20
+up with these (through IRC channel), i.e. David is aware when
+I send anything keyring specific.
 
 BR, Jarkko
 
