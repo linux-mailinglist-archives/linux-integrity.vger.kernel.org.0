@@ -1,142 +1,117 @@
-Return-Path: <linux-integrity+bounces-1971-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1972-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24874895ECE
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 23:36:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D981895FAB
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 00:42:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B51F61F276CE
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 21:36:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A3781C227A7
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 22:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0375D15E5D6;
-	Tue,  2 Apr 2024 21:36:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F77225A2;
+	Tue,  2 Apr 2024 22:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VFs56/kY"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="E84EBHY9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A56115E5C4
-	for <linux-integrity@vger.kernel.org>; Tue,  2 Apr 2024 21:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EB71E531;
+	Tue,  2 Apr 2024 22:42:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712093803; cv=none; b=EAwiXCwyZy3Z2NNQGMuA/s+G8POyvuTQK2SO8u5ouU5Mx1qTcuKkobGOGDjilYpRwnetic1U7G1GkGUH2yXVD4alv3JNO9J9HwKY4WBVzDf3rmNOQhzK3oFMT4K0o40J/JSbonbNfRhgWeEDfl641kYFCoOj49CA2qWHoCN1bDE=
+	t=1712097759; cv=none; b=eDqTikItMHGt80/6D5ftrymZ9iAK2cVokzdsUvFpbGC4fRaMgqsqeROzcgJs9JBulJbgqH8/R3Zo/ZWRgteN75Zt9uQPjV/KpaziYy7vbU/fwYX6Op8x/lA40bvhs2OZOXNY23YcdoaMoGEGTULrOYFNs1lnAVcV6CzAjQ8KRk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712093803; c=relaxed/simple;
-	bh=zRrJ7KggAH7cTt1Vhmiuiy2Df28+5h6/wPPYTkWVw04=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BFBwuOC9a2dudHH3aSmXq7asFy7ivyBh9IUJM1DSLvEBUiRy2ROSzyZs23pxmzSokjS+C9r4pnX3+tFjCXqQnCHUJn9W9xTvegmccABjNjq5sDg/rzG708ZIOYaRDkK8l0zshVK/dzElm1jEeS3ueWZg0cMzLgCsQfG95fFExRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=VFs56/kY; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6153d343a4eso9147397b3.0
-        for <linux-integrity@vger.kernel.org>; Tue, 02 Apr 2024 14:36:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1712093801; x=1712698601; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=timWU9GFd6HZQcBIpJ1fDsofXUJOEA2GJUMxdnQeWyI=;
-        b=VFs56/kYlEJ/L6SfqNtsq2LSS+FXJEtIlml70yJZrVYGXT5pKgv9O1EfqVnfef2DHC
-         effgJPyzTa7fxIfft8tofMWxtRk6jmHDTs/yrjT89LI5jITiHeDxBltTiHMGm1NgfK0c
-         C/IyN5f7hATZMFKF4tDkZVaKw40iTbRHuRL92vkwITMIrS8aH/VZ2+qDNVtlfDd2CWfD
-         4JwBLd0t6R2N76LWeJCWujE/6aOaergy+OuNTXokJ3qZixcUjT3l+gdhN9qrThw4qDzV
-         aHjcDYvhpXIKiv7j7zkVSqOt6JiBpGFYEfXPT1uYaYV2WBffe/MmP7+wNEp2PnfMMkS0
-         L4Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712093801; x=1712698601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=timWU9GFd6HZQcBIpJ1fDsofXUJOEA2GJUMxdnQeWyI=;
-        b=r+lBo7klEJDs1Et08oGH9K5LsfoGtcrvzE2hnePUFyB6EEVMbpsPoc5qlfG5GyHJ0b
-         PLPGLe1gQX3bbzjwD+7FFtmQWeaO4BlKlVXwdxK4X+ihAgtk5xbdIHEgTTXJXd/i6Rrs
-         R1udtvgdGw1KsuYgrKQ5evlWJSaQZOlmTmW/fyRHQD07VsT92Fu4TwxvzZ8Edt9zvnJp
-         FEINfSduBE1kAilBvWqhLMCIX/qOfeIqnEjSMZhZC8Yx7fNzq4fGlYA3NZwphBs8rdIt
-         TlLruKMRDNzoouMykZ/W/axefR+Yn6Fhvb3EjeglIywxnMmZtKwHxvo5p4Cqb9O3zPIA
-         WdDg==
-X-Forwarded-Encrypted: i=1; AJvYcCV9Tt2WIXJ6v91gGMRcBO0baBLzi+g7ogWqtFleIZiFvIky9tqzOwCA0cwh7R6Q1ObD98wGZsQv5E1UUK4WhFQ11jdyAdclGoYC9jx95Ych
-X-Gm-Message-State: AOJu0YyAGl45jV/0DQmunXIuLVd4Wp35bTtCD5CynJUDJZFhIMgf5xGj
-	r4pk8ET3VHeQ/nKTgjpxxaI+6Wi6RVETb0HS9jT9m6IZnoU9TUQAqS6CPn3wPp50IJYEH4iek1s
-	ea1d+Q0CbB8CGwileheLZTV3EbF39NTbsTmLa
-X-Google-Smtp-Source: AGHT+IFJTwImClpiwZnwMaF5ABMRExNpfaFRHdgXao7m2+19hKn+RgyYiVPx95ZPN4eHvFaQwRNeE+0VXYBbG7NAbBQ=
-X-Received: by 2002:a81:8544:0:b0:610:e9b2:f84a with SMTP id
- v65-20020a818544000000b00610e9b2f84amr12120598ywf.26.1712093801155; Tue, 02
- Apr 2024 14:36:41 -0700 (PDT)
+	s=arc-20240116; t=1712097759; c=relaxed/simple;
+	bh=76n/dtlrdS4V3B69xGR2/C2+sMIqOX5IJ8MMCJoFQsE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jy+lajzzJGXcHY6Ge3NLY4adydlY+1wGWG5AZzs0yOKzlSY42fP/2X+7q6g4IUY6WLUInPPuY1WqleRiju2JcS+YW52wj5E853AI1KoG2qQpWHLKiukIStvsvOfmbBw3x4WzlrVzEAm1iUJjW4tdnw2a4C/MrO1SCqtgI7p5Yos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=E84EBHY9; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=9vuFRydjFmA3iR+UUnQHu939ajflmP5RxYpQ3S/7QEQ=; b=E84EBHY99VSck8VRb3I+xR7fQ3
+	MOhva1SFDx4LcquqPIXb78cVrAuiJ/XZr+ypDL49prxUF9jv5V7KRYCJkx54WLbnYkrLnJDHRF5YU
+	voQJIsae1qL9QyTm/6BE0udqedcbzXUyMZw7p4PsoxekPQgDlxlZ9VwZmDAOapcuSjP778b1WnVeE
+	DvjhZUou0IYs9ZRuwXrEbW7JYnPGnlAA4pT+bVbjyaqvq5/ao6K97lRwm7bQokmatWc+o7fegbN9a
+	hpC/U4c9t0XInAkGopJOxDFZfdLu5KxE3g7QsadDkZXiKyIMcK0WTEImfFaNPexLoYg3aB1n+zzsJ
+	1e/Nt3EQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1rrmpq-004St9-2e;
+	Tue, 02 Apr 2024 22:42:30 +0000
+Date: Tue, 2 Apr 2024 23:42:30 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [GIT PULL] security changes for v6.9-rc3
+Message-ID: <20240402224230.GJ538574@ZenIV>
+References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
+ <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+ <CAHk-=wjjx3oZ55Uyaw9N_kboHdiScLkXAu05CmPF_p_UhQ-tbw@mail.gmail.com>
+ <20240402210035.GI538574@ZenIV>
+ <CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
- <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
- <CAHk-=wjjx3oZ55Uyaw9N_kboHdiScLkXAu05CmPF_p_UhQ-tbw@mail.gmail.com> <20240402210035.GI538574@ZenIV>
-In-Reply-To: <20240402210035.GI538574@ZenIV>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 2 Apr 2024 17:36:30 -0400
-Message-ID: <CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
-Subject: Re: [GIT PULL] security changes for v6.9-rc3
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Roberto Sassu <roberto.sassu@huaweicloud.com>, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Tue, Apr 2, 2024 at 5:00=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> wr=
-ote:
-> On Tue, Apr 02, 2024 at 12:57:28PM -0700, Linus Torvalds wrote:
->
-> > So in other cases we do handle the NULL, but it does seem like the
-> > other cases actually do validaly want to deal with this (ie the
-> > fsnotify case will say "the directory that mknod was done in was
-> > changed" even if it doesn't know what the change is.
-> >
-> > But for the security case, it really doesn't seem to make much sense
-> > to check a mknod() that you don't know the result of.
-> >
-> > I do wonder if that "!inode" test might also be more specific with
-> > "d_unhashed(dentry)". But that would only make sense if we moved this
-> > test from security_path_post_mknod() into the caller itself, ie we
-> > could possibly do something like this instead (or in addition to):
-> >
-> >   -     if (error)
-> >   -             goto out2;
-> >   -     security_path_post_mknod(idmap, dentry);
-> >   +     if (!error && !d_unhashed(dentry))
-> >   +             security_path_post_mknod(idmap, dentry);
-> >
-> > which might also be sensible.
-> >
-> > Al? Anybody?
->
-> Several things here:
->
->         1) location of that hook is wrong.  It's really "how do we catch
-> file creation that does not come through open() - yes, you can use
-> mknod(2) for that".  It should've been after the call of vfs_create(),
-> not the entire switch.  LSM folks have a disturbing fondness of inserting
-> hooks in various places, but IMO this one has no business being where
-> they'd placed it.
+On Tue, Apr 02, 2024 at 05:36:30PM -0400, Paul Moore wrote:
 
-I know it's everyone's favorite hobby to bash the LSM and LSM devs,
-but it's important to note that we don't add hooks without working
-with the associated subsystem devs to get approval.  In the cases
-where we don't get an explicit ACK, there is an on-list approval, or
-several ignored on-list attempts over weeks/months/years.  We want to
-be good neighbors.
+> >         1) location of that hook is wrong.  It's really "how do we catch
+> > file creation that does not come through open() - yes, you can use
+> > mknod(2) for that".  It should've been after the call of vfs_create(),
+> > not the entire switch.  LSM folks have a disturbing fondness of inserting
+> > hooks in various places, but IMO this one has no business being where
+> > they'd placed it.
+> 
+> I know it's everyone's favorite hobby to bash the LSM and LSM devs,
+> but it's important to note that we don't add hooks without working
+> with the associated subsystem devs to get approval.  In the cases
+> where we don't get an explicit ACK, there is an on-list approval, or
+> several ignored on-list attempts over weeks/months/years.  We want to
+> be good neighbors.
+> 
+> Roberto's original patch which converted from the IMA/EVM hook to the
+> LSM hook was ACK'd by the VFS folks.
+> 
+> Regardless, Roberto if it isn't obvious by now, just move the hook
+> back to where it was prior to v6.9-rc1.
 
-Roberto's original patch which converted from the IMA/EVM hook to the
-LSM hook was ACK'd by the VFS folks.
+The root cause is in the too vague documentation - it's very easy to
+misread as "->mknod() must call d_instantiate()", so the authors of
+that patchset and reviewers of the same had missed the subtlety
+involved.  No arguments about that.
 
-Regardless, Roberto if it isn't obvious by now, just move the hook
-back to where it was prior to v6.9-rc1.
+Unkind comments about the LSM folks' tendency to shove hooks in
+places where they make no sense had been brought by many things,
+the most recent instance being this:
+	However, I thought, since we were promoting it as an LSM hook,
+	we should be as generic possible, and support more usages than
+	what was needed for IMA.
+(https://lore.kernel.org/all/3441a4a1140944f5b418b70f557bca72@huawei.com/)
 
---=20
-paul-moore.com
+I'm not blaming Roberto - that really seems to be the general attitude
+around LSM;  I've seen a _lot_ of "it doesn't matter if it makes any sense,
+somebody might figure out some use for the data we have at that point in
+control flow, eventually if not now" kind of responses over the years.
+IME asking what this or that hook is for and what it expects from the objects
+passed to it gets treated as invalid question.  Which invites treating
+hooks as black boxes...
 
