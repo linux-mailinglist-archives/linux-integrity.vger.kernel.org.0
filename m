@@ -1,122 +1,153 @@
-Return-Path: <linux-integrity+bounces-1964-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1965-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE5F2895C94
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 21:30:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6125B895CCF
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 21:39:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72CA91F26D89
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 19:30:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14471285A0B
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 19:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C114415B55A;
-	Tue,  2 Apr 2024 19:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9847915B980;
+	Tue,  2 Apr 2024 19:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A+ld4brv"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="GrZeNhqn"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A49D15B964;
-	Tue,  2 Apr 2024 19:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F0256458
+	for <linux-integrity@vger.kernel.org>; Tue,  2 Apr 2024 19:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712086233; cv=none; b=ujakWtC1X1bQfA5sEMZRsiiCEqjoKk/btVkDvfTiG5ln0E4vIlRA/T43ibZTSAozlAr2l9JloCqSFLnuvkQYEFGVrL+0BxiUSQtnQUrxMcY9F2mOjQtIuFPZoxro6Prqzx7chSAtW8DMVE256h7GCTLQovQUFWS9+TsVyP0eDUg=
+	t=1712086788; cv=none; b=FWig001O9NSScQfUptUD7u/BKfzpbW3UyYdZM1z6x637vBraajE1TQiH7lorX3/J2UzZBTj+taF9zVzAMbOLnP0Es9/1Z/YLDIznCpG3nDLRzc7S4Vj1SV8dr6oZmLLcz817MvZ5eA7R4SIjDYGNx1FwmzOZ9x/13ZT0/fK3gwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712086233; c=relaxed/simple;
-	bh=vRWeZ4wLl6K6OAEg47hnNnPSj1tZrLt7BHdvAHXaxbc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tm7eA6Jjz8DV1tkewR1av0nr4Z+gu/cm5R0Qcpf3LFn+yi/0k4ffKKY2RmHGDrz6aLZWcg9i7e6oxPAGiV+rw0NSrJCCE20VGj7eB3gv5+yaiqlZUHPCGDi8u9un0fFW1t2IJaQ5VLgF9+jLB6RuiaSxB4a3FmbUIAhSwcaREvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A+ld4brv; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 432JOkmM029203;
-	Tue, 2 Apr 2024 19:30:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=FLKcoy4KD5ED4v2BnCoO/X4hnM4GQdSh3uwIQkosmQ4=;
- b=A+ld4brvDFVKBuYUMaQbLr801BffuyuZCROWBrGOGkHOjONQjlZ/nt63WMCamee10A/q
- vHnH8wSHH7yBu7Omkr6UpslcKz2rF+SsAqA5+8CqqZ2xvT4TBlyD8HDaH38OUYP68szW
- EiMgBcrqZsTRv2qkVsrC5MyZ3XeSamcZ+uqb4xV3zoih8DNbHT06ojh4P2BgmHTgU42c
- nVM4g0XiTHoUR62DJvo1F/NiW0vcelXnM8P04qQbYdNPIBb4H55DcesfOFI6yklHx1ci
- HSWDPN/a3MCdWOiBzAx6ABZJihVkI2XZX9Hf8KA19UdxkeBywcG+AlfyddEl2p60k3Ey Ig== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x8quy025c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Apr 2024 19:30:19 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 432ISwld008422;
-	Tue, 2 Apr 2024 19:30:18 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3x6w2u0yr7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Apr 2024 19:30:18 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 432JUFes25887408
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 2 Apr 2024 19:30:17 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 452DB58083;
-	Tue,  2 Apr 2024 19:30:15 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E25795805F;
-	Tue,  2 Apr 2024 19:30:14 +0000 (GMT)
-Received: from [9.2.202.85] (unknown [9.2.202.85])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  2 Apr 2024 19:30:14 +0000 (GMT)
-Message-ID: <2fb01074-e7a2-403c-8d46-d2b2323c231e@linux.ibm.com>
-Date: Tue, 2 Apr 2024 15:30:13 -0400
+	s=arc-20240116; t=1712086788; c=relaxed/simple;
+	bh=FUitx7MgiMoEaaLuPTTMRh2BBePYzO9uMUChIAgHet4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qSI/kl8w9FsQyS4sOYVzpJlJkRrVXrzVRe6IBSKjlBKr0dQXt6zow5XMC5oRzBzJw1M3Qh61Z++52q4p1AWJzRQnFE3YBlQJtvaXgY8vMLbJ2fREl+bB0L2sPdsZKMZKMxyAZYupa+/n+CscOFGFiwiEDaFG5bIUG1B7aVMN6Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=GrZeNhqn; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56845954ffeso8176381a12.2
+        for <linux-integrity@vger.kernel.org>; Tue, 02 Apr 2024 12:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1712086784; x=1712691584; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mQeGyOEkrbKK1USpW42EOtHV5nHSHeR2mY3J6ZfsUg=;
+        b=GrZeNhqnkcLYGTX+yyG8BOagRjmaAaJP+ErkV4Bp8cauJzqpnp5AwAqyfvWool1JFd
+         k1GpkgNzfn7bVylSi+EFxe9r/r5bvAyV71XWS94KPGoo2xFBYwiLHXbOyHADn4w8UPxv
+         FPuxU66l2HUTfxQGTOidDYyYD6P01dNCgbHdI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712086784; x=1712691584;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0mQeGyOEkrbKK1USpW42EOtHV5nHSHeR2mY3J6ZfsUg=;
+        b=uM8GuQfC6waRYykGLfuZCe5UllJ5lSXhSExM4QB/Yt7HPeXRG7TRLo1t4diCr61B+e
+         MF18hmtzv4WS1buzwCY3FCSQ5fxojiIWoWIOxwjOQtyj6tBoKZSPxZlDbJKCYR/e9ZpC
+         pgeGPKB7goevahjMXJXkZNLXPFpqkDGmSBc5Ekq4fqWKqrsZg1l8T0/EKQZRd2UPjZrS
+         m/xshRlIOJS1TMNiF0QR6lEOPItCEuUB6mYRmm9NYv25GEygTOwb0WELeeCPcPTCZ+8o
+         5p8MNgr7zKv8WuQAY1ncuRCRtyyXcSD7G1SQeIqkhRPGRPuLc8xHczmQnkv9gYvCNtfe
+         N+mQ==
+X-Gm-Message-State: AOJu0Yw/fV5/MvJCuEuEdHLyU15+rbdWhhWE0KCXL1Dx47zPCvNt3Nxp
+	B47wHrwUpm9uCa/R5y8ZKFKhybutb/YVD9KpiQddnCf6jORwb7HQa7X8/erSntcCkI6yoL1RKSe
+	GAGU=
+X-Google-Smtp-Source: AGHT+IE6fIL63BFVZK7j9wIHlc30Eg7Z4u+wHr8CKOY8KchBj4ckHEaBZSCwMcb6gPCZNaHEOWNSDw==
+X-Received: by 2002:a50:d5de:0:b0:56d:c3cb:df49 with SMTP id g30-20020a50d5de000000b0056dc3cbdf49mr6409378edj.31.1712086784569;
+        Tue, 02 Apr 2024 12:39:44 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id f5-20020a05640214c500b0056bf7f92346sm7235757edx.50.2024.04.02.12.39.43
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Apr 2024 12:39:43 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56df87057bbso845852a12.3
+        for <linux-integrity@vger.kernel.org>; Tue, 02 Apr 2024 12:39:43 -0700 (PDT)
+X-Received: by 2002:a17:906:2698:b0:a47:4d61:de44 with SMTP id
+ t24-20020a170906269800b00a474d61de44mr8673776ejc.55.1712086783205; Tue, 02
+ Apr 2024 12:39:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 12/21] tpm: Add NULL primary creation
-To: =?UTF-8?B?R2FicsOtZWwgQXJ0aMO6ciBQw6l0dXJzc29u?= <gabriel@system.is>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org
-Cc: keyrings@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-References: <20240213171334.30479-1-James.Bottomley@HansenPartnership.com>
- <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
- <05c7d10b23e74269efd720eedbb1773931b0ad46.camel@system.is>
- <D08273C2C8HD.2QT57ZPAWPS9H@kernel.org>
- <ea2a3a9a2bea2f1af5565ed32e9584caee2fbecf.camel@system.is>
-Content-Language: en-US
-From: Ken Goldman <kgold@linux.ibm.com>
-In-Reply-To: <ea2a3a9a2bea2f1af5565ed32e9584caee2fbecf.camel@system.is>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GMeB6XCmwZMmneqqs8nC2mHVyUaS0XXm
-X-Proofpoint-ORIG-GUID: GMeB6XCmwZMmneqqs8nC2mHVyUaS0XXm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-02_12,2024-04-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 mlxlogscore=798 lowpriorityscore=0 adultscore=0 spamscore=0
- malwarescore=0 mlxscore=0 phishscore=0 impostorscore=0 clxscore=1011
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2403210000 definitions=main-2404020143
+References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 2 Apr 2024 12:39:27 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+Message-ID: <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+Subject: Re: [GIT PULL] security changes for v6.9-rc3
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/31/2024 12:52 PM, Gabríel Arthúr Pétursson wrote:
-> The TPM specifications have a standardized set of templates for the
-> Endorsement Keys, and a recommendation on a template to
-> create/provision the shared SRK.
+On Tue, 2 Apr 2024 at 07:12, Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+> A single bug fix to address a kernel panic in the newly introduced function
+> security_path_post_mknod.
 
-The original TCG guidance document for an SRK used arrays of zeros for 
-the unique field.
+So I've pulled from you before, but I still don't have a signature
+chain for your key (not that I can even find the key itself, much less
+a signature chain).
 
-This was either a holdover from TPM 1.2, where arrays were 20 bytes,
-or a misinterpretation of text that said: NULL.
+Last time I pulled, it was after having everybody else just verify the
+actual commit.
 
-The reality is that it's a TPM2B, and the size(s) can be zero.
+This time, the commit looks like a valid "avoid NULL", but I have to
+say that I also think the security layer code in question is ENTIRELY
+WRONG.
 
-The answer for the EK is different. It has to use the TCG
-standard.  The EK is not a 'guidance document'.
+IOW, as far as I can tell, the mknod() system call may indeed leave
+the dentry unhashed, and rely on anybody who then wants to use the new
+special file to just do a "lookup()" to actually use it.
+
+HOWEVER.
+
+That also means that the whole notion of "post_path_mknod() is
+complete and utter hoghwash. There is not anything that the security
+layer can possibly validly do.
+
+End result: instead of checking the 'inode' for NULL, I think the
+right fix is to remove that meaningless security hook. It cannot do
+anything sane, since one option is always 'the inode hasn't been
+initialized yet".
+
+Put another way: any security hook that checks inode in
+security_path_post_mknod() seems simply buggy.
+
+But if we really want to do this ("if mknod creates a positive dentry,
+I won't see it in lookup, so I want to appraise it now"), then we
+should just deal with this in the generic layer with some hack like
+this:
+
+  --- a/security/security.c
+  +++ b/security/security.c
+  @@ -1801,7 +1801,8 @@ EXPORT_SYMBOL(security_path_mknod);
+    */
+   void security_path_post_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+   {
+  -     if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+  +     struct inode *inode = d_backing_inode(dentry);
+  +     if (unlikely(!inode || IS_PRIVATE(inode)))
+                return;
+        call_void_hook(path_post_mknod, idmap, dentry);
+   }
+
+and IMA and EVM would have to do any validation at lookup() time for
+the cases where the dentry wasn't hashed by ->mknod.
+
+Anyway, all of this is to say that I don't feel like I can pull this without
+ (a) more acks by people
+and
+ (b) explanations for why the simpler fix to just
+security_path_post_mknod() isn't the right fix.
+
+                 Linus
 
