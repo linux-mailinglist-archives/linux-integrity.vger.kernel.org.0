@@ -1,86 +1,86 @@
-Return-Path: <linux-integrity+bounces-1965-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1966-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6125B895CCF
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 21:39:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C95DC895D30
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 21:57:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14471285A0B
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 19:39:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6902E1F27375
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Apr 2024 19:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9847915B980;
-	Tue,  2 Apr 2024 19:39:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D82B15CD64;
+	Tue,  2 Apr 2024 19:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="GrZeNhqn"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LNtqNNSK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F0256458
-	for <linux-integrity@vger.kernel.org>; Tue,  2 Apr 2024 19:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2558515B578
+	for <linux-integrity@vger.kernel.org>; Tue,  2 Apr 2024 19:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712086788; cv=none; b=FWig001O9NSScQfUptUD7u/BKfzpbW3UyYdZM1z6x637vBraajE1TQiH7lorX3/J2UzZBTj+taF9zVzAMbOLnP0Es9/1Z/YLDIznCpG3nDLRzc7S4Vj1SV8dr6oZmLLcz817MvZ5eA7R4SIjDYGNx1FwmzOZ9x/13ZT0/fK3gwg=
+	t=1712087870; cv=none; b=uBEJdWG8OHBZRQChllLdlJ96eDpI9mwGCNDhbtCk/u2YUlZwFP0c+DUkelrQGylMBd99OUOWMY49cKaQdyN1otPEJthtxXmzxUWrJpR872XCrEbJMci8lWWXhOgWXXnmBKLhVDiT2057rGieV+zhxLe0YmMubwGBC2sivBCNRPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712086788; c=relaxed/simple;
-	bh=FUitx7MgiMoEaaLuPTTMRh2BBePYzO9uMUChIAgHet4=;
+	s=arc-20240116; t=1712087870; c=relaxed/simple;
+	bh=dktNbJSE4AMUUSXBqDMDbOSzD2AIdHi/2em6bOnXPak=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qSI/kl8w9FsQyS4sOYVzpJlJkRrVXrzVRe6IBSKjlBKr0dQXt6zow5XMC5oRzBzJw1M3Qh61Z++52q4p1AWJzRQnFE3YBlQJtvaXgY8vMLbJ2fREl+bB0L2sPdsZKMZKMxyAZYupa+/n+CscOFGFiwiEDaFG5bIUG1B7aVMN6Xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=GrZeNhqn; arc=none smtp.client-ip=209.85.208.50
+	 To:Cc:Content-Type; b=sLV/IfllqhI59XOI03WIRTqk6zmH6Y7+OG7ijEGJR3XJC1c2FljtiTf5xZwcOt3fXD1lSI/vOBTr//UHG32zo7czk1eAI0HPGL9r7iP9fpUHoz3TJ1VcWOmedphCZHTgqAAv/7jAhDB6j7yxKOaNClkXS27qWGMG75RTx0V7QNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LNtqNNSK; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-56845954ffeso8176381a12.2
-        for <linux-integrity@vger.kernel.org>; Tue, 02 Apr 2024 12:39:46 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-563cb3ba9daso5592805a12.3
+        for <linux-integrity@vger.kernel.org>; Tue, 02 Apr 2024 12:57:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1712086784; x=1712691584; darn=vger.kernel.org;
+        d=linux-foundation.org; s=google; t=1712087866; x=1712692666; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0mQeGyOEkrbKK1USpW42EOtHV5nHSHeR2mY3J6ZfsUg=;
-        b=GrZeNhqnkcLYGTX+yyG8BOagRjmaAaJP+ErkV4Bp8cauJzqpnp5AwAqyfvWool1JFd
-         k1GpkgNzfn7bVylSi+EFxe9r/r5bvAyV71XWS94KPGoo2xFBYwiLHXbOyHADn4w8UPxv
-         FPuxU66l2HUTfxQGTOidDYyYD6P01dNCgbHdI=
+        bh=xZSMPyJcLDwQQyPD929o3b508jAKY9ueBln0f3F7O4Q=;
+        b=LNtqNNSK2bxx5ZBmRwBbbisytbYWfxwNUm4pCONxSDiyQA4x40LNM9pwUOlV9l6SBd
+         dq3annfM35j9CkSniihaifFKA/I9XrLJv1LyYi9GqAKPmLaNy4iSI/Xcr8gfRZo5AXsE
+         30yfgTyqewyZ1yQ9OivJubpMkTgvXkjWl0ff8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712086784; x=1712691584;
+        d=1e100.net; s=20230601; t=1712087866; x=1712692666;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0mQeGyOEkrbKK1USpW42EOtHV5nHSHeR2mY3J6ZfsUg=;
-        b=uM8GuQfC6waRYykGLfuZCe5UllJ5lSXhSExM4QB/Yt7HPeXRG7TRLo1t4diCr61B+e
-         MF18hmtzv4WS1buzwCY3FCSQ5fxojiIWoWIOxwjOQtyj6tBoKZSPxZlDbJKCYR/e9ZpC
-         pgeGPKB7goevahjMXJXkZNLXPFpqkDGmSBc5Ekq4fqWKqrsZg1l8T0/EKQZRd2UPjZrS
-         m/xshRlIOJS1TMNiF0QR6lEOPItCEuUB6mYRmm9NYv25GEygTOwb0WELeeCPcPTCZ+8o
-         5p8MNgr7zKv8WuQAY1ncuRCRtyyXcSD7G1SQeIqkhRPGRPuLc8xHczmQnkv9gYvCNtfe
-         N+mQ==
-X-Gm-Message-State: AOJu0Yw/fV5/MvJCuEuEdHLyU15+rbdWhhWE0KCXL1Dx47zPCvNt3Nxp
-	B47wHrwUpm9uCa/R5y8ZKFKhybutb/YVD9KpiQddnCf6jORwb7HQa7X8/erSntcCkI6yoL1RKSe
-	GAGU=
-X-Google-Smtp-Source: AGHT+IE6fIL63BFVZK7j9wIHlc30Eg7Z4u+wHr8CKOY8KchBj4ckHEaBZSCwMcb6gPCZNaHEOWNSDw==
-X-Received: by 2002:a50:d5de:0:b0:56d:c3cb:df49 with SMTP id g30-20020a50d5de000000b0056dc3cbdf49mr6409378edj.31.1712086784569;
-        Tue, 02 Apr 2024 12:39:44 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id f5-20020a05640214c500b0056bf7f92346sm7235757edx.50.2024.04.02.12.39.43
+        bh=xZSMPyJcLDwQQyPD929o3b508jAKY9ueBln0f3F7O4Q=;
+        b=g0yPcv9c53DreV2iPsbiijsvGE619klceiR17JhnqFm7570qdVu05qvcjTtFPbsNwu
+         8Fm/+H33eRTyfjf2K74oNvyD9aOY0I52BZZ16kaj6dQd1hGg8ThBsmeVKncWB5cjfkam
+         0TxdUtyYsf/48Ny5LzCoqTycbBfEEll8Lbkn24ut4agpgkhs4AGHn2FgICtKpTRuoLQe
+         faxFCZA9WmNVLe3D/wXNvXvR95IDrdxxzCRPcnaj+Zq41ZU4l8ceplSc0nzuZInAPTCf
+         IFz5tci1lBibQDwJcJ4KhEIJLuGEIV72Qm0+6eBwEcdyo1mZxbHmmVA6Yxpg08yUSIvE
+         CbdA==
+X-Gm-Message-State: AOJu0YwYA/aaxxmr8NV7mFKMvF2c7+2rGbqtHqpHBbHT0/cAbYyBGm9j
+	NnKRo8ORI0dIlw5fyNUSOewCspYITcRouuz7o/YCnQAAuEYJNJD/3comZZBgEaLPySC+NRA4SPH
+	Mufo=
+X-Google-Smtp-Source: AGHT+IG3ypqPcP/LpoJ9JmwSSQUeU4M+WHj7/lEtbbzgSvkeOe+wkjPn7YAXd7BcQUcp7UAtEyExuA==
+X-Received: by 2002:a17:906:4889:b0:a4e:4389:7dc0 with SMTP id v9-20020a170906488900b00a4e43897dc0mr8847034ejq.69.1712087866187;
+        Tue, 02 Apr 2024 12:57:46 -0700 (PDT)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id w20-20020a170906d21400b00a4750705a07sm6878210ejz.190.2024.04.02.12.57.45
         for <linux-integrity@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Apr 2024 12:39:43 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-56df87057bbso845852a12.3
-        for <linux-integrity@vger.kernel.org>; Tue, 02 Apr 2024 12:39:43 -0700 (PDT)
-X-Received: by 2002:a17:906:2698:b0:a47:4d61:de44 with SMTP id
- t24-20020a170906269800b00a474d61de44mr8673776ejc.55.1712086783205; Tue, 02
- Apr 2024 12:39:43 -0700 (PDT)
+        Tue, 02 Apr 2024 12:57:45 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a466e53f8c0so735851266b.1
+        for <linux-integrity@vger.kernel.org>; Tue, 02 Apr 2024 12:57:45 -0700 (PDT)
+X-Received: by 2002:a17:906:5794:b0:a4e:7b8e:35ae with SMTP id
+ k20-20020a170906579400b00a4e7b8e35aemr3749307ejq.38.1712087865212; Tue, 02
+ Apr 2024 12:57:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
+References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com> <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+In-Reply-To: <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 2 Apr 2024 12:39:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
-Message-ID: <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+Date: Tue, 2 Apr 2024 12:57:28 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjjx3oZ55Uyaw9N_kboHdiScLkXAu05CmPF_p_UhQ-tbw@mail.gmail.com>
+Message-ID: <CAHk-=wjjx3oZ55Uyaw9N_kboHdiScLkXAu05CmPF_p_UhQ-tbw@mail.gmail.com>
 Subject: Re: [GIT PULL] security changes for v6.9-rc3
 To: Roberto Sassu <roberto.sassu@huaweicloud.com>
 Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
@@ -88,66 +88,57 @@ Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 2 Apr 2024 at 07:12, Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> A single bug fix to address a kernel panic in the newly introduced function
-> security_path_post_mknod.
+On Tue, 2 Apr 2024 at 12:39, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
 
-So I've pulled from you before, but I still don't have a signature
-chain for your key (not that I can even find the key itself, much less
-a signature chain).
+>    void security_path_post_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+>    {
+>   -     if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+>   +     struct inode *inode = d_backing_inode(dentry);
+>   +     if (unlikely(!inode || IS_PRIVATE(inode)))
+>                 return;
+>         call_void_hook(path_post_mknod, idmap, dentry);
 
-Last time I pulled, it was after having everybody else just verify the
-actual commit.
+Hmm. We do have other hooks that get called for this case.
 
-This time, the commit looks like a valid "avoid NULL", but I have to
-say that I also think the security layer code in question is ENTIRELY
-WRONG.
+For fsnotify_create() we actually have a comment about this:
 
-IOW, as far as I can tell, the mknod() system call may indeed leave
-the dentry unhashed, and rely on anybody who then wants to use the new
-special file to just do a "lookup()" to actually use it.
+ * fsnotify_create - 'name' was linked in
+ *
+ * Caller must make sure that dentry->d_name is stable.
+ * Note: some filesystems (e.g. kernfs) leave @dentry negative and instantiate
+ * ->d_inode later
 
-HOWEVER.
+and audit_inode_child() ends up having a
 
-That also means that the whole notion of "post_path_mknod() is
-complete and utter hoghwash. There is not anything that the security
-layer can possibly validly do.
+        if (inode)
+                handle_one(inode);
 
-End result: instead of checking the 'inode' for NULL, I think the
-right fix is to remove that meaningless security hook. It cannot do
-anything sane, since one option is always 'the inode hasn't been
-initialized yet".
+in it.
 
-Put another way: any security hook that checks inode in
-security_path_post_mknod() seems simply buggy.
+So in other cases we do handle the NULL, but it does seem like the
+other cases actually do validaly want to deal with this (ie the
+fsnotify case will say "the directory that mknod was done in was
+changed" even if it doesn't know what the change is.
 
-But if we really want to do this ("if mknod creates a positive dentry,
-I won't see it in lookup, so I want to appraise it now"), then we
-should just deal with this in the generic layer with some hack like
-this:
+But for the security case, it really doesn't seem to make much sense
+to check a mknod() that you don't know the result of.
 
-  --- a/security/security.c
-  +++ b/security/security.c
-  @@ -1801,7 +1801,8 @@ EXPORT_SYMBOL(security_path_mknod);
-    */
-   void security_path_post_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
-   {
-  -     if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
-  +     struct inode *inode = d_backing_inode(dentry);
-  +     if (unlikely(!inode || IS_PRIVATE(inode)))
-                return;
-        call_void_hook(path_post_mknod, idmap, dentry);
-   }
+I do wonder if that "!inode" test might also be more specific with
+"d_unhashed(dentry)". But that would only make sense if we moved this
+test from security_path_post_mknod() into the caller itself, ie we
+could possibly do something like this instead (or in addition to):
 
-and IMA and EVM would have to do any validation at lookup() time for
-the cases where the dentry wasn't hashed by ->mknod.
+  -     if (error)
+  -             goto out2;
+  -     security_path_post_mknod(idmap, dentry);
+  +     if (!error && !d_unhashed(dentry))
+  +             security_path_post_mknod(idmap, dentry);
 
-Anyway, all of this is to say that I don't feel like I can pull this without
- (a) more acks by people
-and
- (b) explanations for why the simpler fix to just
-security_path_post_mknod() isn't the right fix.
+which might also be sensible.
 
-                 Linus
+Al? Anybody?
+
+                Linus
 
