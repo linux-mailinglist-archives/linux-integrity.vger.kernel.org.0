@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-1995-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1996-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AA39897471
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 17:50:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D8168974E3
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 18:09:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F4FDB2607D
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 15:48:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D51211F224D1
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 16:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589D814A4FC;
-	Wed,  3 Apr 2024 15:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 075BF14E2F9;
+	Wed,  3 Apr 2024 16:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dYo0Q27d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcKjSobB"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1675714A4E0;
-	Wed,  3 Apr 2024 15:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B588C14E2DC;
+	Wed,  3 Apr 2024 16:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712159280; cv=none; b=SdBt3zm/tClmgCO0cnZZD3Nr7ZG9R8orDWvDw1P24X5ajibDQhi7qmgu6t5CK8lR5Ava9x2qXr0QXwsX36cDkVKyiHC1aPCYPKHYkGEkynPTvenP31iPAr01WzPgxccxlOH53lM8gb82f6jcP0CwKwasF+Xyw/NzZTJ9uGAsdto=
+	t=1712160590; cv=none; b=tMzNNRwvuL4xKu3ObIZreVIYllJX0VEwnt/9/8A9m83Y6EXAavLbiAO26dJm+dct40OW8b0IrFb4AK5wimx0arKEaeuS2QMi5484j3+J2fe0i2Kw8/+449DDCg2tvvusRqoDxEbwKaO0/n/RWy6vyas726DFXQ1J9mNIuI4cS+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712159280; c=relaxed/simple;
-	bh=rrCR4x657hJj+9Z7FfIwTOL0bKqYr1iVATWuKVnBvdc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=IfaYXXHYKBzEF6hzXXR0y75ac5wwXSIeqeBlBf/82IoNYEa8tnAHz4cD+Ckpz9spJLRhlVwqBaFS//MXMIJiodhTaCYkokEofnOdphDXd/Uut2B7WfuGaETPlyXJs+xCyIeGEkun3MkLVROOSsJLxOUvZ7CpLhJbAS2ISxWIU/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dYo0Q27d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13591C433C7;
-	Wed,  3 Apr 2024 15:47:52 +0000 (UTC)
+	s=arc-20240116; t=1712160590; c=relaxed/simple;
+	bh=8hzZGuG3Djlgf0qMwrfrn4bWy2pLWmCCjfypaPd6iaU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=tJaGtwjEjTezCb56WYqyDf0bl03EZxpj8BiJulTlSG/m95BaVKr7XaVQwgkSAHlT7aHjzTF8byu4fD6Lh10WsoKifcpnI1QoMsY5+pBvmZXSO+SCbj7Syb09/5iJK5uSjlrA9cgtNy0UxZxDgh73e+aHoeiV/tx/09miV/2PXc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jcKjSobB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D70C433B1;
+	Wed,  3 Apr 2024 16:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712159279;
-	bh=rrCR4x657hJj+9Z7FfIwTOL0bKqYr1iVATWuKVnBvdc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dYo0Q27dSQQ3Ch8t1bv/4TDEGdVvlFtZiK/Zz2pAtDrV2dGg+D+XOJblloji6lf8f
-	 AT/1G9mjWsRaJTEV3z+NlLz40f+kBk5nFmcrUtgEA41qda5WwW4i8s4RLr/MzdF5zi
-	 YoTjxsD9V0zKYX4yL4N07X1LoysvapSXkS7G6OsnvSJFKJeNikI8cMxk3axKsNBB+y
-	 P6Adfksr8JnIG1LemgmEFRN0C6BpU/ZKYmBXXWJOohD4naX0Imdw+22KIlCXUWOohl
-	 YL80cR6IKID87Ymp816wKnW4iT/VyBYwP0nq6oFeuIpysRTK4u+RGJb+IBGt3Xt9x0
-	 vxIbwg0cDWVFw==
+	s=k20201202; t=1712160590;
+	bh=8hzZGuG3Djlgf0qMwrfrn4bWy2pLWmCCjfypaPd6iaU=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=jcKjSobBys2AwDWtHUg+nZNz255hX8YJ8clocbZnVtIj0h52DY808t+gVnLSzkMLC
+	 X2jjQFAvUGmd4lb2M/HiK8OYAD4oRg6oM2wRSk/RtDyPOErdicM/kRH7ZmaFffstdd
+	 A5uhuABW7lcrvZbj6juYMAQtimJyqGFQZcIGMI0EOpEDTaFtJn8kgeNnGah9Hgz94S
+	 IOzUjSSG8Dy1PPZNqM66yJrWCw2X5fzAFrh0GVmZ1l/EQYOliuMJ261ne92VmHIt0M
+	 aZaraEfx5h6OpkWv3gkSRGiGucYprWgAnxL9Gst4Y9JBTDvukYB1H1HajHS8VYD79T
+	 fVNVTde8ha+Ew==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,226 +49,68 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 03 Apr 2024 18:47:51 +0300
-Message-Id: <D0ALT2QCUIYB.8NFTE7Z18JKN@kernel.org>
+Date: Wed, 03 Apr 2024 19:09:38 +0300
+Message-Id: <D0AM9RGC7D65.2V9TFGBOSF3LN@kernel.org>
+Subject: Re: [PATCH 33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR
+ annotations
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "David Gstir" <david@sigma-star.at>, "Mimi Zohar" <zohar@linux.ibm.com>,
- "James Bottomley" <jejb@linux.ibm.com>, "Herbert Xu"
- <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
-Cc: "Shawn Guo" <shawnguo@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- "Sascha Hauer" <s.hauer@pengutronix.de>, "Pengutronix Kernel Team"
- <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "NXP Linux
- Team" <linux-imx@nxp.com>, "Ahmad Fatoum" <a.fatoum@pengutronix.de>, "sigma
- star Kernel Team" <upstream+dcp@sigma-star.at>, "David Howells"
- <dhowells@redhat.com>, "Li Yang" <leoyang.li@nxp.com>, "Paul Moore"
- <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, "Tejun Heo" <tj@kernel.org>, "Steven Rostedt
- (Google)" <rostedt@goodmis.org>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>, <linuxppc-dev@lists.ozlabs.org>,
- <linux-security-module@vger.kernel.org>, "Richard Weinberger"
- <richard@nod.at>, "David Oberhollenzer" <david.oberhollenzer@sigma-star.at>
-Subject: Re: [PATCH v8 6/6] docs: trusted-encrypted: add DCP as new trust
- source
+To: "Arnd Bergmann" <arnd@kernel.org>, <linux-kernel@vger.kernel.org>,
+ "Corey Minyard" <minyard@acm.org>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Vinod Koul" <vkoul@kernel.org>, "Moritz Fischer" <mdf@kernel.org>, "Wu
+ Hao" <hao.wu@intel.com>, "Xu Yilun" <yilun.xu@intel.com>, "Jiri Kosina"
+ <jikos@kernel.org>, "Benjamin Tissoires" <benjamin.tissoires@redhat.com>,
+ "Michael Hennerich" <michael.hennerich@analog.com>, "Peter Rosin"
+ <peda@axentia.se>, "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, "Iyappan
+ Subramanian" <iyappan@os.amperecomputing.com>, "Keyur Chudgar"
+ <keyur@os.amperecomputing.com>, "David S. Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Yisen Zhuang"
+ <yisen.zhuang@huawei.com>, "Salil Mehta" <salil.mehta@huawei.com>, "Tony
+ Lindgren" <tony@atomide.com>, "Liam Girdwood" <lgirdwood@gmail.com>, "Mark
+ Brown" <broonie@kernel.org>, "Alexandre Belloni"
+ <alexandre.belloni@bootlin.com>, "Xiang Chen" <chenxiang66@hisilicon.com>,
+ "James E.J. Bottomley" <jejb@linux.ibm.com>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Russell King" <linux@armlinux.org.uk>, "Jiri
+ Slaby" <jirislaby@kernel.org>, "Jacky Huang" <ychuang3@nuvoton.com>,
+ "Shan-Chun Hung" <schung@nuvoton.com>
+Cc: "Arnd Bergmann" <arnd@arndb.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Tom
+ Rix" <trix@redhat.com>, =?utf-8?q?Uwe_Kleine-K=C3=B6nig?=
+ <u.kleine-koenig@pengutronix.de>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Rob Herring" <robh@kernel.org>, "Linus Walleij"
+ <linus.walleij@linaro.org>, <openipmi-developer@lists.sourceforge.net>,
+ <linux-integrity@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+ <linux-fpga@vger.kernel.org>, <linux-input@vger.kernel.org>,
+ <linux-i2c@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-omap@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+ <linux-scsi@vger.kernel.org>, <linux-staging@lists.linux.dev>,
+ <linux-serial@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
 X-Mailer: aerc 0.17.0
-References: <20240403072131.54935-1-david@sigma-star.at>
- <20240403072131.54935-7-david@sigma-star.at>
-In-Reply-To: <20240403072131.54935-7-david@sigma-star.at>
+References: <20240403080702.3509288-1-arnd@kernel.org>
+ <20240403080702.3509288-34-arnd@kernel.org>
+In-Reply-To: <20240403080702.3509288-34-arnd@kernel.org>
 
-On Wed Apr 3, 2024 at 10:21 AM EEST, David Gstir wrote:
-> Update the documentation for trusted and encrypted KEYS with DCP as new
-> trust source:
->
-> - Describe security properties of DCP trust source
-> - Describe key usage
-> - Document blob format
->
-> Co-developed-by: Richard Weinberger <richard@nod.at>
-> Signed-off-by: Richard Weinberger <richard@nod.at>
-> Co-developed-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-> Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-> Signed-off-by: David Gstir <david@sigma-star.at>
-> ---
->  .../security/keys/trusted-encrypted.rst       | 53 +++++++++++++++++++
->  security/keys/trusted-keys/trusted_dcp.c      | 19 +++++++
->  2 files changed, 72 insertions(+)
->
-> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Document=
-ation/security/keys/trusted-encrypted.rst
-> index e989b9802f92..f4d7e162d5e4 100644
-> --- a/Documentation/security/keys/trusted-encrypted.rst
-> +++ b/Documentation/security/keys/trusted-encrypted.rst
-> @@ -42,6 +42,14 @@ safe.
->           randomly generated and fused into each SoC at manufacturing tim=
-e.
->           Otherwise, a common fixed test key is used instead.
-> =20
-> +     (4) DCP (Data Co-Processor: crypto accelerator of various i.MX SoCs=
-)
-> +
-> +         Rooted to a one-time programmable key (OTP) that is generally b=
-urnt
-> +         in the on-chip fuses and is accessible to the DCP encryption en=
-gine only.
-> +         DCP provides two keys that can be used as root of trust: the OT=
-P key
-> +         and the UNIQUE key. Default is to use the UNIQUE key, but selec=
-ting
-> +         the OTP key can be done via a module parameter (dcp_use_otp_key=
-).
-> +
->    *  Execution isolation
-> =20
->       (1) TPM
-> @@ -57,6 +65,12 @@ safe.
-> =20
->           Fixed set of operations running in isolated execution environme=
-nt.
-> =20
-> +     (4) DCP
-> +
-> +         Fixed set of cryptographic operations running in isolated execu=
-tion
-> +         environment. Only basic blob key encryption is executed there.
-> +         The actual key sealing/unsealing is done on main processor/kern=
-el space.
-> +
->    * Optional binding to platform integrity state
-> =20
->       (1) TPM
-> @@ -79,6 +93,11 @@ safe.
->           Relies on the High Assurance Boot (HAB) mechanism of NXP SoCs
->           for platform integrity.
-> =20
-> +     (4) DCP
-> +
-> +         Relies on Secure/Trusted boot process (called HAB by vendor) fo=
-r
-> +         platform integrity.
-> +
->    *  Interfaces and APIs
-> =20
->       (1) TPM
-> @@ -94,6 +113,11 @@ safe.
-> =20
->           Interface is specific to silicon vendor.
-> =20
-> +     (4) DCP
-> +
-> +         Vendor-specific API that is implemented as part of the DCP cryp=
-to driver in
-> +         ``drivers/crypto/mxs-dcp.c``.
-> +
->    *  Threat model
-> =20
->       The strength and appropriateness of a particular trust source for a=
- given
-> @@ -129,6 +153,13 @@ selected trust source:
->       CAAM HWRNG, enable CRYPTO_DEV_FSL_CAAM_RNG_API and ensure the devic=
-e
->       is probed.
-> =20
-> +  *  DCP (Data Co-Processor: crypto accelerator of various i.MX SoCs)
-> +
-> +     The DCP hardware device itself does not provide a dedicated RNG int=
-erface,
-> +     so the kernel default RNG is used. SoCs with DCP like the i.MX6ULL =
-do have
-> +     a dedicated hardware RNG that is independent from DCP which can be =
-enabled
-> +     to back the kernel RNG.
-> +
->  Users may override this by specifying ``trusted.rng=3Dkernel`` on the ke=
-rnel
->  command-line to override the used RNG with the kernel's random number po=
-ol.
-> =20
-> @@ -231,6 +262,19 @@ Usage::
->  CAAM-specific format.  The key length for new keys is always in bytes.
->  Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-> =20
-> +Trusted Keys usage: DCP
-> +-----------------------
-> +
-> +Usage::
-> +
-> +    keyctl add trusted name "new keylen" ring
-> +    keyctl add trusted name "load hex_blob" ring
-> +    keyctl print keyid
-> +
-> +"keyctl print" returns an ASCII hex copy of the sealed key, which is in =
-format
-> +specific to this DCP key-blob implementation.  The key length for new ke=
-ys is
-> +always in bytes. Trusted Keys can be 32 - 128 bytes (256 - 1024 bits).
-> +
->  Encrypted Keys usage
->  --------------------
-> =20
-> @@ -426,3 +470,12 @@ string length.
->  privkey is the binary representation of TPM2B_PUBLIC excluding the
->  initial TPM2B header which can be reconstructed from the ASN.1 octed
->  string length.
-> +
-> +DCP Blob Format
-> +---------------
-> +
-> +.. kernel-doc:: security/keys/trusted-keys/trusted_dcp.c
-> +   :doc: dcp blob format
-> +
-> +.. kernel-doc:: security/keys/trusted-keys/trusted_dcp.c
-> +   :identifiers: struct dcp_blob_fmt
-> diff --git a/security/keys/trusted-keys/trusted_dcp.c b/security/keys/tru=
-sted-keys/trusted_dcp.c
-> index 16c44aafeab3..b5f81a05be36 100644
-> --- a/security/keys/trusted-keys/trusted_dcp.c
-> +++ b/security/keys/trusted-keys/trusted_dcp.c
-> @@ -19,6 +19,25 @@
->  #define DCP_BLOB_VERSION 1
->  #define DCP_BLOB_AUTHLEN 16
-> =20
-> +/**
-> + * DOC: dcp blob format
-> + *
-> + * The Data Co-Processor (DCP) provides hardware-bound AES keys using it=
-s
-> + * AES encryption engine only. It does not provide direct key sealing/un=
-sealing.
-> + * To make DCP hardware encryption keys usable as trust source, we defin=
-e
-> + * our own custom format that uses a hardware-bound key to secure the se=
-aling
-> + * key stored in the key blob.
-> + *
-> + * Whenever a new trusted key using DCP is generated, we generate a rand=
-om 128-bit
-> + * blob encryption key (BEK) and 128-bit nonce. The BEK and nonce are us=
-ed to
-> + * encrypt the trusted key payload using AES-128-GCM.
-> + *
-> + * The BEK itself is encrypted using the hardware-bound key using the DC=
-P's AES
-> + * encryption engine with AES-128-ECB. The encrypted BEK, generated nonc=
-e,
-> + * BEK-encrypted payload and authentication tag make up the blob format =
-together
-> + * with a version number, payload length and authentication tag.
-> + */
-> +
->  /**
->   * struct dcp_blob_fmt - DCP BLOB format.
->   *
+On Wed Apr 3, 2024 at 11:06 AM EEST, Arnd Bergmann wrote:
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_=
+tee.c
+> index 2ea4882251cf..0c453f3f928d 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -362,7 +362,7 @@ MODULE_DEVICE_TABLE(of, of_ftpm_tee_ids);
+>  static struct platform_driver ftpm_tee_plat_driver =3D {
+>  	.driver =3D {
+>  		.name =3D "ftpm-tee",
+> -		.of_match_table =3D of_match_ptr(of_ftpm_tee_ids),
+> +		.of_match_table =3D of_ftpm_tee_ids,
+>  	},
+>  	.shutdown =3D ftpm_plat_tee_shutdown,
+>  	.probe =3D ftpm_plat_tee_probe,
+
+For this portion:
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-I can only test that this does not break a machine without the
-hardware feature.
-
-Is there anyone who could possibly peer test these patches?
+[can be included to possible new revisions if it stays same]
 
 BR, Jarkko
 
