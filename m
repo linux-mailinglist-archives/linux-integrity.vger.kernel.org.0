@@ -1,166 +1,151 @@
-Return-Path: <linux-integrity+bounces-1990-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1992-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AA34896FEA
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 15:12:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7A3B8970D7
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 15:27:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C484B28A724
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 13:11:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54FB81F234E7
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 13:27:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920F7146D41;
-	Wed,  3 Apr 2024 13:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 980D2149E18;
+	Wed,  3 Apr 2024 13:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Upl7xRlv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BIll3WjV"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FAD6200D4;
-	Wed,  3 Apr 2024 13:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C87514882E;
+	Wed,  3 Apr 2024 13:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712149916; cv=none; b=beMQbl1PE/prIpYLya6B7k1r09SbGf5BRXRrN373xXl4sBHeMSHFsNIxAunx0GTu5DZQaAuZ50P8IgKxVVBZyYg/3BWviY1CzCu1QJpp6I614SzEHqjcT+1+pczGd16bsbSssckTqLcjxJqW2pBgcs5Jdg93932KHQcIKIXp9LQ=
+	t=1712150664; cv=none; b=chwYPU+hXlMJ4TLUjLn3P1get4Bzvpfcti407jyJnBz4UUE8Q3EISk59TBVv5E1+xV7RRJ7F/G8DSIEmjQO5nGnB+uI8D81oZQbyJm9+FASzIC5PoG98qA7x58hwW+NWSpgXWMdLu/wyEcfXNQj6ZZapYlRuoxBndbjlDo07m7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712149916; c=relaxed/simple;
-	bh=988I3Q8yT1g6WpTi1Ga40N32urlSH2QimLrM2LzfSQs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ht/SOUW5vc9UYTape6IUgbjMMoPbW35ftH9heAPrL+EGJxhx+CzmFyRZQXGe2zEq1wYhaTX0mOPOD06f8q1v1QtUeLRKOJVY2YoHabJryRkhRsMoBu2JD1izGzNxgIaqRu2Pvjw2tyOTUiyyGJr3umGgJRkc2TuDipJ844SCSXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Upl7xRlv; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 433CqamI013959;
-	Wed, 3 Apr 2024 13:11:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=cX9BfS1KFfnbnppbxJxElitNCKueMFxijxJrZ6z2zUY=;
- b=Upl7xRlvRndQgXEOukfJD8YvwK8uodvSpontiwuTshTMpllHoYVQIpRAgIV2cHEpF8eL
- wMeO+3N4zGuRYam8thFiH4TYke6zB4CmxU6wxHfdBRUQz+J1b28xIOOtFdtpjLG3aRe2
- hiX1h1hLm4RGqCmnj1jxX8pAFyeVKHllAg5U7iFSCUXkPSB8qULByym6B5I1QICnI3xd
- V3ITFR5yCjMpVUdV77VktwzlX+e2IWuS6MlxIqMhH5rHWe3b/uc8XDCY4ox3D1RNH2qB
- vL/okmm37QDg67D8QXV82a1SyLLbT9qDpuTf0m+xhusxeAujZWsEpgg3++dTsaWWIu4P nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x97gd01fg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Apr 2024 13:11:18 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 433DBH13013325;
-	Wed, 3 Apr 2024 13:11:17 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x97gd01f5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Apr 2024 13:11:17 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 4339sdpA015214;
-	Wed, 3 Apr 2024 13:11:10 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3x6y9m5299-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Apr 2024 13:11:10 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 433DB7Sd393788
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 3 Apr 2024 13:11:09 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5C3EA5805B;
-	Wed,  3 Apr 2024 13:11:07 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0A23D58067;
-	Wed,  3 Apr 2024 13:11:06 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.65.3])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  3 Apr 2024 13:11:05 +0000 (GMT)
-Message-ID: <6d3b9d8a5f5a2ca010a5a701d7826e47912fec89.camel@linux.ibm.com>
-Subject: Re: [RESEND][PATCH v3] security: Place security_path_post_mknod()
- where the original IMA call was
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, jack@suse.cz, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-integrity@vger.kernel.org, pc@manguebit.com,
-        torvalds@linux-foundation.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Steve French <smfrench@gmail.com>
-Date: Wed, 03 Apr 2024 09:11:05 -0400
-In-Reply-To: <20240403090749.2929667-1-roberto.sassu@huaweicloud.com>
-References: <20240403090749.2929667-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WKsOfMXpW4Ur0rTPFXN01RjMFZxDEYOv
-X-Proofpoint-GUID: grSbjh9SmaV9twxkgVclig21urG8CFOV
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1712150664; c=relaxed/simple;
+	bh=I5RGyzMLJIXNupLdtHjUd2yPu3cEeEw2E/J4C1xPUx4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NkMBfmCGwMHrdR6zQu7Z0m4jpuBtcZMfXhvGbJyvE+Xde1y0LGudgrG093xF9qVwS1aRa1FsX8hncMyOXaIM5ssGO53qzcdulWUVSSfzgJJL45MOVhWNb5ouFpo+71Eu8sDj3oyzeVdwMucXfWxreoWAutcAb8goc7tviayO41w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BIll3WjV; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712150663; x=1743686663;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I5RGyzMLJIXNupLdtHjUd2yPu3cEeEw2E/J4C1xPUx4=;
+  b=BIll3WjVgpfFcHVp7T9Pi6xrWhp5lxBR8uSu6h9l1Zf+/EKXP1GhBi7y
+   /ITTAEuYW5XNM+sj8o6F7ESKvSRpz6wzwrDRcexfi54slNjU31xEiNKfv
+   qAwmi/Ifd2yYoY1xEeQcGP4sgbbKml1fkkJP3rWMviVglP9Jp7oUftMB0
+   sivPUciTWnPh6ICRjv0kcTPm7RKnrL6w9LeDfOGZwxNXYiyxoyw6oe6Ps
+   JdwEoJvpTNGi7qKEtbxi8CUhjhvcU4o/7pFN6b5f5+NOt/YNWD5mxmuLt
+   kxvFO9/pSbLSO3xpbWYdDHBft4HuIdCIaiYLaJTTqy2UGLk2YyDXuZXMY
+   Q==;
+X-CSE-ConnectionGUID: fkEU17qARrOH0xT/nf4HTA==
+X-CSE-MsgGUID: l9ixA4vZT+azb+QJ8XDI2A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7243739"
+X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
+   d="scan'208";a="7243739"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 06:24:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="915183381"
+X-IronPort-AV: E=Sophos;i="6.07,177,1708416000"; 
+   d="scan'208";a="915183381"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2024 06:23:53 -0700
+Received: from andy by smile with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rs0aj-0000000180g-2o4w;
+	Wed, 03 Apr 2024 16:23:49 +0300
+Date: Wed, 3 Apr 2024 16:23:49 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Corey Minyard <minyard@acm.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Peter Rosin <peda@axentia.se>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Keyur Chudgar <keyur@os.amperecomputing.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Tom Rix <trix@redhat.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Randy Dunlap <rdunlap@infradead.org>, Rob Herring <robh@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	openipmi-developer@lists.sourceforge.net,
+	linux-integrity@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR
+ annotations
+Message-ID: <Zg1YZVtM3CZWDYq1@smile.fi.intel.com>
+References: <20240403080702.3509288-1-arnd@kernel.org>
+ <20240403080702.3509288-34-arnd@kernel.org>
+ <Zg0hxMZGlwfXV2RA@smile.fi.intel.com>
+ <Zg1P9fpdwPot3Dxj@mail.minyard.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-03_12,2024-04-03_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 mlxscore=0 adultscore=0 suspectscore=0 clxscore=1011
- mlxlogscore=999 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2403210000 definitions=main-2404030091
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zg1P9fpdwPot3Dxj@mail.minyard.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Roberto,
+On Wed, Apr 03, 2024 at 07:47:49AM -0500, Corey Minyard wrote:
+> On Wed, Apr 03, 2024 at 12:30:44PM +0300, Andy Shevchenko wrote:
+> > On Wed, Apr 03, 2024 at 10:06:51AM +0200, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
 
-Subject: -> security: Limit security_path_post_mknod() to regular files
+...
 
-This patch description was written for the previous patch version with minor
-changes.  The discussion was more about making LSM hooks more generic than
-currently needed.  The patch description should somehow reflect that discussion.
-
-On Wed, 2024-04-03 at 11:07 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > I considered splitting up the large patch into per subsystem patches, but since
+> > > it's really just the same thing everywhere it feels better to do it all at once.
+> > 
+> > Can we split to three groups:
+> > - Dropping ACPI_PTR()
+> > - Dropping of_match_ptr() (which I won't review in depth, for example)
+> > - Dropping both
+> > ?
 > 
-> Commit 08abce60d63f ("security: Introduce path_post_mknod hook")
-> introduced security_path_post_mknod(), to replace the IMA-specific call to
-> ima_post_path_mknod().
-> 
-> For symmetry with security_path_mknod(), security_path_post_mknod() was
-> called after a successful mknod operation, for any file type, rather than
-> only for regular files at the time there was the IMA call.
+> Why?
 
--> rather than only for regular files.
-> 
-> However, as reported by VFS maintainers, successful mknod operation does
-> not mean that the dentry always has an inode attached to it (for example,
-> not for FIFOs on a SAMBA mount).
-> 
-> If that condition happens, the kernel crashes when
-> security_path_post_mknod() attempts to verify if the inode associated to
-> the dentry is private.
+Easy to review ACPI parts independently on the rest. I think I explained that
+in above. Besides that some patches might require additional work (don't remember
+if it is the case for _this_ patch).
 
-This is an example of why making the LSM hook more generic than needed didn't
-work.  Based on the discussion there is no valid reason for making the hook more
-generic.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> 
-> Move security_path_post_mknod() where the ima_post_path_mknod() call was,
-> which is obviously correct from IMA/EVM perspective. IMA/EVM are the only
-> in-kernel users, and only need to inspect regular files.
-
--> Move the security_path_post_mknod() back to the original placement of the
-ima_post_path_mknod(), so that it is only called for regular files.
-
-> 
-> Reported-by: Steve French <smfrench@gmail.com>
-> Closes: 
-> https://lore.kernel.org/linux-kernel/CAH2r5msAVzxCUHHG8VKrMPUKQHmBpE6K9_vjhgDa1uAvwx4ppw@mail.gmail.com/
-> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-> Fixes: 08abce60d63f ("security: Introduce path_post_mknod hook")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
 
