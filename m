@@ -1,120 +1,92 @@
-Return-Path: <linux-integrity+bounces-1993-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-1994-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 912AE897351
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 17:03:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12F4F89743C
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 17:43:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C21D31C28096
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 15:03:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1D1F285063
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 15:43:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BAE7149DFD;
-	Wed,  3 Apr 2024 15:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07FC21E871;
+	Wed,  3 Apr 2024 15:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GMcWIfYr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cXwlj+pf"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB05149DE5
-	for <linux-integrity@vger.kernel.org>; Wed,  3 Apr 2024 15:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46481494D3;
+	Wed,  3 Apr 2024 15:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712156586; cv=none; b=PYN7AByf/zwIy3ikHKCg4npamCH+eW1FKlBhdhGvHKE3NQu0clz7wVxew/H5aqIhs56z7R0f3YXdQd1xavtFkSkLjL2j7kwmI65Kt/mNfoQfOmBPIHPDKbqF+O87ZNq0sQKMgjNTNtV/iiw1MrxFh0kTDikp2GphXph1AuOVn/I=
+	t=1712158999; cv=none; b=cEmKeoUxi0XXSLu7/XHmpRuvVvi9L8TOhUGnEbux//8gFFV92SaMXTzjc0rhN/PUUh0rzKqV5rtSXqzCsRcZliDouoUTDEeN6GSSAccld8yuMIipE3Rz59S30hJ6W9Z9L+JJD3gB32Sr6w7XXcrMeSZDFa9MbVrFXi4Wc5PGZQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712156586; c=relaxed/simple;
-	bh=a7mNqaALJyPq3YdKVXicKQwMMqVLcFYOt4aFmY79KZk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WHw9ZFAJNp45wf0AJnDOaL8Sor+eCcT/9CYRUwI8rDSSvV8PnG3AsT7y+X4CWkyQSoaFivKnWacNuJZxtbV2sQXETqeN/GEixieGI5CRPC4VgyocsKS/ZdPp6H2gX0mDLeeHmObuF/x5uKFBdHqn3BMey/RCRWTKLiNtN/4Zso4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GMcWIfYr; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dc742543119so6354348276.0
-        for <linux-integrity@vger.kernel.org>; Wed, 03 Apr 2024 08:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1712156584; x=1712761384; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oB/QZCIJNsw+4xmf5zobnrRWsDWTsJXOON4ReH8dtVg=;
-        b=GMcWIfYrscgAst0DD1198oNQcsFMfoJUezrKRuFuSkBeRfUlhe12r/FugLlhXrhjeu
-         kVcDqPEqIJjtPihBsbmlxgtpqxFdeAS8D2EFqLTdvi+V/MTKMlJFWDTV+NxXb3Urstno
-         uHlDgkqMs9Py7j+iWmqbI7uTWyplzVeREnbJSH/hzqEUBusyomTt1uikCuT7VIIC2d1J
-         ZCOhc352kmpbiZNf+/IPd5HgyMPOcDEEBP5Ki7v8Y8I4K8j8jgs25mAVXv6c34bMHG31
-         D8MOcddtf/gRfQB4MxTLnLUarjmPwHenM+wRP/AlZk1tMTTjjU6rrOrdnN3EQr7ZMfpD
-         Y9AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712156584; x=1712761384;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oB/QZCIJNsw+4xmf5zobnrRWsDWTsJXOON4ReH8dtVg=;
-        b=Pk8r/CvGkXt9BX50b8DEawyzbLbn3ACYhqeUbQDUoMZfTQUqQizeuul9Ry7jkTOd8j
-         Ni/4klqe8GKkBSyxHPgBEgw4/h8Mf2uaxpXuqC+lB+zWRfIU7Jge4PrTHVOqVsJp2u0I
-         3SlvM6lO7/+AVy4dx4vpLUO6GGEivkksuE6fXTyzFxl8wAIaRIUGTDP0pjKIPhom0f7F
-         Xc1/FuJ/In9TcdnJBuF5BAl5qDlEb988M8zw2XEZLW9zqFSL6zuvejhhApH7zihE0awa
-         mufP395RLwokLG0/awYXjuPZwSnpGA1MRhC4LkxECOmgJWMTOtIkFg26REScXzNCNRvZ
-         Pp4A==
-X-Forwarded-Encrypted: i=1; AJvYcCW55EHiZGUO43Zs69JqQR8pn8k6Y5BbRQs53ZWJ/cW+LXAWkx/fYpw4zOiU+SOH1DinzyGP06c0ICySwpF9ecK+TwV84rvKcNaDJxlmmZbd
-X-Gm-Message-State: AOJu0YzE5MW5H+o3jQLCVSnpw67iTmIt8ZNtD2IzxErdMjQ+SiGJmx77
-	uodSosJRP3w5ZB2OBIamSpBztUjPqWigJcmddO/0XAfWRyg56EIF2BXCRLMGglDgWIPJGeD50Sf
-	o6+hsb5y/GTjbfDMf+yWd4N7sRTR5VYBimGGJ
-X-Google-Smtp-Source: AGHT+IFT4d6bpRvDAVa07rux2sG1s5ZKLWz6hKyaoKXTEtvPIEVh93oEV7NIJATmjfw8W0YvP4+xkMNiV5GnCLoztN0=
-X-Received: by 2002:a05:6902:2b87:b0:dca:c369:fac8 with SMTP id
- fj7-20020a0569022b8700b00dcac369fac8mr3635102ybb.1.1712156583732; Wed, 03 Apr
- 2024 08:03:03 -0700 (PDT)
+	s=arc-20240116; t=1712158999; c=relaxed/simple;
+	bh=PtICiElJcVPNWAUIq6pUyg4yR41atjsu+gsz1WbLHB0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=PYI7e5dqvTyo7hZdI0NTolXoFMr+XhNMgywaHEpGXRducF4EWZM1iwvwcvnseT85UlznuqL82ipYZyL9nNIbMfOpvxGfWmZWni+ZtRRN9q+YugT2s3h3RJkiv7KMgny+dL/NyOn2oaJW9IigkcHo266ljztwDwjgx4nN1izJI6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cXwlj+pf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 205E6C433F1;
+	Wed,  3 Apr 2024 15:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712158999;
+	bh=PtICiElJcVPNWAUIq6pUyg4yR41atjsu+gsz1WbLHB0=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=cXwlj+pfyj+sTGNY92JLZjCwdfYtkvFKEZowPoYQfPtjQDCrFiycYGzbRHe2uaUJy
+	 AQLsxfXGsBC8c5BaL75slco/FBXRTwviq/B48A6QN7GbjpQxFEZXFllQuRRDHGCQ9G
+	 5yZog5YFlGaDqZgk2AKsH+DQQDmNUXCgIJ7/MdGnY/PKa144C49YDX1bFvk3ZoydsK
+	 EZXZgOChosaMKzw2lY4G6dfmeXz6R1PDGu04e27co4d+H51vt62bGmTwUYDEGoq31s
+	 5SFZXlZdypeIJUEETz1lEWW+weUZs4ZE6O0Vkt3c2MFZnv/wn2XGBKfXyaKLGzi/GO
+	 XOFcpwehfU6hw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240403090749.2929667-1-roberto.sassu@huaweicloud.com> <6d3b9d8a5f5a2ca010a5a701d7826e47912fec89.camel@linux.ibm.com>
-In-Reply-To: <6d3b9d8a5f5a2ca010a5a701d7826e47912fec89.camel@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 3 Apr 2024 11:02:53 -0400
-Message-ID: <CAHC9VhQjcvRBo30Y346p5Tbo3pspxnnmrLj6nvv1g=e_52SQUg@mail.gmail.com>
-Subject: Re: [RESEND][PATCH v3] security: Place security_path_post_mknod()
- where the original IMA call was
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, jack@suse.cz, jmorris@namei.org, serge@hallyn.com, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, pc@manguebit.com, 
-	torvalds@linux-foundation.org, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Steve French <smfrench@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 03 Apr 2024 18:43:16 +0300
+Message-Id: <D0ALPKFAOB74.1PQT8QI6416G@kernel.org>
+Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH v7 12/21] tpm: Add NULL primary creation
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Ken Goldman" <kgold@linux.ibm.com>,
+ =?utf-8?q?Gabr=C3=ADel_Arth=C3=BAr_P=C3=A9tursson?= <gabriel@system.is>,
+ "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240213171334.30479-1-James.Bottomley@HansenPartnership.com>
+ <20240213171334.30479-13-James.Bottomley@HansenPartnership.com>
+ <05c7d10b23e74269efd720eedbb1773931b0ad46.camel@system.is>
+ <D08273C2C8HD.2QT57ZPAWPS9H@kernel.org>
+ <ea2a3a9a2bea2f1af5565ed32e9584caee2fbecf.camel@system.is>
+ <2fb01074-e7a2-403c-8d46-d2b2323c231e@linux.ibm.com>
+In-Reply-To: <2fb01074-e7a2-403c-8d46-d2b2323c231e@linux.ibm.com>
 
-On Wed, Apr 3, 2024 at 9:11=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wro=
-te:
-> On Wed, 2024-04-03 at 11:07 +0200, Roberto Sassu wrote:
-> >
-> > However, as reported by VFS maintainers, successful mknod operation doe=
-s
-> > not mean that the dentry always has an inode attached to it (for exampl=
-e,
-> > not for FIFOs on a SAMBA mount).
-> >
-> > If that condition happens, the kernel crashes when
-> > security_path_post_mknod() attempts to verify if the inode associated t=
-o
-> > the dentry is private.
+On Tue Apr 2, 2024 at 10:30 PM EEST, Ken Goldman wrote:
+> On 3/31/2024 12:52 PM, Gabr=C3=ADel Arth=C3=BAr P=C3=A9tursson wrote:
+> > The TPM specifications have a standardized set of templates for the
+> > Endorsement Keys, and a recommendation on a template to
+> > create/provision the shared SRK.
 >
-> This is an example of why making the LSM hook more generic than needed di=
-dn't
-> work.  Based on the discussion there is no valid reason for making the ho=
-ok more
-> generic.
+> The original TCG guidance document for an SRK used arrays of zeros for=20
+> the unique field.
+>
+> This was either a holdover from TPM 1.2, where arrays were 20 bytes,
+> or a misinterpretation of text that said: NULL.
+>
+> The reality is that it's a TPM2B, and the size(s) can be zero.
+>
+> The answer for the EK is different. It has to use the TCG
+> standard.  The EK is not a 'guidance document'.
 
-I agree, I think we all do, but I don't think we want to get into
-process discussions in the patch description.  The description
-explains the original motivation for the buggy commit, the problem it
-caused, and the solution; that's enough IMHO.
+Does anyone follow TCG's provisioning guide? I.e. is it implemented
+"in the industry"? I'm just trying to understand the real value of
+this document.
 
---=20
-paul-moore.com
+BR, Jarkko
 
