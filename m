@@ -1,155 +1,216 @@
-Return-Path: <linux-integrity+bounces-2000-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2001-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 873FC897CC1
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Apr 2024 01:56:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1445C897DAB
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Apr 2024 04:20:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8F351C265EE
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Apr 2024 23:56:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BECD2855C5
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Apr 2024 02:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BF2315699D;
-	Wed,  3 Apr 2024 23:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1987819478;
+	Thu,  4 Apr 2024 02:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t0uM6RPl"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="M64bDONP";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CgKakMnN"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2B1139D;
-	Wed,  3 Apr 2024 23:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F7319470
+	for <linux-integrity@vger.kernel.org>; Thu,  4 Apr 2024 02:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712188600; cv=none; b=t4YlS2vr1XPL2zMn0LrgHZaodZOU+ikvsBqDBBUUJEB6k/aOiM4GKkdbQz9B+0ejt+RW+ZoWrw30153bNWpSqI/aVZY/oZkenGghlzfJAydmHdrfgApiWXgQZusrrwj8qLJPYYdokhgvSySefnbD0wpPQgyPw1ccg9OFXTU+xPE=
+	t=1712197195; cv=none; b=evdAaQzPceMVYiVmhrpVJHrU51EBdHDnvRVOlI68EOmyelRmyQ/ACjSSvm19To+B/qc/33lbt/mMtskF8Jq4PoX/x39kWdLj/b6GsqP6uv7lWaLunRBpmx2LWk3eqYvyWGajRLTifFGfJUbSrew7a9CtoXuSwkdHnKsw+nnVDZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712188600; c=relaxed/simple;
-	bh=m8IbDM148A6sz7bWT/CQKnE9AfgQW6cHCi6VsGmG9X8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ja2EYn79rSXqeiXD8lb9opfNjasjFMdcLr5dPjCSGvanpoTHNHBh0SDtXG3KYad5lTzVi1fK5HsWdpvfAjRYMdZKzTToxQCEWkX2TD6IREq1bgwad7NZM32Ep4Ae6xAHntXQVaCHj0C1MySAMsnkaFx10UXmXu7A3RVOJhglTAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t0uM6RPl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3407C43394;
-	Wed,  3 Apr 2024 23:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712188599;
-	bh=m8IbDM148A6sz7bWT/CQKnE9AfgQW6cHCi6VsGmG9X8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=t0uM6RPlGuNQ2pvlqrK5sJYW3QIWUD/Ch+blAKlhtyKQCglZyMACwH2YghM8qdYTx
-	 eBPDOQhbls3SLnnU19e+ycW267im0qo3s7DmQrGBThEtcKMITPijTtYT1j6u19QNnf
-	 amG33e6JWYAg2/i6QR7pitO2x0BsQI9uWn5IiKeG944GH9LkfL4L21VdoeIIgHiyBQ
-	 gpoc8t9p9dMFVRKVRDB1eJL2fMFGmILWoJ6R8tS5FM1x1fnZGWHEyoc/jXW7wXeoSu
-	 PNyqc9GIixNFegy1D6HYuzxTwLjegR0bNGA4RUOTulmhCHilEkh1v3G/QSiOKtNKIT
-	 UfoXU+7DHB84Q==
-Date: Wed, 3 Apr 2024 18:56:35 -0500
-From: Eric Biggers <ebiggers@kernel.org>
-To: Andy Lutomirski <luto@kernel.org>
-Cc: Andrew Cooper <andrew.cooper3@citrix.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ross Philipson <ross.philipson@oracle.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	the arch/x86 maintainers <x86@kernel.org>,
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-	dpsmith@apertussolutions.com, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Matthew Garrett <mjg59@srcf.ucam.org>,
-	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
-	jarkko@kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-	"luto@amacapital.net" <luto@amacapital.net>,
-	Arvind Sankar <nivedita@alum.mit.edu>,
-	Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-	kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v8 06/15] x86: Add early SHA support for Secure Launch
- early measurements
-Message-ID: <20240403235635.GA24248@quark.localdomain>
-References: <CAMj1kXEmMBY_jc0uM5UgZbuZ3-C7NPKzg5AScaunyu9XzLgzZA@mail.gmail.com>
- <98ad92bb-ef17-4c15-88ba-252db2a2e738@citrix.com>
- <CAMj1kXFTu+bV2kQhAyu15hrYai20NcBLb4Zu8XG2Y-XjL0f+rw@mail.gmail.com>
- <1a8e69a7-89eb-4d36-94d6-0da662d8b72f@citrix.com>
- <CAMj1kXEvmGy9RJo4s8tECsFj2dufZ8jBPoJOEtkcGUoj+x2qsw@mail.gmail.com>
- <431a0b3a-47e5-4e61-a7fc-31cdf56f4e4c@citrix.com>
- <20240223175449.GA1112@sol.localdomain>
- <e641e2f1-16cf-4717-8a1f-8afac2644efe@citrix.com>
- <20240223183004.GE1112@sol.localdomain>
- <10db421c-77da-4a1c-a25e-2374a7a2ef79@app.fastmail.com>
+	s=arc-20240116; t=1712197195; c=relaxed/simple;
+	bh=MSzPaMzo2/GQFqXfbBNbu0z+jXOwpLqQS0qLqngQggk=;
+	h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:Cc:To; b=DntUbyeJLVyyswd6Nx4Xnn4PQcCy1kZdVwIv+yp1Ab+NQFVuDH6uCi2oVx6mifulQrgTGj6+uQYRnpI2IF7J7kAyUzyoXeTE0BVCfIkda5RppnFJBt3rMy1HT+FyG6MaRRqIW9EurKw0Nh6TpsMxNcJYgYFCRzPZA+ciKrfxQqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=M64bDONP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CgKakMnN; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D649D5D402;
+	Thu,  4 Apr 2024 02:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1712197189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cGlClew1HiAGmDmfiveMxoILyFIrS2Ui75/zxAGu3+g=;
+	b=M64bDONPqZG3eEsABVkyftqzA1mjxlPbH6JvHmZtnXVJ4XnHx6ojd7pZspCkujpMP+zVPY
+	vVD67L9lrlBhzTAnXfAI0+d+1YGu6bGC/NeHkP9o22AetWs9bqImGDtCxUr6bxDU4Y0qUA
+	iYq+TEjlyqq/CQXXA+1X8o6vumtSOE8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1712197189;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cGlClew1HiAGmDmfiveMxoILyFIrS2Ui75/zxAGu3+g=;
+	b=CgKakMnNvdCj/B9dZp4s0BkIP1nkrTFYJXOO1lmUbQoRdMEX0oeq6zWpZdF+MHD5gKPfG3
+	mtX+8QX02mZNntBA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id AE685139F4;
+	Thu,  4 Apr 2024 02:19:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id HeEtGEMODmY4KAAAn2gu4w
+	(envelope-from <wbrown@suse.de>); Thu, 04 Apr 2024 02:19:47 +0000
+From: William Brown <wbrown@suse.de>
+Content-Type: text/plain;
+	charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <10db421c-77da-4a1c-a25e-2374a7a2ef79@app.fastmail.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6.1.1\))
+Subject: TPM error 0x0901, possibly related to TPM2_PT_CONTEXT_GAP_MAX
+Message-Id: <424B3F10-D91C-4F47-B33C-BB66FE4DB91A@suse.de>
+Date: Thu, 4 Apr 2024 12:19:34 +1000
+Cc: peterhuewe@gmx.de,
+ jarkko@kernel.org,
+ jgg@ziepe.ca,
+ Takashi Iwai <tiwai@suse.de>
+To: linux-integrity@vger.kernel.org
+X-Mailer: Apple Mail (2.3731.700.6.1.1)
+X-Spam-Score: -3.79
+X-Spamd-Result: default: False [-3.79 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 MV_CASE(0.50)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmx.de];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 RCPT_COUNT_FIVE(0.00)[5];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.19)[-0.973];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FREEMAIL_CC(0.00)[gmx.de,kernel.org,ziepe.ca,suse.de];
+	 RCVD_TLS_ALL(0.00)[];
+	 MID_RHS_MATCH_FROM(0.00)[]
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-On Wed, Apr 03, 2024 at 09:32:02AM -0700, Andy Lutomirski wrote:
-> On Fri, Feb 23, 2024, at 10:30 AM, Eric Biggers wrote:
-> > On Fri, Feb 23, 2024 at 06:20:27PM +0000, Andrew Cooper wrote:
-> >> On 23/02/2024 5:54 pm, Eric Biggers wrote:
-> >> > On Fri, Feb 23, 2024 at 04:42:11PM +0000, Andrew Cooper wrote:
-> >> >> Yes, and I agree.  We're not looking to try and force this in with
-> >> >> underhand tactics.
-> >> >>
-> >> >> But a blind "nack to any SHA-1" is similarly damaging in the opposite
-> >> >> direction.
-> >> >>
-> >> > Well, reviewers have said they'd prefer that SHA-1 not be included and given
-> >> > some thoughtful reasons for that.  But also they've given suggestions on how to
-> >> > make the SHA-1 support more palatable, such as splitting it into a separate
-> >> > patch and giving it a proper justification.
-> >> >
-> >> > All suggestions have been ignored.
-> >> 
-> >> The public record demonstrates otherwise.
-> >> 
-> >> But are you saying that you'd be happy if the commit message read
-> >> something more like:
-> >> 
-> >> ---8<---
-> >> For better or worse, Secure Launch needs SHA-1 and SHA-256.
-> >> 
-> >> The choice of hashes used lie with the platform firmware, not with
-> >> software, and is often outside of the users control.
-> >> 
-> >> Even if we'd prefer to use SHA-256-only, if firmware elected to start us
-> >> with the SHA-1 and SHA-256 backs active, we still need SHA-1 to parse
-> >> the TPM event log thus far, and deliberately cap the SHA-1 PCRs in order
-> >> to safely use SHA-256 for everything else.
-> >> ---
-> >
-> > Please take some time to read through the comments that reviewers have left on
-> > previous versions of the patchset.
-> 
-> So I went and read through the old comments, and I'm lost.  In brief summary:
-> 
-> If the hardware+firmware only supports SHA-1, then some reviewers would prefer
-> Linux not to support DRTM.  I personally think this is a bit silly, but it's
-> not entirely unreasonable.  Maybe it should be a config option?
-> 
-> If the hardware+firmware does support SHA-256, then it sounds (to me, reading
-> this -- I haven't dug into the right spec pages) that, for optimal security,
-> something still needs to effectively turn SHA-1 *off* at runtime by capping
-> the event log properly.  And that requires computing a SHA-1 hash.  And, to be
-> clear, (a) this is only on systems that already support SHA-256 and that we
-> should support and (b) *not* doing so leaves us potentially more vulnerable to
-> SHA-1 attacks than doing so.  And no SHA-256-supporting tooling will actually
-> be compromised by a SHA-1 compromise if we cap the event log.
-> 
-> So is there a way forward?  Just saying "read through the comments" seems like
-> a dead end.
-> 
+Hi all,
 
-It seems there may be a justification for some form of SHA-1 support in this
-feature.  As I've said, the problem is that it's not explained in the patchset
-itself.  Rather, it just talks about "SHA" and pretends like SHA-1 and SHA-2 are
-basically the same.  In fact, SHA-1 differs drastically from SHA-2 in terms of
-security.  SHA-1 support should be added in a separate patch, with a clearly
-explained rationale *in the patch itself* for the SHA-1 support *specifically*.
+I've been recently working on enabling TPM support within a number of =
+PAM modules. I'm certainly not a TPM expert, but I have noticed some =
+issues when testing.
 
-- Eric
+We have a number of tests/examples in the rust-tss-esapi project, such =
+as an example that shows how to hmac a value:
+
+```
+# TCTI=3Ddevice:/dev/tpmrm0 cargo run --example hmac --features =
+generate-bindings
+    Finished dev [unoptimized + debuginfo] target(s) in 0.07s
+     Running `target/debug/examples/hmac`
+true: TpmProperties(TaggedTpmPropertyList { tagged_tpm_properties: [] })
+hmac1 =3D Digest(Zeroizing([54, 176, 122, 39, 222, 112, 105, 131, 3, =
+158, 89, 12, 38, 14, 184, 176, 97, 38, 60, 37, 9, 49, 176, 80, 191, 161, =
+64, 233, 163, 47, 254, 1]))
+hmac2 =3D Digest(Zeroizing([54, 176, 122, 39, 222, 112, 105, 131, 3, =
+158, 89, 12, 38, 14, 184, 176, 97, 38, 60, 37, 9, 49, 176, 80, 191, 161, =
+64, 233, 163, 47, 254, 1]))
+```
+
+When this test program is run repeatedly, it begins to fail with:
+
+ERROR:tcti:src/tss2-tcti/tcti-device.c:197:tcti_device_receive() Failed =
+to get response size fd 3, got errno 14: Bad address
+=
+ERROR:esys:src/tss2-esys/api/Esys_FlushContext.c:238:Esys_FlushContext_Fin=
+ish() Received a non-TPM Error
+ERROR:esys:src/tss2-esys/api/Esys_FlushContext.c:89:Esys_FlushContext() =
+Esys Finish ErrorCode (0x000a000a)
+thread 'main' panicked at tss-esapi/examples/hmac.rs:170:48:
+called `Result::unwrap()` on an `Err` value: =
+TssError(Tcti(TctiReturnCode { base_error: IoError }))
+stack backtrace:
+
+This is associated with dmesg erros such as:
+
+[83754.340909] tpm tpm0: tpm2_save_context: failed with a TPM error =
+0x0901
+[83754.343680] tpm tpm0: A TPM error (459) occurred flushing context
+[83754.345650] tpm tpm0: tpm2_commit_space: error -14
+
+
+Research indicated the following issue:
+
+https://github.com/tpm2-software/tpm2-tools/issues/2279
+
+Since I am currently using the kernel resource manager, this may be =
+related. To investigate further, I reviewed the TSS Resource Manager =
+document and noted in section 3.15 a number of properties related to =
+sessions. Dumping these I see the following values:
+
+true: TpmProperties(TaggedTpmPropertyList { tagged_tpm_properties: =
+[TaggedProperty { property: HrLoaded, value: 0 }] })
+true: TpmProperties(TaggedTpmPropertyList { tagged_tpm_properties: =
+[TaggedProperty { property: HrLoadedAvail, value: 3 }] })
+true: TpmProperties(TaggedTpmPropertyList { tagged_tpm_properties: =
+[TaggedProperty { property: HrActive, value: 1 }] })
+true: TpmProperties(TaggedTpmPropertyList { tagged_tpm_properties: =
+[TaggedProperty { property: HrActiveAvail, value: 63 }] })
+true: TpmProperties(TaggedTpmPropertyList { tagged_tpm_properties: =
+[TaggedProperty { property: ActiveSessionsMax, value: 64 }] })
+true: TpmProperties(TaggedTpmPropertyList { tagged_tpm_properties: =
+[TaggedProperty { property: ContextGapMax, value: 255 }] })
+
+So we can see that there are sufficient available sessions, but that the =
+context gap max is 0xFF per the github issue.
+
+Checking with tpm2_getcap I see:
+
+TPM2TOOLS_TCTI=3Ddevice:/dev/tpmrm0 tpm2_getcap properties-fixed
+TPM2_PT_CONTEXT_GAP_MAX:
+  raw: 0xFF
+
+TPM2TOOLS_TCTI=3Ddevice:/dev/tpm0 tpm2_getcap properties-fixed
+TPM2_PT_CONTEXT_GAP_MAX:
+  raw: 0xFFFFFFFF
+
+My assumption would be that the same issue as the github issue notes =
+persists today, but Im certainly not an expert on the interactions that =
+are occuring. My first assumption was that my own programs were =
+exhausting the resources of the TPM, but after tracking the session =
+totals and properties, I'm not sure it's something my examples are doing =
+wrong.
+
+However, if you wait for a few minutes, the TPM appears to "unjam" and =
+starts to respond again.
+
+These tests were performed on an openSUSE Tumbleweed virtual machine =
+with a libvirt TPM provided by swtpm.=20
+
+Any ideas what could be going on?=20
+
+--
+Sincerely,
+
+William Brown
+
+Senior Software Engineer,
+Identity and Access Management
+SUSE Labs, Australia
+
 
