@@ -1,111 +1,240 @@
-Return-Path: <linux-integrity+bounces-2013-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2014-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A794B898B91
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Apr 2024 17:51:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA80F898BAD
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Apr 2024 17:57:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7F481C21835
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Apr 2024 15:51:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7190629266E
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Apr 2024 15:57:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AF51129A99;
-	Thu,  4 Apr 2024 15:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 956D5129A7E;
+	Thu,  4 Apr 2024 15:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="QEm2tR3l";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="QEm2tR3l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IISVG3k9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DB112BF06
-	for <linux-integrity@vger.kernel.org>; Thu,  4 Apr 2024 15:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7150F1D531
+	for <linux-integrity@vger.kernel.org>; Thu,  4 Apr 2024 15:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712245799; cv=none; b=KaSQhLoZASLPHvpg5l6McodrKqPDBzxtqDQEX93y9VUX0UGRhwa7gMJpYemrbWtyQ1yDHyyPziMen/weTyWMY/ERpsgE4obytb4l0VB+cMfGjUL4F3YYBjtUOpLgOMyx4HKuR1CBcjR/Dlu3v0nf4eMvk3Kxb0rnE+EoooMt80Q=
+	t=1712246260; cv=none; b=VhSkfp85EJzFAhkmvlJoNnh7NC/6qfjflNz3molTbJ1kNtOdvnGXfZmw6Jm8yzqRjvTPeGTA3g7Lpclj4Q+IHjBPBj25y3sME7OqGNzrRWWucMjDlvT8wQikn3XBbvAhpdO+wJ+3/J1tF1wcBgoKfNOWSRvGek0CU1euVgVlSxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712245799; c=relaxed/simple;
-	bh=/KZem5JcUAecz9AvyO5d4dul8jaQb17pfHKDYgt+AMg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WF9CCXKu0fBymvIr5ghf8NqLqr/r9c2kQGLV0YqEvPEQqZ9lqORyU9WNLyI9LC28blT7oHt+ndv41bagKGgaRTpfpPVTgURpPyE8v2TcQ3quRnQOkq7q8Y9Es86psM0lJumO1P7vSHnepwCcduidYT8C5dg8Gm0mMTrdNDkFtDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=QEm2tR3l; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=QEm2tR3l; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1712245796;
-	bh=/KZem5JcUAecz9AvyO5d4dul8jaQb17pfHKDYgt+AMg=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=QEm2tR3lQV5K1wOzv/mO0C1vwosKQdxl4YYEdsVKypPhXwE0D7D8XQLukNaKBsOSp
-	 StRAUA1c4WN/juH6K3AKEsD3FJLOYwN7l18myJDyu78euK6JF97q7GkIpXY35uKpOK
-	 DMyUDEWHkwmtd2WG7LSTMCIm15GEthuoAzLJTlyA=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 588AE1280BDD;
-	Thu,  4 Apr 2024 11:49:56 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id 5kIbZ-dZVjeW; Thu,  4 Apr 2024 11:49:56 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1712245796;
-	bh=/KZem5JcUAecz9AvyO5d4dul8jaQb17pfHKDYgt+AMg=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=QEm2tR3lQV5K1wOzv/mO0C1vwosKQdxl4YYEdsVKypPhXwE0D7D8XQLukNaKBsOSp
-	 StRAUA1c4WN/juH6K3AKEsD3FJLOYwN7l18myJDyu78euK6JF97q7GkIpXY35uKpOK
-	 DMyUDEWHkwmtd2WG7LSTMCIm15GEthuoAzLJTlyA=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 856991280941;
-	Thu,  4 Apr 2024 11:49:55 -0400 (EDT)
-Message-ID: <6857f043301a100ee93b3ea120a2d1d60e83efdb.camel@HansenPartnership.com>
-Subject: Re: TPM error 0x0901, possibly related to TPM2_PT_CONTEXT_GAP_MAX
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, William Brown <wbrown@suse.de>, 
-	linux-integrity@vger.kernel.org
-Cc: peterhuewe@gmx.de, jgg@ziepe.ca, Takashi Iwai <tiwai@suse.de>
-Date: Thu, 04 Apr 2024 11:49:54 -0400
-In-Reply-To: <D0BFMGM02V7A.1HEWQ05350K07@kernel.org>
-References: <424B3F10-D91C-4F47-B33C-BB66FE4DB91A@suse.de>
-	 <D0BFJLQ0JKO4.20EW2ZA8GIS5Z@kernel.org>
-	 <D0BFMGM02V7A.1HEWQ05350K07@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1712246260; c=relaxed/simple;
+	bh=W+wU60ZPW3W9JIhL3CypslsBTwp7+UZfTV/ovpgWWJo=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=BkmdcyLk3jamhK8lKxofRmcxaAuX1JT/ap35r8M1/zdJGjt8dzO8jSKeCx4VMn1eOCeHdVzwAdsHnaySc8vydzOo0SZuc/+HK0nuhrYafpdatI6dxg2IYrLJQ1Vf9aaupIDj0sQPkAiCVhA8QZ05j9tvrFhDmQYuS8O3ntWZsro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IISVG3k9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F86C433C7
+	for <linux-integrity@vger.kernel.org>; Thu,  4 Apr 2024 15:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712246260;
+	bh=W+wU60ZPW3W9JIhL3CypslsBTwp7+UZfTV/ovpgWWJo=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+	b=IISVG3k9hNvM11VTLpU4Iv7Bhmg2h/l1Dv6ZS1sUSZgZqWoemfM3f4nUJXfY9bmhf
+	 qDj51GvPbhDFkMsxmTAR+QOQAs6SwpDoXXfvzLYIOegtmD3ZIeB/ekzfSBJjp40fVR
+	 5qzG+Hq2MBlE/a5oFsF+HP6ulXR1yo8wM0CVrdWUNUx+QAdQ6sTlszCsMafKeltBCz
+	 3SC+Ez/p5G85QkIDBWDJjubSLjIYwoyiEIOivZcmN0RDpkJOFcvu0qZ7eFcgTkZLos
+	 ZAXhAK3A9x55CSeYzVN3bUBarGRWXGryy9K47UsjEG18tYbQauaw5uP4dC/Lv5eufo
+	 /RF26skIkv7OQ==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id D83E51200032;
+	Thu,  4 Apr 2024 11:57:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 04 Apr 2024 11:57:38 -0400
+X-ME-Sender: <xms:8s0OZrCAj9o_nwJkTnzZWVfJdvL4cR-bYhw01DLfCPjo7Xip2aIIbg>
+    <xme:8s0OZhgH7oZIhrZsP1KiuaEvQZ1rpjFrdAD1Se0QFfKxUMr6ohONIdVAWKB4KHOBp
+    xuchoh5uyZawAEy2bQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudefkedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
+    grthhtvghrnhepvdeviefgtedugeevieelvdfgveeuvdfgteegfeeiieejjeffgeeghedu
+    gedtveehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedt
+    vdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrd
+    guvg
+X-ME-Proxy: <xmx:8s0OZmntOJ89YxUj9wURfXe4PW9gXlFtYpsvKIzNwHNZUjdd9loLug>
+    <xmx:8s0OZtzXOCAb_4C-RNCo6E-R_yTrinDjIBVpO80fF3_l3vvGQkfFFw>
+    <xmx:8s0OZgRVN83O5r-1s_6ceKu5MowPuYRJ9Il_iCxJWU-cXRa0FN9aRA>
+    <xmx:8s0OZgZnh2_cSXzn2HCT8G1ZpckZVsrPTLoaJRuUDs58Yk24uZYZXg>
+    <xmx:8s0OZmdn9_zT6BRbfl-NSVbzvpxnbCUgn1Y67fY1roaUIFiIjo65-RiD>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 8EE03B6008D; Thu,  4 Apr 2024 11:57:38 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-Id: <9d9fa267-067e-421b-9a39-aa178b913298@app.fastmail.com>
+In-Reply-To: <4cdb6399d803d37a883d1a2fbe119c0a14610106.camel@linux.ibm.com>
+References: <20240404105840.3396821-1-schnelle@linux.ibm.com>
+ <20240404105840.3396821-2-schnelle@linux.ibm.com>
+ <95a63afe-ccd7-4551-86af-00b7fb0d8ff9@app.fastmail.com>
+ <4cdb6399d803d37a883d1a2fbe119c0a14610106.camel@linux.ibm.com>
+Date: Thu, 04 Apr 2024 17:56:47 +0200
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ "Peter Huewe" <peterhuewe@gmx.de>, "Jarkko Sakkinen" <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, "Heiko Carstens" <hca@linux.ibm.com>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] char: tpm: handle HAS_IOPORT dependencies
+Content-Type: text/plain
 
-On Thu, 2024-04-04 at 18:09 +0300, Jarkko Sakkinen wrote:
-> [...]
-> Emphasis that I might have forgotten something but this is what I can
-> remember right now.
+On Thu, Apr 4, 2024, at 17:41, Niklas Schnelle wrote:
+>
+> Good find! I do see the same #ifdef in v5 but maybe something else
+> changed. I think this was also hidden during both my local test builds
+> and kernel test robot because of the PNP -> ACPI || ISA dependency
+> which I think implies HAS_IOPORT. So unless I'm missing something we
+> can't currently get here with HAS_IOPORT=n. Maybe that changed?
 
-What you forgot is that I did originally proposed session degapping in
-the kernel resource manager but it was rather complex, so you made me
-take it out for lack of a use case.  It dates back to when we used the
-old sourceforge tpmdd list which seems to have caused message loss, so
-I'm not sure how complete this thread is:
+Rihgt, I just found that as well, so the TCG_INFINEON driver
+won't ever be enabled without CONFIG_HAS_IOPORT after all.
 
-https://lore.kernel.org/lkml/1484772489.2396.2.camel@HansenPartnership.com/
+> I'm now thinking maybe keeping TPM_INF_IO_PORT is the cleaner choice.
+> It saves us 4 lines of #ifdeffery at the cost of one sometimes "unused"
+> define.
 
-If I compare it to the fragment on sourceforge, you can see a bit more
-of it (but sourceforge has lost the patch):
+Agreed. I tried it out for reference, but it does get quite ugly,
+see below. Alternatively, we could just add a 'depends on HAS_IOPORT'
+to this driver after all. Even if it can be used on MMIO, it might
+never actually be built without PIO.
 
-https://sourceforge.net/p/tpmdd/mailman/tpmdd-devel/thread/201702090906.v1996c6a015552%40wind.enjellic.com/#msg35656470
+     Arnd
 
-The reality is that unless you context save a session, you don't need
-degapping and pretty much every TSS based use of sessions doesn't need
-to save them, so people who construct TPM based systems rarely run into
-this.  The exception is the tpm2-tools CLI project, which encourages
-the context saving of sessions and thus can cause this.  We kept
-tripping across this in the Keylime, but the eventual solution was to
-dump the tpm2-tools dependency and do a direct TSS connection in the
-Keylime agent.
-
-James
-
+diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+index 418c9ed59ffd..852bb9344788 100644
+--- a/drivers/char/tpm/Kconfig
++++ b/drivers/char/tpm/Kconfig
+@@ -157,7 +157,7 @@ config TCG_ATMEL
+ 
+ config TCG_INFINEON
+ 	tristate "Infineon Technologies TPM Interface"
+-	depends on PNP
++	depends on PNP || COMPILE_TEST
+ 	help
+ 	  If you have a TPM security chip from Infineon Technologies
+ 	  (either SLD 9630 TT 1.1 or SLB 9635 TT 1.2) say Yes and it
+diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
+index 99c6e565ec8d..768ca65960d8 100644
+--- a/drivers/char/tpm/tpm_infineon.c
++++ b/drivers/char/tpm/tpm_infineon.c
+@@ -51,10 +51,19 @@ struct tpm_inf_dev {
+ 
+ static struct tpm_inf_dev tpm_dev;
+ 
++static inline bool tpm_is_ioport(struct tpm_inf_dev *dev)
++{
++#ifdef CONFIG_HAS_IOPORT
++	return tpm_dev.iotype == TPM_INF_IO_PORT;
++#else
++	return false;
++#endif
++}
++
+ static inline void tpm_data_out(unsigned char data, unsigned char offset)
+ {
+ #ifdef CONFIG_HAS_IOPORT
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT)
++	if (tpm_is_ioport(&tpm_dev))
+ 		outb(data, tpm_dev.data_regs + offset);
+ 	else
+ #endif
+@@ -64,7 +73,7 @@ static inline void tpm_data_out(unsigned char data, unsigned char offset)
+ static inline unsigned char tpm_data_in(unsigned char offset)
+ {
+ #ifdef CONFIG_HAS_IOPORT
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT)
++	if (tpm_is_ioport(&tpm_dev))
+ 		return inb(tpm_dev.data_regs + offset);
+ #endif
+ 	return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
+@@ -73,7 +82,7 @@ static inline unsigned char tpm_data_in(unsigned char offset)
+ static inline void tpm_config_out(unsigned char data, unsigned char offset)
+ {
+ #ifdef CONFIG_HAS_IOPORT
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT)
++	if (tpm_is_ioport(&tpm_dev))
+ 		outb(data, tpm_dev.config_port + offset);
+ 	else
+ #endif
+@@ -83,7 +92,7 @@ static inline void tpm_config_out(unsigned char data, unsigned char offset)
+ static inline unsigned char tpm_config_in(unsigned char offset)
+ {
+ #ifdef CONFIG_HAS_IOPORT
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT)
++	if (tpm_is_ioport(&tpm_dev))
+ 		return inb(tpm_dev.config_port + offset);
+ #endif
+ 	return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
+@@ -404,6 +413,7 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
+ 	const char *chipname;
+ 	struct tpm_chip *chip;
+ 
++#ifdef CONFIG_HAS_IOPORT
+ 	/* read IO-ports through PnP */
+ 	if (pnp_port_valid(dev, 0) && pnp_port_valid(dev, 1) &&
+ 	    !(pnp_port_flags(dev, 0) & IORESOURCE_DISABLED)) {
+@@ -436,8 +446,10 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
+ 			rc = -EINVAL;
+ 			goto err_last;
+ 		}
+-	} else if (pnp_mem_valid(dev, 0) &&
+-		   !(pnp_mem_flags(dev, 0) & IORESOURCE_DISABLED)) {
++	} else
++#endif
++	if (pnp_mem_valid(dev, 0) &&
++	   !(pnp_mem_flags(dev, 0) & IORESOURCE_DISABLED)) {
+ 
+ 		tpm_dev.iotype = TPM_INF_IO_MEM;
+ 
+@@ -540,10 +552,10 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
+ 			 "vendor id 0x%x%x (Infineon), "
+ 			 "product id 0x%02x%02x"
+ 			 "%s\n",
+-			 tpm_dev.iotype == TPM_INF_IO_PORT ?
++			 tpm_is_ioport(&tpm_dev) ?
+ 			 tpm_dev.config_port :
+ 			 tpm_dev.map_base + tpm_dev.index_off,
+-			 tpm_dev.iotype == TPM_INF_IO_PORT ?
++			 tpm_is_ioport(&tpm_dev) ?
+ 			 tpm_dev.data_regs :
+ 			 tpm_dev.map_base + tpm_dev.data_regs,
+ 			 version[0], version[1],
+@@ -567,7 +579,7 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
+ 	}
+ 
+ err_release_region:
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT) {
++	if (tpm_is_ioport(&tpm_dev)) {
+ 		release_region(tpm_dev.data_regs, tpm_dev.data_size);
+ 		release_region(tpm_dev.config_port, tpm_dev.config_size);
+ 	} else {
+@@ -585,11 +597,14 @@ static void tpm_inf_pnp_remove(struct pnp_dev *dev)
+ 
+ 	tpm_chip_unregister(chip);
+ 
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT) {
++#ifdef CONFIG_HAS_IOPORT
++	if (tpm_is_ioport(&tpm_dev)) {
+ 		release_region(tpm_dev.data_regs, tpm_dev.data_size);
+ 		release_region(tpm_dev.config_port,
+ 			       tpm_dev.config_size);
+-	} else {
++	} else
++#endif
++	{
+ 		iounmap(tpm_dev.mem_base);
+ 		release_mem_region(tpm_dev.map_base, tpm_dev.map_size);
+ 	}
 
