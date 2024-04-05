@@ -1,148 +1,260 @@
-Return-Path: <linux-integrity+bounces-2023-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2024-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 901D2899F64
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Apr 2024 16:20:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA3D189A5E1
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Apr 2024 23:03:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13D61B231AD
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Apr 2024 14:20:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1283A1C20F69
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Apr 2024 21:03:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6869816F0E7;
-	Fri,  5 Apr 2024 14:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C16A174EDB;
+	Fri,  5 Apr 2024 21:03:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mB9nqNnv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/8Ljbk/"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49AA16EC10;
-	Fri,  5 Apr 2024 14:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01DE7171669;
+	Fri,  5 Apr 2024 21:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712326666; cv=none; b=iQO3O+vS1QW16FiWgLlQOA5b+uVjV4VNVHgm0PQrVes7yTri39Z23C+isirfZKdsfhpsPod6tFYTdacF6OJNygPOy9xHC1a7NA1pP/maUM2Vtk9UwsW5uHEN96TXIzVvZv9EzbbIJtPpbLgGbkX1ivRwKsDc/VzaJivDCIS4r7E=
+	t=1712350991; cv=none; b=kCkAczSGgoL8DhdMKq7aOxxs+DqNtEFdX5p8iPGXbAMf17hHzkNIn4YaNdKgDGrIdU5X1CLs1sMEDtnd1UzJkEapln6wxT4Ui/8ZKJfQ5g2yGsyFDWoLtMpMHpzBAnbeG7I/MppcQMCVwlRR8mlYKcWEZXg8/8l8QkU0y7jgbm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712326666; c=relaxed/simple;
-	bh=U17liQpywJZqzvfF2s5U5/znHXqwcP4t0v/zYuO1Dyw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=O2C3Fdd4JuRKDfDVYUVLuJUA6NtHPtmiEn0zSyykIMCz3UoJEEtd1OxNBM6wJ1yY/0qtjohabFe4wqgkS/8fWmUczy5LB2Ic4Z7wO+5B0YJCEZIhcSkBC4AYAOhWs7PgSzV7HVPXK7IdS9D4oqZ0ZOCv8sXclXVGHt2pXf93Qds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mB9nqNnv; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 435DQXQ1019047;
-	Fri, 5 Apr 2024 14:17:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=TUmKMDwUoLogS/+j4Uv+vxtiIwsSDaKPFGJe3NunF6E=;
- b=mB9nqNnvL5wZrOOSOLtYiCq2FgQzVdHBd2HbB6sEW5V1GfXegQsb8l85qMIbgrL6lUyz
- Kc6GbnG44BOeh5W8I8EPs8pKkyuz5Zbo/XjL8iFaUcSuGpUnayWXomr8MToyiHAug6yw
- qASbPwRjdS843AhgGkLtP4pg2D3Xzmzl+dR+If6OPt1BqsYCxnxfwjMQjqapkdItYFbf
- PYqdKx9Lx2YpUHNcxIoUQE2xh01EK9Adw5RdZUMyLStWMoY4m3dsvjWtA8D3jONu4L6d
- 6ggJsGBgKnbJSG6C2IIr1A5FCI1gFx06+7/sj5+KlVBryAqGYkw2CPkr6cTLPWNO0MnU Jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xahrur73v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 14:17:14 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 435EHEHT030388;
-	Fri, 5 Apr 2024 14:17:14 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xahrur73s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 14:17:14 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 435CcRkS003612;
-	Fri, 5 Apr 2024 14:17:13 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3x9epyjxgd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 05 Apr 2024 14:17:13 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 435EHBgI20251212
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 5 Apr 2024 14:17:13 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 251125806A;
-	Fri,  5 Apr 2024 14:17:11 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5ABD358052;
-	Fri,  5 Apr 2024 14:17:10 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.142.172])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  5 Apr 2024 14:17:10 +0000 (GMT)
-Message-ID: <cb683a87f9d6942df057567fbf2de57f83bd6546.camel@linux.ibm.com>
-Subject: Re: [PATCH v5][next] integrity: Avoid
- -Wflex-array-member-not-at-end warnings
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "Gustavo A. R. Silva"
- <gustavoars@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Dmitry
- Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg
- <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris
- <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Date: Fri, 05 Apr 2024 10:17:09 -0400
-In-Reply-To: <d6c9a04e-66e3-4010-9a35-fb5efc3f1af0@embeddedor.com>
-References: <Zg7AoOh7CL5ZD/fe@neat>
-	 <27d36ec8e0539c5d6bc760de7305299a2142f9f1.camel@linux.ibm.com>
-	 <b3956fd36307d33ebbf0e4633e0d2389860cf720.camel@linux.ibm.com>
-	 <d6c9a04e-66e3-4010-9a35-fb5efc3f1af0@embeddedor.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
+	s=arc-20240116; t=1712350991; c=relaxed/simple;
+	bh=4+g6js5mEU1pa5ulHJ+C7YQxyZdv41bK8ysv9MJSxyU=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=TO0Pe/yuL1CCwGZNzL15LMq2uoMQHrEFT+QXytAYQyqXo7HO/V300qAzy//Fnz/5udyniLeWJzoq/DHIDvC4n/24tade5o56nZ+FueETzFRKH48vIhehQgbMY9eb/C68DcxawQ0NvqYRvRoQY61/Q8iJITedy9wkJVJfq614S+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/8Ljbk/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565DEC43394;
+	Fri,  5 Apr 2024 21:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712350989;
+	bh=4+g6js5mEU1pa5ulHJ+C7YQxyZdv41bK8ysv9MJSxyU=;
+	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+	b=L/8Ljbk/5fkA3JZ236dhrHG3f5JgFHRUtN7g1CRRS7g8TMvza7NlCS+/Q9hxjRNml
+	 UldX8TzETK1FjtAJUPdr8h2swcYoPx8LIpCvCzi7Z1+whaYsiEtTwSsb50cqN2kPy/
+	 ZSmCTEFaUqLgs2nRqCwyN8rjZSjhCEEoZ2CnIus+o9z7EDPiYVHgnpsY/kIUbgeG4L
+	 7m92y7oEbazVHqlMFifDcVTM4fqnggZL9lAKyCpkVB0CYDkk9xXGll2mh5VjMXImnC
+	 BkVzfEgxJicES7tmqlIQkTwYI/4V8m0kJeskaxHrUNLnwOOW/9/YxG8ro67ziPBbDF
+	 i9e7LYen/RLlQ==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 561901200032;
+	Fri,  5 Apr 2024 17:03:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 05 Apr 2024 17:03:08 -0400
+X-ME-Sender: <xms:DGcQZnwhPIGAwsK7wdLhwvmUrmxhrWIi8kQ5dztmg78mxG9NpKpDlg>
+    <xme:DGcQZvTF9brGNMV6gb35dn_tgfJVqlEcpFGypaob1Zpu06E1OO8tznAkEqqnmlFbB
+    H1etiPIy0nIcOhfqow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudegtddgudehkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedvveeigfetudegveeiledvgfevuedvgfetgeefieeijeejffeggeeh
+    udegtdevheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidquddvkeehudej
+    tddvgedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlhdrohhrghesrghrnhgusg
+    druggv
+X-ME-Proxy: <xmx:DGcQZhXZznZmWtvHwKC4dzzKRFbg4AEzMgC_pLkGJ1uXPIVfBwZysA>
+    <xmx:DGcQZhi4Wgf6-sHSxo8bQ2yWhcEczMUAFR18A4yBemB40G-Z511AMg>
+    <xmx:DGcQZpC2aWXCs7_PaJVz0WLXN5kxWvPzjkdAK8mK3DJvvx1G-78e-g>
+    <xmx:DGcQZqK3rtXTv1hKCVKykEzbzkEiR1aHYGLYImZQCqgO07hWWBb8nA>
+    <xmx:DGcQZoOvpR1euKiLtFecPwUBzCTWriVC-Pf3ZTvG0CnSI6FfVAhUIFF7>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 03C77B6008D; Fri,  5 Apr 2024 17:03:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nTgj8x-mMrz1hQjnt_3Wx53SLRRm0Nm1
-X-Proofpoint-ORIG-GUID: ovnVxbgugPSecIjL19HnDdyRy1Wun-bz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-05_14,2024-04-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 mlxlogscore=980 impostorscore=0
- bulkscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404050102
+MIME-Version: 1.0
+Message-Id: <fe5e2e29-6d60-4ec1-ab3e-492c463e6a12@app.fastmail.com>
+In-Reply-To: <4d08af651b95744dc6cfa0c2624c596d21d83d09.camel@linux.ibm.com>
+References: <20240404105840.3396821-1-schnelle@linux.ibm.com>
+ <20240404105840.3396821-2-schnelle@linux.ibm.com>
+ <95a63afe-ccd7-4551-86af-00b7fb0d8ff9@app.fastmail.com>
+ <4cdb6399d803d37a883d1a2fbe119c0a14610106.camel@linux.ibm.com>
+ <9d9fa267-067e-421b-9a39-aa178b913298@app.fastmail.com>
+ <4d08af651b95744dc6cfa0c2624c596d21d83d09.camel@linux.ibm.com>
+Date: Fri, 05 Apr 2024 23:02:47 +0200
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ "Peter Huewe" <peterhuewe@gmx.de>, "Jarkko Sakkinen" <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, "Heiko Carstens" <hca@linux.ibm.com>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] char: tpm: handle HAS_IOPORT dependencies
+Content-Type: text/plain
 
-On Thu, 2024-04-04 at 18:56 -0600, Gustavo A. R. Silva wrote:
-> > "checkpatch.pl --strict" complains "CHECK: Alignment should match open
-> > parenthesis".  I'll queue the patch, but how about teaching checkpatch.pl to
-> > ignore __struct_group()?
-> 
-> I think this would do it:
-> 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 9c4c4a61bc83..e229b97f17f6 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -3958,7 +3958,7 @@ sub process {
->                          my $rest = $2;
-> 
->                          my $pos = pos_last_openparen($rest);
-> -                       if ($pos >= 0) {
-> +                       if ($pos >= 0 && $rest !~
-> /(__)?struct_group(_(tagged|attr))?(\()/) {
->                                  $line =~ /^(\+| )([ \t]*)/;
->                                  my $newindent = $2;
-> 
-> I'll send a proper patch. Thanks for the suggestion, Mimi.
+On Fri, Apr 5, 2024, at 11:23, Niklas Schnelle wrote:
+>
+> I just confirmed that keeping the define it also compiles but I do
+> wonder if it's not even cleaner to just add an explicit HAS_IOPORT
+> dependency and no new #ifdefs in the code. I'm willing to send a patch
+> for any of these solutions though.
 
-Thanks, it works.
+It depends a bit on where the driver is used in the end. We
+currently set HAS_IOPORT on arm64 and riscv, but we could make
+that dependent on which PCI host drivers are actually being
+built, as a lot of modern hardware doesn't actually support
+port I/O.
 
-Mimi
+Is this driver still expected to be used on modern PCIe hosts
+with no port I/O, or would new machines all use the i2c version?
 
+If we do need the driver in configurations without CONFIG_HAS_IOPORT,
+then the patch below wouldn't be awful (on top of the patch that
+got merged already).
+
+     Arnd
+
+diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
+index 99c6e565ec8d..5b45ad619900 100644
+--- a/drivers/char/tpm/tpm_infineon.c
++++ b/drivers/char/tpm/tpm_infineon.c
+@@ -37,7 +37,8 @@
+ struct tpm_inf_dev {
+ 	int iotype;
+ 
+-	void __iomem *mem_base;	/* MMIO ioremap'd addr */
++	void __iomem *data_base;	/* MMIO ioremap'd addr */
++	void __iomem *config_base;	/* MMIO ioremap'd config */
+ 	unsigned long map_base;	/* phys MMIO base */
+ 	unsigned long map_size;	/* MMIO region size */
+ 	unsigned int index_off;	/* index register offset */
+@@ -53,40 +54,22 @@ static struct tpm_inf_dev tpm_dev;
+ 
+ static inline void tpm_data_out(unsigned char data, unsigned char offset)
+ {
+-#ifdef CONFIG_HAS_IOPORT
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+-		outb(data, tpm_dev.data_regs + offset);
+-	else
+-#endif
+-		writeb(data, tpm_dev.mem_base + tpm_dev.data_regs + offset);
++	iowrite8(data, tpm_dev.data_base + offset);
+ }
+ 
+ static inline unsigned char tpm_data_in(unsigned char offset)
+ {
+-#ifdef CONFIG_HAS_IOPORT
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+-		return inb(tpm_dev.data_regs + offset);
+-#endif
+-	return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
++	return ioread8(tpm_dev.data_base + offset);
+ }
+ 
+ static inline void tpm_config_out(unsigned char data, unsigned char offset)
+ {
+-#ifdef CONFIG_HAS_IOPORT
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+-		outb(data, tpm_dev.config_port + offset);
+-	else
+-#endif
+-		writeb(data, tpm_dev.mem_base + tpm_dev.index_off + offset);
++	iowrite8(data, tpm_dev.config_base + offset);
+ }
+ 
+ static inline unsigned char tpm_config_in(unsigned char offset)
+ {
+-#ifdef CONFIG_HAS_IOPORT
+-	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+-		return inb(tpm_dev.config_port + offset);
+-#endif
+-	return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
++	return ioread8(tpm_dev.config_base + offset);
+ }
+ 
+ /* TPM header definitions */
+@@ -425,16 +408,27 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
+ 			goto err_last;
+ 		}
+ 		/* publish my base address and request region */
++		tpm_dev.data_base = ioport_map(tpm_dev.data_regs, tpm_dev.data_size);
++		if (!tpm_dev.data_base) {
++			rc = -EINVAL;
++			goto err_last;
++		}
+ 		if (request_region(tpm_dev.data_regs, tpm_dev.data_size,
+ 				   "tpm_infineon0") == NULL) {
+ 			rc = -EINVAL;
++			ioport_unmap(tpm_dev.config_base);
+ 			goto err_last;
+ 		}
++		tpm_dev.config_base = ioport_map(tpm_dev.config_port, tpm_dev.config_size);
++		if (!tpm_dev.config_base) {
++			rc = -EINVAL;
++			goto err_release_data_region;
++		}
+ 		if (request_region(tpm_dev.config_port, tpm_dev.config_size,
+ 				   "tpm_infineon0") == NULL) {
+ 			release_region(tpm_dev.data_regs, tpm_dev.data_size);
+ 			rc = -EINVAL;
+-			goto err_last;
++			goto err_release_data_region;
+ 		}
+ 	} else if (pnp_mem_valid(dev, 0) &&
+ 		   !(pnp_mem_flags(dev, 0) & IORESOURCE_DISABLED)) {
+@@ -454,8 +448,8 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
+ 			goto err_last;
+ 		}
+ 
+-		tpm_dev.mem_base = ioremap(tpm_dev.map_base, tpm_dev.map_size);
+-		if (tpm_dev.mem_base == NULL) {
++		tpm_dev.data_base = ioremap(tpm_dev.map_base, tpm_dev.map_size);
++		if (tpm_dev.data_base == NULL) {
+ 			release_mem_region(tpm_dev.map_base, tpm_dev.map_size);
+ 			rc = -EINVAL;
+ 			goto err_last;
+@@ -468,8 +462,7 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
+ 		 * seem like they could be placed anywhere within the MMIO
+ 		 * region, but lets just put them at zero offset.
+ 		 */
+-		tpm_dev.index_off = TPM_ADDR;
+-		tpm_dev.data_regs = 0x0;
++		tpm_dev.config_base = tpm_dev.data_base + TPM_ADDR;
+ 	} else {
+ 		rc = -EINVAL;
+ 		goto err_last;
+@@ -568,10 +561,16 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
+ 
+ err_release_region:
+ 	if (tpm_dev.iotype == TPM_INF_IO_PORT) {
+-		release_region(tpm_dev.data_regs, tpm_dev.data_size);
++		ioport_unmap(tpm_dev.config_base);
+ 		release_region(tpm_dev.config_port, tpm_dev.config_size);
++	}
++
++err_release_data_region:
++	if (tpm_dev.iotype == TPM_INF_IO_PORT) {
++		ioport_unmap(tpm_dev.data_base);
++		release_region(tpm_dev.data_regs, tpm_dev.data_size);
+ 	} else {
+-		iounmap(tpm_dev.mem_base);
++		iounmap(tpm_dev.data_base);
+ 		release_mem_region(tpm_dev.map_base, tpm_dev.map_size);
+ 	}
+ 
+@@ -586,11 +585,13 @@ static void tpm_inf_pnp_remove(struct pnp_dev *dev)
+ 	tpm_chip_unregister(chip);
+ 
+ 	if (tpm_dev.iotype == TPM_INF_IO_PORT) {
++		ioport_unmap(tpm_dev.data_base);
+ 		release_region(tpm_dev.data_regs, tpm_dev.data_size);
++		ioport_unmap(tpm_dev.config_base);
+ 		release_region(tpm_dev.config_port,
+ 			       tpm_dev.config_size);
+ 	} else {
+-		iounmap(tpm_dev.mem_base);
++		iounmap(tpm_dev.data_base);
+ 		release_mem_region(tpm_dev.map_base, tpm_dev.map_size);
+ 	}
+ }
 
