@@ -1,260 +1,140 @@
-Return-Path: <linux-integrity+bounces-2024-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2025-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA3D189A5E1
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Apr 2024 23:03:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 974DA89A90A
+	for <lists+linux-integrity@lfdr.de>; Sat,  6 Apr 2024 07:20:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1283A1C20F69
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Apr 2024 21:03:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 381B5B22183
+	for <lists+linux-integrity@lfdr.de>; Sat,  6 Apr 2024 05:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C16A174EDB;
-	Fri,  5 Apr 2024 21:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C932208D0;
+	Sat,  6 Apr 2024 05:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/8Ljbk/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HYazYNyp"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01DE7171669;
-	Fri,  5 Apr 2024 21:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EB218E02;
+	Sat,  6 Apr 2024 05:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712350991; cv=none; b=kCkAczSGgoL8DhdMKq7aOxxs+DqNtEFdX5p8iPGXbAMf17hHzkNIn4YaNdKgDGrIdU5X1CLs1sMEDtnd1UzJkEapln6wxT4Ui/8ZKJfQ5g2yGsyFDWoLtMpMHpzBAnbeG7I/MppcQMCVwlRR8mlYKcWEZXg8/8l8QkU0y7jgbm0=
+	t=1712380829; cv=none; b=YzbEaLpkY1uVjsGwaQO1u+GcmshnUnFAxY+GcJB8z7/W6G5GIZGCcfBcDEjXLvGBv0crdz8VkQIxs2kmrhvOykKr6zmbeQjKDQT+1V+GgFc8+UV9n4BO280BecUa/nF1cCe8vrCw/5HIHacvrFdeEATQ6v+RiMCvinEcdNzAKq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712350991; c=relaxed/simple;
-	bh=4+g6js5mEU1pa5ulHJ+C7YQxyZdv41bK8ysv9MJSxyU=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=TO0Pe/yuL1CCwGZNzL15LMq2uoMQHrEFT+QXytAYQyqXo7HO/V300qAzy//Fnz/5udyniLeWJzoq/DHIDvC4n/24tade5o56nZ+FueETzFRKH48vIhehQgbMY9eb/C68DcxawQ0NvqYRvRoQY61/Q8iJITedy9wkJVJfq614S+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/8Ljbk/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565DEC43394;
-	Fri,  5 Apr 2024 21:03:09 +0000 (UTC)
+	s=arc-20240116; t=1712380829; c=relaxed/simple;
+	bh=TBj/hcnPrvS19ZOluMZ12evt8AeDaDrUTBeM5kaTuKY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=CZ8xfNFOwOwbOw+X7MQ2mypw2+89BHGbOVaiv57GMPQkzoP+kTI3Of0iGuMzFOUzREJ/5HG1uwWjOnb/738qFydKIOLZPWRcq+fRpVC2c83ScQZah+i6XKs06F3D3U/JknTPeBdxqgBUOHgAXMUknabfbbQJoG8FBKB5p8UrXSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HYazYNyp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C5A9C433C7;
+	Sat,  6 Apr 2024 05:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712350989;
-	bh=4+g6js5mEU1pa5ulHJ+C7YQxyZdv41bK8ysv9MJSxyU=;
-	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-	b=L/8Ljbk/5fkA3JZ236dhrHG3f5JgFHRUtN7g1CRRS7g8TMvza7NlCS+/Q9hxjRNml
-	 UldX8TzETK1FjtAJUPdr8h2swcYoPx8LIpCvCzi7Z1+whaYsiEtTwSsb50cqN2kPy/
-	 ZSmCTEFaUqLgs2nRqCwyN8rjZSjhCEEoZ2CnIus+o9z7EDPiYVHgnpsY/kIUbgeG4L
-	 7m92y7oEbazVHqlMFifDcVTM4fqnggZL9lAKyCpkVB0CYDkk9xXGll2mh5VjMXImnC
-	 BkVzfEgxJicES7tmqlIQkTwYI/4V8m0kJeskaxHrUNLnwOOW/9/YxG8ro67ziPBbDF
-	 i9e7LYen/RLlQ==
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id 561901200032;
-	Fri,  5 Apr 2024 17:03:08 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 05 Apr 2024 17:03:08 -0400
-X-ME-Sender: <xms:DGcQZnwhPIGAwsK7wdLhwvmUrmxhrWIi8kQ5dztmg78mxG9NpKpDlg>
-    <xme:DGcQZvTF9brGNMV6gb35dn_tgfJVqlEcpFGypaob1Zpu06E1OO8tznAkEqqnmlFbB
-    H1etiPIy0nIcOhfqow>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudegtddgudehkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedvveeigfetudegveeiledvgfevuedvgfetgeefieeijeejffeggeeh
-    udegtdevheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidquddvkeehudej
-    tddvgedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlhdrohhrghesrghrnhgusg
-    druggv
-X-ME-Proxy: <xmx:DGcQZhXZznZmWtvHwKC4dzzKRFbg4AEzMgC_pLkGJ1uXPIVfBwZysA>
-    <xmx:DGcQZhi4Wgf6-sHSxo8bQ2yWhcEczMUAFR18A4yBemB40G-Z511AMg>
-    <xmx:DGcQZpC2aWXCs7_PaJVz0WLXN5kxWvPzjkdAK8mK3DJvvx1G-78e-g>
-    <xmx:DGcQZqK3rtXTv1hKCVKykEzbzkEiR1aHYGLYImZQCqgO07hWWBb8nA>
-    <xmx:DGcQZoOvpR1euKiLtFecPwUBzCTWriVC-Pf3ZTvG0CnSI6FfVAhUIFF7>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 03C77B6008D; Fri,  5 Apr 2024 17:03:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
+	s=k20201202; t=1712380828;
+	bh=TBj/hcnPrvS19ZOluMZ12evt8AeDaDrUTBeM5kaTuKY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=HYazYNypOS+iPe/PmwIZVgrP0OAjOmuWcCZaXmQBd5/DF3DU2Cm7HK1KTLKVM8W2j
+	 EfdrhznuDsHvbEh7NeV1r2EDMVkxTqo+hmKt5MdFIcqj68UTB4u7gvHG6geAe3ArfV
+	 cYxb7yc2nqhO3pPj8ToTFIgL78NntzPlzi3tNk1u8F7N5z7SqSGJ1Z/QhHbUaQaR1j
+	 GTv/7bDPNNXqFXoXNMGCl3bjIAtmML/lX++bgYkRjXumLNf6dEzpQPrpxdPeyVgSKh
+	 czfxRuHIWxcuBJ6wGSXEzVfHmRCYmRJdToESEDFulu3u4HF5IZUSSU3tkxxLhyQRAI
+	 TbkNIwkM8MMRA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 19C9BD84BAC;
+	Sat,  6 Apr 2024 05:20:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fe5e2e29-6d60-4ec1-ab3e-492c463e6a12@app.fastmail.com>
-In-Reply-To: <4d08af651b95744dc6cfa0c2624c596d21d83d09.camel@linux.ibm.com>
-References: <20240404105840.3396821-1-schnelle@linux.ibm.com>
- <20240404105840.3396821-2-schnelle@linux.ibm.com>
- <95a63afe-ccd7-4551-86af-00b7fb0d8ff9@app.fastmail.com>
- <4cdb6399d803d37a883d1a2fbe119c0a14610106.camel@linux.ibm.com>
- <9d9fa267-067e-421b-9a39-aa178b913298@app.fastmail.com>
- <4d08af651b95744dc6cfa0c2624c596d21d83d09.camel@linux.ibm.com>
-Date: Fri, 05 Apr 2024 23:02:47 +0200
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "Peter Huewe" <peterhuewe@gmx.de>, "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, "Heiko Carstens" <hca@linux.ibm.com>,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] char: tpm: handle HAS_IOPORT dependencies
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/34] address all -Wunused-const warnings
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171238082809.31617.17365732495689756509.git-patchwork-notify@kernel.org>
+Date: Sat, 06 Apr 2024 05:20:28 +0000
+References: <20240403080702.3509288-1-arnd@kernel.org>
+In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, arnd@arndb.de, mpe@ellerman.id.au,
+ christophe.leroy@csgroup.eu, dlemoal@kernel.org, jikos@kernel.org,
+ gregkh@linuxfoundation.org, minyard@acm.org, peterhuewe@gmx.de,
+ jarkko@kernel.org, kristo@kernel.org, sboyd@kernel.org, abbotti@mev.co.uk,
+ hsweeten@visionengravers.com, srinivas.pandruvada@linux.intel.com,
+ lenb@kernel.org, rafael@kernel.org, john.allen@amd.com,
+ herbert@gondor.apana.org.au, vkoul@kernel.org, ardb@kernel.org,
+ andersson@kernel.org, mdf@kernel.org, liviu.dudau@arm.com,
+ benjamin.tissoires@redhat.com, andi.shyti@kernel.org,
+ michael.hennerich@analog.com, peda@axentia.se, lars@metafoo.de,
+ jic23@kernel.org, dmitry.torokhov@gmail.com, markuss.broks@gmail.com,
+ alexandre.torgue@foss.st.com, lee@kernel.org, kuba@kernel.org,
+ Shyam-sundar.S-k@amd.com, iyappan@os.amperecomputing.com,
+ yisen.zhuang@huawei.com, stf_xl@wp.pl, kvalo@kernel.org, sre@kernel.org,
+ tony@atomide.com, broonie@kernel.org, alexandre.belloni@bootlin.com,
+ chenxiang66@hisilicon.com, martin.petersen@oracle.com,
+ neil.armstrong@linaro.org, heiko@sntech.de, krzysztof.kozlowski@linaro.org,
+ hvaibhav.linux@gmail.com, elder@kernel.org, jirislaby@kernel.org,
+ ychuang3@nuvoton.com, deller@gmx.de, hch@lst.de, robin.murphy@arm.com,
+ rostedt@goodmis.org, mhiramat@kernel.org, akpm@linux-foundation.org,
+ keescook@chromium.org, trond.myklebust@hammerspace.com, anna@kernel.org,
+ masahiroy@kernel.org, nathan@kernel.org, tiwai@suse.com,
+ linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org,
+ openipmi-developer@lists.sourceforge.net, linux-integrity@vger.kernel.org,
+ linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-fpga@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, iommu@lists.linux.dev,
+ linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+ linux-hardening@vger.kernel.org, linux-nfs@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, alsa-devel@alsa-project.org,
+ linux-sound@vger.kernel.org
 
-On Fri, Apr 5, 2024, at 11:23, Niklas Schnelle wrote:
->
-> I just confirmed that keeping the define it also compiles but I do
-> wonder if it's not even cleaner to just add an explicit HAS_IOPORT
-> dependency and no new #ifdefs in the code. I'm willing to send a patch
-> for any of these solutions though.
+Hello:
 
-It depends a bit on where the driver is used in the end. We
-currently set HAS_IOPORT on arm64 and riscv, but we could make
-that dependent on which PCI host drivers are actually being
-built, as a lot of modern hardware doesn't actually support
-port I/O.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Is this driver still expected to be used on modern PCIe hosts
-with no port I/O, or would new machines all use the i2c version?
+On Wed,  3 Apr 2024 10:06:18 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Compilers traditionally warn for unused 'static' variables, but not
+> if they are constant. The reason here is a custom for C++ programmers
+> to define named constants as 'static const' variables in header files
+> instead of using macros or enums.
+> 
+> [...]
 
-If we do need the driver in configurations without CONFIG_HAS_IOPORT,
-then the patch below wouldn't be awful (on top of the patch that
-got merged already).
+Here is the summary with links:
+  - [05/34] 3c515: remove unused 'mtu' variable
+    https://git.kernel.org/netdev/net-next/c/17b35355c2c6
+  - [19/34] sunrpc: suppress warnings for unused procfs functions
+    (no matching commit)
+  - [26/34] isdn: kcapi: don't build unused procfs code
+    https://git.kernel.org/netdev/net-next/c/91188544af06
+  - [28/34] net: xgbe: remove extraneous #ifdef checks
+    https://git.kernel.org/netdev/net-next/c/0ef416e045ad
+  - [33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR annotations
+    (no matching commit)
 
-     Arnd
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
-index 99c6e565ec8d..5b45ad619900 100644
---- a/drivers/char/tpm/tpm_infineon.c
-+++ b/drivers/char/tpm/tpm_infineon.c
-@@ -37,7 +37,8 @@
- struct tpm_inf_dev {
- 	int iotype;
- 
--	void __iomem *mem_base;	/* MMIO ioremap'd addr */
-+	void __iomem *data_base;	/* MMIO ioremap'd addr */
-+	void __iomem *config_base;	/* MMIO ioremap'd config */
- 	unsigned long map_base;	/* phys MMIO base */
- 	unsigned long map_size;	/* MMIO region size */
- 	unsigned int index_off;	/* index register offset */
-@@ -53,40 +54,22 @@ static struct tpm_inf_dev tpm_dev;
- 
- static inline void tpm_data_out(unsigned char data, unsigned char offset)
- {
--#ifdef CONFIG_HAS_IOPORT
--	if (tpm_dev.iotype == TPM_INF_IO_PORT)
--		outb(data, tpm_dev.data_regs + offset);
--	else
--#endif
--		writeb(data, tpm_dev.mem_base + tpm_dev.data_regs + offset);
-+	iowrite8(data, tpm_dev.data_base + offset);
- }
- 
- static inline unsigned char tpm_data_in(unsigned char offset)
- {
--#ifdef CONFIG_HAS_IOPORT
--	if (tpm_dev.iotype == TPM_INF_IO_PORT)
--		return inb(tpm_dev.data_regs + offset);
--#endif
--	return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
-+	return ioread8(tpm_dev.data_base + offset);
- }
- 
- static inline void tpm_config_out(unsigned char data, unsigned char offset)
- {
--#ifdef CONFIG_HAS_IOPORT
--	if (tpm_dev.iotype == TPM_INF_IO_PORT)
--		outb(data, tpm_dev.config_port + offset);
--	else
--#endif
--		writeb(data, tpm_dev.mem_base + tpm_dev.index_off + offset);
-+	iowrite8(data, tpm_dev.config_base + offset);
- }
- 
- static inline unsigned char tpm_config_in(unsigned char offset)
- {
--#ifdef CONFIG_HAS_IOPORT
--	if (tpm_dev.iotype == TPM_INF_IO_PORT)
--		return inb(tpm_dev.config_port + offset);
--#endif
--	return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
-+	return ioread8(tpm_dev.config_base + offset);
- }
- 
- /* TPM header definitions */
-@@ -425,16 +408,27 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
- 			goto err_last;
- 		}
- 		/* publish my base address and request region */
-+		tpm_dev.data_base = ioport_map(tpm_dev.data_regs, tpm_dev.data_size);
-+		if (!tpm_dev.data_base) {
-+			rc = -EINVAL;
-+			goto err_last;
-+		}
- 		if (request_region(tpm_dev.data_regs, tpm_dev.data_size,
- 				   "tpm_infineon0") == NULL) {
- 			rc = -EINVAL;
-+			ioport_unmap(tpm_dev.config_base);
- 			goto err_last;
- 		}
-+		tpm_dev.config_base = ioport_map(tpm_dev.config_port, tpm_dev.config_size);
-+		if (!tpm_dev.config_base) {
-+			rc = -EINVAL;
-+			goto err_release_data_region;
-+		}
- 		if (request_region(tpm_dev.config_port, tpm_dev.config_size,
- 				   "tpm_infineon0") == NULL) {
- 			release_region(tpm_dev.data_regs, tpm_dev.data_size);
- 			rc = -EINVAL;
--			goto err_last;
-+			goto err_release_data_region;
- 		}
- 	} else if (pnp_mem_valid(dev, 0) &&
- 		   !(pnp_mem_flags(dev, 0) & IORESOURCE_DISABLED)) {
-@@ -454,8 +448,8 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
- 			goto err_last;
- 		}
- 
--		tpm_dev.mem_base = ioremap(tpm_dev.map_base, tpm_dev.map_size);
--		if (tpm_dev.mem_base == NULL) {
-+		tpm_dev.data_base = ioremap(tpm_dev.map_base, tpm_dev.map_size);
-+		if (tpm_dev.data_base == NULL) {
- 			release_mem_region(tpm_dev.map_base, tpm_dev.map_size);
- 			rc = -EINVAL;
- 			goto err_last;
-@@ -468,8 +462,7 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
- 		 * seem like they could be placed anywhere within the MMIO
- 		 * region, but lets just put them at zero offset.
- 		 */
--		tpm_dev.index_off = TPM_ADDR;
--		tpm_dev.data_regs = 0x0;
-+		tpm_dev.config_base = tpm_dev.data_base + TPM_ADDR;
- 	} else {
- 		rc = -EINVAL;
- 		goto err_last;
-@@ -568,10 +561,16 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
- 
- err_release_region:
- 	if (tpm_dev.iotype == TPM_INF_IO_PORT) {
--		release_region(tpm_dev.data_regs, tpm_dev.data_size);
-+		ioport_unmap(tpm_dev.config_base);
- 		release_region(tpm_dev.config_port, tpm_dev.config_size);
-+	}
-+
-+err_release_data_region:
-+	if (tpm_dev.iotype == TPM_INF_IO_PORT) {
-+		ioport_unmap(tpm_dev.data_base);
-+		release_region(tpm_dev.data_regs, tpm_dev.data_size);
- 	} else {
--		iounmap(tpm_dev.mem_base);
-+		iounmap(tpm_dev.data_base);
- 		release_mem_region(tpm_dev.map_base, tpm_dev.map_size);
- 	}
- 
-@@ -586,11 +585,13 @@ static void tpm_inf_pnp_remove(struct pnp_dev *dev)
- 	tpm_chip_unregister(chip);
- 
- 	if (tpm_dev.iotype == TPM_INF_IO_PORT) {
-+		ioport_unmap(tpm_dev.data_base);
- 		release_region(tpm_dev.data_regs, tpm_dev.data_size);
-+		ioport_unmap(tpm_dev.config_base);
- 		release_region(tpm_dev.config_port,
- 			       tpm_dev.config_size);
- 	} else {
--		iounmap(tpm_dev.mem_base);
-+		iounmap(tpm_dev.data_base);
- 		release_mem_region(tpm_dev.map_base, tpm_dev.map_size);
- 	}
- }
+
 
