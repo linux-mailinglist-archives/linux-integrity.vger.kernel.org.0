@@ -1,162 +1,135 @@
-Return-Path: <linux-integrity+bounces-2039-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2040-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4D5789E30A
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 21:11:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E3B689E43C
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 22:15:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4631CB2354D
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 19:11:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59FBE2848C1
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 20:15:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC8315749F;
-	Tue,  9 Apr 2024 19:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3416F158207;
+	Tue,  9 Apr 2024 20:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q0cBNmuL"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PZtcfELs"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED54157489;
-	Tue,  9 Apr 2024 19:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F808562A
+	for <linux-integrity@vger.kernel.org>; Tue,  9 Apr 2024 20:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712689742; cv=none; b=Z4U7Wm1j52EvO0+vc9+Wflhumbf0t6f6lVgz5Lq4h2jLBpdbhwr7YZhnrgt9/fk9uLSXvEsQB5upgj+jcoBqics/aNlm/yRpvrrOBzQN/v94sP8NtdpHoU4ScRGhZ6F/LgTo2w9pNEF02nn9olBKFRCWWPPidvNsLmW0Kof+j5s=
+	t=1712693699; cv=none; b=KvHLEhBUfoQGwmY+9Bx/bGqXHmNhe9A9rOMG8rDT62U0A9MTonDKhzT5tXZLZxnZ+/YJZ0hs6/9/tqlVK67djsKbNzWJjw38G9rg4YWYMTImgIssHPlhlpT4WR8PVZOFJyqRogx6F79HxgOMfVPNJrcQ5hkA0tgfxGVzrHmnKuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712689742; c=relaxed/simple;
-	bh=UpK3Tp7MDdksNh8J95zsXrIo50ZqivfzGhiSPuSgXZE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EyiK/RCnOaYQsev/jw0ehTCWu08067hw0IScypDRsmrOyPTgh62WeJ0BTFNkz6d23XXC5GOgHItEI7tdM3D3lpIwP71O2ARlhZ2G9Eh6eO2gphvxW1YqxsGmd+cXANNbQfYB6eJcazSugD8vMIgD0p3Jlvoo+IW3DIhQGMEvqvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q0cBNmuL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CA36C433F1;
-	Tue,  9 Apr 2024 19:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712689742;
-	bh=UpK3Tp7MDdksNh8J95zsXrIo50ZqivfzGhiSPuSgXZE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=q0cBNmuLTxP6dP/tIH6MPGNZ3Fhqp9BJNd5odIE3yWn5bi85AXykP9S+rHkzhm0LA
-	 MHdCQH+5hzKe92GWYhOkfInwZnAmiblE9iskOW/jJSquIolRyvEcF0hJ5Qmk9+7QD3
-	 QLH/71b2ojPVTuzw3XNzw4T57rBIL1gBcMV9fLk9QOMNucSuYwywItLMp6P5mZa9dm
-	 9a/EYYtLYgOY75qScKKktePL1UsCMUDxXpUmdKI0nyiyiZdxLz+IuprRdGCeSMBTFn
-	 YBTpT+yxzlUWhOUGf7uC4S8Ms/ZfdFNHXoM70cr/b0NW77tbH50dkiwOUgp8/UfNIU
-	 tHjH3YqvUBGSw==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Alexander Steffen <Alexander.Steffen@infineon.com>,
-	"Daniel P . Smith" <dpsmith@apertussolutions.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] Documentation: tpm_tis
-Date: Tue,  9 Apr 2024 22:08:47 +0300
-Message-ID: <20240409190847.10869-3-jarkko@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240409190847.10869-1-jarkko@kernel.org>
-References: <20240409190847.10869-1-jarkko@kernel.org>
+	s=arc-20240116; t=1712693699; c=relaxed/simple;
+	bh=2SbgLvgPGkcDv0lCPd1iXo8d7o7QDk5hgPKEFcSWSls=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CTDs1a2eGglfPtn5WENncj0jn/k2nKMUYwP21GmiibX1J++LkbSAUnwXUK+Ojndx+s8PRB2g5b9ne3qO0av5b527AGmQ4PTM5MUKe3cgs4Awr80CqbQcXTKaDbauDu20B3uotyeQ/Z5Tg1wVYCZL1dT+BjDxKUV9pcPDzn/8Mlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PZtcfELs; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dc6d8bd618eso5672457276.3
+        for <linux-integrity@vger.kernel.org>; Tue, 09 Apr 2024 13:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1712693696; x=1713298496; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j0YVQ9djY2M33MWph8FPZMPtyUpc6ybsMtuQAt43J/Y=;
+        b=PZtcfELsz3rwGgDJAZIoMllf//1Z6O7akXXFVcVivFc3oFY0oUs//r3yGCUL1jyLPe
+         pi3Z628Cxz/kqdRFUZRa2QX9cSCgNVGe9wSQMLE/FYv1loD/asr64OhME59V8FzCuDqh
+         UOV1QdeJcF1CI0/+UotCzIDkxGMTx6Difn+iSiFwAOxATq1J834JiWLUiSjcWWXayEBn
+         Ymco/s4fIncJ5Yb5FDkdJ3ifL81/ldft5G/sqTvRfo8TpwhRz4FOsuFyZk4tA44StKzV
+         sQpHSnCT7Jb5iZu2G70tvRBXBRdeB68OEiUXUnMuwatpPcs1GQCwd+9jNDhjmvgzVUah
+         rn1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712693696; x=1713298496;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j0YVQ9djY2M33MWph8FPZMPtyUpc6ybsMtuQAt43J/Y=;
+        b=JCsmA6KpBolI6Eo8fWGPxXkaWpNI2JKNlpdh4rPTA6baWoOcRhkvqmBE6xDXr9OQD2
+         /7WAIfPMEGHvp12LPqOei9mgYCe+xNZMuuD46HUTZ9i10yev5wlnsqcwRBPq8Z8UQG8l
+         Uf6uD2eercMYR7u3wF2WL5++IQ89oA/fkzL+WTP4l3zTXFgPTxe6SK3j5kqH90SpHQtZ
+         mXC5nsHN2pzOOY9ZpNvPFwZDlUaE0LtUxgF33jFvc4xthEvS+vScYYt5odWxynpY5KCu
+         B3Kf8ZxAyQfs5iW/TzpQhcvn0Hjlbd1jq4YWNomxI16KuoRFqc+bJYtCxfz0pb+B0hAN
+         6YTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVmvJLX0OyiI5qfIOk2OE48rUWo4UWYWNriowPcgtTH0vM2ntX6HOjZcZd4zOI6A2x2cIx95XyEyNQU1ED8EzZ16Xft2Hz/xxoGLT73rwzJ
+X-Gm-Message-State: AOJu0YwomWsdnf3xCNkk3vTx9VjWMs4Q8JZBJS2SnH566XCYSon7GzYP
+	bPqKylaGXVtAmrfWfPT0bG5WqMDh7vsCYJwlJVGQ61Vx/CR+RnwupS/U4CXfsaGZbM9y0bB+9eH
+	hCg8TRPU3Nglf4NvLU+u++8EKpmgTVO+t/2Ez
+X-Google-Smtp-Source: AGHT+IHOHfb3Vsx0X6ltkSVRZFRT+zreJyCaHp4J4qYazQG9Rm3OCb+u4xunfbpGxaxtGsfS74W6Ks+5hyL3bJx9lHY=
+X-Received: by 2002:a05:6902:100b:b0:dc7:423c:b8aa with SMTP id
+ w11-20020a056902100b00b00dc7423cb8aamr1106734ybt.12.1712693696380; Tue, 09
+ Apr 2024 13:14:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
+ <CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+ <CAHk-=wjjx3oZ55Uyaw9N_kboHdiScLkXAu05CmPF_p_UhQ-tbw@mail.gmail.com>
+ <20240402210035.GI538574@ZenIV> <CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
+ <87le5mxwry.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87le5mxwry.fsf@email.froward.int.ebiederm.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 9 Apr 2024 16:14:45 -0400
+Message-ID: <CAHC9VhTF=-Sh6w4icTPA_=A25-EL55Nt-z=mvyb1-vONoN=5wg@mail.gmail.com>
+Subject: Re: [GIT PULL] security changes for v6.9-rc3
+To: linux-security-module@vger.kernel.org
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, linux-integrity@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>, 
+	"Eric W. Biederman" <ebiederm@xmission.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Based recent discussions on LKML, provide preliminary bits of tpm_tis_core
-dependent drivers. Includes only bare essentials but can be extended later
-on case by case. This way some people may even want to read it later on.
+On Tue, Apr 9, 2024 at 1:38=E2=80=AFPM Eric W. Biederman <ebiederm@xmission=
+.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+>
+> > I know it's everyone's favorite hobby to bash the LSM and LSM devs,
+> > but it's important to note that we don't add hooks without working
+> > with the associated subsystem devs to get approval.
+>
+> Hah!!!!
+>
+> > In the cases
+> > where we don't get an explicit ACK, there is an on-list approval, or
+> > several ignored on-list attempts over weeks/months/years.  We want to
+> > be good neighbors.
+>
+> Hah!!!!
+>
+> You merged a LSM hook that is only good for breaking chrome's sandbox,
+> over my expressed objections.  After I tested and verified that
+> is what it does.
+>
+> I asked for testing. None was done.  It was claimed that no
+> security sensitive code would ever fail to check and deal with
+> all return codes, so no testing was necessary.  Then later a
+> whole bunch of security sensitive code that didn't was found.
+>
+> The only redeeming grace has been that no-one ever actually uses
+> that misbegotten security hook.
+>
+> P.S.  Sorry for this off topic rant but sheesh.   At least from
+> my perspective you deserve plenty of bashing.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v4:
-- Extended the text to address some of Stefan's concerns with v2.
-- Had to unfortunately remove Randy's reviewed-by because of this, given
-  the amount of text added.
-v3:
-- Fixed incorrect buffer size:
-  https://lore.kernel.org/linux-integrity/d957dbd3-4975-48d7-abc5-1a01c0959ea3@linux.ibm.com/
-v2:
-- Fixed errors reported by Randy:
-  https://lore.kernel.org/all/aed28265-d677-491a-a045-24b351854b24@infradead.org/
-- Improved the text a bit to have a better presentation.
----
- Documentation/security/tpm/index.rst   |  1 +
- Documentation/security/tpm/tpm_tis.rst | 46 ++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
- create mode 100644 Documentation/security/tpm/tpm_tis.rst
+Just in case people are reading this email and don't recall the
+security_create_user_ns() hook discussions from 2022, I would suggest
+reading those old threads and drawing your own conclusions.  A lore
+link is below:
 
-diff --git a/Documentation/security/tpm/index.rst b/Documentation/security/tpm/index.rst
-index fc40e9f23c85..f27a17f60a96 100644
---- a/Documentation/security/tpm/index.rst
-+++ b/Documentation/security/tpm/index.rst
-@@ -5,6 +5,7 @@ Trusted Platform Module documentation
- .. toctree::
- 
-    tpm_event_log
-+   tpm_tis
-    tpm_vtpm_proxy
-    xen-tpmfront
-    tpm_ftpm_tee
-diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/security/tpm/tpm_tis.rst
-new file mode 100644
-index 000000000000..b448ea3db71d
---- /dev/null
-+++ b/Documentation/security/tpm/tpm_tis.rst
-@@ -0,0 +1,46 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=========================
-+TPM FIFO interface driver
-+=========================
-+
-+TCG PTP Specification defines two interface types: FIFO and CRB. The former is
-+based on sequenced read and write operations,  and the latter is based on a
-+buffer containing the full command or response.
-+
-+FIFO (First-In-First-Out) interface is used by the tpm_tis_core dependent
-+drivers. Originally Linux had only a driver called tpm_tis, which covered
-+memory mapped (aka MMIO) interface but it was later on extended to cover other
-+physical interfaces supported by the TCG standard.
-+
-+For legacy compliance the original MMIO driver is called tpm_tis and the
-+framework for FIFO drivers is named as tpm_tis_core. The postfix "tis" in
-+tpm_tis comes from the TPM Interface Specification, which is the hardware
-+interface specification for TPM 1.x chips.
-+
-+Communication is based on a 20 KiB buffer shared by the TPM chip through a
-+hardware bus or memory map, depending on the physical wiring. The buffer is
-+further split into five equal-size 4 KiB buffers, which provide equivalent
-+sets of registers for communication between the CPU and TPM. These
-+communication endpoints are called localities in the TCG terminology.
-+
-+When the kernel wants to send commands to the TPM chip, it first reserves
-+locality 0 by setting the requestUse bit in the TPM_ACCESS register. The bit is
-+cleared by the chip when the access is granted. Once it completes its
-+communication, the kernel writes the TPM_ACCESS.activeLocality bit. This
-+informs the chip that the locality has been relinquished.
-+
-+Pending localities are served in order by the chip in descending order, one at
-+a time:
-+
-+- Locality 0 has the lowest priority.
-+- Locality 5 has the highest priority.
-+
-+Further information on the purpose and meaning of the localities can be found
-+in section 3.2 of the TCG PC Client Platform TPM Profile Specification.
-+
-+References
-+==========
-+
-+TCG PC Client Platform TPM Profile (PTP) Specification
-+https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
--- 
-2.44.0
+https://lore.kernel.org/linux-security-module/?q=3Ds%3Asecurity_create_user=
+_ns
 
+--=20
+paul-moore.com
 
