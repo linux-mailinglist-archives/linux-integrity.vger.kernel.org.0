@@ -1,692 +1,521 @@
-Return-Path: <linux-integrity+bounces-2032-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2033-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 060B889D74D
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 12:54:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50C0E89D95C
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 14:44:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71DE71F24F90
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 10:54:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73A691C21F5C
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 12:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4530883A09;
-	Tue,  9 Apr 2024 10:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3AC2127B5A;
+	Tue,  9 Apr 2024 12:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="L6MPOq73"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cdpOBmID"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2108.outbound.protection.outlook.com [40.107.7.108])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E231B7C0B0;
-	Tue,  9 Apr 2024 10:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.7.108
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712660063; cv=fail; b=AxP+bgM5m16cGPbl/GRrRjQRFNxD/kpW3bPEuuvBBp6xR0t3b7t3kqCJA8bww/XQes884Zi/BlzAMmRD1bwSIJpGp/fxHUOYbeXHjZwL+9qs/hoSuDyF89b901L5RVGsm4rkDxq6vsmAo5DJ44CVIl7gI8ar7LwgHd78XQNYXUY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712660063; c=relaxed/simple;
-	bh=x4Hj4YbRn3HZG418NIYii/8TAMBKHr1aiV1VHReSHfU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=OC4Sp9UmmMPJ8oxuWpQejks2EuTqfRFRdtvCMPAhenTorMc2DMXSBXqZKr3SeNQ3IW9+DcUwniRXQRbk2g9Hc177VQJuATcPJh30MJ+xNwMjEfYfv9jE1mIxU4t+ahB4PG78yJ8nHdNuLWRZie2ikhzLSmX+KFGkjF/jDpXZTfE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=L6MPOq73; arc=fail smtp.client-ip=40.107.7.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YcJjeDE53z+aJ1bN5rK8YFJm/tKzvnI4M9z7UU8op/hg+RfBa0JEpk7DrWq82Lz8FqoTw6EeYCwmc/DH6w5wVCcnL87lYFXXKtx9oeWnXSgIpIFqViGjqBerbEeH8mYilkJZx+FMMlO2kDb6qwvWTsfiDwR6Nj9OjfrH7E2ATL/4PfQJj2XqaoJLTADtDYNd45riwfQnVaSvqW9X82RI6cCRicTYJJmPo2sZqYP5kWUfn6XoIQjJlCkTX5m0cD9I2dj4M7KDBtua07Ar7j56HAYPV72qPHmwgQXfNe0T+nVv8Q9Vqltzgfz7eStcq+cTM1Wnz45qJKSDHVaMunHqwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W1OkZhRUlrJCI5ikV2kv17qmHEHI+sfWVAxK9Swq2pc=;
- b=oahpDHm+XTIWxgLZOsiY1ZwcD+ocO6+8HUqiUwyaCmuZJIKrwwLCFAYnB2dmNrYX4hpwWZOCHCqzSdpqOKZgll+it92tna9Ua3r3LxKsQQwzzgw4vBjvj/IfPD1nr6psDSKrVYUAN0sce4A/f0/MC17lPlcFxwDZC33fMgzOQXcZn4CrJphsOt4cPzMaR7dzg4106w6k3a7WQbDbCA0mOm0ThPXZjoQ2VMLvj+GKzX6dMC6HMWlgcxTzBdaFHHOVt4Bk2gA4xFOk+tN1QVeIwh1qgM0wwWNOTp/zc34is23sOTaoj5J9kF4TTG2dhMQGmHMHOq1NvDzRl7C+3UR0oA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W1OkZhRUlrJCI5ikV2kv17qmHEHI+sfWVAxK9Swq2pc=;
- b=L6MPOq73DM24HMMO+bn74iW3hgPAyu8t0frt71LEn5lP/Hp+RnAJEGFrcvaDum5Y9Mo7BUZjU4K//er4AcHhAk/G+xj/z8yCOUqSGN1R0SEGJL2VD2uqlfvxA+eWqH4vo4vuPrPVUuEHTfOEwbwsJsd0r4F7U3cml3ffYSDFFv4=
-Received: from DB6PR04MB3190.eurprd04.prod.outlook.com (2603:10a6:6:5::31) by
- AM8PR04MB7729.eurprd04.prod.outlook.com (2603:10a6:20b:24c::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.55; Tue, 9 Apr
- 2024 10:54:16 +0000
-Received: from DB6PR04MB3190.eurprd04.prod.outlook.com
- ([fe80::e8bc:451:6316:4a6f]) by DB6PR04MB3190.eurprd04.prod.outlook.com
- ([fe80::e8bc:451:6316:4a6f%6]) with mapi id 15.20.7409.042; Tue, 9 Apr 2024
- 10:54:15 +0000
-From: Kshitiz Varshney <kshitiz.varshney@nxp.com>
-To: David Gstir <david@sigma-star.at>, Mimi Zohar <zohar@linux.ibm.com>, James
- Bottomley <jejb@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Herbert
- Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
-CC: Shawn Guo <shawnguo@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
-	<kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, dl-linux-imx
-	<linux-imx@nxp.com>, Ahmad Fatoum <a.fatoum@pengutronix.de>, sigma star
- Kernel Team <upstream+dcp@sigma-star.at>, David Howells
-	<dhowells@redhat.com>, Li Yang <leoyang.li@nxp.com>, Paul Moore
-	<paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
-	<serge@hallyn.com>, "Paul E. McKenney" <paulmck@kernel.org>, Randy Dunlap
-	<rdunlap@infradead.org>, Catalin Marinas <catalin.marinas@arm.com>, "Rafael
- J. Wysocki" <rafael.j.wysocki@intel.com>, Tejun Heo <tj@kernel.org>, "Steven
- Rostedt (Google)" <rostedt@goodmis.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-integrity@vger.kernel.org"
-	<linux-integrity@vger.kernel.org>, "keyrings@vger.kernel.org"
-	<keyrings@vger.kernel.org>, "linux-crypto@vger.kernel.org"
-	<linux-crypto@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linuxppc-dev@lists.ozlabs.org"
-	<linuxppc-dev@lists.ozlabs.org>, "linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>, Richard Weinberger <richard@nod.at>,
-	David Oberhollenzer <david.oberhollenzer@sigma-star.at>, Varun Sethi
-	<V.Sethi@nxp.com>, Gaurav Jain <gaurav.jain@nxp.com>, Pankaj Gupta
-	<pankaj.gupta@nxp.com>
-Subject: RE: [EXT] [PATCH v8 3/6] KEYS: trusted: Introduce NXP DCP-backed
- trusted keys
-Thread-Topic: [EXT] [PATCH v8 3/6] KEYS: trusted: Introduce NXP DCP-backed
- trusted keys
-Thread-Index: AQHahZe8FOET2O8opkK/K3DU/sDkl7Ffx2mg
-Date: Tue, 9 Apr 2024 10:54:15 +0000
-Message-ID:
- <DB6PR04MB31904A8EB8B481A530C90CBB8F072@DB6PR04MB3190.eurprd04.prod.outlook.com>
-References: <20240403072131.54935-1-david@sigma-star.at>
- <20240403072131.54935-4-david@sigma-star.at>
-In-Reply-To: <20240403072131.54935-4-david@sigma-star.at>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB6PR04MB3190:EE_|AM8PR04MB7729:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- 6/+Vn90fw532JFQk9K/SMegzAD0/T+EMA6S4mChio2VmmWYC1L68I12kBQoO6yv3BS3zdJQ639TVuTaywMtqLQ134H4GxNKoDUaemxwmqPf7xHrzvtzgmFITPzj/hpvssw8JDJS+8d8q+oo1l+YWnktcAYbrOfkI4V0/FJeourmFaiWn+amIyyLlvi9y+isGPCNK4DfyrhKFTwa+ZcArW/J2Ag7Wzq0iQAson7cmGe2yPUSigGUFJT+dmCHcWYXtPrdGm5WCBQ2jRE7q6Py42KbKXkwpsXoofgTu3hEICNwBmnPWHxYnr6DAXMcsUHWfovFL1Afshl8W3b9ZzCgTS77X/dd9/7gN7zphOsoxNUrJJWPo+qtXLhH7iMqYv9haBQGEDDSlsI0OA6BncqPaD7sLiZvfGelSqdIzCqt6HhkQjQolDH1VcMvfpgy1yQGnhjw82rI28MEvWFNvkEzLQI378q6/WAzjjGk9S6QoWOKn5g6vkBj2Cqx9JY3bA3X5Nsex4WMGPXC3mFYTiMElOL8FOtReR5TJjQtNZQJpV2M9NvmuFoBDiyrQXVZIyKEHqtYWAiiW2GrRJOGYKzTvljBLzGi1wfax19dc1xPIajGY05O3IdE8B4M+rJuBU9TPuHcZXQDvSjsbt2n1rt2gT8p8IAkYMf8ehMzcFhhynM8=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR04MB3190.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(7416005)(376005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?yxDlHUfSGeqXDt7bACBi41HoXDms9MRKMtnj+PLOR97Mgj3C5D9IJfREc8KP?=
- =?us-ascii?Q?G+HNhn/hnLqrU2bv156Y3NcR5CjihWiYz+K7+kBzAfXWTAe2QI97T5p0Xe86?=
- =?us-ascii?Q?raIDXPyPBPzDShvzJAX4cS//CPgQGEyhuKL9HI6Mobq8ZsgQmB0SiJcYzo4L?=
- =?us-ascii?Q?ZrKxFk1kjP5fzOQVMLCLTjEGapmGQinuXK/cxd1nbVCdmIyVpVa5BRIQYazH?=
- =?us-ascii?Q?KwNHIlpRNf3IJGrG7XaMRzWwTXJvj1yKdEuXD22vrhtcM6ZHpM07IKX+xkOa?=
- =?us-ascii?Q?6dmzHSD8wqh+nWE3m14jt/WkbTj3AUk3lpahmb9Ny3yIVvzQzAhSfExIw0Ld?=
- =?us-ascii?Q?YbTPp1wz+a2nVB2rXcak1b4QN7B0rI9+yLR0NqD05DCPz+83t7cNPiLXCFTi?=
- =?us-ascii?Q?AufraiAEpzJq8AJAbYYPrUpTThVw/bC3oqPu0oqnYt2l/COQmDRPauEfndJK?=
- =?us-ascii?Q?FzI87boLGFEPmw+VJ3ntY+DNU34mPaazRRxQ3INJR8TItKR5hz40x6bOT5xV?=
- =?us-ascii?Q?SVTSG5RymRjPAiwneqtW/DpGe4Snv4VW2tC8e56uphRZSPoZxZAU4wpPipA6?=
- =?us-ascii?Q?a1UtL5KAhwe1TsxwWr2n0z6l2as1/xv3TDxXI/nFBQezCKh4ZFRxVLw5oetf?=
- =?us-ascii?Q?UQT5XYP3kI2Mew5ZSw44nKM2y0Lt3zYcZYF7ON+JYe8E5YfdBpvwgqdcB2is?=
- =?us-ascii?Q?VPAy6uniQ2dluqSbOwz+lfFnyreNZEw62z0SH5jihZgoyU31KB8em0fafQvk?=
- =?us-ascii?Q?UzEl2RBgfM1Ru3FADqG8GmSIJ4wCPVvlet7BHwwpX0hMh/TzDtKlGe9+jze5?=
- =?us-ascii?Q?YX70HmHbi0zYUCV3hYX+U0b/mNz+9xiys5CuOD1YtJgdtr1ytAvP9XzSR7OB?=
- =?us-ascii?Q?k29D0gI3Yvv093jL27fenXjFbKdFp0lAiewdmZ7woMFHdnxKblW25d31voHF?=
- =?us-ascii?Q?7Hrjep4ZmO8mF2jDDi4UZgY9rU2nDyefoyY1gBDXXcv/5xYVxAw9EIAqVlsN?=
- =?us-ascii?Q?jDDbOzQFife+eS3Lh4HgtxgsOIYlI48M5v0aIN2KW1SukbJGkPvHIK3eHIJh?=
- =?us-ascii?Q?szAI5T5QCSddz8YSYejC6Tt76yru29dVRX4kAi72TiR95HNo0hkuNvcVRR86?=
- =?us-ascii?Q?IKYABq4fgQsycXdZr3zqTsAM5A8fg8MEmzh+ZzFqftmCz+Pee4ZONElrnWMF?=
- =?us-ascii?Q?URDn+tmzZvalEPUXnHdqzx1KUcTJ+r6hPb8/ozPYxdHZmsU+TPpxUscMByfZ?=
- =?us-ascii?Q?6iTTWaYxiQvInxDuXLzOIPZ76SfId5pssSCIviDSn7CoiInPpf4b+tO7t3Tq?=
- =?us-ascii?Q?n3xG4oDihWupTndkSJ+GcKj/YXoozmDrwzoQUGlabZCfsAMBXfCAcH0t6/bM?=
- =?us-ascii?Q?38yRRsN9EAq1+Sb7UZGUdHo8DHm4KvAv8EwTGHsSb2u0/rau6zCyy0A31dMx?=
- =?us-ascii?Q?Ua7o7rCI1gbAdhp+geLf1tb5EgpdaAzc5nICuN4iIh7aEO9hrs0GOD4gcjMf?=
- =?us-ascii?Q?V/Fk98pF1LDCD5cQgXPtPnyzLWGrt0fqjf1X3RwvntvGnU0FTAsFdiYjiCYY?=
- =?us-ascii?Q?FstCUy7qxgGCAehR/kIxUqTnuwR1cR6RuUXvmyk+?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9A912F39E
+	for <linux-integrity@vger.kernel.org>; Tue,  9 Apr 2024 12:44:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712666658; cv=none; b=Z6oLaRyPLWZzd/lQw97T2+hFvTdXlgtx2rBNyP2FoFsJB2Wu04ERdyuVnXE5MQ5omX/YDGxL7UYjY4p9roemr5K+t07WnSqYqnCPcCYxEnCVS0J8T9+oOMhzaHCgsSbFoyq4O1Q1gYy7/gKVIFV7g7LfSdvBCUAd8pi9aDJXZi8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712666658; c=relaxed/simple;
+	bh=LknBjnTBh8437TgPnoA7mhEbcjC3YzUWOdi69NRGXps=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=S8yPQRRqSodudFeSlp3Qm0mAdsuq5dYaTdkA4kd9FgJr/iGq0rm3Pmo1QPM9zVNguGIptJpdElraoKzN/WBxEGZq5QLQWHG7M8f041IFSYWlQPPs/+rxomOpjmqiAD/l14Pu9PPkBRMl1dbfbG7ij33RjgHRxQdClkbIR4DzCLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cdpOBmID; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 439BLblC025261;
+	Tue, 9 Apr 2024 12:43:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=TlpddKh6DDe1WebG227ewNiMK6FuFwqvneR92fhcFDE=;
+ b=cdpOBmIDJUmUfFoWFUrUDl/SfhYpDvxPLZ85mT9fanvhjffL7OgSGq8KvxloJ/mapOCR
+ 9xp2ioMSxHNma0EoG3zrkTzxInEm8euwCq42cwX570/NZJ7z8fJ0zwi0zc0Q4Kza24iu
+ 9DZUqRyTpxLU2e2psAKBVWRujI8FMQCxQlihqXG8DB/HJT1GA5jWmPBgQyeYgIj1c+LX
+ VeKYsqpbZoSjoh2lCfish8GsuomrRoUNG3xwb7v3IpNiRmAdBOY9FY3syxzaDHDseM7d
+ 8+TI0ooVfdeaDNbMg5YhydcvgqkmLm+qa+QrjTc6lOFx2Mz9JEJnQpDqrkb7v3zt4JxW Ww== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xd2pxgcaq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Apr 2024 12:43:59 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 439ChwNM015135;
+	Tue, 9 Apr 2024 12:43:58 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xd2pxgcap-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Apr 2024 12:43:58 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 439BVEh7019092;
+	Tue, 9 Apr 2024 12:43:58 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xbh406cya-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Apr 2024 12:43:58 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 439ChtJ345416862
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 9 Apr 2024 12:43:57 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5260458052;
+	Tue,  9 Apr 2024 12:43:55 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EC1EB5806A;
+	Tue,  9 Apr 2024 12:43:54 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.39.161])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  9 Apr 2024 12:43:54 +0000 (GMT)
+Message-ID: <74f8f5fa75629c41455f28544ab8c430ebd9006a.camel@linux.ibm.com>
+Subject: Re: [PATCH v6] ima: add crypto agility support for template-hash
+ algorithm
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Enrico Bravi <enrico.bravi@polito.it>, linux-integrity@vger.kernel.org,
+        dmitry.kasatkin@gmail.com
+Cc: roberto.sassu@huawei.com, Silvia Sisinni <silvia.sisinni@polito.it>
+Date: Tue, 09 Apr 2024 08:43:54 -0400
+In-Reply-To: <20240408212810.1043272-1-enrico.bravi@polito.it>
+References: <20240408212810.1043272-1-enrico.bravi@polito.it>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR04MB3190.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 774cdf51-20ed-4abb-7456-08dc58836627
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2024 10:54:15.6966
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JgFT8FRyMQutdNlCDF9xO48IGysofYzZ3yMW8FJLYTTfINvm3hJWErHFsxCrgDb3QjfJptXddhbCMewViTNo4IVXM4M1VkrS+XI/3riYYr4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7729
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: EWCSCQgcuYOwNFCDGMPrDsiMlGLKNWhr
+X-Proofpoint-ORIG-GUID: 1n34RGLN3Lu2AyVyAaAzNumDh30Dr8vm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-09_08,2024-04-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 spamscore=0 clxscore=1015 bulkscore=0 adultscore=0
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2404010000 definitions=main-2404090082
 
-Hi David,
+Hi Enrico,
 
-> -----Original Message-----
-> From: David Gstir <david@sigma-star.at>
-> Sent: Wednesday, April 3, 2024 12:51 PM
-> To: Mimi Zohar <zohar@linux.ibm.com>; James Bottomley
-> <jejb@linux.ibm.com>; Jarkko Sakkinen <jarkko@kernel.org>; Herbert Xu
-> <herbert@gondor.apana.org.au>; David S. Miller <davem@davemloft.net>
-> Cc: David Gstir <david@sigma-star.at>; Shawn Guo <shawnguo@kernel.org>;
-> Jonathan Corbet <corbet@lwn.net>; Sascha Hauer
-> <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-
-> imx <linux-imx@nxp.com>; Ahmad Fatoum <a.fatoum@pengutronix.de>;
-> sigma star Kernel Team <upstream+dcp@sigma-star.at>; David Howells
-> <dhowells@redhat.com>; Li Yang <leoyang.li@nxp.com>; Paul Moore
-> <paul@paul-moore.com>; James Morris <jmorris@namei.org>; Serge E.
-> Hallyn <serge@hallyn.com>; Paul E. McKenney <paulmck@kernel.org>;
-> Randy Dunlap <rdunlap@infradead.org>; Catalin Marinas
-> <catalin.marinas@arm.com>; Rafael J. Wysocki
-> <rafael.j.wysocki@intel.com>; Tejun Heo <tj@kernel.org>; Steven Rostedt
-> (Google) <rostedt@goodmis.org>; linux-doc@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-integrity@vger.kernel.org;
-> keyrings@vger.kernel.org; linux-crypto@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linuxppc-dev@lists.ozlabs.org; linux-security=
--
-> module@vger.kernel.org; Richard Weinberger <richard@nod.at>; David
-> Oberhollenzer <david.oberhollenzer@sigma-star.at>
-> Subject: [EXT] [PATCH v8 3/6] KEYS: trusted: Introduce NXP DCP-backed
-> trusted keys
->=20
-> Caution: This is an external email. Please take care when clicking links =
-or
-> opening attachments. When in doubt, report the message using the 'Report
-> this email' button
->=20
->=20
-> DCP (Data Co-Processor) is the little brother of NXP's CAAM IP.
-> Beside of accelerated crypto operations, it also offers support for hardw=
-are-
-> bound keys. Using this feature it is possible to implement a blob
-> mechanism similar to what CAAM offers. Unlike on CAAM, constructing and
-> parsing the blob has to happen in software (i.e. the kernel).
->=20
-> The software-based blob format used by DCP trusted keys encrypts the
-> payload using AES-128-GCM with a freshly generated random key and
-> nonce.
-> The random key itself is AES-128-ECB encrypted using the DCP unique or
-> OTP key.
->=20
-> The DCP trusted key blob format is:
-> /*
->  * struct dcp_blob_fmt - DCP BLOB format.
->  *
->  * @fmt_version: Format version, currently being %1
->  * @blob_key: Random AES 128 key which is used to encrypt @payload,
->  *            @blob_key itself is encrypted with OTP or UNIQUE device key=
- in
->  *            AES-128-ECB mode by DCP.
->  * @nonce: Random nonce used for @payload encryption.
->  * @payload_len: Length of the plain text @payload.
->  * @payload: The payload itself, encrypted using AES-128-GCM and
-> @blob_key,
->  *           GCM auth tag of size AES_BLOCK_SIZE is attached at the end o=
-f it.
->  *
->  * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) +
-> @payload_len +
->  * AES_BLOCK_SIZE.
->  */
-> struct dcp_blob_fmt {
->         __u8 fmt_version;
->         __u8 blob_key[AES_KEYSIZE_128];
->         __u8 nonce[AES_KEYSIZE_128];
->         __le32 payload_len;
->         __u8 payload[];
-> } __packed;
->=20
-> By default the unique key is used. It is also possible to use the OTP key=
-.
-> While the unique key should be unique it is not documented how this key i=
-s
-> derived. Therefore selection the OTP key is supported as well via the
-> use_otp_key module parameter.
->=20
-> Co-developed-by: Richard Weinberger <richard@nod.at>
-> Signed-off-by: Richard Weinberger <richard@nod.at>
-> Co-developed-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-> Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-> Signed-off-by: David Gstir <david@sigma-star.at>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+On Mon, 2024-04-08 at 23:28 +0200, Enrico Bravi wrote:
+> The template hash showed by the ascii_runtime_measurements and
+> binary_runtime_measurements is the one calculated using sha1 and there is
+> no possibility to change this value, despite the fact that the template
+> hash is calculated using the hash algorithms corresponding to all the PCR
+> banks configured in the TPM.
+> 
+> Add the support to retrieve the ima log with the template data hash
+> calculated with a specific hash algorithm.
+> Add a new file in the securityfs ima directory for each hash algo
+> configured in a PCR bank of the TPM. Each new file has the name with
+> the following structure:
+> 
+>         {binary, ascii}_runtime_measurements_<hash_algo_name>
+> 
+> Legacy files are kept, to avoid breaking existing applications, but as
+> symbolic links which point to {binary, ascii}_runtime_measurements_sha1
+> files. These two files are created even if a TPM chip is not detected or
+> the sha1 bank is not configured in the TPM.
+> 
+> As example, in the case a TPM chip is present and sha256 is the only
+> configured PCR bank, the listing of the securityfs ima directory is the
+> following:
+> 
+> lr--r--r-- [...] ascii_runtime_measurements -> ascii_runtime_measurements_sha1
+> -r--r----- [...] ascii_runtime_measurements_sha1
+> -r--r----- [...] ascii_runtime_measurements_sha256
+> lr--r--r-- [...] binary_runtime_measurements ->
+> binary_runtime_measurements_sha1
+> -r--r----- [...] binary_runtime_measurements_sha1
+> -r--r----- [...] binary_runtime_measurements_sha256
+> --w------- [...] policy
+> -r--r----- [...] runtime_measurements_count
+> -r--r----- [...] violations
+> 
+> Signed-off-by: Enrico Bravi <enrico.bravi@polito.it>
+> Signed-off-by: Silvia Sisinni <silvia.sisinni@polito.it>
+> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Much better. Just a few comments inline.
+
+> 
 > ---
->  include/keys/trusted_dcp.h                |  11 +
->  security/keys/trusted-keys/Kconfig        |   8 +
->  security/keys/trusted-keys/Makefile       |   2 +
->  security/keys/trusted-keys/trusted_core.c |   6 +-
->  security/keys/trusted-keys/trusted_dcp.c  | 313
-> ++++++++++++++++++++++
->  5 files changed, 339 insertions(+), 1 deletion(-)  create mode 100644
-> include/keys/trusted_dcp.h  create mode 100644 security/keys/trusted-
-> keys/trusted_dcp.c
->=20
-> diff --git a/include/keys/trusted_dcp.h b/include/keys/trusted_dcp.h new
-> file mode 100644 index 000000000000..9aaa42075b40
-> --- /dev/null
-> +++ b/include/keys/trusted_dcp.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2021 sigma star gmbh
-> + */
+> 
+> v6:
+>  - Fixed format error when applying the patch.
+> 
+> v5:
+>  - Added lookup_algo_by_dentry() function to select the hash algo during
+>    measurements dump. (suggested by Roberto)
+>  - Renamed remove_measurements_list_files() to
+>    remove_securityfs_measurement_lists() and create_measurements_list_files()
+>    to create_securityfs_measurement_lists(), and marked both as __init.
+>    (suggested by Mimi)
+>  - Renamed ima_ascii_measurements_files to ascii_securityfs_measurement_lists,
+>    ima_binary_measurements_files to binary_securityfs_measurement_lists and
+>    ima_measurements_files_count to securityfs_measurement_list_count, and
+>    marked them as __ro_after_init. (suggested by Mimi)
+>  - Added missing NULL assignment for file.file in ima_dump_measurement_list()
+>    during kexec.
+> 
+> v4:
+>  - Added NULL check on m->file for measurements list dump called by
+>    ima_dump_measurement_list() on kexec.
+>  - Exported ima_algo_array and struct ima_algo_desc declaration from
+>    ima_crypto.c to access this information in ima_fs.c.
+>  - Added ima_measurements_files_count global variable to avoid extra
+>    logic each time the number of measurements file is needed.
+> 
+> v3:
+>  - Added create_measurements_list_files function for measurements files
+> creation.
+>  - Parameterized the remove_measurements_list_files function and add NULL
+>    check before freeing files' list.
+>  - Removed algorithm selection based on file name during ima_measurements_show
+>    and ima_ascii_measurements_show, and selecting it comparing dentry address.
+>  - Allocate also sha1 file following the schema
+>    {binary, ascii}_runtime_measurements_<hash_algo_name> and keep legacy
+>    files as symbolic links to those files.
+>  - Allocate measurements files lists even if a TPM chip is not detected,
+>    adding only sha1 files.
+> 
+> v2:
+>  - Changed the behavior of configuring at boot time the template data hash
+>    algorithm.
+>  - Removed template data hash algo name prefix.
+>  - Removed ima_template_hash command line option.
+>  - Introducing a new file in the securityfs ima subdir for each PCR banks
+>    algorithm configured in the TPM.
+>    (suggested by Roberto)
+> 
+>  security/integrity/ima/ima.h        |  10 +++
+>  security/integrity/ima/ima_crypto.c |   7 +-
+>  security/integrity/ima/ima_fs.c     | 131 +++++++++++++++++++++++++---
+>  security/integrity/ima/ima_kexec.c  |   1 +
+>  4 files changed, 131 insertions(+), 18 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 11d7c0332207..72ac73ebc83e 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -54,6 +54,16 @@ extern int ima_hash_algo __ro_after_init;
+>  extern int ima_sha1_idx __ro_after_init;
+>  extern int ima_hash_algo_idx __ro_after_init;
+>  extern int ima_extra_slots __ro_after_init;
 > +
-> +#ifndef TRUSTED_DCP_H
-> +#define TRUSTED_DCP_H
-> +
-> +extern struct trusted_key_ops dcp_trusted_key_ops;
-> +
-> +#endif
-> diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-
-> keys/Kconfig
-> index 553dc117f385..1fb8aa001995 100644
-> --- a/security/keys/trusted-keys/Kconfig
-> +++ b/security/keys/trusted-keys/Kconfig
-> @@ -39,6 +39,14 @@ config TRUSTED_KEYS_CAAM
->           Enable use of NXP's Cryptographic Accelerator and Assurance Mod=
-ule
->           (CAAM) as trusted key backend.
->=20
-> +config TRUSTED_KEYS_DCP
-> +       bool "DCP-based trusted keys"
-> +       depends on CRYPTO_DEV_MXS_DCP >=3D TRUSTED_KEYS
-> +       default y
-> +       select HAVE_TRUSTED_KEYS
-> +       help
-> +         Enable use of NXP's DCP (Data Co-Processor) as trusted key back=
-end.
-> +
->  if !HAVE_TRUSTED_KEYS
->         comment "No trust source selected!"
->  endif
-> diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-
-> keys/Makefile
-> index 735aa0bc08ef..f0f3b27f688b 100644
-> --- a/security/keys/trusted-keys/Makefile
-> +++ b/security/keys/trusted-keys/Makefile
-> @@ -14,3 +14,5 @@ trusted-$(CONFIG_TRUSTED_KEYS_TPM) +=3D
-> tpm2key.asn1.o
->  trusted-$(CONFIG_TRUSTED_KEYS_TEE) +=3D trusted_tee.o
->=20
->  trusted-$(CONFIG_TRUSTED_KEYS_CAAM) +=3D trusted_caam.o
-> +
-> +trusted-$(CONFIG_TRUSTED_KEYS_DCP) +=3D trusted_dcp.o
-> diff --git a/security/keys/trusted-keys/trusted_core.c
-> b/security/keys/trusted-keys/trusted_core.c
-> index fee1ab2c734d..5113aeae5628 100644
-> --- a/security/keys/trusted-keys/trusted_core.c
-> +++ b/security/keys/trusted-keys/trusted_core.c
-> @@ -10,6 +10,7 @@
->  #include <keys/trusted-type.h>
->  #include <keys/trusted_tee.h>
->  #include <keys/trusted_caam.h>
-> +#include <keys/trusted_dcp.h>
->  #include <keys/trusted_tpm.h>
->  #include <linux/capability.h>
->  #include <linux/err.h>
-> @@ -30,7 +31,7 @@ MODULE_PARM_DESC(rng, "Select trusted key RNG");
->=20
->  static char *trusted_key_source;
->  module_param_named(source, trusted_key_source, charp, 0); -
-> MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee or
-> caam)");
-> +MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee, caam
-> or
-> +dcp)");
->=20
->  static const struct trusted_key_source trusted_key_sources[] =3D {  #if
-> defined(CONFIG_TRUSTED_KEYS_TPM) @@ -42,6 +43,9 @@ static const
-> struct trusted_key_source trusted_key_sources[] =3D {  #if
-> defined(CONFIG_TRUSTED_KEYS_CAAM)
->         { "caam", &trusted_key_caam_ops },  #endif
-> +#if defined(CONFIG_TRUSTED_KEYS_DCP)
-> +       { "dcp", &dcp_trusted_key_ops }, #endif
->  };
->=20
->  DEFINE_STATIC_CALL_NULL(trusted_key_seal, *trusted_key_sources[0].ops-
-> >seal);
-> diff --git a/security/keys/trusted-keys/trusted_dcp.c
-> b/security/keys/trusted-keys/trusted_dcp.c
-> new file mode 100644
-> index 000000000000..16c44aafeab3
-> --- /dev/null
-> +++ b/security/keys/trusted-keys/trusted_dcp.c
-> @@ -0,0 +1,313 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2021 sigma star gmbh
-> + */
-> +
-> +#include <crypto/aead.h>
-> +#include <crypto/aes.h>
-> +#include <crypto/algapi.h>
-> +#include <crypto/gcm.h>
-> +#include <crypto/skcipher.h>
-> +#include <keys/trusted-type.h>
-> +#include <linux/key-type.h>
-> +#include <linux/module.h>
-> +#include <linux/printk.h>
-> +#include <linux/random.h>
-> +#include <linux/scatterlist.h>
-> +#include <soc/fsl/dcp.h>
-> +
-> +#define DCP_BLOB_VERSION 1
-> +#define DCP_BLOB_AUTHLEN 16
-> +
-> +/**
-> + * struct dcp_blob_fmt - DCP BLOB format.
-> + *
-> + * @fmt_version: Format version, currently being %1.
-> + * @blob_key: Random AES 128 key which is used to encrypt @payload,
-> + *            @blob_key itself is encrypted with OTP or UNIQUE device ke=
-y in
-> + *            AES-128-ECB mode by DCP.
-> + * @nonce: Random nonce used for @payload encryption.
-> + * @payload_len: Length of the plain text @payload.
-> + * @payload: The payload itself, encrypted using AES-128-GCM and
-> @blob_key,
-> + *           GCM auth tag of size DCP_BLOB_AUTHLEN is attached at the en=
-d of
-> it.
-> + *
-> + * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) +
-> @payload_len +
-> + * DCP_BLOB_AUTHLEN.
-> + */
-> +struct dcp_blob_fmt {
-> +       __u8 fmt_version;
-> +       __u8 blob_key[AES_KEYSIZE_128];
-> +       __u8 nonce[AES_KEYSIZE_128];
-> +       __le32 payload_len;
-> +       __u8 payload[];
-> +} __packed;
-> +
-> +static bool use_otp_key;
-> +module_param_named(dcp_use_otp_key, use_otp_key, bool, 0);
-> +MODULE_PARM_DESC(dcp_use_otp_key, "Use OTP instead of UNIQUE key
-> for sealing");
-> +
-> +static bool skip_zk_test;
-> +module_param_named(dcp_skip_zk_test, skip_zk_test, bool, 0);
-> +MODULE_PARM_DESC(dcp_skip_zk_test, "Don't test whether device keys
-> are zero'ed");
-> +
-> +static unsigned int calc_blob_len(unsigned int payload_len)
-> +{
-> +       return sizeof(struct dcp_blob_fmt) + payload_len +
-> DCP_BLOB_AUTHLEN;
-> +}
-> +
-> +static int do_dcp_crypto(u8 *in, u8 *out, bool do_encrypt)
-> +{
-> +       struct skcipher_request *req =3D NULL;
-> +       struct scatterlist src_sg, dst_sg;
-> +       struct crypto_skcipher *tfm;
-> +       u8 paes_key[DCP_PAES_KEYSIZE];
-> +       DECLARE_CRYPTO_WAIT(wait);
-> +       int res =3D 0;
-> +
-> +       if (use_otp_key)
-> +               paes_key[0] =3D DCP_PAES_KEY_OTP;
-> +       else
-> +               paes_key[0] =3D DCP_PAES_KEY_UNIQUE;
-> +
-> +       tfm =3D crypto_alloc_skcipher("ecb-paes-dcp", CRYPTO_ALG_INTERNAL=
-,
-> +                                   CRYPTO_ALG_INTERNAL);
-> +       if (IS_ERR(tfm)) {
-> +               res =3D PTR_ERR(tfm);
-> +               tfm =3D NULL;
-> +               goto out;
-> +       }
-> +
-> +       req =3D skcipher_request_alloc(tfm, GFP_NOFS);
-> +       if (!req) {
-> +               res =3D -ENOMEM;
-> +               goto out;
-> +       }
-> +
-> +       skcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG
-> |
-> +                                     CRYPTO_TFM_REQ_MAY_SLEEP,
-> +                                     crypto_req_done, &wait);
-> +       res =3D crypto_skcipher_setkey(tfm, paes_key, sizeof(paes_key));
-> +       if (res < 0)
-> +               goto out;
-> +
-> +       sg_init_one(&src_sg, in, AES_KEYSIZE_128);
-> +       sg_init_one(&dst_sg, out, AES_KEYSIZE_128);
-> +       skcipher_request_set_crypt(req, &src_sg, &dst_sg, AES_KEYSIZE_128=
-,
-> +                                  NULL);
-> +
-> +       if (do_encrypt)
-> +               res =3D crypto_wait_req(crypto_skcipher_encrypt(req), &wa=
-it);
-> +       else
-> +               res =3D crypto_wait_req(crypto_skcipher_decrypt(req), &wa=
-it);
-> +
-> +out:
-> +       skcipher_request_free(req);
-> +       crypto_free_skcipher(tfm);
-> +
-> +       return res;
-> +}
-> +
-> +static int do_aead_crypto(u8 *in, u8 *out, size_t len, u8 *key, u8 *nonc=
-e,
-> +                         bool do_encrypt)
-> +{
-> +       struct aead_request *aead_req =3D NULL;
-> +       struct scatterlist src_sg, dst_sg;
-> +       struct crypto_aead *aead;
-> +       int ret;
-> +
-> +       aead =3D crypto_alloc_aead("gcm(aes)", 0, CRYPTO_ALG_ASYNC);
-> +       if (IS_ERR(aead)) {
-> +               ret =3D PTR_ERR(aead);
-> +               goto out;
-> +       }
-> +
-> +       ret =3D crypto_aead_setauthsize(aead, DCP_BLOB_AUTHLEN);
-> +       if (ret < 0) {
-> +               pr_err("Can't set crypto auth tag len: %d\n", ret);
-> +               goto free_aead;
-> +       }
-> +
-> +       aead_req =3D aead_request_alloc(aead, GFP_KERNEL);
-> +       if (!aead_req) {
-> +               ret =3D -ENOMEM;
-> +               goto free_aead;
-> +       }
-> +
-> +       sg_init_one(&src_sg, in, len);
-> +       if (do_encrypt) {
-> +               /*
-> +                * If we encrypt our buffer has extra space for the auth =
-tag.
-> +                */
-> +               sg_init_one(&dst_sg, out, len + DCP_BLOB_AUTHLEN);
-> +       } else {
-> +               sg_init_one(&dst_sg, out, len);
-> +       }
-> +
-> +       aead_request_set_crypt(aead_req, &src_sg, &dst_sg, len, nonce);
-> +       aead_request_set_callback(aead_req, CRYPTO_TFM_REQ_MAY_SLEEP,
-> NULL,
-> +                                 NULL);
-> +       aead_request_set_ad(aead_req, 0);
-> +
-> +       if (crypto_aead_setkey(aead, key, AES_KEYSIZE_128)) {
-> +               pr_err("Can't set crypto AEAD key\n");
-> +               ret =3D -EINVAL;
-> +               goto free_req;
-> +       }
-> +
-> +       if (do_encrypt)
-> +               ret =3D crypto_aead_encrypt(aead_req);
-> +       else
-> +               ret =3D crypto_aead_decrypt(aead_req);
-> +
-> +free_req:
-> +       aead_request_free(aead_req);
-> +free_aead:
-> +       crypto_free_aead(aead);
-> +out:
-> +       return ret;
-> +}
-> +
-> +static int decrypt_blob_key(u8 *key)
-> +{
-> +       return do_dcp_crypto(key, key, false);
-> +}
-> +
-> +static int encrypt_blob_key(u8 *key)
-> +{
-> +       return do_dcp_crypto(key, key, true);
-> +}
-> +
-> +static int trusted_dcp_seal(struct trusted_key_payload *p, char *datablo=
-b)
-> +{
-> +       struct dcp_blob_fmt *b =3D (struct dcp_blob_fmt *)p->blob;
-> +       int blen, ret;
-> +
-> +       blen =3D calc_blob_len(p->key_len);
-> +       if (blen > MAX_BLOB_SIZE)
-> +               return -E2BIG;
-> +
-> +       b->fmt_version =3D DCP_BLOB_VERSION;
-> +       get_random_bytes(b->nonce, AES_KEYSIZE_128);
-> +       get_random_bytes(b->blob_key, AES_KEYSIZE_128);
-
-We can use HWRNG instead of using kernel RNG. Please refer drivers/char/hw_=
-random/imx-rngc.c=20
-> +
-> +       ret =3D do_aead_crypto(p->key, b->payload, p->key_len, b->blob_ke=
-y,
-> +                            b->nonce, true);
-> +       if (ret) {
-> +               pr_err("Unable to encrypt blob payload: %i\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       ret =3D encrypt_blob_key(b->blob_key);
-> +       if (ret) {
-> +               pr_err("Unable to encrypt blob key: %i\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       b->payload_len =3D get_unaligned_le32(&p->key_len);
-> +       p->blob_len =3D blen;
-> +       return 0;
-> +}
-> +
-> +static int trusted_dcp_unseal(struct trusted_key_payload *p, char
-> *datablob)
-> +{
-> +       struct dcp_blob_fmt *b =3D (struct dcp_blob_fmt *)p->blob;
-> +       int blen, ret;
-> +
-> +       if (b->fmt_version !=3D DCP_BLOB_VERSION) {
-> +               pr_err("DCP blob has bad version: %i, expected %i\n",
-> +                      b->fmt_version, DCP_BLOB_VERSION);
-> +               ret =3D -EINVAL;
-> +               goto out;
-> +       }
-> +
-> +       p->key_len =3D le32_to_cpu(b->payload_len);
-> +       blen =3D calc_blob_len(p->key_len);
-> +       if (blen !=3D p->blob_len) {
-> +               pr_err("DCP blob has bad length: %i !=3D %i\n", blen,
-> +                      p->blob_len);
-> +               ret =3D -EINVAL;
-> +               goto out;
-> +       }
-> +
-> +       ret =3D decrypt_blob_key(b->blob_key);
-> +       if (ret) {
-> +               pr_err("Unable to decrypt blob key: %i\n", ret);
-> +               goto out;
-> +       }
-> +
-> +       ret =3D do_aead_crypto(b->payload, p->key, p->key_len +
-> DCP_BLOB_AUTHLEN,
-> +                            b->blob_key, b->nonce, false);
-> +       if (ret) {
-> +               pr_err("Unwrap of DCP payload failed: %i\n", ret);
-> +               goto out;
-> +       }
-> +
-> +       ret =3D 0;
-> +out:
-> +       return ret;
-> +}
-> +
-> +static int test_for_zero_key(void)
-> +{
-> +       /*
-> +        * Encrypting a plaintext of all 0x55 bytes will yield
-> +        * this ciphertext in case the DCP test key is used.
-> +        */
-> +       static const u8 bad[] =3D {0x9a, 0xda, 0xe0, 0x54, 0xf6, 0x3d, 0x=
-fa, 0xff,
-> +                                0x5e, 0xa1, 0x8e, 0x45, 0xed, 0xf6, 0xea=
-, 0x6f};
-> +       void *buf =3D NULL;
-> +       int ret =3D 0;
-> +
-> +       if (skip_zk_test)
-> +               goto out;
-> +
-> +       buf =3D kmalloc(AES_BLOCK_SIZE, GFP_KERNEL);
-> +       if (!buf) {
-> +               ret =3D -ENOMEM;
-> +               goto out;
-> +       }
-> +
-> +       memset(buf, 0x55, AES_BLOCK_SIZE);
-> +
-> +       ret =3D do_dcp_crypto(buf, buf, true);
-> +       if (ret)
-> +               goto out;
-> +
-> +       if (memcmp(buf, bad, AES_BLOCK_SIZE) =3D=3D 0) {
-> +               pr_warn("Device neither in secure nor trusted mode!\n");
-> +               ret =3D -EINVAL;
-> +       }
-> +out:
-> +       kfree(buf);
-> +       return ret;
-> +}
-> +
-> +static int trusted_dcp_init(void)
-> +{
-> +       int ret;
-> +
-> +       if (use_otp_key)
-> +               pr_info("Using DCP OTP key\n");
-> +
-> +       ret =3D test_for_zero_key();
-> +       if (ret) {
-> +               pr_warn("Test for zero'ed keys failed: %i\n", ret);
-> +
-> +               return -EINVAL;
-> +       }
-> +
-> +       return register_key_type(&key_type_trusted);
-> +}
-> +
-> +static void trusted_dcp_exit(void)
-> +{
-> +       unregister_key_type(&key_type_trusted);
-> +}
-> +
-> +struct trusted_key_ops dcp_trusted_key_ops =3D {
-> +       .exit =3D trusted_dcp_exit,
-> +       .init =3D trusted_dcp_init,
-> +       .seal =3D trusted_dcp_seal,
-> +       .unseal =3D trusted_dcp_unseal,
-> +       .migratable =3D 0,
+> +/* IMA hash algorithm description */
+> +struct ima_algo_desc {
+> +	struct crypto_shash *tfm;
+> +	enum hash_algo algo;
 > +};
-> --
-> 2.35.3
->=20
+> +
+> +/* hash algorithms configured in IMA */
+> +extern struct ima_algo_desc *ima_algo_array;
+> +
+>  extern int ima_appraise;
+>  extern struct tpm_chip *ima_tpm_chip;
+>  extern const char boot_aggregate_name[];
+> diff --git a/security/integrity/ima/ima_crypto.c
+> b/security/integrity/ima/ima_crypto.c
+> index f3738b2c8bcd..3606931fc525 100644
+> --- a/security/integrity/ima/ima_crypto.c
+> +++ b/security/integrity/ima/ima_crypto.c
+> @@ -57,11 +57,6 @@ MODULE_PARM_DESC(ahash_bufsize, "Maximum ahash buffer
+> size");
+>  static struct crypto_shash *ima_shash_tfm;
+>  static struct crypto_ahash *ima_ahash_tfm;
+>  
+> -struct ima_algo_desc {
+> -	struct crypto_shash *tfm;
+> -	enum hash_algo algo;
+> -};
+> -
+>  int ima_sha1_idx __ro_after_init;
+>  int ima_hash_algo_idx __ro_after_init;
+>  /*
+> @@ -70,7 +65,7 @@ int ima_hash_algo_idx __ro_after_init;
+>   */
+>  int ima_extra_slots __ro_after_init;
+>  
+> -static struct ima_algo_desc *ima_algo_array;
+> +struct ima_algo_desc *ima_algo_array;
 
-Regards,
-Kshitiz
+ima_algo_array should probably be defined as __ro_after_init, especially now
+that the scope is changing.
+
+>  
+>  static int __init ima_init_ima_crypto(void)
+>  {
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+> index cd1683dad3bf..7d9c2ef5b86c 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -116,9 +116,30 @@ void ima_putc(struct seq_file *m, void *data, int
+> datalen)
+>  		seq_putc(m, *(char *)data++);
+>  }
+>  
+> +static struct dentry **ascii_securityfs_measurement_lists __ro_after_init;
+> +static struct dentry **binary_securityfs_measurement_lists __ro_after_init;
+> +static int securityfs_measurement_list_count __ro_after_init;
+> +
+> +static void lookup_algo_by_dentry(int *algo_idx, enum hash_algo *algo,
+> +				  struct seq_file *m, struct dentry
+> **dentry_list)
+
+Please rename the function without "_by_dentry". Consider naming the function
+lookup_measurement_list_algo().  Instead of dentry_list, consider naming the
+variable measurement_lists or just lists.
+
+> +{
+> +	struct dentry *dentry;
+> +	int i;
+> +
+> +	dentry = file_dentry(m->file);
+> +
+> +	for (i = 0; i < securityfs_measurement_list_count; i++) {
+> +		if (dentry == dentry_list[i]) {
+> +			*algo_idx = i;
+> +			*algo = ima_algo_array[i].algo;
+> +			break;
+> +		}
+> +	}
+> +}
+> +
+>  /* print format:
+>   *       32bit-le=pcr#
+> - *       char[20]=template digest
+> + *       char[n]=template digest
+>   *       32bit-le=template name size
+>   *       char[n]=template name
+>   *       [eventdata length]
+> @@ -132,7 +153,15 @@ int ima_measurements_show(struct seq_file *m, void *v)
+>  	char *template_name;
+>  	u32 pcr, namelen, template_data_len; /* temporary fields */
+>  	bool is_ima_template = false;
+> -	int i;
+> +	int i, algo_idx;
+> +	enum hash_algo algo;
+> +
+> +	algo_idx = ima_sha1_idx;
+> +	algo = HASH_ALGO_SHA1;
+> +
+> +	if (m->file != NULL)
+> +		lookup_algo_by_dentry(&algo_idx, &algo, m,
+> +				      binary_securityfs_measurement_lists);
+>  
+>  	/* get entry */
+>  	e = qe->entry;
+> @@ -151,7 +180,7 @@ int ima_measurements_show(struct seq_file *m, void *v)
+>  	ima_putc(m, &pcr, sizeof(e->pcr));
+>  
+>  	/* 2nd: template digest */
+> -	ima_putc(m, e->digests[ima_sha1_idx].digest, TPM_DIGEST_SIZE);
+> +	ima_putc(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
+>  
+>  	/* 3rd: template name size */
+>  	namelen = !ima_canonical_fmt ? strlen(template_name) :
+> @@ -220,7 +249,15 @@ static int ima_ascii_measurements_show(struct seq_file
+> *m, void *v)
+>  	struct ima_queue_entry *qe = v;
+>  	struct ima_template_entry *e;
+>  	char *template_name;
+> -	int i;
+> +	int i, algo_idx;
+> +	enum hash_algo algo;
+
+The preferred variable definition ordering is reverse fir tree.  Reverse the two
+lines.
+
+> +	algo_idx = ima_sha1_idx;
+> +	algo = HASH_ALGO_SHA1;
+> +
+> +	if (m->file != NULL)
+> +		lookup_algo_by_dentry(&algo_idx, &algo, m,
+> +				      ascii_securityfs_measurement_lists);
+>  
+>  	/* get entry */
+>  	e = qe->entry;
+> @@ -233,8 +270,8 @@ static int ima_ascii_measurements_show(struct seq_file *m,
+> void *v)
+>  	/* 1st: PCR used (config option) */
+>  	seq_printf(m, "%2d ", e->pcr);
+>  
+> -	/* 2nd: SHA1 template hash */
+> -	ima_print_digest(m, e->digests[ima_sha1_idx].digest, TPM_DIGEST_SIZE);
+> +	/* 2nd: template hash */
+> +	ima_print_digest(m, e->digests[algo_idx].digest,
+> hash_digest_size[algo]);
+>  
+>  	/* 3th:  template name */
+>  	seq_printf(m, " %s", template_name);
+> @@ -379,6 +416,69 @@ static const struct seq_operations ima_policy_seqops = {
+>  };
+>  #endif
+>  
+> +static void __init remove_securityfs_measurement_lists(struct dentry
+> **dentry_list)
+> +{
+> +	int i;
+> +
+> +	if (dentry_list) {
+> +		for (i = 0; i < securityfs_measurement_list_count; i++)
+> +			securityfs_remove(dentry_list[i]);
+> +
+> +		kfree(dentry_list);
+> +	}
+> +
+> +	securityfs_measurement_list_count = 0;
+> +}
+> +
+> +static int __init create_securityfs_measurement_lists(void)
+> +{
+> +	int i;
+> +	u16 algo;
+> +	char file_name[NAME_MAX + 1];
+> +	struct dentry *dentry;
+> +
+> +	securityfs_measurement_list_count = NR_BANKS(ima_tpm_chip);
+> +
+> +	if (ima_sha1_idx >= NR_BANKS(ima_tpm_chip))
+> +		securityfs_measurement_list_count++;
+> +
+> +	ascii_securityfs_measurement_lists =
+> kcalloc(securityfs_measurement_list_count,
+> +						     sizeof(struct dentry *),
+> GFP_KERNEL);
+
+Although lines > 80 characters are permitted, it isn't needed here.  Like the
+original ascii_runtime_measurements initialization, split the line after the
+ascii_securityfs_measurement_lists variable name.
+
+> +	if (!ascii_securityfs_measurement_lists)
+> +		return -ENOMEM;
+> +
+> +	binary_securityfs_measurement_lists =
+> kcalloc(securityfs_measurement_list_count,
+> +						      sizeof(struct dentry *),
+> GFP_KERNEL);
+
+Same here.
+
+
+> +	if (!binary_securityfs_measurement_lists)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < securityfs_measurement_list_count; i++) {
+> +		algo = ima_algo_array[i].algo;
+> +
+> +		sprintf(file_name, "ascii_runtime_measurements_%s",
+> +			hash_algo_name[algo]);
+> +		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+> +						ima_dir, NULL,
+> +						&ima_ascii_measurements_ops);
+> +		if (IS_ERR(dentry))
+> +			return PTR_ERR(dentry);
+> +
+> +		ascii_securityfs_measurement_lists[i] = dentry;
+> +
+> +		sprintf(file_name, "binary_runtime_measurements_%s",
+> +			hash_algo_name[algo]);
+> +		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+> +						ima_dir, NULL,
+> +						&ima_measurements_ops);
+> +		if (IS_ERR(dentry))
+> +			return PTR_ERR(dentry);
+> +
+> +		binary_securityfs_measurement_lists[i] = dentry;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * ima_open_policy: sequentialize access to the policy file
+>   */
+> @@ -454,6 +554,9 @@ int __init ima_fs_init(void)
+>  {
+>  	int ret;
+>  
+> +	ascii_securityfs_measurement_lists = NULL;
+> +	binary_securityfs_measurement_lists = NULL;
+> +
+>  	ima_dir = securityfs_create_dir("ima", integrity_dir);
+>  	if (IS_ERR(ima_dir))
+>  		return PTR_ERR(ima_dir);
+> @@ -465,19 +568,21 @@ int __init ima_fs_init(void)
+>  		goto out;
+>  	}
+>  
+> +	ret = create_securityfs_measurement_lists();
+> +	if (ret != 0)
+> +		goto out;
+> +
+>  	binary_runtime_measurements =
+> -	    securityfs_create_file("binary_runtime_measurements",
+> -				   S_IRUSR | S_IRGRP, ima_dir, NULL,
+> -				   &ima_measurements_ops);
+> +		securityfs_create_symlink("binary_runtime_measurements",
+> ima_dir,
+> +					  "binary_runtime_measurements_sha1",
+> NULL);
+
+> 80 characters here and in a few other places.
+
+thanks,
+
+Mimi
+
+>  	if (IS_ERR(binary_runtime_measurements)) {
+>  		ret = PTR_ERR(binary_runtime_measurements);
+>  		goto out;
+>  	}
+>  
+>  	ascii_runtime_measurements =
+> -	    securityfs_create_file("ascii_runtime_measurements",
+> -				   S_IRUSR | S_IRGRP, ima_dir, NULL,
+> -				   &ima_ascii_measurements_ops);
+> +		securityfs_create_symlink("ascii_runtime_measurements", ima_dir,
+> +					  "ascii_runtime_measurements_sha1",
+> NULL);
+>  	if (IS_ERR(ascii_runtime_measurements)) {
+>  		ret = PTR_ERR(ascii_runtime_measurements);
+>  		goto out;
+> @@ -515,6 +620,8 @@ int __init ima_fs_init(void)
+>  	securityfs_remove(runtime_measurements_count);
+>  	securityfs_remove(ascii_runtime_measurements);
+>  	securityfs_remove(binary_runtime_measurements);
+> +	remove_securityfs_measurement_lists(ascii_securityfs_measurement_lists);
+> +	remove_securityfs_measurement_lists(binary_securityfs_measurement_lists)
+> ;
+>  	securityfs_remove(ima_symlink);
+>  	securityfs_remove(ima_dir);
+>  
+> diff --git a/security/integrity/ima/ima_kexec.c
+> b/security/integrity/ima/ima_kexec.c
+> index dadc1d138118..52e00332defe 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -30,6 +30,7 @@ static int ima_dump_measurement_list(unsigned long
+> *buffer_size, void **buffer,
+>  		goto out;
+>  	}
+>  
+> +	file.file = NULL;
+>  	file.size = segment_size;
+>  	file.read_pos = 0;
+>  	file.count = sizeof(khdr);	/* reserved space */
+> 
+> base-commit: 38aa3f5ac6d2de6b471ecb6e1cd878957ae7e8de
+
 
