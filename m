@@ -1,114 +1,134 @@
-Return-Path: <linux-integrity+bounces-2035-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2036-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B211689E190
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 19:28:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F09F989E286
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 20:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CFB5284B55
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 17:28:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E3471F224A7
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 18:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C4415625B;
-	Tue,  9 Apr 2024 17:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDFC3156C59;
+	Tue,  9 Apr 2024 18:27:45 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B364C85
-	for <linux-integrity@vger.kernel.org>; Tue,  9 Apr 2024 17:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BE9156C50;
+	Tue,  9 Apr 2024 18:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712683724; cv=none; b=G5ny1JfyxegUwOVJLQGPvI+0irA0TqOBKXOudq7Tso2LTiuQzRYJ54w9k2Uc47WXS7Vn3XvxpAkGa0ISv4E5Np+n6LfbVP/9hq8p7YYC9lGGkbDhKtU/AZ/fbBKhI1C0DGUKn76pQKxw+DcA7uuYUvIiJkmeShZRT6BkqdmqfLc=
+	t=1712687265; cv=none; b=OMOOKs/8unFV2P7PX0wDWn84T6ps9p4BisK1QY5LVnq1SfQnlWxgpCP5PPdT5aLH1pPZUCq4N2vVqHs4CkxWCy9bxyew2eo2nu8iqKMYvmPmdbbG97oeZb6718sDlAiguoCi9vU/WbtclxzUHkmSndxGtuDzbmlabvpIE2ROT64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712683724; c=relaxed/simple;
-	bh=eHo/igXZcq8HeXdyeAD2kiUayElbdwtoFad+ENVCRhc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kJAf8SVcB9HBaau4NNxeKnpN6pEp97V00NDu3bb1B/fRz79sP0FAnZTdIc0n/tj5NVrqflXbO+u3GrEL8FoKCO9rVXNot+J8Ky4aW424dSTLoy6P4o1OuHkH0PGQ8UIc0VvYCfL3oUPCR8wR9VZNpDH6oovFEDapeYAoNvlXEuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1ruFGD-0001dT-16; Tue, 09 Apr 2024 19:27:53 +0200
-Message-ID: <4c6164e5-bcfd-4172-a76e-db989f729a8a@pengutronix.de>
-Date: Tue, 9 Apr 2024 19:27:44 +0200
+	s=arc-20240116; t=1712687265; c=relaxed/simple;
+	bh=+e4o3Key427s9PGCVpm+yJBrEgVTXiMxI86rVYGWrbI=;
+	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=UbNlBVbQqJgtgtuqFnH7036xygrCII03Li9HfugCyxLbJ3LiwNJJ6C7dIcOsDSJKhQhtS3nXwXgUtcHyHt3iwUT7FrBVCkdSZam9HVxMwafbtzW6Edr1+B9ePoXIr7ez6rAz+z59Ua4GSdA8xcqAHKuJaB+NbNSMNpY62lsyUfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in02.mta.xmission.com ([166.70.13.52]:38406)
+	by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1ruFQF-007Aen-3v; Tue, 09 Apr 2024 11:38:15 -0600
+Received: from ip68-227-168-167.om.om.cox.net ([68.227.168.167]:58962 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1ruFQE-009VSq-7G; Tue, 09 Apr 2024 11:38:14 -0600
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>,  Linus Torvalds
+ <torvalds@linux-foundation.org>,  Roberto Sassu
+ <roberto.sassu@huaweicloud.com>,  linux-integrity@vger.kernel.org,
+  linux-security-module@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
+  linux-cifs@vger.kernel.org,  linux-kernel@vger.kernel.org,  Roberto Sassu
+ <roberto.sassu@huawei.com>
+References: <20240402141145.2685631-1-roberto.sassu@huaweicloud.com>
+	<CAHk-=wgepVMJCYj9s7J50_Tpb5BWq9buBoF0J5HAa1xjet6B8A@mail.gmail.com>
+	<CAHk-=wjjx3oZ55Uyaw9N_kboHdiScLkXAu05CmPF_p_UhQ-tbw@mail.gmail.com>
+	<20240402210035.GI538574@ZenIV>
+	<CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
+Date: Tue, 09 Apr 2024 12:37:21 -0500
+In-Reply-To: <CAHC9VhSWiQQ3shgczkNr+xYX6G5PX+LgeP3bsMepnM_cp4Gd4g@mail.gmail.com>
+	(Paul Moore's message of "Tue, 2 Apr 2024 17:36:30 -0400")
+Message-ID: <87le5mxwry.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [EXT] [PATCH v8 3/6] KEYS: trusted: Introduce NXP DCP-backed
- trusted keys
-Content-Language: en-US
-To: Kshitiz Varshney <kshitiz.varshney@nxp.com>,
- David Gstir <david@sigma-star.at>, Mimi Zohar <zohar@linux.ibm.com>,
- James Bottomley <jejb@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>
-Cc: "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- Gaurav Jain <gaurav.jain@nxp.com>, Catalin Marinas
- <catalin.marinas@arm.com>, David Howells <dhowells@redhat.com>,
- "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
- Fabio Estevam <festevam@gmail.com>, Paul Moore <paul@paul-moore.com>,
- Jonathan Corbet <corbet@lwn.net>, Richard Weinberger <richard@nod.at>,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- James Morris <jmorris@namei.org>, dl-linux-imx <linux-imx@nxp.com>,
- "Serge E. Hallyn" <serge@hallyn.com>, "Paul E. McKenney"
- <paulmck@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pankaj Gupta <pankaj.gupta@nxp.com>,
- sigma star Kernel Team <upstream+dcp@sigma-star.at>,
- "Steven Rostedt (Google)" <rostedt@goodmis.org>,
- David Oberhollenzer <david.oberhollenzer@sigma-star.at>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
- Randy Dunlap <rdunlap@infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Li Yang <leoyang.li@nxp.com>,
- "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- Pengutronix Kernel Team <kernel@pengutronix.de>, Tejun Heo <tj@kernel.org>,
- "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Varun Sethi <V.Sethi@nxp.com>
-References: <20240403072131.54935-1-david@sigma-star.at>
- <20240403072131.54935-4-david@sigma-star.at>
- <DB6PR04MB31904A8EB8B481A530C90CBB8F072@DB6PR04MB3190.eurprd04.prod.outlook.com>
-From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <DB6PR04MB31904A8EB8B481A530C90CBB8F072@DB6PR04MB3190.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+Content-Type: text/plain
+X-XM-SPF: eid=1ruFQE-009VSq-7G;;;mid=<87le5mxwry.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.168.167;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19gMkca3jYcuCNyXyTaOnFXicdzcwRWtZ4=
+X-SA-Exim-Connect-IP: 68.227.168.167
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Level: **
+X-Spam-Virus: No
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.4480]
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  1.2 XMSubMetaSxObfu_03 Obfuscated Sexy Noun-People
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+	*  1.0 XMSubMetaSx_00 1+ Sexy Words
+	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Paul Moore <paul@paul-moore.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 277 ms - load_scoreonly_sql: 0.03 (0.0%),
+	signal_user_changed: 4.1 (1.5%), b_tie_ro: 2.8 (1.0%), parse: 0.71
+	(0.3%), extract_message_metadata: 8 (3.1%), get_uri_detail_list: 0.70
+	(0.3%), tests_pri_-2000: 6 (2.2%), tests_pri_-1000: 1.97 (0.7%),
+	tests_pri_-950: 1.05 (0.4%), tests_pri_-900: 0.80 (0.3%),
+	tests_pri_-90: 59 (21.3%), check_bayes: 57 (20.7%), b_tokenize: 4.6
+	(1.7%), b_tok_get_all: 6 (2.1%), b_comp_prob: 1.51 (0.5%),
+	b_tok_touch_all: 42 (15.1%), b_finish: 0.87 (0.3%), tests_pri_0: 181
+	(65.3%), check_dkim_signature: 0.37 (0.1%), check_dkim_adsp: 7 (2.6%),
+	poll_dns_idle: 0.53 (0.2%), tests_pri_10: 2.7 (1.0%), tests_pri_500: 9
+	(3.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [GIT PULL] security changes for v6.9-rc3
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 
-Hello Kshitiz,
 
-On 09.04.24 12:54, Kshitiz Varshney wrote:
-> Hi David,
->> +       b->fmt_version = DCP_BLOB_VERSION;
->> +       get_random_bytes(b->nonce, AES_KEYSIZE_128);
->> +       get_random_bytes(b->blob_key, AES_KEYSIZE_128);
-> 
-> We can use HWRNG instead of using kernel RNG. Please refer drivers/char/hw_random/imx-rngc.c 
+Paul Moore <paul@paul-moore.com> writes:
 
-imx-rngc can be enabled and used to seed the kernel entropy pool. Adding
-direct calls into imx-rngc here only introduces duplicated code at no extra
-benefit.
+> I know it's everyone's favorite hobby to bash the LSM and LSM devs,
+> but it's important to note that we don't add hooks without working
+> with the associated subsystem devs to get approval.
 
-Cheers,
-Ahmad
+Hah!!!!
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> In the cases
+> where we don't get an explicit ACK, there is an on-list approval, or
+> several ignored on-list attempts over weeks/months/years.  We want to
+> be good neighbors.
 
+Hah!!!!
+
+You merged a LSM hook that is only good for breaking chrome's sandbox,
+over my expressed objections.  After I tested and verified that
+is what it does.
+
+I asked for testing. None was done.  It was claimed that no
+security sensitive code would ever fail to check and deal with
+all return codes, so no testing was necessary.  Then later a
+whole bunch of security sensitive code that didn't was found.
+
+The only redeeming grace has been that no-one ever actually uses
+that misbegotten security hook.
+
+P.S.  Sorry for this off topic rant but sheesh.   At least from
+my perspective you deserve plenty of bashing.
+
+Eric
 
