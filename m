@@ -1,64 +1,63 @@
-Return-Path: <linux-integrity+bounces-2031-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2032-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 521F889D5EF
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 11:48:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 060B889D74D
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 12:54:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75EA91C21986
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 09:48:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71DE71F24F90
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Apr 2024 10:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4C27FBBC;
-	Tue,  9 Apr 2024 09:48:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4530883A09;
+	Tue,  9 Apr 2024 10:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="rzLPV5zC"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="L6MPOq73"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2128.outbound.protection.outlook.com [40.107.21.128])
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2108.outbound.protection.outlook.com [40.107.7.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58C87F478;
-	Tue,  9 Apr 2024 09:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E231B7C0B0;
+	Tue,  9 Apr 2024 10:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.7.108
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712656113; cv=fail; b=hxLRTVC+SWCCH0YhDeCC38WKwiVTG9Zp7alMIgbwx85UfdZt9AlW98NEZcz6z4InLfePANxnSVaN0ZsnQEi80kJ2QcnQ9ohA9I/aUqh5JGp9ERoxLMHq5P18kwlhua4zAcfl0T6xjNdyPURQKQv1mvPgOYwzjvhe1lwH22sTLgE=
+	t=1712660063; cv=fail; b=AxP+bgM5m16cGPbl/GRrRjQRFNxD/kpW3bPEuuvBBp6xR0t3b7t3kqCJA8bww/XQes884Zi/BlzAMmRD1bwSIJpGp/fxHUOYbeXHjZwL+9qs/hoSuDyF89b901L5RVGsm4rkDxq6vsmAo5DJ44CVIl7gI8ar7LwgHd78XQNYXUY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712656113; c=relaxed/simple;
-	bh=rmhalswk55WdA99sGBu0U4wdTv+Bp0L/Ke2aUtG3pIM=;
+	s=arc-20240116; t=1712660063; c=relaxed/simple;
+	bh=x4Hj4YbRn3HZG418NIYii/8TAMBKHr1aiV1VHReSHfU=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=I8Z7jUVc1YI/lKz8RQhcKxLWaId4Fz0FGA0JPk9Wl2roWj5jD0SWTA6Npph6heJJen/foboA0neutEnI2xpARtZ3md4kgm3d4T0Dft1tlrqf7dCrvTt7GmOnjekj+zrVxMtLYAtxo66Xev4itIdSrgLJ7D1oyYmV4qtdGwgFqhM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=rzLPV5zC; arc=fail smtp.client-ip=40.107.21.128
+	 Content-Type:MIME-Version; b=OC4Sp9UmmMPJ8oxuWpQejks2EuTqfRFRdtvCMPAhenTorMc2DMXSBXqZKr3SeNQ3IW9+DcUwniRXQRbk2g9Hc177VQJuATcPJh30MJ+xNwMjEfYfv9jE1mIxU4t+ahB4PG78yJ8nHdNuLWRZie2ikhzLSmX+KFGkjF/jDpXZTfE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=L6MPOq73; arc=fail smtp.client-ip=40.107.7.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L/CwaRGvUHed8k/JTUpSrKW59iZrjo9epTF4hG8+TWHlW5GdgoiSmXHH2SZwEPjtTx/3s5jq0gmBzuTrVYDPxgcb0u9BiGZrfqSNgVzjxGzEV6/5oiV1Jq8L890nzpZYRf7bfk+h/zSCGGQt/u6b7c7Cnb3QwW/Oq30Q/GekZL1kNP3+pSS4AwXW3vMjVvKSRydy6guZcfOOZSnnZJ96qE3B16jhw9aNRo0X1F+MPCDUfDAPWkXy/bD18Ltad78Oa3g9CTdlL+0+egP9kCzwTBejtjXrUV1x6yhrs5CjN0zMfPBHddhhzOJcKlQ9FsrTDDAhNJlpjPTIb0QonjUlwQ==
+ b=YcJjeDE53z+aJ1bN5rK8YFJm/tKzvnI4M9z7UU8op/hg+RfBa0JEpk7DrWq82Lz8FqoTw6EeYCwmc/DH6w5wVCcnL87lYFXXKtx9oeWnXSgIpIFqViGjqBerbEeH8mYilkJZx+FMMlO2kDb6qwvWTsfiDwR6Nj9OjfrH7E2ATL/4PfQJj2XqaoJLTADtDYNd45riwfQnVaSvqW9X82RI6cCRicTYJJmPo2sZqYP5kWUfn6XoIQjJlCkTX5m0cD9I2dj4M7KDBtua07Ar7j56HAYPV72qPHmwgQXfNe0T+nVv8Q9Vqltzgfz7eStcq+cTM1Wnz45qJKSDHVaMunHqwg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rmhalswk55WdA99sGBu0U4wdTv+Bp0L/Ke2aUtG3pIM=;
- b=f3Q9XvmMa8VpoXlI68QfDDSrxwPi4rat2g7sudMdBEnr1emJBmekJNvlxnp07lwidOOBq9RwHZRrSDv7wV9zJtuB9DIzffXctrMp9BhtEpQWQnX/s70mumutJvLtgS0QUXo+RAOepCsaLDtd+pZ3+VpkkHcivUvfgJibNbtyq0sAJKBkUH9koTHsli8ern+P1ONyh0SNGoM7A3eeyXKJXqTDwTGTJEeMIjHnV8XlvMp7uzzBcGGZzJRnf7xaKQlATXTC5Zpl3eDB9IfLB2m6D4al8YV7q7pKEHc2R0mTIF6Zg7FY6NfF+GXEhpTINKrDVyP2Gr1wfzPGR9OyZSSetw==
+ bh=W1OkZhRUlrJCI5ikV2kv17qmHEHI+sfWVAxK9Swq2pc=;
+ b=oahpDHm+XTIWxgLZOsiY1ZwcD+ocO6+8HUqiUwyaCmuZJIKrwwLCFAYnB2dmNrYX4hpwWZOCHCqzSdpqOKZgll+it92tna9Ua3r3LxKsQQwzzgw4vBjvj/IfPD1nr6psDSKrVYUAN0sce4A/f0/MC17lPlcFxwDZC33fMgzOQXcZn4CrJphsOt4cPzMaR7dzg4106w6k3a7WQbDbCA0mOm0ThPXZjoQ2VMLvj+GKzX6dMC6HMWlgcxTzBdaFHHOVt4Bk2gA4xFOk+tN1QVeIwh1qgM0wwWNOTp/zc34is23sOTaoj5J9kF4TTG2dhMQGmHMHOq1NvDzRl7C+3UR0oA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rmhalswk55WdA99sGBu0U4wdTv+Bp0L/Ke2aUtG3pIM=;
- b=rzLPV5zCbCfLtTEseFc0tcM/1yWP94R/qiMPKJUsaXIMBy+IEpIzbeyo48rC1Ef8MnXN/tNy9f2bl9tP15Dh+FmB8gms/7Dle5Ae1plucdgYVqOablHZl4vlX9eV6KNztyOxsaHhXk5m4eprtCDklUiKrxHGVRUk8XG2VbVxYTw=
+ bh=W1OkZhRUlrJCI5ikV2kv17qmHEHI+sfWVAxK9Swq2pc=;
+ b=L6MPOq73DM24HMMO+bn74iW3hgPAyu8t0frt71LEn5lP/Hp+RnAJEGFrcvaDum5Y9Mo7BUZjU4K//er4AcHhAk/G+xj/z8yCOUqSGN1R0SEGJL2VD2uqlfvxA+eWqH4vo4vuPrPVUuEHTfOEwbwsJsd0r4F7U3cml3ffYSDFFv4=
 Received: from DB6PR04MB3190.eurprd04.prod.outlook.com (2603:10a6:6:5::31) by
- PAXPR04MB8512.eurprd04.prod.outlook.com (2603:10a6:102:213::13) with
+ AM8PR04MB7729.eurprd04.prod.outlook.com (2603:10a6:20b:24c::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Tue, 9 Apr
- 2024 09:48:27 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.55; Tue, 9 Apr
+ 2024 10:54:16 +0000
 Received: from DB6PR04MB3190.eurprd04.prod.outlook.com
  ([fe80::e8bc:451:6316:4a6f]) by DB6PR04MB3190.eurprd04.prod.outlook.com
  ([fe80::e8bc:451:6316:4a6f%6]) with mapi id 15.20.7409.042; Tue, 9 Apr 2024
- 09:48:27 +0000
+ 10:54:15 +0000
 From: Kshitiz Varshney <kshitiz.varshney@nxp.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, David Gstir <david@sigma-star.at>,
-	Mimi Zohar <zohar@linux.ibm.com>, James Bottomley <jejb@linux.ibm.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
-	<davem@davemloft.net>
+To: David Gstir <david@sigma-star.at>, Mimi Zohar <zohar@linux.ibm.com>, James
+ Bottomley <jejb@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Herbert
+ Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
 CC: Shawn Guo <shawnguo@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Sascha
  Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
 	<kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, dl-linux-imx
@@ -81,71 +80,61 @@ CC: Shawn Guo <shawnguo@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Sascha
 	David Oberhollenzer <david.oberhollenzer@sigma-star.at>, Varun Sethi
 	<V.Sethi@nxp.com>, Gaurav Jain <gaurav.jain@nxp.com>, Pankaj Gupta
 	<pankaj.gupta@nxp.com>
-Subject: RE: [EXT] Re: [PATCH v8 6/6] docs: trusted-encrypted: add DCP as new
- trust source
-Thread-Topic: [EXT] Re: [PATCH v8 6/6] docs: trusted-encrypted: add DCP as new
- trust source
-Thread-Index: AQHahd5ZPsPUUHSBS06BOt9//l0ZJbFfubhQ
-Date: Tue, 9 Apr 2024 09:48:27 +0000
+Subject: RE: [EXT] [PATCH v8 3/6] KEYS: trusted: Introduce NXP DCP-backed
+ trusted keys
+Thread-Topic: [EXT] [PATCH v8 3/6] KEYS: trusted: Introduce NXP DCP-backed
+ trusted keys
+Thread-Index: AQHahZe8FOET2O8opkK/K3DU/sDkl7Ffx2mg
+Date: Tue, 9 Apr 2024 10:54:15 +0000
 Message-ID:
- <DB6PR04MB3190F6B78FF3760EBCC14E758F072@DB6PR04MB3190.eurprd04.prod.outlook.com>
+ <DB6PR04MB31904A8EB8B481A530C90CBB8F072@DB6PR04MB3190.eurprd04.prod.outlook.com>
 References: <20240403072131.54935-1-david@sigma-star.at>
- <20240403072131.54935-7-david@sigma-star.at>
- <D0ALT2QCUIYB.8NFTE7Z18JKN@kernel.org>
-In-Reply-To: <D0ALT2QCUIYB.8NFTE7Z18JKN@kernel.org>
+ <20240403072131.54935-4-david@sigma-star.at>
+In-Reply-To: <20240403072131.54935-4-david@sigma-star.at>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB6PR04MB3190:EE_|PAXPR04MB8512:EE_
+x-ms-traffictypediagnostic: DB6PR04MB3190:EE_|AM8PR04MB7729:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
 x-microsoft-antispam-message-info:
- r01T+j/pItGtZqoS/Z3Hn8Lh7fhqAzKnpVwknOXHR1/jZ7Y9SH94nPVcGVbv9J4iJTXGGBvq8UK5uQ5vrsKRUF9U7uzVK6n1levhvqF3OpWPofRl9Pv+rZ2oKt1KREt++Njf/LP1OawFjp+Da6D9njVgJJUOTxQQoMBndCozyqXUq2m1zImwqdmrVLCFM2ayoYFFwPCmidCJPIsCSEZjoeh0LUoRnandQYkrCie0Zi9jHQjYURZfjBS0QbRjjOqlayNcvA+ufIjToLjxfIKfgp1NBH9499aLVIVetsFVQUzDgfwz0oUFlfhljeo4RAV9ScUTnHtu5u2RWL5NQerBH5mhPfiWTgpCs5gAxUo0d3TLMUg6GLhgIbulw9c//ImFwd+9XWDz+GE/zXINtt9AkF3Pj44/vUfBLYgeC4vUZodeLHqE0fYjV32BFcgV7DnKqkWw87GLOsvf0Xbb3KnqLhn7K/yzlhBHQUPWduV8PFR6Fza4XU9wnKHjHOnSALq6PEUB6BwQttACv97gS2cQkeicH15wnBayebau59mY/mMS9YZiZt+GmvGpnJ0mCQBzcZ/R6odnZp6RI0dXgICuVWuLoeVkX2yix6nPQt80L2v7kMT3dNn6yrpDqJ8onlgv/5P0Wx9AfI73DI88lav1o1U0yXxgUlIYsDWiFmHh/3c=
+ 6/+Vn90fw532JFQk9K/SMegzAD0/T+EMA6S4mChio2VmmWYC1L68I12kBQoO6yv3BS3zdJQ639TVuTaywMtqLQ134H4GxNKoDUaemxwmqPf7xHrzvtzgmFITPzj/hpvssw8JDJS+8d8q+oo1l+YWnktcAYbrOfkI4V0/FJeourmFaiWn+amIyyLlvi9y+isGPCNK4DfyrhKFTwa+ZcArW/J2Ag7Wzq0iQAson7cmGe2yPUSigGUFJT+dmCHcWYXtPrdGm5WCBQ2jRE7q6Py42KbKXkwpsXoofgTu3hEICNwBmnPWHxYnr6DAXMcsUHWfovFL1Afshl8W3b9ZzCgTS77X/dd9/7gN7zphOsoxNUrJJWPo+qtXLhH7iMqYv9haBQGEDDSlsI0OA6BncqPaD7sLiZvfGelSqdIzCqt6HhkQjQolDH1VcMvfpgy1yQGnhjw82rI28MEvWFNvkEzLQI378q6/WAzjjGk9S6QoWOKn5g6vkBj2Cqx9JY3bA3X5Nsex4WMGPXC3mFYTiMElOL8FOtReR5TJjQtNZQJpV2M9NvmuFoBDiyrQXVZIyKEHqtYWAiiW2GrRJOGYKzTvljBLzGi1wfax19dc1xPIajGY05O3IdE8B4M+rJuBU9TPuHcZXQDvSjsbt2n1rt2gT8p8IAkYMf8ehMzcFhhynM8=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR04MB3190.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7416005)(376005)(1800799015)(366007);DIR:OUT;SFP:1102;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR04MB3190.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(7416005)(376005);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?cG5FdFVSN2U3dmUzSHNzOGI1YVlzbml4ekE2RUVBamJlLzZBTloxOFA5dFZH?=
- =?utf-8?B?SSt1MGNxUWtSR0FTSThxdUJDMDlYSzJCY3JuQ1p1N3h4NXZYVGNCOHA3QnRw?=
- =?utf-8?B?M3ByNVAyaDNIcElmVzNSZnVLeXlJdDZvdXExS3BjQmNDUXZ0T2tUS3hENC8r?=
- =?utf-8?B?L1p1SEpNRWZLa21BazBPUVN1aHBvWnVrYWJyTElScCtTY0FWRWhLVG9OTWFi?=
- =?utf-8?B?aWl4SWZXZlNPMEdJTkV3RllOdG9UV0hBMTlmRFNDVUI1UHBwUEZrMUV2bGEy?=
- =?utf-8?B?MHNZYXZpVUJ1OEhqM1FrZzFyemorZFpxRTFzNlhlZytMTHdMdk1aaCtzSisy?=
- =?utf-8?B?S001MkRoRXFFQnJ5SkpoV2l6RFlySEF6d0FpYlpVSFFFTWRrSE9wREVHMFMw?=
- =?utf-8?B?a3BzUlJhS3k2aW13MkN1ZHpoaHAyMngxT1hnbE50dEZDRUpNTTYzWHFVdC8y?=
- =?utf-8?B?M1FabVB5cHo2T3cyWS96U2k3Q2cxeUZvM29ENHh4ZndGQUtsZ1Z3T3UzN0g0?=
- =?utf-8?B?dENwejc0d0UzajA0WU5Sb21sdWVvbVlGKytuSUxsU2NocFVXeDFBMnhCVDBU?=
- =?utf-8?B?THNPQWQzQTgvZm5wS253UEVoQS9EaG5lTTFXWVFoN0JqUUdHUmxlaFpidnls?=
- =?utf-8?B?U1M4elFYZi9kb1MzaSsyR2x1NmFiY3QvNDRTKzNCNGprTlo3b2dRSEhqWjJO?=
- =?utf-8?B?WW1ZcVZMUElEUmI4aGN0WGk5MlhuRWdBTTdXY2UrQnNoTmJ4eE1XVUdndFJS?=
- =?utf-8?B?VkVTY09WSUI3TUxxSEtmdjliWjArZ3pLT0hubjVHTmh2MHBmcWcrcGxvVVFS?=
- =?utf-8?B?UFZPcWFyb1Nzdlh5dy9lNGNyV0k1WjZvOVpyQUQvdGUwRS94T3FTK3FqL3dh?=
- =?utf-8?B?RzZDcG96YTZEb1EwRWtzSitOVW1POG1HU2dSQ29EcmRUd0tleWxBQjBxai9k?=
- =?utf-8?B?RnFRNUFiWlRDSWVoWGRRa0JoampVbG1QYTNMWmlLUkFBSnVMZnhGWUw5TmhE?=
- =?utf-8?B?UnFCa0FUc1dBL25rTjNTdlZ4QndsMVdUKzVoR3dKT3BkMTJ3ZUlaRzFRR01y?=
- =?utf-8?B?a2daUnFBQTNWMGIzcXJSckJoY0JQOHV4V2g4Ni96dElMdHVneC9xcTAvcGln?=
- =?utf-8?B?V3R5Z3hpSmdlY3V5WnoyN0FxakQ4d2ZxUFdaSWlwU3ZINU9PU2k3bit3bHli?=
- =?utf-8?B?WmVsT29ERXJCTkk2MXdhaGduOTVvWG5Hdy9DdGlrRVJPVXBCT0EwRnhMWDlw?=
- =?utf-8?B?c2hqOUNaem12dVBIRGowazZFZ055Qk1NdXdMSWtPeXE0REZWb2lQdWI5RFpo?=
- =?utf-8?B?ckFvSmxua0tWeUg4bWc2SjVOY2hQUkRETjdQeEcrOGo1Z3hsa25QMW95VjRH?=
- =?utf-8?B?QlJ4WnIwdE1Wc0UxUjN5Nlh2b1VYUTJjeWdDVzQrSE1kSlFjVkdiYnV5Y2tO?=
- =?utf-8?B?aDAyNFcyWjVpK1FzS1NQMVhlZkhSKytjNktYVkNUS2V4YlkrUCtvVmVZeC9P?=
- =?utf-8?B?Y3c4S1JVYjZlWkFoU0lCMXZrQW5jVWtvTUNUQVl3WG9seXdCOEwwMHdzOWZQ?=
- =?utf-8?B?Wm5Vd3hTRTlLTjk1eDdKSmpTVlhwNFg4TDk4ZVhXaEN4Nkwzcko2MDdIbEJq?=
- =?utf-8?B?YTdzQytlMmxNTzJua1VSSjJuUUQrWjYyOE1YSmwydDVUa0xsRGs3dzE4TFNm?=
- =?utf-8?B?VnBBZWtCSCtLQW1nVHY2QWdtbHltSnFhT050bkhKR2dPUklPTmNTT1owY21z?=
- =?utf-8?B?UkZ3SnkyVHp0MU5ETDdXeFlNRkd6N1FTRHRZOFRrYUkwVmxWOHYxRWZSSEd0?=
- =?utf-8?B?cS9oNFFEQ2F5eVQ2M0JYT1JoOW9zVVNyWlhZSkZRVmliNzRvT3dvUTNibTgw?=
- =?utf-8?B?cVplR1M0bnFFYWh3TTZvdzkrUnh3eUpYVHloQXhIeG0wNVdtUk9lVmVGckRB?=
- =?utf-8?B?TDdWc1pXMWlHbXJkaFIzYVZncm52VXlkUTc0c3BtVWJiVlFRNHFvZGNvdDZy?=
- =?utf-8?B?RG5WNkZVR0txdTd5UlgrVUVxY0M0ZVhMbDZQRDFBSkExdHNjUHhsaU1HV0Q3?=
- =?utf-8?B?YXIrdnpWRjBzeGxWTktNWGp3SkNYbW5KbVJnV2V3dCtwbTJUTU13WGV6TW83?=
- =?utf-8?Q?8vJwBPGGXtwLbOFOQAGy8OGIr?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ =?us-ascii?Q?yxDlHUfSGeqXDt7bACBi41HoXDms9MRKMtnj+PLOR97Mgj3C5D9IJfREc8KP?=
+ =?us-ascii?Q?G+HNhn/hnLqrU2bv156Y3NcR5CjihWiYz+K7+kBzAfXWTAe2QI97T5p0Xe86?=
+ =?us-ascii?Q?raIDXPyPBPzDShvzJAX4cS//CPgQGEyhuKL9HI6Mobq8ZsgQmB0SiJcYzo4L?=
+ =?us-ascii?Q?ZrKxFk1kjP5fzOQVMLCLTjEGapmGQinuXK/cxd1nbVCdmIyVpVa5BRIQYazH?=
+ =?us-ascii?Q?KwNHIlpRNf3IJGrG7XaMRzWwTXJvj1yKdEuXD22vrhtcM6ZHpM07IKX+xkOa?=
+ =?us-ascii?Q?6dmzHSD8wqh+nWE3m14jt/WkbTj3AUk3lpahmb9Ny3yIVvzQzAhSfExIw0Ld?=
+ =?us-ascii?Q?YbTPp1wz+a2nVB2rXcak1b4QN7B0rI9+yLR0NqD05DCPz+83t7cNPiLXCFTi?=
+ =?us-ascii?Q?AufraiAEpzJq8AJAbYYPrUpTThVw/bC3oqPu0oqnYt2l/COQmDRPauEfndJK?=
+ =?us-ascii?Q?FzI87boLGFEPmw+VJ3ntY+DNU34mPaazRRxQ3INJR8TItKR5hz40x6bOT5xV?=
+ =?us-ascii?Q?SVTSG5RymRjPAiwneqtW/DpGe4Snv4VW2tC8e56uphRZSPoZxZAU4wpPipA6?=
+ =?us-ascii?Q?a1UtL5KAhwe1TsxwWr2n0z6l2as1/xv3TDxXI/nFBQezCKh4ZFRxVLw5oetf?=
+ =?us-ascii?Q?UQT5XYP3kI2Mew5ZSw44nKM2y0Lt3zYcZYF7ON+JYe8E5YfdBpvwgqdcB2is?=
+ =?us-ascii?Q?VPAy6uniQ2dluqSbOwz+lfFnyreNZEw62z0SH5jihZgoyU31KB8em0fafQvk?=
+ =?us-ascii?Q?UzEl2RBgfM1Ru3FADqG8GmSIJ4wCPVvlet7BHwwpX0hMh/TzDtKlGe9+jze5?=
+ =?us-ascii?Q?YX70HmHbi0zYUCV3hYX+U0b/mNz+9xiys5CuOD1YtJgdtr1ytAvP9XzSR7OB?=
+ =?us-ascii?Q?k29D0gI3Yvv093jL27fenXjFbKdFp0lAiewdmZ7woMFHdnxKblW25d31voHF?=
+ =?us-ascii?Q?7Hrjep4ZmO8mF2jDDi4UZgY9rU2nDyefoyY1gBDXXcv/5xYVxAw9EIAqVlsN?=
+ =?us-ascii?Q?jDDbOzQFife+eS3Lh4HgtxgsOIYlI48M5v0aIN2KW1SukbJGkPvHIK3eHIJh?=
+ =?us-ascii?Q?szAI5T5QCSddz8YSYejC6Tt76yru29dVRX4kAi72TiR95HNo0hkuNvcVRR86?=
+ =?us-ascii?Q?IKYABq4fgQsycXdZr3zqTsAM5A8fg8MEmzh+ZzFqftmCz+Pee4ZONElrnWMF?=
+ =?us-ascii?Q?URDn+tmzZvalEPUXnHdqzx1KUcTJ+r6hPb8/ozPYxdHZmsU+TPpxUscMByfZ?=
+ =?us-ascii?Q?6iTTWaYxiQvInxDuXLzOIPZ76SfId5pssSCIviDSn7CoiInPpf4b+tO7t3Tq?=
+ =?us-ascii?Q?n3xG4oDihWupTndkSJ+GcKj/YXoozmDrwzoQUGlabZCfsAMBXfCAcH0t6/bM?=
+ =?us-ascii?Q?38yRRsN9EAq1+Sb7UZGUdHo8DHm4KvAv8EwTGHsSb2u0/rau6zCyy0A31dMx?=
+ =?us-ascii?Q?Ua7o7rCI1gbAdhp+geLf1tb5EgpdaAzc5nICuN4iIh7aEO9hrs0GOD4gcjMf?=
+ =?us-ascii?Q?V/Fk98pF1LDCD5cQgXPtPnyzLWGrt0fqjf1X3RwvntvGnU0FTAsFdiYjiCYY?=
+ =?us-ascii?Q?FstCUy7qxgGCAehR/kIxUqTnuwR1cR6RuUXvmyk+?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -155,163 +144,549 @@ MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DB6PR04MB3190.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5ef2067-4bc3-499c-748d-08dc587a34ac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2024 09:48:27.2331
+X-MS-Exchange-CrossTenant-Network-Message-Id: 774cdf51-20ed-4abb-7456-08dc58836627
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2024 10:54:15.6966
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EssHdgkHqyUvIJ0w5IdPM0kF88WPtYW+9zPoMO6LhWR1aDJV92iTSO+RC+HdMqQowVQVZoCvogiEzv90776i4AUj8Th4jQXT2/Qh30CpP7Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8512
+X-MS-Exchange-CrossTenant-userprincipalname: JgFT8FRyMQutdNlCDF9xO48IGysofYzZ3yMW8FJLYTTfINvm3hJWErHFsxCrgDb3QjfJptXddhbCMewViTNo4IVXM4M1VkrS+XI/3riYYr4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7729
 
-SGkgSmFya2tvLA0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSmFy
-a2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9yZz4NCj4gU2VudDogV2VkbmVzZGF5LCBBcHJp
-bCAzLCAyMDI0IDk6MTggUE0NCj4gVG86IERhdmlkIEdzdGlyIDxkYXZpZEBzaWdtYS1zdGFyLmF0
-PjsgTWltaSBab2hhciA8em9oYXJAbGludXguaWJtLmNvbT47DQo+IEphbWVzIEJvdHRvbWxleSA8
-amVqYkBsaW51eC5pYm0uY29tPjsgSGVyYmVydCBYdQ0KPiA8aGVyYmVydEBnb25kb3IuYXBhbmEu
-b3JnLmF1PjsgRGF2aWQgUy4gTWlsbGVyIDxkYXZlbUBkYXZlbWxvZnQubmV0Pg0KPiBDYzogU2hh
-d24gR3VvIDxzaGF3bmd1b0BrZXJuZWwub3JnPjsgSm9uYXRoYW4gQ29yYmV0DQo+IDxjb3JiZXRA
-bHduLm5ldD47IFNhc2NoYSBIYXVlciA8cy5oYXVlckBwZW5ndXRyb25peC5kZT47IFBlbmd1dHJv
-bml4DQo+IEtlcm5lbCBUZWFtIDxrZXJuZWxAcGVuZ3V0cm9uaXguZGU+OyBGYWJpbyBFc3RldmFt
-DQo+IDxmZXN0ZXZhbUBnbWFpbC5jb20+OyBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29t
-PjsgQWhtYWQgRmF0b3VtDQo+IDxhLmZhdG91bUBwZW5ndXRyb25peC5kZT47IHNpZ21hIHN0YXIg
-S2VybmVsIFRlYW0NCj4gPHVwc3RyZWFtK2RjcEBzaWdtYS1zdGFyLmF0PjsgRGF2aWQgSG93ZWxs
-cyA8ZGhvd2VsbHNAcmVkaGF0LmNvbT47IExpDQo+IFlhbmcgPGxlb3lhbmcubGlAbnhwLmNvbT47
-IFBhdWwgTW9vcmUgPHBhdWxAcGF1bC1tb29yZS5jb20+OyBKYW1lcw0KPiBNb3JyaXMgPGptb3Jy
-aXNAbmFtZWkub3JnPjsgU2VyZ2UgRS4gSGFsbHluIDxzZXJnZUBoYWxseW4uY29tPjsgUGF1bCBF
-Lg0KPiBNY0tlbm5leSA8cGF1bG1ja0BrZXJuZWwub3JnPjsgUmFuZHkgRHVubGFwIDxyZHVubGFw
-QGluZnJhZGVhZC5vcmc+Ow0KPiBDYXRhbGluIE1hcmluYXMgPGNhdGFsaW4ubWFyaW5hc0Bhcm0u
-Y29tPjsgUmFmYWVsIEouIFd5c29ja2kNCj4gPHJhZmFlbC5qLnd5c29ja2lAaW50ZWwuY29tPjsg
-VGVqdW4gSGVvIDx0akBrZXJuZWwub3JnPjsgU3RldmVuIFJvc3RlZHQNCj4gKEdvb2dsZSkgPHJv
-c3RlZHRAZ29vZG1pcy5vcmc+OyBsaW51eC1kb2NAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4g
-a2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtaW50ZWdyaXR5QHZnZXIua2VybmVsLm9yZzsN
-Cj4ga2V5cmluZ3NAdmdlci5rZXJuZWwub3JnOyBsaW51eC1jcnlwdG9Admdlci5rZXJuZWwub3Jn
-OyBsaW51eC1hcm0tDQo+IGtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnOyBsaW51eHBwYy1kZXZA
-bGlzdHMub3psYWJzLm9yZzsgbGludXgtc2VjdXJpdHktDQo+IG1vZHVsZUB2Z2VyLmtlcm5lbC5v
-cmc7IFJpY2hhcmQgV2VpbmJlcmdlciA8cmljaGFyZEBub2QuYXQ+OyBEYXZpZA0KPiBPYmVyaG9s
-bGVuemVyIDxkYXZpZC5vYmVyaG9sbGVuemVyQHNpZ21hLXN0YXIuYXQ+DQo+IFN1YmplY3Q6IFtF
-WFRdIFJlOiBbUEFUQ0ggdjggNi82XSBkb2NzOiB0cnVzdGVkLWVuY3J5cHRlZDogYWRkIERDUCBh
-cyBuZXcNCj4gdHJ1c3Qgc291cmNlDQo+IA0KPiBDYXV0aW9uOiBUaGlzIGlzIGFuIGV4dGVybmFs
-IGVtYWlsLiBQbGVhc2UgdGFrZSBjYXJlIHdoZW4gY2xpY2tpbmcgbGlua3Mgb3INCj4gb3Blbmlu
-ZyBhdHRhY2htZW50cy4gV2hlbiBpbiBkb3VidCwgcmVwb3J0IHRoZSBtZXNzYWdlIHVzaW5nIHRo
-ZSAnUmVwb3J0DQo+IHRoaXMgZW1haWwnIGJ1dHRvbg0KPiANCj4gDQo+IE9uIFdlZCBBcHIgMywg
-MjAyNCBhdCAxMDoyMSBBTSBFRVNULCBEYXZpZCBHc3RpciB3cm90ZToNCj4gPiBVcGRhdGUgdGhl
-IGRvY3VtZW50YXRpb24gZm9yIHRydXN0ZWQgYW5kIGVuY3J5cHRlZCBLRVlTIHdpdGggRENQIGFz
-DQo+ID4gbmV3IHRydXN0IHNvdXJjZToNCj4gPg0KPiA+IC0gRGVzY3JpYmUgc2VjdXJpdHkgcHJv
-cGVydGllcyBvZiBEQ1AgdHJ1c3Qgc291cmNlDQo+ID4gLSBEZXNjcmliZSBrZXkgdXNhZ2UNCj4g
-PiAtIERvY3VtZW50IGJsb2IgZm9ybWF0DQo+ID4NCj4gPiBDby1kZXZlbG9wZWQtYnk6IFJpY2hh
-cmQgV2VpbmJlcmdlciA8cmljaGFyZEBub2QuYXQ+DQo+ID4gU2lnbmVkLW9mZi1ieTogUmljaGFy
-ZCBXZWluYmVyZ2VyIDxyaWNoYXJkQG5vZC5hdD4NCj4gPiBDby1kZXZlbG9wZWQtYnk6IERhdmlk
-IE9iZXJob2xsZW56ZXINCj4gPiA8ZGF2aWQub2JlcmhvbGxlbnplckBzaWdtYS1zdGFyLmF0Pg0K
-PiA+IFNpZ25lZC1vZmYtYnk6IERhdmlkIE9iZXJob2xsZW56ZXIgPGRhdmlkLm9iZXJob2xsZW56
-ZXJAc2lnbWEtc3Rhci5hdD4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBEYXZpZCBHc3RpciA8ZGF2aWRA
-c2lnbWEtc3Rhci5hdD4NCj4gPiAtLS0NCj4gPiAgLi4uL3NlY3VyaXR5L2tleXMvdHJ1c3RlZC1l
-bmNyeXB0ZWQucnN0ICAgICAgIHwgNTMgKysrKysrKysrKysrKysrKysrKw0KPiA+ICBzZWN1cml0
-eS9rZXlzL3RydXN0ZWQta2V5cy90cnVzdGVkX2RjcC5jICAgICAgfCAxOSArKysrKysrDQo+ID4g
-IDIgZmlsZXMgY2hhbmdlZCwgNzIgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBh
-L0RvY3VtZW50YXRpb24vc2VjdXJpdHkva2V5cy90cnVzdGVkLWVuY3J5cHRlZC5yc3QNCj4gPiBi
-L0RvY3VtZW50YXRpb24vc2VjdXJpdHkva2V5cy90cnVzdGVkLWVuY3J5cHRlZC5yc3QNCj4gPiBp
-bmRleCBlOTg5Yjk4MDJmOTIuLmY0ZDdlMTYyZDVlNCAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1bWVu
-dGF0aW9uL3NlY3VyaXR5L2tleXMvdHJ1c3RlZC1lbmNyeXB0ZWQucnN0DQo+ID4gKysrIGIvRG9j
-dW1lbnRhdGlvbi9zZWN1cml0eS9rZXlzL3RydXN0ZWQtZW5jcnlwdGVkLnJzdA0KPiA+IEBAIC00
-Miw2ICs0MiwxNCBAQCBzYWZlLg0KPiA+ICAgICAgICAgICByYW5kb21seSBnZW5lcmF0ZWQgYW5k
-IGZ1c2VkIGludG8gZWFjaCBTb0MgYXQgbWFudWZhY3R1cmluZyB0aW1lLg0KPiA+ICAgICAgICAg
-ICBPdGhlcndpc2UsIGEgY29tbW9uIGZpeGVkIHRlc3Qga2V5IGlzIHVzZWQgaW5zdGVhZC4NCj4g
-Pg0KPiA+ICsgICAgICg0KSBEQ1AgKERhdGEgQ28tUHJvY2Vzc29yOiBjcnlwdG8gYWNjZWxlcmF0
-b3Igb2YgdmFyaW91cyBpLk1YDQo+ID4gKyBTb0NzKQ0KPiA+ICsNCj4gPiArICAgICAgICAgUm9v
-dGVkIHRvIGEgb25lLXRpbWUgcHJvZ3JhbW1hYmxlIGtleSAoT1RQKSB0aGF0IGlzIGdlbmVyYWxs
-eQ0KPiBidXJudA0KPiA+ICsgICAgICAgICBpbiB0aGUgb24tY2hpcCBmdXNlcyBhbmQgaXMgYWNj
-ZXNzaWJsZSB0byB0aGUgRENQIGVuY3J5cHRpb24gZW5naW5lDQo+IG9ubHkuDQo+ID4gKyAgICAg
-ICAgIERDUCBwcm92aWRlcyB0d28ga2V5cyB0aGF0IGNhbiBiZSB1c2VkIGFzIHJvb3Qgb2YgdHJ1
-c3Q6IHRoZSBPVFANCj4ga2V5DQo+ID4gKyAgICAgICAgIGFuZCB0aGUgVU5JUVVFIGtleS4gRGVm
-YXVsdCBpcyB0byB1c2UgdGhlIFVOSVFVRSBrZXksIGJ1dCBzZWxlY3RpbmcNCj4gPiArICAgICAg
-ICAgdGhlIE9UUCBrZXkgY2FuIGJlIGRvbmUgdmlhIGEgbW9kdWxlIHBhcmFtZXRlcg0KPiAoZGNw
-X3VzZV9vdHBfa2V5KS4NCj4gPiArDQo+ID4gICAgKiAgRXhlY3V0aW9uIGlzb2xhdGlvbg0KPiA+
-DQo+ID4gICAgICAgKDEpIFRQTQ0KPiA+IEBAIC01Nyw2ICs2NSwxMiBAQCBzYWZlLg0KPiA+DQo+
-ID4gICAgICAgICAgIEZpeGVkIHNldCBvZiBvcGVyYXRpb25zIHJ1bm5pbmcgaW4gaXNvbGF0ZWQg
-ZXhlY3V0aW9uIGVudmlyb25tZW50Lg0KPiA+DQo+ID4gKyAgICAgKDQpIERDUA0KPiA+ICsNCj4g
-PiArICAgICAgICAgRml4ZWQgc2V0IG9mIGNyeXB0b2dyYXBoaWMgb3BlcmF0aW9ucyBydW5uaW5n
-IGluIGlzb2xhdGVkIGV4ZWN1dGlvbg0KPiA+ICsgICAgICAgICBlbnZpcm9ubWVudC4gT25seSBi
-YXNpYyBibG9iIGtleSBlbmNyeXB0aW9uIGlzIGV4ZWN1dGVkIHRoZXJlLg0KPiA+ICsgICAgICAg
-ICBUaGUgYWN0dWFsIGtleSBzZWFsaW5nL3Vuc2VhbGluZyBpcyBkb25lIG9uIG1haW4gcHJvY2Vz
-c29yL2tlcm5lbA0KPiBzcGFjZS4NCj4gPiArDQo+ID4gICAgKiBPcHRpb25hbCBiaW5kaW5nIHRv
-IHBsYXRmb3JtIGludGVncml0eSBzdGF0ZQ0KPiA+DQo+ID4gICAgICAgKDEpIFRQTQ0KPiA+IEBA
-IC03OSw2ICs5MywxMSBAQCBzYWZlLg0KPiA+ICAgICAgICAgICBSZWxpZXMgb24gdGhlIEhpZ2gg
-QXNzdXJhbmNlIEJvb3QgKEhBQikgbWVjaGFuaXNtIG9mIE5YUCBTb0NzDQo+ID4gICAgICAgICAg
-IGZvciBwbGF0Zm9ybSBpbnRlZ3JpdHkuDQo+ID4NCj4gPiArICAgICAoNCkgRENQDQo+ID4gKw0K
-PiA+ICsgICAgICAgICBSZWxpZXMgb24gU2VjdXJlL1RydXN0ZWQgYm9vdCBwcm9jZXNzIChjYWxs
-ZWQgSEFCIGJ5IHZlbmRvcikgZm9yDQo+ID4gKyAgICAgICAgIHBsYXRmb3JtIGludGVncml0eS4N
-Cj4gPiArDQo+ID4gICAgKiAgSW50ZXJmYWNlcyBhbmQgQVBJcw0KPiA+DQo+ID4gICAgICAgKDEp
-IFRQTQ0KPiA+IEBAIC05NCw2ICsxMTMsMTEgQEAgc2FmZS4NCj4gPg0KPiA+ICAgICAgICAgICBJ
-bnRlcmZhY2UgaXMgc3BlY2lmaWMgdG8gc2lsaWNvbiB2ZW5kb3IuDQo+ID4NCj4gPiArICAgICAo
-NCkgRENQDQo+ID4gKw0KPiA+ICsgICAgICAgICBWZW5kb3Itc3BlY2lmaWMgQVBJIHRoYXQgaXMg
-aW1wbGVtZW50ZWQgYXMgcGFydCBvZiB0aGUgRENQIGNyeXB0bw0KPiBkcml2ZXIgaW4NCj4gPiAr
-ICAgICAgICAgYGBkcml2ZXJzL2NyeXB0by9teHMtZGNwLmNgYC4NCj4gPiArDQo+ID4gICAgKiAg
-VGhyZWF0IG1vZGVsDQo+ID4NCj4gPiAgICAgICBUaGUgc3RyZW5ndGggYW5kIGFwcHJvcHJpYXRl
-bmVzcyBvZiBhIHBhcnRpY3VsYXIgdHJ1c3Qgc291cmNlDQo+ID4gZm9yIGEgZ2l2ZW4gQEAgLTEy
-OSw2ICsxNTMsMTMgQEAgc2VsZWN0ZWQgdHJ1c3Qgc291cmNlOg0KPiA+ICAgICAgIENBQU0gSFdS
-TkcsIGVuYWJsZSBDUllQVE9fREVWX0ZTTF9DQUFNX1JOR19BUEkgYW5kIGVuc3VyZQ0KPiB0aGUg
-ZGV2aWNlDQo+ID4gICAgICAgaXMgcHJvYmVkLg0KPiA+DQo+ID4gKyAgKiAgRENQIChEYXRhIENv
-LVByb2Nlc3NvcjogY3J5cHRvIGFjY2VsZXJhdG9yIG9mIHZhcmlvdXMgaS5NWCBTb0NzKQ0KPiA+
-ICsNCj4gPiArICAgICBUaGUgRENQIGhhcmR3YXJlIGRldmljZSBpdHNlbGYgZG9lcyBub3QgcHJv
-dmlkZSBhIGRlZGljYXRlZCBSTkcNCj4gaW50ZXJmYWNlLA0KPiA+ICsgICAgIHNvIHRoZSBrZXJu
-ZWwgZGVmYXVsdCBSTkcgaXMgdXNlZC4gU29DcyB3aXRoIERDUCBsaWtlIHRoZSBpLk1YNlVMTCBk
-bw0KPiBoYXZlDQo+ID4gKyAgICAgYSBkZWRpY2F0ZWQgaGFyZHdhcmUgUk5HIHRoYXQgaXMgaW5k
-ZXBlbmRlbnQgZnJvbSBEQ1Agd2hpY2ggY2FuIGJlDQo+IGVuYWJsZWQNCj4gPiArICAgICB0byBi
-YWNrIHRoZSBrZXJuZWwgUk5HLg0KPiA+ICsNCj4gPiAgVXNlcnMgbWF5IG92ZXJyaWRlIHRoaXMg
-Ynkgc3BlY2lmeWluZyBgYHRydXN0ZWQucm5nPWtlcm5lbGBgIG9uIHRoZQ0KPiA+IGtlcm5lbCAg
-Y29tbWFuZC1saW5lIHRvIG92ZXJyaWRlIHRoZSB1c2VkIFJORyB3aXRoIHRoZSBrZXJuZWwncyBy
-YW5kb20NCj4gbnVtYmVyIHBvb2wuDQo+ID4NCj4gPiBAQCAtMjMxLDYgKzI2MiwxOSBAQCBVc2Fn
-ZTo6DQo+ID4gIENBQU0tc3BlY2lmaWMgZm9ybWF0LiAgVGhlIGtleSBsZW5ndGggZm9yIG5ldyBr
-ZXlzIGlzIGFsd2F5cyBpbiBieXRlcy4NCj4gPiAgVHJ1c3RlZCBLZXlzIGNhbiBiZSAzMiAtIDEy
-OCBieXRlcyAoMjU2IC0gMTAyNCBiaXRzKS4NCj4gPg0KPiA+ICtUcnVzdGVkIEtleXMgdXNhZ2U6
-IERDUA0KPiA+ICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICsNCj4gPiArVXNhZ2U6Og0K
-PiA+ICsNCj4gPiArICAgIGtleWN0bCBhZGQgdHJ1c3RlZCBuYW1lICJuZXcga2V5bGVuIiByaW5n
-DQo+ID4gKyAgICBrZXljdGwgYWRkIHRydXN0ZWQgbmFtZSAibG9hZCBoZXhfYmxvYiIgcmluZw0K
-PiA+ICsgICAga2V5Y3RsIHByaW50IGtleWlkDQo+ID4gKw0KPiA+ICsia2V5Y3RsIHByaW50IiBy
-ZXR1cm5zIGFuIEFTQ0lJIGhleCBjb3B5IG9mIHRoZSBzZWFsZWQga2V5LCB3aGljaCBpcw0KPiA+
-ICtpbiBmb3JtYXQgc3BlY2lmaWMgdG8gdGhpcyBEQ1Aga2V5LWJsb2IgaW1wbGVtZW50YXRpb24u
-ICBUaGUga2V5DQo+ID4gK2xlbmd0aCBmb3IgbmV3IGtleXMgaXMgYWx3YXlzIGluIGJ5dGVzLiBU
-cnVzdGVkIEtleXMgY2FuIGJlIDMyIC0gMTI4IGJ5dGVzDQo+ICgyNTYgLSAxMDI0IGJpdHMpLg0K
-PiA+ICsNCj4gPiAgRW5jcnlwdGVkIEtleXMgdXNhZ2UNCj4gPiAgLS0tLS0tLS0tLS0tLS0tLS0t
-LS0NCj4gPg0KPiA+IEBAIC00MjYsMyArNDcwLDEyIEBAIHN0cmluZyBsZW5ndGguDQo+ID4gIHBy
-aXZrZXkgaXMgdGhlIGJpbmFyeSByZXByZXNlbnRhdGlvbiBvZiBUUE0yQl9QVUJMSUMgZXhjbHVk
-aW5nIHRoZQ0KPiA+IGluaXRpYWwgVFBNMkIgaGVhZGVyIHdoaWNoIGNhbiBiZSByZWNvbnN0cnVj
-dGVkIGZyb20gdGhlIEFTTi4xIG9jdGVkDQo+ID4gc3RyaW5nIGxlbmd0aC4NCj4gPiArDQo+ID4g
-K0RDUCBCbG9iIEZvcm1hdA0KPiA+ICstLS0tLS0tLS0tLS0tLS0NCj4gPiArDQo+ID4gKy4uIGtl
-cm5lbC1kb2M6OiBzZWN1cml0eS9rZXlzL3RydXN0ZWQta2V5cy90cnVzdGVkX2RjcC5jDQo+ID4g
-KyAgIDpkb2M6IGRjcCBibG9iIGZvcm1hdA0KPiA+ICsNCj4gPiArLi4ga2VybmVsLWRvYzo6IHNl
-Y3VyaXR5L2tleXMvdHJ1c3RlZC1rZXlzL3RydXN0ZWRfZGNwLmMNCj4gPiArICAgOmlkZW50aWZp
-ZXJzOiBzdHJ1Y3QgZGNwX2Jsb2JfZm10DQo+ID4gZGlmZiAtLWdpdCBhL3NlY3VyaXR5L2tleXMv
-dHJ1c3RlZC1rZXlzL3RydXN0ZWRfZGNwLmMNCj4gPiBiL3NlY3VyaXR5L2tleXMvdHJ1c3RlZC1r
-ZXlzL3RydXN0ZWRfZGNwLmMNCj4gPiBpbmRleCAxNmM0NGFhZmVhYjMuLmI1ZjgxYTA1YmUzNiAx
-MDA2NDQNCj4gPiAtLS0gYS9zZWN1cml0eS9rZXlzL3RydXN0ZWQta2V5cy90cnVzdGVkX2RjcC5j
-DQo+ID4gKysrIGIvc2VjdXJpdHkva2V5cy90cnVzdGVkLWtleXMvdHJ1c3RlZF9kY3AuYw0KPiA+
-IEBAIC0xOSw2ICsxOSwyNSBAQA0KPiA+ICAjZGVmaW5lIERDUF9CTE9CX1ZFUlNJT04gMQ0KPiA+
-ICAjZGVmaW5lIERDUF9CTE9CX0FVVEhMRU4gMTYNCj4gPg0KPiA+ICsvKioNCj4gPiArICogRE9D
-OiBkY3AgYmxvYiBmb3JtYXQNCj4gPiArICoNCj4gPiArICogVGhlIERhdGEgQ28tUHJvY2Vzc29y
-IChEQ1ApIHByb3ZpZGVzIGhhcmR3YXJlLWJvdW5kIEFFUyBrZXlzIHVzaW5nDQo+ID4gK2l0cw0K
-PiA+ICsgKiBBRVMgZW5jcnlwdGlvbiBlbmdpbmUgb25seS4gSXQgZG9lcyBub3QgcHJvdmlkZSBk
-aXJlY3Qga2V5DQo+IHNlYWxpbmcvdW5zZWFsaW5nLg0KPiA+ICsgKiBUbyBtYWtlIERDUCBoYXJk
-d2FyZSBlbmNyeXB0aW9uIGtleXMgdXNhYmxlIGFzIHRydXN0IHNvdXJjZSwgd2UNCj4gPiArZGVm
-aW5lDQo+ID4gKyAqIG91ciBvd24gY3VzdG9tIGZvcm1hdCB0aGF0IHVzZXMgYSBoYXJkd2FyZS1i
-b3VuZCBrZXkgdG8gc2VjdXJlIHRoZQ0KPiA+ICtzZWFsaW5nDQo+ID4gKyAqIGtleSBzdG9yZWQg
-aW4gdGhlIGtleSBibG9iLg0KPiA+ICsgKg0KPiA+ICsgKiBXaGVuZXZlciBhIG5ldyB0cnVzdGVk
-IGtleSB1c2luZyBEQ1AgaXMgZ2VuZXJhdGVkLCB3ZSBnZW5lcmF0ZSBhDQo+ID4gK3JhbmRvbSAx
-MjgtYml0DQo+ID4gKyAqIGJsb2IgZW5jcnlwdGlvbiBrZXkgKEJFSykgYW5kIDEyOC1iaXQgbm9u
-Y2UuIFRoZSBCRUsgYW5kIG5vbmNlIGFyZQ0KPiA+ICt1c2VkIHRvDQo+ID4gKyAqIGVuY3J5cHQg
-dGhlIHRydXN0ZWQga2V5IHBheWxvYWQgdXNpbmcgQUVTLTEyOC1HQ00uDQo+ID4gKyAqDQo+ID4g
-KyAqIFRoZSBCRUsgaXRzZWxmIGlzIGVuY3J5cHRlZCB1c2luZyB0aGUgaGFyZHdhcmUtYm91bmQg
-a2V5IHVzaW5nIHRoZQ0KPiA+ICtEQ1AncyBBRVMNCj4gPiArICogZW5jcnlwdGlvbiBlbmdpbmUg
-d2l0aCBBRVMtMTI4LUVDQi4gVGhlIGVuY3J5cHRlZCBCRUssIGdlbmVyYXRlZA0KPiA+ICtub25j
-ZSwNCj4gPiArICogQkVLLWVuY3J5cHRlZCBwYXlsb2FkIGFuZCBhdXRoZW50aWNhdGlvbiB0YWcg
-bWFrZSB1cCB0aGUgYmxvYg0KPiA+ICtmb3JtYXQgdG9nZXRoZXINCj4gPiArICogd2l0aCBhIHZl
-cnNpb24gbnVtYmVyLCBwYXlsb2FkIGxlbmd0aCBhbmQgYXV0aGVudGljYXRpb24gdGFnLg0KPiA+
-ICsgKi8NCj4gPiArDQo+ID4gIC8qKg0KPiA+ICAgKiBzdHJ1Y3QgZGNwX2Jsb2JfZm10IC0gRENQ
-IEJMT0IgZm9ybWF0Lg0KPiA+ICAgKg0KPiANCj4gUmV2aWV3ZWQtYnk6IEphcmtrbyBTYWtraW5l
-biA8amFya2tvQGtlcm5lbC5vcmc+DQo+IA0KPiBJIGNhbiBvbmx5IHRlc3QgdGhhdCB0aGlzIGRv
-ZXMgbm90IGJyZWFrIGEgbWFjaGluZSB3aXRob3V0IHRoZSBoYXJkd2FyZQ0KPiBmZWF0dXJlLg0K
-PiANCj4gSXMgdGhlcmUgYW55b25lIHdobyBjb3VsZCBwb3NzaWJseSBwZWVyIHRlc3QgdGhlc2Ug
-cGF0Y2hlcz8NCkkgYW0gYWxyZWFkeSB3b3JraW5nIG9uIHRlc3RpbmcgdGhpcyBwYXRjaHNldCBv
-biBpLk1YNiBwbGF0Zm9ybS4NClJlZ2FyZHMsDQpLc2hpdGl6DQo+IEJSLCBKYXJra28NCg0K
+Hi David,
+
+> -----Original Message-----
+> From: David Gstir <david@sigma-star.at>
+> Sent: Wednesday, April 3, 2024 12:51 PM
+> To: Mimi Zohar <zohar@linux.ibm.com>; James Bottomley
+> <jejb@linux.ibm.com>; Jarkko Sakkinen <jarkko@kernel.org>; Herbert Xu
+> <herbert@gondor.apana.org.au>; David S. Miller <davem@davemloft.net>
+> Cc: David Gstir <david@sigma-star.at>; Shawn Guo <shawnguo@kernel.org>;
+> Jonathan Corbet <corbet@lwn.net>; Sascha Hauer
+> <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; dl-linux-
+> imx <linux-imx@nxp.com>; Ahmad Fatoum <a.fatoum@pengutronix.de>;
+> sigma star Kernel Team <upstream+dcp@sigma-star.at>; David Howells
+> <dhowells@redhat.com>; Li Yang <leoyang.li@nxp.com>; Paul Moore
+> <paul@paul-moore.com>; James Morris <jmorris@namei.org>; Serge E.
+> Hallyn <serge@hallyn.com>; Paul E. McKenney <paulmck@kernel.org>;
+> Randy Dunlap <rdunlap@infradead.org>; Catalin Marinas
+> <catalin.marinas@arm.com>; Rafael J. Wysocki
+> <rafael.j.wysocki@intel.com>; Tejun Heo <tj@kernel.org>; Steven Rostedt
+> (Google) <rostedt@goodmis.org>; linux-doc@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-integrity@vger.kernel.org;
+> keyrings@vger.kernel.org; linux-crypto@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linuxppc-dev@lists.ozlabs.org; linux-security=
+-
+> module@vger.kernel.org; Richard Weinberger <richard@nod.at>; David
+> Oberhollenzer <david.oberhollenzer@sigma-star.at>
+> Subject: [EXT] [PATCH v8 3/6] KEYS: trusted: Introduce NXP DCP-backed
+> trusted keys
+>=20
+> Caution: This is an external email. Please take care when clicking links =
+or
+> opening attachments. When in doubt, report the message using the 'Report
+> this email' button
+>=20
+>=20
+> DCP (Data Co-Processor) is the little brother of NXP's CAAM IP.
+> Beside of accelerated crypto operations, it also offers support for hardw=
+are-
+> bound keys. Using this feature it is possible to implement a blob
+> mechanism similar to what CAAM offers. Unlike on CAAM, constructing and
+> parsing the blob has to happen in software (i.e. the kernel).
+>=20
+> The software-based blob format used by DCP trusted keys encrypts the
+> payload using AES-128-GCM with a freshly generated random key and
+> nonce.
+> The random key itself is AES-128-ECB encrypted using the DCP unique or
+> OTP key.
+>=20
+> The DCP trusted key blob format is:
+> /*
+>  * struct dcp_blob_fmt - DCP BLOB format.
+>  *
+>  * @fmt_version: Format version, currently being %1
+>  * @blob_key: Random AES 128 key which is used to encrypt @payload,
+>  *            @blob_key itself is encrypted with OTP or UNIQUE device key=
+ in
+>  *            AES-128-ECB mode by DCP.
+>  * @nonce: Random nonce used for @payload encryption.
+>  * @payload_len: Length of the plain text @payload.
+>  * @payload: The payload itself, encrypted using AES-128-GCM and
+> @blob_key,
+>  *           GCM auth tag of size AES_BLOCK_SIZE is attached at the end o=
+f it.
+>  *
+>  * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) +
+> @payload_len +
+>  * AES_BLOCK_SIZE.
+>  */
+> struct dcp_blob_fmt {
+>         __u8 fmt_version;
+>         __u8 blob_key[AES_KEYSIZE_128];
+>         __u8 nonce[AES_KEYSIZE_128];
+>         __le32 payload_len;
+>         __u8 payload[];
+> } __packed;
+>=20
+> By default the unique key is used. It is also possible to use the OTP key=
+.
+> While the unique key should be unique it is not documented how this key i=
+s
+> derived. Therefore selection the OTP key is supported as well via the
+> use_otp_key module parameter.
+>=20
+> Co-developed-by: Richard Weinberger <richard@nod.at>
+> Signed-off-by: Richard Weinberger <richard@nod.at>
+> Co-developed-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+> Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+> Signed-off-by: David Gstir <david@sigma-star.at>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+>  include/keys/trusted_dcp.h                |  11 +
+>  security/keys/trusted-keys/Kconfig        |   8 +
+>  security/keys/trusted-keys/Makefile       |   2 +
+>  security/keys/trusted-keys/trusted_core.c |   6 +-
+>  security/keys/trusted-keys/trusted_dcp.c  | 313
+> ++++++++++++++++++++++
+>  5 files changed, 339 insertions(+), 1 deletion(-)  create mode 100644
+> include/keys/trusted_dcp.h  create mode 100644 security/keys/trusted-
+> keys/trusted_dcp.c
+>=20
+> diff --git a/include/keys/trusted_dcp.h b/include/keys/trusted_dcp.h new
+> file mode 100644 index 000000000000..9aaa42075b40
+> --- /dev/null
+> +++ b/include/keys/trusted_dcp.h
+> @@ -0,0 +1,11 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2021 sigma star gmbh
+> + */
+> +
+> +#ifndef TRUSTED_DCP_H
+> +#define TRUSTED_DCP_H
+> +
+> +extern struct trusted_key_ops dcp_trusted_key_ops;
+> +
+> +#endif
+> diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-
+> keys/Kconfig
+> index 553dc117f385..1fb8aa001995 100644
+> --- a/security/keys/trusted-keys/Kconfig
+> +++ b/security/keys/trusted-keys/Kconfig
+> @@ -39,6 +39,14 @@ config TRUSTED_KEYS_CAAM
+>           Enable use of NXP's Cryptographic Accelerator and Assurance Mod=
+ule
+>           (CAAM) as trusted key backend.
+>=20
+> +config TRUSTED_KEYS_DCP
+> +       bool "DCP-based trusted keys"
+> +       depends on CRYPTO_DEV_MXS_DCP >=3D TRUSTED_KEYS
+> +       default y
+> +       select HAVE_TRUSTED_KEYS
+> +       help
+> +         Enable use of NXP's DCP (Data Co-Processor) as trusted key back=
+end.
+> +
+>  if !HAVE_TRUSTED_KEYS
+>         comment "No trust source selected!"
+>  endif
+> diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-
+> keys/Makefile
+> index 735aa0bc08ef..f0f3b27f688b 100644
+> --- a/security/keys/trusted-keys/Makefile
+> +++ b/security/keys/trusted-keys/Makefile
+> @@ -14,3 +14,5 @@ trusted-$(CONFIG_TRUSTED_KEYS_TPM) +=3D
+> tpm2key.asn1.o
+>  trusted-$(CONFIG_TRUSTED_KEYS_TEE) +=3D trusted_tee.o
+>=20
+>  trusted-$(CONFIG_TRUSTED_KEYS_CAAM) +=3D trusted_caam.o
+> +
+> +trusted-$(CONFIG_TRUSTED_KEYS_DCP) +=3D trusted_dcp.o
+> diff --git a/security/keys/trusted-keys/trusted_core.c
+> b/security/keys/trusted-keys/trusted_core.c
+> index fee1ab2c734d..5113aeae5628 100644
+> --- a/security/keys/trusted-keys/trusted_core.c
+> +++ b/security/keys/trusted-keys/trusted_core.c
+> @@ -10,6 +10,7 @@
+>  #include <keys/trusted-type.h>
+>  #include <keys/trusted_tee.h>
+>  #include <keys/trusted_caam.h>
+> +#include <keys/trusted_dcp.h>
+>  #include <keys/trusted_tpm.h>
+>  #include <linux/capability.h>
+>  #include <linux/err.h>
+> @@ -30,7 +31,7 @@ MODULE_PARM_DESC(rng, "Select trusted key RNG");
+>=20
+>  static char *trusted_key_source;
+>  module_param_named(source, trusted_key_source, charp, 0); -
+> MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee or
+> caam)");
+> +MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee, caam
+> or
+> +dcp)");
+>=20
+>  static const struct trusted_key_source trusted_key_sources[] =3D {  #if
+> defined(CONFIG_TRUSTED_KEYS_TPM) @@ -42,6 +43,9 @@ static const
+> struct trusted_key_source trusted_key_sources[] =3D {  #if
+> defined(CONFIG_TRUSTED_KEYS_CAAM)
+>         { "caam", &trusted_key_caam_ops },  #endif
+> +#if defined(CONFIG_TRUSTED_KEYS_DCP)
+> +       { "dcp", &dcp_trusted_key_ops }, #endif
+>  };
+>=20
+>  DEFINE_STATIC_CALL_NULL(trusted_key_seal, *trusted_key_sources[0].ops-
+> >seal);
+> diff --git a/security/keys/trusted-keys/trusted_dcp.c
+> b/security/keys/trusted-keys/trusted_dcp.c
+> new file mode 100644
+> index 000000000000..16c44aafeab3
+> --- /dev/null
+> +++ b/security/keys/trusted-keys/trusted_dcp.c
+> @@ -0,0 +1,313 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2021 sigma star gmbh
+> + */
+> +
+> +#include <crypto/aead.h>
+> +#include <crypto/aes.h>
+> +#include <crypto/algapi.h>
+> +#include <crypto/gcm.h>
+> +#include <crypto/skcipher.h>
+> +#include <keys/trusted-type.h>
+> +#include <linux/key-type.h>
+> +#include <linux/module.h>
+> +#include <linux/printk.h>
+> +#include <linux/random.h>
+> +#include <linux/scatterlist.h>
+> +#include <soc/fsl/dcp.h>
+> +
+> +#define DCP_BLOB_VERSION 1
+> +#define DCP_BLOB_AUTHLEN 16
+> +
+> +/**
+> + * struct dcp_blob_fmt - DCP BLOB format.
+> + *
+> + * @fmt_version: Format version, currently being %1.
+> + * @blob_key: Random AES 128 key which is used to encrypt @payload,
+> + *            @blob_key itself is encrypted with OTP or UNIQUE device ke=
+y in
+> + *            AES-128-ECB mode by DCP.
+> + * @nonce: Random nonce used for @payload encryption.
+> + * @payload_len: Length of the plain text @payload.
+> + * @payload: The payload itself, encrypted using AES-128-GCM and
+> @blob_key,
+> + *           GCM auth tag of size DCP_BLOB_AUTHLEN is attached at the en=
+d of
+> it.
+> + *
+> + * The total size of a DCP BLOB is sizeof(struct dcp_blob_fmt) +
+> @payload_len +
+> + * DCP_BLOB_AUTHLEN.
+> + */
+> +struct dcp_blob_fmt {
+> +       __u8 fmt_version;
+> +       __u8 blob_key[AES_KEYSIZE_128];
+> +       __u8 nonce[AES_KEYSIZE_128];
+> +       __le32 payload_len;
+> +       __u8 payload[];
+> +} __packed;
+> +
+> +static bool use_otp_key;
+> +module_param_named(dcp_use_otp_key, use_otp_key, bool, 0);
+> +MODULE_PARM_DESC(dcp_use_otp_key, "Use OTP instead of UNIQUE key
+> for sealing");
+> +
+> +static bool skip_zk_test;
+> +module_param_named(dcp_skip_zk_test, skip_zk_test, bool, 0);
+> +MODULE_PARM_DESC(dcp_skip_zk_test, "Don't test whether device keys
+> are zero'ed");
+> +
+> +static unsigned int calc_blob_len(unsigned int payload_len)
+> +{
+> +       return sizeof(struct dcp_blob_fmt) + payload_len +
+> DCP_BLOB_AUTHLEN;
+> +}
+> +
+> +static int do_dcp_crypto(u8 *in, u8 *out, bool do_encrypt)
+> +{
+> +       struct skcipher_request *req =3D NULL;
+> +       struct scatterlist src_sg, dst_sg;
+> +       struct crypto_skcipher *tfm;
+> +       u8 paes_key[DCP_PAES_KEYSIZE];
+> +       DECLARE_CRYPTO_WAIT(wait);
+> +       int res =3D 0;
+> +
+> +       if (use_otp_key)
+> +               paes_key[0] =3D DCP_PAES_KEY_OTP;
+> +       else
+> +               paes_key[0] =3D DCP_PAES_KEY_UNIQUE;
+> +
+> +       tfm =3D crypto_alloc_skcipher("ecb-paes-dcp", CRYPTO_ALG_INTERNAL=
+,
+> +                                   CRYPTO_ALG_INTERNAL);
+> +       if (IS_ERR(tfm)) {
+> +               res =3D PTR_ERR(tfm);
+> +               tfm =3D NULL;
+> +               goto out;
+> +       }
+> +
+> +       req =3D skcipher_request_alloc(tfm, GFP_NOFS);
+> +       if (!req) {
+> +               res =3D -ENOMEM;
+> +               goto out;
+> +       }
+> +
+> +       skcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG
+> |
+> +                                     CRYPTO_TFM_REQ_MAY_SLEEP,
+> +                                     crypto_req_done, &wait);
+> +       res =3D crypto_skcipher_setkey(tfm, paes_key, sizeof(paes_key));
+> +       if (res < 0)
+> +               goto out;
+> +
+> +       sg_init_one(&src_sg, in, AES_KEYSIZE_128);
+> +       sg_init_one(&dst_sg, out, AES_KEYSIZE_128);
+> +       skcipher_request_set_crypt(req, &src_sg, &dst_sg, AES_KEYSIZE_128=
+,
+> +                                  NULL);
+> +
+> +       if (do_encrypt)
+> +               res =3D crypto_wait_req(crypto_skcipher_encrypt(req), &wa=
+it);
+> +       else
+> +               res =3D crypto_wait_req(crypto_skcipher_decrypt(req), &wa=
+it);
+> +
+> +out:
+> +       skcipher_request_free(req);
+> +       crypto_free_skcipher(tfm);
+> +
+> +       return res;
+> +}
+> +
+> +static int do_aead_crypto(u8 *in, u8 *out, size_t len, u8 *key, u8 *nonc=
+e,
+> +                         bool do_encrypt)
+> +{
+> +       struct aead_request *aead_req =3D NULL;
+> +       struct scatterlist src_sg, dst_sg;
+> +       struct crypto_aead *aead;
+> +       int ret;
+> +
+> +       aead =3D crypto_alloc_aead("gcm(aes)", 0, CRYPTO_ALG_ASYNC);
+> +       if (IS_ERR(aead)) {
+> +               ret =3D PTR_ERR(aead);
+> +               goto out;
+> +       }
+> +
+> +       ret =3D crypto_aead_setauthsize(aead, DCP_BLOB_AUTHLEN);
+> +       if (ret < 0) {
+> +               pr_err("Can't set crypto auth tag len: %d\n", ret);
+> +               goto free_aead;
+> +       }
+> +
+> +       aead_req =3D aead_request_alloc(aead, GFP_KERNEL);
+> +       if (!aead_req) {
+> +               ret =3D -ENOMEM;
+> +               goto free_aead;
+> +       }
+> +
+> +       sg_init_one(&src_sg, in, len);
+> +       if (do_encrypt) {
+> +               /*
+> +                * If we encrypt our buffer has extra space for the auth =
+tag.
+> +                */
+> +               sg_init_one(&dst_sg, out, len + DCP_BLOB_AUTHLEN);
+> +       } else {
+> +               sg_init_one(&dst_sg, out, len);
+> +       }
+> +
+> +       aead_request_set_crypt(aead_req, &src_sg, &dst_sg, len, nonce);
+> +       aead_request_set_callback(aead_req, CRYPTO_TFM_REQ_MAY_SLEEP,
+> NULL,
+> +                                 NULL);
+> +       aead_request_set_ad(aead_req, 0);
+> +
+> +       if (crypto_aead_setkey(aead, key, AES_KEYSIZE_128)) {
+> +               pr_err("Can't set crypto AEAD key\n");
+> +               ret =3D -EINVAL;
+> +               goto free_req;
+> +       }
+> +
+> +       if (do_encrypt)
+> +               ret =3D crypto_aead_encrypt(aead_req);
+> +       else
+> +               ret =3D crypto_aead_decrypt(aead_req);
+> +
+> +free_req:
+> +       aead_request_free(aead_req);
+> +free_aead:
+> +       crypto_free_aead(aead);
+> +out:
+> +       return ret;
+> +}
+> +
+> +static int decrypt_blob_key(u8 *key)
+> +{
+> +       return do_dcp_crypto(key, key, false);
+> +}
+> +
+> +static int encrypt_blob_key(u8 *key)
+> +{
+> +       return do_dcp_crypto(key, key, true);
+> +}
+> +
+> +static int trusted_dcp_seal(struct trusted_key_payload *p, char *datablo=
+b)
+> +{
+> +       struct dcp_blob_fmt *b =3D (struct dcp_blob_fmt *)p->blob;
+> +       int blen, ret;
+> +
+> +       blen =3D calc_blob_len(p->key_len);
+> +       if (blen > MAX_BLOB_SIZE)
+> +               return -E2BIG;
+> +
+> +       b->fmt_version =3D DCP_BLOB_VERSION;
+> +       get_random_bytes(b->nonce, AES_KEYSIZE_128);
+> +       get_random_bytes(b->blob_key, AES_KEYSIZE_128);
+
+We can use HWRNG instead of using kernel RNG. Please refer drivers/char/hw_=
+random/imx-rngc.c=20
+> +
+> +       ret =3D do_aead_crypto(p->key, b->payload, p->key_len, b->blob_ke=
+y,
+> +                            b->nonce, true);
+> +       if (ret) {
+> +               pr_err("Unable to encrypt blob payload: %i\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       ret =3D encrypt_blob_key(b->blob_key);
+> +       if (ret) {
+> +               pr_err("Unable to encrypt blob key: %i\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       b->payload_len =3D get_unaligned_le32(&p->key_len);
+> +       p->blob_len =3D blen;
+> +       return 0;
+> +}
+> +
+> +static int trusted_dcp_unseal(struct trusted_key_payload *p, char
+> *datablob)
+> +{
+> +       struct dcp_blob_fmt *b =3D (struct dcp_blob_fmt *)p->blob;
+> +       int blen, ret;
+> +
+> +       if (b->fmt_version !=3D DCP_BLOB_VERSION) {
+> +               pr_err("DCP blob has bad version: %i, expected %i\n",
+> +                      b->fmt_version, DCP_BLOB_VERSION);
+> +               ret =3D -EINVAL;
+> +               goto out;
+> +       }
+> +
+> +       p->key_len =3D le32_to_cpu(b->payload_len);
+> +       blen =3D calc_blob_len(p->key_len);
+> +       if (blen !=3D p->blob_len) {
+> +               pr_err("DCP blob has bad length: %i !=3D %i\n", blen,
+> +                      p->blob_len);
+> +               ret =3D -EINVAL;
+> +               goto out;
+> +       }
+> +
+> +       ret =3D decrypt_blob_key(b->blob_key);
+> +       if (ret) {
+> +               pr_err("Unable to decrypt blob key: %i\n", ret);
+> +               goto out;
+> +       }
+> +
+> +       ret =3D do_aead_crypto(b->payload, p->key, p->key_len +
+> DCP_BLOB_AUTHLEN,
+> +                            b->blob_key, b->nonce, false);
+> +       if (ret) {
+> +               pr_err("Unwrap of DCP payload failed: %i\n", ret);
+> +               goto out;
+> +       }
+> +
+> +       ret =3D 0;
+> +out:
+> +       return ret;
+> +}
+> +
+> +static int test_for_zero_key(void)
+> +{
+> +       /*
+> +        * Encrypting a plaintext of all 0x55 bytes will yield
+> +        * this ciphertext in case the DCP test key is used.
+> +        */
+> +       static const u8 bad[] =3D {0x9a, 0xda, 0xe0, 0x54, 0xf6, 0x3d, 0x=
+fa, 0xff,
+> +                                0x5e, 0xa1, 0x8e, 0x45, 0xed, 0xf6, 0xea=
+, 0x6f};
+> +       void *buf =3D NULL;
+> +       int ret =3D 0;
+> +
+> +       if (skip_zk_test)
+> +               goto out;
+> +
+> +       buf =3D kmalloc(AES_BLOCK_SIZE, GFP_KERNEL);
+> +       if (!buf) {
+> +               ret =3D -ENOMEM;
+> +               goto out;
+> +       }
+> +
+> +       memset(buf, 0x55, AES_BLOCK_SIZE);
+> +
+> +       ret =3D do_dcp_crypto(buf, buf, true);
+> +       if (ret)
+> +               goto out;
+> +
+> +       if (memcmp(buf, bad, AES_BLOCK_SIZE) =3D=3D 0) {
+> +               pr_warn("Device neither in secure nor trusted mode!\n");
+> +               ret =3D -EINVAL;
+> +       }
+> +out:
+> +       kfree(buf);
+> +       return ret;
+> +}
+> +
+> +static int trusted_dcp_init(void)
+> +{
+> +       int ret;
+> +
+> +       if (use_otp_key)
+> +               pr_info("Using DCP OTP key\n");
+> +
+> +       ret =3D test_for_zero_key();
+> +       if (ret) {
+> +               pr_warn("Test for zero'ed keys failed: %i\n", ret);
+> +
+> +               return -EINVAL;
+> +       }
+> +
+> +       return register_key_type(&key_type_trusted);
+> +}
+> +
+> +static void trusted_dcp_exit(void)
+> +{
+> +       unregister_key_type(&key_type_trusted);
+> +}
+> +
+> +struct trusted_key_ops dcp_trusted_key_ops =3D {
+> +       .exit =3D trusted_dcp_exit,
+> +       .init =3D trusted_dcp_init,
+> +       .seal =3D trusted_dcp_seal,
+> +       .unseal =3D trusted_dcp_unseal,
+> +       .migratable =3D 0,
+> +};
+> --
+> 2.35.3
+>=20
+
+Regards,
+Kshitiz
 
