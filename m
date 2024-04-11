@@ -1,190 +1,126 @@
-Return-Path: <linux-integrity+bounces-2047-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2048-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86E988A120E
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Apr 2024 12:50:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99F0C8A21EB
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Apr 2024 00:50:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F37D51F21D15
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Apr 2024 10:50:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27AE8B220A7
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Apr 2024 22:50:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE81913BACD;
-	Thu, 11 Apr 2024 10:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 229DF2CCD7;
+	Thu, 11 Apr 2024 22:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c/gF3M1M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Emom8fSM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670841E48E;
-	Thu, 11 Apr 2024 10:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06D612E6C
+	for <linux-integrity@vger.kernel.org>; Thu, 11 Apr 2024 22:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712832615; cv=none; b=rrfz0jqpIP0BhJKWvaFYu12kcAfnAiT4ZfcHkEGH4rv2lDa+AlIppd1pU9Gu9CGM2PqLdxuLVxSRS0QFsS6q5MkLmGFvjz84shXKwm/aRBbSIxf3FccwHHcvIH3/q0s8IrClPA9l2YPdw5HPL5KQRCtuTQj2xTDREsv9SjroCfg=
+	t=1712875816; cv=none; b=oSWZm1V21FLdz4R3hNH22t34+cZdDrD9wruF0R1dX9eOsoguWtPRhUw8fqby+IjgFrqBwzytv2pdE2FXR9NI9snIzyJbYG73XHQaR2he38PsaLylSPpVgp8SzIdvPBCwlmqtkdcL6BDbXyp+r5hrVNN4kLkYhqEg4eOXd2AH78k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712832615; c=relaxed/simple;
-	bh=40G/2iJhs7b/9hSb3u6zcH2MWcwO6qO4lwKmJTuf4Ko=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Msn660BqckxQO9m0grJ049l6oZVktQ6Yj7mGzrp9gyek7xCS8ms5dX3S5g3sv0Jz0a/oe3KqDYOx0ia4sjpjNifcmqd4YihZyjcgUH/V5gAe/W1nLOf/oR/roBTR8uBUE3rJ8z+lcKSaMELpbAV95LonU91h0oJSANYRgjgRIF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c/gF3M1M; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1e3c9300c65so48958875ad.0;
-        Thu, 11 Apr 2024 03:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712832614; x=1713437414; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0V8AVI188fF5AbLDUaefOD559npRcC/Ay2FvGZtxQ64=;
-        b=c/gF3M1Mx8qsK02izeo+dBs3ax9p/1XTB/386WOg7gEipYGvlAqoV8oEk9RLPbILuY
-         HPwz++6ftm+qM2UPAxJoB3wnV3Ex7pfxM3HDmIYP+9m6NKaHCyXxMu2XDyhMGn/R6mM+
-         hgjhu1cGczlNdveKsQvMdvVEmgPfx4yXxPFaNi1u4tUzEZLWJTuwEk/31a3bDox+zpqf
-         V90fHoQTKI260UZZDbEmtXFmYqmT+N/4K0qUhB2WNXlSDeWNGuWSfh/M8yjt7ydzmNlP
-         GSup/s0qRSo9U/gNNES5KPqIRpyovvUqLNJVO+Bjf8uisYKo09XQm0kuPx9yuOpOk7q0
-         9hzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712832614; x=1713437414;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0V8AVI188fF5AbLDUaefOD559npRcC/Ay2FvGZtxQ64=;
-        b=jdCKBvIbKfnn+mfFtRCgKCjMWtmPlQ5djPVtYHct7QoiOnmV5TRGgX5LUlcKsNlsXo
-         W7SE48LTaXEcXuiOUwcPHJTPBieeDcIDne+jnhSc1VetQ0nEO7oniw6DVRjT7iWHCdIb
-         xqwPulO9wyXr06kRSgdaXH45wh3yBCgmHuCl/JTqbiHKnA8N5pTIfAIMhfVzaLgwGu86
-         iwuMt0oDUSe9GNmkZwiqDv4cxlNQ8uWNkg3U8b2K0u0pUcmbRO0WBBABba5UH6/h3C1Z
-         rNaaIqNXEMM0uhnXZ8Da1D6UZiY1zV37Zo0wlyS+9H2pVr7uhveGbEo/ITVFyjgzuHD1
-         g9rg==
-X-Forwarded-Encrypted: i=1; AJvYcCXpe7R9OYJamZrl6RrSVa3iP066RvJTRtZzFJGOR9rId4wKlcDJiecU2GEflKGOkgYVyPf/LEHrobhGEi1zSN6foR+zV0rTbJMSJBJK55n2iYWIF79oMAsAVvRw4xf59H2OuStSjsdjbrLx8x5+bq+9neaShT9DaEdIQVgXKlsOYT2tU/ZV1AjS
-X-Gm-Message-State: AOJu0YwsQ6Lv5/zL8ZU+mcANX5zrsXfHdokNKeFkpnQiqPu5GrscHZ3I
-	OzkWDYhq15YtdH3/cUvS7/dpp5w4srvRA1MDZlQAjG40GvvdpASGyadVmg==
-X-Google-Smtp-Source: AGHT+IEtQzHYcZhHF+ujcl2W4gfyTb2Kq41fyleepPcTD77/19WDgStiPTVulVfZQkv3bnNhXD/5EQ==
-X-Received: by 2002:a17:903:18d:b0:1e5:62:7ac0 with SMTP id z13-20020a170903018d00b001e500627ac0mr4509674plg.14.1712832613536;
-        Thu, 11 Apr 2024 03:50:13 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902d34600b001def175bbbfsm912997plk.251.2024.04.11.03.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 03:50:12 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 106E3184799FF; Thu, 11 Apr 2024 17:50:09 +0700 (WIB)
-Date: Thu, 11 Apr 2024 17:50:09 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: Alexander Steffen <Alexander.Steffen@infineon.com>,
-	"Daniel P . Smith" <dpsmith@apertussolutions.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-	Mimi Zohar <zohar@linux.ibm.com>, Peter Huewe <peterhuewe@gmx.de>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] Documentation: tpm_tis
-Message-ID: <ZhfAYVLwoYAPnYbI@archie.me>
-References: <20240409190847.10869-1-jarkko@kernel.org>
- <20240409190847.10869-3-jarkko@kernel.org>
+	s=arc-20240116; t=1712875816; c=relaxed/simple;
+	bh=gbOja/iFdN2dia+crdM7ykW+OKsh+Q8fPIPBWdcUTns=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=nVcyZ0Jzf8lizosVbWj0EMaUAxm2X/cqVaCbFZt5xlSBOFBxyqyBbWVnm4Pj2CLjaY3Lfj3dki65kdj2zmbjKN5Yt92qBh76QKK/mJsG+1oUDSEqzM/n96vM9PlE4+dr8lcKLiSeLzjY4xEx0ZNaAdm0YbBLpUQ6+/ldOi+IJHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Emom8fSM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45318C072AA;
+	Thu, 11 Apr 2024 22:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712875815;
+	bh=gbOja/iFdN2dia+crdM7ykW+OKsh+Q8fPIPBWdcUTns=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=Emom8fSMwMfDe3Y6kWp4gg+j0vpgTbJr+Mu3CA5mLIWF3fz6UQ5pq33Bc0TO29pEr
+	 7jeYldorfx3h75gY/a9n0gkSyly/M27whBvlHTpQ5fjRUnW+imO7ahuXsSYiH6BBfO
+	 CQUCTlXaMtwjlsroCRb/xaQzwBo8FcSyBYXKJyYanG9Fhctx9FfSh5Fwo4uQ2YB9mk
+	 HHL4XKi+NVpS/qe4QXFO/V7u8LcddllZeuEFucELjKswPYgVop5KN2MM3JpZSDdEoG
+	 2SDoUUA5iQAgPeEHJYqENZqIaeBMpGdl5sTQ1aHTY80X6TgLncx0jpHx9VVVmn/Gc9
+	 6mkWLnr6gES6w==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QQMkQKtETCXLqH/I"
-Content-Disposition: inline
-In-Reply-To: <20240409190847.10869-3-jarkko@kernel.org>
-
-
---QQMkQKtETCXLqH/I
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 12 Apr 2024 01:50:12 +0300
+Message-Id: <D0HNST37O7G8.3A722951U878Z@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>, "William
+ Brown" <wbrown@suse.de>, <linux-integrity@vger.kernel.org>
+Cc: <peterhuewe@gmx.de>, <jgg@ziepe.ca>, "Takashi Iwai" <tiwai@suse.de>
+Subject: Re: TPM error 0x0901, possibly related to TPM2_PT_CONTEXT_GAP_MAX
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <424B3F10-D91C-4F47-B33C-BB66FE4DB91A@suse.de>
+ <D0BFJLQ0JKO4.20EW2ZA8GIS5Z@kernel.org>
+ <D0BFMGM02V7A.1HEWQ05350K07@kernel.org>
+ <6857f043301a100ee93b3ea120a2d1d60e83efdb.camel@HansenPartnership.com>
+In-Reply-To: <6857f043301a100ee93b3ea120a2d1d60e83efdb.camel@HansenPartnership.com>
 
-On Tue, Apr 09, 2024 at 10:08:47PM +0300, Jarkko Sakkinen wrote:
-> diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/secur=
-ity/tpm/tpm_tis.rst
-> new file mode 100644
-> index 000000000000..b448ea3db71d
-> --- /dev/null
-> +++ b/Documentation/security/tpm/tpm_tis.rst
-> @@ -0,0 +1,46 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> +TPM FIFO interface driver
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> +
-> +TCG PTP Specification defines two interface types: FIFO and CRB. The for=
-mer is
-> +based on sequenced read and write operations,  and the latter is based o=
-n a
-> +buffer containing the full command or response.
-> +
-> +FIFO (First-In-First-Out) interface is used by the tpm_tis_core dependent
-> +drivers. Originally Linux had only a driver called tpm_tis, which covered
-> +memory mapped (aka MMIO) interface but it was later on extended to cover=
- other
-> +physical interfaces supported by the TCG standard.
-> +
-> +For legacy compliance the original MMIO driver is called tpm_tis and the
-Did you mean "For historical reasons above ..."?
-> +framework for FIFO drivers is named as tpm_tis_core. The postfix "tis" in
-> +tpm_tis comes from the TPM Interface Specification, which is the hardware
-> +interface specification for TPM 1.x chips.
-> +
-> +Communication is based on a 20 KiB buffer shared by the TPM chip through=
- a
-> +hardware bus or memory map, depending on the physical wiring. The buffer=
- is
-> +further split into five equal-size 4 KiB buffers, which provide equivale=
-nt
-> +sets of registers for communication between the CPU and TPM. These
-> +communication endpoints are called localities in the TCG terminology.
-> +
-> +When the kernel wants to send commands to the TPM chip, it first reserves
-> +locality 0 by setting the requestUse bit in the TPM_ACCESS register. The=
- bit is
-> +cleared by the chip when the access is granted. Once it completes its
-> +communication, the kernel writes the TPM_ACCESS.activeLocality bit. This
-> +informs the chip that the locality has been relinquished.
-> +
-> +Pending localities are served in order by the chip in descending order, =
-one at
-> +a time:
-> +
-> +- Locality 0 has the lowest priority.
-> +- Locality 5 has the highest priority.
-> +
-> +Further information on the purpose and meaning of the localities can be =
-found
-> +in section 3.2 of the TCG PC Client Platform TPM Profile Specification.
-> +
-> +References
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +TCG PC Client Platform TPM Profile (PTP) Specification
-> +https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profil=
-e-ptp-specification/
+On Thu Apr 4, 2024 at 6:49 PM EEST, James Bottomley wrote:
+> On Thu, 2024-04-04 at 18:09 +0300, Jarkko Sakkinen wrote:
+> > [...]
+> > Emphasis that I might have forgotten something but this is what I can
+> > remember right now.
+>
+> What you forgot is that I did originally proposed session degapping in
+> the kernel resource manager but it was rather complex, so you made me
+> take it out for lack of a use case.  It dates back to when we used the
+> old sourceforge tpmdd list which seems to have caused message loss, so
+> I'm not sure how complete this thread is:
 
-Other than that,
+I might be forgetting some detail to contxt gap but since kernel flushes
+every single object per transaction contextCounter should be updated all
+the time and thus there should not be too large gap that would cause
+emitting this error.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+I quickly reviewed section 30.5 for architecture specificaton to check
+if I got it right and it says that: "On receiving this error, the
+management software either would explicitly flush old session contexts
+or would load the old session contexts to update their associated
+counter values.."
 
---=20
-An old man doll... just what I always wanted! - Clara
+You could cause the error even with kernel RM if e,g. a process with
+access to /dev/tpm0 purposely populates the chip with objects that it
+does not flush so it is then inevitable over time...
 
---QQMkQKtETCXLqH/I
-Content-Type: application/pgp-signature; name="signature.asc"
+I still think that kernel RM should not do any pro-active handling to
+this albeit I have to admit I did not remember what I said about the
+topic back then :-)
 
------BEGIN PGP SIGNATURE-----
+>
+> https://lore.kernel.org/lkml/1484772489.2396.2.camel@HansenPartnership.co=
+m/
+>
+> If I compare it to the fragment on sourceforge, you can see a bit more
+> of it (but sourceforge has lost the patch):
+>
+> https://sourceforge.net/p/tpmdd/mailman/tpmdd-devel/thread/201702090906.v=
+1996c6a015552%40wind.enjellic.com/#msg35656470
+>
+> The reality is that unless you context save a session, you don't need
+> degapping and pretty much every TSS based use of sessions doesn't need
+> to save them, so people who construct TPM based systems rarely run into
+> this.  The exception is the tpm2-tools CLI project, which encourages
+> the context saving of sessions and thus can cause this.  We kept
+> tripping across this in the Keylime, but the eventual solution was to
+> dump the tpm2-tools dependency and do a direct TSS connection in the
+> Keylime agent.
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZhfAXQAKCRD2uYlJVVFO
-oyTWAQDDh/ybYEQfUhhhVix+XJRKnyJS+qX3oVhOtCnaV4rdbwD/T7FQM2fd19g6
-yntkKwA+0kOawAxi5rYvOITeNGaiTwo=
-=eLHn
------END PGP SIGNATURE-----
+If someone is interested to deal with this error in tpm2-tools (or what
+ever that stacks name is), e.g. Android TPM stack does address the
+error.
 
---QQMkQKtETCXLqH/I--
+I agree with you tho that properly implemented application wisely you
+should never encounter the error...
+
+> James
+
+BR, Jarkko
 
