@@ -1,139 +1,140 @@
-Return-Path: <linux-integrity+bounces-2056-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2057-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E25558A31D0
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Apr 2024 17:09:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFEB98A3557
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Apr 2024 20:06:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F0DE1C2126C
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Apr 2024 15:09:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54DDEB21CE0
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Apr 2024 18:06:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470F71465BD;
-	Fri, 12 Apr 2024 15:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10D914E2F4;
+	Fri, 12 Apr 2024 18:05:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IAwZOfoY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BembhugX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B3385285
-	for <linux-integrity@vger.kernel.org>; Fri, 12 Apr 2024 15:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAE7148313;
+	Fri, 12 Apr 2024 18:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712934550; cv=none; b=qZE5wgCBRcmM2OiO1twN3pXjIIk3azGsbeFb9rlRGEo47ToiksK6E9GVd4tIL/O097gt52JdYPfXYB9gUqcoen84c1YntRL8gUh307BPQ3QUZfcZOVxb1W/RIrzndN8GNB1nniXucw/BuFVWhFP+uV0IF1VQgeabwysjsVv4eSo=
+	t=1712945113; cv=none; b=rcmBnW2yc/rTF/tdFwTXiNEuIhS2LN+O5usb81TNhFxTg32FuuilO4+bHTG12LCQvUKJQtAbe/6y9KaJlut9LuJ1n8g5Gkj0GqtITwm92uu0P+KUktNADw/drVFTRUGdTYAwYIKU4agMf6UUAjmUauc7vS6DGzq1Q0NkygEL630=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712934550; c=relaxed/simple;
-	bh=Ujj1GT1OiwJhZvMrv50V4ObpLTLWi9ndUBKpX9UYgR0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PdaVdIVPAKtwzmG5MlZwYhB3KnmAgZTbm5gYqnzpWrYpZGKmetkJUzsEctvpfatE5EoxNX82ZPr/MgoKtTbr1uyB+joLZPn82VvUWj+hwkeGcNpVcRWsziVsznNEMqESF3ZYk7P5ic/rujCk6WALg8B8stLL5J2bwgBGI2sAfyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IAwZOfoY; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712934548; x=1744470548;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ujj1GT1OiwJhZvMrv50V4ObpLTLWi9ndUBKpX9UYgR0=;
-  b=IAwZOfoYCEE7SfpxdRffiOCJlk9gLlPHm2+MdWDPFVvPncE11BPLStFe
-   /gECenFHeOW3YC/We7Cli7XaZ+944Q4nc31xfNgsidRFRR+Gq3AOx5V7j
-   LC8aKKNtWvQaXOwQ1tqRiUIpokBX/Ey346jjQ3E5gN4H4jtbAppOXDv2P
-   lCJUXyuhuTGRJbeNQZjSFrRPGEhV9G/NmLxYs4JFlQcOMwo/EtKt5tNn1
-   XE0NJlb7UQyPv2DrXmSmvXtbwijTBLIx/zEjCwBm1b0yi2A7medYjE66G
-   VHK1wHqbGANtUHRZVXbT3VVsuvtaPHkhC3CjqQ+gNjmRMh/z5SAZq3wmx
-   A==;
-X-CSE-ConnectionGUID: QDivR3OnQHOwj912IVh30A==
-X-CSE-MsgGUID: ShVhiQGwRJGwOXoGDDMv0A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11042"; a="8568413"
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="8568413"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2024 08:09:07 -0700
-X-CSE-ConnectionGUID: ysHXEuhpRcSeiN00rU6Cbg==
-X-CSE-MsgGUID: 3QXTbJ5WQzGFmQMqU3Koog==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,196,1708416000"; 
-   d="scan'208";a="25802571"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 12 Apr 2024 08:09:04 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1011)
-	id 79984E7; Fri, 12 Apr 2024 18:09:02 +0300 (EEST)
-Date: Fri, 12 Apr 2024 18:09:02 +0300
-From: "Svahn, Kai" <kai.svahn@linux.intel.com>
-To: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: linux-integrity@vger.kernel.org,
-	Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-	Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	Vitaly Chikunov <vt@altlinux.org>,
-	Ken Goldman <kgold@linux.ibm.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Bruno Meneguele <bmeneg@redhat.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	George Wilson <gcwilson@linux.ibm.com>,
-	Tergel Myanganbayar <tergelmyanganbayar2024@u.northwestern.edu>,
-	Andr?? Draszik <git@andred.net>,
-	Frank Sorenson <sorenson@redhat.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Vivek Goyal <vgoyal@redhat.com>
-Subject: Re: [ima-evm-utils: PATCH v2 1/1] Change license to
- LGPL-2.0-or-later and GPL-2.0-or-later
-Message-ID: <ZhlOjunocFKwYENP@black.fi.intel.com>
-References: <103252ffff09c607e83c887cab2e0af5404d62ff.1710774200.git.dmitry.kasatkin@gmail.com>
+	s=arc-20240116; t=1712945113; c=relaxed/simple;
+	bh=+OOlDC7Xxm6MIaBGhJg19XXHllnLQ9JmPImaSQkrJ18=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jl8ETz37UbaHP0asWL+8fZu7om9iQnZHWwgOl+DakmD7359PJTzd0KIZLlxH/vAldgRYRE1SMK4thjbaBrhwxPIZHBJrsrOQeV8zXER5lT0upm95Occ5D4EmdMEdePM82rdGOodDk4vmFjh5zInpvqV1rpUUErPPlqC1Sco/BME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BembhugX; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-696315c9da5so10005116d6.2;
+        Fri, 12 Apr 2024 11:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712945111; x=1713549911; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NXIp91wOih9CoCfNDEheAqOA0zoVihgOT0Xf+EbLOzs=;
+        b=BembhugXcDGLgv5SQW5FFSr67EiA2p7ltSOkEPfLeb0NtSglFEemLAKwky1e2FCO9S
+         wokQlMwMS8meeMbfpFXIJ/up+v5ndGPydNqDCnDYRHAF+4YhX1BD4bDbfrXUSCS3t1Xo
+         K5/K4pHc06tHEdecuw+0IxMm6Mt8hcNoZSpsCOrmFfJ4oKLc/baxTK0EH+U4SF7H3HmG
+         eeu3xVFZFV+a7/0nNv2gA/vtVcTENoDfvgArkOqzoVYhycwM34N5XOGE/aXfR5WY1kBF
+         fydUTDgx5ad7W1+9oNMe/neUrAEeYoR+kp9qM96XQMHQyc38gigo0ov3hmQoa6Ag7moY
+         2sLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712945111; x=1713549911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NXIp91wOih9CoCfNDEheAqOA0zoVihgOT0Xf+EbLOzs=;
+        b=EJG8Sr/O/4f/bftFinYBx81ZDmrFTVTjoFP/YGz/ygYWmsfw14iGnOPXCBTmaRHhW1
+         P99+Y4OIgzA3MxgRvi/+tZ+gXaVd1AEkve7TBwrG0Y259IiIUEzEsYHS5o6/oSM67JbB
+         lKUtdSufzcvThfh2L3SErcPKbPLliJaLFwPNKtDMJjB5Il0Jp5rhfr1Vp380D3/M0nkj
+         kzMuQ0xZAbkg0EedQBiD+xoWH4xquEWqlBG0J0nyAxv2PdVaPXPVfmXzvXar2ajGHVDI
+         RDkAKIkQeVHJd9V4E2jDSpVus/FwhpShvHiq5TaiGQZgDxBq8IWS7K5HnqOZrf2j12JX
+         95Aw==
+X-Forwarded-Encrypted: i=1; AJvYcCXbwphoZTssr9yRCbR6UYEbVzDaljdMtfSNLnAevACoo+POhKf67DHiJXEwPhlAIJGJffUHwRHDcM4DiRnwcfSspatSu6nyVw9uw4X8PXCcvpoBV1WQlBTqL3q5jxrIPQ/usDITjcON87TpoA==
+X-Gm-Message-State: AOJu0YxEWZqhqPjBm2Gl3QjgUw60vl12qNNr02chhLVp4YL51m5iaKVd
+	D+ybczWjgv/WouEiTdLI2Us/WZQeFtDQGLV2YzamIfcMxfGuJ12IE+mXBsKIl6kYd1X7RPdySou
+	ygj36fmuSuqWKzyLpVQJLSZ50fxI=
+X-Google-Smtp-Source: AGHT+IG/8HJwtDYDi7eVF5555tvAtRnoSP6wV0lzz7X8Ji2t5zDXvQOTMLyRxapB9H3x4DDuD5pCvPEYTWgU020ambk=
+X-Received: by 2002:a0c:e852:0:b0:699:2274:b229 with SMTP id
+ l18-20020a0ce852000000b006992274b229mr3779676qvo.14.1712945111598; Fri, 12
+ Apr 2024 11:05:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <103252ffff09c607e83c887cab2e0af5404d62ff.1710774200.git.dmitry.kasatkin@gmail.com>
+References: <20240412140122.2607743-1-stefanb@linux.ibm.com> <20240412140122.2607743-2-stefanb@linux.ibm.com>
+In-Reply-To: <20240412140122.2607743-2-stefanb@linux.ibm.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Fri, 12 Apr 2024 21:05:00 +0300
+Message-ID: <CAOQ4uxgNRYi-mYo=LZ5yiWch2zwDeTG2q9ZYD0ysEN6XaJkVhw@mail.gmail.com>
+Subject: Re: [RFC 1/2] ovl: Define D_REAL_FILEDATA for d_real to return dentry
+ with data
+To: Stefan Berger <stefanb@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, zohar@linux.ibm.com, roberto.sassu@huawei.com, 
+	miklos@szeredi.hu
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Fri, Apr 12, 2024 at 5:01=E2=80=AFPM Stefan Berger <stefanb@linux.ibm.co=
+m> wrote:
+>
+> Define D_REAL_FILEDATA which is to be used as a parameter for d_real()
+> to return the dentry that is holding the file data, which is either the
 
-On Mon, Mar 18, 2024 at 05:07:24PM +0200, Dmitry Kasatkin wrote:
-> Currently libimaevm provided by this project is used by the tool evmctl,
-> which is also provided by this project.
-> 
-> An issue was reported about using libimaevm with other software. Its
-> GPL2-only license makes it incompatible to use with other licenses, in
-> particular GPL3-only.
-> 
-> To address this issue, change the project license to GPL-2.0-or-later
-> and libimaevm to LGPL 2.0 or later.
-> 
-> This patch includes all acks received so far.
-> 
-> Signed-off-by: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Acked-by: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
-> Acked-by: Petr Vorel <pvorel@suse.cz>
-> Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-> Acked-by: Stefan Berger <stefanb@linux.ibm.com>
-> Acked-by: Vitaly Chikunov <vt@altlinux.org>
-> Acked-by: Ken Goldman <kgold@linux.ibm.com>
-> Acked-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Acked-by: Bruno Meneguele <bmeneg@redhat.com>
-> Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Acked-by: George Wilson <gcwilson@linux.ibm.com>
-> Acked-by: Tergel Myanganbayar <tergelmyanganbayar2024@u.northwestern.edu>
-> Acked-by: Andr?? Draszik <git@andred.net>
-> Acked-by: Frank Sorenson <sorenson@redhat.com>
-> Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> Acked-by: Vivek Goyal <vgoyal@redhat.com>
-> Acked-by: Eric Biggers <ebiggers@google.com>
-> Acked-by: Alberto Mardegan <a.mardegan@omp.ru>
-> Acked-by: Eric Biggers <ebiggers@google.com> # all Google contributions
-> Acked-by: Dmitry Baryshkov <dbaryshkov@gmail.com>
-> Acked-by: Patrick Uiterwijk <patrick@puiterwijk.org>
-> Acked-by: Mimi Zohar <zohar@linux.ibm.com>  # all IBM contributions
-> Acked-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+D_REAL_DATA already does that
+
+> upper or the lower denry. The caller is expected to call d_real() again
+> on the returned dentry to get to lower layers of a stacked filesystem,
+> if available.
+>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 > ---
+>  fs/overlayfs/super.c   | 6 ++++++
+>  include/linux/dcache.h | 1 +
+>  2 files changed, 7 insertions(+)
+>
+> diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+> index 06a231970cb5..f466ad89b005 100644
+> --- a/fs/overlayfs/super.c
+> +++ b/fs/overlayfs/super.c
+> @@ -36,6 +36,7 @@ static struct dentry *ovl_d_real(struct dentry *dentry,=
+ enum d_real_type type)
+>         switch (type) {
+>         case D_REAL_DATA:
+>         case D_REAL_METADATA:
+> +       case D_REAL_FILEDATA:
+>                 break;
+>         default:
+>                 goto bug;
+> @@ -47,6 +48,11 @@ static struct dentry *ovl_d_real(struct dentry *dentry=
+, enum d_real_type type)
+>         }
+>
+>         upper =3D ovl_dentry_upper(dentry);
+> +       if (type =3D=3D D_REAL_FILEDATA) {
+> +               if (ovl_has_upperdata(d_inode(dentry)))
+> +                       return upper;
 
-Acked-by: Kai Svahn <kai.svahn@linux.intel.com>
+This one is already the returned value for D_REAL_DATA
 
-Cheers,
-Kai
+> +               return ovl_dentry_lower(dentry);
+
+And this one is a wrong value, because the lower file's data is at
+ovl_dentry_lowerdata(), which is what D_REAL_DATA
+returns.
+
+So it is not clear to me what it is that you tried to do here.
+
+Thanks,
+Amir.
 
