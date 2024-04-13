@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2101-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2102-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016E68A3ECA
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 23:39:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D843C8A3ED1
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 23:41:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23A3CB216BA
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 21:39:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C5881F21561
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 21:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E085644A;
-	Sat, 13 Apr 2024 21:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A52548F0;
+	Sat, 13 Apr 2024 21:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvdjdO2u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ToAAOQXU"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0287B5473D;
-	Sat, 13 Apr 2024 21:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241A1E542;
+	Sat, 13 Apr 2024 21:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713044355; cv=none; b=jnxFMr6zTn72lzPudCBZhtEL1HVlOnYvDDocVIDep64molEnk+c8pPAUAb4EGRy4tLePLdrJsOtEakEYu5YuEJWjp3/NSJxWxpRFqyyOwdZfoM/MEEBRAydsKj1ND/KY9hItEAVkk/7GT59vzW7yk0VbqNKRdOkj+jvQMtaMXAM=
+	t=1713044494; cv=none; b=YKRJ1u5lcu+WuHKEZ3Z+8uYkIB3P69nq04GlIYQxrbP/CAxkX1x4c0owQxODoxfALe+8eFUcqBGLJKYb6Drcbg/nOge5M1N8vdNvv/UQYSLEdUF4DnSu/HdS79KP38h4p6zquP8feb/N76K7q+emRDGTMiYThornFZ7lNNN9jUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713044355; c=relaxed/simple;
-	bh=d/ixlUFZiWqS7w1S+uZ5bU3PvtJ6FPlMO8nl+D0Kuh4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=UZjh71N249wYX9OX/NJjZVS5Fux+Ak0FzIsBL6pdz+Cj8ss+6M4wxp0Uv30fqSY8CJr+sjRhC55YQv/SDzAzyCYcoSGWDggIl58/Knubq1QY4eAAWI0ebVcocac13PRGgzji9ETfz03nhUxV8njZYxmPMF7W8qG4Vp71wTJX++Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvdjdO2u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922AFC2BD10;
-	Sat, 13 Apr 2024 21:39:13 +0000 (UTC)
+	s=arc-20240116; t=1713044494; c=relaxed/simple;
+	bh=ZMcIxouqaKmGopD4LjyDkY37fHk0qCUz/R0GOM0XHUg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=TsI9QhmvoSoGWQ6L8dkKYdZQvqyW9CRNUvs8XyXGZZydx3JRNS68AoxTfDcobIoRlrd7sQjph0FSR5/ueh/X8rW41yYWHNV1nOeQXDG5dB0iQ6sfbQJZFFNKBIik9N7J0Xj/hjAyRg7tUnWAgP47+T2POcQx2/miWhFCG4NmKbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ToAAOQXU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2350EC113CD;
+	Sat, 13 Apr 2024 21:41:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713044354;
-	bh=d/ixlUFZiWqS7w1S+uZ5bU3PvtJ6FPlMO8nl+D0Kuh4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lvdjdO2uoJHyEoPa0msweepPXLPKa3kP4G3Wva+G8EACxTjWM0wMwboqyW/uEQ+Vs
-	 knJyE5dZTYEBwXZ/OHmDWxO9PRIqMbEAShcxL86ZvENhYkvT3WZDxYlkZnRPUfpxJq
-	 IW1ouwhCv7VHqK5rRvvhi/qnYhdevAPyf5H6a1S61loycKN6J2zcBBWfritq+uxTPH
-	 uyc1SPKCyDBv6k66SabBflyqqxV/M7VnGFCVViDGNQ4kC92sdGAHU5Gz1VAJ6SLPAU
-	 UehF5TkAEBoqshNNQuJEotlatlknYDIG9fk+Rwh46cnihDITGCKd54Syl90hA1qc1+
-	 VzbB4H3ZOnYxA==
+	s=k20201202; t=1713044493;
+	bh=ZMcIxouqaKmGopD4LjyDkY37fHk0qCUz/R0GOM0XHUg=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=ToAAOQXUhLrh9nCG0DBHIil5C1hzoy3H5Mi10fGBU7d9WE7fawotv31I4Xio4pCdv
+	 JbMWYbsYHrdSFhiKeZoYF8SjkhmYOrvaOtmaHmSYYz0cG4r1jFzF9k0T4i5T5N/ZHK
+	 fSFrrbTCfjGlTEmU30b4Ftc4VKqCt/+1s6E8LZejtrAzWWUQEsAJMvPEH6tDkLLfvF
+	 MdZXRZvMydTvKy02/a48YhX+XzUHbxhnSOmRHwN5BGqKJuUfas+H2Hn5g5eMh2S0oT
+	 SExamm1xJ2KdsWEfww8NAnt+l+wAWKw8xS7zfrc+BTSGmt1RhZz6CoQvjMAnEnfuu5
+	 PFzpOf72b2tlw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,51 +49,115 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 14 Apr 2024 00:39:11 +0300
-Message-Id: <D0JBJJ3ZOR1E.29NIB5RSEJRSL@kernel.org>
+Date: Sun, 14 Apr 2024 00:41:29 +0300
+Message-Id: <D0JBLACWBFZZ.2ZYOFBJVG5EVU@kernel.org>
+Cc: "Alexander Steffen" <Alexander.Steffen@infineon.com>, "Daniel P . Smith"
+ <dpsmith@apertussolutions.com>, "James Bottomley"
+ <James.Bottomley@hansenpartnership.com>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Lino Sanfilippo"
+ <l.sanfilippo@kunbus.com>, "Mimi Zohar" <zohar@linux.ibm.com>, "Peter
+ Huewe" <peterhuewe@gmx.de>, "Randy Dunlap" <rdunlap@infradead.org>,
+ <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] Documentation: tpm_tis
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Colin Ian King" <colin.i.king@gmail.com>, "Peter Huewe"
- <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+To: "Bagas Sanjaya" <bagasdotme@gmail.com>,
  <linux-integrity@vger.kernel.org>
-Cc: <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH][next] tpm/eventlog: remove redundant assignment to
- variabel ret
 X-Mailer: aerc 0.17.0
-References: <20240411084913.305780-1-colin.i.king@gmail.com>
-In-Reply-To: <20240411084913.305780-1-colin.i.king@gmail.com>
+References: <20240409190847.10869-1-jarkko@kernel.org>
+ <20240409190847.10869-3-jarkko@kernel.org> <ZhfAYVLwoYAPnYbI@archie.me>
+In-Reply-To: <ZhfAYVLwoYAPnYbI@archie.me>
 
-On Thu Apr 11, 2024 at 11:49 AM EEST, Colin Ian King wrote:
-> Variable ret is being assigned and error code that is never read, it is
-> either being re-assigned in an error exit path or never referenced again
-> on the non-error path. The assignment is redundant and can be removed.
+On Thu Apr 11, 2024 at 1:50 PM EEST, Bagas Sanjaya wrote:
+> On Tue, Apr 09, 2024 at 10:08:47PM +0300, Jarkko Sakkinen wrote:
+> > diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/sec=
+urity/tpm/tpm_tis.rst
+> > new file mode 100644
+> > index 000000000000..b448ea3db71d
+> > --- /dev/null
+> > +++ b/Documentation/security/tpm/tpm_tis.rst
+> > @@ -0,0 +1,46 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> > +TPM FIFO interface driver
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> > +
+> > +TCG PTP Specification defines two interface types: FIFO and CRB. The f=
+ormer is
+> > +based on sequenced read and write operations,  and the latter is based=
+ on a
+> > +buffer containing the full command or response.
+> > +
+> > +FIFO (First-In-First-Out) interface is used by the tpm_tis_core depend=
+ent
+> > +drivers. Originally Linux had only a driver called tpm_tis, which cove=
+red
+> > +memory mapped (aka MMIO) interface but it was later on extended to cov=
+er other
+> > +physical interfaces supported by the TCG standard.
+> > +
+> > +For legacy compliance the original MMIO driver is called tpm_tis and t=
+he
+> Did you mean "For historical reasons above ..."?
+
+That would be better wording.
+
+> > +framework for FIFO drivers is named as tpm_tis_core. The postfix "tis"=
+ in
+> > +tpm_tis comes from the TPM Interface Specification, which is the hardw=
+are
+> > +interface specification for TPM 1.x chips.
+> > +
+> > +Communication is based on a 20 KiB buffer shared by the TPM chip throu=
+gh a
+> > +hardware bus or memory map, depending on the physical wiring. The buff=
+er is
+> > +further split into five equal-size 4 KiB buffers, which provide equiva=
+lent
+> > +sets of registers for communication between the CPU and TPM. These
+> > +communication endpoints are called localities in the TCG terminology.
+> > +
+> > +When the kernel wants to send commands to the TPM chip, it first reser=
+ves
+> > +locality 0 by setting the requestUse bit in the TPM_ACCESS register. T=
+he bit is
+> > +cleared by the chip when the access is granted. Once it completes its
+> > +communication, the kernel writes the TPM_ACCESS.activeLocality bit. Th=
+is
+> > +informs the chip that the locality has been relinquished.
+> > +
+> > +Pending localities are served in order by the chip in descending order=
+, one at
+> > +a time:
+> > +
+> > +- Locality 0 has the lowest priority.
+> > +- Locality 5 has the highest priority.
+> > +
+> > +Further information on the purpose and meaning of the localities can b=
+e found
+> > +in section 3.2 of the TCG PC Client Platform TPM Profile Specification=
+.
+> > +
+> > +References
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +TCG PC Client Platform TPM Profile (PTP) Specification
+> > +https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-prof=
+ile-ptp-specification/
 >
-> Cleans up clang scan build warning:
-> drivers/char/tpm/eventlog/acpi.c:145:2: warning: Value stored to 'ret'
-> is never read [deadcode.DeadStores]
+> Other than that,
 >
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/char/tpm/eventlog/acpi.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog=
-/acpi.c
-> index bd757d836c5c..69533d0bfb51 100644
-> --- a/drivers/char/tpm/eventlog/acpi.c
-> +++ b/drivers/char/tpm/eventlog/acpi.c
-> @@ -142,7 +142,6 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
-> =20
->  	log->bios_event_log_end =3D log->bios_event_log + len;
-> =20
-> -	ret =3D -EIO;
->  	virt =3D acpi_os_map_iomem(start, len);
->  	if (!virt) {
->  		dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 
-Thanks!
+Thanks! I'll apply this with the fix you proposed.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+For everyone: this is by no means perfect. The point is to seed
+something we can build on top of. So I leave it rather lacking stuff
+than try to document every possible bells and whistle. This can be
+then improved based on discussions and future patch sets.
 
 BR, Jarkko
 
