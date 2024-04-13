@@ -1,173 +1,99 @@
-Return-Path: <linux-integrity+bounces-2091-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2092-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB8C8A3C47
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 12:43:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B0628A3C53
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 12:51:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 436AE1C20A2B
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 10:43:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 686A5B21C16
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 10:51:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14545208B6;
-	Sat, 13 Apr 2024 10:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ONWJZdz3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E241831A94;
+	Sat, 13 Apr 2024 10:51:19 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651D61D55D
-	for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 10:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27AAA3EA96;
+	Sat, 13 Apr 2024 10:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713005024; cv=none; b=hGrnMP5i4bgeU1Ob4PsCFP1GBkqD+H0sIbybMUFZhbwNJ/FNjOujLUaYACoLHQrDMmrAy0zCaxSTY8jbgDH+aNHvWj+XSwbxuO+VsGeoXKYv6CnRVyldtK2qAZIM+8SonN70EKZ1aQZYmQv1WgxTmKJNYdQpeyDoYjcl8KnyJVg=
+	t=1713005479; cv=none; b=RojA6T9/7m7Ivt6Z0T5S1DHighyN0cupGKJYX9KoKBICQJ6FO838ynk0SWTSOezqReyw5z6X1XXbJreUBNerZrkd+jU5pH9qD1Ok62dUHNg3JHgK2fMAGP0Gc8wvxISfiIbD4TunPMUHmyJNZoORJnVcnKlbQTCpHs3tWo0R7II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713005024; c=relaxed/simple;
-	bh=1l41Cdo2BQJ4F4UsaALf1Ueombq8eeBCU8ISjIV4uAo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oMc5AAG8c+RoBORSKDbzY/5XU4wvDIY5vVsupGQs20zj7CdVnbyY193NJPJMd1n28P9Tdwh1oe9BW7KAq4m+Zoo1bOizvGVJeJtfAyRfrox5nVLtVBIgc6arMShqldIXYDPKXI3a0MFRWul9WCbq5BLHUklkwUfJFd+104Cumk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ONWJZdz3; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-516d0c004b1so2237743e87.2
-        for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 03:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713005020; x=1713609820; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=JLor0KE/dK61W7fnhr/rCnlASwbBvCTGAkHx7fm/a8Y=;
-        b=ONWJZdz3ZWS9s/VzzCKunCgx76ivYdqCEvQoicZcaI2VDxKfA8msoUrgk8C3uWrhL4
-         qwHoRYC5Lz59hOgU7iizRak4zBbQOLHvAkK+Ewu5L8CWZQJWQM4ne0mPKsBKsHGb2umc
-         wF2uOSNygSWPWOGEUkWuS89jKhUMTcmdw70TO8rsXSWH3STlgbwJXK+VeJ8b0zfQfyj+
-         yLLIAaNN6KgLGZzPR7QWa86xMuswgCsvxAKZAlUtNyxeXu9OS8NvMpfY/XyoZa5CoO7H
-         FcFrVHxL7FKg7nZFdkRu+NUlp36JVfPL1yUj9uUUTJ+VLc0Xaj2VOHbz+0ctzmq9cdNK
-         xq1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713005020; x=1713609820;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JLor0KE/dK61W7fnhr/rCnlASwbBvCTGAkHx7fm/a8Y=;
-        b=eTqWREYACTPJq3Eg2X0j675JiwdSTGhkqHhWnWJQ5au27g7yNtHEhLFKG5nX2kIThJ
-         5cXenNpwfAjaM6aGgNSRLTnhnVqbXcMRFx9Ywe+ZrQaCwvk6S1MqsaKqzPs7469pp52r
-         KlwMHXsJwNhyDnH+bdJmN10y9kG4YL0RQY50aJXNz3/MQ0oWdMfgAoVeLgo+SzM39JPZ
-         URUUQxyfTYDPjVTCnL6Kade2YCl64ESRdU/OdC1YOzMYxB7so1jMRATHmmsdK7RnzJfF
-         f6Dws7eE2lagIFEAeEhievR1dCHOIWndj0iRo4H+8RYRUES0QMSXFyjqMPMKFC/HBqHy
-         I07g==
-X-Forwarded-Encrypted: i=1; AJvYcCX3LStMb3NQAoosZV6X266xWiwajjP+iskWx19NYi/Z7l9jIQcf49Oa6Pc/G1nkEjr3pIsx8S13+J3nXx0qS1fr/mS+RJKi+2Tz8xmbHfzg
-X-Gm-Message-State: AOJu0YyEFoWUjN4SyIWoCK5C980XssjVny5gHiYJU635DW7j7hkpzwct
-	n0ClR7fuXo7+Q5tbBYrSncTqxhDhMigzWBkBaGPr5mPaultKHIoAmPbPpRhNv8g=
-X-Google-Smtp-Source: AGHT+IEYjb2appB1aU3tNbqMdmp5wRsIVIfSgc+foH2WzCMZKqPBpqHwn9qirBDOQulZkne4M+wtCg==
-X-Received: by 2002:ac2:5119:0:b0:516:afb5:6a71 with SMTP id q25-20020ac25119000000b00516afb56a71mr3239210lfb.67.1713005020328;
-        Sat, 13 Apr 2024 03:43:40 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id a11-20020a05600c348b00b0041833ab5798sm415323wmq.42.2024.04.13.03.43.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Apr 2024 03:43:39 -0700 (PDT)
-Message-ID: <889ca65c-c9c7-4658-9c34-5d89774218cc@linaro.org>
-Date: Sat, 13 Apr 2024 12:43:38 +0200
-Precedence: bulk
-X-Mailing-List: linux-integrity@vger.kernel.org
-List-Id: <linux-integrity.vger.kernel.org>
-List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+	s=arc-20240116; t=1713005479; c=relaxed/simple;
+	bh=8bpdfCe2nuq6dKsz2FLSG+VUZG2U5J6jqaUpYbF9eW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jaOei+zXTLA8DQTGekgkyaoz4E2GLDwegenqG7qeYKvDZKU4DwjYgWcUZ2oob/FqTsPinFUrKPPuqyklkfmZNXmeVD7i1yTysPAEMWRcBDa+I1HX680awsrDFspKHRB8/Luv+oA/UBen1isrCwLrYxm/RYGf25o0FmGlDXm/WcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 4A4771029D24D;
+	Sat, 13 Apr 2024 12:51:15 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 2C13048440; Sat, 13 Apr 2024 12:51:15 +0200 (CEST)
+Date: Sat, 13 Apr 2024 12:51:15 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "M. Haener" <michael.haener@siemens.com>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexander Sverdlin <alexander.sverdlin@siemens.com>
 Subject: Re: [PATCH 2/2] dt-bindings: tpm: Add st,st33ktpm2xi2c to TCG TIS
  binding
-To: Lukas Wunner <lukas@wunner.de>
-Cc: "M. Haener" <michael.haener@siemens.com>,
- linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
- Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Message-ID: <ZhpjozjbeWrb0OTl@wunner.de>
 References: <20240413071621.12509-1-michael.haener@siemens.com>
  <20240413071621.12509-3-michael.haener@siemens.com>
  <8c13a349-a721-44d3-9e23-2e01f4c2ca4d@linaro.org>
  <Zhpb2URMxuoilKAZ@wunner.de>
  <3d08cf54-f58f-446f-977e-21ba65986924@linaro.org>
  <ZhpfwaIUc0HpfZP1@wunner.de>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ZhpfwaIUc0HpfZP1@wunner.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <889ca65c-c9c7-4658-9c34-5d89774218cc@linaro.org>
+Precedence: bulk
+X-Mailing-List: linux-integrity@vger.kernel.org
+List-Id: <linux-integrity.vger.kernel.org>
+List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <889ca65c-c9c7-4658-9c34-5d89774218cc@linaro.org>
 
-On 13/04/2024 12:34, Lukas Wunner wrote:
-> On Sat, Apr 13, 2024 at 12:23:47PM +0200, Krzysztof Kozlowski wrote:
->> On 13/04/2024 12:18, Lukas Wunner wrote:
->>> On Sat, Apr 13, 2024 at 10:10:49AM +0200, Krzysztof Kozlowski wrote:
->>>> I got only one patch, but if these are compatible, why do you need
->>>> second patch? Plus binding come before users.
->>>
->>> Right, the order of the patches needs to be reversed it seems.
->>
->> What is the second patch? Device is or is not compatible?
+On Sat, Apr 13, 2024 at 12:43:38PM +0200, Krzysztof Kozlowski wrote:
+> On 13/04/2024 12:34, Lukas Wunner wrote:
+> > The other patch just adds an entry to of_tis_i2c_match[] in the driver,
+> > pretty unspectacular:
+> > 
+> > https://lore.kernel.org/all/20240413071621.12509-2-michael.haener@siemens.com/
 > 
-> The other patch just adds an entry to of_tis_i2c_match[] in the driver,
-> pretty unspectacular:
-> 
-> https://lore.kernel.org/all/20240413071621.12509-2-michael.haener@siemens.com/
-> 
+> Then why is it needed?
 
-Then why is it needed?
+The binding requires two entries in the compatible string used in the DT,
+the chip name followed by the generic string:
 
-To re-iterate:
-"Device is or is not compatible?"
+        items:
+          - enum:
+              - infineon,slb9673
+              - nuvoton,npct75x
+          - const: tcg,tpm-tis-i2c
 
-Decide, one of the two patches is wrong.
+This allows us to deal with device-specific quirks, should they pop up
+(e.g. special timing requirements, hardware bugs).  We don't know in
+advance if they will be discovered, but if they are, it's cumbersome
+to determine after the fact which products (and thus DTs) are affected.
+So having the name of the actual chip used on the board has value.
 
-Best regards,
-Krzysztof
+Thanks,
 
+Lukas
 
