@@ -1,102 +1,176 @@
-Return-Path: <linux-integrity+bounces-2085-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2086-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBD1D8A3B6E
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 09:17:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A0CF8A3B97
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 10:11:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4A0D1C20D2D
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 07:17:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B40BFB21636
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 08:11:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E1A538FA3;
-	Sat, 13 Apr 2024 07:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FEAF208B6;
+	Sat, 13 Apr 2024 08:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=siemens.com header.i=michael.haener@siemens.com header.b="HozHQ1Yr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YfU9wOqo"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mta-65-228.siemens.flowmailer.net (mta-65-228.siemens.flowmailer.net [185.136.65.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96613838C
-	for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 07:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCD41D555
+	for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 08:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712992616; cv=none; b=VpV/lB+VLDnQ9plkvP4M0CLLtTAaxFvQ3GWz8I5KmHrVHouNI6uKZU3b3Z9JY36WTK0cQqDnU6QjZ1ylwUyeJh23cKW34g2tAUf4HFhbOWu4gRJRM5pC8gXZFdETONRySPWDbyHQMvbP200yM7sAklVevfwyyRey1WJWa/OTL/A=
+	t=1712995855; cv=none; b=W7P5RVHHVf67xyeGQxotxaTZCMbi4a3ddrIHWIfB6q52mjfJ4tuE0WOh3RhYP0XZ4hvhKl8pkppMZ5I/qqqAFbvT7VU7dTvSHWaIhcmoPbomB3KLnxbB2m635aWx8XM6qaGdu/xdwbiSXzZ9RXdxz6tOC1jOC8sJ91EjDrku8xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712992616; c=relaxed/simple;
-	bh=h+jXI0oeBS8n98NMxvX0ZNK9OanOZVaWfhf9F7zYh20=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lk3jOQaiEKKndq1UTGWc2kD18KSRje47QGPYKfTveVMTMPyCHD505cuqpKgFc1MYMnrqicAB7XbWJSm2jjyUJ6dRK5cFZ+BKrWJhHEje+R8Io+Ne2eZNzJ0vULCDAHWmOJEUXlUBzZGyAkwAj7ZDWMWds2VSRCHHuP4aXURZTU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=michael.haener@siemens.com header.b=HozHQ1Yr; arc=none smtp.client-ip=185.136.65.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
-Received: by mta-65-228.siemens.flowmailer.net with ESMTPSA id 20240413071646510cdec554b6d2a9e4
-        for <linux-integrity@vger.kernel.org>;
-        Sat, 13 Apr 2024 09:16:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=michael.haener@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=QyM1wgxijDrCMszk9wY5F2yipXafY8cejQEdgl4Lh14=;
- b=HozHQ1YreXAXjF1NAGUC2PjRvs1Y8ZdzsE1jOMDCElI5dCgL9/UnE6bzEliL3LlJJkPsbn
- a3xbOYh8Ycd+PdGAEdxh95X96WJG9WI+BEN3hGR9oJjAxbqYSz9TPsHzE6iXhN1Yt1f8uOLm
- TybqAFEOkCdvnA0LXOF/mWgd6O924=;
-From: "M. Haener" <michael.haener@siemens.com>
-To: linux-integrity@vger.kernel.org
-Cc: Michael Haener <michael.haener@siemens.com>,
-	linux-kernel@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Subject: [PATCH 2/2] dt-bindings: tpm: Add st,st33ktpm2xi2c to TCG TIS binding
-Date: Sat, 13 Apr 2024 09:15:07 +0200
-Message-ID: <20240413071621.12509-3-michael.haener@siemens.com>
-In-Reply-To: <20240413071621.12509-1-michael.haener@siemens.com>
-References: <20240413071621.12509-1-michael.haener@siemens.com>
+	s=arc-20240116; t=1712995855; c=relaxed/simple;
+	bh=Hzx2Ez5MMmDRwCCt7ueWKPGZ2NGimuMLqXHARjJVxKg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fS+bDo/j0J4OlgSmOp/mRL00J1oyi3fNDbfduqPEwxo7RrvTHFalLQl731/qPaNQPkm3N4MsL2MJnxeTjFIGxMrjtiVIeYWWh6yaVfA8bJUyFAAgetSaHJ2WJif87RDNIwoekJbjRSvwJVnox2T75gxkQ5rTYJVzz2nLgCDfKMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YfU9wOqo; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-343f62d8124so1246589f8f.2
+        for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 01:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712995852; x=1713600652; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cslKi75/x2PpuWKVEmXOT7J5pruaCjcrME468msEacc=;
+        b=YfU9wOqoc4Ru1YvwS0h8HV4ILtrT11bQ8osz7UVK3N808PmVlDMTzaiIzpwLFTHXNx
+         CVxf9HS/HuJOSYTPC12BndcxTOpkvai1JuYH5V+7EUg1gfjKi9vCdht3V6SDrhasKpHw
+         po2+iicOxfPYBJL7e+l8eEnIxUClEGTq0bZTkFV3HL3ehuS9zu9M+iKDp4t1jZVs5pB5
+         LeGF6O9vcgGYv+FStGndqCtwDNlauWoQUanxTaJ+5vZE9TWCID5P4XR1tYkGY870AmSv
+         mN8vtYWTYWQyDGZZwkrogkEPpbYDcA/tHIcGcnCRpFtEzkCNYaFyw39JmiAHzLY6FBvS
+         gxaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712995852; x=1713600652;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cslKi75/x2PpuWKVEmXOT7J5pruaCjcrME468msEacc=;
+        b=h3cvuBRMlQE6V95JVWWi9Nv1H4bDEkuX809FXBHaA1RWS6YlVLYLAcZWE5P0L9g44P
+         c/S9n09xcHGfJHUDSybDXKgXch8jhHk/37OO4Po9cJyLE4nI9bLXFVDQIaqosQjcjCxY
+         0p9Z/NWlghFZEr9Dd5wAlhnM2EnS7bNEKgS8VNX2b+C0z4luh/argwO82RMxjdm3kCGF
+         qZYox3Muk61yUrLg+gkAZpNGxPMvtk6G3IPCbII4MjPkizqjnsiNE7uA1wIUVK+RPFfW
+         cG8fZtZ1xiTSQo2PkYkWvdplEuTkmJGjqp2eH7i4W4elIa54QArZm+AT7avoKUPctBZx
+         IWGw==
+X-Forwarded-Encrypted: i=1; AJvYcCVcOfLz6p6VNfDyEFK1a/3vkz1mWUSKDbKQOiawVGHmEYXXTsysH2afLTS0vqcEbnZGOMjtGN7MpMld+6cAIpyBCIIUu8FFUmHfgTsUnwOk
+X-Gm-Message-State: AOJu0YwZ6EYRmPdm2srJKjWeLW+c0udP9paqIziJovl35oaNtppncftQ
+	TLFHewky6Y68oJl3X3fCfqYyFgcEMkrDEWYLSKSt/Vu1pLQ9/TFHvNNMRUh0R94=
+X-Google-Smtp-Source: AGHT+IHz8P+i8m8IWUnSmsr3BzstT/EuoLjm4dDYnc/s56k6Ams5/WR9/s8FkLz8QeWYTCaL0wmwGw==
+X-Received: by 2002:a05:600c:3aca:b0:418:f6b:ecec with SMTP id d10-20020a05600c3aca00b004180f6bececmr1737383wms.23.1712995852265;
+        Sat, 13 Apr 2024 01:10:52 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id p10-20020a05600c468a00b00416ba2db6b4sm8054886wmo.18.2024.04.13.01.10.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Apr 2024 01:10:51 -0700 (PDT)
+Message-ID: <8c13a349-a721-44d3-9e23-2e01f4c2ca4d@linaro.org>
+Date: Sat, 13 Apr 2024 10:10:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] dt-bindings: tpm: Add st,st33ktpm2xi2c to TCG TIS
+ binding
+To: "M. Haener" <michael.haener@siemens.com>, linux-integrity@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+ Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Lukas Wunner <lukas@wunner.de>,
+ Alexander Sverdlin <alexander.sverdlin@siemens.com>
+References: <20240413071621.12509-1-michael.haener@siemens.com>
+ <20240413071621.12509-3-michael.haener@siemens.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240413071621.12509-3-michael.haener@siemens.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-664519:519-21489:flowmailer
+Content-Transfer-Encoding: 7bit
 
-From: Michael Haener <michael.haener@siemens.com>
+On 13/04/2024 09:15, M. Haener wrote:
+> From: Michael Haener <michael.haener@siemens.com>
+> 
 
-Add the ST chip st33ktpm2xi2c to the supported compatible strings of the
-TPM TIS I2C schema. The Chip is compliant with the TCG PC Client TPM
-Profile specification.
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching.
 
-For reference, a datasheet is available at:
-https://www.st.com/resource/en/data_brief/st33ktpm2xi2c.pdf
+A nit, subject: drop second/last, redundant "binding". The "dt-bindings"
+prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
 
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Signed-off-by: Michael Haener <michael.haener@siemens.com>
----
- Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
-index 3ab4434b7352..af7720dc4a12 100644
---- a/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
-+++ b/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
-@@ -32,6 +32,7 @@ properties:
-           - enum:
-               - infineon,slb9673
-               - nuvoton,npct75x
-+              - st,st33ktpm2xi2c
-           - const: tcg,tpm-tis-i2c
- 
-       - description: TPM 1.2 and 2.0 chips with vendor-specific I²C interface
--- 
-2.44.0
+>  Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
+> index 3ab4434b7352..af7720dc4a12 100644
+> --- a/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
+> @@ -32,6 +32,7 @@ properties:
+>            - enum:
+>                - infineon,slb9673
+>                - nuvoton,npct75x
+> +              - st,st33ktpm2xi2c
+
+I got only one patch, but if these are compatible, why do you need
+second patch? Plus binding come before users.
+
+Please explain what are you doing in other patch.
+
+Best regards,
+Krzysztof
 
 
