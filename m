@@ -1,111 +1,82 @@
-Return-Path: <linux-integrity+bounces-2077-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2083-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6FA78A39C6
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 02:58:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7E5E8A3B67
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 09:16:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 218691C21531
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 00:58:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 388F81F21AB5
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 07:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8929843AB9;
-	Sat, 13 Apr 2024 00:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BD51CD11;
+	Sat, 13 Apr 2024 07:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="lJOlD+fh"
+	dkim=pass (1024-bit key) header.d=siemens.com header.i=michael.haener@siemens.com header.b="hZ6ltHAa"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A68F4C97;
-	Sat, 13 Apr 2024 00:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981661802B
+	for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 07:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712969774; cv=none; b=QLvoqBuWL3zaSTRplwhzKWnWhS7Ezy0Istr1bFdcrrlUDmZ25arap0NIPWrhtByFD+j2lPkliNdAYskEv153YSW97rlU4xR6yVtQ4kqV9EyLqbX6hcutL8Q5q68+nSvvKuAVlMrRZyxou4RCz+ezRnoStfOCOKUgtfqbqrcQ6GA=
+	t=1712992604; cv=none; b=E5reQLQnAyX4MTwelz4Dh7HYzLjm5p9UmupyUvBevz52ufQyKUPLHBWDtd/nVbiENzZDwHmGLSv5fCWOivp1So3Qc044Os1WfvGsMtRf6cmsNmjvoHa/Kk6521pC3Hc1DGSiR3kUdWsZ1kbwNPr8y9D7UhKyd9fm5voWCSQwNes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712969774; c=relaxed/simple;
-	bh=pBU/dUpHcW7hv4jahHyUxb9624g5oZLMksU7XwtQcWg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=QT8w+tWBGeKDRK8+TEL8NQu/Q/Ua83Td8mWXu6r4T41Qm0kIymA/UImXMWjTai2XwiJVW3Oc1OMgHXyWOU4Xlhmxqu+XYrG30GtuqxMOpV9zpRLmbOLflLfCEG5FQXzfKgaTB3uoTAfU4c9V2+Xz7sI8CYdrn3v+BlTcnwlXetQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=lJOlD+fh; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-	id AD89A20FC5FA; Fri, 12 Apr 2024 17:56:06 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AD89A20FC5FA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1712969766;
-	bh=RkLiZLmYY6yXHhJqHQYW5lgf/n+IHqe1I+s8c4aEHFk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lJOlD+fhAoGAuJ5iZUO71L5J5LCGOsNCchcUL6JHtoAoyT5JDX0HrG3Eqe3ErOvnU
-	 BvMpI3b83kNEU7wV1u0gMFyOywTOm+CFsHhq6jKBWtwaDvWB2gnKNfr6G56JV/toT7
-	 vogkh3rb+v16VTJ9Opjit07BN+AqWythNOtPfyQ8=
-From: Fan Wu <wufan@linux.microsoft.com>
-To: corbet@lwn.net,
-	zohar@linux.ibm.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	tytso@mit.edu,
-	ebiggers@kernel.org,
-	axboe@kernel.dk,
-	agk@redhat.com,
-	snitzer@kernel.org,
-	eparis@redhat.com,
-	paul@paul-moore.com
-Cc: linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	fsverity@lists.linux.dev,
-	linux-block@vger.kernel.org,
-	dm-devel@lists.linux.dev,
-	audit@vger.kernel.org,
+	s=arc-20240116; t=1712992604; c=relaxed/simple;
+	bh=z25bTZc9JG5yJA9IHvnqHV8Wk5GB3X3k1vQl9OUyOm0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sUHid3jhskkmhL72c0Y/rfx2i4oM9DCK0XprvGRN2+UzPCMrYAeUFanUwyCRQkllHBhzWfw1pvWtOjbW8RibjcN6IxrZq6bkR7kRw62BOnMH+dvrjCJnrata5TggRtoTjtCQ27ziyyuEQg2tqqX0Q6YsBovVfnbwhIDAC2sD77Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=michael.haener@siemens.com header.b=hZ6ltHAa; arc=none smtp.client-ip=185.136.65.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 2024041307163250a8c71deec23bc361
+        for <linux-integrity@vger.kernel.org>;
+        Sat, 13 Apr 2024 09:16:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=michael.haener@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=limXHXZhHYSYa+SxW/WS0j+eNSyq1f+RRAMZebUPVWc=;
+ b=hZ6ltHAakl+6w1+QqRO49Cadylo4KsxXdByFnhyCRZs6yoKt3C+7EAp/tniEjy9ov+GWm6
+ krXVAQnvTXr+vHZsJQnZoHBj89Cu392AjDuLJQobnKTmOFaxaZCWQ1koIqy7ZFudwG+ztn4h
+ FBVXi2+TUFCbD0stRtop6GnFlE40Y=;
+From: "M. Haener" <michael.haener@siemens.com>
+To: linux-integrity@vger.kernel.org
+Cc: Michael Haener <michael.haener@siemens.com>,
 	linux-kernel@vger.kernel.org,
-	Fan Wu <wufan@linux.microsoft.com>
-Subject: [PATCH v17 21/21] MAINTAINERS: ipe: add ipe maintainer information
-Date: Fri, 12 Apr 2024 17:56:04 -0700
-Message-Id: <1712969764-31039-22-git-send-email-wufan@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
-References: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lukas Wunner <lukas@wunner.de>,
+	Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Subject: [PATCH 0/2] Add ST33KTPM2XI2C chip to the TPM TIS I2C driver
+Date: Sat, 13 Apr 2024 09:15:05 +0200
+Message-ID: <20240413071621.12509-1-michael.haener@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-664519:519-21489:flowmailer
 
-Update MAINTAINERS to include ipe maintainer information.
+From: Michael Haener <michael.haener@siemens.com>
 
-Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+This patch series adds support for the ST33KTPM2XI2C chip.
 
---
-v1-v16:
-  + Not present
+Michael Haener (2):
+  tpm: tis_i2c: Add compatible string st,st33ktpm2xi2c
+  dt-bindings: tpm: Add st,st33ktpm2xi2c to TCG TIS binding
 
-v17:
-  + Introduced
----
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml | 1 +
+ drivers/char/tpm/tpm_tis_i2c.c                             | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b5b89687680b..93eb4e12a789 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10745,6 +10745,16 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
- F:	security/integrity/
- F:	security/integrity/ima/
- 
-+INTEGRITY POLICY ENFORCEMENT (IPE)
-+M:	Fan Wu <wufan@linux.microsoft.com>
-+L:	linux-security-module@vger.kernel.org
-+S:	Supported
-+T:	git https://github.com/microsoft/ipe.git
-+F:	Documentation/admin-guide/LSM/ipe.rst
-+F:	Documentation/security/ipe.rst
-+F:	scripts/ipe/
-+F:	security/ipe/
-+
- INTEL 810/815 FRAMEBUFFER DRIVER
- M:	Antonino Daplas <adaplas@gmail.com>
- L:	linux-fbdev@vger.kernel.org
 -- 
 2.44.0
 
