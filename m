@@ -1,88 +1,209 @@
-Return-Path: <linux-integrity+bounces-2098-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2099-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AB008A3E8C
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 22:55:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94D48A3EA3
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 23:14:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 171781F21568
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 20:55:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9A1B1C20B5B
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 21:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00AD94206E;
-	Sat, 13 Apr 2024 20:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC66A55C1D;
+	Sat, 13 Apr 2024 21:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0ZgN/Fc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cJXsBlq/"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E6C41238
-	for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 20:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF051758B
+	for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 21:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713041703; cv=none; b=MbHNgLjVebhmVCOykjEHjrufmR24Zw8SKTmD3lpcb2W73SKS6c0HAVIi99Sb6InsOnz3ka2nuaLXKADeY/oWPX/NZnb40bEvfHTvK5ClOdZnZm0XNFN3+Ylb32L+THdN5uShvhS+b5BjZ9vepaZhFwKBpzLcX7eyLRgNPoYx9SU=
+	t=1713042832; cv=none; b=qdhqbn1pJFKCF5aytgk1uUW0vt4maLzE6/ebElpyAeLKaR/xJ6xWI3YuZX1Dpybgh63MrEPE1E+HgmtN4OCe2N/DU+rwbU1mb8ja0GdB9fodAKvFuG+WKUS+TuJBwM7Chg2vPkyIcrCGI8+gsHY4KOc6jJVnnDTAGo5lXnjN9a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713041703; c=relaxed/simple;
-	bh=H7A69nwhk6/eHi7xhNQJEEuhBVT2AuTcQF3FbtTjpu0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=OvqJnLuagC0iBTPJZI1BJr6+lq5nKxH6qLAGJSTqD0f42T4hEnbcbmqeLl7+ZtROhN959kFRhFFMo0lTp9ovwT1JmAWOxcVbci9oNbm2qtCnGA/truXTRE6yrN6qicHT6dN01pppzNeQbONXf16AZ8i+37ZQivgcsl5e7GpiBHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o0ZgN/Fc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8348EC113CD;
-	Sat, 13 Apr 2024 20:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713041702;
-	bh=H7A69nwhk6/eHi7xhNQJEEuhBVT2AuTcQF3FbtTjpu0=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=o0ZgN/FcwlA6SoOs80nf1bncLmFZOf6soqyE+Jk6WhHRUaXfrt4jB2T3d5utmNl31
-	 E1F1DtbURCxsji1JsZJ8KmxI+Lcp/w/qDmt6MqnEYsS8pLjwY4jQkqYUr6ZOZEBpoA
-	 ZEFDyaWEhuZjYODrZhaN156u6gW+VLygu17lFyhV8P6+Zwve5OK0Jszw5f/BpdId7q
-	 5o/jm2dwZCkh7K+cqkuRei7YeMepUCdILYAinDzM0q+QN4ncsR4CJ/P73bjCDHwjJD
-	 8lyP3GckgwINkPZrAiBl1YLEtsUlanR5NIwxx/elMrmJKX7HO7s9NHR+bjyUjYOO+2
-	 WxX3gZQNxG7SA==
+	s=arc-20240116; t=1713042832; c=relaxed/simple;
+	bh=XGReRWz7u7T8neea9WRts0ekrqtCQCSHyQ6+MlKIXXE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BzPGX3yNQN2ccpLT3kLhv7y5WmM6eEuNGPgxHnhfTAPCr6pPzg1r+GNAGtNeGWXhTHRYEDzMvKaoJDbBiP+6MmNP909N4cM+omyAZxKwviGl8loTM/TIzGfPQKm8vfTJzVYUUFNTkHq4WTz1jRHMvUCfTYoi5HP8dxOOUrsRp1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cJXsBlq/; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a524ecaf215so65415866b.2
+        for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 14:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713042829; x=1713647629; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/QcS7aKqLvfcOrAHC9t/RNGgAG9N/gh7FrnnJ0LyKg=;
+        b=cJXsBlq/JeLE7Ese/v1yubDNkfEyxFt82pC4IYjwxB1dIyTmXNFHo4h29l3qx7ATaA
+         LROdhCCAV7MAwUC2thQ3SLjZL8qphaJrrqGbHd5skOd1l2Jr93YP7Bn0Q8cJea2MHsaG
+         bzlxBjERZCDjPoqGw8yjpJmjNGWePvoM38HhifLaTOMC/aneCG5NPxeBicDpvQ1tghPQ
+         RvAjGI7xSQwPG7IXMbMSdL0rI1iJ/yVtn4nwaEnyGI5if3tkdH+hTC3nzhRx3uOXhoSm
+         XfYVaq9jRlF8Ea3+ABtKeo26FY8IRcx0wkSwPQp1uwpTsh03OOz5M0XtpvTLfKhQRvAl
+         h92A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713042829; x=1713647629;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U/QcS7aKqLvfcOrAHC9t/RNGgAG9N/gh7FrnnJ0LyKg=;
+        b=BccCVOd4ZBE2cJ9CszzRr0WQxp5d8KtAO5CacFodJl6CFytOWoTPXRaN1tlLzB7rP0
+         RD0DSgfzZ9gFjDTrgvFH8SBu8fjoDW+axrhmRw04sqC7Yq2QMt9ReqsWv/TD6BBNDF4Z
+         +V25yRxlGU3EECm8ugXphAe0HtLWWR60F7mJwyi502DrHLaoGVt5rqxiHR5F7gBxxSH8
+         R9RohDGv1ee+i/fy8emh0m7DDAW3tqzwqDNXC5eMB3SPcckg+v6N6yUYsLPxbsghJKjc
+         3PubZmHs/1WGzoSzZWBEmGtttW28nVplJ91qGEuWGbQGiTNNhYtZndx8G5uQolZmaU4x
+         ThZA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXEANmZFH7HOhcTzNDXwkyIR5Ao9fgyKw+gjihaRX00z9TP0izffeZMQs7B4NqgRagDrvx98s3IgFn/pCDDIQx096xqu0JaR0Lw+apTpWi
+X-Gm-Message-State: AOJu0YwQoMqLtJwomRgLMiE8jHDB+WtTxaO/GIPr4zsStiFe6LbRCX2G
+	qZ7Q+ICq0Me2HPkf/yj9LaDEol1jC/GEG9upEpX6IlpPT8rBCbh/ylGXooWS1lE=
+X-Google-Smtp-Source: AGHT+IFWuvfsMgahGLa+kTIMnUfbUbWCZlLRSzZJcSHFDWPdBB6rJ0uf0VK89rG+ntQXqMTNChKoaw==
+X-Received: by 2002:a17:906:b7d1:b0:a51:c747:531d with SMTP id fy17-20020a170906b7d100b00a51c747531dmr3671963ejb.64.1713042829092;
+        Sat, 13 Apr 2024 14:13:49 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id b24-20020a17090630d800b00a4e781bd30dsm3387480ejb.24.2024.04.13.14.13.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Apr 2024 14:13:48 -0700 (PDT)
+Message-ID: <08ec46be-971f-4234-b65c-96992b5b0a87@linaro.org>
+Date: Sat, 13 Apr 2024 23:13:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] dt-bindings: tpm: Add st,st33ktpm2xi2c to TCG TIS
+ binding
+To: "Haener, Michael" <michael.haener@siemens.com>,
+ "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+ "krzk@kernel.org" <krzk@kernel.org>
+Cc: "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>,
+ "jarkko@kernel.org" <jarkko@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+ "peterhuewe@gmx.de" <peterhuewe@gmx.de>, "robh@kernel.org"
+ <robh@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+ "lukas@wunner.de" <lukas@wunner.de>
+References: <20240413071621.12509-1-michael.haener@siemens.com>
+ <20240413071621.12509-3-michael.haener@siemens.com>
+ <9634ac9e-23ad-4bb9-aecf-d46c875f8d2f@kernel.org>
+ <85fa06dfb9bb69443ce86e10b8c4619317cccb3e.camel@siemens.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <85fa06dfb9bb69443ce86e10b8c4619317cccb3e.camel@siemens.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 13 Apr 2024 23:54:59 +0300
-Message-Id: <D0JALOP2RDHA.21T8JRY0LWKN2@kernel.org>
-Subject: Re: TPM error 0x0901, possibly related to TPM2_PT_CONTEXT_GAP_MAX
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "William Brown" <wbrown@suse.de>
-Cc: <linux-integrity@vger.kernel.org>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
- "Takashi Iwai" <tiwai@suse.de>
-X-Mailer: aerc 0.17.0
-References: <424B3F10-D91C-4F47-B33C-BB66FE4DB91A@suse.de>
- <D0BFJLQ0JKO4.20EW2ZA8GIS5Z@kernel.org>
- <F34D4DB5-EDFF-4E04-A35D-D9044F513A99@suse.de>
-In-Reply-To: <F34D4DB5-EDFF-4E04-A35D-D9044F513A99@suse.de>
+Content-Transfer-Encoding: 7bit
 
-On Fri Apr 5, 2024 at 3:24 AM EEST, William Brown wrote:
->
->
-> > On 5 Apr 2024, at 01:06, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >=20
-> > Since the code is accessing /dev/tpm0 and not /dev/tpmrm0 this issue
-> > should be mitigated by the user space resource manager.
->
-> My code is operating via /dev/tpmrm0, not /dev/tpm0. And after each itera=
-tion, all sessions are cleared and removed.=20
->
-> If I operate on /dev/tpm0 the issue goes away. So the error is actually i=
-n the resource manager itself.=20
+On 13/04/2024 22:26, Haener, Michael wrote:
+> On Sat, 2024-04-13 at 10:38 +0200, Krzysztof Kozlowski wrote:
+>> On 13/04/2024 09:15, M. Haener wrote:
+>>> From: Michael Haener <michael.haener@siemens.com>
+>>>
+>>> Add the ST chip st33ktpm2xi2c to the supported compatible strings
+>>> of the
+>>> TPM TIS I2C schema. The Chip is compliant with the TCG PC Client
+>>> TPM
+>>> Profile specification.
+>>>
+>>> For reference, a datasheet is available at:
+>>> https://www.st.com/resource/en/data_brief/st33ktpm2xi2c.pdf
+>>>
+>>> Reviewed-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+>>> Signed-off-by: Michael Haener <michael.haener@siemens.com>
+>>> ---
+>>
+>>
+>> Not tested...
+> 
+> I was only able to verify and test the conformity of the ST chip
+> st33ktpm2xi2c with kernel 6.1, so I left out the test-by tag.
 
-Ah, my previous response about kprobe hook is still relevant.
+I don't mean your tag. Your SoB means you tested it, but I meant you did
+not send the binding for testing via automation.
 
-Kernel RM can cause context gap error if user space leaves a=20
-stall session long enough. Before making any decisions we should
-be aware first what are the exact conditions in this case.
+> Unfortunately, there is no newer kernel for my embedded hardware.
+> 
+>>
+>> Please use scripts/get_maintainers.pl to get a list of necessary
+>> people
+>> and lists to CC. It might happen, that command when run on an older
+>> kernel, gives you outdated entries. Therefore please be sure you base
+>> your patches on recent Linux kernel.
+>>
+>> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+>> people, so fix your workflow. Tools might also fail if you work on
+>> some
+>> ancient tree (don't, instead use mainline), work on fork of kernel
+>> (don't, instead use mainline) or you ignore some maintainers (really
+>> don't). Just use b4 and everything should be fine, although remember
+>> about `b4 prep --auto-to-cc` if you added new patches to the
+>> patchset.
+>>
+>> You missed at least devicetree list (maybe more), so this won't be
+>> tested by automated tooling.
+> 
+> I called the script scripts/get_maintainer.pl on the latest kernel
+> version for each of the two patches and added the output list to the
+> individual patches accordingly. And only for the cover-letter I linked
+> the two lists together.
+> I understand now that I should have sent the whole series to both
+> lists.
+> 
 
-Sorry for late response. I was sick for most of last wee.
+No, that's not the case. You did not Cc output of get_maintainer.pl.
+Read *AGAIN* my message..
 
-BR, Jarkko
+Best regards,
+Krzysztof
+
 
