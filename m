@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2102-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2103-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D843C8A3ED1
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 23:41:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 707198A3ED5
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 23:43:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C5881F21561
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 21:41:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29B12281547
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Apr 2024 21:43:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A52548F0;
-	Sat, 13 Apr 2024 21:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2983548F0;
+	Sat, 13 Apr 2024 21:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ToAAOQXU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mX2Kll+Y"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241A1E542;
-	Sat, 13 Apr 2024 21:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE5F5473D
+	for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 21:43:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713044494; cv=none; b=YKRJ1u5lcu+WuHKEZ3Z+8uYkIB3P69nq04GlIYQxrbP/CAxkX1x4c0owQxODoxfALe+8eFUcqBGLJKYb6Drcbg/nOge5M1N8vdNvv/UQYSLEdUF4DnSu/HdS79KP38h4p6zquP8feb/N76K7q+emRDGTMiYThornFZ7lNNN9jUQ=
+	t=1713044605; cv=none; b=di7xAv/AZhRN/jBppdrveoqDZnAP8JFXbUfe/s7RrJQhYpXKHk+3VyOAt4u3cvBkCbKIneJ6gDnzgXTd5fU1knHhF9+SgBATcZ97NTTs1qADrh+wkUw6Wqj8uyRREHKoyxsj8MwRKmWrPYhp1j8n3I+yC1Gb/klVB6vWXdsLJ1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713044494; c=relaxed/simple;
-	bh=ZMcIxouqaKmGopD4LjyDkY37fHk0qCUz/R0GOM0XHUg=;
+	s=arc-20240116; t=1713044605; c=relaxed/simple;
+	bh=Zp37eyYFV7+VD40b7IFn8E0PLAAldwpnR38yPH0w/90=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=TsI9QhmvoSoGWQ6L8dkKYdZQvqyW9CRNUvs8XyXGZZydx3JRNS68AoxTfDcobIoRlrd7sQjph0FSR5/ueh/X8rW41yYWHNV1nOeQXDG5dB0iQ6sfbQJZFFNKBIik9N7J0Xj/hjAyRg7tUnWAgP47+T2POcQx2/miWhFCG4NmKbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ToAAOQXU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2350EC113CD;
-	Sat, 13 Apr 2024 21:41:30 +0000 (UTC)
+	 References:In-Reply-To; b=InSkYGlE3ucLIFcwnJXErfa8lJsrEsUx+1Dsat1Wsgvdee2byxPerX9ha5oJMxEKfjfCgFJkyIxXHv+vUmoNUcoqdgAiBLqSDTmfVz/xJHww3dOc+BxYxMRKV7fUNr9KCweFoR+WxREiLCp+D/pWAVj6gP1SY7NDzgcSr4nypD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mX2Kll+Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FE6C113CD;
+	Sat, 13 Apr 2024 21:43:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713044493;
-	bh=ZMcIxouqaKmGopD4LjyDkY37fHk0qCUz/R0GOM0XHUg=;
+	s=k20201202; t=1713044605;
+	bh=Zp37eyYFV7+VD40b7IFn8E0PLAAldwpnR38yPH0w/90=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=ToAAOQXUhLrh9nCG0DBHIil5C1hzoy3H5Mi10fGBU7d9WE7fawotv31I4Xio4pCdv
-	 JbMWYbsYHrdSFhiKeZoYF8SjkhmYOrvaOtmaHmSYYz0cG4r1jFzF9k0T4i5T5N/ZHK
-	 fSFrrbTCfjGlTEmU30b4Ftc4VKqCt/+1s6E8LZejtrAzWWUQEsAJMvPEH6tDkLLfvF
-	 MdZXRZvMydTvKy02/a48YhX+XzUHbxhnSOmRHwN5BGqKJuUfas+H2Hn5g5eMh2S0oT
-	 SExamm1xJ2KdsWEfww8NAnt+l+wAWKw8xS7zfrc+BTSGmt1RhZz6CoQvjMAnEnfuu5
-	 PFzpOf72b2tlw==
+	b=mX2Kll+Ykk5lK3LVX5vra5ESNsBoWhL5HIIuW59QMuC5RIG6KXQkMw904VNbF9ISh
+	 2gNcmefnrk0WQ869qhLej3n3p/+aBtNhGnBRdoy69KAayw42IzpIgaarbK5g2jO3ZE
+	 aWWMrB07ZdK1v8drCym1UlAJPvyVs8TMXQZVZw6LaTlGPJRF2anfm5wZ92ifNHuScP
+	 5QdR9ZAcankhDNlYI8TfewbIX7VkC6b3miZB0U/3s7kZa+/bLxpCNSTVf4zD7yG0AG
+	 d4I5d9nnnjDI4jHGsonVyZo7i/7ERZU11+bwSM2d8M7JJILAfGRGD7qJRWZFqCVMMB
+	 MuSjud6oKkbhg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,115 +49,58 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 14 Apr 2024 00:41:29 +0300
-Message-Id: <D0JBLACWBFZZ.2ZYOFBJVG5EVU@kernel.org>
-Cc: "Alexander Steffen" <Alexander.Steffen@infineon.com>, "Daniel P . Smith"
- <dpsmith@apertussolutions.com>, "James Bottomley"
- <James.Bottomley@hansenpartnership.com>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- "Jonathan Corbet" <corbet@lwn.net>, "Lino Sanfilippo"
- <l.sanfilippo@kunbus.com>, "Mimi Zohar" <zohar@linux.ibm.com>, "Peter
- Huewe" <peterhuewe@gmx.de>, "Randy Dunlap" <rdunlap@infradead.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] Documentation: tpm_tis
+Date: Sun, 14 Apr 2024 00:43:22 +0300
+Message-Id: <D0JBMQ8POIZ5.3A7ZIQY5PW9SM@kernel.org>
+Cc: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+ "Takashi Iwai" <tiwai@suse.de>
+Subject: Re: TPM error 0x0901, possibly related to TPM2_PT_CONTEXT_GAP_MAX
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Bagas Sanjaya" <bagasdotme@gmail.com>,
- <linux-integrity@vger.kernel.org>
+To: "William Brown" <wbrown@suse.de>
 X-Mailer: aerc 0.17.0
-References: <20240409190847.10869-1-jarkko@kernel.org>
- <20240409190847.10869-3-jarkko@kernel.org> <ZhfAYVLwoYAPnYbI@archie.me>
-In-Reply-To: <ZhfAYVLwoYAPnYbI@archie.me>
+References: <424B3F10-D91C-4F47-B33C-BB66FE4DB91A@suse.de>
+ <D0BFJLQ0JKO4.20EW2ZA8GIS5Z@kernel.org>
+ <D0BFMGM02V7A.1HEWQ05350K07@kernel.org>
+ <6857f043301a100ee93b3ea120a2d1d60e83efdb.camel@HansenPartnership.com>
+ <D0HNST37O7G8.3A722951U878Z@kernel.org>
+ <C1E92886-E7ED-4425-8A31-22FE196C5218@suse.de>
+In-Reply-To: <C1E92886-E7ED-4425-8A31-22FE196C5218@suse.de>
 
-On Thu Apr 11, 2024 at 1:50 PM EEST, Bagas Sanjaya wrote:
-> On Tue, Apr 09, 2024 at 10:08:47PM +0300, Jarkko Sakkinen wrote:
-> > diff --git a/Documentation/security/tpm/tpm_tis.rst b/Documentation/sec=
-urity/tpm/tpm_tis.rst
-> > new file mode 100644
-> > index 000000000000..b448ea3db71d
-> > --- /dev/null
-> > +++ b/Documentation/security/tpm/tpm_tis.rst
-> > @@ -0,0 +1,46 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> > +TPM FIFO interface driver
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> > +
-> > +TCG PTP Specification defines two interface types: FIFO and CRB. The f=
-ormer is
-> > +based on sequenced read and write operations,  and the latter is based=
- on a
-> > +buffer containing the full command or response.
-> > +
-> > +FIFO (First-In-First-Out) interface is used by the tpm_tis_core depend=
-ent
-> > +drivers. Originally Linux had only a driver called tpm_tis, which cove=
-red
-> > +memory mapped (aka MMIO) interface but it was later on extended to cov=
-er other
-> > +physical interfaces supported by the TCG standard.
-> > +
-> > +For legacy compliance the original MMIO driver is called tpm_tis and t=
-he
-> Did you mean "For historical reasons above ..."?
-
-That would be better wording.
-
-> > +framework for FIFO drivers is named as tpm_tis_core. The postfix "tis"=
- in
-> > +tpm_tis comes from the TPM Interface Specification, which is the hardw=
-are
-> > +interface specification for TPM 1.x chips.
-> > +
-> > +Communication is based on a 20 KiB buffer shared by the TPM chip throu=
-gh a
-> > +hardware bus or memory map, depending on the physical wiring. The buff=
-er is
-> > +further split into five equal-size 4 KiB buffers, which provide equiva=
-lent
-> > +sets of registers for communication between the CPU and TPM. These
-> > +communication endpoints are called localities in the TCG terminology.
-> > +
-> > +When the kernel wants to send commands to the TPM chip, it first reser=
-ves
-> > +locality 0 by setting the requestUse bit in the TPM_ACCESS register. T=
-he bit is
-> > +cleared by the chip when the access is granted. Once it completes its
-> > +communication, the kernel writes the TPM_ACCESS.activeLocality bit. Th=
-is
-> > +informs the chip that the locality has been relinquished.
-> > +
-> > +Pending localities are served in order by the chip in descending order=
-, one at
-> > +a time:
-> > +
-> > +- Locality 0 has the lowest priority.
-> > +- Locality 5 has the highest priority.
-> > +
-> > +Further information on the purpose and meaning of the localities can b=
-e found
-> > +in section 3.2 of the TCG PC Client Platform TPM Profile Specification=
-.
-> > +
-> > +References
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +TCG PC Client Platform TPM Profile (PTP) Specification
-> > +https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-prof=
-ile-ptp-specification/
+On Fri Apr 12, 2024 at 2:21 AM EEST, William Brown wrote:
 >
-> Other than that,
 >
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> > On 12 Apr 2024, at 08:50, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >=20
+> > On Thu Apr 4, 2024 at 6:49 PM EEST, James Bottomley wrote:
+> >> On Thu, 2024-04-04 at 18:09 +0300, Jarkko Sakkinen wrote:
+> >>> [...]
+> >>> Emphasis that I might have forgotten something but this is what I can
+> >>> remember right now.
+> >>=20
+> >> What you forgot is that I did originally proposed session degapping in
+> >> the kernel resource manager but it was rather complex, so you made me
+> >> take it out for lack of a use case.  It dates back to when we used the
+> >> old sourceforge tpmdd list which seems to have caused message loss, so
+> >> I'm not sure how complete this thread is:
+> >=20
+> > I might be forgetting some detail to contxt gap but since kernel flushe=
+s
+> > every single object per transaction contextCounter should be updated al=
+l
+> > the time and thus there should not be too large gap that would cause
+> > emitting this error.
+> >=20
+> > I quickly reviewed section 30.5 for architecture specificaton to check
+> > if I got it right and it says that: "On receiving this error, the
+> > management software either would explicitly flush old session contexts
+> > or would load the old session contexts to update their associated
+> > counter values.."
+>
+> The issue is that we *are* flushing session contexts and this error is st=
+ill occurring.
 
-
-Thanks! I'll apply this with the fix you proposed.
-
-For everyone: this is by no means perfect. The point is to seed
-something we can build on top of. So I leave it rather lacking stuff
-than try to document every possible bells and whistle. This can be
-then improved based on discussions and future patch sets.
+Was there a way that I could reproduce the same workload or something
+simpler that would reproduce the issue on my side?
 
 BR, Jarkko
 
