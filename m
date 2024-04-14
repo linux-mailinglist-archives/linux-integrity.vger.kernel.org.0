@@ -1,219 +1,83 @@
-Return-Path: <linux-integrity+bounces-2112-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2113-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A7578A406F
-	for <lists+linux-integrity@lfdr.de>; Sun, 14 Apr 2024 07:52:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A70CC8A4105
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Apr 2024 09:47:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25432281AE3
-	for <lists+linux-integrity@lfdr.de>; Sun, 14 Apr 2024 05:52:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58CB31F213B2
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Apr 2024 07:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588FC1B966;
-	Sun, 14 Apr 2024 05:52:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D91208C3;
+	Sun, 14 Apr 2024 07:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ehZV8xsd"
+	dkim=pass (1024-bit key) header.d=siemens.com header.i=michael.haener@siemens.com header.b="Gz8TYfjE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3FF1B962
-	for <linux-integrity@vger.kernel.org>; Sun, 14 Apr 2024 05:52:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3854F2032D
+	for <linux-integrity@vger.kernel.org>; Sun, 14 Apr 2024 07:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713073934; cv=none; b=Npyr42EMwi9HzAh5xd8AWhr0F1SMYbox6MXn0vCLYU21++q7jBdDghVOHsp/R/9j+xqLOArNVobA2YrBljI6OPbHAj9plaehuBMmVR2J5ntVUJTvPEPQPbTQ8vQrZIqwWrF2CyYHS660uMKJic+NzLIDR/yFx1IOPsEv5sdtUig=
+	t=1713080835; cv=none; b=qhHtqrvFl0ehX8x8lnSR36wmrwlNqlbLHIfHFtFkbbOezsij8CzK+EAo9V4M3hHqAJ7eNbDIbtLnCBjJxBGRNS85TvPl3QgA5g34Ni3REmANX3Fubnz5CGuVCmbclnQDdl9EgV/Etb1T1LWa9KJFtgCBkdCv1E9VTTxOKk91/D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713073934; c=relaxed/simple;
-	bh=gkFjdp4a1rNpx/+zlzyEZoGADjSfZU3nNZhtvmvrq3E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xje32592FOgSmGjMrNZ052Qr1RI07n6kCotJLnLrGlsioToG6DTVraCF+hRwe5/NDfXczFTGnVj1unIEc7VA+H7vht7ZikyKsCdsGwpFQgUegBOqoqUlwy/NI5i5L34FKDIm0XB+eBLAhfv29b4tn8KIkRl6y+niwCULXs18n34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ehZV8xsd; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46ea03c2a5so349999366b.1
-        for <linux-integrity@vger.kernel.org>; Sat, 13 Apr 2024 22:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713073931; x=1713678731; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=+BIcKwkF8WH4Du8nK3Cmra0ZAndhivR3Sa8HBz2YQiQ=;
-        b=ehZV8xsd3ixjCCzalP1Q2su0Pb1iW/ni1oOSvfC4rb2zJktYeM+7zOJS2MXmh/mIDt
-         3Ec9jMnWd0wpSxGUSCV/s9xN2AqpeYDmodzt8UiOIXx1H2cKofw31JpZgSmsUnTSMrgI
-         dXWlU+N5JQz1/laxFO7wKbrkpaea9Rg5o7gDNTFFdSu1fEJo5g0B+y84n1qkSEP6+nJQ
-         XBIp770lEX2VsmREuEdxHHQ0INegPI6px46z5AXMfp7tR/zXteQMr0JJDXrACX8BOI85
-         B4dnU3InFdZZaexcR5E7K8xfuoqYb3kX2HZ5Xuzy3sUJ0LsT9bo1jZ43GXcQkRJb25DK
-         H03Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713073931; x=1713678731;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+BIcKwkF8WH4Du8nK3Cmra0ZAndhivR3Sa8HBz2YQiQ=;
-        b=oq9WRRU505caXmaO7R6TP3JmUCxll/lpGuWZPu5/jVWToSoBHf4pQqCY1x9DKwg+hV
-         7Vj661UIC9ZzJSw7sHzcHd+mMaRYPniJRiVPiwWGJ6fwhiC9BwphwG2mWXWxhDPRmvic
-         vCZ0eJTZp9YKS8hGV0PrddWUpSdxq5l9w7xqCqZ0wNswphUj8IJBfVCKc3uQbpVHF+OD
-         B3tCvpRU4tdS8pn8oKucrHqXaBAunq7lAzmsyhJELkTFlWCYqzzfA3nB/kOW99n2l4yl
-         G3Sd/9sFqemU/w3kGRdfxcuyBJviQMHvcJFtHXcl/feg9J6keK6KAwaQ2VFu0gdxzhnO
-         RGnw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0IF9JU7BPOeu1IlLkE713MRn/va6fQfvnDmvjBxTsRYcD9qQLUtWiwpXrkpNZb7ljUr3QfEL9dU2P2XUsujpewllnoKpGDmjcbQLRSHs9
-X-Gm-Message-State: AOJu0YyzoFVegq7opO0uv849Xin1mUJibFEyRmLxpIpy2Hq0bfynu/RY
-	c9DBH/wHwlmPcLUYFxUEU+jUhEFi5g720QtfHsTRSfB/lFNS2mliUJCX/R6KpP4=
-X-Google-Smtp-Source: AGHT+IFr3sMSlS0w7sqj1Zvpz3WJKCfOx9Zh4bRu5T7ATZy7Dt2XN+fj93fGbzN8GCaMHBg8eslEQg==
-X-Received: by 2002:a17:907:7da4:b0:a52:5827:fb9 with SMTP id oz36-20020a1709077da400b00a5258270fb9mr1347004ejc.27.1713073930868;
-        Sat, 13 Apr 2024 22:52:10 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id x26-20020a170906711a00b00a521591ffacsm3798407ejj.34.2024.04.13.22.52.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Apr 2024 22:52:10 -0700 (PDT)
-Message-ID: <8de8590f-0ed3-4fd1-82a3-96b5fb767e48@linaro.org>
-Date: Sun, 14 Apr 2024 07:52:08 +0200
+	s=arc-20240116; t=1713080835; c=relaxed/simple;
+	bh=66B9xW2JnZF+T+ORl+vmwNxP9ZuLdipN2y3NqjssXK0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W+KJnUbxdauB7RMDZyygmx2ez4wiE2TO1NYVjctvYpC6xBCwss/SUqkv6qaUywe44nmZRXUqLbc3A8aKxfD708AOGiPzCZ7fRjSi73ey37D0z4r6oNE1JHwmQfGZ2XvXrNkqOzMkUAdfcqVAgFJw90Awv6fUyoHFYA9hKQaAclU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=michael.haener@siemens.com header.b=Gz8TYfjE; arc=none smtp.client-ip=185.136.64.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 202404140747034f580c8d0494f2c544
+        for <linux-integrity@vger.kernel.org>;
+        Sun, 14 Apr 2024 09:47:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=michael.haener@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=mRTcKk9CAwzkOcmbjmAlIJKdoAVTq0P9oRRdIYZzYdw=;
+ b=Gz8TYfjEfurOTWhvYtKCLk18xlnVUejBN5W04nkiza/SyUHBV6y9rUVvs5Ab279BVT5Y4j
+ 3Z4Z9+I8eg3XPlDoLp/3GpAPJJGtnxmPuHXVb6Lt9m7pAlTu2wjdly7zWfG/6gjINpe0VLMb
+ XlfvwUemmwfBr2vtISPg0rpvxXrnQ=;
+From: Michael Haener <michael.haener@siemens.com>
+To: linux-integrity@vger.kernel.org
+Cc: Michael Haener <michael.haener@siemens.com>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lukas Wunner <lukas@wunner.de>,
+	Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Subject: [PATCH v2 0/1] Add ST33KTPM2XI2C chip to the TPM TIS I2C driver
+Date: Sun, 14 Apr 2024 09:44:33 +0200
+Message-ID: <20240414074440.23831-1-michael.haener@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] dt-bindings: tpm: Add st,st33ktpm2xi2c to TCG TIS
- binding
-To: "Haener, Michael" <michael.haener@siemens.com>,
- "lukas@wunner.de" <lukas@wunner.de>
-Cc: "jgg@ziepe.ca" <jgg@ziepe.ca>, "jarkko@kernel.org" <jarkko@kernel.org>,
- "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
- "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- "robh@kernel.org" <robh@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
- "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
-References: <20240413071621.12509-1-michael.haener@siemens.com>
- <20240413071621.12509-3-michael.haener@siemens.com>
- <8c13a349-a721-44d3-9e23-2e01f4c2ca4d@linaro.org>
- <Zhpb2URMxuoilKAZ@wunner.de>
- <3d08cf54-f58f-446f-977e-21ba65986924@linaro.org>
- <ZhpfwaIUc0HpfZP1@wunner.de>
- <889ca65c-c9c7-4658-9c34-5d89774218cc@linaro.org>
- <ZhpjozjbeWrb0OTl@wunner.de>
- <bbe365cd-698e-4507-b5e6-d7dd4dcc7a75@linaro.org>
- <ZhpkzWhOdW3OaJfn@wunner.de>
- <548b7a66-9a56-4971-89eb-1a147d658f0f@linaro.org>
- <ca685f5b60ac676a72b80b65b73b33d532617acd.camel@siemens.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ca685f5b60ac676a72b80b65b73b33d532617acd.camel@siemens.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-664519:519-21489:flowmailer
 
-On 14/04/2024 07:42, Haener, Michael wrote:
-> On Sat, 2024-04-13 at 13:01 +0200, Krzysztof Kozlowski wrote:
->> On 13/04/2024 12:56, Lukas Wunner wrote:
->>> On Sat, Apr 13, 2024 at 12:53:25PM +0200, Krzysztof Kozlowski
->>> wrote:
->>>> On 13/04/2024 12:51, Lukas Wunner wrote:
->>>>> The binding requires two entries in the compatible string used
->>>>> in the DT,
->>>>> the chip name followed by the generic string:
->>>>>
->>>>>         items:
->>>>>           - enum:
->>>>>               - infineon,slb9673
->>>>>               - nuvoton,npct75x
->>>>>           - const: tcg,tpm-tis-i2c
->>>>>
->>>>> This allows us to deal with device-specific quirks, should they
->>>>> pop up
->>>>> (e.g. special timing requirements, hardware bugs).  We don't
->>>>> know in
->>>>> advance if they will be discovered, but if they are, it's
->>>>> cumbersome
->>>>> to determine after the fact which products (and thus DTs) are
->>>>> affected.
->>>>> So having the name of the actual chip used on the board has
->>>>> value.
->>>>
->>>> So you say devices are compatible. Then the second patch is
->>>> wrong.
->>>>
->>>> I cannot respond to it, though... so NAK-here-for-second-patch.
->>>
->>> I disagree.  It's ugly to have inconsistencies between the DT
->>> bindings
->>> and the driver.  So I think patch [1/2] in this series is fine.
->>
->> You are mixing different things. This patchset creates inconsistency.
->> You even refer here to bindings while we discuss the driver...
->>
->> Why this one driver is different than all other Linux drivers? Why do
->> you keep pushing here entirely different behavior?
->>
->> The devices are compatible, so growing match table is both redundant
->> and
->> confusing. That's everywhere. TPM is not different.
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> Sorry for the mistakes made (kernel noob).
-> I made the patch for the driver analogous to the i2c-tpm of
-> infineon,slb9673 and nuvoton,npct75x. In the discussion I realize that
-> the compatibility is a duplication and should not be extended.
-> 
-> I now adjust the following in the series:
-> - correct cc receiver list
-> - delete driver patch with compatibility extension
-> - change commit title to "dt-bindings: tpm: Add st,st33ktpm2xi2c"
+This patch series adds support for the ST33KTPM2XI2C chip.
 
-Thanks.
+Changelog:
+v2: removed driver patch
 
-Best regards,
-Krzysztof
+Michael Haener (1):
+  dt-bindings: tpm: Add st,st33ktpm2xi2c
+
+ Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+-- 
+2.44.0
 
 
