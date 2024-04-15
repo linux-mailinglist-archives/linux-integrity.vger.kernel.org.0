@@ -1,211 +1,168 @@
-Return-Path: <linux-integrity+bounces-2149-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2150-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92B0D8A5767
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Apr 2024 18:15:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C6238A59F6
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Apr 2024 20:35:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 070261F2388F
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Apr 2024 16:15:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 533C32836FD
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Apr 2024 18:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6FCB8287A;
-	Mon, 15 Apr 2024 16:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A30215445E;
+	Mon, 15 Apr 2024 18:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XyTaOYy4"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E394B82862;
-	Mon, 15 Apr 2024 16:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F259E13666E;
+	Mon, 15 Apr 2024 18:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713197613; cv=none; b=Fk33ZLvthvRUIsD5NeA3SjlEvXvMhg6uqOh0937PIHAmRaq9F0iaDXvt7mktnexI9gpgslLeQ1mx01VlkZHyjFXTRGInXwDGDPLFtOryDkZYOHbTD0jkg5mM4WqPhWT1fOTszCTDqmX2PLx3IqOX6HyyFwvgTGM04mZj/vBIhag=
+	t=1713206125; cv=none; b=RGznKpGwv8wxna1L0AojoFsPE6WVOEhCx20HtUJxxwDwmYVLpbLkRHSDZgZdsbr5VlGVf/B9ZdghmX9L/NUVU/985yXpeQTk8GbmCq3+9HhRnFFJ6HmF0mFbgGI2h9L9yOS/LPcDNNr2qWqDqLhYyVIre8AP62w681x6bHgUdHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713197613; c=relaxed/simple;
-	bh=OstlfuSyRFOTycwkFPIRoGHthbADv/RkObuMjJltxto=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qBD6yVTZtH4Bp19r7NML1qrP1XIuSS5MbFMSXCqIJ7oKDqd0XyTjUBKcPmRofpdjLb2Nv+H38RWvPa5C5+9nDGJRpY6mhJTRkrlfHq77K+vhbAbKpHf+TiwqRGQo9aPN+EaNjtSku8x1C/yKcuDIopet+jMCyu2t+OAdwwupYbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4VJBcp5D7Cz9xHvk;
-	Mon, 15 Apr 2024 23:56:58 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 120C41408C5;
-	Tue, 16 Apr 2024 00:13:23 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwDn0iaZUR1m4n9HBg--.16529S11;
-	Mon, 15 Apr 2024 17:13:22 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: corbet@lwn.net,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	wufan@linux.microsoft.com,
-	pbrobinson@gmail.com,
-	zbyszek@in.waw.pl,
-	hch@lst.de,
-	mjg59@srcf.ucam.org,
-	pmatilai@redhat.com,
-	jannh@google.com,
-	dhowells@redhat.com,
-	jikos@kernel.org,
-	mkoutny@suse.com,
-	ppavlu@suse.com,
-	petr.vorel@gmail.com,
-	mzerqung@0pointer.de,
-	kgold@linux.ibm.com,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v2 9/9] ima: Register to the digest_cache LSM notifier and process events
-Date: Mon, 15 Apr 2024 18:10:44 +0200
-Message-Id: <20240415161044.2572438-10-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240415161044.2572438-1-roberto.sassu@huaweicloud.com>
-References: <20240415161044.2572438-1-roberto.sassu@huaweicloud.com>
+	s=arc-20240116; t=1713206125; c=relaxed/simple;
+	bh=aMpLn34rgN3Wu7qR0MHV/hkCetkhm4GVgtqnR3BnptI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=iMGNlkwqcc0i5t5wPnJMghcePjG7Z4PWY7Oj+as0/63p6uXMESTAp2rzUv5exMhG2xXhBy3nBQ0pYHm+INFD6vc3M2daGuwa6ZoiGR8ZHA5up/9oUAtK/pKR19uF8AOcXtZpU5ayW9iZ6tuM70gDxSt8a6a68dfgreRcUjfFs4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XyTaOYy4; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43FHOUsW006406;
+	Mon, 15 Apr 2024 18:35:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=D5i5HVxEBVh4tmqqQG3dAXHenBgT7Vw/0+SyVXK1vbw=;
+ b=XyTaOYy4PxQELlKiYptJO1fr6d5zu3QMk3l2auMOCrp2iZ3YFDzWhAbW48RY+3hWidvO
+ psCcKflFMSEOP/3uAPzEBKbLrN7XVintNIYuI8kzb5i2/l+NRWWSAR0EhUQZiJVcE7zF
+ 9YJ+NqyRaWMRPH16D16WA/OTwnFJkLBgcKE1V1DX5qhxOSHxDzo/Qo3P6uFcJoS2fkGc
+ kcUpcOgMVwJfdDt+eAUCK+JDYFLR7WTER/3MoFX7wXgwdoj0OZu6wLIfQFBgcFuM8Dng
+ MZe2tIxOkTqXcJ+7Pn8ZRRUsS35HYut4AO2OnbBLSNQhieEVC8sUnztr8OfXYQhfG8ni /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xh7xpr7f3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Apr 2024 18:35:07 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43FIZ6pJ011059;
+	Mon, 15 Apr 2024 18:35:06 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xh7xpr7f2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Apr 2024 18:35:06 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43FHNDRV011164;
+	Mon, 15 Apr 2024 18:35:05 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xg73292ut-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Apr 2024 18:35:05 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43FIZ3oq9831124
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 15 Apr 2024 18:35:05 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1C8165805C;
+	Mon, 15 Apr 2024 18:35:03 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0490758058;
+	Mon, 15 Apr 2024 18:35:02 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.watson.ibm.com (unknown [9.31.110.109])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 15 Apr 2024 18:35:01 +0000 (GMT)
+Message-ID: <52645fb25b424e10e68f0bde3b80906bbf8b9a37.camel@linux.ibm.com>
+Subject: Re: [RFC 2/2] ima: Fix detection of read/write violations on
+ stacked filesystems
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
+Cc: Stefan Berger <stefanb@linux.ibm.com>,
+        Amir Goldstein
+ <amir73il@gmail.com>, linux-integrity@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        roberto.sassu@huawei.com, Christian Brauner <brauner@kernel.org>
+Date: Mon, 15 Apr 2024 14:34:56 -0400
+In-Reply-To: <CAJfpegvPwpS5_S4qrrVbeC1RovP8jeNuDCYLbdcZ_XDFgfgftQ@mail.gmail.com>
+References: <20240412140122.2607743-1-stefanb@linux.ibm.com>
+	 <20240412140122.2607743-3-stefanb@linux.ibm.com>
+	 <CAOQ4uxjDQO91cjA0sgyPStkwc_7+NxAOhyve94qUvXSM3ytk1g@mail.gmail.com>
+	 <89b4fb29-5906-4b21-8b5b-6b340701ffe4@linux.ibm.com>
+	 <CAJfpeguctirEYECoigcAsJwpGPCX2NyfMZ8H8GHGW-0UyKfjgg@mail.gmail.com>
+	 <b74a9a3edc52d96a7a34d6ba327fdb2a5a79a80d.camel@linux.ibm.com>
+	 <CAJfpegvPwpS5_S4qrrVbeC1RovP8jeNuDCYLbdcZ_XDFgfgftQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-23.el8_9) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: P4YbifeBC878fdZOryHn8Fupjdc1zeUs
+X-Proofpoint-ORIG-GUID: ErHeamn1iAxmoNK9_tHWbWoVqE6zMJ7H
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwDn0iaZUR1m4n9HBg--.16529S11
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr47Gr1xXw47ZFy8ArW7twb_yoWrXF1fpa
-	9rG3WrKrW8Zry7ur4fAFnFyayrK3yktayxW395X3sIyF4DXr1jy395Jr1UuFyrJr4Yqw4x
-	tw45Kry5uw1jyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x02
-	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
-	kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-	5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZV
-	WrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY
-	1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-	AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW0oVCq3bIYCTnIWIevJa73UjIFyTuY
-	vjxUxrcTDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj5x3HAAAsN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-15_15,2024-04-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1015 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404150122
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, 2024-04-15 at 14:57 +0200, Miklos Szeredi wrote:
+> On Mon, 15 Apr 2024 at 12:47, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > It's queued in
+> > https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/
+> > next-
+> > integrity branch and should be linux-next.
+> 
+> Is there a document about ima/evm vs. overlayfs?
 
-A digest cache used for measurement/appraisal might change over the time
-(due to file modification, directory changes). When that happens, IMA
-should invalidate the cached integrity result for affected inodes and
-evaluate those inodes again.
+Not yet.
+> 
+> What exactly is it trying to achieve and how?
 
-Implement ima_digest_cache_change(), to be invoked at every notification by
-the digest_cache LSM, and register it as a callback with
-digest_cache_register_notifier().
+Although "Changes to the underlying filesystems while part of a mounted overlay
+filesystem are not allowed.", from an integrity perspective these changes might
+affect overlay files.  So they need to be detected and possibly re-measured, re-
+appraised, and/or re-audited [1, 2].
 
-For every notification, and if the type of event is DIGEST_CACHE_RESET,
-retrieve the inode integrity metadata (if any), and set the
-IMA_CHANGE_XATTR atomic flag, so that IMA fully reevaluates the inode in
-process_measurement().
+Saying, "If the underlying filesystem is changed, the behavior of the overlay is
+undefined, though it will not result in a crash or deadlock." does not address
+the concerns about the integrity of the overlay file being accessed.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima_digest_cache.c | 31 +++++++++++++++++++++++
- security/integrity/ima/ima_digest_cache.h |  6 +++++
- security/integrity/ima/ima_main.c         | 11 +++++++-
- 3 files changed, 47 insertions(+), 1 deletion(-)
+Initially we disabled EVM on overlay, since calculating the overlay EVM HMAC,
+could result in taking an invalid HMAC value and making it valid.  Stefan's EVM
+patch set addresses this by only copying up the EVM portable & immutable
+signature [3, 4].
 
-diff --git a/security/integrity/ima/ima_digest_cache.c b/security/integrity/ima/ima_digest_cache.c
-index 013c69f265d8..0ab35575ff7c 100644
---- a/security/integrity/ima/ima_digest_cache.c
-+++ b/security/integrity/ima/ima_digest_cache.c
-@@ -90,3 +90,34 @@ void ima_digest_cache_update_allowed_usage(struct file *file,
- out:
- 	digest_cache_put(digest_cache);
- }
-+
-+static int ima_digest_cache_change(struct notifier_block *nb,
-+				   unsigned long event, void *data)
-+{
-+	struct ima_iint_cache *iint;
-+	struct digest_cache_event_data *event_data = data;
-+
-+	if (event != DIGEST_CACHE_RESET)
-+		return NOTIFY_DONE;
-+
-+	iint = ima_iint_find(event_data->inode);
-+	if (!iint) {
-+		pr_debug("Integrity metadata not found for inode %lu\n",
-+			 event_data->inode->i_ino);
-+		return NOTIFY_OK;
-+	}
-+
-+	set_bit(IMA_CHANGE_XATTR, &iint->atomic_flags);
-+	pr_debug("Integrity metadata of inode %lu successfully reset\n",
-+		 event_data->inode->i_ino);
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block digest_cache_notifier = {
-+	.notifier_call = ima_digest_cache_change,
-+};
-+
-+int ima_digest_cache_register_notifier(void)
-+{
-+	return digest_cache_register_notifier(&digest_cache_notifier);
-+}
-diff --git a/security/integrity/ima/ima_digest_cache.h b/security/integrity/ima/ima_digest_cache.h
-index cb47c15e975d..44c188c2fb93 100644
---- a/security/integrity/ima/ima_digest_cache.h
-+++ b/security/integrity/ima/ima_digest_cache.h
-@@ -15,6 +15,7 @@ void ima_digest_cache_store_allowed_usage(struct file *file,
- void ima_digest_cache_update_allowed_usage(struct file *file,
- 					   struct ima_iint_cache *iint,
- 					   u64 *allowed_usage);
-+int ima_digest_cache_register_notifier(void);
- #else
- static inline void
- ima_digest_cache_store_allowed_usage(struct file *file,
-@@ -27,4 +28,9 @@ ima_digest_cache_update_allowed_usage(struct file *file,
- 				      u64 *allowed_usage)
- { }
- 
-+static inline int ima_digest_cache_register_notifier(void)
-+{
-+	return 0;
-+}
-+
- #endif /* CONFIG_SECURITY_DIGEST_CACHE */
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 7ae2bd888d41..fe826755acd1 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -1159,8 +1159,17 @@ static int __init init_ima(void)
- 		return error;
- 
- 	error = register_blocking_lsm_notifier(&ima_lsm_policy_notifier);
--	if (error)
-+	if (error) {
- 		pr_warn("Couldn't register LSM notifier, error %d\n", error);
-+		return error;
-+	}
-+
-+	error = ima_digest_cache_register_notifier();
-+	if (error) {
-+		pr_warn("Couldn't register digest cache notifier, error %d\n",
-+			error);
-+		unregister_blocking_lsm_notifier(&ima_lsm_policy_notifier);
-+	}
- 
- 	if (!error)
- 		ima_update_policy_flags();
--- 
-2.34.1
+Lastly, if a file is being opened for read, but is already opened for write, or
+the reverse, the file measurement is meaningless.  A violation is audited and
+the IMA measurement list is invalidated.  This patch set similarly addresses the
+case where the underlying file is already opened for write and the overlay file
+is being opened for read.
+
+
+[1] Commit 18b44bc5a672 ("ovl: Always reevaluate the file signature for IMA")
+forced signature re-evaulation on every file access.
+
+[2] Commit b836c4d29f27 (ima: detect changes to the backing overlay file)
+
+[3] 
+https://lore.kernel.org/linux-integrity/20231219175206.12342-1-zohar@linux.ibm.com/
+
+[4] 
+https://lore.kernel.org/linux-integrity/20240223172513.4049959-1-stefanb@linux.ibm.com/
+
+thanks,
+
+Mimi
+
 
 
