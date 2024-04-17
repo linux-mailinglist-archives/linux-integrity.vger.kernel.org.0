@@ -1,109 +1,78 @@
-Return-Path: <linux-integrity+bounces-2181-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2182-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 569538A87F4
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Apr 2024 17:42:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 657538A8873
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Apr 2024 18:08:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 880F41C2160A
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Apr 2024 15:42:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64A72B21F7E
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Apr 2024 16:08:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9E32147C73;
-	Wed, 17 Apr 2024 15:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B7Ggu7IW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1DF91487E2;
+	Wed, 17 Apr 2024 16:08:49 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7F71474AF;
-	Wed, 17 Apr 2024 15:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0C01487C0;
+	Wed, 17 Apr 2024 16:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713368519; cv=none; b=AaM7FXu6iUSg+VP0CScDluSuurUyHjEOsGNDk6DR9Ru0jERTATnS5DcrfzG1PQcnzN2QyYSB7SeSdkKIVTz0xx5+9hxfL+6mUIHeu+moX1JLc+Ed/+UxJsrwtIu3IO2nPInP+O/I1OE1JWiy8ywZWqoR/Mij+Irl6PYfaJh/C0Q=
+	t=1713370129; cv=none; b=OBYG9RI4iAxmNRwjEb+LQfy42s0R1BcUsliKjz21LPTN+7RRiFA5ySK3YwUAqYgq1/yiR4TQD0p2I73vvJKk5v5rgrAao2tdnQLfUPZ7HNtlBFLOu4LMKTvMTI3q6IWhzP8Mfxz1hPEQbcknnbgzzIIqxfBiOc1CMR0ljYikffQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713368519; c=relaxed/simple;
-	bh=X8tyzIwBha9q3PVkl2DqYe/3JNv+4UmdMfGkcEkyilM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=BQVsGlq60mdXjz7/wa1kroVdjl+Vu6PtyG7DYMAIH7JwMAhe+lN5jIbtpASuRjlS/OHDS89u8YDtMHwDwhDDNHtEGJOK8UJGFvXRsBNTrXYg+Bt9GlvcF1chow5jnc052UyouoeoHIKpOUq2R02eE1pYan16CGPDF4wJ96WE3eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B7Ggu7IW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96E7C072AA;
-	Wed, 17 Apr 2024 15:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713368519;
-	bh=X8tyzIwBha9q3PVkl2DqYe/3JNv+4UmdMfGkcEkyilM=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=B7Ggu7IWGOdXdvw6cVHhVTgYIqAcF3+TAvaiJNvkcPQyE5T3T1uNmpds/OjXZ8zlq
-	 MjPPeSwgCG45H5zf72wpwXn1d7cnZtDpIJEOm0BToSvyDGgUl8hPvSrL/baY6FRP8n
-	 8BNPjzCCNhisp+Q48STLYE5h9L0pEQlRauDnYsTKKW80MeYfdFVL86LFgc07/NXBdv
-	 4lJ0LEJILNpJm0pcQbsCYGRlNjWVfT4ZoBbOP1NDqt+SOJFtp6TorI12ufwcwq2FrI
-	 kCywSO0JSs+s7QFI+FPWmInZpKy0gEsD4nfaFzC3a3g42HLozi3c0XwMrbT+tMd4P8
-	 zOqn57k8DrNgg==
+	s=arc-20240116; t=1713370129; c=relaxed/simple;
+	bh=26a4q1b+qSqumSamso89ZepY6YnikGWu88avFTTGmt8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IAa3BVDjNfHCOU+NZYzQDDP+HKCwqAoM7du7a5JL5cm/jmWNkLzOmWb0OHic+ngGlLCsN7Z2erc0FSSAOfm8W+/ZJ8Jo8/PmXg2XuyPci17ASUywd0/zdMbNK3yL7Koxll8O0mz9nZMdHqKRKR91C+ZJ/Y6QY8AX+bFexzSVGPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [172.18.169.210] (ip-185-104-138-26.ptr.icomera.net [185.104.138.26])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4500961E5FE05;
+	Wed, 17 Apr 2024 18:07:50 +0200 (CEST)
+Message-ID: <23faa727-4b1e-4eb2-9e43-c10b8fadaa23@molgen.mpg.de>
+Date: Wed, 17 Apr 2024 18:07:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 17 Apr 2024 18:41:56 +0300
-Message-Id: <D0MIG62V6JNV.3OZB5M1T63T7@kernel.org>
-Cc: "Jason Gunthorpe" <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 42/74] x86/cpu/vfm: Update tpm files
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Tony Luck" <tony.luck@intel.com>, "Peter Huewe" <peterhuewe@gmx.de>
-X-Mailer: aerc 0.17.0
+To: Tony Luck <tony.luck@intel.com>, Peter Huewe <peterhuewe@gmx.de>,
+ Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
+ linux-kernel@vger.kernel.org, patches@lists.linux.dev
 References: <20240416211941.9369-1-tony.luck@intel.com>
  <20240416212202.9452-1-tony.luck@intel.com>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
 In-Reply-To: <20240416212202.9452-1-tony.luck@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed Apr 17, 2024 at 12:22 AM EEST, Tony Luck wrote:
-> New CPU #defines encode vendor and family as well as model.
->
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
-> ---
->  drivers/char/tpm/tpm.h          | 1 +
->  drivers/char/tpm/tpm_tis_core.h | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 61445f1dc46d..895f2dba266c 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -28,6 +28,7 @@
->  #include <linux/tpm_eventlog.h>
-> =20
->  #ifdef CONFIG_X86
-> +#include <asm/cpu_device_id.h>
->  #include <asm/intel-family.h>
->  #endif
-> =20
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_c=
-ore.h
-> index 13e99cf65efe..c940fd18988e 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -210,7 +210,7 @@ static inline int tpm_tis_verify_crc(struct tpm_tis_d=
-ata *data, size_t len,
->  static inline bool is_bsw(void)
->  {
->  #ifdef CONFIG_X86
-> -	return ((boot_cpu_data.x86_model =3D=3D INTEL_FAM6_ATOM_AIRMONT) ? 1 : =
-0);
-> +	return ((boot_cpu_data.x86_vfm =3D=3D INTEL_ATOM_AIRMONT) ? 1 : 0);
->  #else
->  	return false;
->  #endif
+Dear Tony,
 
-Thanks!
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Thank you for your patch. It’d be great if you changed the commit 
+message summary/title to be more specific. Currently, the short log, 
+`git log --oneline`, is not very meaningful. Maybe:
 
-You want me to pick this?
+tpm: Use new VFM macro INTEL_ATOM_AIRMONT
 
-BR, Jarkko
+or
+
+x86/cpu/vfm: Use macro INTEL_ATOM_AIRMONT in tpm
+
+
+Kind regards,
+
+Paul
 
