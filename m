@@ -1,159 +1,140 @@
-Return-Path: <linux-integrity+bounces-2179-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2180-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05EB58A7D60
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Apr 2024 09:49:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE9938A805D
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Apr 2024 12:05:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FE0C283F2A
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Apr 2024 07:49:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C384B22621
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Apr 2024 10:05:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 722726A357;
-	Wed, 17 Apr 2024 07:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 154E213A896;
+	Wed, 17 Apr 2024 10:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AAzs3ZuR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786AC17F7;
-	Wed, 17 Apr 2024 07:49:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B758C13A258;
+	Wed, 17 Apr 2024 10:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713340154; cv=none; b=ZKQ9v4Re9N67njJhSRB0CaD/hSjnRZBHbbRHC5kTbP39r6Q4vhNhQmYdbPXS6m/8iyRBUHoyLGjTrLm4LcvD4QOfbsBkkp8A/vPBEwijRYOIdyHeZvLHj4CS5JKLAx9qXP9ZBcKn84hvcs1S/BdvaI1eI4A8EvuZYm+A1hmRnps=
+	t=1713348342; cv=none; b=aKotXkkS9xCcP0POe5Kk0jopAB7BOFPVzZQjBY5ItccajdNy7IPztNuyUrw+3d8oFv4JcGlXSkTzt6NOmq6P9+yMLtVbVzIZZXlO9N9EuEGG5kSFsU0V9bik0qNB8++Zkksa4e1mH7s7eL4PjnzNqLWTNS1pm7Sr1vzzFS5qKtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713340154; c=relaxed/simple;
-	bh=co+z49j0tM1Q9zS5k/yfns53parrcX8vZUN/HgGXnYU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hPcXitYif7q0OfFWVe3ChiAxWJlenoJk8rJwBG3LwwFM91/R34wwm3FEEMNAHSYyUgHkcRW7C7OtTjm48q3T1Nc9dJFjHtxlDqwctoPo7Yv1ceTN73+YiFVuqhUYsI0s93kW5fdOJp1PPafdalf1DHyE1KcA2XWZw+/hRiCqHvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4VKCdZ6hR2z2CcrW;
-	Wed, 17 Apr 2024 15:46:10 +0800 (CST)
-Received: from dggpemm500024.china.huawei.com (unknown [7.185.36.203])
-	by mail.maildlp.com (Postfix) with ESMTPS id E3BB61400DA;
-	Wed, 17 Apr 2024 15:49:08 +0800 (CST)
-Received: from huawei.com (10.67.174.60) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Wed, 17 Apr
- 2024 15:49:08 +0800
-From: GUO Zihua <guozihua@huawei.com>
-To: <zohar@linux.ibm.com>, <roberto.sassu@huawei.com>,
-	<dmitry.kasatkin@gmail.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
-	<serge@hallyn.com>, <stephen.smalley.work@gmail.com>
-CC: <eric.snowberg@oracle.com>, <omosnace@redhat.com>,
-	<linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>
-Subject: [PATCH] ima: Avoid blocking in RCU read-side critical section
-Date: Wed, 17 Apr 2024 07:44:44 +0000
-Message-ID: <20240417074444.2834769-1-guozihua@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1713348342; c=relaxed/simple;
+	bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F1gfO8ucyMfydlTHUFuf9SDLrFAoOZtjhQTv9e5gmJ0MS085w7yKlIvYGQM0CH3QHioEMnV8t4QcSG0PHBqo5XXIysRhL3KK8ee57DyzH8JykzQcBsQVJWdAXRlcUk7wutKUgbASxupaZd8yiGqEocxZFgAJ5kU99suoVpVtCpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AAzs3ZuR; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d8b887bb0cso4045939a12.2;
+        Wed, 17 Apr 2024 03:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713348340; x=1713953140; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
+        b=AAzs3ZuRJX7XDEU/S31apMVw0w4s7Q7KO0FdVCxGcPYSQYxeRSY28pC1eu3Nrio5c1
+         /8hlCKRtkZAgyv8u2ZkQRGfxaZJMq1OWpJiBVcvOqdTd2WBLQIZ2kjfFBum4N2R8Isih
+         f2SkFV+0ugaXXipJ2Nlmu4lZAs98Uu7pgtHxn5StoZ+osrPawfSsDoFTHgEoyq2Tt6Q8
+         NRjLJNg4pvoJ5WApc/OPQ4IAFhbQ7RH2Kz3RT5CY8e2rwsQ/E1wXGXRIyVxPAPyHxqu0
+         xXjLmG+nWpVe8EKo2OzaEGE6HiF4EW+wqWYp7nr6UxxOhqD0p14pNRRYbP31JFxGWdYJ
+         BuPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713348340; x=1713953140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1gRmg87JIr+AbQO3Esc+cHkCY63QUm02iWl6ErooOoI=;
+        b=iIRsi31AfcqzDKUNNO6o9d3ib8xGzePLs9voX9qMDY78+WB0gtQYpo7kXPOBnw2WTm
+         YzYRwT+Oo0gI3yiO4xGWx6DR+eU0urjiDqvVEdgaDP/jcMcgDaLBdIH6/wDsRP3KCpgl
+         Pz+utAPk2ispxU0TLWkBdG2f4Y4/LM1n+AfVbxPPAGTpgEf9i0JxbOqcd4fZCsMHsSE0
+         pmro/RaRuyLVSEcdLlg9r7LgoRzpd4G5HWENm4VxUvcuRbrI2iiRiJTACsZIVfN12aSC
+         5gZk7AoirKe21tUqOoK9HMtPad2H4a5jwUjYz7cl5xmXvftqdXkjqWsHFMN08st5+AzW
+         qHEA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7IS6j45Gfqpkz+GTYOT1w1GCNrANLl/xhNlogdKJkw3K3EqUqgFKkc2TgQcow4QdjzjHAuB5G3fNaypVxqolnIJrRwppo7MhG2zZs9+/T/Nbl7SXr3Y2gQvvWRjUjEaiFSkIs1YjlyYKaPbKoSs+JVjxeDE6jhEgRQPQzpZbQHKVI10sX1XjmInTqEUNM70jCiOsLvZiLojjq55CPA52TGCgxr5GK93NyY2kPva240GtdGqkSCf2ItMR1qGvwAKhKpy4rGF4SeQ==
+X-Gm-Message-State: AOJu0Yy7solfZwT8Xrej9ZNsZNk0qeXZSEkViORqFlj1vWa7k1MVELAA
+	SlxwR+1FqfC8+ES8QkGdUbyMlj4fEsK0Id+6u0iD26wAp++h3IEJ
+X-Google-Smtp-Source: AGHT+IHoSQwgWNaYYN9PHfJ92Leu3dCSJnPJtoI+4IJ8iitgaNIncK7hpg/lzzZCpwVd83QGt3/Z2Q==
+X-Received: by 2002:a17:90a:108:b0:2aa:7057:437b with SMTP id b8-20020a17090a010800b002aa7057437bmr6040509pjb.16.1713348339921;
+        Wed, 17 Apr 2024 03:05:39 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id t12-20020a17090a5d8c00b002a474e2d7d8sm1019325pji.15.2024.04.17.03.05.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Apr 2024 03:05:38 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 1682E18462BA0; Wed, 17 Apr 2024 17:05:35 +0700 (WIB)
+Date: Wed, 17 Apr 2024 17:05:35 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Randy Dunlap <rdunlap@infradead.org>,
+	Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net,
+	zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
+	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [PATCH v17 20/21] Documentation: add ipe documentation
+Message-ID: <Zh-e7945DM6f2u9T@archie.me>
+References: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
+ <1712969764-31039-21-git-send-email-wufan@linux.microsoft.com>
+ <Zh0Zh3-xraVl85Lm@archie.me>
+ <a2266217-c3ad-4bb2-8188-498a2c8ae36c@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500024.china.huawei.com (7.185.36.203)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="0nWDRmFxn5oWDUvp"
+Content-Disposition: inline
+In-Reply-To: <a2266217-c3ad-4bb2-8188-498a2c8ae36c@infradead.org>
 
-A panic happens in ima_match_policy:
 
-BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
-PGD 42f873067 P4D 0
-Oops: 0000 [#1] SMP NOPTI
-CPU: 5 PID: 1286325 Comm: kubeletmonit.sh Kdump: loaded Tainted: P
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
-RIP: 0010:ima_match_policy+0x84/0x450
-Code: 49 89 fc 41 89 cf 31 ed 89 44 24 14 eb 1c 44 39 7b 18 74 26 41 83 ff 05 74 20 48 8b 1b 48 3b 1d f2 b9 f4 00 0f 84 9c 01 00 00 <44> 85 73 10 74 ea 44 8b 6b 14 41 f6 c5 01 75 d4 41 f6 c5 02 74 0f
-RSP: 0018:ff71570009e07a80 EFLAGS: 00010207
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000200
-RDX: ffffffffad8dc7c0 RSI: 0000000024924925 RDI: ff3e27850dea2000
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffffabfce739
-R10: ff3e27810cc42400 R11: 0000000000000000 R12: ff3e2781825ef970
-R13: 00000000ff3e2785 R14: 000000000000000c R15: 0000000000000001
-FS:  00007f5195b51740(0000) GS:ff3e278b12d40000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000010 CR3: 0000000626d24002 CR4: 0000000000361ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- ima_get_action+0x22/0x30
- process_measurement+0xb0/0x830
- ima_file_check+0x64/0x90
- path_openat+0x571/0x1720
- do_filp_open+0x9b/0x110
- do_sys_open+0x1bd/0x250
- do_syscall_64+0x5d/0x1d0
- entry_SYSCALL_64_after_hwframe+0x65/0xca
+--0nWDRmFxn5oWDUvp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-(stack trace marked with ? is deleted)
+On Mon, Apr 15, 2024 at 07:56:16AM -0700, Randy Dunlap wrote:
+>=20
+> On 4/15/24 5:11 AM, Bagas Sanjaya wrote:
+> > The doc LGTM, thanks!
+> >=20
+> > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>=20
+> Hi,
+> Please see netiquette, section "Trim replies".
+> Thanks.
+>=20
+>=20
+> --=20
+> #Randy
+> https://people.kernel.org/tglx/notes-about-netiquette
+> https://subspace.kernel.org/etiquette.html
 
-Commit c7423dbdbc9e ("ima: Handle -ESTALE returned by
-ima_filter_rule_match()") introduced call to ima_lsm_copy_rule within a
-RCU read-side critical section which contains kmalloc with GFP_KERNEL.
-This implies a possible sleep and violates limitations of RCU read-side
-critical sections on non-PREEMPT systems.
+Thanks for the tip!
 
-Sleeping within RCU read-side critical section might cause
-synchronize_rcu() returning early and break RCU protection, allowing a
-UAF to happen.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-The root cause of this issue could be described as follows:
-|	Thread A	|	Thread B	|
-|			|ima_match_policy	|
-|			|  rcu_read_lock	|
-|ima_lsm_update_rule	|			|
-|  synchronize_rcu	|			|
-|			|    kmalloc(GFP_KERNEL)|
-|			|      sleep		|
-==> synchronize_rcu returns early
-|  kfree(entry)		|			|
-|			|    entry = entry->next|
-==> UAF happens and entry now becomes NULL (or could be anything).
-|			|    entry->action	|
-==> Accessing entry might cause panic.
+--0nWDRmFxn5oWDUvp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-To fix this issue, we are converting all kmalloc that is called within
-RCU read-side critical section to use GFP_ATOMIC.
+-----BEGIN PGP SIGNATURE-----
 
-Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
-Cc: stable@vger.kernel.org
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/ima_policy.c | 2 +-
- security/selinux/ss/services.c      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZh+e6wAKCRD2uYlJVVFO
+o4TXAPwN11FytsnDX/+gFpUvWYFc3CxPaaA7sJCuHF5qVYQtGAEA6GP0hs+AljG4
+tOsfo209C7he+IJJJUnxDpScnZoh/wc=
+=jvcJ
+-----END PGP SIGNATURE-----
 
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index c0556907c2e6..c0cf9b6a01f0 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -410,7 +410,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 	 * Immutable elements are copied over as pointers and data; only
- 	 * lsm rules can change
- 	 */
--	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
-+	nentry = kmemdup(entry, sizeof(*nentry), GFP_ATOMIC);
- 	if (!nentry)
- 		return NULL;
- 
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index e88b1b6c4adb..b7cfad1a2964 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -3549,7 +3549,7 @@ int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
- 		return -EINVAL;
- 	}
- 
--	tmprule = kzalloc(sizeof(struct selinux_audit_rule), GFP_KERNEL);
-+	tmprule = kzalloc(sizeof(struct selinux_audit_rule), GFP_ATOMIC);
- 	if (!tmprule)
- 		return -ENOMEM;
- 	context_init(&tmprule->au_ctxt);
--- 
-2.34.1
-
+--0nWDRmFxn5oWDUvp--
 
