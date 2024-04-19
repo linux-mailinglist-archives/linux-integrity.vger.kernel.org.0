@@ -1,121 +1,102 @@
-Return-Path: <linux-integrity+bounces-2189-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2190-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDAF48AAD87
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Apr 2024 13:18:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 838DE8AB5E2
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Apr 2024 22:06:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75A59282E74
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Apr 2024 11:18:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 128FBB20F4B
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Apr 2024 20:06:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0890A8172F;
-	Fri, 19 Apr 2024 11:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1115B13C9C8;
+	Fri, 19 Apr 2024 20:06:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ov+mWThE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EWgTgCD2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DC881725;
-	Fri, 19 Apr 2024 11:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CF82206C;
+	Fri, 19 Apr 2024 20:06:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713525505; cv=none; b=XLfaIs6WvSlB72tNCUgdoYlU6ENAn2fYlkAj5llL/6ZIZJrFSkBfP3iXGbbtvJfDbFRTf+Vn9YZGCo6U1bj9VoBiZ77SIPwNmrT7Fiu7gMsZUjgDwy/UBfMjpOJ+T93IQPenEb3IzD9fa7ZMhe+GmzZ3odKeNoxzVKQsXq2vUkU=
+	t=1713557165; cv=none; b=R1zoB8+7Oe1pJxnw+IOOFiCaonafB0BpdZJYf6AZRzHOfuSf4MPSY6M5UxOrnDuyKhb9UO1smJwYzoNaq4KFW0Ug28WC7smf18Wnn1C1OSqynMxYMC60P6jTiw+DHb90/Xv/w3UUvFCyKW/8tL+SrBzTwPB8jlrxAl67S6vHq7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713525505; c=relaxed/simple;
-	bh=4S0ijTuOG1XfPNB7vzzLF7bgqgJf2hetvsXjMkXUk+0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k0F3LCuoKY61KpYoXeoEUz+X0j6AFC92kJCWLaoruORmOhaMiKqs01jRwTLMD2AoVGx92Bdhm9/d7jzlVKHleckpPVZI+IwLi5i6oBMN7Q8YotBZRZYkSaO4Ndd+TBRMYNq7gkajgZoS3TtokIX8Imj7OGZYCrHNmiwajMDE4AE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ov+mWThE; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6eddff25e4eso1576687b3a.3;
-        Fri, 19 Apr 2024 04:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713525504; x=1714130304; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OyBuv5kBEYfUc16aLXP76ZXaynrNdrlIh1WL3rQFBdw=;
-        b=Ov+mWThE8IvrN65xo3/FOfZavMaJHKs3T3gm4+NbfMEjWCOGu5bHbtzCHiqniBTvMW
-         QC9H477bCfFlhhGsrTUQUVSR86+2bDVHtUiTq977no0Ou9dgW4RO0pf8D+mtBbWzInfj
-         iPasmg4oiCd+ICUpIfst6gfRVNe4qANSq0X5OwHAOK9I3eSOM8vV7NfeGbRSCuo9W8oE
-         YBGJW0m2zz4ynzAlAlo2N//FH2f9o5qEeQojD1bSfP7rQWcecJNJvtkV2dS7ea6f0OST
-         keLK8U4s3/1F+xxe2BhVIUmhRqdCOT47nDl7NKdXWRlZiu1B/YcoSEIQaxMFfHkYHQ4e
-         7T5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713525504; x=1714130304;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyBuv5kBEYfUc16aLXP76ZXaynrNdrlIh1WL3rQFBdw=;
-        b=P6xbUFUiPcV1a9/2mXLx1ZrPwldug+Om1IKM4fYQnsfn+9w7YTWkmhOoIR7GLZpI8K
-         iZUaq/YIsMJxu4IBMzjr5BuCq1B33u39fp5sYx8Fn1X9XKNzfJnmd9Z/Fbx4oh6uP4aU
-         SblXOysuqDhbz9GjRS+P+/VPtiaww/3p53MxOOnYvyFDvOTYHMFqMHkkBTvJdUYZ+q+z
-         eAGDdUf2IOJlliURYe/AgxCsGIR4zcUYZM0zJU9vdc77xri3VidAsgwJ9wExAKnybbXL
-         OaU4eMK2tYqSeUbYeuzh7OLyAkXpkBJEjjUL1oEhy99IeKGxz1JEknLh5kzUJmlK4IJv
-         ERXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXnVqKXKIcKadQb6OH504E7z4RpSxJw9UGcshX1Z2xQY/mukm/dJLgX6gAYnMSHdVRqY8SpPeEv4+PtSCPuuci+vEBuiuw6cRzqhW22RxUUK3NvkOz/28kxoF+XkYKGmkD/UHr2a2DAOfOmw2hzGqPg9NbGfsf7kp/QvFzPdAfbiP8E/mhsazCjGVnm9/PE7rDKGRVrAk7QDDYMaxXhL0KLIIhDm9FURQWXpFjsuE8NlbK72S3gdZn9/M1DYPQv
-X-Gm-Message-State: AOJu0Yy4JpBOyw1ByM+8VA44hHAPUVZMPtLtuCXsJlXk3x3gZfXfHkAj
-	sm+pFBPrc02nfV6+QxNUML0Ep6GI+xxRGpqQ5HDRvA2JOqEo2w5T
-X-Google-Smtp-Source: AGHT+IGrIiXTpCilLzBmkpvZQgTccBG7XaieqrHNhkdG0tln9wJXWvgEsCFL2ljmjKXvjnyamvrgcQ==
-X-Received: by 2002:a05:6a21:168b:b0:1ac:423b:7c7a with SMTP id np11-20020a056a21168b00b001ac423b7c7amr1456490pzb.21.1713525503827;
-        Fri, 19 Apr 2024 04:18:23 -0700 (PDT)
-Received: from [192.168.0.107] ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170902c41100b001e00285b727sm3104974plk.294.2024.04.19.04.18.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Apr 2024 04:18:23 -0700 (PDT)
-Message-ID: <fe361a16-1536-4c92-894a-0b24258384bf@gmail.com>
-Date: Fri, 19 Apr 2024 18:18:12 +0700
+	s=arc-20240116; t=1713557165; c=relaxed/simple;
+	bh=qiBYh7Q4vs/502OF3/ovuHA+agIZHizLsd++YZi/P5A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=r2dBQZ5mFQc4NWLNqj+/y7p4iv6TClNxtafBnCZDu/7mvSPxotTOH9/HZFkLU61CJRR6skzugrvmAbnl3EMsKOO9xgVuMTcS0q1hj2O70zOSdejZ8uz14EJoRM1+D6ULfLwHC3ez6W6+xe9+mDke/9cvOt0S51u8h261QRt3IDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EWgTgCD2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5328C072AA;
+	Fri, 19 Apr 2024 20:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713557164;
+	bh=qiBYh7Q4vs/502OF3/ovuHA+agIZHizLsd++YZi/P5A=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=EWgTgCD20cGXC2obnm+7DRzZMA2SWOgkh8x8neSq1xG/nL3Bp3eW7hGjTQM7iPzXA
+	 ld6cgcD4nAUa4/RwewmqbTEISAXlnKagvG/bJ8uE4PPy1t9lVoo/wzAOn4MRJOQRsA
+	 s4iDGy0T5VemW7vxJ0OaLUtuTQB94ADywih6ZgZafB2XuLokvxmSsOp/rwH7LCNdKD
+	 IkxT83hQQsNf30+99I5rFrKEj1KDmTVATZz9JPacceATz1VvwesUGBuZ37LOQspUhN
+	 Fymm8QpdJpJDcSmnxo/65A7umQY/1MgYimc6AZvALyr2SjAt29l8ZpJnWcbN41hgmM
+	 Y4uMybalywT9g==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 19 Apr 2024 23:05:55 +0300
+Message-Id: <D0ODBDZDHQ6J.ZC4UU90AZPFL@kernel.org>
+Cc: "linux-security-module" <linux-security-module@vger.kernel.org>,
+ "linux-doc" <linux-doc@vger.kernel.org>, "linux-kernel"
+ <linux-kernel@vger.kernel.org>, "linux-kselftest"
+ <linux-kselftest@vger.kernel.org>, "bpf" <bpf@vger.kernel.org>, "zohar"
+ <zohar@linux.ibm.com>, "dmitry.kasatkin" <dmitry.kasatkin@gmail.com>,
+ "linux-integrity" <linux-integrity@vger.kernel.org>, "wufan"
+ <wufan@linux.microsoft.com>, "pbrobinson" <pbrobinson@gmail.com>, "zbyszek"
+ <zbyszek@in.waw.pl>, "hch" <hch@lst.de>, "mjg59" <mjg59@srcf.ucam.org>,
+ "pmatilai" <pmatilai@redhat.com>, "jannh" <jannh@google.com>, "dhowells"
+ <dhowells@redhat.com>, "jikos" <jikos@kernel.org>, "mkoutny"
+ <mkoutny@suse.com>, "ppavlu" <ppavlu@suse.com>, "petr.vorel"
+ <petr.vorel@gmail.com>, "mzerqung" <mzerqung@0pointer.de>, "kgold"
+ <kgold@linux.ibm.com>
 Subject: Re: [PATCH v4 00/14] security: digest_cache LSM
-To: Roberto Sassu <roberto.sassu@huawei.com>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet <corbet@lwn.net>,
- paul <paul@paul-moore.com>, jmorris <jmorris@namei.org>,
- serge <serge@hallyn.com>, akpm <akpm@linux-foundation.org>,
- shuah <shuah@kernel.org>, "mcoquelin.stm32" <mcoquelin.stm32@gmail.com>,
- "alexandre.torgue" <alexandre.torgue@foss.st.com>, mic <mic@digikod.net>
-Cc: linux-security-module <linux-security-module@vger.kernel.org>,
- linux-doc <linux-doc@vger.kernel.org>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- linux-kselftest <linux-kselftest@vger.kernel.org>, bpf
- <bpf@vger.kernel.org>, zohar <zohar@linux.ibm.com>,
- "dmitry.kasatkin" <dmitry.kasatkin@gmail.com>,
- linux-integrity <linux-integrity@vger.kernel.org>,
- wufan <wufan@linux.microsoft.com>, pbrobinson <pbrobinson@gmail.com>,
- zbyszek <zbyszek@in.waw.pl>, hch <hch@lst.de>, mjg59 <mjg59@srcf.ucam.org>,
- pmatilai <pmatilai@redhat.com>, jannh <jannh@google.com>,
- dhowells <dhowells@redhat.com>, jikos <jikos@kernel.org>,
- mkoutny <mkoutny@suse.com>, ppavlu <ppavlu@suse.com>,
- "petr.vorel" <petr.vorel@gmail.com>, mzerqung <mzerqung@0pointer.de>,
- kgold <kgold@linux.ibm.com>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Bagas Sanjaya" <bagasdotme@gmail.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Roberto Sassu"
+ <roberto.sassu@huaweicloud.com>, "corbet" <corbet@lwn.net>, "paul"
+ <paul@paul-moore.com>, "jmorris" <jmorris@namei.org>, "serge"
+ <serge@hallyn.com>, "akpm" <akpm@linux-foundation.org>, "shuah"
+ <shuah@kernel.org>, "mcoquelin.stm32" <mcoquelin.stm32@gmail.com>,
+ "alexandre.torgue" <alexandre.torgue@foss.st.com>, "mic" <mic@digikod.net>
+X-Mailer: aerc 0.17.0
 References: <20240415142436.2545003-1-roberto.sassu@huaweicloud.com>
  <Zh4DQ7RGxtWCam8K@archie.me>
  <66201cd2.df0a0220.a8ad5.6fbaSMTPIN_ADDED_BROKEN@mx.google.com>
-Content-Language: en-US
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <66201cd2.df0a0220.a8ad5.6fbaSMTPIN_ADDED_BROKEN@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <fe361a16-1536-4c92-894a-0b24258384bf@gmail.com>
+In-Reply-To: <fe361a16-1536-4c92-894a-0b24258384bf@gmail.com>
 
-On 4/18/24 02:02, Roberto Sassu wrote:
-> 
-> 72374d71c315
-> 
-> Roberto
-> 
+On Fri Apr 19, 2024 at 2:18 PM EEST, Bagas Sanjaya wrote:
+> On 4/18/24 02:02, Roberto Sassu wrote:
+> >=20
+> > 72374d71c315
+> >=20
+> > Roberto
+> >=20
+>
+> Still FTA (fail to apply), unfortunately.
 
-Still FTA (fail to apply), unfortunately.
+Robert, quick suggestion.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Maybe pick recent rc for the patch set, rebase on top of that and
+document that to the cover letter?
 
+In git: "git rebase <version>" when on branch with the patches
+applied.
+
+BR, Jarkko
 
