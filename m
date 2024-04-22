@@ -1,191 +1,145 @@
-Return-Path: <linux-integrity+bounces-2193-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2194-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 573058AC287
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 03:26:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA57C8AC6A9
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 10:19:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16DBD1F20FF4
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 01:26:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63EC4283534
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 08:19:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 397CBED9;
-	Mon, 22 Apr 2024 01:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5179A537F1;
+	Mon, 22 Apr 2024 08:18:50 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1099D3D60;
-	Mon, 22 Apr 2024 01:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7E8502B6;
+	Mon, 22 Apr 2024 08:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713749190; cv=none; b=qGpSOgnTcyHyayNQoI9kBPk+r+/eUfU+tYadUfiqz7EzulHwnNITxeziESoZIqfdIciw89hC59vHnv68mP4zxUxUGQVt8GR5BajCJUDZuGPsY6Izmyv7S3apwN2WRETxcGT0xuWFxEapLqA2ng+1xVAKHV/8aK6ITI47iYuygtQ=
+	t=1713773930; cv=none; b=KTm7pF/s+L1x4s93exkltT3gtWTwvsrb5ODXQhDqV1rnnAEQ3cC/R1o07e8mV5kWKUt9/m0P52Y/SpCWQmj49+zfMhBkfvGYS8rXuoFDEqNLwia2T6OS19rsiHEZugkH98ZHKaimpuWC36p45qdtEJ9VWGvZGdRVj/5IXH1HAes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713749190; c=relaxed/simple;
-	bh=ZQW0ZhBG7pVYu0cg0d2HQ8nDyPwTqc3M1QmRWwlhzPs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=JQPk9Y97gC8a7eqPUCX/BHIm3l0FlsPugkjzmfgfbwH1lwqBRqwEjuT+2DYmJAx+mdQ/MsgqwsjsE0BGJl9hyIGknhn4O3C/7YsVD8wUmaqXEuhb2DTQAHw75wMCygYVG4Nu9JEl7ZVq6/clbG01IAf9iMq0lO/eqsU0UA18I1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4VN6vK5zcxzwTXM;
-	Mon, 22 Apr 2024 09:23:09 +0800 (CST)
-Received: from dggpemm500024.china.huawei.com (unknown [7.185.36.203])
-	by mail.maildlp.com (Postfix) with ESMTPS id 059B1140257;
-	Mon, 22 Apr 2024 09:26:18 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 22 Apr 2024 09:26:17 +0800
-Message-ID: <8b814f56-3987-5503-313d-fc3c3104e028@huawei.com>
-Date: Mon, 22 Apr 2024 09:26:17 +0800
+	s=arc-20240116; t=1713773930; c=relaxed/simple;
+	bh=1R0QdiqBkh2lDI1KZWlD4yhHxXvFKtuxtuwBOw/ITOE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=a+EoWro1vSYv/ZNn5sKp0LrXGEJL9PtjzaARAm/t9y97X+8es7AW8AXSONV2Xlw2Idw0f5RRs3eFRU0usNcj/3jgG7LtGO7qZ0wpNGQ6XH/onCZ8zFLmgWDArikSSFqCwco1GtxsJ9hEpRRlWDQsvNe7S4QvMQlAie6SNuX1T30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VNJ6g0Nzdz4x1R;
+	Mon, 22 Apr 2024 18:18:35 +1000 (AEST)
+From: Michael Ellerman <patch-notifications@ellerman.id.au>
+To: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Damien Le Moal <dlemoal@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Corey Minyard <minyard@acm.org>, Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Tero Kristo <kristo@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>, Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	John Allen <john.allen@amd.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Vinod Koul <vkoul@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Peter Rosin <peda@axentia.se>, Lars-Peter Clausen <lars@metafoo.de>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Markuss Broks <markuss.broks@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Lee Jones <lee@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Stanislaw Gruszka <stf_xl@wp.pl>, Kalle Valo <kvalo@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+	Alex Elder <elder@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	Jacky Huang <ychuang3@nuvoton.com>, Helge Deller <deller@gmx.de>,
+	Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org,
+	openipmi-developer@lists.sourceforge.net,
+	linux-integrity@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-fpga@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-stm32@st-md-mailman.stormr,
+	eply.com@web.codeaurora.org, linux-arm-kernel@lists.infradead.org,
+	netdev@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	iommu@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
+	linux-nfs@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
+In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
+References: <20240403080702.3509288-1-arnd@kernel.org>
+Subject: Re: (subset) [PATCH 00/34] address all -Wunused-const warnings
+Message-Id: <171377378377.1025456.1313405994816400451.b4-ty@ellerman.id.au>
+Date: Mon, 22 Apr 2024 18:16:23 +1000
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ima: Avoid blocking in RCU read-side critical section
-Content-Language: en-US
-To: Stephen Smalley <stephen.smalley.work@gmail.com>
-CC: <zohar@linux.ibm.com>, <roberto.sassu@huawei.com>,
-	<dmitry.kasatkin@gmail.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
-	<serge@hallyn.com>, <eric.snowberg@oracle.com>, <omosnace@redhat.com>,
-	<linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>
-References: <20240417074444.2834769-1-guozihua@huawei.com>
- <CAEjxPJ52FzbBsVfbawiE=fx7UuMNp3pq2xuJnSebcPUhg6gc-A@mail.gmail.com>
-From: "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <CAEjxPJ52FzbBsVfbawiE=fx7UuMNp3pq2xuJnSebcPUhg6gc-A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500024.china.huawei.com (7.185.36.203)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On 2024/4/20 5:41, Stephen Smalley wrote:
-> On Wed, Apr 17, 2024 at 12:49 AM GUO Zihua <guozihua@huawei.com> wrote:
->>
->> A panic happens in ima_match_policy:
->>
->> BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
->> PGD 42f873067 P4D 0
->> Oops: 0000 [#1] SMP NOPTI
->> CPU: 5 PID: 1286325 Comm: kubeletmonit.sh Kdump: loaded Tainted: P
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
->> RIP: 0010:ima_match_policy+0x84/0x450
->> Code: 49 89 fc 41 89 cf 31 ed 89 44 24 14 eb 1c 44 39 7b 18 74 26 41 83 ff 05 74 20 48 8b 1b 48 3b 1d f2 b9 f4 00 0f 84 9c 01 00 00 <44> 85 73 10 74 ea 44 8b 6b 14 41 f6 c5 01 75 d4 41 f6 c5 02 74 0f
->> RSP: 0018:ff71570009e07a80 EFLAGS: 00010207
->> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000200
->> RDX: ffffffffad8dc7c0 RSI: 0000000024924925 RDI: ff3e27850dea2000
->> RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffffabfce739
->> R10: ff3e27810cc42400 R11: 0000000000000000 R12: ff3e2781825ef970
->> R13: 00000000ff3e2785 R14: 000000000000000c R15: 0000000000000001
->> FS:  00007f5195b51740(0000) GS:ff3e278b12d40000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 0000000000000010 CR3: 0000000626d24002 CR4: 0000000000361ee0
->> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> Call Trace:
->>  ima_get_action+0x22/0x30
->>  process_measurement+0xb0/0x830
->>  ima_file_check+0x64/0x90
->>  path_openat+0x571/0x1720
->>  do_filp_open+0x9b/0x110
->>  do_sys_open+0x1bd/0x250
->>  do_syscall_64+0x5d/0x1d0
->>  entry_SYSCALL_64_after_hwframe+0x65/0xca
->>
->> (stack trace marked with ? is deleted)
->>
->> Commit c7423dbdbc9e ("ima: Handle -ESTALE returned by
->> ima_filter_rule_match()") introduced call to ima_lsm_copy_rule within a
->> RCU read-side critical section which contains kmalloc with GFP_KERNEL.
->> This implies a possible sleep and violates limitations of RCU read-side
->> critical sections on non-PREEMPT systems.
->>
->> Sleeping within RCU read-side critical section might cause
->> synchronize_rcu() returning early and break RCU protection, allowing a
->> UAF to happen.
->>
->> The root cause of this issue could be described as follows:
->> |       Thread A        |       Thread B        |
->> |                       |ima_match_policy       |
->> |                       |  rcu_read_lock        |
->> |ima_lsm_update_rule    |                       |
->> |  synchronize_rcu      |                       |
->> |                       |    kmalloc(GFP_KERNEL)|
->> |                       |      sleep            |
->> ==> synchronize_rcu returns early
->> |  kfree(entry)         |                       |
->> |                       |    entry = entry->next|
->> ==> UAF happens and entry now becomes NULL (or could be anything).
->> |                       |    entry->action      |
->> ==> Accessing entry might cause panic.
->>
->> To fix this issue, we are converting all kmalloc that is called within
->> RCU read-side critical section to use GFP_ATOMIC.
->>
->> Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: GUO Zihua <guozihua@huawei.com>
->> ---
->>  security/integrity/ima/ima_policy.c | 2 +-
->>  security/selinux/ss/services.c      | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index c0556907c2e6..c0cf9b6a01f0 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -410,7 +410,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
->>          * Immutable elements are copied over as pointers and data; only
->>          * lsm rules can change
->>          */
->> -       nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
->> +       nentry = kmemdup(entry, sizeof(*nentry), GFP_ATOMIC);
->>         if (!nentry)
->>                 return NULL;
->>
->> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
->> index e88b1b6c4adb..b7cfad1a2964 100644
->> --- a/security/selinux/ss/services.c
->> +++ b/security/selinux/ss/services.c
->> @@ -3549,7 +3549,7 @@ int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
->>                 return -EINVAL;
->>         }
->>
->> -       tmprule = kzalloc(sizeof(struct selinux_audit_rule), GFP_KERNEL);
->> +       tmprule = kzalloc(sizeof(struct selinux_audit_rule), GFP_ATOMIC);
+On Wed, 03 Apr 2024 10:06:18 +0200, Arnd Bergmann wrote:
+> Compilers traditionally warn for unused 'static' variables, but not
+> if they are constant. The reason here is a custom for C++ programmers
+> to define named constants as 'static const' variables in header files
+> instead of using macros or enums.
 > 
-> I would suggest passing in gfp flags from the callers and only using
-> GFP_ATOMIC for the particular call chain that requires atomic
-> allocations, or re-factoring the caller to perform the allocating
-> operations outside of the critical section.
-
-Well unfortunately the SELinux involved in this patch is called via
-security hooks. Adding new flags would mean define macros as well as all
-the callers and implementations would have to be changed.
-
-> Sidebar: the refactoring of the SELinux policy loading logic may have
-> made it possible to revisit the approaches here to permit holding a
-> reference to the policy from which the rule was derived so that we
-> don't have to return -ESTALE in this scenario.
-
-This would be nice if we are able to make this re-init happen in-place
-which would spare IMA from initializing a temporary rule and the list
-replace behavior.
+> In W=1 builds, we get warnings only static const variables in C
+> files, but not in headers, which is a good compromise, but this still
+> produces warning output in at least 30 files. These warnings are
+> almost all harmless, but also trivial to fix, and there is no
+> good reason to warn only about the non-const variables being unused.
 > 
->>         if (!tmprule)
->>                 return -ENOMEM;
->>         context_init(&tmprule->au_ctxt);
->> --
-> 
->>
+> [...]
 
--- 
-Best
-GUO Zihua
+Applied to powerpc/next.
 
+[01/34] powerpc/fsl-soc: hide unused const variable
+        https://git.kernel.org/powerpc/c/01acaf3aa75e1641442cc23d8fe0a7bb4226efb1
+
+cheers
 
