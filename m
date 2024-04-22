@@ -1,195 +1,127 @@
-Return-Path: <linux-integrity+bounces-2200-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2202-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E113B8AD004
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 16:57:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69F1C8AD03B
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 17:07:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10AB11C2166A
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 14:57:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C85A1C21F87
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 15:07:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5671F152199;
-	Mon, 22 Apr 2024 14:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF704152523;
+	Mon, 22 Apr 2024 15:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xVUZcvki"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DBu4hbOs"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976DB1514FC
-	for <linux-integrity@vger.kernel.org>; Mon, 22 Apr 2024 14:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941261474B9;
+	Mon, 22 Apr 2024 15:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713797868; cv=none; b=YVjJMbovMODpetPsynf6QH0kDlaWZprmDVgBHNHtDiwaGQ5F3r5p5i1v916nYY6PjpOkaYNorVvdg1Gty1EGgCPuRET0NOs/rqv7NLO065d9Z9F+/CJ8C1yyd61QksFPC/2kNyLa5+g9dfmHM9pJkAfeGqO93Orn31jwhS4EJK0=
+	t=1713798442; cv=none; b=iCgyuyNHm9bTCPiZou54OsLlf12WBSyaBBPJgZVdt5El58lQ7nHDTLWhJcX2c8SLFSs+9BXhcwoI2d88W1QW9LLoSe2IeFtxD4t9W8DCV6zOrU/tvYpIwAubTzQULNKWCVVfz/whFY9Cw10I9+fLbHjGFYNM3tQrOgSiF5MP054=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713797868; c=relaxed/simple;
-	bh=3QukAxF9x8keggcmZ5JAuzjKsHOe0olr9mzjfn/llzI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fczwntZaKfvXT7xlH9A55X7SAxW9E9EhmPfe9nePq4SII9aN0pDXjXvGPDVmexUkHihXAP/ASHpKhQHpDMQP1UTeRkYQx35BGXO1BJANzdrr0UTWdAf4qIIAgDz7GtjcIBURmJche6TbhPD646/VqY+h4Bp2qm344ojgCOTKd80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xVUZcvki; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-51aa6a8e49aso4676856e87.3
-        for <linux-integrity@vger.kernel.org>; Mon, 22 Apr 2024 07:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713797865; x=1714402665; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7LF7mBQJYuNlCsuT9TW9nCR6m2MZVtuZsBkk99+oIw=;
-        b=xVUZcvki08f2NL9yp6+QU9OsQ7te4ID17/Dnm75BpMZn/zSskt6To3DIChWOX3B1OH
-         ho7dZPxgvywoOquhYOFwmoelyJostLA8r57l8GRLQeVcrvrrnJJqplS5+6DbNX9BSk3h
-         QFu4Y1ObswuwlArFLFX5KHAWitgRv3o7faByvfPWOTcO4QgH9q1wNBs/mqLy7ZWuGzKQ
-         JxYAvq50w2hyfkiJphQPk6FWlOMf4l8VQAohEX++5gY/f1GmE6T1saTLjAP3govExoiJ
-         JKHbvUSO8DsLthNnlxxcNP5PPPGpj2BMuWqmaTEu+YfW3bpKHzWKR0a1a1IaI0ezF71n
-         l8uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713797865; x=1714402665;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O7LF7mBQJYuNlCsuT9TW9nCR6m2MZVtuZsBkk99+oIw=;
-        b=XvhwusCaS5J2Z0oaIq7FGe40UP3e3TDc5CGURvu9YlH71qdrIx9VmCtGwFrs9SwdTr
-         evoouPrRkyVL8wGsD3193R7qhwlX67ILhC31rEj8f3bkjOajLrlbBS7odEjXvzGc65ih
-         aj3JxfscEd4fVJQRh4ZjB3AN9NyW4qjOeDmsJR9Q72uS/MWlh3dshk6Nn60ju54kD6Lg
-         TeFeRyT2RaRIsloUgpsOm+NU/oLhh9XQFNf11gmmXuGW6B7qSsYLgWX5Zwtn2/PmC+tJ
-         VuN/d6QDPFdFTahxUCTiwS0OhP5+oTwuHNDYx14+jrb+xhWerlFQQN7bw5GEh4BW0U+e
-         4UgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhdnNwXx3wuGudgl59xfMcCUBP7eBO1nqcSEdiFQM2DhNTiUUrNjtdrCg1ogn856QnvBZ6irWnJc1oopPoXc7i9GwD9f1tiac1xZo+XZVb
-X-Gm-Message-State: AOJu0Ywjs3trso92cdbt/SS+jIcIiBwB/hL+QJF3VmGllKkyt7dsQO0k
-	vsU+METaGt2cL6d0av8D2ItrGEwNUjYNwBdiXHJwHyXbp9yCdJqYHV3daZd9bvs=
-X-Google-Smtp-Source: AGHT+IGyLLZrNulj0xRkuSIpQWr5bZVAAgmHvz84R+mSTI2YxA6Fg1grf9bNCHLRK7MCUJYHh4p7+w==
-X-Received: by 2002:a05:6512:908:b0:519:5a3c:e468 with SMTP id e8-20020a056512090800b005195a3ce468mr5350547lft.12.1713797864753;
-        Mon, 22 Apr 2024 07:57:44 -0700 (PDT)
-Received: from nuoska (87-100-245-199.bb.dnainternet.fi. [87.100.245.199])
-        by smtp.gmail.com with ESMTPSA id k8-20020a192d08000000b0051ac9a297aasm1262211lfj.141.2024.04.22.07.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Apr 2024 07:57:44 -0700 (PDT)
-Date: Mon, 22 Apr 2024 17:57:42 +0300
-From: Mikko Rapeli <mikko.rapeli@linaro.org>
-To: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lennart Poettering <lennart@poettering.net>,
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] efi: expose TPM event log to userspace via sysfs
-Message-ID: <ZiZ65rEN8b9Ufmlr@nuoska>
-References: <20240422112711.362779-1-mikko.rapeli@linaro.org>
- <6e751959b9056884c1b9d3ba23e303d1737d8763.camel@HansenPartnership.com>
- <ZiZhSfgeAdrbnaVL@nuoska>
- <CAC_iWjKA-xRH=3FK+=woXsB8AW4+_mVhJhUQnL8iFKxGzOwKiA@mail.gmail.com>
- <e3038141413e25350f0e53496f7a7af1bf8419cf.camel@HansenPartnership.com>
- <CAC_iWj+zbs2tq_nMASDX6pgCAP23+PpctJFiu9=mgOVDz8Trzw@mail.gmail.com>
+	s=arc-20240116; t=1713798442; c=relaxed/simple;
+	bh=OwBTM38wR2q83NXNwr0WZqVclcVxAfrXdY/laVtugxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oh429OtPT9OYA/tVm5hnlOkbQ7bAq5UrENa7LpUE8ubNzVbLcDWSvJMwh3DE8rnWOasBn5+dlIQGbhekSv6LnLNOhZMePZUFvJH2HmZQ//TiXm8qVD7kIZwLe82VfePqDDiIjddH0oKKRDWGnyqy4mF8sO5JVNp+XnMVF+vs/7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DBu4hbOs; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43MEnfqJ031250;
+	Mon, 22 Apr 2024 15:07:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=X/qZpknkXE3GmCsg7Uudnu3Lok0kBSYi8OLJ1TnoCRE=;
+ b=DBu4hbOsuSInpXU5lJUbIMaL861LBWfosxc6+TtL2clnP3T4/GPYec2EdJvcyx/aJpzd
+ tiigYfRnhekq4Q48DYOK1v6d79BdOP3tdd3bX4shSjMWCxs/4SlJlpks5ZBNDEFk2Gbj
+ J9y0mtu/KlznbBxl9eucSL0m3e9qDXbA3zLTZhnJEVqj4j00lFkX0KQXu6gcxRYjGduM
+ SKVEmHUEib3EXOWRtU3HqW4E99kXFU8gF7aAQvstIzMBGdlWaJN635CXbxggyAKHjIwu
+ WRLwi+ccYoQuiS+fOUmNfFs70iZMjkKVhD6JfefS3NRfWroUiWCKbM7Hia44HcGsQxiC 6w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xnsyx81j8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Apr 2024 15:07:03 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43MF73Qg030610;
+	Mon, 22 Apr 2024 15:07:03 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xnsyx81j5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Apr 2024 15:07:03 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43MEk6Vj005341;
+	Mon, 22 Apr 2024 15:07:02 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xmx3c732k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Apr 2024 15:07:02 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43MF6xbU25035364
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 22 Apr 2024 15:07:01 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6151E58063;
+	Mon, 22 Apr 2024 15:06:59 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7EAD958053;
+	Mon, 22 Apr 2024 15:06:58 +0000 (GMT)
+Received: from sbct-3.bos2.lab (unknown [9.47.158.153])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 22 Apr 2024 15:06:58 +0000 (GMT)
+From: Stefan Berger <stefanb@linux.ibm.com>
+To: linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        roberto.sassu@huawei.com, amir73il@gmail.com, miklos@szeredi.hu,
+        brauner@kernel.org, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [RFC PATCH v2 0/2] ima: Fix detection of read/write violations on stacked filesystems
+Date: Mon, 22 Apr 2024 11:06:49 -0400
+Message-ID: <20240422150651.2908169-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAC_iWj+zbs2tq_nMASDX6pgCAP23+PpctJFiu9=mgOVDz8Trzw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YpzgEsrKWbOGmi1SxPnRCSSENnl8QvoO
+X-Proofpoint-GUID: JzYrXdFfo49JUJD0CxIcfkUo230NyBie
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-22_09,2024-04-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ clxscore=1015 malwarescore=0 mlxlogscore=561 impostorscore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2404010000
+ definitions=main-2404220065
 
-Hi,
+This series fixes the detection of read/write violations on stacked
+filesystems. To be able to access the relevant dentries necessary to
+detect files opened for writing on a stacked filesystem a new d_real_type
+D_REAL_FILEDATA is introduced that allows callers to access all relevant
+files involved in a stacked filesystem while traversing the layers.
 
-On Mon, Apr 22, 2024 at 04:54:26PM +0300, Ilias Apalodimas wrote:
-> Hi James
-> 
-> On Mon, 22 Apr 2024 at 16:38, James Bottomley
-> <James.Bottomley@hansenpartnership.com> wrote:
-> >
-> > On Mon, 2024-04-22 at 16:32 +0300, Ilias Apalodimas wrote:
-> > > Hi all,
-> > >
-> > > On Mon, 22 Apr 2024 at 16:08, Mikko Rapeli <mikko.rapeli@linaro.org>
-> > > wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > On Mon, Apr 22, 2024 at 08:42:41AM -0400, James Bottomley wrote:
-> > > > > On Mon, 2024-04-22 at 14:27 +0300, Mikko Rapeli wrote:
-> > > > > > Userspace needs to know if TPM kernel drivers need to be loaded
-> > > > > > and related services started early in the boot if TPM device
-> > > > > > is used and available.
-> > > > >
-> > > > > This says what but not why.  We already have module autoloading
-> > > > > that works correctly for TPM devices, so why is this needed?
-> > > > >
-> > > > > We do have a chicken and egg problem with IMA in that the TPM
-> > > > > driver needs to be present *before* any filesystem, including the
-> > > > > one the TPM modules would be on, is mounted so executions can be
-> > > > > measured into IMA (meaning that if you use IMA the TPM drivers
-> > > > > must be built in) but this sounds to be something different.
-> > > > > However, because of the IMA problem, most distributions don't end
-> > > > > up compiling TPM drivers as modules anyway.
-> > > > >
-> > > > > Is what you want simply that tpm modules be loaded earlier?
-> > > >
-> > > > Yes, ealier is the problem. In my specific testing case the machine
-> > > > is qemu arm64 with swtpm with EFI firmware for secure boot and TPM
-> > > > support.
-> > > >
-> > > > Firmware uses TPM and does measurements and thus TPM event log is
-> > > > available on this machine and a bunch of other arm64 boards.
-> > > > Visible in early boot dmesg as TPMEventLog lines like:
-> > > >
-> > > > [    0.000000] efi: ESRT=0xf0ea5040 TPMFinalLog=0xf0ea9040
-> > > > RTPROP=0xf0ea7040 SMBIOS=0xf0ea3000 TPMEventLog=0xeb3b3040
-> > > > INITRD=0xeb3b2040 RNG=0xe5c0f040 MEMRESERVE=0xe5c0e040
-> > > >
-> > > > Different boards use different TPM HW and drivers so compiling all
-> > > > these in is possible but a bit ugly. systemd recently gained
-> > > > support for a specific tpm2.target which makes TPM support modular
-> > > > and also works with kernel modules for some TPM use cases but not
-> > > > rootfs encryption.
-> > > >
-> > > > In my test case we have a kernel+initramfs uki binary which is
-> > > > loaded by EFI firmware as a secure boot binary. TPM support on
-> > > > various boards is visible in devicetree but not as ACPI table
-> > > > entries. systemd currently detect TPM2 support either via ACPI
-> > > > table /sys/firmware/acpi/tables/TPM2 or TPM entry or via firmware
-> > > > measurement via /sys/kernel/security/tpm0/binary_bios_measurements
-> > > > .
-> > >
-> > > One corner case worth noting here is that scanning the device tree
-> > > won't always work for non-ACPI systems... The reason is that a
-> > > firmware TPM (running in OP-TEE) might or might not have a DT entry,
-> > > since OP-TEE can discover the device dynamically and doesn't always
-> > > rely on a DT entry.
-> > >
-> > > I don't particularly love the idea that an EventLog existence
-> > > automatically means a TPM will be there, but it seems that systemd
-> > > already relies on that and it does solve the problem we have.
-> >
-> > Well, quite. That's why the question I was interested in, perhaps not
-> > asked as clearly as it could be is: since all the TPM devices rely on
-> > discovery mechanisms like ACPI or DT or the like which are ready quite
-> > early, should we simply be auto loading the TPM drivers earlier?
-> 
-> This would be an elegant way to solve this and on top of that, we have
-> a single discovery mechanism from userspace -- e.g ls /dev/tpmX.
-> But to answer that we need more feedback from systemd. What 'earlier'
-> means? Autload it from the kernel before we go into launching the
-> initrd?
+  Stefan
 
-This is sort of what already happens, but the question is when
-does init/systemd wait for the TPM device discovery and setup
-of related service so that rootfs can be mounted?
+v2:
+ - Simplified 2nd patch
+ - Improvements on patch description on 1st patch
 
-Currently the answer is, for device auto discover: when ACPI TPM2 table
-exists or TPM kernel driver interface for firmware measurement is available.
+Stefan Berger (2):
+  ovl: Define D_REAL_FILEDATA for d_real to return dentry with data
+  ima: Fix detection of read/write violations on stacked filesystems
 
-Or as policy, when the kernel command line includes something or services
-in initramfs are hard coded.
+ fs/overlayfs/super.c              |  6 ++++++
+ include/linux/dcache.h            |  1 +
+ security/integrity/ima/ima_main.c | 21 ++++++++++++++++-----
+ 3 files changed, 23 insertions(+), 5 deletions(-)
 
-Parsing devicetree is really hard in userspace but it may contain the TPM details.
-But the TPM can also be on some other discoverable bus, firmware TPM optee trusted
-application. These both get discovered via the TPM Event Log if firmware
-has TPM support on the arm64 boards we have.
+-- 
+2.43.0
 
-Cheers,
-
--Mikko
 
