@@ -1,173 +1,214 @@
-Return-Path: <linux-integrity+bounces-2203-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2204-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFB338AD03F
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 17:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 298518AD082
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 17:22:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FA4E1C22194
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 15:07:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CD151C224AF
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Apr 2024 15:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13CE152DFA;
-	Mon, 22 Apr 2024 15:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97B37153503;
+	Mon, 22 Apr 2024 15:22:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PkV6Kq3v"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Rv/fe9Jv"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB3B15217D;
-	Mon, 22 Apr 2024 15:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8711534E4
+	for <linux-integrity@vger.kernel.org>; Mon, 22 Apr 2024 15:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713798443; cv=none; b=oqL2EPDmhBy28+YLg8J6kTYHdCOUUoRb5OEswqJz7Z3yw1R6nDMAKPkp9JSDa/da8iOsT2RmPD1j3dPEqZXcc2pcn1haV15BgW6e92mEr9J41RYTPyeOrLJNmhcdvfg3Lxa4vTrD8Oysdfzl3HZleW0fCezHtCerJgxc52mNZIU=
+	t=1713799363; cv=none; b=mhyh4BuFiBAjj5a7mHZgb8yiMfiM4zsKeBy+suWjD43JyDly0Vh3W4AoYHNZnlbuJZ106O4MtEDKG1Lok1t+yyVi8WAp0muic72VxSbtlyWUffDfXhrtEldyBAgVL1y/2hSCD1mGI/h6+CZae1puC8qYf05YX9pEeUvfZB7jK9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713798443; c=relaxed/simple;
-	bh=9JnUA2M7ld+cdmtH5SExTOA4m2nU2g3VkDOtkWnpGRM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nVebu9B/v75k/jlrIkYc7pxFhknBlVopEaSgTWxtd0iv19gU+ihJEs1thh9NwjGKxxpdNfRM0o+f4jEzHtkQl5DcwBubSBQQ7pRisex+VnUXLMFiRy5Hq7P/PBKfQOrcdrUVAztx3EvSVM8OHoSDg3yyoif+4pA2M8VjVepIhmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PkV6Kq3v; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43MEnRRp031035;
-	Mon, 22 Apr 2024 15:07:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=CfL7MiiThw2Agk96Q2WmYQnMT87ZKq/BPxVs8GeYDHQ=;
- b=PkV6Kq3vDONA65I06A84onrC2BA9rTn1GZB0i/zH5P8fmc8CpPQJ70/kQtSVa0o7NYkA
- CMlLy81cc79fTQ7+VwPT0VxNIlCukfawsDINr4cTYORx3RFKk88ZGVAWCM00zWXH22EM
- Dky1FD1txBNWuCzRsI79P0o/UMYuzy78ygPdkJRaX/vKbupLee9vDZyHddkHsfZsmSyi
- C/68nEVbjOpww4+VOtEwXWbbkjQ/CQdK3vt9lOk/9+Yd0RUdfdlkqYwma6fI04eXdvoI
- 2aDztbR4N5wUayiO7VVFw/jWAoIwvsYX4vSYrcof93u/R+4T5YORlB09zi9NYN2gaArz aA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xnt0501jk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Apr 2024 15:07:05 +0000
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43MF75L7030765;
-	Mon, 22 Apr 2024 15:07:05 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xnt0501jj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Apr 2024 15:07:05 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43MBmHMw028328;
-	Mon, 22 Apr 2024 15:07:04 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xmtr27ve2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Apr 2024 15:07:04 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43MF71OD54329610
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 22 Apr 2024 15:07:03 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5EDB758053;
-	Mon, 22 Apr 2024 15:07:01 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 85AAE58043;
-	Mon, 22 Apr 2024 15:07:00 +0000 (GMT)
-Received: from sbct-3.bos2.lab (unknown [9.47.158.153])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 22 Apr 2024 15:07:00 +0000 (GMT)
-From: Stefan Berger <stefanb@linux.ibm.com>
-To: linux-integrity@vger.kernel.org, linux-unionfs@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        roberto.sassu@huawei.com, amir73il@gmail.com, miklos@szeredi.hu,
-        brauner@kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [RFC PATCH v2 2/2] ima: Fix detection of read/write violations on stacked filesystems
-Date: Mon, 22 Apr 2024 11:06:51 -0400
-Message-ID: <20240422150651.2908169-3-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240422150651.2908169-1-stefanb@linux.ibm.com>
-References: <20240422150651.2908169-1-stefanb@linux.ibm.com>
+	s=arc-20240116; t=1713799363; c=relaxed/simple;
+	bh=Ci2yuDBlgoa8ozNJQ5jJq2jE33en1qoK9mqBxDfTgV4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QB0GrDMb5Whwi+hR2OLPM5LkxDwt88Ai5sH2L7PlyAIUZ9FTDKSnYeApFACYeAi011cTjGjT1SIA2eMtIwQ8NEzqexO8fVnhm2vd5UCsOG0eQ5CWhfTcnjEC2PVJM1cEuwlkxSwNFa3yARZ+qiR87aaxY2Y9qcSGjjWzKbEhkOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Rv/fe9Jv; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a55911bff66so323789266b.0
+        for <linux-integrity@vger.kernel.org>; Mon, 22 Apr 2024 08:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713799360; x=1714404160; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=U1Ry9k3u4r/ZH6YfxckAiW911VK5SE+gAAnPQnrkQA8=;
+        b=Rv/fe9Jv6vm4YT8PeA+StwjzA8/uv4dfyooe3dihDRDxbvy1w373RmCh5LXT6upceI
+         a6jzh/+w5wNSeiWM0C85ate9+nMDNJUiBY4YLqo3ezNYjIui0zgiNGPwAcnTrnqZzG4R
+         TRH2MOYl/9IED5Mhll1lE7KMhBS8yLr6qcms+OQMD8Jm0TeaC3hPOphmp6V9+k1K9Zyy
+         pwVicE0WuQrr5FAy/rDgGEOfC57Ee+eCHqLMBhOZkEs1v26oklsT2Nb3DRIkygt+b8gl
+         i/pT3hy9k1w1GC5WuApJsOUiDJo8TZt8GfNkwci/vhqo9FgOh9AtDi5KyRVnCc+w1XO5
+         29Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713799360; x=1714404160;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U1Ry9k3u4r/ZH6YfxckAiW911VK5SE+gAAnPQnrkQA8=;
+        b=RB+IJ6nozlZ8kBLXdWMeou4kNQAZa1Ms7tZEVdBAbiBfRk5CL+LkaHGQuPszdf74Fd
+         Su4Zg6ZuaAWFFxmynnxJpLpxccVWZkXPfoiibz+RVhLuUEt9J+E6z5n/WDEXMrE7zLBb
+         Nas0F6J9O8pQlaUHHxGzEJJ1glkis/wvlOS+JclF+/HdKXPpyWLQURuPrw0SozWBkzwA
+         Y7SG37Ie3BoCwwDhp6plPaVB1cLmIUTTB9hMr+KvtsE+Iuba/bSfB3OOl2y7EUFMuP1y
+         kcDyolLeQO8vJzS0uWiNAt64xrjjYgO5l86jzw8D+lS/hkkM9PCgoIBENSGASGHwx16S
+         p4uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6cTim3AaP/34zDY3DwzNOWgAeVze9HSZe1FnSKQKiPZNiyCtX2rKjENKdi/5rSHMnnCSpOnNtGCXzJY3kCl0iUDIXAaXNkV0W7wyqpDT+
+X-Gm-Message-State: AOJu0YyQVKni6aY2YVBYpSrTxf1pjfZTc2nsUAppb/wYPkLjorp8XdQK
+	sG9TKJeaxhQ8szcAIMedyrSyZuoU0qgYftavZ2LY8P+VZb1/TiFzBPh5obVe04ZS9WRywcmV3Eb
+	n+rf0jVAb77Nf0I5Mb1dz3Z7d50e1C6tc1TXgqQ==
+X-Google-Smtp-Source: AGHT+IF7tlD0zygVG9NWdr4X2DqIV3+l7wtVQTW7JN1Fu86rCV2xydnxXx4bO+KERuw/RRypbzRNGaCUDPBeYj269Ho=
+X-Received: by 2002:a17:906:f74b:b0:a58:7470:21f3 with SMTP id
+ jp11-20020a170906f74b00b00a58747021f3mr183241ejb.28.1713799359973; Mon, 22
+ Apr 2024 08:22:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2KSdtnbHGMLxs-JxKxr0E51uN_l0aoP0
-X-Proofpoint-ORIG-GUID: jf-2JOobOTNWqrxHexaYVu1VCXNPeWLY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-22_09,2024-04-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=547 clxscore=1015
- adultscore=0 impostorscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2404010000
- definitions=main-2404220065
+References: <20240422112711.362779-1-mikko.rapeli@linaro.org>
+ <6e751959b9056884c1b9d3ba23e303d1737d8763.camel@HansenPartnership.com>
+ <ZiZhSfgeAdrbnaVL@nuoska> <CAC_iWjKA-xRH=3FK+=woXsB8AW4+_mVhJhUQnL8iFKxGzOwKiA@mail.gmail.com>
+ <e3038141413e25350f0e53496f7a7af1bf8419cf.camel@HansenPartnership.com>
+ <CAC_iWj+zbs2tq_nMASDX6pgCAP23+PpctJFiu9=mgOVDz8Trzw@mail.gmail.com> <e1da76ca4c7fe9319aaac5f8ff6eb46db433ec60.camel@HansenPartnership.com>
+In-Reply-To: <e1da76ca4c7fe9319aaac5f8ff6eb46db433ec60.camel@HansenPartnership.com>
+From: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date: Mon, 22 Apr 2024 18:22:03 +0300
+Message-ID: <CAC_iWjLH=SDoTw_Pgr2hOKHkjEp_dKqwpUe9j6a=_WNW9UcxKw@mail.gmail.com>
+Subject: Re: [PATCH] efi: expose TPM event log to userspace via sysfs
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Mikko Rapeli <mikko.rapeli@linaro.org>, Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Lennart Poettering <lennart@poettering.net>, 
+	linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On a stacked filesystem, when one process opens the file holding a file's
-data (e.g., on upper or lower layer on overlayfs) then issue a violation
-when another process opens the file for reading on the top layer (overlay
-layer on overlayfs). This then provides similar behavior to the existing
-case where a violation is generated when one process opens a file for
-writing and another one opens the same file for reading.
+On Mon, 22 Apr 2024 at 17:31, James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> On Mon, 2024-04-22 at 16:54 +0300, Ilias Apalodimas wrote:
+> > Hi James
+> >
+> > On Mon, 22 Apr 2024 at 16:38, James Bottomley
+> > <James.Bottomley@hansenpartnership.com> wrote:
+> > >
+> > > On Mon, 2024-04-22 at 16:32 +0300, Ilias Apalodimas wrote:
+> > > > Hi all,
+> > > >
+> > > > On Mon, 22 Apr 2024 at 16:08, Mikko Rapeli
+> > > > <mikko.rapeli@linaro.org>
+> > > > wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > On Mon, Apr 22, 2024 at 08:42:41AM -0400, James Bottomley
+> > > > > wrote:
+> > > > > > On Mon, 2024-04-22 at 14:27 +0300, Mikko Rapeli wrote:
+> > > > > > > Userspace needs to know if TPM kernel drivers need to be
+> > > > > > > loaded and related services started early in the boot if
+> > > > > > > TPM device is used and available.
+> > > > > >
+> > > > > > This says what but not why.  We already have module
+> > > > > > autoloading that works correctly for TPM devices, so why is
+> > > > > > this needed?
+> > > > > >
+> > > > > > We do have a chicken and egg problem with IMA in that the TPM
+> > > > > > driver needs to be present *before* any filesystem, including
+> > > > > > the one the TPM modules would be on, is mounted so executions
+> > > > > > can be measured into IMA (meaning that if you use IMA the TPM
+> > > > > > drivers must be built in) but this sounds to be something
+> > > > > > different. However, because of the IMA problem, most
+> > > > > > distributions don't end up compiling TPM drivers as modules
+> > > > > > anyway.
+> > > > > >
+> > > > > > Is what you want simply that tpm modules be loaded earlier?
+> > > > >
+> > > > > Yes, ealier is the problem. In my specific testing case the
+> > > > > machine is qemu arm64 with swtpm with EFI firmware for secure
+> > > > > boot and TPM support.
+> > > > >
+> > > > > Firmware uses TPM and does measurements and thus TPM event log
+> > > > > is
+> > > > > available on this machine and a bunch of other arm64 boards.
+> > > > > Visible in early boot dmesg as TPMEventLog lines like:
+> > > > >
+> > > > > [    0.000000] efi: ESRT=0xf0ea5040 TPMFinalLog=0xf0ea9040
+> > > > > RTPROP=0xf0ea7040 SMBIOS=0xf0ea3000 TPMEventLog=0xeb3b3040
+> > > > > INITRD=0xeb3b2040 RNG=0xe5c0f040 MEMRESERVE=0xe5c0e040
+> > > > >
+> > > > > Different boards use different TPM HW and drivers so compiling
+> > > > > all these in is possible but a bit ugly. systemd recently
+> > > > > gained support for a specific tpm2.target which makes TPM
+> > > > > support modular and also works with kernel modules for some TPM
+> > > > > use cases but not rootfs encryption.
+> > > > >
+> > > > > In my test case we have a kernel+initramfs uki binary which is
+> > > > > loaded by EFI firmware as a secure boot binary. TPM support on
+> > > > > various boards is visible in devicetree but not as ACPI table
+> > > > > entries. systemd currently detect TPM2 support either via ACPI
+> > > > > table /sys/firmware/acpi/tables/TPM2 or TPM entry or via
+> > > > > firmware measurement via
+> > > > > /sys/kernel/security/tpm0/binary_bios_measurements
+> > > > > .
+> > > >
+> > > > One corner case worth noting here is that scanning the device
+> > > > tree won't always work for non-ACPI systems... The reason is that
+> > > > a firmware TPM (running in OP-TEE) might or might not have a DT
+> > > > entry, since OP-TEE can discover the device dynamically and
+> > > > doesn't always rely on a DT entry.
+> > > >
+> > > > I don't particularly love the idea that an EventLog existence
+> > > > automatically means a TPM will be there, but it seems that
+> > > > systemd already relies on that and it does solve the problem we
+> > > > have.
+> > >
+> > > Well, quite. That's why the question I was interested in, perhaps
+> > > not asked as clearly as it could be is: since all the TPM devices
+> > > rely on discovery mechanisms like ACPI or DT or the like which are
+> > > ready quite early, should we simply be auto loading the TPM drivers
+> > > earlier?
+> >
+> > This would be an elegant way to solve this and on top of that, we
+> > have a single discovery mechanism from userspace -- e.g ls /dev/tpmX.
+> > But to answer that we need more feedback from systemd. What 'earlier'
+> > means? Autload it from the kernel before we go into launching the
+> > initrd?
+>
+> Right, so this is another timing problem: we can't autoload modules
+> *before* they appear in the filesystem and presumably they're on the
+> initrd, so auto loading must be post initrd mount (and init execution)
+> but otherwise quite early?
 
-Convert the current code so that it can handle the normal case as well
-as the stacked filesystem case. Therefore, use d_real with parameter
-D_REAL_FILEDATA to get the next dentry holding the file data. On a normal
-filesystem this would be the dentry of the file and on a stacked filesystem
-this could be an upper or lower dentry. Check the dentry's inode for
-writes and if it has any issue the violation. Otherwise continue onto the
-next dentry given the current dentry by again calling d_real. On a normal
-filesystem this would return the same dentry as before and on a stacked
-filesystem it would return the next-level dentry, so either the upper
-or lower dentry of the next lower layer.
+Exactly. But is that enough?
 
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
----
- security/integrity/ima/ima_main.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+>
+> This might be quite a bit of work.  Logically, just moving the matching
+> and loading code earlier might work, but we used to have a
+> load_default_modules() at the end of init/main.c and it got removed
+> (because it only eventually loaded elevator modules) everything is now
+> loaded in it's various init routines, so to get, say, TPM ACPI modules
+> loaded earlier, we'd have to run the ACPI device matching code earlier
+> and so on for every other subsystem ...
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index f04f43af651c..7d727c448dc7 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -122,7 +122,9 @@ static void ima_rdwr_violation_check(struct file *file,
- 				     char *filename)
- {
- 	struct inode *inode = file_inode(file);
-+	struct dentry *fd_dentry, *d;
- 	fmode_t mode = file->f_mode;
-+	struct inode *fd_inode;
- 	bool send_tomtou = false, send_writers = false;
- 
- 	if (mode & FMODE_WRITE) {
-@@ -134,11 +136,20 @@ static void ima_rdwr_violation_check(struct file *file,
- 						&iint->atomic_flags))
- 				send_tomtou = true;
- 		}
--	} else {
--		if (must_measure)
--			set_bit(IMA_MUST_MEASURE, &iint->atomic_flags);
--		if (inode_is_open_for_write(inode) && must_measure)
--			send_writers = true;
-+	} else if (must_measure) {
-+		set_bit(IMA_MUST_MEASURE, &iint->atomic_flags);
-+
-+		d = d_real(file_dentry(file), D_REAL_FILEDATA);
-+		do {
-+			fd_dentry = d;
-+			fd_inode = d_inode(fd_dentry);
-+			if (inode_is_open_for_write(fd_inode)) {
-+				send_writers = true;
-+				break;
-+			}
-+			/* next layer of stacked fs */
-+			d = d_real(fd_dentry, D_REAL_FILEDATA);
-+		} while (d != fd_dentry);
- 	}
- 
- 	if (!send_tomtou && !send_writers)
--- 
-2.43.0
+Being the devil's advocate here and as I stated I don't love this but ...
+The kernel isn't technically doing anything wrong. We just expose an
+*existing* EFI config table. The kernel also exposes filesystems so
+people are free to do rm -rf *.
+The fact that applications might use it as a means of "oh there's
+probably a TPM" shouldn't be the end of the world. On top of that,
+since it's an EFI config table we can keep it around and never break
+any ABIs we create to userspace. If in the future we find a better
+way, userspace can use that?
 
+So perhaps this is ok as long as make sure we understand why systemd
+needs it that early?
+
+Thanks
+/Ilias
+>
+> James
+>
 
