@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-2220-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2221-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C8568B19A1
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Apr 2024 05:42:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C32828B19C5
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Apr 2024 05:56:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58E101C2125A
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Apr 2024 03:42:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCEEA1C23028
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Apr 2024 03:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D7E529D02;
-	Thu, 25 Apr 2024 03:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 179A42C19B;
+	Thu, 25 Apr 2024 03:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oiiz9zVQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZra8rhA"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379A7249F9;
-	Thu, 25 Apr 2024 03:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7D01AACB;
+	Thu, 25 Apr 2024 03:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714016556; cv=none; b=gYaORCZD5/vNf5n4MIRcXOUHWM9V0O6/Z9pgL72DQ/xFt3jOrKS/vGMAASJBCIpMZvS9tsx0gcLTZSIRD2FuExeG4+Dd+/luYAgVufELlBp0ot6BIUHYfEiuppchfm7c86KcQ3vupTjlLYg0CeWMwtj++tT3u3j9d0jt7uaPXlU=
+	t=1714017410; cv=none; b=MlQwOIFGnaGbRUI8eaeVycDlM41X8HG2L+tSdK1S+I+YtcZ9JtTaj4ZrvkpFYtb0N1x7hhc8e5WCUUx+2m6/JI92ltJ6mjfqSUqI2+zI2+FBJXHDITHNZXH5Zchjr4DGkeXu/7J3Y8DUUn8P+3yUmhwiGOsiNJIL3Ogn4SMOKG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714016556; c=relaxed/simple;
-	bh=meGItb0gYvU6XxtF1MngGAZWQ+39zegqnIascrO7roQ=;
+	s=arc-20240116; t=1714017410; c=relaxed/simple;
+	bh=xbvsl7p/tNI3FsAriBnf2RoEGr8k3R2uelHe67Dhz9o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EwOgf+3QQ1QscZ7PQMbEhfSBMVP98umiRPpQUKG00QhKETJ7QmCmkb5V5Ze6Zz4cMhizRAEb32mnfpYLy9K+H7Z3wYssamzboH63DtIUrB35m6y+Y5h8YihjXXD6+mweBDa9UKb2jrpZrVA6YeRzH5oTDi4n06cRD3+ssFw4Vhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oiiz9zVQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B926C113CE;
-	Thu, 25 Apr 2024 03:42:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ST/8KRxCEF0rYilvPXBHzOCS3yLE1/Xc0wAfjgk4ykieGW8cdwpL/lSVPEtFEA3O1WAweGI5Xh97RmG1K0xEravThpS98xW5aM6MAxF+uxcITnliHq7ZvMXQ14vPjy3Pa8bmuqEoHNl0gpOdCGUT8oYq1X/bZDlWG4XyZ7u6oNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZra8rhA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE01AC113CC;
+	Thu, 25 Apr 2024 03:56:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714016555;
-	bh=meGItb0gYvU6XxtF1MngGAZWQ+39zegqnIascrO7roQ=;
+	s=k20201202; t=1714017409;
+	bh=xbvsl7p/tNI3FsAriBnf2RoEGr8k3R2uelHe67Dhz9o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Oiiz9zVQNbAlp33I8T93khpL3VupBBWMtSQiwaM3Uucc2N0y+hHdyFVIrSLSjbaAK
-	 pO3PhhVEVJuaxwt9zAToR4gWEZBI3gdFOImUsFtpwsjyJUBk1+b+jD4KBXkiaXpeZw
-	 zjcCkFf2+D5wB9cj9mBf1G58Ke03FafRDraxMb0iZhSj2IEsItVz72U9HIAPzEJw+f
-	 FVSu79CQbNKesa5KbI7rXP1kDOnPZt+qTTC3hHMQZd9RnT0vM6lS4CHz6snOjQ0Pxo
-	 HywsHZf7COFo0jgNonuzWQ6iR+Y+yr2JDKSgLqI1I+rdQdY6ruL6yywXGe/+nDlU0d
-	 aw75d72jfXQ4g==
-Date: Wed, 24 Apr 2024 20:42:33 -0700
+	b=TZra8rhAGO4C6E2iOW3rX/yd1YzAQbNgxnEMcEnXuyHAXwubnXPoZrPbUSD33Fu9J
+	 SxCM6i6yNtp0Gon16iAdINv7SG0lYFFTTwqw3OcfVSawRcWpbBIcnenmRTQdYMY2zN
+	 3Vjp42P8iLlstsam2vyZCnqHhxfhrZxWKFNTc3vpcuGvd+RCxQYUh9ckvfJOuJaUY0
+	 B5Dh12B+u/WvV4RA4obddHQ761gBea8YlSd95x/iENRuz26pdL+DALTCqc2EkE/6Zm
+	 KPD6Qe07CbTXQKGn+phST2tqBUgSWVTPjUSRotLn4LtgX65Q7AZ1h5c5X5Q879qrtY
+	 L0I9gmI/S5f6g==
+Date: Wed, 24 Apr 2024 20:56:47 -0700
 From: Eric Biggers <ebiggers@kernel.org>
 To: Fan Wu <wufan@linux.microsoft.com>
 Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
@@ -52,11 +52,11 @@ Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
 	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
 	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [PATCH v17 17/21] ipe: enable support for fs-verity as a trust
- provider
-Message-ID: <20240425034233.GB1401@sol.localdomain>
+Subject: Re: [PATCH v17 13/21] dm verity: consume root hash digest and expose
+ signature data via LSM hook
+Message-ID: <20240425035647.GC1401@sol.localdomain>
 References: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
- <1712969764-31039-18-git-send-email-wufan@linux.microsoft.com>
+ <1712969764-31039-14-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -65,26 +65,128 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1712969764-31039-18-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <1712969764-31039-14-git-send-email-wufan@linux.microsoft.com>
 
-On Fri, Apr 12, 2024 at 05:56:00PM -0700, Fan Wu wrote:
-> +config IPE_PROP_FS_VERITY
-> +	bool "Enable property for fs-verity files"
-> +	depends on FS_VERITY && FS_VERITY_BUILTIN_SIGNATURES
-> +	help
-> +	  This option enables the usage of properties "fsverity_signature"
-> +	  and "fsverity_digest". These properties evaluate to TRUE when
-> +	  a file is fsverity enabled and has a valid builtin signature
-> +	  whose signing cert is in the .fs-verity keyring or its
-> +	  digest matches the supplied value in the policy.
+On Fri, Apr 12, 2024 at 05:55:56PM -0700, Fan Wu wrote:
+> dm verity: consume root hash digest and expose signature data via LSM hook
+
+As in the fsverity patch, nothing is being "consumed" here.  This patch adds a
+supplier, not a consumer.  I think you mean something like: expose root digest
+and signature to LSMs.
+
+> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+> index bb5da66da4c1..fbb83c6fd99c 100644
+> --- a/drivers/md/dm-verity-target.c
+> +++ b/drivers/md/dm-verity-target.c
+> @@ -22,6 +22,8 @@
+>  #include <linux/scatterlist.h>
+>  #include <linux/string.h>
+>  #include <linux/jump_label.h>
+> +#include <linux/security.h>
+> +#include <linux/dm-verity.h>
+>  
+>  #define DM_MSG_PREFIX			"verity"
+>  
+> @@ -1017,6 +1019,38 @@ static void verity_io_hints(struct dm_target *ti, struct queue_limits *limits)
+>  	blk_limits_io_min(limits, limits->logical_block_size);
+>  }
+>  
+> +#ifdef CONFIG_SECURITY
 > +
-> +	  if unsure, answer Y.
+> +static int verity_init_sig(struct dm_verity *v, const void *sig,
+> +			   size_t sig_size)
+> +{
+> +	v->sig_size = sig_size;
+> +	v->root_digest_sig = kmemdup(sig, v->sig_size, GFP_KERNEL);
+> +	if (!v->root_digest)
+> +		return -ENOMEM;
 
-Does this really need to depend on FS_VERITY_BUILTIN_SIGNATURES?  That's needed
-for fsverity_signature to work, but fsverity_digest would work without it.
+root_digest_sig, not root_digest
 
-I'd prefer if people had the option of only turning on
-FS_VERITY_BUILTIN_SIGNATURES if they really need it.
+> +#ifdef CONFIG_SECURITY
+> +
+> +static int verity_finalize(struct dm_target *ti)
+> +{
+> +	struct block_device *bdev;
+> +	struct dm_verity_digest root_digest;
+> +	struct dm_verity *v;
+> +	int r;
+> +
+> +	v = ti->private;
+> +	bdev = dm_disk(dm_table_get_md(ti->table))->part0;
+> +	root_digest.digest = v->root_digest;
+> +	root_digest.digest_len = v->digest_size;
+> +	root_digest.alg = v->alg_name;
+> +
+> +	r = security_bdev_setintegrity(bdev, LSM_INT_DMVERITY_ROOTHASH, &root_digest,
+> +				       sizeof(root_digest));
+> +	if (r)
+> +		return r;
+> +
+> +	r = security_bdev_setintegrity(bdev,
+> +				       LSM_INT_DMVERITY_SIG_VALID,
+> +				       v->root_digest_sig,
+> +				       v->sig_size);
+
+The signature is only checked if CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=y, whereas
+this code is built whenever CONFIG_SECURITY=y.
+
+So this seems like the same issue that has turned up elsewhere in the IPE
+patchset, where IPE is (apparently) happy with any signature, even one that
+hasn't been checked...
+
+> diff --git a/drivers/md/dm-verity.h b/drivers/md/dm-verity.h
+> index 20b1bcf03474..89e862f0cdf6 100644
+> --- a/drivers/md/dm-verity.h
+> +++ b/drivers/md/dm-verity.h
+> @@ -43,6 +43,9 @@ struct dm_verity {
+>  	u8 *root_digest;	/* digest of the root block */
+>  	u8 *salt;		/* salt: its size is salt_size */
+>  	u8 *zero_digest;	/* digest for a zero block */
+> +#ifdef CONFIG_SECURITY
+> +	u8 *root_digest_sig;	/* digest signature of the root block */
+> +#endif /* CONFIG_SECURITY */
+
+No, it's not a signature of the root block, at least not directly.  It's a
+signature of the root digest (the digest of the root block).
+
+> diff --git a/include/linux/dm-verity.h b/include/linux/dm-verity.h
+> new file mode 100644
+> index 000000000000..a799a8043d85
+> --- /dev/null
+> +++ b/include/linux/dm-verity.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef _LINUX_DM_VERITY_H
+> +#define _LINUX_DM_VERITY_H
+> +
+> +struct dm_verity_digest {
+> +	const char *alg;
+> +	const u8 *digest;
+> +	size_t digest_len;
+> +};
+> +
+> +#endif /* _LINUX_DM_VERITY_H */
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index ac0985641611..9e46b13a356c 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -84,7 +84,8 @@ enum lsm_event {
+>  };
+>  
+>  enum lsm_integrity_type {
+> -	__LSM_INT_MAX
+> +	LSM_INT_DMVERITY_SIG_VALID,
+> +	LSM_INT_DMVERITY_ROOTHASH,
+>  };
+
+Shouldn't struct dm_verity_digest be defined next to LSM_INT_DMVERITY_ROOTHASH?
+It's the struct that's associated with it.
+
+It seems weird to create a brand new header <linux/dm-verity.h> that just
+contains this one LSM related definition, when there's already a header for the
+LSM definitions that even includes the related value LSM_INT_DMVERITY_ROOTHASH.
 
 - Eric
 
