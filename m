@@ -1,220 +1,259 @@
-Return-Path: <linux-integrity+bounces-2241-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2242-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A4E98B29A5
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Apr 2024 22:24:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFD218B3172
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Apr 2024 09:34:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4BFE2817D7
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Apr 2024 20:24:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6C05B23318
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Apr 2024 07:34:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4777F15381B;
-	Thu, 25 Apr 2024 20:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QzRFHDNM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F7013C3CB;
+	Fri, 26 Apr 2024 07:34:51 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 971C7153801;
-	Thu, 25 Apr 2024 20:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5C413BAFA;
+	Fri, 26 Apr 2024 07:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714076641; cv=none; b=pqDImpkrU10LEOOWQvYk9uo6AeVgU/uWSy9GXqZ/NTGQ8HVHGLTTudczVzXlFoEG+iQ+d0CJ7vdwh2C0pld4Oq/G9mse8vgskJrXZicMXaUGeGOp7UZ+qjOt1D/aDEKsm00umoyif/CdYA+CL8a99quBf2HchDVdW94dRreI+7Y=
+	t=1714116891; cv=none; b=k/TQcttXejZxM+krrWGlYx536DY1SlnH7f4v4xQszRdKS86xVrivKvR35tcDEe1OymdM0ksI3OTR/eRssaq8E14B+5tBPiXnf7MhhGIvzMg+DolLgbyX10v3UddAMQFW/vGwj9PHod23OLfm8FBOorY4+TqHtpI1V0KzR4KyL/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714076641; c=relaxed/simple;
-	bh=08WPogXj9ccCunrIcH7Gsf5VsfCJT+2vSloyAfgVOpo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E6vxXiPbziu6LLIrSQOLXQjR7psCrTHUwvCdyOA4VPVg4m6W2ukEofQhfb4Z+abiBZErrbWpJ8E6dmpRkk3h6nLGQMgDMg4DxRWNCjF41lDOxKG0Gm/v1t/bL2KD9F/SnnVo6regPER9wdfvcI29bQB88MTy4x/SoyETGgcDcGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QzRFHDNM; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.106.151] (unknown [167.220.2.23])
-	by linux.microsoft.com (Postfix) with ESMTPSA id E234E20FD4CE;
-	Thu, 25 Apr 2024 13:23:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E234E20FD4CE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1714076638;
-	bh=Ut792Bm4cIOYNOqotGiFt26HJ/65wP94SVse6cZs0cU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QzRFHDNMdopqkGKA5TUBtW0Vrr3/py/nBJLRMF/wnzbWNulqxJ+g+rYqSg6zSRn4u
-	 yqOzz8YbPOQKDxvZ8OnHbTca+U6PA2Jycw+u/5fF4Z6Qg6OF0aUBky68HRJfknZSPc
-	 F2+OF3hzpfon+VEwQmF4/xiOd8H7SpBuHHnSPphQ=
-Message-ID: <6cf278b3-32f2-4665-be8d-ea6605f4318b@linux.microsoft.com>
-Date: Thu, 25 Apr 2024 13:23:57 -0700
+	s=arc-20240116; t=1714116891; c=relaxed/simple;
+	bh=2nrxwp2YjUh24wBnc5J/BKpzCkny1EsZeH2Cz2T2t0I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MtYBtRJN4zPz1gPzPadEtdexG+mvLdeVzoO9iXpKYP0IpOoJNKOp03++5kJt/afKSQ8QE1AUrIcjtOlKLKr3BgUcCYxXtQeRuAF9uRZvKNIWw5ohIIN8UMUDwhZXYtYb55Ckd8HNW//O1EInT8sg7N8PkTAUqsz/mG0JfJ8CvxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4VQkZz1Rkjz9xGhJ;
+	Fri, 26 Apr 2024 15:18:03 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id F081C140558;
+	Fri, 26 Apr 2024 15:34:39 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwB3YycEWStmtzr3Bg--.56522S2;
+	Fri, 26 Apr 2024 08:34:38 +0100 (CET)
+Message-ID: <2b28414a7c7e4c53057ef8e527f85c05eb225d85.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v2 0/2] ima: Fix detection of read/write violations
+ on stacked filesystems
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org, 
+ linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+ zohar@linux.ibm.com,  roberto.sassu@huawei.com, miklos@szeredi.hu,
+ brauner@kernel.org
+Date: Fri, 26 Apr 2024 09:34:24 +0200
+In-Reply-To: <CAOQ4uxjODtbaWPHS3bQvnEKuYAWTJa6kqsXCSzcsF1hJdThcsw@mail.gmail.com>
+References: <20240422150651.2908169-1-stefanb@linux.ibm.com>
+	 <CAOQ4uxgvHjU-n56ryOp5yWQF=yKz0Cfo0ZieypWJhqsBV4g-2w@mail.gmail.com>
+	 <a8da6b9f57095be494b8c38ca46e2a102b8eafac.camel@huaweicloud.com>
+	 <CAOQ4uxjODtbaWPHS3bQvnEKuYAWTJa6kqsXCSzcsF1hJdThcsw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v17 13/21] dm verity: consume root hash digest and expose
- signature data via LSM hook
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
- tytso@mit.edu, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
- eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- fsverity@lists.linux.dev, linux-block@vger.kernel.org,
- dm-devel@lists.linux.dev, audit@vger.kernel.org,
- linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
-References: <1712969764-31039-1-git-send-email-wufan@linux.microsoft.com>
- <1712969764-31039-14-git-send-email-wufan@linux.microsoft.com>
- <20240425035647.GC1401@sol.localdomain>
-Content-Language: en-CA
-From: Fan Wu <wufan@linux.microsoft.com>
-In-Reply-To: <20240425035647.GC1401@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:GxC2BwB3YycEWStmtzr3Bg--.56522S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XF13Aw47Ar15Jr43GryUWrg_yoWxAr1kpF
+	W3AanFkw1Dtr1xAr92y3W8X3WFyrW8JFWUX34Y9ryUAa4qgrn3trWrKr4a9F9rCFn5Cw40
+	qayjqrZrZr1DZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAFBF1jj5zPXgACs+
 
+On Thu, 2024-04-25 at 15:37 +0300, Amir Goldstein wrote:
+> > On Thu, Apr 25, 2024 at 2:30=E2=80=AFPM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > >=20
+> > > > On Tue, 2024-04-23 at 09:02 +0300, Amir Goldstein wrote:
+> > > > > > On Mon, Apr 22, 2024 at 6:07=E2=80=AFPM Stefan Berger <stefanb@=
+linux.ibm.com> wrote:
+> > > > > > > >=20
+> > > > > > > > This series fixes the detection of read/write violations on=
+ stacked
+> > > > > > > > filesystems. To be able to access the relevant dentries nec=
+essary to
+> > > > > > > > detect files opened for writing on a stacked filesystem a n=
+ew d_real_type
+> > > > > > > > D_REAL_FILEDATA is introduced that allows callers to access=
+ all relevant
+> > > > > > > > files involved in a stacked filesystem while traversing the=
+ layers.
+> > > > > > > >=20
+> > > > > >=20
+> > > > > > Stefan,
+> > > > > >=20
+> > > > > > Both Miklos and myself objected to this solution:
+> > > > > > https://lore.kernel.org/linux-unionfs/CAJfpeguctirEYECoigcAsJwp=
+GPCX2NyfMZ8H8GHGW-0UyKfjgg@mail.gmail.com/
+> > > > > >=20
+> > > > > > Not sure what you are hoping to achieve from re-posting the sam=
+e solution.
+> > > > > >=20
+> > > > > > I stopped counting how many times I already argued that *all* I=
+MA/EVM
+> > > > > > assertions,
+> > > > > > including rw-ro violations should be enforced only on the real =
+inode.
+> > > > > > I know this does not work - so you should find out why it does =
+not work and fix
+> > > > > > the problem.
+> > > > > >=20
+> > > > > > Enforcing IMA/EVM on the overlayfs inode layer is just the wron=
+g way IMO.
+> > > > > > Not once have I heard an argument from IMA/EVM developers why i=
+t is really
+> > > > > > needed to enforce IMA/EVM on the overlayfs inode layer and not =
+on the
+> > > > > > real inode.
+> > > >=20
+> > > > Ok, I try to provide an example regarding this, and we see if it ma=
+kes
+> > > > sense.
+> > > >=20
+> > > > # echo test > test-file
+> > > > # chown 2000 d/test-file
+> > > > # ls -l a/test-file
+> > > > -rw-r--r--. 1 2000 root 25 Apr 25 10:50 a/test-file
+> > > >=20
+> > > > Initially there is a file in the lower layer with UID 2000.
+> > > >=20
+> > > >=20
+> > > > # mount -t overlay -olowerdir=3Da,upperdir=3Db,workdir=3Dc,metacopy=
+=3Don overlay d
+> > > > # chown 3000 d/test-file
+> > > > # ls -l d/test-file
+> > > > -rw-r--r--. 1 3000 root 25 Apr 25 10:50 d/test-file
+> > > > # ls -l a/test-file
+> > > > -rw-r--r--. 1 2000 root 25 Apr 25 10:50 a/test-file
+> > > > # ls -l b/test-file
+> > > > -rw-r--r--. 1 3000 root 25 Apr 25 10:50 b/test-file
+> > > >=20
+> > > > If I have a policy like this:
+> > > >=20
+> > > > # echo "measure fsname=3Doverlay fowner=3D3000" > /sys/kernel/secur=
+ity/ima/policy
+> > > >=20
+> > > > there won't be any match on the real file which still has UID 2000.=
+ But
+> > > > what is observable by the processes through overlayfs is UID 3000.
+> > > >=20
+> >=20
+> > ok, it is simple to write an ima policy that is not respected by overla=
+yfs.
+> >=20
+> > My question is: under what circumstances is a policy like the above
+> > useful in the real world?
+> >=20
+> > Correct me if I am wrong, but AFAIK, the purpose of IMA/EVM is to
+> > mitigate attack vectors of tampering with files offline or after the
+> > file's data/metadata were measured. Is that a correct description?
 
+(For now I would talk about IMA, EVM can be considered separately).
 
-On 4/24/2024 8:56 PM, Eric Biggers wrote:
-> On Fri, Apr 12, 2024 at 05:55:56PM -0700, Fan Wu wrote:
->> dm verity: consume root hash digest and expose signature data via LSM hook
-> 
-> As in the fsverity patch, nothing is being "consumed" here.  This patch adds a
-> supplier, not a consumer.  I think you mean something like: expose root digest
-> and signature to LSMs.
-> 
-Thanks for the suggestion.
+The main purpose of IMA is to evaluate files being accessed, and record
+the access together with a file digest in a measurement list,
+allow/deny access to the file (appraisal), or add a new event to audit
+logs.
 
->> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
->> index bb5da66da4c1..fbb83c6fd99c 100644
->> --- a/drivers/md/dm-verity-target.c
->> +++ b/drivers/md/dm-verity-target.c
->> @@ -22,6 +22,8 @@
->>   #include <linux/scatterlist.h>
->>   #include <linux/string.h>
->>   #include <linux/jump_label.h>
->> +#include <linux/security.h>
->> +#include <linux/dm-verity.h>
->>   
->>   #define DM_MSG_PREFIX			"verity"
->>   
->> @@ -1017,6 +1019,38 @@ static void verity_io_hints(struct dm_target *ti, struct queue_limits *limits)
->>   	blk_limits_io_min(limits, limits->logical_block_size);
->>   }
->>   
->> +#ifdef CONFIG_SECURITY
->> +
->> +static int verity_init_sig(struct dm_verity *v, const void *sig,
->> +			   size_t sig_size)
->> +{
->> +	v->sig_size = sig_size;
->> +	v->root_digest_sig = kmemdup(sig, v->sig_size, GFP_KERNEL);
->> +	if (!v->root_digest)
->> +		return -ENOMEM;
-> 
-> root_digest_sig, not root_digest
-> 
-Thanks for pointing out!
+How files are selected depends on the IMA policy. A rule can be
+subject-based or object-based, depending on whether respectively
+process or file attributes are matched. It can also be both.
 
->> +#ifdef CONFIG_SECURITY
->> +
->> +static int verity_finalize(struct dm_target *ti)
->> +{
->> +	struct block_device *bdev;
->> +	struct dm_verity_digest root_digest;
->> +	struct dm_verity *v;
->> +	int r;
->> +
->> +	v = ti->private;
->> +	bdev = dm_disk(dm_table_get_md(ti->table))->part0;
->> +	root_digest.digest = v->root_digest;
->> +	root_digest.digest_len = v->digest_size;
->> +	root_digest.alg = v->alg_name;
->> +
->> +	r = security_bdev_setintegrity(bdev, LSM_INT_DMVERITY_ROOTHASH, &root_digest,
->> +				       sizeof(root_digest));
->> +	if (r)
->> +		return r;
->> +
->> +	r = security_bdev_setintegrity(bdev,
->> +				       LSM_INT_DMVERITY_SIG_VALID,
->> +				       v->root_digest_sig,
->> +				       v->sig_size);
-> 
-> The signature is only checked if CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=y, whereas
-> this code is built whenever CONFIG_SECURITY=y.
-> 
-> So this seems like the same issue that has turned up elsewhere in the IPE
-> patchset, where IPE is (apparently) happy with any signature, even one that
-> hasn't been checked...
-> 
+A subject-based rule means that you identify a process/set of
+processes, and you evaluate everything it/they read.
 
-Yes I do agree the second hook call should better depend on 
-CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=y.
+An object-based rule means that you identify a file/set of files, and
+you evaluate any process accessing them.
 
-However, the current implementation does not happy with any signature.
+Since processes normally would access the top most layer (overlayfs),
+the IMA policy should be written in terms of metadata seen in that
+layer (but not necessarily).
 
-In case of CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=y, any signature 
-provided to dm-verity will be checked against the configured keyring, 
-the hook call won't be reached if the check failed. In case of no 
-signature is provided and !DM_VERITY_IS_SIG_FORCE_ENABLED(), the hook 
-will be called with signature value NULL.
+This is just for identifying the set of files to
+measure/appraise/audit, not which file is going to be evaluated, which
+will be always the persistent one.
 
-In case of CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=n, signature won't be 
-accepted by dm-verity. In addition, the whole support of dm-verity will 
-be disabled for IPE because CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG=n.
+I have to admit, things are not very clear also to me.
 
->> diff --git a/drivers/md/dm-verity.h b/drivers/md/dm-verity.h
->> index 20b1bcf03474..89e862f0cdf6 100644
->> --- a/drivers/md/dm-verity.h
->> +++ b/drivers/md/dm-verity.h
->> @@ -43,6 +43,9 @@ struct dm_verity {
->>   	u8 *root_digest;	/* digest of the root block */
->>   	u8 *salt;		/* salt: its size is salt_size */
->>   	u8 *zero_digest;	/* digest for a zero block */
->> +#ifdef CONFIG_SECURITY
->> +	u8 *root_digest_sig;	/* digest signature of the root block */
->> +#endif /* CONFIG_SECURITY */
-> 
-> No, it's not a signature of the root block, at least not directly.  It's a
-> signature of the root digest (the digest of the root block).
-> 
->> diff --git a/include/linux/dm-verity.h b/include/linux/dm-verity.h
->> new file mode 100644
->> index 000000000000..a799a8043d85
->> --- /dev/null
->> +++ b/include/linux/dm-verity.h
->> @@ -0,0 +1,12 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +
->> +#ifndef _LINUX_DM_VERITY_H
->> +#define _LINUX_DM_VERITY_H
->> +
->> +struct dm_verity_digest {
->> +	const char *alg;
->> +	const u8 *digest;
->> +	size_t digest_len;
->> +};
->> +
->> +#endif /* _LINUX_DM_VERITY_H */
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index ac0985641611..9e46b13a356c 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -84,7 +84,8 @@ enum lsm_event {
->>   };
->>   
->>   enum lsm_integrity_type {
->> -	__LSM_INT_MAX
->> +	LSM_INT_DMVERITY_SIG_VALID,
->> +	LSM_INT_DMVERITY_ROOTHASH,
->>   };
-> 
-> Shouldn't struct dm_verity_digest be defined next to LSM_INT_DMVERITY_ROOTHASH?
-> It's the struct that's associated with it.
-> 
-> It seems weird to create a brand new header <linux/dm-verity.h> that just
-> contains this one LSM related definition, when there's already a header for the
-> LSM definitions that even includes the related value LSM_INT_DMVERITY_ROOTHASH.
-> 
-> - Eric
+Suppose you have a file in the lower filesystem with SELinux label
+user_t, and then on overlayfs with metadata copy, you change the label
+of this file to unconfined_t.
 
-Yes they can just be in the same header. Thanks for the suggestion.
+What will happen exactly? On the overlayfs layer, you will have a
+permission request with the new label unconfined_t, but when overlayfs
+calls vfs_open(), there will be another permission request with the old
+label.
 
--Fan
+It is kind of the same challenge we are facing with IMA, we can observe
+the file operations at different layers. That is why I think having
+stacked IMA calls is a good idea (other than really fixing the
+violations).
+
+The current problem, that is very difficult to solve, is that the
+policy should cover all layers, or some events will be missed. Now we
+have overlayfs-specific code to detect changes in the backing inode,
+while with stacked IMA calls, we can detect the change at the layer
+where it happened (and we can remove the overlayfs-specific code).
+
+Ideally, what I would do to cover all layers is that if there is a
+match at one layer, the lower layers should automatically match too,
+but it is not that easy since after the vfs_open() recursive calls we
+start calling IMA in the botton most layer first.
+
+(What I did with the stacked IMA calls is just an experiment to see how
+far we can go, but still we didn't make any decision with Mimi).
+
+> > AFAIK, IMA/EVM policy is system-wide and not namespace aware
+> > so the policy has to be set on the container's host and not inside
+> > containers. Is that correct?
+
+I know that overlayfs is primarily aiming at containers, but I would
+suggest to not add that complexity yet and just consider the host.
+
+> > If those statements are true then please try to explain to me what is
+> > the thread model for tampering with overlayfs files, without tampering
+> > with the real upper and/or lower files.
+
+I hope at this point is clear that what we care about is that, or the
+process is reading the content of the file whose digest is recorded in
+the measurement list, or we must signal to remote verifiers concurrent
+accesses that make the statement above false.
+
+> > My thesis is that if an IMA/EVM policy is good enough to prevent
+> > tampering with the real lower/upper files, then no extra measures
+> > are needed to protect the virtual overlayfs files against tampering.
+
+What you say is correct, but the way you identify files to
+measure/appraise/audit can be different.
+
+Thanks
+
+Roberto
+
+> > Is my thesis flawed?
+> > I'm pretty sure that it is, but I never got a satisfying answer why.
+> >=20
+> > Thanks,
+> > Amir.
+
 
