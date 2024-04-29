@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2281-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2282-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 912DB8B65B1
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Apr 2024 00:26:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A7ED8B65D1
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Apr 2024 00:37:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B56D71C21588
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Apr 2024 22:26:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3EFC282C55
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Apr 2024 22:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99D8194C61;
-	Mon, 29 Apr 2024 22:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55BB413AEE;
+	Mon, 29 Apr 2024 22:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PpFHPEvs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J1kGXiM1"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE281779BD;
-	Mon, 29 Apr 2024 22:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD8D101E3;
+	Mon, 29 Apr 2024 22:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714429581; cv=none; b=GR4v3xJ0VDDXN/hINLcVA5gDn5IraKHWGhHgACIngFxZqlc5vRcrSeeTv8GQrliJGcmlHz1nXtcn8lLH4gbSRembp3KNhMZITxqulYVfZGZ5eGwQ1SOto6U444VdsENmDOpO7n0zriYGPqqCGcamrn9Gj28t+A9SJ4IHW/vjXj8=
+	t=1714430231; cv=none; b=UlbmFX83VLlcahvSkQ9X4jEn1GETSamEkRLsZ1Ko5LKjl1+AVYOEIymOTandSvKOTntsKzgLsnlRjWWdlgiH1Angn3QSmPQGHsNPufdMiMlkvE/h78p81M9RVFFx9EdaG/7S2DjsvIHcEQpw2et/jpQPXRGjcOUejcFd+6aIzMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714429581; c=relaxed/simple;
-	bh=Rtp/Fgag/+EJnygnO5Iz0OamyK+5KOmdaLhATBryGAI=;
+	s=arc-20240116; t=1714430231; c=relaxed/simple;
+	bh=uT7fnDycv9NkFMpFP5p3BJl/JgZemkawZR+V65LOqh0=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=tA8xhW2Q7j4T3THJYEjzDb9CaXjXB3t1N+a9Yu02+OuSDd1lT50Jf9QgjjfWgeko1RUFQqYT3uutih7jtFJ+E9Frv5DOqgfuInUVyQjH7LFGnKpkapUbabKBHcc3xw5+kxmMdwd9zKLmLwC0oIsPLfiniiYPH4AT/ibjvTQdg0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PpFHPEvs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF7FC113CD;
-	Mon, 29 Apr 2024 22:26:19 +0000 (UTC)
+	 References:In-Reply-To; b=Qj+Kws+gIOZDgeuvBOVAf/R5RB80Y93l9Zw6YE6Z+vSBflCM8K8IVaO42vXCFflCZRFFj/f6Ie0qPdAxkF6XtmP4XD66FVcyamNVk0Snb7nsgTwu4skzWIL/59p9qI6DjkkzBsSZKRfHd3siHpWW61OWSg4Suj1q3MVI6ahVrXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J1kGXiM1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB420C4AF17;
+	Mon, 29 Apr 2024 22:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714429581;
-	bh=Rtp/Fgag/+EJnygnO5Iz0OamyK+5KOmdaLhATBryGAI=;
+	s=k20201202; t=1714430231;
+	bh=uT7fnDycv9NkFMpFP5p3BJl/JgZemkawZR+V65LOqh0=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=PpFHPEvsUI1o4UxAnLCBnGXd0sJOMHJ527WbtC5RqUm4Vk7scsTZ/R9WV9DUpEEKB
-	 Orn3ieEZIovrCZ6gdFBho8QNDC6NWewoZz8nRoBl8kTorvRijKMtnBmw6OQkYqWS03
-	 ERxyxfDozPeCy3o9eYQvnm40Ji0dzTNDnKRWxehdONlHf+oiseAvNCUn852+dChS+t
-	 7DBquNpy5+aE1S6qdSlGth+UeiKLn6xtQYAKboGoA/3sQRmilPz3gPsrEja4I3vCiQ
-	 MkUJcNDH16uHa14QMD6IRJuISPsHn1Bn5ZkICOHB0Sk1yNUGWiEt8JaZ12FovLo5H3
-	 QJAvk3niDu5PQ==
+	b=J1kGXiM1FehJHubY9Kpf8b5zvR6noV9EEslSApnUKzk3Jr9oL4EbqT72bZEi1j3cU
+	 503CCsm4/Uan6OCUSECEHdPF1PpVlNw0WOoqkUpg4mJyTHVDvyI2kOX6Pf5oLZDxxD
+	 6lhM2TOYrAABL91GWOko7gWskuxkOcYJRLTOrtQlJv69nI0K+9xR6g4JYVRrpqNBr0
+	 bMQoXD/es/cM7kBdjx3plM0QIMi9LQohEBEFTXk7V2eJ0CADIrF/flxm6nX0YZ/A31
+	 XM4SW5wxYQXDt8hH5zszmEJgc7Xnu1sjdZKN3mlJIfNjpG/v4TGId9PioXHgc1c20C
+	 UIGCYuhastZSQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,227 +49,600 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 30 Apr 2024 01:26:18 +0300
-Message-Id: <D0WYKBCRV1BS.EWPTEY7QUG85@kernel.org>
+Date: Tue, 30 Apr 2024 01:37:07 +0300
+Message-Id: <D0WYSLNYKAGO.3DDGCBF2DY5Q5@kernel.org>
 Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
-Subject: Re: [PATCH v8 00/22] add integrity and security to TPM2
- transactions
+Subject: Re: [PATCH v8 12/22] tpm: Add NULL primary creation
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, <linux-integrity@vger.kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.17.0
 References: <20240429202811.13643-1-James.Bottomley@HansenPartnership.com>
- <D0WYH9UDXCZC.3OZ9MSOVTDBE1@kernel.org>
-In-Reply-To: <D0WYH9UDXCZC.3OZ9MSOVTDBE1@kernel.org>
+ <20240429202811.13643-13-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20240429202811.13643-13-James.Bottomley@HansenPartnership.com>
 
-On Tue Apr 30, 2024 at 1:22 AM EEST, Jarkko Sakkinen wrote:
-> On Mon Apr 29, 2024 at 11:27 PM EEST, James Bottomley wrote:
-> > The interest in securing the TPM against interposers, both active and
-> > passive has risen to fever pitch with the demonstration of key
-> > recovery against windows bitlocker:
-> >
-> > https://dolosgroup.io/blog/2021/7/9/from-stolen-laptop-to-inside-the-co=
-mpany-network
-> >
-> > And subsequently the same attack being successful against all the
-> > Linux TPM based security solutions:
-> >
-> > https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-=
-targets
-> >
-> > The attacks fall into two categories:
-> >
-> > 1. Passive Interposers, which sit on the bus and merely observe
-> > 2. Active Interposers, which try to manipulate TPM transactions on the
-> >    bus using man in the middle and packet stealing to create TPM state
-> >    the interposer owner desires.
-> >
-> > Our broadest interposer target is the use of TPM_RS_PW for password
-> > authorization which sends the actual password to the TPM without any
-> > obfuscation and effectively hands it to any interposer. The way to fix
-> > this is to use real sessions for HMAC capabilities to ensure integrity
-> > and to use parameter and response encryption to ensure confidentiality
-> > of the data flowing over the TPM bus.  HMAC sessions by agreeing a
-> > challenge with the TPM and then giving a response which is a HMAC of
-> > the password and the challenge, so the application proves knowledge of
-> > the password to the TPM without ever transmitting the password itself.
-> > Using HMAC sessions when sending commands to the TPM also provides
-> > some measure of protection against active interposers, since the
-> > interposer can't interfere with or delete a HMAC'd command (because
-> > they can't manufacture a response with the correct HMAC).
-> >
-> > To protect TPM transactions where there isn't a shared secret
-> > (i.e. the command is something like a PCR extension which doesn't
-> > involve a TPM object with a password) we have to do a bit more work to
-> > set up sessions with a passed in encrypted secret (called a salt) to
-> > act in place of the shared secret in the HMAC.  This secret salt is
-> > effectively a random number encrypted to a public key of the TPM.  The
-> > final piece of the puzzle is using parameter input and response return
-> > encryption, so any interposer can't see the data passing from the
-> > application to the TPM and vice versa.
-> >
-> > The most insidious interposer attack of all is a reset attack: since
-> > the interposer has access to the TPM bus, it can assert the TPM reset
-> > line any time it wants.  When a TPM resets it mostly comes back in the
-> > same state except that all the PCRs are reset to their initial values.
-> > Controlling the reset line allows the interposer to change the PCR
-> > state after the fact by resetting the TPM and then replaying PCR
-> > extends to get the PCRs into a valid state to release secrets, so even
-> > if an attack event was recorded, the record is erased.  This reset
-> > attack violates the fundamental princible of non-repudiability of TPM
-> > logs.  Defeating the reset attack involves tying all TPM operations
-> > within the kernel to a property which will change detectably if the
-> > TPM is reset.  For that reason, we tie all TPM sessions to the null
-> > hierarchy we obtain at start of day and whose seed changes on every
-> > reset.  If an active interposer asserts a TPM reset, the new null
-> > primary won't match the kernel's stored one and all TPM operations
-> > will start failing because of HMAC mismatches in the sessions.  So if
-> > the kernel TPM code keeps operating, it guarantees that a reset hasn't
-> > occurred.
-> >
-> > The final part of the puzzle is that the machine owner must have a
-> > fixed idea of the EK of their TPM and should have certified this with
-> > the TPM manufacturer.  On every boot, the certified EK public key
-> > should be used to do a make credential/activate credential attestation
-> > key insertion and then the null key certified with the attestation
-> > key.  We can follow a trust on first use model where an OS
-> > installation will extract and verify a public EK and save it to a read
-> > only file.
-> >
-> > This patch series adds a simple API which can ensure the above
-> > properties as a layered addition to the existing TPM handling code.
-> > This series now includes protections for PCR extend, getting random
-> > numbers from the TPM and data sealing and unsealing.  It therefore
-> > eliminates all uses of TPM2_RS_PW in the kernel and adds encryption
-> > protection to sensitive data flowing into and out of the TPM.  The
-> > first four patches add more sophisticated buffer handling to the TPM
-> > which is needed to build the more complex encryption and
-> > authentication based commands.  Patch 6 adds all the generic
-> > cryptography primitives and patches 7-9 use them in critical TPM
-> > operations where we want to avoid or detect interposers.  Patch 10
-> > exports the name of the null key we used for boot/run time
-> > verification and patch 11 documents the security guarantees and
-> > expectations.
-> >
-> > This was originally sent over four years ago, with the last iteration
-> > being:
-> >
-> > https://lore.kernel.org/linux-integrity/1568031515.6613.31.camel@Hansen=
-Partnership.com/
-> >
-> > I'm dusting it off now because various forces at Microsoft and Google
-> > via the Open Compute Platform are making a lot of noise about
-> > interposers and we in the linux kernel look critically lacking in that
-> > regard, particularly for TPM trusted keys.
-> >
-> > ---
-> > v2 fixes the problems smatch reported and adds more explanation about
-> > the code motion in the first few patches
-> > v3 rebases the encryption to be against Ard's new library function, the
-> > aescfb addition of which appears as patch 1.
-> > v4 refreshes Ard's patch, adds kernel doc (including a new patch to
-> > add it to the moved tpm-buf functions) updates and rewords some commit
-> > logs
-> > v5: update to proposed tpm-buf implementation (for ease of use all
-> > precursor patches are part of this series, so the actual session HMAC
-> > and encryption begins at patch 10) and add review feedback
-> > v6: split the original sessions patch into three and change the config
-> > variable name
-> > v7: Collect reviews and add extra patch to check for and disable the TP=
-M on
-> > detecting a reset attack.
-> > v8: split KDF out, add tpm_ prefix + other cosmetic updates
-> >
-> > James
-> >
-> > ---
-> >
-> > Ard Biesheuvel (1):
-> >   crypto: lib - implement library version of AES in CFB mode
-> >
-> > James Bottomley (14):
-> >   tpm: Move buffer handling from static inlines to real functions
-> >   tpm: add buffer function to point to returned parameters
-> >   tpm: export the context save and load commands
-> >   tpm: Add NULL primary creation
-> >   tpm: Add TCG mandated Key Derivation Functions (KDFs)
-> >   tpm: Add HMAC session start and end functions
-> >   tpm: Add HMAC session name/handle append
-> >   tpm: Add the rest of the session HMAC API
-> >   tpm: add hmac checks to tpm2_pcr_extend()
-> >   tpm: add session encryption protection to tpm2_get_random()
-> >   KEYS: trusted: Add session encryption protection to the seal/unseal
-> >     path
-> >   tpm: add the null key name as a sysfs export
-> >   Documentation: add tpm-security.rst
-> >   tpm: disable the TPM if NULL name changes
-> >
-> > Jarkko Sakkinen (7):
-> >   tpm: Remove unused tpm_buf_tag()
-> >   tpm: Remove tpm_send()
-> >   tpm: Update struct tpm_buf documentation comments
-> >   tpm: Store the length of the tpm_buf data separately.
-> >   tpm: TPM2B formatted buffers
-> >   tpm: Add tpm_buf_read_{u8,u16,u32}
-> >   KEYS: trusted: tpm2: Use struct tpm_buf for sized buffers
-> >
-> >  Documentation/security/tpm/tpm-security.rst |  216 ++++
-> >  drivers/char/tpm/Kconfig                    |   14 +
-> >  drivers/char/tpm/Makefile                   |    2 +
-> >  drivers/char/tpm/tpm-buf.c                  |  251 ++++
-> >  drivers/char/tpm/tpm-chip.c                 |    6 +
-> >  drivers/char/tpm/tpm-interface.c            |   26 +-
-> >  drivers/char/tpm/tpm-sysfs.c                |   18 +
-> >  drivers/char/tpm/tpm.h                      |   14 +
-> >  drivers/char/tpm/tpm2-cmd.c                 |   53 +-
-> >  drivers/char/tpm/tpm2-sessions.c            | 1280 +++++++++++++++++++
-> >  drivers/char/tpm/tpm2-space.c               |   11 +-
-> >  include/crypto/aes.h                        |    5 +
-> >  include/keys/trusted_tpm.h                  |    2 -
-> >  include/linux/tpm.h                         |  316 +++--
-> >  lib/crypto/Kconfig                          |    5 +
-> >  lib/crypto/Makefile                         |    3 +
-> >  lib/crypto/aescfb.c                         |  257 ++++
-> >  security/keys/trusted-keys/trusted_tpm1.c   |   23 +-
-> >  security/keys/trusted-keys/trusted_tpm2.c   |  136 +-
-> >  19 files changed, 2443 insertions(+), 195 deletions(-)
-> >  create mode 100644 Documentation/security/tpm/tpm-security.rst
-> >  create mode 100644 drivers/char/tpm/tpm-buf.c
-> >  create mode 100644 drivers/char/tpm/tpm2-sessions.c
-> >  create mode 100644 lib/crypto/aescfb.c
+On Mon Apr 29, 2024 at 11:28 PM EEST, James Bottomley wrote:
+> The session handling code uses a "salted" session, meaning a session
+> whose salt is encrypted to the public part of another TPM key so an
+> observer cannot obtain it (and thus deduce the session keys).  This
+> patch creates and context saves in the tpm_chip area the primary key
+> of the NULL hierarchy for this purpose.
 >
-> Thanks for the update!
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 >
-> I think I asked this already earlier but unfortunately could not
-> find the corresponding email from lore.
+> ---
+> v6: split out of original HMAC patch update config name
+> v7: rename null seed parameters
+> v8: format changes and move template to tpm.h
+> ---
+>  drivers/char/tpm/Kconfig         |  11 ++
+>  drivers/char/tpm/Makefile        |   1 +
+>  drivers/char/tpm/tpm.h           |  10 +
+>  drivers/char/tpm/tpm2-cmd.c      |   5 +
+>  drivers/char/tpm/tpm2-sessions.c | 316 +++++++++++++++++++++++++++++++
+>  include/linux/tpm.h              |  69 +++++++
+>  6 files changed, 412 insertions(+)
+>  create mode 100644 drivers/char/tpm/tpm2-sessions.c
 >
-> Anyway, I've tested this series with QEMU i.e. to the point that
-> I know that it does not break anything in the case when things are
-> working as expected.
->
-> What I would like to test is the negative case when the null key
-> name changes and see what happens.
->
-> I recall that you had some version of QEMU that had ability to test
-> this and my latest question on that was what QEMU baseline it was
-> expected to be applied over.
->
-> Since I could not find the email subthread I neither have the patch nor
-> do know the baseline. So if you could help with these details then we
-> can move forward.
->
-> I can also work with QEMU Git fork if you have one and point out
-> QEMU_OVERRIDE_SRCDIR to the clone.
->
-> It is somewhat mandatory IMHO to be able to test this to both=20
-> directions, right?
+> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> index 927088b2c3d3..ab16d347579f 100644
+> --- a/drivers/char/tpm/Kconfig
+> +++ b/drivers/char/tpm/Kconfig
+> @@ -27,6 +27,17 @@ menuconfig TCG_TPM
+> =20
+>  if TCG_TPM
+> =20
+> +config TCG_TPM2_HMAC
+> +	bool "Use HMAC and encrypted transactions on the TPM bus"
+> +	default y
+> +	help
+> +	  Setting this causes us to deploy a scheme which uses request
+> +	  and response HMACs in addition to encryption for
+> +	  communicating with the TPM to prevent or detect bus snooping
+> +	  and interposer attacks (see tpm-security.rst).  Saying Y
+> +	  here adds some encryption overhead to all kernel to TPM
+> +	  transactions.
+> +
+>  config HW_RANDOM_TPM
+>  	bool "TPM HW Random Number Generator support"
+>  	depends on TCG_TPM && HW_RANDOM && !(TCG_TPM=3Dy && HW_RANDOM=3Dm)
+> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> index ad3594e383e1..4c695b0388f3 100644
+> --- a/drivers/char/tpm/Makefile
+> +++ b/drivers/char/tpm/Makefile
+> @@ -17,6 +17,7 @@ tpm-y +=3D eventlog/tpm1.o
+>  tpm-y +=3D eventlog/tpm2.o
+>  tpm-y +=3D tpm-buf.o
+> =20
+> +tpm-$(CONFIG_TCG_TPM2_HMAC) +=3D tpm2-sessions.o
+>  tpm-$(CONFIG_ACPI) +=3D tpm_ppi.o eventlog/acpi.o
+>  tpm-$(CONFIG_EFI) +=3D eventlog/efi.o
+>  tpm-$(CONFIG_OF) +=3D eventlog/of.o
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index cbc9d1e2974d..6b8b9956ba69 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -321,4 +321,14 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
+>  void tpm_bios_log_teardown(struct tpm_chip *chip);
+>  int tpm_dev_common_init(void);
+>  void tpm_dev_common_exit(void);
+> +
+> +#ifdef CONFIG_TCG_TPM2_HMAC
+> +int tpm2_sessions_init(struct tpm_chip *chip);
+> +#else
+> +static inline int tpm2_sessions_init(struct tpm_chip *chip)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+>  #endif
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index 93545be190a5..b0e72fb563d9 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -759,6 +759,11 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+>  		rc =3D 0;
+>  	}
+> =20
+> +	if (rc)
+> +		goto out;
+> +
+> +	rc =3D tpm2_sessions_init(chip);
+> +
+>  out:
+>  	/*
+>  	 * Infineon TPM in field upgrade mode will return no data for the numbe=
+r
+> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-ses=
+sions.c
+> new file mode 100644
+> index 000000000000..fc3f032df467
+> --- /dev/null
+> +++ b/drivers/char/tpm/tpm2-sessions.c
+> @@ -0,0 +1,316 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright (C) 2018 James.Bottomley@HansenPartnership.com
+> + *
+> + */
+> +
+> +#include "tpm.h"
+> +#include <asm/unaligned.h>
+> +
+> +/**
+> + * tpm2_parse_create_primary() - parse the data returned from TPM_CC_CRE=
+ATE_PRIMARY
+> + *
+> + * @chip:	The TPM the primary was created under
+> + * @buf:	The response buffer from the chip
+> + * @handle:	pointer to be filled in with the return handle of the primar=
+y
+> + * @hierarchy:	The hierarchy the primary was created for
+> + *
+> + * @returns: 0 on success or a positive TPM or negative standard error
+> + */
+> +static int tpm2_parse_create_primary(struct tpm_chip *chip, struct tpm_b=
+uf *buf,
+> +				     u32 *handle, u32 hierarchy)
+> +{
+> +	struct tpm_header *head =3D (struct tpm_header *)buf->data;
+> +	off_t offset_r =3D TPM_HEADER_SIZE, offset_t;
+> +	u16 len =3D TPM_HEADER_SIZE;
+> +	u32 total_len =3D be32_to_cpu(head->length);
+> +	u32 val, param_len;
+> +
+> +	*handle =3D tpm_buf_read_u32(buf, &offset_r);
+> +	param_len =3D tpm_buf_read_u32(buf, &offset_r);
+> +	/*
+> +	 * param_len doesn't include the header, but all the other
+> +	 * lengths and offsets do, so add it to parm len to make
+> +	 * the comparisons easier
+> +	 */
+> +	param_len +=3D TPM_HEADER_SIZE;
+> +
+> +	if (param_len + 8 > total_len)
+> +		return -EINVAL;
+> +	len =3D tpm_buf_read_u16(buf, &offset_r);
+> +	offset_t =3D offset_r;
+> +	/* now we have the public area, compute the name of the object */
+> +	put_unaligned_be16(TPM_ALG_SHA256, chip->null_key_name);
+> +	sha256(&buf->data[offset_r], len, chip->null_key_name + 2);
+> +
+> +	/* validate the public key */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +
+> +	/* key type (must be what we asked for) */
+> +	if (val !=3D TPM_ALG_ECC)
+> +		return -EINVAL;
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +
+> +	/* name algorithm */
+> +	if (val !=3D TPM_ALG_SHA256)
+> +		return -EINVAL;
+> +	val =3D tpm_buf_read_u32(buf, &offset_t);
+> +
+> +	/* object properties */
+> +	if (val !=3D TPM2_OA_TMPL)
+> +		return -EINVAL;
+> +
+> +	/* auth policy (empty) */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D 0)
+> +		return -EINVAL;
+> +
+> +	/* symmetric key parameters */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D TPM_ALG_AES)
+> +		return -EINVAL;
+> +
+> +	/* symmetric key length */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D AES_KEY_BITS)
+> +		return -EINVAL;
+> +
+> +	/* symmetric encryption scheme */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D TPM_ALG_CFB)
+> +		return -EINVAL;
+> +
+> +	/* signing scheme */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D TPM_ALG_NULL)
+> +		return -EINVAL;
+> +
+> +	/* ECC Curve */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D TPM2_ECC_NIST_P256)
+> +		return -EINVAL;
+> +
+> +	/* KDF Scheme */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D TPM_ALG_NULL)
+> +		return -EINVAL;
+> +
+> +	/* extract public key (x and y points) */
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D EC_PT_SZ)
+> +		return -EINVAL;
+> +	memcpy(chip->null_ec_key_x, &buf->data[offset_t], val);
+> +	offset_t +=3D val;
+> +	val =3D tpm_buf_read_u16(buf, &offset_t);
+> +	if (val !=3D EC_PT_SZ)
+> +		return -EINVAL;
+> +	memcpy(chip->null_ec_key_y, &buf->data[offset_t], val);
+> +	offset_t +=3D val;
+> +
+> +	/* original length of the whole TPM2B */
+> +	offset_r +=3D len;
+> +
+> +	/* should have exactly consumed the TPM2B public structure */
+> +	if (offset_t !=3D offset_r)
+> +		return -EINVAL;
+> +	if (offset_r > param_len)
+> +		return -EINVAL;
+> +
+> +	/* creation data (skip) */
+> +	len =3D tpm_buf_read_u16(buf, &offset_r);
+> +	offset_r +=3D len;
+> +	if (offset_r > param_len)
+> +		return -EINVAL;
+> +
+> +	/* creation digest (must be sha256) */
+> +	len =3D tpm_buf_read_u16(buf, &offset_r);
+> +	offset_r +=3D len;
+> +	if (len !=3D SHA256_DIGEST_SIZE || offset_r > param_len)
+> +		return -EINVAL;
+> +
+> +	/* TPMT_TK_CREATION follows */
+> +	/* tag, must be TPM_ST_CREATION (0x8021) */
+> +	val =3D tpm_buf_read_u16(buf, &offset_r);
+> +	if (val !=3D TPM2_ST_CREATION || offset_r > param_len)
+> +		return -EINVAL;
+> +
+> +	/* hierarchy */
+> +	val =3D tpm_buf_read_u32(buf, &offset_r);
+> +	if (val !=3D hierarchy || offset_r > param_len)
+> +		return -EINVAL;
+> +
+> +	/* the ticket digest HMAC (might not be sha256) */
+> +	len =3D tpm_buf_read_u16(buf, &offset_r);
+> +	offset_r +=3D len;
+> +	if (offset_r > param_len)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * finally we have the name, which is a sha256 digest plus a 2
+> +	 * byte algorithm type
+> +	 */
+> +	len =3D tpm_buf_read_u16(buf, &offset_r);
+> +	if (offset_r + len !=3D param_len + 8)
+> +		return -EINVAL;
+> +	if (len !=3D SHA256_DIGEST_SIZE + 2)
+> +		return -EINVAL;
+> +
+> +	if (memcmp(chip->null_key_name, &buf->data[offset_r],
+> +		   SHA256_DIGEST_SIZE + 2) !=3D 0) {
+> +		dev_err(&chip->dev, "NULL Seed name comparison failed\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * tpm2_create_primary() - create a primary key using a fixed P-256 temp=
+late
+> + *
+> + * @chip:      the TPM chip to create under
+> + * @hierarchy: The hierarchy handle to create under
+> + * @handle:    The returned volatile handle on success
+> + *
+> + * For platforms that might not have a persistent primary, this can be
+> + * used to create one quickly on the fly (it uses Elliptic Curve not
+> + * RSA, so even slow TPMs can create one fast).  The template uses the
+> + * TCG mandated H one for non-endorsement ECC primaries, i.e. P-256
+> + * elliptic curve (the only current one all TPM2s are required to
+> + * have) a sha256 name hash and no policy.
+> + *
+> + * @returns: 0 on success or positive TPM or negative error.
+> + */
+> +static int tpm2_create_primary(struct tpm_chip *chip, u32 hierarchy,
+> +			       u32 *handle)
+> +{
+> +	int rc;
+> +	struct tpm_buf buf;
+> +	struct tpm_buf template;
+> +
+> +	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE_PRIMARY);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc =3D tpm_buf_init_sized(&template);
+> +	if (rc) {
+> +		tpm_buf_destroy(&buf);
+> +		return rc;
+> +	}
+> +
+> +	/*
+> +	 * create the template.  Note: in order for userspace to
+> +	 * verify the security of the system, it will have to create
+> +	 * and certify this NULL primary, meaning all the template
+> +	 * parameters will have to be identical, so conform exactly to
+> +	 * the TCG TPM v2.0 Provisioning Guidance for the SRK ECC
+> +	 * key H template (H has zero size unique points)
+> +	 */
+> +
+> +	/* key type */
+> +	tpm_buf_append_u16(&template, TPM_ALG_ECC);
+> +
+> +	/* name algorithm */
+> +	tpm_buf_append_u16(&template, TPM_ALG_SHA256);
+> +
+> +	/* object properties */
+> +	tpm_buf_append_u32(&template, TPM2_OA_TMPL);
+> +
+> +	/* sauth policy (empty) */
+> +	tpm_buf_append_u16(&template, 0);
+> +
+> +	/* BEGIN parameters: key specific; for ECC*/
+> +
+> +	/* symmetric algorithm */
+> +	tpm_buf_append_u16(&template, TPM_ALG_AES);
+> +
+> +	/* bits for symmetric algorithm */
+> +	tpm_buf_append_u16(&template, AES_KEY_BITS);
+> +
+> +	/* algorithm mode (must be CFB) */
+> +	tpm_buf_append_u16(&template, TPM_ALG_CFB);
+> +
+> +	/* scheme (NULL means any scheme) */
+> +	tpm_buf_append_u16(&template, TPM_ALG_NULL);
+> +
+> +	/* ECC Curve ID */
+> +	tpm_buf_append_u16(&template, TPM2_ECC_NIST_P256);
+> +
+> +	/* KDF Scheme */
+> +	tpm_buf_append_u16(&template, TPM_ALG_NULL);
+> +
+> +	/* unique: key specific; for ECC it is two zero size points */
+> +	tpm_buf_append_u16(&template, 0);
+> +	tpm_buf_append_u16(&template, 0);
+> +
+> +	/* END parameters */
+> +
+> +	/* primary handle */
+> +	tpm_buf_append_u32(&buf, hierarchy);
+> +	tpm_buf_append_empty_auth(&buf, TPM2_RS_PW);
+> +
+> +	/* sensitive create size is 4 for two empty buffers */
+> +	tpm_buf_append_u16(&buf, 4);
+> +
+> +	/* sensitive create auth data (empty) */
+> +	tpm_buf_append_u16(&buf, 0);
+> +
+> +	/* sensitive create sensitive data (empty) */
+> +	tpm_buf_append_u16(&buf, 0);
+> +
+> +	/* the public template */
+> +	tpm_buf_append(&buf, template.data, template.length);
+> +	tpm_buf_destroy(&template);
+> +
+> +	/* outside info (empty) */
+> +	tpm_buf_append_u16(&buf, 0);
+> +
+> +	/* creation PCR (none) */
+> +	tpm_buf_append_u32(&buf, 0);
+> +
+> +	rc =3D tpm_transmit_cmd(chip, &buf, 0,
+> +			      "attempting to create NULL primary");
+> +
+> +	if (rc =3D=3D TPM2_RC_SUCCESS)
+> +		rc =3D tpm2_parse_create_primary(chip, &buf, handle, hierarchy);
+> +
+> +	tpm_buf_destroy(&buf);
+> +
+> +	return rc;
+> +}
+> +
+> +static int tpm2_create_null_primary(struct tpm_chip *chip)
+> +{
+> +	u32 null_key;
+> +	int rc;
+> +
+> +	rc =3D tpm2_create_primary(chip, TPM2_RH_NULL, &null_key);
+> +
+> +	if (rc =3D=3D TPM2_RC_SUCCESS) {
+> +		unsigned int offset =3D 0; /* dummy offset for null key context */
+> +
+> +		rc =3D tpm2_save_context(chip, null_key, chip->null_key_context,
+> +				       sizeof(chip->null_key_context), &offset);
+> +		tpm2_flush_context(chip, null_key);
+> +	}
+> +
+> +	return rc;
+> +}
+> +
+> +/**
+> + * tpm2_sessions_init() - start of day initialization for the sessions c=
+ode
+> + * @chip: TPM chip
+> + *
+> + * Derive and context save the null primary and allocate memory in the
+> + * struct tpm_chip for the authorizations.
+> + */
+> +int tpm2_sessions_init(struct tpm_chip *chip)
+> +{
+> +	int rc;
+> +
+> +	rc =3D tpm2_create_null_primary(chip);
+> +	if (rc)
+> +		dev_err(&chip->dev, "TPM: security failed (NULL seed derivation): %d\n=
+", rc);
+> +
+> +	return rc;
+> +}
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index 6be263509e81..bc8c9a350e23 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -23,6 +23,7 @@
+>  #include <linux/fs.h>
+>  #include <linux/highmem.h>
+>  #include <crypto/hash_info.h>
+> +#include <crypto/aes.h>
+> =20
+>  #define TPM_DIGEST_SIZE 20	/* Max TPM v1.2 PCR size */
+>  #define TPM_MAX_DIGEST_SIZE SHA512_DIGEST_SIZE
+> @@ -35,12 +36,15 @@ struct trusted_key_options;
+>  enum tpm_algorithms {
+>  	TPM_ALG_ERROR		=3D 0x0000,
+>  	TPM_ALG_SHA1		=3D 0x0004,
+> +	TPM_ALG_AES		=3D 0x0006,
+>  	TPM_ALG_KEYEDHASH	=3D 0x0008,
+>  	TPM_ALG_SHA256		=3D 0x000B,
+>  	TPM_ALG_SHA384		=3D 0x000C,
+>  	TPM_ALG_SHA512		=3D 0x000D,
+>  	TPM_ALG_NULL		=3D 0x0010,
+>  	TPM_ALG_SM3_256		=3D 0x0012,
+> +	TPM_ALG_ECC		=3D 0x0023,
+> +	TPM_ALG_CFB		=3D 0x0043,
+>  };
+> =20
+>  /*
+> @@ -49,6 +53,11 @@ enum tpm_algorithms {
+>   */
+>  #define TPM_MAX_HASHES	5
+> =20
+> +enum tpm2_curves {
+> +	TPM2_ECC_NONE		=3D 0x0000,
+> +	TPM2_ECC_NIST_P256	=3D 0x0003,
+> +};
+> +
+>  struct tpm_digest {
+>  	u16 alg_id;
+>  	u8 digest[TPM_MAX_DIGEST_SIZE];
+> @@ -116,6 +125,20 @@ struct tpm_chip_seqops {
+>  	const struct seq_operations *seqops;
+>  };
+> =20
+> +/* fixed define for the curve we use which is NIST_P256 */
+> +#define EC_PT_SZ	32
+> +
+> +/*
+> + * fixed define for the size of a name.  This is actually HASHALG size
+> + * plus 2, so 32 for SHA256
+> + */
+> +#define TPM2_NAME_SIZE	34
+> +
+> +/*
+> + * The maximum size for an object context
+> + */
+> +#define TPM2_MAX_CONTEXT_SIZE 4096
+> +
+>  struct tpm_chip {
+>  	struct device dev;
+>  	struct device devs;
+> @@ -170,6 +193,17 @@ struct tpm_chip {
+> =20
+>  	/* active locality */
+>  	int locality;
+> +
+> +#ifdef CONFIG_TCG_TPM2_HMAC
+> +	/* details for communication security via sessions */
+> +
+> +	/* saved context for NULL seed */
+> +	u8 null_key_context[TPM2_MAX_CONTEXT_SIZE];
+> +	 /* name of NULL seed */
+> +	u8 null_key_name[TPM2_NAME_SIZE];
+> +	u8 null_ec_key_x[EC_PT_SZ];
+> +	u8 null_ec_key_y[EC_PT_SZ];
+> +#endif
+>  };
+> =20
+>  #define TPM_HEADER_SIZE		10
+> @@ -194,6 +228,7 @@ enum tpm2_timeouts {
+>  enum tpm2_structures {
+>  	TPM2_ST_NO_SESSIONS	=3D 0x8001,
+>  	TPM2_ST_SESSIONS	=3D 0x8002,
+> +	TPM2_ST_CREATION	=3D 0x8021,
+>  };
+> =20
+>  /* Indicates from what layer of the software stack the error comes from =
+*/
+> @@ -243,6 +278,7 @@ enum tpm2_command_codes {
+>  };
+> =20
+>  enum tpm2_permanent_handles {
+> +	TPM2_RH_NULL		=3D 0x40000007,
+>  	TPM2_RS_PW		=3D 0x40000009,
+>  };
+> =20
+> @@ -318,9 +354,28 @@ struct tpm_buf {
+>  enum tpm2_object_attributes {
+>  	TPM2_OA_FIXED_TPM		=3D BIT(1),
+>  	TPM2_OA_FIXED_PARENT		=3D BIT(4),
+> +	TPM2_OA_SENSITIVE_DATA_ORIGIN	=3D BIT(5),
+>  	TPM2_OA_USER_WITH_AUTH		=3D BIT(6),
+> +	TPM2_OA_NO_DA			=3D BIT(10),
+> +	TPM2_OA_RESTRICTED		=3D BIT(16),
+> +	TPM2_OA_DECRYPT			=3D BIT(17),
+>  };
+> =20
+> +/*
+> + * definitions for the canonical template.  These are mandated
+> + * by the TCG key template documents
+> + */
+> +
+> +#define AES_KEY_BYTES	AES_KEYSIZE_128
+> +#define AES_KEY_BITS	(AES_KEY_BYTES*8)
+> +#define TPM2_OA_TMPL	(TPM2_OA_NO_DA |			\
+> +			 TPM2_OA_FIXED_TPM |			\
+> +			 TPM2_OA_FIXED_PARENT |			\
+> +			 TPM2_OA_SENSITIVE_DATA_ORIGIN |	\
+> +			 TPM2_OA_USER_WITH_AUTH |		\
+> +			 TPM2_OA_DECRYPT |			\
+> +			 TPM2_OA_RESTRICTED)
+> +
+>  enum tpm2_session_attributes {
+>  	TPM2_SA_CONTINUE_SESSION	=3D BIT(0),
+>  };
+> @@ -373,6 +428,16 @@ extern int tpm_pcr_extend(struct tpm_chip *chip, u32=
+ pcr_idx,
+>  extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+>  extern struct tpm_chip *tpm_default_chip(void);
+>  void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
+> +
+> +static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 ha=
+ndle)
+> +{
+> +	/* simple authorization for empty auth */
+> +	tpm_buf_append_u32(buf, 9);		/* total length of auth */
+> +	tpm_buf_append_u32(buf, handle);
+> +	tpm_buf_append_u16(buf, 0);		/* nonce len */
+> +	tpm_buf_append_u8(buf, 0);		/* attributes */
+> +	tpm_buf_append_u16(buf, 0);		/* hmac len */
+> +}
+>  #else
+>  static inline int tpm_is_tpm2(struct tpm_chip *chip)
+>  {
+> @@ -399,5 +464,9 @@ static inline struct tpm_chip *tpm_default_chip(void)
+>  {
+>  	return NULL;
+>  }
+> +
+> +static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 ha=
+ndle)
+> +{
+> +}
+>  #endif
+>  #endif
 
-Right and obviously 3rd option is to send a PR to
-https://gitlab.com/jarkkojs/linux-tpmdd-test.
 
-I.e. patch file goes to patches/qemu (BR2_GLOBAL_PATCH_DIR
-points there).
+Good enough!
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
-
 
