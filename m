@@ -1,60 +1,60 @@
-Return-Path: <linux-integrity+bounces-2262-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2263-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD8708B638F
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Apr 2024 22:29:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 568C98B638C
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Apr 2024 22:29:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF43BB22E7D
-	for <lists+linux-integrity@lfdr.de>; Mon, 29 Apr 2024 20:29:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9D031F22F63
+	for <lists+linux-integrity@lfdr.de>; Mon, 29 Apr 2024 20:29:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB0513AA5D;
-	Mon, 29 Apr 2024 20:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B3FC1422A6;
+	Mon, 29 Apr 2024 20:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="aP75Vg7b"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="xZOLgkXw"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA5913AD2F;
-	Mon, 29 Apr 2024 20:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A88613AD2F;
+	Mon, 29 Apr 2024 20:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714422548; cv=none; b=JENpteRt2AzbcxapcMa6MYOI1XrwIPwVk/MoBcpTpgq58fO9AI2+4jUO11OfL/7mQ4azouCcFnAJAgua/+QZHycHtTQ5O9WpUfByqUJei0rxcoJwCbTzvM8HJAOw8DTYdXSoAl8qumVhie4yyLxXVefASMDc37foj/0g9Rrt9eU=
+	t=1714422560; cv=none; b=f1aXZ8OkxBivJikpisc3AMCjMOV5w0d2GmpuvGxedCplD9DxYauje/XfBPAK3bCkNvvUavAWXXUuD7WNLwcoX3OwM3dviK2u3Fe+1dGvHsssyR1dQ1yr2TvtimXIwvtsUoNINl9HDVkpuH04VHJ8FG3J61Tm/+2KoXh+IDzQTuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714422548; c=relaxed/simple;
-	bh=6ks3bmvuYUE58vztBDISP6iQvbdzJBgPsZsoww3ykCU=;
+	s=arc-20240116; t=1714422560; c=relaxed/simple;
+	bh=GhlA/Rq82/QUrouorinlF9Wm+3ULLc25ENkn8rx/tUg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=E0DtUeaUl9nbHz6eCEX2uL1Mfdu9KDv1NQOMa6JEYiYkVoNgLLNp22/eioW2a8zUZjNgeKJyelU55v79MuRgEgHqArErM6Ab/D9FihYVvlw9L3OwzZuzNy7RoliCvs61KXiDRmffn52JFJrZtU4vYIilx5qZ3OywzBbMmS3+P+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=aP75Vg7b; arc=none smtp.client-ip=96.44.175.130
+	 MIME-Version; b=qUIRyD4xwwy18gu/GCgtfX88TiLs60VKswWiSvRBbf9m5ZxOtxf/OWBxKlnqSvG52iz2ZoHSYVCkx535LR5AGqIXrw6XbCVnvMgFsEWUUCA8alCMM4P3fI6qnFauJ35+5jMN5QgeyClLbtz+q61xQky6gRsifci9wO3Je1Q+pEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=xZOLgkXw; arc=none smtp.client-ip=96.44.175.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1714422546;
-	bh=6ks3bmvuYUE58vztBDISP6iQvbdzJBgPsZsoww3ykCU=;
+	d=hansenpartnership.com; s=20151216; t=1714422558;
+	bh=GhlA/Rq82/QUrouorinlF9Wm+3ULLc25ENkn8rx/tUg=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-	b=aP75Vg7bQ7SUbM5ClZptOVhSq8GEawQUcI1eTYzugQtxCLlijAQMK1rR2yAlncIZc
-	 knlok5tspMfZXeQiZo+Xj9+nxdhCjyoSUOgJheGjcAeekRCvKw0Bi8q8TXGOoK2p0y
-	 gP9FkroufIQR0TFshyoCCdBUJNG0it/taaOnJgRk=
+	b=xZOLgkXwqhr4spcMDc5Tq1za5rFz1FV4fDdNYg+ijI7P9PtnlOgTjVvAuPJRq82mi
+	 OhcrTIOk09+mJ9ocxX+jb8laKZhvbk4d7obuBZcL6JlushSgyy6rhTJhsn1pMffQo5
+	 llrXrakebjA8rcf8IIKzRQTNvH4ZIgEYcFDFqhQo=
 Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id A6EF51281D87;
-	Mon, 29 Apr 2024 16:29:06 -0400 (EDT)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 8CB541281D87;
+	Mon, 29 Apr 2024 16:29:18 -0400 (EDT)
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
  by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id i3ave2BWqRub; Mon, 29 Apr 2024 16:29:06 -0400 (EDT)
+ with ESMTP id SHoqPGxA2FRk; Mon, 29 Apr 2024 16:29:18 -0400 (EDT)
 Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 17A2212819F3;
-	Mon, 29 Apr 2024 16:29:06 -0400 (EDT)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id F298D12819F3;
+	Mon, 29 Apr 2024 16:29:17 -0400 (EDT)
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
 To: linux-integrity@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	keyrings@vger.kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v8 05/22] tpm: Store the length of the tpm_buf data separately.
-Date: Mon, 29 Apr 2024 16:27:54 -0400
-Message-Id: <20240429202811.13643-6-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v8 06/22] tpm: TPM2B formatted buffers
+Date: Mon, 29 Apr 2024 16:27:55 -0400
+Message-Id: <20240429202811.13643-7-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20240429202811.13643-1-James.Bottomley@HansenPartnership.com>
 References: <20240429202811.13643-1-James.Bottomley@HansenPartnership.com>
@@ -68,223 +68,102 @@ Content-Transfer-Encoding: 8bit
 
 From: Jarkko Sakkinen <jarkko@kernel.org>
 
-TPM2B buffers, or sized buffers, have a two byte header, which contains the
-length of the payload as a 16-bit big-endian number, without counting in
-the space taken by the header. This differs from encoding in the TPM header
-where the length includes also the bytes taken by the header.
-
-Unbound the length of a tpm_buf from the value stored to the TPM command
-header. A separate encoding and decoding step so that different buffer
-types can be supported, with variant header format and length encoding.
+Declare tpm_buf_init_sized() and tpm_buf_reset_sized() for creating TPM2B
+formatted buffers. These buffers are also known as sized buffers in the
+specifications and literature.
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- drivers/char/tpm/tpm-buf.c                | 48 +++++++++++++++++------
- drivers/char/tpm/tpm-interface.c          |  1 +
- include/keys/trusted_tpm.h                |  2 -
- include/linux/tpm.h                       |  6 +--
- security/keys/trusted-keys/trusted_tpm1.c |  9 +++--
- 5 files changed, 46 insertions(+), 20 deletions(-)
+ drivers/char/tpm/tpm-buf.c | 38 +++++++++++++++++++++++++++++++++++---
+ include/linux/tpm.h        |  4 ++++
+ 2 files changed, 39 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-index 96cee41d5b9c..3f39893f3bb1 100644
+index 3f39893f3bb1..099b4a56c5d5 100644
 --- a/drivers/char/tpm/tpm-buf.c
 +++ b/drivers/char/tpm/tpm-buf.c
-@@ -3,25 +3,44 @@
-  * Handling of TPM command and other buffers.
-  */
- 
-+#include <linux/tpm_command.h>
- #include <linux/module.h>
- #include <linux/tpm.h>
+@@ -47,6 +47,36 @@ void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
+ }
+ EXPORT_SYMBOL_GPL(tpm_buf_reset);
  
 +/**
-+ * tpm_buf_init() - Allocate and initialize a TPM command
-+ * @buf:	A &tpm_buf
-+ * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
-+ * @ordinal:	A command ordinal
++ * tpm_buf_init_sized() - Allocate and initialize a sized (TPM2B) buffer
++ * @buf:	A @tpm_buf
 + *
 + * Return: 0 or -ENOMEM
 + */
- int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
- {
- 	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
- 	if (!buf->data)
- 		return -ENOMEM;
- 
--	buf->flags = 0;
- 	tpm_buf_reset(buf, tag, ordinal);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(tpm_buf_init);
- 
-+/**
-+ * tpm_buf_reset() - Initialize a TPM command
-+ * @buf:	A &tpm_buf
-+ * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
-+ * @ordinal:	A command ordinal
-+ */
- void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
- {
- 	struct tpm_header *head = (struct tpm_header *)buf->data;
- 
-+	WARN_ON(tag != TPM_TAG_RQU_COMMAND && tag != TPM2_ST_NO_SESSIONS &&
-+		tag != TPM2_ST_SESSIONS && tag != 0);
++int tpm_buf_init_sized(struct tpm_buf *buf)
++{
++	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
++	if (!buf->data)
++		return -ENOMEM;
 +
-+	buf->flags = 0;
-+	buf->length = sizeof(*head);
- 	head->tag = cpu_to_be16(tag);
- 	head->length = cpu_to_be32(sizeof(*head));
- 	head->ordinal = cpu_to_be32(ordinal);
-@@ -34,33 +53,40 @@ void tpm_buf_destroy(struct tpm_buf *buf)
- }
- EXPORT_SYMBOL_GPL(tpm_buf_destroy);
- 
++	tpm_buf_reset_sized(buf);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(tpm_buf_init_sized);
++
 +/**
-+ * tpm_buf_length() - Return the number of bytes consumed by the data
-+ *
-+ * Return: The number of bytes consumed by the buffer
++ * tpm_buf_reset_sized() - Initialize a sized buffer
++ * @buf:	A &tpm_buf
 + */
- u32 tpm_buf_length(struct tpm_buf *buf)
++void tpm_buf_reset_sized(struct tpm_buf *buf)
++{
++	buf->flags = TPM_BUF_TPM2B;
++	buf->length = 2;
++	buf->data[0] = 0;
++	buf->data[1] = 0;
++}
++EXPORT_SYMBOL_GPL(tpm_buf_reset_sized);
++
+ void tpm_buf_destroy(struct tpm_buf *buf)
+ {
+ 	free_page((unsigned long)buf->data);
+@@ -72,8 +102,6 @@ EXPORT_SYMBOL_GPL(tpm_buf_length);
+  */
+ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
  {
 -	struct tpm_header *head = (struct tpm_header *)buf->data;
 -
--	return be32_to_cpu(head->length);
-+	return buf->length;
- }
- EXPORT_SYMBOL_GPL(tpm_buf_length);
- 
--void tpm_buf_append(struct tpm_buf *buf,
--		    const unsigned char *new_data,
--		    unsigned int new_len)
-+/**
-+ * tpm_buf_append() - Append data to an initialized buffer
-+ * @buf:	A &tpm_buf
-+ * @new_data:	A data blob
-+ * @new_length:	Size of the appended data
-+ */
-+void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
- {
- 	struct tpm_header *head = (struct tpm_header *)buf->data;
--	u32 len = tpm_buf_length(buf);
- 
  	/* Return silently if overflow has already happened. */
  	if (buf->flags & TPM_BUF_OVERFLOW)
  		return;
+@@ -86,7 +114,11 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
  
--	if ((len + new_len) > PAGE_SIZE) {
-+	if ((buf->length + new_length) > PAGE_SIZE) {
- 		WARN(1, "tpm_buf: overflow\n");
- 		buf->flags |= TPM_BUF_OVERFLOW;
- 		return;
- 	}
- 
--	memcpy(&buf->data[len], new_data, new_len);
--	head->length = cpu_to_be32(len + new_len);
-+	memcpy(&buf->data[buf->length], new_data, new_length);
-+	buf->length += new_length;
-+	head->length = cpu_to_be32(buf->length);
+ 	memcpy(&buf->data[buf->length], new_data, new_length);
+ 	buf->length += new_length;
+-	head->length = cpu_to_be32(buf->length);
++
++	if (buf->flags & TPM_BUF_TPM2B)
++		((__be16 *)buf->data)[0] = cpu_to_be16(buf->length - 2);
++	else
++		((struct tpm_header *)buf->data)->length = cpu_to_be32(buf->length);
  }
  EXPORT_SYMBOL_GPL(tpm_buf_append);
  
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index f940045a014e..5da134f12c9a 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -232,6 +232,7 @@ ssize_t tpm_transmit_cmd(struct tpm_chip *chip, struct tpm_buf *buf,
- 	if (len < min_rsp_body_length + TPM_HEADER_SIZE)
- 		return -EFAULT;
- 
-+	buf->length = len;
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(tpm_transmit_cmd);
-diff --git a/include/keys/trusted_tpm.h b/include/keys/trusted_tpm.h
-index 7769b726863a..a088b33fd0e3 100644
---- a/include/keys/trusted_tpm.h
-+++ b/include/keys/trusted_tpm.h
-@@ -6,8 +6,6 @@
- #include <linux/tpm_command.h>
- 
- /* implementation specific TPM constants */
--#define MAX_BUF_SIZE			1024
--#define TPM_GETRANDOM_SIZE		14
- #define TPM_SIZE_OFFSET			2
- #define TPM_RETURN_OFFSET		6
- #define TPM_DATA_OFFSET			10
 diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 0a8c1351adc2..1d7b39b5c383 100644
+index 1d7b39b5c383..715db4a91c1f 100644
 --- a/include/linux/tpm.h
 +++ b/include/linux/tpm.h
-@@ -306,7 +306,8 @@ enum tpm_buf_flags {
-  * A string buffer type for constructing TPM commands.
-  */
- struct tpm_buf {
--	unsigned int flags;
-+	u32 flags;
-+	u32 length;
- 	u8 *data;
+@@ -300,6 +300,8 @@ struct tpm_header {
+ enum tpm_buf_flags {
+ 	/* the capacity exceeded: */
+ 	TPM_BUF_OVERFLOW	= BIT(0),
++	/* TPM2B format: */
++	TPM_BUF_TPM2B		= BIT(1),
  };
  
-@@ -329,8 +330,7 @@ int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
+ /*
+@@ -328,6 +330,8 @@ struct tpm2_hash {
+ 
+ int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
  void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
++int tpm_buf_init_sized(struct tpm_buf *buf);
++void tpm_buf_reset_sized(struct tpm_buf *buf);
  void tpm_buf_destroy(struct tpm_buf *buf);
  u32 tpm_buf_length(struct tpm_buf *buf);
--void tpm_buf_append(struct tpm_buf *buf, const unsigned char *new_data,
--		    unsigned int new_len);
-+void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length);
- void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
- void tpm_buf_append_u16(struct tpm_buf *buf, const u16 value);
- void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
-diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index 37bce84eef99..89c9798d1800 100644
---- a/security/keys/trusted-keys/trusted_tpm1.c
-+++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -367,6 +367,7 @@ int trusted_tpm_send(unsigned char *cmd, size_t buflen)
- 		return rc;
- 
- 	buf.flags = 0;
-+	buf.length = buflen;
- 	buf.data = cmd;
- 	dump_tpm_buf(cmd);
- 	rc = tpm_transmit_cmd(chip, &buf, 4, "sending data");
-@@ -417,7 +418,7 @@ static int osap(struct tpm_buf *tb, struct osapsess *s,
- 	tpm_buf_append_u32(tb, handle);
- 	tpm_buf_append(tb, ononce, TPM_NONCE_SIZE);
- 
--	ret = trusted_tpm_send(tb->data, MAX_BUF_SIZE);
-+	ret = trusted_tpm_send(tb->data, tb->length);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -441,7 +442,7 @@ int oiap(struct tpm_buf *tb, uint32_t *handle, unsigned char *nonce)
- 		return -ENODEV;
- 
- 	tpm_buf_reset(tb, TPM_TAG_RQU_COMMAND, TPM_ORD_OIAP);
--	ret = trusted_tpm_send(tb->data, MAX_BUF_SIZE);
-+	ret = trusted_tpm_send(tb->data, tb->length);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -553,7 +554,7 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
- 	tpm_buf_append_u8(tb, cont);
- 	tpm_buf_append(tb, td->pubauth, SHA1_DIGEST_SIZE);
- 
--	ret = trusted_tpm_send(tb->data, MAX_BUF_SIZE);
-+	ret = trusted_tpm_send(tb->data, tb->length);
- 	if (ret < 0)
- 		goto out;
- 
-@@ -644,7 +645,7 @@ static int tpm_unseal(struct tpm_buf *tb,
- 	tpm_buf_append_u8(tb, cont);
- 	tpm_buf_append(tb, authdata2, SHA1_DIGEST_SIZE);
- 
--	ret = trusted_tpm_send(tb->data, MAX_BUF_SIZE);
-+	ret = trusted_tpm_send(tb->data, tb->length);
- 	if (ret < 0) {
- 		pr_info("authhmac failed (%d)\n", ret);
- 		return ret;
+ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length);
 -- 
 2.35.3
 
