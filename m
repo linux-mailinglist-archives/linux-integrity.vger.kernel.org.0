@@ -1,111 +1,155 @@
-Return-Path: <linux-integrity+bounces-2300-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2301-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAB6A8B82E9
-	for <lists+linux-integrity@lfdr.de>; Wed,  1 May 2024 01:11:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5257A8B90E7
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 May 2024 22:49:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C85DAB23CE3
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Apr 2024 23:11:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE6691F23414
+	for <lists+linux-integrity@lfdr.de>; Wed,  1 May 2024 20:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1764181305;
-	Tue, 30 Apr 2024 23:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1147E29405;
+	Wed,  1 May 2024 20:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VacM079c"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QNZFerJj"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849F786126;
-	Tue, 30 Apr 2024 23:10:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6C91649B3;
+	Wed,  1 May 2024 20:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714518656; cv=none; b=lrfS7exwKsoVvAYnSjAvkYuh3DeCOzQVYGUsuZjwOAeOwVVWSP5gS/ZTKQap/7RUuC4LiRU9bkbSxwGNL/qMlxd2D4GdOjRcUd9DbTW68keiTkR3c+gY+Vfqf2Ez0gAMYwL+DmQIgxz1b0CzGJsm2EwsH9xQ4r/09hxOLPP+Xao=
+	t=1714596542; cv=none; b=X4eX3LNkaCZZMxBUkvyeljtSZWGQb9yo2j5gCYKD0zfAcGF9eEGHNxEz5e86Fxd6vnXXcL/gQzvitvLZwkxjmLpGxaeTxMJSEagGthtfONUxV/2RZAYgbUDc0urUon2tSGcox0EIWuLnsqnxAzbSqwsXTPyTdjg3bEZd8M44a50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714518656; c=relaxed/simple;
-	bh=3ozd/dLNcaXnTupI3HAH0T+oR/ZIay1YmFEmUpy28xo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=kV90m1kCq72++lxNw0F528UUlFQZN9jeT5KIIMaPQrkQM4h5p74uybJ8ZsPsBy+EiDAU1Br5xK0bt7zKowQ9Qo0Nmgiv5W8WpzUEKJMJ8z2VG0R2lierL4yMhPwTGAsSX7+LmOqup8AKPlzifNFY0Rvem6TcPAo6FTqaw34BQck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VacM079c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8874C2BBFC;
-	Tue, 30 Apr 2024 23:10:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714518656;
-	bh=3ozd/dLNcaXnTupI3HAH0T+oR/ZIay1YmFEmUpy28xo=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=VacM079cPoTyPXAUN9PlNLBJXYLMcy1bq3KX++VvFj5beHChjaRBwsgve8wrlCfIP
-	 aYY2yugdE2B3JmwImqANpbJBZDWwJMLHYx3tdjTcZDStnmqpWDLlXC2lPzb0n4WCm6
-	 RRQ8vSwVa45aKUm9I3tbO3j+p/0vw3qeexfcDFHXcIDoEkmcSjMOPhlTv1fr5JBNum
-	 3HauCoYf840uCb5JRdZufCbpchsWtY9irV/WH/suzVIyMJs5YxT6pkKe4z9ynZ5rke
-	 W2b7Aa2Q6aXvkj0zOHMZaRe2IyWri6MAESKZWt8a84/FP/TldviO+a1QIVf4vPryKR
-	 KIVck1KEV0i3A==
+	s=arc-20240116; t=1714596542; c=relaxed/simple;
+	bh=vYVHQz7LVOJQ1l+1Q+luzrST3mctVW7Oe5+/FBr/4Bo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=XEl4gcdEIh3s+cqJYFVBlwBaHtts2drIlD4Y0bOhQLHOwQOV7luUZU0gEuawv618vIW8Zrpt1x4AeGz/lsKEetLXuoUdte5kNHf4/eG5M94+IrMWiqj/OvAH3v7JI6Bo6NQeZk3opej4LjFdV1eV95g23TqsIeRmgVsN3S1Ylzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QNZFerJj; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 441KmbDI028505;
+	Wed, 1 May 2024 20:48:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=QQ7kkJ18hLQjxGVphtNo3xqJXIC2fHGWJ+5viySu6a8=;
+ b=QNZFerJjpCAsFiptZPMgxn0nhldnZ0Fdx2IUNIzBE6Ts7RnIUjChzUSRU24JodcZN+yW
+ zAwRJg0OzfTDBX54gEZYt76kxQHCcdathx8oGLsS8BiFdLh8FM771jrkYKYmsGH4TiJw
+ sG5uZPBOvQhB0nNu45N4l0VYNkyKFa9QQ6dQCYkmUynZUPVxrzy9/HNgCIajV2Vxm/pq
+ F6dJBe1xR+UU7fSMuHDxfL09OSOufz5H4jblrzIfDX2VLTIHZmJ8Vu3GvNCZN+T4oshN
+ ah9UZffqK3pBCZnniPE14aL5PIlMDAScyVMVd9emWdIm7EAG2cxR8kpi648et5E9A/Zu kA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xuw3b0013-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 May 2024 20:48:37 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 441Kmagg028442;
+	Wed, 1 May 2024 20:48:37 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xuw3b000y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 May 2024 20:48:36 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 441KBB0f022182;
+	Wed, 1 May 2024 20:48:36 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xsd6mvc8b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 May 2024 20:48:36 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 441KmXu226739314
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 1 May 2024 20:48:35 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 72B6B58067;
+	Wed,  1 May 2024 20:48:33 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C9D9E5805D;
+	Wed,  1 May 2024 20:48:32 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.157.98])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  1 May 2024 20:48:32 +0000 (GMT)
+Message-ID: <870ebd4d7a8789bfe55056635dcf9a308d5b0e40.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: Avoid blocking in RCU read-side critical section
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: GUO Zihua <guozihua@huawei.com>, roberto.sassu@huawei.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com
+Cc: eric.snowberg@oracle.com, omosnace@redhat.com,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Date: Wed, 01 May 2024 16:48:32 -0400
+In-Reply-To: <20240428091045.85513-1-guozihua@huawei.com>
+References: <20240428091045.85513-1-guozihua@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-25.el8_9) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 01 May 2024 02:10:53 +0300
-Message-Id: <D0XU4ZTRCD68.2EMZX03QA4I4@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, <linux-integrity@vger.kernel.org>
-Cc: <keyrings@vger.kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>
-Subject: Re: [PATCH v8 00/22] add integrity and security to TPM2
- transactions
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240429202811.13643-1-James.Bottomley@HansenPartnership.com>
- <D0WYH9UDXCZC.3OZ9MSOVTDBE1@kernel.org>
- <eef3292f4680c22b817021f973a34a1657b82c86.camel@HansenPartnership.com>
- <D0XSE6G33OHS.1B4OFPN0NCEIM@kernel.org>
- <c175a43a1c33a9513e3319e7b29e3985a140b4da.camel@HansenPartnership.com>
- <D0XTMODYQ0MO.38N6NKD1SYOXI@kernel.org>
-In-Reply-To: <D0XTMODYQ0MO.38N6NKD1SYOXI@kernel.org>
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vrxnrgS6T-qfqoiMTwXTomeJelVhDgCk
+X-Proofpoint-GUID: Kr6kmf2CJN_S6B2kIKRb4sSB9zVJ4c5Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-01_16,2024-04-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 adultscore=0 mlxlogscore=999
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
+ malwarescore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2404010000 definitions=main-2405010147
 
-On Wed May 1, 2024 at 1:46 AM EEST, Jarkko Sakkinen wrote:
-> On Wed May 1, 2024 at 1:31 AM EEST, James Bottomley wrote:
-> > On Wed, 2024-05-01 at 00:48 +0300, Jarkko Sakkinen wrote:
-> > > On Tue Apr 30, 2024 at 10:23 PM EEST, James Bottomley wrote:
-> > > > On Tue, 2024-04-30 at 01:22 +0300, Jarkko Sakkinen wrote:
-> > [...]
-> > > > > Since I could not find the email subthread I neither have the
-> > > > > patch nor do know the baseline. So if you could help with these
-> > > > > details then we can move forward.
-> > > > >=20
-> > > > > I can also work with QEMU Git fork if you have one and point out
-> > > > > QEMU_OVERRIDE_SRCDIR to the clone.
-> > > >=20
-> > > > I only have the patches in a local git repository, but I could push
-> > > > qemu up onto kernel.org if it would help?
-> > >=20
-> > > That definitely does help. I can point out my build to that
-> > > repository, (or actually clone of it).
-> >
-> > OK, it's the mssim branch here:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jejb/qemu.git/log/?h=3D=
-mssim
-> >
-> > It's based on qemu head, but it works for me.
-> >
-> > James
->
-> OK, cool. I'll test this on Thursday as tomorrow is national holiday
-> in Finland. However, I'll quickly just try it in my host before going
-> to sleep (if there is any feedback to be given).
->
-> I happen to run Tumbleweed nowadays so I can just install ibmswtpm2
-> package, i.e. should take only a short while.
+Hi Scott,
 
-OK, so I got to the point that I can startup a VM with mssim so I'll
-do the "final test" Thursday :-)
+On Sun, 2024-04-28 at 09:10 +0000, GUO Zihua wrote:
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index c0556907c2e6..216ffe388ce5 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -410,7 +410,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+>          * Immutable elements are copied over as pointers and data; only
+>          * lsm rules can change
+>          */
+> -       nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
+> +       nentry = kmemdup(entry, sizeof(*nentry), GFP_ATOMIC);
+>         if (!nentry)
+>                 return NULL;
+>  
+> @@ -425,7 +425,8 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
+>  
+>                 ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
+>                                      nentry->lsm[i].args_p,
+> -                                    &nentry->lsm[i].rule);
+> +                                    &nentry->lsm[i].rule,
+> +                                    GFP_ATOMIC);
+>                 if (!nentry->lsm[i].rule)
+>                         pr_warn("rule for LSM \'%s\' is undefined\n",
+>                                 nentry->lsm[i].args_p);
 
-I have no time to review the qemu patches but you could add my
-tested-by if you want to those.
+If only the call to ima_lsm_copy_rule() in ima_match_rules() needs to be
+GFP_ATOMIC, then pass the gfp type.
 
-BR, Jarkko
+thanks,
+
+Mimi
+
+
+> @@ -1140,7 +1141,8 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
+>         entry->lsm[lsm_rule].type = audit_type;
+>         result = ima_filter_rule_init(entry->lsm[lsm_rule].type, Audit_equal,
+>                                       entry->lsm[lsm_rule].args_p,
+> -                                     &entry->lsm[lsm_rule].rule);
+> +                                     &entry->lsm[lsm_rule].rule,
+> +                                     GFP_KERNEL);
+>         if (!entry->lsm[lsm_rule].rule) {
+>                 pr_warn("rule for LSM \'%s\' is undefined\n",
+>                         entry->lsm[lsm_rule].args_p);
+
 
