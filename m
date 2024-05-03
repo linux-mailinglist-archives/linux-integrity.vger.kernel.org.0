@@ -1,145 +1,169 @@
-Return-Path: <linux-integrity+bounces-2303-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2304-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 806418BABC9
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2024 13:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D987C8BB6FE
+	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 00:17:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373DB1F21D44
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2024 11:40:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 662AF1F2255E
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 May 2024 22:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E19C14534A;
-	Fri,  3 May 2024 11:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6F65B5D6;
+	Fri,  3 May 2024 22:17:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UWMXXmRo"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Fj2r+TLs"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BAE441C93
-	for <linux-integrity@vger.kernel.org>; Fri,  3 May 2024 11:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49084CDE0
+	for <linux-integrity@vger.kernel.org>; Fri,  3 May 2024 22:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714736411; cv=none; b=Sns/jqIZ9A76i/2O/BTr/68ihCXw7UiS50m5wFweTvTqOHAAy0yk6YV/9LrGUPL6VWh2eGE/vfJDexXe+Fx73MByDB0Odu/Vz4tHJY3pZzDgza+t0bQYuQ1Gkd8EDIFcDwlhb4rx5+48acmBkxF+U79Q4zuaxgBqAYA+m0FC4zQ=
+	t=1714774623; cv=none; b=VUV8h49DCELySLKFWY9tYqS0ILrsPHrBM5FjzxjkMVWL76GIho23+7Zg3RJ+ikxFW1Lvqu/PcibrNAOBLlPr8SbO+ciNBtpGhXptC4mMmuWV8KyZfXXNJopsQrkAOKuANFLGR4nGcTn9TI5/VHrk/0fl9Y7w7sTbuMcPpQo5/mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714736411; c=relaxed/simple;
-	bh=HVIlwxj1XlUjmUkbZ9DQiwhFjKBdSzGbrBwbUVQ8olM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cM08n9jlLax97y8n+QLqjGGlQlPZ5hql/qYcxRlBN498YP/h9CjDGycaHPonP9r32OKM2euWOHyX4px/iBxlL4bUjDlsfY7HE+nGDc8PT5Xtzb0hky46kGJtWO3cjs7WB7j5u54vVS4gnqkyayZsYkf6no+BV9l7vFfNElE0bPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UWMXXmRo; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714736408; x=1746272408;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HVIlwxj1XlUjmUkbZ9DQiwhFjKBdSzGbrBwbUVQ8olM=;
-  b=UWMXXmRo1jGG/JGqy9cbfGOXsMQ+LrBiQk5q9FkaxNsJ9cqwHopmh8nK
-   cJHfby995VIHobx9Y/g+FbO57sYumi6wG2PfWy1wNw7dGPz/gmtgk9ztT
-   IOaTnS/zX3RuJRqMxmWDEZZyYLTlGTChSnx9KjniVTz40xqgs4VWtAIsM
-   lfIqmXnDyVzP7KTo629AeyQxzWYkKUVmG9dbtqlY3tB+geQa0WCG0jfii
-   VVpvRp1HtByISxL8/5ITT6EjqUC+6m6WQLZ95zTcIa7CTRwsovdbgkvRM
-   rt7DDp6cpjAxktQVSxNBSi+nI0gpt8+IfVDXZWkCvCbmyEyblCIlVXCZ2
-   A==;
-X-CSE-ConnectionGUID: U4FyA5myTXyWRZ0tRf5UQA==
-X-CSE-MsgGUID: MemVaQnZSO6dmcY64nB4AA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11062"; a="21955124"
-X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
-   d="scan'208";a="21955124"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 04:40:07 -0700
-X-CSE-ConnectionGUID: L+eeVZwFTTKBhjwzfWm9DA==
-X-CSE-MsgGUID: +LnsvirOT6CziPhXH2NSFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
-   d="scan'208";a="31937756"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 03 May 2024 04:40:02 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1011)
-	id 7CA4D19E; Fri,  3 May 2024 14:40:01 +0300 (EEST)
-Date: Fri, 3 May 2024 14:40:01 +0300
-From: "Svahn, Kai" <kai.svahn@linux.intel.com>
-To: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: linux-integrity@vger.kernel.org,
-	Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-	Petr Vorel <pvorel@suse.cz>, Mimi Zohar <zohar@linux.ibm.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	Vitaly Chikunov <vt@altlinux.org>,
-	Ken Goldman <kgold@linux.ibm.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Bruno Meneguele <bmeneg@redhat.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	George Wilson <gcwilson@linux.ibm.com>,
-	Tergel Myanganbayar <tergelmyanganbayar2024@u.northwestern.edu>,
-	Andr?? Draszik <git@andred.net>,
-	Frank Sorenson <sorenson@redhat.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Vivek Goyal <vgoyal@redhat.com>
-Subject: Re: [ima-evm-utils: PATCH v2 1/1] Change license to
- LGPL-2.0-or-later and GPL-2.0-or-later
-Message-ID: <ZjTNEbrDZvLxzV5h@black.fi.intel.com>
-References: <103252ffff09c607e83c887cab2e0af5404d62ff.1710774200.git.dmitry.kasatkin@gmail.com>
- <ZhlOjunocFKwYENP@black.fi.intel.com>
+	s=arc-20240116; t=1714774623; c=relaxed/simple;
+	bh=bjrPyd8oi0HdoqaOMudW73dCqeW2eJJ1sam9lCXCaJY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=jgLDv2SLCkogYwGHTXxF/03g5bO2tJ2EobUq8HWjmgsJZbDmOo/1jDXkZuBPIefnXeNBWD4ThTwph4EDilcrZocmitkopLrIEbAIlSE23iwqFIqILvverfCbIhwjeanHvMVCurIo3DeTE5qIt8jCY4OPnfTk33i9uSLXdVCTdKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Fj2r+TLs; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-41bab13ca4eso1865445e9.1
+        for <linux-integrity@vger.kernel.org>; Fri, 03 May 2024 15:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1714774619; x=1715379419; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RwCOw0nc1pOxcjdsWVI1ueYL54XbeJ/hpDJBTzvXAfg=;
+        b=Fj2r+TLsI06YE5Iee9AsJP5geZ4ByaUByi0m41VO/RPSn1fzM/0VbkmvkyF7PXd7fk
+         vG3sOWl7Un7Z+E449WEHvfU+PjeAhqIMqgSpKbs8ibpO3XUM3HSsUZJfI/JN18V8BYOv
+         qcT1RuafUIB9+eJqkdK50R0AoaLG5kldJazZOf/FVw/6+BXzDU6jNvFsInJXTHoaf106
+         jNnvDWOEMCBp01/KPdkp/FnT9kiXOot7FY1tCUSqyM/udVLSZZ+x3PycpoCiHHHU6K9c
+         hzj85iXMZSQdkSVJ8oBvLe9QcRdwfbYA00MSp/9lNIQJLuIcMGDyzk7rfXo3ype2PdH4
+         uRxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714774619; x=1715379419;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RwCOw0nc1pOxcjdsWVI1ueYL54XbeJ/hpDJBTzvXAfg=;
+        b=L7YTHoc7ZgWFPx0o1e2X+Sw4H0hQVISSTNV2i5iEiF7BBlwRMU3jXgV+cM7lDuoAsy
+         fietShLB6umZKlEXCiDRw0jP16+SyLqzgnD3RetKH3B7LDQUk8gY40W55Q2WEyQX4HL7
+         ah3saOPzEoO5huV6W8eG05u64JARk0HHlBRHrJNYVG2j+aGPT2BPgoMrYApcpUw68bUI
+         nM4eCszWrj5KTm05u1dukMOdjy/opg4+6Zta+bTjKixUkNhD+MK7EVIrITElsQwTOt1A
+         AkYSR/gV5vuJes87JbSvhEHVIvEt7kVP9brBn7pRS5NPicYShHw+p+qbTY0aPkYtQNdc
+         k71Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVhDsNapHB/uyOHdF5w5FDHlNsMQNIhSBAKQiSOnFkFCAV9bmDkw8nVpquMadvn/JM1KUAFe8xXP+E03b55aKT4DtbsE3cePHADfsEXum/m
+X-Gm-Message-State: AOJu0YzPbjBVoStFDDWT7Bxu/6LZ+uQ4NeR+wJQznTBmax8uRRgcuBw3
+	o0TyFyJz88XfcU6U8lwqD2WDxvVKXI2Uw43IWNquGjFGWK+L29am6LgA19bokfU=
+X-Google-Smtp-Source: AGHT+IH8IaaKjpv39xJ6W/yfMwMMQLl5Ff5DYRJtGnHzBJ5kmUMtt7DNuIuZyWuSjfonfV1sSj+lPA==
+X-Received: by 2002:a05:600c:3b21:b0:418:f5a9:b91c with SMTP id m33-20020a05600c3b2100b00418f5a9b91cmr2954824wms.33.1714774618992;
+        Fri, 03 May 2024 15:16:58 -0700 (PDT)
+Received: from localhost.localdomain ([104.28.200.6])
+        by smtp.gmail.com with ESMTPSA id p9-20020a05600c1d8900b0041563096e15sm10873368wms.5.2024.05.03.15.16.57
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 03 May 2024 15:16:58 -0700 (PDT)
+From: Ignat Korchagin <ignat@cloudflare.com>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	serge@hallyn.com,
+	linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: kernel-team@cloudflare.com,
+	Ignat Korchagin <ignat@cloudflare.com>
+Subject: [RFC PATCH 0/2] TPM derived keys
+Date: Fri,  3 May 2024 23:16:32 +0100
+Message-Id: <20240503221634.44274-1-ignat@cloudflare.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZhlOjunocFKwYENP@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi,
+TPM derived keys get their payload from an HMAC primary key in the owner
+hierarchy mixed with some metadata from the requesting process.
 
-On Fri, Apr 12, 2024 at 06:09:02PM +0300, Svahn, Kai wrote:
-> Hi,
-> 
-> On Mon, Mar 18, 2024 at 05:07:24PM +0200, Dmitry Kasatkin wrote:
-> > Currently libimaevm provided by this project is used by the tool evmctl,
-> > which is also provided by this project.
-> > 
-> > An issue was reported about using libimaevm with other software. Its
-> > GPL2-only license makes it incompatible to use with other licenses, in
-> > particular GPL3-only.
-> > 
-> > To address this issue, change the project license to GPL-2.0-or-later
-> > and libimaevm to LGPL 2.0 or later.
-> > 
-> > This patch includes all acks received so far.
-> > 
-> > Signed-off-by: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> > Acked-by: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
-> > Acked-by: Petr Vorel <pvorel@suse.cz>
-> > Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Acked-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Acked-by: Vitaly Chikunov <vt@altlinux.org>
-> > Acked-by: Ken Goldman <kgold@linux.ibm.com>
-> > Acked-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > Acked-by: Bruno Meneguele <bmeneg@redhat.com>
-> > Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Acked-by: George Wilson <gcwilson@linux.ibm.com>
-> > Acked-by: Tergel Myanganbayar <tergelmyanganbayar2024@u.northwestern.edu>
-> > Acked-by: Andr?? Draszik <git@andred.net>
-> > Acked-by: Frank Sorenson <sorenson@redhat.com>
-> > Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-> > Acked-by: Vivek Goyal <vgoyal@redhat.com>
-> > Acked-by: Eric Biggers <ebiggers@google.com>
-> > Acked-by: Alberto Mardegan <a.mardegan@omp.ru>
-> > Acked-by: Eric Biggers <ebiggers@google.com> # all Google contributions
-> > Acked-by: Dmitry Baryshkov <dbaryshkov@gmail.com>
-> > Acked-by: Patrick Uiterwijk <patrick@puiterwijk.org>
-> > Acked-by: Mimi Zohar <zohar@linux.ibm.com>  # all IBM contributions
-> > Acked-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> > ---
-> 
-> Acked-by: Kai Svahn <kai.svahn@linux.intel.com>
+They are similar to trusted keys in the sense that the key security is rooted
+in the TPM, but may provide easier key management for some use-cases.
 
-Acked-by: Kai Svahn <kai.svahn@linux.intel.com> # all Intel contributions 
+One inconvenience with trusted keys is that the cryptographic material should
+be provided externally. This means either wrapping the key to the TPM on the
+executing system (which briefly exposes plaintext cryptographic material to
+userspace) or creating the wrapped blob externally, but then we need to gather
+and transfer the TPM public key to the remote system, which may be a logistical
+problem sometimes.
 
-Cheers,
-Kai
+Moreover, we need to store the wrapped key blob somewhere, and if we lose it,
+the application cannot recover its data anymore.
+
+TPM derived keys may make key management for applications easier, especially on
+stateless systems as the application can always recreate its keys and the
+encrypted data is bound to the device and its TPM. They allow the application
+to wrap/unwrap some data to the device without worrying too much about key
+management and provisioning. They are similar in a sense to device unique keys
+present on many mobile devices and some IoT systems, but even better as every
+application has its own unique device key.
+
+It is also easy to quickly "wipe" all the application keys by just resetting
+the TPM owner hierarchy.
+
+It is worth mentioning that this functionality can be implemented in userspace
+as a /sbin/request-key plugin. However, the advantage of the in-kernel
+implementation is that the derived key material never leaves the kernel space
+(unless explicitly read into userspace with proper permissions).
+
+Current implementation supports two modes (as demonstrated by the keyctl
+userspace tool):
+  1. keyctl add derived test '32 path' - will derive a 32 byte key based on
+     the TPM seed and the filesystem path of the requesting application. That
+     is /usr/bin/keyctl and /opt/bin/keyctl would generate different keys.
+
+  2. keyctl add derived test '32 csum' - will derive a 32 byte key based on the
+     TPM seed and the IMA measurement of the requesting application. That is
+     /usr/bin/keyctl and /opt/bin/keyctl would generate the same key IFF their
+     code exactly matches bit for bit. The implementation does not measure the
+     requesting binary itself, but rather relies on already available
+     measurement. This means for this mode to work IMA needs to be enabled and
+     configured for requesting applications. For example:
+       # echo 'audit func=BPRM_CHECK' > \
+         /sys/kernel/security/integrity/ima/policy
+
+Open questions (apart from the obvious "is this useful?"):
+  * should any other modes/derivation parameters be considered?
+  * apparently in checksum mode, when calling keyring syscalls from scripts,
+    we mix in the measurement of the interpreter, not the script itself. Is
+    there any way to improve this?
+
+
+Ignat Korchagin (2):
+  tpm: add some algorithm and constant definitions from the TPM spec
+  KEYS: implement derived keys
+
+ include/linux/tpm.h                     |  16 +-
+ security/keys/Kconfig                   |  16 ++
+ security/keys/Makefile                  |   1 +
+ security/keys/derived-keys/Makefile     |   8 +
+ security/keys/derived-keys/derived.c    | 226 +++++++++++++++++++++
+ security/keys/derived-keys/derived.h    |   4 +
+ security/keys/derived-keys/tpm2_shash.c | 257 ++++++++++++++++++++++++
+ 7 files changed, 524 insertions(+), 4 deletions(-)
+ create mode 100644 security/keys/derived-keys/Makefile
+ create mode 100644 security/keys/derived-keys/derived.c
+ create mode 100644 security/keys/derived-keys/derived.h
+ create mode 100644 security/keys/derived-keys/tpm2_shash.c
+
+-- 
+2.39.2
+
 
