@@ -1,98 +1,205 @@
-Return-Path: <linux-integrity+bounces-2335-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2336-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBA1A8BBCC3
-	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 17:35:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF6678BBDF8
+	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 22:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E4BF1C208FF
-	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 15:35:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D09D8B21481
+	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 20:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB1A3CF63;
-	Sat,  4 May 2024 15:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66C2684A3E;
+	Sat,  4 May 2024 20:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E1qYw7ln"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="AF7a2jdM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B06E1EF15;
-	Sat,  4 May 2024 15:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FFE7318A;
+	Sat,  4 May 2024 20:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714836954; cv=none; b=BDhTaSr6Vj6khhJdwYXfClWN+03xpIyAhDV4e+GakU9XU22X0QTLeAhMJchgMbJsgCc598E4ghL0+bjx/TrZO41JzAroG/7WKWRanbLN4UfZgIexKKZarDsT3pd/R5x5i6uHtAzqltM/EXNXt7VQeJbE88gyB7mp2BBudscrJ9c=
+	t=1714853604; cv=none; b=XOwf2wIoUOSvjw4wy5YMzkoX3Bkv6CiPFQ11MlfN2N0rZpVq8EbXv8iSKjSS0mLeMYYC8+pSqydZhKgrfN9+PxXesKJSg6t+kyoXr9lpM+jZRSnufsRQIruOc1VCyYUWiTHd5qhbctLotWg+hOsrojJnuYrsrWcuRx0LN6bSwPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714836954; c=relaxed/simple;
-	bh=Gk/mhS8TriKuywu+H3KzIpPCU/lc2/yHAJtYyq2QK8I=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=SoiHGIvWfCVEscy65jJvOuOncgwuhq3qsuwkHFyUF3mgkYRb5wMIAqmEw+avUUrbaQXKLsJEwEwUNeIE2pG4W24AeCLXTynxDGWfCs5/8v0PrAcneFOkz5hI+ttC1UxcWI6vc1hZVERPk2OwrOICqF1OhOUKLMLzrxj4Gpvnayw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E1qYw7ln; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394EAC072AA;
-	Sat,  4 May 2024 15:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714836953;
-	bh=Gk/mhS8TriKuywu+H3KzIpPCU/lc2/yHAJtYyq2QK8I=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=E1qYw7lndcDJNl9XAEYLPpuwwU9h+88xGdsUPSOMQDie+h0nBD/Xn//eeyCZMYGGK
-	 PcIt4ItYu2jjeJ13atj0aFNZepI8NxFpWC81rPT85e7H8txGnalBG5Vzix7LgCsyvi
-	 WfMf8FvDdY5WFvS3SVOqN68TXF7L7ArFTHd519+X58BxpaFx9a3XIxtUT5aZbmi8HN
-	 db8a0+QNk/EoEbP6w5iiSkHgnorbJ2//8oxjbeFJBvNDt9lJrzfLgu6UeW5+/oDzoL
-	 3509B6PuGT2OFUbrS5XyFeZY5+qW1yAL1kYJ3ZJZdNFHVpCCcOjVaOpNeFM88/YIW/
-	 HYO6RVrfNGBsw==
+	s=arc-20240116; t=1714853604; c=relaxed/simple;
+	bh=fhto2uEYgU4wqeL/mix3cVjrhwG4PTmSdbCpoGKNje0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aGo6C4MiNswYbj8bQgBmPxE6KlSX+Ng9hCypm3p8iOl94npK3d/rS+6xVcfHRSbKjjH9MCx/Tpd1Vvl1N5jOfpuXbi46YtXJjh5V9WU+5lMggo5vs5L0GO5IBP5ZYlw5JtTrFMaQ9KiTrGl5SajKGqLXpEnvX0bcjJ2308jkON4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=AF7a2jdM; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [167.220.2.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 79675207DBB5;
+	Sat,  4 May 2024 13:13:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 79675207DBB5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1714853596;
+	bh=Xjz+ah6dGJK98fSkhXGcgKoJ+WDVAsQMdYbME8KL/v4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AF7a2jdMT93DQfcuBJJyAee3iRGHkB6sAaFzHW3xa8rmM2fr/yng8b/vuFYOI6r1C
+	 mOake8mf6Ya2UDnxaN+IpyWI8rszWLoz+iix+kLcubqMjZSW2GP9OEzG1RuoPbRQBn
+	 oVcqMwODzceFEk90N4os+slDEJ+rrCu+IqwzfnOM=
+Message-ID: <ab7054cd-affd-47c3-bd98-2cf47d6a6376@linux.microsoft.com>
+Date: Sat, 4 May 2024 13:13:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 04 May 2024 18:35:48 +0300
-Message-Id: <D10YYQKT9P1S.25CE053K7MQKI@kernel.org>
-Cc: "Ignat Korchagin" <ignat@cloudflare.com>, "James Bottomley"
- <James.Bottomley@hansenpartnership.com>, "Mimi Zohar"
- <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul Moore"
- <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
- <serge@hallyn.com>, <linux-integrity@vger.kernel.org>,
- <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel-team@cloudflare.com>
-Subject: Re: [RFC PATCH 0/2] TPM derived keys
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Ben Boeckel" <me@benboeckel.net>
-X-Mailer: aerc 0.17.0
-References: <20240503221634.44274-1-ignat@cloudflare.com>
- <D10FIGJ84Q71.2VT5MH1VUDP0R@kernel.org> <ZjY-UU8pROnwlTuH@farprobe>
- <D10Y0V64JXG8.1F6S3OZDACCGF@kernel.org>
-In-Reply-To: <D10Y0V64JXG8.1F6S3OZDACCGF@kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v18 20/21] Documentation: add ipe documentation
+To: Bagas Sanjaya <bagasdotme@gmail.com>, corbet@lwn.net,
+ zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, tytso@mit.edu,
+ ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+ eparis@redhat.com, paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Deven Bowers <deven.desai@linux.microsoft.com>
+References: <1714775551-22384-1-git-send-email-wufan@linux.microsoft.com>
+ <1714775551-22384-21-git-send-email-wufan@linux.microsoft.com>
+ <ZjXsBjAFs-qp9xY4@archie.me>
+Content-Language: en-CA
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <ZjXsBjAFs-qp9xY4@archie.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat May 4, 2024 at 5:51 PM EEST, Jarkko Sakkinen wrote:
-> On Sat May 4, 2024 at 4:55 PM EEST, Ben Boeckel wrote:
-> > On Sat, May 04, 2024 at 03:21:11 +0300, Jarkko Sakkinen wrote:
-> > > I have no idea for what the key created with this is even used, which
-> > > makes this impossible to review.
-> >
-> > Additionally, there is nothing in Documentation/ for how userspace migh=
-t
-> > use or create them. This includes things like their description format
-> > and describing available options.
+
+
+On 5/4/2024 1:04 AM, Bagas Sanjaya wrote:
+> On Fri, May 03, 2024 at 03:32:30PM -0700, Fan Wu wrote:
+>> +IPE does not mitigate threats arising from malicious but authorized
+>> +developers (with access to a signing certificate), or compromised
+>> +developer tools used by them (i.e. return-oriented programming attacks).
+>> +Additionally, IPE draws hard security boundary between userspace and
+>> +kernelspace. As a result, IPE does not provide any protections against a
+>> +kernel level exploit, and a kernel-level exploit can disable or tamper
+>> +with IPE's protections.
+> 
+> So how to mitigate kernel-level exploits then?
 >
-> The whole user story is plain out broken. Documenting a feature that has
-> no provable use case won't fix that part.
->
-> So it is better to start with the cover letter. With the *existing*
-> knowledge of the *real* issue I don't think we need this tbh.
+One possible way is to use hypervisor to protect the kernel integrity. 
+https://github.com/heki-linux is one project on this direction. Perhaps 
+I should also add this link to the doc.
 
-As for code I'd suggest the "Describe your changes" part from=20
+>> +Allow only initramfs
+>> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> <snipped>...
+>> +Allow any signed and validated dm-verity volume and the initramfs
+>> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> <snipped>...
+> 
+> htmldocs build reports new warnings:
+> 
+> Documentation/admin-guide/LSM/ipe.rst:694: WARNING: Title underline too short.
+> 
+> Allow any signed and validated dm-verity volume and the initramfs
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Documentation/admin-guide/LSM/ipe.rst:694: WARNING: Title underline too short.
+> 
+> Allow any signed and validated dm-verity volume and the initramfs
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Documentation/arch/x86/resctrl.rst:577: WARNING: Title underline too short.
+> 
+> I have to match these sections underline length:
+> 
+> ---- >8 ----
+> diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admin-guide/LSM/ipe.rst
+> index 1a3bf1d8aa23f0..a47e14e024a90d 100644
+> --- a/Documentation/admin-guide/LSM/ipe.rst
+> +++ b/Documentation/admin-guide/LSM/ipe.rst
+> @@ -681,7 +681,7 @@ Allow all
+>      DEFAULT action=ALLOW
+>   
+>   Allow only initramfs
+> -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +~~~~~~~~~~~~~~~~~~~~
+>   
+>   ::
+>   
+> @@ -691,7 +691,7 @@ Allow only initramfs
+>      op=EXECUTE boot_verified=TRUE action=ALLOW
+>   
+>   Allow any signed and validated dm-verity volume and the initramfs
+> -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   
+>   ::
+>   
+> @@ -725,7 +725,7 @@ Allow only a specific dm-verity volume
+>      op=EXECUTE dmverity_roothash=sha256:401fcec5944823ae12f62726e8184407a5fa9599783f030dec146938 action=ALLOW
+>   
+>   Allow any fs-verity file with a valid built-in signature
+> -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   
+>   ::
+>   
+> @@ -735,7 +735,7 @@ Allow any fs-verity file with a valid built-in signature
+>      op=EXECUTE fsverity_signature=TRUE action=ALLOW
+>   
+>   Allow execution of a specific fs-verity file
+> -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   
+>   ::
+>   
+> 
+>> +Additional Information
+>> +----------------------
+>> +
+>> +- `Github Repository <https://github.com/microsoft/ipe>`_
+>> +- Documentation/security/ipe.rst
+> 
+> Link title to both this admin-side and developer docs can be added for
+> disambiguation (to avoid confusion on readers):
+> 
+> ---- >8 ----
+> diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admin-guide/LSM/ipe.rst
+> index a47e14e024a90d..25b17e11559149 100644
+> --- a/Documentation/admin-guide/LSM/ipe.rst
+> +++ b/Documentation/admin-guide/LSM/ipe.rst
+> @@ -7,7 +7,8 @@ Integrity Policy Enforcement (IPE)
+>   
+>      This is the documentation for admins, system builders, or individuals
+>      attempting to use IPE. If you're looking for more developer-focused
+> -   documentation about IPE please see Documentation/security/ipe.rst
+> +   documentation about IPE please see :doc:`the design docs
+> +   </security/ipe>`.
+>   
+>   Overview
+>   --------
+> @@ -748,7 +749,7 @@ Additional Information
+>   ----------------------
+>   
+>   - `Github Repository <https://github.com/microsoft/ipe>`_
+> -- Documentation/security/ipe.rst
+> +- :doc:`Developer and design docs for IPE </security/ipe>`
+>   
+>   FAQ
+>   ---
+> diff --git a/Documentation/security/ipe.rst b/Documentation/security/ipe.rst
+> index 07e3632241285d..fd1b1a852d2165 100644
+> --- a/Documentation/security/ipe.rst
+> +++ b/Documentation/security/ipe.rst
+> @@ -7,7 +7,7 @@ Integrity Policy Enforcement (IPE) - Kernel Documentation
+>   
+>      This is documentation targeted at developers, instead of administrators.
+>      If you're looking for documentation on the usage of IPE, please see
+> -   Documentation/admin-guide/LSM/ipe.rst
+> +   `IPE admin guide </admin-guide/LSM/ipe.rst>`_.
+>   
+>   Historical Motivation
+>   ---------------------
+> 
+> Thanks.
+> 
 
-  https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-
-and most essentially how to split them properly.
-
-My best bet could something along the lines that perhaps there is some
-issue to be sorted out but I don't honestly believe that this will ever
-be a solution for any possible problem that exist in this planet.
-
-BR, Jarkko
+My apologies for these format issues and thanks for the suggestions. I 
+will fix them.
+-Fan
 
