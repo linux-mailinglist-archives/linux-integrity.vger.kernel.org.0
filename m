@@ -1,149 +1,246 @@
-Return-Path: <linux-integrity+bounces-2331-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2332-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9C138BB8A9
-	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 02:21:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCB768BB9ED
+	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 10:04:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 380861F2329C
-	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 00:21:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73D12282369
+	for <lists+linux-integrity@lfdr.de>; Sat,  4 May 2024 08:04:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48BCAA2A;
-	Sat,  4 May 2024 00:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A6C11182;
+	Sat,  4 May 2024 08:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EGIDu0fK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j2MPtTQT"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B2C629;
-	Sat,  4 May 2024 00:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DBAD29E;
+	Sat,  4 May 2024 08:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714782076; cv=none; b=I8Tc7ZTsBhO67jlQN69jyPzSSeU6gGqdtOzpMOLjG/hOokwNZ9YPLnshGsC8neQQ1dy8PtL0eXc8Nfrl3b+iz5PQboNKTEOYY0tPM50sn9jsJuR3krHi3rR7Qbp6NTwUGR1aqDXwphmDi9TtTmHTDXSgAyZy7zPyc0nVvljfWc0=
+	t=1714809869; cv=none; b=Kgr6DSAxNcEM/nEoRD2/QLhSsYbECiMri96BOozGV7tN3HGyv8wGorBCI7HAGhKx7mus9nBLyWP5f61ittUmXfgWzi1O+XGEeGwjP4+IbcJagDMri18JaUNFKGrRvzqtu62Xn7vpnxd4k+x/74nWEbuUPE+Phbt+XJ0YBNd28P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714782076; c=relaxed/simple;
-	bh=yP+2iZaNfuy4VuiXaL0zmGDR2KLSPl+3nYtHp/N/ijs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=ISl8wa9KkEWSEJbtU5FhT37b2pp9OCVeVO18z+O3eZ5tW5aNL8wu62Dz+CliDKF537oCCIfdXzVRp7Ow4LzBUZrnM3J0wJhX1kz3ui9fYW9HJOlS1siOHANQAxJFMQ1scYUGujoJlKZwuHtzy5vphYeN+lGCihv+MSz0CzEtj0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EGIDu0fK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63974C116B1;
-	Sat,  4 May 2024 00:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714782075;
-	bh=yP+2iZaNfuy4VuiXaL0zmGDR2KLSPl+3nYtHp/N/ijs=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=EGIDu0fKWx1Zl2N92TP+rsDvXkAkhZqdf9GL7Cm+4YShK+WmIMxu7Gl2CL4vWI+ta
-	 KfkXiDzDr4563l3Kggxn4z2UzrdHWp3nLv9X1RY7g94bvy1hRvmoBi2W65hkxFEp0H
-	 T1avmrYlz+DqzgBdzPd1W5fBmGLUUPFbirov00abDPXaVTC2bE8Ti3HzDbRixOmtd3
-	 XCSe2NVnrJdhzjDEyqaRoHUfsAHOkGCI0jlzKgsEXhsnU7uhfYIznZ0bnKmrp4141F
-	 oG8Jr3SggdnA+UpgAXvd3WkCGcR3sfuCj55c9XA3wo6qtjPWxTpD3fPKAuIBn2DII+
-	 /+oUACdlC1O8g==
+	s=arc-20240116; t=1714809869; c=relaxed/simple;
+	bh=0hjZIw2e2IuhjYNugxhXSXZpWs5mVXjcsoZo1BqocAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ue9HDOTCe4j4gjig2I5kW18f3muEpv7ofXLBCkNYbB+0QclQdB4Cqx+eop9AdV3RyWRFpTdcWx/hovEZz0DGnnly0O+dp/E/hyfNkHqbhF6gqEH+hxpPwJh4LQ2YdtrCYJ1fktZT8a1VC0wZEcHeFt1FNVkC2KBVRpp2QD+bw9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j2MPtTQT; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6ed3cafd766so391268b3a.0;
+        Sat, 04 May 2024 01:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714809866; x=1715414666; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Lj67rtK1QueWPk7ARNpfvxl9vOgAVWGxhUJDN/QBK8=;
+        b=j2MPtTQTx683nJWgf+VqG/CYiRVqskw/qKRynsLET/BuZX8Gx+lRoPor2Mbw77E/rs
+         f5PVcoklIFNoWE1RWFO5kyJxadfxcHOe93vboEbFAAR6eo1eO/Ojiu2xD1/ZLSYQgZVD
+         dNBAFTYTp+S45ULOfx3Gb5TClMgKwPE6cUWd7KZraDaORWL3p+Zu4h2Su3ynomL8e6LD
+         79/LzoGjVid/dmXwbAQMJIMFL9s8a6R+onCZxCrYzATbVGNaXht4nt62YZv976Bw3bOt
+         EQNcwi76REG8VUUY9c9FJC931NWCEBwxuZVEH7Oz07377xVwvG8hfW/mnCrYjJr9GJoR
+         WQBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714809866; x=1715414666;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3Lj67rtK1QueWPk7ARNpfvxl9vOgAVWGxhUJDN/QBK8=;
+        b=W/9dzpS/lLFJLoXjFbPJnwnrRBB4BRKasFPORn58kgupW5I6D2nCxYpPxGmsIaEBQ/
+         PgY/W+6LNNYNdgRqp7v3k2CR83+eGtgJTjNL77EfWHiWBN1pc1qhf/+AGirZ+T/CkmhJ
+         23TCkpvDGFZGJl0INYpBO2/VkZjI5Ft891YCX9AiugpNjGDGYKSFjDWXdlvInlGm5lIr
+         Ou6KaBBVBXAWwT4JJXzpetcQJjwfholBX+SSc1b8LI1NZ2FDbMlhn16orvoQphinZw57
+         ZB4aZZRCK9notumSDPq1TB3cvs/AkeVebzZ5RPwVtir/PGa1Y9mIjImT4WDg40m0NFyl
+         dRWA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgXjfzAGqpZFd8V4eQ7FPaIReB6gBfvQp8Pd21tKLo97WCvi5PjVJncQsXy6aHX9EbG0gJX3OAOaeVkZASF5jbPRjbPc63YWcIDdDVXt5rBQmW/ax84o4AtD5yKzeFZolBzn0o2zsibhxLWZiVFoOnQopXNZqcLaMvGukLzVACXXbzAspKWKC3paLYd9go/Kp7hR05ZqZsLt3OHf+RuHfN1Klrw0BKRJses52aGIXYnWI6ceZpCiNLDwef7gWtZmENw0R3nBWbLg==
+X-Gm-Message-State: AOJu0YzESvWpYvlndTA/zG1moIQZJ9Zm1Gq3mrp1V9ezJtQHJ0V+o+7t
+	QQ9MI9lwRe27O8mBR6TVZsbkUDrvwJgRwCE4y/Q2XQuESGNMvOcB
+X-Google-Smtp-Source: AGHT+IG0qZqH9zc005lWKjgxwZgqZm5TyMRd8CrRzXUZbRqngw1NpFuolrIDkh7YQEN+G1GdDh8Ciw==
+X-Received: by 2002:a05:6a00:a81:b0:6f3:e9bc:7ed3 with SMTP id b1-20020a056a000a8100b006f3e9bc7ed3mr5704824pfl.17.1714809866257;
+        Sat, 04 May 2024 01:04:26 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id bn12-20020a056a00324c00b006edd05e3751sm4356202pfb.176.2024.05.04.01.04.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 May 2024 01:04:25 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 8A4001847D504; Sat, 04 May 2024 15:04:22 +0700 (WIB)
+Date: Sat, 4 May 2024 15:04:22 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com,
+	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu,
+	ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
+	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
+Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [PATCH v18 20/21] Documentation: add ipe documentation
+Message-ID: <ZjXsBjAFs-qp9xY4@archie.me>
+References: <1714775551-22384-1-git-send-email-wufan@linux.microsoft.com>
+ <1714775551-22384-21-git-send-email-wufan@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nK/4++6p9aVBG6jQ"
+Content-Disposition: inline
+In-Reply-To: <1714775551-22384-21-git-send-email-wufan@linux.microsoft.com>
+
+
+--nK/4++6p9aVBG6jQ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 04 May 2024 03:21:11 +0300
-Message-Id: <D10FIGJ84Q71.2VT5MH1VUDP0R@kernel.org>
-To: "Ignat Korchagin" <ignat@cloudflare.com>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Mimi Zohar"
- <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul Moore"
- <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
- <serge@hallyn.com>, <linux-integrity@vger.kernel.org>,
- <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Cc: <kernel-team@cloudflare.com>
-Subject: Re: [RFC PATCH 0/2] TPM derived keys
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240503221634.44274-1-ignat@cloudflare.com>
-In-Reply-To: <20240503221634.44274-1-ignat@cloudflare.com>
 
-On Sat May 4, 2024 at 1:16 AM EEST, Ignat Korchagin wrote:
-> TPM derived keys get their payload from an HMAC primary key in the owner
-> hierarchy mixed with some metadata from the requesting process.
+On Fri, May 03, 2024 at 03:32:30PM -0700, Fan Wu wrote:
+> +IPE does not mitigate threats arising from malicious but authorized
+> +developers (with access to a signing certificate), or compromised
+> +developer tools used by them (i.e. return-oriented programming attacks).
+> +Additionally, IPE draws hard security boundary between userspace and
+> +kernelspace. As a result, IPE does not provide any protections against a
+> +kernel level exploit, and a kernel-level exploit can disable or tamper
+> +with IPE's protections.
 
-What metadata?
-What is "the requesting process"?
+So how to mitigate kernel-level exploits then?
 
->
-> They are similar to trusted keys in the sense that the key security is ro=
-oted
-> in the TPM, but may provide easier key management for some use-cases.
+> +Allow only initramfs
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> <snipped>...
+> +Allow any signed and validated dm-verity volume and the initramfs
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> <snipped>...
 
-Which use cases?
+htmldocs build reports new warnings:
 
-Two first paragraphs are confusers not motivators with three undefined asse=
-ts.
+Documentation/admin-guide/LSM/ipe.rst:694: WARNING: Title underline too sho=
+rt.
 
-> One inconvenience with trusted keys is that the cryptographic material sh=
-ould
-> be provided externally. This means either wrapping the key to the TPM on =
-the
-> executing system (which briefly exposes plaintext cryptographic material =
-to
-> userspace) or creating the wrapped blob externally, but then we need to g=
-ather
-> and transfer the TPM public key to the remote system, which may be a logi=
-stical
-> problem sometimes.
+Allow any signed and validated dm-verity volume and the initramfs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Documentation/admin-guide/LSM/ipe.rst:694: WARNING: Title underline too sho=
+rt.
 
-What are the *existential* issues?
+Allow any signed and validated dm-verity volume and the initramfs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Documentation/arch/x86/resctrl.rst:577: WARNING: Title underline too short.
 
-You are start by inconviences with trusted keys without describing for
-what the trusted keys are used for.
+I have to match these sections underline length:
 
+---- >8 ----
+diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admin-gu=
+ide/LSM/ipe.rst
+index 1a3bf1d8aa23f0..a47e14e024a90d 100644
+--- a/Documentation/admin-guide/LSM/ipe.rst
++++ b/Documentation/admin-guide/LSM/ipe.rst
+@@ -681,7 +681,7 @@ Allow all
+    DEFAULT action=3DALLOW
+=20
+ Allow only initramfs
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~
+=20
+ ::
+=20
+@@ -691,7 +691,7 @@ Allow only initramfs
+    op=3DEXECUTE boot_verified=3DTRUE action=3DALLOW
+=20
+ Allow any signed and validated dm-verity volume and the initramfs
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=20
+ ::
+=20
+@@ -725,7 +725,7 @@ Allow only a specific dm-verity volume
+    op=3DEXECUTE dmverity_roothash=3Dsha256:401fcec5944823ae12f62726e818440=
+7a5fa9599783f030dec146938 action=3DALLOW
+=20
+ Allow any fs-verity file with a valid built-in signature
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=20
+ ::
+=20
+@@ -735,7 +735,7 @@ Allow any fs-verity file with a valid built-in signature
+    op=3DEXECUTE fsverity_signature=3DTRUE action=3DALLOW
+=20
+ Allow execution of a specific fs-verity file
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=20
+ ::
+=20
 
-> Moreover, we need to store the wrapped key blob somewhere, and if we lose=
- it,
-> the application cannot recover its data anymore.
+> +Additional Information
+> +----------------------
+> +
+> +- `Github Repository <https://github.com/microsoft/ipe>`_
+> +- Documentation/security/ipe.rst
 
-I don't frankly understand what you are trying to say here. Somewhere is
-not a place. It is an indeterministic entity.
+Link title to both this admin-side and developer docs can be added for
+disambiguation (to avoid confusion on readers):
 
->
-> TPM derived keys may make key management for applications easier, especia=
-lly on
-> stateless systems as the application can always recreate its keys and the
-> encrypted data is bound to the device and its TPM. They allow the applica=
-tion
-> to wrap/unwrap some data to the device without worrying too much about ke=
-y
-> management and provisioning. They are similar in a sense to device unique=
- keys
-> present on many mobile devices and some IoT systems, but even better as e=
-very
-> application has its own unique device key.
+---- >8 ----
+diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admin-gu=
+ide/LSM/ipe.rst
+index a47e14e024a90d..25b17e11559149 100644
+--- a/Documentation/admin-guide/LSM/ipe.rst
++++ b/Documentation/admin-guide/LSM/ipe.rst
+@@ -7,7 +7,8 @@ Integrity Policy Enforcement (IPE)
+=20
+    This is the documentation for admins, system builders, or individuals
+    attempting to use IPE. If you're looking for more developer-focused
+-   documentation about IPE please see Documentation/security/ipe.rst
++   documentation about IPE please see :doc:`the design docs
++   </security/ipe>`.
+=20
+ Overview
+ --------
+@@ -748,7 +749,7 @@ Additional Information
+ ----------------------
+=20
+ - `Github Repository <https://github.com/microsoft/ipe>`_
+-- Documentation/security/ipe.rst
++- :doc:`Developer and design docs for IPE </security/ipe>`
+=20
+ FAQ
+ ---
+diff --git a/Documentation/security/ipe.rst b/Documentation/security/ipe.rst
+index 07e3632241285d..fd1b1a852d2165 100644
+--- a/Documentation/security/ipe.rst
++++ b/Documentation/security/ipe.rst
+@@ -7,7 +7,7 @@ Integrity Policy Enforcement (IPE) - Kernel Documentation
+=20
+    This is documentation targeted at developers, instead of administrators.
+    If you're looking for documentation on the usage of IPE, please see
+-   Documentation/admin-guide/LSM/ipe.rst
++   `IPE admin guide </admin-guide/LSM/ipe.rst>`_.
+=20
+ Historical Motivation
+ ---------------------
 
-Does it or does it not make it easier? Please decide.
+Thanks.
 
-That said hard fine from mainline perspective unless there is an
-existential issue.
+--=20
+An old man doll... just what I always wanted! - Clara
 
->
-> It is also easy to quickly "wipe" all the application keys by just resett=
-ing
-> the TPM owner hierarchy.
->
-> It is worth mentioning that this functionality can be implemented in user=
-space
-> as a /sbin/request-key plugin. However, the advantage of the in-kernel
-> implementation is that the derived key material never leaves the kernel s=
-pace
-> (unless explicitly read into userspace with proper permissions).
+--nK/4++6p9aVBG6jQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please describe the implementation with request-key in the context of
-the use case where it is used. That is what this should have started.
-Then the motivation. Then the proposal for solution. And also focus
-only on existential factors.
+-----BEGIN PGP SIGNATURE-----
 
-I have no idea for what the key created with this is even used, which
-makes this impossible to review.
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZjXsAgAKCRD2uYlJVVFO
+o5rXAQCS3HwJg98sIZ+dvHD4EtrdQXP2AZQEC3nP+kq7cOi47wD+P0ZrOINzS3p5
+azRTQTXUkE+0lznZFyE75YeW2OX1dQs=
+=ebwU
+-----END PGP SIGNATURE-----
 
-BR, Jarkko
+--nK/4++6p9aVBG6jQ--
 
