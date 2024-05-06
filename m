@@ -1,274 +1,336 @@
-Return-Path: <linux-integrity+bounces-2337-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2338-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDAA48BBEE4
-	for <lists+linux-integrity@lfdr.de>; Sun,  5 May 2024 02:15:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DD208BCE05
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 May 2024 14:34:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48F5F28202D
-	for <lists+linux-integrity@lfdr.de>; Sun,  5 May 2024 00:15:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 039711F2385E
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 May 2024 12:34:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2989E801;
-	Sun,  5 May 2024 00:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N0uFbkB6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04D31DA5F;
+	Mon,  6 May 2024 12:34:30 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5A1191;
-	Sun,  5 May 2024 00:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162281DA58;
+	Mon,  6 May 2024 12:34:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714868128; cv=none; b=QWPqPf0AiwM0RGGoHtzFnquY8FmI2YeWd0+B/31bzLXqaqrhBuf43WJJl0Dch4eUVpuf4xe34iPPS2eAiezd7J/GMvOUkQY06GALOjtNC/Kcg1G4F4Wp/XSDvse4uAcUE1ZbUBpEjdnlGW4vPGyowZ2KA2LNgKBP7EPqPWWqHwA=
+	t=1714998870; cv=none; b=ikSxHvDc0BfEsKEvK13Qz4PGi2mAXARLAxPL2paHtB40zTxxFUqmYKyjaZY/Ww07Ka+lwWQfmfIIzQU23w/NEINS4FwWO2nV1hJ/K6OGAvOOrtyIVhhRUS7fKF6RMk53P/n3Kx3u9P7HRUKRy/NuRbT7G+T5MfuLQJntlBh2/eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714868128; c=relaxed/simple;
-	bh=Us12kLS2/JZzE9OjnNQSSWjgW41q/1qK+0tYJ109430=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xe12wYUL5AuwOiFg2pJpBydk7OATwXAsRIZqOb/Dbyiss3czJWpWzf3gaP+f8mfYfeGgXKTzwPYbVTAasSrQYoofUWq5LYEcjN/A5Y5of3KeTimj7xjdMOdBNnENt2OEdHYq527VR9TzYIp4mFTHKxXWKUZV3ky8+nY8c0Vv9Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N0uFbkB6; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1ec4dd8525cso6328525ad.3;
-        Sat, 04 May 2024 17:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714868125; x=1715472925; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wgS8JoAt6F27d1bbCvSCcX4fIE1TnZzCg1FmdDqGcZI=;
-        b=N0uFbkB6jlEaPVaOkdFzQg50wGVyjtKlAT3sTV6Q1wl8d6l6Xslb0jv8uf3R25h8Vb
-         tQsr+pzftUPFvfauxRNFUWxeHVqk+2/GkzR9xk1MCJ60cyEGTpv32mcpuKmD1kc8Egbz
-         vsm3zfxNnG7vFZf4HXCFb0hKVEchgUQIZgj0R+ssWzz6zCkwcJIf3GEb0ykNOHMclFrw
-         ThB3bpYZgAWRIuwMHUsR/WMYdJyhtIeQyLQ9NVkZQXg5aQNda0gEHC/JY1L7FQPD7euN
-         hJPdS6nDAlq1RFpXrT9XKI7x2/9TN5HjBBZeRWkk9CUam2mffol8nXHPOsBcoDYtnCpN
-         slsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714868125; x=1715472925;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wgS8JoAt6F27d1bbCvSCcX4fIE1TnZzCg1FmdDqGcZI=;
-        b=wKFsWS6sAadDXIujg0o/v1q1dSOqM5tVT4I8jlEtWrIK73hknDfP9422oPMfkDrVZD
-         eqGtCiXx4GamW5aKQvXKCjSKsDhFLfKoJYlM50aEWUnqyPQrt6LZxA+uaRIuwipm2Knz
-         AU0r85HdkcFOEzi3OJnvbAlwvqN4nrmGZjEtwqXC64U55TszEn9c5QCDvtbDryFK1RSI
-         5NiXHK1o7btqB4oPD6wJLNVcLBuU77Stu4cRnOQ7cXqR84qS6fhPEuqRjGR5XPwKeYR2
-         iq37+Zf0IeZZtdK1LgAyx7KnLvKtYw0Bs5ataG1S/4hERgAHvpA4IuPodqCfM3Fsvnpr
-         Fc9g==
-X-Forwarded-Encrypted: i=1; AJvYcCWEjhnFrI5QyOCG09iEPWqDmGN1fyBoYOR3i4aKKWfKPgfv77Rqfi224NjfrpQIxy1MkX0Fp5XHtR+fzyQwkvq6VBTnOXeBvF9dgsavW3M5HMGE1HdjQu21OrDe5ZWf1HEgWDnBHQG9AC3NVnzW0eXmi/cFqpvBv2lliq8pw1Ewjek8aEU++fOfj68OmCAfNnIuinkFZHmRdQuVsBDfBZQ4ICsfrHsZOBwGv+shx1Fqp5q6ugtDTTsGEEEl1D8l8oqptgyEcXCSLg==
-X-Gm-Message-State: AOJu0Yw5aS/Ye9GcDBg/BwHHL/jmFCtqhaLCCEcuvlVve1FlkFzsjKQl
-	On3koFLDz39sSniWvUSRXDETmx4SpWV1/Im/nsHC7BJL0h8fOKAf
-X-Google-Smtp-Source: AGHT+IEuepOKmbUX0nP6tkkmgH/wJcdmWEBFxatponT+7JHJdiSXjE9CQIyDOyyrEvUleV3UtJK/YA==
-X-Received: by 2002:a17:903:2403:b0:1e5:8175:4968 with SMTP id e3-20020a170903240300b001e581754968mr5632206plo.9.1714868124735;
-        Sat, 04 May 2024 17:15:24 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id ld14-20020a170902face00b001e0c568ae8fsm5583101plb.192.2024.05.04.17.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 May 2024 17:15:24 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 133A9184947D8; Sun, 05 May 2024 07:15:18 +0700 (WIB)
-Date: Sun, 5 May 2024 07:15:18 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com,
-	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu,
-	ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
-	snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com
-Cc: linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
-	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [PATCH v18 20/21] Documentation: add ipe documentation
-Message-ID: <ZjbPlk8ZwFZwdqJJ@archie.me>
-References: <1714775551-22384-1-git-send-email-wufan@linux.microsoft.com>
- <1714775551-22384-21-git-send-email-wufan@linux.microsoft.com>
- <ZjXsBjAFs-qp9xY4@archie.me>
- <ab7054cd-affd-47c3-bd98-2cf47d6a6376@linux.microsoft.com>
+	s=arc-20240116; t=1714998870; c=relaxed/simple;
+	bh=B98TXEFSbhOQ1H3pUCnsrzCSALIGq+HzyitCBr1f82Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=adAqCB6lH15/QvmuPhK+9GwqvQty/2jqQqtTlEaqL6QJzV2+zWuZJ8J2IE6/mP86OgEHmT2L/iCbrSBkhXvdBG4JMs81BV9o69rbT8daXKVgAgwAr5zyNhuPF6HPyW7cgSKZBYVMMrb25WDzM9xUdsSy4JVB9dKqwU73Qdh0PvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VY0fb2rH8z9xGXR;
+	Mon,  6 May 2024 20:12:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 892BC1404A6;
+	Mon,  6 May 2024 20:34:19 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwBH8Rk_zjhm+GelBw--.19992S2;
+	Mon, 06 May 2024 13:34:18 +0100 (CET)
+Message-ID: <15d129d8e601a98d5b447da6a6032c8f984d2638.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v2 0/2] ima: Fix detection of read/write violations
+ on stacked filesystems
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org, 
+ linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+ zohar@linux.ibm.com,  roberto.sassu@huawei.com, miklos@szeredi.hu,
+ brauner@kernel.org, Vivek Goyal <vgoyal@redhat.com>
+Date: Mon, 06 May 2024 14:34:03 +0200
+In-Reply-To: <CAOQ4uxjd3e2M4_dF4_jVhghMCmtuZT01hWCMeiuA_=1HFfrS1w@mail.gmail.com>
+References: <20240422150651.2908169-1-stefanb@linux.ibm.com>
+	 <CAOQ4uxgvHjU-n56ryOp5yWQF=yKz0Cfo0ZieypWJhqsBV4g-2w@mail.gmail.com>
+	 <a8da6b9f57095be494b8c38ca46e2a102b8eafac.camel@huaweicloud.com>
+	 <CAOQ4uxjODtbaWPHS3bQvnEKuYAWTJa6kqsXCSzcsF1hJdThcsw@mail.gmail.com>
+	 <2b28414a7c7e4c53057ef8e527f85c05eb225d85.camel@huaweicloud.com>
+	 <CAOQ4uxjd3e2M4_dF4_jVhghMCmtuZT01hWCMeiuA_=1HFfrS1w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="InlbHezzGTuEcuIT"
-Content-Disposition: inline
-In-Reply-To: <ab7054cd-affd-47c3-bd98-2cf47d6a6376@linux.microsoft.com>
+X-CM-TRANSID:LxC2BwBH8Rk_zjhm+GelBw--.19992S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AFyDtF4DGrW3CF1rXw4Utwb_yoWDGryxpF
+	W3Za12kw1DJF17Ar1IyF18XF1Fy3yrJFWUX34Fgry5Aa4qqrn3trWrJr1Y9F9rArn5Jw4j
+	qayUtrZxZr1DZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj5kMxAACsr
 
-
---InlbHezzGTuEcuIT
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, May 04, 2024 at 01:13:16PM -0700, Fan Wu wrote:
+On Sat, 2024-04-27 at 12:03 +0300, Amir Goldstein wrote:
+> On Fri, Apr 26, 2024 at 10:34=E2=80=AFAM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> >=20
+> > On Thu, 2024-04-25 at 15:37 +0300, Amir Goldstein wrote:
+> > > > On Thu, Apr 25, 2024 at 2:30=E2=80=AFPM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > >=20
+> > > > > > On Tue, 2024-04-23 at 09:02 +0300, Amir Goldstein wrote:
+> > > > > > > > On Mon, Apr 22, 2024 at 6:07=E2=80=AFPM Stefan Berger <stef=
+anb@linux.ibm.com> wrote:
+> > > > > > > > > >=20
+> > > > > > > > > > This series fixes the detection of read/write violation=
+s on stacked
+> > > > > > > > > > filesystems. To be able to access the relevant dentries=
+ necessary to
+> > > > > > > > > > detect files opened for writing on a stacked filesystem=
+ a new d_real_type
+> > > > > > > > > > D_REAL_FILEDATA is introduced that allows callers to ac=
+cess all relevant
+> > > > > > > > > > files involved in a stacked filesystem while traversing=
+ the layers.
+> > > > > > > > > >=20
+> > > > > > > >=20
+> > > > > > > > Stefan,
+> > > > > > > >=20
+> > > > > > > > Both Miklos and myself objected to this solution:
+> > > > > > > > https://lore.kernel.org/linux-unionfs/CAJfpeguctirEYECoigcA=
+sJwpGPCX2NyfMZ8H8GHGW-0UyKfjgg@mail.gmail.com/
+> > > > > > > >=20
+> > > > > > > > Not sure what you are hoping to achieve from re-posting the=
+ same solution.
+> > > > > > > >=20
+> > > > > > > > I stopped counting how many times I already argued that *al=
+l* IMA/EVM
+> > > > > > > > assertions,
+> > > > > > > > including rw-ro violations should be enforced only on the r=
+eal inode.
+> > > > > > > > I know this does not work - so you should find out why it d=
+oes not work and fix
+> > > > > > > > the problem.
+> > > > > > > >=20
+> > > > > > > > Enforcing IMA/EVM on the overlayfs inode layer is just the =
+wrong way IMO.
+> > > > > > > > Not once have I heard an argument from IMA/EVM developers w=
+hy it is really
+> > > > > > > > needed to enforce IMA/EVM on the overlayfs inode layer and =
+not on the
+> > > > > > > > real inode.
+> > > > > >=20
+> > > > > > Ok, I try to provide an example regarding this, and we see if i=
+t makes
+> > > > > > sense.
+> > > > > >=20
+> > > > > > # echo test > test-file
+> > > > > > # chown 2000 d/test-file
+> > > > > > # ls -l a/test-file
+> > > > > > -rw-r--r--. 1 2000 root 25 Apr 25 10:50 a/test-file
+> > > > > >=20
+> > > > > > Initially there is a file in the lower layer with UID 2000.
+> > > > > >=20
+> > > > > >=20
+> > > > > > # mount -t overlay -olowerdir=3Da,upperdir=3Db,workdir=3Dc,meta=
+copy=3Don overlay d
+> > > > > > # chown 3000 d/test-file
+> > > > > > # ls -l d/test-file
+> > > > > > -rw-r--r--. 1 3000 root 25 Apr 25 10:50 d/test-file
+> > > > > > # ls -l a/test-file
+> > > > > > -rw-r--r--. 1 2000 root 25 Apr 25 10:50 a/test-file
+> > > > > > # ls -l b/test-file
+> > > > > > -rw-r--r--. 1 3000 root 25 Apr 25 10:50 b/test-file
+> > > > > >=20
+> > > > > > If I have a policy like this:
+> > > > > >=20
+> > > > > > # echo "measure fsname=3Doverlay fowner=3D3000" > /sys/kernel/s=
+ecurity/ima/policy
+> > > > > >=20
+> > > > > > there won't be any match on the real file which still has UID 2=
+000. But
+> > > > > > what is observable by the processes through overlayfs is UID 30=
+00.
+> > > > > >=20
+> > > >=20
+> > > > ok, it is simple to write an ima policy that is not respected by ov=
+erlayfs.
+> > > >=20
+> > > > My question is: under what circumstances is a policy like the above
+> > > > useful in the real world?
+> > > >=20
+> > > > Correct me if I am wrong, but AFAIK, the purpose of IMA/EVM is to
+> > > > mitigate attack vectors of tampering with files offline or after th=
+e
+> > > > file's data/metadata were measured. Is that a correct description?
+> >=20
+> > (For now I would talk about IMA, EVM can be considered separately).
+> >=20
+> > The main purpose of IMA is to evaluate files being accessed, and record
+> > the access together with a file digest in a measurement list,
+> > allow/deny access to the file (appraisal), or add a new event to audit
+> > logs.
+> >=20
+> > How files are selected depends on the IMA policy. A rule can be
+> > subject-based or object-based, depending on whether respectively
+> > process or file attributes are matched. It can also be both.
+> >=20
+> > A subject-based rule means that you identify a process/set of
+> > processes, and you evaluate everything it/they read.
+> >=20
+> > An object-based rule means that you identify a file/set of files, and
+> > you evaluate any process accessing them.
+> >=20
+> > Since processes normally would access the top most layer (overlayfs),
+> > the IMA policy should be written in terms of metadata seen in that
+> > layer (but not necessarily).
+> >=20
+> > This is just for identifying the set of files to
+> > measure/appraise/audit, not which file is going to be evaluated, which
+> > will be always the persistent one.
+> >=20
+> > I have to admit, things are not very clear also to me.
+> >=20
+> > Suppose you have a file in the lower filesystem with SELinux label
+> > user_t, and then on overlayfs with metadata copy, you change the label
+> > of this file to unconfined_t.
+> >=20
+> > What will happen exactly? On the overlayfs layer, you will have a
+> > permission request with the new label unconfined_t, but when overlayfs
+> > calls vfs_open(), there will be another permission request with the old
+> > label.
 >=20
+> CC Vivek who was involved with ovl+selinux, but I think the answer is
+> that ovl sepolicy is expected to be associated with the mount ctx and
+> not the objects and there was a need to implement the security hook
+> security_inode_copy_up() to be able to compose a safe sepolicy for
+> overlayfs.
 >=20
-> On 5/4/2024 1:04 AM, Bagas Sanjaya wrote:
-> > On Fri, May 03, 2024 at 03:32:30PM -0700, Fan Wu wrote:
-> > > +IPE does not mitigate threats arising from malicious but authorized
-> > > +developers (with access to a signing certificate), or compromised
-> > > +developer tools used by them (i.e. return-oriented programming attac=
-ks).
-> > > +Additionally, IPE draws hard security boundary between userspace and
-> > > +kernelspace. As a result, IPE does not provide any protections again=
-st a
-> > > +kernel level exploit, and a kernel-level exploit can disable or tamp=
-er
-> > > +with IPE's protections.
 > >=20
-> > So how to mitigate kernel-level exploits then?
+> > It is kind of the same challenge we are facing with IMA, we can observe
+> > the file operations at different layers. That is why I think having
+> > stacked IMA calls is a good idea (other than really fixing the
+> > violations).
 > >=20
-> One possible way is to use hypervisor to protect the kernel integrity.
-> https://github.com/heki-linux is one project on this direction. Perhaps I
-> should also add this link to the doc.
-
-OK.
-
->=20
-> > > +Allow only initramfs
-> > > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > <snipped>...
-> > > +Allow any signed and validated dm-verity volume and the initramfs
-> > > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > <snipped>...
+> > The current problem, that is very difficult to solve, is that the
+> > policy should cover all layers, or some events will be missed. Now we
+> > have overlayfs-specific code to detect changes in the backing inode,
+> > while with stacked IMA calls, we can detect the change at the layer
+> > where it happened (and we can remove the overlayfs-specific code).
 > >=20
-> > htmldocs build reports new warnings:
+> > Ideally, what I would do to cover all layers is that if there is a
+> > match at one layer, the lower layers should automatically match too,
+> > but it is not that easy since after the vfs_open() recursive calls we
+> > start calling IMA in the botton most layer first.
 > >=20
-> > Documentation/admin-guide/LSM/ipe.rst:694: WARNING: Title underline too=
- short.
+> > (What I did with the stacked IMA calls is just an experiment to see how
+> > far we can go, but still we didn't make any decision with Mimi).
 > >=20
-> > Allow any signed and validated dm-verity volume and the initramfs
-> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > Documentation/admin-guide/LSM/ipe.rst:694: WARNING: Title underline too=
- short.
+> > > > AFAIK, IMA/EVM policy is system-wide and not namespace aware
+> > > > so the policy has to be set on the container's host and not inside
+> > > > containers. Is that correct?
 > >=20
-> > Allow any signed and validated dm-verity volume and the initramfs
-> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > Documentation/arch/x86/resctrl.rst:577: WARNING: Title underline too sh=
-ort.
+> > I know that overlayfs is primarily aiming at containers, but I would
+> > suggest to not add that complexity yet and just consider the host.
 > >=20
-> > I have to match these sections underline length:
+> > > > If those statements are true then please try to explain to me what =
+is
+> > > > the thread model for tampering with overlayfs files, without tamper=
+ing
+> > > > with the real upper and/or lower files.
 > >=20
-> > ---- >8 ----
-> > diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admi=
-n-guide/LSM/ipe.rst
-> > index 1a3bf1d8aa23f0..a47e14e024a90d 100644
-> > --- a/Documentation/admin-guide/LSM/ipe.rst
-> > +++ b/Documentation/admin-guide/LSM/ipe.rst
-> > @@ -681,7 +681,7 @@ Allow all
-> >      DEFAULT action=3DALLOW
-> >   Allow only initramfs
-> > -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +~~~~~~~~~~~~~~~~~~~~
-> >   ::
-> > @@ -691,7 +691,7 @@ Allow only initramfs
-> >      op=3DEXECUTE boot_verified=3DTRUE action=3DALLOW
-> >   Allow any signed and validated dm-verity volume and the initramfs
-> > -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >   ::
-> > @@ -725,7 +725,7 @@ Allow only a specific dm-verity volume
-> >      op=3DEXECUTE dmverity_roothash=3Dsha256:401fcec5944823ae12f62726e8=
-184407a5fa9599783f030dec146938 action=3DALLOW
-> >   Allow any fs-verity file with a valid built-in signature
-> > -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >   ::
-> > @@ -735,7 +735,7 @@ Allow any fs-verity file with a valid built-in sign=
-ature
-> >      op=3DEXECUTE fsverity_signature=3DTRUE action=3DALLOW
-> >   Allow execution of a specific fs-verity file
-> > -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >   ::
+> > I hope at this point is clear that what we care about is that, or the
+> > process is reading the content of the file whose digest is recorded in
+> > the measurement list, or we must signal to remote verifiers concurrent
+> > accesses that make the statement above false.
 > >=20
-> > > +Additional Information
-> > > +----------------------
-> > > +
-> > > +- `Github Repository <https://github.com/microsoft/ipe>`_
-> > > +- Documentation/security/ipe.rst
+> > > > My thesis is that if an IMA/EVM policy is good enough to prevent
+> > > > tampering with the real lower/upper files, then no extra measures
+> > > > are needed to protect the virtual overlayfs files against tampering=
+.
 > >=20
-> > Link title to both this admin-side and developer docs can be added for
-> > disambiguation (to avoid confusion on readers):
-> >=20
-> > ---- >8 ----
-> > diff --git a/Documentation/admin-guide/LSM/ipe.rst b/Documentation/admi=
-n-guide/LSM/ipe.rst
-> > index a47e14e024a90d..25b17e11559149 100644
-> > --- a/Documentation/admin-guide/LSM/ipe.rst
-> > +++ b/Documentation/admin-guide/LSM/ipe.rst
-> > @@ -7,7 +7,8 @@ Integrity Policy Enforcement (IPE)
-> >      This is the documentation for admins, system builders, or individu=
-als
-> >      attempting to use IPE. If you're looking for more developer-focused
-> > -   documentation about IPE please see Documentation/security/ipe.rst
-> > +   documentation about IPE please see :doc:`the design docs
-> > +   </security/ipe>`.
-> >   Overview
-> >   --------
-> > @@ -748,7 +749,7 @@ Additional Information
-> >   ----------------------
-> >   - `Github Repository <https://github.com/microsoft/ipe>`_
-> > -- Documentation/security/ipe.rst
-> > +- :doc:`Developer and design docs for IPE </security/ipe>`
-> >   FAQ
-> >   ---
-> > diff --git a/Documentation/security/ipe.rst b/Documentation/security/ip=
-e.rst
-> > index 07e3632241285d..fd1b1a852d2165 100644
-> > --- a/Documentation/security/ipe.rst
-> > +++ b/Documentation/security/ipe.rst
-> > @@ -7,7 +7,7 @@ Integrity Policy Enforcement (IPE) - Kernel Documentati=
-on
-> >      This is documentation targeted at developers, instead of administr=
-ators.
-> >      If you're looking for documentation on the usage of IPE, please see
-> > -   Documentation/admin-guide/LSM/ipe.rst
-> > +   `IPE admin guide </admin-guide/LSM/ipe.rst>`_.
-> >   Historical Motivation
-> >   ---------------------
-> >=20
-> > Thanks.
+> > What you say is correct, but the way you identify files to
+> > measure/appraise/audit can be different.
 > >=20
 >=20
-> My apologies for these format issues and thanks for the suggestions. I wi=
-ll
-> fix them.
+> IIUC, the problem as you described it, is similar to the problem
+> of how to display the overlayfs path of mmaped files in /proc/self/maps
+> when the actual inode mapped to memory is the real inode.
+>=20
+> The solution for this problem was the somewhat awkward
+> "file with fake path" - it was recently changed to use the new
+> file_user_path() helper.
+>=20
+> I'm not sure how this can help IMA, but in theory, you could
+> always attach iint state to the real inode and only the the real inode
+> but the rules that filter by path/object in the IMA hooks that take a fil=
+e
+> argument could take file_user_path() into account.
 
-Oh, I forgot to also add :doc: directive for the last reference link:
+Sorry, it took some time to elaborate this proposal, but I think it is
+mostly correct. I even tried it (as an experiment, we didn't make any
+decision yet).
 
----- >8 ----
-diff --git a/Documentation/security/ipe.rst b/Documentation/security/ipe.rst
-index fd1b1a852d2165..aa2e64d4119f3e 100644
---- a/Documentation/security/ipe.rst
-+++ b/Documentation/security/ipe.rst
-@@ -7,7 +7,7 @@ Integrity Policy Enforcement (IPE) - Kernel Documentation
-=20
-    This is documentation targeted at developers, instead of administrators.
-    If you're looking for documentation on the usage of IPE, please see
--   `IPE admin guide </admin-guide/LSM/ipe.rst>`_.
-+   :doc:`IPE admin guide </admin-guide/LSM/ipe>`.
-=20
- Historical Motivation
- ---------------------
+So, the basic idea is to use the stacked IMA calls I proposed (by
+adding security_file_post_open() in backing-file.c, and evaluate each
+layer independently.
 
-Thanks.
+The policy match on each IMA call will be on the overlayfs inode, so
+that we see the same metadata as the process opening the file, but we
+attach the state to the real inode (regardless of the layer).
 
---=20
-An old man doll... just what I always wanted! - Clara
+Violations are going to work because there is no layer mismatch (write
+on one layer, read on a different layer), they are checked always on
+the real inode. Since overlayfs has to always open the real inode,
+i_write/readcount will be always incremented.
 
---InlbHezzGTuEcuIT
-Content-Type: application/pgp-signature; name="signature.asc"
+If there is a match at one layer, IMA is not going to process the file
+again, since the result is cached from the previous IMA call.
 
------BEGIN PGP SIGNATURE-----
+i_version comparison will also be on the real inode, no need to provide
+one on overlayfs.
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZjbPjgAKCRD2uYlJVVFO
-o8HPAQDxhozqHxPAtlb/vByqFj4O4DT+qZVm5PvJcv9tnq0aCQD7BQbQr6wEPrYZ
-0lIMQIcpVMj+XdMBtixikEDTadIDHQI=
-=mp4a
------END PGP SIGNATURE-----
+Invalidation (like by setting security.ima) will happen on the real
+inode.
 
---InlbHezzGTuEcuIT--
+I went even further, to think that when we check the authenticity of
+security.ima with EVM we can pass the real inode, but we are not sure
+yet.
+
+We will continue to validate this proposal.
+
+Thanks
+
+Roberto
+
+> For example, if you have security_file_post_open(f) in
+> backing_file_open(), then you can use d_real_inode()
+> in process_measurement to get to the IMA state and check the
+> rules referring to the real inode and you can use file_user_path(file)
+> to check the rules referring to "front object".
+>=20
+> In case of a nested overlayfs, you should get two post_open
+> hook, both will refer to the same IMA state on the real inode, but
+> each hook with have a different file_user_path(), so you will have
+> an opportunity to apply the path/object based rules on every layer
+> in the nested overlayfs.
+>=20
+> I hope what I tried to explain is clear and I hope there are not
+> many traps down this road, but you won't know unless you try...
+>=20
+> Thanks,
+> Amir.
+
 
