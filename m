@@ -1,209 +1,150 @@
-Return-Path: <linux-integrity+bounces-2342-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2343-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 734018BDECF
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 May 2024 11:49:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 607988BE16F
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 May 2024 13:54:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 991BCB20AF0
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 May 2024 09:49:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15D171F2397F
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 May 2024 11:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D0C0150984;
-	Tue,  7 May 2024 09:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C3915252F;
+	Tue,  7 May 2024 11:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="IGaHRBuu"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD3114E2EF;
-	Tue,  7 May 2024 09:42:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2339A1509B0;
+	Tue,  7 May 2024 11:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715074955; cv=none; b=q4/5spE7t0A/M3lMkDhbFco1+oHXYIuu4SXhs3GIL2Gg9VZC9B5qFB4+U00x5ORE6yEoLcHzjJJRaQSPFI3fcSmAvQwGzQflcU7+1OgkgqNP1uhIDpj0Ge2+oK01dIdQ8iVEOhmbCxfzTgFi4P12Rgcu6LATjxOiCg08FG6HdiI=
+	t=1715082876; cv=none; b=iMe9738mNEOOcyKHvzSbagZYd0V3ALyt1mZd7NdgylL9L7nNuZWkcyVNt76iPxUDxXKfTnwT0c8pyj/nZxEksRRcR9kyTG24jdmYeLbVaci/3WMw288I/iVyID4cZmkxdAQuCoLc2blbsMVjhmvHDl+PNyFZA/Sc8Yp92GAyq84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715074955; c=relaxed/simple;
-	bh=VdSWCPQAIn9GwQc51HcOBACWo1FZmzZEpgWE+jpnrXM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nSeKooPUsDGlZKkfdH3Fl0iepDK6vLzUIkci7LqRuyzcfI3/aHjJEKhSsE/HsGAiaC5UFIh+Z1ZH8DVTlu4SUA4JRopT41SxTioKcSUtxza9qlGuOwbjjt2JAcVv82JM5iW2B7aLmqmedVFwvqq04iHPssJF9ye9k8TLc3RDCy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4VYYFB1DP5zCrNJ;
-	Tue,  7 May 2024 17:41:18 +0800 (CST)
-Received: from dggpemm500024.china.huawei.com (unknown [7.185.36.203])
-	by mail.maildlp.com (Postfix) with ESMTPS id C513B14011B;
-	Tue,  7 May 2024 17:42:13 +0800 (CST)
-Received: from huawei.com (10.67.174.60) by dggpemm500024.china.huawei.com
- (7.185.36.203) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 7 May
- 2024 17:42:13 +0800
-From: GUO Zihua <guozihua@huawei.com>
-To: <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>, <jmorris@namei.org>,
-	<serge@hallyn.com>
-CC: <linux-integrity@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH] ima: fix deadlock when traversing "ima_default_rules".
-Date: Tue, 7 May 2024 09:37:14 +0000
-Message-ID: <20240507093714.1031820-1-guozihua@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1715082876; c=relaxed/simple;
+	bh=dTHlifqT8rTPMbPEVR3X+UNuN6wPypI1d/rW8hGvkNk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=Aqa69Eu+aabuXCr9OlNA+p5NbfwGmEaHHrCBQscSPy9I1IIeXe2kdPMWsQXC8tbE+7T6WGktqRq2VnjrtyPF7cDk1CyUjb1KqjC/Jc9MX4Dx0/Uw9PI38fO63yw9uL9v+G+1v6tMLM6rxXpdappY7Nyv1kr2po7hIvQn0x70U4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=IGaHRBuu; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 447BgHOG006505;
+	Tue, 7 May 2024 11:54:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=2AhXXN/V3wCElifhaMO+4M4/JQCST6uMKGpBgF1i3N0=;
+ b=IGaHRBuurVHUC0n3co4OAgwkn0LDLk+f/xCtJPOsM6Aze5l1xHHdAwM7tiqjqdLgz1IP
+ TBLBLQgkbq3sfzI8eELlLaVuehJuWGJQW0iQ5VicLAIXyu0V5DLo4uDFO8LoQfNNOo0N
+ s/6UbCSMYxppRDg3Ohbt3qIUsYzf4YprZhOHCAXP5w1wbMujGPaw5XyzvNiwNm/FfkKv
+ LWW7PER415nnri6j7HQDrmN7x1PznLtuh4JzYUR8TpZTWToMzp2tsLpRkJK8//kF4XrP
+ H6d9AFQ2/fdkz4KGhpp1BLXwC+v8eu3+W6uR35IwkrcDizcddykdlugOZrbEQucW8x8D 9A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xykncg0xe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 May 2024 11:54:11 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 447BsAa9024552;
+	Tue, 7 May 2024 11:54:11 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xykncg0x8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 May 2024 11:54:10 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 447B6jiA005882;
+	Tue, 7 May 2024 11:54:09 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xx5yh4gkb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 May 2024 11:54:09 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 447Bs6HF51380660
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 7 May 2024 11:54:08 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C8FD158065;
+	Tue,  7 May 2024 11:54:06 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5BC2158057;
+	Tue,  7 May 2024 11:54:06 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.105.150])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  7 May 2024 11:54:06 +0000 (GMT)
+Message-ID: <baff6527d8d1e1f7287e33d6a8570bd242d5cadf.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: fix deadlock when traversing "ima_default_rules".
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: GUO Zihua <guozihua@huawei.com>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc: linux-integrity@vger.kernel.org, stable@vger.kernel.org
+Date: Tue, 07 May 2024 07:54:05 -0400
+In-Reply-To: <20240507093714.1031820-1-guozihua@huawei.com>
+References: <20240507093714.1031820-1-guozihua@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-25.el8_9) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500024.china.huawei.com (7.185.36.203)
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: f2H7xKIE5oj-CNtTXPVsPtH1VAdwA9by
+X-Proofpoint-GUID: Zz0LFyf-Myp0bDtHdEkceTM9USe5-7Nf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-07_06,2024-05-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 spamscore=0 clxscore=1011
+ mlxlogscore=999 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2405070081
 
-From: liqiong <liqiong@nfschina.com>
+On Tue, 2024-05-07 at 09:37 +0000, GUO Zihua wrote:
+> From: liqiong <liqiong@nfschina.com>
+> 
+> [ Upstream commit eb0782bbdfd0d7c4786216659277c3fd585afc0e ]
+> 
+> The current IMA ruleset is identified by the variable "ima_rules"
+> that default to "&ima_default_rules". When loading a custom policy
+> for the first time, the variable is updated to "&ima_policy_rules"
+> instead. That update isn't RCU-safe, and deadlocks are possible.
+> Indeed, some functions like ima_match_policy() may loop indefinitely
+> when traversing "ima_default_rules" with list_for_each_entry_rcu().
+> 
+> When iterating over the default ruleset back to head, if the list
+> head is "ima_default_rules", and "ima_rules" have been updated to
+> "&ima_policy_rules", the loop condition (&entry->list != ima_rules)
+> stays always true, traversing won't terminate, causing a soft lockup
+> and RCU stalls.
+> 
+> Introduce a temporary value for "ima_rules" when iterating over
+> the ruleset to avoid the deadlocks.
+> 
+> Addition:
+> 
+> A rcu_read_lock pair is added within ima_update_policy_flag to avoid
+> suspicious RCU usage warning. This pair of RCU lock was added with
+> commit 4f2946aa0c45 ("IMA: introduce a new policy option
+> func=SETXATTR_CHECK") on mainstream.
+> 
+> Signed-off-by: liqiong <liqiong@nfschina.com>
+> Reviewed-by: THOBY Simon <Simon.THOBY@viveris.fr>
+> Fixes: 38d859f991f3 ("IMA: policy can now be updated multiple times")
+> Reported-by: kernel test robot <lkp@intel.com> (Fix sparse: incompatible types in comparison expression.)
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> Sig=ned-off-by: GUO Zihua <guozihua@huawei.com>
 
-[ Upstream commit eb0782bbdfd0d7c4786216659277c3fd585afc0e ]
+Hi Scott,
 
-The current IMA ruleset is identified by the variable "ima_rules"
-that default to "&ima_default_rules". When loading a custom policy
-for the first time, the variable is updated to "&ima_policy_rules"
-instead. That update isn't RCU-safe, and deadlocks are possible.
-Indeed, some functions like ima_match_policy() may loop indefinitely
-when traversing "ima_default_rules" with list_for_each_entry_rcu().
+I'm confused by this patch.  Is it meant for upstream?
 
-When iterating over the default ruleset back to head, if the list
-head is "ima_default_rules", and "ima_rules" have been updated to
-"&ima_policy_rules", the loop condition (&entry->list != ima_rules)
-stays always true, traversing won't terminate, causing a soft lockup
-and RCU stalls.
+thanks,
 
-Introduce a temporary value for "ima_rules" when iterating over
-the ruleset to avoid the deadlocks.
-
-Addition:
-
-A rcu_read_lock pair is added within ima_update_policy_flag to avoid
-suspicious RCU usage warning. This pair of RCU lock was added with
-commit 4f2946aa0c45 ("IMA: introduce a new policy option
-func=SETXATTR_CHECK") on mainstream.
-
-Signed-off-by: liqiong <liqiong@nfschina.com>
-Reviewed-by: THOBY Simon <Simon.THOBY@viveris.fr>
-Fixes: 38d859f991f3 ("IMA: policy can now be updated multiple times")
-Reported-by: kernel test robot <lkp@intel.com> (Fix sparse: incompatible types in comparison expression.)
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
----
- security/integrity/ima/ima_policy.c | 29 ++++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 1c403e8a8044..4f5d44037081 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -210,7 +210,7 @@ static struct ima_rule_entry *arch_policy_entry __ro_after_init;
- static LIST_HEAD(ima_default_rules);
- static LIST_HEAD(ima_policy_rules);
- static LIST_HEAD(ima_temp_rules);
--static struct list_head *ima_rules = &ima_default_rules;
-+static struct list_head __rcu *ima_rules = (struct list_head __rcu *)(&ima_default_rules);
- 
- static int ima_policy __initdata;
- 
-@@ -648,12 +648,14 @@ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
- {
- 	struct ima_rule_entry *entry;
- 	int action = 0, actmask = flags | (flags << 1);
-+	struct list_head *ima_rules_tmp;
- 
- 	if (template_desc)
- 		*template_desc = ima_template_desc_current();
- 
- 	rcu_read_lock();
--	list_for_each_entry_rcu(entry, ima_rules, list) {
-+	ima_rules_tmp = rcu_dereference(ima_rules);
-+	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
- 
- 		if (!(entry->action & actmask))
- 			continue;
-@@ -701,11 +703,15 @@ int ima_match_policy(struct inode *inode, const struct cred *cred, u32 secid,
- void ima_update_policy_flag(void)
- {
- 	struct ima_rule_entry *entry;
-+	struct list_head *ima_rules_tmp;
- 
--	list_for_each_entry(entry, ima_rules, list) {
-+	rcu_read_lock();
-+	ima_rules_tmp = rcu_dereference(ima_rules);
-+	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
- 		if (entry->action & IMA_DO_MASK)
- 			ima_policy_flag |= entry->action;
- 	}
-+	rcu_read_unlock();
- 
- 	ima_appraise |= (build_ima_appraise | temp_ima_appraise);
- 	if (!ima_appraise)
-@@ -898,10 +904,10 @@ void ima_update_policy(void)
- 
- 	list_splice_tail_init_rcu(&ima_temp_rules, policy, synchronize_rcu);
- 
--	if (ima_rules != policy) {
-+	if (ima_rules != (struct list_head __rcu *)policy) {
- 		ima_policy_flag = 0;
--		ima_rules = policy;
- 
-+		rcu_assign_pointer(ima_rules, policy);
- 		/*
- 		 * IMA architecture specific policy rules are specified
- 		 * as strings and converted to an array of ima_entry_rules
-@@ -989,7 +995,7 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
- 		pr_warn("rule for LSM \'%s\' is undefined\n",
- 			entry->lsm[lsm_rule].args_p);
- 
--		if (ima_rules == &ima_default_rules) {
-+		if (ima_rules == (struct list_head __rcu *)(&ima_default_rules)) {
- 			kfree(entry->lsm[lsm_rule].args_p);
- 			entry->lsm[lsm_rule].args_p = NULL;
- 			result = -EINVAL;
-@@ -1598,9 +1604,11 @@ void *ima_policy_start(struct seq_file *m, loff_t *pos)
- {
- 	loff_t l = *pos;
- 	struct ima_rule_entry *entry;
-+	struct list_head *ima_rules_tmp;
- 
- 	rcu_read_lock();
--	list_for_each_entry_rcu(entry, ima_rules, list) {
-+	ima_rules_tmp = rcu_dereference(ima_rules);
-+	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
- 		if (!l--) {
- 			rcu_read_unlock();
- 			return entry;
-@@ -1619,7 +1627,8 @@ void *ima_policy_next(struct seq_file *m, void *v, loff_t *pos)
- 	rcu_read_unlock();
- 	(*pos)++;
- 
--	return (&entry->list == ima_rules) ? NULL : entry;
-+	return (&entry->list == &ima_default_rules ||
-+		&entry->list == &ima_policy_rules) ? NULL : entry;
- }
- 
- void ima_policy_stop(struct seq_file *m, void *v)
-@@ -1823,6 +1832,7 @@ bool ima_appraise_signature(enum kernel_read_file_id id)
- 	struct ima_rule_entry *entry;
- 	bool found = false;
- 	enum ima_hooks func;
-+	struct list_head *ima_rules_tmp;
- 
- 	if (id >= READING_MAX_ID)
- 		return false;
-@@ -1834,7 +1844,8 @@ bool ima_appraise_signature(enum kernel_read_file_id id)
- 	func = read_idmap[id] ?: FILE_CHECK;
- 
- 	rcu_read_lock();
--	list_for_each_entry_rcu(entry, ima_rules, list) {
-+	ima_rules_tmp = rcu_dereference(ima_rules);
-+	list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
- 		if (entry->action != APPRAISE)
- 			continue;
- 
--- 
-2.34.1
+Mimi
 
 
