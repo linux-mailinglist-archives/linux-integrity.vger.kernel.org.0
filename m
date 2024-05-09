@@ -1,106 +1,155 @@
-Return-Path: <linux-integrity+bounces-2356-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2357-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CD258C122F
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 May 2024 17:48:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A71C8C1383
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 May 2024 19:07:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F14232833D4
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 May 2024 15:48:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BD3E1C203DE
+	for <lists+linux-integrity@lfdr.de>; Thu,  9 May 2024 17:07:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE2F313C68C;
-	Thu,  9 May 2024 15:48:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691308F7A;
+	Thu,  9 May 2024 17:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J0KiHvcM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GvpKdYu1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1633BBE3;
-	Thu,  9 May 2024 15:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1035171A2
+	for <linux-integrity@vger.kernel.org>; Thu,  9 May 2024 17:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715269709; cv=none; b=uhhIWVzXrE7rgLKofgAH5Z4paTtzk2OnEs/H4M+yJv7S/nODekqyz6MTNBY1Ofhc6l0axTAygyTWHJn4frNElvBlJVdOSdTB1l5CyjDPNPk4HmO/trcgQKxu1pfwRcQimmchs86eG1IDpRcAZDxXFcAqNbt6rP+ST2YB/WE9Y6w=
+	t=1715274442; cv=none; b=TYUmbUwi+gZvo25/TkZCr6RWyyKySAWtvTrNsJCn5wgIpPzgP5xMLw1WR8bP2a3Zl0HF0a4JVPB28F3WTa3zyMTeoHh/UvPU6C1DVcAuqcktSiV8tGGZlYWeKV0uo+3hqBxLQbziN/vpG28U1xLfNP/EjA1TTIYx7UBtQIWx16o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715269709; c=relaxed/simple;
-	bh=wcUJCc5Jd0sSuP3wsE984VDNHrBT9xCEyzalVdcN9ug=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fEdcKZM40L5JmKVbESjv9pnTiltgEJQRisUDD75v90zMnVOLk10QglzMWbcPmfp1df6Oe17ABA/repLf9DLcA8UcpQ+OqsHJ3nrUebod1Z3IyVBXOIaRNPVLtQyoU19fklwD9fKuOTj12t4X78WI9BSwv1DqMVHzAbbw2XNTSa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J0KiHvcM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A463EC116B1;
-	Thu,  9 May 2024 15:48:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715269709;
-	bh=wcUJCc5Jd0sSuP3wsE984VDNHrBT9xCEyzalVdcN9ug=;
-	h=From:To:Cc:Subject:Date:From;
-	b=J0KiHvcMQ7bm6Z4VmXo/SfZXiaVOTRkl3gZY75q6NEFadKd5FxYTwb0t4Goz5ALXS
-	 jTqybRq90giV/HQTpXwydp9l/MzSLXsVjww828l9YcZK5BToNakDeJH3Dpa5z4+GhF
-	 8o/4vYhVAviaqv5pdBMQp5Oh++kT8nrV98FFAUxHJ0zH5mbPnoY24C53mKHuZXA8B/
-	 M/xqfCaeuEpn7lqqV8wNyzRbsowaANpp5DmIAlxuCTsvy+ZhfDLahdB1pAhJpN41Ah
-	 6ciuulS5PAfpr6XT8n7iPovQhblivyL+tC8UxOfSBoREhM45gsuWu48NgfxNolv1cM
-	 dqd4rH1a/GqFA==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	David Howells <dhowells@redhat.com>,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	keyrings@vger.kernel.org
-Subject: [GIT PULL] trusted keys changes for v6.10-rc1
-Date: Thu,  9 May 2024 18:47:51 +0300
-Message-ID: <20240509154751.25983-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.45.0
+	s=arc-20240116; t=1715274442; c=relaxed/simple;
+	bh=JTqRwvs7ATnblMDzbI8kYx5IrTBxMWNprcLAXd5ODXg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=pZrXb7GkbblKb6VNWvtflnrB31xyjC7Vw2uK8ohGtQO030PUnVHic1X9tY5qY/ZsetzFz3GKayDF95l3TlTDur3eijq3Jit8i1X3nEZdaBw5ZXNRMAzyu9FJhd9xto2GNnny0+rUlvORBY00aemg8pLpw3FNIW093uGYQJ+OoeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GvpKdYu1; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715274439;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1Ca9Pf11lzbP4jlatyhKofM52bEPeu8vNmdS1FsH4a8=;
+	b=GvpKdYu10fnHDW/pAoyK20EECRTJN/Yec8Sow2na6ca6Jc0DaUwN+Rqcd9dAwzM34sF2Nr
+	pb9GzTIbh/vMFHEhBxGN4T6FJVQ28pnUuYGyYScmpFQG3HifUkBUXmOstiOWHkHpwdtvSD
+	ymBkaQTaKH7QV3JuzvR3zdMZNMbVkP8=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-182-Y19FXQdzO2eI8S9NubSUHw-1; Thu,
+ 09 May 2024 13:07:16 -0400
+X-MC-Unique: Y19FXQdzO2eI8S9NubSUHw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71A903802292;
+	Thu,  9 May 2024 17:07:14 +0000 (UTC)
+Received: from file1-rdu.file-001.prod.rdu2.dc.redhat.com (unknown [10.11.5.21])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id CB1CB1169588;
+	Thu,  9 May 2024 17:07:13 +0000 (UTC)
+Received: by file1-rdu.file-001.prod.rdu2.dc.redhat.com (Postfix, from userid 12668)
+	id A5F3A30C1B8F; Thu,  9 May 2024 17:07:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by file1-rdu.file-001.prod.rdu2.dc.redhat.com (Postfix) with ESMTP id 9F5133E683;
+	Thu,  9 May 2024 19:07:13 +0200 (CEST)
+Date: Thu, 9 May 2024 19:07:13 +0200 (CEST)
+From: Mikulas Patocka <mpatocka@redhat.com>
+To: Fan Wu <wufan@linux.microsoft.com>
+cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, 
+    tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, 
+    snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com, 
+    linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
+    linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
+    linux-block@vger.kernel.org, dm-devel@lists.linux.dev, 
+    audit@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v18 12/21] dm: add finalize hook to target_type
+In-Reply-To: <212b02a8-f5f0-4433-a726-1639dda61790@linux.microsoft.com>
+Message-ID: <bc9aa053-20a6-eaa-cbe4-344f340242b@redhat.com>
+References: <1714775551-22384-1-git-send-email-wufan@linux.microsoft.com> <1714775551-22384-13-git-send-email-wufan@linux.microsoft.com> <aa767961-5e3-2ceb-1a1e-ff66a8eed649@redhat.com> <212b02a8-f5f0-4433-a726-1639dda61790@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-  Merge tag '6.9-rc7-ksmbd-fixes' of git://git.samba.org/ksmbd (2024-05-08 10:39:53 -0700)
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-trusted-next-6.10-rc1
+On Wed, 8 May 2024, Fan Wu wrote:
 
-for you to fetch changes up to 28c5f596ae3d1790cdc96fa5fc7370f934abfb2e:
+> 
+> 
+> On 5/8/2024 10:17 AM, Mikulas Patocka wrote:
+> > 
+> > 
+> > On Fri, 3 May 2024, Fan Wu wrote:
+> > 
+> >> This patch adds a target finalize hook.
+> >>
+> >> The hook is triggered just before activating an inactive table of a
+> >> mapped device. If it returns an error the __bind get cancelled.
+> >>
+> >> The dm-verity target will use this hook to attach the dm-verity's
+> >> roothash metadata to the block_device struct of the mapped device.
+> >>
+> >> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+> > 
+> > Hi
+> > 
+> > Why not use the preresume callback?
+> > 
+> > Is there some reason why do we need a new callback instead of using the
+> > existing one?
+> > 
+> > Mikulas
+> Thanks for the suggestion.
+> 
+> Mike suggested the new finalize() callback. I think the reason for not using
+> the preresume() callback is that there are multiple points that can fail
+> before activating an inactive table of a mapped device which can potentially
+> lead to inconsistent state.
+> 
+> In our specific case, we are trying to associate dm-verity's roothash metadata
+> with the block_device struct of the mapped device inside the callback.
+> 
+> If we use the preresume() callback for the work and an error occurs between
+> the callback and the table activation, this leave the block_device struct in
+> an inconsistent state.
 
-  docs: trusted-encrypted: add DCP as new trust source (2024-05-09 18:29:03 +0300)
+The preresume callback is the final GO/NO-GO decision point. If all the 
+targets return zero in their preresume callback, then there's no turning 
+back and the table will be activated.
 
-----------------------------------------------------------------
-Hi,
+> This is because now the block device contains the roothash metadata of it's
+> inactive table due to the preresume() callback, but the activation failed so
+> the mapped device is still using the old table.
+> 
+> The new finalize() callback guarantees that the callback happens just before
+> the table activation, thus avoiding the inconsistency.
 
-This is pull request for trusted keys subsystem containing a new key
-type for the Data Co-Processor (DCP), which is an IP core built into
-many NXP SoCs such as i.mx6ull.
+In your patch, it doesn't guarantee that.
 
-BR, Jarkko
+do_resume calls dm_swap_table, dm_swap_table calls __bind, __bind calls 
+ti->type->finalize. Then we go back to do_resume and call dm_resume which 
+calls __dm_resume which calls dm_table_resume_targets which calls the 
+preresume callback on all the targets. If some of them fails, it returns a 
+failure (despite the fact that ti->type->finalize succeeded), if all of 
+them succeed, it calls the resume callback on all of them.
 
-----------------------------------------------------------------
-David Gstir (6):
-      crypto: mxs-dcp: Add support for hardware-bound keys
-      KEYS: trusted: improve scalability of trust source config
-      KEYS: trusted: Introduce NXP DCP-backed trusted keys
-      MAINTAINERS: add entry for DCP-based trusted keys
-      docs: document DCP-backed trusted keys kernel params
-      docs: trusted-encrypted: add DCP as new trust source
+So, it seems that the preresume callback provides the guarantee that you 
+looking for.
 
- Documentation/admin-guide/kernel-parameters.txt   |  13 +
- Documentation/security/keys/trusted-encrypted.rst |  53 ++++
- MAINTAINERS                                       |   9 +
- drivers/crypto/mxs-dcp.c                          | 104 ++++++-
- include/keys/trusted_dcp.h                        |  11 +
- include/soc/fsl/dcp.h                             |  20 ++
- security/keys/trusted-keys/Kconfig                |  18 +-
- security/keys/trusted-keys/Makefile               |   2 +
- security/keys/trusted-keys/trusted_core.c         |   6 +-
- security/keys/trusted-keys/trusted_dcp.c          | 332 ++++++++++++++++++++++
- 10 files changed, 554 insertions(+), 14 deletions(-)
- create mode 100644 include/keys/trusted_dcp.h
- create mode 100644 include/soc/fsl/dcp.h
- create mode 100644 security/keys/trusted-keys/trusted_dcp.c
+> -Fan
+
+Mikulas
+
 
