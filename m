@@ -1,106 +1,115 @@
-Return-Path: <linux-integrity+bounces-2380-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2381-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB6828C4802
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2024 22:03:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94B388C499F
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 00:33:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48DBB281EF8
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2024 20:03:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 353B71F226DB
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2024 22:33:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D937CF25;
-	Mon, 13 May 2024 20:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7048E39FD6;
+	Mon, 13 May 2024 22:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kmhAuAtT"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="QHc/v/Dd";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="QHc/v/Dd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253517AE5D
-	for <linux-integrity@vger.kernel.org>; Mon, 13 May 2024 20:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C6B4F883;
+	Mon, 13 May 2024 22:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715630581; cv=none; b=DLEq2wKjbvyZR2YEpj5z5GQK6Lb+Z+IF/qpC+Dbi9t+w/eMsbJkOv99GUbHeNRUBfWOnizcgNVBNzsp4/EwL8SBvEu7fqbSGNJHbYFM3Ce1BtPt52T+hlbY+ECb22a2OCKiwnBifyKYDxqyOco9vLZZHz2s4CtCgAeugwyl78S0=
+	t=1715639625; cv=none; b=QjbwMaujx0Z8msN0frV7H+4S2UJ1vc0q7rXAyb0CJS4P+EM17vgISJMy/mUx/cBXR7p6s71URsu3MwtBPo1lHKHMh24OU7XvU80aRBJ25uL6fL7TNZuAA4dKvMH7qqIDDYbzkR38DeEr5o9cbJnUTfKiGQY2t2ts5geOCmITyrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715630581; c=relaxed/simple;
-	bh=vN/oZPVUM0VbKTBMpMyTJSQOi5UZXcQoj84jhnHinmc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YyLVfP8nC2tsEHM/P4R9cde38oWPJGOmExN5YCGVCsydFg0a0AzV7Y0+7NWj/tXoq7qeB4mVLv4vG7gjxZ+iAlMCua7ZQCJP+O3DQOMhWDInl+bz3Jp5nFrqHoaX5DDPTzd8vfFLg65f33xvU5mDBTTgdMHXNBo3f4ew43tc/qI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kmhAuAtT; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1ec41d82b8bso45552045ad.2
-        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2024 13:02:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1715630578; x=1716235378; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L5nQNVYZPxKaKLdJxSwXvg5R8/O6lRnjptx4J93d4hY=;
-        b=kmhAuAtTSRBDjVwsZJH4oVuUmfzhyMrIe8cZ8Tud4FCMLKQJmxIGplZNKhVLJgzmRV
-         tTKI1lYGHn9XnIB+sI2nL0ONOCBEHPt3qzI9U2BlCTOq4Hv925YxS5K+nm2HpA2/aejE
-         vTRZOyRXiIOGvH38XcbhF3rqnjcco6JwEtorg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715630578; x=1716235378;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L5nQNVYZPxKaKLdJxSwXvg5R8/O6lRnjptx4J93d4hY=;
-        b=IiIy5KWigTPaXiHOMTU9UqQ89dZAojhyOJPI1nr4mxREPLOOwx6WXGYQ2fwHRRPkxZ
-         Ek/7LKZjI+5e4G4pFx41R3QkBqlzyPf5e8fVymXwWnRV9vxK0XJCHKKJ9ohUm4W4IXk2
-         ZGGjQbK31j7RdzuGxLiGrCLyQ54iSr5qf0ZFaMK+A6M8zp6qhStG2/aP9VTUGibUQETC
-         ADI4dbm14baEsjgwJK51JfeufM+roqPlYZE8fQ0wuXfRgeRVbZfQ5mZqZxn43aXisYeS
-         YVeFZUvw8peq5H1W9L9d2JtUs644+SaNLH6ZyFUtKDvJtHAHSGXQwUaMVFnL+T9wFia9
-         neng==
-X-Forwarded-Encrypted: i=1; AJvYcCX/9TUBkPv98rGutFKoB2JaP7nAb5ZUO13VU2i+53scn4GFY5JQ54DCGllRBQ6dp8QmbAzcLsYD3d2z+kjm4kjXRwVG78o7wp8uUFSSmsC2
-X-Gm-Message-State: AOJu0YwFjBOlAGQsVov9eyUGoBq045zJ8OjWcVzliWHzqV7JjYV6nyOk
-	K6r1LtgM5BL1Z+fmEMUtlGuEuAeSWrTfGaaEd9S5dkrw4w/eAacOk7WD5MQYWg==
-X-Google-Smtp-Source: AGHT+IG/kQjGxArMBt2gt0E87feuvucE0+UTE644XiSYwvBHzgRi5fADgV7o5cADuhUcHPkhpx2rNw==
-X-Received: by 2002:a17:902:ce85:b0:1e5:11ac:a283 with SMTP id d9443c01a7336-1ef43d0ada2mr143038325ad.9.1715630576456;
-        Mon, 13 May 2024 13:02:56 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0c1368desm83578025ad.233.2024.05.13.13.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 May 2024 13:02:56 -0700 (PDT)
-Date: Mon, 13 May 2024 13:02:55 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: richard@nod.at, anton.ivanov@cambridgegreys.com,
-	johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-	x86@kernel.org, linux-um@lists.infradead.org,
-	linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-	linux-integrity@vger.kernel.org,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v2] x86: um: vdso: Disable UBSAN instrumentation
-Message-ID: <202405131302.51918C1C1A@keescook>
-References: <20240513131024.1309073-1-roberto.sassu@huaweicloud.com>
+	s=arc-20240116; t=1715639625; c=relaxed/simple;
+	bh=VCTPQ8CjvvoriPIr3qUhR8Tme9pCRlLe8w6LPLPTQXo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=si/4xDCs924q8ecBruKhHzCaVK/rQK/XcvES9Ia+OUeSZdenJEegQALliVm/V+RaUobKBCwatelXBQ0SxyHmtmhLH14uWLIHzj91Kkljl0zpvtQPxMFqQTkkw1QBmnLUGk3TKHnL3Vu4ItunskWBZOgxWr8T785BIvJ31dlNxlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=QHc/v/Dd; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=QHc/v/Dd; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1715639622;
+	bh=VCTPQ8CjvvoriPIr3qUhR8Tme9pCRlLe8w6LPLPTQXo=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=QHc/v/DdsDmJ2xXElFQP7TWQ+IsfpUeTJ1RtWB5BUu5tMwochUlZUVWw5ARQa72U6
+	 mJx29a5MeI0nQr8rXU89ZlYbgWhG9ElFNKBEj23oOf4KHjQ/CMcbxXZUPpf/hCcNjT
+	 kFW+oHVeg8oBIVTh24wPlxtu7ZwNojnZX4/e7kgk=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6392612868FA;
+	Mon, 13 May 2024 18:33:42 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id EGxPfShCTr4e; Mon, 13 May 2024 18:33:42 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1715639622;
+	bh=VCTPQ8CjvvoriPIr3qUhR8Tme9pCRlLe8w6LPLPTQXo=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=QHc/v/DdsDmJ2xXElFQP7TWQ+IsfpUeTJ1RtWB5BUu5tMwochUlZUVWw5ARQa72U6
+	 mJx29a5MeI0nQr8rXU89ZlYbgWhG9ElFNKBEj23oOf4KHjQ/CMcbxXZUPpf/hCcNjT
+	 kFW+oHVeg8oBIVTh24wPlxtu7ZwNojnZX4/e7kgk=
+Received: from [172.21.4.27] (unknown [50.204.89.31])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9FDBD12868BA;
+	Mon, 13 May 2024 18:33:41 -0400 (EDT)
+Message-ID: <44cd50b60a0a4e376d01544d25187556b8badf94.camel@HansenPartnership.com>
+Subject: Re: [RFC PATCH 0/2] TPM derived keys
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Ignat Korchagin <ignat@cloudflare.com>, Jarkko Sakkinen
+ <jarkko@kernel.org>,  Ben Boeckel <me@benboeckel.net>
+Cc: Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, 
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ serge@hallyn.com,  linux-integrity@vger.kernel.org,
+ keyrings@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ kernel-team@cloudflare.com
+Date: Mon, 13 May 2024 16:33:40 -0600
+In-Reply-To: <CALrw=nFLa5=bPbYKijNsEo0Kk77_TEpdPmPe3CJ3VJqGNMmBeg@mail.gmail.com>
+References: <20240503221634.44274-1-ignat@cloudflare.com>
+	 <D10FIGJ84Q71.2VT5MH1VUDP0R@kernel.org> <ZjY-UU8pROnwlTuH@farprobe>
+	 <D10Y0V64JXG8.1F6S3OZDACCGF@kernel.org>
+	 <D10YYQKT9P1S.25CE053K7MQKI@kernel.org>
+	 <CALrw=nFLa5=bPbYKijNsEo0Kk77_TEpdPmPe3CJ3VJqGNMmBeg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240513131024.1309073-1-roberto.sassu@huaweicloud.com>
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 13, 2024 at 03:10:24PM +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> The UBSAN instrumentation cannot work in the vDSO since it is executing in
-> userspace, so disable it in the Makefile. Fixes the build failures such as:
-> 
->   CALL    scripts/checksyscalls.sh
->   VDSO    arch/x86/um/vdso/vdso.so.dbg
-> arch/x86/um/vdso/vdso.so.dbg: undefined symbols found
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, 2024-05-13 at 18:09 +0100, Ignat Korchagin wrote:
+[...]
+> TPM derived keys attempt to address the above use cases by allowing
+> applications to deterministically derive unique cryptographic keys
+> for their own purposes directly from the TPM seed in the owner
+> hierarchy. The idea is that when an application requests a new key,
+> instead of generating a random key and wrapping it with the TPM, the
+> implementation generates a key via KDF(hierarchy seed, application
+> specific info). Therefore, the resulting keys will always be
+> cryptographically bound to the application itself and the device they
+> were generated on.
 
-This is fixed differently (and more universally) here:
-https://lore.kernel.org/lkml/20240506133544.2861555-1-masahiroy@kernel.org/
+So I think what confuses me is what the expected cryptographic secrecy
+properties of the derived keys are.  I get they're a KDF of seed and
+deterministic properties, but if those mixing values are well known (as
+the path or binary checksum cases) then anyone with access to the TPM
+can derive the key from user space because they can easily obtain the
+mixing parameters and there's no protection to the TPM keyed hash
+operation.
 
--- 
-Kees Cook
+Consider the use case where two users are using derived keys on the
+same system (so same TPM).  Assuming they use them to protect sensitive
+information, what prevents user1 from simply deriving user2's key and
+getting the information, or am I missing the point of this?
+
+James
+
 
