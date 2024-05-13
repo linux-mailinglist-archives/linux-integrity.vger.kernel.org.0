@@ -1,125 +1,156 @@
-Return-Path: <linux-integrity+bounces-2372-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2373-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7851D8C41A2
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2024 15:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 17AA48C42CB
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2024 16:04:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B1CC1F23801
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2024 13:17:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AEB31F21403
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 May 2024 14:04:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E7615218F;
-	Mon, 13 May 2024 13:17:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BF0615358F;
+	Mon, 13 May 2024 14:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="DzShIiKS";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="DzShIiKS"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E4959164;
-	Mon, 13 May 2024 13:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC94153598;
+	Mon, 13 May 2024 14:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715606234; cv=none; b=r72l8sYB369vmKTlrLcP9d7I3DW98mdwwaYzn/HOA9aj1ehzomGLQ/QicZ2gxaXgXLmhgIrbGLYz1T41yJJbkqQms3K315cs+tXv1Z/1wNGXKmnauyfRcjlCjE2DQFEyoaKdgluEo2HMime0lVmMskZ+65ou1Ac2+6YKzFBjMT8=
+	t=1715609038; cv=none; b=cou21guH9qCsXf+JvKUucpp62vq6tkiwpzbKB+KJa0aAHo+83tApnxuKpAvjcHelQnPZEovbPGss60Td4N6DzfviV63AjfluOV0hDGdkEfmIchKUdbru0MSixHvxbMUDglimV4O876CfRqjhII5lH2ghGp44xPRFbYhj2vlDIrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715606234; c=relaxed/simple;
-	bh=k+8GpZNBlKXzQ26D79fDJhu5nOiOh+IpMZings0a3n8=;
+	s=arc-20240116; t=1715609038; c=relaxed/simple;
+	bh=Lgh6G1eAGr1IMo9Vxnj39v+o8JT8rLEQeJcV+88RQik=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RxXH0KeiWkoS0j/kAtZNnPHw6EFBlCtW4QWS2WEeyGEOE4KZzMTQbSA1i520giD/bShi9ji9jrhGFqGjDBq1pBZkjkyE7YtxHDFa1raSf2Eze0Ec4YjDOFVTbaDT+ErUqOx1Oy0azEBoAnEmUrw8okof21rXa0LLes0QxZzP1kM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4VdKMp3XR6z9v7J2;
-	Mon, 13 May 2024 21:00:06 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id ED8321400CB;
-	Mon, 13 May 2024 21:17:08 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwB3sCTKEkJmHCQTCA--.61498S2;
-	Mon, 13 May 2024 14:17:08 +0100 (CET)
-Message-ID: <505192e0d4a8d336ff0e934590c761de3a72e3a9.camel@huaweicloud.com>
-Subject: Re: [PATCH] arch/x86/um: Disable UBSAN sanitization
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Johannes Berg <johannes@sipsolutions.net>, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, tglx@linutronix.de, mingo@redhat.com, 
-	bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com
-Cc: x86@kernel.org, linux-um@lists.infradead.org,
- linux-kernel@vger.kernel.org,  zohar@linux.ibm.com,
- linux-integrity@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Date: Mon, 13 May 2024 15:16:55 +0200
-In-Reply-To: <d4f9861effd64c155f93cc712d2c7660b1cf2e4a.camel@sipsolutions.net>
-References: <20240513122754.1282833-1-roberto.sassu@huaweicloud.com>
-	 <d4f4666bf745e83ea00b466b7a7cfb5132b8c7b9.camel@sipsolutions.net>
-	 <096121b3e74a7971b5e6a3d77ca8889380de1885.camel@huaweicloud.com>
-	 <f88384a305b90708db3b30012f9edf09690dc5ee.camel@sipsolutions.net>
-	 <dba181a54e76ba2916ecd4747f76e40e6fbbb757.camel@huaweicloud.com>
-	 <d4f9861effd64c155f93cc712d2c7660b1cf2e4a.camel@sipsolutions.net>
+	 Content-Type:MIME-Version; b=llnAGMNbgRWdep23V2QLaCJcx7YYGg8QcTdYa4gJYc+YhQ/jRtSdU2M4IzOWSfoX1Id4MxSTGiJwQV4YRkvFE+J7aatMdChVm4flhOD6Ko4X/r4hoJTVTlD4fwLe5jrIOfT6qGxrlnXVxGP1LUIjfpHtDZ1qU29zk7vNvb+2RAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=DzShIiKS; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=DzShIiKS; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1715609035;
+	bh=Lgh6G1eAGr1IMo9Vxnj39v+o8JT8rLEQeJcV+88RQik=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=DzShIiKSdsasr4E5wVwexE/6FI5q7gmgOCvYJelYgn5BBWydE+yU+fFY6TxQRQK9p
+	 eoCxlHz+3inoYRyYQUU36n7EplsZYAILi0eTMzHY7svMU6X9BcOUCqldaILXNl0S7R
+	 ZpqQSofQA2kPOjl5toD/5mti2kL2wVIXHDv1T1DE=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id A27841286A69;
+	Mon, 13 May 2024 10:03:55 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id fsnPAtpqdWnn; Mon, 13 May 2024 10:03:55 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1715609035;
+	bh=Lgh6G1eAGr1IMo9Vxnj39v+o8JT8rLEQeJcV+88RQik=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=DzShIiKSdsasr4E5wVwexE/6FI5q7gmgOCvYJelYgn5BBWydE+yU+fFY6TxQRQK9p
+	 eoCxlHz+3inoYRyYQUU36n7EplsZYAILi0eTMzHY7svMU6X9BcOUCqldaILXNl0S7R
+	 ZpqQSofQA2kPOjl5toD/5mti2kL2wVIXHDv1T1DE=
+Received: from [172.21.4.27] (unknown [50.204.89.31])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 069031286A24;
+	Mon, 13 May 2024 10:03:54 -0400 (EDT)
+Message-ID: <a8ea533bf30c658508875948f29341663360db57.camel@HansenPartnership.com>
+Subject: Re: [RFC PATCH v2 4/4] tsm: Allow for extending and reading
+ configured RTMRs
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Samuel Ortiz <sameo@rivosinc.com>
+Cc: Dan Williams <dan.j.williams@intel.com>, Kuppuswamy Sathyanarayanan
+ <sathyanarayanan.kuppuswamy@linux.intel.com>, Qinkun Bao
+ <qinkun@google.com>,  "Yao, Jiewen" <jiewen.yao@intel.com>, "Xing, Cedric"
+ <cedric.xing@intel.com>, Dionna Amalie Glaze <dionnaglaze@google.com>,
+ biao.lu@intel.com, linux-coco@lists.linux.dev, 
+ linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 13 May 2024 08:03:53 -0600
+In-Reply-To: <ZkHoiYMseU0XqEbR@vermeer>
+References: <20240128212532.2754325-1-sameo@rivosinc.com>
+	 <20240128212532.2754325-5-sameo@rivosinc.com>
+	 <ec7edddcf8c74e48cb392db0789b03243ab05692.camel@HansenPartnership.com>
+	 <ZkHoiYMseU0XqEbR@vermeer>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwB3sCTKEkJmHCQTCA--.61498S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tFW5uF1DJryDJF43XF43Jrb_yoW8Gr48pa
-	42yF1fGrsYvryIyF1vq3yYqF1vyw48Ga1UXrn8Cry7Zr1qkF1fGr43tFyrua4qgrn7Jw1Y
-	krZ0q347Wr1UZF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-	AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-	aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbPEf5UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj51CVgAAs-
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2024-05-13 at 15:08 +0200, Johannes Berg wrote:
-> On Mon, 2024-05-13 at 14:58 +0200, Roberto Sassu wrote:
-> > On Mon, 2024-05-13 at 14:52 +0200, Johannes Berg wrote:
-> > > On Mon, 2024-05-13 at 14:42 +0200, Roberto Sassu wrote:
-> > > > On Mon, 2024-05-13 at 14:29 +0200, Johannes Berg wrote:
-> > > > > On Mon, 2024-05-13 at 14:27 +0200, Roberto Sassu wrote:
-> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > >=20
-> > > > > > Disable UBSAN sanitization on UML, since UML does not support i=
-t.
-> > > > > >=20
-> > > > >=20
-> > > > > Luckily, that isn't actually true, nor does it actually do this a=
-t all.
-> > > > > Please fix the commit message.
-> > > >=20
-> > > > Thanks, I was actually wondering. I based that statement based on
-> > > > ARCH_HAS_UBSAN=3Dn.
-> > > >=20
-> > > > Any other solution would be ok.
-> > >=20
-> > > Not sure I get it. What you're doing in the patch is perfectly fine a=
-nd
-> > > almost certainly required, but you're definitely not disabling UBSAN =
-on
-> > > ARCH=3Dum as you described in the commit message?
-> >=20
-> > Ok, I guess the right word is instrumentation (got it from commit
-> > d4be85d068b44). And the reason is that the vDSO is executing in user
-> > space. Will fix it.
->=20
-> No, UBSAN is fine, but you're only disabling it for the vDSO :) The
-> commit message doesn't even mention the vDSO though.
+On Mon, 2024-05-13 at 12:16 +0200, Samuel Ortiz wrote:
+> On Fri, May 10, 2024 at 10:57:37PM -0400, James Bottomley wrote:
+> > I'm not really sure where to hang this, since there's no posted
+> > agenda
+> > or materials for the CCC meeting today.
+> 
+> The agenda was posted on the linux-coco ml [1]. I sent a link to the
+> presentation slides [2] to the thread.
 
-You are right, the commit message was misleading without vDSO.
+That's great, thanks.
 
-Thanks
+> > However, it struck me you missed a third option: use the ima log
+> > format.  This has the advantage that we can define additional
+> > events and have them published with a kernel patch (the IMA log
+> > format is defined in the kernel).  Thanks to the TCG, it's also CEL
+> > compatible but doesn't require any sort of TCG blessing of the
+> > events.  Plus we also have existing kernel infrastructure to log to
+> > that format.
+> 
+> That's an interesting idea. It may avoid having to extend the CEL
+> spec with a new Content Type, but otoh the current spec defines which
+> IMA events are supported. So adding new ones may require to also
+> eventually extend the spec. But I guess since IMA is a Linux kernel
+> subsystem, changing the kernel code and ABI would de-facto extend the
+> TCG CEL IMA spec.
 
-Roberto
+That's what I was assuming since the TCG is currently deferring to IMA
+in that regard.
+
+> Here I assume you're talking about the IMA_TEMPLATE CEL specified
+> format, which is designed to accomodate for the current kernel IMA
+> log format. The main drawback of this format is that the digest does
+> not include the whole content event, making the CEL content type, the
+> IMA tag name and both lengths (for the content event and the IMA
+> content) untrusted for event log verifiers.
+
+That's only because IMA doesn't yet have such an event.  If we're
+assuming effectively designing an IMA log format for non repudiation of
+external events, one can be added.  Although I wouldn't want to be
+hasty: one of the big problems of all options is that no existing log
+format really covers the measure container use case and we're not
+completely sure what other use cases will arise (the firewall rules
+measurements was one that regulated cloud providers seem to think would
+be important ... and that has a periodic rush of events, but there will
+be others).
+
+However, the current IMA templates (event descriptions) are known by an
+ASCII prefix (they all begin ima-):
+
+https://docs.kernel.org/security/IMA-templates.html#supported-template-fields-and-descriptors
+
+So it would be easy to add more with a non ima- prefix.  Note that this
+doc is out of date an IMA does support hashes all the way to SHA256
+although SHA384 isn't currently listed.
+
+The current record fields are defined in
+
+security/integrity/ima/ima_template.c
+
+> CEL defines another IMA format (IMA_TLV), that hashes the whole event
+> content. I think we should at least use that format as our output
+> ABI, if we want to use a TCG specified IMA content type.
+
+Possibly.  Although avoiding double hashing may be a useful performance
+measure (not really sure how fast records will come in yet).
+
+James
 
 
