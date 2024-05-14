@@ -1,70 +1,70 @@
-Return-Path: <linux-integrity+bounces-2402-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2403-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 887B88C5937
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 18:01:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 229F68C596B
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 18:09:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB6711C2099A
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 16:01:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A70CA1F243F1
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 16:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B11017EBB4;
-	Tue, 14 May 2024 16:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF0217EBAE;
+	Tue, 14 May 2024 16:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="e/u+AQ10"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="R9Yqk8AD"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA7F17B4E5
-	for <linux-integrity@vger.kernel.org>; Tue, 14 May 2024 16:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5819F1448F2
+	for <linux-integrity@vger.kernel.org>; Tue, 14 May 2024 16:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715702476; cv=none; b=T87pDWK1Z6TFg4etU9MnC0Hgp1cf5mHXO0SYE9YaGRchem4Zde+sXfKfEYA3ox1mWjdDPIuwKu2cyUX2FED0CGuNLp3+StVCHQAeDvOwjgpTXtPxZ+AHHl0gHehsyS7yBrBTzHh8P9bMNzUiJ3cdcQ2H2JkNu9vTgv1HLnvypb8=
+	t=1715702949; cv=none; b=oVsnUPgEJhmm99enUbnzTUEnQr/642Pbm5a4rd6iW25W3hKBm01n4Tl+ziF9FGb1qr+9qELRPKNt3Jw5WSp6AN9VC152vg0D9c1x4YzwoBOPqHn7dwtXMuXSQDAiuEY39XgRoO7ny4EEiPhxxzTNQlBqm8mvauQRCZ0Or3fmv3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715702476; c=relaxed/simple;
-	bh=BNBKprk69XqKuQd2nd+AK0sj1ZRUamfPFo5xEhcbXbY=;
+	s=arc-20240116; t=1715702949; c=relaxed/simple;
+	bh=2NaUwO+c1ZDsGQvErbOvxItcWN5Zu9ssbIm5SR9sE/c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nJgFhlR8NxrK7+yd3NLgOtk+uJ+N4mdxBd4noeKwvXzrzy1BodE2ghRRpNAFbSt2K0zMr0tC89iuoDO03bt7hBGYRT81yCWVUC+oZrlmDGh9nIiQMucqI8r8KNs7q/eMjR4RcVG/DNT9ZcUIEdAn9c89ut+lPRXuaBVBoBxhsK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=e/u+AQ10; arc=none smtp.client-ip=209.85.215.176
+	 To:Cc:Content-Type; b=iMTctCFriVxFsax2z064laEhefVrkTbDy0Al5a7Gn6zekC7GFYHi+9OOURJHC7TyEmtPVXzQUmtn34tNQteU34a/2HNsYIxQmAFNSg8K0mLmteUmGhq0wWR5XChY8ecW6213YzwW0xVeJvzZjiIDB58uML5UtppUucL23vpxv28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=R9Yqk8AD; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5c6bd3100fcso3503280a12.3
-        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2024 09:01:15 -0700 (PDT)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2b346712919so4116851a91.2
+        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2024 09:09:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1715702474; x=1716307274; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1715702947; x=1716307747; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wgD83N4J7mAbRy3EDx661pmTjLnOlorxLzfUuLM4b+w=;
-        b=e/u+AQ10mFf+YmAAspVmynsrWhi2pfwBL8ZWFeP9DEg1GEI2mbzCzHpfN3mqmmk7Bi
-         KzroWTMDZXeIhx+2ndaEQyIPXy/LyNZYe7UescxuOyIafQ1UYTYGdZ0r7qyZ+x3FVccM
-         telxj5rwabcn1OW7cWvDnXDlLqwkqBHat1CdE34gKvGGS3P1A7WTbDQWK/tpDrNGDFJV
-         5WHQAnZxrhwpPatX6lQVeTdnVoM41SWEB/c4PQG63V0hlxH9+IHQkVzIjZ46ZCBUAcSp
-         UrAmjgcRr5/T7HtvtXvporTLe7KV7fw3tgommK8AIr9Y2e7u6FQtQwkLR6MFZN3OM+y0
-         lSCQ==
+        bh=lAA8ABQW5Kp/Vp6EOKwo5QYY73GU6/0kgQ+y5yUiQfk=;
+        b=R9Yqk8ADJ+3zPgFFAnTnautQkuSWGkfokRhRfuh2g6w0ApKsmVPE1phfXWMHNdPHcY
+         kItrOBsMHc4AkbN/ZEinzT6IyFNwz9DmmNR1cB6IjxI+7A+Eu2doDr/3of0H7dKz4pu/
+         rLW1zP/NpDwrqnS+GIwvH0nXjDjbP6dQK6Bvl7KSoBsCPgLWKHZ2uZv4ZLtWXAny94bW
+         UeiHbpaAtmGwFWF6tpTGevFbzbtFL+QkhIp3lPoHhO2tuQfObvV/EJL4tP3nPxznSnhH
+         Vlxhe6+BG4sVnRk0ZuS8D4J++SV9DLY8HQcJDZ+bDR6hKHlxw4ewrHv4VYSaa46FFqs0
+         Dgow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715702474; x=1716307274;
+        d=1e100.net; s=20230601; t=1715702947; x=1716307747;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wgD83N4J7mAbRy3EDx661pmTjLnOlorxLzfUuLM4b+w=;
-        b=d6zfpBCQTlVNCb4wm6jtQ1kMD05i+1I9CjyaoCn2AaEsvpg6C9y+Ud6IavCRnRkadD
-         nnNMQKvdqfQ21JfUk2mbrnII5L5r4LuNlFVtZCpw1KWqTPNTtRicHhY+KD2lJ0DQoEZU
-         8YS+q0JBK5H917QP5jHEkRtmPCxDAxX/DtzwKtppl14N8iCVgGAsK7o8MslSizp/TUJk
-         Kwj64kJN+Mww1fcbQESmTGIXJCU0eb3c4j0j0OCd4BY6pTIyzlkN3/moW4zQoblhxP2P
-         nCV0MEcQXyQ2jH0zj1PvNnwBNuc8xJVIOsqGNeRjq3qAvrln3JjFmqXJRDo8AqkSMxEQ
-         RjKw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2foOt5ws1N/MEHDvqpR4C+QpcsoCOP55B2Lsk8nO0MM2Shr70/LtHotn94nuZIdlVYEfkzamiWEfsro5jqZEQmT33QSlvAV49vZsIQqkF
-X-Gm-Message-State: AOJu0YwuM9LNYL/ALV5FX/T43bdJyC2BF2vW6LRlh/6nj9lSBK7Xp++f
-	579x5s7O6U+A9YgaKKhqlqKORHwFm1rJtxon4cEZOfnWycWC3y7R9y5JmTY4+1/yfTkU+fdgKP5
-	H3xxQyboQWD9Fc2aoOUfxi7TDhwdqPmfwo259/Q==
-X-Google-Smtp-Source: AGHT+IGniyLHL2d8EkhZ6SHULNVROizWokiY9TO81uFsHrlKrx+cweSwP3i6SKrWQTa8TdW6AOy44PFGwhFEHuu1Dz8=
-X-Received: by 2002:a17:90a:b38e:b0:2b5:6f9b:a7b with SMTP id
- 98e67ed59e1d1-2b6cc759192mr10553268a91.15.1715702474405; Tue, 14 May 2024
- 09:01:14 -0700 (PDT)
+        bh=lAA8ABQW5Kp/Vp6EOKwo5QYY73GU6/0kgQ+y5yUiQfk=;
+        b=aQDtwoXg4/cYYApAbVS1i6GxN1tLdmX3bzFG/NDcNmXRVjoyNb9tVTBiKENy60sst/
+         KccnmW2IvCDZB7N6XWZOMcPfPRQEWsjlHtZXSOSAwuTE2KxdAA7fmAdZy0QDQpdDzUCq
+         8xv4bk54yV9w5eyZ8cKDIiqJqywbNoYa+zFH+U0ucg5+4Ej/JPemtYhi5H0mThmbcWtu
+         sTOQ08evwyP6dF9zkBHLxZwbLzClfbXIqgw6O4KQpHj6AlKCh9pHVcjVAlKc8GHy8IXd
+         mi4zqYjuRQeWS/WXz2SD7qygYf8+TbZRFUGpYIQ1F6NpZkuwgPN5nQVr4E+WsWnlLtSP
+         uQCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/qSsZVwyzb7qBJwfQL5zgknHwh1X8lpI8kxaWMO9s2yNR7VgC4s5h2iStVQTWA3+S7y/dRHESslUly493anzSOU3LXNnQHxu3lrVxPXtA
+X-Gm-Message-State: AOJu0Ywc+JbuQTaD9gbofAdZLFzqmO2H0K7dnm958ZtOg4akVkwE9vty
+	7NMv58vjDPzNx+8l8dwMW5mDVj6yk2NsMd4xphfiFKb3TkX/426udwnfH3KWjSGHIIGWg9MokeF
+	5W8Udup9XZvZg/Hnty554sOkTPO7XI7/kXGcWAA==
+X-Google-Smtp-Source: AGHT+IH3dmdyHallXCVdxeMNdlicZ1dK8HZ6VAkn0dTMFFhhdJk11v+SFUlYIwiiSPc4lireyO7nGZTI2WmMinVlE0k=
+X-Received: by 2002:a17:90a:bd8d:b0:2b9:a299:918f with SMTP id
+ 98e67ed59e1d1-2b9a29992dcmr1249853a91.6.1715702947417; Tue, 14 May 2024
+ 09:09:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -74,15 +74,16 @@ MIME-Version: 1.0
 References: <20240503221634.44274-1-ignat@cloudflare.com> <CALrw=nGhgRrhJ5mWWC6sV2WYWoijvD9WgFzMfOe6mHmqnza-Hw@mail.gmail.com>
  <D18XXJ373C2V.2M6AOMKD1B89W@kernel.org> <CALrw=nHGLN=dn3fbyAcXsBufw0tAWUT1PKVHDK5RZkHcdd3CUw@mail.gmail.com>
  <D19CUF0H9Q3S.3L5Y5S9553S5@kernel.org> <CALrw=nEZ07U9VhbGsnpchOYw1icUZCnuoHHXkJLzhFqSPe9_fQ@mail.gmail.com>
- <3bfcacf38d4f5ab5c8008f2d7df539012940222e.camel@HansenPartnership.com>
- <CALrw=nE-t6ZWCvPm=3XS_=-UM9D=mMaXL2GOw-QL5GOLtbcHmA@mail.gmail.com> <c8b98d9fc2ac4062d6c010551244da184af1244d.camel@HansenPartnership.com>
-In-Reply-To: <c8b98d9fc2ac4062d6c010551244da184af1244d.camel@HansenPartnership.com>
+ <D19F74M6B8UC.2VEOOZHGOS87V@kernel.org> <D19FUGDA2CUO.16EF7U9ZEZ4SD@kernel.org>
+ <D19GWXHYP2VC.1OY7BOW5LNXVF@kernel.org> <D19H0UVF3R0O.3N4GLZWFRZ2DO@kernel.org>
+ <CALrw=nE7ga6wxSqrJBTOaj+pPXhi4+-Rn4ePRC9vXL-8Qd3GrA@mail.gmail.com> <D19HDMZ1OKN9.2PX2FJVY4WZ09@kernel.org>
+In-Reply-To: <D19HDMZ1OKN9.2PX2FJVY4WZ09@kernel.org>
 From: Ignat Korchagin <ignat@cloudflare.com>
-Date: Tue, 14 May 2024 17:01:03 +0100
-Message-ID: <CALrw=nFABteNOAOpvaGOMrpUOMW1LMJfRB5EXxs_dPH70G_LGQ@mail.gmail.com>
+Date: Tue, 14 May 2024 17:08:56 +0100
+Message-ID: <CALrw=nF53qsmBp06qDerh3++0VYm-OZJ8k-Es3+2AAQFRjY-9w@mail.gmail.com>
 Subject: Re: [RFC PATCH 0/2] TPM derived keys
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, Mimi Zohar <zohar@linux.ibm.com>, 
 	David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
 	James Morris <jmorris@namei.org>, serge@hallyn.com, linux-integrity@vger.kernel.org, 
 	keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -90,53 +91,98 @@ Cc: Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 14, 2024 at 4:54=E2=80=AFPM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
+On Tue, May 14, 2024 at 4:43=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
+ wrote:
 >
-> On Tue, 2024-05-14 at 16:38 +0100, Ignat Korchagin wrote:
-> > On Tue, May 14, 2024 at 4:30=E2=80=AFPM James Bottomley
-> > <James.Bottomley@hansenpartnership.com> wrote:
+> On Tue May 14, 2024 at 6:30 PM EEST, Ignat Korchagin wrote:
+> > On Tue, May 14, 2024 at 4:26=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.=
+org> wrote:
 > > >
-> > > On Tue, 2024-05-14 at 14:11 +0100, Ignat Korchagin wrote:
-> > > >   * if someone steals one of the disks - we don't want them to
-> > > > see it has encrypted data (no LUKS header)
+> > > On Tue May 14, 2024 at 6:21 PM EEST, Jarkko Sakkinen wrote:
+> > > > On Tue May 14, 2024 at 5:30 PM EEST, Jarkko Sakkinen wrote:
+> > > > > On Tue May 14, 2024 at 5:00 PM EEST, Jarkko Sakkinen wrote:
+> > > > > > On Tue May 14, 2024 at 4:11 PM EEST, Ignat Korchagin wrote:
+> > > > > > > For example, a cheap NAS box with no internal storage (disks =
+connected
+> > > > > > > externally via USB). We want:
+> > > > > > >   * disks to be encrypted and decryptable only by this NAS bo=
+x
+> > > > > >
+> > > > > > So how this differs from LUKS2 style, which also systemd suppor=
+ts where
+> > > > > > the encryption key is anchored to PCR's? If I took hard drive o=
+ut of my
+> > > > > > Linux box, I could not decrypt it in another machine because of=
+ this.
+> > > > >
+> > > > > Maybe you could replace the real LUKS2 header with a dummy LUKS2
+> > > > > header, which would need to be able the describe "do not use this=
+" and
+> > > > > e.g. SHA256 of the actual header. And then treat the looked up he=
+ader as
+> > > > > the header when the drive is mounted.
+> > > > >
+> > > > > LUKS2 would also need to be able to have pre-defined (e.g. kernel
+> > > > > command-line or bootconfig) small internal storage, which would b=
+e
+> > > > > also encrypted with TPM's PRCs containing an array of LUKS2 heade=
+r
+> > > > > and then look up that with SHA256 as the key.
+> > > > >
+> > > > > Without knowing LUKS2 implementation to me these do not sound rea=
+ching
+> > > > > the impossible engineer problems so maybe this would be worth of
+> > > > > investigating...
+> > > >
+> > > > Or why you could not just encrypt the whole header with another key
+> > > > that is only in that device? Then it would appear as random full
+> > > > length.
+> > > >
+> > > > I.e. unsealing
+> > > >
+> > > > 1. Decrypt LUKS2 header with TPM2 key
+> > > > 2. Use the new resulting header as it was in the place of encrypted
+> > > >    stored to the external drive.
+> > > > 3. Decrypt key from the LUK2S header etc.
 > > >
-> > > What is the use case that makes this important?  In usual operation
-> > > over the network, the fact that we're setting up encryption is
-> > > easily identifiable to any packet sniffer (DHE key exchanges are
-> > > fairly easy to fingerprint), but security relies on the fact that
-> > > even knowing that we're setting up encryption, the attacker can't
-> > > gain access to it.  The fact that we are setting up encryption
-> > > isn't seen as a useful thing to conceal, so why is it important for
-> > > your encrypted disk use case?
+> > > Maybe something like:
+> > >
+> > > 1. Asymmetric for LUKS2 (just like it is)
+> > > 2. Additional symmetric key, which is created as non-migratable and s=
+tored
+> > >    to the TPM2 chip. This deciphers the header, i.e. takes the random
+> > >    away.
 > >
-> > In some "jurisdictions" authorities can demand that you decrypt the
-> > data for them for "reasons". On the other hand if they can't prove
-> > there is a ciphertext in the first place - it makes their case
-> > harder.
+> > This could work, but you still have the problem of - if the header
+> > gets wiped, all the data is lost.
+> > As for storing things on the TPM chip - that doesn't scale. Today you
+> > only think about disk encryption, tomorrow there is a new application,
+> > which wants to do the same thing and so on. One of the features of
+> > derived keys - you don't store anything, just recreate/derive when
+> > needed and it scales infinitely.
 >
-> Well, this isn't necessarily a good assumption: the way to detect an
-> encrypted disk is to look at the entropy of the device blocks.  If the
-> disk is encrypted, the entropy will be pretty much maximal unlike every
-> other use case.  The other thing is that if the authorities have your
+> OK, so now I know the problem at least and that is probably the
+> most important thing in this discussion, right?
 
-What if the disk is filled with random data? Would it not be at maximal ent=
-ropy?
+Yes, I think so.
 
-> TPM, they already have access to the disk in this derived key scenario.
+> So make a better story, now you also probably have better idea,
+> also split the patch properly by subsystem, send the patch set,
 
-I'm thinking more of a datacenter scenario here - it is much easier to
-"steal" a disk rather than a server from a datacenter. So it is
-possible that someone has the disk but no access to the TPM.
+I'm actually not super clear on this part - I have two patches: one
+for TPM header definitions and another one for the keyring subsystem?
+Any other subsystems in play here?
 
-> If *you* still have access to your TPM, you can update the storage seed
-> to shred the data.
+> and I'll promise to revisit.
 
-The point here is not if I was able to shred the data or not, but the
-fact I have something encrypted. Even if I shred the key I would be
-considered "uncooperative and refusing to provide the key" vs "I don't
-have anything encrypted in the first place".
+Thanks. Would probably take some time as I want to think more on the
+open questions I raised in the description, try to address some
+comments from James B from other replies (key rotation for example)
+and rebase on recently merged TPM encrypted sessions. But since this
+is an RFC I would like to continue the discussion and gather opinions
+from folks here, if there are any more concerns.
 
-> James
+> Fair enough? :-)
 >
+> BR, Jarkko
 
