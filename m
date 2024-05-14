@@ -1,163 +1,136 @@
-Return-Path: <linux-integrity+bounces-2384-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2385-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EA2B8C4BD9
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 07:08:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FFCE8C4F0E
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 12:32:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA6591F23148
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 05:08:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B20BB209D4
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 May 2024 10:32:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3392812E78;
-	Tue, 14 May 2024 05:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A411139577;
+	Tue, 14 May 2024 09:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="OHHecF50"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="V7BUJjIj"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A04414A84
-	for <linux-integrity@vger.kernel.org>; Tue, 14 May 2024 05:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF5512FB18
+	for <linux-integrity@vger.kernel.org>; Tue, 14 May 2024 09:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715663305; cv=none; b=boheXpxr75Jx6PvhxE20ZeUqvDjC5JYbp63YX8ShOWQw98vlmfVo5dMTM83NjSJq8uJjpcJ+cwwZLmxZITrRi/TQs96RyW2CpI2NobpodsmU+aNk6YynwAD5xsA7+XOdyJ2ujNsG+yuBI5zncm+BqQEbgI/LVzPkiShcgUUVV+A=
+	t=1715680265; cv=none; b=ZDn73UzgVF7bj308ydHHYlnjfyj5F3hyRdMLD/NZLmdHTsUD1mmNe9xHwjOEomEcODS29I5ywUHBz6m6MMxWgvbvwyd9Q2cf6lLR55R0kdWyzv9HcQD13KwIZEzPdCpv0MT1UVyvM1PsiKPdRhhU6fj3XxLds93a0zBPBLTxS6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715663305; c=relaxed/simple;
-	bh=ieIbWlqpi3qncOa+DKFbV5vGmc6SVatErRwe1s69pQI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OUk/LTwny7+SndXdTq0ZCFB5iZHbvCkLxqQ90hkIo6B7JAhPq0NSw/6Abv1Y1grxrrM9/MELhTg3zCspmxiFCnaM3TRsv9NmB8FqV0EJNmUgVnT9KVMsdKGL4SaR8jFJ8IsCJntGRzDmP8i/hC6GZZoPGR7dQCnHrtZ9mHkoa90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=OHHecF50; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-42016c8db2aso11343645e9.0
-        for <linux-integrity@vger.kernel.org>; Mon, 13 May 2024 22:08:22 -0700 (PDT)
+	s=arc-20240116; t=1715680265; c=relaxed/simple;
+	bh=aS77YYdZ78IuRzScLcwXvYvXKe8QSm/hM61mNFiZW4k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MzjaZ2BupSzyy+U6CfrTmw7Y01SxlqF0oNOGgjUZMGYTxcwy3lWD3KiYll/iRFBswM2Cfm7sqUfqaQnIMXnpJLYovFIs5zr3dBMvS4JdBysl9o0/qBltIYXUq4JdomXt2PjijCWzd/O1GRbCi2p8sjFvYwXcHN+LPNzqaNwoDNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=V7BUJjIj; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-602801ea164so3751308a12.0
+        for <linux-integrity@vger.kernel.org>; Tue, 14 May 2024 02:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715663301; x=1716268101; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a19HgSmq/trWYOKDNko6X/3OBusO+lp3rPBD1dWx/PQ=;
-        b=OHHecF504e59rhAz63mNkg1Sqko/yFcUP7ntSvMQCU9APH0IBYBQDA47cIZlSE4wmU
-         nk2XUbWmIKVLDFjCkjR7l6kAIxo5cb44GClqNvP/Z/O48QXdy5YQrOEtSIyQ10IRHawr
-         P2VIl/xrGLOGMmtdVVcTZRJRSO0tTU/Bbt1cuNFCv0EmlTrWVBLb/TVtud3GgM/1mmoR
-         PPI7YmNZ4E3OkVj5SqGITeynjd5i+/J5k3sO6yflyqMT9dPo4j3IKl/3FamWpKrQxGKd
-         /BalKHxdPeCqYVhjxrn14Yo1uoCS67JhoFT25B86rr4alYjiKvnTpl7H1jdYQ6iq+T2h
-         GqbQ==
+        d=cloudflare.com; s=google09082023; t=1715680262; x=1716285062; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LY/CWj5etN+XzqJRunvNp4aqTo4ZuVzUw0zQCCYpDIs=;
+        b=V7BUJjIj4iXJ5HPnoVEDy/e2deSAnv5k6VUl7jawcKvxz6/gKknRg44KShtj2YoFVA
+         O/se7uxsF4K3z4Rdn+6FUEv8CfaP13TM4LmqPYhb0Dp/eUWOlb4as8MxWqBqHPvX8DZi
+         K2JMk1MtS1Ewui0ugJ8ROUyDUC1nGvu9cx78vG+JcK/YU69zZ7qalvSlwtGOf9ZpMSEt
+         umKXMrtDrVsiVqEaFS1GnK1pCRJSZY0FEhrEBd3rnRY10SAenYcbk1IddGDgFuj25Gto
+         qzxXN9U6fno4pDAgMa/RccDJqPVch6tYgww4xMC8gX4o2QR9y1u6fPnROzGkTP+yR3bH
+         qPBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715663301; x=1716268101;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a19HgSmq/trWYOKDNko6X/3OBusO+lp3rPBD1dWx/PQ=;
-        b=P7DNPIgPMgF6UYEL3bjJBW1wqbgNue5GOuCB/E7YO2QdsfK3VQa43I2EqsyUIdaW8+
-         pXSTa0hWEonNRAEyTuX0SkNh2KQcu8Tw/B3qJ1lNqpYZ/g2w7g1eivEN33cJ+XUVdM2u
-         DRjCNBtvxwSsadLwpUZ1R4oSmf8+lY9KJ8ZRVGgFwF1CHkLq/6AI/9iJN6drF45pQrjv
-         +jTtuq7SXeJQqb7pWXccI0h2OR9zhgkje3eZVIeJCyA9x+fYG/HdQUho/cUJVNNukSiy
-         amkgRnbjy4isV0rY1+j409SLAQ611rHOga9QxkIYvqjnME27Qz98d2rFPbZqeAhrwcPc
-         2duQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW+TBbEWO0buP0awuL6iF1bhQajkJpGzekjDJ9hkAoaSWJnzihlJ2nbyrxv3j/20okeaNz74FAiq8bvCfInzpzwDGb6gTAonYRXoY6+3VcL
-X-Gm-Message-State: AOJu0Yx500DHsbqu4HEIWNhJgFFFAI/KTozdjrQH1CoPf2QrWO4Z8IWi
-	XCD6gOuNXaxphUHT/dj1RFVXC8PkZdHCaTAZvbFDMYbUTzDM6xa7KFgR3pvrwIA=
-X-Google-Smtp-Source: AGHT+IGlBf3IWKGC+J9VINEwYnh1B9uENrrXQXg3NIcAKjXjFsRFaHL1ijjFWUAjW3iOtpw9ewXEQw==
-X-Received: by 2002:a05:600c:4f12:b0:420:18e9:86d5 with SMTP id 5b1f17b1804b1-42018e98859mr26458475e9.10.1715663301584;
-        Mon, 13 May 2024 22:08:21 -0700 (PDT)
-Received: from vermeer ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-41f87d20488sm213889265e9.25.2024.05.13.22.08.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 May 2024 22:08:21 -0700 (PDT)
-Date: Tue, 14 May 2024 07:08:17 +0200
-From: Samuel Ortiz <sameo@rivosinc.com>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Dan Williams <dan.j.williams@intel.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	Qinkun Bao <qinkun@google.com>,
-	"Yao, Jiewen" <jiewen.yao@intel.com>,
-	"Xing, Cedric" <cedric.xing@intel.com>,
-	Dionna Amalie Glaze <dionnaglaze@google.com>, biao.lu@intel.com,
-	linux-coco@lists.linux.dev, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/4] tsm: Allow for extending and reading
- configured RTMRs
-Message-ID: <ZkLxwacH9nt6U9dk@vermeer>
-References: <20240128212532.2754325-1-sameo@rivosinc.com>
- <20240128212532.2754325-5-sameo@rivosinc.com>
- <ec7edddcf8c74e48cb392db0789b03243ab05692.camel@HansenPartnership.com>
- <ZkHoiYMseU0XqEbR@vermeer>
- <a8ea533bf30c658508875948f29341663360db57.camel@HansenPartnership.com>
+        d=1e100.net; s=20230601; t=1715680262; x=1716285062;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LY/CWj5etN+XzqJRunvNp4aqTo4ZuVzUw0zQCCYpDIs=;
+        b=hTJenhngFi41+KyGjdm/fSXJltJrkiH3Q+Ggp8NtusT/OBj0ZGcyYIiouVm3EjZ2JG
+         BB00jjdA65lxDBQ8qoRcI5ViGI9eOhcSJ6WKXY1TugfqS5C0NhE5mJAyBX3qsd1cIe4j
+         kso5MG/9QcK5lxs3/nDsXl0BREx+D8QUHCMpyLk9mGRs/XzfZosgrw8817c1idCyliZT
+         SqECB5otK8NnZY/auatOFi0BS/TAh3A0e+3UUtMhAKVVtBpgFhgvDSm3jUS5ghHzil1X
+         ZWVD+kEaAb6YhgMEffHedYFxh9n48ZihFY2vZPVOkO2tWRDMm1ONvqZ0ogOKrlcsJgJY
+         QEFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhwdxEAhp8OTcgQjbY3n29BYG55sunlds80SVATMpPM9D7IQwJHUI5R6dADEdLEE0O5iMD2Ce1jwuW+puFulRGBO0bvH0yS+u0uZdZ1MlI
+X-Gm-Message-State: AOJu0Yy4H5a1dfiLIrSsncf+2DDi6Baw0r2BY/0CiUq2/eDvwVaTVZUB
+	Ql8jDry2sbZwOywBLZP9bquLQwdpu8BY2ON7rnRZlgJy8u9UM56IZRzL2V37ZiXvEcDNvmBA7lS
+	BY7unYljNZPkwI+RAaxiZjl9MplJjxv2HxmpILA==
+X-Google-Smtp-Source: AGHT+IGL1sjB1cH8Sy6ERRP/a2fuJSYBfObXE9OlMwyWHDtfcQhVPOPqI1HqkSUA2r3Vq+m4HQT81NXxMObwWY6bXq0=
+X-Received: by 2002:a05:6a21:c91:b0:1af:9728:de86 with SMTP id
+ adf61e73a8af0-1afde10456emr11538144637.32.1715680262309; Tue, 14 May 2024
+ 02:51:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a8ea533bf30c658508875948f29341663360db57.camel@HansenPartnership.com>
+References: <20240503221634.44274-1-ignat@cloudflare.com> <D10FIGJ84Q71.2VT5MH1VUDP0R@kernel.org>
+ <ZjY-UU8pROnwlTuH@farprobe> <D10Y0V64JXG8.1F6S3OZDACCGF@kernel.org>
+ <D10YYQKT9P1S.25CE053K7MQKI@kernel.org> <CALrw=nFLa5=bPbYKijNsEo0Kk77_TEpdPmPe3CJ3VJqGNMmBeg@mail.gmail.com>
+ <44cd50b60a0a4e376d01544d25187556b8badf94.camel@HansenPartnership.com>
+In-Reply-To: <44cd50b60a0a4e376d01544d25187556b8badf94.camel@HansenPartnership.com>
+From: Ignat Korchagin <ignat@cloudflare.com>
+Date: Tue, 14 May 2024 10:50:51 +0100
+Message-ID: <CALrw=nFOh0=TXGx-z_oTkLWshVU_AfGRQzcC3zxVTzcRbuRqQQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] TPM derived keys
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, Ben Boeckel <me@benboeckel.net>, 
+	Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, serge@hallyn.com, 
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 13, 2024 at 08:03:53AM -0600, James Bottomley wrote:
-> On Mon, 2024-05-13 at 12:16 +0200, Samuel Ortiz wrote:
-> > > However, it struck me you missed a third option: use the ima log
-> > > format.  This has the advantage that we can define additional
-> > > events and have them published with a kernel patch (the IMA log
-> > > format is defined in the kernel).  Thanks to the TCG, it's also CEL
-> > > compatible but doesn't require any sort of TCG blessing of the
-> > > events.  Plus we also have existing kernel infrastructure to log to
-> > > that format.
-> > 
-> > That's an interesting idea. It may avoid having to extend the CEL
-> > spec with a new Content Type, but otoh the current spec defines which
-> > IMA events are supported. So adding new ones may require to also
-> > eventually extend the spec. But I guess since IMA is a Linux kernel
-> > subsystem, changing the kernel code and ABI would de-facto extend the
-> > TCG CEL IMA spec.
-> 
-> That's what I was assuming since the TCG is currently deferring to IMA
-> in that regard.
-> 
-> > Here I assume you're talking about the IMA_TEMPLATE CEL specified
-> > format, which is designed to accomodate for the current kernel IMA
-> > log format. The main drawback of this format is that the digest does
-> > not include the whole content event, making the CEL content type, the
-> > IMA tag name and both lengths (for the content event and the IMA
-> > content) untrusted for event log verifiers.
-> 
-> That's only because IMA doesn't yet have such an event.  If we're
-> assuming effectively designing an IMA log format for non repudiation of
-> external events, one can be added. 
+On Mon, May 13, 2024 at 11:33=E2=80=AFPM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> On Mon, 2024-05-13 at 18:09 +0100, Ignat Korchagin wrote:
+> [...]
+> > TPM derived keys attempt to address the above use cases by allowing
+> > applications to deterministically derive unique cryptographic keys
+> > for their own purposes directly from the TPM seed in the owner
+> > hierarchy. The idea is that when an application requests a new key,
+> > instead of generating a random key and wrapping it with the TPM, the
+> > implementation generates a key via KDF(hierarchy seed, application
+> > specific info). Therefore, the resulting keys will always be
+> > cryptographically bound to the application itself and the device they
+> > were generated on.
+>
+> So I think what confuses me is what the expected cryptographic secrecy
+> properties of the derived keys are.  I get they're a KDF of seed and
+> deterministic properties, but if those mixing values are well known (as
+> the path or binary checksum cases) then anyone with access to the TPM
+> can derive the key from user space because they can easily obtain the
+> mixing parameters and there's no protection to the TPM keyed hash
+> operation.
+>
+> Consider the use case where two users are using derived keys on the
+> same system (so same TPM).  Assuming they use them to protect sensitive
+> information, what prevents user1 from simply deriving user2's key and
+> getting the information, or am I missing the point of this?
 
-If we were to follow the IMA_TEMPLATE format as our output RTMR ABI for
-the event log, adding one or more IMA events would not change the fact
-that the event and content type would not be hashed into the extended
-digest. Unless we want to specify a different behaviour for each IMA
-event, and then verifiers would have interpret the digest construction
-differently depending on the IMA_TEMPLATE nested event type. And that's
-not pretty IMHO.
+You are correct: it is possible, but in practice it would be limited
+only to privileged users/applications. I remember there was a push to
+set a 666 mask for the TPM device file, but it is not how it is done
+today by default. Also I think the same applies to trusted keys as
+well, at least without any additional authorizations or PCR
+restrictions on the blob (I remember I could manually unwrap a trusted
+key blob in userspace as root).
 
-Using the IMA_TLV content type would make that cut cleaner at least. A
-digest is built on the whole content event, for all event types. And the
-content and event types are trusted, i.e. the verifier can securely map
-events to the reported event types.
+It would be fixed if we could limit access to some TPM ops only from
+the kernel, but I remember from one of your presentations that it is
+generally a hard problem and that some solution was in the works (was
+it based on limiting access to a resettable PCR?). I'm happy to
+consider adopting it here as well somehow.
 
-> Although I wouldn't want to be
-> hasty: one of the big problems of all options is that no existing log
-> format really covers the measure container use case and we're not
-> completely sure what other use cases will arise (the firewall rules
-> measurements was one that regulated cloud providers seem to think would
-> be important ... and that has a periodic rush of events, but there will
-> be others).
-
-Right. A new CEL content type would give us more freedom in that regard,
-as it would allow us to define our own event content value in a more
-flexible way. Instead of the nested TLV approach that IMA_TLV follows,
-having one where the T would be a max length string defining the creator
-of the event (a.k.a. the attester), would avoid having to formally
-define each and every new event. That's where option #2 in the
-presentation was heading to.
-
-Cheers,
-Samuel.
-> 
+> James
+>
 
