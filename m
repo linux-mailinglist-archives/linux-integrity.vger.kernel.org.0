@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-2421-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2422-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9B548C678B
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 15:40:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D3CA8C6927
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 17:02:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94EB3281B1C
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 13:40:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06EB9283D3A
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 15:02:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F108912A16E;
-	Wed, 15 May 2024 13:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88AE155743;
+	Wed, 15 May 2024 15:02:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ki78AE9X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QARLt8Y2"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3AD912A15B;
-	Wed, 15 May 2024 13:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADCFA15572C;
+	Wed, 15 May 2024 15:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715780381; cv=none; b=HzreStY+F8yJpmmSThKQMES/oEJmjPxxwPrKR879Tql8LMThE/uIeKD6HmmEvhsjfdGDQsjT8W6SKm3yCJHDiXw0pXG5ErcslFVXtgLqdZrkHhoXDHUAvRI6RZ89d9StP0ufCWjDQODii8JYfjk/6cTk6DVrenZHrlKva2TFygM=
+	t=1715785340; cv=none; b=D/qcjpkq3B9A0czcUJF0UKUHxWTcdxbIqPhY7tj2TyBUyNPh5VbA7sfA7UG8jSzw0J6tZKYWR2VpRmWaDbG3QUF0QJz8/G1xeAlCLhda2xiR4JCU03OKJ+GoEKAOy40cTKXubCmrNX3h8uAsqAIq1TUOkSleG5upq0WTLhkqp80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715780381; c=relaxed/simple;
-	bh=17blqijHRfRC3vxH1neCWLqBA7J+OA+Hm9veCyE5STQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NsCU/DAAx4Yh8UbR3sIcosENXNHNuPDmQhlvT2i5GTmSQH2TCGsLBJpIIuqUmxHJDf4rg5b0aPDXozPugSrH3o6ugNv9mbNWYnmZVEAeQ1ATJ8y/jJV+Kcn+DpsRMzNxBqEqm3EmQRqPOTmFwhGwvgHGb17HebNiOtqCEt5Yr2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ki78AE9X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE25C4AF0B;
-	Wed, 15 May 2024 13:39:39 +0000 (UTC)
+	s=arc-20240116; t=1715785340; c=relaxed/simple;
+	bh=VzjvvZ9ObMsO/pd+PA+Q7TGExyfbBU28dZOOW6dqSSs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bcgunhe/h6GKjnepPDC358zmioye27T2Vs0d6Q0rquYLSG56H9UQM6uvmHCqVFURoPYBnMP454ijeykI7JB/khjgfnJsosC45jP9BAOLmmHuPBGOLn6W82sfmtEKrVuf+IUD06LpJeQZ+v6TXMCVrwY2+6xk05o8KCR/rPG6cMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QARLt8Y2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2206BC2BD11;
+	Wed, 15 May 2024 15:02:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715780380;
-	bh=17blqijHRfRC3vxH1neCWLqBA7J+OA+Hm9veCyE5STQ=;
+	s=k20201202; t=1715785339;
+	bh=VzjvvZ9ObMsO/pd+PA+Q7TGExyfbBU28dZOOW6dqSSs=;
 	h=From:To:Cc:Subject:Date:From;
-	b=ki78AE9XAAMtOh9Nkf1Pp5y5zmVJeprzd3VNs1f6hSE/n8u4cB+4gEoR7PE1nl2AM
-	 9onlpQqFBmKAriQRHBmlWjeJdKqyf0goRUzjVYlKzWLOvLO0J8+FGv9i6tvBVo0zv0
-	 1DhUWs2DEzmg5tCHHaWIW+p6ZsPvUaJg/5u+W91I713iJC6xpae+fefdGlUQsWsDAi
-	 4MOctzzNTiL3jEOU8z/QwRntx2rxh4LD2ARV6ZtPWsTXASoQeGD6uRoG2APerAybsk
-	 QBt3JgO9t458/FbhgNXMG0Z56pwzb1UUzBdE/3CdBbuebhVJ30L5HSbFjIXmLJ/wBF
-	 tQp4tQF2U/tCw==
+	b=QARLt8Y2f153giDpqZQk6fn55lras9Mm2rErqTSuhIv4gKtpeUFpUU9rAjyngtOnQ
+	 FAQAnxCY2BHOjuumYOUjvWG26g9jWX0pGTLeAzQQDtcAE8bleWyKbPm5dK/GWmke/H
+	 NeIhQJZ6v6ONBO+IoMpgSI9hrJN4hH64vxQhVV40esNZ0uYIwHT4WMhLZT8nRW9inq
+	 hUCTHKQWhbqmK5Bs+jnRqQPEXOVedo7coUUa/2AJgiKwYBj06melEci0GczA89dIWB
+	 i+iUZ/MoUx2T8rLe9netIh+00q1txLG028ED6dmH0FdWv70AoPOABtdtXTGvmmynuN
+	 xMtma9kINzbmQ==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: linux-integrity@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc: linux-integrity@vger.kernel.org,
 	"David S. Miller" <davem@davemloft.net>,
 	linux-crypto@vger.kernel.org (open list:CRYPTO API),
 	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] crypto: rsa-pkcs1pad: export rsa1_asn_lookup()
-Date: Wed, 15 May 2024 16:39:30 +0300
-Message-ID: <20240515133933.8515-1-jarkko@kernel.org>
+Subject: [PATCH v2] crypto: rsa-pkcs1pad: export rsa1_asn_lookup()
+Date: Wed, 15 May 2024 18:02:10 +0300
+Message-ID: <20240515150213.32491-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -72,13 +72,17 @@ by:
 Cc: James Prestwood <prestwoj@gmail.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- crypto/rsa-pkcs1pad.c         | 10 +++++++++-
- include/crypto/rsa-pkcs1pad.h | 11 +++++++++++
- 2 files changed, 20 insertions(+), 1 deletion(-)
+v2:
+- Fix typo in the kdoc.
+- Export also the template struct.
+---
+ crypto/rsa-pkcs1pad.c         | 16 ++++++++++------
+ include/crypto/rsa-pkcs1pad.h | 20 ++++++++++++++++++++
+ 2 files changed, 30 insertions(+), 6 deletions(-)
  create mode 100644 include/crypto/rsa-pkcs1pad.h
 
 diff --git a/crypto/rsa-pkcs1pad.c b/crypto/rsa-pkcs1pad.c
-index cd501195f34a..a07ccf179f56 100644
+index cd501195f34a..ea162ccf28ec 100644
 --- a/crypto/rsa-pkcs1pad.c
 +++ b/crypto/rsa-pkcs1pad.c
 @@ -7,6 +7,7 @@
@@ -89,7 +93,20 @@ index cd501195f34a..a07ccf179f56 100644
  #include <crypto/internal/akcipher.h>
  #include <crypto/internal/rsa.h>
  #include <linux/err.h>
-@@ -101,7 +102,13 @@ static const struct rsa_asn1_template {
+@@ -79,11 +80,7 @@ static const u8 rsa_digest_info_sha3_512[] = {
+ 	0x05, 0x00, 0x04, 0x40
+ };
+ 
+-static const struct rsa_asn1_template {
+-	const char	*name;
+-	const u8	*data;
+-	size_t		size;
+-} rsa_asn1_templates[] = {
++const struct rsa_asn1_template rsa_asn1_templates[] = {
+ #define _(X) { #X, rsa_digest_info_##X, sizeof(rsa_digest_info_##X) }
+ 	_(md5),
+ 	_(sha1),
+@@ -101,7 +98,13 @@ static const struct rsa_asn1_template {
  	{ NULL }
  };
  
@@ -98,13 +115,13 @@ index cd501195f34a..a07ccf179f56 100644
 + * rsa_lookup_asn1() - Lookup the ASN.1 digest info given the hash
 + * name:	hash algorithm name
 + *
-+ * Returns theu ASN.1 digest info on success, and NULL on failure.
++ * Returns the ASN.1 digest info on success, and NULL on failure.
 + */
 +const struct rsa_asn1_template *rsa_lookup_asn1(const char *name)
  {
  	const struct rsa_asn1_template *p;
  
-@@ -110,6 +117,7 @@ static const struct rsa_asn1_template *rsa_lookup_asn1(const char *name)
+@@ -110,6 +113,7 @@ static const struct rsa_asn1_template *rsa_lookup_asn1(const char *name)
  			return p;
  	return NULL;
  }
@@ -114,10 +131,10 @@ index cd501195f34a..a07ccf179f56 100644
  	struct crypto_akcipher *child;
 diff --git a/include/crypto/rsa-pkcs1pad.h b/include/crypto/rsa-pkcs1pad.h
 new file mode 100644
-index 000000000000..9881fa23d0dd
+index 000000000000..32c7453ff644
 --- /dev/null
 +++ b/include/crypto/rsa-pkcs1pad.h
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,20 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * RSA padding templates.
@@ -125,6 +142,15 @@ index 000000000000..9881fa23d0dd
 +
 +#ifndef _CRYPTO_RSA_PKCS1PAD_H
 +#define _CRYPTO_RSA_PKCS1PAD_H
++
++/*
++ * Hash algorithm name to ASN.1 template mapping.
++ */
++struct rsa_asn1_template {
++	const char *name;
++	const u8 *data;
++	size_t size;
++};
 +
 +const struct rsa_asn1_template *rsa_lookup_asn1(const char *name);
 +
