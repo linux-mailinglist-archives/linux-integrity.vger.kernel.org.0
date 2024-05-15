@@ -1,185 +1,182 @@
-Return-Path: <linux-integrity+bounces-2418-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2419-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84D0A8C65F7
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 13:56:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AF668C660D
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 14:00:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5217B22F71
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 11:56:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 155CE281684
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 12:00:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE6A7174F;
-	Wed, 15 May 2024 11:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C746EB4D;
+	Wed, 15 May 2024 12:00:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QZ67yjOW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R5vW6wGW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27EBD6F085;
-	Wed, 15 May 2024 11:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F1F14AB4;
+	Wed, 15 May 2024 12:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715774170; cv=none; b=DFQEbKwh7e016RWWhASsip6AMdI5OLI7OuQpBIiFbPTwGfcLWRbnAzsk1R49D4el8BczYuBUAZcdEdMszyXj0OoQUmDF2QitjAdm597jBHavvCcDzapvErXIYH93WNOmeQCTNs22y5kC62LCMPFb9G8Gdv0pW8cMMpP9A7ss/as=
+	t=1715774417; cv=none; b=sF8+xEd50IRXlbLnCQog4oigS/jnrpmBJmD+GvUeganVuWKSlNfak9Pip6raoe2TPYIAKBoiJ/ifPvp06/yXn0H7d1+IiXtUj2DbIw0IYaz7tWtewVmogUE03wWZR6CQLBkjml6Km1boblnZKp4T1pgv4a4VM/3/O5eEHiiGE6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715774170; c=relaxed/simple;
-	bh=4pC6ilZ310P00v6s0/5Ld75NFzCzkUptLwWfKWKbUYY=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=Uu5EhZDd4YyTczRqc0U4poUXWYePECLE3JrbIUmbbb2emaVK6sZ29p3MXfLA8R3Nuar0tJak5x1fdxALniJfkhstNFMSH3yeQ7qTUVvqfo8/sXDeTnCc0tARhTAFy3vR9GCAUnhjp0X+rm52RgU2/qVvxueS2eko1ypkZoXWlNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QZ67yjOW; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44FBQGSx009762;
-	Wed, 15 May 2024 11:55:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=a57vU2orCPnYctsB8Gc3TVmzZjgD5+BC2tkG8ynyhrk=;
- b=QZ67yjOWGpqpQ8IhEdYdndRNJtmcGM2a49uQi0RxZvnX99DhxSoPV40E3QR4iv6LDUwy
- KNNtzGQmLdpCHiml4TWQdZ2JUH4MFLuTCUG87kJ/UC1Eoy2WpG1Rvi2T/rNJpLwVF5FQ
- D8IjS/5ePMi/VPcy2O7A83SgqR8v1Cq7uSc9xKLr/j6DZ2H6LRE1ujHTlfNrkvTwJG8I
- LEY4ViwQMy4irjQLtJoJe08pD//iKHD5jYXGSgJny41lLBS/sBgTyDUDRqLaPzldDS4p
- +z6Be3CLNX9tuIGmxfqrP0j3hl0/CGSQfosY+O5KMKoEUYcHrM+4btM1xiM6rzqqY8vA 2g== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y4uyg833e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 15 May 2024 11:55:51 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44FA3NYc006073;
-	Wed, 15 May 2024 11:55:50 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3y2nq2ty7w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 15 May 2024 11:55:50 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44FBtmOv19857804
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 15 May 2024 11:55:50 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3632658066;
-	Wed, 15 May 2024 11:55:48 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E1A1E5805E;
-	Wed, 15 May 2024 11:55:47 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.158.76])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 15 May 2024 11:55:47 +0000 (GMT)
-Message-ID: <1887e28b6bcbe1eca72028432c9e0fee7a72fbfe.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: subsystem updates for v6.10
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel
- <linux-kernel@vger.kernel.org>,
-        Roberto Sassu
- <roberto.sassu@huaweicloud.com>
-Date: Wed, 15 May 2024 07:55:47 -0400
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-25.el8_9) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tmcYkkciT_-Nlh97-3hwenfY-w5L_rwu
-X-Proofpoint-GUID: tmcYkkciT_-Nlh97-3hwenfY-w5L_rwu
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1715774417; c=relaxed/simple;
+	bh=fIyxcnkjrOli+Uk3bndx9D9k4fUWSo6ZOhd9rATHI44=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Ekcmyx18sWm6zTlKqI+IJUVfRWv+Y3Y2l9boCYUjxkc4Y4i1Mn/Km0ZeO8Vd0f2q0/qFPLGoph1UBMUySVcj4vvmISbh5v1Dp1SiGRfyaBeeFbr2j3F+/UMJC8NdS1eACXUb7po6ADaOeqoDdErh4hLpXCvCVhFpjRAQdoMIQTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R5vW6wGW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBCC9C116B1;
+	Wed, 15 May 2024 12:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715774417;
+	bh=fIyxcnkjrOli+Uk3bndx9D9k4fUWSo6ZOhd9rATHI44=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=R5vW6wGW7WwOxYDdVl1GDdN9+ti1CI9HK3NnZJ3RpfZPoQP+xkgs4ILI+ojoulmu7
+	 ZkyEynJEq0gjFD3IJmou85CbPpQtQ4zsepl/0NSRZOOZebeeJSfep8lDHbeMbUsn0X
+	 oBOQDir4i+VGvp/7D7fYi0h/OLclY4j3PVw0b9bT0mFOGEzk8dleEUUBJCm98pSMNF
+	 Gtjinz8Tt+SSu3QxG/kDsQkft9N1ltXvQnloMMKEdoll+Cvon6zN9TXz8DHm1fwMfw
+	 CmezXUBvQvlRM1oCNuigXvzQjnseIp+GDDVJcd/WxirOI93nJ29THWz8VYAFpV+W11
+	 kbvpva46XCqEQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-15_06,2024-05-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 suspectscore=0 adultscore=0
- mlxlogscore=829 priorityscore=1501 mlxscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2405150082
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 15 May 2024 15:00:12 +0300
+Message-Id: <D1A79NQ33IGG.OYIRO9S4YWZS@kernel.org>
+Cc: "James Bottomley" <James.Bottomley@hansenpartnership.com>, "Mimi Zohar"
+ <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul Moore"
+ <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
+ <serge@hallyn.com>, <linux-integrity@vger.kernel.org>,
+ <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <kernel-team@cloudflare.com>
+Subject: Re: [RFC PATCH 2/2] KEYS: implement derived keys
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Ignat Korchagin" <ignat@cloudflare.com>
+X-Mailer: aerc 0.17.0
+References: <20240503221634.44274-1-ignat@cloudflare.com>
+ <20240503221634.44274-3-ignat@cloudflare.com>
+ <D19QW70177QG.2YC9XL0FT7VME@kernel.org>
+ <D19RM0OV7YUW.1ZEI72XQUREMQ@kernel.org>
+ <CALrw=nEnqBCBQKhK9ACc7tbicqkXaDD+Bjc1d90xizMvbb--oA@mail.gmail.com>
+In-Reply-To: <CALrw=nEnqBCBQKhK9ACc7tbicqkXaDD+Bjc1d90xizMvbb--oA@mail.gmail.com>
 
-Hi Linus,
+On Wed May 15, 2024 at 9:44 AM EEST, Ignat Korchagin wrote:
+> On Wed, May 15, 2024 at 12:44=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.o=
+rg> wrote:
+> >
+> > On Wed May 15, 2024 at 2:10 AM EEST, Jarkko Sakkinen wrote:
+> > > On Sat May 4, 2024 at 1:16 AM EEST, Ignat Korchagin wrote:
+> > > > Derived keys are similar to user keys, but their payload is derived=
+ from the
+> > > > primary TPM seed and some metadata of the requesting process. This =
+way every
+> > >
+> > > What is exactly "some metadata"?
+> > >
+> > > > application can get a unique secret/key, which is cryptographically=
+ bound to
+> > >
+> > > What is "cryptographically bound". Please go straight to the point an=
+d
+> > > cut out *all* white paper'ish phrases. We do not need it and will mak=
+e
+> > > painful to backtrack this commit once in the mainline.
+> > >
+> > > > the TPM without the need to provide the key material externally (un=
+like trusted
+> > > > keys). Also, the whole key derivation process is deterministic, so =
+as long as
+> > >
+> > > Why trusted keys is inside braces. It is not important for the point
+> > > you are trying to make here?
+> > >
+> > > > the TPM is available, applications can always recover their keys, w=
+hich may
+> > > > allow for easier key management on stateless systems.
+> > >
+> > > Please drop "stateless system" unless you provide a rigid definition
+> > > what it is. I have no idea what you mean by it. Probably not that
+> > > important, right?
+> > >
+> > > >
+> > > > In this implementation the following factors will be used as a key =
+derivation
+> > > > factor:
+> > > >   * requested key length
+> > > >   * requesting process effective user id
+> > > >   * either the application executable path or the application integ=
+rity
+> > > >     metadata (if available)
+> > >
+> > > NAK for path for any possible key derivation. They are racy and
+> > > and ambiguous.
+> > >
+> > > This should have been in the beginning instead of "some data". What
+> > > other implementations exist. For me "this implementation" implies
+> > > that this one competing alternative to multiple implementations
+> > > of the same thing.
+> > >
+> > > I do not like this science/white paper style at all. Just express
+> > > short, open code everything right at start when you need and cut
+> > > extras like "stateless system" unless you can provide exact, sound
+> > > and unambiguous definiton of it.
+> > >
+> > > Just want to underline how this really needs a complete rewrite with
+> > > clear and concise explanation :-) This won't ever work.
+> > >
+> > > >
+> > > > Key length is used so requests for keys with different sizes result=
+ in keys
+> > > > with different cryptographic material.
+> > >
+> > > What is "key length"? Please refer the exact attribute.
+> > >
+> > > >
+> > > > User id is mixed, so different users get different keys even when e=
+xecuting the
+> > >
+> > > First of all it would be more clear to just s/User id/UID/
+> > >
+> > > And make obvious whether we are talking about ruid or euid and how
+> > > this interacts with GIDs.
+> > >
+> > > I'll look at the code change next round if the commit message starts
+> > > making any sense.
+> >
+> > Right and neither UIDs and GIDs are applicable for key derivation for
+> > quite obvious reasons. So NAK for that too.
+>
+> Can you, please, clarify a bit here? Not very obvious for me. I added
+> euid for two reasons:
+>   * an unprivileged user might run a normally privileged application,
+> for example /usr/sbin/sshd, and depending on the code could "leak" the
+> key
+>   * without it and with unprivileged user namespaces it is possible to
+> create an unprivileged container with code at the same path as a
+> privileged application
+>
+> Why do you think UIDs/GIDs are not applicable as mixins?
 
-Two IMA changes, one EVM change, a use after free bug fix, and a code cleanup to
-address "-Wflex-array-member-not-at-end" warnings:
+I did as much clarification as I possibly can.
 
-- The existing IMA {ascii, binary}_runtime_measurements lists include a hard
-coded SHA1 hash.  To address this limitation, define per TPM enabled hash
-algorithm {ascii, binary}_runtime_measurements lists.
+Also, if you look at confidential computing platforms there's exactly
+two assets that they use lock into machine:
 
-- Close an IMA integrity init_module syscall measurement gap by defining a new
-critical-data record.
+- Binary
+- CPU material
 
-- Enable (partial) EVM support on stacked filesystems (overlayfs).  Only EVM
-portable & immutable file signatures are copied up, since they do not contain
-filesystem specific metadata.
+Only carved into stone immutable material for key derivation.
 
-thanks,
+You can use mm_struct->exe_file binary if that will work out for you.
+I'm done with this version.
 
-Mimi
-
-
-The following changes since commit fec50db7033ea478773b159e0e2efb135270e3b7:
-
-  Linux 6.9-rc3 (2024-04-07 13:22:46 -0700)
-
-are available in the Git repository at:
-
-  ssh://gitolite@ra.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.10
-
-for you to fetch changes up to 9fa8e76250082a45d0d3dad525419ab98bd01658:
-
-  ima: add crypto agility support for template-hash algorithm (2024-04-12 09:59:04 -0400)
-
-----------------------------------------------------------------
-integrity-v6.10
-
-----------------------------------------------------------------
-Enrico Bravi (1):
-      ima: add crypto agility support for template-hash algorithm
-
-Gustavo A. R. Silva (1):
-      integrity: Avoid -Wflex-array-member-not-at-end warnings
-
-Mimi Zohar (1):
-      ima: define an init_module critical data record
-
-Stefan Berger (11):
-      ima: Fix use-after-free on a dentry's dname.name
-      ima: Rename backing_inode to real_inode
-      security: allow finer granularity in permitting copy-up of security xattrs
-      evm: Implement per signature type decision in security_inode_copy_up_xattr
-      evm: Use the metadata inode to calculate metadata hash
-      ima: Move file-change detection variables into new structure
-      evm: Store and detect metadata inode attributes changes
-      ima: re-evaluate file integrity on file metadata change
-      evm: Enforce signatures on unsupported filesystem for EVM_INIT_X509
-      fs: Rename SB_I_EVM_UNSUPPORTED to SB_I_EVM_HMAC_UNSUPPORTED
-      evm: Rename is_unsupported_fs to is_unsupported_hmac_fs
-
- fs/overlayfs/copy_up.c                    |   2 +-
- fs/overlayfs/super.c                      |   2 +-
- include/linux/evm.h                       |   8 ++
- include/linux/fs.h                        |   2 +-
- include/linux/integrity.h                 |  34 ++++++++
- include/linux/lsm_hook_defs.h             |   3 +-
- include/linux/security.h                  |   4 +-
- security/integrity/evm/evm.h              |   8 +-
- security/integrity/evm/evm_crypto.c       |  25 ++++--
- security/integrity/evm/evm_main.c         |  92 +++++++++++++++-----
- security/integrity/ima/ima.h              |  12 ++-
- security/integrity/ima/ima_api.c          |  32 ++++---
- security/integrity/ima/ima_appraise.c     |   4 +-
- security/integrity/ima/ima_crypto.c       |   7 +-
- security/integrity/ima/ima_fs.c           | 134 +++++++++++++++++++++++++++---
- security/integrity/ima/ima_iint.c         |   2 +-
- security/integrity/ima/ima_init.c         |   6 +-
- security/integrity/ima/ima_kexec.c        |   1 +
- security/integrity/ima/ima_main.c         |  44 +++++++---
- security/integrity/ima/ima_template_lib.c |  27 ++++--
- security/integrity/integrity.h            |  12 ++-
- security/security.c                       |   5 +-
- security/selinux/hooks.c                  |   2 +-
- security/smack/smack_lsm.c                |   2 +-
- 24 files changed, 374 insertions(+), 96 deletions(-)
-
+BR, Jarkko
 
