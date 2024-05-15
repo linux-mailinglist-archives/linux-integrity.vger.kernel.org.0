@@ -1,179 +1,119 @@
-Return-Path: <linux-integrity+bounces-2416-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2417-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8368C61A7
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 09:26:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 350FB8C65DC
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 13:38:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A88E1F21355
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 07:26:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 381201C208F5
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 May 2024 11:38:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 342104316B;
-	Wed, 15 May 2024 07:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049D814AB4;
+	Wed, 15 May 2024 11:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ZmPZVsSp"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jkbIRIYw"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A843D41C84
-	for <linux-integrity@vger.kernel.org>; Wed, 15 May 2024 07:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21975101C8
+	for <linux-integrity@vger.kernel.org>; Wed, 15 May 2024 11:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715757997; cv=none; b=W/KbN2kG7wPpS3xITXqp/NuPU1j9UAXUQF/8XNPq5ItSMgA+ga3t3/EKx0essDm2wDYdiSR9CMnDCn0kBtRqfx7ZipUuaEk6auYYgE1VBDBdu6oDNd5C658Q7oZlHA7fZCvk5g+G7wP8IRtIpcVsHu0DIUNonzyKBzLMdo2Pu7k=
+	t=1715773110; cv=none; b=TQZI8OPhdobch6ytJX12Cuj/13Mtf2LBaWlN8nu84IHxcXHNFp7Np0lxpvyqYdyRReY23WeQ0ly6y5NoAqsibFbAzarXa8UyX5gj3S1uLRXdVWUIczU6xquqIhygLruUfNGaiJSgYofay7z1tcecoT/BalCT7tqZvLfpXFALfYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715757997; c=relaxed/simple;
-	bh=pHIDXBNssCBc03cLf2WrSSXPNJV9C69TUOs58UGNXiY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PPnO6AB0rfkAijycmBcuiCosq7GE5AH4G8u+J5Tc9FxbA8MadT1mm6Jmfsb7uChqxdPToRGyL/LiI03wx0OQF7ri9Us5qcGnSSTtE7q0cxJBlVpGYZSCNP2yhFnJ5/r2K1YrwCwf6AmOsc6dZYUuA7i7cVAfa6LaaJDlQ1DKCQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ZmPZVsSp; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f489e64eb3so4570319b3a.1
-        for <linux-integrity@vger.kernel.org>; Wed, 15 May 2024 00:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1715757995; x=1716362795; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZrvNGMUcH8kbhXEijiFcgBH5XmfO0e+fTQFgvwJdcDA=;
-        b=ZmPZVsSpAlOrLOzNVMuNGm3E1tubJAyWkLqcvdYvVAK7vZJzS3L6wQ6BuZZJROZPEe
-         Ha1THimHGr+6u/jjHA5oDXOQlp1pQBNi7VEeTlyceIccBGCUTm7g61bQaUlk1jE1Nsy4
-         9Se0qQqO1dqqSz3MVJQabkMV0Dv8m/z2AhYLSPG+GhSzuHUQoEL7xYwTOCJYV/SY93Xe
-         7mXuMw/xavBZwbEdo30lqLS4z5F6fAAIDL+MKF3rDSCA65OOuNXV9JdRKZdS5GiWxQal
-         AQjxAk68cu2Re4pM6zdLZFahaN+9sv6cwjHrkzqRtPl4MkCEzclOzihAxVs4L0ogHvB3
-         k2jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715757995; x=1716362795;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZrvNGMUcH8kbhXEijiFcgBH5XmfO0e+fTQFgvwJdcDA=;
-        b=KOxgLXEnAgmkmvsJ3iixjMkgWF2gduwnSSsJs4tJnV8U2E040f8UG/4GIkTX1HtwHj
-         vPI72fu7juvWEBSltsFv7bOFnHXGs0Cu5HuDTZkJkuiPZLk75IsEo5hb51kM7SxKQM5m
-         6r746rHfURMzVK6+0VvTQ9ED+UuoPBh9Yd2sjzOr3LkD6PlX7d88AILC4XrznCVlg4hP
-         PFf5qXr94lAPMc/FLfR8zaff93vuk141EzZD/OTPuJqRlzrtvSKEPl2FlcIxgJfcztsG
-         zsestlRFYio5lrwXa2EHO+D7jY0ANkEuC8EZ8gdDfbx/scx3RSTzOyTNe+WC9oA0aVg5
-         i/TA==
-X-Forwarded-Encrypted: i=1; AJvYcCWNi7tJVQkVsNy0c5GOLmhuF/vfF5YgWttawvzOo68+yoXECc9ad7CLIvftNCRyTbHrYmqhRXMFi0x+E4Lz03Hn51iQxt548DrnKBshmWTB
-X-Gm-Message-State: AOJu0Yxx02OhWZbWt7g1wk0L+1x5RpuEsd+f5Q1zJI0xwTnzhiLDV9Lf
-	7c19d1XpDph66bryYML07rhwuAS4yG4tWr5zmAWSqHrFy/D1oHOH0Vfap3bcPzgcg8CqTIyh0xS
-	2qmM4gyq3+sHdKYdltPTN3mLvrZ5tRMgOcqKfyg==
-X-Google-Smtp-Source: AGHT+IFkuxJNBNByOn4dn/O0DmpomBqME3HUvwwIwYCPNWgsW8k2PYZmU2A6Yq68xZdjZJus/8N9Nb7AiHdNU5pwdUo=
-X-Received: by 2002:a05:6a20:12d4:b0:1a5:6a85:8ce9 with SMTP id
- adf61e73a8af0-1afde0a8da9mr16307857637.12.1715757994863; Wed, 15 May 2024
- 00:26:34 -0700 (PDT)
+	s=arc-20240116; t=1715773110; c=relaxed/simple;
+	bh=+B0w/o7yTjZrqBN8DhZmltvH1d9+dlMi0ttqbQo67tg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=czLiMBT+SXGA76WHCKNpVCsmLSL4o+KFX9oq3cX+xtksHQvw/LLhPq7y7F5QVX6rSu9TI4XBMrrPTQGkilOpex53lmBhSYukqAIO5J2JF0cxK3HtCycsywmGEAua+QU+b0xXNKYtIOA+ugW6AH5/jI+XeFzvLN7QFq0IHlfvrgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jkbIRIYw; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44FBRicT012997;
+	Wed, 15 May 2024 11:38:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=nrcd5VDPfh4qdtrZ+onxcl9Cuuy5S1JXHvIoN5QUxck=;
+ b=jkbIRIYwZYWxs24KkslmXJLLvXagnq7cxUfwCiMBVc//qH0Jm4LM48PxlQQWVndV/kCk
+ DDGR+wqUad3CHowY7iBo4JJVmFgMME70uSU325X+4TKCnKelAm3TjKJ2VhcKyt6Kllaz
+ ahgosVDik2Fz3a/5MFYh4W/GtFuHLBffugEEqEqhwqJAsrpdexjXHbgtgChaZuWYt4/n
+ asAAq/F1sS4GAb45Y73JcARxB/28iltyvD4e+PCM3gbwUCdRm10jBzE38Wj2Wnn3+qB6
+ OYQOIZ7/qIUqduR/EbYs0o1H6wiQ56qFN6I1ARC0B8QE4JKLAwaqzeP1/V0Swpqm2bkd iw== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y4v6j80qg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 May 2024 11:38:17 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44F8PRkk002257;
+	Wed, 15 May 2024 11:38:16 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y2m0pbb2p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 May 2024 11:38:16 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44FBcDNG34799892
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 15 May 2024 11:38:15 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 71B3A58052;
+	Wed, 15 May 2024 11:38:13 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 29F1058065;
+	Wed, 15 May 2024 11:38:13 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.158.76])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 15 May 2024 11:38:13 +0000 (GMT)
+Message-ID: <30a81894f2397c353aeae91c7237a4373e3d8cfe.camel@linux.ibm.com>
+Subject: Re: [ima-evm-utils PATCH 0/2] Fix issue with tests and provider on
+ Ubuntu 24.04
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc: roberto.sassu@huawei.com
+Date: Wed, 15 May 2024 07:38:12 -0400
+In-Reply-To: <20240514182300.92440-1-stefanb@linux.ibm.com>
+References: <20240514182300.92440-1-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-25.el8_9) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240503221634.44274-1-ignat@cloudflare.com> <20240503221634.44274-3-ignat@cloudflare.com>
- <D19QW70177QG.2YC9XL0FT7VME@kernel.org>
-In-Reply-To: <D19QW70177QG.2YC9XL0FT7VME@kernel.org>
-From: Ignat Korchagin <ignat@cloudflare.com>
-Date: Wed, 15 May 2024 08:26:23 +0100
-Message-ID: <CALrw=nFsjiGTZDN3vYCN+GC9R3eQ3ix6_u2x0xo3jcpHqWjs3A@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/2] KEYS: implement derived keys
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, serge@hallyn.com, linux-integrity@vger.kernel.org, 
-	keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@cloudflare.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SicvTxqJZuoB3V5PqKQFj_5OmxBocjiL
+X-Proofpoint-ORIG-GUID: SicvTxqJZuoB3V5PqKQFj_5OmxBocjiL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-15_06,2024-05-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=939 clxscore=1011
+ spamscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405150080
 
-On Wed, May 15, 2024 at 12:10=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.org=
-> wrote:
->
-> On Sat May 4, 2024 at 1:16 AM EEST, Ignat Korchagin wrote:
-> > Derived keys are similar to user keys, but their payload is derived fro=
-m the
-> > primary TPM seed and some metadata of the requesting process. This way =
-every
->
-> What is exactly "some metadata"?
->
-> > application can get a unique secret/key, which is cryptographically bou=
-nd to
->
-> What is "cryptographically bound". Please go straight to the point and
-> cut out *all* white paper'ish phrases. We do not need it and will make
-> painful to backtrack this commit once in the mainline.
->
-> > the TPM without the need to provide the key material externally (unlike=
- trusted
-> > keys). Also, the whole key derivation process is deterministic, so as l=
-ong as
->
-> Why trusted keys is inside braces. It is not important for the point
-> you are trying to make here?
->
-> > the TPM is available, applications can always recover their keys, which=
- may
-> > allow for easier key management on stateless systems.
->
-> Please drop "stateless system" unless you provide a rigid definition
-> what it is. I have no idea what you mean by it. Probably not that
-> important, right?
->
-> >
-> > In this implementation the following factors will be used as a key deri=
-vation
-> > factor:
-> >   * requested key length
-> >   * requesting process effective user id
-> >   * either the application executable path or the application integrity
-> >     metadata (if available)
->
-> NAK for path for any possible key derivation. They are racy and
-> and ambiguous.
+On Tue, 2024-05-14 at 14:22 -0400, Stefan Berger wrote:
+> The 1st patch fixes an issue on Ubuntu 24.04 due to which an OpenSSL
+> provider could not be used.
+> 
+> The 2nd patch passes --engine pkcs11 or --provider pkcs11 options via
+> EVNCTL_ENGINE variable so that the proper values are used on the command
+> line for a pkcs11 test case evmctl.
+> 
+> Regards,
+>    Stefan
+> 
+> Stefan Berger (2):
+>   evmctl: Replace OSS_PROVIDER_load with OSSL_PROVIDER_try_load (Ubuntu)
+>   tests: Use EVMCTL_ENGINE to set engine or provider for test case
 
-Can you elaborate here? What kind of a problem you see specifically?
-(This is exactly what I want to get from this discussion)
+Thanks, Stefan.  Both patches are now queued.
 
-> This should have been in the beginning instead of "some data". What
-> other implementations exist. For me "this implementation" implies
-> that this one competing alternative to multiple implementations
-> of the same thing.
+Mimi
 
-With "this implementation" I meant the current RFC patchset because I
-do expect there would be more iterations and just wanted to solicit
-comments.
-
-> I do not like this science/white paper style at all. Just express
-> short, open code everything right at start when you need and cut
-> extras like "stateless system" unless you can provide exact, sound
-> and unambiguous definiton of it.
->
-> Just want to underline how this really needs a complete rewrite with
-> clear and concise explanation :-) This won't ever work.
-
-Understood.
-
-> >
-> > Key length is used so requests for keys with different sizes result in =
-keys
-> > with different cryptographic material.
->
-> What is "key length"? Please refer the exact attribute.
->
-> >
-> > User id is mixed, so different users get different keys even when execu=
-ting the
->
-> First of all it would be more clear to just s/User id/UID/
->
-> And make obvious whether we are talking about ruid or euid and how
-> this interacts with GIDs.
->
-> I'll look at the code change next round if the commit message starts
-> making any sense.
->
-> BR, Jarkko
->
 
