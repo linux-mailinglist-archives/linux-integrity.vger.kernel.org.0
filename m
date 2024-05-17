@@ -1,178 +1,189 @@
-Return-Path: <linux-integrity+bounces-2438-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2439-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BCA28C8A44
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2024 18:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E61228C8CA3
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2024 21:13:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC8DA1C21E84
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2024 16:49:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 152EC1C21CBB
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 May 2024 19:13:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E15713D890;
-	Fri, 17 May 2024 16:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0E013FD76;
+	Fri, 17 May 2024 19:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kDUJlkxZ"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="fpp/vl3D"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0A738DD6;
-	Fri, 17 May 2024 16:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B0D13F423;
+	Fri, 17 May 2024 19:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715964533; cv=none; b=gcK96rqsuVHCQSdPVyJRxYesLop7dGopXoWHhsbabq2QPCE974sPfuNzqKzPHpD1vHmolZXLomPud/zLxQ+dtAWmK+1Nh6dzNC68t0i7yFEwsn/QDa3NehcEF0ryZqDDxBnsmK0NntGlMpN1q++QbJqrTNcefj8PrY9CRRKaMe0=
+	t=1715973216; cv=none; b=ok9rZbwP6SBnQ3ydAey78g7sFx9YsB59h+E11RBBuLwU0js/izpFeK88hjflSt64LtW1H67z8BXftkpKseI3fVFkjizzfuw7w2EDzkHuqtlqsJ2lx1hlz2LFHV/tGRdB6UKrIpxSN7xam1dykkkRiZKcwCwojwykHM9ndiwNhYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715964533; c=relaxed/simple;
-	bh=UGkdLRqZ6n3b8m0rCAFb9FxggqgZvS7s7r5YjUFxV/s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=HZy6oZMe8iaIC5oD/4jGdEbizuST+6zvtGpHSRXwjKD5ezLapWiIht+nt+acb+9YPXYLDoagrAG6Z16yuLkge6sT0QnzrxD7tkne5Sg97B2bLb/npWI3Y6VaWFj6ZjnKAjcTJrfs4LXq/hjXSOU/Bm7PR1wTZGc0jqchjtXCIsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kDUJlkxZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD1EC2BD10;
-	Fri, 17 May 2024 16:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715964532;
-	bh=UGkdLRqZ6n3b8m0rCAFb9FxggqgZvS7s7r5YjUFxV/s=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=kDUJlkxZiXqWz8DV3xX4JG+pjnQr7+gpM5367q5r2232f7PxD7E103JpoVL3dcb3v
-	 BPfHFX6Mq6AZhQxSPViM5+nCYxYK4uIYA1mMowSoqyjsX0OqHhejUttWRkJjfphQ/O
-	 QhKLOR0e2o4X2p4fE+OmYu4p8i2kWHouN4a5Uw9zAhKs10wuRfHjr6J3Aw+GIy3/6N
-	 tGSmod6sTDtm8RNx8dO/yILAY7u0vCcqsRRyRV028Ep8j5F0ZyutSZOj2N47GeFWpP
-	 bt9IOJtsIHf88gH3+Sf4j6GNDZCeaoB9+JrsM07P6Dvfdu06tT6h2KnxFAdwuD5Ehl
-	 1S9Cso3tRTOpA==
+	s=arc-20240116; t=1715973216; c=relaxed/simple;
+	bh=cl5z+RypzfaYXGWf+rnBBjI5OlA1WYqdwNwX6Edu4uM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sBvJuDcCVC/JfYhw9pXSqQC4rCodnPr1gKmcVu4Rj7PgKS10tH5lU9t9AUyyzUT2314l2ypu6ELPrRLFMvjtNupA6tCxYGiXvwvYBUKyskW0HmuGNixCY9FJnMM9BgVUtniV+v5nuDhliYhQTgfHo9KkzrquHv+BbCPbx/t107I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=fpp/vl3D; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [167.220.2.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 6FAD220B915A;
+	Fri, 17 May 2024 12:13:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6FAD220B915A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1715973207;
+	bh=2p1wopyKvglG1K22JP2DhRwV85SJbq4dKxtjT1xHvtY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fpp/vl3DKUdjSDRpvAjyDgeuyiVrUyujnX4va9QRUjeu+quEuTpy1VLMWrbI1o4O2
+	 7tFT61OD7MvfnS0fygEkUh5vIkJKB8wvWKhgP7fqsqhi6YbLFLZ5KpReHrkz8TRyK5
+	 gfobGVgWsvo7PzhwRCDJDIgnL1vDR71OaQIF5phw=
+Message-ID: <234910c1-40c3-4489-94ab-6e9a5f00d93e@linux.microsoft.com>
+Date: Fri, 17 May 2024 12:13:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 17 May 2024 19:48:48 +0300
-Message-Id: <D1C2NPOBHAHK.20O4IME8OK1FH@kernel.org>
-Cc: "Ard Biesheuvel" <ardb@kernel.org>, "Linux Crypto Mailing List"
- <linux-crypto@vger.kernel.org>, "Herbert Xu" <herbert@gondor.apana.org.au>,
- <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
- <regressions@lists.linux.dev>, <kernel@collabora.com>
-Subject: Re: [PATCH v8 18/22] tpm: add session encryption protection to
- tpm2_get_random()
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: =?utf-8?b?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- "James Bottomley" <James.Bottomley@hansenpartnership.com>
-X-Mailer: aerc 0.17.0
-References: <20240429202811.13643-1-James.Bottomley@HansenPartnership.com>
- <20240429202811.13643-19-James.Bottomley@HansenPartnership.com>
- <119dc5ed-f159-41be-9dda-1a056f29888d@notapiano>
- <0f68c283ff4bbb89b8a019d47891f798c6fff287.camel@HansenPartnership.com>
- <CAMj1kXHi4r8KY9GvX573kwqvLpMfX-J=K2hWiGAKkf5bnicwYQ@mail.gmail.com>
- <0d260c2f7a9f67ec8bd2305919636678d06000d1.camel@HansenPartnership.com>
- <CAMj1kXFE_R_x10BVkU+8vrMz0RHiX0+rz-ZL+w08FH2CLQHZXA@mail.gmail.com>
- <66ec985f3ee229135bf748f1b0874d5367a74d7f.camel@HansenPartnership.com>
- <dfb0d930-7cbe-46c5-be19-d132b4906ecf@notapiano>
-In-Reply-To: <dfb0d930-7cbe-46c5-be19-d132b4906ecf@notapiano>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v18 12/21] dm: add finalize hook to target_type
+To: Mikulas Patocka <mpatocka@redhat.com>, Mike Snitzer <snitzer@kernel.org>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+ tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
+ snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
+ linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1714775551-22384-1-git-send-email-wufan@linux.microsoft.com>
+ <1714775551-22384-13-git-send-email-wufan@linux.microsoft.com>
+ <aa767961-5e3-2ceb-1a1e-ff66a8eed649@redhat.com>
+ <212b02a8-f5f0-4433-a726-1639dda61790@linux.microsoft.com>
+ <bc9aa053-20a6-eaa-cbe4-344f340242b@redhat.com>
+Content-Language: en-CA
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <bc9aa053-20a6-eaa-cbe4-344f340242b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri May 17, 2024 at 7:22 PM EEST, N=C3=ADcolas F. R. A. Prado wrote:
-> On Fri, May 17, 2024 at 07:25:40AM -0700, James Bottomley wrote:
-> > On Fri, 2024-05-17 at 15:43 +0200, Ard Biesheuvel wrote:
-> > > On Fri, 17 May 2024 at 15:35, James Bottomley
-> > > <James.Bottomley@hansenpartnership.com> wrote:
-> > [...]
-> > > > Thanks for the analysis.=C2=A0 If I look at how CRYPTO_ECC does it,=
- that
-> > > > selects CRYPTO_RNG_DEFAULT which pulls in CRYPTO_DRBG, so the fix
-> > > > would be the attached.=C2=A0 Does that look right to you Ard?
-> > >=20
-> > > No it doesn't - it's CRYPTO_RNG_DEFAULT not CRYTPO_RNG_DEFAULT :-)
-> > >=20
-> > > With that fixed,
-> > >=20
-> > > Acked-by: Ard Biesheuvel <ardb@kernel.org>
-> >=20
-> > Erm, oops, sorry about that; so attached is the update.
-> >=20
-> > James
-> >=20
-> > ---8>8>8><8<8<8---
-> >=20
-> > From 2ac337a33e6416ef806e2c692b9239d193e8468f Mon Sep 17 00:00:00 2001
-> > From: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > Date: Fri, 17 May 2024 06:29:31 -0700
-> > Subject: [PATCH] tpm: Fix sessions cryptography requirement for Random =
-Numbers
-> > MIME-Version: 1.0
-> > Content-Type: text/plain; charset=3DUTF-8
-> > Content-Transfer-Encoding: 8bit
-> >=20
-> > The ECDH code in tpm2-sessions.c requires an initial random number
-> > generator to generate the key pair.  If the configuration doesn't have
-> > CONFIG_RNG_DEFAULT, it will try to pull this in as a module (which is
-> > impossible for the early kernel boot where the TPM starts).  Fix this
-> > by selecting the required RNG.
-> >=20
-> > Reported-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> > Fixes: 1b6d7f9eb150 ("tpm: add session encryption protection to tpm2_ge=
-t_random()")
-> > Acked-by: Ard Biesheuvel <ardb@kernel.org>
-> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > ---
-> >  drivers/char/tpm/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> > index 4f83ee7021d0..ecdd3db4be2b 100644
-> > --- a/drivers/char/tpm/Kconfig
-> > +++ b/drivers/char/tpm/Kconfig
-> > @@ -31,6 +31,7 @@ config TCG_TPM2_HMAC
-> >  	bool "Use HMAC and encrypted transactions on the TPM bus"
-> >  	default y
-> >  	select CRYPTO_ECDH
-> > +	select CRYPTO_RNG_DEFAULT
-> >  	select CRYPTO_LIB_AESCFB
-> >  	select CRYPTO_LIB_SHA256
-> >  	help
-> > --=20
-> > 2.35.3
-> >=20
-> >=20
->
-> Hi James,
->
-> thanks for the patch. But I actually already had that config enabled buil=
-tin. I
-> also had ECDH and DRBG which have been suggested previously:
->
-> 	CONFIG_CRYPTO_RNG_DEFAULT=3Dy
->
-> 	CONFIG_CRYPTO_DRBG_MENU=3Dy
-> 	CONFIG_CRYPTO_DRBG_HMAC=3Dy
-> 	# CONFIG_CRYPTO_DRBG_HASH is not set
-> 	# CONFIG_CRYPTO_DRBG_CTR is not set
-> 	CONFIG_CRYPTO_DRBG=3Dy
->
-> 	CONFIG_CRYPTO_ECDH=3Dy
->
-> I've pasted my full config here: http://0x0.st/XPN_.txt
->
-> Adding a debug print I see that the module that the code tries to load is
-> "crypto-hmac(sha512)". I would have expected to see=20
->
-> 	MODULE_ALIAS_CRYPTO("hmac(sha512)");
->
-> in crypto/drbg.c, but I don't see it anywhere in the tree. Maybe it is mi=
-ssing?
 
-1. Bug fixes need to be submitted as described in
-   https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-2. The patch is missing the transcript:
-   https://lore.kernel.org/linux-integrity/D1BRZ60B9O5S.3NAT20QPQE6KH@kerne=
-l.org/
 
-There's nothing to review at this point.
+On 5/9/2024 10:07 AM, Mikulas Patocka wrote:
+> 
+> 
+> On Wed, 8 May 2024, Fan Wu wrote:
+> 
+>>
+>>
+>> On 5/8/2024 10:17 AM, Mikulas Patocka wrote:
+>>>
+>>>
+>>> On Fri, 3 May 2024, Fan Wu wrote:
+>>>
+>>>> This patch adds a target finalize hook.
+>>>>
+>>>> The hook is triggered just before activating an inactive table of a
+>>>> mapped device. If it returns an error the __bind get cancelled.
+>>>>
+>>>> The dm-verity target will use this hook to attach the dm-verity's
+>>>> roothash metadata to the block_device struct of the mapped device.
+>>>>
+>>>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+>>>
+>>> Hi
+>>>
+>>> Why not use the preresume callback?
+>>>
+>>> Is there some reason why do we need a new callback instead of using the
+>>> existing one?
+>>>
+>>> Mikulas
+>> Thanks for the suggestion.
+>>
+>> Mike suggested the new finalize() callback. I think the reason for not using
+>> the preresume() callback is that there are multiple points that can fail
+>> before activating an inactive table of a mapped device which can potentially
+>> lead to inconsistent state.
+>>
+>> In our specific case, we are trying to associate dm-verity's roothash metadata
+>> with the block_device struct of the mapped device inside the callback.
+>>
+>> If we use the preresume() callback for the work and an error occurs between
+>> the callback and the table activation, this leave the block_device struct in
+>> an inconsistent state.
+> 
+> The preresume callback is the final GO/NO-GO decision point. If all the
+> targets return zero in their preresume callback, then there's no turning
+> back and the table will be activated.
+> 
+>> This is because now the block device contains the roothash metadata of it's
+>> inactive table due to the preresume() callback, but the activation failed so
+>> the mapped device is still using the old table.
+>>
+>> The new finalize() callback guarantees that the callback happens just before
+>> the table activation, thus avoiding the inconsistency.
+> 
+> In your patch, it doesn't guarantee that.
+> 
+> do_resume calls dm_swap_table, dm_swap_table calls __bind, __bind calls
+> ti->type->finalize. Then we go back to do_resume and call dm_resume which
+> calls __dm_resume which calls dm_table_resume_targets which calls the
+> preresume callback on all the targets. If some of them fails, it returns a
+> failure (despite the fact that ti->type->finalize succeeded), if all of
+> them succeed, it calls the resume callback on all of them.
+> 
+> So, it seems that the preresume callback provides the guarantee that you
+> looking for.
+> 
+>> -Fan
+> 
+> Mikulas
 
->
-> Thanks,
-> N=C3=ADcolas
+Thanks for the info. I have tested and verified that the preresume() 
+hook can also work for our case.
 
-BR, Jarkko
+ From the source code 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/md/dm-ioctl.c#n1149, 
+the whole resume process appears to be:
+
+1. Check if there is a new map for the device. If so, attempt to 
+activate the new map using dm_swap_table() (where the finalize() 
+callback occurs).
+
+2. Check if the device is suspended. If so, use dm_resume() (where the 
+preresume() callback occurs) to resume the device.
+
+3. If a new map is activated, use dm_table_destroy() to destroy the old map.
+
+For our case:
+
+- Using the finalize() callback, the metadata of the dm-verity target 
+inside the table is attached to the mapped device every time a new table 
+is activated.
+- Using the preresume() callback, the same metadata is attached every 
+time the device resumes from suspension.
+
+If I understand the code correctly, resuming from suspension is a 
+necessary step for loading a new mapping table. Thus, the preresume() 
+callback covers all conditions where the finalize() callback would be 
+triggered. However, the preresume() callback can also be triggered when 
+the device resumes from suspension without loading a new table, in which 
+case there is no new metadata in the table to attach to the mapped device.
+
+In the scenario where the finalize() callback succeeds but the 
+preresume() callback fails, it seems the device will remain in a 
+suspended state, the newly activated table will be kept, and the old 
+table will be destroyed, so it seems there is no inconsistency using 
+finalize() even preresume() potentially fails.
+
+I believe both the finalize() callback proposed by Mike and the 
+preresume() callback suggested by Mikulas can work for our case. I am 
+fine with either approach, but I would like to know which one is 
+preferred by the maintainers and would appreciate an ACK for the chosen 
+approach.
+
+-Fan
 
