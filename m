@@ -1,88 +1,108 @@
-Return-Path: <linux-integrity+bounces-2450-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2451-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 776918C914D
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 May 2024 15:03:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6531A8C9155
+	for <lists+linux-integrity@lfdr.de>; Sat, 18 May 2024 15:08:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14E901F21C06
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 May 2024 13:03:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 966801C20F5C
+	for <lists+linux-integrity@lfdr.de>; Sat, 18 May 2024 13:08:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F7729415;
-	Sat, 18 May 2024 13:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 028013A1DA;
+	Sat, 18 May 2024 13:08:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zuel/urP"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="HgykhyYp";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="HgykhyYp"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5FE1F5FA;
-	Sat, 18 May 2024 13:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C6C32C60;
+	Sat, 18 May 2024 13:07:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716037411; cv=none; b=QNaTRmb7uVEOM2cRfDySnPHVuNaCgvO1n7R+KoLbAI2QxpVbzuDpmiDqR0yoldsjPkZY9o2Yw76GarSwl0vFUz1uwqfT9NahM4JbveQtId5m5sgy+prTIpjUy6atGnOIUPCCcUdAyZbh8RTQx90U7parPleeAxydly9GP/ZxJ+o=
+	t=1716037680; cv=none; b=i9LOGWJ0JyXpDhWXfBWZy0ulBeUvFkUrNfD3xRV/5aL7dae5EOFxG6FauLyp4KZ40GvJRKdWDFL4DPqoZGEvLuK6EqTctMTIaKlWo3IPPGSS8cTOkso1XEErj9Zf9kZO0OF2U/Ps3PXNNR/CMIAejAIcTaIShiPQ1hbSw+vBY8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716037411; c=relaxed/simple;
-	bh=ZggJadfHy1NOHs7+8mfVbZ9wI8BBKNLewZn820T/SN0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=iHOuLYY87VvlqcDf20sBR1N/D0YYZi9Lf/cP8QwCGZwY6pfVpx2eGbjXG4lV+OaqCwEP7pUlryfyAz9edan7hUMw61aWX5gnpJ+FmnHfPmWvDhSIbqNMNUOtSsPO2L4OcQ0Os3baBTqFu6F7fLFfUxvfIItfcnT7SnFtxcO/coQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zuel/urP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064DDC113CC;
-	Sat, 18 May 2024 13:03:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716037410;
-	bh=ZggJadfHy1NOHs7+8mfVbZ9wI8BBKNLewZn820T/SN0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Zuel/urP9lpCRixHrKBB4PYNBACOVkPvR9+8Qwmt3+OOrUG+AzLlTcksw12tb9GHg
-	 G/iFqH3SOIFw0gdvQ8wm3/d0lVYfD4yNl/JEsZtUl7TGAXMMdYuyDncVYqONDEJdyz
-	 2U7yXw90iJsCdLKf4Cr//qp8+xCBfHfnpx7fUp7lJTOpsc49nsNyrieV2BvngDvdoG
-	 F8qoGFwXw66UKmXD+sXUrMdkq1oj0YC5+u4YlLt4i/CegOf5eFuI+eyYvY8qRZiMJf
-	 eMSCcGCIT0zIGP1BlW7wrCX2+BnKNhtNKAEfP4eVkqujaqX5/WQE8vwdSNdN8TeNU3
-	 3z2bq5/tMGcWQ==
+	s=arc-20240116; t=1716037680; c=relaxed/simple;
+	bh=Qf9Qwpx/MU8nA0UDjxSlvV9op3yi9qax6HPjVmnv/6c=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=sgFefjTca6xkHak+Puqp2/3aS0rxdyutI3lrBGBliPYvtGS9qiSqK3E0oMPATSJZAaKd6qtWugJn8qLPOCOPp9sZpWBLMU4aGRnhJ4yFm4bP4R4DYjPRI7iVb1y6nPI8lKXqy9VYB/OwHr9UTc2fSxRkYc2DDdcUCfy3sB+mG4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=HgykhyYp; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=HgykhyYp; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1716037678;
+	bh=Qf9Qwpx/MU8nA0UDjxSlvV9op3yi9qax6HPjVmnv/6c=;
+	h=Date:From:To:Subject:In-Reply-To:References:Message-ID:From;
+	b=HgykhyYpXYkU3vdXxHkNLuDXeK6DldzWZkFjnLdi/Z+joYO19EfbVnY6ErTXDeYNN
+	 VLgd0kokEDk+d9FDfiqQNcbatvqrb96ijTQkTxAyAgJJKFSn3yG0aNQJV2a5VtMxdV
+	 JmloHbEJvUPLmsYWncs2IhGW3r7dws/UY6s2uK5I=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 954AF1287275;
+	Sat, 18 May 2024 09:07:58 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id djlfKy_s9EQE; Sat, 18 May 2024 09:07:58 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1716037678;
+	bh=Qf9Qwpx/MU8nA0UDjxSlvV9op3yi9qax6HPjVmnv/6c=;
+	h=Date:From:To:Subject:In-Reply-To:References:Message-ID:From;
+	b=HgykhyYpXYkU3vdXxHkNLuDXeK6DldzWZkFjnLdi/Z+joYO19EfbVnY6ErTXDeYNN
+	 VLgd0kokEDk+d9FDfiqQNcbatvqrb96ijTQkTxAyAgJJKFSn3yG0aNQJV2a5VtMxdV
+	 JmloHbEJvUPLmsYWncs2IhGW3r7dws/UY6s2uK5I=
+Received: from [IPv6:::1] (unknown [IPv6:2607:fb91:1dc2:86d0:8b7e:3b6d:e5db:1254])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 145A11287272;
+	Sat, 18 May 2024 09:07:57 -0400 (EDT)
+Date: Sat, 18 May 2024 06:07:39 -0700
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>, Jarkko Sakkinen <jarkko@kernel.org>
+CC: Eric Biggers <ebiggers@kernel.org>,
+ =?ISO-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>,
+ Ard Biesheuvel <ardb@kernel.org>,
+ Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ regressions@lists.linux.dev, kernel@collabora.com
+Subject: Re: [PATCH] crypto: api - Do not load modules until algapi is ready
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Zkif-BI_OFnFbDhv@gondor.apana.org.au>
+References: <0f68c283ff4bbb89b8a019d47891f798c6fff287.camel@HansenPartnership.com> <CAMj1kXHi4r8KY9GvX573kwqvLpMfX-J=K2hWiGAKkf5bnicwYQ@mail.gmail.com> <0d260c2f7a9f67ec8bd2305919636678d06000d1.camel@HansenPartnership.com> <CAMj1kXFE_R_x10BVkU+8vrMz0RHiX0+rz-ZL+w08FH2CLQHZXA@mail.gmail.com> <66ec985f3ee229135bf748f1b0874d5367a74d7f.camel@HansenPartnership.com> <dfb0d930-7cbe-46c5-be19-d132b4906ecf@notapiano> <D1C2NPOBHAHK.20O4IME8OK1FH@kernel.org> <20240518043115.GA53815@sol.localdomain> <ZkhS1zrobNwAuANI@gondor.apana.org.au> <D1CPYHVR94JS.1DIGZUQ2H3NCI@kernel.org> <Zkif-BI_OFnFbDhv@gondor.apana.org.au>
+Message-ID: <3A150785-8EE3-4B53-9E71-4DE49C6751B0@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 18 May 2024 16:03:26 +0300
-Message-Id: <D1CSHP8IUUBC.2MY9XKKJCQVYQ@kernel.org>
-Cc: "Eric Biggers" <ebiggers@kernel.org>,
- =?utf-8?b?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- "James Bottomley" <James.Bottomley@hansenpartnership.com>, "Ard Biesheuvel"
- <ardb@kernel.org>, "Linux Crypto Mailing List"
- <linux-crypto@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <keyrings@vger.kernel.org>, <regressions@lists.linux.dev>,
- <kernel@collabora.com>
-Subject: Re: [PATCH] crypto: api - Do not load modules until algapi is ready
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Herbert Xu" <herbert@gondor.apana.org.au>
-X-Mailer: aerc 0.17.0
-References: <0f68c283ff4bbb89b8a019d47891f798c6fff287.camel@HansenPartnership.com> <CAMj1kXHi4r8KY9GvX573kwqvLpMfX-J=K2hWiGAKkf5bnicwYQ@mail.gmail.com> <0d260c2f7a9f67ec8bd2305919636678d06000d1.camel@HansenPartnership.com> <CAMj1kXFE_R_x10BVkU+8vrMz0RHiX0+rz-ZL+w08FH2CLQHZXA@mail.gmail.com> <66ec985f3ee229135bf748f1b0874d5367a74d7f.camel@HansenPartnership.com> <dfb0d930-7cbe-46c5-be19-d132b4906ecf@notapiano> <D1C2NPOBHAHK.20O4IME8OK1FH@kernel.org> <20240518043115.GA53815@sol.localdomain> <ZkhS1zrobNwAuANI@gondor.apana.org.au> <D1CPYHVR94JS.1DIGZUQ2H3NCI@kernel.org> <Zkif-BI_OFnFbDhv@gondor.apana.org.au>
-In-Reply-To: <Zkif-BI_OFnFbDhv@gondor.apana.org.au>
 
-On Sat May 18, 2024 at 3:32 PM EEST, Herbert Xu wrote:
-> On Sat, May 18, 2024 at 02:04:18PM +0300, Jarkko Sakkinen wrote:
-> >
-> > Right does this mean for TPM driver that a crypto API invocation not
-> > having everthing needed loaded will block until this is not the case?
+On May 18, 2024 5:32:56 AM PDT, Herbert Xu <herbert@gondor=2Eapana=2Eorg=2E=
+au> wrote:
+>On Sat, May 18, 2024 at 02:04:18PM +0300, Jarkko Sakkinen wrote:
+>>
+>> Right does this mean for TPM driver that a crypto API invocation not
+>> having everthing needed loaded will block until this is not the case?
 >
-> All this does is disable module loading by the Crypto API (because
-> there is no point and it may deadlock) until such a point where
-> all/most drivers have finished loading.
+>All this does is disable module loading by the Crypto API (because
+>there is no point and it may deadlock) until such a point where
+>all/most drivers have finished loading=2E
 >
-> So if the algorithm is missing (which shouldn't happen because of
-> Kconfig selects), then it will simply fail.
->
-> Cheers,
+>So if the algorithm is missing (which shouldn't happen because of
+>Kconfig selects), then it will simply fail=2E
 
-Ok, you can add
+I have a curiosity question: if Eric is right and it's looking for an opti=
+onal hmac accelerator module, why don't I see this?  The only real config d=
+ifference between what I tested and what Nicholas did is he's arm and I'm x=
+86=2E
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+James
 
-BR, Jarkko
+--=20
+Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E
 
