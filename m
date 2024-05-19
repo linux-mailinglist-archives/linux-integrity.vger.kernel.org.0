@@ -1,99 +1,81 @@
-Return-Path: <linux-integrity+bounces-2465-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2466-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A166B8C94A7
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 May 2024 14:49:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B4578C976D
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 01:51:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF8FC1F21436
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 May 2024 12:49:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA26F28115D
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 May 2024 23:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB013D96D;
-	Sun, 19 May 2024 12:49:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6151DDF8;
+	Sun, 19 May 2024 23:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pu9fBiY5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GbQFl7s3"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B73DF58;
-	Sun, 19 May 2024 12:49:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC338F4A;
+	Sun, 19 May 2024 23:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716122974; cv=none; b=gX9qzsEjBRNm1ck7YaV/ukhcbxGEIHLULsbX0QdYOM8uH3L2Tjdv++qOoHy/MI8u048va3U5ovCOusUqgcxlEM3RMa1Wxb4kfN8kMUuOfBikBAFhRzuAg8Tm/nkMm7A7Jn1V2OYgKrdweLMJno3Ytsp+l4okW00KCkNzielbuCk=
+	t=1716162688; cv=none; b=aSfgDOTnGV9pWNGn/qS1tw/a4uC75OUe16gjaSJFDalsyOC1dpyV3D1iLvIjFa83efZmGZgsuoKumppPiwZfqr9z12hcpSw7oqDI1b3QpEWFeHhmga+o/RUBpZQtr112WNYgQG0n3rEnmGfL5geFqIsyWubMxipt2c+kDTYok1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716122974; c=relaxed/simple;
-	bh=5c6KJP9+iCfjzaILwM7txlwQN7YH/0G77q+/VLJR75Q=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=ugkmX+Ys2K4w041Ps6WtM6LwZfzmU9FUjLDtBQVaCvOPnPaTpTrbTE8BUcB7eE+uErHXwNS5uF/bJILHbuUm9sAJlIMdPgPOK96pjZHxNvdllWyyr3PYaHsXnRZkDlB2m8Stdtk/g9Lfgx+qOlVGUMhLAQTNFAsfCphZmkJFWCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pu9fBiY5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDCDC32781;
-	Sun, 19 May 2024 12:49:30 +0000 (UTC)
+	s=arc-20240116; t=1716162688; c=relaxed/simple;
+	bh=sFF+7igQBl2ESdcO2thGcwttU4waX/G2ehZzAJURP0I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jJVfARbJ5X/XOhBGJPD0TvK40hCBveoiPUL0Rdubsvl8EZDVpVfnLSCpXrQhcuJnBLY6rf1UK0K0NEWVqt+R/NpA3TuyCTSVPyVLtFGX4tFeCZ8m85OD2+Q9ffTa/4IKynnotK1GO/FqWe2/prpUl8EzinhSe4sM5gGjkPGp6zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GbQFl7s3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFE9CC32781;
+	Sun, 19 May 2024 23:51:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716122973;
-	bh=5c6KJP9+iCfjzaILwM7txlwQN7YH/0G77q+/VLJR75Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pu9fBiY5sUYW+kaSaQAsHpOYqf6ezgVhR63MS0OeE3XNnO9jKmp2fM4hhReBGI9m5
-	 hV9KzFBgUn+H/+fFMXEqbrSG7MprlfUioOWRjjotk14fYKLJA/p/uKqJFIzc2uVYn/
-	 pqE6FJLnApKT+hss/8NGm+JXSxpHrfF98A04/cCeGIOi7qlZ0DdgmbaUEbWaDk75xN
-	 ZdrLFVekaKSof67XtRtDzXFPPkr1hVbmIir2F9CU12M4KTIZO/aLjbJWadLvJheoPF
-	 wrOTW3vNQ/pwDoPwduqahuG0zI9Q6MriCzcjvwk+lAV0jVNyplCkXiNEvcsT6I2xHQ
-	 2XBetNTBAqNMQ==
+	s=k20201202; t=1716162687;
+	bh=sFF+7igQBl2ESdcO2thGcwttU4waX/G2ehZzAJURP0I=;
+	h=From:To:Cc:Subject:Date:From;
+	b=GbQFl7s3spqTkn7xfq3hNeqkAE8gh6hjmnA1j0Y/+pudvJV/wg2Pg7bLydSfLjr1Y
+	 gXXzP676BsvfO4+haxJrn2zlF9iVGsfJjvegbqk9V43UgEhOyCWot7SGlMOWaKoH27
+	 Zhp42JxAVqA64f236VKNPwmY8If2qqRcSdDWL28y2o51Qs0djXlDYZSoe8LnOtR+QC
+	 Vp3gaohiuJ2usHqXxS7K/G1YUhN5L0AvrmlQkBKL3wlmwGMDCtl2jB8tm3lZA4Ql++
+	 0cnPHxp4Y0Kzvw4j3/bDxfs93XW3BTj8RryLLCIzJafmH+SLU1xZKYIL/1IaDR2Ihx
+	 SpJy5kItC4yzQ==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org,
+	James.Bottomley@HansenPartnership.com,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] KEYS: trusted: bug fixes
+Date: Mon, 20 May 2024 02:51:18 +0300
+Message-ID: <20240519235122.3380-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 19 May 2024 15:49:28 +0300
-Message-Id: <D1DMTJYL7TFC.3J3FM36K06ECD@kernel.org>
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Herbert Xu"
- <herbert@gondor.apana.org.au>
-Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
- <Andreas.Fuchs@infineon.com>, "James Prestwood" <prestwoj@gmail.com>,
- "David Woodhouse" <dwmw2@infradead.org>, "David Howells"
- <dhowells@redhat.com>, "David S. Miller" <davem@davemloft.net>, "Peter
- Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "James
- Bottomley" <James.Bottomley@HansenPartnership.com>, "Stefan Berger"
- <stefanb@linux.ibm.com>, "Ard Biesheuvel" <ardb@kernel.org>, "Mario
- Limonciello" <mario.limonciello@amd.com>, "open list:CRYPTO API"
- <linux-crypto@vger.kernel.org>, "open list" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v2 0/5] Asymmetric TPM2 key type
-X-Mailer: aerc 0.17.0
-References: <20240519002616.4432-1-jarkko@kernel.org>
-In-Reply-To: <20240519002616.4432-1-jarkko@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun May 19, 2024 at 3:25 AM EEST, Jarkko Sakkinen wrote:
-> ## Overview
->
-> Introduce tpm2_key_rsa implementing asymmetric TPM RSA key.
->
-> I submit this first as RFC as I could not execute the keyctl padd in the
-> following sequence (returns EBADF):
->
-> tpm2_createprimary --hierarchy o -G rsa2048 -c owner.txt
-> tpm2_evictcontrol -c owner.txt 0x81000001
-> tpm2_getcap handles-persistent
-> openssl genrsa -out private.pem 2048
-> tpm2_import -C 0x81000001 -G rsa -i private.pem -u key.pub -r key.priv
-> tpm2_encodeobject -C 0x81000001 -u key.pub -r key.priv -o key.priv.pem
-> openssl asn1parse -inform pem -in key.priv.pem -noout -out key.priv.der
-> key_serial=3D`cat key.priv.der | keyctl padd asymmetric tpm @u`
+Accumulated bug fixes for trusted keys.
 
-After v2 changes it ends up to -EINVAL and:
+Jarkko Sakkinen (3):
+  tpm: Disable TCG_TPM2_HMAC by default
+  KEYS: trusted: Fix memory leak in tpm2_key_encode()
+  KEYS: trusted: Do not use WARN when encode fails
 
-OID is "2.23.133.10.1.3" which is not TPMSealedData
+ drivers/char/tpm/Kconfig                  |  2 +-
+ security/keys/trusted-keys/trusted_tpm2.c | 25 +++++++++++++++++------
+ 2 files changed, 20 insertions(+), 7 deletions(-)
 
-which makes total sense. James' old patch set has already TPMLoadableKey
-parsing PoC'd so I use that as the reference.
+-- 
+2.45.1
 
-After the sequence above successfully completes keyctl public key ops
-are accesible by using $key_serial as the serial.
-
-BR, Jarkko
 
