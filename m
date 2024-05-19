@@ -1,86 +1,99 @@
-Return-Path: <linux-integrity+bounces-2464-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2465-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CA1A8C9363
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 May 2024 06:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A166B8C94A7
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 May 2024 14:49:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C295C1F2136A
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 May 2024 04:20:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF8FC1F21436
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 May 2024 12:49:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235248F49;
-	Sun, 19 May 2024 04:20:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB013D96D;
+	Sun, 19 May 2024 12:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pu9fBiY5"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4366B7492;
-	Sun, 19 May 2024 04:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B73DF58;
+	Sun, 19 May 2024 12:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716092408; cv=none; b=slgJstm+pe9XNRN/ErVNZwcVdZMukmkXbHtwuXYDYOejFuPKYI+piPHjesvF15Ci5BjEJBZ/eU4WdAGgdX7TNs1ED9VP+Kzq/uVinaHnbnpKPQR8ZdAfIwkD9htUqKWZaTFhUQJfLPNhQ4XOarx6su6Fm7/4d6VozS934ftWRoM=
+	t=1716122974; cv=none; b=gX9qzsEjBRNm1ck7YaV/ukhcbxGEIHLULsbX0QdYOM8uH3L2Tjdv++qOoHy/MI8u048va3U5ovCOusUqgcxlEM3RMa1Wxb4kfN8kMUuOfBikBAFhRzuAg8Tm/nkMm7A7Jn1V2OYgKrdweLMJno3Ytsp+l4okW00KCkNzielbuCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716092408; c=relaxed/simple;
-	bh=KSFNkUecnxYaZfX2XSP4Ln26Z+CZ5J+ihB7wjteqxRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aaSzDhdguvN4f+YraR95uDiMo9ImddrSGIko9ap+2fEQo2JtBpePq04GxZWbo4Bv8Upq7AXwr7SSYsJOektk6DASYPNbdLNGn0/oO0Ocxqlyl3+5DOytv8Ax+WugtQkDEUFUdH/7U074xUXbN+6A24QrgasnIgVbISyRx9cibLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1s8Y1b-00HFcI-19;
-	Sun, 19 May 2024 12:19:56 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 19 May 2024 12:19:56 +0800
-Date: Sun, 19 May 2024 12:19:56 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, Eric Biggers <ebiggers@kernel.org>,
-	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	regressions@lists.linux.dev, kernel@collabora.com
-Subject: Re: [PATCH] crypto: api - Do not load modules until algapi is ready
-Message-ID: <Zkl97G-y7ZvTK5Pf@gondor.apana.org.au>
-References: <0d260c2f7a9f67ec8bd2305919636678d06000d1.camel@HansenPartnership.com>
- <CAMj1kXFE_R_x10BVkU+8vrMz0RHiX0+rz-ZL+w08FH2CLQHZXA@mail.gmail.com>
- <66ec985f3ee229135bf748f1b0874d5367a74d7f.camel@HansenPartnership.com>
- <dfb0d930-7cbe-46c5-be19-d132b4906ecf@notapiano>
- <D1C2NPOBHAHK.20O4IME8OK1FH@kernel.org>
- <20240518043115.GA53815@sol.localdomain>
- <ZkhS1zrobNwAuANI@gondor.apana.org.au>
- <D1CPYHVR94JS.1DIGZUQ2H3NCI@kernel.org>
- <Zkif-BI_OFnFbDhv@gondor.apana.org.au>
- <3A150785-8EE3-4B53-9E71-4DE49C6751B0@HansenPartnership.com>
+	s=arc-20240116; t=1716122974; c=relaxed/simple;
+	bh=5c6KJP9+iCfjzaILwM7txlwQN7YH/0G77q+/VLJR75Q=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=ugkmX+Ys2K4w041Ps6WtM6LwZfzmU9FUjLDtBQVaCvOPnPaTpTrbTE8BUcB7eE+uErHXwNS5uF/bJILHbuUm9sAJlIMdPgPOK96pjZHxNvdllWyyr3PYaHsXnRZkDlB2m8Stdtk/g9Lfgx+qOlVGUMhLAQTNFAsfCphZmkJFWCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pu9fBiY5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDCDC32781;
+	Sun, 19 May 2024 12:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716122973;
+	bh=5c6KJP9+iCfjzaILwM7txlwQN7YH/0G77q+/VLJR75Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pu9fBiY5sUYW+kaSaQAsHpOYqf6ezgVhR63MS0OeE3XNnO9jKmp2fM4hhReBGI9m5
+	 hV9KzFBgUn+H/+fFMXEqbrSG7MprlfUioOWRjjotk14fYKLJA/p/uKqJFIzc2uVYn/
+	 pqE6FJLnApKT+hss/8NGm+JXSxpHrfF98A04/cCeGIOi7qlZ0DdgmbaUEbWaDk75xN
+	 ZdrLFVekaKSof67XtRtDzXFPPkr1hVbmIir2F9CU12M4KTIZO/aLjbJWadLvJheoPF
+	 wrOTW3vNQ/pwDoPwduqahuG0zI9Q6MriCzcjvwk+lAV0jVNyplCkXiNEvcsT6I2xHQ
+	 2XBetNTBAqNMQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3A150785-8EE3-4B53-9E71-4DE49C6751B0@HansenPartnership.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 19 May 2024 15:49:28 +0300
+Message-Id: <D1DMTJYL7TFC.3J3FM36K06ECD@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Herbert Xu"
+ <herbert@gondor.apana.org.au>
+Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
+ <Andreas.Fuchs@infineon.com>, "James Prestwood" <prestwoj@gmail.com>,
+ "David Woodhouse" <dwmw2@infradead.org>, "David Howells"
+ <dhowells@redhat.com>, "David S. Miller" <davem@davemloft.net>, "Peter
+ Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "James
+ Bottomley" <James.Bottomley@HansenPartnership.com>, "Stefan Berger"
+ <stefanb@linux.ibm.com>, "Ard Biesheuvel" <ardb@kernel.org>, "Mario
+ Limonciello" <mario.limonciello@amd.com>, "open list:CRYPTO API"
+ <linux-crypto@vger.kernel.org>, "open list" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC v2 0/5] Asymmetric TPM2 key type
+X-Mailer: aerc 0.17.0
+References: <20240519002616.4432-1-jarkko@kernel.org>
+In-Reply-To: <20240519002616.4432-1-jarkko@kernel.org>
 
-On Sat, May 18, 2024 at 06:07:39AM -0700, James Bottomley wrote:
+On Sun May 19, 2024 at 3:25 AM EEST, Jarkko Sakkinen wrote:
+> ## Overview
 >
-> I have a curiosity question: if Eric is right and it's looking for an optional hmac accelerator module, why don't I see this?  The only real config difference between what I tested and what Nicholas did is he's arm and I'm x86.
+> Introduce tpm2_key_rsa implementing asymmetric TPM RSA key.
+>
+> I submit this first as RFC as I could not execute the keyctl padd in the
+> following sequence (returns EBADF):
+>
+> tpm2_createprimary --hierarchy o -G rsa2048 -c owner.txt
+> tpm2_evictcontrol -c owner.txt 0x81000001
+> tpm2_getcap handles-persistent
+> openssl genrsa -out private.pem 2048
+> tpm2_import -C 0x81000001 -G rsa -i private.pem -u key.pub -r key.priv
+> tpm2_encodeobject -C 0x81000001 -u key.pub -r key.priv -o key.priv.pem
+> openssl asn1parse -inform pem -in key.priv.pem -noout -out key.priv.der
+> key_serial=3D`cat key.priv.der | keyctl padd asymmetric tpm @u`
 
-It depends on your kernel config.  Perhaps you didn't build the
-TPM driver into the kernel?
+After v2 changes it ends up to -EINVAL and:
 
-It's not an issue with an optional algorithm that's not included.
+OID is "2.23.133.10.1.3" which is not TPMSealedData
 
-It's the fact the Crypto API tries to load a module for any
-algorithm that requires instantiation (anything with "()" in its
-name).
+which makes total sense. James' old patch set has already TPMLoadableKey
+parsing PoC'd so I use that as the reference.
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+After the sequence above successfully completes keyctl public key ops
+are accesible by using $key_serial as the serial.
+
+BR, Jarkko
 
