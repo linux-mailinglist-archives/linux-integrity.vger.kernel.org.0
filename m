@@ -1,77 +1,97 @@
-Return-Path: <linux-integrity+bounces-2473-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2474-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8BD18C9F37
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 17:02:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1335E8C9FEF
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 17:44:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3FF028306E
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 15:02:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1387280D2B
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 15:44:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59DF41369AF;
-	Mon, 20 May 2024 15:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8F89137755;
+	Mon, 20 May 2024 15:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fpvV0n3S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QpJG34v/"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DAE128E7;
-	Mon, 20 May 2024 15:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F4613774C;
+	Mon, 20 May 2024 15:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716217342; cv=none; b=G8IiY7ZUmPZ57powT3TJiDcEpcWQE/Y+cx8a0JDx/pmIOy+s1H1kQJ9olOICIBM/qIUZhhRk7owRwFrZrpQRdmsIi9EZ4GLnL4UxcOUJiMV5gFOfLwyLidmwE9FX11N4YxgqMaGL7QcWaVpI1uEmypFAMNj5Ck1oAmZJYOzSkQY=
+	t=1716219867; cv=none; b=WpR0USPVVzKlGFsmMdixYvomdcMZ0ipP3yAq/DvEZuR/UGfSBWVORPORjRgoXzdYlw6YT23NjBZds4xeFrMGzykMmlk5zEWBstqTZsfGFQ7xnDIjiSnzk9NsU/0AwKxEzGWu8Q0fUKlUdxadytQuOSu57wGX2qkyq6QnBrQAUi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716217342; c=relaxed/simple;
-	bh=9RS2az84TElMInbtcQQTogk7d6fIdrs3LvcZ6khQz98=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pOqlkvk5jXJf1s6qORF0t0m6XtGJW7VeEAtzZCkuHzOHQPhzNndA1269nNXLW18baAQ2FqG50nRMYqUHMsc6FDX/eZOKFrKL14H8ftDJEQGdpqPEg+1Sd2I3SyXBy2PosyzCWgE2o8BVA2FX1x5Veg8XiiqF1ox5H6T/g3xjFYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fpvV0n3S; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=v7UHaYBASGON477WeRkbYfkExvBwpWv5B6NceC3529c=; b=fpvV0n3S49M2CiU5s1d4zgeu/D
-	09c7chgt0e7SZHx1SKl57Kwkavj+rOzcqNMQsBngDdxVw4Lnj2tqfIFM5Vglng9KGvNj3tynUqO/W
-	I6IzicAjOXT16P8KjwBIXPZEH/CsEIhM18snHX+ph2fMOpbVJk4oqy39N2bIWC5vFUEghZ7QsQ1hi
-	hcwrABCKfkfnhL0QUtJ3WdnHPD79gMQjVnJ75Hu9uNYWqDdRmnOZ67E1gW1YweFqxKs11vyTVzghZ
-	gPqkZedsAnVVGJs7XlLaRKCsNgEt/6CFPDbbd2XVca48y19gdnpLO5C+8YrFNN74B/Qaqq2AC0/J/
-	y0YtFpCw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s94Wm-0000000EmZ7-3FjD;
-	Mon, 20 May 2024 15:02:16 +0000
-Date: Mon, 20 May 2024 08:02:16 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Mikulas Patocka <mpatocka@redhat.com>
-Cc: Eric Wheeler <linux-integrity@lists.ewheeler.net>,
-	Mike Snitzer <snitzer@kernel.org>, Milan Broz <gmazyland@gmail.com>,
-	dm-devel@lists.linux.dev, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] dm-integrity: set discard_granularity to logical block
- size
-Message-ID: <Zktl-DSFXiNQg7K5@infradead.org>
-References: <d015c396-d686-48b1-1460-c8e1b18f4c4c@redhat.com>
+	s=arc-20240116; t=1716219867; c=relaxed/simple;
+	bh=/L4FskE1HfAHScBbUruTM2tjBuSCUX2t8pOV7GehlYs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=MF3vDxQxzbNxwe+O3Z9973AIXR+QEEHZzmyw+mm/Df8X0g/H7n2qHzWQ/jzC1Haa8fGpOCe1cBTOY/W92QzbAeP/osNpKmRZRC/uRbveu26EQkUIv41YOfvmmgHGCZQtNWejwGQNZ0m6q4JzQskLE7zolbk0HeOsHkAMn2D/ZTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QpJG34v/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3CC2C2BD10;
+	Mon, 20 May 2024 15:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716219867;
+	bh=/L4FskE1HfAHScBbUruTM2tjBuSCUX2t8pOV7GehlYs=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=QpJG34v/lOIJWRMRp1RBRrkH8ymaB5o0UPDpba70rf0d/jvmQlr5AoBK4PwxPHniS
+	 89NvhOyKftO/PSEHPid9ByD2VGBSs961xR4bmeCjUyrmO6wcORpw+Hw7snZQH7Mj6W
+	 FW4inGyvSKXQ3FKftp/NNbco3CNTsfNlMkyh95GZ5GlXi9n0iRRCUK7uk4xbvcloI4
+	 lWDMwKwz5RKyaE2z5uKVBP9NZluUXNCOmT5RKyqVaxaYl+nSFoF6tPsMsoOyelBMXi
+	 3WLer03ddSQ84LQCw3EzdTRWo3QfG80Tt38qIwqwLjHnbtjyVJc7OGfZRIoqOoin87
+	 xFIZsqi6c7oRw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d015c396-d686-48b1-1460-c8e1b18f4c4c@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 20 May 2024 18:44:24 +0300
+Message-Id: <D1EL6195XVCO.1T6R5B5AYTQQZ@kernel.org>
+Cc: <keyrings@vger.kernel.org>, "Vitor Soares" <ivitro@gmail.com>, "Peter
+ Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "open list"
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm: Disable TCG_TPM2_HMAC by default
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240518113424.13486-1-jarkko@kernel.org>
+ <41466b65a30a351d57869042e9f130cdb68aab5b.camel@HansenPartnership.com>
+In-Reply-To: <41466b65a30a351d57869042e9f130cdb68aab5b.camel@HansenPartnership.com>
 
-On Mon, May 20, 2024 at 04:48:31PM +0200, Mikulas Patocka wrote:
-> dm-integrity could set discard_granularity lower than the logical block
-> size. This could result in failures when sending discard requests to
-> dm-integrity. This patch fixes discard_granularity.
+On Mon May 20, 2024 at 5:50 PM EEST, James Bottomley wrote:
+> On Sat, 2024-05-18 at 14:34 +0300, Jarkko Sakkinen wrote:
+> > Causes performance drop in initialization so needs to be opt-in.
+> > Distributors are capable of opt-in enabling this. Could be also
+> > handled by kernel-command line in the future.
+> >=20
+> > Reported-by: Vitor Soares <ivitro@gmail.com>
+> > Closes:
+> > https://lore.kernel.org/linux-integrity/bf67346ef623ff3c452c4f968b7d900=
+911e250c3.camel@gmail.com/#t
+>
+> Hey, there's no response on that thread verifying the primary
+> generation is the culprit.  Could we at least wait for a reply before
+> taking such drastic action based on surmise?
+>
+> I'd be really surprised if it is primary generation.  If I used an RSA
+> primary it would be a problem (My oldest TPM takes a couple of minutes
+> to generate one) but the longest I've seen an EC primary take to
+> generate is still less than a second.
+>
+> James
 
-What kernel was this reported on?  For current mainline,
-blk_validate_limits should ensure that the discard_granularity is
-floored by the logical block size.
+Nothing is going to happen before rc1 is out, it would be earliest rc2.
 
+ECDSA should be always faster than RSA so you're right that it does not
+necessarily make much sense, unless there are TPM2 chips with only RSA.
+
+It might make sense to have at least a command-line option to disable
+hmac.
+
+BR, Jarkko
 
