@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2478-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2479-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6DF58CA236
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 20:48:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D87528CA23C
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 20:48:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D32D281F62
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 18:48:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 040B51C21866
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 May 2024 18:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D61F81384BD;
-	Mon, 20 May 2024 18:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998C3137C57;
+	Mon, 20 May 2024 18:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ie2aK56F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DurDf+K6"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A572A13956B;
-	Mon, 20 May 2024 18:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE21137C2E;
+	Mon, 20 May 2024 18:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716230865; cv=none; b=Sv5BC/pRcIAfF5xrPTLrp+FMrf8Fv4ND+yd3vnSjoMHA+yu/BPJQo6GnDPd3CbPHQqO8z02MuTWPVquhgcOnPvgE4k3YlHSZoLQo1NiRAlcZUd0wie+RHl08LC8AUp+oMvyraIUxeDvMYSxLjsStWbKcB+/743mpbDTvBdfwpCY=
+	t=1716230872; cv=none; b=awds8FWu81bBT2OV3TmuBVUVeIUTFDiVZW+VLzJtD4CrVuERxhSysS9q+mdWh1PgrW/5R9hSja5pyOMxJnSBM7oJOhrPAwv37eXKyaKGbZ/kyLT0NW5jumXKvjbbVijGNCuAoOuKptBnfCEVokezdaq1gGWonoLRkSFJ4Khed2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716230865; c=relaxed/simple;
-	bh=xy+V7XL2mntIN1Y8Vq4nuU/5Bbmt5vykHQ/6P1bi5xo=;
+	s=arc-20240116; t=1716230872; c=relaxed/simple;
+	bh=jec1TbJ+akbpJqkAQc6Azv309XlSmxotrVc7+fbbuXQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ALfZJFcLaFvLzaTc1uIO9qR2LtkgVitKxpx1rclypZ1qKqq7dRMEugXu3YJVRrPaGvQCWk+zVa9u/nulkyATfRD1MmNL8qfNzP5VlL+LD8OxefYo3wtgIkkFnZnYcExxqVGQPdQLXY+4d22eqMn/eGMfnkpw/EGhLKHEpGWcjVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ie2aK56F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2036EC2BD10;
-	Mon, 20 May 2024 18:47:44 +0000 (UTC)
+	 MIME-Version; b=L4UztMlM5310feWkKu0xw1zxzXmY3Q23nYPLE7qX8wJL5CG8kFXsr+WB/6F0QII5ObxSXda8Lse5Th/+RyM3CXBWjX1fRquKOmPWhPe8H+JpF48+goI5Tug3p0Lg4/6kLt2XsESjHLiuNpiuTXtID2gjIu/xDt+7INzrSwcs7eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DurDf+K6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84613C2BD10;
+	Mon, 20 May 2024 18:47:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716230865;
-	bh=xy+V7XL2mntIN1Y8Vq4nuU/5Bbmt5vykHQ/6P1bi5xo=;
+	s=k20201202; t=1716230871;
+	bh=jec1TbJ+akbpJqkAQc6Azv309XlSmxotrVc7+fbbuXQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ie2aK56FFOTsPMlGUzRljAEw5ofaCi6G4XaANyyX/yn0Ql39Xrybwgu08LHc+qN0P
-	 Wu/JEQ+207GGVaZeDKST1nSCl2DYObYMpI801nDZJ8s7Eozzc7lRb0XujZuRvyMX3N
-	 tImYiV3nlM1j/A8KnYNTtJA1rhAJqfrm+GwVh/2x0gEoZT1UJMc3D7Y0vfqvd2y0bh
-	 NyYtw92P1Hxey33GApmQBF25McLm7PL8lEyjAKGgEj5+4k/riuWgXxbhrsggImkkQM
-	 Q/ba8vfOEyuwAW8GFe77ry9fdCSg/KjX5TVqRnxidoSA0e7kpQjzRuIc4voO4VdZev
-	 Kju8MfuBLhwzA==
+	b=DurDf+K6tI8CwTetvZaUheJ6zrWhdD75ECb9521ETi19cqtDb0UmQkMEOcIn8WIm6
+	 LL9E//ffoDKaaA+vXiYobhRX0ad8vx/Oa3Zartdn6PFp5UIrGGMJmIYTJyTsbr5gFU
+	 haqKlhs5XtkB1MGw54CwtizMwiYjnNWX1/rZUb+0WqPB7WV3sZsE3Jw7Wfv4YodKTr
+	 XnsmG2XgLUwDK8j5RfNp6jz0TburKjLo2HcMgl31cz7ad6C8S/vJKFekSeR5E+f0ee
+	 GuyxXAMbPiOpixRVGA1Tr7Z97jdAw4J+w4GLshCcDuWgqEL6S1BmLCMy+BGOOr0V4X
+	 U46nLx+bd6bEg==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: linux-integrity@vger.kernel.org,
@@ -52,17 +52,15 @@ Cc: linux-integrity@vger.kernel.org,
 	"David S. Miller" <davem@davemloft.net>,
 	linux-crypto@vger.kernel.org (open list:CRYPTO API),
 	linux-kernel@vger.kernel.org (open list),
-	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
 	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH 2/6] lib: Expand asn1_encode_integer() to variable size integers
-Date: Mon, 20 May 2024 21:47:09 +0300
-Message-ID: <20240520184727.22038-3-jarkko@kernel.org>
+	Stefan Berger <stefanb@linux.ibm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH 3/6] tpm: Export tpm2_load_context()
+Date: Mon, 20 May 2024 21:47:10 +0300
+Message-ID: <20240520184727.22038-4-jarkko@kernel.org>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20240520184727.22038-1-jarkko@kernel.org>
 References: <20240520184727.22038-1-jarkko@kernel.org>
@@ -74,297 +72,210 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Expand asn1_encode_integer() to variable size integers, meaning that it
-will get a blob in big-endian format as integer and length of the blob as
-parameters. This is required in order to encode RSA public key modulus.
+Export tpm2_load_context() so that the null key can be loaded as the
+parent of a asymmetric TPM2 key.
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- include/linux/asn1_encoder.h              |   3 +-
- lib/asn1_encoder.c                        | 185 ++++++++++++----------
- security/keys/trusted-keys/trusted_tpm2.c |   4 +-
- 3 files changed, 103 insertions(+), 89 deletions(-)
+ drivers/char/tpm/tpm.h        |  2 -
+ drivers/char/tpm/tpm2-cmd.c   | 77 +++++++++++++++++++++++++++++++++++
+ drivers/char/tpm/tpm2-space.c | 61 ---------------------------
+ include/linux/tpm.h           |  2 +
+ 4 files changed, 79 insertions(+), 63 deletions(-)
 
-diff --git a/include/linux/asn1_encoder.h b/include/linux/asn1_encoder.h
-index 08cd0c2ad34f..ad5fb18db9e2 100644
---- a/include/linux/asn1_encoder.h
-+++ b/include/linux/asn1_encoder.h
-@@ -9,9 +9,10 @@
- #include <linux/bug.h>
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 6b8b9956ba69..c9c67fe84f33 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -314,8 +314,6 @@ int tpm_devs_add(struct tpm_chip *chip);
+ void tpm_devs_remove(struct tpm_chip *chip);
+ int tpm2_save_context(struct tpm_chip *chip, u32 handle, u8 *buf,
+ 		      unsigned int buf_size, unsigned int *offset);
+-int tpm2_load_context(struct tpm_chip *chip, u8 *buf,
+-		      unsigned int *offset, u32 *handle);
  
- #define asn1_oid_len(oid) (sizeof(oid)/sizeof(u32))
-+
- unsigned char *
- asn1_encode_integer(unsigned char *data, const unsigned char *end_data,
--		    s64 integer);
-+		    const u8 *integer, int integer_len);
- unsigned char *
- asn1_encode_oid(unsigned char *data, const unsigned char *end_data,
- 		u32 oid[], int oid_len);
-diff --git a/lib/asn1_encoder.c b/lib/asn1_encoder.c
-index 0fd3c454a468..51a2d7010a67 100644
---- a/lib/asn1_encoder.c
-+++ b/lib/asn1_encoder.c
-@@ -9,12 +9,78 @@
- #include <linux/bug.h>
- #include <linux/string.h>
- #include <linux/module.h>
-+#include <linux/slab.h>
+ void tpm_bios_log_setup(struct tpm_chip *chip);
+ void tpm_bios_log_teardown(struct tpm_chip *chip);
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index 0cdf892ec2a7..eb07a109e2ba 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -370,6 +370,83 @@ void tpm2_flush_context(struct tpm_chip *chip, u32 handle)
+ }
+ EXPORT_SYMBOL_GPL(tpm2_flush_context);
+ 
++struct tpm2_context {
++	__be64 sequence;
++	__be32 saved_handle;
++	__be32 hierarchy;
++	__be16 blob_size;
++} __packed;
 +
 +/**
-+ * asn1_encode_length() - encode a length to follow an ASN.1 tag
-+ * @data: pointer to encode at
-+ * @data_len: pointer to remaining length (adjusted by routine)
-+ * @len: length to encode
++ * tpm2_load_context() - Load TPM2 object to the TPM memory
++ * @chip:	TPM chip to use
++ * @buf:	Blob containing TPM2 object.
++ * @offset:	Output variable for the offset in @buf reached.
++ * @handle:	Output variable for the handle of the object in TPM memory.
 + *
-+ * This routine can encode lengths up to 65535 using the ASN.1 rules.
-+ * It will accept a negative length and place a zero length tag
-+ * instead (to keep the ASN.1 valid).  This convention allows other
-+ * encoder primitives to accept negative lengths as singalling the
-+ * sequence will be re-encoded when the length is known.
++ * Load a blob encrypted with TPM from the memory to the TPM chip.
++ *
++ * Return:
++ * - 0 when the blob is successfully loaded to the TPM.
++ * - -EFAULT if the TPM chip itself fails.
++ * - -ENOENT if the TPM object is replayed.
++ * - -EINVAL if the TPM object is corrupted.
 + */
-+static int asn1_encode_length(unsigned char **data, int *data_len, int len)
++int tpm2_load_context(struct tpm_chip *chip, const u8 *buf,
++		      unsigned int *offset, u32 *handle)
 +{
-+	if (*data_len < 1)
-+		return -EINVAL;
++	struct tpm_buf tbuf;
++	struct tpm2_context *ctx;
++	unsigned int body_size;
++	int rc;
 +
-+	if (len < 0) {
-+		*((*data)++) = 0;
-+		(*data_len)--;
-+		return 0;
++	rc = tpm_buf_init(&tbuf, TPM2_ST_NO_SESSIONS, TPM2_CC_CONTEXT_LOAD);
++	if (rc)
++		return rc;
++
++	ctx = (struct tpm2_context *)&buf[*offset];
++	body_size = sizeof(*ctx) + be16_to_cpu(ctx->blob_size);
++	tpm_buf_append(&tbuf, &buf[*offset], body_size);
++
++	rc = tpm_transmit_cmd(chip, &tbuf, 4, NULL);
++	if (rc < 0) {
++		dev_warn(&chip->dev, "%s: failed with a system error %d\n",
++			 __func__, rc);
++		tpm_buf_destroy(&tbuf);
++		return -EFAULT;
++	} else if (tpm2_rc_value(rc) == TPM2_RC_HANDLE ||
++		   rc == TPM2_RC_REFERENCE_H0) {
++		/*
++		 * TPM_RC_HANDLE means that the session context can't
++		 * be loaded because of an internal counter mismatch
++		 * that makes the TPM think there might have been a
++		 * replay.  This might happen if the context was saved
++		 * and loaded outside the space.
++		 *
++		 * TPM_RC_REFERENCE_H0 means the session has been
++		 * flushed outside the space
++		 */
++		*handle = 0;
++		tpm_buf_destroy(&tbuf);
++		return -ENOENT;
++	} else if (tpm2_rc_value(rc) == TPM2_RC_INTEGRITY) {
++		tpm_buf_destroy(&tbuf);
++		return -EINVAL;
++	} else if (rc > 0) {
++		dev_warn(&chip->dev, "%s: failed with a TPM error 0x%04X\n",
++			 __func__, rc);
++		tpm_buf_destroy(&tbuf);
++		return -EFAULT;
 +	}
 +
-+	if (len <= 0x7f) {
-+		*((*data)++) = len;
-+		(*data_len)--;
-+		return 0;
-+	}
++	*handle = be32_to_cpup((__be32 *)&tbuf.data[TPM_HEADER_SIZE]);
++	*offset += body_size;
 +
-+	if (*data_len < 2)
-+		return -EINVAL;
-+
-+	if (len <= 0xff) {
-+		*((*data)++) = 0x81;
-+		*((*data)++) = len & 0xff;
-+		*data_len -= 2;
-+		return 0;
-+	}
-+
-+	if (*data_len < 3)
-+		return -EINVAL;
-+
-+	if (len <= 0xffff) {
-+		*((*data)++) = 0x82;
-+		*((*data)++) = (len >> 8) & 0xff;
-+		*((*data)++) = len & 0xff;
-+		*data_len -= 3;
-+		return 0;
-+	}
-+
-+	if (WARN(len > 0xffffff, "ASN.1 length can't be > 0xffffff"))
-+		return -EINVAL;
-+
-+	if (*data_len < 4)
-+		return -EINVAL;
-+	*((*data)++) = 0x83;
-+	*((*data)++) = (len >> 16) & 0xff;
-+	*((*data)++) = (len >> 8) & 0xff;
-+	*((*data)++) = len & 0xff;
-+	*data_len -= 4;
-+
++	tpm_buf_destroy(&tbuf);
 +	return 0;
 +}
++EXPORT_SYMBOL_GPL(tpm2_load_context);
++
+ struct tpm2_get_cap_out {
+ 	u8 more_data;
+ 	__be32 subcap_id;
+diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+index 4892d491da8d..708c6e4d64cd 100644
+--- a/drivers/char/tpm/tpm2-space.c
++++ b/drivers/char/tpm/tpm2-space.c
+@@ -21,13 +21,6 @@ enum tpm2_handle_types {
+ 	TPM2_HT_TRANSIENT	= 0x80000000,
+ };
  
- /**
-  * asn1_encode_integer() - encode positive integer to ASN.1
-- * @data:	pointer to the pointer to the data
-- * @end_data:	end of data pointer, points one beyond last usable byte in @data
-- * @integer:	integer to be encoded
-+ * @data:		pointer to the pointer to the data
-+ * @end_data:		end of data pointer, points one beyond last usable byte in @data
-+ * @integer:		integer to be encoded
-+ * @integer_len:	length in bytes of the integer blob
-  *
-  * This is a simplified encoder: it only currently does
-  * positive integers, but it should be simple enough to add the
-@@ -22,15 +88,17 @@
-  */
- unsigned char *
- asn1_encode_integer(unsigned char *data, const unsigned char *end_data,
--		    s64 integer)
-+		    const u8 *integer, int integer_len)
+-struct tpm2_context {
+-	__be64 sequence;
+-	__be32 saved_handle;
+-	__be32 hierarchy;
+-	__be16 blob_size;
+-} __packed;
+-
+ static void tpm2_flush_sessions(struct tpm_chip *chip, struct tpm_space *space)
  {
- 	int data_len = end_data - data;
--	unsigned char *d = &data[2];
- 	bool found = false;
-+	unsigned char *d;
-+	int encoded_len;
-+	u8 *encoded;
-+	int ret;
  	int i;
- 
--	if (WARN(integer < 0,
--		 "BUG: integer encode only supports positive integers"))
-+	if (WARN(!integer, "BUG: integer is null"))
- 		return ERR_PTR(-EINVAL);
- 
- 	if (IS_ERR(data))
-@@ -40,17 +108,22 @@ asn1_encode_integer(unsigned char *data, const unsigned char *end_data,
- 	if (data_len < 3)
- 		return ERR_PTR(-EINVAL);
- 
--	/* remaining length where at d (the start of the integer encoding) */
--	data_len -= 2;
-+	(*data++) = _tag(UNIV, PRIM, INT);
-+	data_len--;
- 
--	data[0] = _tag(UNIV, PRIM, INT);
--	if (integer == 0) {
--		*d++ = 0;
--		goto out;
-+	if (!memchr_inv(integer, 0, integer_len)) {
-+		data[1] = 1;
-+		data[2] = 0;
-+		return &data[2];
- 	}
- 
--	for (i = sizeof(integer); i > 0 ; i--) {
--		int byte = integer >> (8 * (i - 1));
-+	encoded = kzalloc(integer_len, GFP_KERNEL);
-+	if (!encoded)
-+		return ERR_PTR(-ENOMEM);
-+	d = encoded;
-+
-+	for (i = 0; i < integer_len; i++) {
-+		int byte = integer[i];
- 
- 		if (!found && byte == 0)
- 			continue;
-@@ -67,21 +140,23 @@ asn1_encode_integer(unsigned char *data, const unsigned char *end_data,
- 			 * have len >= 1
- 			 */
- 			*d++ = 0;
--			data_len--;
- 		}
- 
- 		found = true;
--		if (data_len == 0)
--			return ERR_PTR(-EINVAL);
--
- 		*d++ = byte;
--		data_len--;
- 	}
- 
-- out:
--	data[1] = d - data - 2;
-+	encoded_len = d - encoded;
- 
--	return d;
-+	ret = asn1_encode_length(&data, &data_len, encoded_len);
-+	if (ret)  {
-+		kfree(encoded);
-+		return ERR_PTR(ret);
-+	}
-+
-+	memcpy(data, encoded, encoded_len);
-+	kfree(encoded);
-+	return data + encoded_len;
+@@ -68,60 +61,6 @@ void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
+ 	kfree(space->session_buf);
  }
- EXPORT_SYMBOL_GPL(asn1_encode_integer);
  
-@@ -176,70 +251,6 @@ asn1_encode_oid(unsigned char *data, const unsigned char *end_data,
- }
- EXPORT_SYMBOL_GPL(asn1_encode_oid);
- 
--/**
-- * asn1_encode_length() - encode a length to follow an ASN.1 tag
-- * @data: pointer to encode at
-- * @data_len: pointer to remaining length (adjusted by routine)
-- * @len: length to encode
-- *
-- * This routine can encode lengths up to 65535 using the ASN.1 rules.
-- * It will accept a negative length and place a zero length tag
-- * instead (to keep the ASN.1 valid).  This convention allows other
-- * encoder primitives to accept negative lengths as singalling the
-- * sequence will be re-encoded when the length is known.
-- */
--static int asn1_encode_length(unsigned char **data, int *data_len, int len)
+-int tpm2_load_context(struct tpm_chip *chip, u8 *buf,
+-		      unsigned int *offset, u32 *handle)
 -{
--	if (*data_len < 1)
--		return -EINVAL;
+-	struct tpm_buf tbuf;
+-	struct tpm2_context *ctx;
+-	unsigned int body_size;
+-	int rc;
 -
--	if (len < 0) {
--		*((*data)++) = 0;
--		(*data_len)--;
--		return 0;
+-	rc = tpm_buf_init(&tbuf, TPM2_ST_NO_SESSIONS, TPM2_CC_CONTEXT_LOAD);
+-	if (rc)
+-		return rc;
+-
+-	ctx = (struct tpm2_context *)&buf[*offset];
+-	body_size = sizeof(*ctx) + be16_to_cpu(ctx->blob_size);
+-	tpm_buf_append(&tbuf, &buf[*offset], body_size);
+-
+-	rc = tpm_transmit_cmd(chip, &tbuf, 4, NULL);
+-	if (rc < 0) {
+-		dev_warn(&chip->dev, "%s: failed with a system error %d\n",
+-			 __func__, rc);
+-		tpm_buf_destroy(&tbuf);
+-		return -EFAULT;
+-	} else if (tpm2_rc_value(rc) == TPM2_RC_HANDLE ||
+-		   rc == TPM2_RC_REFERENCE_H0) {
+-		/*
+-		 * TPM_RC_HANDLE means that the session context can't
+-		 * be loaded because of an internal counter mismatch
+-		 * that makes the TPM think there might have been a
+-		 * replay.  This might happen if the context was saved
+-		 * and loaded outside the space.
+-		 *
+-		 * TPM_RC_REFERENCE_H0 means the session has been
+-		 * flushed outside the space
+-		 */
+-		*handle = 0;
+-		tpm_buf_destroy(&tbuf);
+-		return -ENOENT;
+-	} else if (tpm2_rc_value(rc) == TPM2_RC_INTEGRITY) {
+-		tpm_buf_destroy(&tbuf);
+-		return -EINVAL;
+-	} else if (rc > 0) {
+-		dev_warn(&chip->dev, "%s: failed with a TPM error 0x%04X\n",
+-			 __func__, rc);
+-		tpm_buf_destroy(&tbuf);
+-		return -EFAULT;
 -	}
 -
--	if (len <= 0x7f) {
--		*((*data)++) = len;
--		(*data_len)--;
--		return 0;
--	}
+-	*handle = be32_to_cpup((__be32 *)&tbuf.data[TPM_HEADER_SIZE]);
+-	*offset += body_size;
 -
--	if (*data_len < 2)
--		return -EINVAL;
--
--	if (len <= 0xff) {
--		*((*data)++) = 0x81;
--		*((*data)++) = len & 0xff;
--		*data_len -= 2;
--		return 0;
--	}
--
--	if (*data_len < 3)
--		return -EINVAL;
--
--	if (len <= 0xffff) {
--		*((*data)++) = 0x82;
--		*((*data)++) = (len >> 8) & 0xff;
--		*((*data)++) = len & 0xff;
--		*data_len -= 3;
--		return 0;
--	}
--
--	if (WARN(len > 0xffffff, "ASN.1 length can't be > 0xffffff"))
--		return -EINVAL;
--
--	if (*data_len < 4)
--		return -EINVAL;
--	*((*data)++) = 0x83;
--	*((*data)++) = (len >> 16) & 0xff;
--	*((*data)++) = (len >> 8) & 0xff;
--	*((*data)++) = len & 0xff;
--	*data_len -= 4;
--
+-	tpm_buf_destroy(&tbuf);
 -	return 0;
 -}
 -
- /**
-  * asn1_encode_tag() - add a tag for optional or explicit value
-  * @data:	pointer to place tag at
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 8b7dd73d94c1..ec59f9389a2d 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -38,6 +38,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	u8 *end_work = scratch + SCRATCH_SIZE;
- 	u8 *priv, *pub;
- 	u16 priv_len, pub_len;
-+	u32 key_handle;
- 	int ret;
+ int tpm2_save_context(struct tpm_chip *chip, u32 handle, u8 *buf,
+ 		      unsigned int buf_size, unsigned int *offset)
+ {
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index c17e4efbb2e5..2f25ca07127b 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -466,6 +466,8 @@ extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+ extern struct tpm_chip *tpm_default_chip(void);
+ void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
++int tpm2_load_context(struct tpm_chip *chip, const u8 *buf,
++		      unsigned int *offset, u32 *handle);
  
- 	priv_len = get_unaligned_be16(src) + 2;
-@@ -77,7 +78,8 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 		goto err;
- 	}
- 
--	work = asn1_encode_integer(work, end_work, options->keyhandle);
-+	key_handle = cpu_to_be32(options->keyhandle);
-+	work = asn1_encode_integer(work, end_work, (u8 *)&key_handle, 4);
- 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
- 	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
- 
+ static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 handle)
+ {
 -- 
 2.45.1
 
