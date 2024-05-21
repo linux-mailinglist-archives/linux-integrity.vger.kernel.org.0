@@ -1,155 +1,136 @@
-Return-Path: <linux-integrity+bounces-2530-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2531-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C6828CB44D
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 21:37:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C92908CB552
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 23:17:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 945141F21EFB
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 19:37:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 822012837EA
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 21:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA540757F6;
-	Tue, 21 May 2024 19:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9381256440;
+	Tue, 21 May 2024 21:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="5X8nQJ+M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k3KCaWSK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07671DFE8;
-	Tue, 21 May 2024 19:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B151EB2F;
+	Tue, 21 May 2024 21:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716320245; cv=none; b=ioKlIqWdpZeT0efNIbrYanUotGVRN8sPaqNO0eE7+Zk3B1DGcJqC80HoAcGH56PZeGsHyxYtZDBNs7XN5Rgu/vVf28kbqzb/VjLD+Sx4ONAyPR6KHgG5q9rCO0tCD8/8o3CyVtOLvvLcpNqYBK0GZoXj/kiNqzc3Ro8+mBAZnXg=
+	t=1716326239; cv=none; b=qTKQRJsgpk5DBHpoOG6HbkrT6+d0QhRb+KVHMPFV3cRyLDJ5Me3+xpVrJzsiA/OSICQwHPYukm2FJNGhnnA9zrqb0v0scsKpyRoh1JFpGRlojcwfnEyDZGt+ZxdAccEiZgcNWLGVtuviOWD9aVWmGM5Ryc2MIqxomH2YWFkKanQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716320245; c=relaxed/simple;
-	bh=wXDcMa9BCYSyaXMMmTl9LN4ze2E6leCzM04dQwdFaRM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ObeN41Gc7xQyiaXkdT/Cp2UC5V48yl32HWeMY0R72cgxy1hSL7gX7M7rnn5Fqjc0qu/1G6WukNk+h0fFLPX/bF1PMWX5yMdzB9vw5toqtc/dUTgafi8Rf3lGl+RwtxX36dEu+mW8pZJvqvK8Ky8J36XOpR9TLLiVRnV9fpsqZHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=5X8nQJ+M; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1716320241;
-	bh=wXDcMa9BCYSyaXMMmTl9LN4ze2E6leCzM04dQwdFaRM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=5X8nQJ+MU7gpqCnK/j2pEAXml/E84t8yPhv1xQpdLoc8LPYVDKPFa5+M6n38NzU80
-	 Z+j1/At6hOVYn8VmZls82EutWaY7Ehg2OYpdMykTy2cV7JvEzs8SqHBT2UpPRVDfNr
-	 5iFDu/JCq3KkmiDCMBioXP3XC4g4bvuLjbusOcohr88wASA9NJZ30Tep5/AIOq2M8h
-	 YTJZ0SWhHE+FDm5yZvE+Em2ioQ7ePT9r175ZagbbP6JMAxf0AnxGu0Jyb781LbEytZ
-	 GVvqgRbFNw8QaxI19BZXaYArrw9Eatwxu+YreHu91wPwTVdwtzjrvUXKdBLJ9Ln3Ix
-	 RKXLDTV7ZZCNQ==
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 245963782183;
-	Tue, 21 May 2024 19:37:18 +0000 (UTC)
-Date: Tue, 21 May 2024 15:37:16 -0400
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Eric Biggers <ebiggers@kernel.org>, Jarkko Sakkinen <jarkko@kernel.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	regressions@lists.linux.dev, kernel@collabora.com,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [v2 PATCH] crypto: api - Do not load modules if called by async
- probing
-Message-ID: <07512097-8198-4a84-b166-ef9809c2913b@notapiano>
-References: <CAMj1kXHi4r8KY9GvX573kwqvLpMfX-J=K2hWiGAKkf5bnicwYQ@mail.gmail.com>
- <0d260c2f7a9f67ec8bd2305919636678d06000d1.camel@HansenPartnership.com>
- <CAMj1kXFE_R_x10BVkU+8vrMz0RHiX0+rz-ZL+w08FH2CLQHZXA@mail.gmail.com>
- <66ec985f3ee229135bf748f1b0874d5367a74d7f.camel@HansenPartnership.com>
- <dfb0d930-7cbe-46c5-be19-d132b4906ecf@notapiano>
- <D1C2NPOBHAHK.20O4IME8OK1FH@kernel.org>
- <20240518043115.GA53815@sol.localdomain>
- <ZkhS1zrobNwAuANI@gondor.apana.org.au>
- <00bcfa65-384d-46ae-ab8b-30f12487928b@notapiano>
- <ZkwMnrTR_CbXcjWe@gondor.apana.org.au>
+	s=arc-20240116; t=1716326239; c=relaxed/simple;
+	bh=RJqD7WEQOpBw7+L+o4xmUJtf1B8VRQenxyV5ITvcpK0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=BFaaqwQrGA17kk2QYZLbO9SyllT4XkoeJIuazDrXbrvxx04vKvRa7kxm6a6SaETCd5eO6+Jng01saU9i1fTjEGylf+cbUUvYfiy6kuSbF9T0Y/H/C2byZdQWas/CDqInm1YxnNnna9qBCTFvfP+oOlYqFhNPzJz2tW7G/DzCXeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k3KCaWSK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23775C2BD11;
+	Tue, 21 May 2024 21:17:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716326239;
+	bh=RJqD7WEQOpBw7+L+o4xmUJtf1B8VRQenxyV5ITvcpK0=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=k3KCaWSKyNRQJDQWJHQ6BKqd3OAvMvZxvcQ9PjaWUkf64mzmIdVQS4ebKpqgJAVis
+	 FvBVM7OOm1jmD3f4g8B40mH049E+XFeiwKb3GWoFufozpfb+SY8ZqUkeS3PFIfisoW
+	 ZPXTSmL8BPlGCZuXKlVLdewwoCho+bYJbuU5MG60NcOpMk7AvXXVLPeywWc7WCKfgh
+	 rlvL76Yqhmp/HBdYLH/yhM8qsuV09xjKPlDzjffDABxHuDhm1YYhTzGjOTcougTI/L
+	 uWGKKTVBfuJ6vXTihW8buKM/cMZI8iJhfkBfBrOrtroRxk1kSUtaCK+CkFJWUuAeL7
+	 OZqKT+eXZoqOw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZkwMnrTR_CbXcjWe@gondor.apana.org.au>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 22 May 2024 00:17:13 +0300
+Message-Id: <D1FMVEJWGLEW.14QGHPAYPHQG1@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
+ <Andreas.Fuchs@infineon.com>, "James Prestwood" <prestwoj@gmail.com>,
+ "David Woodhouse" <dwmw2@infradead.org>, "Eric Biggers"
+ <ebiggers@kernel.org>, "David S. Miller" <davem@davemloft.net>, "open
+ list:CRYPTO API" <linux-crypto@vger.kernel.org>, "open list"
+ <linux-kernel@vger.kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>, "Jason
+ Gunthorpe" <jgg@ziepe.ca>, "Mimi Zohar" <zohar@linux.ibm.com>, "David
+ Howells" <dhowells@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "James
+ Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "open
+ list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v2 4/6] KEYS: trusted: Move tpm2_key_decode() to the TPM
+ driver
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>, "Herbert Xu"
+ <herbert@gondor.apana.org.au>
+X-Mailer: aerc 0.17.0
+References: <20240521031645.17008-1-jarkko@kernel.org>
+ <20240521031645.17008-5-jarkko@kernel.org>
+ <cc3d952f8295b52b052fbffe009b796ffb45707a.camel@HansenPartnership.com>
+In-Reply-To: <cc3d952f8295b52b052fbffe009b796ffb45707a.camel@HansenPartnership.com>
 
-On Tue, May 21, 2024 at 10:53:18AM +0800, Herbert Xu wrote:
-> On Mon, May 20, 2024 at 11:49:56AM -0400, Nícolas F. R. A. Prado wrote:
-> >
-> > Unfortunately this patch didn't work either. The warning is still there
-> > unchanged.
-> 
-> OK perhaps we can do it by calling current_is_async ourselves.
-> But this is really a nasty hack because it basically defeats
-> the whole point of loading optional algorithm by module.
-> 
-> Linus/Tejun, is it time perhaps to remove the warning introduced
-> by commit 0fdff3ec6d87856cdcc99e69cf42143fdd6c56b4 since it's
-> been ten years since the warning caused a real problem?
-> 
-> For the Crypto API, if it is called by some random driver via the
-> async context, this warning stops us from loading any modules
-> without printing a nasty warning that isn't relevant as the Crypto
-> API never calls async_synchronize_full.
-> 
-> ---8<---
-> Do not call request_module if this is the case or a warning will
-> be printed.
-> 
-> Reported-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Reported-by: Eric Biggers <ebiggers@kernel.org>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-> ---
->  crypto/api.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/crypto/api.c b/crypto/api.c
-> index 22556907b3bc..7c4b9f86c1ad 100644
-> --- a/crypto/api.c
-> +++ b/crypto/api.c
-> @@ -10,6 +10,7 @@
->   * and Nettle, by Niels Möller.
->   */
->  
-> +#include <linux/async.h>
->  #include <linux/err.h>
->  #include <linux/errno.h>
->  #include <linux/jump_label.h>
-> @@ -280,7 +281,8 @@ static struct crypto_alg *crypto_larval_lookup(const char *name, u32 type,
->  	mask &= ~(CRYPTO_ALG_LARVAL | CRYPTO_ALG_DEAD);
->  
->  	alg = crypto_alg_lookup(name, type, mask);
-> -	if (!alg && !(mask & CRYPTO_NOLOAD)) {
-> +	if (!alg && !(mask & CRYPTO_NOLOAD) &&
-> +	    (!IS_BUILTIN(CONFIG_CRYPTO) || !current_is_async())) {
->  		request_module("crypto-%s", name);
->  
->  		if (!((type ^ CRYPTO_ALG_NEED_FALLBACK) & mask &
-> -- 
-> 2.39.2
+On Tue May 21, 2024 at 9:18 PM EEST, James Bottomley wrote:
+> On Tue, 2024-05-21 at 06:16 +0300, Jarkko Sakkinen wrote:
+> [...]
+> > diff --git a/include/crypto/tpm2_key.h b/include/crypto/tpm2_key.h
+> > new file mode 100644
+> > index 000000000000..acf41b2e0c92
+> > --- /dev/null
+> > +++ b/include/crypto/tpm2_key.h
+> > @@ -0,0 +1,33 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +#ifndef __LINUX_TPM2_KEY_H__
+> > +#define __LINUX_TPM2_KEY_H__
+> > +
+> > +#include <linux/slab.h>
+> > +
+> > +/*
+> > + * TPM2 ASN.1 key
+> > + */
+> > +struct tpm2_key {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 parent;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const u8 *blob;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 blob_len;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const u8 *pub;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 pub_len;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const u8 *priv;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 priv_len;
+> > +};
+> > +
+> > +int tpm2_key_decode(const u8 *src, u32 src_len, struct tpm2_key
+> > *key,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 max_key_len);
+>
+> I don't think this is a good idea.  Trusted keys already have a pre-
+> defined max payload size (MAX_BLOB_SIZE in include/keys/trusted-type.h)
+> and I've already had to increase this several times because once you
+> get policy attached to a key, it can get pretty big (over a page).=20
+> Exactly the same thing will happen to asymmetric keys as well, so it
+> does make sense that they share the same maximum (probably in a more
+> generic header, though).
 
-FWIW this patch fixes the warning. So feel free to add
+ECDSA and RSA have different space requirements. With that solution you
+actually max out space requirements given same cap for everything.
 
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Even tpm2_key_ecdsa should use a different value than tpm2_key_rsa to
+save memory.
 
-if you choose to apply this patch (I'm happy to help test other patches too). In
-any case, please also add the following trailers so the regression gets closed
-automatically in regzbot:
+> Since the code already right sizes the allocation and all we check with
+> this is whether it's over a pre-defined maximum, it's way easier if
+> that maximum is defined in a header rather than passed in in several
+> places making increasing the maximum really hard because you have to
+> chase all the threading.
 
-Fixes: 1b6d7f9eb150 ("tpm: add session encryption protection to tpm2_get_random()")
-Link: https://lore.kernel.org/r/119dc5ed-f159-41be-9dda-1a056f29888d@notapiano/
+You don't save a single byte of memory with any constant that dictates
+the size requirements for multiple modules in two disjoint subsystems.
 
-Thanks,
-Nícolas
+You are maximizing the use of memory.
+
+> James
+
+BR, Jarkko
 
