@@ -1,131 +1,145 @@
-Return-Path: <linux-integrity+bounces-2489-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2490-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D6D28CA663
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 04:53:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF3F8CA6B6
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 05:16:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97F4F281DC2
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 02:53:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B5281F21D83
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 03:16:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F23C10953;
-	Tue, 21 May 2024 02:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B943101F2;
+	Tue, 21 May 2024 03:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mufnkycR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BADF1FDD;
-	Tue, 21 May 2024 02:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBB3848A;
+	Tue, 21 May 2024 03:16:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716260005; cv=none; b=ohO2A1L80irpgISCTY1WEfLTcxUis7HFaSWPbj6qzqCsOj0NhG6NJJ1FYULGpg6so2PrixlI9ithIbvQGiC1uwLTdLqDYNoLXoyLdqCBQf+ufxqTZ8zlhgDNBK5t1qLlf3rSSwzvuJS28qeM7kH8St/I0ZMLg68hrAm4j+kv++I=
+	t=1716261411; cv=none; b=PPtYCziyFlAFhS3tkAW6VrB+TDjG04zBTB3X6dL1I70BYn1JLQsjUCaSXw/cfZQjLnva2DREiv+S3sdwt+kkuhL71dRsQblZzKxROAcCkoLlFwAGfemg0D/1dt2o5VpvyncLEygv5G8ZP/qh4VvGC/vqjyCgaHinuwlWu/77i1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716260005; c=relaxed/simple;
-	bh=Z4jGxdA4J1toKgzTasm0GDN9Ngv8FeSm+rD8paoawxo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KINmUwce3Kq6AeDgAhc/1f9vIC6OEm6ROX0WomA849GZgc7zRyNlsPl6GMeEBMSbxhhC7sG4/h4QAyAp/6SDH5cjMwB5vRzYTqVZVDYr6ss51gTPg/vkEWF/mM53qNSVFgpuLRprB4EUNpPiZDZFh1uUcru7AF5wJ5tyNW2SzMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1s9Fcq-000M2J-2k;
-	Tue, 21 May 2024 10:53:17 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 21 May 2024 10:53:18 +0800
-Date: Tue, 21 May 2024 10:53:18 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Cc: Eric Biggers <ebiggers@kernel.org>, Jarkko Sakkinen <jarkko@kernel.org>,
+	s=arc-20240116; t=1716261411; c=relaxed/simple;
+	bh=YK2OIxpfjJaaDk91GjlEjElige5eBrqgDYVjkNdZEEo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EaYkFn1zbWWA1ih4COtb5l5+3tKQGL1RLl7hMxFdTdCgyWW31T6YKHQOjNLo78sfy+b0gIdMAR2GB8L84x8QMa4QDQjF64UGNeJ6VXuedQFTO4IeuqyM30cvWre9vBRjXOgYi58m+wovV6rLNFgZ2Kpo7FmrL2BApQ8kHY08jcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mufnkycR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9C3C32786;
+	Tue, 21 May 2024 03:16:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716261410;
+	bh=YK2OIxpfjJaaDk91GjlEjElige5eBrqgDYVjkNdZEEo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mufnkycRqgDnEKVs0Z8YdZMXrmiM4FjhjHgsPPRH415K1hGvGc7FXZohKtrutljZJ
+	 kzd5d40xulh0Pe5nG+T9w48QmMwWGQXAldO8h/DZog93F7AE5pzXbZ032XIqjcl1HH
+	 j17xXmiw2y+BaaDIcYOlsBhX+uhkAPJRDMwvsqn7qQD8oTHoyolRomqbdwfq9mnCaQ
+	 prQhbvBXSTkiKRUzsk21QcU5fe7yrqYz8bLuKCF7t5FVaZu2GMtZQdGb6VGXk2Q8Nw
+	 fvol5NhCQvOKBf1nRvfjBr+GGbNKOs+3gDoo40MfjcXmDjrNMIVlESEVI/GzH9f4Vk
+	 UJ/mPhE6LgNCg==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	Andreas.Fuchs@infineon.com,
+	James Prestwood <prestwoj@gmail.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Eric Biggers <ebiggers@kernel.org>,
 	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	regressions@lists.linux.dev, kernel@collabora.com,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Tejun Heo <tj@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [v2 PATCH] crypto: api - Do not load modules if called by async
- probing
-Message-ID: <ZkwMnrTR_CbXcjWe@gondor.apana.org.au>
-References: <0f68c283ff4bbb89b8a019d47891f798c6fff287.camel@HansenPartnership.com>
- <CAMj1kXHi4r8KY9GvX573kwqvLpMfX-J=K2hWiGAKkf5bnicwYQ@mail.gmail.com>
- <0d260c2f7a9f67ec8bd2305919636678d06000d1.camel@HansenPartnership.com>
- <CAMj1kXFE_R_x10BVkU+8vrMz0RHiX0+rz-ZL+w08FH2CLQHZXA@mail.gmail.com>
- <66ec985f3ee229135bf748f1b0874d5367a74d7f.camel@HansenPartnership.com>
- <dfb0d930-7cbe-46c5-be19-d132b4906ecf@notapiano>
- <D1C2NPOBHAHK.20O4IME8OK1FH@kernel.org>
- <20240518043115.GA53815@sol.localdomain>
- <ZkhS1zrobNwAuANI@gondor.apana.org.au>
- <00bcfa65-384d-46ae-ab8b-30f12487928b@notapiano>
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	linux-crypto@vger.kernel.org (open list:CRYPTO API),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 0/6] KEYS: asymmetric: tpm2_key_rsa
+Date: Tue, 21 May 2024 06:16:25 +0300
+Message-ID: <20240521031645.17008-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <00bcfa65-384d-46ae-ab8b-30f12487928b@notapiano>
 
-On Mon, May 20, 2024 at 11:49:56AM -0400, Nícolas F. R. A. Prado wrote:
->
-> Unfortunately this patch didn't work either. The warning is still there
-> unchanged.
+## Overview
 
-OK perhaps we can do it by calling current_is_async ourselves.
-But this is really a nasty hack because it basically defeats
-the whole point of loading optional algorithm by module.
+Introduce tpm2_key_rsa module, which implements asymmetric TPM2 RSA key.
+The feature can be enabled with the CONFIG_ASYMMETRIC_TPM2_KEY_RSA_SUBTYPE 
+kconfig option.
 
-Linus/Tejun, is it time perhaps to remove the warning introduced
-by commit 0fdff3ec6d87856cdcc99e69cf42143fdd6c56b4 since it's
-been ten years since the warning caused a real problem?
+The idea in the design is to over time to have submodule per key type
+For instance, tpm2_key_ecdsa could be one potential future addition in
+the future. Perhaps, it might sense to consider at that point also a
+top-level tpm2_key module. The gist is that the naming convention is
+free from potential future bottlencks.
 
-For the Crypto API, if it is called by some random driver via the
-async context, this warning stops us from loading any modules
-without printing a nasty warning that isn't relevant as the Crypto
-API never calls async_synchronize_full.
+## Change Log
 
----8<---
-Do not call request_module if this is the case or a warning will
-be printed.
+v2
+Cleaned up all the low-hanging fruit for the sake of saving everyones
+time. After this I move into reactive mode (I promise) ;-)
 
-Reported-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Reported-by: Eric Biggers <ebiggers@kernel.org>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
----
- crypto/api.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+## Testing
 
-diff --git a/crypto/api.c b/crypto/api.c
-index 22556907b3bc..7c4b9f86c1ad 100644
---- a/crypto/api.c
-+++ b/crypto/api.c
-@@ -10,6 +10,7 @@
-  * and Nettle, by Niels Möller.
-  */
- 
-+#include <linux/async.h>
- #include <linux/err.h>
- #include <linux/errno.h>
- #include <linux/jump_label.h>
-@@ -280,7 +281,8 @@ static struct crypto_alg *crypto_larval_lookup(const char *name, u32 type,
- 	mask &= ~(CRYPTO_ALG_LARVAL | CRYPTO_ALG_DEAD);
- 
- 	alg = crypto_alg_lookup(name, type, mask);
--	if (!alg && !(mask & CRYPTO_NOLOAD)) {
-+	if (!alg && !(mask & CRYPTO_NOLOAD) &&
-+	    (!IS_BUILTIN(CONFIG_CRYPTO) || !current_is_async())) {
- 		request_module("crypto-%s", name);
- 
- 		if (!((type ^ CRYPTO_ALG_NEED_FALLBACK) & mask &
+tpm2_createprimary --hierarchy o -G rsa2048 -c owner.txt
+tpm2_evictcontrol -c owner.txt 0x81000001
+tpm2_getcap handles-persistent
+openssl genrsa -out private.pem 2048
+tpm2_import -C 0x81000001 -G rsa -i private.pem -u key.pub -r key.priv
+tpm2_encodeobject -C 0x81000001 -u key.pub -r key.priv -o key.priv.pem
+openssl asn1parse -inform pem -in key.priv.pem -noout -out key.priv.der
+serial=`cat key.priv.der | keyctl padd asymmetric tpm @u`
+echo "abcdefg" > plaintext.txt
+keyctl pkey_encrypt $serial 0 plaintext.txt enc=pkcs1 > encrypted.dat
+keyctl pkey_decrypt $serial 0 encrypted.dat enc=pkcs1 > decrypted.dat
+keyctl pkey_sign $serial 0 plaintext.txt enc=pkcs1 hash=sha256 > signed.dat
+keyctl pkey_verify $serial 0 plaintext.txt signed.dat enc=pkcs1 hash=sha256
+
+## References
+
+- v1: https://lore.kernel.org/linux-integrity/20240520184727.22038-1-jarkko@kernel.org/
+- Derived from https://lore.kernel.org/all/20200518172704.29608-1-prestwoj@gmail.com/
+
+James Prestwood (1):
+  keys: asymmetric: ASYMMETRIC_TPM2_KEY_RSA_SUBTYPE
+
+Jarkko Sakkinen (5):
+  crypto: rsa-pkcs1pad: export rsa1_asn_lookup()
+  lib: Expand asn1_encode_integer() to variable size integers
+  tpm: Export tpm2_load_context()
+  KEYS: trusted: Move tpm2_key_decode() to the TPM driver
+  tpm: tpm2_key: Extend parser to TPM_LoadableKey
+
+ crypto/asymmetric_keys/Kconfig                |  16 +
+ crypto/asymmetric_keys/Makefile               |   1 +
+ crypto/asymmetric_keys/tpm2_key_rsa.c         | 698 ++++++++++++++++++
+ crypto/rsa-pkcs1pad.c                         |  16 +-
+ drivers/char/tpm/Kconfig                      |   1 +
+ drivers/char/tpm/Makefile                     |   5 +
+ drivers/char/tpm/tpm.h                        |   2 -
+ drivers/char/tpm/tpm2-cmd.c                   |  77 ++
+ drivers/char/tpm/tpm2-space.c                 |  61 --
+ drivers/char/tpm/tpm2_key.c                   | 119 +++
+ .../char/tpm}/tpm2key.asn1                    |   0
+ include/crypto/rsa-pkcs1pad.h                 |  20 +
+ include/crypto/tpm2_key.h                     |  35 +
+ include/linux/asn1_encoder.h                  |   3 +-
+ include/linux/tpm.h                           |   4 +
+ lib/asn1_encoder.c                            | 185 ++---
+ security/keys/trusted-keys/Makefile           |   2 -
+ security/keys/trusted-keys/trusted_tpm2.c     | 135 +---
+ 18 files changed, 1110 insertions(+), 270 deletions(-)
+ create mode 100644 crypto/asymmetric_keys/tpm2_key_rsa.c
+ create mode 100644 drivers/char/tpm/tpm2_key.c
+ rename {security/keys/trusted-keys => drivers/char/tpm}/tpm2key.asn1 (100%)
+ create mode 100644 include/crypto/rsa-pkcs1pad.h
+ create mode 100644 include/crypto/tpm2_key.h
+
 -- 
-2.39.2
+2.45.1
 
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
