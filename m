@@ -1,136 +1,170 @@
-Return-Path: <linux-integrity+bounces-2531-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2532-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C92908CB552
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 23:17:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8B608CB572
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 23:42:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 822012837EA
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 21:17:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C1661F21922
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 May 2024 21:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9381256440;
-	Tue, 21 May 2024 21:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C278B2AE6C;
+	Tue, 21 May 2024 21:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k3KCaWSK"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="pobkyxdG"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B151EB2F;
-	Tue, 21 May 2024 21:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D12148821;
+	Tue, 21 May 2024 21:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716326239; cv=none; b=qTKQRJsgpk5DBHpoOG6HbkrT6+d0QhRb+KVHMPFV3cRyLDJ5Me3+xpVrJzsiA/OSICQwHPYukm2FJNGhnnA9zrqb0v0scsKpyRoh1JFpGRlojcwfnEyDZGt+ZxdAccEiZgcNWLGVtuviOWD9aVWmGM5Ryc2MIqxomH2YWFkKanQ=
+	t=1716327770; cv=none; b=lAQiKsbORL3csm6lFm/DdOyP+KIONYpWHFrMEethpVR3BDZpH6YJmu1CCUU8LviCs9eK6JfVUZRNhQBU59u6mQV31/vmq8Z3oNlMd38/35IVGT/+X/TA1HJ4DhKYoA1++Zp5U9QaMFKs3m79kzf4aT5VtWC5eDOOjG3O9qgYVRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716326239; c=relaxed/simple;
-	bh=RJqD7WEQOpBw7+L+o4xmUJtf1B8VRQenxyV5ITvcpK0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=BFaaqwQrGA17kk2QYZLbO9SyllT4XkoeJIuazDrXbrvxx04vKvRa7kxm6a6SaETCd5eO6+Jng01saU9i1fTjEGylf+cbUUvYfiy6kuSbF9T0Y/H/C2byZdQWas/CDqInm1YxnNnna9qBCTFvfP+oOlYqFhNPzJz2tW7G/DzCXeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k3KCaWSK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23775C2BD11;
-	Tue, 21 May 2024 21:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716326239;
-	bh=RJqD7WEQOpBw7+L+o4xmUJtf1B8VRQenxyV5ITvcpK0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=k3KCaWSKyNRQJDQWJHQ6BKqd3OAvMvZxvcQ9PjaWUkf64mzmIdVQS4ebKpqgJAVis
-	 FvBVM7OOm1jmD3f4g8B40mH049E+XFeiwKb3GWoFufozpfb+SY8ZqUkeS3PFIfisoW
-	 ZPXTSmL8BPlGCZuXKlVLdewwoCho+bYJbuU5MG60NcOpMk7AvXXVLPeywWc7WCKfgh
-	 rlvL76Yqhmp/HBdYLH/yhM8qsuV09xjKPlDzjffDABxHuDhm1YYhTzGjOTcougTI/L
-	 uWGKKTVBfuJ6vXTihW8buKM/cMZI8iJhfkBfBrOrtroRxk1kSUtaCK+CkFJWUuAeL7
-	 OZqKT+eXZoqOw==
+	s=arc-20240116; t=1716327770; c=relaxed/simple;
+	bh=u9OHQk1eGnLPF7q8QnB3x/3atmb+9wZIs5n85uU/v2c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d9MM7xsvtqLN903geLKBlL7Ptr5pjIxAR5nNs5wW/QUUAvSHPVLvnMnuIRHV3h4HBOW+cC61ySxfdAHqjSxyfLVdoxR42EHHl8yeQ+JENPKLntuokb/MJKgLGpsIaiLIvg3go5yapjMUkft6Z5IslzH9vmhVAio//1r5b4UsaQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=pobkyxdG; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [167.220.2.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id CCF0E2067900;
+	Tue, 21 May 2024 14:42:47 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CCF0E2067900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1716327768;
+	bh=BUSVrQbwhWTK6SmDrPgyWJrCD0hgOdRhFqYqUq240sk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pobkyxdGe7YVFwF3dkaJkJgWbG+KavLPiuQF6SQQN1zBASMoAM9wcAdd5EmYZaB/L
+	 61ecccz7Ow8aijjoRWVO+F98iR9BjxIC5czqVksM0Y0rMb0ZRRAKkfCOJ6tvNTRUK0
+	 vikUnzUoW2A/1EOMAGY+LrNlY0+QdhS1KLRy/ENA=
+Message-ID: <3bd4d9a8-58ce-4cb2-a91e-c0d33174d951@linux.microsoft.com>
+Date: Tue, 21 May 2024 14:42:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 22 May 2024 00:17:13 +0300
-Message-Id: <D1FMVEJWGLEW.14QGHPAYPHQG1@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
- <Andreas.Fuchs@infineon.com>, "James Prestwood" <prestwoj@gmail.com>,
- "David Woodhouse" <dwmw2@infradead.org>, "Eric Biggers"
- <ebiggers@kernel.org>, "David S. Miller" <davem@davemloft.net>, "open
- list:CRYPTO API" <linux-crypto@vger.kernel.org>, "open list"
- <linux-kernel@vger.kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>, "Jason
- Gunthorpe" <jgg@ziepe.ca>, "Mimi Zohar" <zohar@linux.ibm.com>, "David
- Howells" <dhowells@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "James
- Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "open
- list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2 4/6] KEYS: trusted: Move tpm2_key_decode() to the TPM
- driver
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "James Bottomley" <James.Bottomley@HansenPartnership.com>, "Herbert Xu"
- <herbert@gondor.apana.org.au>
-X-Mailer: aerc 0.17.0
-References: <20240521031645.17008-1-jarkko@kernel.org>
- <20240521031645.17008-5-jarkko@kernel.org>
- <cc3d952f8295b52b052fbffe009b796ffb45707a.camel@HansenPartnership.com>
-In-Reply-To: <cc3d952f8295b52b052fbffe009b796ffb45707a.camel@HansenPartnership.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v18 12/21] dm: add finalize hook to target_type
+To: Mikulas Patocka <mpatocka@redhat.com>
+Cc: Mike Snitzer <snitzer@kernel.org>, corbet@lwn.net, zohar@linux.ibm.com,
+ jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+ axboe@kernel.dk, agk@redhat.com, eparis@redhat.com, paul@paul-moore.com,
+ linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1714775551-22384-1-git-send-email-wufan@linux.microsoft.com>
+ <1714775551-22384-13-git-send-email-wufan@linux.microsoft.com>
+ <aa767961-5e3-2ceb-1a1e-ff66a8eed649@redhat.com>
+ <212b02a8-f5f0-4433-a726-1639dda61790@linux.microsoft.com>
+ <bc9aa053-20a6-eaa-cbe4-344f340242b@redhat.com>
+ <234910c1-40c3-4489-94ab-6e9a5f00d93e@linux.microsoft.com>
+ <889a7880-8336-a44a-bea4-a4c81c5e5cce@redhat.com>
+Content-Language: en-CA
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <889a7880-8336-a44a-bea4-a4c81c5e5cce@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue May 21, 2024 at 9:18 PM EEST, James Bottomley wrote:
-> On Tue, 2024-05-21 at 06:16 +0300, Jarkko Sakkinen wrote:
-> [...]
-> > diff --git a/include/crypto/tpm2_key.h b/include/crypto/tpm2_key.h
-> > new file mode 100644
-> > index 000000000000..acf41b2e0c92
-> > --- /dev/null
-> > +++ b/include/crypto/tpm2_key.h
-> > @@ -0,0 +1,33 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > +#ifndef __LINUX_TPM2_KEY_H__
-> > +#define __LINUX_TPM2_KEY_H__
-> > +
-> > +#include <linux/slab.h>
-> > +
-> > +/*
-> > + * TPM2 ASN.1 key
-> > + */
-> > +struct tpm2_key {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 parent;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const u8 *blob;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 blob_len;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const u8 *pub;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 pub_len;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const u8 *priv;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 priv_len;
-> > +};
-> > +
-> > +int tpm2_key_decode(const u8 *src, u32 src_len, struct tpm2_key
-> > *key,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 max_key_len);
+
+
+On 5/20/2024 5:31 AM, Mikulas Patocka wrote:
+> 
+> 
+> On Fri, 17 May 2024, Fan Wu wrote:
+> 
+>>> So, it seems that the preresume callback provides the guarantee that you
+>>> looking for.
+>>>
+>>>> -Fan
+>>>
+>>> Mikulas
+>>
+>> Thanks for the info. I have tested and verified that the preresume() hook can
+>> also work for our case.
+>>
+>>  From the source code
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/md/dm-ioctl.c#n1149,
+>> the whole resume process appears to be:
+>>
+>> 1. Check if there is a new map for the device. If so, attempt to activate the
+>> new map using dm_swap_table() (where the finalize() callback occurs).
+>>
+>> 2. Check if the device is suspended. If so, use dm_resume() (where the
+>> preresume() callback occurs) to resume the device.
+>>
+>> 3. If a new map is activated, use dm_table_destroy() to destroy the old map.
+>>
+>> For our case:
+>>
+>> - Using the finalize() callback, the metadata of the dm-verity target inside
+>> the table is attached to the mapped device every time a new table is
+>> activated.
+>> - Using the preresume() callback, the same metadata is attached every time the
+>> device resumes from suspension.
+>>
+>> If I understand the code correctly, resuming from suspension is a necessary
+>> step for loading a new mapping table. Thus, the preresume() callback covers
+>> all conditions where the finalize() callback would be triggered.
+> 
+> Yes.
+> 
+>> However, the preresume() callback can also be triggered when the device
+>> resumes from suspension without loading a new table, in which case there
+>> is no new metadata in the table to attach to the mapped device.
+> 
+> Yes.
+> 
+>> In the scenario where the finalize() callback succeeds but the preresume()
+>> callback fails, it seems the device will remain in a suspended state, the
+>> newly activated table will be kept, and the old table will be destroyed, so it
+>> seems there is no inconsistency using finalize() even preresume() potentially
+>> fails.
+> 
+> What does your security module do when the verification of the dm-verity
+> hash fails? Does it halt the whole system? Does it destroy just the
+> failing dm device? Or does it attempt to recover somehow from this
+> situation?
 >
-> I don't think this is a good idea.  Trusted keys already have a pre-
-> defined max payload size (MAX_BLOB_SIZE in include/keys/trusted-type.h)
-> and I've already had to increase this several times because once you
-> get policy attached to a key, it can get pretty big (over a page).=20
-> Exactly the same thing will happen to asymmetric keys as well, so it
-> does make sense that they share the same maximum (probably in a more
-> generic header, though).
 
-ECDSA and RSA have different space requirements. With that solution you
-actually max out space requirements given same cap for everything.
+I'm not sure which hash verification is being referred to here, but it 
+could be either root hash signature verification or block-level hash 
+verification. Our security module does not intervene in these processes, 
+so the behavior remains as dm-verity currently handles it.
 
-Even tpm2_key_ecdsa should use a different value than tpm2_key_rsa to
-save memory.
+Within the device mapper, our security module uses the device mapper 
+callback to duplicate the root hash of a dm-verity target and record the 
+signature verification state of the dm-verity target, then attach this 
+information to the security field of the block_device structure. This 
+process can only fail if the system is out of memory.
 
-> Since the code already right sizes the allocation and all we check with
-> this is whether it's over a pre-defined maximum, it's way easier if
-> that maximum is defined in a header rather than passed in in several
-> places making increasing the maximum really hard because you have to
-> chase all the threading.
+With the root hash and signature verification state attached to the 
+security field of the block device, the security system can access this 
+important metadata to enforce policies. For example, these policies can 
+include only allowing files from a dm-verity volume specified by its 
+root hash to execute or only allowing files from a verified signed 
+dm-verity volume to execute.
 
-You don't save a single byte of memory with any constant that dictates
-the size requirements for multiple modules in two disjoint subsystems.
+>> I believe both the finalize() callback proposed by Mike and the preresume()
+>> callback suggested by Mikulas can work for our case. I am fine with either
+>> approach, but I would like to know which one is preferred by the maintainers
+>> and would appreciate an ACK for the chosen approach.
+>>
+>> -Fan
+> 
+> I would prefer preresume - we shouldn't add new callbacks unless it's
+> necessary.
+> 
+> Mikulas
+>
 
-You are maximizing the use of memory.
+Thanks for the confirmation. I will switch to use prereume and I will 
+send a new version later this week.
 
-> James
-
-BR, Jarkko
+-Fan
 
