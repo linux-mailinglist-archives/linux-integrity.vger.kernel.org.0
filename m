@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-2572-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2573-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C59E38CD3ED
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 May 2024 15:20:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 575658CD45A
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 May 2024 15:24:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B2B8B2282F
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 May 2024 13:20:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4BC41F23C0C
+	for <lists+linux-integrity@lfdr.de>; Thu, 23 May 2024 13:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C8914BF91;
-	Thu, 23 May 2024 13:19:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DACDA14A63C;
+	Thu, 23 May 2024 13:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lXqoJMS+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mU0CSDIR"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5864D14BF87;
-	Thu, 23 May 2024 13:19:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88B014A60D;
+	Thu, 23 May 2024 13:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716470379; cv=none; b=ueeUPrxcwKbnSmKJsDb+0q3DciLTBs7aKzEPkT0v/whC8PS0RnkwkucBvIX8Ts0hCCdybT77r6lKGKZbgAa+Sk4qyubZbebhcrXdKV6JBbZnMnOJvBJhlHqc0GmCqFPx3Nl0uMKQy+DPnNL1tzpNYAnnpF3Yyzg9ps4Mc9UuaK4=
+	t=1716470629; cv=none; b=oBQcvq+gfK74HJEn0Q9i7fOnuqZ7A9ooBqCnOr60RQJGxRk/+TLDS8ztdV0ytkFd/4SciMF3/PR6J73rbPuluJu7hsIVblLu7ZamNIFNLCR5MT/U+BRl6vtRE2H3c/PT0KLnJbroa31AXeuNPP7G27P272LugowlPNyVwgdHXCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716470379; c=relaxed/simple;
-	bh=zZ3XjVEYiN/8uyKfpWtkHMKyalnuSZD3ionATMomS90=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EK4O1fYOZe0MfNVRVWBTiUm012195Ih0ah908IH9S0BBoat09uAhzo8Q6jYDT8SNwPuWHdb1xAk6QypAmu57npt3EkUaFOGBFeabUxBUEFPZ7xIw0W9Z8mGJcqMHXWX41A4mk+DktBheAGgiJB9jNehVWOUEzddqIu6way1dLow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lXqoJMS+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8764C32786;
-	Thu, 23 May 2024 13:19:38 +0000 (UTC)
+	s=arc-20240116; t=1716470629; c=relaxed/simple;
+	bh=Eji3OK0kgA/1QMg7rgMlIDsUrIG2CMxWsZn7mehH8BI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hj4iYykL9By/Ujq7avzM8gdDyQ+6XK9jOimm03c1ImIFVlQqGJDiviZ7Dimwjb6xciyNIfYuj3fQQAoYZgHv1Hz+i0/hHni2bn+06PILlQ4GAkMnwnldl7fNucZdFbJhleecoCuhP1KaZBl3cuD/XJ0SumVUMWdAFvgWOdsux3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mU0CSDIR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DBAEC2BD10;
+	Thu, 23 May 2024 13:23:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716470379;
-	bh=zZ3XjVEYiN/8uyKfpWtkHMKyalnuSZD3ionATMomS90=;
+	s=k20201202; t=1716470629;
+	bh=Eji3OK0kgA/1QMg7rgMlIDsUrIG2CMxWsZn7mehH8BI=;
 	h=From:To:Cc:Subject:Date:From;
-	b=lXqoJMS+rfZT5J2CHvzN5HBbOj7EuXxR9om2KmZf/FtJL4ibhUzh4WX+hIfuifODW
-	 lPmbyasC2Xkp0RluUUZ1Mhn1oTLaD0YkDtIxEsWL2jV7kMhmHKRVyiyk8Ww1uG80pB
-	 HgEvCkH0SzCHppeCG7kRu3YP0Hn5R5eIN8L5R94XrxjtmptjMDrGAAsLDwLWt1Yobq
-	 Y3+zGWgImT7HbkFP26r2/Pku4+mFL4UbqWga8Tq68fZgP/pd9VClncuwuqYrrZ4Xg1
-	 yvknr5OTjD9QmQt8Ko3Ft1luFBqylPJYEGajybbAc1QoYY668+sUC9GaugilKS2waq
-	 j6ryROqOAs+Ig==
+	b=mU0CSDIRLU770cVTc7mGdG67gRacbfHX7KZ3Gwz+oYUJEhalcsfOL6Vj1uCz2stDU
+	 TEripNlxvNFEQP8cntlNdqNLokL4guGK4fJoZy/He1cRDDL3C/hqdGyHfAyL+d//Ue
+	 SZ2a68BRNj2MQEEqXEcY/Bx+shnT3i/pQNx7nYcsMyoQYXkga7UNES7HLABgt8Evj2
+	 nGtk08D4xHZacvpGIqT2BnkIEG6gYleBhqPN4en9XoJgu06FVwBgAUzAhdsQw/HaVA
+	 fWJd4prZaGkIOdq20udzo8rEXW9StEHeOO2+21CdEQGxMjCQhfMTho3yWZS2G8d1A+
+	 1Y0kbZ0DQGXmA==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: keyrings@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc: keyrings@vger.kernel.org,
 	linux-crypto@vger.kernel.org (open list:CRYPTO API),
 	linux-kernel@vger.kernel.org (open list),
 	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH RESEND] KEYS: trusted: Use ASN.1 encoded OID
-Date: Thu, 23 May 2024 16:19:26 +0300
-Message-ID: <20240523131931.22350-1-jarkko@kernel.org>
+Subject: [PATCH v2] KEYS: trusted: Use ASN.1 encoded OID
+Date: Thu, 23 May 2024 16:23:37 +0300
+Message-ID: <20240523132341.32092-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -83,10 +83,15 @@ the OID can be simply copied to the blob.
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
+v2:
+* Not my day I guess. This one has print_hex_dump() taken away.
+  Apologies for spamming. The patch is however tested properly
+  with run-tests.sh in https://gitlab.com/jarkkojs/linux-tpmdd-test.
+---
  include/linux/asn1_encoder.h              |  4 -
  lib/asn1_encoder.c                        | 91 -----------------------
- security/keys/trusted-keys/trusted_tpm2.c | 10 ++-
- 3 files changed, 7 insertions(+), 98 deletions(-)
+ security/keys/trusted-keys/trusted_tpm2.c |  7 +-
+ 3 files changed, 4 insertions(+), 98 deletions(-)
 
 diff --git a/include/linux/asn1_encoder.h b/include/linux/asn1_encoder.h
 index 08cd0c2ad34f..afeefdfe2525 100644
@@ -210,7 +215,7 @@ index 0fd3c454a468..c0db3cbebe89 100644
   * asn1_encode_length() - encode a length to follow an ASN.1 tag
   * @data: pointer to encode at
 diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 8b7dd73d94c1..f732e01a9dc6 100644
+index 8b7dd73d94c1..4a2b4ad5a913 100644
 --- a/security/keys/trusted-keys/trusted_tpm2.c
 +++ b/security/keys/trusted-keys/trusted_tpm2.c
 @@ -26,7 +26,8 @@ static struct tpm2_hash tpm2_hash_map[] = {
@@ -234,16 +239,6 @@ index 8b7dd73d94c1..f732e01a9dc6 100644
  
  	if (options->blobauth_len == 0) {
  		unsigned char bool[3], *w = bool;
-@@ -90,6 +91,9 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 		goto err;
- 	}
- 
-+	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE, 16, 1,
-+		       payload->blob, work1 - payload->blob, 0);
-+
- 	kfree(scratch);
- 	return work1 - payload->blob;
- 
 -- 
 2.45.1
 
