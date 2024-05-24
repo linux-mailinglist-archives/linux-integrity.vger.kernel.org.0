@@ -1,59 +1,59 @@
-Return-Path: <linux-integrity+bounces-2608-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2609-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC7668CE5AD
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 15:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 177038CE5AF
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 15:06:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF98BB2034A
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 13:05:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 468C6B208DE
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 13:06:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D5F86640;
-	Fri, 24 May 2024 13:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91D3186263;
+	Fri, 24 May 2024 13:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="a8ruv9C9"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="roBPqO6r"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7F58663A;
-	Fri, 24 May 2024 13:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B2A86640;
+	Fri, 24 May 2024 13:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716555938; cv=none; b=Rwyw0c9yv+ofbZwsfG9sMjRDAswTdjm/v26uvF0pC1zh8y9PRf4I/aXYllWKRo7e5Y2EisQpWCTjygMQ5r6Y3+lJsWiGN5sirZLZanTU6/OzqYq9lE4QcfH0sfaYCRbk+ogFAH6lb0NqzVQgELG79BReXN6tAvthtdHuVYEMlY0=
+	t=1716555959; cv=none; b=Ryz9RRgnpLxp7dVaA4GQlIcqt65L9FPUIkWRlW5btcFMXdNgaABe1te02/5AnnT2YKkYucnKSqWEXE8sUyNe/D5g+9xzSX+Yj2UD2Wadj6VElh4QWXtvlzlXr5K9XIb2QlhmNqzNDyEDKEZkskhlCs5EimYiE4VjYYI0/npWPxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716555938; c=relaxed/simple;
-	bh=b+uK5R3vH0YaKvyljOUQyWTKez5T2uNjzy7I7NKd17g=;
+	s=arc-20240116; t=1716555959; c=relaxed/simple;
+	bh=9dFiZ+XSknK9pTiu6qLHoLR7mBuSpmYjeMB3X9Bn5N8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Lgg+xiPW5kt0ZDPywbwhj94uyoT1JtGXkjI8WAy2QGEfywiafiUhkt12qQK8WrHzz4N/RJcC7MNxEadqARPgCIqO54I4d2eqWjBZCsK1/Zo7Fnl54ERrwVER+Zha29sImPYiWiAHHgI7wr7OABUQo2kNURD35ik/KFkqZZI1vk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=a8ruv9C9; arc=none smtp.client-ip=96.44.175.130
+	 MIME-Version; b=EH2zO9WtCClHEplcsHdLpUmv7Bf8aPCXAd3TIZuIDOx5JAIqRP0JK8/nwPowVo8rbznJRniN217CAU55apsgOr/cYtsN/OD6nX4qK4Z7EuMxqCyrLPOQZSaGw22Lkkej8+zT6odyCcoN8JvyZsW8E/V8tTEyJ4R0QKokC6wLSPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=roBPqO6r; arc=none smtp.client-ip=96.44.175.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1716555935;
-	bh=b+uK5R3vH0YaKvyljOUQyWTKez5T2uNjzy7I7NKd17g=;
+	d=hansenpartnership.com; s=20151216; t=1716555956;
+	bh=9dFiZ+XSknK9pTiu6qLHoLR7mBuSpmYjeMB3X9Bn5N8=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-	b=a8ruv9C9i/y45zUGBnLj1yPuqLQG5zfnkcxavC6X39GKAuhvk3nLl3NujskLiVvtF
-	 BfqDIdgYL1KECvBmziYlX5W13qdZQUVkuapqrPiuREbIHEU/OBwjcd3mxvhGnkI2wA
-	 NqS9tsJvMuQ3GuHdr3OAVqAJ2Og8hIZ6zESWP7ac=
+	b=roBPqO6rhGL0xt6g1xQ56nQoE7CDfEc4GpavstzBu8VDF/0+/ogM5sBm/KL34rr0n
+	 00LXdADKUPesGprmF70xsTNKE/6w+h/yBfZqIOcwyvv9DBf1FiSVMnRTh3nytk26Oz
+	 pjO/paMenJ7ieokfmo55t1ttuDzi+yazd5RTK4nk=
 Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id DE69C1287771;
-	Fri, 24 May 2024 09:05:35 -0400 (EDT)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id E051B1287771;
+	Fri, 24 May 2024 09:05:56 -0400 (EDT)
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
  by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id 2VwfxqarWgfx; Fri, 24 May 2024 09:05:35 -0400 (EDT)
+ with ESMTP id 81WnPpOPthrw; Fri, 24 May 2024 09:05:56 -0400 (EDT)
 Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6A8261280355;
-	Fri, 24 May 2024 09:05:35 -0400 (EDT)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 60B0D1280355;
+	Fri, 24 May 2024 09:05:56 -0400 (EDT)
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
 To: linux-integrity@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	keyrings@vger.kernel.org
-Subject: [PATCH 2/6] tpm: add policy sessions
-Date: Fri, 24 May 2024 09:04:55 -0400
-Message-Id: <20240524130459.21510-3-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 3/6] KEYS: trusted: add PCR policy to TPM2 keys
+Date: Fri, 24 May 2024 09:04:56 -0400
+Message-Id: <20240524130459.21510-4-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20240524130459.21510-1-James.Bottomley@HansenPartnership.com>
 References: <20240524130459.21510-1-James.Bottomley@HansenPartnership.com>
@@ -65,632 +65,906 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-TPM security uses hmac sessions to implement data protection and
-integrity.  The hash algorithm of these sessions isn't exposed to the
-user (and doesn't depend on the object being authorized) so it is
-currently fixed at a safe sha256.  Policy sessions may also be used
-for the same purpose and in addition, they can be used to express a
-rich policy language.  However, the session hash of policy sessions is
-defined to be the same as the name algorithm of the TPM object they're
-operating on, so we must update the session code to allow a variable
-hash algorithm instead of the fixed sha256 one.  Note that while this
-affects most of the code, the KDFe algorithm still uses a fixed sha256
-algorithm because it is define to follow the name algorithm of the
-salt encryption key (which is a key we derive from the null seed and
-set its name algorithm to sha256).
+This commit adds the ability to specify a PCR lock policy to TPM2
+keys.  There is a complexity in that keys that contain both a password
+(blobauth) and a PCR lock have to have two policy statements
+(POLICY_PCR and POLICY_AUTHVALUE).  The way to construct a pcrinfo
+statement for a key is simply to use the TPMS_PCR_SELECT structure to
+specify the PCRs and follow this by a hash of all their values in
+order of ascending PCR number.
+
+To construct a policy around the value of the resettable PCR 16 using
+the sha256 bank, first reset the pcr to zero giving a hash of all
+zeros as:
+
+66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925
+
+Then the TPMS_PCR_SELECT value for sha256 bank PCR 16 is
+
+000b03000001
+
+So create a new 32 byte key with a policy locking the key to this
+value of PCR 16 with a parent key of 81000001 would be:
+
+keyctl add trusted kmk "new 32 keyhandle=0x81000001 pcrinfo=000b0300000166687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925" @u
 
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- drivers/char/tpm/tpm2-sessions.c | 307 +++++++++++++++++++------------
- include/linux/tpm.h              |   6 +
- 2 files changed, 200 insertions(+), 113 deletions(-)
+ .../security/keys/trusted-encrypted.rst       |  53 ++-
+ include/keys/trusted-type.h                   |   5 +-
+ include/linux/tpm.h                           |  16 +
+ security/keys/trusted-keys/Kconfig            |   2 +
+ security/keys/trusted-keys/Makefile           |   3 +
+ security/keys/trusted-keys/tpm2-policy.c      | 325 ++++++++++++++++++
+ security/keys/trusted-keys/tpm2-policy.h      |  53 +++
+ security/keys/trusted-keys/tpm2key.asn1       |  13 +
+ security/keys/trusted-keys/trusted_core.c     |   7 +-
+ security/keys/trusted-keys/trusted_tpm2.c     | 147 +++++++-
+ 10 files changed, 606 insertions(+), 18 deletions(-)
+ create mode 100644 security/keys/trusted-keys/tpm2-policy.c
+ create mode 100644 security/keys/trusted-keys/tpm2-policy.h
 
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index ea8860661876..63c175b2165c 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -105,10 +105,10 @@ struct tpm2_auth {
- 	/*
- 	 * the size here is variable and set by the size of our_nonce
- 	 * which must be between 16 and the name hash length. we set
--	 * the maximum sha256 size for the greatest protection
-+	 * the maximum hash size for the greatest protection
- 	 */
--	u8 our_nonce[SHA256_DIGEST_SIZE];
--	u8 tpm_nonce[SHA256_DIGEST_SIZE];
-+	u8 our_nonce[HASH_MAX_DIGESTSIZE];
-+	u8 tpm_nonce[HASH_MAX_DIGESTSIZE];
- 	/*
- 	 * the salt is only used across the session command/response
- 	 * after that it can be used as a scratch area
-@@ -119,17 +119,15 @@ struct tpm2_auth {
- 		u8 scratch[AES_KEY_BYTES + AES_BLOCK_SIZE];
- 	};
- 	/*
--	 * the session key and passphrase are the same size as the
--	 * name digest (sha256 again).  The session key is constant
--	 * for the use of the session and the passphrase can change
--	 * with every invocation.
--	 *
--	 * Note: these fields must be adjacent and in this order
--	 * because several HMAC/KDF schemes use the combination of the
--	 * session_key and passphrase.
-+	 * The session_key and passphrase must be next to each other
-+	 * to allow us to hash them as a unit.  With a variable hash,
-+	 * this means that the passphrase must occur exactly one hash
-+	 * size after the session_key, so make session_key house both
-+	 * and passphrase is a pointer into where the passphrase
-+	 * begins in session_key.
- 	 */
--	u8 session_key[SHA256_DIGEST_SIZE];
--	u8 passphrase[SHA256_DIGEST_SIZE];
-+	u8 session_key[2*HASH_MAX_DIGESTSIZE];
-+	u8 *passphrase;
- 	int passphrase_len;
- 	struct crypto_aes_ctx aes_ctx;
- 	/* saved session attributes: */
-@@ -142,7 +140,8 @@ struct tpm2_auth {
- 	 * we must compute and remember
- 	 */
- 	u32 name_h[AUTH_MAX_NAMES];
--	u8 name[AUTH_MAX_NAMES][2 + SHA512_DIGEST_SIZE];
-+	u8 name[AUTH_MAX_NAMES][2 + HASH_MAX_DIGESTSIZE];
-+	struct crypto_shash *tfm;
+diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+index f4d7e162d5e4..c37c08956ec1 100644
+--- a/Documentation/security/keys/trusted-encrypted.rst
++++ b/Documentation/security/keys/trusted-encrypted.rst
+@@ -217,7 +217,10 @@ Usage::
+                      (40 ascii zeros)
+        blobauth=     ascii hex auth for sealed data default 0x00...
+                      (40 ascii zeros)
+-       pcrinfo=	     ascii hex of PCR_INFO or PCR_INFO_LONG (no default)
++       pcrinfo=      ascii hex of PCR_INFO or PCR_INFO_LONG (no
++                     default) on TPM 1.2 and a TPMS_PCR_SELECTION
++                     coupled with a hash of all the selected PCRs on
++                     TPM 2.0 using the selected hash.
+        pcrlock=	     pcr number to be extended to "lock" blob
+        migratable=   0|1 indicating permission to reseal to new PCR values,
+                      default 1 (resealing allowed)
+@@ -343,6 +346,37 @@ Load a trusted key from the saved blob::
+     f1f8fff03ad0acb083725535636addb08d73dedb9832da198081e5deae84bfaf0409c22b
+     e4a8aea2b607ec96931e6f4d4fe563ba
+ 
++Create a trusted key on TPM 2.0 using an all zero value of PCR16 and
++using the NV storage root 81000001 as the parent::
++
++    $ keyctl add trusted kmk "new 32 keyhandle=0x81000001 pcrinfo=000b0300000166687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925" @u
++
++Note the TPMS_PCR_SELECT value for sha256 bank PCR 16 is 000b03000001
++because all current TPMs have 24 PCRs, so the initial 000b says sha256
++bank (other possible banks are sha1=0004; sha384=000c; sha512=000d),
++03 says there are three following bytes of selection and then because
++the bytes are big endian, 16 is bit zero of byte 2. the hash is the
++sha256 sum of all zeros (the value of PCR 16)::
++
++    $ dd if=/dev/zero bs=1 count=32 2>/dev/null|sha256sum
++    66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925
++
++If you want to compute a current PCR hash value, simply take the
++hashes of multiple PCRs (in ascending order) and compute the sha256sum
++over the total:
++
++    $ { cat /sys/class/tpm/tpm0/pcr-sha256/7; cat /sys/class/tpm/tpm0/pcr-sha256/16; }|xxd -r -p|sha256sum
++
++Then use this value to append to a TPMS_PCR_SELECT (for 7 and 16 that
++would be 000b03800001) to the calculated hash as before.  Note also
++that the hash of the PCR registers has to use the name algorithm hash
++(the keyctl option hash=) not the bank algorithm hash.  So to select
++the sha1 pcr16 bank you'd say::
++
++    keyctl add trusted kmk "new 32 keyhandle=0x81000001 pcrinfo=000403000001de47c9b27eb8d300dbb5f2c353e632c393262cf06340c4fa7f1b40c4cbd36f90" @u
++
++because the trailing hash is the sha256sum of 20 zero bytes.
++
+ Reseal (TPM specific) a trusted key under new PCR values::
+ 
+     $ keyctl update 268728824 "update pcrinfo=`cat pcr.blob`"
+@@ -425,11 +459,17 @@ policy::
+     TPMKey ::= SEQUENCE {
+         type		OBJECT IDENTIFIER
+         emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL
++        policy		[1] EXPLICIT SEQUENCE OF TPMPolicy OPTIONAL
+         parent		INTEGER
+         pubkey		OCTET STRING
+         privkey		OCTET STRING
+     }
+ 
++    TPMPolicy ::= SEQUENCE {
++	CommandCode		[0] EXPLICIT INTEGER
++	CommandPolicy		[1] EXPLICIT OCTET STRING
++    }
++
+ type is what distinguishes the key even in binary form since the OID
+ is provided by the TCG to be unique and thus forms a recognizable
+ binary pattern at offset 3 in the key.  The OIDs currently made
+@@ -455,6 +495,17 @@ is false or not present, the key requires an explicit authorization
+ phrase.  This is used by most user space consumers to decide whether
+ to prompt for a password.
+ 
++policy represents a sequence of one or more policy statements that
++must be executed successfully into a session policy register.  If
++policy isn't present then no policy is required to unlock the key, but
++if it is, commandCode is the TPM 2.0 command code of the policy
++instruction that must be executed and CommandPolicy represents the
++binary parameter area of the policy command.
++
++Note that the current sequential execution requirement means that only
++AND based policy can be constructed at the moment, so TPM2_PolicyOR is
++not currently supported.
++
+ parent represents the parent key handle, either in the 0x81 MSO space,
+ like 0x81000001 for the RSA primary storage key.  Userspace programmes
+ also support specifying the primary handle in the 0x40 MSO space.  If
+diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+index 4eb64548a74f..5d1d481a8a19 100644
+--- a/include/keys/trusted-type.h
++++ b/include/keys/trusted-type.h
+@@ -20,9 +20,11 @@
+ #define MIN_KEY_SIZE			32
+ #define MAX_KEY_SIZE			128
+ #define MAX_BLOB_SIZE			512
+-#define MAX_PCRINFO_SIZE		64
++#define MAX_PCRINFO_SIZE		128
+ #define MAX_DIGEST_SIZE			64
+ 
++#define TPM2_MAX_POLICIES		16
++
+ struct trusted_key_payload {
+ 	struct rcu_head rcu;
+ 	unsigned int key_len;
+@@ -31,6 +33,7 @@ struct trusted_key_payload {
+ 	unsigned char old_format;
+ 	unsigned char key[MAX_KEY_SIZE + 1];
+ 	unsigned char blob[MAX_BLOB_SIZE];
++	struct tpm2_policies *policies;
  };
  
- /*
-@@ -161,34 +160,36 @@ static u8 name_size(const u8 *name)
- }
+ struct trusted_key_options {
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index dc2dd98cf104..154efceec0a4 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -248,7 +248,9 @@ enum tpm2_return_codes {
+ 	TPM2_RC_SUCCESS		= 0x0000,
+ 	TPM2_RC_HASH		= 0x0083, /* RC_FMT1 */
+ 	TPM2_RC_HANDLE		= 0x008B,
++	TPM2_RC_AUTH_FAIL	= 0x008E,
+ 	TPM2_RC_INTEGRITY	= 0x009F,
++	TPM2_RC_BAD_AUTH	= 0x00A2,
+ 	TPM2_RC_INITIALIZE	= 0x0100, /* RC_VER1 */
+ 	TPM2_RC_FAILURE		= 0x0101,
+ 	TPM2_RC_DISABLED	= 0x0120,
+@@ -259,6 +261,18 @@ enum tpm2_return_codes {
+ 	TPM2_RC_RETRY		= 0x0922,
+ };
  
- /*
-- * It turns out the crypto hmac(sha256) is hard for us to consume
-+ * It turns out the crypto hmac(shaX) is hard for us to consume
-  * because it assumes a fixed key and the TPM seems to change the key
-  * on every operation, so we weld the hmac init and final functions in
-  * here to give it the same usage characteristics as a regular hash
-  */
--static void tpm2_hmac_init(struct sha256_state *sctx, u8 *key, u32 key_len)
-+static void tpm2_hmac_init(struct shash_desc *sdesc, u8 *key, u32 key_len)
- {
--	u8 pad[SHA256_BLOCK_SIZE];
-+	const int block_size = crypto_shash_blocksize(sdesc->tfm);
-+	u8 pad[SHA512_BLOCK_SIZE];
- 	int i;
- 
--	sha256_init(sctx);
--	for (i = 0; i < sizeof(pad); i++) {
-+	crypto_shash_init(sdesc);
-+	for (i = 0; i < block_size; i++) {
- 		if (i < key_len)
- 			pad[i] = key[i];
- 		else
- 			pad[i] = 0;
- 		pad[i] ^= HMAC_IPAD_VALUE;
- 	}
--	sha256_update(sctx, pad, sizeof(pad));
-+	crypto_shash_update(sdesc, pad, block_size);
- }
- 
--static void tpm2_hmac_final(struct sha256_state *sctx, u8 *key, u32 key_len,
-+static void tpm2_hmac_final(struct shash_desc *sdesc, u8 *key, u32 key_len,
- 			    u8 *out)
- {
--	u8 pad[SHA256_BLOCK_SIZE];
-+	const int block_size = crypto_shash_blocksize(sdesc->tfm);
-+	u8 pad[SHA512_BLOCK_SIZE];
- 	int i;
- 
--	for (i = 0; i < sizeof(pad); i++) {
-+	for (i = 0; i < block_size; i++) {
- 		if (i < key_len)
- 			pad[i] = key[i];
- 		else
-@@ -197,35 +198,42 @@ static void tpm2_hmac_final(struct sha256_state *sctx, u8 *key, u32 key_len,
- 	}
- 
- 	/* collect the final hash;  use out as temporary storage */
--	sha256_final(sctx, out);
-+	crypto_shash_final(sdesc, out);
- 
--	sha256_init(sctx);
--	sha256_update(sctx, pad, sizeof(pad));
--	sha256_update(sctx, out, SHA256_DIGEST_SIZE);
--	sha256_final(sctx, out);
-+	crypto_shash_init(sdesc);
-+	crypto_shash_update(sdesc, pad, block_size);
-+	crypto_shash_update(sdesc, out, crypto_shash_digestsize(sdesc->tfm));
-+	crypto_shash_final(sdesc, out);
- }
- 
- /*
-- * assume hash sha256 and nonces u, v of size SHA256_DIGEST_SIZE but
-+ * assume hash sha256 and nonces u, v of hash digest size but
-  * otherwise standard tpm2_KDFa.  Note output is in bytes not bits.
-  */
- static void tpm2_KDFa(u8 *key, u32 key_len, const char *label, u8 *u,
--		      u8 *v, u32 bytes, u8 *out)
-+		      u8 *v, u32 bytes, u8 *out, struct shash_desc *sdesc)
- {
- 	u32 counter = 1;
- 	const __be32 bits = cpu_to_be32(bytes * 8);
-+	const int digest_size = crypto_shash_digestsize(sdesc->tfm);
- 
- 	while (bytes > 0) {
--		struct sha256_state sctx;
- 		__be32 c = cpu_to_be32(counter);
- 
--		tpm2_hmac_init(&sctx, key, key_len);
--		sha256_update(&sctx, (u8 *)&c, sizeof(c));
--		sha256_update(&sctx, label, strlen(label)+1);
--		sha256_update(&sctx, u, SHA256_DIGEST_SIZE);
--		sha256_update(&sctx, v, SHA256_DIGEST_SIZE);
--		sha256_update(&sctx, (u8 *)&bits, sizeof(bits));
--		tpm2_hmac_final(&sctx, key, key_len, out);
-+		tpm2_hmac_init(sdesc, key, key_len);
-+		crypto_shash_update(sdesc, (u8 *)&c, sizeof(c));
-+		crypto_shash_update(sdesc, label, strlen(label)+1);
-+		crypto_shash_update(sdesc, u, digest_size);
-+		crypto_shash_update(sdesc, v, digest_size);
-+		crypto_shash_update(sdesc, (u8 *)&bits, sizeof(bits));
-+		if (bytes < digest_size) {
-+			u8 buf[HASH_MAX_DIGESTSIZE];
-+
-+			tpm2_hmac_final(sdesc, key, key_len, buf);
-+			memcpy(out, buf, bytes);
-+		} else {
-+			tpm2_hmac_final(sdesc, key, key_len, out);
-+		}
- 
- 		bytes -= SHA256_DIGEST_SIZE;
- 		counter++;
-@@ -236,9 +244,9 @@ static void tpm2_KDFa(u8 *key, u32 key_len, const char *label, u8 *u,
- /*
-  * Somewhat of a bastardization of the real KDFe.  We're assuming
-  * we're working with known point sizes for the input parameters and
-- * the hash algorithm is fixed at sha256.  Because we know that the
-- * point size is 32 bytes like the hash size, there's no need to loop
-- * in this KDF.
-+ * the hash algorithm is fixed at sha256 (name algorithm of the
-+ * encrypting key).  Because we know that the point size is 32 bytes
-+ * like the hash size, there's no need to loop in this KDF.
-  */
- static void tpm2_KDFe(u8 z[EC_PT_SZ], const char *str, u8 *pt_u, u8 *pt_v,
- 		      u8 *out)
-@@ -370,9 +378,10 @@ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- 				 u8 attributes, u8 *passphrase,
- 				 int passphrase_len)
- {
--	u8 nonce[SHA256_DIGEST_SIZE];
-+	u8 nonce[HASH_MAX_DIGESTSIZE];
- 	u32 len;
- 	struct tpm2_auth *auth = chip->auth;
-+	const int digest_size = crypto_shash_digestsize(auth->tfm);
- 
- 	/*
- 	 * The Architecture Guide requires us to strip trailing zeros
-@@ -384,8 +393,14 @@ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- 
- 	auth->attrs = attributes;
- 	auth->passphrase_len = passphrase_len;
--	if (passphrase_len)
-+	if (passphrase_len) {
-+		/*
-+		 * place the passphrase immediately adjacent to
-+		 * the session key
-+		 */
-+		auth->passphrase = auth->session_key + digest_size;
- 		memcpy(auth->passphrase, passphrase, passphrase_len);
-+	}
- 
- 	if (auth->session != tpm_buf_length(buf)) {
- 		/* we're not the first session */
-@@ -396,23 +411,23 @@ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- 		}
- 
- 		/* add our new session */
--		len += 9 + 2 * SHA256_DIGEST_SIZE;
-+		len += 9 + 2 * digest_size;
- 		put_unaligned_be32(len, &buf->data[auth->session]);
- 	} else {
--		tpm_buf_append_u32(buf, 9 + 2 * SHA256_DIGEST_SIZE);
-+		tpm_buf_append_u32(buf, 9 + 2 * digest_size);
- 	}
- 
- 	/* random number for our nonce */
--	get_random_bytes(nonce, sizeof(nonce));
--	memcpy(auth->our_nonce, nonce, sizeof(nonce));
-+	get_random_bytes(nonce, digest_size);
-+	memcpy(auth->our_nonce, nonce, digest_size);
- 	tpm_buf_append_u32(buf, auth->handle);
- 	/* our new nonce */
--	tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
--	tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
-+	tpm_buf_append_u16(buf, digest_size);
-+	tpm_buf_append(buf, nonce, digest_size);
- 	tpm_buf_append_u8(buf, auth->attrs);
- 	/* and put a placeholder for the hmac */
--	tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
--	tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
-+	tpm_buf_append_u16(buf, digest_size);
-+	tpm_buf_append(buf, nonce, digest_size);
- }
- EXPORT_SYMBOL(tpm_buf_append_hmac_session);
- 
-@@ -443,8 +458,11 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
- 	off_t offset_s = TPM_HEADER_SIZE, offset_p;
- 	u8 *hmac = NULL;
- 	u32 attrs;
--	u8 cphash[SHA256_DIGEST_SIZE];
--	struct sha256_state sctx;
-+	const int digest_size = crypto_shash_digestsize(auth->tfm);
-+	u8 cphash[HASH_MAX_DIGESTSIZE];
-+	SHASH_DESC_ON_STACK(sdesc, auth->tfm);
-+
-+	sdesc->tfm = auth->tfm;
- 
- 	/* save the command code in BE format */
- 	auth->ordinal = head->ordinal;
-@@ -515,10 +533,10 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
- 		u16 len;
- 
- 		/* need key and IV */
--		tpm2_KDFa(auth->session_key, SHA256_DIGEST_SIZE
-+		tpm2_KDFa(auth->session_key, digest_size
- 			  + auth->passphrase_len, "CFB", auth->our_nonce,
- 			  auth->tpm_nonce, AES_KEY_BYTES + AES_BLOCK_SIZE,
--			  auth->scratch);
-+			  auth->scratch, sdesc);
- 
- 		len = tpm_buf_read_u16(buf, &offset_p);
- 		aes_expandkey(&auth->aes_ctx, auth->scratch, AES_KEY_BYTES);
-@@ -529,9 +547,10 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
- 		offset_p -= 2;
- 	}
- 
--	sha256_init(&sctx);
-+	crypto_shash_init(sdesc);
- 	/* ordinal is already BE */
--	sha256_update(&sctx, (u8 *)&head->ordinal, sizeof(head->ordinal));
-+	crypto_shash_update(sdesc, (u8 *)&head->ordinal,
-+			    sizeof(head->ordinal));
- 	/* add the handle names */
- 	for (i = 0; i < handles; i++) {
- 		enum tpm2_mso_type mso = tpm2_handle_mso(auth->name_h[i]);
-@@ -539,27 +558,27 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
- 		if (mso == TPM2_MSO_PERSISTENT ||
- 		    mso == TPM2_MSO_VOLATILE ||
- 		    mso == TPM2_MSO_NVRAM) {
--			sha256_update(&sctx, auth->name[i],
--				      name_size(auth->name[i]));
-+			crypto_shash_update(sdesc, auth->name[i],
-+					    name_size(auth->name[i]));
- 		} else {
- 			__be32 h = cpu_to_be32(auth->name_h[i]);
- 
--			sha256_update(&sctx, (u8 *)&h, 4);
-+			crypto_shash_update(sdesc, (u8 *)&h, 4);
- 		}
- 	}
- 	if (offset_s != tpm_buf_length(buf))
--		sha256_update(&sctx, &buf->data[offset_s],
--			      tpm_buf_length(buf) - offset_s);
--	sha256_final(&sctx, cphash);
-+		crypto_shash_update(sdesc, &buf->data[offset_s],
-+				    tpm_buf_length(buf) - offset_s);
-+	crypto_shash_final(sdesc, cphash);
- 
- 	/* now calculate the hmac */
--	tpm2_hmac_init(&sctx, auth->session_key, sizeof(auth->session_key)
-+	tpm2_hmac_init(sdesc, auth->session_key, digest_size
- 		       + auth->passphrase_len);
--	sha256_update(&sctx, cphash, sizeof(cphash));
--	sha256_update(&sctx, auth->our_nonce, sizeof(auth->our_nonce));
--	sha256_update(&sctx, auth->tpm_nonce, sizeof(auth->tpm_nonce));
--	sha256_update(&sctx, &auth->attrs, 1);
--	tpm2_hmac_final(&sctx, auth->session_key, sizeof(auth->session_key)
-+	crypto_shash_update(sdesc, cphash, digest_size);
-+	crypto_shash_update(sdesc, auth->our_nonce, digest_size);
-+	crypto_shash_update(sdesc, auth->tpm_nonce, digest_size);
-+	crypto_shash_update(sdesc, &auth->attrs, 1);
-+	tpm2_hmac_final(sdesc, auth->session_key, digest_size
- 			+ auth->passphrase_len, hmac);
- }
- EXPORT_SYMBOL(tpm_buf_fill_hmac_session);
-@@ -695,12 +714,15 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
- 	struct tpm_header *head = (struct tpm_header *)buf->data;
- 	struct tpm2_auth *auth = chip->auth;
- 	off_t offset_s, offset_p;
--	u8 rphash[SHA256_DIGEST_SIZE];
-+	const int digest_size = crypto_shash_digestsize(auth->tfm);
-+	u8 rphash[HASH_MAX_DIGESTSIZE];
- 	u32 attrs;
--	struct sha256_state sctx;
- 	u16 tag = be16_to_cpu(head->tag);
- 	u32 cc = be32_to_cpu(auth->ordinal);
- 	int parm_len, len, i, handles;
-+	SHASH_DESC_ON_STACK(sdesc, auth->tfm);
-+
-+	sdesc->tfm = auth->tfm;
- 
- 	if (auth->session >= TPM_HEADER_SIZE) {
- 		WARN(1, "tpm session not filled correctly\n");
-@@ -739,7 +761,7 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
- 	len = tpm_buf_read_u16(buf, &offset_s);
- 	if (offset_s + len > tpm_buf_length(buf))
- 		goto out;
--	if (len != SHA256_DIGEST_SIZE)
-+	if (len != digest_size)
- 		goto out;
- 	memcpy(auth->tpm_nonce, &buf->data[offset_s], len);
- 	offset_s += len;
-@@ -747,32 +769,32 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
- 	len = tpm_buf_read_u16(buf, &offset_s);
- 	if (offset_s + len != tpm_buf_length(buf))
- 		goto out;
--	if (len != SHA256_DIGEST_SIZE)
-+	if (len != digest_size)
- 		goto out;
- 	/*
- 	 * offset_s points to the HMAC. now calculate comparison, beginning
- 	 * with rphash
- 	 */
--	sha256_init(&sctx);
-+	crypto_shash_init(sdesc);
- 	/* yes, I know this is now zero, but it's what the standard says */
--	sha256_update(&sctx, (u8 *)&head->return_code,
--		      sizeof(head->return_code));
-+	crypto_shash_update(sdesc, (u8 *)&head->return_code,
-+			    sizeof(head->return_code));
- 	/* ordinal is already BE */
--	sha256_update(&sctx, (u8 *)&auth->ordinal, sizeof(auth->ordinal));
--	sha256_update(&sctx, &buf->data[offset_p], parm_len);
--	sha256_final(&sctx, rphash);
-+	crypto_shash_update(sdesc, (u8 *)&auth->ordinal, sizeof(auth->ordinal));
-+	crypto_shash_update(sdesc, &buf->data[offset_p], parm_len);
-+	crypto_shash_final(sdesc, rphash);
- 
- 	/* now calculate the hmac */
--	tpm2_hmac_init(&sctx, auth->session_key, sizeof(auth->session_key)
-+	tpm2_hmac_init(sdesc, auth->session_key, digest_size
- 		       + auth->passphrase_len);
--	sha256_update(&sctx, rphash, sizeof(rphash));
--	sha256_update(&sctx, auth->tpm_nonce, sizeof(auth->tpm_nonce));
--	sha256_update(&sctx, auth->our_nonce, sizeof(auth->our_nonce));
--	sha256_update(&sctx, &auth->attrs, 1);
-+	crypto_shash_update(sdesc, rphash, digest_size);
-+	crypto_shash_update(sdesc, auth->tpm_nonce, digest_size);
-+	crypto_shash_update(sdesc, auth->our_nonce, digest_size);
-+	crypto_shash_update(sdesc, &auth->attrs, 1);
- 	/* we're done with the rphash, so put our idea of the hmac there */
--	tpm2_hmac_final(&sctx, auth->session_key, sizeof(auth->session_key)
-+	tpm2_hmac_final(sdesc, auth->session_key, digest_size
- 			+ auth->passphrase_len, rphash);
--	if (memcmp(rphash, &buf->data[offset_s], SHA256_DIGEST_SIZE) == 0) {
-+	if (memcmp(rphash, &buf->data[offset_s], digest_size) == 0) {
- 		rc = 0;
- 	} else {
- 		dev_err(&chip->dev, "TPM: HMAC check failed\n");
-@@ -782,10 +804,10 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
- 	/* now do response decryption */
- 	if (auth->attrs & TPM2_SA_ENCRYPT) {
- 		/* need key and IV */
--		tpm2_KDFa(auth->session_key, SHA256_DIGEST_SIZE
-+		tpm2_KDFa(auth->session_key, digest_size
- 			  + auth->passphrase_len, "CFB", auth->tpm_nonce,
- 			  auth->our_nonce, AES_KEY_BYTES + AES_BLOCK_SIZE,
--			  auth->scratch);
-+			  auth->scratch, sdesc);
- 
- 		len = tpm_buf_read_u16(buf, &offset_p);
- 		aes_expandkey(&auth->aes_ctx, auth->scratch, AES_KEY_BYTES);
-@@ -799,6 +821,7 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
- 		if (rc)
- 			/* manually close the session if it wasn't consumed */
- 			tpm2_flush_context(chip, auth->handle);
-+		crypto_free_shash(auth->tfm);
- 		memzero_explicit(auth, sizeof(*auth));
- 	} else {
- 		/* reset for next use  */
-@@ -821,8 +844,11 @@ EXPORT_SYMBOL(tpm_buf_check_hmac_response);
-  */
- void tpm2_end_auth_session(struct tpm_chip *chip)
- {
--	tpm2_flush_context(chip, chip->auth->handle);
--	memzero_explicit(chip->auth, sizeof(*chip->auth));
-+	struct tpm2_auth *auth = chip->auth;
-+
-+	tpm2_flush_context(chip, auth->handle);
-+	crypto_free_shash(auth->tfm);
-+	memzero_explicit(auth, sizeof(*auth));
- }
- EXPORT_SYMBOL(tpm2_end_auth_session);
- 
-@@ -833,23 +859,26 @@ static int tpm2_parse_start_auth_session(struct tpm2_auth *auth,
- 	u32 tot_len = be32_to_cpu(head->length);
- 	off_t offset = TPM_HEADER_SIZE;
- 	u32 val;
-+	const int digest_size = crypto_shash_digestsize(auth->tfm);
-+	SHASH_DESC_ON_STACK(sdesc, auth->tfm);
-+
-+	sdesc->tfm = auth->tfm;
- 
- 	/* we're starting after the header so adjust the length */
- 	tot_len -= TPM_HEADER_SIZE;
- 
- 	/* should have handle plus nonce */
--	if (tot_len != 4 + 2 + sizeof(auth->tpm_nonce))
-+	if (tot_len != 4 + 2 + digest_size)
- 		return -EINVAL;
- 
- 	auth->handle = tpm_buf_read_u32(buf, &offset);
- 	val = tpm_buf_read_u16(buf, &offset);
--	if (val != sizeof(auth->tpm_nonce))
-+	if (val != digest_size)
- 		return -EINVAL;
--	memcpy(auth->tpm_nonce, &buf->data[offset], sizeof(auth->tpm_nonce));
-+	memcpy(auth->tpm_nonce, &buf->data[offset], digest_size);
- 	/* now compute the session key from the nonces */
- 	tpm2_KDFa(auth->salt, sizeof(auth->salt), "ATH", auth->tpm_nonce,
--		  auth->our_nonce, sizeof(auth->session_key),
--		  auth->session_key);
-+		  auth->our_nonce, digest_size, auth->session_key, sdesc);
- 
- 	return 0;
- }
-@@ -885,24 +914,23 @@ static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
- 	return rc;
- }
- 
--/**
-- * tpm2_start_auth_session() - create a HMAC authentication session with the TPM
-- * @chip: the TPM chip structure to create the session with
-- *
-- * This function loads the NULL seed from its saved context and starts
-- * an authentication session on the null seed, fills in the
-- * @chip->auth structure to contain all the session details necessary
-- * for performing the HMAC, encrypt and decrypt operations and
-- * returns.  The NULL seed is flushed before this function returns.
-- *
-- * Return: zero on success or actual error encountered.
-- */
--int tpm2_start_auth_session(struct tpm_chip *chip)
-+static int __tpm2_start_session(struct tpm_chip *chip, u8 type, u16 hash)
- {
- 	struct tpm_buf buf;
- 	struct tpm2_auth *auth = chip->auth;
- 	int rc;
- 	u32 null_key;
-+	int tpm_hash = tpm2_crypto_to_alg(hash);
-+	int digest_size;
-+
-+	if (tpm_hash < 0)
-+		return -EINVAL;
-+
-+	auth->tfm = crypto_alloc_shash(hash_algo_name[hash], 0, 0);
-+	if (IS_ERR(auth->tfm))
-+		return PTR_ERR(auth->tfm);
-+
-+	digest_size = crypto_shash_digestsize(auth->tfm);
- 
- 	rc = tpm2_load_null(chip, &null_key);
- 	if (rc)
-@@ -919,14 +947,14 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
- 	/* bind key handle */
- 	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
- 	/* nonce caller */
--	get_random_bytes(auth->our_nonce, sizeof(auth->our_nonce));
--	tpm_buf_append_u16(&buf, sizeof(auth->our_nonce));
--	tpm_buf_append(&buf, auth->our_nonce, sizeof(auth->our_nonce));
-+	get_random_bytes(auth->our_nonce, digest_size);
-+	tpm_buf_append_u16(&buf, digest_size);
-+	tpm_buf_append(&buf, auth->our_nonce, digest_size);
- 
- 	/* append encrypted salt and squirrel away unencrypted in auth */
- 	tpm_buf_append_salt(&buf, chip);
- 	/* session type (HMAC, audit or policy) */
--	tpm_buf_append_u8(&buf, TPM2_SE_HMAC);
-+	tpm_buf_append_u8(&buf, type);
- 
- 	/* symmetric encryption parameters */
- 	/* symmetric algorithm */
-@@ -936,7 +964,7 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
- 	/* symmetric algorithm mode (must be CFB) */
- 	tpm_buf_append_u16(&buf, TPM_ALG_CFB);
- 	/* hash algorithm for session */
--	tpm_buf_append_u16(&buf, TPM_ALG_SHA256);
-+	tpm_buf_append_u16(&buf, tpm_hash);
- 
- 	rc = tpm_transmit_cmd(chip, &buf, 0, "start auth session");
- 	tpm2_flush_context(chip, null_key);
-@@ -949,11 +977,64 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
- 	if (rc)
- 		goto out;
- 
-+	return rc;
-+
-  out:
-+	crypto_free_shash(auth->tfm);
-+	auth->tfm = NULL;
-+
- 	return rc;
- }
-+
-+/**
-+ * tpm2_start_auth_session() - create a HMAC authentication session with the TPM
-+ * @chip: the TPM chip structure to create the session with
-+ *
-+ * This function loads the NULL seed from its saved context and starts
-+ * an authentication session on the null seed, fills in the
-+ * @chip->auth structure to contain all the session details necessary
-+ * for performing the HMAC, encrypt and decrypt operations and
-+ * returns.  The NULL seed is flushed before this function returns.
-+ *
-+ * Return: zero on success or actual error encountered.
-+ */
-+int tpm2_start_auth_session(struct tpm_chip *chip)
++static inline int tpm2_error_code(u32 rc)
 +{
-+	return __tpm2_start_session(chip, TPM2_SE_HMAC, HASH_ALGO_SHA256);
++	if ((rc & 0x0180) == 0)
++		/* TPM 1.2 error */
++		return -1;
++	if ((rc & 0x0080) == 0)
++		/* Error or Warning */
++		return rc;
++	/* strip off encoded parameter, handle or session */
++	return rc & 0x00ff;
 +}
- EXPORT_SYMBOL(tpm2_start_auth_session);
++
+ enum tpm2_command_codes {
+ 	TPM2_CC_FIRST		        = 0x011F,
+ 	TPM2_CC_HIERARCHY_CONTROL       = 0x0121,
+@@ -276,12 +290,14 @@ enum tpm2_command_codes {
+ 	TPM2_CC_CONTEXT_LOAD	        = 0x0161,
+ 	TPM2_CC_CONTEXT_SAVE	        = 0x0162,
+ 	TPM2_CC_FLUSH_CONTEXT	        = 0x0165,
++	TPM2_CC_POLICY_AUTHVALUE	= 0x016B,
+ 	TPM2_CC_READ_PUBLIC		= 0x0173,
+ 	TPM2_CC_START_AUTH_SESS		= 0x0176,
+ 	TPM2_CC_VERIFY_SIGNATURE        = 0x0177,
+ 	TPM2_CC_GET_CAPABILITY	        = 0x017A,
+ 	TPM2_CC_GET_RANDOM	        = 0x017B,
+ 	TPM2_CC_PCR_READ	        = 0x017E,
++	TPM2_CC_POLICY_PCR		= 0x017F,
+ 	TPM2_CC_PCR_EXTEND	        = 0x0182,
+ 	TPM2_CC_EVENT_SEQUENCE_COMPLETE = 0x0185,
+ 	TPM2_CC_HASH_SEQUENCE_START     = 0x0186,
+diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
+index 1fb8aa001995..da271679330b 100644
+--- a/security/keys/trusted-keys/Kconfig
++++ b/security/keys/trusted-keys/Kconfig
+@@ -8,6 +8,8 @@ config TRUSTED_KEYS_TPM
+ 	select CRYPTO
+ 	select CRYPTO_HMAC
+ 	select CRYPTO_SHA1
++	select CRYPTO_SHA256
++	select CRYPTO_SHA512
+ 	select CRYPTO_HASH_INFO
+ 	select ASN1_ENCODER
+ 	select OID_REGISTRY
+diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
+index f0f3b27f688b..1d22d9821876 100644
+--- a/security/keys/trusted-keys/Makefile
++++ b/security/keys/trusted-keys/Makefile
+@@ -10,6 +10,9 @@ trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm1.o
+ $(obj)/trusted_tpm2.o: $(obj)/tpm2key.asn1.h
+ trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm2.o
+ trusted-$(CONFIG_TRUSTED_KEYS_TPM) += tpm2key.asn1.o
++ifeq ($(CONFIG_TCG_TPM2_HMAC),y)
++trusted-$(CONFIG_TRUSTED_KEYS_TPM) += tpm2-policy.o
++endif
  
-+/**
-+ * tpm2_start_policy_session - create a policy session with the TPM
-+ * @chip: the TPM chip structure to create the session with
-+ * @handle: the policy session handle
-+ * @hash: the crypto subsystem hash algorithm for the policy
-+ *
-+ * This function loads the NULL seed from its saved context and starts
-+ * a policy session on the null seed, fills in the @chip->auth
-+ * structure to contain all the session details necessary for
-+ * performing the HMAC, encrypt and decrypt operations and returns.
-+ * The NULL seed is flushed before this function returns.
-+ *
-+ * Note the hash algorthim has to match the name algorithm of the TPM
-+ * object the policy will be used to authorize.
-+ *
-+ * Return: zero on success or actual error encountered.
+ trusted-$(CONFIG_TRUSTED_KEYS_TEE) += trusted_tee.o
+ 
+diff --git a/security/keys/trusted-keys/tpm2-policy.c b/security/keys/trusted-keys/tpm2-policy.c
+new file mode 100644
+index 000000000000..8c3a09762c10
+--- /dev/null
++++ b/security/keys/trusted-keys/tpm2-policy.c
+@@ -0,0 +1,325 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2019 James.Bottomley@HansenPartnership.com
 + */
-+int tpm2_start_policy_session(struct tpm_chip *chip, u32 *handle, u8 hash)
++
++#include <linux/asn1_encoder.h>
++#include <linux/err.h>
++#include <linux/types.h>
++#include <linux/printk.h>
++#include <linux/string.h>
++#include <linux/tpm.h>
++
++#include <asm/unaligned.h>
++
++#include <crypto/hash.h>
++
++#include <keys/trusted-type.h>
++#include <keys/trusted_tpm.h>
++
++#include "tpm2key.asn1.h"
++#include "tpm2-policy.h"
++
++int tpm2_key_code(void *context, size_t hdrlen,
++		  unsigned char tag,
++		  const void *value, size_t vlen)
 +{
++	struct tpm2_key_context *ctx = context;
++	u32 code = 0;
++	const u8 *v = value;
++	int i;
++
++	for (i = 0; i < vlen; i++) {
++		code <<= 8;
++		code |= v[i];
++	}
++
++	ctx->policy_code[ctx->policy_count] = code;
++
++	return 0;
++}
++
++int tpm2_key_policy(void *context, size_t hdrlen,
++		  unsigned char tag,
++		  const void *value, size_t vlen)
++{
++	struct tpm2_key_context *ctx = context;
++
++	ctx->policies[ctx->policy_count] = value;
++	ctx->policy_len[ctx->policy_count++] = vlen;
++
++	return 0;
++}
++
++/* we only support a limited number of policy statement so
++ * make sure we don't have anything we can't support
++ */
++static int tpm2_validate_policy(struct tpm2_policies *pols)
++{
++	int i;
++
++	if (pols->count == 0)
++		return 0;
++
++	for (i = 0; i < pols->count; i++) {
++		switch (pols->code[i]) {
++		case TPM2_CC_POLICY_PCR:
++		case TPM2_CC_POLICY_AUTHVALUE:
++			break;
++		default:
++			pr_info("tpm2 policy 0x%x is unsupported\n",
++				pols->code[i]);
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
++/**
++ * tpm2_key_process_policy - collect the policty from the context
++ * @ctx: the context to collect from
++ * @payload: the payload structure to place it in
++ *
++ * THis function sizes the policy statements and allocates space
++ * within the payload to receive them before copying them over.  It
++ * should be used after the ber decoder has completed successfully
++ */
++int tpm2_key_policy_process(struct tpm2_key_context *ctx,
++			    struct trusted_key_payload *payload)
++{
++	int tot_len = 0;
++	u8 *buf;
++	int i, ret, len = 0;
++	struct tpm2_policies *pols;
++	u16 name_alg;
++
++	if (ctx->policy_count == 0)
++		return 0;
++
++	for (i = 0; i < ctx->policy_count; i++)
++		tot_len += ctx->policy_len[i];
++	tot_len += sizeof(*pols);
++
++	pols = kmalloc(tot_len, GFP_KERNEL);
++	if (!pols)
++		return -ENOMEM;
++
++	payload->policies = pols;
++	buf = (u8 *)(pols + 1);
++
++	for (i = 0; i < ctx->policy_count; i++) {
++		pols->policies[i] = &buf[len];
++		pols->len[i] = ctx->policy_len[i];
++		pols->code[i] = ctx->policy_code[i];
++		if (pols->len[i])
++			memcpy(pols->policies[i], ctx->policies[i],
++			       ctx->policy_len[i]);
++		len += ctx->policy_len[i];
++	}
++	pols->count = ctx->policy_count;
++
++	ret = tpm2_validate_policy(pols);
++	if (ret)
++		goto out;
++
++	/* capture the hash and size */
++
++	/* the hash is the second algorithm (the nameAlg) */
++	name_alg = get_unaligned_be16(&ctx->pub[4]);
++	pols->hash = tpm2_alg_to_crypto(name_alg);
++
++	if (pols->hash < 0)
++		ret = -EINVAL;
++
++	/* and the digest appears after the attributes */
++	pols->hash_size = get_unaligned_be16(&ctx->pub[10]);
++
++ out:
++	if (ret) {
++		kfree(pols);
++		payload->policies = NULL;
++	}
++
++	return ret;
++}
++
++int tpm2_generate_policy_digest(struct tpm2_policies *pols,
++				u32 hash, u8 *policydigest, u32 *plen)
++{
++	int i;
++	struct crypto_shash *tfm;
 +	int rc;
 +
-+	rc = __tpm2_start_session(chip, TPM2_SE_POLICY, hash);
++	if (pols->count == 0)
++		return 0;
++
++	tfm = crypto_alloc_shash(hash_algo_name[hash], 0, 0);
++	if (IS_ERR(tfm))
++		return PTR_ERR(tfm);
++
++	rc = crypto_shash_digestsize(tfm);
++	if (WARN(rc > MAX_DIGEST_SIZE,
++		 "BUG: trusted key code has alg %s with digest too large (%d)",
++		 hash_algo_name[hash], rc)) {
++		rc = -EINVAL;
++		goto err;
++	}
++
++	pols->hash = hash;
++	pols->hash_size = rc;
++	*plen = rc;
++
++	/* policy digests always start out all zeros */
++	memset(policydigest, 0, rc);
++
++	for (i = 0; i < pols->count; i++) {
++		u8 *policy = pols->policies[i];
++		int len = pols->len[i];
++		u32 cmd = pols->code[i];
++		u8 code[4];
++		SHASH_DESC_ON_STACK(sdesc, tfm);
++
++		sdesc->tfm = tfm;
++		rc = crypto_shash_init(sdesc);
++		if (rc)
++			goto err;
++
++		/* first hash the previous digest */
++		crypto_shash_update(sdesc, policydigest, *plen);
++
++		/* then hash the command code */
++		put_unaligned_be32(cmd, code);
++		crypto_shash_update(sdesc, code, 4);
++
++		if (len)
++			crypto_shash_update(sdesc, policy, len);
++
++		/* now output the intermediate to the policydigest */
++		crypto_shash_final(sdesc, policydigest);
++
++	}
++	rc = 0;
++
++ err:
++	crypto_free_shash(tfm);
++	return rc;
++}
++
++int tpm2_encode_policy(struct tpm2_policies *pols, u8 **data, u32 *len)
++{
++	const int SCRATCH_SIZE = PAGE_SIZE;
++	u8 *buf = kmalloc(2 * SCRATCH_SIZE, GFP_KERNEL);
++	u8 *work = buf + SCRATCH_SIZE;
++	u8 *ptr;
++	u8 *end_work = work + SCRATCH_SIZE;
++	int i, ret;
++
++	if (!buf)
++		return -ENOMEM;
++
++	for (i = 0; i < pols->count; i++) {
++		u8 *seq, *tag;
++		u32 cmd = pols->code[i];
++
++		if (WARN(work - buf + 14 + pols->len[i] > 2 * SCRATCH_SIZE,
++			 "BUG: scratch buffer is too small"))
++			return -EINVAL;
++
++		work = asn1_encode_sequence(work, end_work, NULL, -1);
++		seq = work;
++
++		work = asn1_encode_tag(work, end_work, 0, NULL, -1);
++		tag = work;
++
++		work = asn1_encode_integer(work, end_work, cmd);
++		asn1_encode_tag(tag, end_work, 0, NULL, work - tag);
++
++		work = asn1_encode_tag(work, end_work, 1, NULL, -1);
++		tag = work;
++
++		work = asn1_encode_octet_string(work, end_work,
++						pols->policies[i],
++						pols->len[i]);
++
++		asn1_encode_tag(tag, end_work, 1, NULL, work - tag);
++
++		seq = asn1_encode_sequence(seq, end_work, NULL, work - seq);
++		if (IS_ERR(seq)) {
++			ret = PTR_ERR(seq);
++			goto err;
++		}
++	}
++	ptr = asn1_encode_sequence(buf, buf + SCRATCH_SIZE, buf + PAGE_SIZE,
++				   work - buf - PAGE_SIZE);
++	if (IS_ERR(ptr)) {
++		ret = PTR_ERR(ptr);
++		goto err;
++	}
++
++	*data = buf;
++	*len = ptr - buf;
++
++	return 0;
++
++ err:
++	kfree(buf);
++	return ret;
++}
++
++int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols)
++{
++	int i, rc;
++	u32 handle;
++	const char *failure;
++
++	rc = tpm2_start_policy_session(chip, &handle, pols->hash);
 +	if (rc)
 +		return rc;
 +
-+	*handle = chip->auth->handle;
++	for (i = 0; i < pols->count; i++) {
++		u32 cmd = pols->code[i];
++		struct tpm_buf buf;
 +
-+	return rc;
++		rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, cmd);
++		if (rc)
++			return rc;
++
++		tpm_buf_append_u32(&buf, handle);
++
++		switch (cmd) {
++		case TPM2_CC_POLICY_PCR:
++			failure = "PCR";
++			/*
++			 * for reasons best known to the TCG we have
++			 * to reverse the two arguments to send to the
++			 * policy command
++			 */
++			tpm_buf_append_u16(&buf, pols->hash_size);
++			tpm_buf_append(&buf, pols->policies[i] + pols->len[i] -
++				       pols->hash_size, pols->hash_size);
++			tpm_buf_append(&buf, pols->policies[i],
++				       pols->len[i] - pols->hash_size);
++			break;
++
++		default:
++			failure = "unknown policy";
++			if (pols->len[i])
++				tpm_buf_append(&buf, pols->policies[i],
++					       pols->len[i]);
++
++			break;
++		}
++
++		rc = tpm_transmit_cmd(chip, &buf, 0, "updating policy");
++		tpm_buf_destroy(&buf);
++		if (rc) {
++			pr_notice("TPM policy %s failed, rc=%d\n",
++				  failure, rc);
++			tpm2_end_auth_session(chip);
++			return -EPERM;
++		}
++	}
++
++	return 0;
 +}
-+EXPORT_SYMBOL(tpm2_start_policy_session);
+diff --git a/security/keys/trusted-keys/tpm2-policy.h b/security/keys/trusted-keys/tpm2-policy.h
+new file mode 100644
+index 000000000000..b20e9c3e2f06
+--- /dev/null
++++ b/security/keys/trusted-keys/tpm2-policy.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +
- /**
-  * tpm2_parse_create_primary() - parse the data returned from TPM_CC_CREATE_PRIMARY
-  *
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 07f532456a0c..dc2dd98cf104 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -560,6 +560,7 @@ static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 handle)
- #ifdef CONFIG_TCG_TPM2_HMAC
- 
- int tpm2_start_auth_session(struct tpm_chip *chip);
-+int tpm2_start_policy_session(struct tpm_chip *chip, u32 *handle, u8 hash);
- void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- 			 u32 handle, u8 *name);
- void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
-@@ -585,6 +586,11 @@ static inline int tpm2_start_auth_session(struct tpm_chip *chip)
- {
- 	return 0;
- }
-+static inline int tpm2_start_policy_session(struct tpm_chip *chip, u32 *handle,
-+					    u8 hash)
++struct tpm2_key_context {
++	u32 parent;
++	const u8 *pub;
++	u32 pub_len;
++	const u8 *priv;
++	u32 priv_len;
++	const u8 *policies[TPM2_MAX_POLICIES];
++	u32 policy_code[TPM2_MAX_POLICIES];
++	u16 policy_len[TPM2_MAX_POLICIES];
++	u8 policy_count;
++};
++
++struct tpm2_policies {
++	u32 code[TPM2_MAX_POLICIES];
++	u8 *policies[TPM2_MAX_POLICIES];
++	u16 len[TPM2_MAX_POLICIES];
++	u8 count;
++	int hash;		/* crypto not TPM hash algorithm */
++	u16 hash_size;
++};
++
++#ifdef CONFIG_TCG_TPM2_HMAC
++int tpm2_key_policy_process(struct tpm2_key_context *ctx,
++			    struct trusted_key_payload *payload);
++int tpm2_generate_policy_digest(struct tpm2_policies *pols, u32 hash,
++				u8 *policydigest, u32 *plen);
++int tpm2_encode_policy(struct tpm2_policies *pols, u8 **data, u32 *len);
++int tpm2_get_policy_session(struct tpm_chip *chip, struct tpm2_policies *pols);
++#else
++static inline int tpm2_key_policy_process(struct tpm2_key_context *ctx,
++					  struct trusted_key_payload *payload)
++{
++	return 0;
++}
++static inline int tpm2_generate_policy_digest(struct tpm2_policies *pols,
++					      u32 hash,
++					      u8 *policydigest, u32 *plen)
 +{
 +	return -EINVAL;
 +}
- static inline void tpm2_end_auth_session(struct tpm_chip *chip)
- {
++static inline int tpm2_encode_policy(struct tpm2_policies *pols,
++				     u8 **data, u32 *len)
++{
++	return -EINVAL;
++}
++static inline int tpm2_get_policy_session(struct tpm_chip *chip,
++					  struct tpm2_policies *pols)
++{
++	return -EINVAL;
++}
++#endif
+diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trusted-keys/tpm2key.asn1
+index f57f869ad600..1684bd8f725e 100644
+--- a/security/keys/trusted-keys/tpm2key.asn1
++++ b/security/keys/trusted-keys/tpm2key.asn1
+@@ -1,11 +1,24 @@
+ ---
+ --- ASN.1 for TPM 2.0 keys
+ ---
++--- Note: This isn't quite the definition in the standard
++---       However, the Linux asn.1 parser doesn't understand
++---       [2] EXPLICIT SEQUENCE OF OPTIONAL
++---       So there's an extra intermediate TPMPolicySequence
++---       definition to work around this
+ 
+ TPMKey ::= SEQUENCE {
+ 	type		OBJECT IDENTIFIER ({tpm2_key_type}),
+ 	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
++	policy		[1] EXPLICIT TPMPolicySequence OPTIONAL,
+ 	parent		INTEGER ({tpm2_key_parent}),
+ 	pubkey		OCTET STRING ({tpm2_key_pub}),
+ 	privkey		OCTET STRING ({tpm2_key_priv})
+ 	}
++
++TPMPolicySequence ::= SEQUENCE OF TPMPolicy
++
++TPMPolicy ::= SEQUENCE {
++	commandCode		[0] EXPLICIT INTEGER ({tpm2_key_code}),
++	commandPolicy		[1] EXPLICIT OCTET STRING ({tpm2_key_policy})
++	}
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index 5113aeae5628..53f0f15b0f59 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -221,6 +221,7 @@ static void trusted_rcu_free(struct rcu_head *rcu)
+ 	struct trusted_key_payload *p;
+ 
+ 	p = container_of(rcu, struct trusted_key_payload, rcu);
++	kfree_sensitive(p->policies);
+ 	kfree_sensitive(p);
  }
+ 
+@@ -311,7 +312,11 @@ static long trusted_read(const struct key *key, char *buffer,
+  */
+ static void trusted_destroy(struct key *key)
+ {
+-	kfree_sensitive(key->payload.data[0]);
++	struct trusted_key_payload *p;
++
++	p = key->payload.data[0];
++	kfree_sensitive(p->policies);
++	kfree_sensitive(p);
+ }
+ 
+ struct key_type key_type_trusted = {
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 94ff9ccae66e..64c922bbc36c 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -17,6 +17,7 @@
+ #include <asm/unaligned.h>
+ 
+ #include "tpm2key.asn1.h"
++#include "tpm2-policy.h"
+ 
+ static u32 tpm2key_oid[] = { 2, 23, 133, 10, 1, 5 };
+ 
+@@ -54,6 +55,21 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+ 	}
+ 
++	if (payload->policies) {
++		u8 *encoded_pols;
++		u32 encoded_pol_len;
++		int ret;
++
++		ret = tpm2_encode_policy(payload->policies, &encoded_pols,
++					 &encoded_pol_len);
++		if (ret)
++			return ret;
++
++		work = asn1_encode_tag(work, end_work, 1, encoded_pols,
++				       encoded_pol_len);
++		kfree(encoded_pols);
++	}
++
+ 	/*
+ 	 * Assume both octet strings will encode to a 2 byte definite length
+ 	 *
+@@ -77,14 +93,6 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+ 	return work1 - payload->blob;
+ }
+ 
+-struct tpm2_key_context {
+-	u32 parent;
+-	const u8 *pub;
+-	u32 pub_len;
+-	const u8 *priv;
+-	u32 priv_len;
+-};
+-
+ static int tpm2_key_decode(struct trusted_key_payload *payload,
+ 			   struct trusted_key_options *options,
+ 			   u8 **buf)
+@@ -107,6 +115,12 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
+ 	if (!blob)
+ 		return -ENOMEM;
+ 
++	ret = tpm2_key_policy_process(&ctx, payload);
++	if (ret) {
++		kfree(blob);
++		return ret;
++	}
++
+ 	*buf = blob;
+ 	options->keyhandle = ctx.parent;
+ 
+@@ -223,16 +237,85 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 	off_t offset = TPM_HEADER_SIZE;
+ 	struct tpm_buf buf, sized;
+ 	int blob_len = 0;
+-	int hash = tpm2_crypto_to_alg(options->hash);
++	int name_alg = tpm2_crypto_to_alg(options->hash);
+ 	u32 flags;
+ 	int rc;
++	static const int POLICY_SIZE = 2 * PAGE_SIZE;
++	u8 *scratch = NULL;
++	const bool generate_policy = options->pcrinfo_len;
+ 
+-	if (hash < 0)
++	if (name_alg < 0)
+ 		return -EINVAL;
+ 
+ 	if (!options->keyhandle)
+ 		return -EINVAL;
+ 
++
++	if (generate_policy && payload->policies)
++		/*
++		 * can't specify both policy construction options
++		 * and passed in policy set
++		 */
++		return -EINVAL;
++
++	if (generate_policy) {
++		struct tpm2_policies *pols;
++
++		pols = kmalloc(POLICY_SIZE, GFP_KERNEL);
++		if (!pols)
++			return -ENOMEM;
++		pols->count = 0;
++		payload->policies = pols;
++		scratch = (u8 *)(pols + 1);
++	}
++
++	if (options->pcrinfo_len) {
++		struct tpm2_policies *pols = payload->policies;
++		int i;
++		/* 4 array len */
++		const int len = 4 + options->pcrinfo_len;
++
++		i = pols->count++;
++		pols->len[i] = len;
++		pols->policies[i] = scratch;
++		pols->code[i] = TPM2_CC_POLICY_PCR;
++
++		/* only a single TPMS_PCR_SELECTION */
++		put_unaligned_be32(1, &scratch[0]);
++		memcpy(&scratch[4], options->pcrinfo, options->pcrinfo_len);
++		scratch += len;
++	}
++
++	if (options->policydigest_len != 0 && payload->policies)
++		/* can't specify both a digest and a policy */
++		return -EINVAL;
++
++	/*
++	 * if we already have a policy, we have to add authorization
++	 * to it.  If we don't, we can simply follow the usual
++	 * non-policy route.
++	 */
++	if (generate_policy && options->blobauth_len) {
++		struct tpm2_policies *pols;
++		int i;
++
++		pols = payload->policies;
++		i = pols->count++;
++
++		/* the TPM2_PolicyPassword command has no payload */
++		pols->len[i] = 0;
++		pols->code[i] = TPM2_CC_POLICY_AUTHVALUE;
++	}
++
++	if (payload->policies) {
++		rc = tpm2_generate_policy_digest(payload->policies,
++						 options->hash,
++						 options->policydigest,
++						 &options->policydigest_len);
++		if (rc)
++			return rc;
++	}
++
+ 	rc = tpm_try_get_ops(chip);
+ 	if (rc)
+ 		return rc;
+@@ -271,7 +354,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 	/* public */
+ 	tpm_buf_reset_sized(&sized);
+ 	tpm_buf_append_u16(&sized, TPM_ALG_KEYEDHASH);
+-	tpm_buf_append_u16(&sized, hash);
++	tpm_buf_append_u16(&sized, name_alg);
+ 
+ 	/* key properties */
+ 	flags = 0;
+@@ -467,9 +550,9 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 	u8 *data;
+ 	int rc;
+ 
+-	rc = tpm2_start_auth_session(chip);
+-	if (rc)
+-		return rc;
++	if (payload->policies && options->policyhandle)
++		/* can't have both a passed in policy and a key resident one */
++		return -EINVAL;
+ 
+ 	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_UNSEAL);
+ 	if (rc) {
+@@ -477,6 +560,13 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 		return rc;
+ 	}
+ 
++	if (payload->policies)
++		rc = tpm2_get_policy_session(chip, payload->policies);
++	else
++		rc = tpm2_start_auth_session(chip);
++	if (rc)
++		goto out;
++
+ 	tpm_buf_append_name(chip, &buf, blob_handle, NULL);
+ 
+ 	if (!options->policyhandle) {
+@@ -505,8 +595,14 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 	tpm_buf_fill_hmac_session(chip, &buf);
+ 	rc = tpm_transmit_cmd(chip, &buf, 6, "unsealing");
+ 	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+-	if (rc > 0)
++	if (rc > 0) {
++		rc = tpm2_error_code(rc);
++		if (rc == TPM2_RC_BAD_AUTH)
++			pr_info("Bad blobauth\n");
++		else if (rc == TPM2_RC_AUTH_FAIL)
++			pr_info("Bad blobauth (DA Counter incremented)\n");
+ 		rc = -EPERM;
++	}
+ 
+ 	if (!rc) {
+ 		data_len = be16_to_cpup(
+@@ -574,3 +670,24 @@ int tpm2_unseal_trusted(struct tpm_chip *chip,
+ 
+ 	return rc;
+ }
++
++/*
++ * weak symbols for policy statements in tpm2key.asn1 in case
++ * tpm2-policy.c can't be built
++ */
++
++int __weak tpm2_key_code(void *context, size_t hdrlen,
++		  unsigned char tag,
++		  const void *value, size_t vlen)
++{
++	pr_err("TPM key policy is unsupported without CONFIG_TCG_TPM2_HMAC=Y\n");
++
++	return -EINVAL;
++}
++
++int __weak tpm2_key_policy(void *context, size_t hdrlen,
++		  unsigned char tag,
++		  const void *value, size_t vlen)
++{
++	return -EINVAL;
++}
 -- 
 2.35.3
 
