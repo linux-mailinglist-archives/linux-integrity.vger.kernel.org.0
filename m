@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2616-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2617-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B82218CE639
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 15:36:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7846D8CE640
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 15:40:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F1111F21FA0
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 13:36:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E26711F22393
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 13:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A540C85C6C;
-	Fri, 24 May 2024 13:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E2F8625F;
+	Fri, 24 May 2024 13:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rxk3ngRc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DpIWmxie"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAD91EEE9;
-	Fri, 24 May 2024 13:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD4083CCC;
+	Fri, 24 May 2024 13:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716557799; cv=none; b=or40afcC63rnOH2LCO9BovYUHXizv2JXkM7ttZRrwfgCLcRSpaX48i9mIWijJ3Pc7C7QTRFklU3zTuWshJqfH3HoyQg2sWXixquNWf2CUF2oq4iBRtmCCCI05KNJHtckXExVaG/AvU8XnqGevcuM9N8fDejhiQbJ7be+IKiyRhw=
+	t=1716558008; cv=none; b=nzP0cQOca+C6oKRXqWwS78nUZBwapX6BAp8ks0MlXWBHIcxAGBdRuQLbvWtmv8Sx5JQnyHs9sbpFVyOBmzHy47I+CLxzGOVUqcnUFzBgSJbIVtUbHQra2WzEJkyZ9AjQb0BqNXgUgwsXX3HXAWiC5mEfDFpkx3MibIIzTm6MP1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716557799; c=relaxed/simple;
-	bh=FtEAemUtjsfVtrnf/dndIkNJYf7ABSYOe9TvL7t1G8k=;
+	s=arc-20240116; t=1716558008; c=relaxed/simple;
+	bh=4V1bVT/JiwGBv/67/zOOwWttaXzXYPB4SY+FPsUEmnI=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=rcnoPubvZFH4kCATp5oykDMv+siz+d35LnUvbI6YUAO+GtYuseHh919dO29nnpwGTpF6vE4sZk0MM7FkeTT1I0LdEB3MMlx3MTR2GPQ69DjlicK/BLx3Wic+5Kenl91hAWL91nFEVrRiD1K0QXUkU12hg1cNYcd669+MlWMkUm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rxk3ngRc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F329C2BBFC;
-	Fri, 24 May 2024 13:36:37 +0000 (UTC)
+	 References:In-Reply-To; b=RxpfIjUdlakDJYtdZ0ILxO2mapwgBy9M4Qiq2OTcW2+wT7gokz3mo0kAEIzBbB9MFOIfQpzrEQBY9XCGs3O/mYpTMQyckLx0KIAjTn1ixcWxRbgktgIOvQ7wt3atT3coFRCrcX3UkosDhMosWadgAL/UqON4G7PbbBDqyqGmLxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DpIWmxie; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFB8C2BBFC;
+	Fri, 24 May 2024 13:40:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716557799;
-	bh=FtEAemUtjsfVtrnf/dndIkNJYf7ABSYOe9TvL7t1G8k=;
+	s=k20201202; t=1716558007;
+	bh=4V1bVT/JiwGBv/67/zOOwWttaXzXYPB4SY+FPsUEmnI=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Rxk3ngRcNYX/tBMiEbekupwuTx6xPQPDMIpy2j/TFC+s1ff8grBH361Tp3sEH0pVa
-	 qTSxVE8R7AG0nn7CSwuV/lvqicIGDeUN4CBVRvzRlGoeN7vcbfi7lPJyeN9T/dmSwZ
-	 Bd6yP/QMfjqxAConXl28jhpXrBr6TXBhcWfNFoPIikkZFSWBftx6KjrEp+LwaRisbz
-	 Vma2U0+Va0gSZwmmpc1dYkNwIrE0b4xGPznLDl7KEa6TeK9UJw2da2ovU8vidPAtnA
-	 +X5aPiSnYIB2UgtrQ4nAAHNSawgtvZ1q+6ko03h2TI5dvne/FbnV648pzgFR0Vd4KA
-	 ddt9TJgJtQTng==
+	b=DpIWmxiei3rJC+DaAq/iHQZNrZaWltinHTT5wgJp93vELAN1/E+TSZznJLWZLAPyn
+	 5N0ZoVde1BCfM+a89MZEPTMr1NFyDqLh7ePilKuqg+g/HHXsy5tc1Zf2HcErFSEmlV
+	 WmSf+BBtrodYUXdqoE0RbcPAb9HwQdjBQsHa64KPwl9MRMfEvYjEvWP4b1lwHlhEgy
+	 yFdi3OFq7a+82eT1LyODNXlxiv2K0b9sdnLmVZ0I3A6QDNw16+kzSWmiJW8FWOGvTP
+	 WIGkHBbplVO51A1EZztbnmef3Fd60cLI9w3LCoqM+G8CKRFg675lBP201C6KMULBUb
+	 kGcsH3UciWVCA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,153 +49,178 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 24 May 2024 16:36:36 +0300
-Message-Id: <D1HWYD30PATS.2RPJ8RD2CU67O@kernel.org>
-Cc: <keyrings@vger.kernel.org>, "David Howells" <dhowells@redhat.com>
-Subject: Re: [PATCH 3/3] lib: asn1_encode: remove obsolete asn1_encode_oid
+Date: Fri, 24 May 2024 16:40:05 +0300
+Message-Id: <D1HX114XAWHS.1VKKAMFR9XYE3@kernel.org>
+Cc: <keyrings@vger.kernel.org>
+Subject: Re: [PATCH 1/6] tpm: consolidate TPM to crypto hash algorithm
+ conversion
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
 To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
  <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.17.0
-References: <20240524125955.20739-1-James.Bottomley@HansenPartnership.com>
- <20240524125955.20739-4-James.Bottomley@HansenPartnership.com>
-In-Reply-To: <20240524125955.20739-4-James.Bottomley@HansenPartnership.com>
+References: <20240524130459.21510-1-James.Bottomley@HansenPartnership.com>
+ <20240524130459.21510-2-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20240524130459.21510-2-James.Bottomley@HansenPartnership.com>
 
-On Fri May 24, 2024 at 3:59 PM EEST, James Bottomley wrote:
-> This has been replaced by encode_OID from the OID_registry.  To use,
-> consumers must make sure the OID is present in enum OID in
-> oid_registry.h and then use encode_OID with the enum.
+On Fri May 24, 2024 at 4:04 PM EEST, James Bottomley wrote:
+> linux crypto and the TPM use different numeric algorithm identifiers
+> for hash (and other) functions.  The conversion array for this already
+> exists in two separate places.  The new policy sessions code would
+> have to add a third copy, so instead of increasing the duplication,
+> move the definition to a single consolidated place in tpm.h so the
+> policy code can use it as is.
 >
 > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 > ---
->  include/linux/asn1_encoder.h |  3 --
->  lib/asn1_encoder.c           | 91 ------------------------------------
->  2 files changed, 94 deletions(-)
+>  drivers/char/tpm/tpm2-cmd.c               |  8 ----
+>  include/linux/tpm.h                       | 52 ++++++++++++++++++++++-
+>  security/keys/trusted-keys/trusted_tpm2.c | 20 +--------
+>  3 files changed, 53 insertions(+), 27 deletions(-)
 >
-> diff --git a/include/linux/asn1_encoder.h b/include/linux/asn1_encoder.h
-> index 08cd0c2ad34f..5f8cf47ede59 100644
-> --- a/include/linux/asn1_encoder.h
-> +++ b/include/linux/asn1_encoder.h
-> @@ -13,9 +13,6 @@ unsigned char *
->  asn1_encode_integer(unsigned char *data, const unsigned char *end_data,
->  		    s64 integer);
->  unsigned char *
-> -asn1_encode_oid(unsigned char *data, const unsigned char *end_data,
-> -		u32 oid[], int oid_len);
-> -unsigned char *
->  asn1_encode_tag(unsigned char *data, const unsigned char *end_data,
->  		u32 tag, const unsigned char *string, int len);
->  unsigned char *
-> diff --git a/lib/asn1_encoder.c b/lib/asn1_encoder.c
-> index 0fd3c454a468..c0db3cbebe89 100644
-> --- a/lib/asn1_encoder.c
-> +++ b/lib/asn1_encoder.c
-> @@ -85,97 +85,6 @@ asn1_encode_integer(unsigned char *data, const unsigne=
-d char *end_data,
->  }
->  EXPORT_SYMBOL_GPL(asn1_encode_integer);
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index 0cdf892ec2a7..f4428e715dd8 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -14,14 +14,6 @@
+>  #include "tpm.h"
+>  #include <crypto/hash_info.h>
 > =20
-> -/* calculate the base 128 digit values setting the top bit of the first =
-octet */
-> -static int asn1_encode_oid_digit(unsigned char **_data, int *data_len, u=
-32 oid)
-> -{
-> -	unsigned char *data =3D *_data;
-> -	int start =3D 7 + 7 + 7 + 7;
-> -	int ret =3D 0;
+> -static struct tpm2_hash tpm2_hash_map[] =3D {
+> -	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+> -	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> -	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
+> -	{HASH_ALGO_SHA512, TPM_ALG_SHA512},
+> -	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+> -};
 > -
-> -	if (*data_len < 1)
-> -		return -EINVAL;
+>  int tpm2_get_timeouts(struct tpm_chip *chip)
+>  {
+>  	/* Fixed timeouts for TPM2 */
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index c17e4efbb2e5..07f532456a0c 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -418,11 +418,61 @@ enum tpm2_session_attributes {
+>  	TPM2_SA_AUDIT			=3D BIT(7),
+>  };
+> =20
+> -struct tpm2_hash {
+> +static const struct {
+>  	unsigned int crypto_id;
+>  	unsigned int tpm_id;
+> +} tpm2_hash_map[] =3D {
+> +	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+> +	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> +	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
+> +	{HASH_ALGO_SHA512, TPM_ALG_SHA512},
+> +	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+>  };
+> =20
+> +/**
+> + * tpm2_crypto_to_alg() - convert a crypto hash to a TPM alg id
+> + *
+> + * @hash: the crypto subsystem view of the hash
+> + *
+> + * Return: TPM algorithm id or -1 if no mapping was found.
+> + */
+> +static inline int tpm2_crypto_to_alg(int hash)
+> +{
+> +	int i;
+> +	int tpm_alg =3D -1;
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+> +		if (hash =3D=3D tpm2_hash_map[i].crypto_id) {
+> +			tpm_alg =3D tpm2_hash_map[i].tpm_id;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return tpm_alg;
+> +}
+> +
+> +/**
+> + * tpm2_alg_to_crypto() - convert a TPM alg id to a crypto hash
+> + *
+> + * @hash: the TPM alg id view of the hash
+> + *
+> + * Return: TPM algorithm id or -1 if no mapping was found.
+> + */
+> +static inline int tpm2_alg_to_crypto(int hash)
+> +{
+> +	int i;
+> +	int crypto_hash =3D -1;
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+> +		if (hash =3D=3D tpm2_hash_map[i].tpm_id) {
+> +			crypto_hash =3D tpm2_hash_map[i].crypto_id;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return crypto_hash;
+> +}
+> +
+>  int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
+>  void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
+>  int tpm_buf_init_sized(struct tpm_buf *buf);
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/tr=
+usted-keys/trusted_tpm2.c
+> index dfeec06301ce..94ff9ccae66e 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -18,14 +18,6 @@
+> =20
+>  #include "tpm2key.asn1.h"
+> =20
+> -static struct tpm2_hash tpm2_hash_map[] =3D {
+> -	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+> -	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> -	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
+> -	{HASH_ALGO_SHA512, TPM_ALG_SHA512},
+> -	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+> -};
 > -
-> -	/* quick case */
-> -	if (oid =3D=3D 0) {
-> -		*data++ =3D 0x80;
-> -		(*data_len)--;
-> -		goto out;
+>  static u32 tpm2key_oid[] =3D { 2, 23, 133, 10, 1, 5 };
+> =20
+>  static int tpm2_key_encode(struct trusted_key_payload *payload,
+> @@ -231,19 +223,11 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  	off_t offset =3D TPM_HEADER_SIZE;
+>  	struct tpm_buf buf, sized;
+>  	int blob_len =3D 0;
+> -	u32 hash;
+> +	int hash =3D tpm2_crypto_to_alg(options->hash);
+>  	u32 flags;
+> -	int i;
+>  	int rc;
+> =20
+> -	for (i =3D 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+> -		if (options->hash =3D=3D tpm2_hash_map[i].crypto_id) {
+> -			hash =3D tpm2_hash_map[i].tpm_id;
+> -			break;
+> -		}
 > -	}
 > -
-> -	while (oid >> start =3D=3D 0)
-> -		start -=3D 7;
-> -
-> -	while (start > 0 && *data_len > 0) {
-> -		u8 byte;
-> -
-> -		byte =3D oid >> start;
-> -		oid =3D oid - (byte << start);
-> -		start -=3D 7;
-> -		byte |=3D 0x80;
-> -		*data++ =3D byte;
-> -		(*data_len)--;
-> -	}
-> -
-> -	if (*data_len > 0) {
-> -		*data++ =3D oid;
-> -		(*data_len)--;
-> -	} else {
-> -		ret =3D -EINVAL;
-> -	}
-> -
-> - out:
-> -	*_data =3D data;
-> -	return ret;
-> -}
-> -
-> -/**
-> - * asn1_encode_oid() - encode an oid to ASN.1
-> - * @data:	position to begin encoding at
-> - * @end_data:	end of data pointer, points one beyond last usable byte in=
- @data
-> - * @oid:	array of oids
-> - * @oid_len:	length of oid array
-> - *
-> - * this encodes an OID up to ASN.1 when presented as an array of OID val=
-ues
-> - */
-> -unsigned char *
-> -asn1_encode_oid(unsigned char *data, const unsigned char *end_data,
-> -		u32 oid[], int oid_len)
-> -{
-> -	int data_len =3D end_data - data;
-> -	unsigned char *d =3D data + 2;
-> -	int i, ret;
-> -
-> -	if (WARN(oid_len < 2, "OID must have at least two elements"))
-> -		return ERR_PTR(-EINVAL);
-> -
-> -	if (WARN(oid_len > 32, "OID is too large"))
-> -		return ERR_PTR(-EINVAL);
-> -
-> -	if (IS_ERR(data))
-> -		return data;
-> -
-> -
-> -	/* need at least 3 bytes for tag, length and OID encoding */
-> -	if (data_len < 3)
-> -		return ERR_PTR(-EINVAL);
-> -
-> -	data[0] =3D _tag(UNIV, PRIM, OID);
-> -	*d++ =3D oid[0] * 40 + oid[1];
-> -
-> -	data_len -=3D 3;
-> -
-> -	for (i =3D 2; i < oid_len; i++) {
-> -		ret =3D asn1_encode_oid_digit(&d, &data_len, oid[i]);
-> -		if (ret < 0)
-> -			return ERR_PTR(ret);
-> -	}
-> -
-> -	data[1] =3D d - data - 2;
-> -
-> -	return d;
-> -}
-> -EXPORT_SYMBOL_GPL(asn1_encode_oid);
-> -
->  /**
->   * asn1_encode_length() - encode a length to follow an ASN.1 tag
->   * @data: pointer to encode at
+> -	if (i =3D=3D ARRAY_SIZE(tpm2_hash_map))
+> +	if (hash < 0)
+>  		return -EINVAL;
+> =20
+>  	if (!options->keyhandle)
 
-Obvious change but I skip R-y's before the first patch has been
-fixed (no use for anyone to tag them).
+I want a patch set that renders out the WARN's before any other
+modification to this code. I've spent fixing one myself plus
+fixing totally trivial memory leak. That happens everyone but
+still focus in now all wrong. I.e. adding new stuff without
+polishing old first and let others take care cleaning up the
+mess...
+
+Also, HMAC still needs attention.
+
+And this patch set is totally conflicting getting asymmetric
+keys landed, which came first and if already maturing quite
+well.
+
+No issues reviewing after so this is not like rejecting the
+idea but doing right things right and in right order.
 
 BR, Jarkko
 
