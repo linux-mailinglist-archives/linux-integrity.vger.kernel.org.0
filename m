@@ -1,60 +1,60 @@
-Return-Path: <linux-integrity+bounces-2604-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2605-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2C288CE59F
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 15:02:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C59B8CE5A0
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 15:02:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47958B2215A
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 13:02:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CB8E1C20A41
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 May 2024 13:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BCF127B72;
-	Fri, 24 May 2024 13:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E8585C79;
+	Fri, 24 May 2024 13:01:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="A9jTMPDz"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="tIyI5/vL"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00BC126F14;
-	Fri, 24 May 2024 13:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652EE84FAC;
+	Fri, 24 May 2024 13:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716555692; cv=none; b=q/BrU7Do1wEeVEioyi0UflD2h26sY5dFMePHpqP+Ts++NJ1OlRoV7C6vxQigwGKXHpko3eT1WhBy7Ap80ZUh81N1yY+6AWL5iT7b2gZeN1MunI+LkdGj3eFNeyEcgq4QUomFGgagBRW7E+PV+fFucqaJJEHAdgNBAn5NqPjwO/Q=
+	t=1716555699; cv=none; b=KSvq/fNCZ4WP1DRe4roilx0qU3EybT+QK92fCFHGNDc6WdIRSE/VQRbzBxOpxH9jFvfEzV4uwxwgyAI+RBxxjxTxznfkG/M3YSXH/XkkwLkr/qtHu4Thp4/ITjy1bduX1l8G7pkr8FO03GxE9S0dgxGSVjIIlvlNfFGxQfN5V7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716555692; c=relaxed/simple;
-	bh=fwkVUqyuoGV+nactJePBL7JXxmQ07OROf/rnJYMz7OI=;
+	s=arc-20240116; t=1716555699; c=relaxed/simple;
+	bh=DiayMIgQMfFI7pbgJrFjn+K43IClPfvZHrsfCCfRYtg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eNMiYCsIWQD7kfbBY77fg8ScPo/too4V0vfW9vRboGoA2JGeLH1DaXORV0a8FI/4jOucfV/ICGy3MvOKcY+oo+iOjDn6Axg9DlZzqkzDPPdyeN86DbzHfJ/O1DNI43byYlOM/PcUHEXLsOPi0zDyLh/OPM7FvdlgDhdhqKUiP80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=A9jTMPDz; arc=none smtp.client-ip=96.44.175.130
+	 MIME-Version; b=s4kcYczXSUbRLlAT/N1yOXpjFpiAbU9COljL1H1oTxE7TLwdXUpTOY/nKX37P5fzRl8ujdVGpDx8uTALvL4cAdDspNaSkhxeuYv9zNSXo/TrjnTkftnYJI00681OQAMAkss6KBiL2yqv1DSE/sWIbi+vaPzO8q913zXtgoLHHK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=tIyI5/vL; arc=none smtp.client-ip=96.44.175.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1716555690;
-	bh=fwkVUqyuoGV+nactJePBL7JXxmQ07OROf/rnJYMz7OI=;
+	d=hansenpartnership.com; s=20151216; t=1716555697;
+	bh=DiayMIgQMfFI7pbgJrFjn+K43IClPfvZHrsfCCfRYtg=;
 	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-	b=A9jTMPDzqzvMzFyQy1+MqkPeQTPfSxBSfzdMKHOhRXMKmiqz9HOvnzt4Qc23oGraN
-	 7AMnUDS/3njSrw6Z9VKbAjy2y5wwzTxq+jvg/ED0iknMOquBrmnj4iCv5EfWKx+KlP
-	 WFSdgokzipGvoVlYu8wWe91i0rNPf2aP/aftEYrg=
+	b=tIyI5/vLzHd++nlmv5+JVv2WzWUFQ1lBDQReVYghjAdja7vJ/Cs5Su73vlZVhTH31
+	 V00SOORiADZeM3AqlH6PEl/3kcNWn1a/M7k8Gi2DfGnAqF79l2/M7WOAZQwyC6SbiW
+	 cJN6gBzWnHlmEgjOKvhcSwXUZzdzOTLmzmbbd2lY=
 Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 284851287771;
-	Fri, 24 May 2024 09:01:30 -0400 (EDT)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 981C31287771;
+	Fri, 24 May 2024 09:01:37 -0400 (EDT)
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
  by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id D3ksWtT7ACPw; Fri, 24 May 2024 09:01:30 -0400 (EDT)
+ with ESMTP id F5uFo3TOUYLV; Fri, 24 May 2024 09:01:37 -0400 (EDT)
 Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 9835812817CC;
-	Fri, 24 May 2024 09:01:29 -0400 (EDT)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id E1B8C12817CC;
+	Fri, 24 May 2024 09:01:36 -0400 (EDT)
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
 To: linux-integrity@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	keyrings@vger.kernel.org,
 	David Howells <dhowells@redhat.com>
-Subject: [PATCH 2/3] KEYS: trusted: use encode_OID for OID encoding
-Date: Fri, 24 May 2024 08:59:54 -0400
-Message-Id: <20240524125955.20739-3-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 3/3] lib: asn1_encode: remove obsolete asn1_encode_oid
+Date: Fri, 24 May 2024 08:59:55 -0400
+Message-Id: <20240524125955.20739-4-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20240524125955.20739-1-James.Bottomley@HansenPartnership.com>
 References: <20240524125955.20739-1-James.Bottomley@HansenPartnership.com>
@@ -66,49 +66,132 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The new routine takes the OID enum instead of needing the u32 OID
-array explicitly which reduces duplication and the potential for
-mistakes.
+This has been replaced by encode_OID from the OID_registry.  To use,
+consumers must make sure the OID is present in enum OID in
+oid_registry.h and then use encode_OID with the enum.
 
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- security/keys/trusted-keys/trusted_tpm2.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ include/linux/asn1_encoder.h |  3 --
+ lib/asn1_encoder.c           | 91 ------------------------------------
+ 2 files changed, 94 deletions(-)
 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 9c7ac2e423d3..b6f34ff0ca5c 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -19,8 +19,6 @@
- #include "tpm2key.asn1.h"
- #include "tpm2-policy.h"
+diff --git a/include/linux/asn1_encoder.h b/include/linux/asn1_encoder.h
+index 08cd0c2ad34f..5f8cf47ede59 100644
+--- a/include/linux/asn1_encoder.h
++++ b/include/linux/asn1_encoder.h
+@@ -13,9 +13,6 @@ unsigned char *
+ asn1_encode_integer(unsigned char *data, const unsigned char *end_data,
+ 		    s64 integer);
+ unsigned char *
+-asn1_encode_oid(unsigned char *data, const unsigned char *end_data,
+-		u32 oid[], int oid_len);
+-unsigned char *
+ asn1_encode_tag(unsigned char *data, const unsigned char *end_data,
+ 		u32 tag, const unsigned char *string, int len);
+ unsigned char *
+diff --git a/lib/asn1_encoder.c b/lib/asn1_encoder.c
+index 0fd3c454a468..c0db3cbebe89 100644
+--- a/lib/asn1_encoder.c
++++ b/lib/asn1_encoder.c
+@@ -85,97 +85,6 @@ asn1_encode_integer(unsigned char *data, const unsigned char *end_data,
+ }
+ EXPORT_SYMBOL_GPL(asn1_encode_integer);
  
--static u32 tpm2key_oid[] = { 2, 23, 133, 10, 1, 5 };
+-/* calculate the base 128 digit values setting the top bit of the first octet */
+-static int asn1_encode_oid_digit(unsigned char **_data, int *data_len, u32 oid)
+-{
+-	unsigned char *data = *_data;
+-	int start = 7 + 7 + 7 + 7;
+-	int ret = 0;
 -
- static int tpm2_key_encode(struct trusted_key_payload *payload,
- 			   struct trusted_key_options *options,
- 			   u8 *src, u32 len)
-@@ -31,6 +29,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	u8 *end_work = scratch + SCRATCH_SIZE;
- 	u8 *priv, *pub;
- 	u16 priv_len, pub_len;
-+	int ret;
- 
- 	priv_len = get_unaligned_be16(src) + 2;
- 	priv = src;
-@@ -43,8 +42,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	if (!scratch)
- 		return -ENOMEM;
- 
--	work = asn1_encode_oid(work, end_work, tpm2key_oid,
--			       asn1_oid_len(tpm2key_oid));
-+	ret = encode_OID(OID_TPMSealedData, work, end_work - work);
-+	if (ret < 0)
-+		return ret;
-+	work += ret;
- 
- 	if (options->blobauth_len == 0) {
- 		unsigned char bool[3], *w = bool;
+-	if (*data_len < 1)
+-		return -EINVAL;
+-
+-	/* quick case */
+-	if (oid == 0) {
+-		*data++ = 0x80;
+-		(*data_len)--;
+-		goto out;
+-	}
+-
+-	while (oid >> start == 0)
+-		start -= 7;
+-
+-	while (start > 0 && *data_len > 0) {
+-		u8 byte;
+-
+-		byte = oid >> start;
+-		oid = oid - (byte << start);
+-		start -= 7;
+-		byte |= 0x80;
+-		*data++ = byte;
+-		(*data_len)--;
+-	}
+-
+-	if (*data_len > 0) {
+-		*data++ = oid;
+-		(*data_len)--;
+-	} else {
+-		ret = -EINVAL;
+-	}
+-
+- out:
+-	*_data = data;
+-	return ret;
+-}
+-
+-/**
+- * asn1_encode_oid() - encode an oid to ASN.1
+- * @data:	position to begin encoding at
+- * @end_data:	end of data pointer, points one beyond last usable byte in @data
+- * @oid:	array of oids
+- * @oid_len:	length of oid array
+- *
+- * this encodes an OID up to ASN.1 when presented as an array of OID values
+- */
+-unsigned char *
+-asn1_encode_oid(unsigned char *data, const unsigned char *end_data,
+-		u32 oid[], int oid_len)
+-{
+-	int data_len = end_data - data;
+-	unsigned char *d = data + 2;
+-	int i, ret;
+-
+-	if (WARN(oid_len < 2, "OID must have at least two elements"))
+-		return ERR_PTR(-EINVAL);
+-
+-	if (WARN(oid_len > 32, "OID is too large"))
+-		return ERR_PTR(-EINVAL);
+-
+-	if (IS_ERR(data))
+-		return data;
+-
+-
+-	/* need at least 3 bytes for tag, length and OID encoding */
+-	if (data_len < 3)
+-		return ERR_PTR(-EINVAL);
+-
+-	data[0] = _tag(UNIV, PRIM, OID);
+-	*d++ = oid[0] * 40 + oid[1];
+-
+-	data_len -= 3;
+-
+-	for (i = 2; i < oid_len; i++) {
+-		ret = asn1_encode_oid_digit(&d, &data_len, oid[i]);
+-		if (ret < 0)
+-			return ERR_PTR(ret);
+-	}
+-
+-	data[1] = d - data - 2;
+-
+-	return d;
+-}
+-EXPORT_SYMBOL_GPL(asn1_encode_oid);
+-
+ /**
+  * asn1_encode_length() - encode a length to follow an ASN.1 tag
+  * @data: pointer to encode at
 -- 
 2.35.3
 
