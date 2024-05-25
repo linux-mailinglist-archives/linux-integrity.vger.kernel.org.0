@@ -1,103 +1,102 @@
-Return-Path: <linux-integrity+bounces-2644-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2645-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60B358CEEE4
-	for <lists+linux-integrity@lfdr.de>; Sat, 25 May 2024 14:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47FEA8CEF20
+	for <lists+linux-integrity@lfdr.de>; Sat, 25 May 2024 15:42:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5700B1C20AC6
-	for <lists+linux-integrity@lfdr.de>; Sat, 25 May 2024 12:36:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 751911C2096F
+	for <lists+linux-integrity@lfdr.de>; Sat, 25 May 2024 13:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5F33A1BC;
-	Sat, 25 May 2024 12:36:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 594BC43AD6;
+	Sat, 25 May 2024 13:42:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ubWj447c"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="VtwIkuKh";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="VtwIkuKh"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836AFDF62;
-	Sat, 25 May 2024 12:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4BB1E480;
+	Sat, 25 May 2024 13:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716640606; cv=none; b=d37LBzim/SfW1RCHSb2+IdEWlhPvK9W5QLRRghE+UW812n72ch17Cany4NdNmYHZDSeUowFhx2J+/Jg6M61Gk4Zcq61DzljbL7XZxxOrXY24vCSNS4ioR7Cbht5K1VZ2BOROmz/46qmAqyAEY/OqaPjwe32rtOVX1BZuI/TAl+s=
+	t=1716644528; cv=none; b=tgUBkMQuKEAWmnPIRYAyidvQI8ln6haQkZyqTSz8Tq/UblDMfFGZN4S9oCMQR5WpceWhbYrkRIHiTwyobCL25uBRW0qUd0I5FXZIw1sGo1U9BdUa0GjgdnSWb2tFP7qPsyvHsT1xbBPD1x/BROqEpynzs1P3n4EhKmEjU60DcRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716640606; c=relaxed/simple;
-	bh=iYJiwZkq202sbFOQmZ/InspF352DafABToYi4GRr+ps=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S87TlXO1XQ3xCG/hsTEV+JKWy5iOONh6wARkAexl33yRIJV5K9gOYmoRbG9G68xqYBhRPxP8sWjYsIus7sc2QxeNn/jCFQSSzOlJzWBQkg6N6B8iPb011E3P28My1EdqJUgjLkX1dDRAGj4WKSfLZvsUgw6SFElKW4Fvy9tSM6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ubWj447c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CC4C2BD11;
-	Sat, 25 May 2024 12:36:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716640605;
-	bh=iYJiwZkq202sbFOQmZ/InspF352DafABToYi4GRr+ps=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ubWj447cpnppasdvMyvq08tvBeJD4k495DIDLj5VpV7XZXppojROdM94TAKzujuvb
-	 bIhwbPJ2BQHa9TSWAFMNaEW0xOimICXZ6i0aWHc62jNFw+T3l9b4IWTsnwREX3H81J
-	 aKLyPMBhXF6VZQSoTr+5xkl8ia+6YaWMmCiF/6WXIDjPX2J7ByQG+FNxmdTCI3dQCe
-	 NU38ASVM37vlftlIWZr1BAgsNNJKy0v1VVr4F6Ei4/s1P5XQeCugJBX5ndJGNFfzW/
-	 S2tryxDtyKrrlL8pmyBbPireptWqei0qzSC79MnxmTOcN/vYcJzsWa5c41osn2gq8d
-	 SfT+ONdUOof9w==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: keyrings@vger.kernel.org,
-	James.Bottomley@HansenPartnership.com,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	stable@vger.kernel.org,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-security-module@vger.kernel.org,
+	s=arc-20240116; t=1716644528; c=relaxed/simple;
+	bh=amI1SPYRnBjM8Ew/R6TtCgxDdWD5U2OLyaFMWH/xHco=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aa1MMQQLBgU5qJ0eBmBtTOBfknBd+HJDXf7QKzay6smJ/8R1wudXxA7AgcXP+fNY99wXZ5W+y2C1G7D/ZiaRJNLQIcFthWDhYMjToySBWgzMVdnZP8WfkY9doUvzZAZ5m2Z8oP/X4yXjN0HimND+Wc6prxWQj4GoqMAHBTVLRSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=VtwIkuKh; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=VtwIkuKh; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1716644525;
+	bh=amI1SPYRnBjM8Ew/R6TtCgxDdWD5U2OLyaFMWH/xHco=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=VtwIkuKhcA50/tF3DmtgWWcszs8/cLEA02WPuZLwtGVta7DLVEO8WmZkDFCORIqsk
+	 M6F2y02YGWSrUrh4IyyC1rabzA8T7vAvMA5F4a6PBtoo6n2rbDP235Ww7vJVEqlYtz
+	 WCiaJ6fKL3qM5CCSGUtQApDaVgwDKWg4VEmYbi5o=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7818B1287ABA;
+	Sat, 25 May 2024 09:42:05 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id 1QvmScxBCgUX; Sat, 25 May 2024 09:42:05 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1716644525;
+	bh=amI1SPYRnBjM8Ew/R6TtCgxDdWD5U2OLyaFMWH/xHco=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=VtwIkuKhcA50/tF3DmtgWWcszs8/cLEA02WPuZLwtGVta7DLVEO8WmZkDFCORIqsk
+	 M6F2y02YGWSrUrh4IyyC1rabzA8T7vAvMA5F4a6PBtoo6n2rbDP235Ww7vJVEqlYtz
+	 WCiaJ6fKL3qM5CCSGUtQApDaVgwDKWg4VEmYbi5o=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5AFC01287AB8;
+	Sat, 25 May 2024 09:42:04 -0400 (EDT)
+Message-ID: <b1ac7ec116c871294d856185da44ae1e9fc02fe7.camel@HansenPartnership.com>
+Subject: Re: [PATCH] KEYS: trusted_tpm2: Only check options->keyhandle for
+ ASN.1
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org, stable@vger.kernel.org, Mimi Zohar
+	 <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, Paul Moore
+	 <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
+	 <serge@hallyn.com>, linux-security-module@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] KEYS: trusted_tpm2: Only check options->keyhandle for ASN.1
-Date: Sat, 25 May 2024 15:36:33 +0300
-Message-ID: <20240525123634.3396-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.45.1
+Date: Sat, 25 May 2024 09:42:02 -0400
+In-Reply-To: <20240525123634.3396-1-jarkko@kernel.org>
+References: <20240525123634.3396-1-jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-tpm2_load_cmd incorrectly checks options->keyhandle also for the legacy
-format, as also implied by the inline comment. Check options->keyhandle
-when ASN.1 is loaded.
+On Sat, 2024-05-25 at 15:36 +0300, Jarkko Sakkinen wrote:
+> tpm2_load_cmd incorrectly checks options->keyhandle also for the
+> legacy format, as also implied by the inline comment. Check
+> options->keyhandle when ASN.1 is loaded.
 
-Cc: James Bottomey <James.Bottomley@HansenPartnership.com>
-Cc: stable@vger.kernel.org # v5.13+
-Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- security/keys/trusted-keys/trusted_tpm2.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+No that's not right.  keyhandle must be specified for the old format,
+because it's just the two private/public blobs and doesn't know it's
+parent. Since tpm2_key_decode() always places the ASN.1 parent into
+options->keyhandle, the proposed new code is fully redundant (options-
+>keyhandle must be non zero if the ASN.1 parsed correctly) but it loses
+the check that the loader must specify it for the old format.
 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 8b7dd73d94c1..4f8207bf52a7 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -400,12 +400,11 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 		/* old form */
- 		blob = payload->blob;
- 		payload->old_format = 1;
-+	} else {
-+		if (!options->keyhandle)
-+			return -EINVAL;
- 	}
- 
--	/* new format carries keyhandle but old format doesn't */
--	if (!options->keyhandle)
--		return -EINVAL;
--
- 	/* must be big enough for at least the two be16 size counts */
- 	if (payload->blob_len < 4)
- 		return -EINVAL;
--- 
-2.45.1
+What the comment above the code you removed means is that the keyhandle
+must be non zero here, either extracted from the ASN.1 for the new
+format or specified on the command line for the old.
+
+James
 
 
