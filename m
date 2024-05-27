@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2657-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2658-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D76B68D06A6
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 May 2024 17:52:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF0DD8D06FB
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 May 2024 17:57:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 071E91C2223A
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 May 2024 15:52:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB1301C224F5
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 May 2024 15:57:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED71A13B29B;
-	Mon, 27 May 2024 15:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9C115A873;
+	Mon, 27 May 2024 15:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b1llqXXV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TRyba0Qy"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C056B13AD05;
-	Mon, 27 May 2024 15:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB0E15A85C;
+	Mon, 27 May 2024 15:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716825108; cv=none; b=SsQzVGpzdpG5JDNg9GgWZg/2KLzsVQjk7tElwCgL6Pe6oyieE/2XqMMEW1KoG1kZG0FEEAOTjG0b+2gA9YtUbRXoFraB4l35tiJarYUhlJduX0BMYoFhCaxYwyB9puC/hKBBiGHbXbWy+MQBUXHqtE5S9rnbo0gl0gRw1g/LgeY=
+	t=1716825240; cv=none; b=W+b/DUMhCNUo6JObquepd0OrxPLUcTxOuZNQIRu1bvFpcic0gOdezwrxKvbgQNXSYEd4L/BxkBG7pTqGlHOHqJlEcGJRq3+lOdBzPOaUCXLGSFT1oDVVEJdAw5b2/sCgDOhQNhlAwx/aVvhugSMxCqokk2t+rf+5hjMhDMIoTlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716825108; c=relaxed/simple;
-	bh=j2rKURWHsVnV6Ucey0Bt0igo2eVco9EQuuWG5rZz4V4=;
+	s=arc-20240116; t=1716825240; c=relaxed/simple;
+	bh=t69fSFn4QBXxAEyTZrdB5V0gHZ/18lUkY7exkJBwoPI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kX1nXgiWc5sOPIWAkS9ceF9p75xYEvp+kKtzGlDq+UB6SAVA/ekHshZwpON7dmb86nqhKkuOFKn4k5R/Wrugd+o1I7Y+G/nspIXCdjLZZwfe0aC9H2tIh+7DTR21wTRmL/wBoYuikZptO3utD9/O2FExPNtQIsv6wNPoVLYzvpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b1llqXXV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA49C2BBFC;
-	Mon, 27 May 2024 15:51:46 +0000 (UTC)
+	 MIME-Version; b=n7B4A6l9i8crLDdH9FWcmJLjldTW8p54O2gyGgqS2lZVtwHH9+Pb92vvv7s/2xUUrRS+p9mi08kZm/GJMVLWaYOym1bhb+hHJ/fFbD0RntZneiGIiKmEvF+3sIiQmkTwQtxu0mvR3+DCiusmHUp+T6db7axfrgO7B3fcI+2BMLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TRyba0Qy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4FCDC32789;
+	Mon, 27 May 2024 15:53:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716825108;
-	bh=j2rKURWHsVnV6Ucey0Bt0igo2eVco9EQuuWG5rZz4V4=;
+	s=k20201202; t=1716825239;
+	bh=t69fSFn4QBXxAEyTZrdB5V0gHZ/18lUkY7exkJBwoPI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=b1llqXXViRopiOmh21n+DKij66OdegYaZ2RLGkpB2oagknI/Ovyur5uC9J4clazZH
-	 SviEBqhVNsvGQB6Wq2cfPeyP7nepAIare3kamx1zpQO9g6RRIAxjkAO9bkDDfGznyJ
-	 2YlRNCMIy1GpZn/E1XIT4JLQLkxFwGOQFctIIIFpsqrPF+OAu6ARBG/w5nKchvohrs
-	 JmytXZugnW9epma6eStzu7EwEBEl8agEozD3Wh4H0m5wu8BqcSX/otDdgMcUjjsWSq
-	 uCU8ZONbpSuYt/H+Pjv35RLIFZLTyHqKoyKWeZBR1fzvdKcjLsaYtd7t3tsxXPlKbg
-	 s3FKiu2uKL5Og==
+	b=TRyba0Qy94RiD2lj5r0XFcoNmVZ0wuMtcQX+pfE+oZ9/JtIghm5Ck7oACsNHL860u
+	 ++xDEKxBEdrNdH6Dj1/fkaIo0sU46vQa7vtWUgXRBM3nrnDqaHAuU0sm9tVc5FjJT9
+	 7wbhQXgrX/eIe8Yyy9r27T/5czD+boxuYVBZMKRx/gI7RjFeJLGEYw95h4RlF3WP44
+	 pIQSx+SBlif6aF8IU18kpio+pd4l9qDaTB220NWiFRyV7gB0PsvWOxm9PBTFda7GnH
+	 flwwy6+VwjMtfnFjOuYJlKoZpD1EvEfYHVBwV6AEM+4FsuPzMhgjpuLrtXBNwS3Ept
+	 WPDPFKwLOz/gQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -55,12 +55,12 @@ Cc: Stefan Berger <stefanb@linux.ibm.com>,
 	serge@hallyn.com,
 	linux-integrity@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.9 04/23] ima: Fix use-after-free on a dentry's dname.name
-Date: Mon, 27 May 2024 11:50:05 -0400
-Message-ID: <20240527155123.3863983-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.8 03/20] ima: Fix use-after-free on a dentry's dname.name
+Date: Mon, 27 May 2024 11:52:46 -0400
+Message-ID: <20240527155349.3864778-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240527155123.3863983-1-sashal@kernel.org>
-References: <20240527155123.3863983-1-sashal@kernel.org>
+In-Reply-To: <20240527155349.3864778-1-sashal@kernel.org>
+References: <20240527155349.3864778-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.9.2
+X-stable-base: Linux 6.8.11
 Content-Transfer-Encoding: 8bit
 
 From: Stefan Berger <stefanb@linux.ibm.com>
@@ -93,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 26 insertions(+), 7 deletions(-)
 
 diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index b37d043d5748c..1856981e33df3 100644
+index 597ea0c4d72f7..44b8161746fec 100644
 --- a/security/integrity/ima/ima_api.c
 +++ b/security/integrity/ima/ima_api.c
-@@ -245,8 +245,8 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
+@@ -244,8 +244,8 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
  	const char *audit_cause = "failed";
  	struct inode *inode = file_inode(file);
  	struct inode *real_inode = d_real_inode(file_dentry(file));
@@ -106,7 +106,7 @@ index b37d043d5748c..1856981e33df3 100644
  	struct kstat stat;
  	int result = 0;
  	int length;
-@@ -317,9 +317,13 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
+@@ -316,9 +316,13 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
  		if (file->f_flags & O_DIRECT)
  			audit_cause = "failed(directio)";
  
@@ -122,7 +122,7 @@ index b37d043d5748c..1856981e33df3 100644
  	}
  	return result;
  }
-@@ -432,6 +436,7 @@ void ima_audit_measurement(struct ima_iint_cache *iint,
+@@ -431,6 +435,7 @@ void ima_audit_measurement(struct integrity_iint_cache *iint,
   */
  const char *ima_d_path(const struct path *path, char **pathbuf, char *namebuf)
  {
@@ -130,7 +130,7 @@ index b37d043d5748c..1856981e33df3 100644
  	char *pathname = NULL;
  
  	*pathbuf = __getname();
-@@ -445,7 +450,10 @@ const char *ima_d_path(const struct path *path, char **pathbuf, char *namebuf)
+@@ -444,7 +449,10 @@ const char *ima_d_path(const struct path *path, char **pathbuf, char *namebuf)
  	}
  
  	if (!pathname) {
