@@ -1,81 +1,75 @@
-Return-Path: <linux-integrity+bounces-2693-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2694-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DAA38D2A16
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2024 03:50:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02DDF8D2EDC
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2024 09:48:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E2811C23C11
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2024 01:50:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAF0F28ADDD
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 May 2024 07:48:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3501F13E41D;
-	Wed, 29 May 2024 01:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B416C167DAA;
+	Wed, 29 May 2024 07:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W86N+DVI"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fMUXNKoM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891E054F95;
-	Wed, 29 May 2024 01:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A667169361
+	for <linux-integrity@vger.kernel.org>; Wed, 29 May 2024 07:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716947452; cv=none; b=Qy+lipWvWIu2Qx/WupksUgUM0njuayPZzcXvUcHVzqQZj9GoTRh4zXpTabUsgV8lZC5oe4FlUMvktoHAaSNSZbDzdtml3laFx83xgdwO50acqnM/epDnq3dRCyzOC1SXki5CXmaLH+xdIgypEb3Bd59nw5fA5W5qiY+JlrqpshU=
+	t=1716968836; cv=none; b=KpyhtI8fg6AoqQPoVFcF+kRkxJ27sYZhqdCEWllHRaijxOSjbTCaZT/qEYlFRImHdrBO3gNnyPMkweht0Wi+SArFdApjAx+PJXW/bX7/N8cE3nee3Li+MWk3uqAp/u2ewLUUUkZbgr/qEygGUnv3Az0cMhQk2m8+9lN/fIffq9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716947452; c=relaxed/simple;
-	bh=/qtOjP1RlF/FN7zclhrsBp1avL7HC78PDggKJ48KInE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q6IIok+4wb0lCm+5SRaWTl+ARa4TTx2snGVuTyYhpl3fYwBBHs+rLNllbuGHW40mZyTp7Vk+gX7FH+W8FOtVv3swe9vhZilOLfxw6C4p+P6tyeJKLeNFmU3FDjbFYHn7z3nKEv2VHAH54oQzkCVGN+qUu2g4ZjKrNL+5YmFjSP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W86N+DVI; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44T1J2ur016581;
-	Wed, 29 May 2024 01:50:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=pp1;
- bh=18e5f2V5wYwa//AXQoETnqRxYbmEXog+v0GD6re4QDI=;
- b=W86N+DVICq0EzEVAV3nQjeBONDQUkfzD82w+kaeC4ASU2EvSkXlaMtP2Hh+x0UZWlnVd
- WL32qdO/mb+RXrNJOVWWyBd8yz9NHytWPFcotR56mYdMDP7iJPnO57CTX8TEQJmxDZSS
- MbunYHpic8O9dE6h5KNaMILdW4NJsIiFAzXywoUSbi7Dy7YL6n++Tx9yn8rNg+CZgqG0
- l28rjgyDeuVRwQcohnPx4QL83pC9HXdgKv9u8eLXw7XrNPP5CCht4i3xgK8AU4zcQHFF
- M8pHWbVFhiuOYzUwqUprCDRNtx0M9K/eb6jV0+syZAryFbu7duX51rsFptHyyLiYaW3B fA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ydtk3g220-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 May 2024 01:50:21 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44T1oK7t030265;
-	Wed, 29 May 2024 01:50:20 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ydtk3g21w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 May 2024 01:50:20 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44T0NX0o026733;
-	Wed, 29 May 2024 01:50:19 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3ydpd2h6x4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 May 2024 01:50:19 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44T1oHN723069022
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 29 May 2024 01:50:19 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EC2835806D;
-	Wed, 29 May 2024 01:50:16 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E57D058055;
-	Wed, 29 May 2024 01:50:14 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 29 May 2024 01:50:14 +0000 (GMT)
-Message-ID: <14d0baf4-fa41-4a08-925d-90f028117352@linux.ibm.com>
-Date: Tue, 28 May 2024 21:50:13 -0400
+	s=arc-20240116; t=1716968836; c=relaxed/simple;
+	bh=X0yWnlnmQLutm9mVnyhuOMjWnh8aSQGJbdGguN9W8jU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=mpGDIPMczr1+eXhtSSXdzt00RyTlC3bC/cqkpqa7teQvC1zQ5cs7BA9afJ4tUY7SoQPs7bXoBieH582YOrmzcVKzDyxbZW4eCSufMUFkVK374iJ2678QztyE/yuBOwrtrUIBRLzO5gSe82cfc6UPbe2A1/QiRcA2w+U4RdlM6CI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fMUXNKoM; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a626776cc50so184294066b.3
+        for <linux-integrity@vger.kernel.org>; Wed, 29 May 2024 00:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1716968833; x=1717573633; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=B60sIRNcgpPRysBC4X8m+j9lXdOHuT3jSKh0T6iUqdM=;
+        b=fMUXNKoMwfCJkwFGtcTFIb0LgITD++obHHt5RjcbuZNECstpeMRrN30TgmnRoCRITJ
+         xyP0NhvlhlYQn902j5fc76RkNN/os6pR1Zm7mG6WK3hEjJqhTNLT4ACQCsFyVmkGC9B4
+         +8YZ2hF4/Mhyi7VBhl0fi3eb/sfIc4MLFJ2ELWnM1O9+xDclxh1Xgwq95F27MuQsH2fm
+         pGaI+piWsw6/HNy7iXR3Qp7QB7pN385mM9SxCOwL+sbOY1Wk6fL+6LWfO8yepkQlx2Ih
+         gQoOqQ7p1eH0SJZc5XCtOsP+RjC2PHmayLUD4TYroEHVm8ECkE7V8wQ9102+cvwi5lVk
+         k//g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716968833; x=1717573633;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B60sIRNcgpPRysBC4X8m+j9lXdOHuT3jSKh0T6iUqdM=;
+        b=fW1963pCXSRET12QYxMCGTalgI6ElbpoZTraV5hA30hLymihkVJ2AXAIwwCNRIVSxb
+         HS2fTWkUz7f3DQl8BSDi+E/80+rthOq+k3UzmKMW9PZB9e1Ugsb30ACHFlfU/oyVdpmN
+         krNpKFN9UXc1r+m/e6KPdxZsEtFvbZTEoXiE0kYnomRwjm7qUfMzloasp4YLlfPbuXRw
+         Pah0h3WXtcsZ8DAWrd2WRrBsHYH1rYQ4J5/n6s4Uu3M8JLcQdGVSE4onfIDBDTTItHa8
+         HLrqyEccNvTDe1AlXR2TWflUJiueQSMMxCWmtYn13WO8nL/qaWr/9fltapyp2S1aN4U/
+         3D1w==
+X-Forwarded-Encrypted: i=1; AJvYcCWygwk7/69q4o2LpfhEl7zNvYliY77BpofYzqKXwENVX8EKERKMO3yaIlmMtMwccM0VaW3xgYicTtsdqea6iknmesf54FDMXfe6oAcye+Q4
+X-Gm-Message-State: AOJu0YxYOnC9LppSvWG8D5XaKfm83jFvo/8/AiEAzn/Xk1nMiHzUIyVR
+	J+2NaHUQ6owyW8H/BUABbR3DIcSw48miUGBZfQPt1EyW2V9JM1/g6S2Ak9mykA==
+X-Google-Smtp-Source: AGHT+IGJsyXjFMQisjdK7VtrIVNt2iOAfmvhYHJEzmVPe91YbY8CDjH5PR3mkW+27Phebiklj18q8A==
+X-Received: by 2002:a17:907:7e85:b0:a62:de58:b362 with SMTP id a640c23a62f3a-a62de58d30fmr623364566b.55.1716968832655;
+        Wed, 29 May 2024 00:47:12 -0700 (PDT)
+Received: from [10.156.60.236] (ip-037-024-206-209.um08.pools.vodafone-ip.de. [37.24.206.209])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626cda1c32sm688999966b.190.2024.05.29.00.47.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 May 2024 00:47:12 -0700 (PDT)
+Message-ID: <365c120f-dfb0-4155-b83f-e0b8d4ead486@suse.com>
+Date: Wed, 29 May 2024 09:47:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -83,66 +77,78 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/5] KEYS: trusted: Change -EINVAL to -E2BIG
-To: Jarkko Sakkinen <jarkko@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        Andreas.Fuchs@infineon.com, James Prestwood <prestwoj@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-crypto@vger.kernel.org,
-        Lennart Poettering <lennart@poettering.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-References: <20240528210823.28798-1-jarkko@kernel.org>
- <20240528210823.28798-3-jarkko@kernel.org>
+Subject: Ping: [PATCH] tpm_tis: don't flush never initialized work
+From: Jan Beulich <jbeulich@suse.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+ linux-integrity@vger.kernel.org
+References: <908e5878-61f9-7a75-129f-ac236fbc8b0a@suse.com>
+ <CVIQPE7W60RN.2QQ8DLCMFV4CW@suppilovahvero>
+ <9a1e2ac0-54a8-b88b-3953-22624da5d4b2@suse.com>
 Content-Language: en-US
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20240528210823.28798-3-jarkko@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=jbeulich@suse.com; keydata=
+ xsDiBFk3nEQRBADAEaSw6zC/EJkiwGPXbWtPxl2xCdSoeepS07jW8UgcHNurfHvUzogEq5xk
+ hu507c3BarVjyWCJOylMNR98Yd8VqD9UfmX0Hb8/BrA+Hl6/DB/eqGptrf4BSRwcZQM32aZK
+ 7Pj2XbGWIUrZrd70x1eAP9QE3P79Y2oLrsCgbZJfEwCgvz9JjGmQqQkRiTVzlZVCJYcyGGsD
+ /0tbFCzD2h20ahe8rC1gbb3K3qk+LpBtvjBu1RY9drYk0NymiGbJWZgab6t1jM7sk2vuf0Py
+ O9Hf9XBmK0uE9IgMaiCpc32XV9oASz6UJebwkX+zF2jG5I1BfnO9g7KlotcA/v5ClMjgo6Gl
+ MDY4HxoSRu3i1cqqSDtVlt+AOVBJBACrZcnHAUSuCXBPy0jOlBhxPqRWv6ND4c9PH1xjQ3NP
+ nxJuMBS8rnNg22uyfAgmBKNLpLgAGVRMZGaGoJObGf72s6TeIqKJo/LtggAS9qAUiuKVnygo
+ 3wjfkS9A3DRO+SpU7JqWdsveeIQyeyEJ/8PTowmSQLakF+3fote9ybzd880fSmFuIEJldWxp
+ Y2ggPGpiZXVsaWNoQHN1c2UuY29tPsJgBBMRAgAgBQJZN5xEAhsDBgsJCAcDAgQVAggDBBYC
+ AwECHgECF4AACgkQoDSui/t3IH4J+wCfQ5jHdEjCRHj23O/5ttg9r9OIruwAn3103WUITZee
+ e7Sbg12UgcQ5lv7SzsFNBFk3nEQQCACCuTjCjFOUdi5Nm244F+78kLghRcin/awv+IrTcIWF
+ hUpSs1Y91iQQ7KItirz5uwCPlwejSJDQJLIS+QtJHaXDXeV6NI0Uef1hP20+y8qydDiVkv6l
+ IreXjTb7DvksRgJNvCkWtYnlS3mYvQ9NzS9PhyALWbXnH6sIJd2O9lKS1Mrfq+y0IXCP10eS
+ FFGg+Av3IQeFatkJAyju0PPthyTqxSI4lZYuJVPknzgaeuJv/2NccrPvmeDg6Coe7ZIeQ8Yj
+ t0ARxu2xytAkkLCel1Lz1WLmwLstV30g80nkgZf/wr+/BXJW/oIvRlonUkxv+IbBM3dX2OV8
+ AmRv1ySWPTP7AAMFB/9PQK/VtlNUJvg8GXj9ootzrteGfVZVVT4XBJkfwBcpC/XcPzldjv+3
+ HYudvpdNK3lLujXeA5fLOH+Z/G9WBc5pFVSMocI71I8bT8lIAzreg0WvkWg5V2WZsUMlnDL9
+ mpwIGFhlbM3gfDMs7MPMu8YQRFVdUvtSpaAs8OFfGQ0ia3LGZcjA6Ik2+xcqscEJzNH+qh8V
+ m5jjp28yZgaqTaRbg3M/+MTbMpicpZuqF4rnB0AQD12/3BNWDR6bmh+EkYSMcEIpQmBM51qM
+ EKYTQGybRCjpnKHGOxG0rfFY1085mBDZCH5Kx0cl0HVJuQKC+dV2ZY5AqjcKwAxpE75MLFkr
+ wkkEGBECAAkFAlk3nEQCGwwACgkQoDSui/t3IH7nnwCfcJWUDUFKdCsBH/E5d+0ZnMQi+G0A
+ nAuWpQkjM1ASeQwSHEeAWPgskBQL
+In-Reply-To: <9a1e2ac0-54a8-b88b-3953-22624da5d4b2@suse.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: PQ-J8mJnvVf2cN96SS9-nuPuwfKldJRy
-X-Proofpoint-ORIG-GUID: _qkRw_-n6ewNKIshDIJmVzW32UTOKZno
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-28_14,2024-05-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- priorityscore=1501 mlxscore=0 adultscore=0 spamscore=0 impostorscore=0
- clxscore=1011 lowpriorityscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=794 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2405290010
 
-
-
-On 5/28/24 17:08, Jarkko Sakkinen wrote:
-> Report -E2BIG instead of -EINVAL when too large size for the key blob is
-> requested.
+On 14.09.2023 17:29, Jan Beulich wrote:
+> On 14.09.2023 17:19, Jarkko Sakkinen wrote:
+>> On Thu Sep 14, 2023 at 5:28 PM EEST, Jan Beulich wrote:
+>>> tpm_tis_core_init() may fail before tpm_tis_probe_irq_single() is
+>>> called, in which case tpm_tis_remove() unconditionally calling
+>>> flush_work() is triggering a warning for .func still being NULL.
+>>>
+>>> Fixes: 481c2d14627d ("tpm,tpm_tis: Disable interrupts after 1000 unhandled IRQs")
+>>> Signed-off-by: Jan Beulich <jbeulich@suse.com>
+>>> ---
+>>> An alternative would be to move INIT_WORK(), but where to put it is far
+>>> more difficult to tell for an outsider than simply making the flush call
+>>> conditional.
+>>>
+>>> --- a/drivers/char/tpm/tpm_tis_core.c
+>>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>>> @@ -1022,7 +1022,8 @@ void tpm_tis_remove(struct tpm_chip *chi
+>>>  		interrupt = 0;
+>>>  
+>>>  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
+>>> -	flush_work(&priv->free_irq_work);
+>>> +	if (priv->free_irq_work.func)
+>>> +		flush_work(&priv->free_irq_work);
+>>>  
+>>>  	tpm_tis_clkrun_enable(chip, false);
+>>>  
+>>
+>> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>
+>> Jan, I'm about to leave to vacation but will be back after next week.
+>>
+>> Do you think that the fix can hold up unti that?
 > 
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> There's no rush from my pov, as I have helped myself.
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Has this possibly fallen through the cracks?
 
-> ---
->   security/keys/trusted-keys/trusted_tpm2.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-> index 8b7dd73d94c1..06c8fa7b21ae 100644
-> --- a/security/keys/trusted-keys/trusted_tpm2.c
-> +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> @@ -122,7 +122,7 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
->   		return ret;
->   
->   	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
-> -		return -EINVAL;
-> +		return -E2BIG;
->   
->   	blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
->   	if (!blob)
+Jan
 
