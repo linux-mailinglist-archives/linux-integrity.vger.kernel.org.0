@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2710-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2711-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34EC18D44D8
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2024 07:39:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDAC18D44EB
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2024 07:50:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7D4F1F21E0F
-	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2024 05:39:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 158F11C21294
+	for <lists+linux-integrity@lfdr.de>; Thu, 30 May 2024 05:50:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5B4143C59;
-	Thu, 30 May 2024 05:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 550BD137937;
+	Thu, 30 May 2024 05:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRxhcyJw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+2n6QSo"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9642A143881;
-	Thu, 30 May 2024 05:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04383142E85;
+	Thu, 30 May 2024 05:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717047562; cv=none; b=d/YAPVFHsrsTFZCXRpT4iX4uEuR8d5hwFrNl0AB5pHhg35k8YOWsmBYuYE2AABOjenPVPi+tLPHwnuaOuXB1fSnIbv7lJSvOhTgHh2pCEnEV8tfk0j8NzcOEBB7v4aDe/oTDCYASwp7YED2rsIqQV4rN1/G6/kEPF6UXiwReqzU=
+	t=1717048195; cv=none; b=Oc98hRNaaRc/41TzD56gR7m+E8GR5Lr4wxJlZNG2O8kIK1hLUzK/+uDEIDQmkVQfvxBdV3gaDNUz/4LxZjPLJljkMyrL1n28FNEGkq9h0CSQr6DegGTAj0TkIDAg5vgGH8KI8Jm6rEx+OJIpsGsGYwFIpRiQf0FyyeEfROerQY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717047562; c=relaxed/simple;
-	bh=4wqCGR8PxhrYHDAcLLZG9ohQGaRjJbfGM64BelJNi8U=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=mPXPAf0FhQv3nhlt3f92jkTPtqn2o39BsJo9HjFpwaqKSkbBSF9EAac5PS3hw1vICHj0r7mv3M6PJKtcFltSF+94LVAuhPt1JMmllpfDQHnKOI5BRc4Bc4K6K6vnMahBRY74w8xtJXJSBmXkj/sY9UhAALC1/lV9gE05unt0A94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bRxhcyJw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B23C6C2BBFC;
-	Thu, 30 May 2024 05:39:17 +0000 (UTC)
+	s=arc-20240116; t=1717048195; c=relaxed/simple;
+	bh=7+dnG3WUQBWbugvASJZr4RwKum91jLcT2Ms1uQHX6J4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=WpUqtcXpWBR5fUv+R3jf7LZi2qBl4CmgSyW0CAFo84Zwz9rRYbe0nPKQaQf+o8fzK3tegEIzAjq3THPVuehtR6iduWBdsBMjzb8IaQt/D8fnKCRE3HmkZZRTuctU+s+R3NHeGNI6EQ4GZ1Tifq0yTcNDRe717/G/L5UYWk/4Ot0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y+2n6QSo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57BDEC2BBFC;
+	Thu, 30 May 2024 05:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717047562;
-	bh=4wqCGR8PxhrYHDAcLLZG9ohQGaRjJbfGM64BelJNi8U=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=bRxhcyJw/dRobV6FVR28Pvg2HWPGgj9dao3fh+3Op6Vs8FH7LgRb6kG+s26PQY33H
-	 ytjVT4Lnlwhesc2gQhJchrZrkmH3tGRB9jaREbiPOWn5oi57QCZevklURmU0x0Ih83
-	 v8CnAXYsqxh3YzZsPHo6aFf1xoWBl1lIBEp1rjn8v1tzEDSo/OdIqp+ULun85Rz9h8
-	 ew4TSCPmIAHWmWA3o8ojkQ9Uwl/Tr8qrfybmzVLQZX0gYhuaobcqtpF231FAEjEQ0n
-	 Rlil7gNSnxLco462t6inN+j0KwX3dDr245pAIzn585fcKBskBA6/fYusE4lGr6XHBU
-	 zLhdKqi6jwN9Q==
+	s=k20201202; t=1717048194;
+	bh=7+dnG3WUQBWbugvASJZr4RwKum91jLcT2Ms1uQHX6J4=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=Y+2n6QSo/Lzj6UGzj9j6W/lNXVRakSs10UiEg82tlLiBQbLQAOkcxOXL/mdNaXhQ8
+	 VJ/anR6Yn0ZhVyPQgzc3OiUOTKTeTr4gzP1PUCQCyy6iyA3C7tmwSXRZgaPVtIp+Uq
+	 UGKBdh+Vmd+ySFBE8LP8wgjAylC4VTo9d8TVXZoBxdZqjEBYuCvvUNxKyeWDECIyQY
+	 7p5xQNDO9vDuqPBgzVGwiE6j0WzhFoBCdMgJkTibJKhUOHx0DyKw8oSpJGhn5atAQy
+	 sOsHOppc4q+gf3wg5R17etd8DmVzK7ky2iIT4+nvx23g+VgoY81mp/amBVHrkB85mR
+	 vP7I2yf5Rt4uw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,39 +49,68 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 30 May 2024 08:39:14 +0300
-Message-Id: <D1MQK4XPVIUW.2EUDV0050EY5L@kernel.org>
-Subject: Re: [PATCH] KEYS: trusted: add MODULE_DESCRIPTION()
+Date: Thu, 30 May 2024 08:49:43 +0300
+Message-Id: <D1MQS61J31B4.26M79HHP1VCQT@kernel.org>
+Cc: <linux-doc@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+ <linux-security-module@vger.kernel.org>, <fsverity@lists.linux.dev>,
+ <linux-block@vger.kernel.org>, <dm-devel@lists.linux.dev>,
+ <audit@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Deven Bowers"
+ <deven.desai@linux.microsoft.com>
+Subject: Re: [PATCH v19 13/20] ipe: add support for dm-verity as a trust
+ provider
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jeff Johnson" <quic_jjohnson@quicinc.com>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Mimi Zohar"
- <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul Moore"
- <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>
-Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel-janitors@vger.kernel.org>
+To: "Paul Moore" <paul@paul-moore.com>, "Fan Wu"
+ <wufan@linux.microsoft.com>, <corbet@lwn.net>, <zohar@linux.ibm.com>,
+ <jmorris@namei.org>, <serge@hallyn.com>, <tytso@mit.edu>,
+ <ebiggers@kernel.org>, <axboe@kernel.dk>, <agk@redhat.com>,
+ <snitzer@kernel.org>, <mpatocka@redhat.com>, <eparis@redhat.com>
 X-Mailer: aerc 0.17.0
-References: <20240529-md-trusted-v1-1-56c9a0ae8e28@quicinc.com>
-In-Reply-To: <20240529-md-trusted-v1-1-56c9a0ae8e28@quicinc.com>
+References: <1716583609-21790-14-git-send-email-wufan@linux.microsoft.com>
+ <2ecde610ca3f0cabcbb111e3432f2dd5@paul-moore.com>
+In-Reply-To: <2ecde610ca3f0cabcbb111e3432f2dd5@paul-moore.com>
 
-On Thu May 30, 2024 at 4:02 AM EEST, Jeff Johnson wrote:
-> Fix the 'make W=3D1' warning:
-> WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-k=
-eys/trusted.o
+On Thu May 30, 2024 at 4:44 AM EEST, Paul Moore wrote:
+> On May 24, 2024 Fan Wu <wufan@linux.microsoft.com> wrote:
+> > +	if (type =3D=3D LSM_INT_DMVERITY_ROOTHASH) {
+> > +		if (!value) {
+> > +			ipe_digest_free(blob->root_hash);
+> > +			blob->root_hash =3D NULL;
+> > +
+> > +			return 0;
+> > +		}
+> > +		digest =3D value;
+> > +
+> > +		info =3D kzalloc(sizeof(*info), GFP_KERNEL);
+> > +		if (!info)
+> > +			return -ENOMEM;
+> > +
+> > +		info->digest =3D kmemdup(digest->digest, digest->digest_len,
+> > +				       GFP_KERNEL);
+> > +		if (!info->digest)
+> > +			goto dmv_roothash_err;
+> > +
+> > +		info->alg =3D kstrdup(digest->alg, GFP_KERNEL);
+> > +		if (!info->alg)
+> > +			goto dmv_roothash_err;
+> > +
+> > +		info->digest_len =3D digest->digest_len;
+> > +
+> > +		if (blob->root_hash)
+> > +			ipe_digest_free(blob->root_hash);
 
-Maybe instead:
+I'd restructure this as:
 
-"""
-KEYS: trusted: Add the missing MODULE_DESCRIPTION()
+	if (type =3D=3D LSM_INT_DMVERITY_SIG_VALID {
+		/* ... */
+		return 0;
+	}
 
-kbuild reports:
+	if (type !=3D LSM_INT_DMVERITY_ROOTHASH)
+		return -EINVAL;
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-key=
-s/trusted.o
+	* ... */
 
-Add the missing MODULE_DESCRIPTION() macro invocation.
-"""
+Right? Less packed to the right ;-)
 
 BR, Jarkko
 
