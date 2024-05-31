@@ -1,162 +1,192 @@
-Return-Path: <linux-integrity+bounces-2758-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2759-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 611598D645D
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2024 16:22:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18A8F8D661A
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2024 17:52:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF6FD1F277F1
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2024 14:22:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D1C6283316
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2024 15:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C30199B0;
-	Fri, 31 May 2024 14:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875511586C7;
+	Fri, 31 May 2024 15:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="WYmK2Ngo"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E14179AE;
-	Fri, 31 May 2024 14:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF115381A
+	for <linux-integrity@vger.kernel.org>; Fri, 31 May 2024 15:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717165343; cv=none; b=Oh5BDAy4hUwwQpd88Om8T5fsNswmSb6EnBBI3MHEODXqiR+jRvoZ9KlFSjr4Rh3dB8v8Yat/JBPcAxTJ7pPZB1szCC4/SazJTksCm8jMnkeSMollGeDUPfzclvGi7tb3zMBYkqub+R81ELX0s8sYqY0nI8NhIY3gaVIrpjqaqGY=
+	t=1717170721; cv=none; b=cJsUKtQfB3IXXMSJ31Dx/c2jvUX2P4xtRINjRkNg8fFDodMNLzdWuSWJHoMVOc+b5zLujLd5dvJije9Zwg25GoYHN5so+6aT19uE6wGM1eDrLMUrM2tnXK78sEF9PBn8N5Wxls+Ku4BNxeWEkLq2tR+YTyJf7+1FHbOxrNzqBO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717165343; c=relaxed/simple;
-	bh=KhPwAHj5psCQsqX4Dn8+N9prZw+SckfJvkJ/770euJo=;
-	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=NGMsXDK+eMpNdQz83jggdYNlO1APeUCjdyuZwDiCK9k0BkYVBuGfu2JLjYsdozmPT581zes2gTl1n0Ubn2jDFVf9ZaOksXVHOXNJ2v2xQmAY0RTR9mZWH3uIXqLcPjoZEu0BMe8icY4uWi/FYEQWTHuplNQOQPIQSaz4aqeIftk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in01.mta.xmission.com ([166.70.13.51]:42770)
-	by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1sD2jp-003KCz-6R; Fri, 31 May 2024 07:56:09 -0600
-Received: from ip68-227-168-167.om.om.cox.net ([68.227.168.167]:39510 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1sD2jo-00Bi30-2x; Fri, 31 May 2024 07:56:08 -0600
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Ross Philipson <ross.philipson@oracle.com>,
-  linux-kernel@vger.kernel.org,  x86@kernel.org,
-  linux-integrity@vger.kernel.org,  linux-doc@vger.kernel.org,
-  linux-crypto@vger.kernel.org,  kexec@lists.infradead.org,
-  linux-efi@vger.kernel.org,  iommu@lists.linux-foundation.org,
-  dpsmith@apertussolutions.com,  tglx@linutronix.de,  mingo@redhat.com,
-  bp@alien8.de,  hpa@zytor.com,  dave.hansen@linux.intel.com,
-  ardb@kernel.org,  mjg59@srcf.ucam.org,
-  James.Bottomley@hansenpartnership.com,  peterhuewe@gmx.de,
-  jarkko@kernel.org,  jgg@ziepe.ca,  luto@amacapital.net,
-  nivedita@alum.mit.edu,  herbert@gondor.apana.org.au,
-  davem@davemloft.net,  corbet@lwn.net,  dwmw2@infradead.org,
-  baolu.lu@linux.intel.com,  kanth.ghatraju@oracle.com,
-  andrew.cooper3@citrix.com,  trenchboot-devel@googlegroups.com
-References: <20240531010331.134441-1-ross.philipson@oracle.com>
-	<20240531010331.134441-7-ross.philipson@oracle.com>
-	<20240531021656.GA1502@sol.localdomain>
-Date: Fri, 31 May 2024 08:54:21 -0500
-In-Reply-To: <20240531021656.GA1502@sol.localdomain> (Eric Biggers's message
-	of "Thu, 30 May 2024 19:16:56 -0700")
-Message-ID: <874jaegk8i.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1717170721; c=relaxed/simple;
+	bh=3Ot0Q+UNMH93NNe6w2xEdYL7SS7lyjTPxCgxXIk/HII=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OUZdIVXPPi0YvOdLIt65NRYvudcHgZJ823xDXAcyqRx2IpYrtPQJ3eENICFGh58/gtRpu+tBhOm/ma3MD/O7np3vmytCziqDNJPdwcbTXg2wEBXeWqYpHEV+pE5eORA3gQO65dNJ5KFHUcdLonu/W4gYPTv0wcTwsoROe6/BJxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=WYmK2Ngo; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-62a2424ed01so23293767b3.1
+        for <linux-integrity@vger.kernel.org>; Fri, 31 May 2024 08:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1717170718; x=1717775518; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=umHwvOWM6BZb7+KUwwTZhP6Ecq2Z1H7xf7RPJu7Y4LI=;
+        b=WYmK2NgorglmETNVsa8lVKUBI8stYpjO0fymmtz1DRh+QxwOPCMOqHtdXM+EqwGRuf
+         QHENiru5BzdxOE1NquZlCP3t50X7DimA/z+MSjBPfKy5GIhNqaycVFu2c/2g1kviVUkx
+         /sS4q7dqa7worYWKYSUeGmZM3jVHXpd3PCD+aiLpAsjfn3mcZSDqmCvKbx2wDIQjkznr
+         R0fVnatG25Qkb7ns2K8Qdg44HgZoiCtwewnVl5ZhyjRfOmGLVvNpUqGmEt0dcRPTe4dK
+         6d/0ywSUY5ta6fdTzMzzak+v4Z/R0Jyx90j2TcJi8dm3wDLz9sDTZzwKAVHYo71uDyEG
+         SpaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717170718; x=1717775518;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=umHwvOWM6BZb7+KUwwTZhP6Ecq2Z1H7xf7RPJu7Y4LI=;
+        b=rBUc/Fbrl0tghSchh8bVj0kUxsUp88QmeTHI3HgLcAU3cPS9fo2fXdCKVCbnerfKKD
+         QQfV2ZcJrILVSTFujg0vFBgQfWvUzA7wIRZHAoR4rDcFVpJxc3V31+VdBn6IWAqoO4ve
+         ygYlwuBVtGQr+lNtKEKDvaTOi3yl7YW2bb/AWTZVZmDXX0Z1CJ3eylovNQQNVa/cVmzn
+         /220l+ESm7bGFqDui97tT3gbYholHOGis6HGVsbXKLygJGk8UaDdSju9voeWc5ZykgpX
+         GmCbWcQzscbUniKc8DznlZ/RRgVdZXxpzJ3TAmJgUDRG51vix8K1KzNXP6mgYX/n5Bx9
+         /edg==
+X-Forwarded-Encrypted: i=1; AJvYcCXFKpbrngto+w2Yzxhjgu/maB7Gr2jnHR+C0ji/zd6LFUUfrAcEqGFPvKZLM+hwFneOcvv2T1qmpAcY84f86iOai3kNP/Ih5EcdJh1SWYjH
+X-Gm-Message-State: AOJu0YxasLkMsJu6/FjmSTvzreyjlpVQXBcVvfbd/khLGfTxz99QGMcx
+	sEvXaad4WnMqf4jmOwrqMCMjmQJdxq4TPNXZ62bbIp4tWmj2aZB5Wguc6GHkSG0odBjVltRlrq1
+	6EfdC9cJXixiCBWfUQ4sgUSiGfXF5haT9ZtIh
+X-Google-Smtp-Source: AGHT+IHXzsYZDXrOIeHpN/g+jpmnMKhUXad17ToUg8H48P+bzIE3W6LWRQGFybVp9CQlBFZl48Ombvk1I/V82/c84Do=
+X-Received: by 2002:a81:7754:0:b0:627:ddc5:eb5c with SMTP id
+ 00721157ae682-62c797e22a5mr22158347b3.34.1717170718539; Fri, 31 May 2024
+ 08:51:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1sD2jo-00Bi30-2x;;;mid=<874jaegk8i.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.168.167;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19trb9vNuHauQyjgb2/8G4ddYyfaO4Rxd0=
-X-SA-Exim-Connect-IP: 68.227.168.167
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Level: *
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.5000]
-	*  0.7 XMSubLong Long Subject
-	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  0.0 T_TooManySym_01 4+ unique symbols in subject
-	*  1.0 T_XMDrugObfuBody_08 obfuscated drug references
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Eric Biggers <ebiggers@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 465 ms - load_scoreonly_sql: 0.11 (0.0%),
-	signal_user_changed: 12 (2.5%), b_tie_ro: 10 (2.1%), parse: 1.18
-	(0.3%), extract_message_metadata: 15 (3.3%), get_uri_detail_list: 1.99
-	(0.4%), tests_pri_-2000: 15 (3.2%), tests_pri_-1000: 3.1 (0.7%),
-	tests_pri_-950: 1.25 (0.3%), tests_pri_-900: 1.09 (0.2%),
-	tests_pri_-90: 77 (16.6%), check_bayes: 76 (16.3%), b_tokenize: 16
-	(3.4%), b_tok_get_all: 13 (2.8%), b_comp_prob: 4.4 (0.9%),
-	b_tok_touch_all: 38 (8.2%), b_finish: 1.11 (0.2%), tests_pri_0: 324
-	(69.8%), check_dkim_signature: 0.77 (0.2%), check_dkim_adsp: 3.2
-	(0.7%), poll_dns_idle: 0.97 (0.2%), tests_pri_10: 2.1 (0.5%),
-	tests_pri_500: 8 (1.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
- early measurements
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+References: <1716583609-21790-1-git-send-email-wufan@linux.microsoft.com>
+ <1716583609-21790-16-git-send-email-wufan@linux.microsoft.com>
+ <CAHC9VhRsnGjZATBj7-evK6Gdryr54raTTKMYO_vup8AGXLwjQg@mail.gmail.com>
+ <20240530030605.GA29189@sol.localdomain> <CAHC9VhRySQ0c16UZz5xKT-y5Tn39wXxe4-f7LNjFY+ROGGxpaQ@mail.gmail.com>
+ <20240531004321.GA1238@sol.localdomain>
+In-Reply-To: <20240531004321.GA1238@sol.localdomain>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 31 May 2024 11:51:47 -0400
+Message-ID: <CAHC9VhRRuBdnv3u2VjKZCR672p4oj_smA72P-181ysdDXGJ-AA@mail.gmail.com>
+Subject: Re: [PATCH v19 15/20] fsverity: expose verified fsverity built-in
+ signatures to LSMs
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, 
+	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, 
+	agk@redhat.com, snitzer@kernel.org, mpatocka@redhat.com, eparis@redhat.com, 
+	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Eric Biggers <ebiggers@kernel.org> writes:
-
-> On Thu, May 30, 2024 at 06:03:18PM -0700, Ross Philipson wrote:
->> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
->> 
->> For better or worse, Secure Launch needs SHA-1 and SHA-256. The
->> choice of hashes used lie with the platform firmware, not with
->> software, and is often outside of the users control.
->> 
->> Even if we'd prefer to use SHA-256-only, if firmware elected to start us
->> with the SHA-1 and SHA-256 backs active, we still need SHA-1 to parse
->> the TPM event log thus far, and deliberately cap the SHA-1 PCRs in order
->> to safely use SHA-256 for everything else.
->> 
->> The SHA-1 code here has its origins in the code from the main kernel:
->> 
->> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
->> 
->> A modified version of this code was introduced to the lib/crypto/sha1.c
->> to bring it in line with the SHA-256 code and allow it to be pulled into the
->> setup kernel in the same manner as SHA-256 is.
->> 
->> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
->> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+On Thu, May 30, 2024 at 8:43=E2=80=AFPM Eric Biggers <ebiggers@kernel.org> =
+wrote:
+> On Thu, May 30, 2024 at 04:54:37PM -0400, Paul Moore wrote:
+> > On Wed, May 29, 2024 at 11:06=E2=80=AFPM Eric Biggers <ebiggers@kernel.=
+org> wrote:
+> > > On Wed, May 29, 2024 at 09:46:57PM -0400, Paul Moore wrote:
+> > > > On Fri, May 24, 2024 at 4:46=E2=80=AFPM Fan Wu <wufan@linux.microso=
+ft.com> wrote:
+> > > > >
+> > > > > This patch enhances fsverity's capabilities to support both integ=
+rity and
+> > > > > authenticity protection by introducing the exposure of built-in
+> > > > > signatures through a new LSM hook. This functionality allows LSMs=
+,
+> > > > > e.g. IPE, to enforce policies based on the authenticity and integ=
+rity of
+> > > > > files, specifically focusing on built-in fsverity signatures. It =
+enables
+> > > > > a policy enforcement layer within LSMs for fsverity, offering gra=
+nular
+> > > > > control over the usage of authenticity claims. For instance, a po=
+licy
+> > > > > could be established to permit the execution of all files with ve=
+rified
+> > > > > built-in fsverity signatures while restricting kernel module load=
+ing
+> > > > > from specified fsverity files via fsverity digests.
+> >
+> > ...
+> >
+> > > > Eric, can you give this patch in particular a look to make sure you
+> > > > are okay with everything?  I believe Fan has addressed all of your
+> > > > previous comments and it would be nice to have your Ack/Review tag =
+if
+> > > > you are okay with the current revision.
+> > >
+> > > Sorry, I've just gotten a bit tired of finding so many basic issues i=
+n this
+> > > patchset even after years of revisions.
+> > >
+> > > This patch in particular is finally looking better.  There are a coup=
+le issues
+> > > that I still see.  (BTW, you're welcome to review it too to help find=
+ these
+> > > things, given that you seem to have an interest in getting this lande=
+d...):
+> >
+> > I too have been reviewing this patchset across multiple years and have
+> > worked with Fan to fix locking issues, parsing issues, the initramfs
+> > approach, etc.
 >
-> Thanks.  This explanation doesn't seem to have made it into the actual code or
-> documentation.  Can you please get it into a more permanent location?
+> Sure, but none of the patches actually have your Reviewed-by.
+
+As a general rule I don't post Acked-by/Reviewed-by tags for patches
+that are targeting a subsystem that I maintain.  The logic being that
+I'm going to be adding my Signed-off-by tag to the patches and arguing
+these in front of Linus, so adding a Acked-by/Reviewed-by simply
+creates more work later on where I have to strip them off and replace
+them with my sign-off.
+
+If the lack of a Reviewed-by tag is *really* what is preventing you
+from reviewing the fs-verity patch, I can post that starting with the
+next revision, but I'm guessing the lack of my tag isn't your core
+issue (or at least I would argue it shouldn't be).
+
+> > My interest in getting this landed is simply a
+> > combination of fulfilling my role as LSM maintainer as well as being
+> > Fan's coworker.  While I realize you don't work with Fan, you are
+> > listed as the fs-verity maintainer and as such I've been looking to
+> > you to help review and authorize the fs-verity related code.  If you
+> > are too busy, frustrated, or <fill in the blank> to continue reviewing
+> > this patchset it would be helpful if you could identify an authorized
+> > fs-verity reviewer.  I don't see any besides you and Ted listed in the
+> > MAINTAINERS file, but perhaps the fs-verity entry is dated.
+> >
+> > Regardless, I appreciate your time and feedback thus far and I'm sure
+> > Fan does as well.
 >
-> Also, can you point to where the "deliberately cap the SHA-1 PCRs" thing happens
-> in the code?
->
-> That paragraph is also phrased as a hypothetical, "Even if we'd prefer to use
-> SHA-256-only".  That implies that you do not, in fact, prefer SHA-256 only.  Is
-> that the case?  Sure, maybe there are situations where you *have* to use SHA-1,
-> but why would you not at least *prefer* SHA-256?
+> Maintainers are expected to do reviews and acks, but not to the extent of
+> extensive hand-holding of a half-baked submission.
 
-Yes.  Please prefer to use SHA-256.
+Considering the current state of this patchset I don't believe that
+verdict to be fair, or very considerate.
 
-Have you considered implementing I think it is SHA1-DC (as git has) that
-is compatible with SHA1 but blocks the known class of attacks where
-sha1 is actively broken at this point?
+We clearly have different styles and approaches towards subsystem
+maintainer roles.  I've had the good fortune to work with both hostile
+and helpful senior developers during the early years of my time
+working in the Linux kernel, and it helped reinforce the impact
+patience and mentoring can have on contributors who are new to the
+Linux kernel or perhaps system programming in general.  While I'm far
+from perfect in this regard, I do hope and recommend that all of us in
+maintainer, or senior developer, roles remember to exercise some
+additional patience and education when working with new contributors.
 
-No offense to your Trenchboot project but my gut says that anything new
-relying on SHA-1 is probably a bad joke at this point.
-
-Firmware can most definitely be upgraded and if the goal is a more
-secure boot the usual backwards compatibility concerns for supporting
-old firmware really don't apply.
-
-Perhaps hide all of the SHA-1 stuff behind CONFIG_TRENCHBOOT_PROTOTYPE
-or something like that to make it clear that SHA-1 is not appropriate
-for any kind of production deployment and is only good for prototyping
-your implementation until properly implemented firmware comes along.
-
-Eric
+--=20
+paul-moore.com
 
