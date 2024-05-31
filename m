@@ -1,917 +1,1689 @@
-Return-Path: <linux-integrity+bounces-2753-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2754-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0E358D5F80
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2024 12:20:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6B758D6021
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2024 13:00:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 256781F2465E
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2024 10:20:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96F46287C3D
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 May 2024 11:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863EC1514F8;
-	Fri, 31 May 2024 10:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B22156967;
+	Fri, 31 May 2024 11:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B+5sgyNW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217EC1514CE;
-	Fri, 31 May 2024 10:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1643155CB4;
+	Fri, 31 May 2024 11:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717150821; cv=none; b=kc7N6gzPebqZt7xMDTqOWrR+RMAaSZRdQFDD8EizDeTE9nj9xRpEQfmWceqg+8qSLMDBNqEM2i8WxA+apS+LeyX1ramOVuVUYBECY8RnixxjZZAouw6uZdBLtPRIwLi6te30uqkWtfskuMxbk811NNk4pkg1SsfXVC4rQsVooJE=
+	t=1717153225; cv=none; b=Mzl9JwXV5H6O6TnBVJIRYeviuAcItNfwXezxh6cDKQmg06TCOp/1suOkzIqnreNNfwKND8nIzjRP//eSXBAtFS3NCeymWp1jDjsEmNB8WSBPPMnlLY5HIl4VmJ/HNAsgK9GbxTezrdrHt5/i7TahnphQViPxOLwzbuVQmEqv6bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717150821; c=relaxed/simple;
-	bh=1eJi1WQWqfYZwZAKCTyRZGB2/dWJ67hjqSbjuS1o9v8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KQQsxFK/dV1+sIXZkzbPkhzU9JeLmdK+4FCRjNa1XtEys4hvbLg1d9VxqfliZy01n+Y6As3ixAcAI8+zcUgKeXGObhdR0RKjKNMoeNoeS3X9uQfBWJyovemFHyoEIy2M+rOwB9klxVOCuHxpL37xRg+3q+Ocsf/DKaVLRnGrgyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1sCzMf-004Agn-0E;
-	Fri, 31 May 2024 18:20:02 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 31 May 2024 18:20:03 +0800
-Date: Fri, 31 May 2024 18:20:03 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Huaxin Lu <luhuaxin1@huawei.com>
-Cc: David Howells <dhowells@redhat.com>,
-	"David S . Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
-	linux-crypto@vger.kernel.org, xiujianfeng@huawei.com,
-	wangweiyang2@huawei.com, yiyang13@huawei.com,
-	zhujianwei7@huawei.com, shenyining@huawei.com,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH] crypto: sm2 - Remove sm2 algorithm
-Message-ID: <ZlmkU7h3O2pS-vvw@gondor.apana.org.au>
-References: <20240513230718.447895-1-luhuaxin1@huawei.com>
- <Zkc1nsG9H1ajhCl_@gondor.apana.org.au>
+	s=arc-20240116; t=1717153225; c=relaxed/simple;
+	bh=NAV3HkUJXOmQIwGZZIcqxaB0Rqo5+gudPmIsbeyUdgc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ooxC1jDIK8/gNmbwM7Bmgh3gwDI4J9IWg/INm5XHZjyQWs6geP/bSBWn1OErqGFr0cYyLV8+z3foGIrlPUoaFVjHuzwynTwdGF51gVT3zdVZw6H+C09gQW0YndtFh7gkGYoWJEmpYdqcgbNln5eWLXH58c29DNanhC4kdc7lBrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B+5sgyNW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855C4C4AF11;
+	Fri, 31 May 2024 11:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717153224;
+	bh=NAV3HkUJXOmQIwGZZIcqxaB0Rqo5+gudPmIsbeyUdgc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=B+5sgyNWpZsZ3cImSCdQGDUs0fyMP3L4gUgbaWYQk14Pu9L7xai/0Nr+LT1YcO2xs
+	 5NhJDJmufjAAWtuBbKqh0jZyvDQw0m/zH2aio9uEVKtLLvevRmhgEHMGfZKV4ILcvI
+	 RUjYy4QXGSpRy7IiylPuGZirKv8D/RcU9aUIFt06fr6jn+sinHydhOFlkFi1i4nRtr
+	 1SOBh5Lmq+URLxGvksrPSr7xAQZBDIOy5RqodrY3wNHmxix30sKPhNBg8HzSMzKmNd
+	 m5wtgXQ3sJL9EU3eZG/dEGns40crcwWHsswxVAeeIcjqrlfytABvojiKrOwHtuja5v
+	 MGKeP6fRTJCxA==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2e3efa18e6aso16155701fa.0;
+        Fri, 31 May 2024 04:00:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVZCWcWXL1clKcQqLR01Odj8P/IviyjJ85G25kbmLW/2hh9LfmHDAcE1Pi1mj66vOi5gJfbuDUGsf8I53ew7ORPuyUCH2DlrzG9ZbnmxdwQfCNtWnJ9k0KTyAtYnS4gmoUscWwXsbdousbYfNCvSgzglY18Wl4gPq0P0OLenlyi9vTh1qEISu9hn4xmCuigU7tYuHOLNTNbNoq5pmVrc1vJFXSf
+X-Gm-Message-State: AOJu0YwhpL4VDmTUrgUgQYY8QRImWqBjeZmO/+vnvyqaEc5DDhcP8Sp/
+	oewhiwlWqH7OK7dJ5dqiiYgf1lDTBYijU1p8M1H5doj15CwpK48pFcqII8EfCWnhKyRHVMIAQhL
+	RvHbD5fWCqaVWK5Dqfb1JkMNCURE=
+X-Google-Smtp-Source: AGHT+IHsmSlCXsjqFJfA2lOyTy2rBBM3OWUrlLyaxlzEMEVyFulvYZZXNLTzLi27XnP8neyJ0yzfLj++BgbYkPpH7WY=
+X-Received: by 2002:a05:651c:21a:b0:2e9:7f96:3d56 with SMTP id
+ 38308e7fff4ca-2ea950a67demr5241201fa.3.1717153222207; Fri, 31 May 2024
+ 04:00:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zkc1nsG9H1ajhCl_@gondor.apana.org.au>
+References: <20240531010331.134441-1-ross.philipson@oracle.com> <20240531010331.134441-9-ross.philipson@oracle.com>
+In-Reply-To: <20240531010331.134441-9-ross.philipson@oracle.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 31 May 2024 13:00:10 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHaH6atsvwr6oVPdZuhR5YEXU33-2kYEn6xb1e=gidOCw@mail.gmail.com>
+Message-ID: <CAMj1kXHaH6atsvwr6oVPdZuhR5YEXU33-2kYEn6xb1e=gidOCw@mail.gmail.com>
+Subject: Re: [PATCH v9 08/19] x86: Secure Launch kernel early boot stub
+To: Ross Philipson <ross.philipson@oracle.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, 
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org, 
+	dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, mjg59@srcf.ucam.org, 
+	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, jarkko@kernel.org, 
+	jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net, 
+	ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com, 
+	kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com, 
+	trenchboot-devel@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The SM2 algorithm has a single user in the kernel.  However, it's
-never been integrated properly with that user: asymmetric_keys.
+Hello Ross,
 
-The crux of the issue is that the way it computes its digest with
-sm3 does not fit into the architecture of asymmetric_keys.  As no
-solution has been proposed, remove this algorithm.
+On Fri, 31 May 2024 at 03:32, Ross Philipson <ross.philipson@oracle.com> wrote:
+>
+> The Secure Launch (SL) stub provides the entry point for Intel TXT (and
+> later AMD SKINIT) to vector to during the late launch. The symbol
+> sl_stub_entry is that entry point and its offset into the kernel is
+> conveyed to the launching code using the MLE (Measured Launch
+> Environment) header in the structure named mle_header. The offset of the
+> MLE header is set in the kernel_info. The routine sl_stub contains the
+> very early late launch setup code responsible for setting up the basic
+> environment to allow the normal kernel startup_32 code to proceed. It is
+> also responsible for properly waking and handling the APs on Intel
+> platforms. The routine sl_main which runs after entering 64b mode is
+> responsible for measuring configuration and module information before
+> it is used like the boot params, the kernel command line, the TXT heap,
+> an external initramfs, etc.
+>
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+> ---
+>  Documentation/arch/x86/boot.rst        |  21 +
+>  arch/x86/boot/compressed/Makefile      |   3 +-
+>  arch/x86/boot/compressed/head_64.S     |  30 +
+>  arch/x86/boot/compressed/kernel_info.S |  34 ++
+>  arch/x86/boot/compressed/sl_main.c     | 577 ++++++++++++++++++++
+>  arch/x86/boot/compressed/sl_stub.S     | 725 +++++++++++++++++++++++++
+>  arch/x86/include/asm/msr-index.h       |   5 +
+>  arch/x86/include/uapi/asm/bootparam.h  |   1 +
+>  arch/x86/kernel/asm-offsets.c          |  20 +
+>  9 files changed, 1415 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/x86/boot/compressed/sl_main.c
+>  create mode 100644 arch/x86/boot/compressed/sl_stub.S
+>
+> diff --git a/Documentation/arch/x86/boot.rst b/Documentation/arch/x86/boot.rst
+> index 4fd492cb4970..295cdf9bcbdb 100644
+> --- a/Documentation/arch/x86/boot.rst
+> +++ b/Documentation/arch/x86/boot.rst
+> @@ -482,6 +482,14 @@ Protocol:  2.00+
+>             - If 1, KASLR enabled.
+>             - If 0, KASLR disabled.
+>
+> +  Bit 2 (kernel internal): SLAUNCH_FLAG
+> +
+> +       - Used internally by the setup kernel to communicate
+> +         Secure Launch status to kernel proper.
+> +
+> +           - If 1, Secure Launch enabled.
+> +           - If 0, Secure Launch disabled.
+> +
+>    Bit 5 (write): QUIET_FLAG
+>
+>         - If 0, print early messages.
+> @@ -1028,6 +1036,19 @@ Offset/size:     0x000c/4
+>
+>    This field contains maximal allowed type for setup_data and setup_indirect structs.
+>
+> +============   =================
+> +Field name:    mle_header_offset
+> +Offset/size:   0x0010/4
+> +============   =================
+> +
+> +  This field contains the offset to the Secure Launch Measured Launch Environment
+> +  (MLE) header. This offset is used to locate information needed during a secure
+> +  late launch using Intel TXT. If the offset is zero, the kernel does not have
+> +  Secure Launch capabilities. The MLE entry point is called from TXT on the BSP
+> +  following a success measured launch. The specific state of the processors is
+> +  outlined in the TXT Software Development Guide, the latest can be found here:
+> +  https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-txt-software-development-guide.pdf
+> +
+>
 
-It can be resubmitted when it is integrated properly into the
-asymmetric_keys subsystem.
+Could we just repaint this field as the offset relative to the start
+of kernel_info rather than relative to the start of the image? That
+way, there is no need for patch #1, and given that the consumer of
+this field accesses it via kernel_info, I wouldn't expect any issues
+in applying this offset to obtain the actual address.
 
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
----
- crypto/Kconfig                            |  18 -
- crypto/Makefile                           |   8 -
- crypto/asymmetric_keys/pkcs7_parser.c     |   4 -
- crypto/asymmetric_keys/public_key.c       |   7 -
- crypto/asymmetric_keys/x509_cert_parser.c |  16 -
- crypto/asymmetric_keys/x509_public_key.c  |  17 +-
- crypto/sm2.c                              | 498 ----------------------
- crypto/sm2signature.asn1                  |   4 -
- crypto/testmgr.c                          |   6 -
- crypto/testmgr.h                          |  59 ---
- include/crypto/sm2.h                      |  28 --
- security/integrity/digsig_asymmetric.c    |   3 +-
- 12 files changed, 3 insertions(+), 665 deletions(-)
- delete mode 100644 crypto/sm2.c
- delete mode 100644 crypto/sm2signature.asn1
- delete mode 100644 include/crypto/sm2.h
 
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 5688d42a59c2..72e2decb8c6a 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -313,24 +313,6 @@ config CRYPTO_ECRDSA
- 	  One of the Russian cryptographic standard algorithms (called GOST
- 	  algorithms). Only signature verification is implemented.
- 
--config CRYPTO_SM2
--	tristate "SM2 (ShangMi 2)"
--	select CRYPTO_SM3
--	select CRYPTO_AKCIPHER
--	select CRYPTO_MANAGER
--	select MPILIB
--	select ASN1
--	help
--	  SM2 (ShangMi 2) public key algorithm
--
--	  Published by State Encryption Management Bureau, China,
--	  as specified by OSCCA GM/T 0003.1-2012 -- 0003.5-2012.
--
--	  References:
--	  https://datatracker.ietf.org/doc/draft-shen-sm2-ecdsa/
--	  http://www.oscca.gov.cn/sca/xxgk/2010-12/17/content_1002386.shtml
--	  http://www.gmbz.org.cn/main/bzlb.html
--
- config CRYPTO_CURVE25519
- 	tristate "Curve25519"
- 	select CRYPTO_KPP
-diff --git a/crypto/Makefile b/crypto/Makefile
-index edbbaa3ffef5..4c99e5d376f6 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -50,14 +50,6 @@ rsa_generic-y += rsa_helper.o
- rsa_generic-y += rsa-pkcs1pad.o
- obj-$(CONFIG_CRYPTO_RSA) += rsa_generic.o
- 
--$(obj)/sm2signature.asn1.o: $(obj)/sm2signature.asn1.c $(obj)/sm2signature.asn1.h
--$(obj)/sm2.o: $(obj)/sm2signature.asn1.h
--
--sm2_generic-y += sm2signature.asn1.o
--sm2_generic-y += sm2.o
--
--obj-$(CONFIG_CRYPTO_SM2) += sm2_generic.o
--
- $(obj)/ecdsasignature.asn1.o: $(obj)/ecdsasignature.asn1.c $(obj)/ecdsasignature.asn1.h
- $(obj)/ecdsa.o: $(obj)/ecdsasignature.asn1.h
- ecdsa_generic-y += ecdsa.o
-diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
-index 231ad7b3789d..423d13c47545 100644
---- a/crypto/asymmetric_keys/pkcs7_parser.c
-+++ b/crypto/asymmetric_keys/pkcs7_parser.c
-@@ -292,10 +292,6 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t hdrlen,
- 		ctx->sinfo->sig->pkey_algo = "ecdsa";
- 		ctx->sinfo->sig->encoding = "x962";
- 		break;
--	case OID_SM2_with_SM3:
--		ctx->sinfo->sig->pkey_algo = "sm2";
--		ctx->sinfo->sig->encoding = "raw";
--		break;
- 	case OID_gost2012PKey256:
- 	case OID_gost2012PKey512:
- 		ctx->sinfo->sig->pkey_algo = "ecrdsa";
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index 3474fb34ded9..422940a6706a 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -124,13 +124,6 @@ software_key_determine_akcipher(const struct public_key *pkey,
- 		    strcmp(hash_algo, "sha3-384") != 0 &&
- 		    strcmp(hash_algo, "sha3-512") != 0)
- 			return -EINVAL;
--	} else if (strcmp(pkey->pkey_algo, "sm2") == 0) {
--		if (strcmp(encoding, "raw") != 0)
--			return -EINVAL;
--		if (!hash_algo)
--			return -EINVAL;
--		if (strcmp(hash_algo, "sm3") != 0)
--			return -EINVAL;
- 	} else if (strcmp(pkey->pkey_algo, "ecrdsa") == 0) {
- 		if (strcmp(encoding, "raw") != 0)
- 			return -EINVAL;
-diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-index 25cc4273472f..ee2fdab42334 100644
---- a/crypto/asymmetric_keys/x509_cert_parser.c
-+++ b/crypto/asymmetric_keys/x509_cert_parser.c
-@@ -257,10 +257,6 @@ int x509_note_sig_algo(void *context, size_t hdrlen, unsigned char tag,
- 	case OID_gost2012Signature512:
- 		ctx->cert->sig->hash_algo = "streebog512";
- 		goto ecrdsa;
--
--	case OID_SM2_with_SM3:
--		ctx->cert->sig->hash_algo = "sm3";
--		goto sm2;
- 	}
- 
- rsa_pkcs1:
-@@ -273,11 +269,6 @@ int x509_note_sig_algo(void *context, size_t hdrlen, unsigned char tag,
- 	ctx->cert->sig->encoding = "raw";
- 	ctx->sig_algo = ctx->last_oid;
- 	return 0;
--sm2:
--	ctx->cert->sig->pkey_algo = "sm2";
--	ctx->cert->sig->encoding = "raw";
--	ctx->sig_algo = ctx->last_oid;
--	return 0;
- ecdsa:
- 	ctx->cert->sig->pkey_algo = "ecdsa";
- 	ctx->cert->sig->encoding = "x962";
-@@ -309,7 +300,6 @@ int x509_note_signature(void *context, size_t hdrlen,
- 
- 	if (strcmp(ctx->cert->sig->pkey_algo, "rsa") == 0 ||
- 	    strcmp(ctx->cert->sig->pkey_algo, "ecrdsa") == 0 ||
--	    strcmp(ctx->cert->sig->pkey_algo, "sm2") == 0 ||
- 	    strcmp(ctx->cert->sig->pkey_algo, "ecdsa") == 0) {
- 		/* Discard the BIT STRING metadata */
- 		if (vlen < 1 || *(const u8 *)value != 0)
-@@ -514,17 +504,11 @@ int x509_extract_key_data(void *context, size_t hdrlen,
- 	case OID_gost2012PKey512:
- 		ctx->cert->pub->pkey_algo = "ecrdsa";
- 		break;
--	case OID_sm2:
--		ctx->cert->pub->pkey_algo = "sm2";
--		break;
- 	case OID_id_ecPublicKey:
- 		if (parse_OID(ctx->params, ctx->params_size, &oid) != 0)
- 			return -EBADMSG;
- 
- 		switch (oid) {
--		case OID_sm2:
--			ctx->cert->pub->pkey_algo = "sm2";
--			break;
- 		case OID_id_prime192v1:
- 			ctx->cert->pub->pkey_algo = "ecdsa-nist-p192";
- 			break;
-diff --git a/crypto/asymmetric_keys/x509_public_key.c b/crypto/asymmetric_keys/x509_public_key.c
-index 00ac7159fba2..8409d7d36cb4 100644
---- a/crypto/asymmetric_keys/x509_public_key.c
-+++ b/crypto/asymmetric_keys/x509_public_key.c
-@@ -7,7 +7,6 @@
- 
- #define pr_fmt(fmt) "X.509: "fmt
- #include <crypto/hash.h>
--#include <crypto/sm2.h>
- #include <keys/asymmetric-parser.h>
- #include <keys/asymmetric-subtype.h>
- #include <keys/system_keyring.h>
-@@ -64,20 +63,8 @@ int x509_get_sig_params(struct x509_certificate *cert)
- 
- 	desc->tfm = tfm;
- 
--	if (strcmp(cert->pub->pkey_algo, "sm2") == 0) {
--		ret = strcmp(sig->hash_algo, "sm3") != 0 ? -EINVAL :
--		      crypto_shash_init(desc) ?:
--		      sm2_compute_z_digest(desc, cert->pub->key,
--					   cert->pub->keylen, sig->digest) ?:
--		      crypto_shash_init(desc) ?:
--		      crypto_shash_update(desc, sig->digest,
--					  sig->digest_size) ?:
--		      crypto_shash_finup(desc, cert->tbs, cert->tbs_size,
--					 sig->digest);
--	} else {
--		ret = crypto_shash_digest(desc, cert->tbs, cert->tbs_size,
--					  sig->digest);
--	}
-+	ret = crypto_shash_digest(desc, cert->tbs, cert->tbs_size,
-+				  sig->digest);
- 
- 	if (ret < 0)
- 		goto error_2;
-diff --git a/crypto/sm2.c b/crypto/sm2.c
-deleted file mode 100644
-index 5ab120d74c59..000000000000
---- a/crypto/sm2.c
-+++ /dev/null
-@@ -1,498 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * SM2 asymmetric public-key algorithm
-- * as specified by OSCCA GM/T 0003.1-2012 -- 0003.5-2012 SM2 and
-- * described at https://tools.ietf.org/html/draft-shen-sm2-ecdsa-02
-- *
-- * Copyright (c) 2020, Alibaba Group.
-- * Authors: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-- */
--
--#include <linux/module.h>
--#include <linux/mpi.h>
--#include <crypto/internal/akcipher.h>
--#include <crypto/akcipher.h>
--#include <crypto/hash.h>
--#include <crypto/rng.h>
--#include <crypto/sm2.h>
--#include "sm2signature.asn1.h"
--
--/* The default user id as specified in GM/T 0009-2012 */
--#define SM2_DEFAULT_USERID "1234567812345678"
--#define SM2_DEFAULT_USERID_LEN 16
--
--#define MPI_NBYTES(m)   ((mpi_get_nbits(m) + 7) / 8)
--
--struct ecc_domain_parms {
--	const char *desc;           /* Description of the curve.  */
--	unsigned int nbits;         /* Number of bits.  */
--	unsigned int fips:1; /* True if this is a FIPS140-2 approved curve */
--
--	/* The model describing this curve.  This is mainly used to select
--	 * the group equation.
--	 */
--	enum gcry_mpi_ec_models model;
--
--	/* The actual ECC dialect used.  This is used for curve specific
--	 * optimizations and to select encodings etc.
--	 */
--	enum ecc_dialects dialect;
--
--	const char *p;              /* The prime defining the field.  */
--	const char *a, *b;          /* The coefficients.  For Twisted Edwards
--				     * Curves b is used for d.  For Montgomery
--				     * Curves (a,b) has ((A-2)/4,B^-1).
--				     */
--	const char *n;              /* The order of the base point.  */
--	const char *g_x, *g_y;      /* Base point.  */
--	unsigned int h;             /* Cofactor.  */
--};
--
--static const struct ecc_domain_parms sm2_ecp = {
--	.desc = "sm2p256v1",
--	.nbits = 256,
--	.fips = 0,
--	.model = MPI_EC_WEIERSTRASS,
--	.dialect = ECC_DIALECT_STANDARD,
--	.p   = "0xfffffffeffffffffffffffffffffffffffffffff00000000ffffffffffffffff",
--	.a   = "0xfffffffeffffffffffffffffffffffffffffffff00000000fffffffffffffffc",
--	.b   = "0x28e9fa9e9d9f5e344d5a9e4bcf6509a7f39789f515ab8f92ddbcbd414d940e93",
--	.n   = "0xfffffffeffffffffffffffffffffffff7203df6b21c6052b53bbf40939d54123",
--	.g_x = "0x32c4ae2c1f1981195f9904466a39c9948fe30bbff2660be1715a4589334c74c7",
--	.g_y = "0xbc3736a2f4f6779c59bdcee36b692153d0a9877cc62a474002df32e52139f0a0",
--	.h = 1
--};
--
--static int __sm2_set_pub_key(struct mpi_ec_ctx *ec,
--			     const void *key, unsigned int keylen);
--
--static int sm2_ec_ctx_init(struct mpi_ec_ctx *ec)
--{
--	const struct ecc_domain_parms *ecp = &sm2_ecp;
--	MPI p, a, b;
--	MPI x, y;
--	int rc = -EINVAL;
--
--	p = mpi_scanval(ecp->p);
--	a = mpi_scanval(ecp->a);
--	b = mpi_scanval(ecp->b);
--	if (!p || !a || !b)
--		goto free_p;
--
--	x = mpi_scanval(ecp->g_x);
--	y = mpi_scanval(ecp->g_y);
--	if (!x || !y)
--		goto free;
--
--	rc = -ENOMEM;
--
--	ec->Q = mpi_point_new(0);
--	if (!ec->Q)
--		goto free;
--
--	/* mpi_ec_setup_elliptic_curve */
--	ec->G = mpi_point_new(0);
--	if (!ec->G) {
--		mpi_point_release(ec->Q);
--		goto free;
--	}
--
--	mpi_set(ec->G->x, x);
--	mpi_set(ec->G->y, y);
--	mpi_set_ui(ec->G->z, 1);
--
--	rc = -EINVAL;
--	ec->n = mpi_scanval(ecp->n);
--	if (!ec->n) {
--		mpi_point_release(ec->Q);
--		mpi_point_release(ec->G);
--		goto free;
--	}
--
--	ec->h = ecp->h;
--	ec->name = ecp->desc;
--	mpi_ec_init(ec, ecp->model, ecp->dialect, 0, p, a, b);
--
--	rc = 0;
--
--free:
--	mpi_free(x);
--	mpi_free(y);
--free_p:
--	mpi_free(p);
--	mpi_free(a);
--	mpi_free(b);
--
--	return rc;
--}
--
--static void sm2_ec_ctx_deinit(struct mpi_ec_ctx *ec)
--{
--	mpi_ec_deinit(ec);
--
--	memset(ec, 0, sizeof(*ec));
--}
--
--/* RESULT must have been initialized and is set on success to the
-- * point given by VALUE.
-- */
--static int sm2_ecc_os2ec(MPI_POINT result, MPI value)
--{
--	int rc;
--	size_t n;
--	unsigned char *buf;
--	MPI x, y;
--
--	n = MPI_NBYTES(value);
--	buf = kmalloc(n, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
--
--	rc = mpi_print(GCRYMPI_FMT_USG, buf, n, &n, value);
--	if (rc)
--		goto err_freebuf;
--
--	rc = -EINVAL;
--	if (n < 1 || ((n - 1) % 2))
--		goto err_freebuf;
--	/* No support for point compression */
--	if (*buf != 0x4)
--		goto err_freebuf;
--
--	rc = -ENOMEM;
--	n = (n - 1) / 2;
--	x = mpi_read_raw_data(buf + 1, n);
--	if (!x)
--		goto err_freebuf;
--	y = mpi_read_raw_data(buf + 1 + n, n);
--	if (!y)
--		goto err_freex;
--
--	mpi_normalize(x);
--	mpi_normalize(y);
--	mpi_set(result->x, x);
--	mpi_set(result->y, y);
--	mpi_set_ui(result->z, 1);
--
--	rc = 0;
--
--	mpi_free(y);
--err_freex:
--	mpi_free(x);
--err_freebuf:
--	kfree(buf);
--	return rc;
--}
--
--struct sm2_signature_ctx {
--	MPI sig_r;
--	MPI sig_s;
--};
--
--int sm2_get_signature_r(void *context, size_t hdrlen, unsigned char tag,
--				const void *value, size_t vlen)
--{
--	struct sm2_signature_ctx *sig = context;
--
--	if (!value || !vlen)
--		return -EINVAL;
--
--	sig->sig_r = mpi_read_raw_data(value, vlen);
--	if (!sig->sig_r)
--		return -ENOMEM;
--
--	return 0;
--}
--
--int sm2_get_signature_s(void *context, size_t hdrlen, unsigned char tag,
--				const void *value, size_t vlen)
--{
--	struct sm2_signature_ctx *sig = context;
--
--	if (!value || !vlen)
--		return -EINVAL;
--
--	sig->sig_s = mpi_read_raw_data(value, vlen);
--	if (!sig->sig_s)
--		return -ENOMEM;
--
--	return 0;
--}
--
--static int sm2_z_digest_update(struct shash_desc *desc,
--			       MPI m, unsigned int pbytes)
--{
--	static const unsigned char zero[32];
--	unsigned char *in;
--	unsigned int inlen;
--	int err;
--
--	in = mpi_get_buffer(m, &inlen, NULL);
--	if (!in)
--		return -EINVAL;
--
--	if (inlen < pbytes) {
--		/* padding with zero */
--		err = crypto_shash_update(desc, zero, pbytes - inlen) ?:
--		      crypto_shash_update(desc, in, inlen);
--	} else if (inlen > pbytes) {
--		/* skip the starting zero */
--		err = crypto_shash_update(desc, in + inlen - pbytes, pbytes);
--	} else {
--		err = crypto_shash_update(desc, in, inlen);
--	}
--
--	kfree(in);
--	return err;
--}
--
--static int sm2_z_digest_update_point(struct shash_desc *desc,
--				     MPI_POINT point, struct mpi_ec_ctx *ec,
--				     unsigned int pbytes)
--{
--	MPI x, y;
--	int ret = -EINVAL;
--
--	x = mpi_new(0);
--	y = mpi_new(0);
--
--	ret = mpi_ec_get_affine(x, y, point, ec) ? -EINVAL :
--	      sm2_z_digest_update(desc, x, pbytes) ?:
--	      sm2_z_digest_update(desc, y, pbytes);
--
--	mpi_free(x);
--	mpi_free(y);
--	return ret;
--}
--
--int sm2_compute_z_digest(struct shash_desc *desc,
--			 const void *key, unsigned int keylen, void *dgst)
--{
--	struct mpi_ec_ctx *ec;
--	unsigned int bits_len;
--	unsigned int pbytes;
--	u8 entl[2];
--	int err;
--
--	ec = kmalloc(sizeof(*ec), GFP_KERNEL);
--	if (!ec)
--		return -ENOMEM;
--
--	err = sm2_ec_ctx_init(ec);
--	if (err)
--		goto out_free_ec;
--
--	err = __sm2_set_pub_key(ec, key, keylen);
--	if (err)
--		goto out_deinit_ec;
--
--	bits_len = SM2_DEFAULT_USERID_LEN * 8;
--	entl[0] = bits_len >> 8;
--	entl[1] = bits_len & 0xff;
--
--	pbytes = MPI_NBYTES(ec->p);
--
--	/* ZA = H256(ENTLA | IDA | a | b | xG | yG | xA | yA) */
--	err = crypto_shash_init(desc);
--	if (err)
--		goto out_deinit_ec;
--
--	err = crypto_shash_update(desc, entl, 2);
--	if (err)
--		goto out_deinit_ec;
--
--	err = crypto_shash_update(desc, SM2_DEFAULT_USERID,
--				  SM2_DEFAULT_USERID_LEN);
--	if (err)
--		goto out_deinit_ec;
--
--	err = sm2_z_digest_update(desc, ec->a, pbytes) ?:
--	      sm2_z_digest_update(desc, ec->b, pbytes) ?:
--	      sm2_z_digest_update_point(desc, ec->G, ec, pbytes) ?:
--	      sm2_z_digest_update_point(desc, ec->Q, ec, pbytes);
--	if (err)
--		goto out_deinit_ec;
--
--	err = crypto_shash_final(desc, dgst);
--
--out_deinit_ec:
--	sm2_ec_ctx_deinit(ec);
--out_free_ec:
--	kfree(ec);
--	return err;
--}
--EXPORT_SYMBOL_GPL(sm2_compute_z_digest);
--
--static int _sm2_verify(struct mpi_ec_ctx *ec, MPI hash, MPI sig_r, MPI sig_s)
--{
--	int rc = -EINVAL;
--	struct gcry_mpi_point sG, tP;
--	MPI t = NULL;
--	MPI x1 = NULL, y1 = NULL;
--
--	mpi_point_init(&sG);
--	mpi_point_init(&tP);
--	x1 = mpi_new(0);
--	y1 = mpi_new(0);
--	t = mpi_new(0);
--
--	/* r, s in [1, n-1] */
--	if (mpi_cmp_ui(sig_r, 1) < 0 || mpi_cmp(sig_r, ec->n) > 0 ||
--		mpi_cmp_ui(sig_s, 1) < 0 || mpi_cmp(sig_s, ec->n) > 0) {
--		goto leave;
--	}
--
--	/* t = (r + s) % n, t == 0 */
--	mpi_addm(t, sig_r, sig_s, ec->n);
--	if (mpi_cmp_ui(t, 0) == 0)
--		goto leave;
--
--	/* sG + tP = (x1, y1) */
--	rc = -EBADMSG;
--	mpi_ec_mul_point(&sG, sig_s, ec->G, ec);
--	mpi_ec_mul_point(&tP, t, ec->Q, ec);
--	mpi_ec_add_points(&sG, &sG, &tP, ec);
--	if (mpi_ec_get_affine(x1, y1, &sG, ec))
--		goto leave;
--
--	/* R = (e + x1) % n */
--	mpi_addm(t, hash, x1, ec->n);
--
--	/* check R == r */
--	rc = -EKEYREJECTED;
--	if (mpi_cmp(t, sig_r))
--		goto leave;
--
--	rc = 0;
--
--leave:
--	mpi_point_free_parts(&sG);
--	mpi_point_free_parts(&tP);
--	mpi_free(x1);
--	mpi_free(y1);
--	mpi_free(t);
--
--	return rc;
--}
--
--static int sm2_verify(struct akcipher_request *req)
--{
--	struct crypto_akcipher *tfm = crypto_akcipher_reqtfm(req);
--	struct mpi_ec_ctx *ec = akcipher_tfm_ctx(tfm);
--	unsigned char *buffer;
--	struct sm2_signature_ctx sig;
--	MPI hash;
--	int ret;
--
--	if (unlikely(!ec->Q))
--		return -EINVAL;
--
--	buffer = kmalloc(req->src_len + req->dst_len, GFP_KERNEL);
--	if (!buffer)
--		return -ENOMEM;
--
--	sg_pcopy_to_buffer(req->src,
--		sg_nents_for_len(req->src, req->src_len + req->dst_len),
--		buffer, req->src_len + req->dst_len, 0);
--
--	sig.sig_r = NULL;
--	sig.sig_s = NULL;
--	ret = asn1_ber_decoder(&sm2signature_decoder, &sig,
--				buffer, req->src_len);
--	if (ret)
--		goto error;
--
--	ret = -ENOMEM;
--	hash = mpi_read_raw_data(buffer + req->src_len, req->dst_len);
--	if (!hash)
--		goto error;
--
--	ret = _sm2_verify(ec, hash, sig.sig_r, sig.sig_s);
--
--	mpi_free(hash);
--error:
--	mpi_free(sig.sig_r);
--	mpi_free(sig.sig_s);
--	kfree(buffer);
--	return ret;
--}
--
--static int sm2_set_pub_key(struct crypto_akcipher *tfm,
--			const void *key, unsigned int keylen)
--{
--	struct mpi_ec_ctx *ec = akcipher_tfm_ctx(tfm);
--
--	return __sm2_set_pub_key(ec, key, keylen);
--
--}
--
--static int __sm2_set_pub_key(struct mpi_ec_ctx *ec,
--			     const void *key, unsigned int keylen)
--{
--	MPI a;
--	int rc;
--
--	/* include the uncompressed flag '0x04' */
--	a = mpi_read_raw_data(key, keylen);
--	if (!a)
--		return -ENOMEM;
--
--	mpi_normalize(a);
--	rc = sm2_ecc_os2ec(ec->Q, a);
--	mpi_free(a);
--
--	return rc;
--}
--
--static unsigned int sm2_max_size(struct crypto_akcipher *tfm)
--{
--	/* Unlimited max size */
--	return PAGE_SIZE;
--}
--
--static int sm2_init_tfm(struct crypto_akcipher *tfm)
--{
--	struct mpi_ec_ctx *ec = akcipher_tfm_ctx(tfm);
--
--	return sm2_ec_ctx_init(ec);
--}
--
--static void sm2_exit_tfm(struct crypto_akcipher *tfm)
--{
--	struct mpi_ec_ctx *ec = akcipher_tfm_ctx(tfm);
--
--	sm2_ec_ctx_deinit(ec);
--}
--
--static struct akcipher_alg sm2 = {
--	.verify = sm2_verify,
--	.set_pub_key = sm2_set_pub_key,
--	.max_size = sm2_max_size,
--	.init = sm2_init_tfm,
--	.exit = sm2_exit_tfm,
--	.base = {
--		.cra_name = "sm2",
--		.cra_driver_name = "sm2-generic",
--		.cra_priority = 100,
--		.cra_module = THIS_MODULE,
--		.cra_ctxsize = sizeof(struct mpi_ec_ctx),
--	},
--};
--
--static int __init sm2_init(void)
--{
--	return crypto_register_akcipher(&sm2);
--}
--
--static void __exit sm2_exit(void)
--{
--	crypto_unregister_akcipher(&sm2);
--}
--
--subsys_initcall(sm2_init);
--module_exit(sm2_exit);
--
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Tianjia Zhang <tianjia.zhang@linux.alibaba.com>");
--MODULE_DESCRIPTION("SM2 generic algorithm");
--MODULE_ALIAS_CRYPTO("sm2-generic");
-diff --git a/crypto/sm2signature.asn1 b/crypto/sm2signature.asn1
-deleted file mode 100644
-index ab8c0b754d21..000000000000
---- a/crypto/sm2signature.asn1
-+++ /dev/null
-@@ -1,4 +0,0 @@
--Sm2Signature ::= SEQUENCE {
--	sig_r	INTEGER ({ sm2_get_signature_r }),
--	sig_s	INTEGER ({ sm2_get_signature_s })
--}
-diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-index 00f5a6cf341a..f71bdba5597f 100644
---- a/crypto/testmgr.c
-+++ b/crypto/testmgr.c
-@@ -5589,12 +5589,6 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.hash = __VECS(sha512_tv_template)
- 		}
--	}, {
--		.alg = "sm2",
--		.test = alg_test_akcipher,
--		.suite = {
--			.akcipher = __VECS(sm2_tv_template)
--		}
- 	}, {
- 		.alg = "sm3",
- 		.test = alg_test_hash,
-diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index 5350cfd9d325..9b38501a17b2 100644
---- a/crypto/testmgr.h
-+++ b/crypto/testmgr.h
-@@ -5774,65 +5774,6 @@ static const struct hash_testvec hmac_streebog512_tv_template[] = {
- 	},
- };
- 
--/*
-- * SM2 test vectors.
-- */
--static const struct akcipher_testvec sm2_tv_template[] = {
--	{ /* Generated from openssl */
--	.key =
--	"\x04"
--	"\x8e\xa0\x33\x69\x91\x7e\x3d\xec\xad\x8e\xf0\x45\x5e\x13\x3e\x68"
--	"\x5b\x8c\xab\x5c\xc6\xc8\x50\xdf\x91\x00\xe0\x24\x73\x4d\x31\xf2"
--	"\x2e\xc0\xd5\x6b\xee\xda\x98\x93\xec\xd8\x36\xaa\xb9\xcf\x63\x82"
--	"\xef\xa7\x1a\x03\xed\x16\xba\x74\xb8\x8b\xf9\xe5\x70\x39\xa4\x70",
--	.key_len = 65,
--	.param_len = 0,
--	.c =
--	"\x30\x45"
--	"\x02\x20"
--	"\x70\xab\xb6\x7d\xd6\x54\x80\x64\x42\x7e\x2d\x05\x08\x36\xc9\x96"
--	"\x25\xc2\xbb\xff\x08\xe5\x43\x15\x5e\xf3\x06\xd9\x2b\x2f\x0a\x9f"
--	"\x02\x21"
--	"\x00"
--	"\xbf\x21\x5f\x7e\x5d\x3f\x1a\x4d\x8f\x84\xc2\xe9\xa6\x4c\xa4\x18"
--	"\xb2\xb8\x46\xf4\x32\x96\xfa\x57\xc6\x29\xd4\x89\xae\xcc\xda\xdb",
--	.c_size = 71,
--	.algo = OID_SM2_with_SM3,
--	.m =
--	"\x47\xa7\xbf\xd3\xda\xc4\x79\xee\xda\x8b\x4f\xe8\x40\x94\xd4\x32"
--	"\x8f\xf1\xcd\x68\x4d\xbd\x9b\x1d\xe0\xd8\x9a\x5d\xad\x85\x47\x5c",
--	.m_size = 32,
--	.public_key_vec = true,
--	.siggen_sigver_test = true,
--	},
--	{ /* From libgcrypt */
--	.key =
--	"\x04"
--	"\x87\x59\x38\x9a\x34\xaa\xad\x07\xec\xf4\xe0\xc8\xc2\x65\x0a\x44"
--	"\x59\xc8\xd9\x26\xee\x23\x78\x32\x4e\x02\x61\xc5\x25\x38\xcb\x47"
--	"\x75\x28\x10\x6b\x1e\x0b\x7c\x8d\xd5\xff\x29\xa9\xc8\x6a\x89\x06"
--	"\x56\x56\xeb\x33\x15\x4b\xc0\x55\x60\x91\xef\x8a\xc9\xd1\x7d\x78",
--	.key_len = 65,
--	.param_len = 0,
--	.c =
--	"\x30\x44"
--	"\x02\x20"
--	"\xd9\xec\xef\xe8\x5f\xee\x3c\x59\x57\x8e\x5b\xab\xb3\x02\xe1\x42"
--	"\x4b\x67\x2c\x0b\x26\xb6\x51\x2c\x3e\xfc\xc6\x49\xec\xfe\x89\xe5"
--	"\x02\x20"
--	"\x43\x45\xd0\xa5\xff\xe5\x13\x27\x26\xd0\xec\x37\xad\x24\x1e\x9a"
--	"\x71\x9a\xa4\x89\xb0\x7e\x0f\xc4\xbb\x2d\x50\xd0\xe5\x7f\x7a\x68",
--	.c_size = 70,
--	.algo = OID_SM2_with_SM3,
--	.m =
--	"\x11\x22\x33\x44\x55\x66\x77\x88\x99\xaa\xbb\xcc\xdd\xee\xff\x00"
--	"\x12\x34\x56\x78\x9a\xbc\xde\xf0\x12\x34\x56\x78\x9a\xbc\xde\xf0",
--	.m_size = 32,
--	.public_key_vec = true,
--	.siggen_sigver_test = true,
--	},
--};
--
- /* Example vectors below taken from
-  * http://www.oscca.gov.cn/UpFile/20101222141857786.pdf
-  *
-diff --git a/include/crypto/sm2.h b/include/crypto/sm2.h
-deleted file mode 100644
-index 04a92c1013c8..000000000000
---- a/include/crypto/sm2.h
-+++ /dev/null
-@@ -1,28 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * sm2.h - SM2 asymmetric public-key algorithm
-- * as specified by OSCCA GM/T 0003.1-2012 -- 0003.5-2012 SM2 and
-- * described at https://tools.ietf.org/html/draft-shen-sm2-ecdsa-02
-- *
-- * Copyright (c) 2020, Alibaba Group.
-- * Written by Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-- */
--
--#ifndef _CRYPTO_SM2_H
--#define _CRYPTO_SM2_H
--
--struct shash_desc;
--
--#if IS_REACHABLE(CONFIG_CRYPTO_SM2)
--int sm2_compute_z_digest(struct shash_desc *desc,
--			 const void *key, unsigned int keylen, void *dgst);
--#else
--static inline int sm2_compute_z_digest(struct shash_desc *desc,
--				       const void *key, unsigned int keylen,
--				       void *dgst)
--{
--	return -ENOTSUPP;
--}
--#endif
--
--#endif /* _CRYPTO_SM2_H */
-diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-index de603cf42ac7..457c0a396caf 100644
---- a/security/integrity/digsig_asymmetric.c
-+++ b/security/integrity/digsig_asymmetric.c
-@@ -114,8 +114,7 @@ int asymmetric_verify(struct key *keyring, const char *sig,
- 	} else if (!strncmp(pk->pkey_algo, "ecdsa-", 6)) {
- 		/* edcsa-nist-p192 etc. */
- 		pks.encoding = "x962";
--	} else if (!strcmp(pk->pkey_algo, "ecrdsa") ||
--		   !strcmp(pk->pkey_algo, "sm2")) {
-+	} else if (!strcmp(pk->pkey_algo, "ecrdsa")) {
- 		pks.encoding = "raw";
- 	} else {
- 		ret = -ENOPKG;
--- 
-2.39.2
+>  The Image Checksum
+>  ==================
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index 9189a0e28686..9076a248d4b4 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -118,7 +118,8 @@ vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
+>  vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_mixed.o
+>  vmlinux-objs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+>
+> -vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/early_sha1.o $(obj)/early_sha256.o
+> +vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/early_sha1.o $(obj)/early_sha256.o \
+> +       $(obj)/sl_main.o $(obj)/sl_stub.o
+>
+>  $(obj)/vmlinux: $(vmlinux-objs-y) FORCE
+>         $(call if_changed,ld)
+> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> index 1dcb794c5479..803c9e2e6d85 100644
+> --- a/arch/x86/boot/compressed/head_64.S
+> +++ b/arch/x86/boot/compressed/head_64.S
+> @@ -420,6 +420,13 @@ SYM_CODE_START(startup_64)
+>         pushq   $0
+>         popfq
+>
+> +#ifdef CONFIG_SECURE_LAUNCH
+> +       /* Ensure the relocation region is coverd by a PMR */
 
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+covered
+
+> +       movq    %rbx, %rdi
+> +       movl    $(_bss - startup_32), %esi
+> +       callq   sl_check_region
+> +#endif
+> +
+>  /*
+>   * Copy the compressed kernel to the end of our buffer
+>   * where decompression in place becomes safe.
+> @@ -462,6 +469,29 @@ SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+>         shrq    $3, %rcx
+>         rep     stosq
+>
+> +#ifdef CONFIG_SECURE_LAUNCH
+> +       /*
+> +        * Have to do the final early sl stub work in 64b area.
+> +        *
+> +        * *********** NOTE ***********
+> +        *
+> +        * Several boot params get used before we get a chance to measure
+> +        * them in this call. This is a known issue and we currently don't
+> +        * have a solution. The scratch field doesn't matter. There is no
+> +        * obvious way to do anything about the use of kernel_alignment or
+> +        * init_size though these seem low risk with all the PMR and overlap
+> +        * checks in place.
+> +        */
+> +       movq    %r15, %rdi
+> +       callq   sl_main
+> +
+> +       /* Ensure the decompression location is covered by a PMR */
+> +       movq    %rbp, %rdi
+> +       movq    output_len(%rip), %rsi
+> +       callq   sl_check_region
+> +#endif
+> +
+> +       pushq   %rsi
+
+This looks like a rebase error.
+
+>         call    load_stage2_idt
+>
+>         /* Pass boot_params to initialize_identity_maps() */
+> diff --git a/arch/x86/boot/compressed/kernel_info.S b/arch/x86/boot/compressed/kernel_info.S
+> index c18f07181dd5..e199b87764e9 100644
+> --- a/arch/x86/boot/compressed/kernel_info.S
+> +++ b/arch/x86/boot/compressed/kernel_info.S
+> @@ -28,6 +28,40 @@ SYM_DATA_START(kernel_info)
+>         /* Maximal allowed type for setup_data and setup_indirect structs. */
+>         .long   SETUP_TYPE_MAX
+>
+> +       /* Offset to the MLE header structure */
+> +#if IS_ENABLED(CONFIG_SECURE_LAUNCH)
+> +       .long   rva(mle_header)
+
+... so this could just be mle_header - kernel_info, and the consumer
+can do the math instead.
+
+> +#else
+> +       .long   0
+> +#endif
+> +
+>  kernel_info_var_len_data:
+>         /* Empty for time being... */
+>  SYM_DATA_END_LABEL(kernel_info, SYM_L_LOCAL, kernel_info_end)
+> +
+> +#if IS_ENABLED(CONFIG_SECURE_LAUNCH)
+> +       /*
+> +        * The MLE Header per the TXT Specification, section 2.1
+> +        * MLE capabilities, see table 4. Capabilities set:
+> +        * bit 0: Support for GETSEC[WAKEUP] for RLP wakeup
+> +        * bit 1: Support for RLP wakeup using MONITOR address
+> +        * bit 2: The ECX register will contain the pointer to the MLE page table
+> +        * bit 5: TPM 1.2 family: Details/authorities PCR usage support
+> +        * bit 9: Supported format of TPM 2.0 event log - TCG compliant
+> +        */
+> +SYM_DATA_START(mle_header)
+> +       .long   0x9082ac5a  /* UUID0 */
+> +       .long   0x74a7476f  /* UUID1 */
+> +       .long   0xa2555c0f  /* UUID2 */
+> +       .long   0x42b651cb  /* UUID3 */
+> +       .long   0x00000034  /* MLE header size */
+> +       .long   0x00020002  /* MLE version 2.2 */
+> +       .long   rva(sl_stub_entry) /* Linear entry point of MLE (virt. address) */
+
+and these should perhaps be relative to mle_header?
+
+> +       .long   0x00000000  /* First valid page of MLE */
+> +       .long   0x00000000  /* Offset within binary of first byte of MLE */
+> +       .long   rva(_edata) /* Offset within binary of last byte + 1 of MLE */
+
+and here
+
+> +       .long   0x00000227  /* Bit vector of MLE-supported capabilities */
+> +       .long   0x00000000  /* Starting linear address of command line (unused) */
+> +       .long   0x00000000  /* Ending linear address of command line (unused) */
+> +SYM_DATA_END(mle_header)
+> +#endif
+> diff --git a/arch/x86/boot/compressed/sl_main.c b/arch/x86/boot/compressed/sl_main.c
+> new file mode 100644
+> index 000000000000..61e9baf410fd
+> --- /dev/null
+> +++ b/arch/x86/boot/compressed/sl_main.c
+> @@ -0,0 +1,577 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Secure Launch early measurement and validation routines.
+> + *
+> + * Copyright (c) 2024, Oracle and/or its affiliates.
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/string.h>
+> +#include <linux/linkage.h>
+> +#include <asm/segment.h>
+> +#include <asm/boot.h>
+> +#include <asm/msr.h>
+> +#include <asm/mtrr.h>
+> +#include <asm/processor-flags.h>
+> +#include <asm/asm-offsets.h>
+> +#include <asm/bootparam.h>
+> +#include <asm/bootparam_utils.h>
+> +#include <linux/slr_table.h>
+> +#include <linux/slaunch.h>
+> +#include <crypto/sha1.h>
+> +#include <crypto/sha2.h>
+> +
+> +#define CAPS_VARIABLE_MTRR_COUNT_MASK  0xff
+> +
+> +#define SL_TPM12_LOG           1
+> +#define SL_TPM20_LOG           2
+> +
+> +#define SL_TPM20_MAX_ALGS      2
+> +
+> +#define SL_MAX_EVENT_DATA      64
+> +#define SL_TPM12_LOG_SIZE      (sizeof(struct tcg_pcr_event) + \
+> +                               SL_MAX_EVENT_DATA)
+> +#define SL_TPM20_LOG_SIZE      (sizeof(struct tcg_pcr_event2_head) + \
+> +                               SHA1_DIGEST_SIZE + SHA256_DIGEST_SIZE + \
+> +                               sizeof(struct tcg_event_field) + \
+> +                               SL_MAX_EVENT_DATA)
+> +
+> +static void *evtlog_base;
+> +static u32 evtlog_size;
+> +static struct txt_heap_event_log_pointer2_1_element *log20_elem;
+> +static u32 tpm_log_ver = SL_TPM12_LOG;
+> +static struct tcg_efi_specid_event_algs tpm_algs[SL_TPM20_MAX_ALGS] = {0};
+> +
+> +extern u32 sl_cpu_type;
+> +extern u32 sl_mle_start;
+> +
+> +static u64 sl_txt_read(u32 reg)
+> +{
+> +       return readq((void *)(u64)(TXT_PRIV_CONFIG_REGS_BASE + reg));
+> +}
+> +
+> +static void sl_txt_write(u32 reg, u64 val)
+> +{
+> +       writeq(val, (void *)(u64)(TXT_PRIV_CONFIG_REGS_BASE + reg));
+> +}
+> +
+> +static void __noreturn sl_txt_reset(u64 error)
+> +{
+> +       /* Reading the E2STS register acts as a barrier for TXT registers */
+> +       sl_txt_write(TXT_CR_ERRORCODE, error);
+> +       sl_txt_read(TXT_CR_E2STS);
+> +       sl_txt_write(TXT_CR_CMD_UNLOCK_MEM_CONFIG, 1);
+> +       sl_txt_read(TXT_CR_E2STS);
+> +       sl_txt_write(TXT_CR_CMD_RESET, 1);
+> +
+> +       for ( ; ; )
+> +               asm volatile ("hlt");
+> +
+> +       unreachable();
+> +}
+> +
+> +static u64 sl_rdmsr(u32 reg)
+> +{
+> +       u64 lo, hi;
+> +
+> +       asm volatile ("rdmsr" : "=a" (lo), "=d" (hi) : "c" (reg));
+> +
+> +       return (hi << 32) | lo;
+> +}
+> +
+> +static struct slr_table *sl_locate_and_validate_slrt(void)
+> +{
+> +       struct txt_os_mle_data *os_mle_data;
+> +       struct slr_table *slrt;
+> +       void *txt_heap;
+> +
+> +       txt_heap = (void *)sl_txt_read(TXT_CR_HEAP_BASE);
+> +       os_mle_data = txt_os_mle_data_start(txt_heap);
+> +
+> +       if (!os_mle_data->slrt)
+> +               sl_txt_reset(SL_ERROR_INVALID_SLRT);
+> +
+> +       slrt = (struct slr_table *)os_mle_data->slrt;
+> +
+> +       if (slrt->magic != SLR_TABLE_MAGIC)
+> +               sl_txt_reset(SL_ERROR_INVALID_SLRT);
+> +
+> +       if (slrt->architecture != SLR_INTEL_TXT)
+> +               sl_txt_reset(SL_ERROR_INVALID_SLRT);
+> +
+> +       return slrt;
+> +}
+> +
+> +static void sl_check_pmr_coverage(void *base, u32 size, bool allow_hi)
+> +{
+> +       struct txt_os_sinit_data *os_sinit_data;
+> +       void *end = base + size;
+> +       void *txt_heap;
+> +
+> +       if (!(sl_cpu_type & SL_CPU_INTEL))
+> +               return;
+> +
+> +       txt_heap = (void *)sl_txt_read(TXT_CR_HEAP_BASE);
+> +       os_sinit_data = txt_os_sinit_data_start(txt_heap);
+> +
+> +       if ((end >= (void *)0x100000000ULL) && (base < (void *)0x100000000ULL))
+> +               sl_txt_reset(SL_ERROR_REGION_STRADDLE_4GB);
+> +
+> +       /*
+> +        * Note that the late stub code validates that the hi PMR covers
+> +        * all memory above 4G. At this point the code can only check that
+> +        * regions are within the hi PMR but that is sufficient.
+> +        */
+> +       if ((end > (void *)0x100000000ULL) && (base >= (void *)0x100000000ULL)) {
+
+Better to put the cast on the pointers, given that we are doing
+arithmetic, and use SZ_4G instead of open coding this constant 4
+times.
+
+
+
+> +               if (allow_hi) {
+> +                       if (end >= (void *)(os_sinit_data->vtd_pmr_hi_base +
+> +                                          os_sinit_data->vtd_pmr_hi_size))
+> +                               sl_txt_reset(SL_ERROR_BUFFER_BEYOND_PMR);
+> +               } else {
+> +                       sl_txt_reset(SL_ERROR_REGION_ABOVE_4GB);
+> +               }
+> +       }
+> +
+> +       if (end >= (void *)os_sinit_data->vtd_pmr_lo_size)
+> +               sl_txt_reset(SL_ERROR_BUFFER_BEYOND_PMR);
+> +}
+> +
+> +/*
+> + * Some MSRs are modified by the pre-launch code including the MTRRs.
+> + * The early MLE code has to restore these values. This code validates
+> + * the values after they are measured.
+> + */
+> +static void sl_txt_validate_msrs(struct txt_os_mle_data *os_mle_data)
+> +{
+> +       struct slr_txt_mtrr_state *saved_bsp_mtrrs;
+> +       u64 mtrr_caps, mtrr_def_type, mtrr_var;
+> +       struct slr_entry_intel_info *txt_info;
+> +       u64 misc_en_msr;
+> +       u32 vcnt, i;
+> +
+> +       txt_info = (struct slr_entry_intel_info *)os_mle_data->txt_info;
+> +       saved_bsp_mtrrs = &txt_info->saved_bsp_mtrrs;
+> +
+> +       mtrr_caps = sl_rdmsr(MSR_MTRRcap);
+> +       vcnt = (u32)(mtrr_caps & CAPS_VARIABLE_MTRR_COUNT_MASK);
+> +
+> +       if (saved_bsp_mtrrs->mtrr_vcnt > vcnt)
+> +               sl_txt_reset(SL_ERROR_MTRR_INV_VCNT);
+> +       if (saved_bsp_mtrrs->mtrr_vcnt > TXT_OS_MLE_MAX_VARIABLE_MTRRS)
+> +               sl_txt_reset(SL_ERROR_MTRR_INV_VCNT);
+> +
+> +       mtrr_def_type = sl_rdmsr(MSR_MTRRdefType);
+> +       if (saved_bsp_mtrrs->default_mem_type != mtrr_def_type)
+> +               sl_txt_reset(SL_ERROR_MTRR_INV_DEF_TYPE);
+> +
+> +       for (i = 0; i < saved_bsp_mtrrs->mtrr_vcnt; i++) {
+> +               mtrr_var = sl_rdmsr(MTRRphysBase_MSR(i));
+> +               if (saved_bsp_mtrrs->mtrr_pair[i].mtrr_physbase != mtrr_var)
+> +                       sl_txt_reset(SL_ERROR_MTRR_INV_BASE);
+> +               mtrr_var = sl_rdmsr(MTRRphysMask_MSR(i));
+> +               if (saved_bsp_mtrrs->mtrr_pair[i].mtrr_physmask != mtrr_var)
+> +                       sl_txt_reset(SL_ERROR_MTRR_INV_MASK);
+> +       }
+> +
+> +       misc_en_msr = sl_rdmsr(MSR_IA32_MISC_ENABLE);
+> +       if (txt_info->saved_misc_enable_msr != misc_en_msr)
+> +               sl_txt_reset(SL_ERROR_MSR_INV_MISC_EN);
+> +}
+> +
+> +static void sl_find_drtm_event_log(struct slr_table *slrt)
+> +{
+> +       struct txt_os_sinit_data *os_sinit_data;
+> +       struct slr_entry_log_info *log_info;
+> +       void *txt_heap;
+> +
+> +       log_info = slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_LOG_INFO);
+> +       if (!log_info)
+> +               sl_txt_reset(SL_ERROR_SLRT_MISSING_ENTRY);
+> +
+> +       evtlog_base = (void *)log_info->addr;
+> +       evtlog_size = log_info->size;
+> +
+> +       txt_heap = (void *)sl_txt_read(TXT_CR_HEAP_BASE);
+> +
+> +       /*
+> +        * For TPM 2.0, the event log 2.1 extended data structure has to also
+> +        * be located and fixed up.
+> +        */
+> +       os_sinit_data = txt_os_sinit_data_start(txt_heap);
+> +
+> +       /*
+> +        * Only support version 6 and later that properly handle the
+> +        * list of ExtDataElements in the OS-SINIT structure.
+> +        */
+> +       if (os_sinit_data->version < 6)
+> +               sl_txt_reset(SL_ERROR_OS_SINIT_BAD_VERSION);
+> +
+> +       /* Find the TPM2.0 logging extended heap element */
+> +       log20_elem = tpm20_find_log2_1_element(os_sinit_data);
+> +
+> +       /* If found, this implies TPM20 log and family */
+> +       if (log20_elem)
+> +               tpm_log_ver = SL_TPM20_LOG;
+> +}
+> +
+> +static void sl_validate_event_log_buffer(void)
+> +{
+> +       struct txt_os_sinit_data *os_sinit_data;
+> +       void *txt_heap, *txt_end;
+> +       void *mle_base, *mle_end;
+> +       void *evtlog_end;
+> +
+> +       if ((u64)evtlog_size > (LLONG_MAX - (u64)evtlog_base))
+> +               sl_txt_reset(SL_ERROR_INTEGER_OVERFLOW);
+> +       evtlog_end = evtlog_base + evtlog_size;
+> +
+> +       txt_heap = (void *)sl_txt_read(TXT_CR_HEAP_BASE);
+> +       txt_end = txt_heap + sl_txt_read(TXT_CR_HEAP_SIZE);
+> +       os_sinit_data = txt_os_sinit_data_start(txt_heap);
+> +
+> +       mle_base = (void *)(u64)sl_mle_start;
+> +       mle_end = mle_base + os_sinit_data->mle_size;
+> +
+> +       /*
+> +        * This check is to ensure the event log buffer does not overlap with
+> +        * the MLE image.
+> +        */
+> +       if (evtlog_base >= mle_end && evtlog_end > mle_end)
+> +               goto pmr_check; /* above */
+> +
+> +       if (evtlog_end <= mle_base && evtlog_base < mle_base)
+> +               goto pmr_check; /* below */
+> +
+> +       sl_txt_reset(SL_ERROR_MLE_BUFFER_OVERLAP);
+> +
+> +pmr_check:
+> +       /*
+> +        * The TXT heap is protected by the DPR. If the TPM event log is
+> +        * inside the TXT heap, there is no need for a PMR check.
+> +        */
+> +       if (evtlog_base > txt_heap && evtlog_end < txt_end)
+> +               return;
+> +
+> +       sl_check_pmr_coverage(evtlog_base, evtlog_size, true);
+> +}
+> +
+> +static void sl_find_event_log_algorithms(void)
+> +{
+> +       struct tcg_efi_specid_event_head *efi_head =
+> +               (struct tcg_efi_specid_event_head *)(evtlog_base +
+> +                                       log20_elem->first_record_offset +
+> +                                       sizeof(struct tcg_pcr_event));
+> +
+> +       if (efi_head->num_algs == 0 || efi_head->num_algs > 2)
+> +               sl_txt_reset(SL_ERROR_TPM_NUMBER_ALGS);
+> +
+> +       memcpy(&tpm_algs[0], &efi_head->digest_sizes[0],
+> +              sizeof(struct tcg_efi_specid_event_algs) * efi_head->num_algs);
+> +}
+> +
+> +static void sl_tpm12_log_event(u32 pcr, u32 event_type,
+> +                              const u8 *data, u32 length,
+> +                              const u8 *event_data, u32 event_size)
+> +{
+> +       u8 sha1_hash[SHA1_DIGEST_SIZE] = {0};
+> +       u8 log_buf[SL_TPM12_LOG_SIZE] = {0};
+> +       struct tcg_pcr_event *pcr_event;
+> +       u32 total_size;
+> +
+> +       pcr_event = (struct tcg_pcr_event *)log_buf;
+> +       pcr_event->pcr_idx = pcr;
+> +       pcr_event->event_type = event_type;
+> +       if (length > 0) {
+> +               sha1(data, length, &sha1_hash[0]);
+> +               memcpy(&pcr_event->digest[0], &sha1_hash[0], SHA1_DIGEST_SIZE);
+> +       }
+> +       pcr_event->event_size = event_size;
+> +       if (event_size > 0)
+> +               memcpy((u8 *)pcr_event + sizeof(struct tcg_pcr_event),
+> +                      event_data, event_size);
+> +
+> +       total_size = sizeof(struct tcg_pcr_event) + event_size;
+> +
+> +       if (tpm12_log_event(evtlog_base, evtlog_size, total_size, pcr_event))
+> +               sl_txt_reset(SL_ERROR_TPM_LOGGING_FAILED);
+> +}
+> +
+> +static void sl_tpm20_log_event(u32 pcr, u32 event_type,
+> +                              const u8 *data, u32 length,
+> +                              const u8 *event_data, u32 event_size)
+> +{
+> +       u8 sha256_hash[SHA256_DIGEST_SIZE] = {0};
+> +       u8 sha1_hash[SHA1_DIGEST_SIZE] = {0};
+> +       u8 log_buf[SL_TPM20_LOG_SIZE] = {0};
+> +       struct sha256_state sctx256 = {0};
+> +       struct tcg_pcr_event2_head *head;
+> +       struct tcg_event_field *event;
+> +       u32 total_size;
+> +       u16 *alg_ptr;
+> +       u8 *dgst_ptr;
+> +
+> +       head = (struct tcg_pcr_event2_head *)log_buf;
+> +       head->pcr_idx = pcr;
+> +       head->event_type = event_type;
+> +       total_size = sizeof(struct tcg_pcr_event2_head);
+> +       alg_ptr = (u16 *)(log_buf + sizeof(struct tcg_pcr_event2_head));
+> +
+> +       for ( ; head->count < 2; head->count++) {
+> +               if (!tpm_algs[head->count].alg_id)
+> +                       break;
+> +
+> +               *alg_ptr = tpm_algs[head->count].alg_id;
+> +               dgst_ptr = (u8 *)alg_ptr + sizeof(u16);
+> +
+> +               if (tpm_algs[head->count].alg_id == TPM_ALG_SHA256 &&
+> +                   length) {
+> +                       sha256_init(&sctx256);
+> +                       sha256_update(&sctx256, data, length);
+> +                       sha256_final(&sctx256, &sha256_hash[0]);
+> +               } else if (tpm_algs[head->count].alg_id == TPM_ALG_SHA1 &&
+> +                          length) {
+> +                       sha1(data, length, &sha1_hash[0]);
+> +               }
+> +
+> +               if (tpm_algs[head->count].alg_id == TPM_ALG_SHA256) {
+> +                       memcpy(dgst_ptr, &sha256_hash[0], SHA256_DIGEST_SIZE);
+> +                       total_size += SHA256_DIGEST_SIZE + sizeof(u16);
+> +                       alg_ptr = (u16 *)((u8 *)alg_ptr + SHA256_DIGEST_SIZE + sizeof(u16));
+> +               } else if (tpm_algs[head->count].alg_id == TPM_ALG_SHA1) {
+> +                       memcpy(dgst_ptr, &sha1_hash[0], SHA1_DIGEST_SIZE);
+> +                       total_size += SHA1_DIGEST_SIZE + sizeof(u16);
+> +                       alg_ptr = (u16 *)((u8 *)alg_ptr + SHA1_DIGEST_SIZE + sizeof(u16));
+> +               } else {
+> +                       sl_txt_reset(SL_ERROR_TPM_UNKNOWN_DIGEST);
+> +               }
+> +       }
+> +
+> +       event = (struct tcg_event_field *)(log_buf + total_size);
+> +       event->event_size = event_size;
+> +       if (event_size > 0)
+> +               memcpy((u8 *)event + sizeof(struct tcg_event_field), event_data, event_size);
+> +       total_size += sizeof(struct tcg_event_field) + event_size;
+> +
+> +       if (tpm20_log_event(log20_elem, evtlog_base, evtlog_size, total_size, &log_buf[0]))
+> +               sl_txt_reset(SL_ERROR_TPM_LOGGING_FAILED);
+> +}
+> +
+> +static void sl_tpm_extend_evtlog(u32 pcr, u32 type,
+> +                                const u8 *data, u32 length, const char *desc)
+> +{
+> +       if (tpm_log_ver == SL_TPM20_LOG)
+> +               sl_tpm20_log_event(pcr, type, data, length,
+> +                                  (const u8 *)desc, strlen(desc));
+> +       else
+> +               sl_tpm12_log_event(pcr, type, data, length,
+> +                                  (const u8 *)desc, strlen(desc));
+> +}
+> +
+> +static struct setup_data *sl_handle_setup_data(struct setup_data *curr,
+> +                                              struct slr_policy_entry *entry)
+> +{
+> +       struct setup_indirect *ind;
+> +       struct setup_data *next;
+> +
+> +       if (!curr)
+> +               return NULL;
+> +
+> +       next = (struct setup_data *)(unsigned long)curr->next;
+> +
+> +       /* SETUP_INDIRECT instances have to be handled differently */
+> +       if (curr->type == SETUP_INDIRECT) {
+> +               ind = (struct setup_indirect *)((u8 *)curr + offsetof(struct setup_data, data));
+> +
+> +               sl_check_pmr_coverage((void *)ind->addr, ind->len, true);
+> +
+> +               sl_tpm_extend_evtlog(entry->pcr, TXT_EVTYPE_SLAUNCH,
+> +                                    (void *)ind->addr, ind->len,
+> +                                    entry->evt_info);
+> +
+> +               return next;
+> +       }
+> +
+> +       sl_check_pmr_coverage(((u8 *)curr) + sizeof(struct setup_data),
+> +                             curr->len, true);
+> +
+> +       sl_tpm_extend_evtlog(entry->pcr, TXT_EVTYPE_SLAUNCH,
+> +                            ((u8 *)curr) + sizeof(struct setup_data),
+> +                            curr->len,
+> +                            entry->evt_info);
+> +
+> +       return next;
+> +}
+> +
+> +static void sl_extend_setup_data(struct slr_policy_entry *entry)
+> +{
+> +       struct setup_data *data;
+> +
+> +       /*
+> +        * Measuring the boot params measured the fixed e820 memory map.
+> +        * Measure any setup_data entries including e820 extended entries.
+> +        */
+> +       data = (struct setup_data *)(unsigned long)entry->entity;
+> +       while (data)
+> +               data = sl_handle_setup_data(data, entry);
+> +}
+> +
+> +static void sl_extend_slrt(struct slr_policy_entry *entry)
+> +{
+> +       struct slr_table *slrt = (struct slr_table *)entry->entity;
+> +       struct slr_entry_intel_info *intel_info;
+> +
+> +       /*
+> +        * In revision one of the SLRT, the only table that needs to be
+> +        * measured is the Intel info table. Everything else is meta-data,
+> +        * addresses and sizes. Note the size of what to measure is not set.
+> +        * The flag SLR_POLICY_IMPLICIT_SIZE leaves it to the measuring code
+> +        * to sort out.
+> +        */
+> +       if (slrt->revision == 1) {
+> +               intel_info = slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_INTEL_INFO);
+> +               if (!intel_info)
+> +                       sl_txt_reset(SL_ERROR_SLRT_MISSING_ENTRY);
+> +
+> +               sl_tpm_extend_evtlog(entry->pcr, TXT_EVTYPE_SLAUNCH,
+> +                                    (void *)entry->entity, sizeof(struct slr_entry_intel_info),
+> +                                    entry->evt_info);
+> +       }
+> +}
+> +
+> +static void sl_extend_txt_os2mle(struct slr_policy_entry *entry)
+> +{
+> +       struct txt_os_mle_data *os_mle_data;
+> +       void *txt_heap;
+> +
+> +       txt_heap = (void *)sl_txt_read(TXT_CR_HEAP_BASE);
+> +       os_mle_data = txt_os_mle_data_start(txt_heap);
+> +
+> +       /*
+> +        * Version 1 of the OS-MLE heap structure has no fields to measure. It just
+> +        * has addresses and sizes and a scratch buffer.
+> +        */
+> +       if (os_mle_data->version == 1)
+> +               return;
+> +}
+> +
+> +static void sl_process_extend_policy(struct slr_table *slrt)
+> +{
+> +       struct slr_entry_policy *policy;
+> +       u16 i;
+> +
+> +       policy = slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_ENTRY_POLICY);
+> +       if (!policy)
+> +               sl_txt_reset(SL_ERROR_SLRT_MISSING_ENTRY);
+> +
+> +       for (i = 0; i < policy->nr_entries; i++) {
+> +               switch (policy->policy_entries[i].entity_type) {
+> +               case SLR_ET_SETUP_DATA:
+> +                       sl_extend_setup_data(&policy->policy_entries[i]);
+> +                       break;
+> +               case SLR_ET_SLRT:
+> +                       sl_extend_slrt(&policy->policy_entries[i]);
+> +                       break;
+> +               case SLR_ET_TXT_OS2MLE:
+> +                       sl_extend_txt_os2mle(&policy->policy_entries[i]);
+> +                       break;
+> +               case SLR_ET_UNUSED:
+> +                       continue;
+> +               default:
+> +                       sl_tpm_extend_evtlog(policy->policy_entries[i].pcr, TXT_EVTYPE_SLAUNCH,
+> +                                            (void *)policy->policy_entries[i].entity,
+> +                                            policy->policy_entries[i].size,
+> +                                            policy->policy_entries[i].evt_info);
+> +               }
+> +       }
+> +}
+> +
+> +static void sl_process_extend_uefi_config(struct slr_table *slrt)
+> +{
+> +       struct slr_entry_uefi_config *uefi_config;
+> +       u16 i;
+> +
+> +       uefi_config = slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_UEFI_CONFIG);
+> +
+> +       /* Optionally here depending on how SL kernel was booted */
+> +       if (!uefi_config)
+> +               return;
+> +
+> +       for (i = 0; i < uefi_config->nr_entries; i++) {
+> +               sl_tpm_extend_evtlog(uefi_config->uefi_cfg_entries[i].pcr, TXT_EVTYPE_SLAUNCH,
+> +                                    (void *)uefi_config->uefi_cfg_entries[i].cfg,
+> +                                    uefi_config->uefi_cfg_entries[i].size,
+> +                                    uefi_config->uefi_cfg_entries[i].evt_info);
+> +       }
+> +}
+> +
+> +asmlinkage __visible void sl_check_region(void *base, u32 size)
+> +{
+> +       sl_check_pmr_coverage(base, size, false);
+> +}
+> +
+> +asmlinkage __visible void sl_main(void *bootparams)
+> +{
+> +       struct boot_params *bp  = (struct boot_params *)bootparams;
+> +       struct txt_os_mle_data *os_mle_data;
+> +       struct slr_table *slrt;
+> +       void *txt_heap;
+> +
+> +       /*
+> +        * Ensure loadflags do not indicate a secure launch was done
+> +        * unless it really was.
+> +        */
+> +       bp->hdr.loadflags &= ~SLAUNCH_FLAG;
+> +
+> +       /*
+> +        * Currently only Intel TXT is supported for Secure Launch. Testing
+> +        * this value also indicates that the kernel was booted successfully
+> +        * through the Secure Launch entry point and is in SMX mode.
+> +        */
+> +       if (!(sl_cpu_type & SL_CPU_INTEL))
+> +               return;
+> +
+> +       slrt = sl_locate_and_validate_slrt();
+> +
+> +       /* Locate the TPM event log. */
+> +       sl_find_drtm_event_log(slrt);
+> +
+> +       /* Validate the location of the event log buffer before using it */
+> +       sl_validate_event_log_buffer();
+> +
+> +       /*
+> +        * Find the TPM hash algorithms used by the ACM and recorded in the
+> +        * event log.
+> +        */
+> +       if (tpm_log_ver == SL_TPM20_LOG)
+> +               sl_find_event_log_algorithms();
+> +
+> +       /*
+> +        * Sanitize them before measuring. Set the SLAUNCH_FLAG early since if
+> +        * anything fails, the system will reset anyway.
+> +        */
+> +       sanitize_boot_params(bp);
+> +       bp->hdr.loadflags |= SLAUNCH_FLAG;
+> +
+> +       sl_check_pmr_coverage(bootparams, PAGE_SIZE, false);
+> +
+> +       /* Place event log SL specific tags before and after measurements */
+> +       sl_tpm_extend_evtlog(17, TXT_EVTYPE_SLAUNCH_START, NULL, 0, "");
+> +
+> +       /* Process all policy entries and extend the measurements to the evtlog */
+> +       sl_process_extend_policy(slrt);
+> +
+> +       /* Process all EFI config entries and extend the measurements to the evtlog */
+> +       sl_process_extend_uefi_config(slrt);
+> +
+> +       sl_tpm_extend_evtlog(17, TXT_EVTYPE_SLAUNCH_END, NULL, 0, "");
+> +
+> +       /* No PMR check is needed, the TXT heap is covered by the DPR */
+> +       txt_heap = (void *)sl_txt_read(TXT_CR_HEAP_BASE);
+> +       os_mle_data = txt_os_mle_data_start(txt_heap);
+> +
+> +       /*
+> +        * Now that the OS-MLE data is measured, ensure the MTRR and
+> +        * misc enable MSRs are what we expect.
+> +        */
+> +       sl_txt_validate_msrs(os_mle_data);
+> +}
+> diff --git a/arch/x86/boot/compressed/sl_stub.S b/arch/x86/boot/compressed/sl_stub.S
+> new file mode 100644
+> index 000000000000..24b8f23d5dcc
+> --- /dev/null
+> +++ b/arch/x86/boot/compressed/sl_stub.S
+> @@ -0,0 +1,725 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * Secure Launch protected mode entry point.
+> + *
+> + * Copyright (c) 2024, Oracle and/or its affiliates.
+> + */
+> +       .code32
+> +       .text
+> +#include <linux/linkage.h>
+> +#include <asm/segment.h>
+> +#include <asm/msr.h>
+> +#include <asm/apicdef.h>
+> +#include <asm/trapnr.h>
+> +#include <asm/processor-flags.h>
+> +#include <asm/asm-offsets.h>
+> +#include <asm/bootparam.h>
+> +#include <asm/page_types.h>
+> +#include <asm/irq_vectors.h>
+> +#include <linux/slr_table.h>
+> +#include <linux/slaunch.h>
+> +
+> +/* CPUID: leaf 1, ECX, SMX feature bit */
+> +#define X86_FEATURE_BIT_SMX    (1 << 6)
+> +
+> +#define IDT_VECTOR_LO_BITS     0
+> +#define IDT_VECTOR_HI_BITS     6
+> +
+> +/*
+> + * See the comment in head_64.S for detailed information on what this macro
+> + * and others like it are used for. The comment appears right at the top of
+> + * the file.
+> + */
+> +#define rva(X) ((X) - sl_stub_entry)
+> +
+> +/*
+> + * The GETSEC op code is open coded because older versions of
+> + * GCC do not support the getsec mnemonic.
+> + */
+> +.macro GETSEC leaf
+> +       pushl   %ebx
+> +       xorl    %ebx, %ebx      /* Must be zero for SMCTRL */
+> +       movl    \leaf, %eax     /* Leaf function */
+> +       .byte   0x0f, 0x37      /* GETSEC opcode */
+> +       popl    %ebx
+> +.endm
+> +
+> +.macro TXT_RESET error
+> +       /*
+> +        * Set a sticky error value and reset. Note the movs to %eax act as
+> +        * TXT register barriers.
+> +        */
+> +       movl    \error, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_ERRORCODE)
+> +       movl    (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_E2STS), %eax
+> +       movl    $1, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_CMD_NO_SECRETS)
+> +       movl    (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_E2STS), %eax
+> +       movl    $1, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_CMD_UNLOCK_MEM_CONFIG)
+> +       movl    (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_E2STS), %eax
+> +       movl    $1, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_CMD_RESET)
+> +1:
+> +       hlt
+> +       jmp     1b
+> +.endm
+> +
+> +       .code32
+> +SYM_FUNC_START(sl_stub_entry)
+> +       cli
+> +       cld
+> +
+> +       /*
+> +        * On entry, %ebx has the entry abs offset to sl_stub_entry. This
+> +        * will be correctly scaled using the rva macro and avoid causing
+> +        * relocations. Only %cs and %ds segments are known good.
+
+Could you please clarify this? 'scaling' is unidiomatic in this
+context, and actually means something different in my book. AIUI, %ebx
+is guaranteed to carry the actual address of sl_stub_entry(), and
+rva() is used to generate relative references using %ebx as a base, as
+to avoid /absolute/ relocations, which would require fixups at
+runtime.
+
+
+> +        */
+> +
+> +       /* Load GDT, set segment regs and lret to __SL32_CS */
+> +       leal    rva(sl_gdt_desc)(%ebx), %eax
+> +       addl    %eax, 2(%eax)
+> +       lgdt    (%eax)
+> +
+> +       movl    $(__SL32_DS), %eax
+> +       movw    %ax, %ds
+> +       movw    %ax, %es
+> +       movw    %ax, %fs
+> +       movw    %ax, %gs
+> +       movw    %ax, %ss
+> +
+> +       /*
+> +        * Now that %ss is known good, take the first stack for the BSP. The
+> +        * AP stacks are only used on Intel.
+> +        */
+> +       leal    rva(sl_stacks_end)(%ebx), %esp
+> +
+> +       leal    rva(.Lsl_cs)(%ebx), %eax
+> +       pushl   $(__SL32_CS)
+> +       pushl   %eax
+> +       lret
+> +
+> +.Lsl_cs:
+> +       /* Save our base pointer reg and page table for MLE */
+> +       pushl   %ebx
+> +       pushl   %ecx
+> +
+> +       /* See if SMX feature is supported. */
+> +       movl    $1, %eax
+> +       cpuid
+> +       testl   $(X86_FEATURE_BIT_SMX), %ecx
+> +       jz      .Ldo_unknown_cpu
+> +
+> +       popl    %ecx
+> +       popl    %ebx
+> +
+> +       /* Know it is Intel */
+> +       movl    $(SL_CPU_INTEL), rva(sl_cpu_type)(%ebx)
+> +
+> +       /* Locate the base of the MLE using the page tables in %ecx */
+> +       call    sl_find_mle_base
+> +
+> +       /* Increment CPU count for BSP */
+> +       incl    rva(sl_txt_cpu_count)(%ebx)
+> +
+> +       /*
+> +        * Enable SMI with GETSEC[SMCTRL] which were disabled by SENTER.
+> +        * NMIs were also disabled by SENTER. Since there is no IDT for the BSP,
+> +        * allow the mainline kernel re-enable them in the normal course of
+> +        * booting.
+> +        */
+> +       GETSEC  $(SMX_X86_GETSEC_SMCTRL)
+> +
+> +       /* Clear the TXT error registers for a clean start of day */
+> +       movl    $0, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_ERRORCODE)
+> +       movl    $0xffffffff, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_ESTS)
+> +
+> +       /* On Intel, the zero page address is passed in the TXT heap */
+> +       /* Read physical base of heap into EAX */
+> +       movl    (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_HEAP_BASE), %eax
+> +       /* Read the size of the BIOS data into ECX (first 8 bytes) */
+> +       movl    (%eax), %ecx
+> +       /* Skip over BIOS data and size of OS to MLE data section */
+> +       leal    8(%eax, %ecx), %eax
+> +
+> +       /* Need to verify the values in the OS-MLE struct passed in */
+> +       call    sl_txt_verify_os_mle_struct
+> +
+> +       /*
+> +        * Get the boot params address from the heap. Note %esi and %ebx MUST
+> +        * be preserved across calls and operations.
+> +        */
+> +       movl    SL_boot_params_addr(%eax), %esi
+> +
+> +       /* Save %ebx so the APs can find their way home */
+> +       movl    %ebx, (SL_mle_scratch + SL_SCRATCH_AP_EBX)(%eax)
+> +
+> +       /* Fetch the AP wake code block address from the heap */
+> +       movl    SL_ap_wake_block(%eax), %edi
+> +       movl    %edi, rva(sl_txt_ap_wake_block)(%ebx)
+> +
+> +       /* Store the offset in the AP wake block to the jmp address */
+> +       movl    $(sl_ap_jmp_offset - sl_txt_ap_wake_begin), \
+> +               (SL_mle_scratch + SL_SCRATCH_AP_JMP_OFFSET)(%eax)
+> +
+> +       /* Store the offset in the AP wake block to the AP stacks block */
+> +       movl    $(sl_stacks - sl_txt_ap_wake_begin), \
+> +               (SL_mle_scratch + SL_SCRATCH_AP_STACKS_OFFSET)(%eax)
+> +
+> +       /* %eax still is the base of the OS-MLE block, save it */
+> +       pushl   %eax
+> +
+> +       /* Relocate the AP wake code to the safe block */
+> +       call    sl_txt_reloc_ap_wake
+> +
+> +       /*
+> +        * Wake up all APs that are blocked in the ACM and wait for them to
+> +        * halt. This should be done before restoring the MTRRs so the ACM is
+> +        * still properly in WB memory.
+> +        */
+> +       call    sl_txt_wake_aps
+> +
+> +       /* Restore OS-MLE in %eax */
+> +       popl    %eax
+> +
+> +       /*
+> +        * %edi is used by this routine to find the MTRRs which are in the SLRT
+> +        * in the Intel info.
+> +        */
+> +       movl    SL_txt_info(%eax), %edi
+> +       call    sl_txt_load_regs
+> +
+> +       jmp     .Lcpu_setup_done
+> +
+> +.Ldo_unknown_cpu:
+> +       /* Non-Intel CPUs are not yet supported */
+> +       ud2
+> +
+> +.Lcpu_setup_done:
+> +       /*
+> +        * Don't enable MCE at this point. The kernel will enable
+> +        * it on the BSP later when it is ready.
+> +        */
+> +
+> +       /* Done, jump to normal 32b pm entry */
+> +       jmp     startup_32
+> +SYM_FUNC_END(sl_stub_entry)
+> +
+> +SYM_FUNC_START(sl_find_mle_base)
+> +       /* %ecx has PDPT, get first PD */
+> +       movl    (%ecx), %eax
+> +       andl    $(PAGE_MASK), %eax
+> +       /* Get first PT from first PDE */
+> +       movl    (%eax), %eax
+> +       andl    $(PAGE_MASK), %eax
+> +       /* Get MLE base from first PTE */
+> +       movl    (%eax), %eax
+> +       andl    $(PAGE_MASK), %eax
+> +
+> +       movl    %eax, rva(sl_mle_start)(%ebx)
+> +       ret
+> +SYM_FUNC_END(sl_find_mle_base)
+> +
+> +SYM_FUNC_START(sl_check_buffer_mle_overlap)
+> +       /* %ecx: buffer begin %edx: buffer end */
+> +       /* %ebx: MLE begin %edi: MLE end */
+> +       /* %eax: region may be inside MLE */
+> +
+> +       cmpl    %edi, %ecx
+> +       jb      .Lnext_check
+> +       cmpl    %edi, %edx
+> +       jbe     .Lnext_check
+> +       jmp     .Lvalid /* Buffer above MLE */
+> +
+> +.Lnext_check:
+> +       cmpl    %ebx, %edx
+> +       ja      .Linside_check
+> +       cmpl    %ebx, %ecx
+> +       jae     .Linside_check
+> +       jmp     .Lvalid /* Buffer below MLE */
+> +
+> +.Linside_check:
+> +       cmpl    $0, %eax
+> +       jz      .Linvalid
+> +       cmpl    %ebx, %ecx
+> +       jb      .Linvalid
+> +       cmpl    %edi, %edx
+> +       ja      .Linvalid
+> +       jmp     .Lvalid /* Buffer in MLE */
+> +
+> +.Linvalid:
+> +       TXT_RESET $(SL_ERROR_MLE_BUFFER_OVERLAP)
+> +
+> +.Lvalid:
+> +       ret
+> +SYM_FUNC_END(sl_check_buffer_mle_overlap)
+> +
+> +SYM_FUNC_START(sl_txt_verify_os_mle_struct)
+> +       pushl   %ebx
+> +       /*
+> +        * %eax points to the base of the OS-MLE struct. Need to also
+> +        * read some values from the OS-SINIT struct too.
+> +        */
+> +       movl    -8(%eax), %ecx
+> +       /* Skip over OS to MLE data section and size of OS-SINIT structure */
+> +       leal    (%eax, %ecx), %edx
+> +
+> +       /* Load MLE image base absolute offset */
+> +       movl    rva(sl_mle_start)(%ebx), %ebx
+> +
+> +       /* Verify the value of the low PMR base. It should always be 0. */
+> +       movl    SL_vtd_pmr_lo_base(%edx), %esi
+> +       cmpl    $0, %esi
+> +       jz      .Lvalid_pmr_base
+> +       TXT_RESET $(SL_ERROR_LO_PMR_BASE)
+> +
+> +.Lvalid_pmr_base:
+> +       /* Grab some values from OS-SINIT structure */
+> +       movl    SL_mle_size(%edx), %edi
+> +       addl    %ebx, %edi
+> +       jc      .Loverflow_detected
+> +       movl    SL_vtd_pmr_lo_size(%edx), %esi
+> +
+> +       /* Check the AP wake block */
+> +       movl    SL_ap_wake_block(%eax), %ecx
+> +       movl    SL_ap_wake_block_size(%eax), %edx
+> +       addl    %ecx, %edx
+> +       jc      .Loverflow_detected
+> +       pushl   %eax
+> +       xorl    %eax, %eax
+> +       call    sl_check_buffer_mle_overlap
+> +       popl    %eax
+> +       cmpl    %esi, %edx
+> +       ja      .Lbuffer_beyond_pmr
+> +
+> +       /*
+> +        * Check the boot params. Note during a UEFI boot, the boot
+> +        * params will be inside the MLE image. Test for this case
+> +        * in the overlap case.
+> +        */
+> +       movl    SL_boot_params_addr(%eax), %ecx
+> +       movl    $(PAGE_SIZE), %edx
+> +       addl    %ecx, %edx
+> +       jc      .Loverflow_detected
+> +       pushl   %eax
+> +       movl    $1, %eax
+> +       call    sl_check_buffer_mle_overlap
+> +       popl    %eax
+> +       cmpl    %esi, %edx
+> +       ja      .Lbuffer_beyond_pmr
+> +
+> +       /* Check that the AP wake block is big enough */
+> +       cmpl    $(sl_txt_ap_wake_end - sl_txt_ap_wake_begin), \
+> +               SL_ap_wake_block_size(%eax)
+> +       jae     .Lwake_block_ok
+> +       TXT_RESET $(SL_ERROR_WAKE_BLOCK_TOO_SMALL)
+> +
+> +.Lwake_block_ok:
+> +       popl    %ebx
+> +       ret
+> +
+> +.Loverflow_detected:
+> +       TXT_RESET $(SL_ERROR_INTEGER_OVERFLOW)
+> +
+> +.Lbuffer_beyond_pmr:
+> +       TXT_RESET $(SL_ERROR_BUFFER_BEYOND_PMR)
+> +SYM_FUNC_END(sl_txt_verify_os_mle_struct)
+> +
+> +SYM_FUNC_START(sl_txt_ap_entry)
+> +       cli
+> +       cld
+> +       /*
+> +        * The %cs and %ds segments are known good after waking the AP.
+> +        * First order of business is to find where we are and
+> +        * save it in %ebx.
+> +        */
+> +
+> +       /* Read physical base of heap into EAX */
+> +       movl    (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_HEAP_BASE), %eax
+> +       /* Read the size of the BIOS data into ECX (first 8 bytes) */
+> +       movl    (%eax), %ecx
+> +       /* Skip over BIOS data and size of OS to MLE data section */
+> +       leal    8(%eax, %ecx), %eax
+> +
+> +       /* Saved %ebx from the BSP and stash OS-MLE pointer */
+> +       movl    (SL_mle_scratch + SL_SCRATCH_AP_EBX)(%eax), %ebx
+> +
+> +       /* Save TXT info ptr in %edi for call to sl_txt_load_regs */
+> +       movl    SL_txt_info(%eax), %edi
+> +
+> +       /* Lock and get our stack index */
+> +       movl    $1, %ecx
+> +.Lspin:
+> +       xorl    %eax, %eax
+> +       lock cmpxchgl   %ecx, rva(sl_txt_spin_lock)(%ebx)
+> +       pause
+> +       jnz     .Lspin
+> +
+> +       /* Increment the stack index and use the next value inside lock */
+> +       incl    rva(sl_txt_stack_index)(%ebx)
+> +       movl    rva(sl_txt_stack_index)(%ebx), %eax
+> +
+> +       /* Unlock */
+> +       movl    $0, rva(sl_txt_spin_lock)(%ebx)
+> +
+> +       /* Location of the relocated AP wake block */
+> +       movl    rva(sl_txt_ap_wake_block)(%ebx), %ecx
+> +
+> +       /* Load reloc GDT, set segment regs and lret to __SL32_CS */
+> +       lgdt    (sl_ap_gdt_desc - sl_txt_ap_wake_begin)(%ecx)
+> +
+> +       movl    $(__SL32_DS), %edx
+> +       movw    %dx, %ds
+> +       movw    %dx, %es
+> +       movw    %dx, %fs
+> +       movw    %dx, %gs
+> +       movw    %dx, %ss
+> +
+> +       /* Load our reloc AP stack */
+> +       movl    $(TXT_BOOT_STACK_SIZE), %edx
+> +       mull    %edx
+> +       leal    (sl_stacks_end - sl_txt_ap_wake_begin)(%ecx), %esp
+> +       subl    %eax, %esp
+> +
+> +       /* Switch to AP code segment */
+> +       leal    rva(.Lsl_ap_cs)(%ebx), %eax
+> +       pushl   $(__SL32_CS)
+> +       pushl   %eax
+> +       lret
+> +
+> +.Lsl_ap_cs:
+> +       /* Load the relocated AP IDT */
+> +       lidt    (sl_ap_idt_desc - sl_txt_ap_wake_begin)(%ecx)
+> +
+> +       /* Fixup MTRRs and misc enable MSR on APs too */
+> +       call    sl_txt_load_regs
+> +
+> +       /* Enable SMI with GETSEC[SMCTRL] */
+> +       GETSEC $(SMX_X86_GETSEC_SMCTRL)
+> +
+> +       /* IRET-to-self can be used to enable NMIs which SENTER disabled */
+> +       leal    rva(.Lnmi_enabled_ap)(%ebx), %eax
+> +       pushfl
+> +       pushl   $(__SL32_CS)
+> +       pushl   %eax
+> +       iret
+> +
+> +.Lnmi_enabled_ap:
+> +       /* Put APs in X2APIC mode like the BSP */
+> +       movl    $(MSR_IA32_APICBASE), %ecx
+> +       rdmsr
+> +       orl     $(XAPIC_ENABLE | X2APIC_ENABLE), %eax
+> +       wrmsr
+> +
+> +       /*
+> +        * Basically done, increment the CPU count and jump off to the AP
+> +        * wake block to wait.
+> +        */
+> +       lock incl       rva(sl_txt_cpu_count)(%ebx)
+> +
+> +       movl    rva(sl_txt_ap_wake_block)(%ebx), %eax
+> +       jmp     *%eax
+> +SYM_FUNC_END(sl_txt_ap_entry)
+> +
+> +SYM_FUNC_START(sl_txt_reloc_ap_wake)
+> +       /* Save boot params register */
+> +       pushl   %esi
+> +
+> +       movl    rva(sl_txt_ap_wake_block)(%ebx), %edi
+> +
+> +       /* Fixup AP IDT and GDT descriptor before relocating */
+> +       leal    rva(sl_ap_idt_desc)(%ebx), %eax
+> +       addl    %edi, 2(%eax)
+> +       leal    rva(sl_ap_gdt_desc)(%ebx), %eax
+> +       addl    %edi, 2(%eax)
+> +
+> +       /*
+> +        * Copy the AP wake code and AP GDT/IDT to the protected wake block
+> +        * provided by the loader. Destination already in %edi.
+> +        */
+> +       movl    $(sl_txt_ap_wake_end - sl_txt_ap_wake_begin), %ecx
+> +       leal    rva(sl_txt_ap_wake_begin)(%ebx), %esi
+> +       rep movsb
+> +
+> +       /* Setup the IDT for the APs to use in the relocation block */
+> +       movl    rva(sl_txt_ap_wake_block)(%ebx), %ecx
+> +       addl    $(sl_ap_idt - sl_txt_ap_wake_begin), %ecx
+> +       xorl    %edx, %edx
+> +
+> +       /* Form the default reset vector relocation address */
+> +       movl    rva(sl_txt_ap_wake_block)(%ebx), %esi
+> +       addl    $(sl_txt_int_reset - sl_txt_ap_wake_begin), %esi
+> +
+> +1:
+> +       cmpw    $(NR_VECTORS), %dx
+> +       jz      .Lap_idt_done
+> +
+> +       cmpw    $(X86_TRAP_NMI), %dx
+> +       jz      2f
+> +
+> +       /* Load all other fixed vectors with reset handler */
+> +       movl    %esi, %eax
+> +       movw    %ax, (IDT_VECTOR_LO_BITS)(%ecx)
+> +       shrl    $16, %eax
+> +       movw    %ax, (IDT_VECTOR_HI_BITS)(%ecx)
+> +       jmp     3f
+> +
+> +2:
+> +       /* Load single wake NMI IPI vector at the relocation address */
+> +       movl    rva(sl_txt_ap_wake_block)(%ebx), %eax
+> +       addl    $(sl_txt_int_nmi - sl_txt_ap_wake_begin), %eax
+> +       movw    %ax, (IDT_VECTOR_LO_BITS)(%ecx)
+> +       shrl    $16, %eax
+> +       movw    %ax, (IDT_VECTOR_HI_BITS)(%ecx)
+> +
+> +3:
+> +       incw    %dx
+> +       addl    $8, %ecx
+> +       jmp     1b
+> +
+> +.Lap_idt_done:
+> +       popl    %esi
+> +       ret
+> +SYM_FUNC_END(sl_txt_reloc_ap_wake)
+> +
+> +SYM_FUNC_START(sl_txt_load_regs)
+> +       /* Save base pointer register */
+> +       pushl   %ebx
+> +
+> +       /*
+> +        * On Intel, the original variable MTRRs and Misc Enable MSR are
+> +        * restored on the BSP at early boot. Each AP will also restore
+> +        * its MTRRs and Misc Enable MSR.
+> +        */
+> +       pushl   %edi
+> +       addl    $(SL_saved_bsp_mtrrs), %edi
+> +       movl    (%edi), %ebx
+> +       pushl   %ebx /* default_mem_type lo */
+> +       addl    $4, %edi
+> +       movl    (%edi), %ebx
+> +       pushl   %ebx /* default_mem_type hi */
+> +       addl    $4, %edi
+> +       movl    (%edi), %ebx /* mtrr_vcnt lo, don't care about hi part */
+> +       addl    $8, %edi /* now at MTRR pair array */
+> +       /* Write the variable MTRRs */
+> +       movl    $(MSR_MTRRphysBase0), %ecx
+> +1:
+> +       cmpl    $0, %ebx
+> +       jz      2f
+> +
+> +       movl    (%edi), %eax /* MTRRphysBaseX lo */
+> +       addl    $4, %edi
+> +       movl    (%edi), %edx /* MTRRphysBaseX hi */
+> +       wrmsr
+> +       addl    $4, %edi
+> +       incl    %ecx
+> +       movl    (%edi), %eax /* MTRRphysMaskX lo */
+> +       addl    $4, %edi
+> +       movl    (%edi), %edx /* MTRRphysMaskX hi */
+> +       wrmsr
+> +       addl    $4, %edi
+> +       incl    %ecx
+> +
+> +       decl    %ebx
+> +       jmp     1b
+> +2:
+> +       /* Write the default MTRR register */
+> +       popl    %edx
+> +       popl    %eax
+> +       movl    $(MSR_MTRRdefType), %ecx
+> +       wrmsr
+> +
+> +       /* Return to beginning and write the misc enable msr */
+> +       popl    %edi
+> +       addl    $(SL_saved_misc_enable_msr), %edi
+> +       movl    (%edi), %eax /* saved_misc_enable_msr lo */
+> +       addl    $4, %edi
+> +       movl    (%edi), %edx /* saved_misc_enable_msr hi */
+> +       movl    $(MSR_IA32_MISC_ENABLE), %ecx
+> +       wrmsr
+> +
+> +       popl    %ebx
+> +       ret
+> +SYM_FUNC_END(sl_txt_load_regs)
+> +
+> +SYM_FUNC_START(sl_txt_wake_aps)
+> +       /* Save boot params register */
+> +       pushl   %esi
+> +
+> +       /* First setup the MLE join structure and load it into TXT reg */
+> +       leal    rva(sl_gdt)(%ebx), %eax
+> +       leal    rva(sl_txt_ap_entry)(%ebx), %ecx
+> +       leal    rva(sl_smx_rlp_mle_join)(%ebx), %edx
+> +       movl    %eax, SL_rlp_gdt_base(%edx)
+> +       movl    %ecx, SL_rlp_entry_point(%edx)
+> +       movl    %edx, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_MLE_JOIN)
+> +
+> +       /* Another TXT heap walk to find various values needed to wake APs */
+> +       movl    (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_HEAP_BASE), %eax
+> +       /* At BIOS data size, find the number of logical processors */
+> +       movl    (SL_num_logical_procs + 8)(%eax), %edx
+> +       /* Skip over BIOS data */
+> +       movl    (%eax), %ecx
+> +       addl    %ecx, %eax
+> +       /* Skip over OS to MLE */
+> +       movl    (%eax), %ecx
+> +       addl    %ecx, %eax
+> +       /* At OS-SNIT size, get capabilities to know how to wake up the APs */
+> +       movl    (SL_capabilities + 8)(%eax), %esi
+> +       /* Skip over OS to SNIT */
+> +       movl    (%eax), %ecx
+> +       addl    %ecx, %eax
+> +       /* At SINIT-MLE size, get the AP wake MONITOR address */
+> +       movl    (SL_rlp_wakeup_addr + 8)(%eax), %edi
+> +
+> +       /* Determine how to wake up the APs */
+> +       testl   $(1 << TXT_SINIT_MLE_CAP_WAKE_MONITOR), %esi
+> +       jz      .Lwake_getsec
+> +
+> +       /* Wake using MWAIT MONITOR */
+> +       movl    $1, (%edi)
+> +       jmp     .Laps_awake
+> +
+> +.Lwake_getsec:
+> +       /* Wake using GETSEC(WAKEUP) */
+> +       GETSEC  $(SMX_X86_GETSEC_WAKEUP)
+> +
+> +.Laps_awake:
+> +       /*
+> +        * All of the APs are woken up and rendesvous in the relocated wake
+> +        * block starting at sl_txt_ap_wake_begin. Wait for all of them to
+> +        * halt.
+> +        */
+> +       pause
+> +       cmpl    rva(sl_txt_cpu_count)(%ebx), %edx
+> +       jne     .Laps_awake
+> +
+> +       popl    %esi
+> +       ret
+> +SYM_FUNC_END(sl_txt_wake_aps)
+> +
+> +/* This is the beginning of the relocated AP wake code block */
+> +       .global sl_txt_ap_wake_begin
+> +sl_txt_ap_wake_begin:
+> +
+> +       /* Get the LAPIC ID for each AP and stash it on the stack */
+> +       movl    $(MSR_IA32_X2APIC_APICID), %ecx
+> +       rdmsr
+> +       pushl   %eax
+> +
+> +       /*
+> +        * Get a pointer to the monitor location on this APs stack to test below
+> +        * after mwait returns. Currently %esp points to just past the pushed APIC
+> +        * ID value.
+> +        */
+> +       movl    %esp, %eax
+> +       subl    $(TXT_BOOT_STACK_SIZE - 4), %eax
+> +       movl    $0, (%eax)
+> +
+> +       /* Clear ecx/edx so no invalid extensions or hints are passed to monitor */
+> +       xorl    %ecx, %ecx
+> +       xorl    %edx, %edx
+> +
+> +       /*
+> +        * Arm the monitor and wait for it to be poked by he SMP bringup code. The mwait
+> +        * instruction can return for a number of reasons. Test to see if it returned
+> +        * because the monitor was written to.
+> +        */
+> +       monitor
+> +
+> +1:
+> +       mfence
+> +       mwait
+> +       movl    (%eax), %edx
+> +       testl   %edx, %edx
+> +       jz      1b
+> +
+> +       /*
+> +        * This is the long absolute jump to the 32b Secure Launch protected mode stub
+> +        * code in sl_trampoline_start32() in the rmpiggy. The jump address will be
+> +        * fixed in the SMP boot code when the first AP is brought up. This whole area
+> +        * is provided and protected in the memory map by the prelaunch code.
+> +        */
+> +       .byte   0xea
+> +sl_ap_jmp_offset:
+> +       .long   0x00000000
+> +       .word   __SL32_CS
+> +
+> +SYM_FUNC_START(sl_txt_int_nmi)
+> +       /* NMI context, just IRET */
+> +       iret
+> +SYM_FUNC_END(sl_txt_int_nmi)
+> +
+> +SYM_FUNC_START(sl_txt_int_reset)
+> +       TXT_RESET $(SL_ERROR_INV_AP_INTERRUPT)
+> +SYM_FUNC_END(sl_txt_int_reset)
+> +
+> +       .balign 8
+> +SYM_DATA_START_LOCAL(sl_ap_idt_desc)
+> +       .word   sl_ap_idt_end - sl_ap_idt - 1           /* Limit */
+> +       .long   sl_ap_idt - sl_txt_ap_wake_begin        /* Base */
+> +SYM_DATA_END_LABEL(sl_ap_idt_desc, SYM_L_LOCAL, sl_ap_idt_desc_end)
+> +
+> +       .balign 8
+> +SYM_DATA_START_LOCAL(sl_ap_idt)
+> +       .rept   NR_VECTORS
+> +       .word   0x0000          /* Offset 15 to 0 */
+> +       .word   __SL32_CS       /* Segment selector */
+> +       .word   0x8e00          /* Present, DPL=0, 32b Vector, Interrupt */
+> +       .word   0x0000          /* Offset 31 to 16 */
+> +       .endr
+> +SYM_DATA_END_LABEL(sl_ap_idt, SYM_L_LOCAL, sl_ap_idt_end)
+> +
+> +       .balign 8
+> +SYM_DATA_START_LOCAL(sl_ap_gdt_desc)
+> +       .word   sl_ap_gdt_end - sl_ap_gdt - 1
+> +       .long   sl_ap_gdt - sl_txt_ap_wake_begin
+> +SYM_DATA_END_LABEL(sl_ap_gdt_desc, SYM_L_LOCAL, sl_ap_gdt_desc_end)
+> +
+> +       .balign 8
+> +SYM_DATA_START_LOCAL(sl_ap_gdt)
+> +       .quad   0x0000000000000000      /* NULL */
+> +       .quad   0x00cf9a000000ffff      /* __SL32_CS */
+> +       .quad   0x00cf92000000ffff      /* __SL32_DS */
+> +SYM_DATA_END_LABEL(sl_ap_gdt, SYM_L_LOCAL, sl_ap_gdt_end)
+> +
+> +       /* Small stacks for BSP and APs to work with */
+> +       .balign 64
+> +SYM_DATA_START_LOCAL(sl_stacks)
+> +       .fill (TXT_MAX_CPUS * TXT_BOOT_STACK_SIZE), 1, 0
+> +SYM_DATA_END_LABEL(sl_stacks, SYM_L_LOCAL, sl_stacks_end)
+> +
+> +/* This is the end of the relocated AP wake code block */
+> +       .global sl_txt_ap_wake_end
+> +sl_txt_ap_wake_end:
+> +
+> +       .data
+> +       .balign 8
+> +SYM_DATA_START_LOCAL(sl_gdt_desc)
+> +       .word   sl_gdt_end - sl_gdt - 1
+> +       .long   sl_gdt - sl_gdt_desc
+> +SYM_DATA_END_LABEL(sl_gdt_desc, SYM_L_LOCAL, sl_gdt_desc_end)
+> +
+> +       .balign 8
+> +SYM_DATA_START_LOCAL(sl_gdt)
+> +       .quad   0x0000000000000000      /* NULL */
+> +       .quad   0x00cf9a000000ffff      /* __SL32_CS */
+> +       .quad   0x00cf92000000ffff      /* __SL32_DS */
+> +SYM_DATA_END_LABEL(sl_gdt, SYM_L_LOCAL, sl_gdt_end)
+> +
+> +       .balign 8
+> +SYM_DATA_START_LOCAL(sl_smx_rlp_mle_join)
+> +       .long   sl_gdt_end - sl_gdt - 1 /* GDT limit */
+> +       .long   0x00000000              /* GDT base */
+> +       .long   __SL32_CS       /* Seg Sel - CS (DS, ES, SS = seg_sel+8) */
+> +       .long   0x00000000      /* Entry point physical address */
+> +SYM_DATA_END(sl_smx_rlp_mle_join)
+> +
+> +SYM_DATA(sl_cpu_type, .long 0x00000000)
+> +
+> +SYM_DATA(sl_mle_start, .long 0x00000000)
+> +
+> +SYM_DATA_LOCAL(sl_txt_spin_lock, .long 0x00000000)
+> +
+> +SYM_DATA_LOCAL(sl_txt_stack_index, .long 0x00000000)
+> +
+> +SYM_DATA_LOCAL(sl_txt_cpu_count, .long 0x00000000)
+> +
+> +SYM_DATA_LOCAL(sl_txt_ap_wake_block, .long 0x00000000)
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index e022e6eb766c..37f6167f28ba 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -348,6 +348,9 @@
+>  #define MSR_IA32_RTIT_OUTPUT_BASE      0x00000560
+>  #define MSR_IA32_RTIT_OUTPUT_MASK      0x00000561
+>
+> +#define MSR_MTRRphysBase0              0x00000200
+> +#define MSR_MTRRphysMask0              0x00000201
+> +
+>  #define MSR_MTRRfix64K_00000           0x00000250
+>  #define MSR_MTRRfix16K_80000           0x00000258
+>  #define MSR_MTRRfix16K_A0000           0x00000259
+> @@ -849,6 +852,8 @@
+>  #define MSR_IA32_APICBASE_ENABLE       (1<<11)
+>  #define MSR_IA32_APICBASE_BASE         (0xfffff<<12)
+>
+> +#define MSR_IA32_X2APIC_APICID         0x00000802
+> +
+>  #define MSR_IA32_UCODE_WRITE           0x00000079
+>  #define MSR_IA32_UCODE_REV             0x0000008b
+>
+> diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+> index 9b82eebd7add..7ce283a22d6b 100644
+> --- a/arch/x86/include/uapi/asm/bootparam.h
+> +++ b/arch/x86/include/uapi/asm/bootparam.h
+> @@ -12,6 +12,7 @@
+>  /* loadflags */
+>  #define LOADED_HIGH    (1<<0)
+>  #define KASLR_FLAG     (1<<1)
+> +#define SLAUNCH_FLAG   (1<<2)
+>  #define QUIET_FLAG     (1<<5)
+>  #define KEEP_SEGMENTS  (1<<6)
+>  #define CAN_USE_HEAP   (1<<7)
+> diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+> index a98020bf31bb..925adce6e2c7 100644
+> --- a/arch/x86/kernel/asm-offsets.c
+> +++ b/arch/x86/kernel/asm-offsets.c
+> @@ -13,6 +13,8 @@
+>  #include <linux/hardirq.h>
+>  #include <linux/suspend.h>
+>  #include <linux/kbuild.h>
+> +#include <linux/slr_table.h>
+> +#include <linux/slaunch.h>
+>  #include <asm/processor.h>
+>  #include <asm/thread_info.h>
+>  #include <asm/sigframe.h>
+> @@ -120,4 +122,22 @@ static void __used common(void)
+>         OFFSET(ARIA_CTX_rounds, aria_ctx, rounds);
+>  #endif
+>
+> +#ifdef CONFIG_SECURE_LAUNCH
+> +       BLANK();
+> +       OFFSET(SL_txt_info, txt_os_mle_data, txt_info);
+> +       OFFSET(SL_mle_scratch, txt_os_mle_data, mle_scratch);
+> +       OFFSET(SL_boot_params_addr, txt_os_mle_data, boot_params_addr);
+> +       OFFSET(SL_ap_wake_block, txt_os_mle_data, ap_wake_block);
+> +       OFFSET(SL_ap_wake_block_size, txt_os_mle_data, ap_wake_block_size);
+> +       OFFSET(SL_saved_misc_enable_msr, slr_entry_intel_info, saved_misc_enable_msr);
+> +       OFFSET(SL_saved_bsp_mtrrs, slr_entry_intel_info, saved_bsp_mtrrs);
+> +       OFFSET(SL_num_logical_procs, txt_bios_data, num_logical_procs);
+> +       OFFSET(SL_capabilities, txt_os_sinit_data, capabilities);
+> +       OFFSET(SL_mle_size, txt_os_sinit_data, mle_size);
+> +       OFFSET(SL_vtd_pmr_lo_base, txt_os_sinit_data, vtd_pmr_lo_base);
+> +       OFFSET(SL_vtd_pmr_lo_size, txt_os_sinit_data, vtd_pmr_lo_size);
+> +       OFFSET(SL_rlp_wakeup_addr, txt_sinit_mle_data, rlp_wakeup_addr);
+> +       OFFSET(SL_rlp_gdt_base, smx_rlp_mle_join, rlp_gdt_base);
+> +       OFFSET(SL_rlp_entry_point, smx_rlp_mle_join, rlp_entry_point);
+> +#endif
+>  }
+> --
+> 2.39.3
+>
 
