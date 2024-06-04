@@ -1,418 +1,633 @@
-Return-Path: <linux-integrity+bounces-2783-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2784-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 089308FBA36
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 19:23:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67A978FBA3B
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 19:24:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B18E328299D
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 17:23:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D465F1F21FF9
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 17:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36444149C7A;
-	Tue,  4 Jun 2024 17:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B6D14900F;
+	Tue,  4 Jun 2024 17:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WMBRd5T7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D764149C58;
-	Tue,  4 Jun 2024 17:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717521799; cv=fail; b=WCPKTghpsTrMzYYzrFbWwKXuZGjGu9Hcv8nlrcdIBE+RP6n4Bj1VnF7FPb+P71VJC/b8AdmZ46i0rm9fF0P0K4lmKdmy/NC9RiOxxGM+yVYPA3Eq/CrS5if+0g/uiudgbbaIVfJGXJXI4d8yL4ZQd+wcM1vmI1sFlCZiuG1qnU4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717521799; c=relaxed/simple;
-	bh=A2lcTMMJB7jzu+Gj+ade8g8L4VcpUWzUGYcNaNYAJ/s=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=MwBl15firJ8zKYF1vrBCrixs6ObjWbOz1uWQ0yBswoAUev2bdc2KzXBKl9iIBxi6RYj8KGpe7jbs2/wRwf9mVfFgh6S0/SCdZutVDj8mJUASk1yJGcy2rZSr/4F3stEXjryIgLadiwApAFcDa/9LkwGTtfO91o9e6V0NkHR+1MQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 454Bmnhe004632;
-	Tue, 4 Jun 2024 17:22:40 GMT
-DKIM-Signature: =?UTF-8?Q?v=3D1;_a=3Drsa-sha256;_c=3Drelaxed/relaxed;_d=3Doracle.com;_h?=
- =?UTF-8?Q?=3Dcc:content-transfer-encoding:content-type:date:from:in-reply?=
- =?UTF-8?Q?-to:message-id:mime-version:references:subject:to;_s=3Dcorp-202?=
- =?UTF-8?Q?3-11-20;_bh=3DZemZGsYGDBP7381T4/E2xJwQ0ydRGEPMEUYZv+DfZ8E=3D;_b?=
- =?UTF-8?Q?=3DnKp9ydYgZ/BMfoGOTqDjbafOkIz/Co8xwvwFH7u5IMCHfumDq3O4AKW3xGRw?=
- =?UTF-8?Q?cdkKzuyG_IRntA2fjRdtp6QRJqSJeY7ikW5Ibct5Ons+2GGQ42lxIdOo9mT38ct?=
- =?UTF-8?Q?NyVaCxiOpRgj2H_DN2V6NiAj3V+Sf+tuPWAgLthEawelVwNyC87RKotaqfPmWEm?=
- =?UTF-8?Q?hR5KI/K2zBrKRKBD6jiJ_xt/LOOuOXI8m5/7irv9L6NWh3hbqSZktSwEGkykzvg?=
- =?UTF-8?Q?yYc64XEfe/2C+xIFuw7NhguL4H_AtJwGUsV2wo971LZakhvG3RpIFfzNYx0V98o?=
- =?UTF-8?Q?49biHDE+20WbraXpVBJQEZesJYCQgl2d_dQ=3D=3D_?=
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yfv05djxj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 04 Jun 2024 17:22:39 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 454GLXRS020545;
-	Tue, 4 Jun 2024 17:22:38 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2041.outbound.protection.outlook.com [104.47.55.41])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ygrj2auns-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 04 Jun 2024 17:22:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dz0tq4ax57z80LQZT3hW3/RYJzm7ifo+TFFWYzu7xcUVWQAsHgG+73/ZjQ50QgBosqDQBF0VKznopM0kxHRu4dpZxbMyXaRDzfB6QdSDf4TFJiB17i65pKBVPoHUH0E8ZrLze1qcjwTNTWRCwdHf7KQobTocXiO6Cnyla17L6YrWvJXGU4VuLFrHJ30QLeId0fx/petVaaYP7SLCwgeXrrPFU5GpggMVQMYPpjYVe2SzqMsvK/89HWpswEbJ3Y3BOCUuxXGwv81/xgzXMHAFdt+xA8suHm3HSmjai9znbLO7kWA5w5g1TZNaqjsRhfqFE2/fNZ30WxXqPd9fTszlKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZemZGsYGDBP7381T4/E2xJwQ0ydRGEPMEUYZv+DfZ8E=;
- b=AyDLMPer/23eMor5bt02TKbDBTc+Lm0oj5se8qS0foPLXLMtYzk1IgfPOmzTDmrq3l1FwbQJNoYfEa3Vz3z0MF2GAp1gwD6rT+b4U+m8efDV6pMcjxRC9kbd2xSMcrAQyplzqxD1Fath9rCwQzweNxxNKf2YqOdmffRWWyKMFXBASoby9uA4N87RBJI7KE1FwJfRyKMDp9Z6WjZ4HIgaoEZyL/oe0q0K4QwQdOXEg1XxIiWssUd8lGRtMyYzVQV4+p8YkLGkSvT/XCukiP4DO06DABeKL31RNln24ybZZUsNTxgkahEGbJLXAH9a2jel1MIRSRiiP9TfnmOxbji1JA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZemZGsYGDBP7381T4/E2xJwQ0ydRGEPMEUYZv+DfZ8E=;
- b=Y0w3EQKDW3TrdycjBIzhg00dcVPyIZUkzH3Ol4zdt28sMCSbQjlnSA/xQb5FmK/FNEOWvTKhud0nrFutfgWogQvZQrN2ibwi7xuwLu0ZGHhq0bSo6C6K1Y/S3kYwyBZZqreZ7TVuSaDhzIr1mkRZriZUrjAJi86+j3azygQdcp8=
-Received: from DS0PR10MB7224.namprd10.prod.outlook.com (2603:10b6:8:f5::14) by
- PH8PR10MB6291.namprd10.prod.outlook.com (2603:10b6:510:1c2::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.27; Tue, 4 Jun
- 2024 17:22:33 +0000
-Received: from DS0PR10MB7224.namprd10.prod.outlook.com
- ([fe80::c57:383f:cfb2:47f8]) by DS0PR10MB7224.namprd10.prod.outlook.com
- ([fe80::c57:383f:cfb2:47f8%6]) with mapi id 15.20.7633.021; Tue, 4 Jun 2024
- 17:22:33 +0000
-Message-ID: <d6ec13f6-85ad-4c2e-a91e-36b834e30ffd@oracle.com>
-Date: Tue, 4 Jun 2024 10:22:29 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 19/19] x86: EFI stub DRTM launch support for Secure
- Launch
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
-        linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
-        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
-        mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
-        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
-        ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com,
-        trenchboot-devel@googlegroups.com, ross.philipson@oracle.com
-References: <20240531010331.134441-1-ross.philipson@oracle.com>
- <20240531010331.134441-20-ross.philipson@oracle.com>
- <CAMj1kXGC7a5+5at7T7M_mxBNWjqnuM4QGydG4ZEbu63y6fri3g@mail.gmail.com>
-Content-Language: en-US
-From: ross.philipson@oracle.com
-In-Reply-To: <CAMj1kXGC7a5+5at7T7M_mxBNWjqnuM4QGydG4ZEbu63y6fri3g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0P220CA0009.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:a03:41b::25) To DS0PR10MB7224.namprd10.prod.outlook.com
- (2603:10b6:8:f5::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938E214431C;
+	Tue,  4 Jun 2024 17:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717521837; cv=none; b=syGVlQECu25Z0221Z56UgkJmBJEdpFVKm48UodgZFnJ2MJ6WC7njM7IEc898uzaHznfezJMhuXaYi5rjjvxSLHS33hB4CGUxsJiytLdrXFyzZwQpcec+aYvWXxfUNmcu+8Oq3t7AemSfF+5sCRPoN+qhRKuSxZt3xhrs67rUu8s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717521837; c=relaxed/simple;
+	bh=3kgT6Sk5v04z/yQNVd4oaHeoKPsWkyHCa0V+u+actBI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=nADucte/C02+WXXk9Woggq1MqvMkdhfg5bcsUnu7RQ2wQXlfCBiCbBYNBqImJyiD/PCSW+hBw4FvTdlua9J0+uT4vQXXlLXoMuyrlJWfJDIO1t6Tx9zuBRbJIdKFe0bT+z/e3g5so+9GrmWS+ovjdUoa9/cwsGw5xwd9gTnPN74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WMBRd5T7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB6CC2BBFC;
+	Tue,  4 Jun 2024 17:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717521837;
+	bh=3kgT6Sk5v04z/yQNVd4oaHeoKPsWkyHCa0V+u+actBI=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=WMBRd5T7xk//pr/ZqHuYvOnFy7JcfvSQKC+e3osM5W2fzH/N3GSn/KkwjlQj062A0
+	 VIcgK7P/PeEdjwyThEFd1HNkw3Qu9DjIEpZXOt6L3Xq3H/3eUUSzYQ+UhGNAO2++T6
+	 6jzKoIx1wnzkKyBOwNvkuw67E/K6AE8lhaGFg6bDE18LLcunJZc3D8fHm0yrL+jmA5
+	 dqsLX7+9v+iksjJM/x9pQboiF/PfihJXdYiDurDla1B+tclg/W9NHwB2MMUZ7wh4ex
+	 ELZHkAYfEK1wjxr86reqOFsFZS1wpL9Vj9taXf0H9iKFd2WX4VXTqtL+KsQElaKyiF
+	 fyz8jgt4WUK0A==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB7224:EE_|PH8PR10MB6291:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06e60858-4d2a-4eb1-43c4-08dc84baeb7c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|1800799015|7416005|376005;
-X-Microsoft-Antispam-Message-Info: 
-	=?utf-8?B?dVYwWUNVQVUrVEpqcEY0aXZxQXhkNVlJNG5sWDhGem5zR1B3ZzMyMUgydXdE?=
- =?utf-8?B?MGUxbEZ4MERMR29Dc1c3N3FpN2RYWUkrUWErV2QrcVRxNEVDbDZoRi9IVXh4?=
- =?utf-8?B?Uk4yT2RYNXc5NWZwL1dxSUo2UU5lZmRQOXBIUFJKZ3VIZlRHOUcrcVlUZnAr?=
- =?utf-8?B?THV4UVoxdHh2NnVLY3lsTy9LdHl6MDdRckVBdkV5dXlJK09jTk9DUGh4Q3lu?=
- =?utf-8?B?TDlaLzdMNEZMQkpURjNwS2p2N2NxR2hBd2h3dDJibTNGdkxZdFdHSmY4TTBl?=
- =?utf-8?B?ak85N0d1ODRFZGNJcUtMd1M2dk85V3RWVHF6bG9pREwvZ2h2NXNCYThGVkxG?=
- =?utf-8?B?SFZyczhEVlU3OC9CWFViVzQ0Mzg1QjYvS3pjN0w4Y1Y5OVlLb2F3d1pzQVlS?=
- =?utf-8?B?NEV2T2hJNzUwOG93OUZoekNqWXlaLzh2YWsrbDE3WFdCU2diTmVvU0VhZGJX?=
- =?utf-8?B?V1pmeUoxQllGUWxFYjl2WWxKYXFIZWxJNHorak1WUUlFR1A3UE1qdENZSXFs?=
- =?utf-8?B?OUk4eHlVYkpyVkVwTTRIUHdpUUZraVVoYW9Zak1SRjZDQWlQcmNsYk9DUFNR?=
- =?utf-8?B?dVZZbHc2ckZnSXR0amw2UGpHVzMrOWFGMlV4aGJ5M0x5SzFIeDVqblZMZmlY?=
- =?utf-8?B?bUY1MlR0QU1tUW1GV1dBeXVKZE1KdWxSVVRkekYwZXhCeWFsZTI4eXlzYnNL?=
- =?utf-8?B?L1djdGg4SDVHM0NEL0cweXk2NCt1elJwVWl0UjNhK29jT1VZWVZnS2RpQzBx?=
- =?utf-8?B?bWkwS1BWUkZWS3ZvWTgxTFVHSHBDSVZZcmxSbG1MT2NiK081VSthekFPQ3FI?=
- =?utf-8?B?ZlNMcEFlOFkwSTg4Y1M1UUxQS3RNZkttdGs2R0c5eFlqQnVZcGNYU0FIdDF4?=
- =?utf-8?B?L1ArOWVCSFdQQ2wra0o0dFlPdC9hakpjcVRVTU4zSm43WlBuQWV6ZUhteDFV?=
- =?utf-8?B?NEo0cE02blBlNllNQzk0WTArV3ZwSEV1YVdGZWJzLzhFQmFrV3YzdXRsaHpH?=
- =?utf-8?B?dURwZjJuZXNDZGJMZ3RuUjE4M2VpZTNnandOM1Y4bjlmaDhHVHRVRHl2b01P?=
- =?utf-8?B?K3k4TG1GTm1VbzlycmpHU0NsM01qMWpPMVRlOSt1cVRGUCt6NGJzSWFiUUQv?=
- =?utf-8?B?TDFNb0Rja1ljTGQzaFhxaUN4THdZNWdObE5sNXZ4dnQ0RjJDYXBBU3hTUUhS?=
- =?utf-8?B?TlV6cXJvOVZRdUxsbmVHdFhXMnYvY1g4NjlpQnFkQWFpNzJ6WFlqdktEeHht?=
- =?utf-8?B?RW9odDRyRWJaZ1NVVkRXN0IxSG9STXZ6eEV0T0c4VURvRTF6U0MyWjNyR3Ix?=
- =?utf-8?B?N0dkTVNyVjdLUkh3Sy8rMVdnV1BTZ0NFZWwrdVJnS1daRCtUSWdFM3psSFk5?=
- =?utf-8?B?R1lSZlZqQmFzSUY1VERvbHVxNGpvMjN6SnlhZjhlMHBBNklxa0ZIeGNHWGFD?=
- =?utf-8?B?KzVQaldteTk5ajRta3VFdGpIMU5DTFdoVDBSb1Qvem41Nm5yYkFuVS84L0FM?=
- =?utf-8?B?cWNqeTd4b2dMbU5PVHpyQW5OTWEzWExINGhrbEtvUVByaEhlTFZxbGV6SXV3?=
- =?utf-8?B?SXN1c2plN01EMGg1cUtlZUJiaUpjRDhlZ0lDVFplRkJRQURNbk9vcmRoM2dU?=
- =?utf-8?B?cHdHQ3h3eU1lcEdVamU0NlY2ZFFQMi9ObFFENUNzUXV5TUlnY05jbzlsZ2VR?=
- =?utf-8?B?REdHQ3N6QzkzYjNpWWF5emtvM045c2JZZUZFQjRXYlVyaVZvTzRDNWducDkw?=
- =?utf-8?Q?M/8FYyzV3uaFT62ITxU6R+3NcHSccERrlAPs4ud?=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7224.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(7416005)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?b08raTRlaThMV3hvc2RkVm5FR0grcE4rd05uSWF4WWNKbXhVODd4YjAwMmFk?=
- =?utf-8?B?QUhIaEdsZmNKNFg3dzZ5WllUYUJKTURsd2R1bldXL3Q4QUFUeXBCRlluMlRJ?=
- =?utf-8?B?UytlTlgxU0F3anJ0Z1RIL0dxbTRLdmlIcHE3Tm05SkJXclpscEE0WnMvNlp3?=
- =?utf-8?B?Y3ZuLy9SR3RCM3dEcXROYnQ2RlZhcFA0dmtxaUNRNCtTWWdETUI2YjRyS2Rm?=
- =?utf-8?B?R1Z0YXgveUZyRGV1b1AyR1kvOGtNMW9jWVFTRzBFdllZOVNWdjQ3U1JLUFFa?=
- =?utf-8?B?UUdNTWJNN1MwZUJoaXFrQWZsQkNrRDgxcnZYM1JkOFFqS2hXSzNGaUoyVktz?=
- =?utf-8?B?VkpaVXlSVlhSeThaUCtMcG9USmFEZXlDdldjaTJIbVFpQWFIMEo2Lys5elVV?=
- =?utf-8?B?OVowNTZpalpnbEF1dksrdEtvOUM5QTNTM3E5YXNCUXpvVW81YjVKMGhDVGd3?=
- =?utf-8?B?QVhBa2ljdnlRaW91TUxMZ3RoNmRUcEx6bGxGclA3UEduVHhoV0VpOVN5V3Bw?=
- =?utf-8?B?WXk2WnBTeGd2eTRWSG1tZGZoS0s2SkNvYXFabTJ3ZGtSS1o4dkd3VTBYcXUr?=
- =?utf-8?B?YmRESnJ2S0UxS1BTL3lvN2JxVFpvVTM2RVl5VUdOVHltRlNHYWsyRndTODl0?=
- =?utf-8?B?WkMvR1lLZ016K1JJTVU2cXhRSnhVakRMMHEvZzdheTFLTkJIdC9lR0R2eTBp?=
- =?utf-8?B?UDVlQzZ5enVlMjIwdG9QN05KbkQ1Kzl4WWVSOWl3QVFWcHdyNm95eUs5bjl1?=
- =?utf-8?B?TFBUVzdQeDFDUVZKZkkvRzhTajhuWDI3QXk0MHFXSDk5YUtWM2N5dzNOdndq?=
- =?utf-8?B?eTdNZUNSaVhIZnhZYTNGMG84VDZYVlV0c0RwK3FDN2JlTWZvZ0VJZ2ZoelZF?=
- =?utf-8?B?VTEzdkU5OVBjZ1d5Y2YxSUtadTl0Q3dNald4QUpSZDBTZGVaanRhTjZKWFl1?=
- =?utf-8?B?MTA0Q3ZpWi9pR1NjWDh1WHIzZ1ZOZW9LYkM2QXB1aGhLYzJ0WXFHdHprYVcr?=
- =?utf-8?B?QkRLL0dNTWFjTjVWT3JXTlFxbjcveWFkbGlyZlJMZmMxaW1YVjVxMWdPVU44?=
- =?utf-8?B?TzdDQjA1bGRVUnJadUZzK29Pajd1ZEtVelBHbzVtTm1nZVFjMjJmTUxiSlhN?=
- =?utf-8?B?VXJ1Q3ROZE11eVJrajlSQXBRSmV5RjFmVGVWdnVscVRGY3ZGOG42SWlaOXlv?=
- =?utf-8?B?ZVZNUHRFK2pZTHlGUHFaRHFLWkVpb3gvU3Z4eXg3TlZhTnV2bVpBbG9pWGs4?=
- =?utf-8?B?a0QzZUtTbkpaTWR3YTFKR05ZcHBSWlpFSkFkNDRrMHplYjdjMGQ4bFl0SEdD?=
- =?utf-8?B?WUxtU0tEaG5VVGdoYWFqczVZMExjM21FeDZmSk54QnJQWnpJRnpLU3E1aEtI?=
- =?utf-8?B?ZHR2Sm5rc1FhUi9Hc2RkeUhjTlVFc1ZCQXRWdXM1ZjY1NlMvQU1GWmVtWlRD?=
- =?utf-8?B?d0JSRUpHNFh1UENDSGJNTUk4SGt1KzBwME5UWFU3R1hNWkNpVnYrUWoxaHhl?=
- =?utf-8?B?VE5YTlZvWG9QcU5JaXEzUXEzYlVJd09SeXhKOGlqdzNRZWc0clQrL2N2amFJ?=
- =?utf-8?B?dEhmc1p3TGRZZElyUE5TT3l5c1dOQUlsbEdOZmlyYUdxc1MwNzF6aUhITVBR?=
- =?utf-8?B?ak9EbVNDczMrc0JHVTY2cWtQUVdrRjJWTUxla0lKSFIvRFBRTm5nSlJXQmJr?=
- =?utf-8?B?bkdMZVEvZXZNbTRBeWQrV0c2ajE3cmxkbVRuYUZOWGlMbmhmeTNPQ3pxakRw?=
- =?utf-8?B?TC9aSHY0MHNkYUdRMW5uUXpuYWQ0ZEpxK0p1bnJEdkpISG16OUZNM0pDY2FJ?=
- =?utf-8?B?KzBvL1J3QmhlL3FFOGtmNTQvQThrS1NyQ1BPYjNEMU1ReXFweFNZOFBVcVMv?=
- =?utf-8?B?OE9Gd3JaTlFkMGN3ZmlZRjh5dGRGVGhCNko2dlp6cDFoM2pvSDVtb29IS1dJ?=
- =?utf-8?B?YWFuMFJHNWU3RmNBWlYzUWFYZ0V1cnZDZTlpREZjcy9aeU9rd1IzSXhPNDMx?=
- =?utf-8?B?aFZiOExLQ2piTHFUZFl0aWcrQXpTeDdSUm5URmEvZzN3ckV2YUxaVHBCTDhn?=
- =?utf-8?B?L3pxQWxZVlJIaENJb3NpenBsN29vVHMrMHlrcDNKQzhUSUtZYnU3YXJzc2FF?=
- =?utf-8?B?K2QwelJkTytKTisxTHRraFNsRE1NRE5NUVRoOEc5ODA3elF0aU95SkR3TEor?=
- =?utf-8?B?bnc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	RfI13UwGGfDQF/qN7Svys8l+dai6wYcYghRdnRyWP/5J3xCKfWkT9OKlEnf1e/EF8rloox4MgS8+i5pa7M1eR+nSst7VuFHeBrDC90dossvF7CJ4ZLgH+UfZ0K2wsMgx/9XIMfc50JygaRF6ujCGIQRhC88pmtqkixGn9TYeNvZYSFwQHez1U+ixMnmwxMR01eFTL4S7k8c50kpyjZ7mVpVj5ZpHm3EYAipJX3Raa4RxkSraRIbbur33/OToTvvZCGRGyCvgHnn5Z+HSd/snD5IU+kYOIUP6tXJyMs4ITvxILJlWhx/gHy+aZv74wMWLzjhv/M9S6CBSigbHmmYJZYoGB0kQdtzcvzz/Lh3hjscBX0XZx80E8gXL+B/sdqQU40RV7gYApt9nAhhW8UecrJ/8+A8Vctyx7dsaIMcObU8ah/a7WBqH46atDkRpIZTuiQNDzFqIvjelhi/uYDcsvft0F6BptHZ7fCGtusxcnUx4ucgc0DogzWKXgvGwEThVgwtGIf4D4z9xcMuITtjuDCrlOAWzuR+fT4+R1v7m0EFGtonX3Z+yGkEXY3p9yPMfRUpNxNmrfVIpt5kAFo1G+Js4cV1t+uPdFZSU5iE5lIQ=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06e60858-4d2a-4eb1-43c4-08dc84baeb7c
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7224.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2024 17:22:33.1399
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7dopZIj3bdSDxzWm6D+wnCzBRLlRBkbl3Xd1GAHfoFD552Tbj6yJQu95jz8jm+9SX0tCg+ot/w+c9dJk5VEk8Q6dCHxK7r0pQ+F8Wyg9C8s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6291
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-04_09,2024-06-04_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 bulkscore=0
- adultscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2406040139
-X-Proofpoint-GUID: b-t_FbAEFC7sCUrQFG9xoBAaeuv4tfkp
-X-Proofpoint-ORIG-GUID: b-t_FbAEFC7sCUrQFG9xoBAaeuv4tfkp
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 04 Jun 2024 20:23:51 +0300
+Message-Id: <D1REOCZ2XHRY.4U47RZ20QET1@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
+ <Andreas.Fuchs@infineon.com>, "James Prestwood" <prestwoj@gmail.com>,
+ "David Woodhouse" <dwmw2@infradead.org>, "Eric Biggers"
+ <ebiggers@kernel.org>, "James Bottomley"
+ <James.Bottomley@hansenpartnership.com>, <linux-crypto@vger.kernel.org>,
+ "Lennart Poettering" <lennart@poettering.net>, "David S. Miller"
+ <davem@davemloft.net>, "open list" <linux-kernel@vger.kernel.org>, "Mimi
+ Zohar" <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul
+ Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
+ Hallyn" <serge@hallyn.com>, "open list:SECURITY SUBSYSTEM"
+ <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v7 3/5] crypto: tpm2_key: Introduce a TPM2 key type
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Stefan Berger" <stefanb@linux.ibm.com>, "Herbert Xu"
+ <herbert@gondor.apana.org.au>
+X-Mailer: aerc 0.17.0
+References: <20240528210823.28798-1-jarkko@kernel.org>
+ <20240528210823.28798-4-jarkko@kernel.org>
+ <97dd7485-51bf-4e47-83ab-957710fc2182@linux.ibm.com>
+In-Reply-To: <97dd7485-51bf-4e47-83ab-957710fc2182@linux.ibm.com>
 
-On 5/31/24 4:09 AM, Ard Biesheuvel wrote:
-> On Fri, 31 May 2024 at 03:32, Ross Philipson <ross.philipson@oracle.com> wrote:
->>
->> This support allows the DRTM launch to be initiated after an EFI stub
->> launch of the Linux kernel is done. This is accomplished by providing
->> a handler to jump to when a Secure Launch is in progress. This has to be
->> called after the EFI stub does Exit Boot Services.
->>
->> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
-> 
-> Just some minor remarks below. The overall approach in this patch
-> looks fine now.
-> 
-> 
->> ---
->>   drivers/firmware/efi/libstub/x86-stub.c | 98 +++++++++++++++++++++++++
->>   1 file changed, 98 insertions(+)
->>
->> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
->> index d5a8182cf2e1..a1143d006202 100644
->> --- a/drivers/firmware/efi/libstub/x86-stub.c
->> +++ b/drivers/firmware/efi/libstub/x86-stub.c
->> @@ -9,6 +9,8 @@
->>   #include <linux/efi.h>
->>   #include <linux/pci.h>
->>   #include <linux/stddef.h>
->> +#include <linux/slr_table.h>
->> +#include <linux/slaunch.h>
->>
->>   #include <asm/efi.h>
->>   #include <asm/e820/types.h>
->> @@ -830,6 +832,97 @@ static efi_status_t efi_decompress_kernel(unsigned long *kernel_entry)
->>          return efi_adjust_memory_range_protection(addr, kernel_text_size);
->>   }
->>
->> +#if (IS_ENABLED(CONFIG_SECURE_LAUNCH))
-> 
-> IS_ENABLED() is mostly used for C conditionals not CPP ones.
-> 
-> It would be nice if this #if could be dropped, and replaced with ... (see below)
-> 
-> 
->> +static bool efi_secure_launch_update_boot_params(struct slr_table *slrt,
->> +                                                struct boot_params *boot_params)
->> +{
->> +       struct slr_entry_intel_info *txt_info;
->> +       struct slr_entry_policy *policy;
->> +       struct txt_os_mle_data *os_mle;
->> +       bool updated = false;
->> +       int i;
->> +
->> +       txt_info = slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_INTEL_INFO);
->> +       if (!txt_info)
->> +               return false;
->> +
->> +       os_mle = txt_os_mle_data_start((void *)txt_info->txt_heap);
->> +       if (!os_mle)
->> +               return false;
->> +
->> +       os_mle->boot_params_addr = (u32)(u64)boot_params;
->> +
-> 
-> Why is this safe?
+On Fri May 31, 2024 at 3:35 AM EEST, Stefan Berger wrote:
+>
+>
+> On 5/28/24 17:08, Jarkko Sakkinen wrote:
+> > TPM2 ASN.1 format is required for trusted keys and asymmetric keys. Mov=
+e it
+> > to crypto in order to make it available for both. Implement validation =
+with
+> > coverage of all TPMT_PUBLIC shared fields. Key type specific fields mus=
+t be
+> > covered by the different subsystems using this.
+> >=20
+> > A Kconfig option CRYPTO_TPM2_KEY can be used to select the feature, whi=
+ch
+> > depends only crypto subsystem itself and ASN.1 parser.
+> >=20
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > v6:
+> > * Relocate to crypto. Validate the shared part and provide
+> >    accessor functions. Use a fixed buffer size.
+> > v2:
+> > * Do not allocate blob twice. Use the one inside struct tpm2_key.
+> > ---
+> >   crypto/Kconfig                            |   7 ++
+> >   crypto/Makefile                           |   6 +
+> >   crypto/tpm2_key.asn1                      |  11 ++
+> >   crypto/tpm2_key.c                         | 134 ++++++++++++++++++++
+> >   include/crypto/tpm2_key.h                 |  46 +++++++
+> >   security/keys/trusted-keys/Kconfig        |   2 +-
+> >   security/keys/trusted-keys/Makefile       |   2 -
+> >   security/keys/trusted-keys/tpm2key.asn1   |  11 --
+> >   security/keys/trusted-keys/trusted_tpm2.c | 141 +++++----------------=
+-
+> >   9 files changed, 235 insertions(+), 125 deletions(-)
+> >   create mode 100644 crypto/tpm2_key.asn1
+> >   create mode 100644 crypto/tpm2_key.c
+> >   create mode 100644 include/crypto/tpm2_key.h
+> >   delete mode 100644 security/keys/trusted-keys/tpm2key.asn1
+> >=20
+> > diff --git a/crypto/Kconfig b/crypto/Kconfig
+> > index 5688d42a59c2..c8989bc71f57 100644
+> > --- a/crypto/Kconfig
+> > +++ b/crypto/Kconfig
+> > @@ -5,6 +5,13 @@
+> >   config XOR_BLOCKS
+> >   	tristate
+> >  =20
+> > +config CRYPTO_TPM2_KEY
+> > +	bool
+> > +	depends on CRYPTO
+> > +	select ASN1
+> > +	select OID_REGISTRY
+> > +	default n
+> > +
+> >   #
+> >   # async_tx api: hardware offloaded memory transfer/transform support
+> >   #
+> > diff --git a/crypto/Makefile b/crypto/Makefile
+> > index edbbaa3ffef5..d932fdb72319 100644
+> > --- a/crypto/Makefile
+> > +++ b/crypto/Makefile
+> > @@ -216,3 +216,9 @@ obj-$(CONFIG_CRYPTO_SIMD) +=3D crypto_simd.o
+> >   # Key derivation function
+> >   #
+> >   obj-$(CONFIG_CRYPTO_KDF800108_CTR) +=3D kdf_sp800108.o
+> > +
+> > +ifdef CONFIG_CRYPTO_TPM2_KEY
+> > +$(obj)/tpm2_key.asn1.o: $(obj)/tpm2_key.asn1.h $(obj)/tpm2_key.asn1.c
+> > +$(obj)/tpm2_key.o: $(obj)/tpm2_key.asn1.h
+> > +obj-y +=3D tpm2_key.o tpm2_key.asn1.o
+> > +endif
+> > diff --git a/crypto/tpm2_key.asn1 b/crypto/tpm2_key.asn1
+> > new file mode 100644
+> > index 000000000000..b235d02ab78e
+> > --- /dev/null
+> > +++ b/crypto/tpm2_key.asn1
+> > @@ -0,0 +1,11 @@
+> > +---
+> > +--- ASN.1 for TPM 2.0 keys
+> > +---
+> > +
+> > +TPMKey ::=3D SEQUENCE {
+> > +	type		OBJECT IDENTIFIER ({tpm2_key_get_type}),
+> > +	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
+> > +	parent		INTEGER ({tpm2_key_get_parent}),
+> > +	pubkey		OCTET STRING ({tpm2_get_public}),
+> > +	privkey		OCTET STRING ({tpm2_get_private})
+> > +	}
+> > diff --git a/crypto/tpm2_key.c b/crypto/tpm2_key.c
+> > new file mode 100644
+> > index 000000000000..78f55478d046
+> > --- /dev/null
+> > +++ b/crypto/tpm2_key.c
+> > @@ -0,0 +1,134 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +#include <crypto/tpm2_key.h>
+> > +#include <linux/oid_registry.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/types.h>
+> > +#include <asm/unaligned.h>
+> > +#include "tpm2_key.asn1.h"
+> > +
+> > +#undef pr_fmt
+> > +#define pr_fmt(fmt) "tpm2_key: "fmt
+> > +
+> > +struct tpm2_key_decoder_context {
+> > +	u32 parent;
+> > +	const u8 *pub;
+> > +	u32 pub_len;
+> > +	const u8 *priv;
+> > +	u32 priv_len;
+> > +	enum OID oid;
+> > +};
+> > +
+> > +int tpm2_key_get_parent(void *context, size_t hdrlen,
+> > +			unsigned char tag,
+> > +			const void *value, size_t vlen)
+> > +{
+> > +	struct tpm2_key_decoder_context *decoder =3D context;
+> > +	const u8 *v =3D value;
+> > +	int i;
+> > +
+> > +	decoder->parent =3D 0;
+> > +	for (i =3D 0; i < vlen; i++) {
+> > +		decoder->parent <<=3D 8;
+> > +		decoder->parent |=3D v[i];
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +int tpm2_key_get_type(void *context, size_t hdrlen,
+> > +		      unsigned char tag,
+> > +		      const void *value, size_t vlen)
+> > +{
+> > +	struct tpm2_key_decoder_context *decoder =3D context;
+> > +
+> > +	decoder->oid =3D look_up_OID(value, vlen);
+> > +	return 0;
+> > +}
+> > +
+> > +static inline bool tpm2_key_is_valid(const void *value, size_t vlen)
+> > +{
+> > +	if (vlen < 2 || vlen > TPM2_KEY_BYTES_MAX)
+> > +		return false;
+> > +
+> > +	if (get_unaligned_be16(value) !=3D vlen - 2)
+> > +		return false;
+> > +
+> > +	return true;
+> > +}
+> > +
+> > +int tpm2_get_public(void *context, size_t hdrlen, unsigned char tag,
+> > +		    const void *value, size_t vlen)
+> > +{
+> > +	struct tpm2_key_decoder_context *decoder =3D context;
+> > +
+> > +	if (!tpm2_key_is_valid(value, vlen))
+> > +		return -EBADMSG;
+> > +
+> > +	if (sizeof(struct tpm2_key_desc) > vlen - 2)
+> > +		return -EBADMSG;
+> > +
+> > +	decoder->pub =3D value;
+> > +	decoder->pub_len =3D vlen;
+> > +	return 0;
+> > +}
+> > +
+> > +int tpm2_get_private(void *context, size_t hdrlen, unsigned char tag,
+> > +		     const void *value, size_t vlen)
+> > +{
+> > +	struct tpm2_key_decoder_context *decoder =3D context;
+> > +
+> > +	if (!tpm2_key_is_valid(value, vlen))
+> > +		return -EBADMSG;
+> > +
+> > +	decoder->priv =3D value;
+> > +	decoder->priv_len =3D vlen;
+> > +	return 0;
+> > +}
+> > +
+> > +/**
+> > + * tpm_key_decode() - Decode TPM2 ASN.1 key
+> > + * @src:	ASN.1 source.
+> > + * @src_len:	ASN.1 source length.
+> > + *
+> > + * Decodes the TPM2 ASN.1 key and validates that the public key data h=
+as all
+> > + * the shared fields of TPMT_PUBLIC. This is full coverage of the memo=
+ry that
+> > + * can be validated before doing any key type specific validation.
+>
+> I am not sure what the last sentence means.
 
-The size of the boot_params_addr is a holdover from the legacy boot 
-world when boot params were always loaded at a low address. We will 
-increase the size of the field.
+I think the whole paragraph should be rewritten.
 
-> 
->> +       policy = slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_ENTRY_POLICY);
->> +       if (!policy)
->> +               return false;
->> +
->> +       for (i = 0; i < policy->nr_entries; i++) {
->> +               if (policy->policy_entries[i].entity_type == SLR_ET_BOOT_PARAMS) {
->> +                       policy->policy_entries[i].entity = (u64)boot_params;
->> +                       updated = true;
->> +                       break;
->> +               }
->> +       }
->> +
->> +       /*
->> +        * If this is a PE entry into EFI stub the mocked up boot params will
->> +        * be missing some of the setup header data needed for the second stage
->> +        * of the Secure Launch boot.
->> +        */
->> +       if (image) {
->> +               struct setup_header *hdr = (struct setup_header *)((u8 *)image->image_base + 0x1f1);
-> 
-> Could we use something other than a bare 0x1f1 constant here? struct
-> boot_params has a struct setup_header at the correct offset, so with
-> some casting of offsetof() use, we can make this look a lot more self
-> explanatory.
+So what it does is that it takes the private and public parts and
+concanates them together so maybe just write:
 
-Yes we can do this.
+"Load TPMT_PUBLIC and TPMT_PRIVATE from ASN.1 file, and concatenate the
+blobs together as a single blob, as this is expected format for the TPM2
+commands. In addition, validate TPMT_PUBLIC fields so that they make
+sense for trusted and asymmetric keys."
 
-> 
-> 
->> +               u64 cmdline_ptr, hi_val;
->> +
->> +               boot_params->hdr.setup_sects = hdr->setup_sects;
->> +               boot_params->hdr.syssize = hdr->syssize;
->> +               boot_params->hdr.version = hdr->version;
->> +               boot_params->hdr.loadflags = hdr->loadflags;
->> +               boot_params->hdr.kernel_alignment = hdr->kernel_alignment;
->> +               boot_params->hdr.min_alignment = hdr->min_alignment;
->> +               boot_params->hdr.xloadflags = hdr->xloadflags;
->> +               boot_params->hdr.init_size = hdr->init_size;
->> +               boot_params->hdr.kernel_info_offset = hdr->kernel_info_offset;
->> +               hi_val = boot_params->ext_cmd_line_ptr;
-> 
-> We have efi_set_u64_split() for this.
+What you think of this?
 
-Ok I will use that then.
 
-> 
->> +               cmdline_ptr = boot_params->hdr.cmd_line_ptr | hi_val << 32;
->> +               boot_params->hdr.cmdline_size = strlen((const char *)cmdline_ptr);;
->> +       }
->> +
->> +       return updated;
->> +}
->> +
->> +static void efi_secure_launch(struct boot_params *boot_params)
->> +{
->> +       struct slr_entry_dl_info *dlinfo;
->> +       efi_guid_t guid = SLR_TABLE_GUID;
->> +       dl_handler_func handler_callback;
->> +       struct slr_table *slrt;
->> +
-> 
-> ... a C conditional here, e.g.,
-> 
-> if (!IS_ENABLED(CONFIG_SECURE_LAUNCH))
->      return;
-> 
-> The difference is that all the code will get compile test coverage
-> every time, instead of only in configs that enable
-> CONFIG_SECURE_LAUNCH.
-> 
-> This significantly reduces the risk that your stuff will get broken
-> inadvertently.
+>
+> > + *
+> > + * Return:
+> > + * - TPM2 ASN.1 key on success.
+> > + * - -EBADMSG when decoding fails.
+> > + * - -ENOMEM when OOM while allocating struct tpm2_key.
+> > + */
+> > +struct tpm2_key *tpm2_key_decode(const u8 *src, u32 src_len)
+> > +{
+> > +	struct tpm2_key_decoder_context decoder;
+> > +	struct tpm2_key *key;
+> > +	u8 *data;
+> > +	int ret;
+> > +
+> > +	memset(&decoder, 0, sizeof(decoder));
+> > +	ret =3D asn1_ber_decoder(&tpm2_key_decoder, &decoder, src, src_len);
+> > +	if (ret < 0) {
+> > +		if (ret !=3D -EBADMSG)
+> > +			pr_info("Decoder error %d\n", ret);
+> > +
+> > +		return ERR_PTR(-EBADMSG);
+> > +	}
+> > +
+> > +	key =3D kzalloc(sizeof(*key), GFP_KERNEL);
+> > +	if (!key)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	data =3D &key->data[0];
+> > +	memcpy(&data[0], decoder.priv, decoder.priv_len);
+> > +	memcpy(&data[decoder.priv_len], decoder.pub, decoder.pub_len);
+> > +
+> > +	key->oid =3D decoder.oid;
+> > +	key->priv_len =3D decoder.priv_len;
+> > +	key->pub_len =3D decoder.pub_len;
+> > +	key->parent =3D decoder.parent;
+> > +	key->desc =3D (struct tpm2_key_desc *)&data[decoder.priv_len + 2];
+> > +	return key;
+> > +}
+> > +EXPORT_SYMBOL_GPL(tpm2_key_decode);
+> > diff --git a/include/crypto/tpm2_key.h b/include/crypto/tpm2_key.h
+> > new file mode 100644
+> > index 000000000000..74debaf707bf
+> > --- /dev/null
+> > +++ b/include/crypto/tpm2_key.h
+> > @@ -0,0 +1,46 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +#ifndef __LINUX_TPM2_KEY_H__
+> > +#define __LINUX_TPM2_KEY_H__
+> > +
+> > +#include <linux/oid_registry.h>
+> > +#include <linux/slab.h>
+> > +
+> > +#define TPM2_KEY_BYTES_MAX 1024
+> > +
+> > +/*  TPM2 Structures 12.2.4: TPMT_PUBLIC */
+> > +struct tpm2_key_desc {
+> > +	__be16 type;
+> > +	__be16 name_alg;
+> > +	__be32 object_attributes;
+> > +	__be16 policy_size;
+> > +} __packed;
+> > +
+> > +/* Decoded TPM2 ASN.1 key. */
+> > +struct tpm2_key {
+> > +	u8 data[2 * TPM2_KEY_BYTES_MAX];
+> > +	struct tpm2_key_desc *desc;
+> > +	u16 priv_len;
+> > +	u16 pub_len;
+> > +	u32 parent;
+> > +	enum OID oid;
+> > +	char oid_str[64];
+> > +};
+> > +
+> > +struct tpm2_key *tpm2_key_decode(const u8 *src, u32 src_len);
+> > +
+> > +static inline const void *tpm2_key_data(const struct tpm2_key *key)
+> > +{
+> > +	return &key->data[0];
+> > +}
+> > +
+> > +static inline u16 tpm2_key_type(const struct tpm2_key *key)
+> > +{
+> > +	return be16_to_cpu(key->desc->type);
+> > +}
+> > +
+> > +static inline int tpm2_key_policy_size(const struct tpm2_key *key)
+> > +{
+> > +	return be16_to_cpu(key->desc->policy_size);
+> > +}
+> > +
+> > +#endif /* __LINUX_TPM2_KEY_H__ */
+> > diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted=
+-keys/Kconfig
+> > index 1fb8aa001995..00d9489384ac 100644
+> > --- a/security/keys/trusted-keys/Kconfig
+> > +++ b/security/keys/trusted-keys/Kconfig
+> > @@ -9,9 +9,9 @@ config TRUSTED_KEYS_TPM
+> >   	select CRYPTO_HMAC
+> >   	select CRYPTO_SHA1
+> >   	select CRYPTO_HASH_INFO
+> > +	select CRYPTO_TPM2_KEY
+> >   	select ASN1_ENCODER
+> >   	select OID_REGISTRY
+> > -	select ASN1
+> >   	select HAVE_TRUSTED_KEYS
+> >   	help
+> >   	  Enable use of the Trusted Platform Module (TPM) as trusted key
+> > diff --git a/security/keys/trusted-keys/Makefile b/security/keys/truste=
+d-keys/Makefile
+> > index f0f3b27f688b..2674d5c10fc9 100644
+> > --- a/security/keys/trusted-keys/Makefile
+> > +++ b/security/keys/trusted-keys/Makefile
+> > @@ -7,9 +7,7 @@ obj-$(CONFIG_TRUSTED_KEYS) +=3D trusted.o
+> >   trusted-y +=3D trusted_core.o
+> >   trusted-$(CONFIG_TRUSTED_KEYS_TPM) +=3D trusted_tpm1.o
+> >  =20
+> > -$(obj)/trusted_tpm2.o: $(obj)/tpm2key.asn1.h
+> >   trusted-$(CONFIG_TRUSTED_KEYS_TPM) +=3D trusted_tpm2.o
+> > -trusted-$(CONFIG_TRUSTED_KEYS_TPM) +=3D tpm2key.asn1.o
+> >  =20
+> >   trusted-$(CONFIG_TRUSTED_KEYS_TEE) +=3D trusted_tee.o
+> >  =20
+> > diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/tr=
+usted-keys/tpm2key.asn1
+> > deleted file mode 100644
+> > index f57f869ad600..000000000000
+> > --- a/security/keys/trusted-keys/tpm2key.asn1
+> > +++ /dev/null
+> > @@ -1,11 +0,0 @@
+> > ----
+> > ---- ASN.1 for TPM 2.0 keys
+> > ----
+> > -
+> > -TPMKey ::=3D SEQUENCE {
+> > -	type		OBJECT IDENTIFIER ({tpm2_key_type}),
+> > -	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
+> > -	parent		INTEGER ({tpm2_key_parent}),
+> > -	pubkey		OCTET STRING ({tpm2_key_pub}),
+> > -	privkey		OCTET STRING ({tpm2_key_priv})
+> > -	}
+> > diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/=
+trusted-keys/trusted_tpm2.c
+> > index 06c8fa7b21ae..b9e505e99e8c 100644
+> > --- a/security/keys/trusted-keys/trusted_tpm2.c
+> > +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> > @@ -13,11 +13,10 @@
+> >  =20
+> >   #include <keys/trusted-type.h>
+> >   #include <keys/trusted_tpm.h>
+> > +#include <crypto/tpm2_key.h>
+> >  =20
+> >   #include <asm/unaligned.h>
+> >  =20
+> > -#include "tpm2key.asn1.h"
+> > -
+> >   static struct tpm2_hash tpm2_hash_map[] =3D {
+> >   	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+> >   	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> > @@ -98,106 +97,6 @@ static int tpm2_key_encode(struct trusted_key_paylo=
+ad *payload,
+> >   	return ret;
+> >   }
+> >  =20
+> > -struct tpm2_key_context {
+> > -	u32 parent;
+> > -	const u8 *pub;
+> > -	u32 pub_len;
+> > -	const u8 *priv;
+> > -	u32 priv_len;
+> > -};
+> > -
+> > -static int tpm2_key_decode(struct trusted_key_payload *payload,
+> > -			   struct trusted_key_options *options,
+> > -			   u8 **buf)
+> > -{
+> > -	int ret;
+> > -	struct tpm2_key_context ctx;
+> > -	u8 *blob;
+> > -
+> > -	memset(&ctx, 0, sizeof(ctx));
+> > -
+> > -	ret =3D asn1_ber_decoder(&tpm2key_decoder, &ctx, payload->blob,
+> > -			       payload->blob_len);
+> > -	if (ret < 0)
+> > -		return ret;
+> > -
+> > -	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
+> > -		return -E2BIG;
+> > -
+> > -	blob =3D kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
+> > -	if (!blob)
+> > -		return -ENOMEM;
+> > -
+> > -	*buf =3D blob;
+> > -	options->keyhandle =3D ctx.parent;
+> > -
+> > -	memcpy(blob, ctx.priv, ctx.priv_len);
+> > -	blob +=3D ctx.priv_len;
+> > -
+> > -	memcpy(blob, ctx.pub, ctx.pub_len);
+> > -
+> > -	return 0;
+> > -}
+> > -
+> > -int tpm2_key_parent(void *context, size_t hdrlen,
+> > -		  unsigned char tag,
+> > -		  const void *value, size_t vlen)
+> > -{
+> > -	struct tpm2_key_context *ctx =3D context;
+> > -	const u8 *v =3D value;
+> > -	int i;
+> > -
+> > -	ctx->parent =3D 0;
+> > -	for (i =3D 0; i < vlen; i++) {
+> > -		ctx->parent <<=3D 8;
+> > -		ctx->parent |=3D v[i];
+> > -	}
+> > -
+> > -	return 0;
+> > -}
+> > -
+> > -int tpm2_key_type(void *context, size_t hdrlen,
+> > -		unsigned char tag,
+> > -		const void *value, size_t vlen)
+> > -{
+> > -	enum OID oid =3D look_up_OID(value, vlen);
+> > -
+> > -	if (oid !=3D OID_TPMSealedData) {
+> > -		char buffer[50];
+> > -
+> > -		sprint_oid(value, vlen, buffer, sizeof(buffer));
+> > -		pr_debug("OID is \"%s\" which is not TPMSealedData\n",
+> > -			 buffer);
+> > -		return -EINVAL;
+> > -	}
+> > -
+> > -	return 0;
+> > -}
+> > -
+> > -int tpm2_key_pub(void *context, size_t hdrlen,
+> > -	       unsigned char tag,
+> > -	       const void *value, size_t vlen)
+> > -{
+> > -	struct tpm2_key_context *ctx =3D context;
+> > -
+> > -	ctx->pub =3D value;
+> > -	ctx->pub_len =3D vlen;
+> > -
+> > -	return 0;
+> > -}
+> > -
+> > -int tpm2_key_priv(void *context, size_t hdrlen,
+> > -		unsigned char tag,
+> > -		const void *value, size_t vlen)
+> > -{
+> > -	struct tpm2_key_context *ctx =3D context;
+> > -
+> > -	ctx->priv =3D value;
+> > -	ctx->priv_len =3D vlen;
+> > -
+> > -	return 0;
+> > -}
+> > -
+> >   /**
+> >    * tpm2_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+> >    *
+> > @@ -387,22 +286,43 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+> >   			 struct trusted_key_options *options,
+> >   			 u32 *blob_handle)
+> >   {
+> > -	struct tpm_buf buf;
+> >   	unsigned int private_len;
+> >   	unsigned int public_len;
+> >   	unsigned int blob_len;
+> > -	u8 *blob, *pub;
+> > -	int rc;
+> > +	struct tpm2_key *key;
+> > +	const u8 *blob, *pub;
+> > +	struct tpm_buf buf;
+> >   	u32 attrs;
+> > +	int rc;
+> >  =20
+> > -	rc =3D tpm2_key_decode(payload, options, &blob);
+> > -	if (rc) {
+> > -		/* old form */
+> > +	key =3D tpm2_key_decode(payload->blob, payload->blob_len);
+> > +	if (IS_ERR(key)) {
+> > +		/* Get the error code and reset the pointer to the key: */
+> > +		rc =3D PTR_ERR(key);
+> > +		key =3D NULL;
+> > +
+> > +		if (rc =3D=3D -ENOMEM)
+> > +			return -ENOMEM;
+> > +
+> > +		/* A sanity check, as only -EBADMSG or -ENOMEM are expected: */
+> > +		if (rc !=3D -EBADMSG)
+> > +			pr_err("tpm2_key_decode(): spurious error code %d\n", rc);
+>
+> tpm2_key_decode seems simple enough that it only returns key, -ENOMEM or=
+=20
+> EBADMSG.
 
-Understood, I will address these as you suggest.
+So what is your suggestion here?
 
-> 
->> +       /*
->> +        * The presence of this table indicated a Secure Launch
->> +        * is being requested.
->> +        */
->> +       slrt = (struct slr_table *)get_efi_config_table(guid);
->> +       if (!slrt || slrt->magic != SLR_TABLE_MAGIC)
->> +               return;
->> +
->> +       /*
->> +        * Since the EFI stub library creates its own boot_params on entry, the
->> +        * SLRT and TXT heap have to be updated with this version.
->> +        */
->> +       if (!efi_secure_launch_update_boot_params(slrt, boot_params))
->> +               return;
->> +
->> +       /* Jump through DL stub to initiate Secure Launch */
->> +       dlinfo = slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_DL_INFO);
->> +
->> +       handler_callback = (dl_handler_func)dlinfo->dl_handler;
->> +
->> +       handler_callback(&dlinfo->bl_context);
->> +
->> +       unreachable();
->> +}
->> +#endif
->> +
->>   static void __noreturn enter_kernel(unsigned long kernel_addr,
->>                                      struct boot_params *boot_params)
->>   {
->> @@ -957,6 +1050,11 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
->>                  goto fail;
->>          }
->>
->> +#if (IS_ENABLED(CONFIG_SECURE_LAUNCH))
-> 
-> ... and drop this #if as well.
+The reasoning here is that asymmetric keys use -EBADMSG not only as
+error but also iterator, when probing which can load a specific key.
 
-Yes.
+>
+> > +
+> > +		/* Fallback to the legacy format: */
+> >   		blob =3D payload->blob;
+> >   		payload->old_format =3D 1;
+> > +	} else {
+> > +		blob =3D tpm2_key_data(key);
+> > +		if (key->oid !=3D OID_TPMSealedData) {
+> > +			kfree(key);
+> > +			return -EBADMSG;
+> > +		}
+> >   	}
+> >  =20
+> > -	/* new format carries keyhandle but old format doesn't */
+> > +	/*
+> > +	 * Must be non-zero here, either extracted from the ASN.1 for the new
+> > +	 * format or specified on the command line for the old.
+>
+> sentence seems incomplete: ... for the old one.  OR  ... for the old form=
+at.
 
-Thanks
-Ross
+Yep, I think it is a plain mistake.
 
-> 
->> +       /* If a Secure Launch is in progress, this never returns */
->> +       efi_secure_launch(boot_params);
->> +#endif
->> +
->>          /*
->>           * Call the SEV init code while still running with the firmware's
->>           * GDT/IDT, so #VC exceptions will be handled by EFI.
->> --
->> 2.39.3
->>
+>
+> > +	 */
+> >   	if (!options->keyhandle)
+> >   		return -EINVAL;
+> >  =20
+> > @@ -464,8 +384,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+> >   			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
+> >  =20
+> >   out:
+> > -	if (blob !=3D payload->blob)
+> > -		kfree(blob);
+> > +	kfree(key);
+> >   	tpm_buf_destroy(&buf);
+> >  =20
+> >   	if (rc > 0)
 
+Thanks for the feedback.
+
+BR, Jarkko
 
