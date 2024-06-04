@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2820-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2821-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10A778FBEFB
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Jun 2024 00:33:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCEC38FBF0B
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Jun 2024 00:36:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5D711F21442
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 22:33:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AD9F282876
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 22:36:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC9CF1442FE;
-	Tue,  4 Jun 2024 22:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D54514D290;
+	Tue,  4 Jun 2024 22:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/nfl/5c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wa1jwYWe"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8341A28DC7;
-	Tue,  4 Jun 2024 22:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD43014C5AE;
+	Tue,  4 Jun 2024 22:36:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717540418; cv=none; b=DfyDTsi0Ae7lRUVb8UPmYBZlqJ4N+2jWRYGTEcYory4V/6DW93mZVPOrVeUBdY9AodqHMkEz1PohM7hLzP17tF/NDM+5OueDnOp1YyH8SX18MJMMk5iWPkIkOo6mx6iYniunVpp3yZMFYSba2nOncHb34R4IWa4+uM3MQ1DWScM=
+	t=1717540589; cv=none; b=vBDWcH56j5zVBLP7sYhbec3pbJqcXk9s+oXheTFj6mCJ71uAVa/yveCyXJZK7555FMWsfmKDtxzX/vC9XWA60obAAjJGveLDGlx640H+clJ0ZNPRcIoE/D6Px0c4GoRzIkcdMs8N72MBPrnDquEKzcd8cOu8+3O/7bmqDU5NQq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717540418; c=relaxed/simple;
-	bh=vKk54H5hajLqoyQvgP+yXe9n5V6epR2sgSb7GL/pKD0=;
+	s=arc-20240116; t=1717540589; c=relaxed/simple;
+	bh=vkh29LcZuA4Sz0xUo0Giq6q/HmkTXs9ahlbNzKVYxng=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=JhbobHZ4nsJ+vulHff510SYYrkLuQuRNhPdmxR5BeWa9z+ZrYL6081UVOQVOPl4/QWHG76+fTwj4DbsnswDRk8rAzn+OwO8f6k+Yf1LqBS76EdX5a4pT5jmGyRKJ0BjHJHO0fbcBKyxoGs/6BR43uSI70iBqPm1TPO4jSBDqA0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/nfl/5c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD4AC3277B;
-	Tue,  4 Jun 2024 22:33:34 +0000 (UTC)
+	 References:In-Reply-To; b=MHkSXC+ksEis5d5AMH+OQ4QDBfr7Y26BfSm4BAyXqv5cT7qM1ZMdrGicPoXYrDIrrTACYXfhH2sOezAHcQaQQj/0WHY6/8+i70JVX//Ag7PrtjrAF0h1r2hDYba2bDiGSt2epudTKXiilVcPnQFQPtS92yd3WYWqnrht9hmPnOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wa1jwYWe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7037C2BBFC;
+	Tue,  4 Jun 2024 22:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717540417;
-	bh=vKk54H5hajLqoyQvgP+yXe9n5V6epR2sgSb7GL/pKD0=;
+	s=k20201202; t=1717540589;
+	bh=vkh29LcZuA4Sz0xUo0Giq6q/HmkTXs9ahlbNzKVYxng=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=G/nfl/5cR0PwMZa8J22uWo0KSFIzBt74P8cN/OEhgB/00aKhX9xMV9qd8jZhHm//G
-	 teAehz1lQgqYECpI7jnVW/ck4etFZDkML6JfvX0Py2zN5rt8amp2VC1/cG5MGHCGlq
-	 2hojjdMPUs+seAOX6ZZvyAKv+vOXSbj+WIOqZ10Uhf4PWrzmnTGr+7KvmoPvcDdxqV
-	 7AxsIxMbgqtXMSNHPZ5mlHYXIYYPAtvp8uPjBjmTgZl6P7gMDUPHztTT4BJmgasNko
-	 KEBdo7wgfp6PWKv/P3yqQ6I3UyhVdjviylkfGi4XEzuMxN+BqIisBrKAVC7rOpnDwD
-	 /6PeY1X9SDS5A==
+	b=Wa1jwYWe1gDKB/JcdKkJd5eqvpX/bLh954mEJEiY5sfp1Jsl9BzcS7gIADAcpRFQ8
+	 5b2Z+KR0PO7iC+UefSD+nWYWgv5dim7w3OceDBruFV/tyaWv7LDlGrITfKmLGoAM6a
+	 57yxX26az1npx87W6+VsZxy1l3ruChkkm4Pzk7eYQK0dOcyeNIoegwdV1vps+HxRSO
+	 FcPOpucMgOCpo9fUxHYSbyfugusoq5loIrWUAewdkYAUpoUYvEe7Kv6HTcEuWk8TxF
+	 QgIqjzR2Sq65KRa0Piil1C789ZsmBR+bfL1YZBun7IlsuINQyGQLIitVySKAf4bAbN
+	 puw6F6rCHqlBg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,70 +49,55 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 05 Jun 2024 01:33:32 +0300
-Message-Id: <D1RL9GZKU6Y3.2HFU56T053FQB@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
- <Andreas.Fuchs@infineon.com>, "James Prestwood" <prestwoj@gmail.com>,
- "David Woodhouse" <dwmw2@infradead.org>, "Eric Biggers"
- <ebiggers@kernel.org>, "James Bottomley"
- <James.Bottomley@hansenpartnership.com>, <linux-crypto@vger.kernel.org>,
- "Lennart Poettering" <lennart@poettering.net>, "David S. Miller"
- <davem@davemloft.net>, "open list" <linux-kernel@vger.kernel.org>, "Mimi
- Zohar" <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul
- Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, "open list:SECURITY SUBSYSTEM"
- <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v7 3/5] crypto: tpm2_key: Introduce a TPM2 key type
+Date: Wed, 05 Jun 2024 01:36:22 +0300
+Message-Id: <D1RLBMTUKRFN.34KQXEFZTBA08@kernel.org>
+Cc: <dpsmith@apertussolutions.com>, <tglx@linutronix.de>,
+ <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+ <dave.hansen@linux.intel.com>, <ardb@kernel.org>, <mjg59@srcf.ucam.org>,
+ <James.Bottomley@hansenpartnership.com>, <peterhuewe@gmx.de>,
+ <jgg@ziepe.ca>, <luto@amacapital.net>, <nivedita@alum.mit.edu>,
+ <herbert@gondor.apana.org.au>, <davem@davemloft.net>, <corbet@lwn.net>,
+ <ebiederm@xmission.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+ <kanth.ghatraju@oracle.com>, <andrew.cooper3@citrix.com>,
+ <trenchboot-devel@googlegroups.com>
+Subject: Re: [PATCH v9 04/19] x86: Secure Launch Resource Table header file
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Stefan Berger" <stefanb@linux.ibm.com>, "Herbert Xu"
- <herbert@gondor.apana.org.au>
+To: <ross.philipson@oracle.com>, <linux-kernel@vger.kernel.org>,
+ <x86@kernel.org>, <linux-integrity@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+ <kexec@lists.infradead.org>, <linux-efi@vger.kernel.org>,
+ <iommu@lists.linux-foundation.org>
 X-Mailer: aerc 0.17.0
-References: <20240528210823.28798-1-jarkko@kernel.org>
- <20240528210823.28798-4-jarkko@kernel.org>
- <97dd7485-51bf-4e47-83ab-957710fc2182@linux.ibm.com>
- <D1REOCZ2XHRY.4U47RZ20QET1@kernel.org>
- <6f0e04c2-4602-4407-9af5-f72610021a6a@linux.ibm.com>
-In-Reply-To: <6f0e04c2-4602-4407-9af5-f72610021a6a@linux.ibm.com>
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-5-ross.philipson@oracle.com>
+ <D1RFWFIJEYWL.2FC7V79321264@kernel.org>
+ <1eca8cb1-4b3b-402b-993b-53de7c810016@oracle.com>
+In-Reply-To: <1eca8cb1-4b3b-402b-993b-53de7c810016@oracle.com>
 
-On Tue Jun 4, 2024 at 9:41 PM EEST, Stefan Berger wrote:
->
->
-> On 6/4/24 13:23, Jarkko Sakkinen wrote:
-> > On Fri May 31, 2024 at 3:35 AM EEST, Stefan Berger wrote:
+On Tue Jun 4, 2024 at 11:31 PM EEST,  wrote:
+> On 6/4/24 11:21 AM, Jarkko Sakkinen wrote:
+> > On Fri May 31, 2024 at 4:03 AM EEST, Ross Philipson wrote:
+> >> Introduce the Secure Launch Resource Table which forms the formal
+> >> interface between the pre and post launch code.
 > >>
->
-> >>>   =20
-> >>> -	rc =3D tpm2_key_decode(payload, options, &blob);
-> >>> -	if (rc) {
-> >>> -		/* old form */
-> >>> +	key =3D tpm2_key_decode(payload->blob, payload->blob_len);
-> >>> +	if (IS_ERR(key)) {
-> >>> +		/* Get the error code and reset the pointer to the key: */
-> >>> +		rc =3D PTR_ERR(key);
-> >>> +		key =3D NULL;
-> >>> +
-> >>> +		if (rc =3D=3D -ENOMEM)
-> >>> +			return -ENOMEM;
-> >>> +
-> >>> +		/* A sanity check, as only -EBADMSG or -ENOMEM are expected: */
-> >>> +		if (rc !=3D -EBADMSG)
-> >>> +			pr_err("tpm2_key_decode(): spurious error code %d\n", rc);
-> >>
-> >> tpm2_key_decode seems simple enough that it only returns key, -ENOMEM =
-or
-> >> EBADMSG.
+> >> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 > >=20
-> > So what is your suggestion here?
+> > If a uarch specific, I'd appreciate Intel SDM reference here so that I
+> > can look it up and compare. Like in section granularity.
 >
-> You can remove the check resuling in pr_err().
+> This table is meant to not be architecture specific though it can=20
+> contain architecture specific sub-entities. E.g. there is a TXT specific=
+=20
+> table and in the future there will be an AMD and ARM one (and hopefully=
+=20
+> some others). I hope that addresses what you are pointing out or maybe I=
+=20
+> don't fully understand what you mean here...
 
-OK, I think so too. Just had to (sanity) check.
-
->
-> >=20
-> > The reasoning here is that asymmetric keys use -EBADMSG not only as
-> > error but also iterator, when probing which can load a specific key.
-> >=20
+At least Intel SDM has a definition of any possible architecture
+specific data structure. It is handy to also have this available
+in inline comment for any possible such structure pointing out the
+section where it is defined.
 
 BR, Jarkko
 
