@@ -1,459 +1,498 @@
-Return-Path: <linux-integrity+bounces-2814-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2815-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 843248FBDDA
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 23:12:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 376E98FBDE2
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 23:12:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2FDFB21451
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 21:12:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90466B22506
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 21:12:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF7B14B09E;
-	Tue,  4 Jun 2024 21:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="u90UA7Dn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2321714BF91;
+	Tue,  4 Jun 2024 21:12:50 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BEDA140375;
-	Tue,  4 Jun 2024 21:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717535527; cv=none; b=h25El7UACJC3h8TA3zZf0Dc0lGju/sPO1J+Vw1gHPsMKdp7FkeorzS7hZ5dBXmwbdzLGcvbh+D4bnxgdzE6/KI9InK6fcidb3bg9Of9DK0/H5vC8FL0wV3Zkp5FXJsm2mrAIbOAKRl2HtLPqn/U9nR5VFkyTFIQmGmdeM0WdWLU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717535527; c=relaxed/simple;
-	bh=+3+nZYGwjMBo1h7rn9OlnQr17nh3Jw/L2+pFHPDLCx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ck+IrPh2kdr4kxIZ+e+5VFaViKR3I4cSfJp0CrwOxpH2nWqHrzTI+0VRqYfCW/nL9DbvAp69bwHAlpWLJpy5kgdY0zqPQ8TmPPgY0rYF4Y043AhJn+ausg2qtEt1yJD2puiMrYRbulD+3dX8KBzjpNJ5F9TgQOq1KimmYjrmv7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=u90UA7Dn; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from [192.168.192.83] (unknown [50.39.103.33])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EB3063F328;
-	Tue,  4 Jun 2024 21:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1717535514;
-	bh=z4Ze92yVXDr3n5usDAZ1blNDkW5aBW5P6snB2x0NBiY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=u90UA7DnIbSRbze+wlk7E1HmoX9YcV8SFDxJ5BMBaWbTvZyN+1HhTKXIQ85j3fnRC
-	 ZMo5lTpX1PmH0B4Fd4YZhLSWJG46t/fwmZjtDUjwq30ONjDp7simQFP2RLvju27LpS
-	 mXQLYCgY5NY54AJivGNDgmjmbsNtixTXK3AoD5TANNWxQwuLCf4wUWFWRr+JW6F3/f
-	 GP3zAgEcDznNNPPmLkhIBQGm6u4e8+1LUIBgjtvAqUvbB8s5H8K5ibRrOC3+HIxIYq
-	 hpkh1N3qA10hWrVDIYF/a5+QdM9Axd+yUPfVNV/xElAz4NULrb2yoN4jc+w/fT05JH
-	 gD5ZTbBK7UPlA==
-Message-ID: <39e025dc-9298-49c1-906a-008073489201@canonical.com>
-Date: Tue, 4 Jun 2024 14:11:48 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269E7140366;
+	Tue,  4 Jun 2024 21:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717535570; cv=fail; b=cVK64ZB6xez3PwC0aqNwjvgveppsqYRWWQNzNJTtS6L4jF7pVOnrXqYi6CbmSoJYEBBN+DO1sHx9AWH8tejlFfge0DQYJGm6aLWl2phLbcG/Wmzog0bdvVd24Z2ppXaED/UzNRNMJbSsAIcOKtKFmUz7uouL/4y7vU5xFREPt6o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717535570; c=relaxed/simple;
+	bh=U+O0AjYlCBZTHJNoPQDv1CxGhcCfQBK5wKqJRbhdvIY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=lq4DXfgmIYDab3+9vlzFdbqjqfh7OkPHoA8IL/TEu6+3Kj9WROwU3XOAdnmcU9VOTvC4NJ48SdN2LxhEmY9cUtYJLIcofDpqt9LhanzElURM1QIF1au08w3eH9gVRGQjAFJKAatUTCTJMB/zFI/ujJlhKQqPpcSGhT3Fpw94AIk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 454J4Rt9026963;
+	Tue, 4 Jun 2024 21:12:14 GMT
+DKIM-Signature: =?UTF-8?Q?v=3D1;_a=3Drsa-sha256;_c=3Drelaxed/relaxed;_d=3Doracle.com;_h?=
+ =?UTF-8?Q?=3Dcc:content-transfer-encoding:content-type:date:from:in-reply?=
+ =?UTF-8?Q?-to:message-id:mime-version:references:subject:to;_s=3Dcorp-202?=
+ =?UTF-8?Q?3-11-20;_bh=3DwfgIzVVAyuatlqWHeM/OgipifgM+gz9OcBGrpp5TxXs=3D;_b?=
+ =?UTF-8?Q?=3Dcn34noIt8V+42Srj4w4Yc6bmjCje7vAC7Vk/p2lf4iHKUXMtICxTTos8cH9g?=
+ =?UTF-8?Q?+/rGCiBm_M+vYx27CqsfdALJtK5rCkDWvSLjtjmxjKWX6nqLC6EEzv9xxx18WX2?=
+ =?UTF-8?Q?tv6z5ohpQA6Ysz_BsVdwSxXkjvYpka4fVLo1zYgiLeMPGYK3rJg9R/41F2100hu?=
+ =?UTF-8?Q?NlRNcUzgEU66bwIw+FkD_obuV0n7Rjv84kktkDxS8saJclmfSr0jhfvDie5A3FA?=
+ =?UTF-8?Q?06HIJm0lnIhhxVS3DpWHLhb7uH_HkzdflH+ib/QfsbsbCktNe2dFuhs2pdQJVUh?=
+ =?UTF-8?Q?ml0c+4z+hvgkJ3dO1ETtf/9Z+mzRTBt6_pA=3D=3D_?=
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yfv07wxvw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 04 Jun 2024 21:12:13 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 454JOm0p025148;
+	Tue, 4 Jun 2024 21:12:12 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2049.outbound.protection.outlook.com [104.47.55.49])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ygrt95xw7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 04 Jun 2024 21:12:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mpwgf42GZIiCcBHWWgIlUbe1b7mLLGTJIym+3Oc/rZ7Neeg4B7NBT6b44SOetns0zFiWYhZ64hAxAXloqaGYfP6mGpxxZCvT5+JV56kAG1PC+D06mmjffgUDmWpFKTxuR6ndXOlRIePWPp+1qIouY31ebjtBU9VBKNsEZ2UhzCmJGToj8+spRaliahjTFz5djHrPFGcJZAzshUJXMv276FRZ3a+oRFT8qqOJZUJja9LkGi0DQtzJRjVOOdDiiLLHkBbcUMoRVMc7FlVWLG61jl9mZSSUHglUQxEvtYukCX/5Mvl7NSJjXXEUnXa5phcD06pJPknF+Ot2MO6kWg87fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wfgIzVVAyuatlqWHeM/OgipifgM+gz9OcBGrpp5TxXs=;
+ b=DmQOF5RFWku3hJNLrBmxkUIP7sE3AVSiC7rVl584meXfqIaK9s0ZeoGL9//jCcY7lL3OSAQrwZ5Q0GJCMP9WGgCkRY+2B9DLoHQrOYURg9n6C7XOZU9+Lk+EoRGwAAFFIwA1/1sgddFsmgGK7nGMk9bQxpCH/yoivpkAR7shfdgwTDgsBbTQQQJ63zByhrWcY1tlCDuOnpDIeDHwQAtpBCsRxxSX9FCPGqwhD9RhggDZ2znnj7j7yvOLdi+uZTmZp9yZTwuwc/RbkTEDr1R54gF70DNdxnrYv/iNtqlhIn7cSrRgdczH4pgrWkNRkbFuH248iLloabHK4T9A0BfsIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wfgIzVVAyuatlqWHeM/OgipifgM+gz9OcBGrpp5TxXs=;
+ b=DoiEzFgbjG6V53JjIMnAwoo0IqKvdzwef2io0gc/nbdNH2/a20VTtLQoNpiYTIMHgFj1o6i4pgSX6ruIM79vcII8JKQESZyhwdPYezOUipT8VRf/c13WEZDdMPWNqxOvff+aSNEso+PLKOEeGcKzPRZ9ROZhvlRf17g67Z5eG+Q=
+Received: from DS0PR10MB7224.namprd10.prod.outlook.com (2603:10b6:8:f5::14) by
+ CH0PR10MB4988.namprd10.prod.outlook.com (2603:10b6:610:c8::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7633.31; Tue, 4 Jun 2024 21:12:09 +0000
+Received: from DS0PR10MB7224.namprd10.prod.outlook.com
+ ([fe80::c57:383f:cfb2:47f8]) by DS0PR10MB7224.namprd10.prod.outlook.com
+ ([fe80::c57:383f:cfb2:47f8%6]) with mapi id 15.20.7633.021; Tue, 4 Jun 2024
+ 21:12:09 +0000
+Message-ID: <80580749-1a60-4754-9979-1fa29825f2f8@oracle.com>
+Date: Tue, 4 Jun 2024 14:12:05 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 08/19] x86: Secure Launch kernel early boot stub
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+        linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+        mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
+        ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com,
+        trenchboot-devel@googlegroups.com, ross.philipson@oracle.com
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-9-ross.philipson@oracle.com>
+ <CAMj1kXHaH6atsvwr6oVPdZuhR5YEXU33-2kYEn6xb1e=gidOCw@mail.gmail.com>
+ <CAMj1kXHcYOPTLTh-hEtfHk+JaORGK+fEatTT+UOqLJww+_cNTg@mail.gmail.com>
+ <5bffa507-75e8-4cce-ac0c-fe13d6efd3bb@oracle.com>
+ <CAMj1kXHLaqyPAw5Jjg91pqFbHoMT2jDqui4rosyerHVudRsq-w@mail.gmail.com>
+ <5b32106b-bb7b-463d-8b0b-589e3d466bf3@oracle.com>
+ <CAMj1kXEak-_D=B9qLsvo-M5+qJKSCrBwkoQkmC7_NoPR34+r-w@mail.gmail.com>
+Content-Language: en-US
+From: ross.philipson@oracle.com
+In-Reply-To: <CAMj1kXEak-_D=B9qLsvo-M5+qJKSCrBwkoQkmC7_NoPR34+r-w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0132.namprd03.prod.outlook.com
+ (2603:10b6:a03:33c::17) To DS0PR10MB7224.namprd10.prod.outlook.com
+ (2603:10b6:8:f5::14)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] ima: Avoid blocking in RCU read-side critical section
-To: GUO Zihua <guozihua@huawei.com>, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com, zohar@linux.ibm.com, roberto.sassu@huawei.com,
- dmitry.kasatkin@gmail.com, stephen.smalley.work@gmail.com,
- casey@schaufler-ca.com, eparis@redhat.com
-Cc: eric.snowberg@oracle.com, omosnace@redhat.com, audit@vger.kernel.org,
- apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
- linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-References: <20240507012541.796421-1-guozihua@huawei.com>
-Content-Language: en-US
-From: John Johansen <john.johansen@canonical.com>
-Autocrypt: addr=john.johansen@canonical.com; keydata=
- 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 lT9Q
-Organization: Canonical
-In-Reply-To: <20240507012541.796421-1-guozihua@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB7224:EE_|CH0PR10MB4988:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8cf280d4-751c-4858-337d-08dc84dafe9e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|376005|1800799015|7416005;
+X-Microsoft-Antispam-Message-Info: 
+	=?utf-8?B?bzZiaGtwSEd6S3lFZEZwVWtoeE9JeE1JYTRWOWkwM1NZN2dNdWpaUGxCRjdF?=
+ =?utf-8?B?UDBrVUIwVFBKVmZzREVMVDNuSVcrd3cxYlc4dlZsWnFUeW91NHhxZHBrcWhE?=
+ =?utf-8?B?U1lldm4vUlRUTitIRGk0SW96a0Z4NjhUME92d2hMZjR1UkZtM1ZzaTZnQlhP?=
+ =?utf-8?B?MzhWYUNhaXlYelRVeUhmQXZ1TDBqSDZ1c2lpKzRGUWMrcldLd0dXc2YwUTdt?=
+ =?utf-8?B?Q1RWNThzanppaENTSmNwazZ6NjJ6dURnVW5FVWFVcGl2bG1iNUpJQjZVd1Jz?=
+ =?utf-8?B?VVFRS3JEcnhVMkxOVXI3bk9PNUcrVVg0b1Bhb0xuaDJQWE5QdlN5SHJaSm5E?=
+ =?utf-8?B?TndvMy8wWSsvWHE1M3g3SVZVNTZyUlFBTEExSTZ4RzIrTWgwWndjeTBQVnlR?=
+ =?utf-8?B?T211ZnEyNCtYdTZ0KzI1L1pkOU42eG9sS2xYTFlrZVkwcnVRbDRLSE55Wkx0?=
+ =?utf-8?B?aXRialU3OTBDQ3dBRVdjUnBKMnZPaUlXcW1vRHR6VkdydjZRczFFcS9ZajEv?=
+ =?utf-8?B?WHZjNWJld1d3UFpPQ1l6bmRVQ1Z6MjQ5bkhURWI5QU5PUG9QWkJ4Sng2ZUFN?=
+ =?utf-8?B?MkdDMVdreEYwKzdtdVVYbGs3SHJEalNtTGxBNkxWeXFPOVhwbExXS1BlMDE4?=
+ =?utf-8?B?dTI0SGU1ZWJ2UDYzeEoyTXdGd2hYTm12OG81elJ1eGhJVWhYb3JuY1VjTE1M?=
+ =?utf-8?B?SisvdHhVUkU4enJlbHJ0MWM0SXpLWTJuR0JJcEE1emRjWHcwTFlRU3NWZ0Q4?=
+ =?utf-8?B?S2pwYzRiWjJVaDRLZVYwV2VuVzBJN3kvc1VtMDlRekNHVFdkVzBEUENqNGlu?=
+ =?utf-8?B?dzlOa2FzV0Y0TVFpTlhCVHdaMnNFci9SQmJUOWpjZXV2Y2J3bXBid28wK0RF?=
+ =?utf-8?B?MlRzZDVtOHM4REgreGJDYmpLbjlrOTgzT0FFeWFvTStLRmd0bmVSVHcxdFBH?=
+ =?utf-8?B?RFlwYW0zSC9hY1ViajdTN0loSFY3NnNHUjdzRXhQZUVNZXpkM1ppeTZPMXBH?=
+ =?utf-8?B?bWMxUnovUzlDZTJpK2JaQzF3WVhEUzR6UkRsZEFWK1VEU1pxV1hoOGNSTFcr?=
+ =?utf-8?B?Ly9qKzFVSnVLR0RNNy9ZYU53VEpVUHp6R1dQTnhqMHBIMHB0bC92MWVabVFB?=
+ =?utf-8?B?SjdXNDRCcVNoNTIwa3l0K2JMSnNBWE40dEROc2FiT2tueGZHazdFNFhhZWRm?=
+ =?utf-8?B?dkVrcW1tcDF1VHhYVjRnV0dzYlpaTVZkOU04d2t0UUNsOVFicDlhTDYrVWNT?=
+ =?utf-8?B?TGIyR2pTcTMxN0hlRnptNklTOHN2dmZTU2xKbkxaeG9oTmtycnNwZzBzM2Fw?=
+ =?utf-8?B?bUlMa2M0YTJwU2FtOWRFMkxXWVUzdmt2UGJkaXgvc3JsTHBFQVFKZHJpN25T?=
+ =?utf-8?B?UkR5R25wV1pHMkR3dnl1OFlyTmtlRTRLT3BRbzZnTTRiYWNlY2d1M0FrU0tm?=
+ =?utf-8?B?ay96MHo2RDhEMWpXa01DNWg0WkYyamtyanI3T3hxUWVmSG5nUWU1VWhaa3Z3?=
+ =?utf-8?B?NUdSeG5WWUFqQnBwYUZqdCtFSjVRQkNKc3Yyb1ZLWWowand3QUFCNzhPZjVK?=
+ =?utf-8?B?Tm9RL25EZFRuQVo3S3cxTXdoU1BVdVZ2dUp3OWxyQThrMU80T2tvM3Vvelgw?=
+ =?utf-8?B?MHVNa2lGZzRNWUNSRG1EbGNyZC9WVkt4VjJ5SjBQcjJldmZVaWpFbzZQTm5q?=
+ =?utf-8?B?LzV5bEw4ckFXNFBEbUZ3WDkvU0x1Zjc4RVE2enloVG9kdG1Nb3RUODNBPT0=?=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7224.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015)(7416005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?VmgyMTUra0NBWFUyS0RLZXpvTDFBWDNYMHpSa3V0WFkvaDdJU2V6R3QvVEpK?=
+ =?utf-8?B?NGxoY0pENXI2dTdsSzh4SnozSVk4WU5BK2YwcGVZeEk3ckhYZW1FSnkyWW00?=
+ =?utf-8?B?NDZSejhSVTc3VERmUXVNZHdHSEZEZHhaYVk4RmVENS8xWFpldXpITE8vWk14?=
+ =?utf-8?B?MlhBYmhsZGNJRjBsVXNZRzFhQnhSam9jQ0FVeU93RW5LK1ZBNEZ3bXhBZC9z?=
+ =?utf-8?B?RldYOUxlVFBFd3M0Y1dxbkdkQ0QyZjlYemovWWxKQ2lZNDh4NFNPZFUwWkpL?=
+ =?utf-8?B?N0MzMC9VNDFSOGRvOUIyQ1E4eCtmUWx5dmx5b29yekNydTZwU24vdmlWMUFW?=
+ =?utf-8?B?YnRiWEJnU3VhS0lxcWRSbmtaRjljRllETE0xTnlOU3ZGNERQZ1dMbno1QkFW?=
+ =?utf-8?B?ZVk3QkdXWEV5VGd0TUJzelgzVzNCZ01kRC9OTUZGaHg3MWs1cXhyb0xRZ3Zi?=
+ =?utf-8?B?US9za20vUjJNY2NMeWtOdUoxTHQ2VnoyRTVOUjUySURIekFvalJ3U0xOYktt?=
+ =?utf-8?B?VEI1Z01QODJEK0lUc1FZOTBKYUwveVlVRGJ1bDBxeU5UNVFscVRQVFJlTG5F?=
+ =?utf-8?B?V1hQd1hodXNPbFN0VkJxblF2aXJxRW9XWlQ4dytpRlFmdUc5eDJLcU1uYklD?=
+ =?utf-8?B?bnQ5Z3RVdGhra2E1VkpOSDdrcnB0YXJDZDFUS3BUeHBFemNKTEdJS1hRWWtD?=
+ =?utf-8?B?Q2lXaTEzcndsWGRHTEJjL3kvVXg3S3dkQkIrNGhVNFlucmJJNytlM0hJdVB4?=
+ =?utf-8?B?SlJKTTNNY1N1Wm9RNG1DOEZXaGIvTHJ5dVlFU3lGdC9qbldUUUhhcXdSb3Zs?=
+ =?utf-8?B?TFRQZ0hHQlVuRk9MNHZwOFhrMDIyRm44bDltdHRtd0pzMGNOVDdSQ0VXNnYw?=
+ =?utf-8?B?TDdWUkJ3NFZ0T1RYZlNJbnY5ZjN4ZXd5NTNxYzlTVmZObSt6aFAzR1p6a3ds?=
+ =?utf-8?B?c05RQjJBSGVUaTRFVmR3VTh6UW9YY0pCMHNvVWkrdHNPVmI4RlN0ZTVTSksy?=
+ =?utf-8?B?SmsycXFRcGYvR1JENXc3VUp1dkh5SHkwbExzQ2N3Q0xacEZxb0JLQlUzUFF2?=
+ =?utf-8?B?WmxBZnhRS1E1RVZlRFRZSnEwWERxNVhhQyt6Ry82UDR5VEtTTVI0ZlRXdDlW?=
+ =?utf-8?B?dFpUdlRIVituWFBMU1c1VWxZTUxlZE9kamY3VURNSkFXSUxQelZkQXpXdURJ?=
+ =?utf-8?B?a3VDY09STElERTcvRmtiSlhkaWU4OERDYjdnSFRFWlkwRUtqSFppNTI3QUpo?=
+ =?utf-8?B?dWI2VEVtMUNRUzAvYUNid3ZNaXJpVVExVEQ0NkxUYjd0NTNjck9MWUNITng3?=
+ =?utf-8?B?QzFxQVlJYjlUaW51c2phWGdvZE04Ujl1WWdkbVlJdkFScjhtbUZ3ZmppaEVN?=
+ =?utf-8?B?eVF2QTAzZ3FZWll5K1krQ09XcHZxM3hOV2F3Ylc4dFRYQlpIN25USHlVQXk0?=
+ =?utf-8?B?ZjUwRDNIb1UwTWNkbGpCRlhMZnR2Ynhhc29WbkhZWjZMZ3BuK3pKZEVpRTQ3?=
+ =?utf-8?B?VTc0MGhXc3p5QkNVcVM1em9BOHpIL0JOakorZ1J4SEcxRmpjL1RPRXhIZXFP?=
+ =?utf-8?B?SUJFTHpiRTVvV291M21LUkFGdncweWx0V0VsQmhWZkJQV3dGa1JITWN0eEk2?=
+ =?utf-8?B?d2dWOGlGSmxUVS9ZSFFEejhubGJ1cnE2aFJZaXVuZG1IMmVzRk9xUmRjRm5r?=
+ =?utf-8?B?bnFkYU5SZXYwaTUwQ2lBME5hY3I2QlB1Q1p2alVuamRlNnpJcGN2ME15MDdV?=
+ =?utf-8?B?b2xkVGppOHJreFpiUG9uVnZRSTVSOHBWVTZ5UmFSWTBOa2tpbTdGQ3M0R0o4?=
+ =?utf-8?B?MjlWQzVIY05wRmtKcGN1cTJYcHM3bnFZTTdIKzJCT3ZZVFhZQmJCMW5XRHBz?=
+ =?utf-8?B?dDlCTlRPRVg3ZG0zRkJ6NlJmVXZCNEhZb1NxUTdCYUdibm5Ld2E3N3o5OWE1?=
+ =?utf-8?B?NUpUSERtZTBpS1E1d0Z6YkhoQThuUmNZUGpPSkJhNFBMN296aEZrTy9DQWpn?=
+ =?utf-8?B?T2dBYnNpYjRyR0NSaCt2YVhyQWZoeTVLWHFrOW8xMFN6U2kwY1ZpVlEzK2Qr?=
+ =?utf-8?B?VFlyQUNnQVNRNEJwWDVLNENBcisrRGFEazN0RVltMWdxQzNjMWYxTUpVRFpK?=
+ =?utf-8?B?ODIvSU5ncEVSL3J1bDh2VTZCQjlhN2xtVWE1VDdoTHNWc1dPYmw0aGNLS2F4?=
+ =?utf-8?B?TFE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	DjQfkbPGtphju1vEzfGj3hr5zZyHop19HQqn2srD3xMI1iCPS1gMfyFkDlpVswDzkyYV2IMJCA+Jwq8JrwEwWlauvoeus8GU0rXjcQezxyxp7nklAJwCJCZKbw7gK0qQAGQrO38j+kMiF43ZwE1WF0JQG+IAXFaOnvxIyBl8UECpY6p7Ond2OrkhxnK4WVBSpfWaimWxjKNPbfS9iPA81SSp1ZpniJZ6cp0dLeeCmo7J/RwMToSVR/e/RopjBPpVdhWlx+iLTciX7OYqeJkfDRz2FLcPyTFk7Pvs570xZ72mjkD4kSf3EvAT0D6/95KSYMBGwYHzOg/DbxR4nkoUAw+E0QBgjfVaGX8hCKPcv3RE1pUluZawUK0DpDpwXWrCgxe1TadBaGbYOykiZbki0tHJSmM0Df36i2PKZ4O9AH2HIgMfYUwfIVEE3Qz73rc/C1ElfDd1bhOoRA3wwxwsZMYsVKH5NfAtB8abNmxSDsmQqwnsl3n7ayOWtQ4zkfR2G+zfQ0jCKr5AhAvPPuMgxT5C3yv0iV3cRxSOrgejtNVa63XHV9TdziufG8jJzVVCWPX8P4bo86oSG77Ibqs8jCEMDoGB9QSuLETZlhn3WYc=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8cf280d4-751c-4858-337d-08dc84dafe9e
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7224.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2024 21:12:09.1069
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tHAHgkvsbBs6f2lhVMS3UghoQ7g10AXcQbCgPJaELPGoL0Htda6fwLf4ohlOjmsRfDpTQnlT+gV/cfg+5oR9mxFMbQv08iuLa68Fnnp6FJk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB4988
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-04_11,2024-06-04_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ adultscore=0 suspectscore=0 malwarescore=0 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2406040171
+X-Proofpoint-GUID: uO_k8lKaLNXD6430GVJMYyTNbc4jtZS8
+X-Proofpoint-ORIG-GUID: uO_k8lKaLNXD6430GVJMYyTNbc4jtZS8
 
-On 5/6/24 18:25, GUO Zihua wrote:
-> A panic happens in ima_match_policy:
+On 6/4/24 1:54 PM, Ard Biesheuvel wrote:
+> On Tue, 4 Jun 2024 at 19:34, <ross.philipson@oracle.com> wrote:
+>>
+>> On 6/4/24 10:27 AM, Ard Biesheuvel wrote:
+>>> On Tue, 4 Jun 2024 at 19:24, <ross.philipson@oracle.com> wrote:
+>>>>
+>>>> On 5/31/24 6:33 AM, Ard Biesheuvel wrote:
+>>>>> On Fri, 31 May 2024 at 13:00, Ard Biesheuvel <ardb@kernel.org> wrote:
+>>>>>>
+>>>>>> Hello Ross,
+>>>>>>
+>>>>>> On Fri, 31 May 2024 at 03:32, Ross Philipson <ross.philipson@oracle.com> wrote:
+>>>>>>>
+>>>>>>> The Secure Launch (SL) stub provides the entry point for Intel TXT (and
+>>>>>>> later AMD SKINIT) to vector to during the late launch. The symbol
+>>>>>>> sl_stub_entry is that entry point and its offset into the kernel is
+>>>>>>> conveyed to the launching code using the MLE (Measured Launch
+>>>>>>> Environment) header in the structure named mle_header. The offset of the
+>>>>>>> MLE header is set in the kernel_info. The routine sl_stub contains the
+>>>>>>> very early late launch setup code responsible for setting up the basic
+>>>>>>> environment to allow the normal kernel startup_32 code to proceed. It is
+>>>>>>> also responsible for properly waking and handling the APs on Intel
+>>>>>>> platforms. The routine sl_main which runs after entering 64b mode is
+>>>>>>> responsible for measuring configuration and module information before
+>>>>>>> it is used like the boot params, the kernel command line, the TXT heap,
+>>>>>>> an external initramfs, etc.
+>>>>>>>
+>>>>>>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+>>>>>>> ---
+>>>>>>>     Documentation/arch/x86/boot.rst        |  21 +
+>>>>>>>     arch/x86/boot/compressed/Makefile      |   3 +-
+>>>>>>>     arch/x86/boot/compressed/head_64.S     |  30 +
+>>>>>>>     arch/x86/boot/compressed/kernel_info.S |  34 ++
+>>>>>>>     arch/x86/boot/compressed/sl_main.c     | 577 ++++++++++++++++++++
+>>>>>>>     arch/x86/boot/compressed/sl_stub.S     | 725 +++++++++++++++++++++++++
+>>>>>>>     arch/x86/include/asm/msr-index.h       |   5 +
+>>>>>>>     arch/x86/include/uapi/asm/bootparam.h  |   1 +
+>>>>>>>     arch/x86/kernel/asm-offsets.c          |  20 +
+>>>>>>>     9 files changed, 1415 insertions(+), 1 deletion(-)
+>>>>>>>     create mode 100644 arch/x86/boot/compressed/sl_main.c
+>>>>>>>     create mode 100644 arch/x86/boot/compressed/sl_stub.S
+>>>>>>>
+>>>>>>> diff --git a/Documentation/arch/x86/boot.rst b/Documentation/arch/x86/boot.rst
+>>>>>>> index 4fd492cb4970..295cdf9bcbdb 100644
+>>>>>>> --- a/Documentation/arch/x86/boot.rst
+>>>>>>> +++ b/Documentation/arch/x86/boot.rst
+>>>>>>> @@ -482,6 +482,14 @@ Protocol:  2.00+
+>>>>>>>                - If 1, KASLR enabled.
+>>>>>>>                - If 0, KASLR disabled.
+>>>>>>>
+>>>>>>> +  Bit 2 (kernel internal): SLAUNCH_FLAG
+>>>>>>> +
+>>>>>>> +       - Used internally by the setup kernel to communicate
+>>>>>>> +         Secure Launch status to kernel proper.
+>>>>>>> +
+>>>>>>> +           - If 1, Secure Launch enabled.
+>>>>>>> +           - If 0, Secure Launch disabled.
+>>>>>>> +
+>>>>>>>       Bit 5 (write): QUIET_FLAG
+>>>>>>>
+>>>>>>>            - If 0, print early messages.
+>>>>>>> @@ -1028,6 +1036,19 @@ Offset/size:     0x000c/4
+>>>>>>>
+>>>>>>>       This field contains maximal allowed type for setup_data and setup_indirect structs.
+>>>>>>>
+>>>>>>> +============   =================
+>>>>>>> +Field name:    mle_header_offset
+>>>>>>> +Offset/size:   0x0010/4
+>>>>>>> +============   =================
+>>>>>>> +
+>>>>>>> +  This field contains the offset to the Secure Launch Measured Launch Environment
+>>>>>>> +  (MLE) header. This offset is used to locate information needed during a secure
+>>>>>>> +  late launch using Intel TXT. If the offset is zero, the kernel does not have
+>>>>>>> +  Secure Launch capabilities. The MLE entry point is called from TXT on the BSP
+>>>>>>> +  following a success measured launch. The specific state of the processors is
+>>>>>>> +  outlined in the TXT Software Development Guide, the latest can be found here:
+>>>>>>> +  https://urldefense.com/v3/__https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-txt-software-development-guide.pdf__;!!ACWV5N9M2RV99hQ!Mng0gnPhOYZ8D02t1rYwQfY6U3uWaypJyd1T2rsWz3QNHr9GhIZ9ANB_-cgPExxX0e0KmCpda-3VX8Fj$
+>>>>>>> +
+>>>>>>>
+>>>>>>
+>>>>>> Could we just repaint this field as the offset relative to the start
+>>>>>> of kernel_info rather than relative to the start of the image? That
+>>>>>> way, there is no need for patch #1, and given that the consumer of
+>>>>>> this field accesses it via kernel_info, I wouldn't expect any issues
+>>>>>> in applying this offset to obtain the actual address.
+>>>>>>
+>>>>>>
+>>>>>>>     The Image Checksum
+>>>>>>>     ==================
+>>>>>>> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+>>>>>>> index 9189a0e28686..9076a248d4b4 100644
+>>>>>>> --- a/arch/x86/boot/compressed/Makefile
+>>>>>>> +++ b/arch/x86/boot/compressed/Makefile
+>>>>>>> @@ -118,7 +118,8 @@ vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
+>>>>>>>     vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_mixed.o
+>>>>>>>     vmlinux-objs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+>>>>>>>
+>>>>>>> -vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/early_sha1.o $(obj)/early_sha256.o
+>>>>>>> +vmlinux-objs-$(CONFIG_SECURE_LAUNCH) += $(obj)/early_sha1.o $(obj)/early_sha256.o \
+>>>>>>> +       $(obj)/sl_main.o $(obj)/sl_stub.o
+>>>>>>>
+>>>>>>>     $(obj)/vmlinux: $(vmlinux-objs-y) FORCE
+>>>>>>>            $(call if_changed,ld)
+>>>>>>> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+>>>>>>> index 1dcb794c5479..803c9e2e6d85 100644
+>>>>>>> --- a/arch/x86/boot/compressed/head_64.S
+>>>>>>> +++ b/arch/x86/boot/compressed/head_64.S
+>>>>>>> @@ -420,6 +420,13 @@ SYM_CODE_START(startup_64)
+>>>>>>>            pushq   $0
+>>>>>>>            popfq
+>>>>>>>
+>>>>>>> +#ifdef CONFIG_SECURE_LAUNCH
+>>>>>>> +       /* Ensure the relocation region is coverd by a PMR */
+>>>>>>
+>>>>>> covered
+>>>>>>
+>>>>>>> +       movq    %rbx, %rdi
+>>>>>>> +       movl    $(_bss - startup_32), %esi
+>>>>>>> +       callq   sl_check_region
+>>>>>>> +#endif
+>>>>>>> +
+>>>>>>>     /*
+>>>>>>>      * Copy the compressed kernel to the end of our buffer
+>>>>>>>      * where decompression in place becomes safe.
+>>>>>>> @@ -462,6 +469,29 @@ SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+>>>>>>>            shrq    $3, %rcx
+>>>>>>>            rep     stosq
+>>>>>>>
+>>>>>>> +#ifdef CONFIG_SECURE_LAUNCH
+>>>>>>> +       /*
+>>>>>>> +        * Have to do the final early sl stub work in 64b area.
+>>>>>>> +        *
+>>>>>>> +        * *********** NOTE ***********
+>>>>>>> +        *
+>>>>>>> +        * Several boot params get used before we get a chance to measure
+>>>>>>> +        * them in this call. This is a known issue and we currently don't
+>>>>>>> +        * have a solution. The scratch field doesn't matter. There is no
+>>>>>>> +        * obvious way to do anything about the use of kernel_alignment or
+>>>>>>> +        * init_size though these seem low risk with all the PMR and overlap
+>>>>>>> +        * checks in place.
+>>>>>>> +        */
+>>>>>>> +       movq    %r15, %rdi
+>>>>>>> +       callq   sl_main
+>>>>>>> +
+>>>>>>> +       /* Ensure the decompression location is covered by a PMR */
+>>>>>>> +       movq    %rbp, %rdi
+>>>>>>> +       movq    output_len(%rip), %rsi
+>>>>>>> +       callq   sl_check_region
+>>>>>>> +#endif
+>>>>>>> +
+>>>>>>> +       pushq   %rsi
+>>>>>>
+>>>>>> This looks like a rebase error.
+>>>>>>
+>>>>>>>            call    load_stage2_idt
+>>>>>>>
+>>>>>>>            /* Pass boot_params to initialize_identity_maps() */
+>>>>>>> diff --git a/arch/x86/boot/compressed/kernel_info.S b/arch/x86/boot/compressed/kernel_info.S
+>>>>>>> index c18f07181dd5..e199b87764e9 100644
+>>>>>>> --- a/arch/x86/boot/compressed/kernel_info.S
+>>>>>>> +++ b/arch/x86/boot/compressed/kernel_info.S
+>>>>>>> @@ -28,6 +28,40 @@ SYM_DATA_START(kernel_info)
+>>>>>>>            /* Maximal allowed type for setup_data and setup_indirect structs. */
+>>>>>>>            .long   SETUP_TYPE_MAX
+>>>>>>>
+>>>>>>> +       /* Offset to the MLE header structure */
+>>>>>>> +#if IS_ENABLED(CONFIG_SECURE_LAUNCH)
+>>>>>>> +       .long   rva(mle_header)
+>>>>>>
+>>>>>> ... so this could just be mle_header - kernel_info, and the consumer
+>>>>>> can do the math instead.
+>>>>>>
+>>>>>>> +#else
+>>>>>>> +       .long   0
+>>>>>>> +#endif
+>>>>>>> +
+>>>>>>>     kernel_info_var_len_data:
+>>>>>>>            /* Empty for time being... */
+>>>>>>>     SYM_DATA_END_LABEL(kernel_info, SYM_L_LOCAL, kernel_info_end)
+>>>>>>> +
+>>>>>>> +#if IS_ENABLED(CONFIG_SECURE_LAUNCH)
+>>>>>>> +       /*
+>>>>>>> +        * The MLE Header per the TXT Specification, section 2.1
+>>>>>>> +        * MLE capabilities, see table 4. Capabilities set:
+>>>>>>> +        * bit 0: Support for GETSEC[WAKEUP] for RLP wakeup
+>>>>>>> +        * bit 1: Support for RLP wakeup using MONITOR address
+>>>>>>> +        * bit 2: The ECX register will contain the pointer to the MLE page table
+>>>>>>> +        * bit 5: TPM 1.2 family: Details/authorities PCR usage support
+>>>>>>> +        * bit 9: Supported format of TPM 2.0 event log - TCG compliant
+>>>>>>> +        */
+>>>>>>> +SYM_DATA_START(mle_header)
+>>>>>>> +       .long   0x9082ac5a  /* UUID0 */
+>>>>>>> +       .long   0x74a7476f  /* UUID1 */
+>>>>>>> +       .long   0xa2555c0f  /* UUID2 */
+>>>>>>> +       .long   0x42b651cb  /* UUID3 */
+>>>>>>> +       .long   0x00000034  /* MLE header size */
+>>>>>>> +       .long   0x00020002  /* MLE version 2.2 */
+>>>>>>> +       .long   rva(sl_stub_entry) /* Linear entry point of MLE (virt. address) */
+>>>>>>
+>>>>>> and these should perhaps be relative to mle_header?
+>>>>>>
+>>>>>>> +       .long   0x00000000  /* First valid page of MLE */
+>>>>>>> +       .long   0x00000000  /* Offset within binary of first byte of MLE */
+>>>>>>> +       .long   rva(_edata) /* Offset within binary of last byte + 1 of MLE */
+>>>>>>
+>>>>>> and here
+>>>>>>
+>>>>>
+>>>>> Ugh never mind - these are specified externally.
+>>>>
+>>>> Can you clarify your follow on comment here?
+>>>>
+>>>
+>>> I noticed that -as you pointed out in your previous reply- these
+>>> fields cannot be repainted at will, as they are defined by an external
+>>> specification.
+>>>
+>>> I'll play a bit more with this code tomorrow - I would *really* like
+>>> to avoid the need for patch #1, as it adds another constraint on how
+>>> we construct the boot image, and this is already riddled with legacy
+>>> and other complications.
+>>
+>> Yea I should have read forward through all your replies before
+>> responding to the first one but I think it clarified things as you point
+>> out here. We appreciate you help and suggestions.
+>>
 > 
-> BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
-> PGD 42f873067 P4D 0
-> Oops: 0000 [#1] SMP NOPTI
-> CPU: 5 PID: 1286325 Comm: kubeletmonit.sh Kdump: loaded Tainted: P
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
-> RIP: 0010:ima_match_policy+0x84/0x450
-> Code: 49 89 fc 41 89 cf 31 ed 89 44 24 14 eb 1c 44 39 7b 18 74 26 41 83 ff 05 74 20 48 8b 1b 48 3b 1d f2 b9 f4 00 0f 84 9c 01 00 00 <44> 85 73 10 74 ea 44 8b 6b 14 41 f6 c5 01 75 d4 41 f6 c5 02 74 0f
-> RSP: 0018:ff71570009e07a80 EFLAGS: 00010207
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000200
-> RDX: ffffffffad8dc7c0 RSI: 0000000024924925 RDI: ff3e27850dea2000
-> RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffffabfce739
-> R10: ff3e27810cc42400 R11: 0000000000000000 R12: ff3e2781825ef970
-> R13: 00000000ff3e2785 R14: 000000000000000c R15: 0000000000000001
-> FS:  00007f5195b51740(0000) GS:ff3e278b12d40000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000010 CR3: 0000000626d24002 CR4: 0000000000361ee0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   ima_get_action+0x22/0x30
->   process_measurement+0xb0/0x830
->   ? page_add_file_rmap+0x15/0x170
->   ? alloc_set_pte+0x269/0x4c0
->   ? prep_new_page+0x81/0x140
->   ? simple_xattr_get+0x75/0xa0
->   ? selinux_file_open+0x9d/0xf0
->   ima_file_check+0x64/0x90
->   path_openat+0x571/0x1720
->   do_filp_open+0x9b/0x110
->   ? page_counter_try_charge+0x57/0xc0
->   ? files_cgroup_alloc_fd+0x38/0x60
->   ? __alloc_fd+0xd4/0x250
->   ? do_sys_open+0x1bd/0x250
->   do_sys_open+0x1bd/0x250
->   do_syscall_64+0x5d/0x1d0
->   entry_SYSCALL_64_after_hwframe+0x65/0xca
+> OK, so I have a solution that does not require kernel_info at a fixed offset:
 > 
-> Commit c7423dbdbc9e ("ima: Handle -ESTALE returned by
-> ima_filter_rule_match()") introduced call to ima_lsm_copy_rule within a
-> RCU read-side critical section which contains kmalloc with GFP_KERNEL.
-> This implies a possible sleep and violates limitations of RCU read-side
-> critical sections on non-PREEMPT systems.
+> - put this at the end of arch/x86/boot/compressed/vmlinux.lds.S
 > 
-> Sleeping within RCU read-side critical section might cause
-> synchronize_rcu() returning early and break RCU protection, allowing a
-> UAF to happen.
+> #ifdef CONFIG_SECURE_LAUNCH
+> PROVIDE(kernel_info_offset      = ABSOLUTE(kernel_info - startup_32));
+> PROVIDE(mle_header_offset       = kernel_info_offset +
+> ABSOLUTE(mle_header - startup_32));
+> PROVIDE(sl_stub_entry_offset    = kernel_info_offset +
+> ABSOLUTE(sl_stub_entry - startup_32));
+> PROVIDE(_edata_offset           = kernel_info_offset + ABSOLUTE(_edata
+> - startup_32));
+> #endif
 > 
-> The root cause of this issue could be described as follows:
-> |	Thread A	|	Thread B	|
-> |			|ima_match_policy	|
-> |			|  rcu_read_lock	|
-> |ima_lsm_update_rule	|			|
-> |  synchronize_rcu	|			|
-> |			|    kmalloc(GFP_KERNEL)|
-> |			|      sleep		|
-> ==> synchronize_rcu returns early
-> |  kfree(entry)		|			|
-> |			|    entry = entry->next|
-> ==> UAF happens and entry now becomes NULL (or could be anything).
-> |			|    entry->action	|
-> ==> Accessing entry might cause panic.
 > 
-> To fix this issue, we are converting all kmalloc that is called within
-> RCU read-side critical section to use GFP_ATOMIC.
+> and use this for the header fields:
 > 
-> Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: GUO Zihua <guozihua@huawei.com>
+>          /* Offset to the MLE header structure */
+> #if IS_ENABLED(CONFIG_SECURE_LAUNCH)
+>          .long   mle_header_offset - kernel_info
+> #else
+>          .long   0
+> #endif
+> 
 
-this looks fine
-Acked-by: John Johansen <john.johansen@canonical.com>
+Awesome thank you! We will work on incorporating this unless someone 
+else sees a problem with it (or we run into problems and need to revisit).
 
-> ---
+Ross
+
 > 
-> v3:
->    ima_lsm_copy_rule takes a GFP flag as input as well.
-> v2:
->    Changed the audit_rule_init security hook to accept a new GFP flag, as
-> per Stephen's suggestion.
 > 
-> ---
->   include/linux/lsm_hook_defs.h       |  2 +-
->   include/linux/security.h            |  5 +++--
->   kernel/auditfilter.c                |  5 +++--
->   security/apparmor/audit.c           |  6 +++---
->   security/apparmor/include/audit.h   |  2 +-
->   security/integrity/ima/ima_policy.c | 15 +++++++++------
->   security/security.c                 |  6 ++++--
->   security/selinux/include/audit.h    |  4 +++-
->   security/selinux/ss/services.c      |  5 +++--
->   security/smack/smack_lsm.c          |  3 ++-
->   10 files changed, 32 insertions(+), 21 deletions(-)
+> SYM_DATA_START(mle_header)
+>          .long   0x9082ac5a  /* UUID0 */
+>          .long   0x74a7476f  /* UUID1 */
+>          .long   0xa2555c0f  /* UUID2 */
+>          .long   0x42b651cb  /* UUID3 */
+>          .long   0x00000034  /* MLE header size */
+>          .long   0x00020002  /* MLE version 2.2 */
+>          .long   sl_stub_entry_offset - kernel_info /* Linear entry
+> point of MLE (virt. address) */
+>          .long   0x00000000  /* First valid page of MLE */
+>          .long   0x00000000  /* Offset within binary of first byte of MLE */
+>          .long   _edata_offset - kernel_info /* Offset within binary of
+> last byte + 1 of MLE */
+>          .long   0x00000227  /* Bit vector of MLE-supported capabilities */
+>          .long   0x00000000  /* Starting linear address of command line
+> (unused) */
+>          .long   0x00000000  /* Ending linear address of command line (unused) */
 > 
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index 334e00efbde4..7e539f6f8c67 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -412,7 +412,7 @@ LSM_HOOK(void, LSM_RET_VOID, key_post_create_or_update, struct key *keyring,
->   
->   #ifdef CONFIG_AUDIT
->   LSM_HOOK(int, 0, audit_rule_init, u32 field, u32 op, char *rulestr,
-> -	 void **lsmrule)
-> +	 void **lsmrule, gfp_t gfp)
->   LSM_HOOK(int, 0, audit_rule_known, struct audit_krule *krule)
->   LSM_HOOK(int, 0, audit_rule_match, u32 secid, u32 field, u32 op, void *lsmrule)
->   LSM_HOOK(void, LSM_RET_VOID, audit_rule_free, void *lsmrule)
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 41a8f667bdfa..5122e3ad83b1 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -2048,7 +2048,8 @@ static inline void security_key_post_create_or_update(struct key *keyring,
->   
->   #ifdef CONFIG_AUDIT
->   #ifdef CONFIG_SECURITY
-> -int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule);
-> +int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule,
-> +			     gfp_t gfp);
->   int security_audit_rule_known(struct audit_krule *krule);
->   int security_audit_rule_match(u32 secid, u32 field, u32 op, void *lsmrule);
->   void security_audit_rule_free(void *lsmrule);
-> @@ -2056,7 +2057,7 @@ void security_audit_rule_free(void *lsmrule);
->   #else
->   
->   static inline int security_audit_rule_init(u32 field, u32 op, char *rulestr,
-> -					   void **lsmrule)
-> +					   void **lsmrule, gfp_t gfp)
->   {
->   	return 0;
->   }
-> diff --git a/kernel/auditfilter.c b/kernel/auditfilter.c
-> index be8c680121e4..d6ef4f4f9cba 100644
-> --- a/kernel/auditfilter.c
-> +++ b/kernel/auditfilter.c
-> @@ -529,7 +529,8 @@ static struct audit_entry *audit_data_to_entry(struct audit_rule_data *data,
->   			entry->rule.buflen += f_val;
->   			f->lsm_str = str;
->   			err = security_audit_rule_init(f->type, f->op, str,
-> -						       (void **)&f->lsm_rule);
-> +						       (void **)&f->lsm_rule,
-> +						       GFP_KERNEL);
->   			/* Keep currently invalid fields around in case they
->   			 * become valid after a policy reload. */
->   			if (err == -EINVAL) {
-> @@ -799,7 +800,7 @@ static inline int audit_dupe_lsm_field(struct audit_field *df,
->   
->   	/* our own (refreshed) copy of lsm_rule */
->   	ret = security_audit_rule_init(df->type, df->op, df->lsm_str,
-> -				       (void **)&df->lsm_rule);
-> +				       (void **)&df->lsm_rule, GFP_KERNEL);
->   	/* Keep currently invalid fields around in case they
->   	 * become valid after a policy reload. */
->   	if (ret == -EINVAL) {
-> diff --git a/security/apparmor/audit.c b/security/apparmor/audit.c
-> index 45beb1c5f747..6b5181c668b5 100644
-> --- a/security/apparmor/audit.c
-> +++ b/security/apparmor/audit.c
-> @@ -217,7 +217,7 @@ void aa_audit_rule_free(void *vrule)
->   	}
->   }
->   
-> -int aa_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
-> +int aa_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule, gfp_t gfp)
->   {
->   	struct aa_audit_rule *rule;
->   
-> @@ -230,14 +230,14 @@ int aa_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
->   		return -EINVAL;
->   	}
->   
-> -	rule = kzalloc(sizeof(struct aa_audit_rule), GFP_KERNEL);
-> +	rule = kzalloc(sizeof(struct aa_audit_rule), gfp);
->   
->   	if (!rule)
->   		return -ENOMEM;
->   
->   	/* Currently rules are treated as coming from the root ns */
->   	rule->label = aa_label_parse(&root_ns->unconfined->label, rulestr,
-> -				     GFP_KERNEL, true, false);
-> +				     gfp, true, false);
->   	if (IS_ERR(rule->label)) {
->   		int err = PTR_ERR(rule->label);
->   		aa_audit_rule_free(rule);
-> diff --git a/security/apparmor/include/audit.h b/security/apparmor/include/audit.h
-> index acbb03b9bd25..0c8cc86b417b 100644
-> --- a/security/apparmor/include/audit.h
-> +++ b/security/apparmor/include/audit.h
-> @@ -200,7 +200,7 @@ static inline int complain_error(int error)
->   }
->   
->   void aa_audit_rule_free(void *vrule);
-> -int aa_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule);
-> +int aa_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule, gfp_t gfp);
->   int aa_audit_rule_known(struct audit_krule *rule);
->   int aa_audit_rule_match(u32 sid, u32 field, u32 op, void *vrule);
->   
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index c0556907c2e6..09da8e639239 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -401,7 +401,8 @@ static void ima_free_rule(struct ima_rule_entry *entry)
->   	kfree(entry);
->   }
->   
-> -static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
-> +static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry,
-> +						gfp_t gfp)
->   {
->   	struct ima_rule_entry *nentry;
->   	int i;
-> @@ -410,7 +411,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
->   	 * Immutable elements are copied over as pointers and data; only
->   	 * lsm rules can change
->   	 */
-> -	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
-> +	nentry = kmemdup(entry, sizeof(*nentry), gfp);
->   	if (!nentry)
->   		return NULL;
->   
-> @@ -425,7 +426,8 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
->   
->   		ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
->   				     nentry->lsm[i].args_p,
-> -				     &nentry->lsm[i].rule);
-> +				     &nentry->lsm[i].rule,
-> +				     gfp);
->   		if (!nentry->lsm[i].rule)
->   			pr_warn("rule for LSM \'%s\' is undefined\n",
->   				nentry->lsm[i].args_p);
-> @@ -438,7 +440,7 @@ static int ima_lsm_update_rule(struct ima_rule_entry *entry)
->   	int i;
->   	struct ima_rule_entry *nentry;
->   
-> -	nentry = ima_lsm_copy_rule(entry);
-> +	nentry = ima_lsm_copy_rule(entry, GFP_KERNEL);
->   	if (!nentry)
->   		return -ENOMEM;
->   
-> @@ -664,7 +666,7 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
->   		}
->   
->   		if (rc == -ESTALE && !rule_reinitialized) {
-> -			lsm_rule = ima_lsm_copy_rule(rule);
-> +			lsm_rule = ima_lsm_copy_rule(rule, GFP_ATOMIC);
->   			if (lsm_rule) {
->   				rule_reinitialized = true;
->   				goto retry;
-> @@ -1140,7 +1142,8 @@ static int ima_lsm_rule_init(struct ima_rule_entry *entry,
->   	entry->lsm[lsm_rule].type = audit_type;
->   	result = ima_filter_rule_init(entry->lsm[lsm_rule].type, Audit_equal,
->   				      entry->lsm[lsm_rule].args_p,
-> -				      &entry->lsm[lsm_rule].rule);
-> +				      &entry->lsm[lsm_rule].rule,
-> +				      GFP_KERNEL);
->   	if (!entry->lsm[lsm_rule].rule) {
->   		pr_warn("rule for LSM \'%s\' is undefined\n",
->   			entry->lsm[lsm_rule].args_p);
-> diff --git a/security/security.c b/security/security.c
-> index 0a9a0ac3f266..4fd3c839353e 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -5331,15 +5331,17 @@ void security_key_post_create_or_update(struct key *keyring, struct key *key,
->    * @op: rule operator
->    * @rulestr: rule context
->    * @lsmrule: receive buffer for audit rule struct
-> + * @gfp: GFP flag used for kmalloc
->    *
->    * Allocate and initialize an LSM audit rule structure.
->    *
->    * Return: Return 0 if @lsmrule has been successfully set, -EINVAL in case of
->    *         an invalid rule.
->    */
-> -int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule)
-> +int security_audit_rule_init(u32 field, u32 op, char *rulestr, void **lsmrule,
-> +			     gfp_t gfp)
->   {
-> -	return call_int_hook(audit_rule_init, field, op, rulestr, lsmrule);
-> +	return call_int_hook(audit_rule_init, field, op, rulestr, lsmrule, gfp);
->   }
->   
->   /**
-> diff --git a/security/selinux/include/audit.h b/security/selinux/include/audit.h
-> index 52aca71210b4..29c7d4c86f6d 100644
-> --- a/security/selinux/include/audit.h
-> +++ b/security/selinux/include/audit.h
-> @@ -21,12 +21,14 @@
->    *	@op: the operator the rule uses
->    *	@rulestr: the text "target" of the rule
->    *	@rule: pointer to the new rule structure returned via this
-> + *	@gfp: GFP flag used for kmalloc
->    *
->    *	Returns 0 if successful, -errno if not.  On success, the rule structure
->    *	will be allocated internally.  The caller must free this structure with
->    *	selinux_audit_rule_free() after use.
->    */
-> -int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **rule);
-> +int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **rule,
-> +			    gfp_t gfp);
->   
->   /**
->    *	selinux_audit_rule_free - free an selinux audit rule structure.
-> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-> index e88b1b6c4adb..ded250e525e9 100644
-> --- a/security/selinux/ss/services.c
-> +++ b/security/selinux/ss/services.c
-> @@ -3508,7 +3508,8 @@ void selinux_audit_rule_free(void *vrule)
->   	}
->   }
->   
-> -int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
-> +int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule,
-> +			    gfp_t gfp)
->   {
->   	struct selinux_state *state = &selinux_state;
->   	struct selinux_policy *policy;
-> @@ -3549,7 +3550,7 @@ int selinux_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
->   		return -EINVAL;
->   	}
->   
-> -	tmprule = kzalloc(sizeof(struct selinux_audit_rule), GFP_KERNEL);
-> +	tmprule = kzalloc(sizeof(struct selinux_audit_rule), gfp);
->   	if (!tmprule)
->   		return -ENOMEM;
->   	context_init(&tmprule->au_ctxt);
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 146667937811..a4943628d75a 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -4696,7 +4696,8 @@ static int smack_post_notification(const struct cred *w_cred,
->    * Prepare to audit cases where (@field @op @rulestr) is true.
->    * The label to be audited is created if necessay.
->    */
-> -static int smack_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
-> +static int smack_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule,
-> +				 gfp_t gfp)
->   {
->   	struct smack_known *skp;
->   	char **rule = (char **)vrule;
 
 
