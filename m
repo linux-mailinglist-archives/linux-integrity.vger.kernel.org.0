@@ -1,206 +1,279 @@
-Return-Path: <linux-integrity+bounces-2796-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2797-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FB7B8FBBC8
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 20:43:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6A348FBBE8
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 20:52:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 936C91C2375E
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 18:43:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A182B26886
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Jun 2024 18:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6F114A0B7;
-	Tue,  4 Jun 2024 18:43:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5F914AD0C;
+	Tue,  4 Jun 2024 18:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="D+Dn9pjz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Md9bXG+P"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF9E149006
-	for <linux-integrity@vger.kernel.org>; Tue,  4 Jun 2024 18:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8EF13D88D;
+	Tue,  4 Jun 2024 18:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717526599; cv=none; b=lE9QUe6v+h0ka1VxDJwWFMDQUCuOrP2e/HsNqowiTKHSEkEK8A6y4Kc5D5lm+2NmD/Qfnb7eYVUy4FltUWsDCPHN1R4nNFgt8Lmievz+R85Gx1LZ6zK9I/JqIxwPSHMwJt4kpOY51L0YzbMQNh375h2uQAQPTtszrhfjkpraQ7c=
+	t=1717527149; cv=none; b=E969FA7wLvx2t7jYVgNrYnBfED9kin03VE8CM4IBlUmjXsFfrB68T3T+6qR4gVGIiDyyCIc3T9vWe1YNtY+L4zkf0/+hJA83auDzaiAtw3lOuUmZIgfo+74MZdgmSO2zxIJG/5iPAqkrZhFsMgImMoTe4/9viMmy0notDGTIYGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717526599; c=relaxed/simple;
-	bh=grQASJp14Bt7fZYtPF/BOiWWydFpPjbo/cl/eIyN7Yw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P2zj/Vh97sFRZn1GGl6dfmFYmOL/F1gmFpEBe4luw65azoXoLpjOjVU8mkBjem7pL2xW+vI51mJWAspktae0jgmjhgFhz0/OkToAlpLlcVy+khmPCbp1UhBaV+OguSX8hfWRUD8KSsjtcPCvlgceLo4XOEHW2LNwzZRgH5Y5358=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=D+Dn9pjz; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52baa9026dcso384067e87.3
-        for <linux-integrity@vger.kernel.org>; Tue, 04 Jun 2024 11:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1717526595; x=1718131395; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Iay1wNfKZ5p2yKYQUB8UE9csohQVR6x64V5CAu9ZDo=;
-        b=D+Dn9pjzYyPe1Rb7YGr00UzU4jXPUPhzf588Vw3LRrXDtEUrWHMyJFgBFHSzDt9SvD
-         4Jb0EebP/31mDzPYeCNS26IGloGjQLhKU3I/uOwmwzdeIvqPQCBNDBsUOqgO7pcUROe7
-         gYktqDIa3QoCsBMrLMUc5KPupFSaiN9T4jBVQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717526595; x=1718131395;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Iay1wNfKZ5p2yKYQUB8UE9csohQVR6x64V5CAu9ZDo=;
-        b=VZ51lv1YVd8AGfRJjcgIMKiYlqtBgUo69rCAJ2ofZ3zYvWwJ7XLqIc5qiBBE97KD4x
-         CT8qVz64ICl4T50P9kB0KNZVTMy6j9Mlk1mjMbfRE0UPszkjA4L2FiWaDoK5+qrRkAwA
-         NcTmtAvPSzWxulUf+myy+03kNsyPjt4OkqvC7e8qP5gnYtKNjkpq1NcSY8FiefMOKMoj
-         XBCLgEnTxdrvKVTc8ungbfzWtogBlWViJDGQ93ip8IXSigoXxV6euG+YY0fp9683mjus
-         eHWZNdRInZHDDaHVi7xiq56P8Ce9TYYPUoXvpG1SX1NaMjTge3aCBcx+o0/wGW9IBkLO
-         InxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV1mBC2GqhLPnL+3Ojzm31yZQMj2SrJ3dv1C4jgJHg9bXkaKoPsnwpNQJ3oywidNxyo9XaISdDEnfh1gre/63tK3lxvGqdVWAwRh+WeHebz
-X-Gm-Message-State: AOJu0YwH7vtuHLBH4gCHbL2ZUAgvYW3pK0PeedZc41VKwhD309PzFocK
-	hJ/JDc4/4FYf8Xxd4MT1L4GQSpeD4TLLVmUZ2JhTXGPAyR7CBy5Pep/2qIzZuGG0gzM0PBWMiCr
-	AshLZDQ==
-X-Google-Smtp-Source: AGHT+IF1XuetQGGmSOLo21b1TzXntStPiojPehBgA3h1ugsb3QLzYNhbzDx3nfGd/5BR1oEkGgDWQA==
-X-Received: by 2002:a05:6512:110a:b0:52b:7955:1188 with SMTP id 2adb3069b0e04-52bab4d47a6mr335765e87.35.1717526595673;
-        Tue, 04 Jun 2024 11:43:15 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a790f1c95sm2560214a12.50.2024.06.04.11.43.15
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jun 2024 11:43:15 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-421572bb0f0so144185e9.0
-        for <linux-integrity@vger.kernel.org>; Tue, 04 Jun 2024 11:43:15 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU7bKS0OM+Eqevk1oC6zfJo1IbGpJ2//7bWqTnX1jsaAXgRM/+0M0OaoyJ4xtiODQWuv9cRHUmlPI8f6lf1syEu4JyAxeUfTUbWNpWcwd5a
-X-Received: by 2002:a17:906:54b:b0:a62:2cae:c02 with SMTP id
- a640c23a62f3a-a69a024ce40mr20818866b.61.1717526574326; Tue, 04 Jun 2024
- 11:42:54 -0700 (PDT)
+	s=arc-20240116; t=1717527149; c=relaxed/simple;
+	bh=WWH33RP1o5Qg05eJ8r9JvDT1Wv6XYAs8lOgl4ISqoq8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=nwGuS4INUhy+5uCMV3OHX79FdKIQi63oRYzKJeK/RzqSZdtnqmXoVb2rAoyhV66fVvR+qnhjzAO+5dlZDcnFXXB5yEptIOOvd/rAjYKQMUaw//EcBrGVozhCr8ilVumZXnF87fuq8rB0gXyJ7uF7F19oQob7kj2UWJAviNfuVv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Md9bXG+P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D612CC2BBFC;
+	Tue,  4 Jun 2024 18:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717527148;
+	bh=WWH33RP1o5Qg05eJ8r9JvDT1Wv6XYAs8lOgl4ISqoq8=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=Md9bXG+PizBDYmRG3tn1IrdW/6JZBrceK1yZ8SUCpiSSD2j81VkmKoPTgTQ25tz+t
+	 8ynwvq8HMFa6OhUsZ5oHLquws90ATj8DerOaO9XHRwyBgQ3XlH1MBsHo8nLps1G7v7
+	 Og2atXobM6Jo6e6tkgZErgnFD/1tVaDkpHzp+kpmU67Ne7icB6yoSbxz1TlSeC8o4k
+	 2Uyu8Eu460PtoI/YSUV++IBS9gmza22773TYhbWLfuZFDnMhiIhWt/TrkxKbRq+QoA
+	 /I8Rt6aJYXwmLudczPLW4emg3FGZOUMZH7FMcpnWCHmggtGM7Czq8xbNIaPckcgN4W
+	 UnilDqYAur8ZQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com> <Zl9b_Wh_Lx7Aln1q@intel.com>
-In-Reply-To: <Zl9b_Wh_Lx7Aln1q@intel.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 4 Jun 2024 11:42:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whAnzrovfD8MtpRwfbkVxi-W61CqKxYdX+94r_uJeCT7w@mail.gmail.com>
-Message-ID: <CAHk-=whAnzrovfD8MtpRwfbkVxi-W61CqKxYdX+94r_uJeCT7w@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] treewide: Align match_string() with sysfs_match_string()
-To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Corey Minyard <minyard@acm.org>, 
-	Allen Pais <apais@linux.microsoft.com>, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>, Perry Yuan <perry.yuan@amd.com>, 
-	Giovanni Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Nuno Sa <nuno.sa@analog.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Lee Jones <lee@kernel.org>, 
-	Samuel Holland <samuel@sholland.org>, Elad Nachman <enachman@marvell.com>, 
-	Arseniy Krasnov <AVKrasnov@sberdevices.ru>, Johannes Berg <johannes.berg@intel.com>, 
-	Gregory Greenman <gregory.greenman@intel.com>, Benjamin Berg <benjamin.berg@intel.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Robert Richter <rrichter@amd.com>, Vinod Koul <vkoul@kernel.org>, 
-	Chunfeng Yun <chunfeng.yun@mediatek.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Nikita Kravets <teackot@gmail.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Stanley Chang <stanley_chang@realtek.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Abdel Alkuor <abdelalkuor@geotab.com>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Eric Biggers <ebiggers@google.com>, 
-	Kees Cook <keescook@chromium.org>, Ingo Molnar <mingo@kernel.org>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Hugh Dickins <hughd@google.com>, 
-	Abel Wu <wuyun.abel@bytedance.com>, John Johansen <john.johansen@canonical.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Takashi Iwai <tiwai@suse.de>, Takashi Sakamoto <o-takashi@sakamocchi.jp>, 
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Mark Brown <broonie@kernel.org>, 
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-ide@vger.kernel.org, openipmi-developer@lists.sourceforge.net, 
-	linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org, qat-linux@intel.com, 
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
-	intel-xe@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-sunxi@lists.linux.dev, 
-	linux-omap@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, netdev@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org, 
-	linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-	linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, 
-	linux-fbdev@vger.kernel.org, linux-bcachefs@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, alsa-devel@alsa-project.org, 
-	linux-sound@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, David Howells <dhowells@redhat.com>, 
-	"David S. Miller" <davem@davemloft.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, Damien Le Moal <dlemoal@kernel.org>, 
-	Niklas Cassel <cassel@kernel.org>, Daniel Scally <djrscally@gmail.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, 
-	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>, 
-	Danilo Krummrich <dakr@redhat.com>, Jean Delvare <jdelvare@suse.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Tony Lindgren <tony@atomide.com>, Adrian Hunter <adrian.hunter@intel.com>, Hu Ziji <huziji@marvell.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Potnuri Bharat Teja <bharat@chelsio.com>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miri Korenblit <miriam.rachel.korenblit@intel.com>, Kalle Valo <kvalo@kernel.org>, 
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>, "Oliver O'Halloran" <oohall@gmail.com>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, JC Kuo <jckuo@nvidia.com>, 
-	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Sebastian Reichel <sre@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Helge Deller <deller@gmx.de>, Brian Foster <bfoster@redhat.com>, 
-	Zhihao Cheng <chengzhihao1@huawei.com>, Tejun Heo <tj@kernel.org>, 
-	Zefan Li <lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jason Baron <jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Clemens Ladisch <clemens@ladisch.de>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 04 Jun 2024 21:52:21 +0300
+Message-Id: <D1RGK44SJ477.3BQ82NMUKH2Z8@kernel.org>
+Cc: <dpsmith@apertussolutions.com>, <tglx@linutronix.de>,
+ <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+ <dave.hansen@linux.intel.com>, <ardb@kernel.org>, <mjg59@srcf.ucam.org>,
+ <James.Bottomley@hansenpartnership.com>, <peterhuewe@gmx.de>,
+ <jgg@ziepe.ca>, <luto@amacapital.net>, <nivedita@alum.mit.edu>,
+ <herbert@gondor.apana.org.au>, <davem@davemloft.net>, <corbet@lwn.net>,
+ <ebiederm@xmission.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+ <kanth.ghatraju@oracle.com>, <andrew.cooper3@citrix.com>,
+ <trenchboot-devel@googlegroups.com>
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
+ early measurements
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Ross Philipson" <ross.philipson@oracle.com>,
+ <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+ <linux-integrity@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-crypto@vger.kernel.org>, <kexec@lists.infradead.org>,
+ <linux-efi@vger.kernel.org>, <iommu@lists.linux-foundation.org>
+X-Mailer: aerc 0.17.0
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-7-ross.philipson@oracle.com>
+In-Reply-To: <20240531010331.134441-7-ross.philipson@oracle.com>
 
-On Tue, 4 Jun 2024 at 11:25, Rodrigo Vivi <rodrigo.vivi@intel.com> wrote:
+On Fri May 31, 2024 at 4:03 AM EEST, Ross Philipson wrote:
+> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
 >
-> (I believe that the new _match_string(str1, size, str2) deserves a better name,
-> but since I'm bad with naming stuff, I don't have any good suggestion)
+> For better or worse, Secure Launch needs SHA-1 and SHA-256. The
+> choice of hashes used lie with the platform firmware, not with
+> software, and is often outside of the users control.
+>
+> Even if we'd prefer to use SHA-256-only, if firmware elected to start us
+> with the SHA-1 and SHA-256 backs active, we still need SHA-1 to parse
+> the TPM event log thus far, and deliberately cap the SHA-1 PCRs in order
+> to safely use SHA-256 for everything else.
+>
+> The SHA-1 code here has its origins in the code from the main kernel:
+>
+> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
+>
+> A modified version of this code was introduced to the lib/crypto/sha1.c
+> to bring it in line with the SHA-256 code and allow it to be pulled into =
+the
+> setup kernel in the same manner as SHA-256 is.
+>
+> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+> ---
+>  arch/x86/boot/compressed/Makefile     |  2 +
+>  arch/x86/boot/compressed/early_sha1.c | 12 ++++
+>  include/crypto/sha1.h                 |  1 +
+>  lib/crypto/sha1.c                     | 81 +++++++++++++++++++++++++++
+>  4 files changed, 96 insertions(+)
+>  create mode 100644 arch/x86/boot/compressed/early_sha1.c
+>
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed=
+/Makefile
+> index e9522c6893be..3307ebef4e1b 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -118,6 +118,8 @@ vmlinux-objs-$(CONFIG_EFI) +=3D $(obj)/efi.o
+>  vmlinux-objs-$(CONFIG_EFI_MIXED) +=3D $(obj)/efi_mixed.o
+>  vmlinux-objs-$(CONFIG_EFI_STUB) +=3D $(objtree)/drivers/firmware/efi/lib=
+stub/lib.a
+> =20
+> +vmlinux-objs-$(CONFIG_SECURE_LAUNCH) +=3D $(obj)/early_sha1.o
+> +
+>  $(obj)/vmlinux: $(vmlinux-objs-y) FORCE
+>  	$(call if_changed,ld)
+> =20
+> diff --git a/arch/x86/boot/compressed/early_sha1.c b/arch/x86/boot/compre=
+ssed/early_sha1.c
+> new file mode 100644
+> index 000000000000..8a9b904a73ab
+> --- /dev/null
+> +++ b/arch/x86/boot/compressed/early_sha1.c
+> @@ -0,0 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2024 Apertus Solutions, LLC.
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/linkage.h>
+> +#include <linux/string.h>
+> +#include <asm/boot.h>
+> +#include <asm/unaligned.h>
+> +
+> +#include "../../../../lib/crypto/sha1.c"
+}
 
-I hated the enormous cc list, so I didn't reply to all. But clearly
-everybody else is just doing so.
+Yep, make sense. Thinking only that should this be just sha1.c.
 
-Anyway, here's my NAK for this patch with explanation:
+Comparing this to mainly drivers/firmware/efi/tpm.c, which is not
+early_tpm.c where the early actually probably would make more sense
+than here. Here sha1 primitive is just needed.
 
-    https://lore.kernel.org/all/CAHk-=wg5F99-GZPETsasJd0JB0JGcdmmPeHRxCtT4_i83h8avg@mail.gmail.com/
+This is definitely a nitpick but why carry a prefix that is not
+that useful, right?
 
-and part of it was the naming, but there were other oddities there too.
+> diff --git a/include/crypto/sha1.h b/include/crypto/sha1.h
+> index 044ecea60ac8..d715dd5332e1 100644
+> --- a/include/crypto/sha1.h
+> +++ b/include/crypto/sha1.h
+> @@ -42,5 +42,6 @@ extern int crypto_sha1_finup(struct shash_desc *desc, c=
+onst u8 *data,
+>  #define SHA1_WORKSPACE_WORDS	16
+>  void sha1_init(__u32 *buf);
+>  void sha1_transform(__u32 *digest, const char *data, __u32 *W);
+> +void sha1(const u8 *data, unsigned int len, u8 *out);
+> =20
+>  #endif /* _CRYPTO_SHA1_H */
+> diff --git a/lib/crypto/sha1.c b/lib/crypto/sha1.c
+> index 1aebe7be9401..10152125b338 100644
+> --- a/lib/crypto/sha1.c
+> +++ b/lib/crypto/sha1.c
+> @@ -137,4 +137,85 @@ void sha1_init(__u32 *buf)
+>  }
+>  EXPORT_SYMBOL(sha1_init);
+> =20
+> +static void __sha1_transform(u32 *digest, const char *data)
+> +{
+> +       u32 ws[SHA1_WORKSPACE_WORDS];
+> +
+> +       sha1_transform(digest, data, ws);
+> +
+> +       memzero_explicit(ws, sizeof(ws));
 
-           Linus
+For the sake of future reference I'd carry always some inline comment
+with any memzero_explicit() call site.
+
+> +}
+> +
+> +static void sha1_update(struct sha1_state *sctx, const u8 *data, unsigne=
+d int len)
+> +{
+> +	unsigned int partial =3D sctx->count % SHA1_BLOCK_SIZE;
+> +
+> +	sctx->count +=3D len;
+> +
+> +	if (likely((partial + len) >=3D SHA1_BLOCK_SIZE)) {
+
+
+	if (unlikely((partial + len) < SHA1_BLOCK_SIZE))
+		goto out;
+
+?
+
+> +		int blocks;
+> +
+> +		if (partial) {
+> +			int p =3D SHA1_BLOCK_SIZE - partial;
+> +
+> +			memcpy(sctx->buffer + partial, data, p);
+> +			data +=3D p;
+> +			len -=3D p;
+> +
+> +			__sha1_transform(sctx->state, sctx->buffer);
+> +		}
+> +
+> +		blocks =3D len / SHA1_BLOCK_SIZE;
+> +		len %=3D SHA1_BLOCK_SIZE;
+> +
+> +		if (blocks) {
+> +			while (blocks--) {
+> +				__sha1_transform(sctx->state, data);
+> +				data +=3D SHA1_BLOCK_SIZE;
+> +			}
+> +		}
+> +		partial =3D 0;
+> +	}
+> +
+
+out:
+
+> +	if (len)
+> +		memcpy(sctx->buffer + partial, data, len);
+
+Why not just memcpy() unconditionally?
+
+> +}
+> +
+> +static void sha1_final(struct sha1_state *sctx, u8 *out)
+> +{
+> +	const int bit_offset =3D SHA1_BLOCK_SIZE - sizeof(__be64);
+> +	unsigned int partial =3D sctx->count % SHA1_BLOCK_SIZE;
+> +	__be64 *bits =3D (__be64 *)(sctx->buffer + bit_offset);
+> +	__be32 *digest =3D (__be32 *)out;
+> +	int i;
+> +
+> +	sctx->buffer[partial++] =3D 0x80;
+> +	if (partial > bit_offset) {
+> +		memset(sctx->buffer + partial, 0x0, SHA1_BLOCK_SIZE - partial);
+> +		partial =3D 0;
+> +
+> +		__sha1_transform(sctx->state, sctx->buffer);
+> +	}
+> +
+> +	memset(sctx->buffer + partial, 0x0, bit_offset - partial);
+> +	*bits =3D cpu_to_be64(sctx->count << 3);
+> +	__sha1_transform(sctx->state, sctx->buffer);
+> +
+> +	for (i =3D 0; i < SHA1_DIGEST_SIZE / sizeof(__be32); i++)
+> +		put_unaligned_be32(sctx->state[i], digest++);
+> +
+> +	*sctx =3D (struct sha1_state){};
+> +}
+> +
+> +void sha1(const u8 *data, unsigned int len, u8 *out)
+> +{
+> +	struct sha1_state sctx =3D {0};
+> +
+> +	sha1_init(sctx.state);
+> +	sctx.count =3D 0;
+
+Hmm... so shouldn't C99 take care of this given the initialization
+above? I'm not 100% sure here. I.e. given "=3D {0}", shouldn't this
+already be zero?
+
+> +	sha1_update(&sctx, data, len);
+> +	sha1_final(&sctx, out);
+> +}
+> +EXPORT_SYMBOL(sha1);
+> +
+>  MODULE_LICENSE("GPL");
+
+BR, Jarkko
 
