@@ -1,129 +1,163 @@
-Return-Path: <linux-integrity+bounces-2845-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2848-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF53A8FF9AA
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2024 03:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA209000B3
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2024 12:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 327401F241E7
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2024 01:47:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1CA31F254D3
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Jun 2024 10:24:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FDF810A19;
-	Fri,  7 Jun 2024 01:47:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25FF1C696;
+	Fri,  7 Jun 2024 10:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WOdn/kkw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N5d7MWhE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEF64C76;
-	Fri,  7 Jun 2024 01:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A250746E
+	for <linux-integrity@vger.kernel.org>; Fri,  7 Jun 2024 10:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717724848; cv=none; b=WJWMAqbNpWriiTBO0yVxczYY4pJCYcdQrrveZ26+IZxE01MnkVz24Mpk8ZLB8ApqMwIwfvJFjQMAMCSsWZoXwOiBtRoNDuvoslVvrKxS4+kCsXPk7Zr36d1dl9m2OCi4T3CwqsfgfO9YUc5OsmYFMk5KLfhtGKhZJ/5xJ+eM1Fg=
+	t=1717755774; cv=none; b=i+3pTPiL1zbgTNmFKYXaJB4Aq/623iy2o0LjJNl5vto56ZHjB+dD9lZ8ZfG8O9gR2HSwyVnYwY1zITUf1ORUfBSK0QTZGUIiBoXFWrnm3hFr90HvuGsJnSFnLOLeJOsprCQSwYNEokU6gnovMTFL6DLu1e6ykA9bW6nfAbL8d5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717724848; c=relaxed/simple;
-	bh=vEQGruV7vNomyN1/16lhy+/kKw+pGXABrWp8XaCgJ3k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=GV/4RgnpcmhQNOFEe0S4/x0s9xC9mATC2FCDfyiYlpamZGbMGmzXAV7zDz89POop3UD0Kn5QNbAJuvavbPmC4p0XHgNiDrjakyHbmkxkMYZ47uaC2A+aLtecYRsB2o6S21c4sAfX6FjVdrgsH9iqwZy8dFUB5C64zgjYK+/lg90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WOdn/kkw; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 456LprOG009857;
-	Fri, 7 Jun 2024 01:47:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	m8ztMMV0XfBkGZrE/9oEW6+dpAh7sNaqLenUpmWCesk=; b=WOdn/kkw+i/Fe4MJ
-	0oeav343TfBBklbLWxUwoM895bMIY+9T5dfHkCnkOlqWQfc6eM0TqBDCIUsSOZBj
-	Zdv3QrUca+RKyMnswy2k6RyLPekOhobpRDbrnie8gzOTHKKBDvhEMXdXGa/u6p6D
-	7P6bWge/WCTNLU+OWAoNdwfURMMxEl+74HfQQDuSKPb347KuQm8SUt0W1mXOlrNI
-	BwBI6/F83wGC20u7q3aAyVxkTbj6EHuMaFYkEQspwm8Soir3FV/2pBpfprghjK0E
-	yvytFsvk91jLJknS1Pf9YuZ1B2U8e+kfK16Yl0VWfxFEIEuDQcX/rIt5J9AwvhmY
-	AEC1wQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yjh3tw0fs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Jun 2024 01:47:10 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4571l9s0004936
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 7 Jun 2024 01:47:09 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 6 Jun 2024
- 18:47:08 -0700
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Date: Thu, 6 Jun 2024 18:47:07 -0700
-Subject: [PATCH v3 2/2] KEYS: encrypted: add missing MODULE_DESCRIPTION()
+	s=arc-20240116; t=1717755774; c=relaxed/simple;
+	bh=nXz5EYuO2loFBrDPkymBXNFRs0atL4WhmYpYb74DJgc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c95lY5pdvsDjPexjQkzQAgyETNIA3seSmo2uvolgWBtZ0yMWJbC7u+J7QcjPoKyIKleIw4Q/ZlnxNv2Tg0AD4l1dYnzqABtdeALMCplAaewIdfgPzSXIZrCDLSVCKWtPgPtZNHZmoONMHFiqY3lRL8XQ7I1uP9L5Wi97O1Noecc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N5d7MWhE; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7025f4f4572so2312856b3a.1
+        for <linux-integrity@vger.kernel.org>; Fri, 07 Jun 2024 03:22:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717755771; x=1718360571; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P8hEpBvVjtNfcbiEWd/gwxvmPyixaEXOK9U5WUUSHco=;
+        b=N5d7MWhE5D1r86S3TxvHZQPlAwXhFj4iGKOGQt6rePMmdiPaAocu692IFcuTmViRvh
+         IQ8UbmGXF5uKHstUrtXyATF3lcWPiml485Zh3inv5PxMnkuOzKn40kvbwAfUN+zZPBf3
+         yIYcQRSu81sBjXv6oH9vmZXGiUCEs8q35VOosNiPmHypQK6XoacERo+cGp3Errxk7H/L
+         GdF5RM1O0kguX4zNVixb3D29K+qAT1orySZlo2D+nejI+M1KflShjwOrQs1nEvrXqo/c
+         F2L/iDvF5Pk9vizObj0I/7LmjbLgK+Z4xRMd9JgGcgbBJ+tJwQ4LOYW44g7vX8R3xbL+
+         rCrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717755771; x=1718360571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P8hEpBvVjtNfcbiEWd/gwxvmPyixaEXOK9U5WUUSHco=;
+        b=c3VZ8v03ID1qtLdVFkfxOqBIxNz0ZaIiwI8XEV26aF8mu+NpGZSadNHRh6Evhts1i3
+         pQoyG7rRvxZMERj7mulbsXXV+MK0diUgXr/mhQNF+HnUB3nlHy8H8xuo22EFwQOz7aob
+         jz6zr2cN5OVC1C6ECwc3bWtNaIwGFxncbJ2baTFKuWZ61jVeBcWlzYL+DtPjemVkVUQb
+         Hw+NSW2l4gBKEvoPvB6OduIyYwGwBKAJR474g+yz6bpuygF/jM8JQvZY70OSMePrII/v
+         BDlsXfjUrUxwffXBGzKu0+7sQGmipZWSrVM3fxcWrG20od4Jc61zWEswMrUjH9XOZwzg
+         EenA==
+X-Gm-Message-State: AOJu0YySQRR+47K9CCvGXzmeBcNAJsIXnXEG1vpgQ8CimTE4uN5nxr1T
+	RaxXmO5fbf+0PoHtNcDn99tOYHo4Xq/JcYuaMDNaWUSeplg7DQxZGuKHK/93Vobx3ayOure7SgI
+	s7HhqvY9t40GRMcdtxWqAVqFWKPk=
+X-Google-Smtp-Source: AGHT+IGBCQstEbNPr72rld48pO1SzkpwPr6O8h08S0skOo4HPex77G8jWE5cKrxr9xhk7iPhzlkoc+91fM8TpsdggGI=
+X-Received: by 2002:a17:90a:fa11:b0:2bd:47fe:6dec with SMTP id
+ 98e67ed59e1d1-2c29996c181mr7317734a91.5.1717755771319; Fri, 07 Jun 2024
+ 03:22:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240606-md-trusted-v3-2-42716f15e66e@quicinc.com>
-References: <20240606-md-trusted-v3-0-42716f15e66e@quicinc.com>
-In-Reply-To: <20240606-md-trusted-v3-0-42716f15e66e@quicinc.com>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Jarkko Sakkinen
-	<jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells
-	<dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>,
-        James Morris
-	<jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-CC: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>
-X-Mailer: b4 0.13.0
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: k9lB1TD4tAzTUchkfJHb6CFCyNOZt2ym
-X-Proofpoint-ORIG-GUID: k9lB1TD4tAzTUchkfJHb6CFCyNOZt2ym
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-06_20,2024-06-06_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- adultscore=0 bulkscore=0 malwarescore=0 phishscore=0 priorityscore=1501
- suspectscore=0 spamscore=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406070012
+References: <103252ffff09c607e83c887cab2e0af5404d62ff.1710774200.git.dmitry.kasatkin@gmail.com>
+ <ZhlOjunocFKwYENP@black.fi.intel.com> <ZjTNEbrDZvLxzV5h@black.fi.intel.com>
+In-Reply-To: <ZjTNEbrDZvLxzV5h@black.fi.intel.com>
+From: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Date: Fri, 7 Jun 2024 13:22:39 +0300
+Message-ID: <CACE9dm9p0nwsKJxQE28ctv3r+b4Eqm_9iP+QNK+MBZGfxi23JQ@mail.gmail.com>
+Subject: Re: [ima-evm-utils: PATCH v2 1/1] Change license to LGPL-2.0-or-later
+ and GPL-2.0-or-later
+To: "Svahn, Kai" <kai.svahn@linux.intel.com>
+Cc: linux-integrity@vger.kernel.org, 
+	Dmitry Kasatkin <dmitry.kasatkin@huawei.com>, Petr Vorel <pvorel@suse.cz>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>, 
+	Vitaly Chikunov <vt@altlinux.org>, Ken Goldman <kgold@linux.ibm.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Bruno Meneguele <bmeneg@redhat.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, George Wilson <gcwilson@linux.ibm.com>, 
+	Tergel Myanganbayar <tergelmyanganbayar2024@u.northwestern.edu>, "Andr?? Draszik" <git@andred.net>, 
+	Frank Sorenson <sorenson@redhat.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Vivek Goyal <vgoyal@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-During kbuild, with W=1, modpost will warn when a module doesn't have
-a MODULE_DESCRIPTION(). The encrypted-keys module does not have a
-MODULE_DESCRIPTION().  But currently, even with an allmodconfig
-configuration, this module is built-in, and as a result, kbuild does
-not currently warn about the missing MODULE_DESCRIPTION().
+On Fri, May 3, 2024 at 2:40=E2=80=AFPM Svahn, Kai <kai.svahn@linux.intel.co=
+m> wrote:
+>
+> Hi,
+>
+> On Fri, Apr 12, 2024 at 06:09:02PM +0300, Svahn, Kai wrote:
+> > Hi,
+> >
+> > On Mon, Mar 18, 2024 at 05:07:24PM +0200, Dmitry Kasatkin wrote:
+> > > Currently libimaevm provided by this project is used by the tool evmc=
+tl,
+> > > which is also provided by this project.
+> > >
+> > > An issue was reported about using libimaevm with other software. Its
+> > > GPL2-only license makes it incompatible to use with other licenses, i=
+n
+> > > particular GPL3-only.
+> > >
+> > > To address this issue, change the project license to GPL-2.0-or-later
+> > > and libimaevm to LGPL 2.0 or later.
+> > >
+> > > This patch includes all acks received so far.
+> > >
+> > > Signed-off-by: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+> > > Acked-by: Dmitry Kasatkin <dmitry.kasatkin@huawei.com>
+> > > Acked-by: Petr Vorel <pvorel@suse.cz>
+> > > Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > Acked-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > Acked-by: Vitaly Chikunov <vt@altlinux.org>
+> > > Acked-by: Ken Goldman <kgold@linux.ibm.com>
+> > > Acked-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> > > Acked-by: Bruno Meneguele <bmeneg@redhat.com>
+> > > Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > Acked-by: George Wilson <gcwilson@linux.ibm.com>
+> > > Acked-by: Tergel Myanganbayar <tergelmyanganbayar2024@u.northwestern.=
+edu>
+> > > Acked-by: Andr?? Draszik <git@andred.net>
+> > > Acked-by: Frank Sorenson <sorenson@redhat.com>
+> > > Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
+> > > Acked-by: Vivek Goyal <vgoyal@redhat.com>
+> > > Acked-by: Eric Biggers <ebiggers@google.com>
+> > > Acked-by: Alberto Mardegan <a.mardegan@omp.ru>
+> > > Acked-by: Eric Biggers <ebiggers@google.com> # all Google contributio=
+ns
+> > > Acked-by: Dmitry Baryshkov <dbaryshkov@gmail.com>
+> > > Acked-by: Patrick Uiterwijk <patrick@puiterwijk.org>
+> > > Acked-by: Mimi Zohar <zohar@linux.ibm.com>  # all IBM contributions
+> > > Acked-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> > > ---
+> >
+> > Acked-by: Kai Svahn <kai.svahn@linux.intel.com>
+>
+> Acked-by: Kai Svahn <kai.svahn@linux.intel.com> # all Intel contributions
+>
+> Cheers,
+> Kai
 
-However, just in case it is built as a module in the future, add the
-missing MODULE_DESCRIPTION() macro invocation.
 
-Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
----
- security/keys/encrypted-keys/encrypted.c | 1 +
- 1 file changed, 1 insertion(+)
+Hello,
 
-diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
-index 8af2136069d2..831cb84fd75a 100644
---- a/security/keys/encrypted-keys/encrypted.c
-+++ b/security/keys/encrypted-keys/encrypted.c
-@@ -1040,4 +1040,5 @@ static void __exit cleanup_encrypted(void)
- late_initcall(init_encrypted);
- module_exit(cleanup_encrypted);
- 
-+MODULE_DESCRIPTION("Encrypted key type");
- MODULE_LICENSE("GPL");
+I finally got consent from Samsung Corporation...
 
--- 
-2.42.0
+Acked-by: yh00.jung@samsung.com # all Samsung contributions
+Acked-by: dmitry.kasatkin@gmail.com # all Samsung contributions with
+consent from Samsung corporation
 
+I will update patchset with all Acks..
+
+-Dmitry
 
