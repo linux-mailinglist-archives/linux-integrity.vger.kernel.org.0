@@ -1,280 +1,214 @@
-Return-Path: <linux-integrity+bounces-2856-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2857-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85D41904C08
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2024 08:56:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F410905DDD
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2024 23:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E2761F22997
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2024 06:56:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F322FB228F8
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Jun 2024 21:43:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7615816C457;
-	Wed, 12 Jun 2024 06:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08A85126F32;
+	Wed, 12 Jun 2024 21:43:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oHMb1Jq7"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="SIKgFwFP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDC11649BE
-	for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2024 06:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7E386252
+	for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2024 21:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718175383; cv=none; b=bKe8GQUHu2aZ6Yll/59E79BDR4A1vYy5IQlz5kKHhFdF6z7z7sFnJ/z72gib9lNN6KqrWU4XKYz5V8EPvF44Sv9iBEytJbW2gvuLeJ85fmm1felhbgE8jDA0bTwB3HQyYMjr/L4VO4J1Gk6dVD4n/arpsOZ/JBQBKuUPnyfwNfM=
+	t=1718228623; cv=none; b=h6JFq2oUS4uFW6ubJp5S0UCQ69QsoiEs4Dk/DJpO0R9VVqA2LjZ+wBfvBG19Y8WKtdJyp/++vxab2Gab4SBeuMecHZtmsbmokhMUPVNFIlRjB99cnrzHDpKrJLE/pGBHO5NfDpZ9dfYk/FXq9Ehe99Vdy570dOsegkaQQy135wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718175383; c=relaxed/simple;
-	bh=2Ua0nGG0EAK9OtUoDrHzQ2WSgUsgITqxokxmviplgzQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jIsZaYJfPTYCszGvhoLq2Ka3Xh3V+fPjVKdDvR6ybKmW1Io3WwjD4X0W1WQ6qvvtnQacqZiN7mzP0LuaMInm5KhLWRl3z9l2+fX4rawVMdNHuQIODVGQHHkTmlHyvchnh8bIgbDhAivoigPhZW/96+cFCKVbM1CQJ4R/idHx37M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oHMb1Jq7; arc=none smtp.client-ip=209.85.160.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-254c22faf4cso1323783fac.2
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Jun 2024 23:56:20 -0700 (PDT)
+	s=arc-20240116; t=1718228623; c=relaxed/simple;
+	bh=fu1M9lWhRUD8wRdmq/h32XCfO82gXRNhQRHjhGNYpVY=;
+	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
+	 From:To:Cc:Subject:References:In-Reply-To; b=BO6HtHR0h1RgBhWG0Qc36nGzSafMTe0n24JZzs1Rhdd4UE4A6OuaKnVqWa3CcFZnJ6huUQbrUEkg3ogqKYYdZ3MADnHf+6fQ7f2+qI/LUlZ/04WhyU/pGCgvnEM2pAYH2Z/5Saaqa0YkoFUASJhk0SjaQP/hAL6hmA/94OfOJ00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=SIKgFwFP; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-62a2a6a5ccfso4167427b3.3
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Jun 2024 14:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718175379; x=1718780179; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fz+vtmXVQrksH83NPuXPvwENKWM7qR/JOFyTm8EoID8=;
-        b=oHMb1Jq7aW9IwmNtGLrM2cJX4GuzcjcqGFY6Mlna/5GK3cEO8Nl09PIP5d7dMhB7zG
-         o68aTn/xLA+N4oSR9tVXTdSJ9Or3RV+oPRGRFzPontSGGETXeUUGG1YOVN7cJ/wPjl2K
-         mO04zHn8oGfdo0reRRfY/cPoOunkgLOZoS0gVwmwD90yYx+lKrWRYZHuQH2RsQ6A9ULd
-         ObqmnM935LT/g1m9yEKxMqsl66f8XCrBfh4Ivvws0M0dXfGiLf/oAutdTQedKsGuswkI
-         seRBYangONDG3UhTWsNGSGDXPqilyr3JBnnefHXq6d+Vv1WCgD45EilePQoIhsKiGxPQ
-         XE3A==
+        d=paul-moore.com; s=google; t=1718228620; x=1718833420; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=H5P+IbdHtppUszGApidFOa9Hm6YpZkzCVF9qJbTn8jo=;
+        b=SIKgFwFPzAgVLcAK5KZvOkSypriDmquKjdzdySQLw/7qPz/SN3M7A8eaTSaXnoLCYb
+         4TE5igJzUSb34Lq688fda+G1MZDZs8e6PmMFmGdSj5N0zDoi+ERvEF+sqFDEJDg7nIzP
+         sdtUFaG8zKrtm8DXqlWgzI3R1rzhsjxGnPh3TjRllwNpIg3ARkpKas2qH6F3zuYqqKjy
+         vor4cWoCsMyR3ryYM3IaIQMUVNkDeZJdYFNTxztXJhzkhIT1tf/ya4u3RSFPFFvp/iFZ
+         W+lw21YxzDnz5h/6SSWdqwCb8iDX3T3E/Skqqq9vG4+R/oUqAeeOTyB3VwWSlmVnRC3f
+         GuGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718175379; x=1718780179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fz+vtmXVQrksH83NPuXPvwENKWM7qR/JOFyTm8EoID8=;
-        b=mzMy68Rx+vm4OnWVj635R4NUhYtE+/RIhiTohe3x92ppl7VjUByjVZW9wn9AA6UtzP
-         BWYX9+o9lc/orIxzpJqpcj2Xhy4C7+1EPK4jQjXbXAOAPLfWSwFzkXGXDKXkSNzPv8xp
-         FSIY0EmPDa0wyJR3uu0j337F1LG8484e61NMLpVCUzNXAq/DbNmN+Fjg+A5/xVSks06T
-         nLZhEvE1meTgjMqoY8syYHGHgAZJV94pjL7QCFByHp76T/qo969lG1FumZtA5QSvakmq
-         mO+4gLHDmqvMxA+QB1cfpLsIn7UOo4g1uKCNlTH9aHnEq5iXDXZwSZ83MdGzVR/D2NmX
-         535A==
-X-Forwarded-Encrypted: i=1; AJvYcCXd5vhIUHO/nI/l9vZv2J1687zCVnGzk0HjmS3j8RZPAPUHMWPWcmv113ze/KuQay/ENt5BleOSDU43sIoSLnyEDlF2o9v6jQKXdIpWXR8m
-X-Gm-Message-State: AOJu0YzV2hSN1l8LDj+WoMExfGUX7k9kMcEu6WgNlBrTOGVSlV/ZijXS
-	WXAqtOEjrnEQHHBsPdwJE9NBxKTV+Z/3V9Sblj7x784m0Bi0G6U9bACGoEWN9+ujTy53oYVXgBX
-	W0CAmlZohK2wpl7bfgVczOZtaXndHHOyinHsvMA==
-X-Google-Smtp-Source: AGHT+IHEbPnS3vGWtKgLg5y/Xl1GQNVn/cBKHYQZbPYu2bxiWaoRaiZv7DNixRQUCHror/nc1b+hktM0NXzAqzsf+kE=
-X-Received: by 2002:a05:6870:ce88:b0:24f:e09d:3c83 with SMTP id
- 586e51a60fabf-25514e367d7mr1089220fac.36.1718175379100; Tue, 11 Jun 2024
- 23:56:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718228620; x=1718833420;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :content-disposition:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H5P+IbdHtppUszGApidFOa9Hm6YpZkzCVF9qJbTn8jo=;
+        b=X6afsIoc11fx48YjFHQPgC7P5qD9flO3a4daApvthwdUs+4X9dP3uuSQmZ0zyM2UxH
+         B/IBzMRVSLqSZxFhyVanC69WsscbPBx2re1LcDFBZ0Ggk3LLV9C7JMGs1LUPcXgY7LXb
+         Hibs1bv5Z/+T4tGDF1xGz/YeATSzbnnqmVC35JtgeAfopfT6pMXmUr7kcOpBspKhI93F
+         EUq2nWucBqZeGnxLn5bXMQQZRep+YqRVAUdd28jJUbtDJdWLdfAVr1CVCeA2V96KWmPO
+         8ZIXV/tYpJfcJQpvSO6/ncAd2a29DrkoDza8Ppy/seEZdZ2OJW/CVmRLLgFUZntdPR9b
+         uqCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUhxEHYZJPlNWwRA3hfCxnzWT79G7oeP8WCUYWkVr6VDOVRba4M2B9inYeD3RQk9yznpdOdoeB+LLlFHDJL6nEb1MeE0GCU9bQF1nLEjtTG
+X-Gm-Message-State: AOJu0YwCrwew7pcC5l/USV011XrS1dUb4I14GtBGgTRrKGvoo4YwiSg6
+	D8q4LMGKtkP4GNNWnhEcHz++fEqfmb6qM2INpGgSksah/TdPL1b2TUgCjkiS+A==
+X-Google-Smtp-Source: AGHT+IEzCkGmcURuwumylkliwQQS7tKCwphHhO+nQwNDPDQUW3WVTWS6GxOh4TbgC9Y2HEAECiLJvA==
+X-Received: by 2002:a81:c546:0:b0:61a:cd65:3010 with SMTP id 00721157ae682-62fb91269a1mr30015217b3.30.1718228620242;
+        Wed, 12 Jun 2024 14:43:40 -0700 (PDT)
+Received: from localhost ([70.22.175.108])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441f2d6e933sm190801cf.44.2024.06.12.14.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jun 2024 14:43:39 -0700 (PDT)
+Date: Wed, 12 Jun 2024 17:43:39 -0400
+Message-ID: <00d88046025c611f2bf94708ffc65ecc@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240527121340.3931987-1-jens.wiklander@linaro.org>
- <20240527121340.3931987-5-jens.wiklander@linaro.org> <Zl2Ibey9Qck-VLWE@manut.de>
- <CAHUa44GAiUf9+PxqhXOwGfOuc250YDyJ7uzGe2B1bGmBw2iegg@mail.gmail.com>
- <Zme-NMa3Bvp2h7aL@nuoska> <CAFA6WYPYSfrDtnLPRs7_0h5Hf01oPfOpqmt4c7_Twxv-re87xQ@mail.gmail.com>
- <Zmj2Wg_YqdebN3xO@nuoska>
-In-Reply-To: <Zmj2Wg_YqdebN3xO@nuoska>
-From: Jens Wiklander <jens.wiklander@linaro.org>
-Date: Wed, 12 Jun 2024 08:56:07 +0200
-Message-ID: <CAHUa44FP_eN+S4QBWJWmZ6PLptYg1+9iackz9P4Q1_Yc5EK3tQ@mail.gmail.com>
-Subject: Re: [PATCH v7 4/4] optee: probe RPMB device using RPMB subsystem
-To: Mikko Rapeli <mikko.rapeli@linaro.org>
-Cc: Sumit Garg <sumit.garg@linaro.org>, Manuel Traut <manut@mecka.net>, linux-kernel@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, op-tee@lists.trustedfirmware.org, 
-	Shyam Saini <shyamsaini@linux.microsoft.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Jerome Forissier <jerome.forissier@linaro.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Bart Van Assche <bvanassche@acm.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Peter Huewe <peterhuewe@gmx.de>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Disposition: inline 
+Content-Transfer-Encoding: 8bit
+From: Paul Moore <paul@paul-moore.com>
+To: GUO Zihua <guozihua@huawei.com>, <john.johansen@canonical.com>, <jmorris@namei.org>, <serge@hallyn.com>, <zohar@linux.ibm.com>, <roberto.sassu@huawei.com>, <dmitry.kasatkin@gmail.com>, <stephen.smalley.work@gmail.com>, <casey@schaufler-ca.com>, <eparis@redhat.com>
+Cc: <eric.snowberg@oracle.com>, <omosnace@redhat.com>, <audit@vger.kernel.org>, <apparmor@lists.ubuntu.com>, <linux-security-module@vger.kernel.org>, <linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>
+Subject: Re: [PATCH v3] ima: Avoid blocking in RCU read-side critical section
+References: <20240507012541.796421-1-guozihua@huawei.com>
+In-Reply-To: <20240507012541.796421-1-guozihua@huawei.com>
 
-On Wed, Jun 12, 2024 at 3:14=E2=80=AFAM Mikko Rapeli <mikko.rapeli@linaro.o=
-rg> wrote:
+On May  6, 2024 GUO Zihua <guozihua@huawei.com> wrote:
+> 
+> A panic happens in ima_match_policy:
+> 
+> BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
+> PGD 42f873067 P4D 0
+> Oops: 0000 [#1] SMP NOPTI
+> CPU: 5 PID: 1286325 Comm: kubeletmonit.sh Kdump: loaded Tainted: P
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
+> RIP: 0010:ima_match_policy+0x84/0x450
+> Code: 49 89 fc 41 89 cf 31 ed 89 44 24 14 eb 1c 44 39 7b 18 74 26 41 83 ff 05 74 20 48 8b 1b 48 3b 1d f2 b9 f4 00 0f 84 9c 01 00 00 <44> 85 73 10 74 ea 44 8b 6b 14 41 f6 c5 01 75 d4 41 f6 c5 02 74 0f
+> RSP: 0018:ff71570009e07a80 EFLAGS: 00010207
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000200
+> RDX: ffffffffad8dc7c0 RSI: 0000000024924925 RDI: ff3e27850dea2000
+> RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffffabfce739
+> R10: ff3e27810cc42400 R11: 0000000000000000 R12: ff3e2781825ef970
+> R13: 00000000ff3e2785 R14: 000000000000000c R15: 0000000000000001
+> FS:  00007f5195b51740(0000) GS:ff3e278b12d40000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000010 CR3: 0000000626d24002 CR4: 0000000000361ee0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  ima_get_action+0x22/0x30
+>  process_measurement+0xb0/0x830
+>  ? page_add_file_rmap+0x15/0x170
+>  ? alloc_set_pte+0x269/0x4c0
+>  ? prep_new_page+0x81/0x140
+>  ? simple_xattr_get+0x75/0xa0
+>  ? selinux_file_open+0x9d/0xf0
+>  ima_file_check+0x64/0x90
+>  path_openat+0x571/0x1720
+>  do_filp_open+0x9b/0x110
+>  ? page_counter_try_charge+0x57/0xc0
+>  ? files_cgroup_alloc_fd+0x38/0x60
+>  ? __alloc_fd+0xd4/0x250
+>  ? do_sys_open+0x1bd/0x250
+>  do_sys_open+0x1bd/0x250
+>  do_syscall_64+0x5d/0x1d0
+>  entry_SYSCALL_64_after_hwframe+0x65/0xca
+> 
+> Commit c7423dbdbc9e ("ima: Handle -ESTALE returned by
+> ima_filter_rule_match()") introduced call to ima_lsm_copy_rule within a
+> RCU read-side critical section which contains kmalloc with GFP_KERNEL.
+> This implies a possible sleep and violates limitations of RCU read-side
+> critical sections on non-PREEMPT systems.
+> 
+> Sleeping within RCU read-side critical section might cause
+> synchronize_rcu() returning early and break RCU protection, allowing a
+> UAF to happen.
+> 
+> The root cause of this issue could be described as follows:
+> |	Thread A	|	Thread B	|
+> |			|ima_match_policy	|
+> |			|  rcu_read_lock	|
+> |ima_lsm_update_rule	|			|
+> |  synchronize_rcu	|			|
+> |			|    kmalloc(GFP_KERNEL)|
+> |			|      sleep		|
+> ==> synchronize_rcu returns early
+> |  kfree(entry)		|			|
+> |			|    entry = entry->next|
+> ==> UAF happens and entry now becomes NULL (or could be anything).
+> |			|    entry->action	|
+> ==> Accessing entry might cause panic.
 >
-> Hi,
->
-> Adding TPM maintainers and linux-integrity since discussion relates to fi=
-rmware TPM
-> driver tpm_ftpm_tee
->
-> On Tue, Jun 11, 2024 at 04:13:21PM +0530, Sumit Garg wrote:
-> > On Tue, 11 Jun 2024 at 08:32, Mikko Rapeli <mikko.rapeli@linaro.org> wr=
-ote:
-> > >
-> > > Hi,
-> > >
-> > > On Mon, Jun 10, 2024 at 02:52:31PM +0200, Jens Wiklander wrote:
-> > > > Hi Manuel,
-> > > >
-> > > > On Mon, Jun 3, 2024 at 11:10=E2=80=AFAM Manuel Traut <manut@mecka.n=
-et> wrote:
-> > > > >
-> > > > > On 14:13 Mon 27 May     , Jens Wiklander wrote:
-> > > > > > --- a/drivers/tee/optee/ffa_abi.c
-> > > > > > +++ b/drivers/tee/optee/ffa_abi.c
-> > > > > > @@ -7,6 +7,7 @@
-> > > > > >
-> > > > > >  #include <linux/arm_ffa.h>
-> > > > > >  #include <linux/errno.h>
-> > > > > > +#include <linux/rpmb.h>
-> > > > > >  #include <linux/scatterlist.h>
-> > > > > >  #include <linux/sched.h>
-> > > > > >  #include <linux/slab.h>
-> > > > > > @@ -903,6 +904,10 @@ static int optee_ffa_probe(struct ffa_devi=
-ce *ffa_dev)
-> > > > > >       optee->ffa.bottom_half_value =3D U32_MAX;
-> > > > > >       optee->rpc_param_count =3D rpc_param_count;
-> > > > > >
-> > > > > > +     if (IS_REACHABLE(CONFIG_RPMB) &&
-> > > > > > +         (sec_caps & OPTEE_FFA_SEC_CAP_RPMB_PROBE))
-> > > > > > +             optee->in_kernel_rpmb_routing =3D true;
-> > > > >
-> > > > > The SEC_CAP_RPMB_PROBE flag seems to be missing in optee_os at th=
-e moment.
-> > > > > If I remove this check here, the series works for me.
-> > > >
-> > > > You're right, I missed pushing those flags to optee_os. I've pushed=
- them now.
-> > >
-> > > Thanks! Tested with optee 4.1 and your patches from
-> > > https://github.com/jenswi-linaro/optee_os/commits/rpmb_probe_v7/
-> > > in Trusted Substrate uefi firmware
-> > > ( https://gitlab.com/Linaro/trustedsubstrate/meta-ts/ )
-> > > and this series and a bunch of dependencies backported to
-> > > our Trusted Reference Stack
-> > > ( https://trs.readthedocs.io/en/latest/ )
-> > > 6.6.29 kernel on rockpi4b (rk3399 ARM64 SoC) with secure boot and
-> > > the optee side fTPM TA device used to create an encrypted rootfs with
-> > > systemd. Kernel side RPMB routing is in use and works for the TPM use=
- cases.
-> > >
-> >
-> > Glad to see that you can get fTPM to work without tee-supplicant after
-> > this patch-set.
->
-> Sorry but the fTPM TA only works with tee-supplicant in userspace. It's n=
-eeded
-> for RPC setup. For RPMB it is not needed or used with these patches appli=
-ed.
+> To fix this issue, we are converting all kmalloc that is called within
+> RCU read-side critical section to use GFP_ATOMIC.
+> 
+> Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: GUO Zihua <guozihua@huawei.com>
+> Acked-by: John Johansen <john.johansen@canonical.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+> v3:
+>   ima_lsm_copy_rule takes a GFP flag as input as well.
+> v2:
+>   Changed the audit_rule_init security hook to accept a new GFP flag, as
+> per Stephen's suggestion.
+> 
+> ---
+>  include/linux/lsm_hook_defs.h       |  2 +-
+>  include/linux/security.h            |  5 +++--
+>  kernel/auditfilter.c                |  5 +++--
+>  security/apparmor/audit.c           |  6 +++---
+>  security/apparmor/include/audit.h   |  2 +-
+>  security/integrity/ima/ima_policy.c | 15 +++++++++------
+>  security/security.c                 |  6 ++++--
+>  security/selinux/include/audit.h    |  4 +++-
+>  security/selinux/ss/services.c      |  5 +++--
+>  security/smack/smack_lsm.c          |  3 ++-
+>  10 files changed, 32 insertions(+), 21 deletions(-)
 
-I've never been able to find out what fTPM is trying to do with
-tee-supplicant at this stage. I guess the RPC is a shared memory
-allocation preparing for another request.
+With the exception of one small gotcha (see below), this looks okay to
+me.  At Mimi's request I'm going to merge this into the LSM tree, via
+lsm/stable-6.10, where I'll give it a few days in linux-next before
+sending it up to Linus.
 
->
-> > > Full boot and test log (with unrelated test failures)
-> > > https://ledge.validation.linaro.org/scheduler/job/88692
-> > >
-> > > root@trs-qemuarm64:~# cat /sys/class/tee/tee0/rpmb_routing_model
-> > > ...
-> > > kernel
-> >
-> > So coming back to the real question, do we really need this new
-> > rpmb_routing_model ABI? Did systemd still need it with no
-> > tee-supplicant dependency? IMHO, a user-space ABI requires use-case
-> > justification otherwise it's just going to add on maintenance burden.
->
-> Currently it is not needed, because tee-supplicant is still required to
-> setup RPC with fTPM. If the RPC setup were also done in kernel directly a=
-nd
-> tee-supplicant need is removed, then this kind of ABI is important so tha=
-t
-> userspace init knows if it needs to queue startup of tee-supplicant or no=
-t.
->
-> On a related note, the kernel tpm_ftpm_tee driver for fTPM TA really has
-> a hard dependency to tee-supplicant in userspace. If tee-supplicant is st=
-opped,
-> restarted etc without unloading the kernel module (or otherwise disabling=
- the TPM device),
-> then all TPM device actions done without tee-supplicant running will fail=
- ane keep
-> failing until next reboot. The kernel driver is not crashing but all func=
-tionality
-> breaks.
->
-> The availability of tpm_ftpm_tee should be tied much harder to the tee-su=
-pplicant
-> running in userspace, e.g. optee should be in charge to start and bring t=
-pm_ftpm_tee down
-> based on tee-supplicant userspace daemon availability. Or the needed tee-=
-supplicant code
-> should be moved to kernel side. Currently systemd side init scripts have =
-issues switching
-> from initrd to main rootfs since they need to disable tpm_ftpm_tee driver=
-, built in or a module,
-> before shutting down tee-supplicant. A suspend or other inactive state in=
- the ftpm driver
-> needs to be triggered, which AFAIK is not currently possible, at least fr=
-om userspace
-> (I'd happy be proven wrong here).
->
-> An alternative for tpm_fptm_tee driver is to use optee APIs so that the c=
-alls
-> wait for tee-supplicant in userspace if needed:
->
-> --- a/drivers/char/tpm/tpm_ftpm_tee.c
-> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
-> @@ -237,6 +237,9 @@ static int ftpm_tee_probe(struct device *dev)
->                 return PTR_ERR(pvt_data->ctx);
->         }
->
-> +       /* wait for tee-supplicant in userspace, fTPM TA really depends o=
-n it */
-> +       pvt_data->ctx->supp_nowait =3D false;
-> +
->         /* Open a session with fTPM TA */
->         memset(&sess_arg, 0, sizeof(sess_arg));
->         export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
->
-> This works pretty well for the tee-supplicant initrd to main rootfs switc=
-h but currently
-> breaks for example reboot (just hangs), and Jens doesn't approve of this =
-as a
-> real solution.
+Thanks everyone :)
 
-Yes, the hang part is my main concern.
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index 146667937811..a4943628d75a 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -4696,7 +4696,8 @@ static int smack_post_notification(const struct cred *w_cred,
+>   * Prepare to audit cases where (@field @op @rulestr) is true.
+>   * The label to be audited is created if necessay.
+>   */
+> -static int smack_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule)
+> +static int smack_audit_rule_init(u32 field, u32 op, char *rulestr, void **vrule,
+> +				 gfp_t gfp)
 
->
-> So as an alternative, userspace needs to be very careful in initrd and ro=
-otfs
-> to start tee-supplicant earlier than loading tpm_ftpm_tee driver which ca=
-n
-> only be supported as module and removed before shutting down tee-supplica=
-nt.
+You forgot to add the new @gfp parameter to the function's header
+comment block.  I'm going to add the following as the text is used in
+other Smack functions, if anyone has any objections please let me know.
 
-Unbind/bind via sysfs might be an option. But that's still only a
-workaround since getting rid of the tee-supplicant dependency in
-initrd should avoid the problem entirely.
+  " * @gfp: type of the memory for the allocation"
 
-Cheers,
-Jens
+>  {
+>  	struct smack_known *skp;
+>  	char **rule = (char **)vrule;
 
-> In other use cases, TPM drivers are only supported if driver is built int=
-o
-> the kernel (or ACPI table entry for a TPM device exists) which I'm trying
-> to change with
->
-> [PATCH] efi: expose TPM event log to userspace via sysfs
->
-> https://lore.kernel.org/lkml/20240422112711.362779-1-mikko.rapeli@linaro.=
-org/
->
-> where userspace init can check if it should wait longer for the tpm devic=
-e to appear,
-> e.g. let udev load optee etc drivers which eventually start also tee-supp=
-licant and
-> thus load tpm_ftpm_tee driver (fTPM TA enumration is tied to tee-supplica=
-nt in userspace
-> https://git.yoctoproject.org/meta-arm/tree/meta-arm/recipes-security/opte=
-e-ftpm/optee-ftpm/0001-add-enum-to-ta-flags.patch )
->
-> Cheers,
->
-> -Mikko
+--
+paul-moore.com
 
