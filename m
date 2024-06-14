@@ -1,376 +1,250 @@
-Return-Path: <linux-integrity+bounces-2859-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2860-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F1B9907D9B
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2024 22:44:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33A0090895A
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2024 12:09:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0A291F241A5
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Jun 2024 20:44:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7174AB275F5
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Jun 2024 10:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7263A13B596;
-	Thu, 13 Jun 2024 20:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jlEiq2Gi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC411922DB;
+	Fri, 14 Jun 2024 10:08:26 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD5713A3F7;
-	Thu, 13 Jun 2024 20:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2F913B7BC;
+	Fri, 14 Jun 2024 10:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718311459; cv=none; b=AVjzws/Kjx9N3B4w4j/aDvITFkq2obiw8KP6u2Rl+cj3/NoyAKvZOn+xKCfQBhSCn9tfaGDil1Hu7wZcqOxr7gf/0+i2YMiBZePUj6lAI7nOPL04nnt828Wj4mrei0jMV/FF232Za88vj4iWlVPlmA5Ey8bsvvj3RGDPADMKeFk=
+	t=1718359706; cv=none; b=ryCqTPcFk2Jhc5ZaBfYzZQF7S9YhRPBGKIJmD4JpBb7TxzwbzmqlKHKcpp1nOD85CnydMhmsjgEUGNQ0xRdDKEtogKAuaLYwKoYQcqd5blRd8MTF/z9SQsmBKQEjuc+ed8cK8ayWPVOpObYJts1glAYKMSn2cHjDL5kjEsF02tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718311459; c=relaxed/simple;
-	bh=ZMQKAiTTpNPcqkOMQfaPtk/alrNE490xzzeqLwEYsn8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=m5ldYVruwKzW+UVA765lU4fd4Isu4ZJeu3kjZLZsM5JC48h62PCtOkvZ3DWdURZjUFbrsZIPdnqck+whadxmNuTdkcN7NCU8EFLooDf1UCXluxfYQ392+Z74DgIrsp6Kb3R4nFiP8S8cNarZp/hD/2ej1aRKgXZ23zpPjwwaEqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jlEiq2Gi; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718311458; x=1749847458;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZMQKAiTTpNPcqkOMQfaPtk/alrNE490xzzeqLwEYsn8=;
-  b=jlEiq2GiP+5Bmu7LykexDtOKDNRwfMf/fxOsYNbbHmNKXr3Ceol2CujV
-   fhF8ZxUtruyW4cw5eH0occkz4qv6bguUe/u0MbaKZVYHnyXcH2OLOb1Ce
-   37Te8ACqzK1NnkHD7KkIEuoEbZHcUhVWE1DyIEyc7LBoF+McBmeLn2Cbz
-   jnaGo6Cy9xJGsv0uZkFzgiF/pga/M9oW1pSCDrbLEIYsAn92a/dXJXtWG
-   7hoXYeXEzcsQ1uMVKhwlSP/4/X2as72waeKxUl0rbK0sx8nW4yeiCPPTb
-   VOm2QkAVMUt9lsrWEJwd3CPO+E0psv3RZaLaAgUxeV5+bGm1NShlcVSOi
-   g==;
-X-CSE-ConnectionGUID: TO40xztoTDuo7rcQIXSTDg==
-X-CSE-MsgGUID: YalWd+l9R76Ei5DRMdv95g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11102"; a="25806144"
-X-IronPort-AV: E=Sophos;i="6.08,236,1712646000"; 
-   d="scan'208";a="25806144"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 13:44:17 -0700
-X-CSE-ConnectionGUID: C2pUUIfnT3SOkXrCcqbbSA==
-X-CSE-MsgGUID: Wi5wMx8DRcWe/bW7266bKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,236,1712646000"; 
-   d="scan'208";a="77737919"
-Received: from lkp-server01.sh.intel.com (HELO 9e3ee4e9e062) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 13 Jun 2024 13:44:14 -0700
-Received: from kbuild by 9e3ee4e9e062 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sHrIp-0000OC-15;
-	Thu, 13 Jun 2024 20:44:11 +0000
-Date: Fri, 14 Jun 2024 04:43:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Memory Management List <linux-mm@kvack.org>,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org
-Subject: [linux-next:master] BUILD REGRESSION
- 6906a84c482f098d31486df8dc98cead21cce2d0
-Message-ID: <202406140411.4qyUCuPF-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1718359706; c=relaxed/simple;
+	bh=Vjs0i/0wD1zfFuu4U1L5IftZy/BR2wHBuwrKKTjKJ+o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uPc9vpoib/kVEeKOfk1B5RvzmlXMuP96bsWRUTh7PUZfVGC+CQJuoq3bdW+L/U60V4sPZ2pYhlK/7h+3xJlcxdszO7XiGUwzEtuSt9MbYbE5cSSJdMAKm4qK3MA2n5rnp0gd4YBbpcefinWks81zl8944XO7a9UAcQsZ9reRBN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4W0vGF6fwHz9v7Hk;
+	Fri, 14 Jun 2024 17:33:09 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id A1FE21404F0;
+	Fri, 14 Jun 2024 17:50:44 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwCHDjleEmxmCXJlAA--.52264S2;
+	Fri, 14 Jun 2024 10:50:43 +0100 (CET)
+Message-ID: <8e898e2f5ae479ab08be61048481404d12cb6ea4.camel@huaweicloud.com>
+Subject: Re: [PATCH v3] ima: Avoid blocking in RCU read-side critical section
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Paul Moore <paul@paul-moore.com>, GUO Zihua <guozihua@huawei.com>, 
+	john.johansen@canonical.com, jmorris@namei.org, serge@hallyn.com, 
+	zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, 
+	stephen.smalley.work@gmail.com, casey@schaufler-ca.com, eparis@redhat.com
+Cc: eric.snowberg@oracle.com, omosnace@redhat.com, audit@vger.kernel.org, 
+	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Date: Fri, 14 Jun 2024 11:50:18 +0200
+In-Reply-To: <CAHC9VhRqvBsdy+U-wr+X6QmawLv6DnB32nwAO7Ex6L7cdR=mSg@mail.gmail.com>
+References: <20240507012541.796421-1-guozihua@huawei.com>
+	 <00d88046025c611f2bf94708ffc65ecc@paul-moore.com>
+	 <CAHC9VhRqvBsdy+U-wr+X6QmawLv6DnB32nwAO7Ex6L7cdR=mSg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-CM-TRANSID:GxC2BwCHDjleEmxmCXJlAA--.52264S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtFWfJFy5WF4DWFykWF1kGrg_yoWxGr45pF
+	WUKF1jkr48JFyUArsFvrnFgF1j93yUCF1UXrn3ur1UAF9IqF1kGr17Jr1jkry5Xr4rCr1I
+	qrsFqwsI9r1qy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj58tDQABsE
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 6906a84c482f098d31486df8dc98cead21cce2d0  Add linux-next specific files for 20240613
+On Thu, 2024-06-13 at 14:26 -0400, Paul Moore wrote:
+> On Wed, Jun 12, 2024 at 5:43=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
+wrote:
+> > On May  6, 2024 GUO Zihua <guozihua@huawei.com> wrote:
+> > >=20
+> > > A panic happens in ima_match_policy:
+> > >=20
+> > > BUG: unable to handle kernel NULL pointer dereference at 000000000000=
+0010
+> > > PGD 42f873067 P4D 0
+> > > Oops: 0000 [#1] SMP NOPTI
+> > > CPU: 5 PID: 1286325 Comm: kubeletmonit.sh Kdump: loaded Tainted: P
+> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/=
+06/2015
+> > > RIP: 0010:ima_match_policy+0x84/0x450
+> > > Code: 49 89 fc 41 89 cf 31 ed 89 44 24 14 eb 1c 44 39 7b 18 74 26 41 =
+83 ff 05 74 20 48 8b 1b 48 3b 1d f2 b9 f4 00 0f 84 9c 01 00 00 <44> 85 73 1=
+0 74 ea 44 8b 6b 14 41 f6 c5 01 75 d4 41 f6 c5 02 74 0f
+> > > RSP: 0018:ff71570009e07a80 EFLAGS: 00010207
+> > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000200
+> > > RDX: ffffffffad8dc7c0 RSI: 0000000024924925 RDI: ff3e27850dea2000
+> > > RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffffabfce739
+> > > R10: ff3e27810cc42400 R11: 0000000000000000 R12: ff3e2781825ef970
+> > > R13: 00000000ff3e2785 R14: 000000000000000c R15: 0000000000000001
+> > > FS:  00007f5195b51740(0000) GS:ff3e278b12d40000(0000) knlGS:000000000=
+0000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 0000000000000010 CR3: 0000000626d24002 CR4: 0000000000361ee0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > Call Trace:
+> > >  ima_get_action+0x22/0x30
+> > >  process_measurement+0xb0/0x830
+> > >  ? page_add_file_rmap+0x15/0x170
+> > >  ? alloc_set_pte+0x269/0x4c0
+> > >  ? prep_new_page+0x81/0x140
+> > >  ? simple_xattr_get+0x75/0xa0
+> > >  ? selinux_file_open+0x9d/0xf0
+> > >  ima_file_check+0x64/0x90
+> > >  path_openat+0x571/0x1720
+> > >  do_filp_open+0x9b/0x110
+> > >  ? page_counter_try_charge+0x57/0xc0
+> > >  ? files_cgroup_alloc_fd+0x38/0x60
+> > >  ? __alloc_fd+0xd4/0x250
+> > >  ? do_sys_open+0x1bd/0x250
+> > >  do_sys_open+0x1bd/0x250
+> > >  do_syscall_64+0x5d/0x1d0
+> > >  entry_SYSCALL_64_after_hwframe+0x65/0xca
+> > >=20
+> > > Commit c7423dbdbc9e ("ima: Handle -ESTALE returned by
+> > > ima_filter_rule_match()") introduced call to ima_lsm_copy_rule within=
+ a
+> > > RCU read-side critical section which contains kmalloc with GFP_KERNEL=
+.
+> > > This implies a possible sleep and violates limitations of RCU read-si=
+de
+> > > critical sections on non-PREEMPT systems.
+> > >=20
+> > > Sleeping within RCU read-side critical section might cause
+> > > synchronize_rcu() returning early and break RCU protection, allowing =
+a
+> > > UAF to happen.
+> > >=20
+> > > The root cause of this issue could be described as follows:
+> > > >     Thread A        |       Thread B        |
+> > > >                     |ima_match_policy       |
+> > > >                     |  rcu_read_lock        |
+> > > > ima_lsm_update_rule  |                       |
+> > > >  synchronize_rcu    |                       |
+> > > >                     |    kmalloc(GFP_KERNEL)|
+> > > >                     |      sleep            |
+> > > =3D=3D> synchronize_rcu returns early
+> > > >  kfree(entry)               |                       |
+> > > >                     |    entry =3D entry->next|
+> > > =3D=3D> UAF happens and entry now becomes NULL (or could be anything)=
+.
+> > > >                     |    entry->action      |
+> > > =3D=3D> Accessing entry might cause panic.
+> > >=20
+> > > To fix this issue, we are converting all kmalloc that is called withi=
+n
+> > > RCU read-side critical section to use GFP_ATOMIC.
+> > >=20
+> > > Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule=
+_match()")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: GUO Zihua <guozihua@huawei.com>
+> > > Acked-by: John Johansen <john.johansen@canonical.com>
+> > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> > > ---
+> > > v3:
+> > >   ima_lsm_copy_rule takes a GFP flag as input as well.
+> > > v2:
+> > >   Changed the audit_rule_init security hook to accept a new GFP flag,=
+ as
+> > > per Stephen's suggestion.
+> > >=20
+> > > ---
+> > >  include/linux/lsm_hook_defs.h       |  2 +-
+> > >  include/linux/security.h            |  5 +++--
+> > >  kernel/auditfilter.c                |  5 +++--
+> > >  security/apparmor/audit.c           |  6 +++---
+> > >  security/apparmor/include/audit.h   |  2 +-
+> > >  security/integrity/ima/ima_policy.c | 15 +++++++++------
+> > >  security/security.c                 |  6 ++++--
+> > >  security/selinux/include/audit.h    |  4 +++-
+> > >  security/selinux/ss/services.c      |  5 +++--
+> > >  security/smack/smack_lsm.c          |  3 ++-
+> > >  10 files changed, 32 insertions(+), 21 deletions(-)
+> >=20
+> > With the exception of one small gotcha (see below), this looks okay to
+> > me.  At Mimi's request I'm going to merge this into the LSM tree, via
+> > lsm/stable-6.10, where I'll give it a few days in linux-next before
+> > sending it up to Linus.
+>=20
+> I also had to apply the following fix to this patch to resolve the
+> !CONFIG_IMA_LSM_RULES ca
+> se ... grrrrr.
 
-Error/Warning reports:
+Argh, sorry...
 
-https://lore.kernel.org/oe-kbuild-all/202406131636.cCrcJztc-lkp@intel.com
+Thanks Paul!
 
-Error/Warning: (recently discovered and may have been fixed)
+Roberto
 
-drivers/hwmon/pmbus/mp9941.c:60:33: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-drivers/hwmon/pmbus/mp9941.c:60:40: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-drivers/hwmon/pmbus/mp9941.c:84:13: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-drivers/hwmon/pmbus/mp9941.c:84:6: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-security/integrity/ima/ima_policy.c:430:10: error: too many arguments to function call, expected 4, have 5
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 3e568126cd48..c51e24d24d1e 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -546,7 +546,7 @@ static inline void ima_free_modsig(struct modsig *mod=
+sig)
+> #else
+>=20
+> static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
+> -                                      void **lsmrule)
+> +                                      void **lsmrule, gfp_t gfp)
+> {
+>        return -EINVAL;
+> }
+>=20
+> > > diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> > > index 146667937811..a4943628d75a 100644
+> > > --- a/security/smack/smack_lsm.c
+> > > +++ b/security/smack/smack_lsm.c
+> > > @@ -4696,7 +4696,8 @@ static int smack_post_notification(const struct=
+ cred *w_cred,
+> > >   * Prepare to audit cases where (@field @op @rulestr) is true.
+> > >   * The label to be audited is created if necessay.
+> > >   */
+> > > -static int smack_audit_rule_init(u32 field, u32 op, char *rulestr, v=
+oid **vrule)
+> > > +static int smack_audit_rule_init(u32 field, u32 op, char *rulestr, v=
+oid **vrule,
+> > > +                              gfp_t gfp)
+> >=20
+> > You forgot to add the new @gfp parameter to the function's header
+> > comment block.  I'm going to add the following as the text is used in
+> > other Smack functions, if anyone has any objections please let me know.
+> >=20
+> >   " * @gfp: type of the memory for the allocation"
+> >=20
+> > >  {
+> > >       struct smack_known *skp;
+> > >       char **rule =3D (char **)vrule;
+>=20
 
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- arc-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- arc-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- arm64-randconfig-001-20240613
-|   `-- drivers-pinctrl-pinctrl-keembay.c:error:struct-function_desc-has-no-member-named-name
-|-- csky-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- csky-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- loongarch-defconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-hubbub-dcn401-dcn401_hubbub.o:warning:objtool:unexpected-relocation-symbol-type-in-.rela.discard.reachable
-|   `-- drivers-thermal-thermal_trip.o:warning:objtool:unexpected-relocation-symbol-type-in-.rela.discard.reachable
-|-- m68k-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- m68k-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- microblaze-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- microblaze-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- nios2-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- nios2-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- openrisc-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- parisc-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- parisc-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sh-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sh-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sparc-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sparc64-allmodconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- sparc64-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-|-- x86_64-buildonly-randconfig-002-20240613
-|   |-- drivers-input-touchscreen-wacom_w8001.c:warning:Finger-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   `-- drivers-input-touchscreen-wacom_w8001.c:warning:Pen-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|-- x86_64-randconfig-011-20240613
-|   |-- drivers-input-touchscreen-wacom_w8001.c:warning:Finger-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   `-- drivers-input-touchscreen-wacom_w8001.c:warning:Pen-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-`-- xtensa-allyesconfig
-    |-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_GET
-    `-- drivers-hwmon-pmbus-mp9941.c:error:implicit-declaration-of-function-FIELD_PREP
-clang_recent_errors
-|-- arm-randconfig-051-20240613
-|   |-- arch-arm-boot-dts-rockchip-rk3128-evb.dtb:dsi:failed-to-match-any-schema-with-compatible:rockchip-rk3128-mipi-dsi-snps-dw-mipi-dsi
-|   `-- arch-arm-boot-dts-rockchip-rk3128-xpi-.dtb:dsi:failed-to-match-any-schema-with-compatible:rockchip-rk3128-mipi-dsi-snps-dw-mipi-dsi
-|-- arm64-allmodconfig
-|   `-- drivers-pinctrl-pinctrl-keembay.c:error:no-member-named-name-in-struct-function_desc
-|-- arm64-randconfig-003-20240613
-|   `-- drivers-pinctrl-pinctrl-keembay.c:error:no-member-named-name-in-struct-function_desc
-|-- hexagon-allyesconfig
-|   |-- drivers-hwmon-pmbus-mp9941.c:error:call-to-undeclared-function-FIELD_GET-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- drivers-hwmon-pmbus-mp9941.c:error:call-to-undeclared-function-FIELD_PREP-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- i386-buildonly-randconfig-004-20240613
-|   `-- security-integrity-ima-ima_policy.c:error:too-many-arguments-to-function-call-expected-have
-`-- powerpc64-randconfig-001-20240613
-    `-- drivers-gpu-drm-drm_mm.c:error:function-drm_mm_node_scanned_block-is-not-needed-and-will-not-be-emitted-Werror-Wunneeded-internal-declaration
-
-elapsed time: 940m
-
-configs tested: 179
-configs skipped: 4
-
-tested configs:
-alpha                             allnoconfig   gcc-13.2.0
-alpha                            allyesconfig   gcc-13.2.0
-alpha                               defconfig   gcc-13.2.0
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                              allyesconfig   gcc-13.2.0
-arc                                 defconfig   gcc-13.2.0
-arc                   randconfig-001-20240613   gcc-13.2.0
-arc                   randconfig-002-20240613   gcc-13.2.0
-arm                              allmodconfig   gcc-13.2.0
-arm                               allnoconfig   clang-19
-arm                              allyesconfig   gcc-13.2.0
-arm                                 defconfig   clang-14
-arm                   randconfig-001-20240613   gcc-13.2.0
-arm                   randconfig-002-20240613   clang-17
-arm                   randconfig-003-20240613   clang-19
-arm                   randconfig-004-20240613   clang-19
-arm                         s5pv210_defconfig   gcc-13.2.0
-arm64                            allmodconfig   clang-19
-arm64                             allnoconfig   gcc-13.2.0
-arm64                               defconfig   gcc-13.2.0
-arm64                 randconfig-001-20240613   gcc-13.2.0
-arm64                 randconfig-002-20240613   clang-19
-arm64                 randconfig-003-20240613   clang-19
-arm64                 randconfig-004-20240613   clang-19
-csky                             allmodconfig   gcc-13.2.0
-csky                              allnoconfig   gcc-13.2.0
-csky                             allyesconfig   gcc-13.2.0
-csky                                defconfig   gcc-13.2.0
-csky                  randconfig-001-20240613   gcc-13.2.0
-csky                  randconfig-002-20240613   gcc-13.2.0
-hexagon                          allmodconfig   clang-19
-hexagon                           allnoconfig   clang-19
-hexagon                          allyesconfig   clang-19
-hexagon                             defconfig   clang-19
-hexagon               randconfig-001-20240613   clang-19
-hexagon               randconfig-002-20240613   clang-15
-i386                              allnoconfig   gcc-13
-i386                             allyesconfig   gcc-13
-i386         buildonly-randconfig-001-20240613   gcc-9
-i386         buildonly-randconfig-002-20240613   clang-18
-i386         buildonly-randconfig-003-20240613   clang-18
-i386         buildonly-randconfig-004-20240613   clang-18
-i386         buildonly-randconfig-005-20240613   gcc-7
-i386         buildonly-randconfig-006-20240613   clang-18
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240613   gcc-7
-i386                  randconfig-002-20240613   gcc-11
-i386                  randconfig-003-20240613   gcc-13
-i386                  randconfig-004-20240613   clang-18
-i386                  randconfig-005-20240613   gcc-13
-i386                  randconfig-006-20240613   gcc-13
-i386                  randconfig-011-20240613   gcc-13
-i386                  randconfig-012-20240613   clang-18
-i386                  randconfig-013-20240613   clang-18
-i386                  randconfig-014-20240613   gcc-12
-i386                  randconfig-015-20240613   gcc-8
-i386                  randconfig-016-20240613   gcc-13
-loongarch                        allmodconfig   gcc-13.2.0
-loongarch                         allnoconfig   gcc-13.2.0
-loongarch                           defconfig   gcc-13.2.0
-loongarch             randconfig-001-20240613   gcc-13.2.0
-loongarch             randconfig-002-20240613   gcc-13.2.0
-m68k                             allmodconfig   gcc-13.2.0
-m68k                              allnoconfig   gcc-13.2.0
-m68k                             allyesconfig   gcc-13.2.0
-m68k                                defconfig   gcc-13.2.0
-microblaze                       allmodconfig   gcc-13.2.0
-microblaze                        allnoconfig   gcc-13.2.0
-microblaze                       allyesconfig   gcc-13.2.0
-microblaze                          defconfig   gcc-13.2.0
-microblaze                      mmu_defconfig   gcc-13.2.0
-mips                              allnoconfig   gcc-13.2.0
-mips                             allyesconfig   gcc-13.2.0
-mips                        bcm47xx_defconfig   clang-15
-mips                        bcm63xx_defconfig   clang-17
-mips                     decstation_defconfig   gcc-13.2.0
-mips                        vocore2_defconfig   clang-15
-nios2                            allmodconfig   gcc-13.2.0
-nios2                             allnoconfig   gcc-13.2.0
-nios2                            allyesconfig   gcc-13.2.0
-nios2                               defconfig   gcc-13.2.0
-nios2                 randconfig-001-20240613   gcc-13.2.0
-nios2                 randconfig-002-20240613   gcc-13.2.0
-openrisc                         alldefconfig   gcc-13.2.0
-openrisc                          allnoconfig   gcc-13.2.0
-openrisc                         allyesconfig   gcc-13.2.0
-openrisc                            defconfig   gcc-13.2.0
-openrisc                    or1ksim_defconfig   gcc-13.2.0
-parisc                           allmodconfig   gcc-13.2.0
-parisc                            allnoconfig   gcc-13.2.0
-parisc                           allyesconfig   gcc-13.2.0
-parisc                              defconfig   gcc-13.2.0
-parisc                randconfig-001-20240613   gcc-13.2.0
-parisc                randconfig-002-20240613   gcc-13.2.0
-parisc64                            defconfig   gcc-13.2.0
-powerpc                     akebono_defconfig   clang-19
-powerpc                          allmodconfig   gcc-13.2.0
-powerpc                           allnoconfig   gcc-13.2.0
-powerpc                          allyesconfig   clang-19
-powerpc                        fsp2_defconfig   gcc-13.2.0
-powerpc                    gamecube_defconfig   clang-19
-powerpc                    klondike_defconfig   gcc-13.2.0
-powerpc               randconfig-001-20240613   clang-19
-powerpc               randconfig-002-20240613   clang-19
-powerpc               randconfig-003-20240613   clang-19
-powerpc                     tqm8560_defconfig   gcc-13.2.0
-powerpc64             randconfig-001-20240613   clang-19
-powerpc64             randconfig-002-20240613   clang-19
-powerpc64             randconfig-003-20240613   gcc-13.2.0
-riscv                            allmodconfig   clang-19
-riscv                             allnoconfig   gcc-13.2.0
-riscv                            allyesconfig   clang-19
-riscv                               defconfig   clang-19
-riscv                 randconfig-001-20240613   clang-19
-riscv                 randconfig-002-20240613   clang-19
-s390                             allmodconfig   clang-19
-s390                              allnoconfig   clang-19
-s390                             allyesconfig   gcc-13.2.0
-s390                                defconfig   clang-19
-s390                  randconfig-001-20240613   gcc-13.2.0
-s390                  randconfig-002-20240613   gcc-13.2.0
-sh                               allmodconfig   gcc-13.2.0
-sh                                allnoconfig   gcc-13.2.0
-sh                               allyesconfig   gcc-13.2.0
-sh                                  defconfig   gcc-13.2.0
-sh                               j2_defconfig   gcc-13.2.0
-sh                    randconfig-001-20240613   gcc-13.2.0
-sh                    randconfig-002-20240613   gcc-13.2.0
-sh                   secureedge5410_defconfig   gcc-13.2.0
-sh                     sh7710voipgw_defconfig   gcc-13.2.0
-sh                             shx3_defconfig   gcc-13.2.0
-sparc                            allmodconfig   gcc-13.2.0
-sparc                             allnoconfig   gcc-13.2.0
-sparc                               defconfig   gcc-13.2.0
-sparc64                          allmodconfig   gcc-13.2.0
-sparc64                          allyesconfig   gcc-13.2.0
-sparc64                             defconfig   gcc-13.2.0
-sparc64               randconfig-001-20240613   gcc-13.2.0
-sparc64               randconfig-002-20240613   gcc-13.2.0
-um                               allmodconfig   clang-19
-um                                allnoconfig   clang-17
-um                               allyesconfig   gcc-13
-um                                  defconfig   clang-19
-um                             i386_defconfig   gcc-13
-um                    randconfig-001-20240613   gcc-9
-um                    randconfig-002-20240613   gcc-9
-um                           x86_64_defconfig   clang-15
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240613   gcc-13
-x86_64       buildonly-randconfig-002-20240613   gcc-9
-x86_64       buildonly-randconfig-003-20240613   clang-18
-x86_64       buildonly-randconfig-004-20240613   clang-18
-x86_64       buildonly-randconfig-005-20240613   clang-18
-x86_64       buildonly-randconfig-006-20240613   clang-18
-x86_64                              defconfig   gcc-13
-x86_64                randconfig-001-20240613   gcc-13
-x86_64                randconfig-002-20240613   clang-18
-x86_64                randconfig-003-20240613   gcc-13
-x86_64                randconfig-004-20240613   clang-18
-x86_64                randconfig-005-20240613   clang-18
-x86_64                randconfig-006-20240613   clang-18
-x86_64                randconfig-011-20240613   gcc-9
-x86_64                randconfig-012-20240613   clang-18
-x86_64                randconfig-013-20240613   clang-18
-x86_64                randconfig-014-20240613   clang-18
-x86_64                randconfig-015-20240613   gcc-7
-x86_64                randconfig-016-20240613   clang-18
-x86_64                randconfig-071-20240613   clang-18
-x86_64                randconfig-072-20240613   clang-18
-x86_64                randconfig-073-20240613   gcc-9
-x86_64                randconfig-074-20240613   clang-18
-x86_64                randconfig-075-20240613   clang-18
-x86_64                randconfig-076-20240613   clang-18
-x86_64                          rhel-8.3-rust   clang-18
-xtensa                            allnoconfig   gcc-13.2.0
-xtensa                randconfig-001-20240613   gcc-13.2.0
-xtensa                randconfig-002-20240613   gcc-13.2.0
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
