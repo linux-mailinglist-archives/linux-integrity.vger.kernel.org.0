@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-2877-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2878-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E751390FA2B
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jun 2024 02:18:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F68990FA2F
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jun 2024 02:19:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 815E3B219F5
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jun 2024 00:18:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B5CB1F22109
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Jun 2024 00:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 454B8EBE;
-	Thu, 20 Jun 2024 00:18:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC361803;
+	Thu, 20 Jun 2024 00:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UogrS+kY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GPjMF0/i"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076B864C;
-	Thu, 20 Jun 2024 00:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96721C02;
+	Thu, 20 Jun 2024 00:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718842702; cv=none; b=S9p2/dGyD53x+ZlC8EQR9rpT8Je0s9pxNaOcRUEnxKUf7CzmJdw3rGj6tHU8zqM6nZxPI9xgGTa/7HHqp/MqU3akcS7ZDFRm24O4EJINpsWeJft6vf7Hgdl8w9tIgbKBorklSnUnoa3JsIuvnStqkbq4o5vFx8oEU2zs+eRDU2Y=
+	t=1718842753; cv=none; b=mULLm2AUHWtYwqReV56m6H9BQh9ueqvck0rc36oM8AFuNrdlAQpvTHjKHWxi7AKLbBtfz7Sl+1AowfdRi4+05eqE+ay3djSJ5pWxoMCf7eNVOdd8f7rvTeTEozVftEOCYQGqqACrGoPkXXpTFeHfF4qDIMaYBiRnvCoXaxZGRPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718842702; c=relaxed/simple;
-	bh=AjGTuPtk95NLEx+Fq4Qq+oorb0yiuLhFVoBTD7HosbQ=;
+	s=arc-20240116; t=1718842753; c=relaxed/simple;
+	bh=Rf67pFF+333ccM9oZKN4wF6guSKaFqEmVkrXWE9tz54=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=eqfDJZqwmfoDguIfImZIFmZAmC4iz84+6VaoU8/hIHRY3h62tTeO/3ShNeBuisrUk4ugAuoVwLQqz44WCMeqzvEGykPS0EhADS1Pg2vEOGuV6P7+ruOfxlbGYtGDELliUOdUMcy+sQH0jkpRS/dZHpm4/to/tHwlxEs+qO1FQJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UogrS+kY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9158FC2BBFC;
-	Thu, 20 Jun 2024 00:18:15 +0000 (UTC)
+	 References:In-Reply-To; b=P5noElvzdwHmM0WEwzaBxqJMLpIaLpMboZ80NLLYwJ4Sv3v+JDIANN9aAPhJ9AlBQOMuiAIiuGMw6hRcp83E9PH6FkdBjKYHxkyEc/rrh8a1KK0JsW70tTpTOGLcT7MMCK8ulxQvCX/yxAxCp2a6pUHB3+3XTqZojpjEv3t8IIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GPjMF0/i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A28C2BBFC;
+	Thu, 20 Jun 2024 00:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718842701;
-	bh=AjGTuPtk95NLEx+Fq4Qq+oorb0yiuLhFVoBTD7HosbQ=;
+	s=k20201202; t=1718842753;
+	bh=Rf67pFF+333ccM9oZKN4wF6guSKaFqEmVkrXWE9tz54=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=UogrS+kY7AH+DCLQ2wu6155VpA9xgKIzKNs1kx36Stt7xUroWQHkFKlsg7gLvh04C
-	 WmHYDyOFcZMT+C7jB9qW/cwh6GvuDZ0CHnWikBphf5WzbbjTEYvgIcezIVstgcxpGz
-	 g55DDyXE8tISgnVjX6fsOhEDASTPuRJOJLd/1CLuINQscuxncHUPHapZQF/2x1ogPy
-	 pP+eK0/dLHoE1IOgvxEWxJx1cr3ErS5E+oQU9/qTm7EScqv8rHl1eD7wfppOXyvl4Z
-	 PiIDDwqP3Q+qbBZoPySZ8JhqIZ0jj+ObaVp+Y/iZSIA5WPh1I3R0HG/CB6VsVEfJho
-	 jXU8QWoU/wyLA==
+	b=GPjMF0/iN67qTJwfeGCRJv/uLpabn+1w6vrbhwDL0ZFEzG1iYAtCeKBq2WMo10mdG
+	 RrkxVU2TqMkvlXQOHkrstfpYNvI2lhSswf4t2qmVnVQQZ6Q+Ufqg7Adkx9PV6l8jKo
+	 +3zWQsxGvUVxmYKnLotFxs4O77HpponAWPC6Y5e9PufAOp1h6ycX9q5OZ6N/0mpRS3
+	 yzxTFN9M6cf7z1fUNAOtkUnQ0VHp8VXvcyh4UwjGFWBJJjya6qW9ifQ3khuReWEOf3
+	 9YxLp+9l2HI/v6y08c21NFZdIz3zRU4h1xpt/XG366A+VJ5VkKwGiEJqxaSLgAU9K+
+	 YdwARf/a21k7A==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,57 +49,49 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 20 Jun 2024 03:18:13 +0300
-Message-Id: <D24EVSK6GUPH.1P44T5NNBWORU@kernel.org>
-Cc: <dpsmith@apertussolutions.com>, <tglx@linutronix.de>,
- <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
- <dave.hansen@linux.intel.com>, <ardb@kernel.org>, <mjg59@srcf.ucam.org>,
- <James.Bottomley@hansenpartnership.com>, <peterhuewe@gmx.de>,
- <jgg@ziepe.ca>, <luto@amacapital.net>, <nivedita@alum.mit.edu>,
- <herbert@gondor.apana.org.au>, <davem@davemloft.net>, <corbet@lwn.net>,
- <ebiederm@xmission.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
- <kanth.ghatraju@oracle.com>, <andrew.cooper3@citrix.com>,
- <trenchboot-devel@googlegroups.com>
-Subject: Re: [PATCH v9 04/19] x86: Secure Launch Resource Table header file
+Date: Thu, 20 Jun 2024 03:19:08 +0300
+Message-Id: <D24EWHXV14EM.S0NQ3H51R892@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
+ <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <kernel-janitors@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] KEYS: trusted: add missing MODULE_DESCRIPTION()
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: <ross.philipson@oracle.com>, <linux-kernel@vger.kernel.org>,
- <x86@kernel.org>, <linux-integrity@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
- <kexec@lists.infradead.org>, <linux-efi@vger.kernel.org>,
- <iommu@lists.linux-foundation.org>
+To: "Jeff Johnson" <quic_jjohnson@quicinc.com>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Mimi Zohar"
+ <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul Moore"
+ <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
+ Hallyn" <serge@hallyn.com>
 X-Mailer: aerc 0.17.0
-References: <20240531010331.134441-1-ross.philipson@oracle.com>
- <20240531010331.134441-5-ross.philipson@oracle.com>
- <D1RFWFIJEYWL.2FC7V79321264@kernel.org>
- <1eca8cb1-4b3b-402b-993b-53de7c810016@oracle.com>
- <D1RLBMTUKRFN.34KQXEFZTBA08@kernel.org>
- <249a9b27-c18d-4377-8b51-9bc610b53a8b@oracle.com>
- <D1RNKV4JIE5L.1LNG82UAC916M@kernel.org>
- <f66de08f-4905-48d6-8bcf-5b1ab847492f@oracle.com>
- <D1RSB1PB5XGS.2X032M0E1VMJW@kernel.org>
- <a865a25c-336e-47de-9718-de4cb957e6c2@oracle.com>
- <D1SPFVXS6FOG.IQQB3INFYEF2@kernel.org>
- <23961b5b-a52a-483c-876e-e5e39d9e6c01@oracle.com>
-In-Reply-To: <23961b5b-a52a-483c-876e-e5e39d9e6c01@oracle.com>
+References: <20240606-md-trusted-v3-0-42716f15e66e@quicinc.com>
+ <20240606-md-trusted-v3-1-42716f15e66e@quicinc.com>
+In-Reply-To: <20240606-md-trusted-v3-1-42716f15e66e@quicinc.com>
 
-On Thu Jun 6, 2024 at 7:49 PM EEST,  wrote:
-> > For any architectures dig a similar fact:
-> >=20
-> > 1. Is not dead.
-> > 2. Will be there also in future.
-> >=20
-> > Make any architecture existentially relevant for and not too much
-> > coloring in the text that is easy to check.
-> >=20
-> > It is nearing 5k lines so you should be really good with measured
-> > facts too (not just launch) :-)
+On Fri Jun 7, 2024 at 4:47 AM EEST, Jeff Johnson wrote:
+> kbuild reports:
 >
-> ... but overall I get your meaning. We will spend time on this sort of=20
-> documentation for the v10 release.
+> WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-k=
+eys/trusted.o
+>
+> Add the missing MODULE_DESCRIPTION() macro invocation.
+>
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> ---
+>  security/keys/trusted-keys/trusted_core.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/tr=
+usted-keys/trusted_core.c
+> index 5113aeae5628..e2d9644efde1 100644
+> --- a/security/keys/trusted-keys/trusted_core.c
+> +++ b/security/keys/trusted-keys/trusted_core.c
+> @@ -395,4 +395,5 @@ static void __exit cleanup_trusted(void)
+>  late_initcall(init_trusted);
+>  module_exit(cleanup_trusted);
+> =20
+> +MODULE_DESCRIPTION("Trusted Key type");
+>  MODULE_LICENSE("GPL");
 
-Yeah, I mean we live in the universe of 3 letter acronyms so
-it is better to summarize the existential part, especially
-in a ~5 KSLOC patch set ;-)
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
 
