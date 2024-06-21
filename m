@@ -1,235 +1,118 @@
-Return-Path: <linux-integrity+bounces-2908-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2909-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A73BD912BBE
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2024 18:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40F65912D0D
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2024 20:12:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C53A28901A
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2024 16:51:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE5C9283F52
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2024 18:12:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B5E15FCFB;
-	Fri, 21 Jun 2024 16:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="D1OZOPJD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C4A41667CF;
+	Fri, 21 Jun 2024 18:12:26 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612E115FA94
-	for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2024 16:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1D51607A4
+	for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2024 18:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718988666; cv=none; b=raeeG+CZD3DIsnx/CGD/AxonNt9NyRc4fI23Nr35SkqHmY7fHTb3r6S7HeAt1BN2qMQSt+96iIF26gB8m7cIlOH7bSBCM5l6wHQX9p8GLVEyh9Wo8pvrTxEcp6tsHp+A2dVE5fYzu9BNMEk3OSCwm3HwER4OniU9FbAGXQW2yGM=
+	t=1718993546; cv=none; b=lB8K9bF5/WoH/GOVQlQ7ZEJXldit6aL7+HD68CxRiZDeh3+kDgeDghFpbXZ70Nui1DKXKQfVcTcOmFFHZzBTspiTj4i2mTiYvtVRKiUI7iYrQA2ptcUEz2BPyBcpv+fJ7FEckBcWoQuNUblQFz4XCFMq+YFCkFFNTWDkxeXqFNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718988666; c=relaxed/simple;
-	bh=IZ4Cnnxk3XF7uvCUsWi/i38UQ2fJzqrI6jo78DbBRUE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lrqQF8MSVs7l8KzP5cYnYqMSspLP0thxSd4b6g0xekEGl0jAn1QG3p7IYWHyZZuybHgYak2tbDDc5v0iBobgJeSrnkqS/lCizYOMW/i5YiKIM5374qyFTsL48nZsMk4ZuXLFVi5mApKKTWo6hfvGnhOH0FGjcRblABFipl1d35Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=D1OZOPJD; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-63bce128c70so17279077b3.0
-        for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2024 09:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1718988663; x=1719593463; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tSrhlkWdX6A/JwQnL1qGyp7h9CQ4fvs211cMTRuxiNQ=;
-        b=D1OZOPJDKqfKk8kKH2DSz5kN68XqSbmDRPGVtdetr0D+mzIrCCkISOJVimj9i7iFpx
-         pg2gNK9MYGg6jZDx/e7/VtqrFfE0+CKTU20yx5tG8PklFeT2PguoLYUoV0vBE2M/np+F
-         AODEQ1AEkAwgzNUc5iPrCO1YmFJRXsA0o/96u1r5ljE47CHHvzq4yIdPeGDhTtpVEYMs
-         /ObRwcypxgB0vw1YB8g7K4l2LspjvN+lsQBZmdesF4svh2ipVpcW7VOqZ4wi7kQ8sjc3
-         xKBfPAVJZTn5uq+VIfeO4Q6+Ar/g0Q1dlpzxDdQDUE/72qkdfdfxEcsOMvGNoaGve7VL
-         YfSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718988663; x=1719593463;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tSrhlkWdX6A/JwQnL1qGyp7h9CQ4fvs211cMTRuxiNQ=;
-        b=DHDpRF5BtPfSo35//2jsnyQgvmQt6GKtXcgnF1Cy7aKJhUNYIaHl8V7SbxQ0/3C8Q4
-         aNq/cAgO6c5+2M0pOhhq528U0wYrWm4sr/x1q26SwFmunP3D2fSeAjhLXiGOWiDdweqp
-         1cJatTdDzXATg6mWzYWThfgs+F/qK/Foz253gZCEFWr4bPuOmX2ljbd9O4gu7lTMbevo
-         3er6uHpliVn8HgnnyslctmwdNL+De8xqcKo8uRlvTD46R8Ob8N2fjvqowkFpsPRRYzC2
-         xCg876dV/DrVR3Laou0DlLWlp9FLiOUuHxUxsGqOH+LP7YuDsos6lNbRsow7lLpaiB4k
-         1FvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUg91PcN1dCiGr5iNQCa5/ForbsqNbhmKiWtS6CTw3hdLWq8BNih5iLXRMUCe/aqTH+P8HIHGp2E8SLcwzPSy3CrTUfnDkbbmwPIzsucihj
-X-Gm-Message-State: AOJu0Yz6vub/bPePvjfxzMLWqBeNvDcC2tsPsmZRbTGAY9jbIZ94dKJy
-	vr979pn4ow5wJzjHOCLe2mHvRdZVKbzpwYF4RpRYB+ihJzJGDuVIcXTUN+MvhnlFplY7cKUU0uG
-	1+o9fP+qbmTsc0MAmtGTIWOH0d1XfEeZfTE7L0pmht9A5k7c=
-X-Google-Smtp-Source: AGHT+IFgmp5RsbF5wpzYfKgtVbH0mSqcmQYprYV8KJXjbZUbpr+S0cYL1rPczjsK1o6CAOpABdLrNgJCmL2S+1BoVtU=
-X-Received: by 2002:a0d:d692:0:b0:63b:ab21:4f8f with SMTP id
- 00721157ae682-64134290c70mr3646647b3.12.1718988663220; Fri, 21 Jun 2024
- 09:51:03 -0700 (PDT)
+	s=arc-20240116; t=1718993546; c=relaxed/simple;
+	bh=wrkaTMbWQ/Opvcmj6YE4KMwEj5XR4EzwSkFfeF1wSkI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ssJXQFVifc2YkMtouSZ+FpixcdaGqpM3vVDdKgN+M0NyG2EwSThF8mZG/arfpUvvegJ2CcFFBwLnuH8BTad/uoCD6MKR/l5oJ4RgJoLwrCu9uXMECmmk59IcZp/Ya/wBoe8lb6Cah67t2WFMkFxvTDGPrmctNjEkMNfQYLXdrhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4W5Q3K1qYdz9v7Hk
+	for <linux-integrity@vger.kernel.org>; Sat, 22 Jun 2024 01:54:21 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id D4D401402E0
+	for <linux-integrity@vger.kernel.org>; Sat, 22 Jun 2024 02:12:04 +0800 (CST)
+Received: from [10.204.63.28] (unknown [10.204.63.28])
+	by APP1 (Coremail) with SMTP id LxC2BwDHIVFuwnVmC37eAA--.43270S2;
+	Fri, 21 Jun 2024 19:12:04 +0100 (CET)
+Message-ID: <6e2b6fc6-6bb6-4ae6-82ef-5d01c8bc7bb6@huaweicloud.com>
+Date: Fri, 21 Jun 2024 20:11:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231215221636.105680-1-casey@schaufler-ca.com> <20231215221636.105680-2-casey@schaufler-ca.com>
-In-Reply-To: <20231215221636.105680-2-casey@schaufler-ca.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 21 Jun 2024 12:50:51 -0400
-Message-ID: <CAHC9VhT+QUuwH9Dv2PA9vUrx4ovA_HZsJ4ijTMEk9BVE4tLy8g@mail.gmail.com>
-Subject: Re: [PATCH v39 01/42] integrity: disassociate ima_filter_rule from security_audit_rule
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: linux-security-module@vger.kernel.org, jmorris@namei.org, serge@hallyn.com, 
-	keescook@chromium.org, john.johansen@canonical.com, 
-	penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, 
-	linux-kernel@vger.kernel.org, mic@digikod.net, 
-	linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH ] ima: fix buffer overrun in ima_eventdigest_init_common
+To: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>,
+ zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com
+Cc: eric.snowberg@oracle.com, linux-integrity@vger.kernel.org
+References: <20240620194632.3996068-1-samasth.norway.ananda@oracle.com>
+Content-Language: en-GB
+From: Enrico Bravi <enrico.bravi@huaweicloud.com>
+In-Reply-To: <20240620194632.3996068-1-samasth.norway.ananda@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:LxC2BwDHIVFuwnVmC37eAA--.43270S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF43GF45KF1UuryUGF1xKrg_yoW8XFy7pa
+	1vga1jkF1DJFyfGFnxAa47tw4xW3yvkry7Gr45Gr1akr90qr1v9an3AryI9r4rGFW5AFyx
+	twsIqryay3Wjya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgvb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIx
+	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
+	Ja73UjIFyTuYvjxUOyCJDUUUU
+X-CM-SenderInfo: 5hquxuvroe2ttyl6x35dzhxuhorxvhhfrp/
 
-On Fri, Dec 15, 2023 at 5:16=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
->
-> Create real functions for the ima_filter_rule interfaces.
-> These replace #defines that obscure the reuse of audit
-> interfaces. The new functions are put in security.c because
-> they use security module registered hooks that we don't
-> want exported.
->
-> Acked-by: Paul Moore <paul@paul-moore.com>
-> Reviewed-by: John Johansen <john.johansen@canonical.com>
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> To: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: linux-integrity@vger.kernel.org
+On 6/20/2024 9:46 PM, Samasth Norway Ananda wrote:
+> Function ima_eventdigest_init() can call ima_eventdigest_init_common()
+> with HASH_ALGO__LAST which is then used to access the array
+> hash_digest_size[] leading to buffer overrun. Have a conditional
+> statement to handle this.
+> 
+> Fixes: 9fab303a2cb3 ("ima: fix violation measurement list record")
+> Signed-off-by: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
+
+Tested-by: Enrico Bravi (PhD at polito.it) <enrico.bravi@huawei.com>
+
 > ---
->  include/linux/security.h     | 24 ++++++++++++++++++++++++
->  security/integrity/ima/ima.h | 26 --------------------------
->  security/security.c          | 21 +++++++++++++++++++++
->  3 files changed, 45 insertions(+), 26 deletions(-)
+>   security/integrity/ima/ima_template_lib.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+> index 4183956c53af..14c000fe8312 100644
+> --- a/security/integrity/ima/ima_template_lib.c
+> +++ b/security/integrity/ima/ima_template_lib.c
+> @@ -320,13 +320,17 @@ static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
+>   
+>   	if (digest)
+>   		memcpy(buffer + offset, digest, digestsize);
+> -	else
+> +	else {
+>   		/*
+>   		 * If digest is NULL, the event being recorded is a violation.
+>   		 * Make room for the digest by increasing the offset by the
+>   		 * hash algorithm digest size.
+>   		 */
+> -		offset += hash_digest_size[hash_algo];
+> +		if (hash_algo < HASH_ALGO__LAST)
+> +                        offset += hash_digest_size[hash_algo];
+> +               else
+> +                        offset += IMA_DIGEST_SIZE;
+> +	}
+>   
+>   	return ima_write_template_field_data(buffer, offset + digestsize,
+>   					     fmt, field_data);
 
-Mimi, Roberto, are you both okay if I merge this into the lsm/dev
-branch?  The #define approach taken with the ima_filter_rule_XXX
-macros likely contributed to the recent problem where the build
-problem caused by the new gfp_t parameter was missed during review;
-I'd like to get this into an upstream tree independent of the larger
-stacking effort as I believe it has standalone value.
-
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 750130a7b9dd..4790508818ee 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -2009,6 +2009,30 @@ static inline void security_audit_rule_free(void *=
-lsmrule)
->  #endif /* CONFIG_SECURITY */
->  #endif /* CONFIG_AUDIT */
->
-> +#if defined(CONFIG_IMA_LSM_RULES) && defined(CONFIG_SECURITY)
-> +int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrul=
-e);
-> +int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule);
-> +void ima_filter_rule_free(void *lsmrule);
-> +
-> +#else
-> +
-> +static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
-> +                                          void **lsmrule)
-> +{
-> +       return 0;
-> +}
-> +
-> +static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
-> +                                           void *lsmrule)
-> +{
-> +       return 0;
-> +}
-> +
-> +static inline void ima_filter_rule_free(void *lsmrule)
-> +{ }
-> +
-> +#endif /* defined(CONFIG_IMA_LSM_RULES) && defined(CONFIG_SECURITY) */
-> +
->  #ifdef CONFIG_SECURITYFS
->
->  extern struct dentry *securityfs_create_file(const char *name, umode_t m=
-ode,
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index c29db699c996..560d6104de72 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -420,32 +420,6 @@ static inline void ima_free_modsig(struct modsig *mo=
-dsig)
->  }
->  #endif /* CONFIG_IMA_APPRAISE_MODSIG */
->
-> -/* LSM based policy rules require audit */
-> -#ifdef CONFIG_IMA_LSM_RULES
-> -
-> -#define ima_filter_rule_init security_audit_rule_init
-> -#define ima_filter_rule_free security_audit_rule_free
-> -#define ima_filter_rule_match security_audit_rule_match
-> -
-> -#else
-> -
-> -static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
-> -                                      void **lsmrule)
-> -{
-> -       return -EINVAL;
-> -}
-> -
-> -static inline void ima_filter_rule_free(void *lsmrule)
-> -{
-> -}
-> -
-> -static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
-> -                                       void *lsmrule)
-> -{
-> -       return -EINVAL;
-> -}
-> -#endif /* CONFIG_IMA_LSM_RULES */
-> -
->  #ifdef CONFIG_IMA_READ_POLICY
->  #define        POLICY_FILE_FLAGS       (S_IWUSR | S_IRUSR)
->  #else
-> diff --git a/security/security.c b/security/security.c
-> index d7b15ea67c3f..8e5379a76369 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -5350,6 +5350,27 @@ int security_audit_rule_match(u32 secid, u32 field=
-, u32 op, void *lsmrule)
->  }
->  #endif /* CONFIG_AUDIT */
->
-> +#ifdef CONFIG_IMA_LSM_RULES
-> +/*
-> + * The integrity subsystem uses the same hooks as
-> + * the audit subsystem.
-> + */
-> +int ima_filter_rule_init(u32 field, u32 op, char *rulestr, void **lsmrul=
-e)
-> +{
-> +       return call_int_hook(audit_rule_init, 0, field, op, rulestr, lsmr=
-ule);
-> +}
-> +
-> +void ima_filter_rule_free(void *lsmrule)
-> +{
-> +       call_void_hook(audit_rule_free, lsmrule);
-> +}
-> +
-> +int ima_filter_rule_match(u32 secid, u32 field, u32 op, void *lsmrule)
-> +{
-> +       return call_int_hook(audit_rule_match, 0, secid, field, op, lsmru=
-le);
-> +}
-> +#endif /* CONFIG_IMA_LSM_RULES */
-> +
->  #ifdef CONFIG_BPF_SYSCALL
->  /**
->   * security_bpf() - Check if the bpf syscall operation is allowed
-> --
-> 2.41.0
->
-
-
---=20
-paul-moore.com
 
