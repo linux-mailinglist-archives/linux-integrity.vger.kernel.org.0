@@ -1,133 +1,147 @@
-Return-Path: <linux-integrity+bounces-2912-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2914-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23F98912E9E
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2024 22:34:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1306E912F59
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2024 23:19:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58C1FB255B7
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2024 20:34:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35E9F1C21F87
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Jun 2024 21:19:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A926616D304;
-	Fri, 21 Jun 2024 20:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B6E17B407;
+	Fri, 21 Jun 2024 21:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Afd3s0/W"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZZQtfcVr"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13574374DD
-	for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2024 20:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A95E82488
+	for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2024 21:19:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719002083; cv=none; b=oY2cAidFbnZNgrjqS1mf9AJDX0MA5S6NvBEh01EK8p0q8cx7BGpjiGhSz2jTb1ZdAuP5lT6tflxDmq1FI+BP1qtUJ/Qw+CTtxAiY2W3KjF3UH60rL7grf0Ql8FBshytwcm7DkgjesTARmtCq/y/eD3wo4DvTW5Lk5yFhkSqhTqY=
+	t=1719004744; cv=none; b=cuLUwlK8EdvOJQmX/8npSBZ8jbAa06w9gbxTWYSyx1YFL4Z/3Q8vcYWznn2erJ34GxGIIY8cMllwR1twVILbddqXwNfYfbpc5F5mVj9Zxb4gp8nlqIw1ChaawZEdwz90+3dwzZU9ApXqyf6SHfJehraWmGfyNbwpy2XOs+oMzqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719002083; c=relaxed/simple;
-	bh=dl/Q+qnwxcRQyT1ACYnHmDe7mZJSw0E/y0xmJVorrHo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EowlJnruxJ5Lr5GVzQvrAz+SiLmzhl4hb/uP0qXQoYgQrhVkxsajtPM3mgDE6Yn6lA/PwcS8hSaTGeCH2MLXJqzcHxxBSqqC1ljThHjCjmAjVs6mhfVKsuQCbttFx/QCwiH6ZpEY/iLDF+KlX41VoJMykzvKGG0FvFSQ4CDh7PQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Afd3s0/W; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45LKUVuh008167;
-	Fri, 21 Jun 2024 20:34:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	message-id:subject:from:to:cc:date:in-reply-to:references
-	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
-	ZElm1vn8u6TtGKo5TAK8grmUoyUwj+C4JIeIFChFZhw=; b=Afd3s0/Wi+ufmcDc
-	eyvX+bpx3P4RQVbImO6N7IIc2mQX4Vq7o9oTP8K1kjHPQA8vN8+3TeBe5wrm/cht
-	xn71utOOg855TKRUKYaVxd0uhuYuSH8+fkXxhlEsgkV9BSsZ67G86VSyJCFhmmr7
-	VyJCIoSKIYofxcWOqhVyDtpK2kXn6M8DajJcrxWc0bQ+qCpKq7WVPE0rJlYd9HG9
-	V/a9lDkibtm4J+PW3YOerGX/QfISSI9vJYbM+OZ2eXjGat4Mdn7zOn0l1qSSScNa
-	MVRjvb5ZY6THxgGhV1kxjEUgB06K2rsKZd8GqGcsN8n0E/1B+/OmY42JNU1+2uSZ
-	2QARWA==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ywgm4808b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Jun 2024 20:34:37 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 45LJAFGZ031347;
-	Fri, 21 Jun 2024 20:34:36 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3yvrrq95w9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Jun 2024 20:34:36 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 45LKYYtI19923508
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 21 Jun 2024 20:34:36 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 217C158054;
-	Fri, 21 Jun 2024 20:34:34 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 93F4F58052;
-	Fri, 21 Jun 2024 20:34:33 +0000 (GMT)
-Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.ibm.com (unknown [9.61.41.136])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 21 Jun 2024 20:34:33 +0000 (GMT)
-Message-ID: <c7cace8cd944ea83bf93f8db652ead0b07611fe5.camel@linux.ibm.com>
-Subject: Re: [ima-evm-utils][PATCH 2/3] CI/CD: Disable pkcs11 providers for
- Debian and AltLinux
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Jonathan McDowell <noodles@earth.li>
-Cc: Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Date: Fri, 21 Jun 2024 16:34:33 -0400
-In-Reply-To: <ZnVni8XlHevSIfEB@earth.li>
-References: <20240621005912.1365462-1-stefanb@linux.vnet.ibm.com>
-	 <20240621005912.1365462-3-stefanb@linux.vnet.ibm.com>
-	 <ZnVP1nLxm1vhc1l0@earth.li>
-	 <5fc85cd29bc8456bfd1cd47b6dbe38bfbaeb4907.camel@linux.ibm.com>
-	 <ZnVni8XlHevSIfEB@earth.li>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-25.el8_9) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -rCa4i8xTIBqGZcvt7WFOmS400R5NbfX
-X-Proofpoint-ORIG-GUID: -rCa4i8xTIBqGZcvt7WFOmS400R5NbfX
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1719004744; c=relaxed/simple;
+	bh=X9WSMFU/wNIJq2RKIpQCKPYG8Sq+Ik2gDt2GAk8E5kA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MsAdj0Xj1Ubau7WLCudswuyh2IWNPoWBO6lOwCLecuSwiWMut6HiCbeohNtP3ngyxJeu2m0mmGHHKMNoRtb6JgdBoE3E7HaWQynkP9HSsuUNRf4l1AVC3m1/foXrr4qvY3d8edE9iNKT4oPIMch1HxAWo+pnOuPPFwoNcLtxyGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZZQtfcVr; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e02e4eb5c3dso1407426276.3
+        for <linux-integrity@vger.kernel.org>; Fri, 21 Jun 2024 14:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1719004741; x=1719609541; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pCD4r20mrpTxmvcMRXNwOiX5qAdOlLJEKmqvDoOzpPQ=;
+        b=ZZQtfcVr4rAIifpUrpBSrSr0wwaRMF2r56zZSDIge/Es78JpQj6HlQD55SzUo35QoB
+         qDMSibqzG1qXRU0vaMjAI8RI37Et6X/cDpJxKcFGuboY2D+A2qohA5fMrRkD1k9PDnwt
+         V+rZDtpnIAURXlNJN3xcvt87/P4UKtKJemWv/yS4CpVFmExYLSi5Q+sm7ddasog0Zvpm
+         R7LsaOTz/0u/XZdSRrB/mY8bd3Wz9j2mes60YF45yB6AABSYbjUKk715qtvByOMINFdV
+         epc5CRpGY55ykQMR8Iy24GgxhU/9j4MRr+Wsu7DYSM2bhnn99KWdw0BTXIDpBX0oqkzx
+         OpBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719004741; x=1719609541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pCD4r20mrpTxmvcMRXNwOiX5qAdOlLJEKmqvDoOzpPQ=;
+        b=Z/BE0NeM0HMSpt/Dv2IwkPXTkhQ+tl2DLEWdpndAKzFFo9XUQT58hQIx/Hr1dYbTCT
+         lksYS3x2rsXvYHEL5zoGxZt4FJkyWQserio8rgI9CkONSfpEMhi6nLOihdH3opzHsF+c
+         W1B8IWZJnA3c9mcuTHgZ2mUJQe4JB3lOwvQ7o25I+d7ibgBio9XWcLbAqps4A/WKA714
+         N0WKfasUNaKsyvG2ucaKFmAwAHWHOhuF/q2TnyM14NMHmmIcwbNsMrJW95PlkD2Lq9xy
+         TecTENw1REOhw0JZB6dDRpBBbdxJ6qai/UD0VYoeOnYgy5qiQeDFW6YNpz9alNNHEdJs
+         Xo6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXvzjxeu/pTExrlLkPKD9S/L+KJiCD3PAEH8nu5K+kL7Lmrfgy/b4LxHWSyTVbwZttJQBr0Q9WZol4hQYK6qiSSov1LbIt8guRhixJqXtWQ
+X-Gm-Message-State: AOJu0YxmTfOEcxZ8Wz/1tgWfraHYx63PFu6Lx7L2oYGXdWSidWHGxtvD
+	WG9BAEv/iIj1lczTuabh36VizI18u7CklwiLBYMHZbhORY/RVUfnR/96nzUKvC+2O57BB1HkjdK
+	azuUSCU9rRdaEouaxeu3BRBxnQ2NSwQjEgDPF
+X-Google-Smtp-Source: AGHT+IFe108rxfdI4dceOPLQyYzs1eDja/U43G2YmMGoBEVShtoTYQzpQ8euwTVDfc0m+2FKogi3L+jAlR4yzx48SCE=
+X-Received: by 2002:a25:5f50:0:b0:e02:b9ac:1486 with SMTP id
+ 3f1490d57ef6-e02be22e5ebmr9441533276.57.1719004741560; Fri, 21 Jun 2024
+ 14:19:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-21_11,2024-06-21_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- clxscore=1015 lowpriorityscore=0 adultscore=0 priorityscore=1501
- impostorscore=0 suspectscore=0 mlxlogscore=999 phishscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2406210145
+References: <20231215221636.105680-1-casey@schaufler-ca.com>
+ <20231215221636.105680-2-casey@schaufler-ca.com> <CAHC9VhT+QUuwH9Dv2PA9vUrx4ovA_HZsJ4ijTMEk9BVE4tLy8g@mail.gmail.com>
+ <CAHC9VhSY2NyqTD35H7yb8qJtJF5+1=Z4MHy_ZpP_b7YDT-Mmtw@mail.gmail.com> <fbf7f344c518d70833398c2365bb2029480bd628.camel@linux.ibm.com>
+In-Reply-To: <fbf7f344c518d70833398c2365bb2029480bd628.camel@linux.ibm.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 21 Jun 2024 17:18:50 -0400
+Message-ID: <CAHC9VhTPE-dcwVWeMf=S8ci2J_h9Cm4B54knaskFKBOaYSEWiw@mail.gmail.com>
+Subject: Re: [PATCH v39 01/42] integrity: disassociate ima_filter_rule from security_audit_rule
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>, linux-security-module@vger.kernel.org, 
+	jmorris@namei.org, serge@hallyn.com, keescook@chromium.org, 
+	john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp, 
+	stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org, mic@digikod.net, 
+	linux-integrity@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-06-21 at 12:44 +0100, Jonathan McDowell wrote:
-> On Fri, Jun 21, 2024 at 06:24:38AM -0400, Mimi Zohar wrote:
-> > On Fri, 2024-06-21 at 11:03 +0100, Jonathan McDowell wrote:
-> > > On Thu, Jun 20, 2024 at 08:59:11PM -0400, Stefan Berger wrote:
-> > > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > > 
-> > > > Disable testing provider support on Debian:latest and AltLinux:sisyphus
-> > > > since both now get stuck while running OpenSSL provider-related tests.
-> > > > This is most likely due to an update in a dependency (OpenSSL, libp11,
-> > > > softhsm,  or others).
-> > > 
-> > > This seems to disable it for both Debian stable + testing.  Is it
-> > > actually broken for both?
-> > 
-> > There is no pkcs11-provider package on stable, so the test is skipped.
-> 
-> Ah, right. I can't actually figure out what tree Stefan's patch is
-> against to try myself. https://git.code.sf.net/p/linux-ima/ima-evm-utils
-> does not have the commented out softhsm2 / pkcs11-provider apt line.
-> Where should I be looking?
+On Fri, Jun 21, 2024 at 4:27=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
+ote:
+> On Fri, 2024-06-21 at 15:07 -0400, Paul Moore wrote:
+> > On Fri, Jun 21, 2024 at 12:50=E2=80=AFPM Paul Moore <paul@paul-moore.co=
+m> wrote:
+> > > On Fri, Dec 15, 2023 at 5:16=E2=80=AFPM Casey Schaufler <casey@schauf=
+ler-ca.com> wrote:
+> > > > Create real functions for the ima_filter_rule interfaces.
+> > > > These replace #defines that obscure the reuse of audit
+> > > > interfaces. The new functions are put in security.c because
+> > > > they use security module registered hooks that we don't
+> > > > want exported.
+> > > >
+> > > > Acked-by: Paul Moore <paul@paul-moore.com>
+> > > > Reviewed-by: John Johansen <john.johansen@canonical.com>
+> > > > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> > > > To: Mimi Zohar <zohar@linux.ibm.com>
+> > > > Cc: linux-integrity@vger.kernel.org
+> > > > ---
+> > > >  include/linux/security.h     | 24 ++++++++++++++++++++++++
+> > > >  security/integrity/ima/ima.h | 26 --------------------------
+> > > >  security/security.c          | 21 +++++++++++++++++++++
+> > > >  3 files changed, 45 insertions(+), 26 deletions(-)
+> > >
+> > > Mimi, Roberto, are you both okay if I merge this into the lsm/dev
+> > > branch?  The #define approach taken with the ima_filter_rule_XXX
+> > > macros likely contributed to the recent problem where the build
+> > > problem caused by the new gfp_t parameter was missed during review;
+> > > I'd like to get this into an upstream tree independent of the larger
+> > > stacking effort as I believe it has standalone value.
+> >
+> > ... and I just realized neither Mimi or Roberto were directly CC'd on
+> > that last email, oops.  Fixed.
+>
+> Paul, I do see things posted on the linux-integrity mailing list pretty q=
+uickly.
+> Unfortunately, something came up midday and I'm just seeing this now.  As=
+ for
+> Roberto, it's probably a time zone issue.
 
-Upstream should be based on the next-testing branch of 
-https://github.com/linux-integrity/ima-evm-utils.git.
+Oh, no worries at all, please don't take my comment above to mean I
+was expecting an immediate response!  I try to make sure that if I'm
+addressing someone directly that they are explicitly included on the
+To/CC line.  I was writing another email and it occurred to me that I
+didn't check for that when emailing the two of you, and sure enough,
+you guys weren't on the To/CC line ... I was just trying to fix my
+screw-up :)
 
-Mimi
+> The patch looks ok, but I haven't had a chance to apply or test it.  I'll=
+ look
+> at it over the weekend and get back to you.
 
+No rush, enjoy your weekend, the patch isn't going to run away :)
+
+--=20
+paul-moore.com
 
