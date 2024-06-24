@@ -1,152 +1,112 @@
-Return-Path: <linux-integrity+bounces-2919-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2920-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99A91914538
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2024 10:46:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF7D1914653
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2024 11:24:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5EEA1C208CF
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2024 08:46:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AACB2849EB
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Jun 2024 09:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3544C7E0F2;
-	Mon, 24 Jun 2024 08:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E9C13049E;
+	Mon, 24 Jun 2024 09:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="wupNwgB0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2DC1FAA;
-	Mon, 24 Jun 2024 08:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92A17346C
+	for <linux-integrity@vger.kernel.org>; Mon, 24 Jun 2024 09:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719218798; cv=none; b=RHl2A5cKoKdEFH0RH31OhiwkPXxtqkbX7YRh2s5HOmVPs/mul1j+E1xa6VPTRExKz3ifEUAd03RGI2U6Fx5pdSE6zT5kdEez4GlKq6Jg3ckAOZb2nBS92NOV9IWOvMvIyq9bDFvLrs9aFxsjB4xrmwma6NT0Ef6f6zaSke0WbRI=
+	t=1719221053; cv=none; b=uZ0WpFpOXhm0DqmZLrr8KwD23mq7QW5xWfy4DhIHB5AHItbIyUVPYE90+ZjzIis1HYbLbWBwz42f7irdy3Ptj0NK8j5G2NXhtJR3KyJexEonjc331SOJb9/w+ibULnCVcJSY6asjnEHPDKvrnmKxrI+sH2OarfgHwWmgSb2PiE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719218798; c=relaxed/simple;
-	bh=BIdEdWkDT6EWmjACsuAXmqxF3OU7gyb9Iv5JEW1LWPA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cWBXVVKDzvp4OrgErPX9e7rV10S9TtiAxtkwvizYSl+ZCh148GkdEfslGE2ZOH2TbGeRwB84Z8gIVWsu3OjmdKavklaf+QX3pj9yz6c+JjAYpomYKurDIba24DoiM0TRizalz31ZZvmxwSx/t6ysj4LEwyA+TRXjkNJ/fIezfFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4W71M62bknz9v7Hl;
-	Mon, 24 Jun 2024 16:28:34 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 063AC1405DF;
-	Mon, 24 Jun 2024 16:46:15 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwCH3t9LMnlm2cMiAA--.46294S2;
-	Mon, 24 Jun 2024 09:46:14 +0100 (CET)
-Message-ID: <aecad5ea129946dbf9cf5013331f9368ceb84326.camel@huaweicloud.com>
-Subject: Re: [PATCH v39 01/42] integrity: disassociate ima_filter_rule from
- security_audit_rule
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
- <roberto.sassu@huawei.com>,  linux-security-module@vger.kernel.org,
- jmorris@namei.org, serge@hallyn.com,  keescook@chromium.org,
- john.johansen@canonical.com,  penguin-kernel@i-love.sakura.ne.jp,
- stephen.smalley.work@gmail.com,  linux-kernel@vger.kernel.org,
- mic@digikod.net, linux-integrity@vger.kernel.org,  Casey Schaufler
- <casey@schaufler-ca.com>
-Date: Mon, 24 Jun 2024 10:45:59 +0200
-In-Reply-To: <CAHC9VhRKmkAPgQRt0YXrF4hLXCp7RyCSkG0K9ZchJ6x4bKKhEw@mail.gmail.com>
-References: <20231215221636.105680-1-casey@schaufler-ca.com>
-	 <20231215221636.105680-2-casey@schaufler-ca.com>
-	 <CAHC9VhT+QUuwH9Dv2PA9vUrx4ovA_HZsJ4ijTMEk9BVE4tLy8g@mail.gmail.com>
-	 <CAHC9VhSY2NyqTD35H7yb8qJtJF5+1=Z4MHy_ZpP_b7YDT-Mmtw@mail.gmail.com>
-	 <fbf7f344c518d70833398c2365bb2029480bd628.camel@linux.ibm.com>
-	 <d953fac4-9dbe-42a0-82eb-35eac862ca6a@huaweicloud.com>
-	 <CAHC9VhRKmkAPgQRt0YXrF4hLXCp7RyCSkG0K9ZchJ6x4bKKhEw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1719221053; c=relaxed/simple;
+	bh=6gbsmilc3HZ4ErPzDmaGa4+RgG7DfiDFQ47eyx88HeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BqDSLRFPlIMOP5RzZdB6oUB7sIiEvvQs5e6q999c58XVJePUPYLjd1bK2kmgWRIgpHrLgsJxwZ+AUC+34tw8oB2jj6qZBeCAPUzADYLYlqd8qVDJAh0+Ljomj4HUwqOM0hQpgdN7CNRqB0HHHJ0ll2qj13/T68v+1YJrDvhnhSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=wupNwgB0; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=f+RqtYqgtJ6OjqzyEO6Nfnt86JS5z8jN3u4v28Y8neA=; b=wupNwgB0sT7t3aIRdL/UJy1u7V
+	6hdG/3EAcfkjZKc7m42RlV4wdy618f6jf3IZIWczeBvArOuobbHR2jAlCZRBHwraMqEvcMHoPJczz
+	htQollBkF860eadoTDv39twxxp7p9se2JSt/trXOHOJBoHtKBW9uY31nUxi4W40Fss1RRbeyvrcbI
+	6VDx074yI+4DxZMWlanTzWAYYLlE6tOo7F/wvWkefM3cevbzsJkSAfkywqnL3xLr7Yf+tuy5YdxJp
+	ZNo9Z0yoVFPy5hUSrFLZ3Zq8dAFzK9N3+nsfTpy95l7kibnxhym7yI7X8A5NibhwWWOxIQRdhgzPt
+	XFBCBBlg==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1sLfve-00BnTd-23;
+	Mon, 24 Jun 2024 10:24:02 +0100
+Date: Mon, 24 Jun 2024 10:24:02 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Stefan Berger <stefanb@linux.vnet.ibm.com>,
+	linux-integrity@vger.kernel.org,
+	Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [ima-evm-utils][PATCH 2/3] CI/CD: Disable pkcs11 providers for
+ Debian and AltLinux
+Message-ID: <Znk7MpQ7ixXJygNj@earth.li>
+References: <20240621005912.1365462-1-stefanb@linux.vnet.ibm.com>
+ <20240621005912.1365462-3-stefanb@linux.vnet.ibm.com>
+ <ZnVP1nLxm1vhc1l0@earth.li>
+ <5fc85cd29bc8456bfd1cd47b6dbe38bfbaeb4907.camel@linux.ibm.com>
+ <ZnVni8XlHevSIfEB@earth.li>
+ <c7cace8cd944ea83bf93f8db652ead0b07611fe5.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwCH3t9LMnlm2cMiAA--.46294S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFWUGr4DAr1xtr1DAr1fJFb_yoW5JF15pa
-	y3Ka45AF4kXFy3C3ZIvF1UZ345K395Jr1UZr9xtw1vqFn0vr13Zr17GF48ua4UuryxGFy7
-	tF13Ww13u34DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj5wOowAAsC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7cace8cd944ea83bf93f8db652ead0b07611fe5.camel@linux.ibm.com>
 
-On Fri, 2024-06-21 at 17:19 -0400, Paul Moore wrote:
-> On Fri, Jun 21, 2024 at 4:34=E2=80=AFPM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On 6/21/2024 10:23 PM, Mimi Zohar wrote:
-> > > On Fri, 2024-06-21 at 15:07 -0400, Paul Moore wrote:
-> > > > On Fri, Jun 21, 2024 at 12:50=E2=80=AFPM Paul Moore <paul@paul-moor=
-e.com> wrote:
-> > > > > On Fri, Dec 15, 2023 at 5:16=E2=80=AFPM Casey Schaufler <casey@sc=
-haufler-ca.com> wrote:
-> > > > > > Create real functions for the ima_filter_rule interfaces.
-> > > > > > These replace #defines that obscure the reuse of audit
-> > > > > > interfaces. The new functions are put in security.c because
-> > > > > > they use security module registered hooks that we don't
-> > > > > > want exported.
-> > > > > >=20
-> > > > > > Acked-by: Paul Moore <paul@paul-moore.com>
-> > > > > > Reviewed-by: John Johansen <john.johansen@canonical.com>
-> > > > > > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> > > > > > To: Mimi Zohar <zohar@linux.ibm.com>
-> > > > > > Cc: linux-integrity@vger.kernel.org
-> > > > > > ---
-> > > > > >   include/linux/security.h     | 24 ++++++++++++++++++++++++
-> > > > > >   security/integrity/ima/ima.h | 26 --------------------------
-> > > > > >   security/security.c          | 21 +++++++++++++++++++++
-> > > > > >   3 files changed, 45 insertions(+), 26 deletions(-)
-> > > > >=20
-> > > > > Mimi, Roberto, are you both okay if I merge this into the lsm/dev
-> > > > > branch?  The #define approach taken with the ima_filter_rule_XXX
-> > > > > macros likely contributed to the recent problem where the build
-> > > > > problem caused by the new gfp_t parameter was missed during revie=
-w;
-> > > > > I'd like to get this into an upstream tree independent of the lar=
-ger
-> > > > > stacking effort as I believe it has standalone value.
-> > > >=20
-> > > > ... and I just realized neither Mimi or Roberto were directly CC'd =
-on
-> > > > that last email, oops.  Fixed.
-> > >=20
-> > > Paul, I do see things posted on the linux-integrity mailing list pret=
-ty quickly.
-> > > Unfortunately, something came up midday and I'm just seeing this now.=
-  As for
-> > > Roberto, it's probably a time zone issue.
-> >=20
-> > Will review/check it first thing Monday morning.
->=20
-> Thanks Roberto, no rush.
+On Fri, Jun 21, 2024 at 04:34:33PM -0400, Mimi Zohar wrote:
+> On Fri, 2024-06-21 at 12:44 +0100, Jonathan McDowell wrote:
+> > On Fri, Jun 21, 2024 at 06:24:38AM -0400, Mimi Zohar wrote:
+> > > On Fri, 2024-06-21 at 11:03 +0100, Jonathan McDowell wrote:
+> > > > On Thu, Jun 20, 2024 at 08:59:11PM -0400, Stefan Berger wrote:
+> > > > > From: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > 
+> > > > > Disable testing provider support on Debian:latest and AltLinux:sisyphus
+> > > > > since both now get stuck while running OpenSSL provider-related tests.
+> > > > > This is most likely due to an update in a dependency (OpenSSL, libp11,
+> > > > > softhsm,  or others).
+> > > > 
+> > > > This seems to disable it for both Debian stable + testing.  Is it
+> > > > actually broken for both?
+> > > 
+> > > There is no pkcs11-provider package on stable, so the test is skipped.
+> > 
+> > Ah, right. I can't actually figure out what tree Stefan's patch is
+> > against to try myself. https://git.code.sf.net/p/linux-ima/ima-evm-utils
+> > does not have the commented out softhsm2 / pkcs11-provider apt line.
+> > Where should I be looking?
+> 
+> Upstream should be based on the next-testing branch of 
+> https://github.com/linux-integrity/ima-evm-utils.git.
 
-Ok, so no problem from my side to upstream the patch.
+Thanks, I was able to reproduce with that. There's some sort of deadlock
+happening down in the softhsm2 / p11-kit-proxy layers that wasn't
+immediately obvious to me. Backtrace at
 
-My only comment would be that I would not call the new functions with
-the ima_ prefix, being those in security.c, which is LSM agnostic, but
-I would rather use a name that more resembles the differences, if any.
+https://the.earth.li/~noodles/evm-test-failure
 
-If not:
+in case it means something to someone else.
 
-Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
+J.
 
-Thanks
-
-Roberto
-
+-- 
+Can't you see I want tenderness, you idiot?
 
