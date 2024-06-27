@@ -1,161 +1,119 @@
-Return-Path: <linux-integrity+bounces-2935-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2936-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C239918399
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jun 2024 16:03:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C09BB919F59
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2024 08:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69F21B275E2
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Jun 2024 14:03:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F4BD1F221B9
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2024 06:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED1F17D37E;
-	Wed, 26 Jun 2024 14:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FBF322EE4;
+	Thu, 27 Jun 2024 06:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kWKi6AnJ"
+	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="LfIkd8wf"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31038181D1F
-	for <linux-integrity@vger.kernel.org>; Wed, 26 Jun 2024 14:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 759751CAB7
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2024 06:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719410629; cv=none; b=mPZqahO7VMq1kmvVzBD8nAZEdFVUJfpLSWCn9fB8UGwtQTYajpPR1T1z2jt7qjlzXbVRqp8/z3Ga4WWlL2cjj0rHIaj0lZGB2+/usOIcGdPSdbQ/EuxD1bI7QWNxfv68oP8lQouzvJEthzuLsabS3/pddx63wx04riBhrvzSY5U=
+	t=1719470202; cv=none; b=vGbU2kDe8AyDMeBtn0KH+/fNYdB4x/P1P+XyHkgtfTIVWkpPrDD0sYDw6CbfDZ4Nh3fmNZ4q/wC7oPxKt+o4Bvh5c1IAfAe+GusctRz6gsaAx1BFxhhRjlnqPURV9ZlMkQ3RDzg/ZvoTpaQy2KEJlU2gc+3M+bcFkoi8xpWZjXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719410629; c=relaxed/simple;
-	bh=xs4LLYsfrRzMfpfjWbXCA0eI8gA2aN/e8u81yI8Lugs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mgRYYeFC13ALNWQArbIb763aAYt8U7sbR1LjlB8ZwZYfhAy+aCBTCncaQPla0ANa3zfH7XNRF+QSEQlrFHNFgKgA4SszbvRaTZ6WEBYMpBcSc8uStD0iq1teNdju7Fkmw14NovyeHGNeDAfKIeKdrLWX4raksZd/I6FzC1ZhCm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kWKi6AnJ; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3d562882f4cso360054b6e.3
-        for <linux-integrity@vger.kernel.org>; Wed, 26 Jun 2024 07:03:47 -0700 (PDT)
+	s=arc-20240116; t=1719470202; c=relaxed/simple;
+	bh=M0wLcNU/BeTuuohEgxMB3gbOO+PhYurxfT7UgvaKQTg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gMyC8DRBeLmd6Time85Bcg7Jipsu9hBLds59I5CP4HclHAyVLLVuCDMGkp7HPtvw/MGqv1GtoTVbPHX1Um2PVbL08qfhsZON14tn2wwhJsYQen7AO+NADqv1ZrY2yflAFwaa0Xsfa82KocmOjM1pboMxuoodXY2/77lSu53iUXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=LfIkd8wf; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-70656b43fd4so4674567b3a.0
+        for <linux-integrity@vger.kernel.org>; Wed, 26 Jun 2024 23:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1719410627; x=1720015427; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lJUHJEXAc+QcqYtg3JPqiGV21t0n+2d3pWybHwk5YPo=;
-        b=kWKi6AnJO/LltRyE7J7bOJ1PXfEyCr3HIOM4rmwLES9EyO0OAcgb6sI9nGmcpLof+d
-         IV6ClEcRl7/EZePuSJ7sUCu5LyYEiyO/DiGMqBo3vTjcsHXdiz7PL1IesYS2IHSc+n6m
-         7MbHrTCAZLPPclrXQLWozIRJpg651KKy6uUx4=
+        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1719470199; x=1720074999; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NKqizyh8XSn6mH10NxE9X9AFr5AwyCB3pJHvwsBkhUE=;
+        b=LfIkd8wf1IX9A+DHZXBkngSf68a3qMi3NeLnJ41z7JDpwyky7KP+eJkuTaQknVl0G0
+         pEIWka7LWlA6ZhMkOB58qvLIVR6wPH24/xcPJCFOVbRa3rnfMTmNofbO34aK9K26jTd7
+         CKdViscZTLjxqZ3S0abCzOx85UfCXB9gbISdiarXAnvcD2U0pRHKn81LXUf9h007H5f2
+         SeIoa4srKOcEbV4h0JQG1aRocrI2ItnGrbqbJOnrViGXHSQOMoTYYM6sQJFyEMgJ8KJe
+         4A2U/q2EJciwwN0D6VwxLV8vlymVp/p2GpquP05SlwaTKxWLXuJH5564ifpaS0T54FRl
+         z/hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719410627; x=1720015427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lJUHJEXAc+QcqYtg3JPqiGV21t0n+2d3pWybHwk5YPo=;
-        b=b3AmrgWtEanTP6HpLB8ny1RupSZUWPQsocJV/5+sewFWJDsuJgg7AZEyiVWWL+0PV6
-         gVnGI4nlCIlABfzjSplKjb/DH6r/Wl5NZRipkGZKOwW6ox772wX2kMT4S4HLe2BbsRdb
-         Ep/ufO5r7mIietoJtWq5cJiZVTrDnU1Q8PxPysfnYVObG3Iczty2U0Pb8z4GgNO4ktc1
-         uJbiwvS9P9WyV+Se7QGQKfr29OnHXouVhyZZpertM8YxqyeB9J/iLHdUYv+we3PTEHiM
-         fp9LVVhJ0kGaLJwjrFH8SAKFGI+zRko/eGEmsd+fbJ8mvP9HDeoPR/vZATwsHtGgpptt
-         8mIg==
-X-Forwarded-Encrypted: i=1; AJvYcCW1HgUW64T/vjeP7mBtr7X/c9BsHt/JbThFz+LiiScApixYt5sPnPxRLsg2tU0QOSqjU8h22PFZWeXDXlVog++PetiaEOEr2afTKHa3J25P
-X-Gm-Message-State: AOJu0YxL5QfHOeS7wLWEkCIO8QA/VUMmgRUR5sc5ZaWu8/HbRO36lC6j
-	92kBvOyphDGHrEpYB8m948GXAce22oRNl38xMBhrdKBqH+cvsM3gmMFW04NCbDzKKlmLkDNVkPY
-	=
-X-Google-Smtp-Source: AGHT+IEXlm/90rZ/WmM/a62HHi3zPApqbKPChW/7jztd/3ujDX7gdOG0Jx7xMok+l6VB7ciQKzqy1g==
-X-Received: by 2002:a05:6808:144e:b0:3d5:5c77:fc2f with SMTP id 5614622812f47-3d55c78016amr5427935b6e.48.1719410626984;
-        Wed, 26 Jun 2024 07:03:46 -0700 (PDT)
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3d564d6a239sm42584b6e.49.2024.06.26.07.03.45
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jun 2024 07:03:46 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-700cb05c118so805395a34.2
-        for <linux-integrity@vger.kernel.org>; Wed, 26 Jun 2024 07:03:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV5yAQtQkT6bldj9uOMVkPyEClUM0LuKK78iUP+3iJCBzm3zZ5oT/PAf96UnPS9vXHPnc4CGgyV8/r14VL3s4jGBV1Qh4rjw85YS2nbRI45
-X-Received: by 2002:a05:6871:58c:b0:254:de02:4c65 with SMTP id
- 586e51a60fabf-25d06bc819dmr11469477fac.6.1719410625090; Wed, 26 Jun 2024
- 07:03:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719470199; x=1720074999;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NKqizyh8XSn6mH10NxE9X9AFr5AwyCB3pJHvwsBkhUE=;
+        b=VYJS9ZOg0dc4g6vIcr3UU+5AzAVcSjVCupe+CTV/TdI1v69B3GD4NxSBn0MEHFywTB
+         yCX+49012dWE6Dix8+O/pzZz2CLT2O0nwYbyl0ZSIg9h5cKLk1Tq2u2TJq5jL4yU25h5
+         n2ft6lhSXOrcxfYiTxdAye6hVB01VyKSt5Q261p/iTBiIhr0mxbQ11hxzQl+3rytZhyv
+         mw5rF9OY+j6+qITSQq40Hl8bRHq7lBBtSausdpzl1hzDwCNfuI+JGjmzI8ZZxtLuieC3
+         uH8TuXI0vVF/YG7Rsnm+wcA1JIEFU9kU0Xvb3Uwu2s/DQeknA/ET+UUqBIfug41+yApR
+         BfYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVbRztzfNLOD4mwZ1LHlH5wm1umEEb6aw0SGFYT2XwC8s/Pls4yz/FAL6z6AD9kmhS8yYcO8yADCHirS24iJPGQsv5K4kzqHeJqy3mwH94b
+X-Gm-Message-State: AOJu0YyIPWkes8N6bqsXxYA8dHul0tW+ZeEtkA3Dsr/OkA8KJRMrSVcQ
+	itgfqquIvG3YXYRwYY3TIn9944eGzx7VQnAk4Mli6N55lkdwrshQ+0okzk0wgFE=
+X-Google-Smtp-Source: AGHT+IFU0s/YoFbgmqqiMGaiaCo1qHFQmmss6XInf3FRtoFQ/hNKlJhJELQW3TpYpxvODWHC0cKmnA==
+X-Received: by 2002:a05:6a00:3c94:b0:705:9ddb:db6b with SMTP id d2e1a72fcca58-706745aaf1fmr14466716b3a.13.1719470199557;
+        Wed, 26 Jun 2024 23:36:39 -0700 (PDT)
+Received: from localhost.localdomain ([150.249.244.44])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-72748e8544bsm476406a12.59.2024.06.26.23.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jun 2024 23:36:39 -0700 (PDT)
+From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+To: jarkko@kernel.org,
+	peterhuewe@gmx.de
+Cc: jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Subject: [PATCH v2] char: tpm: Fix possible memory leak in tpm_bios_measurements_open()
+Date: Thu, 27 Jun 2024 15:31:09 +0900
+Message-Id: <20240627063109.1239467-1-joe@pf.is.s.u-tokyo.ac.jp>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240610132513.1.I6434acf426183b4077ba3e8af4eccaa5921c6c2f@changeid>
-In-Reply-To: <20240610132513.1.I6434acf426183b4077ba3e8af4eccaa5921c6c2f@changeid>
-From: Jett Rink <jettrink@chromium.org>
-Date: Wed, 26 Jun 2024 08:03:34 -0600
-X-Gmail-Original-Message-ID: <CAK+PMK4Vbka3XhbXJHmWJRHD4WVe_k9yvRMw71r+n28Jp5cyvA@mail.gmail.com>
-Message-ID: <CAK+PMK4Vbka3XhbXJHmWJRHD4WVe_k9yvRMw71r+n28Jp5cyvA@mail.gmail.com>
-Subject: Re: [PATCH] tpm: Add new device/vendor ID 0x50666666
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>, 
-	linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-I wanted to check the status of this review. Is there something I did
-incorrectly?
+In tpm_bios_measurements_open(), get_device() is called on the device
+embedded in struct tpm_chip. In the error path, however, put_device() is
+not called. This results in a reference count leak, which prevents the
+device from being properly released. This commit makes sure to call
+put_device() when the seq_open() call fails.
 
--Jett
+Fixes: 9b01b5356629 ("tpm: Move shared eventlog functions to common.c")
+Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+---
+Changes since v1:
+- Keep the code diff minimal.
+- Fix the commit message.
+- Add a Fixes tag.
+---
+ drivers/char/tpm/eventlog/common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Mon, Jun 10, 2024 at 1:25=E2=80=AFPM Jett Rink <jettrink@chromium.org> w=
-rote:
->
-> Accept another DID:VID for the next generation Google TPM. This TPM
-> has the same Ti50 firmware and fulfills the same interface.
->
-> Signed-off-by: Jett Rink <jettrink@chromium.org>
-> ---
->
->  drivers/char/tpm/tpm_tis_i2c_cr50.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_t=
-is_i2c_cr50.c
-> index 86c9a1a43adb..d9b6abdcda5f 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> @@ -32,7 +32,8 @@
->  #define TPM_CR50_TIMEOUT_SHORT_MS      2               /* Short timeout =
-during transactions */
->  #define TPM_CR50_TIMEOUT_NOIRQ_MS      20              /* Timeout for TP=
-M ready without IRQ */
->  #define TPM_CR50_I2C_DID_VID           0x00281ae0L     /* Device and ven=
-dor ID reg value */
-> -#define TPM_TI50_I2C_DID_VID           0x504a6666L     /* Device and ven=
-dor ID reg value */
-> +#define TPM_TI50_DT_I2C_DID_VID                0x504a6666L     /* Device=
- and vendor ID reg value */
-> +#define TPM_TI50_OT_I2C_DID_VID                0x50666666L     /* Device=
- and vendor ID reg value */
->  #define TPM_CR50_I2C_MAX_RETRIES       3               /* Max retries du=
-e to I2C errors */
->  #define TPM_CR50_I2C_RETRY_DELAY_LO    55              /* Min usecs betw=
-een retries on I2C */
->  #define TPM_CR50_I2C_RETRY_DELAY_HI    65              /* Max usecs betw=
-een retries on I2C */
-> @@ -781,13 +782,17 @@ static int tpm_cr50_i2c_probe(struct i2c_client *cl=
-ient)
->         }
->
->         vendor =3D le32_to_cpup((__le32 *)buf);
-> -       if (vendor !=3D TPM_CR50_I2C_DID_VID && vendor !=3D TPM_TI50_I2C_=
-DID_VID) {
-> +       if (vendor !=3D TPM_CR50_I2C_DID_VID &&
-> +           vendor !=3D TPM_TI50_DT_I2C_DID_VID &&
-> +           vendor !=3D TPM_TI50_OT_I2C_DID_VID) {
->                 dev_err(dev, "Vendor ID did not match! ID was %08x\n", ve=
-ndor);
->                 return -ENODEV;
->         }
->
->         dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
-> -                vendor =3D=3D TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
-> +                vendor =3D=3D TPM_CR50_I2C_DID_VID    ? "cr50" :
-> +                vendor =3D=3D TPM_TI50_DT_I2C_DID_VID ? "ti50 DT" :
-> +                                                    "ti50 OT",
->                  client->addr, client->irq, vendor >> 16);
->         return tpm_chip_register(chip);
->  }
-> --
-> 2.45.2.505.gda0bf45e8d-goog
->
+diff --git a/drivers/char/tpm/eventlog/common.c b/drivers/char/tpm/eventlog/common.c
+index 639c3f395a5a..4c0bbba64ee5 100644
+--- a/drivers/char/tpm/eventlog/common.c
++++ b/drivers/char/tpm/eventlog/common.c
+@@ -47,6 +47,8 @@ static int tpm_bios_measurements_open(struct inode *inode,
+ 	if (!err) {
+ 		seq = file->private_data;
+ 		seq->private = chip;
++	} else {
++		put_device(&chip->dev);
+ 	}
+ 
+ 	return err;
+-- 
+2.34.1
+
 
