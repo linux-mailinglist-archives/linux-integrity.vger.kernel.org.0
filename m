@@ -1,80 +1,78 @@
-Return-Path: <linux-integrity+bounces-2936-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2937-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C09BB919F59
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2024 08:36:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABA1291AF8B
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2024 21:20:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F4BD1F221B9
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2024 06:36:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 347C42869A3
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Jun 2024 19:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FBF322EE4;
-	Thu, 27 Jun 2024 06:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19F2405CC;
+	Thu, 27 Jun 2024 19:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="LfIkd8wf"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="J/LoCLgW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 759751CAB7
-	for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2024 06:36:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E012EAEA
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2024 19:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719470202; cv=none; b=vGbU2kDe8AyDMeBtn0KH+/fNYdB4x/P1P+XyHkgtfTIVWkpPrDD0sYDw6CbfDZ4Nh3fmNZ4q/wC7oPxKt+o4Bvh5c1IAfAe+GusctRz6gsaAx1BFxhhRjlnqPURV9ZlMkQ3RDzg/ZvoTpaQy2KEJlU2gc+3M+bcFkoi8xpWZjXM=
+	t=1719516044; cv=none; b=HyARaPa8jA29EMTxcVelFgdkLbb7vZ54Sn4Ca5+aoB1k1vCVq4WuHpyoUpLyupnwg487GRgfnAOEH3G65JWIjiETiIgaYDUPBbNO/r2S+mhbmuMLAgr0YWxrUo3AiwJoMCkL1FjVyBxT1+3cwaUZ/ywogE5Dkcq4cf/EXlrp6vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719470202; c=relaxed/simple;
-	bh=M0wLcNU/BeTuuohEgxMB3gbOO+PhYurxfT7UgvaKQTg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gMyC8DRBeLmd6Time85Bcg7Jipsu9hBLds59I5CP4HclHAyVLLVuCDMGkp7HPtvw/MGqv1GtoTVbPHX1Um2PVbL08qfhsZON14tn2wwhJsYQen7AO+NADqv1ZrY2yflAFwaa0Xsfa82KocmOjM1pboMxuoodXY2/77lSu53iUXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=LfIkd8wf; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-70656b43fd4so4674567b3a.0
-        for <linux-integrity@vger.kernel.org>; Wed, 26 Jun 2024 23:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1719470199; x=1720074999; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NKqizyh8XSn6mH10NxE9X9AFr5AwyCB3pJHvwsBkhUE=;
-        b=LfIkd8wf1IX9A+DHZXBkngSf68a3qMi3NeLnJ41z7JDpwyky7KP+eJkuTaQknVl0G0
-         pEIWka7LWlA6ZhMkOB58qvLIVR6wPH24/xcPJCFOVbRa3rnfMTmNofbO34aK9K26jTd7
-         CKdViscZTLjxqZ3S0abCzOx85UfCXB9gbISdiarXAnvcD2U0pRHKn81LXUf9h007H5f2
-         SeIoa4srKOcEbV4h0JQG1aRocrI2ItnGrbqbJOnrViGXHSQOMoTYYM6sQJFyEMgJ8KJe
-         4A2U/q2EJciwwN0D6VwxLV8vlymVp/p2GpquP05SlwaTKxWLXuJH5564ifpaS0T54FRl
-         z/hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719470199; x=1720074999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NKqizyh8XSn6mH10NxE9X9AFr5AwyCB3pJHvwsBkhUE=;
-        b=VYJS9ZOg0dc4g6vIcr3UU+5AzAVcSjVCupe+CTV/TdI1v69B3GD4NxSBn0MEHFywTB
-         yCX+49012dWE6Dix8+O/pzZz2CLT2O0nwYbyl0ZSIg9h5cKLk1Tq2u2TJq5jL4yU25h5
-         n2ft6lhSXOrcxfYiTxdAye6hVB01VyKSt5Q261p/iTBiIhr0mxbQ11hxzQl+3rytZhyv
-         mw5rF9OY+j6+qITSQq40Hl8bRHq7lBBtSausdpzl1hzDwCNfuI+JGjmzI8ZZxtLuieC3
-         uH8TuXI0vVF/YG7Rsnm+wcA1JIEFU9kU0Xvb3Uwu2s/DQeknA/ET+UUqBIfug41+yApR
-         BfYA==
-X-Forwarded-Encrypted: i=1; AJvYcCVbRztzfNLOD4mwZ1LHlH5wm1umEEb6aw0SGFYT2XwC8s/Pls4yz/FAL6z6AD9kmhS8yYcO8yADCHirS24iJPGQsv5K4kzqHeJqy3mwH94b
-X-Gm-Message-State: AOJu0YyIPWkes8N6bqsXxYA8dHul0tW+ZeEtkA3Dsr/OkA8KJRMrSVcQ
-	itgfqquIvG3YXYRwYY3TIn9944eGzx7VQnAk4Mli6N55lkdwrshQ+0okzk0wgFE=
-X-Google-Smtp-Source: AGHT+IFU0s/YoFbgmqqiMGaiaCo1qHFQmmss6XInf3FRtoFQ/hNKlJhJELQW3TpYpxvODWHC0cKmnA==
-X-Received: by 2002:a05:6a00:3c94:b0:705:9ddb:db6b with SMTP id d2e1a72fcca58-706745aaf1fmr14466716b3a.13.1719470199557;
-        Wed, 26 Jun 2024 23:36:39 -0700 (PDT)
-Received: from localhost.localdomain ([150.249.244.44])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-72748e8544bsm476406a12.59.2024.06.26.23.36.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jun 2024 23:36:39 -0700 (PDT)
-From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-To: jarkko@kernel.org,
-	peterhuewe@gmx.de
-Cc: jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-Subject: [PATCH v2] char: tpm: Fix possible memory leak in tpm_bios_measurements_open()
-Date: Thu, 27 Jun 2024 15:31:09 +0900
-Message-Id: <20240627063109.1239467-1-joe@pf.is.s.u-tokyo.ac.jp>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1719516044; c=relaxed/simple;
+	bh=q5I3ue5pXOFaFcZG+la4qhNiovoZDk053Ua4gQfvwN0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gIYqDoP2jZ+dd0aWRaNkTOFjTvO7mhhYhhIYbtZzN0vHLqZd2ksDqFNS5g9EgBmdKHKFyCgAt9ZNe4eZIesXvgTEAjih4LXmXjcexIcIhK/tMWXQ2nFedDdaDf9GokLNmVXovrfhfP1vKHX1LiSnKnp9zEOP9KuSppdfDEkU400=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=J/LoCLgW; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45RIxep0027745
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2024 19:20:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=3v77jUAYVfradg02qM7CSDoHgE
+	cR1mHxS1wLiiXI7H8=; b=J/LoCLgWsWyI0gBWlv8wFNubpCk0BWT22ROLBRlLVL
+	nq8XkMuby5WUrGW95fYUWHKLr5XD4s4/AvsA2sd3+odm0RIZoK8n/GKCg59qLenv
+	hJzHbvLmOE2ejXe4JzjgdwX7txCIqon/qAjvg+qir+xfImJMA9XYQ9mTr34oao8f
+	iH02Jk+0nZFBtB/CpZiENyWHAMwKFkltNkLZeCHSJob4fXxyYZJQAPPDFpPRR7OG
+	7MXJv+NakwBS2ci5+bEup0K7kaK7IOmGyF+jsRXMRrq82pZO0PZh9FY9NvhVw1rz
+	JIdsdCC9SCTknn095SJ5CqjdhVN5IVt1zkCPrw1H1yyA==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 401dty81qd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2024 19:20:37 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 45RGiuVA000402
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2024 19:20:37 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3yxbn3m19c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Jun 2024 19:20:37 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 45RJKVAb55116224
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 27 Jun 2024 19:20:33 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2FCFE20043;
+	Thu, 27 Jun 2024 19:20:31 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B4C6820040;
+	Thu, 27 Jun 2024 19:20:30 +0000 (GMT)
+Received: from li-5cd3c5cc-21f9-11b2-a85c-a4381f30c2f3.watson.ibm.com (unknown [9.31.110.109])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 27 Jun 2024 19:20:30 +0000 (GMT)
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: linux-integrity@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Subject: [ima-evm-utils PATCH] ci: EOL CentOS Stream 8 and CentOS 7
+Date: Thu, 27 Jun 2024 15:20:21 -0400
+Message-Id: <20240627192021.5075-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -82,38 +80,104 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: v9ylepTwkqAci5Xo7g65cD1Ge6yrFiXB
+X-Proofpoint-GUID: v9ylepTwkqAci5Xo7g65cD1Ge6yrFiXB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-27_14,2024-06-27_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 mlxlogscore=952 impostorscore=0 phishscore=0 spamscore=0
+ mlxscore=0 suspectscore=0 lowpriorityscore=0 clxscore=1015 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2406270141
 
-In tpm_bios_measurements_open(), get_device() is called on the device
-embedded in struct tpm_chip. In the error path, however, put_device() is
-not called. This results in a reference count leak, which prevents the
-device from being properly released. This commit makes sure to call
-put_device() when the seq_open() call fails.
+Remove CentOS Stream 8 and CentOS 7, which reached End of Life (EOL) on
+on May 31, 2024 and June 30, 2024 respectively.  Replace with CentOS
+Stream 9.
 
-Fixes: 9b01b5356629 ("tpm: Move shared eventlog functions to common.c")
-Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+tpm2-tss, tpm2-tss-devel and tss2-devel packages do not exist on
+CentOS stream 9.  Differentiate between Fedora and CentOS.
+
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
-Changes since v1:
-- Keep the code diff minimal.
-- Fix the commit message.
-- Add a Fixes tag.
----
- drivers/char/tpm/eventlog/common.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .github/workflows/ci.yml |  4 ++--
+ .travis.yml              |  6 +-----
+ ci/fedora.sh             | 17 +++++++++++------
+ ci/quay.io.sh            |  1 +
+ 4 files changed, 15 insertions(+), 13 deletions(-)
+ create mode 120000 ci/quay.io.sh
 
-diff --git a/drivers/char/tpm/eventlog/common.c b/drivers/char/tpm/eventlog/common.c
-index 639c3f395a5a..4c0bbba64ee5 100644
---- a/drivers/char/tpm/eventlog/common.c
-+++ b/drivers/char/tpm/eventlog/common.c
-@@ -47,6 +47,8 @@ static int tpm_bios_measurements_open(struct inode *inode,
- 	if (!err) {
- 		seq = file->private_data;
- 		seq->private = chip;
-+	} else {
-+		put_device(&chip->dev);
- 	}
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 71fcaaeb3061..2144990f1793 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -160,9 +160,9 @@ jobs:
+               TST_KERNEL: ../linux
+               TST_EVM_CHANGE_MODE: 1
  
- 	return err;
+-          - container: "centos:7"
++          - container: "quay.io/centos/centos:stream9"
+             env:
+-              CC: gcc
++              CC: clang
+               TSS: tpm2-tss
+ 
+           - container: "debian:testing"
+diff --git a/.travis.yml b/.travis.yml
+index b8876f45333b..b69073883087 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -56,11 +56,7 @@ matrix:
+           compiler: clang
+ 
+         - os: linux
+-          env: DISTRO=centos:7 TSS=tpm2-tss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/crun --network=host"
+-          compiler: gcc
+-
+-        - os: linux
+-          env: REPO="quay.io/centos/" DISTRO="${REPO}centos:stream8" TSS=tpm2-tss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/crun --network=host"
++          env: REPO="quay.io/centos/" DISTRO="${REPO}centos:stream9" TSS=tpm2-tss CONTAINER=podman CONTAINER_ARGS="--runtime=/usr/bin/crun --network=host"
+           compiler: clang
+ 
+         - os: linux
+diff --git a/ci/fedora.sh b/ci/fedora.sh
+index 44fd956ab075..10d4256bb957 100755
+--- a/ci/fedora.sh
++++ b/ci/fedora.sh
+@@ -7,12 +7,17 @@ if [ -z "$CC" ]; then
+ 	exit 1
+ fi
+ 
+-case "$TSS" in
+-ibmtss) TSS="tss2-devel";;
+-tpm2-tss) TSS="tpm2-tss-devel";;
+-'') echo "Missing TSS!" >&2; exit 1;;
+-*) echo "Unsupported TSS: '$TSS'!" >&2; exit 1;;
+-esac
++# Neither tss2-devel nor tpm2-tss-devel exist on CentOS stream 9
++if [ -f /etc/centos-release ]; then
++	TSS="$TSS"
++else
++	case "$TSS" in
++	ibmtss) TSS="tss2-devel";;
++	tpm2-tss) TSS="tpm2-tss-devel";;
++	'') echo "Missing TSS!" >&2; exit 1;;
++	*) echo "Unsupported TSS: '$TSS'!" >&2; exit 1;;
++	esac
++fi
+ 
+ # ibmswtpm2 requires gcc
+ [ "$CC" = "gcc" ] || CC="gcc $CC"
+diff --git a/ci/quay.io.sh b/ci/quay.io.sh
+new file mode 120000
+index 000000000000..1479a43e04ed
+--- /dev/null
++++ b/ci/quay.io.sh
+@@ -0,0 +1 @@
++fedora.sh
+\ No newline at end of file
 -- 
-2.34.1
+2.39.3
 
 
