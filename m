@@ -1,129 +1,205 @@
-Return-Path: <linux-integrity+bounces-2940-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2941-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 656CD91C3DF
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2024 18:39:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16B9191C4CD
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2024 19:27:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 061221F22129
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2024 16:39:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0D7A28541A
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Jun 2024 17:26:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878BF157A4D;
-	Fri, 28 Jun 2024 16:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D2811C9ED6;
+	Fri, 28 Jun 2024 17:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="kKuqxZ2F";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="kKuqxZ2F"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="P0zxScd2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (unknown [96.44.175.130])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559AC14F136;
-	Fri, 28 Jun 2024 16:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E689D1C230B;
+	Fri, 28 Jun 2024 17:26:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719592760; cv=none; b=QSC9W6AXImZDBEpmxSyi4B3nyUBlvtovM2lTgx/Bu/s1SzyPXjJMYNmXRMnWDiCVjqcs5GrPneky/87QeFRYgkVHzvKhxgoAArX6e3Tec9ce/IdLG7vJjgD5Jo6ntckJic6s4LGf5IcWO2MOKe1ogfniqksm5t6jnqqrrrmjDdg=
+	t=1719595616; cv=none; b=X33mvKcMa8/uqKp1l2gIWCC4EGP9JSpyjJMhJr0bctVUsBJgiPbx6KSUmk2XFXNIosIj48kZV7hxMmyilj8xXcRNS9Zkq+9F7S/OC9mYXYBnOOvc0j15OJBZyFvAxXu03KeygGjTi4h/BL9ZFm9Gv8FG5b1CJGCH/Cv5TJTy34w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719592760; c=relaxed/simple;
-	bh=ThX3VkL4XqWltRAEAJcGz6lQ6bV8PCB4b3rThe7Ub8w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QxZPQ345iIQ5abpYTx3uGcr7OyLrEY/WMeJfCITBUKzDZyXLi8ubPIr/ZTq6eMYI3Z/wu4vLsz2NvbjDeRMgGAu8ZC1CZrvxEmUQCTv85X3HuGyI0GJheHSstSpcaqf1RprzPaT17hNVYh/Yv6vGSaJXxoH1qNH6KWMpxJVRfqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=kKuqxZ2F; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=kKuqxZ2F; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1719592751;
-	bh=ThX3VkL4XqWltRAEAJcGz6lQ6bV8PCB4b3rThe7Ub8w=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=kKuqxZ2FfOivHhDKfZ2gxeX2q4n3qtKW39/16cd8rcoGQsFyHuVsnaEd1SbW0pBK/
-	 a1BCnaGsetnT8G30ly+oTBaaY6RMsOse5J55tv3ZkbK1Vpt/eX30UWLXgUYiILV9EX
-	 OZbMPQOmX94Qz9MlEuSe+lBRRB9g+Y3J8kFzh7qc=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 89CD41280F5E;
-	Fri, 28 Jun 2024 12:39:11 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id YjhWdUbX6P9N; Fri, 28 Jun 2024 12:39:11 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1719592751;
-	bh=ThX3VkL4XqWltRAEAJcGz6lQ6bV8PCB4b3rThe7Ub8w=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=kKuqxZ2FfOivHhDKfZ2gxeX2q4n3qtKW39/16cd8rcoGQsFyHuVsnaEd1SbW0pBK/
-	 a1BCnaGsetnT8G30ly+oTBaaY6RMsOse5J55tv3ZkbK1Vpt/eX30UWLXgUYiILV9EX
-	 OZbMPQOmX94Qz9MlEuSe+lBRRB9g+Y3J8kFzh7qc=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4EF451280728;
-	Fri, 28 Jun 2024 12:39:10 -0400 (EDT)
-Message-ID: <4108938158d888cc6ec371bb151e7ac35d3b4cb0.camel@HansenPartnership.com>
+	s=arc-20240116; t=1719595616; c=relaxed/simple;
+	bh=nb8UnrN2SPJaWBp23t1Vp8ZQeFYgxLsZ5/KO1gpo4jM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=io9deiIYuNbj+7VDAU2s1bIhdxK+8SrRxOiiXE+ZZ+I/HTVqLkYhsoEbzdyhVPIIxm3Ssvd0wBtqvr+FJYz8DN95FIWaQa497Dxy2ba5QyKHawvVJmad5o33wwI+10/+iFxPUznTTc+HtHfkvLrb1n0sxfnCSBHeUg6Jiv6H6DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=P0zxScd2; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45SHQd9t019168;
+	Fri, 28 Jun 2024 17:26:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:subject:to:cc:references:from:in-reply-to
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	VcN3kePM+arjTHsJ0UoPdxnh68JcoVepbhSSbj5f1OM=; b=P0zxScd2ixgpyV1/
+	u1p7vZSwalbCpvcj4uoNRzTnN/MZAe1d3dVKggksobdpYGKmdjeOhmVDR/pP1evb
+	+NmGfQtbZI54v156L4i0pHXFBuB6WiSmOKnze7IbNwpHWy0LV0qTdV68pxmgzr0b
+	g9gTgUu6cLhroaf54X2a6TL2PdMNEHjR3dBHCJO9he0xfQN2hmlzH9pg4JZUj+kH
+	gvqCEhR9xf3MICVnSr9GDyliegtNivP0myFHkePzh7lZkU3HRYxSW6Ky9ErTc7ND
+	xSGN9wVzlkU66JUZK9C5+2vlE/BDeGGAu1HZpCZOltURKq+zCgxXBjMR2D9cYIiL
+	jQHZWQ==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 401yuhg99u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Jun 2024 17:26:38 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 45SF5GsM032606;
+	Fri, 28 Jun 2024 17:21:57 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3yxbn3s3b7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Jun 2024 17:21:57 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 45SHLtaa37618356
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 28 Jun 2024 17:21:57 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 17B3758060;
+	Fri, 28 Jun 2024 17:21:55 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7ACD358043;
+	Fri, 28 Jun 2024 17:21:54 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 28 Jun 2024 17:21:54 +0000 (GMT)
+Message-ID: <1bca15c7-1e76-49bc-aa6c-368d2bbf2e5c@linux.ibm.com>
+Date: Fri, 28 Jun 2024 13:21:54 -0400
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] tpm: ibmvtpm: Call tpm2_sessions_init() to initialize
  session support
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Michael Ellerman <mpe@ellerman.id.au>, regressions@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org, naveen.n.rao@linux.ibm.com, Stefan Berger
-	 <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, jarkko@kernel.org
-Date: Fri, 28 Jun 2024 12:39:08 -0400
-In-Reply-To: <87pls1lwe0.fsf@mail.lhotse>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Michael Ellerman <mpe@ellerman.id.au>, regressions@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, naveen.n.rao@linux.ibm.com,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        jarkko@kernel.org
 References: <20240617193408.1234365-1-stefanb@linux.ibm.com>
-	 <87pls1lwe0.fsf@mail.lhotse>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+ <87pls1lwe0.fsf@mail.lhotse>
+ <4108938158d888cc6ec371bb151e7ac35d3b4cb0.camel@HansenPartnership.com>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <4108938158d888cc6ec371bb151e7ac35d3b4cb0.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: VY9C5Bla9sDiFnRhJOGu09GsMOggn9mh
+X-Proofpoint-GUID: VY9C5Bla9sDiFnRhJOGu09GsMOggn9mh
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-28_12,2024-06-28_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0 clxscore=1011
+ impostorscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2406280129
 
-On Fri, 2024-06-28 at 10:54 +1000, Michael Ellerman wrote:
-> Stefan Berger <stefanb@linux.ibm.com> writes:
-> > Fix the following type of error message caused by a missing call to
-> > tpm2_sessions_init() in the IBM vTPM driver:
-> > 
-> > [    2.987131] tpm tpm0: tpm2_load_context: failed with a TPM error
-> > 0x01C4
-> > [    2.987140] ima: Error Communicating to TPM chip, result: -14
-> > 
-> > Fixes: d2add27cf2b8 ("tpm: Add NULL primary creation")
-> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > ---
-> >  drivers/char/tpm/tpm_ibmvtpm.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_ibmvtpm.c
-> > b/drivers/char/tpm/tpm_ibmvtpm.c
-> > index d3989b257f42..1e5b107d1f3b 100644
-> > --- a/drivers/char/tpm/tpm_ibmvtpm.c
-> > +++ b/drivers/char/tpm/tpm_ibmvtpm.c
-> > @@ -698,6 +698,10 @@ static int tpm_ibmvtpm_probe(struct vio_dev
-> > *vio_dev,
-> >                 rc = tpm2_get_cc_attrs_tbl(chip);
-> >                 if (rc)
-> >                         goto init_irq_cleanup;
-> > +
-> > +               rc = tpm2_sessions_init(chip);
-> > +               if (rc)
-> > +                       goto init_irq_cleanup;
-> >         }
-> >  
-> >         return tpm_chip_register(chip);
+
+
+On 6/28/24 12:39, James Bottomley wrote:
+> On Fri, 2024-06-28 at 10:54 +1000, Michael Ellerman wrote:
+>> Stefan Berger <stefanb@linux.ibm.com> writes:
+>>> Fix the following type of error message caused by a missing call to
+>>> tpm2_sessions_init() in the IBM vTPM driver:
+>>>
+>>> [    2.987131] tpm tpm0: tpm2_load_context: failed with a TPM error
+>>> 0x01C4
+>>> [    2.987140] ima: Error Communicating to TPM chip, result: -14
+>>>
+>>> Fixes: d2add27cf2b8 ("tpm: Add NULL primary creation")
+>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>> ---
+>>>   drivers/char/tpm/tpm_ibmvtpm.c | 4 ++++
+>>>   1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c
+>>> b/drivers/char/tpm/tpm_ibmvtpm.c
+>>> index d3989b257f42..1e5b107d1f3b 100644
+>>> --- a/drivers/char/tpm/tpm_ibmvtpm.c
+>>> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
+>>> @@ -698,6 +698,10 @@ static int tpm_ibmvtpm_probe(struct vio_dev
+>>> *vio_dev,
+>>>                  rc = tpm2_get_cc_attrs_tbl(chip);
+>>>                  if (rc)
+>>>                          goto init_irq_cleanup;
+>>> +
+>>> +               rc = tpm2_sessions_init(chip);
+>>> +               if (rc)
+>>> +                       goto init_irq_cleanup;
+>>>          }
+>>>   
+>>>          return tpm_chip_register(chip);
+>>
+>> #regzbot ^introduced: d2add27cf2b8
 > 
-> #regzbot ^introduced: d2add27cf2b8 
+> Could you please test out the patch I proposed for this:
+> 
+> https://lore.kernel.org/linux-integrity/1302b413a2d7bf3b275133e7fdb04b44bfe2d5e3.camel@HansenPartnership.com/
+> 
+> Because it's not just tmp_ibmvtpm that doesn't call autostart.  From
+> inspection xen-tpmfront, tmp_nsc, tpm_infineon and tpm_atmel also
 
-Could you please test out the patch I proposed for this:
+afaik tpm_infineon is a TPM 1.2 driver; same holds for tpm_atmel and 
+tpm_ns. Neither needs this new call from what I understand. The new TPM2 
+drivers have the TPM_OPS_AUTO_STARTUP flag set.
 
-https://lore.kernel.org/linux-integrity/1302b413a2d7bf3b275133e7fdb04b44bfe2d5e3.camel@HansenPartnership.com/
+$ grep -r AUTO drivers/char/tpm/*.c | grep =
+drivers/char/tpm/tpm_crb.c:     .flags = TPM_OPS_AUTO_STARTUP,
+drivers/char/tpm/tpm_ftpm_tee.c:        .flags = TPM_OPS_AUTO_STARTUP,
+drivers/char/tpm/tpm_i2c_atmel.c:       .flags = TPM_OPS_AUTO_STARTUP,
+drivers/char/tpm/tpm_i2c_infineon.c:    .flags = TPM_OPS_AUTO_STARTUP,
+drivers/char/tpm/tpm_i2c_nuvoton.c:     .flags = TPM_OPS_AUTO_STARTUP,
+drivers/char/tpm/tpm_ibmvtpm.c: .flags = TPM_OPS_AUTO_STARTUP,
+drivers/char/tpm/tpm_tis_core.c:        .flags = TPM_OPS_AUTO_STARTUP,
+drivers/char/tpm/tpm_tis_i2c_cr50.c:    .flags = TPM_OPS_AUTO_STARTUP,
+drivers/char/tpm/tpm_vtpm_proxy.c:      .flags = TPM_OPS_AUTO_STARTUP,
 
-Because it's not just tmp_ibmvtpm that doesn't call autostart.  From
-inspection xen-tpmfront, tmp_nsc, tpm_infineon and tpm_atmel also
-don't, so it would be better to fix this for everyone rather than just
-for you and have to do a separate fix for each of them.
+With xen-tpmfront I am not sure where something like chip->flags |= 
+TPM_CHIP_FLAG_TPM2 is done -- tpm2-cmd.c::tpm2_probe is not called from 
+this driver but only from tpm_tis_core.c::tpm_tis_core_init and 
+otherwise driver set it themselves.
 
-James
+$ grep -r TPM_CHIP_FLAG_TPM2 drivers/char/tpm/*.c | grep =
+drivers/char/tpm/tpm2-cmd.c:                    chip->flags |= 
+TPM_CHIP_FLAG_TPM2;
+drivers/char/tpm/tpm-chip.c:    rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
+drivers/char/tpm/tpm_crb.c:     chip->flags = TPM_CHIP_FLAG_TPM2;
+drivers/char/tpm/tpm_ftpm_tee.c:        pvt_data->chip->flags |= 
+TPM_CHIP_FLAG_TPM2;
+drivers/char/tpm/tpm_i2c_nuvoton.c:             chip->flags |= 
+TPM_CHIP_FLAG_TPM2;
+drivers/char/tpm/tpm_ibmvtpm.c:         chip->flags |= TPM_CHIP_FLAG_TPM2;
+drivers/char/tpm/tpm-interface.c:       rc = (chip->flags & 
+TPM_CHIP_FLAG_TPM2) != 0;
+drivers/char/tpm/tpm_tis_i2c_cr50.c:    chip->flags |= TPM_CHIP_FLAG_TPM2;
+drivers/char/tpm/tpm_vtpm_proxy.c:              proxy_dev->chip->flags 
+|= TPM_CHIP_FLAG_TPM2;
 
+
+
+
+
+> don't, so it would be better to fix this for everyone rather than just
+> for you and have to do a separate fix for each of them.
+
+I am not sure whether any one of the mentioned drivers actually need 
+this call and if they need it they should probably move towards setting 
+TPM_OPS_AUTO_STARTUP.
+
+   Stefan
+> 
+> James
+> 
+> 
 
