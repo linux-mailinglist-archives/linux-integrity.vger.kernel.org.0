@@ -1,368 +1,127 @@
-Return-Path: <linux-integrity+bounces-2977-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-2978-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 050D892604F
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jul 2024 14:28:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F16FC9260F4
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jul 2024 14:54:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DBD2B31168
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jul 2024 12:14:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3747B23109
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Jul 2024 12:54:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A651741F4;
-	Wed,  3 Jul 2024 12:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F213A176AA4;
+	Wed,  3 Jul 2024 12:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="P2ioUUDO"
+	dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b="ZtnmC/Ab"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16D21741D8;
-	Wed,  3 Jul 2024 12:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B6D173359
+	for <linux-integrity@vger.kernel.org>; Wed,  3 Jul 2024 12:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720008858; cv=none; b=d7INKxm386gimS4fazjZprlKKsfBxGJrT1zWm4WvZhbnD2rbZ/dyoIBLhHPptY26jBkxU9FT4A5LRdH2dZ/aSWhYJbOW/h+jxamLYFYLQpTmVJtq7KBfpBIhSza/SGHQ7+4yvwyiVI0cjt0pE+KLdqHlHyEXXjoGl2zG/v5If94=
+	t=1720011245; cv=none; b=VqtNoZkOydJptXMlinL/uBHKE56CemGU6O8AUVc2gbzvWsQkOaIBXF1wDN5eCRSImBZp7Gf9AWRCzUYvoXwefVL3QlU3ErxOS6kWZ5n16Fez7cMda7SQFnSpaZ08ZNxBmcqps24GgKo/hjMQoFHOPPc/fEw6XSMtvtFjPPfnHFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720008858; c=relaxed/simple;
-	bh=DJpjR5HefgjTL0bv9nMfbdjfiJX+bw75hmGbhE5ij50=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=pokkL8Lb60OExPX1vwjgi7TaU6rSP8SaffRiaBvnBBF8gkaS2QLKPw3lW/ef47B6ftoS/ZU2POzAjqKo2GfADbV0IuhAlNMBfOpNS39hsTbfYYMBu2nzWHWELO3BztJ/nO1+rkSyB/nvRJq2VLZELHZOzDo28HxXyq1PLUACJoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=P2ioUUDO; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1720008853;
-	bh=Pb3IybUOodV6UVRqohn1NmeZMblGt+tknvg2rfacJrM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=P2ioUUDOrWweSgrN8LQrpWc+VlNJq64xk5Ac/egxKe74lllzmblNca5qaTEV3gDO4
-	 IGklPjThUboFnxBNFOvYPJ+30Zh3Ok3BmmqrH8AaZGDZ5JQyfA+fPYKne0g0nxusZr
-	 FEL/T4uNz79M/UCzI8f9CG2hbfoJI3j3XOZ2s+uf5kfHr65QtsQvIkFvvtUwYpQOB3
-	 zdYs8DUymdwLPoP8sn7okSJVfGCFxQqCRJDnzQQD5M7G3imYlW/RPItCAReslfxxOq
-	 cszQh6m6CVYxKtfELDcC2hUk4FGyCzukzz1d3+WFvczLGhkPfzHFFVw0Vx2TIEVzIv
-	 oi2Yrk6FVlFaQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WDdxJ05mJz4w2Q;
-	Wed,  3 Jul 2024 22:14:11 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: "Rob Herring (Arm)" <robh@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
- Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, "Naveen N. Rao"
- <naveen.n.rao@linux.ibm.com>
-Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] tpm: atmel: Drop PPC64 specific MMIO setup
-In-Reply-To: <20240702161052.3563599-1-robh@kernel.org>
-References: <20240702161052.3563599-1-robh@kernel.org>
-Date: Wed, 03 Jul 2024 22:14:11 +1000
-Message-ID: <87frsqk6zw.fsf@mail.lhotse>
+	s=arc-20240116; t=1720011245; c=relaxed/simple;
+	bh=icdGIhylB0lXVqhQ0Oq7EE1+CLenXFSI1YMAf1lrq+w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WsHbyGrj8vocngB3fnEzmjQpXT/mLcNn6dc7nQcD903F/eLgynLZ3BJ9Qgbw4+lyC271LzmgW0L/AqHNBGhQJKQ5R9M7Y7CR5zICZwUhQHjSPynk5tpRw/9DkdC5jMjbjhm5qQ2eco97ir8lgq/b6yUt2BAMVboJYLoP5oXB+0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at; spf=pass smtp.mailfrom=sigma-star.at; dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b=ZtnmC/Ab; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sigma-star.at
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-367975543a8so186878f8f.3
+        for <linux-integrity@vger.kernel.org>; Wed, 03 Jul 2024 05:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sigma-star.at; s=google; t=1720011243; x=1720616043; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yzx9VHlc/8h9m6p3SRKEm1Y4xLQisswwlqQ+JvkCTDE=;
+        b=ZtnmC/AbZzQDFm3e+qe1qL7U9It+RJ0V9zshhUBc9BGDawvbKrGpVuWVLsVFo7WjjF
+         is8/hqshXxPt/nHmfx5CBBLHdSWMyX+9krMVsPu+yL76Qwc3+pJa35SpZqWYWw093bdW
+         2smyX5BENKzeuRB4hwUG3wGRil1yz6OzPxpasZRFH9k6JL+m5zERzv5+jISBsyBiny/x
+         P1l69+zPmXeOfyaa+4qkaa47WEccm038Quq/lLNiIftiACAfCb5/wvdXe2kJiIIBuV3N
+         JOXw258OKl2OQtAi3b5NriUN0f3lL8lrwNrCWn1G/2pAN8TZR4RCL3k27IhB1lMTgbwo
+         StmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720011243; x=1720616043;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yzx9VHlc/8h9m6p3SRKEm1Y4xLQisswwlqQ+JvkCTDE=;
+        b=bgd89eUJsdESs1xCzgSfxHKLqGqEh/KVgz4JqR3tzxQDsF6qWjhjxROhKZcEfgsy1l
+         S+xCKCyl06Kd0/V928s5+XgTGS+cq3UtCoYAzL9+nmmYtkXqtb7DwOsHhb6X3fBBG5iw
+         64/NWJp2Txtj7efLQ5XloyNnKY1Y91wIlmkNr6CYuZWaE3vMy0dm8S6M7RgxH1A+PXkk
+         sTZ6KJP0XD7Zxxs3jiVJ6N9cmcXcIvkXOEWYyisN3G5OvkavXDwCvPqMw7thS2hS4LG9
+         kbePhxIltNxYJ806hLWIT1lDeeOYdYHNJpht17KH1qKfO+4sKvo+9/CcEinIHTGn/HFT
+         x4Ow==
+X-Gm-Message-State: AOJu0YwGLP+JOt+fh/hV97KiFCtaZbs8J1DPukKFqkOFamMLeR7Xap3a
+	9G6dKLIptDNnYELqVeZIOhwXro9z3ghjCe8EBpIZTZF5Jk2f0+NP/9phmQB5dB4=
+X-Google-Smtp-Source: AGHT+IHKkT/F7VYwbLXQnp0PsjNCbmpL2tzMJ16ri/aVmQvC719AC9zQFGR8qEFOdoj3yqk4lIc+HQ==
+X-Received: by 2002:a5d:648f:0:b0:366:ee84:6a73 with SMTP id ffacd0b85a97d-36775696c16mr8572598f8f.10.1720011242537;
+        Wed, 03 Jul 2024 05:54:02 -0700 (PDT)
+Received: from localhost ([82.150.214.1])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3675a0d8daasm15703542f8f.30.2024.07.03.05.54.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jul 2024 05:54:02 -0700 (PDT)
+From: David Gstir <david@sigma-star.at>
+To: sigma star Kernel Team <upstream+dcp@sigma-star.at>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	David Oberhollenzer <david.oberhollenzer@sigma-star.at>,
+	Richard Weinberger <richard@nod.at>
+Cc: linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Gstir <david@sigma-star.at>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH 1/2] KEYS: trusted: fix DCP blob payload length assignment
+Date: Wed,  3 Jul 2024 14:53:52 +0200
+Message-ID: <20240703125353.46115-1-david@sigma-star.at>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-"Rob Herring (Arm)" <robh@kernel.org> writes:
-> The PPC64 specific MMIO setup open codes DT address functions rather
-> than using standard address parsing functions. The open-coded version
-> fails to handle any address translation and is not endian safe.
->
-> I haven't found any evidence of what platform used this. The only thing
-> that turned up was a PPC405 platform, but that is 32-bit and PPC405
-> support is being removed as well. CONFIG_TCG_ATMEL is not enabled for
-> any powerpc config and never was. The support was added in 2005 and
-> hasn't been touched since.
+The DCP trusted key type uses the wrong helper function to store
+the blob's payload length which can lead to the wrong byte order
+being used in case this would ever run on big endian architectures.
 
-I found a post on the tpm list which says it was used in JS21, which
-would make sense given the time frame:
+Fix by using correct helper function.
 
-  https://lore.kernel.org/all/526EA6FF.2080401@linux.vnet.ibm.com/
+Signed-off-by: David Gstir <david@sigma-star.at>
+Suggested-by: Richard Weinberger <richard@nod.at>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202405240610.fj53EK0q-lkp@intel.com/
+Fixes: 2e8a0f40a39c ("KEYS: trusted: Introduce NXP DCP-backed trusted keys")
+---
+ security/keys/trusted-keys/trusted_dcp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  As near as I can tell this was on a single machine type (the js21 circa
-  2006).  The firmware on the machine didn't support establishing a root
-  of trust, so use of the TPM was as a practical matter effective only for
-  the other functions like random number generation and key management.
-  The number of users who used the TPM for this on this machine was likely
-  very small 7 years ago.  The number of those machines still in service
-  today is likely smaller still.  The cross section of those two small
-  numbers combined with those who want to run on a shiny new kernel has to
-  be quickly approaching zero.
-  
-The SLOF (firmware) code does confirm that, and includes the same
-compatible value as below, so I think that's pretty definitive:
+diff --git a/security/keys/trusted-keys/trusted_dcp.c b/security/keys/trusted-keys/trusted_dcp.c
+index b5f81a05be36..b0947f072a98 100644
+--- a/security/keys/trusted-keys/trusted_dcp.c
++++ b/security/keys/trusted-keys/trusted_dcp.c
+@@ -222,7 +222,7 @@ static int trusted_dcp_seal(struct trusted_key_payload *p, char *datablob)
+ 		return ret;
+ 	}
+ 
+-	b->payload_len = get_unaligned_le32(&p->key_len);
++	put_unaligned_le32(p->key_len, &b->payload_len);
+ 	p->blob_len = blen;
+ 	return 0;
+ }
+-- 
+2.35.3
 
-  https://github.com/qemu/SLOF/blob/master/board-js2x/slof/tpm.fs
-
-  \ Atmel TPM.
-  
-  new-device   500 1 set-unit
-  s" tpm" 2dup device-name device-type
-  s" AT97SC3201" compatible
-  
-I used to have a JS21, but it got scrapped in a cleanup a few years
-back. I strongly doubt any others still exist, I couldn't find any on
-ebay :)
-
-> Rather than try to modernize and fix this code, just remove it.
-
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-
-cheers
-
-> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> index e63a6a17793c..9b655e9fc7ab 100644
-> --- a/drivers/char/tpm/Kconfig
-> +++ b/drivers/char/tpm/Kconfig
-> @@ -162,7 +162,7 @@ config TCG_NSC
->  
->  config TCG_ATMEL
->  	tristate "Atmel TPM Interface"
-> -	depends on PPC64 || HAS_IOPORT_MAP
-> +	depends on HAS_IOPORT_MAP
->  	depends on HAS_IOPORT
->  	help
->  	  If you have a TPM security chip from Atmel say Yes and it 
-> diff --git a/drivers/char/tpm/tpm_atmel.c b/drivers/char/tpm/tpm_atmel.c
-> index 9fb2defa9dc4..622c4abe8cb3 100644
-> --- a/drivers/char/tpm/tpm_atmel.c
-> +++ b/drivers/char/tpm/tpm_atmel.c
-> @@ -15,7 +15,67 @@
->   */
->  
->  #include "tpm.h"
-> -#include "tpm_atmel.h"
-> +
-> +struct tpm_atmel_priv {
-> +	int region_size;
-> +	int have_region;
-> +	unsigned long base;
-> +	void __iomem *iobase;
-> +};
-> +
-> +#define atmel_getb(chip, offset) inb(atmel_get_priv(chip)->base + offset)
-> +#define atmel_putb(val, chip, offset) \
-> +	outb(val, atmel_get_priv(chip)->base + offset)
-> +#define atmel_request_region request_region
-> +#define atmel_release_region release_region
-> +/* Atmel definitions */
-> +enum tpm_atmel_addr {
-> +	TPM_ATMEL_BASE_ADDR_LO = 0x08,
-> +	TPM_ATMEL_BASE_ADDR_HI = 0x09
-> +};
-> +
-> +static inline int tpm_read_index(int base, int index)
-> +{
-> +	outb(index, base);
-> +	return inb(base+1) & 0xFF;
-> +}
-> +
-> +/* Verify this is a 1.1 Atmel TPM */
-> +static int atmel_verify_tpm11(void)
-> +{
-> +
-> +	/* verify that it is an Atmel part */
-> +	if (tpm_read_index(TPM_ADDR, 4) != 'A' ||
-> +	    tpm_read_index(TPM_ADDR, 5) != 'T' ||
-> +	    tpm_read_index(TPM_ADDR, 6) != 'M' ||
-> +	    tpm_read_index(TPM_ADDR, 7) != 'L')
-> +		return 1;
-> +
-> +	/* query chip for its version number */
-> +	if (tpm_read_index(TPM_ADDR, 0x00) != 1 ||
-> +	    tpm_read_index(TPM_ADDR, 0x01) != 1)
-> +		return 1;
-> +
-> +	/* This is an atmel supported part */
-> +	return 0;
-> +}
-> +
-> +/* Determine where to talk to device */
-> +static void __iomem * atmel_get_base_addr(unsigned long *base, int *region_size)
-> +{
-> +	int lo, hi;
-> +
-> +	if (atmel_verify_tpm11() != 0)
-> +		return NULL;
-> +
-> +	lo = tpm_read_index(TPM_ADDR, TPM_ATMEL_BASE_ADDR_LO);
-> +	hi = tpm_read_index(TPM_ADDR, TPM_ATMEL_BASE_ADDR_HI);
-> +
-> +	*base = (hi << 8) | lo;
-> +	*region_size = 2;
-> +
-> +	return ioport_map(*base, *region_size);
-> +}
->  
->  /* write status bits */
->  enum tpm_atmel_write_status {
-> @@ -142,7 +202,6 @@ static void atml_plat_remove(void)
->  	tpm_chip_unregister(chip);
->  	if (priv->have_region)
->  		atmel_release_region(priv->base, priv->region_size);
-> -	atmel_put_base_addr(priv->iobase);
->  	platform_device_unregister(pdev);
->  }
->  
-> @@ -211,7 +270,6 @@ static int __init init_atmel(void)
->  err_unreg_dev:
->  	platform_device_unregister(pdev);
->  err_rel_reg:
-> -	atmel_put_base_addr(iobase);
->  	if (have_region)
->  		atmel_release_region(base,
->  				     region_size);
-> diff --git a/drivers/char/tpm/tpm_atmel.h b/drivers/char/tpm/tpm_atmel.h
-> deleted file mode 100644
-> index 7ac3f69dcf0f..000000000000
-> --- a/drivers/char/tpm/tpm_atmel.h
-> +++ /dev/null
-> @@ -1,140 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0-only */
-> -/*
-> - * Copyright (C) 2005 IBM Corporation
-> - *
-> - * Authors:
-> - * Kylene Hall <kjhall@us.ibm.com>
-> - *
-> - * Maintained by: <tpmdd-devel@lists.sourceforge.net>
-> - *
-> - * Device driver for TCG/TCPA TPM (trusted platform module).
-> - * Specifications at www.trustedcomputinggroup.org
-> - *
-> - * These difference are required on power because the device must be
-> - * discovered through the device tree and iomap must be used to get
-> - * around the need for holes in the io_page_mask.  This does not happen
-> - * automatically because the tpm is not a normal pci device and lives
-> - * under the root node.
-> - */
-> -
-> -struct tpm_atmel_priv {
-> -	int region_size;
-> -	int have_region;
-> -	unsigned long base;
-> -	void __iomem *iobase;
-> -};
-> -
-> -#ifdef CONFIG_PPC64
-> -
-> -#include <linux/of.h>
-> -
-> -#define atmel_getb(priv, offset) readb(priv->iobase + offset)
-> -#define atmel_putb(val, priv, offset) writeb(val, priv->iobase + offset)
-> -#define atmel_request_region request_mem_region
-> -#define atmel_release_region release_mem_region
-> -
-> -static inline void atmel_put_base_addr(void __iomem *iobase)
-> -{
-> -	iounmap(iobase);
-> -}
-> -
-> -static void __iomem * atmel_get_base_addr(unsigned long *base, int *region_size)
-> -{
-> -	struct device_node *dn;
-> -	unsigned long address, size;
-> -	const unsigned int *reg;
-> -	int reglen;
-> -	int naddrc;
-> -	int nsizec;
-> -
-> -	dn = of_find_node_by_name(NULL, "tpm");
-> -
-> -	if (!dn)
-> -		return NULL;
-> -
-> -	if (!of_device_is_compatible(dn, "AT97SC3201")) {
-> -		of_node_put(dn);
-> -		return NULL;
-> -	}
-> -
-> -	reg = of_get_property(dn, "reg", &reglen);
-> -	naddrc = of_n_addr_cells(dn);
-> -	nsizec = of_n_size_cells(dn);
-> -
-> -	of_node_put(dn);
-> -
-> -
-> -	if (naddrc == 2)
-> -		address = ((unsigned long) reg[0] << 32) | reg[1];
-> -	else
-> -		address = reg[0];
-> -
-> -	if (nsizec == 2)
-> -		size =
-> -		    ((unsigned long) reg[naddrc] << 32) | reg[naddrc + 1];
-> -	else
-> -		size = reg[naddrc];
-> -
-> -	*base = address;
-> -	*region_size = size;
-> -	return ioremap(*base, *region_size);
-> -}
-> -#else
-> -#define atmel_getb(chip, offset) inb(atmel_get_priv(chip)->base + offset)
-> -#define atmel_putb(val, chip, offset) \
-> -	outb(val, atmel_get_priv(chip)->base + offset)
-> -#define atmel_request_region request_region
-> -#define atmel_release_region release_region
-> -/* Atmel definitions */
-> -enum tpm_atmel_addr {
-> -	TPM_ATMEL_BASE_ADDR_LO = 0x08,
-> -	TPM_ATMEL_BASE_ADDR_HI = 0x09
-> -};
-> -
-> -static inline int tpm_read_index(int base, int index)
-> -{
-> -	outb(index, base);
-> -	return inb(base+1) & 0xFF;
-> -}
-> -
-> -/* Verify this is a 1.1 Atmel TPM */
-> -static int atmel_verify_tpm11(void)
-> -{
-> -
-> -	/* verify that it is an Atmel part */
-> -	if (tpm_read_index(TPM_ADDR, 4) != 'A' ||
-> -	    tpm_read_index(TPM_ADDR, 5) != 'T' ||
-> -	    tpm_read_index(TPM_ADDR, 6) != 'M' ||
-> -	    tpm_read_index(TPM_ADDR, 7) != 'L')
-> -		return 1;
-> -
-> -	/* query chip for its version number */
-> -	if (tpm_read_index(TPM_ADDR, 0x00) != 1 ||
-> -	    tpm_read_index(TPM_ADDR, 0x01) != 1)
-> -		return 1;
-> -
-> -	/* This is an atmel supported part */
-> -	return 0;
-> -}
-> -
-> -static inline void atmel_put_base_addr(void __iomem *iobase)
-> -{
-> -}
-> -
-> -/* Determine where to talk to device */
-> -static void __iomem * atmel_get_base_addr(unsigned long *base, int *region_size)
-> -{
-> -	int lo, hi;
-> -
-> -	if (atmel_verify_tpm11() != 0)
-> -		return NULL;
-> -
-> -	lo = tpm_read_index(TPM_ADDR, TPM_ATMEL_BASE_ADDR_LO);
-> -	hi = tpm_read_index(TPM_ADDR, TPM_ATMEL_BASE_ADDR_HI);
-> -
-> -	*base = (hi << 8) | lo;
-> -	*region_size = 2;
-> -
-> -	return ioport_map(*base, *region_size);
-> -}
-> -#endif
-> -- 
-> 2.43.0
 
