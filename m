@@ -1,51 +1,54 @@
-Return-Path: <linux-integrity+bounces-3005-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3006-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C38C5927D4C
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2024 20:53:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1FDF927D50
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2024 20:53:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F7D4283341
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2024 18:53:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DC071F24736
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2024 18:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 961E66EB7D;
-	Thu,  4 Jul 2024 18:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DCFF13A260;
+	Thu,  4 Jul 2024 18:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pkyE1hMP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SxpYjMPL"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6371F4E1CA;
-	Thu,  4 Jul 2024 18:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B0A54660;
+	Thu,  4 Jul 2024 18:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720119201; cv=none; b=OYl8bf/uRTjrLtIBEzVNNXO10nzoEuxv2CLDManqE8qwC8CYcPQtq22E2bTAZRmVhmvvzhe2E1lklzKEt1/lwCu8GAPZqvbN9mDy4AFpmLPU9e3HR4jh24lmaUaKQ7UsTRUVTjbd6VJ9EuO8apewJFeuTEN03tr65/ePv3WwBsM=
+	t=1720119206; cv=none; b=YvbBP9Lx6WY4nCAsc2uicg3Delux3unpsPCGTYJXK8LWKNx3axWa+3Mr9Dk+lT8oIq9DEzEmkOY/bhlDQ484O5b55jI9Pce2fDm5UUzehajLhrxBKAWAgjvtbqbmA/L4LQC0tq2uwbpUDhLtzZUbS8KlBBo+nafvLwabPHjaQB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720119201; c=relaxed/simple;
-	bh=CYarSEwmlNaTYzL/Nt8gn0Rbqf1Axm3ojbF4GWmppx4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fG9DcJlWqYcdiV6R6r43MZJF+LPx1NGcrjDbJPetwXrNgxF8mWdKnE8BL946JZuohECaNJYPR/yVfDeaqImAHoaE9eekSxem+xb3nI/6NTIrw4JyZzc/l1HV3Z4+9TW6/IJLd6tN1FGiRE5TIFXS7JrbRuUppLxjt8KjYaSCmUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pkyE1hMP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62180C3277B;
-	Thu,  4 Jul 2024 18:53:20 +0000 (UTC)
+	s=arc-20240116; t=1720119206; c=relaxed/simple;
+	bh=ozB6sXxoZjPGE+obe6yHmAPktZE1u9uWHV2bB0LM1Ic=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mJW7GZTjgLJePAdynKASZGYpgCheBrcH2mWQAcMFFx9JCv1rXTQY7dx6aGXss4pxZ69WgqGbRyPV/+QPnrqQZwF8xCrmnLWKeXArzHUuc/fKfaVblp2acPHi4LHj4QRf9/6n7Jphu2CzVvKy5MjibgTtompO2nWRiGwqlhf6RN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SxpYjMPL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D968C3277B;
+	Thu,  4 Jul 2024 18:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720119200;
-	bh=CYarSEwmlNaTYzL/Nt8gn0Rbqf1Axm3ojbF4GWmppx4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pkyE1hMPc2e0AURPNzjW9xJHzsMAuoDmcWBJxevXKdYlcyNpbS4P81BCzssSQIkIN
-	 jBJmMNy42KUL6cqXJ6Zu/TRKHc8/VEMJ61r+4WjlTm8u8uok2okbbHvPX3nRP5zwqN
-	 1HCeFWmIofY1kkTNo1yb0mjBhMtwItMk03VWYw6qhHO8dSX1mJB/Cbnxn9HZSwo13/
-	 ZBwqQWHlDtp9wiBXcJFYshpcCQNiVxrJJQSsvKW2XoDfLpZGDEPucdmQkRlcngkoMN
-	 CEml0T9pEjPzqWJbYkxPtsYKClIP2c64D2hcTRBsg2TXhUpcNFbV7gaWXXe8PiEbwP
-	 a9NT77lz/6nUA==
+	s=k20201202; t=1720119205;
+	bh=ozB6sXxoZjPGE+obe6yHmAPktZE1u9uWHV2bB0LM1Ic=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=SxpYjMPL90kk5BfTb8v/F776y8N3oYo133wDOgEGHMsg7oVJ1r9rkbeGMyQgrNg0N
+	 rkwMKKqiCIIdvo5EvTtdlxg87Q1zFuPlF279GkMnfawAo5bW2iZv4jBEsboUz2EnPU
+	 nBg1yPFyMhRqYxS4CdHUtUlAssKrOKHWWNJHMac4fm/gP7N5zOGEm0tV3fRwPntVVs
+	 /G/UEqIeoMUytJPw08YhXA/tmBpeCJgU50k5vTe22n+QR/x3ee2/fd+7mQJooBOdh2
+	 UzLs7sisM6s/l7lcLoJgYSifWL8x1B/eEeHh61YuHEWZn/9QjpUYUHnboYFctz4ldH
+	 2yX1q3tK5GecQ==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Thorsten Leemhuis <regressions@leemhuis.info>,
 	Linus Torvalds <torvalds@linux-foundation.org>,
 	Michael Ellerman <mpe@ellerman.id.au>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
+	stable@vger.kernel.org,
+	Stefan Berger <stefanb@linux.ibm.com>,
 	James Bottomley <James.Bottomley@HansenPartnership.com>,
 	Mimi Zohar <zohar@linux.ibm.com>,
 	David Howells <dhowells@redhat.com>,
@@ -55,10 +58,12 @@ Cc: Thorsten Leemhuis <regressions@leemhuis.info>,
 	keyrings@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/3] Address !chip->auth
-Date: Thu,  4 Jul 2024 21:53:05 +0300
-Message-ID: <20240704185313.224318-1-jarkko@kernel.org>
+Subject: [PATCH v4 1/3] tpm: Address !chip->auth in tpm2_*_auth_session()
+Date: Thu,  4 Jul 2024 21:53:06 +0300
+Message-ID: <20240704185313.224318-2-jarkko@kernel.org>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240704185313.224318-1-jarkko@kernel.org>
+References: <20240704185313.224318-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,55 +72,59 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Unless tpm2_sessions_init() is called, then chip->auth ends up being a null
-pointer, which is ignored by authenticated sessions code. These patches aim
-to fully address the bug, and hopefully still make into 6.10-rc7.
+Unless tpm_chip_bootstrap() was called by the driver, !chip->auth can cause
+a null derefence in tpm2_*_auth_session(). Thus, address !chip->auth in
+tpm2_*_auth_session().
 
-Tested on x86-64 with:
-
-- TCG_TPM2_HMAC disabled.
-- TCG_TPM2_HMAC enabled.
-- TCG_TPM2_HMAC enabled, and "/* rc = tpm2_sessions_init(chip); */".
-
-For drivers that do not initialize with tpm2_chip_bootstrap(), the lack of
-auth sessions is reported once per power cycle by:
-
-"tpm tpm0: auth session is not active"
-
-This is expected output for the following drivers:
-
-* tpm_ftpm_tee.c
-* tpm_i2c_nuvoton.c
-* tpm_ibmvtpm.c
-* tpm_tis_i2c_cr50.c
-* tpm_vtpm_proxy.c
-
-They need to later on enable auth sessions, if they eager to. This
-patch set only fixes any collateral damage of not doing so.
-
+Cc: stable@vger.kernel.org # v6.9+
+Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+Closes: https://lore.kernel.org/linux-integrity/20240617193408.1234365-1-stefanb@linux.ibm.com/
+Fixes: 699e3efd6c64 ("tpm: Add HMAC session start and end functions")
+Tested-by: Michael Ellerman <mpe@ellerman.id.au> # ppc
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
 v4:
-* Address:
-  https://lore.kernel.org/linux-integrity/CAHk-=wiM=Cyw-07EkbAH66pE50VzJiT3bVHv9CS=kYR6zz5mTQ@mail.gmail.com/
-* Git: https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=auth-null-4
+* Added tested-by from Michael Ellerman.
 v3:
-* Address:
-  https://lore.kernel.org/linux-integrity/922603265d61011dbb23f18a04525ae973b83ffd.camel@HansenPartnership.com/
-* Git: https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=auth-null-3
-* Did a full QA run given the changes in config flag handling.
+* No changes.
 v2:
-* Rebase to commit 8a9c6c40432e ("Merge tag 'io_uring-6.10-20240703' of git://git.kernel.dk/linux").
-* Couple of cosmetic fixes.
+* Use dev_warn_once() instead of pr_warn_once().
+---
+ drivers/char/tpm/tpm2-sessions.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Jarkko Sakkinen (3):
-  tpm: Address !chip->auth in tpm2_*_auth_session()
-  tpm: Address !chip->auth in tpm_buf_append_name()
-  tpm: Address !chip->auth in tpm_buf_append_hmac_session*()
-
- drivers/char/tpm/Makefile        |   2 +-
- drivers/char/tpm/tpm2-sessions.c | 419 ++++++++++++++++++-------------
- include/linux/tpm.h              |  81 +++---
- 3 files changed, 269 insertions(+), 233 deletions(-)
-
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index 907ac9956a78..2f1d96a5a5a7 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -824,8 +824,13 @@ EXPORT_SYMBOL(tpm_buf_check_hmac_response);
+  */
+ void tpm2_end_auth_session(struct tpm_chip *chip)
+ {
+-	tpm2_flush_context(chip, chip->auth->handle);
+-	memzero_explicit(chip->auth, sizeof(*chip->auth));
++	struct tpm2_auth *auth = chip->auth;
++
++	if (!auth)
++		return;
++
++	tpm2_flush_context(chip, auth->handle);
++	memzero_explicit(auth, sizeof(*auth));
+ }
+ EXPORT_SYMBOL(tpm2_end_auth_session);
+ 
+@@ -907,6 +912,11 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
+ 	int rc;
+ 	u32 null_key;
+ 
++	if (!auth) {
++		dev_warn_once(&chip->dev, "auth session is not active\n");
++		return 0;
++	}
++
+ 	rc = tpm2_load_null(chip, &null_key);
+ 	if (rc)
+ 		goto out;
 -- 
 2.45.2
 
