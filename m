@@ -1,415 +1,352 @@
-Return-Path: <linux-integrity+bounces-3008-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3014-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EE60927D5A
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2024 20:54:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 429E6927D9F
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2024 21:12:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35CB3283889
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2024 18:54:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6C1C1F23402
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jul 2024 19:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91A3F13C9B8;
-	Thu,  4 Jul 2024 18:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCF27137764;
+	Thu,  4 Jul 2024 19:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ed6vnC+b"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="1QBY2kS2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8BF13C90B;
-	Thu,  4 Jul 2024 18:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C239D3219F
+	for <linux-integrity@vger.kernel.org>; Thu,  4 Jul 2024 19:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720119215; cv=none; b=BVhUy0PE3hXpriIqw1/U9FNp/033/PCgOLPSJs30Fx/5IbGeQFwO6naKMpizptH4Gzp/7Uu3YemNmDVNshXY5tASY18tB/6sD9LzTc0ZMiKBkzpbDdQ5/79tq+UFf3YaVkCKjihjSmgL99wihmfZna4CoLu2Bp3YOH0sqAnSgZQ=
+	t=1720120328; cv=none; b=tuzYma9wUXt6wu/7o10jiM28L89R2in7bEVrvHcaECRooOQWjxkR6Pw2M2QJ3hAQ3JtSC/FrxRgnyhWYfkq8gfrn/2eLi/L2iUnRkH825mClpMv/eqaHNaVXnYu34j/uyyzYmXIOYtfLouMKfAIzN8cqdWGQmol0onuWxmSBxMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720119215; c=relaxed/simple;
-	bh=6dnQmoNRVdKNz5z+5LQzjfW1/goiM1Ez8Qa4oDUYHRY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hRKZbdesMLDkwJxRG5DeAceBCuvDRTlD8oAlAHF43mJ/NEuAY4u11DcAaVXO6HMD1krP6McABFpusO0Pw27juhk0WyoDWHFMaByPyOiVFtSnAoF+GhjMjys4eW9nh0OVtuOSe7ua/iJZDzUIIakjaw25aW2u7BmPD9TJfhKFgMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ed6vnC+b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C2BEC32786;
-	Thu,  4 Jul 2024 18:53:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720119215;
-	bh=6dnQmoNRVdKNz5z+5LQzjfW1/goiM1Ez8Qa4oDUYHRY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ed6vnC+bmJyT3MstBT7LGw61D23EL+ozcha/lS/DWW17xu0QortmKEK8uY2S2h/aD
-	 Ta0DNuxTMlStuK7mH/GQktbZjYBcTVbaMAGzTQg8FI62WYuL9VqDlTkYGVoxdE7wZP
-	 hqyOp2WCGpEXlXzvN4UN8jHuNdvkRiGZpPGpMclZuZa+ZmS9vM4YBAYzu3JVDQTAoo
-	 UYY9ZBHYpnjpJOpm60wHqTcz5E4DEMiIUS0lKv414437iDRSHay31Gy/G9F9Rfil0h
-	 /O09+yTyXneMURFpEOEtQFLrvw/7deWqEFRW+9UbS5Bpuzzr44K7dHB3Bzp4kefecH
-	 Bj65LfAhYBNlg==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Thorsten Leemhuis <regressions@leemhuis.info>,
+	s=arc-20240116; t=1720120328; c=relaxed/simple;
+	bh=T/Zlv7hpxcj6ge20dm5J1s49tQ2h0H8JUTPLaAI3H4k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Qie5MQInHxtj5F8C7sh4+/QHrGdDY1MZBrbk5pSRZw/IUysUq9NXcTnVGRuCl4ClMqOL9F8qbcnGaHynaHh+1s79EC3dADYHQOfnQZseImhwNJZmJETnrGAffhudqr9OQSygovCDo5cpKtVbCfVp/GAJiRn7DRzX7yO7WQsoGDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=1QBY2kS2; arc=none smtp.client-ip=185.125.25.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WFQxQ4frgz12D6;
+	Thu,  4 Jul 2024 21:02:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1720119722;
+	bh=mWTdMc2mDoqK3vG7kCbrxvYoXYYZW4JBWFPI1VNiFqI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=1QBY2kS2RSODNRFXIdLoNpf9tErlv3MtxR1Jfe5QFaR4K68oLiuCXp/K+qeMqTDa7
+	 YcAwdlyK25OKa8LU3AGdG5l8Jsk84GLZLJ/D6MMsSf8gpHK2eGGrKbo0wrigbTKdN8
+	 e5foBA60Lan0pu2WCJBpU8LVSlLJIZPkMv9u0nzk=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WFQxL5HtrzSXD;
+	Thu,  4 Jul 2024 21:01:58 +0200 (CEST)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
 	Linus Torvalds <torvalds@linux-foundation.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	stable@vger.kernel.org,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] tpm: Address !chip->auth in tpm_buf_append_hmac_session*()
-Date: Thu,  4 Jul 2024 21:53:08 +0300
-Message-ID: <20240704185313.224318-4-jarkko@kernel.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240704185313.224318-1-jarkko@kernel.org>
-References: <20240704185313.224318-1-jarkko@kernel.org>
+	Theodore Ts'o <tytso@mit.edu>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Alejandro Colomar <alx.manpages@gmail.com>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Christian Heimes <christian@python.org>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Eric Chiang <ericchiang@google.com>,
+	Fan Wu <wufan@linux.microsoft.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Jan Kara <jack@suse.cz>,
+	Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jordan R Abrahams <ajordanr@google.com>,
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+	Luca Boccassi <bluca@debian.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Matthew Garrett <mjg59@srcf.ucam.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Miklos Szeredi <mszeredi@redhat.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
+	Scott Shell <scottsh@microsoft.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Steve Dower <steve.dower@python.org>,
+	Steve Grubb <sgrubb@redhat.com>,
+	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+	Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+	Xiaoming Ni <nixiaoming@huawei.com>,
+	Yin Fengwei <fengwei.yin@intel.com>,
+	kernel-hardening@lists.openwall.com,
+	linux-api@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [RFC PATCH v19 0/5] Script execution control (was O_MAYEXEC)
+Date: Thu,  4 Jul 2024 21:01:32 +0200
+Message-ID: <20240704190137.696169-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-Unless tpm_chip_bootstrap() was called by the driver, !chip->auth can
-cause a null derefence in tpm_buf_hmac_session*().  Thus, address
-!chip->auth in tpm_buf_hmac_session*() and remove the fallback
-implementation for !TCG_TPM2_HMAC.
+Hi,
 
-Cc: stable@vger.kernel.org # v6.9+
-Reported-by: Stefan Berger <stefanb@linux.ibm.com>
-Closes: https://lore.kernel.org/linux-integrity/20240617193408.1234365-1-stefanb@linux.ibm.com/
-Fixes: 1085b8276bb4 ("tpm: Add the rest of the session HMAC API")
-Tested-by: Michael Ellerman <mpe@ellerman.id.au> # ppc
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v4:
-* Address:
-  https://lore.kernel.org/linux-integrity/CAHk-=wiM=Cyw-07EkbAH66pE50VzJiT3bVHv9CS=kYR6zz5mTQ@mail.gmail.com/
-* Added tested-by from Michael Ellerman.
-v3:
-* Address:
-  https://lore.kernel.org/linux-integrity/922603265d61011dbb23f18a04525ae973b83ffd.camel@HansenPartnership.com/
-v2:
-* Use auth in place of chip->auth.
----
- drivers/char/tpm/tpm2-sessions.c | 186 ++++++++++++++++++-------------
- include/linux/tpm.h              |  68 ++++-------
- 2 files changed, 130 insertions(+), 124 deletions(-)
+The ultimate goal of this patch series is to be able to ensure that
+direct file execution (e.g. ./script.sh) and indirect file execution
+(e.g. sh script.sh) lead to the same result, especially from a security
+point of view.
 
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index b3ed35e7ec00..2281d55df545 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -272,6 +272,110 @@ void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- }
- EXPORT_SYMBOL_GPL(tpm_buf_append_name);
- 
-+/**
-+ * tpm_buf_append_hmac_session() - Append a TPM session element
-+ * @chip: the TPM chip structure
-+ * @buf: The buffer to be appended
-+ * @attributes: The session attributes
-+ * @passphrase: The session authority (NULL if none)
-+ * @passphrase_len: The length of the session authority (0 if none)
-+ *
-+ * This fills in a session structure in the TPM command buffer, except
-+ * for the HMAC which cannot be computed until the command buffer is
-+ * complete.  The type of session is controlled by the @attributes,
-+ * the main ones of which are TPM2_SA_CONTINUE_SESSION which means the
-+ * session won't terminate after tpm_buf_check_hmac_response(),
-+ * TPM2_SA_DECRYPT which means this buffers first parameter should be
-+ * encrypted with a session key and TPM2_SA_ENCRYPT, which means the
-+ * response buffer's first parameter needs to be decrypted (confusing,
-+ * but the defines are written from the point of view of the TPM).
-+ *
-+ * Any session appended by this command must be finalized by calling
-+ * tpm_buf_fill_hmac_session() otherwise the HMAC will be incorrect
-+ * and the TPM will reject the command.
-+ *
-+ * As with most tpm_buf operations, success is assumed because failure
-+ * will be caused by an incorrect programming model and indicated by a
-+ * kernel message.
-+ */
-+void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
-+				 u8 attributes, u8 *passphrase,
-+				 int passphrase_len)
-+{
-+#ifdef CONFIG_TCG_TPM2_HMAC
-+	u8 nonce[SHA256_DIGEST_SIZE];
-+	struct tpm2_auth *auth;
-+	u32 len;
-+#endif
-+
-+	if (!tpm2_chip_auth(chip)) {
-+		/* offset tells us where the sessions area begins */
-+		int offset = buf->handles * 4 + TPM_HEADER_SIZE;
-+		u32 len = 9 + passphrase_len;
-+
-+		if (tpm_buf_length(buf) != offset) {
-+			/* not the first session so update the existing length */
-+			len += get_unaligned_be32(&buf->data[offset]);
-+			put_unaligned_be32(len, &buf->data[offset]);
-+		} else {
-+			tpm_buf_append_u32(buf, len);
-+		}
-+		/* auth handle */
-+		tpm_buf_append_u32(buf, TPM2_RS_PW);
-+		/* nonce */
-+		tpm_buf_append_u16(buf, 0);
-+		/* attributes */
-+		tpm_buf_append_u8(buf, 0);
-+		/* passphrase */
-+		tpm_buf_append_u16(buf, passphrase_len);
-+		tpm_buf_append(buf, passphrase, passphrase_len);
-+		return;
-+	}
-+
-+#ifdef CONFIG_TCG_TPM2_HMAC
-+	/*
-+	 * The Architecture Guide requires us to strip trailing zeros
-+	 * before computing the HMAC
-+	 */
-+	while (passphrase && passphrase_len > 0 && passphrase[passphrase_len - 1] == '\0')
-+		passphrase_len--;
-+
-+	auth = chip->auth;
-+	auth->attrs = attributes;
-+	auth->passphrase_len = passphrase_len;
-+	if (passphrase_len)
-+		memcpy(auth->passphrase, passphrase, passphrase_len);
-+
-+	if (auth->session != tpm_buf_length(buf)) {
-+		/* we're not the first session */
-+		len = get_unaligned_be32(&buf->data[auth->session]);
-+		if (4 + len + auth->session != tpm_buf_length(buf)) {
-+			WARN(1, "session length mismatch, cannot append");
-+			return;
-+		}
-+
-+		/* add our new session */
-+		len += 9 + 2 * SHA256_DIGEST_SIZE;
-+		put_unaligned_be32(len, &buf->data[auth->session]);
-+	} else {
-+		tpm_buf_append_u32(buf, 9 + 2 * SHA256_DIGEST_SIZE);
-+	}
-+
-+	/* random number for our nonce */
-+	get_random_bytes(nonce, sizeof(nonce));
-+	memcpy(auth->our_nonce, nonce, sizeof(nonce));
-+	tpm_buf_append_u32(buf, auth->handle);
-+	/* our new nonce */
-+	tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
-+	tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
-+	tpm_buf_append_u8(buf, auth->attrs);
-+	/* and put a placeholder for the hmac */
-+	tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
-+	tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
-+#endif
-+}
-+EXPORT_SYMBOL_GPL(tpm_buf_append_hmac_session);
-+
- #ifdef CONFIG_TCG_TPM2_HMAC
- 
- static int tpm2_create_primary(struct tpm_chip *chip, u32 hierarchy,
-@@ -457,82 +561,6 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip)
- 	crypto_free_kpp(kpp);
- }
- 
--/**
-- * tpm_buf_append_hmac_session() - Append a TPM session element
-- * @chip: the TPM chip structure
-- * @buf: The buffer to be appended
-- * @attributes: The session attributes
-- * @passphrase: The session authority (NULL if none)
-- * @passphrase_len: The length of the session authority (0 if none)
-- *
-- * This fills in a session structure in the TPM command buffer, except
-- * for the HMAC which cannot be computed until the command buffer is
-- * complete.  The type of session is controlled by the @attributes,
-- * the main ones of which are TPM2_SA_CONTINUE_SESSION which means the
-- * session won't terminate after tpm_buf_check_hmac_response(),
-- * TPM2_SA_DECRYPT which means this buffers first parameter should be
-- * encrypted with a session key and TPM2_SA_ENCRYPT, which means the
-- * response buffer's first parameter needs to be decrypted (confusing,
-- * but the defines are written from the point of view of the TPM).
-- *
-- * Any session appended by this command must be finalized by calling
-- * tpm_buf_fill_hmac_session() otherwise the HMAC will be incorrect
-- * and the TPM will reject the command.
-- *
-- * As with most tpm_buf operations, success is assumed because failure
-- * will be caused by an incorrect programming model and indicated by a
-- * kernel message.
-- */
--void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
--				 u8 attributes, u8 *passphrase,
--				 int passphrase_len)
--{
--	u8 nonce[SHA256_DIGEST_SIZE];
--	u32 len;
--	struct tpm2_auth *auth = chip->auth;
--
--	/*
--	 * The Architecture Guide requires us to strip trailing zeros
--	 * before computing the HMAC
--	 */
--	while (passphrase && passphrase_len > 0
--	       && passphrase[passphrase_len - 1] == '\0')
--		passphrase_len--;
--
--	auth->attrs = attributes;
--	auth->passphrase_len = passphrase_len;
--	if (passphrase_len)
--		memcpy(auth->passphrase, passphrase, passphrase_len);
--
--	if (auth->session != tpm_buf_length(buf)) {
--		/* we're not the first session */
--		len = get_unaligned_be32(&buf->data[auth->session]);
--		if (4 + len + auth->session != tpm_buf_length(buf)) {
--			WARN(1, "session length mismatch, cannot append");
--			return;
--		}
--
--		/* add our new session */
--		len += 9 + 2 * SHA256_DIGEST_SIZE;
--		put_unaligned_be32(len, &buf->data[auth->session]);
--	} else {
--		tpm_buf_append_u32(buf, 9 + 2 * SHA256_DIGEST_SIZE);
--	}
--
--	/* random number for our nonce */
--	get_random_bytes(nonce, sizeof(nonce));
--	memcpy(auth->our_nonce, nonce, sizeof(nonce));
--	tpm_buf_append_u32(buf, auth->handle);
--	/* our new nonce */
--	tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
--	tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
--	tpm_buf_append_u8(buf, auth->attrs);
--	/* and put a placeholder for the hmac */
--	tpm_buf_append_u16(buf, SHA256_DIGEST_SIZE);
--	tpm_buf_append(buf, nonce, SHA256_DIGEST_SIZE);
--}
--EXPORT_SYMBOL(tpm_buf_append_hmac_session);
--
- /**
-  * tpm_buf_fill_hmac_session() - finalize the session HMAC
-  * @chip: the TPM chip structure
-@@ -563,6 +591,9 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
- 	u8 cphash[SHA256_DIGEST_SIZE];
- 	struct sha256_state sctx;
- 
-+	if (!auth)
-+		return;
-+
- 	/* save the command code in BE format */
- 	auth->ordinal = head->ordinal;
- 
-@@ -721,6 +752,9 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
- 	u32 cc = be32_to_cpu(auth->ordinal);
- 	int parm_len, len, i, handles;
- 
-+	if (!auth)
-+		return rc;
-+
- 	if (auth->session >= TPM_HEADER_SIZE) {
- 		WARN(1, "tpm session not filled correctly\n");
- 		goto out;
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 4d3071e885a0..e93ee8d936a9 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -502,10 +502,6 @@ static inline struct tpm2_auth *tpm2_chip_auth(struct tpm_chip *chip)
- 
- void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- 			 u32 handle, u8 *name);
--
--#ifdef CONFIG_TCG_TPM2_HMAC
--
--int tpm2_start_auth_session(struct tpm_chip *chip);
- void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- 				 u8 attributes, u8 *passphrase,
- 				 int passphraselen);
-@@ -515,9 +511,27 @@ static inline void tpm_buf_append_hmac_session_opt(struct tpm_chip *chip,
- 						   u8 *passphrase,
- 						   int passphraselen)
- {
--	tpm_buf_append_hmac_session(chip, buf, attributes, passphrase,
--				    passphraselen);
-+	struct tpm_header *head;
-+	int offset;
-+
-+	if (tpm2_chip_auth(chip)) {
-+		tpm_buf_append_hmac_session(chip, buf, attributes, passphrase, passphraselen);
-+	} else  {
-+		offset = buf->handles * 4 + TPM_HEADER_SIZE;
-+		head = (struct tpm_header *)buf->data;
-+
-+		/*
-+		 * If the only sessions are optional, the command tag must change to
-+		 * TPM2_ST_NO_SESSIONS.
-+		 */
-+		if (tpm_buf_length(buf) == offset)
-+			head->tag = cpu_to_be16(TPM2_ST_NO_SESSIONS);
-+	}
- }
-+
-+#ifdef CONFIG_TCG_TPM2_HMAC
-+
-+int tpm2_start_auth_session(struct tpm_chip *chip);
- void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf);
- int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
- 				int rc);
-@@ -532,48 +546,6 @@ static inline int tpm2_start_auth_session(struct tpm_chip *chip)
- static inline void tpm2_end_auth_session(struct tpm_chip *chip)
- {
- }
--static inline void tpm_buf_append_hmac_session(struct tpm_chip *chip,
--					       struct tpm_buf *buf,
--					       u8 attributes, u8 *passphrase,
--					       int passphraselen)
--{
--	/* offset tells us where the sessions area begins */
--	int offset = buf->handles * 4 + TPM_HEADER_SIZE;
--	u32 len = 9 + passphraselen;
--
--	if (tpm_buf_length(buf) != offset) {
--		/* not the first session so update the existing length */
--		len += get_unaligned_be32(&buf->data[offset]);
--		put_unaligned_be32(len, &buf->data[offset]);
--	} else {
--		tpm_buf_append_u32(buf, len);
--	}
--	/* auth handle */
--	tpm_buf_append_u32(buf, TPM2_RS_PW);
--	/* nonce */
--	tpm_buf_append_u16(buf, 0);
--	/* attributes */
--	tpm_buf_append_u8(buf, 0);
--	/* passphrase */
--	tpm_buf_append_u16(buf, passphraselen);
--	tpm_buf_append(buf, passphrase, passphraselen);
--}
--static inline void tpm_buf_append_hmac_session_opt(struct tpm_chip *chip,
--						   struct tpm_buf *buf,
--						   u8 attributes,
--						   u8 *passphrase,
--						   int passphraselen)
--{
--	int offset = buf->handles * 4 + TPM_HEADER_SIZE;
--	struct tpm_header *head = (struct tpm_header *) buf->data;
--
--	/*
--	 * if the only sessions are optional, the command tag
--	 * must change to TPM2_ST_NO_SESSIONS
--	 */
--	if (tpm_buf_length(buf) == offset)
--		head->tag = cpu_to_be16(TPM2_ST_NO_SESSIONS);
--}
- static inline void tpm_buf_fill_hmac_session(struct tpm_chip *chip,
- 					     struct tpm_buf *buf)
- {
+Overview
+--------
+
+This patch series is a new approach of the initial O_MAYEXEC feature,
+and a revamp of the previous patch series.  Taking into account the last
+reviews [1], we now stick to the kernel semantic for file executability.
+One major change is the clear split between access check and policy
+management.
+
+The first patch brings the AT_CHECK flag to execveat(2).  The goal is to
+enable user space to check if a file could be executed (by the kernel).
+Unlike stat(2) that only checks file permissions, execveat2(2) +
+AT_CHECK take into account the full context, including mount points
+(noexec), caller's limits, and all potential LSM extra checks (e.g.
+argv, envp, credentials).
+
+The second patch brings two new securebits used to set or get a security
+policy for a set of processes.  For this to be meaningful, all
+executable code needs to be trusted.  In practice, this means that
+(malicious) users can be restricted to only run scripts provided (and
+trusted) by the system.
+
+[1] https://lore.kernel.org/r/CAHk-=wjPGNLyzeBMWdQu+kUdQLHQugznwY7CvWjmvNW47D5sog@mail.gmail.com
+
+Script execution
+----------------
+
+One important thing to keep in mind is that the goal of this patch
+series is to get the same security restrictions with these commands:
+* ./script.py
+* python script.py
+* python < script.py
+* python -m script.py
+
+However, on secure systems, we should be able to forbid these commands
+because there is no way to reliably identify the origin of the script:
+* xargs -a script.py -d '\r' -- python -c
+* cat script.py | python
+* python
+
+Background
+----------
+
+Compared to the previous patch series, there is no more dedicated
+syscall nor sysctl configuration.  This new patch series only add new
+flags: one for execveat(2) and four for prctl(2).
+
+This kind of script interpreter restriction may already be used in
+hardened systems, which may need to fork interpreters and install
+different versions of the binaries.  This mechanism should enable to
+avoid the use of duplicate binaries (and potential forked source code)
+for secure interpreters (e.g. secure Python [2]) by making it possible
+to dynamically enforce restrictions or not.
+
+The ability to control script execution is also required to close a
+major IMA measurement/appraisal interpreter integrity [3].
+
+This new execveat + AT_CHECK should not be confused with the O_EXEC flag
+(for open) which is intended for execute-only, which obviously doesn't
+work for scripts.
+
+I gave a talk about controlling script execution where I explain the
+previous approaches [4].  The design of the WIP RFC I talked about
+changed quite a bit since then.
+
+[2] https://github.com/zooba/spython
+[3] https://lore.kernel.org/lkml/20211014130125.6991-1-zohar@linux.ibm.com/
+[4] https://lssna2023.sched.com/event/1K7bO
+
+Execution policy
+----------------
+
+The "execution" usage means that the content of the file descriptor is
+trusted according to the system policy to be executed by user space,
+which means that it interprets the content or (try to) maps it as
+executable memory.
+
+It is important to note that this can only enable to extend access
+control managed by the kernel.  Hence it enables current access control
+mechanism to be extended and become a superset of what they can
+currently control.  Indeed, the security policy could also be delegated
+to an LSM, either a MAC system or an integrity system.
+
+Complementary W^X protections can be brought by SELinux or IPE [5].
+
+Being able to restrict execution also enables to protect the kernel by
+restricting arbitrary syscalls that an attacker could perform with a
+crafted binary or certain script languages.  It also improves multilevel
+isolation by reducing the ability of an attacker to use side channels
+with specific code.  These restrictions can natively be enforced for ELF
+binaries (with the noexec mount option) but require this kernel
+extension to properly handle scripts (e.g. Python, Perl).  To get a
+consistent execution policy, additional memory restrictions should also
+be enforced (e.g. thanks to SELinux).
+
+[5] https://lore.kernel.org/lkml/1716583609-21790-1-git-send-email-wufan@linux.microsoft.com/
+
+Prerequisite for security use
+-----------------------------
+
+Because scripts might not currently have the executable permission and
+still run well as is, or because we might want specific users to be
+allowed to run arbitrary scripts, we also need a configuration
+mechanism.
+
+According to the threat model, to get a secure execution environment on
+top of these changes, it might be required to configure and enable
+existing security mechanisms such as secure boot, restrictive mount
+points (e.g. with rw AND noexec), correct file permissions (including
+executable libraries), IMA/EVM, SELinux policy...
+
+The first thing to patch is the libc to check loaded libraries (e.g. see
+chromeOS changes).  The second thing to patch are the script
+interpreters by checking direct scripts executability and by checking
+their own libraries (e.g. Python's imported files or argument-passed
+modules).  For instance, the PEP 578 [6] (Runtime Audit Hooks) enables
+Python 3.8 to be extended with policy enforcement points related to code
+interpretation, which can be used to align with the PowerShell audit
+features.  Additional Python security improvements (e.g. a limited
+interpreter without -c, stdin piping of code) are developed [2] [7].
+
+[6] https://www.python.org/dev/peps/pep-0578/
+[7] https://lore.kernel.org/lkml/0c70debd-e79e-d514-06c6-4cd1e021fa8b@python.org/
+
+libc patch
+----------
+
+Dynamic linking needs still need to check the libraries the same way
+interpreters need to check scripts.
+
+chromeOS patches glibc with a fstatvfs check [8] [9]. This enables to
+check against noexec mount points, which is OK but doesn't fit with
+execve semantics.  Moreover, the kernel is not aware of such check, so
+all access control checks are not performed (e.g. file permission, LSMs
+security policies, integrity and authenticity checks), it is not handled
+with audit, and more importantly this would not work on generic
+distributions because of the strict requirement and chromeOS-specific
+assumptions.
+
+[8] https://issuetracker.google.com/issues/40054993
+[9] https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/6abfc9e327241a5f684b8b941c899b7ca8b6dbc1/sys-libs/glibc/files/local/glibc-2.37/0007-Deny-LD_PRELOAD-of-files-in-NOEXEC-mount.patch
+
+Examples
+--------
+
+The initial idea comes from CLIP OS 4 and the original implementation
+has been used for more than a decade:
+https://github.com/clipos-archive/clipos4_doc
+Chrome OS has a similar approach:
+https://www.chromium.org/chromium-os/developer-library/guides/security/noexec-shell-scripts/
+
+User space patches can be found here:
+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+There is more than the O_MAYEXEC changes (which matches this search)
+e.g., to prevent Python interactive execution. There are patches for
+Bash, Wine, Java (Icedtea), Busybox's ash, Perl and Python. There are
+also some related patches which do not directly rely on O_MAYEXEC but
+which restrict the use of browser plugins and extensions, which may be
+seen as scripts too:
+https://github.com/clipos-archive/clipos4_portage-overlay/tree/master/www-client
+
+Past talks and articles
+-----------------------
+
+An introduction to O_MAYEXEC was given at the Linux Security Summit
+Europe 2018 - Linux Kernel Security Contributions by ANSSI:
+https://www.youtube.com/watch?v=chNjCRtPKQY&t=17m15s
+The "write xor execute" principle was explained at Kernel Recipes 2018 -
+CLIP OS: a defense-in-depth OS:
+https://www.youtube.com/watch?v=PjRE0uBtkHU&t=11m14s
+See also a first LWN article about O_MAYEXEC and a new one about
+trusted_for(2) and its background:
+* https://lwn.net/Articles/820000/
+* https://lwn.net/Articles/832959/
+
+Previous versions:
+v18: https://lore.kernel.org/r/20220104155024.48023-1-mic@digikod.net
+v17: https://lore.kernel.org/r/20211115185304.198460-1-mic@digikod.net
+v16: https://lore.kernel.org/r/20211110190626.257017-1-mic@digikod.net
+v15: https://lore.kernel.org/r/20211012192410.2356090-1-mic@digikod.net
+v14: https://lore.kernel.org/r/20211008104840.1733385-1-mic@digikod.net
+v13: https://lore.kernel.org/r/20211007182321.872075-1-mic@digikod.net
+v12: https://lore.kernel.org/r/20201203173118.379271-1-mic@digikod.net
+v11: https://lore.kernel.org/r/20201019164932.1430614-1-mic@digikod.net
+v10: https://lore.kernel.org/r/20200924153228.387737-1-mic@digikod.net
+v9: https://lore.kernel.org/r/20200910164612.114215-1-mic@digikod.net
+v8: https://lore.kernel.org/r/20200908075956.1069018-1-mic@digikod.net
+v7: https://lore.kernel.org/r/20200723171227.446711-1-mic@digikod.net
+v6: https://lore.kernel.org/r/20200714181638.45751-1-mic@digikod.net
+v5: https://lore.kernel.org/r/20200505153156.925111-1-mic@digikod.net
+v4: https://lore.kernel.org/r/20200430132320.699508-1-mic@digikod.net
+v3: https://lore.kernel.org/r/20200428175129.634352-1-mic@digikod.net
+v2: https://lore.kernel.org/r/20190906152455.22757-1-mic@digikod.net
+v1: https://lore.kernel.org/r/20181212081712.32347-1-mic@digikod.net
+
+Regards,
+
+Mickaël Salaün (5):
+  exec: Add a new AT_CHECK flag to execveat(2)
+  security: Add new SHOULD_EXEC_CHECK and SHOULD_EXEC_RESTRICT
+    securebits
+  selftests/exec: Add tests for AT_CHECK and related securebits
+  selftests/landlock: Add tests for execveat + AT_CHECK
+  samples/should-exec: Add set-should-exec
+
+ fs/exec.c                                  |   5 +-
+ include/linux/binfmts.h                    |   7 +-
+ include/uapi/linux/fcntl.h                 |  30 ++
+ include/uapi/linux/securebits.h            |  56 ++-
+ kernel/audit.h                             |   1 +
+ kernel/auditsc.c                           |   1 +
+ samples/Kconfig                            |   7 +
+ samples/Makefile                           |   1 +
+ samples/should-exec/.gitignore             |   1 +
+ samples/should-exec/Makefile               |  13 +
+ samples/should-exec/set-should-exec.c      |  88 ++++
+ security/commoncap.c                       |  63 ++-
+ tools/testing/selftests/exec/.gitignore    |   2 +
+ tools/testing/selftests/exec/Makefile      |   8 +
+ tools/testing/selftests/exec/config        |   2 +
+ tools/testing/selftests/exec/false.c       |   5 +
+ tools/testing/selftests/exec/should-exec.c | 449 +++++++++++++++++++++
+ tools/testing/selftests/landlock/fs_test.c |  26 ++
+ 18 files changed, 753 insertions(+), 12 deletions(-)
+ create mode 100644 samples/should-exec/.gitignore
+ create mode 100644 samples/should-exec/Makefile
+ create mode 100644 samples/should-exec/set-should-exec.c
+ create mode 100644 tools/testing/selftests/exec/config
+ create mode 100644 tools/testing/selftests/exec/false.c
+ create mode 100644 tools/testing/selftests/exec/should-exec.c
+
+
+base-commit: f2661062f16b2de5d7b6a5c42a9a5c96326b8454
 -- 
 2.45.2
 
