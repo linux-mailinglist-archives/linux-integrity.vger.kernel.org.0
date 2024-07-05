@@ -1,109 +1,79 @@
-Return-Path: <linux-integrity+bounces-3027-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3028-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 797C2928F4E
-	for <lists+linux-integrity@lfdr.de>; Sat,  6 Jul 2024 00:22:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C91B3928F84
+	for <lists+linux-integrity@lfdr.de>; Sat,  6 Jul 2024 01:25:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABBFE1C232D3
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2024 22:22:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AB4B1C21A9B
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2024 23:25:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BDF7144D00;
-	Fri,  5 Jul 2024 22:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9126F1459F7;
+	Fri,  5 Jul 2024 23:24:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R82FvL6J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1y1LIDN"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF7512FF89;
-	Fri,  5 Jul 2024 22:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BAF79F3;
+	Fri,  5 Jul 2024 23:24:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720218138; cv=none; b=XKwUYQScvXCAPKHS01JggjTHzyIe00zFJC6t/Oxr61X8UrmBmioeM63mswqEs6BVJRSaMxWxh7SWmwyARx80fLkjJ4a/sZPPPhzxw5OGi7cp9yrWYG+mLr4eaoCgK4HEj18k5c+e5uPRMuUZ4UFKSKyDKKv8rmSCgkyjeh/fKRU=
+	t=1720221898; cv=none; b=IUetKCnfxowUpUJwQFOledpGSpuJNNrZZvADqEnkQ4toEHxWlsPUFOn/4RLmXYEJ4kzRWHl3VEeWUTtp1cL4J5Uk7g6fXH6hI4ARM1zgQ58098ro4TrI2CmQh/0co6rlHPCX7HvTYH6pMnPsPbOt+UaVsvFn4iznBB/wgsi3jqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720218138; c=relaxed/simple;
-	bh=ENklnaGwg7gbVoxwnNN9rxnZRVBjkNfp1WlAFtAN+BM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=kJhAE6Tsh7RsCXuz86R9jFZyPNJ9phgU5vcrvLJoDmBBXj0i1rQFaeVmsULPVE1GErWw9CoufpBANMGdrij9cgpg9MRo5N307Yw1HGpI4L/DPchKmB2UR2EzYuthx3LfsZHv6nyOQDq1JPwkZwi1oHNfK5gePSrXbosMiAF2vdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R82FvL6J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B7B9C116B1;
-	Fri,  5 Jul 2024 22:22:08 +0000 (UTC)
+	s=arc-20240116; t=1720221898; c=relaxed/simple;
+	bh=6dfmR1e/fcU7jwvDaK5WLLj7pfWBbDQpzmEO6uLxl5Y=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=cHDffhr6fKdimSx8J+ocWGUo74b+FBAgfmpDkLovYm0BOH4oxe/PTbaRRipNNptHsmrBF+Sn4bw7D7TQkyst+18W9O274PS9mt9vSFMBbhgFtVBtm4Xlqpt2wk5M5yamyzjCOaFn4TCa1IJlY/4MKxzrYVyU4qR79IhipCpFeCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1y1LIDN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07BEFC116B1;
+	Fri,  5 Jul 2024 23:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720218138;
-	bh=ENklnaGwg7gbVoxwnNN9rxnZRVBjkNfp1WlAFtAN+BM=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=R82FvL6Jp535Akx7VaoouTVyo3yZ0oGQHmxMZDd8FwAEPKBkSuOcmyJ9yJToPi+f9
-	 UFyV7ns+xPCXVNrONu4MLRJ+og/16DTLW2nn8UuBAWcIEwgWrhiYRfAE6UC5NF6fEW
-	 o8fn/hy3aBZgrLuJfjcZ5BJ5x9sR4unHadsjfrLzWnrBoQTX8zJnvSwCMdcBdRTRiw
-	 TXzP3JsHskW93BnEtYnD2cSp6iB3K3VR7Tey1BRNlrZeD9ilvydyOdUhlnBqXbDmwD
-	 sGTt5wEsH8n14WZh+M/G2uVc89lBBgwL/9yNfZMoGxCPo4ph3osIyWc0IRFrCqyTX9
-	 C3W/JiomT1p3A==
+	s=k20201202; t=1720221898;
+	bh=6dfmR1e/fcU7jwvDaK5WLLj7pfWBbDQpzmEO6uLxl5Y=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=X1y1LIDNfUe2mR2Zode0Jxmp8U+Oiflq65YH1J1NnwIgrkck/Yqde8tA9LozLhKiF
+	 jybXzsyu7z4ck0xB2E7C+rHTA3JzhDxaOH1rDKLkxB7LVfHYTtHp/8iS5slLvWt+Vp
+	 25G2PPbzqLlP9yAHfN4rtwjQa1qI0HptJC8XdHlRrmSRjh5p4mFBA+yhNWBtgptFHA
+	 WOVTj5HynLlpmnkuQ59T//nx9Nf/dUQZA5bBJWasZWQOpFlzfxtXbsev3mFwzs5tZd
+	 bTT7bQT/L+9rfXpzdaZLU+1ag2XSZflf7ayhwe4TgctIvcvesbOBZrlx91pK3C7p/D
+	 iMjEYSCdJjj9Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F0CA4C433A2;
+	Fri,  5 Jul 2024 23:24:57 +0000 (UTC)
+Subject: Re: [GIT PULL] integrity: subsystem update for v6.10-rcX
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <6b98a933682b443f0c16a4c8b3c5cd6db59d8f17.camel@linux.ibm.com>
+References: <6b98a933682b443f0c16a4c8b3c5cd6db59d8f17.camel@linux.ibm.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <6b98a933682b443f0c16a4c8b3c5cd6db59d8f17.camel@linux.ibm.com>
+X-PR-Tracked-Remote: ssh://gitolite@ra.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.10-fix
+X-PR-Tracked-Commit-Id: fbf06cee60876d50f259d0689e3c03940750f0d4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1dd28064d4164a4dc9096fd1a7990d2de15f2bb6
+Message-Id: <172022189797.24316.10106089174939986565.pr-tracker-bot@kernel.org>
+Date: Fri, 05 Jul 2024 23:24:57 +0000
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-integrity <linux-integrity@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, Roberto Sassu <roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 06 Jul 2024 01:22:06 +0300
-Message-Id: <D2HYFLLXVYLS.ORASE7L62L3N@kernel.org>
-Subject: Re: [RFC PATCH v19 2/5] security: Add new SHOULD_EXEC_CHECK and
- SHOULD_EXEC_RESTRICT securebits
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Kees Cook" <kees@kernel.org>, =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>
-Cc: "Al Viro" <viro@zeniv.linux.org.uk>, "Christian Brauner"
- <brauner@kernel.org>, "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Paul Moore" <paul@paul-moore.com>, "Theodore Ts'o" <tytso@mit.edu>,
- "Alejandro Colomar" <alx@kernel.org>, "Aleksa Sarai" <cyphar@cyphar.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, "Andy Lutomirski"
- <luto@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>, "Casey Schaufler"
- <casey@schaufler-ca.com>, "Christian Heimes" <christian@python.org>,
- "Dmitry Vyukov" <dvyukov@google.com>, "Eric Biggers" <ebiggers@kernel.org>,
- "Eric Chiang" <ericchiang@google.com>, "Fan Wu"
- <wufan@linux.microsoft.com>, "Florian Weimer" <fweimer@redhat.com>, "Geert
- Uytterhoeven" <geert@linux-m68k.org>, "James Morris"
- <jamorris@linux.microsoft.com>, "Jan Kara" <jack@suse.cz>, "Jann Horn"
- <jannh@google.com>, "Jeff Xu" <jeffxu@google.com>, "Jonathan Corbet"
- <corbet@lwn.net>, "Jordan R Abrahams" <ajordanr@google.com>, "Lakshmi
- Ramasubramanian" <nramas@linux.microsoft.com>, "Luca Boccassi"
- <bluca@debian.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Madhavan T .
- Venkataraman" <madvenka@linux.microsoft.com>, "Matt Bobrowski"
- <mattbobrowski@google.com>, "Matthew Garrett" <mjg59@srcf.ucam.org>,
- "Matthew Wilcox" <willy@infradead.org>, "Miklos Szeredi"
- <mszeredi@redhat.com>, "Mimi Zohar" <zohar@linux.ibm.com>, "Nicolas
- Bouchinet" <nicolas.bouchinet@ssi.gouv.fr>, "Scott Shell"
- <scottsh@microsoft.com>, "Shuah Khan" <shuah@kernel.org>, "Stephen
- Rothwell" <sfr@canb.auug.org.au>, "Steve Dower" <steve.dower@python.org>,
- "Steve Grubb" <sgrubb@redhat.com>, "Thibaut Sautereau"
- <thibaut.sautereau@ssi.gouv.fr>, "Vincent Strubel"
- <vincent.strubel@ssi.gouv.fr>, "Xiaoming Ni" <nixiaoming@huawei.com>, "Yin
- Fengwei" <fengwei.yin@intel.com>, <kernel-hardening@lists.openwall.com>,
- <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240704190137.696169-1-mic@digikod.net>
- <20240704190137.696169-3-mic@digikod.net> <202407041711.B7CD16B2@keescook>
- <20240705.IeTheequ7Ooj@digikod.net> <202407051425.32AF9D2@keescook>
-In-Reply-To: <202407051425.32AF9D2@keescook>
 
-On Sat Jul 6, 2024 at 12:44 AM EEST, Kees Cook wrote:
-> > As explained in the UAPI comments, all parent processes need to be
-> > trusted.  This meeans that their code is trusted, their seccomp filters
-> > are trusted, and that they are patched, if needed, to check file
-> > executability.
->
-> But we have launchers that apply arbitrary seccomp policy, e.g. minijail
-> on Chrome OS, or even systemd on regular distros. In theory, this should
-> be handled via other ACLs.
+The pull request you sent on Fri, 05 Jul 2024 16:20:22 -0400:
 
-Or a regular web browser? AFAIK seccomp filtering was the tool to make
-secure browser tabs in the first place.
+> ssh://gitolite@ra.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.10-fix
 
-BR, Jarkko
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1dd28064d4164a4dc9096fd1a7990d2de15f2bb6
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
