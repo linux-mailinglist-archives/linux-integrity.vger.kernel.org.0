@@ -1,111 +1,243 @@
-Return-Path: <linux-integrity+bounces-3017-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3018-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEF179287D5
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2024 13:23:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A5A7928A5C
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2024 16:06:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B2B1286CDC
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2024 11:23:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A84A82824AC
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jul 2024 14:06:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14E1314A4E9;
-	Fri,  5 Jul 2024 11:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B15616848F;
+	Fri,  5 Jul 2024 14:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2KaoXGU"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="r51Ul7A7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3AE1465B3;
-	Fri,  5 Jul 2024 11:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FE814A62E;
+	Fri,  5 Jul 2024 14:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720178525; cv=none; b=BfeuIB5XFU6Oi6Igms3GpsZofXmApjHkyDSz9monwQcU4bJw1pF5Jqb2VsbcFmw3Nl+bqMGTBA/C6rEJU/OWWeSck8gJVjCZkVZntrhUCayhI1quQ3VngfLiN6jDIUKE/wnYSGaCltzZq2v+MHPcRqwj7PYzdkkd7ETePuaiFnE=
+	t=1720188370; cv=none; b=DVJBY/HxRzcLw2iTG4i0Yux3lnVjGKl8nS/ylKhRZWQWFdy42HROiTT+QmgENeGxazXjgmy1XXxvJTE3oH3bpCwnOY7UsJOcBKWBOhPeKaBSiHI+8cwbgljRukzbLBp87A8eIYlvNEqrSauSot5cr0HLdeXqxIBANeT2kQJ0oEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720178525; c=relaxed/simple;
-	bh=b6EsCXCAUPVZ6fUS4BEAH9hZNBzB1OJF44oM3EXRitk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To; b=FHlrMQA/YGZWPYvj4WzImMMxWMbU592PuR1KqsmxXRfbNGTdnGccE81c6OZiBFUBmIRI0d/bHiD99u0v2hkX+4SISM6SsWrY11fOQb9K3O+TchubATzOjty397a9dmpOU8LxLKQqEuxPbJ3ifvNkMZ5NjKVmlIX60aSN8ToTx4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2KaoXGU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 713FDC116B1;
-	Fri,  5 Jul 2024 11:22:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720178524;
-	bh=b6EsCXCAUPVZ6fUS4BEAH9hZNBzB1OJF44oM3EXRitk=;
-	h=Date:Cc:Subject:From:To:From;
-	b=G2KaoXGUqY2s194Fx6JCDC7egcc+QUc1Gb/iCNxbA0pY1QS+RJtNXYDKBU7o/eWhu
-	 tvHz3p6Ph247ksAxYN/r2gRz5idJ2ArSlsZE4IiYQJFhT9V4kyoL7W5oF1FQUSHIVR
-	 LKjrSnbDVzVRdk/oTNu5rcKqZ3SSclRIDYqXGg8uAq2i0Iuw84fbnEg/sssCAeCgN3
-	 NRn276bGQHA7RgFxNSmJxHTh873BUbBHFZJMX8AIjbKsCRw+Dygm2ESDtoR7DLPtT5
-	 KWTctc+7ZXkWH9/Gt8/H49+4b4LxAKnpdYsc2/f8O8xh4QBxtVN506qsDwNzVrbiJP
-	 NPiHtve+Ksetg==
+	s=arc-20240116; t=1720188370; c=relaxed/simple;
+	bh=zOSrsIqDgw6nsS4xTIr0H79y6qZFeeth/rCwIFXjYVE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=KfRs6KoAe+GUMkH4CoIkAotXUEOhUD/ZSeE0Tc+XT6J4uHUAaGTDpSt9DEoollRHYQfKIHekilDisZQyLdpagQljNbBcATmWvwBc3MFYABkPGGzZzU7e0tsFELzFyD4rF9yoKP+OnKlUIZo33DU3F8Mm9/fPaBL86lvmLXWBNZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=r51Ul7A7; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 465DwaYE022369;
+	Fri, 5 Jul 2024 14:05:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:subject:to:cc:references:from:in-reply-to
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	jswmdaZpgdwezGBmtgUlt8LtKnBHchYGQHSMWl7LaB0=; b=r51Ul7A7DR2WMDgw
+	F+YWbtgX2ZScu2gdxz9yGLB2ZSf8+y6ldMA4yVXg5Ebg1I0pAK1Zcv2sH+IIOduN
+	Qu3BILfuhnOrqpaHXK5zwDfUsOepZCKGPQ+GZ5XyVnpRGn7aT72pUi4F5iwNdeRz
+	ePa/ja/eGSV78c9+v8O1FROlnNraoFpgyHh8n3d78fv+SemopU8SnGLsOvoyyvR/
+	+CA5kbe7mrCpfLope2VnnW5akk9cnL27GbPoKw+HwIaBKIXXoP+u1ZTwRJiq6dCs
+	MoAou3gqUzj9Vk7Nt4+T9wTIrHl/UbtDNxIMvLqN0+bjYAZdAmcq5wMcowxJwnzi
+	YDlW5w==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 406j6b00jj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Jul 2024 14:05:44 +0000 (GMT)
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 465E5hhS001371;
+	Fri, 5 Jul 2024 14:05:43 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 406j6b00je-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Jul 2024 14:05:43 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 465CwfXH024085;
+	Fri, 5 Jul 2024 14:05:42 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 402ya3wdre-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 05 Jul 2024 14:05:42 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 465E5eXQ13566630
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 5 Jul 2024 14:05:42 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 38DAD5806A;
+	Fri,  5 Jul 2024 14:05:40 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E212058056;
+	Fri,  5 Jul 2024 14:05:38 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  5 Jul 2024 14:05:38 +0000 (GMT)
+Message-ID: <bffebaaa-4831-459f-939d-adf531e4c78b@linux.ibm.com>
+Date: Fri, 5 Jul 2024 10:05:38 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] tpm: Address !chip->auth in
+ tpm_buf_append_hmac_session*()
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: Thorsten Leemhuis <regressions@leemhuis.info>,
+        Linus Torvalds <torvalds@linux-foundation.org>, stable@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20240703182453.1580888-1-jarkko@kernel.org>
+ <20240703182453.1580888-4-jarkko@kernel.org>
+ <c90ce151-c6e5-40c6-8d3d-ccec5a97d10f@linux.ibm.com>
+ <D2GJSLLC0LSF.2RP57L3ALBW38@kernel.org>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <D2GJSLLC0LSF.2RP57L3ALBW38@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qclVOdl1N7Mzp5Z8e73-uIgvKncococf
+X-Proofpoint-ORIG-GUID: xQJxZA9UF3u8kVvQaJujMma6uFYtArgU
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 05 Jul 2024 14:22:00 +0300
-Message-Id: <D2HKE740MWCK.2O7S4KF56L929@kernel.org>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- "David Howells" <dhowells@redhat.com>, <keyrings@vger.kernel.org>,
- <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "James
- Bottomley" <James.Bottomley@HansenPartnership.com>, "Michael Ellerman"
- <mpe@ellerman.id.au>, "Stefan Berger" <stefanb@linux.ibm.com>
-Subject: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-6.10-rc7
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-X-Mailer: aerc 0.17.0
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-05_09,2024-07-05_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 adultscore=0 mlxlogscore=999 mlxscore=0
+ malwarescore=0 impostorscore=0 clxscore=1015 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407050099
 
-The following changes since commit 661e504db04c6b7278737ee3a9116738536b4ed4=
-:
+On 7/4/24 02:41, Jarkko Sakkinen wrote:
+> On Thu Jul 4, 2024 at 4:56 AM EEST, Stefan Berger wrote:
+>>
+>>
+>> On 7/3/24 14:24, Jarkko Sakkinen wrote:
+>>> Unless tpm_chip_bootstrap() was called by the driver, !chip->auth can
+>>
+>> Doesn't tpm_chip_register() need to be called by all drivers? This
+>> function then calls tpm_chip_bootstrap().
+>>
+>>> cause a null derefence in tpm_buf_hmac_session*().  Thus, address
+>>> !chip->auth in tpm_buf_hmac_session*() and remove the fallback
+>>> implementation for !TCG_TPM2_HMAC.
+>>>
+>>> Cc: stable@vger.kernel.org # v6.9+
+>>> Reported-by: Stefan Berger <stefanb@linux.ibm.com>
+>>> Closes: https://lore.kernel.org/linux-integrity/20240617193408.1234365-1-stefanb@linux.ibm.com/
+>>> Fixes: 1085b8276bb4 ("tpm: Add the rest of the session HMAC API")
+>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>
+>> I applied this series now but it doesn't solve the reported problem. The
+> 
+> It fixes the issues of which symptoms was shown by your transcript:
+> 
+> [    2.987131] tpm tpm0: tpm2_load_context: failed with a TPM error 0x01C4
+> [    2.987140] ima: Error Communicating to TPM chip, result: -14
+> 
+> Your original thread identified zero problems, so thus your claim here
+> is plain untrue.
 
-  Merge tag 'for-6.10-rc6-tag' of git://git.kernel.org/pub/scm/linux/kernel=
-/git/kdave/linux (2024-07-04 10:27:37 -0700)
+The original thread here
 
-are available in the Git repository at:
+https://lore.kernel.org/linux-integrity/656b319fc58683e399323b880722434467cf20f2.camel@kernel.org/T/#t
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags=
-/tpmdd-next-6.10-rc7
+identified the fact that tpm2_session_init() was missing for the ibmvtpm 
+driver. It is a non-zero problem for the respective platforms where this 
+driver is being used. The patched fixed the reported issue.
 
-for you to fetch changes up to 7ca110f2679b7d1f3ac1afc90e6ffbf0af3edf0d:
+> 
+> Before the null derefence is fixed all other patches related are
+> blocked, including ibm_tpmvtpm patches, because it would be insane
+> to accept them when there is known memory corruption bug, which
+> this patch set fixes.
+> 
+> What is so difficult to understand in this?
+> 
+>> error message is gone but the feature can still be enabled
+>> (CONFIG_TCG_TPM2_HMAC=y) but is unlikely actually doing what it is
+>> promising to do with this config option. So you either still have to
+>> apply my patch, James's patch, or your intended "depends on
+>> !TCG_IBMVTPM" patch.
+> 
+> Well this somewhat misleading imho...
+> 
+> None of the previous patches, including your, do nothing to fix the null
+> derefence bug and that is the *only* bug we care about ATM. With these
+> fixes drivers that do not call tpm_chip_bootstrap() will be fully
+> working still but without encryption.
+> 
 
-  tpm: Address !chip->auth in tpm_buf_append_hmac_session*() (2024-07-05 02=
-:12:27 +0300)
+Now that you fixed it in v4 are you going to accept my original patch 
+with the Fixes tag since we will (likely) have an enabled feature in 
+6.10 that is not actually working when the ibmvtpm driver is being used?
 
-----------------------------------------------------------------
-Hi
+Original patch:
 
-Contains the fixes for !chip->auth condition, preventing the breakage
-of:
+https://lore.kernel.org/linux-integrity/656b319fc58683e399323b880722434467cf20f2.camel@kernel.org/T/#t
 
-* tpm_ftpm_tee.c
-* tpm_i2c_nuvoton.c
-* tpm_ibmvtpm.c
-* tpm_tis_i2c_cr50.c
-* tpm_vtpm_proxy.c
+> There's five drivers which would require update for that:
+> 
+> drivers/char/tpm/tpm_ftpm_tee.c:        pvt_data->chip->flags |= TPM_CHIP_FLAG_TPM2;
+> drivers/char/tpm/tpm_i2c_nuvoton.c:             chip->flags |= TPM_CHIP_FLAG_TPM2;
+> drivers/char/tpm/tpm_ibmvtpm.c:         chip->flags |= TPM_CHIP_FLAG_TPM2;
+> drivers/char/tpm/tpm_tis_i2c_cr50.c:    chip->flags |= TPM_CHIP_FLAG_TPM2;
+> drivers/char/tpm/tpm_vtpm_proxy.c:              proxy_dev->chip->flags |= TPM_CHIP_FLAG_TPM2;
 
-All drivers will continue to work as they did in 6.9, except a single
-warning (dev_warn() not WARN()) is printed to klog only to inform that
-authenticated sessions are not enabled.
+I do no think that this is true and its only tpm_ibmvtpm.c that need the 
+call to tpm2_session_init. All drivers that use TPM_OPS_AUTO_STARTUP 
+will run tpm_chip_register -> tpm_chip_bootstrap -> tpm_auto_startup -> 
+tpm2_auto_startup -> tpm2_sessions_init
 
-BR, Jarkko
+$ grep AUTO_START *.c
+tpm_crb.c:      .flags = TPM_OPS_AUTO_STARTUP,
+tpm_ftpm_tee.c: .flags = TPM_OPS_AUTO_STARTUP,
+tpm_i2c_atmel.c:        .flags = TPM_OPS_AUTO_STARTUP,
+tpm_i2c_infineon.c:     .flags = TPM_OPS_AUTO_STARTUP,
+tpm_i2c_nuvoton.c:      .flags = TPM_OPS_AUTO_STARTUP,
+tpm-interface.c:        if (!(chip->ops->flags & TPM_OPS_AUTO_STARTUP))
+tpm_tis_core.c: .flags = TPM_OPS_AUTO_STARTUP,
+tpm_tis_i2c_cr50.c:     .flags = TPM_OPS_AUTO_STARTUP,
+tpm_vtpm_proxy.c:       .flags = TPM_OPS_AUTO_STARTUP,
 
-Link: https://lore.kernel.org/linux-integrity/20240704185313.224318-1-jarkk=
-o@kernel.org/
+All the above drivers are also calling tpm_chip_register.
 
-----------------------------------------------------------------
-Jarkko Sakkinen (3):
-      tpm: Address !chip->auth in tpm2_*_auth_session()
-      tpm: Address !chip->auth in tpm_buf_append_name()
-      tpm: Address !chip->auth in tpm_buf_append_hmac_session*()
+tpm_atmel.c:    rc = tpm_chip_register(chip);
+tpm-chip.c: * tpm_chip_register() - create a character device for the 
+TPM chip
+tpm-chip.c:int tpm_chip_register(struct tpm_chip *chip)
+tpm-chip.c:EXPORT_SYMBOL_GPL(tpm_chip_register);
+tpm-chip.c: * cleans up all the resources reserved by tpm_chip_register().
+tpm_crb.c:      rc = tpm_chip_register(chip);
+tpm_ftpm_tee.c: rc = tpm_chip_register(pvt_data->chip);
+tpm_ftpm_tee.c:         dev_err(dev, "%s: tpm_chip_register failed with 
+rc=%d\n",
+tpm_i2c_atmel.c:        return tpm_chip_register(chip);
+tpm_i2c_infineon.c:     return tpm_chip_register(chip);
+tpm_i2c_nuvoton.c:      return tpm_chip_register(chip);
+tpm_ibmvtpm.c:  return tpm_chip_register(chip);
+tpm_infineon.c:         rc = tpm_chip_register(chip);
+tpm_nsc.c:      rc = tpm_chip_register(chip);
+tpm_tis_core.c: rc = tpm_chip_register(chip);
+tpm_tis_i2c_cr50.c:     return tpm_chip_register(chip);
+tpm_vtpm_proxy.c:       rc = tpm_chip_register(proxy_dev->chip);
+xen-tpmfront.c: return tpm_chip_register(priv->chip)
 
- drivers/char/tpm/Makefile        |   2 +-
- drivers/char/tpm/tpm2-sessions.c | 419 ++++++++++++++++++++++-------------=
-----
- include/linux/tpm.h              |  81 +++-----
- 3 files changed, 269 insertions(+), 233 deletions(-)
+
+   Stefan
+
+> 
+> 
+> BR, Jarkko
 
