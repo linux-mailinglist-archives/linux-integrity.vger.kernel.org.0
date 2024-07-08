@@ -1,82 +1,106 @@
-Return-Path: <linux-integrity+bounces-3044-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3045-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7FA992A7CE
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2024 19:06:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D421692A83E
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2024 19:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D8001F219AB
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2024 17:06:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 746E51F21C39
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2024 17:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D4D148310;
-	Mon,  8 Jul 2024 17:05:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D492B149C6A;
+	Mon,  8 Jul 2024 17:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="iGsmbWMw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZwnjUpNx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DF1143734
-	for <linux-integrity@vger.kernel.org>; Mon,  8 Jul 2024 17:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244B4148FE0
+	for <linux-integrity@vger.kernel.org>; Mon,  8 Jul 2024 17:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720458357; cv=none; b=DBgPiMu6HYasrTQB71g874srQfEqVMPSPRtS6+gI7uzkHR9KEUTDF3DOfYp3P8ffWuUpXYhQeUWCj3HcuQDULaSoIjSVuf/UP0skMpMEZJoRrpwkGvQlM61Q2MmO8MjYhxWPgNnOmlyToLecvkzsgKgitxiBufjGj3TCwRmmmks=
+	t=1720460016; cv=none; b=NYy5Bej65NhzrI2ePsVY486TyNE3hxfQTUyKnE0IA6e1MHmfRbWJTL1mqKEYMHYXbM5Gq2Xk9YfyZUCqtqP9pNIPSo7cynYy9xzVtRSNDqHe9wcT57SxsEnINUfnDtlZbipLf0UNAJHh9E9HC6Qq11Q8hQVNFt2zkycQM8HXn6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720458357; c=relaxed/simple;
-	bh=uxsJY74mGnl6Pfbb3/HWHQAP4SJETbEUSAhS9KG71Rc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cc1R7MkcucUusQc8RLCK7aZh+EjYQJKQgGdmpONWApz+29sMJnsRtln2OK3/ZySdJc7q38cnGeCdnm/ddMAzmxVPUk/p9JwpWd6eKTrz6g311rsEyfL5/ZJoSLm8C3pvcrVaUQMAMXqKlA2/HlF8LGn0WbhufLafE62u6hRqV8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=iGsmbWMw; arc=none smtp.client-ip=45.157.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WHr9Q2JFsz77b;
-	Mon,  8 Jul 2024 19:05:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1720458346;
-	bh=rqrFtsUKnrmCy2BFEII07R6XIPCDv3T85BZjHwdXhkA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iGsmbWMwtJflXK6ehzd9F4+q9ko4rI+RsU0vRG2KJenxOv9O+37g3x9xV5rgAxw8Z
-	 x1SZVivMlS1QjsFvkpzoPQZqGVHx90Rr3itkH76Jq4XlBOLzK1xxTqHrU/DZq8+AiM
-	 9gy+wZVKNeUrfCRAdOIT+S6aPHFpqIfzk5yYleOI=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4WHr9L0CjHz70k;
-	Mon,  8 Jul 2024 19:05:41 +0200 (CEST)
-Date: Mon, 8 Jul 2024 19:05:39 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+	s=arc-20240116; t=1720460016; c=relaxed/simple;
+	bh=SGGTfSOeRUwxz6VC/qRrj5DKzqlNaTgG40wQSssXK7c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=REc6c5RCUE07eIE8H6dHTohyxrPIpDK+G0zvr+4YLbxPjOkxuvdtBSdWjnH+OOp93BZhm2gxjC0IFZDhBX3U1HUv3jHBplLLbSyBtNSg/semk5aGwMgvgmpN1uRWTQo8/ybdpFteZy/edB3LFLOaueL0RUt7OQqxZE1fk7j0ot0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZwnjUpNx; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720460014;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NzysFrdc8w10bKEbWw8ppHuT/B9oi64/ANDYqxDHLjs=;
+	b=ZwnjUpNxgWpCCIvN1GjIP/U+G7+xRK2g8jNqh7yj8N3tqpl4fqnydUl4AsDFcYUrRyrAON
+	dXsWlBdcp8i4BU420aXoP03FJLbUogNL8YHSZ8KP7Zcvfywuuy1mX6gRO6rw3Y3Dfal4Oi
+	wgOBm8nhVVx2lXmWsWuFzhSo15Lfv/4=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-401-i2EE8bhrPTu-d51vmcgTDg-1; Mon,
+ 08 Jul 2024 13:33:32 -0400
+X-MC-Unique: i2EE8bhrPTu-d51vmcgTDg-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9014B1956046;
+	Mon,  8 Jul 2024 17:33:24 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.45.224.113])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2CE9B19560AE;
+	Mon,  8 Jul 2024 17:33:05 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
 To: Jeff Xu <jeffxu@google.com>
-Cc: Florian Weimer <fweimer@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
-	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, James Morris <jamorris@linux.microsoft.com>, 
-	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
-	Luca Boccassi <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Matthew Garrett <mjg59@srcf.ucam.org>, Matthew Wilcox <willy@infradead.org>, 
-	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, Scott Shell <scottsh@microsoft.com>, 
-	Shuah Khan <shuah@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
-	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, Vincent Strubel <vincent.strubel@ssi.gouv.fr>, 
-	Xiaoming Ni <nixiaoming@huawei.com>, Yin Fengwei <fengwei.yin@intel.com>, 
-	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
+Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,  Al Viro
+ <viro@zeniv.linux.org.uk>,
+  Christian Brauner <brauner@kernel.org>,  Kees Cook
+ <keescook@chromium.org>,  Linus Torvalds <torvalds@linux-foundation.org>,
+  Paul Moore <paul@paul-moore.com>,  "Theodore Ts'o" <tytso@mit.edu>,
+  Alejandro Colomar <alx.manpages@gmail.com>,  Aleksa Sarai
+ <cyphar@cyphar.com>,  Andrew Morton <akpm@linux-foundation.org>,  Andy
+ Lutomirski <luto@kernel.org>,  Arnd Bergmann <arnd@arndb.de>,  Casey
+ Schaufler <casey@schaufler-ca.com>,  Christian Heimes
+ <christian@python.org>,  Dmitry Vyukov <dvyukov@google.com>,  Eric Biggers
+ <ebiggers@kernel.org>,  Eric Chiang <ericchiang@google.com>,  Fan Wu
+ <wufan@linux.microsoft.com>,  Geert Uytterhoeven <geert@linux-m68k.org>,
+  James Morris <jamorris@linux.microsoft.com>,  Jan Kara <jack@suse.cz>,
+  Jann Horn <jannh@google.com>,  Jonathan Corbet <corbet@lwn.net>,  Jordan
+ R Abrahams <ajordanr@google.com>,  Lakshmi Ramasubramanian
+ <nramas@linux.microsoft.com>,  Luca Boccassi <bluca@debian.org>,  Luis
+ Chamberlain <mcgrof@kernel.org>,  "Madhavan T . Venkataraman"
+ <madvenka@linux.microsoft.com>,  Matt Bobrowski
+ <mattbobrowski@google.com>,  Matthew Garrett <mjg59@srcf.ucam.org>,
+  Matthew Wilcox <willy@infradead.org>,  Miklos Szeredi
+ <mszeredi@redhat.com>,  Mimi Zohar <zohar@linux.ibm.com>,  Nicolas
+ Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,  Scott Shell
+ <scottsh@microsoft.com>,  Shuah Khan <shuah@kernel.org>,  Stephen Rothwell
+ <sfr@canb.auug.org.au>,  Steve Dower <steve.dower@python.org>,  Steve
+ Grubb <sgrubb@redhat.com>,  Thibaut Sautereau
+ <thibaut.sautereau@ssi.gouv.fr>,  Vincent Strubel
+ <vincent.strubel@ssi.gouv.fr>,  Xiaoming Ni <nixiaoming@huawei.com>,  Yin
+ Fengwei <fengwei.yin@intel.com>,  kernel-hardening@lists.openwall.com,
+  linux-api@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
+  linux-integrity@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-security-module@vger.kernel.org
 Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to execveat(2)
-Message-ID: <20240708.ujeeDahkee4e@digikod.net>
+In-Reply-To: <CALmYWFvkUnevm=npBeaZVkK_PXm=A8MjgxFXkASnERxoMyhYBg@mail.gmail.com>
+	(Jeff Xu's message of "Mon, 8 Jul 2024 09:40:45 -0700")
 References: <20240704190137.696169-1-mic@digikod.net>
- <20240704190137.696169-2-mic@digikod.net>
- <87bk3bvhr1.fsf@oldenburg.str.redhat.com>
- <CALmYWFu_JFyuwYhDtEDWxEob8JHFSoyx_SCcsRVKqSYyyw30Rg@mail.gmail.com>
- <87ed83etpk.fsf@oldenburg.str.redhat.com>
- <CALmYWFvkUnevm=npBeaZVkK_PXm=A8MjgxFXkASnERxoMyhYBg@mail.gmail.com>
+	<20240704190137.696169-2-mic@digikod.net>
+	<87bk3bvhr1.fsf@oldenburg.str.redhat.com>
+	<CALmYWFu_JFyuwYhDtEDWxEob8JHFSoyx_SCcsRVKqSYyyw30Rg@mail.gmail.com>
+	<87ed83etpk.fsf@oldenburg.str.redhat.com>
+	<CALmYWFvkUnevm=npBeaZVkK_PXm=A8MjgxFXkASnERxoMyhYBg@mail.gmail.com>
+Date: Mon, 08 Jul 2024 19:33:03 +0200
+Message-ID: <87r0c3dc1c.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -84,54 +108,30 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALmYWFvkUnevm=npBeaZVkK_PXm=A8MjgxFXkASnERxoMyhYBg@mail.gmail.com>
-X-Infomaniak-Routing: alpha
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, Jul 08, 2024 at 09:40:45AM -0700, Jeff Xu wrote:
-> On Mon, Jul 8, 2024 at 9:26 AM Florian Weimer <fweimer@redhat.com> wrote:
-> >
-> > * Jeff Xu:
-> >
-> > > Will dynamic linkers use the execveat(AT_CHECK) to check shared
-> > > libraries too ?  or just the main executable itself.
-> >
-> > I expect that dynamic linkers will have to do this for everything they
-> > map.
+* Jeff Xu:
 
-Correct, that would enable to safely handle LD_PRELOAD for instance.
-
+> On Mon, Jul 8, 2024 at 9:26=E2=80=AFAM Florian Weimer <fweimer@redhat.com=
+> wrote:
+>>
+>> * Jeff Xu:
+>>
+>> > Will dynamic linkers use the execveat(AT_CHECK) to check shared
+>> > libraries too ?  or just the main executable itself.
+>>
+>> I expect that dynamic linkers will have to do this for everything they
+>> map.
 > Then all the objects (.so, .sh, etc.) will go through  the check from
 > execveat's main  to security_bprm_creds_for_exec(), some of them might
 > be specific for the main executable ?
-> e.g. ChromeOS uses security_bprm_creds_for_exec to block executable
-> memfd [1], applying this means automatically extending the block to
-> the .so object.
 
-That's a good example of how this AT_CHECK check makes sense.
+If we want to avoid that, we could have an agreed-upon error code which
+the LSM can signal that it'll never fail AT_CHECK checks, so we only
+have to perform the extra system call once.
 
-Landlock will probably get a similar (optional) restriction too:
-https://github.com/landlock-lsm/linux/issues/37
+Thanks,
+Florian
 
-> 
-> I'm not sure if other LSMs need to be updated ?  e.g.  will  SELINUX
-> check for .so with its process transaction policy ?
-
-LSM should not need to be updated with this patch series.  However,
-systems/components/containers enabling this new check should make sure
-it works with their current policy.
-
-> 
-> [1] https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3834992
-> 
-> -Jeff
-> 
-> 
-> > Usually, that does not include the maim program, but this can
-> > happen with explicit loader invocations (“ld.so /bin/true”).
-> >
-> > Thanks,
-> > Florian
-> >
 
