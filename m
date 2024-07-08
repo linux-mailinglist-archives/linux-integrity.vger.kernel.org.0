@@ -1,83 +1,136 @@
-Return-Path: <linux-integrity+bounces-3037-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3038-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E1A0929764
-	for <lists+linux-integrity@lfdr.de>; Sun,  7 Jul 2024 12:15:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F14929E8D
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2024 10:57:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA9582818DD
-	for <lists+linux-integrity@lfdr.de>; Sun,  7 Jul 2024 10:15:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B7071F21A85
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jul 2024 08:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27A7D17BDC;
-	Sun,  7 Jul 2024 10:14:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CFA750276;
+	Mon,  8 Jul 2024 08:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CdOQbuts"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="0MfGmOLJ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE72912B95;
-	Sun,  7 Jul 2024 10:14:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CF2481B4
+	for <linux-integrity@vger.kernel.org>; Mon,  8 Jul 2024 08:57:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720347298; cv=none; b=nfjFZSCKrt0FSOf5u4b51K4CaBTlqpXnbeQtDksKX0XjCRmGq43X4iCJBgjyvsURyWTjuKtvvSvMmEk0+ng4tNpoDrVCznsEMMaQV4d5WRVuDILs/GroKbaxkro5cGhDYfeGHraix2aUc6Jlw0DUdQYHoOZa4BRR1R0WnBHpVms=
+	t=1720429040; cv=none; b=FQCYAIzXCeT3IwwUhduWjKzlm5NQhDndVQfksMFvrsYZyLWMbYX7c6uRj66J2scPNkdnWDBp5BBl91zwVQZijFvTLwzlfvFowSHrRk9FZEgd/VGPPQkTD8KESAaGQmadQCu3Ev1MxuoBRQI1ZZT7hjGfcxrfolnKKxRp5UuwjjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720347298; c=relaxed/simple;
-	bh=wOI/PV2B2NCFRujee1gfOuB52t1+xSVFJndNRK6TyJw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=sTNDE87Qsh0oyb05Tq2q0IRIFimEgtNACUG2xtA/oJXaKEfOY9lfUGcw6OMzddlG2CCJuMG7roMFxPTozp12N1AcmObf7PkjIXSEJLbhwYZBYYlhnUjW8aluNNoHBYRSTgCAkhX7lZkUei4Zmlzd6MGY5I1ub3OkdRYuCSLzdf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CdOQbuts; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25B07C3277B;
-	Sun,  7 Jul 2024 10:14:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720347297;
-	bh=wOI/PV2B2NCFRujee1gfOuB52t1+xSVFJndNRK6TyJw=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=CdOQbutsU7XjAQzNHH1C81tJcATaFspOHZLYVEHk/xMb63jPAXhrLQ6atHmZNZ9zs
-	 R8JJS6kjs8UQfUo8gDkjqDqOFqYOXHAg79hCWXio1Z5+r5328ZYbnv2WmuWL411rdn
-	 KyeU8OD14A/YbSWaGaEHRv8NY4bv1S4+DhUUzxKJH94wac2otGhaa/pe0ll/JUlRSZ
-	 5xpngbfUZuUj+KUgaT2HcZj/EdCXhwiyeoNqGqC8tEw60R6YjK++yJO5sZKTBPgLsm
-	 hSdfJjCY/Ft74vXVptWQNYWroVBwXltl/sCZ7sgSLMvmF8yJaYz1Ssw8Tu7IeC1q/D
-	 4TgiR4PNo8w9g==
+	s=arc-20240116; t=1720429040; c=relaxed/simple;
+	bh=Cb1AF0mLzMpKLDzenlvnWCSwmMf5JIIi0U9107W5+ro=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UAk31DnJzBvjmUQjMC5yhwpmuwlQg64nqJ3Qw29xNkhYU5rX29cgJmS8pc9w56DZ6ENv2KpuMsp2AXGY5/DUPpCiOCxz8fwxGzh1dIbzNOWHUH1kdJKwPosw1r6vmeVkN4CaNtTcrVNeo9VjK/hrKs2kR0dmwF/rrsBTVdIxZcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=0MfGmOLJ; arc=none smtp.client-ip=84.16.66.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WHdKc1k4lzkyc;
+	Mon,  8 Jul 2024 10:57:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1720429028;
+	bh=7bLt7WxO3ulEYXhk1rhXT6KKMcWMaVDQidRXNgAZAWs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=0MfGmOLJXnmucGesfHgTcGIrV1AuYeLm7OPKPfCmEW0e1L+aQfqE3m5322nbHkmbp
+	 o/g25CO5nyDvvCCX0mNrl+9Vxi2omD86s/oTmd2DYsR4YvIMPmAftfijfVaZPvAxYt
+	 1uPPfRCpd1M7aQnk90+oYq6XmUBltSw7ahYrQLDs=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4WHdKV00tCzWdS;
+	Mon,  8 Jul 2024 10:57:01 +0200 (CEST)
+Date: Mon, 8 Jul 2024 10:56:59 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Florian Weimer <fweimer@redhat.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
+	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, James Morris <jamorris@linux.microsoft.com>, 
+	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, 
+	Matthew Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
+	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Dower <steve.dower@python.org>, 
+	Steve Grubb <sgrubb@redhat.com>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
+	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
+	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to execveat(2)
+Message-ID: <20240708.zooj9Miaties@digikod.net>
+References: <20240704190137.696169-1-mic@digikod.net>
+ <20240704190137.696169-2-mic@digikod.net>
+ <87bk3bvhr1.fsf@oldenburg.str.redhat.com>
+ <20240706.poo9ahd3La9b@digikod.net>
+ <871q46bkoz.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 07 Jul 2024 13:14:53 +0300
-Message-Id: <D2J87W3IAN9S.2IDDGG803SS58@kernel.org>
-Cc: "James Bottomley" <James.Bottomley@HansenPartnership.com>, "Mimi Zohar"
- <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul Moore"
- <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, <keyrings@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: validate object type in tpm2_handle_mso()
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240707010916.78918-1-jarkko@kernel.org>
-In-Reply-To: <20240707010916.78918-1-jarkko@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <871q46bkoz.fsf@oldenburg.str.redhat.com>
+X-Infomaniak-Routing: alpha
 
-On Sun Jul 7, 2024 at 4:09 AM EEST, Jarkko Sakkinen wrote:
-> tpm2_handle_mso() lacks validation for the object type. Validate that
-> value is one of the allowed values in order to detect errors.
->
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
+On Sat, Jul 06, 2024 at 05:32:12PM +0200, Florian Weimer wrote:
+> * Mickaël Salaün:
+> 
+> > On Fri, Jul 05, 2024 at 08:03:14PM +0200, Florian Weimer wrote:
+> >> * Mickaël Salaün:
+> >> 
+> >> > Add a new AT_CHECK flag to execveat(2) to check if a file would be
+> >> > allowed for execution.  The main use case is for script interpreters and
+> >> > dynamic linkers to check execution permission according to the kernel's
+> >> > security policy. Another use case is to add context to access logs e.g.,
+> >> > which script (instead of interpreter) accessed a file.  As any
+> >> > executable code, scripts could also use this check [1].
+> >> 
+> >> Some distributions no longer set executable bits on most shared objects,
+> >> which I assume would interfere with AT_CHECK probing for shared objects.
+> >
+> > A file without the execute permission is not considered as executable by
+> > the kernel.  The AT_CHECK flag doesn't change this semantic.  Please
+> > note that this is just a check, not a restriction.  See the next patch
+> > for the optional policy enforcement.
+> >
+> > Anyway, we need to define the policy, and for Linux this is done with
+> > the file permission bits.  So for systems willing to have a consistent
+> > execution policy, we need to rely on the same bits.
+> 
+> Yes, that makes complete sense.  I just wanted to point out the odd
+> interaction with the old binutils bug and the (sadly still current)
+> kernel bug.
+> 
+> >> Removing the executable bit is attractive because of a combination of
+> >> two bugs: a binutils wart which until recently always set the entry
+> >> point address in the ELF header to zero, and the kernel not checking for
+> >> a zero entry point (maybe in combination with an absent program
+> >> interpreter) and failing the execve with ELIBEXEC, instead of doing the
+> >> execve and then faulting at virtual address zero.  Removing the
+> >> executable bit is currently the only way to avoid these confusing
+> >> crashes, so I understand the temptation.
+> >
+> > Interesting.  Can you please point to the bug report and the fix?  I
+> > don't see any ELIBEXEC in the kernel.
+> 
+> The kernel hasn't been fixed yet.  I do think this should be fixed, so
+> that distributions can bring back the executable bit.
 
-Just something I spotted while fixing the other bug.
-
-If an API that claims to return enum, the results would
-better *only* be values from that enum.
-
-Also this API is using alien acronym "MSO" for the enum
-fields while the spec uses "HT".
-
-BR, Jarkko
-
+Can you please point to the mailing list discussion or the bug report?
 
