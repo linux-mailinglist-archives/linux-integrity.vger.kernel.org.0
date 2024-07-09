@@ -1,117 +1,145 @@
-Return-Path: <linux-integrity+bounces-3058-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3059-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72D8192AFC0
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jul 2024 08:06:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2386792B38D
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jul 2024 11:18:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2838B1F22228
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jul 2024 06:06:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CA7D280EE8
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Jul 2024 09:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67EA74501A;
-	Tue,  9 Jul 2024 06:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B57155300;
+	Tue,  9 Jul 2024 09:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ov2rCa1w"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ZTiHpEnf"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
+Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA7142052;
-	Tue,  9 Jul 2024 06:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BD4154C17
+	for <linux-integrity@vger.kernel.org>; Tue,  9 Jul 2024 09:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720505203; cv=none; b=Qkty4flDy0ERD1+le7vn8pHj+9Xehqd5nPHDOa5TGIoS7JOYF3RpH8vyDi1MQkrLOtko6VUAzLrfN1JXEWavzwVm8G5nA9vDBDnNGFh0n9qes8XxmE3DhggeiHW9byiIDM17iLkSsef2og2DThz9xSfBp68akJgtXqFiDBaSJ5E=
+	t=1720516707; cv=none; b=UKlW6nYtFTSKefjZCaGprD3zgxuhkVsNkTyR3NyTSJJX0pcEdfBOnVE0q8UuYrNtMA0MybgDljVZxQTsPwf72C0uIXM5/ZapDRIAwqx+w6GQt9QziTvztLkYGARcJfyymyt1FNPqXL6NQeJpYt/sJBonaB+UhLLBhYGsgfs3s68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720505203; c=relaxed/simple;
-	bh=AB8GU4lJy6m1ESYPkgpTF64f4Nq208/HyuonUMJToFM=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=m8CfJ9TFLHTzkx/6HVMDaCFGkEAK+SZCp/QnEjifEsANNfYi20/UMfD3LN70AeFvEbrEAGZKBkbIjr14Qu9CkuhENiWTYGyMQnzAB5Joao+/xIKGaJnUEs9mY2TzSkG8QKWVOP7nnN4K9KLX+EWielwGo3POzznOS7gOwGhX6nU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ov2rCa1w; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1720505089; x=1721109889; i=markus.elfring@web.de;
-	bh=vocCb0s2+QsTYPRKuzeCkB5145JJcttII2QUDPFbX2k=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=ov2rCa1whGMoNF60ljpXxxNb2tEZLO50JOybCRmWoepN7R/L5eZJUCpaoSelbcUT
-	 KEF0Q05v7eXFfWR16E1whVj9llB98LkgXBBFcuETAURj7LYzyC1HVFOUa9SMQOyNO
-	 m9Fx8BLJkRsins6yiTMIlyfqbDHipiTRJOPrENi5k4ZjhMIm6byoecIZmBUsgPXNa
-	 FW8SroTpKpEjrBS/icy+NzVLtUaZzBQiKbnY0qmE0zQEkbDGAuRFXbDGOTyrWAIpr
-	 mB1idujN75Nc3BeDNqHc8xzt0Y7FBDnnMC2h17Lv1pF8mFnTiAI1KyxQbScJuDnjW
-	 jbU6+TE2haihGnVTlA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.91.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MActe-1sXhof0FrM-000PbJ; Tue, 09
- Jul 2024 08:04:49 +0200
-Message-ID: <fc4323b7-c7f9-47c5-a7eb-4034d2e18bcf@web.de>
-Date: Tue, 9 Jul 2024 08:04:26 +0200
+	s=arc-20240116; t=1720516707; c=relaxed/simple;
+	bh=eVK1yU/K1gUCeypMeHvP2ycH4mth7QtdS8bCm7eN+/0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FCcfvIUHJScrmwYyFZ45vgAbpA0Ll13k2ZPU1o37KpVdL0Zo43FKscX9nx9w0ttmYMzO0YMsFTgbfLs632puIUrd8KA0eBReycU98tOylqdsgCAWJDQ+TkmzgyfDV3rfdN+6Zm/7kLFWQGzm++nwk3NLODzN5ZS+XLfuoChj/fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ZTiHpEnf; arc=none smtp.client-ip=84.16.66.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WJFlW6pv4z5T6;
+	Tue,  9 Jul 2024 11:18:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1720516695;
+	bh=v/JFEHCX3gZ0MVpHje3ikJ9/D0FTAcZwjQbECtZLdZE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZTiHpEnfNR3mlatCxWux7y7Eu0qGDnEqSh+8W8s09JC/3VLLlbrWZwmN1jeWX5Vho
+	 ndmFxLkDKg4N0dPsk7JixdJH7Olf3q4BBy/rLZ/oO3L8jaUA2xpIdzwOIgKnGlTAP3
+	 N7+HAeqyif99g6G9CBVvsU6dg8SkNZKc9yNMrgvw=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WJFlH1ZZFzVjC;
+	Tue,  9 Jul 2024 11:18:03 +0200 (CEST)
+Date: Tue, 9 Jul 2024 11:18:00 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Jeff Xu <jeffxu@google.com>
+Cc: Florian Weimer <fweimer@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
+	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, James Morris <jamorris@linux.microsoft.com>, 
+	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Luca Boccassi <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Matthew Garrett <mjg59@srcf.ucam.org>, Matthew Wilcox <willy@infradead.org>, 
+	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, Scott Shell <scottsh@microsoft.com>, 
+	Shuah Khan <shuah@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
+	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, Vincent Strubel <vincent.strubel@ssi.gouv.fr>, 
+	Xiaoming Ni <nixiaoming@huawei.com>, Yin Fengwei <fengwei.yin@intel.com>, 
+	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to execveat(2)
+Message-ID: <20240709.gae4cu4Aiv6s@digikod.net>
+References: <20240704190137.696169-1-mic@digikod.net>
+ <20240704190137.696169-2-mic@digikod.net>
+ <87bk3bvhr1.fsf@oldenburg.str.redhat.com>
+ <CALmYWFu_JFyuwYhDtEDWxEob8JHFSoyx_SCcsRVKqSYyyw30Rg@mail.gmail.com>
+ <87ed83etpk.fsf@oldenburg.str.redhat.com>
+ <CALmYWFvkUnevm=npBeaZVkK_PXm=A8MjgxFXkASnERxoMyhYBg@mail.gmail.com>
+ <87r0c3dc1c.fsf@oldenburg.str.redhat.com>
+ <CALmYWFvA7VPz06Tg8E-R_Jqn2cxMiWPPC6Vhy+vgqnofT0GELg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Hao Ge <gehao@kylinos.cn>, linux-integrity@vger.kernel.org,
- Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- =?UTF-8?Q?Peter_H=C3=BCwe?= <peterhuewe@gmx.de>
-Cc: Hao Ge <hao.ge@linux.dev>, LKML <linux-kernel@vger.kernel.org>
-References: <20240709023337.102509-1-hao.ge@linux.dev>
-Subject: Re: [PATCH] tpm: Move dereference after NULL check in
- tpm_buf_check_hmac_response
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240709023337.102509-1-hao.ge@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rYmMZ52qGI3wa0UJ7FqpRq1mkvewDOSlp01g4rQQbvxNCvTkeiw
- XhK26BhSOihuyvCAR5t4gjJc1HpeqjUhgHQj+J0yLpd7TLjx/Cx1TGdn5kBBWVMDGN9h2Aa
- q1wsGLdAj5eZu9LVNbIDFkgCiauwDlkYz6SeYkNwK0TYWpSjldZsfJsVdFxOOFDys7nMoN3
- YFkbfXfLwKIOgeKhtWY3Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:sPcVbkyG1cM=;PlIWtWZXFZovBqgQL5g23Z3/QlT
- DJsgzHBYGrsuel0Rwu8wgwqLK6Xz5CeXj6orRCO4w9lqrEVY2myMEi7iLHpSm6YNLsgVUY5b8
- lYBrL9xn0y8pRkOz/cIeAOfzBuS6E/NqjC2Qzn6C6ikkkdy9S0fL/hpXEXZAeLEuVrDFQO8kt
- bSgL7ubk/tg/sVX3EDf0ZlL5AXvnrPeXyVZ1apAmlNY7QPcuB2cunQ4CLdOy3FUFPLsuMX+nQ
- 3ufboUv50wl/vQcgHxLNDxdySQpTaSxVcodoVatWZJkxMe920zhgwV2/MF8bFqffSfe/kBgh4
- af2MGO0YHnJFXgx+nV+eKQi6esYU4QO5gqn6qluQ4n53sWq7tAX1JJlQlp+CoHDacp2PjeUAS
- AtpZ5KbAL9MOH7p9uEmx8/KYiqBIbJg49GsUhPBdB8Ra1DHmA0RlyKN/opjBXtCoe7b2Y+Y+A
- UIaBpYXFCS2En3xKRAzcJlQZjrNEmn6aGieyJ89RLuDenLLvD3hbZkkA6lCv33vj6T3dw8lkL
- HGh7fv1gEKkyy0BylkSewGbng8weN8M7lKC00y5rZkOo22ldXWPdPNj3Sk+Qr9E2RjQlu67w5
- 90jSyljgQblAny0GD5prEuNJzUfbso8QYS79VqEbAjQhF4ulUtyOVTvxq8f754Kf39c39P1BT
- KvmtUh3CQ5Sw2qrFpL51wA9LTwNEOoA4IVi0FWgWWws+DYbib1Pu0zVvFMJcFlOA78ULCAjwW
- uIcw6b1yAoxcl/GpNSqxEbLQlpzkXqcD11r4Unkt4EXmwPSsaGOoYjOOUwbhMuGSR8y3lnFGa
- NBdHnR4N3/km8GiiX7r3pqHGpUXDJ+SHWwYcWx7ZzuFeM=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALmYWFvA7VPz06Tg8E-R_Jqn2cxMiWPPC6Vhy+vgqnofT0GELg@mail.gmail.com>
+X-Infomaniak-Routing: alpha
 
-> We shouldn't dereference "auth" until after we have checked that it is
-> non-NULL.
+On Mon, Jul 08, 2024 at 10:52:36AM -0700, Jeff Xu wrote:
+> On Mon, Jul 8, 2024 at 10:33 AM Florian Weimer <fweimer@redhat.com> wrote:
+> >
+> > * Jeff Xu:
+> >
+> > > On Mon, Jul 8, 2024 at 9:26 AM Florian Weimer <fweimer@redhat.com> wrote:
+> > >>
+> > >> * Jeff Xu:
+> > >>
+> > >> > Will dynamic linkers use the execveat(AT_CHECK) to check shared
+> > >> > libraries too ?  or just the main executable itself.
+> > >>
+> > >> I expect that dynamic linkers will have to do this for everything they
+> > >> map.
+> > > Then all the objects (.so, .sh, etc.) will go through  the check from
+> > > execveat's main  to security_bprm_creds_for_exec(), some of them might
+> > > be specific for the main executable ?
 
-How do you think about to improve such a change description with imperativ=
-e wordings?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.10-rc7#n94
+Yes, we should check every executable code (including seccomp filters)
+to get a consistent policy.
 
+What do you mean by "specific for the main executable"?
 
-> Fixes: 7ca110f2679b ("tpm: Address !chip->auth in tpm_buf_append_hmac_se=
-ssion*()")
+> >
+> > If we want to avoid that, we could have an agreed-upon error code which
+> > the LSM can signal that it'll never fail AT_CHECK checks, so we only
+> > have to perform the extra system call once.
 
-1. Would the commit 1085b8276bb4239daa7008f0dcd5c973e4bd690f ("tpm:
-   Add the rest of the session HMAC API") be more appropriate as a referen=
-ce?
+I'm not sure to follow.  Either we check executable code or we don't,
+but it doesn't make sense to only check some parts (except for migration
+of user space code in a system, which is one purpose of the securebits
+added with the next patch).
 
-2. Would you like to add a =E2=80=9Cstable tag=E2=80=9D accordingly?
-   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/process/stable-kernel-rules.rst?h=3Dv6.10-rc7#n34
+The idea with AT_CHECK is to unconditionnaly check executable right the
+same way it is checked when a file is executed.  User space can decide
+to check that or not according to its policy (i.e. securebits).
 
-3. How do you think about to append parentheses to a function name
-   in the summary phrase?
+> >
+> Right, something like that.
+> I would prefer not having AT_CHECK specific code in LSM code as an
+> initial goal, if that works, great.
 
+LSMs should not need to change anything, but they are free to implement
+new access right according to AT_CHECK.
 
-Regards,
-Markus
+> 
+> -Jeff
+> 
+> > Thanks,
+> > Florian
+> >
 
