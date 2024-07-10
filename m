@@ -1,160 +1,171 @@
-Return-Path: <linux-integrity+bounces-3069-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3070-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 036AB92CECC
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jul 2024 12:05:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE05F92D594
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jul 2024 17:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 252661C21477
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jul 2024 10:05:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF8161C2125B
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Jul 2024 15:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7598E7E76F;
-	Wed, 10 Jul 2024 10:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8601B194135;
+	Wed, 10 Jul 2024 15:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="DNVbx2ud"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hAVRkr+g"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DFB8288F;
-	Wed, 10 Jul 2024 10:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EB517B05F
+	for <linux-integrity@vger.kernel.org>; Wed, 10 Jul 2024 15:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720605915; cv=none; b=QZb35relbCYmMAJo6P3PFbMzWhTWX3Ip3mdJWkyqzvLdD6AyhNgvQ0Ub3tPTX6JQqTFlo5uKpjBsdgrWjIye7kF5TVm86SdeqTImDlnde5qqfdhxiVllpNsStIc10mSpRoAa9cX5I/ZD+y4Jqzm/QsvlW/iPHfV297Yq8nKz1Vo=
+	t=1720627189; cv=none; b=aBwacksEBkuJm4UeqHnU1lzbLB1DFXuI5AkYnJmeM8oO1MAuVP1vgfRkCMTIzPJZIo0W1aGF79KGkcxI7nSj+2aq70jUdDdesL4cGfNFU2IhJA5oiRaTRLwxtm+e6QF5i7C1AZzNc4YHfn9CgGSaLPUZPquHSRfSWoT+7e1uFE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720605915; c=relaxed/simple;
-	bh=6XjeGM1uoLScdRWcAjqr9FYRJeKY3sUp1jjgMn0Q/rw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MUdStzwzI4H9K1OAnwHKylLzlTS8JFTqGNcgiYCKu/u3cQpVuuiOwlxlEo6Ebitc802mc8NbooWAqZr65oxny7NpWr6C5qJpOJWvWefkC0XzDHvRdBQrx1fsKdrcN9ixKXcJH+8WgvNP4kO8uXWq7X0VR/+jkH77EVDoacQmlds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=DNVbx2ud; arc=none smtp.client-ip=45.157.188.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WJtlB1RbmzSKT;
-	Wed, 10 Jul 2024 12:05:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1720605910;
-	bh=58eL5zKFVrJFUT+TpbxjO2RgasvOa3v7FdFqIaHbAZ8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DNVbx2udibxVu+14OKvyFsM2tte1G7+GSl8Z+NOcHcVVvvBg1ydxpZsw6h/1RkTaN
-	 ejzvZofhsiG9dNul4ThaAxY28YALObLrSzblZ8Zjk8uwQdQKc/EuaduylSGnGw3pZ7
-	 LEta7bCt/CqWCCKmMGDr9F+uKDtZtEAT6JChcVeQ=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WJtl848ghzL4p;
-	Wed, 10 Jul 2024 12:05:08 +0200 (CEST)
-Date: Wed, 10 Jul 2024 12:05:05 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Florian Weimer <fweimer@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
-	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, James Morris <jamorris@linux.microsoft.com>, 
-	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, 
-	Matthew Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
-	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Dower <steve.dower@python.org>, 
-	Steve Grubb <sgrubb@redhat.com>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
-	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
-	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>, linux-mm@kvack.org
-Subject: Re: [PATCH] binfmt_elf: Fail execution of shared objects with
- ELIBEXEC (was: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to
- execveat(2))
-Message-ID: <20240710.Lu2thiemeil2@digikod.net>
-References: <20240704190137.696169-1-mic@digikod.net>
- <20240704190137.696169-2-mic@digikod.net>
- <87bk3bvhr1.fsf@oldenburg.str.redhat.com>
- <20240706.poo9ahd3La9b@digikod.net>
- <871q46bkoz.fsf@oldenburg.str.redhat.com>
- <20240708.zooj9Miaties@digikod.net>
- <878qybet6t.fsf_-_@oldenburg.str.redhat.com>
+	s=arc-20240116; t=1720627189; c=relaxed/simple;
+	bh=ar5c/kcYZA38v5PH246OzfRNY9cpIC7n1xJjZdWUz4o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eUU5AmTTGOJaq8ZBmXyaaPF/kZ/5mILZWXpnbQWDWfxRPAhAWboM+994vN1mR1Lj8EdYC/a8KfwGnwQETKconcaMkBd2pZ0phjyvcpI4GXfWEiE3M3vHR0Im698U/8iGlHfAbcsYE7VeSBVzr9y0RqhFiNX3Rd4MZcdN7lnTLgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hAVRkr+g; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5c2011716a3so2431125eaf.1
+        for <linux-integrity@vger.kernel.org>; Wed, 10 Jul 2024 08:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1720627187; x=1721231987; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=frwA92uLz4k21pIYgm2Hz8f6vblljgbWvTyStEdlCs0=;
+        b=hAVRkr+gTYJxSlTxCG5W8X13T/EBDDqkn/2SYDGgbMkmGtQPEBtSoK5GLWLPHnoilN
+         O9FoBrhHa6I5a2dAYEljaG9BEvGwaOKuEnt695c+qJwXWZtMz1d4X6vPvSoZDC1XSJuK
+         XRDIq8hBpGHyYts6HECCN7j6zIYZeYMbl/Htg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720627187; x=1721231987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=frwA92uLz4k21pIYgm2Hz8f6vblljgbWvTyStEdlCs0=;
+        b=sqYl31oPgyMos5HNMc2/OpyVWCDEdQGj9F6qwpuR1Rc5fXxJI+keNU+lnd0jbq5AAG
+         zoXtf7J7w0DQ2NP7vmiIIgCQuEPBnhXYnReYzvxZMJDEDDY7CBKBzpswc1f5XZw9vxdI
+         rDefR6tCeoRYSTR7fSzhEBMC+nFq5FJIXavyMsmJHDTuOEKkROulbYZQ0jG7Y8nsk9d4
+         hHWL3ebCEBGZRU3deEYR4Xrfp9Fyb+wy1v7E9tcOES3BaxCN24mhEl8qgpyMa3P0IbVi
+         I8XUmrrdqD3nBdrP5+/nY4QM7zhe466a2N1O9sv5QC5b2Vtk+WEwpzWB1mUveaPWH6Yd
+         GUNg==
+X-Forwarded-Encrypted: i=1; AJvYcCWn9rKDshlBGyflkwYXcJ5yfw5w2SVFNZ7iRtaOl/k99dd0p+PT6no+06Z2sHgr5ppdITOi2Hhfj/ZJ54OuHKTjPD/imxtJ3E14C65aKue8
+X-Gm-Message-State: AOJu0YxqcIfuDJ0pwG4v54fDCx8U2KsI00GWTXM3Okq7opZY2liiku1J
+	nDomlxCqT+fVcxaZ5cCapbNMh/SuCbdZauTbpwL+1m5NtTF5JsVm/G+J5U3L4cBcffAUdR6Qqft
+	jGkTm
+X-Google-Smtp-Source: AGHT+IECveDlbSj/ICCUl0qjIUWVXNH6lwqXeTw+niJsoUSaxNdRLpFCimqeWMft5W9j98vtqWT2rw==
+X-Received: by 2002:a05:6871:79a:b0:25e:bded:3607 with SMTP id 586e51a60fabf-25ebded3bc3mr3369642fac.14.1720627186688;
+        Wed, 10 Jul 2024 08:59:46 -0700 (PDT)
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com. [209.85.161.50])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-25ea9f8fd03sm1239814fac.11.2024.07.10.08.59.46
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jul 2024 08:59:46 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5c661bcb9a0so2000741eaf.2
+        for <linux-integrity@vger.kernel.org>; Wed, 10 Jul 2024 08:59:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUg+ZRXiHrxJcSHWsPeWgpPIKRYSZOyDYeBszVl1m9vLRwi4O1nGeKgZzjPCQ+9Ju+r33GifaU3nj2dxmoa5zN5AqagvNGl5Xh0uoyR6zZF
+X-Received: by 2002:a05:6870:2254:b0:25e:1688:ddd7 with SMTP id
+ 586e51a60fabf-25eaec756d6mr4635383fac.58.1720627185644; Wed, 10 Jul 2024
+ 08:59:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <878qybet6t.fsf_-_@oldenburg.str.redhat.com>
-X-Infomaniak-Routing: alpha
+References: <20240610132513.1.I6434acf426183b4077ba3e8af4eccaa5921c6c2f@changeid>
+ <CAK+PMK4Vbka3XhbXJHmWJRHD4WVe_k9yvRMw71r+n28Jp5cyvA@mail.gmail.com>
+In-Reply-To: <CAK+PMK4Vbka3XhbXJHmWJRHD4WVe_k9yvRMw71r+n28Jp5cyvA@mail.gmail.com>
+From: Jett Rink <jettrink@chromium.org>
+Date: Wed, 10 Jul 2024 09:59:34 -0600
+X-Gmail-Original-Message-ID: <CAK+PMK568x+TCvYnkBVsssNSMNc8ZO8Fo8JX9xtzcj+1Wta24A@mail.gmail.com>
+Message-ID: <CAK+PMK568x+TCvYnkBVsssNSMNc8ZO8Fo8JX9xtzcj+1Wta24A@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Add new device/vendor ID 0x50666666
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>, 
+	linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 08, 2024 at 06:37:14PM +0200, Florian Weimer wrote:
-> * Mickaël Salaün:
-> 
-> > On Sat, Jul 06, 2024 at 05:32:12PM +0200, Florian Weimer wrote:
-> >> * Mickaël Salaün:
-> >> 
-> >> > On Fri, Jul 05, 2024 at 08:03:14PM +0200, Florian Weimer wrote:
-> >> >> * Mickaël Salaün:
-> >> >> 
-> >> >> > Add a new AT_CHECK flag to execveat(2) to check if a file would be
-> >> >> > allowed for execution.  The main use case is for script interpreters and
-> >> >> > dynamic linkers to check execution permission according to the kernel's
-> >> >> > security policy. Another use case is to add context to access logs e.g.,
-> >> >> > which script (instead of interpreter) accessed a file.  As any
-> >> >> > executable code, scripts could also use this check [1].
-> >> >> 
-> >> >> Some distributions no longer set executable bits on most shared objects,
-> >> >> which I assume would interfere with AT_CHECK probing for shared objects.
-> >> >
-> >> > A file without the execute permission is not considered as executable by
-> >> > the kernel.  The AT_CHECK flag doesn't change this semantic.  Please
-> >> > note that this is just a check, not a restriction.  See the next patch
-> >> > for the optional policy enforcement.
-> >> >
-> >> > Anyway, we need to define the policy, and for Linux this is done with
-> >> > the file permission bits.  So for systems willing to have a consistent
-> >> > execution policy, we need to rely on the same bits.
-> >> 
-> >> Yes, that makes complete sense.  I just wanted to point out the odd
-> >> interaction with the old binutils bug and the (sadly still current)
-> >> kernel bug.
-> >> 
-> >> >> Removing the executable bit is attractive because of a combination of
-> >> >> two bugs: a binutils wart which until recently always set the entry
-> >> >> point address in the ELF header to zero, and the kernel not checking for
-> >> >> a zero entry point (maybe in combination with an absent program
-> >> >> interpreter) and failing the execve with ELIBEXEC, instead of doing the
-> >> >> execve and then faulting at virtual address zero.  Removing the
-> >> >> executable bit is currently the only way to avoid these confusing
-> >> >> crashes, so I understand the temptation.
-> >> >
-> >> > Interesting.  Can you please point to the bug report and the fix?  I
-> >> > don't see any ELIBEXEC in the kernel.
-> >> 
-> >> The kernel hasn't been fixed yet.  I do think this should be fixed, so
-> >> that distributions can bring back the executable bit.
+Would it be possible to get feedback on this patch that just adds a
+new DID_VID please?
+
+-Jett
+
+
+On Wed, Jun 26, 2024 at 8:03=E2=80=AFAM Jett Rink <jettrink@chromium.org> w=
+rote:
+>
+> I wanted to check the status of this review. Is there something I did
+> incorrectly?
+>
+> -Jett
+>
+> On Mon, Jun 10, 2024 at 1:25=E2=80=AFPM Jett Rink <jettrink@chromium.org>=
+ wrote:
 > >
-> > Can you please point to the mailing list discussion or the bug report?
-> 
-> I'm not sure if this was ever reported upstream as an RFE to fail with
-> ELIBEXEC.  We have downstream bug report:
-> 
->   Prevent executed .so files with e_entry == 0 from attempting to become
->   a process.
->   <https://bugzilla.redhat.com/show_bug.cgi?id=2004942>
-
-Thanks for the info.
-
-> 
-> I've put together a patch which seems to work, see below.
-> 
-> I don't think there's any impact on AT_CHECK with execveat because that
-> mode will never get to this point.
-
-Correct, that is not an issue for AT_CHECK use cases.
+> > Accept another DID:VID for the next generation Google TPM. This TPM
+> > has the same Ti50 firmware and fulfills the same interface.
+> >
+> > Signed-off-by: Jett Rink <jettrink@chromium.org>
+> > ---
+> >
+> >  drivers/char/tpm/tpm_tis_i2c_cr50.c | 11 ++++++++---
+> >  1 file changed, 8 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm=
+_tis_i2c_cr50.c
+> > index 86c9a1a43adb..d9b6abdcda5f 100644
+> > --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> > @@ -32,7 +32,8 @@
+> >  #define TPM_CR50_TIMEOUT_SHORT_MS      2               /* Short timeou=
+t during transactions */
+> >  #define TPM_CR50_TIMEOUT_NOIRQ_MS      20              /* Timeout for =
+TPM ready without IRQ */
+> >  #define TPM_CR50_I2C_DID_VID           0x00281ae0L     /* Device and v=
+endor ID reg value */
+> > -#define TPM_TI50_I2C_DID_VID           0x504a6666L     /* Device and v=
+endor ID reg value */
+> > +#define TPM_TI50_DT_I2C_DID_VID                0x504a6666L     /* Devi=
+ce and vendor ID reg value */
+> > +#define TPM_TI50_OT_I2C_DID_VID                0x50666666L     /* Devi=
+ce and vendor ID reg value */
+> >  #define TPM_CR50_I2C_MAX_RETRIES       3               /* Max retries =
+due to I2C errors */
+> >  #define TPM_CR50_I2C_RETRY_DELAY_LO    55              /* Min usecs be=
+tween retries on I2C */
+> >  #define TPM_CR50_I2C_RETRY_DELAY_HI    65              /* Max usecs be=
+tween retries on I2C */
+> > @@ -781,13 +782,17 @@ static int tpm_cr50_i2c_probe(struct i2c_client *=
+client)
+> >         }
+> >
+> >         vendor =3D le32_to_cpup((__le32 *)buf);
+> > -       if (vendor !=3D TPM_CR50_I2C_DID_VID && vendor !=3D TPM_TI50_I2=
+C_DID_VID) {
+> > +       if (vendor !=3D TPM_CR50_I2C_DID_VID &&
+> > +           vendor !=3D TPM_TI50_DT_I2C_DID_VID &&
+> > +           vendor !=3D TPM_TI50_OT_I2C_DID_VID) {
+> >                 dev_err(dev, "Vendor ID did not match! ID was %08x\n", =
+vendor);
+> >                 return -ENODEV;
+> >         }
+> >
+> >         dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> > -                vendor =3D=3D TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
+> > +                vendor =3D=3D TPM_CR50_I2C_DID_VID    ? "cr50" :
+> > +                vendor =3D=3D TPM_TI50_DT_I2C_DID_VID ? "ti50 DT" :
+> > +                                                    "ti50 OT",
+> >                  client->addr, client->irq, vendor >> 16);
+> >         return tpm_chip_register(chip);
+> >  }
+> > --
+> > 2.45.2.505.gda0bf45e8d-goog
+> >
 
