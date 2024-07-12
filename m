@@ -1,43 +1,48 @@
-Return-Path: <linux-integrity+bounces-3097-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3098-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6A7092EA76
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2024 16:16:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2CB292FB6F
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2024 15:32:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D307B20DAE
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jul 2024 14:16:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EDB61F226E6
+	for <lists+linux-integrity@lfdr.de>; Fri, 12 Jul 2024 13:32:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565B015CD42;
-	Thu, 11 Jul 2024 14:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0653816F83D;
+	Fri, 12 Jul 2024 13:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e32V4pQ2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CDD80BF8;
-	Thu, 11 Jul 2024 14:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA0815B13D;
+	Fri, 12 Jul 2024 13:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720707386; cv=none; b=S1Ol4vtW4U5CNKtAHZcrnQ9j9704KLuuMa0pT3SFPiNRjkouXFde9TdFtjNHdEC0YHhnqyDdNWvyjOPYWB1CBHEtvwIKw+NgisEMd6U9sVHUSVxHmSJ7mBU2rVC5SPt3PBLxpBrXINdauIoNG1uWb+tGZCPdbWeLe9J+h5GhL+4=
+	t=1720791110; cv=none; b=QjrWLcTauD03MiOItYBNH+ajSVi3JI6hEKFN0leI6Hd1nkBY8bfgKlM0O9iO0HScLPBFUXg9ih0zlo4coH7Uyi400EhyqwrXyOJllfY99GlNd88o6/hAou1U6uqNYSzI9L0GY15XQxZOmbXOez5+X54+X9YssYMxpeyXPJJyEtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720707386; c=relaxed/simple;
-	bh=u9ZPGa/Rq/UUrmz2WagOFmzqjUL+DHKleZd8UGjFxGw=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=Hzfd8yI2TmJvtYhTws3z+Cg1xQUMonTU+nVTlbFoCsWk4nyaynGNL66HSdeJUYjsGPyVFU3xMrk00Hts8EUEhdsIq54hLldZw3DTWF8BWBgG63c4G1Cz5Reb7PM144gWngtxxud7d3BGKcx5arYTrKSeeIFOCeyOBQQ3q0iNEkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hallyn.com
-Received: from dummy.faircode.eu (unknown [172.56.89.160])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: serge)
-	by mail.hallyn.com (Postfix) with ESMTPSA id DD57227C;
-	Thu, 11 Jul 2024 09:16:13 -0500 (CDT)
-Date: Thu, 11 Jul 2024 09:15:59 -0500 (CDT)
-From: Serge Hallyn <serge@hallyn.com>
+	s=arc-20240116; t=1720791110; c=relaxed/simple;
+	bh=D90FayrMuFi+Snmtl8k2Ar9LAGpxPsM22fxKDhzoZTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OYmLJEylpQYCOjg+fTsg5f7SzSlAtTXKGD1oj7N1rAw8MsdsU1u/JIgK/KGE/nGviUqB90fVbEXpKZqIsSg+MpPd7QvbFU/NFVADphCq/ypSkoNVRIR1AzG3CjthNey3E8IXbKGoHjHG/MBdYu1TKahOEu6xHFfxj8M5aCOvbS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e32V4pQ2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D23C32786;
+	Fri, 12 Jul 2024 13:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720791110;
+	bh=D90FayrMuFi+Snmtl8k2Ar9LAGpxPsM22fxKDhzoZTM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e32V4pQ2ih0Q0X18A50u8zXTdfXWPYCAqTYgi4ddBi7UnDNW9o+MM/qa/KsgMrnkz
+	 vUYknoxNmihdjQa2IfK0rIzb1FJ3iV/XS/++9ZpG0D/zcBqH2nZXSbARpg3PBCbb56
+	 xl2GDHpqvzS/qJ6cMrhhqEhkRa/SLW3hLK9g4EpWdbSTXq6hAalDLo01KmED/v0LH7
+	 GPy+AUtXKtPrV+fTgbyhV9KB2XIrCwg71ZQiyHIuS25MlWZUtNDPB2NP7igK3EYHxz
+	 HacvcYblqG8FYsJxRy1Ng4YZz4BaESZHql7Y0tvrDjklmAt4LfVYGQRyqjMKT1gG39
+	 FhVR0Rt0IB+1g==
+Date: Fri, 12 Jul 2024 14:31:41 +0100
+From: Simon Horman <horms@kernel.org>
 To: Xu Kuohai <xukuohai@huaweicloud.com>
 Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
@@ -55,6 +60,7 @@ Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
 	Matt Bobrowski <mattbobrowski@google.com>,
 	Brendan Jackman <jackmanb@chromium.org>,
 	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
 	Khadija Kamran <kamrankhadijadj@gmail.com>,
 	Casey Schaufler <casey@schaufler-ca.com>,
 	Ondrej Mosnacek <omosnace@redhat.com>,
@@ -67,284 +73,103 @@ Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
 	Alexander Viro <viro@zeniv.linux.org.uk>,
 	Christian Brauner <brauner@kernel.org>,
 	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Eric Dumazet <edumazet@google.com>,
+	Anna Schumaker <anna@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Stephen Smalley <stephen.smalley.work@gmail.com>
-Message-ID: <3b4cc9c0-2645-4654-aa48-7944d91ee3f4@hallyn.com>
-In-Reply-To: <20240711111908.3817636-3-xukuohai@huaweicloud.com>
-References: <20240711111908.3817636-1-xukuohai@huaweicloud.com> <20240711111908.3817636-3-xukuohai@huaweicloud.com>
-Subject: Re: [PATCH bpf-next v4 02/20] lsm: Refactor return value of LSM
- hook inode_need_killpriv
+Subject: Re: [PATCH bpf-next v4 03/20] lsm: Refactor return value of LSM hook
+ inode_getsecurity
+Message-ID: <20240712133141.GB120802@kernel.org>
+References: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
+ <20240711111908.3817636-4-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <3b4cc9c0-2645-4654-aa48-7944d91ee3f4@hallyn.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240711111908.3817636-4-xukuohai@huaweicloud.com>
 
-Jul 11, 2024 06:14:09 Xu Kuohai <xukuohai@huaweicloud.com>:
-
+On Thu, Jul 11, 2024 at 07:18:51PM +0800, Xu Kuohai wrote:
 > From: Xu Kuohai <xukuohai@huawei.com>
->
+> 
 > To be consistent with most LSM hooks, convert the return value of
-> hook inode_need_killpriv to 0 or a negative error code.
->
+> hook inode_getsecurity to 0 or a negative error code.
+> 
 > Before:
-> - Both hook inode_need_killpriv and func security_inode_need_killpriv
-> =C2=A0 return > 0 if security_inode_killpriv is required, 0 if not, and <=
- 0
-> =C2=A0 to abort the operation.
->
+> - Hook inode_getsecurity returns size of buffer on success or a
+>   negative error code on failure.
+> 
 > After:
-> - Both hook inode_need_killpriv and func security_inode_need_killpriv
-> =C2=A0 return 0 on success and a negative error code on failure.
-> =C2=A0 On success, hook inode_need_killpriv sets output param @need to tr=
-ue
-> =C2=A0 if security_inode_killpriv is required, and false if not. When @ne=
-ed
-> =C2=A0 is true, func security_inode_need_killpriv sets ATTR_KILL_PRIV fla=
-g
-> =C2=A0 in @attr; when false, it clears the flag.
-> =C2=A0 On failure, @need and @attr remains unchanged.
->
+> - Hook inode_getsecurity returns 0 on success or a negative error
+>   code on failure. An output parameter @len is introduced to hold
+>   the buffer size on success.
+> 
 > Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-
-It looks ok - though unnecessary (I'm assuming a later patch works better w=
-ith this) - , but I'd be more comfortable if it was documented that any cal=
-lers of the need_killpriv hook must set need to false before calling. Or if=
- the hooks set need to false at start.
-
-
 > ---
-> fs/attr.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 5 ++---
-> fs/inode.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 4 +---
-> include/linux/lsm_hook_defs.h |=C2=A0 2 +-
-> include/linux/security.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 20 +++++++++++++=
-+++----
-> security/commoncap.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 12 ++++++++----
-> security/security.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 29 ++++++++++++++++++++++++-----
-> 6 files changed, 52 insertions(+), 20 deletions(-)
->
-> diff --git a/fs/attr.c b/fs/attr.c
-> index 960a310581eb..aaadc721c982 100644
-> --- a/fs/attr.c
-> +++ b/fs/attr.c
-> @@ -427,11 +427,10 @@ int notify_change(struct mnt_idmap *idmap, struct d=
-entry *dentry,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 attr->ia_mtime =3D timestamp_t=
-runcate(attr->ia_mtime, inode);
->
-> =C2=A0=C2=A0=C2=A0 if (ia_valid & ATTR_KILL_PRIV) {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 error =3D security_inode_need_killp=
-riv(dentry);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 error =3D security_inode_need_killp=
-riv(dentry, &ia_valid);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (error < 0)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return=
- error;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (error =3D=3D 0)
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ia_valid =
-=3D attr->ia_valid &=3D ~ATTR_KILL_PRIV;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 attr->ia_valid =3D ia_valid;
-> =C2=A0=C2=A0=C2=A0 }
->
-> =C2=A0=C2=A0=C2=A0 /*
-> diff --git a/fs/inode.c b/fs/inode.c
-> index 3a41f83a4ba5..cd335dc3a3bc 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -2012,11 +2012,9 @@ int dentry_needs_remove_privs(struct mnt_idmap *id=
-map,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->
-> =C2=A0=C2=A0=C2=A0 mask =3D setattr_should_drop_suidgid(idmap, inode);
-> -=C2=A0=C2=A0 ret =3D security_inode_need_killpriv(dentry);
-> +=C2=A0=C2=A0 ret =3D security_inode_need_killpriv(dentry, &mask);
-> =C2=A0=C2=A0=C2=A0 if (ret < 0)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
-> -=C2=A0=C2=A0 if (ret)
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mask |=3D ATTR_KILL_PRIV;
-> =C2=A0=C2=A0=C2=A0 return mask;
-> }
->
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.=
-h
-> index e6e6f8473955..964849de424b 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -165,7 +165,7 @@ LSM_HOOK(int, 0, inode_remove_acl, struct mnt_idmap *=
-idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0 struct dentry *dentry, const char *acl_name)
-> LSM_HOOK(void, LSM_RET_VOID, inode_post_remove_acl, struct mnt_idmap *idm=
-ap,
-> =C2=A0=C2=A0=C2=A0=C2=A0 struct dentry *dentry, const char *acl_name)
-> -LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry)
-> +LSM_HOOK(int, 0, inode_need_killpriv, struct dentry *dentry, bool *need)
-> LSM_HOOK(int, 0, inode_killpriv, struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0 struct dentry *dentry)
-> LSM_HOOK(int, -EOPNOTSUPP, inode_getsecurity, struct mnt_idmap *idmap,
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 454f96307cb9..1614ef5b2dd2 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -161,7 +161,7 @@ int cap_inode_setxattr(struct dentry *dentry, const c=
-har *name,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 const void *value, size_t size, int flags);
-> int cap_inode_removexattr(struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 struct dentry *dentry, const char *name);
-> -int cap_inode_need_killpriv(struct dentry *dentry);
-> +int cap_inode_need_killpriv(struct dentry *dentry, bool *need);
-> int cap_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentry);
-> int cap_inode_getsecurity(struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 struct inode *inode, const char *name, void **buffer,
-> @@ -389,7 +389,7 @@ int security_inode_listxattr(struct dentry *dentry);
-> int security_inode_removexattr(struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct dentry *dentry, const char *nam=
-e);
-> void security_inode_post_removexattr(struct dentry *dentry, const char *n=
-ame);
-> -int security_inode_need_killpriv(struct dentry *dentry);
-> +int security_inode_need_killpriv(struct dentry *dentry, int *attr);
-> int security_inode_killpriv(struct mnt_idmap *idmap, struct dentry *dentr=
-y);
-> int security_inode_getsecurity(struct mnt_idmap *idmap,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct inode *inode, const char *name,
-> @@ -971,9 +971,21 @@ static inline void security_inode_post_removexattr(s=
-truct dentry *dentry,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 const char *name)
-> { }
->
-> -static inline int security_inode_need_killpriv(struct dentry *dentry)
-> +static inline int security_inode_need_killpriv(struct dentry *dentry, in=
-t *attr)
-> {
-> -=C2=A0=C2=A0 return cap_inode_need_killpriv(dentry);
-> +=C2=A0=C2=A0 int rc;
-> +=C2=A0=C2=A0 bool need =3D false;
-> +
-> +=C2=A0=C2=A0 rc =3D cap_inode_need_killpriv(dentry, &need);
-> +=C2=A0=C2=A0 if (rc < 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return rc;
-> +
-> +=C2=A0=C2=A0 if (need)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *attr |=3D ATTR_KILL_PRIV;
-> +=C2=A0=C2=A0 else
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *attr &=3D ~ATTR_KILL_PRIV;
-> +
-> +=C2=A0=C2=A0 return 0;
-> }
->
-> static inline int security_inode_killpriv(struct mnt_idmap *idmap,
-> diff --git a/security/commoncap.c b/security/commoncap.c
-> index cefad323a0b1..17d6188d22cf 100644
-> --- a/security/commoncap.c
-> +++ b/security/commoncap.c
-> @@ -286,21 +286,25 @@ int cap_capset(struct cred *new,
-> /**
-> =C2=A0 * cap_inode_need_killpriv - Determine if inode change affects priv=
-ileges
-> =C2=A0 * @dentry: The inode/dentry in being changed with change marked AT=
-TR_KILL_PRIV
-> + * @need: If inode_killpriv() is needed
-> =C2=A0 *
-> =C2=A0 * Determine if an inode having a change applied that's marked ATTR=
-_KILL_PRIV
-> =C2=A0 * affects the security markings on that inode, and if it is, shoul=
-d
-> =C2=A0 * inode_killpriv() be invoked or the change rejected.
-> =C2=A0 *
-> - * Return: 1 if security.capability has a value, meaning inode_killpriv(=
-)
-> - * is required, 0 otherwise, meaning inode_killpriv() is not required.
-> + * Return: Always returns 0. If security.capability has a value, meaning
-> + * inode_killpriv() is required, @need is set to true.
-> =C2=A0 */
-> -int cap_inode_need_killpriv(struct dentry *dentry)
-> +int cap_inode_need_killpriv(struct dentry *dentry, bool *need)
-> {
-> =C2=A0=C2=A0=C2=A0 struct inode *inode =3D d_backing_inode(dentry);
-> =C2=A0=C2=A0=C2=A0 int error;
->
-> =C2=A0=C2=A0=C2=A0 error =3D __vfs_getxattr(dentry, inode, XATTR_NAME_CAP=
-S, NULL, 0);
-> -=C2=A0=C2=A0 return error > 0;
-> +=C2=A0=C2=A0 if (error > 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *need =3D true;
-> +
-> +=C2=A0=C2=A0 return 0;
-> }
->
-> /**
-> diff --git a/security/security.c b/security/security.c
-> index 3475f0cab3da..a4abcd86eb36 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -2490,17 +2490,36 @@ void security_inode_post_removexattr(struct dentr=
-y *dentry, const char *name)
-> /**
-> =C2=A0 * security_inode_need_killpriv() - Check if security_inode_killpri=
-v() required
-> =C2=A0 * @dentry: associated dentry
-> + * @attr: attribute flags
-> =C2=A0 *
-> =C2=A0 * Called when an inode has been changed to determine if
-> =C2=A0 * security_inode_killpriv() should be called.
-> =C2=A0 *
-> - * Return: Return <0 on error to abort the inode change operation, retur=
-n 0 if
-> - *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 security_inode_killpr=
-iv() does not need to be called, return >0 if
-> - *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 security_inode_killpr=
-iv() does need to be called.
-> + * Return: Return 0 on success, negative error code on failure.
-> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 On success, set ATTR_=
-KILL_PRIV flag in @attr when @need is true,
-> + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clears it when false.
-> =C2=A0 */
-> -int security_inode_need_killpriv(struct dentry *dentry)
-> +int security_inode_need_killpriv(struct dentry *dentry, int *attr)
-> {
-> -=C2=A0=C2=A0 return call_int_hook(inode_need_killpriv, dentry);
-> +=C2=A0=C2=A0 int rc;
-> +=C2=A0=C2=A0 bool need =3D false;
-> +=C2=A0=C2=A0 struct security_hook_list *hp;
-> +
-> +=C2=A0=C2=A0 hlist_for_each_entry(hp, &security_hook_heads.inode_need_ki=
-llpriv,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 list) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rc =3D hp->hook.inode_need_killpriv=
-(dentry, &need);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (rc < 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return rc;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (need)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
-> +=C2=A0=C2=A0 }
-> +
-> +=C2=A0=C2=A0 if (need)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *attr |=3D ATTR_KILL_PRIV;
-> +=C2=A0=C2=A0 else
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *attr &=3D ~ATTR_KILL_PRIV;
-> +
-> +=C2=A0=C2=A0 return 0;
-> }
->
-> /**
-> --
-> 2.30.2
+>  fs/xattr.c                    | 19 ++++++++++---------
+>  include/linux/lsm_hook_defs.h |  3 ++-
+>  include/linux/security.h      | 12 ++++++------
+>  security/commoncap.c          |  9 ++++++---
+>  security/security.c           | 11 ++++++-----
+>  security/selinux/hooks.c      | 16 ++++++----------
+>  security/smack/smack_lsm.c    | 14 +++++++-------
+>  7 files changed, 43 insertions(+), 41 deletions(-)
+> 
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index f8b643f91a98..f4e3bedf7272 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -339,27 +339,28 @@ xattr_getsecurity(struct mnt_idmap *idmap, struct inode *inode,
+>  		  const char *name, void *value, size_t size)
+>  {
+>  	void *buffer = NULL;
+> -	ssize_t len;
+> +	int error;
+> +	u32 len;
+>  
+>  	if (!value || !size) {
+> -		len = security_inode_getsecurity(idmap, inode, name,
+> -						 &buffer, false);
+> +		error = security_inode_getsecurity(idmap, inode, name,
+> +						   false, &buffer, &len);
+>  		goto out_noalloc;
+>  	}
+>  
+> -	len = security_inode_getsecurity(idmap, inode, name, &buffer,
+> -					 true);
+> -	if (len < 0)
+> -		return len;
+> +	error = security_inode_getsecurity(idmap, inode, name, true,
+> +					   &buffer, &len);
+> +	if (error)
+> +		return error;
+>  	if (size < len) {
+> -		len = -ERANGE;
+> +		error = -ERANGE;
+>  		goto out;
+>  	}
+>  	memcpy(value, buffer, len);
+>  out:
+>  	kfree(buffer);
+>  out_noalloc:
+> -	return len;
+> +	return error < 0 ? error : len;
 
+Hi Xu Kuohai,
+
+len is an unsigned 32-bit entity, but the return type of this function
+is an unsigned value (ssize_t). So in theory, if len is very large,
+a negative error value error will be returned.
+
+>  }
+
+Similarly for the handling of nattr in lsm_get_self_attr in
+lsm_syscalls.c in a subsequent patch.
+
+Flagged by Smatch.
+
+...
 
