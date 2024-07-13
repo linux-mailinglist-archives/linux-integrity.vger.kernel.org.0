@@ -1,126 +1,112 @@
-Return-Path: <linux-integrity+bounces-3105-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3106-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BCD393047C
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jul 2024 10:11:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB30E93080C
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Jul 2024 01:29:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD1CCB21F4A
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jul 2024 08:11:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A3E91F21768
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jul 2024 23:29:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6FCC3D97A;
-	Sat, 13 Jul 2024 08:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4261448DC;
+	Sat, 13 Jul 2024 23:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UwR2zisj"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE301DFE3;
-	Sat, 13 Jul 2024 08:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921DE44C7B
+	for <linux-integrity@vger.kernel.org>; Sat, 13 Jul 2024 23:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720858274; cv=none; b=KeHgHRKnW3bnIw/H+nk7QcqCKJNVL1DRBsHrzIE1umJIwDslOLNIwY9QjRFWjuRUwW1nxBu+EE32P3mcqFcmom2RfqN3wPxp0mVIy2nWsCbtXKjxiZepfrrtwbpZJpCX8bu7Rh2i5qlNd0meVvYPYWmNttCLZjASCTLAEnjlBJ8=
+	t=1720913348; cv=none; b=Cvq3fFpoEWfhKBeizoOky19ObRZUbbWjGD5wUdxAdho25Ksbbm9v4H9retQA8tLUX9lxOXGpXwFbTA7cOuzcWIvjCG1sDGWWHg8dmlS8uDLjeY+v6SVkUWwVSo68DVx+M506im0xmPKBTCue2ykWbM79LjEfeQ+bVmQrGNlzDas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720858274; c=relaxed/simple;
-	bh=v6WEaM18t7QWAOiNkCtdqwMsvabTvhmPFPEIsnakkHw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bjHCar3ogmEoV/JeueFAWSTXPiXXkdH9ijtyLSMksKkS5k/Sj+MY/h1Jvx8wcyF9VcFkUMkqx1tfL4nPAhmx4qsMryFMkHa84NURXsBr930KIM7ZYjV48CbPWiy7llEFSwzxsUPB6fetyrih9yvQf4dKdfll9j53xXiA/c6qEEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WLh452CFQz4f3jM1;
-	Sat, 13 Jul 2024 16:11:01 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 130DE1A0185;
-	Sat, 13 Jul 2024 16:11:09 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP4 (Coremail) with SMTP id gCh0CgAnLfacNpJmR8bRBw--.46904S2;
-	Sat, 13 Jul 2024 16:11:08 +0800 (CST)
-Message-ID: <92b895d4-8831-404b-98f3-3f42edbc5331@huaweicloud.com>
-Date: Sat, 13 Jul 2024 16:11:08 +0800
+	s=arc-20240116; t=1720913348; c=relaxed/simple;
+	bh=M/AvsivzDqTnYbkqcOyzYWQpJBTHdgFX/+yrR5IViz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nDlowgCYDZ1KzS6Ton36SpudyzWGXRUG96SUTP1/qBj+XUHWPM09D++PlE46fiD1v7C4BjbHwFIN+9ToGA6/jXWeCjT0r1dytMGbwYVPM5gzyPQep844lfuK/aQjK/L6fiPHAl/3/LGGjGAgRiyrWzRPI2H/QWKTyBXhhpNEWK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UwR2zisj; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-70368b53cc0so1595677a34.1
+        for <linux-integrity@vger.kernel.org>; Sat, 13 Jul 2024 16:29:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1720913345; x=1721518145; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pVxraW28RA2WdzslZaE8dPXH80KC61WA5pdsVo3++fk=;
+        b=UwR2zisjiocmLsJtq9tvuN5LCYVcD6r8/O2HMwj241wnYLXymQoLS8bDCw+ZuRDen9
+         Z1OonBG/GEnYgDMTC1/E7m7XjbAYoEeMlUnpop6aa143W4JX2HP3RFsHOkaHRy88xpf2
+         hyOpr75/CUu5D/PjLKR0EldmT87NPs97snqUQcRmnHCUTXDrm+jL9MmoqWp+B6akuTBS
+         NBv671jgqSHkfnlFspBjRrBz1MZ0b3xY+D0+FZqUcDmdSvtTk21T3XSfi8cxsirqa7nG
+         qVt3EojDpkr8WhhAfUFcpQ7RD9WP/PGY0uXutOdQBuSh0Fy7clDmMBfJeWXEqN71+bT2
+         /XsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720913345; x=1721518145;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pVxraW28RA2WdzslZaE8dPXH80KC61WA5pdsVo3++fk=;
+        b=ZbeabkPl0QYb4zH2lXIXrbziOfMMbyN75EAIRO95VEq6wneMdEqIkn1ERT0TfH5LQh
+         M7neDmHap2Fh82tFn9UL86Vht5Sg6p+EDT4OiGAr8k3EG3Hvwsqx19fZ3GDIlY5cahta
+         Ksg3K3PJTh+YdRTuwiSn9yD8EkuTbjaARxlu3+EUMdK+2hKauXOmzgIS8DZsJQofM4e8
+         gaP2KjnTdvVUPA7epsG8v2XN3Kj9IA4xpCSHrRrD9EZY5xwSc48MlE+Lp6lyUmGySV4a
+         3AfryftgACTIDMKoKjkdRHyz0m06UQCN0oNX94Ov1pYHXc7KD+hdwXHqwIhDKESB6wA9
+         IdVA==
+X-Gm-Message-State: AOJu0Yz9reu8sd2BZCnaN4Bf1pVWK64oP19wijM/ObSOQ4DNZMbVBG47
+	OqXxV5PFpQyF8/FN//gNCCOlhV+djgfY7oVowjHkCtEjbYAM3dU6W0eYY4V4rF3QHmxw4zNwRxv
+	W
+X-Google-Smtp-Source: AGHT+IHwlwNcqFJec1lUtwXJgCvu/DND3dE3BswO01Hd2/uENUaWlfY/fcJcUSgZpOfyBh5zm/D+sQ==
+X-Received: by 2002:a05:6830:21a:b0:703:5f4d:a758 with SMTP id 46e09a7af769-70375a08790mr17149467a34.13.1720913345612;
+        Sat, 13 Jul 2024 16:29:05 -0700 (PDT)
+Received: from localhost ([2603:8080:b800:f700::1cb1])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-708c0c78623sm466757a34.28.2024.07.13.16.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Jul 2024 16:29:04 -0700 (PDT)
+Date: Sat, 13 Jul 2024 18:29:02 -0500
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org
+Subject: [bug report] tpm: Address !chip->auth in
+ tpm_buf_append_hmac_session*()
+Message-ID: <3b1755a9-b12f-42fc-b26d-de2fe4e13ec2@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 11/20] bpf, lsm: Add disabled BPF LSM hook
- list
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-integrity@vger.kernel.org, apparmor@lists.ubuntu.com,
- selinux@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
- Brendan Jackman <jackmanb@chromium.org>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>,
- Khadija Kamran <kamrankhadijadj@gmail.com>,
- Casey Schaufler <casey@schaufler-ca.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>,
- John Johansen <john.johansen@canonical.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Shung-Hsi Yu <shung-hsi.yu@suse.com>, Edward Cree <ecree.xilinx@gmail.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Trond Myklebust <trond.myklebust@hammerspace.com>,
- Anna Schumaker <anna@kernel.org>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>
-References: <20240711111908.3817636-1-xukuohai@huaweicloud.com>
- <20240711111908.3817636-12-xukuohai@huaweicloud.com>
- <qjrf5c6f24b6ef5tpvpz75uxp6ro6mhos34ovssinv4yxjwyz3@nvs75o5sywgx>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <qjrf5c6f24b6ef5tpvpz75uxp6ro6mhos34ovssinv4yxjwyz3@nvs75o5sywgx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgAnLfacNpJmR8bRBw--.46904S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFyDtrWxuF1rKw4kXFWDJwb_yoW3GFb_ur
-	yjv3srtw1ftwn3AF4F9F42gFWUuw4vgFy5W345Wr98XryfZF95Za1kGrs5AFWUJFWvvFy2
-	9F1fJanFgw42qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY
-	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0x
-	vE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-	aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQZ2-UUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 7/13/2024 1:56 AM, Alexei Starovoitov wrote:
-> On Thu, Jul 11, 2024 at 07:18:59PM +0800, Xu Kuohai wrote:
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> Add a disabled hooks list for BPF LSM. progs being attached to the
->> listed hooks will be rejected by the verifier.
->>
->> Suggested-by: KP Singh <kpsingh@kernel.org>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> 
-> Xu,
-> 
-> The patches 11 and higher are mostly independent from lsm refactoring.
-> Please send them as a separate patchset for bpf-next.
-> While lsm cleanups are being reviewed this lsm_disabled list can be
-> a bit larger temporarily.
-> 
+Hello Jarkko Sakkinen,
 
-It's great to separate patches unrelated to bpf by temporarily extending
-the lsm disabled list. I'll post an update. Thanks!
+This is a semi-automatic email about new static checker warnings.
 
+Commit 7ca110f2679b ("tpm: Address !chip->auth in
+tpm_buf_append_hmac_session*()") from Jul 3, 2024, leads to the
+following Smatch complaint:
+
+    drivers/char/tpm/tpm2-sessions.c:755 tpm_buf_check_hmac_response()
+    warn: variable dereferenced before check 'auth' (see line 752)
+
+drivers/char/tpm/tpm2-sessions.c
+   751		u16 tag = be16_to_cpu(head->tag);
+   752		u32 cc = be32_to_cpu(auth->ordinal);
+                                     ^^^^^^^^^^^^^
+The existing code had an unchecked dereference
+
+   753		int parm_len, len, i, handles;
+   754	
+   755		if (!auth)
+                    ^^^^^
+The patch adds a NULL check
+
+   756			return rc;
+   757	
+
+regards,
+dan carpenter
 
