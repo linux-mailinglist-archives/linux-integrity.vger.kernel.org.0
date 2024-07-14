@@ -1,112 +1,104 @@
-Return-Path: <linux-integrity+bounces-3106-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3107-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB30E93080C
-	for <lists+linux-integrity@lfdr.de>; Sun, 14 Jul 2024 01:29:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DD84930A99
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Jul 2024 17:43:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A3E91F21768
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Jul 2024 23:29:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EC2D1C20984
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Jul 2024 15:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4261448DC;
-	Sat, 13 Jul 2024 23:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D900941C62;
+	Sun, 14 Jul 2024 15:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UwR2zisj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSOUf8AC"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921DE44C7B
-	for <linux-integrity@vger.kernel.org>; Sat, 13 Jul 2024 23:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B452F5B;
+	Sun, 14 Jul 2024 15:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720913348; cv=none; b=Cvq3fFpoEWfhKBeizoOky19ObRZUbbWjGD5wUdxAdho25Ksbbm9v4H9retQA8tLUX9lxOXGpXwFbTA7cOuzcWIvjCG1sDGWWHg8dmlS8uDLjeY+v6SVkUWwVSo68DVx+M506im0xmPKBTCue2ykWbM79LjEfeQ+bVmQrGNlzDas=
+	t=1720971828; cv=none; b=BBDwUAzYRi9RA0X1d5k7NmyRh6oLrnIR9CYbhuJ7wJvzLiXrrHRGI2HEYEEb38CJf00XUK/7ZUHSgn/ns7aufzb0jfQSV7rjoWdmHpz2+scXd20I5Imh55WRWfULTV43aIF+eCLaSCTV1mDSVr6U6Fwx8WPmPO/vMWX9zmipzmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720913348; c=relaxed/simple;
-	bh=M/AvsivzDqTnYbkqcOyzYWQpJBTHdgFX/+yrR5IViz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nDlowgCYDZ1KzS6Ton36SpudyzWGXRUG96SUTP1/qBj+XUHWPM09D++PlE46fiD1v7C4BjbHwFIN+9ToGA6/jXWeCjT0r1dytMGbwYVPM5gzyPQep844lfuK/aQjK/L6fiPHAl/3/LGGjGAgRiyrWzRPI2H/QWKTyBXhhpNEWK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UwR2zisj; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-70368b53cc0so1595677a34.1
-        for <linux-integrity@vger.kernel.org>; Sat, 13 Jul 2024 16:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720913345; x=1721518145; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pVxraW28RA2WdzslZaE8dPXH80KC61WA5pdsVo3++fk=;
-        b=UwR2zisjiocmLsJtq9tvuN5LCYVcD6r8/O2HMwj241wnYLXymQoLS8bDCw+ZuRDen9
-         Z1OonBG/GEnYgDMTC1/E7m7XjbAYoEeMlUnpop6aa143W4JX2HP3RFsHOkaHRy88xpf2
-         hyOpr75/CUu5D/PjLKR0EldmT87NPs97snqUQcRmnHCUTXDrm+jL9MmoqWp+B6akuTBS
-         NBv671jgqSHkfnlFspBjRrBz1MZ0b3xY+D0+FZqUcDmdSvtTk21T3XSfi8cxsirqa7nG
-         qVt3EojDpkr8WhhAfUFcpQ7RD9WP/PGY0uXutOdQBuSh0Fy7clDmMBfJeWXEqN71+bT2
-         /XsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720913345; x=1721518145;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pVxraW28RA2WdzslZaE8dPXH80KC61WA5pdsVo3++fk=;
-        b=ZbeabkPl0QYb4zH2lXIXrbziOfMMbyN75EAIRO95VEq6wneMdEqIkn1ERT0TfH5LQh
-         M7neDmHap2Fh82tFn9UL86Vht5Sg6p+EDT4OiGAr8k3EG3Hvwsqx19fZ3GDIlY5cahta
-         Ksg3K3PJTh+YdRTuwiSn9yD8EkuTbjaARxlu3+EUMdK+2hKauXOmzgIS8DZsJQofM4e8
-         gaP2KjnTdvVUPA7epsG8v2XN3Kj9IA4xpCSHrRrD9EZY5xwSc48MlE+Lp6lyUmGySV4a
-         3AfryftgACTIDMKoKjkdRHyz0m06UQCN0oNX94Ov1pYHXc7KD+hdwXHqwIhDKESB6wA9
-         IdVA==
-X-Gm-Message-State: AOJu0Yz9reu8sd2BZCnaN4Bf1pVWK64oP19wijM/ObSOQ4DNZMbVBG47
-	OqXxV5PFpQyF8/FN//gNCCOlhV+djgfY7oVowjHkCtEjbYAM3dU6W0eYY4V4rF3QHmxw4zNwRxv
-	W
-X-Google-Smtp-Source: AGHT+IHwlwNcqFJec1lUtwXJgCvu/DND3dE3BswO01Hd2/uENUaWlfY/fcJcUSgZpOfyBh5zm/D+sQ==
-X-Received: by 2002:a05:6830:21a:b0:703:5f4d:a758 with SMTP id 46e09a7af769-70375a08790mr17149467a34.13.1720913345612;
-        Sat, 13 Jul 2024 16:29:05 -0700 (PDT)
-Received: from localhost ([2603:8080:b800:f700::1cb1])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-708c0c78623sm466757a34.28.2024.07.13.16.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jul 2024 16:29:04 -0700 (PDT)
-Date: Sat, 13 Jul 2024 18:29:02 -0500
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org
-Subject: [bug report] tpm: Address !chip->auth in
- tpm_buf_append_hmac_session*()
-Message-ID: <3b1755a9-b12f-42fc-b26d-de2fe4e13ec2@stanley.mountain>
+	s=arc-20240116; t=1720971828; c=relaxed/simple;
+	bh=dWsGnWYI/CpKAaBJ+Mk/aGmNmbT6hDk+yjZuzwGnLAE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=jREiFUK/oCxf0d/HF62LcpqUMCf5yhepF49yazu7Ah2rIwdLCNHKdcpJCnHOIiN5vQ/2dy5VMjmUK/t37/URHfsDn8tpIrtBrqUZ3aqCJ3U57BBSmeG0m+aklxYwq+4Aaezqfsv+aafqK5Vxz5Hvmjl5PPgJ3aiTfeoRUFMMVfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSOUf8AC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE69EC116B1;
+	Sun, 14 Jul 2024 15:43:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720971828;
+	bh=dWsGnWYI/CpKAaBJ+Mk/aGmNmbT6hDk+yjZuzwGnLAE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZSOUf8ACYJsKf3tiWm1pCsFdDfRUvEyPhmHJNikDOLpapzA/P2Bpj7mpP3t5/VW1c
+	 045tmzkhtb0ruYT/Eb3NNR8XmseL5XASE176lpxGCpr7HWigkr6YfhnMCDw6BooelC
+	 rCOYDIN56NS4f9JXHT3pqttacI+zP+hIRwUKF6q1WMmG/UcyHAjfmZBlK/+sH1m1t5
+	 JcZEDrAk3Kif+h2cr6R4isrtJ1LVcyiPa6gWmXnS4oqx0NAbUlmuYOJ+xHmuD+Qr4K
+	 +Ez2uekCLAEM8xT8haJhia+eo+uSEwlBJLXEDZxMRdOxqyj/4vUk0GyqRJDWncVgyJ
+	 ZNhX/EFynX6Pg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 14 Jul 2024 18:43:44 +0300
+Message-Id: <D2PDLHX51C3K.16A4U6XFXRE29@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Hao Ge" <hao.ge@linux.dev>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>
+Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Hao
+ Ge" <gehao@kylinos.cn>
+Subject: Re: [PATCH] tpm: Move dereference after NULL check in
+ tpm_buf_check_hmac_response
+X-Mailer: aerc 0.18.0
+References: <20240709023337.102509-1-hao.ge@linux.dev>
+In-Reply-To: <20240709023337.102509-1-hao.ge@linux.dev>
 
-Hello Jarkko Sakkinen,
+On Tue Jul 9, 2024 at 5:33 AM EEST, Hao Ge wrote:
+> From: Hao Ge <gehao@kylinos.cn>
+>
+> We shouldn't dereference "auth" until after we have checked that it is
+> non-NULL.
 
-This is a semi-automatic email about new static checker warnings.
+Sorry for some latency in responses. I'm on holiday up until week 31 and
+only look at emerging issues but not every day.
 
-Commit 7ca110f2679b ("tpm: Address !chip->auth in
-tpm_buf_append_hmac_session*()") from Jul 3, 2024, leads to the
-following Smatch complaint:
+I do agree with the code change but the description contains no information
+of the bug and how the fix resolves it. Could you please rewrite the
+description?
 
-    drivers/char/tpm/tpm2-sessions.c:755 tpm_buf_check_hmac_response()
-    warn: variable dereferenced before check 'auth' (see line 752)
+I can only think this realizing with tpm_ibmvtpm and TCG_TPM2_HMAC
+enabled because it was according to recent learnings a platform which
+does not end up calling tpm2_sessions_init().
 
-drivers/char/tpm/tpm2-sessions.c
-   751		u16 tag = be16_to_cpu(head->tag);
-   752		u32 cc = be32_to_cpu(auth->ordinal);
-                                     ^^^^^^^^^^^^^
-The existing code had an unchecked dereference
+Since you bug report contains no bug report, I need to ask that did you
+realize a regression in some platform? Fix will get eventually accepted
+even if the bug was found by "looking at code" but the gist here is that
+your bug description contains no description how you found the bug,
+which it should.
 
-   753		int parm_len, len, i, handles;
-   754	
-   755		if (!auth)
-                    ^^^^^
-The patch adds a NULL check
+When TCG_TPM2_HMAC is disable it should be safe because we have:
 
-   756			return rc;
-   757	
+static inline int tpm_buf_check_hmac_response(struct tpm_chip *chip,
+					      struct tpm_buf *buf,
+					      int rc)
+{
+	return rc;
+}
 
-regards,
-dan carpenter
+I also noticed that your fixes tag is incorrect as that null dereference
+pre-existed on tpm_ibmvtpm before my fixes. It is not a new regression
+introduced by my patches. So use git blame and check which commit
+introduced that one.
+
+Address these issues and send v2. Thank you!
+
+BR, Jarkko
 
