@@ -1,151 +1,90 @@
-Return-Path: <linux-integrity+bounces-3109-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3110-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 311D7930FD0
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2024 10:30:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5540931308
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2024 13:25:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6F85281BDE
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2024 08:30:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6083628323E
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jul 2024 11:25:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD54D185083;
-	Mon, 15 Jul 2024 08:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C821891A2;
+	Mon, 15 Jul 2024 11:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kOsYXowy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GvdfMZWL"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9DA4A18
-	for <linux-integrity@vger.kernel.org>; Mon, 15 Jul 2024 08:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC1E187868;
+	Mon, 15 Jul 2024 11:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721032196; cv=none; b=YLMT3Qsr179CH5DCg0LhWOzzsjREYCMsbV1tNMvEO3h0VEA0j+GjKBoIpc+vS38SmtUL01pUl+22p9UMDpHJvhTwcFMm9cDEhJ/NwNFVPXwuLdST25cOPuWUvO1dlU1hfcVwocnqM1S+k29wG/6XfX+j4VKnbIjbBH/p17FGeoU=
+	t=1721042719; cv=none; b=dWdpK9xpaAwttewMHdQHMyEOMaDh/qvhoBXMkIQJ8JrBE5Kh23fwTuDPjFJjojZl7iYs4q+abcnxilebtH+sRCqlrdRypJ4aLZ2TdenvhteaGvbRvPf2JkVsy0VXxRs1gNaEWI5ebrXRM0xLdSbmBZ+6ZEQ7hnTzXFzH9JALqNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721032196; c=relaxed/simple;
-	bh=NOnnq+61CxDOWMILVOgzIwIKxbt7n9msZtGOaXKmv1k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HX9Mj90xcztVFbsIq2urekGdsHggwn44FPAJGFx01VFl5vIlSumvRWVg7IE4Xh4MiEU+nHRCCx7eNXIwohYWzYYLBVII/r13QvRHqeYPXs2Jx61g1H1xFSEAjxqxbuSUejyt018DxmD8Qn7poEJKdfSiRTlyTTob9CIPw4WReKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kOsYXowy; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: jarkko@kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1721032192;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gI+AO5s/O2pz6h4ONw/V+YoYvCERCtp3v+pVErREphU=;
-	b=kOsYXowyPGspLPXF9SVdQZ0V5kNNsx8jS+NossoDwzgm+9GnG5rp4hnx2YF7ZJMUQsOgNC
-	DFYpI9vsuUaijnzyHEPdtU5ajiFxYXmUTNfAX1ISYjfx7HDHPU+Qx18emGGLzLaOA5pOTV
-	3t18lqbK7SQndlhCGfvzKdPz0DqNkIc=
-X-Envelope-To: peterhuewe@gmx.de
-X-Envelope-To: jgg@ziepe.ca
-X-Envelope-To: linux-integrity@vger.kernel.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: gehao@kylinos.cn
-Message-ID: <b69b55e8-eba8-3f3f-e65f-cc5e6cf3eb84@linux.dev>
-Date: Mon, 15 Jul 2024 16:29:42 +0800
+	s=arc-20240116; t=1721042719; c=relaxed/simple;
+	bh=KC0jcakKkauqSbjVB4rvDkrK1IwXEPbpjatq47Q8YLg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=KDbwpCsjmOHumebYZfZlhthsn3zDdzun2iGBfyAcYSe3vbPH2d/AsDu1S4EOH9pFwpM+D2d0MtGepW7f15EsOB0wV8uqjwdYYHK3gjorTar61eWQ609CAjRZ8xHb+U+fA8RmXjcO0UG8z8FohdlfRPM+E+p0ZICK/JPFx2LYfsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GvdfMZWL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A95FEC32782;
+	Mon, 15 Jul 2024 11:25:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721042718;
+	bh=KC0jcakKkauqSbjVB4rvDkrK1IwXEPbpjatq47Q8YLg=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=GvdfMZWLK+QQB0Loqm/2bafYkFbrdwFHsb60HINhZmkOX5GLfIAe7TilDJ89IE0vM
+	 nQLxk/HV9nDrSNVsyD7OOTJ5YJRVZFTQ7QOikfyspol/GTVOn+hKVQxP16MjzXgB40
+	 3j4lQPzcAP38iN4CnbgPlHtWWSlvo+FjhesaswIyTIwqSjnthkOlIb0TpmHeNGVJPp
+	 meSz5XfkWOb/grCWOeRQvfv37w1IDGMNt06MWHsAhNfOQK9tHHt9V9CfjVzBckMf9k
+	 71l1Vm62vhAhQZhSW3W/nmeYBJLWimt04kINAxqGgDDL6iLtBQNJQmKgMKVkYfFvS9
+	 a0jNGrx196aRQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 15 Jul 2024 14:25:15 +0300
+Message-Id: <D2Q2Q4R8BZ4Q.2QZF7NM3RE9B8@kernel.org>
+To: "Hao Ge" <hao.ge@linux.dev>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>
+Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Hao
+ Ge" <gehao@kylinos.cn>
 Subject: Re: [PATCH] tpm: Move dereference after NULL check in
  tpm_buf_check_hmac_response
-To: Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de, jgg@ziepe.ca
-Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
- Hao Ge <gehao@kylinos.cn>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.17.0
 References: <20240709023337.102509-1-hao.ge@linux.dev>
- <D2PDLHX51C3K.16A4U6XFXRE29@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Hao Ge <hao.ge@linux.dev>
-In-Reply-To: <D2PDLHX51C3K.16A4U6XFXRE29@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20240709023337.102509-1-hao.ge@linux.dev>
 
-Hi Jarkko
-
-On 7/14/24 23:43, Jarkko Sakkinen wrote:
-> On Tue Jul 9, 2024 at 5:33 AM EEST, Hao Ge wrote:
->> From: Hao Ge <gehao@kylinos.cn>
->>
->> We shouldn't dereference "auth" until after we have checked that it is
->> non-NULL.
-> Sorry for some latency in responses. I'm on holiday up until week 31 and
-> only look at emerging issues but not every day.
-Understand,I hope you enjoy your holiday.
-> I do agree with the code change but the description contains no information
-> of the bug and how the fix resolves it. Could you please rewrite the
-> description?
+On Tue Jul 9, 2024 at 5:33 AM EEST, Hao Ge wrote:
+> From: Hao Ge <gehao@kylinos.cn>
 >
-> I can only think this realizing with tpm_ibmvtpm and TCG_TPM2_HMAC
-> enabled because it was according to recent learnings a platform which
-> does not end up calling tpm2_sessions_init().
+> We shouldn't dereference "auth" until after we have checked that it is
+> non-NULL.
 >
-> Since you bug report contains no bug report, I need to ask that did you
-> realize a regression in some platform? Fix will get eventually accepted
-> even if the bug was found by "looking at code" but the gist here is that
-> your bug description contains no description how you found the bug,
-> which it should.
-Actually It's reported by smatch and Dan Carpenter also noticed this 
-warning.
+> Fixes: 7ca110f2679b ("tpm: Address !chip->auth in tpm_buf_append_hmac_ses=
+sion*()")
+> Signed-off-by: Hao Ge <gehao@kylinos.cn>
 
-This is the email he sent
+Also lacking:
 
-https://lore.kernel.org/all/3b1755a9-b12f-42fc-b26d-de2fe4e13ec2@stanley.mountain/ 
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/linux-integrity/3b1755a9-b12f-42fc-b26d-de2=
+fe4e13ec2@stanley.mountain/T/#u
 
-> When TCG_TPM2_HMAC is disable it should be safe because we have:
->
-> static inline int tpm_buf_check_hmac_response(struct tpm_chip *chip,
-> 					      struct tpm_buf *buf,
-> 					      int rc)
-> {
-> 	return rc;
-> }
->
-> I also noticed that your fixes tag is incorrect as that null dereference
-> pre-existed on tpm_ibmvtpm before my fixes. It is not a new regression
-> introduced by my patches. So use git blame and check which commit
-> introduced that one.
-I'm a bit confused about fixes tag. Sometimes tool often fail to truly 
-understand the context.
+What is happening here is that my commit exposed pre-existing bug to
+static analysis but it did not introduce a new regression. I missed
+from your patch how did you ended up to your conclusions.
 
-Form the logical perspective of the code,null deference indeed existed 
-before your fixes.
+Please *do not* ignore the sources next time. Either explain how the bug
+was found or provide the reporting source. You are essentially taking
+credit and also blame from the work that you did not accomplish
+yourself, which is both wrong and dishonest.
 
-But for smatch, It simply conducted a static code analysis and flagged a 
-line with a warnning.
-
-Its warning seems to be related to Commit 7ca110f2679b("tpm: Address 
-!chip->auth in tpm_buf_append_hmac_session*()")
-
-That's why I used the 'fixes' tag for Commit 7ca110f2679b.(Please 
-forgive me for not being clear earlier. I discovered it through smatch.)
-
-So, should I use the fix tag for Commit 7ca110f2679b ('tpm: Address 
-!chip->auth in tpm_buf_append_hmac_session*()') or for Commit 
-1085b8276bb4 ('tpm: Add the rest of the session HMAC API')?
-
-Even though I have already send V2 which fixes tag using Commit 
-1085b8276bb4 ('tpm: Add the rest of the session HMAC API'),
-
-I still want to gain knowledge in this area so that I can more 
-accurately use fxies tag and send patches in the future.
->
-> Address these issues and send v2. Thank you!
->
-> BR, Jarkko
-
-Thanks
-
-BR
-
-Hao
-
+BR, Jarkko
 
