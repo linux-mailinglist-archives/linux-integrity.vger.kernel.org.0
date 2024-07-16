@@ -1,131 +1,124 @@
-Return-Path: <linux-integrity+bounces-3137-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3138-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F2AD932E24
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 18:13:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50A22932E30
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 18:14:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35FF21F220D6
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 16:13:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 823501C211C5
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 16:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1121C19DF9D;
-	Tue, 16 Jul 2024 16:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 163EB19B59C;
+	Tue, 16 Jul 2024 16:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="w5Ti5JRE";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="w5Ti5JRE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjGeDT12"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450A81DDCE;
-	Tue, 16 Jul 2024 16:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19761DDCE;
+	Tue, 16 Jul 2024 16:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721146381; cv=none; b=KZCahLkHdbbKyotQin7P0fL3nFsl4bWJ8FKgiY1kEs7vvIlnkdBAI572TmxH664fxfIKz3EDc9Mmu9rzUkdweDjUKGJ3OE1STSEbBOxYMzu9Y/g9uScNKxPXj68y28PtAmdNjX6oWv2D4jbNE+PG8a0GYxoUfTwJDfAUrgYMsoc=
+	t=1721146453; cv=none; b=rnCRzcou0vW+DYkrSlHvlObCmtYUUD90TYgh0JMXJHTIKhhfx76kJDVLcsxI7LqO1EeH0Bkzhw6jP3D0tU9veJZJSMxJNou+5CTQgV/vZ0LJXY6RgMpB+/NMyUA51h4DDK5SLBj4x/xB/y9sn/5ULTIdGeYqlAihG637ynGYBo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721146381; c=relaxed/simple;
-	bh=uVjkJ49b/yBaPoybzQj8BJWIAtzJ2A0MyWEfn24MNKA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=udpD7sro4wP/reXdr0qVgC8QLo7xAXSMDULjbIxhqGYUSjp36dRjBN+1hgnOizF+2TwE8h9KiyYdNN52++SQHX2g3urXnfKPFMBgXkyFJiayrGuEl/6K4rhoUP2TIiOiDIW6owFNa8iLWZBbkIMLTZWEHCTsl9ExMEW7vIZI+hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=w5Ti5JRE; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=w5Ti5JRE; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1721146374;
-	bh=uVjkJ49b/yBaPoybzQj8BJWIAtzJ2A0MyWEfn24MNKA=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=w5Ti5JRE//Vx3a3OuzV8wkqcdM9o25BnWOnkKOIPpVYAihmxEB6ByOff1/m10QOAj
-	 py6wkR3M3X1tu+AvcVcI5EL3dTrPfor6U3VAEPlCcFsgi7fevJCeZzukaGyok6HDG+
-	 6u+uHdCeyHj5/D5TVEJ6WZRd2Ek87OwEv4EI0nis=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id CBD8012866B5;
-	Tue, 16 Jul 2024 12:12:54 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id seKY2ty1dPDA; Tue, 16 Jul 2024 12:12:54 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1721146374;
-	bh=uVjkJ49b/yBaPoybzQj8BJWIAtzJ2A0MyWEfn24MNKA=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=w5Ti5JRE//Vx3a3OuzV8wkqcdM9o25BnWOnkKOIPpVYAihmxEB6ByOff1/m10QOAj
-	 py6wkR3M3X1tu+AvcVcI5EL3dTrPfor6U3VAEPlCcFsgi7fevJCeZzukaGyok6HDG+
-	 6u+uHdCeyHj5/D5TVEJ6WZRd2Ek87OwEv4EI0nis=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 90B851286670;
-	Tue, 16 Jul 2024 12:12:50 -0400 (EDT)
-Message-ID: <ee1ae815b6e75021709612181a6a4415fda543a4.camel@HansenPartnership.com>
-Subject: Re: [RFC PATCH v19 0/5] Script execution control (was O_MAYEXEC)
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, 
-	=?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=
-	 <mic@digikod.net>, Mimi Zohar <zohar@linux.ibm.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner
- <brauner@kernel.org>,  Kees Cook <keescook@chromium.org>, Linus Torvalds
- <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore
- Ts'o <tytso@mit.edu>, Alejandro Colomar <alx@kernel.org>, Aleksa Sarai
- <cyphar@cyphar.com>, Andrew Morton <akpm@linux-foundation.org>, Andy
- Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Casey
- Schaufler <casey@schaufler-ca.com>, Christian Heimes
- <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, Eric Biggers
- <ebiggers@kernel.org>, Eric Chiang <ericchiang@google.com>, Fan Wu
- <wufan@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>, Geert
- Uytterhoeven <geert@linux-m68k.org>, James Morris
- <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>,  Jann Horn
- <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jonathan Corbet
- <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, Lakshmi
- Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi
- <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T .
- Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski
- <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, Matthew
- Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, Nicolas
- Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,  Scott Shell
- <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, Stephen Rothwell
- <sfr@canb.auug.org.au>,  Steve Dower <steve.dower@python.org>, Steve Grubb
- <sgrubb@redhat.com>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
- Vincent Strubel <vincent.strubel@ssi.gouv.fr>,  Xiaoming Ni
- <nixiaoming@huawei.com>, Yin Fengwei <fengwei.yin@intel.com>, 
- kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Date: Tue, 16 Jul 2024 12:12:49 -0400
-In-Reply-To: <9e3df65c2bf060b5833558e9f8d82dcd2fe9325a.camel@huaweicloud.com>
-References: <20240704190137.696169-1-mic@digikod.net>
-	 <55b4f6291e8d83d420c7d08f4233b3d304ce683d.camel@linux.ibm.com>
-	 <20240709.AhJ7oTh1biej@digikod.net>
-	 <9e3df65c2bf060b5833558e9f8d82dcd2fe9325a.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1721146453; c=relaxed/simple;
+	bh=pT5RpY9lauBmkOcsYuu4tTe9R4Aa3/4UfpKQYu5QfdM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kv76DvoZlEvm5EIxflvo+BMFYN0RoS6oP/anCXzmvFI3x4iVdXsUlFlNKFa2GFYJWNzJWKToSOcCveByU6/R5ku3QIKYaFYqzJdfqAKHIsfjukAOy5q/XpQ9I7NFyucj3ZFdHy4DbZ7nnW8/OCiqO+jnIzm6Bg/MXLF4TTMmAPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjGeDT12; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05FDDC116B1;
+	Tue, 16 Jul 2024 16:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721146452;
+	bh=pT5RpY9lauBmkOcsYuu4tTe9R4Aa3/4UfpKQYu5QfdM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EjGeDT12OdyyFi9IlXe3uM2QetKY/wnkWrKXyDdvQ0W1c/WywruYIHYpE3QruBBjC
+	 Po61Bv5Vd2bGGyRFMnFsmHR4KlI+a2mEGALKBTf2sM+E0qfG5i/zAZFmBnZXfC+XyY
+	 xqoFJYb7srotfzcX2cgOvA2evNzhNUbmLLDK9R8qbV3s6FcTK0+b3mseKLQJmh1RKi
+	 NfLOWjGmafDEeF16IfFeZ6u6Z5Qlqw/uHyrzjv0QJAX93ZqTnSuIVZ3CsjuXlyHT2X
+	 asvcC122tKDWMuAup3XE+o5sNywc80GmOg2VTT1QNcerVtxbdFL1CInWQ7HW/Lv7Pb
+	 E1D77SEMf4ENg==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	stable@vger.kernel.org,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm: Fix alignment of buf->handles
+Date: Tue, 16 Jul 2024 19:13:46 +0300
+Message-ID: <20240716161348.99858-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2024-07-16 at 17:57 +0200, Roberto Sassu wrote:
-> But the Clip OS 4 patch does not cover the redirection case:
-> 
-> # ./bash < /root/test.sh
-> Hello World
-> 
-> Do you have a more recent patch for that?
+tpm_buf_append_name() has the following snippet in the beginning:
 
-How far down the rabbit hole do you want to go?  You can't forbid a
-shell from executing commands from stdin because logging in then won't
-work.  It may be possible to allow from a tty backed file and not from
-a file backed one, but you still have the problem of the attacker
-manually typing in the script.
+	if (!tpm2_chip_auth(chip)) {
+		tpm_buf_append_u32(buf, handle);
+		/* count the number of handles in the upper bits of flags */
+		buf->handles++;
+		return;
+	}
 
-The saving grace for this for shells is that they pretty much do
-nothing on their own (unlike python) so you can still measure all the
-executables they call out to, which provides reasonable safety.
+The claim in the comment is wrong, and the comment is in the wrong place
+as it should not be anyway a concern of the "call site". So in essence
+it is lying about the code.
 
-James
+Fix the alignment to be aligned with the claim in the comment and remove
+the comment.
+
+Cc: stable@vger.kernel.org # v6.10+
+Fixes: 699e3efd6c64 ("tpm: Add HMAC session start and end functions")
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/tpm2-sessions.c | 1 -
+ include/linux/tpm.h              | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index d3521aadd43e..02fc5d4ff535 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -238,7 +238,6 @@ void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+ 
+ 	if (!tpm2_chip_auth(chip)) {
+ 		tpm_buf_append_u32(buf, handle);
+-		/* count the number of handles in the upper bits of flags */
+ 		buf->handles++;
+ 		return;
+ 	}
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index e93ee8d936a9..4b55298520b5 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -374,10 +374,10 @@ enum tpm_buf_flags {
+  * A string buffer type for constructing TPM commands.
+  */
+ struct tpm_buf {
+-	u32 flags;
++	u16 flags;
++	u16 handles;
+ 	u32 length;
+ 	u8 *data;
+-	u8 handles;
+ };
+ 
+ enum tpm2_object_attributes {
+-- 
+2.45.2
 
 
