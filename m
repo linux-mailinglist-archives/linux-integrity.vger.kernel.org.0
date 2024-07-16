@@ -1,70 +1,46 @@
-Return-Path: <linux-integrity+bounces-3119-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3120-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 906799323CD
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 12:20:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70675932423
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 12:33:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3CC51C20B9E
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 10:20:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DD09282FED
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 10:33:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D031953A8;
-	Tue, 16 Jul 2024 10:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E86198E6E;
+	Tue, 16 Jul 2024 10:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="L9cELZwG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HGWeTWkX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A766AC0;
-	Tue, 16 Jul 2024 10:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.140.195.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721125252; cv=pass; b=RmtX1fN9Wynx3I7/Vw8P8O4UiN1Ii1e0tpDxaKVLpGSPWvVw5ywzMRyv1Bonw0Cq/utD/v5COLt3tjLBkTI2Q/iCqm9hQ7FAdnxfXcxeM2ZJ3i4l5xZ7Tjk3WT/ZPigWLARGoRIPHwojuaZuyOEE9eVgZqiVJ0qyQ41AFQ/4MKA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721125252; c=relaxed/simple;
-	bh=xkkChdmkRLKiZKGSsspElQIgwTeWZhu6tOmt+rhM/P4=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB19A198A34;
+	Tue, 16 Jul 2024 10:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721126000; cv=none; b=G3gIHmWL3MqMQGA+55IUt0jWjE+VrFEN5k6NKoxg3h7aLm3KkfO35FPAEFjduEncfxYn+l7j1sCx0SMQMxCwhP0CZl2uXMeRs+50ak8tpIXaLknNtdrD0AF8juFtJD/D7u5+1xCZGQdxzOBwMQ1YyIw5GFwtyHTVdS43btO2L6g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721126000; c=relaxed/simple;
+	bh=dN5E33LT7GgPkxb12Y5QkfMGlP4vR+Mumccgj5BvfJ8=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ZmP70kp/kVfmnKMBL/gxSVzHURXbFiRAhjip5Zx1NfUN2OCDM8aU/QqrQTsOYR2ADOc4aPlbD7wffZ3JguSgctKqfpdLMT6aq9rhr+Exypsb0X8IpIfe9lkZo9LXRnSYLCm6rdwJp+tvmMtG/q82TFTPremDgYcGJMSrnby1e9I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b=L9cELZwG; arc=pass smtp.client-ip=195.140.195.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
-Received: from localhost (83-245-197-232.elisa-laajakaista.fi [83.245.197.232])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sakkinen)
-	by meesny.iki.fi (Postfix) with ESMTPSA id 4WNZpR06BbzyS4;
-	Tue, 16 Jul 2024 13:20:46 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-	t=1721125247;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xkkChdmkRLKiZKGSsspElQIgwTeWZhu6tOmt+rhM/P4=;
-	b=L9cELZwGq6Sfuy4gjPffNFMDYxvrcIqdB62UJuXnWnauvdBwbebDPTAE9AastBfQ3a3Qr0
-	5EyaNYssBANt84GOIucl43Oh+yWDLkx4o57MX3UfqbQmEShG7Zw6+kmy9i7/lYRxnxh6tP
-	RI5SpSYPrv6QXf3J9LvLFzz1pDmZ4hs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=meesny; t=1721125247;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xkkChdmkRLKiZKGSsspElQIgwTeWZhu6tOmt+rhM/P4=;
-	b=SC4gnkgZXIJPahSjb7Y0NX5osY+m9pOYWsJFUL7hixkwR5SaH3cKP65BIsfxhDskvwFP8f
-	EGukVZOLlppr98b1VXkWWe8FwtePf5legdGeAB4cZVTVxIH52ILnBQx3MSS5P5QgmfSVJW
-	BjeQ56Il5JlHtWuQbBxFFK7SknP736Q=
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1721125247; a=rsa-sha256; cv=none;
-	b=CLSLkaC/O+/eroBuPJGwOwmn2TxwfklI1ZgjXGbSDUaH4F6sGzcEVmmiUqXgIA2Y6zxC3F
-	KLOj0un+4HgaEV1lAGqh57l9RjpwinZUyIvuju1oVn6c9ICVxhp7quQ/6Msp5cIVcJb5wx
-	xRjOjpydn/oXEBLSdK25NrJ3ZZWLyZg=
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
+	 References:In-Reply-To; b=j0WAoBZUWYt2uPTTyon0C22U8LuCuELSs3IFu7JcDISe2dFLwckPDSNK1Smh22KQHIWd1Gsuv4K9xUe2a0kke4Qzxv8lFvDHU2vTxFlN9iAEtHPGGZSKu7b2WDVtnTo1edjF5YjBXjdFjMkhW+RAD4QiBlR35L6zw29zI/PHqNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HGWeTWkX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D5CC116B1;
+	Tue, 16 Jul 2024 10:33:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721126000;
+	bh=dN5E33LT7GgPkxb12Y5QkfMGlP4vR+Mumccgj5BvfJ8=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=HGWeTWkXtRL6VXma7QDXpFmNzfcRfYea92DaBoa4f5SfAn7PZqZ6sR9QR/AKpaLun
+	 /pNc0sTWAYyGdb9M55bzVZalzvG3OIeYxK4+WuBhNZQr9LG81TI9XxGIDi7B4lp9kK
+	 IFiAEvxNQT3oK/6KzTCWDAcaewz8J+RD5EM21WzOTCEAU4M0J98k/So/G00RVoLNen
+	 fVdLVo9L8CG6AzYn37hxDNy8mAhiZW4HT4UuePM9AYUTyp1wFqINIVq6IQNZbpoFpA
+	 keMwBSLKfaG+a6HSFNX/TW1CXJErb9UHZ1f6+kPgOLWpDACSVfLnK5FOqU8xWBwSvk
+	 CqeaXPwUC2KVw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -73,76 +49,68 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 16 Jul 2024 13:20:46 +0300
-Message-Id: <D2QVZB1Y4DHT.2WFLXMCFYSISM@iki.fi>
+Date: Tue, 16 Jul 2024 13:33:17 +0300
+Message-Id: <D2QW8VSPX777.34R28W8GVXKMS@kernel.org>
 Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Hao
  Ge" <gehao@kylinos.cn>
 Subject: Re: [PATCH] tpm: Move dereference after NULL check in
  tpm_buf_check_hmac_response
-From: "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>
-To: "Hao Ge" <hao.ge@linux.dev>, "Jarkko Sakkinen" <jarkko@kernel.org>,
- <peterhuewe@gmx.de>, <jgg@ziepe.ca>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Hao Ge" <hao.ge@linux.dev>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>
 X-Mailer: aerc 0.17.0
 References: <20240709023337.102509-1-hao.ge@linux.dev>
- <D2Q2Q4R8BZ4Q.2QZF7NM3RE9B8@kernel.org>
- <593e3ae7-1f8c-218a-a5ce-3d90e3008999@linux.dev>
-In-Reply-To: <593e3ae7-1f8c-218a-a5ce-3d90e3008999@linux.dev>
+In-Reply-To: <20240709023337.102509-1-hao.ge@linux.dev>
 
-On Tue Jul 16, 2024 at 4:04 AM EEST, Hao Ge wrote:
-> Hi Jarkko
+On Tue Jul 9, 2024 at 5:33 AM EEST, Hao Ge wrote:
+> From: Hao Ge <gehao@kylinos.cn>
 >
-> Have a nice day.
+> We shouldn't dereference "auth" until after we have checked that it is
+> non-NULL.
 >
-> On 7/15/24 19:25, Jarkko Sakkinen wrote:
-> > On Tue Jul 9, 2024 at 5:33 AM EEST, Hao Ge wrote:
-> >> From: Hao Ge <gehao@kylinos.cn>
-> >>
-> >> We shouldn't dereference "auth" until after we have checked that it is
-> >> non-NULL.
-> >>
-> >> Fixes: 7ca110f2679b ("tpm: Address !chip->auth in tpm_buf_append_hmac_=
-session*()")
-> >> Signed-off-by: Hao Ge <gehao@kylinos.cn>
-> > Also lacking:
-> >
-> > Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > Closes: https://lore.kernel.org/linux-integrity/3b1755a9-b12f-42fc-b26d=
--de2fe4e13ec2@stanley.mountain/T/#u
+> Fixes: 7ca110f2679b ("tpm: Address !chip->auth in tpm_buf_append_hmac_ses=
+sion*()")
+> Signed-off-by: Hao Ge <gehao@kylinos.cn>
+> ---
+>  drivers/char/tpm/tpm2-sessions.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 >
-> Regarding this version, I don't think I should add these.
->
-> I send this patch on July 9th, 2024.
->
-> The following email was sent on July 13th, 2024.
->
-> https://lore.kernel.org/linux-integrity/3b1755a9-b12f-42fc-b26d-de2fe4e13=
-ec2@stanley.mountain/T/#u
->
-> I think these should be included in the subsequent versions (if any).
+> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-ses=
+sions.c
+> index 2281d55df545..d3521aadd43e 100644
+> --- a/drivers/char/tpm/tpm2-sessions.c
+> +++ b/drivers/char/tpm/tpm2-sessions.c
+> @@ -746,15 +746,16 @@ int tpm_buf_check_hmac_response(struct tpm_chip *ch=
+ip, struct tpm_buf *buf,
+>  	struct tpm2_auth *auth =3D chip->auth;
+>  	off_t offset_s, offset_p;
+>  	u8 rphash[SHA256_DIGEST_SIZE];
+> -	u32 attrs;
+> +	u32 attrs, cc;
+>  	struct sha256_state sctx;
+>  	u16 tag =3D be16_to_cpu(head->tag);
+> -	u32 cc =3D be32_to_cpu(auth->ordinal);
+>  	int parm_len, len, i, handles;
+> =20
+>  	if (!auth)
+>  		return rc;
+> =20
+> +	cc =3D be32_to_cpu(auth->ordinal);
+> +
+>  	if (auth->session >=3D TPM_HEADER_SIZE) {
+>  		WARN(1, "tpm session not filled correctly\n");
+>  		goto out;
 
-OK sorry, then you are right.
+Please check:
 
->
-> >
-> > What is happening here is that my commit exposed pre-existing bug to
-> > static analysis but it did not introduce a new regression. I missed
-> > from your patch how did you ended up to your conclusions.
-> >
-> > Please *do not* ignore the sources next time. Either explain how the bu=
-g
-> > was found or provide the reporting source. You are essentially taking
-> > credit and also blame from the work that you did not accomplish
-> > yourself, which is both wrong and dishonest.
-> >
-> > BR, Jarkko
->
-> OK,got it,I'll pay more attention to such details in the future.
->
-> I would like to clarify that I did not taking credit and dishonest.
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/comm=
+it/?id=3D72d6e06ed101e31e943937e42053fc690dc75cfe
 
-OK, cool, and I do agree, and I'm sorry what I said.
+It is exactly this except commit message is tuned. And please denote
+that I'm on holiday ;-)
 
-Please just add the necessary details and send v2 then.
+If that works for you, I can put it to my -rc PR.
 
-BRR, Jarkko
+Thank you.
+
+BR, Jarkko
 
