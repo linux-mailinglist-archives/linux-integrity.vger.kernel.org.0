@@ -1,236 +1,301 @@
-Return-Path: <linux-integrity+bounces-3135-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3136-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5DDF932A42
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 17:19:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EC9B932CD4
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 17:58:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AEBE1F22D83
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 15:19:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86603B2370D
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 15:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80DAD19DFB8;
-	Tue, 16 Jul 2024 15:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KuM2abcJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396CB19EEA7;
+	Tue, 16 Jul 2024 15:58:25 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEFA219E7D8
-	for <linux-integrity@vger.kernel.org>; Tue, 16 Jul 2024 15:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30210195B27;
+	Tue, 16 Jul 2024 15:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721143133; cv=none; b=QBbkGc/YQDPs3PBrQkR8kT7+8Yatx0EOn7yBJEhjPX+FeFkNQ7oaBdGRnfHm2jWwHkRp7u4vPGq3142PxyhVd2kTKC7Er/EwxcqqCaP5akrCghffvx9Yo68kMV0gSxf1ch5rRRrIH0cQ1ugGd7ILky0y/5ijSTHa9zYW4aRAnWU=
+	t=1721145505; cv=none; b=kTM3tk4N+nfjD6G8rD6QXUrzzjBsB58Xu+OrHgCrceAMqBMx5paf9+6ne8+6a3L4amdOo4R23ZlrfFeqM0q7dsYKNfW1opSb7IccKmJ6PXaZ83gyrttHhVKhiRCZlsVGQvXv6kg6/fGVLRmrKbFan9VPSgzjzBinNklz9Knw8N4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721143133; c=relaxed/simple;
-	bh=9Cy/3Y8kPlwgnsA87ATuYpWF26sXvnlcGY/yqfqbXSU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IWnR1khEbRuXcW5bhhlJ3qEo1OyiFORDI0T3JrcX8zSzQ7o89OhVcN8uCdXRL3Zu9iERdYjkIIxyieiKvqnGb3nnu/7b7IMSPdYOI+jdtKnF7A2PY6g0Y4UipcZJnacUl5X04bgjgLPC34fZnDGZPDeR56IUK94Cnr/YIEw1zJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KuM2abcJ; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-447f8aa87bfso462601cf.0
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Jul 2024 08:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1721143131; x=1721747931; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WWVNrxbBHDXZu/jCvfJLl2ens68sOvgHXhZ1riQlav8=;
-        b=KuM2abcJKNu6Wu/Zo6y3Dila7DecYrbJ3Jt4gioQHFe2bftbtrqLfYEDx7ZvWclHS2
-         HY8POeFIzuln87aKfgkH39mcSevAbp2lvfj6gWOn0n+xO+RlHMjSfV1C6jF4w89pNtQr
-         6QttE9ehDZWnTJppIhMidRDOjxHwb7Hf3+IUzEn0E3AWoBclFHDTZ6BFMkoFe8yH8JhK
-         2sAVJWYu0HFyYerDwucdOrwouVmkCQCCj9q4M1LdV7oe/pvY1KsFZO0YomFMX9B/uUlS
-         kaNqwnZkhkKf7mBYUcm44e0sorNHWXg8mgDi5vaPxrsS45DcpgBlHTrUTBhdUYjQXn6A
-         c99A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721143131; x=1721747931;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WWVNrxbBHDXZu/jCvfJLl2ens68sOvgHXhZ1riQlav8=;
-        b=iju0/tCvxxAxbgKN5A8getQ4cCCyZlwuausmBpcvgJ+A5YktQ3qhIk6DoaPvEHLlHa
-         cwq2eaGnm0OZDstmRmaSnWlIXzRVmrYRE5eK8K/uYTIB9NSXq3xpV9gvMzM9MG55aaxc
-         lZLCxneVjnWOk/mZSUf4IHGgs6C7rQzxAFNWumIG/V6W8BbbXixTMVwH6rPv7go8UOyJ
-         9YsnbobthmrgGVtYRa3IXPJZOu5xxellXGgC+P/ymZSNhtHzl50RhQ3ZDhtIYty68VM/
-         Vz23ARifgaeSTLFbEtVVOhGLjiYIVeR3Z606h9IOJ9h2JUIud/jh0MDK8wD2lhIWrQd/
-         tiPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVKN2F8lwxj3yVvVMmmajnuR0N3sJ3+G5InLh9ovw7wXpw3YjXWBiX53pgtT7v3r46LjsJA4MAqElIdAdgZ5xnSkTAzIpGCl11eaccBEP3V
-X-Gm-Message-State: AOJu0YxTueZtwUCqvxqXo2ybzbiPNkGCEjzNg965MlEyT+Ntzx0mkJRt
-	UZURVd6Vj+hfCP0H4CrIbc4vQKuD2QwhHqqD/maNEEXWmEROUdKaoed7fUCqW+N3dJVwJ2rtZKu
-	z3EqtiuYdL/m8drpHCd8hTBrj/jHUpDGfgtnl
-X-Google-Smtp-Source: AGHT+IHWbKj34zsRyLKiBWqdmFyKlDq6Wr5+2Wdecg/ZG3HyZU7BuDsfvRbU1vyabej6wFPdLE9jOxxXXzqK9dZsCJU=
-X-Received: by 2002:a05:622a:997:b0:444:dc22:fb1d with SMTP id
- d75a77b69052e-44f7a64c7e0mr3638781cf.12.1721143130336; Tue, 16 Jul 2024
- 08:18:50 -0700 (PDT)
+	s=arc-20240116; t=1721145505; c=relaxed/simple;
+	bh=x01xUcW0fNo3bqc70fBVuuGS0X2cQFPaRzseNMmOH9U=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uRXmNyHRI+ZUTrEhgLdOUy2Sg2mR0fwWv8VqQt+arM/EpdEx2TMT15FwawEBg1ukWeTQ44twfIthjYGDTaU1JRy4Udc0Uwmz97/x43BCwP8f3y2QEc0jW+Gs9FqFixMnBQXONd26vzqezkyH2FzIvoOKlq4KuullKEPbc2h6jis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4WNjmc1xyNz9v7Jq;
+	Tue, 16 Jul 2024 23:34:40 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id EB28F14051C;
+	Tue, 16 Jul 2024 23:58:12 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwA35i93mJZmA3M7AA--.19133S2;
+	Tue, 16 Jul 2024 16:58:11 +0100 (CET)
+Message-ID: <9e3df65c2bf060b5833558e9f8d82dcd2fe9325a.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v19 0/5] Script execution control (was O_MAYEXEC)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>, Mimi Zohar
+	 <zohar@linux.ibm.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner
+ <brauner@kernel.org>,  Kees Cook <keescook@chromium.org>, Linus Torvalds
+ <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore
+ Ts'o <tytso@mit.edu>, Alejandro Colomar <alx@kernel.org>, Aleksa Sarai
+ <cyphar@cyphar.com>, Andrew Morton <akpm@linux-foundation.org>, Andy
+ Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Casey
+ Schaufler <casey@schaufler-ca.com>, Christian Heimes
+ <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, Eric Biggers
+ <ebiggers@kernel.org>, Eric Chiang <ericchiang@google.com>, Fan Wu
+ <wufan@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>, Geert
+ Uytterhoeven <geert@linux-m68k.org>, James Morris
+ <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>,  Jann Horn
+ <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jonathan Corbet
+ <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, Lakshmi
+ Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi
+ <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T .
+ Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski
+ <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, Matthew
+ Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, Nicolas
+ Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,  Scott Shell
+ <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, Stephen Rothwell
+ <sfr@canb.auug.org.au>,  Steve Dower <steve.dower@python.org>, Steve Grubb
+ <sgrubb@redhat.com>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+ Vincent Strubel <vincent.strubel@ssi.gouv.fr>,  Xiaoming Ni
+ <nixiaoming@huawei.com>, Yin Fengwei <fengwei.yin@intel.com>, 
+ kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Date: Tue, 16 Jul 2024 17:57:39 +0200
+In-Reply-To: <20240709.AhJ7oTh1biej@digikod.net>
+References: <20240704190137.696169-1-mic@digikod.net>
+	 <55b4f6291e8d83d420c7d08f4233b3d304ce683d.camel@linux.ibm.com>
+	 <20240709.AhJ7oTh1biej@digikod.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240708.quoe8aeSaeRi@digikod.net> <CALmYWFuVJiRZgB0ye9eR95dvBOigoOVShgS9i_ESjEre-H5pLA@mail.gmail.com>
- <ef3281ad-48a5-4316-b433-af285806540d@python.org> <CALmYWFuFE=V7sGp0_K+2Vuk6F0chzhJY88CP1CAE9jtd=rqcoQ@mail.gmail.com>
- <20240709.aech3geeMoh0@digikod.net> <CALmYWFuOXAiT05Pi2rZ1nUAKDGe9JyTH7fro2EYS1fh3zeGV5Q@mail.gmail.com>
- <20240710.eiKohpa4Phai@digikod.net> <202407100921.687BE1A6@keescook>
- <20240711.sequuGhee0th@digikod.net> <CALmYWFt7X0v8k1N9=aX6BuT2gCiC9SeWwPEBckvBk8GQtb0rqQ@mail.gmail.com>
- <20240716.Zah8Phaiphae@digikod.net>
-In-Reply-To: <20240716.Zah8Phaiphae@digikod.net>
-From: Jeff Xu <jeffxu@google.com>
-Date: Tue, 16 Jul 2024 08:18:09 -0700
-Message-ID: <CALmYWFu=kdsxZwj-U5yqCUXrhvzxWCt1YjuJv0eAAaAyGFbxFQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v19 2/5] security: Add new SHOULD_EXEC_CHECK and
- SHOULD_EXEC_RESTRICT securebits
-To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc: Kees Cook <kees@kernel.org>, Steve Dower <steve.dower@python.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, 
-	"Theodore Ts'o" <tytso@mit.edu>, Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Christian Heimes <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, 
-	Eric Biggers <ebiggers@kernel.org>, Eric Chiang <ericchiang@google.com>, 
-	Fan Wu <wufan@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, James Morris <jamorris@linux.microsoft.com>, 
-	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
-	Luca Boccassi <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Matthew Garrett <mjg59@srcf.ucam.org>, Matthew Wilcox <willy@infradead.org>, 
-	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, Scott Shell <scottsh@microsoft.com>, 
-	Shuah Khan <shuah@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, Steve Grubb <sgrubb@redhat.com>, 
-	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
-	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
-	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, 
-	linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:GxC2BwA35i93mJZmA3M7AA--.19133S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AFy7ZFWrJryfuF4xCr1kuFg_yoWxXFWfpa
+	naga12kF4kGF18Arn7K3WfuF1Sgws5JFW5Wrn8WryrZas0yr10qr4Svr15uFyDJFWFya42
+	vr4avr9xZw1qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
+	Jr1lIxkvb40E47kJMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+	C0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+	cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+	nxnUUI43ZEXa7IUYt5r7UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBGaV1uwLqwAAsq
 
-On Tue, Jul 16, 2024 at 8:15=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digik=
-od.net> wrote:
->
-> On Tue, Jul 16, 2024 at 08:02:37AM -0700, Jeff Xu wrote:
-> > On Thu, Jul 11, 2024 at 1:57=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@d=
-igikod.net> wrote:
-> > >
-> > > On Wed, Jul 10, 2024 at 09:26:14AM -0700, Kees Cook wrote:
-> > > > On Wed, Jul 10, 2024 at 11:58:25AM +0200, Micka=C3=ABl Sala=C3=BCn =
-wrote:
-> > > > > Here is another proposal:
-> > > > >
-> > > > > We can change a bit the semantic by making it the norm to always =
-check
-> > > > > file executability with AT_CHECK, and using the securebits to res=
-trict
-> > > > > file interpretation and/or command injection (e.g. user supplied =
-shell
-> > > > > commands).  Non-executable checked files can be reported/logged a=
-t the
-> > > > > kernel level, with audit, configured by sysadmins.
-> > > > >
-> > > > > New securebits (feel free to propose better names):
-> > > > >
-> > > > > - SECBIT_EXEC_RESTRICT_FILE: requires AT_CHECK to pass.
-> > > >
-> > > > Would you want the enforcement of this bit done by userspace or the
-> > > > kernel?
-> > > >
-> > > > IIUC, userspace would always perform AT_CHECK regardless of
-> > > > SECBIT_EXEC_RESTRICT_FILE, and then which would happen?
-> > > >
-> > > > 1) userspace would ignore errors from AT_CHECK when
-> > > >    SECBIT_EXEC_RESTRICT_FILE is unset
-> > >
-> > > Yes, that's the idea.
-> > >
-> > > >
-> > > > or
-> > > >
-> > > > 2) kernel would allow all AT_CHECK when SECBIT_EXEC_RESTRICT_FILE i=
+On Tue, 2024-07-09 at 22:43 +0200, Micka=C3=ABl Sala=C3=BCn wrote:
+> On Mon, Jul 08, 2024 at 04:35:38PM -0400, Mimi Zohar wrote:
+> > Hi Micka=C3=ABl,
+> >=20
+> > On Thu, 2024-07-04 at 21:01 +0200, Micka=C3=ABl Sala=C3=BCn wrote:
+> > > Hi,
+> > >=20
+> > > The ultimate goal of this patch series is to be able to ensure that
+> > > direct file execution (e.g. ./script.sh) and indirect file execution
+> > > (e.g. sh script.sh) lead to the same result, especially from a securi=
+ty
+> > > point of view.
+> > >=20
+> > > Overview
+> > > --------
+> > >=20
+> > > This patch series is a new approach of the initial O_MAYEXEC feature,
+> > > and a revamp of the previous patch series.  Taking into account the l=
+ast
+> > > reviews [1], we now stick to the kernel semantic for file executabili=
+ty.
+> > > One major change is the clear split between access check and policy
+> > > management.
+> > >=20
+> > > The first patch brings the AT_CHECK flag to execveat(2).  The goal is=
+ to
+> > > enable user space to check if a file could be executed (by the kernel=
+).
+> > > Unlike stat(2) that only checks file permissions, execveat2(2) +
+> > > AT_CHECK take into account the full context, including mount points
+> > > (noexec), caller's limits, and all potential LSM extra checks (e.g.
+> > > argv, envp, credentials).
+> > >=20
+> > > The second patch brings two new securebits used to set or get a secur=
+ity
+> > > policy for a set of processes.  For this to be meaningful, all
+> > > executable code needs to be trusted.  In practice, this means that
+> > > (malicious) users can be restricted to only run scripts provided (and
+> > > trusted) by the system.
+> > >=20
+> > > [1] https://lore.kernel.org/r/CAHk-=3DwjPGNLyzeBMWdQu+kUdQLHQugznwY7C=
+vWjmvNW47D5sog@mail.gmail.com
+> > >=20
+> > > Script execution
+> > > ----------------
+> > >=20
+> > > One important thing to keep in mind is that the goal of this patch
+> > > series is to get the same security restrictions with these commands:
+> > > * ./script.py
+> > > * python script.py
+> > > * python < script.py
+> > > * python -m script.pyT
+> >=20
+> > This is really needed, but is it the "only" purpose of this patch set o=
+r can it
+> > be used to also monitor files the script opens (for read) with the inte=
+ntion of
+> > executing.
+>=20
+> This feature can indeed also be used to monitor files requested by
+> scripts to be executed e.g. using
+> https://docs.python.org/3/library/io.html#io.open_code
+>=20
+> IMA/EVM can include this check in its logs.
+>=20
+> >=20
+> > >=20
+> > > However, on secure systems, we should be able to forbid these command=
 s
-> > > >    unset
-> > > >
-> > > > I suspect 1 is best and what you intend, given that
-> > > > SECBIT_EXEC_DENY_INTERACTIVE can only be enforced by userspace.
-> > >
-> > > Indeed. We don't want AT_CHECK's behavior to change according to
-> > > securebits.
-> > >
-> > One bit is good.
-> >
-> > > >
-> > > > > - SECBIT_EXEC_DENY_INTERACTIVE: deny any command injection via
-> > > > >   command line arguments, environment variables, or configuration=
- files.
-> > > > >   This should be ignored by dynamic linkers.  We could also have =
-an
-> > > > >   allow-list of shells for which this bit is not set, managed by =
-an
-> > > > >   LSM's policy, if the native securebits scoping approach is not =
-enough.
-> > > > >
-> > > > > Different modes for script interpreters:
-> > > > >
-> > > > > 1. RESTRICT_FILE=3D0 DENY_INTERACTIVE=3D0 (default)
-> > > > >    Always interpret scripts, and allow arbitrary user commands.
-> > > > >    =3D> No threat, everyone and everything is trusted, but we can=
- get
-> > > > >    ahead of potential issues with logs to prepare for a migration=
- to a
-> > > > >    restrictive mode.
-> > > > >
-> > > > > 2. RESTRICT_FILE=3D1 DENY_INTERACTIVE=3D0
-> > > > >    Deny script interpretation if they are not executable, and all=
-ow
-> > > > >    arbitrary user commands.
-> > > > >    =3D> Threat: (potential) malicious scripts run by trusted (and=
- not
-> > > > >       fooled) users.  That could protect against unintended scrip=
+> > > because there is no way to reliably identify the origin of the script=
+:
+> > > * xargs -a script.py -d '\r' -- python -c
+> > > * cat script.py | python
+> > > * python
+> > >=20
+> > > Background
+> > > ----------
+> > >=20
+> > > Compared to the previous patch series, there is no more dedicated
+> > > syscall nor sysctl configuration.  This new patch series only add new
+> > > flags: one for execveat(2) and four for prctl(2).
+> > >=20
+> > > This kind of script interpreter restriction may already be used in
+> > > hardened systems, which may need to fork interpreters and install
+> > > different versions of the binaries.  This mechanism should enable to
+> > > avoid the use of duplicate binaries (and potential forked source code=
+)
+> > > for secure interpreters (e.g. secure Python [2]) by making it possibl=
+e
+> > > to dynamically enforce restrictions or not.
+> > >=20
+> > > The ability to control script execution is also required to close a
+> > > major IMA measurement/appraisal interpreter integrity [3].
+> >=20
+> > Definitely.  But it isn't limited to controlling script execution, but =
+also
+> > measuring the script.  Will it be possible to measure and appraise the =
+indirect
+> > script calls with this patch set?
+>=20
+> Yes. You should only need to implement security_bprm_creds_for_exec()
+> for IMA/EVM.
+>=20
+> BTW, I noticed that IMA only uses the security_bprm_check() hook (which
+> can be called several times for one execve), but
+> security_bprm_creds_for_exec() might be more appropriate.
+
+Ok, I tried a trivial modification to have this working:
+
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima=
+_main.c
+index f04f43af651c..2a6b04c91601 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -554,6 +554,14 @@ static int ima_bprm_check(struct linux_binprm *bprm)
+                                   MAY_EXEC, CREDS_CHECK);
+ }
+=20
++static int ima_bprm_creds_for_exec(struct linux_binprm *bprm)
++{
++       if (!bprm->is_check)
++               return 0;
++
++       return ima_bprm_check(bprm);
++}
++
+ /**
+  * ima_file_check - based on policy, collect/store measurement.
+  * @file: pointer to the file to be measured
+@@ -1177,6 +1185,7 @@ static int __init init_ima(void)
+=20
+ static struct security_hook_list ima_hooks[] __ro_after_init =3D {
+        LSM_HOOK_INIT(bprm_check_security, ima_bprm_check),
++       LSM_HOOK_INIT(bprm_creds_for_exec, ima_bprm_creds_for_exec),
+        LSM_HOOK_INIT(file_post_open, ima_file_check),
+        LSM_HOOK_INIT(inode_post_create_tmpfile, ima_post_create_tmpfile),
+        LSM_HOOK_INIT(file_release, ima_file_free),
+
+
+I also adapted the Clip OS 4 patch for bash.
+
+The result seems good so far:
+
+# echo "measure fowner=3D2000 func=3DBPRM_CHECK" > /sys/kernel/security/ima=
+/policy
+
+# ./bash /root/test.sh
+Hello World
+
+# cat /sys/kernel/security/ima/ascii_runtime_measurements
+10 35435d0858d895b90097306171a2e5fcc7f5da9e ima-ng sha256:0e4acf326a82c6bde=
+d9d86f48d272d7a036b6490081bb6466ecc2a0e416b244a boot_aggregate
+10 4cd9df168a2cf8d18be46543e66c76a53ca6a03d ima-ng sha256:e7f3c2dab66f56fef=
+963fbab55fc6d64bc22a5f900c29042e6ecd87e08f2b535 /root/test.sh
+
+So, it is there.
+
+It works only with +x permission. If not, I get:
+
+# ./bash /root/test.sh
+./bash: /root/test.sh: Permission denied
+
+But the Clip OS 4 patch does not cover the redirection case:
+
+# ./bash < /root/test.sh
+Hello World
+
+Do you have a more recent patch for that?
+
+Thanks
+
+Roberto
+
+> >=20
+> > Mimi
+> >=20
+> > > This new execveat + AT_CHECK should not be confused with the O_EXEC f=
+lag
+> > > (for open) which is intended for execute-only, which obviously doesn'=
 t
-> > > > >       executions (e.g. sh /tmp/*.sh).
-> > > > >    =3D=3D> Makes sense for (semi-restricted) user sessions.
-> > > > >
-> > > > > 3. RESTRICT_FILE=3D1 DENY_INTERACTIVE=3D1
-> > > > >    Deny script interpretation if they are not executable, and als=
-o deny
-> > > > >    any arbitrary user commands.
-> > > > >    =3D> Threat: malicious scripts run by untrusted users.
-> > > > >    =3D=3D> Makes sense for system services executing scripts.
-> > > > >
-> > > > > 4. RESTRICT_FILE=3D0 DENY_INTERACTIVE=3D1
-> > > > >    Always interpret scripts, but deny arbitrary user commands.
-> > > > >    =3D> Goal: monitor/measure/assess script content (e.g. with IM=
-A/EVM) in
-> > > > >       a system where the access rights are not (yet) ready.  Arbi=
-trary
-> > > > >       user commands would be much more difficult to monitor.
-> > > > >    =3D=3D> First step of restricting system services that should =
-not
-> > > > >        directly pass arbitrary commands to shells.
-> > > >
-> > > > I like these bits!
-> > >
-> > > Good! Jeff, Steve, Florian, Matt, others, what do you think?
-> >
-> > For below two cases: will they be restricted by one (or some) mode abov=
-e ?
-> >
-> > 1> cat /tmp/a.sh | sh
-> >
-> > 2> sh -c "$(cat /tmp/a.sh)"
->
-> Yes, DENY_INTERACTIVE=3D1 is to deny both of these cases (i.e. arbitrary
-> user command).
->
-> These other examples should be allowed with AT_CHECK and RESTRICT_FILE=3D=
-1
-> if a.sh is executable though:
-> * sh /tmp/a.sh
-> * sh < /tmp/a.sh
-That looks good. Thanks for clarifying.
+> > > work for scripts.
+> > >=20
+> > > I gave a talk about controlling script execution where I explain the
+> > > previous approaches [4].  The design of the WIP RFC I talked about
+> > > changed quite a bit since then.
+> > >=20
+> > > [2] https://github.com/zooba/spython
+> > > [3] https://lore.kernel.org/lkml/20211014130125.6991-1-zohar@linux.ib=
+m.com/
+> > > [4] https://lssna2023.sched.com/event/1K7bO
+> > >=20
+> >=20
+> >=20
+
 
