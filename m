@@ -1,136 +1,105 @@
-Return-Path: <linux-integrity+bounces-3116-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3117-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7C3E931E3D
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 03:04:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03D5693210A
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 09:14:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4367AB21A7A
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 01:04:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86E93B22052
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 07:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E143187F;
-	Tue, 16 Jul 2024 01:04:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E872374C;
+	Tue, 16 Jul 2024 07:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="itbrRJox"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="kT1s73ju"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [83.166.143.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A758E79E0
-	for <linux-integrity@vger.kernel.org>; Tue, 16 Jul 2024 01:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71137376E0
+	for <linux-integrity@vger.kernel.org>; Tue, 16 Jul 2024 07:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721091872; cv=none; b=YvT+XJjbIcvvdCt+KYY0Pa3QCMDH3MY0RENg1aK1wWHHU92029VNN4R/azV09u35yjKkv5vbdwxy8fTcFI0KG/3YCr0cTSnu8KX6aoe3Mn4WpE7GVEPis6tYAZpbaUCgT63e0bkgfdp436i2Dadq6cy2YIdgLEKsfB2SvU1eilc=
+	t=1721114040; cv=none; b=Hp6aniSBz30DXJ3iicqF1/My2m9DSsmQDBOPeWdtzQqIZrQz6+OVMLPVEGnfWSXa7s3d+xHhQwr2pdp2DtbYX88DIn3OB3fGbqf3nV1KRvzrboX8izCOJl2rzPCyP6L1bvH2PrAOSyZRvOhcSZv0oPLfaGkT28yVGaS5Sm1M9fI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721091872; c=relaxed/simple;
-	bh=DxVL674DykXj38h1XVGpn0hsaGmd4nf0QTNzrbjYn8M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kKsgzAVH0tiGxV57ZXdgM5DM77O2C//Fa1ovbqdhqD0+JaKJJQiGU4vCsOKBi+7+Wo69Z6izXs06zEl9R1cIpQ2x/zQJrgbxCYVmx7rdV8nG9BzPb9g8Iad84rzCmS7POg0uDgLVmQj4CIivdJ/KXuKha5nLNr99eAuNf5IfQLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=itbrRJox; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: jarkko@kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1721091867;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rrsdvOcbnZj3fLM/P3nqd13De7FARkH+xOOXrXATVM0=;
-	b=itbrRJoxtO+pLwhn2iCH2bPN8FYFO9ODrSsOjdtfC8sPOGXa2S0CGR745jKwKFlH46Bf7s
-	8FPVMAmvHtIeGiKJcN7LS/QuOgmwi5BC1W0/qhlvkFXrNkkQDcq3CJB+TVm9sRuSx0iwN7
-	P2FkeEmQc5ApsAYkJUkOqhKVS4kEhNY=
-X-Envelope-To: peterhuewe@gmx.de
-X-Envelope-To: jgg@ziepe.ca
-X-Envelope-To: linux-integrity@vger.kernel.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: gehao@kylinos.cn
-Message-ID: <593e3ae7-1f8c-218a-a5ce-3d90e3008999@linux.dev>
-Date: Tue, 16 Jul 2024 09:04:08 +0800
+	s=arc-20240116; t=1721114040; c=relaxed/simple;
+	bh=om5UofC4ryHM94Wlsk4/cAWNj8IrCD8xKsDi+0pvYEI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IuAL3KVEodU6sokAFHyaOGLKDrYYJeuTfaGBCEikcy7WGV6+Q3FVIh4hhrex10jjL0Ytlmj6AfU5ASsUrpk0pBkm3FOuO1MeJxBna1P8BHJzH/1OvSzEs6ac+OcpwJMb3Swm6JBfGFdQZ8O7GriVf7L4uw3+vms6QhwvrzEs47M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=kT1s73ju; arc=none smtp.client-ip=83.166.143.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WNVfn1WqqzlGb;
+	Tue, 16 Jul 2024 09:13:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1721114033;
+	bh=Pgvv7MQ5tPNIpIpwnO7JzPSqhpV+bSm8Xa4gUvwKzv8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kT1s73ju4LMuNR9iv/HUc1o8CwZJ5xCxOz/+egyw3P7sbZeW2jRv16p+ElhwyUtEA
+	 zvYnMjKHWvc/qG6EqgzzBjF8lkQqacaFr+P3FuSQ58elSfbJjsGYZnsmUg1ZWS8FKD
+	 1oJ6pWXDMHcM7ab84mB83LrO7VC6Cvd3MjkJ0lkk=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WNVff3KMVzQHl;
+	Tue, 16 Jul 2024 09:13:46 +0200 (CEST)
+Date: Tue, 16 Jul 2024 09:13:44 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
+	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, 
+	Jeff Xu <jeffxu@google.com>, Jordan R Abrahams <ajordanr@google.com>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, 
+	Matthew Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
+	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Dower <steve.dower@python.org>, 
+	Steve Grubb <sgrubb@redhat.com>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
+	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
+	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH v19 0/5] Script execution control (was O_MAYEXEC)
+Message-ID: <20240716.bebeeX1aequi@digikod.net>
+References: <20240704190137.696169-1-mic@digikod.net>
+ <8734oawguu.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] tpm: Move dereference after NULL check in
- tpm_buf_check_hmac_response
-To: Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de, jgg@ziepe.ca
-Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
- Hao Ge <gehao@kylinos.cn>
-References: <20240709023337.102509-1-hao.ge@linux.dev>
- <D2Q2Q4R8BZ4Q.2QZF7NM3RE9B8@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Hao Ge <hao.ge@linux.dev>
-In-Reply-To: <D2Q2Q4R8BZ4Q.2QZF7NM3RE9B8@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <8734oawguu.fsf@trenco.lwn.net>
+X-Infomaniak-Routing: alpha
 
-Hi Jarkko
+On Mon, Jul 15, 2024 at 02:16:41PM -0600, Jonathan Corbet wrote:
+> Mickaël Salaün <mic@digikod.net> writes:
+> 
+> FYI:
+> 
+> > User space patches can be found here:
+> > https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+> 
+> That link appears to be broken.
 
-Have a nice day.
+Unfortunately, GitHub's code search links only work with an account.
+git grep prints a similar output though.
 
-On 7/15/24 19:25, Jarkko Sakkinen wrote:
-> On Tue Jul 9, 2024 at 5:33 AM EEST, Hao Ge wrote:
->> From: Hao Ge <gehao@kylinos.cn>
->>
->> We shouldn't dereference "auth" until after we have checked that it is
->> non-NULL.
->>
->> Fixes: 7ca110f2679b ("tpm: Address !chip->auth in tpm_buf_append_hmac_session*()")
->> Signed-off-by: Hao Ge <gehao@kylinos.cn>
-> Also lacking:
->
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/linux-integrity/3b1755a9-b12f-42fc-b26d-de2fe4e13ec2@stanley.mountain/T/#u
-
-Regarding this version, I don't think I should add these.
-
-I send this patch on July 9th, 2024.
-
-The following email was sent on July 13th, 2024.
-
-https://lore.kernel.org/linux-integrity/3b1755a9-b12f-42fc-b26d-de2fe4e13ec2@stanley.mountain/T/#u
-
-I think these should be included in the subsequent versions (if any).
-
->
-> What is happening here is that my commit exposed pre-existing bug to
-> static analysis but it did not introduce a new regression. I missed
-> from your patch how did you ended up to your conclusions.
->
-> Please *do not* ignore the sources next time. Either explain how the bug
-> was found or provide the reporting source. You are essentially taking
-> credit and also blame from the work that you did not accomplish
-> yourself, which is both wrong and dishonest.
->
-> BR, Jarkko
-
-OK,got it,I'll pay more attention to such details in the future.
-
-I would like to clarify that I did not taking credit and dishonest.
-
-As stated earlier, the timeline indicates that my patch preceded his email.
-
-Before submitting my patch, I conducted a thorough search to ensure that 
-there were no related submissions,
-
-  in order to avoid any duplication of effort and wastage of everyone's 
-time.
-
-I didn't expect to have wasted everyone's time because of commit message 
-, and I sincerely apologize for that.
-
-
-Thanks
-
-BR
-
-Hao
-
-
-
+> 
+> Thanks,
+> 
+> jon
 
