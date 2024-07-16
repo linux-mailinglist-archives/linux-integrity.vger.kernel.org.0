@@ -1,55 +1,56 @@
-Return-Path: <linux-integrity+bounces-3140-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3141-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD5F2932F35
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 19:37:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31FEF932F56
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 19:48:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E85811C20B4C
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 17:37:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD6E928246A
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 17:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F074119DF87;
-	Tue, 16 Jul 2024 17:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88A454BD4;
+	Tue, 16 Jul 2024 17:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="BhoDx/d0"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="QQQ+S7I2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8360219DF59
-	for <linux-integrity@vger.kernel.org>; Tue, 16 Jul 2024 17:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1A519DF8D
+	for <linux-integrity@vger.kernel.org>; Tue, 16 Jul 2024 17:48:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721151430; cv=none; b=QoswP6Dnqdj6Kl9LCxUOvlBV0JJTRoNL24u4CKpEDsQOREY/hYWSBujx6xWzDrObn5WjQ4a33dSrh/Qdsdr5ZTUN9wesb8MlHaUg8NNH2gHeBqCkH0KDwWrXfNdTfyvGWMpRB9zHkgMDyPBf4Aq7ZzYYZ4uUG/8NkQLmDYnBBNI=
+	t=1721152098; cv=none; b=JOMEDrrpHDaszp3UvTdL8WXdk2kwnmHl0Obm2ByRaMBsMDExmlEwSh5pr6+TdD2Psl/N/UxrTeODTcNtVbnFqBgporax46/4tbIBUIDilR7GagfeqnuSCkZ/CsjVJyLpZRTxyEUfbwO8A4cEkuQwkRyfx3WwVEQA8Do0IYnLKDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721151430; c=relaxed/simple;
-	bh=MW5MM0UiDoNQ5jIccGyeCS2wNwBx87O/gkIYwsEBj+s=;
+	s=arc-20240116; t=1721152098; c=relaxed/simple;
+	bh=NiVYgJ9EX5zgNqw3xIpFnIScG6qQ7oONoRUqdjLrXPI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OXVezdlxlH0KF25EjdHJcG2wDzJgx6WfU1WlTnGHNcSQsyy/hhZEo2YQjYdM0jBa+mkkZfY7uaSfqs7vtW1nsiSKo2kL7/IgsPd4jvKnrAx8dgg95HE9nGd2GwWsdIso/gSzggMmI/efnZgv4mHzpyJPREJiwrKRlucN7fsX1+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=BhoDx/d0; arc=none smtp.client-ip=83.166.143.168
+	 Content-Type:Content-Disposition:In-Reply-To; b=RpupEjS13QQhyz8LgX3kG4C54uD1vmtsTSj4Dw23SNr8nn5/kTK+ZZtfY/SU811anmoY6YSkdvZe+6oxo1F7vZKviP7295jYZOv7UIMl4RcWSGFWT/9XyRbneN058SF/cgIf8UUZdPlR/kjbEHgT60pQ48c2j8cPYIa5QwQKleI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=QQQ+S7I2; arc=none smtp.client-ip=185.125.25.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WNmMj5yz5z4Mp;
-	Tue, 16 Jul 2024 19:31:45 +0200 (CEST)
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WNmkc3K3RzncK;
+	Tue, 16 Jul 2024 19:48:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1721151105;
-	bh=Xu6GB1mmYQXJSoJZK4nvtCnpIij3wppCLjoOW51w6fM=;
+	s=20191114; t=1721152088;
+	bh=LWblpPfF9wNYIYfX15oQl6tTRp3rZAKkmPWjrsQep60=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BhoDx/d0FL+9WOZsjJfJW8taaEo6bVoFn6l1M02l3CmqODMqqKPv7R3eCAw4USrP/
-	 G+nhmkrZacHDd01il83mrHH+zULbipwD/RLRES9qWSMAIN23MFh2hYqoKE2W5cieGD
-	 HBnwBBUcQ3ZObdCcIHv/DM7C3kLPxfeMt0lO2WTY=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WNmMc22bKz12m6;
-	Tue, 16 Jul 2024 19:31:39 +0200 (CEST)
-Date: Tue, 16 Jul 2024 19:31:38 +0200
+	b=QQQ+S7I2Ua4od8sW/6D1JC9ivlgTH1sZMkaw8jYNQtPma8Ip6DbG40h1NpdimI7Xc
+	 F/k0WwtFrl7pTIGzv0AQntKmgMTJmCu5m09toaI5LhDwng++5GebvyVFtv5GfZB3yN
+	 VtdK+y0E4iqnH4BuYwNCr38mLDQw/yAs+Enhz0wE=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WNmkS378YzxCQ;
+	Tue, 16 Jul 2024 19:48:00 +0200 (CEST)
+Date: Tue, 16 Jul 2024 19:47:59 +0200
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
+To: Boris Lukashev <blukashev@sempervictus.com>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
 	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
 	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
 	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
@@ -71,12 +72,13 @@ Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
 	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-security-module@vger.kernel.org
 Subject: Re: [RFC PATCH v19 0/5] Script execution control (was O_MAYEXEC)
-Message-ID: <20240716.leeV4ooveinu@digikod.net>
+Message-ID: <20240716.shaliZ2chohj@digikod.net>
 References: <20240704190137.696169-1-mic@digikod.net>
  <55b4f6291e8d83d420c7d08f4233b3d304ce683d.camel@linux.ibm.com>
  <20240709.AhJ7oTh1biej@digikod.net>
  <9e3df65c2bf060b5833558e9f8d82dcd2fe9325a.camel@huaweicloud.com>
  <ee1ae815b6e75021709612181a6a4415fda543a4.camel@HansenPartnership.com>
+ <E608EDB8-72E8-4791-AC9B-8FF9AC753FBE@sempervictus.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -85,45 +87,50 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ee1ae815b6e75021709612181a6a4415fda543a4.camel@HansenPartnership.com>
+In-Reply-To: <E608EDB8-72E8-4791-AC9B-8FF9AC753FBE@sempervictus.com>
 X-Infomaniak-Routing: alpha
 
-On Tue, Jul 16, 2024 at 12:12:49PM -0400, James Bottomley wrote:
-> On Tue, 2024-07-16 at 17:57 +0200, Roberto Sassu wrote:
-> > But the Clip OS 4 patch does not cover the redirection case:
-> > 
-> > # ./bash < /root/test.sh
-> > Hello World
-> > 
-> > Do you have a more recent patch for that?
+(adding back other people in Cc)
 
-Bash was only partially restricted for CLIP OS because it was used for
-administrative tasks (interactive shell).
+On Tue, Jul 16, 2024 at 01:29:43PM -0400, Boris Lukashev wrote:
+> Wouldn't count those shell chickens - awk alone is enough and we can
+> use ssh and openssl clients (all in metasploit public code). As one of
+> the people who makes novel shell types, I can assure you that this
+> effort is only going to slow skiddies and only until the rest of us
+> publish mitigations for this mitigation :)
 
-Python was also restricted for user commands though:
-https://github.com/clipos-archive/clipos4_portage-overlay/blob/master/dev-lang/python/files/python-2.7.9-clip-mayexec.patch
+Security is not binary. :)
 
-Steve and Christian could help with a better Python implementation.
+Not all Linux systems are equals. Some hardened systems need this kind
+of feature and they can get guarantees because they fully control and
+trust their executable binaries (e.g. CLIP OS, chromeOS) or they
+properly sandbox them.  See context in the cover letter.
 
-> 
-> How far down the rabbit hole do you want to go?  You can't forbid a
-> shell from executing commands from stdin because logging in then won't
-> work.  It may be possible to allow from a tty backed file and not from
-> a file backed one, but you still have the problem of the attacker
-> manually typing in the script.
-
-Yes, that's why we'll have the (optional) SECBIT_EXEC_DENY_INTERACTIVE:
-https://lore.kernel.org/all/20240710.eiKohpa4Phai@digikod.net/
+awk is a script interpreter that should be patched too, like other Linux
+tools.
 
 > 
-> The saving grace for this for shells is that they pretty much do
-> nothing on their own (unlike python) so you can still measure all the
-> executables they call out to, which provides reasonable safety.
-
-Exactly. Python is a much more interesting target for attacker because
-it opens the door for arbitrary syscalls (see the cover letter).
-
-If we want to have a more advanced access control (e.g. allow Bash but
-not Python), we should extend existing LSMs to manage the appropriate
-securebits according to programs/subjects.
+> -Boris (RageLtMan)
+> 
+> On July 16, 2024 12:12:49 PM EDT, James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
+> >On Tue, 2024-07-16 at 17:57 +0200, Roberto Sassu wrote:
+> >> But the Clip OS 4 patch does not cover the redirection case:
+> >> 
+> >> # ./bash < /root/test.sh
+> >> Hello World
+> >> 
+> >> Do you have a more recent patch for that?
+> >
+> >How far down the rabbit hole do you want to go?  You can't forbid a
+> >shell from executing commands from stdin because logging in then won't
+> >work.  It may be possible to allow from a tty backed file and not from
+> >a file backed one, but you still have the problem of the attacker
+> >manually typing in the script.
+> >
+> >The saving grace for this for shells is that they pretty much do
+> >nothing on their own (unlike python) so you can still measure all the
+> >executables they call out to, which provides reasonable safety.
+> >
+> >James
+> >
 
