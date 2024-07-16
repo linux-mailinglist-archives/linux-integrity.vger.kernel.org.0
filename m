@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3122-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3123-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16C5993247F
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 12:57:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 220BE9324AD
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 13:13:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3CDB283643
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 10:57:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B78BB24220
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jul 2024 11:13:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5908517D371;
-	Tue, 16 Jul 2024 10:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 916FE1990A5;
+	Tue, 16 Jul 2024 11:13:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hv8DaxJl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="akmv+xLt"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FA313A416;
-	Tue, 16 Jul 2024 10:57:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679C5197543;
+	Tue, 16 Jul 2024 11:13:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721127463; cv=none; b=AxxtRZxH5Z6csMIULfE3OCrzI3rYwqOs5lB/tSUOORoKOp32H+rmVs7dIM3hsWzpb1VjTOCxliufZ1H6VmCsvqeF6uBUiyI6SeTQLe7a+30wiwXS5u/4ab3g/12DwV2ohd8+oL2FdAvbCMszJ+qLUEeOtWr44AX3LYGjlh/nLZ4=
+	t=1721128427; cv=none; b=LeUEnjAjzNf7lmbSoMLBHELkR6u1IC2xgCOqa/WwnSQ6T/gY6q1cyNDvV8lvHKY/npO7jwgU2qV7dG57WccYTLVzdXfl6PDLwwLR37wF8iKbWcHPYll6PKYIt2luPY7XRSMVn/U8djaOVLXNvb0dwD2TqDg3Xa/kWmouajP5u7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721127463; c=relaxed/simple;
-	bh=aocP7RUGsmhvJkehNMWI/c4VBoqY60Gv7KuiloPxwhs=;
+	s=arc-20240116; t=1721128427; c=relaxed/simple;
+	bh=0vdbSu1OCtFKw0qJs8Rw+nkNJ7PcbDbwEAd5tcv14T0=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=SkusTTbHVf1GphY1cAmqSOLjTVFwj67+neJsS4/gFqkaTJPiNfUgdFeTJWBtfjRLPdPaSLwa9zVqFMngiVi7vCgdQwetAv/bA2Rpdvjl60VYxv7rcTshTDEkquKzIXnCM+s2riE8iJhzPJVl4H/0aZpSP4f9L2Jm1af/6VhjXCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hv8DaxJl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A675C116B1;
-	Tue, 16 Jul 2024 10:57:41 +0000 (UTC)
+	 References:In-Reply-To; b=U5Rxj0rLa1c3QARXVbyrQKsyRwWy1HWskCFbdaFhRJDDf4usA3MF0CNHcx1N//4ZvDD0j4WhvIygzVhKONGnShUQPAsdlcAmsB7rTOKJBuwV/FBBmf51Oej05yp20FcjU0SV+/zUlbWSNqAbFs0MuA6q2Q5TzVedmvciYD6srcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=akmv+xLt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62627C4AF09;
+	Tue, 16 Jul 2024 11:13:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721127462;
-	bh=aocP7RUGsmhvJkehNMWI/c4VBoqY60Gv7KuiloPxwhs=;
+	s=k20201202; t=1721128427;
+	bh=0vdbSu1OCtFKw0qJs8Rw+nkNJ7PcbDbwEAd5tcv14T0=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Hv8DaxJl/t7ZHe9XvQzrSs5N487r48E/fAWYqcv2MpLjwgz7hkTDbBhCSb9GWJE7f
-	 yGBiwUvOPb5bURl99TU8kA6a2mKynDAgofa0QiJp9FEw4dBg4RxGq8dofDPpA30FTu
-	 hlXlMh4daX8WqIszuweEMUCQsvqD/l/bunF42v8+mxqmC7LvdGDIv94CJ5QxJDnYcp
-	 7u64BU3Z0lSokZO4ffZWbGL4dI7nDkThGjRuzr/t0Nzn7iodGm+J73Zjox2ukIGCeu
-	 d12qky3rIxX6PZEaXCrhV1e1CTIPAw/sd81wBp1P2EnvYvP78BgdqSaMl4/dW4dC3X
-	 DntTnoKy9b22g==
+	b=akmv+xLt6JNjS+Ii9gDW+b3EsweQoh5yuVYNnUITdW9pAPhwA/vqc8jXNzBhACFv3
+	 kjB9oo+LXbiwFm/aGbSEmco2VdKD2HJFFWTDeHNdcpz8uUN0Oz/QRgM4eCdF4dgPyu
+	 7AchizP8/3ZdEofN3Na5sbi1AowncUq+AhzdUngGDjecxACIT35Xv2Np3qEKAuZ3ol
+	 glERXXfBLIMVzqLrsJx8PaeXu9K6fKcvItKYtbKFOoiR8wHUKsOAESz8CIbWzDNOo6
+	 tac9j9R7tLDv8Km0+r/gkzZlF5m2DQb1N+/bfQwGYWLYXnmYPh9tHcrRoLu09g5Yer
+	 8/O3BR6GwD6yw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,71 +49,183 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 16 Jul 2024 13:57:39 +0300
-Message-Id: <D2QWRJMX5UZY.3EO7G8DMPU1ZQ@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Hao
- Ge" <gehao@kylinos.cn>
-Subject: Re: [PATCH] tpm: Move dereference after NULL check in
- tpm_buf_check_hmac_response
+Date: Tue, 16 Jul 2024 14:13:44 +0300
+Message-Id: <D2QX3UY7MF0A.2GZRRAUVMT1ST@kernel.org>
+Cc: <keyrings@vger.kernel.org>
+Subject: Re: [PATCH 1/6] tpm: consolidate TPM to crypto hash algorithm
+ conversion
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Hao Ge" <hao.ge@linux.dev>,
- <peterhuewe@gmx.de>, <jgg@ziepe.ca>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.17.0
-References: <20240709023337.102509-1-hao.ge@linux.dev>
- <D2QW8VSPX777.34R28W8GVXKMS@kernel.org>
-In-Reply-To: <D2QW8VSPX777.34R28W8GVXKMS@kernel.org>
+References: <20240524130459.21510-1-James.Bottomley@HansenPartnership.com>
+ <20240524130459.21510-2-James.Bottomley@HansenPartnership.com>
+In-Reply-To: <20240524130459.21510-2-James.Bottomley@HansenPartnership.com>
 
-On Tue Jul 16, 2024 at 1:33 PM EEST, Jarkko Sakkinen wrote:
-> On Tue Jul 9, 2024 at 5:33 AM EEST, Hao Ge wrote:
-> > From: Hao Ge <gehao@kylinos.cn>
-> >
-> > We shouldn't dereference "auth" until after we have checked that it is
-> > non-NULL.
-> >
-> > Fixes: 7ca110f2679b ("tpm: Address !chip->auth in tpm_buf_append_hmac_s=
-ession*()")
-> > Signed-off-by: Hao Ge <gehao@kylinos.cn>
-> > ---
-> >  drivers/char/tpm/tpm2-sessions.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-s=
-essions.c
-> > index 2281d55df545..d3521aadd43e 100644
-> > --- a/drivers/char/tpm/tpm2-sessions.c
-> > +++ b/drivers/char/tpm/tpm2-sessions.c
-> > @@ -746,15 +746,16 @@ int tpm_buf_check_hmac_response(struct tpm_chip *=
-chip, struct tpm_buf *buf,
-> >  	struct tpm2_auth *auth =3D chip->auth;
-> >  	off_t offset_s, offset_p;
-> >  	u8 rphash[SHA256_DIGEST_SIZE];
-> > -	u32 attrs;
-> > +	u32 attrs, cc;
-> >  	struct sha256_state sctx;
-> >  	u16 tag =3D be16_to_cpu(head->tag);
-> > -	u32 cc =3D be32_to_cpu(auth->ordinal);
-> >  	int parm_len, len, i, handles;
-> > =20
-> >  	if (!auth)
-> >  		return rc;
-> > =20
-> > +	cc =3D be32_to_cpu(auth->ordinal);
-> > +
-> >  	if (auth->session >=3D TPM_HEADER_SIZE) {
-> >  		WARN(1, "tpm session not filled correctly\n");
-> >  		goto out;
+Now I bandwidth to give this the first round.
+
+On Fri May 24, 2024 at 4:04 PM EEST, James Bottomley wrote:
+> linux crypto and the TPM use different numeric algorithm identifiers
+> for hash (and other) functions.  The conversion array for this already
+
+Please use exact names i.e. conversion is between enum tpm2_algorithms
+and enum hash_info. Much easier to lookup later on.
+
+> exists in two separate places.  The new policy sessions code would
+> have to add a third copy, so instead of increasing the duplication,
+> move the definition to a single consolidated place in tpm.h so the
+> policy code can use it as is.
+
+"the new policy session code" is not an artifact.
+
+Instead, please say what needs the third instance and why. I don't
+consume white paper text.
+
+I'm fine if you just use merging two redundant copies together, with
+no reference to the third copy. In this form this unconditional NAK
+given that I have zero idea what the third copy is and where it is
+located.
+
 >
-> Please check:
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> ---
+>  drivers/char/tpm/tpm2-cmd.c               |  8 ----
+>  include/linux/tpm.h                       | 52 ++++++++++++++++++++++-
+>  security/keys/trusted-keys/trusted_tpm2.c | 20 +--------
+>  3 files changed, 53 insertions(+), 27 deletions(-)
 >
-> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/co=
-mmit/?id=3D72d6e06ed101e31e943937e42053fc690dc75cfe
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index 0cdf892ec2a7..f4428e715dd8 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -14,14 +14,6 @@
+>  #include "tpm.h"
+>  #include <crypto/hash_info.h>
+> =20
+> -static struct tpm2_hash tpm2_hash_map[] =3D {
+> -	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+> -	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> -	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
+> -	{HASH_ALGO_SHA512, TPM_ALG_SHA512},
+> -	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+> -};
+> -
+>  int tpm2_get_timeouts(struct tpm_chip *chip)
+>  {
+>  	/* Fixed timeouts for TPM2 */
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index c17e4efbb2e5..07f532456a0c 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -418,11 +418,61 @@ enum tpm2_session_attributes {
+>  	TPM2_SA_AUDIT			=3D BIT(7),
+>  };
+> =20
+> -struct tpm2_hash {
+> +static const struct {
+>  	unsigned int crypto_id;
+>  	unsigned int tpm_id;
+> +} tpm2_hash_map[] =3D {
+> +	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+> +	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> +	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
+> +	{HASH_ALGO_SHA512, TPM_ALG_SHA512},
+> +	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+>  };
+> =20
+> +/**
+> + * tpm2_crypto_to_alg() - convert a crypto hash to a TPM alg id
+> + *
+> + * @hash: the crypto subsystem view of the hash
+> + *
+> + * Return: TPM algorithm id or -1 if no mapping was found.
+> + */
+> +static inline int tpm2_crypto_to_alg(int hash)
+> +{
+> +	int i;
+> +	int tpm_alg =3D -1;
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+> +		if (hash =3D=3D tpm2_hash_map[i].crypto_id) {
+> +			tpm_alg =3D tpm2_hash_map[i].tpm_id;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return tpm_alg;
+> +}
+> +
+> +/**
+> + * tpm2_alg_to_crypto() - convert a TPM alg id to a crypto hash
+> + *
+> + * @hash: the TPM alg id view of the hash
+> + *
+> + * Return: TPM algorithm id or -1 if no mapping was found.
+> + */
+> +static inline int tpm2_alg_to_crypto(int hash)
+> +{
+> +	int i;
+> +	int crypto_hash =3D -1;
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+> +		if (hash =3D=3D tpm2_hash_map[i].tpm_id) {
+> +			crypto_hash =3D tpm2_hash_map[i].crypto_id;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return crypto_hash;
+> +}
+> +
+>  int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
+>  void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
+>  int tpm_buf_init_sized(struct tpm_buf *buf);
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/tr=
+usted-keys/trusted_tpm2.c
+> index dfeec06301ce..94ff9ccae66e 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -18,14 +18,6 @@
+> =20
+>  #include "tpm2key.asn1.h"
+> =20
+> -static struct tpm2_hash tpm2_hash_map[] =3D {
+> -	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+> -	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> -	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
+> -	{HASH_ALGO_SHA512, TPM_ALG_SHA512},
+> -	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+> -};
+> -
+>  static u32 tpm2key_oid[] =3D { 2, 23, 133, 10, 1, 5 };
+> =20
+>  static int tpm2_key_encode(struct trusted_key_payload *payload,
+> @@ -231,19 +223,11 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>  	off_t offset =3D TPM_HEADER_SIZE;
+>  	struct tpm_buf buf, sized;
+>  	int blob_len =3D 0;
+> -	u32 hash;
+> +	int hash =3D tpm2_crypto_to_alg(options->hash);
 
-Changed to:
+Please use reverse christmas tree order.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/comm=
-it/?id=3D7dc357d343f134bf59815ff6098b93503ec8a23b
+>  	u32 flags;
+> -	int i;
+>  	int rc;
+> =20
+> -	for (i =3D 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+> -		if (options->hash =3D=3D tpm2_hash_map[i].crypto_id) {
+> -			hash =3D tpm2_hash_map[i].tpm_id;
+> -			break;
+> -		}
+> -	}
+> -
+> -	if (i =3D=3D ARRAY_SIZE(tpm2_hash_map))
+> +	if (hash < 0)
+>  		return -EINVAL;
+> =20
+>  	if (!options->keyhandle)
 
-Just fixed some typos.
 
 BR, Jarkko
 
