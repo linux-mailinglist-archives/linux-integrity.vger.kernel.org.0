@@ -1,150 +1,236 @@
-Return-Path: <linux-integrity+bounces-3167-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3168-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEF8593405B
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2024 18:25:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDB979341C4
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2024 19:59:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79AB9282DBB
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2024 16:25:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73D06281FC5
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2024 17:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E7B181BB5;
-	Wed, 17 Jul 2024 16:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759F5183072;
+	Wed, 17 Jul 2024 17:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sempervictus-com.20230601.gappssmtp.com header.i=@sempervictus-com.20230601.gappssmtp.com header.b="bwM9jGXI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC99180A67;
-	Wed, 17 Jul 2024 16:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB2D183068
+	for <linux-integrity@vger.kernel.org>; Wed, 17 Jul 2024 17:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721233521; cv=none; b=r7wtl7whIqfqaGCoTqpKzvvgsERqApywkvC4XUhw6FrHLbJTrDcdBNxwx0oJFcZElmGAcKdt1vyINPR0h/JazhV+hInQoGsGwcXma3922op1mRBhp8OgGPUHFx2VxBzjaomcAvz2hmkUnyVBCMhhdfEprTicSzHVqZOmpw/nMtM=
+	t=1721239176; cv=none; b=F9S31luPxSqfk8mUfNTu9wh7jedv93vhq+/ylCkzNDItZjQo2QX/elLBrbV0ZcCrXAPvBnIUm7cY+8+NPR5viDZvqu5s2BncPQCXaQ0I42tov6imN8WzOxLrAaLmstwZiGBy5errQd0c0lRjLR2PyJx/tOpyj2whW1MLYu4eXFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721233521; c=relaxed/simple;
-	bh=gsTjsJKiSv9mO94ijtFAZFseVqYNxVDnZ1NCnfwYttA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=omX9BfJ5lScG0VOswBxUfRWZH0yJf3dqgCjpjZ5cVWUuY9ZSkLzBRErdN+pl1bigj41ZMyz5KLAZCI8yB+d6K3pvLA5haTCJXafqrKo1dtRaDr9af51JWmVg1zCJ4onPViiK92A1VsUlbMAdj6eFel0H5/xTz3m2923d87Cv4U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 431D92800B3CC;
-	Wed, 17 Jul 2024 18:17:45 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 2E3BF21097A; Wed, 17 Jul 2024 18:17:45 +0200 (CEST)
-Date: Wed, 17 Jul 2024 18:17:45 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-	davem@davemloft.net, herbert@gondor.apana.org.au,
-	dhowells@redhat.com, zohar@linux.ibm.com, jarkko@kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	patrick@puiterwijk.org
-Subject: Re: [PATCH v12 02/10] crypto: Add support for ECDSA signature
- verification
-Message-ID: <ZpfuqeSVC47jqme2@wunner.de>
-References: <20210316210740.1592994-1-stefanb@linux.ibm.com>
- <20210316210740.1592994-3-stefanb@linux.ibm.com>
+	s=arc-20240116; t=1721239176; c=relaxed/simple;
+	bh=H+21wE+2iLRZVcP4hl3SPiAfZGYS6lnRDxIGD4RAScs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ro+NhOoBzEtOVJBnXrpVhl6pAEY1mO6RAy5vKpEGtrE8xhW1KIkyjfgX0zRnN6JQrxnJf3DET6eQx7PCh7ZQQU6+ldHG4qU4u8q/BjZ42/Wb2N6qonRVQ9nWknUWYWJT7NG8bdZ3v6Yz/6c6f/7Kct5UsCT82zGGynSSBmuK188=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sempervictus.com; spf=pass smtp.mailfrom=sempervictus.com; dkim=pass (2048-bit key) header.d=sempervictus-com.20230601.gappssmtp.com header.i=@sempervictus-com.20230601.gappssmtp.com header.b=bwM9jGXI; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sempervictus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sempervictus.com
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e05e2b2d88bso70577276.0
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Jul 2024 10:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sempervictus-com.20230601.gappssmtp.com; s=20230601; t=1721239173; x=1721843973; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M8eaQLw9xNg9uFvBqSP89sHIql2nuE2XWi7tzCheL6U=;
+        b=bwM9jGXIDPY2RP+zfLzAji+xk+1TZw3XnxzIJYrZ3lgTntWgVbzSOoarL9rYRLMUqD
+         hRBRPodo2UO5qJfPfhfyJa1qJQLNM9nD3pB4YvHNouUiT87p87jUOjwiQN5ed1X8v919
+         RWF/8UKZqFMeQz5GM+LeFAYxqJjbyf9r88HDhjvpZDChOFGBka8+wZTuTYgNnXZaCceA
+         N6vTYRoL05roZ5Pwbxlrh4Jr2mTgtrHPm5hi817AUhIOsarZ8pzE44z19Vcd1A3iz+I+
+         U1huGfSQoUNFTspen+P1vG+9P2DVOGSrZauJy+pq5qOpLsLbXiHyozBem93kEXtP4a3k
+         B6YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721239173; x=1721843973;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M8eaQLw9xNg9uFvBqSP89sHIql2nuE2XWi7tzCheL6U=;
+        b=DAQr0WIqm19psphHAW0YCPKvmvb2EU53T5tKAmznOG1hHdxlmutb/b6n55YQswr1Ar
+         WmeyTPNlUMbnCjU2CSxeDXRuu2EBajOIwwu9e6bglrGMfIA9cjiscTGuZWZ/3fnRmzaY
+         vYeNyZWWCtkKGB8uYbK2xo5+iOeO8ETOObSo6lQF/rY2oSCyIdmL4KcwY5yLTguyKyqN
+         ANb6fNKZqszbx2TTLw8R21tW5GpvX8rYig6sblSXDX+/7Tf8wjbVC0FC2D6fpiHlWtlg
+         vTICNPOCBR8wBdeozGghWRbxZl6WT/FHoP556qQ9vnWPdNyTRKNlvTYgXBzB2kB0zsli
+         vFOw==
+X-Forwarded-Encrypted: i=1; AJvYcCWnliXoDrqwb0GEFrN8YqSgKZowva0k3zyz9zJCVGHPf0bAquuu1gWFR1C1GTIe5bCXLsr6c1WEC8nS2ha8Nd8k8m9WKQDlDg6OXB3dSCrH
+X-Gm-Message-State: AOJu0YwumBULoAOOBppN8OkuACQTkyIU3/hUJEdRFnBQZK7+a+gOvhl2
+	ccN2zeFdPpplcl19GEhftUAUmJFCDBo5lXrXnoEyJmGj47YGkGWy92z86WM3YcfulpLxVSpS8iU
+	JU/T2QJWR5+87qkXQ9s0mWj3yg4OV0dwKsRnV6g==
+X-Google-Smtp-Source: AGHT+IHEIU9neXftIncv5fOI1sUBbkOnPhjhzxfBjmV6pQBNc144cKpBZMqrxy2p/3onnp89VdZ5B8F9Pc4Udgj9/PQ=
+X-Received: by 2002:a05:6902:278a:b0:e03:63d0:4516 with SMTP id
+ 3f1490d57ef6-e05ed7e2324mr2980262276.57.1721239173538; Wed, 17 Jul 2024
+ 10:59:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210316210740.1592994-3-stefanb@linux.ibm.com>
+References: <20240704190137.696169-1-mic@digikod.net> <55b4f6291e8d83d420c7d08f4233b3d304ce683d.camel@linux.ibm.com>
+ <20240709.AhJ7oTh1biej@digikod.net> <9e3df65c2bf060b5833558e9f8d82dcd2fe9325a.camel@huaweicloud.com>
+ <ee1ae815b6e75021709612181a6a4415fda543a4.camel@HansenPartnership.com>
+ <E608EDB8-72E8-4791-AC9B-8FF9AC753FBE@sempervictus.com> <20240716.shaliZ2chohj@digikod.net>
+In-Reply-To: <20240716.shaliZ2chohj@digikod.net>
+From: Boris Lukashev <rageltman@sempervictus.com>
+Date: Wed, 17 Jul 2024 13:59:22 -0400
+Message-ID: <CAFUG7CfqAV0vzuFf_WL+wedeRzAfOyRGVWRVhfNBxS3FU78Tig@mail.gmail.com>
+Subject: Re: [RFC PATCH v19 0/5] Script execution control (was O_MAYEXEC)
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Paul Moore <paul@paul-moore.com>, "Theodore Ts'o" <tytso@mit.edu>, Alejandro Colomar <alx@kernel.org>, 
+	Aleksa Sarai <cyphar@cyphar.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, 
+	Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Luca Boccassi <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Matthew Garrett <mjg59@srcf.ucam.org>, Matthew Wilcox <willy@infradead.org>, 
+	Miklos Szeredi <mszeredi@redhat.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
+	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Dower <steve.dower@python.org>, 
+	Steve Grubb <sgrubb@redhat.com>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
+	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
+	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, 
+	linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stefan,
+Apologies, sent from phone so plain-text wasn't flying.
+To elaborate a bit on the quick commentary there - i'm the happy
+camper behind most of the SSL shells, SSH stuff, AWS shells, and so on
+in Metasploit. So please take the following with a grain of
+tinfoil-hat salt as i'm well aware that there is no perfect defense
+against these things which covers all bases while permitting any level
+of sane operation in a general-purpose linux system (also work w/
+GrapheneOS which is a far more suitable context for this sort of
+thing). Having loosely followed the discussion thread, my offsec-brain
+$0.02 are:
 
-On Tue, Mar 16, 2021 at 05:07:32PM -0400, Stefan Berger wrote:
-> +/*
-> + * Get the r and s components of a signature from the X509 certificate.
-> + */
-> +static int ecdsa_get_signature_rs(u64 *dest, size_t hdrlen, unsigned char tag,
-> +				  const void *value, size_t vlen, unsigned int ndigits)
-> +{
-> +	size_t keylen = ndigits * sizeof(u64);
-> +	ssize_t diff = vlen - keylen;
-> +	const char *d = value;
-> +	u8 rs[ECC_MAX_BYTES];
-> +
-> +	if (!value || !vlen)
-> +		return -EINVAL;
-> +
-> +	/* diff = 0: 'value' has exacly the right size
-> +	 * diff > 0: 'value' has too many bytes; one leading zero is allowed that
-> +	 *           makes the value a positive integer; error on more
-> +	 * diff < 0: 'value' is missing leading zeros, which we add
-> +	 */
-> +	if (diff > 0) {
-> +		/* skip over leading zeros that make 'value' a positive int */
-> +		if (*d == 0) {
-> +			vlen -= 1;
-> +			diff--;
-> +			d++;
-> +		}
-> +		if (diff)
-> +			return -EINVAL;
-> +	}
-> +	if (-diff >= keylen)
-> +		return -EINVAL;
+Shells are the provenance of the post-exploitation world - it's what
+we want to get as a result of the exploit succeeding. So i think we
+want to keep clear delineation between exploit and post-exp mitigation
+as they're actually separate concerns of the killchain.
+1. Command shells tend to differentiate from interpreted or binary
+execution environments in their use of POSIX file descriptor
+primitives such as pipes. How those are marshalled, chained, and
+maintained (in a loop or whatever, hiding args, etc) are the only real
+IOCs available at this tier for interdiction as observation of data
+flow through the pipes is too onerous and complex. Target systems vary
+in the post-exp surfaces exposed (/dev/tcp for example) with the
+mechanics of that exposure necessitating adaptation of marshalling,
+chaining, and maintenance to fit the environment; but the basic
+premise of what forms a command shell cannot be mitigated without
+breaking POSIX mechanics themselves - offsec devs are no different
+from anyone else, we want our code to utilize architectural primitives
+instead of undefined behavior for longevity and ecosystem
+persistence/relevance.
+2. The conversation about interpreted languages is probably a dead-end
+unless you want to neuter the interpreter - check out Spencer
+McIntyre's work re Python meterpreter or HDs/mine/etc on the PHP side.
+The stagers, loaded contexts, execution patterns, etc are all
+trivially modified to avoid detection (private versions not submitted
+for free ripping by lazy commercial entities to the FOSS ecosystem,
+yet). Dynamic code loading of interpreted languages is trivial and
+requires no syscalls, just text/serialized IL/etc. The complexity of
+loaded context available permits much more advanced functionality than
+we get in most basic command interpreter shells - <advanced evasions
+go here before doing something that'll get you caught> sort of thing.
+3. Lastly, binary payloads such as Mettle have their own advantages re
+portability, skipping over libc, etc but need to be "harnessed-in"
+from say a command-injection exploit via memfd or similar. We haven't
+published our memfd stagers while the relevant sysctl gets adopted
+more widely, but we've had them for a long time (meaning real bad guys
+have as well) and have other ways to get binary content into
+executable memory or make memory containing it executable
+(to-the-gills Grsec/PaX systems notwithstanding). IMO, interdiction of
+the harnessed injection from a command context is the last time when
+anything of use can be done at this layer unless we're sure that we
+can trace all related and potentially async (not within the process
+tree anyway) syscalls emanating from what happens next. Subsequent
+actions are separate "remedial" workflows which is a wholly separate
+philosophical discussion about how to handle having been compromised
+already.
 
-I'm in the process of creating a crypto_template for decoding an x962
-signature as requested by Herbert:
-
-https://lore.kernel.org/all/ZoHXyGwRzVvYkcTP@gondor.apana.org.au/
-
-I intend to move the above code to the template and to do so I'm
-trying to understand what it's doing.
-
-There's an oddity in the above-quoted function.  The check ...
-
-+	if (-diff >= keylen)
-+		return -EINVAL;
-
-... seems superfluous. diff is assigned the following value at the
-top of the function:
-
-+	ssize_t diff = vlen - keylen;
-
-This means that:  -diff == keylen - vlen.
-
-Now, if vlen is zero, -diff would equal keylen and then the
-"-diff >= keylen" check would be true.  However at the top of
-the function, there's already a !vlen check.  No need to check
-the same thing again!
-
-Next, I'm asking myself if -diff can ever be greater than keylen.
-I don't think it can.  For that to be true, vlen would have to be
-negative.  But vlen is of unsigned type size_t!
-
-I just wanted to double-check with you whether ...
-
-+	if (-diff >= keylen)
-+		return -EINVAL;
-
-... is indeed superfluous as I suspect or whether I'm missing
-something.  I'm guessing that the check might be some kind of
-safety net to avoid an out-of-bounds access in the memset()
-and memcpy() calls that follow further down in the function,
-in case sig->curve->g.ndigits was neglected to be set by the
-programmer.  But there doesn't seem to be any real need for
-the check, so I'm leaning towards not carrying it over to the
-x962 template.
-
-The check was already present in v1 of your ecdsa patch set:
-
-https://lore.kernel.org/all/20210126170359.363969-2-stefanb@linux.vnet.ibm.com/
+Security is very much not binary and in that vein of logic i think
+that we should probably define our shades of gray as ranges of what we
+want to protect/how and at what operational cost to then permit
+"dial-in" knobs to actually garner adoption from a broad range of
+systems outside the "real hardened efforts." At some point this turns
+into "limit users to sftp or git shells" which is a perfectly valid
+approach when the context permits that level of draconian restriction
+but the architectural breakdown of "native command, interpreted
+context, fully binary" shell types is pretty universal with new ones
+being API access into runtimes of clouds (SSM/serial/etc) which have
+their own set of limitations at execution and interface layers.
+Organizing defensive functions to handle the primitives necessary for
+each of these shell classes would likely help stratify/simplify this
+conversation and allow for more granular tasking toward those specific
+objectives.
 
 Thanks,
+-Boris
 
-Lukas
+
+On Tue, Jul 16, 2024 at 1:48=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@digik=
+od.net> wrote:
+>
+> (adding back other people in Cc)
+>
+> On Tue, Jul 16, 2024 at 01:29:43PM -0400, Boris Lukashev wrote:
+> > Wouldn't count those shell chickens - awk alone is enough and we can
+> > use ssh and openssl clients (all in metasploit public code). As one of
+> > the people who makes novel shell types, I can assure you that this
+> > effort is only going to slow skiddies and only until the rest of us
+> > publish mitigations for this mitigation :)
+>
+> Security is not binary. :)
+>
+> Not all Linux systems are equals. Some hardened systems need this kind
+> of feature and they can get guarantees because they fully control and
+> trust their executable binaries (e.g. CLIP OS, chromeOS) or they
+> properly sandbox them.  See context in the cover letter.
+>
+> awk is a script interpreter that should be patched too, like other Linux
+> tools.
+>
+> >
+> > -Boris (RageLtMan)
+> >
+> > On July 16, 2024 12:12:49 PM EDT, James Bottomley <James.Bottomley@Hans=
+enPartnership.com> wrote:
+> > >On Tue, 2024-07-16 at 17:57 +0200, Roberto Sassu wrote:
+> > >> But the Clip OS 4 patch does not cover the redirection case:
+> > >>
+> > >> # ./bash < /root/test.sh
+> > >> Hello World
+> > >>
+> > >> Do you have a more recent patch for that?
+> > >
+> > >How far down the rabbit hole do you want to go?  You can't forbid a
+> > >shell from executing commands from stdin because logging in then won't
+> > >work.  It may be possible to allow from a tty backed file and not from
+> > >a file backed one, but you still have the problem of the attacker
+> > >manually typing in the script.
+> > >
+> > >The saving grace for this for shells is that they pretty much do
+> > >nothing on their own (unlike python) so you can still measure all the
+> > >executables they call out to, which provides reasonable safety.
+> > >
+> > >James
+> > >
 
