@@ -1,77 +1,46 @@
-Return-Path: <linux-integrity+bounces-3165-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3166-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99D1F933D6D
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2024 15:14:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96763933DA9
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2024 15:33:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB8B41C22C1A
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2024 13:14:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 403D61F211CF
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jul 2024 13:33:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8381A1802C4;
-	Wed, 17 Jul 2024 13:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016851802A9;
+	Wed, 17 Jul 2024 13:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="Z4OcyPTZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eYz14SvK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B1C18004E;
-	Wed, 17 Jul 2024 13:14:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721222068; cv=pass; b=YVvyNmBAUUfSKuJKyYz/QkRv5VhJ2fiH2HftN1WuNuPZoUs6t6B6gENBV3rD8nkQ10TDgXn0hTtQyOrigSW/o95ruBaMDPtMck31b0Swlj+TWC4iAACuWlTNw35ZG7uvyMa5hu+or6yanhFH5hsWs684Nd0TyKHg9wFGFNi2qVo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721222068; c=relaxed/simple;
-	bh=UhNWj8tbJsA/dIsV0n7TH0YDw2A+cYy/1vuKntGxdpE=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDF8566A;
+	Wed, 17 Jul 2024 13:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721223224; cv=none; b=sQ39GJnJnPWo5jEq0LSK3Px6DEcTNZoFQ+cJOyzmbravZuV63KbIv1BzA4cC7akrRzecSTZL/K/4CTmXuH8iRdJyeZPb3xoC0AtFyy6dEzTBiAvPm2zmRdizCqGJSzVw3SOwjOWYOp/zoZXeDF0FTfBh4/E6dBl7RvTGXaSC+T8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721223224; c=relaxed/simple;
+	bh=g3cwZ/x9CY+hSC/sCIT3dsiPeI4OGPupHHfnIETxlL8=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=i1joC5CfuNUn78auvojeQvVUfwSwJF9+7mqdsWFmv7H4UbF0P6F/ivxiV05HQKmeUYoxf57FZaPpILoM8ybN8z5rduYKhdGmscLlx87+g6vVUWr4+WhX3XYcac0ZkJYcUW3XKEuCOck025L2AcOgIOikVJN7mQqIBHgymu1f09s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=Z4OcyPTZ; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
-Received: from localhost (83-245-197-232.elisa-laajakaista.fi [83.245.197.232])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sakkinen)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4WPGcF50VFz49Q0P;
-	Wed, 17 Jul 2024 16:14:21 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1721222063;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UhNWj8tbJsA/dIsV0n7TH0YDw2A+cYy/1vuKntGxdpE=;
-	b=Z4OcyPTZ7t5H8qeQBOlxkGLaqCUJxVnF6pjmYPze849BB0/j1HT2hEvxc6neK64Uuc0cw9
-	jXTyJg8LW+nKhxiwBXm7ylxeXcH0Na3ZxLQbvOco+7f7zlAOzgLDvcDgFlkG6D6xd5I+hN
-	wRI/YQLi82TcVfIF0RrVFIisTiTNlDIYVOzYIqO1zErs9eOoIqTKA1X6kEmDSrh0ejAwJB
-	oyWsMPMh0POKCQ+b7Bw1Rp6XbZD/Q8FbnrFcftEhC2XG/1GgN05BgKz/2RbveDeGHDCsil
-	8URpCJOwS8PM1Biq2joq1b6hjlugC/q8jRzwVdvAdLcrP+GZC2/NgGPk2f/JRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1721222063;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UhNWj8tbJsA/dIsV0n7TH0YDw2A+cYy/1vuKntGxdpE=;
-	b=Cxip6k/YnP/FKV/fSiJyqOQkKAoqlFKPxZxkdT2HqrwJa4bWIXWVfvJrQZerzVAPaNVU5J
-	rRychLQEXuW4/nTHJZYoGCkQoMh1JSv4byNDA7VS6AmelysY5y7rqRkzD7It2GSXNwHbwg
-	SJY1EnyfFlhBiyEawkeAcm2nDRNN7zGA3GHMU8OTDK1cEqFGsRDQGypzpKWKDtx/nR3ZDf
-	lWWMPGkem8ORSjDPAIFpJniGu2Yng2Wc0+UDd5FgyKKLufydyz9byD33T/1FKAkyIjIMSG
-	ITtkM8VtCYWhJPafVLyA4g+JrsWRl4EnOO5erTcKMjv3nvAeiagvGkKY+fAhoA==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1721222063; a=rsa-sha256;
-	cv=none;
-	b=iuXoQHds7PDZ1xPeJL4JdXW6S/nboVIZwy29Tc5oAylYd2NenhPzB03lfDx4VxRyKJUNn2
-	KmzAEeHUzUpgfVtCvg4yOMWdtnYf5XYAt+qx9BpHR5f4Bis7tc4BmYpkJ4ijebYuqhYlfj
-	jkK22sPdFgFmWBjCI47XFkpd9syabVNS90iuyX4cEtKGbXlfEE+Dw2guMHgQ8BWvcNbb4V
-	iCGSzhoucMCXG4pTgy8tocl7EWQ0Wv5svIqG4Kwu5Om52Xisx6mGYCWsNypcj7Y0TpUXph
-	bh4idbsp34bemR2sjqH/CUELRaw/gG3Q2i/rgHg+IIf0r/7C2ozESixPukEkWQ==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
+	 References:In-Reply-To; b=d3LP6zQWDRtJvbnOvgX1HgI8DuLdnrzffMwzGAWq2bQFL+W6GFFftLtLC/xQieeZFdv86MlqXnNUwknHmv/ZfnEVkRczaiTMQwHSGgzO+B/00wCMp8xVoMkRMzFB9UiWz5qa3SzRWDDI7wU1MMp3zXDLru0xvrX9oxiSSZmlWW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eYz14SvK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5197BC32782;
+	Wed, 17 Jul 2024 13:33:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721223224;
+	bh=g3cwZ/x9CY+hSC/sCIT3dsiPeI4OGPupHHfnIETxlL8=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=eYz14SvKF7e9RuRHc+ddupm5RGSWpk/BNZPG5vX6+JUlsTq3jlg85qdEw/wHq9uNh
+	 lZDo7CqGTDh8NhkGL0bsi+XJvcgRfmcifR4Nkh2pthuVCXTKxYAbzSOKfmc7JV/YCE
+	 oWcwDLJJvdWH+X4BZpMpS5lC5xvl4O/FzOFnq9P5+0157PyIL+AKjDo2hbB5HzpXWF
+	 9EMMQayO1OWPu8RlXk32tlwGfIv5wBuVM8gYy31khVk74wHwOlz9kBzhWUO/FpfLvp
+	 ELjDVey2vtkqR2bdVrCE2bepJKF349xBpZMeKOcphlyGv6p3/GdYo4OyhLt77fQ1aP
+	 5p8nVI8qzuJQQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -80,27 +49,44 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 17 Jul 2024 16:14:21 +0300
-Message-Id: <D2RUAQX7TSOM.UWLZYT2WBHI4@iki.fi>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- "David Howells" <dhowells@redhat.com>, <keyrings@vger.kernel.org>,
- <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Hao Ge"
- <gehao@kylinos.cn>
-Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-6.11-rc1-roundtwo
-From: "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Linus Torvalds"
- <torvalds@linux-foundation.org>
+Date: Wed, 17 Jul 2024 16:33:39 +0300
+Message-Id: <D2RUPJ5P1LXX.1T2OL2PBT2K78@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
+ <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <stable@vger.kernel.org>, "kernel test robot" <lkp@intel.com>
+Subject: Re: [PATCH v2 1/2] KEYS: trusted: fix DCP blob payload length
+ assignment
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "David Gstir" <david@sigma-star.at>, "sigma star Kernel Team"
+ <upstream+dcp@sigma-star.at>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Mimi Zohar"
+ <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul Moore"
+ <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
+ Hallyn" <serge@hallyn.com>, "Richard Weinberger" <richard@nod.at>, "David
+ Oberhollenzer" <david.oberhollenzer@sigma-star.at>
 X-Mailer: aerc 0.17.0
-References: <D2RU88JYHTMN.14YA4E5BCVG0L@kernel.org>
-In-Reply-To: <D2RU88JYHTMN.14YA4E5BCVG0L@kernel.org>
+References: <20240717112845.92088-1-david@sigma-star.at>
+In-Reply-To: <20240717112845.92088-1-david@sigma-star.at>
 
-On Wed Jul 17, 2024 at 4:11 PM EEST, Jarkko Sakkinen wrote:
-> This is additional fix that supplements my earlier fixes for handling
-> auth, which I unfortunately missed last time.
+On Wed Jul 17, 2024 at 2:28 PM EEST, David Gstir wrote:
+> The DCP trusted key type uses the wrong helper function to store
+> the blob's payload length which can lead to the wrong byte order
+> being used in case this would ever run on big endian architectures.
+>
+> Fix by using correct helper function.
+>
+> Cc: stable@vger.kernel.org # v6.10+
+> Fixes: 2e8a0f40a39c ("KEYS: trusted: Introduce NXP DCP-backed trusted key=
+s")
+> Suggested-by: Richard Weinberger <richard@nod.at>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202405240610.fj53EK0q-lkp@i=
+ntel.com/
+> Signed-off-by: David Gstir <david@sigma-star.at>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-That said my fix did increase collateral damage, same triggering point
-existed also before, but I decided to keep the fixes tag as it is as
-this supplements the diff for my original diff...
+I applied the patches, will send the PR later on (probably either
+-rc2 or -rc3), so thus they are mirrored already to also linux-next.
 
 BR, Jarkko
 
