@@ -1,405 +1,155 @@
-Return-Path: <linux-integrity+bounces-3180-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3182-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D13DE934F7B
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2024 16:57:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6F9A935013
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2024 17:42:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 619591F21242
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2024 14:57:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65D9528208A
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Jul 2024 15:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D9F1142E9F;
-	Thu, 18 Jul 2024 14:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8FDB1448C8;
+	Thu, 18 Jul 2024 15:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1lkiHvL"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="15Yc0S0O"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0448D1428F2;
-	Thu, 18 Jul 2024 14:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA751442E8
+	for <linux-integrity@vger.kernel.org>; Thu, 18 Jul 2024 15:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721314668; cv=none; b=H1g5WX/I1SX/kk0vWdLZYwkS4XnRvZHH1e5YVHtMsc9GEEwBI16Rebk9guz9HwqUaGptuy4DAeqXa9EEYLDMBA/LUlXcDvsMSNTtIYFAf3a/CBK/73ghN85PzpcxUlXHAPRJFR3S/O2WatZQ1LtnPqlRmMrVCc+xGrY/wAlaIxM=
+	t=1721317365; cv=none; b=eAKqq50eox/SyCiYA2VTLHI0DZMXqTZBcfDFd4hlGHdya0b+n7qHp8+hEQiCjv9N79SRBCVMlPa8PCYPQE3v9r+RF3i8+FWPwFU04QX4qYbhhZjE6VRqDKqDsjQWrVScJMOXM8cTh+/qRDTlCVLKY8mrLn4hZesoefwitNUjoyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721314668; c=relaxed/simple;
-	bh=dOkeYWPGxwEBfu26Tj+pRBlDvvOlceNYIBvbM109sFA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l+qcMI8UUnz5jbs4vFD6jBtsvKWM5V5NOXgBzOeJgO+vKTe/QeugMEVOmUEilm4CzE8a9hs2qSwZzXUsw6y9yJxRg78DP0A3XFKx5bcIe8OfLvw8JeHDiS9zLugLDI6PRjmHDxgMDesqwTHO/HVIjZLOU4MHyOzZjPBzjyIG5ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1lkiHvL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEBFC4AF0F;
-	Thu, 18 Jul 2024 14:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721314667;
-	bh=dOkeYWPGxwEBfu26Tj+pRBlDvvOlceNYIBvbM109sFA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=u1lkiHvLzL016UKlAuO029FQD7tYjU2kB4KQiJRuIq3k9K1CvxsJuQ2EnyhBGHCXt
-	 SlXDt4haDPqbGsGnZzosm4zcLFMh7JVp2QtSo8aMSXvwV23TNqMrbTls1kwPKFJlwj
-	 Hbd5cmRn7lser/RAjT9jXHosYvf6JMqDAarlIIYmTWC9UcS+O59sfcr7hRLrRLUqsy
-	 dcQtbqtYA0U3FHmYqIEhHawv9/C11cHXXXtw489tK9K5V5NEc9n2e+9JEFoMbbnMyX
-	 LSJbjOKAjPfh/0BAc/D0BSOKIBnWzTMZrbaDbC01MBH7TMRjoilmH9QRxwoqvgpYbd
-	 W2lMW3NtfctXw==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52ea2ce7abaso743948e87.0;
-        Thu, 18 Jul 2024 07:57:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXlmjCi8v9rTlLegTrVha8FjIwN3nS8ZT1NWw2GJnIix/7AMEAe78NW21Lsk9Eccyn9E6auMP+5nQ0BKm8Nxa6nI3VVTNIv0C8kR+e1Eq4hBHgScApiFAFoKFZ+Wz/Wdaq6aBzs770yeKkIZ7fp
-X-Gm-Message-State: AOJu0Yw4tOrcThuDRIhgxVyi8FSqAl4ugTHm0hMclAY+96XGMJ5OtbCR
-	lgo3b88DXyvQIXW81RTL4pEVe2B1Hyo1Shq6L6NYw8VXoa6Z1SAO1a0Ps3q/l1wrfva+iH1G/rD
-	JxwP73yuD6NV8UZL84rLDgIlZ6g==
-X-Google-Smtp-Source: AGHT+IGz2Ng4W1rwVzqmoDmoEQl5W6pvWD7cdpRPX1alqN6E9vLw0Y7fhmxQUmQjjs3wsKtysQH2udmFXwUbBc2L17M=
-X-Received: by 2002:a05:6512:3984:b0:52c:8c4d:f8d6 with SMTP id
- 2adb3069b0e04-52ee54118b7mr3670486e87.45.1721314665678; Thu, 18 Jul 2024
- 07:57:45 -0700 (PDT)
+	s=arc-20240116; t=1721317365; c=relaxed/simple;
+	bh=VHuBFKSlr71gbOdtIQLbGSA6bMgPhQCYPXB0gvlN8hM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qttsuj9bVtQ4xEnukJbRTp6Um2Mj4/Ww705rOcvECGSRiZ/rDqCDNIjV3LLHoLUKSoThdkOSkvzErZx0KGie8b1J9EfXnF43BPRKk1+r4N8m4NIjo5YizR5TjNCy2jPggblHfqhqCcKVon5QqRbLcecg1FIbE9xIxZIv+8OHc6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=15Yc0S0O; arc=none smtp.client-ip=45.157.188.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WPxhv3R8Mz34s;
+	Thu, 18 Jul 2024 17:35:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1721316943;
+	bh=/oX0SWFonwXZp8ZAmC3Hb1diHldVFLJw2446o3eOM5s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=15Yc0S0O5ZUSmioE97yrOTIAGd0Zl2aVwOr9JnKeVUNGkrlu8kRkQrIeUOwKSxySh
+	 5/eCqi1ounZDtSx5Oxry1CQncNyJl3cLWh/5YPS63vfafuX0K57BC7Ta2Ypafx8J0w
+	 mKFGZWnY56lDSGLMW+GuHf+rtZb8CJ37otIUTh8I=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WPxhq3z0zzmG;
+	Thu, 18 Jul 2024 17:35:39 +0200 (CEST)
+Date: Thu, 18 Jul 2024 17:35:36 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Jeff Xu <jeffxu@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
+	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, 
+	Matthew Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
+	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Dower <steve.dower@python.org>, 
+	Steve Grubb <sgrubb@redhat.com>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
+	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
+	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Elliott Hughes <enh@google.com>
+Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to execveat(2)
+Message-ID: <20240718.yieCh6miu9en@digikod.net>
+References: <20240704190137.696169-1-mic@digikod.net>
+ <20240704190137.696169-2-mic@digikod.net>
+ <CALmYWFss7qcpR9D_r3pbP_Orxs55t3y3yXJsac1Wz=Hk9Di0Nw@mail.gmail.com>
+ <20240717.neaB5Aiy2zah@digikod.net>
+ <CALmYWFt=yXpzhS=HS9FjwVMvx6U1MoR31vK79wxNLhmJm9bBoA@mail.gmail.com>
+ <20240718.kaePhei9Ahm9@digikod.net>
+ <544d08f5b55a0fbb1dc883bce6cf94c78cf46e42.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240702161052.3563599-1-robh@kernel.org> <D2RSWMPFF8KK.X5HZZMHANQMO@iki.fi>
- <D2RT0J8KXY1H.3MEV7KGQXTWHW@iki.fi>
-In-Reply-To: <D2RT0J8KXY1H.3MEV7KGQXTWHW@iki.fi>
-From: Rob Herring <robh@kernel.org>
-Date: Thu, 18 Jul 2024 08:57:32 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJDX+uOSoPh6pTNEP0vBLwcP3bKmAW1wCr_0cVr5fsPcg@mail.gmail.com>
-Message-ID: <CAL_JsqJDX+uOSoPh6pTNEP0vBLwcP3bKmAW1wCr_0cVr5fsPcg@mail.gmail.com>
-Subject: Re: [PATCH] tpm: atmel: Drop PPC64 specific MMIO setup
-To: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <544d08f5b55a0fbb1dc883bce6cf94c78cf46e42.camel@HansenPartnership.com>
+X-Infomaniak-Routing: alpha
 
-On Wed, Jul 17, 2024 at 6:14=E2=80=AFAM Jarkko Sakkinen <jarkko.sakkinen@ik=
-i.fi> wrote:
->
-> On Wed Jul 17, 2024 at 3:08 PM EEST, Jarkko Sakkinen wrote:
-> > On Tue Jul 2, 2024 at 7:10 PM EEST, Rob Herring (Arm) wrote:
-> > > The PPC64 specific MMIO setup open codes DT address functions rather
-> > > than using standard address parsing functions. The open-coded version
-> > > fails to handle any address translation and is not endian safe.
-> > >
-> > > I haven't found any evidence of what platform used this. The only thi=
-ng
-> > > that turned up was a PPC405 platform, but that is 32-bit and PPC405
-> > > support is being removed as well. CONFIG_TCG_ATMEL is not enabled for
-> > > any powerpc config and never was. The support was added in 2005 and
-> > > hasn't been touched since.
-> > >
-> > > Rather than try to modernize and fix this code, just remove it.
-> > >
-> > > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> > > ---
-> > >  drivers/char/tpm/Kconfig     |   2 +-
-> > >  drivers/char/tpm/tpm_atmel.c |  64 +++++++++++++++-
-> > >  drivers/char/tpm/tpm_atmel.h | 140 ---------------------------------=
---
-> > >  3 files changed, 62 insertions(+), 144 deletions(-)
-> > >  delete mode 100644 drivers/char/tpm/tpm_atmel.h
-> > >
-> > > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> > > index e63a6a17793c..9b655e9fc7ab 100644
-> > > --- a/drivers/char/tpm/Kconfig
-> > > +++ b/drivers/char/tpm/Kconfig
-> > > @@ -162,7 +162,7 @@ config TCG_NSC
-> > >
-> > >  config TCG_ATMEL
-> > >     tristate "Atmel TPM Interface"
-> > > -   depends on PPC64 || HAS_IOPORT_MAP
-> > > +   depends on HAS_IOPORT_MAP
-> > >     depends on HAS_IOPORT
-> > >     help
-> > >       If you have a TPM security chip from Atmel say Yes and it
-> > > diff --git a/drivers/char/tpm/tpm_atmel.c b/drivers/char/tpm/tpm_atme=
-l.c
-> > > index 9fb2defa9dc4..622c4abe8cb3 100644
-> > > --- a/drivers/char/tpm/tpm_atmel.c
-> > > +++ b/drivers/char/tpm/tpm_atmel.c
-> > > @@ -15,7 +15,67 @@
-> > >   */
-> > >
-> > >  #include "tpm.h"
-> > > -#include "tpm_atmel.h"
-> > > +
-> > > +struct tpm_atmel_priv {
-> > > +   int region_size;
-> > > +   int have_region;
-> > > +   unsigned long base;
-> > > +   void __iomem *iobase;
-> > > +};
-> > > +
-> > > +#define atmel_getb(chip, offset) inb(atmel_get_priv(chip)->base + of=
-fset)
-> > > +#define atmel_putb(val, chip, offset) \
-> > > +   outb(val, atmel_get_priv(chip)->base + offset)
-> > > +#define atmel_request_region request_region
-> > > +#define atmel_release_region release_region
-> > > +/* Atmel definitions */
-> > > +enum tpm_atmel_addr {
-> > > +   TPM_ATMEL_BASE_ADDR_LO =3D 0x08,
-> > > +   TPM_ATMEL_BASE_ADDR_HI =3D 0x09
-> > > +};
-> > > +
-> > > +static inline int tpm_read_index(int base, int index)
-> > > +{
-> > > +   outb(index, base);
-> > > +   return inb(base+1) & 0xFF;
-> > > +}
-> > > +
-> > > +/* Verify this is a 1.1 Atmel TPM */
-> > > +static int atmel_verify_tpm11(void)
-> > > +{
-> > > +
-> > > +   /* verify that it is an Atmel part */
-> > > +   if (tpm_read_index(TPM_ADDR, 4) !=3D 'A' ||
-> > > +       tpm_read_index(TPM_ADDR, 5) !=3D 'T' ||
-> > > +       tpm_read_index(TPM_ADDR, 6) !=3D 'M' ||
-> > > +       tpm_read_index(TPM_ADDR, 7) !=3D 'L')
-> > > +           return 1;
-> > > +
-> > > +   /* query chip for its version number */
-> > > +   if (tpm_read_index(TPM_ADDR, 0x00) !=3D 1 ||
-> > > +       tpm_read_index(TPM_ADDR, 0x01) !=3D 1)
-> > > +           return 1;
-> > > +
-> > > +   /* This is an atmel supported part */
-> > > +   return 0;
-> > > +}
-> > > +
-> > > +/* Determine where to talk to device */
-> > > +static void __iomem * atmel_get_base_addr(unsigned long *base, int *=
-region_size)
-> > > +{
-> > > +   int lo, hi;
-> > > +
-> > > +   if (atmel_verify_tpm11() !=3D 0)
-> > > +           return NULL;
-> > > +
-> > > +   lo =3D tpm_read_index(TPM_ADDR, TPM_ATMEL_BASE_ADDR_LO);
-> > > +   hi =3D tpm_read_index(TPM_ADDR, TPM_ATMEL_BASE_ADDR_HI);
-> > > +
-> > > +   *base =3D (hi << 8) | lo;
-> > > +   *region_size =3D 2;
-> > > +
-> > > +   return ioport_map(*base, *region_size);
-> > > +}
-> > >
-> > >  /* write status bits */
-> > >  enum tpm_atmel_write_status {
-> > > @@ -142,7 +202,6 @@ static void atml_plat_remove(void)
-> > >     tpm_chip_unregister(chip);
-> > >     if (priv->have_region)
-> > >             atmel_release_region(priv->base, priv->region_size);
-> > > -   atmel_put_base_addr(priv->iobase);
-> > >     platform_device_unregister(pdev);
-> > >  }
-> > >
-> > > @@ -211,7 +270,6 @@ static int __init init_atmel(void)
-> > >  err_unreg_dev:
-> > >     platform_device_unregister(pdev);
-> > >  err_rel_reg:
-> > > -   atmel_put_base_addr(iobase);
-> > >     if (have_region)
-> > >             atmel_release_region(base,
-> > >                                  region_size);
-> > > diff --git a/drivers/char/tpm/tpm_atmel.h b/drivers/char/tpm/tpm_atme=
-l.h
-> > > deleted file mode 100644
-> > > index 7ac3f69dcf0f..000000000000
-> > > --- a/drivers/char/tpm/tpm_atmel.h
-> > > +++ /dev/null
-> > > @@ -1,140 +0,0 @@
-> > > -/* SPDX-License-Identifier: GPL-2.0-only */
-> > > -/*
-> > > - * Copyright (C) 2005 IBM Corporation
-> > > - *
-> > > - * Authors:
-> > > - * Kylene Hall <kjhall@us.ibm.com>
-> > > - *
-> > > - * Maintained by: <tpmdd-devel@lists.sourceforge.net>
-> > > - *
-> > > - * Device driver for TCG/TCPA TPM (trusted platform module).
-> > > - * Specifications at www.trustedcomputinggroup.org
-> > > - *
-> > > - * These difference are required on power because the device must be
-> > > - * discovered through the device tree and iomap must be used to get
-> > > - * around the need for holes in the io_page_mask.  This does not hap=
-pen
-> > > - * automatically because the tpm is not a normal pci device and live=
-s
-> > > - * under the root node.
-> > > - */
-> > > -
-> > > -struct tpm_atmel_priv {
-> > > -   int region_size;
-> > > -   int have_region;
-> > > -   unsigned long base;
-> > > -   void __iomem *iobase;
-> > > -};
-> > > -
-> > > -#ifdef CONFIG_PPC64
-> > > -
-> > > -#include <linux/of.h>
-> > > -
-> > > -#define atmel_getb(priv, offset) readb(priv->iobase + offset)
-> > > -#define atmel_putb(val, priv, offset) writeb(val, priv->iobase + off=
-set)
-> > > -#define atmel_request_region request_mem_region
-> > > -#define atmel_release_region release_mem_region
-> > > -
-> > > -static inline void atmel_put_base_addr(void __iomem *iobase)
-> > > -{
-> > > -   iounmap(iobase);
-> > > -}
-> > > -
-> > > -static void __iomem * atmel_get_base_addr(unsigned long *base, int *=
-region_size)
-> > > -{
-> > > -   struct device_node *dn;
-> > > -   unsigned long address, size;
-> > > -   const unsigned int *reg;
-> > > -   int reglen;
-> > > -   int naddrc;
-> > > -   int nsizec;
-> > > -
-> > > -   dn =3D of_find_node_by_name(NULL, "tpm");
-> > > -
-> > > -   if (!dn)
-> > > -           return NULL;
-> > > -
-> > > -   if (!of_device_is_compatible(dn, "AT97SC3201")) {
-> > > -           of_node_put(dn);
-> > > -           return NULL;
-> > > -   }
-> > > -
-> > > -   reg =3D of_get_property(dn, "reg", &reglen);
-> > > -   naddrc =3D of_n_addr_cells(dn);
-> > > -   nsizec =3D of_n_size_cells(dn);
-> > > -
-> > > -   of_node_put(dn);
-> > > -
-> > > -
-> > > -   if (naddrc =3D=3D 2)
-> > > -           address =3D ((unsigned long) reg[0] << 32) | reg[1];
-> > > -   else
-> > > -           address =3D reg[0];
-> > > -
-> > > -   if (nsizec =3D=3D 2)
-> > > -           size =3D
-> > > -               ((unsigned long) reg[naddrc] << 32) | reg[naddrc + 1]=
-;
-> > > -   else
-> > > -           size =3D reg[naddrc];
-> > > -
-> > > -   *base =3D address;
-> > > -   *region_size =3D size;
-> > > -   return ioremap(*base, *region_size);
-> > > -}
-> > > -#else
-> > > -#define atmel_getb(chip, offset) inb(atmel_get_priv(chip)->base + of=
-fset)
-> > > -#define atmel_putb(val, chip, offset) \
-> > > -   outb(val, atmel_get_priv(chip)->base + offset)
-> > > -#define atmel_request_region request_region
-> > > -#define atmel_release_region release_region
-> > > -/* Atmel definitions */
-> > > -enum tpm_atmel_addr {
-> > > -   TPM_ATMEL_BASE_ADDR_LO =3D 0x08,
-> > > -   TPM_ATMEL_BASE_ADDR_HI =3D 0x09
-> > > -};
-> > > -
-> > > -static inline int tpm_read_index(int base, int index)
-> > > -{
-> > > -   outb(index, base);
-> > > -   return inb(base+1) & 0xFF;
-> > > -}
-> > > -
-> > > -/* Verify this is a 1.1 Atmel TPM */
-> > > -static int atmel_verify_tpm11(void)
-> > > -{
-> > > -
-> > > -   /* verify that it is an Atmel part */
-> > > -   if (tpm_read_index(TPM_ADDR, 4) !=3D 'A' ||
-> > > -       tpm_read_index(TPM_ADDR, 5) !=3D 'T' ||
-> > > -       tpm_read_index(TPM_ADDR, 6) !=3D 'M' ||
-> > > -       tpm_read_index(TPM_ADDR, 7) !=3D 'L')
-> > > -           return 1;
-> > > -
-> > > -   /* query chip for its version number */
-> > > -   if (tpm_read_index(TPM_ADDR, 0x00) !=3D 1 ||
-> > > -       tpm_read_index(TPM_ADDR, 0x01) !=3D 1)
-> > > -           return 1;
-> > > -
-> > > -   /* This is an atmel supported part */
-> > > -   return 0;
-> > > -}
-> > > -
-> > > -static inline void atmel_put_base_addr(void __iomem *iobase)
-> > > -{
-> > > -}
-> > > -
-> > > -/* Determine where to talk to device */
-> > > -static void __iomem * atmel_get_base_addr(unsigned long *base, int *=
-region_size)
-> > > -{
-> > > -   int lo, hi;
-> > > -
-> > > -   if (atmel_verify_tpm11() !=3D 0)
-> > > -           return NULL;
-> > > -
-> > > -   lo =3D tpm_read_index(TPM_ADDR, TPM_ATMEL_BASE_ADDR_LO);
-> > > -   hi =3D tpm_read_index(TPM_ADDR, TPM_ATMEL_BASE_ADDR_HI);
-> > > -
-> > > -   *base =3D (hi << 8) | lo;
-> > > -   *region_size =3D 2;
-> > > -
-> > > -   return ioport_map(*base, *region_size);
-> > > -}
-> > > -#endif
-> >
-> > Responding from holidays but:
-> >
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >
-> > [still away for couple of weeks]
->
-> I got these in with checkpatch.pl --strict:
->
-> CHECK: Macro argument 'offset' may be better as '(offset)' to avoid prece=
-dence issues
-> #59: FILE: drivers/char/tpm/tpm_atmel.c:26:
-> +#define atmel_getb(chip, offset) inb(atmel_get_priv(chip)->base + offset=
-)
->
-> CHECK: Macro argument 'offset' may be better as '(offset)' to avoid prece=
-dence issues
-> #60: FILE: drivers/char/tpm/tpm_atmel.c:27:
-> +#define atmel_putb(val, chip, offset) \
-> +       outb(val, atmel_get_priv(chip)->base + offset)
->
-> CHECK: spaces preferred around that '+' (ctx:VxV)
-> #73: FILE: drivers/char/tpm/tpm_atmel.c:40:
-> +       return inb(base+1) & 0xFF;
->                       ^
->
-> CHECK: Blank lines aren't necessary after an open brace '{'
-> #79: FILE: drivers/char/tpm/tpm_atmel.c:46:
-> +{
-> +
->
-> Can you address them and I'll tag the next version, once I've
-> revisited checkpatch. Otherwise, nothing against the code change.
+On Thu, Jul 18, 2024 at 09:03:36AM -0400, James Bottomley wrote:
+> On Thu, 2024-07-18 at 14:24 +0200, Mickaël Salaün wrote:
+> > On Wed, Jul 17, 2024 at 07:08:17PM -0700, Jeff Xu wrote:
+> > > On Wed, Jul 17, 2024 at 3:01 AM Mickaël Salaün <mic@digikod.net>
+> > > wrote:
+> > > > On Tue, Jul 16, 2024 at 11:33:55PM -0700, Jeff Xu wrote:
+> [...]
+> > > > > I'm still thinking  execveat(AT_CHECK) vs faccessat(AT_CHECK)
+> > > > > in different use cases:
+> > > > > 
+> > > > > execveat clearly has less code change, but that also means: we
+> > > > > can't add logic specific to exec (i.e. logic that can't be
+> > > > > applied to config) for this part (from do_execveat_common to
+> > > > > security_bprm_creds_for_exec) in future.  This would require
+> > > > > some agreement/sign-off, I'm not sure from whom.
+> > > > 
+> > > > I'm not sure to follow. We could still add new flags, but for now
+> > > > I don't see use cases.  This patch series is not meant to handle
+> > > > all possible "trust checks", only executable code, which makes
+> > > > sense for the kernel.
+> > > > 
+> > > I guess the "configfile" discussion is where I get confused, at one
+> > > point, I think this would become a generic "trust checks" api for
+> > > everything related to "generating executable code", e.g.
+> > > javascript, java code, and more. We will want to clearly define the
+> > > scope of execveat(AT_CHECK)
+> > 
+> > The line between data and code is blurry.  For instance, a
+> > configuration file can impact the execution flow of a program.  So,
+> > where to draw the line?
+> 
+> Having a way to have config files part of the trusted envelope, either
+> by signing or measurement would be really useful.  The current standard
+> distro IMA deployment is signed executables, but not signed config
+> because it's hard to construct a policy that doesn't force the signing
+> of too many extraneous files (and files which might change often).
+> 
+> > It might makes sense to follow the kernel and interpreter semantic:
+> > if a file can be executed by the kernel (e.g. ELF binary, file
+> > containing a shebang, or just configured with binfmt_misc), then this
+> > should be considered as executable code.  This applies to Bash,
+> > Python, Javascript, NodeJS, PE, PHP...  However, we can also make a
+> > picture executable with binfmt_misc.  So, again, where to draw the
+> > line?
+> 
+> Possibly by making open for config an indication executables can give?
+> I'm not advocating doing it in this patch, but if we had an open for
+> config indication, the LSMs could do much finer grained policy,
+> especially if they knew which executable was trying to open the config
+> file.  It would allow things like an IMA policy saying if a signed
+> executable is opening a config file, then that file must also be
+> signed.
 
-Those all existed before because I just moved what was left of the
-header contents into the .c file. Fixing them seems like a separate
-change to me. I can just leave the header in place and avoid the
-warnings if you prefer. Otherwise, those warnings are the least of the
-clean-up this driver needs. For starters, I would make those defines
-static inlines instead.
+Checking configuration could be a next step, but not with this patch
+series.  FYI, the previous version was a (too) generic syscall:
+https://lore.kernel.org/all/20220104155024.48023-1-mic@digikod.net/
+One of the main concern was alignment with kernel semantic.  For now,
+let's focus on script execution control.
 
-Rob
+> 
+> James
+> 
 
