@@ -1,127 +1,260 @@
-Return-Path: <linux-integrity+bounces-3203-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3204-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DFB693787A
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jul 2024 15:27:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C037993790D
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jul 2024 16:17:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46E372810C3
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jul 2024 13:27:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEE791C20B62
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jul 2024 14:17:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 314DD14372D;
-	Fri, 19 Jul 2024 13:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C8EC13A276;
+	Fri, 19 Jul 2024 14:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ltCQJ0X0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YLQ9Rrqk"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A465142642;
-	Fri, 19 Jul 2024 13:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B55C383AE
+	for <linux-integrity@vger.kernel.org>; Fri, 19 Jul 2024 14:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721395586; cv=none; b=AAAX949ZA46+LyX4BQVgOAFEVDMMpQZGmbW2BQmB4TJ4FaDGpmc/DyhMXxEEl0U9z4Dl3kt9i92CS6W+rp2CLaG88GY+AZELEIqFSRDbJquDU+4x8eIgerjCBorPtF4mfyZE+9bRTuknX7rD7UIRMvzN9Pu15L4rfihnYZxTPyc=
+	t=1721398659; cv=none; b=lgygDcPn4sDG8cSfglgngKZGUxMKGmI2Lvj2NGS5Upg5xbq22P1WqPxUfL4vI3Igp46/AZEZW9Jd/AfTcnIkg76cZbj8vxCnGqSTyZ0nWboyuYk59BREk1fdLZRK3WC3Au4rnAawC6Aoo7BFpL6svvFtQkjnhtkUXEWTsW4MYHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721395586; c=relaxed/simple;
-	bh=68yt5A153ilfN6Bw2zQNNbc3FwxdTtR1iBe2Pp/r+cY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FeWXBC8wm61FKCVrtQQzdJCj++i2SGiYAcA1AtrTbXOPZCaKMkjoTY5QW4GKhCfNWCar+Kkd5Q1wBesAGjKStj4J8gS9lb7FhFxnyJFFy7UwbcDvts5YhYuOpsulKEECTl3iw6FlXlYXQL0+RwjjvT0RAVLeEi5/9YOKVpLipuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ltCQJ0X0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4692DC32782;
-	Fri, 19 Jul 2024 13:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721395585;
-	bh=68yt5A153ilfN6Bw2zQNNbc3FwxdTtR1iBe2Pp/r+cY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=ltCQJ0X0Xo706pE1V5BeNu9xh8c64w2bNwAoeA5W7UTJCBReZ6djZVfWo/emJQ9hQ
-	 8+aGoxXHKJhIdQlT7ktBNwLNMzLf+QmVXKBm34lJFiLWO6gyo3vBqIJ1QU0hihFgpI
-	 C4iuc43UNn2BqAvjCtPDrNcXbe9A0NeyyOd2SBL04aPNr/MOtXFvVyOh90hlLou8q6
-	 /aTOpGvfQU7LzEuWUxXDqEsaCH7VQZDGywkPyR3nfP0Ow+2/RnW3+KY2uLxOdpGJyo
-	 1BmoNPwF66ZhoXMiNssI8AcTg/e573l3X94xOxuEvAIZNOGCkQL8pImU/CDIICZkkA
-	 XZ18V2uK/EFRw==
-Message-ID: <ed2617e276271cc33261053da12aff9995e710d7.camel@kernel.org>
-Subject: Re: [PATCH 2/6] tpm: add policy sessions
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>, 
-	linux-integrity@vger.kernel.org
-Cc: keyrings@vger.kernel.org
-Date: Fri, 19 Jul 2024 16:26:21 +0300
-In-Reply-To: <6d5c4d26ec6b993ce3dd8e24fd22d0a4dfca021d.camel@kernel.org>
-References: <20240524130459.21510-1-James.Bottomley@HansenPartnership.com>
-	 <20240524130459.21510-3-James.Bottomley@HansenPartnership.com>
-	 <D2QXYCVI47RK.GFOY8SNQHWW2@kernel.org>
-	 <D2R0SSS449F2.1CSVCMJ39S3LB@kernel.org>
-	 <05a81f59a42c70d5c6233468206d012ba0fcdea6.camel@HansenPartnership.com>
-	 <6d5c4d26ec6b993ce3dd8e24fd22d0a4dfca021d.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3 (3.52.3-1.fc40) 
+	s=arc-20240116; t=1721398659; c=relaxed/simple;
+	bh=4EWpzWGRDEjZbhG0kGkRZIyo4WrdmT6376CHlCk5/pg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GZNB9TIQtx06sBWdcmWv3j1goZsiJ9raWt2BrvPEvHfUbJPFdMS+UkM0fLbnMZySAkgbsc3LA0w6nLH1eVXB6vbbCEP52n6Y0CTF96VpzAPrwKEP1s1XNitOFEE3EDtRISO0bkHSAm+UAqUhSL+HbIfshwodReNH670i5uZzZBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YLQ9Rrqk; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5a1b073d7cdso16369a12.0
+        for <linux-integrity@vger.kernel.org>; Fri, 19 Jul 2024 07:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1721398656; x=1722003456; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o3gGwnKkOxiHuqDBoqHiGOngepHwURq3W8ZE5hfV4/I=;
+        b=YLQ9RrqkSIq6CixGgC31cxVa5rmqGG0jmN2ffnr651EDlxqv0gzIFnjS2dNXV6TE+i
+         QG/hORf+LgIrhuV4CsmUANPhzJRlESFaeWZLftn/0dvk82StxjD0JdSCNyHPIKCFF20h
+         5u5+hI6R2833dRKca62coWdn1ewVDS0+njh4pN1jaNYVN84ZsBNqLKl1uesRCLp1ypi5
+         twnGsDctNHHDCeVhaYrjvY3g9LLQUqrYNqHi9BPpPbrEw3siNoRzvBHE/KcDaS7VI5XB
+         Jn0iZogWOaOGStLLmww9Pi/0XIxxquJRGssySirP61BI1qSD5GqcwuZYVfuk2gO4de6V
+         GvkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721398656; x=1722003456;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o3gGwnKkOxiHuqDBoqHiGOngepHwURq3W8ZE5hfV4/I=;
+        b=FE5igChFGvRbNQxyoBnJJMH/3GjacJQCw8kfgpuMdVjaAbWyi/qj6pcVQ6Y/BXss7/
+         DPJ3/6xmgTYvCvd340+I4+uHB04ekt+IUltuvU/D0m3PFhUpQwCC4QzlOhJTik8EeHD1
+         AB8KSVbDXboWQxInPQ8oMMnsIBjktb+5KzDJkfYW0EptxT02EP2dQW1Z7K/wFKf4LS69
+         OywkQ5+0h5E3rGftwDEFRFwRq9XXEYyZZkvdd8T84irXLxle5tlP8RfSjxQ96rsfSwlI
+         zCDcQXVMPpgMoEuD2fmr4iWEuleoPVW1mdEVoFLk/V9xqXOzXiaNQM5oFuqvWbDkfzbK
+         Cifg==
+X-Forwarded-Encrypted: i=1; AJvYcCWoGyEPJzkHSenNkbx704G1vvFKX7Oqish8XOgdF5ErZcxAtEC+ey4UmbMpl7ADdza0nb/BbDw3SuVmiXx6qrH9bnqfITnkLN9nPTA+7H8b
+X-Gm-Message-State: AOJu0Ywg0XHNHPSmQKFfFtwmKl/S9ky3Uinvh702DldaTaDrgFyaNLo8
+	674ALdEHUGDJP7h9SLdhMlr3RqffoUgLlLiTuDBlb2ONTbFNKIrP1YD2v2KB7nJaRwYohS6QZPt
+	mVF0abkZO/srVt3kuID5Aqhz1eWz8jmQP3jHt
+X-Google-Smtp-Source: AGHT+IF76WQ3Sl0kv11m20n2/Esl/cSZDr2M3d5alLDqRF7hKGGW3bWZH0gtFIknuNBESclOnt0Py52fuwxCjdRo6fQ=
+X-Received: by 2002:a05:6402:50c9:b0:57c:c5e2:2c37 with SMTP id
+ 4fb4d7f45d1cf-5a2f262b220mr158387a12.3.1721398655421; Fri, 19 Jul 2024
+ 07:17:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240704190137.696169-1-mic@digikod.net> <20240704190137.696169-2-mic@digikod.net>
+ <CALmYWFss7qcpR9D_r3pbP_Orxs55t3y3yXJsac1Wz=Hk9Di0Nw@mail.gmail.com>
+ <20240717.neaB5Aiy2zah@digikod.net> <CALmYWFt=yXpzhS=HS9FjwVMvx6U1MoR31vK79wxNLhmJm9bBoA@mail.gmail.com>
+ <20240718.kaePhei9Ahm9@digikod.net> <CALmYWFto4sw-Q2+J0Gc54POhnM9C8YpnJ44wMz=fd_K3_+dWmw@mail.gmail.com>
+ <20240719.shaeK6PaiSie@digikod.net>
+In-Reply-To: <20240719.shaeK6PaiSie@digikod.net>
+From: Jeff Xu <jeffxu@google.com>
+Date: Fri, 19 Jul 2024 07:16:55 -0700
+Message-ID: <CALmYWFsd-=pOPZZmiKvYJ8pOhACsTvW_d+pRjG_C4jD6+Li0AQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to execveat(2)
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Paul Moore <paul@paul-moore.com>, "Theodore Ts'o" <tytso@mit.edu>, Alejandro Colomar <alx@kernel.org>, 
+	Aleksa Sarai <cyphar@cyphar.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, 
+	Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Luca Boccassi <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Matthew Garrett <mjg59@srcf.ucam.org>, Matthew Wilcox <willy@infradead.org>, 
+	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, Scott Shell <scottsh@microsoft.com>, 
+	Shuah Khan <shuah@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
+	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
+	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
+	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, 
+	linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Elliott Hughes <enh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-07-19 at 16:21 +0300, Jarkko Sakkinen wrote:
-> On Wed, 2024-07-17 at 22:30 -0400, James Bottomley wrote:
-> > On Tue, 2024-07-16 at 17:07 +0300, Jarkko Sakkinen wrote:
-> > > On Tue Jul 16, 2024 at 2:53 PM EEST, Jarkko Sakkinen wrote:
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 name[AUTH_MAX_NAMES=
-][2 + SHA512_DIGEST_SIZE];
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 name[AUTH_MAX_NAMES=
-][2 + HASH_MAX_DIGESTSIZE];
-> > >=20
-> > > Ouch, we definitely do not want 2-dimensional arrays. I missed this
-> > > in the hmac review.
-> > >=20
-> > > Why this is based on count (AUTH_MAX_NAMES) rather than space? Is
-> > > that value from the specs?
-> >=20
-> > Yes, it's based on the maximum number of session handles a command can
-> > have.=C2=A0 It's architecturally defined in Trusted Platform Module Lib=
-rary
-> > Part 1: Architecture chapter 18 (TPM Command/Response Structure) where
-> > it says in 18.1 "an Authorization Area containing one to three session
-> > structures"
-> >=20
-> > Although if I look at our code we really only use a maximum of two for
-> > all the commands the kernel does.
-> >=20
-> > > You could just as well replace name and name_h with a single tpm_buf
-> > > instance in "sized" mode and return -E2BIG from the functions that
-> > > use it. Right, those don't return anything but void, which should be
-> > > also fixed.
-> >=20
-> > I'll look into that: it would get us out of the buf->handles spat.
->=20
->=20
-> Also one thing I recalled after reviewing this: when updating
-> any of the exported functions:
->=20
-> 1. Try to scope patch per function. Obviously when sanely
-> =C2=A0=C2=A0 possible but at least goal should be this granularity.
-> 2. It would make sense to take the documentation from header
-> =C2=A0=C2=A0 and kdoc and merge them into a single entity.
->=20
-> This way I think it would be more digestable and easier both
-> test and review.
+On Fri, Jul 19, 2024 at 1:45=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digik=
+od.net> wrote:
+>
+> On Thu, Jul 18, 2024 at 06:29:54PM -0700, Jeff Xu wrote:
+> > On Thu, Jul 18, 2024 at 5:24=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@d=
+igikod.net> wrote:
+> > >
+> > > On Wed, Jul 17, 2024 at 07:08:17PM -0700, Jeff Xu wrote:
+> > > > On Wed, Jul 17, 2024 at 3:01=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <m=
+ic@digikod.net> wrote:
+> > > > >
+> > > > > On Tue, Jul 16, 2024 at 11:33:55PM -0700, Jeff Xu wrote:
+> > > > > > On Thu, Jul 4, 2024 at 12:02=E2=80=AFPM Micka=C3=ABl Sala=C3=BC=
+n <mic@digikod.net> wrote:
+> > > > > > >
+> > > > > > > Add a new AT_CHECK flag to execveat(2) to check if a file wou=
+ld be
+> > > > > > > allowed for execution.  The main use case is for script inter=
+preters and
+> > > > > > > dynamic linkers to check execution permission according to th=
+e kernel's
+> > > > > > > security policy. Another use case is to add context to access=
+ logs e.g.,
+> > > > > > > which script (instead of interpreter) accessed a file.  As an=
+y
+> > > > > > > executable code, scripts could also use this check [1].
+> > > > > > >
+> > > > > > > This is different than faccessat(2) which only checks file ac=
+cess
+> > > > > > > rights, but not the full context e.g. mount point's noexec, s=
+tack limit,
+> > > > > > > and all potential LSM extra checks (e.g. argv, envp, credenti=
+als).
+> > > > > > > Since the use of AT_CHECK follows the exact kernel semantic a=
+s for a
+> > > > > > > real execution, user space gets the same error codes.
+> > > > > > >
+> > > > > > So we concluded that execveat(AT_CHECK) will be used to check t=
+he
+> > > > > > exec, shared object, script and config file (such as seccomp co=
+nfig),
+>
+> > > > > > I think binfmt_elf.c in the kernel needs to check the ld.so to =
+make
+> > > > > > sure it passes AT_CHECK, before loading it into memory.
+> > > > >
+> > > > > All ELF dependencies are opened and checked with open_exec(), whi=
+ch
+> > > > > perform the main executability checks (with the __FMODE_EXEC flag=
+).
+> > > > > Did I miss something?
+> > > > >
+> > > > I mean the ld-linux-x86-64.so.2 which is loaded by binfmt in the ke=
+rnel.
+> > > > The app can choose its own dynamic linker path during build, (maybe
+> > > > even statically link one ?)  This is another reason that relying on=
+ a
+> > > > userspace only is not enough.
+> > >
+> > > The kernel calls open_exec() on all dependencies, including
+> > > ld-linux-x86-64.so.2, so these files are checked for executability to=
+o.
+> > >
+> > This might not be entirely true. iiuc, kernel  calls open_exec for
+> > open_exec for interpreter, but not all its dependency (e.g. libc.so.6)
+>
+> Correct, the dynamic linker is in charge of that, which is why it must
+> be enlighten with execveat+AT_CHECK and securebits checks.
+>
+> > load_elf_binary() {
+> >    interpreter =3D open_exec(elf_interpreter);
+> > }
+> >
+> > libc.so.6 is opened and mapped by dynamic linker.
+> > so the call sequence is:
+> >  execve(a.out)
+> >   - open exec(a.out)
+> >   - security_bprm_creds(a.out)
+> >   - open the exec(ld.so)
+> >   - call open_exec() for interruptor (ld.so)
+> >   - call execveat(AT_CHECK, ld.so) <-- do we want ld.so going through
+> > the same check and code path as libc.so below ?
+>
+> open_exec() checks are enough.  LSMs can use this information (open +
+> __FMODE_EXEC) if needed.  execveat+AT_CHECK is only a user space
+> request.
+>
+Then the ld.so doesn't go through the same security_bprm_creds() check
+as other .so.
+
+As my previous email, the ChromeOS LSM restricts executable mfd
+through security_bprm_creds(), the end result is that ld.so can still
+be executable memfd, but not other .so.
+
+One way to address this is to refactor the necessary code from
+execveat() code patch, and make it available to call from both kernel
+and execveat() code paths., but if we do that, we might as well use
+faccessat2(AT_CHECK)
 
 
-My philosophy here is like for any other new feature:
-
-1. The first version can be messier, and all the issues I've complained abo=
-ut
-   (mostly because I came from holiday to fix them) are kind of part of the
-   job.
-2. The second version or supplemental feature should make the code base
-   cleaner than it was before it existed.
-
-So I kind of see the second iteration also a chance fix all the glitches
-and rough corners. I don't think anything was done "wrong" durign the
-first iteration, now it is just easier to reflect some of the choices.
-
-BR, Jarkko
+> >   - transfer the control to ld.so)
+> >   - ld.so open (libc.so)
+> >   - ld.so call execveat(AT_CHECK,libc.so) <-- proposed by this patch,
+> > require dynamic linker change.
+> >   - ld.so mmap(libc.so,rx)
+>
+> Explaining these steps is useful. I'll include that in the next patch
+> series.
+>
+> > > > A detailed user case will help demonstrate the use case for dynamic
+> > > > linker, e.g. what kind of app will benefit from
+> > > > SECBIT_EXEC_RESTRICT_FILE =3D 1, what kind of threat model are we
+> > > > dealing with , what kind of attack chain we blocked as a result.
+> > >
+> > > I explained that in the patches and in the description of these new
+> > > securebits.  Please point which part is not clear.  The full threat
+> > > model is simple: the TCB includes the kernel and system's files, whic=
+h
+> > > are integrity-protected, but we don't trust arbitrary data/scripts th=
+at
+> > > can be written to user-owned files or directly provided to script
+> > > interpreters.  As for the ptrace restrictions, the dynamic linker
+> > > restrictions helps to avoid trivial bypasses (e.g. with LD_PRELOAD)
+> > > with consistent executability checks.
+> > >
+> > On elf loading case, I'm clear after your last email. However, I'm not
+> > sure if everyone else follows,  I will try to summarize here:
+> > - Problem:  ld.so /tmp/a.out will happily pass, even /tmp/a.out is
+> > mounted as non-exec.
+> >   Solution: ld.so call execveat(AT_CHECK) for a.out before mmap a.out
+> > into memory.
+> >
+> > - Problem: a poorly built application (a.out) can have a dependency on
+> > /tmp/a.o, when /tmp/a.o is on non-exec mount,
+> >   Solution: ld.so call execveat(AT_CHECK) for a.o, before mmap a.o into=
+ memory.
+> >
+> > - Problem: application can call mmap (/tmp/a.out, rx), where /tmp is
+> > on non-exec mount
+>
+> I'd say "malicious or non-enlightened processes" can call mmap without
+> execveat+AT_CHECK...
+>
+> >   This is out of scope, i.e. will require enforcement on mmap(), maybe
+> > through LSM
+>
+> Cool, I'll include that as well. Thanks.
 
