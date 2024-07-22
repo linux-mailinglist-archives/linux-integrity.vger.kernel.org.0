@@ -1,238 +1,181 @@
-Return-Path: <linux-integrity+bounces-3222-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3223-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79484938112
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Jul 2024 13:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 19A55938F02
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2024 14:20:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A57828206D
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Jul 2024 11:43:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4D8828197D
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Jul 2024 12:20:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5364712C470;
-	Sat, 20 Jul 2024 11:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AFB816C86E;
+	Mon, 22 Jul 2024 12:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsFuW5U2"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kw/PURPT"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DDE83CBA;
-	Sat, 20 Jul 2024 11:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9532914AD3F;
+	Mon, 22 Jul 2024 12:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721475834; cv=none; b=syP52Wp09V9crfiU7XdfHpaLAkVJE7vNLGVBXMy+ETfk7drZ3tCPiDl4imSEdWaob0DNE847+LDJ/M5AKTkuF3HySvOI/7S/wxX1FXxjYC/zr0cW4YCCHo6ykSPUcBTVrtzFQpGleP5MA1vV357zh0AKWzw4nWCv84Vi4fTJ/GU=
+	t=1721650811; cv=none; b=aCWeWLHJW9/Qz+KOGsqY67Sj5N94wRgnxJyICdI8ohGvfOSeZxqO13iKfKXfTCmz7QnnGyYE+vb1M8Ir+ewgMFlWYVCXRaCYoEr7RI8UGURnp9EvNuyeEKtSIcKcUi3aSFQIvo/8YWnClAfU4bIHuaWWd3Uiw/J6C1UrqSMDAvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721475834; c=relaxed/simple;
-	bh=rw4nH2UHgn5T7FRDMb5wZ9ureFZDCLODRd4xCi/HFpc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=peMT8AUom8KRnH/BTjyq7Z/oMa9VcHkjSeNG7CFQz/3gbnhOZlMRZ3NKYW13aaV3McWfUngpX/ISinkLgd+QKKAgu9C2LzLAbJFXGvx4Qo6wCPJrWaB1XxaIWAwjgbsmR4uC4TjmU5sF24npEOppFI32vS0y2ouN3Q7K4dKKwlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsFuW5U2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA9AC2BD10;
-	Sat, 20 Jul 2024 11:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721475833;
-	bh=rw4nH2UHgn5T7FRDMb5wZ9ureFZDCLODRd4xCi/HFpc=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=DsFuW5U2JLq70FLgSERfxYXkl0cHGvICJLn9KuagbTHWf6h7XZE/VxGyN6j5Xos4Q
-	 rkURmlCbpNrvl+MAtXxU92bFrdFfQkgAtwbCwtR4xp8O/Fcsjp3UWKQs7B+DLZiGMy
-	 3ISRBT76LPZmLU48ix5qAReV5Q+XsNs04GRmDD4cXNQKU/PmxF13YI+C/kC1PR9vMR
-	 /NxLFPhv7MaDNuAAEgqGNtaWBAXpEz3dRsHFdRnM3y6JFAzjPhnis+2ryBi76OXHZ8
-	 oeDCyJX9KFtgyW/0RNz4HFt74r7kvMM6M5v0OnCiYqnFSUcCqwuSV+0kSlegOEtjYo
-	 MQyymRippIwDA==
+	s=arc-20240116; t=1721650811; c=relaxed/simple;
+	bh=m5DugPP1DC1LZ2XEUi0/l+kGRbWjHA0M/x0whe3bE/8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=p3xN9SaBP/lki8ebL9D2YibjDy5Ufhzbm7wyiQ1uZNGtCiFbsLsrstwYN1+52wX279Jgz9gslSNBnmR2Dc4v1OGo0RnPqUbW4Lva3vxSoweZEAmEC+yvSaeNdj6nmDGoMpD/lJsc/Z1Xbg2d4E5wPwTHuxv0sE2ADMmImiTUWz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kw/PURPT; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46MBQwpt025216;
+	Mon, 22 Jul 2024 12:19:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:subject:to:cc:references:from:in-reply-to
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	uFvmW9DpP7Xjc69hppvUAoyualI8ZPVCYAqWtlAoRtw=; b=kw/PURPTMFS/jbnG
+	6ujRl0GRIUB9R02YAg/qGE4OY4/wwia6Wh7DQBOVkkj/VQ1wPLoJ94qXo0e8PPsU
+	F4PRyXAntyh9A+yBix/IouGlEpgjfKFkwmlWUhd8o4Kssbblx1zjzOoCLFeLBVlg
+	2uTorxnT93EVlnvYsuMJjPqbVkLvMzle8P2GyD2EseIb8r8wfLpYBEm+4PUO7sQS
+	XUzDvLpDX2qWKXKnt8cC+VZuYjnVHZJoFgkZoblEeZ/bFI4rrWwiJfQGYCYJOMjl
+	T5Kyy8vKlawMuP9KrgF3zNXw4Bo4Ig4uYbyZIG3r7T6I2rzovS4IXjLJk9eEP5xS
+	6hIK7g==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40gtw42pb4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jul 2024 12:19:46 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 46MCJkWU003879;
+	Mon, 22 Jul 2024 12:19:46 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40gtw42pb2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jul 2024 12:19:46 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 46M9FqPP005776;
+	Mon, 22 Jul 2024 12:19:45 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40gy2p53rf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 22 Jul 2024 12:19:45 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 46MCJhSk9372344
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 22 Jul 2024 12:19:45 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 240CB58065;
+	Mon, 22 Jul 2024 12:19:43 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2710958043;
+	Mon, 22 Jul 2024 12:19:42 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 22 Jul 2024 12:19:42 +0000 (GMT)
+Message-ID: <6eee0c55-40cd-4e7b-8819-1a4c9596062a@linux.ibm.com>
+Date: Mon, 22 Jul 2024 08:19:41 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 02/10] crypto: Add support for ECDSA signature
+ verification
+To: Lukas Wunner <lukas@wunner.de>
+Cc: keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        davem@davemloft.net, herbert@gondor.apana.org.au, dhowells@redhat.com,
+        zohar@linux.ibm.com, jarkko@kernel.org,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patrick@puiterwijk.org
+References: <20210316210740.1592994-1-stefanb@linux.ibm.com>
+ <20210316210740.1592994-3-stefanb@linux.ibm.com> <ZpfuqeSVC47jqme2@wunner.de>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <ZpfuqeSVC47jqme2@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JxPgH5XzRCm_YZnQxQxY_MsvRm-z8XMR
+X-Proofpoint-ORIG-GUID: xAotsV-GmwKR1gYlGG3n10-BunaDlMsd
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 20 Jul 2024 14:43:41 +0300
-Message-Id: <D2UC8YVOX9WU.1DRD4QFQ92L1U@kernel.org>
-Cc: "Steve Dower" <steve.dower@python.org>, "Jeff Xu" <jeffxu@google.com>,
- "Al Viro" <viro@zeniv.linux.org.uk>, "Christian Brauner"
- <brauner@kernel.org>, "Kees Cook" <keescook@chromium.org>, "Linus Torvalds"
- <torvalds@linux-foundation.org>, "Paul Moore" <paul@paul-moore.com>,
- "Theodore Ts'o" <tytso@mit.edu>, "Alejandro Colomar" <alx@kernel.org>,
- "Aleksa Sarai" <cyphar@cyphar.com>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Andy Lutomirski" <luto@kernel.org>, "Arnd
- Bergmann" <arnd@arndb.de>, "Casey Schaufler" <casey@schaufler-ca.com>,
- "Christian Heimes" <christian@python.org>, "Dmitry Vyukov"
- <dvyukov@google.com>, "Eric Biggers" <ebiggers@kernel.org>, "Eric Chiang"
- <ericchiang@google.com>, "Fan Wu" <wufan@linux.microsoft.com>, "Florian
- Weimer" <fweimer@redhat.com>, "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "James Morris" <jamorris@linux.microsoft.com>, "Jan Kara" <jack@suse.cz>,
- "Jann Horn" <jannh@google.com>, "Jonathan Corbet" <corbet@lwn.net>, "Jordan
- R Abrahams" <ajordanr@google.com>, "Lakshmi Ramasubramanian"
- <nramas@linux.microsoft.com>, "Luca Boccassi" <bluca@debian.org>, "Luis
- Chamberlain" <mcgrof@kernel.org>, "Madhavan T . Venkataraman"
- <madvenka@linux.microsoft.com>, "Matt Bobrowski"
- <mattbobrowski@google.com>, "Matthew Garrett" <mjg59@srcf.ucam.org>,
- "Matthew Wilcox" <willy@infradead.org>, "Miklos Szeredi"
- <mszeredi@redhat.com>, "Mimi Zohar" <zohar@linux.ibm.com>, "Nicolas
- Bouchinet" <nicolas.bouchinet@ssi.gouv.fr>, "Scott Shell"
- <scottsh@microsoft.com>, "Shuah Khan" <shuah@kernel.org>, "Stephen
- Rothwell" <sfr@canb.auug.org.au>, "Steve Grubb" <sgrubb@redhat.com>,
- "Thibaut Sautereau" <thibaut.sautereau@ssi.gouv.fr>, "Vincent Strubel"
- <vincent.strubel@ssi.gouv.fr>, "Xiaoming Ni" <nixiaoming@huawei.com>, "Yin
- Fengwei" <fengwei.yin@intel.com>, <kernel-hardening@lists.openwall.com>,
- <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>, "Elliott Hughes" <enh@google.com>
-Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to
- execveat(2)
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Andy Lutomirski" <luto@amacapital.net>,
- =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-X-Mailer: aerc 0.17.0
-References: <20240704190137.696169-1-mic@digikod.net>
- <20240704190137.696169-2-mic@digikod.net>
- <CALmYWFss7qcpR9D_r3pbP_Orxs55t3y3yXJsac1Wz=Hk9Di0Nw@mail.gmail.com>
- <a0da7702-dabe-49e4-87f4-5d6111f023a8@python.org>
- <20240717.AGh2shahc9ee@digikod.net>
- <CALCETrUcr3p_APNazMro7Y9FX1zLAiQESvKZ5BDgd8X3PoCdFw@mail.gmail.com>
- <20240718.Niexoo0ahch0@digikod.net>
- <CALCETrVVq4DJZ2q9V9TMuvZ1nb+-Qf4Eu8LVBgUy3XiTa=jFCQ@mail.gmail.com>
-In-Reply-To: <CALCETrVVq4DJZ2q9V9TMuvZ1nb+-Qf4Eu8LVBgUy3XiTa=jFCQ@mail.gmail.com>
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-22_08,2024-07-22_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ phishscore=0 malwarescore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
+ impostorscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2407220090
 
-On Sat Jul 20, 2024 at 4:59 AM EEST, Andy Lutomirski wrote:
-> > On Jul 18, 2024, at 8:22=E2=80=AFPM, Micka=C3=ABl Sala=C3=BCn <mic@digi=
-kod.net> wrote:
-> >
-> > =EF=BB=BFOn Thu, Jul 18, 2024 at 09:02:56AM +0800, Andy Lutomirski wrot=
-e:
-> >>>> On Jul 17, 2024, at 6:01=E2=80=AFPM, Micka=C3=ABl Sala=C3=BCn <mic@d=
-igikod.net> wrote:
-> >>>
-> >>> On Wed, Jul 17, 2024 at 09:26:22AM +0100, Steve Dower wrote:
-> >>>>> On 17/07/2024 07:33, Jeff Xu wrote:
-> >>>>> Consider those cases: I think:
-> >>>>> a> relying purely on userspace for enforcement does't seem to be
-> >>>>> effective,  e.g. it is trivial  to call open(), then mmap() it into
-> >>>>> executable memory.
-> >>>>
-> >>>> If there's a way to do this without running executable code that had=
- to pass
-> >>>> a previous execveat() check, then yeah, it's not effective (e.g. a P=
-ython
-> >>>> interpreter that *doesn't* enforce execveat() is a trivial way to do=
- it).
-> >>>>
-> >>>> Once arbitrary code is running, all bets are off. So long as all arb=
-itrary
-> >>>> code is being checked itself, it's allowed to do things that would b=
-ypass
-> >>>> later checks (and it's up to whoever audited it in the first place t=
-o
-> >>>> prevent this by not giving it the special mark that allows it to pas=
-s the
-> >>>> check).
-> >>>
-> >>> Exactly.  As explained in the patches, one crucial prerequisite is th=
-at
-> >>> the executable code is trusted, and the system must provide integrity
-> >>> guarantees.  We cannot do anything without that.  This patches series=
- is
-> >>> a building block to fix a blind spot on Linux systems to be able to
-> >>> fully control executability.
-> >>
-> >> Circling back to my previous comment (did that ever get noticed?), I
-> >
-> > Yes, I replied to your comments.  Did I miss something?
->
-> I missed that email in the pile, sorry. I=E2=80=99ll reply separately.
->
-> >
-> >> don=E2=80=99t think this is quite right:
-> >>
-> >> https://lore.kernel.org/all/CALCETrWYu=3DPYJSgyJ-vaa+3BGAry8Jo8xErZLiG=
-R3U5h6+U0tA@mail.gmail.com/
-> >>
-> >> On a basic system configuration, a given path either may or may not be
-> >> executed. And maybe that path has some integrity check (dm-verity,
-> >> etc).  So the kernel should tell the interpreter/loader whether the
-> >> target may be executed. All fine.
-> >>
-> >> But I think the more complex cases are more interesting, and the
-> >> =E2=80=9Cexecute a program=E2=80=9D process IS NOT BINARY.  An attempt=
- to execute can
-> >> be rejected outright, or it can be allowed *with a change to creds or
-> >> security context*.  It would be entirely reasonable to have a policy
-> >> that allows execution of non-integrity-checked files but in a very
-> >> locked down context only.
-> >
-> > I guess you mean to transition to a sandbox when executing an untrusted
-> > file.  This is a good idea.  I talked about role transition in the
-> > patch's description:
-> >
-> > With the information that a script interpreter is about to interpret a
-> > script, an LSM security policy can adjust caller's access rights or log
-> > execution request as for native script execution (e.g. role transition)=
-.
-> > This is possible thanks to the call to security_bprm_creds_for_exec().
->
-> =E2=80=A6
->
-> > This patch series brings the minimal building blocks to have a
-> > consistent execution environment.  Role transitions for script executio=
-n
-> > are left to LSMs.  For instance, we could extend Landlock to
-> > automatically sandbox untrusted scripts.
->
-> I=E2=80=99m not really convinced.  There=E2=80=99s more to building an AP=
-I that
-> enables LSM hooks than merely sticking the hook somewhere in kernel
-> code. It needs to be a defined API. If you call an operation =E2=80=9Cche=
-ck=E2=80=9D,
-> then people will expect it to check, not to change the caller=E2=80=99s
-> credentials.  And people will mess it up in both directions (e.g.
-> callers will call it and then open try to load some library that they
-> should have loaded first, or callers will call it and forget to close
-> fds first.
->
-> And there should probably be some interaction with dumpable as well.
-> If I =E2=80=9Ccheck=E2=80=9D a file for executability, that should not su=
-ddenly allow
-> someone to ptrace me?
->
-> And callers need to know to exit on failure, not carry on.
->
->
-> More concretely, a runtime that fully opts in to this may well "check"
-> multiple things.  For example, if I do:
->
-> $ ld.so ~/.local/bin/some_program   (i.e. I literally execve ld.so)
->
-> then ld.so will load several things:
->
-> ~/.local/bin/some_program
-> libc.so
-> other random DSOs, some of which may well be in my home directory
 
-What would really help to comprehend this patch set would be a set of
-test scripts, preferably something that you can run easily with
-BuildRoot or similar.
 
-Scripts would demonstrate the use cases for the patch set. Then it
-would be easier to develop scripts that would underline the corner
-cases. I would keep all this out of kselftest shenanigans for now.
+On 7/17/24 12:17, Lukas Wunner wrote:
+> Hi Stefan,
+> 
+> On Tue, Mar 16, 2021 at 05:07:32PM -0400, Stefan Berger wrote:
+>> +/*
+>> + * Get the r and s components of a signature from the X509 certificate.
+>> + */
+>> +static int ecdsa_get_signature_rs(u64 *dest, size_t hdrlen, unsigned char tag,
+>> +				  const void *value, size_t vlen, unsigned int ndigits)
+>> +{
+>> +	size_t keylen = ndigits * sizeof(u64);
+>> +	ssize_t diff = vlen - keylen;
+>> +	const char *d = value;
+>> +	u8 rs[ECC_MAX_BYTES];
+>> +
+>> +	if (!value || !vlen)
+>> +		return -EINVAL;
+>> +
+>> +	/* diff = 0: 'value' has exacly the right size
+>> +	 * diff > 0: 'value' has too many bytes; one leading zero is allowed that
+>> +	 *           makes the value a positive integer; error on more
+>> +	 * diff < 0: 'value' is missing leading zeros, which we add
+>> +	 */
+>> +	if (diff > 0) {
+>> +		/* skip over leading zeros that make 'value' a positive int */
+>> +		if (*d == 0) {
+>> +			vlen -= 1;
+>> +			diff--;
+>> +			d++;
+>> +		}
+>> +		if (diff)
+>> +			return -EINVAL;
+>> +	}
+>> +	if (-diff >= keylen)
+>> +		return -EINVAL;
+> 
+> I'm in the process of creating a crypto_template for decoding an x962
+> signature as requested by Herbert:
+> 
+> https://lore.kernel.org/all/ZoHXyGwRzVvYkcTP@gondor.apana.org.au/
+> 
+> I intend to move the above code to the template and to do so I'm
+> trying to understand what it's doing.
+> 
+> There's an oddity in the above-quoted function.  The check ...
+> 
+> +	if (-diff >= keylen)
+> +		return -EINVAL;
+> 
+> ... seems superfluous. diff is assigned the following value at the
+> top of the function:
+> 
+> +	ssize_t diff = vlen - keylen;
+> 
+> This means that:  -diff == keylen - vlen.
+> 
+> Now, if vlen is zero, -diff would equal keylen and then the
+> "-diff >= keylen" check would be true.  However at the top of
+> the function, there's already a !vlen check.  No need to check
+> the same thing again!
 
-I feel that the patch set is hovering in abstractions with examples
-that you cannot execute.
+You're right, this check is not necessary.
 
-I added the patches to standard test CI hack:
-
-https://codeberg.org/jarkko/linux-tpmdd-test
-
-But after I booted up a kernel I had no idea what to do with it. And
-all this lenghty discussion makes it even more confusing.
-
-Please find some connection to the real world before sending any new
-version of this (e.g. via test scripts). I think this should not be
-pulled before almost anyone doing kernel dev can comprehend the "gist"
-at least in some reasonable level.
-
-BR, Jarkko
+    Stefan
 
