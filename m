@@ -1,206 +1,208 @@
-Return-Path: <linux-integrity+bounces-3226-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3227-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AB48939B58
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jul 2024 09:04:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B417C93A100
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jul 2024 15:15:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E45161F2214D
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jul 2024 07:04:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C26DB1C20A70
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jul 2024 13:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD12C14A614;
-	Tue, 23 Jul 2024 07:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B11531527BA;
+	Tue, 23 Jul 2024 13:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="HjieBgpR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch [185.125.25.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BDE13B5A6;
-	Tue, 23 Jul 2024 07:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA5415250C
+	for <linux-integrity@vger.kernel.org>; Tue, 23 Jul 2024 13:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721718289; cv=none; b=NZfDBNNmXhi2UJwUGVAexlBZII9wGed5QYkqRhRZP/f0a4jgi/xs5hzLVPyS+aHqueC+30z8KU1zu7p5LnK368tpehzK0mLpWXug+aazlw5G9aDOsdliiKSGwCNyDIkSmQQQ20P6OvkDS3QmQaDCN0f1h10XgqVOD+bwkyCoh34=
+	t=1721740537; cv=none; b=G+DZ5WNL6jaAfms2IuYV8VHEtWV74j8juBI1lxvywYgwQddHHj9jDh/0GQkGygvWqj0MOreosHVGBWezZJXPdaSnHVpEakApn6pq0LCYo1WH15WtKiaxVXrDg5FruKy7Wjw1k+WHslCJdbjDiJCBMY6uJ0jPcIfzYbhkbiXX1cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721718289; c=relaxed/simple;
-	bh=OS7/D2fswcHFX0KJp9WVoT9m3o1j5i+tbBQzNvC5FiU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PM26A4M3wpbhyQpyIZYEmXww1iJ6K1AoSDryHLMCfyH5//D3rDaUXndVfh4FyEjY5qrx7j2iWhV0golj10BBRX903ZgCIzkCDc7+MLCLWcxJSxsf1rtsCDT65K8L3/T1vo9xKy0CIkOZ5BxV1FxZizPeLVUpwM175nV5csvcdDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WSp6h0vm8z4f3l19;
-	Tue, 23 Jul 2024 15:04:28 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 97B481A0CA0;
-	Tue, 23 Jul 2024 15:04:41 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP3 (Coremail) with SMTP id _Ch0CgBndE8HVp9mDXyOAw--.51101S2;
-	Tue, 23 Jul 2024 15:04:41 +0800 (CST)
-Message-ID: <b1ba86f7-f943-4913-8265-2a94f3951a88@huaweicloud.com>
-Date: Tue, 23 Jul 2024 15:04:39 +0800
+	s=arc-20240116; t=1721740537; c=relaxed/simple;
+	bh=GQMYqRZLirdBdnV9m05p3q7iUsQxl7Es+Hr/8ahrDeQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nWehbobEz8SWlVBmQA/y5KmQ6EuyG6gWbJcqkCJsF1F06cmyu2UwOQLrNz419e0GVdz76pLVzxq+AXfF3z0n4e2jGXK6sl+svxptJHIeUZrdxRIfGqrkJ40p0Uh059hnr8A8S4Ink5M4JJLyikzsuk0bVN2tq1i5vN05tVOyuLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=HjieBgpR; arc=none smtp.client-ip=185.125.25.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WSyLj0XJ6zvdg;
+	Tue, 23 Jul 2024 15:15:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1721740524;
+	bh=Qj8Xgm8rcMJSt8La6LY/BFSnfayKGlNJ2hnbPdsP+c4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HjieBgpROL8YzXywnxRaVs/lBhQC8sCG72MSmA1PAGizlICvD8PSvtDlMWicL9X1d
+	 V6xSMy1NB4+7ISBIZb5R4Qb0Q/5r6uVtc04r+yNAtiVVgbQ5PNuDUeO/uAa8G6Yad2
+	 AwO0Y79iGqgbZUsXUVSXoOuwFz3cBPmXaXbe6uxk=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4WSyLb1YXwzpH5;
+	Tue, 23 Jul 2024 15:15:19 +0200 (CEST)
+Date: Tue, 23 Jul 2024 15:15:16 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Andy Lutomirski <luto@kernel.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
+	Alejandro Colomar <alx.manpages@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, 
+	Jeff Xu <jeffxu@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Luca Boccassi <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Matthew Garrett <mjg59@srcf.ucam.org>, Matthew Wilcox <willy@infradead.org>, 
+	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, Scott Shell <scottsh@microsoft.com>, 
+	Shuah Khan <shuah@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
+	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, Vincent Strubel <vincent.strubel@ssi.gouv.fr>, 
+	Xiaoming Ni <nixiaoming@huawei.com>, Yin Fengwei <fengwei.yin@intel.com>, 
+	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH v19 2/5] security: Add new SHOULD_EXEC_CHECK and
+ SHOULD_EXEC_RESTRICT securebits
+Message-ID: <20240723.Uquiangopie6@digikod.net>
+References: <20240704190137.696169-1-mic@digikod.net>
+ <20240704190137.696169-3-mic@digikod.net>
+ <CALCETrWpk5Es9GPoAdDD=m_vgSePm=cA16zCor_aJV0EPXBw1A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 9/20] lsm: Refactor return value of LSM hook
- key_getsecurity
-Content-Language: en-US
-To: Paul Moore <paul@paul-moore.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Matt Bobrowski <mattbobrowski@google.com>,
- Brendan Jackman <jackmanb@chromium.org>, James Morris <jmorris@namei.org>,
- "Serge E . Hallyn" <serge@hallyn.com>,
- Khadija Kamran <kamrankhadijadj@gmail.com>,
- Casey Schaufler <casey@schaufler-ca.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>,
- John Johansen <john.johansen@canonical.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Shung-Hsi Yu <shung-hsi.yu@suse.com>, Edward Cree <ecree.xilinx@gmail.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Trond Myklebust <trond.myklebust@hammerspace.com>,
- Anna Schumaker <anna@kernel.org>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>
-References: <20240711111908.3817636-10-xukuohai@huaweicloud.com>
- <94a3b82a1e3e1fec77d676fa382105d4@paul-moore.com>
- <7711bdba-9fbd-406c-8b81-adf91074d0b7@huaweicloud.com>
- <CAHC9VhSsCuJzJ3ReUTyTXfWqRd+_TfShJBnRugZtX6OrMYJkOQ@mail.gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <CAHC9VhSsCuJzJ3ReUTyTXfWqRd+_TfShJBnRugZtX6OrMYJkOQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBndE8HVp9mDXyOAw--.51101S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZryfGF1fXrW8KFWUZry8AFb_yoWrWryxpr
-	W5Ka1Yyr4kJFy3ur1Iv3W7uF4Sya93GF1UWrZ3Gw1UZr1qvr17Wr1jkr1j9ryrCr1fJr10
-	vw47ZFZxCr1DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
-	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	j6a0PUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+In-Reply-To: <CALCETrWpk5Es9GPoAdDD=m_vgSePm=cA16zCor_aJV0EPXBw1A@mail.gmail.com>
+X-Infomaniak-Routing: alpha
 
-On 7/23/2024 5:35 AM, Paul Moore wrote:
-> On Sat, Jul 20, 2024 at 5:31 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->> On 7/19/2024 10:08 AM, Paul Moore wrote:
->>> On Jul 11, 2024 Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->>>>
->>>> To be consistent with most LSM hooks, convert the return value of
->>>> hook key_getsecurity to 0 or a negative error code.
->>>>
->>>> Before:
->>>> - Hook key_getsecurity returns length of value on success or a
->>>>     negative error code on failure.
->>>>
->>>> After:
->>>> - Hook key_getsecurity returns 0 on success or a negative error
->>>>     code on failure. An output parameter @len is introduced to hold
->>>>     the length of value on success.
->>>>
->>>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->>>> ---
->>>>    include/linux/lsm_hook_defs.h |  3 ++-
->>>>    include/linux/security.h      |  6 ++++--
->>>>    security/keys/keyctl.c        | 11 ++++++++---
->>>>    security/security.c           | 26 +++++++++++++++++++++-----
->>>>    security/selinux/hooks.c      | 11 +++++------
->>>>    security/smack/smack_lsm.c    | 21 +++++++++++----------
->>>>    6 files changed, 51 insertions(+), 27 deletions(-)
+On Sat, Jul 20, 2024 at 10:06:28AM +0800, Andy Lutomirski wrote:
+> On Fri, Jul 5, 2024 at 3:02 AM Mickaël Salaün <mic@digikod.net> wrote:
+> >
+> > These new SECBIT_SHOULD_EXEC_CHECK, SECBIT_SHOULD_EXEC_RESTRICT, and
+> > their *_LOCKED counterparts are designed to be set by processes setting
+> > up an execution environment, such as a user session, a container, or a
+> > security sandbox.  Like seccomp filters or Landlock domains, the
+> > securebits are inherited across proceses.
+> >
+> > When SECBIT_SHOULD_EXEC_CHECK is set, programs interpreting code should
+> > check executable resources with execveat(2) + AT_CHECK (see previous
+> > patch).
+> >
+> > When SECBIT_SHOULD_EXEC_RESTRICT is set, a process should only allow
+> > execution of approved resources, if any (see SECBIT_SHOULD_EXEC_CHECK).
+> 
+> I read this twice, slept on it, read them again, and I *still* can't
+> understand it.  See below...
+
+There is a new proposal:
+https://lore.kernel.org/all/20240710.eiKohpa4Phai@digikod.net/
+The new securebits will be SECBIT_EXEC_RESTRICT_FILE and
+SECBIT_EXEC_DENY_INTERACTIVE.  I'll send a new patch series with that.
+
+> 
+> > The only restriction enforced by the kernel is the right to ptrace
+> > another process.  Processes are denied to ptrace less restricted ones,
+> > unless the tracer has CAP_SYS_PTRACE.  This is mainly a safeguard to
+> > avoid trivial privilege escalations e.g., by a debugging process being
+> > abused with a confused deputy attack.
+> 
+> What's the actual issue?  And why can't I, as root, do, in a carefully
+> checked, CHECK'd and RESTRICT'd environment, # gdb -p <pid>?  Adding
+> weird restrictions to ptrace can substantially *weaken* security
+> because it forces people to do utterly daft things to work around the
+> restrictions.
+
+Restricting ptrace was a cautious approach, but I get you point and I
+agree.  I'll remove the ptrace restrictions in the next patch series.
+
 > 
 > ...
 > 
->>>> diff --git a/security/security.c b/security/security.c
->>>> index 9dd2ae6cf763..2c161101074d 100644
->>>> --- a/security/security.c
->>>> +++ b/security/security.c
->>>> @@ -5338,19 +5338,35 @@ int security_key_permission(key_ref_t key_ref, const struct cred *cred,
->>>>     * security_key_getsecurity() - Get the key's security label
->>>>     * @key: key
->>>>     * @buffer: security label buffer
->>>> + * @len: the length of @buffer (including terminating NULL) on success
->>>>     *
->>>>     * Get a textual representation of the security context attached to a key for
->>>>     * the purposes of honouring KEYCTL_GETSECURITY.  This function allocates the
->>>>     * storage for the NUL-terminated string and the caller should free it.
->>>>     *
->>>> - * Return: Returns the length of @buffer (including terminating NUL) or -ve if
->>>> - *         an error occurs.  May also return 0 (and a NULL buffer pointer) if
->>>> - *         there is no security label assigned to the key.
->>>> + * Return: Returns 0 on success or -ve if an error occurs. May also return 0
->>>> + *         (and a NULL buffer pointer) if there is no security label assigned
->>>> + *         to the key.
->>>>     */
->>>> -int security_key_getsecurity(struct key *key, char **buffer)
->>>> +int security_key_getsecurity(struct key *key, char **buffer, size_t *len)
->>>>    {
->>>> +    int rc;
->>>> +    size_t n = 0;
->>>> +    struct security_hook_list *hp;
->>>> +
->>>>       *buffer = NULL;
->>>> -    return call_int_hook(key_getsecurity, key, buffer);
->>>> +
->>>> +    hlist_for_each_entry(hp, &security_hook_heads.key_getsecurity, list) {
->>>> +            rc = hp->hook.key_getsecurity(key, buffer, &n);
->>>> +            if (rc < 0)
->>>> +                    return rc;
->>>> +            if (n)
->>>> +                    break;
->>>> +    }
->>>> +
->>>> +    *len = n;
->>>> +
->>>> +    return 0;
->>>>    }
->>>
->>> Help me understand why we can't continue to use the call_int_hook()
->>> macro here?
->>>
->>
->> Before this patch, the hook may return +ve, 0, or -ve, and call_int_hook
->> breaks the loop when the hook return value is not 0.
->>
->> After this patch, the +ve is stored in @n, so @n and return value should
->> both be checked to determine whether to break the loop. This is not
->> feasible with call_int_hook.
+> > +/*
+> > + * When SECBIT_SHOULD_EXEC_CHECK is set, a process should check all executable
+> > + * files with execveat(2) + AT_CHECK.  However, such check should only be
+> > + * performed if all to-be-executed code only comes from regular files.  For
+> > + * instance, if a script interpreter is called with both a script snipped as
 > 
-> Yes, gotcha.  I was focused on the error condition and wasn't thinking
-> about the length getting zero'd out by a trailing callback.
-> Unfortunately, we *really* want to stick with the
-> call_{int,void}_hook() macros so I think we either need to find a way
-> to work within that constraint for existing macro callers, or we have
-> to leave this hook as-is for the moment.
+> s/snipped/snippet/
 > 
+> > + * argument and a regular file, the interpreter should not check any file.
+> > + * Doing otherwise would mislead the kernel to think that only the script file
+> > + * is being executed, which could for instance lead to unexpected permission
+> > + * change and break current use cases.
+> 
+> This is IMO not nearly clear enough to result in multiple user
+> implementations and a kernel implementation and multiple LSM
+> implementations and LSM policy authors actually agreeing as to what
+> this means.
 
-Let's leave it as is. So we ultimately have four hooks that can be
-converted, two of which require adding additional output parameter to
-hold odd return values. These output parameters require extra work
-on the BPF verifier, and it doesn't seem worthwhile just for two
-hooks. So I prefer to keep only the two patches that handle
-conversion without adding output parameters (patch 1 and 5).
+Right, no kernel parts (e.g. LSMs) should try to infer anything other
+than an executability check.  We should handle things such as role
+transitions with something else (e.g. a complementary dedicated flag),
+and that should be decorrelated from this patch series.
 
+> 
+> I also think it's wrong to give user code instructions about what
+> kernel checks it should do.  Have the user code call the kernel and
+> have the kernel implement the policy.
+
+Call the kernel for what?  Script interpreter is a user space thing, and
+restrictions enforced on interpreters need to be a user space thing.
+The kernel cannot restrict user space according to a semantic only
+defined by user space, such as Python interpretation, CLI arguments,
+content of environment variables...  If a process wants to interpret
+some data and turn than into code, there is no way for the kernel to
+know about that.
+
+> 
+> > +/*
+> > + * When SECBIT_SHOULD_EXEC_RESTRICT is set, a process should only allow
+> > + * execution of approved files, if any (see SECBIT_SHOULD_EXEC_CHECK).  For
+> > + * instance, script interpreters called with a script snippet as argument
+> > + * should always deny such execution if SECBIT_SHOULD_EXEC_RESTRICT is set.
+> > + * However, if a script interpreter is called with both
+> > + * SECBIT_SHOULD_EXEC_CHECK and SECBIT_SHOULD_EXEC_RESTRICT, they should
+> > + * interpret the provided script files if no unchecked code is also provided
+> > + * (e.g. directly as argument).
+> 
+> I think you're trying to say that this is like (the inverse of)
+> Content-Security-Policy: unsafe-inline.  In other words, you're saying
+> that, if RESTRICT is set, then programs should not execute code-like
+> text that didn't come from a file.  Is that right?
+
+That is the definition of the new SECBIT_EXEC_DENY_INTERACTIVE, which
+should be clearer.
+
+> 
+> I feel like it would be worth looking at the state of the art of
+> Content-Security-Policy and all the lessons people have learned from
+> it.  Whatever the result is should be at least as comprehensible and
+> at least as carefully engineered as Content-Security-Policy.
+
+That's a good idea, but I guess Content-Security-Policy cannot be
+directly applied here.  My understanding is that CSP enables web servers
+to request restrictions on code they provide.  In the
+AT_CHECK+securebits case, the policy is defined and enforced by the
+interpreter, not necessarily the script provider. One big difference is
+that web servers (should) know the scripts they provide, and can then
+request the browser to ensure that they do what they should do, while
+the script interpreter trusts the kernel to check security properties of
+a script.  In other words, something like CSP could be implemented with
+AT_CHECK+securebits and a LSM policy (e.g. according to file's xattr).
+
+> 
+> --Andy
 
