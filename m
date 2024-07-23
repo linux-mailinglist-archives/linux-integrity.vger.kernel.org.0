@@ -1,228 +1,225 @@
-Return-Path: <linux-integrity+bounces-3231-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3232-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B67E93A11F
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jul 2024 15:17:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1D7D93A658
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jul 2024 20:34:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 266CC1C22032
-	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jul 2024 13:17:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D5C4281AC4
+	for <lists+linux-integrity@lfdr.de>; Tue, 23 Jul 2024 18:34:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76131534E7;
-	Tue, 23 Jul 2024 13:16:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACFF15821E;
+	Tue, 23 Jul 2024 18:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="QoxHXFmq"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aFepVZkW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [83.166.143.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67227152E03
-	for <linux-integrity@vger.kernel.org>; Tue, 23 Jul 2024 13:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD52158A19
+	for <linux-integrity@vger.kernel.org>; Tue, 23 Jul 2024 18:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721740609; cv=none; b=OqRr6/5Y7VaPRExV9w+hOg7m9mhrY5s50vg3+E3K3l/NOhQOSFqQ0AUWiM3dV2Anxz4ReAHVqWGFpYPot55rEja+bF+0icPR47FWgMQBVloUOYotkcHQ7JjWeVpRd+HlIfirdnYap+OyV/1gTWJTRzF3W4MgMWX03h9saNzKAsk=
+	t=1721759658; cv=none; b=pI3qoltX8gcNse8UIOZW2Z7EPOZcTHDrcZRHAw2xVX8nxEi55bKRwM5KSE++EixHQmXjsOuLI4djUgGAmlXvjDskkVrYmt5rjdDgcpoC8PB2NOebNAs1sDoCd6dzvpRsw+d2kJaGHF43CkrNRq9aekiWOHe7+FNoVy9Ndfwr9sA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721740609; c=relaxed/simple;
-	bh=xEwc8PxtVvX8tsn9ZtZk7QYu/EDsOr3ij74CMnS5fEM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f98sMuNfDLoSIhdWewAGPpJEfyua1p4iBTd5C7hIaOiWFGK4z5PcdiqKa8o/l7CATX6zaiyDFagyJTERtDODT4r4gJYsKhj3UACtR4rth7ooodo7/sRcTHOuENPOTcvsGHqIZIjwO4awhb/9CzzUPA41AOMIZpPscrtg1vGzHCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=QoxHXFmq; arc=none smtp.client-ip=83.166.143.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WSyNF4BxtzkLM;
-	Tue, 23 Jul 2024 15:16:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1721740605;
-	bh=aewoPXtLEZ2GI0ABNVUxmYfgHpbPmetUh2xF9chmBvU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QoxHXFmq0LCFEzZK0mctxYTvHGqNZ1uCqYaYTsicvHyPtGk6/EoAvbcjptbOdletB
-	 Xb+mo9w40Pve8Z4bqucnZtXJ5vuZ8LzPC439s3sEnEroIcBRqKvnRKpMP3XVQmBgwu
-	 oYK6AKjw5ryx52fN9ih6Bs6OS9r5voySJS6klizc=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4WSyND3c4Mz7kk;
-	Tue, 23 Jul 2024 15:16:44 +0200 (CEST)
-Date: Tue, 23 Jul 2024 15:16:41 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>, 
-	Steve Dower <steve.dower@python.org>, Jeff Xu <jeffxu@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, Theodore Ts'o <tytso@mit.edu>, 
-	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
-	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Matthew Garrett <mjg59@srcf.ucam.org>, 
-	Matthew Wilcox <willy@infradead.org>, Miklos Szeredi <mszeredi@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, 
-	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Steve Grubb <sgrubb@redhat.com>, 
-	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, Vincent Strubel <vincent.strubel@ssi.gouv.fr>, 
-	Xiaoming Ni <nixiaoming@huawei.com>, Yin Fengwei <fengwei.yin@intel.com>, 
-	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Elliott Hughes <enh@google.com>
-Subject: Re: [RFC PATCH v19 1/5] exec: Add a new AT_CHECK flag to execveat(2)
-Message-ID: <20240723.eY8boameed1k@digikod.net>
-References: <20240704190137.696169-1-mic@digikod.net>
- <20240704190137.696169-2-mic@digikod.net>
- <CALmYWFss7qcpR9D_r3pbP_Orxs55t3y3yXJsac1Wz=Hk9Di0Nw@mail.gmail.com>
- <a0da7702-dabe-49e4-87f4-5d6111f023a8@python.org>
- <20240717.AGh2shahc9ee@digikod.net>
- <CALCETrUcr3p_APNazMro7Y9FX1zLAiQESvKZ5BDgd8X3PoCdFw@mail.gmail.com>
- <20240718.Niexoo0ahch0@digikod.net>
- <CALCETrVVq4DJZ2q9V9TMuvZ1nb+-Qf4Eu8LVBgUy3XiTa=jFCQ@mail.gmail.com>
- <D2UC8YVOX9WU.1DRD4QFQ92L1U@kernel.org>
+	s=arc-20240116; t=1721759658; c=relaxed/simple;
+	bh=/BDujCC1m34ov27OfSvcr6YJrOqVpBj1SDvh/3UsOlU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MZvpyHFrsgWJY3V0hOo2/fB83Ij/0lN0mSXUGZgk0Gfh5TYWinb0dAm0J/k+y8WCMDci8S3VNILX7pbt6YzZUnaBnlulldQ2Yt4X7wkttEemHi4tcrH8pQ9hrnKuOVhfRktCs79Nufz0hrgkiT1ktqdLTmMDvsbY1PdZvTIZf14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aFepVZkW; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e05eccfcdb3so5462941276.1
+        for <linux-integrity@vger.kernel.org>; Tue, 23 Jul 2024 11:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1721759655; x=1722364455; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Umx7dac9KxgI1oocDLH/hx1evzjsOlrXNT+tzGIsg7k=;
+        b=aFepVZkWo816N4mggXBCyxO8EYpfjir9sv3wzJyUlO/Brxq1ogEQQCmErHOsWvOdpn
+         GEKaw3Ar0YNNjJJXto3U9ymA7CHHwCHvrEZGW2qB1KaWcN4BYF2/eYVSEp5dmIl44ain
+         2qkv+MAeuV1nunFiLAt19CLxls2oALpPIPqkxlTeDO+1DgQv2x3OZ35exOhUf3me8Yvb
+         t1PeWMYKTpQAEdmm47UaoG0jPgaMtux5w0fBctyxEwItK8Mnw7OA35RPafGl4lh62z+H
+         RnI1p+Pb5kwiQxZor2rqBP+jNDgpDHf7QDK0wQ5hHImC7v9Ok0S3afv/4imlHvK6CuWp
+         QBrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721759655; x=1722364455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Umx7dac9KxgI1oocDLH/hx1evzjsOlrXNT+tzGIsg7k=;
+        b=IYpiSYJc8sfWOpVHD6WzY/Zm7r+4GhA/VT1SjEtGZKdMBhFWxQQcMV66VSFDw1Qii4
+         HkZhnkNZ8wO25dBztAlIfoK4im+TPeaRmm+6RVVEOo3qXPckFRyS9CwhnrBWGuZopdvt
+         5fX6yG0BeSOQhPpijSdODZJNEwN6s6h9y8/dBDIbSzVaiIDHbqY60Rtc3QumkjM/KjYM
+         dRf40NnTyyLHu4d7Zq/Gc6VTFsiKKoQHrXSodJtbfQBcF8qI8/NxEBg0zCQPWMwqD73T
+         zQbgDTR8bGvPAfP4Sf/dKtWF/35w+l3EJ4VpBAsZBSekm5HoAH7a8KrOS5BfPhJLsolB
+         AUgw==
+X-Forwarded-Encrypted: i=1; AJvYcCVaBJuFsyBAHV3SNWcCcQZ1EaCzrTq56HdR3XURMJxQ+tf5VJ+U6rhDqY1bCOkw12JWj2bPTFarmxzdNzkijwDY5QA3FjfE5kYI5Pq11r5g
+X-Gm-Message-State: AOJu0Yz2VYsyCVzsyHwtpWwgTuITnJR10FzGiLhdTDy1le/mgQvKxkg0
+	UXDxtxDOm2Ubu8ehmcdHkYsgSoOMzr6p5KznO6SBldUwUCu1f3M0uMzqhGCDTD3yPERrlW19KjJ
+	5OLdfz1TL7wzldyKcZ2/HrWZSoslyhXYon/79
+X-Google-Smtp-Source: AGHT+IEk6clKXMmbj8F9c4ALs9K9k0S5PErz2GXRvQye1XVqqzrWp12U0J4otwfEg5J3qaVWYV/s7JesHhJr3dvtkHg=
+X-Received: by 2002:a05:6902:11cc:b0:e08:551f:c90f with SMTP id
+ 3f1490d57ef6-e087b2eaaa6mr11618458276.7.1721759655226; Tue, 23 Jul 2024
+ 11:34:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D2UC8YVOX9WU.1DRD4QFQ92L1U@kernel.org>
-X-Infomaniak-Routing: alpha
+References: <20240711111908.3817636-10-xukuohai@huaweicloud.com>
+ <94a3b82a1e3e1fec77d676fa382105d4@paul-moore.com> <7711bdba-9fbd-406c-8b81-adf91074d0b7@huaweicloud.com>
+ <CAHC9VhSsCuJzJ3ReUTyTXfWqRd+_TfShJBnRugZtX6OrMYJkOQ@mail.gmail.com> <b1ba86f7-f943-4913-8265-2a94f3951a88@huaweicloud.com>
+In-Reply-To: <b1ba86f7-f943-4913-8265-2a94f3951a88@huaweicloud.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 23 Jul 2024 14:34:04 -0400
+Message-ID: <CAHC9VhQhLE8aunBsSvoGv2dWw3TGihXhXCJO1eSbx2VRAf5GDQ@mail.gmail.com>
+Subject: Re: [PATCH v4 9/20] lsm: Refactor return value of LSM hook key_getsecurity
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Brendan Jackman <jackmanb@chromium.org>, 
+	James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, 
+	Khadija Kamran <kamrankhadijadj@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Kees Cook <keescook@chromium.org>, 
+	John Johansen <john.johansen@canonical.com>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
+	Edward Cree <ecree.xilinx@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Trond Myklebust <trond.myklebust@hammerspace.com>, 
+	Anna Schumaker <anna@kernel.org>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Stephen Smalley <stephen.smalley.work@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 20, 2024 at 02:43:41PM +0300, Jarkko Sakkinen wrote:
-> On Sat Jul 20, 2024 at 4:59 AM EEST, Andy Lutomirski wrote:
-> > > On Jul 18, 2024, at 8:22 PM, Mickaël Salaün <mic@digikod.net> wrote:
-> > >
-> > > ﻿On Thu, Jul 18, 2024 at 09:02:56AM +0800, Andy Lutomirski wrote:
-> > >>>> On Jul 17, 2024, at 6:01 PM, Mickaël Salaün <mic@digikod.net> wrote:
-> > >>>
-> > >>> On Wed, Jul 17, 2024 at 09:26:22AM +0100, Steve Dower wrote:
-> > >>>>> On 17/07/2024 07:33, Jeff Xu wrote:
-> > >>>>> Consider those cases: I think:
-> > >>>>> a> relying purely on userspace for enforcement does't seem to be
-> > >>>>> effective,  e.g. it is trivial  to call open(), then mmap() it into
-> > >>>>> executable memory.
-> > >>>>
-> > >>>> If there's a way to do this without running executable code that had to pass
-> > >>>> a previous execveat() check, then yeah, it's not effective (e.g. a Python
-> > >>>> interpreter that *doesn't* enforce execveat() is a trivial way to do it).
-> > >>>>
-> > >>>> Once arbitrary code is running, all bets are off. So long as all arbitrary
-> > >>>> code is being checked itself, it's allowed to do things that would bypass
-> > >>>> later checks (and it's up to whoever audited it in the first place to
-> > >>>> prevent this by not giving it the special mark that allows it to pass the
-> > >>>> check).
-> > >>>
-> > >>> Exactly.  As explained in the patches, one crucial prerequisite is that
-> > >>> the executable code is trusted, and the system must provide integrity
-> > >>> guarantees.  We cannot do anything without that.  This patches series is
-> > >>> a building block to fix a blind spot on Linux systems to be able to
-> > >>> fully control executability.
-> > >>
-> > >> Circling back to my previous comment (did that ever get noticed?), I
-> > >
-> > > Yes, I replied to your comments.  Did I miss something?
+On Tue, Jul 23, 2024 at 3:04=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.com=
+> wrote:
+> On 7/23/2024 5:35 AM, Paul Moore wrote:
+> > On Sat, Jul 20, 2024 at 5:31=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud=
+.com> wrote:
+> >> On 7/19/2024 10:08 AM, Paul Moore wrote:
+> >>> On Jul 11, 2024 Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+> >>>>
+> >>>> To be consistent with most LSM hooks, convert the return value of
+> >>>> hook key_getsecurity to 0 or a negative error code.
+> >>>>
+> >>>> Before:
+> >>>> - Hook key_getsecurity returns length of value on success or a
+> >>>>     negative error code on failure.
+> >>>>
+> >>>> After:
+> >>>> - Hook key_getsecurity returns 0 on success or a negative error
+> >>>>     code on failure. An output parameter @len is introduced to hold
+> >>>>     the length of value on success.
+> >>>>
+> >>>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> >>>> ---
+> >>>>    include/linux/lsm_hook_defs.h |  3 ++-
+> >>>>    include/linux/security.h      |  6 ++++--
+> >>>>    security/keys/keyctl.c        | 11 ++++++++---
+> >>>>    security/security.c           | 26 +++++++++++++++++++++-----
+> >>>>    security/selinux/hooks.c      | 11 +++++------
+> >>>>    security/smack/smack_lsm.c    | 21 +++++++++++----------
+> >>>>    6 files changed, 51 insertions(+), 27 deletions(-)
 > >
-> > I missed that email in the pile, sorry. I’ll reply separately.
+> > ...
 > >
-> > >
-> > >> don’t think this is quite right:
-> > >>
-> > >> https://lore.kernel.org/all/CALCETrWYu=PYJSgyJ-vaa+3BGAry8Jo8xErZLiGR3U5h6+U0tA@mail.gmail.com/
-> > >>
-> > >> On a basic system configuration, a given path either may or may not be
-> > >> executed. And maybe that path has some integrity check (dm-verity,
-> > >> etc).  So the kernel should tell the interpreter/loader whether the
-> > >> target may be executed. All fine.
-> > >>
-> > >> But I think the more complex cases are more interesting, and the
-> > >> “execute a program” process IS NOT BINARY.  An attempt to execute can
-> > >> be rejected outright, or it can be allowed *with a change to creds or
-> > >> security context*.  It would be entirely reasonable to have a policy
-> > >> that allows execution of non-integrity-checked files but in a very
-> > >> locked down context only.
-> > >
-> > > I guess you mean to transition to a sandbox when executing an untrusted
-> > > file.  This is a good idea.  I talked about role transition in the
-> > > patch's description:
-> > >
-> > > With the information that a script interpreter is about to interpret a
-> > > script, an LSM security policy can adjust caller's access rights or log
-> > > execution request as for native script execution (e.g. role transition).
-> > > This is possible thanks to the call to security_bprm_creds_for_exec().
+> >>>> diff --git a/security/security.c b/security/security.c
+> >>>> index 9dd2ae6cf763..2c161101074d 100644
+> >>>> --- a/security/security.c
+> >>>> +++ b/security/security.c
+> >>>> @@ -5338,19 +5338,35 @@ int security_key_permission(key_ref_t key_re=
+f, const struct cred *cred,
+> >>>>     * security_key_getsecurity() - Get the key's security label
+> >>>>     * @key: key
+> >>>>     * @buffer: security label buffer
+> >>>> + * @len: the length of @buffer (including terminating NULL) on succ=
+ess
+> >>>>     *
+> >>>>     * Get a textual representation of the security context attached =
+to a key for
+> >>>>     * the purposes of honouring KEYCTL_GETSECURITY.  This function a=
+llocates the
+> >>>>     * storage for the NUL-terminated string and the caller should fr=
+ee it.
+> >>>>     *
+> >>>> - * Return: Returns the length of @buffer (including terminating NUL=
+) or -ve if
+> >>>> - *         an error occurs.  May also return 0 (and a NULL buffer p=
+ointer) if
+> >>>> - *         there is no security label assigned to the key.
+> >>>> + * Return: Returns 0 on success or -ve if an error occurs. May also=
+ return 0
+> >>>> + *         (and a NULL buffer pointer) if there is no security labe=
+l assigned
+> >>>> + *         to the key.
+> >>>>     */
+> >>>> -int security_key_getsecurity(struct key *key, char **buffer)
+> >>>> +int security_key_getsecurity(struct key *key, char **buffer, size_t=
+ *len)
+> >>>>    {
+> >>>> +    int rc;
+> >>>> +    size_t n =3D 0;
+> >>>> +    struct security_hook_list *hp;
+> >>>> +
+> >>>>       *buffer =3D NULL;
+> >>>> -    return call_int_hook(key_getsecurity, key, buffer);
+> >>>> +
+> >>>> +    hlist_for_each_entry(hp, &security_hook_heads.key_getsecurity, =
+list) {
+> >>>> +            rc =3D hp->hook.key_getsecurity(key, buffer, &n);
+> >>>> +            if (rc < 0)
+> >>>> +                    return rc;
+> >>>> +            if (n)
+> >>>> +                    break;
+> >>>> +    }
+> >>>> +
+> >>>> +    *len =3D n;
+> >>>> +
+> >>>> +    return 0;
+> >>>>    }
+> >>>
+> >>> Help me understand why we can't continue to use the call_int_hook()
+> >>> macro here?
+> >>>
+> >>
+> >> Before this patch, the hook may return +ve, 0, or -ve, and call_int_ho=
+ok
+> >> breaks the loop when the hook return value is not 0.
+> >>
+> >> After this patch, the +ve is stored in @n, so @n and return value shou=
+ld
+> >> both be checked to determine whether to break the loop. This is not
+> >> feasible with call_int_hook.
 > >
-> > …
+> > Yes, gotcha.  I was focused on the error condition and wasn't thinking
+> > about the length getting zero'd out by a trailing callback.
+> > Unfortunately, we *really* want to stick with the
+> > call_{int,void}_hook() macros so I think we either need to find a way
+> > to work within that constraint for existing macro callers, or we have
+> > to leave this hook as-is for the moment.
 > >
-> > > This patch series brings the minimal building blocks to have a
-> > > consistent execution environment.  Role transitions for script execution
-> > > are left to LSMs.  For instance, we could extend Landlock to
-> > > automatically sandbox untrusted scripts.
-> >
-> > I’m not really convinced.  There’s more to building an API that
-> > enables LSM hooks than merely sticking the hook somewhere in kernel
-> > code. It needs to be a defined API. If you call an operation “check”,
-> > then people will expect it to check, not to change the caller’s
-> > credentials.  And people will mess it up in both directions (e.g.
-> > callers will call it and then open try to load some library that they
-> > should have loaded first, or callers will call it and forget to close
-> > fds first.
-> >
-> > And there should probably be some interaction with dumpable as well.
-> > If I “check” a file for executability, that should not suddenly allow
-> > someone to ptrace me?
-> >
-> > And callers need to know to exit on failure, not carry on.
-> >
-> >
-> > More concretely, a runtime that fully opts in to this may well "check"
-> > multiple things.  For example, if I do:
-> >
-> > $ ld.so ~/.local/bin/some_program   (i.e. I literally execve ld.so)
-> >
-> > then ld.so will load several things:
-> >
-> > ~/.local/bin/some_program
-> > libc.so
-> > other random DSOs, some of which may well be in my home directory
-> 
-> What would really help to comprehend this patch set would be a set of
-> test scripts, preferably something that you can run easily with
-> BuildRoot or similar.
-> 
-> Scripts would demonstrate the use cases for the patch set. Then it
-> would be easier to develop scripts that would underline the corner
-> cases. I would keep all this out of kselftest shenanigans for now.
+>
+> Let's leave it as is. So we ultimately have four hooks that can be
+> converted, two of which require adding additional output parameter to
+> hold odd return values. These output parameters require extra work
+> on the BPF verifier, and it doesn't seem worthwhile just for two
+> hooks. So I prefer to keep only the two patches that handle
+> conversion without adding output parameters (patch 1 and 5).
 
-I'll include a toy script interpreter with the next patch series.  This
-one was an RFC.
+Fair enough.  Thanks for working on this, between the changes to the
+LSM framework and the BPF verifier, I think this is still a nice
+improvement.
 
-> 
-> I feel that the patch set is hovering in abstractions with examples
-> that you cannot execute.
-> 
-> I added the patches to standard test CI hack:
-> 
-> https://codeberg.org/jarkko/linux-tpmdd-test
-> 
-> But after I booted up a kernel I had no idea what to do with it. And
-> all this lenghty discussion makes it even more confusing.
-
-You can run the tests in the CI.
-
-> 
-> Please find some connection to the real world before sending any new
-> version of this (e.g. via test scripts). I think this should not be
-> pulled before almost anyone doing kernel dev can comprehend the "gist"
-> at least in some reasonable level.
-
-You'll find in this patch series (cover letter, patch description, and
-comments) connection to the real world. :)
-The next patch series should take into account the current discussions.
-
-> 
-> BR, Jarkko
+--=20
+paul-moore.com
 
