@@ -1,211 +1,152 @@
-Return-Path: <linux-integrity+bounces-3235-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3236-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F08F93AACE
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jul 2024 03:57:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 883C393B837
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jul 2024 22:46:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4499E284213
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jul 2024 01:57:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC0CA1C2151D
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Jul 2024 20:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E09BA47;
-	Wed, 24 Jul 2024 01:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0939A12B143;
+	Wed, 24 Jul 2024 20:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="Mge1pdbk"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D14A1171C;
-	Wed, 24 Jul 2024 01:57:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB6F132464
+	for <linux-integrity@vger.kernel.org>; Wed, 24 Jul 2024 20:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.184.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721786224; cv=none; b=GMrPaToXtqaTbumDupcCAmxMyJkEkU9P7PWmX+fTJ1u2dGBlhVinWinGHyIsTpkmENc8h1uQd6VNDncqTpASMISXl5Q1t/VIaytXCdRzgd+p7mjek9Gh+hjKIAvBbxyT8BdZkLAh6DlUAETvZxeRnK7VtSl16ddevQTFvGrmrh0=
+	t=1721853992; cv=none; b=fG/hv33RaAT4KuYHj8PIuoHARbKAbBP+3mChAMUY68MLXtxqMkaQDN2uAFzzj1i56Yboe6pf9zHI+9iwf1vSafGdxCjB17r+NS2bS5WsoMwM5mVqyVDdPIcxk8rQ42cvLeziBlAF/z8ybEfcv+DlFJfLDIKcc1LBubZ9MmG2rYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721786224; c=relaxed/simple;
-	bh=WJWRcqsesXwYwAt1BcpzmR0xuMOTS3AEdFL6VnirlvM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c+yISQdOC4QbwYp1OLAy3Oxbr9kXQY33kDKK/721+miPjtKw5YtZkQxgyPmD1VYEmi3jPcXPBjVlTHde3yfj13vJ59wzdq2Vo9WGdKfY3d1GYyqCU8LRuDp6U9FW6ZNXfIWryDk2dmiNDoNpxRmpJ09l6NdSi1Y8WPI99DG3AdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WTHF24TVdz4f3kw5;
-	Wed, 24 Jul 2024 09:56:38 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 2EF6D1A190F;
-	Wed, 24 Jul 2024 09:56:52 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-	by APP1 (Coremail) with SMTP id cCh0CgDXw3VgX6BmaKTZAw--.12072S4;
-	Wed, 24 Jul 2024 09:56:51 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-unionfs@vger.kernel.org,
-	linux-integrity@vger.kernel.org
-Cc: Paul Moore <paul@paul-moore.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Amir Goldstein <amir73il@gmail.com>,
-	James Morris <jmorris@namei.org>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>
-Subject: [PATCH v1 2/2] lsm: Refactor return value of LSM hook inode_copy_up_xattr
-Date: Wed, 24 Jul 2024 10:06:59 +0800
-Message-Id: <20240724020659.120353-3-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240724020659.120353-1-xukuohai@huaweicloud.com>
-References: <20240724020659.120353-1-xukuohai@huaweicloud.com>
+	s=arc-20240116; t=1721853992; c=relaxed/simple;
+	bh=pTW0C/srNvLSd1af1jTM4YafIWW01ysF9V0iRUeGJTM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RU/aQjGbE4o1g8mZegETN/qj/jg0V1AfIY8t/v3OeUzwO5Ch8wW6i1nuxfcS0g2h+F6Tp9XGMWDXU4cmKh5oD/vrFB/UHxFCzoxsqMvj4DBWCnr5mPD7gfiwY1eVcC+NDuxXgyrvmFcQFr8kUYsBnN4vEds/xk8jUg4ZJx1eQXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=Mge1pdbk; arc=none smtp.client-ip=66.163.184.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1721853989; bh=uyqNlMER+A4e+8EYoXNA4LcRlMSMioRF3dT/72cqgck=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Mge1pdbk/FnY7vXPm5fnDM5Wmo1atbCryp9Pk0T+N3HZvtztMDwmsxOmAyOQk7dklDS6F8sS5Hzwkn0wbXA98yb4F0x9zHt4w90lKaQglU5rWiqEO9pm3PiYeWeMKkG0INget3ycO3SHEPEtsVs4jywRVqeUISgZzazW6tGzAVibIFTsXv5jPN0ZNJR0Nx7w/rhbQQQFgnsQ1SYiJqUdflPlZlhS5tKz6U1KWLNmya4M/ol07UjB/Chz3sPHsza8/T/1AThr6ijKNK5bjs/BtHgTFqnmXKqqjsHnqXY8QOuMXaz9N179JZ2gMoN6+avdrQ7dWfITKd3WjyM1njShsg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1721853989; bh=5FeFN3u70SVwnWeBfq0xdXUjbZRQUg1XwDDGp6QvzOf=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=JIfZmc1jwpPeUZGJkcg1YXebCi841mmlZXSzg0HYcPAi00Jlm3V7VG2y0o1XB/M9xDhOJw55D/V865rfe1OiAJEMWrLmpKdn74INRdOuQWqRwSOwSHDQsj+ZznKuAv56ZLK5NhQ1Jcan3m1Oj3G1k/Vhr904J8Wuev8Nebh3KKTactiE0H8XqPyI9vXthHXXs5LgueBsa6U4qP9ndPKNFq6t9xWcba3qYLirlBtAZzswVjQDyBdjzO/FiHMxlw2mowAfEDCvUpz/R4W4a+pYlFMjmUB7MiuGUKHsGNWWh31nkmyvjWSLraAf8ArsKAgzq3UF5DuhwO2mTtuh2cyuMQ==
+X-YMail-OSG: 9zDWBc4VM1m_91EP.9GB7I._GbYyaOrnxhXq7Z8y_iBeIa26U4Qy1Osv0MjAJ4m
+ UBX2t9GtXtwhEibAJPBgqDOdryPJSmBLytpqrnwf3nYtvHeEYpjw52vfa1BY.10p5LDBrL88aiPt
+ caHAvdVIYrY1JMzSRQG5HGncaIs.Al8HhmdxnYRgiJ1UyxfNiAHxXclwwf.4sopQVVr2X6mDmeC6
+ waSTmFbaNN7g1T9J9mVPGycj2hpiGkYsG_j6UfARjgWN_64DE.EMcjerMfWupsIkaK7JgF3eCaqy
+ aHwgJeNyb7uk2XUHRv.d2tN3BL77ttSdPowGXLESJHi1DbHu09nig7IygHn5oiUsZd4KqT3ChPdU
+ jGwyIlaplZhLhWVUb_n17wb_eDjXLQm6PrpRori2mJ_96NIL.e.0rKb_T6IhLJLkv3nDFOrDMDGv
+ JnSf.6lGnxKwwRWjKXuDcArHLN11uKLs1nAqz36tk8tuSLH48s8qg.NC9ZBCHJ7SI_IZDndmbvxO
+ IE9GfPT2jAX3k8zFGrE1vbBvSsgFPMTzIZWC1VtPvyGwuoGzz_HpDkMwnNod4Ud7mqiIfjcpRWKQ
+ eZQ4yHGdedWsUrlP4mVWooD8IPrUPeb56VMy0UUeKw2vGskgN7Mifyjj4N9z.OOP.mON.eDkddCf
+ qPH2MLCmaLcRNmXcl.blr0YgPF8HsVSxhkjI3nIdFEAX5BRUsGxOKBBWDTYWpqSIKhs9i4tADZz_
+ 5_yEmhlM7cGRGF0zFVj1RmZ4yFt04jcBcuF8UWu9W6CLOMUXITqxNRZMBjwDWJU.vbsynPRNpn.L
+ xFRnP2KqjDUW95mKJ1EpcTADRgvtEA.udNH41P_4Hw610.ktTH.nelPWC2ZStMq_Ae.nXPgnn9nK
+ RUQNGXBTEqc48rQ5nHl5iO0a2fDfAl2M3_5Ns0k0RqtnO_cMcGaIB0rm2YdsY1IjkuKeoPemuFnS
+ d7Z65qZQa.lEW7IXxB3jj.Xb2GmaP1j4qw2.35DgE.3zdKGCwpUoqNikY14.SDP7nhilmRSTpDZ9
+ FgkMmVf5JIagzUgG_pNDp9DTw5rSzh_DjAiFxF3MyQF51q2KWB00q9eVIesxOIt6uGKtyrmA0Um5
+ 13SLoISyv_Ewmql5csdSk0i1_ONnIPu7.2vV.DmB4sZB2Jj2Fu2_h9GydiQZ.ee0vMxJFEowDmMV
+ RJXngI2cSTjolGZ3URXnfci5SqnL2oyhl8OfkHH.op9ALyQ3dgUer7DDaBq18Y2l9zbqvd.qoUBF
+ E1cCg9fmdu.ExiCzn7RjYcNWjcXeqmsxVZ90bmTmEMArRds6cR5kbFy5syACLv3Nq8OzDdxS.I.D
+ DHF2vn6HFHiDBhdrZAlTJSPSwPwgjf88JJdYZ_nN6w02quW1uEsqykW62yrq4IWBaFRczmg3ij3e
+ TnqAVtQ9qkyl5cOZqQ6oXuaPkcXz_A8FX9.NnUcDMC_F2WiseVRD7g1V6dDkd7SrFaRbodWYU0uG
+ DHPYpliUgFUs7Cx2jVv5kgS_0KLJ6rHCqwYGpBpeJAjX9DM8xesFzufjEdTyH4_H6W3L3ohislkz
+ tOcSlVHquSf34nPYbBRpryBojgVoQeDl5e2u0hWS4XoouVHuFz3bNaPvu4KxNomfoeruZPzp7uuW
+ fgmysYlhMInuOeo1BjC5WBorYgfXasU8vmD_HjhO.ZH_OsK2qf38qDOfqnEJNfz945xL.GrM51tL
+ XOD3b2buJkMNGX7EJYysN8G.C54eu8_BUZUcCRX5_jHOHXqznpiVTMW0dBpnO3MrpUj5HtZXzxfb
+ W9_GEn1.YLMIErFg0ON.k0L1H3gTWu_IuLbXWDjAhj9SSjYamrNPvGcOK9Tus6jkgivg5cWS1EtE
+ w97SdqpYxjgN5ffG7XKjtJYl6XgnSdyTKLxvsIk93A2BZQNXtQlO_KTyKafpQypYfO0CI5OYajTi
+ MO_xBdf_hCJC69FG1_HHN1nTb8jJFdR14EOgODBIaiHvqLdzAg4jIggCaC9kfaibxL81uGWIeOwO
+ ZLRnf2D_gr9mh_Vb2eK4jGzfMS.NSN1Ns7PedPpzdYYsthAJ53P9XfsyPP1VtoOqHJFOim8ZvUQd
+ grno60yHpe_lauJXNtXldwXBJ.vD2MXrsCIwSwOC.NbAZ8SCkUb7jEZWYtMi1tcgUvFw.9m_Qz_t
+ i85AzeiiTI8VzhJBazN5ImgrdsQS0gxQjouQpElxTgcVuf_Tl0X1N.0qlxSItmZPBUX_GGpunBC7
+ jHvGPidZ_fAf8WGy2T8ui0uVw0Kw3YRasS0BgjNz9AxiFPClXSIBoOzhPD2lHGBGv.JLv0ZqVHVN
+ xDtDNQkGL
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 21259a2a-9a13-44af-942d-555c071eab18
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Wed, 24 Jul 2024 20:46:29 +0000
+Received: by hermes--production-gq1-799bb7c8cf-l4fvm (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1e7574de8c63b9acc091ed1cca9f592b;
+          Wed, 24 Jul 2024 20:36:18 +0000 (UTC)
+Message-ID: <26bb0c7b-e241-4239-8933-349115f3afdb@schaufler-ca.com>
+Date: Wed, 24 Jul 2024 13:36:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDXw3VgX6BmaKTZAw--.12072S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw1kXF4DJFWkXFWrJF1fJFb_yoWrZF1fpa
-	1Dtan2qr1rJFy7XFykJa17ua1F93yrGFWUC39xuw12kFZ3Xrs3Wryayr12kr45Wry8JF4v
-	qanFvrs8C3W5t3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFSdy
-	UUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/2] Refactor return value of two lsm hooks
+To: Xu Kuohai <xukuohai@huaweicloud.com>,
+ linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+ linux-unionfs@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc: Paul Moore <paul@paul-moore.com>, "Serge E . Hallyn" <serge@hallyn.com>,
+ Miklos Szeredi <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>,
+ James Morris <jmorris@namei.org>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240724020659.120353-1-xukuohai@huaweicloud.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20240724020659.120353-1-xukuohai@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.22501 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On 7/23/2024 7:06 PM, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+>
+> The BPF LSM program may cause a kernel panic if it returns an
+> unexpected value, such as a positive value on the hook
+> file_alloc_security.
+>
+> To fix it, series [1] refactored the LSM hook return values and
+> added BPF return value checks.
+>
+> [1] used two methods to refactor hook return values:
+>
+> - converting positive return value to negative error code
+>
+> - adding additional output parameter to store odd return values
+>
+> Based on discussion in [1], only two hooks refactored with the
+> second method may be acceptable. Since the second method requires
+> extra work on BPF side to ensure that the output parameter is
+> set properly, the extra work does not seem worthwhile for just
+> two hooks. So this series includes only the two patches refactored
+> with the first method.
+>
+> Changes to [1]:
+> - Drop unnecessary patches
+> - Rebase
+> - Remove redundant comments in the inode_copy_up_xattr patch
+>
+> [1] https://lore.kernel.org/bpf/20240711111908.3817636-1-xukuohai@huaweicloud.com
+>     https://lore.kernel.org/bpf/20240711113828.3818398-1-xukuohai@huaweicloud.com
+>
+> Xu Kuohai (2):
+>   lsm: Refactor return value of LSM hook vm_enough_memory
+>   lsm: Refactor return value of LSM hook inode_copy_up_xattr
 
-To be consistent with most LSM hooks, convert the return value of
-hook inode_copy_up_xattr to 0 or a negative error code.
+For the series:
+Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
-Before:
-- Hook inode_copy_up_xattr returns 0 when accepting xattr, 1 when
-  discarding xattr, -EOPNOTSUPP if it does not know xattr, or any
-  other negative error code otherwise.
-
-After:
-- Hook inode_copy_up_xattr returns 0 when accepting xattr, *-ECANCELED*
-  when discarding xattr, -EOPNOTSUPP if it does not know xattr, or
-  any other negative error code otherwise.
-
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- fs/overlayfs/copy_up.c            |  6 +++---
- security/integrity/evm/evm_main.c |  2 +-
- security/security.c               | 11 +++--------
- security/selinux/hooks.c          |  4 ++--
- security/smack/smack_lsm.c        |  6 +++---
- 5 files changed, 12 insertions(+), 17 deletions(-)
-
-diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
-index a5ef2005a2cc..337a5be99ac9 100644
---- a/fs/overlayfs/copy_up.c
-+++ b/fs/overlayfs/copy_up.c
-@@ -115,12 +115,12 @@ int ovl_copy_xattr(struct super_block *sb, const struct path *oldpath, struct de
- 			continue;
- 
- 		error = security_inode_copy_up_xattr(old, name);
--		if (error < 0 && error != -EOPNOTSUPP)
--			break;
--		if (error == 1) {
-+		if (error == -ECANCELED) {
- 			error = 0;
- 			continue; /* Discard */
- 		}
-+		if (error < 0 && error != -EOPNOTSUPP)
-+			break;
- 
- 		if (is_posix_acl_xattr(name)) {
- 			error = ovl_copy_acl(OVL_FS(sb), oldpath, new, name);
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 62fe66dd53ce..6924ed508ebd 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -1000,7 +1000,7 @@ static int evm_inode_copy_up_xattr(struct dentry *src, const char *name)
- 	case EVM_XATTR_HMAC:
- 	case EVM_IMA_XATTR_DIGSIG:
- 	default:
--		rc = 1; /* discard */
-+		rc = -ECANCELED; /* discard */
- 	}
- 
- 	kfree(xattr_data);
-diff --git a/security/security.c b/security/security.c
-index ff5cca992ee1..ca93d43ad475 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -2760,19 +2760,14 @@ EXPORT_SYMBOL(security_inode_copy_up);
-  * lower layer to the union/overlay layer.   The caller is responsible for
-  * reading and writing the xattrs, this hook is merely a filter.
-  *
-- * Return: Returns 0 to accept the xattr, 1 to discard the xattr, -EOPNOTSUPP
-- *         if the security module does not know about attribute, or a negative
-- *         error code to abort the copy up.
-+ * Return: Returns 0 to accept the xattr, -ECANCELED to discard the xattr,
-+ *         -EOPNOTSUPP if the security module does not know about attribute,
-+ *         or a negative error code to abort the copy up.
-  */
- int security_inode_copy_up_xattr(struct dentry *src, const char *name)
- {
- 	int rc;
- 
--	/*
--	 * The implementation can return 0 (accept the xattr), 1 (discard the
--	 * xattr), -EOPNOTSUPP if it does not know anything about the xattr or
--	 * any other error code in case of an error.
--	 */
- 	rc = call_int_hook(inode_copy_up_xattr, src, name);
- 	if (rc != LSM_RET_DEFAULT(inode_copy_up_xattr))
- 		return rc;
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index af7467cdd181..81fbfa5b80d4 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3531,8 +3531,8 @@ static int selinux_inode_copy_up_xattr(struct dentry *dentry, const char *name)
- 	 * xattrs up.  Instead, filter out SELinux-related xattrs following
- 	 * policy load.
- 	 */
--	if (selinux_initialized() && strcmp(name, XATTR_NAME_SELINUX) == 0)
--		return 1; /* Discard */
-+	if (selinux_initialized() && !strcmp(name, XATTR_NAME_SELINUX))
-+		return -ECANCELED; /* Discard */
- 	/*
- 	 * Any other attribute apart from SELINUX is not claimed, supported
- 	 * by selinux.
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index b0e0205a5724..09ff7f24c0c6 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4902,10 +4902,10 @@ static int smack_inode_copy_up(struct dentry *dentry, struct cred **new)
- static int smack_inode_copy_up_xattr(struct dentry *src, const char *name)
- {
- 	/*
--	 * Return 1 if this is the smack access Smack attribute.
-+	 * Return -ECANCELED if this is the smack access Smack attribute.
- 	 */
--	if (strcmp(name, XATTR_NAME_SMACK) == 0)
--		return 1;
-+	if (!strcmp(name, XATTR_NAME_SMACK))
-+		return -ECANCELED;
- 
- 	return -EOPNOTSUPP;
- }
--- 
-2.39.2
-
+>
+>  fs/overlayfs/copy_up.c            |  6 +++---
+>  include/linux/lsm_hook_defs.h     |  2 +-
+>  include/linux/security.h          |  2 +-
+>  security/commoncap.c              | 11 +++--------
+>  security/integrity/evm/evm_main.c |  2 +-
+>  security/security.c               | 22 ++++++++--------------
+>  security/selinux/hooks.c          | 19 ++++++-------------
+>  security/smack/smack_lsm.c        |  6 +++---
+>  8 files changed, 26 insertions(+), 44 deletions(-)
+>
 
