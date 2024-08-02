@@ -1,62 +1,79 @@
-Return-Path: <linux-integrity+bounces-3254-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3255-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD1694645D
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 22:27:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0CDF9464CA
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 23:05:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC8FC28193B
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 20:27:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DA391C2188D
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 21:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F8133DF;
-	Fri,  2 Aug 2024 20:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C48C8060D;
+	Fri,  2 Aug 2024 21:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="iigZhOXW"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hdmolVEE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103BA335C0
-	for <linux-integrity@vger.kernel.org>; Fri,  2 Aug 2024 20:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7055A757EA
+	for <linux-integrity@vger.kernel.org>; Fri,  2 Aug 2024 21:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722630458; cv=none; b=LLlxnj0+WDcj7k+ZFGqsnLCZY/KsE/SUM8u8tf0xJ9FAmetAhNYiV8rmdwnZXqzdwsOHD6bub7wwSGBnOnBFLdYRas55qexdliLvzfEb6IfPHIWurbq8gUxuaoUxNp4IUN4HBd6wNNVgtAw0lvn+oX1grzomt31iHyeAz+dWubQ=
+	t=1722632690; cv=none; b=lRh/GHJ0NhGvbSL361DBhuU2+CNE3QTPqT13JJX9Hyqw5KPIOXWjBN+CjGPeIfrlu30tgosNHdtcMvnE1vjq7ihvxp+5IVGx7BcaVajDMXyDnNa/ucfGvLOUFcZdfQMGQjURwJ3glsKuGTCZKkHfkx3qwqrM0vvK+4yPNktoMrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722630458; c=relaxed/simple;
-	bh=ByhhAf6fSfJ3HhoOdGTjoMruS4DwqOoGivFFdWqOKaQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dfDImUmu3kC9jW4BUeBJtHpbGjV/zwfvGF61xGAm0vl7Z1SwffwsRQKW5SQ1FKVK2uC+9JTvjXsrrgcjuiU9Oz9/VGnvype/1ZbjUJQBW7SSXsI01k9iulq60IwbEfNYKDc1DGRzuA2SGDaH12vQEP5jHakmAuVDufl/cS4QfEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=iigZhOXW; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1722630456;
-	bh=ByhhAf6fSfJ3HhoOdGTjoMruS4DwqOoGivFFdWqOKaQ=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-	b=iigZhOXWBm50F3/G17zSUfPzKkdgVc2SYGyerBWi9452SVnvGnw+zfNMf8oxJ7eqj
-	 +dAwPI2dkQakGA+fYjP/2QsXyvhKTN8LEvkZV6wXvmNQn0uS+O4KaJJZ78oZyGkNj6
-	 N41z//d/rxyH017tX+s+TRkdxvhPQzfZtq1CCvxc=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 595501286AF9;
-	Fri, 02 Aug 2024 16:27:36 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id X6gLxksNq6Qe; Fri,  2 Aug 2024 16:27:36 -0400 (EDT)
-Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id D513812860B6;
-	Fri, 02 Aug 2024 16:27:35 -0400 (EDT)
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: openssl-tpm2-engine@groups.io
-Cc: linux-integrity@vger.kernel.org,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH 8/8] tests: add tests for attest_tpm2_primary
-Date: Fri,  2 Aug 2024 16:26:06 -0400
-Message-Id: <20240802202606.12767-9-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20240802202606.12767-1-James.Bottomley@HansenPartnership.com>
-References: <20240802202606.12767-1-James.Bottomley@HansenPartnership.com>
+	s=arc-20240116; t=1722632690; c=relaxed/simple;
+	bh=z1RdEZ7A8nCpAdJiYNdv+o6BPnQVzKEX+9aqwiP/Jig=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NUbPVF0I854v0oHMxKdVzz0+FEB6MRQQWC+wwGU+fRcxeNN33VZBl7kXds+feLv1UXeRGaxqpQNYJWx0v9ZswLcD4CL1e7gfelhGLxtTvNTZ2XofQzoub0eEmeztB4UAiC7GJ7BcLepCV+weX5OFh8u9RH+uXTUni63ymiyE1gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hdmolVEE; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-8152f0c63c1so306120739f.1
+        for <linux-integrity@vger.kernel.org>; Fri, 02 Aug 2024 14:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1722632687; x=1723237487; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bizVYN62g2WR0h6WdBjGD7lztQUVqZACzgFg3ew1NZg=;
+        b=hdmolVEEz3F+RJMK0XoDpq4DHzYtDE48C+k1TzlEB82oZRtD2cAQ/W4mZKgG0P9itj
+         DfLFI3EmT8cl5zas7GmWLAvl3x78g0ob/r1oQyLyElpnF00LKaVFzZwoI0twQU48di2B
+         n6KYi5qkGPGL85W00E/yq6pqAncO7syKTcEiU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722632687; x=1723237487;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bizVYN62g2WR0h6WdBjGD7lztQUVqZACzgFg3ew1NZg=;
+        b=MctbfMuDewQYA2xjJxjMNbaLo60a8JHF7GDAQAxa0/7i9YuY95QTX8vGohMUi+Oiry
+         HcIpC6lcklg//yMChQGEQX1RRVlXits2h0lXxmXM6NnhzTTGD6uPr6Vrq/Q2eGa54hRJ
+         g84Ur6vNJMj6bCqsDVn3wVox/3OrQWmubFPVkId6x0L5wQlGM5ReL1WKLi9uYwdhBUKc
+         /kx2BSzSHuwM1S5NDQfQopxEYgZVa+Kc/4jfesdXNwtQlAmjjL+nxvCTNnH+2EiLnV+X
+         TTucj0mvdiQhNSqtZ7dz0DR22oXa8vjdtXGx8SxXbu4CmPEEwzGdqeEgxs7wtsB7YoQN
+         JhNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWM4T3Js5vK1NhHx6CoAEBUc5pKtrMOLWAeiOVV1/bxq5WUzhSzXm7tuSfCmEJV2vwTZeCXHCrpEQSBqpuBepViQxcijuAYFG+EZlpTJ4W8
+X-Gm-Message-State: AOJu0Yz29lA2sezny01GeG7yg5m9xmdYba5B+8LMBT1/FXaqcheorkO6
+	CsET80BsmRJ03nzldliwcrr4trven0uVIbceSmGyv8VE5/+7LOasi+hCMpJQAA==
+X-Google-Smtp-Source: AGHT+IHUFG1Og3qZnJuB+WHW/Mj9RyaQmwZbLxjxKt93uYCF5XTb9EODVbRysfl5tZk2LzoGN4JDew==
+X-Received: by 2002:a05:6602:3ca:b0:81f:9468:7c3c with SMTP id ca18e2360f4ac-81fd43e3415mr598235239f.12.1722632687275;
+        Fri, 02 Aug 2024 14:04:47 -0700 (PDT)
+Received: from rink.c.googlers.com.com (212.165.232.35.bc.googleusercontent.com. [35.232.165.212])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-81fd4d7223csm70159939f.42.2024.08.02.14.04.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 14:04:46 -0700 (PDT)
+From: Jett Rink <jettrink@chromium.org>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: linux-security-module@vger.kernel.org,
+	jettrink@chromium.org,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	linux-integrity@vger.kernel.org
+Subject: [PATCH v3] tpm: Add new device/vendor ID 0x50666666
+Date: Fri,  2 Aug 2024 21:04:32 +0000
+Message-ID: <20240802210441.625738-1-jettrink@chromium.org>
+X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -65,133 +82,83 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- tests/attestation.sh       | 30 ++++++++++++++++++++++++++++++
- tests/check_importable.sh  |  3 +--
- tests/engine/Makefile.am   |  3 ++-
- tests/provider/Makefile.am |  3 ++-
- tests/seal_unseal.sh       |  3 +--
- tests/start_sw_tpm.sh      |  2 ++
- 6 files changed, 38 insertions(+), 6 deletions(-)
- create mode 100755 tests/attestation.sh
+Accept another DID:VID for the next generation Google TPM. This TPM
+has the same Ti50 firmware and fulfills the same interface.
 
-diff --git a/tests/attestation.sh b/tests/attestation.sh
-new file mode 100755
-index 0000000..bd927fa
---- /dev/null
-+++ b/tests/attestation.sh
-@@ -0,0 +1,30 @@
-+#!/bin/bash
-+set -x
+Signed-off-by: Jett Rink <jettrink@chromium.org>
+---
+
+Changes in v3:
+Refactor ternary operators into helper method.
+
+Changes in v2:
+Patchset 2 applies cleanly
+
+ drivers/char/tpm/tpm_tis_i2c_cr50.c | 30 ++++++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+index adf22992138e..1f83cfe2724c 100644
+--- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
++++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+@@ -31,7 +31,8 @@
+ #define TPM_CR50_TIMEOUT_SHORT_MS	2		/* Short timeout during transactions */
+ #define TPM_CR50_TIMEOUT_NOIRQ_MS	20		/* Timeout for TPM ready without IRQ */
+ #define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID reg value */
+-#define TPM_TI50_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
++#define TPM_TI50_DT_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
++#define TPM_TI50_OT_I2C_DID_VID		0x50666666L	/* Device and vendor ID reg value */
+ #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
+ #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
+ #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
+@@ -668,6 +669,27 @@ static const struct of_device_id of_cr50_i2c_match[] = {
+ MODULE_DEVICE_TABLE(of, of_cr50_i2c_match);
+ #endif
+ 
++/**
++ * tpm_cr50_vid_to_name() - Maps VID to name.
++ * @vendor:	Vendor identifier to map to name
++ *
++ * Return:
++ *	A valid string for the vendor or empty string
++ */
++static const char *tpm_cr50_vid_to_name(u32 vendor)
++{
++	switch (vendor) {
++	case TPM_CR50_I2C_DID_VID:
++		return "cr50";
++	case TPM_TI50_DT_I2C_DID_VID:
++		return "ti50 DT";
++	case TPM_TI50_OT_I2C_DID_VID:
++		return "ti50 OT";
++	default:
++		return "";
++	}
++}
 +
-+##
-+# We already created eksign.name and null.name, so check them first
-+##
-+${bindir}/attest_tpm2_primary --eksign --name ${testdir}/eksign.name || exit 1
-+${bindir}/attest_tpm2_primary --eksign --name ${testdir}/null.name && exit 1
-+${bindir}/attest_tpm2_primary --certify null --name ${testdir}/eksign.name ${testdir}/null.name || exit 1
-+##
-+# Run through certification of all the keys (already done null above
-+##
-+for h in owner endorsement platform; do
-+    rm -f tmp.name
-+    ${bindir}/attest_tpm2_primary -C ${h} -n ${testdir}/eksign.name -o > tmp.name || exit 1
-+    ${bindir}/attest_tpm2_primary -C ${h} -n ${testdir}/eksign.name tmp.name || exit 1
-+    ${bindir}/attest_tpm2_primary -C ${h} -n ${testdir}/eksign.name null.name && exit 1
-+done
-+##
-+# attestation tests
-+# 1. create both P-256 and RSA2048 attestation certs
-+##
-+openssl genrsa 2048 > ca.key || exit 1
-+# several EK templates exist, so try RSA and EC for each
-+for high in "" "-high"; do
-+    for alg in "-rsa 2048" "-ecc nistp256"; do
-+	tsscreateekcert ${high} ${alg} -cakey ca.key -of cert.der || exit 1
-+	${bindir}/attest_tpm2_primary --attest cert.der --name ${testdir}/eksign.name || exit 1
-+    done
-+done
-diff --git a/tests/check_importable.sh b/tests/check_importable.sh
-index eeafe03..ee84f16 100755
---- a/tests/check_importable.sh
-+++ b/tests/check_importable.sh
-@@ -2,8 +2,7 @@
+ /**
+  * tpm_cr50_i2c_probe() - Driver probe function.
+  * @client:	I2C client information.
+@@ -741,14 +763,16 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
+ 	}
  
+ 	vendor = le32_to_cpup((__le32 *)buf);
+-	if (vendor != TPM_CR50_I2C_DID_VID && vendor != TPM_TI50_I2C_DID_VID) {
++	if (vendor != TPM_CR50_I2C_DID_VID &&
++	    vendor != TPM_TI50_DT_I2C_DID_VID &&
++	    vendor != TPM_TI50_OT_I2C_DID_VID) {
+ 		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
+ 		tpm_cr50_release_locality(chip, true);
+ 		return -ENODEV;
+ 	}
  
- # export the parent key as a EC and RSA public key
--prim=$(tsscreateprimary -ecc nistp256 -hi o -opem srk.pub | sed 's/Handle //') || exit 1
--tssflushcontext -ha ${prim} || exit 1
-+${bindir}/attest_tpm2_primary --certify owner --name ${testdir}/eksign.name --file srk.pub || exit 1
- prim=$(tsscreateprimary -rsa 2048 -hi o -opem srkrsa.pub | sed 's/Handle //') || exit 1
- tssflushcontext -ha ${prim} || exit 1
- 
-diff --git a/tests/engine/Makefile.am b/tests/engine/Makefile.am
-index ec6f321..7bade2b 100644
---- a/tests/engine/Makefile.am
-+++ b/tests/engine/Makefile.am
-@@ -30,6 +30,7 @@ TESTS += ../check_curves.sh \
- 	../check_locality.sh \
- 	../check_secret_policies.sh \
- 	../dynamic_engine.sh \
-+	../attestation.sh \
- 	../stop_sw_tpm.sh
- 
- fail_connect.sh: tpm_server_found
-@@ -53,6 +54,6 @@ AM_TESTS_ENVIRONMENT = TPM_INTERFACE_TYPE=socsim; export TPM_INTERFACE_TYPE; \
- 
- TEST_EXTENSIONS = .sh
- 
--CLEANFILES = key*.tpm key*.pub key*.priv tmp.* NVChip h*.bin key*.der seal.* fifo tss2.*
-+CLEANFILES = key*.tpm key*.pub key*.priv tmp.* NVChip h*.bin key*.der seal.* fifo tss2.* *.name
- clean-local:
- 	rm -fr testdir
-diff --git a/tests/provider/Makefile.am b/tests/provider/Makefile.am
-index 1080036..05bbee1 100644
---- a/tests/provider/Makefile.am
-+++ b/tests/provider/Makefile.am
-@@ -31,6 +31,7 @@ TESTS += ../check_curves.sh \
- 	../check_signed_policies.sh \
- 	../check_locality.sh \
- 	../check_secret_policies.sh \
-+	../attestation.sh \
- 	../stop_sw_tpm.sh
- 
- fail_connect.sh: tpm_server_found
-@@ -56,7 +57,7 @@ endif
- 
- TEST_EXTENSIONS = .sh
- 
--CLEANFILES = key*.tpm key*.pub key*.priv tmp.* NVChip h*.bin key*.der seal.* fifo tss2.*
-+CLEANFILES = key*.tpm key*.pub key*.priv tmp.* NVChip h*.bin key*.der seal.* fifo tss2.* *.name
- clean-local:
- 	rm -fr testdir
- 
-diff --git a/tests/seal_unseal.sh b/tests/seal_unseal.sh
-index 6d05a4c..2df3aa8 100755
---- a/tests/seal_unseal.sh
-+++ b/tests/seal_unseal.sh
-@@ -48,8 +48,7 @@ for n in sha1 sha256 sha384; do
-     else
- 	POLICYFILE="${testdir}/policies/policy_pcr${n}.txt"
-     fi
--    prim=$(tsscreateprimary -hi o -st -ecc nistp256 -opem srk.pub | sed 's/Handle //') || exit 1
--    tssflushcontext -ha $prim
-+    ${bindir}/attest_tpm2_primary -C owner -n ${testdir}/eksign.name -f srk.pub || exit 1
-     TPM_INTERFACE_TYPE= echo $DATA | ${bindir}/seal_tpm2_data -n ${n} -a -k ${AUTH} --import srk.pub seal.tpm || exit 1;
-     ${bindir}/unseal_tpm2_data -k ${AUTH} seal.tpm | grep -q "${DATA}" || exit 1;
-     rm seal.tpm
-diff --git a/tests/start_sw_tpm.sh b/tests/start_sw_tpm.sh
-index 5f249a5..1e0e4db 100755
---- a/tests/start_sw_tpm.sh
-+++ b/tests/start_sw_tpm.sh
-@@ -56,3 +56,5 @@ key=$(tsscreateprimary -hi o -st -rsa|sed 's/Handle //') && \
- tssevictcontrol -hi o -ho ${key} -hp 81000001 && \
- tssflushcontext -ha ${key}
- 
-+${bindir}/attest_tpm2_primary --ek > ${testdir}/eksign.name || exit 1
-+${bindir}/attest_tpm2_primary --certify null --outname --name ${testdir}/eksign.name > ${testdir}/null.name || exit 1
+ 	dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+-		 vendor == TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
++		 tpm_cr50_vid_to_name(vendor),
+ 		 client->addr, client->irq, vendor >> 16);
+ 	return tpm_chip_register(chip);
+ }
 -- 
-2.35.3
+2.46.0.rc2.264.g509ed76dc8-goog
 
 
