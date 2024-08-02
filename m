@@ -1,135 +1,165 @@
-Return-Path: <linux-integrity+bounces-3243-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3244-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4CAE94543A
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2024 23:48:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 611F1946038
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 17:21:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 949441F224A1
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 Aug 2024 21:48:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16A0B2853D2
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 15:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 831911487F1;
-	Thu,  1 Aug 2024 21:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CE0015C159;
+	Fri,  2 Aug 2024 15:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="SojdjJ3S"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="BKvudFLM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3E0DF49;
-	Thu,  1 Aug 2024 21:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722548910; cv=pass; b=g1H+b+VfP2K636P7I5eM5KI2DGsQ2d8tzbjLw4CyOvtkxXVz6BjfGuSqy4BLE3WuKTEo8W/eaZ99MvhpOK3je1jyDGPi3OCJQizfj0I5Dm9YATHPhglbv6oMvYShr0xzVWlBKaVEbXsmnifEcWqfMTCfYS1i/qFf9bHlRYoigqQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722548910; c=relaxed/simple;
-	bh=ZO3XA4CcsmcRe7FcHo4W8o2Ga50j2vmLjqPTn4HcuXQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=JlqTNFn2dR6yE/L/EwgRg5hDU9GiWzxcnVa/sHGk70eJBkk2eQ8pM5vgzWOLmpS1FYVSPewzhHgG05X+igornSSlHowsG6oiduiL0yv97Lb1fNgdTuGQoSauriAgxa5GlrCENsESBMYyOq6oI3reeDT1ghFELjJnV7UOLBGJmAQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=SojdjJ3S; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
-Received: from localhost (91-154-92-171.elisa-laajakaista.fi [91.154.92.171])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sakkinen)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4WZjJK0bqdz49Q0P;
-	Fri,  2 Aug 2024 00:48:17 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1722548898;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KTNTSSPsb4ORaTHQPc0RPyrJwlrU/KKte+XLlL8P/cA=;
-	b=SojdjJ3SH8N/Z5P/x9LAB/ko97rXjIzhNvBo8gp3EwokbtJTmVwxFdP3rAM8yyL98JvzlB
-	QV5gAeseyJz2ySD7zUM4lW8rIVrsIDClKUKtkVcwvbn4fPHM1iTiFV0ahZ1sEh2FqjFDvD
-	lbIO14xPbrcsmO35Vw8Mnk5YAQWiTHYxlKyxfRfG4NpSNTH8+DYX3REm+5yqSK+lCpeRad
-	Wg4YPNEUe7AX80Xmtc783VRMfIhhVxD4a4IvSz4p26cCWtNGVxHZFKDq5oECGdB8QbyJcq
-	xYc7iNxGpiyDvUko8Qse9I1Adb1n0QNhxSFgGkDPglxViLfe6jbV97Neo5PiLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1722548898;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KTNTSSPsb4ORaTHQPc0RPyrJwlrU/KKte+XLlL8P/cA=;
-	b=PGBC+b/acN+zLuWlk9RW9f0cE06sd78mkwZzu/YH2Sebust82s0uGXRYsDVQT717dXyNPt
-	8sBvG9NyTGq0qRxqsR7X4RNanx7LrlnmRkZA/kMFcsYlE15pBh8c+oNsWKQCyg0SWsTHRU
-	0LsLQqBu76mQ1r7EZQXO1E/k1A7mJKk1Yiem/ayKuKztwRUTWIOXOShTYYM2Ofd7LvmZ6H
-	qDHGwY95TVs2QPP8nSahpAhDiZYhaQFCGZJ+JplLGTLMx9hElcl9/1UJ+IoeM8GbTlxXn7
-	oZMp1AA0Awa9iMXLelYrf462cwiu/337RwBafqDoMoB8E4Z4181xJbZ+ErPI0A==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1722548898; a=rsa-sha256;
-	cv=none;
-	b=R9CP4BjQXi4eaqnJp1264aVeeM/unlJA4TdcVTQwmL5BjGJv0+kVibqkvfbqEarEvmfvV1
-	Id9pKsATfWvll4leGkyxdwhzpyFUj5NAUM3FlgDT0DyBmU+1Rpw+RzDWs65dUr3273EAri
-	wCyvzAbmlRv+8b4XzmGEKJFiCFKJA3hxrj4sNO1Dj42nzXlMaatVYA5m+mLFAzAuCx9yQ0
-	aYTvums30v+FLUIC/gpn8zflIFLU9b/kiOBIRp1gDQzF37NW0uDsNQSMRCd8WBOYf3pSjS
-	+w+LhLfRPVS07vaOMGgcfRKE2MpYzsRKhYuzpFtld5DrgxWC9QP287g0E9N0PA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628AE15C15C
+	for <linux-integrity@vger.kernel.org>; Fri,  2 Aug 2024 15:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722611974; cv=none; b=GGAKVfPgn8xCo/m7UKyMPAVzylFBKtfg2rTnnC1AOqWB2qPtn8R0netccmipPaRUTsCdlbOS0my73trEn7MUx+n3ZBuVRMu41GW/lpHwPEzbKldScBZQIlMxWDlNkXwsTjg6oysXRrfFKBSiSVVzAiJ7J2gKNSkDMI1uVuf9GH8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722611974; c=relaxed/simple;
+	bh=yf3/DcLNflmZVVdGmRQQ3m5ZTvXvQqIBueCI1PWXdwg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qwKjnJ4s33Wjnse/27F63WFgd+KqnK9h4SCV8KoTTOwNeVwXbHrWr97RiOWQrhBB7x9gzukxglkpgbFQTDTZ4h8KSBCyyc858zsKtmhQomsVpU5u0eBnVIgx8ByQwmqvwIkxBJKjxIbVRtRCoqNs++VibFTsCkABGHevi0ibsBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=BKvudFLM; arc=none smtp.client-ip=209.85.161.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5d5c8c1006eso4732236eaf.3
+        for <linux-integrity@vger.kernel.org>; Fri, 02 Aug 2024 08:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1722611970; x=1723216770; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hVQxTJ6XiBlo2K6vivKGyjwtwzsISazu9ikSPPmJl/k=;
+        b=BKvudFLMgRl2q3rvuTbFgJvNchsosRZK4tIukjujKRw1dEr89Jz2GO8z9IurlGrvcP
+         Wjh5ti/uV11DwSPsTUIGYK5qVo/QekWR6Xhk9lcbuWearkuOEX6HWZgDHlTSIrsdYDah
+         xjdBbMymQPfOrplba70BKcxbvLeHMSmEFbKGw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722611970; x=1723216770;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hVQxTJ6XiBlo2K6vivKGyjwtwzsISazu9ikSPPmJl/k=;
+        b=RDAAK0xOE6HUo8ZJn8bfEpVsx21nheveXY8Qw1dm+t2NjCyAUis46ufWheR0GTcqsN
+         Caf9iOwMt7EKcZXMVupx8yanTfmFmpec2O1vJNWZyUPf2jHolLJSOQ3eRwAwt1WZSFdK
+         ccbPa7Ht/VvQkc/TyAj7CaZgyCrZj86qznhRc3GtZjPfEzODIVADMKSSd/NXGUXyTa29
+         ubmDdHK2QFBJJ++vYcUJdkLhTTB88RWfubrvSgAIf186yxSuUthwSsnhz/3ZaCn+1cPk
+         a9Co4jrKet6amt7xahSPez5WdAoz+ykrotxzuouWvvsoMfvREhY6WjF41YkUBw46osBI
+         qYqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW74rBGRK/XOumXl2+1YPGHp1sYdrmyP1QCP1Kf3RiM+tHZQBAfw2ZI4jYbxG7VcaBCiA/4I/EuSUTYcbQ/1ZgcIZni10OiJcwT1y8CrXCI
+X-Gm-Message-State: AOJu0Yx3gPBmidT2d6UKyu40hk6pzzQ2MeR0QzMfJHFTd9QHDPffoAP8
+	Wx2ol6JED7NRQFhwrwS6mRALbPQB85eA7tBV4c74sy+BrNOFMymqhqaeGXcHGg1Hqn34JlEYkHo
+	NZA==
+X-Google-Smtp-Source: AGHT+IET4EQQ0MrqJ5PjS77FdtIVWuByjF7+WbMH/2gYrFAwEZn1GU8FKJTh0w3veLKFmO+aYr7FQQ==
+X-Received: by 2002:a05:6870:c18b:b0:261:1eb4:dd8e with SMTP id 586e51a60fabf-26891aa8b89mr4863729fac.2.1722611970112;
+        Fri, 02 Aug 2024 08:19:30 -0700 (PDT)
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com. [209.85.160.48])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2689a2fc510sm355130fac.22.2024.08.02.08.19.29
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Aug 2024 08:19:29 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2689f749649so390857fac.0
+        for <linux-integrity@vger.kernel.org>; Fri, 02 Aug 2024 08:19:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWI8wfcRiQzTg6mVVvdGGcNSHF5k3llzrLmFItwvOvCDb25oUYt89VDqIfHwalpngNS4dtSSRT3fL+Wpv+T1ochQlp6CBjc9Vjb1h0VT+GV
+X-Received: by 2002:a05:6870:b025:b0:25e:24b:e65b with SMTP id
+ 586e51a60fabf-26891f23fc9mr4898926fac.42.1722611968742; Fri, 02 Aug 2024
+ 08:19:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20240718202359.127482-1-jettrink@chromium.org>
+In-Reply-To: <20240718202359.127482-1-jettrink@chromium.org>
+From: Jett Rink <jettrink@chromium.org>
+Date: Fri, 2 Aug 2024 09:19:17 -0600
+X-Gmail-Original-Message-ID: <CAK+PMK4yBkqpfJdcQ5M93DKB1-7Wn4zJmx6VmqNghogJJhDa6A@mail.gmail.com>
+Message-ID: <CAK+PMK4yBkqpfJdcQ5M93DKB1-7Wn4zJmx6VmqNghogJJhDa6A@mail.gmail.com>
+Subject: Re: [PATCH v2] tpm: Add new device/vendor ID 0x50666666
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: linux-security-module@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 02 Aug 2024 00:48:15 +0300
-Message-Id: <D34WMEE9AIKU.1KLX21J35LNJA@iki.fi>
-To: "Stefan Berger" <stefanb@linux.ibm.com>,
- <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
- <jarkko@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <mpe@ellerman.id.au>,
- <naveen.n.rao@linux.ibm.com>, <zohar@linux.ibm.com>
-Subject: Re: [PATCH v2] tpm: ibmvtpm: Call tpm2_sessions_init() to
- initialize session support
-From: "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>
-X-Mailer: aerc 0.17.0
-References: <20240729132934.311136-1-stefanb@linux.ibm.com>
-In-Reply-To: <20240729132934.311136-1-stefanb@linux.ibm.com>
 
-On Mon Jul 29, 2024 at 4:29 PM EEST, Stefan Berger wrote:
-> Commit d2add27cf2b8 ("tpm: Add NULL primary creation") introduced
-> CONFIG_TCG_TPM2_HMAC. When this option is enabled on ppc64 then the
-> following message appears in the kernel log due to a missing call to
-> tpm2_sessions_init().
+Could I get some feedback on this patch please? Is there something I
+am not doing correctly?
+
+-Jett
+
+On Thu, Jul 18, 2024 at 2:24=E2=80=AFPM Jett Rink <jettrink@chromium.org> w=
+rote:
 >
-> [    2.654549] tpm tpm0: auth session is not active
+> Accept another DID:VID for the next generation Google TPM. This TPM
+> has the same Ti50 firmware and fulfills the same interface.
 >
-> Add the missing call to tpm2_session_init() to the ibmvtpm driver to
-> resolve this issue.
->
-> Fixes: d2add27cf2b8 ("tpm: Add NULL primary creation")
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: Jett Rink <jettrink@chromium.org>
 > ---
->  drivers/char/tpm/tpm_ibmvtpm.c | 4 ++++
->  1 file changed, 4 insertions(+)
 >
-> diff --git a/drivers/char/tpm/tpm_ibmvtpm.c b/drivers/char/tpm/tpm_ibmvtp=
-m.c
-> index d3989b257f42..1e5b107d1f3b 100644
-> --- a/drivers/char/tpm/tpm_ibmvtpm.c
-> +++ b/drivers/char/tpm/tpm_ibmvtpm.c
-> @@ -698,6 +698,10 @@ static int tpm_ibmvtpm_probe(struct vio_dev *vio_dev=
-,
->  		rc =3D tpm2_get_cc_attrs_tbl(chip);
->  		if (rc)
->  			goto init_irq_cleanup;
-> +
-> +		rc =3D tpm2_sessions_init(chip);
-> +		if (rc)
-> +			goto init_irq_cleanup;
->  	}
-> =20
->  	return tpm_chip_register(chip);
-
-Applied!
-
-BR, Jarkko
+> Changes in v2:
+> Patchset 2 applies cleanly
+>
+>  drivers/char/tpm/tpm_tis_i2c_cr50.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_t=
+is_i2c_cr50.c
+> index adf22992138e..b50005ccfc5e 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+> @@ -31,7 +31,8 @@
+>  #define TPM_CR50_TIMEOUT_SHORT_MS      2               /* Short timeout =
+during transactions */
+>  #define TPM_CR50_TIMEOUT_NOIRQ_MS      20              /* Timeout for TP=
+M ready without IRQ */
+>  #define TPM_CR50_I2C_DID_VID           0x00281ae0L     /* Device and ven=
+dor ID reg value */
+> -#define TPM_TI50_I2C_DID_VID           0x504a6666L     /* Device and ven=
+dor ID reg value */
+> +#define TPM_TI50_DT_I2C_DID_VID                0x504a6666L     /* Device=
+ and vendor ID reg value */
+> +#define TPM_TI50_OT_I2C_DID_VID                0x50666666L     /* Device=
+ and vendor ID reg value */
+>  #define TPM_CR50_I2C_MAX_RETRIES       3               /* Max retries du=
+e to I2C errors */
+>  #define TPM_CR50_I2C_RETRY_DELAY_LO    55              /* Min usecs betw=
+een retries on I2C */
+>  #define TPM_CR50_I2C_RETRY_DELAY_HI    65              /* Max usecs betw=
+een retries on I2C */
+> @@ -741,14 +742,18 @@ static int tpm_cr50_i2c_probe(struct i2c_client *cl=
+ient)
+>         }
+>
+>         vendor =3D le32_to_cpup((__le32 *)buf);
+> -       if (vendor !=3D TPM_CR50_I2C_DID_VID && vendor !=3D TPM_TI50_I2C_=
+DID_VID) {
+> +       if (vendor !=3D TPM_CR50_I2C_DID_VID &&
+> +           vendor !=3D TPM_TI50_DT_I2C_DID_VID &&
+> +           vendor !=3D TPM_TI50_OT_I2C_DID_VID) {
+>                 dev_err(dev, "Vendor ID did not match! ID was %08x\n", ve=
+ndor);
+>                 tpm_cr50_release_locality(chip, true);
+>                 return -ENODEV;
+>         }
+>
+>         dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
+> -                vendor =3D=3D TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
+> +                vendor =3D=3D TPM_CR50_I2C_DID_VID    ? "cr50" :
+> +                vendor =3D=3D TPM_TI50_DT_I2C_DID_VID ? "ti50 DT" :
+> +                                                    "ti50 OT",
+>                  client->addr, client->irq, vendor >> 16);
+>         return tpm_chip_register(chip);
+>  }
+> --
+> 2.45.2.1089.g2a221341d9-goog
+>
 
