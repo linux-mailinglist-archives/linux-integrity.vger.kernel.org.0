@@ -1,59 +1,62 @@
-Return-Path: <linux-integrity+bounces-3246-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3247-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 706C3946453
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 22:26:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA697946454
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 22:26:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AE60282507
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 20:26:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CFDBB21F6F
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Aug 2024 20:26:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAE533DF;
-	Fri,  2 Aug 2024 20:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754AC4D8D1;
+	Fri,  2 Aug 2024 20:26:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="q353Utpf"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="ebCGbhrs"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7C74CE05
-	for <linux-integrity@vger.kernel.org>; Fri,  2 Aug 2024 20:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA00F4D8A1
+	for <linux-integrity@vger.kernel.org>; Fri,  2 Aug 2024 20:26:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722630385; cv=none; b=d2On3IEYQnb1FdRTHyJSRnuuvTPDtdju9oaUqgW0SKo4odrPHY1eBlXHfGngSUhjnpb0+DcL2bRoV3KJl/krGZN1pY+hJaYX+iNvKZYU7i9aVpVGj0Uc6DrDWuK2IMMTxQQGNMCybTGDYXXtNd+URIn4G/SfqCgNzsZlSVaSBqk=
+	t=1722630401; cv=none; b=VtADGZDrub8TcvoIvtC1CVzjpsNrQyyO9rRkZK0CnRvME+lqIbRJfUf2r9AhnaS53J4ZIv7Vbpu3dQdUbgO1HU9zMugZ/oWYlwN/UYODadtQBkj2uHdTSVnf2rAXyFVZcDPa4OBnqpRuev5crx/cvBUHLHzyEIZENcMA9GgwH78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722630385; c=relaxed/simple;
-	bh=e1BaOhYB7z0J2l6xojIvWZk5WJoXeZ0vbypRislG9uo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Om/aN8bn+XVCziT5kxyExdR2Jkl+4uLdbThOcHJCfuoZ/bCcdneZfKf0WoIql6ggjz89VJQoGSB2873f3G/WQL3gebFPOrDUzx8e81LXc6roeVm/i0FJgOO7/cu7LojuyP79Hisr5jGd+X+kAa6BsJEupHF4GFdHr8ZNpuX2ggc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=q353Utpf; arc=none smtp.client-ip=96.44.175.130
+	s=arc-20240116; t=1722630401; c=relaxed/simple;
+	bh=tlYMTE9qUYrL1KkFicy/RFTs+B9cajYqQ8pFQYhQd+c=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=eov5cpnH6YdRFvnJ9DK53fbMTjSCcXssimzK0to5iohlac9Xj4pysYUcDQ7n0qEKFzC1QFdpi5rj49FX5dJ67jNpDlHxeHu8C6XKptVcUI5MaaHJGFZRcSNWpRcBvLf/q9exZqJYHYXf5bcS5Uhee/iRqy0sP9Jmzwg38zMM5ZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=ebCGbhrs; arc=none smtp.client-ip=96.44.175.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1722630383;
-	bh=e1BaOhYB7z0J2l6xojIvWZk5WJoXeZ0vbypRislG9uo=;
-	h=From:To:Subject:Date:Message-Id:From;
-	b=q353Utpf7i3SAAJPFvemRgdb2BjERADKnOAPC0m3WtdkuNFkwy1I8kwmXhUyTct5l
-	 zehP6hiyAVhQPc8iFmguVOhInIi7XaOV6+cTr5ontbPdSSaFk9W67G8rHONzrlIjQq
-	 suxs24ztMT5s66pZVS3ekFXB2v16UKlCZKnt38V4=
+	d=hansenpartnership.com; s=20151216; t=1722630395;
+	bh=tlYMTE9qUYrL1KkFicy/RFTs+B9cajYqQ8pFQYhQd+c=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
+	b=ebCGbhrsDY+GLCrkOAVkaJ2ppK46cIrMdzvNmZ8syHW8AduMYlByfQ+OP/CUUdsRA
+	 MoEh/OkxcgjXOOT/HGVouV3LlDRa3oMTEPdD8govlzUD9F3Zp5B67P1zc1bJQMNoYx
+	 VbCV+UlN9B/lSpc9W0pKvfLc2jdlwMvR2lO8xxuI=
 Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 4A5671286A6B;
-	Fri, 02 Aug 2024 16:26:23 -0400 (EDT)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3CA1E1286A6B;
+	Fri, 02 Aug 2024 16:26:35 -0400 (EDT)
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
  by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id xGj7usumZNF5; Fri,  2 Aug 2024 16:26:23 -0400 (EDT)
+ with ESMTP id EmW6V8rWYiMo; Fri,  2 Aug 2024 16:26:35 -0400 (EDT)
 Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id B5374128690C;
-	Fri, 02 Aug 2024 16:26:22 -0400 (EDT)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id B60C4128690C;
+	Fri, 02 Aug 2024 16:26:34 -0400 (EDT)
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
 To: openssl-tpm2-engine@groups.io
 Cc: linux-integrity@vger.kernel.org,
 	Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH 0/8] openssl_tpm2_engine: Add attestation functions for primary keys
-Date: Fri,  2 Aug 2024 16:25:58 -0400
-Message-Id: <20240802202606.12767-1-James.Bottomley@HansenPartnership.com>
+Subject: [PATCH 1/8] tss: Fix handling of TPM_RH_NULL in intel-tss
+Date: Fri,  2 Aug 2024 16:25:59 -0400
+Message-Id: <20240802202606.12767-2-James.Bottomley@HansenPartnership.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20240802202606.12767-1-James.Bottomley@HansenPartnership.com>
+References: <20240802202606.12767-1-James.Bottomley@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -62,73 +65,64 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The first 5 patches add supporting infrastructure and the next three
-add the actually attestation command, its man page and its tests.
+Now that we're going to be using the NULL primary to salt sessions,
+the Intel TSS shim needs fixing to cope with this.  In the Intel TSS,
+there are two internal handles representing NULL: ESYS_TR_NONE and
+ESYS_TR_RH_NULL.  We translate TPM_RH_NULL to ESYS_TR_NONE because
+most of the time it does mean no value.  However, for the NULL primary
+handle we must use ESYS_TR_RH_NULL, so check for that specific case
+and fix it.  Additionally remove the intel_handle() code which was
+supposed to do this: it's unused because 0 is never passed in as a
+handle number.
 
-The design is to be able to store a stable copy of the signing EK
-(done by name) in /etc/eksign.name, which can then be used to verify
-any on the fly creation of the signing key.  The reason for using a
-signing EK not an AK as the specs usually require is to have the
-simplicity of a stable key that never changes as the attesting key and
-because there are no privacy issues in the machine owner knowing it.
-The command then provides a way to attest this key against the EK
-certificate (if the TPM has one).  If there is no EK certificate, the
-signing EK name is used on a trust on first use (TOFU) basis.
-
-attest_tpm2_primary --eksign > /etc/eksign.name
-
-Will create this file once.  If an EK certificate exists, the
-eksign.name file can be attested to that certificate with
-
-attest_tpm2_primary --attest tpm-cert.crt --name /etc/eksign.name
-
-The above commands should only need to be done once per TPM.
-
-Once the Signing EK is known, it can be used on every boot to create
-and certify the NULL key, which is what the kernel uses and exports
-from version 6.10 onwards and thus proves to the user that the
-kernel's reliance on the NULL key during boot was cryptographically
-justifed.  This can be done from a boot script as:
-
-attest_tpm2_primary --certify null --name /etc/eksign.name /sys/class/tpm/tpm0/null_name
-
-Which will return true if the certification succeeds.  If the
-certification fails, all TPM functions should be considered
-compromised.  Whether boot should continue even with a compromised TPM
-is a user policy decision.
-
-James
-
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
+ src/include/intel-tss.h | 18 +++++-------------
+ 1 file changed, 5 insertions(+), 13 deletions(-)
 
-James Bottomley (8):
-  tss: Fix handling of TPM_RH_NULL in intel-tss
-  libcommon: add ability to create a signing primary key
-  libcommon: add bin2hex and tmp2_get_hexname
-  libcommon: add primary creation from template
-  tss: add tpm2_Certify, tpm2_ActivateCredential and tpm2_PolicyOR
-  tools: add new attest_tpm2_primary command
-  attest_tpm2_primary: add man page
-  tests: add tests for attest_tpm2_primary
-
- src/include/ibm-tss.h              |  84 +++
- src/include/intel-tss.h            |  95 +++-
- src/include/tpm2-common.h          |   9 +
- src/libcommon/tpm2-common.c        |  93 +++-
- src/tools/Makefile.am              |  11 +-
- src/tools/attest_tpm2_primary.1.in | 103 ++++
- src/tools/attest_tpm2_primary.c    | 842 +++++++++++++++++++++++++++++
- tests/attestation.sh               |  30 +
- tests/check_importable.sh          |   3 +-
- tests/engine/Makefile.am           |   3 +-
- tests/provider/Makefile.am         |   3 +-
- tests/seal_unseal.sh               |   3 +-
- tests/start_sw_tpm.sh              |   2 +
- 13 files changed, 1230 insertions(+), 51 deletions(-)
- create mode 100644 src/tools/attest_tpm2_primary.1.in
- create mode 100644 src/tools/attest_tpm2_primary.c
- create mode 100755 tests/attestation.sh
-
+diff --git a/src/include/intel-tss.h b/src/include/intel-tss.h
+index 1870b4e..5b8db20 100644
+--- a/src/include/intel-tss.h
++++ b/src/include/intel-tss.h
+@@ -251,14 +251,6 @@ intel_sess_helper(TSS_CONTEXT *tssContext, TPM_HANDLE auth, TPMA_SESSION flags)
+ 				  TPMA_SESSION_CONTINUESESSION | flags);
+ }
+ 
+-static inline TPM_HANDLE
+-intel_handle(TPM_HANDLE h)
+-{
+-	if (h == 0)
+-		return ESYS_TR_NONE;
+-	return h;
+-}
+-
+ static inline void
+ TSS_Delete(TSS_CONTEXT *tssContext)
+ {
+@@ -937,8 +929,10 @@ tpm2_CreatePrimary(TSS_CONTEXT *tssContext, TPM_HANDLE primaryHandle,
+ 	TPM2B_PUBLIC *opub;
+ 	TPM_RC rc;
+ 
+-	/* FIXME will generate wrong value for NULL hierarchy */
+-	primaryHandle = intel_handle(primaryHandle);
++
++	/* TPM_RH_NULL is mapped to ESYS_TR_NONE, which won't work here */
++	if (primaryHandle == TPM_RH_NULL)
++		primaryHandle = INT_TPM_RH_NULL;
+ 
+ 	outsideInfo.size = 0;
+ 	creationPcr.count = 0;
+@@ -993,9 +987,7 @@ tpm2_StartAuthSession(TSS_CONTEXT *tssContext, TPM_HANDLE tpmKey,
+ 		      TPM_HANDLE *sessionHandle,
+ 		      const char *bindPassword)
+ {
+-	bind = intel_handle(bind);
+-	tpmKey = intel_handle(tpmKey);
+-	if (bind != ESYS_TR_NONE)
++	if (bind != TPM_RH_NULL)
+ 		intel_auth_helper(tssContext, bind, bindPassword);
+ 
+ 	return Esys_StartAuthSession(tssContext, tpmKey, bind, ESYS_TR_NONE,
 -- 
 2.35.3
 
