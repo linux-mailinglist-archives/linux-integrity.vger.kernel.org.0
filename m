@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-3261-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3266-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 029369467AC
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Aug 2024 08:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5980A9467BF
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Aug 2024 08:10:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2401E1C20D00
-	for <lists+linux-integrity@lfdr.de>; Sat,  3 Aug 2024 06:09:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D9501C20D20
+	for <lists+linux-integrity@lfdr.de>; Sat,  3 Aug 2024 06:10:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA1214F11D;
-	Sat,  3 Aug 2024 06:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1BD4152199;
+	Sat,  3 Aug 2024 06:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="n17SCVDc"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="jic40mOE"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ECCF14D2AC;
-	Sat,  3 Aug 2024 06:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B4214D44E;
+	Sat,  3 Aug 2024 06:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722665330; cv=none; b=TunKwRrc83vpI5qSaA5YO+aKEaGVNBb5z+mmh4nPo7lvgyHFBmkAjXvSyi/M+1Ot9kRMO4XMv5iBsQzGOeqsTYJyepScHZ5kD+GuC2cOx736BKmiGklMcuA42xbLs+86+05GBbyQbTYBCsRA5wIBwL8BztPI4Lp6fGETlk/BoD4=
+	t=1722665332; cv=none; b=dAIQ3kh4HR7M4fzY5YXgg21qEow23/WTSE4fRIHDerYI+AGhp/hsXJVX6pN7YpsVfYrKvMG80NzbqXU1nYpJWzcs4/vLEiqeETh2BNAfXjIKAMqgTGRINDlDB3VmnqSJnQHPWoODzEluhFwABlmxJo7VL4NI5rA28Qn7iPUHc80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722665330; c=relaxed/simple;
-	bh=sy6NBm7410TH9PETxs9BxIS8V23ww+2VGqUQ4Q/m2J8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=eLmuEj4y9+SBnD9PUhqWWyWSfK5Y2tRrZzBoL7JzmPY3gSU2VWOeJqXr5ZytwwIh/DaIxSgCC3zSeuQ3dyFlxeleGmeXxGuzShlY823puZQJ36qNx9eY9mrsHi8JcWnNUWLeEsyBALfeKpKeebVO3VITBn+BvE9Dl25NpfUqgwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=n17SCVDc; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1722665332; c=relaxed/simple;
+	bh=Exr5Ww6AmJpEPF3EUjs7uyBG/FxBK6rQWK/K6uIghWw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=p4/1oxzBBkYHLiQJbm2zaxj3kxG5Z6E+OVVhb42jVhlq8uCZuIHTQu6RLJetm8vE33ONc2Av2VjZ54XEZC6xFuu1NUSxIDZiDmFv6w3mEpy07mEvnfEtoH2QTkjXPilALTIWBm+M9V/dh7JDhpoFJPUH0TYQ9I93RBUlIYWtCzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=jic40mOE; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: by linux.microsoft.com (Postfix, from userid 1052)
-	id DC99320B7408; Fri,  2 Aug 2024 23:08:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DC99320B7408
+	id EA81820B740A; Fri,  2 Aug 2024 23:08:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EA81820B740A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1722665320;
-	bh=NRI1M+kKAFqAQzE8ALTQyDtvYuEm+/cmnGvSKIeyRtE=;
+	bh=JJhCf/WehNAKnvisKr6OyHIi2NzvpKjkviDlua2QhJU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=n17SCVDc/JwtiGPtabmPLUEapLxp3EvP8yX7jQM7xWF6xFhTpMxAPq26IjWADfufp
-	 pwVXr0o5JIVzBqVsN1Kl6y0SNqk8oGlT2IoDoejA4GtuqrFAGgOk2i+cVOkqMeYRHH
-	 V0RT3NU/PwzahX6B/zPw03MSoQU/1pNpgmVxz/r4=
+	b=jic40mOEIxSGY6ePC5ybaOI+JyKt2ObMM2TwSdUF1anYVsVd1cKzAloTIOikmRntV
+	 lA3Uo5XJpfB25PmZynXHAQz6ja9imRajlSv0YtyK7vffS5ov0eI//AhPg1zDLL4vu6
+	 7bDK3vPHIQZQvZvwyysbtzCPRJVCo4PIEBYKy2dQ=
 From: Fan Wu <wufan@linux.microsoft.com>
 To: corbet@lwn.net,
 	zohar@linux.ibm.com,
@@ -59,10 +59,11 @@ Cc: linux-doc@vger.kernel.org,
 	dm-devel@lists.linux.dev,
 	audit@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Fan Wu <wufan@linux.microsoft.com>
-Subject: [PATCH v20 14/20] security: add security_inode_setintegrity() hook
-Date: Fri,  2 Aug 2024 23:08:28 -0700
-Message-Id: <1722665314-21156-15-git-send-email-wufan@linux.microsoft.com>
+	Fan Wu <wufan@linux.microsoft.com>,
+	Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: [PATCH v20 15/20] fsverity: expose verified fsverity built-in signatures to LSMs
+Date: Fri,  2 Aug 2024 23:08:29 -0700
+Message-Id: <1722665314-21156-16-git-send-email-wufan@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
 References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
@@ -72,112 +73,211 @@ List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 
-This patch introduces a new hook to save inode's integrity
-data. For example, for fsverity enabled files, LSMs can use this hook to
-save the existence of verified fsverity builtin signature into the inode's
-security blob, and LSMs can make access decisions based on this data.
+This patch enhances fsverity's capabilities to support both integrity and
+authenticity protection by introducing the exposure of built-in
+signatures through a new LSM hook. This functionality allows LSMs,
+e.g. IPE, to enforce policies based on the authenticity and integrity of
+files, specifically focusing on built-in fsverity signatures. It enables
+a policy enforcement layer within LSMs for fsverity, offering granular
+control over the usage of authenticity claims. For instance, a policy
+could be established to only permit the execution of all files with
+verified built-in fsverity signatures.
 
+The introduction of a security_inode_setintegrity() hook call within
+fsverity's workflow ensures that the verified built-in signature of a file
+is exposed to LSMs. This enables LSMs to recognize and label fsverity files
+that contain a verified built-in fsverity signature. This hook is invoked
+subsequent to the fsverity_verify_signature() process, guaranteeing the
+signature's verification against fsverity's keyring. This mechanism is
+crucial for maintaining system security, as it operates in kernel space,
+effectively thwarting attempts by malicious binaries to bypass user space
+stack interactions.
+
+The second to last commit in this patch set will add a link to the IPE
+documentation in fsverity.rst.
+
+Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
 Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 
---
-v1-v14:
+---
+v1-v6:
   + Not present
 
+v7:
+  Introduced
+
+v8:
+  + Split fs/verity/ changes and security/ changes into separate patches
+  + Change signature of fsverity_create_info to accept non-const inode
+  + Change signature of fsverity_verify_signature to accept non-const inode
+  + Don't cast-away const from inode.
+  + Digest functionality dropped in favor of:
+    ("fs-verity: define a function to return the integrity protected
+      file digest")
+  + Reworded commit description and title to match changes.
+  + Fix a bug wherein no LSM implements the particular fsverity @name
+    (or LSM is disabled), and returns -EOPNOTSUPP, causing errors.
+
+v9:
+  + No changes
+
+v10:
+  + Rename the signature blob key
+  + Cleanup redundant code
+  + Make the hook call depends on CONFIG_FS_VERITY_BUILTIN_SIGNATURES
+
+v11:
+  + No changes
+
+v12:
+  + Add constification to the hook call
+
+v13:
+  + No changes
+
+v14:
+  + Add doc/comment to built-in signature verification
+
 v15:
-  + Introduced
+  + Add more docs related to IPE
+  + Switch the hook call to security_inode_setintegrity()
 
 v16:
-  + Switch to call_int_hook()
+  + Explicitly mention "fsverity builtin signatures" in the commit
+    message
+  + Amend documentation in fsverity.rst
+  + Fix format issue
+  + Change enum name
 
 v17:
-  + Fix a typo
+  + Fix various documentation issues
+  + Use new enum name LSM_INT_FSVERITY_BUILTINSIG_VALID
 
 v18:
-  + No changes
+  + Fix typos
+  + Move the inode_setintegrity hook call into fsverity_verify_signature()
 
 v19:
-  + Refactor hook declaration
+  + Cleanup code w.r.t inode_setintegrity hook refactoring
 
 v20:
-  + No changes
+  + Remove the incorrect le32_to_cpu() call and correct commit message
 ---
- include/linux/lsm_hook_defs.h |  2 ++
- include/linux/security.h      | 10 ++++++++++
- security/security.c           | 20 ++++++++++++++++++++
- 3 files changed, 32 insertions(+)
+ Documentation/filesystems/fsverity.rst | 23 +++++++++++++++++++++--
+ fs/verity/signature.c                  | 18 +++++++++++++++++-
+ include/linux/security.h               |  1 +
+ 3 files changed, 39 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 909cf6f4b9fe..3c82d4e37ec8 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -179,6 +179,8 @@ LSM_HOOK(void, LSM_RET_VOID, inode_getsecid, struct inode *inode, u32 *secid)
- LSM_HOOK(int, 0, inode_copy_up, struct dentry *src, struct cred **new)
- LSM_HOOK(int, -EOPNOTSUPP, inode_copy_up_xattr, struct dentry *src,
- 	 const char *name)
-+LSM_HOOK(int, 0, inode_setintegrity, const struct inode *inode,
-+	 enum lsm_integrity_type type, const void *value, size_t size)
- LSM_HOOK(int, 0, kernfs_init_security, struct kernfs_node *kn_dir,
- 	 struct kernfs_node *kn)
- LSM_HOOK(int, 0, file_permission, struct file *file, int mask)
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 0604893f2f9e..e0adf599efe4 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -410,6 +410,9 @@ int security_inode_listsecurity(struct inode *inode, char *buffer, size_t buffer
- void security_inode_getsecid(struct inode *inode, u32 *secid);
- int security_inode_copy_up(struct dentry *src, struct cred **new);
- int security_inode_copy_up_xattr(struct dentry *src, const char *name);
-+int security_inode_setintegrity(const struct inode *inode,
-+				enum lsm_integrity_type type, const void *value,
-+				size_t size);
- int security_kernfs_init_security(struct kernfs_node *kn_dir,
- 				  struct kernfs_node *kn);
- int security_file_permission(struct file *file, int mask);
-@@ -1026,6 +1029,13 @@ static inline int security_inode_copy_up(struct dentry *src, struct cred **new)
+diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
+index 13e4b18e5dbb..362b7a5dc300 100644
+--- a/Documentation/filesystems/fsverity.rst
++++ b/Documentation/filesystems/fsverity.rst
+@@ -86,6 +86,14 @@ authenticating fs-verity file hashes include:
+   signature in their "security.ima" extended attribute, as controlled
+   by the IMA policy.  For more information, see the IMA documentation.
+ 
++- Integrity Policy Enforcement (IPE).  IPE supports enforcing access
++  control decisions based on immutable security properties of files,
++  including those protected by fs-verity's built-in signatures.
++  "IPE policy" specifically allows for the authorization of fs-verity
++  files using properties ``fsverity_digest`` for identifying
++  files by their verity digest, and ``fsverity_signature`` to authorize
++  files with a verified fs-verity's built-in signature.
++
+ - Trusted userspace code in combination with `Built-in signature
+   verification`_.  This approach should be used only with great care.
+ 
+@@ -457,7 +465,11 @@ Enabling this option adds the following:
+    On success, the ioctl persists the signature alongside the Merkle
+    tree.  Then, any time the file is opened, the kernel verifies the
+    file's actual digest against this signature, using the certificates
+-   in the ".fs-verity" keyring.
++   in the ".fs-verity" keyring. This verification happens as long as the
++   file's signature exists, regardless of the state of the sysctl variable
++   "fs.verity.require_signatures" described in the next item. The IPE LSM
++   relies on this behavior to recognize and label fsverity files
++   that contain a verified built-in fsverity signature.
+ 
+ 3. A new sysctl "fs.verity.require_signatures" is made available.
+    When set to 1, the kernel requires that all verity files have a
+@@ -481,7 +493,7 @@ be carefully considered before using them:
+ 
+ - Builtin signature verification does *not* make the kernel enforce
+   that any files actually have fs-verity enabled.  Thus, it is not a
+-  complete authentication policy.  Currently, if it is used, the only
++  complete authentication policy.  Currently, if it is used, one
+   way to complete the authentication policy is for trusted userspace
+   code to explicitly check whether files have fs-verity enabled with a
+   signature before they are accessed.  (With
+@@ -490,6 +502,13 @@ be carefully considered before using them:
+   could just store the signature alongside the file and verify it
+   itself using a cryptographic library, instead of using this feature.
+ 
++- Another approach is to utilize fs-verity builtin signature
++  verification in conjunction with the IPE LSM, which supports defining
++  a kernel-enforced, system-wide authentication policy that allows only
++  files with a verified fs-verity builtin signature to perform certain
++  operations, such as execution. Note that IPE doesn't require
++  fs.verity.require_signatures=1.
++
+ - A file's builtin signature can only be set at the same time that
+   fs-verity is being enabled on the file.  Changing or deleting the
+   builtin signature later requires re-creating the file.
+diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+index 90c07573dd77..0302a4e506ec 100644
+--- a/fs/verity/signature.c
++++ b/fs/verity/signature.c
+@@ -17,6 +17,7 @@
+ 
+ #include <linux/cred.h>
+ #include <linux/key.h>
++#include <linux/security.h>
+ #include <linux/slab.h>
+ #include <linux/verification.h>
+ 
+@@ -41,7 +42,11 @@ static struct key *fsverity_keyring;
+  * @sig_size: size of signature in bytes, or 0 if no signature
+  *
+  * If the file includes a signature of its fs-verity file digest, verify it
+- * against the certificates in the fs-verity keyring.
++ * against the certificates in the fs-verity keyring. Note that signatures
++ * are verified regardless of the state of the 'fsverity_require_signatures'
++ * variable and the LSM subsystem relies on this behavior to help enforce
++ * file integrity policies. Please discuss changes with the LSM list
++ * (thank you!).
+  *
+  * Return: 0 on success (signature valid or not required); -errno on failure
+  */
+@@ -106,6 +111,17 @@ int fsverity_verify_signature(const struct fsverity_info *vi,
+ 		return err;
+ 	}
+ 
++	err = security_inode_setintegrity(inode,
++					  LSM_INT_FSVERITY_BUILTINSIG_VALID,
++					  signature,
++					  sig_size);
++
++	if (err) {
++		fsverity_err(inode, "Error %d exposing file signature to LSMs",
++			     err);
++		return err;
++	}
++
  	return 0;
  }
  
-+static inline int security_inode_setintegrity(const struct inode *inode,
-+					      enum lsm_integrity_type type,
-+					      const void *value, size_t size)
-+{
-+	return 0;
-+}
-+
- static inline int security_kernfs_init_security(struct kernfs_node *kn_dir,
- 						struct kernfs_node *kn)
- {
-diff --git a/security/security.c b/security/security.c
-index 9baab988be7b..39841ec33ab7 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -2708,6 +2708,26 @@ int security_inode_copy_up_xattr(struct dentry *src, const char *name)
- }
- EXPORT_SYMBOL(security_inode_copy_up_xattr);
+diff --git a/include/linux/security.h b/include/linux/security.h
+index e0adf599efe4..38f294f8487b 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -92,6 +92,7 @@ struct dm_verity_digest {
+ enum lsm_integrity_type {
+ 	LSM_INT_DMVERITY_SIG_VALID,
+ 	LSM_INT_DMVERITY_ROOTHASH,
++	LSM_INT_FSVERITY_BUILTINSIG_VALID,
+ };
  
-+/**
-+ * security_inode_setintegrity() - Set the inode's integrity data
-+ * @inode: inode
-+ * @type: type of integrity, e.g. hash digest, signature, etc
-+ * @value: the integrity value
-+ * @size: size of the integrity value
-+ *
-+ * Register a verified integrity measurement of a inode with LSMs.
-+ * LSMs should free the previously saved data if @value is NULL.
-+ *
-+ * Return: Returns 0 on success, negative values on failure.
-+ */
-+int security_inode_setintegrity(const struct inode *inode,
-+				enum lsm_integrity_type type, const void *value,
-+				size_t size)
-+{
-+	return call_int_hook(inode_setintegrity, inode, type, value, size);
-+}
-+EXPORT_SYMBOL(security_inode_setintegrity);
-+
- /**
-  * security_kernfs_init_security() - Init LSM context for a kernfs node
-  * @kn_dir: parent kernfs node
+ /*
 -- 
 2.44.0
 
