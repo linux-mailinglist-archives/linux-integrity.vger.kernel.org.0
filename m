@@ -1,163 +1,162 @@
-Return-Path: <linux-integrity+bounces-3288-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3289-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A229470B1
-	for <lists+linux-integrity@lfdr.de>; Sun,  4 Aug 2024 23:28:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 901CD947371
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Aug 2024 04:48:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D854228019C
-	for <lists+linux-integrity@lfdr.de>; Sun,  4 Aug 2024 21:28:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B35E91C20BF6
+	for <lists+linux-integrity@lfdr.de>; Mon,  5 Aug 2024 02:48:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44FEF47F7A;
-	Sun,  4 Aug 2024 21:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7852A1C6;
+	Mon,  5 Aug 2024 02:48:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q4IHSJbU"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="CknIr2J+";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="CknIr2J+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E188A2A
-	for <linux-integrity@vger.kernel.org>; Sun,  4 Aug 2024 21:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38918A21
+	for <linux-integrity@vger.kernel.org>; Mon,  5 Aug 2024 02:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722806925; cv=none; b=EgsjMomzgKqNkpwBb3YVPjfcuwZuliyqEp3Yfv624ycrjn6Ku44/ixWDQLUa6BLsnjv4NcsKsnD6q2LwPgyq4gU5XNgX0EqX81SyDfFqNkMuZjkVdo3UwksDimyi5V8Pm3oOzxcBSvKRuzDj1xfpTYpjMpUthE2SZXr081tGLcA=
+	t=1722826112; cv=none; b=WzCrlSRyACWNe9Xq/6QzvZf/dGSnwErxwHlzfFSnruHPQMjk8+FDvdzXc9ysi3ww+vfbNmDkHlqUG8a/xnE39kFyaKVV4pEMw6qDiPXU+wZrsq8kXOUlVlwTOGhYY8riyHwXbbLLum4HQBDUpY6WD1kz4UtwQsDEZUPaDZoRsAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722806925; c=relaxed/simple;
-	bh=bUPs55x3fnKZvu1WDtWKSzaaBc7s6aMaCTnShrPGDeQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=CicefPxw0OfLcyruTz3wS2Uh+RTJ9I0G0oOYymvw+HXFwdA7oVSihOuRzIPN85soS0KukwY6caaxK483aDcRZ/ai/tfSmccUVe3ejMlTwhTa7ZHVSvcpmTerDL7D15o9ALjLdArYcEtwmE5wooCaEoJxURtTAA2G45VUyxvsVSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q4IHSJbU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED76AC32786;
-	Sun,  4 Aug 2024 21:28:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722806924;
-	bh=bUPs55x3fnKZvu1WDtWKSzaaBc7s6aMaCTnShrPGDeQ=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=q4IHSJbUq/raaZhRny9Z36b0MVTscPVxvA9xHjX9R9U23TbnaUhF8Qzzwl94+sJHZ
-	 SqBN+j2cVTfW8BYc+hyE9a/JA1JWRmKPZw07Agg0pK3f4Qg8hGxPnMcUAwKvOeIFDD
-	 yjtRJsPMKUhZQwLVX5Om0suk2f6eh02KgmqthBskKqWrT3vz+2uxBSPVsESRCCwCPq
-	 9L0W2I2Yx0ttVcwGpR9kx0zyhaS2uxPAa4yqjIIMAIxVCOFJigS4KfgXdeAkwByyNY
-	 aqG4rSHi7EXVAzVDPH7dBajDDygb6iBgg1SVvCMGedZ1NEYeWHCce8yahVGNIpIHg6
-	 8dlc9cwF9wRMQ==
+	s=arc-20240116; t=1722826112; c=relaxed/simple;
+	bh=TI6HnGClycd7Wn0NEsi363o/i5UEWV869bIojV3ENuM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZsXUsZ8RLYrZXcb5AOgwPixkyvK1Guu5sa18RbiL9zJ6+4rlFUE8jWU6ytQ1JuZZgVwQE1NWzBcZkU6y8mC5vjkf0axOyQ1NrSAz2D1njGHhAEGETnbA9RAiKEFFKk/tur9pyIJeoUUxEX1Ui/sScJBB3ZitjltfANJHIPK9GMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=CknIr2J+; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=CknIr2J+; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1722826108;
+	bh=TI6HnGClycd7Wn0NEsi363o/i5UEWV869bIojV3ENuM=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=CknIr2J+1Hzxswi2jk53o+5Vq+aPIHiTceN/o4AMkKXfgs+FsvDRRgzZ21Q2mNXWO
+	 HYnMWWm3+wuPuz5wmZzfFSAUwJNV6cizL9bolNkpz54Nw0vX56NExOzcMzg2jZ1a8B
+	 9VW5FAZ2akrDLYKGg0yUWrzzhxrdyHWICKOSUZeo=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id D601312813BC;
+	Sun, 04 Aug 2024 22:48:28 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id tecFJ_tPKuoR; Sun,  4 Aug 2024 22:48:28 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1722826108;
+	bh=TI6HnGClycd7Wn0NEsi363o/i5UEWV869bIojV3ENuM=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=CknIr2J+1Hzxswi2jk53o+5Vq+aPIHiTceN/o4AMkKXfgs+FsvDRRgzZ21Q2mNXWO
+	 HYnMWWm3+wuPuz5wmZzfFSAUwJNV6cizL9bolNkpz54Nw0vX56NExOzcMzg2jZ1a8B
+	 9VW5FAZ2akrDLYKGg0yUWrzzhxrdyHWICKOSUZeo=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::db7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 3B241128120F;
+	Sun, 04 Aug 2024 22:48:28 -0400 (EDT)
+Message-ID: <d0d83a418720467551faa718fd150c379a933652.camel@HansenPartnership.com>
+Subject: Re: [openssl-tpm2-engine] [PATCH v2 1/8] tss: Fix handling of
+ TPM_RH_NULL in intel-tss
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: openssl-tpm2-engine@groups.io, jarkko@kernel.org, Jarkko Sakkinen
+	 <jarkko.sakkinen@iki.fi>
+Cc: linux-integrity@vger.kernel.org
+Date: Sun, 04 Aug 2024 22:48:26 -0400
+In-Reply-To: <D37G310H9GA0.34YJCKUIISRVS@kernel.org>
+References: <20240802202606.12767-1-James.Bottomley@HansenPartnership.com>
+	 <20240802202606.12767-2-James.Bottomley@HansenPartnership.com>
+	 <D36FX5RTUSEW.1LZMP91ZPPZZK@iki.fi>
+	 <53a91b9ebbc500e928eadf2112d3ecb5631c56c1.camel@HansenPartnership.com>
+	 <D36IYI5ZD4VK.2GC6CG6GIUWK9@kernel.org>
+	 <237c1ed926d926bfddb92a959a27543479b5f0ae.camel@HansenPartnership.com>
+	 <D36KI8TC0600.1OAIM33YQYMLX@kernel.org>
+	 <940e5cbca2cf08f7275d5e09d552a8500e18742c.camel@HansenPartnership.com>
+	 <D37G310H9GA0.34YJCKUIISRVS@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 05 Aug 2024 00:28:40 +0300
-Message-Id: <D37G310H9GA0.34YJCKUIISRVS@kernel.org>
-Cc: <linux-integrity@vger.kernel.org>
-Subject: Re: [PATCH v2 1/8] tss: Fix handling of TPM_RH_NULL in intel-tss
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
- <openssl-tpm2-engine@groups.io>, "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>
-X-Mailer: aerc 0.17.0
-References: <20240802202606.12767-1-James.Bottomley@HansenPartnership.com>
- <20240802202606.12767-2-James.Bottomley@HansenPartnership.com>
- <D36FX5RTUSEW.1LZMP91ZPPZZK@iki.fi>
- <53a91b9ebbc500e928eadf2112d3ecb5631c56c1.camel@HansenPartnership.com>
- <D36IYI5ZD4VK.2GC6CG6GIUWK9@kernel.org>
- <237c1ed926d926bfddb92a959a27543479b5f0ae.camel@HansenPartnership.com>
- <D36KI8TC0600.1OAIM33YQYMLX@kernel.org>
- <940e5cbca2cf08f7275d5e09d552a8500e18742c.camel@HansenPartnership.com>
-In-Reply-To: <940e5cbca2cf08f7275d5e09d552a8500e18742c.camel@HansenPartnership.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun Aug 4, 2024 at 4:42 PM EEST, James Bottomley wrote:
-> The design of the intel-tss shim is to hide the difference between the
-> internal and the external handles by doing the internal to external
-> transform on entry.  Unfortunately, the NULL handle (TPM_RH_NULL,
-> 40000007) has two possible internal representations depending on
-> whether it's used to indicate no session or the null hierarcy.
->
-> There is a bug in the intel-tss in that it uses the wrong internal
-> NULL handle to try to create the NULL seed primary (and thus fails).
-> Now that we're going to be using the NULL primary to salt sessions,
-> the Intel TSS shim needs fixing to cope with thi correctly.
->
-> The fix is to do the correct transform to the internal hierarchy
-> representation on NULL hierarchy creation and to do the session handle
-> conversion everywhere else.  Additionally remove the intel_handle()
-> code which was supposed to do this: it's unused because 0 is never
-> passed in as a handle number.
->
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
->
-> ---
-> v2: reword commit message
->
-> ---
->  src/include/intel-tss.h | 18 +++++-------------
->  1 file changed, 5 insertions(+), 13 deletions(-)
->
-> diff --git a/src/include/intel-tss.h b/src/include/intel-tss.h
-> index 1870b4e..5b8db20 100644
-> --- a/src/include/intel-tss.h
-> +++ b/src/include/intel-tss.h
-> @@ -251,14 +251,6 @@ intel_sess_helper(TSS_CONTEXT *tssContext,
-> TPM_HANDLE auth, TPMA_SESSION flags)
->  				  TPMA_SESSION_CONTINUESESSION |
-> flags);
->  }
-> =20
-> -static inline TPM_HANDLE
-> -intel_handle(TPM_HANDLE h)
-> -{
-> -	if (h =3D=3D 0)
-> -		return ESYS_TR_NONE;
-> -	return h;
-> -}
-> -
->  static inline void
->  TSS_Delete(TSS_CONTEXT *tssContext)
->  {
-> @@ -937,8 +929,10 @@ tpm2_CreatePrimary(TSS_CONTEXT *tssContext,
-> TPM_HANDLE primaryHandle,
->  	TPM2B_PUBLIC *opub;
->  	TPM_RC rc;
-> =20
-> -	/* FIXME will generate wrong value for NULL hierarchy */
-> -	primaryHandle =3D intel_handle(primaryHandle);
-> +
-> +	/* TPM_RH_NULL is mapped to ESYS_TR_NONE, which won't work
-> here */
-> +	if (primaryHandle =3D=3D TPM_RH_NULL)
-> +		primaryHandle =3D INT_TPM_RH_NULL;
-> =20
->  	outsideInfo.size =3D 0;
->  	creationPcr.count =3D 0;
-> @@ -993,9 +987,7 @@ tpm2_StartAuthSession(TSS_CONTEXT *tssContext,
-> TPM_HANDLE tpmKey,
->  		      TPM_HANDLE *sessionHandle,
->  		      const char *bindPassword)
->  {
-> -	bind =3D intel_handle(bind);
-> -	tpmKey =3D intel_handle(tpmKey);
-> -	if (bind !=3D ESYS_TR_NONE)
-> +	if (bind !=3D TPM_RH_NULL)
->  		intel_auth_helper(tssContext, bind, bindPassword);
+On Mon, 2024-08-05 at 00:28 +0300, Jarkko Sakkinen wrote:
+[...]
+> > --- a/src/include/intel-tss.h
+> > +++ b/src/include/intel-tss.h
+> > @@ -251,14 +251,6 @@ intel_sess_helper(TSS_CONTEXT *tssContext,
+> > TPM_HANDLE auth, TPMA_SESSION flags)
+> >                                   TPMA_SESSION_CONTINUESESSION |
+> > flags);
+> >  }
+> >  
+> > -static inline TPM_HANDLE
+> > -intel_handle(TPM_HANDLE h)
+> > -{
+> > -       if (h == 0)
+> > -               return ESYS_TR_NONE;
+> > -       return h;
+> > -}
+> > -
+> >  static inline void
+> >  TSS_Delete(TSS_CONTEXT *tssContext)
+> >  {
+> > @@ -937,8 +929,10 @@ tpm2_CreatePrimary(TSS_CONTEXT *tssContext,
+> > TPM_HANDLE primaryHandle,
+> >         TPM2B_PUBLIC *opub;
+> >         TPM_RC rc;
+> >  
+> > -       /* FIXME will generate wrong value for NULL hierarchy */
+> > -       primaryHandle = intel_handle(primaryHandle);
+> > +
+> > +       /* TPM_RH_NULL is mapped to ESYS_TR_NONE, which won't work
+> > here */
+> > +       if (primaryHandle == TPM_RH_NULL)
+> > +               primaryHandle = INT_TPM_RH_NULL;
+> >  
+> >         outsideInfo.size = 0;
+> >         creationPcr.count = 0;
+> > @@ -993,9 +987,7 @@ tpm2_StartAuthSession(TSS_CONTEXT *tssContext,
+> > TPM_HANDLE tpmKey,
+> >                       TPM_HANDLE *sessionHandle,
+> >                       const char *bindPassword)
+> >  {
+> > -       bind = intel_handle(bind);
+> > -       tpmKey = intel_handle(tpmKey);
+> > -       if (bind != ESYS_TR_NONE)
+> > +       if (bind != TPM_RH_NULL)
+> >                 intel_auth_helper(tssContext, bind, bindPassword);
+> 
+> Not blaming the patch but just have hard time coping this.
+> 
+> The most basic question is probably this: what is the application for
+> INT_TPM_RH_NULL?
 
-Not blaming the patch but just have hard time coping this.
+Ah, well, it turns out that the Intel TSS also isn't very performant
+and part of the performance loss is using a memory database for
+translating external TPM objects into internal ones.  Some of the
+performance can be recovered by not doing this.
 
-The most basic question is probably this: what is the application for
-INT_TPM_RH_NULL?
+It turns out that the engine code never uses volatile external handles,
+so the switch from volatile internal -> external and vice versa (which
+occurs on load followed by key operation) was eliminated and the code
+uses internal representation for volatile handles and external
+representation for all other handles.  This scheme worked fine until
+non-volatile key indexes were introduced and then it broke down a bit.
+It would be logically very nice to redo the internal representation to
+be entirely contained within the intel tss shim, but then that would
+reintroduce the performance problem (although on the other hand, the
+Intel TSS is still twice as slow as the IBM TSS so perhaps this
+wouldn't be such a huge addition).
 
-Let's imagine that we have a flow chart describing Intel shim as a state
-machine. I decide to shoot it with these three stimulus:
+Regards,
 
-1. INT_TPM_RH_NULL
-2. TPM_RH_NULL
-3. A valid handle
+James
 
-What happens in each case to its state?
-
-> =20
->  	return Esys_StartAuthSession(tssContext, tpmKey, bind,
-> ESYS_TR_NONE,
-
-BR, Jarkko
 
