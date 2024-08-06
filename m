@@ -1,171 +1,173 @@
-Return-Path: <linux-integrity+bounces-3294-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3295-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EA6D9495E9
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2024 18:51:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42BF99499AC
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2024 22:55:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B337D1F22B58
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2024 16:51:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED10A1F241BC
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2024 20:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA15C4AEE5;
-	Tue,  6 Aug 2024 16:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ECC116ABF3;
+	Tue,  6 Aug 2024 20:55:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LefYejKC"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="J9LvP6Wz"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5312347A6A
-	for <linux-integrity@vger.kernel.org>; Tue,  6 Aug 2024 16:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A4215B55E
+	for <linux-integrity@vger.kernel.org>; Tue,  6 Aug 2024 20:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722963102; cv=none; b=Dt0p4Nqk/56WIivrwu7ijPbvBzIfxwSPfiHhpFWpyDk1waJ+7XP7TUIhfE+0jkGbrbfKij97k3Dy4ILlS0UAEKl6yw0ZIvt7GKuC9+sQGxK2NUpdSZX8D/oRy3UANt6EbuO2kCGYIqmNZ8R7RTlwUR1NP1SygFMdrmMJWMWRAM8=
+	t=1722977711; cv=none; b=IzGIlYyfApCgIrMxDnB8Sth6AaQmWnOHYWOXLgqcbko1Ahyhbr4au+j2r0hGbyv1JUinoQildpBv3vJLtukqxLK5Ukyl3Xw2irwK/8ERnHakyJkH0VT/ZHYOv79aPpca7FFay2pvM4s3ua5BBkTdhA+VSJbrIekv4FG7pRL6xgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722963102; c=relaxed/simple;
-	bh=zwYrYMjd46tRAc1s8WfUpUtE5XVT9C0iCl5X9xL3yRM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LkFtfB53PUO2B751GGvI/P6GU92p8fnF5mNb0tJbDW2sh8XJQAYwlLaRYLYt70F7Pwz+RXoMH+7/6vqK8mtQ63xIJFqYlk16UP1+nVLWBNIFUNNUHJ0olK5imkCaD+GQvmtR9vCarqIXZEKJQfvsc+ll/SeX+8RkRh0ATLMwLzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LefYejKC; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4519383592aso5425241cf.3
-        for <linux-integrity@vger.kernel.org>; Tue, 06 Aug 2024 09:51:41 -0700 (PDT)
+	s=arc-20240116; t=1722977711; c=relaxed/simple;
+	bh=Q1EFjItpPAJVvRpOJiKVEeB9t84orASFY/TzMasrm54=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jp0Ryh1bVLeH9/D93GcLB6crNO2wdDvHUF3DFL9tpnwk/OwPaAXHnhQFqqfq1T1LxrfZwRwW0tpyvdRCNpb1qa++mn51RwZ0KBTm1WQhkzOUbOIwfb6OmRocrleSqQTUqdCifYXPiGZgZY/L8f2fINhZV0Hod306IXbuGW4/wvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=J9LvP6Wz; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e0b2d502c6eso1011585276.0
+        for <linux-integrity@vger.kernel.org>; Tue, 06 Aug 2024 13:55:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1722963100; x=1723567900; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xwhrn6L/BEax4z8Y9Ps+jMGT26+SKh+43Sy/rMhIBig=;
-        b=LefYejKC+a7bQvRIXQJ+6GhzLhCDOzMEBf+BLGowb1TdSWIGkUThrrXuT3dPesLDOH
-         5tcwmXB8qh+nTS38kpXmrh1D0u8Ne5mGoM9VwEVkQJNWZpGvJjU0jW/3GAiAuZmlf/WK
-         B877QvQceuH5MuPc3dTkTuW4pqTbUp6yQczB0=
+        d=paul-moore.com; s=google; t=1722977707; x=1723582507; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ddUgUKkImUJBZRqaPBh4WpQntM2pgtbxW0LlNFNQthQ=;
+        b=J9LvP6WzsHCDvrj2ADlfQxZ+5S7SpXsWuAnvGoTiKwzrkTAYtuGkWaXW9Cq5wlO9Qh
+         D/YR5zglVkofWi2ld0OZOWgxLsCXHGc38lQXqK5r5bcca0X2gefHhm9qyJE2Lutp2v51
+         quEykI75yi+ydzJrWtD9d5nocZc6CxsSsjxrSVC5RB2Cn6E5QIkuYIcSpXm/VPxfUqi9
+         5CaF3deusHY2tUaA4MYtaMnt0DekhxDLUwUvitPwjEKxVX4PJfqSxblBgzPhgre5U8pQ
+         T+MpyGKZSo+z7gB+r+bE8PqaNW13txwd38RnSxCS6zgALbcMEe+NNIuNTm79oFB+FBTD
+         dTlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722963100; x=1723567900;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xwhrn6L/BEax4z8Y9Ps+jMGT26+SKh+43Sy/rMhIBig=;
-        b=P7brHs9F6zmQkS7gU1PqTANev66z/weAsmnouTR0Aa+lxBaNlTV5I+JuuwFvntGW31
-         +WWM48UiqrpPLXa9Wrk6A0vIS/12UZ60I9ryFs4DMBFXS+DS3VQ9ahR7dj5nWVWdd7Aq
-         pQZ70pG9aKUu/wLzScHFczaVkp+mZd0RqZDUCDVrFfNGR7OrxP+JGxMqJOoW+q9iFJiK
-         USDfQBw9DWqjOtkf8K6f4PlvTMQMuHGcaLSz88nRsMqy+8NJRA8ZXXPr2TPRBykgo3TW
-         tvyajOsYzVwXJnAI8HKSOOj7ujaT/0P56JAGOJxSODdH0EoFu4dcG6kR151JQRrMGpQL
-         vROg==
-X-Forwarded-Encrypted: i=1; AJvYcCU+PKcibV3B6Jmlx0o1eNR8A/DPbPelObVG5LAFdMUfp+CdqKh7xOXdrnpsioGV0a66W+Z0T6mY0P6CiLRDvFZ0wqAd829fouf6uc4SCBl8
-X-Gm-Message-State: AOJu0Yx4UMd8pYFWniDirB/vhiirVWjv/MfYSx5JF0Ta4Lo00RzQQ8FP
-	Ia9U7MqclncSvgfhE8KbZcC7vAXzAwKrlePN/6/NmzETBlGYHoz1KUCYry30Gg==
-X-Google-Smtp-Source: AGHT+IEIJDB0Wd/AEg4ps8OtmLu1icwcxdK69nWNNqRPnsYe91O137kk69C/uJq5/hfxb5REkl/+gA==
-X-Received: by 2002:ac8:5a4a:0:b0:447:efb8:97f4 with SMTP id d75a77b69052e-45189208315mr162589391cf.2.1722963100004;
-        Tue, 06 Aug 2024 09:51:40 -0700 (PDT)
-Received: from rink.c.googlers.com.com (212.165.232.35.bc.googleusercontent.com. [35.232.165.212])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-451ae326f9dsm18974831cf.38.2024.08.06.09.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 09:51:39 -0700 (PDT)
-From: Jett Rink <jettrink@chromium.org>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: jettrink@chromium.org,
-	linux-security-module@vger.kernel.org,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH v5] tpm: Add new device/vendor ID 0x50666666
-Date: Tue,  6 Aug 2024 16:51:10 +0000
-Message-ID: <20240806165134.1692428-1-jettrink@chromium.org>
-X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
+        d=1e100.net; s=20230601; t=1722977707; x=1723582507;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ddUgUKkImUJBZRqaPBh4WpQntM2pgtbxW0LlNFNQthQ=;
+        b=cn1Fdx/pC+cv679CoT9ay3W0i85DNfTrsT0aRl5jUqIZEsDY5NN4Tk0EK6PZoBuPaX
+         79mCJJehE/10fMi0AhQiZ3y2phrYS6s+tducKKm618T4XfloeXcbK4PjrEIBJNvDEF2t
+         GO0ePQBVMmbfHZR8lgA32VU3wKEAv7lnDjDOWOjBLPaNCAjZ2p4o3Ld8tSzHmVcu7zZM
+         UGhbuy/DEFvVU4z+X1sBbVlzgeJpxpHvKsi5doloEhNBxvxecaCDIZ5bOzcHrfUekwYw
+         PUcb8J066gGHUH5ieVfM6o0x+If1f++hlq9VhVyWy2X0L260mRvw7brpUP5i1oVzdZBj
+         Zhgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUFlYoVsU5xEaYyBCMunGU/38GoK/edtWvThgJ1ytU7laUox5/6gbVPnQctiUMBtsRDmQzlmIBJRWyzZjd/LpY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpzAtcasfH/Z/gQO1MnEGrqAJdmjkjVUhP0zyxokyPwqMTNknm
+	4BVokWNlG08DFL8qYSmg5k+cb8Dstx3of7etYeIqeo3vZfhL17kkocxQbwQyHMXaRj6yFcUq2tU
+	MDJ0sgA2fajQh9LuThYfiq0H4nJsvMXvFUI+F
+X-Google-Smtp-Source: AGHT+IEV3DoSxpbwywgyClpobkg3f96r+2vacgaYADkIDoHb8BVfBMUuKoLI3KKW3kNSXmapcP0+yqslrTw3VHo3MFI=
+X-Received: by 2002:a05:6902:dc9:b0:e03:5bca:aee6 with SMTP id
+ 3f1490d57ef6-e0e54be0a4amr8897314276.54.1722977707114; Tue, 06 Aug 2024
+ 13:55:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
+ <1722665314-21156-21-git-send-email-wufan@linux.microsoft.com> <de7857fb-63d9-42fc-af1e-12ffcdfcdda8@molgen.mpg.de>
+In-Reply-To: <de7857fb-63d9-42fc-af1e-12ffcdfcdda8@molgen.mpg.de>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 6 Aug 2024 16:54:56 -0400
+Message-ID: <CAHC9VhRmcReVM_Le5bYor2deotnSe4OT08UYhL6xhiKCu0+3kA@mail.gmail.com>
+Subject: Re: [PATCH v20 20/20] MAINTAINERS: ipe: add ipe maintainer information
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Fan Wu <wufan@linux.microsoft.com>, corbet@lwn.net, zohar@linux.ibm.com, 
+	jmorris@namei.org, serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org, 
+	axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org, mpatocka@redhat.com, 
+	eparis@redhat.com, linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Accept another DID:VID for the next generation Google TPM. This TPM
-has the same Ti50 firmware and fulfills the same interface.
+On Sat, Aug 3, 2024 at 4:15=E2=80=AFAM Paul Menzel <pmenzel@molgen.mpg.de> =
+wrote:
+>
+> Dear Fan,
+>
+>
+> Thank you very much for your patch. Two nits, should you sent another
+> interation: A more specific summary would avoid people having to look at
+> the message body or diff, and `git log --oneline` would be enough.
+>
+> MAINTAINERS: Add IPE entry with M: Fan Wu
+>
+> MAINTAINERS: Add IPE entry with Fan Wu as maintainer
+>
+> Am 03.08.24 um 08:08 schrieb Fan Wu:
+> > Update MAINTAINERS to include ipe maintainer information.
+>
+> I=E2=80=99d at least mention Integrity Policy Enforcement. As you not onl=
+y
+> include the maintainer information but add a new entry, I=E2=80=99d leave=
+ the
+> body out, or mention that a new entry is added.
+>
+> > Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
 
-Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Jett Rink <jettrink@chromium.org>
----
+Working under the current assumption that a new revision is not
+needed, I can fix this up during the merge.  Fan, other-Paul, are you
+both okay with the following:
 
-Changes in v5:
-Correct Suggested-by tag form.
+  "MAINTAINERS: add IPE entry with Fan Wu as maintainer
 
-Changes in v4:
-Add Suggested-by tag. Sorry that I forget.
+   Add a MAINTAINERS entry for the Integrity Policy Enforcement (IPE) LSM."
 
-Changes in v3:
-Refactor ternary operators into helper method.
+> > --
+> > v1-v16:
+> >    + Not present
+> >
+> > v17:
+> >    + Introduced
+> >
+> > v18:
+> >    + No changes
+> >
+> > v19:
+> >    + No changes
+> >
+> > v20:
+> >    + No changes
+> > ---
+> >   MAINTAINERS | 10 ++++++++++
+> >   1 file changed, 10 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 8766f3e5e87e..4cdf2d5a2058 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -11118,6 +11118,16 @@ T:   git git://git.kernel.org/pub/scm/linux/ke=
+rnel/git/zohar/linux-integrity.git
+> >   F:  security/integrity/
+> >   F:  security/integrity/ima/
+> >
+> > +INTEGRITY POLICY ENFORCEMENT (IPE)
+> > +M:   Fan Wu <wufan@linux.microsoft.com>
+> > +L:   linux-security-module@vger.kernel.org
+> > +S:   Supported
+> > +T:   git https://github.com/microsoft/ipe.git
+> > +F:   Documentation/admin-guide/LSM/ipe.rst
+> > +F:   Documentation/security/ipe.rst
+> > +F:   scripts/ipe/
+> > +F:   security/ipe/
+> > +
+> >   INTEL 810/815 FRAMEBUFFER DRIVER
+> >   M:  Antonino Daplas <adaplas@gmail.com>
+> >   L:  linux-fbdev@vger.kernel.org
+>
+> Kind regards,
+>
+> Paul
 
-Changes in v2:
-Patchset 2 applies cleanly
-
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 30 ++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index adf22992138e..1f83cfe2724c 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -31,7 +31,8 @@
- #define TPM_CR50_TIMEOUT_SHORT_MS	2		/* Short timeout during transactions */
- #define TPM_CR50_TIMEOUT_NOIRQ_MS	20		/* Timeout for TPM ready without IRQ */
- #define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID reg value */
--#define TPM_TI50_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
-+#define TPM_TI50_DT_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
-+#define TPM_TI50_OT_I2C_DID_VID		0x50666666L	/* Device and vendor ID reg value */
- #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
- #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
- #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
-@@ -668,6 +669,27 @@ static const struct of_device_id of_cr50_i2c_match[] = {
- MODULE_DEVICE_TABLE(of, of_cr50_i2c_match);
- #endif
- 
-+/**
-+ * tpm_cr50_vid_to_name() - Maps VID to name.
-+ * @vendor:	Vendor identifier to map to name
-+ *
-+ * Return:
-+ *	A valid string for the vendor or empty string
-+ */
-+static const char *tpm_cr50_vid_to_name(u32 vendor)
-+{
-+	switch (vendor) {
-+	case TPM_CR50_I2C_DID_VID:
-+		return "cr50";
-+	case TPM_TI50_DT_I2C_DID_VID:
-+		return "ti50 DT";
-+	case TPM_TI50_OT_I2C_DID_VID:
-+		return "ti50 OT";
-+	default:
-+		return "";
-+	}
-+}
-+
- /**
-  * tpm_cr50_i2c_probe() - Driver probe function.
-  * @client:	I2C client information.
-@@ -741,14 +763,16 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
- 	}
- 
- 	vendor = le32_to_cpup((__le32 *)buf);
--	if (vendor != TPM_CR50_I2C_DID_VID && vendor != TPM_TI50_I2C_DID_VID) {
-+	if (vendor != TPM_CR50_I2C_DID_VID &&
-+	    vendor != TPM_TI50_DT_I2C_DID_VID &&
-+	    vendor != TPM_TI50_OT_I2C_DID_VID) {
- 		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
- 		tpm_cr50_release_locality(chip, true);
- 		return -ENODEV;
- 	}
- 
- 	dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
--		 vendor == TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
-+		 tpm_cr50_vid_to_name(vendor),
- 		 client->addr, client->irq, vendor >> 16);
- 	return tpm_chip_register(chip);
- }
--- 
-2.46.0.rc2.264.g509ed76dc8-goog
-
+--=20
+paul-moore.com
 
