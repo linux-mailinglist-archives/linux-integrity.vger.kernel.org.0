@@ -1,131 +1,126 @@
-Return-Path: <linux-integrity+bounces-3299-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3300-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E50A294AEDD
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 Aug 2024 19:27:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ACBD94AF4E
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Aug 2024 20:01:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2200E1C2125F
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 Aug 2024 17:27:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC87F1F23ACF
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Aug 2024 18:01:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 105F313BC1B;
-	Wed,  7 Aug 2024 17:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A8213AA26;
+	Wed,  7 Aug 2024 18:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="hqIvG2KF"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="aunZM4VX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E5E13C9CF
-	for <linux-integrity@vger.kernel.org>; Wed,  7 Aug 2024 17:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814DD12F5B1;
+	Wed,  7 Aug 2024 18:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723051649; cv=none; b=etH1HIrXvNCsUqvW+29m9E/vO1CnxDL9Hj4vdmRcoBzZHvO2i6oESh1Iu/3blRfxpwaNdRomH8GlfjEADCqIiiLn2fzr8bgIMh/Aaz7rvj858TrGEA5cj4XiqxbwhqCalPC7IcFIV4BwgSv6qsZolmLr3MjtLMsT4To84Zdbkvg=
+	t=1723053690; cv=none; b=Hz32SbJagyXJ1FOYMSkTXxuj3AEv/aQ3Yz0GBChXUWA0JlA5KCLkdjDYSUaWine0sszzd8bCDAeowtsgNqPhRZbKEYAXheD6ImB2qmBrhYXsVkbmuUGat5TvMfoBx8d9iM8BwhZ5gzT01RHoiyrMkGn48TNo+CVa8cwt8ufVdYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723051649; c=relaxed/simple;
-	bh=gmS3d60Xozc11AFo4bglYIrKfWnl+d/Qny/Bv2a3Fjs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dkfpdCTyqjPhYPyRbWdAYJ4/sEOSVg3SdtUB1v3ksFPsl2/uGToVB0fryvkki8IN71IkNLWRfphLoFWZ7yqCpjNopxPz+BBFsIKROB4OOCjdlQXl6VAxwkkRvAj5GVq/MbHOHwJs7kzDXunJMPWcMPNN7eoFXFA7Fu0tB6i5i6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=hqIvG2KF; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 477HMZLJ002858;
-	Wed, 7 Aug 2024 17:27:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding; s=corp-2023-11-20; bh=+yZKoNZBXTqfDR
-	7Etww9G6var+eSmam2PYicV/nbO00=; b=hqIvG2KFzblzBoFEVCozQQGX3qqUru
-	2eg16LR6rLx1L/Yc8CM0Ps9lut50px088fpPp2hBc5qb8jvQ59T4XORnVoZarY+0
-	x8twggKqn5Z4IvfiBqF6X1A6GnaVNchpTMltKvtZbsBAfsjghNmoEqYY8CvAbafm
-	P48laKnj8pw9IlVLRhxpWxHvnjJXQ1sXQNtiY5XEmAUttxRE4df7S8JnrATxzcSo
-	yKFh2W2sdl7KLS9FS/co3J33oHY7VBp6SL9ZR9cfhk692aWdRG8R2kIRwmedY0lJ
-	W8e34xQ00v/yruv21/dzzUPLAWwCy1fAruN/bIqUHgw078fhP7n8ClTg==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40saye82xu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 07 Aug 2024 17:27:16 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 477GJCnk017024;
-	Wed, 7 Aug 2024 17:27:15 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 40sb0bkerw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 07 Aug 2024 17:27:15 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 477HREHA019875;
-	Wed, 7 Aug 2024 17:27:14 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 40sb0bkeqg-1;
-	Wed, 07 Aug 2024 17:27:14 +0000
-From: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
-To: zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com
-Cc: eric.snowberg@oracle.com, linux-integrity@vger.kernel.org,
-        enrico.bravi@huawei.com, samasth.norway.ananda@oracle.com
-Subject: [PATCH v2] ima: fix buffer overrun in ima_eventdigest_init_common
-Date: Wed,  7 Aug 2024 10:27:13 -0700
-Message-ID: <20240807172713.1692608-1-samasth.norway.ananda@oracle.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1723053690; c=relaxed/simple;
+	bh=yqp0uOSR8Q8K4/5lXUBRuESQesWcvdBjwX8QJL9PB5s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k+AmHHyOhpYanh0CYlUyM6jXi4svgJzyNY7/PQJhFmKbjS1cOPS2750Jc9UiIEdC3pPkK6DI9A+RLfI+LZKpipYOJKUG0ATL3f3jIWh9QZy59v/l3x0RmBx+LWMONlRyLsvBaTx6vO4QVBPg2IOdE7+J96qPgeeh+ZyaQXrABpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=aunZM4VX; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.106.151] (unknown [131.107.174.23])
+	by linux.microsoft.com (Postfix) with ESMTPSA id C5D4820B7165;
+	Wed,  7 Aug 2024 11:01:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C5D4820B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1723053682;
+	bh=JBD5S5GVsNdnH6wjmW/+nIlLS6fh9sw+q0ZHaDgSzqo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=aunZM4VX0xcprS96+2RmSgZf60XSA27qvPVhz6D4bvlUDHm+AAedz7t9cP58XP5T7
+	 3Kw+15MQrOnztwHPz4/UKECWCiy/kTOPbSWECYJk+1FBYPIsOxRjrLe6i/+8l5mh0W
+	 ZoKEt4JNNiwgMXddXYZEieQG4zU6t4SqwHnsWmMw=
+Message-ID: <080c93d1-9c02-478f-a0be-f4bd3869c1fd@linux.microsoft.com>
+Date: Wed, 7 Aug 2024 11:01:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v20 20/20] MAINTAINERS: ipe: add ipe maintainer
+ information
+To: Paul Menzel <pmenzel@molgen.mpg.de>, Paul Moore <paul@paul-moore.com>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+ tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com,
+ snitzer@kernel.org, mpatocka@redhat.com, eparis@redhat.com,
+ linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
+ linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
+ audit@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
+ <1722665314-21156-21-git-send-email-wufan@linux.microsoft.com>
+ <de7857fb-63d9-42fc-af1e-12ffcdfcdda8@molgen.mpg.de>
+ <CAHC9VhRmcReVM_Le5bYor2deotnSe4OT08UYhL6xhiKCu0+3kA@mail.gmail.com>
+ <5880e801-e896-4bf0-9a69-2cf5acb51ec3@molgen.mpg.de>
+Content-Language: en-US
+From: Fan Wu <wufan@linux.microsoft.com>
+In-Reply-To: <5880e801-e896-4bf0-9a69-2cf5acb51ec3@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-07_11,2024-08-07_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
- adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2407110000 definitions=main-2408070122
-X-Proofpoint-ORIG-GUID: RYEzrWE70uxye8i5Vrx5TovaXzxBcqhh
-X-Proofpoint-GUID: RYEzrWE70uxye8i5Vrx5TovaXzxBcqhh
 
-Function ima_eventdigest_init() can call ima_eventdigest_init_common()
-with HASH_ALGO__LAST which is then used to access the array
-hash_digest_size[] leading to buffer overrun. Have a conditional
-statement to handle this.
 
-Fixes: 9fab303a2cb3 ("ima: fix violation measurement list record")
-Signed-off-by: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
----
- security/integrity/ima/ima_template_lib.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-index 4183956c53af..0e627eac9c33 100644
---- a/security/integrity/ima/ima_template_lib.c
-+++ b/security/integrity/ima/ima_template_lib.c
-@@ -318,15 +318,21 @@ static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
- 				      hash_algo_name[hash_algo]);
- 	}
- 
--	if (digest)
-+	if (digest) {
- 		memcpy(buffer + offset, digest, digestsize);
--	else
-+	} else {
- 		/*
- 		 * If digest is NULL, the event being recorded is a violation.
- 		 * Make room for the digest by increasing the offset by the
--		 * hash algorithm digest size.
-+		 * hash algorithm digest size. If the hash algorithm is not
-+		 * specified increase the offset by IMA_DIGEST_SIZE which
-+		 * fits SHA1 or MD5
- 		 */
--		offset += hash_digest_size[hash_algo];
-+		if (hash_algo < HASH_ALGO__LAST)
-+			offset += hash_digest_size[hash_algo];
-+		else
-+			offset += IMA_DIGEST_SIZE;
-+	}
- 
- 	return ima_write_template_field_data(buffer, offset + digestsize,
- 					     fmt, field_data);
--- 
-2.45.2
+On 8/6/2024 9:48 PM, Paul Menzel wrote:
+> Dear Paul,
+> 
+> 
+> Am 06.08.24 um 22:54 schrieb Paul Moore:
+>> On Sat, Aug 3, 2024 at 4:15 AM Paul Menzel wrote:
+> 
+>>> Thank you very much for your patch. Two nits, should you sent another
+>>> interation: A more specific summary would avoid people having to look at
+>>> the message body or diff, and `git log --oneline` would be enough.
+>>>
+>>> MAINTAINERS: Add IPE entry with M: Fan Wu
+>>>
+>>> MAINTAINERS: Add IPE entry with Fan Wu as maintainer
+>>>
+>>> Am 03.08.24 um 08:08 schrieb Fan Wu:
+>>>> Update MAINTAINERS to include ipe maintainer information.
+>>>
+>>> I’d at least mention Integrity Policy Enforcement. As you not only
+>>> include the maintainer information but add a new entry, I’d leave the
+>>> body out, or mention that a new entry is added.
+>>>
+>>>> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+>>
+>> Working under the current assumption that a new revision is not
+>> needed, I can fix this up during the merge.  Fan, other-Paul, are you
+>> both okay with the following:
+>>
+>>    "MAINTAINERS: add IPE entry with Fan Wu as maintainer
+>>
+>>     Add a MAINTAINERS entry for the Integrity Policy Enforcement (IPE) 
+>> LSM."
+> 
+> Thank you. That is fine by me.
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> 
+> 
+
+Hi Paul and Paul,
+
+Thank you both for your feedback and coordination on this. I'm good with 
+the proposed changes and appreciate your efforts.
+
+-Fan
+
+
 
 
