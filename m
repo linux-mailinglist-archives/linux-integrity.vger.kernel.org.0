@@ -1,114 +1,202 @@
-Return-Path: <linux-integrity+bounces-3296-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3297-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C5029499C6
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2024 23:00:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C98C949D59
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Aug 2024 03:25:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCC69B24196
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Aug 2024 21:00:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27E331F2296D
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 Aug 2024 01:25:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A16171079;
-	Tue,  6 Aug 2024 20:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C11E81D6AA;
+	Wed,  7 Aug 2024 01:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Eb3sUuf/"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aUoBESlx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B23C170A28
-	for <linux-integrity@vger.kernel.org>; Tue,  6 Aug 2024 20:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3C12209B;
+	Wed,  7 Aug 2024 01:25:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722977974; cv=none; b=pa9XvOQHB/f73s4Cfw2yo+E8GT6wOoN6oZJjM5dAc5IFTzr8WmFBFN8KIwt+JktAgrVSqTSQCc9sRx3fiENzSILSD0Cf0gpNVTv1RPi5jbbow9+QsAPng/89tHmAvflPWEWsU5+Z6TctmWADw0UyOn/EthH95KJq7mAyURTdDgo=
+	t=1722993932; cv=none; b=F30gMoUw+x1DqVxfPGu1UFVaz1kNzq0t96kURIqRB+MzU5oQBW1tXV/I3n1mCGWyei5lCASPHKv6hnoDfHBduAai8RU0m1H1rpJg7AG+EMO01uqiB9sDoc417E7IOL4b+bvTNT4C+ParnSOUONUv+CulifqPj7pu+n8EiY1exsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722977974; c=relaxed/simple;
-	bh=qyUz9Qqv5k5SudOvCxQPX4RBki5RQXyIqfhgrvWKdyk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pjSUaT/CRBqs1986reTQIKiJs7ukoVRmnNAvCl6skQ3PLNFllXX+lj+thvHjYzTUuOgTqK7s1+u9/uJvKPefdUdRGCL89uK2dp2wpr8aD/ljpttaQ8Vk4Gctuu6D/AyGNOWLV/fPPNql61U71yEXGc/v9xFzKKsvzosl3lGozJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Eb3sUuf/; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e0bfc0ee203so1171542276.2
-        for <linux-integrity@vger.kernel.org>; Tue, 06 Aug 2024 13:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1722977971; x=1723582771; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hqRA/CX/CVDKRMnMKUkE7btXGpws1I/eaVA/YpB62Hc=;
-        b=Eb3sUuf/v0kca+XnoKJZRiENpb45DUPlfGi6IMf13qoSoLYimi3mbIv6qhH8hOEh8A
-         mtVov7Lo2+nWdrAHGka9zLYVA1Sjmjb3AcjWwDADP1msPFly37oB04+MJAo54CujViTu
-         a1vCj3WAE+S3ZIjyJgFSjCbqF+44/OIo599KJgBo80TX+cbW1YJaofC74vUrXxBHwvc3
-         sFE1L/cMDbIe99kU4N5IUeNp9/6xTDjzSbnrqVs0378SkaDdfLa0lvtM6stQdlKdcDlN
-         DrmYuETjc7TuhIltjqm90BxNzaWLUuccUumCJk4/JR+ilZrg3hf3VdnUc5ty8V2xUoWk
-         yVaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722977971; x=1723582771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hqRA/CX/CVDKRMnMKUkE7btXGpws1I/eaVA/YpB62Hc=;
-        b=iYzD7t5AsUztpCsRYyNIzTtrEBUFRll4YheM2Lg0UYDKGDEQJMFQmFl9d8MXg718HJ
-         vSIrrlJQ2wxm2gWwIc2uG+lK/s2pBtYaQKNH1vYNFy5F6IHu4DB9e5K4ylTgpTkjrsVu
-         WYv7zJShI8m7Eq+fa71iNP1z622oNabKPFMR/kr7rFpyJI0DxkesrErLKAyIg8sBfHDy
-         kkE059sFC/l9UrSSr2BH9eEy30xqkCBqdrW7sYgeTdTdQCiPOuvAPJSNvMajaUlkhqms
-         vcCxApuds44l2vjEyvyaG9iu+ray1w06qIYnksU4AfS6/C2v4nCk2jZ8S17q6Gim+1nK
-         iuAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/N0zbJFl8mzeHcLbu+hO1wMdrOf1pVv94CiRYcVgkRVeQiamxhQ33zZSoY4lf8SvWDDDJKXVmXxbv59HV96MyfToDwXNF1GYGnJEOb+cW
-X-Gm-Message-State: AOJu0Ywi0k508MmDyJ3Lx+mnsxFL23pWEzcUy1of/Cxe6yYO+co1mS5y
-	ny/8x8uR+Be8C9UxiPDWRZ4jkxSsvjElcjLAyOK2RTbv0LwAYaIhnlRhH34j5G2XM0ADy9o10M/
-	+sM9PbsCarD9QpdZSOd01YAs+zuudxdKtQ47m
-X-Google-Smtp-Source: AGHT+IG+g9ZPIj3c+gMV8h9nbV6S0gFWlT866BH5MDCEFMia55H31Vc+W1m/exuwqdaE7fTnf6/iUgbwZyFG5W1FJkM=
-X-Received: by 2002:a05:6902:15c5:b0:e0b:e2ed:b6c9 with SMTP id
- 3f1490d57ef6-e0be2edba28mr17255194276.9.1722977971481; Tue, 06 Aug 2024
- 13:59:31 -0700 (PDT)
+	s=arc-20240116; t=1722993932; c=relaxed/simple;
+	bh=RdmmaJIN/niCBudzuwUJhi0XTYmYEaNyimnVbmm6W3s=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=MfZjd2C+j61dGPbLI3OcWWWvwZISE+2QAZUqcVIk8ykvRn0rA0u/3XWG0HPFCb/65jBjE/y8/euSolIQvum7cDfYcP7hbNaM4fwQL6BeEdHkMnaQbweovsgdPvCNpE0jNTrEVLQWQ/xlEQxvwTd0xF805/1Msiuky675vTjxh1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aUoBESlx; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4771MgHK019254;
+	Wed, 7 Aug 2024 01:24:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:subject:from:to:cc:in-reply-to:references
+	:content-type:date:content-transfer-encoding:mime-version; s=
+	pp1; bh=fw4+UNUefHB/ppv2FvnlJCX7lVBHlTTo++OcFFVaQxY=; b=aUoBESlx
+	iCVNMXTH44jMzaA+lHLZUZPvlTdSC2YMxAtc855YqD21moGPPnirkTKLl+FUsLTd
+	vpNdmWVfTeoMbXbHJNY6tRyCeQWXf7Bb6Hz1pPPRxDLF+TE/BjHJzk+98ItrvI6N
+	KPMNbsCnsHtH94s99+hn0Mc6x/63c7RvTTkrtX8hy2wccScO+BnhqVKvN6LqfERI
+	EVMtqu40vURz0oPHT6gCA/I1gsX1CoY2jZCZc4npPB7JTlw6LKf7klUPD815dcHi
+	E7ky6E36q4n3D5vVCNP1jtf5ap7nLBWmZ0Af6RZCtzjzLPNMlwA284ft91tjoAHw
+	dPBjERzU9lyx1g==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40uk02hkm2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 07 Aug 2024 01:24:59 +0000 (GMT)
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4771OwS7022695;
+	Wed, 7 Aug 2024 01:24:58 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40uk02hkky-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 07 Aug 2024 01:24:58 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 476M31fc024322;
+	Wed, 7 Aug 2024 01:24:57 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40sy90prfy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 07 Aug 2024 01:24:57 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4771OtOU11600506
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 7 Aug 2024 01:24:57 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7DC2A58066;
+	Wed,  7 Aug 2024 01:24:55 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8120A58054;
+	Wed,  7 Aug 2024 01:24:54 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.166.93])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  7 Aug 2024 01:24:54 +0000 (GMT)
+Message-ID: <80af3c293db64365bdadbec122c37de7194fbf51.camel@linux.ibm.com>
+Subject: Re: [RFC] integrity: wait for completion of i2c initialization
+ using late_initcall_sync()
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Romain Naour <romain.naour@smile.fr>, Paul Menzel
+ <pmenzel@molgen.mpg.de>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        serge@hallyn.com, jmorris@namei.org, paul@paul-moore.com,
+        eric.snowberg@oracle.com, dmitry.kasatkin@gmail.com,
+        roberto.sassu@huawei.com, Romain Naour <romain.naour@skf.com>
+In-Reply-To: <785b9c89-a9a6-427d-8715-110cb638b645@smile.fr>
+References: <20240701133814.641662-1-romain.naour@smile.fr>
+	 <c090cd3c-f4c6-4923-a9fa-b54768ca2a26@molgen.mpg.de>
+	 <d7429218-7b48-4201-8ad9-63728e188be5@smile.fr>
+	 <e197920f27bc67df45327ef56ee509d113435b25.camel@linux.ibm.com>
+	 <b551f01f52d5cefea3992f6c75baa0683ed57ac9.camel@linux.ibm.com>
+	 <785b9c89-a9a6-427d-8715-110cb638b645@smile.fr>
+Content-Type: text/plain; charset="UTF-8"
+Date: Tue, 06 Aug 2024 20:41:22 -0400
+User-Agent: Evolution 3.52.3 (3.52.3-1.fc40) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DhmVbBoBCYMdNP3J7E0tbmgGZlAV5H3j
+X-Proofpoint-ORIG-GUID: DrPq6rqg9KKvAYz5LY2WR61b6OYgDctj
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
-In-Reply-To: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 6 Aug 2024 16:59:20 -0400
-Message-ID: <CAHC9VhQ3LobZks+JtcmOxiDH1_kbjXq3ao8th4V_VXO8VAh6YA@mail.gmail.com>
-Subject: Re: [PATCH v20 00/20] Integrity Policy Enforcement LSM (IPE)
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com, 
-	tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, agk@redhat.com, 
-	snitzer@kernel.org, mpatocka@redhat.com, eparis@redhat.com, 
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_20,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=999 clxscore=1011 mlxscore=0 adultscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408070007
 
-On Sat, Aug 3, 2024 at 2:08=E2=80=AFAM Fan Wu <wufan@linux.microsoft.com> w=
-rote:
->
-> IPE is a Linux Security Module that takes a complementary approach to
-> access control. Unlike traditional access control mechanisms that rely on
-> labels and paths for decision-making, IPE focuses on the immutable securi=
-ty
-> properties inherent to system components. These properties are fundamenta=
-l
-> attributes or features of a system component that cannot be altered,
-> ensuring a consistent and reliable basis for security decisions.
->
-> ...
+On Thu, 2024-08-01 at 12:12 +0200, Romain Naour wrote:
+> Hi Mimi,
+>=20
+> Le 11/07/2024 =C3=A0 16:06, Mimi Zohar a =C3=A9crit=C2=A0:
+> > On Mon, 2024-07-01 at 22:37 -0400, Mimi Zohar wrote:
+> > > Hi Romain,
+> > >=20
+> > > Please limit the subject line to 70 - 75 characters.
+> > >=20
+> > >=20
+> > > On Mon, 2024-07-01 at 16:58 +0200, Romain Naour wrote:
+> > > > > > [1]
+> > > > > > https://lore.kernel.org/linux-integrity/9b98d912-ba78-402c-a5c8=
+-154bef8794f7@smile.fr/
+> > > > > > [2]
+> > > > > > https://e2e.ti.com/support/processors-group/processors/f/proces=
+sors-forum/1375425/tda4vm-ima-vs-tpm-builtin-driver-boot-order
+> > > > > >=20
+> > > > > > Signed-off-by: Romain Naour <romain.naour@skf.com>
+> > > > >=20
+> > > > > Should this get a Fixes: tag and be also applied to the stable se=
+ries?
+> > > >=20
+> > > > The current behavior can be reproduced on any released kernel (at l=
+east since
+> > > > 6.1). But I'm not sure if it should be backported to stable kernels=
+ since it
+> > > > delays the ima/evm initialization at runtime.
+> > >=20
+> > > With the IMA builtin measurement policy specified on the boot command=
+ line
+> > > ("ima_policy=3Dtcb"), moving init_ima from the late_initcall() to
+> > > late_initcall_sync() affects the measurement list order.  It's unlike=
+ly, but
+> > > possible, that someone is sealing the TPM to PCR-10.  It's probably n=
+ot a good
+> > > idea to backport the change.
+> > >=20
+> > > An alternative would be to continue using the late_initcall(), but re=
+try on
+> > > failure, instead of going directly into TPM-bypass mode.
+>=20
+> Indeed, it would be better if the IMA (and EVM) can use something like EP=
+ROBE_DEFER.
 
-There was some minor merge fuzz, a handful of overly long lines in the
-comments, and some subject lines that needed some minor tweaking but
-overall I think this looks good.  I only see one thing holding me back
-from merging this into the LSM tree: an updated ACK from the
-device-mapper folks; if we can get that within the next week or two
-that would be great.
+Yes, "something like EPROBE_DEFER" sounds like the right direction.  Depend=
+ing
+on the environment, the TPM initialization delay might be acceptable and not
+introduce an integrity gap.
 
---=20
-paul-moore.com
+For now let's start with just late_initcall() and late_initcall_sync().  If=
+ the
+TPM hasn't been initialized, not all of ima_init() needs to be deferred to
+late_initcall_sync().
+
+>=20
+> > >=20
+> > > As far as I can tell, everything is still being measured and verified=
+, but more
+> > > testing is required.
+>=20
+> Agree, I'm still evaluating the TPM stack when time allows.
+>=20
+> >=20
+> > Romain, Paul, another report of IMA going into TPM-bypass mode is here:=
+=20
+> > https://github.com/raspberrypi/linux/issues/6217.  Deferring IMA initia=
+lization
+> > to late_initcall_sync() did not resolve the problem for them.  Please t=
+ake a
+> > look at the report.
+>=20
+> I don't think that the "mdelay(200)" is really needed when late_initcall_=
+sync()
+> is used. I guess the issue was the spi driver was not builtin, fixed by:
+>=20
+> CONFIG_SPI_DESIGNWARE=3Dy
+> CONFIG_SPI_DW_MMIO=3Dy
+
+Good to know.
+
+thanks,
+
+Mimi
 
