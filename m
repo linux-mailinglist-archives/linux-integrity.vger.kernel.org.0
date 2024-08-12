@@ -1,52 +1,103 @@
-Return-Path: <linux-integrity+bounces-3309-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3310-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 724C294DE7B
-	for <lists+linux-integrity@lfdr.de>; Sat, 10 Aug 2024 22:05:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C964294E61A
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Aug 2024 07:17:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D28B5B21D29
-	for <lists+linux-integrity@lfdr.de>; Sat, 10 Aug 2024 20:05:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D293F1C207BF
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 Aug 2024 05:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3390813D240;
-	Sat, 10 Aug 2024 20:05:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 228CF5FBB7;
+	Mon, 12 Aug 2024 05:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uLwgQWe5";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CLohDBdD";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uLwgQWe5";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CLohDBdD"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3078E44C68;
-	Sat, 10 Aug 2024 20:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C721A4D8CE
+	for <linux-integrity@vger.kernel.org>; Mon, 12 Aug 2024 05:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723320331; cv=none; b=PDwpMA9SpFyD48hnc7qOAxUxQ+qoCub490PFMZjWc1tXhXcp/cVuRKbnCoc0Kj9wvg4w3vqe05unoLtauqDeKZ3OhOmSgEbvkJorIhSlUiKmVK9w+3szNlSWpSawD2vICCRMgR69qp8cZtaCZDS/qgJnhbK5UTr2F7Aru8zvZdQ=
+	t=1723439826; cv=none; b=FyrA6nV0pfgodc1o2ResrmgLXZ3MEjH6uzfMxSzxjH2jWMi5ljX+tIyFib3VOvLyvKPWB8WAm0zbcYESfsTHmdy0aYkY2MG2soGEFTsJdM9cOWnVzYcjWWJvJrrV4s5Y4mUwMJnhI155mftThbU15sGmQGLZwyIAfkbtpwNBlXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723320331; c=relaxed/simple;
-	bh=V8k+LowYYOyKVujwCvCYLKZqEzPBWcRIa/WNWwRJxt4=;
+	s=arc-20240116; t=1723439826; c=relaxed/simple;
+	bh=AsbNvrlkkHQrO07PvuGculnUcPhbQtVrYbU8G8vuBlw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AXZlOlabBHE6PIlja5Z+LrOXDH7Ck5mZV5M5PyIAchsGXmMJ9RXAI851JNPUlFvGlfoAumhfzACozZK8XMwHX4L1O5LoxeMrtz3RvaoC1vQgd0Qmpc/6Vlh729FHRaEGnXOz2mUC/ElI8paiHLfgRKqZlx67UXJ8UkkzTPg1rrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id 4E34950; Sat, 10 Aug 2024 15:05:26 -0500 (CDT)
-Date: Sat, 10 Aug 2024 15:05:26 -0500
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-	serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-	axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-	mpatocka@redhat.com, eparis@redhat.com, paul@paul-moore.com,
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
-	audit@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [PATCH v20 03/20] ipe: add evaluation loop
-Message-ID: <20240810200526.GA40028@mail.hallyn.com>
-References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
- <1722665314-21156-4-git-send-email-wufan@linux.microsoft.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lr1lUivbFPGA2LXK8hP+oBBcjreWGcvh2kFA75aIrQay8P0z1K6YpWM/wj0DZhpOWs/Ln5/+PO4CEIN31eqj59bOkqJFhJKW0GZwzdbSTZCzxC8YY2iYW/0dPVLyeJKRhrY/e3M8qFcOD+kvLjbHvkbTOKZH88RIJP68KqFT7jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uLwgQWe5; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CLohDBdD; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uLwgQWe5; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CLohDBdD; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 95BCE222E1;
+	Mon, 12 Aug 2024 05:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1723439821;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vdBBIUVWpfUrsxbuH/2vU7qo4vzTNlY8/0INw+jh7PQ=;
+	b=uLwgQWe5cLVJMLl4sl9+/d0B6qL2KItmiOPeT+bIlnJICxMoE8fLXaWmzbbIKHe4z8A+Mk
+	5awBoRJiluwAMZRjjFM0AIpxlyNx5KXfzsCrMAVOIXIKBMooMCcmYUMwm4supqpLfuLY83
+	DHYV9Vgew4ctAcwGq42NPsrMzfbYMus=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1723439821;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vdBBIUVWpfUrsxbuH/2vU7qo4vzTNlY8/0INw+jh7PQ=;
+	b=CLohDBdD0kyfeEM/9V4E1Zp5IqN/BQ4mhJgoM2iE1rL3ZS5O9Ne0Naq9Mj3Z558rI++8JY
+	IxGqfCLGEwh866CA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=uLwgQWe5;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=CLohDBdD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1723439821;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vdBBIUVWpfUrsxbuH/2vU7qo4vzTNlY8/0INw+jh7PQ=;
+	b=uLwgQWe5cLVJMLl4sl9+/d0B6qL2KItmiOPeT+bIlnJICxMoE8fLXaWmzbbIKHe4z8A+Mk
+	5awBoRJiluwAMZRjjFM0AIpxlyNx5KXfzsCrMAVOIXIKBMooMCcmYUMwm4supqpLfuLY83
+	DHYV9Vgew4ctAcwGq42NPsrMzfbYMus=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1723439821;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vdBBIUVWpfUrsxbuH/2vU7qo4vzTNlY8/0INw+jh7PQ=;
+	b=CLohDBdD0kyfeEM/9V4E1Zp5IqN/BQ4mhJgoM2iE1rL3ZS5O9Ne0Naq9Mj3Z558rI++8JY
+	IxGqfCLGEwh866CA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 71828137BA;
+	Mon, 12 Aug 2024 05:17:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Vpc2Gs2auWbAaAAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Mon, 12 Aug 2024 05:17:01 +0000
+Date: Mon, 12 Aug 2024 07:16:56 +0200
+From: Petr Vorel <pvorel@suse.cz>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org,
+	Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Peter Robinson <pbrobinson@gmail.com>
+Subject: Re: [ima-evm-utils PATCH] Add copies of the license text
+Message-ID: <20240812051656.GA385161@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20240808212349.246633-1-zohar@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -55,258 +106,80 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1722665314-21156-4-git-send-email-wufan@linux.microsoft.com>
+In-Reply-To: <20240808212349.246633-1-zohar@linux.ibm.com>
+X-Spam-Score: -3.71
+X-Rspamd-Queue-Id: 95BCE222E1
+X-Spamd-Result: default: False [-3.71 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,huawei.com,gmail.com];
+	DWL_DNSWL_BLOCKED(0.00)[suse.cz:dkim];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	MISSING_XM_UA(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-On Fri, Aug 02, 2024 at 11:08:17PM -0700, Fan Wu wrote:
-> From: Deven Bowers <deven.desai@linux.microsoft.com>
-> 
-> Introduce a core evaluation function in IPE that will be triggered by
-> various security hooks (e.g., mmap, bprm_check, kexec). This function
-> systematically assesses actions against the defined IPE policy, by
-> iterating over rules specific to the action being taken. This critical
-> addition enables IPE to enforce its security policies effectively,
-> ensuring that actions intercepted by these hooks are scrutinized for policy
-> compliance before they are allowed to proceed.
-> 
-> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
+Hi Mimi, Peter,
 
-(started at this longer than I care to admit)
+> Add copies of the license texts so they're distributed in the tar files
+> for offline viewing.
 
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> The GNU license associated with the the SPDX License Identifier GPL-2.0
+> and GPL-2.0-or-later is the same.  Restore the COPYING file from
+> https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 
-> 
+> Add the GNU license associated with the SPDX License Identifier
+> LGPL-2.0-or-later as COPYING.LGPL from
+> https://www.gnu.org/licenses/old-licenses/lgpl-2.0.txt.
+
+> Note: While removing the file specific licenses and replacing them with
+> the SPDX License Identifier, the special exception for linking with the
+> OpenSSL library (WITH cryptsetup-OpenSSL-exception) was removed.  With
+> the relicensing of OpenSSL 3 or later to the Apache 2 license, the
+> special exception is no longer necessary.
+
+Thanks for restoring these files!
+
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
+
+Kind regards,
+Petr
+
+> Fixes: 6adc50f68202 ("Change license to LGPL-2.0-or-later and GPL-2.0-or-later")
+> Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 > ---
-> v2:
-> + Split evaluation loop, access control hooks, and evaluation loop from policy parser and userspace interface to pass mailing list character limit
-> 
-> v3:
-> + Move ipe_load_properties to patch 04.
-> + Remove useless 0-initializations Prefix extern variables with ipe_
-> + Remove kernel module parameters, as these are exposed through sysctls.
-> + Add more prose to the IPE base config option help text.
-> + Use GFP_KERNEL for audit_log_start.
-> + Remove unnecessary caching system.
-> + Remove comments from headers
-> + Use rcu_access_pointer for rcu-pointer null check
-> + Remove usage of reqprot; use prot only.
-> +Move policy load and activation audit event to 03/12
-> 
-> v4:
-> + Remove sysctls in favor of securityfs nodes
-> + Re-add kernel module parameters, as these are now exposed through securityfs.
-> + Refactor property audit loop to a separate function.
-> 
-> v5:
-> + fix minor grammatical errors
-> + do not group rule by curly-brace in audit record,
-> + reconstruct the exact rule.
-> 
-> v6:
-> + No changes
-> 
-> v7:
-> + Further split lsm creation into a separate commit from the evaluation loop and audit system, for easier review.
-> + Propagating changes to support the new ipe_context structure in the evaluation loop.
-> 
-> v8:
-> + Remove ipe_hook enumeration; hooks can be correlated via syscall record.
-> 
-> v9:
-> + Remove ipe_context related code and simplify the evaluation loop.
-> 
-> v10:
-> + Split eval part and boot_verified part
-> 
-> v11:
-> + Fix code style issues
-> 
-> v12:
-> + Correct an rcu_read_unlock usage
-> + Add a WARN to unknown op during evaluation
-> 
-> v13:
-> + No changes
-> 
-> v14:
-> + No changes
-> 
-> v15:
-> + No changes
-> 
-> v16:
-> + No changes
-> 
-> v17:
-> + Add years to license header
-> + Fix code and documentation style issues
-> 
-> v18:
-> + No changes
-> 
-> v19:
-> + No changes
-> 
-> v20:
-> + No changes
-> ---
->  security/ipe/Makefile |   1 +
->  security/ipe/eval.c   | 102 ++++++++++++++++++++++++++++++++++++++++++
->  security/ipe/eval.h   |  24 ++++++++++
->  3 files changed, 127 insertions(+)
->  create mode 100644 security/ipe/eval.c
->  create mode 100644 security/ipe/eval.h
-> 
-> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
-> index 3093de1afd3e..4cc17eb92060 100644
-> --- a/security/ipe/Makefile
-> +++ b/security/ipe/Makefile
-> @@ -6,6 +6,7 @@
->  #
->  
->  obj-$(CONFIG_SECURITY_IPE) += \
-> +	eval.o \
->  	ipe.o \
->  	policy.o \
->  	policy_parser.o \
-> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
-> new file mode 100644
-> index 000000000000..f6a681ca49f6
-> --- /dev/null
-> +++ b/security/ipe/eval.c
-> @@ -0,0 +1,102 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2024 Microsoft Corporation. All rights reserved.
-> + */
-> +
-> +#include <linux/fs.h>
-> +#include <linux/types.h>
-> +#include <linux/slab.h>
-> +#include <linux/file.h>
-> +#include <linux/sched.h>
-> +#include <linux/rcupdate.h>
-> +
-> +#include "ipe.h"
-> +#include "eval.h"
-> +#include "policy.h"
-> +
-> +struct ipe_policy __rcu *ipe_active_policy;
-> +
-> +/**
-> + * evaluate_property() - Analyze @ctx against a rule property.
-> + * @ctx: Supplies a pointer to the context to be evaluated.
-> + * @p: Supplies a pointer to the property to be evaluated.
-> + *
-> + * This is a placeholder. The actual function will be introduced in the
-> + * latter commits.
-> + *
-> + * Return:
-> + * * %true	- The current @ctx match the @p
-> + * * %false	- The current @ctx doesn't match the @p
-> + */
-> +static bool evaluate_property(const struct ipe_eval_ctx *const ctx,
-> +			      struct ipe_prop *p)
-> +{
-> +	return false;
-> +}
-> +
-> +/**
-> + * ipe_evaluate_event() - Analyze @ctx against the current active policy.
-> + * @ctx: Supplies a pointer to the context to be evaluated.
-> + *
-> + * This is the loop where all policy evaluations happen against the IPE policy.
-> + *
-> + * Return:
-> + * * %0		- Success
-> + * * %-EACCES	- @ctx did not pass evaluation
-> + */
-> +int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx)
-> +{
-> +	const struct ipe_op_table *rules = NULL;
-> +	const struct ipe_rule *rule = NULL;
-> +	struct ipe_policy *pol = NULL;
-> +	struct ipe_prop *prop = NULL;
-> +	enum ipe_action_type action;
-> +	bool match = false;
-> +
-> +	rcu_read_lock();
-> +
-> +	pol = rcu_dereference(ipe_active_policy);
-> +	if (!pol) {
-> +		rcu_read_unlock();
-> +		return 0;
-> +	}
-> +
-> +	if (ctx->op == IPE_OP_INVALID) {
-> +		if (pol->parsed->global_default_action == IPE_ACTION_DENY) {
-> +			rcu_read_unlock();
-> +			return -EACCES;
-> +		}
-> +		if (pol->parsed->global_default_action == IPE_ACTION_INVALID)
-> +			WARN(1, "no default rule set for unknown op, ALLOW it");
-> +		rcu_read_unlock();
-> +		return 0;
-> +	}
-> +
-> +	rules = &pol->parsed->rules[ctx->op];
-> +
-> +	list_for_each_entry(rule, &rules->rules, next) {
-> +		match = true;
-> +
-> +		list_for_each_entry(prop, &rule->props, next) {
-> +			match = evaluate_property(ctx, prop);
-> +			if (!match)
-> +				break;
-> +		}
-> +
-> +		if (match)
-> +			break;
-> +	}
-> +
-> +	if (match)
-> +		action = rule->action;
-> +	else if (rules->default_action != IPE_ACTION_INVALID)
-> +		action = rules->default_action;
-> +	else
-> +		action = pol->parsed->global_default_action;
-> +
-> +	rcu_read_unlock();
-> +	if (action == IPE_ACTION_DENY)
-> +		return -EACCES;
-> +
-> +	return 0;
-> +}
-> diff --git a/security/ipe/eval.h b/security/ipe/eval.h
-> new file mode 100644
-> index 000000000000..b137f2107852
-> --- /dev/null
-> +++ b/security/ipe/eval.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2024 Microsoft Corporation. All rights reserved.
-> + */
-> +
-> +#ifndef _IPE_EVAL_H
-> +#define _IPE_EVAL_H
-> +
-> +#include <linux/file.h>
-> +#include <linux/types.h>
-> +
-> +#include "policy.h"
-> +
-> +extern struct ipe_policy __rcu *ipe_active_policy;
-> +
-> +struct ipe_eval_ctx {
-> +	enum ipe_op_type op;
-> +
-> +	const struct file *file;
-> +};
-> +
-> +int ipe_evaluate_event(const struct ipe_eval_ctx *const ctx);
-> +
-> +#endif /* _IPE_EVAL_H */
-> -- 
-> 2.44.0
+>  COPYING      | 339 ++++++++++++++++++++++++++++++++++++
+>  COPYING.LGPL | 481 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>  LICENSES.txt |   4 +
+>  3 files changed, 824 insertions(+)
+>  create mode 100644 COPYING
+>  create mode 100644 COPYING.LGPL
+...
 
