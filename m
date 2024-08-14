@@ -1,171 +1,112 @@
-Return-Path: <linux-integrity+bounces-3313-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3314-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 151049511B7
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Aug 2024 03:54:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8D495201E
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Aug 2024 18:36:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B6081F24E0C
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Aug 2024 01:54:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFE0728A960
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Aug 2024 16:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4061E1CD31;
-	Wed, 14 Aug 2024 01:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8DCB1B8E98;
+	Wed, 14 Aug 2024 16:36:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KBsEdR2t"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="KtUVRdbB"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from the.earth.li (the.earth.li [93.93.131.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5199718059
-	for <linux-integrity@vger.kernel.org>; Wed, 14 Aug 2024 01:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A8C2BB1C;
+	Wed, 14 Aug 2024 16:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723600438; cv=none; b=KAHWysgx71O04ZnQWnrGEJmfeJwhR/SaVb23J96GSOl61VvXnZ72PP6qH7KWrQinKhddAEiIgJC8nKrMHa6C3T1AwLrorMQOS+fV0S6Fbo4CDpNJAJSrDQIXOI31i/YGKvf5xs9ZSWE37ZIO88YRzvAriS5MkYI+fLANbY//o88=
+	t=1723653393; cv=none; b=VwmhG3v/AsODA677uyQLqhRJpYZxNhAMz3THnbxviaPbG181EmTK9VoF6bfco2wPZZA4GZiP2FR0LCPu/ubT2CD/6DVKP1y7J9yM8yyyeKRQN/uIbh+iNBheyOmxyvkdRnBHJHUAZWZCQsRaxSM5xQEc65u2kwYBAEvmUW0tTI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723600438; c=relaxed/simple;
-	bh=ge9OCe6p9CdisLeskHvVtpoC1MjOcmdSYUlZQVLG7yA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BOEdH1OXOaI2zg/EosyQ/FWykZPTu2nAS48w/m4i4VE8AGgyzFqkzDgTPut3iJKy9d2xnWnG+oOiO1DT7rh1qomy/VEDBD7xhgAxFUJt+Jug9bLnhgAQov9N09T4oPDx8L8E53Ki8oXVVcqz2LaUWqE3iiCPzb1ZUmRFfJVC2Zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KBsEdR2t; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e0e88873825so6050402276.2
-        for <linux-integrity@vger.kernel.org>; Tue, 13 Aug 2024 18:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1723600435; x=1724205235; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4BMhf+QP+vZrCE9Emw8zcn7tG5k24e14A1z1v4Cf/zo=;
-        b=KBsEdR2t9WA4dOKCy6h7cW+DspYRvLSjSR7nwpYx9ejkCy1Is3S/8XV3GfQeP4n+bw
-         DgZORAYEOvcDhI+LWG8I6cw4VeVCqcf5f9UwFezcg5+aUZJRKdCz+iAvnRZhBu0FaCJN
-         BxUublanhyyBoQTLD5Q3+oKR7XdopSIPHHCu37GEZZ19R9g0GueYKSXDwov4zgZoa6mR
-         1FF3erH3HtexQK4CHdIcjgRuf3Mdm0iBaOYoXQGXuyGE0/FD+qVtS1OU7Mn971RZi6UI
-         SCoHld79UFiDrxf0lY/wTzfjt+/ubKqOAzg4dOTOJBbExPO255tdujaZOvkU09b2Pm3E
-         LTKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723600435; x=1724205235;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4BMhf+QP+vZrCE9Emw8zcn7tG5k24e14A1z1v4Cf/zo=;
-        b=Jp9Ju+zh12IxZbv1ELeUjir1n7CZrfxE4Pi4ddmd2tuPdmWksIsRWjulxfINv2TOwP
-         9Ht7bbRd5d3EqoACN67GiNWCTRPp5qplnxg6QaxfkR0v61fg4eu+KAAQKM/qLXrnHC+l
-         he9jOyyZ7T2omsRx5Flv9Byv0vAjeY8vDoEYeonq29j6HkngqDvNAis3PCMyMMreBfwi
-         zvb1Hxs5QOMHPwLxafgjtqjBHEljYUcjJVfc+Ak8rKo+89v71mKJxAIaQpYLg93g7+PR
-         ybDFpLGQLf7VgEO5fSKKj31rEBXTEBpEayH9+r2uT0pSeU04e0HNgWa3ccahZIxAQsDC
-         rhKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUXeC8rpQxCPzU8ObvsEoKtMg+wiio4a0g6+EhnOpaNrrrg4YJelEKZ1onA+R3QhAIiMy6O1WxTw1U9XTP2/Kz5LqGgAhR76r9rwM/pvi1n
-X-Gm-Message-State: AOJu0YyIS8RL437WVBBlR61idhmFcrfJYR638JvnaFAVOSmMMe3YzHHi
-	TkoQHYw4Vw5HSbfE7Bw6AnFl6jpag4O/HUXJ0WnWEzeVzLyQ8MOKzQZk1cM2l9YxpAQYxu83g/s
-	ylnW/3y3qTg8geChcer2ugtlPiaYJYdRVVIZq
-X-Google-Smtp-Source: AGHT+IHB113GJo/Rn2X/NGXeXW2H8kobdAD498o2N36iaLt+j07rl2BNDKs7iuampjJQJpWHgw4is6cXxwQOKy7hDtE=
-X-Received: by 2002:a05:6902:1b92:b0:e0b:e550:4e5c with SMTP id
- 3f1490d57ef6-e1155ae63a8mr1592199276.26.1723600435327; Tue, 13 Aug 2024
- 18:53:55 -0700 (PDT)
+	s=arc-20240116; t=1723653393; c=relaxed/simple;
+	bh=SD4ky/IGZ61AUsL3mlyIH0wAdX/QeyBja3qwrblQLCk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eRoqu+ZcMsq0O9slq1HAr10PoNS4eNxZnFMB/9zDaw5wbx9RdqxRz/9DTRkcl1mhXbnaT6ApKfrRvY+uNMY73/YcGUfnPklvdJG2LVgaGzubvXdA1VoDGjT1ERE41OO8xxHBho7gIEyj6gYqerE+V2kPzeLQU/fSOiBuUd7M4Og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=KtUVRdbB; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:
+	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
+	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+	References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+	List-Owner:List-Archive; bh=+XpfXLOB0tocY50bNKQJ2ipYCYlbg8wHXzHAW0qFiAM=; b=K
+	tUVRdbBqDrp0jrRi3gCXjpHNOU9kRO3WNVkVqYqw0ngYhOY2gbAynfhM9pmiKrfedRcYtgni6X3RG
+	yjdSUqqp3E1ecKDiM1VViWZjsZbHf4wa7LfPhla1GeDD7NGV4hqL0wt8lm+0hlpbMdN6QgkWHOz2g
+	DLPllvyTrehK8BlxclvadOrAxU+T6k7eZzdlTdKA3W9/WBsEb3NEoiGYJa7e4LJMyrt1RyFpL08qw
+	qF7vzUDqkdqnPi3LRFSqVnUIHvvZFxhD7v/KgxMdtpQQycLjYFG75RxbZvBTMxrqo/FzR2t8mOe7V
+	bEKGG40AhrE+q4edmoC5bvfJnu2bMqL0Q==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1seGiK-00BLyg-26;
+	Wed, 14 Aug 2024 17:19:08 +0100
+Date: Wed, 14 Aug 2024 17:19:08 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: linux-integrity@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: [RFC] [PATCH] tpm: Clean up TPM space after command failure
+Message-ID: <ZrzY_LWIXABkqd-S@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
- <1722665314-21156-3-git-send-email-wufan@linux.microsoft.com>
- <20240810155000.GA35219@mail.hallyn.com> <e1dd4dcf-8e2e-4e7b-9d40-533efd123103@linux.microsoft.com>
-In-Reply-To: <e1dd4dcf-8e2e-4e7b-9d40-533efd123103@linux.microsoft.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 13 Aug 2024 21:53:44 -0400
-Message-ID: <CAHC9VhTYT3RTG1FbnZQ2F68a16gU9_QJ-=LSGbroP-40tpRTiw@mail.gmail.com>
-Subject: Re: [PATCH v20 02/20] ipe: add policy parser
-To: Fan Wu <wufan@linux.microsoft.com>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>, corbet@lwn.net, zohar@linux.ibm.com, 
-	jmorris@namei.org, tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk, 
-	agk@redhat.com, snitzer@kernel.org, mpatocka@redhat.com, eparis@redhat.com, 
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
-	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Deven Bowers <deven.desai@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Aug 13, 2024 at 1:54=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
-wrote:
-> On 8/10/2024 8:50 AM, Serge E. Hallyn wrote:
-> > On Fri, Aug 02, 2024 at 11:08:16PM -0700, Fan Wu wrote:
-> >> From: Deven Bowers <deven.desai@linux.microsoft.com>
-> >>
-> >> IPE's interpretation of the what the user trusts is accomplished throu=
-gh
-> >
-> > nit: "of what the user trusts" (drop the extra 'the')
-> >
-> >> its policy. IPE's design is to not provide support for a single trust
-> >> provider, but to support multiple providers to enable the end-user to
-> >> choose the best one to seek their needs.
-> >>
-> >> This requires the policy to be rather flexible and modular so that
-> >> integrity providers, like fs-verity, dm-verity, or some other system,
-> >> can plug into the policy with minimal code changes.
-> >>
-> >> Signed-off-by: Deven Bowers <deven.desai@linux.microsoft.com>
-> >> Signed-off-by: Fan Wu <wufan@linux.microsoft.com>
-> >
-> > This all looks fine.  Just one comment below.
-> >
-> Thank you for reviewing this!
->
-> >
-> >> +/**
-> >> + * parse_rule() - parse a policy rule line.
-> >> + * @line: Supplies rule line to be parsed.
-> >> + * @p: Supplies the partial parsed policy.
-> >> + *
-> >> + * Return:
-> >> + * * 0              - Success
-> >> + * * %-ENOMEM       - Out of memory (OOM)
-> >> + * * %-EBADMSG      - Policy syntax error
-> >> + */
-> >> +static int parse_rule(char *line, struct ipe_parsed_policy *p)
-> >> +{
-> >> +    enum ipe_action_type action =3D IPE_ACTION_INVALID;
-> >> +    enum ipe_op_type op =3D IPE_OP_INVALID;
-> >> +    bool is_default_rule =3D false;
-> >> +    struct ipe_rule *r =3D NULL;
-> >> +    bool first_token =3D true;
-> >> +    bool op_parsed =3D false;
-> >> +    int rc =3D 0;
-> >> +    char *t;
-> >> +
-> >> +    r =3D kzalloc(sizeof(*r), GFP_KERNEL);
-> >> +    if (!r)
-> >> +            return -ENOMEM;
-> >> +
-> >> +    INIT_LIST_HEAD(&r->next);
-> >> +    INIT_LIST_HEAD(&r->props);
-> >> +
-> >> +    while (t =3D strsep(&line, IPE_POLICY_DELIM), line) {
-> >
-> > If line is passed in as NULL, t will be NULL on the first test.  Then
-> > you'll break out and call parse_action(NULL), which calls
-> > match_token(NULL, ...), which I do not think is safe.
-> >
-> > I realize the current caller won't pass in NULL, but it seems worth
-> > checking for here in case some future caller is added by someone
-> > who's unaware.
-> >
-> > Or, maybe add 'line must not be null' to the function description.
->
-> Yes, I agree that adding a NULL check would be better. I will include it
-> in the next version.
+We've been seeing a problem where TPM commands time out, which if
+they're the last command before the TPM device is closed causes a leak
+of transient handles. They can be seen and cleaned up (with a flush
+context) if the /dev/tpm0 device is used instead of /dev/tpmrm0, but it
+seems like we should be doing this automatically on the transmit error
+path. Patch below adds a tpm2_flush_space on error to avoid this.
 
-We're still waiting to hear back from the device-mapper devs, but if
-this is the only change required to the patchset I can add a NULL
-check when I merge the patchset as it seems silly to resend the entire
-patchset for this.  Fan, do you want to share the code snippet with
-the NULL check so Serge can take a look?
+Does this seem reasonable? The other query is whether tpm2_del_space
+should cleanup the contexts as well, rather than just the sessions.
 
---=20
-paul-moore.com
+(Obviously in an ideal world we wouldn't see the timeouts at all, and
+I'm still trying to work on getting to the bottom of these, which are
+generally infrequent, but happening enough across our fleet that we were
+able to observe this handle leak.)
+
+From: Jonathan McDowell <noodles@meta.com>
+
+tpm_dev_transmit prepares the TPM space before attempting command
+transmission. However if the command fails no rollback of this
+preparation is done. This can result in transient handles being leaked
+if the device is subsequently closed with no further commands performed.
+
+Fix this by flushing the space in the event of command transmission
+failure.
+
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
+
+---
+ drivers/char/tpm/tpm-dev-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index 30b4c288c1bb..c3fbbf4d3db7 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -47,6 +47,8 @@ static ssize_t tpm_dev_transmit(struct tpm_chip *chip, struct tpm_space *space,
+ 
+ 	if (!ret)
+ 		ret = tpm2_commit_space(chip, space, buf, &len);
++	else
++		tpm2_flush_space(chip);
+ 
+ out_rc:
+ 	return ret ? ret : len;
+-- 
+2.46.0
+
 
