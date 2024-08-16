@@ -1,128 +1,80 @@
-Return-Path: <linux-integrity+bounces-3333-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3334-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C420954B48
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 15:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D05149550D8
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 20:29:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C77B51F22EF5
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 13:44:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B5F31F227EB
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 18:29:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937E31B9B2A;
-	Fri, 16 Aug 2024 13:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 781DE1C3F29;
+	Fri, 16 Aug 2024 18:28:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ePoQF/me"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tv2DtPzD"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B8F1E505;
-	Fri, 16 Aug 2024 13:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515141C37B2;
+	Fri, 16 Aug 2024 18:28:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723815846; cv=none; b=kUNZkntJYQRvnY2vPWrmCiEWLULNVlHph4mOh/BFSDxhjiBzQmOjg9HGgH76r6p5AS1PNkKoJgvDHLB+e64NXCT7WjMyMkjFT50ipzr0ESTSG0vF8wRSl5pEg5XfBy1+zW7gG+qLZll02l0ypi9DzKcL4UwVDlfgMRtzTY5toJE=
+	t=1723832909; cv=none; b=rhOeZocBLHf6uKc4q0gGsKZ8viZ3tv4PJ6DiczQKMVAxSjgvhdWnYIiELO5JKFn0+HytBxU6MQ6AGgiP80h5lrFmwKWzffoYt+FmrrPv+aPEn0ZzQhRQLpGuoUXMBspKQI1IHTz7p2KRS88r2rLDKcOuR+6CEjGwQLzKqtUM3y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723815846; c=relaxed/simple;
-	bh=WMrryXEcz553t+mMJqMYz/30Wg6cjJ3h0oW4dFydHhY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
-	 References:In-Reply-To; b=MHHyC0KJe+ii+kaMlYanlhH1e2cSueBhB+3B5CfalYAa8+l0CVvCL6xfFtmNIOg+7liWKdAs5lMqd6rp+QJHzU1WkQSNLzdJ8/9nw76kFzhazVitnNebPnYIc7C2CQTsvOFrrj1JWSUbotecr8Kna67O9/FI1R3Wd7GD6uxL+10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ePoQF/me; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64543C32782;
-	Fri, 16 Aug 2024 13:44:05 +0000 (UTC)
+	s=arc-20240116; t=1723832909; c=relaxed/simple;
+	bh=BZmQl+oxMjUcDLZqoD9zCIUK26RP/PYDWBrw3V5LaCY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=GM32Ppub6LE5R42N4DopwdlE/md6agilefwmcL0Jdnb8Mw3jDg27hC08u7TnSdbQ8P8gCvCUyAUTg3lIZMSI2ysgbOojn+58sjHv22nk7Q+iiwm+1xiQaV9XWnmMoJyEsELJxlU45HJVTfIH7m2ArNrYCEEyCoZwW/lJw3ELokQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tv2DtPzD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348C1C32782;
+	Fri, 16 Aug 2024 18:28:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723815845;
-	bh=WMrryXEcz553t+mMJqMYz/30Wg6cjJ3h0oW4dFydHhY=;
-	h=Date:Subject:From:To:References:In-Reply-To:From;
-	b=ePoQF/me36mjWxuo6jnjQvpMiEFGywpNuWzHYydVfImZnfCgPZmoacpZ6n1WoVY8w
-	 ICEO+ZKVJS4IXnw+h95hIbmJTXSiTBnStuXXVT51d9M2jUb4LLkR5ZOuNvDRF3mzC5
-	 caGheBAyrU96V4w+y32isTq97ejDVJDsN4p3pyYRr1srzQArK9ldwrDXM3UlVN7Xgc
-	 BKKYnnR40g1PKa5uZROeN849L8fj3w15+Llm74iC58ul3LlLt+8CY9V3WLKP4oFass
-	 UXAWD/aJFpb80JHyPb9nnOyFMjin3VIIjIeUwab/zzDsQ1ELmRs9iFHLZ3oH7qwukM
-	 bHrzOoxv3tZpw==
+	s=k20201202; t=1723832909;
+	bh=BZmQl+oxMjUcDLZqoD9zCIUK26RP/PYDWBrw3V5LaCY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=tv2DtPzDxhovDtPtWjmfE3Jdo2Q5fSQH0/TPDU8XzVW3S5LnjEnVXbjqRY0HWFutj
+	 5CGBzyCxdaL5BBNarsSrEI/Irfdcv4rZKfpaKPm8jUWCE4rND5F5qqYw62yQL78ba6
+	 mhH8hrnx2bP63W4HkAHzbVANfngF71FDanMxPoC2nZy0NCLFUzhwQHv7tXJK2jE/uz
+	 TkhiivmVqi730S+uplepkigI43ODgGKDinVDm3wGfoXLpQeVQlvovknZUCE9rZdRO+
+	 sws7mBFVLSpcppzE9ANg1Ft5upPWZCVvNxu/avdwWIMDjkpuieq/VUA/2klDQ5B7Wj
+	 K+jQdb6uyA9xg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE2C938232A9;
+	Fri, 16 Aug 2024 18:28:29 +0000 (UTC)
+Subject: Re: [GIT PULL] KEYS-TRUSTED: keys-trusted-next-6.11-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <D3HAJIMUJEVC.154RCMPVU2URD@iki.fi>
+References: <D3HAJIMUJEVC.154RCMPVU2URD@iki.fi>
+X-PR-Tracked-List-Id: <keyrings.vger.kernel.org>
+X-PR-Tracked-Message-Id: <D3HAJIMUJEVC.154RCMPVU2URD@iki.fi>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-trusted-next-6.11-rc4
+X-PR-Tracked-Commit-Id: 0e28bf61a5f9ab30be3f3b4eafb8d097e39446bb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1486141ad8e79956e393f9af0ce076a5942e8feb
+Message-Id: <172383290829.3597757.3536439627063817366.pr-tracker-bot@kernel.org>
+Date: Fri, 16 Aug 2024 18:28:28 +0000
+To: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org, linux-integrity@vger.kernel.org, David
+ Gstir <david@sigma-star.at>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Aug 2024 16:44:01 +0300
-Message-Id: <D3HDPTAXDU8P.5CUQ1ECMIG2X@kernel.org>
-Subject: Re: [PATCH v2] tpm: Clean up TPM space after command failure
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jonathan McDowell" <noodles@earth.li>, "Peter Huewe"
- <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "James Bottomley"
- <James.Bottomley@hansenpartnership.com>, <linux-integrity@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.17.0
-References: <ZrzY_LWIXABkqd-S@earth.li>
- <D3GPGYHWPGFL.1S13HXY9ALZCU@kernel.org> <Zr8-QijwOpDLkol3@earth.li>
-In-Reply-To: <Zr8-QijwOpDLkol3@earth.li>
 
-On Fri Aug 16, 2024 at 2:55 PM EEST, Jonathan McDowell wrote:
-> From: Jonathan McDowell <noodles@meta.com>
->
-> tpm_dev_transmit prepares the TPM space before attempting command
-> transmission. However if the command fails no rollback of this
-> preparation is done. This can result in transient handles being leaked
-> if the device is subsequently closed with no further commands performed.
->
-> Fix this by flushing the space in the event of command transmission
-> failure.
->
-> Fixes: 745b361e989a ("tpm: infrastructure for TPM spaces")
-> Signed-off-by: Jonathan McDowell <noodles@meta.com>
-> ---
-> v2:
->  - Add 'Fixes:'
->  - Cc James as one of the original authors
->  - Add space sanity check in tpm2_flush_space
->
->  drivers/char/tpm/tpm-dev-common.c | 2 ++
->  drivers/char/tpm/tpm2-space.c     | 3 +++
->  2 files changed, 5 insertions(+)
->
-> diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev=
--common.c
-> index 30b4c288c1bb..c3fbbf4d3db7 100644
-> --- a/drivers/char/tpm/tpm-dev-common.c
-> +++ b/drivers/char/tpm/tpm-dev-common.c
-> @@ -47,6 +47,8 @@ static ssize_t tpm_dev_transmit(struct tpm_chip *chip, =
-struct tpm_space *space,
-> =20
->  	if (!ret)
->  		ret =3D tpm2_commit_space(chip, space, buf, &len);
-> +	else
-> +		tpm2_flush_space(chip);
-> =20
->  out_rc:
->  	return ret ? ret : len;
-> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.=
-c
-> index 4892d491da8d..25a66870c165 100644
-> --- a/drivers/char/tpm/tpm2-space.c
-> +++ b/drivers/char/tpm/tpm2-space.c
-> @@ -169,6 +169,9 @@ void tpm2_flush_space(struct tpm_chip *chip)
->  	struct tpm_space *space =3D &chip->work_space;
->  	int i;
-> =20
-> +	if (!space)
-> +		return;
-> +
->  	for (i =3D 0; i < ARRAY_SIZE(space->context_tbl); i++)
->  		if (space->context_tbl[i] && ~space->context_tbl[i])
->  			tpm2_flush_context(chip, space->context_tbl[i]);
+The pull request you sent on Fri, 16 Aug 2024 14:14:45 +0300:
 
-I'll pick this for 6.12: I think it is a legit fix but not worth of
-disturbing the in-progress release cycle (which is going almost rc4
-already):
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-trusted-next-6.11-rc4
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1486141ad8e79956e393f9af0ce076a5942e8feb
 
-Thank you.
+Thank you!
 
-BR, Jarkko
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
