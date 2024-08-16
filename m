@@ -1,135 +1,122 @@
-Return-Path: <linux-integrity+bounces-3328-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3329-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23FBE95484E
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 13:54:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E03095485A
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 13:56:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F8931C21A17
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 11:54:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33D641F23030
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 11:56:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B105B198E80;
-	Fri, 16 Aug 2024 11:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFC61ABEB4;
+	Fri, 16 Aug 2024 11:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="WFHHZ5OD"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8A6143757;
-	Fri, 16 Aug 2024 11:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8586E1AD3EF;
+	Fri, 16 Aug 2024 11:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723809236; cv=none; b=DvCdlDrsADh4rGKvcd9yHGeMyNGiskUWLPIs3ZNuX6GG9bPwqu/muoP81pysdrOcuTSKIPwEZa20Zz4NBYblym7vasnzpYBpbV6Z7ZUd8y56mmw/9/TnKOBAc7OmbWigpbdL31EzB7hUN1CSHjhNBrX/k8MbiyMi++5VdwWmbOQ=
+	t=1723809359; cv=none; b=XISJ+klktLmPhkBenpMYtbdelLWvJSToYI+t5F5gHXcCswoVLbfxueZspn6qFjpRGaSxtTsiaUdOlIydIq7Z8Fbqaq/0O3IDb5bNSTiaa0tFd5P6XJ7t7sRIzvZ0DPsdGGfXeuEyvgW5riwbiIZOkurnMxsKgGkzRED90RCF05w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723809236; c=relaxed/simple;
-	bh=eojZLNJ54T7C1telZ/KLrA0gUmF3UJrn5dZ7ljL4lTs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WeT+aaVBBl5XlLROWN3KATDXcxQZ65aPrwlb7mWCgbjvEQDL99RXX41RjXjD184JTXwUKHoBgCM8OiVYn1F9GN7u7NFSugvVFIQGFf5+SLT1mAV1FZxTGm2gcSPQetBztIiaqXbrxdRhaU0HWMLo3t646rPNn6WFQcY9qlpv5MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Wlfzg42L7z9v7NK;
-	Fri, 16 Aug 2024 19:34:55 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id C0BA514037F;
-	Fri, 16 Aug 2024 19:53:50 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwAn98PHPb9mV9RPAQ--.34928S2;
-	Fri, 16 Aug 2024 12:53:50 +0100 (CET)
-Message-ID: <3cd8019f03dae99c4e43b7613df869499ec72e66.camel@huaweicloud.com>
-Subject: Re: [PATCH] evm: stop avoidably reading i_writecount in
- evm_file_release
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Mateusz Guzik <mjguzik@gmail.com>, zohar@linux.ibm.com, 
- roberto.sassu@huawei.com, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com
-Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Date: Fri, 16 Aug 2024 13:53:39 +0200
-In-Reply-To: <20240806133607.869394-1-mjguzik@gmail.com>
-References: <20240806133607.869394-1-mjguzik@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1723809359; c=relaxed/simple;
+	bh=P1zQUaopEBnPUj03ntwAXsb5a66WDUioes3LPXmeLK8=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S+WDsMaaNhgzVhQQxdCGllZuJDSIO7f/tiCHWtD2gdq7uFHvseYAsa+pwzM1ReImxjmnzNomvgeW8DfyKY1yfiUP8wyEcx5jqbFb+nKkOByA3lVocxqijqYqo41QEy//dx9xvJ+k+mPOb6YXiAy9Mh4TGPTMIxM8Cw3sYC3tf8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=WFHHZ5OD; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	To:From:Date:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=Wl3ZHAqgIGZLTckXRyqpTcjRcs19ZwdEjD9GnraGpIQ=; b=WFHHZ5ODphxCrj5bFJ1/Qx94Qh
+	Ii2eCi++8hZZcvTgw0OvHOh35JGxiCkEyOjf9cJHEWhqvS4So7/L0dytvcf05cIJIiBrgOjvfl1eJ
+	EdDjIdUq/Xq22AO6xinXXML8OgebMYMQ4Mh3fkV/DuTahu+QJmyR9T8zDgdDeGAh8Fu047O1IxMKn
+	jxKbe5qfvpzh37ZUKMphsCJIxeq9chMiMLG9t0WOJg/srvWycABjwSdXLqWjnoI9cCnjoq8Vxa3/p
+	U7WBGH7Kl1g3iVRVoLKk6lJNEhHpPM9Uwe3qFN3nI2hkAMpHdcImH+qtGwLSRxOdg1bjg8X7uaunR
+	uOejhPdg==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1sevYY-00EUiR-2M;
+	Fri, 16 Aug 2024 12:55:46 +0100
+Date: Fri, 16 Aug 2024 12:55:46 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] tpm: Clean up TPM space after command failure
+Message-ID: <Zr8-QijwOpDLkol3@earth.li>
+References: <ZrzY_LWIXABkqd-S@earth.li>
+ <D3GPGYHWPGFL.1S13HXY9ALZCU@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwAn98PHPb9mV9RPAQ--.34928S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFW3Zw1xuF43Jry8Ary7ZFb_yoW8Zr43pF
-	Wftan7JFn5tryfCF92y3W7uFyru340qr18Zas5WF12vFn8JrZYqr48tr1jgFnxKrZ5Cr1f
-	X3yIka45A3WDuaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrPEfUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBGa+tfgI+QAAsz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <D3GPGYHWPGFL.1S13HXY9ALZCU@kernel.org>
 
-On Tue, 2024-08-06 at 15:36 +0200, Mateusz Guzik wrote:
-> The EVM_NEW_FILE flag is unset if the file already existed at the time
-> of open and this can be checked without looking at i_writecount.
+From: Jonathan McDowell <noodles@meta.com>
 
-Agreed. EVM_NEW_FILE is not going to be set during the open(), only
-before, in evm_post_path_mknod().
+tpm_dev_transmit prepares the TPM space before attempting command
+transmission. However if the command fails no rollback of this
+preparation is done. This can result in transient handles being leaked
+if the device is subsequently closed with no further commands performed.
 
-Looks good to me.
+Fix this by flushing the space in the event of command transmission
+failure.
 
-Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+Fixes: 745b361e989a ("tpm: infrastructure for TPM spaces")
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
+---
+v2:
+ - Add 'Fixes:'
+ - Cc James as one of the original authors
+ - Add space sanity check in tpm2_flush_space
 
-Thanks
+ drivers/char/tpm/tpm-dev-common.c | 2 ++
+ drivers/char/tpm/tpm2-space.c     | 3 +++
+ 2 files changed, 5 insertions(+)
 
-Roberto
-
-> Not accessing it reduces traffic on the cacheline during parallel open
-> of the same file and drop the evm_file_release routine from second place
-> to bottom of the profile.
->=20
-> Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
-> ---
->=20
-> The context is that I'm writing a patch which removes one lockref
-> get/put cycle on parallel open. An operational WIP reduces ping-pong in
-> that area and made do_dentry_open skyrocket along with evm_file_release,
-> due to i_writecount access. With the patch they go down again and
-> apparmor takes the rightful first place.
->=20
-> The patch accounts for about 5% speed up at 20 cores running open3 from
-> will-it-scale on top of the above wip. (the apparmor + lockref thing
-> really don't scale, that's next)
->=20
-> I would provide better measurements, but the wip is not ready (as the
-> description suggests) and I need evm out of the way for the actual
-> patch.
->=20
->  security/integrity/evm/evm_main.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
-vm_main.c
-> index 62fe66dd53ce..309630f319e2 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -1084,7 +1084,8 @@ static void evm_file_release(struct file *file)
->  	if (!S_ISREG(inode->i_mode) || !(mode & FMODE_WRITE))
->  		return;
-> =20
-> -	if (iint && atomic_read(&inode->i_writecount) =3D=3D 1)
-> +	if (iint && iint->flags & EVM_NEW_FILE &&
-> +	    atomic_read(&inode->i_writecount) =3D=3D 1)
->  		iint->flags &=3D ~EVM_NEW_FILE;
->  }
-> =20
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index 30b4c288c1bb..c3fbbf4d3db7 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -47,6 +47,8 @@ static ssize_t tpm_dev_transmit(struct tpm_chip *chip, struct tpm_space *space,
+ 
+ 	if (!ret)
+ 		ret = tpm2_commit_space(chip, space, buf, &len);
++	else
++		tpm2_flush_space(chip);
+ 
+ out_rc:
+ 	return ret ? ret : len;
+diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+index 4892d491da8d..25a66870c165 100644
+--- a/drivers/char/tpm/tpm2-space.c
++++ b/drivers/char/tpm/tpm2-space.c
+@@ -169,6 +169,9 @@ void tpm2_flush_space(struct tpm_chip *chip)
+ 	struct tpm_space *space = &chip->work_space;
+ 	int i;
+ 
++	if (!space)
++		return;
++
+ 	for (i = 0; i < ARRAY_SIZE(space->context_tbl); i++)
+ 		if (space->context_tbl[i] && ~space->context_tbl[i])
+ 			tpm2_flush_context(chip, space->context_tbl[i]);
+-- 
+2.46.0
 
 
