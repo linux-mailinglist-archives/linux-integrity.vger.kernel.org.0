@@ -1,135 +1,135 @@
-Return-Path: <linux-integrity+bounces-3326-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3328-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 589B29547F7
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 13:22:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23FBE95484E
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 13:54:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C64E2B2541A
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 11:22:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F8931C21A17
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 11:54:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB62194124;
-	Fri, 16 Aug 2024 11:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jveqprc1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B105B198E80;
+	Fri, 16 Aug 2024 11:53:56 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D61313C9A7;
-	Fri, 16 Aug 2024 11:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8A6143757;
+	Fri, 16 Aug 2024 11:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723807328; cv=none; b=E/Swq4SwjhCOE26Gvi+tDc4yOjzxENeJzQicavF+qKGTjKpdFA/AA36ynomqXrOiTi96dWxfFBAMytc60v4RufBfSpZ/Oe5ezIz/pAndQKCyFM/Qzcu98ofh90GbrSiCGyGdpO3BkjgM1B2ebX+ubvC9VZMVXD0Fo/5bnUUVeIg=
+	t=1723809236; cv=none; b=DvCdlDrsADh4rGKvcd9yHGeMyNGiskUWLPIs3ZNuX6GG9bPwqu/muoP81pysdrOcuTSKIPwEZa20Zz4NBYblym7vasnzpYBpbV6Z7ZUd8y56mmw/9/TnKOBAc7OmbWigpbdL31EzB7hUN1CSHjhNBrX/k8MbiyMi++5VdwWmbOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723807328; c=relaxed/simple;
-	bh=gV2PqQerkGgy/+HK5ajdWorgprSPCXQyQAoB8oo88rk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=rtTYSyJVnnb34eh04BYe0VnNJIn9GbuUZHTB+2ebUuB/zib896abeynYXNnfxwyHyJdxEg4xDPi8S/8nVKIvHD59a+FW1HIf+qk7s9xVY3yEoDsBZ6QdWar9E9jm9AXfnNi+Ez5CGKKIeLy3Atq+3lZF6196MJldnzmO4V7df08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jveqprc1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB10DC32782;
-	Fri, 16 Aug 2024 11:22:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723807328;
-	bh=gV2PqQerkGgy/+HK5ajdWorgprSPCXQyQAoB8oo88rk=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Jveqprc1i1LHYV6qtBL08bsdgzXefjlh1drYspRjo3Pc7kIhjw730W/Iilznig37j
-	 sq74l0Xoy31GXwIYvl7EKsDZAUsuczbJnDgPgKwDIhvExKHkFhvimJz5DX8cVHjHOn
-	 u8WZojYei71O8DMGl0XY1Rx8fcPCZkZxSnURmusIwH2MP4BxFZrJuvT3wwmoIcnwE0
-	 5HLzLypWYmiiTzxn02IS63nfb2IJCzOx/tyCeqBQFHcwTgUCt2N62+tqZKdTn/4t/q
-	 XA0ADrVDyHSsZuS8Mskt+KlNGNbfliJV3QAz3l/mfwjyjpULNA6rRhMtBak9LNwx/1
-	 DTzeAYYEHOMoQ==
+	s=arc-20240116; t=1723809236; c=relaxed/simple;
+	bh=eojZLNJ54T7C1telZ/KLrA0gUmF3UJrn5dZ7ljL4lTs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WeT+aaVBBl5XlLROWN3KATDXcxQZ65aPrwlb7mWCgbjvEQDL99RXX41RjXjD184JTXwUKHoBgCM8OiVYn1F9GN7u7NFSugvVFIQGFf5+SLT1mAV1FZxTGm2gcSPQetBztIiaqXbrxdRhaU0HWMLo3t646rPNn6WFQcY9qlpv5MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Wlfzg42L7z9v7NK;
+	Fri, 16 Aug 2024 19:34:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id C0BA514037F;
+	Fri, 16 Aug 2024 19:53:50 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwAn98PHPb9mV9RPAQ--.34928S2;
+	Fri, 16 Aug 2024 12:53:50 +0100 (CET)
+Message-ID: <3cd8019f03dae99c4e43b7613df869499ec72e66.camel@huaweicloud.com>
+Subject: Re: [PATCH] evm: stop avoidably reading i_writecount in
+ evm_file_release
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Mateusz Guzik <mjguzik@gmail.com>, zohar@linux.ibm.com, 
+ roberto.sassu@huawei.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Date: Fri, 16 Aug 2024 13:53:39 +0200
+In-Reply-To: <20240806133607.869394-1-mjguzik@gmail.com>
+References: <20240806133607.869394-1-mjguzik@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Aug 2024 14:22:04 +0300
-Message-Id: <D3HAP4O4OVS3.2LOSH5HMQ34OZ@kernel.org>
-Cc: "Ross Philipson" <ross.philipson@oracle.com>,
- <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
- <linux-integrity@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <linux-crypto@vger.kernel.org>, <kexec@lists.infradead.org>,
- <linux-efi@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
- <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
- <dave.hansen@linux.intel.com>, <ardb@kernel.org>, <mjg59@srcf.ucam.org>,
- <James.Bottomley@hansenpartnership.com>, <peterhuewe@gmx.de>,
- <jgg@ziepe.ca>, <luto@amacapital.net>, <nivedita@alum.mit.edu>,
- <herbert@gondor.apana.org.au>, <davem@davemloft.net>, <corbet@lwn.net>,
- <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
- <kanth.ghatraju@oracle.com>, <trenchboot-devel@googlegroups.com>
-Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
- early measurements
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Andrew Cooper" <andrew.cooper3@citrix.com>, "Thomas Gleixner"
- <tglx@linutronix.de>, "Daniel P. Smith" <dpsmith@apertussolutions.com>,
- "Eric W. Biederman" <ebiederm@xmission.com>, "Eric Biggers"
- <ebiggers@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240531010331.134441-1-ross.philipson@oracle.com>
- <20240531010331.134441-7-ross.philipson@oracle.com>
- <20240531021656.GA1502@sol.localdomain>
- <874jaegk8i.fsf@email.froward.int.ebiederm.org>
- <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
- <87ttflli09.ffs@tglx> <550d15cd-5c48-4c20-92c2-f09a7e30adc9@citrix.com>
-In-Reply-To: <550d15cd-5c48-4c20-92c2-f09a7e30adc9@citrix.com>
+MIME-Version: 1.0
+X-CM-TRANSID:GxC2BwAn98PHPb9mV9RPAQ--.34928S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFW3Zw1xuF43Jry8Ary7ZFb_yoW8Zr43pF
+	Wftan7JFn5tryfCF92y3W7uFyru340qr18Zas5WF12vFn8JrZYqr48tr1jgFnxKrZ5Cr1f
+	X3yIka45A3WDuaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrPEfUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBGa+tfgI+QAAsz
 
-On Fri Aug 16, 2024 at 2:01 PM EEST, Andrew Cooper wrote:
-> On 15/08/2024 8:10 pm, Thomas Gleixner wrote:
-> > On Thu, Aug 15 2024 at 13:38, Daniel P. Smith wrote:
-> >> On 5/31/24 09:54, Eric W. Biederman wrote:
-> >>> Eric Biggers <ebiggers@kernel.org> writes:
-> >>>> That paragraph is also phrased as a hypothetical, "Even if we'd pref=
-er to use
-> >>>> SHA-256-only".  That implies that you do not, in fact, prefer SHA-25=
-6 only.  Is
-> >>>> that the case?  Sure, maybe there are situations where you *have* to=
- use SHA-1,
-> >>>> but why would you not at least *prefer* SHA-256?
-> >>> Yes.  Please prefer to use SHA-256.
-> >>>
-> >>> Have you considered implementing I think it is SHA1-DC (as git has) t=
-hat
-> >>> is compatible with SHA1 but blocks the known class of attacks where
-> >>> sha1 is actively broken at this point?
-> >> We are using the kernel's implementation, addressing what the kernel=
-=20
-> >> provides is beyond our efforts. Perhaps someone who is interested in=
-=20
-> >> improving the kernel's SHA1 could submit a patch implementing/replacin=
-g=20
-> >> it with SHA1-DC, as I am sure the maintainers would welcome the help.
-> > Well, someone who is interested to get his "secure" code merged should
-> > have a vested interested to have a non-broken SHA1 implementation if
-> > there is a sensible requirement to use SHA1 in that new "secure" code,
-> > no?
->
-> No.
->
-> The use of SHA-1 is necessary even on modern systems to avoid a
-> vulnerability.
->
-> It is the platform, not Linux, which decides which TPM PCR banks are acti=
-ve.
->
-> Linux *must* have an algorithm for every active bank (which is the
-> platform's choice), even if the single thing it intends to do is cap the
-> bank and use better ones.
+On Tue, 2024-08-06 at 15:36 +0200, Mateusz Guzik wrote:
+> The EVM_NEW_FILE flag is unset if the file already existed at the time
+> of open and this can be checked without looking at i_writecount.
 
-For (any) non-legacy features we can choose, which choices we choose to
-support, and which we do not. This is not an oppositive view just saying
-how it is, and platforms set of choices is not a selling argument.
+Agreed. EVM_NEW_FILE is not going to be set during the open(), only
+before, in evm_post_path_mknod().
 
->
-> Capping a bank requires updating the TPM Log without corrupting it,
-> which requires a hash calculation of the correct type for the bank.
->
-> ~Andrew
+Looks good to me.
 
-BR, Jarkko
+Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Thanks
+
+Roberto
+
+> Not accessing it reduces traffic on the cacheline during parallel open
+> of the same file and drop the evm_file_release routine from second place
+> to bottom of the profile.
+>=20
+> Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
+> ---
+>=20
+> The context is that I'm writing a patch which removes one lockref
+> get/put cycle on parallel open. An operational WIP reduces ping-pong in
+> that area and made do_dentry_open skyrocket along with evm_file_release,
+> due to i_writecount access. With the patch they go down again and
+> apparmor takes the rightful first place.
+>=20
+> The patch accounts for about 5% speed up at 20 cores running open3 from
+> will-it-scale on top of the above wip. (the apparmor + lockref thing
+> really don't scale, that's next)
+>=20
+> I would provide better measurements, but the wip is not ready (as the
+> description suggests) and I need evm out of the way for the actual
+> patch.
+>=20
+>  security/integrity/evm/evm_main.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
+vm_main.c
+> index 62fe66dd53ce..309630f319e2 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -1084,7 +1084,8 @@ static void evm_file_release(struct file *file)
+>  	if (!S_ISREG(inode->i_mode) || !(mode & FMODE_WRITE))
+>  		return;
+> =20
+> -	if (iint && atomic_read(&inode->i_writecount) =3D=3D 1)
+> +	if (iint && iint->flags & EVM_NEW_FILE &&
+> +	    atomic_read(&inode->i_writecount) =3D=3D 1)
+>  		iint->flags &=3D ~EVM_NEW_FILE;
+>  }
+> =20
+
 
