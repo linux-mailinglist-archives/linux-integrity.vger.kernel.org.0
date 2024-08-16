@@ -1,80 +1,89 @@
-Return-Path: <linux-integrity+bounces-3334-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3335-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D05149550D8
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 20:29:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E1E595510A
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 20:49:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B5F31F227EB
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 18:29:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6137A1C21DD4
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 18:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 781DE1C3F29;
-	Fri, 16 Aug 2024 18:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tv2DtPzD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02EEF1C37AD;
+	Fri, 16 Aug 2024 18:49:29 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cavan.codon.org.uk (cavan.codon.org.uk [176.126.240.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515141C37B2;
-	Fri, 16 Aug 2024 18:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D821BDAA0;
+	Fri, 16 Aug 2024 18:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.126.240.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723832909; cv=none; b=rhOeZocBLHf6uKc4q0gGsKZ8viZ3tv4PJ6DiczQKMVAxSjgvhdWnYIiELO5JKFn0+HytBxU6MQ6AGgiP80h5lrFmwKWzffoYt+FmrrPv+aPEn0ZzQhRQLpGuoUXMBspKQI1IHTz7p2KRS88r2rLDKcOuR+6CEjGwQLzKqtUM3y0=
+	t=1723834168; cv=none; b=IAemLPGvBjJIqeu5l7fDb9OdlsTWftwOlqXFbnGny6NOepns49vsFd1c4yIoqqEMvUIDw94HQqXRXPjpqPMRrxRnrk37edsXWv2r1eUIu34Vncjjoxh8ltEoCNvR73hqf8aa/v9p/KwuqX0LdwOcPpQ+arA0hmJ4Fc7LjN7+UuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723832909; c=relaxed/simple;
-	bh=BZmQl+oxMjUcDLZqoD9zCIUK26RP/PYDWBrw3V5LaCY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=GM32Ppub6LE5R42N4DopwdlE/md6agilefwmcL0Jdnb8Mw3jDg27hC08u7TnSdbQ8P8gCvCUyAUTg3lIZMSI2ysgbOojn+58sjHv22nk7Q+iiwm+1xiQaV9XWnmMoJyEsELJxlU45HJVTfIH7m2ArNrYCEEyCoZwW/lJw3ELokQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tv2DtPzD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348C1C32782;
-	Fri, 16 Aug 2024 18:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723832909;
-	bh=BZmQl+oxMjUcDLZqoD9zCIUK26RP/PYDWBrw3V5LaCY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=tv2DtPzDxhovDtPtWjmfE3Jdo2Q5fSQH0/TPDU8XzVW3S5LnjEnVXbjqRY0HWFutj
-	 5CGBzyCxdaL5BBNarsSrEI/Irfdcv4rZKfpaKPm8jUWCE4rND5F5qqYw62yQL78ba6
-	 mhH8hrnx2bP63W4HkAHzbVANfngF71FDanMxPoC2nZy0NCLFUzhwQHv7tXJK2jE/uz
-	 TkhiivmVqi730S+uplepkigI43ODgGKDinVDm3wGfoXLpQeVQlvovknZUCE9rZdRO+
-	 sws7mBFVLSpcppzE9ANg1Ft5upPWZCVvNxu/avdwWIMDjkpuieq/VUA/2klDQ5B7Wj
-	 K+jQdb6uyA9xg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE2C938232A9;
-	Fri, 16 Aug 2024 18:28:29 +0000 (UTC)
-Subject: Re: [GIT PULL] KEYS-TRUSTED: keys-trusted-next-6.11-rc4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <D3HAJIMUJEVC.154RCMPVU2URD@iki.fi>
-References: <D3HAJIMUJEVC.154RCMPVU2URD@iki.fi>
-X-PR-Tracked-List-Id: <keyrings.vger.kernel.org>
-X-PR-Tracked-Message-Id: <D3HAJIMUJEVC.154RCMPVU2URD@iki.fi>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-trusted-next-6.11-rc4
-X-PR-Tracked-Commit-Id: 0e28bf61a5f9ab30be3f3b4eafb8d097e39446bb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1486141ad8e79956e393f9af0ce076a5942e8feb
-Message-Id: <172383290829.3597757.3536439627063817366.pr-tracker-bot@kernel.org>
-Date: Fri, 16 Aug 2024 18:28:28 +0000
-To: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org, linux-integrity@vger.kernel.org, David
- Gstir <david@sigma-star.at>
+	s=arc-20240116; t=1723834168; c=relaxed/simple;
+	bh=cLs57Vs9MQ8D3e6i1jotFe7J+gYFAW+PDI+oQja9PhA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ErFN8G1t4jHQ7EPbFVs99IHFruCyrukA4d2Z6Q7EXyfvNlhk+4z5caZ8hvxTsPzrm0vziqQStkB4/ZUXxoEtbhkynjGwl7obAD0vD/ixkSJGQL8Mpl/NKlK/5KEIlOj+xqbV9sgsWGP56vgUEpisJSheZt8CWHDndS6b1S9ifv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=srcf.ucam.org; spf=pass smtp.mailfrom=codon.org.uk; arc=none smtp.client-ip=176.126.240.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=srcf.ucam.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codon.org.uk
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+	id 61FBF40677; Fri, 16 Aug 2024 19:41:16 +0100 (BST)
+Date: Fri, 16 Aug 2024 19:41:16 +0100
+From: Matthew Garrett <mjg59@srcf.ucam.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Andrew Cooper <andrew.cooper3@citrix.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Daniel P. Smith" <dpsmith@apertussolutions.com>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ross Philipson <ross.philipson@oracle.com>,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+	linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
+	mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+	dave.hansen@linux.intel.com, ardb@kernel.org,
+	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
+	jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu,
+	herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com,
+	kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
+ early measurements
+Message-ID: <Zr+dTMYZNY1b9cRV@srcf.ucam.org>
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-7-ross.philipson@oracle.com>
+ <20240531021656.GA1502@sol.localdomain>
+ <874jaegk8i.fsf@email.froward.int.ebiederm.org>
+ <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
+ <87ttflli09.ffs@tglx>
+ <550d15cd-5c48-4c20-92c2-f09a7e30adc9@citrix.com>
+ <D3HAP4O4OVS3.2LOSH5HMQ34OZ@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <D3HAP4O4OVS3.2LOSH5HMQ34OZ@kernel.org>
 
-The pull request you sent on Fri, 16 Aug 2024 14:14:45 +0300:
+On Fri, Aug 16, 2024 at 02:22:04PM +0300, Jarkko Sakkinen wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-trusted-next-6.11-rc4
+> For (any) non-legacy features we can choose, which choices we choose to
+> support, and which we do not. This is not an oppositive view just saying
+> how it is, and platforms set of choices is not a selling argument.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1486141ad8e79956e393f9af0ce076a5942e8feb
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+NIST still permits the use of SHA-1 until 2030, and the most significant 
+demonstrated weaknesses in it don't seem applicable to the use case 
+here. We certainly shouldn't encourage any new uses of it, and anyone 
+who's able to use SHA-2 should be doing that instead, but it feels like 
+people are arguing about not supporting hardware that exists in the real 
+world for vibes reasons rather than it being a realistically attackable 
+weakness (and if we really *are* that concerned about SHA-1, why are we 
+still supporting TPM 1.2 at all?)
 
