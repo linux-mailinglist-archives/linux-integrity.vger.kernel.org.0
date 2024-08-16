@@ -1,122 +1,135 @@
-Return-Path: <linux-integrity+bounces-3329-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3330-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E03095485A
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 13:56:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D343954918
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 14:47:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33D641F23030
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 11:56:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC7491F24BB7
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 12:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFC61ABEB4;
-	Fri, 16 Aug 2024 11:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="WFHHZ5OD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B32191F84;
+	Fri, 16 Aug 2024 12:46:59 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8586E1AD3EF;
-	Fri, 16 Aug 2024 11:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900F41991BB;
+	Fri, 16 Aug 2024 12:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723809359; cv=none; b=XISJ+klktLmPhkBenpMYtbdelLWvJSToYI+t5F5gHXcCswoVLbfxueZspn6qFjpRGaSxtTsiaUdOlIydIq7Z8Fbqaq/0O3IDb5bNSTiaa0tFd5P6XJ7t7sRIzvZ0DPsdGGfXeuEyvgW5riwbiIZOkurnMxsKgGkzRED90RCF05w=
+	t=1723812419; cv=none; b=Ghcb3e8ZjtD39Q8wCC/FZE8Nmi97Nnbn3uB90PFDk2Dxq75JNx2hpoWQc/C5fbC+J/3Nc/fI7IzY0JbvJJ5vd0VWwpUihXO4t5R95ER8PHWrrHtcSaWeY1T4D9QB0EdvuA0Eo5HYpkZzr9XmmHNAmqekHoUVAVQebMV4j0gKdxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723809359; c=relaxed/simple;
-	bh=P1zQUaopEBnPUj03ntwAXsb5a66WDUioes3LPXmeLK8=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S+WDsMaaNhgzVhQQxdCGllZuJDSIO7f/tiCHWtD2gdq7uFHvseYAsa+pwzM1ReImxjmnzNomvgeW8DfyKY1yfiUP8wyEcx5jqbFb+nKkOByA3lVocxqijqYqo41QEy//dx9xvJ+k+mPOb6YXiAy9Mh4TGPTMIxM8Cw3sYC3tf8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=WFHHZ5OD; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	To:From:Date:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=Wl3ZHAqgIGZLTckXRyqpTcjRcs19ZwdEjD9GnraGpIQ=; b=WFHHZ5ODphxCrj5bFJ1/Qx94Qh
-	Ii2eCi++8hZZcvTgw0OvHOh35JGxiCkEyOjf9cJHEWhqvS4So7/L0dytvcf05cIJIiBrgOjvfl1eJ
-	EdDjIdUq/Xq22AO6xinXXML8OgebMYMQ4Mh3fkV/DuTahu+QJmyR9T8zDgdDeGAh8Fu047O1IxMKn
-	jxKbe5qfvpzh37ZUKMphsCJIxeq9chMiMLG9t0WOJg/srvWycABjwSdXLqWjnoI9cCnjoq8Vxa3/p
-	U7WBGH7Kl1g3iVRVoLKk6lJNEhHpPM9Uwe3qFN3nI2hkAMpHdcImH+qtGwLSRxOdg1bjg8X7uaunR
-	uOejhPdg==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1sevYY-00EUiR-2M;
-	Fri, 16 Aug 2024 12:55:46 +0100
-Date: Fri, 16 Aug 2024 12:55:46 +0100
-From: Jonathan McDowell <noodles@earth.li>
-To: Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] tpm: Clean up TPM space after command failure
-Message-ID: <Zr8-QijwOpDLkol3@earth.li>
-References: <ZrzY_LWIXABkqd-S@earth.li>
- <D3GPGYHWPGFL.1S13HXY9ALZCU@kernel.org>
+	s=arc-20240116; t=1723812419; c=relaxed/simple;
+	bh=jFD73xGsQIz18ke3m88ajT/gZe74KPkUJca2QFGcGLU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ptGzsmjsUa0RMlXC4IRYBZCn+Lcv2FtHDiO3UCHCfJt0RT+9uvQzsw6yz6kNe0o6QzHNOGBYy0GU765grj25IDsbFRm5f6gNqgE/nPnxWEOK0c+pQidERgQIzT1WL5yykcfONs17Xd4v166y6xs7HLccEYdsNSj7JLXx6URqGW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4WlgdN2WLLz9v7Jf;
+	Fri, 16 Aug 2024 20:04:08 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id B6534140B34;
+	Fri, 16 Aug 2024 20:28:28 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwCHCoXjRb9mHDdNAQ--.2087S2;
+	Fri, 16 Aug 2024 13:28:28 +0100 (CET)
+Message-ID: <3b04a8fc177eee5ce2eaa24ae8164140188478c0.camel@huaweicloud.com>
+Subject: Re: [PATCH][next] integrity: Use static_assert() to check struct
+ sizes
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>, Mimi Zohar
+ <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, Dmitry
+ Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg
+ <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date: Fri, 16 Aug 2024 14:28:16 +0200
+In-Reply-To: <ZrVBC9dGwukjfhet@cute>
+References: <ZrVBC9dGwukjfhet@cute>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D3GPGYHWPGFL.1S13HXY9ALZCU@kernel.org>
+X-CM-TRANSID:LxC2BwCHCoXjRb9mHDdNAQ--.2087S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWDAFWUuF1UAF43ZFyxZrb_yoW8Ar1fpF
+	yqga4UCrWjqr1I9FnrAFW3ZF4Sg3y0qr1UXr45Jw1FyFnIyr10qF9YyryrCa43KrWDKr1S
+	yFs0qr45AwsrtFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBGa+tfgJSAAAsD
 
-From: Jonathan McDowell <noodles@meta.com>
+On Thu, 2024-08-08 at 16:04 -0600, Gustavo A. R. Silva wrote:
+> Commit 38aa3f5ac6d2 ("integrity: Avoid -Wflex-array-member-not-at-end
+> warnings") introduced tagged `struct evm_ima_xattr_data_hdr` and
+> `struct ima_digest_data_hdr`. We want to ensure that when new members
+> need to be added to the flexible structures, they are always included
+> within these tagged structs.
+>=20
+> So, we use `static_assert()` to ensure that the memory layout for
+> both the flexible structure and the tagged struct is the same after
+> any changes.
 
-tpm_dev_transmit prepares the TPM space before attempting command
-transmission. However if the command fails no rollback of this
-preparation is done. This can result in transient handles being leaked
-if the device is subsequently closed with no further commands performed.
+Looks good to me.
 
-Fix this by flushing the space in the event of command transmission
-failure.
+Tested-by: Roberto Sassu <roberto.sassu@huawei.com>
+Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Fixes: 745b361e989a ("tpm: infrastructure for TPM spaces")
-Signed-off-by: Jonathan McDowell <noodles@meta.com>
----
-v2:
- - Add 'Fixes:'
- - Cc James as one of the original authors
- - Add space sanity check in tpm2_flush_space
+Thanks
 
- drivers/char/tpm/tpm-dev-common.c | 2 ++
- drivers/char/tpm/tpm2-space.c     | 3 +++
- 2 files changed, 5 insertions(+)
+Roberto
 
-diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-index 30b4c288c1bb..c3fbbf4d3db7 100644
---- a/drivers/char/tpm/tpm-dev-common.c
-+++ b/drivers/char/tpm/tpm-dev-common.c
-@@ -47,6 +47,8 @@ static ssize_t tpm_dev_transmit(struct tpm_chip *chip, struct tpm_space *space,
- 
- 	if (!ret)
- 		ret = tpm2_commit_space(chip, space, buf, &len);
-+	else
-+		tpm2_flush_space(chip);
- 
- out_rc:
- 	return ret ? ret : len;
-diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-index 4892d491da8d..25a66870c165 100644
---- a/drivers/char/tpm/tpm2-space.c
-+++ b/drivers/char/tpm/tpm2-space.c
-@@ -169,6 +169,9 @@ void tpm2_flush_space(struct tpm_chip *chip)
- 	struct tpm_space *space = &chip->work_space;
- 	int i;
- 
-+	if (!space)
-+		return;
-+
- 	for (i = 0; i < ARRAY_SIZE(space->context_tbl); i++)
- 		if (space->context_tbl[i] && ~space->context_tbl[i])
- 			tpm2_flush_context(chip, space->context_tbl[i]);
--- 
-2.46.0
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  security/integrity/integrity.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/security/integrity/integrity.h b/security/integrity/integrit=
+y.h
+> index 660f76cb69d3..c2c2da691123 100644
+> --- a/security/integrity/integrity.h
+> +++ b/security/integrity/integrity.h
+> @@ -37,6 +37,8 @@ struct evm_ima_xattr_data {
+>  	);
+>  	u8 data[];
+>  } __packed;
+> +static_assert(offsetof(struct evm_ima_xattr_data, data) =3D=3D sizeof(st=
+ruct evm_ima_xattr_data_hdr),
+> +	      "struct member likely outside of __struct_group()");
+> =20
+>  /* Only used in the EVM HMAC code. */
+>  struct evm_xattr {
+> @@ -65,6 +67,8 @@ struct ima_digest_data {
+>  	);
+>  	u8 digest[];
+>  } __packed;
+> +static_assert(offsetof(struct ima_digest_data, digest) =3D=3D sizeof(str=
+uct ima_digest_data_hdr),
+> +	      "struct member likely outside of __struct_group()");
+> =20
+>  /*
+>   * Instead of wrapping the ima_digest_data struct inside a local structu=
+re
 
 
