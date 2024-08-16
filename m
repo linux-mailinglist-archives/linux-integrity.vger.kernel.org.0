@@ -1,74 +1,46 @@
-Return-Path: <linux-integrity+bounces-3327-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3326-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E467C9547FE
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 13:22:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 589B29547F7
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 13:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 649C8B2241C
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 11:22:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C64E2B2541A
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 11:22:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9BAE85C5E;
-	Fri, 16 Aug 2024 11:22:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB62194124;
+	Fri, 16 Aug 2024 11:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="WmwWE4WZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jveqprc1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B5A155727;
-	Fri, 16 Aug 2024 11:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723807355; cv=pass; b=nbtU+zExXmy+fjKFbkfLurcR9GxAXkr7HL4vNFhgDcYHEOkaJe2dd7jsGQPgFpyZFKyXoXK9Xxk1MM3+MHRWIw8W4mZEvfSBtm/+1rn01WxvTke8vASBq3ot1rQEtZJYtbhCKOn7UNN++cAjwUcV3MDwE7Tp76sUG3g1r1+ynss=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723807355; c=relaxed/simple;
-	bh=V73G1ph7A4jlD8z73K7hiUCMs96TWLHN98ZuDIkEFKQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject; b=ITNKOUcxi9VEOYloDiP8i6sRLccNslaTohtCbY/IHDUP8FsgaqGbWd5bfnBQ5phxSUkVumlAuHJfhFzrPmMIcV4aUIcTFiapihazI9TzgYMxEm18MMIstLI5uSfMNr4ekYWWOnkbdE+Vi+mIXbn4nTkfwEEab4RJLobv7S/Mu0o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=WmwWE4WZ; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
-Received: from localhost (83-245-197-106.elisa-laajakaista.fi [83.245.197.106])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sakkinen)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4WlfXQ4QjKz49Q7J;
-	Fri, 16 Aug 2024 14:14:46 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1723806888;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uvF0qX6Miuc3lKVQd7sJzmzq21xmCuqisnie2MIM8tc=;
-	b=WmwWE4WZbDHSqhbSHQgd8d+MuTvDoDW19Q3dqHQSksONnmdW+RiHfJpc03QgFy7Q8cNW69
-	H8vUTrvjYcoLZiE/qpitR8+7tEmKGvVBe5yfXIhi8y9JU5QQVQyrzCSEIVFjqyiPtSuqRf
-	FzRt4RZSAPq7PtkyzqOxbBaD+BCmNwWZaE/Ac/wZNHj3hJFgwQoFch4lRm2BKeVkmI7SVs
-	zhqP9+2lBHjWGv2PUQTjQ4eSPz1xZYHQUviVzVM3SJ8iRjEPbKPeBfO/9eQVE1BNkJPVvh
-	LUKNpej323nxOSIfPayp0si/NwrhsMmNYIIZ5sRek3dNLOkstbk+oUhba6VofQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1723806888;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uvF0qX6Miuc3lKVQd7sJzmzq21xmCuqisnie2MIM8tc=;
-	b=BnMUvhVnAzELUeeWIynMmlcBYSWVOC5Dn+gLNXTl//m04v2qJo6DqTEg4ghum4j97t7iJa
-	nN7jP8S5jJnJAtZ7l/64n4BmeDIASXSVy/mAOR3Za76EgwOlqS8/tx8BqkvdNg1vR5b2Yr
-	0Mcbu63zk3vD9dSdxtefLjtFgNxYSFD5bHXn9Q9z/B3GUKawHQmC8Ndzmt7x6ODWYXKYHT
-	ZWw2BkbmSUiW+eGCguj3SMwVf+c/i0GmG9eXPFpo1DViRhZMKEanEHQIhAooKI0gT3oITe
-	bgPlKHwr9XWqytZqEhzDW/OOho2UXWnibeT4PdzH/F8rhX086XBz8YazftXewg==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1723806888; a=rsa-sha256;
-	cv=none;
-	b=iVeEWOncV0Ot6QGyKm6rV28HuYFcGjpQDrASMSUKS2ZbV0J2/gIfs5kGRaOMIaTNuyR7Oe
-	1gZvPraJA5Gc1MhO/j0RKMtlvjEJmJOdasToASlRg6jXAIJc4nlIv9+qg4mQFJLILn3nwU
-	6v0rGM7kydc8jNv+I1+uBl1ESTmCftw+KszmSIxYzXPTfIi2yx7f8ApBDJLSRs4DutFmQs
-	IhJKaTS2mETftSDo4HQ5G0pTZD1ii2yerTrw67Hrc8QJ9ke4JcOEENovG0TnNg8ZcaKDEi
-	bTA/wVImWI5kn/9UrQTj6CaEBYn10Yz0nSxvWLDNriHOUD4P2bDTUoBpHJ7vAQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D61313C9A7;
+	Fri, 16 Aug 2024 11:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723807328; cv=none; b=E/Swq4SwjhCOE26Gvi+tDc4yOjzxENeJzQicavF+qKGTjKpdFA/AA36ynomqXrOiTi96dWxfFBAMytc60v4RufBfSpZ/Oe5ezIz/pAndQKCyFM/Qzcu98ofh90GbrSiCGyGdpO3BkjgM1B2ebX+ubvC9VZMVXD0Fo/5bnUUVeIg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723807328; c=relaxed/simple;
+	bh=gV2PqQerkGgy/+HK5ajdWorgprSPCXQyQAoB8oo88rk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=rtTYSyJVnnb34eh04BYe0VnNJIn9GbuUZHTB+2ebUuB/zib896abeynYXNnfxwyHyJdxEg4xDPi8S/8nVKIvHD59a+FW1HIf+qk7s9xVY3yEoDsBZ6QdWar9E9jm9AXfnNi+Ez5CGKKIeLy3Atq+3lZF6196MJldnzmO4V7df08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jveqprc1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB10DC32782;
+	Fri, 16 Aug 2024 11:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723807328;
+	bh=gV2PqQerkGgy/+HK5ajdWorgprSPCXQyQAoB8oo88rk=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=Jveqprc1i1LHYV6qtBL08bsdgzXefjlh1drYspRjo3Pc7kIhjw730W/Iilznig37j
+	 sq74l0Xoy31GXwIYvl7EKsDZAUsuczbJnDgPgKwDIhvExKHkFhvimJz5DX8cVHjHOn
+	 u8WZojYei71O8DMGl0XY1Rx8fcPCZkZxSnURmusIwH2MP4BxFZrJuvT3wwmoIcnwE0
+	 5HLzLypWYmiiTzxn02IS63nfb2IJCzOx/tyCeqBQFHcwTgUCt2N62+tqZKdTn/4t/q
+	 XA0ADrVDyHSsZuS8Mskt+KlNGNbfliJV3QAz3l/mfwjyjpULNA6rRhMtBak9LNwx/1
+	 DTzeAYYEHOMoQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -77,49 +49,87 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Aug 2024 14:14:45 +0300
-Message-Id: <D3HAJIMUJEVC.154RCMPVU2URD@iki.fi>
-From: "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: "David Howells" <dhowells@redhat.com>, "Herbert Xu"
- <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
- <keyrings@vger.kernel.org>, <linux-integrity@vger.kernel.org>, "David
- Gstir" <david@sigma-star.at>
-Subject: [GIT PULL] KEYS-TRUSTED: keys-trusted-next-6.11-rc4
+Date: Fri, 16 Aug 2024 14:22:04 +0300
+Message-Id: <D3HAP4O4OVS3.2LOSH5HMQ34OZ@kernel.org>
+Cc: "Ross Philipson" <ross.philipson@oracle.com>,
+ <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+ <linux-integrity@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-crypto@vger.kernel.org>, <kexec@lists.infradead.org>,
+ <linux-efi@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+ <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+ <dave.hansen@linux.intel.com>, <ardb@kernel.org>, <mjg59@srcf.ucam.org>,
+ <James.Bottomley@hansenpartnership.com>, <peterhuewe@gmx.de>,
+ <jgg@ziepe.ca>, <luto@amacapital.net>, <nivedita@alum.mit.edu>,
+ <herbert@gondor.apana.org.au>, <davem@davemloft.net>, <corbet@lwn.net>,
+ <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+ <kanth.ghatraju@oracle.com>, <trenchboot-devel@googlegroups.com>
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
+ early measurements
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Andrew Cooper" <andrew.cooper3@citrix.com>, "Thomas Gleixner"
+ <tglx@linutronix.de>, "Daniel P. Smith" <dpsmith@apertussolutions.com>,
+ "Eric W. Biederman" <ebiederm@xmission.com>, "Eric Biggers"
+ <ebiggers@kernel.org>
 X-Mailer: aerc 0.17.0
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-7-ross.philipson@oracle.com>
+ <20240531021656.GA1502@sol.localdomain>
+ <874jaegk8i.fsf@email.froward.int.ebiederm.org>
+ <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
+ <87ttflli09.ffs@tglx> <550d15cd-5c48-4c20-92c2-f09a7e30adc9@citrix.com>
+In-Reply-To: <550d15cd-5c48-4c20-92c2-f09a7e30adc9@citrix.com>
 
+On Fri Aug 16, 2024 at 2:01 PM EEST, Andrew Cooper wrote:
+> On 15/08/2024 8:10 pm, Thomas Gleixner wrote:
+> > On Thu, Aug 15 2024 at 13:38, Daniel P. Smith wrote:
+> >> On 5/31/24 09:54, Eric W. Biederman wrote:
+> >>> Eric Biggers <ebiggers@kernel.org> writes:
+> >>>> That paragraph is also phrased as a hypothetical, "Even if we'd pref=
+er to use
+> >>>> SHA-256-only".  That implies that you do not, in fact, prefer SHA-25=
+6 only.  Is
+> >>>> that the case?  Sure, maybe there are situations where you *have* to=
+ use SHA-1,
+> >>>> but why would you not at least *prefer* SHA-256?
+> >>> Yes.  Please prefer to use SHA-256.
+> >>>
+> >>> Have you considered implementing I think it is SHA1-DC (as git has) t=
+hat
+> >>> is compatible with SHA1 but blocks the known class of attacks where
+> >>> sha1 is actively broken at this point?
+> >> We are using the kernel's implementation, addressing what the kernel=
+=20
+> >> provides is beyond our efforts. Perhaps someone who is interested in=
+=20
+> >> improving the kernel's SHA1 could submit a patch implementing/replacin=
+g=20
+> >> it with SHA1-DC, as I am sure the maintainers would welcome the help.
+> > Well, someone who is interested to get his "secure" code merged should
+> > have a vested interested to have a non-broken SHA1 implementation if
+> > there is a sensible requirement to use SHA1 in that new "secure" code,
+> > no?
+>
+> No.
+>
+> The use of SHA-1 is necessary even on modern systems to avoid a
+> vulnerability.
+>
+> It is the platform, not Linux, which decides which TPM PCR banks are acti=
+ve.
+>
+> Linux *must* have an algorithm for every active bank (which is the
+> platform's choice), even if the single thing it intends to do is cap the
+> bank and use better ones.
 
-The following changes since commit a4a35f6cbebbf9466b6c412506ab89299d567f51=
-:
+For (any) non-legacy features we can choose, which choices we choose to
+support, and which we do not. This is not an oppositive view just saying
+how it is, and platforms set of choices is not a selling argument.
 
-  Merge tag 'net-6.11-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git=
-/netdev/net (2024-08-15 10:35:20 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags=
-/keys-trusted-next-6.11-rc4
-
-for you to fetch changes up to 0e28bf61a5f9ab30be3f3b4eafb8d097e39446bb:
-
-  KEYS: trusted: dcp: fix leak of blob encryption key (2024-08-15 22:01:14 =
-+0300)
-
-----------------------------------------------------------------
-Hi,
-
-Contains two bug fixes for a memory corruption bug and a memory leak bug
-in the DCP trusted keys type. Just as a remainder DCP was a crypto
-coprocessor in i.MX SoC's.
+>
+> Capping a bank requires updating the TPM Log without corrupting it,
+> which requires a hash calculation of the correct type for the bank.
+>
+> ~Andrew
 
 BR, Jarkko
-
-----------------------------------------------------------------
-David Gstir (2):
-      KEYS: trusted: fix DCP blob payload length assignment
-      KEYS: trusted: dcp: fix leak of blob encryption key
-
- security/keys/trusted-keys/trusted_dcp.c | 35 ++++++++++++++++++++--------=
-----
- 1 file changed, 22 insertions(+), 13 deletions(-)
 
