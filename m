@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-3350-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3351-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3FAE955DC2
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 19:03:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6728955DC6
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 19:03:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42C991F22E0D
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 17:03:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6687A282F92
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 17:03:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30B4A154423;
-	Sun, 18 Aug 2024 17:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 995B6155A59;
+	Sun, 18 Aug 2024 17:02:04 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00516153838;
-	Sun, 18 Aug 2024 17:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA531553A7;
+	Sun, 18 Aug 2024 17:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724000522; cv=none; b=BIWYqNow2qs6dQDgxeDMr+5RXsrdD22eAXIn6v2Wzdw3oydLFMLjNt2Mi6o3fBOZ20Di0oUa4xhui5TBrjQV4eNuFbxuuHveLnEHUbJ1YrvmHz5mjHXlVDKgmbMZPO9iD9rtxpKP8cyroknh/dDB839XCGZX3nDU/ve+xYEAXgU=
+	t=1724000524; cv=none; b=jSge0xHDZY34DMKAqyOnl/AaNYWZSzcf7i14tjq/8KIvLQV53dSqicd9ERoyNUPoDX/F7+nHYN5gjngImsqy0AgJQPAY3Dk7KBPbQZTDc/viMk67hYwiF1XV7o5mb8HTSK15YN+Qp8kPwPxLVsGv0+JGV3CNwMR3b983GWFL3C0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724000522; c=relaxed/simple;
-	bh=KIMne1S5wtdevGFHyIWyJ76O7uv7LBcXzQ57F3KySMk=;
+	s=arc-20240116; t=1724000524; c=relaxed/simple;
+	bh=9xjxxmBQ7tQlGwg/eoRKItneGP4VK5pPCK0biFg/LhE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oEA+HGgLpyu28MtGn+cX76lIxiZ+YKWajXvX7qf0zeEbuQVJDj3AO3krFu1GZXfOMHAo65MgUBr5GMbafYqMsYxiVitc4/MERP7UDYDwHOk82pDQi7xIRD7PBQqlW41Jmi3GrUgUDNOlIEksCgljbYMW69mfMCjFbdHAfySbvao=
+	 MIME-Version; b=mZBd1J0Jg0GNYs7xAQqW0oMldkX6MzA2hnYHY3R0UQ/+43jR8Z3ckh9OMv6mWQz9/3GDbMQxgR05auaxFh55srt19FeTBt91g+WlMVjkb4HimrfwwJTRLv+R84c/XCWNYlE0ghFaN1erWaBXxxtcQgJXE/QiUeholxGt/4nxR0M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Wn1kC23y8z9v7NF;
-	Mon, 19 Aug 2024 00:42:59 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Wn1kG2vGlz9v7NJ;
+	Mon, 19 Aug 2024 00:43:02 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id C6DA4140443;
-	Mon, 19 Aug 2024 01:01:49 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 48DBF14040D;
+	Mon, 19 Aug 2024 01:01:55 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCHCoXmKMJmFj1xAQ--.19682S5;
-	Sun, 18 Aug 2024 18:01:49 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwCHCoXmKMJmFj1xAQ--.19682S6;
+	Sun, 18 Aug 2024 18:01:54 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: dhowells@redhat.com,
 	dwmw2@infradead.org,
@@ -49,9 +49,9 @@ Cc: linux-kernel@vger.kernel.org,
 	zohar@linux.ibm.com,
 	linux-integrity@vger.kernel.org,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 13/14] KEYS: Provide a function to load keys from a PGP keyring blob
-Date: Sun, 18 Aug 2024 18:57:55 +0200
-Message-Id: <20240818165756.629203-14-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v2 14/14] KEYS: Introduce load_pgp_public_keyring()
+Date: Sun, 18 Aug 2024 18:57:56 +0200
+Message-Id: <20240818165756.629203-15-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
 References: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
@@ -62,227 +62,151 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwCHCoXmKMJmFj1xAQ--.19682S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw15KF18WF1rCr1xCF1Dtrb_yoWxXFyfpF
-	W0kryrtFWkGr9Ik3yrAw1Ig3sYyr1vyFW5GrySyw15Ar9rXa18KrZ29r4DKa47Ars7t34r
-	trWqg34YyF1DtrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-	WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-	AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
-	ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-	07UHnmiUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBGbBWHECBQAAsf
+X-CM-TRANSID:LxC2BwCHCoXmKMJmFj1xAQ--.19682S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF1DZryrGFWkCF1rAF18Krg_yoWrZF45p3
+	yvyr1fKr4xtr1fArWfGF1UWrW5Cw1vkry2gw13Cw43AFWDKFy5ArsrKFs09ay5Wr98Zr1F
+	q3yvqF1a9w1UA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+	C2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+	7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
+	kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
+	6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw
+	0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
+	c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+	AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
+	pf9x07Udl1kUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGbBWPgB9AAAsn
 
-From: David Howells <dhowells@redhat.com>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Provide a function to load keys from a PGP keyring blob to the built-in
-keyring:
+Preload PGP keys from 'pubring.gpg', placed in certs/ of the kernel source
+directory.
 
-	int preload_pgp_keys(const u8 *pgpdata, size_t pgpdatalen,
-			     struct key *keyring);
-
-Descriptions are generated from user ID notes and key fingerprints.  The
-keys will actually be identified by the ID calculated from the PGP data
-rather than by the description, so this shouldn't be a problem.
-
-The keys are attached to the keyring supplied.
-
-Looking as root in /proc/keys after the built-in keyring has been loaded:
-
-383a00c1 I------     1 perm 1f030000     0     0 asymmetri \
-				Red Hat, Inc. dbeca166: PGP.DSA dbeca166 []
-
-Thanks to Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> for some
-pointing out some errors.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- crypto/asymmetric_keys/Kconfig       |   8 ++
- crypto/asymmetric_keys/Makefile      |   1 +
- crypto/asymmetric_keys/pgp_preload.c | 111 +++++++++++++++++++++++++++
- include/crypto/pgp.h                 |   8 +-
- 4 files changed, 127 insertions(+), 1 deletion(-)
- create mode 100644 crypto/asymmetric_keys/pgp_preload.c
+ certs/Kconfig               | 11 +++++++++++
+ certs/Makefile              |  7 +++++++
+ certs/system_certificates.S | 18 ++++++++++++++++++
+ certs/system_keyring.c      | 23 +++++++++++++++++++++++
+ 4 files changed, 59 insertions(+)
 
-diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
-index d9c709e042f6..6379efded6f4 100644
---- a/crypto/asymmetric_keys/Kconfig
-+++ b/crypto/asymmetric_keys/Kconfig
-@@ -133,4 +133,12 @@ config PGP_TEST_KEY
+diff --git a/certs/Kconfig b/certs/Kconfig
+index 78307dc25559..9b7ece1e45fa 100644
+--- a/certs/Kconfig
++++ b/certs/Kconfig
+@@ -154,4 +154,15 @@ config SYSTEM_BLACKLIST_AUTH_UPDATE
+ 	  keyring.  The PKCS#7 signature of the description is set in the key
+ 	  payload.  Blacklist keys cannot be removed.
  
- 	  This is intended for testing the PGP parser.
- 
-+config PGP_PRELOAD
-+	bool "PGP public key preloading facility"
++config PGP_PRELOAD_PUBLIC_KEYS
++	bool "Preload PGP public keys"
 +	depends on SYSTEM_TRUSTED_KEYRING
-+	select PGP_KEY_PARSER
++	select PGP_PRELOAD
++	default n
 +	help
-+	  This option provides a facility for the kernel to preload PGP-wrapped
-+	  bundles of keys during boot to the built-in keyring.
++	  Load at boot time the PGP public keys from a reserved area (populated
++	  with the content of 'certs/pubring.gpg' provided at kernel build
++	  time), and add them to the built-in keyring. Invalid keys are ignored
++	  and the loading continues.
 +
- endif # ASYMMETRIC_KEY_TYPE
-diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Makefile
-index 507a78f9a0a1..2fa55a7830e6 100644
---- a/crypto/asymmetric_keys/Makefile
-+++ b/crypto/asymmetric_keys/Makefile
-@@ -84,6 +84,7 @@ $(obj)/mscode.asn1.o: $(obj)/mscode.asn1.c $(obj)/mscode.asn1.h
- # PGP handling
- #
- obj-$(CONFIG_PGP_LIBRARY) += pgp_library.o
-+obj-$(CONFIG_PGP_PRELOAD) += pgp_preload.o
+ endmenu
+diff --git a/certs/Makefile b/certs/Makefile
+index 1094e3860c2a..7a3d68441e09 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -31,6 +31,13 @@ $(obj)/system_certificates.o: $(obj)/x509_certificate_list
+ $(obj)/x509_certificate_list: $(CONFIG_SYSTEM_TRUSTED_KEYS) $(obj)/extract-cert FORCE
+ 	$(call if_changed,extract_certs)
  
- obj-$(CONFIG_PGP_KEY_PARSER) += pgp_key_parser.o
- pgp_key_parser-y := \
-diff --git a/crypto/asymmetric_keys/pgp_preload.c b/crypto/asymmetric_keys/pgp_preload.c
-new file mode 100644
-index 000000000000..e0776dc8f928
---- /dev/null
-+++ b/crypto/asymmetric_keys/pgp_preload.c
-@@ -0,0 +1,111 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Asymmetric key request handling
-+ *
-+ * Copyright (C) 2011 Red Hat, Inc. All Rights Reserved.
-+ * Written by David Howells (dhowells@redhat.com)
-+ */
++ifdef CONFIG_PGP_PRELOAD_PUBLIC_KEYS
++ifeq ($(shell ls $(srctree)/certs/pubring.gpg 2> /dev/null), $(srctree)/certs/pubring.gpg)
++AFLAGS_system_certificates.o := -DHAVE_PUBRING_GPG
++$(obj)/system_certificates.o: $(srctree)/certs/pubring.gpg
++endif
++endif
 +
-+#include <linux/module.h>
-+#include <linux/key.h>
-+#include <linux/err.h>
-+#include <crypto/pgp.h>
-+#include <keys/asymmetric-type.h>
-+
-+#include "pgp_parser.h"
-+
-+struct preload_pgp_keys_context {
-+	struct pgp_parse_context pgp;
-+	key_ref_t keyring;
-+	const u8 *key_start;
-+	const u8 *key_end;
-+	bool found_key;
-+};
-+
-+/*
-+ * Create a key.
-+ */
-+static void __init create_pgp_key(struct preload_pgp_keys_context *ctx)
-+{
-+	key_ref_t key;
-+
-+	key = key_create_or_update(ctx->keyring,
-+				   "asymmetric",
-+				   NULL,
-+				   ctx->key_start,
-+				   ctx->key_end - ctx->key_start,
-+				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
-+				    KEY_USR_VIEW | KEY_USR_READ),
-+				   KEY_ALLOC_NOT_IN_QUOTA |
-+				   KEY_ALLOC_BUILT_IN |
-+				   KEY_ALLOC_BYPASS_RESTRICTION);
-+	if (IS_ERR(key)) {
-+		pr_notice("Ignoring PGP key, error: %ld\n", PTR_ERR(key));
-+		return;
-+	}
-+
-+	pr_notice("Loaded PGP key '%s'\n",
-+		  key_ref_to_ptr(key)->description);
-+
-+	key_ref_put(key);
-+}
-+
-+/*
-+ * Extract a public key or subkey from the PGP stream.
-+ */
-+static int __init found_pgp_key(struct pgp_parse_context *context,
-+				enum pgp_packet_tag type, u8 headerlen,
-+				const u8 *data, size_t datalen)
-+{
-+	struct preload_pgp_keys_context *ctx =
-+		container_of(context, struct preload_pgp_keys_context, pgp);
-+
-+	if (ctx->found_key) {
-+		ctx->key_end = data - headerlen;
-+		create_pgp_key(ctx);
-+	}
-+
-+	ctx->key_start = data - headerlen;
-+	ctx->found_key = true;
-+	return 0;
-+}
-+
-+/**
-+ * preload_pgp_keys - Load keys from a PGP keyring blob
-+ * @pgpdata: The PGP keyring blob containing the keys.
-+ * @pgpdatalen: The size of the @pgpdata blob.
-+ * @keyring: The keyring to add the new keys to.
-+ *
-+ * Preload a pack of keys from a PGP keyring blob.
-+ *
-+ * The keys have their descriptions generated from the user ID and fingerprint
-+ * in the PGP stream.  Since keys can be matched on their key IDs independently
-+ * of the key description, the description is mostly irrelevant apart from the
-+ * fact that keys of the same description displace one another from a keyring.
-+ *
-+ * The caller should override the current creds if they want the keys to be
-+ * owned by someone other than the current process's owner.  Keys will not be
-+ * accounted towards the owner's quota.
-+ *
-+ * This function may only be called whilst the kernel is booting.
-+ */
-+int __init preload_pgp_keys(const u8 *pgpdata, size_t pgpdatalen,
-+			    struct key *keyring)
-+{
-+	struct preload_pgp_keys_context ctx;
-+	int ret;
-+
-+	ctx.pgp.types_of_interest = (1 << PGP_PKT_PUBLIC_KEY);
-+	ctx.pgp.process_packet = found_pgp_key;
-+	ctx.keyring = make_key_ref(keyring, 1);
-+	ctx.found_key = false;
-+
-+	ret = pgp_parse_packets(pgpdata, pgpdatalen, &ctx.pgp);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ctx.found_key) {
-+		ctx.key_end = pgpdata + pgpdatalen;
-+		create_pgp_key(&ctx);
-+	}
-+	return 0;
-+}
-diff --git a/include/crypto/pgp.h b/include/crypto/pgp.h
-index 99dd1ab6c1b1..263b44603636 100644
---- a/include/crypto/pgp.h
-+++ b/include/crypto/pgp.h
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0+ */
--/* PGP signature processing
-+/* PGP key and signature processing
-  *
-  * Copyright (C) 2014 Red Hat, Inc. All Rights Reserved.
-  * Written by David Howells (dhowells@redhat.com)
-@@ -27,4 +27,10 @@ extern struct public_key_signature *pgp_sig_get_sig(struct pgp_sig_verify *ctx,
- 						    bool is_key_sig);
- extern u8 pgp_sig_get_version(struct pgp_sig_verify *ctx);
+ targets += x509_certificate_list
  
-+/*
-+ * pgp_preload.c
-+ */
-+extern int __init preload_pgp_keys(const u8 *pgpdata, size_t pgpdatalen,
-+				   struct key *keyring);
+ # If module signing is requested, say by allyesconfig, but a key has not been
+diff --git a/certs/system_certificates.S b/certs/system_certificates.S
+index 003e25d4a17e..b3cbf0811e3f 100644
+--- a/certs/system_certificates.S
++++ b/certs/system_certificates.S
+@@ -44,3 +44,21 @@ module_cert_size:
+ #else
+ 	.long __module_cert_end - __module_cert_start
+ #endif
 +
- #endif /* _CRYPTO_PGP_H */
++	.align 8
++	.globl pgp_public_keys
++pgp_public_keys:
++__pgp_key_list_start:
++#ifdef HAVE_PUBRING_GPG
++	.incbin "certs/pubring.gpg"
++#endif
++__pgp_key_list_end:
++
++	.align 8
++	.globl pgp_public_keys_size
++pgp_public_keys_size:
++#ifdef CONFIG_64BIT
++	.quad __pgp_key_list_end - __pgp_key_list_start
++#else
++	.long __pgp_key_list_end - __pgp_key_list_start
++#endif
+diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+index db0fde36a71b..7b4c1dfa7fb3 100644
+--- a/certs/system_keyring.c
++++ b/certs/system_keyring.c
+@@ -32,6 +32,10 @@ static struct key *platform_trusted_keys;
+ extern __initconst const u8 system_certificate_list[];
+ extern __initconst const unsigned long system_certificate_list_size;
+ extern __initconst const unsigned long module_cert_size;
++#ifdef CONFIG_PGP_PRELOAD_PUBLIC_KEYS
++extern __initconst const u8 pgp_public_keys[];
++extern __initconst const unsigned long pgp_public_keys_size;
++#endif
+ 
+ /**
+  * restrict_link_by_builtin_trusted - Restrict keyring addition by built-in CA
+@@ -268,6 +272,15 @@ __init int load_module_cert(struct key *keyring)
+ 	if (!IS_ENABLED(CONFIG_IMA_APPRAISE_MODSIG))
+ 		return 0;
+ 
++#ifdef CONFIG_PGP_PRELOAD_PUBLIC_KEYS
++	pr_notice("Load PGP public keys to keyring %s\n", keyring->description);
++
++	if (preload_pgp_keys(pgp_public_keys,
++			     pgp_public_keys_size,
++			     keyring) < 0)
++		pr_err("Can't load PGP public keys\n");
++#endif
++
+ 	pr_notice("Loading compiled-in module X.509 certificates\n");
+ 
+ 	return x509_load_certificate_list(system_certificate_list,
+@@ -292,6 +305,16 @@ static __init int load_system_certificate_list(void)
+ 	size = system_certificate_list_size - module_cert_size;
+ #endif
+ 
++#ifdef CONFIG_PGP_PRELOAD_PUBLIC_KEYS
++	pr_notice("Load PGP public keys to keyring %s\n",
++		  builtin_trusted_keys->description);
++
++	if (preload_pgp_keys(pgp_public_keys,
++			     pgp_public_keys_size,
++			     builtin_trusted_keys) < 0)
++		pr_err("Can't load PGP public keys\n");
++#endif
++
+ 	return x509_load_certificate_list(p, size, builtin_trusted_keys);
+ }
+ late_initcall(load_system_certificate_list);
 -- 
 2.34.1
 
