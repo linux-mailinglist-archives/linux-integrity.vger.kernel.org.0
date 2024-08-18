@@ -1,139 +1,228 @@
-Return-Path: <linux-integrity+bounces-3336-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3337-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9A01955138
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 21:11:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91A7F955D8D
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 18:59:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 742521F23573
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 Aug 2024 19:11:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B67F91C20A59
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 16:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881451C37BE;
-	Fri, 16 Aug 2024 19:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="sH5VjGp2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD32B148823;
+	Sun, 18 Aug 2024 16:59:46 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DD21C0DC5;
-	Fri, 16 Aug 2024 19:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416B581AD2;
+	Sun, 18 Aug 2024 16:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723835475; cv=none; b=nZkNEurnZVe3Uo8u99nBynam+2tZrWbEpGbVTHIwZ7hwpInAg3Rw7v+qxzkKXjsLGur+/oL/p0wsIfBlA3T7ticqDla50EbYW1UvqviuN1ws7IimxpNNOlX3mCTDvjwrO/BmX++z8OkAoW3s2vouuTT78ijaWK3XL8Az427PRE8=
+	t=1724000386; cv=none; b=AeCafPTSJvV7klRcOG+pdzfCBsLcu+KSnwJqYwSTRA8A6iYU97E9lOhwfuZQOj0OQAT6/jIPpu/hLTvEesxnsC6pg8MwAacRx1qwm3arvAlLy1iucHVwpHhGonjYu96k1YdGysr8hkMjKqfw23RhdpbDuIuPx8L489fn0KJT5G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723835475; c=relaxed/simple;
-	bh=XMP5kYN/lNCxS08FM9q5A+YLKatBEUnyJVgLnMAWigI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ffao0JFz+qVvr8u6vI2y1mcWMhfnZrzDiuSAw4ww9hsHUN5rKCRP/d438ez7ZdTzyVb4NkObA5PYdHge3g7Q7M1dcuBh7XpYfEAT8Z1hfL0fSCzHA0DtrHWqU8DPBwz82m5TesWTWvCbXz7CcGyd+kk4jeJwLnCTX2P8IMTU5Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=sH5VjGp2; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.106.151] (unknown [131.107.174.23])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7078920B7165;
-	Fri, 16 Aug 2024 12:11:13 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7078920B7165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1723835473;
-	bh=DINdXw4rsRHscph2P2mh0jmv8tgdSIjxLG+8b1MLgBI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sH5VjGp2yrjvCTHmfalgwmnYuUqubfq/VnipazfpCj58DUEY9PO9gEFZDibvnAIIL
-	 RykxOtSBbRmQ2LY5/Q6gBtiUDG5Ini9yIjRJtKx3zWxpqcj8KmpvWVMcYlv9YI4P/B
-	 UeSob/5uozqhsV8PZW3vnPLGLsAQFCxQZW0CSEa8=
-Message-ID: <ac6e33b8-ec1f-494a-874f-9a16d3316fce@linux.microsoft.com>
-Date: Fri, 16 Aug 2024 12:11:12 -0700
+	s=arc-20240116; t=1724000386; c=relaxed/simple;
+	bh=hsTauafTm2FR41Tdc9ImN807VXws3wFETzem63wTHrw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=j38h+vNkTK/C5KEULp8pS9HZLwh5gZHy8RiKNLsnouH1bvPis3VPnVhkM+fdbCx83Qxzz59BYn4dE3pUS7QwYw3G2fuT5/XSNTp3pMYrNfG2kuqmG4AGlR/Zj2N5gMnKtgOZHWR5Vst11n6UNdZfGlSZVDyhMLXcsvuTV4Cky4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Wn1gQ1BQFz9v7Hm;
+	Mon, 19 Aug 2024 00:40:34 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 578ED1401F1;
+	Mon, 19 Aug 2024 00:59:34 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwAXm4VpKMJm+zZxAQ--.21009S2;
+	Sun, 18 Aug 2024 17:59:33 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: dhowells@redhat.com,
+	dwmw2@infradead.org,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net
+Cc: linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	zohar@linux.ibm.com,
+	linux-integrity@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 00/14] KEYS: Add support for PGP keys and signatures
+Date: Sun, 18 Aug 2024 18:57:42 +0200
+Message-Id: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v20 12/20] dm verity: expose root hash digest and
- signature data to LSMs
-To: Mikulas Patocka <mpatocka@redhat.com>, Paul Moore <paul@paul-moore.com>
-Cc: Mike Snitzer <snitzer@kernel.org>, Alasdair Kergon <agk@redhat.com>,
- linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org, fsverity@lists.linux.dev,
- linux-block@vger.kernel.org, dm-devel@lists.linux.dev,
- audit@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
- <1722665314-21156-13-git-send-email-wufan@linux.microsoft.com>
- <9dc30ca6-486c-4fa9-910d-ed1dc6da0e95@linux.microsoft.com>
- <CAHC9VhQrnu8Sj=XnDvg=wGTBxacvMSW6OJyG3-tpwrsbGat6vA@mail.gmail.com>
- <88695db-efc0-6cc6-13ee-fd7c2abe61c@redhat.com>
-Content-Language: en-US
-From: Fan Wu <wufan@linux.microsoft.com>
-In-Reply-To: <88695db-efc0-6cc6-13ee-fd7c2abe61c@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwAXm4VpKMJm+zZxAQ--.21009S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKrW7ArW5Zw4fGFW7uFWDtwb_yoWxuF1xpF
+	4Fkr90yFyDJrn2kayfJw17uw4rAFs5Aw43Gwnaqw15A3sIqF10ya92kF13uF9xGr18XrWF
+	qrWYqw1UCw1Yy3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUF1v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGbBWPgB5wABs1
 
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
+Support for PGP keys and signatures was proposed by David long time ago,
+before the decision of using PKCS#7 for kernel modules signatures
+verification was made. After that, there has been not enough interest to
+support PGP too.
 
-On 8/16/2024 6:35 AM, Mikulas Patocka wrote:
-> 
-> 
-> On Thu, 15 Aug 2024, Paul Moore wrote:
-> 
->> On Thu, Aug 8, 2024 at 6:38 PM Fan Wu <wufan@linux.microsoft.com> wrote:
->>>
->>> Hi Mikulas,
->>>
->>> I hope you’re doing well. I wanted to thank you again for your thorough
->>> review for the last version. I’ve since made some minor updates for this
->>> version, including adding more comments and refactoring the way the hash
->>> algorithm name is obtained due to recent changes in dm-verity.
->>>
->>> Would you mind if we keep the Review-by tag on the latest version since
->>> the changes are minor? Your feedback is greatly valued, and I’d
->>> appreciate it if you could take a quick look when you have a moment.
->>
->> To add a bit more to this, this patchset now looks like it is in a
->> state where we would like to merge it into the LSM tree for the
->> upcoming merge window, but I would really like to make sure that the
->> device-mapper folks are okay with these changes; an
->> Acked-by/Reviewed-by on this patch would be appreciated, assuming you
->> are still okay with this patch.
->>
->> For those who may be missing the context, the full patchset can be
->> found on lore at the link below:
->>
->> https://lore.kernel.org/linux-security-module/1722665314-21156-1-git-send-email-wufan@linux.microsoft.com
-> 
-> Hi
-> 
-> I'm not an expert in Linux security subsystems. I skimmed through the
-> dm-verity patch, didn't find anything wrong with it, so you can add
-> 
-> Reviewed-by: Mikulas Patocka <mpatocka@redhat.com>
->
+Lately, when discussing a proposal of introducing fsverity signatures in
+Fedora [1], developers expressed their preference on not having a separate
+key for signing, which would complicate the management of the distribution.
+They would be more in favor of using the same PGP key, currently used for
+signing RPM headers, also for file-based signatures (not only fsverity, but
+also IMA ones).
 
-Thank you for reviewing the patch and for your suggestion.
+Another envisioned use case would be to add the ability to appraise RPM
+headers with their existing PGP signature, so that they can be used as an
+authenticated source of reference values for appraising remaining
+files [2].
 
->>>>
->>>> +#ifdef CONFIG_SECURITY
->>>> +     u8 *root_digest_sig;    /* signature of the root digest */
->>>> +#endif /* CONFIG_SECURITY */
->>>>        unsigned int salt_size;
->>>>        sector_t data_start;    /* data offset in 512-byte sectors */
->>>>        sector_t hash_start;    /* hash start in blocks */
->>>> @@ -58,6 +61,9 @@ struct dm_verity {
->>>>        bool hash_failed:1;     /* set if hash of any block failed */
->>>>        bool use_bh_wq:1;       /* try to verify in BH wq before normal work-queue */
->>>>        unsigned int digest_size;       /* digest size for the current hash algorithm */
->>>> +#ifdef CONFIG_SECURITY
->>>> +     unsigned int sig_size;  /* root digest signature size */
->>>> +#endif /* CONFIG_SECURITY */
->>>>        unsigned int hash_reqsize; /* the size of temporary space for crypto */
->>>>        enum verity_mode mode;  /* mode for handling verification errors */
->>>>        unsigned int corrupted_errs;/* Number of errors for corrupted blocks */
-> 
-> Just nit-picking: I would move "unsigned int sig_size" up, after "u8
-> *root_digest_sig" entry.
-> 
-> Mikulas
+To make these use cases possible, introduce support for PGP keys and
+signatures in the kernel, and load provided PGP keys in the built-in
+keyring, so that PGP signatures of RPM headers, fsverity digests, and IMA
+digests can be verified from this trust anchor.
 
-Sure, I can make these two fields together.
+In addition to the original version of the patch set, also introduce
+support for signature verification of PGP keys, so that those keys can be
+added to keyrings with a signature-based restriction (e.g. .ima). PGP keys
+are searched with partial IDs, provided with signature subtype 16 (Issuer).
+Search with full IDs could be supported with
+draft-ietf-openpgp-rfc4880bis-10, by retrieving the information from
+signature subtype 33 (Issuer Fingerprint). Due to the possibility of ID
+collisions, the key_or_keyring restriction is not supported.
 
--Fan
+The patch set includes two preliminary patches: patch 1 introduces
+mpi_key_length(), to get the number of bits and bytes of an MPI; patch 2
+introduces rsa_parse_priv_key_raw() and rsa_parse_pub_key_raw(), to parse
+an RSA key in RAW format if the ASN.1 parser returns an error.
+
+Patches 3-5 introduce the library necessary to parse PGP keys and
+signatures, whose support is added with patches 6-10. Patch 11 introduces
+verify_pgp_signature() to be used by kernel subsystems (e.g. fsverity and
+IMA). Patch 12 is for testing of PGP signatures. Finally, patches 13-14
+allow loading a set of PGP keys from a supplied blob at boot time.
+
+Changelog
+
+v1 [4]:
+- Remove quiet_cmd_extract_certs (redundant, likely leftover from
+  conflict resolution)
+- Load PGP keys embedded in the kernel image within load_module_cert()
+  and load_system_certificate_list(), instead of using a separate initcall
+- Style bug fixes found by checkpatch.pl
+- Add <crypto/pgp.h> include in crypto/asymmetric_keys/pgp_preload.c, to
+  remove no previous prototype warning
+- Correctly check returned tfm in pgp_generate_fingerprint()
+- Fix printing message in pgp_generate_fingerprint()
+- Don't create a public key if the key blob does not contain a PGP key
+  packet
+- Remove unused pgp_pubkey_hash array
+- Set KEY_EFLAG_DIGITALSIG key flag if the key has the capability
+- Allow PGP_SIG_GENERAL_CERT_OF_UID_PUBKEY signature type (for key sigs)
+- Add is_key_sig parameter to pgp_sig_get_sig() to ensure the key
+  signature type is PGP_SIG_GENERAL_CERT_OF_UID_PUBKEY or
+  PGP_SIG_POSTITIVE_CERT_OF_UID_PUBKEY
+
+v0 [3]:
+- style fixes
+- move include/linux/pgp.h and pgplib.h to crypto/asymmetric_keys
+- introduce verify_pgp_signature()
+- replace KEY_ALLOC_TRUSTED flag with KEY_ALLOC_BUILT_IN
+- don't fetch PGP subkeys
+- drop support for DSA
+- store number of MPIs in pgp_key_algo_p_num_mpi array
+- replace dynamic memory allocations with static ones in
+  pgp_generate_fingerprint()
+- store only keys with capability of verifying signatures
+- remember selection of PGP signature packet and don't repeat parsing
+- move search of the PGP key to verify the signature from the beginning
+  to the end of the verification process (to be similar with PKCS#7)
+- don't retry key search in the session keyring from the signature
+  verification code, let the caller pass the desired keyring
+- for the PGP signature test key type, retry the key search in the session
+  keyring
+- retry key search in restrict_link_by_signature() with a partial ID
+  (provided in the PGP signature)
+
+[1] https://fedoraproject.org/wiki/Changes/FsVerityRPM
+[2] https://lore.kernel.org/linux-integrity/20240415142436.2545003-1-roberto.sassu@huaweicloud.com/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-modsign.git/log/?h=pgp-parser
+[4] https://lore.kernel.org/linux-integrity/20220111180318.591029-1-roberto.sassu@huawei.com/
+
+David Howells (8):
+  PGPLIB: PGP definitions (RFC 4880)
+  PGPLIB: Basic packet parser
+  PGPLIB: Signature parser
+  KEYS: PGP data parser
+  KEYS: Provide PGP key description autogeneration
+  KEYS: PGP-based public key signature verification
+  PGP: Provide a key type for testing PGP signatures
+  KEYS: Provide a function to load keys from a PGP keyring blob
+
+Roberto Sassu (6):
+  mpi: Introduce mpi_key_length()
+  rsa: add parser of raw format
+  KEYS: Retry asym key search with partial ID in
+    restrict_link_by_signature()
+  KEYS: Calculate key digest and get signature of the key
+  verification: introduce verify_pgp_signature()
+  KEYS: Introduce load_pgp_public_keyring()
+
+ MAINTAINERS                             |   1 +
+ certs/Kconfig                           |  11 +
+ certs/Makefile                          |   7 +
+ certs/system_certificates.S             |  18 +
+ certs/system_keyring.c                  |  93 ++++
+ crypto/asymmetric_keys/Kconfig          |  38 ++
+ crypto/asymmetric_keys/Makefile         |  13 +
+ crypto/asymmetric_keys/pgp.h            | 206 ++++++++
+ crypto/asymmetric_keys/pgp_library.c    | 620 ++++++++++++++++++++++++
+ crypto/asymmetric_keys/pgp_parser.h     |  18 +
+ crypto/asymmetric_keys/pgp_preload.c    | 111 +++++
+ crypto/asymmetric_keys/pgp_public_key.c | 492 +++++++++++++++++++
+ crypto/asymmetric_keys/pgp_signature.c  | 505 +++++++++++++++++++
+ crypto/asymmetric_keys/pgp_test_key.c   | 129 +++++
+ crypto/asymmetric_keys/pgplib.h         |  74 +++
+ crypto/asymmetric_keys/restrict.c       |  10 +-
+ crypto/rsa.c                            |  14 +-
+ crypto/rsa_helper.c                     |  69 +++
+ include/crypto/internal/rsa.h           |   6 +
+ include/crypto/pgp.h                    |  36 ++
+ include/linux/mpi.h                     |   2 +
+ include/linux/verification.h            |  23 +
+ lib/crypto/mpi/mpicoder.c               |  33 +-
+ 23 files changed, 2516 insertions(+), 13 deletions(-)
+ create mode 100644 crypto/asymmetric_keys/pgp.h
+ create mode 100644 crypto/asymmetric_keys/pgp_library.c
+ create mode 100644 crypto/asymmetric_keys/pgp_parser.h
+ create mode 100644 crypto/asymmetric_keys/pgp_preload.c
+ create mode 100644 crypto/asymmetric_keys/pgp_public_key.c
+ create mode 100644 crypto/asymmetric_keys/pgp_signature.c
+ create mode 100644 crypto/asymmetric_keys/pgp_test_key.c
+ create mode 100644 crypto/asymmetric_keys/pgplib.h
+ create mode 100644 include/crypto/pgp.h
+
+-- 
+2.34.1
+
 
