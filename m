@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-3345-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3347-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E2D7955DAE
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 19:01:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F22DE955DB6
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 19:02:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51B981C21509
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 17:01:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7DE51F22143
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 17:02:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2089E153801;
-	Sun, 18 Aug 2024 17:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9FE412FB34;
+	Sun, 18 Aug 2024 17:01:42 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB0A153808;
-	Sun, 18 Aug 2024 17:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC40D208CA;
+	Sun, 18 Aug 2024 17:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724000428; cv=none; b=hLOdsie4luDY5xgt9Dg5k5IuVOxbdcA6DkwGoYpslJ8/oSpwwMrkmwiV00JkdgGlupc0fBOpYqTCz6r+qgXJBse8emUjFmB373iLZBna7enG7jiIhiA0fAQQC2sRzgBNCBOw3ir4fYg6fRLDwRtPM0deSawQoVL5af3m6dfnaJM=
+	t=1724000502; cv=none; b=rlRj0b9P8i2fgO2UEW/yZYpDn4ws9wsnulFlT9cduy2qDnlt/FmIbftgtfpOdFy6W/AggEQ2HO0Oj7E0Sbn6uxgzwCk+LPDQ+EEphQqHAYBZPQgMpaKCF04C7frzvxgxAASYSvKvJTMYEIP5xGu2+h0kSrj6ZtQX1QGUvDAKs9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724000428; c=relaxed/simple;
-	bh=cPhy/a3GqMIBddkPxq8lUP5ZGXsGoXchDekDHW2+9YE=;
+	s=arc-20240116; t=1724000502; c=relaxed/simple;
+	bh=3EovKK7RDUc6RLroEVErm+ftl/7A8yA3Uw7D68DjqsY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JUpIRFz7beumw+WOvbrj9BxvvOoxf7tkwZ1YzZ8mZLfia9vdwP8Gl0PX4980sgz8B+lBUrnq1Lc28v4y+Mzm6qrxPctPK8qQUe7kVSYAKRzQmr3Mt7UU7JBseIJWcaQaMptDS0vsPcWFohcN9JRTBHRI0AI7pixtGE1AAvzYyDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+	 MIME-Version; b=NvekdmL5On3tojkGF8brNoozO5gDay3T1kEr4ryFlgikbpAv0DNst/U49JzXpzxae1sc1FhvXV1k9ndc8TYIkWXa7nlxmLQH4r+8mNjZlmCcTznqRokrgF3YppAgzfVsbIK/32wyK8x5KioMos51iMCugcRB9qsgm6I+i23ArDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Wn1Z10pKRz9v7Jg;
-	Mon, 19 Aug 2024 00:35:53 +0800 (CST)
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Wn1jr3GQWz9v7NJ;
+	Mon, 19 Aug 2024 00:42:40 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 3B68A1400E3;
-	Mon, 19 Aug 2024 01:00:23 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 56AEE140380;
+	Mon, 19 Aug 2024 01:01:33 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAXm4VpKMJm+zZxAQ--.21009S11;
-	Sun, 18 Aug 2024 18:00:22 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwCHCoXmKMJmFj1xAQ--.19682S2;
+	Sun, 18 Aug 2024 18:01:32 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: dhowells@redhat.com,
 	dwmw2@infradead.org,
@@ -49,9 +49,9 @@ Cc: linux-kernel@vger.kernel.org,
 	zohar@linux.ibm.com,
 	linux-integrity@vger.kernel.org,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 09/14] KEYS: Retry asym key search with partial ID in restrict_link_by_signature()
-Date: Sun, 18 Aug 2024 18:57:51 +0200
-Message-Id: <20240818165756.629203-10-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v2 10/14] KEYS: Calculate key digest and get signature of the key
+Date: Sun, 18 Aug 2024 18:57:52 +0200
+Message-Id: <20240818165756.629203-11-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
 References: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
@@ -62,62 +62,168 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwAXm4VpKMJm+zZxAQ--.21009S11
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF13Xr4kZryxWF1xWFyfJFb_yoW8GFyxpa
-	y8CryFkry8K347Cay5Aw47W3yfCFZ5Zr1fGrs3Gwn8A34qqFs8KrWIvF17Wry5Cr4IvryS
-	vrWjgr1Ykw4UAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
-	kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-	5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtV
-	W8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY
-	1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUF9NVUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGbBWPgB7AAAs-
+X-CM-TRANSID:LxC2BwCHCoXmKMJmFj1xAQ--.19682S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrW7Zw1DGr1UWry7CFW7urg_yoWrZr1DpF
+	WrK34ftrW5Grn2kFZ8Jw4xu3yF9348Cw1fK34Skw1a93sYqr1UCay09F1jgFn8GFykAryF
+	yFWqyFWavr1DZrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvvb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+	F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+	kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+	xVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+	IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+	6r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2
+	IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+	jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjxUOBMKDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGbBWPgB8QABsj
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Retry asymmetric key search in restrict_link_by_signature() to support the
-case of partial IDs, provided by PGP signatures (only the last 8 bytes).
+Calculate the digest of the signature, according to the RFC4880 section
+5.2.4, get the last suitable signature with types 0x10 (Generic
+certification of a User ID and Public-Key packet) or 0x13 (Positive
+certification of a User ID and Public Key packet), and store it in the
+asym_auth field of the key payload, so that it is available for validating
+a restriction on a keyring.
 
-Although recently draft-ietf-openpgp-rfc4880bis-10 supports the signature
-subpacket type 33, which contains the full issuer fingerprint, we cannot
-rely on existing signatures to support it.
+Type 0x10 is included despite not giving the strongest trust guarantees,
+since it is the one used by most common PGP implementations (including
+gpg).
+
+The rationale of taking the last signature is that, if there are multiple
+signatures, that would be of a different issuer (not a self-signature),
+that likely has more chances to be useful for the restriction verification.
+If there is one (the self-signature), that will be used.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
 ---
- crypto/asymmetric_keys/restrict.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ crypto/asymmetric_keys/pgp_public_key.c | 81 +++++++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
 
-diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
-index afcd4d101ac5..dd3d4b3405f7 100644
---- a/crypto/asymmetric_keys/restrict.c
-+++ b/crypto/asymmetric_keys/restrict.c
-@@ -97,8 +97,14 @@ int restrict_link_by_signature(struct key *dest_keyring,
- 	key = find_asymmetric_key(trust_keyring,
- 				  sig->auth_ids[0], sig->auth_ids[1],
- 				  sig->auth_ids[2], false);
--	if (IS_ERR(key))
--		return -ENOKEY;
-+	if (IS_ERR(key)) {
-+		/* Retry with a partial ID. */
-+		key = find_asymmetric_key(trust_keyring,
-+					  sig->auth_ids[0], sig->auth_ids[1],
-+					  sig->auth_ids[2], true);
-+		if (IS_ERR(key))
-+			return -ENOKEY;
-+	}
+diff --git a/crypto/asymmetric_keys/pgp_public_key.c b/crypto/asymmetric_keys/pgp_public_key.c
+index e7f74d513a9e..91678cbdc196 100644
+--- a/crypto/asymmetric_keys/pgp_public_key.c
++++ b/crypto/asymmetric_keys/pgp_public_key.c
+@@ -14,6 +14,7 @@
+ #include <keys/asymmetric-parser.h>
+ #include <crypto/hash.h>
+ #include <crypto/public_key.h>
++#include <crypto/pgp.h>
  
- 	if (use_builtin_keys && !test_bit(KEY_FLAG_BUILTIN, &key->flags))
- 		ret = -ENOKEY;
+ #include "pgp_parser.h"
+ 
+@@ -61,6 +62,8 @@ struct pgp_key_data_parse_context {
+ 	size_t raw_fingerprint_len;
+ 	const char *user_id;
+ 	size_t user_id_len;
++	const char *key_pkt;
++	size_t key_pkt_len;
+ };
+ 
+ /*
+@@ -226,6 +229,12 @@ static int pgp_process_public_key(struct pgp_parse_context *context,
+ 		return -EBADMSG;
+ 	}
+ 
++	/* Pointer refers to data being processed. */
++	if (type == PGP_PKT_PUBLIC_KEY) {
++		ctx->key_pkt = data;
++		ctx->key_pkt_len = datalen;
++	}
++
+ 	pub = kzalloc(sizeof(*pub), GFP_KERNEL);
+ 	if (!pub)
+ 		return -ENOMEM;
+@@ -316,6 +325,77 @@ pgp_key_generate_id(struct pgp_key_data_parse_context *ctx)
+ 	return NULL;
+ }
+ 
++/*
++ * Calculate the digest of the signature according to the RFC4880, section
++ * 5.2.4 (packet type 0x13).
++ */
++static int pgp_key_add_sig_data(struct pgp_key_data_parse_context *ctx,
++				struct pgp_sig_verify *sig_ctx)
++{
++	loff_t offset = 0;
++	u8 *data;
++
++	if (!ctx->key_pkt_len || !ctx->user_id_len)
++		return 0;
++
++	/* 0x99 + key pkt len + key pkt + 0xb4 + user ID len + user ID */
++	data = kmalloc(1 + sizeof(u16) + ctx->key_pkt_len +
++		       1 + sizeof(u32) + ctx->user_id_len, GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data[offset++] = 0x99;
++	data[offset++] = ctx->key_pkt_len >> 8;
++	data[offset++] = ctx->key_pkt_len;
++
++	memcpy(data + offset, ctx->key_pkt, ctx->key_pkt_len);
++	offset += ctx->key_pkt_len;
++
++	if (pgp_sig_get_version(sig_ctx) == PGP_SIG_VERSION_4) {
++		data[offset++] = 0xb4;
++		data[offset++] = ctx->user_id_len >> 24;
++		data[offset++] = ctx->user_id_len >> 16;
++		data[offset++] = ctx->user_id_len >> 8;
++		data[offset++] = ctx->user_id_len;
++	}
++
++	memcpy(data + offset, ctx->user_id, ctx->user_id_len);
++	offset += ctx->user_id_len;
++
++	pgp_sig_add_data(sig_ctx, data, offset);
++	kfree(data);
++	return 0;
++}
++
++static struct public_key_signature *
++pgp_key_get_sig(struct key_preparsed_payload *prep,
++		struct pgp_key_data_parse_context *ctx)
++{
++	struct public_key_signature *sig = NULL;
++	struct pgp_sig_verify *sig_ctx;
++	bool keep_sig = false;
++	int ret;
++
++	sig_ctx = pgp_sig_parse(prep->data, prep->datalen);
++	if (IS_ERR(sig_ctx))
++		return NULL;
++
++	ret = pgp_key_add_sig_data(ctx, sig_ctx);
++	if (ret < 0)
++		goto out;
++
++	sig = pgp_sig_get_sig(sig_ctx, true);
++	if (IS_ERR(sig)) {
++		sig = NULL;
++		goto out;
++	}
++
++	keep_sig = true;
++out:
++	pgp_sig_verify_cancel(sig_ctx, keep_sig);
++	return sig;
++}
++
+ /*
+  * Attempt to parse the instantiation data blob for a key as a PGP packet
+  * message holding a key.
+@@ -380,6 +460,7 @@ static int pgp_key_parse(struct key_preparsed_payload *prep)
+ 	prep->payload.data[asym_subtype] = &public_key_subtype;
+ 	prep->payload.data[asym_key_ids] = pgp_key_generate_id(&ctx);
+ 	prep->payload.data[asym_crypto] = ctx.pub;
++	prep->payload.data[asym_auth] = pgp_key_get_sig(prep, &ctx);
+ 	prep->quotalen = 100;
+ 	return 0;
+ 
 -- 
 2.34.1
 
