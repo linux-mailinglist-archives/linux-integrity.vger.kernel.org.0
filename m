@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-3347-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3348-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F22DE955DB6
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 19:02:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 732AA955DBA
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 19:02:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7DE51F22143
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 17:02:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 993091C21704
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 17:02:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9FE412FB34;
-	Sun, 18 Aug 2024 17:01:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4401814E2ED;
+	Sun, 18 Aug 2024 17:01:48 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC40D208CA;
-	Sun, 18 Aug 2024 17:01:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5861B14C59A;
+	Sun, 18 Aug 2024 17:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724000502; cv=none; b=rlRj0b9P8i2fgO2UEW/yZYpDn4ws9wsnulFlT9cduy2qDnlt/FmIbftgtfpOdFy6W/AggEQ2HO0Oj7E0Sbn6uxgzwCk+LPDQ+EEphQqHAYBZPQgMpaKCF04C7frzvxgxAASYSvKvJTMYEIP5xGu2+h0kSrj6ZtQX1QGUvDAKs9U=
+	t=1724000508; cv=none; b=ksP7e4hs496i2QZ5mSJTywCjc8sHyXqgbmSJ7nvCRpWebRUeyU6QjhWyzKxptvC0c/d2/94ztbckPvCVu+Go8N+RdsEHw0WPLOTiKzd0179CKXQg+Hrixgddw7S6ZIlZXXNZuw9frl47UKn06JuVKr0N08ozWop3uVUHvh5/hsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724000502; c=relaxed/simple;
-	bh=3EovKK7RDUc6RLroEVErm+ftl/7A8yA3Uw7D68DjqsY=;
+	s=arc-20240116; t=1724000508; c=relaxed/simple;
+	bh=eLi4aH52NYYpKtfeIIO2DtM7AULReorcbN+ORw9Nums=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NvekdmL5On3tojkGF8brNoozO5gDay3T1kEr4ryFlgikbpAv0DNst/U49JzXpzxae1sc1FhvXV1k9ndc8TYIkWXa7nlxmLQH4r+8mNjZlmCcTznqRokrgF3YppAgzfVsbIK/32wyK8x5KioMos51iMCugcRB9qsgm6I+i23ArDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+	 MIME-Version; b=fJqeWGi0w4dma6zeKSjr9nJhwMyq0hUlXZXz5Tc0Ku+cm2SvB3Aj4tic6JvODh9gruvKGWkELtte6hmVKVoJlI0zXsVshlqyZyPKm8a6y3GclbaiaJZ74kA7zn6jhRCjKsig4zvf1agu5t2SRfReC8q+/+vOOLJS6LGGKU+7c3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Wn1jr3GQWz9v7NJ;
-	Mon, 19 Aug 2024 00:42:40 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Wn1bY5MGTz9v7JW;
+	Mon, 19 Aug 2024 00:37:13 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 56AEE140380;
-	Mon, 19 Aug 2024 01:01:33 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id D079214035F;
+	Mon, 19 Aug 2024 01:01:38 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCHCoXmKMJmFj1xAQ--.19682S2;
-	Sun, 18 Aug 2024 18:01:32 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwCHCoXmKMJmFj1xAQ--.19682S3;
+	Sun, 18 Aug 2024 18:01:38 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: dhowells@redhat.com,
 	dwmw2@infradead.org,
@@ -49,9 +49,9 @@ Cc: linux-kernel@vger.kernel.org,
 	zohar@linux.ibm.com,
 	linux-integrity@vger.kernel.org,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 10/14] KEYS: Calculate key digest and get signature of the key
-Date: Sun, 18 Aug 2024 18:57:52 +0200
-Message-Id: <20240818165756.629203-11-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v2 11/14] verification: introduce verify_pgp_signature()
+Date: Sun, 18 Aug 2024 18:57:53 +0200
+Message-Id: <20240818165756.629203-12-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
 References: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
@@ -62,168 +62,159 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwCHCoXmKMJmFj1xAQ--.19682S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrW7Zw1DGr1UWry7CFW7urg_yoWrZr1DpF
-	WrK34ftrW5Grn2kFZ8Jw4xu3yF9348Cw1fK34Skw1a93sYqr1UCay09F1jgFn8GFykAryF
-	yFWqyFWavr1DZrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvvb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
-	F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
-	kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
-	xVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-	IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-	6r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2
-	IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-	jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73Uj
-	IFyTuYvjxUOBMKDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGbBWPgB8QABsj
+X-CM-TRANSID:LxC2BwCHCoXmKMJmFj1xAQ--.19682S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF1kZw15XF1fXw1DWF1xZrb_yoWrCr1rpF
+	nYvF4FvFy3Arn7Aay3Ga13Z3WrGrn5Kw17X3sFk3ZxJFn7X3ZFy395KF4YqrW5C34UXrWF
+	9rZ2qFy3Gw1DJw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
+	WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
+	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
+	AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
+	ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
+	07UCsjUUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGbBWPgB8QACsg
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Calculate the digest of the signature, according to the RFC4880 section
-5.2.4, get the last suitable signature with types 0x10 (Generic
-certification of a User ID and Public-Key packet) or 0x13 (Positive
-certification of a User ID and Public Key packet), and store it in the
-asym_auth field of the key payload, so that it is available for validating
-a restriction on a keyring.
-
-Type 0x10 is included despite not giving the strongest trust guarantees,
-since it is the one used by most common PGP implementations (including
-gpg).
-
-The rationale of taking the last signature is that, if there are multiple
-signatures, that would be of a different issuer (not a self-signature),
-that likely has more chances to be useful for the restriction verification.
-If there is one (the self-signature), that will be used.
+Introduce verify_pgp_signature() to verify PGP signatures from detached
+data. It will be used by fsverity and by IMA.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- crypto/asymmetric_keys/pgp_public_key.c | 81 +++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+ certs/system_keyring.c       | 70 ++++++++++++++++++++++++++++++++++++
+ include/linux/verification.h | 23 ++++++++++++
+ 2 files changed, 93 insertions(+)
 
-diff --git a/crypto/asymmetric_keys/pgp_public_key.c b/crypto/asymmetric_keys/pgp_public_key.c
-index e7f74d513a9e..91678cbdc196 100644
---- a/crypto/asymmetric_keys/pgp_public_key.c
-+++ b/crypto/asymmetric_keys/pgp_public_key.c
-@@ -14,6 +14,7 @@
- #include <keys/asymmetric-parser.h>
- #include <crypto/hash.h>
- #include <crypto/public_key.h>
+diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+index 9de610bf1f4b..db0fde36a71b 100644
+--- a/certs/system_keyring.c
++++ b/certs/system_keyring.c
+@@ -16,6 +16,7 @@
+ #include <keys/asymmetric-type.h>
+ #include <keys/system_keyring.h>
+ #include <crypto/pkcs7.h>
 +#include <crypto/pgp.h>
  
- #include "pgp_parser.h"
- 
-@@ -61,6 +62,8 @@ struct pgp_key_data_parse_context {
- 	size_t raw_fingerprint_len;
- 	const char *user_id;
- 	size_t user_id_len;
-+	const char *key_pkt;
-+	size_t key_pkt_len;
- };
- 
- /*
-@@ -226,6 +229,12 @@ static int pgp_process_public_key(struct pgp_parse_context *context,
- 		return -EBADMSG;
- 	}
- 
-+	/* Pointer refers to data being processed. */
-+	if (type == PGP_PKT_PUBLIC_KEY) {
-+		ctx->key_pkt = data;
-+		ctx->key_pkt_len = datalen;
-+	}
-+
- 	pub = kzalloc(sizeof(*pub), GFP_KERNEL);
- 	if (!pub)
- 		return -ENOMEM;
-@@ -316,6 +325,77 @@ pgp_key_generate_id(struct pgp_key_data_parse_context *ctx)
- 	return NULL;
+ static struct key *builtin_trusted_keys;
+ #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+@@ -418,6 +419,75 @@ int verify_pkcs7_signature(const void *data, size_t len,
  }
+ EXPORT_SYMBOL_GPL(verify_pkcs7_signature);
  
-+/*
-+ * Calculate the digest of the signature according to the RFC4880, section
-+ * 5.2.4 (packet type 0x13).
++#ifdef CONFIG_PGP_KEY_PARSER
++/**
++ * verify_pgp_signature - Verify a PGP-based signature on system data.
++ * @data: The data to be verified (must be provided).
++ * @len: Size of @data.
++ * @raw_pgp: The PGP message that is the signature.
++ * @pgp_len: The size of @raw_pgp.
++ * @trusted_keys: Trusted keys to use (NULL for builtin trusted keys only,
++ *					(void *)1UL for all trusted keys).
++ * @usage: The use to which the key is being put.
++ * @view_content: Callback to gain access to content.
++ * @ctx: Context for callback.
 + */
-+static int pgp_key_add_sig_data(struct pgp_key_data_parse_context *ctx,
-+				struct pgp_sig_verify *sig_ctx)
++int verify_pgp_signature(const void *data, size_t len,
++			 const void *raw_pgp, size_t pgp_len,
++			 struct key *trusted_keys,
++			 enum key_being_used_for usage,
++			 int (*view_content)(void *ctx,
++					     const void *data, size_t len,
++					     size_t asn1hdrlen),
++			 void *ctx)
 +{
-+	loff_t offset = 0;
-+	u8 *data;
-+
-+	if (!ctx->key_pkt_len || !ctx->user_id_len)
-+		return 0;
-+
-+	/* 0x99 + key pkt len + key pkt + 0xb4 + user ID len + user ID */
-+	data = kmalloc(1 + sizeof(u16) + ctx->key_pkt_len +
-+		       1 + sizeof(u32) + ctx->user_id_len, GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data[offset++] = 0x99;
-+	data[offset++] = ctx->key_pkt_len >> 8;
-+	data[offset++] = ctx->key_pkt_len;
-+
-+	memcpy(data + offset, ctx->key_pkt, ctx->key_pkt_len);
-+	offset += ctx->key_pkt_len;
-+
-+	if (pgp_sig_get_version(sig_ctx) == PGP_SIG_VERSION_4) {
-+		data[offset++] = 0xb4;
-+		data[offset++] = ctx->user_id_len >> 24;
-+		data[offset++] = ctx->user_id_len >> 16;
-+		data[offset++] = ctx->user_id_len >> 8;
-+		data[offset++] = ctx->user_id_len;
-+	}
-+
-+	memcpy(data + offset, ctx->user_id, ctx->user_id_len);
-+	offset += ctx->user_id_len;
-+
-+	pgp_sig_add_data(sig_ctx, data, offset);
-+	kfree(data);
-+	return 0;
-+}
-+
-+static struct public_key_signature *
-+pgp_key_get_sig(struct key_preparsed_payload *prep,
-+		struct pgp_key_data_parse_context *ctx)
-+{
-+	struct public_key_signature *sig = NULL;
-+	struct pgp_sig_verify *sig_ctx;
-+	bool keep_sig = false;
++	struct pgp_sig_verify *pgp_ctx;
 +	int ret;
 +
-+	sig_ctx = pgp_sig_parse(prep->data, prep->datalen);
-+	if (IS_ERR(sig_ctx))
-+		return NULL;
++	if (!data || !len)
++		return -EINVAL;
 +
-+	ret = pgp_key_add_sig_data(ctx, sig_ctx);
-+	if (ret < 0)
-+		goto out;
++	pgp_ctx = pgp_sig_parse(raw_pgp, pgp_len);
++	if (IS_ERR(pgp_ctx))
++		return PTR_ERR(pgp_ctx);
 +
-+	sig = pgp_sig_get_sig(sig_ctx, true);
-+	if (IS_ERR(sig)) {
-+		sig = NULL;
-+		goto out;
++	if (!trusted_keys) {
++		trusted_keys = builtin_trusted_keys;
++	} else if (trusted_keys == VERIFY_USE_SECONDARY_KEYRING) {
++#ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
++		trusted_keys = secondary_trusted_keys;
++#else
++		trusted_keys = builtin_trusted_keys;
++#endif
++	} else if (trusted_keys == VERIFY_USE_PLATFORM_KEYRING) {
++#ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
++		trusted_keys = platform_trusted_keys;
++#else
++		trusted_keys = NULL;
++#endif
++		if (!trusted_keys) {
++			ret = -ENOKEY;
++			pr_devel("PGP platform keyring is not available\n");
++			goto error;
++		}
 +	}
 +
-+	keep_sig = true;
-+out:
-+	pgp_sig_verify_cancel(sig_ctx, keep_sig);
-+	return sig;
-+}
++	/* The data should be detached - so we need to supply it. */
++	if (pgp_sig_add_data(pgp_ctx, data, len)) {
++		pr_err("Failed to supply data for PGP signature\n");
++		ret = -EBADMSG;
++		goto error;
++	}
 +
- /*
-  * Attempt to parse the instantiation data blob for a key as a PGP packet
-  * message holding a key.
-@@ -380,6 +460,7 @@ static int pgp_key_parse(struct key_preparsed_payload *prep)
- 	prep->payload.data[asym_subtype] = &public_key_subtype;
- 	prep->payload.data[asym_key_ids] = pgp_key_generate_id(&ctx);
- 	prep->payload.data[asym_crypto] = ctx.pub;
-+	prep->payload.data[asym_auth] = pgp_key_get_sig(prep, &ctx);
- 	prep->quotalen = 100;
- 	return 0;
++	ret = pgp_sig_verify(pgp_ctx, trusted_keys);
++error:
++	pgp_sig_verify_cancel(pgp_ctx, false);
++	pr_devel("<==%s() = %d\n", __func__, ret);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(verify_pgp_signature);
++
++#endif /* CONFIG_PGP_KEY_PARSER */
+ #endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
  
+ #ifdef CONFIG_INTEGRITY_PLATFORM_KEYRING
+diff --git a/include/linux/verification.h b/include/linux/verification.h
+index cb2d47f28091..e1a3b9424b67 100644
+--- a/include/linux/verification.h
++++ b/include/linux/verification.h
+@@ -63,6 +63,29 @@ extern int verify_pkcs7_message_sig(const void *data, size_t len,
+ 							size_t asn1hdrlen),
+ 				    void *ctx);
+ 
++#ifdef CONFIG_PGP_KEY_PARSER
++extern int verify_pgp_signature(const void *data, size_t len,
++				const void *raw_pgp, size_t pgp_len,
++				struct key *trusted_keys,
++				enum key_being_used_for usage,
++				int (*view_content)(void *ctx,
++						const void *data, size_t len,
++						size_t asn1hdrlen),
++				void *ctx);
++#else
++static inline int verify_pgp_signature(const void *data, size_t len,
++				const void *raw_pgp, size_t pgp_len,
++				struct key *trusted_keys,
++				enum key_being_used_for usage,
++				int (*view_content)(void *ctx,
++						const void *data, size_t len,
++						size_t asn1hdrlen),
++				void *ctx)
++{
++	return -EOPNOTSUPP;
++}
++#endif /* CONFIG_PGP_KEY_PARSER */
++
+ #ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+ extern int verify_pefile_signature(const void *pebuf, unsigned pelen,
+ 				   struct key *trusted_keys,
 -- 
 2.34.1
 
