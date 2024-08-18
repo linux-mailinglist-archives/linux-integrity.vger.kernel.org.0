@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-3349-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3350-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABF3F955DBE
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 19:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3FAE955DC2
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 19:03:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36FDF1F22897
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 17:02:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42C991F22E0D
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 Aug 2024 17:03:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BE241509B3;
-	Sun, 18 Aug 2024 17:01:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30B4A154423;
+	Sun, 18 Aug 2024 17:02:02 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CD2208CA;
-	Sun, 18 Aug 2024 17:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00516153838;
+	Sun, 18 Aug 2024 17:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724000509; cv=none; b=Nc5hpVnZSWAaeLk/aeT/u5pzpKrI9V26RvDUX9458Koe+yohEyZ2wPmY8mqFG8UL9BMhRqaK41Yr8jxw1Mebyc10fExEzanxjPwVPddKfffsfrSO9IbIXS3C1jjnkfmgguuw+NbmP5tgXNsnxL0uxPOoht+aL/5qWzTgP56UB3w=
+	t=1724000522; cv=none; b=BIWYqNow2qs6dQDgxeDMr+5RXsrdD22eAXIn6v2Wzdw3oydLFMLjNt2Mi6o3fBOZ20Di0oUa4xhui5TBrjQV4eNuFbxuuHveLnEHUbJ1YrvmHz5mjHXlVDKgmbMZPO9iD9rtxpKP8cyroknh/dDB839XCGZX3nDU/ve+xYEAXgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724000509; c=relaxed/simple;
-	bh=qMOiEqz0rHS56gmTXYlVqcNZFoXbHBOfIXIdCs0+OUs=;
+	s=arc-20240116; t=1724000522; c=relaxed/simple;
+	bh=KIMne1S5wtdevGFHyIWyJ76O7uv7LBcXzQ57F3KySMk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=riZi4nrsar61aiqssq26czhS5KHAa2h77F2to3DoldnzApImmuI29gNA2/p7u9EHcHs9EjCWRXabFR/4EVOSnx9ydRGGzvJoF/bRjpFsHhnXR9D+wW9XTdGdiiYtINtPrH4/3133mmyrpSb1jk0uO2ZSU1CTKPrPX8QKW+/dD3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+	 MIME-Version; b=oEA+HGgLpyu28MtGn+cX76lIxiZ+YKWajXvX7qf0zeEbuQVJDj3AO3krFu1GZXfOMHAo65MgUBr5GMbafYqMsYxiVitc4/MERP7UDYDwHOk82pDQi7xIRD7PBQqlW41Jmi3GrUgUDNOlIEksCgljbYMW69mfMCjFbdHAfySbvao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Wn1jw0y3vz9v7Hs;
-	Mon, 19 Aug 2024 00:42:44 +0800 (CST)
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Wn1kC23y8z9v7NF;
+	Mon, 19 Aug 2024 00:42:59 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 5051314022E;
-	Mon, 19 Aug 2024 01:01:44 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id C6DA4140443;
+	Mon, 19 Aug 2024 01:01:49 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCHCoXmKMJmFj1xAQ--.19682S4;
-	Sun, 18 Aug 2024 18:01:43 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwCHCoXmKMJmFj1xAQ--.19682S5;
+	Sun, 18 Aug 2024 18:01:49 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: dhowells@redhat.com,
 	dwmw2@infradead.org,
@@ -49,9 +49,9 @@ Cc: linux-kernel@vger.kernel.org,
 	zohar@linux.ibm.com,
 	linux-integrity@vger.kernel.org,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 12/14] PGP: Provide a key type for testing PGP signatures
-Date: Sun, 18 Aug 2024 18:57:54 +0200
-Message-Id: <20240818165756.629203-13-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v2 13/14] KEYS: Provide a function to load keys from a PGP keyring blob
+Date: Sun, 18 Aug 2024 18:57:55 +0200
+Message-Id: <20240818165756.629203-14-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
 References: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
@@ -62,13 +62,13 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwCHCoXmKMJmFj1xAQ--.19682S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3WF18tw4xAr4xXw4DZr1UKFg_yoW3Kw4xpF
-	yFkrWrtFy8Jrn7C3y5AayfWwnYkr40yry3G39aqw1Yy39rWw1kGrZ2yF1kKFy3tw4kZ3yr
-	A3yYva4Uuw1DtrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:LxC2BwCHCoXmKMJmFj1xAQ--.19682S5
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw15KF18WF1rCr1xCF1Dtrb_yoWxXFyfpF
+	W0kryrtFWkGr9Ik3yrAw1Ig3sYyr1vyFW5GrySyw15Ar9rXa18KrZ29r4DKa47Ars7t34r
+	trWqg34YyF1DtrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
 	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
@@ -79,296 +79,210 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3WF18tw4xAr4xXw4DZr1UKFg_yoW3Kw4xpF
 	ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
 	xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
 	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-	07jbID7UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGbBWPgB8QADsh
+	07UHnmiUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBGbBWHECBQAAsf
 
 From: David Howells <dhowells@redhat.com>
 
-Provide a key type for testing the PGP signature parser.  It is given a
-non-detached PGP message as payload:
+Provide a function to load keys from a PGP keyring blob to the built-in
+keyring:
 
-	keyctl padd pgp_test a @s <content.txt.gpg
+	int preload_pgp_keys(const u8 *pgpdata, size_t pgpdatalen,
+			     struct key *keyring);
 
-A suitable message can be generated like this:
+Descriptions are generated from user ID notes and key fingerprints.  The
+keys will actually be identified by the ID calculated from the PGP data
+rather than by the description, so this shouldn't be a problem.
 
-	echo "This is a test attached-signed content" >content.txt
-	gpg --compress-algo=none -s content.txt
+The keys are attached to the keyring supplied.
+
+Looking as root in /proc/keys after the built-in keyring has been loaded:
+
+383a00c1 I------     1 perm 1f030000     0     0 asymmetri \
+				Red Hat, Inc. dbeca166: PGP.DSA dbeca166 []
+
+Thanks to Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> for some
+pointing out some errors.
 
 Signed-off-by: David Howells <dhowells@redhat.com>
 Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- crypto/asymmetric_keys/Kconfig        |  13 +++
- crypto/asymmetric_keys/Makefile       |   2 +
- crypto/asymmetric_keys/pgp_library.c  |  64 +++++++++++++
- crypto/asymmetric_keys/pgp_test_key.c | 129 ++++++++++++++++++++++++++
- crypto/asymmetric_keys/pgplib.h       |  16 ++++
- 5 files changed, 224 insertions(+)
- create mode 100644 crypto/asymmetric_keys/pgp_test_key.c
+ crypto/asymmetric_keys/Kconfig       |   8 ++
+ crypto/asymmetric_keys/Makefile      |   1 +
+ crypto/asymmetric_keys/pgp_preload.c | 111 +++++++++++++++++++++++++++
+ include/crypto/pgp.h                 |   8 +-
+ 4 files changed, 127 insertions(+), 1 deletion(-)
+ create mode 100644 crypto/asymmetric_keys/pgp_preload.c
 
 diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
-index 4c5c52cf54e4..d9c709e042f6 100644
+index d9c709e042f6..6379efded6f4 100644
 --- a/crypto/asymmetric_keys/Kconfig
 +++ b/crypto/asymmetric_keys/Kconfig
-@@ -120,4 +120,17 @@ config PGP_KEY_PARSER
- 	  for key data and provides the ability to instantiate a crypto key
- 	  from a public key packet found inside the blob.
+@@ -133,4 +133,12 @@ config PGP_TEST_KEY
  
-+config PGP_TEST_KEY
-+	tristate "PGP testing key type"
-+	depends on SYSTEM_DATA_VERIFICATION
-+	depends on PGP_KEY_PARSER=y
+ 	  This is intended for testing the PGP parser.
+ 
++config PGP_PRELOAD
++	bool "PGP public key preloading facility"
++	depends on SYSTEM_TRUSTED_KEYRING
++	select PGP_KEY_PARSER
 +	help
-+	  This option provides a type of key that can be loaded up from a
-+	  PGP message - provided the message is signed by a trusted key.  If
-+	  it is, the PGP wrapper is discarded and reading the key returns
-+	  just the payload.  If it isn't, adding the key will fail with an
-+	  error.
-+
-+	  This is intended for testing the PGP parser.
++	  This option provides a facility for the kernel to preload PGP-wrapped
++	  bundles of keys during boot to the built-in keyring.
 +
  endif # ASYMMETRIC_KEY_TYPE
 diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Makefile
-index e7ff01997eb2..507a78f9a0a1 100644
+index 507a78f9a0a1..2fa55a7830e6 100644
 --- a/crypto/asymmetric_keys/Makefile
 +++ b/crypto/asymmetric_keys/Makefile
-@@ -89,3 +89,5 @@ obj-$(CONFIG_PGP_KEY_PARSER) += pgp_key_parser.o
+@@ -84,6 +84,7 @@ $(obj)/mscode.asn1.o: $(obj)/mscode.asn1.c $(obj)/mscode.asn1.h
+ # PGP handling
+ #
+ obj-$(CONFIG_PGP_LIBRARY) += pgp_library.o
++obj-$(CONFIG_PGP_PRELOAD) += pgp_preload.o
+ 
+ obj-$(CONFIG_PGP_KEY_PARSER) += pgp_key_parser.o
  pgp_key_parser-y := \
- 	pgp_public_key.o \
- 	pgp_signature.o
-+
-+obj-$(CONFIG_PGP_TEST_KEY) += pgp_test_key.o
-diff --git a/crypto/asymmetric_keys/pgp_library.c b/crypto/asymmetric_keys/pgp_library.c
-index 2fd3e7d55f6f..2bcd5f46ad48 100644
---- a/crypto/asymmetric_keys/pgp_library.c
-+++ b/crypto/asymmetric_keys/pgp_library.c
-@@ -554,3 +554,67 @@ int pgp_parse_sig_params(const u8 **_data, size_t *_datalen,
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(pgp_parse_sig_params);
-+
-+#if IS_ENABLED(CONFIG_PGP_TEST_KEY)
-+
-+/**
-+ * pgp_parse_literal_data - Parse basic params from a PGP literal data packet
-+ * @data: Content of packet
-+ * @datalen: Length of packet remaining
-+ * @p: The basic parameters
-+ *
-+ * Parse the basic parameters from a PGP literal data packet [RFC 4880: 5.9]
-+ * that are needed to work out what form the data is in and where it is.
-+ *
-+ * Returns 0 if successful or a negative error code.
-+ */
-+int pgp_parse_literal_data(const u8 *data, size_t datalen,
-+			   struct pgp_literal_data_parameters *p)
-+{
-+	unsigned int tmp;
-+
-+	pr_devel("-->%s(,%zu,,)\n", __func__, datalen);
-+
-+	if (datalen < 6)
-+		goto too_short;
-+	datalen -= 6;
-+
-+	p->format = *data++;
-+	switch (p->format) {
-+	case PGP_LIT_FORMAT_BINARY:
-+	case PGP_LIT_FORMAT_TEXT:
-+	case PGP_LIT_FORMAT_TEXT_UTF8:
-+		break;
-+	default:
-+		pr_debug("Literal data packet with unhandled format %02x\n",
-+			 p->format);
-+		return -EBADMSG;
-+	}
-+
-+	p->filename_len = *data++;
-+	p->filename_offset = 2;
-+	if (datalen < p->filename_len)
-+		goto too_short;
-+	data += p->filename_len;
-+	datalen -= p->filename_len;
-+
-+	tmp  = *data++ << 24;
-+	tmp |= *data++ << 16;
-+	tmp |= *data++ << 8;
-+	tmp |= *data++;
-+	p->time = tmp;
-+
-+	p->content_offset = 6 + p->filename_len;
-+	p->content_len = datalen;
-+
-+	pr_devel("%x,%u,%x,%u\n",
-+		 p->format, p->filename_len, p->time, p->content_len);
-+	return 0;
-+
-+too_short:
-+	pr_debug("Literal data packet too short\n");
-+	return -EBADMSG;
-+}
-+EXPORT_SYMBOL_GPL(pgp_parse_literal_data);
-+
-+#endif /* CONFIG_PGP_TEST_KEY */
-diff --git a/crypto/asymmetric_keys/pgp_test_key.c b/crypto/asymmetric_keys/pgp_test_key.c
+diff --git a/crypto/asymmetric_keys/pgp_preload.c b/crypto/asymmetric_keys/pgp_preload.c
 new file mode 100644
-index 000000000000..e067dedf6ca0
+index 000000000000..e0776dc8f928
 --- /dev/null
-+++ b/crypto/asymmetric_keys/pgp_test_key.c
-@@ -0,0 +1,129 @@
++++ b/crypto/asymmetric_keys/pgp_preload.c
+@@ -0,0 +1,111 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Testing module to load key from trusted PGP message
++/* Asymmetric key request handling
 + *
-+ * Copyright (C) 2014 Red Hat, Inc. All Rights Reserved.
++ * Copyright (C) 2011 Red Hat, Inc. All Rights Reserved.
 + * Written by David Howells (dhowells@redhat.com)
 + */
 +
-+#define pr_fmt(fmt) "PGPtest: "fmt
-+#include <linux/key.h>
-+#include <linux/key-type.h>
-+#include <linux/cred.h>
-+#include <linux/err.h>
 +#include <linux/module.h>
-+#include <linux/verification.h>
-+#include <keys/user-type.h>
-+#include <keys/system_keyring.h>
++#include <linux/key.h>
++#include <linux/err.h>
 +#include <crypto/pgp.h>
++#include <keys/asymmetric-type.h>
 +
 +#include "pgp_parser.h"
 +
-+MODULE_LICENSE("GPL");
-+
-+struct pgp_test_parse_context {
++struct preload_pgp_keys_context {
 +	struct pgp_parse_context pgp;
-+	struct pgp_literal_data_parameters params;
-+	const void *content;
++	key_ref_t keyring;
++	const u8 *key_start;
++	const u8 *key_end;
++	bool found_key;
 +};
 +
-+static int pgp_test_parse_data(struct pgp_parse_context *context,
-+			       enum pgp_packet_tag type,
-+			       u8 headerlen,
-+			       const u8 *data,
-+			       size_t datalen)
++/*
++ * Create a key.
++ */
++static void __init create_pgp_key(struct preload_pgp_keys_context *ctx)
 +{
-+	struct pgp_test_parse_context *ctx =
-+		container_of(context, struct pgp_test_parse_context, pgp);
-+	int ret;
++	key_ref_t key;
 +
-+	kenter("");
++	key = key_create_or_update(ctx->keyring,
++				   "asymmetric",
++				   NULL,
++				   ctx->key_start,
++				   ctx->key_end - ctx->key_start,
++				   ((KEY_POS_ALL & ~KEY_POS_SETATTR) |
++				    KEY_USR_VIEW | KEY_USR_READ),
++				   KEY_ALLOC_NOT_IN_QUOTA |
++				   KEY_ALLOC_BUILT_IN |
++				   KEY_ALLOC_BYPASS_RESTRICTION);
++	if (IS_ERR(key)) {
++		pr_notice("Ignoring PGP key, error: %ld\n", PTR_ERR(key));
++		return;
++	}
 +
-+	ret = pgp_parse_literal_data(data, datalen, &ctx->params);
-+	if (ret == 0)
-+		ctx->content = data + ctx->params.content_offset;
-+	return ret;
++	pr_notice("Loaded PGP key '%s'\n",
++		  key_ref_to_ptr(key)->description);
++
++	key_ref_put(key);
 +}
 +
 +/*
-+ * Instantiate a PGP wrapped and validated key.
++ * Extract a public key or subkey from the PGP stream.
 + */
-+static int pgp_test_instantiate(struct key *key,
-+				struct key_preparsed_payload *prep)
++static int __init found_pgp_key(struct pgp_parse_context *context,
++				enum pgp_packet_tag type, u8 headerlen,
++				const u8 *data, size_t datalen)
 +{
-+	struct pgp_test_parse_context p;
-+	const void *saved_prep_data;
-+	size_t saved_prep_datalen;
-+	const struct cred *cred = current_cred();
++	struct preload_pgp_keys_context *ctx =
++		container_of(context, struct preload_pgp_keys_context, pgp);
++
++	if (ctx->found_key) {
++		ctx->key_end = data - headerlen;
++		create_pgp_key(ctx);
++	}
++
++	ctx->key_start = data - headerlen;
++	ctx->found_key = true;
++	return 0;
++}
++
++/**
++ * preload_pgp_keys - Load keys from a PGP keyring blob
++ * @pgpdata: The PGP keyring blob containing the keys.
++ * @pgpdatalen: The size of the @pgpdata blob.
++ * @keyring: The keyring to add the new keys to.
++ *
++ * Preload a pack of keys from a PGP keyring blob.
++ *
++ * The keys have their descriptions generated from the user ID and fingerprint
++ * in the PGP stream.  Since keys can be matched on their key IDs independently
++ * of the key description, the description is mostly irrelevant apart from the
++ * fact that keys of the same description displace one another from a keyring.
++ *
++ * The caller should override the current creds if they want the keys to be
++ * owned by someone other than the current process's owner.  Keys will not be
++ * accounted towards the owner's quota.
++ *
++ * This function may only be called whilst the kernel is booting.
++ */
++int __init preload_pgp_keys(const u8 *pgpdata, size_t pgpdatalen,
++			    struct key *keyring)
++{
++	struct preload_pgp_keys_context ctx;
 +	int ret;
 +
-+	kenter("");
++	ctx.pgp.types_of_interest = (1 << PGP_PKT_PUBLIC_KEY);
++	ctx.pgp.process_packet = found_pgp_key;
++	ctx.keyring = make_key_ref(keyring, 1);
++	ctx.found_key = false;
 +
-+	memset(&p, 0, sizeof(p));
-+	p.pgp.types_of_interest = (1 << PGP_PKT_LITERAL_DATA);
-+	p.pgp.process_packet = pgp_test_parse_data;
-+	ret = pgp_parse_packets(prep->data, prep->datalen, &p.pgp);
-+	if (ret < 0) {
-+		kleave(" = %d [parse]", ret);
++	ret = pgp_parse_packets(pgpdata, pgpdatalen, &ctx.pgp);
++	if (ret < 0)
 +		return ret;
++
++	if (ctx.found_key) {
++		ctx.key_end = pgpdata + pgpdatalen;
++		create_pgp_key(&ctx);
 +	}
-+
-+	if (!p.params.content_len) {
-+		kleave(" = -ENODATA [no literal data");
-+		return -ENODATA;
-+	}
-+
-+	ret = verify_pgp_signature(p.content, p.params.content_len,
-+				   prep->data, prep->datalen, NULL,
-+				   VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
-+	if (ret < 0 && cred->session_keyring) {
-+		ret = verify_pgp_signature(p.content, p.params.content_len,
-+					   prep->data, prep->datalen,
-+					   cred->session_keyring,
-+					   VERIFYING_UNSPECIFIED_SIGNATURE,
-+					   NULL, NULL);
-+		if (ret < 0)
-+			goto error;
-+
-+		pr_warn("PGP message doesn't chain back to a trusted key\n");
-+	}
-+
-+	saved_prep_data = prep->data;
-+	saved_prep_datalen = prep->datalen;
-+	prep->data = p.content;
-+	prep->datalen = p.params.content_len;
-+	ret = generic_key_instantiate(key, prep);
-+	prep->data = saved_prep_data;
-+	prep->datalen = saved_prep_datalen;
-+error:
-+	kleave(" = %d", ret);
-+	return ret;
++	return 0;
 +}
-+
-+/*
-+ * user defined keys take an arbitrary string as the description and an
-+ * arbitrary blob of data as the payload
-+ */
-+static struct key_type key_type_pgp_test = {
-+	.name			= "pgp_test",
-+	.instantiate		= pgp_test_instantiate,
-+	.revoke			= user_revoke,
-+	.destroy		= user_destroy,
-+	.describe		= user_describe,
-+	.read			= user_read,
-+};
-+
-+/*
-+ * Module stuff
-+ */
-+static int __init pgp_key_init(void)
-+{
-+	return register_key_type(&key_type_pgp_test);
-+}
-+
-+static void __exit pgp_key_cleanup(void)
-+{
-+	unregister_key_type(&key_type_pgp_test);
-+}
-+
-+module_init(pgp_key_init);
-+module_exit(pgp_key_cleanup);
-diff --git a/crypto/asymmetric_keys/pgplib.h b/crypto/asymmetric_keys/pgplib.h
-index 967e2853186d..0dc3cd142469 100644
---- a/crypto/asymmetric_keys/pgplib.h
-+++ b/crypto/asymmetric_keys/pgplib.h
-@@ -56,3 +56,19 @@ struct pgp_sig_parameters {
+diff --git a/include/crypto/pgp.h b/include/crypto/pgp.h
+index 99dd1ab6c1b1..263b44603636 100644
+--- a/include/crypto/pgp.h
++++ b/include/crypto/pgp.h
+@@ -1,5 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0+ */
+-/* PGP signature processing
++/* PGP key and signature processing
+  *
+  * Copyright (C) 2014 Red Hat, Inc. All Rights Reserved.
+  * Written by David Howells (dhowells@redhat.com)
+@@ -27,4 +27,10 @@ extern struct public_key_signature *pgp_sig_get_sig(struct pgp_sig_verify *ctx,
+ 						    bool is_key_sig);
+ extern u8 pgp_sig_get_version(struct pgp_sig_verify *ctx);
  
- extern int pgp_parse_sig_params(const u8 **_data, size_t *_datalen,
- 				struct pgp_sig_parameters *p);
++/*
++ * pgp_preload.c
++ */
++extern int __init preload_pgp_keys(const u8 *pgpdata, size_t pgpdatalen,
++				   struct key *keyring);
 +
-+#if IS_ENABLED(CONFIG_PGP_TEST_KEY)
-+
-+struct pgp_literal_data_parameters {
-+	enum pgp_literal_data_format format : 8;
-+	u8 filename_len;
-+	u8 filename_offset;
-+	u8 content_offset;
-+	u32 content_len;
-+	u32 time;
-+};
-+
-+extern int pgp_parse_literal_data(const u8 *data, size_t datalen,
-+				  struct pgp_literal_data_parameters *p);
-+
-+#endif /* CONFIG_PGP_TEST_KEY */
+ #endif /* _CRYPTO_PGP_H */
 -- 
 2.34.1
 
