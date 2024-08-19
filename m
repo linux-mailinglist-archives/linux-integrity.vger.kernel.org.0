@@ -1,105 +1,149 @@
-Return-Path: <linux-integrity+bounces-3366-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3367-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1C85957320
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 20:24:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A4129574A2
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 21:41:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7818FB23ADC
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 18:24:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1077F281BF2
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 19:41:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0531891C3;
-	Mon, 19 Aug 2024 18:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DACE1DC465;
+	Mon, 19 Aug 2024 19:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Ml+q0awz"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from cavan.codon.org.uk (cavan.codon.org.uk [176.126.240.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A6516A934;
-	Mon, 19 Aug 2024 18:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.126.240.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B3B14A0A4
+	for <linux-integrity@vger.kernel.org>; Mon, 19 Aug 2024 19:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724091874; cv=none; b=on3hHwl56sRTjSy81xgszfaw3gv3fpj9F1cz7BwvxPa+vXkMNdQND+q+vGK7pBi6a9A9Xu5UigUGN+k6LlsnqJIKluO7ICaTOAEbfGhuQ71CpIlJORmVZjixvucGJ4YyH6qYgo243WTTWaMLOpV09YHNECr4UAKKpQIAFkneAmk=
+	t=1724096472; cv=none; b=kl1JuyCwP0zLvTDcrCoIj6dJ+ZEvaLVM26WndBM84TuCfYy49rT3QgwQ+GpUnK+YUOI2gCfzCIzEuwV4NDdOTUOQqNF3yb4F9WpHC45yYJrTjmzb4QBQstHyvmVM/7yXz2LHn1n5XeIBhughwo2N8JENZQ/54c+Sen56jJIIqJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724091874; c=relaxed/simple;
-	bh=HHitbLQcODdjPuCSoJaZiVGwSe7pT6N18nHKmwnz0TQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwLpxV0LMlwt1fd3DqH14qPuf3m3AgCqKVETARIlpZGGZlvE7Kggs0ojX5xdSy2ifsn9bQgco6g1F+8/Dw/d6r/uIqNfVMev2qeRgNXwvMxlrRQZPHTNyqmfvkb5jnoPZMLOd5jUg1XMtxFTuxZL+7KKTK5VppY9oJjCyibI1Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=srcf.ucam.org; spf=pass smtp.mailfrom=codon.org.uk; arc=none smtp.client-ip=176.126.240.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=srcf.ucam.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codon.org.uk
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-	id 2F2FF409FF; Mon, 19 Aug 2024 19:24:02 +0100 (BST)
-Date: Mon, 19 Aug 2024 19:24:02 +0100
-From: Matthew Garrett <mjg59@srcf.ucam.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Andrew Cooper <andrew.cooper3@citrix.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Daniel P. Smith" <dpsmith@apertussolutions.com>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ross Philipson <ross.philipson@oracle.com>,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
-	linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
-	mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-	dave.hansen@linux.intel.com, ardb@kernel.org,
-	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
-	jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu,
-	herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com,
-	kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
- early measurements
-Message-ID: <ZsONwsWs3zCln70O@srcf.ucam.org>
-References: <20240531010331.134441-1-ross.philipson@oracle.com>
- <20240531010331.134441-7-ross.philipson@oracle.com>
- <20240531021656.GA1502@sol.localdomain>
- <874jaegk8i.fsf@email.froward.int.ebiederm.org>
- <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
- <87ttflli09.ffs@tglx>
- <550d15cd-5c48-4c20-92c2-f09a7e30adc9@citrix.com>
- <D3HAP4O4OVS3.2LOSH5HMQ34OZ@kernel.org>
- <Zr+dTMYZNY1b9cRV@srcf.ucam.org>
- <D3K35VBCWZSW.2WCXJMW1HGGD5@kernel.org>
+	s=arc-20240116; t=1724096472; c=relaxed/simple;
+	bh=hcSbya+lQiysjoDdhMa2fNXAwE9cTf3HMVXCOHk8tdw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UzPuP3YqdScBbTbGitwafOg8k7VkLy4GldMxeeAII+deD5lNQ8Fb6t1vjUMVx/fkQjuQo7FmghFligdXybQRh++C/L4N7b2/EvAR3WyKZEVliYIA4tLXyQ7acpVKuqYY+J29l1DjL0AMwLZq9jtWy6zZsvJr02FEmtMgEDEx7wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Ml+q0awz; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e026a2238d8so4764879276.0
+        for <linux-integrity@vger.kernel.org>; Mon, 19 Aug 2024 12:41:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1724096469; x=1724701269; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gkyhANmIfoPUx8Ztj0L2oahwdkEC/9ySCXObPcfO7yE=;
+        b=Ml+q0awz6T48Y28kUNsbAqMvhhLu1OT+Fw0Q2W4JkWxl6hDRrIwmMXiTtCI3BM0wIB
+         1BVfrpdC+pdrXFrjxZwmwJFVXe2FvKLOAkCUsevU5fsIR8YHyKsuzbmjkOEMS8MP4+Lk
+         8T3xNnHOfBccmUSlGwU7APIbe5Et5SRGxoFtbt3NNXi+lr16eHzU7wz5ZUvkkjBrRb+F
+         AhpD6as2bkTGucQwCHteWPpgiSO2gB1pUHhKdN9s8rVBS7IuVWySrYAIfT8IqRLWhjZI
+         jcB/TLJSRxgOP1IrerDKgY/ZwjTf/tzaD3GmGNNqb1jVXyaZ0IVvTy/M1SIslKmTSQFg
+         RqsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724096469; x=1724701269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gkyhANmIfoPUx8Ztj0L2oahwdkEC/9ySCXObPcfO7yE=;
+        b=ZUplO5XNZkxJEqOmv3wKXB/phFL9lWALnv4n2DkL8yypAFG5bymXOFvWTf+gdbJb42
+         hvtNhgNEncaeqK8IEB5azSfi1o72ApeHbnLL5TfEjl6VJn6/SaIsoPWIafnXEkSJFQ23
+         BJxySXxX234MNiexP8Biq3eue767GCRUgs++68CXG+FgCBii7YV+lK3bnElvpZzqUStR
+         d8pGn0vSVAnHXtupBWiqJXjpk8mlxY5n9M+I3vuOoRbRE4VXBZlRGrl5DK+bXAkfIq16
+         rLNshiT88sl4wUtle/14IJOW57tPofgdexXblcL/DXTN3CX+ZnRQHeWx9zezyPe25Ucu
+         UPWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/kmvj4xf5LB1itL9ryZJx9rbPDN5fWQ9Q54iPmXLUxW1fNDRKgwtKKTNju0FOZ9KKhjgtwXXWiRP6ow0QL5M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywz/n9hcIazNoc2QxtahHBaMBawt4PB/03cu+XdWYPwQ6lCOAo9
+	sCu/ZwK4QYZ1ym7a3U+wVuMTdIuntr+yroEZvyFdmPslffos9im/6nrF54L2ovrpEGrxFGeHD4t
+	dA0FakClbUR7qZcWa4lZIPpvBb9BhqJT9Skf2
+X-Google-Smtp-Source: AGHT+IGNxAzznyZ+b7siXNq+DgYF6mU9BKHCBgzIgMxr5gD2jPGN9khm6ib1o830lq2PyGnu1xXnHmPm9H/tqvZOtYQ=
+X-Received: by 2002:a05:690c:f8a:b0:64b:69f0:f8f2 with SMTP id
+ 00721157ae682-6b1b9b5ad78mr147420827b3.3.1724096469531; Mon, 19 Aug 2024
+ 12:41:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D3K35VBCWZSW.2WCXJMW1HGGD5@kernel.org>
+References: <1722665314-21156-1-git-send-email-wufan@linux.microsoft.com>
+ <1722665314-21156-13-git-send-email-wufan@linux.microsoft.com>
+ <9dc30ca6-486c-4fa9-910d-ed1dc6da0e95@linux.microsoft.com>
+ <CAHC9VhQrnu8Sj=XnDvg=wGTBxacvMSW6OJyG3-tpwrsbGat6vA@mail.gmail.com>
+ <88695db-efc0-6cc6-13ee-fd7c2abe61c@redhat.com> <ac6e33b8-ec1f-494a-874f-9a16d3316fce@linux.microsoft.com>
+ <CAHC9VhSe0HkzX0gy5Oo+549wG9xqfeHmsveJqdR_xRcYtim+sA@mail.gmail.com> <8421b247-41d2-4bf5-ba80-f356a2b696fd@linux.microsoft.com>
+In-Reply-To: <8421b247-41d2-4bf5-ba80-f356a2b696fd@linux.microsoft.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 19 Aug 2024 15:40:58 -0400
+Message-ID: <CAHC9VhR1gkiB=etUwgqnkZuBiSy1VD4ZgyUeTWvLQTowgQchFg@mail.gmail.com>
+Subject: Re: [PATCH v20 12/20] dm verity: expose root hash digest and
+ signature data to LSMs
+To: Fan Wu <wufan@linux.microsoft.com>
+Cc: Mikulas Patocka <mpatocka@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
+	Alasdair Kergon <agk@redhat.com>, linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, fsverity@lists.linux.dev, 
+	linux-block@vger.kernel.org, dm-devel@lists.linux.dev, audit@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 19, 2024 at 09:05:47PM +0300, Jarkko Sakkinen wrote:
-> On Fri Aug 16, 2024 at 9:41 PM EEST, Matthew Garrett wrote:
-> > On Fri, Aug 16, 2024 at 02:22:04PM +0300, Jarkko Sakkinen wrote:
+On Mon, Aug 19, 2024 at 1:47=E2=80=AFPM Fan Wu <wufan@linux.microsoft.com> =
+wrote:
+> On 8/18/2024 10:22 AM, Paul Moore wrote:
+> > On Fri, Aug 16, 2024 at 3:11=E2=80=AFPM Fan Wu <wufan@linux.microsoft.c=
+om> wrote:
+> >> On 8/16/2024 6:35 AM, Mikulas Patocka wrote:
 > >
-> > > For (any) non-legacy features we can choose, which choices we choose to
-> > > support, and which we do not. This is not an oppositive view just saying
-> > > how it is, and platforms set of choices is not a selling argument.
+> > ...
 > >
-> > NIST still permits the use of SHA-1 until 2030, and the most significant 
-> > demonstrated weaknesses in it don't seem applicable to the use case 
-> > here. We certainly shouldn't encourage any new uses of it, and anyone 
-> > who's able to use SHA-2 should be doing that instead, but it feels like 
-> > people are arguing about not supporting hardware that exists in the real 
-> > world for vibes reasons rather than it being a realistically attackable 
-> > weakness (and if we really *are* that concerned about SHA-1, why are we 
-> > still supporting TPM 1.2 at all?)
-> 
-> We are life-supporting TPM 1.2 as long as necessary but neither the
-> support is extended nor new features will gain TPM 1.2 support. So
-> that is at least my policy for that feature.
+> >>>>>>
+> >>>>>> +#ifdef CONFIG_SECURITY
+> >>>>>> +     u8 *root_digest_sig;    /* signature of the root digest */
+> >>>>>> +#endif /* CONFIG_SECURITY */
+> >>>>>>         unsigned int salt_size;
+> >>>>>>         sector_t data_start;    /* data offset in 512-byte sectors=
+ */
+> >>>>>>         sector_t hash_start;    /* hash start in blocks */
+> >>>>>> @@ -58,6 +61,9 @@ struct dm_verity {
+> >>>>>>         bool hash_failed:1;     /* set if hash of any block failed=
+ */
+> >>>>>>         bool use_bh_wq:1;       /* try to verify in BH wq before n=
+ormal work-queue */
+> >>>>>>         unsigned int digest_size;       /* digest size for the cur=
+rent hash algorithm */
+> >>>>>> +#ifdef CONFIG_SECURITY
+> >>>>>> +     unsigned int sig_size;  /* root digest signature size */
+> >>>>>> +#endif /* CONFIG_SECURITY */
+> >>>>>>         unsigned int hash_reqsize; /* the size of temporary space =
+for crypto */
+> >>>>>>         enum verity_mode mode;  /* mode for handling verification =
+errors */
+> >>>>>>         unsigned int corrupted_errs;/* Number of errors for corrup=
+ted blocks */
+> >>>
+> >>> Just nit-picking: I would move "unsigned int sig_size" up, after "u8
+> >>> *root_digest_sig" entry.
+> >>>
+> >>> Mikulas
+> >>
+> >> Sure, I can make these two fields together.
+> >
+> > Fan, do you want me to move the @sig_size field when merging or are
+> > you planning to submit another revision?  I'm happy to do it during
+> > the merge, but I don't want to bother if you are going to post another
+> > patchset.
+>
+> Thanks, Paul. It seems moving the field during the merge can expedite
+> the process. Please go ahead with that. I appreciate your help with this!
 
-But the fact that we support it and provide no warning labels is a 
-pretty clear indication that we're not actively trying to prevent people 
-from using SHA-1 in the general case. Why is this a different case? 
-Failing to support it actually opens an entire separate set of footgun 
-opportunities in terms of the SHA-1 banks now being out of sync with the 
-SHA-2 ones, so either way we're leaving people open to making poor 
-choices.
+No problem.  I'm going to merge these this afternoon, I'll send
+another note when they are in the repo.
+
+--=20
+paul-moore.com
 
