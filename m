@@ -1,131 +1,125 @@
-Return-Path: <linux-integrity+bounces-3354-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3355-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AD86956D77
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 16:38:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C849956D7B
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 16:38:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDB361C22269
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 14:38:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA3F22841CF
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 14:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D54CD171E69;
-	Mon, 19 Aug 2024 14:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="m4WeACVh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62074171E5A;
+	Mon, 19 Aug 2024 14:38:34 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B704171E43;
-	Mon, 19 Aug 2024 14:38:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464DC17166E;
+	Mon, 19 Aug 2024 14:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724078293; cv=none; b=J8ZGip+GpWQ2/yT9MbXxwO1N0yR7r6gx4WhYxDYcsfNtBo1hCrkJ3P3cEoprTAibxv46qNDJ3QgbuDQjhm/thuCs64WeUujlRDoP/I5qu4ajYnJQ16fQsLaWounFxynoUw8CdhnOBzJjc1HYmqUJ2LcvG5kEKxn+NayK5KaBHT0=
+	t=1724078314; cv=none; b=ZvPdIhvrTzdtq20WhFN+wek9mntvKjajiH4znfozmivaJDMsNHlZmCJ3UnK3mUk4Qkea+OkP/nk7r61c0AvpSxsYjeYlG1QKKtjhVVDTgUOhsiTurF9qiN9S7PYjoAVqEUCJ1KMV1QcvXZiOtxOKPs66natPr+q9n77GHvT6FTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724078293; c=relaxed/simple;
-	bh=DfepRMOLQFR3pquuCkwdVFj+pFZjc2mjw814VgMJy6Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=I8CmeoqhTcYpyAjHPJEqA7rVxedgiIlt8kcYSd04b5jadjtIvtMoWy3eLCXKqiheARPa9fC0cAVsG6/UAWCus8AnwdO0gbRKPJSWWN+eOAHfOck/gXe+h/M32+8+9DbpZYrQ/LeklrrX+mg7eO3Ko/nO6Sp2Voi3YBepuxEryYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=m4WeACVh; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47JB1ckE009997;
-	Mon, 19 Aug 2024 14:37:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	DfepRMOLQFR3pquuCkwdVFj+pFZjc2mjw814VgMJy6Y=; b=m4WeACVhm7oGZmHL
-	9YtRhDD4AerkjSdd6p9WFegNnE8LyjqUcdx0S9Cu26W/htT1h53MUXZmb+hdJDGG
-	u89wExkum+1x8SvkXSZRCX4o8Ac8TLBHUQhM/75CiKjR3j7T0XGce1X9TFBybBMt
-	0pgdbA0tsTslpCvIZgGUF86QhtQNdOADD7lBDwn3KvjmUG7U/CChfjc+PDs3MxWW
-	FMhd82QxEFLjfJ+1il/OPyDAfsptHS11RHFNQ66NCR2q/7DcO3zSf0ylk9JUmtdP
-	vSvf60BBogKh3MFOONk/E8h0dOyzTIb7p/cS0hWyN711IyfvWyCr3innZTd/B2Lw
-	7WpjGg==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 412n584f5s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 14:37:55 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47JEbsfO004333
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 14:37:54 GMT
-Received: from [10.81.24.74] (10.49.16.6) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 19 Aug
- 2024 07:37:53 -0700
-Message-ID: <350d17de-a669-4342-bc94-c86da4ef17db@quicinc.com>
-Date: Mon, 19 Aug 2024 07:37:53 -0700
+	s=arc-20240116; t=1724078314; c=relaxed/simple;
+	bh=ZohGN1b+MVmLdjfygjGavTtu3PvsalA2EoUhvXN3T1I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=p7KD2Htno0mTwF5AoYnvGel+Ifot9rdEmCN6TtoYZHODPnlVdQ6rGI5L6dyR42kgZglkqIKpI3KjZgVo7WaiRFznN2xQ64jVpV7wjUh1edy7anZIq+OUrBodTBCovJ/7ufZo4pmVBrRwCU9PA1LojuihCVFl4GI6IqsKwb/v23U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4WnZMc4vnhz9v7Jb;
+	Mon, 19 Aug 2024 22:13:48 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 5D154140443;
+	Mon, 19 Aug 2024 22:38:20 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwC31MHTWMNme5uDAQ--.19910S2;
+	Mon, 19 Aug 2024 15:38:19 +0100 (CET)
+Message-ID: <58a857afc8b97433ab0056628958d81e69bd7421.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 06/14] KEYS: PGP data parser
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Jeff Johnson <quic_jjohnson@quicinc.com>, dhowells@redhat.com, 
+	dwmw2@infradead.org, herbert@gondor.apana.org.au, davem@davemloft.net
+Cc: linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, zohar@linux.ibm.com, 
+	linux-integrity@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Date: Mon, 19 Aug 2024 16:38:08 +0200
+In-Reply-To: <45accf08-bb98-4199-b0a0-a314f3d0574b@quicinc.com>
+References: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
+	 <20240818165756.629203-7-roberto.sassu@huaweicloud.com>
+	 <45accf08-bb98-4199-b0a0-a314f3d0574b@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 12/14] PGP: Provide a key type for testing PGP
- signatures
-Content-Language: en-US
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, <dhowells@redhat.com>,
-        <dwmw2@infradead.org>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>
-CC: <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <zohar@linux.ibm.com>,
-        <linux-integrity@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
- <20240818165756.629203-13-roberto.sassu@huaweicloud.com>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20240818165756.629203-13-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9pdj4De64koIkSl7Cqp5DR4V3OI8Qt9r
-X-Proofpoint-ORIG-GUID: 9pdj4De64koIkSl7Cqp5DR4V3OI8Qt9r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_13,2024-08-19_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 clxscore=1015 spamscore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408190097
+X-CM-TRANSID:GxC2BwC31MHTWMNme5uDAQ--.19910S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7try7XF1rZF17Gw4fXFWDurg_yoW8JFyfpF
+	4kAF4DJF4qyr1jkrWrJ34agasrJa4xCF13K34vgw4UA3sIvrnrGrWvvryDuF1Uta1kK34F
+	yFWrXa1YvrZ0qrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABGbCqfEG7AABsS
 
-On 8/18/24 09:57, Roberto Sassu wrote:
-...
-> diff --git a/crypto/asymmetric_keys/pgp_test_key.c b/crypto/asymmetric_keys/pgp_test_key.c
-> new file mode 100644
-> index 000000000000..e067dedf6ca0
-> --- /dev/null
-> +++ b/crypto/asymmetric_keys/pgp_test_key.c
-> @@ -0,0 +1,129 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Testing module to load key from trusted PGP message
-> + *
-> + * Copyright (C) 2014 Red Hat, Inc. All Rights Reserved.
-> + * Written by David Howells (dhowells@redhat.com)
-> + */
-> +
-> +#define pr_fmt(fmt) "PGPtest: "fmt
-> +#include <linux/key.h>
-> +#include <linux/key-type.h>
-> +#include <linux/cred.h>
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/verification.h>
-> +#include <keys/user-type.h>
-> +#include <keys/system_keyring.h>
-> +#include <crypto/pgp.h>
-> +
-> +#include "pgp_parser.h"
-> +
-> +MODULE_LICENSE("GPL");
+On Mon, 2024-08-19 at 07:36 -0700, Jeff Johnson wrote:
+> On 8/18/24 09:57, Roberto Sassu wrote:
+> ...
+> > diff --git a/crypto/asymmetric_keys/pgp_public_key.c b/crypto/asymmetri=
+c_keys/pgp_public_key.c
+> > new file mode 100644
+> > index 000000000000..cb399f5cdd3e
+> > --- /dev/null
+> > +++ b/crypto/asymmetric_keys/pgp_public_key.c
+> > @@ -0,0 +1,366 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Instantiate a public key crypto key from PGP format data [RFC 4880]
+> > + *
+> > + * Copyright (C) 2011 Red Hat, Inc. All Rights Reserved.
+> > + * Written by David Howells (dhowells@redhat.com)
+> > + */
+> > +
+> > +#define pr_fmt(fmt) "PGP: "fmt
+> > +#include <linux/module.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/mpi.h>
+> > +#include <keys/asymmetric-subtype.h>
+> > +#include <keys/asymmetric-parser.h>
+> > +#include <crypto/hash.h>
+> > +#include <crypto/public_key.h>
+> > +
+> > +#include "pgp_parser.h"
+> > +
+> > +#define MAX_MPI 5
+> > +#define KEYCTL_SUPPORTS_ENCDEC \
+> > +	(KEYCTL_SUPPORTS_ENCRYPT | KEYCTL_SUPPORTS_DECRYPT)
+> > +#define KEYCTL_SUPPORTS_SIGVER (KEYCTL_SUPPORTS_SIGN | KEYCTL_SUPPORTS=
+_VERIFY)
+> > +
+> > +MODULE_LICENSE("GPL");
+>=20
+> Missing MODULE_DESCRIPTION()
 
-Missing MODULE_DESCRIPTION()
+Thanks! Will add it.
+
+Roberto
 
 
