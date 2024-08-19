@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3364-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3365-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 462C0957283
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 19:56:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0D009572A8
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 20:05:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C37DDB21859
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 17:56:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B95881C22105
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Aug 2024 18:05:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565AD188012;
-	Mon, 19 Aug 2024 17:56:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DC41184535;
+	Mon, 19 Aug 2024 18:05:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ScqkOAn+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="adPXV4dv"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27002D531;
-	Mon, 19 Aug 2024 17:56:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B0B1CAAF;
+	Mon, 19 Aug 2024 18:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724090168; cv=none; b=oZOw/C7EtfYxrmV8rTeStIThSeeLM+jhSsg1yJ19htAZ+3fYWc4XJXB0ipKCpntpZlHfAjyC/x87pKFO/Srjxlh8LmdIIxuMgfwBIMOCqXeWasdSvGFz+NbwZoi8kvYLDiTx4EFQH9X7SgXK7gWE06pjGWOXH+DsrYh0SeMykd4=
+	t=1724090752; cv=none; b=doRR96QtEAiGsvze58ymyYe0sBbDBjrou5TMhw7RduZtMmhn62yMPLLMO9mFIwQrQOSFMOPunfTP38ZF5lwSW/cdvECRehExR7TmwW9GrWvg7hBlg6L7NmY94RF8szCyJ2Sx4PZ+vdsH7JgIHcphZc+fzuS3nXOYyaCOsZ32FBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724090168; c=relaxed/simple;
-	bh=mmODq+TZhWuJQ5d98mEb9sY1bqTu6zYLV5Bks5epVCA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=AW9bWGziRaTtc51rYSdbPze5ndPZIFJo/bOle8eAkanrpltiUvJxEWsRMvuaZuVSyarHGQcm4zq10Mfeh3QG9c9pALd933ky3rmKiPEPwRNa8PBp1g9OBPeGKTtAjxk/ac152UJ1ixmvuaeMY55xwij3uBVu2numQ63ZkU4fFok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ScqkOAn+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B84FC32782;
-	Mon, 19 Aug 2024 17:56:07 +0000 (UTC)
+	s=arc-20240116; t=1724090752; c=relaxed/simple;
+	bh=uLSpmh/E5SFR+0qV7rTBO7Co/W3e9kkntMp3LEBgW5A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=nBRDN2moqb7tOMc3y1xL0QLCvJLLQTrulGXWEGkVoNd5yaoIMNo5rE/isU1o79NCN04QVIN6A49pZWAoRiF0KTMi3Erjl4ano3ruF4T98nTcjdydYxVVMZbtnzpOmGR1hfWahbwi59EUBJRcqYuaGX0q1Zaimm5yBBcaQ+UMXpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=adPXV4dv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECEA4C4AF0E;
+	Mon, 19 Aug 2024 18:05:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724090168;
-	bh=mmODq+TZhWuJQ5d98mEb9sY1bqTu6zYLV5Bks5epVCA=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=ScqkOAn+7oBUmnlRdsXQf73YyqpgKX3dBbwThQcGbkVRActWgjx5MBHTfEfRmv5P2
-	 /gFVplAAbMOUqSdYNgV41/+DhxOnI74U83ZI/PXAyrz1D/CsA+5eLlXLfQr+m0ZDUu
-	 3LSuzPbWVqfJ85lDtuLIfoVgdkxbvFI9xisFAIPO0FvwhITxaD1EENmxUoZYHqlU29
-	 jOShlhKwuJt3bP2EUck+qmMCWmuH7CYlndnhSJgDi1tgoC4bhoFdnHgzhaESZYFpu1
-	 OurUubG4OgiLidulpmYD6GMcEryfU/eTs3DD64p5HT4+ptNnaWdHjs4USb6Q45pyRS
-	 MKqJGBm7rgvYg==
+	s=k20201202; t=1724090751;
+	bh=uLSpmh/E5SFR+0qV7rTBO7Co/W3e9kkntMp3LEBgW5A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=adPXV4dvUSE0pwCC6K1YfPntPyebWDDj0fD+pJW3wr5fWWivDUihmzH65OZg46th3
+	 XY10Ijh0JETmHQ73y7+fG4I7PgmkHr7U80iDyJGFtweWoz0YsD2HhM0IN6gAouT3+4
+	 6/b3YMhfpj3SjpIxmEsO8HaHTh/HP48Vhopc1sof3H6TSo2NuxemqhNg0cvH00Yqjd
+	 FoE10+toTGsLcJhCGFlHGlNrtMPcWL+mwRQvrS4NYp3KGBtiTY7wERz0v8glMM02y5
+	 B4p9QyU2xjbp0fZfBDFDQLq1UwKFMdeTscNEQhbErYHeZ8xohsUeIfaNIwX+yr65Nd
+	 gZnFXr8lOKE8A==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,27 +49,62 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Aug 2024 20:56:04 +0300
-Message-Id: <D3K2YF6WOIPS.Y9VHQLJ375WP@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>,
- <linux-crypto@vger.kernel.org>, <zohar@linux.ibm.com>,
- <linux-integrity@vger.kernel.org>, "Roberto Sassu"
- <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v2 02/14] rsa: add parser of raw format
+Date: Mon, 19 Aug 2024 21:05:47 +0300
+Message-Id: <D3K35VBCWZSW.2WCXJMW1HGGD5@kernel.org>
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, <dhowells@redhat.com>,
- <dwmw2@infradead.org>, <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+To: "Matthew Garrett" <mjg59@srcf.ucam.org>
+Cc: "Andrew Cooper" <andrew.cooper3@citrix.com>, "Thomas Gleixner"
+ <tglx@linutronix.de>, "Daniel P. Smith" <dpsmith@apertussolutions.com>,
+ "Eric W. Biederman" <ebiederm@xmission.com>, "Eric Biggers"
+ <ebiggers@kernel.org>, "Ross Philipson" <ross.philipson@oracle.com>,
+ <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+ <linux-integrity@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-crypto@vger.kernel.org>, <kexec@lists.infradead.org>,
+ <linux-efi@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+ <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+ <dave.hansen@linux.intel.com>, <ardb@kernel.org>,
+ <James.Bottomley@hansenpartnership.com>, <peterhuewe@gmx.de>,
+ <jgg@ziepe.ca>, <luto@amacapital.net>, <nivedita@alum.mit.edu>,
+ <herbert@gondor.apana.org.au>, <davem@davemloft.net>, <corbet@lwn.net>,
+ <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+ <kanth.ghatraju@oracle.com>, <trenchboot-devel@googlegroups.com>
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
+ early measurements
 X-Mailer: aerc 0.18.2
-References: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
- <20240818165756.629203-3-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20240818165756.629203-3-roberto.sassu@huaweicloud.com>
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-7-ross.philipson@oracle.com>
+ <20240531021656.GA1502@sol.localdomain>
+ <874jaegk8i.fsf@email.froward.int.ebiederm.org>
+ <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
+ <87ttflli09.ffs@tglx> <550d15cd-5c48-4c20-92c2-f09a7e30adc9@citrix.com>
+ <D3HAP4O4OVS3.2LOSH5HMQ34OZ@kernel.org> <Zr+dTMYZNY1b9cRV@srcf.ucam.org>
+In-Reply-To: <Zr+dTMYZNY1b9cRV@srcf.ucam.org>
 
-On Sun Aug 18, 2024 at 7:57 PM EEST, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri Aug 16, 2024 at 9:41 PM EEST, Matthew Garrett wrote:
+> On Fri, Aug 16, 2024 at 02:22:04PM +0300, Jarkko Sakkinen wrote:
 >
-> Parse the RSA key with RAW format if the ASN.1 parser returns an error.
+> > For (any) non-legacy features we can choose, which choices we choose to
+> > support, and which we do not. This is not an oppositive view just sayin=
+g
+> > how it is, and platforms set of choices is not a selling argument.
+>
+> NIST still permits the use of SHA-1 until 2030, and the most significant=
+=20
+> demonstrated weaknesses in it don't seem applicable to the use case=20
+> here. We certainly shouldn't encourage any new uses of it, and anyone=20
+> who's able to use SHA-2 should be doing that instead, but it feels like=
+=20
+> people are arguing about not supporting hardware that exists in the real=
+=20
+> world for vibes reasons rather than it being a realistically attackable=
+=20
+> weakness (and if we really *are* that concerned about SHA-1, why are we=
+=20
+> still supporting TPM 1.2 at all?)
 
-Why? Please finish the commit message properly.
+We are life-supporting TPM 1.2 as long as necessary but neither the
+support is extended nor new features will gain TPM 1.2 support. So
+that is at least my policy for that feature.
 
 BR, Jarkko
 
