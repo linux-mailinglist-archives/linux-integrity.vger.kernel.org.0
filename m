@@ -1,131 +1,130 @@
-Return-Path: <linux-integrity+bounces-3372-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3373-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F9CB9588C1
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2024 16:15:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A92D1958B32
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2024 17:27:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5259C1C222CD
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2024 14:15:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 647EE282CA5
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Aug 2024 15:27:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD41191476;
-	Tue, 20 Aug 2024 14:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1273E1A01D2;
+	Tue, 20 Aug 2024 15:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YYij2JgH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D521189F3F;
-	Tue, 20 Aug 2024 14:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11A219FA93;
+	Tue, 20 Aug 2024 15:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724163297; cv=none; b=CsAxTd5cb5/VNOKvbQ7bNn2etYYkL6m5szWbFnMMhDEr3PaVlt7QI6LT7CcaYulA6xW88i/F53utLqyRsSDQON9HNfmOxjaVwm75ty3Le+3bpid4j7EQUr4zwIwRIN+6W4QETJPXdfDwm/szvGEI/vO0sx6JxU0b1EcOMmG0z3I=
+	t=1724167596; cv=none; b=A8NfyzQcQ89CCTmvyhUTjGOzV48HBHvezjHkcxZSQPp+GtS7W9ExjX27lmzTsBe4hSLwHreB9ORW3+bkXPUTAV6GydXLwCRGsm6b4PwNmsz62aq3z4nh7esgTkGMmKVPfiIXs0l9g4tG6QnImQpUFhXnYdJjijAP1Mt70mpGxH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724163297; c=relaxed/simple;
-	bh=Li4il9DPZcDFmQDsu6gkCNX3IrynfYcKNpVKGyGtauc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ccAX9qUQojXkJ/6K08isZv8sOLBokw93NjZM5i3NRw2wA1dW2avOtYcodCNRujrBLYReW4bS4Dk3LuOfDi76wkNd613bpE99MMyGBqVkSJztU2ClaGzqmB7HqVm/iZd85cz0uFblW4eCCPlmKM+0OZVITcKG23WIH/m1atvNkT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Wp9wG09J9z9v7Hk;
-	Tue, 20 Aug 2024 21:55:42 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id D434A140B1C;
-	Tue, 20 Aug 2024 22:14:36 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwDntsPEpMRmxQiUAQ--.4381S2;
-	Tue, 20 Aug 2024 15:14:36 +0100 (CET)
-Message-ID: <e0a67e424dc4cd9f36252c453f046f1f6e51d363.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 00/14] KEYS: Add support for PGP keys and signatures
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Jonathan McDowell <noodles@earth.li>
-Cc: dhowells@redhat.com, dwmw2@infradead.org, herbert@gondor.apana.org.au, 
- davem@davemloft.net, linux-kernel@vger.kernel.org,
- keyrings@vger.kernel.org,  linux-crypto@vger.kernel.org,
- zohar@linux.ibm.com,  linux-integrity@vger.kernel.org, Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Tue, 20 Aug 2024 16:14:24 +0200
-In-Reply-To: <ZsSkTs4TFfx2pK8r@earth.li>
-References: <20240818165756.629203-1-roberto.sassu@huaweicloud.com>
-	 <ZsNf1VdfkHqD8R4Q@earth.li>
-	 <f142b1c4e662d4701a2ab67fa5fc839ab7109e5e.camel@huaweicloud.com>
-	 <ZsSkTs4TFfx2pK8r@earth.li>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1724167596; c=relaxed/simple;
+	bh=cul7AYUW/oUYJetixYQFOVkrNIZzj7nX7ZdNR4EJkYY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=JDmV8VyKaR2F4n0MRkPpM2lOqxbzQ4tMnzAy7z9ELjjixds9k2wvXvhG4MjgnP8LL7POX0FnxKZZ52f5JaudhfyFJ9RsqmMUu1QCEnBbDn/kVo5PN0nKmW+zcvw3g0y3TSEhjKcTxABmwM6IUPLYMsTQqQKBIB5krFwX8gnT1H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YYij2JgH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51E3C4AF14;
+	Tue, 20 Aug 2024 15:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724167595;
+	bh=cul7AYUW/oUYJetixYQFOVkrNIZzj7nX7ZdNR4EJkYY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YYij2JgHvU1AVhaIiSFSmqh3C4f+ic8eJASZifn6Evsee/JMB21kiEgUtpOIBAzfw
+	 WhPHhWbdxcAJ3GX75aIWxGKoIE+TbIbkElRQxkSiCM1gSh7PD6MUNxSUUoVKCpdCo5
+	 Br49eRY1Fh7j8jsrdqPjohHKrKIQUkf6RV1BkZp3Zhod/8qnYQgViR4l08DXR6aSmW
+	 DulskVJSqnfDMUzs1+E910tAcZopB11i46RMlqd/GfDzeV8Bwbz6KJUBtopdAKLoXo
+	 UJG9b6LftIfnK02/OMGuvfBF4uYp8xc4JKrLL2vskwO7qu1TbpCs1VTOoV0Mv/xjHN
+	 vN7mHGvix1P4A==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwDntsPEpMRmxQiUAQ--.4381S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF1kJFWfWr1DWr17AFyUtrb_yoW8AFWkpa
-	yrWF13tFZ5tw1SkFnay3WUGrWjy39rJF15JwnxJrykAFn0qFy09F1xKF45u3s8Grn3Cw1j
-	vrW3Ja13W3s8AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBGbD+-gF-gABsb
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 20 Aug 2024 18:26:31 +0300
+Message-Id: <D3KUEGW4Q63K.NEFOY5C6ZG2O@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Matthew Garrett" <mjg59@srcf.ucam.org>
+Cc: "Andrew Cooper" <andrew.cooper3@citrix.com>, "Thomas Gleixner"
+ <tglx@linutronix.de>, "Daniel P. Smith" <dpsmith@apertussolutions.com>,
+ "Eric W. Biederman" <ebiederm@xmission.com>, "Eric Biggers"
+ <ebiggers@kernel.org>, "Ross Philipson" <ross.philipson@oracle.com>,
+ <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+ <linux-integrity@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-crypto@vger.kernel.org>, <kexec@lists.infradead.org>,
+ <linux-efi@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+ <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+ <dave.hansen@linux.intel.com>, <ardb@kernel.org>,
+ <James.Bottomley@hansenpartnership.com>, <peterhuewe@gmx.de>,
+ <jgg@ziepe.ca>, <luto@amacapital.net>, <nivedita@alum.mit.edu>,
+ <herbert@gondor.apana.org.au>, <davem@davemloft.net>, <corbet@lwn.net>,
+ <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+ <kanth.ghatraju@oracle.com>, <trenchboot-devel@googlegroups.com>
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
+ early measurements
+X-Mailer: aerc 0.17.0
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-7-ross.philipson@oracle.com>
+ <20240531021656.GA1502@sol.localdomain>
+ <874jaegk8i.fsf@email.froward.int.ebiederm.org>
+ <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
+ <87ttflli09.ffs@tglx> <550d15cd-5c48-4c20-92c2-f09a7e30adc9@citrix.com>
+ <D3HAP4O4OVS3.2LOSH5HMQ34OZ@kernel.org> <Zr+dTMYZNY1b9cRV@srcf.ucam.org>
+ <D3K35VBCWZSW.2WCXJMW1HGGD5@kernel.org> <ZsONwsWs3zCln70O@srcf.ucam.org>
+In-Reply-To: <ZsONwsWs3zCln70O@srcf.ucam.org>
 
-On Tue, 2024-08-20 at 15:12 +0100, Jonathan McDowell wrote:
-> On Mon, Aug 19, 2024 at 05:15:02PM +0200, Roberto Sassu wrote:
-> > On Mon, 2024-08-19 at 16:08 +0100, Jonathan McDowell wrote:
-> > > On Sun, Aug 18, 2024 at 06:57:42PM +0200, Roberto Sassu wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > >=20
-> > > > Support for PGP keys and signatures was proposed by David long time=
- ago,
-> > > > before the decision of using PKCS#7 for kernel modules signatures
-> > > > verification was made. After that, there has been not enough intere=
-st to
-> > > > support PGP too.
-> > >=20
-> > > You might want to update the RFC/bis references to RFC9580, which was
-> > > published last month and updates things.
+On Mon Aug 19, 2024 at 9:24 PM EEST, Matthew Garrett wrote:
+> On Mon, Aug 19, 2024 at 09:05:47PM +0300, Jarkko Sakkinen wrote:
+> > On Fri Aug 16, 2024 at 9:41 PM EEST, Matthew Garrett wrote:
+> > > On Fri, Aug 16, 2024 at 02:22:04PM +0300, Jarkko Sakkinen wrote:
+> > >
+> > > > For (any) non-legacy features we can choose, which choices we choos=
+e to
+> > > > support, and which we do not. This is not an oppositive view just s=
+aying
+> > > > how it is, and platforms set of choices is not a selling argument.
+> > >
+> > > NIST still permits the use of SHA-1 until 2030, and the most signific=
+ant=20
+> > > demonstrated weaknesses in it don't seem applicable to the use case=
+=20
+> > > here. We certainly shouldn't encourage any new uses of it, and anyone=
+=20
+> > > who's able to use SHA-2 should be doing that instead, but it feels li=
+ke=20
+> > > people are arguing about not supporting hardware that exists in the r=
+eal=20
+> > > world for vibes reasons rather than it being a realistically attackab=
+le=20
+> > > weakness (and if we really *are* that concerned about SHA-1, why are =
+we=20
+> > > still supporting TPM 1.2 at all?)
 > >=20
-> > Yes, makes sense (but probably isn't too much hassle to support more
-> > things for our purposes?)
->=20
-> I'm mostly suggesting that the comments/docs point to the latest
-> standard rather than the draft version, not changing to support the new
-> v6 keys.
->=20
-> > > Also, I see support for v2 + v3 keys, and this doesn't seem like a go=
-od
-> > > idea. There are cryptographic issues with fingerprints etc there and =
-I
-> > > can't think of a good reason you'd want the kernel to support them. T=
-he
-> > > same could probably be said of DSA key support too.
-> >=20
-> > Uhm, if I remember correctly I encountered some old PGP keys used to
-> > verify RPM packages (need to check). DSA keys are not supported, since
-> > the algorithm is not in the kernel.
->=20
-> I would question the benefit gained from using obsolete key/signature
-> types for verification (I was involved in the process of Debian dropping
-> them back in *2010* which was later than it should have been). Dropping
-> the code for that path means a smaller attack surface/maintenance
-> overhead for something that isn't giving a benefit.
+> > We are life-supporting TPM 1.2 as long as necessary but neither the
+> > support is extended nor new features will gain TPM 1.2 support. So
+> > that is at least my policy for that feature.
+>
+> But the fact that we support it and provide no warning labels is a=20
+> pretty clear indication that we're not actively trying to prevent people=
+=20
+> from using SHA-1 in the general case. Why is this a different case?=20
+> Failing to support it actually opens an entire separate set of footgun=20
+> opportunities in terms of the SHA-1 banks now being out of sync with the=
+=20
+> SHA-2 ones, so either way we're leaving people open to making poor=20
+> choices.
 
-Ok, I agree to both!
+This is a fair and enclosing argument. I get where you are coming from
+now. Please as material for the commit message.
 
-Thanks
-
-Roberto
+BR, Jarkko
 
 
