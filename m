@@ -1,80 +1,135 @@
-Return-Path: <linux-integrity+bounces-3412-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3414-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0666E961E38
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2024 07:32:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF1B19625F6
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2024 13:23:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A54CF1F24EAC
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2024 05:32:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A26352844E9
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Aug 2024 11:23:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D5714D29D;
-	Wed, 28 Aug 2024 05:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5BF616EB40;
+	Wed, 28 Aug 2024 11:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VDb1l480"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="RwwPGxMA";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="OXqnlx5L";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="HDKWTJ7Y";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="0L9heknE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33B414AD25;
-	Wed, 28 Aug 2024 05:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C913FEC;
+	Wed, 28 Aug 2024 11:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724823140; cv=none; b=S4H9qoqDP2WRfb+UCLRhUgX0yaq1pnqMre2WP5+rIbyGhql+WfxcyeI7Lt71RFfta1ZdWCu1ncuVYt4/5D2lu+JJCxDNEUcJHQyBUjmbwp1spePrkyQ3PUZZKNdXjvQCGEQQVq6uRSrsz1cbS9KYBcFvqjFOsetQE5c8Fkx0FUk=
+	t=1724844223; cv=none; b=FqVi053+jC/qqyoMuqinkXm0BxyYdlwVM31+L0Kdso69KXgZxscuzQMcINFfKx5X6a8aBhj2EBaSn4nPIlm0QFjsLNmW0wmAkAe1kV2TcwXH0jtL283t8PioR3RFheAgDqBDAdhIfCp/k2TeIMaV9DzRWuXwOhnbyGWQuclelWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724823140; c=relaxed/simple;
-	bh=olmmimMEbwDxYfJ3/akHUI21VGIKzZvVUXeUuGj+0WI=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=L/++jdJT4151elDAUxTNU62X7By1fdoLJ+6TFoo71JQ7+FT1gPo0YF9MEw20/WKZqHWJcbqAlG2zrrbDA0rydQwKf+9A3+LW8wBryw1EuPKdqXNUagz582sXtwVAHTOzPGsa5PIArS0hQ9Ndm7Y0jKjt4hR0dIuJqmAZpU70ipc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VDb1l480; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B0EC4AF19;
-	Wed, 28 Aug 2024 05:32:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724823140;
-	bh=olmmimMEbwDxYfJ3/akHUI21VGIKzZvVUXeUuGj+0WI=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=VDb1l480Cks0yXzbSebTymGYQhmtZ/U9YSBbjpnGRGdmHEtVfmjMd76lju0LBtEBy
-	 Bh9Y9VJg2aHY+jXiczPTDS32BLLxo2g0VmbJ0LcwQVbIEU8fBS3RyPP5ZOl3y9RUaA
-	 2hJkCdZpQe+NWnZVb0SmWYrPC4eAc+oRdihfd6PHm0idli+HdCC5e+d/WanEq9vzZe
-	 uqX7X8DrftlMcEO0EefGQ+PCdB0koQJQOtSZwfAAfoXhQ1RSMJhUxdLSFSFCW5q1AA
-	 4TqmPhymrb1eMYi+Tep8wFN061f9bzR9iMxRzLJl7ea/heDHLwe4IU1nFCO2YYVQGS
-	 LZjdrO/PcVyyQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70F493822D6F;
-	Wed, 28 Aug 2024 05:32:21 +0000 (UTC)
-Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-6.11-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <D3QXXCFHY73S.26C2JS9ZOV7IQ@kernel.org>
-References: <D3QXXCFHY73S.26C2JS9ZOV7IQ@kernel.org>
-X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
-X-PR-Tracked-Message-Id: <D3QXXCFHY73S.26C2JS9ZOV7IQ@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-6.11-rc6
-X-PR-Tracked-Commit-Id: 08d08e2e9f0ad1af0044e4747723f66677c35ee9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 46d22bfdf0bc76429f596c58ca74a8f67d0f6251
-Message-Id: <172482314011.853602.7428886411403749943.pr-tracker-bot@kernel.org>
-Date: Wed, 28 Aug 2024 05:32:20 +0000
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, Stefan
- Berger <stefanb@linux.ibm.com>
+	s=arc-20240116; t=1724844223; c=relaxed/simple;
+	bh=/nD3GELsv87/jPZ4l6cKmc5fENYaICBxFVhol7UbrYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=llBIer+/yGfO6sTfZrz0RAt3Ut8ATPRqw0ib9eBOSdPfmXGpT3PG5Hp0wZ0wH/A0UgF2eM7fEv4+Ev8HSiUbKcswedq+f824tEt403iSxn+Alr93zYgJmnTd4TfbY/4Kv/j50OXLV6SRhPMpX+yReohElyC3aZezIxLSKTJ0SII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=RwwPGxMA; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=OXqnlx5L; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=HDKWTJ7Y; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=0L9heknE; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	by smtp-out2.suse.de (Postfix) with ESMTP id BD5011FC06;
+	Wed, 28 Aug 2024 11:23:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1724844218; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=VU/9WnGSOzBeM537Y5PLqEr5y1QDTfXTBgK86EBJIUw=;
+	b=RwwPGxMAH39mMgivxKTaMvNBWNQe3H9cHVI98eZnOHjT+gaJiWefN8yfX+7VB0WdyzkK0p
+	mn61T7RT7mrLK5/xZqSrAYkj73NdErJD0vCUkMSSigbcOvo5qQYrJqkg1qsMqxTvjcdVS4
+	nuIzjHSS5LALbWM1aWaAXKWul/IBp+o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1724844218;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=VU/9WnGSOzBeM537Y5PLqEr5y1QDTfXTBgK86EBJIUw=;
+	b=OXqnlx5LDk8CkiliHLD4SodJgRrGZWQC9dPZ4s2soZoOHjdktHFHs+UasERume0KR2UrMo
+	0tTIjUv//vzQdGBQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1724844217; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=VU/9WnGSOzBeM537Y5PLqEr5y1QDTfXTBgK86EBJIUw=;
+	b=HDKWTJ7YQbhe3z2ts88sIa6bK8AHJUtyzbi1b+hmDJ8Uw1yrKwF6DZo0z0IRNCYkwBuG4i
+	PpZGoUQNGS/Bs1NeNiVFiGwEW/jmRaew8WKuMq/Z7t6Hr0sNHloepmidhGGQGAiEijjFb0
+	6vEeduBka2zmN9YXayDNTumFi/nq85M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1724844217;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=VU/9WnGSOzBeM537Y5PLqEr5y1QDTfXTBgK86EBJIUw=;
+	b=0L9heknEgjULYlmzLiD6Mc/ql0of11CmvvIzLGCDK6ukncrac7LeF/CoVEGC1lXBdp2t0h
+	5wHFa1aWPZZnwGAA==
+From: Michal Suchanek <msuchanek@suse.de>
+To: linux-integrity@vger.kernel.org
+Cc: Michal Suchanek <msuchanek@suse.de>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 1/2] MAINTAINERS: Add selftest files to TPM section
+Date: Wed, 28 Aug 2024 13:23:19 +0200
+Message-ID: <52c629ebbfc8f5218a90fa539f816c8555cb552a.1724842902.git.msuchanek@suse.de>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_CC(0.00)[suse.de,gmx.de,kernel.org,ziepe.ca,vger.kernel.org];
+	RCVD_COUNT_ZERO(0.00)[0];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid];
+	FREEMAIL_ENVRCPT(0.00)[gmx.de]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-The pull request you sent on Tue, 27 Aug 2024 22:28:13 +0300:
+tools/testing/selftests/tpm2/ is TPM-specific test
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-6.11-rc6
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/46d22bfdf0bc76429f596c58ca74a8f67d0f6251
-
-Thank you!
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 878dcd23b331..c2ee92c7c16c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23184,6 +23184,7 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+ F:	Documentation/devicetree/bindings/tpm/
+ F:	drivers/char/tpm/
++F:	tools/testing/selftests/tpm2/
+ 
+ TPS546D24 DRIVER
+ M:	Duke Du <dukedu83@gmail.com>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.46.0
+
 
