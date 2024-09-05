@@ -1,120 +1,110 @@
-Return-Path: <linux-integrity+bounces-3470-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3471-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 064D996E0C6
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 19:05:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 003D296E0D6
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 19:10:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B04DA289B7A
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 17:04:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 322671C254DD
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 17:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 397841A0AF4;
-	Thu,  5 Sep 2024 17:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="f3hgaQx4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EFBC1A2570;
+	Thu,  5 Sep 2024 17:10:38 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D1D54F87;
-	Thu,  5 Sep 2024 17:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511C01A0B06;
+	Thu,  5 Sep 2024 17:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725555896; cv=none; b=gSrPGdEVdo+CITEHQI8IftGgx4/SPBe5G9eec+Ecq+d5Fyb5XEUyvJhC4sAsZdZxog+NQG47OggZR0XJp/0DyAXW4HcjA3SumsrCWkwwD+2eE7Ll8kdNSkW8Mz1VDUT24tjZh3fIdsx+eaq+l6uKrcYl3mNXkIkpyZ497R5srXs=
+	t=1725556238; cv=none; b=gE+0R40yZjshxn/opCc8pLsX2sW6BVfMOdcJOdpibOaglHhLmm/de4o/svPSEQyUGuZuOsHHnXU4MkeljKADMYWERosuFtvz19sxrJQL286vjuCJfMsBcMAovj4tI1JUtnHAMIgVPS+ZAA7CrdTXeIDZjb9tbMAfQso/xVTQ4EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725555896; c=relaxed/simple;
-	bh=dszasaLQ5F2bOpdRX6ozfhPf0Kh1rM87y0FL2yxR4h8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=YlK63jEKMu4urJL2iW9rNXuiYA5xuj5QushuFlJeL4ypSzvgzLy4kai71hh3yIUwjhhq83XzKS4iJ75MWu5nTWEKPKdezMWqa1OnM1JIfSTUhUfQkrtBFPgBJdQ0wAnl+d+rNnPrY2ENQA23QZYh4saWwF3GiL392yEzpjYQC1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=f3hgaQx4; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48597LPe026135;
-	Thu, 5 Sep 2024 17:02:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	dszasaLQ5F2bOpdRX6ozfhPf0Kh1rM87y0FL2yxR4h8=; b=f3hgaQx4NdOewLhD
-	hhaHl2ZN1VHZHeP3W6Ts/wlyKkLxO287pf5DJ57U02vt+LjCIW99qsQhHl98ltVv
-	s9Kfz83W8E3/mxf0Z5QZWltukw0oZQ/wKfXqelC14ueojYROEWqRPUUzbnPmdU2u
-	sNC7VCGCvvcyN8ek6SbJSwyW7r6BOWRcvbS8mE+u0vCY9vQdBkfRQcHuPyR5qkcK
-	sYFI6efbP0OC0B6Pven119lJ7pJIL20DL0IBbkb4K5mt8IVpw6QnBCXYOZOdpQD5
-	dSk1d94nLG01U9llv17kiiugw226nY7C+qtwZH5AcMnEKzNPxCGzpE1WyLPFfysM
-	v+ASWw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41drqe93ud-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Sep 2024 17:02:05 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 485H23qG015981
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Sep 2024 17:02:03 GMT
-Received: from [10.81.24.74] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 5 Sep 2024
- 10:02:03 -0700
-Message-ID: <c6ac95bd-df49-4db7-8f5c-1281a9f95ecd@quicinc.com>
-Date: Thu, 5 Sep 2024 10:02:02 -0700
+	s=arc-20240116; t=1725556238; c=relaxed/simple;
+	bh=txJaOor+9ZWaoWB3yu0QW4hZEAgJucHNaOLbH3vB1vE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=e7SmJx46m2SqXmzFHBgKlbzxR65Y/yT51xxK2CRa9R6VJKtoqROwHTUI0JuIl6fTHcj8Pz5lGyzhFYOZMHvt5a1EKdCYDsc6JsnGRIwpfsMZOgNWXlAmOdLKaCzcRCl198vBvhXho6HfRZMOUtxpat8tX82bcLmkijJjK6a2Xzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4X04wm4HLTz9v7Jf;
+	Fri,  6 Sep 2024 00:45:28 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 772AF140FEB;
+	Fri,  6 Sep 2024 01:10:24 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwCH6cnv5dlmbH5WAA--.17402S2;
+	Thu, 05 Sep 2024 18:10:23 +0100 (CET)
+Message-ID: <0cd494edfc48232257753f870d9b88436bee25bc.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 13/14] selftests/digest_cache: Add selftests for the
+ Integrity Digest Cache
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Jeff Johnson <quic_jjohnson@quicinc.com>, zohar@linux.ibm.com, 
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, corbet@lwn.net, 
+	akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org, 
+	serge@hallyn.com, shuah@kernel.org, mcoquelin.stm32@gmail.com, 
+	alexandre.torgue@foss.st.com
+Cc: linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com,
+ pbrobinson@gmail.com,  zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org,
+ pmatilai@redhat.com,  jannh@google.com, dhowells@redhat.com,
+ jikos@kernel.org, mkoutny@suse.com,  ppavlu@suse.com, petr.vorel@gmail.com,
+ mzerqung@0pointer.de, kgold@linux.ibm.com,  Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Thu, 05 Sep 2024 19:10:04 +0200
+In-Reply-To: <c6ac95bd-df49-4db7-8f5c-1281a9f95ecd@quicinc.com>
+References: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
+	 <20240905150543.3766895-14-roberto.sassu@huaweicloud.com>
+	 <c6ac95bd-df49-4db7-8f5c-1281a9f95ecd@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 13/14] selftests/digest_cache: Add selftests for the
- Integrity Digest Cache
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, <zohar@linux.ibm.com>,
-        <dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
-        <corbet@lwn.net>, <akpm@linux-foundation.org>, <paul@paul-moore.com>,
-        <jmorris@namei.org>, <serge@hallyn.com>, <shuah@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>
-CC: <linux-integrity@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <wufan@linux.microsoft.com>,
-        <pbrobinson@gmail.com>, <zbyszek@in.waw.pl>, <hch@lst.de>,
-        <mjg59@srcf.ucam.org>, <pmatilai@redhat.com>, <jannh@google.com>,
-        <dhowells@redhat.com>, <jikos@kernel.org>, <mkoutny@suse.com>,
-        <ppavlu@suse.com>, <petr.vorel@gmail.com>, <mzerqung@0pointer.de>,
-        <kgold@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>
-References: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
- <20240905150543.3766895-14-roberto.sassu@huaweicloud.com>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <20240905150543.3766895-14-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IWHkMbE2UMqP4SDX7b2uvUjjfPgW9-Pc
-X-Proofpoint-ORIG-GUID: IWHkMbE2UMqP4SDX7b2uvUjjfPgW9-Pc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-05_12,2024-09-04_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- phishscore=0 adultscore=0 suspectscore=0 priorityscore=1501 clxscore=1011
- impostorscore=0 spamscore=0 mlxlogscore=983 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2409050127
+X-CM-TRANSID:GxC2BwCH6cnv5dlmbH5WAA--.17402S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKF43Jw4kXrykuF13tryrZwb_yoWxCwbEgw
+	4vvryfC3y3ZF129a1jyas8JFy2ga1vgw1Yqr1kJF95XryfA39IkrWkK3sIvw18Cw4ftF93
+	AayDAwnxtr1SvjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
+	xVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1U
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWx
+	JVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW0oVCq3bIYCTnIWIevJa73UjIFyTuYvjxUsB
+	HqDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBGbZE-oL1gACse
 
-On 9/5/24 08:05, Roberto Sassu wrote:
-...
-> +module_init(digest_cache_test_init);
-> +module_exit(digest_cache_test_fini);
-> +MODULE_LICENSE("GPL");
+On Thu, 2024-09-05 at 10:02 -0700, Jeff Johnson wrote:
+> On 9/5/24 08:05, Roberto Sassu wrote:
+> ...
+> > +module_init(digest_cache_test_init);
+> > +module_exit(digest_cache_test_fini);
+> > +MODULE_LICENSE("GPL");
+>=20
+> Missing MODULE_DESCRIPTION()
+>=20
+> Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
+> description is missing"), a module without a MODULE_DESCRIPTION() will
+> result in a warning when built with make W=3D1. Recently, multiple
+> developers have been eradicating these warnings treewide, and very few
+> are left, so please don't introduce a new one :)
 
-Missing MODULE_DESCRIPTION()
+Argh, thanks for the reminder! You mentioned in the PGP patch set.
 
-Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
-description is missing"), a module without a MODULE_DESCRIPTION() will
-result in a warning when built with make W=1. Recently, multiple
-developers have been eradicating these warnings treewide, and very few
-are left, so please don't introduce a new one :)
+Roberto
 
 
