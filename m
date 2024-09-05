@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-3463-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3464-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EABC096DE14
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 17:27:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DD5096DE19
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 17:27:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D9F1281991
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 15:27:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05AB728220D
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 15:27:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC25216F908;
-	Thu,  5 Sep 2024 15:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C315A19DF5E;
+	Thu,  5 Sep 2024 15:26:49 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5107FBAC;
-	Thu,  5 Sep 2024 15:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECA1629E4;
+	Thu,  5 Sep 2024 15:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725550007; cv=none; b=MKT62V04wrnhQ7XefkYLK1R4p4pyFbS25UiAtgKP+fsqo5M8SPVT6miDzK+WAom2xp7f8SgSP7T4AU80hQPQRRWlEh3CfDrkZAeDy198AFaSPuNGzyGbIwXaEhrq8U2lSm8y40SFSNUarA8N7y9M8rm4i1w+9PtCfSzj0RLADfo=
+	t=1725550009; cv=none; b=Qu2e7ExhqM5AA6bN+XoKKN+64GXWknzGmIkoDKZITTIm6nwpEq1KOrdaI30WoFEIDw+05jGlA9+o5KLqgljEAnSvXSE52zzNOAO4eQWp31FAbvhQCqi/OtfRF3En0U0Qd9mzLtgO7hK2CxbBm7GBln51Rra/GR8uo02E5e1sJrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725550007; c=relaxed/simple;
-	bh=ozW7kpxyH1OPqoT1CaVy0yB2Mni/IEGpUAC53vHMXiQ=;
+	s=arc-20240116; t=1725550009; c=relaxed/simple;
+	bh=pc9nIK6ksyPJvbtXtbJ/+Grb9aOAmdbsH11PSZN4IBA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c9OoJl9/BicnjureFuGKk5o9LN9G157jqCcGeJDw3OiqAgCoqPddWIsPPYmofI5zd0UbkNhqynSCWz9wbfXcvYeUBmD9+fUNuIT3u9fICoU94SKPAwV3jdt7Xf4aPkyElN5ybDpysK59ehAUv3zeIEWq5qmF+FS23cMWm7e0DWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+	 MIME-Version; b=YfO/QeNq/01Th5PE+GkzboZvxIhrM1q2i0x8Zh2Xok+rbOexbraZN3RO1yPqKv2qDetuUTLiHsy2Tvdj+GpcHSb0WRrnD+ncojJmQ10qERYpDrIEQSBE9hW8rM6vbzj58RDa7DzMrDOGcdBzmo3Mmjl1hDjuIk2tJXh+CiNeMB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4X02lb0Jhqz9v7NF;
-	Thu,  5 Sep 2024 23:07:23 +0800 (CST)
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4X02lZ3H9Kz9v7Hq;
+	Thu,  5 Sep 2024 23:07:22 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 0DF86140595;
-	Thu,  5 Sep 2024 23:26:33 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 868E2140114;
+	Thu,  5 Sep 2024 23:26:44 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDXGjJrzdlmK4RUAA--.19788S6;
-	Thu, 05 Sep 2024 16:26:32 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwDXGjJrzdlmK4RUAA--.19788S7;
+	Thu, 05 Sep 2024 16:26:43 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	zohar@linux.ibm.com,
@@ -65,9 +65,9 @@ Cc: linux-kernel@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v3 04/10] ima: Add digest_cache_measure/appraise boot-time built-in policies
-Date: Thu,  5 Sep 2024 17:25:06 +0200
-Message-Id: <20240905152512.3781098-5-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH v3 05/10] ima: Modify existing boot-time built-in policies with digest cache policies
+Date: Thu,  5 Sep 2024 17:25:07 +0200
+Message-Id: <20240905152512.3781098-6-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240905152512.3781098-1-roberto.sassu@huaweicloud.com>
 References: <20240905152512.3781098-1-roberto.sassu@huaweicloud.com>
@@ -78,10 +78,10 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwDXGjJrzdlmK4RUAA--.19788S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxtF1kKr1UWF13Zr1DWw48Zwb_yoW7CF13pa
-	9rWFyYyrZ8XF9xCw47Ca4xuF4Fy3s2ga13Gws8G34jy3Z8Zr1q9w1Fy3W3ZrZ8Ar10q3Wx
-	XF4Ygr4jkw1qqaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:LxC2BwDXGjJrzdlmK4RUAA--.19788S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxXryrur4rAF45uF4fuF1kuFg_yoW5uryfpa
+	9FgrySkrs7Zr9rCw1fA3WIvF4rK3ykta1UGa1DK345AF45CF1jv3Wrtr43uFyUGr10qFWx
+	JF4Ygw4YkF1qyaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -96,152 +96,87 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxtF1kKr1UWF13Zr1DWw48Zwb_yoW7CF13pa
 	1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
 	AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26rxl6s0DYxBIdaVFxhVjvjDU0xZFpf9x
 	07jhXo7UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBGbZE3MLWgACsY
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBGbZE3MLXwAAsf
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Specify the 'digest_cache_measure' boot-time policy with 'ima_policy=' in
-the kernel command line to add the following rule at the beginning of the
-IMA policy, before other rules:
+Setting the boot-time built-in policies 'digest_cache_measure' and
+'digest_cache_appraise' is not sufficient to use the Integrity Digest Cache
+to measure and appraise files, since their effect is only to measure and
+appraise digest lists.
 
-measure func=DIGEST_LIST_CHECK pcr=12
+Modify existing measurement rules if the 'digest_cache_measure' built-in
+policy is specified by adding to them:
 
-which will measure digest lists into PCR 12 (or the value in
-CONFIG_IMA_DIGEST_CACHE_MEASURE_PCR_IDX).
+digest_cache=data pcr=12
 
-Specify 'digest_cache_appraise' to add the following rule at the beginning,
-before other rules:
+Other than enabling the usage of the Integrity Digest Cache for
+measurement, the additional keywords also store measurements in the PCR 12,
+to not confuse new style measurements with the original ones still stored
+on PCR 10.
 
-appraise func=DIGEST_LIST_CHECK appraise_type=imasig|modsig
+Modify existing appraisal rules if the 'digest_cache_appraise' built-in
+policy is specified by adding to them:
 
-which will appraise digest lists with IMA signatures or module-style
-appended signatures.
+digest_cache=data
 
-Adding those rule at the beginning rather than at the end is necessary to
-ensure that digest lists are measured and appraised in the initial ram
-disk, which would be otherwise prevented by the dont_ rules.
+The additional keyword enables the usage of Integrity Digest Cache for
+appraisal.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- .../admin-guide/kernel-parameters.txt         | 10 +++++-
- security/integrity/ima/Kconfig                | 10 ++++++
- security/integrity/ima/ima_policy.c           | 35 +++++++++++++++++++
- 3 files changed, 54 insertions(+), 1 deletion(-)
+ Documentation/admin-guide/kernel-parameters.txt |  9 +++++++--
+ security/integrity/ima/ima_policy.c             | 14 ++++++++++++++
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 09126bb8cc9f..afaaf125a237 100644
+index afaaf125a237..1df8ce411760 100644
 --- a/Documentation/admin-guide/kernel-parameters.txt
 +++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2077,7 +2077,8 @@
- 	ima_policy=	[IMA]
- 			The builtin policies to load during IMA setup.
- 			Format: "tcb | appraise_tcb | secure_boot |
--				 fail_securely | critical_data"
-+				 fail_securely | critical_data |
-+				 digest_cache_measure | digest_cache_appraise"
- 
- 			The "tcb" policy measures all programs exec'd, files
- 			mmap'd for exec, and all files opened with the read
-@@ -2099,6 +2100,13 @@
- 			The "critical_data" policy measures kernel integrity
+@@ -2101,11 +2101,16 @@
  			critical data.
  
-+			The "digest_cache_measure" policy measures digest lists
-+			into PCR 12 (can be changed with kernel config).
-+
-+			The "digest_cache_appraise" policy appraises digest
-+			lists with IMA signatures or module-style appended
-+			signatures.
-+
+ 			The "digest_cache_measure" policy measures digest lists
+-			into PCR 12 (can be changed with kernel config).
++			into PCR 12 (can be changed with kernel config), enables
++			the digest cache to be used for the other selected
++			measure rules (if compatible), and measures the files
++			with digest not found in the digest list into PCR 12
++			(changeable).
+ 
+ 			The "digest_cache_appraise" policy appraises digest
+ 			lists with IMA signatures or module-style appended
+-			signatures.
++			signatures, and enables the digest cache to be used for
++			the other selected appraise rules (if compatible).
+ 
  	ima_tcb		[IMA] Deprecated.  Use ima_policy= instead.
  			Load a policy which meets the needs of the Trusted
- 			Computing Base.  This means IMA will measure all
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 475c32615006..d2d79185f714 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -321,4 +321,14 @@ config IMA_DISABLE_HTABLE
- 	help
- 	   This option disables htable to allow measurement of duplicate records.
- 
-+config IMA_DIGEST_CACHE_MEASURE_PCR_IDX
-+	int
-+	range 8 14
-+	default 12
-+	help
-+	  This option determines the TPM PCR register index that IMA uses to
-+	  maintain the integrity aggregate of the measurement list, when the
-+	  Integrity Digest Cache is used (different measurement style).
-+	  If unsure, use the default 12.
-+
- endif
 diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index eb3bfe01782d..c2bf58010b89 100644
+index c2bf58010b89..c74ff36fcc1f 100644
 --- a/security/integrity/ima/ima_policy.c
 +++ b/security/integrity/ima/ima_policy.c
-@@ -254,6 +254,21 @@ static struct ima_rule_entry critical_data_rules[] __ro_after_init = {
- 	{.action = MEASURE, .func = CRITICAL_DATA, .flags = IMA_FUNC},
- };
+@@ -930,6 +930,20 @@ static void add_rules(struct ima_rule_entry *entries, int count,
+ 	for (i = 0; i < count; i++) {
+ 		struct ima_rule_entry *entry;
  
-+static struct ima_rule_entry measure_digest_cache_rule __ro_after_init = {
-+#ifdef CONFIG_INTEGRITY_DIGEST_CACHE
-+	.action = MEASURE, .func = DIGEST_LIST_CHECK,
-+	.pcr = CONFIG_IMA_DIGEST_CACHE_MEASURE_PCR_IDX,
-+	.flags = IMA_FUNC | IMA_PCR
-+#endif
-+};
++		if (IS_ENABLED(CONFIG_INTEGRITY_DIGEST_CACHE) &&
++		    entries[i].action == MEASURE && ima_digest_cache_measure &&
++		    ima_digest_cache_func_allowed(entries[i].func)) {
++			entries[i].digest_cache_usage |= IMA_DIGEST_CACHE_MEASURE_DATA;
++			entries[i].pcr = CONFIG_IMA_DIGEST_CACHE_MEASURE_PCR_IDX;
++			entries[i].flags |= IMA_PCR;
++		}
 +
-+static struct ima_rule_entry appraise_digest_cache_rule __ro_after_init = {
-+#ifdef CONFIG_INTEGRITY_DIGEST_CACHE
-+	.action = APPRAISE, .func = DIGEST_LIST_CHECK,
-+	.flags = IMA_FUNC | IMA_DIGSIG_REQUIRED | IMA_MODSIG_ALLOWED,
-+#endif
-+};
++		if (IS_ENABLED(CONFIG_INTEGRITY_DIGEST_CACHE) &&
++		    entries[i].action == APPRAISE &&
++		    ima_digest_cache_appraise &&
++		    ima_digest_cache_func_allowed(entries[i].func))
++			entries[i].digest_cache_usage |= IMA_DIGEST_CACHE_APPRAISE_DATA;
 +
- /* An array of architecture specific rules */
- static struct ima_rule_entry *arch_policy_entry __ro_after_init;
+ 		if (policy_rule & IMA_DEFAULT_POLICY)
+ 			list_add_tail(&entries[i].list, &ima_default_rules);
  
-@@ -278,6 +293,8 @@ static bool ima_use_appraise_tcb __initdata;
- static bool ima_use_secure_boot __initdata;
- static bool ima_use_critical_data __initdata;
- static bool ima_fail_unverifiable_sigs __ro_after_init;
-+static bool ima_digest_cache_measure __ro_after_init;
-+static bool ima_digest_cache_appraise __ro_after_init;
- static int __init policy_setup(char *str)
- {
- 	char *p;
-@@ -295,6 +312,10 @@ static int __init policy_setup(char *str)
- 			ima_use_critical_data = true;
- 		else if (strcmp(p, "fail_securely") == 0)
- 			ima_fail_unverifiable_sigs = true;
-+		else if (strcmp(p, "digest_cache_measure") == 0)
-+			ima_digest_cache_measure = true;
-+		else if (strcmp(p, "digest_cache_appraise") == 0)
-+			ima_digest_cache_appraise = true;
- 		else
- 			pr_err("policy \"%s\" not found", p);
- 	}
-@@ -983,6 +1004,20 @@ void __init ima_init_policy(void)
- {
- 	int build_appraise_entries, arch_entries;
- 
-+	/*
-+	 * We need to load digest cache rules at the beginning, to avoid dont_
-+	 * rules causing ours to not be reached.
-+	 */
-+	if (IS_ENABLED(CONFIG_INTEGRITY_DIGEST_CACHE)) {
-+		if (ima_digest_cache_measure)
-+			add_rules(&measure_digest_cache_rule, 1,
-+				  IMA_DEFAULT_POLICY);
-+
-+		if (ima_digest_cache_appraise)
-+			add_rules(&appraise_digest_cache_rule, 1,
-+				  IMA_DEFAULT_POLICY);
-+	}
-+
- 	/* if !ima_policy, we load NO default rules */
- 	if (ima_policy)
- 		add_rules(dont_measure_rules, ARRAY_SIZE(dont_measure_rules),
 -- 
 2.34.1
 
