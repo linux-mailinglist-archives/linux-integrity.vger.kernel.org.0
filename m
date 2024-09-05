@@ -1,60 +1,54 @@
-Return-Path: <linux-integrity+bounces-3457-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3459-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13BA396DDA0
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 17:13:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CF7996DE04
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 17:26:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38F981C25AE5
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 15:13:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31D121C212E1
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Sep 2024 15:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3EE61A08C6;
-	Thu,  5 Sep 2024 15:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88D251714A3;
+	Thu,  5 Sep 2024 15:26:01 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2851A08B2;
-	Thu,  5 Sep 2024 15:10:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5ED7F7FC;
+	Thu,  5 Sep 2024 15:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725549059; cv=none; b=SGFbyzoYdBu9jfboaa13K1LYdIia5IVuMDx0mOlHT0oN2sibWo6Bcy8KWr4zzFJfmBS5aH4Z5oMwflZn4nf1A0V82ltL9JXGG22RR7NgZB+5krcfsXpm6tUt8jiW80vQOKL9RkcZscmqIJPmgQX38LBmtq4g2J2+ZuFOYlqdoGQ=
+	t=1725549961; cv=none; b=S7RXCyBKErOIklcLgSkM1FmDkPf/GjX5iO8/1rdYzJPD64A0KDulvCT6L4hbearja0LgqlsFwPxlQktCjAZpltewBmgGBH/rwMk8cJ52fvogPEr06VAWSS3RlNGLvNvSGjJGBg+QzkinnNdra7UPK6HrQ+KUpw+qRgwRg1AOSQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725549059; c=relaxed/simple;
-	bh=aJkgwPhC90LW1cXOrVZ/XvQ8x/SQukH5El0EYGphG8E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YVtyinGRJ8DTj1WvZUzarYF0QdSEoW+lnyWbQHN5Dn8eEUSLiPrJkhlSwDSsdRQCyJl+qREMH4ZEi1uxgSvqbqnbIPh0QmqKY4mccqE/oN7ge8OJAnugPIdZvO25r0xaDEuySsH14l5cNYFYoNZeMBNw1QxJ7z60L+dUZ99h0w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+	s=arc-20240116; t=1725549961; c=relaxed/simple;
+	bh=gDsN603Zjzy5qZmlhhu82heSLCVyMC0yN8pFnZ6FVWI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rY/Y9hHxGCfg9KlkVJQQqYMI3Q5Bw4piV7YlFRayrq1pFxcLGAgSO2iKhL0eQrUX8YdhnTSQ1a4rdarPAdpolBPjFbzj5MROJ2h2SeRut/TBcpG3NETe90qLR7AmizRcD5MMzredPVlMhim46Sr/t5r17QOe0QvO3kCh4DrATQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4X02PK75Vrz9v7NP;
-	Thu,  5 Sep 2024 22:51:33 +0800 (CST)
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4X02kd3qh2z9v7Hl;
+	Thu,  5 Sep 2024 23:06:33 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 6474E141017;
-	Thu,  5 Sep 2024 23:10:49 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 846E21405A0;
+	Thu,  5 Sep 2024 23:25:46 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAHmTCzydlmEFVUAA--.29644S6;
-	Thu, 05 Sep 2024 16:10:48 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwDXGjJrzdlmK4RUAA--.19788S2;
+	Thu, 05 Sep 2024 16:25:45 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: zohar@linux.ibm.com,
+To: corbet@lwn.net,
+	zohar@linux.ibm.com,
 	dmitry.kasatkin@gmail.com,
 	eric.snowberg@oracle.com,
-	corbet@lwn.net,
-	akpm@linux-foundation.org,
 	paul@paul-moore.com,
 	jmorris@namei.org,
-	serge@hallyn.com,
-	shuah@kernel.org,
-	mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com
-Cc: linux-integrity@vger.kernel.org,
+	serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
 	wufan@linux.microsoft.com,
 	pbrobinson@gmail.com,
 	zbyszek@in.waw.pl,
@@ -70,12 +64,10 @@ Cc: linux-integrity@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v5 14/14] docs: Add documentation of the Integrity Digest Cache
-Date: Thu,  5 Sep 2024 17:05:43 +0200
-Message-Id: <20240905150543.3766895-15-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH v3 00/10] ima: Integrate with Integrity Digest Cache
+Date: Thu,  5 Sep 2024 17:25:02 +0200
+Message-Id: <20240905152512.3781098-1-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
-References: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -83,883 +75,192 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwAHmTCzydlmEFVUAA--.29644S6
-X-Coremail-Antispam: 1UD129KBjvAXoWfCFWrGFWkCFW3Kw1Utr4xWFg_yoW5KrW3to
-	ZY9w4Yyw15KF15AF48AFnrJryUW3sYgwn7AF1vgr45WF10qFW5Ja4DC3WUGFW3Jr4rGwnr
-	A348J39rJF1Utrn3n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUO27kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
-	0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxV
-	AFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
-	kS14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-	5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZV
-	WrXwCIccxYrVCFb41lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY
-	6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIev
-	Ja73UjIFyTuYvjxUBTmhUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBGbZE3MK6wABsr
+X-CM-TRANSID:LxC2BwDXGjJrzdlmK4RUAA--.19788S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jr45JF1xZryDJryUWFy7trb_yoW3Jr17pa
+	9Fg3W5tr1kZryxCr43Aa17CF4rKr9YqF47Wws8Jw1Fyan8ur1jvw1Syry5uFy5Kr4Fqa17
+	tw42gr1UCw1qyaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+	F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+	kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+	xVAaw2AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+	IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+	6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2
+	IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+	jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdYxBIdaVFxhVjvjDU0x
+	ZFpf9x07jSiihUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBGbZE3MLPwACs9
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add the documentation of the Integrity Digest Cache in
-Documentation/security.
+One of the IMA shortcomings over the years has been the availability of
+reference digest values for appraisal. Recently, the situation improved
+and some Linux distributions are including file signatures, such as
+Fedora 39.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- Documentation/security/digest_cache.rst | 814 ++++++++++++++++++++++++
- Documentation/security/index.rst        |   1 +
- MAINTAINERS                             |   2 +
- 3 files changed, 817 insertions(+)
- create mode 100644 Documentation/security/digest_cache.rst
+The Integrity Digest Cache takes a different approach. Instead of requiring
+Linux distributions to include file signatures in their packages, it parses
+the digests from signed RPM package headers and exposes an API for
+integrity providers to query a digest.
 
-diff --git a/Documentation/security/digest_cache.rst b/Documentation/security/digest_cache.rst
-new file mode 100644
-index 000000000000..ddc33e672090
---- /dev/null
-+++ b/Documentation/security/digest_cache.rst
-@@ -0,0 +1,814 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================
-+Integrity Digest Cache
-+======================
-+
-+Introduction
-+============
-+
-+Integrity detection and protection has long been a desirable feature, to
-+reach a large user base and mitigate the risk of flaws in the software
-+and attacks.
-+
-+However, while solutions exist, they struggle to reach a large user base,
-+due to requiring higher than desired constraints on performance,
-+flexibility and configurability, that only security conscious people are
-+willing to accept.
-+
-+For example, IMA measurement requires the target platform to collect
-+integrity measurements, and to protect them with the TPM, which introduces
-+a noticeable overhead (up to 10x slower in a microbenchmark) on frequently
-+used system calls, like the open().
-+
-+IMA Appraisal currently requires individual files to be signed and
-+verified, and Linux distributions to rebuild all packages to include file
-+signatures (this approach has been adopted from Fedora 39+). Like a TPM,
-+also signature verification introduces a significant overhead, especially
-+if it is used to check the integrity of many files.
-+
-+This is where the new Integrity Digest Cache comes into play, it offers
-+additional support for new and existing integrity solutions, to make
-+them faster and easier to deploy.
-+
-+The Integrity Digest Cache can help IMA to reduce the number of TPM
-+operations and to make them happen in a deterministic way. If IMA knows
-+that a file comes from a Linux distribution, it can measure files in a
-+different way: measure the list of digests coming from the distribution
-+(e.g. RPM package headers), and subsequently measure a file if it is not
-+found in that list.
-+
-+The performance improvement comes at the cost of IMA not reporting which
-+files from installed packages were accessed, and in which temporal
-+sequence. This approach might not be suitable for all use cases.
-+
-+The Integrity Digest Cache can also help IMA for appraisal. IMA can simply
-+lookup the calculated digest of an accessed file in the list of digests
-+extracted from package headers, after verifying the header signature. It is
-+sufficient to verify only one signature for all files in the package, as
-+opposed to verifying a signature for each file.
-+
-+The same approach can be followed by other LSMs, such as Integrity Policy
-+Enforcement (IPE), and BPF LSM.
-+
-+The Integrity Digest Cache is not tied to a specific package format. While
-+it currently supports a TLV-based and the RPM formats, it can be easily
-+extended to support more formats, such as DEBs. Focusing on just extracting
-+digests keeps these parsers minimal and reasonably simple (e.g. the RPM
-+parser has ~220 LOC). Included parsers have been verified for memory safety
-+with the Frama-C static analyzer. The parsers with the Frama-C assertions
-+are available here:
-+
-+https://github.com/robertosassu/rpm-formal/
-+
-+Integrating the Integrity Digest Cache in IMA brings significant
-+performance improvements: up to 67% and 79% for measurement respectively in
-+sequential and parallel file reads; up to 65% and 43% for appraisal
-+respectively in sequential and parallel file reads.
-+
-+The performance can be further enhanced by using fsverity digests instead
-+of conventional file digests, which would make IMA verify only the portion
-+of the file to be read. However, at the moment, fsverity digests are not
-+included in RPM packages. In this case, once rpm is extended to include
-+them, Linux distributions still have to rebuild their packages.
-+
-+The Integrity Digest Cache can support both digest types, so that the
-+functionality is immediately available without waiting for Linux
-+distributions to do the transition.
-+
-+
-+Design
-+======
-+
-+Main idea
-+---------
-+
-+The Integrity Digest Cache extracts digests from a file, referred to as a
-+digest list, and stores them in kernel memory in a structure named
-+digest_cache.
-+
-+The digest_cache structure contains a set of per algorithm hash tables,
-+where digests are stored, the digest list pathname, a reference counter,
-+and the integrity state of the digest list.
-+
-+If a digest cache is created from a directory, its hash tables are empty
-+and instead it contains a snapshot of the directory entries discovered with
-+iterate_dir().
-+
-+The integrity state of digest caches created from regular files, also
-+called verification data, is evaluated independently by LSMs, for example
-+by verifying the signature of the digest list, and is provided to the
-+Integrity Digest Cache through a dedicated API.
-+
-+The extracted digests can be used as reference values initially for
-+integrity verification of file data and at a later stage for integrity
-+verification of file metadata.
-+
-+The Integrity Digest Cache can extract digests from a digest list, provided
-+that it has a parser for its format.
-+
-+
-+Caching and reference counting
-+------------------------------
-+
-+Creating a digest cache every time it is requested would introduce an
-+unnecessary overhead, due to repeating the same operation. For this reason,
-+the Integrity Digest Cache reserves space in the inode security blob
-+(through IMA) and stores two types of digest cache reference.
-+
-+If the digest cache was created from the same inode, the Integrity Digest
-+Cache stores in the inode security blob a reference called dig_owner,
-+because the inode owns the content.
-+
-+If the digest cache was requested for verifying an inode, the Integrity
-+Digest Cache stores a reference called dig_user, because the inode is a
-+user of the digest cache.
-+
-+An inode can have both types of reference set, if it is a digest list
-+to be verified with another digest list.
-+
-+Check and assignemt of dig_owner and dig_user is protected respectively
-+with the dig_owner_mutex and dig_user_mutex mutexes.
-+
-+The digest cache reference count tracks how many references have been made
-+to that digest cache (whether that reference is stored in the inode
-+security blob, or is returned to a user of the Integrity Digest Cache).
-+
-+Only when the reference count reaches zero, i.e. all references have been
-+released, the digest cache can be freed.
-+
-+
-+Digest cache lifecycle
-+----------------------
-+
-+Digest cache request
-+~~~~~~~~~~~~~~~~~~~~
-+
-+The first step in order to query a digest from a digest list is to request
-+a digest cache, by calling digest_cache_get(). The Integrity Digest Cache
-+takes care of the digest cache creation and initialization processes,
-+transparently to the caller.
-+
-+The caller passes as argument to digest_cache_get() the inode that the
-+caller intends to verify. The Integrity Digest Cache first sees if there
-+is a cached digest cache in that inode (dig_user reference). If there is,
-+it immediately returns the digest cache with the reference count increased,
-+since the reference is returned to the caller.
-+
-+Otherwise, it will perform the necessary steps (below) to obtain one.
-+
-+
-+Digest list lookup
-+~~~~~~~~~~~~~~~~~~
-+
-+In order to build a digest cache and return it to the caller for performing
-+a query, the Integrity Digest Cache must know which digest list to use.
-+There are a few alternatives.
-+
-+(1) There is only one digest list and its path is specified as default
-+location at build-time in the kernel configuration or at run-time through
-+securityfs. The Integrity Digest Cache builds a single digest cache from
-+that digest list and returns it to the caller.
-+
-+(2) The default location is a directory containing multiple digest lists.
-+Unlike (1), the Integrity Digest Cache does not know which digest list to
-+select, and creates a directory digest cache with a snapshot of the
-+directory entries. During a query, the Integrity Digest Cache iteratively
-+creates a digest cache for each directory entry and searches for the digest
-+until there is a match.
-+
-+(3) Same as (2), but the digest list file name is stored as value of the
-+new security.digest_list xattr in the inode for which the digest cache is
-+requested. The Integrity Digest Cache can directly retrieve the digest list
-+using the default directory as the base path and the xattr value as last
-+path component.
-+
-+(4) Similar to (3), but the Integrity Digest Cache still creates a
-+directory digest cache like in (2). Then, it only reads the digest list if
-+the directory entry file name does not match the security.digest_list
-+xattr, to trigger a measurement or, otherwise, creates a digest cache from
-+the matching one. This is also known as the prefetching mechanism,
-+introduced later.
-+
-+
-+Digest cache creation
-+~~~~~~~~~~~~~~~~~~~~~
-+
-+Once the Integrity Digest Cache selected the digest list to use, it looks
-+up the digest list inode through the VFS, verifies whether in the inode
-+security blob there is already a digest cache reference (dig_owner).
-+
-+If there is, it returns that to digest_cache_get() with the reference count
-+increased, which in turn will store it in dig_user and will increment the
-+reference count again before returning to the caller.
-+
-+If there isn't, it creates a new digest cache and performs the same steps
-+as if dig_owner exists.
-+
-+
-+Digest cache initialization
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The digest cache creation does not include initialization and adding the
-+digests. It cannot be done inside the dig_owner_mutex and dig_user_mutex,
-+to avoid lock inversion with the inode lock done by the VFS.
-+
-+Digest cache initialization is done by digest_cache_get() by
-+calling digest_cache_init(), after releasing the dig_user_mutex. Any
-+digest_cache_get() caller can potentially initialize a digest cache.
-+
-+To avoid multiple initialization attempts, callers atomically test and set
-+the INIT_STARTED atomic flag. The first seeing the flag cleared is the one
-+in charge of the initialization. The other callers wait for another atomic
-+flag, INIT_IN_PROGRESS to be cleared to zero (it is set to one on digest
-+cache creation).
-+
-+Failures during initialization can be detected by checking the INVALID flag
-+in the digest cache and, in this case, the digest cache is not returned to
-+the caller of digest_cache_get().
-+
-+
-+Digest list naming convention
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+The digest_cache_get() caller performing the digest cache initialization
-+reads the digest list and calls the appropriate parser to extract the
-+digests, based on the file name prefix.
-+
-+The expected digest list file name format is::
-+
-+ <digest list format>-<file name>
-+
-+where format can be for example ``tlv`` or ``rpm``, which make the
-+Integrity Digest Cache call respectively the TLV or RPM parser.
-+
-+Alternatively, also the following format is supported::
-+
-+ <seq num>-<digest list format>-<file name>
-+
-+``<seq num>-`` defines how directory entries should be ordered in the
-+directory digest cache. If present, directory entries are ordered in
-+ascending way by that number.
-+
-+
-+Digest list parsing
-+^^^^^^^^^^^^^^^^^^^
-+
-+The selected digest list parser first calls digest_cache_htable_init() to
-+create the hash tables in the digest cache, once for each hash algorithm
-+of the digests to be added. digest_cache_htable_init() accepts as parameter
-+the number of digests to add, usually known before adding digests.
-+
-+The number of hash table slots is determined by dividing the number of
-+digests to add by the desired average collision depth. The latter can be
-+changed in the kernel configuration, to have a different tradeoff between
-+digest lookup speed and memory occupation.
-+
-+The parser then calls digest_cache_htable_add(), to add extracted digests
-+to the new hash tables. It can also call digest_cache_htable_lookup() to
-+check for duplicate digests.
-+
-+Directory digest cache
-+^^^^^^^^^^^^^^^^^^^^^^
-+
-+If the digest list location is a directory, digest_cache_init() calls
-+digest_cache_dir_add_entries(), which in turn calls iterate_dir() to
-+get the current directory entries and to add them to a linked list.
-+
-+When a digest is looked up on a directory digest cache,
-+digest_cache_dir_lookup_digest() will create a regular digest cache for
-+each directory entry and will lookup into it until it finds the digest.
-+
-+digest_cache_dir_lookup_digest() also gets a digest cache reference for
-+each directory entry, so that digest lookup is faster at the next call.
-+
-+
-+Digest lookup
-+~~~~~~~~~~~~~
-+
-+After a caller of digest_cache_get() obtains the desired digest cache, it
-+can perform operations on it. The most important operation is querying for
-+a digest, which can be performed by calling digest_cache_lookup().
-+
-+digest_cache_lookup() returns a numeric reference (uintptr_t type),
-+representing the digest cache containing the queried digest. It is not a
-+pointer, to avoid it being accidentally passed to digest_cache_put().
-+
-+If digest_cache_get() returned a directory digest cache,
-+digest_cache_lookup() cannot directly perform the search, since its hash
-+tables are empty. Instead, it calls digest_cache_dir_lookup_digest(),
-+which searches the digest in the digest cache of each directory entry.
-+
-+digest_cache_dir_lookup_digest(), if it finds a digest in a directory
-+digest cache, it calls digest_cache_dir_update_dig_user() to update
-+dig_user of the inode, whose digest is queried, with the digest cache
-+containing the digest. This ensures that next time digest_cache_get() is
-+called for the same inode, the digest is searched in the right digest
-+cache, instead of repeating the search in each directory entry.
-+
-+
-+Verification data
-+~~~~~~~~~~~~~~~~~
-+
-+Until now, the caller of the Integrity Digest Cache is assumed to always
-+trust the returned digest cache from being created from authentic data. Or,
-+there are security measures in place but not able to correlate reading a
-+digest list with building a digest cache from it.
-+
-+The Integrity Digest Cache introduces a new mechanism for integrity
-+providers to store verification data, i.e. their evaluation result of a
-+digest list. It also allows callers of digest_cache_get() to later retrieve
-+that information and decide whether or not they should use that digest
-+cache.
-+
-+It achieves that by reserving space in the file descriptor security blob,
-+and by setting the digest cache pointer in the digest list file descriptor
-+before the digest list is read by the kernel.
-+
-+Integrity providers should implement the kernel_post_read_file LSM hook and
-+call digest_cache_verif_set(), passing the same digest list file descriptor
-+on which the digest cache pointer was set, their unique ID and their
-+evaluation result of the digest list.
-+
-+The Integrity Digest Cache supports multiple integrity providers at the
-+same time, since multiple LSMs can implement the kernel_post_read_file LSM
-+hook. Each provider is expected to choose an unique ID, so that the
-+verification data can be given back through the same ID.
-+
-+Callers of digest_cache_get() can call digest_cache_verif_get() to get
-+the verification data, passing the returned digest cache pointer and the
-+desired integrity provider ID. However, if the digest cache returned was
-+created from a directory, that call results in a NULL pointer, since the
-+directory digest cache is not populated from any digest list.
-+
-+In that case, those callers have to call digest_cache_lookup() to get the
-+numeric reference of the digest cache containing the digest (thus populated
-+from a digest list), and pass it to digest_cache_verif_get() after casting
-+the value to a digest cache pointer.
-+
-+
-+Tracking digest cache changes
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+After a digest cache has been built and its pointer has been set in the
-+inode security blob, it might happen that there are changes in the digest
-+lists, in the default directory and in the value of the
-+security.digest_list xattr.
-+
-+All these changes may influence which digest cache is returned to callers
-+of digest_cache_get() and which digests in the digest cache might be
-+searched.
-+
-+The Integrity Digest Cache monitors such changes by registering to multiple
-+LSM hooks (path_truncate, file_release, inode_unlink, inode_rename,
-+inode_post_setxattr and inode_post_removexattr). Except for the last two,
-+it accesses the dig_owner pointer in the affected inode security blob, sets
-+the RESET bit, puts the digest cache and clears dig_owner itself.
-+
-+The next time that digest cache is requested with digest_cache_get(), also
-+dig_user is put and cleared. The same happens in
-+digest_cache_dir_lookup_digest(), where the digest cache of a directory
-+entry is released and cleared as well. After a reset, a new digest cache is
-+created and returned, as if there wasn't one in the first place.
-+
-+For the last two hooks, when the security.digest_list xattr is modified,
-+dig_user is cleared so that at the next digest_cache_get() call a new
-+digest cache is retrieved, since the location of the digest list might have
-+changed.
-+
-+Nothing changes for previous callers of digest_cache_get(), since they
-+still hold the old digest cache pointer, despite that has been replaced in
-+the inode security blobs. The old digest cache pointer will be still valid
-+until the callers decide to release that digest cache.
-+
-+
-+Security decision update after digest cache changes
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+While new calls to digest_cache_get() result in a new digest cache to be
-+returned, resetting the previous digest cache does not reflect in a reset
-+of possibly cached security decisions by users of the Integrity Digest
-+Cache.
-+
-+One possible way for those users to become aware of a digest cache change
-+is to store the digest cache pointer they used for a security decision, to
-+call digest_cache_get() again during a new file access and to compare the
-+two pointers. The previous pointer remains valid until the digest cache
-+is released.
-+
-+IMA stores the current digest cache pointer in its managed metadata. At
-+every file access, it calls digest_cache_get() again and compares the
-+returned pointer with the one previously stored. If the pointers are the
-+same, IMA continues to use the previous evaluation result. If not, it
-+performs the evaluation again.
-+
-+The cost of this check is very small. In the case where the digest cache
-+didn't change since the last digest_cache_get(), the cost is to check if
-+the dig_user pointer is not NULL, and to increment and decrement the digest
-+cache reference count.
-+
-+In terms of memory, this solution requires IMA to store an additional
-+pointer in its metadata.
-+
-+
-+Prefetching mechanism
-+~~~~~~~~~~~~~~~~~~~~~
-+
-+One of the objectives of the Integrity Digest Cache is to make a TPM PCR
-+predictable, by having digest lists measured in a deterministic order.
-+Without the prefetching mechanism, digest lists are measured in a
-+non-deterministic order, since the inodes for which a digest cache can be
-+requested are accessed in a non-deterministic order too.
-+
-+The prefetching mechanism, when enabled by setting the new
-+security.dig_prefetch xattr to 1, forces digest lists to be looked up by
-+their file name in the digest cache created for the parent directory.
-+
-+The predictability of the PCR is ensured by reading both matching and
-+non-matching digest lists during the search, so that integrity providers
-+can measure them, and by only creating a digest cache for the matching one.
-+In this way, it does not matter if a digest list later in the list of
-+directory entries is requested before a earlier one, since all digest lists
-+until that point are measured anyway.
-+
-+However, while this mechanism ensures predictability of the PCR, it could
-+also introduce significant latencies, especially if the matching digest
-+list is very late in the list of directory entries. Before a digest cache
-+is returned from that digest list, hundreds or thousands of digest lists
-+could have to be read first.
-+
-+Then, the ``[<seq num>-]`` prefix in the digest list file name comes at
-+hand, since it determines the order of directory entries in the directory
-+digest cache (entries with lower seq nums are before entries with higher
-+seq nums). Digest lists without that prefix are added at the end of the
-+directory entries list, in the same order as iterate_dir() shows them.
-+
-+Boot performance can be greatly improved by looking at the IMA measurement
-+list and by seeing in which order digest lists are requested at boot. Then,
-+``[<seq num>-]`` can be appended to directory entries depending on their
-+position in the measurement list.
-+
-+While digest lists can be requested in a slightly different order due to
-+the non-deterministic access to inodes, the differences should be minimal,
-+causing only fewer extra digest lists to be read before the right one is
-+found.
-+
-+Ordering directory entries can also improve digest queries requiring
-+iteration on all digest lists in the default directory. If directory
-+entries are ordered by their appearance in the IMA measurement list, a
-+digest is found faster because most likely it is searched in the same
-+order as when the IMA measurement list was recorded, and thus its
-+digest list comes earlier than the others in the list of the directory
-+entries of the directory digest cache.
-+
-+
-+Release a digest cache
-+~~~~~~~~~~~~~~~~~~~~~~
-+
-+The Integrity Digest Cache uses the reference count mechanism to ensure
-+that a digest cache does not simply disappear when someone is using it.
-+
-+Either when an inode is evicted from memory, or a caller of
-+digest_cache_get() finished to use a digest cache, they should call
-+digest_cache_put() to signal to the Integrity Digest Cache that they are no
-+longer interested in that digest cache and that it can be eventually freed.
-+
-+A digest cache is freed when all digest cache users called
-+digest_cache_put(), and the reference count reached the value zero.
-+
-+
-+Formal verification of concurrency
-+==================================
-+
-+The Integrity Digest Cache has been designed to work in a heavily concurrent
-+environment, where code can be executed as a follow up of a VFS operation,
-+or upon a direct request by a user of the Integrity Digest Cache.
-+
-+For this reason, a sound locking mechanism is necessary to protect data
-+structures against concurrent accesses.
-+
-+The first verification of the locking mechanism was done with the in-kernel
-+lockdep, which can detect potential deadlocks and unsafe usage of the
-+locking primitives.
-+
-+There is an ongoing verification with a tool named Dartagnan, reachable at
-+the following URL:
-+
-+https://github.com/hernanponcedeleon/Dat3M
-+
-+This verification required porting the Integrity Digest Cache to user
-+space, and to simulate concurrent requests through the pthread library.
-+
-+Dartagnan explores all thread interleavings and checks for data races. In
-+addition to lockdep, it can also spot for example improperly guarded
-+variables.
-+
-+
-+Data structures and API
-+=======================
-+
-+Data structures
-+---------------
-+
-+These are the data structures defined and used internally by the
-+Integrity Digest Cache.
-+
-+.. kernel-doc:: security/integrity/digest_cache/internal.h
-+
-+
-+Public API
-+----------
-+
-+This API is meant to be used by users of the Integrity Digest Cache.
-+
-+.. kernel-doc:: security/integrity/digest_cache/main.c
-+		:identifiers: digest_cache_get digest_cache_put
-+
-+.. kernel-doc:: security/integrity/digest_cache/htable.c
-+		:identifiers: digest_cache_lookup
-+
-+.. kernel-doc:: security/integrity/digest_cache/verif.c
-+		:identifiers: digest_cache_verif_set digest_cache_verif_get
-+
-+
-+Parser API
-+----------
-+
-+This API is meant to be used by digest list parsers.
-+
-+.. kernel-doc:: security/integrity/digest_cache/htable.c
-+		:identifiers: digest_cache_htable_init
-+		              digest_cache_htable_add
-+			      digest_cache_htable_lookup
-+
-+
-+Digest list formats
-+===================
-+
-+tlv
-+---
-+
-+The Type-Length-Value (TLV) format was chosen for its extensibility.
-+Additional fields can be added without breaking compatibility with old
-+versions of the parser.
-+
-+The layout of a tlv digest list is the following::
-+
-+ [header: DIGEST_LIST_FILE, num fields, total len]
-+ [field: DIGEST_LIST_ALGO, length, value]
-+ [field: DIGEST_LIST_ENTRY#1, length, value (below)]
-+  |- [header: DIGEST_LIST_ENTRY_DATA, num fields, total len]
-+  |- [DIGEST_LIST_ENTRY_DIGEST#1, length, file digest]
-+  |- [DIGEST_LIST_ENTRY_PATH#1, length, file path]
-+ [field: DIGEST_LIST_ENTRY#N, length, value (below)]
-+  |- [header: DIGEST_LIST_ENTRY_DATA, num fields, total len]
-+  |- [DIGEST_LIST_ENTRY_DIGEST#N, length, file digest]
-+  |- [DIGEST_LIST_ENTRY_PATH#N, length, file path]
-+
-+DIGEST_LIST_ALGO is a field to specify the algorithm of the file digest.
-+DIGEST_LIST_ENTRY is a nested TLV structure with the following fields:
-+DIGEST_LIST_ENTRY_DIGEST contains the file digest; DIGEST_LIST_ENTRY_PATH
-+contains the file path.
-+
-+
-+rpm
-+---
-+
-+The rpm digest list is basically a subset of the RPM package header.
-+Its format is::
-+
-+ [RPM magic number]
-+ [RPMTAG_IMMUTABLE]
-+
-+RPMTAG_IMMUTABLE is a section of the full RPM header containing the part
-+of the header that was signed, and whose signature is stored in the
-+RPMTAG_RSAHEADER section.
-+
-+
-+Appended signature
-+------------------
-+
-+Digest lists can have a module-style appended signature, that can be used
-+for appraisal with IMA. The signature type can be PKCS#7, as for kernel
-+modules, or a different type.
-+
-+
-+History
-+=======
-+
-+The original name of this work was IMA Digest Lists, which was somehow
-+considered too invasive. The code was moved to a separate component named
-+DIGLIM (DIGest Lists Integrity Module), with the purpose of removing the
-+complexity away of IMA, and also adding the possibility of using it with
-+other kernel components (e.g. Integrity Policy Enforcement, or IPE).
-+
-+The design changed significantly, so DIGLIM was renamed to Integrity Digest
-+Cache, as the name better reflects what the new component does.
-+
-+Since it was originally proposed, in 2017, this work grew up a lot thanks
-+to various comments/suggestions. It became integrally part of the openEuler
-+distribution since end of 2020.
-+
-+The most important difference between the old the current version is moving
-+from a centralized repository of file digests to a per-package repository.
-+This reduces the digest lookup time, since digests are searched in smaller
-+hash tables, and significantly reduces the memory pressure, since
-+digest lists are loaded into kernel memory only when they are actually
-+needed, and removed during reclamation.
-+
-+
-+Performance
-+===========
-+
-+System specification
-+--------------------
-+
-+The tests have been performed on a Fedora 38 virtual machine with 4 cores
-+(AMD EPYC-Rome, no hyperthreading), 16 GB of RAM, no TPM/TPM passthrough/
-+emulated. The QEMU process has been pinned to 4 real CPU cores and its
-+priority was set to -20.
-+
-+
-+Benchmark tool
-+--------------
-+
-+The Integrity Digest Cache has been tested with an ad-hoc benchmark tool
-+that creates 20000 files with a random size up to 100 bytes and randomly
-+adds their digest to one of 303 digest lists. The number of digest lists
-+has been derived from the ratio (66) digests/packages (124174/1883) found
-+in the testing virtual machine (hence, 20000/66 = 303). IMA signatures have
-+been done with ECDSA NIST P-384.
-+
-+The benchmark tool then creates a list of 20000 files to be accessed,
-+randomly chosen (there can be duplicates). This is necessary to make the
-+results reproducible across reboots (by always replaying the same
-+operations). The benchmark reads (sequentially and in parallel) the files
-+from the list 2 times, flushing the kernel caches before each read.
-+
-+Each test has been performed 5 times, and the average value is taken.
-+
-+
-+Purpose of the benchmark
-+------------------------
-+
-+The purpose of the benchmark is to show the performance difference of IMA
-+between the current behavior, and by using the Integrity Digest Cache.
-+
-+
-+IMA measurement policy: no cache
-+--------------------------------
-+
-+.. code-block:: bash
-+
-+ measure func=FILE_CHECK fowner=2001 pcr=12
-+
-+
-+IMA measurement policy: cache
-+-----------------------------
-+
-+.. code-block:: bash
-+
-+ measure func=DIGEST_LIST_CHECK pcr=12
-+ measure func=FILE_CHECK fowner=2001 digest_cache=data pcr=12
-+
-+
-+IMA measurement results
-+-----------------------
-+
-+Sequential
-+~~~~~~~~~~
-+
-+This test was performed reading files sequentially, and waiting for the
-+current read to terminate before beginning a new one.
-+
-+::
-+
-+                      +-------+------------------------+-----------+
-+                      | meas. | time no/p/vTPM (sec.)  | slab (KB) |
-+ +--------------------+-------+------------------------+-----------+
-+ | no cache           | 12313 | 31.71 / 102.80 / 46.29 |   86802   |
-+ +--------------------+-------+------------------------+-----------+
-+ | cache, no prefetch |   304 | 32.21 / 34.28 / 32.47  |   83709   |
-+ +--------------------+-------+------------------------+-----------+
-+ | cache, prefetch    |   304 | 32.67 / 34.47 / 32.67  |   83720   |
-+ +--------------------+-------+------------------------+-----------+
-+
-+The table shows that 12313 measurements (boot_aggregate + files) have been
-+made without the digest cache, and 304 with the digest cache
-+(boot_aggregate + digest lists). Consequently, the memory occupation
-+without the cache is higher due to the higher number of measurements.
-+
-+Not surprisingly, for the same reason, also the test time is significantly
-+higher without the digest cache when the physical or virtual TPM is used.
-+
-+In terms of pure performance, first number in the third column, it can be
-+seen that there are not significant performance differences between using
-+or not using the digest cache.
-+
-+Prefetching adds little overhead, because digest lists were ordered
-+according to their appearance in the IMA measurement list (which minimize
-+the digest lists to prefetch).
-+
-+
-+Parallel
-+~~~~~~~~
-+
-+This test was performed reading files in parallel, not waiting for the
-+current read to terminate.
-+
-+::
-+
-+                      +-------+-----------------------+-----------+
-+                      | meas. | time no/p/vTPM (sec.) | slab (KB) |
-+ +--------------------+-------+-----------------------+-----------+
-+ | no cache           | 12313 | 15.84 / 79.26 / 23.43 |   87635   |
-+ +--------------------+-------+-----------------------+-----------+
-+ | cache, no prefetch |   304 | 15.97 / 16.64 / 16.09 |   89890   |
-+ +--------------------+-------+-----------------------+-----------+
-+ | cache, prefetch    |   304 | 16.18 / 16.84 / 16.24 |   85738   |
-+ +--------------------+-------+-----------------------+-----------+
-+
-+Also in this case, the physical TPM causes the biggest delay especially
-+without digest cache, where a higher number of measurements need to be
-+extended in the TPM.
-+
-+The Integrity Digest Cache does not introduce a noticeable overhead in all
-+scenarios.
-+
-+
-+IMA appraisal policy: no cache
-+------------------------------
-+
-+.. code-block:: bash
-+
-+ appraise func=FILE_CHECK fowner=2001
-+
-+
-+IMA appraisal policy: cache
-+---------------------------
-+
-+.. code-block:: bash
-+
-+ appraise func=DIGEST_LIST_CHECK
-+ appraise func=FILE_CHECK fowner=2001 digest_cache=data
-+
-+
-+IMA appraisal results
-+---------------------
-+
-+Sequential
-+~~~~~~~~~~
-+
-+This test was performed reading files sequentially, and waiting for the
-+current read to terminate before beginning a new one.
-+
-+::
-+
-+                              +-------------+-------------+-----------+
-+                              |    files    | time (sec.) | slab (KB) |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (ECDSA sig)       |    12312    |    98.10    |   80842   |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (cache)           | 12312 + 303 |    34.09    |   83138   |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (cache, prefetch) | 12312 + 303 |    34.08    |   83410   |
-+ +----------------------------+-------------+-------------+-----------+
-+
-+This test shows a huge performance difference from verifying the signature
-+of 12312 files as opposed to just verifying the signature of 303 digest
-+lists, and looking up the digest of the files being read.
-+
-+There are some differences in terms of memory occupation, which is quite
-+expected due to the fact that we have to take into account the digest
-+caches loaded in memory, while with the standard appraisal they don't
-+exist.
-+
-+
-+Parallel
-+~~~~~~~~
-+
-+This test was performed reading files in parallel, not waiting for the
-+current read to terminate.
-+
-+::
-+
-+                              +-------------+-------------+-----------+
-+                              |    files    | time (sec.) | slab (KB) |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (ECDSA sig)       |    12312    |    29.00    |   82255   |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (cache)           | 12313 + 303 |    16.51    |   88359   |
-+ +----------------------------+-------------+-------------+-----------+
-+ | appraise (cache, prefetch) | 12313 + 303 |    17.08    |   86266   |
-+ +----------------------------+-------------+-------------+-----------+
-+
-+The difference is less marked when performing the read in parallel. Also,
-+more memory seems to be occupied in the non-prefetch case.
-+
-+
-+How to test
-+===========
-+
-+Please follow the instructions here:
-+
-+https://github.com/linux-integrity/digest-cache-tools
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 59f8fc106cb0..34933e13c509 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -19,3 +19,4 @@ Security Documentation
-    digsig
-    landlock
-    secrets/index
-+   digest_cache
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ba8d5c137bef..3b212c747652 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11115,8 +11115,10 @@ R:	Eric Snowberg <eric.snowberg@oracle.com>
- L:	linux-integrity@vger.kernel.org
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-+F:	Documentation/security/digest_cache.rst
- F:	security/integrity/
- F:	security/integrity/ima/
-+F:	tools/testing/selftests/digest_cache/
- 
- INTEL 810/815 FRAMEBUFFER DRIVER
- M:	Antonino Daplas <adaplas@gmail.com>
+That enables Linux distributions to immediately gain the ability to do
+integrity checks with the existing packages, lowering the burden for
+software vendors.
+
+In addition, integrating IMA with the Integrity Digest Cache has even more
+benefits.
+
+First, it allows generating a new-style masurement list including the RPM
+package headers and the unknown files, which improves system performance
+due to the lower usage of the TPM. The cost is the less accuracy of the
+information reported, which might not suitable for everyone.
+
+Second, performance improve for appraisal too. It has been found that
+verifying the signatures of only the RPM package headers and doing a digest
+lookup is much less computationally expensive than verifying individual
+file signatures.
+
+In the future, if RPM and other package formats include fsverity digests,
+this would further improve the performance, due to verifying only the
+portion of the file read.
+
+For reference, a preliminary performance evaluation has been published
+here:
+
+https://lore.kernel.org/linux-integrity/20240905150543.3766895-15-roberto.sassu@huaweicloud.com/
+
+Third, it makes a PCR predictable and suitable for TPM key sealing
+policies.
+
+Finally, it allows IMA to maintain a predictable PCR and to perform
+appraisal from the very beginning of the boot, in the initial ram disk
+(excluding auto-generated files).
+
+Integration of IMA with the digest_cache LSM is straightforward.
+
+Patch 1 lets IMA know when the digest_cache LSM is reading a digest list,
+to populate a digest cache.
+
+Patch 2 allows nested IMA verification of digest lists read by the
+digest_cache LSM.
+
+Patch 3 allows the usage of digest caches with the IMA policy.
+
+Patch 4 introduces new boot-time built-in policies, to use digest caches
+from the very beginning (it allows measurement/appraisal from the initial
+ram disk).
+
+Patch 5 modifies existing boot-time built-in policies if the digest_cache
+LSM-specific policies have been selected at boot.
+
+Patch 6 obtains a digest cache for a given file, stores it in the inode
+integrity metadata, and notifies if the digest cache changed since last
+file access.
+
+Patches 7-8 store and load the integrity state of the digest list the
+digest cache was populated from, to restrict the digest cache usage in case
+an IMA action was not performed on the digest list.
+
+Patches 9-10 enable the usage of digest caches respectively for measurement
+and appraisal, at the condition that it is authorized with the IMA policy
+and that the digest list itself was measured and appraised too.
+
+Open points:
+- Mimi prefers to extend flags in ima_iint_cache, rather than passing the
+  parameter down to process_measurement() - will do in a next version
+- Prefetching of digest lists should not be done if there is no
+  measurement rule (not relevant for appraisal)
+
+
+This patch set applies on top of:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/log/?h=next-integrity
+
+with commit fa8a4ce432e8 ("ima: fix buffer overrun in
+ima_eventdigest_init_common").
+
+and on top of the patch set at the URL:
+
+https://lore.kernel.org/linux-integrity/20240905150543.3766895-1-roberto.sassu@huaweicloud.com/
+
+Changelog
+
+v2:
+- Rename digest_cache LSM to Integrity Digest Cache (suggested by Paul
+  Moore)
+- Add digest_cache member to ima_iint_cache structure
+- Nest mutex only in process_measurement()
+- Check IMA_DIGEST_CACHE_APPRAISE_DATA earlier in
+  ima_appraise_measurement()
+- Introduce ima_digest_cache_get_check() to detect changes, instead of
+  using the notifier mechanism (removed from the Integrity Digest Cache)
+- Rename ima_digest_cache_store_allowed_usage() to
+  ima_digest_cache_store_verified_usage()
+- Rename ima_digest_cache_update_allowed_usage() to
+  ima_digest_cache_load_verified_usage(), but do the AND outside the
+  function
+- Check allowed IMA hooks with ima_digest_cache_func_allowed() also at
+  run-time (when a policy is evaluated)
+
+v1:
+- Change digest_cache= policy keyword value from 'content' to 'data'
+  (suggested by Mimi)
+- Move digest_cache LSM integration code to ima_digest_cache.c (suggested
+  by Mimi)
+- Don't store digest cache pointer in integrity metadata
+- Rename 'digest_cache_mask' parameter of ima_get_action() and
+  ima_match_policy() to 'digest_cache_usage'
+- Rename 'digest_cache_mask' parameter of ima_store_measurement() and
+  ima_appraise_measurement() to 'allowed_usage'
+- Try digest cache method as first in ima_appraise_measurement() (suggested
+  by Mimi)
+- Introduce ima_digest_cache_change() to be called on digest cache reset
+- Subscribe to digest cache events
+- Add forgotten modification in ima_iint_lockdep_annotate() (reported by
+  Mimi)
+- Replace 'digest_cache_mask' member of the ima_rule_entry structure with
+  'digest_cache_usage' (suggested by Mimi)
+- Split patch introducing digest_cache LSM-specific boot-time built-in
+  policies and modifying existing rules
+- Add digest_cache LSM-specific boot-time built-in policies if the
+  digest_cache LSM is enabled in the kernel configuration
+- Rename IMA_DIGEST_CACHE_MEASURE_CONTENT and
+  IMA_DIGEST_CACHE_APPRAISE_CONTENT to IMA_DIGEST_CACHE_MEASURE_DATA and
+  IMA_DIGEST_CACHE_APPRAISE_DATA
+
+Roberto Sassu (10):
+  ima: Introduce hook DIGEST_LIST_CHECK
+  ima: Nest iint mutex for DIGEST_LIST_CHECK hook
+  ima: Add digest_cache policy keyword
+  ima: Add digest_cache_measure/appraise boot-time built-in policies
+  ima: Modify existing boot-time built-in policies with digest cache
+    policies
+  ima: Retrieve digest cache and check if changed
+  ima: Store verified usage in digest cache based on integrity metadata
+    flags
+  ima: Load verified usage from digest cache found from query
+  ima: Use digest caches for measurement
+  ima: Use digest caches for appraisal
+
+ Documentation/ABI/testing/ima_policy          |   6 +-
+ .../admin-guide/kernel-parameters.txt         |  15 +-
+ security/integrity/ima/Kconfig                |  10 ++
+ security/integrity/ima/Makefile               |   1 +
+ security/integrity/ima/ima.h                  |  21 ++-
+ security/integrity/ima/ima_api.c              |  21 ++-
+ security/integrity/ima/ima_appraise.c         |  33 +++--
+ security/integrity/ima/ima_digest_cache.c     | 121 ++++++++++++++++
+ security/integrity/ima/ima_digest_cache.h     |  38 +++++
+ security/integrity/ima/ima_iint.c             |   4 +
+ security/integrity/ima/ima_main.c             |  34 +++--
+ security/integrity/ima/ima_policy.c           | 133 +++++++++++++++++-
+ 12 files changed, 409 insertions(+), 28 deletions(-)
+ create mode 100644 security/integrity/ima/ima_digest_cache.c
+ create mode 100644 security/integrity/ima/ima_digest_cache.h
+
 -- 
 2.34.1
 
