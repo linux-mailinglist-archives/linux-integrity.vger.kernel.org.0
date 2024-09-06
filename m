@@ -1,112 +1,105 @@
-Return-Path: <linux-integrity+bounces-3487-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3488-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C796096F58F
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 15:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 97F1896F6DA
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 16:33:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 417BBB20C0D
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 13:40:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F35CCB23E66
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 14:33:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699021CE70D;
-	Fri,  6 Sep 2024 13:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E920E1D1730;
+	Fri,  6 Sep 2024 14:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtRUpSdV"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="LI/oPviD";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="LI/oPviD"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D691E49B;
-	Fri,  6 Sep 2024 13:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8002D1C7B9B
+	for <linux-integrity@vger.kernel.org>; Fri,  6 Sep 2024 14:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725630011; cv=none; b=TGLMirorWh2MbrXuw9qZ3vGaxuXS4VOv5JgINk7atQsI43GnKHVv45x1e3GXXGlc8M5SWMNZR6zfe8c4vYw0cBd3mJ9Y+e84WywKzkuC5C3rIxMQTYupIIKJ9m8uKIqhMA7A501IT6sOE0R0lXFmhIOXJqThQUNqnpRqcV5KJ2g=
+	t=1725633103; cv=none; b=dwMV0j81zn7YWPMapWR851e3EN6fnNRLLGpQm036klfziH+gQSU/Kf9sM3rfu4BsarfesuCAtE+T+k6GQ2VykmCnS/QPjyHsxUgwCHG2VUVOtChSMRSX8CxFxX/glFbfX76MnDGOUzcy8nVWRazfLYbQ8RuVwr68FDUA4bttVm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725630011; c=relaxed/simple;
-	bh=3X47wiK7Z53owlSZ6EkvqXjKfYY8m0qVta1OE1ylsh4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=rh2+lP+jBlAVfmszO1kC0j8+P/4C3MinHTLREtAph+HAV6r8vJVI5ixcdMhT7nBollIwkOoaA/InQfh4c0EdO+2AFI1/IsYTKU1jM1rM1owMLuRwVYoSR93je8UaQ69s3Egu9AZtPV6O0z5vV4G2K85gwcE3/iVqacbD4P7upss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QtRUpSdV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492EDC4CEC5;
-	Fri,  6 Sep 2024 13:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725630010;
-	bh=3X47wiK7Z53owlSZ6EkvqXjKfYY8m0qVta1OE1ylsh4=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=QtRUpSdVRoGcXwVENYf8lux421Hr7+xhFIlobZYRJouGo25hZ7hdqr7xAa1vGV+/4
-	 Q886fRhUxmBvmZ+ZNUJK7LbrTjNeidc/pD022y0BS2q9ztrvZ68nDpTehepSgsLTOM
-	 1GtBGQiWbCb/+1nTSIiDKTqwD3QTofSpk8UAWU4402X2k1qwyZ7/ULPEQ6XJrpn55t
-	 T18yqHQsfbOi/N1iflsKaQwmT4BtQs8iBOGUHMd1yffEtRAFov9d9lbAGHDKx9jy8b
-	 TjxvCWNAOxteukoKwcSEDUV/1lzjhB134nfunlRNotn1oUMWfeDD/Fom3OeSVQGjH2
-	 I2CnDYMfz++MA==
+	s=arc-20240116; t=1725633103; c=relaxed/simple;
+	bh=8wR9DPbhiBBPkQRkLPJ0BC8RzrN/fj0J7XDsQJ+MVHA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EYTMS1ZOfhL85Enzg0WqIjT00ekmHjd/JEec8rt6KM3KIXFnq5+1S9kkQSAAfyeCrmBMPKKrj+j8FfVVld+LjzUJ5cz19UugFqe103zfR/XAPn/W8l220jPkoRya57Q5ThZ6nbvcbPwrHnOKNK8nzKMFoGWMD3BKjogN/YkRVU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=LI/oPviD; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=LI/oPviD; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1725633100;
+	bh=8wR9DPbhiBBPkQRkLPJ0BC8RzrN/fj0J7XDsQJ+MVHA=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=LI/oPviDFUfOshKxubAwPiJh9lYW19Y8A7iYrqUcdqUnBKElwY2BWy39nONO/buG/
+	 ynWUXmc+VYpdGKt6wL3T+Qk8Dd7q6dz91kts5uGYTuoGBFmw/eAlwpwzEZmH8znkTQ
+	 sgaLJ2ob/vNqfr8omVdMO0XGJkyFu38RHOGXI2GY=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id A4843128722A;
+	Fri, 06 Sep 2024 10:31:40 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id at6XbOhRMGzq; Fri,  6 Sep 2024 10:31:40 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1725633100;
+	bh=8wR9DPbhiBBPkQRkLPJ0BC8RzrN/fj0J7XDsQJ+MVHA=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=LI/oPviDFUfOshKxubAwPiJh9lYW19Y8A7iYrqUcdqUnBKElwY2BWy39nONO/buG/
+	 ynWUXmc+VYpdGKt6wL3T+Qk8Dd7q6dz91kts5uGYTuoGBFmw/eAlwpwzEZmH8znkTQ
+	 sgaLJ2ob/vNqfr8omVdMO0XGJkyFu38RHOGXI2GY=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 0874C12871AA;
+	Fri, 06 Sep 2024 10:31:39 -0400 (EDT)
+Message-ID: <a840582cb84e398f71c4dca218046961326d59d0.camel@HansenPartnership.com>
+Subject: Re: TPM HMAC (really) bad performance
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, Jarkko Sakkinen
+	 <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Date: Fri, 06 Sep 2024 10:31:38 -0400
+In-Reply-To: <b8a7b3566e6014ba102ab98e10ede0d574d8930e.camel@huaweicloud.com>
+References: <b8a7b3566e6014ba102ab98e10ede0d574d8930e.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 06 Sep 2024 16:40:06 +0300
-Message-Id: <D3Z8S9922SIU.QD22EOW9RGT0@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <linux-integrity@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <wufan@linux.microsoft.com>, <pbrobinson@gmail.com>, <zbyszek@in.waw.pl>,
- <hch@lst.de>, <mjg59@srcf.ucam.org>, <pmatilai@redhat.com>,
- <jannh@google.com>, <dhowells@redhat.com>, <jikos@kernel.org>,
- <mkoutny@suse.com>, <ppavlu@suse.com>, <petr.vorel@gmail.com>,
- <mzerqung@0pointer.de>, <kgold@linux.ibm.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>
-Subject: Re: [RFC][PATCH v3 01/10] ima: Introduce hook DIGEST_LIST_CHECK
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, <corbet@lwn.net>,
- <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
- <eric.snowberg@oracle.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
- <serge@hallyn.com>
-X-Mailer: aerc 0.18.2
-References: <20240905152512.3781098-1-roberto.sassu@huaweicloud.com>
- <20240905152512.3781098-2-roberto.sassu@huaweicloud.com>
- <D3Z3PDARWOV4.1CBB4U4NW846J@kernel.org>
- <81fd98ce8a43c209e909144a13dcdbf3239e15ff.camel@huaweicloud.com>
-In-Reply-To: <81fd98ce8a43c209e909144a13dcdbf3239e15ff.camel@huaweicloud.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Fri Sep 6, 2024 at 2:22 PM EEST, Roberto Sassu wrote:
-> On Fri, 2024-09-06 at 12:41 +0300, Jarkko Sakkinen wrote:
-> > On Thu Sep 5, 2024 at 6:25 PM EEST, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > >=20
-> > > Introduce a new hook to check the integrity of digest lists.
-> >=20
-> > "Introduce DIGEST_LIST_CHECK, a new hook..."
-> >=20
-> > >=20
-> > > The new hook is invoked during a kernel read with file type
-> >=20
-> > "with the file type"
-> >=20
-> >=20
-> > > READING_DIGEST LIST, which is done by the Integrity Digest Cache when=
- it is
-> > > populating a digest cache with a digest list.
-> >=20
-> > The patch creates a new struct imap_rule_entry instance when it parses
-> > the corresponding rule, which means that there are couple slices of
-> > information missing here:
-> >=20
-> > 1. The commit message does not tell what the code change effectively
-> >    is. I scavenged this information from [1].
->
-> Sorry, to me it seems a bit redundant to state what a IMA hook is. The
-> new hook will be handled by IMA like the other existing hooks.
+On Fri, 2024-09-06 at 14:32 +0200, Roberto Sassu wrote:
+> Hi all
+> 
+> when running the benchmark on my new component, the Integrity Digest
+> Cache, I ran into a serious performance issue.
+> 
+> The benchmark is extending a TPM PCR with 12313 entries of the IMA
+> measurement list, and calculating the time elapsed for the operation.
+> 
+> Without TPM HMAC: 102.8 seconds
+> 
+> With TPM HMAC: 1941.71 seconds
 
-I think with documentation (scoping also to commit messages) it is in
-general a good strategy to put it less rather than more. No
-documentation is better than polluted documentation ;-)
+I did worry about this and kept asking if anyone could benchmark
 
-Just remarking what might not be obvious with someone who might not
-be obvious, unless being a pro-active contributor.
+https://lore.kernel.org/linux-integrity/bd814edddfeac7072ed4f29365ce6bac3d235562.camel@HansenPartnership.com/
 
-BR, Jarkko
+> Do you have already an idea on how to improve the situation?
+
+One theory was that we could context save the session instead and this
+might be faster but would also require degapping in the resource
+manager.
+
+James
+
 
