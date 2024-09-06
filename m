@@ -1,151 +1,153 @@
-Return-Path: <linux-integrity+bounces-3492-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3493-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6714696F966
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 18:33:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6481F96F9B6
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 19:03:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB42D1F23AC3
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 16:33:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE991B2336A
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 17:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C631D318A;
-	Fri,  6 Sep 2024 16:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C831D4606;
+	Fri,  6 Sep 2024 17:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="mF+7Bl9/"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AXbZrfsn"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD747322A
-	for <linux-integrity@vger.kernel.org>; Fri,  6 Sep 2024 16:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAD71D3656;
+	Fri,  6 Sep 2024 17:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725640418; cv=none; b=mxjTt/oI4TEgQl4NhLGtaY53NTzFZGF/ORnXavl2frEKuAnq5A4KZOLw2Jl8wMqoviOiuWcs2rdUEbdjIV9MsQ3dovbPuSpJCvRvFR1nhcHNLQyeJCk9NZZXcpuT3/YDankLYcJGAO5Ul2JgXDTFY5eTOayNFk5yP7SEIFuW/hk=
+	t=1725642193; cv=none; b=dQLR6Wj9Fy1t7ZSMk2fuzVka1tZ5VNFqEe5rbzioKUTk/hXRUc/So03lltqrKXrjCPtJN/yt/0FFtQnlskpjBuX3TPPy8uWApkyEsW4opAtJFy35M+o/LI23YPomLbTWmkgVgA46lTOS0O2ZiALe9Kua9eUloYgyBjGqmoxcGys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725640418; c=relaxed/simple;
-	bh=I9FitKu32sQS6CHvjwK/wGygEoj/DAIBEjDdIB8l+C0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZTv8JIr5y13Ho6mJ5Wgj1/VDA3TAFK2vGm3/QsaCH1QHOnBuUfzSX8z7dZSMwGA1C9tOEqfgM8jkUWTqweH6KfJtJ0ByUSr0By2ueDlNXZf2RqkGqUjARPLWZRXSPu+ophhn8Ske/GhtuATNqru8szVl6oQ2aDsSL4N2+QI977U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=mF+7Bl9/; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a8d100e9ce0so41709866b.2
-        for <linux-integrity@vger.kernel.org>; Fri, 06 Sep 2024 09:33:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725640414; x=1726245214; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LfmJOb/jUm+7E9CUcvrFmOvdVMUS+Zu+g542F26uVC0=;
-        b=mF+7Bl9/gWOp4KPpyKBWgI4x4czum4KaZduVSK5WvB7Qm/9PGIWXmu1kFaKaCSJlUf
-         NPWp1A98R01/xxjPnOi7uucaQbiWX9nS7Y+1RAMeb2CT92QDFOdaho4MMYil+d7Ajmy3
-         496kGW+ca8dbWhDQFeveqtVHhy9D9WUtoorpug5kMmCkjweW1uJA57XO1xXH380HAoS8
-         nPYp8XAdXA0G9NcXH1+O39tWfs98swPku0scWG/OkuALOOmXQ9/uxtPbG/ye/f9qs/l9
-         TH60444X9nZtq5pcq/K/eKd8mDZjWZta1su89iNOyQ6M+9pzeYgRkA/7kifTUgcUVw+s
-         YNEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725640414; x=1726245214;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LfmJOb/jUm+7E9CUcvrFmOvdVMUS+Zu+g542F26uVC0=;
-        b=g/h8czpnWcJtWJyONWPNAhMw9otfQ+hY3v+eHRj/Eb6nIsPXY+6Mm6LCZk/0NBUKxS
-         K196sccH0gQys+uTdp5QKVKQDK0YJ33UPgPkwq5bQeoOpBvWRnYtT0rt4eWFaPvV14P3
-         B5PdyEFy/GM/j1/EuXI2nN46zDpPpmFCILO3MrWyYJChHEtzxfGRgumKzQJNLdqbuviF
-         EFJZkzRudV9B2vRo9k0kmG1jLDJVP1jaRLm7cm3VM5murQAt3BzBkP7AP5SRqXvL70US
-         1QvaQPrbk0fM/aPkU4oI4oFP5irXETowci1GU0smz3KHj9LguG/82SdqrG1IBj1jLvGe
-         BgQw==
-X-Forwarded-Encrypted: i=1; AJvYcCUW0nrTGWWXhJM1Xcx0vG+fQ4BprBFY5ZpXpEao7j+8rsg8RBgmJrEC0Fv+at1AjQ2N1swBfEPgZTRVeb5MyzQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYXhGbGjtaiKgJ3CYq8xjGNIRJkHfq8DVlqJ4PVdzQrCpWD+wT
-	YOC4B7o0hL8BIpgZtcpOJFtseG0FRwQbhSr4vY1ShMFlbIuEl4lCdOgVWpCXCcs=
-X-Google-Smtp-Source: AGHT+IFWSyBL0JGYi5gI1X5ENn5sLmxFPNM801IhUvElezaEQPT8qc9UzQS1LyqxKb6OmdTn5QYizw==
-X-Received: by 2002:a17:907:31cc:b0:a8a:7549:2a25 with SMTP id a640c23a62f3a-a8a88667a59mr272522666b.36.1725640413963;
-        Fri, 06 Sep 2024 09:33:33 -0700 (PDT)
-Received: from localhost (p5dc68d3d.dip0.t-ipconnect.de. [93.198.141.61])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8a61fbb039sm298591366b.18.2024.09.06.09.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Sep 2024 09:33:33 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	=?utf-8?q?Ahelenia_Ziemia=C5=84ska?= <nabijaczleweli@nabijaczleweli.xyz>,
-	linux-integrity@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] tpm: Drop explicit initialization of struct i2c_device_id::driver_data to 0
-Date: Fri,  6 Sep 2024 18:33:24 +0200
-Message-ID: <20240906163325.321610-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1725642193; c=relaxed/simple;
+	bh=yWbLFIl/asMYOkEMtL1VrdhvAG4/uLy2td1Rn6/TbzA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=rT4R8LvSwA69QBg/SeQDrECtGv/QAhk6peDb7D22SXnCZa/0qEZPYFWFDgeFM8Cgc6guw6GfsPgSUHanFsqqQnnyk63QsY2ZSaRIZLtw5Yrwz3LA/nijHgp259iy/towiwmgK5xOVnPS0XiucJLJTofBQBdAguV5MJLnn4fGLn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AXbZrfsn; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 486Dt68d026367;
+	Fri, 6 Sep 2024 17:02:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:subject:to:cc:references:from:in-reply-to
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	8YYOBneB917QBCdakNuvYI37onUQ5PmLSY+eVM2JoYA=; b=AXbZrfsnlN7G6+6P
+	xag44Eo7Ti/JzR943oC4grZXK5CvazRF/qqtm4uc1Uw8bpeurcjSS1r7SXi9J99Z
+	DPqjhbI66Adaoq/NAQFHfovZRAKAHfdIsSUsHMWVCCPNokZAoNmqGMk9L9BU2oOF
+	KT/HQlLgZUNv+gXHUu7UaNYr2pvH2o2Bw0fkJdEw8voR9LTUHymcMSlmrApGu8VC
+	kWqva39KVzJS11Q1iPhwpoggnhz0fD0lfZvym6zhsomlAJ9fwloChK62fz1ciUsZ
+	Cr2UUHtpqWDSxusMrkanwJRA6Jf0RIniuQOS4Xa83qYVCIkt2gtF1aBOTced9dIF
+	rY0adQ==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41fj1m58s8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 06 Sep 2024 17:02:45 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 486FjK4u019891;
+	Fri, 6 Sep 2024 17:02:41 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 41fj3xvp9n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 06 Sep 2024 17:02:41 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 486H2evq52953428
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 6 Sep 2024 17:02:40 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 16B1858058;
+	Fri,  6 Sep 2024 17:02:40 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EB9795805B;
+	Fri,  6 Sep 2024 17:02:38 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  6 Sep 2024 17:02:38 +0000 (GMT)
+Message-ID: <603acd64-0a6d-470b-9c9b-f6146443dc0c@linux.ibm.com>
+Date: Fri, 6 Sep 2024 13:02:37 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 RESEND] tpm: export tpm2_sessions_init() to fix ibmvtpm
+ building
+To: Jarkko Sakkinen <jarkko@kernel.org>, Kexy Biscuit <kexybiscuit@aosc.io>,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc: linux-kernel@vger.kernel.org, mpe@ellerman.id.au,
+        naveen.n.rao@linux.ibm.com, zohar@linux.ibm.com,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Mingcong Bai <jeffbai@aosc.io>
+References: <20240905085219.77240-2-kexybiscuit@aosc.io>
+ <D3YF52E4EVJ0.2ZJSCR5FCVIGX@kernel.org>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <D3YF52E4EVJ0.2ZJSCR5FCVIGX@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cFcTW404zW7yxxo24IlSG3T7nXofLOZk
+X-Proofpoint-ORIG-GUID: cFcTW404zW7yxxo24IlSG3T7nXofLOZk
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1930; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=I9FitKu32sQS6CHvjwK/wGygEoj/DAIBEjDdIB8l+C0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBm2y7V5AcqoyWa4VJFQjAwbJEE1qbNFlEeYbWwT gmNcKMDW6iJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZtsu1QAKCRCPgPtYfRL+ Tow1B/96v1OtyI0evFeGDr47TBuE+9OV4qiOz6lar458tuI7pRp1VwY0uXc1hqYoML4Nl3AhQYz px9YKkHpK2Y4WGR1Gp2GqD5tiiJFPoJwjhL8N10fc++DFaxqauamORBnm4vLVT0VFR324LQqRi4 vLfFVR4y6riib2KX9w/7mrWJLfVuXXfeFcvgWDeiPuvKsG42/R1JXUYyVcgiHjwZI6P7mA6vmcJ DNjjhFDZdBCFz1Zzz7rtJqzm1zOEufthJInBDGkgTgam6l45OcSaVjj82SO7HtvHmvg14zd6Hjj D0rEl7r/nkkgSoTSl+MuPPaaOP6X4S4OIl5milsuB+esvEqS
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_03,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
+ adultscore=0 lowpriorityscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2408220000 definitions=main-2409060125
 
-These drivers don't use the driver_data member of struct i2c_device_id,
-so don't explicitly initialize this member.
 
-This prepares putting driver_data in an anonymous union which requires
-either no initialization or named designators. But it's also a nice
-cleanup on its own.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
- drivers/char/tpm/st33zp24/i2c.c  | 2 +-
- drivers/char/tpm/tpm_i2c_atmel.c | 2 +-
- drivers/char/tpm/tpm_tis_i2c.c   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+On 9/5/24 10:26 AM, Jarkko Sakkinen wrote:
+> On Thu Sep 5, 2024 at 11:52 AM EEST, Kexy Biscuit wrote:
+>> Commit 08d08e2e9f0a ("tpm: ibmvtpm: Call tpm2_sessions_init() to
+>> initialize session support") adds call to tpm2_sessions_init() in ibmvtpm,
+>> which could be built as a module. However, tpm2_sessions_init() wasn't
+>> exported, causing libmvtpm to fail to build as a module:
+>>
+>> ERROR: modpost: "tpm2_sessions_init" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
+>>
+>> Export tpm2_sessions_init() to resolve the issue.
+>>
+>> Cc: stable@vger.kernel.org # v6.10+
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202408051735.ZJkAPQ3b-lkp@intel.com/
+>> Fixes: 08d08e2e9f0a ("tpm: ibmvtpm: Call tpm2_sessions_init() to initialize session support")
+>> Signed-off-by: Kexy Biscuit <kexybiscuit@aosc.io>
+>> Signed-off-by: Mingcong Bai <jeffbai@aosc.io>
+>> ---
+>> V1 -> V2: Added Fixes tag and fixed email format
+>> RESEND: The previous email was sent directly to stable-rc review
+>>
+>>   drivers/char/tpm/tpm2-sessions.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+>> index d3521aadd43e..44f60730cff4 100644
+>> --- a/drivers/char/tpm/tpm2-sessions.c
+>> +++ b/drivers/char/tpm/tpm2-sessions.c
+>> @@ -1362,4 +1362,5 @@ int tpm2_sessions_init(struct tpm_chip *chip)
+>>   
+>>   	return rc;
+>>   }
+>> +EXPORT_SYMBOL(tpm2_sessions_init);
+>>   #endif /* CONFIG_TCG_TPM2_HMAC */
+> 
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+Would have tested it but machine is down..
 
-diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
-index 45ca33b3dcb2..81348487c125 100644
---- a/drivers/char/tpm/st33zp24/i2c.c
-+++ b/drivers/char/tpm/st33zp24/i2c.c
-@@ -133,7 +133,7 @@ static void st33zp24_i2c_remove(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id st33zp24_i2c_id[] = {
--	{TPM_ST33_I2C, 0},
-+	{ TPM_ST33_I2C },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, st33zp24_i2c_id);
-diff --git a/drivers/char/tpm/tpm_i2c_atmel.c b/drivers/char/tpm/tpm_i2c_atmel.c
-index 301a95b3734f..d1d27fdfe523 100644
---- a/drivers/char/tpm/tpm_i2c_atmel.c
-+++ b/drivers/char/tpm/tpm_i2c_atmel.c
-@@ -186,7 +186,7 @@ static void i2c_atmel_remove(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id i2c_atmel_id[] = {
--	{I2C_DRIVER_NAME, 0},
-+	{ I2C_DRIVER_NAME },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, i2c_atmel_id);
-diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-index 9511c0d50185..6cd07dd34507 100644
---- a/drivers/char/tpm/tpm_tis_i2c.c
-+++ b/drivers/char/tpm/tpm_tis_i2c.c
-@@ -375,7 +375,7 @@ static void tpm_tis_i2c_remove(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id tpm_tis_i2c_id[] = {
--	{ "tpm_tis_i2c", 0 },
-+	{ "tpm_tis_i2c" },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-base-commit: 9aaeb87ce1e966169a57f53a02ba05b30880ffb8
--- 
-2.45.2
-
+> BR, Jarkko
+> 
 
