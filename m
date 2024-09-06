@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3481-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3482-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 149EB96F009
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 11:46:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3E7A96F020
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 11:48:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFA421F27965
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 09:46:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8152828643D
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 09:48:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495641C871C;
-	Fri,  6 Sep 2024 09:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EEEF1C8709;
+	Fri,  6 Sep 2024 09:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CclR5XKV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UKWUHgCG"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181161CB145;
-	Fri,  6 Sep 2024 09:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173FC41A8F;
+	Fri,  6 Sep 2024 09:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725615907; cv=none; b=Nvr6nxYjT2pTeNeYJd+j1aG/uBMw1a+61K5LATfRAtGq9DgQWMC2a6D3gyd319QKkKgGHJK4fTnVKZ094YKREe3bPQI2D8Y97RiR54syIp7hXuWoxPj0Bi6ThenbkBbFIrBQyoqZSaD5LxZie9Kr4Blh4cW8qA49mhWBJkO4KBA=
+	t=1725616076; cv=none; b=hLN//DwYO7qg3lg4bo1DWHy9S6RWeOaCXmweyukif4L3RJafFhf4GLKve2EHRSfQaz2+lMGPALzAcXJ/pqUQ2Nlw/9/RBZnGSWq728uy4euNpJCDL44gS4HSLNWwLMw3sEG+mr39ImopjOYDQgGpu/6Zq90o7WXHG1Ljul8T8gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725615907; c=relaxed/simple;
-	bh=h6tMVK3hUBDyNHoKcfua8I1SEiAjO/LajNuZV1loc14=;
+	s=arc-20240116; t=1725616076; c=relaxed/simple;
+	bh=t9WXDI7C8MEWM9cGLSJKb0IC5/+Pqc2jbnUhHiU9H6w=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=C8ZENN9fpUAuascFQ8xrFTE7dA7Hgpv1jJ61YmVGDzpMmW554L1+6S11mlomGQvwlYiYCWqJMnhYyszk408Zs3w4sIvTtAYQkSs1kSHnifCdDtWJCYHNw9YXq6xCtS0h8TvyHm+FUgTIeuEbZ+ttSc3B9zKV885hZE4v1q49urs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CclR5XKV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254B1C4CEC8;
-	Fri,  6 Sep 2024 09:45:06 +0000 (UTC)
+	 References:In-Reply-To; b=bEAX0XWv9NkVrZn90ojkm0/bVQcOUimgKkBPcotyVa4hy2qqGDPEmJHhV0Z5iu9xrC5AsWFwoBlKIK55GJjQNf9yJgTkVV1UxGprS7J3iKUZkqfWtbgWdZWV56wdePKrALLpHqmtFx2+/X94LVFFHu7yHIrPunmuuvLIi332H0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UKWUHgCG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10134C4CEC4;
+	Fri,  6 Sep 2024 09:47:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725615906;
-	bh=h6tMVK3hUBDyNHoKcfua8I1SEiAjO/LajNuZV1loc14=;
+	s=k20201202; t=1725616075;
+	bh=t9WXDI7C8MEWM9cGLSJKb0IC5/+Pqc2jbnUhHiU9H6w=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=CclR5XKVX+vY89v50ULWz36stcErhdsU39M/DOohlVC/ZsSaSe+y3L2IVBJjbPScH
-	 GXOn0glHUhAT0iOZk62N3cY7PkUOSJGILlYDN3lY0iTk6LWbYD1GnbNXI9pmF9EGgg
-	 sJTAp9ln8Jydc29cP4RJop1LNuwYibdDa7bWNnnddaUZQgkULn/SRTob/OB5uoQAfX
-	 cq01Mi6KkHOKwteAKlxrlMmy8JD+h7QtHwgu8P4aSfXTaLlzvo9JK7hDejHRlEoBGU
-	 8ALB9zWGb77EYUlbWUzVdRneP+6mUMRKEOgAT6Jg2OtKa8mBMNQ6XKTr40zW9OWwyL
-	 8W+OTBBNXxt0Q==
+	b=UKWUHgCG8Vo5woHikdETAfFMbJBCI9KKfz4Yco1Y3ppfYpiTF7wCeqPTKQq4449HA
+	 XGpDwuycHRKwINBOzccFgRmAbu+Jcsv2mxAQaS76P553VWzZzGpB0UCIPWpuAkEoLh
+	 RYTkf+cy5tRp495ZKP77qkgx0HdUHi7zxfCjr7A7WCfY2JIwF9Z4UnQUEhk/pVsmRx
+	 WKDlGg6jrxdknh1PhlmWoPiAfAQ4VhfQ2TvdeZUJ9j9TCIgokjYj5LvN7xD3TNIgnS
+	 AHQ4mFIqr1INC5v9QmbSpWYl9374JXhdvk28Rf1UZ/GRyAENG7x6obPqLuerctNhDk
+	 AbxZuePqYpo3w==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,93 +49,64 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 06 Sep 2024 12:45:02 +0300
-Message-Id: <D3Z3S9Z6B4BC.2OSFJZYTZOPZD@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
- <linux-integrity@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <wufan@linux.microsoft.com>, <pbrobinson@gmail.com>, <zbyszek@in.waw.pl>,
- <hch@lst.de>, <mjg59@srcf.ucam.org>, <pmatilai@redhat.com>,
- <jannh@google.com>, <dhowells@redhat.com>, <jikos@kernel.org>,
- <mkoutny@suse.com>, <ppavlu@suse.com>, <petr.vorel@gmail.com>,
- <mzerqung@0pointer.de>, <kgold@linux.ibm.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>
-Subject: Re: [RFC][PATCH v3 04/10] ima: Add digest_cache_measure/appraise
- boot-time built-in policies
+Date: Fri, 06 Sep 2024 12:47:51 +0300
+Message-Id: <D3Z3UFHWQ3MG.N8JU7ZHX3XHN@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ "Stefan Berger" <stefanb@linux.ibm.com>
+Subject: Re: [PATCH RFC 1/2] tpm: tpm_tis_spi: Ensure SPI mode 0
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, <corbet@lwn.net>,
- <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
- <eric.snowberg@oracle.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
- <serge@hallyn.com>
+To: "Stefan Wahren" <wahrenst@gmx.net>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>
 X-Mailer: aerc 0.18.2
-References: <20240905152512.3781098-1-roberto.sassu@huaweicloud.com>
- <20240905152512.3781098-5-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20240905152512.3781098-5-roberto.sassu@huaweicloud.com>
+References: <20240906060947.4844-1-wahrenst@gmx.net>
+ <20240906060947.4844-2-wahrenst@gmx.net>
+In-Reply-To: <20240906060947.4844-2-wahrenst@gmx.net>
 
-On Thu Sep 5, 2024 at 6:25 PM EEST, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri Sep 6, 2024 at 9:09 AM EEST, Stefan Wahren wrote:
+> According to TCG PC Client Platform TPM Profile (PTP) Specification
+> only SPI mode 0 is supported. In order to ensure the SPI controller
+> supports the necessary settings, call spi_setup() and bail out
+> as soon as possible in error case.
 >
-> Specify the 'digest_cache_measure' boot-time policy with 'ima_policy=3D' =
-in
-> the kernel command line to add the following rule at the beginning of the
-> IMA policy, before other rules:
+> This change should affect all supported TPM SPI devices, because
+> tpm_tis_spi_probe is either called direct or indirectly.
 >
-> measure func=3DDIGEST_LIST_CHECK pcr=3D12
->
-> which will measure digest lists into PCR 12 (or the value in
-> CONFIG_IMA_DIGEST_CACHE_MEASURE_PCR_IDX).
->
-> Specify 'digest_cache_appraise' to add the following rule at the beginnin=
-g,
-> before other rules:
->
-> appraise func=3DDIGEST_LIST_CHECK appraise_type=3Dimasig|modsig
->
-> which will appraise digest lists with IMA signatures or module-style
-> appended signatures.
->
-> Adding those rule at the beginning rather than at the end is necessary to
-> ensure that digest lists are measured and appraised in the initial ram
-> disk, which would be otherwise prevented by the dont_ rules.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 > ---
->  .../admin-guide/kernel-parameters.txt         | 10 +++++-
->  security/integrity/ima/Kconfig                | 10 ++++++
->  security/integrity/ima/ima_policy.c           | 35 +++++++++++++++++++
->  3 files changed, 54 insertions(+), 1 deletion(-)
+>  drivers/char/tpm/tpm_tis_spi_main.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 >
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
-ion/admin-guide/kernel-parameters.txt
-> index 09126bb8cc9f..afaaf125a237 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -2077,7 +2077,8 @@
->  	ima_policy=3D	[IMA]
->  			The builtin policies to load during IMA setup.
->  			Format: "tcb | appraise_tcb | secure_boot |
-> -				 fail_securely | critical_data"
-> +				 fail_securely | critical_data |
-> +				 digest_cache_measure | digest_cache_appraise"
-> =20
->  			The "tcb" policy measures all programs exec'd, files
->  			mmap'd for exec, and all files opened with the read
-> @@ -2099,6 +2100,13 @@
->  			The "critical_data" policy measures kernel integrity
->  			critical data.
-> =20
-> +			The "digest_cache_measure" policy measures digest lists
-> +			into PCR 12 (can be changed with kernel config).
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_t=
+is_spi_main.c
+> index 61b42c83ced8..e62d297b040e 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -248,6 +248,17 @@ static int tpm_tis_spi_write_bytes(struct tpm_tis_da=
+ta *data, u32 addr,
+>  int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy=
+,
+>  		     int irq, const struct tpm_tis_phy_ops *phy_ops)
+>  {
+> +	int ret;
 > +
-> +			The "digest_cache_appraise" policy appraises digest
-> +			lists with IMA signatures or module-style appended
-> +			signatures.
+> +	spi->mode &=3D ~SPI_MODE_X_MASK;
+> +	spi->mode |=3D SPI_MODE_0;
 > +
->  	ima_tcb		[IMA] Deprecated.  Use ima_policy=3D instead.
->  			Load a policy which meets the needs of the Trusted
->  			Computing Base.  This means IMA will measure all
+> +	ret =3D spi_setup(spi);
+> +	if (ret < 0) {
+> +		dev_err(&spi->dev, "SPI setup failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>  	phy->iobuf =3D devm_kmalloc(&spi->dev, SPI_HDRSIZE + MAX_SPI_FRAMESIZE,=
+ GFP_KERNEL);
+>  	if (!phy->iobuf)
+>  		return -ENOMEM;
+> --
+> 2.34.1
 
-Must be updated as a separate commit as kernel-parameters.txt not
-part of IMA. Consider it as a different subsystem in this context.
+
+Why?
 
 BR, Jarkko
 
