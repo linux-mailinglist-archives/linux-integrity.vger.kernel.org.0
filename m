@@ -1,96 +1,175 @@
-Return-Path: <linux-integrity+bounces-3489-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3490-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C604896F714
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 16:40:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2C2C96F728
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 16:43:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42BE7B2433A
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 14:40:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F5481F25C2E
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Sep 2024 14:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8421D0DD6;
-	Fri,  6 Sep 2024 14:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013091D1F4D;
+	Fri,  6 Sep 2024 14:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FK3h2sxK"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="ldp+Qsdw"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C35156880
-	for <linux-integrity@vger.kernel.org>; Fri,  6 Sep 2024 14:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6318D1D1757;
+	Fri,  6 Sep 2024 14:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725633645; cv=none; b=Iyyx9jj4ycmhy4LRqzoAovr+2gRzpDPR3oSUIG+rlVZd20sp8hQyu2+S9dnNqne7yN4E3SmqiJxfqzwhBRuweWMJDERkY4e5nfpuYEAOuZodQF4oris7/8S+6gVKNRtcHwYQkNBmBE1dkz9XhhY4bFX80CL8qJGABgKYwemkKc4=
+	t=1725633764; cv=none; b=OcMICHH8Ahrhx22lj8/H/gctDLn8D1/npuJN1R0YEsLsboYNh5p6psi3c569D+oEoizLhemgTOrw/8FFWSsMX50CocDN3rD0SR4zHn8o5CUa5VOIyj5DzdRdv7MR+C9yb5hpRs9Vi490NMO7rVboCqAv17f14f9SwXIbnMaabWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725633645; c=relaxed/simple;
-	bh=eyJuTYjuEjD7ktVS2i3vhYEU9u4psLrUfooxM+9g2kA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=HNcRDulm+omCQWT5HrSlRFRapTmLWqyeUd/2Y3BsFQ92glpGxHccoe2UrcZJRtlfA1uBVhnIQWl63i3okh61r9ZR5Cm6pKDAF76wnkk0OYEXx6USGxL6zv97G8uCsdumVI5Nu3lLSpsT3y3+rdD9/VJStTFCQ2y79xbXkMea5aY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FK3h2sxK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69589C4CEC9;
-	Fri,  6 Sep 2024 14:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725633644;
-	bh=eyJuTYjuEjD7ktVS2i3vhYEU9u4psLrUfooxM+9g2kA=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=FK3h2sxKB4FLBlAgw5/r9E/scirGqn93WYBmhnXXUE4A0J3FWQq2/vQnRPU5SuXvz
-	 6eVRPxWQ070RCtFbrjl5ac/XS4QCWfgmqrDTvcmXHKWpJRDpovvf2iYuKkPzBsH8N0
-	 V/bZWG9CgcKJixZ99SBwHFIWDqJuPVWRdf/NNzgQq2p4O0PcHCwjzhpDkhLbtEJzYC
-	 WqiUto3Q4K8t78LCka07ExDe9ZmUfNkGZBvxCOqRvYL08mzUxQKEmPlegevUn32Sfo
-	 yqWhSOD/+sWatFsij7BsOVUcE56eLaKAdpVV3wC0/Ll9Ib53Vgacn+eWLvn6Gx2Hnw
-	 YeKpkad1viC9g==
+	s=arc-20240116; t=1725633764; c=relaxed/simple;
+	bh=pj6q7pRbyGidAOFqbosve8d0lwaSXVGdj3+1bN4PSq8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OSOrcrgPb7UXvVl0bhLLyM1cJC9d5zCIvrRQ5OoIpax+9rJpa/cyf4kBruDONYvw16gJX44JyCdCNmr7Jefi0q+kuXwGW36S4qCr1KCMAYwUgd7xopuWzlfMMv3A3RMdih0v1bI8Hadyk0H6y2uENSM+H+6y48WQSmUQQoiqoCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=ldp+Qsdw; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1725633752; x=1726238552; i=wahrenst@gmx.net;
+	bh=EnJX//TvEm1gJVJJPWoKfObjaG1VzryhTzzDecbT7PA=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=ldp+QsdwjxOqoiFfvG+QAU62V02ktzMQluOjf+kNal02FQWAx7Ow4tfGbeobO4yI
+	 u4nLuG5ZYTdvgQEgWyPYb0+biJx66zUHuMlJ15Y3FQRzLlN6yGMo9GMaJU66wSsZc
+	 KJIRfP2ux6hN7W9Wyb7esYoaTeOA6XVldxs9jtzKYLRS2dxm10h5GZmgRtp+HlY2l
+	 te3HlazP0+Qllpn2GqIdzbii82gMfUQTewfTU8X4xY1/Nm9j4o9mB+hjeJExECrnF
+	 JcVndOO2vhu0I0gXOqOarEAak/lZNB+SDtZWGum08RW//jdar4vMTFHRqfXQ31vFx
+	 iaK4PpY3G/o2IH/zAw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.127] ([37.4.248.43]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MysRu-1rr1hK0P1m-00vusc; Fri, 06
+ Sep 2024 16:42:32 +0200
+Message-ID: <357a8f1d-033c-4d55-a6d3-05703cc7e0b0@gmx.net>
+Date: Fri, 6 Sep 2024 16:42:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/2] tpm: tpm_tis: Provide error messages in
+ tpm_tis_core_init
+To: Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
+ Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Stefan Berger <stefanb@linux.ibm.com>
+References: <20240906060947.4844-1-wahrenst@gmx.net>
+ <20240906060947.4844-3-wahrenst@gmx.net>
+ <D3Z3W2PZDU7C.4CBZUBZYY0RS@kernel.org>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <D3Z3W2PZDU7C.4CBZUBZYY0RS@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 06 Sep 2024 17:40:40 +0300
-Message-Id: <D3ZA2MOLUMUR.3NEU8TFVD30SP@kernel.org>
-To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>
-Cc: <linux-integrity@vger.kernel.org>, "Mimi Zohar" <zohar@linux.ibm.com>
-Subject: Re: TPM HMAC (really) bad performance
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.18.2
-References: <b8a7b3566e6014ba102ab98e10ede0d574d8930e.camel@huaweicloud.com>
-In-Reply-To: <b8a7b3566e6014ba102ab98e10ede0d574d8930e.camel@huaweicloud.com>
+X-Provags-ID: V03:K1:cQ3Bi+qJJONkbJSVrtzaDZ7EJa1pKmcUqvZ2PtkEfG6spgtY22s
+ EUZhI3L6o8FJB7SOc+Y39npMQZRIM478F3LTdyhzkhBBnjftLpOWtkIFBu+AQ9Fdy3HgsMj
+ 4hOplRCB5UwTppj3tmhzTtYhEOuwO3+bo69dtUkY4vBJnMgEvIRTxOros5dPK0NAP/l3/Bf
+ tqUfreHVwIETPHNrdowVw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:3s6IcaSm9Do=;L/me6pEx9WDHae79V5Rr2Any+nJ
+ Sp4ans00YyU4i0zYXbs/zyhuy2oM3GX44bOZ7mQzG9aUZQLv3gsR/Qf6PoIlTOAU1tJH4eUQi
+ vbjPg5Xwa/Aee7tX6KPe//kWnfnycP9SXyo8E0QDAdM3tU402+c7X2+VMrjj81M8uwdNWkuFg
+ DZpRGxZXjV0C5mc3Y544f5+I2ClKnOFQNScWICeUmTjetzvmZj96oPCXXTyuvRHcZfum+zkMA
+ DK97sAoDMIk5GGQUnyI3NUc7e0u8hlB19cTSVPu/CSl8zOvHav6PEXUeNsmIQsbosgRBtY+7r
+ kMXoIzdOk6SrMrXMRxUkmnphCcK7HJTM38TuZ0M39n2K9AvdQuRwx7O8p9vvbCK5Q4R18dUrP
+ NTkDcSaZkMUf+Mrs0m2h1o1H4jFtoe0CfLs/HhWRQv2tgeMcGfoujuULbzVvsWLY/cjWy99+h
+ VZ9kSa4764Pnjq59YcRDGffRdoWDznT8SrucM1WcTQjft5OSRFiHc+o97CPEMJ6IUPaUJ4R8K
+ vZCKLjM6SqvFzhaG63oRau0d436n6RnHtP868vFf7h56pxIFKrEB1hPcZRr3vxBtU74KmoEEn
+ vUvRPnuJd9ug5D3SPjz1Egk48cLUn7dLgMwFghmP2fvKk1SSAm1IplAjWVMjzbSlhLvmnf3Dp
+ fWEFIaCqINiZnCboD0ZAWxp4Ohh9CHCtra9YbiaP0Q0XgDVzYrAZ4NswlaZjdQHUzjBS23EVD
+ TIVwL3hGywk8gjwuWIzbRu9hq4iYUMq9JRLpn0nwU7DreaqCE3fs5kio9fT9QNnWT1s4vT1kF
+ IWkgIC2McGdLYuD/kK6CFJgQ==
 
-On Fri Sep 6, 2024 at 3:32 PM EEST, Roberto Sassu wrote:
-> Hi all
->
-> when running the benchmark on my new component, the Integrity Digest
-> Cache, I ran into a serious performance issue.
->
-> The benchmark is extending a TPM PCR with 12313 entries of the IMA
-> measurement list, and calculating the time elapsed for the operation.
->
-> Without TPM HMAC: 102.8 seconds
->
-> With TPM HMAC: 1941.71 seconds
->
->
-> Do you have already an idea on how to improve the situation?
+Am 06.09.24 um 11:50 schrieb Jarkko Sakkinen:
+> On Fri Sep 6, 2024 at 9:09 AM EEST, Stefan Wahren wrote:
+>> In case of SPI wiring issues (e.g. MISO pin permanent high) the
+>> core init won't provide any error message on failure. Add some
+>> helpful error messages to tpm_tis_core_init(), which helps
+>> to better understand why the driver won't probe.
+>>
+>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>> ---
+>>   drivers/char/tpm/tpm_tis_core.c | 15 ++++++++++++---
+>>   1 file changed, 12 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
+_core.c
+>> index fdef214b9f6b..830e331fcebe 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.c
+>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>> @@ -1133,8 +1133,10 @@ int tpm_tis_core_init(struct device *dev, struct=
+ tpm_tis_data *priv, int irq,
+>>   	dev_set_drvdata(&chip->dev, priv);
+>>
+>>   	rc =3D tpm_tis_read32(priv, TPM_DID_VID(0), &vendor);
+>> -	if (rc < 0)
+>> +	if (rc < 0) {
+>> +		dev_err(dev, "Failed to read TPM_DID_VID register: %d\n", rc);
+>>   		return rc;
+>> +	}
+>>
+>>   	priv->manufacturer_id =3D vendor;
+>>
+>> @@ -1162,19 +1164,25 @@ int tpm_tis_core_init(struct device *dev, struc=
+t tpm_tis_data *priv, int irq,
+>>   		chip->ops->clk_enable(chip, true);
+>>
+>>   	if (wait_startup(chip, 0) !=3D 0) {
+>> +		dev_err(dev, "TPM device not accessible (0x%0x)\n",
+>> +			vendor);
+>>   		rc =3D -ENODEV;
+>>   		goto out_err;
+>>   	}
+>>
+>>   	/* Take control of the TPM's interrupt hardware and shut it off */
+>>   	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask=
+);
+>> -	if (rc < 0)
+>> +	if (rc < 0) {
+>> +		dev_err(dev, "Failed to read TPM_INT_ENABLE register: %d\n", rc);
+>>   		goto out_err;
+>> +	}
+>>
+>>   	/* Figure out the capabilities */
+>>   	rc =3D tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps=
+);
+>> -	if (rc < 0)
+>> +	if (rc < 0) {
+>> +		dev_err(dev, "Failed to read TPM_INTF_CAPS register: %d\n", rc);
+>>   		goto out_err;
+>> +	}
+>>
+>>   	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+>>   		intfcaps);
+>> @@ -1209,6 +1217,7 @@ int tpm_tis_core_init(struct device *dev, struct =
+tpm_tis_data *priv, int irq,
+>>
+>>   	rc =3D tpm_tis_request_locality(chip, 0);
+>>   	if (rc < 0) {
+>> +		dev_err(dev, "Failed to request locality (0x%0x)\n", vendor);
+>>   		rc =3D -ENODEV;
+>>   		goto out_err;
+>>   	}
+>> --
+>> 2.34.1
+> No thanks. It not only adds helpful messages but has potential to add
+> unwanted merge conflicts.
+So this is a general NAK?
 
-Some missing details: CPU architecture and TPM chip type.
-
-Would be possible to generate off-CPU flame graph?
-
-For decent instructions:
-
-https://www.singlestore.com/blog/linux-off-cpu-investigation/
-
-You can do post-processing steps "offline" only capture step would
-need to be done in-target.
-
+So with every setup where the driver exits without an error message, the
+developer should add its own debug?
 >
-> Thanks
->
-> Roberto
+> BR, Jarkko
 
-BR, Jarkko
 
