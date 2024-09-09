@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3495-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3496-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 975E59701EB
-	for <lists+linux-integrity@lfdr.de>; Sat,  7 Sep 2024 13:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CEC42971FFB
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2024 19:07:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 556C82827F4
-	for <lists+linux-integrity@lfdr.de>; Sat,  7 Sep 2024 11:21:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B8842870C9
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Sep 2024 17:07:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306641BC23;
-	Sat,  7 Sep 2024 11:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1511A17BB1C;
+	Mon,  9 Sep 2024 17:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sJRHZImY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcd1KsfP"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF80A55
-	for <linux-integrity@vger.kernel.org>; Sat,  7 Sep 2024 11:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE4D17BB17;
+	Mon,  9 Sep 2024 17:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725708114; cv=none; b=aG3kdHHs85CikaZvl9YNW3vETa5mNOeurf7pGdf0q1ZBC9yVCIArR1W++H4J9mMCpg1ss5GCK0H7Ew4wgErI15U6ZBDIKHwvM+cGjbwsyVO425cmI4YyNYAVVEfCsawQqSsk3+d/1aFbrvNwhTfJhmCg7IYs7W5reaDZmbmvrGY=
+	t=1725901536; cv=none; b=Oujhn46xRci/Zm0qGFULEsfHQvbQ9Rmnw0LGUb0Zoe9tWy4x9jXraTUBp90Ao2S5VIxjSi1Mf62STNhXxDECyzqhyuHOR4ADHrRZGv7XnLpJ38s9+KO2WjvxD8bVCyONH2j2gRVtyzl7lUB02REeoSRsWYXWU6L1H9Q4IbKVs9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725708114; c=relaxed/simple;
-	bh=60suStfxL+kM5XhUX3F0+btputLsFpjZu6iwZFRShg0=;
+	s=arc-20240116; t=1725901536; c=relaxed/simple;
+	bh=F2CbpEX98qGe7LvwhLE0VH3uSYFDGmAg68m7O9KJ7jU=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=WIcLfj/9XenTLB48IoSzFtuzhmeojlaU8maz9C6QZwyxGTJFytAX0VezhL+Hnl9mBenwQ181LK08MjSthp+/G1ZzV4pHvsoj4k34mm5C/7kbiLSE3jMloOVnEviMnSOINHhHB2DVx/l8jzrL8dCz5fusrR2gXrqWgIDXhi/nuGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sJRHZImY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B93C4CEC2;
-	Sat,  7 Sep 2024 11:21:52 +0000 (UTC)
+	 References:In-Reply-To; b=Q1tX1A3u5fEaEYpw655cnmpn1dQX2A+FMWlp+v9FZKxptr5cV0QPZKDpui37qLQ0k+lMv/H9mb5i28Qm5GCNGiiJ6nbvpcQUAZBrPzZ8rwNjeIzkT3MB0331/mPleBBDJOHT5qQgIfcxWS09tf2NTkzQzU7vdPvA+za7ahdsoxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcd1KsfP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ACFCC4CEC7;
+	Mon,  9 Sep 2024 17:05:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725708113;
-	bh=60suStfxL+kM5XhUX3F0+btputLsFpjZu6iwZFRShg0=;
+	s=k20201202; t=1725901535;
+	bh=F2CbpEX98qGe7LvwhLE0VH3uSYFDGmAg68m7O9KJ7jU=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=sJRHZImYsJG+vbSP4kilGJoqtTx23BZLIA2txyhMQesPzHi3Pxi3leLMxqoX83fE8
-	 nhv9PpLsqqXxyjDK4gGn8SS3FRSvrKJxAPaP5v1U9CL9BogPADOFhu+LBqbCdV+wCR
-	 NpBx+/cZotozD6jX0kQOht341VVDsyIr/l4qE1yy6RVz/j6h3PiL2r2P6+bge6z6LT
-	 duuPJQAF6Q8oRoXSY+h8+9sVfDPxTdd22RILh4GAa8GjBCSwLcBlwnJfU+D4RvtL6d
-	 d93jeld9K2+FEkfvuT0Ni7Roug3rs2wmBtgUtKfE5YQXomyMOrL9fSTFL/k5YQlHdk
-	 kikiO65owZQXg==
+	b=kcd1KsfPQOOreESZYjRqrk2Z6FGVonu4Gvhektb30EYY0s+1FIPTZVNvedTPpBe3r
+	 /Mb4eSTi24YgSe40d8kchFhaBSeWfnKhaNweN/vaw2bHIAWEQbayNpg4h/fqR+GRQD
+	 Fqh0HihDSZ3FfpsCmb1vdIx68z0fTFVO6rU6xngYDMOH4LYJQBp3LUG+wVrU99DF0e
+	 tVoOp7DapCqhIjNKeqekHtbG164fqYjSzOFeowqdMwRo/iifyhs3H6A6MVDDyPkL2o
+	 UWte9lO81UEuz0ayoRDBe3ikJ+3LcPAUF6SX4movrFNhH+f4MiorvhkiconyuIaiTr
+	 OuUfLewwqn3Bg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,90 +49,73 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 07 Sep 2024 14:21:49 +0300
-Message-Id: <D400GX0ZQ02G.35485EHQS4SG3@kernel.org>
-Cc: "Jason Gunthorpe" <jgg@ziepe.ca>, "Nicolas Ferre"
- <nicolas.ferre@microchip.com>, "Alexandre Belloni"
- <alexandre.belloni@bootlin.com>, "Claudiu Beznea"
- <claudiu.beznea@tuxon.dev>, =?utf-8?q?Ahelenia_Ziemia=C5=84ska?=
- <nabijaczleweli@nabijaczleweli.xyz>, <linux-integrity@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] tpm: Drop explicit initialization of struct
- i2c_device_id::driver_data to 0
+Date: Mon, 09 Sep 2024 20:05:31 +0300
+Message-Id: <D41X15Z6ZQ4K.3HGVA7H9C6PJ5@kernel.org>
+Cc: <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ "Stefan Berger" <stefanb@linux.ibm.com>
+Subject: Re: [PATCH RFC 1/2] tpm: tpm_tis_spi: Ensure SPI mode 0
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, "Peter
- Huewe" <peterhuewe@gmx.de>
+To: "Stefan Wahren" <wahrenst@gmx.net>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>
 X-Mailer: aerc 0.18.2
-References: <20240906163325.321610-2-u.kleine-koenig@baylibre.com>
-In-Reply-To: <20240906163325.321610-2-u.kleine-koenig@baylibre.com>
+References: <20240906060947.4844-1-wahrenst@gmx.net>
+ <20240906060947.4844-2-wahrenst@gmx.net>
+ <D3Z3UFHWQ3MG.N8JU7ZHX3XHN@kernel.org>
+ <e7d402f4-0463-4bb2-b1ea-afb36a58e59a@gmx.net>
+In-Reply-To: <e7d402f4-0463-4bb2-b1ea-afb36a58e59a@gmx.net>
 
-On Fri Sep 6, 2024 at 7:33 PM EEST, Uwe Kleine-K=C3=B6nig wrote:
-> These drivers don't use the driver_data member of struct i2c_device_id,
-> so don't explicitly initialize this member.
->
-> This prepares putting driver_data in an anonymous union which requires
-> either no initialization or named designators. But it's also a nice
-> cleanup on its own.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
+On Fri Sep 6, 2024 at 5:46 PM EEST, Stefan Wahren wrote:
+> Am 06.09.24 um 11:47 schrieb Jarkko Sakkinen:
+> > On Fri Sep 6, 2024 at 9:09 AM EEST, Stefan Wahren wrote:
+> >> According to TCG PC Client Platform TPM Profile (PTP) Specification
+> >> only SPI mode 0 is supported. In order to ensure the SPI controller
+> >> supports the necessary settings, call spi_setup() and bail out
+> >> as soon as possible in error case.
+> >>
+> >> This change should affect all supported TPM SPI devices, because
+> >> tpm_tis_spi_probe is either called direct or indirectly.
+> >>
+> >> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> >> ---
+> >>   drivers/char/tpm/tpm_tis_spi_main.c | 11 +++++++++++
+> >>   1 file changed, 11 insertions(+)
+> >>
+> >> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tp=
+m_tis_spi_main.c
+> >> index 61b42c83ced8..e62d297b040e 100644
+> >> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> >> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> >> @@ -248,6 +248,17 @@ static int tpm_tis_spi_write_bytes(struct tpm_tis=
+_data *data, u32 addr,
+> >>   int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy =
+*phy,
+> >>   		     int irq, const struct tpm_tis_phy_ops *phy_ops)
+> >>   {
+> >> +	int ret;
+> >> +
+> >> +	spi->mode &=3D ~SPI_MODE_X_MASK;
+> >> +	spi->mode |=3D SPI_MODE_0;
+> >> +
+> >> +	ret =3D spi_setup(spi);
+> >> +	if (ret < 0) {
+> >> +		dev_err(&spi->dev, "SPI setup failed: %d\n", ret);
+> >> +		return ret;
+> >> +	}
+> >> +
+> >>   	phy->iobuf =3D devm_kmalloc(&spi->dev, SPI_HDRSIZE + MAX_SPI_FRAMES=
+IZE, GFP_KERNEL);
+> >>   	if (!phy->iobuf)
+> >>   		return -ENOMEM;
+> >> --
+> >> 2.34.1
+> >
+> > Why?
+> SPI protocol driver usually call spi_setup to verify that the SPI
+> controller accept the settings (SPI mode, bit, clock rate ...). Bailing
+> out early is more helpful for debugging issues.
 
-I think that works for me as a rationale.
-
-> ---
->  drivers/char/tpm/st33zp24/i2c.c  | 2 +-
->  drivers/char/tpm/tpm_i2c_atmel.c | 2 +-
->  drivers/char/tpm/tpm_tis_i2c.c   | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/=
-i2c.c
-> index 45ca33b3dcb2..81348487c125 100644
-> --- a/drivers/char/tpm/st33zp24/i2c.c
-> +++ b/drivers/char/tpm/st33zp24/i2c.c
-> @@ -133,7 +133,7 @@ static void st33zp24_i2c_remove(struct i2c_client *cl=
-ient)
->  }
-> =20
->  static const struct i2c_device_id st33zp24_i2c_id[] =3D {
-> -	{TPM_ST33_I2C, 0},
-> +	{ TPM_ST33_I2C },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(i2c, st33zp24_i2c_id);
-> diff --git a/drivers/char/tpm/tpm_i2c_atmel.c b/drivers/char/tpm/tpm_i2c_=
-atmel.c
-> index 301a95b3734f..d1d27fdfe523 100644
-> --- a/drivers/char/tpm/tpm_i2c_atmel.c
-> +++ b/drivers/char/tpm/tpm_i2c_atmel.c
-> @@ -186,7 +186,7 @@ static void i2c_atmel_remove(struct i2c_client *clien=
-t)
->  }
-> =20
->  static const struct i2c_device_id i2c_atmel_id[] =3D {
-> -	{I2C_DRIVER_NAME, 0},
-> +	{ I2C_DRIVER_NAME },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(i2c, i2c_atmel_id);
-> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2=
-c.c
-> index 9511c0d50185..6cd07dd34507 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c.c
-> @@ -375,7 +375,7 @@ static void tpm_tis_i2c_remove(struct i2c_client *cli=
-ent)
->  }
-> =20
->  static const struct i2c_device_id tpm_tis_i2c_id[] =3D {
-> -	{ "tpm_tis_i2c", 0 },
-> +	{ "tpm_tis_i2c" },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
->
-> base-commit: 9aaeb87ce1e966169a57f53a02ba05b30880ffb8
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+What problem has this patch solved for you? I think it makes the code
+only less robust and more error prone.
 
 BR, Jarkko
 
