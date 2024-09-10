@@ -1,176 +1,77 @@
-Return-Path: <linux-integrity+bounces-3513-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3514-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 663D9974335
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2024 21:11:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E3C3974610
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Sep 2024 00:41:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E1C3282DA0
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2024 19:11:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB75D288174
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Sep 2024 22:41:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14BC2208A5;
-	Tue, 10 Sep 2024 19:11:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF961AB506;
+	Tue, 10 Sep 2024 22:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PvqhE2H7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g2xaRTUi"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8223A19412D
-	for <linux-integrity@vger.kernel.org>; Tue, 10 Sep 2024 19:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED6B1A76BE;
+	Tue, 10 Sep 2024 22:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725995486; cv=none; b=ZrLPPQY36dz2VQE2fPq5r3GXWZR2goPMSDZuvIUEKOt9F2rLmhrhliR8yxCTobzdolmgKbA3d5bxP5MqhMbVdXjma9eQLX1yRFg0Y4qzlXs40NPEFb6DcNIBNlvK8woG6oeag5iqBR2GQRgFe6kKb22SoQ1YA2cGwlJRlZNAxt8=
+	t=1726008062; cv=none; b=awzAqfbo4jqZ8JgOWx3wxsIQZdIrwFF1c2BQB9i8CGFGYZvEPzQm5k6zPlu/pYOtNeGfDcAW4njGkku83J2rSzU0fTobwYL8lP7sPN/B5Fp03gmJREdgQe8mdKPf5ke2bMgqO1tzqlpQtOh8JaKq8sW97O2GScjs+bTVuCk90/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725995486; c=relaxed/simple;
-	bh=VRKJRu9RUMCW/Ep3bydArOQS+E80rdfLAV15uey/Z34=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GLIvQ3M8LM5MJ2rLI1zWweSBkm54Uj0+kuRu5myYwmxLnLjeG7oLq/sD7yYrF2IJGHYmhP/thmERjTAXiVUjGwlJoNaUg0aRIMacheJVlR5nfkmw7TkDtN+xjdf0/uQ2RhgInUtwwqF28aarQIVxO7DrZ83ZMojqpiUg1LHBGjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PvqhE2H7; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5e1ba05bf73so1982562eaf.3
-        for <linux-integrity@vger.kernel.org>; Tue, 10 Sep 2024 12:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1725995483; x=1726600283; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yVh+0umsxe3NmEOyboRonlTg0PRACWPVXWQxD+jYRtk=;
-        b=PvqhE2H7Ols45JZplEs1jPTonbZiVLh2KHzyPObKRJRpxyxhorcIZnU7BcgmgBZXQM
-         FkK9onyH9LMP1KxtgE1iBr8L/Z9FOmCsIIItfdqKqvorMyLK5nO9mLXpbMZeTspLZPnE
-         MEaalAhIeQOioObRCx945A1AHTKzY/r9BSQqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725995483; x=1726600283;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yVh+0umsxe3NmEOyboRonlTg0PRACWPVXWQxD+jYRtk=;
-        b=bYnYXksxfvWAcO65koGGEOu6vuF8/oZ8qSESJnRpBJsqna3bPGi4kgdhPQxlaVq2/x
-         jo8wCKmvHGElQrfHIeAfznz2BB1BtUFaeCGREmfFT2PFUKk2iaRURwrCWP5rCc95O0VD
-         JOceHYSoLz+K1s6NDstVhXLP8/WeJied96qsYweB6mIV0J1FDqEy3iY1ltA6PXbQbo/r
-         QTv4soD3HKSg8YIzEHWqQyN1UdoEzvo6Iv3wGIPPFW4z59J/ST+PSM3yDK+/LfajKR8w
-         QyCyylkBmS4fMcvKXPH+YIR0Z7MLMRkpxETE2C26i+ZKLU7PY/IM1FnkibUslK1SdzAj
-         WfoA==
-X-Forwarded-Encrypted: i=1; AJvYcCXlcdMmB2KRdv+aCspEnsIy3AlV4NkRXg+bm692axL6yKBeu3lNFIp2yT5am1E/76/IYBAd8PSgCe51t8lXqZ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVDpHt6illZakY2RV5E+gs2bdHR7Qd/EWP9FG18ExOKpNqJ5sq
-	hvX6As5vKDfJQBXGjKpu4TMU/S9xZE5TEgI63amfyPle8lT52qzYAz03q0EoKA==
-X-Google-Smtp-Source: AGHT+IG+QS+VP8zMZnQg2OGY3vbTxSTiFxzjoQo84bN9fxs5YjL2aFgOtLdbc9SVDXn6UGVsfNaA6Q==
-X-Received: by 2002:a05:6358:7e85:b0:1b8:48bf:16db with SMTP id e5c5f4694b2df-1b84d1a0a28mr500134655d.16.1725995483313;
-        Tue, 10 Sep 2024 12:11:23 -0700 (PDT)
-Received: from rink.c.googlers.com.com (254.82.172.34.bc.googleusercontent.com. [34.172.82.254])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a7968ed5sm334305485a.42.2024.09.10.12.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2024 12:11:22 -0700 (PDT)
-From: Jett Rink <jettrink@chromium.org>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: jettrink@chromium.org,
-	linux-security-module@vger.kernel.org,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH v6] tpm: Add new device/vendor ID 0x50666666
-Date: Tue, 10 Sep 2024 19:11:14 +0000
-Message-ID: <20240910191117.1001581-1-jettrink@chromium.org>
-X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
+	s=arc-20240116; t=1726008062; c=relaxed/simple;
+	bh=ewHx+sqMlVODPcD8RjZ430z/omXn0nvn/987s1r2yaQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=sfFDB0O2S92HfA05LJ7K9sFCQuD0qcI9jmAZ6UWarFZlvcCNILicu+xJjUkt1/LYdmB0WnkNbXddzGQ3Ybd0nrGlU/4Jy4KVo/z7yQm4V+eqz6puJwMFZWb6Fbs7gD0xRiVz5bcAKePMyAStOaZ/2AbSpvNCTNITkvXSzI4sftI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g2xaRTUi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB512C4CEC3;
+	Tue, 10 Sep 2024 22:41:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726008061;
+	bh=ewHx+sqMlVODPcD8RjZ430z/omXn0nvn/987s1r2yaQ=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=g2xaRTUiMfwqZw5v2BfwEka1lG4rqdJHbfqPlziBpWZcTIgTi8nFHx1aMg0qzsufP
+	 4butw248eu/wQFN+eo0ifoeXpqV1jU15kp1FbZQxbDlf2n6eLoCJY8RZAmqbjsbttQ
+	 rfBLidb/QNB6ukD4Fej+zt/sq5X2NoCF7L5Qp7FO+NPyp9X7OTprcIyeAQmYU2DzDl
+	 ZjojZ8XPX/K2RN4+p8u8qxUga/TcTL/rC9MF/o1expFJ/tEhTbD4L4gJ1yui54wOnQ
+	 RLx/r2MR3ixLQhRG/oxuIwfxCQJZBCDSDZFFVm3byP0yMBk/JGOtEvq1EsIZvEEp14
+	 CelKkwbsCJFtQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Sep 2024 01:40:56 +0300
+Message-Id: <D42YSIV15N2O.2JNV0VVFUT8S5@kernel.org>
+Cc: <keyrings@vger.kernel.org>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>,
+ "Pengyu Ma" <mapengyu@gmail.com>, "Roberto Sassu"
+ <roberto.sassu@huaweicloud.com>
+Subject: Re: [regression] significant delays when secureboot is enabled
+ since 6.10
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Linux regressions mailing list" <regressions@lists.linux.dev>, "James
+ Bottomley" <James.Bottomley@HansenPartnership.com>
+X-Mailer: aerc 0.17.0
+References: <0b4a5a86-a9f6-42d1-a9ba-ec565b336d3a@leemhuis.info>
+ <db275ab4fb73fc089c66738ffbcab23557e53055.camel@HansenPartnership.com>
+ <1de8359d-f231-452c-bf5c-9fc01f0ec800@leemhuis.info>
+In-Reply-To: <1de8359d-f231-452c-bf5c-9fc01f0ec800@leemhuis.info>
 
-Accept another DID:VID for the next generation Google TPM. This TPM
-has the same Ti50 firmware and fulfills the same interface.
+On Tue Sep 10, 2024 at 3:41 PM EEST, Linux regression tracking (Thorsten Le=
+emhuis) wrote:
+> FWIW (mainly for others that later find this thread on lore), I's pretty
+> sure James meant CONFIG_TCG_TPM2_HMAC.
 
-Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Jett Rink <jettrink@chromium.org>
----
+Yeah, exactly.
 
-Changes in v6:
-Update comments and string based on internal review.
-
-Changes in v5:
-Correct Suggested-by tag form.
-
-Changes in v4:
-Add Suggested-by tag. Sorry that I forget.
-
-Changes in v3:
-Refactor ternary operators into helper method.
-
-Changes in v2:
-Patchset 2 applies cleanly
-
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 32 +++++++++++++++++++++++++----
- 1 file changed, 28 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index adf22992138e..fea744234aa0 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -30,8 +30,9 @@
- #define TPM_CR50_MAX_BUFSIZE		64
- #define TPM_CR50_TIMEOUT_SHORT_MS	2		/* Short timeout during transactions */
- #define TPM_CR50_TIMEOUT_NOIRQ_MS	20		/* Timeout for TPM ready without IRQ */
--#define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID reg value */
--#define TPM_TI50_I2C_DID_VID		0x504a6666L	/* Device and vendor ID reg value */
-+#define TPM_CR50_I2C_DID_VID		0x00281ae0L	/* Device and vendor ID for Cr50 H1 */
-+#define TPM_TI50_DT_I2C_DID_VID		0x504a6666L	/* Device and vendor ID for Ti50 DT */
-+#define TPM_TI50_OT_I2C_DID_VID		0x50666666L	/* Device and vendor ID for TI50 OT */
- #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
- #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
- #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
-@@ -668,6 +669,27 @@ static const struct of_device_id of_cr50_i2c_match[] = {
- MODULE_DEVICE_TABLE(of, of_cr50_i2c_match);
- #endif
- 
-+/**
-+ * tpm_cr50_vid_to_name() - Maps VID to name.
-+ * @vendor:	Vendor identifier to map to name
-+ *
-+ * Return:
-+ *	A valid string for the vendor or empty string
-+ */
-+static const char *tpm_cr50_vid_to_name(u32 vendor)
-+{
-+	switch (vendor) {
-+	case TPM_CR50_I2C_DID_VID:
-+		return "cr50";
-+	case TPM_TI50_DT_I2C_DID_VID:
-+		return "ti50 DT";
-+	case TPM_TI50_OT_I2C_DID_VID:
-+		return "ti50 OT";
-+	default:
-+		return "unknown";
-+	}
-+}
-+
- /**
-  * tpm_cr50_i2c_probe() - Driver probe function.
-  * @client:	I2C client information.
-@@ -741,14 +763,16 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
- 	}
- 
- 	vendor = le32_to_cpup((__le32 *)buf);
--	if (vendor != TPM_CR50_I2C_DID_VID && vendor != TPM_TI50_I2C_DID_VID) {
-+	if (vendor != TPM_CR50_I2C_DID_VID &&
-+	    vendor != TPM_TI50_DT_I2C_DID_VID &&
-+	    vendor != TPM_TI50_OT_I2C_DID_VID) {
- 		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
- 		tpm_cr50_release_locality(chip, true);
- 		return -ENODEV;
- 	}
- 
- 	dev_info(dev, "%s TPM 2.0 (i2c 0x%02x irq %d id 0x%x)\n",
--		 vendor == TPM_TI50_I2C_DID_VID ? "ti50" : "cr50",
-+		 tpm_cr50_vid_to_name(vendor),
- 		 client->addr, client->irq, vendor >> 16);
- 	return tpm_chip_register(chip);
- }
--- 
-2.46.0.662.g92d0881bb0-goog
-
+BR, Jarkko
 
