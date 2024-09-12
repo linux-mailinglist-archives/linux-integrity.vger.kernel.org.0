@@ -1,300 +1,210 @@
-Return-Path: <linux-integrity+bounces-3542-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3543-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEE56976ABB
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Sep 2024 15:34:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9EA7976AC5
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Sep 2024 15:36:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3F601C23ABA
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Sep 2024 13:34:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EAF74B2298D
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Sep 2024 13:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57E21AD262;
-	Thu, 12 Sep 2024 13:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GjORBQBE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAD78187334;
+	Thu, 12 Sep 2024 13:36:31 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F6F1AC459;
-	Thu, 12 Sep 2024 13:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F4F191F9C;
+	Thu, 12 Sep 2024 13:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726148009; cv=none; b=EmqjuNnTWk8joQYsgFqllxHJBaGsdqm8GTJkx5PH7UTUKJlMwdqZOJPA2NDFcu7NPHGfv4CUBmO0yNPKQO0WgGMB71YZXbWiMaUZSNs1Tjo3i8oAkBUjq/fZCYhF+xBX7HFJCe7mvECh6AxAiR7Mm83ZPlLEwmS3sJ6MJp8e/eI=
+	t=1726148191; cv=none; b=uUKeLwkICFYb3LhfDBqhmGFZ3EAC3kacAu3DBQp/1r+CcNvqGRV/acHIMgzPNo0+SCUK835+/4t5YEwdmyR5udGfcL7tidJm1WCsgT5XQcM+e8fj4tpcK1UeqqvTv4rIkLGkFlx4SB8PHaU/snBKz9nFxCuxsIszegTxnyHtT34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726148009; c=relaxed/simple;
-	bh=6z4sL3Q2vQ51GAFjH66UWeYKoPy1VOkfSaBNtywE1Xo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=hM9Q20+0BtbCvzzyjP6jKKaFDRScHETK4zi7yayeAErtzJaY0B6PXHvwa7hEdZnXAW62x5/hVqunzJlzzs9QL/MZavGXVChgwCSOeULb+Kyrb+IogcuM7MiQ26x5sI3DfEGYeTCpF1Eo8rzWXUZkXF/glBQABt/i4aVUuXI7NEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GjORBQBE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1897C4CEC3;
-	Thu, 12 Sep 2024 13:33:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726148009;
-	bh=6z4sL3Q2vQ51GAFjH66UWeYKoPy1VOkfSaBNtywE1Xo=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=GjORBQBE6PrefR1ukxkFRq8fCKYQLz7MQAugI9bYv3iHYjJTDrcxvjCn0+n/MwQ1C
-	 oy4MO9V4f60+vdb/68f59wN1mskL1gmRKM84z30TpT2HehHmG+J9yAkJM/zfnFtohv
-	 lFc1d6JqKOQ1gj2zqc/wahsaqQNzP/qFcoW+ffxK1rU25wD08k4tDl9BTbiOcsgFTD
-	 9CYtjt+ZW5wDzNbIDshILMD9Yz4lMNS51y+bzTt8j6vc8MdtW+1Pdub0m2D1ZJrHV0
-	 5hXrHwcC4TzAEapvhtJRjiSeM++6xIIOrJzncMjrB4PXD3VUQdOkw5kL5zxDBc9Pl8
-	 78EE0WLd3/+lQ==
+	s=arc-20240116; t=1726148191; c=relaxed/simple;
+	bh=RjsoJk0fz0GT0pGzrOF7avM7SGiSZ+cDXayYZl1cJpM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=C3aCIYGjSKrVjVlRwM2jlo+r3+9e+eLToGpkqMwhCW7TnoTWA14/mpxjUEi83qpyiWJhNrXLTE/F3JzBO0iQwBsqxuS+tIWvmAxer9g614N6i4TXGORejPIRbjPf9yslI1B6wxOX/4HOAp71Dkr+jerZahwJDdKs56jJTklAiDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4X4HrC1LrJz9v7JW;
+	Thu, 12 Sep 2024 21:11:07 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 73CDA1401F3;
+	Thu, 12 Sep 2024 21:36:15 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwDnlsdI7uJmEIfIAA--.3419S2;
+	Thu, 12 Sep 2024 14:36:15 +0100 (CET)
+Message-ID: <155190f0eb0974e223538f10afaa7860c5a61cf5.camel@huaweicloud.com>
+Subject: Re: [regression] significant delays when secureboot is enabled
+ since 6.10
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>, Jarkko Sakkinen
+	 <jarkko@kernel.org>, Linux regressions mailing list
+	 <regressions@lists.linux.dev>
+Cc: keyrings@vger.kernel.org, "linux-integrity@vger.kernel.org"
+	 <linux-integrity@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Pengyu Ma <mapengyu@gmail.com>
+Date: Thu, 12 Sep 2024 15:36:04 +0200
+In-Reply-To: <c47b129aeb95094aace5b174fc6d81bf0a7ecfbf.camel@HansenPartnership.com>
+References: <0b4a5a86-a9f6-42d1-a9ba-ec565b336d3a@leemhuis.info>
+	 <92fbcc4c252ec9070d71a6c7d4f1d196ec67eeb0.camel@huaweicloud.com>
+	 <D42LZPLE8HR3.2UTNOI9CYZPIR@kernel.org>
+	 <D42M6OE94RLT.6EZSZLBTX437@kernel.org>
+	 <663d272617d1aead08077ad2b72929cbc226372a.camel@HansenPartnership.com>
+	 <D42N17MFTEDM.3E6IK034S26UT@kernel.org>
+	 <f554031343039883068145f9f4777277e490dc05.camel@huaweicloud.com>
+	 <10ae7b8592af7bacef87e493e6d628a027641b8d.camel@HansenPartnership.com>
+	 <D44C19QB8IK1.OMUJP7N91HRN@kernel.org>
+	 <c47b129aeb95094aace5b174fc6d81bf0a7ecfbf.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 12 Sep 2024 16:33:25 +0300
-Message-Id: <D44CEEGVNROC.2X84S94NHI7K3@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>,
- <linux-crypto@vger.kernel.org>, <zohar@linux.ibm.com>,
- <linux-integrity@vger.kernel.org>, <torvalds@linux-foundation.org>,
- "Roberto Sassu" <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v3 02/14] rsa: add parser of raw format
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, <dhowells@redhat.com>,
- <dwmw2@infradead.org>, <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-X-Mailer: aerc 0.18.2
-References: <20240911122911.1381864-1-roberto.sassu@huaweicloud.com>
- <20240911122911.1381864-3-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20240911122911.1381864-3-roberto.sassu@huaweicloud.com>
+MIME-Version: 1.0
+X-CM-TRANSID:GxC2BwDnlsdI7uJmEIfIAA--.3419S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr4fWr4fCFyrZF4ktFyDGFg_yoWrJFWfpr
+	48JFyUGry5Gr1rtr1DKr4Utryjyr1UJw1UXrn8JF1kAF4Dtr1Ygr15Xr4Ygr1DZr4fJr1Y
+	qr1UJrnxur1UGr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+	14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUwxhLUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAEBGbiTfQJHwADsp
 
-On Wed Sep 11, 2024 at 3:28 PM EEST, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Parse the RSA key with RAW format if the ASN.1 parser returns an error, t=
-o
-> avoid passing somehow the key format as parameter.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> ---
->  crypto/rsa.c                  | 14 ++++--
->  crypto/rsa_helper.c           | 83 ++++++++++++++++++++++++++++++++++-
->  include/crypto/internal/rsa.h |  6 +++
->  3 files changed, 97 insertions(+), 6 deletions(-)
->
-> diff --git a/crypto/rsa.c b/crypto/rsa.c
-> index d9be9e86097e..66d42974d47d 100644
-> --- a/crypto/rsa.c
-> +++ b/crypto/rsa.c
-> @@ -272,8 +272,11 @@ static int rsa_set_pub_key(struct crypto_akcipher *t=
-fm, const void *key,
->  	rsa_free_mpi_key(mpi_key);
-> =20
->  	ret =3D rsa_parse_pub_key(&raw_key, key, keylen);
-> -	if (ret)
-> -		return ret;
-> +	if (ret) {
-> +		ret =3D rsa_parse_pub_key_raw(&raw_key, key, keylen);
-> +		if (ret)
-> +			return ret;
-> +	}
-> =20
->  	mpi_key->e =3D mpi_read_raw_data(raw_key.e, raw_key.e_sz);
->  	if (!mpi_key->e)
-> @@ -311,8 +314,11 @@ static int rsa_set_priv_key(struct crypto_akcipher *=
-tfm, const void *key,
->  	rsa_free_mpi_key(mpi_key);
-> =20
->  	ret =3D rsa_parse_priv_key(&raw_key, key, keylen);
-> -	if (ret)
-> -		return ret;
-> +	if (ret) {
-> +		ret =3D rsa_parse_priv_key_raw(&raw_key, key, keylen);
-> +		if (ret)
-> +			return ret;
-> +	}
-> =20
->  	mpi_key->d =3D mpi_read_raw_data(raw_key.d, raw_key.d_sz);
->  	if (!mpi_key->d)
-> diff --git a/crypto/rsa_helper.c b/crypto/rsa_helper.c
-> index 94266f29049c..40a17ebc972f 100644
-> --- a/crypto/rsa_helper.c
-> +++ b/crypto/rsa_helper.c
-> @@ -9,6 +9,7 @@
->  #include <linux/export.h>
->  #include <linux/err.h>
->  #include <linux/fips.h>
-> +#include <linux/mpi.h>
->  #include <crypto/internal/rsa.h>
->  #include "rsapubkey.asn1.h"
->  #include "rsaprivkey.asn1.h"
-> @@ -148,6 +149,42 @@ int rsa_get_qinv(void *context, size_t hdrlen, unsig=
-ned char tag,
->  	return 0;
->  }
-> =20
+On Thu, 2024-09-12 at 09:26 -0400, James Bottomley wrote:
+> On Thu, 2024-09-12 at 16:16 +0300, Jarkko Sakkinen wrote:
+> > On Wed Sep 11, 2024 at 3:21 PM EEST, James Bottomley wrote:
+> > > On Wed, 2024-09-11 at 10:53 +0200, Roberto Sassu wrote:
+> [...]
+> > > > I made few measurements. I have a Fedora 38 VM with TPM
+> > > > passthrough.
+> > > >=20
+> > > > Kernels: 6.11-rc2+ (guest), 6.5.0-45-generic (host)
+> > > >=20
+> > > > QEMU:
+> > > >=20
+> > > > rc=C2=A0 qemu-kvm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1:4.2-
+> > > > 3ubuntu6.27
+> > > > ii=C2=A0 qemu-system-x86=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 1:6.2+dfsg-
+> > > > 2ubuntu6.22
+> > > >=20
+> > > >=20
+> > > > TPM2_PT_MANUFACTURER:
+> > > > =C2=A0 raw: 0x49465800
+> > > > =C2=A0 value: "IFX"
+> > > > TPM2_PT_VENDOR_STRING_1:
+> > > > =C2=A0 raw: 0x534C4239
+> > > > =C2=A0 value: "SLB9"
+> > > > TPM2_PT_VENDOR_STRING_2:
+> > > > =C2=A0 raw: 0x36373000
+> > > > =C2=A0 value: "670"
+> > > >=20
+> > > >=20
+> > > > No HMAC:
+> > > >=20
+> > > > # tracer: function_graph
+> > > > #
+> > > > # CPU=C2=A0 DURATION=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FUNCTION CALLS
+> > > > # |=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0 |
+> > > > =C2=A00)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 tpm2_pcr_extend() {
+> > > > =C2=A00)=C2=A0=C2=A0 1.112 us=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=
+ tpm_buf_append_hmac_session();
+> > > > =C2=A00) # 6360.029 us |=C2=A0=C2=A0=C2=A0 tpm_transmit_cmd();
+> > > > =C2=A00) # 6415.012 us |=C2=A0 }
+> > > >=20
+> > > >=20
+> > > > HMAC:
+> > > >=20
+> > > > # tracer: function_graph
+> > > > #
+> > > > # CPU=C2=A0 DURATION=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FUNCTION CALLS
+> > > > # |=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0 |
+> > > > =C2=A01)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 tpm2_pcr_extend() {
+> > > > =C2=A01)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 tpm2_start_auth_session() {
+> > > > =C2=A01) * 36976.99 us |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm_transmit=
+_cmd();
+> > > > =C2=A01) * 84746.51 us |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm_transmit=
+_cmd();
+> > > > =C2=A01) # 3195.083 us |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm_transmit=
+_cmd();
+> > > > =C2=A01) @ 126795.1 us |=C2=A0=C2=A0=C2=A0 }
+> > > > =C2=A01)=C2=A0=C2=A0 2.254 us=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=
+ tpm_buf_append_hmac_session();
+> > > > =C2=A01)=C2=A0=C2=A0 3.546 us=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=
+ tpm_buf_fill_hmac_session();
+> > > > =C2=A01) * 24356.46 us |=C2=A0=C2=A0=C2=A0 tpm_transmit_cmd();
+> > > > =C2=A01)=C2=A0=C2=A0 3.496 us=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=
+ tpm_buf_check_hmac_response();
+> > > > =C2=A01) @ 151171.0 us |=C2=A0 }
+> > >=20
+> > > Well, unfortunately, that tells us that it's the TPM itself that's
+> > > taking the time processing the security overhead.=C2=A0 The ordering =
+of
+> > > the commands in tpm2_start_auth_session() shows
+> > >=20
+> > > =C2=A037ms for context restore of null key
+> > > =C2=A085ms for start session with encrypted salt
+> > > =C2=A0 3ms to flush null key
+> > > -----
+> > > 125ms
+> > >=20
+> > > If we context save the session, we'd likely only bear a single 37ms
+> > > cost to restore it (replacing the total 125ms).=C2=A0 However, there'=
+s
+> > > nothing we can do about the extend execution going from 6ms to
+> > > 24ms, so I could halve your current boot time with security enabled
+> > > (it's currently 149ms, it would go to 61ms, but it's still 10x
+> > > slower than the unsecured extend at 6ms)
+> > >=20
+> > > James
+> >=20
+> > I'll hold for better benchmarks.
+>=20
+> Well, yes, I'd like to see this for a variety of TPMs.
+>=20
+> This one clearly shows it's the real time wait for the TPM (since it
+> dwarfs the CPU time calculation there's not much optimization we can do
+> on the kernel end).  The one thing that's missing in all of this is
+> what was the TPM?  but even if it's an outlier that's really bad at
+> crypto what should we do?  We could have a blacklist that turns off the
+> extend hmac (or a whitelist that turns it on), but we can't simply say
+> too bad you need a better TPM.
 
-/*
- * Please, document me.
- */
-> +typedef int (*rsa_get_func)(void *, size_t, unsigned char,
-> +			    const void *, size_t);
-> +
-> +static int rsa_parse_key_raw(struct rsa_key *rsa_key,
-> +			     const void *key, unsigned int key_len,
-> +			     rsa_get_func *func, int n_func)
-> +{
-> +	unsigned int nbytes, len =3D key_len;
-> +	const void *key_ptr =3D key;
-> +	int ret, i;
-> +
-> +	for (i =3D 0; i < n_func; i++) {
-> +		if (key_len < 2)
-> +			return -EINVAL;
-> +
-> +		ret =3D mpi_key_length(key_ptr, len, NULL, &nbytes);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		key_ptr +=3D 2;
-> +		key_len -=3D 2;
-> +
-> +		if (key_len < nbytes)
-> +			return -EINVAL;
-> +
-> +		ret =3D func[i](rsa_key, 0, 0, key_ptr, nbytes);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		key_ptr +=3D nbytes;
-> +		key_len -=3D nbytes;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * rsa_parse_pub_key() - decodes the BER encoded buffer and stores in th=
-e
->   *                       provided struct rsa_key, pointers to the raw ke=
-y as is,
-> @@ -157,7 +194,7 @@ int rsa_get_qinv(void *context, size_t hdrlen, unsign=
-ed char tag,
->   * @key:	key in BER format
->   * @key_len:	length of key
->   *
-> - * Return:	0 on success or error code in case of error
-> + * Return:	0 on success or error code in case of error.
->   */
->  int rsa_parse_pub_key(struct rsa_key *rsa_key, const void *key,
->  		      unsigned int key_len)
-> @@ -166,6 +203,27 @@ int rsa_parse_pub_key(struct rsa_key *rsa_key, const=
- void *key,
->  }
->  EXPORT_SYMBOL_GPL(rsa_parse_pub_key);
-> =20
-> +/**
-> + * rsa_parse_pub_key_raw() - parse the RAW key and store in the provided=
- struct
-> + *                           rsa_key, pointers to the raw key as is, so =
-that
-> + *                           the caller can copy it or MPI parse it, etc=
-.
-> + *
-> + * @rsa_key:	struct rsa_key key representation
-> + * @key:	key in RAW format
-> + * @key_len:	length of key
-> + *
-> + * Return:	0 on success or error code in case of error.
-> + */
-> +int rsa_parse_pub_key_raw(struct rsa_key *rsa_key, const void *key,
-> +			  unsigned int key_len)
-> +{
-> +	rsa_get_func pub_func[] =3D {rsa_get_n, rsa_get_e};
-> +
-> +	return rsa_parse_key_raw(rsa_key, key, key_len,
-> +				 pub_func, ARRAY_SIZE(pub_func));
-> +}
-> +EXPORT_SYMBOL_GPL(rsa_parse_pub_key_raw);
-> +
->  /**
->   * rsa_parse_priv_key() - decodes the BER encoded buffer and stores in t=
-he
->   *                        provided struct rsa_key, pointers to the raw k=
-ey
-> @@ -176,7 +234,7 @@ EXPORT_SYMBOL_GPL(rsa_parse_pub_key);
->   * @key:	key in BER format
->   * @key_len:	length of key
->   *
-> - * Return:	0 on success or error code in case of error
-> + * Return:	0 on success or error code in case of error.
->   */
->  int rsa_parse_priv_key(struct rsa_key *rsa_key, const void *key,
->  		       unsigned int key_len)
-> @@ -184,3 +242,24 @@ int rsa_parse_priv_key(struct rsa_key *rsa_key, cons=
-t void *key,
->  	return asn1_ber_decoder(&rsaprivkey_decoder, rsa_key, key, key_len);
->  }
->  EXPORT_SYMBOL_GPL(rsa_parse_priv_key);
-> +
-> +/**
-> + * rsa_parse_priv_key_raw() - parse the RAW key and store in the provide=
-d struct
-> + *                            rsa_key, pointers to the raw key as is, so=
- that
-> + *                            the caller can copy it or MPI parse it, et=
-c.
+Ops, sorry. I pasted the TPM properties. Was not that clear:
 
-This belongs after the parameters, here a one-liner would be a better
-choice:
+Infineon Optiga SLB9670 (interpreting the properties).
 
-https://www.kernel.org/doc/Documentation/kernel-doc-nano-HOWTO.txt
+Roberto
 
-Try to avoid "etc" in documentation because then I have no choice than
-stop reading your documentation and read source code instead.
-
-Just enumerate everything that makes sense, no aim for perfection but
-it is like a stamp that I tried my best, and then we will refine the
-description.
-
-"etc" in the documentation encompasses also all the future changes,
-which does not encourage accuracy :-) Imcompleteness is less of a
-devil than entropy, or at least that is how I weight these matters.
-
-> + *
-> + * @rsa_key:	struct rsa_key key representation
-> + * @key:	key in RAW format
-> + * @key_len:	length of key
-> + *
-> + * Return:	0 on success or error code in case of error.
-> + */
-> +int rsa_parse_priv_key_raw(struct rsa_key *rsa_key, const void *key,
-> +			   unsigned int key_len)
-> +{
-> +	rsa_get_func priv_func[] =3D {rsa_get_n, rsa_get_e, rsa_get_d};
-> +
-> +	return rsa_parse_key_raw(rsa_key, key, key_len,
-> +				 priv_func, ARRAY_SIZE(priv_func));
-> +}
-> +EXPORT_SYMBOL_GPL(rsa_parse_priv_key_raw);
-> diff --git a/include/crypto/internal/rsa.h b/include/crypto/internal/rsa.=
-h
-> index e870133f4b77..7141e806ceea 100644
-> --- a/include/crypto/internal/rsa.h
-> +++ b/include/crypto/internal/rsa.h
-> @@ -50,8 +50,14 @@ struct rsa_key {
->  int rsa_parse_pub_key(struct rsa_key *rsa_key, const void *key,
->  		      unsigned int key_len);
-> =20
-> +int rsa_parse_pub_key_raw(struct rsa_key *rsa_key, const void *key,
-> +			  unsigned int key_len);
-> +
->  int rsa_parse_priv_key(struct rsa_key *rsa_key, const void *key,
->  		       unsigned int key_len);
-> =20
-> +int rsa_parse_priv_key_raw(struct rsa_key *rsa_key, const void *key,
-> +			   unsigned int key_len);
-> +
->  extern struct crypto_template rsa_pkcs1pad_tmpl;
->  #endif
-
-
-BR, Jarkko
 
