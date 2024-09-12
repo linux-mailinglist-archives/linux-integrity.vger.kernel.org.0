@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3544-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3545-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78680976B46
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Sep 2024 15:54:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99A97976B52
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Sep 2024 15:57:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 223C9281619
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Sep 2024 13:54:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C34D1F22AB0
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Sep 2024 13:57:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824821AD258;
-	Thu, 12 Sep 2024 13:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB3E1AB6CB;
+	Thu, 12 Sep 2024 13:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BXHsH5sq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRjZywS+"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509AD1A0BDA;
-	Thu, 12 Sep 2024 13:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8EF17966F;
+	Thu, 12 Sep 2024 13:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726149267; cv=none; b=B3dbDcSc08dp0U5/fXIJFGSvReDLXc/oxSlyYXivobHR001nYvR6Il5f1hXiunxk4OLPU3aFrT+31CABHWftzd3nbEnrfdxKNJLBFkyCSx5G6m0YyBvt31yv9noYZO26WFRBukQ69wwyj1jG9wOrkyxozWDCq+16ue73UtLrk4E=
+	t=1726149458; cv=none; b=g6ia/xLpn3AAt7RfsJc6pXekfBPemGDKHu8BiD6ue2qaejnxS14jDNtzKwXVl7N53yuYmLc/tFyirHYt1eTYteDhj2Kv0/Z+73/DGuZRgX/l+et4leBrpR2s8lr+o/VEyzwa0mdGBe1w4u+Kz3zdzCBwE8P8jY8FtJhUyMMsC7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726149267; c=relaxed/simple;
-	bh=r3e9l6T8+l0GSLZWpkxe5c2KHX2CvPdoVfI+8KICeY0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Jl16s705zF+a56xr9sEeBr7rHuX+6U/KY3Bv/nC6bIBRP+Rjr0UCBTx4dy9hxJD0ISnBCNWyovd5GdWNHu6xEnjKH0ysZUBPmDLMX7mGCy1JVnwyMA1KfsJsH2ESVunG5RrxOEI7wG+wdRSXfWlMcOK/fYwy9J94fkhzLQOY29k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BXHsH5sq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C747C4CEC3;
-	Thu, 12 Sep 2024 13:54:26 +0000 (UTC)
+	s=arc-20240116; t=1726149458; c=relaxed/simple;
+	bh=hpnmLUdj6I9Xqg7VTdRTBOJb3Q4SwLfnBPYrP2ZXgkA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=OrM5t+zHonVkkVB3YhxBzDXncDibH42oouJP7O/pqMEwXbdS1oqKe5u1cL8XSxkzOO3zmZ25qT8jzpbsbSez59tNOZA2lc5QFrQLcT47vvXHo9B84RrSlTEiq1zR+MtoubaC7dhAUXf8HIfqi/OhZO+/ignPnF/bPiSccwBktHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRjZywS+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE00C4CEC3;
+	Thu, 12 Sep 2024 13:57:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726149266;
-	bh=r3e9l6T8+l0GSLZWpkxe5c2KHX2CvPdoVfI+8KICeY0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=BXHsH5sq50sAiYY4pptLoWGINTlNDsTQKD7J0nH4VxKXZuEwPBaNvhBU9omLHjAJP
-	 8TqmLjj53powrk/4bCa0ebQDIR1gPDfVN2z1o44V7M/4TjLBkMoOgTc6tyI3XWmhPN
-	 /h7zVJrRyQQXn1qwj6PXKI5l3r5omeFOWL2z3NbplynT43+J8NBPjfv7Eqh4NI3PIi
-	 2NAk/RHFHMSf65VOTcUBO7Maobf52ICa9Pv+mqFwHixW4fCbUbYXGe/iEFhu56tbxT
-	 EHX4J/wBBbJPMkWZAnlrr0jMiO9KRATHYeXHLWiBW8YbUFePvCMUkDT0E9Qq4JM0B3
-	 GaGA2roasxgIA==
+	s=k20201202; t=1726149457;
+	bh=hpnmLUdj6I9Xqg7VTdRTBOJb3Q4SwLfnBPYrP2ZXgkA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fRjZywS+WodpHyR2ZTTHa1WAmT1D5Gq6+2fkHV8dJHvxt1zPTKdS9h5kyFexLl34J
+	 iwtr2QdqKjiAXhxXeXbigV3e4ByeW+8pT3daWAt7P2O9FMfavgIQHMVzfFdxYEU0xz
+	 Xw+h28VlrlIFHx6zS7eX4sXEP66fBK4VCZIM6Ik/pONtKVEx5nLz9akKbJx1iBpRxH
+	 gqaihUkZltBpowCGUUqvTuQDZeikiwH4RSSeoGZVLljvjKPzNgH87ek8aA91ix2YJH
+	 /6X4jc2olP35HIvUXqCGtQt8ScmSEwiRYbHw2ZR77rPArbk1d2bM3VmoYK1zqyXU/n
+	 6cYvqsKQO1OTQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,283 +49,406 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 12 Sep 2024 16:54:23 +0300
-Message-Id: <D44CUG76DIBS.31UGN7S3KFK74@kernel.org>
+Date: Thu, 12 Sep 2024 16:57:34 +0300
+Message-Id: <D44CWVY4FZ00.2C7VG1HOAMQLD@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, <dhowells@redhat.com>,
+ <dwmw2@infradead.org>, <herbert@gondor.apana.org.au>, <davem@davemloft.net>
 Cc: <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>,
  <linux-crypto@vger.kernel.org>, <zohar@linux.ibm.com>,
  <linux-integrity@vger.kernel.org>, <torvalds@linux-foundation.org>,
  "Roberto Sassu" <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v3 03/14] PGPLIB: PGP definitions (RFC 9580)
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, <dhowells@redhat.com>,
- <dwmw2@infradead.org>, <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+Subject: Re: [PATCH v3 04/14] PGPLIB: Basic packet parser
 X-Mailer: aerc 0.18.2
 References: <20240911122911.1381864-1-roberto.sassu@huaweicloud.com>
- <20240911122911.1381864-4-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20240911122911.1381864-4-roberto.sassu@huaweicloud.com>
+ <20240911122911.1381864-5-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20240911122911.1381864-5-roberto.sassu@huaweicloud.com>
 
 On Wed Sep 11, 2024 at 3:29 PM EEST, Roberto Sassu wrote:
 > From: David Howells <dhowells@redhat.com>
 >
-> Provide some useful PGP definitions from RFC 9580.  These describe detail=
-s
-> of public key crypto as used by crypto keys for things like signature
-> verification.
+> Provide a simple parser that extracts the packets from a PGP packet blob
+> and passes the desirous ones to the given processor function:
+>
+> 	struct pgp_parse_context {
+> 		u64 types_of_interest;
+> 		int (*process_packet)(struct pgp_parse_context *context,
+> 				      enum pgp_packet_tag type,
+> 				      u8 headerlen,
+> 				      const u8 *data,
+> 				      size_t datalen);
+> 	};
+>
+> 	int pgp_parse_packets(const u8 *data, size_t datalen,
+> 			      struct pgp_parse_context *ctx);
+>
+> This is configured on with CONFIG_PGP_LIBRARY.
 >
 > Signed-off-by: David Howells <dhowells@redhat.com>
 > Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
 > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  crypto/asymmetric_keys/pgp.h | 216 +++++++++++++++++++++++++++++++++++
->  1 file changed, 216 insertions(+)
->  create mode 100644 crypto/asymmetric_keys/pgp.h
+>  crypto/asymmetric_keys/Kconfig       |   6 +
+>  crypto/asymmetric_keys/Makefile      |   5 +
+>  crypto/asymmetric_keys/pgp_library.c | 262 +++++++++++++++++++++++++++
+>  crypto/asymmetric_keys/pgplib.h      |  33 ++++
+>  4 files changed, 306 insertions(+)
+>  create mode 100644 crypto/asymmetric_keys/pgp_library.c
+>  create mode 100644 crypto/asymmetric_keys/pgplib.h
 >
-> diff --git a/crypto/asymmetric_keys/pgp.h b/crypto/asymmetric_keys/pgp.h
+> diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kcon=
+fig
+> index e1345b8f39f1..8215e3fcd8db 100644
+> --- a/crypto/asymmetric_keys/Kconfig
+> +++ b/crypto/asymmetric_keys/Kconfig
+> @@ -103,4 +103,10 @@ config FIPS_SIGNATURE_SELFTEST_ECDSA
+>  	depends on CRYPTO_SHA256=3Dy || CRYPTO_SHA256=3DFIPS_SIGNATURE_SELFTEST
+>  	depends on CRYPTO_ECDSA=3Dy || CRYPTO_ECDSA=3DFIPS_SIGNATURE_SELFTEST
+> =20
+> +config PGP_LIBRARY
+> +	tristate "PGP parsing library"
+> +	help
+> +	  This option enables a library that provides a number of simple
+> +	  utility functions for parsing PGP (RFC 9580) packet-based messages.
+> +
+>  endif # ASYMMETRIC_KEY_TYPE
+> diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Mak=
+efile
+> index bc65d3b98dcb..055b28207111 100644
+> --- a/crypto/asymmetric_keys/Makefile
+> +++ b/crypto/asymmetric_keys/Makefile
+> @@ -79,3 +79,8 @@ verify_signed_pefile-y :=3D \
+> =20
+>  $(obj)/mscode_parser.o: $(obj)/mscode.asn1.h $(obj)/mscode.asn1.h
+>  $(obj)/mscode.asn1.o: $(obj)/mscode.asn1.c $(obj)/mscode.asn1.h
+> +
+> +#
+> +# PGP handling
+> +#
+> +obj-$(CONFIG_PGP_LIBRARY) +=3D pgp_library.o
+> diff --git a/crypto/asymmetric_keys/pgp_library.c b/crypto/asymmetric_key=
+s/pgp_library.c
 > new file mode 100644
-> index 000000000000..eaf0ab8e0373
+> index 000000000000..1b87f8af411b
 > --- /dev/null
-> +++ b/crypto/asymmetric_keys/pgp.h
-> @@ -0,0 +1,216 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* PGP definitions (RFC 9580)
+> +++ b/crypto/asymmetric_keys/pgp_library.c
+> @@ -0,0 +1,262 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* PGP packet parser (RFC 9580)
+/*=20
+ * PGP packet parser (RFC 9580)
+
 > + *
 > + * Copyright (C) 2011 Red Hat, Inc. All Rights Reserved.
 > + * Written by David Howells (dhowells@redhat.com)
 > + */
 > +
-> +#include <linux/types.h>
+> +#define pr_fmt(fmt) "PGPL: "fmt
+> +#include <linux/errno.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
 > +
-> +struct pgp_key_ID {
-> +	u8 id[8];
-> +} __packed;
+> +#include "pgplib.h"
 > +
-> +struct pgp_time {
-> +	u8 time[4];
-> +} __packed;
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("PGP library");
 > +
-> +/*
-> + * PGP public-key algorithm identifiers [RFC 9580: 9.1]
+> +const char *const pgp_hash_algorithms[PGP_HASH__LAST] =3D {
+> +	[PGP_HASH_MD5]			=3D "md5",
+> +	[PGP_HASH_SHA1]			=3D "sha1",
+> +	[PGP_HASH_RIPE_MD_160]		=3D "rmd160",
+> +	[PGP_HASH_SHA256]		=3D "sha256",
+> +	[PGP_HASH_SHA384]		=3D "sha384",
+> +	[PGP_HASH_SHA512]		=3D "sha512",
+> +	[PGP_HASH_SHA224]		=3D "sha224",
+> +	[PGP_HASH_SHA3_256]		=3D "sha3-256",
+> +	[PGP_HASH_SHA3_512]		=3D "sha3-512",
+> +};
+> +EXPORT_SYMBOL_GPL(pgp_hash_algorithms);
+> +
+> +/**
+> + * pgp_parse_packet_header - Parse a PGP packet header
+> + * @_data: Start of the PGP packet (updated to PGP packet data)
+> + * @_datalen: Amount of data remaining in buffer (decreased)
+> + * @_type: Where the packet type will be returned
+> + * @_headerlen: Where the header length will be returned
+> + *
+> + * Parse a set of PGP packet header [RFC 9580: 4.2].
+> + *
+> + * Return: Packet data size on success; non-zero on error.  If successfu=
+l,
+> + * *_data and *_datalen will have been updated and *_headerlen will be s=
+et to
+> + * hold the length of the packet header.
+> + */
+> +static ssize_t pgp_parse_packet_header(const u8 **_data, size_t *_datale=
+n,
+> +				       enum pgp_packet_tag *_type,
+> +				       u8 *_headerlen)
+> +{
+> +	enum pgp_packet_tag type;
+> +	const u8 *data =3D *_data;
+> +	size_t size, datalen =3D *_datalen;
 
-Nicely done documentation, which is rare, i.e. tells what the thing is
-and gives an easy to access reference. 0x1F44D for that.
+Move the last declaration as the first declaration, makes more
+readable (reverse christmas tree order).
 
-> + */
-> +enum pgp_pubkey_algo {
-> +	PGP_PUBKEY_RSA_ENC_OR_SIG	=3D 1,
-> +	PGP_PUBKEY_RSA_ENC_ONLY		=3D 2,
-> +	PGP_PUBKEY_RSA_SIG_ONLY		=3D 3,
-> +	PGP_PUBKEY_ELGAMAL		=3D 16,
-> +	PGP_PUBKEY_DSA			=3D 17,
-> +	PGP_PUBKEY_ECDH			=3D 18,
-> +	PGP_PUBKEY_ECDSA		=3D 19,
-> +	PGP_PUBKEY_EDDSA_LEGACY		=3D 22,
-> +	PGP_PUBKEY_X25519		=3D 25,
-> +	PGP_PUBKEY_X448			=3D 26,
-> +	PGP_PUBKEY_ED25519		=3D 27,
-> +	PGP_PUBKEY_ED448		=3D 28,
-> +	PGP_PUBKEY__LAST
-> +};
-> +
-> +/*
-> + * PGP symmetric-key algorithm identifiers [RFC 9580: 9.3]
-> + */
-> +enum pgp_symkey_algo {
-> +	PGP_SYMKEY_PLAINTEXT		=3D 0,
-> +	PGP_SYMKEY_IDEA			=3D 1,
-> +	PGP_SYMKEY_3DES			=3D 2,
-> +	PGP_SYMKEY_CAST5		=3D 3,
-> +	PGP_SYMKEY_BLOWFISH		=3D 4,
-> +	PGP_SYMKEY_AES_128KEY		=3D 7,
-> +	PGP_SYMKEY_AES_192KEY		=3D 8,
-> +	PGP_SYMKEY_AES_256KEY		=3D 9,
-> +	PGP_SYMKEY_TWOFISH_256KEY	=3D 10,
-> +	PGP_SYMKEY_CAMELIA_128KEY	=3D 11,
-> +	PGP_SYMKEY_CAMELIA_192KEY	=3D 12,
-> +	PGP_SYMKEY_CAMELIA_256KEY	=3D 13,
-> +	PGP_SYMKEY__LAST
-> +};
-> +
-> +/*
-> + * PGP compression algorithm identifiers [RFC 9580: 9.4]
-> + */
-> +enum pgp_compr_algo {
-> +	PGP_COMPR_UNCOMPRESSED		=3D 0,
-> +	PGP_COMPR_ZIP			=3D 1,
-> +	PGP_COMPR_ZLIB			=3D 2,
-> +	PGP_COMPR_BZIP2			=3D 3,
-> +	PGP_COMPR__LAST
-> +};
-> +
-> +/*
-> + * PGP hash algorithm identifiers [RFC 9580: 9.4]
-> + */
-> +enum pgp_hash_algo {
-> +	PGP_HASH_MD5			=3D 1,
-> +	PGP_HASH_SHA1			=3D 2,
-> +	PGP_HASH_RIPE_MD_160		=3D 3,
-> +	PGP_HASH_SHA256			=3D 8,
-> +	PGP_HASH_SHA384			=3D 9,
-> +	PGP_HASH_SHA512			=3D 10,
-> +	PGP_HASH_SHA224			=3D 11,
-> +	PGP_HASH_SHA3_256		=3D 12,
-> +	PGP_HASH_SHA3_512		=3D 14,
-> +	PGP_HASH__LAST
-> +};
-> +
+I don't have time to go this patch fully for this round but I
+saw some other similar nits below.
 
-/*
- * doc
- */
-> +extern const char *const pgp_hash_algorithms[PGP_HASH__LAST];
+> +
+> +	pr_devel("-->%s(,%zu,,)\n", __func__, datalen);
+> +
+> +	if (datalen < 2)
+> +		goto short_packet;
+> +
+> +	pr_devel("pkthdr %02x, %02x\n", data[0], data[1]);
+> +
+> +	type =3D *data++;
+> +	datalen--;
+> +	if (!(type & 0x80)) {
+> +		pr_debug("Packet type does not have MSB set\n");
+> +		return -EBADMSG;
+> +	}
+> +	type &=3D ~0x80;
+> +
+> +	if (type & 0x40) {
+> +		/* New packet length format */
+> +		type &=3D ~0x40;
+> +		pr_devel("new format: t=3D%u\n", type);
+> +		switch (data[0]) {
+> +		case 0x00 ... 0xbf:
+> +			/* One-byte length */
+> +			size =3D data[0];
+> +			data++;
+> +			datalen--;
+> +			*_headerlen =3D 2;
+> +			break;
+> +		case 0xc0 ... 0xdf:
+> +			/* Two-byte length */
+> +			if (datalen < 2)
+> +				goto short_packet;
+> +			size =3D (data[0] - 192) * 256;
+> +			size +=3D data[1] + 192;
+> +			data +=3D 2;
+> +			datalen -=3D 2;
+> +			*_headerlen =3D 3;
+> +			break;
+> +		case 0xff:
+> +			/* Five-byte length */
+> +			if (datalen < 5)
+> +				goto short_packet;
+> +			size =3D  data[1] << 24;
+> +			size |=3D data[2] << 16;
+> +			size |=3D data[3] << 8;
+> +			size |=3D data[4];
+> +			data +=3D 5;
+> +			datalen -=3D 5;
+> +			*_headerlen =3D 6;
+> +			break;
+> +		default:
+> +			pr_debug("Partial body length packet not supported\n");
+> +			return -EBADMSG;
+> +		}
+> +	} else {
+> +		/* Old packet length format */
+> +		u8 length_type =3D type & 0x03;
+> +
+> +		type >>=3D 2;
+> +		pr_devel("old format: t=3D%u lt=3D%u\n", type, length_type);
+> +
+> +		switch (length_type) {
+> +		case 0:
+> +			/* One-byte length */
+> +			size =3D data[0];
+> +			data++;
+> +			datalen--;
+> +			*_headerlen =3D 2;
+> +			break;
+> +		case 1:
+> +			/* Two-byte length */
+> +			if (datalen < 2)
+> +				goto short_packet;
+> +			size  =3D data[0] << 8;
+> +			size |=3D data[1];
+> +			data +=3D 2;
+> +			datalen -=3D 2;
+> +			*_headerlen =3D 3;
+> +			break;
+> +		case 2:
+> +			/* Four-byte length */
+> +			if (datalen < 4)
+> +				goto short_packet;
+> +			size  =3D data[0] << 24;
+> +			size |=3D data[1] << 16;
+> +			size |=3D data[2] << 8;
+> +			size |=3D data[3];
+> +			data +=3D 4;
+> +			datalen -=3D 4;
+> +			*_headerlen =3D 5;
+> +			break;
+> +		default:
+> +			pr_debug("Indefinite length packet not supported\n");
+> +			return -EBADMSG;
+> +		}
+> +	}
+> +
+> +	pr_devel("datalen=3D%zu size=3D%zu\n", datalen, size);
+> +	if (datalen < size)
+> +		goto short_packet;
+> +	if (size > INT_MAX)
+> +		goto too_big;
+> +
+> +	*_data =3D data;
+> +	*_datalen =3D datalen;
+> +	*_type =3D type;
+> +	pr_devel("Found packet type=3D%u size=3D%zd\n", type, size);
+> +	return size;
+> +
+> +short_packet:
+> +	pr_debug("Attempt to parse short packet\n");
+> +	return -EBADMSG;
+> +too_big:
+> +	pr_debug("Signature subpacket size >2G\n");
+> +	return -EMSGSIZE;
+> +}
+> +
+> +/**
+> + * pgp_parse_packets - Parse a set of PGP packets
+> + * @data: Data to be parsed (updated)
+> + * @datalen: Amount of data (updated)
+> + * @ctx: Parsing context
+> + *
+> + * Parse a set of PGP packets [RFC 9580: 4].
+> + *
+> + * Return: 0 on successful parsing, a negative value otherwise.
+> + */
+> +int pgp_parse_packets(const u8 *data, size_t datalen,
+> +		      struct pgp_parse_context *ctx)
+> +{
+> +	enum pgp_packet_tag type;
+> +	ssize_t pktlen;
+> +	u8 headerlen;
+> +	int ret;
+> +
+> +	while (datalen > 2) {
+> +		pktlen =3D pgp_parse_packet_header(&data, &datalen, &type,
+> +						 &headerlen);
+> +		if (pktlen < 0)
+> +			return pktlen;
+> +
+> +		if ((ctx->types_of_interest >> type) & 1) {
+> +			ret =3D ctx->process_packet(ctx, type, headerlen,
+> +						  data, pktlen);
+> +			if (ret < 0)
+> +				return ret;
+> +		}
+> +		data +=3D pktlen;
+> +		datalen -=3D pktlen;
+> +	}
+> +
+> +	if (datalen !=3D 0) {
+> +		pr_debug("Excess octets in packet stream\n");
+> +		return -EBADMSG;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pgp_parse_packets);
+> +
+> +/**
+> + * pgp_parse_public_key - Parse the common part of a PGP pubkey packet
+> + * @_data: Content of packet (updated)
+> + * @_datalen: Length of packet remaining (updated)
+> + * @pk: Public key data
+> + *
+> + * Parse the common data struct for a PGP pubkey packet [RFC 9580: 5.5.2=
+].
+> + *
+> + * Return: 0 on successful parsing, a negative value otherwise.
+> + */
+> +int pgp_parse_public_key(const u8 **_data, size_t *_datalen,
+> +			 struct pgp_parse_pubkey *pk)
+> +{
+> +	const u8 *data =3D *_data;
+> +	size_t datalen =3D *_datalen;
+> +	unsigned int tmp;
+> +
+> +	if (datalen < 12) {
+> +		pr_debug("Public key packet too short\n");
+> +		return -EBADMSG;
+> +	}
+> +
+> +	pk->version =3D *data++;
+> +	switch (pk->version) {
+> +	case PGP_KEY_VERSION_4:
+> +		break;
+> +	default:
+> +		pr_debug("Public key packet with unhandled version %d\n",
+> +			 pk->version);
+> +		return -EBADMSG;
+> +	}
+> +
+> +	tmp  =3D *data++ << 24;
+> +	tmp |=3D *data++ << 16;
+> +	tmp |=3D *data++ << 8;
+> +	tmp |=3D *data++;
+> +	pk->creation_time =3D tmp;
+> +	if (pk->version =3D=3D PGP_KEY_VERSION_4)
+> +		pk->expires_at =3D 0; /* Have to get it from the selfsignature */
+> +
+> +	pk->pubkey_algo =3D *data++;
+> +	datalen -=3D 6;
+> +
+> +	pr_devel("%x,%x,%lx,%lx\n",
+> +		 pk->version, pk->pubkey_algo, pk->creation_time,
+> +		 pk->expires_at);
+> +
+> +	*_data =3D data;
+> +	*_datalen =3D datalen;
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pgp_parse_public_key);
+> diff --git a/crypto/asymmetric_keys/pgplib.h b/crypto/asymmetric_keys/pgp=
+lib.h
+> new file mode 100644
+> index 000000000000..3ec4b408a11e
+> --- /dev/null
+> +++ b/crypto/asymmetric_keys/pgplib.h
+> @@ -0,0 +1,33 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* PGP library definitions (RFC 9580)
+> + *
+> + * Copyright (C) 2012 Red Hat, Inc. All Rights Reserved.
+> + * Written by David Howells (dhowells@redhat.com)
+> + */
+> +
+> +#include "pgp.h"
 > +
 > +/*
-> + * PGP packet type tags [RFC 9580: 5].
+> + * PGP library packet parser
 > + */
-> +enum pgp_packet_tag {
-> +	PGP_PKT_RESERVED		=3D 0,
-> +	PGP_PKT_PUBKEY_ENC_SESSION_KEY	=3D 1,
-> +	PGP_PKT_SIGNATURE		=3D 2,
-> +	PGP_PKT_SYMKEY_ENC_SESSION_KEY	=3D 3,
-> +	PGP_PKT_ONEPASS_SIGNATURE	=3D 4,
-> +	PGP_PKT_SECRET_KEY		=3D 5,
-> +	PGP_PKT_PUBLIC_KEY		=3D 6,
-> +	PGP_PKT_SECRET_SUBKEY		=3D 7,
-> +	PGP_PKT_COMPRESSED_DATA		=3D 8,
-> +	PGP_PKT_SYM_ENC_DATA		=3D 9,
-> +	PGP_PKT_MARKER			=3D 10,
-> +	PGP_PKT_LITERAL_DATA		=3D 11,
-> +	PGP_PKT_TRUST			=3D 12,
-> +	PGP_PKT_USER_ID			=3D 13,
-> +	PGP_PKT_PUBLIC_SUBKEY		=3D 14,
-> +	PGP_PKT_USER_ATTRIBUTE		=3D 17,
-> +	PGP_PKT_SYM_ENC_AND_INTEG_DATA	=3D 18,
-> +	PGP_PKT_MODIFY_DETECT_CODE	=3D 19,
-> +	PGP_PKT_PRIVATE_0		=3D 60,
-> +	PGP_PKT_PRIVATE_3		=3D 63,
-> +	PGP_PKT__HIGHEST		=3D 63
+> +struct pgp_parse_context {
+> +	u64 types_of_interest;
+> +	int (*process_packet)(struct pgp_parse_context *context,
+> +			      enum pgp_packet_tag type,
+> +			      u8 headerlen,
+> +			      const u8 *data,
+> +			      size_t datalen);
 > +};
 > +
-> +/*
-> + * Signature (tag 2) packet [RFC 9580: 5.2].
-> + */
-> +enum pgp_signature_version {
-> +	PGP_SIG_VERSION_3			=3D 3,
-> +	PGP_SIG_VERSION_4			=3D 4,
-> +};
+> +extern int pgp_parse_packets(const u8 *data, size_t datalen,
+> +			     struct pgp_parse_context *ctx);
 > +
-> +/*
-> + * Signature types [RFC 9580: 5.2.1].
-> + */
-> +enum pgp_signature_type {
-> +	PGP_SIG_BINARY_DOCUMENT_SIG		=3D 0x00,
-> +	PGP_SIG_CANONICAL_TEXT_DOCUMENT_SIG	=3D 0x01,
-> +	PGP_SIG_STANDALONE_SIG			=3D 0x02,
-> +	PGP_SIG_GENERAL_CERT_OF_UID_PUBKEY	=3D 0x10,
-> +	PGP_SIG_PERSONAL_CERT_OF_UID_PUBKEY	=3D 0x11,
-> +	PGP_SIG_CASUAL_CERT_OF_UID_PUBKEY	=3D 0x12,
-> +	PGP_SIG_POSTITIVE_CERT_OF_UID_PUBKEY	=3D 0x13,
-> +	PGP_SIG_SUBKEY_BINDING_SIG		=3D 0x18,
-> +	PGP_SIG_PRIMARY_KEY_BINDING_SIG		=3D 0x19,
-> +	PGP_SIG_DIRECTLY_ON_KEY			=3D 0x1F,
-> +	PGP_SIG_KEY_REVOCATION_SIG		=3D 0x20,
-> +	PGP_SIG_SUBKEY_REVOCATION_SIG		=3D 0x28,
-> +	PGP_SIG_CERT_REVOCATION_SIG		=3D 0x30,
-> +	PGP_SIG_TIMESTAMP_SIG			=3D 0x40,
-> +	PGP_SIG_THIRD_PARTY_CONFIRM_SIG		=3D 0x50,
-> +};
-> +
-
-/*
- * doc
- */
-> +struct pgp_signature_v3_packet {
-> +	enum pgp_signature_version version : 8; /* =3D=3D PGP_SIG_VERSION_3 */
-> +	u8	length_of_hashed;	/* =3D=3D 5 */
-> +	struct {
-> +		enum pgp_signature_type signature_type : 8;
-> +		struct pgp_time	creation_time;
-> +	} __packed hashed;
-> +	struct pgp_key_ID issuer;
-> +	enum pgp_pubkey_algo pubkey_algo : 8;
-> +	enum pgp_hash_algo hash_algo : 8;
-> +} __packed;
-> +
-
-/*
- * doc
- */
-> +struct pgp_signature_v4_packet {
-> +	enum pgp_signature_version version : 8;	/* =3D=3D PGP_SIG_VERSION_4 */
-> +	enum pgp_signature_type signature_type : 8;
-> +	enum pgp_pubkey_algo pubkey_algo : 8;
-> +	enum pgp_hash_algo hash_algo : 8;
-> +} __packed;
-> +
-> +/*
-> + * V4 signature subpacket types [RFC 9580: 5.2.3.7].
-> + */
-> +enum pgp_sig_subpkt_type {
-> +	PGP_SIG_CREATION_TIME			=3D 2,
-> +	PGP_SIG_EXPIRATION_TIME			=3D 3,
-> +	PGP_SIG_EXPORTABLE_CERT			=3D 4,
-> +	PGP_SIG_TRUST_SIG			=3D 5,
-> +	PGP_SIG_REGEXP				=3D 6,
-> +	PGP_SIG_REVOCABLE			=3D 7,
-> +	PGP_SIG_KEY_EXPIRATION_TIME		=3D 9,
-> +	PGP_SIG_PREF_SYM_ALGO			=3D 11,
-> +	PGP_SIG_REVOCATION_KEY			=3D 12,
-> +	PGP_SIG_ISSUER				=3D 16,
-> +	PGP_SIG_NOTATION_DATA			=3D 20,
-> +	PGP_SIG_PREF_HASH_ALGO			=3D 21,
-> +	PGP_SIG_PREF_COMPR_ALGO			=3D 22,
-> +	PGP_SIG_KEY_SERVER_PREFS		=3D 23,
-> +	PGP_SIG_PREF_KEY_SERVER			=3D 24,
-> +	PGP_SIG_PRIMARY_USER_ID			=3D 25,
-> +	PGP_SIG_POLICY_URI			=3D 26,
-> +	PGP_SIG_KEY_FLAGS			=3D 27,
-> +	PGP_SIG_SIGNERS_USER_ID			=3D 28,
-> +	PGP_SIG_REASON_FOR_REVOCATION		=3D 29,
-> +	PGP_SIG_FEATURES			=3D 30,
-> +	PGP_SIG_TARGET				=3D 31,
-> +	PGP_SIG_EMBEDDED_SIG			=3D 32,
-> +	PGP_SIG_ISSUER_FINGERPRINT		=3D 33,
-> +	PGP_SIG_INTENDED_RECIPIENT_FINGERPRINT	=3D 35,
-> +	PGP_SIG_PREFERRED_AEAD_CIPHERS		=3D 39,
-> +	PGP_SIG__LAST
-> +};
-> +
-
-/*
- * Documentation what is the critical mask.
- */
-> +#define PGP_SIG_SUBPKT_TYPE_CRITICAL_MASK	0x80
-> +
-> +/*
-> + * Key (tag 5, 6, 7 and 14) packet
-> + */
-> +enum pgp_key_version {
-> +	PGP_KEY_VERSION_4			=3D 4,
-> +};
-> +
-
-/*
- * doc
- */
-> +struct pgp_key_v4_packet {
+> +struct pgp_parse_pubkey {
 > +	enum pgp_key_version version : 8;
-> +	struct pgp_time	creation_time;
 > +	enum pgp_pubkey_algo pubkey_algo : 8;
-> +	u8 key_material[];
-> +} __packed;
-> +
-> +/*
-> + * Literal Data (tag 11) packet
-> + */
-> +enum pgp_literal_data_format {
-> +	PGP_LIT_FORMAT_BINARY			=3D 0x62,
-> +	PGP_LIT_FORMAT_TEXT			=3D 0x74,
-> +	PGP_LIT_FORMAT_TEXT_UTF8		=3D 0x75,
+> +	__kernel_old_time_t creation_time;
+> +	__kernel_old_time_t expires_at;
 > +};
+> +
+> +extern int pgp_parse_public_key(const u8 **_data, size_t *_datalen,
+> +				struct pgp_parse_pubkey *pk);
 
 
 BR, Jarkko
