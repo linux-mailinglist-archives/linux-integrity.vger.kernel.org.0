@@ -1,137 +1,128 @@
-Return-Path: <linux-integrity+bounces-3555-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3556-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2620977C3B
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2024 11:33:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AC02977DD5
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2024 12:40:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68D22289297
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2024 09:33:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5E421F216CE
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Sep 2024 10:40:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5CEF1D6DD1;
-	Fri, 13 Sep 2024 09:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JDGwmVaf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E28B1D86C2;
+	Fri, 13 Sep 2024 10:39:41 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1964B1D6C53
-	for <linux-integrity@vger.kernel.org>; Fri, 13 Sep 2024 09:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A16914A4FB
+	for <linux-integrity@vger.kernel.org>; Fri, 13 Sep 2024 10:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726219966; cv=none; b=q9ROYhEilkVNB/EQCxGVs5OMbQK0zDR6A8Qn1IXWnpi5YCuQIDXSjaOwn3ziZWVdODcPgSg2nKtmq8+/MJ16ulQBsGqH/GmNW4dsF2qj2LEGb1A0W8pYmQXbQ2ATb4UlZL2sWJPhylRxR+GcZPB7ZmGgVpZgIF8bDEx6qGpAlVI=
+	t=1726223981; cv=none; b=LqVGrIzScYwGfOC1s2vpoYqWInxswD4E8+lqYJxJ0BZr3OgnDR1b5fH/MOfItang9po4JNEOJbMIS96Gmgwkhf3cWL61wgp6Od8v45ccwvCBvXMW3WngeHei9K2LRMW1lsR7FCxv+K/jnFMe7DDlMAq63y4tZtxkNir375e3AMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726219966; c=relaxed/simple;
-	bh=4O2NPtM1NLF8/x7jRBau7jSt45OgkOZjXoYGaAykKhw=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=XQT8T038xQsnzmSLBKtD/pM+FcQJHFb5b/F/+qsWbTotYr65cY6VwWU9/HkUvJkeDHOjz1fKGj+AG4gBtfgpN7yfkYm9z3Qg0uleW2IydDXP1MQ20Nt7or0Lj8OMkzddbcGSz+SBD7KNdRCkxVlVoXxya3/Qqw9kSAMsre0eDGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JDGwmVaf; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1726219964;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pKVcQh0mMWfw7YNLqAXgPrezuHhuotyVKCaDrGzitZI=;
-	b=JDGwmVafUFOqJCXOPKdTQkrl0HmDuIAJ8R64jy4ZSZDw4/xbwBtwfxzUGjxtDC9X+8bVXH
-	fWNMO8Wzgt5ObwcQoAfCXQgV5UAGkwA2BrYc1OLouWFpRsY15ZyKBWijySd2Ndn/cwWBXK
-	IzN8MFSa5HjxPrMMfRrkXU0aOUJcWP0=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-70-lLH3y46ROHGoR321_9vN-A-1; Fri,
- 13 Sep 2024 05:32:38 -0400
-X-MC-Unique: lLH3y46ROHGoR321_9vN-A-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EA49D19560AB;
-	Fri, 13 Sep 2024 09:32:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D2B8C1956086;
-	Fri, 13 Sep 2024 09:32:31 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <ZuPDZL_EIoS60L1a@gondor.apana.org.au>
-References: <ZuPDZL_EIoS60L1a@gondor.apana.org.au>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: dhowells@redhat.com, Roberto Sassu <roberto.sassu@huaweicloud.com>,
-    dwmw2@infradead.org, davem@davemloft.net,
-    linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-    linux-crypto@vger.kernel.org, zohar@linux.ibm.com,
-    linux-integrity@vger.kernel.org, torvalds@linux-foundation.org,
-    roberto.sassu@huawei.com
-Subject: Re: [PATCH v3 00/14] KEYS: Add support for PGP keys and signatures
+	s=arc-20240116; t=1726223981; c=relaxed/simple;
+	bh=FeAp3pV84CzFfdmT3VZoKVKNHsnGG3F/cAqPbXXePqc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=PMcoAkUBCPIhma2lJ8qSLFAnVFPSl3ZekqRuJwSxiGh6DeYEMp3f/w3t3MUBaJ2Dfia+EH1iTqkpoKcvtE1raBo05pas7UKI73cWFUxeVG5cIqGKmbfXmLLOrW3mT1vHQpb1xWg1Cn1UEH/h+PlEEOdP6iwR9MYsYN55/CAh9QM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4X4r0Q1WQLz9v7NM
+	for <linux-integrity@vger.kernel.org>; Fri, 13 Sep 2024 18:20:06 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 3509B140451
+	for <linux-integrity@vger.kernel.org>; Fri, 13 Sep 2024 18:39:29 +0800 (CST)
+Received: from [10.221.99.168] (unknown [10.221.99.168])
+	by APP2 (Coremail) with SMTP id GxC2BwBXBsdXFuRmKR7XAA--.10238S2;
+	Fri, 13 Sep 2024 11:39:27 +0100 (CET)
+Message-ID: <f5ce940c-eaef-49d9-8c16-a41324b1fb2e@huaweicloud.com>
+Date: Fri, 13 Sep 2024 12:39:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1266434.1726219950.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 13 Sep 2024 10:32:30 +0100
-Message-ID: <1266435.1726219950@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+User-Agent: Mozilla Thunderbird
+Subject: Re: CFP for the containers and checkpoint-restore micro-conference at
+ LPC 2024 mailing/containers
+To: =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@stgraber.org>,
+ containers@lists.linux.dev
+References: <CA+enf=tZs+B0OscmvyurqXjLwvwjhV7rZQ9-Rfi16BqAwUN6Cg@mail.gmail.com>
+Content-Language: en-GB
+Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
+ Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
+ James.Bottomley@HansenPartnership.com, brauner@kernel.org
+From: Enrico Bravi <enrico.bravi@huaweicloud.com>
+In-Reply-To: <CA+enf=tZs+B0OscmvyurqXjLwvwjhV7rZQ9-Rfi16BqAwUN6Cg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwBXBsdXFuRmKR7XAA--.10238S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFW8uw48Zw43Jr1fJry7ZFb_yoW8Cr4UpF
+	Wjk3WFkw1Utw1fAw4kuF18ArWYkrWfWrW5A3s8G34rAFs8WasF9rySyFWY9Fy5GrWkJw43
+	XFWYv3Z8Xa4DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUymb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UK2NtUUUUU=
+X-CM-SenderInfo: 5hquxuvroe2ttyl6x35dzhxuhorxvhhfrp/
 
-Herbert Xu <herbert@gondor.apana.org.au> wrote:
+On 6/6/2024 11:11 PM, Stéphane Graber wrote:
+> Hello,
+> 
+> We're going to have the usual containers and checkpoint/restore
+> micro-conference at this year's edition of the Linux Plumbers
+> Conference.
+> This is going to be in Vienna, Austria between September 18th and 20th 2024.
+> 
+> Registration is open already and as a reminder, getting accepted as a
+> presenter in a micro-conference does not provide you with a ticket.
+> Everyone who plans on attending, whether in-person or remotely should
+> register now (early bird price until August 2nd).
+> Registration: https://lpc.events/event/18/page/226-attend
+> 
+> Back to our micro-conference, the CFP is now open and will be closing
+> on July 15th!
+> Topics of interest are anything that's related to containers,
+> namespaces, cgroups, ... whether in kernel land or userspace as well
+> as anything that's related to the ability to checkpoint and restore
+> processes.
+> 
+> Full CFP: https://discuss.linuxcontainers.org/t/containers-and-checkpoint-restore-micro-conference-at-lpc-2024/20131
+> Submission link: https://lpc.events/event/18/abstracts/
 
-> Personally I don't think the argument above holds water.  With
-> IPsec we had a similar issue of authenticating untrusted peers
-> using public key cryptography.  In that case we successfully
-> delegated the task to user-space and it is still how it works
-> to this day.
+Hi Stéphane, all,
 
-It transpires that we do actually need at least a PGP parser in the kernel=
- -
-and it needs to be used prior to loading any modules: some Lenovo Thinkpad=
-s,
-at least, may have EFI variables holding a list of keys in PGP form, not X=
-.509
-form.
+Roberto and I are also planning to go the LPC. In the last months we had some 
+thoughts on the IMA namespace and, if possible, we would like to share them with 
+you in a presentation.
 
-For example, in dmesg, you might see:
+Title: IMA Namespace Best for Container Integrity?
 
-May 16 04:01:01 localhost kernel: integrity: Loading X.509 certificate: UE=
-FI:MokListRT (MOKvar table)
-May 16 04:01:01 localhost kernel: integrity: Problem loading X.509 certifi=
-cate -126
+Abstract:
 
-On my laptop, if I dump this variable:
+The IMA namespace has been proposed a while ago but, despite many attempts at 
+addressing maintainers' concerns, it didn't get upstreamed yet. Our work tries 
+to determine if the IMA namespace fulfils the integrity requirements we 
+initially defined, and proposes a few suggestions on how to improve it.
 
-	efivar -e /tmp/q --name=3D605dab50-e046-4300-abb6-3dd810dd8b23-MokListRT
+Would it be possible to present it at the end of the main conference, as a BoF?
 
-And then looking at the data exported:
+Thank you and see you in Vienna!
 
-	file /tmp/q
+Best regards,
 
-I see:
-
-	/tmp/q: PGP Secret Sub-key -
-
-The kernel doesn't currently have a PGP parser.  I've checked and the valu=
-e
-doesn't parse as ASN.1:
-
-	openssl asn1parse -in /tmp/q -inform DER
-	    0:d=3D0  hl=3D2 l=3D  21 prim: cont [ 23 ]       =
-
-	Error in encoding
-	001EBA93B67F0000:error:0680007B:asn1 encoding routines:ASN1_get_object:he=
-ader too long:crypto/asn1/asn1_lib.c:105:
-
-which would suggest that it isn't X.509.
-
-David
+Enrico
 
 
