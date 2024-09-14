@@ -1,214 +1,308 @@
-Return-Path: <linux-integrity+bounces-3581-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3582-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71302978D32
-	for <lists+linux-integrity@lfdr.de>; Sat, 14 Sep 2024 05:57:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B90EF97900B
+	for <lists+linux-integrity@lfdr.de>; Sat, 14 Sep 2024 12:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D74D1F24368
-	for <lists+linux-integrity@lfdr.de>; Sat, 14 Sep 2024 03:57:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DE3C284E0A
+	for <lists+linux-integrity@lfdr.de>; Sat, 14 Sep 2024 10:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6DC17BA2;
-	Sat, 14 Sep 2024 03:57:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0BE1CEAC3;
+	Sat, 14 Sep 2024 10:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b="vR7au40n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sd6HR18M"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8257D1758B
-	for <linux-integrity@vger.kernel.org>; Sat, 14 Sep 2024 03:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61671CDA1E;
+	Sat, 14 Sep 2024 10:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726286261; cv=none; b=A9OMfJshJsddDxCa0ociv1VWbXMp+aE/+7w5Z5GQKMwNWpWmdBM/95QdwM+eLB7Ey9PQB0L5A5Q/Qt+l5rc9pMiUUfFA4Ougn10eo8i8EgUqfgj33mtekZ3Ocw2E2mkjJ2tBPRRr0cmWGqPsS8kTvD4W+5bD0b2Y07F4arua5zo=
+	t=1726310542; cv=none; b=DErjJbJIlvesbGeY+rWQPQVQ7r1+0DQDsbX0Str/8T6HhSnniYHXeQ2UzsjU8bIJn5Xc4vCZjAfNKglH53JTGYEPhDzUnaa0/db87M4lXerU2U+BLoU2VZu8i/YO9pSKrrWmUHpAWPXJ2UcK3eKI39rAuGIj+RR072vUDKnUJCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726286261; c=relaxed/simple;
-	bh=aRgmPo7f3AmEdTXRKPcw6X/eIdDGPE6hhYHHXau80y0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dQ8AxnSXqTgLYGIBQmx1pAGJPqbmctEDzxRCbVFZneLhjZZuydJs4rnqBs7yhPjxWkCoUaN8ZOXkq6Zjri+XOkuUWQt1H8Uco5XZ/U1mXzoN+4HnAKhMJG+6wCQUgo3eXRy9fK3pSzDv02h+6lZH+f3Mxn1dDFtIhX0cgCoh0Pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b=vR7au40n; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a83562f9be9so301815266b.0
-        for <linux-integrity@vger.kernel.org>; Fri, 13 Sep 2024 20:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20230601.gappssmtp.com; s=20230601; t=1726286255; x=1726891055; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=frVOq4/VrOFSBx4qkzHXmRGBdSpABDY2CbvRjZSeHl4=;
-        b=vR7au40nmoUd/bkD7oG92swR6jeZzYrEWFeuOpib874KEJjSh8Gd7DVfXzyI4HBdBg
-         bzafgWsfDS3ZzMkRVJwfSWZKx5EvsyhsNcCGZZPKynmy08389hcSYbXNvpW5vZEx3p+A
-         Q+rQ/+kQQ/dRqtsCtVPbmsam00uJsXdRIDe5KwOPA3/VwNLbV1wKxIqKUL9dgJrERAXR
-         M9VwXlGTgOugrKPh/BFsL0ip6wGbXni7FGxRgg6Y2Y1+zMYxdHU1EZfrmNbAxBfAmdFI
-         DOCu1YHaTn4ycrXnQGWwrIphBSklLaK0mu1TixbHgLkNub9pdCqyhmqDqD4t1bKgVCEN
-         uexg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726286255; x=1726891055;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=frVOq4/VrOFSBx4qkzHXmRGBdSpABDY2CbvRjZSeHl4=;
-        b=aAwXoyMzVHtFU91nWu8EpoomHGLvTQJpNFC9qhID350FORsF4v+sPlZD+8emT5604t
-         Wq8pyNOOgBJWZT8ZqHcluYfTFUIHnIyz+hB+koiyu0Ea8Uf3ok0nwrOpLwEdwRilhXEy
-         rSqXFW6dQemJHfsHa7rCRDN9MWunxRzgySlHELwZBahvxUEcCpU0RWDhQLVxiu9XMlUl
-         JidVFitJWl900dDh/oqf25hp5b/jjlecuU2EgIKJyIt2BLrzgnopTX0fGisC9DOvX+1H
-         IUYA+7vlqSW1O02oGavC4PvkIgeAz2Mw8BN+A4idHZFA3QqJTFDZPUb1gSP+d4UoRsT2
-         HTLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUN9jilVXBi496SFr21vWlPLQYh4qBY4URhileaAkqRIF5bLDjX/Z7Y7dG9Dy8vpOajoKlEeaiX7Lvw4sk2OHk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvFUy+5S+NGwnyfdIvZ9RK9ScW3qaOZNsSVFKcPsRYwM/X1jQc
-	r4O9E7iBIqsD3VhmNLX1YnHs9Yc1U9ZMZ+imtQzHFizdMqTmetiJ1mTpRQFHnN6ZcmENMmcnwtg
-	embY8I+E12sA8ldWO4x7BCvbIYWmzxzKbRa69
-X-Google-Smtp-Source: AGHT+IFF2MbJ6XCRo0MrZkYw3trl3AWEems+cbTpyeTHsgyTn4kgHQumH79FhKTJSbYKsaxyQDqJvjTVXWhQXbeHEQ0=
-X-Received: by 2002:a17:907:e2a5:b0:a8a:926a:d012 with SMTP id
- a640c23a62f3a-a9029490673mr781104466b.26.1726286254571; Fri, 13 Sep 2024
- 20:57:34 -0700 (PDT)
+	s=arc-20240116; t=1726310542; c=relaxed/simple;
+	bh=aWMHIiSHiMRxPm0F/dSWHOU3B9Te3WROyoHtHtUHIA8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Deqgq9cd39s0N7yRckuORMMHGD37zhF0QTN6Q2EzoDVzBg4886KKCfrf8UmkzdZm6xM07hjQh4NZ4nwT+EtIVetjWuZkdvzlsxO3/B2GFX5FhHd2/W7cwkIe8RweUK8sQCjGADP7MpuxrUov09fG7sTaMQrdosiTmxzDL8x3Sdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sd6HR18M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6126C4CEC0;
+	Sat, 14 Sep 2024 10:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726310542;
+	bh=aWMHIiSHiMRxPm0F/dSWHOU3B9Te3WROyoHtHtUHIA8=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=sd6HR18MNpAp99VPF6PDngPx3Wo4xHueOBZFNVpFtq06CiriLkvzDDDPovjsjUqwP
+	 gTbrW0OW92VP5zzeY5jui+HVkSVR6ZkDNUHTgpOF25tL5g2YzxJeog/Wh1HjFBUnQW
+	 AAZxNWxMTm2RLkChUrIpfJBztJ1L3NxrBudc2/mEcnPEF+nz4outlHlI5y9nUsy1sg
+	 qs6A2nnlO6nMvXh+8X5/gTU9QhxbombTCWqjEzArXJPAwZ9LDnJ5RL6yVn5wNWt5UN
+	 dADf8GtvssnrQ5rls9Dovbm0fsY44QJ6PchJPvkOay3eue2TmbGyevy34A5sFtA3by
+	 gGdbK1TO8CWkw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240531010331.134441-1-ross.philipson@oracle.com>
- <20240531010331.134441-7-ross.philipson@oracle.com> <20240531021656.GA1502@sol.localdomain>
- <874jaegk8i.fsf@email.froward.int.ebiederm.org> <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
- <87ttflli09.ffs@tglx> <CALCETrXQ7rChWLDqTG0+KY7rsfajSPguMnHO1G4VJi_mgwN9Zw@mail.gmail.com>
- <1a1f0c41-70de-4f46-b91d-6dc7176893ee@apertussolutions.com> <8a0b59a4-a5a2-42ae-bc1c-1ddc8f2aad16@apertussolutions.com>
-In-Reply-To: <8a0b59a4-a5a2-42ae-bc1c-1ddc8f2aad16@apertussolutions.com>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Fri, 13 Sep 2024 20:57:23 -0700
-Message-ID: <CALCETrX8caT5qvCUu24hQfxUF_wUC2XdGpS2YFP6SR++7FiM3Q@mail.gmail.com>
-Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
- early measurements
-To: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, "Eric W. Biederman" <ebiederm@xmission.com>, 
-	Eric Biggers <ebiggers@kernel.org>, Ross Philipson <ross.philipson@oracle.com>, 
-	linux-kernel@vger.kernel.org, x86@kernel.org, linux-integrity@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-efi@vger.kernel.org, 
-	iommu@lists.linux-foundation.org, mingo@redhat.com, bp@alien8.de, 
-	hpa@zytor.com, dave.hansen@linux.intel.com, ardb@kernel.org, 
-	mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, 
-	jarkko@kernel.org, jgg@ziepe.ca, nivedita@alum.mit.edu, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net, 
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com, 
-	andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 14 Sep 2024 13:42:18 +0300
+Message-Id: <D45Y0H3JRIJE.3LIRI1PEDTJE3@kernel.org>
+Cc: <keyrings@vger.kernel.org>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>,
+ "Pengyu Ma" <mapengyu@gmail.com>
+Subject: Re: [regression] significant delays when secureboot is enabled
+ since 6.10
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>, "Roberto
+ Sassu" <roberto.sassu@huaweicloud.com>, "Linux regressions mailing list"
+ <regressions@lists.linux.dev>
+X-Mailer: aerc 0.18.2
+References: <0b4a5a86-a9f6-42d1-a9ba-ec565b336d3a@leemhuis.info>
+ <92fbcc4c252ec9070d71a6c7d4f1d196ec67eeb0.camel@huaweicloud.com>
+ <D42LZPLE8HR3.2UTNOI9CYZPIR@kernel.org>
+ <D42M6OE94RLT.6EZSZLBTX437@kernel.org>
+ <663d272617d1aead08077ad2b72929cbc226372a.camel@HansenPartnership.com>
+ <D42N17MFTEDM.3E6IK034S26UT@kernel.org>
+ <f554031343039883068145f9f4777277e490dc05.camel@huaweicloud.com>
+ <10ae7b8592af7bacef87e493e6d628a027641b8d.camel@HansenPartnership.com>
+In-Reply-To: <10ae7b8592af7bacef87e493e6d628a027641b8d.camel@HansenPartnership.com>
 
-On Thu, Sep 12, 2024 at 5:34=E2=80=AFPM Daniel P. Smith
-<dpsmith@apertussolutions.com> wrote:
+On Wed Sep 11, 2024 at 3:21 PM EEST, James Bottomley wrote:
+> On Wed, 2024-09-11 at 10:53 +0200, Roberto Sassu wrote:
+> > On Tue, 2024-09-10 at 16:28 +0300, Jarkko Sakkinen wrote:
+> > > On Tue Sep 10, 2024 at 3:57 PM EEST, James Bottomley wrote:
+> > > > On Tue, 2024-09-10 at 15:48 +0300, Jarkko Sakkinen wrote:
+> > > > > On Tue Sep 10, 2024 at 3:39 PM EEST, Jarkko Sakkinen wrote:
+> > > > > > On Tue Sep 10, 2024 at 12:05 PM EEST, Roberto Sassu wrote:
+> > > > > > > On Tue, 2024-09-10 at 11:01 +0200, Linux regression
+> > > > > > > tracking
+> > > > > > > (Thorsten
+> > > > > > > Leemhuis) wrote:
+> > > > > > > > Hi, Thorsten here, the Linux kernel's regression tracker.
+> > > > > > > >=20
+> > > > > > > > James, Jarkoo, I noticed a report about a regression in
+> > > > > > > > bugzilla.kernel.org that appears to be caused by this
+> > > > > > > > change of
+> > > > > > > > yours:
+> > > > > > > >=20
+> > > > > > > > 6519fea6fd372b ("tpm: add hmac checks to
+> > > > > > > > tpm2_pcr_extend()")
+> > > > > > > > [v6.10-rc1]
+> > > > > > > >=20
+> > > > > > > > As many (most?) kernel developers don't keep an eye on
+> > > > > > > > the bug
+> > > > > > > > tracker,
+> > > > > > > > I decided to forward it by mail. To quote from
+> > > > > > > > https://bugzilla.kernel.org/show_bug.cgi?id=3D219229=C2=A0:
+> > > > > > > >=20
+> > > > > > > > > When secureboot is enabled,
+> > > > > > > > > the kernel boot time is ~20 seconds after 6.10 kernel.
+> > > > > > > > > it's ~7 seconds on 6.8 kernel version.
+> > > > > > > > >=20
+> > > > > > > > > When secureboot is disabled,
+> > > > > > > > > the boot time is ~7 seconds too.
+> > > > > > > > >=20
+> > > > > > > > > Reproduced on both AMD and Intel platform on ThinkPad
+> > > > > > > > > X1 and
+> > > > > > > > > T14.
+> > > > > > > > >=20
+> > > > > > > > > It probably caused autologin failure and micmute led
+> > > > > > > > > not
+> > > > > > > > > loaded on AMD platform.
+> > > > > > > >=20
+> > > > > > > > It was later bisected to the change mentioned above. See
+> > > > > > > > the
+> > > > > > > > ticket for
+> > > > > > > > more details.
+> > > > > > >=20
+> > > > > > > Hi
+> > > > > > >=20
+> > > > > > > I suspect I encountered the same problem:
+> > > > > > >=20
+> > > > > > > https://lore.kernel.org/linux-integrity/b8a7b3566e6014ba102ab=
+98e10ede0d574d8930e.camel@huaweicloud.com/
+> > > > > > >=20
+> > > > > > > Going to provide more info there.
+> > > > > >=20
+> > > > > > I suppose you are going try to acquire the tracing data I
+> > > > > > asked?
+> > > > > > That would be awesome, thanks for taking the troube.=C2=A0 Let'=
+s
+> > > > > > look
+> > > > > > at the data and draw conclusions based on that.
+> > > > > >=20
+> > > > > > Workaround is pretty simple: CONFIG_TCG_TPM2_HMAC=3Dn to the
+> > > > > > kernel
+> > > > > > configuration disables the feature.
+> > > > > >=20
+> > > > > > For making decisions what to do with the=C2=A0 we are talking
+> > > > > > about ~2
+> > > > > > week window estimated, given the Vienna conference slows
+> > > > > > things
+> > > > > > down, so I hope my workaround is good enough before that.
+> > > > >=20
+> > > > > I can enumerate three most likely ways to address the issue:
+> > > > >=20
+> > > > > 1. Strongest: drop from defconfig.
+> > > > > 2. Medium: leave to defconfig but add an opt-in kernel command-
+> > > > > line
+> > > > > =C2=A0=C2=A0 parameter.
+> > > > > 3. Lightest: if we can based on tracing data nail the
+> > > > > regression in
+> > > > > =C2=A0=C2=A0 sustainable schedule, fix it.
+> > > >=20
+> > > > Actually, there's a fourth: not use sessions for the PCR extend
+> > > > (if
+> > > > we'd got the timings when I asked, this was going to be my
+> > > > suggestion
+> > > > if they came back problematic).=C2=A0 This seems only to be a probl=
+em
+> > > > for
+> > > > IMA measured boot (because it does lots of extends).=C2=A0 If
+> > > > necessary this
+> > > > could even be wrapped in a separate config or boot option that
+> > > > only
+> > > > disables HMAC on extend if IMA (so we still get security for
+> > > > things
+> > > > like sd-boot)
+> > >=20
+> > > I can buy that but with a twist that make it an opt-in kernel
+> > > command
+> > > line option. We don't want to take already existing functionality
+> > > away
+> > > from those who might want to use it (given e.g. hardening
+> > > requirements),
+> > > and with that basis opt-in (by default disabled) would be more
+> > > balanced
+> > > way to address the issue.
+> > >=20
+> > > Please do a send a patch!
+> >=20
+> > I made few measurements. I have a Fedora 38 VM with TPM passthrough.
+> >=20
+> > Kernels: 6.11-rc2+ (guest), 6.5.0-45-generic (host)
+> >=20
+> > QEMU:
+> >=20
+> > rc=C2=A0 qemu-kvm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1:4.2-
+> > 3ubuntu6.27
+> > ii=C2=A0 qemu-system-x86=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 1:6.2+dfsg-
+> > 2ubuntu6.22
+> >=20
+> >=20
+> > TPM2_PT_MANUFACTURER:
+> > =C2=A0 raw: 0x49465800
+> > =C2=A0 value: "IFX"
+> > TPM2_PT_VENDOR_STRING_1:
+> > =C2=A0 raw: 0x534C4239
+> > =C2=A0 value: "SLB9"
+> > TPM2_PT_VENDOR_STRING_2:
+> > =C2=A0 raw: 0x36373000
+> > =C2=A0 value: "670"
+> >=20
+> >=20
+> > No HMAC:
+> >=20
+> > # tracer: function_graph
+> > #
+> > # CPU=C2=A0 DURATION=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FUNCTION CALLS
+> > # |=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0 |
+> > =C2=A00)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 tpm2_pcr_extend() {
+> > =C2=A00)=C2=A0=C2=A0 1.112 us=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 tpm=
+_buf_append_hmac_session();
+> > =C2=A00) # 6360.029 us |=C2=A0=C2=A0=C2=A0 tpm_transmit_cmd();
+> > =C2=A00) # 6415.012 us |=C2=A0 }
+> >=20
+> >=20
+> > HMAC:
+> >=20
+> > # tracer: function_graph
+> > #
+> > # CPU=C2=A0 DURATION=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 FUNCTION CALLS
+> > # |=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0 |=C2=A0=C2=A0 |
+> > =C2=A01)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 tpm2_pcr_extend() {
+> > =C2=A01)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 tpm2_start_auth_session() {
+> > =C2=A01) * 36976.99 us |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm_transmit_cmd=
+();
+> > =C2=A01) * 84746.51 us |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm_transmit_cmd=
+();
+> > =C2=A01) # 3195.083 us |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm_transmit_cmd=
+();
+> > =C2=A01) @ 126795.1 us |=C2=A0=C2=A0=C2=A0 }
+> > =C2=A01)=C2=A0=C2=A0 2.254 us=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 tpm=
+_buf_append_hmac_session();
+> > =C2=A01)=C2=A0=C2=A0 3.546 us=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 tpm=
+_buf_fill_hmac_session();
+> > =C2=A01) * 24356.46 us |=C2=A0=C2=A0=C2=A0 tpm_transmit_cmd();
+> > =C2=A01)=C2=A0=C2=A0 3.496 us=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 tpm=
+_buf_check_hmac_response();
+> > =C2=A01) @ 151171.0 us |=C2=A0 }
 >
-> Hey again,
+> Well, unfortunately, that tells us that it's the TPM itself that's
+> taking the time processing the security overhead.  The ordering of the
+> commands in tpm2_start_auth_session() shows
 >
-> On 9/4/24 21:01, Daniel P. Smith wrote:
-> > Hi Luto.
-> >
-> > On 8/28/24 23:17, Andy Lutomirski wrote:
-> >> On Thu, Aug 15, 2024 at 12:10=E2=80=AFPM Thomas Gleixner <tglx@linutro=
-nix.de>
-> >> wrote:
-> >>>
-> >>> On Thu, Aug 15 2024 at 13:38, Daniel P. Smith wrote:
-> >>>> On 5/31/24 09:54, Eric W. Biederman wrote:
-> >>>>> Eric Biggers <ebiggers@kernel.org> writes:
-> >>>>>> That paragraph is also phrased as a hypothetical, "Even if we'd
-> >>>>>> prefer to use
-> >>>>>> SHA-256-only".  That implies that you do not, in fact, prefer
-> >>>>>> SHA-256 only.  Is
-> >>>>>> that the case?  Sure, maybe there are situations where you *have*
-> >>>>>> to use SHA-1,
-> >>>>>> but why would you not at least *prefer* SHA-256?
-> >>>>>
-> >>>>> Yes.  Please prefer to use SHA-256.
-> >>>>>
-> >>>>> Have you considered implementing I think it is SHA1-DC (as git has)
-> >>>>> that
-> >>>>> is compatible with SHA1 but blocks the known class of attacks where
-> >>>>> sha1 is actively broken at this point?
-> >>>>
-> >>>> We are using the kernel's implementation, addressing what the kernel
-> >>>> provides is beyond our efforts. Perhaps someone who is interested in
-> >>>> improving the kernel's SHA1 could submit a patch implementing/replac=
-ing
-> >>>> it with SHA1-DC, as I am sure the maintainers would welcome the help=
-.
-> >>>
-> >>> Well, someone who is interested to get his "secure" code merged shoul=
-d
-> >>> have a vested interested to have a non-broken SHA1 implementation if
-> >>> there is a sensible requirement to use SHA1 in that new "secure" code=
-,
-> >>> no?
-> >>>
-> >>> Just for the record. The related maintainers can rightfully decide to
-> >>> reject known broken "secure" code on a purely technical argument.
-> >>>
-> >>
-> >> Wait, hold on a second.
-> >>
-> >> SHA1-DC isn't SHA1.  It's a different hash function that is mostly
-> >> compatible with SHA1, is different on some inputs, and is maybe more
-> >> secure.  But the _whole point_ of using SHA1 in the TPM code (well,
-> >> this really should be the whole point for new applications) is to
-> >> correctly cap the SHA1 PCRs so we can correctly _turn them off_ in the
-> >> best way without breaking compatibility with everything that might
-> >> read the event log.  I think that anyone suggesting using SHA1-DC for
-> >> this purpose should give some actual analysis as to why they think
-> >> it's an improvement, let alone even valid.
-> >
-> > I would say at a minimum it is to provide a means to cap the PCRs.
-> > Devices with TPM1.2 are still prevalent in the wild for which members o=
-f
-> > the TrenchBoot community support, and there are still valid (and secure=
-)
-> > verification uses for SHA1 that I outlined in my previous response.
-> >
-> >> Ross et al, can you confirm that your code actually, at least by
-> >> default and with a monstrous warning to anyone who tries to change the
-> >> default, caps SHA1 PCRs if SHA256 is available?  And then can we maybe
-> >> all stop hassling the people trying to develop this series about the
-> >> fact that they're doing their best with the obnoxious system that the
-> >> TPM designers gave them?
-> >
-> > Our goal is to keep control in the hands of the user, not making
-> > unilateral decisions on their behalf. In the currently deployed
-> > solutions it is left to the initrd (user) to cap the PCRs. After some
-> > thinking, we can still ensure user control and give an option to cap th=
-e
-> > PCRs earlier. We hope to post a v11 later this week or early next week
-> > that introduces a new policy field to the existing measurement policy
-> > framework. Will add/update the kernel docs with respect to the policy
-> > expansion. We are also looking the best way we might add a warning to
-> > the kernel log if the SHA1 bank is used beyond capping the PCRs.
+>  37ms for context restore of null key
+>  85ms for start session with encrypted salt
+>   3ms to flush null key
+> -----
+> 125ms
 >
-> As the attempt was made to lay in the policy logic, it started to become
-> convoluted and unnecessarily complicated. Thus creating more risk with
-> all the bookkeeping and yet sha1 hashes still have to be sent, the null
-> hash in this case, since the TPM driver will reject extends that do not
-> have hashes for all active banks. At this point, we have opted to keep
-> the logic simple and add a section to our documentation advising of the
-> potential risk should one choose to incorporate SHA1 in their
-> attestations of the platform.
->
+> If we context save the session, we'd likely only bear a single 37ms
+> cost to restore it (replacing the total 125ms).  However, there's
+> nothing we can do about the extend execution going from 6ms to 24ms, so
+> I could halve your current boot time with security enabled (it's
+> currently 149ms, it would go to 61ms, but it's still 10x slower than
+> the unsecured extend at 6ms)
 
-I've read the TPM standard a bit, but it's been awhile, and it's too
-complicated anyway.  So, can you remind me (and probably 3/4 of the
-other people on this thread, too):
+Please address how this discussion is related to https://bugzilla.kernel.or=
+g/show_bug.cgi?id=3D219229
 
-What, exactly, is your patchset doing that requires hashing at all?
-(I assume it's extending a PCR and generating an event log entry.).
-What, exactly, does it mean to "cap" a PCR?  How is this different
-from what your patchset does?
+I just read the bug report nothing about IMA or PCR extend.
 
-With that answered, it will hopefully be easy to see that you're
-making the right call :)
+There's now tons of spam about performance issue in a patch set that is
+not in the mainline and barely nothing about the original issue:
 
---Andy
+"
+When secureboot is enabled,
+the kernel boot time is ~20 seconds after 6.10 kernel.
+it's ~7 seconds on 6.8 kernel version.
 
---=20
-Andy Lutomirski
-AMA Capital Management, LLC
+When secureboot is disabled,
+the boot time is ~7 seconds too.
+
+Reproduced on both AMD and Intel platform on ThinkPad X1 and T14.
+
+It probably caused autologin failure and micmute led not loaded on AMD plat=
+form.
+
+6.9 kernel version is not tested since not signed kernel found.
+6.8, 6.10, 6.11 are tested, the first bad version is 6.10.
+"
+
+How is this going to help to fix this one?
+
+I say this once and one: I zero care fixing code that is in the
+mainline.
+
+BR, Jarkko
 
