@@ -1,93 +1,165 @@
-Return-Path: <linux-integrity+bounces-3590-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3591-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7905979629
-	for <lists+linux-integrity@lfdr.de>; Sun, 15 Sep 2024 11:31:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C65597962E
+	for <lists+linux-integrity@lfdr.de>; Sun, 15 Sep 2024 11:43:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 558D5B21F9F
-	for <lists+linux-integrity@lfdr.de>; Sun, 15 Sep 2024 09:31:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A1831F21A67
+	for <lists+linux-integrity@lfdr.de>; Sun, 15 Sep 2024 09:43:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C731C3F0E;
-	Sun, 15 Sep 2024 09:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46200198A16;
+	Sun, 15 Sep 2024 09:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="Z07ZUWCD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JmtUBGry"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4929F9FE;
-	Sun, 15 Sep 2024 09:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12FD713AA2B;
+	Sun, 15 Sep 2024 09:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726392695; cv=none; b=NJ8SiDPbAx4JGjtzKHK22igbj2qFhTVsiZl4rh30VeH9yXeh2+ngxBbTPw++//hQFBi3VTqUvT1GJXr0l3vcAhbng9W6PWoCEJwOhudHE1BZiG+jP40ScXX60F9t+l88lOa1hg9L5JdeEBF/+XEgfaV8wdZVR+/Pg3VRePOTJW4=
+	t=1726393420; cv=none; b=fMJSEkjp9qwsvp4Q0dF9CAgapRRB8oyuspBuQ2SR3fr5BtH8NHKa7lLjw14dHX7Zez8q5D1oDZQBnvdtuLzaJCBHcggqOkLcEqcF5MMtjXBAeJ+juygSfvKim9DetXA3sl/8ZHkXrzasK5xXXnJBfVg77jNKwVh2dgmvRBJlZso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726392695; c=relaxed/simple;
-	bh=yppjmLWuJ3670sLldCSPPm9d/33OxriK4GwJ9hrv0Mg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gmEYSEM1+WmYf9zLkW9L0Ox5MkhQWY7JvPv/pe2Fxboe2zmfrmEiszNiYSmCM+w93QTfvDA+Om/Y720ILK+osyK9HabwVDbyL5dJ8KC4Ia4kgUyVqL83B8Hr8MKxiC1EN2JaQ0lc4cc3oPGRy2g/KPR4cqPgESoSmcYgYdDK7mU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=Z07ZUWCD; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=+eX5kV2Nmw0M6Y+JlJL5bjBjSaQL+XEI8lPe/DK8+pI=; b=Z07ZUWCDCfjii/QqB/7RFV8L4d
-	VhBsg6Z6+PCpxqn6s917cG7cGWUf9jLOB+DW44IOhBQUHKAshoepC09x8bOw14B82gsUJdtmjarfU
-	JBkSUlsIzyVOljZ9w6kgRwMIicn+hmqVKWsNXeAIlNRUH9bjcn5phETN8MN4leAIcCdchC0LZGXMo
-	CLhyYiZ3suCOE78pufjIuR4BStYbMV9t3V/4GvZF8JLm1rRPEAtF30QFXFg6b+mLdKcA+v3+wOvOQ
-	VQvTtA+eiIjhB56h8SZqJbt9x1ZgayEsM2CN2i85x82L8NSdNpaabs1eu9cCqszBYxm4brY1ni8Qg
-	scfSsbAA==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1splRA-002bma-3D;
-	Sun, 15 Sep 2024 17:31:11 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 15 Sep 2024 17:31:10 +0800
-Date: Sun, 15 Sep 2024 17:31:10 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, dhowells@redhat.com,
-	dwmw2@infradead.org, davem@davemloft.net,
-	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-	linux-crypto@vger.kernel.org, zohar@linux.ibm.com,
-	linux-integrity@vger.kernel.org, roberto.sassu@huawei.com,
-	linux-security-module@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v3 00/14] KEYS: Add support for PGP keys and signatures
-Message-ID: <ZuapXswFUxsFxjgH@gondor.apana.org.au>
-References: <ZuPDZL_EIoS60L1a@gondor.apana.org.au>
- <b4a3e55650a9e9f2302cf093e5cc8e739b4ac98f.camel@huaweicloud.com>
- <CAHk-=wiU24MGO7LZ1ZZYpQJr1+CSFG9VnB0Nyy4xZSSc_Zu0rg@mail.gmail.com>
- <ZuaVzQqkwwjbUHSh@gondor.apana.org.au>
- <CAHk-=wgnG+C3fVB+dwZYi_ZEErnd_jFbrkN+xc__om3d=7optQ@mail.gmail.com>
- <ZualreC25wViRHBq@gondor.apana.org.au>
+	s=arc-20240116; t=1726393420; c=relaxed/simple;
+	bh=lq0v9oHdHOUeIp62g7vMkFhZMevGNd76a2adT3E3Q54=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=oR+TSN+CITyi19PQA9asDXB2VZljbAxx67T73BaLXjF/zbhU+2yFYsS6qQr3gQVyVRV64IsPjRbPCD4ZuqvjmygwYLet5LOo5G2oEMSrAS/pjDhR2uF1sW0bVVVUznSamxnOXxtXSm72+0MTsrud45f/dz+hFQZ/CFWlEkFID5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JmtUBGry; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E6FC4CEC3;
+	Sun, 15 Sep 2024 09:43:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726393419;
+	bh=lq0v9oHdHOUeIp62g7vMkFhZMevGNd76a2adT3E3Q54=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=JmtUBGrykvcfisXD8cdC0BGMvqMfm2s3c36f/jLY4t7a5JdUt++lPmwBJQ0RAYTEx
+	 4v7o9a/zMzSwvpcr+yrX7WNQpjmPiGBBTrfkg8Fn7Sq97AY2ZLvSJY/CoOUkec4NLd
+	 iifBnFegBiuDvIxSARvNjU5HJVSr2lw+hh9yyYrEZoXY+vxCdVVBBN9kdGqedGwDlN
+	 pBHKJSxRo9nAxu4xQ+aUr75Lcv6nylPErXiUHYuuk59gACtkgSt3dUmaIL/IkkqJ2p
+	 mYF0iLTwWVW7ldDRoUYaBxDK9KyjIjVtjRi2MvJmUKJ7TgqgBBFZjnSQqx88P9/8dQ
+	 7qV2penJy8/oQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZualreC25wViRHBq@gondor.apana.org.au>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 15 Sep 2024 12:43:35 +0300
+Message-Id: <D46RE2BWMGJ4.25VA7IVYTJ8MO@kernel.org>
+To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Linux regressions mailing list"
+ <regressions@lists.linux.dev>
+Cc: <keyrings@vger.kernel.org>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>,
+ "Pengyu Ma" <mapengyu@gmail.com>
+Subject: Re: [regression] significant delays when secureboot is enabled
+ since 6.10
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.18.2
+References: <0b4a5a86-a9f6-42d1-a9ba-ec565b336d3a@leemhuis.info>
+ <92fbcc4c252ec9070d71a6c7d4f1d196ec67eeb0.camel@huaweicloud.com>
+ <D42LZPLE8HR3.2UTNOI9CYZPIR@kernel.org>
+ <D42M6OE94RLT.6EZSZLBTX437@kernel.org>
+ <663d272617d1aead08077ad2b72929cbc226372a.camel@HansenPartnership.com>
+ <D42N17MFTEDM.3E6IK034S26UT@kernel.org>
+ <f554031343039883068145f9f4777277e490dc05.camel@huaweicloud.com>
+ <D43JXBFOOB2O.3U6ZQ7DASR1ZW@kernel.org>
+ <7e47f97aede88b87fbb9c9284db2005764bfbedd.camel@huaweicloud.com>
+In-Reply-To: <7e47f97aede88b87fbb9c9284db2005764bfbedd.camel@huaweicloud.com>
 
-On Sun, Sep 15, 2024 at 05:15:25PM +0800, Herbert Xu wrote:
->
-> Roberto, correct me if I'm wrong but your intended use case is
-> the following patch series, right?
+On Thu Sep 12, 2024 at 11:13 AM EEST, Roberto Sassu wrote:
+> @[
+>     tpm_transmit_cmd+50
+>     tpm2_load_context+161
+>     tpm2_start_auth_session+98
+>     tpm2_pcr_extend+39
+>     tpm_pcr_extend+221
+>     ima_add_template_entry+437
+>     ima_store_template+114
+>     ima_store_measurement+209
+>     process_measurement+2473
+>     ima_file_check+82
+>     security_file_post_open+92
+>     path_openat+550
+>     do_filp_open+171
+>     do_sys_openat2+186
+>     do_sys_open+76
+>     __x64_sys_openat+35
+>     x64_sys_call+9589
+>     do_syscall_64+96
+>     entry_SYSCALL_64_after_hwframe+118
+> ,=20
+>     0x7f03ea0ade55
+>     0x55f929b7dac2
+>     0x7f03e9fd4b8a
+>     0x7f03e9fd4c4b
+>     0x55f929b7e9b5
+> , cat]: 35928108
+> @[
+>     tpm_transmit_cmd+50
+>     tpm2_start_auth_session+650
+>     tpm2_pcr_extend+39
+>     tpm_pcr_extend+221
+>     ima_add_template_entry+437
+>     ima_store_template+114
+>     ima_store_measurement+209
+>     process_measurement+2473
+>     ima_file_check+82
+>     security_file_post_open+92
+>     path_openat+550
+>     do_filp_open+171
+>     do_sys_openat2+186
+>     do_sys_open+76
+>     __x64_sys_openat+35
+>     x64_sys_call+9589
+>     do_syscall_64+96
+>     entry_SYSCALL_64_after_hwframe+118
+> ,=20
+>     0x7f03ea0ade55
+>     0x55f929b7dac2
+>     0x7f03e9fd4b8a
+>     0x7f03e9fd4c4b
+>     0x55f929b7e9b5
+> , cat]: 84616611
 
-Actually the meat of the changes is in the following series:
+These commands and TPM2_CreatePrimary are the ones that give overhead
+to the AMD boot-up:
 
-https://lore.kernel.org/linux-integrity/20240905150543.3766895-1-roberto.sassu@huaweicloud.com/
+1. TPM2_LoadContext (35 ms)
+2. TPM2_StartAuthSession (85 ms)
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+We can conclude that the implementation is too slow and making it faster
+requires a whole set of small improvements. From this basis the only
+right fix is to make it opt-in kernel command-line option.
+
+That will give space to make small performance improvements over time,
+and not rush. How the session is orchestrated is not production quality,
+and the bug gives direct evidence of that.
+
+High-level improvements that could be done over time:
+
+- Do not call start_auth_session() in extend and get_random().
+  Orchestrate outside.
+- Find places to not close and open session sequentially, e.g.
+  with the help of use SA_CONTINUE_SESSION.
+
+When it comes to boot we should aim for one single start_auth_session
+during boot, i.e. different phases would leave that session open so
+that we don't have to load the context every single time.  I think it
+should be doable.
+
+Making all this happen is not a "performance regression fix". It is
+set of gradual improvements to the code that is not there yet
+
+On plus side, the kernel command-line option allows the enable the
+feature by default during compilation time for all architectures.
+
+I've made my decision on this and will submit a fix for it.
+
+BR, Jarkko
 
