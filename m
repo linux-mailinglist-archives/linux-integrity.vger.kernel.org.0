@@ -1,132 +1,158 @@
-Return-Path: <linux-integrity+bounces-3593-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3594-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B40F979662
-	for <lists+linux-integrity@lfdr.de>; Sun, 15 Sep 2024 12:52:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4CFB979698
+	for <lists+linux-integrity@lfdr.de>; Sun, 15 Sep 2024 14:33:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2042B222B7
-	for <lists+linux-integrity@lfdr.de>; Sun, 15 Sep 2024 10:52:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FAA41F21AE6
+	for <lists+linux-integrity@lfdr.de>; Sun, 15 Sep 2024 12:33:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AA09E55B;
-	Sun, 15 Sep 2024 10:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B051422D4;
+	Sun, 15 Sep 2024 12:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sHKY2Lf/"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3756D184E;
-	Sun, 15 Sep 2024 10:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5540611CAF;
+	Sun, 15 Sep 2024 12:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726397530; cv=none; b=uN2txjkaqps+WOhsUmvaoeVhQOoC7NHYneDi24ZKi1mbiwlftVCjX2fJ1VY+MJt6YTJ4cczQ6X/HCdPKdzwxt2QRbAfndfNNbN1N8VoeVyOB958URa//fomcPYiEdrCC6rCP5PzFzwHGQWsHLt7chXt4Bdnv0HR005HG5qD+TP4=
+	t=1726403611; cv=none; b=Xl2rEmbx/2eaCrfZHan18B+EziVSquQcLVjp98RXSdYbtiOuxCGcBI/A42qy1ELSi4Fn7I7YuxzwecKl53yA2IpVYWNUw9MlbWGF3iX+P8W9YQXLrKhbMZIZQhY//SOcOBHDHiVuhBp8cMl/4pFaEjaTVIF7cilXjMP2jV1e5cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726397530; c=relaxed/simple;
-	bh=nTZPj6uwDfR1desg7EOtuQJmR6Ust8e7oYW8MzabxJQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jzfuebfHmBF6C+oiKdEpN+pawumEZwWITJVWV6CoVm/SglgyW0nbuEpCejqBglPz3mGJlkCRBJGDWpdTEoEcDymzSSIS26nCosKRZDysdZlxfWnVrzKz8OExqvB4gSlc6AkCxUhhViC+1Fc72FCZfraOJlNivUGtnyJyCtGT6lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4X649h3KNzz9v7Hm;
-	Sun, 15 Sep 2024 18:32:24 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 83D44140413;
-	Sun, 15 Sep 2024 18:51:53 +0800 (CST)
-Received: from [10.81.210.187] (unknown [10.81.210.187])
-	by APP2 (Coremail) with SMTP id GxC2BwCX+clAvOZmO134AA--.24823S2;
-	Sun, 15 Sep 2024 11:51:53 +0100 (CET)
-Message-ID: <85f25b5f-cbf0-4032-9502-5fa0f7d07849@huaweicloud.com>
-Date: Sun, 15 Sep 2024 12:51:39 +0200
+	s=arc-20240116; t=1726403611; c=relaxed/simple;
+	bh=PVNncDVUwdveT1NbQPhjqULt1DuFVYIxtUHsC2r/QWE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r0jHy9lUEa/0y/woGujSus/cZIbL8o4FiGOWs+Nv9mnz2cHZHaE1woQKtuFtF8vXjIC7LkeJS3WS/r7G/HVpS7X0+JV3oV0PM3/U8LiFvMYq5j5Pdspxtlfcrjc2BTo8HfGQauk+d+3bPdC0sA0QsQID8jR21F+pJSYbvXjgp98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sHKY2Lf/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EBE2C4CEC3;
+	Sun, 15 Sep 2024 12:33:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726403610;
+	bh=PVNncDVUwdveT1NbQPhjqULt1DuFVYIxtUHsC2r/QWE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sHKY2Lf/mg9UIvwgGM/rdumD3Crd3CXaQX51z2X0TphCeP4JQlt4kycnejOmUEgRV
+	 OSXB7I9qMWozBbvodMOf4tJ5cGBiVfYf6YeCnAFKVQAglzIAZyXG57UzUpnH2r/7hD
+	 R67W1ZsiOpnY82G/k9JlzEeYqwheEtQnOhMvFFrjwGGXrTalXUWZeSS4Zan71/hdnW
+	 e7aci3ndxIeiGABt4TUDdTgYETPYioRN3Os+o35cYjY5zS+pDnWM+qC0Uxs0zIQefz
+	 SQ9gV0x0LJWrbP5NdEwbHA2WgRb3EcbkGsfoGRuBlK19BAKt96TEkKueki4m13Opni
+	 A0uqaFZ5JKw6A==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: James.Bottomley@HansenPartnership.com,
+	roberto.sassu@huawei.com,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] tpm: remove file header documentation from tpm2-sessions.c
+Date: Sun, 15 Sep 2024 15:33:15 +0300
+Message-ID: <20240915123315.10999-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/14] KEYS: Add support for PGP keys and signatures
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>, dhowells@redhat.com,
- dwmw2@infradead.org, davem@davemloft.net, linux-kernel@vger.kernel.org,
- keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, zohar@linux.ibm.com,
- linux-integrity@vger.kernel.org, roberto.sassu@huawei.com,
- linux-security-module@vger.kernel.org
-References: <ZuPDZL_EIoS60L1a@gondor.apana.org.au>
- <b4a3e55650a9e9f2302cf093e5cc8e739b4ac98f.camel@huaweicloud.com>
- <CAHk-=wiU24MGO7LZ1ZZYpQJr1+CSFG9VnB0Nyy4xZSSc_Zu0rg@mail.gmail.com>
-Content-Language: en-US
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <CAHk-=wiU24MGO7LZ1ZZYpQJr1+CSFG9VnB0Nyy4xZSSc_Zu0rg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:GxC2BwCX+clAvOZmO134AA--.24823S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF1Uur48AFy7Cr1rXFWDJwb_yoW8trykpF
-	Z5W3yDC3WkXF97CwnrKw47uw1F9ws3Ja15GF9xJ3s8A3W5Krn2kw12qr47Xa4qkws7CF12
-	vrW5tryj93Z8ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBGbmQnQBnQAAso
+Content-Transfer-Encoding: 8bit
 
-On 9/15/2024 9:11 AM, Linus Torvalds wrote:
-> On Fri, 13 Sept 2024 at 10:30, Roberto Sassu
+The documentation in the file header is duplicate documentation, which
+is already addressed elsewhere (tpm-security.rs and function associated
+documentations). In addition remove the invalid newline character after
+the SPDX tag.
 
-[...]
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+It is good time to remove this finally before doing anything else.
+Unless someone commits to maintain this part of the file, I will just
+take it away because I have neither intention nor motivation to maintain
+it. Came right on front when I started to look into kernel command-line
+and optimizations for session life-time so thus the patch. I'll include
+this later on to a larger patch set.
+ drivers/char/tpm/tpm2-sessions.c | 65 --------------------------------
+ 1 file changed, 65 deletions(-)
 
-> The objections I had were against the whole "start doing policy in
-> kernel", with what sounded like actually parsing and unpacking rpm
-> contents and verifying them with a pgp key. *That* still sounds like a
-> disaster to me, and is the part that made me go "why isn't that done
-> in user space together with then generating the fsverifty
-> information"?
-
-In my opinion, trusting root in this situation is not ideal. Trusting 
-root means trusting all applications that root can run, that they will 
-verify PGP signatures of fsverity digests with Linux distribution keys. 
-In order to trust them, we would need to check the integrity of all 
-those applications, in particular file read and IPC with the rest of the 
-system.
-
-A safer way to achieve the same goal is to let the kernel verify PGP 
-signatures, assuming that the kernel is more privileged and cannot be 
-tampered by root (for example, by using the 'lockdown' LSM). Since the 
-PGP keys of the Linux distribution would be embedded in the kernel image 
-(or certified by the embedded ones), trusting the system would require 
-only to verify the kernel image itself (for example, with the boot loader).
-
-Kernel-based policy enforcement is currently adopted by other LSMs, such 
-as SELinux. SELinux also parses and enforces a policy sent from user 
-space in the kernel. This does not mean that the policy itself is in the 
-kernel, but that the kernel is the only component in the position of 
-enforcing the policy without trusting all applications that root can run.
-
-Roberto
-
-> The argument that the kernel is the only part of the system you trust
-> is bogus. The kernel does nothing on its own (apart from device
-> enumeration etc of course), so if you have no trustworthy user space,
-> then you might as well just give up entirely. At a *minimum* you have
-> initrd, and that can then be the start of a chain of user space trust.
-> 
-> Parsing rpm files in the kernel really sounds horrendous. But that
-> doesn't mean that I hate *this* series that just adds pgp key handling
-> in case there are other valid uses for it.
-> 
-> But maybe I misunderstood the original suggestion from Roberto.
-> 
->                Linus
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index 44f60730cff4..6cc1ea81c57c 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -1,71 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+-
+ /*
+  * Copyright (C) 2018 James.Bottomley@HansenPartnership.com
+- *
+- * Cryptographic helper routines for handling TPM2 sessions for
+- * authorization HMAC and request response encryption.
+- *
+- * The idea is to ensure that every TPM command is HMAC protected by a
+- * session, meaning in-flight tampering would be detected and in
+- * addition all sensitive inputs and responses should be encrypted.
+- *
+- * The basic way this works is to use a TPM feature called salted
+- * sessions where a random secret used in session construction is
+- * encrypted to the public part of a known TPM key.  The problem is we
+- * have no known keys, so initially a primary Elliptic Curve key is
+- * derived from the NULL seed (we use EC because most TPMs generate
+- * these keys much faster than RSA ones).  The curve used is NIST_P256
+- * because that's now mandated to be present in 'TCG TPM v2.0
+- * Provisioning Guidance'
+- *
+- * Threat problems: the initial TPM2_CreatePrimary is not (and cannot
+- * be) session protected, so a clever Man in the Middle could return a
+- * public key they control to this command and from there intercept
+- * and decode all subsequent session based transactions.  The kernel
+- * cannot mitigate this threat but, after boot, userspace can get
+- * proof this has not happened by asking the TPM to certify the NULL
+- * key.  This certification would chain back to the TPM Endorsement
+- * Certificate and prove the NULL seed primary had not been tampered
+- * with and thus all sessions must have been cryptographically secure.
+- * To assist with this, the initial NULL seed public key name is made
+- * available in a sysfs file.
+- *
+- * Use of these functions:
+- *
+- * The design is all the crypto, hash and hmac gunk is confined in this
+- * file and never needs to be seen even by the kernel internal user.  To
+- * the user there's an init function tpm2_sessions_init() that needs to
+- * be called once per TPM which generates the NULL seed primary key.
+- *
+- * These are the usage functions:
+- *
+- * tpm2_start_auth_session() which allocates the opaque auth structure
+- *	and gets a session from the TPM.  This must be called before
+- *	any of the following functions.  The session is protected by a
+- *	session_key which is derived from a random salt value
+- *	encrypted to the NULL seed.
+- * tpm2_end_auth_session() kills the session and frees the resources.
+- *	Under normal operation this function is done by
+- *	tpm_buf_check_hmac_response(), so this is only to be used on
+- *	error legs where the latter is not executed.
+- * tpm_buf_append_name() to add a handle to the buffer.  This must be
+- *	used in place of the usual tpm_buf_append_u32() for adding
+- *	handles because handles have to be processed specially when
+- *	calculating the HMAC.  In particular, for NV, volatile and
+- *	permanent objects you now need to provide the name.
+- * tpm_buf_append_hmac_session() which appends the hmac session to the
+- *	buf in the same way tpm_buf_append_auth does().
+- * tpm_buf_fill_hmac_session() This calculates the correct hash and
+- *	places it in the buffer.  It must be called after the complete
+- *	command buffer is finalized so it can fill in the correct HMAC
+- *	based on the parameters.
+- * tpm_buf_check_hmac_response() which checks the session response in
+- *	the buffer and calculates what it should be.  If there's a
+- *	mismatch it will log a warning and return an error.  If
+- *	tpm_buf_append_hmac_session() did not specify
+- *	TPM_SA_CONTINUE_SESSION then the session will be closed (if it
+- *	hasn't been consumed) and the auth structure freed.
+  */
+ 
+ #include "tpm.h"
+-- 
+2.46.0
 
 
