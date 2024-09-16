@@ -1,136 +1,119 @@
-Return-Path: <linux-integrity+bounces-3608-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3609-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1BF69799E9
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2024 04:33:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 287D7979AAF
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2024 07:16:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62D5D282D65
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2024 02:33:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 573F4B20B79
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Sep 2024 05:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C097C8D1;
-	Mon, 16 Sep 2024 02:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7131C6A1;
+	Mon, 16 Sep 2024 05:16:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Od+lUWrZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DgF5l6tt"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA4E2F5E;
-	Mon, 16 Sep 2024 02:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA72117C6C;
+	Mon, 16 Sep 2024 05:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726454008; cv=none; b=YQ6yELkdIbDft0AFBxAj1zWIKQ6DdacZBbpZw3n8Q9Toxny1mecURI+SBnPgZQ87ZhbOw7e7IdUhAA8QA6V40cyTpRB9ql6egJL84xEkiARDQ3aSpU+uIyGOQpdImYARmjccY/3oXb0uE6GUvRsNnxfqI7yqCoQKL2IGecb6ruk=
+	t=1726463769; cv=none; b=fouohTAxIhZFEsI2cpTYHlY5ssokwF4ZNdERg/L2nZtEkvuOK96R6+mC0lb4lKA+CRbmpV2ZOYecIYGcd0kk2U7VaybHPKw5voyoh2tMIHvrFESe/l3c38Zph9TvnJUfedzlVuyuN3FYTCi93Gy5fsHQLBQK29gANEP8ZZ1sdvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726454008; c=relaxed/simple;
-	bh=MZ0NHCtipHHyGF/fEfMurW1Ve+iCzXkVDy+P5sxjk60=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oNa6bPHNCtvYl19g7AiWX3FlnyCL+nRo+20HjU6PQlwpo2yEjKaeNEr8rj+k/BzTcfnnn+HR8X0WtcJlE5gp42D6GpHG8YD8vv6abQLvoVRMQSKoFqrV65t3URF8wVaL+B+w6FR4jQnkETsunw7pbM20hkL0RqXMa4vX77RlI4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Od+lUWrZ; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53568ffc525so4492182e87.0;
-        Sun, 15 Sep 2024 19:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726454005; x=1727058805; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ggg4JtFM6ycNThd/2kQHdL3j4PMBkevtt6B9BIc3upo=;
-        b=Od+lUWrZZunXKJtvHFCNiF4nYqQvcTozzgNkLQKWvhjuZo5eOqOoI06c/ipjM7apcl
-         zkbT/DTKo17k0LYPeIH+PLH5/TQp6OYgM/ghz/feYWiyCIK9CR7+whTSYLjWmo6CPTes
-         t9qh/W1KuOCQZBJZ0CF5FK5bgdHdUsYRoGVCcqJ5Pzip2wkTKFVPL5ZwnesbshFOcMc6
-         AeCEkywS8bPB4e53uu8yJkdiAU6BY7I0pzWg5UyRmxaXzNw3pg1beTzUlsoOtncTi3fR
-         dUsx79HtOFGiHSJDLr5o75+KhK6T5z2gCDkZdb61mpIcVDK5x9svHj3e179KHLoFn+4B
-         6gyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726454005; x=1727058805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ggg4JtFM6ycNThd/2kQHdL3j4PMBkevtt6B9BIc3upo=;
-        b=BE88Pw8C2P7R3JKwK4LHN8UZqgRKdnbvnxyoSy28DwM+IvxKwZc/5xmb53cxBIxWqu
-         SM9CXSrdJST9QeOxzAxLUm2v4Mssnh0k4N+yv8GU5k+62pQ0VT0PiJ0HitjHtVykjpIR
-         KvD//YNjZ0K+XVvRAGV2pGHPhw79tgRPbIJ49r+VjEw/J96Q0elagzRuk91mqAzxeNBL
-         5dLNQQUUXyp4aXLOUkLvaXk+EVzMDXkcZeosAvDTD9a/WVrXHsDQpsljx6fXliZKen+g
-         k2R6TcTh3f3pYBoZhYoaBlfOFWm2q15TCtlM8kMhaKnkldHxj5BlMb7911oakqbt6onE
-         OH4A==
-X-Forwarded-Encrypted: i=1; AJvYcCX1bmPyX6szX5rtR+wqiNgch8NL3PeSd2TwcaZDYyVdOGwi5K9nmXQaf3JTUUj2aKhLyOqmJTUfopCfv1Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsSdJPu5eAbBW1bwGhiwG69tbKVQGYg8xHPDs7PRiDo1ZMqq2N
-	dKk8XTfrLwTZqQRbluYtsEuDziveytw8V62ktLRCS7K4r5FzyLiqQQG89NLCBlWtxFQRT5JYFrU
-	wBvSQZsnoW3OLkF4DYSntbBkOKgg=
-X-Google-Smtp-Source: AGHT+IGeZY8Ra6ArZv5eqM8elTcbTLcBII9Rw/xiPZlwQLnWVfFQfMRKc3Xz/ZMUEZqddmaCaBV0/dSIYxnyqejs6pI=
-X-Received: by 2002:a05:6512:3d23:b0:52c:99c9:bef6 with SMTP id
- 2adb3069b0e04-53678fb1929mr6907629e87.7.1726454004592; Sun, 15 Sep 2024
- 19:33:24 -0700 (PDT)
+	s=arc-20240116; t=1726463769; c=relaxed/simple;
+	bh=vvZ8k9hQDToFD2OaOTfacHZqXgJx9ZtN2s+yDabkp6o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=qgAraAX0P84ZVPFiiQA21ModIz0N3jZl0cCzC4u8jf/V1q3D+1Hx/ZOAZ7ouoBQEa+Ek2/r4/nidcYO0Pfce5SIkPG5EYXJTUrv/XC9nHXpD55VkBU5LJv1OMp88uQhorw21v1eIchRndpI61fTy5vz+2gD49jGRqv+2eTEttX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DgF5l6tt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA98C4CEC4;
+	Mon, 16 Sep 2024 05:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726463768;
+	bh=vvZ8k9hQDToFD2OaOTfacHZqXgJx9ZtN2s+yDabkp6o=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=DgF5l6tt4B0ppnxeTZncFtw91SDoNMFoxngETAhM8VAdkUt7UObQMbredWJjpZce5
+	 yIen9OXRrEc6KS/nqOohNv5bY2EtOq568H65kkFUDfbmhhv9wfO1reuKzoKq+pvd/n
+	 Km8wyP0UwZ5E/MIAcPDnoxwFD+HdrQhU0VbKz2NawGj9FOlUVpMuCAAwdWf+0DVD0C
+	 9Rcx9DWEJdBFypUp9N7AWWheafP+P5GMYcSYlx4xSTzwwCgzLIWy4jCfkSjqu89EXQ
+	 Lr6DbjslUM3qLLeHz+rN7X19GWJZdcJND41O1IrThgI3B9zn5QxGem3/EO+/K6iEFT
+	 zCBRtbRJmNgnQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240915180448.2030115-1-jarkko@kernel.org> <CALSz7m0ehXM+dU3z0xYPLQkHbyfyMjoCOoMLdBgRcUu1pnT_ww@mail.gmail.com>
-In-Reply-To: <CALSz7m0ehXM+dU3z0xYPLQkHbyfyMjoCOoMLdBgRcUu1pnT_ww@mail.gmail.com>
-From: Pengyu Ma <mapengyu@gmail.com>
-Date: Mon, 16 Sep 2024 10:33:12 +0800
-Message-ID: <CALSz7m1WG7fZ9UuO0URgCZEDG7r_wB4Ev_4mOHJThH_d1Ed1nw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] tpm: lazy flush for the session null key
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, James.Bottomley@hansenpartnership.com, 
-	roberto.sassu@huawei.com, Peter Huewe <peterhuewe@gmx.de>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 16 Sep 2024 08:16:04 +0300
+Message-Id: <D47GBS5ZGNPC.3IRSGEBQGJURI@kernel.org>
+To: "Pengyu Ma" <mapengyu@gmail.com>
+Cc: <linux-integrity@vger.kernel.org>,
+ <James.Bottomley@hansenpartnership.com>, <roberto.sassu@huawei.com>, "Peter
+ Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "open list"
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/4] tpm: lazy flush for the session null key
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.18.2
+References: <20240915180448.2030115-1-jarkko@kernel.org>
+ <CALSz7m0ehXM+dU3z0xYPLQkHbyfyMjoCOoMLdBgRcUu1pnT_ww@mail.gmail.com>
+ <CALSz7m1WG7fZ9UuO0URgCZEDG7r_wB4Ev_4mOHJThH_d1Ed1nw@mail.gmail.com>
+In-Reply-To: <CALSz7m1WG7fZ9UuO0URgCZEDG7r_wB4Ev_4mOHJThH_d1Ed1nw@mail.gmail.com>
 
-After applied your patches, the boot time is ~15 seconds.
-Less than 20 sec, but still much more than 7 sec when disabling HMAC.
-
-Send again in text mode.
-
-
-
-On Mon, Sep 16, 2024 at 10:25=E2=80=AFAM Pengyu Ma <mapengyu@gmail.com> wro=
-te:
->
-> Hi Jarkko,
->
+On Mon Sep 16, 2024 at 5:33 AM EEST, Pengyu Ma wrote:
 > After applied your patches, the boot time is ~15 seconds.
 > Less than 20 sec, but still much more than 7 sec when disabling HMAC.
->
-> Thanks,
-> Aaron
->
->
-> On Mon, Sep 16, 2024 at 2:04=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.or=
-g> wrote:
->>
->> There is no load and flush the null key for every transaction. It only
->> needs to be flushed when user space accesses TPM. This postpones the
->> flush up to that point.
->>
->> The goal is to take the first step addressing [1]. Other performance
->> improvements are needed too but this is the most obvious one and
->> easiest to address.
->>
->> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
->>
->> Jarkko Sakkinen (4):
->>   tpm: remove file header documentation from tpm2-sessions.c
->>   tpm: address tpm2_create_null_primary() return value
->>   tpm: address tpm2_create_primary() failure
->>   tpm: flush the session null key only when required
->>
->>  drivers/char/tpm/tpm-chip.c       |  13 ++++
->>  drivers/char/tpm/tpm-dev-common.c |   7 ++
->>  drivers/char/tpm/tpm-interface.c  |   9 ++-
->>  drivers/char/tpm/tpm2-cmd.c       |   3 +
->>  drivers/char/tpm/tpm2-sessions.c  | 115 ++++++++++--------------------
->>  include/linux/tpm.h               |   2 +
->>  6 files changed, 68 insertions(+), 81 deletions(-)
->>
->> --
->> 2.46.0
->>
+
+Great, and thank you for testing this. I did expect it to fully address
+the issue but it is on the direct path. It took me few days to get my
+testing environment right before moving forward [1], mainly to get
+bpftrace included, thus the delay.
+
+Do you mind if I add tested-by for the for this one?
+
+Before the patch set the in-kernel TPM sequences were along the lines
+of:
+
+1. Load the null key.
+2. Load the auth session.
+3. Do stuff with overhead from encryption.
+4. Save the session.
+5. Save the null key.
+
+With the changes:
+
+1. Load the session.
+2. Do stuff with overhead from encryption.
+3. Save the session.
+
+Each swapped session gets an increasing count. If the count grows over
+treshold measured by the difference of the count in the latest loaded
+session and the session currently being saved, then TPM throws out=20
+a context gap error. It has a limited resolution for this.
+
+As long as /dev/tpm0 is not opened by any process, there is only one
+session open (or at least fixed pre-determined number moving forward).
+This means that context gap error cannot occur, as the only session
+saved is the auth session.
+
+I'll implement a patch on top of this, which does exactly this: track
+the number of open /dev/tpm{rm0}. Only when the device is open, the
+auth session is flushed.
+
+With this change the sequence reduces to:
+
+1. Do stuff with overhead from encryption.
+
+Since the results are promising (thanks to you), I create a new version
+of this patch set with this additional fix. There's no chance to reach
+the same exact boot-up time as without encryption but I think we might
+be able to reach a reasonable cost.
+
+[1] https://codeberg.org/jarkko/linux-tpmdd-test
+
+BR, Jarkko
 
