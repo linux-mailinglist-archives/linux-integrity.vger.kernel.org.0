@@ -1,53 +1,52 @@
-Return-Path: <linux-integrity+bounces-3623-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3624-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5381297B24F
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2024 17:50:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F42397B255
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2024 17:50:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B22A1F274C4
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2024 15:50:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69CE288AD2
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2024 15:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16E95194A76;
-	Tue, 17 Sep 2024 15:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814E0194AD8;
+	Tue, 17 Sep 2024 15:45:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SwNoTDzB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lqK7quu1"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5AC194138;
-	Tue, 17 Sep 2024 15:45:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B73B194AE6;
+	Tue, 17 Sep 2024 15:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726587904; cv=none; b=UuxFrK3UyNYxNj7i7IsF9kPggK4flZoXegG405H0YhYmYwoUagmrgBVKO9mX+ePhGT60bUzyaFSt52HLr02RB7jtYJvpY9pJWlLFAxnDUaE8bmAToYJq/IKWM8p14nAr6SBMTy2Vku9XIqW/1p4DJ0QZCJaHhDlIYxjmXhX6Pdo=
+	t=1726587909; cv=none; b=A3FCdklooJYBAvVbJ55OyjFuMmrLJDAhruJ8k0ti6KqCsG40oUZHnMxWFUjXg31Q1PXkDNcfMR7T1vGV26kaKfFniOhu6l8duqUhnXj4h21t7pt8q/2DuYyYjQLR3cCtlMHNhduFB7V54pnVTKvuHEhg+nDE21Fi8wJwt/pG3/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726587904; c=relaxed/simple;
-	bh=BMyYGqGEO26GNPeQnIBlL1dX/WGOQKX5Yh6/QOkpGHU=;
+	s=arc-20240116; t=1726587909; c=relaxed/simple;
+	bh=C3Mpaxh2OV6YvryYeWN6bkOf7x9QWfSOd3mncoa4OuE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bDOXHZTpaXrzAZLezK7Va8M4dSJxWqeyWsxf9TLqi92QLAZsBY8jscExuLXL8N73wW1fTLFKnUxRS34A3o35EJ04NbBhegYTj84OlmuDvVgfLyFRm5iiC20gsOX7ZKZxh1Nng1ZMU59PO8MtBLmo28ehaTgpE7Y4qZyxoVGtIs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SwNoTDzB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A03C4CEC5;
-	Tue, 17 Sep 2024 15:45:03 +0000 (UTC)
+	 MIME-Version; b=mjqliJ3i44g+OVX/suibt/LWuPQEluMb3hwgAeLVzNIkfzn02fpnpWeb1j2J9cRnYut4asovnznjirB5BHoAPI/gKEGpF13U2JHLi9hw260uTwEcVLvoRro0u4FO3SK2xwZMzgcgZ34qONVEhBx4AXCqPtW1DoOfbT3J0IAaEqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lqK7quu1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76696C4CEC5;
+	Tue, 17 Sep 2024 15:45:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726587903;
-	bh=BMyYGqGEO26GNPeQnIBlL1dX/WGOQKX5Yh6/QOkpGHU=;
+	s=k20201202; t=1726587908;
+	bh=C3Mpaxh2OV6YvryYeWN6bkOf7x9QWfSOd3mncoa4OuE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SwNoTDzBM4Lm2wuAGIqEZkyE7plkegd9QQBCKk46t+lvsAvsfyY3sK20RAeJplI6j
-	 /if9C1sw2hiXQ+hYMi6R1Lg35AIc8f89kkfgl4pYksTxu1HQdPiajpvKEkidPj6ypn
-	 56me0Zu7hICMSInfC2O9R/GUqy06yFj161DqgXjRzz/SQqBrVYJ52iqAZxKai/FONe
-	 BjHOConj+CCP+wi7Z5obWVeJ/TXbVK6dyOjlJjSfs2IpvzlM8UnT8CQgtmw3x85ztX
-	 lMTcIXHZ7XyLUC+Q0PnFKV/k7ucK99Z7V7UmIR9iG0JuA7gLb2M9d0J55qDpFyGpMr
-	 jFlP712AzvqLA==
+	b=lqK7quu1NRBUgl9TMeGqUFdTSBklwF5p+aTLQXsLLk96BOpABcIe4nOmkKmDZ7piZ
+	 w8KIZo+Dz9Y/ZvkX5JenFxV/99NvTcYENtlbg0TP+z0rfkuYeMCdRYACfGGGnnTnTb
+	 CHI0sGLM7u/V6w+ZDm87iHtLki/uECxDhTXQFJkGHEz87xac4wknH15FXAdu1PQDed
+	 49PduawY+2jfvLw49IaUs/slyet8l8DXgP7TQ2n4CXzST3fcQXHkET1H1x0udkbr5Y
+	 hhZnjrwRwRGRszwrzxONs7RgYui3IAPy54ueA0f5YnyDbBhoRimAph/l4JWr0L4IjO
+	 MfwgYnXQGgQTA==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: James.Bottomley@HansenPartnership.com,
 	roberto.sassu@huawei.com,
 	mapengyu@gmail.com,
 	Jarkko Sakkinen <jarkko@kernel.org>,
-	stable@vger.kernel.org,
 	Mimi Zohar <zohar@linux.ibm.com>,
 	David Howells <dhowells@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -56,9 +55,9 @@ Cc: James.Bottomley@HansenPartnership.com,
 	keyrings@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/7] tpm: Return on tpm2_create_primary() failure in tpm2_load_null()
-Date: Tue, 17 Sep 2024 18:44:32 +0300
-Message-ID: <20240917154444.702370-4-jarkko@kernel.org>
+Subject: [PATCH v3 4/7] tpm: flush the null key only when /dev/tpm0 is accessed
+Date: Tue, 17 Sep 2024 18:44:33 +0300
+Message-ID: <20240917154444.702370-5-jarkko@kernel.org>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240917154444.702370-1-jarkko@kernel.org>
 References: <20240917154444.702370-1-jarkko@kernel.org>
@@ -70,85 +69,179 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-tpm2_load_null() ignores the return value of tpm2_create_primary().
-Further, it does not heal from the situation when memcmp() returns zero.
+Instead of flushing and reloading the null key for every single auth
+session, flush it only when:
 
-Address this by returning on failure and saving the null key if there
-was no detected interference in the bus.
+1. User space needs to access /dev/tpm{rm}0.
+2. When going to sleep.
+3. When unregistering the chip.
 
-Cc: stable@vger.kernel.org # v6.11+
-Fixes: eb24c9788cd9 ("tpm: disable the TPM if NULL name changes")
+This removes the need to load and swap the null key between TPM and
+regular memory per transaction, when the user space is not using the
+chip.
+
+Tested-by: Pengyu Ma <mapengyu@gmail.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
 v3:
-- Update log messages. Previously the log message incorrectly stated
-  on load failure that integrity check had been failed, even tho the
-  check is done *after* the load operation.
+- Unchanged.
 v2:
 - Refined the commit message.
-- Reverted tpm2_create_primary() changes. They are not required if
-  tmp_null_key is used as the parameter.
+- Added tested-by from Pengyu Ma <mapengyu@gmail.com>.
+- Removed spurious pr_info() statement.
 ---
- drivers/char/tpm/tpm2-sessions.c | 38 +++++++++++++++++---------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ drivers/char/tpm/tpm-chip.c       | 13 +++++++++++++
+ drivers/char/tpm/tpm-dev-common.c |  7 +++++++
+ drivers/char/tpm/tpm-interface.c  |  9 +++++++--
+ drivers/char/tpm/tpm2-cmd.c       |  3 +++
+ drivers/char/tpm/tpm2-sessions.c  | 17 ++++++++++++++---
+ include/linux/tpm.h               |  2 ++
+ 6 files changed, 46 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 854546000c92..0ea00e32f575 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -674,6 +674,19 @@ EXPORT_SYMBOL_GPL(tpm_chip_register);
+  */
+ void tpm_chip_unregister(struct tpm_chip *chip)
+ {
++#ifdef CONFIG_TCG_TPM2_HMAC
++	int rc;
++
++	rc = tpm_try_get_ops(chip);
++	if (!rc) {
++		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++			tpm2_flush_context(chip, chip->null_key);
++			chip->null_key = 0;
++		}
++		tpm_put_ops(chip);
++	}
++#endif
++
+ 	tpm_del_legacy_sysfs(chip);
+ 	if (tpm_is_hwrng_enabled(chip))
+ 		hwrng_unregister(&chip->hwrng);
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index c3fbbf4d3db7..4bc07963e260 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -27,6 +27,13 @@ static ssize_t tpm_dev_transmit(struct tpm_chip *chip, struct tpm_space *space,
+ 	struct tpm_header *header = (void *)buf;
+ 	ssize_t ret, len;
+ 
++#ifdef CONFIG_TCG_TPM2_HMAC
++	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++		tpm2_flush_context(chip, chip->null_key);
++		chip->null_key = 0;
++	}
++#endif
++
+ 	ret = tpm2_prepare_space(chip, space, buf, bufsiz);
+ 	/* If the command is not implemented by the TPM, synthesize a
+ 	 * response with a TPM2_RC_COMMAND_CODE return for user-space.
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 5da134f12c9a..bfa47d48b0f2 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -379,10 +379,15 @@ int tpm_pm_suspend(struct device *dev)
+ 
+ 	rc = tpm_try_get_ops(chip);
+ 	if (!rc) {
+-		if (chip->flags & TPM_CHIP_FLAG_TPM2)
++		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++#ifdef CONFIG_TCG_TPM2_HMAC
++			tpm2_flush_context(chip, chip->null_key);
++			chip->null_key = 0;
++#endif
+ 			tpm2_shutdown(chip, TPM2_SU_STATE);
+-		else
++		} else {
+ 			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
++		}
+ 
+ 		tpm_put_ops(chip);
+ 	}
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index 1e856259219e..aba024cbe7c5 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -364,6 +364,9 @@ void tpm2_flush_context(struct tpm_chip *chip, u32 handle)
+ 	struct tpm_buf buf;
+ 	int rc;
+ 
++	if (!handle)
++		return;
++
+ 	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_FLUSH_CONTEXT);
+ 	if (rc) {
+ 		dev_warn(&chip->dev, "0x%08x was not flushed, out of memory\n",
 diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index 0993d18ee886..03c56f0eda49 100644
+index 03c56f0eda49..5227bf6097a0 100644
 --- a/drivers/char/tpm/tpm2-sessions.c
 +++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -850,32 +850,34 @@ static int tpm2_parse_start_auth_session(struct tpm2_auth *auth,
+@@ -855,11 +855,19 @@ static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
+ 	u32 tmp_null_key;
+ 	int rc;
  
- static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
- {
--	int rc;
- 	unsigned int offset = 0; /* dummy offset for null seed context */
- 	u8 name[SHA256_DIGEST_SIZE + 2];
-+	u32 tmp_null_key;
-+	int rc;
- 
- 	rc = tpm2_load_context(chip, chip->null_key_context, &offset,
--			       null_key);
--	if (rc != -EINVAL)
-+			       &tmp_null_key);
-+	if (rc != -EINVAL) {
-+		if (!rc)
-+			*null_key = tmp_null_key;
- 		return rc;
-+	}
-+	dev_info(&chip->dev, "the null key has been reset\n");
- 
--	/* an integrity failure may mean the TPM has been reset */
--	dev_err(&chip->dev, "NULL key integrity failure!\n");
--	/* check the null name against what we know */
--	tpm2_create_primary(chip, TPM2_RH_NULL, NULL, name);
--	if (memcmp(name, chip->null_key_name, sizeof(name)) == 0)
--		/* name unchanged, assume transient integrity failure */
-+	rc = tpm2_create_primary(chip, TPM2_RH_NULL, &tmp_null_key, name);
-+	if (rc)
- 		return rc;
--	/*
--	 * Fatal TPM failure: the NULL seed has actually changed, so
--	 * the TPM must have been illegally reset.  All in-kernel TPM
--	 * operations will fail because the NULL primary can't be
--	 * loaded to salt the sessions, but disable the TPM anyway so
--	 * userspace programmes can't be compromised by it.
--	 */
--	dev_err(&chip->dev, "NULL name has changed, disabling TPM due to interference\n");
--	chip->flags |= TPM_CHIP_FLAG_DISABLE;
- 
-+	/* Return the null key if the name has not been changed: */
-+	if (memcmp(name, chip->null_key_name, sizeof(name)) == 0) {
-+		*null_key = tmp_null_key;
++	/* fast path */
++	if (chip->null_key) {
++		*null_key = chip->null_key;
 +		return 0;
 +	}
 +
-+	/* Deduce from the name change TPM interference: */
-+	dev_err(&chip->dev, "the null key integrity check failedh\n");
-+	tpm2_flush_context(chip, tmp_null_key);
-+	chip->flags |= TPM_CHIP_FLAG_DISABLE;
- 	return rc;
- }
+ 	rc = tpm2_load_context(chip, chip->null_key_context, &offset,
+ 			       &tmp_null_key);
+ 	if (rc != -EINVAL) {
+-		if (!rc)
++		if (!rc) {
++			chip->null_key = tmp_null_key;
+ 			*null_key = tmp_null_key;
++		}
+ 		return rc;
+ 	}
+ 	dev_info(&chip->dev, "the null key has been reset\n");
+@@ -870,6 +878,7 @@ static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
  
+ 	/* Return the null key if the name has not been changed: */
+ 	if (memcmp(name, chip->null_key_name, sizeof(name)) == 0) {
++		chip->null_key = tmp_null_key;
+ 		*null_key = tmp_null_key;
+ 		return 0;
+ 	}
+@@ -940,7 +949,6 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
+ 	tpm_buf_append_u16(&buf, TPM_ALG_SHA256);
+ 
+ 	rc = tpm_transmit_cmd(chip, &buf, 0, "start auth session");
+-	tpm2_flush_context(chip, null_key);
+ 
+ 	if (rc == TPM2_RC_SUCCESS)
+ 		rc = tpm2_parse_start_auth_session(auth, &buf);
+@@ -1272,7 +1280,10 @@ static int tpm2_create_null_primary(struct tpm_chip *chip)
+ 
+ 		rc = tpm2_save_context(chip, null_key, chip->null_key_context,
+ 				       sizeof(chip->null_key_context), &offset);
+-		tpm2_flush_context(chip, null_key);
++		if (rc)
++			tpm2_flush_context(chip, null_key);
++		else
++			chip->null_key = null_key;
+ 	}
+ 
+ 	if (rc < 0)
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index e93ee8d936a9..4eb39db80e05 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -205,6 +205,8 @@ struct tpm_chip {
+ #ifdef CONFIG_TCG_TPM2_HMAC
+ 	/* details for communication security via sessions */
+ 
++	/* loaded null key */
++	u32 null_key;
+ 	/* saved context for NULL seed */
+ 	u8 null_key_context[TPM2_MAX_CONTEXT_SIZE];
+ 	 /* name of NULL seed */
 -- 
 2.46.0
 
