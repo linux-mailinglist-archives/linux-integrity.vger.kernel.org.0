@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3625-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3626-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05A9397B258
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2024 17:50:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAE3697B25B
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2024 17:51:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE40D2857D2
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2024 15:50:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C193287AC1
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Sep 2024 15:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE20194C6B;
-	Tue, 17 Sep 2024 15:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACB6E1946C7;
+	Tue, 17 Sep 2024 15:45:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hF5iDZ2L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PrJh4aC1"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564F7194C9E;
-	Tue, 17 Sep 2024 15:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739B4188A37;
+	Tue, 17 Sep 2024 15:45:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726587914; cv=none; b=iCwMKeoCNQgYH2+dQQ/Ib2N7hCjALQknwD1tV77n38rMdaLpcu6SK/0ppra+HWg54dG62W3zhkuLuS+Dk8vwb8xyYaCzgeZcLSl4LW3WtohudbBQslienxqtkEZbLpZ37OkV540AsMcDGcthLtdUsQHo/Rb0iPNY8QnlzCzCVx4=
+	t=1726587919; cv=none; b=P0cdgy9nd3U4unjln69ubJKj8yBlchNs5rV2an7z3DjpFKWCqiFu62LFwDTzmmvCDHPYcKb1f9/4PA6P4R5deozYIwcXtsU5ZI0txT29J2+a0wgcF/NPg8spUS5kBcKectzriVUbpjJMJ1hGNJcks+fOHPZ2dVP7XXJhyww/MWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726587914; c=relaxed/simple;
-	bh=Xos4dszutuJzvowvGCXdRKVwKCAAXY14rh75RX4PjAQ=;
+	s=arc-20240116; t=1726587919; c=relaxed/simple;
+	bh=ierCK7VWxvo8wK6md4TR1uHJ+m5L2VbdufMWxne1uCA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KGTm2KzfVlgxD6gyM8DjIiUp/N6E/xZanars4xFYy0KeMLRSEe+Q61HDblQFsVDBnOFd/ZWo9TU/MZ9WTmIDLPE6tf2eUB+H+thYJQszJUPzz4uw/5ve93O8h8jTDpWO8XlHUqN6PDVP9vkLGU2EVbvVcXaSJHWrKHCefeBMFRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hF5iDZ2L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5C8C4CEC7;
-	Tue, 17 Sep 2024 15:45:13 +0000 (UTC)
+	 MIME-Version; b=lGtrpvzGG2sOzQxOOZNS0/yzm/BpaoN1uUG7QNTA3QCUos+8R9zBvAa3kBE7nwtnvOQMjhQiuiixTKHZxuI7Uke7f0b46TFJSltcrZxjOTL7BwS1lrvNkuH+rpNHI6SXBlE5PLVCVrc196kbPyHPPDq/f3+yj5gtRU3Dcmf5OCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PrJh4aC1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80299C4CEC5;
+	Tue, 17 Sep 2024 15:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726587914;
-	bh=Xos4dszutuJzvowvGCXdRKVwKCAAXY14rh75RX4PjAQ=;
+	s=k20201202; t=1726587919;
+	bh=ierCK7VWxvo8wK6md4TR1uHJ+m5L2VbdufMWxne1uCA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hF5iDZ2LAnrczia5vsYdRtBkr77GheODd4LN4uoO4A+CA0sksNy8uXenOFHFKWNCb
-	 aEu9+9Q5pzAFMfduY2erZbX2xgeuh3/vKOEAu2ILUf4+8fSfyCc5IYJdgkDLGwtXvE
-	 QE3cqD3VmiY54nezug8DguTd0qL10wsKVMxq5qnpeEOzZrX0p2Pr/lkuCYdSaU0S9p
-	 ddW4S25uT8X3PByl/VuKmR97z46PEwxEz88Ej41EDBNEwCv9G0IIQLNPCLCjnDPXiv
-	 iLvGornctpdRNv4zNRlrd7UnZVhMHJvhkgX8wSa9nHkkFEWf/v5JxBuaax0iQ9YB6o
-	 E+QrTOorhEfCg==
+	b=PrJh4aC16spska4hn1hVdh+hmAbymnIz/1CZozeUYlaPJhL2+N+MrD4vTVvHMLtXh
+	 uYjE4X2rMq1stohIGUCCxOr0LzKNKaBcxBNil/cocBKfZIqt3wPhUn30/GC60cXC0L
+	 0LiZg2KMWtsNrxYp3LbI36F+Z4DYXz89V53ioc+P3xm+/+busembyoWql9rIKz66fa
+	 09CKz24YCPivPJ8iLTLnaCxgvXzGRJMdxSd7X39FiYLBt303Jem+aI2/YuLbKcoUld
+	 35QX4/k2A5OK2zXCrxALvYa6oHkaXAdYvK1Gh6RGsW9vtgCWsYyw0viU18u3YzDtcm
+	 GqcNQWwcOzWAw==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: James.Bottomley@HansenPartnership.com,
@@ -55,9 +55,9 @@ Cc: James.Bottomley@HansenPartnership.com,
 	keyrings@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/7] tpm: Allocate chip->auth in tpm2_start_auth_session()
-Date: Tue, 17 Sep 2024 18:44:34 +0300
-Message-ID: <20240917154444.702370-6-jarkko@kernel.org>
+Subject: [PATCH v3 6/7] tpm: flush the auth session only when /dev/tpm0 is open
+Date: Tue, 17 Sep 2024 18:44:35 +0300
+Message-ID: <20240917154444.702370-7-jarkko@kernel.org>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240917154444.702370-1-jarkko@kernel.org>
 References: <20240917154444.702370-1-jarkko@kernel.org>
@@ -69,143 +69,80 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move allocation of chip->auth to tpm2_start_auth_session() so that the
-field can be used as flag to tell whether auth session is active or not.
+Instead of flushing and reloading the auth session for every single
+transaction, keep the session open unless /dev/tpm0 is used. In practice
+this means applying TPM2_SA_CONTINUE_SESSION to the session attributes.
+Flush the session always when /dev/tpm0 is written.
+
+This reduces the number of TPM2_ContextLoad and TPM2_FlushContext
+commands
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
 v3:
-- No changes.
+- Refined the commit message.
+- Removed the conditional for applying TPM2_SA_CONTINUE_SESSION only when
+  /dev/tpm0 is open. It is not required as the auth session is flushed,
+  not saved.
 v2:
 - A new patch.
 ---
- drivers/char/tpm/tpm2-sessions.c | 43 +++++++++++++++++++-------------
- 1 file changed, 25 insertions(+), 18 deletions(-)
+ drivers/char/tpm/tpm-chip.c       | 1 +
+ drivers/char/tpm/tpm-dev-common.c | 1 +
+ drivers/char/tpm/tpm-interface.c  | 1 +
+ drivers/char/tpm/tpm2-sessions.c  | 3 +++
+ 4 files changed, 6 insertions(+)
 
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 0ea00e32f575..7a6bb30d1f32 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -680,6 +680,7 @@ void tpm_chip_unregister(struct tpm_chip *chip)
+ 	rc = tpm_try_get_ops(chip);
+ 	if (!rc) {
+ 		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++			tpm2_end_auth_session(chip);
+ 			tpm2_flush_context(chip, chip->null_key);
+ 			chip->null_key = 0;
+ 		}
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index 4bc07963e260..c6fdeb4feaef 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -29,6 +29,7 @@ static ssize_t tpm_dev_transmit(struct tpm_chip *chip, struct tpm_space *space,
+ 
+ #ifdef CONFIG_TCG_TPM2_HMAC
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++		tpm2_end_auth_session(chip);
+ 		tpm2_flush_context(chip, chip->null_key);
+ 		chip->null_key = 0;
+ 	}
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index bfa47d48b0f2..2363018fa8fb 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -381,6 +381,7 @@ int tpm_pm_suspend(struct device *dev)
+ 	if (!rc) {
+ 		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+ #ifdef CONFIG_TCG_TPM2_HMAC
++			tpm2_end_auth_session(chip);
+ 			tpm2_flush_context(chip, chip->null_key);
+ 			chip->null_key = 0;
+ #endif
 diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index 5227bf6097a0..43b8e3576232 100644
+index 43b8e3576232..d240039d0849 100644
 --- a/drivers/char/tpm/tpm2-sessions.c
 +++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -419,7 +419,8 @@ static void tpm2_KDFe(u8 z[EC_PT_SZ], const char *str, u8 *pt_u, u8 *pt_v,
- 	sha256_final(&sctx, out);
- }
- 
--static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip)
-+static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
-+				struct tpm2_auth *auth)
- {
- 	struct crypto_kpp *kpp;
- 	struct kpp_request *req;
-@@ -478,7 +479,7 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip)
- 	sg_set_buf(&s[0], chip->null_ec_key_x, EC_PT_SZ);
- 	sg_set_buf(&s[1], chip->null_ec_key_y, EC_PT_SZ);
- 	kpp_request_set_input(req, s, EC_PT_SZ*2);
--	sg_init_one(d, chip->auth->salt, EC_PT_SZ);
-+	sg_init_one(d, auth->salt, EC_PT_SZ);
- 	kpp_request_set_output(req, d, EC_PT_SZ);
- 	crypto_kpp_compute_shared_secret(req);
- 	kpp_request_free(req);
-@@ -489,8 +490,7 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip)
- 	 * This works because KDFe fully consumes the secret before it
- 	 * writes the salt
- 	 */
--	tpm2_KDFe(chip->auth->salt, "SECRET", x, chip->null_ec_key_x,
--		  chip->auth->salt);
-+	tpm2_KDFe(auth->salt, "SECRET", x, chip->null_ec_key_x, auth->salt);
- 
-  out:
- 	crypto_free_kpp(kpp);
-@@ -789,6 +789,8 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
- 			/* manually close the session if it wasn't consumed */
- 			tpm2_flush_context(chip, auth->handle);
- 		memzero_explicit(auth, sizeof(*auth));
-+		kfree(auth);
-+		chip->auth = NULL;
- 	} else {
- 		/* reset for next use  */
- 		auth->session = TPM_HEADER_SIZE;
-@@ -817,6 +819,8 @@ void tpm2_end_auth_session(struct tpm_chip *chip)
- 
- 	tpm2_flush_context(chip, auth->handle);
- 	memzero_explicit(auth, sizeof(*auth));
-+	kfree(auth);
-+	chip->auth = NULL;
- }
- EXPORT_SYMBOL(tpm2_end_auth_session);
- 
-@@ -904,25 +908,29 @@ static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
-  */
- int tpm2_start_auth_session(struct tpm_chip *chip)
- {
-+	struct tpm2_auth *auth;
- 	struct tpm_buf buf;
--	struct tpm2_auth *auth = chip->auth;
--	int rc;
- 	u32 null_key;
-+	int rc;
- 
--	if (!auth) {
--		dev_warn_once(&chip->dev, "auth session is not active\n");
-+	if (chip->auth) {
-+		dev_warn_once(&chip->dev, "auth session is active\n");
- 		return 0;
+@@ -268,6 +268,9 @@ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
  	}
  
-+	auth = kzalloc(sizeof(*auth), GFP_KERNEL);
-+	if (!auth)
-+		return -ENOMEM;
+ #ifdef CONFIG_TCG_TPM2_HMAC
++	/* The first write to /dev/tpm{rm0} will flush the session. */
++	attributes |= TPM2_SA_CONTINUE_SESSION;
 +
- 	rc = tpm2_load_null(chip, &null_key);
- 	if (rc)
--		goto out;
-+		goto err;
- 
- 	auth->session = TPM_HEADER_SIZE;
- 
- 	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_START_AUTH_SESS);
- 	if (rc)
--		goto out;
-+		goto err;
- 
- 	/* salt key handle */
- 	tpm_buf_append_u32(&buf, null_key);
-@@ -934,7 +942,7 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
- 	tpm_buf_append(&buf, auth->our_nonce, sizeof(auth->our_nonce));
- 
- 	/* append encrypted salt and squirrel away unencrypted in auth */
--	tpm_buf_append_salt(&buf, chip);
-+	tpm_buf_append_salt(&buf, chip, auth);
- 	/* session type (HMAC, audit or policy) */
- 	tpm_buf_append_u8(&buf, TPM2_SE_HMAC);
- 
-@@ -955,10 +963,13 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
- 
- 	tpm_buf_destroy(&buf);
- 
--	if (rc)
--		goto out;
-+	if (rc == TPM2_RC_SUCCESS) {
-+		chip->auth = auth;
-+		return 0;
-+	}
- 
-- out:
-+err:
-+	kfree(auth);
- 	return rc;
- }
- EXPORT_SYMBOL(tpm2_start_auth_session);
-@@ -1310,10 +1321,6 @@ int tpm2_sessions_init(struct tpm_chip *chip)
- 	if (rc)
- 		return rc;
- 
--	chip->auth = kmalloc(sizeof(*chip->auth), GFP_KERNEL);
--	if (!chip->auth)
--		return -ENOMEM;
--
- 	return rc;
- }
- EXPORT_SYMBOL(tpm2_sessions_init);
+ 	/*
+ 	 * The Architecture Guide requires us to strip trailing zeros
+ 	 * before computing the HMAC
 -- 
 2.46.0
 
