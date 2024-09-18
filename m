@@ -1,154 +1,131 @@
-Return-Path: <linux-integrity+bounces-3637-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3638-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C72397C0E2
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Sep 2024 22:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EF60897C0EB
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Sep 2024 22:38:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 037BA1F2272D
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Sep 2024 20:37:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7BF21F22673
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Sep 2024 20:38:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1175D1CB32D;
-	Wed, 18 Sep 2024 20:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06C601CA69A;
+	Wed, 18 Sep 2024 20:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jSunCmaX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+ByRvPh"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45471CB32C;
-	Wed, 18 Sep 2024 20:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9FD214B94A;
+	Wed, 18 Sep 2024 20:38:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726691795; cv=none; b=Ze3UrMDRzG6GgtWRm63HeDU4XVGN2ZjU2w/0kOoFIu57f9if1QG2TprK0ovBFzTE8Ua44VEsVnvWw3LShW42IuSGPZjzJRD2CT0tzjD1b7a3eAB8uMNk4buH85ErCP3UBbeZjWUdQ3OpeZFhElFDWVdh45sFtWIC7Br/zZ0MAKo=
+	t=1726691933; cv=none; b=VRrusPmc8fHiQsQ/4xUqpM8/D761DC3lMtcDdnuc976VyHx6DDmRY8UP/c2/4TPiu+CAHvwqQ5Kk8kjYP4Rq3OUNsr40cNfplG9C+IODyYCD3KY7Odt74EsSy6jkCXfhB51temB87wSSFc4SSq31F7UKqcfkBW6EnfYuRfGIQxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726691795; c=relaxed/simple;
-	bh=a6hjHtAXEMh6b1R8nEW38A6SmJBF8Y73m7GYMb7SEdk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SRTjRxsXW8LBm40kGRzjxCb6wqNsQSzJ9ryek7u5M4fslZBZvosKfAZ/Mne4TjZlMEHaAPFjlaOnCLTPTTU0Stjxhv1oGlx4D5ac0jjoOZ8nrk9OIonBhy/vtCULEjkfVfUhkwugOQ4+HaHIe5++PLErhHcVHgC+swT/xtQkYig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jSunCmaX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551BCC4CEC2;
-	Wed, 18 Sep 2024 20:36:34 +0000 (UTC)
+	s=arc-20240116; t=1726691933; c=relaxed/simple;
+	bh=boUgcIfKgwAPas8q5f7eAfrRLxFQ2JNLZrh82hZUHdg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=Mz3QT0uR/LJRjX8pyv9Sod2VIv/aeHQxnY6XK47KTwr9/YFJ3Slcz+HgjEwFkpG+M7x+6jK5ITrFfRx8VgtXo7/ndjkE/03cHJkDFL6CchV9XkWxsUsgfGOLcXscDOIRokZLQOUvgpus1ZuUF4Ej8F0Y5Rro9VQdpSWycmAVcew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+ByRvPh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DB5C4CEC7;
+	Wed, 18 Sep 2024 20:38:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726691794;
-	bh=a6hjHtAXEMh6b1R8nEW38A6SmJBF8Y73m7GYMb7SEdk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jSunCmaXzik1WBkT7BnosXXdNSAG8dSg8J4fYJe/OPFdvCXWxbin/ZDf+jrmVed4u
-	 KhEMVsVrGbGOMp81NLGk0jLKiny68b7GiUjjK44HSVvSnZf/fbG5Q/uJ9PJ1w0O8RG
-	 z3vdhksIxLMNBzyKPqdGl9nR81EzlUDqRQW1Bgr9iVpzbwMe0fVeSeSFQU/3VyHGqf
-	 zCFektkS76ZAnhVytu0kHX8DAa84IZDs2gko/ZXjqDXtpLrY3WZsqtvKR8KlvOG7OM
-	 YW4buY5ncuMwhj0wfwGUboWr/NFIWJuJASDS86xl0BlNmTJLOSyueH9Y/HeET6sr18
-	 Q1a2YvJ7KD8+g==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: James.Bottomley@HansenPartnership.com,
-	roberto.sassu@huawei.com,
-	mapengyu@gmail.com,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	stable@vger.kernel.org,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] tpm: flush the auth session only when /dev/tpm0 is open
-Date: Wed, 18 Sep 2024 23:35:49 +0300
-Message-ID: <20240918203559.192605-6-jarkko@kernel.org>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240918203559.192605-1-jarkko@kernel.org>
-References: <20240918203559.192605-1-jarkko@kernel.org>
+	s=k20201202; t=1726691933;
+	bh=boUgcIfKgwAPas8q5f7eAfrRLxFQ2JNLZrh82hZUHdg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=G+ByRvPhXKW0rwxwIHG40X8E525AzfIehe78XuaCUlI/fdfD0RFPTl1wC1G8WM+gH
+	 U6SxfXdsuhqnCQ6G7Ud1xpYFGsZFyKNh6CN37LFREmzBEd/D/gawl/a9hV9TU7rXvT
+	 L9uN3++f3UzEqG7e43bMzYJgk71GxXZKgasZkpyxCBYjXVj+eZnp9URG7I6z4FtrKh
+	 x8HwQ/LopRUtft3OAqYT1sSI6Vz4IHfLLOo/4cLNIo1W4istSfu6VMQ4uOnJ2hYkIF
+	 rUh0Qtt+hm5Fjw8KITUD1OPltNg/2CRao31wegMTQSWYCm0Zcb6GFo22xvwUvAhuL1
+	 7Y9hCsz1G/1JA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 18 Sep 2024 23:38:49 +0300
+Message-Id: <D49P7DT1HDLG.15LBU78Q192XB@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Pengyu Ma" <mapengyu@gmail.com>
+Cc: <linux-integrity@vger.kernel.org>,
+ <James.Bottomley@hansenpartnership.com>, <roberto.sassu@huawei.com>, "Mimi
+ Zohar" <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul
+ Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
+ Hallyn" <serge@hallyn.com>, <keyrings@vger.kernel.org>,
+ <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/7] Lazy flush for the auth session
+X-Mailer: aerc 0.18.2
+References: <20240917154444.702370-1-jarkko@kernel.org>
+ <CALSz7m0EvuDmRQHCbmwA=ED-bt7x8mhCS=X69f+yx60SYq7VgA@mail.gmail.com>
+In-Reply-To: <CALSz7m0EvuDmRQHCbmwA=ED-bt7x8mhCS=X69f+yx60SYq7VgA@mail.gmail.com>
 
-Instead of flushing and reloading the auth session for every single
-transaction, keep the session open unless /dev/tpm0 is used. In practice
-this means applying TPM2_SA_CONTINUE_SESSION to the session attributes.
-Flush the session always when /dev/tpm0 is written.
+On Wed Sep 18, 2024 at 9:47 AM EEST, Pengyu Ma wrote:
+> Hi Jarkko,
+>
+> After applied this patchset, the boot time become 8.9 secondes, it's
+> more reasonable.
 
-Reported-by: Pengyu Ma <mapengyu@gmail.com>
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219229
-Cc: stable@vger.kernel.org # v6.10+
-Fixes: 7ca110f2679b ("tpm: Address !chip->auth in tpm_buf_append_hmac_session*()")
-Tested-by: Pengyu Ma <mapengyu@gmail.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v4:
-- Changed as bug.
-v3:
-- Refined the commit message.
-- Removed the conditional for applying TPM2_SA_CONTINUE_SESSION only when
-  /dev/tpm0 is open. It is not required as the auth session is flushed,
-  not saved.
-v2:
-- A new patch.
----
- drivers/char/tpm/tpm-chip.c       | 1 +
- drivers/char/tpm/tpm-dev-common.c | 1 +
- drivers/char/tpm/tpm-interface.c  | 1 +
- drivers/char/tpm/tpm2-sessions.c  | 3 +++
- 4 files changed, 6 insertions(+)
+Great! I have some ideas how to further optimize but within context of
+the bug I think we are now in reasonable figures :-)
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 0ea00e32f575..7a6bb30d1f32 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -680,6 +680,7 @@ void tpm_chip_unregister(struct tpm_chip *chip)
- 	rc = tpm_try_get_ops(chip);
- 	if (!rc) {
- 		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+			tpm2_end_auth_session(chip);
- 			tpm2_flush_context(chip, chip->null_key);
- 			chip->null_key = 0;
- 		}
-diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
-index 4eaa8e05c291..a3ed7a99a394 100644
---- a/drivers/char/tpm/tpm-dev-common.c
-+++ b/drivers/char/tpm/tpm-dev-common.c
-@@ -29,6 +29,7 @@ static ssize_t tpm_dev_transmit(struct tpm_chip *chip, struct tpm_space *space,
- 
- #ifdef CONFIG_TCG_TPM2_HMAC
- 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
-+		tpm2_end_auth_session(chip);
- 		tpm2_flush_context(chip, chip->null_key);
- 		chip->null_key = 0;
- 	}
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index bfa47d48b0f2..2363018fa8fb 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -381,6 +381,7 @@ int tpm_pm_suspend(struct device *dev)
- 	if (!rc) {
- 		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
- #ifdef CONFIG_TCG_TPM2_HMAC
-+			tpm2_end_auth_session(chip);
- 			tpm2_flush_context(chip, chip->null_key);
- 			chip->null_key = 0;
- #endif
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index 6371e0ee88b0..e9d3a6a9d397 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -333,6 +333,9 @@ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- 	}
- 
- #ifdef CONFIG_TCG_TPM2_HMAC
-+	/* The first write to /dev/tpm{rm0} will flush the session. */
-+	attributes |= TPM2_SA_CONTINUE_SESSION;
-+
- 	/*
- 	 * The Architecture Guide requires us to strip trailing zeros
- 	 * before computing the HMAC
--- 
-2.46.0
+>
+> But this patchset can't be clean applied to upstream 6.11 kernel.
+> looks like file tpm2-sessions.c is changed in your code base.
+
+Thanks for the feedback. I decided to drop the couple of "cleanup"
+patches and relabel performance fixes also as bug fixes because I
+really think we should backport these to v6.10 and v6.11 trees.
+
+I sent v4 which should be easy to apply on top of v6.11.
+
+>
+> Tested-by: Pengyu Ma <mapengyu@gmail.com>
+
+Thank you!
+>
+> Thanks,
+> Pengyu
+
+BR, Jarkko
+>
+> On Tue, Sep 17, 2024 at 11:44=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.o=
+rg> wrote:
+> >
+> > For the sake of:
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
+> >
+> > v2:
+> > https://lore.kernel.org/linux-integrity/20240916110714.1396407-1-jarkko=
+@kernel.org/
+> > v1:
+> > https://lore.kernel.org/linux-integrity/20240915180448.2030115-1-jarkko=
+@kernel.org/
+> >
+> > Jarkko Sakkinen (7):
+> >   tpm: Remove the top-level documentation tpm2-sessions.c
+> >   tpm: Return on tpm2_create_null_primary() failure
+> >   tpm: Return on tpm2_create_primary() failure in tpm2_load_null()
+> >   tpm: flush the null key only when /dev/tpm0 is accessed
+> >   tpm: Allocate chip->auth in tpm2_start_auth_session()
+> >   tpm: flush the auth session only when /dev/tpm0 is open
+> >   tpm: open code tpm2_create_null_primary()
+> >
+> >  drivers/char/tpm/tpm-chip.c       |  14 +++
+> >  drivers/char/tpm/tpm-dev-common.c |   8 ++
+> >  drivers/char/tpm/tpm-interface.c  |  10 +-
+> >  drivers/char/tpm/tpm2-cmd.c       |   3 +
+> >  drivers/char/tpm/tpm2-sessions.c  | 196 +++++++++++-------------------
+> >  include/linux/tpm.h               |   2 +
+> >  6 files changed, 109 insertions(+), 124 deletions(-)
+> >
+> > --
+> > 2.46.0
+> >
 
 
