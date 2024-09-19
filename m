@@ -1,79 +1,109 @@
-Return-Path: <linux-integrity+bounces-3642-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3643-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ED6697C57A
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Sep 2024 10:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A930C97CA4B
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Sep 2024 15:42:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4030F284A23
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Sep 2024 08:00:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49CBB285E34
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Sep 2024 13:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB60199249;
-	Thu, 19 Sep 2024 08:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CB9A19F461;
+	Thu, 19 Sep 2024 13:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jceGIhtm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FbhM8SH1"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2884199FC7;
-	Thu, 19 Sep 2024 08:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BB819D8BB;
+	Thu, 19 Sep 2024 13:42:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726732809; cv=none; b=Ox1SzpptORrHy6xTpdl+XaDRSRk03B2GPDQ3rW1UTLZrVTc7Cz1ZHhFWEb1TfQb3gWcKeB1TTwKrWDnt53ySXqLkOLGflLwgKxXMXNZRzrM3QfAnwy5kL5f1l8xnePXwNK6XBc35nmQ4fhtH5l+UJnciqhhRqMui81MVbSlVmiU=
+	t=1726753330; cv=none; b=ppYnwo15xCtm+NYVoecZkWB8L/iUanqhzk3IK6+wkjcZOShx1cQ5+AybiaAXwRuNhuMy2/RYY0TpPiRdZmkkSOj3lrk/V+5OChY6sPWeLlIQOsF1QEhQM1y3EQuR4HKhxr7S6vofmp/nn2oIyOlyPs4tztQx/cnNYp7XP4AdljM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726732809; c=relaxed/simple;
-	bh=I/G4k6y4i9DNO1R6tRk8uZ85Yb1u0CalDZlvaSRmhgM=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=MVwMfX+JSk950WvcarQzOkhmtcF/kSdj8Iab5c6onR+QhddUUI6/0vUgcosQNPRfDbzwokhlIaRdbLWkdvLbL6Uop4ib+xocqcs7mZ4nHdrbpXDyrkDzHf7OzGILKfe8d4yG7IQFbpFzizwq0iw14KGlvd2jvxeTxLy2iZK66ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jceGIhtm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F360C4CEC4;
-	Thu, 19 Sep 2024 08:00:09 +0000 (UTC)
+	s=arc-20240116; t=1726753330; c=relaxed/simple;
+	bh=Ddg68ZWVidcqPqMiyOPkT4CJlaowbdtqhlHc9z5kbD8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hldlZdlfiej/Fn/c+DPGUQwz7QJWoGMd/M+7Pi9kbXsER3Aqlgpf8FoMcMBSKFIioTgiDP+5Q/O9M+HYHeSocm56sjA7qoFnX3tR+eEI4UqW1HaBW/XmWqnPWnAwwtOD89nQ4FQoJBWOoEfqmJgoki6syy+43eawtfdg27rXLqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FbhM8SH1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76145C4CEC6;
+	Thu, 19 Sep 2024 13:42:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726732809;
-	bh=I/G4k6y4i9DNO1R6tRk8uZ85Yb1u0CalDZlvaSRmhgM=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=jceGIhtmTXYYUWUaehmwKhrqznRQxn23ytG13DMzyw7r3+Wi/CdSS28AfF/t3eF7W
-	 tuQplsetNRm9I+EdKoO1LbjlETUWmV2IuXLpZl7oh19VlJnsyYp/2SiqCbWE9C4S6W
-	 d5lKTNy7U7aNGBrjqDEQl6NTO5v2yIvFYZ2+3IRPAVePIKMp2HzYMmvJ4i+M1YD4d9
-	 jef2mNyx0FDzpuwirVlxpXMW9JdfeKhSmA4H/FonNwp1BvXTI6bfKV/WVZGJ/2YAZc
-	 fuyn3FE6c1ZhkGs3evazZg0PXilUbQwnZAh7Zjit6fLYL/QVfOioEhzeGpNZlanKnd
-	 oOKSu4yB3z5lg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 790003809A81;
-	Thu, 19 Sep 2024 08:00:12 +0000 (UTC)
-Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-6.12-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <D48OZ7EPSJB7.2YEWVMTAYHQXH@kernel.org>
-References: <D48OZ7EPSJB7.2YEWVMTAYHQXH@kernel.org>
-X-PR-Tracked-List-Id: <keyrings.vger.kernel.org>
-X-PR-Tracked-Message-Id: <D48OZ7EPSJB7.2YEWVMTAYHQXH@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-6.12-rc1
-X-PR-Tracked-Commit-Id: f168c000d27f8134160d4a52dfc474a948a3d7e9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d5e65d1fb75ffbe3aba33de81a72752ace28295e
-Message-Id: <172673281140.1388805.17939526705738153161.pr-tracker-bot@kernel.org>
-Date: Thu, 19 Sep 2024 08:00:11 +0000
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=k20201202; t=1726753329;
+	bh=Ddg68ZWVidcqPqMiyOPkT4CJlaowbdtqhlHc9z5kbD8=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=FbhM8SH10VlPVNRQcY/DjuP42fECdCKIJGh5BhrPQxfHrOOUipi6XofvcQcU5A7y5
+	 9PqgtmvblaM/DOaH39C4LiTKllBWSS6i2qLvP9ZTtGXKH8PhF4kqOZ64IueKaHz/nN
+	 0P4mqhfyWVQFZqNIs5Uo2KAQ8kZpoTGJ6al6E8xoiKQ/W7YTr9u+ZOpM8b9Ic4Cx+1
+	 /zEC9vvX//Z2/AMDy8eNRSWw6AE1+inMEuAEXzSLH7hODPuxK+fJLXrIQFzdZVEKi4
+	 KG5E3lOOo1koM9q1R2wupKs/7GxCtf7n3LRyfQ1aoA7M+BJxxhKxDCb1J7TfkeNXye
+	 BXK3rCMbuS2SA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 19 Sep 2024 16:42:05 +0300
+Message-Id: <D4AAYUVJV9D1.J8XJ05EIL9ZL@kernel.org>
+Cc: <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>,
+ <apronin@chromium.org>, <jettrink@chromium.org>, <gwendal@chromium.org>,
+ <chrome-platform@lists.linux.dev>
+Subject: Re: [PATCH] MAINTAINERS: Add Google Security Chip entry
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: <tzungbi@kernel.org>, <peterhuewe@gmx.de>
+X-Mailer: aerc 0.18.2
+References: <20240919055754.2036555-1-tzungbi@kernel.org>
+In-Reply-To: <20240919055754.2036555-1-tzungbi@kernel.org>
 
-The pull request you sent on Tue, 17 Sep 2024 19:15:28 +0300:
+On Thu Sep 19, 2024 at 8:57 AM EEST, tzungbi wrote:
+> From: Tzung-Bi Shih <tzungbi@kernel.org>
+>
+> These are Google Security Chip drivers and are mostly used for ChromeOS
+> platforms.  Add a new entry for them.
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+>  MAINTAINERS | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8a76c256229c..07dc83e01216 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9593,6 +9593,15 @@ S:	Maintained
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/lin=
+ux.git
+>  F:	drivers/firmware/google/
+> =20
+> +GOOGLE SECURITY CHIP DRIVERS
+> +M:	Tzung-Bi Shih <tzungbi@kernel.org>
+> +R:	Andrey Pronin <apronin@chromium.org>
+> +L:	chrome-platform@lists.linux.dev
+> +S:	Maintained
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/lin=
+ux.git
+> +F:	Documentation/devicetree/bindings/tpm/google,cr50.yaml
+> +F:	drivers/char/tpm/*cr50*
+> +
+>  GOOGLE TENSOR SoC SUPPORT
+>  M:	Peter Griffin <peter.griffin@linaro.org>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-6.12-rc1
+1. From now I expect either give reviewed-by. That helps also with my
+   decision so I welcome that of course.
+2. In the end I pick drivers/char/tpm changes. This not because I would
+   want to cr50 specific changes but because I want to make sure that
+   they fit to the context.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d5e65d1fb75ffbe3aba33de81a72752ace28295e
+With those constraints:
 
-Thank you!
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+BR, Jarkko
 
