@@ -1,134 +1,258 @@
-Return-Path: <linux-integrity+bounces-3655-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3656-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E8E797DDB3
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Sep 2024 17:40:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7378497DE57
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Sep 2024 20:38:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E18E1F21984
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Sep 2024 15:40:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCB3AB20BCB
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Sep 2024 18:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D58155CA8;
-	Sat, 21 Sep 2024 15:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D46644C8F;
+	Sat, 21 Sep 2024 18:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lG9mNQC7"
+	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="T1NF7p1R"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender3-of-o57.zoho.com (sender3-of-o57.zoho.com [136.143.184.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDE326AC1;
-	Sat, 21 Sep 2024 15:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726933216; cv=none; b=r/rnQMAZ7JeVa4xyipwUZtlDGC1bRgwRFBjiwOVtFB/VzZwid80y8TbCwT6I/viRF0oVki+8QhZuK1afpPDXHXjo0Bdggur1/Pbwf1qn59p/TdbkkvdC0f5vmidS98YWeBYLzVEOEVMBgQeAAeCBSuyD6HF2ZcdOUbeDQrtZkmQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726933216; c=relaxed/simple;
-	bh=4CxDI76mPU+av0PlDueKI0ZftQmM4Hg/wO91AfGb+BA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=PtlP3vk+um/EU/6DVebNEGjGeYMOvmnqVBncZnnUjh14rEP1pvQXSjC5e6honFtHVy5epkmuT0QfeMq/lRwjylu4t5cyXBnwXand1TVw+jKP+NiMo3S9+cDHWhHtb7U1yfvilIg2qmgVObQc1FPF5cFQdpdHhzkK8XtyMso/q/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lG9mNQC7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0FAC4CEC2;
-	Sat, 21 Sep 2024 15:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726933216;
-	bh=4CxDI76mPU+av0PlDueKI0ZftQmM4Hg/wO91AfGb+BA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lG9mNQC7KEW0nXIn7zBz5m8fkpiHVe3caQ+vTqDQ94XVbQ/227S55P+MKY20GpX5H
-	 4KU0o3f7qzva6l/UwbINxrjW5n1l5SrmdIDrv59UyVxsxuQWkvJ0Hh9Wbv+8mvn262
-	 lntcnMyG4rNTn85JvYEliF9w8Qb4bCABaP2LOGEJZFdqPBJYulocBOBVVNYttNKIkP
-	 /Fe8mTztkd0KlQcnpwaC186EHifE2hVJpWg9Ben3t+BAaWaHM94zeWFVf6ICM7gZ7j
-	 xU+In4yGI/PJ/pGC9NJRpTMfhfQ1DuXi+qGSERgGBbCImYeJO/sidvktarMkrJHPZL
-	 I5+N4x5jDYB4A==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE63B3BB48;
+	Sat, 21 Sep 2024 18:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726943915; cv=pass; b=DaCxcdBHBZlzl80N9uJ844kHe5WOf3nIdGwjm2SnjbnwX72DW6ON3fK08pi3ZYGd0GQifWjiBGNUV8QHhAlVWCWxK+Se9Bn8GnfMSBtb46+kPhg/psqaJKdGlKsnDZrf0k3fwwKElaEjQeTE4hwfXNnqFg4SowLtXbH6XpDI1xI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726943915; c=relaxed/simple;
+	bh=WpadbEHEfXCgwZTQEX+7bHS29I7aOtuKslLsrT04Dzw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GTZjLdyoNt/lFMNkqGZ/q9reNk0CQg5KyHTM/C9eAvlNpk0albWLsKVfUpu9P24zzgXTFZ7XRlTXHofhaFRnPUmhNRVvYe5i5JyXeXSPD2IltEfHj5FNvI1E/hTPFHPdpiLHSEB31gXDODU0qExGXtRuSqsQW0F1Lq2nNrZLcnQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=T1NF7p1R; arc=pass smtp.client-ip=136.143.184.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
+ARC-Seal: i=1; a=rsa-sha256; t=1726943834; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Isu+KNxmEdff4Yf8v+8NIVgqd1KCyNgZK+jRYblRct4+s63Fu1VdgNY+M14Y2pOA4BelJ1fkDlz6rpFcX2n9z+5hFvWgLO6UoLBdT3BokM9arPI4q4s+oaIj4sTIuuP1sl1/fJIdkhZjBibY1wVUqBQU0DG+TGZ9FlNn4/7RqWk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1726943834; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=epVfrURWgC20QBuvtkf5SBZ7wdGePGXbAnPnMOgBIC8=; 
+	b=akg5M36Efr83ZaGZr4tah8q5qwThdoBARKYSFfDrSEnLwQRYUe3CojwDtZhe7qga86BxANRNPH7H/t9vDdPD24UZCYUnEsc+4bJAPdb0yWs9nh+0CSkk6oN0MnLZclXDF3ziTf3S6u7Wf5N9qqYIseUjEIpRuaKjIt3gamJqESI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=apertussolutions.com;
+	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+	dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726943834;
+	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=epVfrURWgC20QBuvtkf5SBZ7wdGePGXbAnPnMOgBIC8=;
+	b=T1NF7p1RrY7do2w/YnOlDlPCBTTaewBsDGRb3wToOj7vxq+uyrWbNkuXqe0v7ikm
+	fVyli/s99EXCa5tZkKzlfoMHeiNKS4LpdfvPMyvXyJTPWh5mC9Broq5SqKNAS9Y+uvq
+	X+P/OtTvPsQH9O+fB8+5pkmUQS7yT6rtiL+YDmWk=
+Received: by mx.zohomail.com with SMTPS id 1726943833180834.882107651291;
+	Sat, 21 Sep 2024 11:37:13 -0700 (PDT)
+Message-ID: <c466ed57-35a8-41c0-9647-c70e588ad1d3@apertussolutions.com>
+Date: Sat, 21 Sep 2024 14:36:58 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 21 Sep 2024 18:40:12 +0300
-Message-Id: <D4C2QDK9WGUH.KQCJ19C43ONW@kernel.org>
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "James Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Roberto Sassu"
- <roberto.sassu@huaweicloud.com>, "Linux regressions mailing list"
- <regressions@lists.linux.dev>
-Cc: <keyrings@vger.kernel.org>, "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>,
- "Pengyu Ma" <mapengyu@gmail.com>
-Subject: Re: [regression] significant delays when secureboot is enabled
- since 6.10
-X-Mailer: aerc 0.18.2
-References: <0b4a5a86-a9f6-42d1-a9ba-ec565b336d3a@leemhuis.info>
- <92fbcc4c252ec9070d71a6c7d4f1d196ec67eeb0.camel@huaweicloud.com>
- <D42LZPLE8HR3.2UTNOI9CYZPIR@kernel.org>
- <D42M6OE94RLT.6EZSZLBTX437@kernel.org>
- <663d272617d1aead08077ad2b72929cbc226372a.camel@HansenPartnership.com>
- <D42N17MFTEDM.3E6IK034S26UT@kernel.org>
- <f554031343039883068145f9f4777277e490dc05.camel@huaweicloud.com>
- <D43JXBFOOB2O.3U6ZQ7DASR1ZW@kernel.org>
- <7e47f97aede88b87fbb9c9284db2005764bfbedd.camel@huaweicloud.com>
- <D46RE2BWMGJ4.25VA7IVYTJ8MO@kernel.org>
- <D46RWPQ211ZS.12EYKZY053BH@kernel.org>
- <0b22c2c4b4a998fb44bb08be60a359acb9ecb8da.camel@HansenPartnership.com>
- <D46XX6HNU686.50X57ZWI2GUX@kernel.org>
- <7586c7e6e6028a734a8cac3d4b1a8504e6cd4b21.camel@HansenPartnership.com>
- <D46ZV5RXW7Z9.26N1IRXNRLV9X@kernel.org>
-In-Reply-To: <D46ZV5RXW7Z9.26N1IRXNRLV9X@kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
+ early measurements
+To: Andy Lutomirski <luto@amacapital.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+ "Eric W. Biederman" <ebiederm@xmission.com>,
+ Eric Biggers <ebiggers@kernel.org>,
+ Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
+ mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+ ardb@kernel.org, mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
+ peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, nivedita@alum.mit.edu,
+ herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
+ dwmw2@infradead.org, baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
+ andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-7-ross.philipson@oracle.com>
+ <20240531021656.GA1502@sol.localdomain>
+ <874jaegk8i.fsf@email.froward.int.ebiederm.org>
+ <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
+ <87ttflli09.ffs@tglx>
+ <CALCETrXQ7rChWLDqTG0+KY7rsfajSPguMnHO1G4VJi_mgwN9Zw@mail.gmail.com>
+ <1a1f0c41-70de-4f46-b91d-6dc7176893ee@apertussolutions.com>
+ <8a0b59a4-a5a2-42ae-bc1c-1ddc8f2aad16@apertussolutions.com>
+ <CALCETrX8caT5qvCUu24hQfxUF_wUC2XdGpS2YFP6SR++7FiM3Q@mail.gmail.com>
+Content-Language: en-US
+From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+In-Reply-To: <CALCETrX8caT5qvCUu24hQfxUF_wUC2XdGpS2YFP6SR++7FiM3Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On Sun Sep 15, 2024 at 7:22 PM EEST, Jarkko Sakkinen wrote:
-> On Sun Sep 15, 2024 at 6:00 PM EEST, James Bottomley wrote:
-> > On Sun, 2024-09-15 at 17:50 +0300, Jarkko Sakkinen wrote:
-> > > On Sun Sep 15, 2024 at 4:59 PM EEST, James Bottomley wrote:
-> > > > On Sun, 2024-09-15 at 13:07 +0300, Jarkko Sakkinen wrote:
-> > > > > On Sun Sep 15, 2024 at 12:43 PM EEST, Jarkko Sakkinen wrote:
-> > > > > > When it comes to boot we should aim for one single
-> > > > > > start_auth_session during boot, i.e. different phases would
-> > > > > > leave that session open so that we don't have to load the
-> > > > > > context every single time.=C2=A0 I think it should be doable.
-> > > > >=20
-> > > > > The best possible idea how to improve performance here would be
-> > > > > to transfer the cost from time to space. This can be achieved by
-> > > > > keeping null key permanently in the TPM memory during power
-> > > > > cycle.
-> > > >=20
-> > > > No it's not at all.=C2=A0 If you look at it, the NULL key is only u=
-sed
-> > > > to encrypt the salt for the start session and that's the operating
-> > > > taking a lot of time.=C2=A0 That's why the cleanest mitigation woul=
-d be
-> > > > to save and restore the session.=C2=A0 Unfortunately the timings yo=
-u
-> > > > already complain about still show this would be about 10x longer
-> > > > than a no-hmac extend so I'm still waiting to see if IMA people
-> > > > consider that an acceptable tradeoff.
-> > >=20
-> > > The bug report does not say anything about IMA issues. Please read
-> > > the bug reports before commenting ;-) I will ignore your comment
-> > > because it is plain misleading information.
-> > >=20
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
-> >
-> > Well, given that the kernel does no measured boot extends after the EFI
-> > boot stub (which isn't session protected) finishes, what's your theory
-> > for the root cause?
->
-> I don't think there is a silver bullet. Based on benchmark which showed
-> 80% overhead from throttling the context reducing number of loads and
-> saves will cut a slice of the fat.
->
-> Since it is the low-hanging fruit I'll start with that. In other words,
-> I'm not going touch session loading and saving. I'll start with null
-> key loading and saving.
+On 9/13/24 23:57, Andy Lutomirski wrote:
+> On Thu, Sep 12, 2024 at 5:34 PM Daniel P. Smith
+> <dpsmith@apertussolutions.com> wrote:
+>>
+>> Hey again,
+>>
+>> On 9/4/24 21:01, Daniel P. Smith wrote:
+>>> Hi Luto.
+>>>
+>>> On 8/28/24 23:17, Andy Lutomirski wrote:
+>>>> On Thu, Aug 15, 2024 at 12:10 PM Thomas Gleixner <tglx@linutronix.de>
+>>>> wrote:
+>>>>>
+>>>>> On Thu, Aug 15 2024 at 13:38, Daniel P. Smith wrote:
+>>>>>> On 5/31/24 09:54, Eric W. Biederman wrote:
+>>>>>>> Eric Biggers <ebiggers@kernel.org> writes:
+>>>>>>>> That paragraph is also phrased as a hypothetical, "Even if we'd
+>>>>>>>> prefer to use
+>>>>>>>> SHA-256-only".  That implies that you do not, in fact, prefer
+>>>>>>>> SHA-256 only.  Is
+>>>>>>>> that the case?  Sure, maybe there are situations where you *have*
+>>>>>>>> to use SHA-1,
+>>>>>>>> but why would you not at least *prefer* SHA-256?
+>>>>>>>
+>>>>>>> Yes.  Please prefer to use SHA-256.
+>>>>>>>
+>>>>>>> Have you considered implementing I think it is SHA1-DC (as git has)
+>>>>>>> that
+>>>>>>> is compatible with SHA1 but blocks the known class of attacks where
+>>>>>>> sha1 is actively broken at this point?
+>>>>>>
+>>>>>> We are using the kernel's implementation, addressing what the kernel
+>>>>>> provides is beyond our efforts. Perhaps someone who is interested in
+>>>>>> improving the kernel's SHA1 could submit a patch implementing/replacing
+>>>>>> it with SHA1-DC, as I am sure the maintainers would welcome the help.
+>>>>>
+>>>>> Well, someone who is interested to get his "secure" code merged should
+>>>>> have a vested interested to have a non-broken SHA1 implementation if
+>>>>> there is a sensible requirement to use SHA1 in that new "secure" code,
+>>>>> no?
+>>>>>
+>>>>> Just for the record. The related maintainers can rightfully decide to
+>>>>> reject known broken "secure" code on a purely technical argument.
+>>>>>
+>>>>
+>>>> Wait, hold on a second.
+>>>>
+>>>> SHA1-DC isn't SHA1.  It's a different hash function that is mostly
+>>>> compatible with SHA1, is different on some inputs, and is maybe more
+>>>> secure.  But the _whole point_ of using SHA1 in the TPM code (well,
+>>>> this really should be the whole point for new applications) is to
+>>>> correctly cap the SHA1 PCRs so we can correctly _turn them off_ in the
+>>>> best way without breaking compatibility with everything that might
+>>>> read the event log.  I think that anyone suggesting using SHA1-DC for
+>>>> this purpose should give some actual analysis as to why they think
+>>>> it's an improvement, let alone even valid.
+>>>
+>>> I would say at a minimum it is to provide a means to cap the PCRs.
+>>> Devices with TPM1.2 are still prevalent in the wild for which members of
+>>> the TrenchBoot community support, and there are still valid (and secure)
+>>> verification uses for SHA1 that I outlined in my previous response.
+>>>
+>>>> Ross et al, can you confirm that your code actually, at least by
+>>>> default and with a monstrous warning to anyone who tries to change the
+>>>> default, caps SHA1 PCRs if SHA256 is available?  And then can we maybe
+>>>> all stop hassling the people trying to develop this series about the
+>>>> fact that they're doing their best with the obnoxious system that the
+>>>> TPM designers gave them?
+>>>
+>>> Our goal is to keep control in the hands of the user, not making
+>>> unilateral decisions on their behalf. In the currently deployed
+>>> solutions it is left to the initrd (user) to cap the PCRs. After some
+>>> thinking, we can still ensure user control and give an option to cap the
+>>> PCRs earlier. We hope to post a v11 later this week or early next week
+>>> that introduces a new policy field to the existing measurement policy
+>>> framework. Will add/update the kernel docs with respect to the policy
+>>> expansion. We are also looking the best way we might add a warning to
+>>> the kernel log if the SHA1 bank is used beyond capping the PCRs.
+>>
+>> As the attempt was made to lay in the policy logic, it started to become
+>> convoluted and unnecessarily complicated. Thus creating more risk with
+>> all the bookkeeping and yet sha1 hashes still have to be sent, the null
+>> hash in this case, since the TPM driver will reject extends that do not
+>> have hashes for all active banks. At this point, we have opted to keep
+>> the logic simple and add a section to our documentation advising of the
+>> potential risk should one choose to incorporate SHA1 in their
+>> attestations of the platform.
+>>
+> 
+> I've read the TPM standard a bit, but it's been awhile, and it's too
+> complicated anyway.  So, can you remind me (and probably 3/4 of the
+> other people on this thread, too):
 
-"my theory" worked pretty well. It brought the boot time back to 8.7s,
-which can be explained with encryption overhead pretty well.
+Sure, but honestly if you were to ask me in person, I would have given 
+you the explanation as provided in the Secure Launch Overview in the 
+documentation patch.
 
-I'd suggest reading the bug report next time before solving a problem
-that did not exist. We care about users, not unfinished patch sets.
+> What, exactly, is your patchset doing that requires hashing at all?
+> (I assume it's extending a PCR and generating an event log entry.).
+> What, exactly, does it mean to "cap" a PCR?  How is this different
+> from what your patchset does?
 
-BR, Jarkko
+
+The SINIT ACM is provided a structure that basically says, here is an 
+address and size of what it will execute next. It will use that 
+information to take its transitive trust measurement of the kernel 
+before handing control to the Linux kernel. The Secure Launch code is 
+responsible for ensuring everything that can influences its execution to 
+be measured and stored into the TPM for attestations to be made at a 
+latter time. The most important part is the transitive trust measurement 
+of the next part to be executed, the initramfs. Specifically, the Secure 
+Launch code must be able to handle the situation where the initramfs 
+independent of the kernel and loaded separately. Additionally, the 
+policy function provided for optional system state to also be measured 
+and recorded, as the attestation evaluator might want them.
+
+At the end of the day, this capability is strictly a passive (mostly, 
+see note [1] below) solution with the responsibility to maintain the 
+DRTM trust chain by taking meaningful measurements. This includes the 
+next component in the trust chain and then hand execution to that next 
+component.
+
+The TCG specs and good practices provide that a component in either SRTM 
+or DRTM trust chains should extend a non-event record to the tpm and/or 
+its log. This is to indicate the transition point from one component in 
+the trust chain to the next component. Under the client profile, 
+firmware is required to do this by extending an event of type 
+EV_SEPARATOR before "Ready to Boot".
+
+I did not see the term actually defined in the client profile, but the 
+term "cap" refers to the specific action of hashing a value across a set 
+of PCRs. This is to reflect that certain events have occurred and will 
+result in a different but predictable change to the PCR value. Often 
+times this is to ensure that if there are TPM objects sealed to the 
+system with either that event having or have not occurred, they cannot 
+be unsealed. Thus, one has "capped" the PCRs as a means to close access 
+to the “acceptable” system state.
+
+To close and reiterate, Secure Launch only responsibility is to send 
+measurements to the TPM. The TPM and TPM driver has an expectation that 
+every PCR extend event contains a hash for every active algorithm bank. 
+For Secure Launch, to send SHA1 measurements has zero impact on the 
+security of the system. Whether those measurements are used for TPM 
+integrity reporting and security policy enforcement by user space or an 
+enterprise is outside the scope of the Secure Launch capability and the 
+kernel.
+
+[1] A future expansion of Secure Launch will be to enable usage of 
+Intel's Hardware Shield, link below, to provide runtime trustworthy 
+determination of SMM. The full extent of this capability can only be 
+achieved under a DRTM launch of the system with Intel TXT. When enabled,
+this can be used to verify the SMM protections are in place and inform 
+the kernel's memory management which regions of memory are safe from SMM 
+tampering.
+
+https://www.intel.com/content/dam/www/central-libraries/us/en/documents/drtm-based-computing-whitepaper.pdf
+
+> With that answered, it will hopefully be easy to see that you're
+> making the right call :)
+> 
+> --Andy
+> 
 
