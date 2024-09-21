@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3654-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3655-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F7EC97DD6E
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Sep 2024 16:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E8E797DDB3
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Sep 2024 17:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 376571F219D5
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Sep 2024 14:38:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E18E1F21984
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Sep 2024 15:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A33B416DED5;
-	Sat, 21 Sep 2024 14:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D58155CA8;
+	Sat, 21 Sep 2024 15:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jgKli/CF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lG9mNQC7"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E5AA47;
-	Sat, 21 Sep 2024 14:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDE326AC1;
+	Sat, 21 Sep 2024 15:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726929495; cv=none; b=Ef/nR1H9UTowvjQ8bXh3arBaG2XPk4SZE0HObTBQWuBBD2QNHBN6tV/Ax46/BCTOCVIUueAmJMM04/a9a4nhpVxh9UDZlWCe60Gz2h0Qx43uHPU6+Gf5424M5Okkcf/ThR/ro1hli0QFsjNuU6Tuh08w1sjxJ9nDkXyoFdqR6PQ=
+	t=1726933216; cv=none; b=r/rnQMAZ7JeVa4xyipwUZtlDGC1bRgwRFBjiwOVtFB/VzZwid80y8TbCwT6I/viRF0oVki+8QhZuK1afpPDXHXjo0Bdggur1/Pbwf1qn59p/TdbkkvdC0f5vmidS98YWeBYLzVEOEVMBgQeAAeCBSuyD6HF2ZcdOUbeDQrtZkmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726929495; c=relaxed/simple;
-	bh=rhYc03IAIsKRQv6i1mpLkXFUePErWwbLge6QrEecCUU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=jthYupnEu5qI4d9UtZuVzBSHGxRwjgQnKB98AWr6fgy3eWB4pVKXFrI4nAl8dAfYAUqCuv6VyLvbbxOBs6+iZry3VF8B/DpkWLeseckjnnm5gHYhgfK+Og5tT1noLgQCvVO950Z0uC733P/mnKLGp+zwPQQr3wsQ+BoYShCWzt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jgKli/CF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 685E2C4CEC2;
-	Sat, 21 Sep 2024 14:38:14 +0000 (UTC)
+	s=arc-20240116; t=1726933216; c=relaxed/simple;
+	bh=4CxDI76mPU+av0PlDueKI0ZftQmM4Hg/wO91AfGb+BA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=PtlP3vk+um/EU/6DVebNEGjGeYMOvmnqVBncZnnUjh14rEP1pvQXSjC5e6honFtHVy5epkmuT0QfeMq/lRwjylu4t5cyXBnwXand1TVw+jKP+NiMo3S9+cDHWhHtb7U1yfvilIg2qmgVObQc1FPF5cFQdpdHhzkK8XtyMso/q/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lG9mNQC7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0FAC4CEC2;
+	Sat, 21 Sep 2024 15:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726929494;
-	bh=rhYc03IAIsKRQv6i1mpLkXFUePErWwbLge6QrEecCUU=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=jgKli/CFBL2UAcZS/AGmZUyW8V6ycBRUKTN5QOlO0MtSYOqz2yu3vOHY3MrF303EE
-	 H4IGb26h6AxdMoTTyULXlurriWz7YxEASuyeCeXUF1qQQvwNqs+lnEXinIKle20VjE
-	 5NVp4GFtOH7W09CN4mrqV6aimY/vfD6X/xmcknQ/16U6q6HaWXhorhLVMUInlZyNey
-	 ddHk0TrVpHbU4K698hGxla6o/NxG8eOS3PbhmEj0pGvJPFG33T8ojtl6PK2DTC6kbm
-	 m4AEUaNsPYBotKSZd2dg6T/nDsGTT+zTHEQkiXFmzd53Yydgn8OAvb+UBzSxUeWD2f
-	 h/bb5bdacE85Q==
+	s=k20201202; t=1726933216;
+	bh=4CxDI76mPU+av0PlDueKI0ZftQmM4Hg/wO91AfGb+BA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lG9mNQC7KEW0nXIn7zBz5m8fkpiHVe3caQ+vTqDQ94XVbQ/227S55P+MKY20GpX5H
+	 4KU0o3f7qzva6l/UwbINxrjW5n1l5SrmdIDrv59UyVxsxuQWkvJ0Hh9Wbv+8mvn262
+	 lntcnMyG4rNTn85JvYEliF9w8Qb4bCABaP2LOGEJZFdqPBJYulocBOBVVNYttNKIkP
+	 /Fe8mTztkd0KlQcnpwaC186EHifE2hVJpWg9Ben3t+BAaWaHM94zeWFVf6ICM7gZ7j
+	 xU+In4yGI/PJ/pGC9NJRpTMfhfQ1DuXi+qGSERgGBbCImYeJO/sidvktarMkrJHPZL
+	 I5+N4x5jDYB4A==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,51 +49,86 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 21 Sep 2024 17:38:10 +0300
-Message-Id: <D4C1EVX2T5EW.1HPJFFD1ZA6YE@kernel.org>
-Subject: Re: [PATCH v5 0/5] Lazy flush for the auth session
+Date: Sat, 21 Sep 2024 18:40:12 +0300
+Message-Id: <D4C2QDK9WGUH.KQCJ19C43ONW@kernel.org>
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Paul Menzel"
- <pmenzel@molgen.mpg.de>
-Cc: <linux-integrity@vger.kernel.org>,
- <James.Bottomley@HansenPartnership.com>, <roberto.sassu@huawei.com>,
- <mapengyu@gmail.com>, "Mimi Zohar" <zohar@linux.ibm.com>, "David Howells"
- <dhowells@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "James Morris"
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Peter Huewe"
- <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <keyrings@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
+To: "Jarkko Sakkinen" <jarkko@kernel.org>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Roberto Sassu"
+ <roberto.sassu@huaweicloud.com>, "Linux regressions mailing list"
+ <regressions@lists.linux.dev>
+Cc: <keyrings@vger.kernel.org>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>,
+ "Pengyu Ma" <mapengyu@gmail.com>
+Subject: Re: [regression] significant delays when secureboot is enabled
+ since 6.10
 X-Mailer: aerc 0.18.2
-References: <20240921120811.1264985-1-jarkko@kernel.org>
- <f9bbc8a7-4292-47a1-8987-b931284a7738@molgen.mpg.de>
- <D4BZLX10S23R.8CQD7UTH7AM1@kernel.org>
-In-Reply-To: <D4BZLX10S23R.8CQD7UTH7AM1@kernel.org>
+References: <0b4a5a86-a9f6-42d1-a9ba-ec565b336d3a@leemhuis.info>
+ <92fbcc4c252ec9070d71a6c7d4f1d196ec67eeb0.camel@huaweicloud.com>
+ <D42LZPLE8HR3.2UTNOI9CYZPIR@kernel.org>
+ <D42M6OE94RLT.6EZSZLBTX437@kernel.org>
+ <663d272617d1aead08077ad2b72929cbc226372a.camel@HansenPartnership.com>
+ <D42N17MFTEDM.3E6IK034S26UT@kernel.org>
+ <f554031343039883068145f9f4777277e490dc05.camel@huaweicloud.com>
+ <D43JXBFOOB2O.3U6ZQ7DASR1ZW@kernel.org>
+ <7e47f97aede88b87fbb9c9284db2005764bfbedd.camel@huaweicloud.com>
+ <D46RE2BWMGJ4.25VA7IVYTJ8MO@kernel.org>
+ <D46RWPQ211ZS.12EYKZY053BH@kernel.org>
+ <0b22c2c4b4a998fb44bb08be60a359acb9ecb8da.camel@HansenPartnership.com>
+ <D46XX6HNU686.50X57ZWI2GUX@kernel.org>
+ <7586c7e6e6028a734a8cac3d4b1a8504e6cd4b21.camel@HansenPartnership.com>
+ <D46ZV5RXW7Z9.26N1IRXNRLV9X@kernel.org>
+In-Reply-To: <D46ZV5RXW7Z9.26N1IRXNRLV9X@kernel.org>
 
-On Sat Sep 21, 2024 at 4:13 PM EEST, Jarkko Sakkinen wrote:
-> On Sat Sep 21, 2024 at 3:36 PM EEST, Paul Menzel wrote:
-> > Dear Jarkko,
+On Sun Sep 15, 2024 at 7:22 PM EEST, Jarkko Sakkinen wrote:
+> On Sun Sep 15, 2024 at 6:00 PM EEST, James Bottomley wrote:
+> > On Sun, 2024-09-15 at 17:50 +0300, Jarkko Sakkinen wrote:
+> > > On Sun Sep 15, 2024 at 4:59 PM EEST, James Bottomley wrote:
+> > > > On Sun, 2024-09-15 at 13:07 +0300, Jarkko Sakkinen wrote:
+> > > > > On Sun Sep 15, 2024 at 12:43 PM EEST, Jarkko Sakkinen wrote:
+> > > > > > When it comes to boot we should aim for one single
+> > > > > > start_auth_session during boot, i.e. different phases would
+> > > > > > leave that session open so that we don't have to load the
+> > > > > > context every single time.=C2=A0 I think it should be doable.
+> > > > >=20
+> > > > > The best possible idea how to improve performance here would be
+> > > > > to transfer the cost from time to space. This can be achieved by
+> > > > > keeping null key permanently in the TPM memory during power
+> > > > > cycle.
+> > > >=20
+> > > > No it's not at all.=C2=A0 If you look at it, the NULL key is only u=
+sed
+> > > > to encrypt the salt for the start session and that's the operating
+> > > > taking a lot of time.=C2=A0 That's why the cleanest mitigation woul=
+d be
+> > > > to save and restore the session.=C2=A0 Unfortunately the timings yo=
+u
+> > > > already complain about still show this would be about 10x longer
+> > > > than a no-hmac extend so I'm still waiting to see if IMA people
+> > > > consider that an acceptable tradeoff.
+> > >=20
+> > > The bug report does not say anything about IMA issues. Please read
+> > > the bug reports before commenting ;-) I will ignore your comment
+> > > because it is plain misleading information.
+> > >=20
+> > > https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
 > >
-> >
-> > Thank you for working on this and your patches.
-> >
-> > Am 21.09.24 um 14:08 schrieb Jarkko Sakkinen:
-> > > This patch set aims to fix:
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=3D219229.
-> >
-> > If I am not mistaken this is about reducing the boot time, right? It=E2=
-=80=99d=20
-> > be great if you documented the numbers in the commit messages.
+> > Well, given that the kernel does no measured boot extends after the EFI
+> > boot stub (which isn't session protected) finishes, what's your theory
+> > for the root cause?
 >
-> So what you're asking is already documented by:
+> I don't think there is a silver bullet. Based on benchmark which showed
+> 80% overhead from throttling the context reducing number of loads and
+> saves will cut a slice of the fat.
 >
-> 1. https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
-> 2. Tested-by
->
-> I added lore link to the bugzilla bug, in order to address your comment.
+> Since it is the low-hanging fruit I'll start with that. In other words,
+> I'm not going touch session loading and saving. I'll start with null
+> key loading and saving.
 
-... to the email which contains the figures.
+"my theory" worked pretty well. It brought the boot time back to 8.7s,
+which can be explained with encryption overhead pretty well.
 
-20 s -> 8.7 s
+I'd suggest reading the bug report next time before solving a problem
+that did not exist. We care about users, not unfinished patch sets.
 
 BR, Jarkko
 
