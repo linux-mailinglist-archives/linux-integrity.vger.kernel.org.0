@@ -1,108 +1,124 @@
-Return-Path: <linux-integrity+bounces-3665-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3666-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C92F997E895
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Sep 2024 11:26:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B723E97ECC3
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Sep 2024 16:04:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 634B0B20462
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Sep 2024 09:26:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F52B1F21CF7
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Sep 2024 14:04:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 151731946B8;
-	Mon, 23 Sep 2024 09:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8599019993E;
+	Mon, 23 Sep 2024 14:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="omwoKTT8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Co9wgEHp"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42F91940B0;
-	Mon, 23 Sep 2024 09:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B00198846
+	for <linux-integrity@vger.kernel.org>; Mon, 23 Sep 2024 14:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727083592; cv=none; b=jxSHgSVdvC4aTyMIkWndC5c5jYZxYAm9FENJ8YvmK35uRoOVUcAkx1jv5t3GUEZG3/VALcLnLyCYopISYf/8VXJeb/QcSMZn+LLIkdjLe8NevoC2+drDvVIfZqBQze8TbPxi6wfHJPBs/k7ArKX+kRD3oIANfA9ygpMq/A2j7L0=
+	t=1727100270; cv=none; b=IJaElZXIZBAhNbsZvmkhw0k3xRwtQNDdHUWdy/IJjSjDYE0zYDpuNflc9XBhiOVw8yJ/PB+L35MHS9T2QuGs/4krNNjPIPPMUvx1iCjEv1maPK/4adgtblrX8Nhc4q6ff9h05q5Jm53NewqFHA/kVRTQzBS+1yR5Hl7IpJtpBx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727083592; c=relaxed/simple;
-	bh=CRdGZ5sGgcmf/LJvWGU1wTRTQWS1yWvpT0UsRqAtB90=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nsqSzzTerYRQmV0jbO+soudTsoG+xT4cuXUh8HoSOQyoACaqhb1hZWx8msHflFST+B8h8jZuctiGUgPcsmU9e3DU0CLy7frrb7Z1QM34EinJqKdcpMoeB4BRPdurMNfdn0xfc+DYiiCip5PWjVz2e/A30XYPlIr00kAyriy83yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=omwoKTT8; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=MyQNaIwuwVveK/EF3pASJW2zkEi7KrMU0/ZkTG4x0nc=; b=omwoKTT8U+z8MIrxhWorPwhbOI
-	pNRFdB1zwzXgX7fMhbFS8abEtgzQKcTeRn42tRwjVZE6Kg/xUq62UM8TYoQg2/fA00O25SwYhyI3z
-	TJBYEysHGFkgfWO2kEcdnHgCMqbVDQzzLWIP1VrAXo/dwsyQvBaf3h/ot+wrNvX4aNdO6EReLbk5d
-	S7AIZDE7FHroutk2FSF3tsNFxtGiB54JJTxrMbuj3KkUW4nNVsGUxVarT3AaXkCZCjxWOBCXCPyO8
-	kpDBJJJrmbrp8PziobSx9f9saUCXIU9wBj9rVK/d1vTeDTs1D8C6ixrPldO9g+1/zVDMPcoGATQP7
-	dMYCqxGg==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1ssfAn-0044Hn-0T;
-	Mon, 23 Sep 2024 17:26:15 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 23 Sep 2024 17:26:14 +0800
-Date: Mon, 23 Sep 2024 17:26:14 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Guangwu Zhang <guazhang@redhat.com>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] hwrng: core - Add WARN_ON for buggy read return values
-Message-ID: <ZvE0NrOC00ojRe3t@gondor.apana.org.au>
-References: <ZvEFQAWVgWNd9j7e@gondor.apana.org.au>
- <D4DI1M1ELFXK.2COGZN6O5HABD@kernel.org>
+	s=arc-20240116; t=1727100270; c=relaxed/simple;
+	bh=gSx9WElPoDc3GpnWNuZWuoC3lDWAnGUmRJLHC+V4aD0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=o1QL8b6WkxDNU8IMj1TYYeyIGoXYf4h6cOw/33lzZ0eDwcj284euqzJVeudo/MnQaQ0ypJtZo0wZUI7HPk1DsHWKcXTQSpJzHnk3TdAt8TsSEBttX0T4DXuaewtXu2vdjR3pi0sBc12ZOkL6xENjOByb794ox3wQmz+VBZmvOPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Co9wgEHp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1727100267;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BZBpzUBCLdRFe7Fe/66+8sc2jK73AsIgYMvGRGKjsF8=;
+	b=Co9wgEHpJHUmhH3tvxs9kByWhVpQA/Zbih7RMgDLJYiUkajW4gmJEA6xSTP44p2cjYOasS
+	9ufrncPBQlDO8HaCvUkbOL0+Z2q894fnsmriWU8shFLb1d5wRgQEIHzCPhxOI+z0W9yM7o
+	d6U80aJtOOcQo05RDW5MjqIlpBAuXJ4=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-653-J-NuBEIEN22XD9dWQO2_KQ-1; Mon,
+ 23 Sep 2024 10:04:24 -0400
+X-MC-Unique: J-NuBEIEN22XD9dWQO2_KQ-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (unknown [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5B2021955D4B;
+	Mon, 23 Sep 2024 14:04:21 +0000 (UTC)
+Received: from [10.45.226.79] (unknown [10.45.226.79])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0C34C19560A3;
+	Mon, 23 Sep 2024 14:04:17 +0000 (UTC)
+Date: Mon, 23 Sep 2024 16:04:15 +0200 (CEST)
+From: Mikulas Patocka <mpatocka@redhat.com>
+To: luca.boccassi@gmail.com
+cc: dm-devel@lists.linux.dev, snitzer@kernel.org, serge@hallyn.com, 
+    wufan@linux.microsoft.com, David Howells <dhowells@redhat.com>, 
+    Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org, 
+    linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [PATCH] dm verity: fallback to platform keyring also if key in
+ trusted keyring is rejected
+In-Reply-To: <20240922161753.244476-1-luca.boccassi@gmail.com>
+Message-ID: <6b3e0e45-5efe-3032-62b8-75dcd45c879c@redhat.com>
+References: <20240922161753.244476-1-luca.boccassi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D4DI1M1ELFXK.2COGZN6O5HABD@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Mon, Sep 23, 2024 at 10:52:49AM +0300, Jarkko Sakkinen wrote:
-> On Mon Sep 23, 2024 at 9:05 AM EEST, Herbert Xu wrote:
-> > Dear TPM maintainers:
+
+
+On Sun, 22 Sep 2024, luca.boccassi@gmail.com wrote:
+
+> From: Luca Boccassi <bluca@debian.org>
 > 
-> There's really only just me (for past 10 years). Maybe that should be
-> updatred.
-
-:)
-
-> >  	BUG_ON(!mutex_is_locked(&reading_mutex));
-> > -	if (rng->read)
-> > -		return rng->read(rng, (void *)buffer, size, wait);
-> > +	if (rng->read) {
-> > +		int err;
-> > +
-> > +		err = rng->read(rng, buffer, size, wait);
-> > +		if (WARN_ON_ONCE(err > 0 && err > size))
+> If enabled, we fallback to the platform keyring if the trusted keyring doesn't have
+> the key used to sign the roothash. But if pkcs7_verify() rejects the key for other
+> reasons, such as usage restrictions, we do not fallback. Do so.
 > 
-> Are you sure you want to use WARN_ON_ONCE here instead of
-> pr_warn_once()? I.e. is it worth of taking down the whole
-> kernel?
+> Follow-up for 6fce1f40e95182ebbfe1ee3096b8fc0b37903269
+> 
+> Suggested-by: Serge Hallyn <serge@hallyn.com>
+> Signed-off-by: Luca Boccassi <bluca@debian.org>
 
-Absolutely.  If this triggers it's a serious kernel bug and we
-should gather as much information as possible.  pr_warn_once is
-not the same thing as WARN_ON_ONCE in terms of what it prints.
+Hi
 
-If people want to turn WARNs into BUGs, then they've only got
-themselves to blame when the kernel goes down.  On the other
-hand perhaps they *do* want this to panic and we should hand
-it to them.
+I'm not an expert in keyrings.
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+I added keyring maintainers to the CC. Please review this patch and 
+Ack/Nack it.
+
+Mikulas
+
+> ---
+>  drivers/md/dm-verity-verify-sig.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+> index d351d7d39c60..a9e2c6c0a33c 100644
+> --- a/drivers/md/dm-verity-verify-sig.c
+> +++ b/drivers/md/dm-verity-verify-sig.c
+> @@ -127,7 +127,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+>  #endif
+>  				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+>  #ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_PLATFORM_KEYRING
+> -	if (ret == -ENOKEY)
+> +	if (ret == -ENOKEY || ret == -EKEYREJECTED)
+>  		ret = verify_pkcs7_signature(root_hash, root_hash_len, sig_data,
+>  					sig_len,
+>  					VERIFY_USE_PLATFORM_KEYRING,
+> -- 
+> 2.39.5
+> 
+
 
