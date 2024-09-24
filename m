@@ -1,79 +1,106 @@
-Return-Path: <linux-integrity+bounces-3687-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3688-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8607984AA7
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 20:05:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B41E984AAD
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 20:07:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BB85B246A7
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 18:05:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50B6C28694A
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 18:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF891AD9CB;
-	Tue, 24 Sep 2024 18:04:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE6D1AC43B;
+	Tue, 24 Sep 2024 18:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q66543lY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZOcuDMh"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E7E1AD9C9;
-	Tue, 24 Sep 2024 18:04:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B2E1581F8;
+	Tue, 24 Sep 2024 18:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727201052; cv=none; b=e8pe69qs6dfJzIPKaC8Zc81pljYHfkwZjfLTYtvCcyFGxD3O6icByFZsK6voHnfnaYDeTev6OBLbZzYZlQwe/eborPS2GmPDXINiB7cwPfEF3A5FQE5qyIa9yDFPuOV7uk3LK2r668rDbw7mGcMYOkELLNBurED3nj6j6LmCXl8=
+	t=1727201247; cv=none; b=u+rpkSBRQ6gW9hdDxR3xbth6RGtYjZ5MXZvnkXrzSIMXtenGoDpc99BLrIFy34ix4NN6+1tFibEafn7nXejyQF68BLKaIOngXQVCw7eqzxz5uEKI/zEPxyK3o17Y/tCHu/8fet3f8iCG9viTtDmGuoehJ8O4/thFO9Pw7uhWoq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727201052; c=relaxed/simple;
-	bh=KA/eAwSEvG9s3WZSHQx6hXU1I0DvlMMxCEpt+wMcoiA=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=TJvg9kl5YCNjGNXG5TROVBG8drrncGtknwEjKCxJMgrawSF264S45yirQU2Emh5HP4gLu/A1yFIwR+z+KXiUnjWvCX3SXQSNnyItUHzpvnRXLYbrZZljSUD3RLjUBOeF2gcrekI01qsXvFu5T67DIeb2YVk2SpgvVtnN3VieiBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q66543lY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F108C4CEC4;
-	Tue, 24 Sep 2024 18:04:12 +0000 (UTC)
+	s=arc-20240116; t=1727201247; c=relaxed/simple;
+	bh=r0Qo7isWNui7uOUPcqe/GIVDS+0O7xChj8EAgM3CfL4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=leheBKrIrwIBwSWu/rE1SrKl53eOFQuVdPKB8/8oq2S/+dH2WGLx62ilae21ZALNgsQsnoVgQVw3LVVvjCSKDR3ursNhAdc4CSZAnjKVmAGQTaWjjhaxH8qdq5UYAeP3SINdbw2+rU8uyaLFnqgrD6erAakrKLECtQzZrV0Ko0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZOcuDMh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C879FC4CEC4;
+	Tue, 24 Sep 2024 18:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727201052;
-	bh=KA/eAwSEvG9s3WZSHQx6hXU1I0DvlMMxCEpt+wMcoiA=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=Q66543lY7/bc1Q2yDU0yPb+aBdAiGEIrIm4/KExspr4uujffrckhspdc3HbxXC/Nq
-	 QE+41IVYc7GfpI9Bf5honClUKOITdKaAtOl1x1ApNSjFvdmIp1+YY2vQ9gwjFB+KZ7
-	 dN7ivy0eSolr1HbqRCbBitOE/De+WgWSzNJ64KiHvF6p5FxpZjYyCYVkTeKQal4w6a
-	 OASf/qKnVZtnAKPyesBmVpIYPR74vgF+DP5XPoP+8wuba00agqHiL3JDvINj1Ur0XM
-	 oSFL3vAh7EcfQhPe8Wz0WRnyljAD4HLuZbH1LoajvsSNg6Pq8TJk+pXD9HOZB8IUgl
-	 7aEtL5ZC6ngVQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAFE23806656;
-	Tue, 24 Sep 2024 18:04:15 +0000 (UTC)
-Subject: Re: [GIT PULL] KEYS: keys-next-6.12-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <D4B9WXZC9B9U.34I6BHWMYXOS2@kernel.org>
-References: <D4B9WXZC9B9U.34I6BHWMYXOS2@kernel.org>
-X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
-X-PR-Tracked-Message-Id: <D4B9WXZC9B9U.34I6BHWMYXOS2@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-next-6.12-rc1
-X-PR-Tracked-Commit-Id: 558bdc45dfb2669e1741384a0c80be9c82fa052c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 24f772dec31591f9268a9c9e4943dc5dc47eaf9b
-Message-Id: <172720105452.4145686.2130527786218091204.pr-tracker-bot@kernel.org>
-Date: Tue, 24 Sep 2024 18:04:14 +0000
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org, linux-integrity@vger.kernel.org
+	s=k20201202; t=1727201247;
+	bh=r0Qo7isWNui7uOUPcqe/GIVDS+0O7xChj8EAgM3CfL4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lZOcuDMhxbB1s/qyEZ8igBAUEiz7OhlJ3PVgm70oWsmkfJvU/w2LaRlIuqMUZtsGZ
+	 U2UB7gFzauQoUe9hovN/7MSUuvkukYSkmEMRvHNK7RBMVY6Ch/N0QJocsbm3OvZ+LO
+	 ZE2KoutzxG8KTMkm7YAr0i/09DcjTMarmjClZ88SHalWjbQWTGgKZG0jNoXyVdPN+Q
+	 d+S3i7cXfgH9C6UPLTsZO57kiodxg6T6Eh2Ahf6y/9vNkFPMlF6Tgbt1hZzY+IP1IQ
+	 bBa3C7pTZp8p/ZgL2Z9enTkkz8YDzprUCHpXqR8bUreg2Yb9YExLMZKyt+2ipeMI/n
+	 MP3PSheqMiGyQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 24 Sep 2024 21:07:23 +0300
+Message-Id: <D4EPQPFA8RGN.2PO6UNTDFI6IT@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
+Cc: <roberto.sassu@huawei.com>, <mapengyu@gmail.com>,
+ <stable@vger.kernel.org>, "Mimi Zohar" <zohar@linux.ibm.com>, "David
+ Howells" <dhowells@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "James
+ Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Peter
+ Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ <keyrings@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 5/5] tpm: flush the auth session only when /dev/tpm0
+ is open
+X-Mailer: aerc 0.18.2
+References: <20240921120811.1264985-1-jarkko@kernel.org>
+ <20240921120811.1264985-6-jarkko@kernel.org>
+ <00cf0bdb3ebfaec7c4607c8c09e55f2e538402f1.camel@HansenPartnership.com>
+In-Reply-To: <00cf0bdb3ebfaec7c4607c8c09e55f2e538402f1.camel@HansenPartnership.com>
 
-The pull request you sent on Fri, 20 Sep 2024 20:05:14 +0300:
+On Tue Sep 24, 2024 at 4:43 PM EEST, James Bottomley wrote:
+> On Sat, 2024-09-21 at 15:08 +0300, Jarkko Sakkinen wrote:
+> > Instead of flushing and reloading the auth session for every single
+> > transaction, keep the session open unless /dev/tpm0 is used. In
+> > practice this means applying TPM2_SA_CONTINUE_SESSION to the session
+> > attributes. Flush the session always when /dev/tpm0 is written.
+>
+> Patch looks fine but this description is way too terse to explain how
+> it works.
+>
+> I would suggest:
+>
+> Boot time elongation as a result of adding sessions has been reported
+> as an issue in https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
+>
+> The root cause is the addition of session overhead to
+> tpm2_pcr_extend().  This overhead can be reduced by not creating and
+> destroying a session for each invocation of the function.  Do this by
+> keeping a session resident in the TPM for reuse by any session based
+> TPM command.  The current flow of TPM commands in the kernel supports
+> this because tpm2_end_session() is only called for tpm errors because
+> most commands don't continue the session and expect the session to be
+> flushed on success.  Thus we can add the continue session flag to
+> session creation to ensure the session won't be flushed except on
+> error, which is a rare case.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-next-6.12-rc1
+I need to disagree on this as I don't even have PCR extends in my
+boot sequence and it still adds overhead. Have you verified this
+from the reporter?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/24f772dec31591f9268a9c9e4943dc5dc47eaf9b
+There's bunch of things that use auth session, like trusted keys.
+Making such claim that PCR extend is the reason is nonsense.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+BR, Jarkko
 
