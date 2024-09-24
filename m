@@ -1,129 +1,154 @@
-Return-Path: <linux-integrity+bounces-3689-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3690-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DD2B984AC2
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 20:14:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A508984AD6
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 20:28:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBD451F229F4
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 18:14:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23EADB2186C
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 18:28:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64CCB1AC8B3;
-	Tue, 24 Sep 2024 18:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6165B1AB6F9;
+	Tue, 24 Sep 2024 18:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXwAE6cO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gG/UXIpW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8F21AC8AC;
-	Tue, 24 Sep 2024 18:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA4911CA0
+	for <linux-integrity@vger.kernel.org>; Tue, 24 Sep 2024 18:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727201636; cv=none; b=OM48sbxkMZ9T13hnRVO1REsaBZtpJX/5ISZGileeiN3IaXiebJHdlMUWbytOKflYzsdHzJIdCQVF+f+51A3T0vboOiAN0P4iSWG61Lc15iAkaLnbMAzKeXPd8CE+oMQgIumLi0EJ8V2spQETAlW1NAWojnxuHMdibfcz+wU++cM=
+	t=1727202490; cv=none; b=Y+97iPgE2VmgQUyEqq1VXZ1IqnCKv37gpENNyUIOgh+jdR1AHSxEGBAJ1YFobjxMEb5nfgmcmnJt467B6drVxu7L1UhLbs6Bg+GL2RBkaUYrH2StIg7hfTDusRvCrN5ugiRSVqoXsfJC9b2mxInAKhgC4WX2rD0JV9EW6SzdzDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727201636; c=relaxed/simple;
-	bh=OCs5Cqpje9S80KFQv8p9Oyg1vEGfixvfhJk33BIA/Yo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=VmcfKcFri66xA4e08f57pbNpSAprzVhUc73a+doQ58yNoQsdsx48C9LczbNaLdzk6QFRcHzclFR9yIgcJ+mTIueqUj0pUwhSc5a4WMbVylVkY7GSUf5GPW/b62ITQEFuFh0AGn4URbSo1XP8cCO2vDUhL3cqRJI19QJ6udAJ2WM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXwAE6cO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A363CC4CECF;
-	Tue, 24 Sep 2024 18:13:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727201636;
-	bh=OCs5Cqpje9S80KFQv8p9Oyg1vEGfixvfhJk33BIA/Yo=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=oXwAE6cOdDZMZ72nGMSAI/qrKVqOOjIrZgljPNUpSl+bNiJH3H9S5aDjXxztfnHNt
-	 m9PlQjwNItAKrFXWKQfIX2opxvrVOP3Z0W3Rmy7fwXRbnrORUImnHCBA2/OyFqzZsU
-	 EuGd6OsAkpqLmK1Co1k+1B9ceYWwLNWHfUSxtI6iHnJZ1tuQuljHZJs4lmO2t1kD4N
-	 PPQYTVeaqgNEI7fhTgdwkGfKKpml2AiCcJp+F1oQzDXyclppznJ0lR54TLHdjkrsi4
-	 0TfjWryYYaMzNapt2zsQUpv7Um1U/0Stwf6gFxQYWJTIv2LteGUGGL0lwvNdZTmeEn
-	 XWxtcCMqDbkaQ==
+	s=arc-20240116; t=1727202490; c=relaxed/simple;
+	bh=5SMjsrCjECPHKcC2m2WAYi0i4UBAszysMeFbCiUs5Yg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=i/Pq7c70NWgcSXkOQaSu3XJ32erRY/g/voxoKcuqy+QelTngc2aLvMScampcbkO0YFEQuGhf+UXwQrtvvYdMO3jl3KF4SC20NkLjwehHZSOOChqF1Q99i6Kr8YOCYegtu5k2Jp/KSu8kYxJ9FMiQe8nPkRUOJ3lcIthDErnP8wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gG/UXIpW; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1727202487;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QP+1N8REoRxKBdYYuKpBVw7Tf3FYIj+GVn6G4LuDBlI=;
+	b=gG/UXIpW4OCvXI7vPIvaM5INx36+sSEZlaTR2u6oAPSwGtaziEChrF0icY3cOwH0ICWNt2
+	KNeghXC9DiolgWawCWDub9EG65owQFAHxZRrsCNxMRZQJJm49EGZGHhnB4JWLtfmM/men/
+	C8zY9Wk4z2VleKPPvjp5MTAPvpaHDMc=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-658-qR6R8Ya_MzyQ87w8Qac1vQ-1; Tue,
+ 24 Sep 2024 14:28:04 -0400
+X-MC-Unique: qR6R8Ya_MzyQ87w8Qac1vQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (unknown [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 34FD218F94D3;
+	Tue, 24 Sep 2024 18:27:53 +0000 (UTC)
+Received: from [10.45.226.79] (unknown [10.45.226.79])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0FFF01956054;
+	Tue, 24 Sep 2024 18:27:49 +0000 (UTC)
+Date: Tue, 24 Sep 2024 20:27:47 +0200 (CEST)
+From: Mikulas Patocka <mpatocka@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+cc: luca.boccassi@gmail.com, dm-devel@lists.linux.dev, snitzer@kernel.org, 
+    serge@hallyn.com, wufan@linux.microsoft.com, 
+    David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org, 
+    linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [PATCH] dm verity: fallback to platform keyring also if key in
+ trusted keyring is rejected
+In-Reply-To: <D4EMWUMBIM94.3PM88QAV6LG6B@kernel.org>
+Message-ID: <7c40c30a-5154-08eb-d44e-6598087c53e6@redhat.com>
+References: <20240922161753.244476-1-luca.boccassi@gmail.com> <6b3e0e45-5efe-3032-62b8-75dcd45c879c@redhat.com> <D4EMWUMBIM94.3PM88QAV6LG6B@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 24 Sep 2024 21:13:52 +0300
-Message-Id: <D4EPVO0KWRLK.2RQK9L93QM4VB@kernel.org>
-To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
- <linux-integrity@vger.kernel.org>
-Cc: <roberto.sassu@huawei.com>, <mapengyu@gmail.com>,
- <stable@vger.kernel.org>, "Mimi Zohar" <zohar@linux.ibm.com>, "David
- Howells" <dhowells@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "James
- Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Peter
- Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <keyrings@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 4/5] tpm: Allocate chip->auth in
- tpm2_start_auth_session()
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.18.2
-References: <20240921120811.1264985-1-jarkko@kernel.org>
- <20240921120811.1264985-5-jarkko@kernel.org>
- <12e17497239dd9b47059b03a0273e2d995371278.camel@HansenPartnership.com>
-In-Reply-To: <12e17497239dd9b47059b03a0273e2d995371278.camel@HansenPartnership.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-On Tue Sep 24, 2024 at 4:33 PM EEST, James Bottomley wrote:
-> On Sat, 2024-09-21 at 15:08 +0300, Jarkko Sakkinen wrote:
-> > Move allocation of chip->auth to tpm2_start_auth_session() so that
-> > the field can be used as flag to tell whether auth session is active
-> > or not.
-> >=20
-> > Cc: stable@vger.kernel.org=C2=A0# v6.10+
-> > Fixes: 699e3efd6c64 ("tpm: Add HMAC session start and end functions")
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> > v5:
-> > - No changes.
-> > v4:
-> > - Change to bug.
-> > v3:
-> > - No changes.
-> > v2:
-> > - A new patch.
-> > ---
-> > =C2=A0drivers/char/tpm/tpm2-sessions.c | 43 +++++++++++++++++++--------=
----
-> > --
-> > =C2=A01 file changed, 25 insertions(+), 18 deletions(-)
-> >=20
-> > diff --git a/drivers/char/tpm/tpm2-sessions.c
-> > b/drivers/char/tpm/tpm2-sessions.c
-> > index 1aef5b1f9c90..a8d3d5d52178 100644
-> > --- a/drivers/char/tpm/tpm2-sessions.c
-> > +++ b/drivers/char/tpm/tpm2-sessions.c
-> > @@ -484,7 +484,8 @@ static void tpm2_KDFe(u8 z[EC_PT_SZ], const char
-> > *str, u8 *pt_u, u8 *pt_v,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sha256_final(&sctx, out=
-);
-> > =C2=A0}
-> > =C2=A0
-> > -static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip
-> > *chip)
-> > +static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip
-> > *chip,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct tpm2_auth *auth)
->
-> This addition of auth as an argument is a bit unnecessary.  You can set
-> chip->auth before calling this and it will all function.  Since there's
-> no error leg in tpm2_start_auth_session unless the session creation
-> itself fails and the guarantee of the ops lock is single threading this
-> chip->auth can be nulled again in that error leg.
->
-> If you want to keep the flow proposed in the patch, the change from how
-> it works now to how it works with this patch needs documenting in the
-> change log
 
-I checked this through and have to disagree with it. We don't want
-to set chip->auth before the whole start auth session is successful
 
-BR, Jarkko
+On Tue, 24 Sep 2024, Jarkko Sakkinen wrote:
+
+> On Mon Sep 23, 2024 at 5:04 PM EEST, Mikulas Patocka wrote:
+> >
+> >
+> > On Sun, 22 Sep 2024, luca.boccassi@gmail.com wrote:
+> >
+> > > From: Luca Boccassi <bluca@debian.org>
+> > > 
+> > > If enabled, we fallback to the platform keyring if the trusted keyring doesn't have
+> > > the key used to sign the roothash. But if pkcs7_verify() rejects the key for other
+> > > reasons, such as usage restrictions, we do not fallback. Do so.
+> > > 
+> > > Follow-up for 6fce1f40e95182ebbfe1ee3096b8fc0b37903269
+> > > 
+> > > Suggested-by: Serge Hallyn <serge@hallyn.com>
+> > > Signed-off-by: Luca Boccassi <bluca@debian.org>
+> >
+> > Hi
+> >
+> > I'm not an expert in keyrings.
+> >
+> > I added keyring maintainers to the CC. Please review this patch and 
+> > Ack/Nack it.
+> >
+> > Mikulas
+> >
+> > > ---
+> > >  drivers/md/dm-verity-verify-sig.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
+> > > index d351d7d39c60..a9e2c6c0a33c 100644
+> > > --- a/drivers/md/dm-verity-verify-sig.c
+> > > +++ b/drivers/md/dm-verity-verify-sig.c
+> > > @@ -127,7 +127,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
+> > >  #endif
+> > >  				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
+> > >  #ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_PLATFORM_KEYRING
+> > > -	if (ret == -ENOKEY)
+> > > +	if (ret == -ENOKEY || ret == -EKEYREJECTED)
+> > >  		ret = verify_pkcs7_signature(root_hash, root_hash_len, sig_data,
+> > >  					sig_len,
+> > >  					VERIFY_USE_PLATFORM_KEYRING,
+> > > -- 
+> > > 2.39.5
+> > > 
+> 
+> I know nothing about dm-verity. What does it even do?
+> 
+> BR, Jarkko
+
+dm-verity provides a read-only device with integrity checking. dm-verity 
+stores hash for every block on the block device and checks the hash when 
+reading the block. If the hash doesn't match, it can do one of these 
+actions (depending on configuration):
+- return I/O error
+- try to correct the data using forward error correction
+- log the mismatch and do nothing
+- restart the machine
+- call panic()
+
+dm-verity is mostly used for the immutable system partition on Android 
+phones. For more info, see 
+Documentation/admin-guide/device-mapper/verity.rst
+
+The above patch changes the way that the signature of the root hash is 
+verified. I have no clue whether the patch can or can't subvert system 
+security, that's why I'd like to have some more reviews of the patch 
+before accepting it.
+
+Mikulas
+
 
