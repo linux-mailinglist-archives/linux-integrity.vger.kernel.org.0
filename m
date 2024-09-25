@@ -1,162 +1,155 @@
-Return-Path: <linux-integrity+bounces-3695-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3696-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11478984D21
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 23:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC91598545A
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2024 09:42:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2AB31F2470A
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Sep 2024 21:59:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 944171F21BA4
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2024 07:42:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF3713D25E;
-	Tue, 24 Sep 2024 21:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB7C156F28;
+	Wed, 25 Sep 2024 07:42:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTktiKHr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PMqqLII9"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80DE613B7BC;
-	Tue, 24 Sep 2024 21:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DB214B950;
+	Wed, 25 Sep 2024 07:42:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727215152; cv=none; b=JUW2dp7+mptxV2ISMFbYVCDtxKkMLTdBXVYFHSse3CatbM6I9lLxjqwYU5LVUBvaxN1y4LprTj7IlDLp1CDwptgUjodJMQj7EzIHUrQBOI08xAIOKxvumXJejeU0RvrRiGTg61XdR6jjmPRJEYwXTF3qVNEC2kdSBxZ8MLjfHxY=
+	t=1727250144; cv=none; b=Qf2y+cDLCR8ZpLrZUcI3DFYLvC1vwWK9EWIwJ8dpKx+6o4DmUZEXqP/bZrKZ5a90wvz6rPfmO3Cd77zrauG5PHV2Puw44cx8rXrC3w1D+uUeCNyCshpvzzQedW/Kl2MaL8Lo0yS2wF7JoivKsBYEfqTvnP8LuhlJw2PJWf4dWIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727215152; c=relaxed/simple;
-	bh=F/QvxXAUbnSi1bOS2nFLFEUmzaLdLpoMAU42kIDG2i0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CYTEqs5sKqmncATyGuLEXRKqNVv3mR2M0bCGwGtwwU18IV8XORE48LEnFG1VF9i1brM8LwSOMHy6bgNoy35lWDADIMDLCEgFel3q8kETAGToBdG9fAbdvD3O5wYCcCvwWVVEvNORQdW7XltTs2Y3BsIVbR2V1+Nw2sVSyrSkdJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTktiKHr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF26BC4CEC4;
-	Tue, 24 Sep 2024 21:59:11 +0000 (UTC)
+	s=arc-20240116; t=1727250144; c=relaxed/simple;
+	bh=9ve0J8ohIJ9K3MhUzdqrB4TkyiG6Duo/wk9xoZ+FVnA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=MYOTBzDC+d8pv4WGrLWlqMhCI3fCeGodcKCWE/Sqymjl5lYI6m3MnTXq4QZSEZxghXx32MWWPbQIl3jjyPV+eJn2lZIGyZmJPwt6HeFrpR66yW0OXaRAR/j7UnoSjFzWK+Cahcunk5xKgcZAxMVp137FB1tyuCuepzRDkYdUM3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PMqqLII9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D180DC4CEC3;
+	Wed, 25 Sep 2024 07:42:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727215152;
-	bh=F/QvxXAUbnSi1bOS2nFLFEUmzaLdLpoMAU42kIDG2i0=;
+	s=k20201202; t=1727250144;
+	bh=9ve0J8ohIJ9K3MhUzdqrB4TkyiG6Duo/wk9xoZ+FVnA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BTktiKHr3W5tcOIZDBbVE9H4UT92w7DSGURgFikZAqarzyb1ZMHQm7Hd9/x7DTPKV
-	 ZsJDDJSPFT0OEerzCHGTRPDSe6U+9PnzfQNqLCCBDIw7xEz1ZQmBq93OQC/Y37ZG/r
-	 bHLTA0wNCzm7UP8u7ksSxaYlTtOTWqT2PZjTDUb51xK3yvgtx0dSRvyy2XUkf07PWs
-	 3ddDiVHB0ktQ5Y0K29pAyM5wcrQ3CdCeGylCvwyzqD043l13vQIRdjmCHykGBjXUdY
-	 qFmWGf0DCGbgjjWnW2HFqDJPyOsgWWzSZxCjiPrDDkNg6CGD7ZqGhKzzy/0FXvHikT
-	 KFbk14mblOi3g==
-Date: Tue, 24 Sep 2024 14:59:10 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Mikulas Patocka <mpatocka@redhat.com>, luca.boccassi@gmail.com,
-	dm-devel@lists.linux.dev, snitzer@kernel.org, serge@hallyn.com,
-	wufan@linux.microsoft.com, David Howells <dhowells@redhat.com>,
-	keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-	Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH] dm verity: fallback to platform keyring also if key in
- trusted keyring is rejected
-Message-ID: <20240924215910.GA1585@sol.localdomain>
-References: <20240922161753.244476-1-luca.boccassi@gmail.com>
- <6b3e0e45-5efe-3032-62b8-75dcd45c879c@redhat.com>
- <D4EMWUMBIM94.3PM88QAV6LG6B@kernel.org>
- <7c40c30a-5154-08eb-d44e-6598087c53e6@redhat.com>
- <D4EU6G0VR6WO.24IWJJQC997Y9@kernel.org>
+	b=PMqqLII9mltW9L7xhuzHFLTI4cgs4vz5qdVYmu8BG77v/YTgjak4Dh3mwXP9UQ4eX
+	 c8DuKgbslWvwPa36Yfaj2Xvys/QsOFwmZu29nDdG2IDsdTSGC78bCmojBcr9W2ERbr
+	 FvY5oWn4Xp9ImVAuFwrddM3+x5Q2ssF87G5Hazhgdnman62xVF8dC9yRgQekNaYgUY
+	 G6kzfeFIJ+4gZJso/NQztSBQ4+JG2dym0YhT1DBa+ENv6aG7ehgK2J0Z1OzfDcd7yp
+	 5I3TcvkrujgXH38VCMH0NTGJcmJdke88FBlihI3dSEaSzDOvJBFJTheXEadAaqo0fl
+	 Wn7xSEgaWy9qg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D4EU6G0VR6WO.24IWJJQC997Y9@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 25 Sep 2024 10:42:20 +0300
+Message-Id: <D4F72OC53B3R.TJ4FDFPRDC8V@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>
+Cc: <roberto.sassu@huawei.com>, <mapengyu@gmail.com>,
+ <stable@vger.kernel.org>, "Mimi Zohar" <zohar@linux.ibm.com>, "David
+ Howells" <dhowells@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "James
+ Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Peter
+ Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ <keyrings@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 5/5] tpm: flush the auth session only when /dev/tpm0
+ is open
+X-Mailer: aerc 0.18.2
+References: <20240921120811.1264985-1-jarkko@kernel.org>
+ <20240921120811.1264985-6-jarkko@kernel.org>
+ <00cf0bdb3ebfaec7c4607c8c09e55f2e538402f1.camel@HansenPartnership.com>
+ <D4EPQPFA8RGN.2PO6UNTDFI6IT@kernel.org>
+ <f9e2072909d462af72a9f3833b2d76e50894e70a.camel@HansenPartnership.com>
+ <D4EU5PQLA7BO.2J5MI195F8CIF@kernel.org>
+ <2b4c10ca905070158a4bc2fb78d5d5b0f32950ad.camel@HansenPartnership.com>
+In-Reply-To: <2b4c10ca905070158a4bc2fb78d5d5b0f32950ad.camel@HansenPartnership.com>
 
-On Wed, Sep 25, 2024 at 12:36:01AM +0300, Jarkko Sakkinen wrote:
-> On Tue Sep 24, 2024 at 9:27 PM EEST, Mikulas Patocka wrote:
-> >
-> >
-> > On Tue, 24 Sep 2024, Jarkko Sakkinen wrote:
-> >
-> > > On Mon Sep 23, 2024 at 5:04 PM EEST, Mikulas Patocka wrote:
-> > > >
-> > > >
-> > > > On Sun, 22 Sep 2024, luca.boccassi@gmail.com wrote:
-> > > >
-> > > > > From: Luca Boccassi <bluca@debian.org>
-> > > > > 
-> > > > > If enabled, we fallback to the platform keyring if the trusted keyring doesn't have
-> > > > > the key used to sign the roothash. But if pkcs7_verify() rejects the key for other
-> > > > > reasons, such as usage restrictions, we do not fallback. Do so.
-> > > > > 
-> > > > > Follow-up for 6fce1f40e95182ebbfe1ee3096b8fc0b37903269
-> > > > > 
-> > > > > Suggested-by: Serge Hallyn <serge@hallyn.com>
-> > > > > Signed-off-by: Luca Boccassi <bluca@debian.org>
-> > > >
-> > > > Hi
-> > > >
-> > > > I'm not an expert in keyrings.
-> > > >
-> > > > I added keyring maintainers to the CC. Please review this patch and 
-> > > > Ack/Nack it.
-> > > >
-> > > > Mikulas
-> > > >
-> > > > > ---
-> > > > >  drivers/md/dm-verity-verify-sig.c | 2 +-
-> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-> > > > > index d351d7d39c60..a9e2c6c0a33c 100644
-> > > > > --- a/drivers/md/dm-verity-verify-sig.c
-> > > > > +++ b/drivers/md/dm-verity-verify-sig.c
-> > > > > @@ -127,7 +127,7 @@ int verity_verify_root_hash(const void *root_hash, size_t root_hash_len,
-> > > > >  #endif
-> > > > >  				VERIFYING_UNSPECIFIED_SIGNATURE, NULL, NULL);
-> > > > >  #ifdef CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG_PLATFORM_KEYRING
-> > > > > -	if (ret == -ENOKEY)
-> > > > > +	if (ret == -ENOKEY || ret == -EKEYREJECTED)
-> > > > >  		ret = verify_pkcs7_signature(root_hash, root_hash_len, sig_data,
-> > > > >  					sig_len,
-> > > > >  					VERIFY_USE_PLATFORM_KEYRING,
-> > > > > -- 
-> > > > > 2.39.5
-> > > > > 
-> > > 
-> > > I know nothing about dm-verity. What does it even do?
-> > > 
-> > > BR, Jarkko
-> >
-> > dm-verity provides a read-only device with integrity checking. dm-verity 
-> > stores hash for every block on the block device and checks the hash when 
-> > reading the block. If the hash doesn't match, it can do one of these 
-> > actions (depending on configuration):
-> > - return I/O error
-> > - try to correct the data using forward error correction
-> > - log the mismatch and do nothing
-> > - restart the machine
-> > - call panic()
-> >
-> > dm-verity is mostly used for the immutable system partition on Android 
-> > phones. For more info, see 
-> > Documentation/admin-guide/device-mapper/verity.rst
-> >
-> > The above patch changes the way that the signature of the root hash is 
-> > verified. I have no clue whether the patch can or can't subvert system 
-> > security, that's why I'd like to have some more reviews of the patch 
-> > before accepting it.
-> 
-> I guess someone who knows all this already should review it.
-> 
-> Doesn't dm-verity have a maintainer?
-> 
+On Wed Sep 25, 2024 at 12:51 AM EEST, James Bottomley wrote:
+> On Wed, 2024-09-25 at 00:35 +0300, Jarkko Sakkinen wrote:
+> > On Tue Sep 24, 2024 at 9:40 PM EEST, James Bottomley wrote:
+> > > On Tue, 2024-09-24 at 21:07 +0300, Jarkko Sakkinen wrote:
+> > > > On Tue Sep 24, 2024 at 4:43 PM EEST, James Bottomley wrote:
+> > > > > On Sat, 2024-09-21 at 15:08 +0300, Jarkko Sakkinen wrote:
+> > > > > > Instead of flushing and reloading the auth session for every
+> > > > > > single transaction, keep the session open unless /dev/tpm0 is
+> > > > > > used. In practice this means applying
+> > > > > > TPM2_SA_CONTINUE_SESSION to the session attributes. Flush the
+> > > > > > session always when /dev/tpm0 is written.
+> > > > >=20
+> > > > > Patch looks fine but this description is way too terse to
+> > > > > explain how it works.
+> > > > >=20
+> > > > > I would suggest:
+> > > > >=20
+> > > > > Boot time elongation as a result of adding sessions has been
+> > > > > reported as an issue in
+> > > > > https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
+> > > > >=20
+> > > > > The root cause is the addition of session overhead to
+> > > > > tpm2_pcr_extend().=C2=A0 This overhead can be reduced by not
+> > > > > creating and destroying a session for each invocation of the
+> > > > > function.=C2=A0Do this by keeping a session resident in the TPM f=
+or
+> > > > > reuse by any session based TPM command.=C2=A0 The current flow of
+> > > > > TPM commands in the kernel supports this because
+> > > > > tpm2_end_session() is only called for tpm errors because most
+> > > > > commands don't continue the session and expect the session to
+> > > > > be flushed on success.=C2=A0 Thus we can add the continue session
+> > > > > flag to session creation to ensure the session won't be flushed
+> > > > > except on error, which is a rare case.
+> > > >=20
+> > > > I need to disagree on this as I don't even have PCR extends in my
+> > > > boot sequence and it still adds overhead. Have you verified this
+> > > > from the reporter?
+> > > >=20
+> > > > There's bunch of things that use auth session, like trusted keys.
+> > > > Making such claim that PCR extend is the reason is nonsense.
+> > >=20
+> > > Well, the bug report does say it's the commit adding sessions to
+> > > the PCR extends that causes the delay:
+> > >=20
+> > > https://bugzilla.kernel.org/show_bug.cgi?id=3D219229#c5
+> > >=20
+> > > I don't know what else to tell you.
+> >=20
+> > As far as I've tested this bug I've been able to generate similar
+> > costs with anything using HMAC encryption. PCR extend op itself
+> > should have same cost with or without encryption AFAIK.
+>
+> That's true, but the only significant TPM operation in the secure boot
+> path is the PCR extend for IMA.  The RNG stuff is there a bit, but
+> there are other significant delays in seeding the entropy pool.  During
+> boot with IMA enabled, you can do hundreds of binary measurements,
+> hence the slow down.
+>
+> > I guess I need provide benchmarks on this to prove that PCR extend is
+> > not the only site that is affected.
+>
+> Well, on the per operation figures, it's obviously not, a standard TPM
+> operation gets a significant overhead because of sessions. However, it
+> is the only site that causes a large boot slowdown because of the
+> number of the number of measurements IMA does on boot.
 
-This patch only affects dm-verity's in-kernel signature verification support,
-which has only been present since Linux v5.4 and is not used by Android or
-Chrome OS.  The whole feature seems weird to me, and it is prone to be misused;
-signatures are best verified by trusted userspace code instead (e.g. initramfs).
-But apparently there are people who use the dm-verity in-kernel signatures.  I
-think systemd has some support for it, as does the recently-upstreamed IPE LSM.
-I don't know what else.  The exact semantics of the "trusted" and "platform"
-keyrings are not entirely clear to me, but given that dm-verity already trusts
-keys from both keyrings this patch seems reasonable.  The people who actually
-use this feature are in the best position to make that call, though.
+Fair enough. I can buy this.
 
-- Eric
+I'll phrase it that (since it was mentioned in the bugzilla comment)
+in the bug in question the root is in PCR extend but since in my own
+tests I got overhead from trusted keys I also mention that it overally
+affects also that and tpm2_get_random().
+
+>
+> Regards,
+>
+> James
+
+BR, Jarkko
 
