@@ -1,66 +1,49 @@
-Return-Path: <linux-integrity+bounces-3701-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3702-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8C598560C
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2024 11:06:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 021B6986074
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2024 16:23:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55CF8B22433
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2024 09:06:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AF4728761B
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Sep 2024 14:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39057156222;
-	Wed, 25 Sep 2024 09:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdXxxy/f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CD991A7058;
+	Wed, 25 Sep 2024 12:57:21 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0972712D20D;
-	Wed, 25 Sep 2024 09:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575A11A704B;
+	Wed, 25 Sep 2024 12:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727255164; cv=none; b=BeXFHBbuXkl13NP2fhbsQDnMqo/kl9bN4S37zODJVWSKJU8/gIQmdWg+t9zdP3y8MR8FeqUd8L23bwNO6t3tQ8Cruw+lnQ7fzr3iMhRoSi9exQiamQ2PK9p+tiaqgLCxcbxbOvmB97rfnasPyCkJ1fo3qcpEIjzmUo5aFDYZBXM=
+	t=1727269041; cv=none; b=SXuAhmggO67blylrtHdZ5yx23N4QS4/SgBbKZniUIjQdIYAn5lAEefAtzydt+O7cM2g14v60EAwYEDrAyMwW71E0QC3ts3mTGZMOby46PbL1lFN5BV5SlnUfXdN+WinEcNd/IdM/rrhNoTdmSRd1fJDl7lv9z3vWe6LtmDTHbFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727255164; c=relaxed/simple;
-	bh=Qc3vcqMtefGSPRw8PeY81lOlPjoknKL/5PRl5184CCg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=dDHsmB7f6Bmkqm9NetKKLrLtwd5qltrKyB29y8zPljtO/BJYQmR4j6wY5L+J0wMLndJCwWNTuByTjbtqO4gQLUU6+wslCZz7ZwwsVMWFbS9URCrG601Odk2lF4W6BRWG5c+OKUs69Q/vcnDlHMjm4NGzarhLpjmO0mc9mHHR2OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdXxxy/f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41767C4CEC7;
-	Wed, 25 Sep 2024 09:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727255163;
-	bh=Qc3vcqMtefGSPRw8PeY81lOlPjoknKL/5PRl5184CCg=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=QdXxxy/faZ3L+Yn3g3fe7myCP5Y7ivhszVLy2OWxVjr5NO9vZa342/nTtF6pmCfPj
-	 RGtkgyhDlYEuhcL/4t4mjgvde2OpI3q02gXzLMbLS95y3D70agPPDgLAjL3g2eR7Id
-	 zmXt3NOUYQtwRkC9OXVlkbM3rSuE9txd1Jz8c/wB+7U9HEmo1/gDP9Gy19T+7xY3dQ
-	 9vLy217XiAaEVR/MOmU8wm2W2LpS7j3txQyI1W1Vco3oawA2XDVf83c03ftu+BAWRw
-	 N8V01CUozxtZe1OzjCi9yodGNEiGpMETmf3LSteExDCIOO0r+1mzBbdvzBkmvfNHDv
-	 8P+dqoSXwjaqg==
-Precedence: bulk
-X-Mailing-List: linux-integrity@vger.kernel.org
-List-Id: <linux-integrity.vger.kernel.org>
-List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Sep 2024 12:05:59 +0300
-Message-Id: <D4F8UQ7EQ1AH.28Y6BJIM287S1@kernel.org>
-Cc: "Mikulas Patocka" <mpatocka@redhat.com>, <luca.boccassi@gmail.com>,
- <dm-devel@lists.linux.dev>, <snitzer@kernel.org>, <serge@hallyn.com>,
- <wufan@linux.microsoft.com>, "David Howells" <dhowells@redhat.com>,
- <keyrings@vger.kernel.org>, <linux-integrity@vger.kernel.org>, "Mimi Zohar"
- <zohar@linux.ibm.com>
+	s=arc-20240116; t=1727269041; c=relaxed/simple;
+	bh=h9y4gY3/47lj3mOUJL9BDXr/IXY0v8IwKjVzqJwVOVc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WoZtn8OwSaCqoMRQl6IHu4CKuRibdhrkyEsAE7CMas1vBVdXqY37K2Tna3CgL6X554JjUlgEsDRtjFhLZp8Xcpzbdln2ypZanpsYshUEwCKz3gVDybvSdoCsIqm9LmyPlX81+OYX/oZ7mxUyA3oG5lll0PCQLSDe6k5UoEo5b5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+	id 50092A05; Wed, 25 Sep 2024 07:57:17 -0500 (CDT)
+Date: Wed, 25 Sep 2024 07:57:17 -0500
+From: "Serge E. Hallyn" <serge@hallyn.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Milan Broz <gmazyland@gmail.com>, Eric Biggers <ebiggers@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>, luca.boccassi@gmail.com,
+	dm-devel@lists.linux.dev, snitzer@kernel.org, serge@hallyn.com,
+	wufan@linux.microsoft.com, David Howells <dhowells@redhat.com>,
+	keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
+	Mimi Zohar <zohar@linux.ibm.com>, Tycho Andersen <tycho@tycho.ws>,
+	Mike McCracken <mikmccra@cisco.com>
 Subject: Re: [PATCH] dm verity: fallback to platform keyring also if key in
  trusted keyring is rejected
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Milan Broz" <gmazyland@gmail.com>, "Eric Biggers" <ebiggers@kernel.org>
-X-Mailer: aerc 0.18.2
+Message-ID: <20240925125717.GA653365@mail.hallyn.com>
 References: <20240922161753.244476-1-luca.boccassi@gmail.com>
  <6b3e0e45-5efe-3032-62b8-75dcd45c879c@redhat.com>
  <D4EMWUMBIM94.3PM88QAV6LG6B@kernel.org>
@@ -68,19 +51,41 @@ References: <20240922161753.244476-1-luca.boccassi@gmail.com>
  <D4EU6G0VR6WO.24IWJJQC997Y9@kernel.org>
  <20240924215910.GA1585@sol.localdomain>
  <df791a04-feae-4708-865f-193360b35fad@gmail.com>
-In-Reply-To: <df791a04-feae-4708-865f-193360b35fad@gmail.com>
+ <D4F8UQ7EQ1AH.28Y6BJIM287S1@kernel.org>
+Precedence: bulk
+X-Mailing-List: linux-integrity@vger.kernel.org
+List-Id: <linux-integrity.vger.kernel.org>
+List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <D4F8UQ7EQ1AH.28Y6BJIM287S1@kernel.org>
 
-On Wed Sep 25, 2024 at 11:03 AM EEST, Milan Broz wrote:
-> >> Doesn't dm-verity have a maintainer?
->
-> (This reminds me of a nice comment from Neil about "little walled
-> gardens" between MD & DM.  Apparently it applies to other subsystems
-> as well. Sorry, I couldn't resist to mention it :-)
+On Wed, Sep 25, 2024 at 12:05:59PM +0300, Jarkko Sakkinen wrote:
+> On Wed Sep 25, 2024 at 11:03 AM EEST, Milan Broz wrote:
+> > >> Doesn't dm-verity have a maintainer?
+> >
+> > (This reminds me of a nice comment from Neil about "little walled
+> > gardens" between MD & DM.  Apparently it applies to other subsystems
+> > as well. Sorry, I couldn't resist to mention it :-)
+> 
+> Np, it's just that last and only time I've ever read anything about
+> dm-verity was 2011 article :-)
+> 
+> I will rephrase question: does dm-verity have a user? ;-)
 
-Np, it's just that last and only time I've ever read anything about
-dm-verity was 2011 article :-)
+It gets used for integrity guarantees in certain containers, where
+the layers of tarballs are replaced by layers of squashfs, with the
+dmverity root hash for each layer listed in the signed manifest, e.g.
 
-I will rephrase question: does dm-verity have a user? ;-)
+github.com/project-stacker/stacker
+github.com/project-machine/atomfs
 
-BR, Jarkko
+This is used of course to verify container integrity, and also gets used by
+some projects and products to create an RFS from such images during initrd
+
+github.com/project-machine/mos
+
+-serge
 
