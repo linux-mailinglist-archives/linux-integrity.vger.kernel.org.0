@@ -1,107 +1,155 @@
-Return-Path: <linux-integrity+bounces-3711-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3712-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22163988697
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2024 15:54:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60AA79886CC
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2024 16:16:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52A7A1C20EEC
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2024 13:54:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CDAC1C22D62
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2024 14:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D65F199FD1;
-	Fri, 27 Sep 2024 13:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC3D18B1A;
+	Fri, 27 Sep 2024 14:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="elQfnAhx";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="elQfnAhx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D29518DF8F
-	for <linux-integrity@vger.kernel.org>; Fri, 27 Sep 2024 13:54:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B278467
+	for <linux-integrity@vger.kernel.org>; Fri, 27 Sep 2024 14:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727445258; cv=none; b=k1+duvEi9OguHkWKQlTS/Us9jqIXq4npbKEX/z9Sgpu9MDGVZ3Zu6aSR9GztJurK135N8ddFitwjwMOMzjRLZAMvGT4bIK3bLTfhadizdebyc1mjCQRULRbpuBL13cifZz6RIWikHeTNEk32abPO+++Wlox7LIlKIzQIpQG8N9g=
+	t=1727446531; cv=none; b=Ux1iXwsOEo936PK576rS4MJ73y7eczXcN1GeH3GiwOJHmCm1sg1D8TsgXfAkRcxlrI7+kyCOmYOj1BmQ9VnRBX5Fba0JSz3TX6NN1Halz0ADOKD6L0Z4J1jCISzO//J9yZeG6Z1jgkVR6DcJnSdxhvnawd8+ji/Eu/jvK1orykI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727445258; c=relaxed/simple;
-	bh=ET6T710vxAoO/Sk4tACmVr5YF+BD0I/Xx1YK55lhMwE=;
+	s=arc-20240116; t=1727446531; c=relaxed/simple;
+	bh=YpIEd/iReS6nIlB1ehVtLiIbtZUDQGWIJebh/76/gsY=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pdWVpiqJTsp9f2pib6Rs5MWw8FWCxnqbtiI3K6Yz2dnCvyxavwePeSXCuTcpmlGuxTve8zYy/+toiWfkeJNkpyuYyh3BNcxW77zZWiy2o7Ai6qb3g3BtWSNa6CXAxmF/S9ZlvQ9a3jxx3G/zLdYYaty19f4p5gxXmMna+28wERk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4XFWf73Lmdz9v7Hl
-	for <linux-integrity@vger.kernel.org>; Fri, 27 Sep 2024 21:34:23 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 6179D140132
-	for <linux-integrity@vger.kernel.org>; Fri, 27 Sep 2024 21:54:07 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwAXx8f3uPZmcTLCAQ--.51442S2;
-	Fri, 27 Sep 2024 14:54:06 +0100 (CET)
-Message-ID: <d66af0d491f7576c7d865bf6de4da4c83cf0c3ba.camel@huaweicloud.com>
+	 Content-Type:MIME-Version; b=UJ3MJJtS+e81hSMEjNLJs9y0JxLvvY9TuAmKGALbXdfHXoEsd4P/TCbdEa94MuTQVcDe9J6EChwtkGO5v2fYb6FRU+/i50A1IpIgnbs7jT4d3l7YJrl7ZKlGbXtPsistYcCO6F08d92iApgsO/qxyIg7YuX050K3NvBQ/tpAqf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=elQfnAhx; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=elQfnAhx; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1727446528;
+	bh=YpIEd/iReS6nIlB1ehVtLiIbtZUDQGWIJebh/76/gsY=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=elQfnAhxx7nZ0yQladjNhrEtoFyKuL8grjv+zzM0cAeVpdL/iwWFIVDlw+dWVXyhz
+	 YtnBhqZyKIZ1MfRrAioQ9t/0Cs/1RCbHfUxKgwEHqtDLkgaE9V4pLBcQbwZJaSlLrN
+	 7uG1Ff2WvFtEwDJ5a1hWYkrXbjs8WgshOL6y3ZLQ=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 83D621281997;
+	Fri, 27 Sep 2024 10:15:28 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id D5X5PLxhL38t; Fri, 27 Sep 2024 10:15:28 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1727446528;
+	bh=YpIEd/iReS6nIlB1ehVtLiIbtZUDQGWIJebh/76/gsY=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=elQfnAhxx7nZ0yQladjNhrEtoFyKuL8grjv+zzM0cAeVpdL/iwWFIVDlw+dWVXyhz
+	 YtnBhqZyKIZ1MfRrAioQ9t/0Cs/1RCbHfUxKgwEHqtDLkgaE9V4pLBcQbwZJaSlLrN
+	 7uG1Ff2WvFtEwDJ5a1hWYkrXbjs8WgshOL6y3ZLQ=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1960A1281943;
+	Fri, 27 Sep 2024 10:15:26 -0400 (EDT)
+Message-ID: <7025be516c4de1cbd8958c80242f503cc6e92c4a.camel@HansenPartnership.com>
 Subject: Re: TPM HMAC (really) bad performance
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>, Jarkko Sakkinen
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, Jarkko Sakkinen
 	 <jarkko@kernel.org>
 Cc: linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Date: Fri, 27 Sep 2024 15:53:55 +0200
-In-Reply-To: <b8a7b3566e6014ba102ab98e10ede0d574d8930e.camel@huaweicloud.com>
+Date: Fri, 27 Sep 2024 10:15:23 -0400
+In-Reply-To: <d66af0d491f7576c7d865bf6de4da4c83cf0c3ba.camel@huaweicloud.com>
 References: <b8a7b3566e6014ba102ab98e10ede0d574d8930e.camel@huaweicloud.com>
+	 <d66af0d491f7576c7d865bf6de4da4c83cf0c3ba.camel@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwAXx8f3uPZmcTLCAQ--.51442S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XF4fKF18XFyrZw1DKrW3KFg_yoW3GrXE9r
-	n5uw1xu39IqrW2g3ZFgw18Zr1fKayUGryFvan7tFn7XryxXr43Jr43GrySqwn7Xa1kta1Y
-	kwnIyryxJwsF9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbOxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-	AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-	kEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-	kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
-	6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
-	vEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
-	vjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGb2FP0KeQAAsf
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2024-09-06 at 14:32 +0200, Roberto Sassu wrote:
-> Hi all
->=20
-> when running the benchmark on my new component, the Integrity Digest
-> Cache, I ran into a serious performance issue.
->=20
-> The benchmark is extending a TPM PCR with 12313 entries of the IMA
-> measurement list, and calculating the time elapsed for the operation.
->=20
-> Without TPM HMAC: 102.8 seconds
->=20
-> With TPM HMAC: 1941.71 seconds
+On Fri, 2024-09-27 at 15:53 +0200, Roberto Sassu wrote:
+> On Fri, 2024-09-06 at 14:32 +0200, Roberto Sassu wrote:
+> > Hi all
+> > 
+> > when running the benchmark on my new component, the Integrity
+> > Digest
+> > Cache, I ran into a serious performance issue.
+> > 
+> > The benchmark is extending a TPM PCR with 12313 entries of the IMA
+> > measurement list, and calculating the time elapsed for the
+> > operation.
+> > 
+> > Without TPM HMAC: 102.8 seconds
+> > 
+> > With TPM HMAC: 1941.71 seconds
+> 
+> Jarkko patch set [1] improved the performance:
+> 
+> 404.4 seconds
+> 
+> 
+> Still quite slow.
 
-Jarkko patch set [1] improved the performance:
+So this is now the internal TPM overhead.  There's not much we can do
+in the kernel to optimize that.  Your own figures were
 
-404.4 seconds
+> No HMAC:
+> 
+> # tracer: function_graph
+> #
+> # CPU  DURATION                  FUNCTION CALLS
+> # |     |   |                     |   |   |   |
+>  0)               |  tpm2_pcr_extend() {
+>  0)   1.112 us    |    tpm_buf_append_hmac_session();
+>  0) # 6360.029 us |    tpm_transmit_cmd();
+>  0) # 6415.012 us |  }
+> 
+> 
+> HMAC:
+> 
+> # tracer: function_graph
+> #
+> # CPU  DURATION                  FUNCTION CALLS
+> # |     |   |                     |   |   |   |
+>  1)               |  tpm2_pcr_extend() {
+>  1)               |    tpm2_start_auth_session() {
+>  1) * 36976.99 us |      tpm_transmit_cmd();
+>  1) * 84746.51 us |      tpm_transmit_cmd();
+>  1) # 3195.083 us |      tpm_transmit_cmd();
+>  1) @ 126795.1 us |    }
+>  1)   2.254 us    |    tpm_buf_append_hmac_session();
+>  1)   3.546 us    |    tpm_buf_fill_hmac_session();
+>  1) * 24356.46 us |    tpm_transmit_cmd();
+>  1)   3.496 us    |    tpm_buf_check_hmac_response();
+>  1) @ 151171.0 us |  }
 
+or 6ms for no session extend vs 24ms for with session extend, so
+effectively 4x slower, which is exactly what the above figures are also
+showing.
 
-Still quite slow. We should consider not only the boot performance.
-Depending on the use case, IMA can be used after boot and slow down
-applications performance.
+>  We should consider not only the boot performance.
+> Depending on the use case, IMA can be used after boot and slow down
+> applications performance.
 
-Thanks
+Right, but this is IMA fish or cut bait time: are you willing to pay a
+4x penalty for improved security, bearing in mind that not all TPMs
+will show the 4x slow down, since some have much better optimized
+crypto routines.  If yes, we can simply keep the no flush optimization.
+If no, we'd have to turn off security for IMA extends
 
-Roberto
+Regards,
 
-
-[1] https://lore.kernel.org/linux-integrity/20240921120811.1264985-1-jarkko=
-@kernel.org/
+James
 
 
