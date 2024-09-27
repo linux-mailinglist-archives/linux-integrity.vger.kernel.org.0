@@ -1,185 +1,190 @@
-Return-Path: <linux-integrity+bounces-3709-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3710-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 403D5987CA0
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2024 03:36:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9497987F2A
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2024 09:12:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6BF71C226F0
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2024 01:36:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C3261F2245C
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Sep 2024 07:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6715E1C6A5;
-	Fri, 27 Sep 2024 01:36:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F24016E89B;
+	Fri, 27 Sep 2024 07:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F3JoG31Y"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34E3ED53C;
-	Fri, 27 Sep 2024 01:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BC66BFC0;
+	Fri, 27 Sep 2024 07:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727401002; cv=none; b=avIHuV+TsxMMR0lT4N8LjW9nRNuGJYSE/xiSkUMHYRTTXIuK5afhT+ibhl0PO0w/5Fw7On7wP8pSOqRdulfpScBeTTizJkaLV6aUYLcA6V4Xheu3vOuOGSKEnNAqxegpZBhZo1ITQvBl9KmlzbGsjwFMG2UA81CIUepHNALT1Yc=
+	t=1727421165; cv=none; b=inkO7nBk50kX+kssAmOX8J6VGmK1otv2KUWax2ru1ROatATLXjBPzImQVOmSnqJNF6dHhqvIsxmiEonIDTzOMs2ZzjLYAansxeS77jaYcMFs5v09NJrMhYk0WBLbHH9ShIdc4U+r2l0uyp+CieWnfGOEX2gQGlr3iTEq3n3BYZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727401002; c=relaxed/simple;
-	bh=hFdP5aaaibBZ8KCNQ8ZKquKbDyruQ6qDPnUlk8g7+Cw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ylji0gj8tJ00SXnTfxhWvuJ3HGLYx0weTngXTjbVdoeUBBAWWvImRGNtV3QzkvgjDKRGGJGBnxy5B/CU3r41k9ZDve0AlHZleWIXvT1MAHLRgcWuscOV1HvRN2Y6Tcb6E7R0o1qyXfkvOtpi7JTb6yMSfFcZWiCH+b4O7xa3jKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 48R1PxJ1000683;
-	Thu, 26 Sep 2024 20:25:59 -0500
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 48R1PvPj000682;
-	Thu, 26 Sep 2024 20:25:57 -0500
-Date: Thu, 26 Sep 2024 20:25:57 -0500
-From: "Dr. Greg" <greg@enjellic.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>, dhowells@redhat.com,
-        dwmw2@infradead.org, davem@davemloft.net, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        roberto.sassu@huawei.com, linux-security-module@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v3 00/14] KEYS: Add support for PGP keys and signatures
-Message-ID: <20240927012557.GA634@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <ZuPDZL_EIoS60L1a@gondor.apana.org.au> <b4a3e55650a9e9f2302cf093e5cc8e739b4ac98f.camel@huaweicloud.com> <CAHk-=wiU24MGO7LZ1ZZYpQJr1+CSFG9VnB0Nyy4xZSSc_Zu0rg@mail.gmail.com> <ZuaVzQqkwwjbUHSh@gondor.apana.org.au> <CAHk-=wgnG+C3fVB+dwZYi_ZEErnd_jFbrkN+xc__om3d=7optQ@mail.gmail.com> <a991cf4187bced19485e28a5542ac446b92f864e.camel@huaweicloud.com>
+	s=arc-20240116; t=1727421165; c=relaxed/simple;
+	bh=cio1o5IurKNwuIpAly/OV6gI1NaIP2BOcW/IDsaOapg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CFg7X7XU9tJjv1/1whEwyfWYUwH4ZV5ZkM0ha07T6U+I0E8K+rw1G4tev/52EKlMUtMfXNTslHEUgIdzb4HT29slz17F6UDYmTBdQxXipQZ/Ahus8PY5sEWyqH1ZKqDAOCE0fh78mc1gYfF2E9wXVTq/yPlDLLd75jWgaSbsrBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F3JoG31Y; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a8d24f98215so243494166b.1;
+        Fri, 27 Sep 2024 00:12:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727421162; x=1728025962; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=y+Ffj+Tps2rgenFO7SDx+Hw2LCXpsYIAcy4tw3rNXyQ=;
+        b=F3JoG31YdPdS0ZI+eVXIQTkDvjtB51MXvFTRuksQg9tx/XH3FaylQPCNdq8NctFAF6
+         W0qy7FI6K2vJV8sTaswRS59+cEQfhLGnOGPPQmEtz/BcL1KNHv+Ds9eJ640zHvs0QoTR
+         nVQwue0VuSqm3V3Gp8KXvuYPjd/VcmJV5AEU85iYBnOtw+8iEMKUk3BjDX1kxeJn6fSL
+         I7PAzRLi0TvbyFe5jzSwbuQEuk5oW1z3Er/H8WOSZy3xpksp0UZBrptz0e7XO7Bz3nPp
+         sQAdxFWnmJh2EMN8q3qCpLL33V1PJy3XQQGudwhJr6bMh5YnKpV7RytNxCdQfUyzN5Za
+         mPZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727421162; x=1728025962;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y+Ffj+Tps2rgenFO7SDx+Hw2LCXpsYIAcy4tw3rNXyQ=;
+        b=MnfCSsn+iHqAkIPTX0LUAdNVrD7Rd2uW6Cu6HS/KyADHHBlZtkKOunCYhdhP5JE90F
+         r4q3LRZbCeglZHgzivwcXydiJRSszuOrY9bbX0ODiBkhtklZRLSMmj9OMLtMERFNcTkl
+         EC9WgWiWbdfNgd4BHJujFW+tTpFvgfcmrRTmobwlZfyjTD8cnZSckz2ROkvAXYw2Vst3
+         c+qA/Wyefl/zcOY1vCEPnHTOzRtNYFbJv9Z8YHGeySuZ/8zHS7AJ1DjBF2cvWfN+zoEv
+         gL2xLXERAymFQZUHV2p6bVoa2qSAsOPRI9jcRVKcAIN2QXcTpkA0u7zAQ2O6XTrnCn4q
+         TYMA==
+X-Forwarded-Encrypted: i=1; AJvYcCU4XJSwNxhM3bbNysPc+q9ZcizK72M0hQw1zaBXfOIKPveie1IIaXDqVdQumIW3gFejuBXIDZDj0Q==@vger.kernel.org, AJvYcCWo9Ulfh4vZXMDlG37dUTwPNm40U4s9LBIHeZe7ptD1qyu2C3nGUInMrnZaDMIyHgMDouS3HIHyTrEmZ7rFfK6b@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAw+TNf1ml8sKjJEdO8DngO2r2VJt/U0z6yxE/g/yBv0eubMIs
+	L+72xtHdY0WJGiFLTZnOAQEQczbfoLNf+meBvDK9GQMCi6ghL215
+X-Google-Smtp-Source: AGHT+IHxmODD/qFIHB5xnYxt+qaFwv616CLTVcHa9VfoKBfORQh79v5gKph6zFK7BABbBwNgGfyjtA==
+X-Received: by 2002:a17:907:981:b0:a86:43c0:4270 with SMTP id a640c23a62f3a-a93c48e900cmr191497066b.13.1727421161716;
+        Fri, 27 Sep 2024 00:12:41 -0700 (PDT)
+Received: from [147.251.42.107] (laomedon.fi.muni.cz. [147.251.42.107])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93c27776cesm91496366b.40.2024.09.27.00.12.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Sep 2024 00:12:40 -0700 (PDT)
+Message-ID: <08fe559f-f5b8-497f-b7aa-6e61e5c1aeb3@gmail.com>
+Date: Fri, 27 Sep 2024 09:12:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a991cf4187bced19485e28a5542ac446b92f864e.camel@huaweicloud.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 26 Sep 2024 20:26:00 -0500 (CDT)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH] dm verity: fallback to platform keyring also if key in
+ trusted keyring is rejected
+To: Luca Boccassi <luca.boccassi@gmail.com>
+Cc: Eric Biggers <ebiggers@kernel.org>, Jarkko Sakkinen <jarkko@kernel.org>,
+ Mikulas Patocka <mpatocka@redhat.com>, dm-devel@lists.linux.dev,
+ snitzer@kernel.org, serge@hallyn.com, wufan@linux.microsoft.com,
+ David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+ linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+References: <20240922161753.244476-1-luca.boccassi@gmail.com>
+ <6b3e0e45-5efe-3032-62b8-75dcd45c879c@redhat.com>
+ <D4EMWUMBIM94.3PM88QAV6LG6B@kernel.org>
+ <7c40c30a-5154-08eb-d44e-6598087c53e6@redhat.com>
+ <D4EU6G0VR6WO.24IWJJQC997Y9@kernel.org>
+ <20240924215910.GA1585@sol.localdomain>
+ <df791a04-feae-4708-865f-193360b35fad@gmail.com>
+ <CAMw=ZnT=3n+1n6z0HE7JPNFX07fAJS+5W+SeO4pddrcUcEpjZA@mail.gmail.com>
+Content-Language: en-US
+From: Milan Broz <gmazyland@gmail.com>
+Autocrypt: addr=gmazyland@gmail.com; keydata=
+ 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
+In-Reply-To: <CAMw=ZnT=3n+1n6z0HE7JPNFX07fAJS+5W+SeO4pddrcUcEpjZA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 26, 2024 at 11:41:51AM +0200, Roberto Sassu wrote:
-
-Good evening, I hope the week has gone well for everyone.
-
-> On Sun, 2024-09-15 at 10:40 +0200, Linus Torvalds wrote:
-> > On Sun, 15 Sept 2024 at 10:08, Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> > > 
-> > > If the aformentioned EFI use-case is bogus, then distro package
-> > > verification is going to be the only application for PGP keys in
-> > > the kernel.
-> > 
-> > So I haven't actually seen _that_ series, but as mentioned it does
-> > smell pretty conceptually broken to me.
-> > 
-> > But hey, code talks, bullshit walks. People can most certainly try to
-> > convince me.
-
-> The solution has three parts.
+On 9/25/24 11:28 PM, Luca Boccassi wrote:
+>>
+>> Do people use veritysetup (libcryptsetup) here, or does it run with its separate userspace tooling?
 > 
-> 1. The kernel verifies the RPM header with a PGP key embedded in the
-> kernel, and provided by the Linux distribution vendor.
+> This is used with libcryptsetup commonly, and often with veritysetup.
+> It is fairly easy to test in a VM or on baremetal, it is not required
+> to build your own kernel - that's the reason for supporting
+> secondary+platform keyrings (the first one allows you to enroll keys
+> in MOK, the second one for UEFI DB).
+> We would even have a CI testing this for every PR and merge in systemd
+> on Github, _except_ there is currently an issue (unrelated to
+> dmverity) that happens when nesting KVM with UEFI secure boot enabled
+> on top of HyperV, which means it cannot be used reliably on Github
+> Actions. Once that is solved, this will be again part of the systemd
+> CI integration tests. But it is used regularly by developers on their
+> machines.
+
+Hi Luca,
+
+good to know that libcryptswtup userspace is then used here, thanks for the info!
+
+I have some more questions, but that is not related to this thread,
+I will ask in another mail later.
+
+Thanks,
+Milan
+
+
 > 
-> 2. The Integrity Digest Cache parses the verified RPM header in the
-> kernel and feeds one of the existing LSMs (IMA, IPE and BPF LSM) with
-> the digests extracted from the RPM header.
+> It might not be commonly used by kernel developers, I do not know as I
+> am not a kernel developer, but it is becoming more and more common in
+> userspace and among image builders. For example the mkosi image
+> builder, using systemd-repart, can very easily build distro images
+> using signed dm verity. I am at All Systems Go and just today there
+> were multiple talks by multiple people using dmverity images for their
+> distros/platforms/products, especially with systemd-sysext, which is
+> all about signed dm-verity.
 > 
-> 3. The LSMs compare the fsverity digest they find in the filesystem
-> with the authenticated ones from the RPM header, and might deny access
-> to the file if the digests don't match.
+> In 6.12 we will also have IPE which allows to enable trusted code
+> integrity checks that cannot be trivially bypassed by other userspace
+> processes running with root or caps. This has been, still is and will
+> be for the foreseeable future, in use in the Azure infrastructure.
 > 
-> At this point, RPM headers don't contain fsverity digests, only file
-> content digests, but this is an orthogonal problem.
+> Hope this provides some clarity, let me know if you need more info.
 
-So from the above, can it be assumed that the RPM parsing code isn't
-useful until the RPM packages contain fsverity root hashes?
-
-In addition, and we mentioned this previously in this thread, it seems
-that one needs to 'eat' a full read of a file, at least once, in order
-to generate an fsverity digest that is consistent with the actual
-on-disk contents of the file.
-
-So, once again, the notion of the implementation of a generic digest
-cache would seem to be orthogonal to the issue of verifying that the
-digest values in the cache are from a 'known good' source.
-
-> I had a look at previous threads on similar topics, to find your
-> position on the matter.
-> 
-> I got that you would not be probably against (1), and maybe not (3).
-> 
-> However, we still need a source telling whether the fsverity digest in
-> the filesystem is the same of one calculated by Linux distributions
-> during build. That is what the Integrity Digest Cache provides.
-> 
-> Regarding (2), maybe I'm missing something fundamental, but isn't
-> parsing the ELF format of kernel modules from the kernel similar?
-> 
-> Cannot really go to user space at this point, since the authenticated
-> fsverity digests are directly consumed by LSMs. Also, as David pointed
-> out in this thread [1], there is no obligation for user space to call
-> any signature verification function before executing a file, this task
-> must be done by an LSM.
-> 
-> I'm aware that we should not run unnecessary code in the kernel. I
-> tried to mitigate this issue by striping the parsing functionality to
-> the minimum (220 LOC), and formally verifying it with the Frama-C
-> static analyzer. The parser is available here [2].
-> 
-> I'm also aware that this is not the long term solution, but I didn't
-> find much support on the alternatives, like a trustworthy user mode
-> driver [3][4] (isolated from other root processes) and signed eBPF
-> programs [5].
-
-We mentioned this previously in the related threads you cite, our TSEM
-LSM implementation allows the kernel to determine whether or not a
-userspace process or the entirety of userspace should be 'trusted' at
-any point in time.
-
-The security footprint/model of a digest 'priming' workload is going
-to be extremely small.  If the priming workload is invoked early in
-the boot process the kernel can have assurance that neither the
-priming workload or the surrounding userspace has commited any actions
-that would be considered to make the system untrusted.
-
-> What it would be the right way to proceed, in your opinion?
-
-Alternatively, we had suggested previously that the RPM parsing code
-may be a good candidate for implementation with a separate kernel
-loadable module.  That places the parsing code in the kernel to meet
-your security requirement and there is standardized infrastructure for
-module signing that would ensure the integrity of the parser.
-
-The module surfaces a pseudo-file through securityfs that userspace
-can use to feed the RPM header into the kernel to drive the population
-of the digest cache.  The parser only needs to be resident and
-operative long enough to initialize the digest cache of a trusted
-system and a kernel loadable module would seem to be consistent with
-that model.
-
-Once again, priming the digest cache with known good digests seems to
-be an issue orthogonal to the implementation of the digest cache
-itself.
-
-We would be interested in knowing if we are misunderstanding the model
-you are trying to achieve.
-
-> Thanks
-> 
-> Roberto
-> 
-> [1] https://lore.kernel.org/linux-kernel/32081.1171560770@redhat.com/
-> [2] https://lore.kernel.org/linux-integrity/20240905150543.3766895-9-roberto.sassu@huaweicloud.com/
-> [3] https://lore.kernel.org/lkml/20230317145240.363908-1-roberto.sassu@huaweicloud.com/#t
-> [4] https://lore.kernel.org/linux-integrity/eb31920bd00e2c921b0aa6ebed8745cb0130b0e1.camel@huaweicloud.com/
-> [5] https://lwn.net/Articles/853489/
-
-Have a good weekend.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
 
