@@ -1,124 +1,225 @@
-Return-Path: <linux-integrity+bounces-3716-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3717-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8766698A12B
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Sep 2024 13:52:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 192D898A6A8
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Sep 2024 16:09:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B95431C20F53
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Sep 2024 11:52:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49E3C1C2088B
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Sep 2024 14:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ECED18CBF7;
-	Mon, 30 Sep 2024 11:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3305818EFEB;
+	Mon, 30 Sep 2024 14:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T2SXiZBc"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NuxwLe75"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B037718990E
-	for <linux-integrity@vger.kernel.org>; Mon, 30 Sep 2024 11:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062BC189F39
+	for <linux-integrity@vger.kernel.org>; Mon, 30 Sep 2024 14:09:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727697169; cv=none; b=UDT66XM60KsSp+MI8Plw97gNaq8rS23P1eSS7nJEN/skXEi2TGVy9RKGr91hbN8YQbpJGSKYVVKdoXlGYdcWGZDqu6gDk9N1MUzkkWKyfdpy/W8dVHN30jucOn6WHoST5fGXyZzNfwNzaJi/bHat2SPjX2u54SovupiMJDWx2ZY=
+	t=1727705381; cv=none; b=kNtgVRgFKlaqpwmQWO7HqCycO1L4xX6dDwxiAzltBGqqXZd+YI0M+mtrl1O1Iz97I0/XkVZaXPypCiXAq16dsnfScewfiQqieeBMnlHI4EH1aDEiJGNkoLwPBGbS26u9CbVoTQnPQnNh8JfAL1HdDlk0PWIiXQo3k3rbZE0bCpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727697169; c=relaxed/simple;
-	bh=dRRUQuHc0GNe9ZyioL62Ezc2oC1wAUIvwq5PYUEZ9M0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OIPp4ZrbJpraaRXSQYRHe4mZnjJT+dt94c7wZDtF697tK3PVlE7fMPvgovKtjl8IHeH1XPcHZASEzJsaSBn5XjKnrwFRxhLhe8r3UOSc8vuwSbDJx2PibL6VcylqovsLPM+F/YrSfY2zPDeTRiAByWar++CAXSn6JzM4hP1VI70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=T2SXiZBc; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37cdb6ebc1cso1308504f8f.1
-        for <linux-integrity@vger.kernel.org>; Mon, 30 Sep 2024 04:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1727697166; x=1728301966; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G4qzGx2YA4BcjqMp4DFQ4bwP8nQ1tp5t1puB3STC9zU=;
-        b=T2SXiZBckkH8Y76pgGxc8whsoOwSFusa1lr2hKiQDjHJlt0fYdEwNUeUrDciF1ZbIi
-         byfH6Im9wzH2irovr11oSLfVpgcJYWcreOUWV9O9Hy4R35vMUSiOovgPPCiGI6JW5NSe
-         w1PHn3cGM7K9sBKBOkhmEoSESp1uqQ7xYVcf0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727697166; x=1728301966;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G4qzGx2YA4BcjqMp4DFQ4bwP8nQ1tp5t1puB3STC9zU=;
-        b=jQvlD0aGe0R9m8TP4UkEx6GFqAjo4brgsLc8isY5QjDV2oinN+sNlZ4S+pbWRNjVXP
-         txi9nVXa7FGe9wgQyDbRun6Cqn9iaffF7XOtqVWTWtvuL9xv7Nm3GG9/7B0pGktaOvbT
-         K+gnntC5VT/DIt1VicOzQx6AIB3Z6Fe2MgbS1oCJYuLXsnhOm1O7C6UBqsl9GhSckqxr
-         9CulGqVeXD6x0BpYUvGJzBvcgHJFZh58LajADlwwBGSHtH+86KjA1w8hox5KR1qzuPkQ
-         TEgmfgrSrZZ5xpG0ygzDOX90UyZdaDCMchqWBThNcoaXFLBEdDB8/74sVaEidfisfmui
-         pCng==
-X-Forwarded-Encrypted: i=1; AJvYcCUrTjkOE8w1hFWta8IPIKUXRB8z8yrCedoyeEvxyI1/7BIapoxGZa1gVq8FdtIOW0Jghx6TeZCyrkJOV+Bki+Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydSkPvICPbghlrc8qPjfs9ehGQq9UT4jJDGypbaIuquKZh5UZw
-	zH0CjcQLfXM1OXAoBQfioJgfX/H7l314QM88U5BcsxMXSFcpbx6fJ8S67jzVHA==
-X-Google-Smtp-Source: AGHT+IFwRfq7zUEWcK8J4P/6B/lEVCNtutZmrrq2Dri2PBirN6AfAcOzL3PjimNE9a3+BGkD7iS3Ug==
-X-Received: by 2002:adf:dd8e:0:b0:374:c8d1:70be with SMTP id ffacd0b85a97d-37cd5b31966mr6165914f8f.38.1727697165983;
-        Mon, 30 Sep 2024 04:52:45 -0700 (PDT)
-Received: from localhost (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-37cd564d5b7sm8973780f8f.5.2024.09.30.04.52.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Sep 2024 04:52:45 -0700 (PDT)
-From: bernacki@chromium.org
-To: timvp@google.com,
-	jarkko@kernel.org
-Cc: apronin@google.com,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	jgg@ziepe.ca,
-	jsd@semihalf.com,
-	linux-integrity@vger.kernel.org,
-	mw@semihalf.com,
-	peterhuewe@gmx.de,
-	rrangel@chromium.org
-Subject: Re: [PATCH 2/3] char: tpm: cr50: Use generic request/relinquish locality ops
-Date: Mon, 30 Sep 2024 11:52:45 +0000
-Message-ID: <20240930115245.2906902-1-bernacki@chromium.org>
-X-Mailer: git-send-email 2.46.1.824.gd892dcdcdd-goog
-In-Reply-To: <CANkg5ezwYT+ZsiRDW9fe1m4vyncOEDFamq0jXTxmWO37d4i3Nw@mail.gmail.com>
-References: <CANkg5ezwYT+ZsiRDW9fe1m4vyncOEDFamq0jXTxmWO37d4i3Nw@mail.gmail.com>
+	s=arc-20240116; t=1727705381; c=relaxed/simple;
+	bh=VTRD/Kl11IC5Xn6VrW5Hbm5j8B+sdnT7i6s7vlZyhtg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BGcTFZw0WNEyt7UIwuQQPzGmd1584jv2LpRKr9zpZkF/QTpXWbbEx6QGMSpnLf4xsO4aF52lR4Guv6n+wyISnLYunpdH+yrV6AV/ul/dMNB/XUOFhspPbWb989008A+QUKQhwgdWLEJZ9ttFMGzZTv4SZoDhAmkwJgRq/cq7Vew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=NuxwLe75; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48UCrliL027232;
+	Mon, 30 Sep 2024 14:09:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:subject:from:to:cc:date:in-reply-to:references
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	ERGiKhyacxZx9nSvEYuSQhE3SpODIX0jvVJoDcOG+8Y=; b=NuxwLe75ZvVlC/E5
+	VyOVcOX3PLComUfZAZ0MvpAZxZ6ZgodrkUBm7qyRiqXqCo6APR50Kmbmpxph6CxL
+	F3/S//CG6BwfxCMl3FVxDi7Zmd8YWlAUll0NR9e5qw+EjAGWwg4fbVWZYq65S9OP
+	XMF1EyfaVKQUm1p7qTyU9MsbERPJpW2iQzTUEpUejNz+TB/sE4hSL4lNrQGJPTtz
+	v98qlb71Vzh6xdT2X/T+GZNlCbgBTxLecDvzE1lajLoIEfmJFyzdrzNo8tWZuiTX
+	sRGLpbmsWTCcfuf39RQ0TQVlbXEZZCSRQfhE/LiPaHEf/xwX5d0T81wfMbPl+UKJ
+	6ufKzA==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41x77qt49b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Sep 2024 14:09:25 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48UBnTd7013006;
+	Mon, 30 Sep 2024 14:09:24 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 41xxbj6nbb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Sep 2024 14:09:24 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48UE9ORn38797994
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Sep 2024 14:09:24 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3444D5805C;
+	Mon, 30 Sep 2024 14:09:24 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B322C58054;
+	Mon, 30 Sep 2024 14:09:23 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.176.245])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 30 Sep 2024 14:09:23 +0000 (GMT)
+Message-ID: <dd0f55e179ae6aaa1c99c320facc1bb33ccb25c8.camel@linux.ibm.com>
+Subject: Re: TPM HMAC (really) bad performance
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Roberto Sassu
+	 <roberto.sassu@huaweicloud.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org
+Date: Mon, 30 Sep 2024 10:09:23 -0400
+In-Reply-To: <7025be516c4de1cbd8958c80242f503cc6e92c4a.camel@HansenPartnership.com>
+References: <b8a7b3566e6014ba102ab98e10ede0d574d8930e.camel@huaweicloud.com>
+	 <d66af0d491f7576c7d865bf6de4da4c83cf0c3ba.camel@huaweicloud.com>
+	 <7025be516c4de1cbd8958c80242f503cc6e92c4a.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WxXiZDWCy2oxFfpA-s-b7ucUq90sQb62
+X-Proofpoint-ORIG-GUID: WxXiZDWCy2oxFfpA-s-b7ucUq90sQb62
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-09-30_12,2024-09-30_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 phishscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=807 clxscore=1011 priorityscore=1501 spamscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409300102
 
-Tim,
+On Fri, 2024-09-27 at 10:15 -0400, James Bottomley wrote:
+> On Fri, 2024-09-27 at 15:53 +0200, Roberto Sassu wrote:
+> > On Fri, 2024-09-06 at 14:32 +0200, Roberto Sassu wrote:
+> > > Hi all
+> > >=20
+> > > when running the benchmark on my new component, the Integrity
+> > > Digest
+> > > Cache, I ran into a serious performance issue.
+> > >=20
+> > > The benchmark is extending a TPM PCR with 12313 entries of the IMA
+> > > measurement list, and calculating the time elapsed for the
+> > > operation.
+> > >=20
+> > > Without TPM HMAC: 102.8 seconds
+> > >=20
+> > > With TPM HMAC: 1941.71 seconds
+> >=20
+> > Jarkko patch set [1] improved the performance:
+> >=20
+> > 404.4 seconds
+> >=20
+> >=20
+> > Still quite slow.
+>=20
+> So this is now the internal TPM overhead.  There's not much we can do
+> in the kernel to optimize that.  Your own figures were
+>=20
+> > No HMAC:
+> >=20
+> > # tracer: function_graph
+> > #
+> > # CPU  DURATION                  FUNCTION CALLS
+> > # |     |   |                     |   |   |   |
+> >  0)               |  tpm2_pcr_extend() {
+> >  0)   1.112 us    |    tpm_buf_append_hmac_session();
+> >  0) # 6360.029 us |    tpm_transmit_cmd();
+> >  0) # 6415.012 us |  }
+> >=20
+> >=20
+> > HMAC:
+> >=20
+> > # tracer: function_graph
+> > #
+> > # CPU  DURATION                  FUNCTION CALLS
+> > # |     |   |                     |   |   |   |
+> >  1)               |  tpm2_pcr_extend() {
+> >  1)               |    tpm2_start_auth_session() {
+> >  1) * 36976.99 us |      tpm_transmit_cmd();
+> >  1) * 84746.51 us |      tpm_transmit_cmd();
+> >  1) # 3195.083 us |      tpm_transmit_cmd();
+> >  1) @ 126795.1 us |    }
+> >  1)   2.254 us    |    tpm_buf_append_hmac_session();
+> >  1)   3.546 us    |    tpm_buf_fill_hmac_session();
+> >  1) * 24356.46 us |    tpm_transmit_cmd();
+> >  1)   3.496 us    |    tpm_buf_check_hmac_response();
+> >  1) @ 151171.0 us |  }
+>=20
+> or 6ms for no session extend vs 24ms for with session extend, so
+> effectively 4x slower, which is exactly what the above figures are also
+> showing.
+>=20
+> >  We should consider not only the boot performance.
+> > Depending on the use case, IMA can be used after boot and slow down
+> > applications performance.
+>=20
+> Right, but this is IMA fish or cut bait time: are you willing to pay a
+> 4x penalty for improved security, bearing in mind that not all TPMs
+> will show the 4x slow down, since some have much better optimized
+> crypto routines.  If yes, we can simply keep the no flush optimization.
+> If no, we'd have to turn off security for IMA extends
 
-[...]
-> Why is it useful to return the same `loc` value that was passed in,
-> rather than just returning `0`? The caller already knows the value of
-> `loc`, so they aren't being told anything new.
-> 
-> I think this should continue to return `0` for success.
+Another way of looking at it is that the performance for existing TPMs is
+unacceptable with CONFIG_TCG_TPM2_HMAC configured at least for the builtin
+"ima_policy=3Dtcb" policy, replaced with a similar custom policy.  Without
+Jarkko's patch set it takes ~10 minutes to boot.  With Jarkko's patch set i=
+t
+takes ~3 minutes. Saying it will work with newer, faster TPMs isn't a viabl=
+e
+solution for distros.  Either the Kconfig is turned on or not for all syste=
+ms.
 
-I think Jan just followed the conventions, when he returned 'loc' instead of
-'0', some others request/release locality function do exactly the same.
+Is the reason for the performance degradation due to the HMAC or encryption=
+?  If
+the performance degradation is due to the HMAC, then the last line should b=
+e:
+"Saying Y here adds some overhead to all kernel to TPM transactions".
 
-[...]
-> For each of these ` WARN_ONCE((chip->locality < 0), ...).`, can it
-> return immediately rather than attempting to continue using an invalid
-> locality value? Do the following commands have a chance of succeeding
-> with the invalid value?
+config TCG_TPM2_HMAC
+        bool "Use HMAC and encrypted transactions on the TPM bus"
+        default X86_64
+        select CRYPTO_ECDH
+        select CRYPTO_LIB_AESCFB
+        select CRYPTO_LIB_SHA256
+        help
+          Setting this causes us to deploy a scheme which uses request
+          and response HMACs in addition to encryption for
+          communicating with the TPM to prevent or detect bus snooping
+          and interposer attacks (see tpm-security.rst).  Saying Y
+          here adds some encryption overhead to all kernel to TPM
+          transactions.
 
-WARN_ONCE() macro does not remove checking of locality. If I understand
-the code correctly layer above should not called this function if
-request locality fails, so this code is an extra check. 
-I can remove it in the next patchset if you want.
+I'm not quite sure what you mean by "If no, we'd have to turn off security =
+for
+IMA extends."  Are you leaving it enabled for all other TPM communication, =
+just
+disabling it for IMA or disabling it entirely based on whether IMA is
+configured?
 
-Jarkko,
+Mimi
 
-Would it be possible to merge this changes. Patch 1. has already been merged,
-only 2 and 3 are still waiting. Do you want me to create a new patchset for
-these two patches?
 
-thanks,
-greg
+
+
+=20
+
+
+
+=20
+=20
+
 
