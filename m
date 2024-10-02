@@ -1,59 +1,62 @@
-Return-Path: <linux-integrity+bounces-3726-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3725-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33D7E98E177
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 19:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D50A298E174
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 19:04:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFA071F24B4B
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 17:04:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D6121F22D4E
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 17:04:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 365011D12E5;
-	Wed,  2 Oct 2024 17:04:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92FD1D0F6F;
+	Wed,  2 Oct 2024 17:04:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="jqa0KgSK"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="g9NS95SE"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16ACC16419;
-	Wed,  2 Oct 2024 17:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8339116419;
+	Wed,  2 Oct 2024 17:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727888685; cv=none; b=K5Bmj9TyZ+8c/MQ+SmApdVCoIp0DQCgyWGw3prNeHofZtqJFF5u34cMe7pJ13NWVFnwP5j/l7F5XUKKDqzzvDCK+GvdboLBPsQIyuZBbQnjdeSw8IH+CvNcxatPiBxFhtBSDWuJ4Rp791kg8FXiT6+tET7fEEtVo/7KD0zkZwXs=
+	t=1727888656; cv=none; b=sLpOBYCRj68m6vxsff2fjm9nFCMUbitjmPyT+0HYeKsdvYFBTPl4Syv6q3GSvdkZL8l5uIcq97pDvmocuj4mW06J2A1CAGrUpmmAme90bSfAQoYdt1WAKLoy6L9UdTaPajDIClN867P3TQc+G0DtbkVvLUjSJInGGYxpmMERe+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727888685; c=relaxed/simple;
-	bh=Zke3y3eke8w+ewmBfu9SuObgfHveGhN3Gtqgt/1zb4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bSt1AnGeNvPzwEoZUyhTbEu5jVIw8vUzrD7X/0ANPPwhJEuDd0rLoVgbrcscfv0+YDJ4QFySglNU7Nf79GFa7E3E86o/GFRdYqVNUPKic/GCydAyKPNwrk7OA6kMTYpj6eXVlmNNQa8uDZhkwuS9A3ol/dbnd0PHnrzJNoIWTEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=jqa0KgSK; arc=none smtp.client-ip=93.93.131.124
+	s=arc-20240116; t=1727888656; c=relaxed/simple;
+	bh=dtA6ihJ6ZDTS8cZbEjeZKcVTbNIuYWa+Z1KN/pjSWzI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kX2DwyW9/xtyy5u4OPAM0sHinncj/uB5BxO6Pj9bSehtSN/B7s7pxR2p4pbJyfiOYEMXgmq5/gCtlK36zuHCRbQgwIwrMefs/p4NKtroWB4Uk1MbmLeA6ArnvegydnMUASjq2ppQPid/nzK3Wp2/p8ZkFCNaj20EJBWiJomXXQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=g9NS95SE; arc=none smtp.client-ip=93.93.131.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:
-	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
-	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-	References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-	List-Owner:List-Archive; bh=j2oskKuZlf6gOsjHJS2Mo8WU7zbM9/s5ApMgHQXyIuw=; b=j
-	qa0KgSKKIvZ8MxZgXh1GrHB8PGb8eIPBq2wqRauYRtreNRNAAyrSvTLxkzgm2vuS+RXlXwLr6YY57
-	QS/aXjwgYdyUOVsA9bX9cBBvAn9H2/iBdRt9AY1YEBQE/fSPpU01dDMqoSzcUZ9NskSmmScKOlGmF
-	PdAxf6lA1JKrYupfVvcnNnuyw4yOI8Vu+Hrw62Ct9SnjRxEU7CfXMqvi6cjjA1HnPQulH4MsBIbxc
-	odXfvW+QoT/pPTn0XLFUFGjAa91v9DOLWXBr5QKxnszO8POs6vey8i1dIv7jNVy9HolxNCvzcZmGl
-	Z/GksrbMqFxbWQExBH8ASEAXUj0NKhxJg==;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=fHU6ZUnI2iqI/oyQsEj+rzsK7fSeyFKuMIL8oz3W1Lk=; b=g9NS95SEtYOxgRO/fKFwucaLHJ
+	hnjbv6RbVFEhZpPX38DHNsjz8ppAAb0KehR18wZ5bxbuvgYbFz4PBx7PpnhocMyuULDZqJpiLvJax
+	jiJVyT40M1ebyhbE+RqqodNlimvD1axZTVVVz9/pTy0PoQuTLczRDhS72WI4Gxg9juEFyw4kmuhbV
+	SyjFmCZs09ZCLF7/Lr0OeNuH9PNy1LLZJVR0tZoLYkCTMqNOlPLfUIFtoeG6h00MuqAb//vqNfCP8
+	jaCAe8yx11942QNaqgGG9Q6M+5/CV2P4yXp81zA6vnIcbLfRbL0kFpXkO0kCj6nDoa8ZzSmashMSH
+	aYZH0nRA==;
 Received: from noodles by the.earth.li with local (Exim 4.96)
 	(envelope-from <noodles@earth.li>)
-	id 1sw2ky-00DFgb-00;
-	Wed, 02 Oct 2024 18:03:20 +0100
-Date: Wed, 2 Oct 2024 18:03:19 +0100
+	id 1sw2ll-00DFjK-2y;
+	Wed, 02 Oct 2024 18:04:09 +0100
+Date: Wed, 2 Oct 2024 18:04:09 +0100
 From: Jonathan McDowell <noodles@earth.li>
 To: linux-integrity@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
 	James Bottomley <James.Bottomley@hansenpartnership.com>
 Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
 	linux-kernel@vger.kernel.org
-Subject: Problems with TPM timeouts
-Message-ID: <Zv1810ZfEBEhybmg@earth.li>
+Subject: [RFC PATCH] tpm: Workaround failed command reception on Infineon
+ devices
+Message-ID: <Zv19Cc-oTOzv8wVO@earth.li>
+References: <Zv1810ZfEBEhybmg@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -62,58 +65,96 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Zv1810ZfEBEhybmg@earth.li>
 
-We have been seeing a large number of TPM transmit problems across our
-fleet, with frequent
+(I'm still in the process of testing this to confirm it fixes the
+errata I've seen, but I wanted to send it out for comments to make sure
+it's a reasonable approach.)
 
-tpm tpm0: tpm_try_transmit: send(): error -62
+Some Infineon devices have a issue where the status register will get
+stuck with a quick REQUEST_USE / COMMAND_READY sequence. The work around
+is to retry the command submission. Add appropriate logic to do this in
+the send path.
 
-errors being logged. I don't have an on-demand reproducer, which makes
-diagnosis difficult. In almost all cases it's a transient issue, and a
-subsequent attempt to execute a command succeeds, but especially when
-the kernel resource broker is involved that can still cause problems, as
-the kernel is not doing retries here.  Uptime does not seem to be a
-factor.
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
+---
+ drivers/char/tpm/tpm_tis_core.c | 24 +++++++++++++++++++-----
+ drivers/char/tpm/tpm_tis_core.h |  1 +
+ include/linux/tpm.h             |  1 +
+ 3 files changed, 21 insertions(+), 5 deletions(-)
 
-This is not yet using the new HMAC session bits; kernels affected range
-from at least 6.9 back to 5.12. Historically we've not paid attention to
-TPMs long after initial boot, these days we're now looking at them
-throughout the uptime of the machine so perhaps discovering something
-that's been latent for a while.
-
-I have a few things to try, which I'll describe below, but running
-through them will take several months due to the difficulties in trying
-to track the issue down over a production fleet. I'm posting here in
-case anyone has any insight or ideas I might have missed.
-
-First, I've seen James' post extending the TPM timeouts back in 2018
-(https://lore.kernel.org/linux-integrity/1531329074.3260.9.camel@HansenPartnership.com/),
-which doesn't seem to have been picked up. Was an alternative resolution
-found, or are you still using this, James?
-
-That was for a Nuvoton device; ours our Infineon devices. The behaviour
-is not firmware specific; we see the problem with the latest 7.85
-firmware as well as the older 7.62.
-
-Things we are going to try:
-
- * Direct usage of /dev/tpm0 rather than /dev/tpmrm0. This is not a long
-   term solution as we want multiple processes to be able to access the
-   TPM, but is easier to deploy. The expectation is this will lower the
-   number of issues due to fewer TPM commands being executed, but that
-   this is not the root cause.
-
- * Retrying command submission on status timeout. We've had details of
-   an errata where the status register can become stuck, with the work
-   around being command resubmission. I've got a patch for this ready to
-   test - I'll follow up to this mail with it, but need to actually roll
-   it out and test before I'll submit it for inclusion.
-
- * Instrumenting other timeout points to see if we're hitting a
-   different timeout.
-
-J.
-
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index f6aa0dfadb93..940abd1a868e 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -432,16 +432,27 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ {
+ 	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+-	int rc, status, burstcnt;
++	int rc, status, burstcnt, retry;
++	bool status_fix = test_bit(TPM_TIS_STATUS_WORKAROUND, &priv->flags);
+ 	size_t count = 0;
+ 	bool itpm = test_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags);
+ 
+ 	status = tpm_tis_status(chip);
+ 	if ((status & TPM_STS_COMMAND_READY) == 0) {
+-		tpm_tis_ready(chip);
+-		if (wait_for_tpm_stat
+-		    (chip, TPM_STS_COMMAND_READY, chip->timeout_b,
+-		     &priv->int_queue, false) < 0) {
++		retry = status_fix ? 3 : 1;
++
++		while (retry > 0) {
++			tpm_tis_ready(chip);
++			if (wait_for_tpm_stat
++			    (chip, TPM_STS_COMMAND_READY, chip->timeout_b,
++			     &priv->int_queue, false) >= 0) {
++				break;
++			}
++
++			retry--;
++		}
++
++		if (retry == 0) {
+ 			rc = -ETIME;
+ 			goto out_err;
+ 		}
+@@ -1147,6 +1158,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
+ 	}
+ 
++	if (priv->manufacturer_id == TPM_VID_IFX)
++		set_bit(TPM_TIS_STATUS_WORKAROUND, &priv->flags);
++
+ 	if (is_bsw()) {
+ 		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
+ 					ILB_REMAP_SIZE);
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 13e99cf65efe..f888da57535d 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -89,6 +89,7 @@ enum tpm_tis_flags {
+ 	TPM_TIS_INVALID_STATUS		= 1,
+ 	TPM_TIS_DEFAULT_CANCELLATION	= 2,
+ 	TPM_TIS_IRQ_TESTED		= 3,
++	TPM_TIS_STATUS_WORKAROUND	= 4,
+ };
+ 
+ struct tpm_tis_data {
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 4ee9d13749ad..5f4998626a98 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -272,6 +272,7 @@ enum tpm2_cc_attrs {
+ #define TPM_VID_WINBOND  0x1050
+ #define TPM_VID_STM      0x104A
+ #define TPM_VID_ATML     0x1114
++#define TPM_VID_IFX      0x15D1
+ 
+ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_BOOTSTRAPPED		= BIT(0),
 -- 
-101 things you can't have too much of : 8 - Hard drive space.
+2.39.5
+
 
