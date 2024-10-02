@@ -1,107 +1,118 @@
-Return-Path: <linux-integrity+bounces-3727-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3728-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D5B98E1AA
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 19:31:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A9E798E36A
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 21:26:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF4681C22949
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 17:31:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CFF21C22E1C
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 19:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34DE1D151E;
-	Wed,  2 Oct 2024 17:31:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876ED2141A9;
+	Wed,  2 Oct 2024 19:26:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="lH9kKzFE";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="lH9kKzFE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="vOK8DXVy"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047F8195FEC;
-	Wed,  2 Oct 2024 17:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485511D0DCE;
+	Wed,  2 Oct 2024 19:26:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727890298; cv=none; b=qAfuNfGdqgKcO7IoZeIRVHnViGzpoQMZiDilogI4RBR/XlPTmIwyQ2pHpGMcUycwblqaT/gautiGmkmCJoIKV9MADRVFnuxpbl4fdZLdqRZufPQX1KkBUoi1+wvOYGGca3KioXQ5G4Hc9qUAd0OlPplkVEd9rlyJf/LCszshMUU=
+	t=1727897211; cv=none; b=EVXGO3YeEoAPd97ybRDjAHth48s54JiBNRqmQhwl4JElyidwWrc/BfgC1RLeYEcYTHMpB8AFudqBwQdJP8CUfvxByDoYYIqApaxF8F2nDHaURkH3qpUAG0LfE9+LpOhR980gN81gdvCrgPmG0xljPUWgybvYCbDDa9MRs5TGCas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727890298; c=relaxed/simple;
-	bh=ESoRXUooJTMamRkxow067zD8y6e7jzs0/6QiT9wMpdI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BQ4uLoMQoln2N4g4gla1p93lqssxdUSXrN1+1k6uFGP6VLEfs3Iayy1Qppry3ju2/mbjqbpN+oAe+OE9RBY9zEKg8kWkJu99a4laKMplKQiUiMdy8/071LfI0Bk3z/jEXPoNehrqW+jpX1+N2Bo1GS36gLF6+moLEkCkjDaYQ/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=lH9kKzFE; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=lH9kKzFE; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1727890296;
-	bh=ESoRXUooJTMamRkxow067zD8y6e7jzs0/6QiT9wMpdI=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=lH9kKzFEmaCbLh8S2QBhZfzUNUuaJpYBeNF1udpFMLG1tO27RRav0uOeNZHXBfDoD
-	 kNshH9EDyvsDfDiOb7bC0NipfHu5ASS08VSPdKaJPPtC+Gfgub3aFp9arehUUsN0bf
-	 T4EHrXJaLvuVnIsKsp/G7p4Hnjp/VW+LLECMolCQ=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 369711287199;
-	Wed, 02 Oct 2024 13:31:36 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id gYCRXyJuUpwg; Wed,  2 Oct 2024 13:31:36 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1727890296;
-	bh=ESoRXUooJTMamRkxow067zD8y6e7jzs0/6QiT9wMpdI=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=lH9kKzFEmaCbLh8S2QBhZfzUNUuaJpYBeNF1udpFMLG1tO27RRav0uOeNZHXBfDoD
-	 kNshH9EDyvsDfDiOb7bC0NipfHu5ASS08VSPdKaJPPtC+Gfgub3aFp9arehUUsN0bf
-	 T4EHrXJaLvuVnIsKsp/G7p4Hnjp/VW+LLECMolCQ=
-Received: from [10.106.168.49] (unknown [167.220.104.49])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C58AE128715F;
-	Wed, 02 Oct 2024 13:31:35 -0400 (EDT)
-Message-ID: <a9b94fad8f0d8023ce2459fa11494ff8e83d0b65.camel@HansenPartnership.com>
-Subject: Re: Problems with TPM timeouts
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jonathan McDowell <noodles@earth.li>, linux-integrity@vger.kernel.org, 
-	Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	s=arc-20240116; t=1727897211; c=relaxed/simple;
+	bh=FAi/yaWlzEaGZY94Cy0xf1w9t3bJECdggONxw7jhmLM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NlDr21wn/x29RTCr43vRxq59XmdA6TCerj+OM7DkyMG6KePQicevFD+sO0AO+IEHfGwnJzfMyy1IdH5AHHzAgLRMo13dudd9k4GSsNgHexhy2nm3C9CIRIdB6bq46Gu2a9PAjiv3MJQdyWC53ch9N+hYNv9iAEm9taOQeoiy6CI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=vOK8DXVy; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=3CUqPSRPJx6WKMwitN1e//58gfK5Iq+dhEFVNJ9G8Fg=; b=vOK8DXVyukL1SLX2p/PNGNasUS
+	oIzkk3ttq09LQIj4S46N2RnfzETclar6N6pqMKkw1WLoiqzCpd3nG3HPB9qzQN4KWufm10TzrGPUS
+	AHZArfO7Qx4c2EvVXu65uWFoa9OVt0MfhKjith61tC6gvzIJkwowm6Pd1cGPH2i5UUTB7ZC53Xz/C
+	NiBuctz5YnSbUg9M3s84pc6kGGReHRnIWFaSoroeaAm1hRuDiUmxWsJeZ25I0tuHxvjGQHtWFBV4w
+	ikW2HgrdXuwI5xfRvogYZVnzHjv3dSGQm+KCMgsfz9kO5QMvM1EJRrNyvk7vhoLcJxRyoX7RaLbW6
+	dFBLn8uw==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1sw4zk-00DLm2-0H;
+	Wed, 02 Oct 2024 20:26:44 +0100
+Date: Wed, 2 Oct 2024 20:26:44 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
 	linux-kernel@vger.kernel.org
-Date: Wed, 02 Oct 2024 10:31:34 -0700
-In-Reply-To: <Zv1810ZfEBEhybmg@earth.li>
+Subject: Re: Problems with TPM timeouts
+Message-ID: <Zv2edMT2TyGsIiFJ@earth.li>
 References: <Zv1810ZfEBEhybmg@earth.li>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+ <a9b94fad8f0d8023ce2459fa11494ff8e83d0b65.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a9b94fad8f0d8023ce2459fa11494ff8e83d0b65.camel@HansenPartnership.com>
 
-On Wed, 2024-10-02 at 18:03 +0100, Jonathan McDowell wrote:
-[...]
-> First, I've seen James' post extending the TPM timeouts back in 2018
-> (
-> https://lore.kernel.org/linux-integrity/1531329074.3260.9.camel@Hansen
-> Partnership.com/), which doesn't seem to have been picked up. Was an
-> alternative resolution found, or are you still using this, James?
+On Wed, Oct 02, 2024 at 10:31:34AM -0700, James Bottomley wrote:
+> On Wed, 2024-10-02 at 18:03 +0100, Jonathan McDowell wrote:
+> [...]
+> > First, I've seen James' post extending the TPM timeouts back in 2018
+> > (
+> > https://lore.kernel.org/linux-integrity/1531329074.3260.9.camel@Hansen
+> > Partnership.com/), which doesn't seem to have been picked up. Was an
+> > alternative resolution found, or are you still using this, James?
+> 
+> No, because I've got a newer laptop.  The problem was seen on a 2015
+> XPS-13 with a Nuvoton TPM that was software upgraded to 2.0 (and had
+> several other problems because of this).  I assumed, based on the lack
+> of reports from others, that this was a problem specific to my TPM and
+> so didn't push it.
 
-No, because I've got a newer laptop.  The problem was seen on a 2015
-XPS-13 with a Nuvoton TPM that was software upgraded to 2.0 (and had
-several other problems because of this).  I assumed, based on the lack
-of reports from others, that this was a problem specific to my TPM and
-so didn't push it.
+Yes, there's somewhat a lack of reports of TPM issues but I can't tell
+if that's because people aren't using them in anger, or if they're just
+not having any issues.
 
-The annoying thing for me was that the TPM didn't seem to recover. 
-Once it started giving timeouts it carried on timing out until machine
-reset, which really caused problems because all my keys are TPM
-resident.
+This is seen across thousands of machines, so it's not a specific TPM
+issue.
 
-Is yours a permanent problem like mine, or is it transient (TPM
-recovers and comes back)?
+> The annoying thing for me was that the TPM didn't seem to recover. 
+> Once it started giving timeouts it carried on timing out until machine
+> reset, which really caused problems because all my keys are TPM
+> resident.
+> 
+> Is yours a permanent problem like mine, or is it transient (TPM
+> recovers and comes back)?
 
-Regards,
+Ah. So the problem I've described is transient; we get a timeout, that
+sometimes causes problems (e.g. the transient space leakage I've
+previously sent a patch for), but ultimately the TPM responds just fine
+next time.
 
-James
+We _do_ have a separate issue where the TPM returns 0xFFFF for STS, the
+kernel does the "invalid TPM_STS.x" with stack thing, then the TPM never
+responds to a command again until a machine reboot. However in that
+instance it _does_ still respond to reading the TPM_DID_VID register,
+and allowing entering/leaving locality, so that looks like it's firmly a
+TPM problem of some sort.
 
+J.
+
+-- 
+/-\                             | No thanks, I'm already having one.
+|@/  Debian GNU/Linux Developer |
+\-                              |
 
