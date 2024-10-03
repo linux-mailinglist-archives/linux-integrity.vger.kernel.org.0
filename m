@@ -1,114 +1,176 @@
-Return-Path: <linux-integrity+bounces-3730-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3731-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34F5898EA62
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2024 09:36:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96DD398F1F5
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2024 16:58:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96E20B24A8B
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2024 07:36:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA8EB1C20A6A
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2024 14:58:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8861B53370;
-	Thu,  3 Oct 2024 07:36:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84862E62C;
+	Thu,  3 Oct 2024 14:58:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="is1GJMqA"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="T1TcT3Mb"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BA78F5C;
-	Thu,  3 Oct 2024 07:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2996E26ACD;
+	Thu,  3 Oct 2024 14:58:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727940966; cv=none; b=gTIhyj4IZeKH4Qxl0yld1KaQzec0ufgFqf6+zSfidcFI77qNGXE42cMpWfTliRbkgXWoyNEByDdhtmx5JC1neY6J4xVIqsPtnXC3TuszLZjra8uEWBNSpvfMXRvUO1cL+KC9G9+Mofanb94F/B4td3OqhcPzxK7TskkfLyKGKjk=
+	t=1727967506; cv=none; b=pKDgf/wAY36pbw17SvXW0eU2Xk3IO14SGTnA2ymYdyUv5hSRVIWLpxhum+7qjn5R50kUlB+iEewbAzlWRABrTTwyjOO6jG27Yl8qRkL50g0y2yYVLeN2C7lOdtYAsHX3E9pORgArEIEvoGs48ZoPhiz4orHkHGY+bv5Dj965bN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727940966; c=relaxed/simple;
-	bh=M7x3cWa977Oz9ozRtPmM2OrD4Iksba/Rz47mA4bO15A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DfsJOA1dWYyOItyCmuBhaHOv7rTmUE7IvxKrqQmKGO0YgIdGOkvCaxt67PgZmgKzRlklzU4y7XoL5NNVDL3q77CT17Zg8iUePclvr8b1DyLRa+bSHKnphiwKBVopZb5JqTqzxLqTt+yIZQVvHsxng9GVWlEMHghJOXoU8yc8uG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=is1GJMqA; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5398df2c871so573298e87.1;
-        Thu, 03 Oct 2024 00:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727940963; x=1728545763; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9oR8h0jcD+ASzHqwg5wRJecDB5ThsYQmaCFqLieUUys=;
-        b=is1GJMqAgkJ2TwFpQ+/oJ71vMz2nu/Uerlqfhxx55ipKam7/4NRvUa4uxhiYGtcoyW
-         R5IMBd4MU6G7m7/xCcfOtwD4xMt03isnk9+OfrIyBAGG7YsnDCNC45ayuDtSbu98HOh8
-         YnagPHX2MmvvVbrXrWNX9iarIm0oCK+Lg7+wbFl04L7wzWQ8uX10/SNkQXnF6gioWwvS
-         ME+UVodyH+8CumP9A+VamWclBoPra2JCRgnmzDuiuAP+z5Uv3SvhS4xTNOrwUqWep30J
-         5nLPUp77G1hhgME9qkKOSpacGEPgB0qjS8FkOd4zq75VCjR5HfjuOJpz5mV/dRW2ugmm
-         r/5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727940963; x=1728545763;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9oR8h0jcD+ASzHqwg5wRJecDB5ThsYQmaCFqLieUUys=;
-        b=bbxXvepvXuWoUwj72n86QGxU6n5IjAhDR3yDe4B6j3OI0LtVgptmn9l8HcEfoOk+uU
-         5W3aEUIN3vMZ67s0whM9+TNsxBm1tYnkLboT5KzvejvwildHpIc2FIGRZVkG8r7qdq3Z
-         NFi8SqTp8PCJkoVs39AhY7P88mR3JSx+R5EU900dEb0mqPeftkYZub8mj46+XsoAMEEG
-         8WOGAszFifKoD4HP4BS6T4tisacUNB+XSYPLC0WCxdH/J1HSy4w2fq1NUOr63WXPttNT
-         RSUWhHP/nsTll0KPHR4ntBmJsuhengztJi5zJMeGRtHlVWCOnK6S45CsbOqIPNjfAz33
-         JgoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUjc1yBMl6SSVFgMuJ39E7c4/ySI+jxE8NShws/IucLjnVp+Ht1GXLV9ynypUlyL1JeqdVDt/kAlsR/y6SVDP8=@vger.kernel.org, AJvYcCXVg+kPLNb6NiimZ/PzsoD9RDUqi6uWteFw1iicTAZfhMSCCI4qiYHe3ybfAWWSdsLbKoJeF3FOMx5KOvUTtTCou9wccBDh@vger.kernel.org, AJvYcCXuOAgQi79LLPUuVWib3yxV+qBXwQj+oI5ep22ZxHlJANvzMRjO0vwQG86txgOy78ekDRVCVILblVsGCmoX@vger.kernel.org
-X-Gm-Message-State: AOJu0YwimYxnr7bW5wGKn8BGR4IyFQqLlWYu6nDghdApvzkJeyE06xV3
-	Ac3p3ThBT7nVAG/ct+RU/TD3aO9osZROy/8FTSFoxUIEXoFey5ySObhzsuwM4wvjvYAUVXHAm69
-	3aZpyU7rc/XyqqrA1Y34aSkwHRe0=
-X-Google-Smtp-Source: AGHT+IFv9AtG9mNjYdrEiVauqIlg0dzgZJCUwjpzJV+xaWeaunneTND2RuGD2CvAsi1FIHppDH85AjSwHwx2Tj0ajdk=
-X-Received: by 2002:ac2:4c48:0:b0:52c:cc2e:1c45 with SMTP id
- 2adb3069b0e04-539a0663300mr3041629e87.15.1727940962711; Thu, 03 Oct 2024
- 00:36:02 -0700 (PDT)
+	s=arc-20240116; t=1727967506; c=relaxed/simple;
+	bh=qlXMXW2vFLKrkpMebmH/XKuu9Q6WXuTRK03cSoPBfUU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hii1jyvrhNaeBjHB0S+jqgUqmINc6Fxs/ceSqnweuaVSLf8LFcOF/aUSGbvI04/Gpip4g+RKD5w/q+pFtjLdkdT+bnDJ9tonCY8sNHaaUsjEo7d4Nn9Lo4Z5xUpixT1SNOeNAp+qrge0XHBi5keGQ828WgkgeLgKKYKX664/PPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=T1TcT3Mb; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 493EiURE009626;
+	Thu, 3 Oct 2024 14:57:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=/
+	etH9hm0berpHXbq1eIePIo22X3OIjzd6weouRDdhQg=; b=T1TcT3MbpMfe/IjTi
+	GlbMFK3C5nXnP4LKFMtkCH/hxn57h8uwxsDlUDKJnq89RRc00bGBgDVzmcvztjMj
+	eK+p9QKhsjAfqlY+bAFsvOYd9RlZtWTJkhd8yax6NvuizBbY3NJ3mNviWdpNmjdd
+	TleFF9vFqB66rT4pnVtt0LnZ60TOcB0f/sN5NAnQ7Lf7AgSxVWTD2OCTDxEikzua
+	FQtlhp+QkSEwREMMSBy2NYi4hxdJzaKxF5jRAeCCfT2S0/REVbDVER4C7mw4om0R
+	63cJ/TA4E/Rwqnq3GXeuWJd7MpC3Dj9mMZsv9XHBwKjn6TiKME33ved51D0C1sbe
+	w5/xA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 421vvd85th-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Oct 2024 14:57:57 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 493EtnVf005425;
+	Thu, 3 Oct 2024 14:57:56 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 421vvd85tf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Oct 2024 14:57:56 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 493BhuSS007923;
+	Thu, 3 Oct 2024 14:57:56 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41xvgy8fp8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Oct 2024 14:57:56 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 493Evt1645416948
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 3 Oct 2024 14:57:55 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6DF0058051;
+	Thu,  3 Oct 2024 14:57:55 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 61B295805A;
+	Thu,  3 Oct 2024 14:57:54 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  3 Oct 2024 14:57:54 +0000 (GMT)
+Message-ID: <69c893e7-6b87-4daa-80db-44d1120e80fe@linux.ibm.com>
+Date: Thu, 3 Oct 2024 10:57:53 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <66f7b10e.050a0220.46d20.0036.GAE@google.com> <CAHQche-Gsy4=UT6+znKyPRDEHQm9y-MQ+zacoqfywKaz7VA2kg@mail.gmail.com>
- <CAHC9VhSHSD5QF8w2+n9f1DAEfQAwW5eA0skSuap2jdMWrLfGWQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhSHSD5QF8w2+n9f1DAEfQAwW5eA0skSuap2jdMWrLfGWQ@mail.gmail.com>
-From: Shu Han <ebpqwerty472123@gmail.com>
-Date: Thu, 3 Oct 2024 15:35:51 +0800
-Message-ID: <CAHQche-HPzahcHea65f-caRBUSvr4WsRF5J8cqYGnjJvBNTX5g@mail.gmail.com>
-Subject: Re: [syzbot] [integrity?] [lsm?] possible deadlock in
- process_measurement (4)
-To: Paul Moore <paul@paul-moore.com>
-Cc: syzbot <syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com>, 
-	akpm@linux-foundation.org, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, hughd@google.com, jmorris@namei.org, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	roberto.sassu@huawei.com, serge@hallyn.com, stephen.smalley.work@gmail.com, 
-	syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/5] tpm: Return on tpm2_create_null_primary() failure
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: James.Bottomley@HansenPartnership.com, roberto.sassu@huawei.com,
+        mapengyu@gmail.com, stable@vger.kernel.org,
+        Mimi Zohar
+ <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240921120811.1264985-1-jarkko@kernel.org>
+ <20240921120811.1264985-2-jarkko@kernel.org>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20240921120811.1264985-2-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 5EFp1r8e1EzEFn9PkcBzzuGPMZjq4zHA
+X-Proofpoint-GUID: ZIlKVpXqsoC0O4SLuVxiv0Zt8P8eHBaV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-03_06,2024-10-03_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0 bulkscore=0
+ clxscore=1011 impostorscore=0 suspectscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2408220000 definitions=main-2410030107
 
-> My apologies for the delay on this, I was traveling for a bit and
-> missed this issue while away.
->
-> Looking quickly at the report, I don't believe this is a false positive.
 
-This is the mistake I made when I first watched the report.
 
-It should be a deadlock.
+On 9/21/24 8:08 AM, Jarkko Sakkinen wrote:
+> tpm2_sessions_init() does not ignores the result of
 
-> Looking at the IMA code, specifically the process_measurement()
-> function which is called from the security_mmap_file() LSM hook, I'm
-> not sure why there is the inode_lock() protected region.  Mimi?
-> Roberto?  My best guess is that locking the inode may have been
-> necessary before we moved the IMA inode state into the inode's LSM
-> security blob, but I'm not certain.
->
-> Mimi and Roberto, can we safely remove the inode locking in
-> process_measurement()?
+s/ignores/ignore
 
-It would be better if IMA could avoid acqurie inode_lock().
+> tpm2_create_null_primary(). Address this by returning -ENODEV to the
+> caller.
 
-If not, then we may need to consider solutions I mentioned in my
-previous reply.
+I am not sure why mapping all errors to -ENODEV resolves the fact that 
+tpm2_sessions_init() does not ignore the result of 
+tpm2_create_null_primary(). I think what you want is to return -ENODEV 
+from tpm2_auto_startup.
+
+> 
+> Cc: stable@vger.kernel.org # v6.10+
+> Fixes: d2add27cf2b8 ("tpm: Add NULL primary creation")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> v5:
+> - Do not print klog messages on error, as tpm2_save_context() already
+>    takes care of this.
+> v4:
+> - Fixed up stable version.
+> v3:
+> - Handle TPM and POSIX error separately and return -ENODEV always back
+>    to the caller.
+> v2:
+> - Refined the commit message.
+> ---
+>   drivers/char/tpm/tpm2-sessions.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+> index d3521aadd43e..0f09ac33ae99 100644
+> --- a/drivers/char/tpm/tpm2-sessions.c
+> +++ b/drivers/char/tpm/tpm2-sessions.c
+> @@ -1338,7 +1338,8 @@ static int tpm2_create_null_primary(struct tpm_chip *chip)
+>   		tpm2_flush_context(chip, null_key);
+>   	}
+>   
+> -	return rc;
+> +	/* Map all errors to -ENODEV: */
+> +	return rc ? -ENODEV : rc;
+
+return rc ? -ENODEV : 0;
+
+>   }
+>   
+>   /**
+> @@ -1354,7 +1355,7 @@ int tpm2_sessions_init(struct tpm_chip *chip)
+>   
+>   	rc = tpm2_create_null_primary(chip);
+>   	if (rc)
+> -		dev_err(&chip->dev, "TPM: security failed (NULL seed derivation): %d\n", rc);
+> +		return rc;
+>   
+>   	chip->auth = kmalloc(sizeof(*chip->auth), GFP_KERNEL);
+>   	if (!chip->auth)
 
