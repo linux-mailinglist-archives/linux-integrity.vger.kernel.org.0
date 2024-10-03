@@ -1,118 +1,146 @@
-Return-Path: <linux-integrity+bounces-3728-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3729-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A9E798E36A
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 21:26:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA3D298E8AA
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2024 05:09:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CFF21C22E1C
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Oct 2024 19:26:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CF3F1F26B97
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Oct 2024 03:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876ED2141A9;
-	Wed,  2 Oct 2024 19:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC1E38384;
+	Thu,  3 Oct 2024 03:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="vOK8DXVy"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="dcT++lDK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485511D0DCE;
-	Wed,  2 Oct 2024 19:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5274F200CD
+	for <linux-integrity@vger.kernel.org>; Thu,  3 Oct 2024 03:09:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727897211; cv=none; b=EVXGO3YeEoAPd97ybRDjAHth48s54JiBNRqmQhwl4JElyidwWrc/BfgC1RLeYEcYTHMpB8AFudqBwQdJP8CUfvxByDoYYIqApaxF8F2nDHaURkH3qpUAG0LfE9+LpOhR980gN81gdvCrgPmG0xljPUWgybvYCbDDa9MRs5TGCas=
+	t=1727924976; cv=none; b=W8DjhiIaNDMQ63GI21cBU4QsawW5/cMuyR0nwFOvDn5N72fJ6zA54OF5gceGeOPt6M0ovtdygoCvCnu6GnfO/O03HAUI+6ffbI+5zmkC4iFv4eRO/HntCqCAerUhO5eixrWtT0F6mGxj1ulIlJXXj3TrRF1IuNsAcFTp7NHR77k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727897211; c=relaxed/simple;
-	bh=FAi/yaWlzEaGZY94Cy0xf1w9t3bJECdggONxw7jhmLM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NlDr21wn/x29RTCr43vRxq59XmdA6TCerj+OM7DkyMG6KePQicevFD+sO0AO+IEHfGwnJzfMyy1IdH5AHHzAgLRMo13dudd9k4GSsNgHexhy2nm3C9CIRIdB6bq46Gu2a9PAjiv3MJQdyWC53ch9N+hYNv9iAEm9taOQeoiy6CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=vOK8DXVy; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=3CUqPSRPJx6WKMwitN1e//58gfK5Iq+dhEFVNJ9G8Fg=; b=vOK8DXVyukL1SLX2p/PNGNasUS
-	oIzkk3ttq09LQIj4S46N2RnfzETclar6N6pqMKkw1WLoiqzCpd3nG3HPB9qzQN4KWufm10TzrGPUS
-	AHZArfO7Qx4c2EvVXu65uWFoa9OVt0MfhKjith61tC6gvzIJkwowm6Pd1cGPH2i5UUTB7ZC53Xz/C
-	NiBuctz5YnSbUg9M3s84pc6kGGReHRnIWFaSoroeaAm1hRuDiUmxWsJeZ25I0tuHxvjGQHtWFBV4w
-	ikW2HgrdXuwI5xfRvogYZVnzHjv3dSGQm+KCMgsfz9kO5QMvM1EJRrNyvk7vhoLcJxRyoX7RaLbW6
-	dFBLn8uw==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1sw4zk-00DLm2-0H;
-	Wed, 02 Oct 2024 20:26:44 +0100
-Date: Wed, 2 Oct 2024 20:26:44 +0100
-From: Jonathan McDowell <noodles@earth.li>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: linux-integrity@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org
-Subject: Re: Problems with TPM timeouts
-Message-ID: <Zv2edMT2TyGsIiFJ@earth.li>
-References: <Zv1810ZfEBEhybmg@earth.li>
- <a9b94fad8f0d8023ce2459fa11494ff8e83d0b65.camel@HansenPartnership.com>
+	s=arc-20240116; t=1727924976; c=relaxed/simple;
+	bh=gqxa1YnqSpyoO8jYHhaneN1Xbjde9NeCMupNvy17rVQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tMov4MCV/0aOMWdPfyv+X2yz+6g5RtFcKM5TNj/CUsymWUZXEKMcmEjMA9abJDNwuBUXNWAQ+Eyx8nWOwIPfv6/z3J9wmxpO5c83kgQwfqs01JS34Xtq0Lpm+DbqPJ8422Rp61ZdH2N3ckr8W0O2YU7q1+lZWJgTrG/KtqJCnXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=dcT++lDK; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6dbc75acbfaso3741997b3.3
+        for <linux-integrity@vger.kernel.org>; Wed, 02 Oct 2024 20:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1727924973; x=1728529773; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6TKlAqmWS7yAuGxt2U11/NinoSGw3zEex51U/NMll6k=;
+        b=dcT++lDKZGo+I167ijS7wJafX8qH34ogEGytZ+LqXFMa+/I6+gJWFaLd9OIy8+rNqQ
+         hytoO83DZqTVs0rcShRiCzQomzXm/m0oywfe6Ha7D7Rg+6iBTQNx27QpXnsSGyQFSPKW
+         ngqyxBSepdTtk62nC5prlCPZDpjC0FTIe6Ng2ByDzdJ1E8J+khx/7Eed44nnyIJut1/x
+         iWDwkoEgggTrgZmxlMFbAI2aace//qm+gYPsQIyiV/jH4MZMB9BXBx6HOwTZ7iQeMZ8p
+         cblaOkdadofbtyUhBcZtc/9OcHEar2tWIfbuuI3AW8XEus8CcVKThImFtjXYVsinQ9fj
+         3xKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727924973; x=1728529773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6TKlAqmWS7yAuGxt2U11/NinoSGw3zEex51U/NMll6k=;
+        b=QpNMa0FmkVs5lIPi62/ugKzbrrrW6tTk0mcBeWzUPU309Wo+tdS+KDSmHs1QtSNeqz
+         CFqjY7LGjIfwpxDf94/ln8PBWehrq/MMoUfS8LUR2bLWPUA3jrnheRG9jIoU2K/YVyZw
+         O4djMo2aekxEDGedwDRFAvikbHTnRLa1Ed/I5SKa7t1hrW/MTFZae3FXNxmbUjOW9y1z
+         1gqi9baXqos/AJC1/tOWzKk3g/dCXEl4fhdf3sAyB/MzKAuJBWzTnbu7z+WFXO3oc5UX
+         NycQ3c8hHSh5tgq/PpTygW9DLq+K0Nh8zMl2fE81fA5qn40KnswQvQEs8RytEwDMNkQ4
+         HfBA==
+X-Forwarded-Encrypted: i=1; AJvYcCXyJxaXdsg3+bsJCjpjXC7rHGdqKD2PghoZ1qUTzo8obIlcJvzdMfFZhAmVSKhGmNNDzOy7fbf18mAXS5Aveek=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyfrm87yXctzJp/RoLYdLVIOC3pFDFk9fSz1dhNCEHk0cMcfyga
+	5V+yc9D8Wgt9lS5nO1J348dsgmhzY2KX1mBVLdvzE/8OXs2CgQDZcYzXWrfnazjgTxLeof+Pn0p
+	9jqnvJdrxJkjn9HEGhbTp3l8fXtgWgb4/08ie0vgNZTetOUU=
+X-Google-Smtp-Source: AGHT+IEXOkpzxjalt/s6BumTiyIkpgNz6DTSsxcgK3vVgqu+PX9GLKOWjEc84soRoaZm+DQi7TTIHvhFljCKfSz0Z54=
+X-Received: by 2002:a05:690c:ed0:b0:6dd:c679:f108 with SMTP id
+ 00721157ae682-6e2a2b3f03cmr55041267b3.5.1727924973274; Wed, 02 Oct 2024
+ 20:09:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a9b94fad8f0d8023ce2459fa11494ff8e83d0b65.camel@HansenPartnership.com>
+References: <66f7b10e.050a0220.46d20.0036.GAE@google.com> <CAHQche-Gsy4=UT6+znKyPRDEHQm9y-MQ+zacoqfywKaz7VA2kg@mail.gmail.com>
+In-Reply-To: <CAHQche-Gsy4=UT6+znKyPRDEHQm9y-MQ+zacoqfywKaz7VA2kg@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 2 Oct 2024 23:09:22 -0400
+Message-ID: <CAHC9VhSHSD5QF8w2+n9f1DAEfQAwW5eA0skSuap2jdMWrLfGWQ@mail.gmail.com>
+Subject: Re: [syzbot] [integrity?] [lsm?] possible deadlock in
+ process_measurement (4)
+To: Shu Han <ebpqwerty472123@gmail.com>
+Cc: syzbot <syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com>, 
+	akpm@linux-foundation.org, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, hughd@google.com, jmorris@namei.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
+	roberto.sassu@huawei.com, serge@hallyn.com, stephen.smalley.work@gmail.com, 
+	syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 02, 2024 at 10:31:34AM -0700, James Bottomley wrote:
-> On Wed, 2024-10-02 at 18:03 +0100, Jonathan McDowell wrote:
-> [...]
-> > First, I've seen James' post extending the TPM timeouts back in 2018
-> > (
-> > https://lore.kernel.org/linux-integrity/1531329074.3260.9.camel@Hansen
-> > Partnership.com/), which doesn't seem to have been picked up. Was an
-> > alternative resolution found, or are you still using this, James?
-> 
-> No, because I've got a newer laptop.  The problem was seen on a 2015
-> XPS-13 with a Nuvoton TPM that was software upgraded to 2.0 (and had
-> several other problems because of this).  I assumed, based on the lack
-> of reports from others, that this was a problem specific to my TPM and
-> so didn't push it.
+On Sat, Sep 28, 2024 at 2:08=E2=80=AFPM Shu Han <ebpqwerty472123@gmail.com>=
+ wrote:
+>
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> > WARNING: possible circular locking dependency detected
+> > 6.11.0-syzkaller-10045-g97d8894b6f4c #0 Not tainted
+> > ------------------------------------------------------
+> > syz-executor369/5231 is trying to acquire lock:
+> > ffff888072852370 (&sb->s_type->i_mutex_key#12){+.+.}-{3:3}, at: inode_l=
+ock include/linux/fs.h:815 [inline]
+> > ffff888072852370 (&sb->s_type->i_mutex_key#12){+.+.}-{3:3}, at: process=
+_measurement+0x439/0x1fb0 security/integrity/ima/ima_main.c:250
+> >
+> > but task is already holding lock:
+> > ffff88807ac9a798 (&mm->mmap_lock){++++}-{3:3}, at: mmap_write_lock_kill=
+able include/linux/mmap_lock.h:122 [inline]
+> > ffff88807ac9a798 (&mm->mmap_lock){++++}-{3:3}, at: __do_sys_remap_file_=
+pages mm/mmap.c:1649 [inline]
+> > ffff88807ac9a798 (&mm->mmap_lock){++++}-{3:3}, at: __se_sys_remap_file_=
+pages+0x22d/0xa50 mm/mmap.c:1624
+> >
+> > which lock already depends on the new lock.
+>
+> This issue (if not a false positive?) is due to the possible `prot`
+> change caused by the processing logic for READ_IMPLIES_EXEC in do_mmap(),
+> so the remap_file_pages() must perform LSM check before calling do_mmap()=
+,
+> this is what the previous commit want to do.
 
-Yes, there's somewhat a lack of reports of TPM issues but I can't tell
-if that's because people aren't using them in anger, or if they're just
-not having any issues.
+My apologies for the delay on this, I was traveling for a bit and
+missed this issue while away.
 
-This is seen across thousands of machines, so it's not a specific TPM
-issue.
+Looking quickly at the report, I don't believe this is a false positive.
 
-> The annoying thing for me was that the TPM didn't seem to recover. 
-> Once it started giving timeouts it carried on timing out until machine
-> reset, which really caused problems because all my keys are TPM
-> resident.
-> 
-> Is yours a permanent problem like mine, or is it transient (TPM
-> recovers and comes back)?
+> The LSM check is required to know what the `prot` is, but `prot` must be
+> obtained after holding the `mmap_write_lock`.
+>
+> If the `mmap_write_lock` is released after getting the `prot` and before
+> the LSM call in remap_file_pages(), it may cause TOCTOU.
 
-Ah. So the problem I've described is transient; we get a timeout, that
-sometimes causes problems (e.g. the transient space leakage I've
-previously sent a patch for), but ultimately the TPM responds just fine
-next time.
+Looking at the IMA code, specifically the process_measurement()
+function which is called from the security_mmap_file() LSM hook, I'm
+not sure why there is the inode_lock() protected region.  Mimi?
+Roberto?  My best guess is that locking the inode may have been
+necessary before we moved the IMA inode state into the inode's LSM
+security blob, but I'm not certain.
 
-We _do_ have a separate issue where the TPM returns 0xFFFF for STS, the
-kernel does the "invalid TPM_STS.x" with stack thing, then the TPM never
-responds to a command again until a machine reboot. However in that
-instance it _does_ still respond to reading the TPM_DID_VID register,
-and allowing entering/leaving locality, so that looks like it's firmly a
-TPM problem of some sort.
+Mimi and Roberto, can we safely remove the inode locking in
+process_measurement()?
 
-J.
-
--- 
-/-\                             | No thanks, I'm already having one.
-|@/  Debian GNU/Linux Developer |
-\-                              |
+--=20
+paul-moore.com
 
