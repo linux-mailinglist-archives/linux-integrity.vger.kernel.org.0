@@ -1,59 +1,61 @@
-Return-Path: <linux-integrity+bounces-3744-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3745-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EE23993B4F
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Oct 2024 01:38:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B88A0993B5E
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Oct 2024 01:45:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 197331F239BA
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2024 23:38:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E82D284612
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2024 23:45:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DBEB18C351;
-	Mon,  7 Oct 2024 23:38:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCD9192592;
+	Mon,  7 Oct 2024 23:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zx8kchcZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJ0A6vOp"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4881618C33C
-	for <linux-integrity@vger.kernel.org>; Mon,  7 Oct 2024 23:38:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC802191F91;
+	Mon,  7 Oct 2024 23:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728344282; cv=none; b=o32D5RdvxWSLD3OB1c8h1gwuDQ9dK06Yu5jIsNyIUeA8PBWkpMA+ffQoVycWXIWKgqy5obZi6ziiKCngTLByt9bYIZ+J1yUcXjbISmIUROkt+gKwIzmx93QAs/9sNX6UKhGK1UtAT4kqenuWu1+NpnD/fFuzP5egjYOnG9j6g94=
+	t=1728344707; cv=none; b=Ap0Uv7RzMwXe5teH2dQpoXiZouYaoFe1FbvT5obzQJZrJ0alJUFQe/77l3KieNC2Fbeo+vvBgIQxfAajw7PUZ/AuHZPI8RdzQNW+k6q0oY/4VIiSuDTbyHMss9MLxtUDTwZJV3Lcq4LqjEdJSuGzwqJ5xZD18oV88pKR5crQ1GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728344282; c=relaxed/simple;
-	bh=PJrm234T3Z8Tt8ZDGkRL7jCkzSLxVTPaKdZKXC7OwI0=;
+	s=arc-20240116; t=1728344707; c=relaxed/simple;
+	bh=pxoATet1YBznyVvU9aVNkP16cxo0TvrxIsY6voDpuRI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iwlBsojo37E3XG/2swAleoMbLY+XxycJeQOfnSR6JOnjWUAMMFC3WAe2Frj9tRQ1+1fveKXw4V05X2C8xvmVghizSeD5wKXaDYMSJx8HbD/byPFkoo35f9QlrinaH8fVgskehl4kO63uM042s2OvQ6h+S7RRsIOHqqlVPxhRZmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zx8kchcZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F450C4CEC6;
-	Mon,  7 Oct 2024 23:38:01 +0000 (UTC)
+	 Content-Type:MIME-Version; b=Rk/O7OSfvQ42h53NQKdbGzlqY9g1Or9ZRtbDDVPOSpOB7I1eNWh4E1gBT0JmX6vN3zxt7MJpb1+0cEM52Q5rJAoatIY11WmdfmSvS/hvYFheEjNrzz5JYEAMGjcCauLr0Fako+J+40hwJ5R26d5duy3NC9WPp5Y8b+CkS04eoFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJ0A6vOp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B97C8C4CEC6;
+	Mon,  7 Oct 2024 23:45:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728344281;
-	bh=PJrm234T3Z8Tt8ZDGkRL7jCkzSLxVTPaKdZKXC7OwI0=;
+	s=k20201202; t=1728344707;
+	bh=pxoATet1YBznyVvU9aVNkP16cxo0TvrxIsY6voDpuRI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Zx8kchcZuzsOEY1F0U07yfyKGMfEBgKkbmoDvtcgr+EAtBSVsO3sKa8uwPlYrjd0W
-	 3TBVhdzBSsn4VXCLtOkR1RkEqyontBIO4XFjQ30KbtyOo0EriM9S18yKM3mCMli1sY
-	 owc/NQOSPCjZxc0lvL1Bb1qhSED1kN/vXxarWnASiCd/WitO3uMkNl4gPJzFnYtfT3
-	 Wo2VLTSC4MEBFObVWW13/A6keFwpTKPw5A9DE3NgizSi4JDdzsisew1ZxsCz+atM3m
-	 ml6XjiBTljT3wGQ9j4yJF+eohwrNs0oOUFmRbCDQtM84aCb6GJidZdFGGQ31OapFvW
-	 7PmMwbS74A3/Q==
-Message-ID: <b081d9a0d780ff6c2eecacf46367be629e5cd949.camel@kernel.org>
-Subject: Re: [PATCH 2/3] char: tpm: cr50: Use generic request/relinquish
- locality ops
+	b=XJ0A6vOpzIj9U57D/Wz7VPkM9cxQbnSBizjE9HpP/EVmFnxBMzXoGV/LIpWHoesSP
+	 avw/u3Vhyy32yr7LWi3GuBRlAGqlmESWsIZ1p7jX7jv2EfUqiNCMVDIUhU5ylyzpf2
+	 ei5NSp/DE8YJ6pT3KTFS7PZxUe/HQ6aMrdnXdIFB/KLAF7OMjAik6vD/wfjW0IuHL7
+	 EFBin+xpXM3fbj9e65GxaBLDwHn9iGDoYla86RqkBz6P5bCbj4jB1aPAQRsenYFO5q
+	 yH5NgYbyTqZNXnMS6Ux2WjDSncOa20ObOTDnb92V7VNbjCSR9w5ZHD1G04tKyIByZQ
+	 AX2iDyjEZasoA==
+Message-ID: <e2dbcd020b3a3bc74bbd829b1299008b5504cc45.camel@kernel.org>
+Subject: Re: [PATCH v5 0/5] Lazy flush for the auth session
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: bernacki@chromium.org, timvp@google.com
-Cc: apronin@google.com, arnd@arndb.de, gregkh@linuxfoundation.org,
- jgg@ziepe.ca,  jsd@semihalf.com, linux-integrity@vger.kernel.org,
- mw@semihalf.com,  peterhuewe@gmx.de, rrangel@chromium.org
-Date: Tue, 08 Oct 2024 02:37:57 +0300
-In-Reply-To: <20240930115245.2906902-1-bernacki@chromium.org>
-References: 
-	<CANkg5ezwYT+ZsiRDW9fe1m4vyncOEDFamq0jXTxmWO37d4i3Nw@mail.gmail.com>
-	 <20240930115245.2906902-1-bernacki@chromium.org>
+To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc: James.Bottomley@HansenPartnership.com, roberto.sassu@huawei.com, 
+ mapengyu@gmail.com, David Howells <dhowells@redhat.com>, Paul Moore
+ <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
+ <serge@hallyn.com>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe
+ <jgg@ziepe.ca>, keyrings@vger.kernel.org,
+ linux-security-module@vger.kernel.org,  linux-kernel@vger.kernel.org
+Date: Tue, 08 Oct 2024 02:45:03 +0300
+In-Reply-To: <3fed38bc5c9de9e1a16fd5c1413ba8a965d26dac.camel@linux.ibm.com>
+References: <20240921120811.1264985-1-jarkko@kernel.org>
+	 <D4D05FKB9VSG.33COYTJHUX6EM@kernel.org>
+	 <3fed38bc5c9de9e1a16fd5c1413ba8a965d26dac.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
@@ -64,56 +66,110 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2024-09-30 at 11:52 +0000, bernacki@chromium.org wrote:
-> Tim,
->=20
-> [...]
-> > Why is it useful to return the same `loc` value that was passed in,
-> > rather than just returning `0`? The caller already knows the value
-> > of
-> > `loc`, so they aren't being told anything new.
+On Tue, 2024-10-01 at 14:10 -0400, Mimi Zohar wrote:
+> On Sun, 2024-09-22 at 20:51 +0300, Jarkko Sakkinen wrote:
+> > On Sat Sep 21, 2024 at 3:08 PM EEST, Jarkko Sakkinen wrote:
+> > > This patch set aims to fix:
+> > > https://bugzilla.kernel.org/show_bug.cgi?id=3D219229.
+> > >=20
+> > > The baseline for the series is the v6.11 tag.
+> > >=20
+> > > v4:
+> > > https://lore.kernel.org/linux-integrity/20240918203559.192605-1-jarkk=
+o@kernel.org/
+> > > v3:
+> > > https://lore.kernel.org/linux-integrity/20240917154444.702370-1-jarkk=
+o@kernel.org/
+> > > v2:
+> > > https://lore.kernel.org/linux-integrity/20240916110714.1396407-1-jark=
+ko@kernel.org/
+> > > v1:
+> > > https://lore.kernel.org/linux-integrity/20240915180448.2030115-1-jark=
+ko@kernel.org/
+> > >=20
+> > > Jarkko Sakkinen (5):
+> > > =C2=A0 tpm: Return on tpm2_create_null_primary() failure
+> > > =C2=A0 tpm: Implement tpm2_load_null() rollback
+> > > =C2=A0 tpm: flush the null key only when /dev/tpm0 is accessed
+> > > =C2=A0 tpm: Allocate chip->auth in tpm2_start_auth_session()
+> > > =C2=A0 tpm: flush the auth session only when /dev/tpm0 is open
+> > >=20
+> > > =C2=A0drivers/char/tpm/tpm-chip.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ |=C2=A0 14 ++++
+> > > =C2=A0drivers/char/tpm/tpm-dev-common.c |=C2=A0=C2=A0 8 +++
+> > > =C2=A0drivers/char/tpm/tpm-interface.c=C2=A0 |=C2=A0 10 ++-
+> > > =C2=A0drivers/char/tpm/tpm2-cmd.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ |=C2=A0=C2=A0 3 +
+> > > =C2=A0drivers/char/tpm/tpm2-sessions.c=C2=A0 | 109 ++++++++++++++++++=
+------
+> > > ------
+> > > =C2=A0include/linux/tpm.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 2 +
+> > > =C2=A06 files changed, 102 insertions(+), 44 deletions(-)
 > >=20
-> > I think this should continue to return `0` for success.
+> >=20
+> > Roberto, James, speaking of digest cache. This patch set has no aim
+> > to
+> > fix those issues but I do believe that it should improve also that=20
+> > feature.
+> >=20
+> > If I don't get soon patch reviews for the patch set, I'll pick the
+> > 2nd
+> > best option: disable bus encryption on all architectures including
+> > x86
+> > and ARM64 (being by default on).
+> >=20
+> > It's a force majeure situation. I know this would sort out the
+> > issue
+> > but I really cannot send these as a pull request with zero reviewe-
+> > by's.
+> >=20
+> > I expect this to be closed by tomorrow.
 >=20
-> I think Jan just followed the conventions, when he returned 'loc'
-> instead of
-> '0', some others request/release locality function do exactly the
-> same.
->=20
-> [...]
-> > For each of these ` WARN_ONCE((chip->locality < 0), ...).`, can it
-> > return immediately rather than attempting to continue using an
-> > invalid
-> > locality value? Do the following commands have a chance of
-> > succeeding
-> > with the invalid value?
->=20
-> WARN_ONCE() macro does not remove checking of locality. If I
-> understand
-> the code correctly layer above should not called this function if
-> request locality fails, so this code is an extra check.=20
-> I can remove it in the next patchset if you want.
->=20
-> Jarkko,
->=20
-> Would it be possible to merge this changes. Patch 1. has already been
-> merged,
-> only 2 and 3 are still waiting. Do you want me to create a new
-> patchset for
-> these two patches?
+> Jarkko, sorry to be so late to this discussion.=C2=A0 The bus
+> HMAC/encryption really
+> impacts IMA as well.=C2=A0 Even with this patch set, it's slow.=C2=A0 My
+> preference would
+> be to disable bus encryption on all architectures until there is a
+> boot/runtime
+> option allowing it to be disabled for IMA as discussed in the other
+> thread.
 
-Send a rebased version that applies. Let's check that through
-then. Quick recap and some time gone, I don't see anything
-extremely bad. Still acking patches that even do not apply
-is not possible.
+No worries, I was getting nervous because of a job switch, now
+I have time since cannot move this forward for week or two anyway
+:-)
 
-So yeah, send. If glitches are spotted in worst case this
-means two rounds.
+I'm totally +1 to make bus encyption opt-in instead of opt-out.
+It's just not there yet.
+
+My fixes fix one use case, i.e. the boot process for AMD, so in
+that sense they are totally legit. But it is pretty clear by now
+that tons of similar patches and small tweaks will be required.
+
+As it is my 2nd work week, I can implement such patch, *next
+week*. Up until that there is time to give any feedback.
+
+>=20
+> In the other thread, I also mentioned that the Kconfig is incorrectly
+> worded.=20
+> The performance degradation is not limited to encryption, but the
+> HMAC itself.=20
+> Please change "Saying Y here adds some encryption overhead to all
+> kernel to TPM
+> transactions." to "Saying Y here adds overhead to all kernel to TPM
+> transactions."
+
+I'll keep this in mind!
+
+I'd prefer to do a single patch set probably with my previous fixes
+and this, as they are already tested by the reporter anyway and pile
+this as a new patch on top. I.e. have basically all that I'd put to
+the next PR.
 
 >=20
 > thanks,
-> greg
-
+>=20
+> Mimi
 
 BR, Jarkko
 
