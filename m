@@ -1,142 +1,154 @@
-Return-Path: <linux-integrity+bounces-3737-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3738-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9025B9906D4
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Oct 2024 16:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DA6D9931F2
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2024 17:48:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49D8F28A151
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Oct 2024 14:56:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3307F282089
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Oct 2024 15:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796412216A0;
-	Fri,  4 Oct 2024 14:47:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="cHYsIzSu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351DC1D9597;
+	Mon,  7 Oct 2024 15:48:02 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D392216A4;
-	Fri,  4 Oct 2024 14:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07A31D4344;
+	Mon,  7 Oct 2024 15:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728053267; cv=none; b=nj6nZi6lhri53bMBBOuNky4lFL4ihIg7dUJIZdHUlCi0Lf2tb8kWiBYReeMYMDojKdlbMkdO5c5kNiKuPpcgFdtEu3+Nk8t6OJOHAjw2FoM2/hgw+v/y0I1/DXHnXHnjVB7J4DLsFTwUWhO4FbQBiBiRkwdeVOTyrr27klozqlU=
+	t=1728316082; cv=none; b=pTkhIWs/MdQx6OQi2poEpztX+OYDFB289QPZOPrAF8fhvTV8C7Ozn/2EouP5gZ/rY0iigu+5ydcTw/dBHF9jBI3Tu8y4N/POsPDH/FBi1XfTd3oNulNrA81qRC0noXK4UlSoDghwffiEi6Z/om+MGGHjHL/Z/4LnuU9dZYUforM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728053267; c=relaxed/simple;
-	bh=7hor2qzuwGEvWmi49euvC9tyFA066oo3GcrVIH/aZzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W/zcLPWDV5253Mo2l1mmH1QLH7ExzlkXZL+D+iGJUngLBN+AuwuaAPfHgVBy4ejvmDRfXDGA81XQmo3agXcdi3TPk+qh6+t2GOBG30Yf9If9cklf93gDMPaVJAcB/y8uL0tHiVCFK1xvrDeA632jJkKZ3aLEMG75GB/QuH0rf/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=cHYsIzSu; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=v38cgu6X66MW8fCyAaX1OVN2xawi1fHqr+/1/Zs1Dsg=; b=cHYsIzSu20boL9RlvEdCz/ThpT
-	mKZkIjXPTgLG3u0523FoSmZAwbG6Mf2Ri9COErAl9nfk69bT07E0W7NtlxrTRDAO9SbqK8OH5owFJ
-	7HcJPMthEMClII9pQfCxPJ6iDWuW8R+TOIB7LnnUwr/15ZBBbc+mtvMtQ/EU1yQPhUtaH4azZj/HJ
-	K1fwuZRQEKR0XiE1TiMjXgooWAg0IkZWVT6zPmMwLn+yXePD34QdaL8AN/j4t7zj6Dut6TMq/HVJM
-	dCw5GIPGWKEv9r+WyTo+80gpMv94uGt76TIBHNSYqUCWF8gTeJoM8SLAJPGUKyk4VhBMUGXJ9DZtU
-	kIO7XZ9w==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1swjaZ-00FBA9-0P;
-	Fri, 04 Oct 2024 15:47:27 +0100
-Date: Fri, 4 Oct 2024 15:47:27 +0100
-From: Jonathan McDowell <noodles@earth.li>
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] tpm: Workaround failed command reception on Infineon
- devices
-Message-ID: <Zv___74cyROxZSic@earth.li>
-References: <Zv1810ZfEBEhybmg@earth.li>
- <Zv19Cc-oTOzv8wVO@earth.li>
- <3c9a6d63-f892-4809-b48d-5fecc3817ad9@linux.ibm.com>
- <979629af-e224-4308-a9a1-c66a60003d2d@linux.ibm.com>
+	s=arc-20240116; t=1728316082; c=relaxed/simple;
+	bh=QbIFB83CPWNA2xWgzSI925rkM1meSV5IgKMJZZ1tlu8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=O/wNmW6gFZXr9jE/+PXyKYSzO1tbeK1+8p44sRU5kwQ1MSLbQUKu26CnXaLiFhU/ua1GKWH3apJrWmW2qXltZigzypCImpg+bYM5WxlmBjHuggkCuxasOXjL0e6Pgnf83/mfOktciDOcGntWKLSGK6Z5hCpmMkVqDn1l+IFFYRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4XMjL42fBsz9v7JS;
+	Mon,  7 Oct 2024 23:11:56 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 52010140360;
+	Mon,  7 Oct 2024 23:31:50 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwAHt8fb_gNno7hpAg--.56876S2;
+	Mon, 07 Oct 2024 16:31:49 +0100 (CET)
+Message-ID: <05e893036fa8753e0177db99dd48eb9d2e33476a.camel@huaweicloud.com>
+Subject: Re: [syzbot] [integrity?] [lsm?] possible deadlock in
+ process_measurement (4)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Paul Moore <paul@paul-moore.com>, Shu Han <ebpqwerty472123@gmail.com>
+Cc: syzbot <syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com>, 
+ akpm@linux-foundation.org, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com,  hughd@google.com, jmorris@namei.org,
+ linux-integrity@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org,  linux-security-module@vger.kernel.org,
+ roberto.sassu@huawei.com,  serge@hallyn.com,
+ stephen.smalley.work@gmail.com,  syzkaller-bugs@googlegroups.com,
+ zohar@linux.ibm.com
+Date: Mon, 07 Oct 2024 17:31:35 +0200
+In-Reply-To: <CAHC9VhSHSD5QF8w2+n9f1DAEfQAwW5eA0skSuap2jdMWrLfGWQ@mail.gmail.com>
+References: <66f7b10e.050a0220.46d20.0036.GAE@google.com>
+	 <CAHQche-Gsy4=UT6+znKyPRDEHQm9y-MQ+zacoqfywKaz7VA2kg@mail.gmail.com>
+	 <CAHC9VhSHSD5QF8w2+n9f1DAEfQAwW5eA0skSuap2jdMWrLfGWQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <979629af-e224-4308-a9a1-c66a60003d2d@linux.ibm.com>
+X-CM-TRANSID:GxC2BwAHt8fb_gNno7hpAg--.56876S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw4DAF15ZF47Xw1DAr1fJFb_yoW5Wr45pF
+	9agayxCr4ktFy7Ar92yr1jg3W0k34jkrWUCrZ5Jr18J3Z0vF1vqr13Jr1furyUGrZ5uw1S
+	qr4DCr93A3WqyrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
+	0PDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBGcDQ-4NXwABsF
 
-On Thu, Oct 03, 2024 at 06:25:14PM -0400, Stefan Berger wrote:
-> On 10/3/24 5:59 PM, Stefan Berger wrote:
-> > On 10/2/24 1:04 PM, Jonathan McDowell wrote:
-> > > (I'm still in the process of testing this to confirm it fixes the
-> > > errata I've seen, but I wanted to send it out for comments to make sure
-> > > it's a reasonable approach.)
-> > > 
-> > > Some Infineon devices have a issue where the status register will get
-> > > stuck with a quick REQUEST_USE / COMMAND_READY sequence. The work around
-> > 
-> > Did you tell Infineon about it? Maybe they should have a look at their
-> > firmware.
+On Wed, 2024-10-02 at 23:09 -0400, Paul Moore wrote:
+> On Sat, Sep 28, 2024 at 2:08=E2=80=AFPM Shu Han <ebpqwerty472123@gmail.co=
+m> wrote:
+> >=20
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> > > WARNING: possible circular locking dependency detected
+> > > 6.11.0-syzkaller-10045-g97d8894b6f4c #0 Not tainted
+> > > ------------------------------------------------------
+> > > syz-executor369/5231 is trying to acquire lock:
+> > > ffff888072852370 (&sb->s_type->i_mutex_key#12){+.+.}-{3:3}, at: inode=
+_lock include/linux/fs.h:815 [inline]
+> > > ffff888072852370 (&sb->s_type->i_mutex_key#12){+.+.}-{3:3}, at: proce=
+ss_measurement+0x439/0x1fb0 security/integrity/ima/ima_main.c:250
+> > >=20
+> > > but task is already holding lock:
+> > > ffff88807ac9a798 (&mm->mmap_lock){++++}-{3:3}, at: mmap_write_lock_ki=
+llable include/linux/mmap_lock.h:122 [inline]
+> > > ffff88807ac9a798 (&mm->mmap_lock){++++}-{3:3}, at: __do_sys_remap_fil=
+e_pages mm/mmap.c:1649 [inline]
+> > > ffff88807ac9a798 (&mm->mmap_lock){++++}-{3:3}, at: __se_sys_remap_fil=
+e_pages+0x22d/0xa50 mm/mmap.c:1624
+> > >=20
+> > > which lock already depends on the new lock.
+> >=20
+> > This issue (if not a false positive?) is due to the possible `prot`
+> > change caused by the processing logic for READ_IMPLIES_EXEC in do_mmap(=
+),
+> > so the remap_file_pages() must perform LSM check before calling do_mmap=
+(),
+> > this is what the previous commit want to do.
+>=20
+> My apologies for the delay on this, I was traveling for a bit and
+> missed this issue while away.
+>=20
+> Looking quickly at the report, I don't believe this is a false positive.
+>=20
+> > The LSM check is required to know what the `prot` is, but `prot` must b=
+e
+> > obtained after holding the `mmap_write_lock`.
+> >=20
+> > If the `mmap_write_lock` is released after getting the `prot` and befor=
+e
+> > the LSM call in remap_file_pages(), it may cause TOCTOU.
+>=20
+> Looking at the IMA code, specifically the process_measurement()
+> function which is called from the security_mmap_file() LSM hook, I'm
+> not sure why there is the inode_lock() protected region.  Mimi?
+> Roberto?  My best guess is that locking the inode may have been
+> necessary before we moved the IMA inode state into the inode's LSM
+> security blob, but I'm not certain.
+>=20
+> Mimi and Roberto, can we safely remove the inode locking in
+> process_measurement()?
 
-I'm in contact with Infineon, and have their errata under NDA.
+I discussed a bit with Mimi. Her concern was the duplicate iint
+structure creation during concurrent file accesses. Now that inode
+integrity metadata have been moved to the inode security blob, we can
+take the iint->mutex out of the ima_iint_cache structure, and store it
+directly in the security blob. In this way, we can remove the inode
+lock.
 
-> > What are the TPMs in your fleet doing? I heared that some TPMs
-> > pre-create keys in the background once users requested a few. I would
-> > try to create a few primary keys with different combination of key flags
-> 
-> Actually make this child keys of primary keys:
-> 
-> > tsscreateprimary
-> Handle 80000000
-> > while :; do time tsscreate -hp 80000000 -si  -opem pubkey.pem ; cat
-> pubkey.pem; done
-> 
-> This should give a different key every time and maybe key creation time goes
-> up at some point...
+Will write a patch and see if it passes our tests.
 
-We're doing a TPM2_CC_CREATE, but as part of a "seal" operation for some
-data, rather than full asymmetric key creation. So I don't think this is
-likely to be the cause, but it's given me the idea to see if we are
-seeing a spike on a particular command - maybe there's something that's
-close to the edge on timings that is occasionally going over. Playing
-around with bpftrace seems to give useful data so I'll need to
-investigate if I can deploy that to do some monitoring.
+Roberto
 
-Our monitoring is running hourly and does the following TPM2
-operations (including the in kernel context switching):
-
-TPM2_CC_SELF_TEST
-TPM2_CC_GET_CAPABILITY
-TPM2_CC_READ_PUBLIC
-TPM2_CC_READ_PUBLIC
-TPM2_CC_CREATE
-TPM2_CC_LOAD
-TPM2_CC_CONTEXT_SAVE
-TPM2_CC_FLUSH_CONTEXT
-TPM2_CC_CONTEXT_LOAD
-TPM2_CC_UNSEAL
-TPM2_CC_CONTEXT_SAVE
-TPM2_CC_FLUSH_CONTEXT
-TPM2_CC_CONTEXT_LOAD
-TPM2_CC_FLUSH_CONTEXT
-TPM2_CC_CONTEXT_SAVE
-TPM2_CC_READ_CLOCK
-TPM2_CC_GET_CAPABILITY
-TPM2_CC_GET_CAPABILITY
-TPM2_CC_GET_CAPABILITY
-TPM2_CC_GET_CAPABILITY
-TPM2_CC_GET_CAPABILITY
-TPM2_CC_GET_CAPABILITY
-TPM2_CC_READ_PUBLIC
-
-J.
-
--- 
-If I, um, err. Yeah, it probably rounds down. -- Simon Huggins
 
