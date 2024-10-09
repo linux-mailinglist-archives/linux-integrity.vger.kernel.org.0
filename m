@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3766-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3767-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A142D99711A
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 18:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1853699713E
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 18:25:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C92531C2093F
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 16:21:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FB921C2265B
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 16:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 650661E0E15;
-	Wed,  9 Oct 2024 16:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A4F1F4FA1;
+	Wed,  9 Oct 2024 16:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xxu8hRs1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XjIZXS1Z"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404EB1E0E07
-	for <linux-integrity@vger.kernel.org>; Wed,  9 Oct 2024 16:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA351F12E0;
+	Wed,  9 Oct 2024 16:13:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728490045; cv=none; b=jtiQMbu7NWskPBvS4URUOmtwvGCy9eIrMX9RuQQd8//bZ8I4bFBmikhlDeshDDFLcQvLRalxyTionu+Ewfdpl1/tzVPq4ukTSnbgpc80ZviNHKwVLzyEWUj/ZYhtux2qy2eWgYLe0uEefE8Pgly1LAaSV2vkzHeOb15UuJ0IPRY=
+	t=1728490436; cv=none; b=ZS+WLWgzn+zlAazOTP0HBHEcjWZjQU1uNUNDgrwJv2XmrgoWgXk8DJmjtKGNl62sK7jrZeYCrktUaX5WZhUXXUJoZMwA4XuUNU0NBFT4U4li5D0OjSBdRgi3pZOOjm8ZNPW888TE80WbwzizzHjSFEanUZY1RCC7pwJ4yt48qIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728490045; c=relaxed/simple;
-	bh=BpAIYPb9L+rpAmaprtX9jLjFzmTJc34CNzOHY+P765w=;
+	s=arc-20240116; t=1728490436; c=relaxed/simple;
+	bh=J3jqmjw+LkkGkYhifldDnZp/qywAKEQbYkNuie5QGac=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=PoX0EOKsHf5q8lEGGFUBR1PgZDHzd4TAIdkjlluEWHDcIrZSLucVTZsrRnbNw2nOLe7i+iZFlK4vh6gxRiCci+hRi4nY3csngq40RVr+4YoNkXiBgvWvOctyUZzCNDBe8ngz1zO/ApNNkct8abIeLtCo8Ch+98fkRPhOulEHaOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xxu8hRs1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4463DC4CEC3;
-	Wed,  9 Oct 2024 16:07:24 +0000 (UTC)
+	 References:In-Reply-To; b=XJOPUjKtrdRe0ZVxWwhnEkkPCEYLMrhrsnDgZoKsaNHtCK4kavx2DowjIyOzQ0YgoPQn3QVm1xetYC+R3VO0ZkZcXufD0LW//sH/0z1DNJT8faWgosCcgDUDqEMxKtA61nVx5PWH4Vy8bLjQNAqnaXPX3bnfqiqva6idsUmSM/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XjIZXS1Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB15DC4CEC3;
+	Wed,  9 Oct 2024 16:13:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728490044;
-	bh=BpAIYPb9L+rpAmaprtX9jLjFzmTJc34CNzOHY+P765w=;
+	s=k20201202; t=1728490436;
+	bh=J3jqmjw+LkkGkYhifldDnZp/qywAKEQbYkNuie5QGac=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Xxu8hRs1OtY+e8u7ydvehh19A7Lpr5ZStjgvChntlo/mRoOv0qW461CtkRRySD5b3
-	 ApcAEeJnlRu7d0HphKfOaJT1+SGMzk90+Kj9mPSDDlHoIXGnnNmhdSI5sCWldPCDrq
-	 FTZ/tkw1qfkNZv5CvPXB2Pe5dsHznQUpAl5H11qEV1P1cNHYZz/OQL/9jGhdSSRfwR
-	 TC9Mrygswb+R8iz66CGxyJefaanlF5ZXjpJcC8zSjh5KuOp2fc1ANUz4wCItOKX3Cm
-	 9ds+Rh7EpaodZ3w4IMj3/cwpURex8SnvHI/hwzmSJAuO0fN0PppK5Xqeuu9b+lJ6oh
-	 1Yruq2vFNnkdQ==
+	b=XjIZXS1ZO6S05rHuv1CGMNLgeEQLy8LXzwY3CEIzXbjYLUFiyLrIrN+U3O91gkVlo
+	 FlvpY2QAOeiujo2fkDFx8Rd3AdnYChpbRVmU3zOzVA/y7w9COQ/tvVkF5dQBIDOELB
+	 YSqPAcX5/f+/uk+k+054rjuZP2DwIwM8fto8Nj1FmV22tCKW5J6aiEdgsZAVKCw7M2
+	 crRQlOL+NnJhVRcAYpfvBLyAvLTP/R9lV4MnzFx2RD62Vgqxj4D0wK36lQoONwsymn
+	 W5WA0inD2kfg3AlNpuWy16/wSrmH7S97rcK0l/aFCX6qJTpz8f1U6gG3eBxK2Yqwom
+	 jEXZ5/hJFQfPw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,146 +49,269 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 09 Oct 2024 19:07:20 +0300
-Message-Id: <D4REKYJJQT5Z.1CUF2XM163E3F@kernel.org>
-Cc: <apronin@google.com>, <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
- <jgg@ziepe.ca>, <linux-integrity@vger.kernel.org>, <mw@semihalf.com>,
- <peterhuewe@gmx.de>, <rrangel@chromium.org>, <timvp@google.com>
-Subject: Re: [PATCH V2 2/2] char: tpm: cr50: Move i2c locking to
- request/relinquish locality ops
+Date: Wed, 09 Oct 2024 19:13:52 +0300
+Message-Id: <D4REPYHQ15AZ.2042JQR9W9MYY@kernel.org>
+Cc: "Breno Leitao" <leitao@debian.org>, <noodles@earth.li>, "Gregory Price"
+ <gourry@gourry.net>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>, <arnd@arndb.de>,
+ "Ard Biesheuvel" <ardb@kernel.org>, <tweek@google.com>,
+ <leendert@watson.ibm.com>, <kjhall@us.ibm.com>
+Subject: Re: Possible overflow of TPM log
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Grzegorz Bernacki" <bernacki@chromium.org>, <jsd@semihalf.com>
+To: "Usama Arif" <usamaarif642@gmail.com>,
+ <linux-integrity@vger.kernel.org>, <tpmdd-devel@lists.sourceforge.net>,
+ <devel@edk2.groups.io>, <linux-efi@vger.kernel.org>
 X-Mailer: aerc 0.18.2
-References: <20221101020352.939691-1-jsd@semihalf.com>
- <20241009094207.2897048-1-bernacki@google.com>
- <20241009094207.2897048-3-bernacki@google.com>
-In-Reply-To: <20241009094207.2897048-3-bernacki@google.com>
+References: <c4da3a99-2e9d-4461-a429-f07a7deaf8f1@gmail.com>
+In-Reply-To: <c4da3a99-2e9d-4461-a429-f07a7deaf8f1@gmail.com>
 
-On Wed Oct 9, 2024 at 12:42 PM EEST, Grzegorz Bernacki wrote:
-> From: Jan Dabros <jsd@semihalf.com>
+On Wed Oct 9, 2024 at 6:29 PM EEST, Usama Arif wrote:
+> Hi,
 >
-> Move i2c locking primitives to request_locality and relinquish_locality
-> callbacks, what effectively blocks TPM bus for the whole duration of
-> logical TPM operation.
+> We (meta) are seeing the below warning in production machines for all ker=
+nels from 5.12 to 6.11 during boot which results in tpm probe failing:
 >
-> With this in place, cr50-equipped TPM may be shared with external CPUs -
-> assuming that underneath i2c controller driver is aware of this setup
-> (see i2c-designware-amdpsp as an example).
 >
-> Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> ---
->  drivers/char/tpm/tpm_tis_i2c_cr50.c | 22 +++++++++++++---------
->  1 file changed, 13 insertions(+), 9 deletions(-)
+> [    6.388599] ------------[ cut here ]------------                      =
+                                                                           =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.397804] memremap attempted on mixed range 0x000000005f54e018 size:=
+ 0x23ba3cfb                                                                =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.412733] WARNING: CPU: 2 PID: 1 at kernel/iomem.c:82 memremap+0x58/=
+0x1b0                                                                      =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.426621] Modules linked in:                                        =
+                                                                           =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.432705] CPU: 2 PID: 1 Comm: swapper/0 Not tainted 6.4.3-0_fbk12_26=
+24_g7d95a0297d81 #1                                                        =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.449020] Hardware name: Quanta Twin Lakes MP/Twin Lakes Passive MP,=
+ BIOS F09_3A23 12/08/2020                                                  =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.466377] RIP: 0010:memremap+0x58/0x1b0                             =
+                                                                           =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.474369] Code: 41 89 c4 83 f8 02 75 26 80 3d fc 33 66 01 00 75 57 c=
+6 05 f3 33 66 01 01 48 89 e6 48 c7 c7 3b 98 34 82 4c 89 f2 e8 38 96 bc ff <=
+0f> 0b eb 3a 41 f6 c7 01 75 04 31 db eb 13 45 85 e4 74 69 48 89 ef         =
+                                                                           =
+                  =20
+> [    6.511837] RSP: 0000:ffffc900000378f8 EFLAGS: 00010286               =
+                                                                           =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.522258] RAX: 0000000000000045 RBX: 0000000000000000 RCX: ffffffff8=
+2c5fdb8                                                                    =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.536490] RDX: 0000000000000000 RSI: c0000000fffeffff RDI: 000000000=
+000ffff                                                                    =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.550723] RBP: 000000005f54e018 R08: ffffffff82de0190 R09: 000000000=
+0000000                                                                    =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.564956] R10: ffffffff82c5fde0 R11: 3fffffffffffffff R12: 000000000=
+0000002                                                                    =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.579187] R13: 0000000000000000 R14: 0000000023ba3cfb R15: 000000000=
+0000001                                                                    =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.593421] FS:  0000000000000000(0000) GS:ffff88903f880000(0000) knlG=
+S:0000000000000000                                                         =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.609559] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033         =
+                                                                           =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.621026] CR2: 0000000000000000 CR3: 0000000062c0a001 CR4: 000000000=
+07706e0                                                                    =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.635257] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000000000=
+0000000                                                                    =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.649489] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000000000=
+0000400                                                                    =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.663724] PKRU: 55555554                                            =
+                                                                           =
+                                                                           =
+                                                                           =
+                  =20
+> [    6.669115] Call Trace:                                               =
+     =20
+> [    6.673986]  <TASK>                                                   =
+     =20
+> [    6.678162]  ? __warn+0x9f/0x130                                      =
+     =20
+> [    6.684595]  ? memremap+0x58/0x1b0                                    =
+     =20
+> [    6.691371]  ? report_bug+0xcc/0x150                                  =
+     =20
+> [    6.698499]  ? handle_bug+0x3d/0x70                                   =
+     =20
+> [    6.705449]  ? exc_invalid_op+0x16/0x40                               =
+     =20
+> [    6.713093]  ? asm_exc_invalid_op+0x16/0x20                           =
+     =20
+> [    6.721433]  ? memremap+0x58/0x1b0                                    =
+     =20
+> [    6.728211]  ? memremap+0x58/0x1b0                                    =
+     =20
+> [    6.732866] Freeing initrd memory: 51140K                             =
+     =20
+> [    6.734986]  tpm_read_log_efi+0x7d/0x1e0                              =
+     =20
+> [    6.750795]  tpm_bios_log_setup+0x51/0x170                            =
+     =20
+> [    6.758959]  tpm_chip_register+0x36/0x220                             =
+     =20
+> [    6.766948]  tpm_tis_core_init+0x438/0x630                            =
+     =20
+> [    6.775112]  tpm_tis_init+0x103/0x190                                 =
+     =20
+> [    6.782410]  tpm_tis_plat_probe+0x87/0x90                             =
+     =20
+> [    6.790401]  platform_probe+0x2f/0x60                                 =
+     =20
+> [    6.797705]  really_probe+0x1ec/0x340                                 =
+     =20
+> [    6.805002]  driver_probe_device+0x1e/0x80                            =
+     =20
+> [    6.813184]  __driver_attach+0x10e/0x1a0                              =
+     =20
+> [    6.821018]  ? driver_attach+0x20/0x20                                =
+     =20
+> [    6.828491]  bus_for_each_dev+0x64/0xa0                               =
+     =20
+> [    6.836136]  bus_add_driver+0x196/0x210                               =
+     =20
+> [    6.843781]  ? __initstub__kmod_tpm__370_527_tpm_init4+0x100/0x100    =
+                                                                           =
+         =20
+> [    6.856109]  driver_register+0x5e/0xf0                                =
+     =20
+> [    6.863580]  __initstub__kmod_tpm_tis__319_478_init_tis6+0x7f/0xc0    =
+                                                                           =
+         =20
+> [    6.875908]  ? add_device_randomness+0x62/0x70                        =
+     =20
+> [    6.884768]  do_one_initcall+0xad/0x1f0                               =
+     =20
+> [    6.892414]  ? alloc_pages+0x120/0x2c0                                =
+     =20
+> [    6.899885]  ? security_kernfs_init_security+0x2a/0x40                =
+     =20
+> [    6.910132]  ? idr_alloc_cyclic+0xaa/0x110                            =
+     =20
+> [    6.918295]  ? idr_alloc_cyclic+0xaa/0x110                            =
+     =20
+> [    6.926458]  ? alloc_pages+0x15c/0x2c0                                =
+     =20
+> [    6.933928]  ? number+0x1da/0x400                                     =
+     =20
+> [    6.940531]  ? ida_alloc_range+0x193/0x410                            =
+     =20
+> [    6.948696]  ? parse_args+0x14b/0x380                                 =
+     =20
+> [    6.955996]  kernel_init_freeable+0x1b1/0x2a0                         =
+     =20
+> [    6.964682]  ? rest_init+0xb0/0xb0                                    =
+     =20
+> [    6.971461]  kernel_init+0x16/0x1a0                                   =
+     =20
+> [    6.978410]  ret_from_fork+0x1f/0x30                                  =
+     =20
+> [    6.985536]  </TASK>                                                  =
+     =20
+> [    6.989885] ---[ end trace 0000000000000000 ]---                      =
+     =20
+> [    6.999089] Could not map UEFI TPM log table payload!  =20
 >
-> diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_t=
-is_i2c_cr50.c
-> index 1b1e403383fc..104ef6c7f11c 100644
-> --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-> @@ -201,8 +201,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u=
-8 addr, u8 *buffer, size_t
->  	};
->  	int rc;
-> =20
-> -	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-> -
->  	/* Prepare for completion interrupt */
->  	tpm_cr50_i2c_enable_tpm_irq(chip);
-> =20
-> @@ -221,7 +219,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u=
-8 addr, u8 *buffer, size_t
-> =20
->  out:
->  	tpm_cr50_i2c_disable_tpm_irq(chip);
-> -	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-> =20
->  	if (rc < 0)
->  		return rc;
-> @@ -263,8 +260,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, =
-u8 addr, u8 *buffer,
->  	priv->buf[0] =3D addr;
->  	memcpy(priv->buf + 1, buffer, len);
-> =20
-> -	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-> -
->  	/* Prepare for completion interrupt */
->  	tpm_cr50_i2c_enable_tpm_irq(chip);
-> =20
-> @@ -278,7 +273,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, =
-u8 addr, u8 *buffer,
-> =20
->  out:
->  	tpm_cr50_i2c_disable_tpm_irq(chip);
-> -	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-> =20
->  	if (rc < 0)
->  		return rc;
-> @@ -322,6 +316,7 @@ static int tpm_cr50_check_locality(struct tpm_chip *c=
-hip, int loc)
->   */
->  static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
->  {
-> +	struct i2c_client *client =3D to_i2c_client(chip->dev.parent);
->  	u8 mask =3D TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_PENDING;
->  	u8 addr =3D TPM_I2C_ACCESS(loc);
->  	u8 buf;
-> @@ -329,13 +324,15 @@ static int tpm_cr50_release_locality(struct tpm_chi=
-p *chip, int loc)
-> =20
->  	rc =3D tpm_cr50_i2c_read(chip, addr, &buf, sizeof(buf));
->  	if (rc < 0)
-> -		return rc;
-> +		goto unlock_out;
-> =20
->  	if ((buf & mask) =3D=3D mask) {
->  		buf =3D TPM_ACCESS_ACTIVE_LOCALITY;
->  		rc =3D tpm_cr50_i2c_write(chip, addr, &buf, sizeof(buf));
->  	}
-> =20
-> +unlock_out:
-> +	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
->  	return rc;
->  }
-> =20
-> @@ -350,16 +347,19 @@ static int tpm_cr50_release_locality(struct tpm_chi=
-p *chip, int loc)
->   */
->  static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
->  {
-> +	struct i2c_client *client =3D to_i2c_client(chip->dev.parent);
->  	u8 buf =3D TPM_ACCESS_REQUEST_USE;
->  	unsigned long stop;
->  	int rc;
-> =20
-> +	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-> +
->  	if (tpm_cr50_check_locality(chip, loc) =3D=3D loc)
->  		return loc;
-> =20
->  	rc =3D tpm_cr50_i2c_write(chip, TPM_I2C_ACCESS(loc), &buf, sizeof(buf))=
-;
->  	if (rc < 0)
-> -		return rc;
-> +		goto unlock_out;
-> =20
->  	stop =3D jiffies + chip->timeout_a;
->  	do {
-> @@ -369,7 +369,11 @@ static int tpm_cr50_request_locality(struct tpm_chip=
- *chip, int loc)
->  		msleep(TPM_CR50_TIMEOUT_SHORT_MS);
->  	} while (time_before(jiffies, stop));
-> =20
-> -	return -ETIMEDOUT;
-> +	rc =3D -ETIMEDOUT;
-> +
-> +unlock_out:
-> +	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-> +	return rc;
->  }
-> =20
->  /**
+>
+> The memremap being attempted is from 0x5f54e018 to 0x830f1d13, which look=
+ing at /proc/iomem, is overlapping all the below regions.
+>
+> cat /proc/iomem
+> ...
+>   61000000-61ffffff : Kernel code
+>   62000000-62bf4fff : Kernel rodata
+>   62c00000-634e28bf : Kernel data
+>   63b8e000-641fffff : Kernel bss
+> 64dbb000-64dbbfff : Reserved
+> 64dbc000-69c89fff : System RAM
+> 69c8a000-6bd89fff : Reserved
+>   6ad6d018-6ad6d027 : APEI EINJ
+>   6ad6d048-6ad6d067 : APEI EINJ
+>   6ad6d078-6ad6d07f : APEI EINJ
+>   6ad6e018-6ad6e018 : APEI ERST
+>   6ad6e01c-6ad6e021 : APEI ERST
+>   6ad6e028-6ad6e039 : APEI ERST
+>   6ad6e040-6ad6e04c : APEI ERST
+>   6ad6e050-6ad7004f : APEI ERST
+> 6bd8a000-6be44fff : ACPI Tables
+> 6be45000-6c99efff : ACPI Non-volatile Storage
+> 6c99f000-6ebedfff : Reserved
+> 6ebee000-6fffffff : System RAM
+> 70000000-7fffffff : Reserved
+> 80000000-8fffffff : PCI MMCONFIG 0000 [bus 00-ff]
+> ...
+>
+> The kernel is being booted using kexec. 0x23ba3cfb is 571MB which looks t=
+oo big. Could it be that the log size grew too big in the previous kernel? =
+Or is it a memory corruption similar to the issue we encountered in [1] and=
+ solved in [2]?
+>
+> [1] https://lore.kernel.org/all/20240910-juicy-festive-sambar-9ad23a@devv=
+m32600/
+> [2] https://lore.kernel.org/all/20240912155159.1951792-2-ardb+git@google.=
+com/
 
-Nothing apparently wrong in this. Will re-check after 1/2 is good.
+I'd look at it if I had extra bandwidth but I hope someone who knows
+better kexec/EFI will take this earliest time I have time to investigate
+is like few weeks from now because I started on new jobs.
+
+So right now for few only strictly TPM focused bugs. Just implying
+my situation. In a normal situation I'd actually find this quite
+interesting. I'll check where it is after some weeks.
+
+>
+> Thanks!
+> Usama
+
 
 BR, Jarkko
 
