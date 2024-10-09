@@ -1,82 +1,83 @@
-Return-Path: <linux-integrity+bounces-3761-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3762-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73FFF997053
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 18:03:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9406E997079
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 18:06:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A7F61F23A1B
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 16:03:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4415D282799
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 16:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834291F708E;
-	Wed,  9 Oct 2024 15:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1A441FAC4A;
+	Wed,  9 Oct 2024 15:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VGlkuqiU"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="U1ulGRA9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC26B1F7086
-	for <linux-integrity@vger.kernel.org>; Wed,  9 Oct 2024 15:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EA61F9A94
+	for <linux-integrity@vger.kernel.org>; Wed,  9 Oct 2024 15:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728488238; cv=none; b=ejUMUclrm40F2AL11DrZRpInOiZM5YcWreB/j09WdBCIeju0euitWPIHGcgKTLnXhFKyJNq7XXV0UhW7eoif/amct5oTsH3PFcb3lt+77Mffo8dDEkNvYKwkxcjqaDngXIUOKrmJnwbvDbnjfzPsqOeTAtSU+d1C4AIKTrI2N+U=
+	t=1728488480; cv=none; b=ZN7sj3gLwc3jZSzl12DqNjQOcSms6XJDo7y3+/azle8QXMzeSjFmhJ6mE7F+HLT34/RirFa/vpTbrPe0xJZ2686FgoXVD89uiVejb9cW+YBgIDsK+BCceIWn2TZgWoNGu+gqFKR2YxEfR1On/9AeWt56uQWRo9OyOAEsepfOVYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728488238; c=relaxed/simple;
-	bh=La4KVBvoExKm9pO09UAsxMsz2f1GjMBJB04Ukn3GBBU=;
+	s=arc-20240116; t=1728488480; c=relaxed/simple;
+	bh=5zXsacpLbkKdd7Owf7i8fcqhHBq0BjhPegtdXbXq2/A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DbfQ79HCNUSLNQHm3OHV8vUSNk04ijq1+OPRmkfKltTAdutq3F/I9W6vD9Wt+nsNYyu/o6Z9GlPUy6rPD3HdCgR8nwQgjOpkUr6RWNTLHnRcuKLY7DNHm7l3GJIWuqBlD9sJHx5sAc/Cp5xUhUVb5LWBBTzUkOraaNoqKyxvSB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=VGlkuqiU; arc=none smtp.client-ip=209.85.222.42
+	 To:Cc:Content-Type; b=eAlbZXtIg28FgpRbLc9PLGEcaVDQnprvCcAuHz7qmg7vOCNXUYru1iB96TOIUWJTsNDf+F8axtWRvutBX/0wUGLuydvJzPA4CsXp/T3Ob25Caugmh3xe+8PK9nyZlvy+UVAvnbtFBSvfsEDqvkXAWEqsikL5MdAeWsuB56DLWqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=U1ulGRA9; arc=none smtp.client-ip=209.85.222.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-84fa2fccc2dso675247241.0
-        for <linux-integrity@vger.kernel.org>; Wed, 09 Oct 2024 08:37:16 -0700 (PDT)
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-84fc00f455bso210150241.2
+        for <linux-integrity@vger.kernel.org>; Wed, 09 Oct 2024 08:41:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1728488236; x=1729093036; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1728488477; x=1729093277; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OD7QcnVhTK/TsR50NL59rPOb7Kr6qLYjhaf79NkEfzg=;
-        b=VGlkuqiUsB0pWWkcZ3G0Zj5BDzVCtgiQCy283PDBNf3/M0aBDd3r+YxGncj7lg3CyJ
-         2yaYH4Tg9TyACyW2XOp+Rb4dcCfr3eOGPL4JFIx9zY5fzKgqH6Wh+OXWasXIn0GFuh7t
-         U5aakPSJyibwjoQeIBRXwqFnufHi4ZcxlF4CrK0gL9Y3Mn4ne4tB71SOzrNQTPfdhVkJ
-         Uf/OwTuU3Ju+0wIc25QX2ZtyzL46dx0R3Yh0sqh4/mWW5bu54Qsh4Etzp4EzonDGt443
-         JEDxfZsRR2/CGo5GB2sOpLAOxq9rwkhp/GexxnA1Ws8eYu4IWdgr7ZMmOcJixiMaQK4s
-         0kAQ==
+        bh=5SH4+TCbdv6Z9/qxMkcCTLdN6YQ+M14kI3Ja3qoYGGs=;
+        b=U1ulGRA9ab7wfwthSbrrhyatrOJ5w4qQDvaStUQP9s1M6piT4MuQDBHZpR5E6kPL4t
+         r7U+Hs1ugw/PRf0WxYxQOYY1QFT2V7Kz1dV4x1rYtaQ87VjetSf+euTDX+kx6ydK2ZQT
+         /rlDRYIsZAtlLfGLANf9RQPJ6/K3i68JXl8iCpzGoxUD9wE39QHcm/rjRfP2c6Nn8RK+
+         eC/Edv4f+tGwqykQJ/kYXvwmG4KBxvgoREHu8p6qUTfAFKsDdkn6JZubvVpCSLtkED3n
+         aJZk6VPDo9uLTMTWGqEhpWOJPwRxNuBbyGhFbzKgjAeLkgflduUOqCYSX7CmJROx+zFt
+         6ynw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728488236; x=1729093036;
+        d=1e100.net; s=20230601; t=1728488477; x=1729093277;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OD7QcnVhTK/TsR50NL59rPOb7Kr6qLYjhaf79NkEfzg=;
-        b=Wv2qKjH4K1f53U5+ViDJARWL2T79bQE69Gb6Yqe/y2+VRDog8X3ed5bXZRzndtDiVD
-         DRdaizi7hCxkNedwn2NKPFISZxDv4cZeLnpE78vUxy7nMWTkTYh+8QxQL/Tz68Z+H96G
-         P8Dr3KMwckRBGwfScbc0UMa0hKTuAWWY1B2W/sCY/UrEsTEFSEYRA5chnbAepGrSOBRJ
-         RT0tMCwcUxFOJv22JWpCLVCChD6Yg562zXxdQrI5N472Dz5S/FUr5/evuGtk+nCk78EO
-         WE0mmKrYT5pI/Y7x8YP+AnoFgXB9RunfA4nrKnWcF6dddmt1yVuKu1Won95rihYQPwPn
-         ITow==
-X-Forwarded-Encrypted: i=1; AJvYcCWVIj6aNZNsGTkGIbcALnUlF3+B2K4vr4JYAAwZE2BkyCx6N0vSjg5hP50coERt4fVTLc9Cgzb8IhO9jOp2LUA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOwLq22CcfcCpVLzOQDofFCQcxZFyy+eUBrhnSTkWDNq+WvYts
-	1dx9Zna+T0H+vV7UvmiuQZO0W2IhOI76Cb23MKqj7b2i8CNS7GgSNOT12yt/LMGf86Fd3Vy7xP9
-	IkXHF06ONmjkDaV2ka25Zq/hGLPTypFXgiB83
-X-Google-Smtp-Source: AGHT+IEu5xzMzhH/wgeDgjEGKWpciv4mCxSojd55huo7SKv5IrO0ylLHZx0Mi5aaHn5HxWNAJbzCfGMT+FuD46vf8r4=
-X-Received: by 2002:a05:6122:3126:b0:4f6:a697:d380 with SMTP id
- 71dfb90a1353d-50cf0c7e54dmr2055501e0c.10.1728488235831; Wed, 09 Oct 2024
- 08:37:15 -0700 (PDT)
+        bh=5SH4+TCbdv6Z9/qxMkcCTLdN6YQ+M14kI3Ja3qoYGGs=;
+        b=gXQe+CiILYwt5i3iORXOFZu077uHsp9P0kcU6Pa5tFd/dq+TzStlDPmeSxU/le66cI
+         JKI2T2J7HUcmCdw/cu/9QVFQ3aOh/R3IY3KYvd1H284QtmsuMIbgvR6VeWzmIlpDz1R3
+         TrSSQwQx5V4dYzO6dkfyxjbweIOefOndgxiaY+Rn5cPRlsqLL5t6HSkGcOEyK/hYQa7i
+         x6E8DOTSwNTuCNpYoZSeSnMQi1XGQtti0geU3NHoZBtgxzden3eyQMjIWmOBm5rXI40V
+         1/rME8ABksAh+MyQJwqVN0s2K1I0cKH65qQGizLo3hityAT7noZ8pb14KLXrC5B4YeW9
+         1TNA==
+X-Forwarded-Encrypted: i=1; AJvYcCU05/bRJeLiLCbpgSq550g09Qdrd56pu8vvQ4rvRTwmEGQfOxOeIQgdzzv0HnbQzwYT27pQL5x5tcYg0fI1Y0g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhDEhg97ItXCX48PlkWWRqcxTyzhRsU+xBetUAhTDuDycTbfmP
+	CZMsArrDr5KuOR6mffJ2JrH0UNo1wuNvzd8qmtdqhNlAjfM9mM6bLtzK9ow4IQby0PiBpbavHYl
+	G/QlCCpd7pF51CHA29MA5yLXTA6MMRgxeIaYd
+X-Google-Smtp-Source: AGHT+IElqeKjByMnp05SB4b4le58PTvRrx7/UaJf46X+cJIeHFizxq02zRji491nEB6lNk7V9WlBohLTdJPiWskBcvE=
+X-Received: by 2002:a05:6122:45a6:b0:50c:eb10:9799 with SMTP id
+ 71dfb90a1353d-50cf089c7fbmr1989108e0c.1.1728488477479; Wed, 09 Oct 2024
+ 08:41:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008165732.2603647-1-roberto.sassu@huaweicloud.com> <CAHC9VhSyWNKqustrTjA1uUaZa_jA-KjtzpKdJ4ikSUKoi7iV0Q@mail.gmail.com>
-In-Reply-To: <CAHC9VhSyWNKqustrTjA1uUaZa_jA-KjtzpKdJ4ikSUKoi7iV0Q@mail.gmail.com>
+References: <20241008165732.2603647-1-roberto.sassu@huaweicloud.com> <20241008165732.2603647-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20241008165732.2603647-2-roberto.sassu@huaweicloud.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 9 Oct 2024 11:37:05 -0400
-Message-ID: <CAHC9VhQR2JbB7ni2yX_U8TWE0PcQQkm_pBCuG3nYN7qO15nNjg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] ima: Remove inode lock
+Date: Wed, 9 Oct 2024 11:41:06 -0400
+Message-ID: <CAHC9VhRkMwLqVFfWMvMOJ6x4UNUK=C_cMVW7Op9icz28MMDYdQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] ima: Ensure lock is held when setting iint pointer in
+ inode security blob
 To: Roberto Sassu <roberto.sassu@huaweicloud.com>
 Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
 	jmorris@namei.org, serge@hallyn.com, linux-integrity@vger.kernel.org, 
@@ -86,47 +87,60 @@ Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 9, 2024 at 11:36=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
-ote:
-> On Tue, Oct 8, 2024 at 12:57=E2=80=AFPM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> >
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >
-> > Move out the mutex in the ima_iint_cache structure to a new structure
-> > called ima_iint_cache_lock, so that a lock can be taken regardless of
-> > whether or not inode integrity metadata are stored in the inode.
-> >
-> > Introduce ima_inode_security() to simplify accessing the new structure =
-in
-> > the inode security blob.
-> >
-> > Move the mutex initialization and annotation in the new function
-> > ima_inode_alloc_security() and introduce ima_iint_lock() and
-> > ima_iint_unlock() to respectively lock and unlock the mutex.
-> >
-> > Finally, expand the critical region in process_measurement() guarded by
-> > iint->mutex up to where the inode was locked, use only one iint lock in
-> > __ima_inode_hash(), since the mutex is now in the inode security blob, =
-and
-> > replace the inode_lock()/inode_unlock() calls in ima_check_last_writer(=
-).
-> >
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  security/integrity/ima/ima.h      | 26 ++++++++---
-> >  security/integrity/ima/ima_api.c  |  4 +-
-> >  security/integrity/ima/ima_iint.c | 77 ++++++++++++++++++++++++++-----
-> >  security/integrity/ima/ima_main.c | 39 +++++++---------
-> >  4 files changed, 104 insertions(+), 42 deletions(-)
+On Tue, Oct 8, 2024 at 12:57=E2=80=AFPM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
 >
-> I'm not an IMA expert, but it looks reasonable to me, although
-> shouldn't this carry a stable CC in the patch metadata?
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 >
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
+> IMA stores a pointer of the ima_iint_cache structure, containing integrit=
+y
+> metadata, in the inode security blob. However, check and assignment of th=
+is
+> pointer is not atomic, and it might happen that two tasks both see that t=
+he
+> iint pointer is NULL and try to set it, causing a memory leak.
+>
+> Ensure that the iint check and assignment is guarded, by adding a lockdep
+> assertion in ima_inode_get().
+>
+> Consequently, guard the remaining ima_inode_get() calls, in
+> ima_post_create_tmpfile() and ima_post_path_mknod(), to avoid the lockdep
+> warnings.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  security/integrity/ima/ima_iint.c |  5 +++++
+>  security/integrity/ima/ima_main.c | 14 ++++++++++++--
+>  2 files changed, 17 insertions(+), 2 deletions(-)
+>
+> diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/i=
+ma_iint.c
+> index c176fd0faae7..fe676ccec32f 100644
+> --- a/security/integrity/ima/ima_iint.c
+> +++ b/security/integrity/ima/ima_iint.c
+> @@ -87,8 +87,13 @@ static void ima_iint_free(struct ima_iint_cache *iint)
+>   */
+>  struct ima_iint_cache *ima_inode_get(struct inode *inode)
+>  {
+> +       struct ima_iint_cache_lock *iint_lock;
+>         struct ima_iint_cache *iint;
+>
+> +       iint_lock =3D ima_inode_security(inode->i_security);
+> +       if (iint_lock)
+> +               lockdep_assert_held(&iint_lock->mutex);
+> +
+>         iint =3D ima_iint_find(inode);
+>         if (iint)
+>                 return iint;
 
-Sorry, one more thing ... did you verify this patchset resolves the
-syzbot problem?  I saw at least one reproducer.
+Can you avoid the ima_iint_find() call here and just do the following?
+
+  /* not sure if you need to check !iint_lock or not? */
+  if (!iint_lock)
+    return NULL;
+  iint =3D iint_lock->iint;
+  if (!iint)
+    return NULL;
 
 --=20
 paul-moore.com
