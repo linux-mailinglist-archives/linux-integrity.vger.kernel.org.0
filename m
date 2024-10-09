@@ -1,125 +1,154 @@
-Return-Path: <linux-integrity+bounces-3750-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3751-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62EAE99552B
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Oct 2024 18:58:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D496996487
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 11:11:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94DA31C24B6D
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Oct 2024 16:58:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E75CCB24172
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 09:11:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F19791E131F;
-	Tue,  8 Oct 2024 16:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6E81188920;
+	Wed,  9 Oct 2024 09:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="NsMO4m1B"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B501E0DE2;
-	Tue,  8 Oct 2024 16:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFB918A6CD;
+	Wed,  9 Oct 2024 09:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728406683; cv=none; b=NWpYC/FR2lA0arzovyXUfwwu7vCn64RKJ0d3g7+snw8vYO5BZbqe3st5+mMePhzBve6171Ao7LZKoiKr0mRwE7ct3Hp2KmgQoYh1OS28Cgt3zQgOu5J4sOpCLfFaRyQbBh/Ahh9TKA35jdK7kGcaOMLzX0CYqHPLuydnzbd93dw=
+	t=1728465104; cv=none; b=uqlM5dqown/qnANUV44/WSmR9A6qXFbJS15EGuCKR5VbowQGXoyJGXiDe1lPiEEjnJuCkUc9N6fx6cLsV982jt39fWx0slwxwK4MU7H4MkSAZZVnU+bN5IzzX3tZQmsHm/0MOwAqTmJ0xJxWQMVp6Dmfpy92PsusHkDeDXoZfzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728406683; c=relaxed/simple;
-	bh=72BH+7dd3CukjfZzS71uAos02pWQ3nHiqzJ+LRPT6q0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ho7atEBdy9lGs3YEhKz6SiZXRtOIQZNQ3RqFkBXSbpViXqbVQ+yuW25ZlQctQ+gPyz2jVRrviC+hTdZcLJvvsnGMJU+vykK+VfoiFXzmkEN8jR79F3lcgkQH1s75qNXxs5QtsjWESeWHAcJkXx9rA+UEFDc3GfSpu6ehw0HJnOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4XNMBp327Fz9v7Hl;
-	Wed,  9 Oct 2024 00:37:54 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id F1593140156;
-	Wed,  9 Oct 2024 00:57:56 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwDnlseAZAVng2B7Ag--.64194S4;
-	Tue, 08 Oct 2024 17:57:56 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com
-Cc: linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	ebpqwerty472123@gmail.com,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 3/3] ima: Mark concurrent accesses to the iint pointer in the inode security blob
-Date: Tue,  8 Oct 2024 18:57:32 +0200
-Message-Id: <20241008165732.2603647-3-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241008165732.2603647-1-roberto.sassu@huaweicloud.com>
-References: <20241008165732.2603647-1-roberto.sassu@huaweicloud.com>
+	s=arc-20240116; t=1728465104; c=relaxed/simple;
+	bh=IVUQL/RYP1pypt4l4/4VPtvvoPQ0+Vk50Ex1eOQ6mhM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GvO/aUwylxRLl9tVbcJnk2Y/EpGjW9EM7PgUrXXB/xcVylmF1U5s5HTkLFX7Sw6AQvB+ZSV4k8R16pkKbP6cV2tjMiM9q+82eqsBlzuypuStES75rPUjAKWnZ3ib2UUveqdNWembqpvdFwwxS+5GeHPc66vjZaI5l9ZOesIAI6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=NsMO4m1B; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=41lRgjq+jYVfy53InEiK/LxoafTTsLIwL+NynDjl2xU=; b=NsMO4m1B4aGFYZt9fC4X1CKAiW
+	MIzvs2ZjbL6wZcQDQAOEs1GaikWr5p2AMSFZJxsBGsVRSjp96nvv3M5MX2hIaU5JWNtoh8I75TKyU
+	Z9nj0Wls79/pybLaeBOEJzIGNMB762OnaquwigElHpZech5HnZZMoyAjviXzqId1ygTG7QYOYIS0p
+	lgI+TDFByXZFiYyPWiVlYNV1kURd7gMYyXUCwMGQr3xFJHzRpMNse+ocTUx8qmwtaMWhbWZMPITXX
+	1aKA62WK/9jKLMx8JtQYtdQaPs5lCdUC748kGa+S1dijJB65QTQmjxAbsHvHqLi4aAGjB4yMH31zW
+	1zMVnTUw==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1sySif-0032Cb-0j;
+	Wed, 09 Oct 2024 10:10:57 +0100
+Date: Wed, 9 Oct 2024 10:10:57 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Breno Leitao <leitao@debian.org>,
+	Usama Arif <usamaarif642@gmail.com>, linux-efi@vger.kernel.org,
+	kexec@lists.infradead.org, bhe@redhat.com, vgoyal@redhat.com,
+	tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
+	linux-kernel@vger.kernel.org, rmikey@meta.com, gourry@gourry.net,
+	linux-integrity@vger.kernel.org
+Subject: Re: [RFC] efi/tpm: add efi.tpm_log as a reserved region in
+ 820_table_firmware
+Message-ID: <ZwZIoQobJrltBpTX@earth.li>
+References: <20240912-wealthy-gabby-tamarin-aaba3c@leitao>
+ <d9df5012cd3306afa2eddd5187e643a3bbdfd866.camel@HansenPartnership.com>
+ <20240913-careful-maroon-crab-8a0541@leitao>
+ <5c525fe8f33fffebc0d275086cc7484e309dfae0.camel@HansenPartnership.com>
+ <87o74n5p05.fsf@email.froward.int.ebiederm.org>
+ <CAMj1kXF7EohKai9nyxSnvu32KNdUcNZxxP69Sz-vUZ-6nmvekg@mail.gmail.com>
+ <874j6e482p.fsf@email.froward.int.ebiederm.org>
+ <CAMj1kXEa4DSY8omHGhoTK0U5isvK2G-PJO9go-QK_Mzny=g6ow@mail.gmail.com>
+ <87setx3b8l.fsf@email.froward.int.ebiederm.org>
+ <CAMj1kXHtNrsdsHQWMXrq9jAyzxEJnTW0M7-OEA0kpb3KS2cZ=w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwDnlseAZAVng2B7Ag--.64194S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrKFyUGF4kZFyfAr43CryfWFg_yoWkKrX_uw
-	nYvr1Utw15uFZ3u3yDAa4aqayv9Fy8Cr48Ka4ftanrA345Jr98XrWUJFnaqFy8Xr42gan8
-	Grnakry3t3ZrWjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbqxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r15M2
-	8IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
-	021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F
-	4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-	Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0jN
-	t3UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBGcElPgLOAAAsz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHtNrsdsHQWMXrq9jAyzxEJnTW0M7-OEA0kpb3KS2cZ=w@mail.gmail.com>
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Wed, Sep 18, 2024 at 09:36:06AM +0200, Ard Biesheuvel wrote:
+> On Wed, 18 Sept 2024 at 05:14, Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > Ard Biesheuvel <ardb@kernel.org> writes:
+> > > On Tue, 17 Sept 2024 at 17:24, Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > >> Ard Biesheuvel <ardb@kernel.org> writes:
 
-Use the READ_ONCE() and WRITE_ONCE() macros to mark concurrent read and
-write accesses to the portion of the inode security blob containing the
-iint pointer.
+> > >> This should not be the kexec-on-panic kernel as that runs in memory
+> > >> that is reserved solely for it's own use.  So we are talking something
+> > >> like using kexec as a bootloader.
+> > >
+> > > kexec as a bootloader under TPM based measured boot will need to do a
+> > > lot more than pass the firmware's event log to the next kernel. I'd
+> > > expect a properly engineered kexec to replace this table entirely, and
+> > > include the hashes of the assets it has loaded and measured into the
+> > > respective PCRs.
+> > >
+> > > But let's stick to solving the actual issue here, rather than
+> > > philosophize on how kexec might work in this context.
+> >
+> > I am fine with that.  The complaint I had seen was that the table was
+> > being corrupted and asking how to solve that.  It seems I haven't read
+> > the part of the conversation where it was made clear that no one wants
+> > the tpm_log after kexec.
+> >
+> It was not made clear, that is why I raised the question. I argued
+> that the TPM log has limited utility after a kexec, given that we will
+> be in one of two situations:
+> - the kexec boot chain cares about the TPM and measured boot, and will
+> therefore have extended the TPM's PCRs and the TPM log will be out of
+> sync;
+> - the kexec boot chain does not care, and so there is no point in
+> forwarding the TPM log.
+> 
+> Perhaps there is a third case where kdump wants to inspect the TPM log
+> that the crashed kernel accessed? But this is rather speculative.
 
-Writers are serialized by the iint lock.
+Generally the kernel/host OS and the firmware are touching different
+PCRs in the TPM.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The firmware eventlog covers what the firmware/bootloader measured;
+itself, option ROMs, secure boot details, bootloader, initial
+kernel/initrd (if we're talking grub as the initial bootloader). These
+details are not changed by a kexec, and provide the anchor of the
+software trust chain.
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 6474a15b584a..3fe1651395ce 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -215,7 +215,7 @@ ima_inode_get_iint(const struct inode *inode)
- 		return NULL;
- 
- 	iint_lock = ima_inode_security(inode->i_security);
--	return iint_lock->iint;
-+	return READ_ONCE(iint_lock->iint);
- }
- 
- static inline void ima_inode_set_iint(const struct inode *inode,
-@@ -227,7 +227,7 @@ static inline void ima_inode_set_iint(const struct inode *inode,
- 		return;
- 
- 	iint_lock = ima_inode_security(inode->i_security);
--	iint_lock->iint = iint;
-+	WRITE_ONCE(iint_lock->iint, iint);
- }
- 
- struct ima_iint_cache *ima_iint_find(struct inode *inode);
+A kexec'd kernel will generally not touch the same PCRs. The primary way
+I know to carry kexec measurements / logs over to new kernels is using
+IMA, which will be configured to use one of the later PCRs (default of
+10).
+
+That means that the firmware event log is still completely valid to
+subsequent kernels, and is still required to validate the
+firmware/bootloader trust chain. You then probably _also_ want to make
+use of the IMA log to validate the kexec'd kernel chain, but that's
+separate.
+
+> > If someone wants the tpm_log then we need to solve this problem.
+> Agreed.
+
+There's a real requirement and use for kexec'd kernels to be able to
+continue to access the firmware TPM event log; to the extent that there
+are also patches floating around to have this carried over via device
+tree on non-UEFI platforms.
+
+J.
+
 -- 
-2.34.1
-
+Avoid temporary variables and strange women.
+This .sig brought to you by the letter U and the number 37
+Product of the Republic of HuggieTag
 
