@@ -1,159 +1,172 @@
-Return-Path: <linux-integrity+bounces-3756-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3757-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D137996D34
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 16:05:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67E6E996EF8
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 16:59:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90D401C21AF9
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 14:05:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDA691F214B8
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 14:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B496319994B;
-	Wed,  9 Oct 2024 14:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B151A0AFA;
+	Wed,  9 Oct 2024 14:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="FkSzYKLd"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="L9tlrYfy"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8E661FEB;
-	Wed,  9 Oct 2024 14:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1DA1925BB;
+	Wed,  9 Oct 2024 14:58:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728482750; cv=none; b=KTeSxxRTeN1O2YXfezZeF0nXv9sNd5UDcKcVf8gRSumnEWqcjvILYlliN3HdRhQshVZ85m4NBCCyeudYGt14G8P9vzOw+sJEjf5JDpMZk+48cJsxpxI4zIwW5tr5GkivfVqIbyS5T/qhtEY1GcFH6fd0RsPi4Roy9YNgU0wh7k4=
+	t=1728485941; cv=none; b=Z0SE3PgC8AlVwWKQlq9637UTFZifTbAzK0PJTKd1vDo3HH4p6WE+/Nr7tzOxwQLHAitvCID79jHVtchgyTkaNpUGF4Xm8Nn5IptwHv1YLvQIMHwuyhP9LDZwsGv0/kVjc9TXTvH1I88uLf2oPz9kVd5scUDSHjjr+XvaP16Jy3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728482750; c=relaxed/simple;
-	bh=cgGY/g9Do3DxKpevKWY1WFv03l4BieX+1o+4n9S8MXI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ctCDdTFIOQU6+NtsZ0+zZh4u5ZctyddJnYq4j0dvMldXlpLkxQmqJ4wcTx+rV+uLYB6kFOUowWZXy2oby6akeFWlrBmNhiUgn1/r0rRaWdNIWIK9ANNdbePkU+1tYjmcgj61gO7JexLtmH6G2AYkF4FyziFI4iHAUy5F8s2jTPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=FkSzYKLd; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=i1QThVF8dGkG2MCAzs0bja3ZVNDTNwm3Axl492fNNQY=; b=FkSzYKLdsa0heLdvcU+riirsHk
-	5ldUDp/FP484xNSeeztScBp45hUlq+ZRp+wFFrY3fB9dYaTM5pKpFhP6/ewD76V3QCwv8/JvJhEcV
-	om5c+iz9GUHRUQ6ay9DhFugwZqTha4QeyBYGvqhXtxqQ43eA8REg+8FQxcl6iCLgZG6DTbw2pbPpn
-	SFH1YTPoJgRJqhFEa/6r4L0RTtxQQ5kDFJqWu4UxdQBeiVutp3cGLMmTuQ917o4vJKXyQVU8sPFgz
-	5ls/1NhgvclwdaR8wH0J0ZoZI7bvsFNbvFe5rwZ3l6XpnzVaEomulvUec2qCSZkmJC/3xpxeRPtNh
-	ThsOA9oA==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1syXJa-003F6L-2V;
-	Wed, 09 Oct 2024 15:05:22 +0100
-Date: Wed, 9 Oct 2024 15:05:22 +0100
-From: Jonathan McDowell <noodles@earth.li>
-To: Breno Leitao <leitao@debian.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Usama Arif <usamaarif642@gmail.com>, linux-efi@vger.kernel.org,
-	kexec@lists.infradead.org, bhe@redhat.com, vgoyal@redhat.com,
-	tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	linux-kernel@vger.kernel.org, rmikey@meta.com, gourry@gourry.net,
-	linux-integrity@vger.kernel.org
-Subject: Re: [RFC] efi/tpm: add efi.tpm_log as a reserved region in
- 820_table_firmware
-Message-ID: <ZwaNorA0hUhdQ8ji@earth.li>
-References: <20240913-careful-maroon-crab-8a0541@leitao>
- <5c525fe8f33fffebc0d275086cc7484e309dfae0.camel@HansenPartnership.com>
- <87o74n5p05.fsf@email.froward.int.ebiederm.org>
- <CAMj1kXF7EohKai9nyxSnvu32KNdUcNZxxP69Sz-vUZ-6nmvekg@mail.gmail.com>
- <874j6e482p.fsf@email.froward.int.ebiederm.org>
- <CAMj1kXEa4DSY8omHGhoTK0U5isvK2G-PJO9go-QK_Mzny=g6ow@mail.gmail.com>
- <87setx3b8l.fsf@email.froward.int.ebiederm.org>
- <CAMj1kXHtNrsdsHQWMXrq9jAyzxEJnTW0M7-OEA0kpb3KS2cZ=w@mail.gmail.com>
- <ZwZIoQobJrltBpTX@earth.li>
- <20241009-feathered-polar-manul-ea6e33@leitao>
+	s=arc-20240116; t=1728485941; c=relaxed/simple;
+	bh=jhOWPTnLy5STHoWvZVLZJEP1Q7YrHr3h2fSsKzTfeQg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OR7/Ctao5ejQJUQ0EH/lKgaXbebZOv+RdsEAkwV8HZ5uTonStSr/GJ87Ktghaac/VqWnCl7Y9nFNR93/bgMrZafnN3GrZf4V7AsKDRUhxABoeHgNIAAy2U9ArvIOUktw1WPhCnOdEW7O0EhFVf3EAtkUoQ6VTrR8kj3wmDsBMbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=L9tlrYfy; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 499DfcCs029962;
+	Wed, 9 Oct 2024 14:53:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=eTcaNQd5pWBwQngr+JkyDuUjKM/IG
+	0KVrbirD+kH8YU=; b=L9tlrYfy+9KH8KerZ0IoHq4lPuE/MwZZGrdABfy0i/zhh
+	omTP2LmIG01e7rb8HACGDzkCHfZqpdcAF9iJ7mG1TSMQzxpeQWBK84RZ4z6MK7wx
+	mrshNvqGtL5Qp9wCu25MFEfw4xl6ZjvFQNd0PxDHiD0FEcnMHhiP4eBe8vanVPag
+	5HDNjEqMumU+8/Q0/NKz/Of50FUreu94jbLHvUSd3w4hFv5S6z0sBTxytpSonjip
+	kEKLCTk9yhcNrMP/4oe+NIDhOeCdVkzZWvpk1bN9py3DGlBlZdoyA+mGFMBz1h1P
+	R6qGYauH92cQp66/4+ucRZYSLFniDhpr6LrhLuv2Q==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 423063rf48-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 09 Oct 2024 14:53:38 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 499Dqb4Y019135;
+	Wed, 9 Oct 2024 14:53:38 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 422uwf0hmw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 09 Oct 2024 14:53:38 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 499ErbH9039489;
+	Wed, 9 Oct 2024 14:53:37 GMT
+Received: from localhost.localdomain ([100.99.32.179])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 422uwf0hkq-1;
+	Wed, 09 Oct 2024 14:53:37 +0000
+From: David Fernandez Gonzalez <david.fernandez.gonzalez@oracle.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: harshit.m.mogalapalli@oracle.com, vegard.nossum@oracle.com,
+        david.fernandez.gonzalez@oracle.com
+Subject: [PATCH] ima: Fix OOB read when violation occurs with ima template.
+Date: Wed,  9 Oct 2024 14:53:34 +0000
+Message-ID: <20241009145335.1297855-1-david.fernandez.gonzalez@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241009-feathered-polar-manul-ea6e33@leitao>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-09_14,2024-10-09_02,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410090092
+X-Proofpoint-ORIG-GUID: Y_RPZEiWuMxK7o-8jjvsCen5A37ffX5Z
+X-Proofpoint-GUID: Y_RPZEiWuMxK7o-8jjvsCen5A37ffX5Z
 
-On Wed, Oct 09, 2024 at 03:46:32AM -0700, Breno Leitao wrote:
-> On Wed, Oct 09, 2024 at 10:10:57AM +0100, Jonathan McDowell wrote:
-> > On Wed, Sep 18, 2024 at 09:36:06AM +0200, Ard Biesheuvel wrote:
-> > > On Wed, 18 Sept 2024 at 05:14, Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > > Ard Biesheuvel <ardb@kernel.org> writes:
-> > > > > On Tue, 17 Sept 2024 at 17:24, Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > > >> Ard Biesheuvel <ardb@kernel.org> writes:
-> > 
-> > > > >> This should not be the kexec-on-panic kernel as that runs in memory
-> > > > >> that is reserved solely for it's own use.  So we are talking something
-> > > > >> like using kexec as a bootloader.
-> > > > >
-> > > > > kexec as a bootloader under TPM based measured boot will need to do a
-> > > > > lot more than pass the firmware's event log to the next kernel. I'd
-> > > > > expect a properly engineered kexec to replace this table entirely, and
-> > > > > include the hashes of the assets it has loaded and measured into the
-> > > > > respective PCRs.
-> > > > >
-> > > > > But let's stick to solving the actual issue here, rather than
-> > > > > philosophize on how kexec might work in this context.
-> > > >
-> > > > I am fine with that.  The complaint I had seen was that the table was
-> > > > being corrupted and asking how to solve that.  It seems I haven't read
-> > > > the part of the conversation where it was made clear that no one wants
-> > > > the tpm_log after kexec.
-> > > >
-> > > It was not made clear, that is why I raised the question. I argued
-> > > that the TPM log has limited utility after a kexec, given that we will
-> > > be in one of two situations:
-> > > - the kexec boot chain cares about the TPM and measured boot, and will
-> > > therefore have extended the TPM's PCRs and the TPM log will be out of
-> > > sync;
-> > > - the kexec boot chain does not care, and so there is no point in
-> > > forwarding the TPM log.
-> > > 
-> > > Perhaps there is a third case where kdump wants to inspect the TPM log
-> > > that the crashed kernel accessed? But this is rather speculative.
-> > 
-> > Generally the kernel/host OS and the firmware are touching different
-> > PCRs in the TPM.
-> > 
-> > The firmware eventlog covers what the firmware/bootloader measured;
-> > itself, option ROMs, secure boot details, bootloader, initial
-> > kernel/initrd (if we're talking grub as the initial bootloader). These
-> > details are not changed by a kexec, and provide the anchor of the
-> > software trust chain.
-> > 
-> > A kexec'd kernel will generally not touch the same PCRs. The primary way
-> > I know to carry kexec measurements / logs over to new kernels is using
-> > IMA, which will be configured to use one of the later PCRs (default of
-> > 10).
-> 
-> What about in the case where you don't have Grub, but, use the kernel as
-> the bootloader, kexecing into the desired kernel?
-> 
-> Will the bootloader-kernel touch the same PCRs as GRUB, or it will only
-> touch PCRs above 10?
+When processing a violation inside ima_eventdigest_init,
+ima_eventdigest_init_common will be called with cur_digest
+being NULL. hash_algo is always set to HASH_ALGO__LAST.
 
-A kernel kexecing into another will generally use IMA if it wants to
-measure into the TPM, which will use PCR 10 by default and not conflict
-with the firmware PCRs (and you then use the IMA integrity log, which is
-passed over a kexec, to work out the kexec side of things).
+Inside ima_eventdigest_init_common, since digest is NULL,
+offset will be calculated by accessing hash_digest_size
+with HASH_ALGO__LAST, one element OOB.
 
-You still need the firmware event log in that case because the
-"bootloader" kernel combo you load is measured into the TPM by the
-firmware.
+This will be used to calculate the amount of bytes
+to be copied as file content hash. Depending on the memory,
+this could lead to the 0 hash not being recorded if offset is 0,
+the violation not being recorded at all if offset is too big
+(as it will be used to allocate the buffer in
+ima_write_template_field_data), or potentially leaking
+memory values into the measurements file, if offset is big
+enough but can still be used to allocate the buffer.
 
-You _could_ technically configure things up to re-use some of the
-firmware PCRs, but it generally wouldn't make a lot of sense to do so
-and I've not seen any examples of that sort of configuration.
+UBSAN: array-index-out-of-bounds in security/integrity/ima/ima_template_lib.c:329:29
+index 23 is out of range for type 'int [23]'
+CPU: 0 UID: 0 PID: 383 Comm: journal-offline Not tainted 6.12.0-rc2 #14
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x64/0x80
+ __ubsan_handle_out_of_bounds+0xc6/0x100
+ ima_eventdigest_init_common+0x297/0x2c0
+ ? ima_add_violation+0x10b/0x260
+ ? __pfx_ima_eventdigest_init_common+0x10/0x10
+ ? path_openat+0x739/0x1ba0
+ ? do_filp_open+0x168/0x290
+ ? do_sys_openat2+0x126/0x160
+ ima_eventdigest_init+0xba/0x280
+ ? __pfx_ima_eventdigest_init+0x10/0x10
+ ? srso_alias_return_thunk+0x5/0xfbef5
+ ? __kmalloc_noprof+0x1cd/0x490
+ ? ima_alloc_init_template+0xd8/0x2f0
+ ima_alloc_init_template+0x1d1/0x2f0
+ ima_add_violation+0x10b/0x260
+ ...
 
-J.
+HASH_ALGO__LAST is only passed to ima_eventdigest_init_common
+for ima template. This change ensures to set an appropriate hash_algo
+value before calculating the offset.
 
+Cc: stable@vger.kernel.org
+Fixes: 9fab303a2cb3 ("ima: fix violation measurement list record")
+Signed-off-by: David Fernandez Gonzalez <david.fernandez.gonzalez@oracle.com>
+---
+ security/integrity/ima/ima_template_lib.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+index 4183956c53af..7a46d720303b 100644
+--- a/security/integrity/ima/ima_template_lib.c
++++ b/security/integrity/ima/ima_template_lib.c
+@@ -318,15 +318,19 @@ static int ima_eventdigest_init_common(const u8 *digest, u32 digestsize,
+ 				      hash_algo_name[hash_algo]);
+ 	}
+ 
+-	if (digest)
++	if (digest) {
+ 		memcpy(buffer + offset, digest, digestsize);
+-	else
++	} else {
+ 		/*
+ 		 * If digest is NULL, the event being recorded is a violation.
+ 		 * Make room for the digest by increasing the offset by the
+ 		 * hash algorithm digest size.
+ 		 */
++		if (hash_algo == HASH_ALGO__LAST) /* To handle ima template case */
++			hash_algo = ima_template_hash_algo_allowed(ima_hash_algo) ?
++				ima_hash_algo : HASH_ALGO_SHA1;
+ 		offset += hash_digest_size[hash_algo];
++	}
+ 
+ 	return ima_write_template_field_data(buffer, offset + digestsize,
+ 					     fmt, field_data);
 -- 
-101 things you can't have too much of : 41 - Tea.
+2.43.0
+
 
