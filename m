@@ -1,210 +1,149 @@
-Return-Path: <linux-integrity+bounces-3754-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3755-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62E1A9965BD
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 11:43:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFCA2996791
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 12:46:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E62F41F21FE6
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 09:43:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3EDC1C240D2
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 10:46:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2497418A93A;
-	Wed,  9 Oct 2024 09:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EPrHAR/w"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B346F18E351;
+	Wed,  9 Oct 2024 10:46:40 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5089D189528
-	for <linux-integrity@vger.kernel.org>; Wed,  9 Oct 2024 09:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3ED645948;
+	Wed,  9 Oct 2024 10:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728466996; cv=none; b=W6fDJSWZO3CWFdWBz1vwaMILE+FnZ6L6fFJG+rknBGEhejFY+LhfAIAYNIOdYene5xQQzLxwXnkpqRUNIc0xfY0iCkmqrB2MiLsXvAi4oazFOzIlzJJXN0ZbBRMECzl0OKMER0YZaDK0FJggzrj19WkcLUOkAag5cDDAdAtAaGw=
+	t=1728470800; cv=none; b=cW4TM7VoAJvjFC9sZHiuWu+HVYj4ZQcrr0Nh79Z66s7wQJzGtQ8L4abXIeQuBJECI3MZfn9R5oTV/+W2jIrNF3fRo/gTOZ7rI+mHKy902JQUA4LFmNK5QR+8fzhtp7/k6lycSl2V2ifKxceG/fszo2H6wv4sTO4dJNL2F7D65YA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728466996; c=relaxed/simple;
-	bh=ZYxNK5hFZ6iVjtXf85rFV7Cy6YXXoBmRK20cr66qNh4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gstq9/jx0eT0kUdtSVeN5IxzoqyVFdtFMgnNP5Sbzy9FQO1j15zFEbQTt4h/LT0uo/59QKeS5S46oio4oHhs7vxH/srbozDm7I3XOmhHCQhwgbFtsKtnJazzGGRRWAaGsTsueUazA+unJsKXvTpBqxE1VS3I69ZsJhazhs3Zsrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=EPrHAR/w; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-37d375ddfc0so836614f8f.2
-        for <linux-integrity@vger.kernel.org>; Wed, 09 Oct 2024 02:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1728466993; x=1729071793; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bv95wUfVWG4fcvTn6B78w2Ak92jQ43dNXHoq4YGYUo4=;
-        b=EPrHAR/wbKXM1DADIQ7zHJQaQBeQt7DE8BLnbg7OPdTW391ejyq+WzcUrN2/2QFZnI
-         PY4PtP5os4t9sepKpogl2a2LiM5pAYLlqpIgbk+1rBVi/VCXE63mqjZDMSvkHJNgIiHv
-         W5rBxX82MzJMoOOk5nbcgd2r9/ri9U7thMQ8g=
+	s=arc-20240116; t=1728470800; c=relaxed/simple;
+	bh=Sip27StrS6XnyQHm1+Ggdhro9W5ZjCFargKWeuvD/dg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lSgFfQvnrUfGoWcP2XW3K2+x3vQkJ70W08jAT0lbYQy9y1K4obBKKyczZta81qzg+EPaer84oWfnKV6YZHYc1xCYgYg/bi9QHe58hy0LV4xx5/vCUgm3Z5LKZ6/1MJ5jcqadF8aDG4X8WdYaaoHAQs/ixMs83VJHxVY3WJd5Diw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fabb837ddbso93686381fa.1;
+        Wed, 09 Oct 2024 03:46:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728466993; x=1729071793;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bv95wUfVWG4fcvTn6B78w2Ak92jQ43dNXHoq4YGYUo4=;
-        b=gLUGECI9LIfQ1PAUKOUnYptWosqOkjf7+O5V8ZjqR6bAS/U9flqH4SMcsVf1ltPjHF
-         ObGvCMH3nvkPx4DKHdpm+JQzIz4knotCBWMA6rUhbDNxCgIJtCtlFDJ1DJw1hkPrE8I6
-         jdg8vn79i5ax3W7/o+jg0hLPrt4gaotaXO9Cesap7ddSfpkBsn09bpsF3ByInLaA+ro3
-         h1xFvkkjs4l1cfTlG6OXn3gQ5KwG68I99n+Mqb/roGP7jJa319SUCR9IA38cfhBBIplP
-         wRjrufv43Izldi3TsS2/iBNEEpJqpRD2cSu60faQvOkPokYBBFhqS5jMWDBGWZ7+pN7M
-         qahw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlCJrt4tyUPqabEcA3GkCJ6GzdPmDVmEDTDImXCbyQsuxPNYKbABw4OeJ/n56iy8g40ZPjD3k5TC3nZDn2ohk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxvl19ZabCmCqpbqJezchqaL6oD5i17/eXtXmOud6B4cyIUPdZI
-	fcjleESPF9a8BimEklPSmAnl8hh8kVVDUnAOqLFWLW/D5EHGZtAFfGX9IwZUig==
-X-Google-Smtp-Source: AGHT+IH9kxMlG2auVxQkOg4WZzRLReO4rw0egjhfNSwGxufZYLHxNPBj/enq6C1rps1iZ1pB79Ohdg==
-X-Received: by 2002:a5d:638a:0:b0:37d:393a:97c5 with SMTP id ffacd0b85a97d-37d3aa28d52mr1066107f8f.28.1728466992576;
-        Wed, 09 Oct 2024 02:43:12 -0700 (PDT)
-Received: from localhost (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-430d748d42fsm14668255e9.43.2024.10.09.02.43.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2024 02:43:11 -0700 (PDT)
-From: Grzegorz Bernacki <bernacki@chromium.org>
-X-Google-Original-From: Grzegorz Bernacki <bernacki@google.com>
-To: jsd@semihalf.com
-Cc: apronin@google.com,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	jarkko@kernel.org,
-	jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	mw@semihalf.com,
-	peterhuewe@gmx.de,
-	rrangel@chromium.org,
-	timvp@google.com
-Subject: [PATCH V2 2/2] char: tpm: cr50: Move i2c locking to request/relinquish locality ops
-Date: Wed,  9 Oct 2024 09:42:07 +0000
-Message-ID: <20241009094207.2897048-3-bernacki@google.com>
-X-Mailer: git-send-email 2.47.0.rc0.187.ge670bccf7e-goog
-In-Reply-To: <20241009094207.2897048-1-bernacki@google.com>
-References: <20221101020352.939691-1-jsd@semihalf.com>
- <20241009094207.2897048-1-bernacki@google.com>
+        d=1e100.net; s=20230601; t=1728470796; x=1729075596;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jNMFGv2yRXisTXc7gWT2h+fzh59yEWTgP+a8tlpKQSw=;
+        b=PRWhVQXSHIpJM4VW4yx5X8txJTZh0mUnz33isp9pVJ9q0pk1p20iuWuWlfm2iW87Hg
+         6Jx/lX5ijpmtdrh8GcZNUss95vjNITLRVvBTI2fFrr1tzKOH06P6Ywlk1mZrOg+I7sU+
+         zQXh+TFhETl4/PSdDhI4nII6c7kIm/KRWsiNGww4ODcOZwZGvWB8KW5GRg+OKhQeOFKu
+         qzDmSDTPFEM/L+n1xzgsk/OqRywehjvVOokuewcuAUXUwYt4+DCn+xQMpqgthvEWc6/D
+         H6jtm8R8lkC5xPv85T4Lhja5u443HSfgn1GWifbLstQlyI8s2HB4hrksolZNM2uj9r3z
+         wJWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUlpYCF8X6sNA5z4cJDt9tlCZ7pHHoB+YMU4ITbu5xoNl4okog37wOyouIZ6CAvuZ9F8mFVEOZ+D1ZHhGYw@vger.kernel.org, AJvYcCVmzmSiYNApxRHIIYN4sgpYI6jMOqy7Z5Bd2Zpu4F70hJrnYewZp8rsjw9pBB4FNKwLFPeDFe+r69o4YDZYM9Gn@vger.kernel.org, AJvYcCVoC8WpASFIFNw6UHgCgEA3oMRuDzKgd0tMYrMlWkdCJzjd2w1yMdJewn7eoMM13SWgdnFgtgAXllM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxTttuYyYp3wkemM1GzLUgUJXwTTy+4pMVupwF5HLASSWrbDwq
+	wzX9QlphkDN6sdbqXtIy5kmH6O0+v088Zb6wEo7NCmDJui1iDu/d/jIdO7Cd
+X-Google-Smtp-Source: AGHT+IGBgPyvl5kI21wnDB/KVv5sxzPHbM6/6Kuir7Lxse6lIyMw/Z/TaRG/9tgMZmWq+QJVbcztyQ==
+X-Received: by 2002:a05:651c:2126:b0:2fa:d49d:45ae with SMTP id 38308e7fff4ca-2fb1871e4f5mr19755081fa.8.1728470795507;
+        Wed, 09 Oct 2024 03:46:35 -0700 (PDT)
+Received: from gmail.com (fwdproxy-lla-009.fbsv.net. [2a03:2880:30ff:9::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99446bd93asm522407566b.82.2024.10.09.03.46.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2024 03:46:35 -0700 (PDT)
+Date: Wed, 9 Oct 2024 03:46:32 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Jonathan McDowell <noodles@earth.li>
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Usama Arif <usamaarif642@gmail.com>, linux-efi@vger.kernel.org,
+	kexec@lists.infradead.org, bhe@redhat.com, vgoyal@redhat.com,
+	tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
+	linux-kernel@vger.kernel.org, rmikey@meta.com, gourry@gourry.net,
+	linux-integrity@vger.kernel.org
+Subject: Re: [RFC] efi/tpm: add efi.tpm_log as a reserved region in
+ 820_table_firmware
+Message-ID: <20241009-feathered-polar-manul-ea6e33@leitao>
+References: <d9df5012cd3306afa2eddd5187e643a3bbdfd866.camel@HansenPartnership.com>
+ <20240913-careful-maroon-crab-8a0541@leitao>
+ <5c525fe8f33fffebc0d275086cc7484e309dfae0.camel@HansenPartnership.com>
+ <87o74n5p05.fsf@email.froward.int.ebiederm.org>
+ <CAMj1kXF7EohKai9nyxSnvu32KNdUcNZxxP69Sz-vUZ-6nmvekg@mail.gmail.com>
+ <874j6e482p.fsf@email.froward.int.ebiederm.org>
+ <CAMj1kXEa4DSY8omHGhoTK0U5isvK2G-PJO9go-QK_Mzny=g6ow@mail.gmail.com>
+ <87setx3b8l.fsf@email.froward.int.ebiederm.org>
+ <CAMj1kXHtNrsdsHQWMXrq9jAyzxEJnTW0M7-OEA0kpb3KS2cZ=w@mail.gmail.com>
+ <ZwZIoQobJrltBpTX@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZwZIoQobJrltBpTX@earth.li>
 
-From: Jan Dabros <jsd@semihalf.com>
+On Wed, Oct 09, 2024 at 10:10:57AM +0100, Jonathan McDowell wrote:
+> On Wed, Sep 18, 2024 at 09:36:06AM +0200, Ard Biesheuvel wrote:
+> > On Wed, 18 Sept 2024 at 05:14, Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > Ard Biesheuvel <ardb@kernel.org> writes:
+> > > > On Tue, 17 Sept 2024 at 17:24, Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > >> Ard Biesheuvel <ardb@kernel.org> writes:
+> 
+> > > >> This should not be the kexec-on-panic kernel as that runs in memory
+> > > >> that is reserved solely for it's own use.  So we are talking something
+> > > >> like using kexec as a bootloader.
+> > > >
+> > > > kexec as a bootloader under TPM based measured boot will need to do a
+> > > > lot more than pass the firmware's event log to the next kernel. I'd
+> > > > expect a properly engineered kexec to replace this table entirely, and
+> > > > include the hashes of the assets it has loaded and measured into the
+> > > > respective PCRs.
+> > > >
+> > > > But let's stick to solving the actual issue here, rather than
+> > > > philosophize on how kexec might work in this context.
+> > >
+> > > I am fine with that.  The complaint I had seen was that the table was
+> > > being corrupted and asking how to solve that.  It seems I haven't read
+> > > the part of the conversation where it was made clear that no one wants
+> > > the tpm_log after kexec.
+> > >
+> > It was not made clear, that is why I raised the question. I argued
+> > that the TPM log has limited utility after a kexec, given that we will
+> > be in one of two situations:
+> > - the kexec boot chain cares about the TPM and measured boot, and will
+> > therefore have extended the TPM's PCRs and the TPM log will be out of
+> > sync;
+> > - the kexec boot chain does not care, and so there is no point in
+> > forwarding the TPM log.
+> > 
+> > Perhaps there is a third case where kdump wants to inspect the TPM log
+> > that the crashed kernel accessed? But this is rather speculative.
+> 
+> Generally the kernel/host OS and the firmware are touching different
+> PCRs in the TPM.
+> 
+> The firmware eventlog covers what the firmware/bootloader measured;
+> itself, option ROMs, secure boot details, bootloader, initial
+> kernel/initrd (if we're talking grub as the initial bootloader). These
+> details are not changed by a kexec, and provide the anchor of the
+> software trust chain.
+> 
+> A kexec'd kernel will generally not touch the same PCRs. The primary way
+> I know to carry kexec measurements / logs over to new kernels is using
+> IMA, which will be configured to use one of the later PCRs (default of
+> 10).
 
-Move i2c locking primitives to request_locality and relinquish_locality
-callbacks, what effectively blocks TPM bus for the whole duration of
-logical TPM operation.
+What about in the case where you don't have Grub, but, use the kernel as
+the bootloader, kexecing into the desired kernel?
 
-With this in place, cr50-equipped TPM may be shared with external CPUs -
-assuming that underneath i2c controller driver is aware of this setup
-(see i2c-designware-amdpsp as an example).
+Will the bootloader-kernel touch the same PCRs as GRUB, or it will only
+touch PCRs above 10?
 
-Signed-off-by: Jan Dabros <jsd@semihalf.com>
----
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index 1b1e403383fc..104ef6c7f11c 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -201,8 +201,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t
- 	};
- 	int rc;
- 
--	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
--
- 	/* Prepare for completion interrupt */
- 	tpm_cr50_i2c_enable_tpm_irq(chip);
- 
-@@ -221,7 +219,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t
- 
- out:
- 	tpm_cr50_i2c_disable_tpm_irq(chip);
--	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 
- 	if (rc < 0)
- 		return rc;
-@@ -263,8 +260,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
- 	priv->buf[0] = addr;
- 	memcpy(priv->buf + 1, buffer, len);
- 
--	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
--
- 	/* Prepare for completion interrupt */
- 	tpm_cr50_i2c_enable_tpm_irq(chip);
- 
-@@ -278,7 +273,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
- 
- out:
- 	tpm_cr50_i2c_disable_tpm_irq(chip);
--	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 
- 	if (rc < 0)
- 		return rc;
-@@ -322,6 +316,7 @@ static int tpm_cr50_check_locality(struct tpm_chip *chip, int loc)
-  */
- static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
- {
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
- 	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_PENDING;
- 	u8 addr = TPM_I2C_ACCESS(loc);
- 	u8 buf;
-@@ -329,13 +324,15 @@ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
- 
- 	rc = tpm_cr50_i2c_read(chip, addr, &buf, sizeof(buf));
- 	if (rc < 0)
--		return rc;
-+		goto unlock_out;
- 
- 	if ((buf & mask) == mask) {
- 		buf = TPM_ACCESS_ACTIVE_LOCALITY;
- 		rc = tpm_cr50_i2c_write(chip, addr, &buf, sizeof(buf));
- 	}
- 
-+unlock_out:
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
- 	return rc;
- }
- 
-@@ -350,16 +347,19 @@ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
-  */
- static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
- {
-+	struct i2c_client *client = to_i2c_client(chip->dev.parent);
- 	u8 buf = TPM_ACCESS_REQUEST_USE;
- 	unsigned long stop;
- 	int rc;
- 
-+	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
- 	if (tpm_cr50_check_locality(chip, loc) == loc)
- 		return loc;
- 
- 	rc = tpm_cr50_i2c_write(chip, TPM_I2C_ACCESS(loc), &buf, sizeof(buf));
- 	if (rc < 0)
--		return rc;
-+		goto unlock_out;
- 
- 	stop = jiffies + chip->timeout_a;
- 	do {
-@@ -369,7 +369,11 @@ static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
- 		msleep(TPM_CR50_TIMEOUT_SHORT_MS);
- 	} while (time_before(jiffies, stop));
- 
--	return -ETIMEDOUT;
-+	rc = -ETIMEDOUT;
-+
-+unlock_out:
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+	return rc;
- }
- 
- /**
--- 
-2.47.0.rc0.187.ge670bccf7e-goog
-
+Thanks
+--breno
 
