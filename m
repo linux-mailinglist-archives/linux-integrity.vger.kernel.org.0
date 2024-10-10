@@ -1,95 +1,127 @@
-Return-Path: <linux-integrity+bounces-3776-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3778-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69927997561
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 21:05:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFC3B997AFB
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Oct 2024 05:02:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0733EB24702
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Oct 2024 19:05:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C44751C23E26
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Oct 2024 03:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FDE51E1A30;
-	Wed,  9 Oct 2024 19:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C9E18593B;
+	Thu, 10 Oct 2024 03:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SFRa6cBT"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27D51E1037
-	for <linux-integrity@vger.kernel.org>; Wed,  9 Oct 2024 19:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060672AEFC;
+	Thu, 10 Oct 2024 03:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728500706; cv=none; b=I8mXgnkHE99QzxG5f49X20kXDa7tvQWekAyEBouTmHZEA5+3DIGu030t2qwCIH8vwyUD6Sfgsa7XzcQTRb1NJbX/Gd/R8GuPAbQ7k7SZTsNNy6iFrRnq4H/BimPZ2/sbO6z2EXLfmzSrEzEtmfOgwqadAGBDKren+Rpn07c3n+g=
+	t=1728529339; cv=none; b=QMzzncNS+KzHKBHpnUNiK6WmfGicHN+vDB+cGYl1aABO7y5kOEab215CCEzDoRerdORYFNj/J++SGSdp2COWc2UUzQvMHisJa3hEr/azasHZkPgKUz1EmAdvi1Wvpwm2jQdEMGojQVY9XIzJ2qaUglaDJh4pfy2CgnJRDvvfgKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728500706; c=relaxed/simple;
-	bh=gvl753cmd6Kx9Rt2yRzrebyZBHezlGiPW3rpihqJy7I=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=Tw4cCWWwQPEGsKk+IXM7IXVoC3d4LNf0xhzQwDeEPz1q2e34Qv38Ri9tkSX/DHWVcOMp5gKvP9npXGgtKeUi7K5MX7UrHy+XL4kZj217Rx2B3OxniDczEJxuznwRrucMaF9zaHtyFV4hQm1uN4Zq4uYrr4R9R/deKPzhbVHM+1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a392e9a8a4so2334075ab.3
-        for <linux-integrity@vger.kernel.org>; Wed, 09 Oct 2024 12:05:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728500704; x=1729105504;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u95iXJ49Igp9OpSFm4zZV4sLy87CGukgyLqm7BVOA1s=;
-        b=cl73BNeOYQg/ifDMmdL9cTDkLfYrmN0lwTuF+zc0UPbxT+ij5TPrg1GXG4OUNlr6yv
-         ihvyNIBdCBTjWmyq6brG3lyO1LxeqDRX4B1RWnnCk6q1+ILAtFrCqdNgWzy5XMQ66ZrZ
-         vaA4nVjPXmXX+A6GMriwBu6lFGdhqwxwiC/9cNXfiOvDu2MlUyhgYrqJF69gGszddAWN
-         wHSZwuDi861XSxLeY4Wy9FIxkwcIR7c0no9D5/jkx0tf93VgWcxY14hlfLRDpdLP6Fdv
-         N5dTadxSc1GDE42txn+UzrY+xq7CfZv4Rpot14+Lq+aTxasF1unOTRcj5Vv+XIiqTr3o
-         emSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWWnxhkRAnyjJECI74gdt6mY5XYDK0ubYycLYHEbeRAD/CzOdKXdK732qemUVbXRjmqy9KqMTY8HHHhlMY2vGI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAsIDxySWWE+aeITqfdREsdkZg4tElDzr2foXMxzM+o69SPOzI
-	PfWLECtRO6/ypr3b575DDEdVv5EYz/2lvFif0luRDiDC6SuDgfgZzAmXjeK5UwJF4lFusXcknkJ
-	I7dv6vzF0QGK4NI9iVM2ku2Se/Dcuh6WOQ6zG5+mOJvQ78oN8mhJIBJI=
-X-Google-Smtp-Source: AGHT+IFCPf66BkaFYbH2fymxFQd+vTQzRMgzpdKXDeJtc+D0Seb1RxcQ7Yx9MemFqc+6V2V4zIZssVNRJ7q4oSGwgJPuJ44k0O9q
+	s=arc-20240116; t=1728529339; c=relaxed/simple;
+	bh=4BgPCK+F3LiivdMjYfBfIZJiX2GAwTIMuPjuDQpPFBE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WDLm0zUNUHFrBRF7MY/z8kfN9dWOciTa9vbWCSXomWYUPfZzQKFF09UCU3Xx8YFTNA7rJrpQF/mHcpjqMooJsFP5sDaSKIyKoQ4heFpocv6xYZ1rAd2emk6OQ5TUskf0NJxvlQs0L1ARaf+Yxp6YOgpUFnFpuzTHSmEeMbC6oPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SFRa6cBT; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49A302ie032232;
+	Thu, 10 Oct 2024 03:00:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:subject:from:to:cc:date:in-reply-to:references
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	HtPgc7a33i+KxQeGQwFZGzpWFHyY7NpEQ7Dwhb4PZE8=; b=SFRa6cBTBlbHerBI
+	N53+ZGT7A3S0zNEkkDJDoWgAlvCyR6mB9jFkmU6Hk3FfYvQW4bwHIwAcrmsXVWIj
+	jGW9U2LetZwBhgDTqQGrrEkKHQIlshd1u12IOx27TDYzmUhth7yHGOZ3K1ewIq5i
+	Nt6/PX+WyWsaVM5NnAZeRKD/Y0ImG2udxe0PjA6wQ+VYRi/GnGTxenKQy0wzf7J4
+	tw9UeTkKQwT4K2LxcoLdIe7f2eG7DoeN9ibx/ISki+PzvrGDX5R5soJXAmwjnZFS
+	EwqaXTMp2yeUrtXtkSEn/Ex9LN2NBIxOVLRRjrQKoNGW9iwJcN9T8XO2ERSTn5//
+	zIR+rw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4266mpg00r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 03:00:02 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49A302p2032247;
+	Thu, 10 Oct 2024 03:00:02 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4266mpg00g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 03:00:02 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 499NPiFR022861;
+	Thu, 10 Oct 2024 03:00:01 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 423jg153fu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 10 Oct 2024 03:00:01 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49A301NB40501566
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 10 Oct 2024 03:00:01 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2946B58055;
+	Thu, 10 Oct 2024 03:00:01 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8A52758043;
+	Thu, 10 Oct 2024 03:00:00 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.45.194])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 10 Oct 2024 03:00:00 +0000 (GMT)
+Message-ID: <7a4f5be16e822236901e8cae032b0bee417d5f50.camel@linux.ibm.com>
+Subject: Re: [PATCH] evm: stop avoidably reading i_writecount in
+ evm_file_release
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Mateusz Guzik <mjguzik@gmail.com>, roberto.sassu@huawei.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date: Wed, 09 Oct 2024 23:00:00 -0400
+In-Reply-To: <20240806133607.869394-1-mjguzik@gmail.com>
+References: <20240806133607.869394-1-mjguzik@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2166:b0:3a2:f7b1:2f70 with SMTP id
- e9e14a558f8ab-3a397d2b458mr35000385ab.21.1728500703772; Wed, 09 Oct 2024
- 12:05:03 -0700 (PDT)
-Date: Wed, 09 Oct 2024 12:05:03 -0700
-In-Reply-To: <1a1d106ea8bba8abc1d3f3cd6fdd71d03edcf764.camel@huaweicloud.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6706d3df.050a0220.67064.0051.GAE@google.com>
-Subject: Re: [syzbot] [integrity?] [lsm?] possible deadlock in
- process_measurement (4)
-From: syzbot <syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, dmitry.kasatkin@gmail.com, 
-	ebpqwerty472123@gmail.com, eric.snowberg@oracle.com, hughd@google.com, 
-	jmorris@namei.org, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, paul@paul-moore.com, 
-	roberto.sassu@huawei.com, roberto.sassu@huaweicloud.com, serge@hallyn.com, 
-	stephen.smalley.work@gmail.com, syzkaller-bugs@googlegroups.com, 
-	zohar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: C5HIWflkvMbHnIq5KDRL2uOAhffbOyub
+X-Proofpoint-GUID: LzIkJNG4EN0eC1IZLxcRruNI0sWvK33e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-09_23,2024-10-09_02,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ impostorscore=0 spamscore=0 mlxlogscore=611 phishscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1015
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410100017
 
-Hello,
+On Tue, 2024-08-06 at 15:36 +0200, Mateusz Guzik wrote:
+> The EVM_NEW_FILE flag is unset if the file already existed at the time
+> of open and this can be checked without looking at i_writecount.
+>=20
+> Not accessing it reduces traffic on the cacheline during parallel open
+> of the same file and drop the evm_file_release routine from second place
+> to bottom of the profile.
+>=20
+> Signed-off-by: Mateusz Guzik <mjguzik@gmail.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Sorry for the delay.  It's now queued in next-integrity.
 
-Reported-by: syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com
-Tested-by: syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com
+thanks,
 
-Tested on:
+Mimi
 
-commit:         0438fbb6 ima: Mark concurrent accesses to the iint poi..
-git tree:       https://github.com/robertosassu/linux.git ima-remove-inode-lock-v1
-console output: https://syzkaller.appspot.com/x/log.txt?x=15ead780580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=74c522fa0761706b
-dashboard link: https://syzkaller.appspot.com/bug?extid=1cd571a672400ef3a930
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
 
