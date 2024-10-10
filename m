@@ -1,69 +1,69 @@
-Return-Path: <linux-integrity+bounces-3780-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3781-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E18779981E9
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Oct 2024 11:19:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C5C99981EA
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Oct 2024 11:19:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C8DB1C266C3
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACA151C26738
 	for <lists+linux-integrity@lfdr.de>; Thu, 10 Oct 2024 09:19:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A781BD516;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA4E31BDA8F;
 	Thu, 10 Oct 2024 09:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LS8nEO39"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZN+JoxgW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF64A1BC074
-	for <linux-integrity@vger.kernel.org>; Thu, 10 Oct 2024 09:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51E91A0AF5
+	for <linux-integrity@vger.kernel.org>; Thu, 10 Oct 2024 09:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728551785; cv=none; b=XlazAsxLcbL9E2FUonye09rzS5F2/mi8L9Is4gFgiPmKl01OMrxB5XqmTsx5Auq/S1+BnM8NJIT+zo4KG/ifPwuKs0dvQBk3OJCef8XX1MwpJTj+AaGMkfCLunCKBaqxX0rN3E4M1Q62CNUoSO8tZGEF6rcmXpziV9iiSF3kncE=
+	t=1728551786; cv=none; b=O/t7eN1xt2H3jPKogDmfToEtSHThzCT9jyREcrPyGrKAJi7/dQU8Wdiw6ZRBqT5uND/1WrAxRVAC21o/el/5b5cBMZ0N8qdNw4LZOS8nK3R/1tyGbbSs2Ifk9mXstaf6jsjbUg5U70RhBjERYKJ8H0cG+9AlOjfm92PnNHGaHW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728551785; c=relaxed/simple;
-	bh=4LHtDJcoHmwOzabrQefs8/8qAN2mYOVxAYXJz7dL1io=;
+	s=arc-20240116; t=1728551786; c=relaxed/simple;
+	bh=HwRMVaR6pdueD8o9m+TkshOXgdsenIdO/o32GNQjbTU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EhhBXPG7/BJIiqjpQs7UwBPxc56ycZmp7RIkmBO4jqdBvD17p4aandsE6JUw2v18snsoBdiqB9kI893fuW95A1U/EXKiYtHmLLJlSKX6DsRucO/ICOcxviP1YpQdgDhid1vJobgYq/DKtOoV5vQpFSM0K45KQ9DnkdOZ0Yvd9RU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LS8nEO39; arc=none smtp.client-ip=209.85.128.47
+	 MIME-Version; b=AotKltoa9AVzZLWq4+j0Cjnf30t4fyvM5oLV2ZGGFLmTgd8ixe8T0UgyRBwCHzQ3wYcMv9GwWfkfnUAJdfcdw3Azk08R2Iz1nB1ark8Y2Y0bimo2eDQ2YHVBziRJyQuaLYDxu/R+cKt7In5+133koLGVaiBDJq6HhJ20sAbGDEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ZN+JoxgW; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43116f8a3c9so5437185e9.1
-        for <linux-integrity@vger.kernel.org>; Thu, 10 Oct 2024 02:16:23 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4311ae6426aso327625e9.2
+        for <linux-integrity@vger.kernel.org>; Thu, 10 Oct 2024 02:16:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1728551782; x=1729156582; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1728551783; x=1729156583; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ur+5KZOuYwz2GcZrxY0ybGvyN/X26x/9fV/Il1CpC6s=;
-        b=LS8nEO39rMzlk9Ll9Ol/1OKzgKaNqi9SiCcjNLADZ4LFmhQakbvPayyFNoGFlR4BHK
-         PBtbB/SZeZHtNn4wkSNYLYAQgqj6yIiSAPcnvMKdo35jXpc1NxwmYmwIn1CnCjRaYAsd
-         lHwsCp0seX7qvSOrMaFBMvHPRfe72JnJvEtuw=
+        bh=KHKiW5K4pvs94vg2y7yDOAb8eOHF1LHGauH8VuHu7fE=;
+        b=ZN+JoxgW0JmWiZ5HjyP4Xo+8Uwz7wMOwBUdsn/Tpj2Zl0zOc/2A3rTykhHXx4XQQQU
+         a2n4R9aCw+Tz95qwJ/aMsaXPvyf4H2OMtwsoXo+HUfUNi0RZZ2jMnSPW1KWRdxHpNmkt
+         ZobW4LIVI+HYC/X2PH2D5WJn+Jeybs3Ma75P4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728551782; x=1729156582;
+        d=1e100.net; s=20230601; t=1728551783; x=1729156583;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ur+5KZOuYwz2GcZrxY0ybGvyN/X26x/9fV/Il1CpC6s=;
-        b=ArLguf9ovaOi0R97mh3vG7sTEEF6IqM4fyksd51tSOP8ygtWZf9wajG6DanMzzgUbu
-         lIo14UzW08pJjJKF2sRvk3uCm4BEkhuD5OsOS7pu5pm477O5eufZ+0g/t6fgeCeOUYc/
-         x5Mc599qa0iTTIc4N5Jeblrc9HaeapgpfHIS3yGSVF46hqhUs3ci2EGTmT8ooQfp9hEq
-         erm8IHIiJomXE+M0/T7O3gYnQCXyAmu8mRiIBYII40Efuc77jVHpBiwk9+OnA+y54HBS
-         Y79l20oyAdTc1MrsGIW+tycQZoyk/idvsgaVs9szcMUGzz2ins0fxF/PJsJWAAwuKGF5
-         em1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVe//IlaNKtcKALg/+hT7ussduPVx2IneY3JYlV/mFrgKeSWOCqlm+dk9Mefr7082o2c/bfY0YJjBA5vKRfrRY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVsSkiECS0yhyRUlmsU3TNDtogVU/C4+rd/Sq7CGWbXr+Xipqw
-	Re51LhJNA//pcWwtAbz5zj8gJBLKjLSG8b4kZ2blRCtyToyccEdUstNNmlpQQg==
-X-Google-Smtp-Source: AGHT+IF+59lp4dWvtKMhVOBnpBXo3TAvmw/7SgIOL1xVypM1JQ5DTbBLgKjngVjQifJpxYRIOo/Azg==
-X-Received: by 2002:a05:600c:cc3:b0:426:6e9a:7a1e with SMTP id 5b1f17b1804b1-430d749418amr47695415e9.35.1728551782044;
-        Thu, 10 Oct 2024 02:16:22 -0700 (PDT)
+        bh=KHKiW5K4pvs94vg2y7yDOAb8eOHF1LHGauH8VuHu7fE=;
+        b=qYSP2XltWrSC1Fqf0CyQL7DlJvAXoxpKRvcUB8C6iAMZw9jiHeF5NVXpEIJas9cbxU
+         6j39fZJcWiky5ts2AYjaNa7cYaytvgIlERCf3Etl36pl57hRWbeLY+ggy58gzlRayT0j
+         VyXyUQYSWQ0h9Q4i+jjBmL/ndeAhcpK5woK63ioo7aDvyGrGn9tRdUTonQZ8GOSktBUn
+         krmdL+HQxaWdCFJS3EUiXBAhvA+18GQf/XMvuKOMn/VDVsKnUeFF8die2+xt41hxifGF
+         ksVLiqaXAJRjFv5vA0OgSexcLIAAE2uyEvtS1ovJ73dXgbj63guIryuL/zC7majJwhyU
+         pTpw==
+X-Forwarded-Encrypted: i=1; AJvYcCV91PCuGH0DD3zR7AoCbH4F/cUhQzD7RFQstZAym+zJo2MujUTAVyrIPvUTcA9FAydbhUcyGuozSer5IqvqUac=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPcUiQfWgpg8Hs2ueJrHGHaP1zRDOwlL9cc6nkt3H7qwjcRIxT
+	QbLW8ZRo/8OC5v5l177bS9nth8uBQnZMD2dG4+8z0viD8yi1EUldQ0p1fxLCTA==
+X-Google-Smtp-Source: AGHT+IHSmyL/OD7yBzsupC0J5lTRhj3VuUP8hKO/1bGTMrcnNdYsge05JpsWTQvgpgvgZp/8noxF5A==
+X-Received: by 2002:a05:600c:4f0c:b0:425:7884:6b29 with SMTP id 5b1f17b1804b1-430ccf470a2mr39745755e9.19.1728551783058;
+        Thu, 10 Oct 2024 02:16:23 -0700 (PDT)
 Received: from localhost (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-37d4b9180adsm955406f8f.112.2024.10.10.02.16.21
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-430ccf46e96sm42995885e9.18.2024.10.10.02.16.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 02:16:21 -0700 (PDT)
+        Thu, 10 Oct 2024 02:16:22 -0700 (PDT)
 From: Grzegorz Bernacki <bernacki@chromium.org>
 X-Google-Original-From: Grzegorz Bernacki <bernacki@google.com>
 To: jsd@semihalf.com
@@ -76,11 +76,10 @@ Cc: apronin@google.com,
 	mw@semihalf.com,
 	peterhuewe@gmx.de,
 	rrangel@chromium.org,
-	timvp@google.com,
-	Grzegorz Bernacki <bernacki@chromium.org>
-Subject: [PATCH V3 1/2] char: tpm: cr50: Use generic request/relinquish locality ops
-Date: Thu, 10 Oct 2024 09:15:58 +0000
-Message-ID: <20241010091559.30866-2-bernacki@google.com>
+	timvp@google.com
+Subject: [PATCH V3 2/2] char: tpm: cr50: Move i2c locking to request/relinquish locality ops
+Date: Thu, 10 Oct 2024 09:15:59 +0000
+Message-ID: <20241010091559.30866-3-bernacki@google.com>
 X-Mailer: git-send-email 2.47.0.rc0.187.ge670bccf7e-goog
 In-Reply-To: <20241010091559.30866-1-bernacki@google.com>
 References: <20221101020352.939691-1-jsd@semihalf.com>
@@ -95,294 +94,116 @@ Content-Transfer-Encoding: 8bit
 
 From: Jan Dabros <jsd@semihalf.com>
 
-Instead of using static functions tpm_cr50_request_locality and
-tpm_cr50_release_locality register callbacks from tpm class chip->ops
-created for this purpose.
+Move i2c locking primitives to request_locality and relinquish_locality
+callbacks, what effectively blocks TPM bus for the whole duration of
+logical TPM operation.
 
-Change-Id: Iee45ab1cbb2f4d898fbac12e9632de27f615bfba
+With this in place, cr50-equipped TPM may be shared with external CPUs -
+assuming that underneath i2c controller driver is aware of this setup
+(see i2c-designware-amdpsp as an example).
+
 Signed-off-by: Jan Dabros <jsd@semihalf.com>
-Signed-off-by: Grzegorz Bernacki <bernacki@chromium.org>
 ---
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 94 +++++++++++++++++------------
- 1 file changed, 54 insertions(+), 40 deletions(-)
+ drivers/char/tpm/tpm_tis_i2c_cr50.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index adf22992138e..eed1c296a00c 100644
+index eed1c296a00c..80b0f41ffb5f 100644
 --- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
 +++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -17,6 +17,7 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/bug.h>
- #include <linux/completion.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -35,6 +36,7 @@
- #define TPM_CR50_I2C_MAX_RETRIES	3		/* Max retries due to I2C errors */
- #define TPM_CR50_I2C_RETRY_DELAY_LO	55		/* Min usecs between retries on I2C */
- #define TPM_CR50_I2C_RETRY_DELAY_HI	65		/* Max usecs between retries on I2C */
-+#define TPM_CR50_I2C_DEFAULT_LOC	0
- 
- #define TPM_I2C_ACCESS(l)	(0x0000 | ((l) << 4))
- #define TPM_I2C_STS(l)		(0x0001 | ((l) << 4))
-@@ -285,25 +287,26 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
- }
- 
- /**
-- * tpm_cr50_check_locality() - Verify TPM locality 0 is active.
-+ * tpm_cr50_check_locality() - Verify if required TPM locality is active.
-  * @chip: A TPM chip.
-+ * @loc: Locality to be verified
-  *
-  * Return:
-- * - 0:		Success.
-+ * - loc:	Success.
-  * - -errno:	A POSIX error code.
-  */
--static int tpm_cr50_check_locality(struct tpm_chip *chip)
-+static int tpm_cr50_check_locality(struct tpm_chip *chip, int loc)
- {
- 	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_ACTIVE_LOCALITY;
- 	u8 buf;
+@@ -201,8 +201,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t
+ 	};
  	int rc;
  
--	rc = tpm_cr50_i2c_read(chip, TPM_I2C_ACCESS(0), &buf, sizeof(buf));
-+	rc = tpm_cr50_i2c_read(chip, TPM_I2C_ACCESS(loc), &buf, sizeof(buf));
+-	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
+-
+ 	/* Prepare for completion interrupt */
+ 	tpm_cr50_i2c_enable_tpm_irq(chip);
+ 
+@@ -221,7 +219,6 @@ static int tpm_cr50_i2c_read(struct tpm_chip *chip, u8 addr, u8 *buffer, size_t
+ 
+ out:
+ 	tpm_cr50_i2c_disable_tpm_irq(chip);
+-	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
+ 
  	if (rc < 0)
  		return rc;
+@@ -263,8 +260,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
+ 	priv->buf[0] = addr;
+ 	memcpy(priv->buf + 1, buffer, len);
  
- 	if ((buf & mask) == mask)
--		return 0;
-+		return loc;
+-	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
+-
+ 	/* Prepare for completion interrupt */
+ 	tpm_cr50_i2c_enable_tpm_irq(chip);
  
- 	return -EIO;
- }
-@@ -311,48 +314,57 @@ static int tpm_cr50_check_locality(struct tpm_chip *chip)
- /**
-  * tpm_cr50_release_locality() - Release TPM locality.
-  * @chip:	A TPM chip.
-- * @force:	Flag to force release if set.
-+ * @loc:	Locality to be released
-+ *
-+ * Return:
-+ * - 0:		Success.
-+ * - -errno:	A POSIX error code.
+@@ -278,7 +273,6 @@ static int tpm_cr50_i2c_write(struct tpm_chip *chip, u8 addr, u8 *buffer,
+ 
+ out:
+ 	tpm_cr50_i2c_disable_tpm_irq(chip);
+-	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
+ 
+ 	if (rc < 0)
+ 		return rc;
+@@ -322,6 +316,7 @@ static int tpm_cr50_check_locality(struct tpm_chip *chip, int loc)
   */
--static void tpm_cr50_release_locality(struct tpm_chip *chip, bool force)
-+static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
+ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
  {
++	struct i2c_client *client = to_i2c_client(chip->dev.parent);
  	u8 mask = TPM_ACCESS_VALID | TPM_ACCESS_REQUEST_PENDING;
--	u8 addr = TPM_I2C_ACCESS(0);
-+	u8 addr = TPM_I2C_ACCESS(loc);
+ 	u8 addr = TPM_I2C_ACCESS(loc);
  	u8 buf;
-+	int rc;
+@@ -329,13 +324,15 @@ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
  
--	if (tpm_cr50_i2c_read(chip, addr, &buf, sizeof(buf)) < 0)
--		return;
-+	rc = tpm_cr50_i2c_read(chip, addr, &buf, sizeof(buf));
-+	if (rc < 0)
-+		return rc;
+ 	rc = tpm_cr50_i2c_read(chip, addr, &buf, sizeof(buf));
+ 	if (rc < 0)
+-		return rc;
++		goto unlock_out;
  
--	if (force || (buf & mask) == mask) {
-+	if ((buf & mask) == mask) {
+ 	if ((buf & mask) == mask) {
  		buf = TPM_ACCESS_ACTIVE_LOCALITY;
--		tpm_cr50_i2c_write(chip, addr, &buf, sizeof(buf));
-+		rc = tpm_cr50_i2c_write(chip, addr, &buf, sizeof(buf));
+ 		rc = tpm_cr50_i2c_write(chip, addr, &buf, sizeof(buf));
  	}
-+
-+	return rc;
+ 
++unlock_out:
++	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
+ 	return rc;
  }
  
- /**
-- * tpm_cr50_request_locality() - Request TPM locality 0.
-+ * tpm_cr50_request_locality() - Request TPM locality.
-  * @chip: A TPM chip.
-+ * @loc: Locality to be requested.
-  *
-  * Return:
-- * - 0:		Success.
-+ * - loc:	Success.
-  * - -errno:	A POSIX error code.
+@@ -350,16 +347,19 @@ static int tpm_cr50_release_locality(struct tpm_chip *chip, int loc)
   */
--static int tpm_cr50_request_locality(struct tpm_chip *chip)
-+static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
+ static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
  {
++	struct i2c_client *client = to_i2c_client(chip->dev.parent);
  	u8 buf = TPM_ACCESS_REQUEST_USE;
  	unsigned long stop;
  	int rc;
  
--	if (!tpm_cr50_check_locality(chip))
--		return 0;
-+	if (tpm_cr50_check_locality(chip, loc) == loc)
-+		return loc;
++	i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
++
+ 	if (tpm_cr50_check_locality(chip, loc) == loc)
+ 		return loc;
  
--	rc = tpm_cr50_i2c_write(chip, TPM_I2C_ACCESS(0), &buf, sizeof(buf));
-+	rc = tpm_cr50_i2c_write(chip, TPM_I2C_ACCESS(loc), &buf, sizeof(buf));
+ 	rc = tpm_cr50_i2c_write(chip, TPM_I2C_ACCESS(loc), &buf, sizeof(buf));
  	if (rc < 0)
- 		return rc;
+-		return rc;
++		goto unlock_out;
  
  	stop = jiffies + chip->timeout_a;
  	do {
--		if (!tpm_cr50_check_locality(chip))
--			return 0;
-+		if (tpm_cr50_check_locality(chip, loc) == loc)
-+			return loc;
- 
+@@ -369,7 +369,11 @@ static int tpm_cr50_request_locality(struct tpm_chip *chip, int loc)
  		msleep(TPM_CR50_TIMEOUT_SHORT_MS);
  	} while (time_before(jiffies, stop));
-@@ -373,7 +385,7 @@ static u8 tpm_cr50_i2c_tis_status(struct tpm_chip *chip)
- {
- 	u8 buf[4];
  
--	if (tpm_cr50_i2c_read(chip, TPM_I2C_STS(0), buf, sizeof(buf)) < 0)
-+	if (tpm_cr50_i2c_read(chip, TPM_I2C_STS(chip->locality), buf, sizeof(buf)) < 0)
- 		return 0;
- 
- 	return buf[0];
-@@ -389,7 +401,7 @@ static void tpm_cr50_i2c_tis_set_ready(struct tpm_chip *chip)
- {
- 	u8 buf[4] = { TPM_STS_COMMAND_READY };
- 
--	tpm_cr50_i2c_write(chip, TPM_I2C_STS(0), buf, sizeof(buf));
-+	tpm_cr50_i2c_write(chip, TPM_I2C_STS(chip->locality), buf, sizeof(buf));
- 	msleep(TPM_CR50_TIMEOUT_SHORT_MS);
- }
- 
-@@ -419,7 +431,7 @@ static int tpm_cr50_i2c_get_burst_and_status(struct tpm_chip *chip, u8 mask,
- 	stop = jiffies + chip->timeout_b;
- 
- 	do {
--		if (tpm_cr50_i2c_read(chip, TPM_I2C_STS(0), buf, sizeof(buf)) < 0) {
-+		if (tpm_cr50_i2c_read(chip, TPM_I2C_STS(chip->locality), buf, sizeof(buf)) < 0) {
- 			msleep(TPM_CR50_TIMEOUT_SHORT_MS);
- 			continue;
- 		}
-@@ -453,7 +465,7 @@ static int tpm_cr50_i2c_tis_recv(struct tpm_chip *chip, u8 *buf, size_t buf_len)
- 
- 	u8 mask = TPM_STS_VALID | TPM_STS_DATA_AVAIL;
- 	size_t burstcnt, cur, len, expected;
--	u8 addr = TPM_I2C_DATA_FIFO(0);
-+	u8 addr = TPM_I2C_DATA_FIFO(chip->locality);
- 	u32 status;
- 	int rc;
- 
-@@ -515,7 +527,6 @@ static int tpm_cr50_i2c_tis_recv(struct tpm_chip *chip, u8 *buf, size_t buf_len)
- 		goto out_err;
- 	}
- 
--	tpm_cr50_release_locality(chip, false);
- 	return cur;
- 
- out_err:
-@@ -523,7 +534,6 @@ static int tpm_cr50_i2c_tis_recv(struct tpm_chip *chip, u8 *buf, size_t buf_len)
- 	if (tpm_cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)
- 		tpm_cr50_i2c_tis_set_ready(chip);
- 
--	tpm_cr50_release_locality(chip, false);
- 	return rc;
- }
- 
-@@ -545,10 +555,6 @@ static int tpm_cr50_i2c_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
- 	u32 status;
- 	int rc;
- 
--	rc = tpm_cr50_request_locality(chip);
--	if (rc < 0)
--		return rc;
--
- 	/* Wait until TPM is ready for a command */
- 	stop = jiffies + chip->timeout_b;
- 	while (!(tpm_cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)) {
-@@ -577,7 +583,8 @@ static int tpm_cr50_i2c_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
- 		 * that is inserted by tpm_cr50_i2c_write()
- 		 */
- 		limit = min_t(size_t, burstcnt - 1, len);
--		rc = tpm_cr50_i2c_write(chip, TPM_I2C_DATA_FIFO(0), &buf[sent], limit);
-+		rc = tpm_cr50_i2c_write(chip, TPM_I2C_DATA_FIFO(chip->locality),
-+					&buf[sent], limit);
- 		if (rc < 0) {
- 			dev_err(&chip->dev, "Write failed\n");
- 			goto out_err;
-@@ -598,7 +605,7 @@ static int tpm_cr50_i2c_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
- 	}
- 
- 	/* Start the TPM command */
--	rc = tpm_cr50_i2c_write(chip, TPM_I2C_STS(0), tpm_go,
-+	rc = tpm_cr50_i2c_write(chip, TPM_I2C_STS(chip->locality), tpm_go,
- 				sizeof(tpm_go));
- 	if (rc < 0) {
- 		dev_err(&chip->dev, "Start command failed\n");
-@@ -611,7 +618,6 @@ static int tpm_cr50_i2c_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
- 	if (tpm_cr50_i2c_tis_status(chip) & TPM_STS_COMMAND_READY)
- 		tpm_cr50_i2c_tis_set_ready(chip);
- 
--	tpm_cr50_release_locality(chip, false);
- 	return rc;
- }
- 
-@@ -650,6 +656,8 @@ static const struct tpm_class_ops cr50_i2c = {
- 	.req_complete_mask = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
- 	.req_complete_val = TPM_STS_DATA_AVAIL | TPM_STS_VALID,
- 	.req_canceled = &tpm_cr50_i2c_req_canceled,
-+	.request_locality = &tpm_cr50_request_locality,
-+	.relinquish_locality = &tpm_cr50_release_locality,
- };
- 
- #ifdef CONFIG_ACPI
-@@ -684,6 +692,7 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
- 	u32 vendor;
- 	u8 buf[4];
- 	int rc;
-+	int loc;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
-@@ -726,24 +735,30 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
- 			 TPM_CR50_TIMEOUT_NOIRQ_MS);
- 	}
- 
--	rc = tpm_cr50_request_locality(chip);
--	if (rc < 0) {
-+	loc = tpm_cr50_request_locality(chip, TPM_CR50_I2C_DEFAULT_LOC);
-+	if (loc < 0) {
- 		dev_err(dev, "Could not request locality\n");
--		return rc;
-+		return loc;
- 	}
- 
- 	/* Read four bytes from DID_VID register */
--	rc = tpm_cr50_i2c_read(chip, TPM_I2C_DID_VID(0), buf, sizeof(buf));
-+	rc = tpm_cr50_i2c_read(chip, TPM_I2C_DID_VID(loc), buf, sizeof(buf));
- 	if (rc < 0) {
- 		dev_err(dev, "Could not read vendor id\n");
--		tpm_cr50_release_locality(chip, true);
-+		if (tpm_cr50_release_locality(chip, loc))
-+			dev_err(dev, "Could not release locality\n");
-+		return rc;
-+	}
+-	return -ETIMEDOUT;
++	rc = -ETIMEDOUT;
 +
-+	rc = tpm_cr50_release_locality(chip, loc);
-+	if (rc) {
-+		dev_err(dev, "Could not release locality\n");
- 		return rc;
- 	}
- 
- 	vendor = le32_to_cpup((__le32 *)buf);
- 	if (vendor != TPM_CR50_I2C_DID_VID && vendor != TPM_TI50_I2C_DID_VID) {
- 		dev_err(dev, "Vendor ID did not match! ID was %08x\n", vendor);
--		tpm_cr50_release_locality(chip, true);
- 		return -ENODEV;
- 	}
- 
-@@ -772,7 +787,6 @@ static void tpm_cr50_i2c_remove(struct i2c_client *client)
- 	}
- 
- 	tpm_chip_unregister(chip);
--	tpm_cr50_release_locality(chip, true);
++unlock_out:
++	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
++	return rc;
  }
  
- static SIMPLE_DEV_PM_OPS(cr50_i2c_pm, tpm_pm_suspend, tpm_pm_resume);
+ /**
 -- 
 2.47.0.rc0.187.ge670bccf7e-goog
 
