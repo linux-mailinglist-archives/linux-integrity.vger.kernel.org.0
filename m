@@ -1,752 +1,189 @@
-Return-Path: <linux-integrity+bounces-3794-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3795-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48AE099ABA4
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Oct 2024 20:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A66B199ACA7
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Oct 2024 21:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C98F71F22CDD
-	for <lists+linux-integrity@lfdr.de>; Fri, 11 Oct 2024 18:56:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35BD31F227CF
+	for <lists+linux-integrity@lfdr.de>; Fri, 11 Oct 2024 19:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 806421D0414;
-	Fri, 11 Oct 2024 18:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA1111CF2BF;
+	Fri, 11 Oct 2024 19:31:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="CJYkvWVe"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FODmMc0x"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F951CCB31
-	for <linux-integrity@vger.kernel.org>; Fri, 11 Oct 2024 18:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE778BE5;
+	Fri, 11 Oct 2024 19:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728672871; cv=none; b=VSAqb3Gd+Jk4V3cmBm4zCcXlF52nOeaGDevHPA1EJdR91CnJR1i0LE40q8n2p2DOAqe5ZrtR9ZYxmfQYRu3DYwZeEDYVAHuUl0YNovjVu7HPUoaSb2kp/bW6eQt9IDsr3U7zpqmklEX0GAAi3mCc6fhhjtbyHXGiV34l1fq5l2s=
+	t=1728675073; cv=none; b=fbPEv2zLCL2Xwy6g33TkjLpsAeIutSMV0nGakgtAg1nCX8e8aYNrq4xFAuglGo2IW5drK2lgUd1NETOO/mW/NCx+7gGxtgmjCaSETgdB6tJidrm3UttK5rjA4HbD1Nzc2tFfEajMq0B0deeswKd1DKMkenmEDw3v0wDsogQMBIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728672871; c=relaxed/simple;
-	bh=2XWtejVXrR6l4R/h50rDRcbu0QtoNEuLf+Cfu3de6no=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OCegtkLiCkyJPevALgKxoivx8Sz17z98S9nfsV/tH6ffi+u2pYVeAdnGXdQT8Qd05sGtsOdOLcsxaar8oYl6o99Hmev1wSN084mWj1jb9lFI/juJ5IbxX1N3EkYQf52c4FlCRItK0EQwtBXLYnHsX4fXPDnP+FOgD5s9QC0pHfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=CJYkvWVe; arc=none smtp.client-ip=185.125.25.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4XQFsq2sZczJl9;
-	Fri, 11 Oct 2024 20:44:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1728672287;
-	bh=z8VzaCq/UYqHGlvynkVHXwnIimRiVgUcmF7oZT7reaY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CJYkvWVeMuesQV6WOA0R0mE+p0jTFhgYjhTGQiGQkAluRiv0kT0I2/2S1BotwDqwK
-	 miGpk2chDBmMCYu2fP77s6T/KTZZhvCTqHQ81RFY1i7LromL5bd0iYeYnhuv8JI52l
-	 wbYwO0UogFZHEts+aBodOWslqfyM71TebaiaCwh4=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4XQFsn4ndzz447;
-	Fri, 11 Oct 2024 20:44:45 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <serge@hallyn.com>,
-	Theodore Ts'o <tytso@mit.edu>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-	Alejandro Colomar <alx@kernel.org>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Christian Heimes <christian@python.org>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Elliott Hughes <enh@google.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Eric Chiang <ericchiang@google.com>,
-	Fan Wu <wufan@linux.microsoft.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Jan Kara <jack@suse.cz>,
-	Jann Horn <jannh@google.com>,
-	Jeff Xu <jeffxu@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jordan R Abrahams <ajordanr@google.com>,
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-	Luca Boccassi <bluca@debian.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Matthew Garrett <mjg59@srcf.ucam.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Miklos Szeredi <mszeredi@redhat.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
-	Scott Shell <scottsh@microsoft.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Steve Dower <steve.dower@python.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-	Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-	Xiaoming Ni <nixiaoming@huawei.com>,
-	Yin Fengwei <fengwei.yin@intel.com>,
-	kernel-hardening@lists.openwall.com,
-	linux-api@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v20 6/6] samples/check-exec: Add an enlighten "inc" interpreter and 28 tests
-Date: Fri, 11 Oct 2024 20:44:22 +0200
-Message-ID: <20241011184422.977903-7-mic@digikod.net>
-In-Reply-To: <20241011184422.977903-1-mic@digikod.net>
-References: <20241011184422.977903-1-mic@digikod.net>
+	s=arc-20240116; t=1728675073; c=relaxed/simple;
+	bh=IwlxQ2sJ1Qhcz7dsBEssEsmbqqW/oITaZu+mKURma8M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=P5DbXkq+rVdkgSjtjk0NgVC/8WlOvYREInqdCeSLDS5l6YCM5XBPezZUzhnsA9WF2RNYu5SbIXFS/aGewUDMrq1aaMVHqo4aHyrQoCdnJpChx1ME44ob/HRUGRRJKKDsbyyGZOWOzmLQvjLon8PxWgR5m4JByYMGJxZ2f662pOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FODmMc0x; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49BITfCd010597;
+	Fri, 11 Oct 2024 19:30:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:subject:from:to:cc:date:in-reply-to:references
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	zQJWf5VdzOpF2EYAGjsfIFpAdx/RWd5wbhX21JW8MXE=; b=FODmMc0xS+voq/fK
+	meBquyIn0m69IwgC2GeULzgM22MQHFpM3aoS3kPrc2IRMQstUDHne4RUksEt3VnQ
+	vKZjhOPZyOPenBPJ/zKgMnZ0fUDbsErjV7F+Gwfc4CrBYweoYeMABKWwvOs3s13r
+	Y10gZOIQPtA3w+t/NQMITkZpxZ+wPWB4wJlHGrK6goAGQj6aoonb9TKiCH5EV5Sl
+	iKyy2UUEIhwJGT8siOjN3GaOr3euCmbyfuyjLMQXyYWvzoz/akl0ahO8XzUoriMA
+	+WU90vlcEjWUgX0hzg+KOgMimAi/+ztA2j+7VAG1dAqtpWDUaezJsfn2c+r31I3/
+	4+cPIg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4279bm88jf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Oct 2024 19:30:42 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49BJUffb006524;
+	Fri, 11 Oct 2024 19:30:42 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4279bm88j6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Oct 2024 19:30:41 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49BHECnT011512;
+	Fri, 11 Oct 2024 19:30:40 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 423g5y7ehc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Oct 2024 19:30:40 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49BJUeoj15401476
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 11 Oct 2024 19:30:40 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E803158061;
+	Fri, 11 Oct 2024 19:30:39 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 276FA58056;
+	Fri, 11 Oct 2024 19:30:39 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.41.228])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 11 Oct 2024 19:30:39 +0000 (GMT)
+Message-ID: <92c528d8848f78869888a746643e1cf2969df62a.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/3] ima: Ensure lock is held when setting iint pointer
+ in inode security blob
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Paul Moore
+	 <paul@paul-moore.com>
+Cc: dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, ebpqwerty472123@gmail.com,
+        Roberto Sassu
+	 <roberto.sassu@huawei.com>
+Date: Fri, 11 Oct 2024 15:30:38 -0400
+In-Reply-To: <69ed92fde951b20a9b976d48803fe9b5daaa9eea.camel@huaweicloud.com>
+References: <20241008165732.2603647-1-roberto.sassu@huaweicloud.com>
+	 <20241008165732.2603647-2-roberto.sassu@huaweicloud.com>
+	 <CAHC9VhRkMwLqVFfWMvMOJ6x4UNUK=C_cMVW7Op9icz28MMDYdQ@mail.gmail.com>
+	 <69ed92fde951b20a9b976d48803fe9b5daaa9eea.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DZxyYUTIR8LDQnwha_3KegIQQZdtiSaE
+X-Proofpoint-GUID: 1T-MaBMKiaPGlCnU0zovXnFAFQ1k5Ai9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-11_16,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 clxscore=1011 mlxscore=0
+ spamscore=0 mlxlogscore=518 bulkscore=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410110132
 
-Add a very simple script interpreter called "inc" that can evaluate two
-different commands (one per line):
-- "?" to initialize a counter from user's input;
-- "+" to increment the counter (which is set to 0 by default).
+On Wed, 2024-10-09 at 17:43 +0200, Roberto Sassu wrote:
+> On Wed, 2024-10-09 at 11:41 -0400, Paul Moore wrote:
+> > On Tue, Oct 8, 2024 at 12:57=E2=80=AFPM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > >=20
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > >=20
+> > > IMA stores a pointer of the ima_iint_cache structure, containing inte=
+grity
+> > > metadata, in the inode security blob. However, check and assignment o=
+f this
+> > > pointer is not atomic, and it might happen that two tasks both see th=
+at the
+> > > iint pointer is NULL and try to set it, causing a memory leak.
+> > >=20
+> > > Ensure that the iint check and assignment is guarded, by adding a loc=
+kdep
+> > > assertion in ima_inode_get().
+> > >=20
+> > > Consequently, guard the remaining ima_inode_get() calls, in
+> > > ima_post_create_tmpfile() and ima_post_path_mknod(), to avoid the loc=
+kdep
+> > > warnings.
+> > >=20
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > ---
+> > >  security/integrity/ima/ima_iint.c |  5 +++++
+> > >  security/integrity/ima/ima_main.c | 14 ++++++++++++--
+> > >  2 files changed, 17 insertions(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/i=
+ma/ima_iint.c
+> > > index c176fd0faae7..fe676ccec32f 100644
+> > > --- a/security/integrity/ima/ima_iint.c
+> > > +++ b/security/integrity/ima/ima_iint.c
+> > > @@ -87,8 +87,13 @@ static void ima_iint_free(struct ima_iint_cache *i=
+int)
+> > >   */
+> > >  struct ima_iint_cache *ima_inode_get(struct inode *inode)
+> > >  {
+> > > +       struct ima_iint_cache_lock *iint_lock;
+> > >         struct ima_iint_cache *iint;
+> > >=20
+> > > +       iint_lock =3D ima_inode_security(inode->i_security);
+> > > +       if (iint_lock)
+> > > +               lockdep_assert_held(&iint_lock->mutex);
+> > > +
+> > >         iint =3D ima_iint_find(inode);
+> > >         if (iint)
+> > >                 return iint;
+> >=20
+> > Can you avoid the ima_iint_find() call here and just do the following?
+> >=20
+> >   /* not sure if you need to check !iint_lock or not? */
+> >   if (!iint_lock)
+> >     return NULL;
+> >   iint =3D iint_lock->iint;
+> >   if (!iint)
+> >     return NULL;
+>=20
+> Yes, I also like it much more.
 
-It is enlighten to only interpret executable files according to AT_CHECK
-and the related securebits:
+Yes, testing iint_lock and then iint_lock->iint should be fine, but the log=
+ic
+needs to be inverted.  ima_inode_get() should return the existing iint, if =
+it
+exists, or allocate the memory.
 
-  # Executing a script with RESTRICT_FILE is only allowed if the script
-  # is exectuable:
-  ./set-exec -f -- ./inc script-exec.inc # Allowed
-  ./set-exec -f -- ./inc script-noexec.inc # Denied
+Mimi
 
-  # Executing stdin with DENY_INTERACTIVE is only allowed if stdin is an
-  # executable regular file:
-  ./set-exec -i -- ./inc -i < script-exec.inc # Allowed
-  ./set-exec -i -- ./inc -i < script-noexec.inc # Denied
-
-  # However, a pipe is not executable and it is then denied:
-  cat script-noexec.inc | ./set-exec -i -- ./inc -i # Denied
-
-  # Executing raw data (e.g. command argument) with DENY_INTERACTIVE is
-  # always denied.
-  ./set-exec -i -- ./inc -c "+" # Denied
-  ./inc -c "$(<script-ask.inc)" # Allowed
-
-  # To directly execute a script, we can update $PATH (used by `env`):
-  PATH="${PATH}:." ./script-exec.inc
-
-  # To execute several commands passed as argument:
-
-Add a complete test suite to check the script interpreter against all
-possible execution cases:
-
-  make TARGETS=exec kselftest-install
-  ./tools/testing/selftests/kselftest_install/run_kselftest.sh
-
-Fix ktap_helpers.sh to gracefully ignore optional argument.
-
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: Serge Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241011184422.977903-7-mic@digikod.net
----
-
-Changes since v19:
-* New patch.
----
- samples/Kconfig                               |   3 +-
- samples/check-exec/.gitignore                 |   1 +
- samples/check-exec/Makefile                   |   1 +
- samples/check-exec/inc.c                      | 204 +++++++++++++++++
- samples/check-exec/run-script-ask.inc         |   8 +
- samples/check-exec/script-ask.inc             |   4 +
- samples/check-exec/script-exec.inc            |   3 +
- samples/check-exec/script-noexec.inc          |   3 +
- tools/testing/selftests/exec/.gitignore       |   2 +
- tools/testing/selftests/exec/Makefile         |  14 +-
- .../selftests/exec/check-exec-tests.sh        | 205 ++++++++++++++++++
- .../selftests/kselftest/ktap_helpers.sh       |   2 +-
- 12 files changed, 446 insertions(+), 4 deletions(-)
- create mode 100644 samples/check-exec/inc.c
- create mode 100755 samples/check-exec/run-script-ask.inc
- create mode 100755 samples/check-exec/script-ask.inc
- create mode 100755 samples/check-exec/script-exec.inc
- create mode 100644 samples/check-exec/script-noexec.inc
- create mode 100755 tools/testing/selftests/exec/check-exec-tests.sh
-
-diff --git a/samples/Kconfig b/samples/Kconfig
-index efa28ceadc42..0128cc68deed 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -296,7 +296,8 @@ config SAMPLE_CHECK_EXEC
- 	depends on CC_CAN_LINK && HEADERS_INSTALL
- 	help
- 	  Build a tool to easily configure SECBIT_EXEC_RESTRICT_FILE and
--	  SECBIT_EXEC_DENY_INTERACTIVE.
-+	  SECBIT_EXEC_DENY_INTERACTIVE, and a simple script interpreter to
-+	  demonstrate how they should be used with execveat(2) + AT_CHECK.
- 
- source "samples/rust/Kconfig"
- 
-diff --git a/samples/check-exec/.gitignore b/samples/check-exec/.gitignore
-index 3f8119112ccf..cd759a19dacd 100644
---- a/samples/check-exec/.gitignore
-+++ b/samples/check-exec/.gitignore
-@@ -1 +1,2 @@
-+/inc
- /set-exec
-diff --git a/samples/check-exec/Makefile b/samples/check-exec/Makefile
-index d9f976e3ff98..c4f08ad0f8e3 100644
---- a/samples/check-exec/Makefile
-+++ b/samples/check-exec/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: BSD-3-Clause
- 
- userprogs-always-y := \
-+	inc \
- 	set-exec
- 
- userccflags += -I usr/include
-diff --git a/samples/check-exec/inc.c b/samples/check-exec/inc.c
-new file mode 100644
-index 000000000000..0710a860f360
---- /dev/null
-+++ b/samples/check-exec/inc.c
-@@ -0,0 +1,204 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Very simple script interpreter that can evaluate two different commands (one
-+ * per line):
-+ * - "?" to initialize a counter from user's input;
-+ * - "+" to increment the counter (which is set to 0 by default).
-+ *
-+ * See tools/testing/selftests/exec/check-exec-tests.sh
-+ *
-+ * Copyright © 2024 Microsoft Corporation
-+ */
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <linux/fcntl.h>
-+#include <linux/prctl.h>
-+#include <linux/securebits.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/prctl.h>
-+#include <unistd.h>
-+
-+/* Returns 1 on error, 0 otherwise. */
-+static int interpret_buffer(char *buffer, size_t buffer_size)
-+{
-+	char *line, *saveptr = NULL;
-+	long long number = 0;
-+
-+	/* Each command is the first character of a line. */
-+	saveptr = NULL;
-+	line = strtok_r(buffer, "\n", &saveptr);
-+	while (line) {
-+		if (*line != '#' && strlen(line) != 1) {
-+			fprintf(stderr, "# ERROR: Unknown string\n");
-+			return 1;
-+		}
-+		switch (*line) {
-+		case '#':
-+			/* Skips shebang and comments. */
-+			break;
-+		case '+':
-+			/* Increments and prints the number. */
-+			number++;
-+			printf("%lld\n", number);
-+			break;
-+		case '?':
-+			/* Reads integer from stdin. */
-+			fprintf(stderr, "> Enter new number: \n");
-+			if (scanf("%lld", &number) != 1) {
-+				fprintf(stderr,
-+					"# WARNING: Failed to read number from stdin\n");
-+			}
-+			break;
-+		default:
-+			fprintf(stderr, "# ERROR: Unknown character '%c'\n",
-+				*line);
-+			return 1;
-+		}
-+		line = strtok_r(NULL, "\n", &saveptr);
-+	}
-+	return 0;
-+}
-+
-+/* Returns 1 on error, 0 otherwise. */
-+static int interpret_stream(FILE *script, char *const script_name,
-+			    char *const *const envp, const bool restrict_stream)
-+{
-+	int err;
-+	char *const script_argv[] = { script_name, NULL };
-+	char buf[128] = {};
-+	size_t buf_size = sizeof(buf);
-+
-+	/*
-+	 * We pass a valid argv and envp to the kernel to emulate a native
-+	 * script execution.  We must use the script file descriptor instead of
-+	 * the script path name to avoid race conditions.
-+	 */
-+	err = execveat(fileno(script), "", script_argv, envp,
-+		       AT_EMPTY_PATH | AT_CHECK);
-+	if (err && restrict_stream) {
-+		perror("ERROR: Script execution check");
-+		return 1;
-+	}
-+
-+	/* Reads script. */
-+	buf_size = fread(buf, 1, buf_size - 1, script);
-+	return interpret_buffer(buf, buf_size);
-+}
-+
-+static void print_usage(const char *argv0)
-+{
-+	fprintf(stderr, "usage: %s <script.inc> | -i | -c <command>\n\n",
-+		argv0);
-+	fprintf(stderr, "Example:\n");
-+	fprintf(stderr, "  ./set-exec -fi -- ./inc -i < script-exec.inc\n");
-+}
-+
-+int main(const int argc, char *const argv[], char *const *const envp)
-+{
-+	int opt;
-+	char *cmd = NULL;
-+	char *script_name = NULL;
-+	bool interpret_stdin = false;
-+	FILE *script_file = NULL;
-+	int secbits;
-+	bool deny_interactive, restrict_file;
-+	size_t arg_nb;
-+
-+	secbits = prctl(PR_GET_SECUREBITS);
-+	if (secbits == -1) {
-+		/*
-+		 * This should never happen, except with a buggy seccomp
-+		 * filter.
-+		 */
-+		perror("ERROR: Failed to get securebits");
-+		return 1;
-+	}
-+
-+	deny_interactive = !!(secbits & SECBIT_EXEC_DENY_INTERACTIVE);
-+	restrict_file = !!(secbits & SECBIT_EXEC_RESTRICT_FILE);
-+
-+	while ((opt = getopt(argc, argv, "c:i")) != -1) {
-+		switch (opt) {
-+		case 'c':
-+			if (cmd) {
-+				fprintf(stderr, "ERROR: Command already set");
-+				return 1;
-+			}
-+			cmd = optarg;
-+			break;
-+		case 'i':
-+			interpret_stdin = true;
-+			break;
-+		default:
-+			print_usage(argv[0]);
-+			return 1;
-+		}
-+	}
-+
-+	/* Checks that only one argument is used, or read stdin. */
-+	arg_nb = !!cmd + !!interpret_stdin;
-+	if (arg_nb == 0 && argc == 2) {
-+		script_name = argv[1];
-+	} else if (arg_nb != 1) {
-+		print_usage(argv[0]);
-+		return 1;
-+	}
-+
-+	if (cmd) {
-+		/*
-+		 * Other kind of interactive interpretations should be denied
-+		 * as well (e.g. CLI arguments passing script snippets,
-+		 * environment variables interpreted as script).  However, any
-+		 * way to pass script files should only be restricted according
-+		 * to restrict_file.
-+		 */
-+		if (deny_interactive) {
-+			fprintf(stderr,
-+				"ERROR: Interactive interpretation denied.\n");
-+			return 1;
-+		}
-+
-+		return interpret_buffer(cmd, strlen(cmd));
-+	}
-+
-+	if (interpret_stdin && !script_name) {
-+		script_file = stdin;
-+		/*
-+		 * As for any execve(2) call, this path may be logged by the
-+		 * kernel.
-+		 */
-+		script_name = "/proc/self/fd/0";
-+		/*
-+		 * When stdin is used, it can point to a regular file or a
-+		 * pipe.  Restrict stdin execution according to
-+		 * SECBIT_EXEC_DENY_INTERACTIVE but always allow executable
-+		 * files (which are not considered as interactive inputs).
-+		 */
-+		return interpret_stream(script_file, script_name, envp,
-+					deny_interactive);
-+	} else if (script_name && !interpret_stdin) {
-+		/*
-+		 * In this sample, we don't pass any argument to scripts, but
-+		 * otherwise we would have to forge an argv with such
-+		 * arguments.
-+		 */
-+		script_file = fopen(script_name, "r");
-+		if (!script_file) {
-+			perror("ERROR: Failed to open script");
-+			return 1;
-+		}
-+		/*
-+		 * Restricts file execution according to
-+		 * SECBIT_EXEC_RESTRICT_FILE.
-+		 */
-+		return interpret_stream(script_file, script_name, envp,
-+					restrict_file);
-+	}
-+
-+	print_usage(argv[0]);
-+	return 1;
-+}
-diff --git a/samples/check-exec/run-script-ask.inc b/samples/check-exec/run-script-ask.inc
-new file mode 100755
-index 000000000000..3ea3e15fbd5a
---- /dev/null
-+++ b/samples/check-exec/run-script-ask.inc
-@@ -0,0 +1,8 @@
-+#!/usr/bin/env sh
-+
-+DIR="$(dirname -- "$0")"
-+
-+PATH="${PATH}:${DIR}"
-+
-+set -x
-+"${DIR}/script-ask.inc"
-diff --git a/samples/check-exec/script-ask.inc b/samples/check-exec/script-ask.inc
-new file mode 100755
-index 000000000000..f48252ab07c1
---- /dev/null
-+++ b/samples/check-exec/script-ask.inc
-@@ -0,0 +1,4 @@
-+#!/usr/bin/env inc
-+
-+?
-++
-diff --git a/samples/check-exec/script-exec.inc b/samples/check-exec/script-exec.inc
-new file mode 100755
-index 000000000000..525e958e1c20
---- /dev/null
-+++ b/samples/check-exec/script-exec.inc
-@@ -0,0 +1,3 @@
-+#!/usr/bin/env inc
-+
-++
-diff --git a/samples/check-exec/script-noexec.inc b/samples/check-exec/script-noexec.inc
-new file mode 100644
-index 000000000000..525e958e1c20
---- /dev/null
-+++ b/samples/check-exec/script-noexec.inc
-@@ -0,0 +1,3 @@
-+#!/usr/bin/env inc
-+
-++
-diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
-index a32c63bb4df1..7f3d1ae762ec 100644
---- a/tools/testing/selftests/exec/.gitignore
-+++ b/tools/testing/selftests/exec/.gitignore
-@@ -11,9 +11,11 @@ non-regular
- null-argv
- /check-exec
- /false
-+/inc
- /load_address.*
- !load_address.c
- /recursion-depth
-+/set-exec
- xxxxxxxx*
- pipe
- S_I*.test
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index 8713d1c862ae..45a3cfc435cf 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -10,9 +10,9 @@ ALIGN_PIES        := $(patsubst %,load_address.%,$(ALIGNS))
- ALIGN_STATIC_PIES := $(patsubst %,load_address.static.%,$(ALIGNS))
- ALIGNMENT_TESTS   := $(ALIGN_PIES) $(ALIGN_STATIC_PIES)
- 
--TEST_PROGS := binfmt_script.py
-+TEST_PROGS := binfmt_script.py check-exec-tests.sh
- TEST_GEN_PROGS := execveat non-regular $(ALIGNMENT_TESTS)
--TEST_GEN_PROGS_EXTENDED := false
-+TEST_GEN_PROGS_EXTENDED := false inc set-exec script-exec.inc script-noexec.inc
- TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
- # Makefile is a run-time dependency, since it's accessed by the execveat test
- TEST_FILES := Makefile
-@@ -26,6 +26,8 @@ EXTRA_CLEAN := $(OUTPUT)/subdir.moved $(OUTPUT)/execveat.moved $(OUTPUT)/xxxxx*
- 
- include ../lib.mk
- 
-+CHECK_EXEC_SAMPLES := $(top_srcdir)/samples/check-exec
-+
- $(OUTPUT)/subdir:
- 	mkdir -p $@
- $(OUTPUT)/script: Makefile
-@@ -45,3 +47,11 @@ $(OUTPUT)/load_address.static.0x%: load_address.c
- 		-fPIE -static-pie $< -o $@
- $(OUTPUT)/false: false.c
- 	$(CC) $(CFLAGS) $(LDFLAGS) -static $< -o $@
-+$(OUTPUT)/inc: $(CHECK_EXEC_SAMPLES)/inc.c
-+	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
-+$(OUTPUT)/set-exec: $(CHECK_EXEC_SAMPLES)/set-exec.c
-+	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
-+$(OUTPUT)/script-exec.inc: $(CHECK_EXEC_SAMPLES)/script-exec.inc
-+	cp $< $@
-+$(OUTPUT)/script-noexec.inc: $(CHECK_EXEC_SAMPLES)/script-noexec.inc
-+	cp $< $@
-diff --git a/tools/testing/selftests/exec/check-exec-tests.sh b/tools/testing/selftests/exec/check-exec-tests.sh
-new file mode 100755
-index 000000000000..87102906ae3c
---- /dev/null
-+++ b/tools/testing/selftests/exec/check-exec-tests.sh
-@@ -0,0 +1,205 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test the "inc" interpreter.
-+#
-+# See include/uapi/linux/securebits.h, include/uapi/linux/fcntl.h and
-+# samples/check-exec/inc.c
-+#
-+# Copyright © 2024 Microsoft Corporation
-+
-+set -u -e -o pipefail
-+
-+EXPECTED_OUTPUT="1"
-+exec 2>/dev/null
-+
-+DIR="$(dirname $(readlink -f "$0"))"
-+source "${DIR}"/../kselftest/ktap_helpers.sh
-+
-+exec_direct() {
-+	local expect="$1"
-+	local script="$2"
-+	shift 2
-+	local ret=0
-+	local out
-+
-+	# Updates PATH for `env` to execute the `inc` interpreter.
-+	out="$(PATH="." "$@" "${script}")" || ret=$?
-+
-+	if [[ ${ret} -ne ${expect} ]]; then
-+		echo "ERROR: Wrong expectation for direct file execution: ${ret}"
-+		return 1
-+	fi
-+	if [[ ${ret} -eq 0 && "${out}" != "${EXPECTED_OUTPUT}" ]]; then
-+		echo "ERROR: Wrong output for direct file execution: ${out}"
-+		return 1
-+	fi
-+}
-+
-+exec_indirect() {
-+	local expect="$1"
-+	local script="$2"
-+	shift 2
-+	local ret=0
-+	local out
-+
-+	# Script passed as argument.
-+	out="$("$@" ./inc "${script}")" || ret=$?
-+
-+	if [[ ${ret} -ne ${expect} ]]; then
-+		echo "ERROR: Wrong expectation for indirect file execution: ${ret}"
-+		return 1
-+	fi
-+	if [[ ${ret} -eq 0 && "${out}" != "${EXPECTED_OUTPUT}" ]]; then
-+		echo "ERROR: Wrong output for indirect file execution: ${out}"
-+		return 1
-+	fi
-+}
-+
-+exec_stdin_reg() {
-+	local expect="$1"
-+	local script="$2"
-+	shift 2
-+	local ret=0
-+	local out
-+
-+	# Executing stdin must be allowed if the related file is executable.
-+	out="$("$@" ./inc -i < "${script}")" || ret=$?
-+
-+	if [[ ${ret} -ne ${expect} ]]; then
-+		echo "ERROR: Wrong expectation for stdin regular file execution: ${ret}"
-+		return 1
-+	fi
-+	if [[ ${ret} -eq 0 && "${out}" != "${EXPECTED_OUTPUT}" ]]; then
-+		echo "ERROR: Wrong output for stdin regular file execution: ${out}"
-+		return 1
-+	fi
-+}
-+
-+exec_stdin_pipe() {
-+	local expect="$1"
-+	shift
-+	local ret=0
-+	local out
-+
-+	# A pipe is not executable.
-+	out="$(cat script-exec.inc | "$@" ./inc -i)" || ret=$?
-+
-+	if [[ ${ret} -ne ${expect} ]]; then
-+		echo "ERROR: Wrong expectation for stdin pipe execution: ${ret}"
-+		return 1
-+	fi
-+}
-+
-+exec_argument() {
-+	local expect="$1"
-+	local ret=0
-+	shift
-+	local out
-+
-+	# Script not coming from a file must not be executed.
-+	out="$("$@" ./inc -c "$(< script-exec.inc)")" || ret=$?
-+
-+	if [[ ${ret} -ne ${expect} ]]; then
-+		echo "ERROR: Wrong expectation for arbitrary argument execution: ${ret}"
-+		return 1
-+	fi
-+	if [[ ${ret} -eq 0 && "${out}" != "${EXPECTED_OUTPUT}" ]]; then
-+		echo "ERROR: Wrong output for arbitrary argument execution: ${out}"
-+		return 1
-+	fi
-+}
-+
-+exec_interactive() {
-+	exec_stdin_pipe "$@"
-+	exec_argument "$@"
-+}
-+
-+ktap_test() {
-+	ktap_test_result "$*" "$@"
-+}
-+
-+ktap_print_header
-+ktap_set_plan 28
-+
-+# Without secbit configuration, nothing is changed.
-+
-+ktap_print_msg "By default, executable scripts are allowed to be interpreted and executed."
-+ktap_test exec_direct 0 script-exec.inc
-+ktap_test exec_indirect 0 script-exec.inc
-+
-+ktap_print_msg "By default, executable stdin is allowed to be interpreted."
-+ktap_test exec_stdin_reg 0 script-exec.inc
-+
-+ktap_print_msg "By default, non-executable scripts are allowed to be interpreted, but not directly executed."
-+# We get 126 because of direct execution by Bash.
-+ktap_test exec_direct 126 script-noexec.inc
-+ktap_test exec_indirect 0 script-noexec.inc
-+
-+ktap_print_msg "By default, non-executable stdin is allowed to be interpreted."
-+ktap_test exec_stdin_reg 0 script-noexec.inc
-+
-+ktap_print_msg "By default, interactive commands are allowed to be interpreted."
-+ktap_test exec_interactive 0
-+
-+# With only file restriction: protect non-malicious users from inadvertent errors (e.g. python ~/Downloads/*.py).
-+
-+ktap_print_msg "With -f, executable scripts are allowed to be interpreted and executed."
-+ktap_test exec_direct 0 script-exec.inc ./set-exec -f --
-+ktap_test exec_indirect 0 script-exec.inc ./set-exec -f --
-+
-+ktap_print_msg "With -f, executable stdin is allowed to be interpreted."
-+ktap_test exec_stdin_reg 0 script-exec.inc ./set-exec -f --
-+
-+ktap_print_msg "With -f, non-executable scripts are not allowed to be executed nor interpreted."
-+# Direct execution of non-executable script is alwayse denied by the kernel.
-+ktap_test exec_direct 1 script-noexec.inc ./set-exec -f --
-+ktap_test exec_indirect 1 script-noexec.inc ./set-exec -f --
-+
-+ktap_print_msg "With -f, non-executable stdin is allowed to be interpreted."
-+ktap_test exec_stdin_reg 0 script-noexec.inc ./set-exec -f --
-+
-+ktap_print_msg "With -f, interactive commands are allowed to be interpreted."
-+ktap_test exec_interactive 0 ./set-exec -f --
-+
-+# With only denied interactive commands: check or monitor script content (e.g. with LSM).
-+
-+ktap_print_msg "With -i, executable scripts are allowed to be interpreted and executed."
-+ktap_test exec_direct 0 script-exec.inc ./set-exec -i --
-+ktap_test exec_indirect 0 script-exec.inc ./set-exec -i --
-+
-+ktap_print_msg "With -i, executable stdin is allowed to be interpreted."
-+ktap_test exec_stdin_reg 0 script-exec.inc ./set-exec -i --
-+
-+ktap_print_msg "With -i, non-executable scripts are allowed to be interpreted, but not directly executed."
-+# Direct execution of non-executable script is alwayse denied by the kernel.
-+ktap_test exec_direct 1 script-noexec.inc ./set-exec -i --
-+ktap_test exec_indirect 0 script-noexec.inc ./set-exec -i --
-+
-+ktap_print_msg "With -i, non-executable stdin is not allowed to be interpreted."
-+ktap_test exec_stdin_reg 1 script-noexec.inc ./set-exec -i --
-+
-+ktap_print_msg "With -i, interactive commands are not allowed to be interpreted."
-+ktap_test exec_interactive 1 ./set-exec -i --
-+
-+# With both file restriction and denied interactive commands: only allow executable scripts.
-+
-+ktap_print_msg "With -fi, executable scripts are allowed to be interpreted and executed."
-+ktap_test exec_direct 0 script-exec.inc ./set-exec -fi --
-+ktap_test exec_indirect 0 script-exec.inc ./set-exec -fi --
-+
-+ktap_print_msg "With -fi, executable stdin is allowed to be interpreted."
-+ktap_test exec_stdin_reg 0 script-exec.inc ./set-exec -fi --
-+
-+ktap_print_msg "With -fi, non-executable scripts are not allowed to be interpreted nor executed."
-+# Direct execution of non-executable script is alwayse denied by the kernel.
-+ktap_test exec_direct 1 script-noexec.inc ./set-exec -fi --
-+ktap_test exec_indirect 1 script-noexec.inc ./set-exec -fi --
-+
-+ktap_print_msg "With -fi, non-executable stdin is not allowed to be interpreted."
-+ktap_test exec_stdin_reg 1 script-noexec.inc ./set-exec -fi --
-+
-+ktap_print_msg "With -fi, interactive commands are not allowed to be interpreted."
-+ktap_test exec_interactive 1 ./set-exec -fi --
-+
-+ktap_finished
-diff --git a/tools/testing/selftests/kselftest/ktap_helpers.sh b/tools/testing/selftests/kselftest/ktap_helpers.sh
-index 79a125eb24c2..14e7f3ec3f84 100644
---- a/tools/testing/selftests/kselftest/ktap_helpers.sh
-+++ b/tools/testing/selftests/kselftest/ktap_helpers.sh
-@@ -40,7 +40,7 @@ ktap_skip_all() {
- __ktap_test() {
- 	result="$1"
- 	description="$2"
--	directive="$3" # optional
-+	directive="${3:-}" # optional
- 
- 	local directive_str=
- 	[ ! -z "$directive" ] && directive_str="# $directive"
--- 
-2.46.1
 
 
