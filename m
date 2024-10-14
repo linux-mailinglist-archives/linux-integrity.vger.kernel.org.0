@@ -1,162 +1,175 @@
-Return-Path: <linux-integrity+bounces-3805-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3806-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D37F99C935
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Oct 2024 13:45:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3089A99C97B
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Oct 2024 13:54:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC9AD1C217F1
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Oct 2024 11:45:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC169B26B84
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Oct 2024 11:46:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846BF189521;
-	Mon, 14 Oct 2024 11:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDA8E19C557;
+	Mon, 14 Oct 2024 11:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MdS0KHEf"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4F58F64;
-	Mon, 14 Oct 2024 11:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BF7154BFF;
+	Mon, 14 Oct 2024 11:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728906334; cv=none; b=DB0z9SM7MGKTi+qdr7DVdmiHc4EYAKxDM7WLkF3NVT2ksb7vWQqS3OSRWreNt9V5ocsXKmjIEgfYncNeT10tDJHvJf+fvKxpEXyyxOjNwEe6i7Wu83aoNW2qPxtKyoFzlLZYvZMX+2JLlrAwmLLSq6NzrE1C6URzCibs4LCN2+o=
+	t=1728906390; cv=none; b=qNNBXGjUQcNlw82lgAHeoo8BDXcVaPX8EYi3TshFL7+l8enr2/4iacg/IbgEydyptZrUUJNYnRLUQSixZDPSbQ2nIIHkhXaXo3tkoYpcfJEC7bwZDvA3SiWTS/6URXDLc+dBOykx3OofovW7Qf1tEfN131XuCkOxFr0jedHpI10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728906334; c=relaxed/simple;
-	bh=VoLnJvOlLRHecuqbnEsmCdzipd3c3Z0TDF+JCNNRUn8=;
+	s=arc-20240116; t=1728906390; c=relaxed/simple;
+	bh=WCsxHw3vZQcjnLcbXSjXjwVJ4eA/MYcD+tajOib6FT4=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ELtZ2XsxA/Tj7pqNWueYlOY4tKyqtAH9u13SG9wIrwU1KaoopvKiK2P6pogoTyabt2XN7dJ8/gDi6rLy+nPRco7FGdPAh5thQW1ffTYy/X9xetjaUm6+N7s4CXi7EYIPwV6Y8ShR/6MomX9co1ygRYmgcIOfmKw5mwPMKe3A8VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4XRvrK36g8z9v7JM;
-	Mon, 14 Oct 2024 19:19:13 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id B168C1405A1;
-	Mon, 14 Oct 2024 19:45:15 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDXZy9CBA1n8ArVAg--.16371S2;
-	Mon, 14 Oct 2024 12:45:15 +0100 (CET)
-Message-ID: <3ab95195af7db9d2bd482f46a69305f2f386cc32.camel@huaweicloud.com>
-Subject: Re: [PATCH 2/3] ima: Ensure lock is held when setting iint pointer
- in inode security blob
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
-Cc: dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jmorris@namei.org, 
-	serge@hallyn.com, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, ebpqwerty472123@gmail.com, Roberto Sassu
-	 <roberto.sassu@huawei.com>
-Date: Mon, 14 Oct 2024 13:45:02 +0200
-In-Reply-To: <92c528d8848f78869888a746643e1cf2969df62a.camel@linux.ibm.com>
-References: <20241008165732.2603647-1-roberto.sassu@huaweicloud.com>
-	 <20241008165732.2603647-2-roberto.sassu@huaweicloud.com>
-	 <CAHC9VhRkMwLqVFfWMvMOJ6x4UNUK=C_cMVW7Op9icz28MMDYdQ@mail.gmail.com>
-	 <69ed92fde951b20a9b976d48803fe9b5daaa9eea.camel@huaweicloud.com>
-	 <92c528d8848f78869888a746643e1cf2969df62a.camel@linux.ibm.com>
+	 Content-Type:MIME-Version; b=VolPdGa5VJtL2CurWFaCE6rW6NOwAVApeZYXsw5sML984jtqFF5rBqdJSEd9dwaHAX6Fgei5JTECUELfmS8g1/AQis8qBS7QGgl07PEy2sANeZFdTp1XpbnVfjhGDKbn0rSZHzPGwaTWg0dqK+/jEcx70dpsZ0owR6rSfFoWUL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MdS0KHEf; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49E9shQo005514;
+	Mon, 14 Oct 2024 11:46:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:subject:from:to:cc:date:in-reply-to:references
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	WCsxHw3vZQcjnLcbXSjXjwVJ4eA/MYcD+tajOib6FT4=; b=MdS0KHEfRRyQVmol
+	l7Foxf3uI71SAwaBHJEHAXKpSmji55GQD4A7nlBYv6etacyeuim5f0xt/xxCk1iZ
+	XiU4+TcUABZwnyNSp0StGb+nYUwFWNLZ5OL0d4xX9gndVgfUf1Ld8JjmKiNwYjJ/
+	uMc2pVBS2lDPJX1ELTJxPOxiXsui+mtA/7JRAYA8ljAeGav399O/qYhdj78rgVpe
+	/HWmCTjsjtY/0WXZLegLZKyI0Brb9GWKdq1CAZVIf3vLNvF4ZIvIkmDkJIOcQQy5
+	gYmeeVZohS5iatQKgdFD3Rq/E4TQ0JSelrr9ReuPZ30oyMk67+VK+QvnWSKP0JkV
+	RfyaGw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4291330fxk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 14 Oct 2024 11:46:01 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49EBk1Tg017492;
+	Mon, 14 Oct 2024 11:46:01 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4291330fxc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 14 Oct 2024 11:46:01 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49EBbf5K002452;
+	Mon, 14 Oct 2024 11:45:59 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4284eme94a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 14 Oct 2024 11:45:59 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49EBjxIx25231986
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 14 Oct 2024 11:45:59 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0810A58067;
+	Mon, 14 Oct 2024 11:45:58 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 389CF58052;
+	Mon, 14 Oct 2024 11:45:58 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.89.75])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 14 Oct 2024 11:45:58 +0000 (GMT)
+Message-ID: <04dc04872f2925166f969b43852161d468ee899a.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 0/5] Lazy flush for the auth session
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>,
+        Roberto Sassu
+	 <roberto.sassu@huaweicloud.com>,
+        linux-integrity@vger.kernel.org
+Cc: James.Bottomley@HansenPartnership.com, roberto.sassu@huawei.com,
+        mapengyu@gmail.com, David Howells <dhowells@redhat.com>,
+        Paul Moore
+ <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn"
+ <serge@hallyn.com>, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe
+ <jgg@ziepe.ca>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 14 Oct 2024 07:45:57 -0400
+In-Reply-To: <e70c55c6edea2a5be7786ee04a85778193237444.camel@kernel.org>
+References: <20240921120811.1264985-1-jarkko@kernel.org>
+	 <f69e08167d8354db31013018edf064a2876f8d1c.camel@kernel.org>
+	 <21b46f4882f0b9b12304d7786bd88f33a7ad2b97.camel@huaweicloud.com>
+	 <a0068539450a81fdd363d078521cb3822c54608b.camel@kernel.org>
+	 <e70c55c6edea2a5be7786ee04a85778193237444.camel@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwDXZy9CBA1n8ArVAg--.16371S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFWDuw4DJr1xur45XrWUArb_yoW5JrWfpF
-	Wvg3WUGayUXFW7ur4SqasxZFWSg3yfWFWkWw45Jw1qvFyqvF1jqr48Jr1Uury5Cr4xKw1I
-	vr42ga13uw1qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBGcMffgJKQADsY
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rYrsrcYGDrxAJtbTIwXVtk0T6VlTXmWv
+X-Proofpoint-GUID: Yej-s5UB3gYcINthSPFZKN81Sf6sAPvl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-14_10,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ phishscore=0 mlxscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
+ spamscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2410140083
 
-On Fri, 2024-10-11 at 15:30 -0400, Mimi Zohar wrote:
-> On Wed, 2024-10-09 at 17:43 +0200, Roberto Sassu wrote:
-> > On Wed, 2024-10-09 at 11:41 -0400, Paul Moore wrote:
-> > > On Tue, Oct 8, 2024 at 12:57=E2=80=AFPM Roberto Sassu
-> > > <roberto.sassu@huaweicloud.com> wrote:
-> > > >=20
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > >=20
-> > > > IMA stores a pointer of the ima_iint_cache structure, containing in=
-tegrity
-> > > > metadata, in the inode security blob. However, check and assignment=
- of this
-> > > > pointer is not atomic, and it might happen that two tasks both see =
-that the
-> > > > iint pointer is NULL and try to set it, causing a memory leak.
-> > > >=20
-> > > > Ensure that the iint check and assignment is guarded, by adding a l=
-ockdep
-> > > > assertion in ima_inode_get().
-> > > >=20
-> > > > Consequently, guard the remaining ima_inode_get() calls, in
-> > > > ima_post_create_tmpfile() and ima_post_path_mknod(), to avoid the l=
-ockdep
-> > > > warnings.
-> > > >=20
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > ---
-> > > >  security/integrity/ima/ima_iint.c |  5 +++++
-> > > >  security/integrity/ima/ima_main.c | 14 ++++++++++++--
-> > > >  2 files changed, 17 insertions(+), 2 deletions(-)
-> > > >=20
-> > > > diff --git a/security/integrity/ima/ima_iint.c b/security/integrity=
-/ima/ima_iint.c
-> > > > index c176fd0faae7..fe676ccec32f 100644
-> > > > --- a/security/integrity/ima/ima_iint.c
-> > > > +++ b/security/integrity/ima/ima_iint.c
-> > > > @@ -87,8 +87,13 @@ static void ima_iint_free(struct ima_iint_cache =
-*iint)
-> > > >   */
-> > > >  struct ima_iint_cache *ima_inode_get(struct inode *inode)
-> > > >  {
-> > > > +       struct ima_iint_cache_lock *iint_lock;
-> > > >         struct ima_iint_cache *iint;
-> > > >=20
-> > > > +       iint_lock =3D ima_inode_security(inode->i_security);
-> > > > +       if (iint_lock)
-> > > > +               lockdep_assert_held(&iint_lock->mutex);
-> > > > +
-> > > >         iint =3D ima_iint_find(inode);
-> > > >         if (iint)
-> > > >                 return iint;
+On Sat, 2024-10-12 at 13:56 +0300, Jarkko Sakkinen wrote:
+> On Fri, 2024-10-11 at 19:25 +0300, Jarkko Sakkinen wrote:
+> > On Fri, 2024-10-11 at 18:10 +0200, Roberto Sassu wrote:
+> > > Initially, I thought that maybe it would not be good to have an
+> > > event
+> > > log with unmodified and altered measurement entries. Then, I tried
+> > > to
+> > > think if we can really prevent an active interposer from injecting
+> > > arbitrary PCR extends and pretending that those events actually
+> > > happened.
 > > >=20
-> > > Can you avoid the ima_iint_find() call here and just do the following=
-?
-> > >=20
-> > >   /* not sure if you need to check !iint_lock or not? */
-> > >   if (!iint_lock)
-> > >     return NULL;
-> > >   iint =3D iint_lock->iint;
-> > >   if (!iint)
-> > >     return NULL;
+> > > If I understood James's cover letter correctly, the kernel can
+> > > detect
+> > > whether a TPM reset occurred, but not that a PCR extend occurred
+> > > (maybe
+> > > with a shadow PCR?).
 > >=20
-> > Yes, I also like it much more.
+> > We can detect TPM reset indirectly. I.e. null seed re-randomizes
+> > per reset.
+> >=20
+> > >=20
+> > > Second point, do we really want to take the responsibility to
+> > > disable
+> > > the protection on behalf of users? Maybe a better choice is to let
+> > > them
+> > > consciously disable HMAC protection.
+> >=20
+> > So when IMA is not used already with these fixes we get good
+> > results. And for tpm2_get_random() we can make the algorithm
+> > smarter. All in all we have good path ongoing for "desktop
+> > use case" that I would keep thing way there are or at least
+> > postpone any major decisions just a bit.
+> >=20
+> > For server/IMA use case I'll add a boot parameter it can be
+> > either on or off by default, I will state that in the commit
+> > message and we'll go from there.
+
+Sounds good.
+
 >=20
-> Yes, testing iint_lock and then iint_lock->iint should be fine, but the l=
-ogic
-> needs to be inverted.  ima_inode_get() should return the existing iint, i=
-f it
-> exists, or allocate the memory.
+> Up until legit fixes are place distributors can easily disable
+> the feature. It would be worse if TCG_TPM2_HMAC did not exist.
+>=20
+> So I think it is better to focus on doing right things right,
+> since the feature itself is useful objectively, and make sure
+> that those fixes bring the wanted results.
 
-Right, I checked the patches I'm about to send, they do that.
+Are you backtracking on having a boot parameter here specifically to turn o=
+n/off
+HMAC encryption for IMA?
 
-Thanks
-
-Roberto
+Mimi
 
 
