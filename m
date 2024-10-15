@@ -1,339 +1,173 @@
-Return-Path: <linux-integrity+bounces-3814-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3815-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 623B899F762
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Oct 2024 21:39:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B07199F7DE
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Oct 2024 22:09:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2161E284564
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Oct 2024 19:39:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D69311F21C24
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Oct 2024 20:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36EF71B6CF6;
-	Tue, 15 Oct 2024 19:39:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4447E1F583C;
+	Tue, 15 Oct 2024 20:09:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DAjuobc9"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UNfs8g3h"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2831F80C3;
-	Tue, 15 Oct 2024 19:39:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823F51B3936;
+	Tue, 15 Oct 2024 20:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729021188; cv=none; b=Pt3cPzk4x++7HCl3eZqWEpiLQFutp6f0wlI+R/DKzz620wKGFVmynrppEW9vn1iikIHnzAeku0c06MFQogLeb3k6mmKhnutp4TCuXJB/1U8xejtfTTtYYJg8gpIS8duRU6OBq7zsyVwSYW/c1KxvdnI/6ecXhfNXM84FADAHNPU=
+	t=1729022940; cv=none; b=Gtv9mBF7wJDkTC4OOoYuz9VFK1a1WxF3N72nBI+ZaSkfw2musPBXqPGdNRzdy7oJSbf3zj4EiHJlv3XEcMQ/HWyg4k1l5xNw3l0LZVrNKn8qg2tDojdwo4cHZpSBEXHXmQ1G7cK/DeTikAECzdid/S4uVaNx8G3WBtbjrRgxDBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729021188; c=relaxed/simple;
-	bh=SaC2xpsyVmEewrREwaV1t3ezVOEBlC3wRbOP+ZWT4Go=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QMZhWeM91S4BPCCWLt5yvPk3gaLAJjd3pCr69bRt74V2K6Omh/vbADuYDbdIqfDodmzSSOCPpL7VhQKS94k4prnRm3GGUd3DF7GSH7PWIlM8kdVA+nhi0dMiYEZE0x3H4r/aYEPk5l+nU80vTXoeDe7Poukg6zpJcFsbX89nFSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DAjuobc9; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1729022940; c=relaxed/simple;
+	bh=j2OJ4nJ22YAGX1EN1Ws9619MuiTw8/GcQUNttC73stc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pWndNrWop9YuUzDfXLo0gKyMQard1QsCRW+dZSQNNb5KVjCCEJV/vwIzBfE1ebgQ4gqEUzoRbWMxKSNKawQI/YEH9CDJ7BwtU7gO3bcZKE+7g+QpiSHraJlBWtVHyKkFMkj4nC07rF8Ie5lR5ZuNa+FChg9hvVSNt2aJWmcjLRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UNfs8g3h; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FJY3k3029851;
-	Tue, 15 Oct 2024 19:39:26 GMT
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FJuBhD002725;
+	Tue, 15 Oct 2024 20:08:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=Nalg9xPyFkMtebeWQh8ejquc7+ahdb3+mMo3lfKkG
-	Kw=; b=DAjuobc9QCfYmwAmho0aHFIjpEqtv4HL+zr9ELczoPqgQGFbsQ7VBMrnb
-	u3RdhFATjGd0zrCrnpXDRU4pffxZLwDdTMyMCH1t7ukvRTHXzcBnJO5korkUwLkw
-	BHS6cj4aOS94op2vIorg8b/YM+wpIOD2gLBxhTpAA9uM+gm/NwbA0nw2ndlUry1X
-	l7flc19VSMqSEpkiBbM08dp3+N9wkvXD2LCRNnb84AHhbiPcPHN0eo1TQmqHNY0j
-	/St+IamtD72KxOCE+fNAG3kGg10PhpHq1/ZUxyzVq0SP5K1MZM+8wXxeYg+PS3LC
-	qXAG5H6Ag+URWCaxRe/gtLZokTQtw==
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=69L/af
+	3IKivmKEyI/Ji8fL2xhTF/EYJNbW9XFUPCA2Q=; b=UNfs8g3hi7tf/L+cDxN+IV
+	E6mgZzQ7BANlXNe2isaXxE4G4VApivQAH0fDC10cYAIF4JEWIvBjQ1H7g5VJYRh9
+	r5vU69++lQRkTRsbqlZ1IES+XfqHoGg/NUbaYrHx1rbvrPH/twGd4AjyxDBn+IIk
+	aI3eY7yPMksw4idZj1hsUGyeNxmeEA/bSXTNvrXaUH5jiWKDkSO+WZp845cFbz0Z
+	sSNfUn3QiwM4Sx2WOta6cmJ08hCsYUFa3ln/mJcoq8mNxWpOU/CExCinL2p5qb8X
+	W7FrLtAr8fNqI4n5T7RR4PdrU0+MUu8/8Y0Okw/XybVhDSRdU03ec/oTG7LY7b5Q
+	==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 429x17g67w-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 429xywr1rg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 19:39:26 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49FJdPSn009465;
-	Tue, 15 Oct 2024 19:39:25 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 429x17g67u-1
+	Tue, 15 Oct 2024 20:08:30 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49FK8TK7028463;
+	Tue, 15 Oct 2024 20:08:30 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 429xywr1ra-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 19:39:25 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49FHmpsI027499;
-	Tue, 15 Oct 2024 19:39:24 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4283txnpyv-1
+	Tue, 15 Oct 2024 20:08:29 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49FJC56T005930;
+	Tue, 15 Oct 2024 20:08:29 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 428650wd5u-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 19:39:24 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49FJdMAe32834292
+	Tue, 15 Oct 2024 20:08:29 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49FK8SQi48562460
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 15 Oct 2024 19:39:22 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C55E520043;
-	Tue, 15 Oct 2024 19:39:22 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 23FF720040;
-	Tue, 15 Oct 2024 19:39:21 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.fios-router.home (unknown [9.61.187.172])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 15 Oct 2024 19:39:20 +0000 (GMT)
+	Tue, 15 Oct 2024 20:08:28 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A2B2B58059;
+	Tue, 15 Oct 2024 20:08:28 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D8AD558058;
+	Tue, 15 Oct 2024 20:08:27 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.187.172])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 15 Oct 2024 20:08:27 +0000 (GMT)
+Message-ID: <036746bc4e37ff10a18b5fdffd6fdee561dd5bfe.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 0/5] Lazy flush for the auth session
 From: Mimi Zohar <zohar@linux.ibm.com>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, James.Bottomley@HansenPartnership.com,
-        roberto.sassu@huawei.com, mapengyu@gmail.com,
-        Paul Moore <paul@paul-moore.com>, linux-kernel@vger.kernel.org,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [RFC PATCH] tpm: Allow the TPM2 pcr_extend HMAC capability to be disabled on boot
-Date: Tue, 15 Oct 2024 15:39:16 -0400
-Message-ID: <20241015193916.59964-1-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
+To: Jarkko Sakkinen <jarkko@kernel.org>,
+        Roberto Sassu
+	 <roberto.sassu@huaweicloud.com>,
+        linux-integrity@vger.kernel.org
+Cc: James.Bottomley@HansenPartnership.com, roberto.sassu@huawei.com,
+        mapengyu@gmail.com, David Howells <dhowells@redhat.com>,
+        Paul Moore
+ <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn"
+ <serge@hallyn.com>, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe
+ <jgg@ziepe.ca>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Tue, 15 Oct 2024 16:08:27 -0400
+In-Reply-To: <64710fe1db1432ca8857ec83fff4809ab1550137.camel@kernel.org>
+References: <20240921120811.1264985-1-jarkko@kernel.org>
+	 <f69e08167d8354db31013018edf064a2876f8d1c.camel@kernel.org>
+	 <21b46f4882f0b9b12304d7786bd88f33a7ad2b97.camel@huaweicloud.com>
+	 <a0068539450a81fdd363d078521cb3822c54608b.camel@kernel.org>
+	 <e70c55c6edea2a5be7786ee04a85778193237444.camel@kernel.org>
+	 <04dc04872f2925166f969b43852161d468ee899a.camel@linux.ibm.com>
+	 <64710fe1db1432ca8857ec83fff4809ab1550137.camel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vEnh6mst_1x2h32pBMI1SmYyzJM4-QtK
+X-Proofpoint-GUID: SXjOjMcLJvo3WHzLFeaengjc6HSy-qJw
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Si7hbLg7yXxAS_aAV5YjnZuOD0OiD09b
-X-Proofpoint-GUID: sI-PfRBgqaUlq4s9QaqjBN_9lm-_k7WS
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=784 phishscore=0 clxscore=1011
- adultscore=0 spamscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ spamscore=0 priorityscore=1501 phishscore=0 adultscore=0 mlxlogscore=999
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 mlxscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2410150131
+ definitions=main-2410150135
 
-The initial TPM2 HMAC session capability added HMAC authentication to
-each and every TPM communication making the pcr_extend performance
-abysmal for HW TPMs. Further, the new CONFIG_TCG_TPM2_HMAC option was
-configured by default on x86_64.
+On Mon, 2024-10-14 at 15:34 +0300, Jarkko Sakkinen wrote:
+> On Mon, 2024-10-14 at 07:45 -0400, Mimi Zohar wrote:
+> > > > For server/IMA use case I'll add a boot parameter it can be
+> > > > either on or off by default, I will state that in the commit
+> > > > message and we'll go from there.
+> >=20
+> > Sounds good.
+>=20
+> But only after this patch set lands. I gave this a thought and since
+> this patch set is specifically for a specific Bugzilla bug that it
+> closes, I have no interest to increase its scope.
 
-The decision to use the TPM2 HMAC session capability feature doesn't
-differentiate between the critical encrypted and the non-encrypted
-communication, but when configured is required for all TPM communication.
+Prior to your performance improvement patch set it took >10 minutes to boot,
+when it succeeded booting.  Now on Fedora 40 with "ima_policy=3Dtcb" on the=
+ boot
+command line, it's taking ~3 minutes to boot.  Do you really think that is
+acceptable?!
 
-In addition, the reason to HMAC the tpm2_pcr_extend() as provided in commit
-6519fea6fd37 ("tpm: add hmac checks to tpm2_pcr_extend()") was to protect
-tpm2_pcr_extend() when used by "trusted keys" to lock the PCR.  However,
-locking the PCR is currently limited to TPM 1.2.
+> >=20
+> > >=20
+> > > Up until legit fixes are place distributors can easily disable
+> > > the feature. It would be worse if TCG_TPM2_HMAC did not exist.
+> > >=20
+> > > So I think it is better to focus on doing right things right,
+> > > since the feature itself is useful objectively, and make sure
+> > > that those fixes bring the wanted results.
 
-We can revert the commit which adds the HMAC sessions for
-tpm2_pcr_extend, allow just the TPM2 pcr_extend HMAC capability to be
-disabled on boot for better IMA performance, or define a generic boot
-command line option to disable HMAC in general.  This patch allows
-disabling the HMAC for just the TPM2_pcr_extend.
+The right thing would have been to listen to my concerns when this was init=
+ially
+being discussed.  The right thing wasn't enabling TCG_TPM2_HMAC by default.
 
-Fixes: 6519fea6fd37 ("tpm: add hmac checks to tpm2_pcr_extend()")
-Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
-Comment: applied and tested with/without patches in Jarkko's hmac-v5 branch -
-commit 92999f9cd11f ("tpm: flush the auth session only when /dev/tpm0 is open")
+> >=20
+> > Are you backtracking on having a boot parameter here specifically to
+> > turn on/off
+> > HMAC encryption for IMA?
+>=20
+> I'm not really sure yet but obviously any change goes through review.
+>=20
+> Also fastest route is to send your own RFC's to IMA specific issue.
+> For me it will take some time (post this patch set).
 
- .../admin-guide/kernel-parameters.txt         |  5 ++
- drivers/char/tpm/tpm2-cmd.c                   | 41 ++++++++++---
- drivers/char/tpm/tpm2-sessions.c              | 59 +++++++++++--------
- include/linux/tpm.h                           |  4 ++
- 4 files changed, 77 insertions(+), 32 deletions(-)
+Done.  The patch applies cleanly with/without the TPM performance improveme=
+nt
+patch set.
+https://lore.kernel.org/linux-integrity/20241015193916.59964-1-zohar@linux.=
+ibm.com/
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 1518343bbe22..c7811f32ba28 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6727,6 +6727,11 @@
- 	torture.verbose_sleep_duration= [KNL]
- 			Duration of each verbose-printk() sleep in jiffies.
- 
-+	tpm_pcr_extend_hmac_disable [HW,TPM]
-+			Disable TPM2 pcr_extend HMAC for better IMA
-+			performance. By default is set to true (1).
-+			Mainly needed when using a HW TPM2.
-+
- 	tpm_suspend_pcr=[HW,TPM]
- 			Format: integer pcr id
- 			Specify that at suspend time, the tpm driver
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index aba024cbe7c5..bac409520a72 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -14,6 +14,14 @@
- #include "tpm.h"
- #include <crypto/hash_info.h>
- 
-+static int __ro_after_init tpm2_pcr_extend_hmac = 1;
-+static int __init tpm2_pcr_extend_hmac_setup(char *str)
-+{
-+	tpm2_pcr_extend_hmac = 0;
-+	return 0;
-+}
-+__setup("tpm2_pcr_extend_hmac_disable", tpm2_pcr_extend_hmac_setup);
-+
- static struct tpm2_hash tpm2_hash_map[] = {
- 	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
- 	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
-@@ -232,18 +240,26 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- 	int rc;
- 	int i;
- 
--	rc = tpm2_start_auth_session(chip);
--	if (rc)
--		return rc;
-+	if (tpm2_pcr_extend_hmac) {
-+		rc = tpm2_start_auth_session(chip);
-+		if (rc)
-+			return rc;
-+	}
- 
- 	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
- 	if (rc) {
--		tpm2_end_auth_session(chip);
-+		if (tpm2_pcr_extend_hmac)
-+			tpm2_end_auth_session(chip);
- 		return rc;
- 	}
- 
--	tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
--	tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
-+	if (tpm2_pcr_extend_hmac) {
-+		tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
-+		tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
-+	} else {
-+		tpm_buf_append_handle(chip, &buf, pcr_idx, NULL);
-+		tpm_buf_append_auth(chip, &buf, 0, NULL, 0);
-+	}
- 
- 	tpm_buf_append_u32(&buf, chip->nr_allocated_banks);
- 
-@@ -253,9 +269,16 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- 			       chip->allocated_banks[i].digest_size);
- 	}
- 
--	tpm_buf_fill_hmac_session(chip, &buf);
--	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting extend a PCR value");
--	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
-+	if (tpm2_pcr_extend_hmac) {
-+		tpm_buf_fill_hmac_session(chip, &buf);
-+		rc = tpm_transmit_cmd(chip, &buf, 0,
-+				      "attempting extend a PCR value");
-+		rc = tpm_buf_check_hmac_response(chip, &buf, rc);
-+	} else {
-+		rc = tpm_transmit_cmd(chip, &buf, 0,
-+				      "attempting extend a PCR value");
-+	}
-+
- 
- 	tpm_buf_destroy(&buf);
- 
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index de860773eead..fae56dfe0d92 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -205,6 +205,14 @@ static int tpm2_read_public(struct tpm_chip *chip, u32 handle, char *name)
- }
- #endif /* CONFIG_TCG_TPM2_HMAC */
- 
-+void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf,
-+			   u32 handle, u8 *name)
-+{
-+	tpm_buf_append_u32(buf, handle);
-+	/* count the number of handles in the upper bits of flags */
-+	buf->handles++;
-+}
-+
- /**
-  * tpm_buf_append_name() - add a handle area to the buffer
-  * @chip: the TPM chip structure
-@@ -237,9 +245,7 @@ void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- #endif
- 
- 	if (!tpm2_chip_auth(chip)) {
--		tpm_buf_append_u32(buf, handle);
--		/* count the number of handles in the upper bits of flags */
--		buf->handles++;
-+		tpm_buf_append_handle(chip, buf, handle, name);
- 		return;
- 	}
- 
-@@ -272,6 +278,31 @@ void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- }
- EXPORT_SYMBOL_GPL(tpm_buf_append_name);
- 
-+void tpm_buf_append_auth(struct tpm_chip *chip, struct tpm_buf *buf,
-+			 u8 attributes, u8 *passphrase, int passphrase_len)
-+{
-+	/* offset tells us where the sessions area begins */
-+	int offset = buf->handles * 4 + TPM_HEADER_SIZE;
-+	u32 len = 9 + passphrase_len;
-+
-+	if (tpm_buf_length(buf) != offset) {
-+		/* not the first session so update the existing length */
-+		len += get_unaligned_be32(&buf->data[offset]);
-+		put_unaligned_be32(len, &buf->data[offset]);
-+	} else {
-+		tpm_buf_append_u32(buf, len);
-+	}
-+	/* auth handle */
-+	tpm_buf_append_u32(buf, TPM2_RS_PW);
-+	/* nonce */
-+	tpm_buf_append_u16(buf, 0);
-+	/* attributes */
-+	tpm_buf_append_u8(buf, 0);
-+	/* passphrase */
-+	tpm_buf_append_u16(buf, passphrase_len);
-+	tpm_buf_append(buf, passphrase, passphrase_len);
-+}
-+
- /**
-  * tpm_buf_append_hmac_session() - Append a TPM session element
-  * @chip: the TPM chip structure
-@@ -309,26 +340,8 @@ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- #endif
- 
- 	if (!tpm2_chip_auth(chip)) {
--		/* offset tells us where the sessions area begins */
--		int offset = buf->handles * 4 + TPM_HEADER_SIZE;
--		u32 len = 9 + passphrase_len;
--
--		if (tpm_buf_length(buf) != offset) {
--			/* not the first session so update the existing length */
--			len += get_unaligned_be32(&buf->data[offset]);
--			put_unaligned_be32(len, &buf->data[offset]);
--		} else {
--			tpm_buf_append_u32(buf, len);
--		}
--		/* auth handle */
--		tpm_buf_append_u32(buf, TPM2_RS_PW);
--		/* nonce */
--		tpm_buf_append_u16(buf, 0);
--		/* attributes */
--		tpm_buf_append_u8(buf, 0);
--		/* passphrase */
--		tpm_buf_append_u16(buf, passphrase_len);
--		tpm_buf_append(buf, passphrase, passphrase_len);
-+		tpm_buf_append_auth(chip, buf, attributes, passphrase,
-+				    passphrase_len);
- 		return;
- 	}
- 
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 28a932aa0416..d30bb1c114f1 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -504,9 +504,13 @@ static inline struct tpm2_auth *tpm2_chip_auth(struct tpm_chip *chip)
- 
- void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- 			 u32 handle, u8 *name);
-+void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf,
-+			   u32 handle, u8 *name);
- void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- 				 u8 attributes, u8 *passphrase,
- 				 int passphraselen);
-+void tpm_buf_append_auth(struct tpm_chip *chip, struct tpm_buf *buf,
-+			 u8 attributes, u8 *passphrase, int passphraselen);
- static inline void tpm_buf_append_hmac_session_opt(struct tpm_chip *chip,
- 						   struct tpm_buf *buf,
- 						   u8 attributes,
--- 
-2.47.0
-
+Mimi
 
