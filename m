@@ -1,217 +1,234 @@
-Return-Path: <linux-integrity+bounces-3876-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3877-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A34CA9A442D
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Oct 2024 18:55:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED1DE9A4676
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Oct 2024 21:05:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32B741F22E93
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Oct 2024 16:55:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EEDB285CA2
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Oct 2024 19:05:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FD82038AD;
-	Fri, 18 Oct 2024 16:55:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5392A204093;
+	Fri, 18 Oct 2024 19:05:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=benboeckel.net header.i=@benboeckel.net header.b="k/kK18yl";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ozye+AsI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5uvTqpE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C99200C87;
-	Fri, 18 Oct 2024 16:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045E1185B48;
+	Fri, 18 Oct 2024 19:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729270511; cv=none; b=KOD2mmAs51MLCHjZ2s3cGONdSVm3IowyGOJvn63bTS0ElyicEOYL+x8mdW1AkeICBRQZ2sCP+K4zNZLbFKH2Zk9Risip5f0dnKBEzYSrFhA72EXVMvUk4vmYiHsh32D6+kzRXySFt68tyncrCcoNsugcHEI27/haph2tpOfIgV8=
+	t=1729278302; cv=none; b=qZbchbqTRHckq7z0Fez8GeqyT65fRy3DCKnH4xgDM54K17t3TcuiPMGIr0zeGCxQIfND6ne0msO4ZbCdwaghBeVBjMSz64hwOWteijB3+pnw3W83lruwCB+bNLlyexwSokzQIjS//bO+h06JeGVOqnCXjru8njD2tWcNWtrVRbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729270511; c=relaxed/simple;
-	bh=2BAp/Ks9vk62NXFUJKf9rtVKUHh7s1trWs775ygWLOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CuRGR0ATYln4IRK+3JiNesV1NjzgrSZ/EpwxaEIT8Nv4YZ3A6imye0d4qy4v1ku30vfMR9LWUs54+lIwZDrMftrsHn8P7Z8LWLBx/X58SxI2oppUcN1T6roUtxxxd1FE41nJ0bzcozBJXI0U8sn26ohyc2R4nIcr9azcZXr770s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benboeckel.net; spf=pass smtp.mailfrom=benboeckel.net; dkim=pass (2048-bit key) header.d=benboeckel.net header.i=@benboeckel.net header.b=k/kK18yl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ozye+AsI; arc=none smtp.client-ip=103.168.172.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=benboeckel.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=benboeckel.net
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailflow.phl.internal (Postfix) with ESMTP id 7B4D72006A2;
-	Fri, 18 Oct 2024 12:55:07 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Fri, 18 Oct 2024 12:55:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
-	 t=1729270507; x=1729277707; bh=0L7B7yGnuyRElZHs/IM6086Uc6KmNfJm
-	/hpOxLBT+m4=; b=k/kK18ylY7URLjXojRDc9N4S7rJgXMLhvlNye6dGW6oNDx3E
-	V+ra4rLZWqnNummxUWVuo36cnVAcsb2q08axEPLq71LDJ0t7XgtOOL+f9MuLYjf3
-	JMB4Difrk+CrPuiPAZ8wIzUCkqnWLOHg+IcLg8gmv2f/NO5xHrBHQxVzYxCcJilZ
-	mLYcFti7O9pMSwxYT03AQ72CnTTeC/yx4sC+qtJDewaf7bEV9Xlhp702u94ZQi4L
-	3tfQ8HleHBoBmOJGdH0uA7ze2SJZkuqCepcNIj8rpdRMIicWA0hqRNh9s6jfpz/G
-	zFYyz6eFAS3PG1C5x0ZGZbJFykxb8N9lTkXKLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1729270507; x=
-	1729277707; bh=0L7B7yGnuyRElZHs/IM6086Uc6KmNfJm/hpOxLBT+m4=; b=O
-	zye+AsIQf4jOgI2Lrrpu/tMoSW8fz2A51yo4ahp0ZBJGIvXjwp+vOkEu80Ni3wOB
-	hFv9No6bvbWBC2GA8UVx9SHY/mJLu+E5jZ5/iVUVCYL7+H5SoWZ16um5OsIplceU
-	XYfkI5EKXdnuxvKkTt4KObmHeFgogkB/Q8DULO9qqRV2sxwOMFvdTb3mjfFugyzI
-	aPZz0sOPWt3PB4396k6F0NcnZr79VutMLODwSRkRcafo8GMEnq9FQZHeK3jqWEs6
-	uV0Nhbi3IoFFBwgJlw3DTkG6s4AKF0EMccSCA6kRk6N/X0Z2zRsvnDqzNqvGolKI
-	jucxNUCF8G2dICMKnp88A==
-X-ME-Sender: <xms:6JISZ434ZPIdiHbuWYeaNcSqzVunzn9uwUZW6OtXjfW9dqoTF2Q0Tw>
-    <xme:6JISZzGePpzTvvZ4vFRXLM6wgbpJq3DsseJnyI43bL1-vYOUSX4UIh6aVMHXzdMy-
-    50pHNOM0p8E1mRPGgs>
-X-ME-Received: <xmr:6JISZw65VRONaSByRxBIL9BfylVtic9_zpXo3O7BKnP-6_dq6KrtDAOQlDUav0jo_bd6xqobLqqs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdehfedguddtgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtugfgjggfsehtkeertddt
-    reejnecuhfhrohhmpeeuvghnuceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlh
-    drnhgvtheqnecuggftrfgrthhtvghrnhepudekvdejteeuudffveffhfelfefgjeehffef
-    hffhgeeiieduveehfeejffetveefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepmhgvsegsvghnsghovggtkhgvlhdrnhgvthdpnhgspghrtghp
-    thhtohepvdegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegvrhhitgdrshhnoh
-    ifsggvrhhgsehorhgrtghlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhsvggtuhhr
-    ihhthidqmhhoughulhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepug
-    hhohifvghllhhssehrvgguhhgrthdrtghomhdprhgtphhtthhopegufihmfidvsehinhhf
-    rhgruggvrggurdhorhhgpdhrtghpthhtohephhgvrhgsvghrthesghhonhguohhrrdgrph
-    grnhgrrdhorhhgrdgruhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhn
-    vghtpdhrtghpthhtoheprghruggssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjrg
-    hrkhhkoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgruhhlsehprghulhdqmhho
-    ohhrvgdrtghomh
-X-ME-Proxy: <xmx:6JISZx3LjUHM3aerHTKSZK7b6NYEiKaH4KlyNHEhZDeqdpoC7cC-Bw>
-    <xmx:6JISZ7FN2-4pTeiOluvybyQrliihhSJzxzgJAuyiQ5tNd8m8sg3R_A>
-    <xmx:6JISZ6-2P1lNIofzl5gJo4ci2r7xVPsZe2YmP6wVKj2PJdKrxxMp0Q>
-    <xmx:6JISZwmUM9wuk4eJkrqMCnfeiiCO03a_FeJiMBgfgUNX8Tmq6W2z1g>
-    <xmx:65ISZzNrDCcw7YGvFpM0DJqQP45rg1wOFv3qdff4aVAW53CXXzEXMk-5>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Oct 2024 12:55:04 -0400 (EDT)
-Date: Fri, 18 Oct 2024 12:55:03 -0400
-From: Ben Boeckel <me@benboeckel.net>
-To: Eric Snowberg <eric.snowberg@oracle.com>
-Cc: "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	"herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	Ard Biesheuvel <ardb@kernel.org>,	Jarkko Sakkinen <jarkko@kernel.org>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-	"casey@schaufler-ca.com" <casey@schaufler-ca.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	"ebiggers@kernel.org" <ebiggers@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-	"linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: Re: [RFC PATCH v3 05/13] clavis: Introduce a new key type called
- clavis_key_acl
-Message-ID: <ZxKS57wBfgBZ21_g@farprobe>
-References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
- <20241017155516.2582369-6-eric.snowberg@oracle.com>
- <ZxHwaGeDCBSp3Dzx@farprobe>
- <2F718293-72DA-4E7F-99FF-690276B94F34@oracle.com>
+	s=arc-20240116; t=1729278302; c=relaxed/simple;
+	bh=FPm25//FWOl+CC1MWzk9hQUI9w5QiPt15s8anu8dklE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=PtZZpCKiUiDW2GhcM3rSnXGO+n3vLYmwIbeNOpdHWDW4UGAsKxjEcvET+Rx0RbnJBsXqNafBIXdi6bzpWzdyM3oaji9cuGWK60bC02mrT0ZOKhLR3JnhA+zgmm77vC2Kzj/KCK7JUTJNM6/Kt9m0Hw82ehDRPoBHsm9LEjUcWcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5uvTqpE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FA0C4CEC3;
+	Fri, 18 Oct 2024 19:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729278301;
+	bh=FPm25//FWOl+CC1MWzk9hQUI9w5QiPt15s8anu8dklE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q5uvTqpERQM/xf087llem64Geo2ZtGqg+DGlihon2UFTSlgjhC5vcPMah+RtPR5jM
+	 V9+ZHf5VFZjTmcJKtPceJvVyS89pTxSHtXENhw0ugAcvlBG6zaDYCdpiePQ9T4NkJw
+	 yYakgWahYaH/gaXTAb0ZaK9Vl26Y4TZHqqw28s36BYO6YrF6GxaiOZZWpK4raV87ID
+	 0ysPDESKTrAl8uBRXz//pA6XT++5p9W6jOADfciBCpAsxs9lJEyR+z9SP5o3THMssx
+	 tyXLYLe23fAQn89EO4XXbpUekwhntYEad85YicmT7GWnJqiLCAR0TKmHOIvH3/pNMO
+	 E7PgKiSEfhCCw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2F718293-72DA-4E7F-99FF-690276B94F34@oracle.com>
-User-Agent: Mutt/2.2.12 (2023-09-09)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 18 Oct 2024 22:04:56 +0300
+Message-Id: <D4Z5ZUHK76A8.18SJLAWKCZ5IX@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Roberto Sassu" <roberto.sassu@huaweicloud.com>,
+ <akpm@linux-foundation.org>, <Liam.Howlett@oracle.com>,
+ <lorenzo.stoakes@oracle.com>, <vbabka@suse.cz>, <jannh@google.com>
+Cc: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+ <ebpqwerty472123@gmail.com>, <paul@paul-moore.com>, <zohar@linux.ibm.com>,
+ <dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
+ <jmorris@namei.org>, <serge@hallyn.com>, <linux-integrity@vger.kernel.org>,
+ <linux-security-module@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-fsdevel@vger.kernel.org>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, <stable@vger.kernel.org>,
+ <syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v2] mm: Split critical region in remap_file_pages() and
+ invoke LSMs in between
+X-Mailer: aerc 0.18.2
+References: <20241018161415.3845146-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20241018161415.3845146-1-roberto.sassu@huaweicloud.com>
 
-On Fri, Oct 18, 2024 at 15:42:15 +0000, Eric Snowberg wrote:
-> > On Oct 17, 2024, at 11:21 PM, Ben Boeckel <me@benboeckel.net> wrote:
-> > Can this be committed to `Documentation/` and not just the Git history
-> > please?
-> 
-> This is documented, but it doesn't come in until the 8th patch in the series. 
-> Hopefully that is not an issue.
+On Fri Oct 18, 2024 at 7:14 PM EEST, Roberto Sassu wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+>
+> Commit ea7e2d5e49c0 ("mm: call the security_mmap_file() LSM hook in
+> remap_file_pages()") fixed a security issue, it added an LSM check when
+> trying to remap file pages, so that LSMs have the opportunity to evaluate
+> such action like for other memory operations such as mmap() and mprotect(=
+).
+>
+> However, that commit called security_mmap_file() inside the mmap_lock loc=
+k,
+> while the other calls do it before taking the lock, after commit
+> 8b3ec6814c83 ("take security_mmap_file() outside of ->mmap_sem").
+>
+> This caused lock inversion issue with IMA which was taking the mmap_lock
+> and i_mutex lock in the opposite way when the remap_file_pages() system
+> call was called.
+>
+> Solve the issue by splitting the critical region in remap_file_pages() in
+> two regions: the first takes a read lock of mmap_lock, retrieves the VMA
+> and the file descriptor associated, and calculates the 'prot' and 'flags'
+> variables; the second takes a write lock on mmap_lock, checks that the VM=
+A
+> flags and the VMA file descriptor are the same as the ones obtained in th=
+e
+> first critical region (otherwise the system call fails), and calls
+> do_mmap().
+>
+> In between, after releasing the read lock and before taking the write loc=
+k,
+> call security_mmap_file(), and solve the lock inversion issue.
+>
+> Cc: stable@vger.kernel.org # v6.12-rcx
+> Fixes: ea7e2d5e49c0 ("mm: call the security_mmap_file() LSM hook in remap=
+_file_pages()")
+> Reported-by: syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/linux-security-module/66f7b10e.050a0220.4=
+6d20.0036.GAE@google.com/
+> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Jann Horn <jannh@google.com>
+> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Tested-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Tested-by: syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> ---
+>  mm/mmap.c | 69 +++++++++++++++++++++++++++++++++++++++++--------------
+>  1 file changed, 52 insertions(+), 17 deletions(-)
+>
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 9c0fb43064b5..f731dd69e162 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1640,6 +1640,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, st=
+art, unsigned long, size,
+>  	unsigned long populate =3D 0;
+>  	unsigned long ret =3D -EINVAL;
+>  	struct file *file;
+> +	vm_flags_t vm_flags;
+> =20
+>  	pr_warn_once("%s (%d) uses deprecated remap_file_pages() syscall. See D=
+ocumentation/mm/remap_file_pages.rst.\n",
+>  		     current->comm, current->pid);
+> @@ -1656,12 +1657,60 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, =
+start, unsigned long, size,
+>  	if (pgoff + (size >> PAGE_SHIFT) < pgoff)
+>  		return ret;
+> =20
+> -	if (mmap_write_lock_killable(mm))
+> +	if (mmap_read_lock_killable(mm))
+>  		return -EINTR;
+> =20
+> +	/*
+> +	 * Look up VMA under read lock first so we can perform the security
+> +	 * without holding locks (which can be problematic). We reacquire a
+> +	 * write lock later and check nothing changed underneath us.
+> +	 */
+>  	vma =3D vma_lookup(mm, start);
+> =20
+> -	if (!vma || !(vma->vm_flags & VM_SHARED))
+> +	if (!vma || !(vma->vm_flags & VM_SHARED)) {
+> +		mmap_read_unlock(mm);
+> +		return -EINVAL;
+> +	}
+> +
+> +	prot |=3D vma->vm_flags & VM_READ ? PROT_READ : 0;
+> +	prot |=3D vma->vm_flags & VM_WRITE ? PROT_WRITE : 0;
+> +	prot |=3D vma->vm_flags & VM_EXEC ? PROT_EXEC : 0;
 
-Ah, I'll look there, thanks.
+Not an actual review comment but we don't have a conversion macro and/or
+inline for this, do we (and opposite direction)?
 
-> >> + if (isspace(desc[i]))
-> >> + desc[i] = 0;
-> > 
-> > How is setting a space to `0` *removing* it? Surely the `isxdigit` check
-> > internally is going to reject this. Perhaps you meant to have two
-> > indices into `desc`, one read and one write and to stall the write index
-> > as long as we're reading whitespace?
-> > 
-> > Also, that whitespace is stripped is a userspace-relevant detail that
-> > should be documented.
-> 
-> This was done incase the end-user has a trailing carriage return at the
-> end of their ACL. I have updated the comment as follows:
-> 
-> +       /*
-> +        * Copy the user supplied contents, if uppercase is used, convert it to
-> +        * lowercase.  Also if the end of the ACL contains any whitespace, strip
-> +        * it out.
-> +        */
+> +
+> +	flags &=3D MAP_NONBLOCK;
+> +	flags |=3D MAP_SHARED | MAP_FIXED | MAP_POPULATE;
+> +	if (vma->vm_flags & VM_LOCKED)
+> +		flags |=3D MAP_LOCKED;
+> +
+> +	/* Save vm_flags used to calculate prot and flags, and recheck later. *=
+/
+> +	vm_flags =3D vma->vm_flags;
+> +	file =3D get_file(vma->vm_file);
+> +
+> +	mmap_read_unlock(mm);
+> +
+> +	/* Call outside mmap_lock to be consistent with other callers. */
+> +	ret =3D security_mmap_file(file, prot, flags);
+> +	if (ret) {
+> +		fput(file);
+> +		return ret;
+> +	}
+> +
+> +	ret =3D -EINVAL;
+> +
+> +	/* OK security check passed, take write lock + let it rip. */
+> +	if (mmap_write_lock_killable(mm)) {
+> +		fput(file);
+> +		return -EINTR;
+> +	}
+> +
+> +	vma =3D vma_lookup(mm, start);
+> +
+> +	if (!vma)
+> +		goto out;
+> +
+> +	/* Make sure things didn't change under us. */
+> +	if (vma->vm_flags !=3D vm_flags)
+> +		goto out;
+> +	if (vma->vm_file !=3D file)
+>  		goto out;
+> =20
+>  	if (start + size > vma->vm_end) {
+> @@ -1689,25 +1738,11 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, =
+start, unsigned long, size,
+>  			goto out;
+>  	}
+> =20
+> -	prot |=3D vma->vm_flags & VM_READ ? PROT_READ : 0;
+> -	prot |=3D vma->vm_flags & VM_WRITE ? PROT_WRITE : 0;
+> -	prot |=3D vma->vm_flags & VM_EXEC ? PROT_EXEC : 0;
+> -
+> -	flags &=3D MAP_NONBLOCK;
+> -	flags |=3D MAP_SHARED | MAP_FIXED | MAP_POPULATE;
+> -	if (vma->vm_flags & VM_LOCKED)
+> -		flags |=3D MAP_LOCKED;
+> -
+> -	file =3D get_file(vma->vm_file);
+> -	ret =3D security_mmap_file(vma->vm_file, prot, flags);
+> -	if (ret)
+> -		goto out_fput;
+>  	ret =3D do_mmap(vma->vm_file, start, size,
+>  			prot, flags, 0, pgoff, &populate, NULL);
+> -out_fput:
+> -	fput(file);
+>  out:
+>  	mmap_write_unlock(mm);
+> +	fput(file);
+>  	if (populate)
+>  		mm_populate(ret, populate);
+>  	if (!IS_ERR_VALUE(ret))
 
-Well, this doesn't check the end for whitespace; any internal whitespace
-will terminate the key:
-
-    DEAD BEEF
-        ^ becomes NUL
-
-and results in the same thing as `DEAD` being passed.
-
-> > 
-> >> +static void key_acl_destroy(struct key *key)
-> >> +{
-> >> + /* It should not be possible to get here */
-> >> + pr_info("destroy clavis_key_acl denied\n");
-> >> +}
-> >> +
-> >> +static void key_acl_revoke(struct key *key)
-> >> +{
-> >> + /* It should not be possible to get here */
-> >> + pr_info("revoke clavis_key_acl denied\n");
-> >> +}
-> > 
-> > These keys cannot be destroyed or revoked? This seems…novel to me. What
-> > if there's a timeout on the key? If such keys are immortal, timeouts
-> > should also be refused?
-> 
-> All the system kernel keyrings work this way. But now that you bring this up, neither of
-> these functions are really necessary, so I will remove them in the next round.
-> 
-> >> +static int key_acl_vet_description(const char *desc)
-> >> +{
-> >> + int i, desc_len;
-> >> + s16 ktype;
-> >> +
-> >> + if (!desc)
-> >> + goto invalid;
-> >> +
-> >> + desc_len = sizeof(desc);
-> > 
-> > This should be `strlen`, no?
-> 
-> I will change this to strlen
-
-Actually, this could probably be `strnlen` using `CLAVIS_ASCII_KID_MAX +
-1` just to avoid running off into la-la land when we're going to error
-anyways. Or even `8` because we only actually care about "is at least 7
-bytes". Worth a comment either way.
-
-Looking forward to the next cycle.
-
-Thanks,
-
---Ben
+BR, Jarkko
 
