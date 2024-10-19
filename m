@@ -1,158 +1,133 @@
-Return-Path: <linux-integrity+bounces-3879-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3880-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6D239A4F1E
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Oct 2024 17:34:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 004C79A5086
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Oct 2024 21:39:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 752741F27086
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Oct 2024 15:34:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FA981C21965
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Oct 2024 19:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DE685B05E;
-	Sat, 19 Oct 2024 15:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E8A191496;
+	Sat, 19 Oct 2024 19:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="RSxock2j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBLm898K"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882EF12B94
-	for <linux-integrity@vger.kernel.org>; Sat, 19 Oct 2024 15:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A885137E;
+	Sat, 19 Oct 2024 19:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729352063; cv=none; b=bTcE0R25RNnx4bpSGY92/66r+/rDJj8ijFBJtX0ay5jKQLrvXLsNNBvIrrYa/eFNXjUAp0oX5Se2mNoMvGQCrAFNpmIA0YIP+bwcjS7rNX53kzVLGY3jhe8jVZZ0+1OFY9WVYGQQR50+b3tJbXqFnbNN8PW6h/HDIp8xn1Bm/Tk=
+	t=1729366789; cv=none; b=Pq7tGXxf68jlG03oefoVuOt6ResjTGYzQUNSw0XKEPIdXIgPaW2+0kmIKyyGNalAUoCKu6UqlHXD25eyeuS6mfjOhP0a94ejYgda1B1cnPowNBxSsBdL9tgttD/A99LE3XAr6kr4k/Vn/G8pQPNsdXuiZ5ilBwlEGk5Pbv+Xt7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729352063; c=relaxed/simple;
-	bh=2VEf0sZkKNyJqV8bPANqoeIKJLjrteDBJkPH+wW3P7Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NU13E4SA8Hi4rPLXSwbo4zh6ZLXfPCc+cY2q1lRprlfF3j2Ojg7dXAQd6fb0Ecu4dv0twNi1pwfN/VTpaStW9sNNu4ydtq2u+UaatuyAq3YAAT1wYvaoASPNQan5V03DeI6a5o6W6Dj8otObrcGrWeuranorw81jP2urTDYS9eE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=RSxock2j; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6e34339d41bso27847257b3.0
-        for <linux-integrity@vger.kernel.org>; Sat, 19 Oct 2024 08:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1729352059; x=1729956859; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dt9BnWbKgBvIPn8Egk93F8g/4UamVtbhqjDHYRc0VbU=;
-        b=RSxock2j4eFSMhlPud2PzMLhYJac3rWyeEDfgpn6nEyOad4weShuW0oPInoz9hKbG8
-         Ww7E5MQV80gkmZirtXUcT3sGyi4ZKtp275tH4BsfKCP0Laepk+0gV2WD25h77PzZ8Ck9
-         Qb61d6X1prsbHCW6kW+Kuj5dxj5OA7Dl9h3HosI/w+TnOjM+mzsqsQapyJJZaF6mc4Ka
-         fd48+oheIE9sLzbV5e0BiUExUP7Z0PLusAZbv8b6lLFLWYxjO/1IQ04uuoPvgTKjTijU
-         Ld9RDoyrTGzzCyxH0fkWmrCIFrz1YWyuBfy66q1laX3QGf9P16At8QHYI36hm66E3Og4
-         8+iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729352059; x=1729956859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dt9BnWbKgBvIPn8Egk93F8g/4UamVtbhqjDHYRc0VbU=;
-        b=FWRLeCge92Jmicz+fs39O9xmfknBa5qxBruaN1+v0TYZEU79+/Vbi2jJgry7gfPvky
-         epnswlZjaXGROOvDNMBKwCtRA9dmAzPnlLgvfs4n+DHkhKFFmf7t1yW1FRiEMH595eyH
-         scFMHI0F939S9azbEKL40OP9mnPm19p19v36KZfxlx6sw9BvIM8hnEzKzexoR2LkwT2j
-         hMppZxeTK8ccNoNYqYcYOlx1/t1OHMYWUVaTPuxFDR6G3mBBcDNqivn4OOrt8RzZkSDq
-         BsX6gFuLHtphJk2sOPePP9QEEZnEmRqRCF8dD4Zt9sShBLwM9u62J6WotDQJvjjxNT2E
-         6XpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvY7xWZ1bgsm1RR67A4Gl/k0NkIaobDGvbqBCUyTRQfEgqWhfI61yYGW+kg41bfXT+PTcL17iz0zFIosVoR7U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFAMN6qXUDXzHZSVB9P8rdyeRxSyYTRocjunQdBblOVIrP8UOB
-	b+4+i2mfmqTWWgk23N3g/cZMJdTUff3lPMFv5KPvdZuG6HQO6aA3hmbvM/xondozm47dafTqs48
-	itTJ/4XiWaOEgo2fVJ0F85+x23UGNKJiqWXoo
-X-Google-Smtp-Source: AGHT+IGtdGqzYcDLxnIpfjuAVP5vxoGEl/nSImRtgtKWi9QsQ/qNJR8p9BgodGD1xEymrlwrAaFBjtak2CSZfpvFhTo=
-X-Received: by 2002:a05:690c:f91:b0:6de:c0e:20ef with SMTP id
- 00721157ae682-6e5bfbdbe14mr53079707b3.7.1729352059439; Sat, 19 Oct 2024
- 08:34:19 -0700 (PDT)
+	s=arc-20240116; t=1729366789; c=relaxed/simple;
+	bh=ragpIrEdAyO35aZulTfOlu6tsbgCh54s8FJ34474VOc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=LbCYqCq1Z9d2joaXc5Z36aFBRMLTj00A2MlnmaH9G423+Z9cJjGkz1i1TnrIFfLQzATrrnXHNBSU1uLv1B1sGOBpn500rHraKHZuv28SJqGYgGLOJxq1JsxqgEQ150FGQabL9trV/VL2vHfI4d1sgofFu0vzoiEOZ78BrJ3Kab0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBLm898K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C07C4CEC5;
+	Sat, 19 Oct 2024 19:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729366789;
+	bh=ragpIrEdAyO35aZulTfOlu6tsbgCh54s8FJ34474VOc=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=LBLm898K3Wd3/r+7PbTixYoUiH+QiBr+DMMZ66UlaNQ1WF6152dHtHGFn+1Wv0OT3
+	 RbbQ+drx/kjt9Z8pHY/ai2nScD9Y7o42TF7kPzmsIj70xWgY1DcMx4oLUmx60ObKks
+	 IGKqzISLzNeTae6EoWQwi+cznW5eCY14NtXzB1jyZn9PeVResrsicIRlwvxnsh56np
+	 J60InhOOauS58Qq22QKdyG8tEFGy2g0t4HD+jS8vuIOSdqUXsZ7ekBSi0E7iSs4KMe
+	 iXTK2AYxZAgMOqvAtxFJ8q6XBQ8IVf64zPLVIxDWDWhDNcB0ZR2/WaLBE1gcXDyb3T
+	 tF9HN/Cwf7lFQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241018161415.3845146-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20241018161415.3845146-1-roberto.sassu@huaweicloud.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sat, 19 Oct 2024 11:34:08 -0400
-Message-ID: <CAHC9VhQP7gBa4AV-Hbh4Bq4fRU6toRmjccv52dGoU-s+MqsmfQ@mail.gmail.com>
-Subject: Re: [PATCH v2] mm: Split critical region in remap_file_pages() and
- invoke LSMs in between
-To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
-	Roberto Sassu <roberto.sassu@huaweicloud.com>, akpm@linux-foundation.org
-Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, vbabka@suse.cz, 
-	jannh@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	ebpqwerty472123@gmail.com, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, jmorris@namei.org, serge@hallyn.com, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, stable@vger.kernel.org, 
-	syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com, 
-	Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 19 Oct 2024 22:39:44 +0300
+Message-Id: <D501D1CY5SJ4.SUKXHV680B30@kernel.org>
+To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Peter Huewe"
+ <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>
+Cc: "Stefan Berger" <stefanb@linux.ibm.com>, <stable@vger.kernel.org>,
+ <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 1/5] tpm: Return on tpm2_create_null_primary()
+ failure
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.18.2
+References: <20241015205842.117300-1-jarkko@kernel.org>
+ <20241015205842.117300-2-jarkko@kernel.org>
+In-Reply-To: <20241015205842.117300-2-jarkko@kernel.org>
 
-On Fri, Oct 18, 2024 at 12:15=E2=80=AFPM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+On Tue Oct 15, 2024 at 11:58 PM EEST, Jarkko Sakkinen wrote:
+> tpm2_sessions_init() does not ignore the result of
+> tpm2_create_null_primary(). Address this by returning -ENODEV to the
+> caller. Given that upper layers cannot help healing the situation
+> further, deal with the TPM error here by
 >
-> Commit ea7e2d5e49c0 ("mm: call the security_mmap_file() LSM hook in
-> remap_file_pages()") fixed a security issue, it added an LSM check when
-> trying to remap file pages, so that LSMs have the opportunity to evaluate
-> such action like for other memory operations such as mmap() and mprotect(=
-).
->
-> However, that commit called security_mmap_file() inside the mmap_lock loc=
-k,
-> while the other calls do it before taking the lock, after commit
-> 8b3ec6814c83 ("take security_mmap_file() outside of ->mmap_sem").
->
-> This caused lock inversion issue with IMA which was taking the mmap_lock
-> and i_mutex lock in the opposite way when the remap_file_pages() system
-> call was called.
->
-> Solve the issue by splitting the critical region in remap_file_pages() in
-> two regions: the first takes a read lock of mmap_lock, retrieves the VMA
-> and the file descriptor associated, and calculates the 'prot' and 'flags'
-> variables; the second takes a write lock on mmap_lock, checks that the VM=
-A
-> flags and the VMA file descriptor are the same as the ones obtained in th=
-e
-> first critical region (otherwise the system call fails), and calls
-> do_mmap().
->
-> In between, after releasing the read lock and before taking the write loc=
-k,
-> call security_mmap_file(), and solve the lock inversion issue.
->
-> Cc: stable@vger.kernel.org # v6.12-rcx
-> Fixes: ea7e2d5e49c0 ("mm: call the security_mmap_file() LSM hook in remap=
-_file_pages()")
-> Reported-by: syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/linux-security-module/66f7b10e.050a0220.4=
-6d20.0036.GAE@google.com/
-> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Jann Horn <jannh@google.com>
-> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Tested-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Tested-by: syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: stable@vger.kernel.org # v6.10+
+> Fixes: d2add27cf2b8 ("tpm: Add NULL primary creation")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 > ---
->  mm/mmap.c | 69 +++++++++++++++++++++++++++++++++++++++++--------------
->  1 file changed, 52 insertions(+), 17 deletions(-)
+> v6:
+> - Address:
+>   https://lore.kernel.org/linux-integrity/69c893e7-6b87-4daa-80db-44d1120=
+e80fe@linux.ibm.com/
+>   as TPM RC is taken care of at the call site. Add also the missing
+>   documentation for the return values.
+> v5:
+> - Do not print klog messages on error, as tpm2_save_context() already
+>   takes care of this.
+> v4:
+> - Fixed up stable version.
+> v3:
+> - Handle TPM and POSIX error separately and return -ENODEV always back
+>   to the caller.
+> v2:
+> - Refined the commit message.
+> ---
+>  drivers/char/tpm/tpm2-sessions.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-ses=
+sions.c
+> index 511c67061728..253639767c1e 100644
+> --- a/drivers/char/tpm/tpm2-sessions.c
+> +++ b/drivers/char/tpm/tpm2-sessions.c
+> @@ -1347,6 +1347,11 @@ static int tpm2_create_null_primary(struct tpm_chi=
+p *chip)
+>   *
+>   * Derive and context save the null primary and allocate memory in the
+>   * struct tpm_chip for the authorizations.
+> + *
+> + * Return:
+> + * * 0		- OK
+> + * * -errno	- A system error
+> + * * TPM_RC	- A TPM error
+>   */
+>  int tpm2_sessions_init(struct tpm_chip *chip)
+>  {
+> @@ -1354,7 +1359,7 @@ int tpm2_sessions_init(struct tpm_chip *chip)
+> =20
+>  	rc =3D tpm2_create_null_primary(chip);
+>  	if (rc)
+> -		dev_err(&chip->dev, "TPM: security failed (NULL seed derivation): %d\n=
+", rc);
 
-Thanks for working on this Roberto, Kirill, and everyone else who had
-a hand in reviewing and testing.
+I can fixup this message back before sending PR.
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
+> +		return rc;
+> =20
+>  	chip->auth =3D kmalloc(sizeof(*chip->auth), GFP_KERNEL);
+>  	if (!chip->auth)
 
-Andrew, I see you're pulling this into the MM/hotfixes-unstable
-branch, do you also plan to send this up to Linus soon/next-week?  If
-so, great, if not let me know and I can send it up via the LSM tree.
+I don't know what happened to the cover letter but this version is only
+major tweaks to the previous version.
 
-We need to get clarity around Roberto's sign-off, but I think that is
-more of an administrative mistake rather than an intentional omission
-:)
-
---=20
-paul-moore.com
+BR, Jarkko
 
