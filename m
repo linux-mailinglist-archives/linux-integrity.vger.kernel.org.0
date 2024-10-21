@@ -1,164 +1,251 @@
-Return-Path: <linux-integrity+bounces-3888-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3889-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3669C9A5DCE
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Oct 2024 10:00:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E20C9A6EFC
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Oct 2024 18:02:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4402F1C21016
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Oct 2024 08:00:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00BE1284103
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Oct 2024 16:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A09CC1E131D;
-	Mon, 21 Oct 2024 07:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 763E01CBE9B;
+	Mon, 21 Oct 2024 16:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="C7i96HM9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFA71E1302;
-	Mon, 21 Oct 2024 07:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13B91CBEAC;
+	Mon, 21 Oct 2024 16:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729497592; cv=none; b=EmyeXLVd2oZZvQ4eibJgNg/aUSbmRowERCL1Ltpfyh7yMEAQQlOyGIMhwfJyxQEXi3Jyw+PUoBe/ic7AioI7Z+hOxvOzAqURWh53icTEDZlgGtVqR7ZIM/JP3h4uGkwdf+04+rwZXoNlGhIssczXIGggdUqy8eZaIMbCAI/xVwI=
+	t=1729526540; cv=none; b=d2RSiPYcWGRZQ60J9Ri9S7sSOL3wDaR5OGrT4NxS0XW6IStAe6shVZLA/UC9EuXc6uelW3E3ZpS51DCY7egDzdjaBd46UU9jhGyoNNygyKgDT/jzpCsWEwmcj3/kBpESwg8qmxC0S9thSoFxpbabpR2wA3ZEoSLknO+EneqmA+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729497592; c=relaxed/simple;
-	bh=lyQWXd8tZ+cJL5EJxSB+u2xZemaLQGSuAwwZhKQD8JQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=so0tKROT/2JP+sPNpLFBclwbPPOe47bIqvogi4OExYosWlpeADYaKWu1LTqcxfgjrq7IfO5TScYUOdAL4bTil5x9QofUJMJLA6UrBVKsYsNGfdkO7cOKHpeeKyiD/s7J9um7w6jsW7UcJN+uem3ljhpmyEOuR8eskd8VI2UZyx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4XX6dS3JbXz9v7NX;
-	Mon, 21 Oct 2024 15:39:24 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 3DEE8140134;
-	Mon, 21 Oct 2024 15:59:40 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwCXsYDdCRZnfdwkAA--.41168S2;
-	Mon, 21 Oct 2024 08:59:39 +0100 (CET)
-Message-ID: <c0e85aaa89283d5e4b742d23299f286a2e3eeaad.camel@huaweicloud.com>
-Subject: Re: [PATCH v2] mm: Split critical region in remap_file_pages() and
- invoke LSMs in between
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Paul Moore <paul@paul-moore.com>, "Kirill A. Shutemov"
-	 <kirill.shutemov@linux.intel.com>, akpm@linux-foundation.org
-Cc: Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, vbabka@suse.cz, 
- jannh@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- ebpqwerty472123@gmail.com, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
- eric.snowberg@oracle.com, jmorris@namei.org, serge@hallyn.com, 
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
- bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-  syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com, Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Mon, 21 Oct 2024 09:59:22 +0200
-In-Reply-To: <CAHC9VhQP7gBa4AV-Hbh4Bq4fRU6toRmjccv52dGoU-s+MqsmfQ@mail.gmail.com>
-References: <20241018161415.3845146-1-roberto.sassu@huaweicloud.com>
-	 <CAHC9VhQP7gBa4AV-Hbh4Bq4fRU6toRmjccv52dGoU-s+MqsmfQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1729526540; c=relaxed/simple;
+	bh=2jsYqb4Ep2sJG5RivIhBxdAGOfUNCMP3DJotctrN4pU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gttUYtcQjaqNdV7fulXnkuDDG772wPIKf9j/7cGV5XuNGuNNYge3j3BEQzYleePpmLapMh2k6ZUjFK+ApzWBPlITl7/Y+ki9H89jgHyHuTL+7XaJYlTn96yXABD5fsXddjKLa6RNlb1KjQiW/rlMMQ9DwGmRrIsvsJ8D0UQF6Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=C7i96HM9; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id AFE7340E0198;
+	Mon, 21 Oct 2024 16:02:15 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id TNPfEbfOKVQk; Mon, 21 Oct 2024 16:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1729526530; bh=gxl89NxCdQju+U0MLf0hibFSL/6VOGUYN70p3/bw+j4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=C7i96HM9lXwl1k5HrAq902CmHG0b3HztacSFaP1d9APzlRdHBwfHHY+Nt6ByNtrcF
+	 R8j/llMr1+RvDOHplMM3GixW8TmJ6nK3x2XQHHCn5I39mGOT43cvxL2umYYan+HfYj
+	 CRJLTO6GFdi/1RU4Aa54ow86yrb634NySlltHrQQCh4nhTrzrHXZbpVeHsGAgPHNSK
+	 uP8+K+rqfQQDPgBqdHTpDZSh74tVfLsGUmEdhRB9m6YhIsAb/koG850TzIezCAsw7T
+	 naUCIv76eZlZASeU/dOXUKsfn186sZvz3hMCOOLulMVAaHs7RjMwsSvoIKLVfNsxh0
+	 2JXlWguaQTySq3ZR+Ki6Zg3415vJX5qsRQVTGKBC+hUsoxDKGSFCTbn/cAief5jYyr
+	 9+Pe0Kr+hUr0wFFSOQHG4qVZi01RZCnMKIWWjLb8JiUiu90PAff6r3avbT1YjDvL79
+	 EwAYGAAbTrW0t+XKU3+T/5DUH/8w4HVw2PNeWPXH5w3esKMQ8Rdfz72NARJfzELgs1
+	 IHnLM08TDqszmkfWEZbgtLLf54Cp6twbiJ94FySU3g4cjbvHePb4Urpd9IseieN/JM
+	 1XS25ZsLtRBAbZm49S+px84WiWvweL6abSkW16sXLEGkiQvjzrFwgG1AuZ8go048Q5
+	 aoyYhLuA2KoPr42gbEiqNAnY=
+Received: from zn.tnic (p5de8e8eb.dip0.t-ipconnect.de [93.232.232.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 98CD340E0194;
+	Mon, 21 Oct 2024 16:02:03 +0000 (UTC)
+Date: Mon, 21 Oct 2024 18:02:02 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: bugzilla-daemon@kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	lkml <linux-kernel@vger.kernel.org>
+Cc: mikeseohyungjin@gmail.com
+Subject: Re: [Bug 219383] New: System reboot on S3 sleep/wakeup test
+Message-ID: <20241021160202.GGZxZ6-gCNNKUtTRse@fat_crate.local>
+References: <bug-219383-6385@https.bugzilla.kernel.org/>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwCXsYDdCRZnfdwkAA--.41168S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF1rZr18XFyrCw1xCryrXrb_yoW5Cw1DpF
-	ZxK3Z0kr1vqryxur1aqFy7WFWrC3yfGrW7WrZ7Xr1ruasrXF1fKr1fGF45Wa4DWrZ7CFWF
-	vF1jkr93Ka1DArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
-	0PDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBGcVvDAFpgADsY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bug-219383-6385@https.bugzilla.kernel.org/>
 
-On Sat, 2024-10-19 at 11:34 -0400, Paul Moore wrote:
-> On Fri, Oct 18, 2024 at 12:15=E2=80=AFPM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> >=20
-> > Commit ea7e2d5e49c0 ("mm: call the security_mmap_file() LSM hook in
-> > remap_file_pages()") fixed a security issue, it added an LSM check when
-> > trying to remap file pages, so that LSMs have the opportunity to evalua=
-te
-> > such action like for other memory operations such as mmap() and mprotec=
-t().
-> >=20
-> > However, that commit called security_mmap_file() inside the mmap_lock l=
-ock,
-> > while the other calls do it before taking the lock, after commit
-> > 8b3ec6814c83 ("take security_mmap_file() outside of ->mmap_sem").
-> >=20
-> > This caused lock inversion issue with IMA which was taking the mmap_loc=
-k
-> > and i_mutex lock in the opposite way when the remap_file_pages() system
-> > call was called.
-> >=20
-> > Solve the issue by splitting the critical region in remap_file_pages() =
-in
-> > two regions: the first takes a read lock of mmap_lock, retrieves the VM=
-A
-> > and the file descriptor associated, and calculates the 'prot' and 'flag=
-s'
-> > variables; the second takes a write lock on mmap_lock, checks that the =
-VMA
-> > flags and the VMA file descriptor are the same as the ones obtained in =
-the
-> > first critical region (otherwise the system call fails), and calls
-> > do_mmap().
-> >=20
-> > In between, after releasing the read lock and before taking the write l=
-ock,
-> > call security_mmap_file(), and solve the lock inversion issue.
-> >=20
-> > Cc: stable@vger.kernel.org # v6.12-rcx
-> > Fixes: ea7e2d5e49c0 ("mm: call the security_mmap_file() LSM hook in rem=
-ap_file_pages()")
-> > Reported-by: syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com
-> > Closes: https://lore.kernel.org/linux-security-module/66f7b10e.050a0220=
-.46d20.0036.GAE@google.com/
-> > Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Reviewed-by: Jann Horn <jannh@google.com>
-> > Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > Tested-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Tested-by: syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  mm/mmap.c | 69 +++++++++++++++++++++++++++++++++++++++++--------------
-> >  1 file changed, 52 insertions(+), 17 deletions(-)
->=20
-> Thanks for working on this Roberto, Kirill, and everyone else who had
-> a hand in reviewing and testing.
+Looks like TPM. CCing the proper people.
 
-Welcome!
+On Mon, Oct 14, 2024 at 12:46:26AM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=219383
+> 
+>             Bug ID: 219383
+>            Summary: System reboot on S3 sleep/wakeup test
+>            Product: Platform Specific/Hardware
+>            Version: 2.5
+>           Hardware: All
+>                 OS: Linux
+>             Status: NEW
+>           Severity: normal
+>           Priority: P3
+>          Component: x86-64
+>           Assignee: platform_x86_64@kernel-bugs.osdl.org
+>           Reporter: mikeseohyungjin@gmail.com
+>         Regression: No
+> 
+> I'm working for LG laptops, and I have run serveral LG PC with ubuntu OS. You
+> may know, most LG laptops has intel soc.
+> I found out a critical issue, system reboot on S3 sleep/wake up.
+> 
+> Enviornments:
+> - PC BIOS : Phoenix Technologies
+> - Intel Jasperlake or Intel Lunarlake 
+> - OS Ubuntu 22.04(Jasperlake), 24.04.1(Lunarlake)
+> - linux kernel version 6.x.0(Jasperlake) or up-to-date 6.11(Lunarlake)
+> 
+> Symptom:
+> 
+> Running the aging scripts like below, system reboots.
+> -------------------------
+> #!/bin/bash
+> <snip>
+> for (( i=1; i<=10000 ; i++ ))
+> sudo rtcwake -m mem -s 10 >> ${LOG} 2>&1
+> <snip>
+> -------------------------
+> The scripts works like below,
+> 1. waits 10 secs
+> 2. echo mem > /sys/power/state
+> 3. waits 10 secs again and wake up system like press power button.
+> 
+> 
+> My analysis:
+> 
+> I had reproduced several times to find that BIOS side triggered the system
+> reboots.
+> | pm_suspend() | syscore_suspend() | acpi_suspend_enter() | ... |  < BIOS > | 
+> ...| acpi_suspend_enter() |  syscore_resume() | ...|
+> 
+> Debugging on BIOS, TPM2 can generate cold reset when it detects something wrong
+> after TPM resuming.
+> In the BIOS code, if there are active PCR banks that are not supported by the
+> Platform mask, it supposes to be update the TPM allocations and reboot the
+> machine.
+> 
+> It means that something in linux kernel side can effect operations of  tpm when
+> going to sleep.
+> So, I have debuggered and traced the functions related to tpm, such as
+> tpm_chip_start whenever the symptoms represented.
+> 
+> In normal case, tpm_chip_start() called once like below,
+>  tpm_pm_suspend()-> tpm_chip_start().
+> but issued case, additionally called below
+>  hwrng_fillfn ->
+>   rng_get_data ->
+>     tpm_hwrng_read ->
+>       tpm_get_random ->
+>         tpm_find_get_ops ->
+>            tpm_try_get_ops ->
+>              tpm_chip_start ->
+> 
+> I found out that when running hwrng_fillfn(), related to Hardware random number
+> generator,  called during system_sleep, it can cause system reboots.
+> To Verify it, I have tested with custom kernel which includes below patch.
+> 
+> -----------------------
+> From 373e92bb6d471c5fb42bacb97a4caf5375df5522 Mon Sep 17 00:00:00 2001
+> From: mike Seo <mikeseohyungjin@gmail.com>
+> Date: Thu, 10 Oct 2024 14:04:57 +0900
+> Subject: [PATCH] test_patch
+> 
+> test_patch for reboot while sleep/wakeup
+> 
+> Signed-off-by: mike Seo <mikeseohyungjin@gmail.com>
+> ---
+>  drivers/char/hw_random/core.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
+> index 57c51efa5..d3f0059a4 100644
+> --- a/drivers/char/hw_random/core.c
+> +++ b/drivers/char/hw_random/core.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/string.h>
+>  #include <linux/uaccess.h>
+> +#include <linux/suspend.h>
+> 
+>  #define RNG_MODULE_NAME                "hw_random"
+> 
+> @@ -469,6 +470,22 @@ static struct attribute *rng_dev_attrs[] = {
+> 
+>  ATTRIBUTE_GROUPS(rng_dev);
+> 
+> +
+> +static int hwrng_pm_notification(struct notifier_block *nb, unsigned long
+> action, void *data)
+> +{
+> +
+> +       switch (action) {
+> +       case PM_SUSPEND_PREPARE:
+> +               is_suspend_prepare = 1;
+> +               break;
+> +       default:
+> +               is_suspend_prepare = 0;
+> +               break;
+> +       }
+> +       return 0;
+> +}
+> +
+> +static struct notifier_block pm_notifier = { .notifier_call =
+> hwrng_pm_notification };
+>  static int hwrng_fillfn(void *unused)
+>  {
+>         size_t entropy, entropy_credit = 0; /* in 1/1024 of a bit */
+> @@ -478,6 +495,9 @@ static int hwrng_fillfn(void *unused)
+>                 unsigned short quality;
+>                 struct hwrng *rng;
+> 
+> +               while (is_suspend_prepare)
+> +                       msleep(500);
+> +
+>                 rng = get_current_rng();
+>                 if (IS_ERR(rng) || !rng)
+>                         break;
+> @@ -549,6 +569,7 @@ int hwrng_register(struct hwrng *rng)
+>                         goto out_unlock;
+>         }
+>         mutex_unlock(&rng_mutex);
+> +       WARN_ON(register_pm_notifier(&pm_notifier));
+>         return 0;
+>  out_unlock:
+>         mutex_unlock(&rng_mutex);
+> -- 
+> 2.43.0
+> ------------------------
+> 
+> And I had passed over 10000 times of s3 wake/sleep aging test.
+> 
+> Can you make some patches for this issue and merges?
+> 
+> Thank you,
+> Mike
+> 
+> -- 
+> You may reply to this email to add a comment.
+> 
+> You are receiving this mail because:
+> You are watching the assignee of the bug.
 
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
->=20
-> Andrew, I see you're pulling this into the MM/hotfixes-unstable
-> branch, do you also plan to send this up to Linus soon/next-week?  If
-> so, great, if not let me know and I can send it up via the LSM tree.
->=20
-> We need to get clarity around Roberto's sign-off, but I think that is
-> more of an administrative mistake rather than an intentional omission
-> :)
+-- 
+Regards/Gruss,
+    Boris.
 
-Ops, I just thought that I would not need to add it, since I'm not the
-author of the patch. Please add my:
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Roberto
-
+https://people.kernel.org/tglx/notes-about-netiquette
 
