@@ -1,88 +1,73 @@
-Return-Path: <linux-integrity+bounces-3892-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3893-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E6E09A9682
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Oct 2024 05:06:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F4C39A976B
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Oct 2024 06:03:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 146D51F23278
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Oct 2024 03:06:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADB0B1C21524
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Oct 2024 04:03:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE57D13A416;
-	Tue, 22 Oct 2024 03:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DCB3770FD;
+	Tue, 22 Oct 2024 04:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="NggfWXyY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fP877oeT"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E894322A;
-	Tue, 22 Oct 2024 03:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7011862;
+	Tue, 22 Oct 2024 04:03:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729566398; cv=none; b=pnEAO/JtMTvCY235zK8oBFdWhqU1GxlUlRA2sEeknhWxmWGx493TwY8ValoCyXukaO0IUtgy2abkdqNXy5A6CKT/oi2yKiOD+fXbg96sMNsPjbhT7VMoUQKt/OPdFmRvapTHt9VIrdgg7JRj0bdMRGhfr5zpJg1zd/HczJ5wlTs=
+	t=1729569821; cv=none; b=uLf/Yw49x55DuIX2vsEfAa20IW2tK58QifzppfL0IjsNff1PT4mjMqlF6i4lRokZvo2EeZjkWuUHGflF2wigSunCZ7ofwVxrh/4ov/GSorgCG3NH417F94EpKSWooIz5sSsZKPME3ZRacmBs6+mNx3E/09pKQBbNxearffdmQi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729566398; c=relaxed/simple;
-	bh=Pdj6kXiEu2uGZ0LuXnPEeFujTzUCsth+MkAeAwOml2M=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=dGVFxIfAO5+JghjPTTH2s/le+AW9NsepW3IGQWeGPxPXnwy1NXUw4/h8QRFMPZqrCh7yzUKKankhPydy5o9uQc5UaDoT5OfMgjo/fBsCFIiPtCLWIA6rKbwXPfsPuWoMzFmH9jy9JvdqdLEGeFUpnd+gOr870PouJzwjooYBa+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=NggfWXyY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63BF2C4CEC3;
-	Tue, 22 Oct 2024 03:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1729566398;
-	bh=Pdj6kXiEu2uGZ0LuXnPEeFujTzUCsth+MkAeAwOml2M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NggfWXyYP0PLz8NPZXXLKvtCHBOCCUHJXIA791VBnfM5S43KFnylELeAOIU7G2AuL
-	 BEW8cUiNFq6PaoOmq/MK+SmL8Qu69m2puY1HIXO2lKmM5M5fYArC67wGmpVdUKHTie
-	 y13EZL8CT913+ZhvQL8OUOUJTE+rrtGvnIzZ+0Hc=
-Date: Mon, 21 Oct 2024 20:06:36 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Roberto Sassu
- <roberto.sassu@huaweicloud.com>, Liam.Howlett@oracle.com,
- lorenzo.stoakes@oracle.com, vbabka@suse.cz, jannh@google.com,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- ebpqwerty472123@gmail.com, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com, jmorris@namei.org, serge@hallyn.com,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
- syzbot+1cd571a672400ef3a930@syzkaller.appspotmail.com, Roberto Sassu
- <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v2] mm: Split critical region in remap_file_pages() and
- invoke LSMs in between
-Message-Id: <20241021200636.308f155a72f8a4d1e26f82b8@linux-foundation.org>
-In-Reply-To: <CAHC9VhQP7gBa4AV-Hbh4Bq4fRU6toRmjccv52dGoU-s+MqsmfQ@mail.gmail.com>
-References: <20241018161415.3845146-1-roberto.sassu@huaweicloud.com>
-	<CAHC9VhQP7gBa4AV-Hbh4Bq4fRU6toRmjccv52dGoU-s+MqsmfQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729569821; c=relaxed/simple;
+	bh=RdQ7SzPxkuKuptpL/Apf1W0JG9I8LoGtTX1YA1crnY4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YUZlQxslYvtPEXGXVzGWh1njtAUnSy/r1FGTA+pZUu0BSe+rXAKceL2NVKnihvoRIjZLMV+YOJQmYSuPtPs1dhIRsBiPVb73hFUPhY+1tnaxMQh4HcyalhYP+8Feo0ZL+5FLCjpXvUZEE/Y1vhJz0Q6xG6icjdumZbq3ahlLlDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fP877oeT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F4F9C4CEC3;
+	Tue, 22 Oct 2024 04:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729569820;
+	bh=RdQ7SzPxkuKuptpL/Apf1W0JG9I8LoGtTX1YA1crnY4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fP877oeTDpOxG3repd4W3K+Kev0m3rMoplYL6IQDtnAmFneYZjIa3hqOQLMyYFVqy
+	 RD3fkPHFWF0z1DaSwWDxeCsXVyCfrFB/IiQjAUJlOjHaGGARYjYHkAPbXaiDEudRe+
+	 Y/PRN+nN7U+1j575Zkh9YpkuXg6Z+EfkaUHCx7vRlEh0lfRVNm8UU9r58hbU+nDadf
+	 R3cBD5+ge/JSErrIdrKt4r3oMJ7VpHsqUG+CdLeHslwp6KV0hqkAjLWc7Qhmi/WnGh
+	 HqTSQ8cL4MxLwr1rCTLLiymWzCmUQ/VF2u/jEan9jC8w1GGIIDqU+vKWfedLNMs/6S
+	 14JYybb1niyUA==
+Date: Tue, 22 Oct 2024 04:03:37 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jett Rink <jettrink@chromium.org>, LKML <linux-kernel@vger.kernel.org>,
+	linux-security-module@vger.kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>,
+	linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v6] tpm: Add new device/vendor ID 0x50666666
+Message-ID: <ZxckGbxzpWDuXG_q@google.com>
+References: <20240910191117.1001581-1-jettrink@chromium.org>
+ <D43HINLZGMXS.FYJOK0SVQFQW@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <D43HINLZGMXS.FYJOK0SVQFQW@kernel.org>
 
-On Sat, 19 Oct 2024 11:34:08 -0400 Paul Moore <paul@paul-moore.com> wrote:
+Hi Jarkko,
 
-> >  mm/mmap.c | 69 +++++++++++++++++++++++++++++++++++++++++--------------
-> >  1 file changed, 52 insertions(+), 17 deletions(-)
-> 
-> Thanks for working on this Roberto, Kirill, and everyone else who had
-> a hand in reviewing and testing.
-> 
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
-> 
-> Andrew, I see you're pulling this into the MM/hotfixes-unstable
-> branch, do you also plan to send this up to Linus soon/next-week?  If
-> so, great, if not let me know and I can send it up via the LSM tree.
+On Wed, Sep 11, 2024 at 04:21:24PM +0300, Jarkko Sakkinen wrote:
+> I applied this (will push later to my remote tree).
 
-In the normal course of things I'd send it upstream next week, but I
-can include it in this week's batch if we know that -next testing is
-hurting from it?
+I failed to find the patch in [1].  Is it somehow overlooked?
 
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=next
 
