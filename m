@@ -1,274 +1,134 @@
-Return-Path: <linux-integrity+bounces-3909-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3910-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE4829AE57B
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 15:01:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30E199AF31E
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 21:57:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BF0228409E
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 13:00:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4860B2316D
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 19:57:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6BB51D9A6E;
-	Thu, 24 Oct 2024 13:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E7F2003AA;
+	Thu, 24 Oct 2024 19:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="msQal4CE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e73TzK2G"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D0D1D9A5B;
-	Thu, 24 Oct 2024 13:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6DF1A3A95;
+	Thu, 24 Oct 2024 19:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729774830; cv=none; b=KJyFzeQrnReBkLhHGdnKbh5XPOP1/Lb1YgbbVjtKwtoIiT/ct7xWJ8QMcizmDxzGmuQoGw1nr1sK2oRCJZTA+gjucxzHErqD00kr1NvC4Ff2GZyU4nfmpEQj+S2A/x6gjCJ2XlGKFN792nPVy9B/ObR6xkw8SzHRtuZO5ZyE9iI=
+	t=1729799849; cv=none; b=vAWs1uNh8Y9tJS8nGatPxxvbnW55pG7xzZQnMC6JA6ykGCSvtSdtArxMPo1DIkYuNzzpXS999nRDyeacFMWmXkfO/3hVbnek1idjiVbnpepiRNvWxNT9FhIQmC3UG3zbic0P9QFqx0XoHNvT30GmnasrtXGxwUzqrUExpT7F5gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729774830; c=relaxed/simple;
-	bh=RK8kCBuNkd+3zVoJoSiqFF447ojkzMRH/ErnnMN+Aik=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=FkTjVbH0VM50KhrZKJAkbjQ+KP9BILlfg/kVYTP7BtPapk6PXXN79+hVM1e52jjfQldPO2+sjQbnA6gMnLg2cVMkP+FC2MAEPch9M0Gj+SMdPCD1AZkdsP3S9DlC5JOxMMsbMEd+35qKDfWLDqeamaAJ4p0cFCrZy6z0uwnogPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=msQal4CE; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49O25JNV026355;
-	Thu, 24 Oct 2024 12:59:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=DpAXj2
-	MSJyHnTZ2Xb1tOp5CVvCsAyxHh/cUttlApCJQ=; b=msQal4CECRe+vuxK3ywVjp
-	sboq/cBYixuKoNqvWBJbynazh6g4mms4QQ2quIOvl/f9sUXcRTZWOMqJcn52wH/6
-	JBdHr/6124qog47fEbgKniP9jLq+t70BiqU4oeUoLk7RzbvacN0wtXfUr+mzUX1n
-	efoKHu4hGBA0VLYezJI+CijGpwt5Pac5VU53M7z24OgUdDFBxQwgCr1mcVC4fGUD
-	Tu8Ubj2c/3CJmP7eJvfUARcNLUrl0TQQYtWqzNlb/nMZIQ8NhPzqx4U1fIiMAhGR
-	VT6oqN2Kzn2KGaMt0bM4Kzg6SCmL/Ea1hMMFW4FO42LfEhLygdrrepYX2d/K5ZmQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42emaf0het-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 12:59:12 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49OCxCIa009289;
-	Thu, 24 Oct 2024 12:59:12 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42emaf0hep-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 12:59:11 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49OAgxCQ001557;
-	Thu, 24 Oct 2024 12:59:11 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 42emk9gef8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 12:59:11 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49OCxAWh10289676
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Oct 2024 12:59:10 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3B29E58057;
-	Thu, 24 Oct 2024 12:59:10 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 41EB658063;
-	Thu, 24 Oct 2024 12:59:09 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 24 Oct 2024 12:59:09 +0000 (GMT)
-Message-ID: <01edff76-2a66-4543-b1bf-4dc33d46c741@linux.ibm.com>
-Date: Thu, 24 Oct 2024 08:59:08 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 4/5] tpm: Allocate chip->auth in
- tpm2_start_auth_session()
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20241021053921.33274-1-jarkko@kernel.org>
- <20241021053921.33274-5-jarkko@kernel.org>
- <588319e8-5983-4f15-abae-b5021f1e4fce@linux.ibm.com>
- <D5401CDJGBUG.1588B09HN21YS@kernel.org>
-Content-Language: en-US
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <D5401CDJGBUG.1588B09HN21YS@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Fi7jeYSJuBQzpNA-AiLfz-omgQg8MNpw
-X-Proofpoint-ORIG-GUID: SlhCKi8OY3LW5MhnZw5YejosLM9BsxQf
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1729799849; c=relaxed/simple;
+	bh=gOn6T3lWiKaxNxhYs41benmtcEZIjMyZ2IUbcXX00nQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hvv6hB8mVqsQkO9fwkBuHR34+/AaK7geDjHa9VnOcPRp0RnPDUEoyPUqVWGrYK+uIX1RHZObO8V5QzhBT56Yt1kBS0SufjCNgzeqJsUj6v8m3z2zQAqfoeDnSirX8tEP0b5IifLJB0rDTzw6cISrh0E4YpcJ5aIRk/NSZ7tyIFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e73TzK2G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70463C4CECD;
+	Thu, 24 Oct 2024 19:57:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729799849;
+	bh=gOn6T3lWiKaxNxhYs41benmtcEZIjMyZ2IUbcXX00nQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e73TzK2Ggyd8lQr/wIg+tIKHA6B0skKLKEHIMU8ouylH6mW7IuUzfXXIOWLBo1LtH
+	 aZ7xD3r9GE+1dfWskbtU3wnTf1xOeLYUzB42pZfj0VwVD92Xau6aTiOcF59fbrYrrh
+	 fbf9nOUcuvWTE/PuF7PEK3tiSwPXCVfmF7Lsxa4GYUkuNer/bsR5uscEynYECo65hF
+	 Oxew16yGZ6ewIRda75moxkaGp8okhOJY5AgD2iazYmQoycx8fBg2VUJ315Vj7p9mWX
+	 AiKWgjeXZbIrVs96YDAvjGoWiuSvt4f0tT99053Nljxj+pQ9daw9zgtzrkbWqyKzIN
+	 YczXwSBMBsU7w==
+Date: Thu, 24 Oct 2024 19:57:21 +0000
+From: sergeh@kernel.org
+To: Eric Snowberg <eric.snowberg@oracle.com>
+Cc: "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	"casey@schaufler-ca.com" <casey@schaufler-ca.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	"ebiggers@kernel.org" <ebiggers@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: Re: [RFC PATCH v3 08/13] clavis: Introduce new LSM called clavis
+Message-ID: <ZxqmoV-izscjbovh@lei>
+References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
+ <20241017155516.2582369-9-eric.snowberg@oracle.com>
+ <ZxhetCy5RE1k4_Jk@lei>
+ <F911D28D-F8EC-4773-8143-2B4E207DA202@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410240107
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F911D28D-F8EC-4773-8143-2B4E207DA202@oracle.com>
 
+On Wed, Oct 23, 2024 at 07:25:21PM +0000, Eric Snowberg wrote:
+> > On Oct 22, 2024, at 8:25 PM, sergeh@kernel.org wrote:
+> > 
+> > On Thu, Oct 17, 2024 at 09:55:11AM -0600, Eric Snowberg wrote:
+> >> 
+> >> +The Clavis LSM contains a system keyring call .clavis.  It contains a single
+> > 
+> > s/call/called/
+> 
+> I will change that, thanks.
+> 
+> >> +asymmetric key that is used to validate anything added to it.  This key can
+> >> +be added during boot and must be a preexisting system kernel key.  If the
+> >> +``clavis=`` boot parameter is not used, any asymmetric key the user owns
+> > 
+> > Who is "the user", and precisely what does "owns' mean here?  Is it just
+> > restating that it must be a key already in one of the builtin or secondary
+> > or platform keyrings?
+> 
+> In the case where Clavis was not provided a key id during boot, root can 
+> add a single public key to the .clavis keyring anytime afterwards.  This 
+> key does not need to be in any of the system keyrings.  Once the key is 
+> added, the Clavis LSM is enabled. The root user must also own the private 
+> key, since this is required to do the ACL signing. I will try to clarify this better 
 
+Ooh, I see.  Own it as in be able to sign things with it.  Of course.  Thanks.
 
-On 10/24/24 7:28 AM, Jarkko Sakkinen wrote:
-> On Wed Oct 23, 2024 at 10:15 PM EEST, Stefan Berger wrote:
->>
->>
->> On 10/21/24 1:39 AM, Jarkko Sakkinen wrote:
->>> Move allocation of chip->auth to tpm2_start_auth_session() so that the
->>> field can be used as flag to tell whether auth session is active or not.
->>>
->>> Cc: stable@vger.kernel.org # v6.10+
->>> Fixes: 699e3efd6c64 ("tpm: Add HMAC session start and end functions")
->>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>> ---
->>> v5:
->>> - No changes.
->>> v4:
->>> - Change to bug.
->>> v3:
->>> - No changes.
->>> v2:
->>> - A new patch.
->>> ---
->>>    drivers/char/tpm/tpm2-sessions.c | 43 +++++++++++++++++++-------------
->>>    1 file changed, 25 insertions(+), 18 deletions(-)
->>>
->>> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
->>> index 78c650ce4c9f..6e52785de9fd 100644
->>> --- a/drivers/char/tpm/tpm2-sessions.c
->>> +++ b/drivers/char/tpm/tpm2-sessions.c
->>> @@ -484,7 +484,8 @@ static void tpm2_KDFe(u8 z[EC_PT_SZ], const char *str, u8 *pt_u, u8 *pt_v,
->>>    	sha256_final(&sctx, out);
->>>    }
->>>    
->>> -static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip)
->>> +static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
->>> +				struct tpm2_auth *auth)
->>>    {
->>>    	struct crypto_kpp *kpp;
->>>    	struct kpp_request *req;
->>> @@ -543,7 +544,7 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip)
->>>    	sg_set_buf(&s[0], chip->null_ec_key_x, EC_PT_SZ);
->>>    	sg_set_buf(&s[1], chip->null_ec_key_y, EC_PT_SZ);
->>>    	kpp_request_set_input(req, s, EC_PT_SZ*2);
->>> -	sg_init_one(d, chip->auth->salt, EC_PT_SZ);
->>> +	sg_init_one(d, auth->salt, EC_PT_SZ);
->>>    	kpp_request_set_output(req, d, EC_PT_SZ);
->>>    	crypto_kpp_compute_shared_secret(req);
->>>    	kpp_request_free(req);
->>> @@ -554,8 +555,7 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip)
->>>    	 * This works because KDFe fully consumes the secret before it
->>>    	 * writes the salt
->>>    	 */
->>> -	tpm2_KDFe(chip->auth->salt, "SECRET", x, chip->null_ec_key_x,
->>> -		  chip->auth->salt);
->>> +	tpm2_KDFe(auth->salt, "SECRET", x, chip->null_ec_key_x, auth->salt);
->>>    
->>>     out:
->>>    	crypto_free_kpp(kpp);
->>> @@ -854,6 +854,8 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
->>>    			/* manually close the session if it wasn't consumed */
->>>    			tpm2_flush_context(chip, auth->handle);
->>>    		memzero_explicit(auth, sizeof(*auth));
->>> +		kfree(auth);
->>> +		chip->auth = NULL;
->>>    	} else {
->>>    		/* reset for next use  */
->>>    		auth->session = TPM_HEADER_SIZE;
->>> @@ -882,6 +884,8 @@ void tpm2_end_auth_session(struct tpm_chip *chip)
->>>    
->>>    	tpm2_flush_context(chip, auth->handle);
->>>    	memzero_explicit(auth, sizeof(*auth));
->>> +	kfree(auth);
->>> +	chip->auth = NULL;
->>>    }
->>>    EXPORT_SYMBOL(tpm2_end_auth_session);
->>>    
->>> @@ -970,25 +974,29 @@ static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
->>>     */
->>>    int tpm2_start_auth_session(struct tpm_chip *chip)
->>>    {
->>> +	struct tpm2_auth *auth;
->>>    	struct tpm_buf buf;
->>> -	struct tpm2_auth *auth = chip->auth;
->>> -	int rc;
->>>    	u32 null_key;
->>> +	int rc;
->>>    
->>> -	if (!auth) {
->>> -		dev_warn_once(&chip->dev, "auth session is not active\n");
->>> +	if (chip->auth) {
->>> +		dev_warn_once(&chip->dev, "auth session is active\n");
->>>    		return 0;
->>>    	}
->>>    
->>> +	auth = kzalloc(sizeof(*auth), GFP_KERNEL);
->>> +	if (!auth)
->>> +		return -ENOMEM;
->>> +
->>>    	rc = tpm2_load_null(chip, &null_key);
->>>    	if (rc)
->>> -		goto out;
->>> +		goto err;
->>>    
->>>    	auth->session = TPM_HEADER_SIZE;
->>>    
->>>    	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_START_AUTH_SESS);
->>>    	if (rc)
->>> -		goto out;
->>> +		goto err;
->>>    
->>>    	/* salt key handle */
->>>    	tpm_buf_append_u32(&buf, null_key);
->>> @@ -1000,7 +1008,7 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
->>>    	tpm_buf_append(&buf, auth->our_nonce, sizeof(auth->our_nonce));
->>>    
->>>    	/* append encrypted salt and squirrel away unencrypted in auth */
->>> -	tpm_buf_append_salt(&buf, chip);
->>> +	tpm_buf_append_salt(&buf, chip, auth);
->>>    	/* session type (HMAC, audit or policy) */
->>>    	tpm_buf_append_u8(&buf, TPM2_SE_HMAC);
->>>    
->>> @@ -1021,10 +1029,13 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
->>>    
->>>    	tpm_buf_destroy(&buf);
->>>    
->>> -	if (rc)
->>> -		goto out;
->>> +	if (rc == TPM2_RC_SUCCESS) {
->>> +		chip->auth = auth;
->>> +		return 0;
->>> +	}
->>>    
->>> - out:
->>> +err:
->>
->> like in many other cases before kfree(auth):
->> memzero_explicit(auth, sizeof(*auth));
->>
->> With this:
->>
->> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> in the documentation. 
 > 
-> Thanks, or should we use kfree_sensitive()?
-> 
-> It has some additional functionality, which is missed now:
-> 
-> https://elixir.bootlin.com/linux/v6.11.5/source/mm/slab_common.c#L1339
-> 
-> I.e. kasan_unpoison().
+> I wouldn't expect this to be the typical way Clavis would be used. I would 
 
-And change the other ones that use memzero_explicit()?
+Right, I wasn't asking because I would want to use it that way, but
+because it feels potentially dangerous :)
 
+> also be interested in any feedback if enabling the Clavis LSM this way 
+> following boot should be removed.  If this were removed, Clavis could 
+> only be enabled when using the boot parameter.
+
+Yeah I don't know enough to give good guidance here.  I do worry about
+UKIs enforcing only the built-in signed kernel command line and so preventing
+a user from appending their own clavis= entry.  Not knowing how this
+will end up getting deployed, I'm not sure which is the more important
+issue.
+
+> > And this is done by simply loading it into the clavis keyring, right?
 > 
-> BR, Jarkko
+> Correct.
 > 
 
