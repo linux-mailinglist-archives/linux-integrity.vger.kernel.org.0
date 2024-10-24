@@ -1,103 +1,95 @@
-Return-Path: <linux-integrity+bounces-3905-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3906-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 776699ADB91
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 07:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 541FA9AE3B7
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 13:22:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 090B62832EB
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 05:43:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1348E283CB6
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 11:22:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F414165F01;
-	Thu, 24 Oct 2024 05:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083F21CEAB1;
+	Thu, 24 Oct 2024 11:22:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="uD/31oaC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="maYJeymI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440F1C8F0;
-	Thu, 24 Oct 2024 05:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF3B61CDA1C;
+	Thu, 24 Oct 2024 11:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729748598; cv=none; b=CQZC4gghRksORkGIUGSjiUOe1JYvgSSxFRi1A4lh//NH8bL794Xzyp0C9ugPm1SNbBN0NRfaWKYWMwy7CI/VafglPOu/K2EeH74jiDLi8PjuIVMIII8RPshepZs9lye6N6tcjVwSUaJYP9smJfumaKLiOlJpNq3SntnHeNjSg5s=
+	t=1729768942; cv=none; b=ZouIgyq28hEUKyr9Fq2R8lkyqn+8ysArzAXXFuoe9NeHuyqGFyA0eMmsXQO+O/WVWCtI1QdAkFe8aQOXMJrCyt/AakF8eEbqqk/opr9qG8O4L5pY3cLBXfL7ryYYsgydjiSRNBTKZdjNYZnRowqm7COxrio1XIwLzi5SfRqzh5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729748598; c=relaxed/simple;
-	bh=wjqS/t8+rcOU09Cga1EforbscJmeUuOflPkZevgZ7B8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=P9swSg48lfQw4yHYbmkQ6zlfVIGB3HFCbAt4iilDHNfDarNhjQt/tj3W+G3yCp9s/lIOI2V/iVtNZf1LX89e5oq3Y9/qAxpiVamEpMFItnzIrPvBVAeFj9wApOFtaO6LYGVcIgxxlnB5yTfEConUn3BJ0wSNkP6o262ptJP11Ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=uD/31oaC; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from localhost.localdomain (82-131-200-27.pool.digikabel.hu [82.131.200.27])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	(Authenticated sender: hs@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 0838888E0F;
-	Thu, 24 Oct 2024 07:43:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1729748594;
-	bh=67XcJrpAeWLTopuAGqI8NMDSv4lhCuMcrzl9ZzSiXug=;
-	h=From:To:Cc:Subject:Date:From;
-	b=uD/31oaCMBI34Ew9AH7yCtoh/G8kSIEnWl8L+NX3j/um1WNeBGCv0jJBObFACk//e
-	 LpPnXPf622DwJHThGb3Yb75oaMN3cMe5C8C1NtagePsWKhNO+0pqPCHUgqOXAtJdxD
-	 hhPcGbUjOJiAjHHErz3g8laEJjoCR5ckLOct0Zqx3ITLkkOjVySJzW9c2IrVTPTO7Z
-	 iJFj3bEAp3hyu3Bpf6+IMyWUj2wNgYRFPmngycNiLTB4RnecnTl8RiJv6sShaUnEQM
-	 irQDXp9DVsBGoulXwbdnsLPUlM6Y+WF0+81jvNC3Xx8e1T2dNWRLVo85OshaKChLLe
-	 RccIIuHwGyJ6w==
-From: Heiko Schocher <hs@denx.de>
-To: linux-kernel@vger.kernel.org
-Cc: Heiko Schocher <hs@denx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH v1] tpm: tis_i2c: add ST33KTPM2XI2C compatible entry
-Date: Thu, 24 Oct 2024 07:43:04 +0200
-Message-Id: <20241024054304.26714-1-hs@denx.de>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1729768942; c=relaxed/simple;
+	bh=CnUNKt4stBuax4eI8NnoLAFYCHPwGJdu2d5Qca/R/Nk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=NPEj+40HURnZIHq335lM2Fx2Nk3k5pOuEiwTvEBzy3SPvKiZV3l32tpAiR1aCBMU/4WHohqugVp8gL6tZuVouqovQ0MEIYUymnAwaKXAa7bWcRtfUp3YWXkkkZLb3e4l2NekcCraHB/j9B6f68tW+cVtgx3MD+a1deMvb6xCP4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=maYJeymI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD128C4CECD;
+	Thu, 24 Oct 2024 11:22:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729768942;
+	bh=CnUNKt4stBuax4eI8NnoLAFYCHPwGJdu2d5Qca/R/Nk=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=maYJeymIdDhTuDsj/E+l/Hanp8AGmW7Wy4Vn8Y/SpvyTZGmGsh/A4LAhK/eIW67tn
+	 wOrweEB+hNIRlIjuoEI9DeY2uiZeidSxPBW0V7aiBPjzgahyK6WlWKpv1F2fpS+ae8
+	 s/k4tOpkleSY1CUFHvXDYAphCtaXlWpiNUlOnX9GzELfhW6PeNO77u3FzTr3Xu5LZm
+	 rDNGI5Iq9aEpsNYAoiLQ4KWmEErgnAdsm4W2RMrNhf2Lf3yobw/iX6j+8lnQfnt3x5
+	 V+A7Ev0E41Ws4Ywz6QAEICEAWuKDbIrJaU++FAaxqML88C7rUwYr4v5Al5Au0aJLXL
+	 wtTqITGuukJrw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Oct 2024 14:22:17 +0300
+Message-Id: <D53ZWVR69ZG1.3CT6HRHCJI68W@kernel.org>
+Cc: "David Howells" <dhowells@redhat.com>, "Mimi Zohar"
+ <zohar@linux.ibm.com>, "Roberto Sassu" <roberto.sassu@huawei.com>,
+ <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v7 1/5] tpm: Return on tpm2_create_null_primary()
+ failure
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Stefan Berger" <stefanb@linux.ibm.com>,
+ <linux-integrity@vger.kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>
+X-Mailer: aerc 0.18.2
+References: <20241021053921.33274-1-jarkko@kernel.org>
+ <20241021053921.33274-2-jarkko@kernel.org>
+ <bb9ef4af-4a35-40e2-85cc-bcacae4f2dbc@linux.ibm.com>
+In-Reply-To: <bb9ef4af-4a35-40e2-85cc-bcacae4f2dbc@linux.ibm.com>
 
-add compatible entry "st,st33ktpm2xi2c" for ST33KTPM2XI2C
-chip from ST.
+On Wed Oct 23, 2024 at 8:46 PM EEST, Stefan Berger wrote:
+>
+>
+> On 10/21/24 1:39 AM, Jarkko Sakkinen wrote:
+> > tpm2_sessions_init() does not ignore the result of
+> > tpm2_create_null_primary(). Address this by returning -ENODEV to the
+> > caller. Given that upper layers cannot help healing the situation
+>
+> It looks like returning -ENODEV applied to a previous version of the patc=
+h.
+>
+> > further, deal with the TPM error here by
+>
+> This sounds like an incomplete sentence...
 
-datasheet:
-https://www.st.com/resource/en/data_brief/st33ktpm2xi2c.pdf
+It looks like totally corrupted, thanks for the remark.
 
-This entry is already documented in
-Documentation/devicetree/bindings/tpm/tcg,tpm-tis-i2c.yaml
+"tpm2_sessions_init() ignores the return value of tpm2_create_null_primary(=
+).
+Fail early and return back to the caller if it fails. Fine-tune the error
+message while at it."
+=09
+Is this sufficient?
 
-and so we should add this compatible entry in the
-related driver.
-
-Signed-off-by: Heiko Schocher <hs@denx.de>
----
-
- drivers/char/tpm/tpm_tis_i2c.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
-index 6cd07dd34507..933e10c7522e 100644
---- a/drivers/char/tpm/tpm_tis_i2c.c
-+++ b/drivers/char/tpm/tpm_tis_i2c.c
-@@ -384,6 +384,7 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
- static const struct of_device_id of_tis_i2c_match[] = {
- 	{ .compatible = "infineon,slb9673", },
- 	{ .compatible = "nuvoton,npct75x", },
-+	{ .compatible = "st,st33ktpm2xi2c", },
- 	{ .compatible = "tcg,tpm-tis-i2c", },
- 	{}
- };
--- 
-2.20.1
-
+BR, Jarkko
 
