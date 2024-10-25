@@ -1,80 +1,93 @@
-Return-Path: <linux-integrity+bounces-3914-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3915-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB20B9B0627
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2024 16:48:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 583559B0CF3
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2024 20:15:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 509B61F2252F
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2024 14:48:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA6D7280DCE
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2024 18:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFFB67083B;
-	Fri, 25 Oct 2024 14:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6157033EA;
+	Fri, 25 Oct 2024 18:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gH44ALbA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dN7W8dWv"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860E8212195;
-	Fri, 25 Oct 2024 14:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311D5800;
+	Fri, 25 Oct 2024 18:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729867710; cv=none; b=lIN5OiAnqFGWMztSpe5U3wp3mWnktBhtcHz+gXuErPVd9I3PT2E+CSe+kBxyIdAKT2x/L2oXTqeAhXmAxIKzhkfKlBsAX5Ne2VkqQAVXwrTiob0UUS6S8eJCwnI/pKzGbXfmifttbUEJEujvIDsrefyJNQF6B3as6hoRiKz7/rw=
+	t=1729880137; cv=none; b=kE3xjBMFwhhnCW/lhGiR5bfTG3l1J5koyxlTy3xa+vbRIj06qVOlBsFsnkddpZAw8MfqCJwEd4FXOfpDh4bvZriXpg4rEiYc/P+049zJv0g2oPZT98PFuiSVzRFE5KnI87PgquTofeWELVpQailX7R6qezgIOOq2xQGWLuC/8yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729867710; c=relaxed/simple;
-	bh=aUonxWk/Wb6mMpEzIzSZDDZlf2vaFKkhtJQaWHKDrmY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=ndCRtd2WGOs7zDOWqUiaTYcKsYeCMAmaDuXwU6eC9N0D3NfE0tEkxshihT0zdGwBh5Z1mH+eJTxiC3wM5bP3E7l+cZBuu53KxCKsEgUEjo1aaFnfNcom3U8KVzaEj43U2pz9etD5wkRxmGS1AZhyUOqIWmlFmuuC8+BRDK5u65g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gH44ALbA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223EBC4CEC3;
-	Fri, 25 Oct 2024 14:48:25 +0000 (UTC)
+	s=arc-20240116; t=1729880137; c=relaxed/simple;
+	bh=4uWSpXe0OsFhjDgpcwZNsIzSJ70LaDPml3fkTZ/8ecw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hn4D15Q97H7OeI4CLGlN9ZuYjkqGwRYrsvwE+KJ5yyGP/LJBJQykRIbons/AZFCQA/WnrcDTBbjqbaAuh65Ihdq3QREP3aSDWZ6zOUmpDyLlnybheYBeJqPajv078tT1x+EmbjWq7cMEeFUjbGOY7+8zK0P2P/D6GqU6+QEyGSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dN7W8dWv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4A8C4CEC3;
+	Fri, 25 Oct 2024 18:15:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729867710;
-	bh=aUonxWk/Wb6mMpEzIzSZDDZlf2vaFKkhtJQaWHKDrmY=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=gH44ALbAO6nxYlI8caLeWzMji+gRCI/y69bK/6XDkizz3CPG4iVzgNhYFYcuMgX4F
-	 cpDxIMa+ZdFqcg9iKjzy//sriqjfSyaoUeSnJzqmmkFKYQP7J9bhvvC4f12v3i1Ye3
-	 nEGbOtF3186STLuevltzo1RLyEeLGGLtCDys2Osg6ELAMFrnverD/evZOcYifGBoT8
-	 2CYpZxX7QzOj8yeOoVHYOrovot9UdgFCIyk3Qtwr5qYPO5h/+b7w3BdMZINK4ObofL
-	 FMMYriiTFWIJHNCaekHPKaPdPjteeli6qpKpeifODuYoYiIvowbFmYnTJT8rTKqfzG
-	 K/Z9+DPrcKqbg==
+	s=k20201202; t=1729880136;
+	bh=4uWSpXe0OsFhjDgpcwZNsIzSJ70LaDPml3fkTZ/8ecw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dN7W8dWvZiFW5UGVdUTOUVjx/AzrGY1bG/nrzR5SYHVHBpFnJl8qJKAoiljlrnC/S
+	 GZxZl1liMGa2htVrIZxL08QBNxL+g+I96iCkxLBdzTKp3oQrVPC3POfswlKjK45vhX
+	 vlq1Xwmju2eStcNA7JVt2UEmlr8c8I41UGs5P52w/TRY3QjG5iVDEnNhoO4V287Jhh
+	 gxM6QT16NA4E2F+amnAEfpj3yzE4rbjOZdApsbCPdUWrILYyqONA66YnVRN7ModgZq
+	 hBp0k3S+dveZgVsDD6O50K7YWscZSd9DeXqRw0cRS7+PwtjyBqGRfM0SLXpeYg4lhu
+	 QYZE9tbmZL6Ew==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jiri Kosina <jikos@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Matt Ranostay <matt@ranostay.sg>,
+	Quentin Monnet <qmo@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] mailmap: update email addresses
+Date: Fri, 25 Oct 2024 21:15:28 +0300
+Message-ID: <20241025181530.6151-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Oct 2024 17:48:18 +0300
-Message-Id: <D54YX5TQD6PC.KPDZRST813O5@kernel.org>
-Subject: Re: [PATCH v6] tpm: Add new device/vendor ID 0x50666666
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Tzung-Bi Shih" <tzungbi@kernel.org>
-Cc: "Jett Rink" <jettrink@chromium.org>, "LKML"
- <linux-kernel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- "Jason Gunthorpe" <jgg@ziepe.ca>, "Peter Huewe" <peterhuewe@gmx.de>,
- <linux-integrity@vger.kernel.org>
-X-Mailer: aerc 0.18.2
-References: <20240910191117.1001581-1-jettrink@chromium.org>
- <D43HINLZGMXS.FYJOK0SVQFQW@kernel.org> <ZxckGbxzpWDuXG_q@google.com>
-In-Reply-To: <ZxckGbxzpWDuXG_q@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue Oct 22, 2024 at 7:03 AM EEST, Tzung-Bi Shih wrote:
-> Hi Jarkko,
->
-> On Wed, Sep 11, 2024 at 04:21:24PM +0300, Jarkko Sakkinen wrote:
-> > I applied this (will push later to my remote tree).
->
-> I failed to find the patch in [1].  Is it somehow overlooked?
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.g=
-it/log/?h=3Dnext
+Remove my previous work email, and the new one. The previous was never
+used in the commit log, so there's no good reason to spare it.
 
-I'll check this next week. Not on purpose if it is missing.
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ .mailmap | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BR, Jarkko
+diff --git a/.mailmap b/.mailmap
+index 442da8603cef..90064084e92a 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -282,7 +282,7 @@ Jan Glauber <jan.glauber@gmail.com> <jglauber@cavium.com>
+ Jan Kuliga <jtkuliga.kdev@gmail.com> <jankul@alatek.krakow.pl>
+ Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@linux.intel.com>
+ Jarkko Sakkinen <jarkko@kernel.org> <jarkko@profian.com>
+-Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@tuni.fi>
++Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@parity.io>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgg@mellanox.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgg@nvidia.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgunthorpe@obsidianresearch.com>
+-- 
+2.47.0
+
 
