@@ -1,134 +1,175 @@
-Return-Path: <linux-integrity+bounces-3910-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3911-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30E199AF31E
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 21:57:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 421B29AF5F3
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2024 02:11:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4860B2316D
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Oct 2024 19:57:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 565DB1C21237
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Oct 2024 00:11:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E7F2003AA;
-	Thu, 24 Oct 2024 19:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3008923AB;
+	Fri, 25 Oct 2024 00:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e73TzK2G"
+	dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b="Z9JGRhwZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6DF1A3A95;
-	Thu, 24 Oct 2024 19:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92481859;
+	Fri, 25 Oct 2024 00:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729799849; cv=none; b=vAWs1uNh8Y9tJS8nGatPxxvbnW55pG7xzZQnMC6JA6ykGCSvtSdtArxMPo1DIkYuNzzpXS999nRDyeacFMWmXkfO/3hVbnek1idjiVbnpepiRNvWxNT9FhIQmC3UG3zbic0P9QFqx0XoHNvT30GmnasrtXGxwUzqrUExpT7F5gk=
+	t=1729815080; cv=none; b=bgYbBOo3zTziAB7/dkpG2sM/GlZJ3jX0HhALhKaHDpBH1RCeuSkI59C0HGBHofumS8doWbeSVzG8rKnhHUcOolWyCoJvKTjTNt19xc/MSRp6EWwadOH/y/aC2DQTRKeGaEGhGk4W27XsWtVWcp2CUr3MSFYG96vmoq2PLyH6WfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729799849; c=relaxed/simple;
-	bh=gOn6T3lWiKaxNxhYs41benmtcEZIjMyZ2IUbcXX00nQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hvv6hB8mVqsQkO9fwkBuHR34+/AaK7geDjHa9VnOcPRp0RnPDUEoyPUqVWGrYK+uIX1RHZObO8V5QzhBT56Yt1kBS0SufjCNgzeqJsUj6v8m3z2zQAqfoeDnSirX8tEP0b5IifLJB0rDTzw6cISrh0E4YpcJ5aIRk/NSZ7tyIFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e73TzK2G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70463C4CECD;
-	Thu, 24 Oct 2024 19:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729799849;
-	bh=gOn6T3lWiKaxNxhYs41benmtcEZIjMyZ2IUbcXX00nQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e73TzK2Ggyd8lQr/wIg+tIKHA6B0skKLKEHIMU8ouylH6mW7IuUzfXXIOWLBo1LtH
-	 aZ7xD3r9GE+1dfWskbtU3wnTf1xOeLYUzB42pZfj0VwVD92Xau6aTiOcF59fbrYrrh
-	 fbf9nOUcuvWTE/PuF7PEK3tiSwPXCVfmF7Lsxa4GYUkuNer/bsR5uscEynYECo65hF
-	 Oxew16yGZ6ewIRda75moxkaGp8okhOJY5AgD2iazYmQoycx8fBg2VUJ315Vj7p9mWX
-	 AiKWgjeXZbIrVs96YDAvjGoWiuSvt4f0tT99053Nljxj+pQ9daw9zgtzrkbWqyKzIN
-	 YczXwSBMBsU7w==
-Date: Thu, 24 Oct 2024 19:57:21 +0000
-From: sergeh@kernel.org
-To: Eric Snowberg <eric.snowberg@oracle.com>
-Cc: "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	"herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-	"davem@davemloft.net" <davem@davemloft.net>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	"casey@schaufler-ca.com" <casey@schaufler-ca.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	"ebiggers@kernel.org" <ebiggers@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-	"linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: Re: [RFC PATCH v3 08/13] clavis: Introduce new LSM called clavis
-Message-ID: <ZxqmoV-izscjbovh@lei>
-References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
- <20241017155516.2582369-9-eric.snowberg@oracle.com>
- <ZxhetCy5RE1k4_Jk@lei>
- <F911D28D-F8EC-4773-8143-2B4E207DA202@oracle.com>
+	s=arc-20240116; t=1729815080; c=relaxed/simple;
+	bh=8KusYx+RHJMTU21LdOIcRKa3lfznJXVCXXS7fB80TKQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i+Tgtw0Nt0qwAmoA9I12pB+GgPRGb2Z8hg5HL4pKdgyGKQGM95FGro6dTlzOeXDmH175YwyTrnW3vgY6VA/qW8UX6gGmUUTzoF0B0h1FOUUEv86cTIG/mUg5aachSfNbLjvfxb5tdmAmn+xiBONVN7vJPLX3bMq8JrKA1ckbQew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu; spf=pass smtp.mailfrom=heusel.eu; dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b=Z9JGRhwZ; arc=none smtp.client-ip=212.227.17.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=heusel.eu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heusel.eu;
+	s=s1-ionos; t=1729815065; x=1730419865; i=christian@heusel.eu;
+	bh=0YLl7MfTCMROivBkVhz/S8UqG5gQEiGAZl8EPHKXjA8=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:
+	 MIME-Version:Content-Type:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=Z9JGRhwZBssFRPS1GeM17+bdihGoFAg05XOselLvmQQpNn7dFtXml/rQXpppjg4R
+	 7Oa1VCtVuqfCG6uz2EEtkAEGX0yktEZPI6uVYlQY2JRZ5MOhUBOPGhTy5ZJnZUx90
+	 9TM8PjjPtup6K9GnNqoFX6dHNvhuE6R4OkxU0j9ABqhnioXjKvrylmcTNf2HDbT7O
+	 RQcptABS+WrcLeCe+/rb0YkbwE5T3r9o3EGs7xlnWp2LVGHm6vS1wXgE7M2bBGl1+
+	 MvH7UFKud3phpSDLYN+1vxPSFIFN/EI5aO7/ZHsBPmCejfK/Igzdd8NfBXraE8HqV
+	 /aYH58c9yd7fXvJyLA==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from localhost ([141.70.80.5]) by mrelayeu.kundenserver.de (mreue109
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1MStKq-1tSmcJ0u2I-00XOI6; Fri, 25
+ Oct 2024 02:11:05 +0200
+Date: Fri, 25 Oct 2024 02:11:04 +0200
+From: Christian Heusel <christian@heusel.eu>
+To: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	regressions@lists.linux.dev
+Subject: [REGRESSION][BISECTED] tpm: Popping noise in USB headphones since
+ 1b6d7f9eb150 
+Message-ID: <7d052744-4bfa-40bc-ba06-1b4c47a5eb87@heusel.eu>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="hyqovalspjnbywsu"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <F911D28D-F8EC-4773-8143-2B4E207DA202@oracle.com>
+X-Provags-ID: V03:K1:XHGnoMCjI2jsjpR4Yyc+j23yPeYMuncudwjVOVMogyqc4Iu4J+E
+ l9bh1wnuyfcIkOZti8S1YXqH8TVeqrfJThJa81iDhietfAYtfmyG7iwDRpkDZm+R88wg0If
+ xSFj4odHA7CTtI/7H6jC05kSjb3X+9CCLDomK18kL/wqfONzzlEf7r+oQDxfqDF3OOOWwke
+ Cg/k3gVTDOMKgT61t2a7g==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:X61aV1cTQzU=;evD4zKSkyCM1UpKtmKpPSp0fR2F
+ kLr5JbNCP7aD8IgsPpequ0jaxmK1dyTsiaQPOaZGSz/l2/hRct6ptu/4RX3fi5MOI91xjWZMc
+ SBkPFiGyCTemteOz3xZFWAs6lChnxxg+LjiAWMx9dLNZyHzlFo5RnqlSVCfhhyQh3hgTWfYD2
+ hZHb3fMu3QC278K0Oc58HIFusWmA1Wi7xPnwGAMAjmjl4+51MsZhZgWRKOko0KfVVDHjuF+/T
+ 9jzKBrEC0NdOcVW16pV8P5oqP0TXixCU35UdszDIqc4o5IxmRZbRoB5Z7JxcRM8rPf0uAxaph
+ 66+0TgUo0zmJsMcSn0PJbZGlh3gu8V3CBhYQDUhuGHK1i1tmRI9x4fmAaKukURogKBVIQQ8JL
+ J9ohx9EaljilFltoLTEL4v95aTdsaaqJrd6FNT07+U+lBZc0HChucZUgar9CpoyRP553SEfOk
+ LvwkFCveE4fbJLhm3p1ZsTjPESnz/NcKOmstMDOg3ghTwWe/fk7l29BGuPvRMApkVqaYA4Vmw
+ lt0h/D+gLnS7v9orj8BTRUEV1KWeSAxO3IKtPpztk7l3tiymViruVgqci91U71xzgYt9pXNjF
+ XZr82gyeOp3gRT4ZNCZYnpCRfS4s1oWwiRGRuKnrL89Nb8oa5ecbXUT8nPZ55pTl9MV6wLO4+
+ johqxPJZClafRzkP1n6olEY3NTergZ5ndv0l7q6xXYBMtPQjqmuk3KXnMO2G9MA9VrporAnu2
+ ihvOrx+WdlaFLRUUcCwD57Wf495LoVJ9Q==
 
-On Wed, Oct 23, 2024 at 07:25:21PM +0000, Eric Snowberg wrote:
-> > On Oct 22, 2024, at 8:25 PM, sergeh@kernel.org wrote:
-> > 
-> > On Thu, Oct 17, 2024 at 09:55:11AM -0600, Eric Snowberg wrote:
-> >> 
-> >> +The Clavis LSM contains a system keyring call .clavis.  It contains a single
-> > 
-> > s/call/called/
-> 
-> I will change that, thanks.
-> 
-> >> +asymmetric key that is used to validate anything added to it.  This key can
-> >> +be added during boot and must be a preexisting system kernel key.  If the
-> >> +``clavis=`` boot parameter is not used, any asymmetric key the user owns
-> > 
-> > Who is "the user", and precisely what does "owns' mean here?  Is it just
-> > restating that it must be a key already in one of the builtin or secondary
-> > or platform keyrings?
-> 
-> In the case where Clavis was not provided a key id during boot, root can 
-> add a single public key to the .clavis keyring anytime afterwards.  This 
-> key does not need to be in any of the system keyrings.  Once the key is 
-> added, the Clavis LSM is enabled. The root user must also own the private 
-> key, since this is required to do the ACL signing. I will try to clarify this better 
 
-Ooh, I see.  Own it as in be able to sign things with it.  Of course.  Thanks.
+--hyqovalspjnbywsu
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: [REGRESSION][BISECTED] tpm: Popping noise in USB headphones since
+ 1b6d7f9eb150 
+MIME-Version: 1.0
 
-> in the documentation. 
-> 
-> I wouldn't expect this to be the typical way Clavis would be used. I would 
+Hello everyone,
 
-Right, I wasn't asking because I would want to use it that way, but
-because it feels potentially dangerous :)
+Adam reports that since switching to the 6.10 kernel they have a popping
+sound from time to time (roughly every 10 minues) on their headphones
+which are connected via a [UGREEN's 5-in-1 USB-C Hub][0].
 
-> also be interested in any feedback if enabling the Clavis LSM this way 
-> following boot should be removed.  If this were removed, Clavis could 
-> only be enabled when using the boot parameter.
+We have then done a [lengthy bisection][1] on the mainline kernel which
+came to the conclusion that the following commit is the culprit of the
+issue:
 
-Yeah I don't know enough to give good guidance here.  I do worry about
-UKIs enforcing only the built-in signed kernel command line and so preventing
-a user from appending their own clavis= entry.  Not knowing how this
-will end up getting deployed, I'm not sure which is the more important
-issue.
+    1b6d7f9eb150 ("tpm: add session encryption protection to tpm2_get_rando=
+m()")
 
-> > And this is done by simply loading it into the clavis keyring, right?
-> 
-> Correct.
-> 
+Since I thought that these results are likely not correct Adam has
+verified our results again by re-testing the bisection steps and again
+came to the same conclusion. Additionally I have shot the same question
+[at Jarkko on Mastodon] to find out if it's possible that changes in the
+TPM subsystem can have such an effect.. Without knowing the exact commit
+we had bisected to he pointed to the same functionality:
+
+> Jarkko Sakkinen (@jarkko@social.kernel.org):
+>
+> @gromit i might actually might have hunch for this but have been
+> unmotivated to move forward before these patches are merged. One thing
+> at a time IMHO, especially with performance fixes.
+> NOTE: this is a hyphothesis.
+>
+> tpm2_get_random() needs to be reconsidered with encryption as hwrng
+> calls it often enough and there's now more overhead.
+>
+> It pulls entropy in small chunks subtracting the length in the look
+> like you would use read() syscall from user space. This is not right.
+> This leads to small and variable size exchanges and yeah generally
+> that equates to an inefficient implemenation with bad latency
+> properties.
+
+If there are any patches to test or if further input is needed from the
+initial reporter on our Bugtracker we can do that!
+
+Thank you all for your hard work on the kernel!
+
+Cheers,
+Chris
+
+
+[0]: https://uk.ugreen.com/collections/hubs-1/products/ugreen-5-in-1-4k-hdm=
+i-usb-c-hub
+[1]: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/issu=
+es/79#note_210599
+[2]: https://chaos.social/@gromit/113345582873908273
+
+---
+#regzbot introduced: 1b6d7f9eb150=20
+#regzbot link: https://gitlab.archlinux.org/archlinux/packaging/packages/li=
+nux/-/issues/79
+#regzbot link: https://chaos.social/@gromit/113345582873908273
+#regzbot title: tpm: popping sound in headphones connected via USB-C
+
+--hyqovalspjnbywsu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEb3ea3iR6a4oPcswTwEfU8yi1JYUFAmca4hgACgkQwEfU8yi1
+JYV65g/8D7BbnNUC1vdgjd2YHrXu4QakYdAq/BX5W+CR80lJ2+gKH3Zc5uK8uyMv
+eEAt63W8TXJicV+gch6xiVgB/7rg3FBXBfOcV7HbNqLvrIy9ijkWzWRnw922kC6P
+QZkyc30/7k8B1UkiPTho4rfvsChhUHOf/B3IhpdPT5vSDMU++psQpFS+Wcb7DrxI
+acBATpgRdh/hb7ZOyQVZ8rQAVtaLw7GFrlDzSOof2OKLAnCfqXL88p21LfD4/twl
+dhti8J5SlE4S6Xo8z7UK5F/lSO+Mxd9CZy3Xr41YWrCFz2T2DyQGUptCVp7ke8Bd
+9Hf+VDYLTmAVV3aEfQdygErBIahwi7rOML24LRseFeJkWBDerNcwE7dyVrFcOSXP
+95PkG3TMTCOnxhhvw6oVgAKYmYa9f0hkuinXbN8EfY4LAqd+xnMfP1lhoRgVSHpk
+2KETCWfHOwNU6Bgsjbtn+Qeohrl0f9QPxJvCfkgrlD/t1PDuVtwCxCD+/AnVijJc
+bGMO5OpMuKUPN0R3sueHTlwUBmhgIIQnuL7epgyRSdOoRSSMa9MBPhHfWDDLfRi2
++rVmfLWwH38nZFoIv9ZwWmCdURH2CvZ3J5QIiOmWBS1AY9zfvw71Z1FJX4gXfyFv
+iAOYad+ph9LFyZNG0SjG41MooCy6j85A8+iayWqA2kHhOx3TcN0=
+=pkob
+-----END PGP SIGNATURE-----
+
+--hyqovalspjnbywsu--
 
