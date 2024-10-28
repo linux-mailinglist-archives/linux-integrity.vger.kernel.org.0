@@ -1,104 +1,89 @@
-Return-Path: <linux-integrity+bounces-3921-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3922-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C46119B2B0E
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2024 10:10:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BEA99B2FD5
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2024 13:11:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD268B22017
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2024 09:09:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE4621C23F73
+	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2024 12:11:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E17A192D61;
-	Mon, 28 Oct 2024 09:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925011DC74A;
+	Mon, 28 Oct 2024 12:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JHxrPkWw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EDlL1ozw"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EBB198A29
-	for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2024 09:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF8F1DA2FD;
+	Mon, 28 Oct 2024 12:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730106577; cv=none; b=qOLJCbr7wrmdMNxBOjmRgD3+3hOJ8kF3RitsTZma19uJs9BiDLU5xjjXAnBqX/TZVy4hC0mOqyp/QQmDmNtaMRl255svqN4EYXT7qH2+1cwUhiKUu7hfNldFsrfvWpuvBdzomlfOiX6YhKmMIjVAoeVUntDYW66aCzVhGO26z6U=
+	t=1730117412; cv=none; b=O9MBP0ZS4vi16aZIUEi96+SyQeklOk+czvOcLG9cmmR+Y++vshMn/FZcb16WHgtvASbANgQn/jFUdgv/7On5nOdaRHp9EW/fvQE6AGYU3Wel19S2k9+oEmtLcNg6czFPRdtPO3Q2QxdrXFNEGHyVrghz4/49RFMqvwNk+KoUQ84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730106577; c=relaxed/simple;
-	bh=kGJMo94pztTrQ+vrO/3L61iWAQ2hdMgd7tvcHrFGYZs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kjHlUIWNWX37PX3K0yRMLzGHrp88y48RzZ7aP3IrbFE67yN1Y6pq6e1Isf2fbiojKOxGFY0JdGpTPpa/Ns2w5bOIKdWZhPSgG0YHIkS46SkVuGV3mXr2CMlM2ciQz6y6cAfttsJ2LfXS+oRCQl5HkHH5yIn4pF1DC8uRrUpYJrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=JHxrPkWw; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4315e62afe0so42828835e9.1
-        for <linux-integrity@vger.kernel.org>; Mon, 28 Oct 2024 02:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1730106572; x=1730711372; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kGJMo94pztTrQ+vrO/3L61iWAQ2hdMgd7tvcHrFGYZs=;
-        b=JHxrPkWw5LdVduWj3noaet4XJBArmq8tHIgldi4wVU9YgxGZd/UcwJIVHFZPnHYJOz
-         gESpPY7gncFxqfntUcab1alMg2DIOmVzlbh9JmSbzO6mpMJ7xWPTykjMrnDoIY+uMyWG
-         4kp42HRaImZXXs1Xk11jYo1mWiv/LJWzBNqoA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730106572; x=1730711372;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kGJMo94pztTrQ+vrO/3L61iWAQ2hdMgd7tvcHrFGYZs=;
-        b=g/V2l8woYEKmHNP/WimgwvjgQN9a1WBZhhE2liq6SNhbLDGLx8U2tuWhXpE/YppJxJ
-         DO71WdhzD6igAWsNY3VvK0UwJMpUwBjoKKeUk9TEn8vWGvgIZXPuHQ1yr/T42QmURZl9
-         txw5bsGmy+4fpbsSuCEXWy7rMrDLqfaDI25i8/TgkPaqD+37aqGCj3HxraKa6Yc+5yCm
-         nPw1x9AxixqcJyx2NfEHQ0LGCE+hRKXatG7kfYnJrEufTCcVnoj1lU23r0wGbM6w5OMg
-         isKD7IDWTFZ/pgV3RxGRaLzbqHmba/7KzZ2+pJOcgu/omBxvGfiN0EVLKyjEIk2/9M21
-         HieQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4y9t9oPEp1UZ+e2gd7cTzvzBleEC4C6Iiy1S9Cy/2N9+fKPty+fZLHGw3VRt3+TX+kzZ1gApEbq8OfRQ//uE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyK8mhPJ7pNRJEpB6hi7WKjUBdGRJNbgUgRZ3aHE2W+e5h6DTrW
-	VVlhj4EylvG07Lo6LeqJbAdk2RxNKp1GchRfXrLk7PVXpkiOYEdaYYAcq+p9Lg==
-X-Google-Smtp-Source: AGHT+IHupxA1uryAe1xJQhJkjl+klF7yUGAE5ih1MF1czh5phkCRatySCzSxPhaduLKL4NK3TFuFjg==
-X-Received: by 2002:a05:600c:548a:b0:42c:c003:edd1 with SMTP id 5b1f17b1804b1-4319ac9c555mr68141075e9.10.1730106572421;
-        Mon, 28 Oct 2024 02:09:32 -0700 (PDT)
-Received: from localhost (105.93.155.104.bc.googleusercontent.com. [104.155.93.105])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4319359527asm102221255e9.16.2024.10.28.02.09.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Oct 2024 02:09:31 -0700 (PDT)
-From: Grzegorz Bernacki <bernacki@chromium.org>
-X-Google-Original-From: Grzegorz Bernacki <bernacki@google.com>
-To: jsd@semihalf.com,
-	jarkko@kernel.org,
-	bernacki@chromium.org
-Cc: apronin@google.com,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	mw@semihalf.com,
-	peterhuewe@gmx.de,
-	rrangel@chromium.org,
-	timvp@google.com
-Subject: Re: [PATCH V3 0/2]  char: tpm: Adjust cr50_i2c locking mechanism
-Date: Mon, 28 Oct 2024 09:09:30 +0000
-Message-ID: <20241028090930.2179983-1-bernacki@google.com>
-X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-In-Reply-To: <20241010091559.30866-1-bernacki@google.com>
-References: <20241010091559.30866-1-bernacki@google.com>
+	s=arc-20240116; t=1730117412; c=relaxed/simple;
+	bh=l5qalQPiwCYhTC3zWpqOzDEvbB3Z5puNHOvHklAezwA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Gry9jjep4+PKEJUXfUh5uWwKRGwsAsRxNX4DNdaQA3ZDXGq44ePiqrHeQdSttw7KH3FUL9nAt/OV0V/VpD8Vu4ShInmjXLl3KkOWCxS5gk57gQKcmOye6rrPvbKGeZSQ8K1xM00YRUGoVFLjtwpo4Hte9u6Ry2DiKo+vH+NSWXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EDlL1ozw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A34DC4CEE4;
+	Mon, 28 Oct 2024 12:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730117411;
+	bh=l5qalQPiwCYhTC3zWpqOzDEvbB3Z5puNHOvHklAezwA=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=EDlL1ozw1Wu3K3uSzBJ5adQi8VkhBdNP+GTmcAI/b+yah183t8I4np5OzbcAJy5HM
+	 PR1241pJnh4SP1Rx8700JfmXBeGRiRvLQjKX4fWkmGPbzYaBSL1apxUfDTQPhMbGHJ
+	 FSxFkDUUM8zHl7ZztgEAptrbCryJbM2r769Wd1xo1i6ykZeiblrYfQMbZB325/Nsdc
+	 tZuhY+xSlwRZeU1Jnh0LskNp3cIYO2zJSbclbnuKbJ+4zHegJfrPVZZgIGJ6O+snwO
+	 pAbXn1ZDfvq+LayFD6CyXYiB9TmG7aNHSZxQzk5lQZnsf7eRj52RyMPDytNPZ6Wcr8
+	 sa6cgOWVPuYKQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 28 Oct 2024 14:10:07 +0200
+Message-Id: <D57FFOHZQDUV.QA3SZQSP63Q2@kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, "David Howells" <dhowells@redhat.com>,
+ "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Stefan Berger" <stefanb@linux.ibm.com>, "Paul
+ Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
+ Hallyn" <serge@hallyn.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>, <keyrings@vger.kernel.org>,
+ <linux-security-module@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v8 2/3] tpm: Rollback tpm2_load_null()
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Paul Menzel" <pmenzel@molgen.mpg.de>,
+ <linux-integrity@vger.kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>
+X-Mailer: aerc 0.18.2
+References: <20241028055007.1708971-1-jarkko@kernel.org>
+ <20241028055007.1708971-3-jarkko@kernel.org>
+ <88bfa0f8-4900-4c56-bd23-14d3b3c7de85@molgen.mpg.de>
+In-Reply-To: <88bfa0f8-4900-4c56-bd23-14d3b3c7de85@molgen.mpg.de>
 
-Jarkko,
+On Mon Oct 28, 2024 at 8:13 AM EET, Paul Menzel wrote:
+> Dear Jarkko,
+>
+>
+> Thank you for your patch.
+>
+> Am 28.10.24 um 06:50 schrieb Jarkko Sakkinen:
+> > Do not continue on tpm2_create_primary() failure in tpm2_load_null().
+>
+> Could you please elaborate, why this is done, that means the motivation=
+=20
+> for your change?
 
-Could you check if there is any additional work needed for these patches?
-Please let me if you have any more comments, which can block it from being
-merged.
+Which part of "not properly handling a return value" I should explain?
 
-thanks,
-greg
-
+BR, Jarkko
 
