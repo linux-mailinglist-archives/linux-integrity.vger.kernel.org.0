@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3933-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3934-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 325D79B55DA
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Oct 2024 23:38:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C83269B55E0
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Oct 2024 23:38:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62B8F1C20AEB
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Oct 2024 22:38:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6EF73B2203B
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Oct 2024 22:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0128620ADDC;
-	Tue, 29 Oct 2024 22:38:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC24020A5FF;
+	Tue, 29 Oct 2024 22:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iECXAQPr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMsD5nO4"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C5E20822D;
-	Tue, 29 Oct 2024 22:38:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC89208230;
+	Tue, 29 Oct 2024 22:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730241480; cv=none; b=JiZKci6UJqKu7ht/QYMWY3SJ9/P84T35bvXfG13FTpSTy2518igrFgT3uj62A+Qg59TMj06xFYGClAZJcjrJk5IyACNs6AjBQ7HQzPIx9ORzkspJ+6DSYTB1Ul07n1dYSd/lvqNnW1Cm5xTq7NVQw2xt3a95MAeDyv42ybY937c=
+	t=1730241503; cv=none; b=tAHJ9NJsN00O4MZLw+uQ84KEzsYVOvl8AmIyalLbmpEic6uMVzOlegXUsJ7If+xGzutHxMAMAytics9OkDOf2el27FZ9pH1yTBwddk0Wy1CmDyu+60AXsDstr2AoSlbD14GAo9kPi8dK8haqjszEhvXq5un+3dxtbxH24dlyb84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730241480; c=relaxed/simple;
+	s=arc-20240116; t=1730241503; c=relaxed/simple;
 	bh=n/rSFNWJKAdBA4Z/FVlAhcvjy5j1KGuh21dTEV1TsMs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=dgj6sX//W9RlAFfEXlyo7GwT7o1XGZchi3pSccylKWD5ybcyT41dUrbpT5ua4tzEzmcXEhzYBEIFQzc8psRppJoFmyHvFNMby0x2Cmriy6u8rzUO7AA3WTYQmqsi6PsZX7UJXn7xB3LLG0h9llJ3vbWBYGRgs/6OtHpNPG5QBXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iECXAQPr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B3B9C4CECD;
-	Tue, 29 Oct 2024 22:37:59 +0000 (UTC)
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=ooIk07Mehw7KLwb3BGKQzGFqX3QeWCbVDjXdFCH4Un1JYb4VTRPb+urYzllla7f2DfF09lC3a6fzwxst4HPUYAhhKCSanJX9Sl8BzNsq7fmlZvFSz1CrrA9FDoc81SxtXwQlrZyvpZQ5Hf7Isa6lYcOmnWYaoth9d/qj2Dq8CdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMsD5nO4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC239C4CECD;
+	Tue, 29 Oct 2024 22:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730241480;
+	s=k20201202; t=1730241503;
 	bh=n/rSFNWJKAdBA4Z/FVlAhcvjy5j1KGuh21dTEV1TsMs=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=iECXAQPrPI/MuOUNhEwbJgKM+edsM7LiBFiSokLWyRq8I35SMDcSYaXhZ5Qy6Xl13
-	 SUN50pLeGk4lrLvgB5zMTl4cQxLkzkTdBiN0uCaKAEnaIAu4FQdwgxhpnj39JoKTJD
-	 n/O/kVQyZJX4rTyTYpCVVKhVm//IFkg0ZBr0HBK5XqEFC3wo2NskLJHlGGpLty8NKu
-	 8rSIfifCs3JZa2hc1zD8whdE+vtel4PJ0AHCLnj8c6ZCWSBgOw8eCrOUZmkhn1eQ8A
-	 HvmlNQhMrxF0EJbosW/aPdYejBbQ2TlQdqvGCvmW0Nofovv9SXdrZBWMw1FcjUA38s
-	 SX8Ei49WOmUSw==
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=OMsD5nO4r3rNh1ofk2Im9EJRGZiEl34DpXqpHuuZxjFrX3a4Yg6kyhplmC8tfxG7o
+	 nOF3fRxlx3I70uZOmFg1hFNFXVQsBnEEgAi+cNcJm689YLBqyqroByTN3fnhfrKgQp
+	 slOCp/XKLylfLLJpyKRj5yOwVNWieZZA1SCTN5JhG4EObm+Xq5nKi4TtH35Gtxx8fV
+	 mEIdhYX3u7+zUlwFI/WlaTC7HvIU0BUJ4aZWld3+oVlW9G1XaPshbmxDfqEzlh9q2t
+	 otOwFiP1Baw5tDV+DqzlEG7+cw3VbJiKB1ccpbLD6cqOkeQPflM6wOqGIbLFr7DhCA
+	 xiJs3HVnM43LA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,8 +49,11 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 30 Oct 2024 00:37:55 +0200
-Message-Id: <D58NEWOJP8YY.CXZB4F73W284@kernel.org>
+Date: Wed, 30 Oct 2024 00:38:19 +0200
+Message-Id: <D58NF7GGPID7.1AIU8KVZVY4WC@kernel.org>
+Subject: Re: [PATCH] KEYS: trusted: dcp: fix NULL dereference in AEAD crypto
+ operation
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
 To: "David Gstir" <david@sigma-star.at>, <parthiban@linumiz.com>, "James
  Bottomley" <James.Bottomley@HansenPartnership.com>, "Mimi Zohar"
  <zohar@linux.ibm.com>, "David Howells" <dhowells@redhat.com>, "Paul Moore"
@@ -60,9 +63,6 @@ Cc: "sigma star Kernel Team" <upstream+dcp@sigma-star.at>,
  <linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>,
  <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
  <stable@vger.kernel.org>
-Subject: Re: [PATCH] KEYS: trusted: dcp: fix NULL dereference in AEAD crypto
- operation
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
 X-Mailer: aerc 0.18.2
 References: <254d3bb1-6dbc-48b4-9c08-77df04baee2f@linumiz.com>
  <20241029113401.90539-1-david@sigma-star.at>
