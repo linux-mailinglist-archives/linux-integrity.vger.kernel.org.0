@@ -1,46 +1,45 @@
-Return-Path: <linux-integrity+bounces-3929-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3930-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4989B9B3C62
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2024 21:56:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E79B9B3ED1
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Oct 2024 01:06:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10B4A281F27
-	for <lists+linux-integrity@lfdr.de>; Mon, 28 Oct 2024 20:56:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 438161F21C8A
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Oct 2024 00:06:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CD7D1DFE2B;
-	Mon, 28 Oct 2024 20:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3929F624;
+	Tue, 29 Oct 2024 00:06:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9FnZOIS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qP7Oelne"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4B718FDC2;
-	Mon, 28 Oct 2024 20:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB04621;
+	Tue, 29 Oct 2024 00:06:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730149000; cv=none; b=Qek8tbM4+YAjGV+HQC0cBtnuT/UUZb1yH7hHJ/+6ZdUXoVRDcYjAg2w3Xpd9idVudhfUiK+TvtlVDTfumZYZPQJQ4klP05NtJQWUVREeqvjqBzAd4LonpH7T3qa/4kKJdPP4aaNu3FsKqXlZeh5HV50A0wFVoYX9dVEpv4LgUAM=
+	t=1730160368; cv=none; b=nszE/HvEK27dbSXkG2PbAW/RMHHsnJyL5NO//Z2trR/+bxCOYnTVvjOB3mXaPNHXEkVUntXKQX4/PQ2BNTF6sfWgn3w8rKAHy6xgr1ENfT8L139zdTezw/YFJ5jn12YRbiNUOcozuUQ5ERB1izpxtBo/PjI2AzGy63d7h8vO1q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730149000; c=relaxed/simple;
-	bh=2xirGwapAOhwwW98vmdKD/TKyBtsn31rVeuL8cNBJcI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=etEAQlGiz7FBlnWuhDJkRzeYc2U7H8vgqMs3S0Ga13Wu5hyeqtqNkca8NJ2kX68wnap4vHG13iU70dpz7DssoOiO0CErneAUyRu6lCLhvKxdDgFvxss+jhondmJN4ZqvUTk5z3FlC990Xbh5ovSkWDnJuVz6ZThEK7uWjQt/W4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M9FnZOIS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DC9AC4CEC3;
-	Mon, 28 Oct 2024 20:56:38 +0000 (UTC)
+	s=arc-20240116; t=1730160368; c=relaxed/simple;
+	bh=5ErTGv0+DuZd39+uN4cny7CaDy/hZ8zMZpANSPaGf5U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To; b=TDhXjix14LKPCDe8WHzqadgEq6CZU5vBmCQgNxLusM26+d62akr2oZ8j/argRmuM7xtFKYSLyFxVpO0qjkMxifs2uSFjgWQYZ2p1RvTSjXFOO9YCiNgChijDOTpnYU3tkjGo4y6HcPfCzs9eQzCagatjsp816gtRr8njFck2ft8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qP7Oelne; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED9CC4CEC3;
+	Tue, 29 Oct 2024 00:06:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730148999;
-	bh=2xirGwapAOhwwW98vmdKD/TKyBtsn31rVeuL8cNBJcI=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=M9FnZOISibfA10+UTcpJU5tbxUpfyoN6N8q+2QG8q1Wc0cfJQcoStpPdEBvwu+a4L
-	 4zRnqq/gZX+0WWVrWJxL/h6SjpD4LsXzCOwFE1pdZmaiY4sR6XMOBUG2pcBeQ+0KQK
-	 O+6evVBtXppq31T/seQi/9hu5VmKewQ5VQHuDQUc6W5ePOMDMWkqVuqH/rOblTA5EX
-	 /6ZXOv+sFXrbQ/8F8YqMCUdAalxat97uZz/sQtSVVtxvmnqYjyBHBAF/ZTiBvGzTkK
-	 H2y1+SvZHYoEpOaBIZJdLR1JmFVQKIyp53BFy4kV41AwuibgMwhJ7eXITvWgW8DJ11
-	 6vsqjl2sMEP4Q==
+	s=k20201202; t=1730160367;
+	bh=5ErTGv0+DuZd39+uN4cny7CaDy/hZ8zMZpANSPaGf5U=;
+	h=Date:Cc:Subject:From:To:From;
+	b=qP7OelneO+aAm36IOjRSIi47O2t2Ma8ADai9ppd+5KSUey0DcWzYCI6H+iatbwIQ3
+	 aSttWVbiKaXpTVvwN9lmRgYv+v3RZ904KsERtzrrrzx13Dvi47qbAt8rm2CQe62F+R
+	 Bgow/yXs5nXWZukP8ti7JH0ZRBmwVyRM7jrB1SRdxtbr6u6y6v2hToJD55AjhaGKXR
+	 rB7LlrvwWXaC2pYgFCc4KjUEqRAqN2EzGgF2gI2IsgxT0M4mmpDKkgPQOQhaL5pS+i
+	 f60XWqUD+LaK23n7IkeF37m90rmG7oALyJ8aZpKfqIMJxT+i79G7xtXovtZ8XLSJoM
+	 UHb8xdwTsrQbg==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,60 +48,49 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 28 Oct 2024 22:56:35 +0200
-Message-Id: <D57QMS2B7KBS.2AR64O934IY0G@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, "David Howells" <dhowells@redhat.com>,
- "James Bottomley" <James.Bottomley@HansenPartnership.com>, "Mimi Zohar"
- <zohar@linux.ibm.com>, "Roberto Sassu" <roberto.sassu@huawei.com>, "Paul
- Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
- Hallyn" <serge@hallyn.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>, "open list:KEYS-TRUSTED"
- <keyrings@vger.kernel.org>, "open list:SECURITY SUBSYSTEM"
- <linux-security-module@vger.kernel.org>, "Pengyu Ma" <mapengyu@gmail.com>,
- <stable@vger.kernel.org>
-Subject: Re: [PATCH v8 3/3] tpm: Lazily flush the auth session
+Date: Tue, 29 Oct 2024 02:06:02 +0200
+Message-Id: <D57UNU1ZUXJS.E2RDQDB8XFKI@kernel.org>
+Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "David Howells" <dhowells@redhat.com>, <keyrings@vger.kernel.org>,
+ <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-6.12-rc6
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Stefan Berger" <stefanb@linux.ibm.com>,
- <linux-integrity@vger.kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>,
- "Jason Gunthorpe" <jgg@ziepe.ca>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
 X-Mailer: aerc 0.18.2
-References: <20241028055007.1708971-1-jarkko@kernel.org>
- <20241028055007.1708971-4-jarkko@kernel.org>
- <fa6b6c7d-1b90-40ad-b7f4-73e1a0eef1d5@linux.ibm.com>
-In-Reply-To: <fa6b6c7d-1b90-40ad-b7f4-73e1a0eef1d5@linux.ibm.com>
 
-On Mon Oct 28, 2024 at 7:52 PM EET, Stefan Berger wrote:
->
-> On 10/28/24 1:50 AM, Jarkko Sakkinen wrote:
-> > Move the allocation of chip->auth to tpm2_start_auth_session() so that =
-this
-> > field can be used as flag to tell whether auth session is active or not=
-.
-> >=20
-> > Instead of flushing and reloading the auth session for every transactio=
-n
-> > separately, keep the session open unless /dev/tpm0 is used.
-> >=20
-> > Reported-by: Pengyu Ma <mapengyu@gmail.com>
-> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
-> > Cc: stable@vger.kernel.org # v6.10+
-> > Fixes: 7ca110f2679b ("tpm: Address !chip->auth in tpm_buf_append_hmac_s=
-ession*()")
-> > Tested-by: Pengyu Ma <mapengyu@gmail.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+The following changes since commit 81983758430957d9a5cb3333fe324fd70cf63e7e=
+:
 
-Thanks!
+  Linux 6.12-rc5 (2024-10-27 12:52:02 -1000)
 
-Next after this: tpm2_get_random() issues reported.
+are available in the Git repository at:
 
-I think biggest problem with that in general, and independent of bugs,
-is that it does not pool random but instead pulls random small chunks.
-This is more like performance issue exposed by bus encryption than
-introducing a new issue (not formally but with better implementation
-would not be necessarily a problem).
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags=
+/tpmdd-next-6.12-rc6
+
+for you to fetch changes up to df745e25098dcb2f706399c0d06dd8d1bab6b6ec:
+
+  tpm: Lazily flush the auth session (2024-10-29 00:46:20 +0200)
+
+----------------------------------------------------------------
+Hi
+
+Addresses a significant boot-time delay issue:
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219229
 
 BR, Jarkko
+
+----------------------------------------------------------------
+Jarkko Sakkinen (3):
+      tpm: Return tpm2_sessions_init() when null key creation fails
+      tpm: Rollback tpm2_load_null()
+      tpm: Lazily flush the auth session
+
+ drivers/char/tpm/tpm-chip.c       |  10 ++++
+ drivers/char/tpm/tpm-dev-common.c |   3 ++
+ drivers/char/tpm/tpm-interface.c  |   6 ++-
+ drivers/char/tpm/tpm2-sessions.c  | 100 +++++++++++++++++++++++-----------=
+----
+ 4 files changed, 77 insertions(+), 42 deletions(-)
 
