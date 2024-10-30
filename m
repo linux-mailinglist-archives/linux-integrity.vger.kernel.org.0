@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-3938-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3939-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 844FB9B7092
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2024 00:36:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC2E49B70A4
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2024 00:44:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 496932825D1
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Oct 2024 23:36:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C44561C20A96
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Oct 2024 23:44:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D99D1E25EF;
-	Wed, 30 Oct 2024 23:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8FDC2141CA;
+	Wed, 30 Oct 2024 23:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SYMblBXG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdYTq8yF"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22551CCB53;
-	Wed, 30 Oct 2024 23:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA5C1C4612;
+	Wed, 30 Oct 2024 23:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730331411; cv=none; b=izWW03q8IeSfQgkKAHk+K1TVZZY3YTIFNDZiKzEjU7PDifUq6JFYcWXZlKJEyXNXh+1mNaWjBfAiYAg+VEyIMgDaniAn3OfXMxvU4BFRFGxJpoo/Q6EYgD+G//dSj7tjKPt+hBLC7rYLEJAQzigfnysUKn+dKocCclxXbZuSKFg=
+	t=1730331850; cv=none; b=JuZNbv76loHoO4TepiQ+e2b8nUmmuoNXYUP7zIOONCoVPHKK+r1+CwBy/br85fklOdioW5cPNZb3pVNbPYTIDvadhK7nWspJ2X61p25bEdNjeE5dSUUtTrxkXCeG6Q5CNRXl1BVKk9HypSOklSeP5yoME6Q47XGejw/7b27eAc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730331411; c=relaxed/simple;
-	bh=unxNl6vAvsReQL1kX4mCDIAfvq/vFGNPbPnhztQp0U8=;
+	s=arc-20240116; t=1730331850; c=relaxed/simple;
+	bh=GVsIwO4FcNuJYtDU9JsLinVVsbRz+7+H7RJ1eishf7c=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DypWMfkko5O4kwS0ilWsw6aw7TYlquMqp7a1+4TZ2opdGewDH7D53NUjBtokUlfdqvPSFxDT9i0wPSeiI4qjbXpeE4oIgdIw1HzjE7XL8wD94V3s698nTsy5cbfdBgggD76p+uPgmI9i8lW4AaAo7WvZ/9497Qu1dSUlRJ7GB20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SYMblBXG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9B3C4DE02;
-	Wed, 30 Oct 2024 23:36:50 +0000 (UTC)
+	 References:In-Reply-To; b=rv0wo5UEHkI4Pw4ay6D09F8OHjxrkYnSRNvSKnVadHSO7ofD5Msbng8FAXVmFuK5n9+gZSnG9nMWHyHFqYZgaSvx4RYS3vDACENzvToyRwNnp4JHwFlrbAD6j8p/5TBGrUfWVTBspcOydqXzVmXg1b1oj3X7ClRBKIzvWahvMoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdYTq8yF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D0EC4CEEB;
+	Wed, 30 Oct 2024 23:44:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730331411;
-	bh=unxNl6vAvsReQL1kX4mCDIAfvq/vFGNPbPnhztQp0U8=;
+	s=k20201202; t=1730331850;
+	bh=GVsIwO4FcNuJYtDU9JsLinVVsbRz+7+H7RJ1eishf7c=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=SYMblBXG3Fg0iTjimrACSgPftvaPXObEcSk982F3K6yMiU9g51FLgnHtrZAixyZjA
-	 ogvA5lWklolwwztI+axBO58hu9B1xL3jKAsY6chDYSgR8Lc35iAc0UTggvO+Q6qLdj
-	 USdhls2K8RO4pt9rMfc3mgIkR3aClxJNlBCRG06cvXU2bAT+0ybIxdGqQaytw0drqY
-	 4hcTQZR6Du9ncg1OoPijSrqfOBNiC5Rv0HjEdezIR61K6ZQXi5W2E4/GQOOkFIoXuY
-	 uHdN42LPtJ/cRr9jVh3pi/EiPCmD+X6kxyJpgR/9mAL0KHGo4ONGuH96unrzew1lth
-	 ks0z+IxI+0wUA==
+	b=NdYTq8yFFS+niTI/Ztrg9qLd6vLogYBaYo2WIJcidbIOFsfXxo1x66zP1SZ975Av/
+	 veyvACW1mU8o99WiB6FADplUmplA4DvdBy3Vyd+GiyeoH7DtXz60mgJnnZqFpXtNT6
+	 uZ4aTBA08aaitH/K6MAH7UOsruQs6zQuhQe95cI8thGVH90Zq2+MHQ2wUc8ubnrw3i
+	 TJ166JeugxubkeBfSNMbTxXB7vGjYjZNLgcMFbIaoFoK+3OAOvGh7cC/mSG0hiP6Ri
+	 VyhQnRZagz3wLxUfUsUGG6HyaVHyQabSwh7nRC7SfWHveONDtpYdI7vLQEvE4ZiKwj
+	 elT9Hy4M8lJUw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,106 +49,127 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 31 Oct 2024 01:36:46 +0200
-Message-Id: <D59JAI6RR2CD.G5E5T4ZCZ49W@kernel.org>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- <stable@vger.kernel.org>, "Mike Seo" <mikeseohyungjin@gmail.com>, "open
- list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>, "open list"
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tpm: set TPM_CHIP_FLAG_SUSPENDED early
+Date: Thu, 31 Oct 2024 01:44:05 +0200
+Message-Id: <D59JG45GJC5V.1HT5KJQ0K4CKI@kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, "David Howells" <dhowells@redhat.com>,
+ "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Stefan Berger" <stefanb@linux.ibm.com>, "Paul
+ Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>, "Serge E.
+ Hallyn" <serge@hallyn.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>, "open list:KEYS-TRUSTED"
+ <keyrings@vger.kernel.org>, "open list:SECURITY SUBSYSTEM"
+ <linux-security-module@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v8 2/3] tpm: Rollback tpm2_load_null()
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jerry Snitselaar" <jsnitsel@redhat.com>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>,
+ <linux-integrity@vger.kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>
 X-Mailer: aerc 0.18.2
-References: <20241029223647.35209-1-jarkko@kernel.org>
- <z4ggs22bzp76ire4yecy5cehlurlcll7hrf2bx4mksebtdmcmr@hpjardr6gwib>
-In-Reply-To: <z4ggs22bzp76ire4yecy5cehlurlcll7hrf2bx4mksebtdmcmr@hpjardr6gwib>
+References: <20241028055007.1708971-1-jarkko@kernel.org>
+ <20241028055007.1708971-3-jarkko@kernel.org>
+ <27e3ac1678bde5e107691e12c09fa470ab47a5b2.camel@HansenPartnership.com>
+In-Reply-To: <27e3ac1678bde5e107691e12c09fa470ab47a5b2.camel@HansenPartnership.com>
 
-On Wed Oct 30, 2024 at 10:09 PM EET, Jerry Snitselaar wrote:
-> On Wed, Oct 30, 2024 at 12:36:47AM +0200, Jarkko Sakkinen wrote:
-> > Setting TPM_CHIP_FLAG_SUSPENDED in the end of tpm_pm_suspend() can be r=
-acy
-> > according to the bug report, as this leaves window for tpm_hwrng_read()=
- to
-> > be called while the operation is in progress. Move setting of the flag
-> > into the beginning.
-> >=20
-> > Cc: stable@vger.kernel.org # v6.4+
-> > Fixes: 99d464506255 ("tpm: Prevent hwrng from activating during resume"=
-)
-> > Reported-by: Mike Seo <mikeseohyungjin@gmail.com>
-> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D219383
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> >  drivers/char/tpm/tpm-interface.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-in=
-terface.c
-> > index 8134f002b121..3f96bc8b95df 100644
-> > --- a/drivers/char/tpm/tpm-interface.c
-> > +++ b/drivers/char/tpm/tpm-interface.c
-> > @@ -370,6 +370,8 @@ int tpm_pm_suspend(struct device *dev)
-> >  	if (!chip)
-> >  		return -ENODEV;
-> > =20
-> > +	chip->flags |=3D TPM_CHIP_FLAG_SUSPENDED;
-> > +
-> >  	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
-> >  		goto suspended;
-> > =20
-> > @@ -390,8 +392,6 @@ int tpm_pm_suspend(struct device *dev)
-> >  	}
-> > =20
-> >  suspended:
-> > -	chip->flags |=3D TPM_CHIP_FLAG_SUSPENDED;
-> > -
-> >  	if (rc)
-> >  		dev_err(dev, "Ignoring error %d while suspending\n", rc);
-> >  	return 0;
-> > --=20
-> > 2.47.0
-> >=20
+On Wed Oct 30, 2024 at 5:47 PM EET, James Bottomley wrote:
+> On Mon, 2024-10-28 at 07:50 +0200, Jarkko Sakkinen wrote:
+> [...]
+> > --- a/drivers/char/tpm/tpm2-sessions.c
+> > +++ b/drivers/char/tpm/tpm2-sessions.c
+> > @@ -915,33 +915,37 @@ static int tpm2_parse_start_auth_session(struct
+> > tpm2_auth *auth,
+> > =C2=A0
+> > =C2=A0static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
+> > =C2=A0{
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int rc;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int offset =3D=
+ 0; /* dummy offset for null seed
+> > context */
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 name[SHA256_DIGEST_S=
+IZE + 2];
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 tmp_null_key;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int rc;
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rc =3D tpm2_load_contex=
+t(chip, chip->null_key_context, &offset,
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 null_key);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc !=3D -EINVAL)
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return rc;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &tmp_null_key);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc !=3D -EINVAL) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0if (!rc)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*null_=
+key =3D tmp_null_key;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0goto err;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > =C2=A0
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* an integrity failure may =
+mean the TPM has been reset */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_err(&chip->dev, "NULL ke=
+y integrity failure!\n");
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* check the null name again=
+st what we know */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm2_create_primary(chip, TP=
+M2_RH_NULL, NULL, name);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (memcmp(name, chip->null_=
+key_name, sizeof(name)) =3D=3D 0)
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0/* name unchanged, assume transient integrity failure
+> > */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return rc;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Fatal TPM failure: the NU=
+LL seed has actually changed, so
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * the TPM must have been il=
+legally reset.=C2=A0 All in-kernel TPM
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * operations will fail beca=
+use the NULL primary can't be
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * loaded to salt the sessio=
+ns, but disable the TPM anyway so
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * userspace programmes can'=
+t be compromised by it.
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_err(&chip->dev, "NULL na=
+me has changed, disabling TPM due
+> > to interference\n");
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Try to re-create null key=
+, given the integrity failure: */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rc =3D tpm2_create_primary(c=
+hip, TPM2_RH_NULL, &tmp_null_key,
+> > name);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (rc)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0goto err;
 >
-> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> From a security point of view, this probably isn't such a good idea:
+> the reason the context load failed above is likely the security
+> condition we're checking for: the null seed changed because an
+> interposer did a reset.  That means that if the interposer knows about
+> this error leg, it would simply error out the create primary here and
+> the TPM wouldn't be disabled.
 
-Thanks but I actually started to look at the function:
+If you think there is something that should be still addressed, or there
+is overlooked issue please do send a patch, and we will review that.
+There's been plenty of time to comment on patches.
 
-https://elixir.bootlin.com/linux/v6.11.5/source/drivers/char/tpm/tpm-interf=
-ace.c#L365
+Neither in previous TPM_CHIP_FLAG_DISABLED was set tpm2_load_context()
+failed. It went like this:
 
-The absolutely safe-play way considering concurrency would be
-to do tpm_try_get_ops() before checking any flags. That way
-tpm_hwrng_read() is guaranteed not conflict.
-
-So the way I would fix this instead would be to (untested
-wrote inline here):
-
-int tpm_pm_suspend(struct device *dev)
-{
-	struct tpm_chip *chip =3D dev_get_drvdata(dev);
-	int rc =3D 0;
-
-	if (!chip)
-		return -ENODEV;
-
-	rc =3D tpm_try_get_ops(chip);
-	if (rc) {
-		chip->flags =3D |=3D TPM_CHIP_FLAG_SUSPENDED;
+	rc =3D tpm2_load_context(chip, chip->null_key_context, &offset,
+			       null_key);
+	if (rc !=3D -EINVAL)
 		return rc;
-	}
 
-	/* ... */
-
-suspended:
-	chip->flags |=3D TPM_CHIP_FLAG_SUSPENDED;
-	tpm_put_ops(chip);
-
-It does not really affect performance but guarantees that
-tpm_hwrng_read() is guaranteed either fully finish or
-never happens given that both sides take chip->lock.
-
-So I'll put one more round of this and then this should be
-stable and fully fixed.
+If you think that this should be addressed, do send a patch but point
+out the fixes-tag to your original patch then.
 
 BR, Jarkko
 
