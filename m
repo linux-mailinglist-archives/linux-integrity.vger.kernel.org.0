@@ -1,145 +1,111 @@
-Return-Path: <linux-integrity+bounces-3950-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3951-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 430429B864E
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2024 23:53:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FD5F9B86A7
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 00:08:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 002A6282E5B
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2024 22:53:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 125351F2277F
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2024 23:08:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8531E2835;
-	Thu, 31 Oct 2024 22:53:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416361E0E03;
+	Thu, 31 Oct 2024 23:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Mcxc8UaQ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="se5Xgp53";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="s6ZB5YV2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E91E1A0BD1
-	for <linux-integrity@vger.kernel.org>; Thu, 31 Oct 2024 22:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF8E1CDFB4;
+	Thu, 31 Oct 2024 23:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730415226; cv=none; b=YmOUaRN7vDF1xrrlmP659O2b8WnR1TJ8e5omLIQJlk/KbpSql1W/nNmvMqN21nosHPd+GtDg1Qe5tI66db6TAkJC+wewyjs+/P9HxRPIXnTRA7Ztf5DilS3kVxRz5ofFZqntL4/pGijOY+QHgR5y50g7tUZ9lMVAw1wPZVm77UI=
+	t=1730416123; cv=none; b=GiaRLycDh9WSpKchxfwNjiZLSt3tmvukd4EyCuQhZVTSb7BwRVfnh5+QpCcZ8fE91Aag+9oVcK/KBFxgqfPlBYHHHtSgGBl2MbsudGSbvzc+rDkqkHHAMMJsZcBcn7zvX8sAramupxPzaNxwiILMXOU7kDEbfJAsvQr/JLn2T6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730415226; c=relaxed/simple;
-	bh=JjJ8QQeKo9Bc7l3L6oH1g7yFrDcQSl74/ZP+UEmeNJo=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=DNIazzpcJg6zYGrVIdjty57a1geF2VsKIbIPeVPWgf50ujA23x/oiNMoxU1pWAT/54vBGM2taxKJi+7G7C7B+Ifq2knmb3VZ+rGn/9lzAc+EohAneUJ2LpSgbYzSwwEw4M6e5Z3fTG8X2MZcEWMskpArTtXj89ZUtu6Mn+13ANQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Mcxc8UaQ; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6cbd12b38b4so8171216d6.2
-        for <linux-integrity@vger.kernel.org>; Thu, 31 Oct 2024 15:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1730415218; x=1731020018; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sCgwTKVFt7wqnix2xMLtGBGcv0MC1rv7OZcvDtlQUvc=;
-        b=Mcxc8UaQdORTCwDIGzUqqGfNPY0R1MqZWMghxrP22t+ndyCWybzR8eUNk3kd+8E5SC
-         9D706fy6xmJx26psBwLxg3FBRJFOkC/oXbo8efVCKt2vHaTjjvTNpcWxpmFkRiDAULo2
-         Y5FeR/ls0vY/shOpgiRK4BvtXzTZhEdezRgmawieO4/mpNOXJ6scH5w4/JW8JyW4KNj8
-         dGBoYVz8UWUg9hVQhdCnkKoN2NyIEDua6w+4Nw3947Bu7zs4Zq51IMb0asxpHUo4+QrT
-         AXR2L+2Q2h+2FxPhxSdT0UhvrzotpQr7rqitRVJcLw1Lt6KvJuVq0GNxatjEHKKLOSki
-         kiIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730415218; x=1731020018;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sCgwTKVFt7wqnix2xMLtGBGcv0MC1rv7OZcvDtlQUvc=;
-        b=Q05NowdID9mY4YwytsSufBeVnpZ1jcBqFHFVrBOfr7m8YYPocfWVUlaGIKG7KDNkua
-         QLMRe4LSnjx/4QnwGPjAq4BrdWb032Admv91uDnT+9Ln+FIzWM8OoPw0yLp0Tcy9XXQw
-         qqSnWkEgQ6BDdhGwIrGt4yRr2iV6mnv3bpSLR10rjhlEfAd/17I7WXKeCJSNGNmmJJVy
-         5KbS6FJTynNASxi4O7Bj2AfyIKcZlaX+0TXxdZVUN6lKXuvNkN8h4KVoKI9LNJsGogxR
-         XDVQJTgCr/u+79RdoS5hZR3eDpZG4A/HjuEE+Tvf10v5U9tA3BnuZm05mINYBLwP1duQ
-         OD6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVTdrv86pCffCGpwkNhRrcjez1TehNSUb68ARXR7jFuKNKulTQMRLcjyyXzTxNyloHjZ2IxnpS3fMcOaOM3KvA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxb5ykQMXNC/We5d3d8Aj1ho9gZZ/3hRp6f3YjB7w7neH4JLB/Z
-	nI0/h7QwGjLA87tqKvMDV8jpZwqIVmnOApFYMJCHsHk1UgCusyoQQpnYBMieeg==
-X-Google-Smtp-Source: AGHT+IEWkU1+2+UR2q0jbd3R64LMFCKC5USLw1o7THh7ScgK7rY6LOrzEpmH2Dade75ISTlwVkPOWQ==
-X-Received: by 2002:a05:6214:5888:b0:6cb:fa7c:33bb with SMTP id 6a1803df08f44-6d1856b635fmr278669766d6.12.1730415217948;
-        Thu, 31 Oct 2024 15:53:37 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d353f9efbesm12768306d6.12.2024.10.31.15.53.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 15:53:37 -0700 (PDT)
-Date: Thu, 31 Oct 2024 18:53:37 -0400
-Message-ID: <da6c8ffc5088f7dc728b2fcf61ee34ea@paul-moore.com>
+	s=arc-20240116; t=1730416123; c=relaxed/simple;
+	bh=t5kudjeNUZ1aRqDlkJODNg0WxGYF3b7fXMYAj3ZS57k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=jwvvumgdzqOyrqKizuv6bDy9fEy2qrWWcVFkUfeGZmfs6m/3/BHdmerNyfOxVFU3WljwVxe5K1o259gYHQSjilMwasLijIHOOoJJ6RhHgCGDeBTwo5BQxXxTC43kVzJ+If1n9AnOnQZJUG3aY9ZYuTKsS2vOzj6S1cVSgX38Ksg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=se5Xgp53; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=s6ZB5YV2; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1730416115;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X43PY2/hEbcwBt7Pbr1N5jc7wEXE8dAimnVrIUPcOUE=;
+	b=se5Xgp53tVB20jyRaaH2iLjXvXwdVsngVIXx9grBEo+lfKa20ugZbbEHcGZhaUpww0RoiY
+	EXWxDRXyp/5faxfVpX5j/HOnWJYwef48MKnqdLSdvRM+SzcC1UZFRSJg9BI8kwdSD2BHp/
+	nhk3F3EKXMN6sHSp0wCKuprK38Y4dIXmLxkF/8Q9LaxZMHrSg3gXcdsJN+btBRaSTYSPph
+	5blEOt0hGuEUHTfEFiNEXw+ofxhlFgZ17QaVFDdq27ezhnrMNksI+PJWPa+WgTBVDwz/5o
+	yOoLg/budsRsV6AywMk3nLc/CDR9rIfvLZDG/1VMgbwz7rZxbiTVpKZTIKOAkg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1730416115;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X43PY2/hEbcwBt7Pbr1N5jc7wEXE8dAimnVrIUPcOUE=;
+	b=s6ZB5YV2NU3xPp/8Y/vclO3GDuEX/ui6tits119rcH2YQb1nCQFRLUCWuey0wof92SceYv
+	CsFSTGLmEip3OrDg==
+To: Jarkko Sakkinen <jarkko@kernel.org>, Ross Philipson
+ <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org
+Cc: dpsmith@apertussolutions.com, mingo@redhat.com, bp@alien8.de,
+ hpa@zytor.com, dave.hansen@linux.intel.com, ardb@kernel.org,
+ mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
+ peterhuewe@gmx.de, jgg@ziepe.ca, luto@amacapital.net,
+ nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
+ corbet@lwn.net, ebiederm@xmission.com, dwmw2@infradead.org,
+ baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
+ andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v11 00/20] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+In-Reply-To: <D5ACNMVX5LXB.1L0S9P2J3UDJH@kernel.org>
+References: <20240913200517.3085794-1-ross.philipson@oracle.com>
+ <87wmhoulb9.ffs@tglx> <D5ACNMVX5LXB.1L0S9P2J3UDJH@kernel.org>
+Date: Fri, 01 Nov 2024 00:08:34 +0100
+Message-ID: <87ldy3vpjh.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20241031_1534/pstg-lib:20241031_1459/pstg-pwork:20241031_1534
-From: Paul Moore <paul@paul-moore.com>
-To: Casey Schaufler <casey@schaufler-ca.com>, casey@schaufler-ca.com, linux-security-module@vger.kernel.org
-Cc: jmorris@namei.org, serge@hallyn.com, keescook@chromium.org, john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org, selinux@vger.kernel.org, mic@digikod.net, linux-integrity@vger.kernel.org, netdev@vger.kernel.org, audit@vger.kernel.org, netfilter-devel@vger.kernel.org, linux-nfs@vger.kernel.org, Todd Kjos <tkjos@google.com>
-Subject: Re: [PATCH v3 1/5] LSM: Ensure the correct LSM context releaser
-References: <20241023212158.18718-2-casey@schaufler-ca.com>
-In-Reply-To: <20241023212158.18718-2-casey@schaufler-ca.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Oct 23, 2024 Casey Schaufler <casey@schaufler-ca.com> wrote:
-> 
-> Add a new lsm_context data structure to hold all the information about a
-> "security context", including the string, its size and which LSM allocated
-> the string. The allocation information is necessary because LSMs have
-> different policies regarding the lifecycle of these strings. SELinux
-> allocates and destroys them on each use, whereas Smack provides a pointer
-> to an entry in a list that never goes away.
-> 
-> Update security_release_secctx() to use the lsm_context instead of a
-> (char *, len) pair. Change its callers to do likewise.  The LSMs
-> supporting this hook have had comments added to remind the developer
-> that there is more work to be done.
-> 
-> The BPF security module provides all LSM hooks. While there has yet to
-> be a known instance of a BPF configuration that uses security contexts,
-> the possibility is real. In the existing implementation there is
-> potential for multiple frees in that case.
-> 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> Cc: linux-integrity@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: audit@vger.kernel.org
-> Cc: netfilter-devel@vger.kernel.org
-> To: Pablo Neira Ayuso <pablo@netfilter.org>
-> Cc: linux-nfs@vger.kernel.org
-> Cc: Todd Kjos <tkjos@google.com>
-> ---
->  drivers/android/binder.c                | 24 +++++++--------
->  fs/ceph/xattr.c                         |  6 +++-
->  fs/nfs/nfs4proc.c                       |  8 +++--
->  fs/nfsd/nfs4xdr.c                       |  8 +++--
->  include/linux/lsm_hook_defs.h           |  2 +-
->  include/linux/security.h                | 35 ++++++++++++++++++++--
->  include/net/scm.h                       | 11 +++----
->  kernel/audit.c                          | 30 +++++++++----------
->  kernel/auditsc.c                        | 23 +++++++-------
->  net/ipv4/ip_sockglue.c                  | 10 +++----
->  net/netfilter/nf_conntrack_netlink.c    | 10 +++----
->  net/netfilter/nf_conntrack_standalone.c |  9 +++---
->  net/netfilter/nfnetlink_queue.c         | 13 +++++---
->  net/netlabel/netlabel_unlabeled.c       | 40 +++++++++++--------------
->  net/netlabel/netlabel_user.c            | 11 ++++---
->  security/apparmor/include/secid.h       |  2 +-
->  security/apparmor/secid.c               | 11 +++++--
->  security/security.c                     |  8 ++---
->  security/selinux/hooks.c                | 11 +++++--
->  19 files changed, 165 insertions(+), 107 deletions(-)
+On Fri, Nov 01 2024 at 00:37, Jarkko Sakkinen wrote:
+> On Thu Oct 31, 2024 at 9:25 PM EET, Thomas Gleixner wrote:
+>> So this looks pretty reasonable to me by now and I'm inclined to take it
+>> through the tip x86 tree, but that needs reviewed/acked-by's from the
+>> crypto and TPM folks. EFI has been reviewed already.
+>>
+>> Can we make progress on this please?
+>
+> So TPM patches do have bunch of glitches:
+>
+> - 15/20: I don't get this. There is nothing to report unless tree
+>   is falling. The reported-by tag literally meaningless. Maybe this
+>   is something that makes sense with this feature. Explain from that
+>   angle.
+> - 16/20: Is this actually a bug fix? If it is should be before 15/20.
+> - 17/20: the commit message could do a better job explaining how the
+>   locality can vary. I'm not sure how this will be used by rest of
+>   the patch set.
+> - 18/20: I'm not confident we want to give privilege to set locality
+>   to the user space. The commit message neither makes a case of this.
+>   Has this been tested to together with bus encryption (just checking)?
 
-This revision looks okay to me, and with no real comments from the other
-affected subsystems on this or the previous revision I'm going to go
-ahead and merge this into the lsm/dev branch.
+Can you please explicitely voice your detailed technical concerns in
+replies to the actual patches?
 
-Thanks Casey.
+Thanks,
 
---
-paul-moore.com
+        tglx
 
