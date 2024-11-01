@@ -1,117 +1,186 @@
-Return-Path: <linux-integrity+bounces-3972-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3973-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15FA79B997E
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 21:34:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 365259B99D9
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 22:07:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 484831C21CB6
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 20:34:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED87F2830C8
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 21:07:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C546E1D5AB6;
-	Fri,  1 Nov 2024 20:34:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771271E260F;
+	Fri,  1 Nov 2024 21:07:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JeAOcNd9";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="veMIp8Hu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rzF/rnTW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270001CC8A7;
-	Fri,  1 Nov 2024 20:34:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4995B1D0E15;
+	Fri,  1 Nov 2024 21:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730493269; cv=none; b=FKtJML3pmQ3K4iPHcWeVnCHnQ3gzOA6NOFpc2tPuTyZBuo4HJfe3soT0VL4MR8JDsmKIUDG+8kkihijpUe35NmBqw1gOJUeMZ0QC+5Ad2+xiI+h9s9Etx0gN1guzVkPq9uEXuB3HRKw7FIdtK/M2/l3EfdMLY8Ueq04qKOXZDws=
+	t=1730495241; cv=none; b=K75Jn0dEb/V1UAAJQQfZFRDwVjEtV4khpKLpqgZVZre1kfUYCHdmJbo3kwk7+per7WsPUGdtlvpVIObEyTGkmAmNR0m0/nXIAjitmby3UfpJ0SNyvId3pGlqXY8fcy/pUOFYuqLKmCjc6sL8RUaiys5NkSC5M0c7uJj9dGK5aHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730493269; c=relaxed/simple;
-	bh=y5wYIh4mE+JQUP17Jx8UhGwMOPLcQWAMz4GHTnF7p18=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=g5YBQbgpfpnUAzoeOSZkdth5BN1Dw+ERXZFZZFWWo1EYxqtDRtTm4+v1GhvcGlaNIpDk6/Hlc70D6aodfYfsXDt53s58Wc7PH9l9AqUXeI/MqdvO0ushCEPLFTjAWcKxQGd351cso4w5oMgGnPJQN+PMO8xs8y4hFAT2n6rNAdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JeAOcNd9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=veMIp8Hu; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1730493266;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=59h/4FnoLZZk0MjKW721si8AWaLkimLKPstUwXjURkM=;
-	b=JeAOcNd9zrq7bXVafXOI2+VYSzyPRw9xhEyPY0SVc0xT2OTXiKahuugI6qbZlJXLpmgXdz
-	S/DifpCHtGqRY77d4wpWjRyJY7j2tylDedWjt65ZEhiNjiZSeEOtRH21gcq9Hk0ZyMrP7G
-	LOIMQhkAxoAsPe8PnwY42kXvpcPVqAZIYgCfLSh6SJfsTQQr/5RAqfl3q2oKQyk4Ltxa7+
-	OIHZdyKZJnhBvKZQKt2IHL6yOoa9mnTcLfdL4qDvhLoRv6D8u7IaiccpXqnsEbT4G8diNJ
-	n1wYxp5K/qPOc7dJvFwjgG/24Zuj2pRmN+72r0Z/SLTwxo0yreEGuOo062oJ0g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1730493266;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=59h/4FnoLZZk0MjKW721si8AWaLkimLKPstUwXjURkM=;
-	b=veMIp8Hu1Fbb53XXy+Sfvp5sOohtY6hRYmZZOUX8zQcskFrKrTVCheUAX3OX4Z0hp6Iatx
-	V3AWbIBcUUOY/lBA==
-To: Jarkko Sakkinen <jarkko@kernel.org>, Ross Philipson
- <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org
-Cc: dpsmith@apertussolutions.com, mingo@redhat.com, bp@alien8.de,
- hpa@zytor.com, dave.hansen@linux.intel.com, ardb@kernel.org,
- mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
- peterhuewe@gmx.de, jgg@ziepe.ca, luto@amacapital.net,
- nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
- corbet@lwn.net, ebiederm@xmission.com, dwmw2@infradead.org,
- baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
- andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v11 00/20] x86: Trenchboot secure dynamic launch Linux
- kernel support
-In-Reply-To: <D5ARS5Y7EATS.2GVNSARKXKIDI@kernel.org>
-References: <20240913200517.3085794-1-ross.philipson@oracle.com>
- <D5ARS5Y7EATS.2GVNSARKXKIDI@kernel.org>
-Date: Fri, 01 Nov 2024 21:34:25 +0100
-Message-ID: <87a5eivgku.ffs@tglx>
+	s=arc-20240116; t=1730495241; c=relaxed/simple;
+	bh=nOOQDnRRe7zTQ0O1OJOiYureb6D1VRmlyb9CrYesKFo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=gGm01KplCxGshmXm23q+5XKmL+ElJBwyCWSrMZZHhfHw7c3+Sd6p7LWwWS68/QDl7Yj9wbeKzcOLklmg7ERI6LWR6a/mxSxTEAOekHoYuGsosvyibQC9fbd1FfPpNTGK5pOKnl/ANXR8moFiWRXj8+sB58Mg7U3aY7tsgITZjFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rzF/rnTW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 641FDC4CECD;
+	Fri,  1 Nov 2024 21:07:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730495240;
+	bh=nOOQDnRRe7zTQ0O1OJOiYureb6D1VRmlyb9CrYesKFo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rzF/rnTWUUL+UTgwBONYo/GpJuczPavqrgbgciMb17O0LrBJjX1E+Zp7D/UMZQWkz
+	 aUfmv3kl17r/0QJ0+xeeqruVLhcXgZc3c4U8fm6hUHZcwMoc0k87mD+BWV3ZhEBUTj
+	 BiRFoyYpHYtVX7TYV0utP3xA9+mok8xrSBRkBxd6NhZNgc+92DA+wb+3m+e4SxOHEp
+	 XjpzImMZsTElWdNuzU7UqOlYbVPc7+SqOhDB+U3zjeow7N3vQzGsevfSx5P56VArSW
+	 clwvsKMBeDCpt6cFbjRxNl2Lds87yc1hQdvfIrPBj9o0lTKofQTTDCtP4MgI2OsCfW
+	 La+otSVMAcwRw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 01 Nov 2024 23:07:15 +0200
+Message-Id: <D5B5D47GLWWS.119EDSKMMGFVF@kernel.org>
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Jerry Snitselaar" <jsnitsel@redhat.com>
+Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ <stable@vger.kernel.org>, "Mike Seo" <mikeseohyungjin@gmail.com>, "open
+ list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>, "open list"
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] tpm: Lock TPM chip in tpm_pm_suspend() first
+X-Mailer: aerc 0.18.2
+References: <20241101002157.645874-1-jarkko@kernel.org>
+ <ke4tjq5p43g7z3dy4wowagwsf6tzfhecexkdmgkizvqu6n5tvl@op3zhjmplntw>
+In-Reply-To: <ke4tjq5p43g7z3dy4wowagwsf6tzfhecexkdmgkizvqu6n5tvl@op3zhjmplntw>
 
-On Fri, Nov 01 2024 at 12:28, Jarkko Sakkinen wrote:
-> On Fri Sep 13, 2024 at 11:04 PM EEST, Ross Philipson wrote:
->> A quick note on terminology. The larger open source project itself is called
->> TrenchBoot, which is hosted on Github (links below). The kernel feature enabling
->> the use of Dynamic Launch technology is referred to as "Secure Launch" within
->> the kernel code. As such the prefixes sl_/SL_ or slaunch/SLAUNCH will be seen
->> in the code. The stub code discussed above is referred to as the SL stub.
+On Fri Nov 1, 2024 at 10:23 PM EET, Jerry Snitselaar wrote:
+> On Fri, Nov 01, 2024 at 02:21:56AM +0200, Jarkko Sakkinen wrote:
+> > Setting TPM_CHIP_FLAG_SUSPENDED in the end of tpm_pm_suspend() can be r=
+acy
+> > according, as this leaves window for tpm_hwrng_read() to be called whil=
+e
+> > the operation is in progress. The recent bug report gives also evidence=
+ of
+> > this behaviour.
+> >=20
+> > Aadress this by locking the TPM chip before checking any chip->flags bo=
+th
+> > in tpm_pm_suspend() and tpm_hwrng_read(). Move TPM_CHIP_FLAG_SUSPENDED
+> > check inside tpm_get_random() so that it will be always checked only wh=
+en
+> > the lock is reserved.
+> >=20
+> > Cc: stable@vger.kernel.org # v6.4+
+> > Fixes: 99d464506255 ("tpm: Prevent hwrng from activating during resume"=
+)
+> > Reported-by: Mike Seo <mikeseohyungjin@gmail.com>
+> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D219383
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > v3:
+> > - Check TPM_CHIP_FLAG_SUSPENDED inside tpm_get_random() so that it is
+> >   also done under the lock (suggested by Jerry Snitselaar).
+> > v2:
+> > - Addressed my own remark:
+> >   https://lore.kernel.org/linux-integrity/D59JAI6RR2CD.G5E5T4ZCZ49W@ker=
+nel.org/
+> > ---
+> >  drivers/char/tpm/tpm-chip.c      |  4 ----
+> >  drivers/char/tpm/tpm-interface.c | 32 ++++++++++++++++++++++----------
+> >  2 files changed, 22 insertions(+), 14 deletions(-)
+> >=20
+> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> > index 1ff99a7091bb..7df7abaf3e52 100644
+> > --- a/drivers/char/tpm/tpm-chip.c
+> > +++ b/drivers/char/tpm/tpm-chip.c
+> > @@ -525,10 +525,6 @@ static int tpm_hwrng_read(struct hwrng *rng, void =
+*data, size_t max, bool wait)
+> >  {
+> >  	struct tpm_chip *chip =3D container_of(rng, struct tpm_chip, hwrng);
+> > =20
+> > -	/* Give back zero bytes, as TPM chip has not yet fully resumed: */
+> > -	if (chip->flags & TPM_CHIP_FLAG_SUSPENDED)
+> > -		return 0;
+> > -
+> >  	return tpm_get_random(chip, data, max);
+> >  }
+> > =20
+> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-in=
+terface.c
+> > index 8134f002b121..b1daa0d7b341 100644
+> > --- a/drivers/char/tpm/tpm-interface.c
+> > +++ b/drivers/char/tpm/tpm-interface.c
+> > @@ -370,6 +370,13 @@ int tpm_pm_suspend(struct device *dev)
+> >  	if (!chip)
+> >  		return -ENODEV;
+> > =20
+> > +	rc =3D tpm_try_get_ops(chip);
+> > +	if (rc) {
+> > +		/* Can be safely set out of locks, as no action cannot race: */
+> > +		chip->flags |=3D TPM_CHIP_FLAG_SUSPENDED;
+> > +		goto out;
+> > +	}
+> > +
+> >  	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+> >  		goto suspended;
+> > =20
+> > @@ -377,21 +384,19 @@ int tpm_pm_suspend(struct device *dev)
+> >  	    !pm_suspend_via_firmware())
+> >  		goto suspended;
+> > =20
+> > -	rc =3D tpm_try_get_ops(chip);
+> > -	if (!rc) {
+> > -		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> > -			tpm2_end_auth_session(chip);
+> > -			tpm2_shutdown(chip, TPM2_SU_STATE);
+> > -		} else {
+> > -			rc =3D tpm1_pm_suspend(chip, tpm_suspend_pcr);
+> > -		}
+> > -
+> > -		tpm_put_ops(chip);
+> > +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> > +		tpm2_end_auth_session(chip);
+> > +		tpm2_shutdown(chip, TPM2_SU_STATE);
+> > +		goto suspended;
+> >  	}
+> > =20
+> > +	rc =3D tpm1_pm_suspend(chip, tpm_suspend_pcr);
+> > +
 >
-> 1. I don't see any tags in most of the patches so don't get the rush. This
->    includes also patches for x86. Why I would care to review TPM patches
->    when there is over a dozen unreviewed and untested patches before it?
-> 2. TPM patches have been in circulation in and out of the patch set
->    for some time now with little or no improvement.
 >
-> Why the sudden buzz? I have not heard much about this since last early
-> summer.  Have to spend some time recalling what this is about anyway. I
-> cannot trust that my tags make any sense before more reviewed/tested-by
-> tags before the TPM patches.
+> I imagine the above still be wrapped in an else with the if (chip->flags =
+& TPM_CHIP_FLAG_TPM2)
+> otherwise it will call tpm1_pm_suspend for both tpm1 and tpm2 devices, ye=
+s?
+>
+> So:
+>
+> 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> 		tpm2_end_auth_session(chip);
+> 		tpm2_shutdown(chip, TPM2_SU_STATE);
+> 		goto suspended;
+> 	} else {
+> 		rc =3D tpm1_pm_suspend(chip, tpm_suspend_pcr);
+> 	}
+>
+>
+> Other than that I think it looks good.
 
-If I intend to merge the patches then I surely have looked at them
-deeply. I don't have to send a reviewed-by just to apply them
-afterwards.
+It should be fine because after tpm2_shutdown() is called there is "goto
+suspended;". This is IMHO more readable as it matches the structure of
+previous exits before it. In future if this needs to be improved it will
+easier to move the logic to a helper function (e.g. __tpm_pm_suspend())
+where gotos are substituted with return-statements.
 
-There was enough motion on these patches and this posting is in your
-inbox for 6 weeks now without any reaction from you.
-
-The TPM changes are very much independent from the x86 specific ones, so
-why do you want x86 review tags in order to look at the ones which are
-specific to your subsystem especially as some of them seem to address
-real short comings there independent of trenchboot.
-
-Thanks,
-
-        tglx
+BR, Jarkko
 
