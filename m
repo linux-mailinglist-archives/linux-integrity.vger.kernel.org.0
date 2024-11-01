@@ -1,111 +1,176 @@
-Return-Path: <linux-integrity+bounces-3951-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3952-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FD5F9B86A7
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 00:08:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C6C99B8798
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 01:22:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 125351F2277F
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Oct 2024 23:08:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 824C0B21F61
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 00:22:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416361E0E03;
-	Thu, 31 Oct 2024 23:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2851E571;
+	Fri,  1 Nov 2024 00:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="se5Xgp53";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="s6ZB5YV2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqoiMvoO"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF8E1CDFB4;
-	Thu, 31 Oct 2024 23:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E5F196;
+	Fri,  1 Nov 2024 00:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730416123; cv=none; b=GiaRLycDh9WSpKchxfwNjiZLSt3tmvukd4EyCuQhZVTSb7BwRVfnh5+QpCcZ8fE91Aag+9oVcK/KBFxgqfPlBYHHHtSgGBl2MbsudGSbvzc+rDkqkHHAMMJsZcBcn7zvX8sAramupxPzaNxwiILMXOU7kDEbfJAsvQr/JLn2T6g=
+	t=1730420525; cv=none; b=nllCHNINeJXOTXXNjOM/TEKNfYqv0SuDp5mkfipM8tDwrnYlI6gkrab9CqaNIA2zVNVZqzFC4/ILaCQTwslLbv+Fn7eU6hcX9spbpQTKKyWSbeA27RnKaO2iwlt1hS00jbbE4t8bLnIQQ2OVq2vorQRcQtWDZ5ce+8+h7gZ8H3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730416123; c=relaxed/simple;
-	bh=t5kudjeNUZ1aRqDlkJODNg0WxGYF3b7fXMYAj3ZS57k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jwvvumgdzqOyrqKizuv6bDy9fEy2qrWWcVFkUfeGZmfs6m/3/BHdmerNyfOxVFU3WljwVxe5K1o259gYHQSjilMwasLijIHOOoJJ6RhHgCGDeBTwo5BQxXxTC43kVzJ+If1n9AnOnQZJUG3aY9ZYuTKsS2vOzj6S1cVSgX38Ksg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=se5Xgp53; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=s6ZB5YV2; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1730416115;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X43PY2/hEbcwBt7Pbr1N5jc7wEXE8dAimnVrIUPcOUE=;
-	b=se5Xgp53tVB20jyRaaH2iLjXvXwdVsngVIXx9grBEo+lfKa20ugZbbEHcGZhaUpww0RoiY
-	EXWxDRXyp/5faxfVpX5j/HOnWJYwef48MKnqdLSdvRM+SzcC1UZFRSJg9BI8kwdSD2BHp/
-	nhk3F3EKXMN6sHSp0wCKuprK38Y4dIXmLxkF/8Q9LaxZMHrSg3gXcdsJN+btBRaSTYSPph
-	5blEOt0hGuEUHTfEFiNEXw+ofxhlFgZ17QaVFDdq27ezhnrMNksI+PJWPa+WgTBVDwz/5o
-	yOoLg/budsRsV6AywMk3nLc/CDR9rIfvLZDG/1VMgbwz7rZxbiTVpKZTIKOAkg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1730416115;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X43PY2/hEbcwBt7Pbr1N5jc7wEXE8dAimnVrIUPcOUE=;
-	b=s6ZB5YV2NU3xPp/8Y/vclO3GDuEX/ui6tits119rcH2YQb1nCQFRLUCWuey0wof92SceYv
-	CsFSTGLmEip3OrDg==
-To: Jarkko Sakkinen <jarkko@kernel.org>, Ross Philipson
- <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org
-Cc: dpsmith@apertussolutions.com, mingo@redhat.com, bp@alien8.de,
- hpa@zytor.com, dave.hansen@linux.intel.com, ardb@kernel.org,
- mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
- peterhuewe@gmx.de, jgg@ziepe.ca, luto@amacapital.net,
- nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
- corbet@lwn.net, ebiederm@xmission.com, dwmw2@infradead.org,
- baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
- andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v11 00/20] x86: Trenchboot secure dynamic launch Linux
- kernel support
-In-Reply-To: <D5ACNMVX5LXB.1L0S9P2J3UDJH@kernel.org>
-References: <20240913200517.3085794-1-ross.philipson@oracle.com>
- <87wmhoulb9.ffs@tglx> <D5ACNMVX5LXB.1L0S9P2J3UDJH@kernel.org>
-Date: Fri, 01 Nov 2024 00:08:34 +0100
-Message-ID: <87ldy3vpjh.ffs@tglx>
+	s=arc-20240116; t=1730420525; c=relaxed/simple;
+	bh=2qL387XEwi0QJoPJLdNwkpzU1ZgxjA26xwDKEWQ6jvc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YFit5nQjhqJah2dLeS3MI5suWo1c45uMeJtoyOKlru8c9wICCqw3PPfeIfQaCeczCy47weUJXgar3j2Iw5JtUJKXIE5KNqfYawbkyb8XJYOZcNSrVDG6mmIlCv0vLtO1ggeKzUd1xeFdURwbp5GlxJveUO3ei6sUIxNrlNXqQ7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mqoiMvoO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75433C4CEC3;
+	Fri,  1 Nov 2024 00:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730420524;
+	bh=2qL387XEwi0QJoPJLdNwkpzU1ZgxjA26xwDKEWQ6jvc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mqoiMvoOta5E9zcIZpB0NV9tHfGDDN0X0lzrTzlo0O6/BVzdFlfxEHlU4hq2vGxO7
+	 g90sAw1euB6VUi1XvA5Uhz5MDoWSAxqrtxxYVGOTXU//Uq8kHHGzljAJSFiYNP5Lve
+	 eVi1tBDmAt+KU4NgpcPfLJyo+Lj3702HoL6eXiL/lJGjyhUPDbNqOoByJXFt2aGk99
+	 ladAF3d5uiMeznt+oTozrJQ18UfQkJR/gS4DZv1XDku+SgcXpsZnicS7Gg6RqbquTN
+	 m9oRQ31dYVS8/UQr1+s7y8vRF4cBUoUFL4LTzDtm/223rGvJUN9QP/ijkH7YowSW2y
+	 pSEfsZQtpTraQ==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Jerry Snitselaar <jsnitsel@redhat.com>
+Cc: stable@vger.kernel.org,
+	Mike Seo <mikeseohyungjin@gmail.com>,
+	linux-integrity@vger.kernel.org (open list:TPM DEVICE DRIVER),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3] tpm: Lock TPM chip in tpm_pm_suspend() first
+Date: Fri,  1 Nov 2024 02:21:56 +0200
+Message-ID: <20241101002157.645874-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 01 2024 at 00:37, Jarkko Sakkinen wrote:
-> On Thu Oct 31, 2024 at 9:25 PM EET, Thomas Gleixner wrote:
->> So this looks pretty reasonable to me by now and I'm inclined to take it
->> through the tip x86 tree, but that needs reviewed/acked-by's from the
->> crypto and TPM folks. EFI has been reviewed already.
->>
->> Can we make progress on this please?
->
-> So TPM patches do have bunch of glitches:
->
-> - 15/20: I don't get this. There is nothing to report unless tree
->   is falling. The reported-by tag literally meaningless. Maybe this
->   is something that makes sense with this feature. Explain from that
->   angle.
-> - 16/20: Is this actually a bug fix? If it is should be before 15/20.
-> - 17/20: the commit message could do a better job explaining how the
->   locality can vary. I'm not sure how this will be used by rest of
->   the patch set.
-> - 18/20: I'm not confident we want to give privilege to set locality
->   to the user space. The commit message neither makes a case of this.
->   Has this been tested to together with bus encryption (just checking)?
+Setting TPM_CHIP_FLAG_SUSPENDED in the end of tpm_pm_suspend() can be racy
+according, as this leaves window for tpm_hwrng_read() to be called while
+the operation is in progress. The recent bug report gives also evidence of
+this behaviour.
 
-Can you please explicitely voice your detailed technical concerns in
-replies to the actual patches?
+Aadress this by locking the TPM chip before checking any chip->flags both
+in tpm_pm_suspend() and tpm_hwrng_read(). Move TPM_CHIP_FLAG_SUSPENDED
+check inside tpm_get_random() so that it will be always checked only when
+the lock is reserved.
 
-Thanks,
+Cc: stable@vger.kernel.org # v6.4+
+Fixes: 99d464506255 ("tpm: Prevent hwrng from activating during resume")
+Reported-by: Mike Seo <mikeseohyungjin@gmail.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219383
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v3:
+- Check TPM_CHIP_FLAG_SUSPENDED inside tpm_get_random() so that it is
+  also done under the lock (suggested by Jerry Snitselaar).
+v2:
+- Addressed my own remark:
+  https://lore.kernel.org/linux-integrity/D59JAI6RR2CD.G5E5T4ZCZ49W@kernel.org/
+---
+ drivers/char/tpm/tpm-chip.c      |  4 ----
+ drivers/char/tpm/tpm-interface.c | 32 ++++++++++++++++++++++----------
+ 2 files changed, 22 insertions(+), 14 deletions(-)
 
-        tglx
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 1ff99a7091bb..7df7abaf3e52 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -525,10 +525,6 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+ {
+ 	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
+ 
+-	/* Give back zero bytes, as TPM chip has not yet fully resumed: */
+-	if (chip->flags & TPM_CHIP_FLAG_SUSPENDED)
+-		return 0;
+-
+ 	return tpm_get_random(chip, data, max);
+ }
+ 
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 8134f002b121..b1daa0d7b341 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -370,6 +370,13 @@ int tpm_pm_suspend(struct device *dev)
+ 	if (!chip)
+ 		return -ENODEV;
+ 
++	rc = tpm_try_get_ops(chip);
++	if (rc) {
++		/* Can be safely set out of locks, as no action cannot race: */
++		chip->flags |= TPM_CHIP_FLAG_SUSPENDED;
++		goto out;
++	}
++
+ 	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+ 		goto suspended;
+ 
+@@ -377,21 +384,19 @@ int tpm_pm_suspend(struct device *dev)
+ 	    !pm_suspend_via_firmware())
+ 		goto suspended;
+ 
+-	rc = tpm_try_get_ops(chip);
+-	if (!rc) {
+-		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+-			tpm2_end_auth_session(chip);
+-			tpm2_shutdown(chip, TPM2_SU_STATE);
+-		} else {
+-			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+-		}
+-
+-		tpm_put_ops(chip);
++	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
++		tpm2_end_auth_session(chip);
++		tpm2_shutdown(chip, TPM2_SU_STATE);
++		goto suspended;
+ 	}
+ 
++	rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
++
+ suspended:
+ 	chip->flags |= TPM_CHIP_FLAG_SUSPENDED;
++	tpm_put_ops(chip);
+ 
++out:
+ 	if (rc)
+ 		dev_err(dev, "Ignoring error %d while suspending\n", rc);
+ 	return 0;
+@@ -440,11 +445,18 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
+ 	if (!chip)
+ 		return -ENODEV;
+ 
++	/* Give back zero bytes, as TPM chip has not yet fully resumed: */
++	if (chip->flags & TPM_CHIP_FLAG_SUSPENDED) {
++		rc = 0;
++		goto out;
++	}
++
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 		rc = tpm2_get_random(chip, out, max);
+ 	else
+ 		rc = tpm1_get_random(chip, out, max);
+ 
++out:
+ 	tpm_put_ops(chip);
+ 	return rc;
+ }
+-- 
+2.47.0
+
 
