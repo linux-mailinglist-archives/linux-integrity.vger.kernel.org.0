@@ -1,292 +1,227 @@
-Return-Path: <linux-integrity+bounces-3970-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-3971-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FD4C9B98B0
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 20:33:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A48359B995F
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 21:23:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E4AB280E6A
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 19:33:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63C22282766
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Nov 2024 20:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF54E1D14E4;
-	Fri,  1 Nov 2024 19:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828CF1E2304;
+	Fri,  1 Nov 2024 20:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="QgYGcyLt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bMqTJxHN"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C505E1D0DE8;
-	Fri,  1 Nov 2024 19:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730489591; cv=fail; b=SeKJtabxaE4797Z5QGXW9cPxjJTxQcRmCP+fhDJHcOXwtdEveeCeWMsJPWpwBbmFfc/zjKRrTZ03QWDrfiVMwO7nNqxputJUMDIM+7T0OCzvR4o7mEUL/NZZCLa3VB/NHW72Uh8XvQULiJdtVkrdKmUmoXus2Nrm1eht0MS6H/8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730489591; c=relaxed/simple;
-	bh=Qt+Y0EPvFNwRXHjcSs0d6bjl8BG+UwdVbcHZRPR0Jp4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=UWWH2lsAbxSKLljWDPJHyX8QhQnRSTL+xKKKCa7DakL+hw4I2L1DWzdjSAKBhMR3ovDUOdh/txN6bfc+pXGzWHFMrZM1dZCX1c0o5096NyMPO0YlUgMx8XQT0T7tqltDeczI2WZxDsQLO6j01m8vxxh8NlyXkpqJcd2cQfPDK2o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=QgYGcyLt; arc=fail smtp.client-ip=148.163.147.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-	by mx0a-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A1I2ean007644;
-	Fri, 1 Nov 2024 19:31:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps0720; bh=Qt
-	+Y0EPvFNwRXHjcSs0d6bjl8BG+UwdVbcHZRPR0Jp4=; b=QgYGcyLtYu8Q9Wl8z/
-	Go3kL8iOhVOMpkzdE6N+v6eVQFTDLFcYvd7VmcPaJUC4NZAs050wGHYFmOTyZ98Q
-	TnDuJWOwtHMS3JUbbgw4HiABgmPZKrVZO3jH5O1ZnU+KNyFvVwrWj2mvCKKR0nGp
-	zgcw67fYZUYFLqpsqVmU5mQMRR+RYS3ZSvsKv41HKmawLlRp+bOVtdSO8Jk7wRCz
-	7k6yqc+z62Kqv+tFP4y7Sc5wZYX98t40vfmIakVxfry8y/r8BkgdGWMk0NJLXcRo
-	CYXobN2jEgtxl8euBiPUp20X7WPCpUUYJSc84p+J0Bo4HpxgSZgOpv6YMVmyHBSa
-	IXsA==
-Received: from p1lg14879.it.hpe.com ([16.230.97.200])
-	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 42mx053b68-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 01 Nov 2024 19:31:55 +0000 (GMT)
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 53DF21374A;
-	Fri,  1 Nov 2024 19:31:50 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 1 Nov 2024 07:31:10 -1200
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 1 Nov 2024 07:31:00 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
- via Frontend Transport; Fri, 1 Nov 2024 07:31:00 -1200
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (192.58.206.35)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 1 Nov 2024 07:31:09 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Kyzhf8p46ZbgPMHDPYkvgp25hgFAWKBwfulOMS+VtYIljKy0k4ZibyndFtbDi33lhFIyjTBelVi5jioDRp1+Tl8TlHOwF33JeiGApgBxSHoY2y68O/i+JRTQGMxeHGdrq9foWKqQx1IZIrysu3HVdflxa6ZRgRhcYlkeU1cdL24064zw7sS28tvyt1uZz1f2ZKl+AQrdmWXlLG2RR667GjNvCQ+3vV0Cl7ExtgRK7wkMBn9sRtUA3zbOV8o7ObLvf2GfQav6Wr3RwzNjOikObmXB87x2e/Iaefk5w2keu/Y4EDu2UFJTHnIIsxcJQKh5+t5tNWE5QYI9cePw5lm3BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qt+Y0EPvFNwRXHjcSs0d6bjl8BG+UwdVbcHZRPR0Jp4=;
- b=uEaGY8xtSImCZADmhbXaIyoOnb7bbzmU94bRioNlcRez/Ddty3R33SsCPKnJoatd+YXi3cY3lFSNesIfSeKA/7Cv6CeFmHZiH/o23fNJdrdGkxW4WdNHWtWu3OS3G8neJZRR41xJUbz0iS3DyRrysUDnQr9TgygDdnr47q8TyBApidkB9ht2fUtCkQGvgD1s/SGQhcIlqpJ1e6lvY5K5clo33Q1GHeQG+RKSEplwkrnGFzXwAP9weMtXb/frOH/U7CvUx80WVjIP0mIAg6WwXDiPba4gfZ3KGG0E2df7gODSDMmkInu/CtiD5c6w12iLDJs2qQXpjfhaMhBQRsEatw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM3PR84MB3714.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:0:3d::17) by
- DM3PR84MB3715.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:0:44::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8114.23; Fri, 1 Nov 2024 19:31:07 +0000
-Received: from DM3PR84MB3714.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::8f56:e2a9:32b0:75bd]) by DM3PR84MB3714.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::8f56:e2a9:32b0:75bd%2]) with mapi id 15.20.8093.027; Fri, 1 Nov 2024
- 19:31:07 +0000
-From: "Elliott, Robert (Servers)" <elliott@hpe.com>
-To: Ross Philipson <ross.philipson@oracle.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-CC: "dpsmith@apertussolutions.com" <dpsmith@apertussolutions.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com"
-	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-        "hpa@zytor.com"
-	<hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "mjg59@srcf.ucam.org"
-	<mjg59@srcf.ucam.org>,
-        "James.Bottomley@hansenpartnership.com"
-	<James.Bottomley@hansenpartnership.com>,
-        "peterhuewe@gmx.de"
-	<peterhuewe@gmx.de>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "jgg@ziepe.ca"
-	<jgg@ziepe.ca>,
-        "luto@amacapital.net" <luto@amacapital.net>,
-        "nivedita@alum.mit.edu" <nivedita@alum.mit.edu>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "corbet@lwn.net"
-	<corbet@lwn.net>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "baolu.lu@linux.intel.com"
-	<baolu.lu@linux.intel.com>,
-        "kanth.ghatraju@oracle.com"
-	<kanth.ghatraju@oracle.com>,
-        "andrew.cooper3@citrix.com"
-	<andrew.cooper3@citrix.com>,
-        "trenchboot-devel@googlegroups.com"
-	<trenchboot-devel@googlegroups.com>
-Subject: RE: [PATCH v11 01/20] Documentation/x86: Secure Launch kernel
- documentation
-Thread-Topic: [PATCH v11 01/20] Documentation/x86: Secure Launch kernel
- documentation
-Thread-Index: AQHbBhk1cjmy5f0J5UyAHliCaIVLyrKjDwew
-Date: Fri, 1 Nov 2024 19:31:06 +0000
-Message-ID: <DM3PR84MB3714A4632C4C7B6B50D7A0F4AB562@DM3PR84MB3714.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20240913200517.3085794-1-ross.philipson@oracle.com>
- <20240913200517.3085794-2-ross.philipson@oracle.com>
-In-Reply-To: <20240913200517.3085794-2-ross.philipson@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM3PR84MB3714:EE_|DM3PR84MB3715:EE_
-x-ms-office365-filtering-correlation-id: 8c74005e-14c2-4a6e-4381-08dcfaabbb60
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info: =?utf-8?B?U0J2Q0NUR2N4UWI2Q2dudUgyci8wU1JVTFpRbDlHR3Y4dWZNYVFwNTh3NHpa?=
- =?utf-8?B?UFVrMEU2ZUNCSVJQUlFnakNUVkdhaGNEZmVqd1luNC9QWmh5WnljSzIwN1lI?=
- =?utf-8?B?cXYrMEhKcVllQzZnZDRJdzFDZ2VHa2NBci9Xc2RoRTlIeDZ2alhGM092Um4y?=
- =?utf-8?B?MW5xTGxMOFRlbW9Da2hpZXVpZ2JraXdkeEpqREZyb1VacGN6L2dmSTlRNWha?=
- =?utf-8?B?OFpMWVplY3p6elprcWRJQlJkakpsWUEzY1NXRTh3aE15bXNMSWd0SzFiQjR2?=
- =?utf-8?B?YmRDSnMrMmMrNHFEWEhwTlAxQUpFMEhmenpiMmJRZFhZN3Zpa0NHTVpiQ2ZL?=
- =?utf-8?B?UDVEek1Cd0NlSkhDV1ZRZXVnd2paWnhsUnE5QmRHV0t0dlNLYUlIKzBQZW9n?=
- =?utf-8?B?SS9LVnhPTUdvakxyd3liL05pREtGK0NUZkZZaS9BbUtVNHMrVzdRSURxK09l?=
- =?utf-8?B?YU5uVFBMY1FuUmZGb0pmNnhXRmEyR0pwbHFId0hLbEtrck1GTGpVN3AyRUhL?=
- =?utf-8?B?cHZvRTJVVlczd3FLRzQyUmtQY2tMek9tZjNZak9DVmJuajRsN2ZpendnU1ox?=
- =?utf-8?B?MXoxQ04vSmF2VnJMQzVxTVNZdE9VT0VnMWhPR3JLZlowZmc1VHdJRlVnTGMy?=
- =?utf-8?B?SDg5aVYwWVpQQzNJT0hxUHpYRlllTU4rZ3A0bVhlLzgwT0VZQmhGdUI1anBk?=
- =?utf-8?B?OEVzNHdzREMvRXg5RWpvd1VFN2dFZkF0Q0dXeGUrTm8wQjBBUGNTU2RHcWZR?=
- =?utf-8?B?RS9ZcnVHTmhzYWp6SnMyZStLUnBBQ2Nyc0txbEQ1djNHU2xEbFp1ZFRpeVI2?=
- =?utf-8?B?RTVVbExqKytpV2prU3piV1d0aGJvUmR3RWlyNVRNY0RPbTV3QWdxVStmL0w5?=
- =?utf-8?B?K3FlcG9nalpsY2NaYVo5UXFtckQxeThiM3ZYYUZjVWszcXhQaWk3dmJpcGZk?=
- =?utf-8?B?ZlNlZkdHN01td2tzRWM3VmdySTBITjdmWVRPSmpaWmZwSXRWT1BVMGJuQU40?=
- =?utf-8?B?SDNpUjZjNEFCaXpXWjRXS2FJeWcxWlFWa0gyb3l4SjBkTWdGTXF0NWNIc3Zk?=
- =?utf-8?B?S2Yvbk5JZ1pvNjh4UUluVkpXdG5hNU0vdXZ4QmVzTlI0VGo1d3oraFNiNS9p?=
- =?utf-8?B?OVNGTXJiZnJmOFJrOE9QZWY0WXR4NVZNZzlyWVM1L3VNeW1CVHZybjJrMWNS?=
- =?utf-8?B?SldWOXhlVUJVcWUrRFJsZnMvU09lblRwQ1g4QTg0dEw1UFk3NzcrbE5WNUc4?=
- =?utf-8?B?OFBHZ2xWeEM1ZlFETXorMHR2YVhWMlYxM3U2d05iKzRPWjM2alYvczVVL3Bo?=
- =?utf-8?B?a0xsOEo2Vmw4M1daSGNKaGlxSWI5ZlVmSTNiN2JUdHF2R0ZLRUJjZU9TdHFL?=
- =?utf-8?B?V2VRd0pNVlVsNkZZc1J1aUl0QlhSZjdvbEN6bGF1VGVnQWFXZ1NHQnJnYlFm?=
- =?utf-8?B?bld3TmhJM1FKK3ViTHRid21NQ0RWeE5kaWYwNlVkV0ZJa3lDN1JsOHhOY3NV?=
- =?utf-8?B?OE5tMzJQekZPUmJoalVFOVpiYWExZzFRQUR1MzlYajJHdDRWZFRGNzhMMStY?=
- =?utf-8?B?ZXJXSDVTQ2VYLy9peU1xNlZRZ1U0SDQrK2JjNFlHaE1ubGNJM2ViYUpjR1Z4?=
- =?utf-8?B?dDFmWW1vU1hYd0x2SStYdjJ6NlVySHhZM3RPNzV3SHc1QU9pM2ZPU3A5dE9E?=
- =?utf-8?B?ZUh2U2RqaVRab2htREM0d3N2dy9qbHdzc2pmbTVCWUp0bVZFMnVlcnJjUVBP?=
- =?utf-8?Q?DoApppq37f/FZVwJV9wYFYFCTM6nqUUqdkrk3C6?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM3PR84MB3714.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?blBiMGpXaDFLaHROSTNKOEZhVXRRNks1RXUxejBYZkxCR3VET3VIempBOUV3?=
- =?utf-8?B?TnMvUGZBNWxESGhlc2szbFN2M2hQSEkxWEdqMUJ4akFvQUlUcFhjbXN4YW5V?=
- =?utf-8?B?QnJyV25taFVXbjVEaVg3ZFZmbkVlditQaU9IalRBa2hVZlFCbGJqdDJCRU9h?=
- =?utf-8?B?dzlzTUdWSjhBSGlFRy95TlZaUHpzUEtQYUpZMEhCVGd0VDd4dmJJY3NLbExK?=
- =?utf-8?B?UEoyUCthQUwvS1gyZVkzd2FxZW5yODVyMXpyejVMdktmN3hmRUNIdmtNYTlH?=
- =?utf-8?B?Y2FUSmRZV21lRFFVSXBQRHRkZjk5djk5OEtqeGJNTHlzTlRKOHBTanBHakUv?=
- =?utf-8?B?TWZhL1NmSXV1dGdmTDU0SEhFUWh3WUF3VDVnRnJsWmlZeTFlc3BmM0RhcE5P?=
- =?utf-8?B?K01Nb1RRNEkvVUcvblpmVUtPcm5rRzFWT1ZrSlpLdUlhWE5RUnZHNHAwRkhV?=
- =?utf-8?B?ZkNkQjZkSTdwUkQ0MmZiaXc5NTdwTWZyZ0tlT3BVb0V5VGw0cW10MTBJL1Br?=
- =?utf-8?B?YkJZTzNEZEI1SlNvT3Q1MFlXT2l5RHFaTnBEcXdUMS83UWI2TFRITzlEZU1B?=
- =?utf-8?B?eW5yMFcrbVM5d2U5WG5XOEtjQW9DR2RHVGFtbSticWprWkluVHZRS2FBeFp4?=
- =?utf-8?B?RXJLOWF4S1NpaS9yenE3OHJ2dnd1clU3QVQ5ZmNWalhwOVlNNlNvT3c4dld0?=
- =?utf-8?B?cXpZNEdaZGxMUUpaeElsOEYvQks5Y2J3N3VhVlg5RGhzV0pDaTRnQ2dUcERq?=
- =?utf-8?B?elRoZkg5WXVJMkJ0YVJHUXdHRVRmY2hTM0lSdC9oUm9lSmhQSG5qY0dNOW5J?=
- =?utf-8?B?ZmN4dHdRYmpjUzVSLzA5cXlRTTl4VzAwdnNxUUYxTHhFcTRpa3NDS1lKN3cr?=
- =?utf-8?B?UFZEQVZqZkhlWVZOeEprTm5pL0FTcllaOXd5OFB2bUh2NVlxeXdUdzN0OHEr?=
- =?utf-8?B?SEZsbE4wTUFSMGJWUk5xR2pLSVNlZ0ZKMUprUitjM0pZRHJKM2trN0hHb2xv?=
- =?utf-8?B?dHhXVG8vdnpBcW00NC9jc280U1k2bmJiNVN6Z0dJNHJzRDdWMzBIYzNoZUV4?=
- =?utf-8?B?dVJuanV5RzZqZ2hyaHZnNFFBWGQ0am9scjFJVDdHczFoUTdQRkFZUTNCSS93?=
- =?utf-8?B?bGhSTVFxMGx2SzR0YnIxYXk4aEM5b1VGcXdWQVdiV1lBbVVHR003NlI0cTla?=
- =?utf-8?B?enZLT3dCTzlZNFVRM2JEMnZ6YjFiT3hSRmFMWmFIWGlnLzBIaDhQejhZRHNU?=
- =?utf-8?B?UFJabGZNQTRpWW9vR3BPZ1Bzb3NDWEV5UFlXLzZoTTRWMkFRVWsxSk54dklr?=
- =?utf-8?B?YVFjU2trdnZvc3lmRk5RVlk0dVBwUjcxV0xRK0l0ZitwK296Z0dtaGJPNS9X?=
- =?utf-8?B?UU5qMjBWdlFKVUFlTG1adFJybXlKRnBEMW9OdU5SVUZWYzFyalQ0ZVZrU1NY?=
- =?utf-8?B?ZDJTSTNDSC9Cc2U3bFZzRjNsaVFSZTh1bEJYQXNIaEdiMTUwUFAxYU9la1A5?=
- =?utf-8?B?SjJIUU4xWHV4Rmc5alVvd3FQaVd2WUxnd3R6RW03MENZMnlnR25wajFSV3l2?=
- =?utf-8?B?ODZ5SXJSaHZqblZsSXNrTFB3cHFadUpaTGNZQjVFQjdkL1VEdTBUb2d5OXli?=
- =?utf-8?B?cHppMEZRVGx4UGVVeGdWM0s3RDhSNlVLdTgzSUd0YitmVjRCaDJzbDVkZGF2?=
- =?utf-8?B?WXpBbXZmcFUwM2p4Yy82UGRXdWZMRGFjeG5ITGZJU0RKYlVrWU5RcHdkUGdU?=
- =?utf-8?B?RCt4OGl2OHM2b0RRT0tEWE9OSlp0Y2NYVnBEYkNKdVh1QTgzVmJyRDJHanVx?=
- =?utf-8?B?aXorcXZxRmVlTXc2aWJnUWN3WFN5emVqdVRoVE11WHFVYU5rQU00T1J5YTZs?=
- =?utf-8?B?aU5XWWNUenBYcVZPaU05eWE0WmtLUitoVTIvcjVrYmhBOUhWdlZqZ3JwRkg0?=
- =?utf-8?B?THRqT2g3RjZTY1BSSVI4bTZtbm94UitnR0NaM0FLNWVMQmhIYmdZb2VQNUFv?=
- =?utf-8?B?dzRyLzA2Wk0raWIzdEJCMGVBcU9XWFkyU3NKSG5Jd2hucDdmS0RUMmxxSTNv?=
- =?utf-8?B?bEErNExBYlgvSmhVWW4xTWEyMUkzelV4TmZWM1Y2dDdQMzBCZU1td2owWVVO?=
- =?utf-8?Q?a8Mc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196491D7E52
+	for <linux-integrity@vger.kernel.org>; Fri,  1 Nov 2024 20:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730492597; cv=none; b=fBZJUZ5zc1L4MyL9M85TabHNisHwcpazsdQebAUGKFqHifucU32DinZQVNWC/1cV1mtrrRiVOsZ642IXAix9e5c6V5lvEoH14JhNa8rCd6hubeOoYqLmoce95Kb1lXcSY9auLvyvl+kxP1c6F6jVPHXGMIIwNwkVXEyeRLyRwm8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730492597; c=relaxed/simple;
+	bh=WZhkCcdsofu4QIHz3gE1Rnefl/2DkGbEznDbjjYDYc0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a/imY9VIffGZ/bAJrex+2CI8iKpTjzmpQq25u0wRLg2ojV5BuRDIOCWMUCfWG4Tz8xdHZw9K/Us5vpRZeOo3X3t1vqQ+/PUcppYqUIBZtE7zguwW2zHsQoKQgb3NJOKj1ATX2OkGkKfNgR3K4D47UxfgBF+zg1EYyEHXLhnCY1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bMqTJxHN; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730492594;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ANub1/K4e3v/MYOsC1JtMcjz48WvDQab142m5XRSVWc=;
+	b=bMqTJxHNyPILM360uhqi5JqzOByYffbXjGvxNQtR9vDhf/dWjOQEuYfyAV5zxjE+hpVqBo
+	rcG1ROoFoXPZqgxKz1HfEwZZNcT65nyDvdfYY9goJsvt2AWFVoRjooEk1yHXigfF4gbely
+	ESO7hW73apOemMRkpVwlVDd9F2tq9Fc=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-691-XrbsCP6eOcybGHX_0JVwKw-1; Fri, 01 Nov 2024 16:23:12 -0400
+X-MC-Unique: XrbsCP6eOcybGHX_0JVwKw-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7b14cb9f6f5so369844385a.0
+        for <linux-integrity@vger.kernel.org>; Fri, 01 Nov 2024 13:23:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730492592; x=1731097392;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ANub1/K4e3v/MYOsC1JtMcjz48WvDQab142m5XRSVWc=;
+        b=Pix/0yQixlmqmD9giBUWCTBvli/DaVkxYpLd6vqmTQcmHZsCb0thMjkUeRYAzbcg5+
+         OobnCEK8zG9V0mUND3G9k1BdGQEfyTKC5f1KZAJOONSd794ZIonK+wNopR9yYsPn7XU6
+         nhaURuBK7ycJdh6OZc0CAmbsRWn6oJEuzUDt6qQKURs8y8RDmYsaOkIE5YNCZmDH3d4O
+         rMsA452yFRiWeWN7IYkzTsgWxGLQreCoNPKUA7Fds4ABHcDPxFBws/6cbX08KYUaR0Vd
+         KQyJj0SQrOKsjoRwquuPTW9VDVNXWmHuGZ+KnbWou+vISmNE15C01PVyeg9h5SSSeiMj
+         JHvA==
+X-Forwarded-Encrypted: i=1; AJvYcCWUrLxJQiLXBfqUqEDiwJO1Zei8GiFoSJC/qvAIQV6RtuL5zcBQYpQTXY8Tut0d51DD9/M5PUH5+rmEM/I4648=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvjfapHkbRKF8Q3u1VFdNsHVw7o5ly1dRVy5OHuWeTbN829z7X
+	vEtppR7Suqu4/9g0AOm8ih+TZdbeM8x3VRo0GBtZPgQQaaKaAe5+5o743TsHQd6R2W7jjkfG6T5
+	69accLFEMiyjtY+VdRyCm0JKlzQhJEjVMS/Xd02ms0/wz31tIBoKckZOaP2mh1bjIgA==
+X-Received: by 2002:a05:620a:458e:b0:7af:cf07:905b with SMTP id af79cd13be357-7b193ee16efmr3456684985a.2.1730492592274;
+        Fri, 01 Nov 2024 13:23:12 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH9xVNPcq1jmK7aJ5QBENQFMna7+p8sUgLMxELKbukLjbWMZ4mTiKOGmCsnmG43Hqb4mVdQ6A==
+X-Received: by 2002:a05:620a:458e:b0:7af:cf07:905b with SMTP id af79cd13be357-7b193ee16efmr3456681685a.2.1730492591925;
+        Fri, 01 Nov 2024 13:23:11 -0700 (PDT)
+Received: from localhost (ip98-179-76-110.ph.ph.cox.net. [98.179.76.110])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f3a10a39sm203788285a.66.2024.11.01.13.23.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Nov 2024 13:23:11 -0700 (PDT)
+Date: Fri, 1 Nov 2024 13:23:09 -0700
+From: Jerry Snitselaar <jsnitsel@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	stable@vger.kernel.org, Mike Seo <mikeseohyungjin@gmail.com>, 
+	"open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] tpm: Lock TPM chip in tpm_pm_suspend() first
+Message-ID: <ke4tjq5p43g7z3dy4wowagwsf6tzfhecexkdmgkizvqu6n5tvl@op3zhjmplntw>
+References: <20241101002157.645874-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM3PR84MB3714.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c74005e-14c2-4a6e-4381-08dcfaabbb60
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2024 19:31:06.9244
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: veYmmTpuugPgwmuTy4vyGWMW5Ea3oy8yAoqFYp8cjAcwE+AnIegBAr7pDGRk3qFJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR84MB3715
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: 01FIJu-WAqlPA-E1kMpd_jY-Iedi0M1v
-X-Proofpoint-ORIG-GUID: 01FIJu-WAqlPA-E1kMpd_jY-Iedi0M1v
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- adultscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
- clxscore=1011 mlxscore=0 suspectscore=0 phishscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411010139
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241101002157.645874-1-jarkko@kernel.org>
 
-PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9zZWN1cml0eS9sYXVuY2gtaW50ZWdyaXR5L2lu
-ZGV4LnJzdA0KPiBiL0RvY3VtZW50YXRpb24vc2VjdXJpdHkvbGF1bmNoLWludGVncml0eS9pbmRl
-eC5yc3QNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi9zZWN1
-cml0eS9sYXVuY2gtaW50ZWdyaXR5L2luZGV4LnJzdA0KLi4uDQoNCj4gK1RoaXMgZG9jdW1lbnQg
-c2VydmVzIHRvIGVzdGFibGlzaCBhIGNvbW1vbiB1bmRlcnN0YW5kaW5nIG9mIHdoYXQgYSBzeXN0
-ZW0NCj4gK2xhdW5jaCBpcywgdGhlIGludGVncml0eSBjb25jZXJuIGZvciBzeXN0ZW0gbGF1bmNo
-LCBhbmQgd2h5IHVzaW5nIGEgUm9vdCBvZiBUcnVzdA0KPiArKFJvVCkgZnJvbSBhIER5bmFtaWMg
-TGF1bmNoIG1heSBiZSBkZXNpcmFibGUuIFRocm91Z2hvdXQgdGhpcyBkb2N1bWVudCwNCj4gK3Rl
-cm1pbm9sb2d5IGZyb20gdGhlIFRydXN0ZWQgQ29tcHV0aW5nIEdyb3VwIChUQ0cpIGFuZCBOYXRp
-b25hbCBJbnN0aXR1dGUgZm9yDQo+ICtTY2llbmNlIGFuZCBUZWNobm9sb2d5IChOSVNUKSBpcyB1
-c2VkIHRvIGVuc3VyZSB0aGF0IHZlbmRvciBuYXR1cmFsIGxhbmd1YWdlIGlzDQo+ICt1c2VkIHRv
-IGRlc2NyaWJlIGFuZCByZWZlcmVuY2Ugc2VjdXJpdHktcmVsYXRlZCBjb25jZXB0cy4NCg0KTklT
-VCA9IE5hdGlvbmFsIEluc3RpdHV0ZSBvZiBTdGFuZGFyZHMgYW5kIFRlY2hub2xvZ3kNCg0KPiAr
-R2xvc3NhcnkNCj4gKz09PT09PT09DQoNCj4gKyAgICAtIE5JU1QgQ05TU0kgTm8uIDQwMDkgLQ0K
-PiBodHRwczovL3d3dy5jbnNzLmdvdi9DTlNTL2lzc3VhbmNlcy9JbnN0cnVjdGlvbnMuY2ZtDQoN
-ClRoYXQgaXMgbm90IGEgTklTVCBwdWJsaWNhdGlvbi4NCg0KQ05TUyA9IENvbW1pdHRlZSBvbiBO
-YXRpb25hbCBTZWN1cml0eSBTeXN0ZW1zLg0KSSA9IEluc3RydWN0aW9uLg0KTklTVCBpcyBqdXN0
-IGEgbm9uLXZvdGluZyBvYnNlcnZlciBvZiB0aGF0IGNvbW1pdHRlZS4NCg0KVGhhdCB3ZWIgc2l0
-ZSB1c2VzIGEgcm9vdCBjZXJ0aWZpY2F0ZSB0aGF0IGlzIG5vdCByZWNvZ25pemVkIGJ5IG1vc3QN
-CmJyb3dzZXJzLiANCg0KVGhlIE5JU1QgZ2xvc3NhcnkgaW5jbHVkZXMgYWxsIHRoZSBDTlNTSSA0
-MDA5LCBOSVNUIFNQLCBhbmQgTklTVCBJUg0KdGVybXMsIGFuZCBpcyBtb3JlIGVhc2lseSBhY2Nl
-c3NpYmxlIChidXQgdGhlIGVudHJpZXMgYXJlIHN1YmplY3QNCnRvIGNoYW5nZSBhcyB0aGUgc291
-cmNlIG1hdGVyaWFsIGNoYW5nZXMpLg0KaHR0cHM6Ly9jc3JjLm5pc3QuZ292L2dsb3NzYXJ5DQoN
-ClRoYXQgY3VycmVudGx5IGNvdmVycyBhbGwgdGhlIHRlcm1zIGV4Y2VwdCAidHJhbnNpdGl2ZSB0
-cnVzdCINCmZyb20gVENHLg0KDQo+ICsgICAgLSBOSVNUIFNwZWNpYWwgUHVibGljYXRpb24gODAw
-LTE2MCAoVk9MVU1FIDEgKSAtDQo+IGh0dHBzOi8vbnZscHVicy5uaXN0Lmdvdi9uaXN0cHVicy9T
-cGVjaWFsUHVibGljYXRpb25zL05JU1QuU1AuODAwLTE2MHYxLnBkZg0KDQpUaGF0J3MgYmVlbiBy
-ZXBsYWNlZCBieSB2MXIxLg0KDQpUaGUgTklTVC1yZWNvbW1lbmRlZCBVUkwgaXMNCmh0dHBzOi8v
-ZG9pLm9yZy8xMC42MDI4L05JU1QuU1AuODAwLTE2MHYxcjENCg0KPiArICAgIC0gTklTVCBTUCA4
-MDAtMzAgUmV2LiAxIC0NCj4gaHR0cHM6Ly9udmxwdWJzLm5pc3QuZ292L25pc3RwdWJzL0xlZ2Fj
-eS9TUC9uaXN0c3BlY2lhbHB1YmxpY2F0aW9uODAwLTMwcjEucGRmDQoNClRoZSBOSVNULXJlY29t
-bWVuZGVkIFVSTCBpczoNCmh0dHBzOi8vZG9pLm9yZy8xMC42MDI4L05JU1QuU1AuODAwLTMwcjEN
-Cg0KPiArICAgIC0gTklTVCBTUCA4MDAtNTcgUGFydCAxIFJldi4gNSAtDQo+IGh0dHBzOi8vbnZs
-cHVicy5uaXN0Lmdvdi9uaXN0cHVicy9TcGVjaWFsUHVibGljYXRpb25zL05JU1QuU1AuODAwLTU3
-cHQxcjUucGRmDQoNClRoZSBOSVNULXJlY29tbWVuZGVkIFVSTCBpczoNCmh0dHBzOi8vZG9pLm9y
-Zy8xMC42MDI4L05JU1QuU1AuODAwLTU3cHQxcjUNCg0KPiArICAgIC0gTklTVElSIDgzMjBBIC0N
-Cj4gaHR0cHM6Ly9udmxwdWJzLm5pc3QuZ292L25pc3RwdWJzL2lyLzIwMjEvTklTVC5JUi44MzIw
-QS5wZGYNCg0KVGhlIE5JU1QtcmVjb21tZW5kZWQgVVJMIGlzOg0KaHR0cHM6Ly9kb2kub3JnLzEw
-LjYwMjgvTklTVC5JUi44MzIwQQ0KDQoNCg==
+On Fri, Nov 01, 2024 at 02:21:56AM +0200, Jarkko Sakkinen wrote:
+> Setting TPM_CHIP_FLAG_SUSPENDED in the end of tpm_pm_suspend() can be racy
+> according, as this leaves window for tpm_hwrng_read() to be called while
+> the operation is in progress. The recent bug report gives also evidence of
+> this behaviour.
+> 
+> Aadress this by locking the TPM chip before checking any chip->flags both
+> in tpm_pm_suspend() and tpm_hwrng_read(). Move TPM_CHIP_FLAG_SUSPENDED
+> check inside tpm_get_random() so that it will be always checked only when
+> the lock is reserved.
+> 
+> Cc: stable@vger.kernel.org # v6.4+
+> Fixes: 99d464506255 ("tpm: Prevent hwrng from activating during resume")
+> Reported-by: Mike Seo <mikeseohyungjin@gmail.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219383
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> v3:
+> - Check TPM_CHIP_FLAG_SUSPENDED inside tpm_get_random() so that it is
+>   also done under the lock (suggested by Jerry Snitselaar).
+> v2:
+> - Addressed my own remark:
+>   https://lore.kernel.org/linux-integrity/D59JAI6RR2CD.G5E5T4ZCZ49W@kernel.org/
+> ---
+>  drivers/char/tpm/tpm-chip.c      |  4 ----
+>  drivers/char/tpm/tpm-interface.c | 32 ++++++++++++++++++++++----------
+>  2 files changed, 22 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 1ff99a7091bb..7df7abaf3e52 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -525,10 +525,6 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>  {
+>  	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
+>  
+> -	/* Give back zero bytes, as TPM chip has not yet fully resumed: */
+> -	if (chip->flags & TPM_CHIP_FLAG_SUSPENDED)
+> -		return 0;
+> -
+>  	return tpm_get_random(chip, data, max);
+>  }
+>  
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 8134f002b121..b1daa0d7b341 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -370,6 +370,13 @@ int tpm_pm_suspend(struct device *dev)
+>  	if (!chip)
+>  		return -ENODEV;
+>  
+> +	rc = tpm_try_get_ops(chip);
+> +	if (rc) {
+> +		/* Can be safely set out of locks, as no action cannot race: */
+> +		chip->flags |= TPM_CHIP_FLAG_SUSPENDED;
+> +		goto out;
+> +	}
+> +
+>  	if (chip->flags & TPM_CHIP_FLAG_ALWAYS_POWERED)
+>  		goto suspended;
+>  
+> @@ -377,21 +384,19 @@ int tpm_pm_suspend(struct device *dev)
+>  	    !pm_suspend_via_firmware())
+>  		goto suspended;
+>  
+> -	rc = tpm_try_get_ops(chip);
+> -	if (!rc) {
+> -		if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> -			tpm2_end_auth_session(chip);
+> -			tpm2_shutdown(chip, TPM2_SU_STATE);
+> -		} else {
+> -			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+> -		}
+> -
+> -		tpm_put_ops(chip);
+> +	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+> +		tpm2_end_auth_session(chip);
+> +		tpm2_shutdown(chip, TPM2_SU_STATE);
+> +		goto suspended;
+>  	}
+>  
+> +	rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+> +
+
+
+I imagine the above still be wrapped in an else with the if (chip->flags & TPM_CHIP_FLAG_TPM2)
+otherwise it will call tpm1_pm_suspend for both tpm1 and tpm2 devices, yes?
+
+So:
+
+	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+		tpm2_end_auth_session(chip);
+		tpm2_shutdown(chip, TPM2_SU_STATE);
+		goto suspended;
+	} else {
+		rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
+	}
+
+
+Other than that I think it looks good.
+
+
+>  suspended:
+>  	chip->flags |= TPM_CHIP_FLAG_SUSPENDED;
+> +	tpm_put_ops(chip);
+>  
+> +out:
+>  	if (rc)
+>  		dev_err(dev, "Ignoring error %d while suspending\n", rc);
+>  	return 0;
+> @@ -440,11 +445,18 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
+>  	if (!chip)
+>  		return -ENODEV;
+>  
+> +	/* Give back zero bytes, as TPM chip has not yet fully resumed: */
+> +	if (chip->flags & TPM_CHIP_FLAG_SUSPENDED) {
+> +		rc = 0;
+> +		goto out;
+> +	}
+> +
+>  	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>  		rc = tpm2_get_random(chip, out, max);
+>  	else
+>  		rc = tpm1_get_random(chip, out, max);
+>  
+> +out:
+>  	tpm_put_ops(chip);
+>  	return rc;
+>  }
+> -- 
+> 2.47.0
+> 
+
 
