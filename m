@@ -1,79 +1,113 @@
-Return-Path: <linux-integrity+bounces-4019-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4020-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A93F9BBCE4
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Nov 2024 19:10:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FE529BBED9
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Nov 2024 21:36:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 524BF1F22D15
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 Nov 2024 18:10:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8294282978
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 Nov 2024 20:36:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 061811C9ED1;
-	Mon,  4 Nov 2024 18:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317A91F5847;
+	Mon,  4 Nov 2024 20:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rXQmtJMi"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="OQBg2D8+";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="OQBg2D8+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A2C179958;
-	Mon,  4 Nov 2024 18:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425B41CC177;
+	Mon,  4 Nov 2024 20:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730743824; cv=none; b=ufl2EdQkv0+NZEuzaaJ1daiPcgUEZX3Ep8pbTNKGk4OxDKh/BkCWlkypDIcVzQhIH/W9rFm5DKiQ6G//vS2pAtuhlkgZ+0EJIDSZxkoakWR1iGat8jR161M+uiqDTMNexjobwHPtH3xKiuc/Km1GRsZiAs/nbm9777s5RCbg79A=
+	t=1730752612; cv=none; b=DrJzW37a7xxUP0GCZzCmKtF+gJJYz/nv86oygtzdn+fpHsW7Xu1i7TbpMf0jX9QlsJhs6U4WWuiyIjOjVlQYgAPh0PpFJcDhFxcKw/sUttLbveH7qLfo0efTT2GQXwjvqSKe6Q9MWHWO/Mph6Pzz/OFKWhze5u2NJ+fdqscCKu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730743824; c=relaxed/simple;
-	bh=8yn2FMoBBbT6Y7C0W/3NVLTfZrFDqhTmxfd9R5SOWPk=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=MrtHC31BSuVofBRgNkHO6bj/HafC8CH+EHKBYpecK6xdpSFU/vin7dArZjHo0haHAFitPBsbgNa01i5LY7w4dT2mAZdumI5AsDrzypVbqP+Sz5aO94GEzQ9XfOPuFIHQUdT/LuzLFp8UMQSf9Fs+Pk1XkGXtrRpECG/BVGeZTQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rXQmtJMi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F38C4CECE;
-	Mon,  4 Nov 2024 18:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730743824;
-	bh=8yn2FMoBBbT6Y7C0W/3NVLTfZrFDqhTmxfd9R5SOWPk=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=rXQmtJMiUT1yWTKXposWrBZFP6tnRvEicbEwTfYNWEOcEsZ/OT1aPjLQ03BBvH4fQ
-	 r2BWdubn1XRCd2DSi156ANbFONkTxO57M9JdDPudzhDUDV8Uv+W7BXKJ62ev2BrDHN
-	 t0/ntik3TGlSKEHsW0iVNS8kEkJtlPDCk4W+1IFlnnx6EOY6GAHPrPXBjL4uYWXB0K
-	 0OGGMOp19JLDkXkhhZMcA+gIxwYKhTg2eGLTWnvPNAt82fWKSpItpl5wbkNbXq5UKN
-	 L8T3pwiyuyJ4+FppkCmTMgRWXBsd6gDXgAR709p3krgR5tKHumKkThWNwtLk5h3bxf
-	 oyfoypnOgUKmw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 342143805CC0;
-	Mon,  4 Nov 2024 18:10:34 +0000 (UTC)
-Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-6.12-rc7
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <D5CYH0IJXX72.35A25M1YICZRP@kernel.org>
-References: <D5CYH0IJXX72.35A25M1YICZRP@kernel.org>
-X-PR-Tracked-List-Id: <keyrings.vger.kernel.org>
-X-PR-Tracked-Message-Id: <D5CYH0IJXX72.35A25M1YICZRP@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-6.12-rc7
-X-PR-Tracked-Commit-Id: 9265fed6db601ee2ec47577815387458ef4f047a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a0339404fd2753c042eb7ea11bd3288dbfc38107
-Message-Id: <173074383275.4156990.7746614523205746915.pr-tracker-bot@kernel.org>
-Date: Mon, 04 Nov 2024 18:10:32 +0000
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1730752612; c=relaxed/simple;
+	bh=MH95nwjtxh9CUiVs6j+VCHeyX3hYoAOyuTRvCrVcPIk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=A/1k/zAD9FKFl51Pfd4lOe8yN5eahsGwXVQRdm3eBamg1YUyZikQlHyngQhvV9aAZ6+zSIGHDMmF2ZZqnhlb3Ng5RjNS1EAKTy/LV9sr2KU60/ubcgZ2x7cPewoolKUeYchRNKZ1N52UP/s13FKIzODQ/XcJWS3NXMv/S7IOy8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=OQBg2D8+; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=OQBg2D8+; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1730752609;
+	bh=MH95nwjtxh9CUiVs6j+VCHeyX3hYoAOyuTRvCrVcPIk=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=OQBg2D8+GhKeQtgdiU+zAzcwIdPNY1fX+zK7EqAzSEkPKBUQyLGrr1gdY440S1bcI
+	 oZ3G5g5JrPdc/nlqFWbiRSSz3R9NK6aAerGX/MTzIDPDTLVw6DJnpXlwl4DySafF2E
+	 qVpzlBAO+KzIaAuPj2KpzCQ47XW6rI52yZKVrRos=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 608E612862C2;
+	Mon, 04 Nov 2024 15:36:49 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id WOB2EnTYZ0Ld; Mon,  4 Nov 2024 15:36:49 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1730752609;
+	bh=MH95nwjtxh9CUiVs6j+VCHeyX3hYoAOyuTRvCrVcPIk=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=OQBg2D8+GhKeQtgdiU+zAzcwIdPNY1fX+zK7EqAzSEkPKBUQyLGrr1gdY440S1bcI
+	 oZ3G5g5JrPdc/nlqFWbiRSSz3R9NK6aAerGX/MTzIDPDTLVw6DJnpXlwl4DySafF2E
+	 qVpzlBAO+KzIaAuPj2KpzCQ47XW6rI52yZKVrRos=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5CBE1128623B;
+	Mon, 04 Nov 2024 15:36:48 -0500 (EST)
+Message-ID: <11eb20711f597b355c38abfce54ccff7f68fa5c9.camel@HansenPartnership.com>
+Subject: Re: [RFC PATCH 0/4] Alternative TPM patches for Trenchboot
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: "Daniel P. Smith" <dpsmith@apertussolutions.com>, Ard Biesheuvel
+	 <ardb@kernel.org>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, x86@kernel.org, Ross Philipson
+ <ross.philipson@oracle.com>, Thomas Gleixner <tglx@linutronix.de>, Peter
+ Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, "open list:TPM
+ DEVICE DRIVER" <linux-integrity@vger.kernel.org>, open list
+ <linux-kernel@vger.kernel.org>,  trenchboot-devel@googlegroups.com
+Date: Mon, 04 Nov 2024 15:36:46 -0500
+In-Reply-To: <102f7de4-a2d0-4315-9bce-6489504180fb@apertussolutions.com>
+References: <20241102152226.2593598-1-jarkko@kernel.org>
+	 <D5BW0P0HH0QL.7Y4HBLJGEDL8@kernel.org>
+	 <e745226d-4722-43ed-86ad-89428f56fcba@apertussolutions.com>
+	 <D5DCPWBQ2M7H.GAUEVUKGC3G0@kernel.org>
+	 <CAMj1kXGd5KAXiFr3rEq3cQK=_970b=eRT4X6YKVSj2PhN6ACrw@mail.gmail.com>
+	 <97d4e1a0-d86e-48a9-ad31-7e53d6885a96@apertussolutions.com>
+	 <CAMj1kXFEJYVs7p6QLEAU-T+xfoWhkFi=PE9QpJ4Oo4oh3eM38Q@mail.gmail.com>
+	 <7b324454-bc34-4cc4-bd12-99268a543508@apertussolutions.com>
+	 <3bc70b659c1c86c0f08c6d91a6d894ce58825e04.camel@HansenPartnership.com>
+	 <102f7de4-a2d0-4315-9bce-6489504180fb@apertussolutions.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Mon, 04 Nov 2024 02:08:32 +0200:
+On Mon, 2024-11-04 at 11:34 -0500, Daniel P. Smith wrote:
+[...]
+> In case the question comes up from those not familiar, the kexec does
+> an GETSEC[SEXIT] which closes off access to Localities 1 and 2, thus 
+> locking the DRTM PCR values. It brings the CPUs out of SMX mode so
+> the target kernel does not require to have any knowledge about
+> running in that mode.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-6.12-rc7
+So, to repeat the question: why a sysfs interface for setting the
+default locality?  If I understand correctly from what you say above,
+it can't be used in any kernel except the SL one, and that one could
+run permanently in it, so there's no requirement at all for user space
+to be able to change this, is there?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a0339404fd2753c042eb7ea11bd3288dbfc38107
+Regards,
 
-Thank you!
+James
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+
 
