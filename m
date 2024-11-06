@@ -1,109 +1,79 @@
-Return-Path: <linux-integrity+bounces-4034-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4035-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF2729BF576
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Nov 2024 19:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ADE69BF765
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Nov 2024 20:47:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76AADB21D48
-	for <lists+linux-integrity@lfdr.de>; Wed,  6 Nov 2024 18:39:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6B7BB22D75
+	for <lists+linux-integrity@lfdr.de>; Wed,  6 Nov 2024 19:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5982120821C;
-	Wed,  6 Nov 2024 18:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD5F920CCC0;
+	Wed,  6 Nov 2024 19:38:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cJEc1tlE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uz8J3he7"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274D7208217;
-	Wed,  6 Nov 2024 18:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A3D209F3D;
+	Wed,  6 Nov 2024 19:38:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730918340; cv=none; b=GNav/ID/0MUKCrez77fK6yCgYDNXWLsJRg9db8qj7ALv1Uu//HNsEgB6a5qCnRsluNiuLx7+v57pwKtGZ+Yqn/12KC21eUBF4iBQPGXcPkmv16TmUuENXrjlsOH1roygZY2w5rWtAi/QTsDV6DrZvZkacZWAI9P/6cPBeIP+EN8=
+	t=1730921880; cv=none; b=oIPLLIhCGiwwC2AiRAAFEDC1Ual1MMwH8qK4ZEkjMdPVmNxnAeGCRttNpM+nUmBBn/juPQKSRoumvZUNbae34S6h3lCTNpJdev4ayVaKssYrpZa0k7iHacRfeIxUXYqjlG9E7Oge7Zm3T7VaQ1ssaCDxd78TVXb0F74ryb64dwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730918340; c=relaxed/simple;
-	bh=hfsiubwE8UnbZ9AU3TXwnnJyFZUi7Z6WW66CkyjmgSE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=eot9d1bFhWKjYje0f5JqWmxIQ2cjS0OHem/NtBRAmz9bVJ2XmYHkY6jZFWJmfwqHp0kSD0e3WZUpTD+Vfff3RBUK8GJGcKQTLFx5uodkHDeUi0jShO1sZYuou1osbfr0Ev1pNRNe5TlZlNOFA8ZpKvneZoFKvUZMyloDA8zZpWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cJEc1tlE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ADBDC4CEC6;
-	Wed,  6 Nov 2024 18:38:59 +0000 (UTC)
+	s=arc-20240116; t=1730921880; c=relaxed/simple;
+	bh=mGlh48tZL1bBGAsoQiwsn0f2h0aoYC2dM7uvbxk8g0I=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=YuISawkmpygJI3rT9zxjBrmMQYa+JaM8XNjXrYQC+5dfwgPFqmEMwOdzuk/3hd1sPSdqw9+mmrqUh0bDoMo6CYvsBIEAzA66e64yZnvP3hSkg+vFoMuptN+WQPulr6S46/kewtY4FpVWYXnlK9Gn7jYCbmEBs4JixqZYNMnXCtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uz8J3he7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30549C4CEC6;
+	Wed,  6 Nov 2024 19:38:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730918340;
-	bh=hfsiubwE8UnbZ9AU3TXwnnJyFZUi7Z6WW66CkyjmgSE=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=cJEc1tlEb/Iu7ty9QYtsbqpxeHIIhAwd1B/o7ga/3lskmWclVengzMkovJo2ZtxTX
-	 rXPJy4VPdj3fhuyRzDu44FrX6PyDvOulc2Q7PyNNQZ8d08vF+2DksB799Ufgf2Lst7
-	 Cglb2olRUwAhBBwbvEVuAb/G9s6nUromugArEMcmNsssYzujvH28hGhHfi/ZqUBGZe
-	 K+gMUYk2nLcK9NfBCd1EE6V7L3ipZPTk+tINVMPWhEEHPI+UFXHjilNlzYRs6HdSry
-	 kTjBT9QLOZ2T2gJEgnhJNP45YDOpQxdcJmUr2EaLcjbrg/MqcHFYeDbTQfk6xXahsU
-	 JBdlrFEZyms5Q==
+	s=k20201202; t=1730921880;
+	bh=mGlh48tZL1bBGAsoQiwsn0f2h0aoYC2dM7uvbxk8g0I=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Uz8J3he7YvfKegpVNZ+/uPeuSHgteFmqS9u3eW/4OoHAfeGv/l78pC1hBTshzKyaB
+	 E2geQChIqXdAwMkEYijBQqE1gCqekvpCs5EjEe3HPBDY3tCJNY0UIDRnK7qJ7we2VN
+	 F56TZwaVRfVmXWDzx4CowMFJCPjuYa0jBUvOyRm3LDj8AonN2FYSGEMT6Flk84N+M5
+	 tg+UNHPcCN9Z9t4bg7SpvfcbvFr6+hteRFNqF3hvPOOmXdh9KyUT7xFEyorSgL39vx
+	 +jBAX1OegjPs7+uwwJ1WnPvSlnI9EQTijig0MsJFnQtIRtAN9tCDwMLDtnjItAWvxP
+	 sW/+XiFH/kYTA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 710ED3809A80;
+	Wed,  6 Nov 2024 19:38:10 +0000 (UTC)
+Subject: Re: [GIT PULL] KEYS: keys-next-6.12-rc7
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <D5FB9PK9DD35.1B1VBVMPOZPRS@kernel.org>
+References: <D5FB9PK9DD35.1B1VBVMPOZPRS@kernel.org>
+X-PR-Tracked-List-Id: <keyrings.vger.kernel.org>
+X-PR-Tracked-Message-Id: <D5FB9PK9DD35.1B1VBVMPOZPRS@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-next-6.12-rc7
+X-PR-Tracked-Commit-Id: 04de7589e0a95167d803ecadd115235ba2c14997
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f43b15692129904ccc064180fa2dd796ba3843a5
+Message-Id: <173092188900.1393097.2042064650287641436.pr-tracker-bot@kernel.org>
+Date: Wed, 06 Nov 2024 19:38:09 +0000
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org, linux-integrity@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 06 Nov 2024 20:38:55 +0200
-Message-Id: <D5FBC9UCGZXJ.6QNQGC6T3361@kernel.org>
-Cc: "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>, "Peter Huewe"
- <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>, "Michael Ellerman"
- <mpe@ellerman.id.au>, "Nicholas Piggin" <npiggin@gmail.com>, "Christophe
- Leroy" <christophe.leroy@csgroup.eu>, "Naveen N. Rao"
- <naveen.n.rao@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
- <linux-integrity@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] tpm: atmel: Drop PPC64 specific MMIO setup
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Rob Herring" <robh@kernel.org>
-X-Mailer: aerc 0.18.2
-References: <20240702161052.3563599-1-robh@kernel.org>
- <D2RSWMPFF8KK.X5HZZMHANQMO@iki.fi> <D2RT0J8KXY1H.3MEV7KGQXTWHW@iki.fi>
- <CAL_JsqJDX+uOSoPh6pTNEP0vBLwcP3bKmAW1wCr_0cVr5fsPcg@mail.gmail.com>
- <D2SSH5HSDHQS.2YJSB22W3MHQK@iki.fi>
- <CAL_JsqLF+gs9e1TL1yi-xAZJRx4Kz7fOk=2wcF8kCqU3vyMWZA@mail.gmail.com>
- <D5FAVRTM32ZJ.1HFCHF3L9I68C@kernel.org>
- <D5FAXEKQ71ZJ.1U9AE15UVWRT9@kernel.org>
- <CAL_JsqJdabUmgOEe29y4o5muOnh83V7rS=YwfXMtZ+Fugcgzdw@mail.gmail.com>
-In-Reply-To: <CAL_JsqJdabUmgOEe29y4o5muOnh83V7rS=YwfXMtZ+Fugcgzdw@mail.gmail.com>
 
-On Wed Nov 6, 2024 at 8:32 PM EET, Rob Herring wrote:
-> On Wed, Nov 6, 2024 at 12:19=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.or=
-g> wrote:
-> >
-> > On Wed Nov 6, 2024 at 8:17 PM EET, Jarkko Sakkinen wrote:
-> > > > Whatever happened to this? Can you please apply my patch if you don=
-'t
-> > > > have the time for further rework.
-> > >
-> > > Sorry unintentional.
-> > >
-> > > I applied with
-> > >
-> > > -static void __iomem * atmel_get_base_addr(unsigned long *base, int *=
-region_size)
-> > > +static void __iomem *atmel_get_base_addr(unsigned long *base, int *r=
-egion_size)
-> > >
-> > > as this gives checkpatch error.
-> >
-> > See:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/=
-commit/?id=3Db18ffd5e0faaa02bffda61e19a013573451008d4
-> >
-> > If that looks good to you, I can mirror it to -next.
->
-> Looks good. Thanks.
+The pull request you sent on Wed, 06 Nov 2024 20:35:34 +0200:
 
-Ya, an my sincere apologies!
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-next-6.12-rc7
 
->
-> Rob
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f43b15692129904ccc064180fa2dd796ba3843a5
 
+Thank you!
 
-BR, Jarkko
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
