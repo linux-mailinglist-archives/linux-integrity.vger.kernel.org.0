@@ -1,279 +1,186 @@
-Return-Path: <linux-integrity+bounces-4059-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4060-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 748249C07DF
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2024 14:44:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C0349C07EE
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2024 14:47:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03E311F2253B
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2024 13:44:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD72E1C20DAA
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2024 13:47:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CDC210188;
-	Thu,  7 Nov 2024 13:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA16E20FAB1;
+	Thu,  7 Nov 2024 13:47:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ODdCOgzP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CQMi4t57"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E18A20B1E2;
-	Thu,  7 Nov 2024 13:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02441EF0A2;
+	Thu,  7 Nov 2024 13:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730987091; cv=none; b=NtUTOT+gtfXVYjM4JP3gkiMaTimr/9LcyS9UZvtvR4uS53O5AFqidrJpchagOCN02oI13qOVEoCwT0M5JrFXP13vRy427N8mpnP91PzpRvdLEK7mxqdYMGBAswwoJ3v6m0rPCAjiLJRryt0fEbcFpMszzF2viBOSV+wnVlvnTCw=
+	t=1730987239; cv=none; b=lGoAg90c5hOhHg0aI55WS7NFM4/DzXCPVlCYmadZ6N49zCaNHEI7c9p22hQUDoVEMcHEUtGhhtGn0YOCfCMuB6ncC0lfrZxc8ZdeR8+Ic4wOY7VA9pCxFJ6q161FzWF1p8aG8KALzxGU+s3aENmP8nDsV4y3AhvTS+UMs6qyxhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730987091; c=relaxed/simple;
-	bh=uLkLtRCV5c29uevsVuMBynD0TYcsr2hGxuZC9NOU0oU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IvVE6W8x7JVAgk0HDdmLDXAnnPxUEwzs0YvwShT9AFU9dSJYDeucly8+j/iTtAhNENdTiUGDZNF1IFidJvmn8764SyXV9w1F8yK1XtkMPkQzm/StmKoNMZeYCd1wrDpAbziyQfYTGHvXxw77/JqVp4aeP+v3cuVEAI5MVGbHIMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ODdCOgzP; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7Cefdj018118;
-	Thu, 7 Nov 2024 13:44:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=LCtgK+
-	BEQtuucrLZPW6Rn1D6ZQwcBVbseGx+J9rEPxg=; b=ODdCOgzPEsedi3HAS/cY1L
-	mvPZGTS9Tk80FajPbvuIprYyIrjDHOflYa3D/uJOhB7jlxed2N1ijMyQAHVpGCa5
-	zXtuPgRbEH2AlUpDKVLRigKh2UXDqGQx19rQx/BptAzBXdRIke+sxy0/6AyAWO8O
-	WUbYGRBXRHjEGFqlTjqosqUTHCCZa9MAMI4gZdD5D2WRLJPzfLpIraRE7YcrDR/Y
-	uHQADOj8emav+GRirx1kbZ+Vb+9yHMeeL0Z/PNuOMX+njniEe+XyB/CwJlQekmYA
-	pY6uP5KBiK5QOiHLjFf9HbuYT7qwgCG2luXPxtBqaPc76IUr0SUFxfzYEoiK2VHQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42rwrk88wg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Nov 2024 13:44:34 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4A7DiXfX004442;
-	Thu, 7 Nov 2024 13:44:34 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42rwrk88wc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Nov 2024 13:44:33 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7C2YTA024230;
-	Thu, 7 Nov 2024 13:44:33 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 42nxds8b25-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 Nov 2024 13:44:33 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A7DiWc253608866
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 7 Nov 2024 13:44:32 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7BC355805A;
-	Thu,  7 Nov 2024 13:44:32 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8B3C05805F;
-	Thu,  7 Nov 2024 13:44:31 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.35.241])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  7 Nov 2024 13:44:31 +0000 (GMT)
-Message-ID: <e015a939893d35efe75e598152725adcc2befdd8.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] tpm: Opt-in in disable PCR integrity protection
-From: Mimi Zohar <zohar@linux.ibm.com>
+	s=arc-20240116; t=1730987239; c=relaxed/simple;
+	bh=xE1dVbC+YVeuhiAWZuW8loujE3dbs7eHJ5Jqu+o7fVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A+nh1MS/6ElfgyhetC3zYPpfNnbPxGUGYNs6QOYvIQZxmulhaj5+rmx9XjNeg9rajHCpsF0/5fna+fYhYyppUzH90YRWJGJV43VMjY3RFnNjDJGHfYnyI914KrBiXPmZ3IuszFedrm7S6AlsADn+WHqsHy/JP5Sk0Bqy6ajmKws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CQMi4t57; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730987238; x=1762523238;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xE1dVbC+YVeuhiAWZuW8loujE3dbs7eHJ5Jqu+o7fVE=;
+  b=CQMi4t57JXzrLESH3kWmkDvrNB3bpgC7ieVOFE231fIEOtCjuT0TCwQt
+   trLKTdW6SGRCFYTRbBSCCgEnY+5GJsibTjTtjXXryxe7On3r5f3hbVK3W
+   WIC97lIDqWCoRgZ3gZL6xFlr5s5lxoi+GqomVAue2kQsFfnUG1o3P365y
+   2wTwIFQl6mG9rV1BHGEo8v7Hx4RpAkGHccdd7p+sDHCzCftHSNyl5bmQW
+   Sny7tel/+55u0WLQypvZbgkBwWJvNAHT8gGAWB0mE47el35qxLr2eUgC1
+   f2g8QExZchoSzZxoYlPlxhohmgkOQTLYoGL5Cov4OZghQWbxGQCP1s9g/
+   w==;
+X-CSE-ConnectionGUID: ko1mUnOBRP2E7o9tKSXzUw==
+X-CSE-MsgGUID: F7WCITSLS22Com5qM7/Itg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="30943318"
+X-IronPort-AV: E=Sophos;i="6.12,266,1728975600"; 
+   d="scan'208";a="30943318"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 05:47:17 -0800
+X-CSE-ConnectionGUID: SemUo1zQRMOmOkgican78Q==
+X-CSE-MsgGUID: SVH4Q6TfS7GZrjkG68indA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,266,1728975600"; 
+   d="scan'208";a="89615619"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 07 Nov 2024 05:47:13 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t92qt-000qJ6-35;
+	Thu, 07 Nov 2024 13:47:11 +0000
+Date: Thu, 7 Nov 2024 21:46:46 +0800
+From: kernel test robot <lkp@intel.com>
 To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, Peter Huewe <peterhuewe@gmx.de>,
-        Jason
- Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley
- <James.Bottomley@HansenPartnership.com>
-Cc: Roberto Sassu <roberto.sassu@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date: Thu, 07 Nov 2024 08:44:31 -0500
-In-Reply-To: <20241107095138.78209-1-jarkko@kernel.org>
+	Jonathan Corbet <corbet@lwn.net>, Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: oe-kbuild-all@lists.linux.dev, Roberto Sassu <roberto.sassu@huawei.com>,
+	Mimi Zohar <zohar@linux.ibm.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tpm: Opt-in in disable PCR integrity protection
+Message-ID: <202411072138.bgOIL36O-lkp@intel.com>
 References: <20241107095138.78209-1-jarkko@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6X0q05HhCvSq2LDT7t_GA02--cIbwB2A
-X-Proofpoint-GUID: j3_S6X9udwxRaKerGOJX5u1X2VYCVGS2
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 impostorscore=0 adultscore=0 phishscore=0 suspectscore=0
- spamscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411070106
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107095138.78209-1-jarkko@kernel.org>
 
-On Thu, 2024-11-07 at 11:51 +0200, Jarkko Sakkinen wrote:
-> The initial HMAC session feature added TPM bus encryption and/or integrity
-> protection to various in-kernel TPM operations. This can cause performance
-> bottlenecks with IMA, as it heavily utilizes PCR extend operations.
->=20
-> In order to mitigate this performance issue, introduce a kernel
-> command-line parameter to the TPM driver for disabling the integrity
-> protection for PCR extension.
->=20
-> Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Link: https://lore.kernel.org/linux-integrity/20241015193916.59964-1-zoha=
-r@linux.ibm.com/
-> Fixes: 6519fea6fd37 ("tpm: add hmac checks to tpm2_pcr_extend()")
-> Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Co-developed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> v2:
-> - Move tpm_buf_append_handle() to the correct file, remove spurious
->   parameter (name), include error on TPM2B and add documentation.
->   Keep the declaration in linux/tpm.h despite not exported as it
->   is easiest to maintain tpm_buf_* in a single header.
-> - Rename kernel command-line option as "disable_pcr_integrity_protection",
->   as Mimi pointed out it does not carry SA_ENCRYPT flag.
-> v1:
-> - Derived from the earlier RFC patch with a different parameter scope,
->   cleaner commit message and some other tweaks. I decided to create
->   something because I did not noticed any progress. Note only compile
->   tested as I wanted to get something quickly out.
-> ---
->  .../admin-guide/kernel-parameters.txt         | 10 ++++
->  drivers/char/tpm/tpm-buf.c                    | 20 ++++++++
->  drivers/char/tpm/tpm2-cmd.c                   | 30 ++++++++---
->  drivers/char/tpm/tpm2-sessions.c              | 51 ++++++++++---------
->  include/linux/tpm.h                           |  3 ++
->  5 files changed, 83 insertions(+), 31 deletions(-)
->=20
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
-ion/admin-guide/kernel-parameters.txt
-> index 1518343bbe22..9fc406b20a74 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6727,6 +6727,16 @@
->  	torture.verbose_sleep_duration=3D [KNL]
->  			Duration of each verbose-printk() sleep in jiffies.
-> =20
-> +	tpm.disable_pcr_integrity_protection=3D [HW,TPM]
-> +			Do not protect PCR registers from unintended physical
-> +			access, or interposers in the bus by the means of
-> +			having an encrypted and integrity protected session
+Hi Jarkko,
 
-"encrypted" isn't needed here.
+kernel test robot noticed the following build errors:
 
-> +			wrapped around TPM2_PCR_Extend command. Consider this
-> +			in a situation where TPM is heavily utilized by
-> +			IMA, thus protection causing a major performance hit,
-> +			and the space where machines are deployed is by other
-> +			means guarded.
-> +
->  	tpm_suspend_pcr=3D[HW,TPM]
->  			Format: integer pcr id
->  			Specify that at suspend time, the tpm driver
-> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-> index cad0048bcc3c..e49a19fea3bd 100644
-> --- a/drivers/char/tpm/tpm-buf.c
-> +++ b/drivers/char/tpm/tpm-buf.c
-> @@ -146,6 +146,26 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u=
-32 value)
->  }
->  EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
-> =20
-> +/**
-> + * tpm_buf_append_handle() - Add a handle
-> + * @chip:	&tpm_chip instance
-> + * @buf:	&tpm_buf instance
-> + * @handle:	a TPM object handle
-> + *
-> + * Add a handle to the buffer, and increase the count tracking the numbe=
-r of
-> + * handles in the command buffer. Works only for command buffers.
-> + */
-> +void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf, u=
-32 handle)
-> +{
-> +	if (buf->flags & TPM_BUF_TPM2B) {
-> +		dev_err(&chip->dev, "Invalid buffer type (TPM2B)\n");
-> +		return;
-> +	}
-> +
-> +	tpm_buf_append_u32(buf, handle);
-> +	buf->handles++;
-> +}
-> +
->  /**
->   * tpm_buf_read() - Read from a TPM buffer
->   * @buf:	&tpm_buf instance
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 1e856259219e..cc443bcf15e8 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -14,6 +14,10 @@
->  #include "tpm.h"
->  #include <crypto/hash_info.h>
-> =20
-> +static bool disable_pcr_integrity_protection;
-> +module_param(disable_pcr_integrity_protection, bool, 0444);
-> +MODULE_PARM_DESC(disable_pcr_integrity_protection, "Disable TPM2_PCR_Ext=
-end encryption");
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.12-rc6 next-20241106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I like the name 'disable_pcr_integrity_protection.  However, the name and
-description doesn't match.  Replace 'encryption' with 'integrity protection=
-'.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sakkinen/tpm-Opt-in-in-disable-PCR-integrity-protection/20241107-175515
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20241107095138.78209-1-jarkko%40kernel.org
+patch subject: [PATCH v2] tpm: Opt-in in disable PCR integrity protection
+config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20241107/202411072138.bgOIL36O-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411072138.bgOIL36O-lkp@intel.com/reproduce)
 
-> +
->  static struct tpm2_hash tpm2_hash_map[] =3D {
->  	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
->  	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
-> @@ -232,18 +236,26 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_=
-idx,
->  	int rc;
->  	int i;
-> =20
-> -	rc =3D tpm2_start_auth_session(chip);
-> -	if (rc)
-> -		return rc;
-> +	if (!disable_pcr_integrity_protection) {
-> +		rc =3D tpm2_start_auth_session(chip);
-> +		if (rc)
-> +			return rc;
-> +	}
-> =20
->  	rc =3D tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
->  	if (rc) {
-> -		tpm2_end_auth_session(chip);
-> +		if (!disable_pcr_integrity_protection)
-> +			tpm2_end_auth_session(chip);
->  		return rc;
->  	}
-> =20
-> -	tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
-> -	tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
-> +	if (!disable_pcr_integrity_protection) {
-> +		tpm_buf_append_name(chip, &buf, pcr_idx);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411072138.bgOIL36O-lkp@intel.com/
 
-tpm_buf_append_name() parameters didn't change.  Don't remove the 'name' fi=
-eld
-here.
+All errors (new ones prefixed by >>):
+
+   drivers/char/tpm/tpm2-cmd.c: In function 'tpm2_pcr_extend':
+>> drivers/char/tpm/tpm2-cmd.c:253:17: error: too few arguments to function 'tpm_buf_append_name'
+     253 |                 tpm_buf_append_name(chip, &buf, pcr_idx);
+         |                 ^~~~~~~~~~~~~~~~~~~
+   In file included from drivers/char/tpm/tpm.h:27,
+                    from drivers/char/tpm/tpm2-cmd.c:14:
+   include/linux/tpm.h:504:6: note: declared here
+     504 | void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+         |      ^~~~~~~~~~~~~~~~~~~
 
 
-> +		tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
-> +	} else {
-> +		tpm_buf_append_handle(chip, &buf, pcr_idx);
+vim +/tpm_buf_append_name +253 drivers/char/tpm/tpm2-cmd.c
 
-Or here.
+   222	
+   223	/**
+   224	 * tpm2_pcr_extend() - extend a PCR value
+   225	 *
+   226	 * @chip:	TPM chip to use.
+   227	 * @pcr_idx:	index of the PCR.
+   228	 * @digests:	list of pcr banks and corresponding digest values to extend.
+   229	 *
+   230	 * Return: Same as with tpm_transmit_cmd.
+   231	 */
+   232	int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+   233			    struct tpm_digest *digests)
+   234	{
+   235		struct tpm_buf buf;
+   236		int rc;
+   237		int i;
+   238	
+   239		if (!disable_pcr_integrity_protection) {
+   240			rc = tpm2_start_auth_session(chip);
+   241			if (rc)
+   242				return rc;
+   243		}
+   244	
+   245		rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
+   246		if (rc) {
+   247			if (!disable_pcr_integrity_protection)
+   248				tpm2_end_auth_session(chip);
+   249			return rc;
+   250		}
+   251	
+   252		if (!disable_pcr_integrity_protection) {
+ > 253			tpm_buf_append_name(chip, &buf, pcr_idx);
+   254			tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
+   255		} else {
+   256			tpm_buf_append_handle(chip, &buf, pcr_idx);
+   257			tpm_buf_append_auth(chip, &buf, 0, NULL, 0);
+   258		}
+   259	
+   260		tpm_buf_append_u32(&buf, chip->nr_allocated_banks);
+   261	
+   262		for (i = 0; i < chip->nr_allocated_banks; i++) {
+   263			tpm_buf_append_u16(&buf, digests[i].alg_id);
+   264			tpm_buf_append(&buf, (const unsigned char *)&digests[i].digest,
+   265				       chip->allocated_banks[i].digest_size);
+   266		}
+   267	
+   268		if (!disable_pcr_integrity_protection)
+   269			tpm_buf_fill_hmac_session(chip, &buf);
+   270		rc = tpm_transmit_cmd(chip, &buf, 0, "attempting extend a PCR value");
+   271		if (!disable_pcr_integrity_protection)
+   272			rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+   273	
+   274		tpm_buf_destroy(&buf);
+   275	
+   276		return rc;
+   277	}
+   278	
 
-> +		tpm_buf_append_auth(chip, &buf, 0, NULL, 0);
-> +	}
-> =20
->  	tpm_buf_append_u32(&buf, chip->nr_allocated_banks);
-> =20
->=20
-
-Mimi
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
