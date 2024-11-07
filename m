@@ -1,246 +1,120 @@
-Return-Path: <linux-integrity+bounces-4057-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4058-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A65BE9C05F7
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2024 13:38:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B8DD9C0723
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2024 14:21:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36D771F22CE3
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2024 12:38:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E33272824E4
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 Nov 2024 13:21:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E586D20FA9B;
-	Thu,  7 Nov 2024 12:38:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0CF720EA54;
+	Thu,  7 Nov 2024 13:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="wNAg25Qz";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="va8P6Jhi";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="wNAg25Qz";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="va8P6Jhi"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="IREtZLrW";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="IREtZLrW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1882D1DBB37
-	for <linux-integrity@vger.kernel.org>; Thu,  7 Nov 2024 12:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9F120CCE5;
+	Thu,  7 Nov 2024 13:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730983105; cv=none; b=gi2/rZr+oQqeBVWpVeO2qXr4urdUqc5pYvch2Gk6mbSo8MpC710edu+jkr/TDh670PHUecCYqvkPpM4UagZn0deJ7F4qu6FFjOw8KBw4JEdRhSlzbBpyenGTekEetu8xzmTwdV2z86CjHs9HSfqnCfq3Aai6Rzv6GRfcsgg/TWE=
+	t=1730985659; cv=none; b=N+fmoOZiHYIPydVYP72b/yrnOnJGcTrrgrkl4JrLs0ExAk2qHiWoS90Xzw82z8jXxJ3pHiJ2gvppqYBeMySXSUJ2ZmEhb6e4/gOpKyUPaUcpRyQSixDzEY1WsiwRGqNrlUXfxwrzJf6LeOxNoyIsrXiBrOCvc9ghpYWZb4dJr1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730983105; c=relaxed/simple;
-	bh=GVEJe/Pa+0urrfYyJZd6pDtauclu8Y8ButtJkvTE3Ck=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CeFSOtzCotT5kI4NWayeHrxEaM/L1IjdI0IM2DssQ/HEJlE+LsnG6bcmo6VkjIpoEHqeLr4piEzPvriNpWTOQCXXq0Bv85KqDivOhIVz1X8S+MtKShM+blj4A/V5j6dpyW876MqrElKEbisD9c2UvC2K8wseTwCKk/H64mwufDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=wNAg25Qz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=va8P6Jhi; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=wNAg25Qz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=va8P6Jhi; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	s=arc-20240116; t=1730985659; c=relaxed/simple;
+	bh=/hIKkyMLrJn4I2+JsuYojwtEsAVODgj3nEdGixCrPkg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=o6Xv8L/456XJcpLlrTB5/MmzCXPuKkAdf6g/lahQnM12+wIsTOw4keHKSsUXR7hKY93qduvTEpE7jiZ79D7zSjNU0TYCbJ40xPWUcRf8gavGIKCHr52JG3zbWYW/dnc/wFO0//jywKHGMY1j+jiH0a2XQnti2QdgqsWlZizdJ7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=IREtZLrW; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=IREtZLrW; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1730985656;
+	bh=/hIKkyMLrJn4I2+JsuYojwtEsAVODgj3nEdGixCrPkg=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=IREtZLrWGdLMbP8gYjwk6LbsOguaKFhfoP5bXlTMRlXB0Qp9l+kX4NkMR6S3Q5keu
+	 Zo4odXhZ294W/2hzIUsw4hy1ExdFQpfl5P1yZV2zK6C89bxH0x0/JuMsc9m9gNHm3N
+	 0Ygd5WD+fsZRxej/IjGR/CV8F5TTBLAVjvaAWza0=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 7CEF11286BF7;
+	Thu, 07 Nov 2024 08:20:56 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id kEfJ871_3_8j; Thu,  7 Nov 2024 08:20:56 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1730985656;
+	bh=/hIKkyMLrJn4I2+JsuYojwtEsAVODgj3nEdGixCrPkg=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=IREtZLrWGdLMbP8gYjwk6LbsOguaKFhfoP5bXlTMRlXB0Qp9l+kX4NkMR6S3Q5keu
+	 Zo4odXhZ294W/2hzIUsw4hy1ExdFQpfl5P1yZV2zK6C89bxH0x0/JuMsc9m9gNHm3N
+	 0Ygd5WD+fsZRxej/IjGR/CV8F5TTBLAVjvaAWza0=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 35C8421C76;
-	Thu,  7 Nov 2024 12:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1730983102; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ujWYTmn4E6mlX795CL7gar8SkmcomwAfdjLDtAtSViw=;
-	b=wNAg25QzzBbMHvcHVXGC6bW6RwZpXO/eNR8g1zhvvuletTd3kSMMDEnHbV6BKKaRv3NcXy
-	VE6UNhva6FJDKmBSJXFqzNE6U5+A4bF9+tWHnswJUDxkKzl/JS5UT5GrKvDlcDyjU5Lr9M
-	QjYQGju22ummDCMQyCewpewJmvQs2io=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1730983102;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ujWYTmn4E6mlX795CL7gar8SkmcomwAfdjLDtAtSViw=;
-	b=va8P6Jhi+HVBOKZQg19u9x2V+15YOXyp9YRvoSLy1HUFxJB8hgM7NXEg+AzkXxuvVA5KAY
-	uBkHATG+QR0m6KDA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1730983102; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ujWYTmn4E6mlX795CL7gar8SkmcomwAfdjLDtAtSViw=;
-	b=wNAg25QzzBbMHvcHVXGC6bW6RwZpXO/eNR8g1zhvvuletTd3kSMMDEnHbV6BKKaRv3NcXy
-	VE6UNhva6FJDKmBSJXFqzNE6U5+A4bF9+tWHnswJUDxkKzl/JS5UT5GrKvDlcDyjU5Lr9M
-	QjYQGju22ummDCMQyCewpewJmvQs2io=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1730983102;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ujWYTmn4E6mlX795CL7gar8SkmcomwAfdjLDtAtSViw=;
-	b=va8P6Jhi+HVBOKZQg19u9x2V+15YOXyp9YRvoSLy1HUFxJB8hgM7NXEg+AzkXxuvVA5KAY
-	uBkHATG+QR0m6KDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EE83B1394A;
-	Thu,  7 Nov 2024 12:38:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qggPOb20LGfZNQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 07 Nov 2024 12:38:21 +0000
-Date: Thu, 07 Nov 2024 13:38:21 +0100
-Message-ID: <878qtvi5he.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Takashi Iwai <tiwai@suse.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-integrity@vger.kernel.org,
-	Andy Liang <andy.liang@hpe.com>,
-	jenifer.golmitz@hpe.com
-Subject: Re: [PATCH] tpm/eventlog: Use kvmalloc() for event log buffer
-In-Reply-To: <87f11490-06ab-43a5-8058-102722a3c3ba@molgen.mpg.de>
-References: <20241107112054.28448-1-tiwai@suse.de>
-	<87f11490-06ab-43a5-8058-102722a3c3ba@molgen.mpg.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5A1591286A68;
+	Thu, 07 Nov 2024 08:20:55 -0500 (EST)
+Message-ID: <76d9ae11c339b589a8ec94f010e7439b7ce7d283.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2] tpm: Opt-in in disable PCR integrity protection
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org, 
+ Jonathan Corbet <corbet@lwn.net>, Peter Huewe <peterhuewe@gmx.de>, Jason
+ Gunthorpe <jgg@ziepe.ca>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>, Mimi Zohar
+ <zohar@linux.ibm.com>,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Thu, 07 Nov 2024 08:20:53 -0500
+In-Reply-To: <20241107095138.78209-1-jarkko@kernel.org>
+References: <20241107095138.78209-1-jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-7
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.de];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.de,kernel.org,gmx.de,ziepe.ca,vger.kernel.org,hpe.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:mid,suse.com:url]
-X-Spam-Score: -3.30
-X-Spam-Flag: NO
 
-On Thu, 07 Nov 2024 13:17:33 +0100,
-Paul Menzel wrote:
-> 
-> Dear Takashi,
-> 
-> 
-> Thank you for the patch.
-> 
-> Am 07.11.24 um 12:18 schrieb Takashi Iwai:
-> > The TPM2 ACPI table may request a large size for the event log, and it
-> > may be over the max size of kmalloc().  When this happens, the driver
-> 
-> What is kmalloc()�s maximum size?
+On Thu, 2024-11-07 at 11:51 +0200, Jarkko Sakkinen wrote:
+[...]
+> +void tpm_buf_append_auth(struct tpm_chip *chip, struct tpm_buf *buf,
+> +                        u8 attributes, u8 *passphrase, int
+> passphrase_len)
+> +{
+> +       /* offset tells us where the sessions area begins */
+> +       int offset = buf->handles * 4 + TPM_HEADER_SIZE;
+> +       u32 len = 9 + passphrase_len;
+> +
+> +       if (tpm_buf_length(buf) != offset) {
+> +               /* not the first session so update the existing
+> length */
+> +               len += get_unaligned_be32(&buf->data[offset]);
+> +               put_unaligned_be32(len, &buf->data[offset]);
+> +       } else {
+> +               tpm_buf_append_u32(buf, len);
+> +       }
+> +       /* auth handle */
+> +       tpm_buf_append_u32(buf, TPM2_RS_PW);
+> +       /* nonce */
+> +       tpm_buf_append_u16(buf, 0);
+> +       /* attributes */
+> +       tpm_buf_append_u8(buf, 0);
+> +       /* passphrase */
+> +       tpm_buf_append_u16(buf, passphrase_len);
+> +       tpm_buf_append(buf, passphrase, passphrase_len);
+> +}
+> +
 
-128kB or so, IIRC.
-And according Andy, the table can be over 4MB.
+The rest of the code looks fine, but if you're going to extract this as
+a separate function instead of doing the open coded struct
+tpm2_null_auth that was there originally, you should probably extract
+and use the tpm2_buf_append_auth() function in trusted_tpm2.c
 
-> > spews the kernel WARNING at the probe time, but the error is
-> > eventually ignored in the caller side, and it results in the missing
-> > TPM event log exposure.
-> > 
-> > This patch replaces the devm_kmalloc() call with kvmalloc() to allow
-> > larger sizes.  Since there is no devm variant for kvmalloc(), now it's
-> > managed manually via devres_alloc() and devres_add().
-> 
-> As the access to the bug report is restricted, are you at liberty to
-> share the system you�ve seen this on?
+James
 
-Likely yes, as it was reported to SLE15.  Sorry for that.
-
-Basically the info provided there was almost what I put in the
-description; the driver got the kernel WARNING and Andy tested my
-patch.
-
-If any further info is required, at best ask HPE people here in Cc.
-
-
-thanks,
-
-Takashi
-
-
-> > Reported-and-tested-by: Andy Liang <andy.liang@hpe.com>
-> > Cc: jenifer.golmitz@hpe.com
-> > Link: https://bugzilla.suse.com/show_bug.cgi?id=1232421
-> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> > ---
-> >   drivers/char/tpm/eventlog/acpi.c | 21 ++++++++++++++++++---
-> >   1 file changed, 18 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> > index 69533d0bfb51..56f7d73fa6bf 100644
-> > --- a/drivers/char/tpm/eventlog/acpi.c
-> > +++ b/drivers/char/tpm/eventlog/acpi.c
-> > @@ -63,6 +63,13 @@ static bool tpm_is_tpm2_log(void *bios_event_log, u64 len)
-> >   	return n == 0;
-> >   }
-> >   +static void bios_event_log_release(struct device *dev, void *res)
-> > +{
-> > +	void **logp = res;
-> > +
-> > +	kvfree(*logp);
-> > +}
-> > +
-> >   /* read binary bios log */
-> >   int tpm_read_log_acpi(struct tpm_chip *chip)
-> >   {
-> > @@ -71,6 +78,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
-> >   	void __iomem *virt;
-> >   	u64 len, start;
-> >   	struct tpm_bios_log *log;
-> > +	void **logp;
-> >   	struct acpi_table_tpm2 *tbl;
-> >   	struct acpi_tpm2_phy *tpm2_phy;
-> >   	int format;
-> > @@ -136,9 +144,16 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
-> >   	}
-> >     	/* malloc EventLog space */
-> > -	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
-> > -	if (!log->bios_event_log)
-> > +	logp = devres_alloc(bios_event_log_release, sizeof(*logp), GFP_KERNEL);
-> > +	if (!logp)
-> >   		return -ENOMEM;
-> > +	devres_add(&chip->dev, logp);
-> > +	log->bios_event_log = kvmalloc(len, GFP_KERNEL);
-> > +	if (!log->bios_event_log) {
-> > +		ret = -ENOMEM;
-> > +		goto err;
-> > +	}
-> > +	*logp = log->bios_event_log;
-> >     	log->bios_event_log_end = log->bios_event_log + len;
-> >   @@ -164,7 +179,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
-> >   	return format;
-> >     err:
-> > -	devm_kfree(&chip->dev, log->bios_event_log);
-> > +	devres_release(&chip->dev, bios_event_log_release, NULL, NULL);
-> >   	log->bios_event_log = NULL;
-> >   	return ret;
-> >   }
-> 
-> The diff looks good to me.
-> 
-> 
-> Kind regards,
-> 
-> Paul
 
