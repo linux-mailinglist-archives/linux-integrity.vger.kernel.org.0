@@ -1,84 +1,98 @@
-Return-Path: <linux-integrity+bounces-4080-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4081-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A8B59C45B5
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Nov 2024 20:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF1F59C4632
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Nov 2024 20:54:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B07FB2841C
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 Nov 2024 19:12:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EABFEB21E9D
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 Nov 2024 19:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97511AA1CA;
-	Mon, 11 Nov 2024 19:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B14EC1A76B4;
+	Mon, 11 Nov 2024 19:54:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="snNG1GWe"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pQYbdCFV"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4521B1AB6EB;
-	Mon, 11 Nov 2024 19:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135F1132103;
+	Mon, 11 Nov 2024 19:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731352344; cv=none; b=j5Les+gaAxvFXc+vyPF4RfpVGjGXvZnrXpheJQWedM5TZXRoDHcSjYNuqF/gxQ+BSUjgwTK9UVqBDYOnub7fVb5xcXg2XB2HqXyRv8GhP5DV5mr+DnF9F6T8jGjgb4DaMzRf0eXKnR5GxA89e+wKDgC8HxmzIJhdGdKDze+EWEY=
+	t=1731354866; cv=none; b=cMEYavjMc0voikdf5YU10JhhLthOkDP7+WfhMZDQsm0v6dpX8SG9IaXkHuT2eKGukr13oztZ9rtb67uv97uRjwRDCPtJc9uPoCcn8W5SUTmdo1N3EcTwmsD/duImJhXxFMQWrP/DF0D/kCUMmGGi/bzYRq6kzw59voP2UL3sMxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731352344; c=relaxed/simple;
-	bh=IZc/E43DZuxHSv7IWU524y8l2UZ+In8MU2dQR2LV2c0=;
+	s=arc-20240116; t=1731354866; c=relaxed/simple;
+	bh=+xNIR6SyFbLm4ZiDbBSE2ZDeR0CGKJ5wHtQjD0Ngm50=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=J79X5WROTrCU5fbHWdeLxBs+92IMmViXdk6iuCm+8iY10AyzEmKaukkfAiFkFZCpvsZVGK4Lk1li5Qf/DfJludXhvIMwLF7zy726Jdm5HkOXxTwaXlE6LYvRiKo5xx/0sJPUQsS3zh9pOGnnMP26i6n3VKXTd/MQu/tfzwbiig4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=snNG1GWe; arc=none smtp.client-ip=148.163.156.1
+	 Content-Type:MIME-Version; b=qGxdl4sUNu4lMqsNB/RCbE/xnEzKhgwSlgiQnojVjNRcEziGZYXNISdvkGEb0J7wY5+5HEp8/pPonQmYDyVe0HOwgJVqXPvQM/t8Tog8dIeY+2htZbRJ6fJo59vz8gKgN62JmES9qopgHcq6lhjLkgeeBueEe5ke571zZpwi+Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pQYbdCFV; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ABIeDvw007739;
-	Mon, 11 Nov 2024 19:12:14 GMT
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ABF9xms029461;
+	Mon, 11 Nov 2024 19:53:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=FUTeFv
-	TTJcfuHgqmvdOMhd7j6g2HNrW0Yp2+VxRnmRc=; b=snNG1GWeEJx2C8HGfH/t/5
-	mHk8exV8kJ88+IRUKmyvgSkrhpz0/u/Qv6IPydzaJBAFBndGRsK9RmKeUpJ9Kt92
-	pkeYQsSjvElpFkL/KDzkFzCl2VDhcWPxiUoKOazjuYplZceMSJXgUpN4k+LVXGQI
-	6VjMa5UKERwW36qO2qdqalo0HORwmiPjcQqq9Ch9opzImc3r9ydQtpCr6/Vtq6w5
-	89ieZSx5vNMzHqmWkrIZOg/FRx30G0xVOoISsOZGIGELVvwwextVHjEtOABmgkx+
-	/PaMdtLzmYOO0mOkJb85O1MCAwtqveAmai/YZ5fQ3ljd0gbQxGYtUg9Jyt1lzHxA
+	:message-id:mime-version:references:subject:to; s=pp1; bh=87Oyme
+	Nad5N63iba6WZgJPlA/SgeyRhOrvUOkAOWbg8=; b=pQYbdCFVP9mAwExQq69TYs
+	6IhzElpuA9Ec/lIHBLdXBgG/wo/obNmV6qiKjwIvCgrvfOVQC8OuHXSXhXW8eyVz
+	W1t+CKMTqNBr+uF/yjFGLcm6CCW7qfHugIZCp8Dca/F7uXp6xtm8YPWC2om4e+d8
+	LgNCJixWdLyAya7xWqE8o7R3LMcey+7c9J8oRkw6tKyhQjkj/bzmuEk7ay4QA9rk
+	BkSgOaEYKaLfr3EBq541DYKQ+YxrypHP7HhMDd3YpkplFO6Z/T9r2gPGcp0sh4oY
+	NAGGAyOtWAJAPYRkX0JNh3FdqHvoLMMCwmR0dshTPb5V/vhFB2Q3nnflENbJZ+Rg
 	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42uqdb83d6-1
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42umav92xt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Nov 2024 19:12:14 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4ABIrcav002761;
-	Mon, 11 Nov 2024 19:12:13 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 42tms12qje-1
+	Mon, 11 Nov 2024 19:53:13 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4ABJrCLL030306;
+	Mon, 11 Nov 2024 19:53:12 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42umav92xr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Nov 2024 19:12:13 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4ABJCCih29033182
+	Mon, 11 Nov 2024 19:53:12 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4ABJbl93008404;
+	Mon, 11 Nov 2024 19:53:12 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42tjey9n6y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Nov 2024 19:53:12 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4ABJrBiC20709950
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 11 Nov 2024 19:12:13 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A011E5805E;
-	Mon, 11 Nov 2024 19:12:12 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3CD1058043;
-	Mon, 11 Nov 2024 19:12:12 +0000 (GMT)
+	Mon, 11 Nov 2024 19:53:11 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7BEF258052;
+	Mon, 11 Nov 2024 19:53:11 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id F09AD5805D;
+	Mon, 11 Nov 2024 19:53:10 +0000 (GMT)
 Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.110.57])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 11 Nov 2024 19:12:12 +0000 (GMT)
-Message-ID: <6a8b48e600e0fd294619b5dfa97b5c796eb2ea2f.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Suspend PCR extends and log appends when rebooting
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 11 Nov 2024 19:53:10 +0000 (GMT)
+Message-ID: <dd51366e50de86e8a6002f2f53801c53a9b770f3.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] tpm: Opt-in in disable PCR integrity protection
 From: Mimi Zohar <zohar@linux.ibm.com>
-To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, roberto.sassu@huawei.com,
-        Tushar Sugandhi
-	 <tusharsu@linux.microsoft.com>
-Date: Mon, 11 Nov 2024 14:12:11 -0500
-In-Reply-To: <20241011150522.2697216-1-stefanb@linux.ibm.com>
-References: <20241011150522.2697216-1-stefanb@linux.ibm.com>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Jarkko Sakkinen
+ <jarkko@kernel.org>, linux-integrity@vger.kernel.org,
+        Jonathan Corbet
+ <corbet@lwn.net>, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe
+ <jgg@ziepe.ca>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date: Mon, 11 Nov 2024 14:53:10 -0500
+In-Reply-To: <10296fd8b0fcbf1d813577ef41738ffea12b70d1.camel@HansenPartnership.com>
+References: <20241107095138.78209-1-jarkko@kernel.org>
+	 <76d9ae11c339b589a8ec94f010e7439b7ce7d283.camel@HansenPartnership.com>
+	 <D5FZT0QPHL0O.231WD6VUHC48X@kernel.org>
+	 <10296fd8b0fcbf1d813577ef41738ffea12b70d1.camel@HansenPartnership.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
@@ -89,167 +103,88 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QFuWBJCemRiAXVNja5tx3nb7XWfGom7w
-X-Proofpoint-GUID: QFuWBJCemRiAXVNja5tx3nb7XWfGom7w
+X-Proofpoint-GUID: wK0NwLDaDVQMoVyqQtYxYDorsb2XHBFc
+X-Proofpoint-ORIG-GUID: wt9Pl_62oacIojLZdQX_ssJzsL0ODwSk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 priorityscore=1501 clxscore=1011
- adultscore=0 mlxlogscore=999 phishscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411110150
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=516
+ impostorscore=0 malwarescore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411110156
 
-On Fri, 2024-10-11 at 11:05 -0400, Stefan Berger wrote:
-
-
-> To avoid the following types of error messages from the TPM driver, suspe=
-nd
-> PCR extends once the reboot notifier has been called.  This avoids trying=
- to
-> use the TPM after the TPM subsystem has been shut down.
+On Thu, 2024-11-07 at 08:52 -0500, James Bottomley wrote:
+> On Thu, 2024-11-07 at 15:49 +0200, Jarkko Sakkinen wrote:
+> > On Thu Nov 7, 2024 at 3:20 PM EET, James Bottomley wrote:
+> > > On Thu, 2024-11-07 at 11:51 +0200, Jarkko Sakkinen wrote:
+> > > [...]
+> > > > +void tpm_buf_append_auth(struct tpm_chip *chip, struct tpm_buf
+> > > > *buf,
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u8=
+ attributes, u8 *passphrase, int
+> > > > passphrase_len)
+> > > > +{
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* offset tells us where=
+ the sessions area begins */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int offset =3D buf->hand=
+les * 4 + TPM_HEADER_SIZE;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 len =3D 9 + passphra=
+se_len;
+> > > > +
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (tpm_buf_length(buf) =
+!=3D offset) {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0/* not the first session so update the existing
+> > > > length */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0len +=3D get_unaligned_be32(&buf->data[offset]);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0put_unaligned_be32(len, &buf->data[offset]);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} else {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0tpm_buf_append_u32(buf, len);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* auth handle */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm_buf_append_u32(buf, =
+TPM2_RS_PW);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* nonce */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm_buf_append_u16(buf, =
+0);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* attributes */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm_buf_append_u8(buf, 0=
+);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* passphrase */
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm_buf_append_u16(buf, =
+passphrase_len);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0tpm_buf_append(buf, pass=
+phrase, passphrase_len);
+> > > > +}
+> > > > +
+> > >=20
+> > > The rest of the code looks fine, but if you're going to extract
+> > > this as a separate function instead of doing the open coded struct
+> > > tpm2_null_auth that was there originally, you should probably
+> > > extract and use the tpm2_buf_append_auth() function in
+> > > trusted_tpm2.c
+> >=20
+> > So this was straight up from Mimi's original patch :-)
 >=20
-> [111707.685315][    T1] ima: Error Communicating to TPM chip, result: -19
-> [111707.685960][    T1] ima: Error Communicating to TPM chip, result: -19
+> Yes, I had the same comment prepped for that too.
+
+But it wasn't sent ...
 >=20
-> This error could be observed on a ppc64 machine running SuSE Linux.
+> > Hmm... was there duplicate use for this in the patch? I'll check
+> > this.
 >=20
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
+> The original open coded the empty auth append with struct
+> tpm2_null_auth since it's the only user.  However, since we do have
+> another user in trusted keys, it might make sense to consolidate.
 
-No need to send a separate post about the patch.  Any comments not part of =
-the
-patch description belong here.
-
->  security/integrity/ima/ima.h       |  1 +
->  security/integrity/ima/ima_init.c  | 16 ++++++++++++++++
->  security/integrity/ima/ima_queue.c | 27 +++++++++++++++++++++++++++
->  3 files changed, 44 insertions(+)
->=20
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index c51e24d24d1e..d3f46232b8b9 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -274,6 +274,7 @@ bool ima_template_has_modsig(const struct ima_templat=
-e_desc *ima_template);
->  int ima_restore_measurement_entry(struct ima_template_entry *entry);
->  int ima_restore_measurement_list(loff_t bufsize, void *buf);
->  int ima_measurements_show(struct seq_file *m, void *v);
-> +void ima_measurements_suspend(void);
->  unsigned long ima_get_binary_runtime_size(void);
->  int ima_init_template(void);
->  void ima_init_template_list(void);
-> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/i=
-ma_init.c
-> index 4e208239a40e..ac630d8d3049 100644
-> --- a/security/integrity/ima/ima_init.c
-> +++ b/security/integrity/ima/ima_init.c
-> @@ -16,6 +16,7 @@
->  #include <linux/slab.h>
->  #include <linux/err.h>
->  #include <linux/ima.h>
-> +#include <linux/reboot.h>
->  #include <generated/utsrelease.h>
-> =20
->  #include "ima.h"
-> @@ -115,6 +116,19 @@ void __init ima_load_x509(void)
->  }
->  #endif
-> =20
-> +static int ima_reboot_notify(struct notifier_block *nb,
-> +                      unsigned long action,
-> +                      void *data)
-> +{
-> +	ima_measurements_suspend();
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static struct notifier_block ima_reboot_notifier =3D {
-> +	.notifier_call =3D ima_reboot_notify,
-> +};
-> +
->  int __init ima_init(void)
->  {
->  	int rc;
-> @@ -152,6 +166,8 @@ int __init ima_init(void)
-> =20
->  	ima_init_key_queue();
-> =20
-> +	register_reboot_notifier(&ima_reboot_notifier);
-> +
->  	ima_measure_critical_data("kernel_info", "kernel_version",
->  				  UTS_RELEASE, strlen(UTS_RELEASE), false,
->  				  NULL, 0);
-> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/=
-ima_queue.c
-> index 532da87ce519..b8613b6c1a39 100644
-> --- a/security/integrity/ima/ima_queue.c
-> +++ b/security/integrity/ima/ima_queue.c
-> @@ -44,6 +44,12 @@ struct ima_h_table ima_htable =3D {
->   */
->  static DEFINE_MUTEX(ima_extend_list_mutex);
-> =20
-> +/*
-> + * Used internally by the kernel to suspend-resume ima measurements.
-> + * Protected by ima_extend_list_mutex.
-> + */
-
-Tushar's original patch incorrectly provided both a function to suspend and
-resume appending records to the IMA measurement list and extending the TPM =
-PCR.
-This patch only suspends appending records to the IMA measurement list and
-extending the TPM PCR.  Please replace the word "suspend-resume" in the com=
-ment
-above with just "suspend".
-
-> +static bool suspend_ima_measurements;
-> +
->  /* lookup up the digest value in the hash table, and return the entry */
->  static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
->  						       int pcr)
-> @@ -148,6 +154,13 @@ static int ima_pcr_extend(struct tpm_digest *digests=
-_arg, int pcr)
->  	return result;
->  }
-> =20
-> +void ima_measurements_suspend(void)
-> +{
-> +	mutex_lock(&ima_extend_list_mutex);
-> +	suspend_ima_measurements =3D true;
-> +	mutex_unlock(&ima_extend_list_mutex);
-> +}
-> +
->  /*
->   * Add template entry to the measurement list and hash table, and
->   * extend the pcr.
-> @@ -176,6 +189,20 @@ int ima_add_template_entry(struct ima_template_entry=
- *entry, int violation,
->  		}
->  	}
-> =20
-> +	/*
-> +	 * suspend_ima_measurements will be set if the system is
-> +	 * undergoing kexec soft boot to a new kernel.
-> +	 * suspending measurements in this short window ensures the
-> +	 * consistency of the IMA measurement list during copying
-> +	 * of the kexec buffer.
-> +	 */
-
-Tushar's patch did not register a reboot notifier.  Please update the above
-comment accordingly.
-
-> +	if (suspend_ima_measurements) {
-> +		audit_cause =3D "measurements_suspended";
-> +		audit_info =3D 0;
-> +		result =3D -ENODEV;
-> +		goto out;
-> +	}
-> +
->  	result =3D ima_add_digest_entry(entry,
->  				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
->  	if (result < 0) {
+Instead of delaying the current patch from being upstreamed, perhaps this c=
+hange
+can be deferred?
 
 thanks,
 
