@@ -1,295 +1,263 @@
-Return-Path: <linux-integrity+bounces-4093-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4097-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1AC39C6473
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 23:47:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C34109C6559
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Nov 2024 00:43:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B76FBBA1D92
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 19:23:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B736E1F265C2
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 23:42:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9E121D21D;
-	Tue, 12 Nov 2024 19:19:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCFF21C17F;
+	Tue, 12 Nov 2024 23:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="g/jVHLY5"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AjcCniZt"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91ED821CF91
-	for <linux-integrity@vger.kernel.org>; Tue, 12 Nov 2024 19:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA001CDFBD;
+	Tue, 12 Nov 2024 23:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731439175; cv=none; b=I1aHQjsHFrFvfSdQgImEZtRCmQ0XchlPO4s0IwCmFMQrokFMAm8rPQgGp6aBY92dkVt+p32u3KL6WBztPMyPnBam+jKkMW4O7u2yHbO3EB9ft8bvSnk5p4GDAEjFBnCWEC8z24PQ2vYv9LOz2glCrRv8COlyB/N3Vgp1bwLcquQ=
+	t=1731454971; cv=none; b=e52Rrzd/FrSfm3XimiZGv4l5z4XfbJVaZJKEWBZwix9fL7HQ6Q+NILHdJcMjpxwXwOh7ySzlttwk4fLZO5kQ/g/et+tUmIZlwwaFD+O+BA1sh33olytHmEHAxJiUO3b8rPCpP/M57ihj13for/m1Px/xoqnrDkrEyZAv4V0Gdn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731439175; c=relaxed/simple;
-	bh=RVPBYxs+3NX2O23j3zFM/NTZQh44JO7+apHRRCQYh+M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E1PghQRuf8BnIW4V5nVjuQmnHdKAxz4r6TE1zltzq01bN0VUk6QjvdmZnsoHKklGKkEaP9F2vGNbmrzP+otbftWxzAVGWJ7JMJD2VJ8zjxWSXN5x8FIy3Fx8FpFiXC+q4pr79Pp+/aFJm8Ow9rrGlRNXbun38h9A+muMCXUkd3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=g/jVHLY5; arc=none smtp.client-ip=185.125.25.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Xnx7066L8zNhc;
-	Tue, 12 Nov 2024 20:19:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1731439164;
-	bh=qOU7JMAOgtDevc3iDrH7eY0FFQEFgp7A03ux9bXw1eM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=g/jVHLY5Fhla+cIXWezLd9tf0LKryAyv25GdTmkPpjcTQr/9lhFC8gw65PihGLOH5
-	 fyC+md1Q4VyCbN5g0XnEoJxmQJZlZywc7WCQRP/Zp7gmTrKT3l88F03W8s6/NQos7d
-	 ZYX0paG5BFSvNa+h5PLVaQLyLoBE8b1c6Ptj0rgw=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Xnx6z2VcQz78t;
-	Tue, 12 Nov 2024 20:19:23 +0100 (CET)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <serge@hallyn.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-	Alejandro Colomar <alx@kernel.org>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Christian Heimes <christian@python.org>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Elliott Hughes <enh@google.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Eric Chiang <ericchiang@google.com>,
-	Fan Wu <wufan@linux.microsoft.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Jan Kara <jack@suse.cz>,
-	Jann Horn <jannh@google.com>,
-	Jeff Xu <jeffxu@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jordan R Abrahams <ajordanr@google.com>,
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Luca Boccassi <bluca@debian.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Matthew Garrett <mjg59@srcf.ucam.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	Miklos Szeredi <mszeredi@redhat.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
-	Scott Shell <scottsh@microsoft.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Steve Dower <steve.dower@python.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-	Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-	Xiaoming Ni <nixiaoming@huawei.com>,
-	Yin Fengwei <fengwei.yin@intel.com>,
-	kernel-hardening@lists.openwall.com,
-	linux-api@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v21 5/6] samples/check-exec: Add set-exec
-Date: Tue, 12 Nov 2024 20:18:57 +0100
-Message-ID: <20241112191858.162021-6-mic@digikod.net>
-In-Reply-To: <20241112191858.162021-1-mic@digikod.net>
-References: <20241112191858.162021-1-mic@digikod.net>
+	s=arc-20240116; t=1731454971; c=relaxed/simple;
+	bh=bngcx8E46pXAYEW/nzLFS8bwIVlyJ/PB4DXxK3alk6k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=t8kCA5C2By/nfELkIlguVrCByWSazZ1wzIs2BLmN2hjt/JzP7R8BgbG9HbtAatyvfe5UUqUl5VkODWObtyg/EWU1ghT353bU2Z8qhUhlfiSATBX/zWU9xs3O02GuoOP1lUE44MUII5Wf94iwYUH+AL1mXJ58x/RfR8x4GYJXRZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AjcCniZt; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ACN42eK016243;
+	Tue, 12 Nov 2024 23:42:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=AoX7VK
+	OxUfCE/FQHkf1ZqG+QeBVf038rL4Hjur1YlOc=; b=AjcCniZtvN2AmhvF5JuzHN
+	gfA5NU8/iucnXWrsgOCFOcCFo/RlRNaerJQG3R0KKOr8QhtBM48dHxzT1D8NPMEI
+	XbY/9Kk6HRlBl17wBLwedUo5j8G02BaK2mhVshtfcZUJng7bpLdnV4h3MrOzL7w/
+	4A6ClMvTR+aPwquY9cJZFmohQ19LDvHrrssdPpHmFuHHhdYCC3Rt/oIqcgfm/kOu
+	2trhHc/HKiyHVPQvHJzR1l+mi8s1lriK8LWSmmtfR5eEqVr9G9SjJ8mo5EALzAAx
+	wSdtpXnJvcRR4m5Gm5xTeP7D/QpQpwfnucCmslcpfrxfcaPSdK1DyjE0eLLellqw
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42vdcerpn7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Nov 2024 23:42:39 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4ACHxOmF004153;
+	Tue, 12 Nov 2024 23:42:38 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 42tms1519n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Nov 2024 23:42:38 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4ACNgcBs52822298
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 12 Nov 2024 23:42:38 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 494C758056;
+	Tue, 12 Nov 2024 23:42:38 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CD51E58052;
+	Tue, 12 Nov 2024 23:42:37 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.145.14])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 12 Nov 2024 23:42:37 +0000 (GMT)
+Message-ID: <a616939fa13b9e01b9cb6be68246152772944a76.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: Suspend PCR extends and log appends when
+ rebooting
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, roberto.sassu@huawei.com,
+        Tushar Sugandhi
+	 <tusharsu@linux.microsoft.com>
+Date: Tue, 12 Nov 2024 18:42:37 -0500
+In-Reply-To: <20241112165206.756351-1-stefanb@linux.ibm.com>
+References: <20241112165206.756351-1-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5oRZ73ko05kSNpFhzW35IhY35kJduxkJ
+X-Proofpoint-ORIG-GUID: 5oRZ73ko05kSNpFhzW35IhY35kJduxkJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ spamscore=0 clxscore=1015 malwarescore=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 mlxscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411120190
 
-Add a simple tool to set SECBIT_EXEC_RESTRICT_FILE or
-SECBIT_EXEC_DENY_INTERACTIVE before executing a command.  This is useful
-to easily test against enlighten script interpreters.
+On Tue, 2024-11-12 at 11:52 -0500, Stefan Berger wrote:
+> To avoid the following types of error messages due to a failure by the TP=
+M
+> driver to use the TPM, suspend TPM PCR extensions and the appending of
+> entries to the IMA log once IMA's reboot notifier has been called. This
+> avoids trying to use the TPM after the TPM subsystem has been shut down.
+>=20
+> [111707.685315][    T1] ima: Error Communicating to TPM chip, result: -19
+> [111707.685960][    T1] ima: Error Communicating to TPM chip, result: -19
+>=20
+> This error could be observed on a ppc64 machine running SuSE Linux where
+> processes are still accessing files after devices have been shut down.
+>=20
+> Suspending the IMA log and PCR extensions shortly before reboot does not
+> seem to open a significant measurement gap since neither TPM quoting woul=
+d
+> work for attestation nor that new log entries could be written to anywher=
+e
+> after devices have been shut down. However, there's a time window between
+> the invocation of the reboot notifier and the shutdown of devices in
+> kernel_restart_prepare() where __usermodehelper_disable() waits for all
+> running_helpers to exit. During this time window IMA could now miss log
+> entries even though attestation would still work. The reboot of the syste=
+m
+> shortly after may make this small gap insignificant.
+>=20
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: Serge Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241112191858.162021-6-mic@digikod.net
----
+Thanks, Stefan.  The patch looks good.  Based on the updated patch descript=
+ion,
+I'm wondering if we should be testing the "system_state" instead of registe=
+ring
+a reboot notifier?
 
-Changes since v19:
-* Rename file and directory.
-* Update securebits and related arguments.
-* Remove useless call to prctl() when securebits are unchanged.
----
- samples/Kconfig               |  7 +++
- samples/Makefile              |  1 +
- samples/check-exec/.gitignore |  1 +
- samples/check-exec/Makefile   | 14 ++++++
- samples/check-exec/set-exec.c | 85 +++++++++++++++++++++++++++++++++++
- 5 files changed, 108 insertions(+)
- create mode 100644 samples/check-exec/.gitignore
- create mode 100644 samples/check-exec/Makefile
- create mode 100644 samples/check-exec/set-exec.c
+>=20
+> ---
+>  v2:
+>   - followed Mimi's suggestions
+>=20
+> ---
+>  security/integrity/ima/ima.h       |  1 +
+>  security/integrity/ima/ima_init.c  |  2 ++
+>  security/integrity/ima/ima_queue.c | 43 ++++++++++++++++++++++++++++++
+>  3 files changed, 46 insertions(+)
+>=20
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 3c323ca213d4..3f1a82b7cd71 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -278,6 +278,7 @@ unsigned long ima_get_binary_runtime_size(void);
+>  int ima_init_template(void);
+>  void ima_init_template_list(void);
+>  int __init ima_init_digests(void);
+> +void __init ima_init_reboot_notifier(void);
+>  int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event=
+,
+>  			  void *lsm_data);
+> =20
+> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/i=
+ma_init.c
+> index 4e208239a40e..a2f34f2d8ad7 100644
+> --- a/security/integrity/ima/ima_init.c
+> +++ b/security/integrity/ima/ima_init.c
+> @@ -152,6 +152,8 @@ int __init ima_init(void)
+> =20
+>  	ima_init_key_queue();
+> =20
+> +	ima_init_reboot_notifier();
+> +
+>  	ima_measure_critical_data("kernel_info", "kernel_version",
+>  				  UTS_RELEASE, strlen(UTS_RELEASE), false,
+>  				  NULL, 0);
+> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/=
+ima_queue.c
+> index 532da87ce519..9b3c9587313f 100644
+> --- a/security/integrity/ima/ima_queue.c
+> +++ b/security/integrity/ima/ima_queue.c
+> @@ -16,6 +16,7 @@
+>   */
+> =20
+>  #include <linux/rculist.h>
+> +#include <linux/reboot.h>
+>  #include <linux/slab.h>
+>  #include "ima.h"
+> =20
+> @@ -44,6 +45,12 @@ struct ima_h_table ima_htable =3D {
+>   */
+>  static DEFINE_MUTEX(ima_extend_list_mutex);
+> =20
+> +/*
+> + * Used internally by the kernel to suspend measurements.
+> + * Protected by ima_extend_list_mutex.
+> + */
+> +static bool ima_measurements_suspended;
+> +
+>  /* lookup up the digest value in the hash table, and return the entry */
+>  static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
+>  						       int pcr)
+> @@ -176,6 +183,17 @@ int ima_add_template_entry(struct ima_template_entry=
+ *entry, int violation,
+>  		}
+>  	}
+> =20
+> +	/*
+> +	 * ima_measurements_suspended will be set before the TPM subsystem has
+> +	 * been shut down.
+> +	 */
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index b288d9991d27..efa28ceadc42 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -291,6 +291,13 @@ config SAMPLE_CGROUP
- 	help
- 	  Build samples that demonstrate the usage of the cgroup API.
- 
-+config SAMPLE_CHECK_EXEC
-+	bool "Exec secure bits examples"
-+	depends on CC_CAN_LINK && HEADERS_INSTALL
-+	help
-+	  Build a tool to easily configure SECBIT_EXEC_RESTRICT_FILE and
-+	  SECBIT_EXEC_DENY_INTERACTIVE.
-+
- source "samples/rust/Kconfig"
- 
- endif # SAMPLES
-diff --git a/samples/Makefile b/samples/Makefile
-index b85fa64390c5..f988202f3a30 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -3,6 +3,7 @@
- 
- subdir-$(CONFIG_SAMPLE_AUXDISPLAY)	+= auxdisplay
- subdir-$(CONFIG_SAMPLE_ANDROID_BINDERFS) += binderfs
-+subdir-$(CONFIG_SAMPLE_CHECK_EXEC)	+= check-exec
- subdir-$(CONFIG_SAMPLE_CGROUP) += cgroup
- obj-$(CONFIG_SAMPLE_CONFIGFS)		+= configfs/
- obj-$(CONFIG_SAMPLE_CONNECTOR)		+= connector/
-diff --git a/samples/check-exec/.gitignore b/samples/check-exec/.gitignore
-new file mode 100644
-index 000000000000..3f8119112ccf
---- /dev/null
-+++ b/samples/check-exec/.gitignore
-@@ -0,0 +1 @@
-+/set-exec
-diff --git a/samples/check-exec/Makefile b/samples/check-exec/Makefile
-new file mode 100644
-index 000000000000..d9f976e3ff98
---- /dev/null
-+++ b/samples/check-exec/Makefile
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: BSD-3-Clause
-+
-+userprogs-always-y := \
-+	set-exec
-+
-+userccflags += -I usr/include
-+
-+.PHONY: all clean
-+
-+all:
-+	$(MAKE) -C ../.. samples/check-exec/
-+
-+clean:
-+	$(MAKE) -C ../.. M=samples/check-exec/ clean
-diff --git a/samples/check-exec/set-exec.c b/samples/check-exec/set-exec.c
-new file mode 100644
-index 000000000000..ba86a60a20dd
---- /dev/null
-+++ b/samples/check-exec/set-exec.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Simple tool to set SECBIT_EXEC_RESTRICT_FILE, SECBIT_EXEC_DENY_INTERACTIVE,
-+ * before executing a command.
-+ *
-+ * Copyright © 2024 Microsoft Corporation
-+ */
-+
-+#define _GNU_SOURCE
-+#define __SANE_USERSPACE_TYPES__
-+#include <errno.h>
-+#include <linux/prctl.h>
-+#include <linux/securebits.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/prctl.h>
-+#include <unistd.h>
-+
-+static void print_usage(const char *argv0)
-+{
-+	fprintf(stderr, "usage: %s -f|-i -- <cmd> [args]...\n\n", argv0);
-+	fprintf(stderr, "Execute a command with\n");
-+	fprintf(stderr, "- SECBIT_EXEC_RESTRICT_FILE set: -f\n");
-+	fprintf(stderr, "- SECBIT_EXEC_DENY_INTERACTIVE set: -i\n");
-+}
-+
-+int main(const int argc, char *const argv[], char *const *const envp)
-+{
-+	const char *cmd_path;
-+	char *const *cmd_argv;
-+	int opt, secbits_cur, secbits_new;
-+	bool has_policy = false;
-+
-+	secbits_cur = prctl(PR_GET_SECUREBITS);
-+	if (secbits_cur == -1) {
-+		/*
-+		 * This should never happen, except with a buggy seccomp
-+		 * filter.
-+		 */
-+		perror("ERROR: Failed to get securebits");
-+		return 1;
-+	}
-+
-+	secbits_new = secbits_cur;
-+	while ((opt = getopt(argc, argv, "fi")) != -1) {
-+		switch (opt) {
-+		case 'f':
-+			secbits_new |= SECBIT_EXEC_RESTRICT_FILE |
-+				       SECBIT_EXEC_RESTRICT_FILE_LOCKED;
-+			has_policy = true;
-+			break;
-+		case 'i':
-+			secbits_new |= SECBIT_EXEC_DENY_INTERACTIVE |
-+				       SECBIT_EXEC_DENY_INTERACTIVE_LOCKED;
-+			has_policy = true;
-+			break;
-+		default:
-+			print_usage(argv[0]);
-+			return 1;
-+		}
-+	}
-+
-+	if (!argv[optind] || !has_policy) {
-+		print_usage(argv[0]);
-+		return 1;
-+	}
-+
-+	if (secbits_cur != secbits_new &&
-+	    prctl(PR_SET_SECUREBITS, secbits_new)) {
-+		perror("Failed to set secure bit(s).");
-+		fprintf(stderr,
-+			"Hint: The running kernel may not support this feature.\n");
-+		return 1;
-+	}
-+
-+	cmd_path = argv[optind];
-+	cmd_argv = argv + optind;
-+	fprintf(stderr, "Executing command...\n");
-+	execvpe(cmd_path, cmd_argv, envp);
-+	fprintf(stderr, "Failed to execute \"%s\": %s\n", cmd_path,
-+		strerror(errno));
-+	return 1;
-+}
--- 
-2.47.0
+The comment should indicate that the system itself is being shut down/reboo=
+ted
+as well.
+
+Mimi
+
+> +	if (ima_measurements_suspended) {
+> +		audit_cause =3D "measurements_suspended";
+> +		audit_info =3D 0;
+> +		result =3D -ENODEV;
+> +		goto out;
+> +	}
+> +
+>  	result =3D ima_add_digest_entry(entry,
+>  				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
+>  	if (result < 0) {
+> @@ -211,6 +229,31 @@ int ima_restore_measurement_entry(struct ima_templat=
+e_entry *entry)
+>  	return result;
+>  }
+> =20
+> +static void ima_measurements_suspend(void)
+> +{
+> +	mutex_lock(&ima_extend_list_mutex);
+> +	ima_measurements_suspended =3D true;
+> +	mutex_unlock(&ima_extend_list_mutex);
+> +}
+> +
+> +static int ima_reboot_notifier(struct notifier_block *nb,
+> +			       unsigned long action,
+> +			       void *data)
+> +{
+> +	ima_measurements_suspend();
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static struct notifier_block ima_reboot_nb =3D {
+> +	.notifier_call =3D ima_reboot_notifier,
+> +};
+> +
+> +void __init ima_init_reboot_notifier(void)
+> +{
+> +	register_reboot_notifier(&ima_reboot_nb);
+> +}
+> +
+>  int __init ima_init_digests(void)
+>  {
+>  	u16 digest_size;
 
 
