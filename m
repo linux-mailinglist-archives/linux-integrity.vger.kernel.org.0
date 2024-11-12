@@ -1,150 +1,82 @@
-Return-Path: <linux-integrity+bounces-4083-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4086-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2C5F9C6209
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 21:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9E69C61CF
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 20:49:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58256B27276
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 16:36:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E690CB873C0
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 18:01:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD006206514;
-	Tue, 12 Nov 2024 16:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4CCC2144DD;
+	Tue, 12 Nov 2024 17:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A++erLGG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uzp8TFWI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D932309BF;
-	Tue, 12 Nov 2024 16:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D0021442E;
+	Tue, 12 Nov 2024 17:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731429371; cv=none; b=BagcUivPoOgXDAFCjie/co6xwgC0U4L8zFnLMhrsu8B1wTWr9JfkJYNb9+ErGSgndzGA7kfzySL3b/a2+vHNB00VvSUm+60Y8rUNSn+JKSjPko9Kb3N8BXSa6VvGhDGZEfIYC+WPuI7AqmG3HhFGIKeXQaDa/d6fabqFKykvSYo=
+	t=1731434262; cv=none; b=bvPVplfK3iVuoIyUjfLA2hxZp3w7giB+4f+2rb97V6b1ZNXBv50vd65YFWd8PbywXkH93aGZxoqOX1Zleh5LrSFxhlMRwiPv5ch110SP6Bldc+0lJn5q5vYy/tMSrNpL2GEZDcmYTrZ5luGekphidcSVBcIEwetfk+wBs6nom9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731429371; c=relaxed/simple;
-	bh=9ZoYAtxk59bGM/XIHyrszcd3j+PhG3oXS4rbt/EjZoQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=ZdpAPrqXo6sQODE7uNhnmsXgrHlSnYP5UI4JTfgGnO9k6E4Cxnu3lMPrzZ4ef67CHlqUkzJQQp1SWQXvg/SzJ7MKLfHwUnqGW1wQc3hpgiR/hwGKNP3gkx6OLrjglpLVD7Dn/UpN++sKilIf48DPQJzOxsApiZWzYbBjHXr0Hzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A++erLGG; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ACFAK8P001109;
-	Tue, 12 Nov 2024 16:36:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=7g5rlVuQ+EnvnyrhwnvqSxB556CU
-	zYtmzbdYIHLZin0=; b=A++erLGGMTbItNWUGA1r4KZErFCgyW3vKiXK5ZYdIZ/F
-	ZkVR5tAVXcYhfgG2W2hoVM4UPsFWenzp8cIsxrYBlKjjXKXgyd/1lxs4nBfxfzO8
-	1m5QTVacZvgz1qt7ucsO/3cToOIWd6bIpZfI4eKwX6TTswc6z5kp6ESVrjEkE7al
-	41EMmKm6kf4gQLMBWWD/z0RcI76wfxq+kdEtB1eOzj0DiqFSlqHl4j6zIGusiLEd
-	FqX9wtTMhmRnJ2VmYqOzFENlwzg0SXIe1jYaTWgnUbGCc8XL2JG4PT8G4B/jFYhu
-	39grtOLfJC6X8/pAJaQHiCOzr1q6ULXAtogkZK88wA==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42v9dv0br5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Nov 2024 16:36:02 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4ACFucsY018059;
-	Tue, 12 Nov 2024 16:36:01 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42tk2mvjka-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Nov 2024 16:36:01 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4ACGa1rF18219702
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 Nov 2024 16:36:01 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3582858063;
-	Tue, 12 Nov 2024 16:36:01 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DE84758056;
-	Tue, 12 Nov 2024 16:36:00 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.167.4])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 12 Nov 2024 16:36:00 +0000 (GMT)
-Message-ID: <da138eda4ad9d96a8e8d1d1cfb9cc5ac380b94cb.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: subsystem fixes for v6.12
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel
- <linux-kernel@vger.kernel.org>,
-        Roberto Sassu
- <roberto.sassu@huaweicloud.com>
-Date: Tue, 12 Nov 2024 11:36:00 -0500
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Domb7dLK_OFCWwq4nrbRWUwy6gO38JFq
-X-Proofpoint-ORIG-GUID: Domb7dLK_OFCWwq4nrbRWUwy6gO38JFq
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1731434262; c=relaxed/simple;
+	bh=1URpfIrCXwUDp20J+85VGQv7B1uElnbl53FjCZonyuU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=tghjhhlh79DypIZNxH7EvsYIR1eyA4EwQvMEdKb6FpBHS6eYX7PCWLFxYEbyqPSeWXd975/JmHg2Ccvouv7hPAOVBiBKvsQT3tlHh4maVJeF7ufVVVD84jX2l+Lre9fmrZZpebKq3ZswBQg0PjppzaILA7p5yD5tle6rL+1wbRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uzp8TFWI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B00DC4CECD;
+	Tue, 12 Nov 2024 17:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731434262;
+	bh=1URpfIrCXwUDp20J+85VGQv7B1uElnbl53FjCZonyuU=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=uzp8TFWIFln5YzU8/cX9CtUrWs5/n5PMJb84/N0vbWt9G2svGTOsIS6sPvrWSf3aU
+	 NRzhnS9uXgiQJpr6qWxBRSt+i0qynR4FxOg6xKI+wZDs2bTEsU3RAp9IcopSU/OCan
+	 Ej97IxAi+iT1N1J/5O0tjEcTzj0cCvyh2cT5RfcKV5s60VDlMtm+/vJTJkGn3k2GUb
+	 5MuuIlMe8zAxOIllEesaN1NwDjEeySr7nZovPNksQUKp4now4Bazi1ffDLtpUA2aw4
+	 hjX8lqRp2oo5M8ptdAJhIcG6AxznFK96TR938ddqFz1f1W93x02NI9gg9+AIq49gF7
+	 IdCmW06ypgxQQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
- lowpriorityscore=0 phishscore=0 bulkscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2411120133
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 12 Nov 2024 19:57:37 +0200
+Message-Id: <D5KE7X6LMR5Z.AA8PPWDBPQP7@kernel.org>
+Cc: "Roberto Sassu" <roberto.sassu@huawei.com>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] tpm: Opt-in in disable PCR integrity protection
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Mimi Zohar" <zohar@linux.ibm.com>, "James Bottomley"
+ <James.Bottomley@HansenPartnership.com>, <linux-integrity@vger.kernel.org>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>
+X-Mailer: aerc 0.18.2
+References: <20241107095138.78209-1-jarkko@kernel.org>
+ <76d9ae11c339b589a8ec94f010e7439b7ce7d283.camel@HansenPartnership.com>
+ <D5FZT0QPHL0O.231WD6VUHC48X@kernel.org>
+ <10296fd8b0fcbf1d813577ef41738ffea12b70d1.camel@HansenPartnership.com>
+ <dd51366e50de86e8a6002f2f53801c53a9b770f3.camel@linux.ibm.com>
+In-Reply-To: <dd51366e50de86e8a6002f2f53801c53a9b770f3.camel@linux.ibm.com>
 
-Hi Linus,
+On Mon Nov 11, 2024 at 9:53 PM EET, Mimi Zohar wrote:
+> > The original open coded the empty auth append with struct
+> > tpm2_null_auth since it's the only user.  However, since we do have
+> > another user in trusted keys, it might make sense to consolidate.
+>
+> Instead of delaying the current patch from being upstreamed, perhaps this=
+ change
+> can be deferred?
 
-Sorry for the delay in sending these changes.  There's just a couple of cha=
-nges:
-one bug fix, one performance improvement, and the use of static_assert.
+Yes.
 
-- The bug fix addresses "only a cosmetic change" commit, which didn't take =
-into
-account the original 'ima' template definition.
-
-- The performance improvement limits the atomic_read().
-
-thanks,
-
-Mimi
-
-The following changes since commit 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b:
-
-  Linux 6.12-rc2 (2024-10-06 15:32:27 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/
-tags/integrity-v6.12
-
-for you to fetch changes up to 08ae3e5f5fc8edb9bd0c7ef9696ff29ef18b26ef:
-
-  integrity: Use static_assert() to check struct sizes (2024-10-09 22:49:40=
- -
-0400)
-
-----------------------------------------------------------------
-integrity-v6.12
-
-----------------------------------------------------------------
-Gustavo A. R. Silva (1):
-      integrity: Use static_assert() to check struct sizes
-
-Mateusz Guzik (1):
-      evm: stop avoidably reading i_writecount in evm_file_release
-
-Samasth Norway Ananda (1):
-      ima: fix buffer overrun in ima_eventdigest_init_common
-
- security/integrity/evm/evm_main.c         |  3 ++-
- security/integrity/ima/ima_template_lib.c | 14 ++++++++++----
- security/integrity/integrity.h            |  4 ++++
- 3 files changed, 16 insertions(+), 5 deletions(-)
-
+BR, Jarkko
 
