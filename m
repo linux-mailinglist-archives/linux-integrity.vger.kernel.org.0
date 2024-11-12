@@ -1,48 +1,48 @@
-Return-Path: <linux-integrity+bounces-4088-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4091-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 937769C614B
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 20:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB7339C6150
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 20:23:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 239541F21C06
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 19:22:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CD8C1F22865
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 19:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7408A218D69;
-	Tue, 12 Nov 2024 19:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A04821D218;
+	Tue, 12 Nov 2024 19:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="0ZNC+N8a"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="JAtIVvuO"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F5A218946
-	for <linux-integrity@vger.kernel.org>; Tue, 12 Nov 2024 19:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41B221CF91
+	for <linux-integrity@vger.kernel.org>; Tue, 12 Nov 2024 19:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731439169; cv=none; b=Qvc+ATvGbN1g3rzb5QJwIg9kWqjoy4Hs1drdmbwWvqNOErGsP/RPhMDMB0I1yYyViu12m9SqeNgQg0GSx2fVKlNOtZ2hPJre8GAvXOtdYjgnYlYMZFqd1vpVBIn1eldfjupcGH53tQqKBn9seMpTUqg01ftdXMrHQLoVqvetUig=
+	t=1731439172; cv=none; b=R+96QcSu+TTbGxvQAU9cY0qZ0/xNWFAyU20cJOs6BqkbHsrHm0LTUFcinPEFeyewYR6prwuBRHOZ8EEiMbiUFu6+onMRHUmilILNvlrt592vhnXSv0iRWuKvfoFkIu+aLsIjpIekxVLXgUcLTwIVM2kkPFtli4tt4EBmG6SqN9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731439169; c=relaxed/simple;
-	bh=ji/vzyUmDrHJ8QjcSw/bA/8JW+pnUvPukMeYWxD3RwE=;
+	s=arc-20240116; t=1731439172; c=relaxed/simple;
+	bh=YFD5FN+7YLa8F3GAqEjBx0mr37qvdEJmwA7HiSOzhGg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=V5TP2nDinH/g8l0ZINrmkHBJBw7cf5CMNwOZn0sor7PAd+ROP3qwSIt00n+3OyEvFdLk6Kbu5Eon5Ge+N76bluNoVdZy2clK8olqf68vt1o8C+4UAAzEDi3QZwcij6+fowKdeqTphsycBsUKLSsWuEilgPEdOsb5/RkqGZMm2wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=0ZNC+N8a; arc=none smtp.client-ip=45.157.188.10
+	 MIME-Version:Content-Type; b=TJdmsy2s1Iubh1D1je1O+6SYwAaRBxz3yVNnNsX5s/x5n4zcvLSV9ZWatp79/4xUtRXFxx4kLBjKfaxP/TsfetI6+yNnrCNxafw9f2lOa3tV6ldfCWyXQ0GoL+V2MGCfpjAeUpsj0EQfmga+33ZX7Wmkgjad2NAfCMofmLmGrMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=JAtIVvuO; arc=none smtp.client-ip=185.125.25.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Xnx6r3sT8zM2j;
-	Tue, 12 Nov 2024 20:19:16 +0100 (CET)
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Xnx725jHrzKMD;
+	Tue, 12 Nov 2024 20:19:26 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1731439156;
-	bh=krXA8v1nXt/SFnhft1+7cc+2GE0q/E3KEtDNCcjdkRw=;
+	s=20191114; t=1731439166;
+	bh=bvTdCc0E+I9qLTspFx/fKqlU6pECXZowjya0LuxzuX8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=0ZNC+N8aVivzWDKK/xunfkDWy3mFiZnzPNixT79HMvYiZOy+2vH+ZarKZyWHKv/AS
-	 LZg1BX7lp4YGz+Q8PKF29dt9W8M8vfb5naSzIh+u2lVUxAQV4RMBen09rmU8GNXPEM
-	 9rHjIrDyU9jhsed5KERzbDNIMgp6Rn+oBLXATuA8=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Xnx6p6KNgz7qR;
-	Tue, 12 Nov 2024 20:19:14 +0100 (CET)
+	b=JAtIVvuOxBUwW5sWpNHARR34tCexPD/ETX9sSo0SAZoG1zMYGu89xiyOxmQ6RE+3N
+	 biPyDE+iPLtCl38lbEUqt2+vf8v0kBiyDXx6AdTvcZIlczfkr+6vL78zCziTGFKmA7
+	 pH5bXVWB4UKs3rvZsiUt0QTzoqc9nSVpD2Wt3q/s=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Xnx712BxTztkh;
+	Tue, 12 Nov 2024 20:19:25 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: Al Viro <viro@zeniv.linux.org.uk>,
 	Christian Brauner <brauner@kernel.org>,
@@ -98,9 +98,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	linux-integrity@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v21 1/6] exec: Add a new AT_EXECVE_CHECK flag to execveat(2)
-Date: Tue, 12 Nov 2024 20:18:53 +0100
-Message-ID: <20241112191858.162021-2-mic@digikod.net>
+Subject: [PATCH v21 6/6] samples/check-exec: Add an enlighten "inc" interpreter and 28 tests
+Date: Tue, 12 Nov 2024 20:18:58 +0100
+Message-ID: <20241112191858.162021-7-mic@digikod.net>
 In-Reply-To: <20241112191858.162021-1-mic@digikod.net>
 References: <20241112191858.162021-1-mic@digikod.net>
 Precedence: bulk
@@ -113,279 +113,644 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Add a new AT_EXECVE_CHECK flag to execveat(2) to check if a file would
-be allowed for execution.  The main use case is for script interpreters
-and dynamic linkers to check execution permission according to the
-kernel's security policy. Another use case is to add context to access
-logs e.g., which script (instead of interpreter) accessed a file.  As
-any executable code, scripts could also use this check [1].
+Add a very simple script interpreter called "inc" that can evaluate two
+different commands (one per line):
+- "?" to initialize a counter from user's input;
+- "+" to increment the counter (which is set to 0 by default).
 
-This is different from faccessat(2) + X_OK which only checks a subset of
-access rights (i.e. inode permission and mount options for regular
-files), but not the full context (e.g. all LSM access checks).  The main
-use case for access(2) is for SUID processes to (partially) check access
-on behalf of their caller.  The main use case for execveat(2) +
-AT_EXECVE_CHECK is to check if a script execution would be allowed,
-according to all the different restrictions in place.  Because the use
-of AT_EXECVE_CHECK follows the exact kernel semantic as for a real
-execution, user space gets the same error codes.
+It is enlighten to only interpret executable files according to
+AT_EXECVE_CHECK and the related securebits:
 
-An interesting point of using execveat(2) instead of openat2(2) is that
-it decouples the check from the enforcement.  Indeed, the security check
-can be logged (e.g. with audit) without blocking an execution
-environment not yet ready to enforce a strict security policy.
+  # Executing a script with RESTRICT_FILE is only allowed if the script
+  # is executable:
+  ./set-exec -f -- ./inc script-exec.inc # Allowed
+  ./set-exec -f -- ./inc script-noexec.inc # Denied
 
-LSMs can control or log execution requests with
-security_bprm_creds_for_exec().  However, to enforce a consistent and
-complete access control (e.g. on binary's dependencies) LSMs should
-restrict file executability, or mesure executed files, with
-security_file_open() by checking file->f_flags & __FMODE_EXEC.
+  # Executing stdin with DENY_INTERACTIVE is only allowed if stdin is an
+  # executable regular file:
+  ./set-exec -i -- ./inc -i < script-exec.inc # Allowed
+  ./set-exec -i -- ./inc -i < script-noexec.inc # Denied
 
-Because AT_EXECVE_CHECK is dedicated to user space interpreters, it
-doesn't make sense for the kernel to parse the checked files, look for
-interpreters known to the kernel (e.g. ELF, shebang), and return ENOEXEC
-if the format is unknown.  Because of that, security_bprm_check() is
-never called when AT_EXECVE_CHECK is used.
+  # However, a pipe is not executable and it is then denied:
+  cat script-noexec.inc | ./set-exec -i -- ./inc -i # Denied
 
-It should be noted that script interpreters cannot directly use
-execveat(2) (without this new AT_EXECVE_CHECK flag) because this could
-lead to unexpected behaviors e.g., `python script.sh` could lead to Bash
-being executed to interpret the script.  Unlike the kernel, script
-interpreters may just interpret the shebang as a simple comment, which
-should not change for backward compatibility reasons.
+  # Executing raw data (e.g. command argument) with DENY_INTERACTIVE is
+  # always denied.
+  ./set-exec -i -- ./inc -c "+" # Denied
+  ./inc -c "$(<script-ask.inc)" # Allowed
 
-Because scripts or libraries files might not currently have the
-executable permission set, or because we might want specific users to be
-allowed to run arbitrary scripts, the following patch provides a dynamic
-configuration mechanism with the SECBIT_EXEC_RESTRICT_FILE and
-SECBIT_EXEC_DENY_INTERACTIVE securebits.
+  # To directly execute a script, we can update $PATH (used by `env`):
+  PATH="${PATH}:." ./script-exec.inc
 
-This is a redesign of the CLIP OS 4's O_MAYEXEC:
-https://github.com/clipos-archive/src_platform_clip-patches/blob/f5cb330d6b684752e403b4e41b39f7004d88e561/1901_open_mayexec.patch
-This patch has been used for more than a decade with customized script
-interpreters.  Some examples can be found here:
-https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+  # To execute several commands passed as argument:
+
+Add a complete test suite to check the script interpreter against all
+possible execution cases:
+
+  make TARGETS=exec kselftest-install
+  ./tools/testing/selftests/kselftest_install/run_kselftest.sh
+
+Fix ktap_helpers.sh to gracefully ignore optional argument.
 
 Cc: Al Viro <viro@zeniv.linux.org.uk>
 Cc: Christian Brauner <brauner@kernel.org>
 Cc: Kees Cook <keescook@chromium.org>
 Cc: Paul Moore <paul@paul-moore.com>
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
-Link: https://docs.python.org/3/library/io.html#io.open_code [1]
+Cc: Serge Hallyn <serge@hallyn.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20241112191858.162021-2-mic@digikod.net
+Link: https://lore.kernel.org/r/20241112191858.162021-7-mic@digikod.net
 ---
 
 Changes since v20:
-* Rename AT_CHECK to AT_EXECVE_CHECK, requested by Amir Goldstein and
-  Serge Hallyn.
-* Move the UAPI documentation to a dedicated RST file.
-* Add Reviewed-by: Serge Hallyn
+* Rename AT_CHECK to AT_EXECVE_CHECK.
 
 Changes since v19:
-* Remove mention of "role transition" as suggested by Andy.
-* Highlight the difference between security_bprm_creds_for_exec() and
-  the __FMODE_EXEC check for LSMs (in commit message and LSM's hooks) as
-  discussed with Jeff.
-* Improve documentation both in UAPI comments and kernel comments
-  (requested by Kees).
-
-New design since v18:
-https://lore.kernel.org/r/20220104155024.48023-3-mic@digikod.net
+* New patch.
 ---
- Documentation/userspace-api/check_exec.rst | 34 ++++++++++++++++++++++
- Documentation/userspace-api/index.rst      |  1 +
- fs/exec.c                                  | 20 +++++++++++--
- include/linux/binfmts.h                    |  7 ++++-
- include/uapi/linux/fcntl.h                 |  4 +++
- kernel/audit.h                             |  1 +
- kernel/auditsc.c                           |  1 +
- security/security.c                        | 10 +++++++
- 8 files changed, 75 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/userspace-api/check_exec.rst
+ samples/Kconfig                               |   4 +-
+ samples/check-exec/.gitignore                 |   1 +
+ samples/check-exec/Makefile                   |   1 +
+ samples/check-exec/inc.c                      | 205 ++++++++++++++++++
+ samples/check-exec/run-script-ask.inc         |   8 +
+ samples/check-exec/script-ask.inc             |   4 +
+ samples/check-exec/script-exec.inc            |   3 +
+ samples/check-exec/script-noexec.inc          |   3 +
+ tools/testing/selftests/exec/.gitignore       |   2 +
+ tools/testing/selftests/exec/Makefile         |  14 +-
+ .../selftests/exec/check-exec-tests.sh        | 205 ++++++++++++++++++
+ .../selftests/kselftest/ktap_helpers.sh       |   2 +-
+ 12 files changed, 448 insertions(+), 4 deletions(-)
+ create mode 100644 samples/check-exec/inc.c
+ create mode 100755 samples/check-exec/run-script-ask.inc
+ create mode 100755 samples/check-exec/script-ask.inc
+ create mode 100755 samples/check-exec/script-exec.inc
+ create mode 100644 samples/check-exec/script-noexec.inc
+ create mode 100755 tools/testing/selftests/exec/check-exec-tests.sh
 
-diff --git a/Documentation/userspace-api/check_exec.rst b/Documentation/userspace-api/check_exec.rst
+diff --git a/samples/Kconfig b/samples/Kconfig
+index efa28ceadc42..84a9d4e8d947 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -296,7 +296,9 @@ config SAMPLE_CHECK_EXEC
+ 	depends on CC_CAN_LINK && HEADERS_INSTALL
+ 	help
+ 	  Build a tool to easily configure SECBIT_EXEC_RESTRICT_FILE and
+-	  SECBIT_EXEC_DENY_INTERACTIVE.
++	  SECBIT_EXEC_DENY_INTERACTIVE, and a simple script interpreter to
++	  demonstrate how they should be used with execveat(2) +
++	  AT_EXECVE_CHECK.
+ 
+ source "samples/rust/Kconfig"
+ 
+diff --git a/samples/check-exec/.gitignore b/samples/check-exec/.gitignore
+index 3f8119112ccf..cd759a19dacd 100644
+--- a/samples/check-exec/.gitignore
++++ b/samples/check-exec/.gitignore
+@@ -1 +1,2 @@
++/inc
+ /set-exec
+diff --git a/samples/check-exec/Makefile b/samples/check-exec/Makefile
+index d9f976e3ff98..c4f08ad0f8e3 100644
+--- a/samples/check-exec/Makefile
++++ b/samples/check-exec/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: BSD-3-Clause
+ 
+ userprogs-always-y := \
++	inc \
+ 	set-exec
+ 
+ userccflags += -I usr/include
+diff --git a/samples/check-exec/inc.c b/samples/check-exec/inc.c
 new file mode 100644
-index 000000000000..ad1aeaa5f6c0
+index 000000000000..94b87569d2a2
 --- /dev/null
-+++ b/Documentation/userspace-api/check_exec.rst
-@@ -0,0 +1,34 @@
-+===================
-+Executability check
-+===================
++++ b/samples/check-exec/inc.c
+@@ -0,0 +1,205 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Very simple script interpreter that can evaluate two different commands (one
++ * per line):
++ * - "?" to initialize a counter from user's input;
++ * - "+" to increment the counter (which is set to 0 by default).
++ *
++ * See tools/testing/selftests/exec/check-exec-tests.sh and
++ * Documentation/userspace-api/check_exec.rst
++ *
++ * Copyright © 2024 Microsoft Corporation
++ */
 +
-+AT_EXECVE_CHECK
-+===============
++#define _GNU_SOURCE
++#include <errno.h>
++#include <linux/fcntl.h>
++#include <linux/prctl.h>
++#include <linux/securebits.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/prctl.h>
++#include <unistd.h>
 +
-+Passing the ``AT_EXECVE_CHECK`` flag to :manpage:`execveat(2)` only performs a
-+check on a regular file and returns 0 if execution of this file would be
-+allowed, ignoring the file format and then the related interpreter dependencies
-+(e.g. ELF libraries, script's shebang).
++/* Returns 1 on error, 0 otherwise. */
++static int interpret_buffer(char *buffer, size_t buffer_size)
++{
++	char *line, *saveptr = NULL;
++	long long number = 0;
 +
-+Programs should always perform this check to apply kernel-level checks against
-+files that are not directly executed by the kernel but passed to a user space
-+interpreter instead.  All files that contain executable code, from the point of
-+view of the interpreter, should be checked.  However the result of this check
-+should only be enforced according to ``SECBIT_EXEC_RESTRICT_FILE`` or
-+``SECBIT_EXEC_DENY_INTERACTIVE.``.
++	/* Each command is the first character of a line. */
++	saveptr = NULL;
++	line = strtok_r(buffer, "\n", &saveptr);
++	while (line) {
++		if (*line != '#' && strlen(line) != 1) {
++			fprintf(stderr, "# ERROR: Unknown string\n");
++			return 1;
++		}
++		switch (*line) {
++		case '#':
++			/* Skips shebang and comments. */
++			break;
++		case '+':
++			/* Increments and prints the number. */
++			number++;
++			printf("%lld\n", number);
++			break;
++		case '?':
++			/* Reads integer from stdin. */
++			fprintf(stderr, "> Enter new number: \n");
++			if (scanf("%lld", &number) != 1) {
++				fprintf(stderr,
++					"# WARNING: Failed to read number from stdin\n");
++			}
++			break;
++		default:
++			fprintf(stderr, "# ERROR: Unknown character '%c'\n",
++				*line);
++			return 1;
++		}
++		line = strtok_r(NULL, "\n", &saveptr);
++	}
++	return 0;
++}
 +
-+The main purpose of this flag is to improve the security and consistency of an
-+execution environment to ensure that direct file execution (e.g.
-+``./script.sh``) and indirect file execution (e.g. ``sh script.sh``) lead to
-+the same result.  For instance, this can be used to check if a file is
-+trustworthy according to the caller's environment.
++/* Returns 1 on error, 0 otherwise. */
++static int interpret_stream(FILE *script, char *const script_name,
++			    char *const *const envp, const bool restrict_stream)
++{
++	int err;
++	char *const script_argv[] = { script_name, NULL };
++	char buf[128] = {};
++	size_t buf_size = sizeof(buf);
 +
-+In a secure environment, libraries and any executable dependencies should also
-+be checked.  For instance, dynamic linking should make sure that all libraries
-+are allowed for execution to avoid trivial bypass (e.g. using ``LD_PRELOAD``).
-+For such secure execution environment to make sense, only trusted code should
-+be executable, which also requires integrity guarantees.
-+
-+To avoid race conditions leading to time-of-check to time-of-use issues,
-+``AT_EXECVE_CHECK`` should be used with ``AT_EMPTY_PATH`` to check against a
-+file descriptor instead of a path.
-diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
-index 274cc7546efc..6272bcf11296 100644
---- a/Documentation/userspace-api/index.rst
-+++ b/Documentation/userspace-api/index.rst
-@@ -35,6 +35,7 @@ Security-related interfaces
-    mfd_noexec
-    spec_ctrl
-    tee
-+   check_exec
- 
- Devices and I/O
- ===============
-diff --git a/fs/exec.c b/fs/exec.c
-index 6c53920795c2..bb83b6a39530 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -891,7 +891,8 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
- 		.lookup_flags = LOOKUP_FOLLOW,
- 	};
- 
--	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-+	if ((flags &
-+	     ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_EXECVE_CHECK)) != 0)
- 		return ERR_PTR(-EINVAL);
- 	if (flags & AT_SYMLINK_NOFOLLOW)
- 		open_exec_flags.lookup_flags &= ~LOOKUP_FOLLOW;
-@@ -1545,6 +1546,21 @@ static struct linux_binprm *alloc_bprm(int fd, struct filename *filename, int fl
- 	}
- 	bprm->interp = bprm->filename;
- 
 +	/*
-+	 * At this point, security_file_open() has already been called (with
-+	 * __FMODE_EXEC) and access control checks for AT_EXECVE_CHECK will
-+	 * stop just after the security_bprm_creds_for_exec() call in
-+	 * bprm_execve().  Indeed, the kernel should not try to parse the
-+	 * content of the file with exec_binprm() nor change the calling
-+	 * thread, which means that the following security functions will be
-+	 * not called:
-+	 * - security_bprm_check()
-+	 * - security_bprm_creds_from_file()
-+	 * - security_bprm_committing_creds()
-+	 * - security_bprm_committed_creds()
++	 * We pass a valid argv and envp to the kernel to emulate a native
++	 * script execution.  We must use the script file descriptor instead of
++	 * the script path name to avoid race conditions.
 +	 */
-+	bprm->is_check = !!(flags & AT_EXECVE_CHECK);
++	err = execveat(fileno(script), "", script_argv, envp,
++		       AT_EMPTY_PATH | AT_EXECVE_CHECK);
++	if (err && restrict_stream) {
++		perror("ERROR: Script execution check");
++		return 1;
++	}
 +
- 	retval = bprm_mm_init(bprm);
- 	if (!retval)
- 		return bprm;
-@@ -1839,7 +1855,7 @@ static int bprm_execve(struct linux_binprm *bprm)
- 
- 	/* Set the unchanging part of bprm->cred */
- 	retval = security_bprm_creds_for_exec(bprm);
--	if (retval)
-+	if (retval || bprm->is_check)
- 		goto out;
- 
- 	retval = exec_binprm(bprm);
-diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
-index e6c00e860951..8ff0eb3644a1 100644
---- a/include/linux/binfmts.h
-+++ b/include/linux/binfmts.h
-@@ -42,7 +42,12 @@ struct linux_binprm {
- 		 * Set when errors can no longer be returned to the
- 		 * original userspace.
- 		 */
--		point_of_no_return:1;
-+		point_of_no_return:1,
++	/* Reads script. */
++	buf_size = fread(buf, 1, buf_size - 1, script);
++	return interpret_buffer(buf, buf_size);
++}
++
++static void print_usage(const char *argv0)
++{
++	fprintf(stderr, "usage: %s <script.inc> | -i | -c <command>\n\n",
++		argv0);
++	fprintf(stderr, "Example:\n");
++	fprintf(stderr, "  ./set-exec -fi -- ./inc -i < script-exec.inc\n");
++}
++
++int main(const int argc, char *const argv[], char *const *const envp)
++{
++	int opt;
++	char *cmd = NULL;
++	char *script_name = NULL;
++	bool interpret_stdin = false;
++	FILE *script_file = NULL;
++	int secbits;
++	bool deny_interactive, restrict_file;
++	size_t arg_nb;
++
++	secbits = prctl(PR_GET_SECUREBITS);
++	if (secbits == -1) {
 +		/*
-+		 * Set by user space to check executability according to the
-+		 * caller's environment.
++		 * This should never happen, except with a buggy seccomp
++		 * filter.
 +		 */
-+		is_check:1;
- 	struct file *executable; /* Executable to pass to the interpreter */
- 	struct file *interpreter;
- 	struct file *file;
-diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
-index 87e2dec79fea..2e87f2e3a79f 100644
---- a/include/uapi/linux/fcntl.h
-+++ b/include/uapi/linux/fcntl.h
-@@ -154,6 +154,10 @@
- 					   usable with open_by_handle_at(2). */
- #define AT_HANDLE_MNT_ID_UNIQUE	0x001	/* Return the u64 unique mount ID. */
- 
-+/* Flags for execveat2(2). */
-+#define AT_EXECVE_CHECK		0x10000	/* Only perform a check if execution
-+					   would be allowed. */
++		perror("ERROR: Failed to get securebits");
++		return 1;
++	}
 +
- #if defined(__KERNEL__)
- #define AT_GETATTR_NOSEC	0x80000000
- #endif
-diff --git a/kernel/audit.h b/kernel/audit.h
-index a60d2840559e..8ebdabd2ab81 100644
---- a/kernel/audit.h
-+++ b/kernel/audit.h
-@@ -197,6 +197,7 @@ struct audit_context {
- 		struct open_how openat2;
- 		struct {
- 			int			argc;
-+			bool			is_check;
- 		} execve;
- 		struct {
- 			char			*name;
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index cd57053b4a69..8d9ba5600cf2 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2662,6 +2662,7 @@ void __audit_bprm(struct linux_binprm *bprm)
++	deny_interactive = !!(secbits & SECBIT_EXEC_DENY_INTERACTIVE);
++	restrict_file = !!(secbits & SECBIT_EXEC_RESTRICT_FILE);
++
++	while ((opt = getopt(argc, argv, "c:i")) != -1) {
++		switch (opt) {
++		case 'c':
++			if (cmd) {
++				fprintf(stderr, "ERROR: Command already set");
++				return 1;
++			}
++			cmd = optarg;
++			break;
++		case 'i':
++			interpret_stdin = true;
++			break;
++		default:
++			print_usage(argv[0]);
++			return 1;
++		}
++	}
++
++	/* Checks that only one argument is used, or read stdin. */
++	arg_nb = !!cmd + !!interpret_stdin;
++	if (arg_nb == 0 && argc == 2) {
++		script_name = argv[1];
++	} else if (arg_nb != 1) {
++		print_usage(argv[0]);
++		return 1;
++	}
++
++	if (cmd) {
++		/*
++		 * Other kind of interactive interpretations should be denied
++		 * as well (e.g. CLI arguments passing script snippets,
++		 * environment variables interpreted as script).  However, any
++		 * way to pass script files should only be restricted according
++		 * to restrict_file.
++		 */
++		if (deny_interactive) {
++			fprintf(stderr,
++				"ERROR: Interactive interpretation denied.\n");
++			return 1;
++		}
++
++		return interpret_buffer(cmd, strlen(cmd));
++	}
++
++	if (interpret_stdin && !script_name) {
++		script_file = stdin;
++		/*
++		 * As for any execve(2) call, this path may be logged by the
++		 * kernel.
++		 */
++		script_name = "/proc/self/fd/0";
++		/*
++		 * When stdin is used, it can point to a regular file or a
++		 * pipe.  Restrict stdin execution according to
++		 * SECBIT_EXEC_DENY_INTERACTIVE but always allow executable
++		 * files (which are not considered as interactive inputs).
++		 */
++		return interpret_stream(script_file, script_name, envp,
++					deny_interactive);
++	} else if (script_name && !interpret_stdin) {
++		/*
++		 * In this sample, we don't pass any argument to scripts, but
++		 * otherwise we would have to forge an argv with such
++		 * arguments.
++		 */
++		script_file = fopen(script_name, "r");
++		if (!script_file) {
++			perror("ERROR: Failed to open script");
++			return 1;
++		}
++		/*
++		 * Restricts file execution according to
++		 * SECBIT_EXEC_RESTRICT_FILE.
++		 */
++		return interpret_stream(script_file, script_name, envp,
++					restrict_file);
++	}
++
++	print_usage(argv[0]);
++	return 1;
++}
+diff --git a/samples/check-exec/run-script-ask.inc b/samples/check-exec/run-script-ask.inc
+new file mode 100755
+index 000000000000..3ea3e15fbd5a
+--- /dev/null
++++ b/samples/check-exec/run-script-ask.inc
+@@ -0,0 +1,8 @@
++#!/usr/bin/env sh
++
++DIR="$(dirname -- "$0")"
++
++PATH="${PATH}:${DIR}"
++
++set -x
++"${DIR}/script-ask.inc"
+diff --git a/samples/check-exec/script-ask.inc b/samples/check-exec/script-ask.inc
+new file mode 100755
+index 000000000000..f48252ab07c1
+--- /dev/null
++++ b/samples/check-exec/script-ask.inc
+@@ -0,0 +1,4 @@
++#!/usr/bin/env inc
++
++?
+++
+diff --git a/samples/check-exec/script-exec.inc b/samples/check-exec/script-exec.inc
+new file mode 100755
+index 000000000000..525e958e1c20
+--- /dev/null
++++ b/samples/check-exec/script-exec.inc
+@@ -0,0 +1,3 @@
++#!/usr/bin/env inc
++
+++
+diff --git a/samples/check-exec/script-noexec.inc b/samples/check-exec/script-noexec.inc
+new file mode 100644
+index 000000000000..525e958e1c20
+--- /dev/null
++++ b/samples/check-exec/script-noexec.inc
+@@ -0,0 +1,3 @@
++#!/usr/bin/env inc
++
+++
+diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
+index a32c63bb4df1..7f3d1ae762ec 100644
+--- a/tools/testing/selftests/exec/.gitignore
++++ b/tools/testing/selftests/exec/.gitignore
+@@ -11,9 +11,11 @@ non-regular
+ null-argv
+ /check-exec
+ /false
++/inc
+ /load_address.*
+ !load_address.c
+ /recursion-depth
++/set-exec
+ xxxxxxxx*
+ pipe
+ S_I*.test
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index 8713d1c862ae..45a3cfc435cf 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -10,9 +10,9 @@ ALIGN_PIES        := $(patsubst %,load_address.%,$(ALIGNS))
+ ALIGN_STATIC_PIES := $(patsubst %,load_address.static.%,$(ALIGNS))
+ ALIGNMENT_TESTS   := $(ALIGN_PIES) $(ALIGN_STATIC_PIES)
  
- 	context->type = AUDIT_EXECVE;
- 	context->execve.argc = bprm->argc;
-+	context->execve.is_check = bprm->is_check;
- }
+-TEST_PROGS := binfmt_script.py
++TEST_PROGS := binfmt_script.py check-exec-tests.sh
+ TEST_GEN_PROGS := execveat non-regular $(ALIGNMENT_TESTS)
+-TEST_GEN_PROGS_EXTENDED := false
++TEST_GEN_PROGS_EXTENDED := false inc set-exec script-exec.inc script-noexec.inc
+ TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+ # Makefile is a run-time dependency, since it's accessed by the execveat test
+ TEST_FILES := Makefile
+@@ -26,6 +26,8 @@ EXTRA_CLEAN := $(OUTPUT)/subdir.moved $(OUTPUT)/execveat.moved $(OUTPUT)/xxxxx*
  
+ include ../lib.mk
  
-diff --git a/security/security.c b/security/security.c
-index c5981e558bc2..456361ec249d 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1249,6 +1249,12 @@ int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
-  * to 1 if AT_SECURE should be set to request libc enable secure mode.  @bprm
-  * contains the linux_binprm structure.
-  *
-+ * If execveat(2) is called with the AT_EXECVE_CHECK flag, bprm->is_check is
-+ * set.  The result must be the same as without this flag even if the execution
-+ * will never really happen and @bprm will always be dropped.
-+ *
-+ * This hook must not change current->cred, only @bprm->cred.
-+ *
-  * Return: Returns 0 if the hook is successful and permission is granted.
-  */
- int security_bprm_creds_for_exec(struct linux_binprm *bprm)
-@@ -3100,6 +3106,10 @@ int security_file_receive(struct file *file)
-  * Save open-time permission checking state for later use upon file_permission,
-  * and recheck access if anything has changed since inode_permission.
-  *
-+ * We can check if a file is opened for execution (e.g. execve(2) call), either
-+ * directly or indirectly (e.g. ELF's ld.so) by checking file->f_flags &
-+ * __FMODE_EXEC .
-+ *
-  * Return: Returns 0 if permission is granted.
-  */
- int security_file_open(struct file *file)
++CHECK_EXEC_SAMPLES := $(top_srcdir)/samples/check-exec
++
+ $(OUTPUT)/subdir:
+ 	mkdir -p $@
+ $(OUTPUT)/script: Makefile
+@@ -45,3 +47,11 @@ $(OUTPUT)/load_address.static.0x%: load_address.c
+ 		-fPIE -static-pie $< -o $@
+ $(OUTPUT)/false: false.c
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -static $< -o $@
++$(OUTPUT)/inc: $(CHECK_EXEC_SAMPLES)/inc.c
++	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
++$(OUTPUT)/set-exec: $(CHECK_EXEC_SAMPLES)/set-exec.c
++	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
++$(OUTPUT)/script-exec.inc: $(CHECK_EXEC_SAMPLES)/script-exec.inc
++	cp $< $@
++$(OUTPUT)/script-noexec.inc: $(CHECK_EXEC_SAMPLES)/script-noexec.inc
++	cp $< $@
+diff --git a/tools/testing/selftests/exec/check-exec-tests.sh b/tools/testing/selftests/exec/check-exec-tests.sh
+new file mode 100755
+index 000000000000..87102906ae3c
+--- /dev/null
++++ b/tools/testing/selftests/exec/check-exec-tests.sh
+@@ -0,0 +1,205 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test the "inc" interpreter.
++#
++# See include/uapi/linux/securebits.h, include/uapi/linux/fcntl.h and
++# samples/check-exec/inc.c
++#
++# Copyright © 2024 Microsoft Corporation
++
++set -u -e -o pipefail
++
++EXPECTED_OUTPUT="1"
++exec 2>/dev/null
++
++DIR="$(dirname $(readlink -f "$0"))"
++source "${DIR}"/../kselftest/ktap_helpers.sh
++
++exec_direct() {
++	local expect="$1"
++	local script="$2"
++	shift 2
++	local ret=0
++	local out
++
++	# Updates PATH for `env` to execute the `inc` interpreter.
++	out="$(PATH="." "$@" "${script}")" || ret=$?
++
++	if [[ ${ret} -ne ${expect} ]]; then
++		echo "ERROR: Wrong expectation for direct file execution: ${ret}"
++		return 1
++	fi
++	if [[ ${ret} -eq 0 && "${out}" != "${EXPECTED_OUTPUT}" ]]; then
++		echo "ERROR: Wrong output for direct file execution: ${out}"
++		return 1
++	fi
++}
++
++exec_indirect() {
++	local expect="$1"
++	local script="$2"
++	shift 2
++	local ret=0
++	local out
++
++	# Script passed as argument.
++	out="$("$@" ./inc "${script}")" || ret=$?
++
++	if [[ ${ret} -ne ${expect} ]]; then
++		echo "ERROR: Wrong expectation for indirect file execution: ${ret}"
++		return 1
++	fi
++	if [[ ${ret} -eq 0 && "${out}" != "${EXPECTED_OUTPUT}" ]]; then
++		echo "ERROR: Wrong output for indirect file execution: ${out}"
++		return 1
++	fi
++}
++
++exec_stdin_reg() {
++	local expect="$1"
++	local script="$2"
++	shift 2
++	local ret=0
++	local out
++
++	# Executing stdin must be allowed if the related file is executable.
++	out="$("$@" ./inc -i < "${script}")" || ret=$?
++
++	if [[ ${ret} -ne ${expect} ]]; then
++		echo "ERROR: Wrong expectation for stdin regular file execution: ${ret}"
++		return 1
++	fi
++	if [[ ${ret} -eq 0 && "${out}" != "${EXPECTED_OUTPUT}" ]]; then
++		echo "ERROR: Wrong output for stdin regular file execution: ${out}"
++		return 1
++	fi
++}
++
++exec_stdin_pipe() {
++	local expect="$1"
++	shift
++	local ret=0
++	local out
++
++	# A pipe is not executable.
++	out="$(cat script-exec.inc | "$@" ./inc -i)" || ret=$?
++
++	if [[ ${ret} -ne ${expect} ]]; then
++		echo "ERROR: Wrong expectation for stdin pipe execution: ${ret}"
++		return 1
++	fi
++}
++
++exec_argument() {
++	local expect="$1"
++	local ret=0
++	shift
++	local out
++
++	# Script not coming from a file must not be executed.
++	out="$("$@" ./inc -c "$(< script-exec.inc)")" || ret=$?
++
++	if [[ ${ret} -ne ${expect} ]]; then
++		echo "ERROR: Wrong expectation for arbitrary argument execution: ${ret}"
++		return 1
++	fi
++	if [[ ${ret} -eq 0 && "${out}" != "${EXPECTED_OUTPUT}" ]]; then
++		echo "ERROR: Wrong output for arbitrary argument execution: ${out}"
++		return 1
++	fi
++}
++
++exec_interactive() {
++	exec_stdin_pipe "$@"
++	exec_argument "$@"
++}
++
++ktap_test() {
++	ktap_test_result "$*" "$@"
++}
++
++ktap_print_header
++ktap_set_plan 28
++
++# Without secbit configuration, nothing is changed.
++
++ktap_print_msg "By default, executable scripts are allowed to be interpreted and executed."
++ktap_test exec_direct 0 script-exec.inc
++ktap_test exec_indirect 0 script-exec.inc
++
++ktap_print_msg "By default, executable stdin is allowed to be interpreted."
++ktap_test exec_stdin_reg 0 script-exec.inc
++
++ktap_print_msg "By default, non-executable scripts are allowed to be interpreted, but not directly executed."
++# We get 126 because of direct execution by Bash.
++ktap_test exec_direct 126 script-noexec.inc
++ktap_test exec_indirect 0 script-noexec.inc
++
++ktap_print_msg "By default, non-executable stdin is allowed to be interpreted."
++ktap_test exec_stdin_reg 0 script-noexec.inc
++
++ktap_print_msg "By default, interactive commands are allowed to be interpreted."
++ktap_test exec_interactive 0
++
++# With only file restriction: protect non-malicious users from inadvertent errors (e.g. python ~/Downloads/*.py).
++
++ktap_print_msg "With -f, executable scripts are allowed to be interpreted and executed."
++ktap_test exec_direct 0 script-exec.inc ./set-exec -f --
++ktap_test exec_indirect 0 script-exec.inc ./set-exec -f --
++
++ktap_print_msg "With -f, executable stdin is allowed to be interpreted."
++ktap_test exec_stdin_reg 0 script-exec.inc ./set-exec -f --
++
++ktap_print_msg "With -f, non-executable scripts are not allowed to be executed nor interpreted."
++# Direct execution of non-executable script is alwayse denied by the kernel.
++ktap_test exec_direct 1 script-noexec.inc ./set-exec -f --
++ktap_test exec_indirect 1 script-noexec.inc ./set-exec -f --
++
++ktap_print_msg "With -f, non-executable stdin is allowed to be interpreted."
++ktap_test exec_stdin_reg 0 script-noexec.inc ./set-exec -f --
++
++ktap_print_msg "With -f, interactive commands are allowed to be interpreted."
++ktap_test exec_interactive 0 ./set-exec -f --
++
++# With only denied interactive commands: check or monitor script content (e.g. with LSM).
++
++ktap_print_msg "With -i, executable scripts are allowed to be interpreted and executed."
++ktap_test exec_direct 0 script-exec.inc ./set-exec -i --
++ktap_test exec_indirect 0 script-exec.inc ./set-exec -i --
++
++ktap_print_msg "With -i, executable stdin is allowed to be interpreted."
++ktap_test exec_stdin_reg 0 script-exec.inc ./set-exec -i --
++
++ktap_print_msg "With -i, non-executable scripts are allowed to be interpreted, but not directly executed."
++# Direct execution of non-executable script is alwayse denied by the kernel.
++ktap_test exec_direct 1 script-noexec.inc ./set-exec -i --
++ktap_test exec_indirect 0 script-noexec.inc ./set-exec -i --
++
++ktap_print_msg "With -i, non-executable stdin is not allowed to be interpreted."
++ktap_test exec_stdin_reg 1 script-noexec.inc ./set-exec -i --
++
++ktap_print_msg "With -i, interactive commands are not allowed to be interpreted."
++ktap_test exec_interactive 1 ./set-exec -i --
++
++# With both file restriction and denied interactive commands: only allow executable scripts.
++
++ktap_print_msg "With -fi, executable scripts are allowed to be interpreted and executed."
++ktap_test exec_direct 0 script-exec.inc ./set-exec -fi --
++ktap_test exec_indirect 0 script-exec.inc ./set-exec -fi --
++
++ktap_print_msg "With -fi, executable stdin is allowed to be interpreted."
++ktap_test exec_stdin_reg 0 script-exec.inc ./set-exec -fi --
++
++ktap_print_msg "With -fi, non-executable scripts are not allowed to be interpreted nor executed."
++# Direct execution of non-executable script is alwayse denied by the kernel.
++ktap_test exec_direct 1 script-noexec.inc ./set-exec -fi --
++ktap_test exec_indirect 1 script-noexec.inc ./set-exec -fi --
++
++ktap_print_msg "With -fi, non-executable stdin is not allowed to be interpreted."
++ktap_test exec_stdin_reg 1 script-noexec.inc ./set-exec -fi --
++
++ktap_print_msg "With -fi, interactive commands are not allowed to be interpreted."
++ktap_test exec_interactive 1 ./set-exec -fi --
++
++ktap_finished
+diff --git a/tools/testing/selftests/kselftest/ktap_helpers.sh b/tools/testing/selftests/kselftest/ktap_helpers.sh
+index 79a125eb24c2..14e7f3ec3f84 100644
+--- a/tools/testing/selftests/kselftest/ktap_helpers.sh
++++ b/tools/testing/selftests/kselftest/ktap_helpers.sh
+@@ -40,7 +40,7 @@ ktap_skip_all() {
+ __ktap_test() {
+ 	result="$1"
+ 	description="$2"
+-	directive="$3" # optional
++	directive="${3:-}" # optional
+ 
+ 	local directive_str=
+ 	[ ! -z "$directive" ] && directive_str="# $directive"
 -- 
 2.47.0
 
