@@ -1,215 +1,392 @@
-Return-Path: <linux-integrity+bounces-4087-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4088-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D473B9C5FCD
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 19:02:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 937769C614B
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 20:22:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 950412848C4
-	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 18:02:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 239541F21C06
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Nov 2024 19:22:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEBDD21502B;
-	Tue, 12 Nov 2024 17:59:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7408A218D69;
+	Tue, 12 Nov 2024 19:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="leM9g1tw"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="0ZNC+N8a"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33552144CB;
-	Tue, 12 Nov 2024 17:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F5A218946
+	for <linux-integrity@vger.kernel.org>; Tue, 12 Nov 2024 19:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731434371; cv=none; b=jAHBXFE25VaprCE8LtVhi3E4WsFx3Rk+8bG4LAqZSrJ/dSO71trFS7cKu9R4gPzhBU2oXewvWCaEnGENf0lgEoyzZ9S5rBqWRvmT1uPSpHiU5WWCtFriOpSp+dsfQTK/EmA72xNkJXtlET8qcuOejEyNk72GXPbIunqxzZWahxo=
+	t=1731439169; cv=none; b=Qvc+ATvGbN1g3rzb5QJwIg9kWqjoy4Hs1drdmbwWvqNOErGsP/RPhMDMB0I1yYyViu12m9SqeNgQg0GSx2fVKlNOtZ2hPJre8GAvXOtdYjgnYlYMZFqd1vpVBIn1eldfjupcGH53tQqKBn9seMpTUqg01ftdXMrHQLoVqvetUig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731434371; c=relaxed/simple;
-	bh=wXCw1HCeuSt/vVeQUJWNGdsHcK2BT2IDvmf7fX1EKmM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ntfJQitdmI96APAuRNzZ+xiYhSosxRJLOnwTX1maVyIhAZcdWhDqiLY2t3wu2kgfPi1fWD0TQ36eZ9rvYtLvbuek9xWLHpkiYnRJAo+lc5PuqolV8gx0vKWUUvz48QonhRe2Ko1fkqWfZAAY7FjgomBsNpesJNsPc3PD3gl1Uik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=leM9g1tw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D43EC4CECD;
-	Tue, 12 Nov 2024 17:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731434371;
-	bh=wXCw1HCeuSt/vVeQUJWNGdsHcK2BT2IDvmf7fX1EKmM=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=leM9g1twN2GBlyIEkhw5oxePTDf6OIhpbgPxUbE90/j70yrnA7a0FHWIHPLXj0i9E
-	 +a3pNz/UVENeTyCJEw7+OslTVgDGFUz0818enYl8IJqYHhN9IeFvtzUiZgaf/zCiko
-	 apqazSUwF6UQ0ufWWIIHoATqCBYych5Qn7tUt3/dgsFwfxDqOP2SwcSmpx3HiJzakZ
-	 1o52JHYhLmEaL5W14UwhLPLHjX/LxhRgb8KMdcmIU/GsTv0J6Tz1fbTn1ew+527nfD
-	 WTSPD6uVz6iqcrUPmcE1BP+q471NEJG7eyOcsvwJQ3fe8WOHpNXciLop8ArURwmLlU
-	 hCKHKj/64yYFQ==
+	s=arc-20240116; t=1731439169; c=relaxed/simple;
+	bh=ji/vzyUmDrHJ8QjcSw/bA/8JW+pnUvPukMeYWxD3RwE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V5TP2nDinH/g8l0ZINrmkHBJBw7cf5CMNwOZn0sor7PAd+ROP3qwSIt00n+3OyEvFdLk6Kbu5Eon5Ge+N76bluNoVdZy2clK8olqf68vt1o8C+4UAAzEDi3QZwcij6+fowKdeqTphsycBsUKLSsWuEilgPEdOsb5/RkqGZMm2wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=0ZNC+N8a; arc=none smtp.client-ip=45.157.188.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Xnx6r3sT8zM2j;
+	Tue, 12 Nov 2024 20:19:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1731439156;
+	bh=krXA8v1nXt/SFnhft1+7cc+2GE0q/E3KEtDNCcjdkRw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=0ZNC+N8aVivzWDKK/xunfkDWy3mFiZnzPNixT79HMvYiZOy+2vH+ZarKZyWHKv/AS
+	 LZg1BX7lp4YGz+Q8PKF29dt9W8M8vfb5naSzIh+u2lVUxAQV4RMBen09rmU8GNXPEM
+	 9rHjIrDyU9jhsed5KERzbDNIMgp6Rn+oBLXATuA8=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Xnx6p6KNgz7qR;
+	Tue, 12 Nov 2024 20:19:14 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Serge Hallyn <serge@hallyn.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+	Alejandro Colomar <alx@kernel.org>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Christian Heimes <christian@python.org>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Elliott Hughes <enh@google.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Eric Chiang <ericchiang@google.com>,
+	Fan Wu <wufan@linux.microsoft.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Jan Kara <jack@suse.cz>,
+	Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jordan R Abrahams <ajordanr@google.com>,
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Luca Boccassi <bluca@debian.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Matthew Garrett <mjg59@srcf.ucam.org>,
+	Matthew Wilcox <willy@infradead.org>,
+	Miklos Szeredi <mszeredi@redhat.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
+	Scott Shell <scottsh@microsoft.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Steve Dower <steve.dower@python.org>,
+	Steve Grubb <sgrubb@redhat.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+	Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+	Xiaoming Ni <nixiaoming@huawei.com>,
+	Yin Fengwei <fengwei.yin@intel.com>,
+	kernel-hardening@lists.openwall.com,
+	linux-api@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v21 1/6] exec: Add a new AT_EXECVE_CHECK flag to execveat(2)
+Date: Tue, 12 Nov 2024 20:18:53 +0100
+Message-ID: <20241112191858.162021-2-mic@digikod.net>
+In-Reply-To: <20241112191858.162021-1-mic@digikod.net>
+References: <20241112191858.162021-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 12 Nov 2024 19:59:27 +0200
-Message-Id: <D5KE9BP4M319.2G0BNVFSLUUEX@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, <roberto.sassu@huawei.com>, "Tushar
- Sugandhi" <tusharsu@linux.microsoft.com>
-Subject: Re: [PATCH v2] ima: Suspend PCR extends and log appends when
- rebooting
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Stefan Berger" <stefanb@linux.ibm.com>,
- <linux-integrity@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <zohar@linux.ibm.com>
-X-Mailer: aerc 0.18.2
-References: <20241112165206.756351-1-stefanb@linux.ibm.com>
-In-Reply-To: <20241112165206.756351-1-stefanb@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On Tue Nov 12, 2024 at 6:52 PM EET, Stefan Berger wrote:
-> To avoid the following types of error messages due to a failure by the TP=
-M
-> driver to use the TPM, suspend TPM PCR extensions and the appending of
-> entries to the IMA log once IMA's reboot notifier has been called. This
-> avoids trying to use the TPM after the TPM subsystem has been shut down.
->
-> [111707.685315][    T1] ima: Error Communicating to TPM chip, result: -19
-> [111707.685960][    T1] ima: Error Communicating to TPM chip, result: -19
->
-> This error could be observed on a ppc64 machine running SuSE Linux where
-> processes are still accessing files after devices have been shut down.
->
-> Suspending the IMA log and PCR extensions shortly before reboot does not
-> seem to open a significant measurement gap since neither TPM quoting woul=
-d
-> work for attestation nor that new log entries could be written to anywher=
-e
-> after devices have been shut down. However, there's a time window between
-> the invocation of the reboot notifier and the shutdown of devices in
-> kernel_restart_prepare() where __usermodehelper_disable() waits for all
-> running_helpers to exit. During this time window IMA could now miss log
-> entries even though attestation would still work. The reboot of the syste=
-m
-> shortly after may make this small gap insignificant.
->
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->
-> ---
->  v2:
->   - followed Mimi's suggestions
->
-> ---
->  security/integrity/ima/ima.h       |  1 +
->  security/integrity/ima/ima_init.c  |  2 ++
->  security/integrity/ima/ima_queue.c | 43 ++++++++++++++++++++++++++++++
->  3 files changed, 46 insertions(+)
->
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 3c323ca213d4..3f1a82b7cd71 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -278,6 +278,7 @@ unsigned long ima_get_binary_runtime_size(void);
->  int ima_init_template(void);
->  void ima_init_template_list(void);
->  int __init ima_init_digests(void);
-> +void __init ima_init_reboot_notifier(void);
->  int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event=
-,
->  			  void *lsm_data);
-> =20
-> diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/i=
-ma_init.c
-> index 4e208239a40e..a2f34f2d8ad7 100644
-> --- a/security/integrity/ima/ima_init.c
-> +++ b/security/integrity/ima/ima_init.c
-> @@ -152,6 +152,8 @@ int __init ima_init(void)
-> =20
->  	ima_init_key_queue();
-> =20
-> +	ima_init_reboot_notifier();
-> +
->  	ima_measure_critical_data("kernel_info", "kernel_version",
->  				  UTS_RELEASE, strlen(UTS_RELEASE), false,
->  				  NULL, 0);
-> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/=
-ima_queue.c
-> index 532da87ce519..9b3c9587313f 100644
-> --- a/security/integrity/ima/ima_queue.c
-> +++ b/security/integrity/ima/ima_queue.c
-> @@ -16,6 +16,7 @@
->   */
-> =20
->  #include <linux/rculist.h>
-> +#include <linux/reboot.h>
->  #include <linux/slab.h>
->  #include "ima.h"
-> =20
-> @@ -44,6 +45,12 @@ struct ima_h_table ima_htable =3D {
->   */
->  static DEFINE_MUTEX(ima_extend_list_mutex);
-> =20
-> +/*
-> + * Used internally by the kernel to suspend measurements.
-> + * Protected by ima_extend_list_mutex.
-> + */
-> +static bool ima_measurements_suspended;
-> +
->  /* lookup up the digest value in the hash table, and return the entry */
->  static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
->  						       int pcr)
-> @@ -176,6 +183,17 @@ int ima_add_template_entry(struct ima_template_entry=
- *entry, int violation,
->  		}
->  	}
-> =20
-> +	/*
-> +	 * ima_measurements_suspended will be set before the TPM subsystem has
-> +	 * been shut down.
-> +	 */
-> +	if (ima_measurements_suspended) {
-> +		audit_cause =3D "measurements_suspended";
-> +		audit_info =3D 0;
-> +		result =3D -ENODEV;
-> +		goto out;
-> +	}
-> +
->  	result =3D ima_add_digest_entry(entry,
->  				      !IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE));
->  	if (result < 0) {
-> @@ -211,6 +229,31 @@ int ima_restore_measurement_entry(struct ima_templat=
-e_entry *entry)
->  	return result;
->  }
-> =20
-> +static void ima_measurements_suspend(void)
-> +{
-> +	mutex_lock(&ima_extend_list_mutex);
-> +	ima_measurements_suspended =3D true;
-> +	mutex_unlock(&ima_extend_list_mutex);
-> +}
-> +
-> +static int ima_reboot_notifier(struct notifier_block *nb,
-> +			       unsigned long action,
-> +			       void *data)
-> +{
-> +	ima_measurements_suspend();
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static struct notifier_block ima_reboot_nb =3D {
-> +	.notifier_call =3D ima_reboot_notifier,
-> +};
-> +
-> +void __init ima_init_reboot_notifier(void)
-> +{
-> +	register_reboot_notifier(&ima_reboot_nb);
-> +}
-> +
->  int __init ima_init_digests(void)
->  {
->  	u16 digest_size;
+Add a new AT_EXECVE_CHECK flag to execveat(2) to check if a file would
+be allowed for execution.  The main use case is for script interpreters
+and dynamic linkers to check execution permission according to the
+kernel's security policy. Another use case is to add context to access
+logs e.g., which script (instead of interpreter) accessed a file.  As
+any executable code, scripts could also use this check [1].
 
+This is different from faccessat(2) + X_OK which only checks a subset of
+access rights (i.e. inode permission and mount options for regular
+files), but not the full context (e.g. all LSM access checks).  The main
+use case for access(2) is for SUID processes to (partially) check access
+on behalf of their caller.  The main use case for execveat(2) +
+AT_EXECVE_CHECK is to check if a script execution would be allowed,
+according to all the different restrictions in place.  Because the use
+of AT_EXECVE_CHECK follows the exact kernel semantic as for a real
+execution, user space gets the same error codes.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+An interesting point of using execveat(2) instead of openat2(2) is that
+it decouples the check from the enforcement.  Indeed, the security check
+can be logged (e.g. with audit) without blocking an execution
+environment not yet ready to enforce a strict security policy.
 
-BR, Jarkko
+LSMs can control or log execution requests with
+security_bprm_creds_for_exec().  However, to enforce a consistent and
+complete access control (e.g. on binary's dependencies) LSMs should
+restrict file executability, or mesure executed files, with
+security_file_open() by checking file->f_flags & __FMODE_EXEC.
+
+Because AT_EXECVE_CHECK is dedicated to user space interpreters, it
+doesn't make sense for the kernel to parse the checked files, look for
+interpreters known to the kernel (e.g. ELF, shebang), and return ENOEXEC
+if the format is unknown.  Because of that, security_bprm_check() is
+never called when AT_EXECVE_CHECK is used.
+
+It should be noted that script interpreters cannot directly use
+execveat(2) (without this new AT_EXECVE_CHECK flag) because this could
+lead to unexpected behaviors e.g., `python script.sh` could lead to Bash
+being executed to interpret the script.  Unlike the kernel, script
+interpreters may just interpret the shebang as a simple comment, which
+should not change for backward compatibility reasons.
+
+Because scripts or libraries files might not currently have the
+executable permission set, or because we might want specific users to be
+allowed to run arbitrary scripts, the following patch provides a dynamic
+configuration mechanism with the SECBIT_EXEC_RESTRICT_FILE and
+SECBIT_EXEC_DENY_INTERACTIVE securebits.
+
+This is a redesign of the CLIP OS 4's O_MAYEXEC:
+https://github.com/clipos-archive/src_platform_clip-patches/blob/f5cb330d6b684752e403b4e41b39f7004d88e561/1901_open_mayexec.patch
+This patch has been used for more than a decade with customized script
+interpreters.  Some examples can be found here:
+https://github.com/clipos-archive/clipos4_portage-overlay/search?q=O_MAYEXEC
+
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
+Link: https://docs.python.org/3/library/io.html#io.open_code [1]
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20241112191858.162021-2-mic@digikod.net
+---
+
+Changes since v20:
+* Rename AT_CHECK to AT_EXECVE_CHECK, requested by Amir Goldstein and
+  Serge Hallyn.
+* Move the UAPI documentation to a dedicated RST file.
+* Add Reviewed-by: Serge Hallyn
+
+Changes since v19:
+* Remove mention of "role transition" as suggested by Andy.
+* Highlight the difference between security_bprm_creds_for_exec() and
+  the __FMODE_EXEC check for LSMs (in commit message and LSM's hooks) as
+  discussed with Jeff.
+* Improve documentation both in UAPI comments and kernel comments
+  (requested by Kees).
+
+New design since v18:
+https://lore.kernel.org/r/20220104155024.48023-3-mic@digikod.net
+---
+ Documentation/userspace-api/check_exec.rst | 34 ++++++++++++++++++++++
+ Documentation/userspace-api/index.rst      |  1 +
+ fs/exec.c                                  | 20 +++++++++++--
+ include/linux/binfmts.h                    |  7 ++++-
+ include/uapi/linux/fcntl.h                 |  4 +++
+ kernel/audit.h                             |  1 +
+ kernel/auditsc.c                           |  1 +
+ security/security.c                        | 10 +++++++
+ 8 files changed, 75 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/userspace-api/check_exec.rst
+
+diff --git a/Documentation/userspace-api/check_exec.rst b/Documentation/userspace-api/check_exec.rst
+new file mode 100644
+index 000000000000..ad1aeaa5f6c0
+--- /dev/null
++++ b/Documentation/userspace-api/check_exec.rst
+@@ -0,0 +1,34 @@
++===================
++Executability check
++===================
++
++AT_EXECVE_CHECK
++===============
++
++Passing the ``AT_EXECVE_CHECK`` flag to :manpage:`execveat(2)` only performs a
++check on a regular file and returns 0 if execution of this file would be
++allowed, ignoring the file format and then the related interpreter dependencies
++(e.g. ELF libraries, script's shebang).
++
++Programs should always perform this check to apply kernel-level checks against
++files that are not directly executed by the kernel but passed to a user space
++interpreter instead.  All files that contain executable code, from the point of
++view of the interpreter, should be checked.  However the result of this check
++should only be enforced according to ``SECBIT_EXEC_RESTRICT_FILE`` or
++``SECBIT_EXEC_DENY_INTERACTIVE.``.
++
++The main purpose of this flag is to improve the security and consistency of an
++execution environment to ensure that direct file execution (e.g.
++``./script.sh``) and indirect file execution (e.g. ``sh script.sh``) lead to
++the same result.  For instance, this can be used to check if a file is
++trustworthy according to the caller's environment.
++
++In a secure environment, libraries and any executable dependencies should also
++be checked.  For instance, dynamic linking should make sure that all libraries
++are allowed for execution to avoid trivial bypass (e.g. using ``LD_PRELOAD``).
++For such secure execution environment to make sense, only trusted code should
++be executable, which also requires integrity guarantees.
++
++To avoid race conditions leading to time-of-check to time-of-use issues,
++``AT_EXECVE_CHECK`` should be used with ``AT_EMPTY_PATH`` to check against a
++file descriptor instead of a path.
+diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
+index 274cc7546efc..6272bcf11296 100644
+--- a/Documentation/userspace-api/index.rst
++++ b/Documentation/userspace-api/index.rst
+@@ -35,6 +35,7 @@ Security-related interfaces
+    mfd_noexec
+    spec_ctrl
+    tee
++   check_exec
+ 
+ Devices and I/O
+ ===============
+diff --git a/fs/exec.c b/fs/exec.c
+index 6c53920795c2..bb83b6a39530 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -891,7 +891,8 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
+ 		.lookup_flags = LOOKUP_FOLLOW,
+ 	};
+ 
+-	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
++	if ((flags &
++	     ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_EXECVE_CHECK)) != 0)
+ 		return ERR_PTR(-EINVAL);
+ 	if (flags & AT_SYMLINK_NOFOLLOW)
+ 		open_exec_flags.lookup_flags &= ~LOOKUP_FOLLOW;
+@@ -1545,6 +1546,21 @@ static struct linux_binprm *alloc_bprm(int fd, struct filename *filename, int fl
+ 	}
+ 	bprm->interp = bprm->filename;
+ 
++	/*
++	 * At this point, security_file_open() has already been called (with
++	 * __FMODE_EXEC) and access control checks for AT_EXECVE_CHECK will
++	 * stop just after the security_bprm_creds_for_exec() call in
++	 * bprm_execve().  Indeed, the kernel should not try to parse the
++	 * content of the file with exec_binprm() nor change the calling
++	 * thread, which means that the following security functions will be
++	 * not called:
++	 * - security_bprm_check()
++	 * - security_bprm_creds_from_file()
++	 * - security_bprm_committing_creds()
++	 * - security_bprm_committed_creds()
++	 */
++	bprm->is_check = !!(flags & AT_EXECVE_CHECK);
++
+ 	retval = bprm_mm_init(bprm);
+ 	if (!retval)
+ 		return bprm;
+@@ -1839,7 +1855,7 @@ static int bprm_execve(struct linux_binprm *bprm)
+ 
+ 	/* Set the unchanging part of bprm->cred */
+ 	retval = security_bprm_creds_for_exec(bprm);
+-	if (retval)
++	if (retval || bprm->is_check)
+ 		goto out;
+ 
+ 	retval = exec_binprm(bprm);
+diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+index e6c00e860951..8ff0eb3644a1 100644
+--- a/include/linux/binfmts.h
++++ b/include/linux/binfmts.h
+@@ -42,7 +42,12 @@ struct linux_binprm {
+ 		 * Set when errors can no longer be returned to the
+ 		 * original userspace.
+ 		 */
+-		point_of_no_return:1;
++		point_of_no_return:1,
++		/*
++		 * Set by user space to check executability according to the
++		 * caller's environment.
++		 */
++		is_check:1;
+ 	struct file *executable; /* Executable to pass to the interpreter */
+ 	struct file *interpreter;
+ 	struct file *file;
+diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+index 87e2dec79fea..2e87f2e3a79f 100644
+--- a/include/uapi/linux/fcntl.h
++++ b/include/uapi/linux/fcntl.h
+@@ -154,6 +154,10 @@
+ 					   usable with open_by_handle_at(2). */
+ #define AT_HANDLE_MNT_ID_UNIQUE	0x001	/* Return the u64 unique mount ID. */
+ 
++/* Flags for execveat2(2). */
++#define AT_EXECVE_CHECK		0x10000	/* Only perform a check if execution
++					   would be allowed. */
++
+ #if defined(__KERNEL__)
+ #define AT_GETATTR_NOSEC	0x80000000
+ #endif
+diff --git a/kernel/audit.h b/kernel/audit.h
+index a60d2840559e..8ebdabd2ab81 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -197,6 +197,7 @@ struct audit_context {
+ 		struct open_how openat2;
+ 		struct {
+ 			int			argc;
++			bool			is_check;
+ 		} execve;
+ 		struct {
+ 			char			*name;
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index cd57053b4a69..8d9ba5600cf2 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2662,6 +2662,7 @@ void __audit_bprm(struct linux_binprm *bprm)
+ 
+ 	context->type = AUDIT_EXECVE;
+ 	context->execve.argc = bprm->argc;
++	context->execve.is_check = bprm->is_check;
+ }
+ 
+ 
+diff --git a/security/security.c b/security/security.c
+index c5981e558bc2..456361ec249d 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1249,6 +1249,12 @@ int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
+  * to 1 if AT_SECURE should be set to request libc enable secure mode.  @bprm
+  * contains the linux_binprm structure.
+  *
++ * If execveat(2) is called with the AT_EXECVE_CHECK flag, bprm->is_check is
++ * set.  The result must be the same as without this flag even if the execution
++ * will never really happen and @bprm will always be dropped.
++ *
++ * This hook must not change current->cred, only @bprm->cred.
++ *
+  * Return: Returns 0 if the hook is successful and permission is granted.
+  */
+ int security_bprm_creds_for_exec(struct linux_binprm *bprm)
+@@ -3100,6 +3106,10 @@ int security_file_receive(struct file *file)
+  * Save open-time permission checking state for later use upon file_permission,
+  * and recheck access if anything has changed since inode_permission.
+  *
++ * We can check if a file is opened for execution (e.g. execve(2) call), either
++ * directly or indirectly (e.g. ELF's ld.so) by checking file->f_flags &
++ * __FMODE_EXEC .
++ *
+  * Return: Returns 0 if permission is granted.
+  */
+ int security_file_open(struct file *file)
+-- 
+2.47.0
+
 
