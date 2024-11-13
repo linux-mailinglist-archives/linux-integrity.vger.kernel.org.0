@@ -1,75 +1,66 @@
-Return-Path: <linux-integrity+bounces-4107-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4108-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C52E29C7ACF
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Nov 2024 19:14:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E05CE9C7B72
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Nov 2024 19:45:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8918128B8E7
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 Nov 2024 18:14:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D818C1F22020
+	for <lists+linux-integrity@lfdr.de>; Wed, 13 Nov 2024 18:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 495FA202F80;
-	Wed, 13 Nov 2024 18:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1F3F2038B8;
+	Wed, 13 Nov 2024 18:44:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="Q7NgK5hT";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="Q7NgK5hT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMzIN0Ai"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5617D13CFBD
-	for <linux-integrity@vger.kernel.org>; Wed, 13 Nov 2024 18:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CB120125C;
+	Wed, 13 Nov 2024 18:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731521579; cv=none; b=tx8NQZWhYk1b8MS0cF8/s/KUddRM3Ugf1QaP2iCkuZKNkVEQPdoC+PArPLpSe5839DqhOCg1n+z+RePnX9aoiwK9vteSPuWxQZHC96XUnqyJe/bGg0iKWazE/92XM4QYmob+s7lfus4ZNHa+9eIjskXFGrdeSAPDFTDMKWxW+kk=
+	t=1731523495; cv=none; b=XsEl2K0QrzHMb9v7vqGp7K5FQSfe7WougIrJnS53bcy0tbBpTtvclkbXNY2Lfl1u4Wqes+RSzN46uEy61p6UtJAFOJBPJ0eaE4ZdeRSVRHpythKBgr8pNm2vnBLKwxlVa7EIQ6mzlLybtCxaF5Bw/OohaN3DzpxdnZ9YX3Q8+HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731521579; c=relaxed/simple;
-	bh=DO4v255/lB8S5OtMlDk2fKw2CtihxhflQjmaKeMSAxg=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HC72oWSJQUMDgfhc0/EKZed9KiXw9GS+DTaoDbrcCe5lw5hCNLyXbgnqE+IdZpzpAZBaWPuNU7xE36BZAH3YfGyB+QPag0ikbBuyPjZscJE5SVo0vfYHuatUQVAZetGmMYOOIHY/nNijF8GFNd1Ze//yvBsZII5VO2H201p62IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=Q7NgK5hT; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=Q7NgK5hT; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1731521576;
-	bh=DO4v255/lB8S5OtMlDk2fKw2CtihxhflQjmaKeMSAxg=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=Q7NgK5hTNlLYhyZYIsSyr/z4vae6KBipOuhCMkRwW1hzn/L0G9FJBzM83cu5LQqkY
-	 WNvN57HIydq3awHGNmUI0nH0YatiEDeZyH7kYfH4eHt/NqO2H1xV0jNqug2nnc3jQ5
-	 9aP0qtM4Zyd4ntxbHmWdNgS7zgOc1cdOHpdYoip0=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6BA391285F82;
-	Wed, 13 Nov 2024 13:12:56 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id VcTbQnrehrxG; Wed, 13 Nov 2024 13:12:56 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1731521576;
-	bh=DO4v255/lB8S5OtMlDk2fKw2CtihxhflQjmaKeMSAxg=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=Q7NgK5hTNlLYhyZYIsSyr/z4vae6KBipOuhCMkRwW1hzn/L0G9FJBzM83cu5LQqkY
-	 WNvN57HIydq3awHGNmUI0nH0YatiEDeZyH7kYfH4eHt/NqO2H1xV0jNqug2nnc3jQ5
-	 9aP0qtM4Zyd4ntxbHmWdNgS7zgOc1cdOHpdYoip0=
-Received: from [10.106.168.49] (unknown [167.220.104.49])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 269911281B1B;
-	Wed, 13 Nov 2024 13:12:56 -0500 (EST)
-Message-ID: <89542959611252d64572ffad438f48b4f54131f0.camel@HansenPartnership.com>
-Subject: Re: regression: kernel log "flooded" with tpm tpm0: A TPM error
- (2306) occurred attempting to create NULL primary
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Christoph Anton Mitterer <calestyo@scientia.org>, 
-	linux-integrity@vger.kernel.org
-Date: Wed, 13 Nov 2024 10:12:54 -0800
-In-Reply-To: <8fe12e2eb9beb159d2af8462fa0b9b1f946deacb.camel@HansenPartnership.com>
-References: <693caa85c3ee1b3117a562894971de60b6842d00.camel@scientia.org>
-	 <8fe12e2eb9beb159d2af8462fa0b9b1f946deacb.camel@HansenPartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1731523495; c=relaxed/simple;
+	bh=9b+TTCpVQFtzpW7fgoyoQDsAoWwHFZNEITgQxl3ZD38=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wjd+ALIBZ56L8q5yRRt6XMFH3HaMQfmqVAUq2wwt2XD+OC3d5aX3cQQscbk6lOMdaLrQxF+Y18fPKuakKDP5+7tXxnLcvq5oXWFdTUJEv+IJyIEIWYM4T6nHB54hJ6eE08UkchWnYMoNxrl72oMX7pEUbElwQdwjGiGzdr6M4Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMzIN0Ai; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D097C4CEC3;
+	Wed, 13 Nov 2024 18:44:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731523495;
+	bh=9b+TTCpVQFtzpW7fgoyoQDsAoWwHFZNEITgQxl3ZD38=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YMzIN0AiFnKMPxtr73YZGmnkfyafC0lzJsSeoamnxWf0XyCiZCO+nKgXJYKwzAcOq
+	 2EG8evfPHOmBBZB1pmbTiM7uLweJ2hkFuU9uCSaTRbR28SmAmntI1Vy/E43rE5TEvJ
+	 0Pw5NgwmkqfuxkoH3n2lel3sErtiCUAclFC8OImxsV7PKF5pWpzXznf9vM5hbaFIUB
+	 3FFxfKgV2YjxAb0xX7eg2k8pM8HQ5IjE1aBPlIs9S8SEWWNaVycWyTQuqSwrPfOdMy
+	 nLBSUIxeIOS1OaxQhTA4eKp/NUAOhmz2cFQNgU7pSYP8+FTRGjtShtRsgCGoUkmiWP
+	 3KI3yfG+F+/jw==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Stefan Berger <stefanb@linux.ibm.com>
+Cc: stable@vger.kernel.org,
+	Christoph Anton Mitterer <calestyo@scientia.org>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-kernel@vger.kernel.org (open list),
+	keyrings@vger.kernel.org (open list:KEYS-TRUSTED),
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
+Subject: [PATCH] tpm: Disable TPM on tpm2_create_primary() failure
+Date: Wed, 13 Nov 2024 20:44:49 +0200
+Message-ID: <20241113184449.477731-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -78,67 +69,39 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed, 2024-11-13 at 07:47 -0800, James Bottomley wrote:
-> On Wed, 2024-11-13 at 15:44 +0100, Christoph Anton Mitterer wrote:
-> > Hey.
-> > 
-> > Forwarding myself from:
-> > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1087331
-> > 
-> > Since 6.11.7 (might have also happened with .6, which I've skipped,
-> > but wasn't the case at least in 6.11.5).
-> > 
-> > I get:
-> > Nov 11 17:50:20 heisenberg kernel: tpm tpm0: A TPM error (2306)
-> > occurred attempting to create NULL primary
-> > Nov 11 17:50:30 heisenberg kernel: tpm tpm0: A TPM error (2306)
-> > occurred attempting to create NULL primary
-> > Nov 11 17:50:41 heisenberg kernel: tpm tpm0: A TPM error (2306)
-> > occurred attempting to create NULL primary
-> > Nov 11 17:50:51 heisenberg kernel: tpm tpm0: A TPM error (2306)
-> > occurred attempting to create NULL primary
-> > Nov 11 17:51:01 heisenberg kernel: tpm tpm0: A TPM error (2306)
-> > occurred attempting to create NULL primary
-> > Nov 11 17:51:11 heisenberg kernel: tpm tpm0: A TPM error (2306)
-> > occurred attempting to create NULL primary
-> 
-> 2306 is TPM_RC_OBJECT_MEMORY - out of memory for object contexts. 
-> What it's saying is that somewhere we're missing a context flush. 
-> I'll take a look.  Does this happen with the current upstream
-> kernel?  It couldbe a flush got lost as a result of a bad stable
-> backport.
+The earlier bug fix misplaced the error-label when dealing with the
+tpm2_create_primary() return value, which the original completely ignored.
 
-OK, I found it; there's a bug in the handling of create primary on a
-validation rather than a TPM error (it doesn't flush the handle). 
-However, even when I fix that you're apparently going to get the below
-message every 10s or so as the TPM tries to init
+Cc: stable@vger.kernel.org
+Reported-by: Christoph Anton Mitterer <calestyo@scientia.org>
+Closes: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1087331
+Fixes: cc7d8594342a ("tpm: Rollback tpm2_load_null()")
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/tpm2-sessions.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> 
-> > It seems that this doesn't occur on a fresh boot, but only when I
-> > resume from hibernation:
-> 
-> That could be more significant, especially with this in the log:
-> 
-> > Nov 13 12:33:06 heisenberg kernel: tpm tpm0: NULL Seed name
-> > comparison failed
-> > Nov 13 12:33:16 heisenberg kernel: tpm tpm0: NULL Seed name
-> > comparison failed
-> > Nov 13 12:33:26 heisenberg kernel: tpm tpm0: NULL Seed name
-> > comparison failed
-> 
-> I think we might have to expect the NULL name to change on actual
-> hibernation because unlike suspend to ram it does power off the TPM.
-
-I checked the code: we're coming in on the correct path to renew the
-null seed after hibernation, so it should all work.  The problem seems
-to be that your TPM itself is doing something invalid because the name
-we calculate for the primary key doesn't match what your TPM says it
-should be.  Absent some form of attack or bus integrity problem, that
-shouldn't ever happen, so I'm even more curious to know why it worked
-in 6.11.5 and before and whether current upstream works.
-
-I haven't found it yet, but I think the every 10s signature is because
-the hibernation path is trying to restart the TPM device and won't take
-no for an answer.
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index a7c1b162251b..b70165b588ec 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -953,10 +953,13 @@ static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
+ 	/* Deduce from the name change TPM interference: */
+ 	dev_err(&chip->dev, "null key integrity check failed\n");
+ 	tpm2_flush_context(chip, tmp_null_key);
+-	chip->flags |= TPM_CHIP_FLAG_DISABLE;
+ 
+ err:
+-	return rc ? -ENODEV : 0;
++	if (rc) {
++		chip->flags |= TPM_CHIP_FLAG_DISABLE;
++		rc = -ENODEV;
++	}
++	return rc;
+ }
+ 
+ /**
+-- 
+2.47.0
 
 
