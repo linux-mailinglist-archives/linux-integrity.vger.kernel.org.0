@@ -1,139 +1,160 @@
-Return-Path: <linux-integrity+bounces-4123-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4124-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D1779C94A9
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Nov 2024 22:48:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E99319C968D
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2024 01:08:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30F90280F8F
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Nov 2024 21:48:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A083B1F215D1
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2024 00:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C8313A86C;
-	Thu, 14 Nov 2024 21:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OMb+nu3C";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="FlODHk+S";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OMb+nu3C";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="FlODHk+S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271D3646;
+	Fri, 15 Nov 2024 00:07:57 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sienna.cherry.relay.mailchannels.net (sienna.cherry.relay.mailchannels.net [23.83.223.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6624876026
-	for <linux-integrity@vger.kernel.org>; Thu, 14 Nov 2024 21:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731620920; cv=none; b=Uci4RKZxrMW826L1DAGWM9sVqxDHWqiEb7M1rfLEIIS3vcJWIUMQxcVsW3OvCoPzqWoPg/jLnXQcTpGQIhzRB14sIO8bZMLO8LNf7CiXvVEvVX/vu5pbVG5Y2Zn681r0aFKUc7iNCdcEgVuDH8SNdT1Ob9YEoa7HaRQXFJKZ34k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731620920; c=relaxed/simple;
-	bh=4mVEZ+0NkYei1upz3kW4GKt5ABYxjv/pFWp3dgsBNcA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mV02exnQuQJl6xt0winv3DXcGJOTI5Q1iIGi3GkNKg4AZllm7cfYgMNFrTmO0ddbrdZ4JDQNOg0jF256f9U5UHNhMB2LbLrgtJAteWqBAL5eWLm7x9rpCO48QdG0RuHm5/ga4qXdTuA52E+wGL3E4w/OyidIA7PiHS1VaKn4Rho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OMb+nu3C; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=FlODHk+S; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OMb+nu3C; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=FlODHk+S; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 8C8021F7B9;
-	Thu, 14 Nov 2024 21:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1731620916;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49798645
+	for <linux-integrity@vger.kernel.org>; Fri, 15 Nov 2024 00:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.223.165
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731629277; cv=pass; b=Nf17n2lUFZKWUfvwT1ZNrzgaReGhSwtZZx6W6hqM919O4q5ztJ6TvgBKagnQr0Pn8HPDlpo67+wZDYU15TzCKySYf6K8OqAiF2k5OUFyZ9By2LN5dVL84zXIoiA5KoZWjgOhWE/DEvWap2wwByTt1KbeojN0zrTYL8EGwd5l5JI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731629277; c=relaxed/simple;
+	bh=bzF6NTWWaczp5UjTRmWE1pFTGVv06z+Wtk1ySVOkYno=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=F/oyRRPe282GLserSnHOokC8AqHMsTcHYva4AXV6yWhN76KeMiRDhjmap1wJLJrjiyFy+ujrS+LR4tXJeoWVReIbpFR1s64j0BqHzUD/FFgzYq2w0ZsAEEsPFhGyfzGDYSMAkAjjP9skwRlqKSCyDXbGC8OdTfl42hVrtJV9mI8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=scientia.org; spf=pass smtp.mailfrom=scientia.org; arc=pass smtp.client-ip=23.83.223.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=scientia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=scientia.org
+X-Sender-Id: instrampxe0y3a|x-authuser|calestyo@scientia.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 29FAF2C43CF;
+	Thu, 14 Nov 2024 23:58:04 +0000 (UTC)
+Received: from cpanel-007-fra.hostingww.com (trex-6.trex.outbound.svc.cluster.local [100.107.236.27])
+	(Authenticated sender: instrampxe0y3a)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 484332C43A4;
+	Thu, 14 Nov 2024 23:58:03 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1731628683; a=rsa-sha256;
+	cv=none;
+	b=xpl6sGkSwiYjVXECcXt+7KyQlkyvJ5Z50TUPFlytgNi/mDwa5Kobk0I7XN3simUimnO2Qq
+	nbYqjAHG82gWCc3D4/Undkf8DkBGAOgYKBl4JtSH62SPNYQxxncI76ZZZ9YkOEP4MhZB4o
+	ci3FV5WdNQGIfI2nOgY0zekDXqcQpJy+6F89DbhMxqpolwfS4EIu2U43gWEyhmXZaQ+6yR
+	q7y5MwXJZtcB/9UcRtR7Ue7MsPUtYmFMLOPZhMqb5vyb+UaYNXYLtMT+oQJINRULb9xRBw
+	GXXwnNZ6cDnrI5OnUPEqmH9kaLh3BDHVukkdSWakg4EnJtXhBfC+zXDWOJoMqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1731628683;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4mVEZ+0NkYei1upz3kW4GKt5ABYxjv/pFWp3dgsBNcA=;
-	b=OMb+nu3C3oU6Tm+hyfC34m4u4R21tVeLrwH4oDem6fndCBK6piKshpservMv42YGfbmqKm
-	Dy21eOuUwFnKpE9SzHOf8TEoC5TBpKR+x00vWpCylX6ncX3WO+lNP//zjTtAXeIegJxVR7
-	FuGMt4xGS+jW6/hmQLQJhAVLkA4uPAE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1731620916;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4mVEZ+0NkYei1upz3kW4GKt5ABYxjv/pFWp3dgsBNcA=;
-	b=FlODHk+SkdUTh7eeWuBkH3stY0OHdmUSzdZuuf5nc5tQKyMY+8+NKmwayoagY/5hB2IVMH
-	a8pxYTj7hGu9YSDw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1731620916;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4mVEZ+0NkYei1upz3kW4GKt5ABYxjv/pFWp3dgsBNcA=;
-	b=OMb+nu3C3oU6Tm+hyfC34m4u4R21tVeLrwH4oDem6fndCBK6piKshpservMv42YGfbmqKm
-	Dy21eOuUwFnKpE9SzHOf8TEoC5TBpKR+x00vWpCylX6ncX3WO+lNP//zjTtAXeIegJxVR7
-	FuGMt4xGS+jW6/hmQLQJhAVLkA4uPAE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1731620916;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4mVEZ+0NkYei1upz3kW4GKt5ABYxjv/pFWp3dgsBNcA=;
-	b=FlODHk+SkdUTh7eeWuBkH3stY0OHdmUSzdZuuf5nc5tQKyMY+8+NKmwayoagY/5hB2IVMH
-	a8pxYTj7hGu9YSDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3E23013794;
-	Thu, 14 Nov 2024 21:48:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id X9mYODJwNmeKfQAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Thu, 14 Nov 2024 21:48:34 +0000
-Date: Thu, 14 Nov 2024 22:48:28 +0100
-From: Petr Vorel <pvorel@suse.cz>
-To: ltp@lists.linux.it
-Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 2/2] ima_boot_aggregate: TBROK on fread() failure
-Message-ID: <20241114214828.GA1099745@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20241101143726.1278291-1-pvorel@suse.cz>
- <20241101143726.1278291-2-pvorel@suse.cz>
+	bh=bzF6NTWWaczp5UjTRmWE1pFTGVv06z+Wtk1ySVOkYno=;
+	b=dKbajuzA8xU2Idg8E9KayEXYr/e2JYJnwLRn4rtPHTn9vVOJiUy4Shnh9lBNIHvUxEQdsL
+	FvXWzJ7xcDgZgmb+NGoxnXIMpUWs/4IwhO2CVwfIGbvsFQkoiN0MX8wdQJq+vR9F/wGalO
+	pTpuajZlT9Q1qe0Kx9jYXzyP4fR0fc8oW7GAnpWQCIYTwW8RAM/rND8XCGvZYuP9kGQfbf
+	K5K0/YQ4zd4nRCjGTfXXwb8TlTPL/zj5ANsjWxRhFZCYKveUTzmd2bITCYLkhMNTa9XVmb
+	M0CLv3EYKPdRvcKXc1PLfiW8RlKHUwC7XoBAFDGYwAP6LXwmB1Ut9D3HEEzUPw==
+ARC-Authentication-Results: i=1;
+	rspamd-645676964-dzw7m;
+	auth=pass smtp.auth=instrampxe0y3a smtp.mailfrom=calestyo@scientia.org
+X-Sender-Id: instrampxe0y3a|x-authuser|calestyo@scientia.org
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: instrampxe0y3a|x-authuser|calestyo@scientia.org
+X-MailChannels-Auth-Id: instrampxe0y3a
+X-Abaft-Descriptive: 196e5d20501fe304_1731628684051_632688747
+X-MC-Loop-Signature: 1731628684051:525262220
+X-MC-Ingress-Time: 1731628684050
+Received: from cpanel-007-fra.hostingww.com (cpanel-007-fra.hostingww.com
+ [3.69.87.180])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.107.236.27 (trex/7.0.2);
+	Thu, 14 Nov 2024 23:58:04 +0000
+Received: from p5b071105.dip0.t-ipconnect.de ([91.7.17.5]:63383 helo=heisenberg.fritz.box)
+	by cpanel-007-fra.hostingww.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <calestyo@scientia.org>)
+	id 1tBjit-0000000GawD-00Qa;
+	Thu, 14 Nov 2024 23:58:01 +0000
+Message-ID: <094d2855e8abe017d5e5610687b7395fe12b5377.camel@scientia.org>
+Subject: Re: regression: kernel log "flooded" with tpm tpm0: A TPM error
+ (2306) occurred attempting to create NULL primary
+From: Christoph Anton Mitterer <calestyo@scientia.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
+Date: Fri, 15 Nov 2024 00:57:59 +0100
+In-Reply-To: <D5LMRS83UP6W.22IBEK42G75GB@kernel.org>
+References: <693caa85c3ee1b3117a562894971de60b6842d00.camel@scientia.org>
+	 <D5L9XVNXYQR1.2EBNEZRV0QVUI@kernel.org>
+	 <10783d8ac0d407f85feb8e0de8eb7ccece8c8e57.camel@scientia.org>
+	 <D5LMRS83UP6W.22IBEK42G75GB@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.1-1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241101143726.1278291-2-pvorel@suse.cz>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.50 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	HAS_REPLYTO(0.30)[pvorel@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:replyto];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	SINGLE_SHORT_PART(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Spam-Score: -3.50
-X-Spam-Flag: NO
+X-AuthUser: calestyo@scientia.org
 
-Hi all,
+Hey Jarkko.
 
-both patches merged.
 
-Kind regards,
-Petr
+On Thu, 2024-11-14 at 06:52 +0200, Jarkko Sakkinen wrote:
+> It was too obvious and I wanted to bring that to 6.12 :-) It was
+> a mistake in my fix so was dead obvious.
+
+Since that is out anyway rather soonish, there's no need from my side
+to get the fix into stable.
+
+> > ... I wondered whether that rings any bells on your side with
+> > respect
+> > to: https://bugzilla.kernel.org/show_bug.cgi?id=3D216998
+>=20
+> So here's my proposal:
+>=20
+> 1. I added myself to the CC list.
+
+:-)
+
+
+> 2. Please add any additional comments from your response that might
+> be
+> =C2=A0=C2=A0 missing as comment.
+
+Right now I don't really have any... mostly because I had no clue on
+how to further debug it (the only thing that I could think of would be
+having a look at any serial console output, but the laptop has no true
+serial port anymore, so best I could do would be to attach some
+USB/RS232 adapter, and whether that even loads before the system does
+something is questionable)
+
+If you have any ideas on what I can do to give more information, don't
+hesitate to tell.
+
+But as I've said... it might just be a bug/missing implementation in
+the firmware and nothing from the kernel side.
+Cause it really seems as if the display and CPU fan don't even power up
+after resume.
+
+So,... I'm happy if you have ideas... but don't waste too much of your
+time on this! :-)
+
+btw: Fujitsu support wasn't really helpful on this matter, once they
+read Linux they basically said not-interested.
+
+
+> I look that as soon as I have time. First time I'm seeing this.
+>=20
+> For anything TPM you can go ahead and CC me also in future...=20
+
+Sure thanks :-)
+
+
+Cheers,
+Chris
 
