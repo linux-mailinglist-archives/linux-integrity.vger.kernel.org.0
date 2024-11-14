@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-4120-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4121-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 374F69C821A
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Nov 2024 05:52:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43A2D9C8243
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Nov 2024 05:56:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1C8BB25532
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Nov 2024 04:52:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB2721F2172E
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Nov 2024 04:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44491553AA;
-	Thu, 14 Nov 2024 04:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F05166F06;
+	Thu, 14 Nov 2024 04:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b1Ez9LLH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQBKufPW"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E223C38
-	for <linux-integrity@vger.kernel.org>; Thu, 14 Nov 2024 04:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622BF1553AA
+	for <linux-integrity@vger.kernel.org>; Thu, 14 Nov 2024 04:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731559947; cv=none; b=rSwZLIperzTxw/laIHpnv1nGW7r51cGyT6JtyBt0cFk2XlPUdAcmac11FVH0UAZ0yrGEkbDeSyxSYyffVSO0VlKGlPyr0a0rkK/3L/SgabW/c914HV4qhfBR7L/7fUWYw4lPuPSCio2ELpwOIXkDQ1fklY2GOE7RbT4Misi3Ww4=
+	t=1731560173; cv=none; b=AZucNeg4WkOuGuKrfK/3xSO1cxUd7N3lHlJ/9NEjLNBlYrVVt5TgEmKAMvVTNPm4dVUou1UIB8pgK9aMZC5zd+C7kzl5l5aEjvVXx99TT1RFXJMWXYFM6KUFdar9/K4cPyg3i6Kr+y2Z92jodUELAJ9C2k1UgDTixx3kcfEkwSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731559947; c=relaxed/simple;
-	bh=gFS2+aN4/Nd9o+KNciOWgJEs7/iK7qsriYypjswK7vM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=T/amXdU4wPXkAF9dIxxCKfDjgMKW0xBNwkg/zUjWLudIIq6HFVHEcpzjf3U8s6SdDFjfdCC3dCZOCN+DZoCL25RjrlSLn/Fld9ptuwmvSLbxLzLrW1HlAGeUdEkjymoawaCbYJHjPJ8dD/eOPuv5VAM9Tg1eIbfJ1qjiL2Jm9Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b1Ez9LLH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBFE4C4CED0;
-	Thu, 14 Nov 2024 04:52:26 +0000 (UTC)
+	s=arc-20240116; t=1731560173; c=relaxed/simple;
+	bh=p60hAPPH21jwDnMY9oEW+Q22IUamAUeNy9tcW7EMmSg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
+	 References:In-Reply-To; b=rc9RMsCei2P4T3r65FnrEQY2IFA21+GmRu5pZcfhB6pszXiMb57zGkXIOn0N5OGrUF6NAELMPwVDxiy+izy9+ic1njzPONshLpYlPTKHuRfGn/vWmkGJGXDwIY6PC/2ffXNq5vxOLDEvBpXDFPIKW/OfjT74tlJfSUAYCl8wUAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQBKufPW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72350C4CED0;
+	Thu, 14 Nov 2024 04:56:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731559947;
-	bh=gFS2+aN4/Nd9o+KNciOWgJEs7/iK7qsriYypjswK7vM=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=b1Ez9LLHQcH/eg5+Zb6piXqyVT4R4RYZbCejwdgoNLm2x184H7yDAzUNwXm58aOV/
-	 4xgAvBgUHAcvZGAz+aQdQw1184PwyYUWBIo4REHypVDd3PdcKSJ599QvUAer/rEA6K
-	 40971isBlk9dV53PWa0l6Nr1b151mRNrentLeVXOghUFIF+UQDaYS/o0xM1aOIPw8C
-	 gP+0oBDaRdUdY0mjWGYsiVouEyLubbtBYrHSMDh2EP3O6UQOlUYA2gDCHd6MFW8OTw
-	 L7a4b46p7Iq07IZkr103jnltdKQuyj/eoQnWC1LTSgIss5fVG358OVhDouDCbTphL1
-	 1nVjU1oHxV/lw==
+	s=k20201202; t=1731560173;
+	bh=p60hAPPH21jwDnMY9oEW+Q22IUamAUeNy9tcW7EMmSg=;
+	h=Date:Subject:From:To:References:In-Reply-To:From;
+	b=oQBKufPWcaAwgvqeU+uEwJwtE5dMxUUvA2vJRhcrqQq2H8xSB98unm8KQspfDejQQ
+	 sbIuNeaiP4r70PAmc43R1nQ73YuycbDKVvue1BCBIme8m4XISSxRKWSnvQg/dxxVW6
+	 UENFMZjDXOyEcRfIRyHOlpCM7ebN5hhXvAhUYPo2dohwq/ULHk++66NcP8RxHNQAGI
+	 NKzBU7DjeY8zM12Vqna216jjrim8CkyrbNq04+Wh1N1o8YqIdDEthuAWnkpOJtTAyW
+	 PtdXSad5tvK2kD+DaVlgNdWAdxpEUsAV8s3kQ2DePrStZfDAL6p7poohNmNOdlmRLa
+	 t5Ep5LKMx1qQQ==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,58 +49,33 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 14 Nov 2024 06:52:22 +0200
-Message-Id: <D5LMRS83UP6W.22IBEK42G75GB@kernel.org>
-Cc: "James Bottomley" <James.Bottomley@HansenPartnership.com>
+Date: Thu, 14 Nov 2024 06:56:08 +0200
+Message-Id: <D5LMUO2NNWFK.390DHBIZ06SMD@kernel.org>
 Subject: Re: regression: kernel log "flooded" with tpm tpm0: A TPM error
  (2306) occurred attempting to create NULL primary
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Christoph Anton Mitterer" <calestyo@scientia.org>,
- <linux-integrity@vger.kernel.org>
+To: "James Bottomley" <James.Bottomley@HansenPartnership.com>, "Christoph
+ Anton Mitterer" <calestyo@scientia.org>, <linux-integrity@vger.kernel.org>
 X-Mailer: aerc 0.18.2
 References: <693caa85c3ee1b3117a562894971de60b6842d00.camel@scientia.org>
- <D5L9XVNXYQR1.2EBNEZRV0QVUI@kernel.org>
- <10783d8ac0d407f85feb8e0de8eb7ccece8c8e57.camel@scientia.org>
-In-Reply-To: <10783d8ac0d407f85feb8e0de8eb7ccece8c8e57.camel@scientia.org>
+ <8fe12e2eb9beb159d2af8462fa0b9b1f946deacb.camel@HansenPartnership.com>
+ <c1b56e93bd7e92d5313fde89dc0ee09fdd4c8577.camel@scientia.org>
+ <05f511502a5918fe81d69201ec3df01b25803bcd.camel@HansenPartnership.com>
+In-Reply-To: <05f511502a5918fe81d69201ec3df01b25803bcd.camel@HansenPartnership.com>
 
-On Thu Nov 14, 2024 at 2:04 AM EET, Christoph Anton Mitterer wrote:
-> On Wed, 2024-11-13 at 20:49 +0200, Jarkko Sakkinen wrote:
-> > The problem still persists related to TPM bus encryption not working
-> > with hibernate in 6.11.5 but the message was shown only once in the
-> > log (and thus you did not notice it).
->
-> At least my grep from before wouldn't have shown it even once.
->
->
->
-> > Please test my fix and I can take it to PR.
->
-> I've seen your PR was anyway already applied, so testing still needed?
-> I'd need to compile the whole Debian kernel which takes quite a while
-> O:-)
+On Thu Nov 14, 2024 at 4:06 AM EET, James Bottomley wrote:
+> Getting the TPM messages to quiet by disabling the chip fixes the
+> message spew, but it doesn't get you a working TPM chip back on resume.
+> I'll take a look at the hibernation path and see if I can see a hook we
+> can use to bring the TPM back.
 
-It was too obvious and I wanted to bring that to 6.12 :-) It was
-a mistake in my fix so was dead obvious.
+Fixing hibernate issue could not be done in the same patch as it is=20
+a different bug logically that I fixed. The hibernate bug pre-existed
+in your original code.
 
->
->
-> But other than that... and especially as I'm seeing these:
->   2024-11-01T15:41:22.428940+01:00 heisenberg kernel: tpm_tis NTC0702:00:=
- Ignoring error -5 while suspending
-> errors...
->
-> ... I wondered whether that rings any bells on your side with respect
-> to: https://bugzilla.kernel.org/show_bug.cgi?id=3D216998
-
-So here's my proposal:
-
-1. I added myself to the CC list.
-2. Please add any additional comments from your response that might be
-   missing as comment.
-
-I look that as soon as I have time. First time I'm seeing this.
-
-For anything TPM you can go ahead and CC me also in future...=20
+So my fix was not about at all masking a bug, it was about fixing a
+bug in my own previous fix. I.e. even you had a fix for hibernate, this
+patch would have been needed separately.
 
 BR, Jarkko
 
