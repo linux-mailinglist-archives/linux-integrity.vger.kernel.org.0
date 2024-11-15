@@ -1,160 +1,187 @@
-Return-Path: <linux-integrity+bounces-4124-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4125-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E99319C968D
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2024 01:08:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EDFA9CD4F1
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2024 02:18:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A083B1F215D1
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2024 00:08:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88C5F1F21E02
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Nov 2024 01:18:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271D3646;
-	Fri, 15 Nov 2024 00:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2517544375;
+	Fri, 15 Nov 2024 01:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="mhpPy1pk"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sienna.cherry.relay.mailchannels.net (sienna.cherry.relay.mailchannels.net [23.83.223.165])
+Received: from sender3-of-o57.zoho.com (sender3-of-o57.zoho.com [136.143.184.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49798645
-	for <linux-integrity@vger.kernel.org>; Fri, 15 Nov 2024 00:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.223.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09C91EA73;
+	Fri, 15 Nov 2024 01:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731629277; cv=pass; b=Nf17n2lUFZKWUfvwT1ZNrzgaReGhSwtZZx6W6hqM919O4q5ztJ6TvgBKagnQr0Pn8HPDlpo67+wZDYU15TzCKySYf6K8OqAiF2k5OUFyZ9By2LN5dVL84zXIoiA5KoZWjgOhWE/DEvWap2wwByTt1KbeojN0zrTYL8EGwd5l5JI=
+	t=1731633513; cv=pass; b=SXD/GjqD/6tx+lJWyjKCpmiA486OuXliQMHvQumrvOvXfa4H/QVRjgTE6aXUojbsB7fexPi9xFTkcbWLR8aw/XkVTCAQUT0GDf6P89Lf//gQB5mzSbOybyboz1Ey8fuboYXJF9vOsInoc1V/7dXMPVCh/2/28e51JamEJPLebSU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731629277; c=relaxed/simple;
-	bh=bzF6NTWWaczp5UjTRmWE1pFTGVv06z+Wtk1ySVOkYno=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F/oyRRPe282GLserSnHOokC8AqHMsTcHYva4AXV6yWhN76KeMiRDhjmap1wJLJrjiyFy+ujrS+LR4tXJeoWVReIbpFR1s64j0BqHzUD/FFgzYq2w0ZsAEEsPFhGyfzGDYSMAkAjjP9skwRlqKSCyDXbGC8OdTfl42hVrtJV9mI8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=scientia.org; spf=pass smtp.mailfrom=scientia.org; arc=pass smtp.client-ip=23.83.223.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=scientia.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=scientia.org
-X-Sender-Id: instrampxe0y3a|x-authuser|calestyo@scientia.org
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id 29FAF2C43CF;
-	Thu, 14 Nov 2024 23:58:04 +0000 (UTC)
-Received: from cpanel-007-fra.hostingww.com (trex-6.trex.outbound.svc.cluster.local [100.107.236.27])
-	(Authenticated sender: instrampxe0y3a)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 484332C43A4;
-	Thu, 14 Nov 2024 23:58:03 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1731628683; a=rsa-sha256;
-	cv=none;
-	b=xpl6sGkSwiYjVXECcXt+7KyQlkyvJ5Z50TUPFlytgNi/mDwa5Kobk0I7XN3simUimnO2Qq
-	nbYqjAHG82gWCc3D4/Undkf8DkBGAOgYKBl4JtSH62SPNYQxxncI76ZZZ9YkOEP4MhZB4o
-	ci3FV5WdNQGIfI2nOgY0zekDXqcQpJy+6F89DbhMxqpolwfS4EIu2U43gWEyhmXZaQ+6yR
-	q7y5MwXJZtcB/9UcRtR7Ue7MsPUtYmFMLOPZhMqb5vyb+UaYNXYLtMT+oQJINRULb9xRBw
-	GXXwnNZ6cDnrI5OnUPEqmH9kaLh3BDHVukkdSWakg4EnJtXhBfC+zXDWOJoMqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1731628683;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bzF6NTWWaczp5UjTRmWE1pFTGVv06z+Wtk1ySVOkYno=;
-	b=dKbajuzA8xU2Idg8E9KayEXYr/e2JYJnwLRn4rtPHTn9vVOJiUy4Shnh9lBNIHvUxEQdsL
-	FvXWzJ7xcDgZgmb+NGoxnXIMpUWs/4IwhO2CVwfIGbvsFQkoiN0MX8wdQJq+vR9F/wGalO
-	pTpuajZlT9Q1qe0Kx9jYXzyP4fR0fc8oW7GAnpWQCIYTwW8RAM/rND8XCGvZYuP9kGQfbf
-	K5K0/YQ4zd4nRCjGTfXXwb8TlTPL/zj5ANsjWxRhFZCYKveUTzmd2bITCYLkhMNTa9XVmb
-	M0CLv3EYKPdRvcKXc1PLfiW8RlKHUwC7XoBAFDGYwAP6LXwmB1Ut9D3HEEzUPw==
-ARC-Authentication-Results: i=1;
-	rspamd-645676964-dzw7m;
-	auth=pass smtp.auth=instrampxe0y3a smtp.mailfrom=calestyo@scientia.org
-X-Sender-Id: instrampxe0y3a|x-authuser|calestyo@scientia.org
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: instrampxe0y3a|x-authuser|calestyo@scientia.org
-X-MailChannels-Auth-Id: instrampxe0y3a
-X-Abaft-Descriptive: 196e5d20501fe304_1731628684051_632688747
-X-MC-Loop-Signature: 1731628684051:525262220
-X-MC-Ingress-Time: 1731628684050
-Received: from cpanel-007-fra.hostingww.com (cpanel-007-fra.hostingww.com
- [3.69.87.180])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.107.236.27 (trex/7.0.2);
-	Thu, 14 Nov 2024 23:58:04 +0000
-Received: from p5b071105.dip0.t-ipconnect.de ([91.7.17.5]:63383 helo=heisenberg.fritz.box)
-	by cpanel-007-fra.hostingww.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <calestyo@scientia.org>)
-	id 1tBjit-0000000GawD-00Qa;
-	Thu, 14 Nov 2024 23:58:01 +0000
-Message-ID: <094d2855e8abe017d5e5610687b7395fe12b5377.camel@scientia.org>
-Subject: Re: regression: kernel log "flooded" with tpm tpm0: A TPM error
- (2306) occurred attempting to create NULL primary
-From: Christoph Anton Mitterer <calestyo@scientia.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: James Bottomley <James.Bottomley@HansenPartnership.com>
-Date: Fri, 15 Nov 2024 00:57:59 +0100
-In-Reply-To: <D5LMRS83UP6W.22IBEK42G75GB@kernel.org>
-References: <693caa85c3ee1b3117a562894971de60b6842d00.camel@scientia.org>
-	 <D5L9XVNXYQR1.2EBNEZRV0QVUI@kernel.org>
-	 <10783d8ac0d407f85feb8e0de8eb7ccece8c8e57.camel@scientia.org>
-	 <D5LMRS83UP6W.22IBEK42G75GB@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1-1 
+	s=arc-20240116; t=1731633513; c=relaxed/simple;
+	bh=FwqvCAt8Zg5L5tpyZOWp/OWDGqTnQXf5GTPksiCqOzE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=QqDu4tmSEOJYbzAk3Zz0gjVyRw52NlSYaWcYaK03LFetbbN1id5m3AO3PBJepLGHjXRE+9Owe2GVpTnsmaL8EsmckX5tPJrZ8r2INJIsxiXkb1GZab4Jf+a0CGm0cVZvAM4LhNc0Ys3ZaPftFkOgr2KdR1b8Wa8Mx339Um/UyD4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=mhpPy1pk; arc=pass smtp.client-ip=136.143.184.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
+ARC-Seal: i=1; a=rsa-sha256; t=1731633431; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=HApsMMSmRc9YCIaxMUkJe0zltVO0dOBTierobYTK3H1mctcHyww8DwqrhC8w5GdZf6NC6DwbwZDAJuMEzTVPRXUDUItxS4QJ17p/tV6kz7j1fgbEhr8ZBdLd8f9rsImU1GTYB1rvqkSEOIBYrchHSHD98NeO+p2CChpRfgw9q+0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1731633431; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=MuBQEpSeYrVW5P897dVbSdSSTy2uYjy7xShRezu7W2k=; 
+	b=NpTuHv2RsFDLRF/2wLyPkQne8P5SbtKMElKK6Mr5iJgBiuu2V4yPF9Z9chpk5y9Yvy8MDQ1Pa+WqJm05Zpoq80TqWZz9rvgv17S6yueVCyrfcfBfvdFXBCYpIw8BcQJ6BwJRUuiTQOscs6oC/s5UJQEOrazWXDEjNLfVjQQF5lY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=apertussolutions.com;
+	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+	dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1731633431;
+	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+	h=Message-ID:Date:Date:MIME-Version:From:From:Subject:Subject:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=MuBQEpSeYrVW5P897dVbSdSSTy2uYjy7xShRezu7W2k=;
+	b=mhpPy1pkZZfw9Xv4SsFNA73xYZM58AZ6T6tnXjLz41i0gpDvH/DTN0MVOimmT0jg
+	EcAnCMDvMFWGfBpMmBnd8Y0PXCoNXN70fIVZFTLqOQzvtCt9J8vlcAhAJn3RJvwzjba
+	YugFNZ3m4CvIQbbEqIXJl+Kd1FYcuZb6NcWxOiz0=
+Received: by mx.zohomail.com with SMTPS id 173163342863043.69850969601737;
+	Thu, 14 Nov 2024 17:17:08 -0800 (PST)
+Message-ID: <5d1e41d6-b467-4013-a0d0-45f9511c15c6@apertussolutions.com>
+Date: Thu, 14 Nov 2024 20:17:04 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-AuthUser: calestyo@scientia.org
+User-Agent: Mozilla Thunderbird
+From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
+ early measurements
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+ Andy Lutomirski <luto@amacapital.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+ "Eric W. Biederman" <ebiederm@xmission.com>,
+ Eric Biggers <ebiggers@kernel.org>,
+ Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
+ mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+ ardb@kernel.org, mjg59@srcf.ucam.org, peterhuewe@gmx.de, jarkko@kernel.org,
+ jgg@ziepe.ca, nivedita@alum.mit.edu, herbert@gondor.apana.org.au,
+ davem@davemloft.net, corbet@lwn.net, dwmw2@infradead.org,
+ baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
+ andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-7-ross.philipson@oracle.com>
+ <20240531021656.GA1502@sol.localdomain>
+ <874jaegk8i.fsf@email.froward.int.ebiederm.org>
+ <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
+ <87ttflli09.ffs@tglx>
+ <CALCETrXQ7rChWLDqTG0+KY7rsfajSPguMnHO1G4VJi_mgwN9Zw@mail.gmail.com>
+ <1a1f0c41-70de-4f46-b91d-6dc7176893ee@apertussolutions.com>
+ <8a0b59a4-a5a2-42ae-bc1c-1ddc8f2aad16@apertussolutions.com>
+ <CALCETrX8caT5qvCUu24hQfxUF_wUC2XdGpS2YFP6SR++7FiM3Q@mail.gmail.com>
+ <c466ed57-35a8-41c0-9647-c70e588ad1d3@apertussolutions.com>
+ <CALCETrW9WNNGh1dEPKfQoeU+m5q6_m97d0_bzRkZsv2LxqB_ew@mail.gmail.com>
+ <ff0c8eed-8981-48c4-81d9-56b040ef1c7b@apertussolutions.com>
+ <446cf9c70184885e4cec6dd4514ae8daf7accdcb.camel@HansenPartnership.com>
+Content-Language: en-US
+In-Reply-To: <446cf9c70184885e4cec6dd4514ae8daf7accdcb.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-Hey Jarkko.
+On 11/2/24 12:04, James Bottomley wrote:
+> On Sat, 2024-11-02 at 10:53 -0400, Daniel P. Smith wrote:
+>> Hi Luto,
+>>
+>> My apologies, I missed this response and the active on v11 cause me
+>> to
+>> get an inquiry why I hadn't responded.
+>>
+>> On 9/21/24 18:40, Andy Lutomirski wrote:
+> [...]
+>>> I assumed that "deliberately cap" meant that there was an actual
+>>> feature where you write something to the event log (if applicable)
+>>> and extend the PCR in a special way that *turns that PCR off*.
+>>> That is, it does something such that later-loaded software *can't*
+>>> use that PCR to attest or unseal anything, etc.
+>>>
+>>> But it sounds like you're saying that no such feature exists.  And
+>>> a quick skim of the specs doesn't come up with anything.  And the
+>>> SHA1 banks may well be susceptible to a collision attack.
+>>
+>> Correct, the only entity that can disable PCR banks is the firmware.
+> 
+> No, that's not correct.  Any user can use TPM_PCR_Allocate to activate
+> or deactivate individual banks.  The caveat is the change is not
+> implemented until the next TPM reset (which should involve a reboot).
+> BIOS also gets to the TPM before the kernel does, so it can, in theory,
+> check what banks a TPM has and call TPM_PCR_Allocate to change them.
+> In practice, because this requires a reboot, this is usually only done
+> from the BIOS menus not on a direct boot ... so you can be reasonably
+> sure that whatever changes were made will stick.
+
+Okay, since there is a desire for exactness. Any system software can 
+send the TPM_PCR_Allocate command, specifying which PCRs should be 
+activated on next _TPM_init. There are restrictions such that if 
+DRTM_PCR is defined, then at least one bank must have a D-RTM PCR 
+allocation. In agreement with my statement, this is the mechanism used 
+by firmware to select the banks. Depending on the firmware 
+implementation, the firmware request will likely override the request 
+sent by the system software.
+
+This brings us back to an earlier point, if one disables the SHA1 banks 
+in BIOS menu, then TXT will not use them and thus neither will Secure 
+Launch. Secure Launch will only use the algorithms used by the CPU and 
+the ACM.
+
+>> When it initializes the TPM, it can disable banks/algorithms. After
+>> that, when an extend operation is done, the TPM is expecting an entry
+>> for all active PCR banks and the TPM itself does the extend hash that
+>> is stored into the PCRs.
+> 
+> This, also, is not quite correct: an extend is allowed to specify banks
+> that don't exist (in which case nothing happens and no error is
+> reported) and miss banks that do (in which case no extend is done to
+> that bank).  In the early days of TPM2, some BIOS implementations only
+> extended sha1 for instance, meaning the sha256 banks were all zero when
+> the kernel started.
+> 
+> Even today, if you activate a bank the BIOS doesn't know about, it
+> likely won't extend it.  You can see this in VM boots with OVMF and
+> software TPMs having esoteric banks like SM3.
+
+Let me correct myself here and again be extremely precise. When an 
+extend operation is done, the TPM driver expects to receive an array of 
+digests that is the same size as the number of allocated/active banks. 
+Specifically, it loops from 0 to chip->nr_allocated_banks, filling 
+TPML_DIGEST_VALUES with an entry for all the active banks, to include 
+SHA1 if it is active. Coming back to my response to Luto, we can either 
+populate it with 0 or a well-known value for each extend we send. 
+Regardless of what the value is, the TPM will use its implementation of 
+SHA1 to calculate the resulting extend value.
+
+Even with these clarifications, the conclusion does not change. If the 
+firmware enables SHA1, there is nothing that can be done to disable or 
+block its usage from the user. Linux Secure Launch sending measurements 
+to all the banks that the hardware used to start the DRTM chain does not 
+create a vulnerability in and of itself. The user is free to leverage 
+the SHA1 bank in any of the TPM's Integrity Collection suite of 
+operations, regardless of what Secure Launch sends for the SHA1 hash. 
+Whereas, neutering the solution of SHA1 breaks the ability for it to 
+support any hardware that has a TPM1.2, of which there are still many in 
+use.
+
+V/r,
+Daniel P. Smith
 
 
-On Thu, 2024-11-14 at 06:52 +0200, Jarkko Sakkinen wrote:
-> It was too obvious and I wanted to bring that to 6.12 :-) It was
-> a mistake in my fix so was dead obvious.
-
-Since that is out anyway rather soonish, there's no need from my side
-to get the fix into stable.
-
-> > ... I wondered whether that rings any bells on your side with
-> > respect
-> > to: https://bugzilla.kernel.org/show_bug.cgi?id=3D216998
->=20
-> So here's my proposal:
->=20
-> 1. I added myself to the CC list.
-
-:-)
-
-
-> 2. Please add any additional comments from your response that might
-> be
-> =C2=A0=C2=A0 missing as comment.
-
-Right now I don't really have any... mostly because I had no clue on
-how to further debug it (the only thing that I could think of would be
-having a look at any serial console output, but the laptop has no true
-serial port anymore, so best I could do would be to attach some
-USB/RS232 adapter, and whether that even loads before the system does
-something is questionable)
-
-If you have any ideas on what I can do to give more information, don't
-hesitate to tell.
-
-But as I've said... it might just be a bug/missing implementation in
-the firmware and nothing from the kernel side.
-Cause it really seems as if the display and CPU fan don't even power up
-after resume.
-
-So,... I'm happy if you have ideas... but don't waste too much of your
-time on this! :-)
-
-btw: Fujitsu support wasn't really helpful on this matter, once they
-read Linux they basically said not-interested.
-
-
-> I look that as soon as I have time. First time I'm seeing this.
->=20
-> For anything TPM you can go ahead and CC me also in future...=20
-
-Sure thanks :-)
-
-
-Cheers,
-Chris
 
