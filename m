@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-4157-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4158-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AE1C9D2480
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Nov 2024 12:04:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 477FA9D2487
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Nov 2024 12:05:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D862B1F240B7
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Nov 2024 11:04:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1EEA1F242F2
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Nov 2024 11:05:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF791C6F47;
-	Tue, 19 Nov 2024 11:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1C01C6F55;
+	Tue, 19 Nov 2024 11:03:36 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA691C4A36;
-	Tue, 19 Nov 2024 11:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C16E1C9EB5;
+	Tue, 19 Nov 2024 11:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732014199; cv=none; b=gSnZCAJ37jk4+NDTat+pYENEo/4JtgcObBum86MMuuRZ5Y/zvdX4GHXgYJnlbkQ8tAt7F/vcNTUTUqOvRnyVOuv83EDUSZswJn2syYe2jB+t612Bz1vSNNPoam5NXpc5s3mZdCETROvF2QpXRfyWxdwU6FJT6q8KCWxLfobjEwQ=
+	t=1732014216; cv=none; b=TVdeyWL2zs9WQ4wHks+5CzD5iJ7qFlqmsz4rIsL325glOnd7vy+KgJBtH7KVQecSsKsStBDjMuzy6/aXLx+n0MA8GtexNyzKyJCZbqslzcOegxGT1taaaimFI1I0Xl9bNRWbucf/t+gW95Z3QMazk9ZsH6fWDLHtCsyx8tJPPs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732014199; c=relaxed/simple;
-	bh=Dtn3dFiwEnuNFVgKfjmK1osRUp4jcnUCWtkeo22Tyfo=;
+	s=arc-20240116; t=1732014216; c=relaxed/simple;
+	bh=pvLhc8RjAUhHE0Ypcfb/nA2SMc5FHFY1VQfKtwXor2g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a2Pn8wsy3nRbHefxu8YdE/EYJTMvMXw3lwsUZGjY1U5G0j7X5ap9uqwVWUBZ/AG6OMBK7XqYTqlO0Yr5s1LMXD0Yk1RrttuRCd1gY5x48+HyHQ7b1CPc0Lt/sOuoJtYe3os3GfXTeUpe5DAqacAI6GHbn7eT8PmGenYKlzfMaiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+	 MIME-Version; b=lY2bnqGBKl9QOVUH+Ct1JIgr7+fbMIitQT7ahVUkpm2PH9D9VIpcnU7GOlvMk0B1Y7cRVk91WJpe37XMbZ4EWn8a5XBXXss7VhQjx03kuq5LDwOZxcfxfU0P7OoF56C1paYNMpUikOMaVZq+ctlbSxwD+a6HPVp8bG4zumiqBHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xt1K95dtvz9v7J6;
-	Tue, 19 Nov 2024 18:42:21 +0800 (CST)
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Xt1KX0C3nz9v7NH;
+	Tue, 19 Nov 2024 18:42:40 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id A4FC9140DF8;
-	Tue, 19 Nov 2024 19:03:09 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id A194014086A;
+	Tue, 19 Nov 2024 19:03:21 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwB3NTb9bzxnNXHnAQ--.10850S10;
-	Tue, 19 Nov 2024 12:03:09 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwB3NTb9bzxnNXHnAQ--.10850S11;
+	Tue, 19 Nov 2024 12:03:20 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	zohar@linux.ibm.com,
@@ -65,9 +65,9 @@ Cc: linux-kernel@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v4 8/9] ima: Use digest caches for measurement
-Date: Tue, 19 Nov 2024 12:01:02 +0100
-Message-ID: <20241119110103.2780453-9-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH v4 9/9] ima: Use digest caches for appraisal
+Date: Tue, 19 Nov 2024 12:01:03 +0100
+Message-ID: <20241119110103.2780453-10-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.47.0.118.gfd3785337b
 In-Reply-To: <20241119110103.2780453-1-roberto.sassu@huaweicloud.com>
 References: <20241119110103.2780453-1-roberto.sassu@huaweicloud.com>
@@ -78,10 +78,10 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwB3NTb9bzxnNXHnAQ--.10850S10
-X-Coremail-Antispam: 1UD129KBjvJXoW3JFy7KrWkXF1UJw4UZFW5ZFb_yoWxGw1xpa
-	9IgF1UKr1kXFySkrn3A3W7Za1F93y8ta1UX398Ww1ay3ZxZr1q9w4Fkr1j9Fs8GrWvya4I
-	yanFqw4UAw1qyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:LxC2BwB3NTb9bzxnNXHnAQ--.10850S11
+X-Coremail-Antispam: 1UD129KBjvJXoW3XFWkZrW5Ar47Zr45tr1UJrb_yoW7WFW8pa
+	9xKF1UKry8WFWI9rZxAa9rCa1Sk3y0gFWUWws8W3429FnxXr109ryrtw12vF15Wr1UJrs7
+	twsFgr1UAa1rt3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -96,142 +96,143 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3JFy7KrWkXF1UJw4UZFW5ZFb_yoWxGw1xpa
 	7I0E14v26F4UJVW0owCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
 	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZEXa7I
 	U04rW7UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBGc797QEmAAAsK
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBGc79-IEqgAAs9
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Introduce a new measurement style using digest caches, which can be
-performed exclusively on non-standard PCRs, to avoid ambiguity.
+Similarly to measurement, enable the new appraisal style too using digest
+caches.
 
-While a measurement on the standard PCR means that a file was accessed and
-had the measured data, a measurement with the digest cache means only that
-the calculated file digest was not found in any of the measured digest
-lists (any digest list used for the search must be measured, otherwise IMA
-wouldn't use it).
+It allows files to be verified by only checking the signature of the
+package they belong to (as opposed to checking individual file signatures),
+and by doing a digest lookup in the digest cache.
 
-The new measurement style does not tell: whether or not the file was
-actually accessed (since its measurement is skipped even if it was); in
-which sequence files were accessed. So, one has to guess that the system
-might have possibly accessed any of the files whose digest is in the
-measured digest lists, in any order.
+The first benefit is that packages are already signed (e.g. RPM package
+headers) and also contain file digests, so it is not necessary to further
+add signatures for each file.
 
-However, it has the following benefits: the IMA measurement list can be
-much shorter, system performance can be much better due to less PCR extend
-operations (see the performance evaluation in the Integrity Digest Cache
-documentation); the PCR can be predictable as long as the set of measured
-digest lists does not change (which obviously happens during software
-updates).
+The second benefit is performance, which improves due to verifying less
+signatures (computationally expensive).
 
-The PCR can be predictable because the Integrity Digest Cache has a
-prefetching mechanism that reads digest lists in a deterministic order,
-until it finds the digest list containing the digest calculated by IMA from
-an accessed file. If IMA measures digest lists, the PCR is extended in a
-deterministic order too.
+Appraisal with a digest cache is successful only if the allowed usage
+(AND of policy usage and verified usage) has the
+IMA_DIGEST_CACHE_APPRAISE_DATA bit set, and if EVM is disabled or the file
+does not have any protected xattr
 
-Predictable PCR means that a TPM key can be made dependent on specific PCR
-values (or a OR of them, depending on the key policy). Accessing a file
-with an unknown digest immediately makes that TPM key unusable, requiring a
-reboot to use it again.
-
-This mechanism can be used for the so called implicit remote attestation,
-where the ability of a system to respond to challenges based on the private
-part of the TPM key means that the system has the expected PCR values
-(which would mean that the integrity of the system is ok). This is opposed
-to the explicit remote attestation, where a system has to send all its
-measurements, to prove to a remote party about its integrity.
-
-Call the newly introduced function ima_digest_cache_load_verified_usage()
-to retrieve the verified usage from the digest cache containing the
-calculated digest of the file being accessed (if it is found), and AND it
-with the policy usage.
-
-If the AND result has the IMA_DIGEST_CACHE_MEASURE_DATA flag set, behave as
-if the file was successfully added to the IMA measurement list (i.e. set
-the IMA_MEASURED flag and the PCR flag from the value specified in the
-matching policy rule), but actually don't do it.
+The digest cache appraisal method is tried first, for performance reasons.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/integrity/ima/ima.h      |  3 ++-
- security/integrity/ima/ima_api.c  | 15 ++++++++++++++-
- security/integrity/ima/ima_main.c |  7 +++++--
- 3 files changed, 21 insertions(+), 4 deletions(-)
+ security/integrity/ima/ima.h          |  6 ++++--
+ security/integrity/ima/ima_appraise.c | 31 +++++++++++++++++++++------
+ security/integrity/ima/ima_main.c     |  4 +++-
+ 3 files changed, 31 insertions(+), 10 deletions(-)
 
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index f3e6dcd9defd..61b019e7bace 100644
+index 61b019e7bace..aec61984b12c 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -389,7 +389,8 @@ void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
- 			   const unsigned char *filename,
- 			   struct evm_ima_xattr_data *xattr_value,
- 			   int xattr_len, const struct modsig *modsig, int pcr,
--			   struct ima_template_desc *template_desc);
-+			   struct ima_template_desc *template_desc,
-+			   u64 allowed_usage);
- int process_buffer_measurement(struct mnt_idmap *idmap,
- 			       struct inode *inode, const void *buf, int size,
- 			       const char *eventname, enum ima_hooks func,
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index b44cf7d9fbcb..530c5bcc115e 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -351,7 +351,8 @@ void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
- 			   const unsigned char *filename,
- 			   struct evm_ima_xattr_data *xattr_value,
- 			   int xattr_len, const struct modsig *modsig, int pcr,
--			   struct ima_template_desc *template_desc)
-+			   struct ima_template_desc *template_desc,
-+			   u64 allowed_usage)
+@@ -440,7 +440,8 @@ int ima_check_blacklist(struct ima_iint_cache *iint,
+ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 			     struct file *file, const unsigned char *filename,
+ 			     struct evm_ima_xattr_data *xattr_value,
+-			     int xattr_len, const struct modsig *modsig);
++			     int xattr_len, const struct modsig *modsig,
++			     u64 allowed_usage);
+ int ima_must_appraise(struct mnt_idmap *idmap, struct inode *inode,
+ 		      int mask, enum ima_hooks func);
+ void ima_update_xattr(struct ima_iint_cache *iint, struct file *file);
+@@ -465,7 +466,8 @@ static inline int ima_appraise_measurement(enum ima_hooks func,
+ 					   const unsigned char *filename,
+ 					   struct evm_ima_xattr_data *xattr_value,
+ 					   int xattr_len,
+-					   const struct modsig *modsig)
++					   const struct modsig *modsig,
++					   u64 allowed_usage)
  {
- 	static const char op[] = "add_template_measure";
- 	static const char audit_cause[] = "ENOMEM";
-@@ -375,6 +376,18 @@ void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
- 	if (iint->measured_pcrs & (0x1 << pcr) && !modsig)
- 		return;
+ 	return INTEGRITY_UNKNOWN;
+ }
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index d479cf58d859..d4745d90ae23 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -480,7 +480,8 @@ int ima_check_blacklist(struct ima_iint_cache *iint,
+ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 			     struct file *file, const unsigned char *filename,
+ 			     struct evm_ima_xattr_data *xattr_value,
+-			     int xattr_len, const struct modsig *modsig)
++			     int xattr_len, const struct modsig *modsig,
++			     u64 allowed_usage)
+ {
+ 	static const char op[] = "appraise_data";
+ 	const char *cause = "unknown";
+@@ -489,13 +490,20 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 	enum integrity_status status = INTEGRITY_UNKNOWN;
+ 	int rc = xattr_len;
+ 	bool try_modsig = iint->flags & IMA_MODSIG_ALLOWED && modsig;
++	bool cache_pass = (allowed_usage & IMA_DIGEST_CACHE_APPRAISE_DATA);
  
+-	/* If not appraising a modsig, we need an xattr. */
+-	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig)
 +	/*
-+	 * If digest cache usage was authorized with the IMA policy, the digest
-+	 * list the digest cache was populated from was measured, and the file
-+	 * digest was found in the digest cache, mark the file as successfully
-+	 * measured.
++	 * If not appraising a modsig/there is no digest cache match, we need
++	 * an xattr.
 +	 */
-+	if (allowed_usage & IMA_DIGEST_CACHE_MEASURE_DATA) {
-+		iint->flags |= IMA_MEASURED;
-+		iint->measured_pcrs |= (0x1 << pcr);
-+		return;
++	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig && !cache_pass)
+ 		return INTEGRITY_UNKNOWN;
+ 
+-	/* If reading the xattr failed and there's no modsig, error out. */
+-	if (rc <= 0 && !try_modsig) {
++	/*
++	 * If reading the xattr failed and there's no modsig/digest cache match,
++	 * error out.
++	 */
++	if (rc <= 0 && !try_modsig && !cache_pass) {
+ 		if (rc && rc != -ENODATA)
+ 			goto out;
+ 
+@@ -526,8 +534,11 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 	case INTEGRITY_UNKNOWN:
+ 		break;
+ 	case INTEGRITY_NOXATTRS:	/* No EVM protected xattrs. */
+-		/* It's fine not to have xattrs when using a modsig. */
+-		if (try_modsig)
++		/*
++		 * It's fine not to have xattrs when using a modsig or there
++		 * is a digest cache match.
++		 */
++		if (try_modsig || cache_pass)
+ 			break;
+ 		fallthrough;
+ 	case INTEGRITY_NOLABEL:		/* No security.evm xattr. */
+@@ -544,6 +555,12 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 		WARN_ONCE(true, "Unexpected integrity status %d\n", status);
+ 	}
+ 
++	if (cache_pass) {
++		status = INTEGRITY_PASS;
++		rc = 0;
++		goto out;
 +	}
 +
- 	result = ima_alloc_init_template(&event_data, &entry, template_desc);
- 	if (result < 0) {
- 		integrity_audit_msg(AUDIT_INTEGRITY_PCR, inode, filename,
+ 	if (xattr_value)
+ 		rc = xattr_verify(func, iint, xattr_value, xattr_len, &status,
+ 				  &cause);
 diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 607749d520b0..0d37cdc01622 100644
+index 0d37cdc01622..049e379fed7f 100644
 --- a/security/integrity/ima/ima_main.c
 +++ b/security/integrity/ima/ima_main.c
-@@ -225,7 +225,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	bool violation_check;
- 	enum hash_algo hash_algo;
- 	unsigned int allowed_algos = 0;
--	u64 policy_usage = 0ULL;
-+	u64 policy_usage = 0ULL, verified_usage = 0ULL;
- 
- 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
- 		return 0;
-@@ -385,10 +385,13 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
- 		pathname = ima_d_path(&file->f_path, &pathbuf, filename);
- 
-+	verified_usage = ima_digest_cache_load_verified_usage(file, iint);
-+
- 	if (action & IMA_MEASURE)
- 		ima_store_measurement(iint, file, pathname,
- 				      xattr_value, xattr_len, modsig, pcr,
--				      template_desc);
-+				      template_desc,
-+				      (policy_usage & verified_usage));
- 	if (rc == 0 && (action & IMA_APPRAISE_SUBMASK)) {
- 		rc = ima_check_blacklist(iint, modsig, pcr);
- 		if (rc != -EPERM) {
+@@ -398,7 +398,9 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 			inode_lock(inode);
+ 			rc = ima_appraise_measurement(func, iint, file,
+ 						      pathname, xattr_value,
+-						      xattr_len, modsig);
++						      xattr_len, modsig,
++						      (policy_usage &
++						       verified_usage));
+ 			inode_unlock(inode);
+ 		}
+ 		if (!rc)
 -- 
 2.47.0.118.gfd3785337b
 
