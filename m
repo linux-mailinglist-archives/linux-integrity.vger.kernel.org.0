@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-4156-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4157-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 495869D247C
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Nov 2024 12:04:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AE1C9D2480
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Nov 2024 12:04:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD580B24324
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Nov 2024 11:04:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D862B1F240B7
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Nov 2024 11:04:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1323A1C9B9A;
-	Tue, 19 Nov 2024 11:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF791C6F47;
+	Tue, 19 Nov 2024 11:03:20 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28C41C68A3;
-	Tue, 19 Nov 2024 11:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA691C4A36;
+	Tue, 19 Nov 2024 11:03:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732014187; cv=none; b=d3oQ0Rug10XWfRp1FG4wysTs5n4QShdw9sftLNSUUBSryrNWBGWgCx8s1WELjCkyp+8WxHl/+5Jq2Swa+3rqLEhNDfV5G2viAZPBwm9mECEM4WIE+x25Y0aXO8dm6anfQN1n556tRpkXbT8Sq6IuJqAGKvZYrVbKGV9tNEJlTKE=
+	t=1732014199; cv=none; b=gSnZCAJ37jk4+NDTat+pYENEo/4JtgcObBum86MMuuRZ5Y/zvdX4GHXgYJnlbkQ8tAt7F/vcNTUTUqOvRnyVOuv83EDUSZswJn2syYe2jB+t612Bz1vSNNPoam5NXpc5s3mZdCETROvF2QpXRfyWxdwU6FJT6q8KCWxLfobjEwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732014187; c=relaxed/simple;
-	bh=ju/IAw6dPeGn+d1vHJhFySBDcHhb9QLqKEczPv4HD9g=;
+	s=arc-20240116; t=1732014199; c=relaxed/simple;
+	bh=Dtn3dFiwEnuNFVgKfjmK1osRUp4jcnUCWtkeo22Tyfo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AVvL93HdwKBmL9Zs844yI5M6o9bg7GW/vYk5xF2MA+ZChz2XMtKKLj3Ypp7p6w+sSp+A12Wz64JunO62+90MXz3iIQY1Fs15KPfnIyo5qUO1xSEKn2izUsQr5hNIjle8VDXFNu7wI5R0MJ+tm3ODEnRFOHQd6aWEv35Sg4hc69c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+	 MIME-Version; b=a2Pn8wsy3nRbHefxu8YdE/EYJTMvMXw3lwsUZGjY1U5G0j7X5ap9uqwVWUBZ/AG6OMBK7XqYTqlO0Yr5s1LMXD0Yk1RrttuRCd1gY5x48+HyHQ7b1CPc0Lt/sOuoJtYe3os3GfXTeUpe5DAqacAI6GHbn7eT8PmGenYKlzfMaiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Xt1Jz5krRz9v7NH;
-	Tue, 19 Nov 2024 18:42:11 +0800 (CST)
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xt1K95dtvz9v7J6;
+	Tue, 19 Nov 2024 18:42:21 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id AAE0D140E9A;
-	Tue, 19 Nov 2024 19:02:57 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id A4FC9140DF8;
+	Tue, 19 Nov 2024 19:03:09 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwB3NTb9bzxnNXHnAQ--.10850S9;
-	Tue, 19 Nov 2024 12:02:57 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwB3NTb9bzxnNXHnAQ--.10850S10;
+	Tue, 19 Nov 2024 12:03:09 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	zohar@linux.ibm.com,
@@ -65,9 +65,9 @@ Cc: linux-kernel@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v4 7/9] ima: Load verified usage from digest cache found from query
-Date: Tue, 19 Nov 2024 12:01:01 +0100
-Message-ID: <20241119110103.2780453-8-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH v4 8/9] ima: Use digest caches for measurement
+Date: Tue, 19 Nov 2024 12:01:02 +0100
+Message-ID: <20241119110103.2780453-9-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.47.0.118.gfd3785337b
 In-Reply-To: <20241119110103.2780453-1-roberto.sassu@huaweicloud.com>
 References: <20241119110103.2780453-1-roberto.sassu@huaweicloud.com>
@@ -78,10 +78,10 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwB3NTb9bzxnNXHnAQ--.10850S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr15KFyrJr13AFyrur4rXwb_yoWrWw4rpa
-	9agFnrtr4rZry7Cw43AFy29rWrKrykta17J398ZwnIya15Zr1jyws5Cw1UuryfJr4jqa1x
-	tw4jgw15Cw1qkaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:LxC2BwB3NTb9bzxnNXHnAQ--.10850S10
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFy7KrWkXF1UJw4UZFW5ZFb_yoWxGw1xpa
+	9IgF1UKr1kXFySkrn3A3W7Za1F93y8ta1UX398Ww1ay3ZxZr1q9w4Fkr1j9Fs8GrWvya4I
+	yanFqw4UAw1qyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -96,108 +96,142 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxWr15KFyrJr13AFyrur4rXwb_yoWrWw4rpa
 	7I0E14v26F4UJVW0owCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
 	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZEXa7I
 	U04rW7UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBGc797QElwABsE
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBGc797QEmAAAsK
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Introduce ima_digest_cache_load_verified_usage() to retrieve the verified
-usage from the digest cache pointer returned by digest_cache_lookup().
+Introduce a new measurement style using digest caches, which can be
+performed exclusively on non-standard PCRs, to avoid ambiguity.
 
-Verified usage cannot be loaded from the digest cache returned by
-digest_cache_get() since the latter might return a directory digest cache,
-which does not contain any verification data (only set to digest caches
-populated from a file).
+While a measurement on the standard PCR means that a file was accessed and
+had the measured data, a measurement with the digest cache means only that
+the calculated file digest was not found in any of the measured digest
+lists (any digest list used for the search must be measured, otherwise IMA
+wouldn't use it).
 
-If digest_cache_lookup() returns the ERR_PTR(-EAGAIN) error pointer,
-replace the digest cache pointer in the inode integrity metadata, by
-calling digest_cache_get() again, and perform the lookup.
+The new measurement style does not tell: whether or not the file was
+actually accessed (since its measurement is skipped even if it was); in
+which sequence files were accessed. So, one has to guess that the system
+might have possibly accessed any of the files whose digest is in the
+measured digest lists, in any order.
 
-ERR_PTR(-EAGAIN) is returned if the digest cache currently stored in the
-inode integrity metadata changed between digest_cache_get() and
-digest_cache_lookup(). In this case, getting a fresh digest cache is
-necessary to see which changes have been made on the digest cache.
+However, it has the following benefits: the IMA measurement list can be
+much shorter, system performance can be much better due to less PCR extend
+operations (see the performance evaluation in the Integrity Digest Cache
+documentation); the PCR can be predictable as long as the set of measured
+digest lists does not change (which obviously happens during software
+updates).
+
+The PCR can be predictable because the Integrity Digest Cache has a
+prefetching mechanism that reads digest lists in a deterministic order,
+until it finds the digest list containing the digest calculated by IMA from
+an accessed file. If IMA measures digest lists, the PCR is extended in a
+deterministic order too.
+
+Predictable PCR means that a TPM key can be made dependent on specific PCR
+values (or a OR of them, depending on the key policy). Accessing a file
+with an unknown digest immediately makes that TPM key unusable, requiring a
+reboot to use it again.
+
+This mechanism can be used for the so called implicit remote attestation,
+where the ability of a system to respond to challenges based on the private
+part of the TPM key means that the system has the expected PCR values
+(which would mean that the integrity of the system is ok). This is opposed
+to the explicit remote attestation, where a system has to send all its
+measurements, to prove to a remote party about its integrity.
+
+Call the newly introduced function ima_digest_cache_load_verified_usage()
+to retrieve the verified usage from the digest cache containing the
+calculated digest of the file being accessed (if it is found), and AND it
+with the policy usage.
+
+If the AND result has the IMA_DIGEST_CACHE_MEASURE_DATA flag set, behave as
+if the file was successfully added to the IMA measurement list (i.e. set
+the IMA_MEASURED flag and the PCR flag from the value specified in the
+matching policy rule), but actually don't do it.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/integrity/ima/ima_digest_cache.c | 42 +++++++++++++++++++++++
- security/integrity/ima/ima_digest_cache.h |  9 +++++
- 2 files changed, 51 insertions(+)
+ security/integrity/ima/ima.h      |  3 ++-
+ security/integrity/ima/ima_api.c  | 15 ++++++++++++++-
+ security/integrity/ima/ima_main.c |  7 +++++--
+ 3 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/security/integrity/ima/ima_digest_cache.c b/security/integrity/ima/ima_digest_cache.c
-index 2c7824ce05cd..b6bd6f9d5442 100644
---- a/security/integrity/ima/ima_digest_cache.c
-+++ b/security/integrity/ima/ima_digest_cache.c
-@@ -82,3 +82,45 @@ void ima_digest_cache_store_verified_usage(struct file *file,
- 		pr_debug("Cannot set verified usage for %s, ret: %d, ignoring\n",
- 			 file_dentry(file)->d_name.name, rc);
- }
-+
-+/**
-+ * ima_digest_cache_load_verified_usage - Load verified usage from digest cache
-+ * @file: File descriptor of the inode for which the digest cache will be used
-+ * @iint: Inode integrity metadata
-+ *
-+ * Load digest cache verified usage from the digest cache returned by
-+ * digest_cache_lookup(), containing the file digest calculated by IMA (if the
-+ * digest is found).
-+ *
-+ * Return: Verified usage if digest is found in digest cache, zero otherwise.
-+ */
-+u64 ima_digest_cache_load_verified_usage(struct file *file,
-+					 struct ima_iint_cache *iint)
-+{
-+	u64 verified_usage = 0ULL;
-+	void *verified_usage_ptr;
-+	struct digest_cache *found_cache;
-+again:
-+	if (!iint->digest_cache)
-+		return 0ULL;
-+
-+	/* Do lookup to get digest cache containing calculated file digest. */
-+	found_cache = digest_cache_lookup(file_dentry(file), iint->digest_cache,
-+					  iint->ima_hash->digest,
-+					  iint->ima_hash->algo);
-+	if (!found_cache) {
-+		return 0ULL;
-+	} else if (found_cache == ERR_PTR(-EAGAIN)) {
-+		digest_cache_put(iint->digest_cache);
-+		iint->digest_cache = digest_cache_get(file);
-+		goto again;
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index f3e6dcd9defd..61b019e7bace 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -389,7 +389,8 @@ void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
+ 			   const unsigned char *filename,
+ 			   struct evm_ima_xattr_data *xattr_value,
+ 			   int xattr_len, const struct modsig *modsig, int pcr,
+-			   struct ima_template_desc *template_desc);
++			   struct ima_template_desc *template_desc,
++			   u64 allowed_usage);
+ int process_buffer_measurement(struct mnt_idmap *idmap,
+ 			       struct inode *inode, const void *buf, int size,
+ 			       const char *eventname, enum ima_hooks func,
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index b44cf7d9fbcb..530c5bcc115e 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -351,7 +351,8 @@ void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
+ 			   const unsigned char *filename,
+ 			   struct evm_ima_xattr_data *xattr_value,
+ 			   int xattr_len, const struct modsig *modsig, int pcr,
+-			   struct ima_template_desc *template_desc)
++			   struct ima_template_desc *template_desc,
++			   u64 allowed_usage)
+ {
+ 	static const char op[] = "add_template_measure";
+ 	static const char audit_cause[] = "ENOMEM";
+@@ -375,6 +376,18 @@ void ima_store_measurement(struct ima_iint_cache *iint, struct file *file,
+ 	if (iint->measured_pcrs & (0x1 << pcr) && !modsig)
+ 		return;
+ 
++	/*
++	 * If digest cache usage was authorized with the IMA policy, the digest
++	 * list the digest cache was populated from was measured, and the file
++	 * digest was found in the digest cache, mark the file as successfully
++	 * measured.
++	 */
++	if (allowed_usage & IMA_DIGEST_CACHE_MEASURE_DATA) {
++		iint->flags |= IMA_MEASURED;
++		iint->measured_pcrs |= (0x1 << pcr);
++		return;
 +	}
 +
-+	/* Get verification data from digest cache with calculated digest. */
-+	verified_usage_ptr = digest_cache_verif_get(found_cache, "ima");
-+	if (verified_usage_ptr)
-+		verified_usage = *(u64 *)verified_usage_ptr;
-+
-+	digest_cache_put(found_cache);
-+	return verified_usage;
-+}
-diff --git a/security/integrity/ima/ima_digest_cache.h b/security/integrity/ima/ima_digest_cache.h
-index 167690930078..23cb53ed02e5 100644
---- a/security/integrity/ima/ima_digest_cache.h
-+++ b/security/integrity/ima/ima_digest_cache.h
-@@ -14,6 +14,8 @@ bool ima_digest_cache_get_check(struct file *file,
- 				struct ima_iint_cache *iint);
- void ima_digest_cache_store_verified_usage(struct file *file,
- 					   struct ima_iint_cache *iint);
-+u64 ima_digest_cache_load_verified_usage(struct file *file,
-+					 struct ima_iint_cache *iint);
- #else
- static inline bool ima_digest_cache_get_check(struct file *file,
- 					      struct ima_iint_cache *iint)
-@@ -26,4 +28,11 @@ ima_digest_cache_store_verified_usage(struct file *file,
- 				      struct ima_iint_cache *iint)
- { }
+ 	result = ima_alloc_init_template(&event_data, &entry, template_desc);
+ 	if (result < 0) {
+ 		integrity_audit_msg(AUDIT_INTEGRITY_PCR, inode, filename,
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 607749d520b0..0d37cdc01622 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -225,7 +225,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	bool violation_check;
+ 	enum hash_algo hash_algo;
+ 	unsigned int allowed_algos = 0;
+-	u64 policy_usage = 0ULL;
++	u64 policy_usage = 0ULL, verified_usage = 0ULL;
  
-+static inline u64
-+ima_digest_cache_load_verified_usage(struct file *file,
-+				     struct ima_iint_cache *iint)
-+{
-+	return 0ULL;
-+}
+ 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+ 		return 0;
+@@ -385,10 +385,13 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	if (!pathbuf)	/* ima_rdwr_violation possibly pre-fetched */
+ 		pathname = ima_d_path(&file->f_path, &pathbuf, filename);
+ 
++	verified_usage = ima_digest_cache_load_verified_usage(file, iint);
 +
- #endif /* CONFIG_INTEGRITY_DIGEST_CACHE */
+ 	if (action & IMA_MEASURE)
+ 		ima_store_measurement(iint, file, pathname,
+ 				      xattr_value, xattr_len, modsig, pcr,
+-				      template_desc);
++				      template_desc,
++				      (policy_usage & verified_usage));
+ 	if (rc == 0 && (action & IMA_APPRAISE_SUBMASK)) {
+ 		rc = ima_check_blacklist(iint, modsig, pcr);
+ 		if (rc != -EPERM) {
 -- 
 2.47.0.118.gfd3785337b
 
