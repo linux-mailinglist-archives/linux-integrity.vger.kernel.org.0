@@ -1,215 +1,191 @@
-Return-Path: <linux-integrity+bounces-4183-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4184-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CF669D5409
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2024 21:36:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BA9E9D5459
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2024 21:55:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0382B21407
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2024 20:36:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8D11B21179
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 Nov 2024 20:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7EEE1C4A37;
-	Thu, 21 Nov 2024 20:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB361C9ED5;
+	Thu, 21 Nov 2024 20:54:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FLFIZr1r"
+	dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b="eZcYIJSB"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABF33C47B;
-	Thu, 21 Nov 2024 20:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CEDF1C4A35
+	for <linux-integrity@vger.kernel.org>; Thu, 21 Nov 2024 20:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732221369; cv=none; b=TvTeArzGxqDdHq2o2QKoEmzupryI76NF0ufuwtygPy1uI3RnSYBAkZgeVACbceJ05d7aAnKB8O28raZdCanfnX+8FOyzFRAJao81kYa4hYT7GedY4jzwhm7FQoZZPUoXEoQzQmcanQgFrAu4RbNhpge/rjQfnM47gP6Bd6bNjjc=
+	t=1732222499; cv=none; b=P8ySpSuT9y5QTG/lu6MC9h6TBcVcfZBAnWA+vUunv4XSVFtvIuQ7ewbjEFCzeXyuEVqIjCu2sLj65AuT5jGzgiePp2PekJ04PCo3pwZEZey+T8szYWmIDlxazffWskN3JaUWG9lj86XUQub7+b9CXid75dUztRBmFKAg5HfWCXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732221369; c=relaxed/simple;
-	bh=7Vq/O7M/rpQ/XvxNyaS3o9CEOAPJiin0cbjFnC1hENc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Hut4soXcwm7yWRFgY1m+3KvXbQp0gh0eSkXdFq+RePOLhe6tJ6xqKbMCrTfKL2oUrbf7fw/21lkG6PIGadbfhpT50O/RQK7wKLnl2khKtRmlE2xJE9faWrCONfSoazcE6oQi+kU70ZVXKXUVkwILThS4V5HpOQTH2rl4IorUUh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FLFIZr1r; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ALGfAQH013558;
-	Thu, 21 Nov 2024 20:34:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=rlelLu
-	NxaQbOjS+AkBlNiz3aAj7rJ3O71jw+IWqCHcY=; b=FLFIZr1rr1BmrgPgUxiG3g
-	Sn9cNjYHRsSVYuOrafvD0Oas8M5sJR3icX2DR4H+Ij8pW1K/nJ1dQ80N/VTGAfJb
-	gUzKG2pWPH6ZwcS7EP/V5A85Z803GnU1c+1Pj0XfDxOkcnQU020QCLahQT6i/1Ee
-	anToxEuakKvgsE2qEjn6OwHJRSEGLWzplZjyqgcyR2KALhJ6iuST4Ap9niIrbXek
-	lmSmFnHLYvZxf1hDcNh3nvmSH52GrdPBsfQ2FxMXHw5I/46RlnCZt2b3PBSYYnkh
-	WU2kJJDaY/8gGcEnFFq9zO4Zjz7tEFINhYu22GZYGE5uf9G8uY71LM5QXTQvt1xw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4313gsufwh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Nov 2024 20:34:53 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4ALKYqu6024816;
-	Thu, 21 Nov 2024 20:34:52 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4313gsufwe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Nov 2024 20:34:52 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4ALIpcBI000600;
-	Thu, 21 Nov 2024 20:34:51 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42y77mtd41-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Nov 2024 20:34:51 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4ALKYoDo57147782
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 Nov 2024 20:34:50 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5FB2C58056;
-	Thu, 21 Nov 2024 20:34:50 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C34A358052;
-	Thu, 21 Nov 2024 20:34:47 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.103.152])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 Nov 2024 20:34:47 +0000 (GMT)
-Message-ID: <d115a20889d01bc7b12dbd8cf99aad0be58cbc97.camel@linux.ibm.com>
-Subject: Re: [PATCH v21 6/6] samples/check-exec: Add an enlighten "inc"
- interpreter and 28 tests
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Al Viro
- <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Kees
- Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>,
-        Serge
- Hallyn <serge@hallyn.com>
-Cc: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Alejandro
- Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
-        Andrew Morton
- <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Heimes <christian@python.org>,
-        Dmitry Vyukov
- <dvyukov@google.com>, Elliott Hughes <enh@google.com>,
-        Eric Biggers
- <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Fan Wu
- <wufan@linux.microsoft.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Geert
- Uytterhoeven <geert@linux-m68k.org>,
-        James Morris
- <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>,
-        Jann Horn
- <jannh@google.com>, Jeff Xu <jeffxu@google.com>,
-        Jonathan Corbet
- <corbet@lwn.net>,
-        Jordan R Abrahams <ajordanr@google.com>,
-        Lakshmi
- Ramasubramanian <nramas@linux.microsoft.com>,
-        Linus Torvalds
- <torvalds@linux-foundation.org>,
-        Luca Boccassi <bluca@debian.org>,
-        Luis
- Chamberlain <mcgrof@kernel.org>,
-        "Madhavan T . Venkataraman"
- <madvenka@linux.microsoft.com>,
-        Matt Bobrowski <mattbobrowski@google.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Matthew Wilcox
- <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Nicolas
- Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
-        Scott Shell
- <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell
- <sfr@canb.auug.org.au>,
-        Steve Dower <steve.dower@python.org>, Steve Grubb
- <sgrubb@redhat.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Thibaut Sautereau
- <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel
- <vincent.strubel@ssi.gouv.fr>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Yin
- Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Date: Thu, 21 Nov 2024 15:34:47 -0500
-In-Reply-To: <20241112191858.162021-7-mic@digikod.net>
-References: <20241112191858.162021-1-mic@digikod.net>
-	 <20241112191858.162021-7-mic@digikod.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1732222499; c=relaxed/simple;
+	bh=Biph9Y81tJzpyne82IE5JL3yDDDlbt96oHwe7pZJBKY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aOZWMhxPb98GEQmYW+3GY5/hK3BY0STi6NmCVPLuNkopbjKzkFPbEXn4vb/jGF9GWL0SXzCVNxXFKMaTMaYy12KPUUC5ncJ6/gfz+s76X0b/3mKOmTO9T4vJC5JVQ4KHShJUWrCGzwJwsgVijBdYFMD5izZu4G4nLT40+Z7MEEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b=eZcYIJSB; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aa4833e9c44so165651566b.2
+        for <linux-integrity@vger.kernel.org>; Thu, 21 Nov 2024 12:54:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20230601.gappssmtp.com; s=20230601; t=1732222496; x=1732827296; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UxlYJjettiAZ+zfwr/z60w9a0TTUnSB4Ghtw8Ez8qss=;
+        b=eZcYIJSBJzbNyIV95VSGlyICxqMVXWjwSXpvTaA1Gm8a+z1DXPgzZL4xx9sQQGpQTB
+         00pw0awYeN+lqtORfWf1yxOJTBJSLaNcCr7EXEm7idN8sqruZGwZy5E/v4dz7mgRlZXC
+         RbgJ70q5sLZmuKuzcSEbcOdTfoEaPwK760R0ESJjlXjHJ03Fpe9z3FvidZFBJ1piroLq
+         iTnaAX2n4caikgul4HOHDnqaAQaUbAz1jjJIRk5d2rwQlsvwtOKJpwl0DbPwtGb922ls
+         udtnN2YBNHEohJ6teTzGDXFijlc/y2yEO+4PyReZIQ8OXv14LtIcLR/tRTipz3fo+fM8
+         QMyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732222496; x=1732827296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UxlYJjettiAZ+zfwr/z60w9a0TTUnSB4Ghtw8Ez8qss=;
+        b=GSk1ryH2KRCZ/GfI9TbSG5niUj7wk/yrleaVlLbrHYsDlq34xB3myL/FYrEl9x2tY/
+         KYPnJIUPd5hD04iHhSwrq9OItbT7oFo4vKA/FYtnaYj0CUskUDzXJHWbqFgT7Sx7qGAv
+         v4VnN+Fy/2WD/i0rAPoHNU95GWr2v03hUiU399G2ACbvfjnMOKgQj+QB1s8gfccs4jFr
+         7B27Gw857Ejvjto92Aij4EewmljsYuGwfB79Q6HFlyIrl8xaCp15e239ifLuGbw0ioEb
+         ioMA40+sa1kABjmtJxRv/KWS/mJD29uMqLZdiXb+vzH5q2d1HUensYKMYxDVo7M1BRc3
+         ThAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV8QG60aQNBMiT+wYIrnIm4nTW1z8hxmwAG359zfcVTmv80tRBG7gKZFPmfaXUG0SNoAM+8KEwlFgxT4FAam6k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznH+fz/8uCVpIbdnq1IvFpLbo3JH/1yqeFQnGn9F7RqR8MACyz
+	TF/iPClYf4LjVWC2qUWbcT8s+J7onBYubgj+jtFDvP6VFfzLLOM18VRVnUUJmS6hUdiKz9X2jk0
+	eN0fanFrRgkPg9JH0YqcGwwa6cjTXGvPxCRGt
+X-Gm-Gg: ASbGncvPxByWdSxPaTIrvp2Y0cEGtbsWEP5T+kQtsVbBHPyOcL6JD1SFeOFkISzHcd6
+	Rs7rP0V7C9eA9cjOiXyxryS21WkBKug==
+X-Google-Smtp-Source: AGHT+IFX8qcopmb73820lJ1EeujV0jQkdCVa2KfAGp/XQ+pR8ULYDdyGXnU+d5xuQGgKClmQdL5XGK0efADwdQnx/XY=
+X-Received: by 2002:a17:907:ab5:b0:a9e:b2da:b4a3 with SMTP id
+ a640c23a62f3a-aa509bc13ffmr38783066b.42.1732222495578; Thu, 21 Nov 2024
+ 12:54:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5j4NljDjvOK_TMG_-0z2jGGIPzeoKdQE
-X-Proofpoint-ORIG-GUID: y_4dWfxzFvg9Bphre9Ic1A5QOC1Kd_4I
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- adultscore=0 mlxlogscore=977 mlxscore=0 malwarescore=0 spamscore=0
- priorityscore=1501 phishscore=0 lowpriorityscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411210153
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <874jaegk8i.fsf@email.froward.int.ebiederm.org> <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
+ <87ttflli09.ffs@tglx> <CALCETrXQ7rChWLDqTG0+KY7rsfajSPguMnHO1G4VJi_mgwN9Zw@mail.gmail.com>
+ <1a1f0c41-70de-4f46-b91d-6dc7176893ee@apertussolutions.com>
+ <8a0b59a4-a5a2-42ae-bc1c-1ddc8f2aad16@apertussolutions.com>
+ <CALCETrX8caT5qvCUu24hQfxUF_wUC2XdGpS2YFP6SR++7FiM3Q@mail.gmail.com>
+ <c466ed57-35a8-41c0-9647-c70e588ad1d3@apertussolutions.com>
+ <CALCETrW9WNNGh1dEPKfQoeU+m5q6_m97d0_bzRkZsv2LxqB_ew@mail.gmail.com>
+ <ff0c8eed-8981-48c4-81d9-56b040ef1c7b@apertussolutions.com>
+ <446cf9c70184885e4cec6dd4514ae8daf7accdcb.camel@HansenPartnership.com>
+ <5d1e41d6-b467-4013-a0d0-45f9511c15c6@apertussolutions.com>
+ <CALCETrW6vMYZo-b7N9ojVSeZLVxhZjLBjnMHsULMGP6TaVYRHA@mail.gmail.com>
+ <9c80e779b6268fde33c93ed3765ff93b1d6d007b.camel@HansenPartnership.com>
+ <CALCETrX4vHnVorqWjPEOP0XLaA0uUWkKikDcCXWtbs2a7EBuiA@mail.gmail.com> <66fabe21-7d0d-4978-806e-9a4af3e9257a@oracle.com>
+In-Reply-To: <66fabe21-7d0d-4978-806e-9a4af3e9257a@oracle.com>
+From: Andy Lutomirski <luto@amacapital.net>
+Date: Thu, 21 Nov 2024 12:54:44 -0800
+Message-ID: <CALCETrXXsta0OdgXb5Ti87psaty7gp5WRr-w8vTuEhOLuoGyXg@mail.gmail.com>
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
+ early measurements
+To: ross.philipson@oracle.com
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	"Daniel P. Smith" <dpsmith@apertussolutions.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	"Eric W. Biederman" <ebiederm@xmission.com>, Eric Biggers <ebiggers@kernel.org>, 
+	linux-kernel@vger.kernel.org, x86@kernel.org, linux-integrity@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	kexec@lists.infradead.org, linux-efi@vger.kernel.org, 
+	iommu@lists.linux-foundation.org, mingo@redhat.com, bp@alien8.de, 
+	hpa@zytor.com, dave.hansen@linux.intel.com, ardb@kernel.org, 
+	mjg59@srcf.ucam.org, peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, 
+	nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net, 
+	corbet@lwn.net, dwmw2@infradead.org, baolu.lu@linux.intel.com, 
+	kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com, 
+	trenchboot-devel@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Micka=C3=ABl,
+On Thu, Nov 21, 2024 at 12:11=E2=80=AFPM <ross.philipson@oracle.com> wrote:
+>
+> On 11/18/24 12:02 PM, Andy Lutomirski wrote:
 
-On Tue, 2024-11-12 at 20:18 +0100, Micka=C3=ABl Sala=C3=BCn wrote:
->=20
-> +
-> +/* Returns 1 on error, 0 otherwise. */
-> +static int interpret_stream(FILE *script, char *const script_name,
-> +			    char *const *const envp, const bool restrict_stream)
-> +{
-> +	int err;
-> +	char *const script_argv[] =3D { script_name, NULL };
-> +	char buf[128] =3D {};
-> +	size_t buf_size =3D sizeof(buf);
-> +
-> +	/*
-> +	 * We pass a valid argv and envp to the kernel to emulate a native
-> +	 * script execution.  We must use the script file descriptor instead of
-> +	 * the script path name to avoid race conditions.
-> +	 */
-> +	err =3D execveat(fileno(script), "", script_argv, envp,
-> +		       AT_EMPTY_PATH | AT_EXECVE_CHECK);
+> > If the vendor of an attestation-dependent thing trusts SM3 but *Linux*
+> > does not like SM3, then the vendor's software should not become wildly
+> > insecure because Linux does not like SM3.  And, as that 2004 CVE
+> > shows, even two groups that are nominally associated with Microsoft
+> > can disagree on which banks they like, causing a vulnerability.
+>
+> Thanks everyone for all the feedback and discussions on this. I
+> understand it is important and perhaps the Linux TPM code should be
+> modified to do the extend operations differently but this seems like it
+> is outside the scope of our Secure Launch feature patch set.
 
-At least with v20, the AT_CHECK always was being set, independent of whethe=
-r
-set-exec.c set it.  I'll re-test with v21.
+It's absolutely not outside the scope.  Look, this is quoted verbatim
+from your patchset (v11, but I don't think this has materially
+changed):
 
-thanks,
++       /* Early SL code ensured there was a max count of 2 digests */
++       for (i =3D 0; i < event->count; i++) {
++               dptr =3D (u8 *)alg_id_field + sizeof(u16);
++
++               for (j =3D 0; j < tpm->nr_allocated_banks; j++) {
++                       if (digests[j].alg_id !=3D *alg_id_field)
++                               continue;
 
-Mimi
+^^^^^^^^^^^^^^^^^^^^^ excuse me?
 
-> +	if (err && restrict_stream) {
-> +		perror("ERROR: Script execution check");
-> +		return 1;
-> +	}
-> +
-> +	/* Reads script. */
-> +	buf_size =3D fread(buf, 1, buf_size - 1, script);
-> +	return interpret_buffer(buf, buf_size);
-> +}
-> +
++
++                       switch (digests[j].alg_id) {
++                       case TPM_ALG_SHA256:
++                               memcpy(&digests[j].digest[0], dptr,
++                                      SHA256_DIGEST_SIZE);
++                               alg_id_field =3D (u16 *)((u8 *)alg_id_field=
+ +
++                                       SHA256_DIGEST_SIZE + sizeof(u16));
++                               break;
++                       case TPM_ALG_SHA1:
++                               memcpy(&digests[j].digest[0], dptr,
++                                      SHA1_DIGEST_SIZE);
++                               alg_id_field =3D (u16 *)((u8 *)alg_id_field=
+ +
++                                       SHA1_DIGEST_SIZE + sizeof(u16));
++                               break;
++                       default:
++                               break;
++                       }
++               }
++       }
++
++       ret =3D tpm_pcr_extend(tpm, event->pcr_idx, digests);
++       if (ret) {
++               pr_err("Error extending TPM20 PCR, result: %d\n", ret);
++               slaunch_txt_reset(txt, "Failed to extend TPM20 PCR\n",
++                                 SL_ERROR_TPM_EXTEND);
++       }
 
+I haven't even tried to see what happens if there are more than two
+allocated banks, but regardless, that 'continue' statement is a
+vulnerability, and it's introduced in the patchset.  I'm not the
+maintainer of this code, but I would NAK this.
+
+I'm sure there's some reason that the TPM spec even makes code like
+this possible, but it sure looks like the TPM2_PCR_Event operation
+exists more or less to avoid this vulnerability.  I think you should
+either use it or you should explain, convincingly, why Linux should
+add code that does not use it and thus has a vulnerability in certain,
+entirely plausible, firmware configurations.
+
+This is brand new code that is explicitly security code.  I don't
+think it's valid to spell "crud, we can't handle this case at all, and
+failing to handle it is a security vulnerability" as "continue".  If
+*I* were writing this code, I would use TPM2_PCR_Event, which is
+entirely immune to this particular failure as far as I can see.
+
+
+--Andy
 
