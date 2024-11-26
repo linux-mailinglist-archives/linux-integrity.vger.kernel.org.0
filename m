@@ -1,235 +1,145 @@
-Return-Path: <linux-integrity+bounces-4214-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4215-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C8FF9D9CEC
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Nov 2024 18:53:49 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF0E9D9D45
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Nov 2024 19:21:43 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AC16B27CCD
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Nov 2024 17:49:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9E8B16504B
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Nov 2024 18:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C531DB951;
-	Tue, 26 Nov 2024 17:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9411DB361;
+	Tue, 26 Nov 2024 18:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZJ4zlMdz"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="CWlxu1d/"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09732182BC;
-	Tue, 26 Nov 2024 17:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B0E1DD879
+	for <linux-integrity@vger.kernel.org>; Tue, 26 Nov 2024 18:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732643367; cv=none; b=aHFjcLlBcnWYSvhxpfmwLPtgTJQcXJtUkPXVFhYV2CqunZu04nHYnVtHNTseiqs9+2subiVffhztRutvUVEHxNAMMZGCfKjNUMmWBZbJY0Bl0r8R2VqCnYrx5IIrpP8k4TUhirYfjP/uhtWIcKVeErdt5Dk3Bf8RwBhVEgxRpCg=
+	t=1732645295; cv=none; b=HHMVeMwTG0Cn1fQFthYeyti4nCIL01Q4L9Rm0+aHtPU5VsvTlZO1aMRoGlUFGRY4BSxvD3sfiVfgfFpDqn4b+12kTTGRePJjKNPLsvyaZ2iD/k+m8hymyfrt7zfOitTuFErmX2ay+0tfxi2xXhuV56F9l1i1kAYuz+/a6hO/m8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732643367; c=relaxed/simple;
-	bh=F7FDeE/BUYT5S6TNc+6yiD5emwOFUBL+9TtRDrcmB6c=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 MIME-Version:Date; b=OYtKLPvKkAHIirBMSjsYqIO6tAyaKoNEuMcreFeJHMt3OPMg7eyOg9DvNfPzA/JEEwBguSpjzijMeQwgPuTeR7KxbkJ7K20Mm/4amrfYkrMViyrNOyFEWLaXZfQzJDeIpyuKV1oWsWRIWRGgWi8mg7mQtWxvbFb6hO9B7PYzd/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZJ4zlMdz; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AQAcOjP003594;
-	Tue, 26 Nov 2024 17:48:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=tNFAwQ
-	Pf7JigwXLQ0UnmIgzsZn4TdCYwde4TNk3iD00=; b=ZJ4zlMdzYd29sRG62XA8O4
-	K5ZSWU2vOtHpQ171myXV9sFIwXoCqCUDyqsq0geuQiTsIHoXsZ5mVrZk7XGzTA2M
-	AMb5OVqXxfS/Hkk4A6x/rM5uuUprMGEgbUwUbIEIApRGE+CYJrGQzX//jShp5wrQ
-	Vzs4MeUVsRW7rCe8TCskGb79eAbsDeTbukn6WJx6Lpq1yWAe5BUILPO2FBT4mtTJ
-	4GUv1sBtLqmSDD6ZunV0iV3Dzu2SpAAKU85RgGAQI/Sfvr07OlKx33mDSZB89rbk
-	J1v07zUhckJcw2vhfGmKxGJa5RmWgg63Zs1BVhP7ScXydN9Kjgg8EX0Sie+UX5aA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43386jy20e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Nov 2024 17:48:06 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4AQHm5su009038;
-	Tue, 26 Nov 2024 17:48:05 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43386jy209-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Nov 2024 17:48:05 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4AQEkcwx027220;
-	Tue, 26 Nov 2024 17:48:04 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 433ukj4tjn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Nov 2024 17:48:04 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4AQHm40U55837170
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 26 Nov 2024 17:48:04 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EB8C258059;
-	Tue, 26 Nov 2024 17:48:03 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 822F358043;
-	Tue, 26 Nov 2024 17:47:59 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.177.21])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 26 Nov 2024 17:47:59 +0000 (GMT)
-Message-ID: <623f89b4de41ac14e0e48e106b846abc9e9d70cf.camel@linux.ibm.com>
-Subject: Re: [PATCH v21 6/6] samples/check-exec: Add an enlighten "inc"
- interpreter and 28 tests
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner
- <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>, Paul Moore
- <paul@paul-moore.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Adhemerval Zanella
- Netto <adhemerval.zanella@linaro.org>,
-        Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
-        Andrew Morton
- <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Heimes <christian@python.org>,
-        Dmitry Vyukov
- <dvyukov@google.com>, Elliott Hughes <enh@google.com>,
-        Eric Biggers
- <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Fan Wu
- <wufan@linux.microsoft.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Geert
- Uytterhoeven <geert@linux-m68k.org>,
-        James Morris
- <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>,
-        Jann Horn
- <jannh@google.com>, Jeff Xu <jeffxu@google.com>,
-        Jonathan Corbet
- <corbet@lwn.net>,
-        Jordan R Abrahams <ajordanr@google.com>,
-        Lakshmi
- Ramasubramanian <nramas@linux.microsoft.com>,
-        Linus Torvalds
- <torvalds@linux-foundation.org>,
-        Luca Boccassi <bluca@debian.org>,
-        Luis
- Chamberlain <mcgrof@kernel.org>,
-        "Madhavan T . Venkataraman"
- <madvenka@linux.microsoft.com>,
-        Matt Bobrowski <mattbobrowski@google.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Matthew Wilcox
- <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Nicolas
- Bouchinet <nicolas.bouchinet@ssi.gouv.fr>,
-        Scott Shell
- <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell
- <sfr@canb.auug.org.au>,
-        Steve Dower <steve.dower@python.org>, Steve Grubb
- <sgrubb@redhat.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Thibaut Sautereau
- <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel
- <vincent.strubel@ssi.gouv.fr>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Yin
- Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-In-Reply-To: <20241122.ahY1pooz1ing@digikod.net>
-References: <20241112191858.162021-1-mic@digikod.net>
-	 <20241112191858.162021-7-mic@digikod.net>
-	 <d115a20889d01bc7b12dbd8cf99aad0be58cbc97.camel@linux.ibm.com>
-	 <20241122.ahY1pooz1ing@digikod.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1732645295; c=relaxed/simple;
+	bh=kgu/8heoFL26/8+SrMsvaQzy6PxggChIOLBjf0ZIOG4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=tSj7MA9P7TKEyilUZUPhlfbcb4/CSoAWRwdNOMvuajimQSnYQ+oi49MqC5ASZVmXarf1rGGNMkDc9yuSYs/zGwOA0L0O3XhC2xLB0PinpDE3uRVJlxP4Lp4MQe0RObX4QPo6meKCXQmp2pLDYZ8nIxW1NaG5BdalaIxwXWEjAgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=CWlxu1d/; arc=none smtp.client-ip=66.163.187.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1732645285; bh=iq9ZgR0bPF3dCmO2VEAGc8zOrSJ8HYs5megjwQ5dlak=; h=Date:From:Subject:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=CWlxu1d/BisL3kzLovhu3dDnwPCup4iZBjFqe1njMaHWtaOtZFKsagBENNf3HbNtEetyJLG20n0NXeD+k15vnrGkONI5t9uiuS5wGqQDBBqfVuZP5JXXIs1wulrhKeAgGvAlxy8ar033rdT+iNb03pbyd6n2C+5Y3GqdMcQi8ZmKUx3ekGLEgxQim3Z0aIB2SfKekETv3M1U99YsqH9EPSc7rT5mNLtWRL3wCN7ScSTUFxyDNas0f68WvAd2prncM7vlDBWt0CtyffOBC+42zrkn/TJ3TAlGdPFSuwEx15CBGn2Qasg8LKqK2eSNR3d/j/SnhawVYVUKvUAwN6myOw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1732645285; bh=YXUitMr6QYQnRGCmTWRAzmhfzaph8+qyAnQ0Qn3rEem=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=lzKNeXcvSL7Mtchg3GiFUrwbFgQ9TmUkm6wGmYfV4VG+v/NEMibfuXMass9/tzMXOrewAQixY67t2e8/Q6VjOXzjHOGGKC+jU6ve17FP0k61yBDjCLemckK3mcBp2FGOe2okH9g4fB0oKqSldZ0vh6E3ndCRgME2aEwMSwMA3sRiY386xMUUdhjT07YmmW8OJN5YLxDr8tBsUS5TCWmAnFHZyqoSCHlTwm4ESigbeCQ9927S5vZxAuEgut/+3H2YqPsOSzWX8wNnx8da6pWOUm3AcFmVj8bggXkkuFxWcKMMTsAOtWnwQPQvdXLIbs9qMygswVdgAqDEk/b/lws2BA==
+X-YMail-OSG: 99LyrCkVM1mxEbGfR8IM0G1bsY4qI0dUywLEmrGAZIdb5Pil8ovmyY1rm0T8j05
+ ja1CQmyxntEedHwkNrxELAQtu5M19TQzMhi2S.YGwSiKmEpFZCwMKMpkwyIdMiQ5tS3P5apNbn6D
+ NhrlE11H.ayo3_x6G5CC8sWTO9y5BEtSGAsKdnj0Xpfcp5QpR45bvgv2e2NpviSpgwisuJO1e2Gj
+ vpClKQ1MYaLOg3ap.9RC5A00a.M_XH1YYCyEV9vM6XabjhdxQX8AQ9G.SEP0sNFNLGQIi22ta.Lm
+ _EkLv.fJPGHM1shFdJq7tBAnJmA5fIw9Wr_RYsB6KKr_9QDkbhOspYKRaVgD9Hbj18TYQ3cjz.C6
+ _9rZ2KnOjF8wouc299AGk46pEbfE02l95ZoVAjP3AGHsWr4kDOYUIfQz0NJ05bsXQJpAltzEdeyt
+ xv8sPzNY7ym4HnKMEv3TumEgFXFu_8tIU5htyQTW5OAcPKjYmupNYjLYJ7p07ducIH87Eadiv0QO
+ FhJpXaj3PkIZQVtNk1RIyx7rUfKnnq2AroBwjhKkeDPXSYtWPLW_gpXkl07qVtrTUgiqvlnhQErs
+ rwyRzjVTiVV9DvUO0Y3IQG4lriRwF37ewCo1lLIDCbhE5jm9xODoPfyEXkGjpw6BQBO6yL3htegV
+ U4.KEoKxA1oE1TRruUXCiSRrPzCrIPwKjpsDPwnNWMK4tncQ1iLramK9Z5LvwXHDQPHzQZTkITkr
+ wmt0H13FecFypjQzz6b7.dSb4ky_dJc76igJSSrwebpqqigXyWv5FK12u0jcow43mhtX7ZDH3_9W
+ 9YqNfF7jkFo_L74IJuP5Fu8cqzECz90wNNCOJVa1H4RsqAOlEjf.3qfCOOEeDbg1odLVuTnwg6SN
+ nwrBkMSmMx_uXb1nC6BqCcvoCyRhan0ZpLNLlF489yJ3yFdIGqbI6yKP2T9ATyMKjt3N3mJAoNQz
+ eZScI9wHOtF8xpHGvaThRcpUtEBxBlM_DL269kQn3ZXeUbQb.CEGdSGZko.89ab5Npwr3VwIlhMT
+ w0YAKqAGOXghsBdFzunznE4FBfi8XIMW5XMZQRs7XIabHel34BVVG94kTPWmMjKYwCq.IVcHSnxs
+ vCbKv3PdHS2nyQQ2csJeXZFprVPypinZNmjKOOJmKTqvAlgstb4CNTy00ItgzvPg43xJDvrx84h5
+ zKAcSVndl8xZfiSxjFe9wc6mCb.iOIWcnuheVrBobPINgmVrpfq6.7ZkVo3DkXHy5xEFvxHqkk2I
+ 0w0wNyD6YrGhusMUHZRouQwnvkwv3PJsLle.aXxPIxdqga2Yekmq9L1fWSUDbK1I.geCw4sLIiYd
+ zoRnIcG.BTYUgvI5BxmTf2VmaTJmLQChn9LEfGfngFupy8nGkozTEVFU.ic_7TGImuiWP6tuuiKU
+ y24TbppqASIT8cTtjwNMWixVyML1nxO0j6GBN9oQytNrS6oqCPQbMggZBRSJj_UmM0RcFRJHds8b
+ LTHUlmVmogt9UXIJiwfqI7xsLt7fX3u6e7c4tjSNpAqhtIwjKGBquLuhpf6Ah9SyAB8pX2DYNWqO
+ 5EdgNCJlNzKoQrDUC4CxbpgOORjpVoS49mtD3X3uUkAWGf.MjkvQS9AR4Mq0WE.sHIBuzfUm9Co2
+ mCTj4QX1WOXISUJngCmdPhSvqSGyVAKPA7U5BzZSmMBuRY3rxlv8uQHW7NdY1eTBg0F4lw5aUhRw
+ W6Hu2_Xz85C8pzqudzqeUIEb05VQc.4rQGdo8D35NjC1VJ7o7gKJVJDkgGoM7.IZFzIUUUqqWV0B
+ gWWDf1GJPo7i46TmsH0QXB9435GiSBOEeZxOMF0sY6TnjwdF3hj2arE6d3qCMj9pmikL9W6BrH9H
+ AJzpL9Wjz.O2EuMgFegHRo1d5stGk9CLP8Z7Sk7ooPhLv_D.olvAEoSRpfv315kIxLe6jNrZw2lb
+ VoM2.P6LwEPRzjGqnMnggQwWxYEEs4Y2Gex_JeAJnxNFPgoar92cM3QUj.ZM5SbhV7pHgcyWiZgJ
+ o9cX6iIKAjz_kYLktl.TarQskmMdZm4ON_M.qFtRwm.oise8Y8kqcjTCUyMVa_.6716ZkE2WrxLB
+ k6dwzEG.5Vm4GPV1PzyMTaJqSNwQIWIGHZUzUlHXvFYnUx8CyFfVldh5rRDEs.PJekghtIpnekNo
+ fTQOpdNrD0i46wNSDK5pxUF.KBTMcJo9awUEckmXCZMXGnwjcWc7hKtYWr._6.zLOFUzsEWw5Tta
+ mFuD7.hDB_3Zgxw1Bl.uGHi0ghO5Y1bdL8g1uOIxEQkPEuMi_rnQnkCfJYRmadH7ZIr1hgNi__mB
+ 0.7kXpYaDZDGbAerp7NGRGpDWMQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 35fe37b8-9eb3-490c-8976-d0d9495fd0b9
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Tue, 26 Nov 2024 18:21:25 +0000
+Received: by hermes--production-gq1-5dd4b47f46-wrqn7 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 55e9207d670faa2d9a961105f9775dc7;
+          Tue, 26 Nov 2024 18:21:22 +0000 (UTC)
+Message-ID: <77003d04-f3a4-46b1-9368-510b529fda44@schaufler-ca.com>
+Date: Tue, 26 Nov 2024 10:21:20 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 26 Nov 2024 12:41:45 -0500
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _b6UFancxFPo-Mc2udQhYrK2rs1bE-Zs
-X-Proofpoint-GUID: 5BPxwchR-GJDXOm4zLUufwuqPvRYVmxk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- mlxlogscore=940 spamscore=0 suspectscore=0 phishscore=0 clxscore=1011
- mlxscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411260139
+User-Agent: Mozilla Thunderbird
+From: Casey Schaufler <casey@schaufler-ca.com>
+Subject: [PATCH] IMA,LSM: Uncover hidden variable in ima_match_rules()
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+ linux-integrity@vger.kernel.org, Paul Moore <paul@paul-moore.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>,
+ "M: Roberto Sassu" <roberto.sassu@huawei.com>,
+ "M: Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "R: Eric Snowberg" <eric.snowberg@oracle.com>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ LSM List <linux-security-module@vger.kernel.org>
+References: <CAJ2a_DeUX9UdAYOo9OwG-yXSH1etKQZortPcyxfzG70K3N+g7g@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAJ2a_DeUX9UdAYOo9OwG-yXSH1etKQZortPcyxfzG70K3N+g7g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.22941 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Fri, 2024-11-22 at 15:50 +0100, Micka=C3=ABl Sala=C3=BCn wrote:
-> On Thu, Nov 21, 2024 at 03:34:47PM -0500, Mimi Zohar wrote:
-> > Hi Micka=C3=ABl,
-> >=20
-> > On Tue, 2024-11-12 at 20:18 +0100, Micka=C3=ABl Sala=C3=BCn wrote:
-> > >=20
-> > > +
-> > > +/* Returns 1 on error, 0 otherwise. */
-> > > +static int interpret_stream(FILE *script, char *const script_name,
-> > > +			    char *const *const envp, const bool restrict_stream)
-> > > +{
-> > > +	int err;
-> > > +	char *const script_argv[] =3D { script_name, NULL };
-> > > +	char buf[128] =3D {};
-> > > +	size_t buf_size =3D sizeof(buf);
-> > > +
-> > > +	/*
-> > > +	 * We pass a valid argv and envp to the kernel to emulate a native
-> > > +	 * script execution.  We must use the script file descriptor instea=
-d of
-> > > +	 * the script path name to avoid race conditions.
-> > > +	 */
-> > > +	err =3D execveat(fileno(script), "", script_argv, envp,
-> > > +		       AT_EMPTY_PATH | AT_EXECVE_CHECK);
-> >=20
-> > At least with v20, the AT_CHECK always was being set, independent of wh=
-ether
-> > set-exec.c set it.  I'll re-test with v21.
->=20
-> AT_EXECVE_CEHCK should always be set, only the interpretation of the
-> result should be relative to securebits.  This is highlighted in the
-> documentation.
+The variable name "prop" is inadvertently used twice in
+ima_match_rules(), resulting in incorrect use of the local
+variable when the function parameter should have been.
+Rename the local variable and correct the use if the parameter.
 
-Sure, that sounds correct.  With an IMA-appraisal policy, any unsigned scri=
-pt
-with the is_check flag set now emits an "cause=3DIMA-signature-required" au=
-dit
-message.  However since IMA-appraisal isn't enforcing file signatures, this
-sounds wrong.
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+Suggested-by: Roberto Sassu <roberto.sassu@huawei.com>
+Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima_policy.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-New audit messages like "IMA-signature-required-by-interpreter" and "IMA-
-signature-not-required-by-interpreter" would need to be defined based on th=
-e
-SECBIT_EXEC_RESTRICT_FILE.
-
-
-> >=20
-> > > +	if (err && restrict_stream) {
-> > > +		perror("ERROR: Script execution check");
-> > > +		return 1;
-> > > +	}
-> > > +
-> > > +	/* Reads script. */
-> > > +	buf_size =3D fread(buf, 1, buf_size - 1, script);
-> > > +	return interpret_buffer(buf, buf_size);
-> > > +}
-> > > +
-> >=20
-> >=20
->=20
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index dbfd554b4624..21a8e54c383f 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -635,7 +635,7 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
+ 		return false;
+ 	for (i = 0; i < MAX_LSM_RULES; i++) {
+ 		int rc = 0;
+-		struct lsm_prop prop = { };
++		struct lsm_prop inode_prop = { };
+ 
+ 		if (!lsm_rule->lsm[i].rule) {
+ 			if (!lsm_rule->lsm[i].args_p)
+@@ -649,15 +649,16 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
+ 		case LSM_OBJ_USER:
+ 		case LSM_OBJ_ROLE:
+ 		case LSM_OBJ_TYPE:
+-			security_inode_getlsmprop(inode, &prop);
+-			rc = ima_filter_rule_match(&prop, lsm_rule->lsm[i].type,
++			security_inode_getlsmprop(inode, &inode_prop);
++			rc = ima_filter_rule_match(&inode_prop,
++						   lsm_rule->lsm[i].type,
+ 						   Audit_equal,
+ 						   lsm_rule->lsm[i].rule);
+ 			break;
+ 		case LSM_SUBJ_USER:
+ 		case LSM_SUBJ_ROLE:
+ 		case LSM_SUBJ_TYPE:
+-			rc = ima_filter_rule_match(&prop, lsm_rule->lsm[i].type,
++			rc = ima_filter_rule_match(prop, lsm_rule->lsm[i].type,
+ 						   Audit_equal,
+ 						   lsm_rule->lsm[i].rule);
+ 			break;
 
 
