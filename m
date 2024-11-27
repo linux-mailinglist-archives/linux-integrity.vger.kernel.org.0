@@ -1,151 +1,234 @@
-Return-Path: <linux-integrity+bounces-4220-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4221-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F5BF9DA277
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 07:46:52 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9FA41670CC
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 06:46:48 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CFB142E78;
-	Wed, 27 Nov 2024 06:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rry29Y4e"
-X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D344C9DA51D
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 10:52:02 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CA51946B;
-	Wed, 27 Nov 2024 06:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 357D1B22F8A
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 09:52:00 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FAB01940A1;
+	Wed, 27 Nov 2024 09:51:55 +0000 (UTC)
+X-Original-To: linux-integrity@vger.kernel.org
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9B5A95E;
+	Wed, 27 Nov 2024 09:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732690008; cv=none; b=SqusmlIHlllGpXSk7FSqLZt+N60zXL+mmQHsHQsrjfZjmSYUzdtmPxwydHI9L7+otGjO4OQY/o7L12k9XteEvqNHqk2mgNbnDwb5dTeW/74KwwoNDY06hucTAGmXvdXCzMIRZ5/Xp4o7yzqNdW0cYHJ6Bk7nt6BHlUlAloSR3TA=
+	t=1732701115; cv=none; b=bjR2EJNIwInOEnnJaO/x5ZkyitvMMlVaqAWQA4K82Ep/IrjsRHEFfVvJ3VoqEMhmLBuxw/s9iwe+KsJJgXiDyJ2mvY2jrROCT0KL7aRMM932VJ04cDp0ZKcPPeHvRRyE4d301jH65yhoRvkcZgnRyLgzTt2YUZr56Jw9yUazV6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732690008; c=relaxed/simple;
-	bh=oHnJjxaEwM0uzGCa4H8g9sV3ZeN5fUEKc5tb1XjA07s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
-	 In-Reply-To:Content-Type; b=h5pc3l6d1lDt38QS6nhrF3pehwf3jsPezl6MbfQtuyJDAinpZrOtnS5iUtdI30Ue4WL00pa1aKcCya5zWBAhHh5i7uRl+J5HK3B1XhL/cbLz22BYWsxiItEeLBvG4D1BfW7NaTZEby6ZD8w/rrZeArEyGG+Xzn2+PW9gjyHz16M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rry29Y4e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C44C4CED9;
-	Wed, 27 Nov 2024 06:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732690007;
-	bh=oHnJjxaEwM0uzGCa4H8g9sV3ZeN5fUEKc5tb1XjA07s=;
-	h=Date:Subject:To:References:From:Cc:In-Reply-To:From;
-	b=rry29Y4eB8Sk8gZsMwxjQ0U6OHN51hU9w1C/WlXWzmIUYLCuam2nnhlnirWZyaWf1
-	 f2qXqP0DesUNu7Xs9C8Mvgivqcd1pTpWkUNAb2zRgJctMjW6JKaps294pEk7c8+tav
-	 Pt5pEpvb312SCAYeUnEND3lM8GGTG7RTMdTxzMdAPlhcjHlBqxzr+6Kxvv9K+d49O2
-	 Wj3Inq2sufxS/qSVGe+ZcCugn7OxqTVRdO67GxV2jsBhikP6YBBMdUlL6q8taTvys9
-	 /jBqr1y6wXD6oZbm3cngGtijJDxk+Yk2zykiHM3+YePotbgvh9pHzWwCby9Q0eaioZ
-	 FOSgx57SeZ58w==
-Message-ID: <9c893c52-e960-4f30-98ce-ba7d873145bb@kernel.org>
-Date: Wed, 27 Nov 2024 07:46:44 +0100
+	s=arc-20240116; t=1732701115; c=relaxed/simple;
+	bh=AdbIqBFr2DX9C4NxpilK5N8h40ZnTWNw2PIzHja54Ws=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fm4Qt53/tyiXu7vUHUIm75TBA0VT2UervyqVmTTOVbX52ZIFwCtKXM9Kq11T3u9XdHKj/etjH9TansW++DjqJVsHnJlOUK708E5ZujvIcRTsDCIHdU0Mx8gLVn84kJFSfCF/alJfRqIxkjTO9aQGQMg2JJF/kOC+BtgaYor9I7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4XyvCX4xMtz9v7JS;
+	Wed, 27 Nov 2024 17:24:24 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id C3DE8140452;
+	Wed, 27 Nov 2024 17:51:39 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwAX1jaT60ZnO3hhAg--.24999S2;
+	Wed, 27 Nov 2024 10:51:38 +0100 (CET)
+Message-ID: <3dc25195b0362b3e5b6d6964df021ff4e7e1b226.camel@huaweicloud.com>
+Subject: Re: [PATCH v6 07/15] digest_cache: Allow registration of digest
+ list parsers
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com,  corbet@lwn.net, petr.pavlu@suse.com,
+ samitolvanen@google.com, da.gomez@samsung.com,  akpm@linux-foundation.org,
+ paul@paul-moore.com, jmorris@namei.org,  serge@hallyn.com,
+ shuah@kernel.org, mcoquelin.stm32@gmail.com,  alexandre.torgue@foss.st.com,
+ linux-integrity@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
+ linux-modules@vger.kernel.org,  linux-security-module@vger.kernel.org,
+ linux-kselftest@vger.kernel.org,  wufan@linux.microsoft.com,
+ pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,  mjg59@srcf.ucam.org,
+ pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com, 
+ jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com, 
+ mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Wed, 27 Nov 2024 10:51:11 +0100
+In-Reply-To: <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+	 <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
+	 <Z0UN9ub0iztWvgLi@bombadil.infradead.org>
+	 <d428a5d926d695ebec170e98463f7501a1b00793.camel@huaweicloud.com>
+	 <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: TPM/EFI issue [Was: Linux 6.12]
-To: Linus Torvalds <torvalds@linux-foundation.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wgtGkHshfvaAe_O2ntnFBH3EprNk1juieLmjcF2HBwBgQ@mail.gmail.com>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-Cc: =?UTF-8?Q?Peter_H=C3=BCwe?= <PeterHuewe@gmx.de>,
- Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- linux-integrity@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
- "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>
-In-Reply-To: <CAHk-=wgtGkHshfvaAe_O2ntnFBH3EprNk1juieLmjcF2HBwBgQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:LxC2BwAX1jaT60ZnO3hhAg--.24999S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XF48Ww47WFyfAFW7Gr1kAFb_yoWxXr1xpa
+	yakan0kF4kJr1Ik3Z7Aa1xu3yF9393X3y5Wrn5Jry3Zrn8ur1Fvr1fKa1Uua4jkrs7JF12
+	qr4Yq34ayF1DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
+	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	EksDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABGdGg-MCpAAAsx
 
-Cc TPM + EFI guys.
+On Tue, 2024-11-26 at 11:04 -0800, Luis Chamberlain wrote:
+> On Tue, Nov 26, 2024 at 11:25:07AM +0100, Roberto Sassu wrote:
+> > On Mon, 2024-11-25 at 15:53 -0800, Luis Chamberlain wrote:
+> >=20
+> > Firmware, eBPF programs and so on are supposed
+>=20
+> Keyword: "supposed".=20
 
-On 17. 11. 24, 23:26, Linus Torvalds wrote:
-> But before the merge window opens, please give this a quick test to
-> make sure we didn't mess anything up. The shortlog below gives you the
-> summary for the last week, and nothing really jumps out at me. A
-> number of last-minute reverts, and some random fairly small fixes
-> fairly spread out in the tree.
+It depends if they are in a policy. They can also be verified with
+other methods, such as file signatures.
 
-Hi,
+For eBPF programs we are also in a need for a better way to
+measure/appraise them.
 
-there is a subtle bug in 6.12 wrt TPM (in TPM, EFI, or perhaps in 
-something else):
-https://bugzilla.suse.com/show_bug.cgi?id=1233752
+> > As far as the LSM infrastructure is concerned, I'm not adding new LSM
+> > hooks, nor extending/modifying the existing ones. The operations the
+> > Integrity Digest Cache is doing match the usage expectation by LSM (net
+> > denying access, as discussed with Paul Moore).
+>=20
+> If modules are the only proven exception to your security model you are
+> not making the case for it clearly.
 
-Our testing (openQA) fails with 6.12:
-https://openqa.opensuse.org/tests/4657304#step/trup_smoke/26
+The Integrity Digest Cache is not implementing any security model, this
+is demanded to other LSMs which might decide to use the Integrity
+Digest Cache based on a policy.
 
-The last good is with 6.11.7:
-https://openqa.opensuse.org/tests/4648526
+If we want to be super picky, the ksys_finit_module() helper is not
+calling security_kernel_module_request(), which is done when using
+request_module(). On the other hand, ksys_finit_module() is not
+triggering user space, as the description of the function states
+(anyway, apologies for not bringing up this earlier).
 
-In sum:
-TPM is supposed to provide a key for decrypting the root partitition, 
-but fails for some reason.
+Net this, and we can discuss if it is more appropriate to call the LSM
+hook, the helper does not introduce any exception since
+security_file_open() is called when the kernel opens the file
+descriptor, and security_kernel_read_file() and
+security_kernel_post_read_file() are called in the same way regardless
+if it is user space doing insmod or the kernel calling
+ksys_finit_module().
 
-It's extremely hard (so far) to reproduce outside of openQA (esp. when 
-trying custom kernels).
+The only exception is that the Integrity Digest Cache is unable to
+verify the kernel modules containing the parsers, but I believe this is
+fine because they are verified with their appended signature.
 
-Most of the 6.12 TPM stuff already ended in (good) 6.11.7. I tried to 
-revert:
-   423893fcbe7e tpm: Disable TPM on tpm2_create_primary() failure
-from 6.12 but that still fails.
+If there are any other concerns I'm missing, please let me know.
 
-We are debugging this further, this is just so you know.
+> > The Integrity Digest Cache is supposed to be used as a supporting tool
+> > for other LSMs to do regular access control based on file data and
+> > metadata integrity. In doing that, it still needs the LSM
+> > infrastructure to notify about filesystem changes, and to store
+> > additional information in the inode and file descriptor security blobs.
+> >=20
+> > The kernel_post_read_file LSM hook should be implemented by another LSM
+> > to verify the integrity of a digest list, when the Integrity Digest
+> > Cache calls kernel_read_file() to read that digest list.
+>=20
+> If LSM folks *do* agree that this work is *suplementing* LSMS then sure,
+> it was not clear from the commit logs. But then you need to ensure the
+> parsers are special snowflakes which won't ever incur other additional
+> kernel_read_file() calls.
 
-Or maybe you have some immediate ideas?
+The Integrity Digest Cache was originally called digest_cache LSM, but
+was renamed due to Paul's concern that it is not a proper LSM enforcing
+a security model. If you are interested, I gave a talk at LSS NA 2024:
 
-thanks,
--- 
-js
-suse labs
+https://www.youtube.com/watch?v=3DaNwlKYSksg8
+
+Given that the Integrity Digest Cache could not be standalone and use
+the LSM infrastructure facilities, it is going to be directly
+integrated in IMA, although it is not strictly necessary.
+
+I planned to support IPE and BPF LSM as other users.
+
+Uhm, let me clarify your last sentence a bit.
+
+Let's assume that IMA is asked to verify a parser, when invoked through
+the kernel_post_read_file hook. IMA is not handling the exception, and
+is calling digest_cache_get() as usual. Normally, this would succeed,
+but because digest_cache_get() realizes that the file descriptor passed
+as argument is marked (i.e. it was opened by the Integrity Digest Cache
+itself), it returns NULL.
+
+That means that IMA falls back on another verification method, which is
+verifying the appended signature.
+
+The most important design principle that I introduced is that users of
+the Integrity Digest Cache don't need to be aware of any exception,
+everything is handled by the Integrity Digest Cache itself.
+
+The same occurs when a kernel read occurs with file ID
+READING_DIGEST_LIST (introduced in this patch set). Yes, I forbid
+specifying an IMA policy which requires the Integrity Digest Cache to
+verify digest lists, but due to the need of handling kernel modules
+I decided to handle the exceptions in the Integrity Digest Cache itself
+(this is why now I'm passing a file descriptor to digest_cache_get()
+instead of a dentry).
+
+Now, I'm trying to follow you on the additional kernel_read_file()
+calls. I agree with you, if a parser tries to open again the file that
+is being verified it would cause a deadlock in IMA (since the inode
+mutex is already locked for verifying the original file).
+
+In the Integrity Digest Cache itself, this is not going to happen,
+since the file being verified with a digest cache is known and an
+internal open of the same file fails. If it is really necessary, we can
+pass the information to the parsers so that they are aware, it is just
+an additional parameter.
+
+However, I was assuming that a parser just receives the data read by
+the Integrity Digest Cache, and just calls the Parser API to add the
+extracted digests to the new digest cache. Also this can be discussed,
+but I guess there is no immediate need.
+
+> > Supporting kernel modules opened the road for new deadlocks, since one
+> > can ask a digest list to verify a kernel module, but that digest list
+> > requires the same kernel module. That is why the in-kernel mechanism is
+> > 100% reliable,
+>=20
+> Are users of this infrastructure really in need of modules for these
+> parsers?
+
+I planned to postpone this to later, and introduced two parsers built-
+in (TLV and RPM). However, due to Linus's concern regarding the RPM
+parser, I moved it out in a kernel module.
+
+Also, a parser cannot be in user space, since the trust anchor is in
+the kernel (the public keys and the signature verification mechanism),
+it is not something that can be established in the initial ram disk
+since the Integrity Digest Cache will be continously used in the
+running system (maybe more parsers will be loaded on demand depending
+on requests from user space).
+
+And finally, the parser cannot run in user space, since it would be at
+the same level of what the kernel is verifying.
+
+Thanks
+
+Roberto
 
 
