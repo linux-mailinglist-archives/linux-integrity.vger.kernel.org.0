@@ -1,120 +1,151 @@
-Return-Path: <linux-integrity+bounces-4219-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4220-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 686839DA14B
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 05:02:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F5BF9DA277
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 07:46:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DE06168806
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 04:02:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9FA41670CC
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 06:46:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AB0282FE;
-	Wed, 27 Nov 2024 04:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CFB142E78;
+	Wed, 27 Nov 2024 06:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="MJu6yPxR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rry29Y4e"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A864228EB
-	for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2024 04:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CA51946B;
+	Wed, 27 Nov 2024 06:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732680140; cv=none; b=psh0LaqoOWVkayClLEZ1bsrPIoSFuUeHNOv51TtBqCG/HNQzGNF/eLlsrej7QBqu37PztQRseHTpDuH+9WJYQ6OKrcSgZGgVyphQEgAnyR+8yxpQvYe9K36s7SY1wAt7D5XC4n9ojI5GdCkltj1iLNHkLMg3kav/OugnQFAANto=
+	t=1732690008; cv=none; b=SqusmlIHlllGpXSk7FSqLZt+N60zXL+mmQHsHQsrjfZjmSYUzdtmPxwydHI9L7+otGjO4OQY/o7L12k9XteEvqNHqk2mgNbnDwb5dTeW/74KwwoNDY06hucTAGmXvdXCzMIRZ5/Xp4o7yzqNdW0cYHJ6Bk7nt6BHlUlAloSR3TA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732680140; c=relaxed/simple;
-	bh=rgGUtTi6cgHbXeEIBneesc4o26QfRW4kSE8z1VlqAaE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PEl+WJBws6Z9OfnnATXGIDroO8f8XDGc24Afp3cnuHP5kSmhUQf2/8mV0p8GIfykiopEs3okvNWDQZh5ve/wtXkfpg7iOXEDFeTElTogvfTe6qmAdIZPc1Uy7Jh/yuN8ohm8vDXKDp1RJ4eENL2In8GtES2sNShA5SnnbOcWqQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=MJu6yPxR; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e3884cd186aso6384192276.1
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Nov 2024 20:02:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1732680137; x=1733284937; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uYdPHxRKENTOkIj1dnE8bjE/PoWNE+0I9VP8yD2g53Q=;
-        b=MJu6yPxR0bpmYq3MPhwFovVdnvbGor5GSl5VunSGA/TQ9H6oUmNCy3zKyuOdm3/uua
-         4nt0op4cvi9S6y/9i9SPy6M0hfmfN/4dnmhcUiIH+xtcPQrwtX2xhwJxGw3VC0ArCkb5
-         4eXN0C9+fG90aUgoZCOrKwCd1VexkFviOyhospxgnqEAxINSKDngtrqcPttS+HYR5IZA
-         orSirMqUpzgeXGQVMTUWDfD4Pu1bBDyFV01Gr2OXcyWAFfGfVSQHPn077LRaGQOl60GW
-         oagCpzIJSOy3ScIBM66K6DUmFFnZMwP4o0VSBvzLIzV+p51/VgXhlRg/w6LOaKk5Amq6
-         IQnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732680137; x=1733284937;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uYdPHxRKENTOkIj1dnE8bjE/PoWNE+0I9VP8yD2g53Q=;
-        b=qgMjAmtViD478Y1t8mdRfB0JcOaDhtvXJQIM3tPmsM8FsIgs23KLjpSEpJ80nAt9si
-         ZO3e4H8tPSrV5zwk/+kOHRFDV/lQ5ERN4w+Xcnv2DQlkT6lG+IxMpjP+Xz85/OpmOYoh
-         2jMZUtHCwlz79TeyR2/kwCHK3VzSk94bIo1YQTkA0YFzLcKouotVojEwgionLvQWzsCt
-         k1J+vDtYLnk8KUiRvP7+IZf7V7PKK5HS1ZSZTOaoRyr/PI3faPZ5kVZlEnKJLmaYFGbp
-         5w08e5gpbCaOCab9B4B6cYuCIB+iLKbs0BugBjkW+KoIcIOrm2WmsGb88Q6WOWaQeS/m
-         ZkJw==
-X-Forwarded-Encrypted: i=1; AJvYcCVnWwELKr3kkS/uA584rdtvDwq7cQMoF1/5ehW+Er++slJ5inTy6LiH+Rn9wj/8R4AJWwEaUYPk+wbMKWRPFlQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo7GAzUTjGd2q+Pd+yU+cfbfJk5QltpUCPAdpi05G9G4hAjAsJ
-	nnUV9GFDBzq4bDHmG95aRHwSzdxmcri4f2kBEvs7ucxvxobJRViUo3pUbfaToAWrvQF/B2r6Sag
-	E2ni/VtJymjgT4bEAg6ezjXTfgRCKatpdERum
-X-Gm-Gg: ASbGncuPfPwzOPtmPL9OVWS5Zgj6RCI5Lhn0t5FF9bXpgu+JyDvEc8gnbdHNzwAGFGn
-	cI2ru06r6BmDgGi71zHawXLDaGVCPxg==
-X-Google-Smtp-Source: AGHT+IFIhoHV1KZILzwwjbRHgH3oq5xxKI/6tI2yJz7Higi7u+bkhBhq9AhbFSn85Rm7+o3h+w2rhHHyh73JVHZ2jOM=
-X-Received: by 2002:a05:6902:114b:b0:e38:b868:cfea with SMTP id
- 3f1490d57ef6-e395b891d60mr1535472276.16.1732680137568; Tue, 26 Nov 2024
- 20:02:17 -0800 (PST)
+	s=arc-20240116; t=1732690008; c=relaxed/simple;
+	bh=oHnJjxaEwM0uzGCa4H8g9sV3ZeN5fUEKc5tb1XjA07s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=h5pc3l6d1lDt38QS6nhrF3pehwf3jsPezl6MbfQtuyJDAinpZrOtnS5iUtdI30Ue4WL00pa1aKcCya5zWBAhHh5i7uRl+J5HK3B1XhL/cbLz22BYWsxiItEeLBvG4D1BfW7NaTZEby6ZD8w/rrZeArEyGG+Xzn2+PW9gjyHz16M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rry29Y4e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C44C4CED9;
+	Wed, 27 Nov 2024 06:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732690007;
+	bh=oHnJjxaEwM0uzGCa4H8g9sV3ZeN5fUEKc5tb1XjA07s=;
+	h=Date:Subject:To:References:From:Cc:In-Reply-To:From;
+	b=rry29Y4eB8Sk8gZsMwxjQ0U6OHN51hU9w1C/WlXWzmIUYLCuam2nnhlnirWZyaWf1
+	 f2qXqP0DesUNu7Xs9C8Mvgivqcd1pTpWkUNAb2zRgJctMjW6JKaps294pEk7c8+tav
+	 Pt5pEpvb312SCAYeUnEND3lM8GGTG7RTMdTxzMdAPlhcjHlBqxzr+6Kxvv9K+d49O2
+	 Wj3Inq2sufxS/qSVGe+ZcCugn7OxqTVRdO67GxV2jsBhikP6YBBMdUlL6q8taTvys9
+	 /jBqr1y6wXD6oZbm3cngGtijJDxk+Yk2zykiHM3+YePotbgvh9pHzWwCby9Q0eaioZ
+	 FOSgx57SeZ58w==
+Message-ID: <9c893c52-e960-4f30-98ce-ba7d873145bb@kernel.org>
+Date: Wed, 27 Nov 2024 07:46:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJ2a_DeUX9UdAYOo9OwG-yXSH1etKQZortPcyxfzG70K3N+g7g@mail.gmail.com>
- <77003d04-f3a4-46b1-9368-510b529fda44@schaufler-ca.com>
-In-Reply-To: <77003d04-f3a4-46b1-9368-510b529fda44@schaufler-ca.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 26 Nov 2024 23:02:06 -0500
-Message-ID: <CAHC9VhTmyHr1U97mE0YwueJ_-8p_sBK-CB6O8rWMUz1Gr70iKw@mail.gmail.com>
-Subject: Re: [PATCH] IMA,LSM: Uncover hidden variable in ima_match_rules()
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
-	linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>, 
-	"M: Roberto Sassu" <roberto.sassu@huawei.com>, "M: Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>, 
-	"R: Eric Snowberg" <eric.snowberg@oracle.com>, LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: TPM/EFI issue [Was: Linux 6.12]
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHk-=wgtGkHshfvaAe_O2ntnFBH3EprNk1juieLmjcF2HBwBgQ@mail.gmail.com>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+Cc: =?UTF-8?Q?Peter_H=C3=BCwe?= <PeterHuewe@gmx.de>,
+ Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ linux-integrity@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+ "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>
+In-Reply-To: <CAHk-=wgtGkHshfvaAe_O2ntnFBH3EprNk1juieLmjcF2HBwBgQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 26, 2024 at 1:21=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
->
-> The variable name "prop" is inadvertently used twice in
-> ima_match_rules(), resulting in incorrect use of the local
-> variable when the function parameter should have been.
-> Rename the local variable and correct the use if the parameter.
+Cc TPM + EFI guys.
 
-/if/of/
+On 17. 11. 24, 23:26, Linus Torvalds wrote:
+> But before the merge window opens, please give this a quick test to
+> make sure we didn't mess anything up. The shortlog below gives you the
+> summary for the last week, and nothing really jumps out at me. A
+> number of last-minute reverts, and some random fairly small fixes
+> fairly spread out in the tree.
 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> Suggested-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  security/integrity/ima/ima_policy.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+Hi,
 
-Aside from the typo above (which can be fixed during the merge) this
-looks good to me.  Based on the discussion in the previous revision it
-looks like Roberto would prefer this go via the LSM tree, so I'm going
-to merge this into lsm/stable-6.13 and send this up to Linus later
-this week (or early next depending on how my holiday travels go);
-additional testing is always welcome :)
+there is a subtle bug in 6.12 wrt TPM (in TPM, EFI, or perhaps in 
+something else):
+https://bugzilla.suse.com/show_bug.cgi?id=1233752
 
-I'm also going to swap Roberto's reviewed-by tag for his ack which he
-gave on the previous revision as this is touching IMA code.
+Our testing (openQA) fails with 6.12:
+https://openqa.opensuse.org/tests/4657304#step/trup_smoke/26
 
---=20
-paul-moore.com
+The last good is with 6.11.7:
+https://openqa.opensuse.org/tests/4648526
+
+In sum:
+TPM is supposed to provide a key for decrypting the root partitition, 
+but fails for some reason.
+
+It's extremely hard (so far) to reproduce outside of openQA (esp. when 
+trying custom kernels).
+
+Most of the 6.12 TPM stuff already ended in (good) 6.11.7. I tried to 
+revert:
+   423893fcbe7e tpm: Disable TPM on tpm2_create_primary() failure
+from 6.12 but that still fails.
+
+We are debugging this further, this is just so you know.
+
+Or maybe you have some immediate ideas?
+
+thanks,
+-- 
+js
+suse labs
+
 
