@@ -1,72 +1,72 @@
-Return-Path: <linux-integrity+bounces-4218-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4219-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE18A9DA13E
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 04:54:14 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 686839DA14B
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 05:02:23 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E44BB22D58
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 03:54:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DE06168806
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 Nov 2024 04:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED62C129A78;
-	Wed, 27 Nov 2024 03:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AB0282FE;
+	Wed, 27 Nov 2024 04:02:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="RNJgJ8sF"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="MJu6yPxR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4736453370
-	for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2024 03:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A864228EB
+	for <linux-integrity@vger.kernel.org>; Wed, 27 Nov 2024 04:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732679647; cv=none; b=I2mDKxiW1ROt6Ofeazf1rB9IH42QBz5kF2t3nlYQFk6w1pWJS28MtH6XRRmF0VpVIOVjs7YORhIcVV3xm+a201o7yZKZAJOTp+8whcKCEMcxHB/9x2wrtPEE6JlT/hNdVWNwi+hRxuYR8ekZq45h03VweLD59P/kIyWzKub6poI=
+	t=1732680140; cv=none; b=psh0LaqoOWVkayClLEZ1bsrPIoSFuUeHNOv51TtBqCG/HNQzGNF/eLlsrej7QBqu37PztQRseHTpDuH+9WJYQ6OKrcSgZGgVyphQEgAnyR+8yxpQvYe9K36s7SY1wAt7D5XC4n9ojI5GdCkltj1iLNHkLMg3kav/OugnQFAANto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732679647; c=relaxed/simple;
-	bh=gHWVtT64xW/oYKsm1H1s7gXvV5oC9AiMhgDBCf2ERw4=;
+	s=arc-20240116; t=1732680140; c=relaxed/simple;
+	bh=rgGUtTi6cgHbXeEIBneesc4o26QfRW4kSE8z1VlqAaE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=as7HAyDYwMGaUUpCQ0Z/u+flYpXBgwtuwbjCv/5DgOnAzHyzsmKQ70Dh0RqMS6h3iSzQiMVU8/2Hdlhg3RB6jDr7EURpuvDCj32VQdTKqZs5teZdbZW1mC3xuEQ9H3q/1ujgFf4mnkbCPJuIsSN9khSqYKfc+R2oiyHAODTP1pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=RNJgJ8sF; arc=none smtp.client-ip=209.85.219.171
+	 To:Cc:Content-Type; b=PEl+WJBws6Z9OfnnATXGIDroO8f8XDGc24Afp3cnuHP5kSmhUQf2/8mV0p8GIfykiopEs3okvNWDQZh5ve/wtXkfpg7iOXEDFeTElTogvfTe6qmAdIZPc1Uy7Jh/yuN8ohm8vDXKDp1RJ4eENL2In8GtES2sNShA5SnnbOcWqQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=MJu6yPxR; arc=none smtp.client-ip=209.85.219.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e3824e1adcdso5991714276.3
-        for <linux-integrity@vger.kernel.org>; Tue, 26 Nov 2024 19:54:05 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e3884cd186aso6384192276.1
+        for <linux-integrity@vger.kernel.org>; Tue, 26 Nov 2024 20:02:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1732679645; x=1733284445; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1732680137; x=1733284937; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9JFRcmOZiXHu3/zU8zCoF0fSGQ7YTFiOrtbQ3JdZhf4=;
-        b=RNJgJ8sFc9hYqyLg6ykQB5Va/6h1tuD9tOjf1PWqpObSbbHxOM2M+z0l9E0MWiuw3N
-         r5NqaIaZCdAyT+zetuFiJzTef5IngPxZqzHsVZgpIlt8PSaniccPPTatYXb0PiXh48Ru
-         Pw3NxbShi2RsEhAYKiUT9OZuC7ukR7hWb9B/rilX2HTQuOYpqzwycz6bDUIemEjal9aE
-         jxrwHBvhSb99oLGEBwCkYir75JLWnL/RSwRuSR7lMvn0wsALfdGQZx6aoDmfVRomv6ES
-         bbsfX6nMFVDVgNDilip3nKlf5hhh0b0Q7k7Np6M3BWku+DmRxxtw90SKXIB2yDXl63Jb
-         6+8Q==
+        bh=uYdPHxRKENTOkIj1dnE8bjE/PoWNE+0I9VP8yD2g53Q=;
+        b=MJu6yPxR0bpmYq3MPhwFovVdnvbGor5GSl5VunSGA/TQ9H6oUmNCy3zKyuOdm3/uua
+         4nt0op4cvi9S6y/9i9SPy6M0hfmfN/4dnmhcUiIH+xtcPQrwtX2xhwJxGw3VC0ArCkb5
+         4eXN0C9+fG90aUgoZCOrKwCd1VexkFviOyhospxgnqEAxINSKDngtrqcPttS+HYR5IZA
+         orSirMqUpzgeXGQVMTUWDfD4Pu1bBDyFV01Gr2OXcyWAFfGfVSQHPn077LRaGQOl60GW
+         oagCpzIJSOy3ScIBM66K6DUmFFnZMwP4o0VSBvzLIzV+p51/VgXhlRg/w6LOaKk5Amq6
+         IQnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732679645; x=1733284445;
+        d=1e100.net; s=20230601; t=1732680137; x=1733284937;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9JFRcmOZiXHu3/zU8zCoF0fSGQ7YTFiOrtbQ3JdZhf4=;
-        b=pr83wYkCIiQCXp1KYVzMcLXXFkgjFHSVK/IZDjULFbdzrtxeyH69E3Q+TNCyJDs470
-         isdRgEaTrzghd6sa0lUMdd4z/cDcS76nYBSOWUEOc5lRExpLf9zprllKxQfAn9UfaiJx
-         MAPZds83vyZAJtOhDDTcJGdCUEJWOFsnTi1tiUBU58W2SwnjVa1Lkx1KMNcusxXaVibu
-         7X9IyrUHh2+H397CFc1ZFHB0wEqwaOjzAW9MdrxXJbcEk+oS1hWrCugTY6IcoJi7b7vx
-         Qd2WK4wEecSv5RWmXdwwDidVFcLYYUP5nN/oPDLokwj+I4a+bOQE/9eKFaTmXxvOfel1
-         XvXA==
-X-Forwarded-Encrypted: i=1; AJvYcCV5JcYpayfNeyf84qHfLC53rQto33IE1fYyu2sF9ZwH4r4tuIjMfM8K52yd/abP2IKjp13ok3ZPZfyApRdJOa8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzL+NCJV9HyxYpHqTMJJfeCgXmpyz0E37vBzQNh44DRhl7pt0KA
-	XEKADuiEGrOIbmEjIgXth0BvMh6iZicIcRT6IxcrscoB2CTzfEGrWMYhDRfbVJ6JqIsYKVjzLJE
-	ceCzVg9P50AOj4m2ne1PzMtH6WjEujWqjobYN
-X-Gm-Gg: ASbGnctwKidOG8JakCvD0hEcoOx4PeH8sK5X531+xhgdAQOFR4qVwZE23ZtE0W6SmPt
-	vIOXBSUTLZpCyVwMDfnz0JKO63sjVXw==
-X-Google-Smtp-Source: AGHT+IEdqF+9WL4cRPWTyDd8aisGMJUrebOf6avTBCMaDvjIIq3DWm39d2KLQfyoufDVabCnOWJJVG7gr6EsbTiVTLI=
-X-Received: by 2002:a05:6902:2d8c:b0:e35:e24f:284d with SMTP id
- 3f1490d57ef6-e395b8a5f2cmr1359548276.16.1732679645222; Tue, 26 Nov 2024
- 19:54:05 -0800 (PST)
+        bh=uYdPHxRKENTOkIj1dnE8bjE/PoWNE+0I9VP8yD2g53Q=;
+        b=qgMjAmtViD478Y1t8mdRfB0JcOaDhtvXJQIM3tPmsM8FsIgs23KLjpSEpJ80nAt9si
+         ZO3e4H8tPSrV5zwk/+kOHRFDV/lQ5ERN4w+Xcnv2DQlkT6lG+IxMpjP+Xz85/OpmOYoh
+         2jMZUtHCwlz79TeyR2/kwCHK3VzSk94bIo1YQTkA0YFzLcKouotVojEwgionLvQWzsCt
+         k1J+vDtYLnk8KUiRvP7+IZf7V7PKK5HS1ZSZTOaoRyr/PI3faPZ5kVZlEnKJLmaYFGbp
+         5w08e5gpbCaOCab9B4B6cYuCIB+iLKbs0BugBjkW+KoIcIOrm2WmsGb88Q6WOWaQeS/m
+         ZkJw==
+X-Forwarded-Encrypted: i=1; AJvYcCVnWwELKr3kkS/uA584rdtvDwq7cQMoF1/5ehW+Er++slJ5inTy6LiH+Rn9wj/8R4AJWwEaUYPk+wbMKWRPFlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo7GAzUTjGd2q+Pd+yU+cfbfJk5QltpUCPAdpi05G9G4hAjAsJ
+	nnUV9GFDBzq4bDHmG95aRHwSzdxmcri4f2kBEvs7ucxvxobJRViUo3pUbfaToAWrvQF/B2r6Sag
+	E2ni/VtJymjgT4bEAg6ezjXTfgRCKatpdERum
+X-Gm-Gg: ASbGncuPfPwzOPtmPL9OVWS5Zgj6RCI5Lhn0t5FF9bXpgu+JyDvEc8gnbdHNzwAGFGn
+	cI2ru06r6BmDgGi71zHawXLDaGVCPxg==
+X-Google-Smtp-Source: AGHT+IFIhoHV1KZILzwwjbRHgH3oq5xxKI/6tI2yJz7Higi7u+bkhBhq9AhbFSn85Rm7+o3h+w2rhHHyh73JVHZ2jOM=
+X-Received: by 2002:a05:6902:114b:b0:e38:b868:cfea with SMTP id
+ 3f1490d57ef6-e395b891d60mr1535472276.16.1732680137568; Tue, 26 Nov 2024
+ 20:02:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -74,70 +74,46 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <CAJ2a_DeUX9UdAYOo9OwG-yXSH1etKQZortPcyxfzG70K3N+g7g@mail.gmail.com>
- <92e5fd64-8c75-4e82-981a-846364fc7a38@schaufler-ca.com> <91a227f3b57374a8aece5480f285c433d3888572.camel@huaweicloud.com>
- <CAHC9VhS7KRcpA7cHcwpKknYsC7iZiBjZGVz1xznC=d=uDYu7EQ@mail.gmail.com> <86863031e74c46e9982fee38706a4d17b5c536dd.camel@huaweicloud.com>
-In-Reply-To: <86863031e74c46e9982fee38706a4d17b5c536dd.camel@huaweicloud.com>
+ <77003d04-f3a4-46b1-9368-510b529fda44@schaufler-ca.com>
+In-Reply-To: <77003d04-f3a4-46b1-9368-510b529fda44@schaufler-ca.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 26 Nov 2024 22:53:54 -0500
-Message-ID: <CAHC9VhTw71a2tKdbOeYz_1hv6vFG9EDREwG==Ri-Z6iL594J+g@mail.gmail.com>
-Subject: Re: ima: property parameter unused in ima_match_rules()
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
-	linux-integrity@vger.kernel.org, 
+Date: Tue, 26 Nov 2024 23:02:06 -0500
+Message-ID: <CAHC9VhTmyHr1U97mE0YwueJ_-8p_sBK-CB6O8rWMUz1Gr70iKw@mail.gmail.com>
+Subject: Re: [PATCH] IMA,LSM: Uncover hidden variable in ima_match_rules()
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
+	linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>, 
 	"M: Roberto Sassu" <roberto.sassu@huawei.com>, "M: Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>, 
 	"R: Eric Snowberg" <eric.snowberg@oracle.com>, LSM List <linux-security-module@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 26, 2024 at 11:39=E2=80=AFAM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> On Tue, 2024-11-26 at 10:57 -0500, Paul Moore wrote:
-> > On Tue, Nov 26, 2024 at 2:50=E2=80=AFAM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > >
-> > > On Mon, 2024-11-25 at 10:23 -0800, Casey Schaufler wrote:
-> > > > On 11/25/2024 3:38 AM, Christian G=C3=B6ttsche wrote:
-> > > > > Hi,
-> > > > >
-> > > > > I noticed that the `prop` parameter of `ima_match_rules()` is
-> > > > > currently unused (due to shadowing).
-> > > > > Is that by design or a mishap of the recent rework?
-> > > > >
-> > > > > Related commits:
-> > > > >
-> > > > > 37f670a ("lsm: use lsm_prop in security_current_getsecid")
-> > > > > 870b7fd ("lsm: use lsm_prop in security_audit_rule_match")
-> > > > > 07f9d2c ("lsm: use lsm_prop in security_inode_getsecid")
-> > > >
-> > > > The shadowing was inadvertent. The use of lsm_prop data is
-> > > > corrected by this patch.
-> > >
-> > > Thanks Casey. Yes, this is what I had in mind.
-> >
-> > Looks good to me too.  Casey can you resend the patch with the proper
-> > sign-off, commit description, etc.?  Roberto, can we convert your
-> > comment above into an ACK?
+On Tue, Nov 26, 2024 at 1:21=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
+.com> wrote:
 >
-> Yes:
->
+> The variable name "prop" is inadvertently used twice in
+> ima_match_rules(), resulting in incorrect use of the local
+> variable when the function parameter should have been.
+> Rename the local variable and correct the use if the parameter.
+
+/if/of/
+
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 > Suggested-by: Roberto Sassu <roberto.sassu@huawei.com>
 > Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
->
-> > Lastly, Mimi and Roberto, would you like me to take this fix up to
-> > Linus via the LSM tree, or would you prefer to take it via IMA?
-> > Either way is fine with me as long as we get it fixed :)
->
-> It is fine if you take in your tree.
->
-> May I also ask to double check for the patches in your PRs that we are
-> aware and me or Mimi acked our parts?
+> ---
+>  security/integrity/ima/ima_policy.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 
-Yes, of course.  I didn't chase the ACKs like I normally do on Casey's
-lsm_prop patchset as I was in a bit of a rush and thought it minor
-enough for most everything, but you are correct that I should have
-sought out you and Mimi's ACK on the IMA related changes.
+Aside from the typo above (which can be fixed during the merge) this
+looks good to me.  Based on the discussion in the previous revision it
+looks like Roberto would prefer this go via the LSM tree, so I'm going
+to merge this into lsm/stable-6.13 and send this up to Linus later
+this week (or early next depending on how my holiday travels go);
+additional testing is always welcome :)
+
+I'm also going to swap Roberto's reviewed-by tag for his ack which he
+gave on the previous revision as this is touching IMA code.
 
 --=20
 paul-moore.com
