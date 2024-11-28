@@ -1,156 +1,171 @@
-Return-Path: <linux-integrity+bounces-4235-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4237-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C68539DB3AD
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2024 09:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C0C59DB53E
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2024 11:07:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7489616159C
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2024 08:24:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0178516838B
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Nov 2024 10:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1A0314A4E7;
-	Thu, 28 Nov 2024 08:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700CC193062;
+	Thu, 28 Nov 2024 10:07:17 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC5613FD86;
-	Thu, 28 Nov 2024 08:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13ED192D82;
+	Thu, 28 Nov 2024 10:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732782288; cv=none; b=KYonWhBE5ajGRGs5fAmmmI1e/z03O1UcZEvpUekBjpVM016HcfEbw+V7yHsGJSKSGPm+ULFYZYuMITJmB3ghSHERiHoVKMt/2pjivqPSRbbicogdcy+Yb1jKnvmxJ6QdtUwxFYyp9EIDLgGgjPdQcivLC8GpjG5zcrzsPwQjXr8=
+	t=1732788437; cv=none; b=Y0mwtCJOXyctAx6z3FT5UqelT7IhrDbnbp5KJQf6u4oMfMnd3/J0UOdhuNB+2gx0CqlAYRAzS3sopL4JjOdsuBu1fAxN9lYweCgxF+ymse3lIqmVd1vvEQOHR7Bylj4g6M2yRqjAMLdbe05dqyRbda0Uxt+PQH4vrEFFFXlYxJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732782288; c=relaxed/simple;
-	bh=SCu+ISsKCCcd6qkQaEWA3jNZcsdZonCDPyLTB8O/kyY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D+yO0gep3hvj7B3tQbmkJ4egKyv2UO4E5toEDOON7QGkcDoEqL6BEE4KGCMmVw+sD1b8tGGm0oZBBuuFRoH5FVlnm2GMs5tKYAEsxxkntMsLgALKvILt7wuJ4rSEL+OHd1fX0KvDdkLABEmBcuuL57WE/3YWM9Fz1r5oSTm8Iqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+	s=arc-20240116; t=1732788437; c=relaxed/simple;
+	bh=wswVD2zp4CCUaT6ZSlru+V4x0SVt/us+3geDqb0tYP4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wr1VnfI3vZ1D9FsO+xi0ABgdMXILCrKqaW2CVoDg8YXjoFS9A0cXAqFe043Lz9UHGSC+LghhaPfpsNUrQfkS07f131kh/JdAkHmkrkXwys623W1xUN/KWpndvEyDRygwRcQWKjLPgILhgl41ef8n9q9wtjkffe8DCq4ZGW7Yxxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4XzTDQ0Gx6z9v7JN;
-	Thu, 28 Nov 2024 15:57:10 +0800 (CST)
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4XzWf05XKhz9v7Vp;
+	Thu, 28 Nov 2024 17:46:00 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id B8230140762;
-	Thu, 28 Nov 2024 16:24:23 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwDXNXWhKEhn28ZyAg--.30519S2;
-	Thu, 28 Nov 2024 09:24:22 +0100 (CET)
-Message-ID: <10c8fd4b53f946c2d7e933a35c6eb36557e8c592.camel@huaweicloud.com>
-Subject: Re: [PATCH v6 07/15] digest_cache: Allow registration of digest
- list parsers
+	by mail.maildlp.com (Postfix) with ESMTP id 5103F140535;
+	Thu, 28 Nov 2024 18:06:58 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwAnj365QEhn6eNzAg--.15234S2;
+	Thu, 28 Nov 2024 11:06:57 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com,  corbet@lwn.net, petr.pavlu@suse.com,
- samitolvanen@google.com, da.gomez@samsung.com,  akpm@linux-foundation.org,
- paul@paul-moore.com, jmorris@namei.org,  serge@hallyn.com,
- shuah@kernel.org, mcoquelin.stm32@gmail.com,  alexandre.torgue@foss.st.com,
- linux-integrity@vger.kernel.org,  linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
- linux-modules@vger.kernel.org,  linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org,  wufan@linux.microsoft.com,
- pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,  mjg59@srcf.ucam.org,
- pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com, 
- jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com, 
- mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Thu, 28 Nov 2024 09:23:57 +0100
-In-Reply-To: <Z0d4vXuCqjTo_QW1@bombadil.infradead.org>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
-	 <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
-	 <Z0UN9ub0iztWvgLi@bombadil.infradead.org>
-	 <d428a5d926d695ebec170e98463f7501a1b00793.camel@huaweicloud.com>
-	 <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
-	 <3dc25195b0362b3e5b6d6964df021ff4e7e1b226.camel@huaweicloud.com>
-	 <Z0d4vXuCqjTo_QW1@bombadil.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+To: viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com
+Cc: linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 0/7] ima: Remove unnecessary inode locks
+Date: Thu, 28 Nov 2024 11:06:13 +0100
+Message-ID: <20241128100621.461743-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.47.0.118.gfd3785337b
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwDXNXWhKEhn28ZyAg--.30519S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw15XFyUGry5CF48Zr1DWrg_yoW8uF4xpF
-	WfK3ZIkr4kt3Wqkw4vyw47uFW0k393GrW5G3Z3Gr9ayr15KFya9FyIgw43WFZrKr4vgw4a
-	qr1rZ3sIvw1kZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwAnj365QEhn6eNzAg--.15234S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFWfKr1fKF4DXFy3tw4fKrg_yoWrCw1kpa
+	9Yg3W5Gr1DAryxurZaka13uaySkayrW3yUWwsxJw1UZF98ZF10qr4rCr1UuryxKr95C3Wq
+	qr1agrn8u3WqyrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvvb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
-	JwCIccxYrVCFb41lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-	DU0xZFpf9x07bhb18UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBGdH1TUBdQAAsw
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+	F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+	kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+	xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+	IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+	6r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+	IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+	jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73Uj
+	IFyTuYvjxUxGNtDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBGdH1TUCmAAAse
 
-On Wed, 2024-11-27 at 11:53 -0800, Luis Chamberlain wrote:
-> On Wed, Nov 27, 2024 at 10:51:11AM +0100, Roberto Sassu wrote:
-> > For eBPF programs we are also in a need for a better way to
-> > measure/appraise them.
->=20
-> I am confused now, I was under the impression this "Integrity Digest
-> Cache" is just a special thing for LSMs, and so I was under the
-> impression that kernel_read_file() lsm hook already would take care
-> of eBPF programs.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Yes, the problem is that eBPF programs are transformed in user space
-before they are sent to the kernel:
+A recent syzbot report [1] showed a possible lock inversion between the
+mmap lock and the inode lock. Paul Moore suggested to remove the inode lock
+in IMA as a possible solution. A first patch set was made [2] to fulfill
+that request, although incomplete due to not removing the inode lock around
+the ima_appraise_measurement() call.
 
-https://lwn.net/Articles/977394/
+While the original report was fixed in a different way, by calling the
+security_mmap_file() hook outside the mmap lock critical region in the
+remap_file_pages() system call [3], the IMA patch set has benefits on its
+own, since it merges two critical sections in one in process_measurement(),
+and make the latter and __ima_inode_hash() compete for the same lock.
 
-The Integrity Digest Cache can be used for the measurement/appraisal of
-the initial eBPF ELF file, when they are accessed from the filesystem,
-but the resulting blob sent to the kernel will be different.
+Remove the inode lock in three phases (except from ima_update_xattr(), when
+setting security.ima).
 
-> > Now, I'm trying to follow you on the additional kernel_read_file()
-> > calls. I agree with you, if a parser tries to open again the file that
-> > is being verified it would cause a deadlock in IMA (since the inode
-> > mutex is already locked for verifying the original file).
->=20
-> Just document this on the parser as a requirement.
+First, remove the S_IMA inode flag and the IS_IMA() macro, since S_IMA
+needs to be set under the inode lock, and it is going to be removed. There
+is no performance penalty in doing that, since the pointer of the inode
+integrity metadata has been moved to the inode security blob when IMA was
+made as a regular LSM [4], and retrieving such metadata can be done in
+constant time (patch 1).
 
-Ok, will do.
+Second, move the mutex from the inode integrity metadata to the inode
+security blob, so that the lock can be taken regardless of whether or not
+the inode integrity metadata was allocated for that inode (patch 2).
 
-> > > > Supporting kernel modules opened the road for new deadlocks, since =
-one
-> > > > can ask a digest list to verify a kernel module, but that digest li=
-st
-> > > > requires the same kernel module. That is why the in-kernel mechanis=
-m is
-> > > > 100% reliable,
-> > >=20
-> > > Are users of this infrastructure really in need of modules for these
-> > > parsers?
-> >=20
-> > I planned to postpone this to later, and introduced two parsers built-
-> > in (TLV and RPM). However, due to Linus's concern regarding the RPM
-> > parser, I moved it out in a kernel module.
->=20
-> OK this should be part of the commit log, ie that it is not desirable to
-> have an rpm parser in-kernel for some users.
+Consequently, remove the inode lock just after the policy evaluation and
+extend the critical region previously guarded by the integrity inode
+metadata mutex to where the inode lock was.
 
-I understand. Will add in the commit log.
+Also, make sure that ima_inode_get() is called with the new mutex lock
+held, to avoid non-atomic check/assignment of the integrity metadata in the
+inode security blob (patch 3), and mark the pointer of inode integrity
+metadata as a shared resource with READ_ONCE() and WRITE_ONCE() (patch 4).
 
-Just to clarify, we are not talking about the full blown librpm in the
-kernel, but a 243 LOC that I rewrote to obtain only the information I
-need. I also formally verified it with pseudo/totally random data with
-Frama-C:
+Second, remove the inode lock around ima_appraise_measurement() by
+postponing setting security.ima when IMA-Appraisal is in fix mode, to when
+the file is closed (patch 5).
 
-https://github.com/robertosassu/rpm-formal/blob/main/validate_rpm.c
+While testing the new functionality, two bugs were found and corrected.
+Discard in IMA files opened with the O_PATH open flags, since no data are
+accessed (the file descriptor is used for different purposes). Otherwise,
+IMA ended up trying to read the files anyway, causing a kernel warning to
+be printed in the kernel log (patch 6).
 
-Thanks
+Do not reset the IMA_NEW_FILE flag as a result of setting inode attributes,
+as it was before the patch to reintroduce the inode integrity metadata
+mutex. By resetting the flag, IMA was not able to appraise new files with
+modified metadata before security.ima was written to the disk (patch 7).
 
-Roberto
+[1] https://lore.kernel.org/linux-security-module/66f7b10e.050a0220.46d20.0036.GAE@google.com/
+[2] https://lore.kernel.org/linux-security-module/20241008165732.2603647-1-roberto.sassu@huaweicloud.com/
+[3] https://lore.kernel.org/linux-security-module/20241018161415.3845146-1-roberto.sassu@huaweicloud.com/
+[4] https://lore.kernel.org/linux-security-module/20240215103113.2369171-1-roberto.sassu@huaweicloud.com/
+
+v1:
+- New patches (1 suggested by Shu Han, 4-6)
+- Remove ima_inode_get_iint() and ima_inode_set_iint() and access inode
+  integrity metadata from the new ima_iint_cache_lock structure directly
+- Return immediately in ima_inode_get() if the inode does not have a
+  security blob (suggested by Paul Moore)
+
+Roberto Sassu (7):
+  fs: ima: Remove S_IMA and IS_IMA()
+  ima: Remove inode lock
+  ima: Ensure lock is held when setting iint pointer in inode security
+    blob
+  ima: Mark concurrent accesses to the iint pointer in the inode
+    security blob
+  ima: Set security.ima on file close when ima_appraise=fix
+  ima: Discard files opened with O_PATH
+  ima: Reset IMA_NONACTION_RULE_FLAGS after post_setattr
+
+ include/linux/fs.h                    |  3 +-
+ security/integrity/ima/ima.h          | 33 ++++------
+ security/integrity/ima/ima_api.c      |  4 +-
+ security/integrity/ima/ima_appraise.c |  7 +-
+ security/integrity/ima/ima_iint.c     | 95 ++++++++++++++++++++++-----
+ security/integrity/ima/ima_main.c     | 81 +++++++++++++----------
+ 6 files changed, 146 insertions(+), 77 deletions(-)
+
+-- 
+2.47.0.118.gfd3785337b
 
 
