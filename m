@@ -1,86 +1,103 @@
-Return-Path: <linux-integrity+bounces-4262-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4263-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88CB39DEF40
-	for <lists+linux-integrity@lfdr.de>; Sat, 30 Nov 2024 08:52:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5CE89DF78A
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2024 02:00:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 373DB281438
-	for <lists+linux-integrity@lfdr.de>; Sat, 30 Nov 2024 07:52:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1D05B20D3E
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2024 01:00:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5CCB13E022;
-	Sat, 30 Nov 2024 07:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0366C3D81;
+	Mon,  2 Dec 2024 01:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNQo3m4b"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IaVdlncj"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FD929A0;
-	Sat, 30 Nov 2024 07:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A96E79FE
+	for <linux-integrity@vger.kernel.org>; Mon,  2 Dec 2024 01:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732953126; cv=none; b=OsQFPJTvYh4AcIrD6Bfbhhtpr23iFjgCyLBhABfBMjvjbqmC76FqcSxiqW6PfVYxbCD4jDLy2YmIgWU1Fes6ygDm8YU5/dicAcmVwjBhAPlAYLPFV5CNEOSjO4dzGNrxmqIusm6bN/B8XNRxc2+U/K5OwPafpnvixuS+igZs+fA=
+	t=1733101235; cv=none; b=IkzOMBGMLGTqXf/IuQcs5i54gMOlDWDmGBJTERg0RK7XRt0zcj9JLRWr3P4WSykEkcSNmRHrVg9Sqfi9IDZ/lhOpWZChws8DJ0rHn+b6gvpTAgFmxbZ0I+si4E42FvLIYmmcXu7OagU+jMKai+5bLoosJHUfLB6106urGILxK50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732953126; c=relaxed/simple;
-	bh=B2jqdqUMq9AblgtpyT+tux0MiGaM+gLl7c0wRNYaxqk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qPfm2DjoVE2sCP01OPprSEfDSGHV6JE6rVBzQ62oDdmaH3G8tTRWR38Bjxo8+yJ/wWUOMhhX/FhqoaOa5APp/Ly1+YXC0cC0ptIupkmYQdK5blX0KM56EeR1J6zkZ5QbBl81VnYgW3JkxGuLMnPAHV/OXGfJqBM1wqfoa2k/56U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNQo3m4b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7410C4CECC;
-	Sat, 30 Nov 2024 07:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732953125;
-	bh=B2jqdqUMq9AblgtpyT+tux0MiGaM+gLl7c0wRNYaxqk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nNQo3m4bVtcCQHKBrv3xkJJB4jlXRF3Og/dbAKUaGSsN8TB+ZFdPoa/97oXqaQrvG
-	 ga8YjCA5PgdHBmtewxQyb3FgJe+Yo0ldZuRQoPqiXNfsYgbLn5YEozGgoyH82T8fT1
-	 apT2s7OeG8oK0CqUwrW3aPu0hjPWyQjVLPGpdINoPht62Fo2Gz2R/73MA+BXvg0NQK
-	 yWUBxAxkFVGDrkrkSuIOWXz+BB0BOVT0ODqWPedfQKtxXm5NB8mxqiLe6XUesVmXJf
-	 dHvpbL/v2Xg97dDmSPIRbDrpTmSvy4oSmroktIYFMaC5zxuiVl1rdmMoxKJBqWwhtQ
-	 4ks3dx3RP5CMQ==
-Message-ID: <144c7ba3-786d-4bca-bca7-f02781c82caf@kernel.org>
-Date: Sat, 30 Nov 2024 08:52:00 +0100
+	s=arc-20240116; t=1733101235; c=relaxed/simple;
+	bh=rbqBaTTjThP16TBbHbn5cd/kHbkmrKMU7+xwUQRiqjM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rN2CBtUfaO+vCqaTA291mlCMzdRFhUr+INJOZ26syG74qpxGAv5f9N58gsbob2ivpXeDIpuholgNL8B+gqbKjdXeqVclTiPbEGvPDpicOK1izjNxBIitEFCLTVX066dxOLQkKoSQabgLDfohh6hn1NjxTljfp659cGltKbk2P8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IaVdlncj; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1733101233;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=a2tOABuxoSwQJFOm0ZseC/QgcSVsZUaBPE4FH0WJZnY=;
+	b=IaVdlncjZtEH+K65LenV+Jz8C7Xgcvjngb12zVFTI02+ovYXtwIB749a/hGBDAsbxVzOgu
+	9GeyKNpjpRNFNf3Tv8hZmEYQyfgqWts94HuKJ98tLxViKs5t8H8LDVyTUqdwCIDB04FJyX
+	gFB2apisJTrl+vJ+AAQ079hsne+vzxE=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-294-gmvFTkJtNJOHJYPemLp7Kw-1; Sun,
+ 01 Dec 2024 20:00:29 -0500
+X-MC-Unique: gmvFTkJtNJOHJYPemLp7Kw-1
+X-Mimecast-MFC-AGG-ID: gmvFTkJtNJOHJYPemLp7Kw
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 53C521956088;
+	Mon,  2 Dec 2024 01:00:28 +0000 (UTC)
+Received: from xiubli-thinkpadp16vgen1.rmtcn.com (unknown [10.72.112.98])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1A279300018D;
+	Mon,  2 Dec 2024 01:00:24 +0000 (UTC)
+From: xiubli@redhat.com
+To: ltp@lists.linux.it
+Cc: linux-integrity@vger.kernel.org,
+	chrubis@suse.cz,
+	Xiubo Li <xiubli@redhat.com>
+Subject: [PATCH v2] doc: correct the build steps for open_posix_testsuite
+Date: Mon,  2 Dec 2024 09:00:12 +0800
+Message-ID: <20241202010012.1266775-1-xiubli@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: TPM/EFI issue [Was: Linux 6.12]
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc: =?UTF-8?Q?Peter_H=C3=BCwe?= <PeterHuewe@gmx.de>,
- Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- linux-integrity@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
- "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>
-References: <CAHk-=wgtGkHshfvaAe_O2ntnFBH3EprNk1juieLmjcF2HBwBgQ@mail.gmail.com>
- <9c893c52-e960-4f30-98ce-ba7d873145bb@kernel.org>
- <ca741d8eade72aa68c389a88d2520f4fe541a1e7.camel@HansenPartnership.com>
- <2a238b61-fa03-4ae4-9dc4-f73834aa3228@kernel.org>
- <70bc83bd7cfb236da030e584e93bfc62c1d9eb6a.camel@HansenPartnership.com>
- <7773891b-b699-4f1d-b9ba-220c649aee9d@kernel.org>
- <02060553aafac7e145e96510a66a6845d389d6ff.camel@HansenPartnership.com>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <02060553aafac7e145e96510a66a6845d389d6ff.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 29. 11. 24, 17:03, James Bottomley wrote:
->>   But well, fs/fat/ received no significant changes either.
-> 
-> We don't use that at all in the EFI stub (and neither does systemd-
-> boot).  We use the protocols EFI provides to read fat volumes, so any
-> issue would be in the edk2 (or in your case ovmf) FatPkg.
+From: Xiubo Li <xiubli@redhat.com>
 
-Sure, I had an FS corruption (during initrd write) in my mind.
+'./configure' is needed just before generating the Makefiles.
 
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
+---
+
+V2:
+- a minor fixing about the order, thanks Cyril.
+
+ doc/users/quick_start.rst | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/doc/users/quick_start.rst b/doc/users/quick_start.rst
+index 1581b1f0c..598a95e2a 100644
+--- a/doc/users/quick_start.rst
++++ b/doc/users/quick_start.rst
+@@ -53,6 +53,7 @@ generated first:
+ 
+ .. code-block:: console
+ 
++   $ ./configure
+    $ cd testcases/open_posix_testsuite/
+    $ make generate-makefiles
+    $ cd conformance/interfaces/foo
 -- 
-js
-suse labs
+2.47.0
+
 
