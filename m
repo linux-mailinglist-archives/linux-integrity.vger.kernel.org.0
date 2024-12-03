@@ -1,131 +1,152 @@
-Return-Path: <linux-integrity+bounces-4273-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4274-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81BD39E136C
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2024 07:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 546A69E14EA
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2024 09:02:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AB1A160320
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2024 06:38:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FA2D164AC3
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2024 08:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3D211862BD;
-	Tue,  3 Dec 2024 06:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A916E1DE3A7;
+	Tue,  3 Dec 2024 07:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tXz/mLSB"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MWSNHbyT"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75741183CBE;
-	Tue,  3 Dec 2024 06:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90011DAC9B;
+	Tue,  3 Dec 2024 07:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733207887; cv=none; b=FqPjv6zyJCraBNa4IL3loPEblkJHYC7irXoz+XZ87UKb0slc+nVJoim2B6/JzcGnDr7ABcx4WCJTOliT5VbmlseQa9YZcYmcRyMZyIqvmV19nt6hm6dJmz/lZ3yd2ow4gOCFTj5hk/2M4BJXrcm3AugCyRQaDSZCcUxjkATcS0c=
+	t=1733212695; cv=none; b=E+hxWsrBcEEI7wBNisjG81KTZwNkD9H/SPwRPgMluPTVkEJnpVv92m7CB1P6fPMeDsSGlu2QUzrq5u7bdNXQJIdL3QkGqYLcVNrnXrYkVsQnmGdqQfQt6oIR6weWX402OIhzdybiHOkFTDAlKymbDMW9HyhlM2pM5E2zeXldzbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733207887; c=relaxed/simple;
-	bh=P1NNfEKNKNDLAevqjUa8oUcSnkwU53Z/TBjQw9BmQfo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=VtfuHamUzOD79huX8DkXIcpQ3TsA4Yp+e9XudQclTwmcRJ1/q8U1UytpD8k8CDwWaw2Vv7SDrA5sz1RMjmvZbH4kj6M2nKefHouYsk6Wr1dkKZHF5o21L2B4+0iJ7FVt23F61PJlCEEaZWf3mKwEivNOoP4X+KEw/OkoGq9IOP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tXz/mLSB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97683C4CECF;
-	Tue,  3 Dec 2024 06:38:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733207887;
-	bh=P1NNfEKNKNDLAevqjUa8oUcSnkwU53Z/TBjQw9BmQfo=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=tXz/mLSBpVjIekJQC5Bqibjiq0InYtSCGqxv3vOexPs++FgpI0y6TaGPFBxBLNM33
-	 RgyFZRj0ChvDZUUw5j+Wtx4+Lo9nSzzImD1BF1I2kVjUMpfVARzQRRO95FHQ4MUlTL
-	 XUP3YbmhZ46q9fhWilUOkV14HczBDgVV72GmJOZI7WSM7aOceo5dib5gXCgNZVYzPQ
-	 Xs+i2B0d5RHyYtkTXHIOkxoogKrt72r92p6qaK4HSo3oGGu3xpucakWMQrAdVq9Xf4
-	 GNvL4adbfV9jExE3Uqjrb0B4YsEI+J/Y0nPJT6N/oatCiDc0mqjp0EMBbRKRT6Zwi8
-	 2WuqG097msy4g==
+	s=arc-20240116; t=1733212695; c=relaxed/simple;
+	bh=LlAMOkFBWltyk8d13cDz4Chrf+wL/mxVKWgO+2b0Z+E=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=PDeG6f72auF+XNnMaq5ZmRf41L8XLLJEG+lKs7oX1CjBfmmWRYA01nSMJXmc7VmncX8VsPRkL7sGbHeLgRTTQsovdYm9Q6arv7dbfoGErU9vuI5jedvm/F6iHGl397m+LXU1HJFDDvC2s5pqHERxBKXcb5qUbysq8cuOIJP1ibQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MWSNHbyT; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B2JQCjs021372;
+	Tue, 3 Dec 2024 07:58:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=yuRrjyJ0isQXXOueNN03As
+	MDhQuBXNE367Q7Ha7DMH4=; b=MWSNHbyTE712Rr+v6wd0pKmixSfbzr5SUlEVuT
+	m/6+kuCBJA5iFuSrpIVC1GSQIp9rM83ku8CxU5nz+s4oZt8w+H9jYr26EJeNGQRc
+	VsTFk6r48x7mir11jALA8GY+sNZeQqx+1AYaX6F2ofkLPFbqUU3h7GW0nY7NW4XE
+	cxVskgvU/pLatPWSpl5MdzN8Cjjz48H8HpzxcAiNlR3bCqgCqq4v2xWpje3bfZGr
+	EDOno8yp2TA/CIrIYTACXNNXmCfhFzpM6PHVfDdPWFGVprDa6afdC2iS9/RFASme
+	VwoRiET5tJ0RvrLElb2xLuzQCcaH0CA6wT2uXAn8PJr9ThqQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 437ufe7810-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Dec 2024 07:58:08 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B37w74C030608
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 3 Dec 2024 07:58:07 GMT
+Received: from [10.218.0.48] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 2 Dec 2024
+ 23:58:05 -0800
+Message-ID: <c5776544-235b-47bd-bab7-d00d436db893@quicinc.com>
+Date: Tue, 3 Dec 2024 13:28:01 +0530
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 03 Dec 2024 07:38:02 +0100
-Message-Id: <D61UX1CMHLZ5.27V9844S1S1D0@kernel.org>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- "James Bottomley" <James.Bottomley@hansenpartnership.com>,
- <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <regressions@lists.linux.dev>
-Subject: Re: [REGRESSION][BISECTED] tpm: Popping noise in USB headphones
- since 1b6d7f9eb150
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Stefan Berger" <stefanb@linux.ibm.com>, "Christian Heusel"
- <christian@heusel.eu>
-X-Mailer: aerc 0.18.2
-References: <7d052744-4bfa-40bc-ba06-1b4c47a5eb87@heusel.eu>
- <D54YWMOV7KOO.2X0N035UHEFBD@kernel.org>
- <b3a01060-f59b-430d-afcc-48c5ec628bcb@heusel.eu>
- <D5Z62H0XCOQM.J4V5ZDH9E7C7@kernel.org>
- <ce7fa562-7cb7-4adc-934a-560b94ce44f0@linux.ibm.com>
-In-Reply-To: <ce7fa562-7cb7-4adc-934a-560b94ce44f0@linux.ibm.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: <peterhuewe@gmx.de>, <jarkko@kernel.org>, <jgg@ziepe.ca>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From: Yuvaraj Ranganathan <quic_yrangana@quicinc.com>
+Subject: QEMU launch failure with TPM passthrough
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -Ex58Sr52x0azX7Mmh8CY5HmXcPYUwny
+X-Proofpoint-GUID: -Ex58Sr52x0azX7Mmh8CY5HmXcPYUwny
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ spamscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxlogscore=989 clxscore=1011 adultscore=0 bulkscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412030067
 
-On Mon Dec 2, 2024 at 11:15 PM CET, Stefan Berger wrote:
->
->
-> On 11/29/24 9:44 PM, Jarkko Sakkinen wrote:
-> > On Tue Nov 26, 2024 at 1:42 PM EET, Christian Heusel wrote:
-> >> On 24/10/25 05:47PM, Jarkko Sakkinen wrote:
-> >>> Yeah, this is on the list.
-> >>>
-> >>> See: https://bugzilla.kernel.org/show_bug.cgi?id=3D219383#c5
-> >>>
-> >>> I had a fix for the AMD boot-time issue already over a month ago
-> >>> but unfortunately took time to get enough feedback.
-> >>>
-> >>> BR, Jarkko
-> >>
-> >> I'm not sure if this is supposed to be fixed, but AFAIK we hoped that
-> >> the patchset that was mentioned in bugzilla also helped this issue.
-> >>
-> >> The reporter said that the bug is still present in 6.12.1, so this mig=
-ht
-> >> need further poking =F0=9F=A4=94
-> >=20
-> > I'd suggest a workaround for the time being.
-> >=20
-> > In 6.12 we added this for (heavy) IMA use:
-> >=20
-> > tpm.disable_pcr_integrity=3D [HW,TPM]
-> >                          Do not protect PCR registers from unintended p=
-hysical
-> >                          access, or interposers in the bus by the means=
- of
-> >                          having an integrity protected session wrapped =
-around
-> >                          TPM2_PCR_Extend command. Consider this in a si=
-tuation
-> >                          where TPM is heavily utilized by IMA, thus pro=
-tection
-> >                          causing a major performance hit, and the space=
- where
-> >                          machines are deployed is by other means guarde=
-d.
-> >=20
-> > Similarly it might make sense to have "tpm.disable_random_integrity"
-> > that disables the feature introduced by the failing commit.
-> >=20
->
-> I am wondering what could be the not-so-obvious root cause for this?=20
-> Could it be due to a (TPM or RNG-related) lock? I guess the audio=20
-> popping could occur if an application cannot meet timing requirements=20
-> when it runs into some sort of blocking lock...
+Hi Everyone,
 
-I'm travelling this week. I'll take a look in detail next weke. Obvious
-thing is that latency has rised on getting the result for TPM2_GetRandom
-but it should sleep while waiting. I.e. not sure what causes "busyness".
+We are trying to launch a VM’s using qemu with TPM passthrough
+(https://www.qemu.org/docs/master/specs/tpm.html) and
+we are encountering the QEMU launch is failing on below experiments,
 
-I think in general having disable_* for trusted keys, random and PCR
-extension i.e. features that bus integrity protection touches would
-be great for debugging these issues in all cases.
+Problem 1:
+qemu-system-aarch64 \
+    -M virt -m 2G \
+ -tpmdev passthrough,id=tpm0,path=/dev/tpmrm0 -device tpm-tis,tpmdev=tpm0 \
+    -kernel /mnt/overlay/Image \
+    -drive
+file=/mnt/overlay/qcom-guestvm-image-qcs9100-ride-sx-20241118050754.rootfs.ext4,if=virtio,format=raw
+\
+    -append "root=/dev/vda" \
+    -cpu host --enable-kvm -smp 4 -nographic
 
-BR, Jarkko
+
+qemu-system-aarch64: -tpmdev passthrough,id=tpm0,path=/dev/tpmrm0:
+tpm_passthrough: Could not guess TPM cancel path
+
+
+Problem 2: (experimented based on open source discussions)
+qemu-system-aarch64 \
+    -M virt -m 2G \
+ -tpmdev
+passthrough,id=tpm0,path=/dev/tpmrm0,cancel-path=/sys/class/tpm/tpm0/device/cancel
+-device tpm-tis,tpmdev=tpm0 \
+    -kernel /mnt/overlay/Image \
+    -drive
+file=/mnt/overlay/qcom-guestvm-image-qcs9100-ride-sx-20241118050754.rootfs.ext4,if=virtio,format=raw
+\
+    -append "root=/dev/vda" \
+    -cpu host --enable-kvm -smp 4 -nographic
+
+qemu-system-aarch64: -tpmdev
+passthrough,id=tpm0,path=/dev/tpmrm0,cancel-path=/sys/class/tpm/tpm0/device/cancel:
+tpm_passthrough: Could not open TPM cancel path: No such file or directory
+
+On further checking, it is due to /sys/class/tpm/tpm0/device/cancel
+attribute is not created by TPM driver.
+
+Temporary Solution explored:
+
+We made the change in TPM driver to use tpm1_dev_group irrespective of
+TPM version.
+tpm2_dev_group is creating only tpm_version_major attribute while
+tpm1_dev_group is creating multiple attributes including cancel + tpm2
+attributes.
+With this change, we are able to launch VM’s successfully using QEMU
+command.
+
+TPM HW version: 2.0
+QEMU emulator version: 6.2.0
+
+This seems to be basic issue with QEMU + TPM 2.0 HW.
+Could you please help us know are we missing any procedure in the QEMU
+steps ?
+
+If the procedure is good, I shall go ahead to post an upstream patch
+with the fix. Need your comments here!!!
+
+Thanks,
+Yuvaraj.
 
