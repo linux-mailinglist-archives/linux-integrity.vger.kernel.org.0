@@ -1,82 +1,86 @@
-Return-Path: <linux-integrity+bounces-4271-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4272-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97D2E9E0EE4
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2024 23:26:12 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A59BA9E10C0
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2024 02:23:55 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A6CAB283DB
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Dec 2024 22:15:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D725161455
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Dec 2024 01:23:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA77F1DF27E;
-	Mon,  2 Dec 2024 22:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 096B0847C;
+	Tue,  3 Dec 2024 01:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EKSXT6ZV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AncE1MJx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B631DE3AF;
-	Mon,  2 Dec 2024 22:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7FF25745
+	for <linux-integrity@vger.kernel.org>; Tue,  3 Dec 2024 01:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733177726; cv=none; b=IlP5CrUNI1tyklIhX4iwV1tDCY6LA1xU4J+ICPXY/LWMBbxT70FsDd7SC69M3OxTGvsB/5CWBrNHeZe4mGxHzfXQgcmnq2SKe0ZMq75eo2Vbly4Dksk6orhMMc5XBk6isgUjzezk/BzLL3L0bBvQlBnJeMJx93MP3pBtOQncTE0=
+	t=1733189032; cv=none; b=Wfz/f38kZWK/s3czTRzNvFIsPKWWspHRlnvbvIerxhlSYitjPpIGfAlPUQVlXbtXJUrbiY0yOnpOZN0oPEcQLvGAIP9MiMUwEIPbAhSN+OImxUJyjknn9qemy+C4gCdXJyKZZX+pVfusP3kxratoVKHtMH1KS1Q9hlrCaXno+7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733177726; c=relaxed/simple;
-	bh=q4HkAbO72lqAvSiyEaGYKu2Cqm5ciWIcD4uxttho7bY=;
+	s=arc-20240116; t=1733189032; c=relaxed/simple;
+	bh=C2/PC1ZypqZswVys9659RV2tZzXp19PZ6Avu/KkJe0k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jquGyTp/qguvuTXdyA+evI7j4puukPUVegmFA3CwUqnE6a0CX/IhvJWCaOeQ3Jz7CI+ePfKhCXFmKCYdSh80O/4/gJnFiWYPC70fIdpb7jyHquw8oZFU3JkCzsaRAPnR2jqVGfLaV93WGcDCl42awRz+RDuj/pwdYS6juZ9rWaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EKSXT6ZV; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B2JIhgd020289;
-	Mon, 2 Dec 2024 22:15:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=EtSWkH
-	2KGCBHcN+5Th++bxlhJSseoSqJAsaXifznjBE=; b=EKSXT6ZVjmMK1FJFVgLruJ
-	kZ6W3dnSpUE06Bp70swE/QiGblnCOU09ApCMFQNcMPC6dJ1iDdcBI6s3jYLUzSwd
-	DK0bVc4KGjhm3oxG0nGgbNuyQeoEHqFgFajSTzZ4aKpJN79NkqsTZmgfo5LHUi3q
-	QZQ6a4r9H8otV+x4c7plnY0uVpB2LAQbMYH+Q+KQpsfSUqNgFgKdqJX/U4gVPGdU
-	qFhc3oq/wRkdVwazecTAb+Hb/qamIrIF0HWTLUB9MS8nZktlg0ltc29KJ6dHTCPY
-	xnlz9vluvQnjOK+Oqwwbh53HPryX+SNCxKFem2hm3MIxPuGBfCMwKURajDkZVGuA
+	 In-Reply-To:Content-Type; b=oZ5rbe8pukytwRY+MAII3jlMZ4ENMMwsCArrah3fPpmH36BKWY8j26PPhXA7o6SiqL2HxRfewKZTshe0uZALbGoxxK2Lw5kzYm92sAGZVXPgbbCMKrfaY2uFWyvS+dwwz4+8l6ClXJySPHARh40/d/o3oBv2rxq0SlDhPlQZrXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AncE1MJx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1733189030;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C2/PC1ZypqZswVys9659RV2tZzXp19PZ6Avu/KkJe0k=;
+	b=AncE1MJxszjrWjtJF9+JEnUmMcvEyY5ouMv6hSirNjXW5gzLhJM6e/1Y7ZEljHmf2RctlM
+	GBqYITV6vCx6kqttMwt4RIbl4GKLkZHwy86o1M7rOhZrY14f8NAgo2rOcs+Nkz0WSefNxp
+	i4+i6XXMG40TKDyq1H+xwHNIzi5lwV8=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-88-hLQd2eOcMh6MTFiQNc_APA-1; Mon, 02 Dec 2024 20:23:49 -0500
+X-MC-Unique: hLQd2eOcMh6MTFiQNc_APA-1
+X-Mimecast-MFC-AGG-ID: hLQd2eOcMh6MTFiQNc_APA
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-211c1c131c4so52756785ad.1
+        for <linux-integrity@vger.kernel.org>; Mon, 02 Dec 2024 17:23:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733189028; x=1733793828;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C2/PC1ZypqZswVys9659RV2tZzXp19PZ6Avu/KkJe0k=;
+        b=Omr5pTRNhNbYXHbuIp7LfDvci0uyG04p12SzRf/3ax+le7wxtU/4sCxYAck1yZ2ptP
+         wgUfrra00TgiZPXef+qpghdSMkU6aVYAafgHBN1N4MTS1TUenbDMcQwRLFlD5iFiuI6Z
+         WpYV15PI7ydh2SicX///rQyXvpPCC3n8pLDQElG3VzmhvE8ncgGvzZLxZahKEq6y3P6u
+         GALYsMDSlfknp/d8whJ3+FFTCxBdla+AKAfbEqeHSRUll0dGmDaHvKIpvh++vEHRg51s
+         RZDYzNh3+/m+BC42Z7MeC8FHEl0tXlT+P15h0Hz/jGVlNy5+NBHnyf92aCcK/JoIYUTr
+         v7XA==
+X-Forwarded-Encrypted: i=1; AJvYcCVCig2cHZ2gupy1gpqLyZZOjINb7NGBGLsIxEFaAGbSurRpNQScKHsJhzYAvxywFUCnF2BtTLKooFChwDn2VMo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6BMHXHRObQvWdXdNgzTWpXTs46YBSUy5vY9GFa7a/lumJn63j
+	bSeTx/t7PG06cMZ94ADls7IauKVA361bfgVh93jxp3eQBALSHafYHDwBUkez3EJV6WBbmPHqrI+
+	Wal3clfKa9azrStlQ3afzSblSm0qpBIWGK6J7rG7DiH1n9d9aCCoz2Ay1AGFcXPozM0c8tUk4Mw
 	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 437s4hu4x2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Dec 2024 22:15:19 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4B2MEQDo014322;
-	Mon, 2 Dec 2024 22:15:18 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 437s4hu4x0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Dec 2024 22:15:18 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B2L8PTq029494;
-	Mon, 2 Dec 2024 22:15:18 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 438ddya5e0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Dec 2024 22:15:18 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B2MFHuJ6095486
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 2 Dec 2024 22:15:17 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A080058059;
-	Mon,  2 Dec 2024 22:15:17 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BD08D5805B;
-	Mon,  2 Dec 2024 22:15:16 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  2 Dec 2024 22:15:16 +0000 (GMT)
-Message-ID: <ce7fa562-7cb7-4adc-934a-560b94ce44f0@linux.ibm.com>
-Date: Mon, 2 Dec 2024 17:15:16 -0500
+X-Gm-Gg: ASbGncusHNU0Aq08jjo+l+V7oYC5XExJg6t6poCwBP4KBoGafayxm+M6ypc2a9aiN4/
+	OKMXIOqHQmsMIOmEump5dMvyecJ34qVoILzi+xnnecefaxk9kpRUgLa6YFeAlAnyDcYwxV7Sdsc
+	nQ+Y5j30c4ZdegxTNfks1E5UJRwEQRwncfCbZ5qd8QVjxQav/QbZjnunm+UeaBW+RPWWBXaZU3n
+	8UNEqDryAkmYyad6bApgTpH9TdSKx5NsSWIf4yl0mJZqUuEKqA=
+X-Received: by 2002:a17:902:cec7:b0:215:a3e4:d26b with SMTP id d9443c01a7336-215a3e4dc89mr65627895ad.0.1733189027857;
+        Mon, 02 Dec 2024 17:23:47 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEcnlTkOEYdvVSwQb5f9BrlBHCoY4NdIqDAtzR19zkNXnGj7T2eKbjQ4ASSxLtdeMBsVBvjVg==
+X-Received: by 2002:a17:902:cec7:b0:215:a3e4:d26b with SMTP id d9443c01a7336-215a3e4dc89mr65627645ad.0.1733189027600;
+        Mon, 02 Dec 2024 17:23:47 -0800 (PST)
+Received: from [10.72.112.98] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215b0887f58sm8629995ad.208.2024.12.02.17.23.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Dec 2024 17:23:46 -0800 (PST)
+Message-ID: <2779c1f7-28fd-415f-a016-da3aa077659b@redhat.com>
+Date: Tue, 3 Dec 2024 09:23:37 +0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -84,83 +88,41 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION][BISECTED] tpm: Popping noise in USB headphones since
- 1b6d7f9eb150
-To: Jarkko Sakkinen <jarkko@kernel.org>,
-        Christian Heusel <christian@heusel.eu>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-References: <7d052744-4bfa-40bc-ba06-1b4c47a5eb87@heusel.eu>
- <D54YWMOV7KOO.2X0N035UHEFBD@kernel.org>
- <b3a01060-f59b-430d-afcc-48c5ec628bcb@heusel.eu>
- <D5Z62H0XCOQM.J4V5ZDH9E7C7@kernel.org>
+Subject: Re: [LTP] [PATCH] doc: correct the build steps for
+ open_posix_testsuite
+To: Cyril Hrubis <chrubis@suse.cz>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org
+References: <20241119101357.951813-1-xiubli@redhat.com>
+ <Z0mXHSnqmstCIMrF@yuki.lan> <a32c6381-8779-4dc5-878b-a46bff6454d6@redhat.com>
+ <Z02PZRGzw5qM3z0w@yuki.lan>
 Content-Language: en-US
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <D5Z62H0XCOQM.J4V5ZDH9E7C7@kernel.org>
+From: Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <Z02PZRGzw5qM3z0w@yuki.lan>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: N2wjq-mLeF-yaiI6ysA8v9C6bzw8fhuV
-X-Proofpoint-ORIG-GUID: sISoTb_AfN8h-K6JsVaQLAGKHUBp3fl3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- adultscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
- impostorscore=0 phishscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412020183
+Content-Transfer-Encoding: 7bit
 
 
-
-On 11/29/24 9:44 PM, Jarkko Sakkinen wrote:
-> On Tue Nov 26, 2024 at 1:42 PM EET, Christian Heusel wrote:
->> On 24/10/25 05:47PM, Jarkko Sakkinen wrote:
->>> Yeah, this is on the list.
->>>
->>> See: https://bugzilla.kernel.org/show_bug.cgi?id=219383#c5
->>>
->>> I had a fix for the AMD boot-time issue already over a month ago
->>> but unfortunately took time to get enough feedback.
->>>
->>> BR, Jarkko
+On 12/2/24 18:43, Cyril Hrubis wrote:
+> Hi!
+>> Wait.
 >>
->> I'm not sure if this is supposed to be fixed, but AFAIK we hoped that
->> the patchset that was mentioned in bugzilla also helped this issue.
->>
->> The reporter said that the bug is still present in 6.12.1, so this might
->> need further poking 🤔
-> 
-> I'd suggest a workaround for the time being.
-> 
-> In 6.12 we added this for (heavy) IMA use:
-> 
-> tpm.disable_pcr_integrity= [HW,TPM]
->                          Do not protect PCR registers from unintended physical
->                          access, or interposers in the bus by the means of
->                          having an integrity protected session wrapped around
->                          TPM2_PCR_Extend command. Consider this in a situation
->                          where TPM is heavily utilized by IMA, thus protection
->                          causing a major performance hit, and the space where
->                          machines are deployed is by other means guarded.
-> 
-> Similarly it might make sense to have "tpm.disable_random_integrity"
-> that disables the feature introduced by the failing commit.
-> 
+>> I check it again. I think we should do it under
+>> 'testcases/open_posix_testsuite/' too ? For me it doesn't work only do
+>> this just before 'cd testcase/...'
+> Ah it's a bit more complicated that I remmebered. There are two ways how
+> to compile the open posix testsuite.
+>
+> The top level configure script configures the open posix testsuite, but
+> you have to pass the --with-open-posix-testsuite flag to it.
+>
+> Or you can run the open posix configure from the open posix directory.
+>
+Yeah, this looks better.
 
-I am wondering what could be the not-so-obvious root cause for this? 
-Could it be due to a (TPM or RNG-related) lock? I guess the audio 
-popping could occur if an application cannot meet timing requirements 
-when it runs into some sort of blocking lock...
+Does it make sense to fix the doc about this ? If so I will send the V3.
 
-> What do you think?
- > >>
->> Cheers,
->> Chris
-> 
-> BR, Jarkko
-> 
+Thanks
+
+- Xiubo
 
 
