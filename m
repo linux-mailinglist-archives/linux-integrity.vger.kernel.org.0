@@ -1,242 +1,229 @@
-Return-Path: <linux-integrity+bounces-4281-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4282-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E53319E3750
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2024 11:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 969559E37CB
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2024 11:45:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5C51284DE2
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2024 10:16:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58185282093
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Dec 2024 10:45:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB2411AF0A7;
-	Wed,  4 Dec 2024 10:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="WYjwtfdU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDFD71AF0D7;
+	Wed,  4 Dec 2024 10:45:33 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F83018595B
-	for <linux-integrity@vger.kernel.org>; Wed,  4 Dec 2024 10:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7465193067;
+	Wed,  4 Dec 2024 10:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733307368; cv=none; b=uWfHx4kVsyd69BWoDpx7+4Y5fQm5OMtRyrLY1C6z3lNf0tzTHRxZnK/Aac/GEIYCVYwFv2kUntfMZ7C5aOa9eTebPmyK6Cny0Dz1itSsDEmfmFWR3DjSLE3I5X7Mvpp/qnDhqLX9iVL5EEdl1aPahkWN029MxuXYDUgo8gH8RSQ=
+	t=1733309133; cv=none; b=jMEBseWfUC2PxXZfnEzVVriinG+NQ2OaccMEHoEpqBDKpItk8MI6nTOKgOhmw+g24bFaohZ2l5c/3dsyt/F4KjjzO5fq19IU3BikVAiP2tjkzlImZ1szD0+pzPt7N+Uo5njnlnvAd4z/8RWC6aORxG/dSo6EuJyL6fIuYuaE6+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733307368; c=relaxed/simple;
-	bh=rKSAyG07/h2eMatj22GyJdWRpjcsvVHB9qLi+04StoA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sxh/IEU7xrTx3QqI2fUO+E6VbKuxrXl/8dUob93HJ3rz/0JhP4nG76egAphRoP7OdmK6sME2Cf4Y8KsOxi+6hMYVcZ073TMSiluVD/rhq/k6voZdVVAIJpQhpkpOS/AJQHtPiHRPjqRLdr640759azyVaSdQGLVD1ne2Ui11kmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=WYjwtfdU; arc=none smtp.client-ip=84.16.66.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Y3D1j6x2kzw15;
-	Wed,  4 Dec 2024 11:15:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1733307353;
-	bh=7QdWrJp74Ayt3Lkyd8RV7Cyw5fURDnlvpTchBSBsUL8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WYjwtfdUADrkIBWJpzYpQMVuZxXAHmOIbs9Z6Xy5WTRHD53ofEvHfOluKuHVlR/1t
-	 skdniFdXJ0qg2p5nMXvmVPS0pJec8Ost+LvfXPZotIm6w44GNhbLEWekVxPyoSX2aE
-	 uxJ1dy7jFaf76PLA4lTRGCA3RLmjsJwXGg3LJslQ=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Y3D1j0rV6zL46;
-	Wed,  4 Dec 2024 11:15:53 +0100 (CET)
-Date: Wed, 4 Dec 2024 11:15:49 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, roberto.sassu@huawei.com, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, Jeff Xu <jeffxu@chromium.org>, 
-	Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>, audit@vger.kernel.org, 
-	Fan Wu <wufan@linux.microsoft.com>
-Subject: Re: [PATCH v2] ima: instantiate the bprm_creds_for_exec() hook
-Message-ID: <20241204.IeZeTheing4e@digikod.net>
-References: <20241203233424.287880-1-zohar@linux.ibm.com>
+	s=arc-20240116; t=1733309133; c=relaxed/simple;
+	bh=vlqTmq5FsT2/FE3QTwtg6jzPyAfB1te9WN7A5R7FPxY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Dm8aAZ2tOszeSHKY/O5VmadzHWTc860D6O3T/580kL2AOrIUVLRUKEzrwgQFHX5Y97xJPdjBXMDeTWHqwa3NVNYX+cIr1Gk6HuM2ev/TuPrmZZwXwowrFGL53h84a4vpiWFS8X13aPScYfq0LWN9eo5JDoMVlkgtDBbcP2BNGiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Y3DCJ121Vz9v7Nj;
+	Wed,  4 Dec 2024 18:24:12 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 24EC41401F2;
+	Wed,  4 Dec 2024 18:45:22 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwD3X3+uMlBnYunQAg--.4171S2;
+	Wed, 04 Dec 2024 11:45:21 +0100 (CET)
+Message-ID: <00f3eb72042aedaa4644ff0932d06d4e8d215f6b.camel@huaweicloud.com>
+Subject: Re: [PATCH v6 00/15] integrity: Introduce the Integrity Digest Cache
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Eric Snowberg <eric.snowberg@oracle.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>, "corbet@lwn.net" <corbet@lwn.net>, 
+ "mcgrof@kernel.org" <mcgrof@kernel.org>, "petr.pavlu@suse.com"
+ <petr.pavlu@suse.com>,  "samitolvanen@google.com"
+ <samitolvanen@google.com>, "da.gomez@samsung.com" <da.gomez@samsung.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, "paul@paul-moore.com"
+ <paul@paul-moore.com>, "jmorris@namei.org" <jmorris@namei.org>,
+ "serge@hallyn.com" <serge@hallyn.com>, "shuah@kernel.org"
+ <shuah@kernel.org>, "mcoquelin.stm32@gmail.com"
+ <mcoquelin.stm32@gmail.com>,  "alexandre.torgue@foss.st.com"
+ <alexandre.torgue@foss.st.com>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "linux-doc@vger.kernel.org"
+ <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-api@vger.kernel.org"
+ <linux-api@vger.kernel.org>, "linux-modules@vger.kernel.org"
+ <linux-modules@vger.kernel.org>, "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+ <linux-kselftest@vger.kernel.org>, "wufan@linux.microsoft.com"
+ <wufan@linux.microsoft.com>, "pbrobinson@gmail.com" <pbrobinson@gmail.com>,
+  "zbyszek@in.waw.pl" <zbyszek@in.waw.pl>, "hch@lst.de" <hch@lst.de>,
+ "mjg59@srcf.ucam.org" <mjg59@srcf.ucam.org>, "pmatilai@redhat.com"
+ <pmatilai@redhat.com>,  "jannh@google.com" <jannh@google.com>,
+ "dhowells@redhat.com" <dhowells@redhat.com>,  "jikos@kernel.org"
+ <jikos@kernel.org>, "mkoutny@suse.com" <mkoutny@suse.com>,
+ "ppavlu@suse.com" <ppavlu@suse.com>, "petr.vorel@gmail.com"
+ <petr.vorel@gmail.com>,  "mzerqung@0pointer.de" <mzerqung@0pointer.de>,
+ "kgold@linux.ibm.com" <kgold@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Wed, 04 Dec 2024 11:44:59 +0100
+In-Reply-To: <B135AC90-7CE5-4E51-90B1-9D82031668A8@oracle.com>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+	 <C4BE31F8-1FA3-4AD1-A712-ED2AA7E61E96@oracle.com>
+	 <17ef4f662e594c8431a00fe423507af4f6a82286.camel@huaweicloud.com>
+	 <B135AC90-7CE5-4E51-90B1-9D82031668A8@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241203233424.287880-1-zohar@linux.ibm.com>
-X-Infomaniak-Routing: alpha
+X-CM-TRANSID:GxC2BwD3X3+uMlBnYunQAg--.4171S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF4xCFWkWryrCFyfKryUZFb_yoWrZw1kpF
+	WrKa17KrWkGr1Fkrn2ka17XFyFkws3tFyUXr1DGr98CrZ8WFyI9ryfKFW5uFyqgr1vkr42
+	vr4agFy7Cwn8ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
+	JwCIccxYrVCFb41lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07bhb18UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBGdPvjYHuwABsf
 
-On Tue, Dec 03, 2024 at 06:34:24PM -0500, Mimi Zohar wrote:
-> Like direct file execution (e.g. ./script.sh), indirect file exection
-> (e.g. sh script.sh) needs to be measured and appraised.  Instantiate
-> the new security_bprm_creds_for_exec() hook to measure and verify the
-> indirect file's integrity.  Unlike direct file execution, indirect file
-> execution is optionally enforced by the interpreter.
-> 
-> Differentiate kernel and userspace enforced integrity audit messages.
-> 
+On Tue, 2024-12-03 at 20:06 +0000, Eric Snowberg wrote:
+>=20
+> > On Nov 26, 2024, at 3:41=E2=80=AFAM, Roberto Sassu <roberto.sassu@huawe=
+icloud.com> wrote:
+> >=20
+> > On Tue, 2024-11-26 at 00:13 +0000, Eric Snowberg wrote:
+> > >=20
+> > > > On Nov 19, 2024, at 3:49=E2=80=AFAM, Roberto Sassu <roberto.sassu@h=
+uaweicloud.com> wrote:
+> > > >=20
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > >=20
+> > > > The Integrity Digest Cache can also help IMA for appraisal. IMA can=
+ simply
+> > > > lookup the calculated digest of an accessed file in the list of dig=
+ests
+> > > > extracted from package headers, after verifying the header signatur=
+e. It is
+> > > > sufficient to verify only one signature for all files in the packag=
+e, as
+> > > > opposed to verifying a signature for each file.
+> > >=20
+> > > Is there a way to maintain integrity over time?  Today if a CVE is di=
+scovered=20
+> > > in a signed program, the program hash can be added to the blacklist k=
+eyring.=20
+> > > Later if IMA appraisal is used, the signature validation will fail ju=
+st for that=20
+> > > program.  With the Integrity Digest Cache, is there a way to do this?=
+ =20
+> >=20
+> > As far as I can see, the ima_check_blacklist() call is before
+> > ima_appraise_measurement(). If it fails, appraisal with the Integrity
+> > Digest Cache will not be done.
+>=20
+>=20
+> It is good the program hash would be checked beforehand and fail if it is=
+=20
+> contained on the list.=20
+>=20
+> The .ima keyring may contain many keys.  If one of the keys was later=20
+> revoked and added to the .blacklist, wouldn't this be missed?  It would=
+=20
+> be caught during signature validation when the file is later appraised, b=
+ut=20
+> now this step isn't taking place.  Correct?
 
-I guess there is a missing tag:
+For files included in the digest lists, yes, there won't be detection
+of later revocation of a key. However, it will still work at package
+level/digest list level, since they are still appraised with a
+signature.
 
-Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
+We can add a mechanism (if it does not already exist) to invalidate the
+integrity status based on key revocation, which can be propagated to
+files verified with the affected digest lists.
 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> With IMA appraisal, it is easy to maintain authenticity but challenging t=
+o=20
+> maintain integrity over time. In user-space there are constantly new CVEs=
+. =20
+> To maintain integrity over time, either keys need to be rotated in the .i=
+ma=20
+> keyring or program hashes need to be frequently added to the .blacklist. =
+ =20
+> If neither is done, for an end-user on a distro, IMA-appraisal basically=
+=20
+> guarantees authenticity.
+>=20
+> While I understand the intent of the series is to increase performance,=
+=20
+> have you considered using this to give the end-user the ability to mainta=
+in=20
+> integrity of their system?  What I mean is, instead of trying to import a=
+nything=20
+> from an RPM, just have the end-user provide this information in some form=
+at=20
+> to the Digest Cache.  User-space tools could be built to collect and form=
+at=20
 
-With some minor comments, this looks good to me. I'll include this patch
-or the next one in my patch series.  Thanks!
+This is already possible, digest-cache-tools
+(https://github.com/linux-integrity/digest-cache-tools) already allow
+to create a digest list with the file a user wants.
 
-> ---
-> Changelog v2:
-> - Mickael: Use same audit messages with new audit message number
-> - Stefan Berger: Return boolean from is_bprm_creds_for_exec() 
-> 
->  include/uapi/linux/audit.h            |  1 +
->  security/integrity/ima/ima_appraise.c | 28 +++++++++++++++++++++++++--
->  security/integrity/ima/ima_main.c     | 22 +++++++++++++++++++++
->  3 files changed, 49 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
-> index 75e21a135483..826337905466 100644
-> --- a/include/uapi/linux/audit.h
-> +++ b/include/uapi/linux/audit.h
-> @@ -161,6 +161,7 @@
->  #define AUDIT_INTEGRITY_RULE	    1805 /* policy rule */
->  #define AUDIT_INTEGRITY_EVM_XATTR   1806 /* New EVM-covered xattr */
->  #define AUDIT_INTEGRITY_POLICY_RULE 1807 /* IMA policy rules */
-> +#define AUDIT_INTEGRITY_DATA_CHECK  1808 /* Userspace enforced data integrity */
->  
->  #define AUDIT_KERNEL		2000	/* Asynchronous audit record. NOT A REQUEST. */
->  
-> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-> index 656c709b974f..144e0b39fbcd 100644
-> --- a/security/integrity/ima/ima_appraise.c
-> +++ b/security/integrity/ima/ima_appraise.c
-> @@ -8,6 +8,7 @@
->  #include <linux/module.h>
->  #include <linux/init.h>
->  #include <linux/file.h>
-> +#include <linux/binfmts.h>
->  #include <linux/fs.h>
->  #include <linux/xattr.h>
->  #include <linux/magic.h>
-> @@ -469,6 +470,18 @@ int ima_check_blacklist(struct ima_iint_cache *iint,
->  	return rc;
->  }
->  
-> +static bool is_bprm_creds_for_exec(enum ima_hooks func, struct file *file)
-> +{
-> +	struct linux_binprm *bprm = NULL;
-> +
-> +	if (func == BPRM_CHECK) {
+But in this case, the user is vouching for having taken the correct
+measure of the file at the time it was added to the digest list. This
+would be instead automatically guaranteed by RPMs or other packages
+shipped with Linux distributions.
 
-struct linux_binprm *bprm;
+To mitigate the concerns of CVEs, we can probably implement a rollback
+prevention mechanism, which would not allow to load a previous version
+of a digest list.
 
-> +		bprm = container_of(&file, struct linux_binprm, file);
-> +		if (bprm->is_check)
-> +			return true;
+> the data needed by the Digest Cache.  This data  may allow multiple versi=
+ons=20
+> of the same program.  The data would then be signed by one of the system=
+=20
+> kernel keys (either something in the secondary or machine keyring), to ma=
+intain=20
+> a root of trust.  This would give the end-user the ability to have integr=
+ity however=20
+> they see fit.  This leaves the distro to provide signed programs and the =
+end-user=20
+> the ability to decide what level of software they want to run on their sy=
+stem.  If=20
+> something isn't in the Digest Cache, it gets bumped down to the tradition=
+al=20
+> IMA-appraisal.  I think it would simplify the problem you are trying to s=
+olve,=20
 
-return bprm->is_check;
+All you say it is already possible. Users can generate and sign their
+digest lists, and add enroll their key to the kernel keyring.
 
-> +	}
-> +	return false;
-> +}
-> +
->  /*
->   * ima_appraise_measurement - appraise file measurement
->   *
-> @@ -483,6 +496,7 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  			     int xattr_len, const struct modsig *modsig)
->  {
->  	static const char op[] = "appraise_data";
-> +	int audit_msgno = AUDIT_INTEGRITY_DATA;
->  	const char *cause = "unknown";
->  	struct dentry *dentry = file_dentry(file);
->  	struct inode *inode = d_backing_inode(dentry);
-> @@ -494,6 +508,16 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig)
->  		return INTEGRITY_UNKNOWN;
->  
-> +	/*
-> +	 * Unlike any of the other LSM hooks where the kernel enforces file
-> +	 * integrity, enforcing file integrity for the bprm_creds_for_exec()
-> +	 * LSM hook with the AT_EXECVE_CHECK flag is left up to the discretion
-> +	 * of the script interpreter(userspace). Differentiate kernel and
-> +	 * userspace enforced integrity audit messages.
-> +	 */
-> +	if (is_bprm_creds_for_exec(func, file))
-> +		audit_msgno = AUDIT_INTEGRITY_DATA_CHECK;
-> +
->  	/* If reading the xattr failed and there's no modsig, error out. */
->  	if (rc <= 0 && !try_modsig) {
->  		if (rc && rc != -ENODATA)
-> @@ -569,7 +593,7 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  	     (iint->flags & IMA_FAIL_UNVERIFIABLE_SIGS))) {
->  		status = INTEGRITY_FAIL;
->  		cause = "unverifiable-signature";
-> -		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
-> +		integrity_audit_msg(audit_msgno, inode, filename,
->  				    op, cause, rc, 0);
->  	} else if (status != INTEGRITY_PASS) {
->  		/* Fix mode, but don't replace file signatures. */
-> @@ -589,7 +613,7 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
->  			status = INTEGRITY_PASS;
->  		}
->  
-> -		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
-> +		integrity_audit_msg(audit_msgno, inode, filename,
->  				    op, cause, rc, 0);
->  	} else {
->  		ima_cache_flags(iint, func);
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 06132cf47016..f0830e6d0cda 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -554,6 +554,27 @@ static int ima_bprm_check(struct linux_binprm *bprm)
->  				   MAY_EXEC, CREDS_CHECK);
->  }
->  
-> +/**
-> + * ima_bprm_creds_for_exec - collect/store/appraise measurement.
-> + * @bprm: contains the linux_binprm structure
-> + *
-> + * Based on the IMA policy and the execvat(2) AT_CHECK flag, measure and
+> especially around the missing kernel PGP code required for all this to wo=
+rk,=20
+> since it wouldn't be necessary.   With this approach, besides the perform=
+ance=20
+> gain, the end-user would gain the ability to maintain integrity that is e=
+nforced by
+> the kernel.
 
-AT_EXECVE_CHECK
+For what I understood, Linus would not be against the=20
 
-> + * appraise the integrity of a file to be executed by script interpreters.
-> + * Unlike any of the other LSM hooks where the kernel enforces file integrity,
-> + * enforcing file integrity is left up to the discretion of the script
-> + * interpreter (userspace).
-> + *
-> + * On success return 0.  On integrity appraisal error, assuming the file
-> + * is in policy and IMA-appraisal is in enforcing mode, return -EACCES.
-> + */
-> +static int ima_bprm_creds_for_exec(struct linux_binprm *bprm)
-> +{
-
-We could have a comment explaining that ima_bprm_check() will not be
-called a second time bi the bprm_check_security hook if bprm->is_check
-is true because this hook would then not be called.  This would not be a
-security issue anyway, just a useless call.
-
-> +	if (!bprm->is_check)
-> +		return 0;
-> +
-> +	return ima_bprm_check(bprm);
-> +}
-> +
->  /**
->   * ima_file_check - based on policy, collect/store measurement.
->   * @file: pointer to the file to be measured
-> @@ -1177,6 +1198,7 @@ static int __init init_ima(void)
->  
->  static struct security_hook_list ima_hooks[] __ro_after_init = {
->  	LSM_HOOK_INIT(bprm_check_security, ima_bprm_check),
-> +	LSM_HOOK_INIT(bprm_creds_for_exec, ima_bprm_creds_for_exec),
->  	LSM_HOOK_INIT(file_post_open, ima_file_check),
->  	LSM_HOOK_INIT(inode_post_create_tmpfile, ima_post_create_tmpfile),
->  	LSM_HOOK_INIT(file_release, ima_file_free),
-> -- 
-> 2.47.0
-> 
-> 
 
