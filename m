@@ -1,179 +1,263 @@
-Return-Path: <linux-integrity+bounces-4290-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4291-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07F369E4CBB
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Dec 2024 04:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 909239E5057
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Dec 2024 09:54:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7D61280D43
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Dec 2024 03:33:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BBBE285C7B
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Dec 2024 08:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787011917FB;
-	Thu,  5 Dec 2024 03:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LV2+lPjt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E1A1D5174;
+	Thu,  5 Dec 2024 08:54:30 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9F418E057
-	for <linux-integrity@vger.kernel.org>; Thu,  5 Dec 2024 03:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5AB16F27E;
+	Thu,  5 Dec 2024 08:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733369629; cv=none; b=lsRcyyb3IH0bKZMuvAYXonOWNjq00H+8sqeXrA98xc+vFBiyV1JBPmLhaneIrfD2kqfvdm+OBvHlrfXuo5Uj81n4lhvd0cPQw1CpohfG2G+/93bKTNrDU/rqHzk/earXrl+S87olhOPNeSMDqS5MNLpCWgbzTIr2ooJWE938wxc=
+	t=1733388870; cv=none; b=Tp2HpPuqU/8/OJ/lzjMvnkSwn6Dk+bgRCN5xDbdNTrIu8yRoiTj1udZyXAUif90BmPw1HbXx32KUxwwxFbd8SXkQRLvKKTtNFNelSworQ0kjYb61WJ8Yk4UIDQq9/ZP5JW6vJz2Gm00W/MQnfixOwGkMI03pwvDxn9jW4VA+B6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733369629; c=relaxed/simple;
-	bh=2YpfMKIZHCtC1yAwRNTrkyONKJmfX3P1Dgzh962vtHo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IFoZxqkWOwFxrq077GTYvj/S7AJHl2Xsu1A+S0PHoOrRN4wgCbnKxCsCGU+rQT0uier/IM/O6c/bW20s44w0kPJXJb3GU3KG6E5aVPg1xhAIkG14afEwEQy22PdjJdnak4DcfYEsutUpZHXwCrn0hrk8sKxxpSVbbZKkTxfTUvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=LV2+lPjt; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e3978c00a5aso629566276.1
-        for <linux-integrity@vger.kernel.org>; Wed, 04 Dec 2024 19:33:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1733369625; x=1733974425; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RqqlC+ZUU04wDK2N54+0ftqA1cSI7m49jZLokKLp/0E=;
-        b=LV2+lPjt4zqa+p3asLanKzH/KAN9YuOD1oGdsCw6FQtNOeq7PFsPJO8I8X4zIcUDmd
-         T7VgI8gcSdFEDjzhHMWVR7vTaE3AUoKXxCkZyU2kUOgvKf7PCEhLfXL4eTFtoK0vWiQK
-         L+2FhhgTocjiE17U4gEUoXEpKsSor8m7J4iMyxSJxWKvcDXhZbD2mqCO4NO0A2cluNh1
-         FiG+ZH3PhYBA4UqYfQY6KA8RRUA5pW5MwMcncmhKWhzV4YcCUDef3uqhJV2JELjCbLht
-         wlX1SRH8ORLTADfiIfQXcu6waSGFjC64jTXCxCh+VM02shbKnMtxlWLmPbbxnM6U3w6r
-         5oVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733369625; x=1733974425;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RqqlC+ZUU04wDK2N54+0ftqA1cSI7m49jZLokKLp/0E=;
-        b=pn/0CnfoHXlkYSe9jlyU/MPlXKWu7zZ4+IXAvrGkGxMuDLjLsfqYJiB5xa+zvTzUwP
-         4euqYKUF2hJ5yI3XopEw4OMP0/QqSqQ7LNThyNc7fKcpWKZhP9eegTuw+W13V3Stnty6
-         K31Yvb6YQm3sp38V0P/97Da59cP5gsZDaP6M2A5RFb983o3+x9mc3+1VD2yWza0gbjec
-         nim++icdgjDC1O3+qWfwijTDIPALWGM6sfUaF0F7aHWvaQ2DUQkJMk0z/Amuo0Egwhy1
-         EDAU9i/E2u0Js2KdTrP6XpodLZ3OQb8NkMiRjk/SiG06ZAG6WuRRnRVP9XlVUspRx1FB
-         QL5A==
-X-Forwarded-Encrypted: i=1; AJvYcCWAtMrxmGoa71PNPHDMLu/+FM7avFBMEH3rgE7YWlFeEPKBjK6tpjxXB7G9mG/na9eJXFOlZ6UNX8x9gZpkdNI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDoBpse2yBSPEANeCNBLJYA8ZFU+XMih3CrGQwuhHbWnKp3Wre
-	4esjQ9Hv59nMwQ8gpS+JT/AuEjicQfD5AVTItkMOn0+Rjw1ZScxeksM/5I716+r1qycla7JSeYo
-	YmSejV7XB9B2+O4afTAwc8n0enexsYrYXnbDE
-X-Gm-Gg: ASbGnctMppb70nPa9f8ygRYl1XkVp+1LQwCPxa428Zptl/9PL7QXyMTIhNvshjR/e8G
-	UdYSGnCwvgMN/ow+L+uV+lpUU0ZlCtA==
-X-Google-Smtp-Source: AGHT+IFIW0nv4nMp+xB3hRxH7jiqJFLJ+/vbSzLjYlJYf27dkS9U79OHIOtdDmrXE95yoa1diQrswqexP0FD2HzbsL0=
-X-Received: by 2002:a05:6902:10c1:b0:e2b:dbf6:34ca with SMTP id
- 3f1490d57ef6-e39d43740bdmr7490115276.36.1733369625457; Wed, 04 Dec 2024
- 19:33:45 -0800 (PST)
+	s=arc-20240116; t=1733388870; c=relaxed/simple;
+	bh=g0gydrHl/2oqhtVxsWa7SZilONyoK1LSyfq8FZ/A+/0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hpCy5o3WuMg0r11Awj5NtIPVQuYSgP/P2dnMqBsXsdZgZS/sX3nHgXNZ06WfxMKBo8eNzh+LbPjjuUy8wLMF4Oc+fLXry+Cowm7EDFFrXFn9/OwAPkboC1oBgD4x93AFv4AmR8OoELy3nKhR+T7rIx8KEF3qKdrk6q16yi+JCQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Y3nhd2ylsz9v7Vj;
+	Thu,  5 Dec 2024 16:33:05 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 00C2714051A;
+	Thu,  5 Dec 2024 16:54:09 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwBH9CQdalFnenXcAg--.56302S2;
+	Thu, 05 Dec 2024 09:54:08 +0100 (CET)
+Message-ID: <3a759c091ac097be84b882dd992e6e216ec11723.camel@huaweicloud.com>
+Subject: Re: [PATCH v6 00/15] integrity: Introduce the Integrity Digest Cache
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Eric Snowberg <eric.snowberg@oracle.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>, "corbet@lwn.net" <corbet@lwn.net>, 
+ "mcgrof@kernel.org" <mcgrof@kernel.org>, "petr.pavlu@suse.com"
+ <petr.pavlu@suse.com>,  "samitolvanen@google.com"
+ <samitolvanen@google.com>, "da.gomez@samsung.com" <da.gomez@samsung.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, "paul@paul-moore.com"
+ <paul@paul-moore.com>, "jmorris@namei.org" <jmorris@namei.org>,
+ "serge@hallyn.com" <serge@hallyn.com>, "shuah@kernel.org"
+ <shuah@kernel.org>, "mcoquelin.stm32@gmail.com"
+ <mcoquelin.stm32@gmail.com>,  "alexandre.torgue@foss.st.com"
+ <alexandre.torgue@foss.st.com>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "linux-doc@vger.kernel.org"
+ <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-api@vger.kernel.org"
+ <linux-api@vger.kernel.org>, "linux-modules@vger.kernel.org"
+ <linux-modules@vger.kernel.org>, "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+ <linux-kselftest@vger.kernel.org>, "wufan@linux.microsoft.com"
+ <wufan@linux.microsoft.com>, "pbrobinson@gmail.com" <pbrobinson@gmail.com>,
+  "zbyszek@in.waw.pl" <zbyszek@in.waw.pl>, "hch@lst.de" <hch@lst.de>,
+ "mjg59@srcf.ucam.org" <mjg59@srcf.ucam.org>, "pmatilai@redhat.com"
+ <pmatilai@redhat.com>,  "jannh@google.com" <jannh@google.com>,
+ "dhowells@redhat.com" <dhowells@redhat.com>,  "jikos@kernel.org"
+ <jikos@kernel.org>, "mkoutny@suse.com" <mkoutny@suse.com>,
+ "ppavlu@suse.com" <ppavlu@suse.com>, "petr.vorel@gmail.com"
+ <petr.vorel@gmail.com>,  "mzerqung@0pointer.de" <mzerqung@0pointer.de>,
+ "kgold@linux.ibm.com" <kgold@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Thu, 05 Dec 2024 09:53:45 +0100
+In-Reply-To: <B0DC94E7-78A3-4797-B864-31DE0A2C903C@oracle.com>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+	 <C4BE31F8-1FA3-4AD1-A712-ED2AA7E61E96@oracle.com>
+	 <17ef4f662e594c8431a00fe423507af4f6a82286.camel@huaweicloud.com>
+	 <B135AC90-7CE5-4E51-90B1-9D82031668A8@oracle.com>
+	 <00f3eb72042aedaa4644ff0932d06d4e8d215f6b.camel@huaweicloud.com>
+	 <B0DC94E7-78A3-4797-B864-31DE0A2C903C@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241112191858.162021-1-mic@digikod.net> <20241112191858.162021-2-mic@digikod.net>
- <CABi2SkVRJC_7qoU56mDt3Ch7U9GnVeRogUt9wc9=32OtG6aatw@mail.gmail.com>
- <20241120.Uy8ahtai5oku@digikod.net> <CABi2SkUx=7zummB4JCqEfb37p6MORR88y7S0E_YxJND_8dGaKA@mail.gmail.com>
- <20241121.uquee7ohRohn@digikod.net>
-In-Reply-To: <20241121.uquee7ohRohn@digikod.net>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 4 Dec 2024 22:33:34 -0500
-Message-ID: <CAHC9VhT9sRXauYX+=21MUdOmfTZL4=sdGQsXojJjjTsdui+F_g@mail.gmail.com>
-Subject: Re: [PATCH v21 1/6] exec: Add a new AT_EXECVE_CHECK flag to execveat(2)
-To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc: Jeff Xu <jeffxu@chromium.org>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Serge Hallyn <serge@hallyn.com>, Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>, 
-	Alejandro Colomar <alx@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Christian Heimes <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, 
-	Elliott Hughes <enh@google.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Eric Chiang <ericchiang@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
-	Florian Weimer <fweimer@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	James Morris <jamorris@linux.microsoft.com>, Jan Kara <jack@suse.cz>, 
-	Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Luca Boccassi <bluca@debian.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, 
-	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Matthew Garrett <mjg59@srcf.ucam.org>, Matthew Wilcox <willy@infradead.org>, 
-	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, Scott Shell <scottsh@microsoft.com>, 
-	Shuah Khan <shuah@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
-	"Theodore Ts'o" <tytso@mit.edu>, Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, 
-	Vincent Strubel <vincent.strubel@ssi.gouv.fr>, Xiaoming Ni <nixiaoming@huawei.com>, 
-	Yin Fengwei <fengwei.yin@intel.com>, kernel-hardening@lists.openwall.com, 
-	linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Eric Paris <eparis@redhat.com>, 
-	audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:LxC2BwBH9CQdalFnenXcAg--.56302S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WrW8tF1DCFykKFWfAF47Jwb_yoW7tw1kpa
+	y5Ka13Kr4kWr10k3Z2ka1UWF1Fk3yftr15Xwn8Xry5CrZ0gr929F1xKa15uFyDGr1kGr12
+	vr1ag347CrWDAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
+	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	EksDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBGdRD-QHxQAAsB
 
-On Thu, Nov 21, 2024 at 8:40=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digik=
-od.net> wrote:
-> On Wed, Nov 20, 2024 at 08:06:07AM -0800, Jeff Xu wrote:
-> > On Wed, Nov 20, 2024 at 1:42=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@d=
-igikod.net> wrote:
-> > > On Tue, Nov 19, 2024 at 05:17:00PM -0800, Jeff Xu wrote:
-> > > > On Tue, Nov 12, 2024 at 11:22=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <=
-mic@digikod.net> wrote:
+On Thu, 2024-12-05 at 00:57 +0000, Eric Snowberg wrote:
+>=20
+> > On Dec 4, 2024, at 3:44=E2=80=AFAM, Roberto Sassu <roberto.sassu@huawei=
+cloud.com> wrote:
+> >=20
+> > On Tue, 2024-12-03 at 20:06 +0000, Eric Snowberg wrote:
+> > >=20
+> > > > On Nov 26, 2024, at 3:41=E2=80=AFAM, Roberto Sassu <roberto.sassu@h=
+uaweicloud.com> wrote:
+> > > >=20
+> > > > On Tue, 2024-11-26 at 00:13 +0000, Eric Snowberg wrote:
+> > > > >=20
+> > > > > > On Nov 19, 2024, at 3:49=E2=80=AFAM, Roberto Sassu <roberto.sas=
+su@huaweicloud.com> wrote:
+> > > > > >=20
+> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > >=20
+> > > > > > The Integrity Digest Cache can also help IMA for appraisal. IMA=
+ can simply
+> > > > > > lookup the calculated digest of an accessed file in the list of=
+ digests
+> > > > > > extracted from package headers, after verifying the header sign=
+ature. It is
+> > > > > > sufficient to verify only one signature for all files in the pa=
+ckage, as
+> > > > > > opposed to verifying a signature for each file.
+> > > > >=20
+> > > > > Is there a way to maintain integrity over time?  Today if a CVE i=
+s discovered=20
+> > > > > in a signed program, the program hash can be added to the blackli=
+st keyring.=20
+> > > > > Later if IMA appraisal is used, the signature validation will fai=
+l just for that=20
+> > > > > program.  With the Integrity Digest Cache, is there a way to do t=
+his? =20
+> > > >=20
+> > > > As far as I can see, the ima_check_blacklist() call is before
+> > > > ima_appraise_measurement(). If it fails, appraisal with the Integri=
+ty
+> > > > Digest Cache will not be done.
+> > >=20
+> > >=20
+> > > It is good the program hash would be checked beforehand and fail if i=
+t is=20
+> > > contained on the list.=20
+> > >=20
+> > > The .ima keyring may contain many keys.  If one of the keys was later=
+=20
+> > > revoked and added to the .blacklist, wouldn't this be missed?  It wou=
+ld=20
+> > > be caught during signature validation when the file is later appraise=
+d, but=20
+> > > now this step isn't taking place.  Correct?
+> >=20
+> > For files included in the digest lists, yes, there won't be detection
+> > of later revocation of a key. However, it will still work at package
+> > level/digest list level, since they are still appraised with a
+> > signature.
+> >=20
+> > We can add a mechanism (if it does not already exist) to invalidate the
+> > integrity status based on key revocation, which can be propagated to
+> > files verified with the affected digest lists.
+> >=20
+> > > With IMA appraisal, it is easy to maintain authenticity but challengi=
+ng to=20
+> > > maintain integrity over time. In user-space there are constantly new =
+CVEs. =20
+> > > To maintain integrity over time, either keys need to be rotated in th=
+e .ima=20
+> > > keyring or program hashes need to be frequently added to the .blackli=
+st.  =20
+> > > If neither is done, for an end-user on a distro, IMA-appraisal basica=
+lly=20
+> > > guarantees authenticity.
+> > >=20
+> > > While I understand the intent of the series is to increase performanc=
+e,=20
+> > > have you considered using this to give the end-user the ability to ma=
+intain=20
+> > > integrity of their system?  What I mean is, instead of trying to impo=
+rt anything=20
+> > > from an RPM, just have the end-user provide this information in some =
+format=20
+> > > to the Digest Cache.  User-space tools could be built to collect and =
+format=20
+> >=20
+> > This is already possible, digest-cache-tools
+> > (https://github.com/linux-integrity/digest-cache-tools) already allow
+> > to create a digest list with the file a user wants.
+> >=20
+> > But in this case, the user is vouching for having taken the correct
+> > measure of the file at the time it was added to the digest list. This
+> > would be instead automatically guaranteed by RPMs or other packages
+> > shipped with Linux distributions.
+> >=20
+> > To mitigate the concerns of CVEs, we can probably implement a rollback
+> > prevention mechanism, which would not allow to load a previous version
+> > of a digest list.
+>=20
+> IMHO, pursuing this with the end-user being in control of what is contain=
+ed=20
+> within the Digest Cache vs what is contained in a distro would provide mo=
+re
+> value. Allowing the end-user to easily update their Digest Cache in some =
+way=20
+> without having to do any type of revocation for both old and vulnerable=
+=20
+> applications with CVEs would be very beneficial.
 
-...
+Yes, deleting the digest list would invalidate any integrity result
+done with that digest list.
 
-> > > > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > > > index cd57053b4a69..8d9ba5600cf2 100644
-> > > > > --- a/kernel/auditsc.c
-> > > > > +++ b/kernel/auditsc.c
-> > > > > @@ -2662,6 +2662,7 @@ void __audit_bprm(struct linux_binprm *bprm=
-)
-> > > > >
-> > > > >         context->type =3D AUDIT_EXECVE;
-> > > > >         context->execve.argc =3D bprm->argc;
-> > > > > +       context->execve.is_check =3D bprm->is_check;
-> > > >
-> > > > Where is execve.is_check used ?
-> > >
-> > > It is used in bprm_execve(), exposed to the audit framework, and
-> > > potentially used by LSMs.
-> > >
-> > bprm_execve() uses bprm->is_check, not  the context->execve.is_check.
->
-> Correct, this is only for audit but not used yet.
->
-> Paul, Eric, do you want me to remove this field, leave it, or extend
-> this patch like this?
->
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 8d9ba5600cf2..12cf89fa224a 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -1290,6 +1290,8 @@ static void audit_log_execve_info(struct audit_cont=
-ext *context,
->                 }
->         } while (arg < context->execve.argc);
->
-> +       audit_log_format(*ab, " check=3D%d", context->execve.is_check);
-> +
->         /* NOTE: the caller handles the final audit_log_end() call */
->
->  out:
+I developed also an rpm plugin that synchronizes the digest lists with
+installed software. Old vulnerable software cannot be verified anymore
+with the Integrity Digest Cache, since the rpm plugin deletes the old
+software digest lists.
 
-I would prefer to drop the audit changes rather than add a new field
-to the audit record at this point in time.  Once we have a better
-understanding of how things are actually being deployed by distros,
-providers, and admins we can make a more reasoned decision on what we
-should audit with respect to AT_EXECVE_CHECK.
+https://github.com/linux-integrity/digest-cache-tools/blob/main/rpm-plugin/=
+digest_cache.c
 
-Beyond that it looks okay to me from a LSM and audit perspective, so
-feel free to add my ACK once you've dropped the audit bits.
+The good thing is that the Integrity Digest Cache can be easily
+controlled with filesystem operations (it works similarly to security
+blobs attached to kernel objects, like inodes and file descriptors).
 
-Acked-by: Paul Moore <paul@paul-moore.com>
+As soon as something changes (e.g. digest list written, link to the
+digest lists), this triggers a reset in the Integrity Digest Cache, so
+digest lists and files need to be verified again. Deleting the digest
+list causes the in-kernel digest cache to be wiped away too (when the
+reference count reaches zero).
 
---=20
-paul-moore.com
+> Is there a belief the Digest Cache would be used without signed kernel=
+=20
+> modules?  Is the performance gain worth changing how kernel modules=20
+> get loaded at boot?  Couldn't this part just be dropped for easier accept=
+ance? =20
+> Integrity is already maintained with the current model of appended signat=
+ures.=20
+
+I don't like making exceptions in the design, and I recently realized
+that it should not be task of the users of the Integrity Digest Cache
+to limit themselves.
+
+But the main problem was not the kernel modules themselves, but the
+infrastructure needed in user space to load them, which might not be
+available at the time a digest list parser needs to be loaded.
+
+I hope ksys_finit_module() does not cause too much resistance (however
+I need to document it better, as others noted). It is just a different
+way to pass the same parameters of the finit_module() system call.
+
+Thanks
+
+Roberto
+
 
