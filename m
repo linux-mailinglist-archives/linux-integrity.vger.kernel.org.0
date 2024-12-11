@@ -1,136 +1,175 @@
-Return-Path: <linux-integrity+bounces-4357-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4358-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 062AD9ED304
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 18:03:02 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 279669ED6C6
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 20:48:52 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 883AA281C0D
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 17:02:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3390618842DC
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 19:48:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66F21DE2BA;
-	Wed, 11 Dec 2024 17:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31C1C148;
+	Wed, 11 Dec 2024 19:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="k4IbfY3s";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="k4IbfY3s"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="VFhr7b21";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="g96QiO/i";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="VFhr7b21";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="g96QiO/i"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06E71D934B;
-	Wed, 11 Dec 2024 17:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE262594BD
+	for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2024 19:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733936574; cv=none; b=JQ4JEgZwaMLcibKd7y/xfDJ80iqV1WnQJ7NAsYqLDy80yiQEFsxC9jafBaRnjhIioOI7Muo0vVSBIfOIaYKv/WfUlEHToBVtMnE1AIfo8/phPOAHeLN/hp7o5ZPrEOKzB9cGSUerDsERkldtNJeaafufsqKqLOKDTKvhm3hSfvo=
+	t=1733946527; cv=none; b=edA5PpWsRWN1oex5mGmVaTBYcUscl3Gv8hdyEEHaxcASJ8UyvrwrkJtyl5CTjzOttgLGYSyN1+vy2ZQXIWBRLIEO9KamB1G+ZNXM2XqI661ZyXEn8Jyl6eNF2jfw7P/xlA+YBT/ELoPSnW3eAMXcOe7285AqVjYDcveVwk/+lXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733936574; c=relaxed/simple;
-	bh=9FBHdM5vw9ed3NmvDQfzEc4hChmQSrZEU3I0PFW8D/Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hrnV4kZosW2np7jwTrhQxM0jld8YiOb83REP4Q6tATsv4PuaNpQc+yFs/GqP7IeG4sWiee4zfsuPrr+0NnQvTeKzZL8sX1Ajg5G+SFIMCeL4Qr9H1xJd8vv7h2mTGGifdtlVoJamyEKFocttYvsXGOBS6IqDbaQgmaRBICc3Mzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=k4IbfY3s; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=k4IbfY3s; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1733936571;
-	bh=9FBHdM5vw9ed3NmvDQfzEc4hChmQSrZEU3I0PFW8D/Q=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=k4IbfY3sBVufrN53CdC4Ny5AyHCQkg/t0Nl+Wt8Jcz5p6KVOZ4xlf1ICtQ91P55DR
-	 LfVYdF1rjx7vtiwO8D8Pd7t/lSUB43dYZxHxQ6syYRXP1pQ7AMre393eoOqEbbYQrL
-	 YSRocspkK6EAga3ISIZ5LqXC1KI4l4V9VxEZHsaA=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id E16DC128B0EE;
-	Wed, 11 Dec 2024 12:02:51 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id haiLfIhCz8St; Wed, 11 Dec 2024 12:02:51 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1733936571;
-	bh=9FBHdM5vw9ed3NmvDQfzEc4hChmQSrZEU3I0PFW8D/Q=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=k4IbfY3sBVufrN53CdC4Ny5AyHCQkg/t0Nl+Wt8Jcz5p6KVOZ4xlf1ICtQ91P55DR
-	 LfVYdF1rjx7vtiwO8D8Pd7t/lSUB43dYZxHxQ6syYRXP1pQ7AMre393eoOqEbbYQrL
-	 YSRocspkK6EAga3ISIZ5LqXC1KI4l4V9VxEZHsaA=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	s=arc-20240116; t=1733946527; c=relaxed/simple;
+	bh=7QhcgsMNKSBy+5YhIhNAk6lN5H9vJRSuR5P0iHOIwZU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KWenN5QmrDuJ9hDpIvJwf7q8+t7crvSQM1gBJSHw1qXB4knjnVlm6Dgb3s//kGLCBsQ4VLZT5qLtlUe/5Lj3iIQ+OWQebLmyHXWmwEclJ4GQsIP2uplRcZNQu4gESDOi0u8NMgCq/xXrqoiHSDQajZOlgzTBk5YlCaQ5i5zQohI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=VFhr7b21; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=g96QiO/i; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=VFhr7b21; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=g96QiO/i; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 3EB6A128B0ED;
-	Wed, 11 Dec 2024 12:02:50 -0500 (EST)
-Message-ID: <9083d4cd50649ea1971e31445c554f44e8d12bf9.camel@HansenPartnership.com>
-Subject: Re: [PATCH 3/3] x86/sev: add a SVSM vTPM platform device
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Tom Lendacky <thomas.lendacky@amd.com>, Stefano Garzarella
-	 <sgarzare@redhat.com>, linux-coco@lists.linux.dev
-Cc: Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>,  Peter Huewe <peterhuewe@gmx.de>, "H. Peter
- Anvin" <hpa@zytor.com>, linux-integrity@vger.kernel.org,  x86@kernel.org,
- Joerg Roedel <jroedel@suse.de>, Jason Gunthorpe <jgg@ziepe.ca>,  Jarkko
- Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org, Ingo Molnar
- <mingo@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Claudio Carvalho
- <cclaudio@linux.ibm.com>, Dov Murik <dovmurik@linux.ibm.com>
-Date: Wed, 11 Dec 2024 12:02:49 -0500
-In-Reply-To: <f8c6c1e0-a42d-6fa6-a10e-925592d7992f@amd.com>
-References: <20241210143423.101774-1-sgarzare@redhat.com>
-	 <20241210143423.101774-4-sgarzare@redhat.com>
-	 <f8c6c1e0-a42d-6fa6-a10e-925592d7992f@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 2B2CB1F38D;
+	Wed, 11 Dec 2024 19:48:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1733946524;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0fOS5FQnchX46ZLxJOMD+J4hxGukjoz1kSqwjBh0yOo=;
+	b=VFhr7b21tA8H1Qe49VcAoQqTQL/Sl9s5NF7XmFObhTo6rClK7rfuB+BjquNnzIXCdWdZ/r
+	UFF/Ux3LGAS9GSWAawoshwOr2hx/mZ+9JMVEDAWiGq/DQ7uUQFQeZGONvFqDRDiTfwExqe
+	6CQgSAsqTZrpPAemQszq9eIk8+RX88k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1733946524;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0fOS5FQnchX46ZLxJOMD+J4hxGukjoz1kSqwjBh0yOo=;
+	b=g96QiO/i23+2y677l9vCbT6rdtE0QaXK60DWRtqYs8ZX8UaNbCCpLEd+JSjURYdnfE1hHd
+	Y1lY5YfPoW29HhDw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1733946524;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0fOS5FQnchX46ZLxJOMD+J4hxGukjoz1kSqwjBh0yOo=;
+	b=VFhr7b21tA8H1Qe49VcAoQqTQL/Sl9s5NF7XmFObhTo6rClK7rfuB+BjquNnzIXCdWdZ/r
+	UFF/Ux3LGAS9GSWAawoshwOr2hx/mZ+9JMVEDAWiGq/DQ7uUQFQeZGONvFqDRDiTfwExqe
+	6CQgSAsqTZrpPAemQszq9eIk8+RX88k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1733946524;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0fOS5FQnchX46ZLxJOMD+J4hxGukjoz1kSqwjBh0yOo=;
+	b=g96QiO/i23+2y677l9vCbT6rdtE0QaXK60DWRtqYs8ZX8UaNbCCpLEd+JSjURYdnfE1hHd
+	Y1lY5YfPoW29HhDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 19C0F1344A;
+	Wed, 11 Dec 2024 19:48:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id I+AlA5vsWWd3EwAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Wed, 11 Dec 2024 19:48:43 +0000
+Date: Wed, 11 Dec 2024 20:48:36 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>
+Subject: Re: [PATCH 2/3] ima_setup.sh: Allow to load predefined policy
+Message-ID: <20241211194836.GE443680@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20241126173830.98960-1-pvorel@suse.cz>
+ <20241126173830.98960-3-pvorel@suse.cz>
+ <710315f59b9378d76d226e209fee698f6bc11c06.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <710315f59b9378d76d226e209fee698f6bc11c06.camel@linux.ibm.com>
+X-Spam-Score: -7.50
+X-Spamd-Result: default: False [-7.50 / 50.00];
+	REPLY(-4.00)[];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	NEURAL_HAM_SHORT(-0.20)[-0.998];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Wed, 2024-12-11 at 10:30 -0600, Tom Lendacky wrote:
-> On 12/10/24 08:34, Stefano Garzarella wrote:
-[...]
-> > +static bool is_svsm_vtpm_send_command_supported(void)
-> > +{
-> > +       struct svsm_call call = {};
-> > +       u64 send_cmd_mask = 0;
-> > +       u64 platform_cmds;
-> > +       u64 features;
-> > +       int ret;
-> > +
-> > +       call.caa = svsm_get_caa();
-> > +       call.rax = SVSM_VTPM_CALL(SVSM_VTPM_QUERY);
-> > +
-> > +       ret = svsm_perform_call_protocol(&call);
-> > +
-> > +       if (ret != SVSM_SUCCESS)
-> > +               return false;
-> > +
-> > +       features = call.rdx_out;
-> > +       platform_cmds = call.rcx_out;
-> > +
-> > +       /* No feature supported, it must be zero */
-> > +       if (features)
-> > +               return false;
-> 
-> I think this check should be removed. The SVSM currently returns all
-> zeroes for the features to allow for future support. If a new feature
-> is added in the future, this then allows a driver that supports that
-> feature to operate with a version of an SVSM that doesn't have that
-> feature implemented. It also allows a version of the driver that
-> doesn't know about that feature to work with an SVSM that has that
-> feature.
-> 
-> A feature added to the vTPM shouldn't alter the behavior of something
-> that isn't using or understands that feature.
+Hi Mimi, all,
 
-I actually don't think this matters, because I can't see any reason to
-use the SVSM features flag for the vTPM.  The reason is that the TPM
-itself contains a versioned feature mechanism that external programs
-already use, so there's no real need to duplicate it.
+> On Tue, 2024-11-26 at 18:38 +0100, Petr Vorel wrote:
+> > environment variable LTP_IMA_LOAD_POLICY=1 tries to load example policy
+> > if available. This should be used only if tooling running LTP tests
+> > allows to reboot afterwards (because policy may be writable only once,
+> > e.g. missing CONFIG_IMA_WRITE_POLICY=y, or policies can influence each
+> > other).
 
-That said, I'm happy with either keeping or removing this.
+> Thanks, Petr.  Allowing the policy to be updated only if permitted is a good
+> idea.  Even with the LTP_IMA_LOAD_POLICY=1 environment variable, the policy
+> might not be loaded.  For example, when secure boot is enabled and the kernel is
+> configured with CONFIG_IMA_ARCH_POLICY enabled, an "appraise func=POLICY_CHECK
+> appraise_type=imasig" rule is loaded, requiring the IMA policy itself to be
+> signed.
 
-Regards,
+Yes, it's an attempt, which can fail for various reasons. I'll add this example
+of failure to load the policy to the commit message and to the docs.
 
-James
+I'd like to detect if policy got updated to avoid wasting time with SUT reboot
+when policy was not updated. But this probably will not be always possible
+(e.g. (CONFIG_IMA_READ_POLICY not set).
+
+> On failure to load a policy, the ima_conditionals.sh and ima_policy.sh tests say
+> "TINFO: SELinux enabled in enforcing mode, this may affect test results".  We
+> should stop blaming SELinux. :)
+
+This info was added for LTP shell tests, which got often affected by
+SELinux/Apparmor. Because IMA is written in LTP shell API it gets this.
+Error message is printed on TBROK, TFAIL, TWARN. Is this the only part where you
+would like to avoid the message? Or do you want to remove SELinux/Apparmor
+warning from all IMA tests?
+
+Kind regards,
+Petr
+
+> thanks,
+
+> Mimi
 
 
