@@ -1,114 +1,136 @@
-Return-Path: <linux-integrity+bounces-4350-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4351-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9EE39ECC24
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 13:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 586249ECF38
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 16:00:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FFD228295B
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 12:36:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF32B280C26
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 15:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0A61229134;
-	Wed, 11 Dec 2024 12:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1168A24634E;
+	Wed, 11 Dec 2024 15:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DljNplhp"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="Toi6SJl1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222CF238E23
-	for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2024 12:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5738324634C
+	for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2024 15:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733920597; cv=none; b=f8GgqIYr0Z6R/DTjTgYiiONf4h8r3o4Y2K6tEnlkoXJQTDJgV4muI0ej+GHuc+RyzZKnjfIQqcIlyp6jOps4vJDIRIMCG6vxF9zVJcj8jgkgq5Tkn+rSW3pSlf9TezH0OmOb6JAQOXzw+60vGf/bl+KeiIQI9v7UdUCZ2hofwQ8=
+	t=1733929253; cv=none; b=O7eRAjUblRcaISb1UDTDzZZGRkrYGdTxBWFQzzesji3ufJxzMIN6e6gpQXC7qSUeHfBh6bJhCadb769yLiW6Ajezqtw0mGH450wmqcvybhKWTOiu7zC/ZYO1OlMAeOvW0Zj6YjYY6mRQFLysFBbIz2maNmuW9srrbM28OYX6A+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733920597; c=relaxed/simple;
-	bh=2QWjvMWlAvOZgtL9Gcgr5khcSNDksxdxj1U4OoYJokg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cYcJyy8+Oq4dOCs3vWm0YNK+2vJ+4dfHV+G5AZeE8wCk7bD22JMILqnB4hTb3qmwUGRnIoz7cymTASADOr9AZTcDa+CfsApF+gULMSzom74CXb/brG0D2UQn+E5YQSmJB52lL0vvWfdhgfKwle/UgUYZvXIi1C/RhKl5MQL05oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DljNplhp; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BBBI4ML003958;
-	Wed, 11 Dec 2024 12:36:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=2QWjvM
-	WlAvOZgtL9Gcgr5khcSNDksxdxj1U4OoYJokg=; b=DljNplhpJHSKKEE2Dgquoz
-	0H76S5iTz92bgY6HXcG68WKgc7sG1CMQj8dKeJhUFNaiGLEVXO42ddTWV6PQTjnE
-	vzXlyEN74DpbrzWsnA2zh9cmis3+dz+f0DlTS02x9BOdlcNWAgpLy6W6JDQ39UXj
-	0xyW8MJYEMBd9svGoNmYPjj0Y3RuINoBIxfEvRsDKcx2MIoBrWB4i+5as8GmvN7x
-	ilxLZH4R5Ror5cvx0p8E80oa+tl0R2+5tBp+in04Q8AVPlKeyREPZO4W0rho7c3u
-	r5jjASWnlEH2IIW2ShQPjMONAV8xCm4RsJDo8gowvlWs1YWIlBUDWmJxYmFPBhUg
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ce0xm187-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Dec 2024 12:36:30 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BB9brVf032589;
-	Wed, 11 Dec 2024 12:36:30 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43d1pn9ddk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Dec 2024 12:36:30 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BBCaTTA29295308
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 11 Dec 2024 12:36:30 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DB11158059;
-	Wed, 11 Dec 2024 12:36:29 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 79F8058053;
-	Wed, 11 Dec 2024 12:36:29 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.71.1])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 11 Dec 2024 12:36:29 +0000 (GMT)
-Message-ID: <b6464e2c5c0195ffd882e6cc484b2f12e7383349.camel@linux.ibm.com>
-Subject: Re: [PATCH 3/3] ima_{kexec,keys,selinux}: Set minimal kernel version
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
-Cc: linux-integrity@vger.kernel.org
-Date: Wed, 11 Dec 2024 07:36:29 -0500
-In-Reply-To: <20241126173830.98960-4-pvorel@suse.cz>
-References: <20241126173830.98960-1-pvorel@suse.cz>
-	 <20241126173830.98960-4-pvorel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1733929253; c=relaxed/simple;
+	bh=tLszuGjmr5DmRzuJ37tFeyxJiAHTkhXYikVmA7/gTV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=POIGYCv9vMcqrUlm+R1QcEJoMeI0zUOXUY8P0RIHpMDpiOvHiTv3Fd7TRuGI5rqs9tBPwbQVtCYt7T1LEtOxOE+5Yrs8XlJGXWkxwv8hIGiDeSHXtu3lA2As3bqDHsmiGvwcPbTMypEH4wv5TP80i+Zreel27JD+XG0FbgM8MEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=Toi6SJl1; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b676152a86so71967085a.1
+        for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2024 07:00:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1733929250; x=1734534050; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YrtmwbffSfZyT6YxRWc9FPtrtY5w8qbaif6a3GhziHU=;
+        b=Toi6SJl1+npOzcW9+TeiwHI0XkmlgzC7E9QHi4dIhLCs3M2nlMP06dauO2Jq0phb5Q
+         k/3Y/bxm4sspN/ruZxUdywsywb7kYJ8xdPRy7uS99AwnCvUAcHkR7skAU9wg2So4a5Ro
+         BJUtlrPtZGrqdddLLcwv1agZ4vW9cVlBmqfF63sJMHRxwt+Xb3C3F7SCyhVrHOlSECUd
+         i9h6hOuDyWCBPq2QaVxN78WUXl79Z0rIJPmrkuzAH992pynXaE9PlUUv5HWKTFVz17Ov
+         Jg4k2SGAiqylDcVRUxVed5Vsezx6v1ElbVKErzdnW2JkWYUITDDPSmrKqimS0h78bssn
+         0swQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733929250; x=1734534050;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YrtmwbffSfZyT6YxRWc9FPtrtY5w8qbaif6a3GhziHU=;
+        b=F6f5w715cIQnvczpytzyGC0p8WXSmwzBZVPRm2cSG2Fvozq0vumL1asNvzspUyNTdC
+         ECv+nfWCUu7S3k6M5Y4oaGM6ETW2dB9e2lnt04bvFXJAtOOSAgqeCxRTodvpFcgY9FjP
+         alyeSPG+kLX63dEbU629j8ps4llaR34kQBGs/Gyg834YqZx9nnyoMYCbKQRHxEAQrOhg
+         FIiafV4JZ9jPbLEqv71dKd+wvrp9l4FiwsyeTmIY6iKdvLQDX59we1zbWVpNx8Zg/C5+
+         /6cYV9dxKRx4WWatcbqcGsM79W88TRl5PH0ckjzdt7398EVo8D3xSHOygtFf7gzONwBI
+         GKzg==
+X-Forwarded-Encrypted: i=1; AJvYcCXBMS3Yuprqz77w4iqyKQlZmDA+YfMlblm/bm4AE+eIcb7tir45RECc8Um3SxDCU8HCtqpBGkYBrhlPHj9SUN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0takN3+JoCbMFqOpULockeJSqOwqyeffkntBzmTpM0Q4sUZ0Z
+	jL5hsBnUS+Pz5t9wcvjl0hrhG85STV6WwVkYkaijMi3KeivgJMPKi/fq6o4rSB0=
+X-Gm-Gg: ASbGncsUuRIN7jvUYkmKfvLLOJVAbDFSfRQCyfRc/QIzVBjfjNoRF6U9JxAOMGq+w4o
+	Hm5saKeVZdxwMtQ2mwjh+8g8K3GJ/nv/00prK3T+X9tBfb0kMhkjsLScVXulZe86sKm17XUY9h5
+	Mn9vaQOeinXlJy02Z2bYeEtNVFPahuH2hslNVAvVSsRNvNv+CYOJKbm1XQlpngr5Jl7DTKGiPNI
+	In7Z1KG8xxEyUWb1HVfoFnoVAfNnZJZnEskefzdeOyPOK688LIzQvHLCGxkLpxW/T3WJDM5PaBZ
+	GnsRYwI6vqHiL7IlOEEgmALaOXI=
+X-Google-Smtp-Source: AGHT+IFQcbIbj/UVOC6lgBpyonYbHxz3lu1y3vK9mVU+Waihpf9zpnAftHXTy27rea7DKFP+zHsrCQ==
+X-Received: by 2002:a05:620a:4488:b0:7b1:4a2a:9ae0 with SMTP id af79cd13be357-7b6ebc2ded9mr501476085a.9.1733929250259;
+        Wed, 11 Dec 2024 07:00:50 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-128-5.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.128.5])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b6ef71409dsm29466085a.121.2024.12.11.07.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2024 07:00:49 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1tLOCm-0000000ADPI-0U4U;
+	Wed, 11 Dec 2024 11:00:48 -0400
+Date: Wed, 11 Dec 2024 11:00:48 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
+	linux-coco@lists.linux.dev, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Huewe <peterhuewe@gmx.de>, "H. Peter Anvin" <hpa@zytor.com>,
+	linux-integrity@vger.kernel.org, x86@kernel.org,
+	Joerg Roedel <jroedel@suse.de>, Jarkko Sakkinen <jarkko@kernel.org>,
+	linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Claudio Carvalho <cclaudio@linux.ibm.com>,
+	Dov Murik <dovmurik@linux.ibm.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH 3/3] x86/sev: add a SVSM vTPM platform device
+Message-ID: <20241211150048.GJ1888283@ziepe.ca>
+References: <20241210143423.101774-1-sgarzare@redhat.com>
+ <20241210143423.101774-4-sgarzare@redhat.com>
+ <20241210144025.GG1888283@ziepe.ca>
+ <50a2e1d29b065498146f459035e447851a518d1a.camel@HansenPartnership.com>
+ <20241210150413.GI1888283@ziepe.ca>
+ <CAGxU2F6yzqb0o_pQDakBbCj3RdKy_XfZfzGsiywnYL65g6WeGg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZdNj9DrtCNVPZkmotR9V-85r0AEK5Gjz
-X-Proofpoint-ORIG-GUID: ZdNj9DrtCNVPZkmotR9V-85r0AEK5Gjz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0 mlxlogscore=878
- priorityscore=1501 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412110091
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGxU2F6yzqb0o_pQDakBbCj3RdKy_XfZfzGsiywnYL65g6WeGg@mail.gmail.com>
 
-On Tue, 2024-11-26 at 18:38 +0100, Petr Vorel wrote:
-> The functionality IMHO was not backported to the enterprise kernels.
->=20
-> This helps to avoid false positive in ima_kexec.sh:
-> ima_kexec 1 TWARN: policy not readable, it might not contain required
-> policy '^measure.*func=3DKEXEC_CMDLINE'
-> ima_kexec 1 TBROK: unable to find a correct measurement
->=20
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
+On Wed, Dec 11, 2024 at 09:19:04AM +0100, Stefano Garzarella wrote:
 
-Looks good.
+> > After that, there is no meaningful shared code here, and maybe the
+> > TPM_CHIP_FLAG_IRQ hack can be avoided too.
+> 
+> IIUC you are proposing the following steps:
+> - extend tpm_class_ops to add a new send_recv() op and use it in
+> tpm_try_transmit()
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Yes, that seems to be the majority of your shared code.
+
+> - call the code in tpm_platform_probe() directly in sev
+
+Yes
+
+> This would remove the intermediate driver, but at this point is it
+> worth keeping tpm_platform_send() and tpm_platform_recv() in a header
+> or module, since these are not related to sev, but to MSSIM?
+
+Reuse *what* exactly? These are 10 both line funtions that just call
+another function pointer. Where exactly is this common MSSIM stuff?
+
+Stated another way, by adding send_Recv() op to tpm_class_ops you have
+already allowed reuse of all the code in tpm_platform_send/recv().
+
+Jason
 
