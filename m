@@ -1,166 +1,128 @@
-Return-Path: <linux-integrity+bounces-4346-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4347-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F0139EC6EE
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 09:19:26 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C3069EC7DC
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 09:55:17 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 508A8286834
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 08:19:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9412166954
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 08:55:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818031D61AF;
-	Wed, 11 Dec 2024 08:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B8/nwdZj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA9191E9B2A;
+	Wed, 11 Dec 2024 08:55:09 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE202451C5
-	for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2024 08:19:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8ECC1D7E46;
+	Wed, 11 Dec 2024 08:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733905160; cv=none; b=htwjHHEYY7JPXnr2qlEkUkS5nW/taW7uibQpUesOknFLSBG59U298NnMLSkjmbnbl52TfA69n4sTJK5m2pyag7vaYd+Iv0OzeHcI4md3MkmyFqBZdMr3cx6VJgNEER4I5GR6FDQVd5ML6LWi3WTd+T/KvYlgP1h7f99dyiQ+VnA=
+	t=1733907309; cv=none; b=rrD1ieEKpceYj89S7V/i3K5OvTNelLWBR3mWKPHxBsyKgg7BesvPO/U2Yf0npP7qcC+4p02FcfUxW872G+droYZKN44WntQuTTlijGLVgACQteRaXRbh/diXj6vu+d9ex6fGH1YAsq09eEk0lJMqA1KYi2Y/ERpIRjXfgaV6gog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733905160; c=relaxed/simple;
-	bh=kK/MJU/Q9OBs7J/to7TFQAxF5400ypJLjs8WUycDgxw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sYClSZHb3kNDHaDqDY1qqJRHWAYMotXvPATM+adrSSPltB80tcFz1gGurOThpJoKL0qL0MJF585d7duiCaGlXC1N37vv8iaDYW1x/DaYDpopOUTmdeJsGdX+zRvVCbuXxHBRxO0QomK+2ojpJFn5f5+NNslg8TIFqZnB2g5JiWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B8/nwdZj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733905157;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Df7gzbgWME26R9rpVKPWThUShTeBvSI36yYMQF09Oe4=;
-	b=B8/nwdZj3wKjzVZ/alDn1yvyybfLH8U8s2R4YcEyAf6EkS9pO2EZIjpLcYu4CaH2OptiJe
-	VkrrxDKJuHbAknPOxLRDxDwGUHEajeGzgfPfoZM3Sl3qevau3+pYDniuUcN9/1zjNiCGp6
-	PMSWnnqtqabb29+vd4MrxzFtJ17/iXA=
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
- [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-64-JnOw9hyAMXS0Rc-f0-T-Qw-1; Wed, 11 Dec 2024 03:19:16 -0500
-X-MC-Unique: JnOw9hyAMXS0Rc-f0-T-Qw-1
-X-Mimecast-MFC-AGG-ID: JnOw9hyAMXS0Rc-f0-T-Qw
-Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-e39a1a1f27dso10208533276.3
-        for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2024 00:19:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733905156; x=1734509956;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Df7gzbgWME26R9rpVKPWThUShTeBvSI36yYMQF09Oe4=;
-        b=sQNJbomZ/t6wOHBmGcAMn/sZIbzAf9V34VEjCadU/f9LI1ff3hnWyj5ZQ85dQtJW7H
-         iop2EEUsPooXVP7Gy8hVAm500O104wUSY/MpvQjlIrKuF4ARB6QicDfV6KAyRH/f809A
-         8QtXpRnHv5Sap98AB3zvGdhkwNYcXXpugzP6ZU6yMEvscOczKuZHLMmZMf1MoTY2x5lq
-         E4AAIVRt9YP6bPJJAQeff8nAxdoi1c0F+2JuCpogwTXst9BZvbPmPw5DapYQo7Jw29jZ
-         xlhH6InbQO0KXg6TQ7U77nVKxsO8jVLINoBvLwLdcqWdVu0U+yXy5I5rudYb/eoYlMRL
-         8LfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWK8UTP5K+hRftZjCTDLinkln0B6KXxrwws5FvHj3TysW8NIlJrsrkxwxnYUzt0B2kFl6xngQLKZlxTNiN4I2E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTJJSdXwlMaytWoKS6euxlIKqRHc2UF9o49IvGopjaUh7LgWQ1
-	Ngn4XmUarSw+dlLSEXqhkPR+3ywBP8SygA3Vy1o9KJOZTayixEcOMORaw/dGXqU5d+AaT0oF4Zt
-	e9NsVTQsgxt4d4Po/qYxlP7eHBkgRkI23LkzQr9NJcwICwKcQ+f0HEDhWzO6622jG6qbxCwMMzT
-	YyLGDzb7Y/Y5lMPBaFri/vvCcjxp2TNBj62prham1o
-X-Gm-Gg: ASbGnct5bq3/scZ4VUs2ZCVnQWpDf8KxIeKH3gdWlICyqTLvN9CkahCm7/ls8bUNveT
-	5i5pjXWn4L9liBaRUOBZ4F1xG/f0gcopsQQ==
-X-Received: by 2002:a05:6902:11c9:b0:e3c:8df7:4cdb with SMTP id 3f1490d57ef6-e3c8e67b517mr2108658276.32.1733905155735;
-        Wed, 11 Dec 2024 00:19:15 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHOSTE2WV/b1b9f1XmObRSLBn8v86IpzkAt8gBR0gdzUUukOkFtjbiPnJpDos/gaChbfGYffrt6LB23Z0mJj7U=
-X-Received: by 2002:a05:6902:11c9:b0:e3c:8df7:4cdb with SMTP id
- 3f1490d57ef6-e3c8e67b517mr2108649276.32.1733905155363; Wed, 11 Dec 2024
- 00:19:15 -0800 (PST)
+	s=arc-20240116; t=1733907309; c=relaxed/simple;
+	bh=8OcxFQjesMKrNcqlMUpJalJTHgVAGWvP/Xjl+AhSYjc=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZYg6TlpZFPrwiTImP4OTeXozW3Qs3u7Q9vae+CoTm1kq8OwBdMTOl0Azs9uQx06/8dOXi2QOV1laypbk4eR6cFahYCZJ8u4FRoqRGiHxyxVAK9O0Rb45qjI/dXFJhAV3Y3ECMWezCj1Nh6xbqy/lEXUZqi15PbSrVVC2EmLFPyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Y7TQW529zz9v7JS;
+	Wed, 11 Dec 2024 16:33:39 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 22DC1140516;
+	Wed, 11 Dec 2024 16:54:50 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwAX1zdRU1lnYzk5Aw--.9641S2;
+	Wed, 11 Dec 2024 09:54:49 +0100 (CET)
+Message-ID: <5401699f8b00ea09367353dc075b5c569ca68d9b.camel@huaweicloud.com>
+Subject: Re: [syzbot] Monthly integrity report (Dec 2024)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: syzbot <syzbot+list2eccd137a466e6acfa54@syzkaller.appspotmail.com>, 
+ linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ syzkaller-bugs@googlegroups.com, "Yuezhang.Mo@sony.com"
+ <Yuezhang.Mo@sony.com>
+Date: Wed, 11 Dec 2024 09:54:37 +0100
+In-Reply-To: <67547425.050a0220.2477f.0019.GAE@google.com>
+References: <67547425.050a0220.2477f.0019.GAE@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210143423.101774-1-sgarzare@redhat.com> <20241210143423.101774-4-sgarzare@redhat.com>
- <20241210144025.GG1888283@ziepe.ca> <50a2e1d29b065498146f459035e447851a518d1a.camel@HansenPartnership.com>
- <20241210150413.GI1888283@ziepe.ca>
-In-Reply-To: <20241210150413.GI1888283@ziepe.ca>
-From: Stefano Garzarella <sgarzare@redhat.com>
-Date: Wed, 11 Dec 2024 09:19:04 +0100
-Message-ID: <CAGxU2F6yzqb0o_pQDakBbCj3RdKy_XfZfzGsiywnYL65g6WeGg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] x86/sev: add a SVSM vTPM platform device
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, linux-coco@lists.linux.dev, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Peter Huewe <peterhuewe@gmx.de>, "H. Peter Anvin" <hpa@zytor.com>, linux-integrity@vger.kernel.org, 
-	x86@kernel.org, Joerg Roedel <jroedel@suse.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Claudio Carvalho <cclaudio@linux.ibm.com>, 
-	Dov Murik <dovmurik@linux.ibm.com>, Tom Lendacky <thomas.lendacky@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:LxC2BwAX1zdRU1lnYzk5Aw--.9641S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFWxWr43ZF4rGF4rurWUCFg_yoW8XFykpr
+	WFkr4xKrsYyF10kFy0g3W2yw10grZY9345Xrn0qry0yFsxCFnIgr1FvrWkur4kur4fC3Z3
+	twn0yw18Zw1xZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUymb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jjVbkUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBGdY+PUB8QABsL
 
-On Tue, Dec 10, 2024 at 4:04=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca> wrot=
-e:
->
-> On Tue, Dec 10, 2024 at 09:55:41AM -0500, James Bottomley wrote:
-> > On Tue, 2024-12-10 at 10:40 -0400, Jason Gunthorpe wrote:
-> > > On Tue, Dec 10, 2024 at 03:34:23PM +0100, Stefano Garzarella wrote:
-> > >
-> > > > +               if (platform_device_add_data(&tpm_device, &pops,
-> > > > sizeof(pops)))
-> > > > +                       return -ENODEV;
-> > > > +               if (platform_device_register(&tpm_device))
-> > > > +                       return -ENODEV;
-> > >
-> > > This seems like an old fashioned way to instantiate a device. Why do
-> > > this? Just put the TPM driver here and forget about pops? Simple tpm
-> > > drivers are not very complex.
-> >
-> > This driver may be for the AMD SEV SVSM vTPM module, but there are
-> > other platforms where there's an internal vTPM which might be contacted
-> > via a platform specific enlightenment (Intel SNP and Microsoft
-> > OpenHCL).
->
-> Sure, that's what TPM drivers are for, give those platforms TPM drivers
-> too.
->
-> Why put a mini driver hidden under an already mini driver?
->
-> > This separation of the platform device from the contact
-> > mechanism is designed to eliminate the duplication of having a platform
-> > device within each implementation and to make any bugs in the mssim
-> > protocol centrally fixable (every vTPM currently speaks this).
->
-> That makes sense, but that isn't really what I see in this series?
->
-> Patch one just has tpm_class_ops send() invoke pops sendrcv() after
-> re-arranging the arguments?
->
-> It looks to me like there would be mert in adding a new op to
-> tpm_class_ops for the send/recv type operating mode and have the core
-> code manage the buffer singleton (is a global static even *correct*??)
->
-> After that, there is no meaningful shared code here, and maybe the
-> TPM_CHIP_FLAG_IRQ hack can be avoided too.
+On Sat, 2024-12-07 at 08:13 -0800, syzbot wrote:
+> Hello integrity maintainers/developers,
+>=20
+> This is a 31-day syzbot report for the integrity subsystem.
+> All related reports/information can be found at:
+> https://syzkaller.appspot.com/upstream/s/integrity
+>=20
+> During the period, 0 new issues were detected and 0 were fixed.
+> In total, 3 issues are still open and 8 have already been fixed.
+>=20
+> Some of the still happening issues:
+>=20
+> Ref Crashes Repro Title
+> <1> 433     No    INFO: task hung in process_measurement (2)
+>                   https://syzkaller.appspot.com/bug?extid=3D1de5a37cb85a2=
+d536330
+> <2> 32      Yes   KMSAN: uninit-value in ima_add_template_entry (2)
+>                   https://syzkaller.appspot.com/bug?extid=3D91ae49e1c1a26=
+34d20c0
 
-IIUC you are proposing the following steps:
-- extend tpm_class_ops to add a new send_recv() op and use it in
-tpm_try_transmit()
-- call the code in tpm_platform_probe() directly in sev
+Hi Yuezhang
 
-This would remove the intermediate driver, but at this point is it
-worth keeping tpm_platform_send() and tpm_platform_recv() in a header
-or module, since these are not related to sev, but to MSSIM?
+it seems that the patch causing the report above is:
 
-As James mentioned, other platforms may want to reuse it.
+6630ea49103c exfat: move extend valid_size into ->page_mkwrite()
 
-Thanks,
-Stefano
+Currently, didn't develop a fix for it. Could you please have a look?
 
->
-> Simply call tpm_chip_alloc/register from the sev code directly and
-> provide an op that does the send/recv. Let the tpm core code deal with
-> everything else. It is much cleaner than platform devices and driver
-> data..
+Thanks
+
+Roberto
+
+> <3> 2       Yes   INFO: task hung in ima_file_free (4)
+>                   https://syzkaller.appspot.com/bug?extid=3D8036326eebe7d=
+0140944
+>=20
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>=20
+> To disable reminders for individual bugs, reply with the following comman=
+d:
+> #syz set <Ref> no-reminders
+>=20
+> To change bug's subsystems, reply with:
+> #syz set <Ref> subsystems: new-subsystem
+>=20
+> You may send multiple commands in a single email message.
 
 
