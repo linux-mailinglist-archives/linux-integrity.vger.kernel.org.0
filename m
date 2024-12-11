@@ -1,128 +1,132 @@
-Return-Path: <linux-integrity+bounces-4347-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4348-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C3069EC7DC
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 09:55:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97D549ECBD8
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 13:19:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9412166954
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 08:55:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03949188A331
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Dec 2024 12:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA9191E9B2A;
-	Wed, 11 Dec 2024 08:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4908F1BD9C8;
+	Wed, 11 Dec 2024 12:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eAURM691"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8ECC1D7E46;
-	Wed, 11 Dec 2024 08:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32DB2210D7
+	for <linux-integrity@vger.kernel.org>; Wed, 11 Dec 2024 12:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733907309; cv=none; b=rrD1ieEKpceYj89S7V/i3K5OvTNelLWBR3mWKPHxBsyKgg7BesvPO/U2Yf0npP7qcC+4p02FcfUxW872G+droYZKN44WntQuTTlijGLVgACQteRaXRbh/diXj6vu+d9ex6fGH1YAsq09eEk0lJMqA1KYi2Y/ERpIRjXfgaV6gog=
+	t=1733919535; cv=none; b=qcumIMh05+1qyV6PDf9znOWXmbUDOy0SqPz3CYhIGq00FZ7Y1c0WevwNhkzZMCO9XXO8FpzTRYY6L0moMjPEjYbt3egoaMFpBKmUzamAc8aTv7/yGOqwU4vb3fnRR5g51ANAJy7kGEodtNdt5f2UZmdojsXpyIb6zajC3ipyv7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733907309; c=relaxed/simple;
-	bh=8OcxFQjesMKrNcqlMUpJalJTHgVAGWvP/Xjl+AhSYjc=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZYg6TlpZFPrwiTImP4OTeXozW3Qs3u7Q9vae+CoTm1kq8OwBdMTOl0Azs9uQx06/8dOXi2QOV1laypbk4eR6cFahYCZJ8u4FRoqRGiHxyxVAK9O0Rb45qjI/dXFJhAV3Y3ECMWezCj1Nh6xbqy/lEXUZqi15PbSrVVC2EmLFPyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Y7TQW529zz9v7JS;
-	Wed, 11 Dec 2024 16:33:39 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 22DC1140516;
-	Wed, 11 Dec 2024 16:54:50 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAX1zdRU1lnYzk5Aw--.9641S2;
-	Wed, 11 Dec 2024 09:54:49 +0100 (CET)
-Message-ID: <5401699f8b00ea09367353dc075b5c569ca68d9b.camel@huaweicloud.com>
-Subject: Re: [syzbot] Monthly integrity report (Dec 2024)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: syzbot <syzbot+list2eccd137a466e6acfa54@syzkaller.appspotmail.com>, 
- linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
- syzkaller-bugs@googlegroups.com, "Yuezhang.Mo@sony.com"
- <Yuezhang.Mo@sony.com>
-Date: Wed, 11 Dec 2024 09:54:37 +0100
-In-Reply-To: <67547425.050a0220.2477f.0019.GAE@google.com>
-References: <67547425.050a0220.2477f.0019.GAE@google.com>
+	s=arc-20240116; t=1733919535; c=relaxed/simple;
+	bh=BaqwCR7U/Z97lvPozgxZXcpNZdy78vBpNMwZfyf5OZM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=k6tA1pFpb0eIRVZCEeTOlTv7K1dJe3YBwUeD3r76wbn9WCwNR3ZtgLHOGQfadTofej7LUqSlx3Q324oeb+AEaQEsZkHOJ+DAUxr56ywUZsiNLH02mmqoTa8sB1IjhxwIGAcOITMPOE4LZ/o8ilphsLYpKUe8E2xRYoTa+bI2K8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eAURM691; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BBBIBUa008973;
+	Wed, 11 Dec 2024 12:18:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ORAUV+
+	JiO6RE+BZek7JQsl/5yygpu1rmOlNgFc7NFoo=; b=eAURM691ksD9FmDiCL5iOs
+	RXIQ11PAeO6sceHnstS7ZlykOjCVr/vvff1bUoMCsrrzcME7GfZfXQRR8HDKJZsC
+	rnK4gb4n/lY6MTUEWuODXlAi1AUbnne7jIPN+yESicjlLztQaBQVpKLxbgHSIqsu
+	omk95sgyyfasw6zHi4pVL0PzNikwgyLNIyn9YBNEfs1nJSKUOnhssQelEku1wl9l
+	x4S8ljsTzEytK0+shkCeLacfJmWNA8CoRiyvAYlStX7umolzD33Hf+hEm2iuDzzu
+	Y+11oidvW45uZs2us9prWz8iTxdmgsrAJRAUmGcn1wcTIvgAk0LHpOXQ+mwdk9lA
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ccsjm2j7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Dec 2024 12:18:40 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BB9Y5vV000572;
+	Wed, 11 Dec 2024 12:18:39 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43d1pn9b0e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Dec 2024 12:18:39 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BBCIdMw13304384
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 11 Dec 2024 12:18:39 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 63B2C58052;
+	Wed, 11 Dec 2024 12:18:39 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E232158045;
+	Wed, 11 Dec 2024 12:18:38 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.71.1])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 11 Dec 2024 12:18:38 +0000 (GMT)
+Message-ID: <710315f59b9378d76d226e209fee698f6bc11c06.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/3] ima_setup.sh: Allow to load predefined policy
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
+Cc: linux-integrity@vger.kernel.org,
+        Roberto Sassu
+	 <roberto.sassu@huaweicloud.com>
+Date: Wed, 11 Dec 2024 07:18:38 -0500
+In-Reply-To: <20241126173830.98960-3-pvorel@suse.cz>
+References: <20241126173830.98960-1-pvorel@suse.cz>
+	 <20241126173830.98960-3-pvorel@suse.cz>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwAX1zdRU1lnYzk5Aw--.9641S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFWxWr43ZF4rGF4rurWUCFg_yoW8XFykpr
-	WFkr4xKrsYyF10kFy0g3W2yw10grZY9345Xrn0qry0yFsxCFnIgr1FvrWkur4kur4fC3Z3
-	twn0yw18Zw1xZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUymb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jjVbkUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBGdY+PUB8QABsL
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BfxQ6LX7SjTRq5f7ERZGtQXgi71bvrMj
+X-Proofpoint-ORIG-GUID: BfxQ6LX7SjTRq5f7ERZGtQXgi71bvrMj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ impostorscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
+ mlxscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412110087
 
-On Sat, 2024-12-07 at 08:13 -0800, syzbot wrote:
-> Hello integrity maintainers/developers,
->=20
-> This is a 31-day syzbot report for the integrity subsystem.
-> All related reports/information can be found at:
-> https://syzkaller.appspot.com/upstream/s/integrity
->=20
-> During the period, 0 new issues were detected and 0 were fixed.
-> In total, 3 issues are still open and 8 have already been fixed.
->=20
-> Some of the still happening issues:
->=20
-> Ref Crashes Repro Title
-> <1> 433     No    INFO: task hung in process_measurement (2)
->                   https://syzkaller.appspot.com/bug?extid=3D1de5a37cb85a2=
-d536330
-> <2> 32      Yes   KMSAN: uninit-value in ima_add_template_entry (2)
->                   https://syzkaller.appspot.com/bug?extid=3D91ae49e1c1a26=
-34d20c0
+On Tue, 2024-11-26 at 18:38 +0100, Petr Vorel wrote:
+> environment variable LTP_IMA_LOAD_POLICY=3D1 tries to load example policy
+> if available. This should be used only if tooling running LTP tests
+> allows to reboot afterwards (because policy may be writable only once,
+> e.g. missing CONFIG_IMA_WRITE_POLICY=3Dy, or policies can influence each
+> other).
 
-Hi Yuezhang
+Thanks, Petr.  Allowing the policy to be updated only if permitted is a goo=
+d
+idea.  Even with the LTP_IMA_LOAD_POLICY=3D1 environment variable, the poli=
+cy
+might not be loaded.  For example, when secure boot is enabled and the kern=
+el is
+configured with CONFIG_IMA_ARCH_POLICY enabled, an "appraise func=3DPOLICY_=
+CHECK
+appraise_type=3Dimasig" rule is loaded, requiring the IMA policy itself to =
+be
+signed.
 
-it seems that the patch causing the report above is:
+On failure to load a policy, the ima_conditionals.sh and ima_policy.sh test=
+s say
+"TINFO: SELinux enabled in enforcing mode, this may affect test results".  =
+We
+should stop blaming SELinux. :)
 
-6630ea49103c exfat: move extend valid_size into ->page_mkwrite()
+thanks,
 
-Currently, didn't develop a fix for it. Could you please have a look?
-
-Thanks
-
-Roberto
-
-> <3> 2       Yes   INFO: task hung in ima_file_free (4)
->                   https://syzkaller.appspot.com/bug?extid=3D8036326eebe7d=
-0140944
->=20
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->=20
-> To disable reminders for individual bugs, reply with the following comman=
-d:
-> #syz set <Ref> no-reminders
->=20
-> To change bug's subsystems, reply with:
-> #syz set <Ref> subsystems: new-subsystem
->=20
-> You may send multiple commands in a single email message.
+Mimi
 
 
