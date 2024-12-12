@@ -1,237 +1,437 @@
-Return-Path: <linux-integrity+bounces-4361-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4362-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7DBF9EE238
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2024 10:06:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 249F9161E48
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2024 09:06:00 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F51620ADE2;
-	Thu, 12 Dec 2024 09:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="WqftByaH"
-X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx08-001d1705.pphosted.com (mx08-001d1705.pphosted.com [185.183.30.70])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 722929EE373
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2024 10:51:35 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91108204C3D;
-	Thu, 12 Dec 2024 09:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.183.30.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733994360; cv=fail; b=AAZTjhGYkSl6K9qcRac/08N0y/OxIJ44E8OMTwu4ZBpkUFvdpeX3HKaEieQguzJsbNVesEa4AyZY1PSbvRlv0kvDvP7eMJ4//cIIsBP4a8l7YjmzH6jrlkw8b9cLIIqqjJo5091IGM/kQR3BEIzSFfQmxCRokD8YNWxOU+IhRRc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733994360; c=relaxed/simple;
-	bh=1EDtfWpqgbd3qf8LCnVfa85cbeY4+MEHxr4ibZ0WinM=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=toFn2ij7+7/e3p6ML+03adk93ivQFhxxz3dZEj0UuGdLUag/h5nZBtMPcZTXp8HxMLB+YOD5LF2ySWpWMVi+Zbz1XL2s5MTmi/uu+TJcorQnYTCFGF6NhuBDxAm9K4mk2Bc7G1BcRvA6NzsZwOD7OrBxa4989iixY2WzPD1LYwg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=WqftByaH; arc=fail smtp.client-ip=185.183.30.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
-Received: from pps.filterd (m0209322.ppops.net [127.0.0.1])
-	by mx08-001d1705.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BC6Eg5P032268;
-	Thu, 12 Dec 2024 09:05:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=
-	content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=S1; bh=Yl80H2HXLTm6/0ouPQJ2aiWfS7dpkpC
-	xu8UnSJRWiDI=; b=WqftByaHh5N7rqYj7gniYNNy7MRne99E0iEsHiY8CgO5xCq
-	QPnt/e4VS+vEn6tOkdwuuaue/4CxgfziQ9Enxi74AeXHWkOc8Q3+tve450tmURZZ
-	0TGoZWxe+B8okFmtIJSTgMa9n8To8MdTb1/CrAgkc8UPXz0L7kMOrlvuEpURyIWX
-	MU+c0FdvttpcOFZBuvVZFkso5Z6d2axvO6DAXDpaCvmGgkA4TpyZSbYFCOv5+/Aw
-	E7PGA2zCoQqKszeYEKGuCvMcmaJj1xtYovksuCOSFNVpNgCo09XGIb6NItkkCFoh
-	0rshXeJhrEb82PKrya7q6blRrDIMHCjCdtxOwPg==
-Received: from apc01-tyz-obe.outbound.protection.outlook.com (mail-tyzapc01lp2045.outbound.protection.outlook.com [104.47.110.45])
-	by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 43cd54ccdp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Dec 2024 09:05:06 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=egUp7en1ctMn/zyeNWgaZB522uI59w9Nbp8ea2W/tWYElhLhrZkKCw/OKjyWhelpB5/ZTZc7BS8yzb+jO8tYaliV5+KqZj7mFm7yhhCFM58AjK2qdE7l2xX08I0rMuh1LInUmv2hK/44wi9yw8LJHR1OABK8swZohVYg2ILBjgymBWZJIA32C4ySSg2/0IUlNBiScTyX6b15JGQzCuFIvzQSwiPozAIaTSaPOUDSOy0WA2I+yH1jGyfmadwzQs6XgitJR2y1gixOoTo7OGONGvj5aISur7VW3na0U6e0foK+KHSFrXkDiKgiF3njeCTfP5BMyQR6PJgQV/weDejJ0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yl80H2HXLTm6/0ouPQJ2aiWfS7dpkpCxu8UnSJRWiDI=;
- b=cgx478coeVjPKERp2upxidL8hf7/v4jKAMqXZdP2J8hWhiqSzUpiwb8v4gRhOPI3D+5+pos++OD2BV4bZCDEnsNyKQeTxMwPSHuGbSVNGxcvWC/NU7tOCeEHvQrPpzy/8CFUfIlrdh09xxGmLBFMJrLh36gPWoSIGNJVWTyui5ytgN7tzWkJOxdOA3UopyqbDiPK7AatfRrMgQBjvaYL++59fWFkBrIUPBeydnRsk14MUDIAU2MKlZbz0IqJQlBq45otsEWh9VXbstGbMDewST6rdc9P8w6IhTF5WZ3FjKIqeemBdZqGTrz9hfvWpRNB8JdbE9tZd3UY1tjJCBi1Eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-Received: from PUZPR04MB6316.apcprd04.prod.outlook.com (2603:1096:301:fc::7)
- by KL1PR0401MB6211.apcprd04.prod.outlook.com (2603:1096:820:9b::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.15; Thu, 12 Dec
- 2024 09:04:52 +0000
-Received: from PUZPR04MB6316.apcprd04.prod.outlook.com
- ([fe80::409e:64d3:cee0:7b06]) by PUZPR04MB6316.apcprd04.prod.outlook.com
- ([fe80::409e:64d3:cee0:7b06%4]) with mapi id 15.20.8230.008; Thu, 12 Dec 2024
- 09:04:52 +0000
-From: "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>
-To: syzbot <syzbot+91ae49e1c1a2634d20c0@syzkaller.appspotmail.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
-        "jmorris@namei.org"
-	<jmorris@namei.org>,
-        "linux-integrity@vger.kernel.org"
-	<linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>,
-        "paul@paul-moore.com"
-	<paul@paul-moore.com>,
-        "roberto.sassu@huawei.com" <roberto.sassu@huawei.com>,
-        "roberto.sassu@huaweicloud.com" <roberto.sassu@huaweicloud.com>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "syzkaller-bugs@googlegroups.com"
-	<syzkaller-bugs@googlegroups.com>,
-        "willy@infradead.org"
-	<willy@infradead.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>
-Subject: Re: [syzbot] [integrity?] [lsm?] KMSAN: uninit-value in
- ima_add_template_entry (2)
-Thread-Topic: [syzbot] [integrity?] [lsm?] KMSAN: uninit-value in
- ima_add_template_entry (2)
-Thread-Index: AQHbHaL+d4YYZYraA06ZwOMR7289y7Lirhxo
-Date: Thu, 12 Dec 2024 09:04:51 +0000
-Message-ID:
- <PUZPR04MB631619A22F03DDBDC97905DD813F2@PUZPR04MB6316.apcprd04.prod.outlook.com>
-References: <66fcf5a0.050a0220.f28ec.04f9.GAE@google.com>
- <670c1a2f.050a0220.3e960.0043.GAE@google.com>
-In-Reply-To: <670c1a2f.050a0220.3e960.0043.GAE@google.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PUZPR04MB6316:EE_|KL1PR0401MB6211:EE_
-x-ms-office365-filtering-correlation-id: 2458293c-0ded-4344-3b1d-08dd1a8c09a4
-x-proofpoint-id: d8690225-876f-412f-87c6-a7cb45557a4c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|1800799024|366016|10070799003|921020|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?F+9TOPRNadHT/ZHqDa5M70Rw4h67+sTt0D7TXkKcFAhkm3aCbCCLbksTua?=
- =?iso-8859-1?Q?GZMwm3FAGf3v7MCyWwJzcdXTxdLuAwstinYwGU3P9KltuhTtvSR5nCV+56?=
- =?iso-8859-1?Q?Dz5VzHWgMSmtdharcShvSII8Co5M/J9jShyYwWH68JH86SnZYJb5qYaZpZ?=
- =?iso-8859-1?Q?l97ZVI6PfIkMJEwUxKLOTKm4/96mS5IcY5jkWD6kI5uLrGgRZZOv1b7DQL?=
- =?iso-8859-1?Q?yOihvdXEP5FauExFCpwGPIHbhTblg2HUoaWpACsYmMQoSIBN78b5uFkDIi?=
- =?iso-8859-1?Q?7JVS7mHky0N3kifxTlZ+2HhnEZg88ajSl/z1Q4SrFseSe6OgthVxqV2M0W?=
- =?iso-8859-1?Q?tQwKYqPNQkeLkj4IXTeJvzxp9gV+d4lHydu3YZBB2+mKbQlYGBIhyhWNwL?=
- =?iso-8859-1?Q?CSL8eapWQuC/+oX798ph/gC++dhKl53PHdygDHDn+D/USBF8WKrcCdhUtd?=
- =?iso-8859-1?Q?6CnraBMkf7/cYSXQkVBK0BG+5yBZ0NdanM5NXzDTVA1yj8smwREsVJ91oI?=
- =?iso-8859-1?Q?Mw+O1gibQo7dZp7qqezeWcokmPgN3xgWdNa7vXyAXonDZ3X+GeSNqZV815?=
- =?iso-8859-1?Q?w5zycWb351eOIFFdzP5Tu6sCynSOouY4LXYLIBbxzUfIbgeWzmhvRf+PMB?=
- =?iso-8859-1?Q?QHoTHiNai1E9eHpa5VVkp/fcH0kbwCqn5Fpelnys0kG+vorkScyPFGrxMb?=
- =?iso-8859-1?Q?m0z2dnldt8LzBKayv9AuHeH+AmsXLxAJ84Oop9yU4+ghA7KcemTwEDjjo+?=
- =?iso-8859-1?Q?t+8c6rNjlfnvq1dnPdMchU4Bb4m7+0e7UWQ6GBM6+xK6+JvJezzN4KzwbA?=
- =?iso-8859-1?Q?2vMk7EceEpB/pzF01iybzg34OChVAjBXvCUBhmFeLXQ3YrcKDpxFOUbBr5?=
- =?iso-8859-1?Q?bWN169EaxDMJJ/yepdxzBtyBUzFAWFHCohlBBtpOIR0+Q3X/dAjD6VboeY?=
- =?iso-8859-1?Q?BcxgF9GyHBJ35A2W3r2Ggwhh1KfhEui6x9lQimAhni++CVWPFki+fe3Pzn?=
- =?iso-8859-1?Q?2M4Vk34JBxdmz+twiwnecaeMLsTTXNmNJyZLwwc8w/iovtSOF2kItuJOYM?=
- =?iso-8859-1?Q?NXxgaG4Rz1cPpPmtDHenKsJDnAEU16Qh64eZ+iF8vtTxEU77xikcA5O9Rt?=
- =?iso-8859-1?Q?VkE7QN/M6HFFc46SH6cRKDpawNNbAUE1UQzSeRBxAh8mdD10r94rQgag7e?=
- =?iso-8859-1?Q?dQdc3Agi3M5x72c/QyFAyH+7GzFUZMzyY/4=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR04MB6316.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(10070799003)(921020)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?k1DfZB3Tuy/9v51XfunBHvPTt6ofrZJANRHOj7SwrkE2rUTx5dPWYRkLXk?=
- =?iso-8859-1?Q?jagGHABwQ4uhPBAMavJSWwLi9k1EsJYrzgeNNVfBj1prRZyhkeC0aOk7gi?=
- =?iso-8859-1?Q?IJKoZQG1dRLVkpPbWKEHb7y7zPXWWMuWMhYKqlHjKudc4xx4JEIrXMYPUS?=
- =?iso-8859-1?Q?DNyiyKXLNUcrAMfxUo2Ok579FB0zV+BpA5ZOLwxaNbXw+7E0B2AN1u0UrA?=
- =?iso-8859-1?Q?l9/w76XMlGKgv/ednoVwSqovyC5ieRGAopexy3iChVlhshw5uR9zjwZwQ/?=
- =?iso-8859-1?Q?O1fz6ncc+HSDDaBYX2VWB9xNhHS8GEyUm2+YKrX9H2PbhuBNTwQoSBZdvF?=
- =?iso-8859-1?Q?kFiTYXCFWweO8dNITMclCWMCcVNque4U69ZQFR+CH3pisvOK5hDzobs0fG?=
- =?iso-8859-1?Q?ymgRS7NsfnI6LBYxg+fXIDE4vGgkX8WRA22dkdv802G6zmtrSHqgGOhvPN?=
- =?iso-8859-1?Q?SZz/ufHgZX76u2JJ/xDu0NeND6SPmso0W+rauHiQ7Zvbcs58fCTA4RY1V6?=
- =?iso-8859-1?Q?nVTDyV4+CPAulAyxk/+/E/gdMrls+Ezgc2Ur7ctgarp2EVWJnCezrSAaga?=
- =?iso-8859-1?Q?vtN5Lw3AfawggjqxD+prwRo6+Elr/XZQFLTab22cJT9nFw7jgOBf6CKFdX?=
- =?iso-8859-1?Q?Pl9Peu0iUsFa9OyM2DLMl4WdV1Moq6foJnVTmAVmHPJ91jq1m1XiFaMP8k?=
- =?iso-8859-1?Q?S37YHI1iuD6vKs7grXFoy3EakhYNOhkY/+2EFiTlwpkvDE/onF3n8l9A0r?=
- =?iso-8859-1?Q?dHRhVcB//qCFNBkyjPU5qiIxtRXTqzEV3KzU2cEf5VK3apoJ+qj7AD+jR8?=
- =?iso-8859-1?Q?RLqUeZDNqmuuF7Up/B0Q2cTcTOhLtYgPTE92RGheDeayC/wedkGoA9vsII?=
- =?iso-8859-1?Q?k5z1dNWkrebWquIxVCwG9xBNtuqWBa5ylUANxhaMbXC4rd/Kfoj5aPCsI9?=
- =?iso-8859-1?Q?L5kR7aD9kNUnSIdF00egFsmoKl3koCZJ7sX2h9iCImC9wwHK7U0oYUqjn0?=
- =?iso-8859-1?Q?uKnMi1ddQlLG8HOhbFz7Sza3roizJd20EwGQB9RCs0cCfxhrdot7arZoU4?=
- =?iso-8859-1?Q?nfmwa3foG3TNDmicnhDoFaOf30Ch7LC2R1ta8BHfr3peu6sT5GV55FljNL?=
- =?iso-8859-1?Q?0ftX3JoKvAvDXQRAsILgqkEtOVD2PJkptGc47MdYGN7HULxuidIIsQWmY7?=
- =?iso-8859-1?Q?T1OgItCxf/2XXOIk6Usm6z8Wh9dAwq2Hncqbuaa5sQAViyHJAqUN1+d6l6?=
- =?iso-8859-1?Q?t8baZgFC34huDNGyYM4vs7rXGIT9zXYOXfReqG8SntlcC/o+4S0KnHAEHF?=
- =?iso-8859-1?Q?UnXvX+h5iyRVPgQGtl5Kmc2Cxxej0BSMtvxbzLtlqF7RI8vXjHPhpaedtC?=
- =?iso-8859-1?Q?HbVWVvN7q4zxLaBTbiqECXJknubbjLkFnN8DBhdCRD11hBWfOp9e73I6nc?=
- =?iso-8859-1?Q?972QbbEhXtvTmcxJvfARRwkm5A+NNQhpOZVdAHlXxMKCvObwrqDxL69Le1?=
- =?iso-8859-1?Q?yYz3eBwaPqdiF5mYkdFqLLGa1QbaB0J1JaEhMIZXyUOo07hgyrP+2c0Zxm?=
- =?iso-8859-1?Q?TOr4MfttV8jyFYOEx6tbNiIzeJ1hvLyDa3TosOILNyIKa9f7UY7YWOVvUb?=
- =?iso-8859-1?Q?m7sV93LeIJU4+jSHjrLtYKvqqnLX4MZK7RUJa5N0KnLnjdBZ8y7LnID7Wa?=
- =?iso-8859-1?Q?XAgfEbgsBS5kbfGyzXY=3D?=
-Content-Type: multipart/mixed;
-	boundary="_002_PUZPR04MB631619A22F03DDBDC97905DD813F2PUZPR04MB6316apcp_"
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DBBC280B40
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Dec 2024 09:51:32 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93EA420C004;
+	Thu, 12 Dec 2024 09:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vv5+Eues"
+X-Original-To: linux-integrity@vger.kernel.org
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5985520E327
+	for <linux-integrity@vger.kernel.org>; Thu, 12 Dec 2024 09:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733997090; cv=none; b=TzvwrbLkPKdGYr2McGYKU1BLDfA4CpzkkDTT7FvNyaXg30JnQ6BOTJZPisfhRRF+4OLwJElQdgKIhuGca1K6CdIGULczbGaup9Dp6whJZzGCfs24+k8U5CHFABOz3GHqMyHI2pKduDanyeA7wtg7asdI9DHrV2cpRkpDkr8F6P4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733997090; c=relaxed/simple;
+	bh=9Q4aeImRaRkIMOQNW+C4UpdgE4A5WQVIVSzvejiIlOs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xtefgy4QLKnz6PIsPbHbckqPXxEN+ADw0wAEEU5J/cTBxM8MQ1F0su38mo4aW8Sn2fm8IBbTpl+8qi+JXk+LxowYQRrX1pEgkLJDaI6dlZwdSGUrFOWS6v3d/YymAP14+fvGzGjazPF6iWGGH72xjJ1FsCfgjnlX+dIPUes1bkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vv5+Eues; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1733997087;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1VOiqarubudKxipZ4sbCOrLtgNp7o+zRkyFk6UjJefg=;
+	b=Vv5+EuesQ7ivQBJaRiFSiSUUCeaWteW7kTOJlHj6kRu/w/SH5q8HszEO8wd3HROaxtuEin
+	iyRcP8T/Zn6d8PhN2WAZ/h1n+FJWplPtyFpQ2Q3ArGVN3ahV68ygI96wpe2/ZoPnkr5Rzp
+	y8PqtfIg6HCOXVb7m252k7XhHbuKJ3o=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-342-bGJgOhBhObqI2_CLOZ-NCg-1; Thu, 12 Dec 2024 04:51:25 -0500
+X-MC-Unique: bGJgOhBhObqI2_CLOZ-NCg-1
+X-Mimecast-MFC-AGG-ID: bGJgOhBhObqI2_CLOZ-NCg
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3878ad4bf8cso283466f8f.1
+        for <linux-integrity@vger.kernel.org>; Thu, 12 Dec 2024 01:51:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733997084; x=1734601884;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1VOiqarubudKxipZ4sbCOrLtgNp7o+zRkyFk6UjJefg=;
+        b=MqBAPwgGj42rJZxaFyDbA1ERkfJBs2VEg+6tgbSYotb1fIacXK7mdCVUMGPdxXWRKg
+         TGZhI3JkVvR+BT/zdTyPdBSR6PrAhoSyZKugA1OM6LBgqUrgE5egiFSyZ/rQ/9buuFSP
+         DZZZ7D/xyRj9bG9qTrK7jKmmMSPGZl0CZtPqPlCd1mSYP8mriEffZnIY9Qw5V5pT9Qos
+         KUTYv7CWRrHI0wW2MgaLqXLttz8x1AuHwbiYhiT4BuqVmvV1vbiAiuy3o4QRQgwvwcdY
+         cZBdl8UD44ux3x/akTplY3I0MiVC4GF42aaMNW/JGjV6WknFMywWbjMLJGfogZw1NX6N
+         VhRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVT4Wa0pVG/XZkYyrrUsGb+wzYIRNYR0NZtexyZVNGvlZMjCPscGYmluo04EeNrJskoDsw/f+/ui+e9o9Vz1h0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrX5O+hJXttCeUT+ky1bwJwDntdx+D14E9CrupY154ZGW3B/98
+	/Ypn+caXTZHnjx0xe+/EvK7/U/hgZziYnTcQ8XMwE9wMq2qJj1dSDn1rpguOUZ3Ad1gBKnvlO9O
+	+dYw2VPH1xOfzGsQqtmRn5GUGke14v42efab4fLTeLwEPW3NlYd6fRGZ8isviPqjoRw==
+X-Gm-Gg: ASbGncuCUieRI974EByz+H1z/aJKFQSTcbBKwnz+R1Tp8ACZ16Yty7qMVdk/x3sJstu
+	WTu9VM5zq1IND2Npc0AiNh6VfsLb+EtubBe4ZfII97ezgl/xvA0wRcjkSBfgmIyQX8qnF8P40yv
+	lfJoH7sIrqOlp/uFX/nKgel5JfAwVQWOygaeqilT2t4+0SbrkdBz412c9uVE7tdzEQfLmQNK9WO
+	bhOlJcdKC4dr4T5vv45jrwWFMmDVCYHxIXMWgd3VxWtcM03s6uUDJiIyUGyLA9nEy80OM7ioMrh
+	xRyCc8JMyUl/LD7Nwuu0SyoXsX8XdO56
+X-Received: by 2002:a05:6000:710:b0:382:3c7b:9ae with SMTP id ffacd0b85a97d-3878768e6abmr2310594f8f.16.1733997084493;
+        Thu, 12 Dec 2024 01:51:24 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGJfWlCNsUJo9EYCvkaq2u2Qir+SrZQpE5Q3wXv1k6TrB8FxTiQMvWpSTTGv1jF4wat+Iv6oA==
+X-Received: by 2002:a05:6000:710:b0:382:3c7b:9ae with SMTP id ffacd0b85a97d-3878768e6abmr2310548f8f.16.1733997083800;
+        Thu, 12 Dec 2024 01:51:23 -0800 (PST)
+Received: from sgarzare-redhat (host-87-12-185-21.business.telecomitalia.it. [87.12.185.21])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4362557c608sm11422145e9.16.2024.12.12.01.51.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Dec 2024 01:51:23 -0800 (PST)
+Date: Thu, 12 Dec 2024 10:51:18 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Claudio Carvalho <cclaudio@linux.ibm.com>, Tom Lendacky <thomas.lendacky@amd.com>
+Cc: linux-coco@lists.linux.dev, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Huewe <peterhuewe@gmx.de>, 
+	"H. Peter Anvin" <hpa@zytor.com>, linux-integrity@vger.kernel.org, x86@kernel.org, 
+	Joerg Roedel <jroedel@suse.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Dov Murik <dovmurik@linux.ibm.com>, 
+	Oliver Steffen <osteffen@redhat.com>
+Subject: Re: [PATCH 1/3] tpm: add generic platform device
+Message-ID: <zzi3fvbo2rnb2d76soseuekwaqe22ifnrhhjplqhvw6x26lbb4@nmcqylrenzyj>
+References: <20241210143423.101774-1-sgarzare@redhat.com>
+ <20241210143423.101774-2-sgarzare@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	7YYSGdVxyTJoa8xSOFhAfo2q1ttLAYCo3ggqX4aQKqc/N0dHf8J9u8BqLZgEjPof97k6l8GoxP3kvAmr4n3wEuFepECHDYJF2eU13kSPRCHX/tC8ccYB/kgAcElDD+npMrkRH2qDp110nv2EfUi+L60hjuOTFFEM1ffa1WQ6HUq3c+xnlFZZ688Fc1L2LGfarqJW9DRn3jrV4/tSDwR5L4HVq64vmLJX5ub0+yYZvTrE3XJMq8gA9MhaCCU4PH5tYCDmKvmbh07uh5sr+jP4KCUtuO9qT2Ysm5VvThm0/x+A/9Ve35YYIBEl6WAIBQCN7xb4vE5JSIsJOqKo7/d4gHNmnY4bA8gcBH7eH/MKnbe0/Yi9CN7GJAwm4hzIoSMaq4KJjRw+JfHB6Nahdd+zA9VF3AR+nLzl1XBAeyL5196Zeas5AtzrWXLG/bcp7yuCMIqxUrkd1/FsgIX5Yvh4oP52st8uvBInHd0EIvrixL2+zXDKgyD8Qykjm/95MqHRVpXZ1UTVdr+zhN8H8S0M/qf60d0HoYyznWUMG0Gr6ECOxhCAoXj6PYAuswPbkLCu63hDtzX1kAcZ3QDwJ1HTAil6km554gxVLpUcfBm41TL37OukrTvUxP2g6cYOiubq
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR04MB6316.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2458293c-0ded-4344-3b1d-08dd1a8c09a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2024 09:04:51.5451
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lopiPFS4sVoBYKgdlpZ1WRm799DkMkgEFS2DKpL3Qi8NXg7j45E46nqAdspNRp6AUscjaWhPKqNk/LIsljLSaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0401MB6211
-X-Proofpoint-GUID: -5AijMovdV9yg1Rsmq1Wxi-fhm8shWBg
-X-Proofpoint-ORIG-GUID: -5AijMovdV9yg1Rsmq1Wxi-fhm8shWBg
-X-Sony-Outbound-GUID: -5AijMovdV9yg1Rsmq1Wxi-fhm8shWBg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-12_03,2024-12-10_01,2024-11-22_01
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20241210143423.101774-2-sgarzare@redhat.com>
 
---_002_PUZPR04MB631619A22F03DDBDC97905DD813F2PUZPR04MB6316apcp_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+On Tue, Dec 10, 2024 at 03:34:21PM +0100, Stefano Garzarella wrote:
+>From: James Bottomley <James.Bottomley@HansenPartnership.com>
+>
+>This is primarily designed to support an enlightened driver for the
+>AMD svsm based vTPM, but it could be used by any platform which
+>communicates with a TPM device.  The platform must fill in struct
+>tpm_platform_ops as the platform_data and set the device name to "tpm"
+>to have the binding by name work correctly.  The sole sendrcv
+>function is designed to do a single buffer request/response conforming
+>to the MSSIM protocol.  For the svsm vTPM case, this protocol is
+>transmitted directly to the SVSM, but it could be massaged for other
+>function type platform interfaces.
+>
+>Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>Signed-off-by: Claudio Carvalho <cclaudio@linux.ibm.com>
+>[SG] changed references/links to TCG TPM repo
+>Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>---
+> include/linux/tpm_platform.h    |  90 ++++++++++++++++++++
+> drivers/char/tpm/tpm_platform.c | 141 ++++++++++++++++++++++++++++++++
+> drivers/char/tpm/Kconfig        |   7 ++
+> drivers/char/tpm/Makefile       |   1 +
+> 4 files changed, 239 insertions(+)
+> create mode 100644 include/linux/tpm_platform.h
+> create mode 100644 drivers/char/tpm/tpm_platform.c
+>
+>diff --git a/include/linux/tpm_platform.h b/include/linux/tpm_platform.h
+>new file mode 100644
+>index 000000000000..95c17a75d59d
+>--- /dev/null
+>+++ b/include/linux/tpm_platform.h
+>@@ -0,0 +1,90 @@
+>+/* SPDX-License-Identifier: GPL-2.0-only */
+>+/*
+>+ * Copyright (C) 2023 James.Bottomley@HansenPartnership.com
+>+ *
+>+ * Interface specification for platforms wishing to activate the
+>+ * platform tpm device.  The device must be a platform device created
+>+ * with the name "tpm" and it must populate platform_data with struct
+>+ * tpm_platform_ops
+>+ */
+>+
+>+/*
+>+ * The current MSSIM TPM commands we support.  The complete list is
+>+ * in the TcpTpmProtocol header:
+>+ *
+>+ * https://github.com/TrustedComputingGroup/TPM/blob/main/TPMCmd/Simulator/include/TpmTcpProtocol.h
+>+ */
+>+
+>+#define TPM_SEND_COMMAND		8
+>+#define TPM_SIGNAL_CANCEL_ON		9
+>+#define TPM_SIGNAL_CANCEL_OFF		10
+>+/*
+>+ * Any platform specific commands should be placed here and should start
+>+ * at 0x8000 to avoid clashes with the MSSIM protocol.  They should follow
+>+ * the same self describing buffer format below
+>+ */
+>+
+>+#define TPM_PLATFORM_MAX_BUFFER		4096 /* max req/resp buffer size */
+>+
+>+/**
+>+ * struct tpm_platform_ops - the share platform operations
+>+ *
+>+ * @sendrcv:	Send a TPM command using the MSSIM protocol.
+>+ *
+>+ * The MSSIM protocol is designed for a network, so the buffers are
+>+ * self describing.  The minimum buffer size is sizeof(u32).  Every
+>+ * MSSIM command defines its own transport buffer and the command is
+>+ * sent in the first u32 array.  The only modification we make is that
+>+ * the MSSIM uses network order and we use the endianness of the
+>+ * architecture.  The response to every command (in the same buffer)
+>+ * is a u32 size preceded array.  Most of the MSSIM commands simply
+>+ * return zero here because they have no defined response.
+>+ *
+>+ * The only command with a defined request/response size is TPM_SEND_COMMAND
+>+ * The definition is in the structures below
+>+ */
+>+struct tpm_platform_ops {
+>+	int (*sendrcv)(u8 *buffer);
+>+};
+>+
+>+/**
+>+ * struct tpm_send_cmd_req - Structure for a TPM_SEND_COMMAND
+>+ *
+>+ * @cmd:	The command (must be TPM_SEND_COMMAND)
+>+ * @locality:	The locality
+>+ * @inbuf_size:	The size of the input buffer following
+>+ * @inbuf:	A buffer of size inbuf_size
+>+ *
+>+ * Note that MSSIM expects @inbuf_size to be equal to the size of the
+>+ * specific TPM command, otherwise an TPM_RC_COMMAND_SIZE error is
+>+ * returned.
+>+ */
+>+struct tpm_send_cmd_req {
+>+	u32	cmd;
+>+	u8	locality;
+>+	u32	inbuf_size;
+>+	u8	inbuf[];
+>+} __packed;
+>+
+>+/**
+>+ * struct tpm_req - generic request header for single word command
+>+ *
+>+ * @cmd:	The command to send
+>+ */
+>+struct tpm_req {
+>+	u32	cmd;
+>+} __packed;
+>+
+>+/**
+>+ * struct tpm_resp - generic response header
+>+ *
+>+ * @size:	The response size (zero if nothing follows)
+>+ *
+>+ * Note: most MSSIM commands simply return zero here with no indication
+>+ * of success or failure.
+>+ */
+>+
+>+struct tpm_resp {
+>+	s32	size;
+>+} __packed;
+>+
+>diff --git a/drivers/char/tpm/tpm_platform.c b/drivers/char/tpm/tpm_platform.c
+>new file mode 100644
+>index 000000000000..b53d74344d61
+>--- /dev/null
+>+++ b/drivers/char/tpm/tpm_platform.c
+>@@ -0,0 +1,141 @@
+>+// SPDX-License-Identifier: GPL-2.0-only
+>+/*
+>+ * Platform based TPM emulator
+>+ *
+>+ * Copyright (C) 2023 James.Bottomley@HansenPartnership.com
+>+ *
+>+ * Designed to handle a simple function request/response single buffer
+>+ * TPM or vTPM rooted in the platform.  This device driver uses the
+>+ * MSSIM protocol from the official TCG reference implementation
+>+ *
+>+ * https://github.com/TrustedComputingGroup/TPM
+>+ *
+>+ * to communicate between the driver and the platform.  This is rich
+>+ * enough to allow platform operations like cancellation The platform
+>+ * should not act on platform commands like power on/off and reset
+>+ * which can disrupt the TPM guarantees.
+>+ *
+>+ * This driver is designed to be single threaded (one call in to the
+>+ * platform TPM at any one time).  The threading guarantees are
+>+ * provided by the chip mutex.
+>+ */
+>+
+>+#include <linux/module.h>
+>+#include <linux/kernel.h>
+>+#include <linux/platform_device.h>
+>+#include <linux/tpm_platform.h>
+>+
+>+#include "tpm.h"
+>+
+>+static struct tpm_platform_ops *pops;
+>+
+>+static u8 *buffer;
+>+/*
+>+ * FIXME: before implementing locality we need to agree what it means
+>+ * to the platform
+>+ */
+>+static u8 locality;
+>+
+>+static int tpm_platform_send(struct tpm_chip *chip, u8 *buf, size_t len)
+>+{
+>+	int ret;
+>+	struct tpm_send_cmd_req *req = (struct tpm_send_cmd_req *)buffer;
+>+
+>+	if (len > TPM_PLATFORM_MAX_BUFFER - sizeof(*req))
+>+		return -EINVAL;
+>+	req->cmd = TPM_SEND_COMMAND;
+>+	req->locality = locality;
+>+	req->inbuf_size = len;
+>+	memcpy(req->inbuf, buf, len);
+>+
+>+	ret = pops->sendrcv(buffer);
+>+	if (ret)
+>+		return ret;
+>+
+>+	return 0;
+>+}
+>+
+>+static int tpm_platform_recv(struct tpm_chip *chip, u8 *buf, size_t len)
+>+{
+>+	struct tpm_resp *resp = (struct tpm_resp *)buffer;
+>+
+>+	if (resp->size < 0)
+>+		return resp->size;
 
-#syz test=
+While reviewing Oliver's work for the driver in edk2[1], I noticed that
+there wasn't this check and asked to add it, but talking to him and
+looking in the code/spec, we realized that it's strange that
+tpm_resp.size field is signed.
 
---_002_PUZPR04MB631619A22F03DDBDC97905DD813F2PUZPR04MB6316apcp_
-Content-Type: text/x-patch; name="v1-0001-exfat-zero-new-buffer.patch"
-Content-Description: v1-0001-exfat-zero-new-buffer.patch
-Content-Disposition: attachment;
-	filename="v1-0001-exfat-zero-new-buffer.patch"; size=1196;
-	creation-date="Thu, 12 Dec 2024 09:03:54 GMT";
-	modification-date="Thu, 12 Dec 2024 09:03:54 GMT"
-Content-Transfer-Encoding: base64
+ From SVSM spec it looks like it can't be negative:
 
-RnJvbSA1MWIwZTNjZmM1YzBjNGFjMDAwMGZmOTdkMjM2ZDI0MzQ2MThmN2ZjIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBZdWV6aGFuZyBNbyA8WXVlemhhbmcuTW9Ac29ueS5jb20+CkRh
-dGU6IFRodSwgMTIgRGVjIDIwMjQgMTY6Mjk6MjMgKzA4MDAKU3ViamVjdDogW1BBVENIIHYxXSBl
-eGZhdDogemVybyBuZXcgYnVmZmVyCgpTaWduZWQtb2ZmLWJ5OiBZdWV6aGFuZyBNbyA8WXVlemhh
-bmcuTW9Ac29ueS5jb20+Ci0tLQogZnMvZXhmYXQvZmlsZS5jIHwgNiArKysrKysKIDEgZmlsZSBj
-aGFuZ2VkLCA2IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9mcy9leGZhdC9maWxlLmMgYi9m
-cy9leGZhdC9maWxlLmMKaW5kZXggYTI1ZDdlYjc4OWY0Li5kOTE0Mzc4MzE4MzUgMTAwNjQ0Ci0t
-LSBhL2ZzL2V4ZmF0L2ZpbGUuYworKysgYi9mcy9leGZhdC9maWxlLmMKQEAgLTU0NSw2ICs1NDUs
-NyBAQCBzdGF0aWMgaW50IGV4ZmF0X2V4dGVuZF92YWxpZF9zaXplKHN0cnVjdCBmaWxlICpmaWxl
-LCBsb2ZmX3QgbmV3X3ZhbGlkX3NpemUpCiAJd2hpbGUgKHBvcyA8IG5ld192YWxpZF9zaXplKSB7
-CiAJCXUzMiBsZW47CiAJCXN0cnVjdCBmb2xpbyAqZm9saW87CisJCXVuc2lnbmVkIGxvbmcgb2Zm
-OwogCiAJCWxlbiA9IFBBR0VfU0laRSAtIChwb3MgJiAoUEFHRV9TSVpFIC0gMSkpOwogCQlpZiAo
-cG9zICsgbGVuID4gbmV3X3ZhbGlkX3NpemUpCkBAIC01NTQsNiArNTU1LDkgQEAgc3RhdGljIGlu
-dCBleGZhdF9leHRlbmRfdmFsaWRfc2l6ZShzdHJ1Y3QgZmlsZSAqZmlsZSwgbG9mZl90IG5ld192
-YWxpZF9zaXplKQogCQlpZiAoZXJyKQogCQkJZ290byBvdXQ7CiAKKwkJb2ZmID0gb2Zmc2V0X2lu
-X2ZvbGlvKGZvbGlvLCBwb3MpOworCQlmb2xpb196ZXJvX25ld19idWZmZXJzKGZvbGlvLCBvZmYs
-IG9mZiArIGxlbik7CisKIAkJZXJyID0gb3BzLT53cml0ZV9lbmQoZmlsZSwgbWFwcGluZywgcG9z
-LCBsZW4sIGxlbiwgZm9saW8sIE5VTEwpOwogCQlpZiAoZXJyIDwgMCkKIAkJCWdvdG8gb3V0OwpA
-QCAtNTYzLDYgKzU2Nyw4IEBAIHN0YXRpYyBpbnQgZXhmYXRfZXh0ZW5kX3ZhbGlkX3NpemUoc3Ry
-dWN0IGZpbGUgKmZpbGUsIGxvZmZfdCBuZXdfdmFsaWRfc2l6ZSkKIAkJY29uZF9yZXNjaGVkKCk7
-CiAJfQogCisJcmV0dXJuIDA7CisKIG91dDoKIAlyZXR1cm4gZXJyOwogfQotLSAKMi40My4wCgo=
+     Table 17: TPM_SEND_COMMAND Response Structure
 
---_002_PUZPR04MB631619A22F03DDBDC97905DD813F2PUZPR04MB6316apcp_--
+     Byte     Size        Meaning
+     Offset   (Bytes)
+     0x000    4           Response size (in bytes)
+     0x004    Variable    Variable Response
+
+And also Coconut SVSM remap it to the `responseSize` of the TCG TPM
+implementation which is unsigned:
+
+     LIB_EXPORT void _plat__RunCommand(
+         uint32_t        requestSize,   // IN: command buffer size
+         unsigned char*  request,       // IN: command buffer
+         uint32_t*       responseSize,  // IN/OUT: response buffer size
+         unsigned char** response       // IN/OUT: response buffer
+     )
+
+@James, @Claudio, @Tom, should we use u32 for tpm_resp.size?
+
+Thanks,
+Stefano
+
+[1] https://github.com/tianocore/edk2/pull/6527#discussion_r1880204144
+
+>+
+>+	if (len < resp->size)
+>+		return -E2BIG;
+>+
+>+	if (resp->size > TPM_PLATFORM_MAX_BUFFER - sizeof(*resp))
+>+		return -EINVAL;  // Invalid response from the platform TPM
+>+
+>+	memcpy(buf, buffer + sizeof(*resp), resp->size);
+>+
+>+	return resp->size;
+>+}
+>+
+>+static struct tpm_class_ops tpm_chip_ops = {
+>+	.flags = TPM_OPS_AUTO_STARTUP,
+>+	.send = tpm_platform_send,
+>+	.recv = tpm_platform_recv,
+>+};
+>+
+>+static struct platform_driver tpm_platform_driver = {
+>+	.driver = {
+>+		.name = "tpm",
+>+	},
+>+};
+>+
+>+static int __init tpm_platform_probe(struct platform_device *pdev)
+>+{
+>+	struct device *dev = &pdev->dev;
+>+	struct tpm_chip *chip;
+>+	int err;
+>+
+>+	if (!dev->platform_data)
+>+		return -ENODEV;
+>+
+>+	/*
+>+	 * in theory platform matching should mean this is always
+>+	 * true, but just in case anyone tries force binding
+>+	 */
+>+	if (strcmp(pdev->name, tpm_platform_driver.driver.name) != 0)
+>+		return -ENODEV;
+>+
+>+	if (!buffer)
+>+		buffer = kmalloc(TPM_PLATFORM_MAX_BUFFER, GFP_KERNEL);
+>+
+>+	if (!buffer)
+>+		return -ENOMEM;
+>+
+>+	pops = dev->platform_data;
+>+
+>+	chip = tpmm_chip_alloc(dev, &tpm_chip_ops);
+>+	if (IS_ERR(chip))
+>+		return PTR_ERR(chip);
+>+
+>+	/*
+>+	 * Setting TPM_CHIP_FLAG_IRQ guarantees that ->recv will be
+>+	 * called straight after ->send and means we don't need to
+>+	 * implement any other chip ops.
+>+	 */
+>+	chip->flags |= TPM_CHIP_FLAG_IRQ;
+>+	err = tpm2_probe(chip);
+>+	if (err)
+>+		return err;
+>+
+>+	err = tpm_chip_register(chip);
+>+	if (err)
+>+		return err;
+>+
+>+	dev_info(dev, "TPM %s platform device\n",
+>+		 (chip->flags & TPM_CHIP_FLAG_TPM2) ? "2.0" : "1.2");
+>+
+>+	return 0;
+>+}
+>+
+>+module_platform_driver_probe(tpm_platform_driver, tpm_platform_probe);
+>+
+>+MODULE_AUTHOR("James Bottomley <James.Bottomley@HansenPartnership.com>");
+>+MODULE_LICENSE("GPL");
+>+MODULE_DESCRIPTION("Platform TPM Driver");
+>+MODULE_ALIAS("platform:tpm");
+>diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+>index 0fc9a510e059..b162f59305ef 100644
+>--- a/drivers/char/tpm/Kconfig
+>+++ b/drivers/char/tpm/Kconfig
+>@@ -225,5 +225,12 @@ config TCG_FTPM_TEE
+> 	help
+> 	  This driver proxies for firmware TPM running in TEE.
+>
+>+config TCG_PLATFORM
+>+	tristate "Platform TPM Device"
+>+	help
+>+	  This driver requires a platform implementation to provide the
+>+	  TPM function.  It will not bind if the implementation is not
+>+	  present.
+>+
+> source "drivers/char/tpm/st33zp24/Kconfig"
+> endif # TCG_TPM
+>diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+>index 9bb142c75243..4b2c04e23bd3 100644
+>--- a/drivers/char/tpm/Makefile
+>+++ b/drivers/char/tpm/Makefile
+>@@ -44,3 +44,4 @@ obj-$(CONFIG_TCG_XEN) += xen-tpmfront.o
+> obj-$(CONFIG_TCG_CRB) += tpm_crb.o
+> obj-$(CONFIG_TCG_VTPM_PROXY) += tpm_vtpm_proxy.o
+> obj-$(CONFIG_TCG_FTPM_TEE) += tpm_ftpm_tee.o
+>+obj-$(CONFIG_TCG_PLATFORM) += tpm_platform.o
+>-- 
+>2.47.1
+>
+
 
