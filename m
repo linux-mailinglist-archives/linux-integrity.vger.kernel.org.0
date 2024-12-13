@@ -1,82 +1,101 @@
-Return-Path: <linux-integrity+bounces-4390-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4385-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC2FD9F1905
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2024 23:27:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A8239F1902
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2024 23:27:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0CDC188F1D6
-	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2024 22:27:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7F5F162F27
+	for <lists+linux-integrity@lfdr.de>; Fri, 13 Dec 2024 22:26:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6C41A8F8F;
-	Fri, 13 Dec 2024 22:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC6011EE01F;
+	Fri, 13 Dec 2024 22:20:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OSmMXXfB";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="XV33A1Rj"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="YlUfEUYR";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="B4Q80ktE";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="YlUfEUYR";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="B4Q80ktE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D351A7AC7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A951A8F98
 	for <linux-integrity@vger.kernel.org>; Fri, 13 Dec 2024 22:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734128423; cv=none; b=KjAwbQrU9HYzm15ORMapVMdwMwUq16lhU/G1nbgScXDtVXVEz4SrE8nHarzQg1eMeUqicUZYbJruGQeQ1TOy7Xrdj8bzM8R0/Kv5HICE0Ck082iVFcEO5A4duI9T5S5g02U7BKpw0zW75j/iJ/VG8Y/efKJw9hQICDC09YMTCGw=
+	t=1734128422; cv=none; b=F7K5XdZQk6SMxgi+eaKjo+/cFtHD43Bx1xU1DoYAawm0aVU2GkJRLeDvxWMdF/JGm8n9A1Ou6S8pxmuaVC8cjCjxuius0ltJHdgfViz+3k1NO+a+VpgiPHFPnRVdgUKbFCMVp+Qnn3inTcgD4CoC7l/Tw0xZLovR0jba7SLAScM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734128423; c=relaxed/simple;
-	bh=6JGVyxPNoiscfSKcDdoi/LHfvDQdcicvK0gRYEKH4Mw=;
+	s=arc-20240116; t=1734128422; c=relaxed/simple;
+	bh=GKsFzih+l6AdtxQDZ4mFgNwA1R7L87B1aNnQT2MDg7Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NK00agVaDEPJkYTF3bbzvtYa9gdo6yMi3GMtWDt3qIk+EiE8R3nQudRQ3Q15fSn4m6zKqJRQ7ela3h+zKVztl3sWNWg/PkdGuI/l+DAdltkv0V0CtIX+MiaPPqOF70LEDCYjCRMu3rGiLVBI1rxwMrdF8mzDe/j4Cmih5LiiS+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OSmMXXfB; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=XV33A1Rj; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version; b=qhA+FjozTDidriVQyKhitAE6NG5hoDboQv2W+QNPlCQ9/r7o+wuml4/j6xe80VPE9dhqMLUidexVuPWt4aMNkgEPWKFrK0YAUUZ2NKlQiny6+x2dT5VGtqOLay0bSyPjtUtesJ8bOzoydKGBZTCa+gDuU+pPot1hUN9UTFK5m9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=YlUfEUYR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B4Q80ktE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=YlUfEUYR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B4Q80ktE; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 2EF4B1F445;
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 5DB0821137;
 	Fri, 13 Dec 2024 22:20:18 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
 	t=1734128418; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QUpq1cVt6R5qZy8sb67a4RKAP7lOu8qrYbdQ9+PCRvA=;
-	b=OSmMXXfBnSTDfNIMz6/mufiVu2OMU/A9ICpJdWq1ILSp96UcSpHKkh/dZcfKCaUtE0HpyI
-	REAGXD3zwDSoJoHRDb9TFwbLYrZj8On0jmYsnIb8xDhTuNyRKaY3vsz7cBHUdXwlP4bSSo
-	HEItmarNkzMdfPBHtBXyMqLmgSXpzuo=
+	bh=WydU/QQar/N9B7tlfpvzCBpnM6HuAvTIztO6LfvbG4k=;
+	b=YlUfEUYR3aXte9qAeNQtPswuPAXz7lOMhVHNjFJ2q9BD3lM6zLet9OFsM9l2mtyjz6Yl4D
+	gxoGHxkQ1Bemc1q7Q1N04H9L49ABH2/mebjL7iIiM3tKlsJYc4hWDLrW6v2pUkOesStnIs
+	zxTQCayM3tNm/bb3ycJqplxnYpY40xA=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
 	s=susede2_ed25519; t=1734128418;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QUpq1cVt6R5qZy8sb67a4RKAP7lOu8qrYbdQ9+PCRvA=;
-	b=XV33A1RjEqbJtpSqC+r115E6jRvEKIf+AVoqfv8AjuWqjMfr/SqrKdu8oYMTwo+quJsANQ
-	C6wCzGvqeFIoDGDQ==
+	bh=WydU/QQar/N9B7tlfpvzCBpnM6HuAvTIztO6LfvbG4k=;
+	b=B4Q80ktEBGYZQRaqdcj1YpX0fEbGth4IYjdzo5syh8wRYN0DKYmtvz32vMFlqcbOxNcADf
+	18xCG0Xgaro0iwBA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1734128418; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WydU/QQar/N9B7tlfpvzCBpnM6HuAvTIztO6LfvbG4k=;
+	b=YlUfEUYR3aXte9qAeNQtPswuPAXz7lOMhVHNjFJ2q9BD3lM6zLet9OFsM9l2mtyjz6Yl4D
+	gxoGHxkQ1Bemc1q7Q1N04H9L49ABH2/mebjL7iIiM3tKlsJYc4hWDLrW6v2pUkOesStnIs
+	zxTQCayM3tNm/bb3ycJqplxnYpY40xA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1734128418;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WydU/QQar/N9B7tlfpvzCBpnM6HuAvTIztO6LfvbG4k=;
+	b=B4Q80ktEBGYZQRaqdcj1YpX0fEbGth4IYjdzo5syh8wRYN0DKYmtvz32vMFlqcbOxNcADf
+	18xCG0Xgaro0iwBA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D03D113A75;
-	Fri, 13 Dec 2024 22:20:17 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 31BD313AD6;
+	Fri, 13 Dec 2024 22:20:18 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id uCsiMSGzXGf5QQAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Fri, 13 Dec 2024 22:20:17 +0000
+	id qOQ6CyKzXGf5QQAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Fri, 13 Dec 2024 22:20:18 +0000
 From: Petr Vorel <pvorel@suse.cz>
 To: ltp@lists.linux.it
 Cc: Petr Vorel <pvorel@suse.cz>,
 	Mimi Zohar <zohar@linux.ibm.com>,
-	linux-integrity@vger.kernel.org,
-	Cyril Hrubis <chrubis@suse.cz>
-Subject: [PATCH v2 3/8] tst_test.sh: IMA: Allow to disable LSM warnings and use it for IMA
-Date: Fri, 13 Dec 2024 23:20:09 +0100
-Message-ID: <20241213222014.1580991-4-pvorel@suse.cz>
+	linux-integrity@vger.kernel.org
+Subject: [PATCH v2 4/8] ima_setup: Print warning when policy not readable
+Date: Fri, 13 Dec 2024 23:20:10 +0100
+Message-ID: <20241213222014.1580991-5-pvorel@suse.cz>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20241213222014.1580991-1-pvorel@suse.cz>
 References: <20241213222014.1580991-1-pvorel@suse.cz>
@@ -88,55 +107,64 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Level: 
-X-Spamd-Result: default: False [-4.00 / 50.00];
+X-Spamd-Result: default: False [-6.80 / 50.00];
 	REPLY(-4.00)[];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU]
-X-Spam-Score: -4.00
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Score: -6.80
 X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 2EF4B1F445
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
 
-Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+check_ima_policy_content() now prints TINFO message when policy is not
+readable and it does not return 1 in this case. Therefore
+"'func=KEXEC_KERNEL_CHECK' appraise policy loaded, kernel image may not
+be signed" TWARN message in ima_kexec.sh is not printed when policy is
+not readable.
+
+This is better because in previous case test always failed due TWARN but
+result is actually unknown (e.g. don't expect missing policy, return 1
+as failure only when policy is readable and checking with grep failed).
+
+Fixes: 3843e2d6fb ("IMA: Add policy related helpers")
 Signed-off-by: Petr Vorel <pvorel@suse.cz>
 ---
-@Cyril: or should we use the opposite approach - by default unused and
-declare tests where should be used? I guess tests for typical userspace
-tools should use it (e.g. runtest/commands or tests which use
-tst_net.sh).
-
- testcases/kernel/security/integrity/ima/tests/ima_setup.sh | 1 +
- testcases/lib/tst_test.sh                                  | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ testcases/kernel/security/integrity/ima/tests/ima_setup.sh | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-index 7afb1a0967..cf769ac751 100644
+index cf769ac751..e958dd3334 100644
 --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
 +++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
-@@ -11,6 +11,7 @@ TST_CLEANUP_CALLER="$TST_CLEANUP"
- TST_CLEANUP="ima_cleanup"
- TST_NEEDS_ROOT=1
- TST_MOUNT_DEVICE=1
-+TST_SKIP_LSM_WARNINGS=1
+@@ -94,8 +94,11 @@ check_ima_policy_content()
+ 	local pattern="$1"
+ 	local grep_params="${2--q}"
  
- # TST_MOUNT_DEVICE can be unset, therefore specify explicitly
- TST_NEEDS_TMPDIR=1
-diff --git a/testcases/lib/tst_test.sh b/testcases/lib/tst_test.sh
-index cfdae02300..3e03a1717f 100644
---- a/testcases/lib/tst_test.sh
-+++ b/testcases/lib/tst_test.sh
-@@ -81,7 +81,7 @@ _tst_do_exit()
- 	fi
+-	check_policy_readable || return 1
+-	grep $grep_params "$pattern" $IMA_POLICY
++	if check_policy_readable; then
++		grep $grep_params "$pattern" $IMA_POLICY
++	else
++		tst_res TINFO "WARNING: policy not readable, can't check policy for '$pattern' (possible false positives)"
++	fi
+ }
  
- 	if [ $TST_BROK -gt 0 -o $TST_FAIL -gt 0 -o $TST_WARN -gt 0 ]; then
--		_tst_check_security_modules
-+		[ -z "$TST_SKIP_LSM_WARNINGS" ] && _tst_check_security_modules
- 	fi
- 
- 	cat >&2 << EOF
+ require_ima_policy_content()
 -- 
 2.47.1
 
