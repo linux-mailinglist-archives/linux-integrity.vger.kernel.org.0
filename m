@@ -1,90 +1,131 @@
-Return-Path: <linux-integrity+bounces-4395-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4397-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15FA09F2A28
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Dec 2024 07:31:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F0C39F30C7
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Dec 2024 13:45:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BB627A206F
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Dec 2024 06:31:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB5EE18843C5
+	for <lists+linux-integrity@lfdr.de>; Mon, 16 Dec 2024 12:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3243E1C878E;
-	Mon, 16 Dec 2024 06:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B72082010E5;
+	Mon, 16 Dec 2024 12:45:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BdseUrO/";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="D6Ob5DMF";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BdseUrO/";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="D6Ob5DMF"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A83B9156F53
-	for <linux-integrity@vger.kernel.org>; Mon, 16 Dec 2024 06:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DAE20458A
+	for <linux-integrity@vger.kernel.org>; Mon, 16 Dec 2024 12:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734330665; cv=none; b=azJrfvaJ1A215WOtP/m9o3H4aztXSJQ7jK2sYuVicEy/YQpdJ3cV5nhzNfpg+UrqGG2OdoxwYtV7caz4tIrFEJfJ/d8tjJ4Ay60Q1eff8z4MmXg1/GlMYKPhGlpO3M4i496gkL8F8RrANe1cB7iB0XtOR2IvYlQChinQ3MeqTtw=
+	t=1734353122; cv=none; b=lTm0gepDL+NcQLZcDbAZLPaY0QKdj/wCTaXWhH7LBySWUE6LMq51KYbIONdSGju6anlTh/03oSI5Gn0eBf0MnYNcYcZq1YKXoquwP7HgMNmStLzLjvebtt8g79MqQU29lXpB3VDEVjncTiCWYRIm0Qy280TtvV3xfTx36pGRq78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734330665; c=relaxed/simple;
-	bh=3E2pDLSWpHz+qKRsyOCvMIVk3xBO/le3IAkheabOoFY=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=nadFhiYCPPafablJSb9eWzgcHitUitj//lh4rP37NxOGYpu02RSIfKGKQha+oEJsCb8VKjOfqTXIV7/5UMIrd8vtCdeDgxUhQgsPP1jP2r4QJjo54TB4WfPa4CZVtguehPDjL8pXfMawi4NLtf1rYw5huMsdbCcfK+l/KDVGQjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a9d195e6e5so38649675ab.2
-        for <linux-integrity@vger.kernel.org>; Sun, 15 Dec 2024 22:31:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734330663; x=1734935463;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FGgwY9doc2BDYdLeq+Akm53OqV4dukJ6miTwWudPyro=;
-        b=flYCSz/to1YBxWcDD5pfyfUta0Im22U6qwi1nI5DOX9wJQzN5sxFrYvo+nNyAi3HBB
-         5UT9YTDevDQXIwe89/9TeESHH/OM1nV3kQ0CrxDEN3XOOCmUImqdx3e+q1QbQb6/PYVc
-         Jz5upsfHrJ+rtHr/pBmDE18+x6+TVxU7rTe51lXw+esZyVAx24A4aYXFmkwKK8yZ1DIl
-         AQCo80SJVqNZtANvbkKomrlCmnwipgKi2In80reZoabP9T2BKJWoDQmBIaKMq3n4GWBf
-         9q6wyBec9KnB6iMxqOvSr+dAbzVQKi6aqMXWXetub1mYQ77SieEzeFJv9OCY7j5yDZ07
-         Ufdg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXssqMrtB0JFqOZuBqfTX+aWLgdP3iLt0XnhKUVBdRLMdhn8djyLXbzchr8UMkBXZ4Rg8Ko9JxriT8lRUOz4I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEnG6i4dmM/PyrH2Uak8en9sQdy1/R9UY8Fw4M9DVc7S43Y0G8
-	dofazNNsNvnF/XdRMMsX8BRvKJO9aS9qDphtO+TaLcfldcJPHinPDvxck9c4gMGHIxvE9S+W8bz
-	smcyTIpMQKO0yzHMIx/A80q2gG3wQdB5eypjZwJfShjUzfIrQKtvqmnY=
-X-Google-Smtp-Source: AGHT+IHqyW8xz9AMDJraQb4QIo+grq8CirvIaFyaiu/OxyxIYJNdfxD/b3iOyQaCcqMOivRLvs+i9Vhs3cxNSZWzH/wAGnEz188Q
+	s=arc-20240116; t=1734353122; c=relaxed/simple;
+	bh=iQ5IhtZgLm+rkc5eoGm9hIH3ZDzmZomFvTPndZ9kpjY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qhx6+0DTCsnc+3JQDbmJK41VPb2DEL8ntz9ROYHW9Nax1ygvs8/w2LH4wY8DrJBNjTu9b9tco81hTPE3EO5cbE1yanlRl328kbyL+L9g+/wDiCI4hItffJRigJml7l4UwUzJRw4XdOlbTdbGpVpwOZVuUeDmAhH6nJ5o5DqAR4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BdseUrO/; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=D6Ob5DMF; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BdseUrO/; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=D6Ob5DMF; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 0E50F1F385;
+	Mon, 16 Dec 2024 12:45:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1734353119; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+qEjuQevZqyO6CweEJ3yMgcImI5q9b4HueNFxukrWBY=;
+	b=BdseUrO/YHFz/Q/AKQ3ZY/QupeZZesHfuTqgf2CceTdMZ7rNnEZUCUl4D5K96l+iseg3Bw
+	xz1jK7kJky0SCuGYFn686lTokK3CcbmL78c4yh5inVDaOgrmn20JJRaaPljfShRGkvrQpx
+	qBVnpYO1XvHQXOv3YtWsVCk8VY5fXwo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1734353119;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+qEjuQevZqyO6CweEJ3yMgcImI5q9b4HueNFxukrWBY=;
+	b=D6Ob5DMFyDXiEp19aTy2ydqPIjtN0fvqMwMGM8XVf4te97x/Nl9BXMZa1oHqIhcy1JOil9
+	LTS4+IhiKBsc6jBQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1734353119; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+qEjuQevZqyO6CweEJ3yMgcImI5q9b4HueNFxukrWBY=;
+	b=BdseUrO/YHFz/Q/AKQ3ZY/QupeZZesHfuTqgf2CceTdMZ7rNnEZUCUl4D5K96l+iseg3Bw
+	xz1jK7kJky0SCuGYFn686lTokK3CcbmL78c4yh5inVDaOgrmn20JJRaaPljfShRGkvrQpx
+	qBVnpYO1XvHQXOv3YtWsVCk8VY5fXwo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1734353119;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+qEjuQevZqyO6CweEJ3yMgcImI5q9b4HueNFxukrWBY=;
+	b=D6Ob5DMFyDXiEp19aTy2ydqPIjtN0fvqMwMGM8XVf4te97x/Nl9BXMZa1oHqIhcy1JOil9
+	LTS4+IhiKBsc6jBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E854D137CF;
+	Mon, 16 Dec 2024 12:45:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 81PfNt4gYGcuTwAAD6G6ig
+	(envelope-from <chrubis@suse.cz>); Mon, 16 Dec 2024 12:45:18 +0000
+Date: Mon, 16 Dec 2024 13:45:18 +0100
+From: Cyril Hrubis <chrubis@suse.cz>
+To: xiubli@redhat.com
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3] doc: correct the build steps for open_posix_testsuite
+Message-ID: <Z2Ag3uMEMaYPbkSr@yuki.lan>
+References: <20241211011636.499499-1-xiubli@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12cd:b0:3a7:e592:55cd with SMTP id
- e9e14a558f8ab-3aff086d9admr103467895ab.14.1734330662864; Sun, 15 Dec 2024
- 22:31:02 -0800 (PST)
-Date: Sun, 15 Dec 2024 22:31:02 -0800
-In-Reply-To: <PUZPR04MB6316F684BF023564B7DDD812813B2@PUZPR04MB6316.apcprd04.prod.outlook.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <675fc926.050a0220.37aaf.0116.GAE@google.com>
-Subject: Re: [syzbot] [integrity?] [lsm?] INFO: task hung in
- process_measurement (2)
-From: syzbot <syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com>
-To: linkinjeon@kernel.org, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	sj1557.seo@samsung.com, syzkaller-bugs@googlegroups.com, yuezhang.mo@sony.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241211011636.499499-1-xiubli@redhat.com>
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -4.30
+X-Spam-Flag: NO
 
-Hello,
+Hi!
+Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-by: syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com
-Tested-by: syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         78d4f34e Linux 6.13-rc3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11259ed7980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6fe704d2356374ad
-dashboard link: https://syzkaller.appspot.com/bug?extid=1de5a37cb85a2d536330
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=105d1730580000
-
-Note: testing is done by a robot and is best-effort only.
+-- 
+Cyril Hrubis
+chrubis@suse.cz
 
