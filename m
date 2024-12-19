@@ -1,220 +1,151 @@
-Return-Path: <linux-integrity+bounces-4418-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4419-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE1B59F7E15
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Dec 2024 16:29:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36B4D9F7E2B
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Dec 2024 16:36:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB715161DFD
-	for <lists+linux-integrity@lfdr.de>; Thu, 19 Dec 2024 15:29:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 809251641F2
+	for <lists+linux-integrity@lfdr.de>; Thu, 19 Dec 2024 15:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98D4E226168;
-	Thu, 19 Dec 2024 15:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D81522616F;
+	Thu, 19 Dec 2024 15:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxrZsZIc"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Oxj8yT2+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7118522579E;
-	Thu, 19 Dec 2024 15:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56E214AD17
+	for <linux-integrity@vger.kernel.org>; Thu, 19 Dec 2024 15:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734622146; cv=none; b=YvWRSF2vjJgUr4eDtnlII1WbgGjOuVvjvevw6JOixoQqreC/JHzg/L632UD8GmWgxtq9e1TzEj0YQjMmJlzW1qpHmTesIOtCfZlLc4VKwIP1ONc5wHrHwmXU2fYEx3dHKop1kPnw3Ejfs0TYoAWCHFQtj/COSLijdlx8M6u1gxs=
+	t=1734622556; cv=none; b=r/zahPGi4c3T9Sf1xFiLNP2W+ciFX0wWUgVns5pmazMiWcleQYuYfR9plMD2Ez+b1Y4JnKV41+gfilHTWq4jF0VsCNlZ4sWsehGdSoQWK4Vk7c6xnvNCmpVzY4nGQRXFFfogmHh/WZ9mTEeTzu2W2lhPsSgwgGovZFzRGVb2+Bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734622146; c=relaxed/simple;
-	bh=pwI/XjCrTmM+3zInTyj3tywcztPolSD2Nz8dS3ZAYNE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=WmA7HxR0jo1VkVBojZ4IpS3zji/sg1ioK8q3wTqfZGomdGu9hg5KDtiPjUCgCRVBer3YnOhJjIp+5gkDIUsCPBx4hO1BRj1P5G/N5H6ozb2sRYmJW8/3VTOQ3K0XaNLtejd9DFKksRo44dymQhOea/uSzXS86wzzthuOpGPDeRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxrZsZIc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5436CC4CECE;
-	Thu, 19 Dec 2024 15:29:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734622145;
-	bh=pwI/XjCrTmM+3zInTyj3tywcztPolSD2Nz8dS3ZAYNE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AxrZsZIcdn9aNyJOaUSH8sHLJgkKLs99FMT5Huz6oSK2m6ChlbaLpmusYIbjDAIG9
-	 hNkTGp8RrzQCHRSNTvg1nATv73OAmfFi2vb0ZUyK8jzLX30MgEr36QxbjDSLrKGheU
-	 zpFs0azeMenl3oQWRloZeqILtyk2OlI4y6tH7uE+95I0DQZJEoIbcXoS7eVCzIX4EP
-	 JXhcgBzb9EBc1afmBaEzz5LyNFjM7SBH3ne2ofb6njtVot3l4+dU+LThq5+mxXatfy
-	 sR/fiHd1I71VNAZe8zdn3zX1JCsNyH2VJQV7iDLbBRjdCiCkEGk2S74IUKw1I1yyGQ
-	 qD8OkjISRxhIA==
+	s=arc-20240116; t=1734622556; c=relaxed/simple;
+	bh=UHleueck9CKLJf8SAKd40mLejhBOJXBHztTRdmvdD7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cuurWkvIsfRNTWb9peTYVV9zuW/r+ERsV/vrMU1w6XaiGcJbZYouU+b0aJ07rVTcOkkPCe4ZX3ifqIw07ja9nOPveHz1Z6P90rtGthy0tn1XoiwExFeEQvjoY1WK+cYX3w0C7n3U+DbwUrn6Bu5SUlN4Cb7oay59sFJQ9bu/Am8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Oxj8yT2+; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1734622553;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=okQ1fdfaEip08JNQz75y5j89eYX/clZZBcTctSXfink=;
+	b=Oxj8yT2+vkQ6nSZMyBc6D2QKqr3YS8R4099pMoqNBVQSu29ngrKIRXfFTiR1eeAoJjDFpk
+	tXc+ffCjxFLwPiREp3fANegzdRFFJTsoqDRoouwUhY+pBGtvjCyYG86tZqByuR1MMj6oaf
+	y3StTRddkmuzCWQACmC9KUJ6Oc7f3rc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-474-m2jCYpFdPyGYiW_7z0Rq8w-1; Thu, 19 Dec 2024 10:35:52 -0500
+X-MC-Unique: m2jCYpFdPyGYiW_7z0Rq8w-1
+X-Mimecast-MFC-AGG-ID: m2jCYpFdPyGYiW_7z0Rq8w
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43646b453bcso5735925e9.3
+        for <linux-integrity@vger.kernel.org>; Thu, 19 Dec 2024 07:35:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734622551; x=1735227351;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=okQ1fdfaEip08JNQz75y5j89eYX/clZZBcTctSXfink=;
+        b=Wsq/qYxHoEqD+lfZZKMMfelDUOzI4/lg3ogQtEOEU2PCtmNZwyPvSjD31IWjGt+paS
+         53p8liHcWj1oxDrv0anfmNuW2uxdigsoOuNKk2TLbYWBtKvvh3H/FNef46Zc4jfOukT3
+         oQETyXUKkLhHqbzXJQAsHz2n80NZmcIiFV3vMyTAceJ2M1YVb7gFTA8BNCLcNpgxqF7I
+         lJ/Ia9aAGKOoYZ5KeqVpRMuBG8tBrHQD62vMzDWmZjL4xUc698jnL89y8Uwsl4QtwnqF
+         7e8JlSAaxqQFc4pgeOdN5fQkB0YHzplzvm44EeAQE0QSNuXfBvOwJ+m+i1Xb6V5Ig+Gb
+         IaDA==
+X-Forwarded-Encrypted: i=1; AJvYcCXJIVOERiHtDkJoOuwf/+uSZYkn7Ox09I7s1pZIH2QSgpGptUqhWqsAPO616I/I17KKfxff+VxERtI/ZQVz1c4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlVOknzXSgKm3L4/HogdK1wdLhaHuDS18XA1p923dEyno6oOCP
+	LAvMZsLxZhuG+sUGXKB24POieVDWhRfCGP6tyL+CJnkv27CILkJrabx7MiW+bhp1T+8wFel9kq2
+	ltaMLRRpg16jvFJ4Mo/VcaejjP49uvHTo9SPn7clLHpyelaN7ZCOJnK81bs03j+rHHg==
+X-Gm-Gg: ASbGncs0P7k2DaIUd4APvKC/jnXgL2JXYRPeOL97BIT/JaiBVr1w4XRTzILjF3V2eSa
+	wtPOwl42sRvQ2ZFc49jOh/TFEA6oilK6XiXUEVHG825Y25Z4m6sClssf/3KrnDMnSP9Lfa7qeRi
+	1tGdc/FWxOi9htAX3kZsJMdRhPRJpvk/ATOBf0U0SSZjqMEalCNx9OThr1rEwv0A29wuecnDIfe
+	oBnOyWaG4Y510PiYIfkPFiEWdgXxU501vAGkrrzXvrTkbqAXCZRGTDnlM6PPay1mVv4O+uF/2Ju
+	DDJhbQVxRcYVi0+05aCDumRwjBkIHuza
+X-Received: by 2002:a5d:64a3:0:b0:388:da2a:e48 with SMTP id ffacd0b85a97d-38a19ae7e68mr3863683f8f.23.1734622551228;
+        Thu, 19 Dec 2024 07:35:51 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEFamfbO9O2OJ9k/OnSfDep3NgEc1R0xrHmelVQ4sUSvht3jKmfVB25GlkMf9i6C8wcOxd+tQ==
+X-Received: by 2002:a5d:64a3:0:b0:388:da2a:e48 with SMTP id ffacd0b85a97d-38a19ae7e68mr3863644f8f.23.1734622550548;
+        Thu, 19 Dec 2024 07:35:50 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-100.retail.telecomitalia.it. [82.53.134.100])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c828f5fsm1835619f8f.8.2024.12.19.07.35.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2024 07:35:47 -0800 (PST)
+Date: Thu, 19 Dec 2024 16:35:41 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>, 
+	James Bottomley <james.bottomley@hansenpartnership.com>
+Cc: linux-coco@lists.linux.dev, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Huewe <peterhuewe@gmx.de>, 
+	"H. Peter Anvin" <hpa@zytor.com>, linux-integrity@vger.kernel.org, x86@kernel.org, 
+	Joerg Roedel <jroedel@suse.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Claudio Carvalho <cclaudio@linux.ibm.com>, 
+	Dov Murik <dovmurik@linux.ibm.com>, Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH 3/3] x86/sev: add a SVSM vTPM platform device
+Message-ID: <CAGxU2F7QjQTnXsqYeKc0q03SQCoW+BHbej9Q2Z8gxbgu-3O2fA@mail.gmail.com>
+References: <20241210143423.101774-1-sgarzare@redhat.com>
+ <20241210143423.101774-4-sgarzare@redhat.com>
+ <20241210144025.GG1888283@ziepe.ca>
+ <50a2e1d29b065498146f459035e447851a518d1a.camel@HansenPartnership.com>
+ <20241210150413.GI1888283@ziepe.ca>
+ <CAGxU2F6yzqb0o_pQDakBbCj3RdKy_XfZfzGsiywnYL65g6WeGg@mail.gmail.com>
+ <20241211150048.GJ1888283@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 19 Dec 2024 17:29:01 +0200
-Message-Id: <D6FS8ALS4HSV.2CSS6SGE8ND09@kernel.org>
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Stefan Berger" <stefanb@linux.ibm.com>,
- <linux-integrity@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, "Andy Liang" <andy.liang@hpe.com>,
- "Takashi Iwai" <tiwai@suse.de>
-Subject: Re: [PATCH] tpm/eventlog: Limit memory allocations for event logs
- with excessive size
-X-Mailer: aerc 0.18.2
-References: <20241210222608.598424-1-stefanb@linux.ibm.com>
- <D6B49LBSZXN4.3V519030X0YCG@kernel.org>
- <709d3abb-d94d-44fc-a730-054139b13188@linux.ibm.com>
-In-Reply-To: <709d3abb-d94d-44fc-a730-054139b13188@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241211150048.GJ1888283@ziepe.ca>
 
-On Mon Dec 16, 2024 at 9:29 PM EET, Stefan Berger wrote:
+On Wed, 11 Dec 2024 at 16:00, Jason Gunthorpe <jgg@ziepe.ca> wrote:
 >
+> On Wed, Dec 11, 2024 at 09:19:04AM +0100, Stefano Garzarella wrote:
 >
-> On 12/13/24 10:51 PM, Jarkko Sakkinen wrote:
-> > On Wed Dec 11, 2024 at 12:26 AM EET, Stefan Berger wrote:
-> >> The TPM2 ACPI BIOS eventlog of a particular machine indicates that the
-> >> length of the log is 4MB, even though the actual length of its useful =
-data,
-> >> when dumped, are only 69kb. To avoid allocating excessive amounts of m=
-emory
-> >> for the event log, limit the size of any eventlog to 128kb. This shoul=
-d be
-> >> sufficient memory and also not unnecessarily truncate event logs on an=
-y
-> >> other machine.
-> >>
-> >> Reported-by: Andy Liang <andy.liang@hpe.com>
-> >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D219495
-> >> Cc: Takashi Iwai <tiwai@suse.de>
-> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> >> ---
-> >>   drivers/char/tpm/eventlog/acpi.c | 8 ++++++++
-> >>   1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/event=
-log/acpi.c
-> >> index 69533d0bfb51..701fd7d4cc28 100644
-> >> --- a/drivers/char/tpm/eventlog/acpi.c
-> >> +++ b/drivers/char/tpm/eventlog/acpi.c
-> >> @@ -26,6 +26,8 @@
-> >>   #include "../tpm.h"
-> >>   #include "common.h"
-> >>  =20
-> >> +#define MAX_TPM_LOG_LEN		(128 * 1024)
-> >=20
-> > Instead, to common.h:
-> >=20
-> > /*
-> >   * Cap the log size to the given number of bytes. Applied to the TPM2
-> >   * ACPI logs.
-> >   */
-> > #define TPM_MAX_LOG_SIZE (128 * 1024)
+> > > After that, there is no meaningful shared code here, and maybe the
+> > > TPM_CHIP_FLAG_IRQ hack can be avoided too.
+> >
+> > IIUC you are proposing the following steps:
+> > - extend tpm_class_ops to add a new send_recv() op and use it in
+> > tpm_try_transmit()
 >
-> Done.
+> Yes, that seems to be the majority of your shared code.
 >
-> >=20
-> >>
-q >> +
-> >>   struct acpi_tcpa {
-> >>   	struct acpi_table_header hdr;
-> >>   	u16 platform_class;
-> >> @@ -135,6 +137,12 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
-> >>   		return -EIO;
-> >>   	}
-> >>  =20
-> >> +	if (len > MAX_TPM_LOG_LEN) {
-> >> +		dev_warn(&chip->dev, "Excessive TCPA log len %llu truncated to %u b=
-ytes\n",
-> >> +			 len, MAX_TPM_LOG_LEN);
-> >> +		len =3D MAX_TPM_LOG_LEN;
-> >> +	}
-> >=20
-> > First, you are changing also TPM1 code path. Also in the case of
+> > - call the code in tpm_platform_probe() directly in sev
 >
-> Ok, let's move it into the TPM2 code path then.
->
-> > TPM2 code path the log message is incorrect as TCPA does not exist.
-> >=20
-> > Second, this does not make sense as the log ends up to be corrupted
-> > (i.e. not complete).
->
-> Truncating the log is something I am trying to prevent by giving it a=20
-> generous size of 128 kb:
-> "To avoid allocating excessive amounts of memory
-> for the event log, limit the size of any eventlog to 128kb. This should b=
-e
-> sufficient memory and also not unnecessarily truncate event logs on any
-> other machine."
->
-> The 8MB the machine with the faulty BIOS indicates are holding 69kb of=20
-> log data at the beginning and then unnecessary data after that. So=20
-> truncating this one to 128kb doesn't affect the 69kb at the beginning.
+> Yes
 
-Hmm.. in dmesg (6.4) I see 8388608 bytes =3D 8 MB.
+I tried this, it's not bad, but I have a problem that I'm not sure how 
+to solve. Basically, the functions used in tpm_platform_probe() (e.g. 
+tpmm_chip_alloc, tpm2_probe, tpm_chip_register) are all defined in 
+drivers/char/tpm/tpm.h
+And in fact all users are in drivers/char/tpm.
 
->
-> >=20
-> > Instead, in the TPM2 code path:
-> >=20
-> > 		start =3D tpm2_phy->log_area_start_address;
-> > 		if (!start || !len) {
-> > 			acpi_put_table((struct acpi_table_header *)tbl);
-> > 			return -ENODEV;
-> > 		}
-> >=20
-> > 		if (len > TPM_MAX_LOG_SIZE) {
-> > 			dev_warn(&chip->dev, "Excessive TPM2 log size of %llu bytes (> %u)\n=
-",
-> > 				 len, MAX_TPM_LOG_LEN);
-> > 			log->bios_event_log =3D start;
-> > 			chip->flags |=3D TPM_CHIP_FLAG_TPM2_ACPI;
-> > 			return 0;
-> > 		}
-> >=20
-> > This can then be used in tpm2.c to create a "slow path" in tpm2.c for
-> > parsing TPM2 ACPI log directly by mapping IO memory.
->
-> I thought the problem when getting request for 8MB is the code a bit=20
-> further below from here that cannot allocated the 8MB.
->
->   	/* malloc EventLog space */
->   	log->bios_event_log =3D devm_kmalloc(&chip->dev, len, GFP_KERNEL);
->   	if (!log->bios_event_log)
+So to use them directly in sev, we would have to move these definitions 
+into include/linux/tpm.h or some other file in inlcude/. Is this 
+acceptable for TPM maintainers?
 
-Truncating the log would make it invalid, or what I'm not seeing?
+Otherwise we need an intermediate module in drivers/char/tpm. Here we 
+have 2 options:
+1. continue as James did by creating a platform_device.
+2. or we could avoid this by just exposing a registration API invoked by 
+sev to specify the send_recv() callback to use. I mean something like 
+renaming tpm_platform_probe() in tpm_platform_register(), and call it in 
+snp_init_platform_device().
 
-1. Quick fix: Disable the log if the size surpasses the max. Export
-   logs as an empty file so that user space can detect the condition.
-2. Proper fix: In tpm2.c call acpi_os_map_iomem() if the size
-   surpasses the max, and e.g. use memcpy_fromio() to access it.
+WDYT?
 
-In both cases: don't call devm_kmalloc().
+Thanks,
+Stefano
 
-Maybe I lost the track. I'm assuming here that the reporter thinks
-that 8 MB is somehow legit log size since there is even this recent
-comment:
-
-"The TPM2 DUMP still shows the TPM event log size as 8MB. Thank you."
-
-My personal opinion is that we should not fix this at all because:
-
-1. Kernel is not the latest mainline. It's 6.4 and I'm not even
-   sure if it is distribution kernel or pure mainline.
-2. No detailed description of the hardware. Some imaginary
-   hardware does stupid shit with unknown BIOS and ages old
-   kernel that is compiled from God knows what source tree.
-
-This does not hold:
-
-"
-Please don't shoot the messenger.  Neither of the original report and I
-understand / manage the relevant code better than you subsystem
-maintainers.
-
-If you can give a patch for testing, I can build a test kernel and ask
-the original reporter, of course.  Thanks!
-"
-
-A messenger telling a tale or lore is not my cup of tea, and without
-better description, I don't proactively encourage to work on this...
-
-  =20
-BR, Jarkko
 
