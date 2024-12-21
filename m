@@ -1,319 +1,507 @@
-Return-Path: <linux-integrity+bounces-4447-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4448-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46CD59F8FF8
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Dec 2024 11:15:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C77819FA073
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Dec 2024 12:33:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D97A188CC07
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Dec 2024 10:15:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EE571692F3
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Dec 2024 11:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F8FE134AB;
-	Fri, 20 Dec 2024 10:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F381F2397;
+	Sat, 21 Dec 2024 11:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lYMbBN86";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fotjMg+U";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="wnUi5/On";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KAfUdT9Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5groNJX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E59E1BD9FA;
-	Fri, 20 Dec 2024 10:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F672594AE;
+	Sat, 21 Dec 2024 11:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734689731; cv=none; b=br2F97+IT140vjq6yw27ZU8q8VE/GXsWK3YRakh9XHWBT55U52CnfMxBAhBNHrFheMuKGJJX5Dcm5AiLz5VtjcQ1hyLdF3WkuE1U5mJaxA/qMcF2xaSC0RZ/BBLFG5aTghpRP/u7rEy7HAPOCEcsqOQfWhw7f0eT7AD9cKSgFOI=
+	t=1734780808; cv=none; b=N6p7wtoz1pZCo6MsE2yWBg4GvjFhnw5NZMYx2MrG9Uor67akr7Shl1DG5HC0xz8CebXlKS2DEEwMXpVzg9wPOdCHi8d8Bf4nFG3ZCJ1qLSNOZJJFC1hfQX5kk9+xtueby5Y2bMpIKPrdQsnADvFj7bWrj6hjA3MfqXq7wUaiUCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734689731; c=relaxed/simple;
-	bh=1pgVgX0KFc15PvmgsvJAFkJYvnHbqnFzeK1mErkruDI=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FlwK+pQsDs5bzG8WHWG2qZr60E8TV8jviPpYzUl6BYjeQupZRNfKsbVRwQdaHVvhT9R4v3NbjWyVOIry5eCoCz8pHqeaGXh+zuFdreMGNOfdUcOYlB/dz68Wkk3Tyj0y5Z6A8iE2tmsZTu8gz84Wm+GbNK4HjBa+YTrayaSzlnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lYMbBN86; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=fotjMg+U; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=wnUi5/On; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KAfUdT9Z; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id EEC2B21106;
-	Fri, 20 Dec 2024 10:15:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1734689726; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8/PKdWyNV1nkxgF4eNWxv+l6FqDqrtTMVBmffVdQ29k=;
-	b=lYMbBN86Ncnc2k3336/4RoB9tNl6dqTRotKnvXIUvY6AsGz0gnApTyKFfN7mZg0RJ9WOh3
-	noFbl+rKRXH9kLpcux6bO2Wr6VEjXO/IymMfHm0PWOTz8pDxlaBIRuwKEybTQQ+xutSDR+
-	Iuk6jQmvtXnYQlj3VS6DtAdmJADDCPM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1734689726;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8/PKdWyNV1nkxgF4eNWxv+l6FqDqrtTMVBmffVdQ29k=;
-	b=fotjMg+UEKGHfXdILBWTQvH7UG5mrMu8T6XMcNaI3xms8efezfAhhzPg45175160T1XoVQ
-	svPcv1K0FJXk4TDg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="wnUi5/On";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=KAfUdT9Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1734689725; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8/PKdWyNV1nkxgF4eNWxv+l6FqDqrtTMVBmffVdQ29k=;
-	b=wnUi5/OnjIZ/C8S1lLtMMOMmLoEkMFQACSIyyhU3yReCuyRY1UZR8wezaMtzdw86Zr8hj0
-	jlBPn3Y8saXYD4IKlOJKyjCxSisrowtMJ9lAKPJs1niPmsLJLsJpTKB7d8dFJobKOVySS3
-	4MdWupIke1HtsjDFar3BksxBRZfTs4E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1734689725;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8/PKdWyNV1nkxgF4eNWxv+l6FqDqrtTMVBmffVdQ29k=;
-	b=KAfUdT9ZZQhWMWBplXRCi6DVqoBEiCUwyunavDrDtHHkxJV9TjsGMbyd8NpZro3dTeW9xd
-	kQfnGSzR8Avm3UAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7449B13A63;
-	Fri, 20 Dec 2024 10:15:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id h5neGL1DZWdnAwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 20 Dec 2024 10:15:25 +0000
-Date: Fri, 20 Dec 2024 11:15:24 +0100
-Message-ID: <87wmfuu0cj.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc: "Stefan Berger"
- <stefanb@linux.ibm.com>,
-	<linux-integrity@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>,
-	"Andy Liang" <andy.liang@hpe.com>,
-	"Takashi Iwai" <tiwai@suse.de>
-Subject: Re: [PATCH] tpm/eventlog: Limit memory allocations for event logs with excessive size
-In-Reply-To: <D6FSFOOBPMHF.3UIDISOAITD3K@kernel.org>
-References: <20241210222608.598424-1-stefanb@linux.ibm.com>
-	<D6B49LBSZXN4.3V519030X0YCG@kernel.org>
-	<709d3abb-d94d-44fc-a730-054139b13188@linux.ibm.com>
-	<D6FS8ALS4HSV.2CSS6SGE8ND09@kernel.org>
-	<D6FSFOOBPMHF.3UIDISOAITD3K@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1734780808; c=relaxed/simple;
+	bh=PZI/vbZ8+kg40jgJ4A27Ci+mznlX51web6exHfKr+r0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oFs7cQWD0Amul1yPbl9TOC0CeIlfT2x3Tq8lYfsDxbAKnsYsjKUo9w0zGyaYYN//9AHL6FaEmQ0iy1Do96nBduy5TW3w6iWNNJs7PMSjPlYQsGCA6CEikFXJ6zWFPSwBjqEThOr/tvbnDFrMCd3EwSbjsXoSyxxBxtUkh+NRdOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5groNJX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EF4BC4CECE;
+	Sat, 21 Dec 2024 11:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734780807;
+	bh=PZI/vbZ8+kg40jgJ4A27Ci+mznlX51web6exHfKr+r0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=G5groNJXMYOtLnV/7cZv6nd2yyLRvgUvH033c7MgzIVgaNk/24Idu5DL46eX3SYgy
+	 bPoHE508oTvcRK7PklFN5yLTEkjvC0kxxx5tnaKMVA6csXaVliNsmNz3IC90q54xjF
+	 6Z2nYSMOOqJAC7ecOvyX2n0Cga1ff801aKfSklTO63gaNcIWxRl91Taij9bMt3Ohzw
+	 2dI+EI5C7BjB9ofJYlk+U75n8Mg3Dnar1NA+pMCOpv5nWKVW9YgdavHD5jhytwGN+6
+	 DbJj0qqg5PgEsYpnE8RMF6LHPpSt49ro/39qQE7/Oebs/BKn/unOH+CRcq455owbkL
+	 Yl0qZQyHkeSow==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Al Viro <viro@zeniv.linux.org.uk>
+Cc: Andy Liang <andy.liang@hpe.com>,
+	Matthew Garrett <mjg59@srcf.ucam.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm: Map the ACPI provided event log
+Date: Sat, 21 Dec 2024 13:33:08 +0200
+Message-ID: <20241221113318.562138-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: EEC2B21106
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:dkim,suse.de:mid];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.51
-X-Spam-Flag: NO
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, 19 Dec 2024 16:38:40 +0100,
-Jarkko Sakkinen wrote:
-> 
-> On Thu Dec 19, 2024 at 5:29 PM EET, Jarkko Sakkinen wrote:
-> > On Mon Dec 16, 2024 at 9:29 PM EET, Stefan Berger wrote:
-> > >
-> > >
-> > > On 12/13/24 10:51 PM, Jarkko Sakkinen wrote:
-> > > > On Wed Dec 11, 2024 at 12:26 AM EET, Stefan Berger wrote:
-> > > >> The TPM2 ACPI BIOS eventlog of a particular machine indicates that the
-> > > >> length of the log is 4MB, even though the actual length of its useful data,
-> > > >> when dumped, are only 69kb. To avoid allocating excessive amounts of memory
-> > > >> for the event log, limit the size of any eventlog to 128kb. This should be
-> > > >> sufficient memory and also not unnecessarily truncate event logs on any
-> > > >> other machine.
-> > > >>
-> > > >> Reported-by: Andy Liang <andy.liang@hpe.com>
-> > > >> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219495
-> > > >> Cc: Takashi Iwai <tiwai@suse.de>
-> > > >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > >> ---
-> > > >>   drivers/char/tpm/eventlog/acpi.c | 8 ++++++++
-> > > >>   1 file changed, 8 insertions(+)
-> > > >>
-> > > >> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> > > >> index 69533d0bfb51..701fd7d4cc28 100644
-> > > >> --- a/drivers/char/tpm/eventlog/acpi.c
-> > > >> +++ b/drivers/char/tpm/eventlog/acpi.c
-> > > >> @@ -26,6 +26,8 @@
-> > > >>   #include "../tpm.h"
-> > > >>   #include "common.h"
-> > > >>   
-> > > >> +#define MAX_TPM_LOG_LEN		(128 * 1024)
-> > > > 
-> > > > Instead, to common.h:
-> > > > 
-> > > > /*
-> > > >   * Cap the log size to the given number of bytes. Applied to the TPM2
-> > > >   * ACPI logs.
-> > > >   */
-> > > > #define TPM_MAX_LOG_SIZE (128 * 1024)
-> > >
-> > > Done.
-> > >
-> > > > 
-> > > >>
-> > q >> +
-> > > >>   struct acpi_tcpa {
-> > > >>   	struct acpi_table_header hdr;
-> > > >>   	u16 platform_class;
-> > > >> @@ -135,6 +137,12 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
-> > > >>   		return -EIO;
-> > > >>   	}
-> > > >>   
-> > > >> +	if (len > MAX_TPM_LOG_LEN) {
-> > > >> +		dev_warn(&chip->dev, "Excessive TCPA log len %llu truncated to %u bytes\n",
-> > > >> +			 len, MAX_TPM_LOG_LEN);
-> > > >> +		len = MAX_TPM_LOG_LEN;
-> > > >> +	}
-> > > > 
-> > > > First, you are changing also TPM1 code path. Also in the case of
-> > >
-> > > Ok, let's move it into the TPM2 code path then.
-> > >
-> > > > TPM2 code path the log message is incorrect as TCPA does not exist.
-> > > > 
-> > > > Second, this does not make sense as the log ends up to be corrupted
-> > > > (i.e. not complete).
-> > >
-> > > Truncating the log is something I am trying to prevent by giving it a 
-> > > generous size of 128 kb:
-> > > "To avoid allocating excessive amounts of memory
-> > > for the event log, limit the size of any eventlog to 128kb. This should be
-> > > sufficient memory and also not unnecessarily truncate event logs on any
-> > > other machine."
-> > >
-> > > The 8MB the machine with the faulty BIOS indicates are holding 69kb of 
-> > > log data at the beginning and then unnecessary data after that. So 
-> > > truncating this one to 128kb doesn't affect the 69kb at the beginning.
-> >
-> > Hmm.. in dmesg (6.4) I see 8388608 bytes = 8 MB.
-> >
-> > >
-> > > > 
-> > > > Instead, in the TPM2 code path:
-> > > > 
-> > > > 		start = tpm2_phy->log_area_start_address;
-> > > > 		if (!start || !len) {
-> > > > 			acpi_put_table((struct acpi_table_header *)tbl);
-> > > > 			return -ENODEV;
-> > > > 		}
-> > > > 
-> > > > 		if (len > TPM_MAX_LOG_SIZE) {
-> > > > 			dev_warn(&chip->dev, "Excessive TPM2 log size of %llu bytes (> %u)\n",
-> > > > 				 len, MAX_TPM_LOG_LEN);
-> > > > 			log->bios_event_log = start;
-> > > > 			chip->flags |= TPM_CHIP_FLAG_TPM2_ACPI;
-> > > > 			return 0;
-> > > > 		}
-> > > > 
-> > > > This can then be used in tpm2.c to create a "slow path" in tpm2.c for
-> > > > parsing TPM2 ACPI log directly by mapping IO memory.
-> > >
-> > > I thought the problem when getting request for 8MB is the code a bit 
-> > > further below from here that cannot allocated the 8MB.
-> > >
-> > >   	/* malloc EventLog space */
-> > >   	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
-> > >   	if (!log->bios_event_log)
-> >
-> > Truncating the log would make it invalid, or what I'm not seeing?
-> >
-> > 1. Quick fix: Disable the log if the size surpasses the max. Export
-> >    logs as an empty file so that user space can detect the condition.
-> > 2. Proper fix: In tpm2.c call acpi_os_map_iomem() if the size
-> >    surpasses the max, and e.g. use memcpy_fromio() to access it.
-> >
-> > In both cases: don't call devm_kmalloc().
-> >
-> > Maybe I lost the track. I'm assuming here that the reporter thinks
-> > that 8 MB is somehow legit log size since there is even this recent
-> > comment:
-> >
-> > "The TPM2 DUMP still shows the TPM event log size as 8MB. Thank you."
-> >
-> > My personal opinion is that we should not fix this at all because:
-> >
-> > 1. Kernel is not the latest mainline. It's 6.4 and I'm not even
-> >    sure if it is distribution kernel or pure mainline.
+The following failure was reported:
 
-The reporter tested the recent upstream, too.
+[   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id 0)
+[   10.848132][    T1] ------------[ cut here ]------------
+[   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __alloc_pages_noprof+0x2ca/0x330
+[   10.862827][    T1] Modules linked in:
+[   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98293a7c9eba9013378d807364c088c9375
+[   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant DL320 Gen12, BIOS 1.20 10/28/2024
+[   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
+[   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
+[   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
+[   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0000000000000000
+[   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0000000000040cc0
 
-Also I provided the reporter the build of the upstream kernel with
-Stefan's patch.
+Above shows that ACPI pointed a 16 MiB buffer for the log events because
+RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
+bug by mapping the region when needed instead of copying.
 
-> > 2. No detailed description of the hardware. Some imaginary
-> >    hardware does stupid shit with unknown BIOS and ages old
-> >    kernel that is compiled from God knows what source tree.
+Reported-by: Andy Liang <andy.liang@hpe.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219495
+Suggested-by: Matthew Garrett <mjg59@srcf.ucam.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/eventlog/acpi.c   | 30 +++++--------------
+ drivers/char/tpm/eventlog/common.c | 33 ++++++++++++--------
+ drivers/char/tpm/eventlog/common.h |  6 ++++
+ drivers/char/tpm/eventlog/tpm1.c   | 38 +++++++++++++++--------
+ drivers/char/tpm/eventlog/tpm2.c   | 48 +++++++++++++++++++-----------
+ include/linux/tpm.h                |  1 +
+ 6 files changed, 91 insertions(+), 65 deletions(-)
 
-Again, you can forget about your argument about the kernel version.
-The recent upstream kernel has been already checked.
-The details of the hardware can be improved by the reporter, though.
+diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+index 69533d0bfb51..8d8db66ce876 100644
+--- a/drivers/char/tpm/eventlog/acpi.c
++++ b/drivers/char/tpm/eventlog/acpi.c
+@@ -22,8 +22,6 @@
+ #include <linux/slab.h>
+ #include <linux/acpi.h>
+ #include <linux/tpm_eventlog.h>
+-
+-#include "../tpm.h"
+ #include "common.h"
+ 
+ struct acpi_tcpa {
+@@ -70,14 +68,11 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 	acpi_status status;
+ 	void __iomem *virt;
+ 	u64 len, start;
+-	struct tpm_bios_log *log;
+ 	struct acpi_table_tpm2 *tbl;
+ 	struct acpi_tpm2_phy *tpm2_phy;
+ 	int format;
+ 	int ret;
+ 
+-	log = &chip->log;
+-
+ 	/* Unfortuntely ACPI does not associate the event log with a specific
+ 	 * TPM, like PPI. Thus all ACPI TPMs will read the same log.
+ 	 */
+@@ -135,36 +130,27 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 		return -EIO;
+ 	}
+ 
+-	/* malloc EventLog space */
+-	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
+-	if (!log->bios_event_log)
+-		return -ENOMEM;
+-
+-	log->bios_event_log_end = log->bios_event_log + len;
+-
+ 	virt = acpi_os_map_iomem(start, len);
+ 	if (!virt) {
+ 		dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
+ 		/* try EFI log next */
+-		ret = -ENODEV;
+-		goto err;
++		return -ENODEV;
+ 	}
+ 
+-	memcpy_fromio(log->bios_event_log, virt, len);
+-
+-	acpi_os_unmap_iomem(virt, len);
+-
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
+-	    !tpm_is_tpm2_log(log->bios_event_log, len)) {
++	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_tpm2_log(virt, len)) {
++		acpi_os_unmap_iomem(virt, len);
+ 		/* try EFI log next */
+ 		ret = -ENODEV;
+ 		goto err;
+ 	}
+ 
++	acpi_os_unmap_iomem(virt, len);
++	chip->flags |= TPM_CHIP_FLAG_ACPI_LOG;
++	chip->log.bios_event_log = (void *)start;
++	chip->log.bios_event_log_end = (void *)start + len;
+ 	return format;
+ 
+ err:
+-	devm_kfree(&chip->dev, log->bios_event_log);
+-	log->bios_event_log = NULL;
++	acpi_os_unmap_iomem(virt, len);
+ 	return ret;
+ }
+diff --git a/drivers/char/tpm/eventlog/common.c b/drivers/char/tpm/eventlog/common.c
+index 4c0bbba64ee5..d934ef8c8b7f 100644
+--- a/drivers/char/tpm/eventlog/common.c
++++ b/drivers/char/tpm/eventlog/common.c
+@@ -25,11 +25,12 @@
+ static int tpm_bios_measurements_open(struct inode *inode,
+ 					    struct file *file)
+ {
+-	int err;
+-	struct seq_file *seq;
++	struct tpm_measurements *priv;
+ 	struct tpm_chip_seqops *chip_seqops;
+ 	const struct seq_operations *seqops;
+ 	struct tpm_chip *chip;
++	struct seq_file *seq;
++	int ret;
+ 
+ 	inode_lock(inode);
+ 	if (!inode->i_private) {
+@@ -42,27 +43,35 @@ static int tpm_bios_measurements_open(struct inode *inode,
+ 	get_device(&chip->dev);
+ 	inode_unlock(inode);
+ 
+-	/* now register seq file */
+-	err = seq_open(file, seqops);
+-	if (!err) {
+-		seq = file->private_data;
+-		seq->private = chip;
+-	} else {
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++	priv->chip = chip;
++
++	ret = seq_open(file, seqops);
++	if (ret) {
++		kfree(priv);
+ 		put_device(&chip->dev);
++	} else {
++		seq = file->private_data;
++		seq->private = priv;
+ 	}
+ 
+-	return err;
++	return ret;
+ }
+ 
+ static int tpm_bios_measurements_release(struct inode *inode,
+ 					 struct file *file)
+ {
+ 	struct seq_file *seq = file->private_data;
+-	struct tpm_chip *chip = seq->private;
++	struct tpm_measurements *priv = seq->private;
++	int ret;
+ 
+-	put_device(&chip->dev);
++	put_device(&priv->chip->dev);
++	ret = seq_release(inode, file);
++	kfree(priv);
+ 
+-	return seq_release(inode, file);
++	return ret;
+ }
+ 
+ static const struct file_operations tpm_bios_measurements_ops = {
+diff --git a/drivers/char/tpm/eventlog/common.h b/drivers/char/tpm/eventlog/common.h
+index 47ff8136ceb5..ad89a0daf585 100644
+--- a/drivers/char/tpm/eventlog/common.h
++++ b/drivers/char/tpm/eventlog/common.h
+@@ -7,6 +7,12 @@ extern const struct seq_operations tpm1_ascii_b_measurements_seqops;
+ extern const struct seq_operations tpm1_binary_b_measurements_seqops;
+ extern const struct seq_operations tpm2_binary_b_measurements_seqops;
+ 
++struct tpm_measurements {
++	struct tpm_chip *chip;
++	void *start;
++	void *end;
++};
++
+ #if defined(CONFIG_ACPI)
+ int tpm_read_log_acpi(struct tpm_chip *chip);
+ #else
+diff --git a/drivers/char/tpm/eventlog/tpm1.c b/drivers/char/tpm/eventlog/tpm1.c
+index 12ee42a31c71..6141a580e99c 100644
+--- a/drivers/char/tpm/eventlog/tpm1.c
++++ b/drivers/char/tpm/eventlog/tpm1.c
+@@ -22,11 +22,8 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/tpm_eventlog.h>
+-
+-#include "../tpm.h"
+ #include "common.h"
+ 
+-
+ static const char* tcpa_event_type_strings[] = {
+ 	"PREBOOT",
+ 	"POST CODE",
+@@ -70,20 +67,32 @@ static const char* tcpa_pc_event_id_strings[] = {
+ static void *tpm1_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ {
+ 	loff_t i = 0;
+-	struct tpm_chip *chip = m->private;
++	struct tpm_measurements *priv = m->private;
++	struct tpm_chip *chip = priv->chip;
+ 	struct tpm_bios_log *log = &chip->log;
+-	void *addr = log->bios_event_log;
+-	void *limit = log->bios_event_log_end;
+ 	struct tcpa_event *event;
+ 	u32 converted_event_size;
+ 	u32 converted_event_type;
++	size_t log_size;
++	void *addr;
++
++	log_size = log->bios_event_log_end - log->bios_event_log;
++
++	priv->start = !(chip->flags & TPM_CHIP_FLAG_ACPI_LOG) ?
++		      log->bios_event_log :
++		      acpi_os_map_iomem((unsigned long)log->bios_event_log, log_size);
++	if (!priv->start)
++		return NULL;
++	priv->end = priv->start + log_size;
++
++	addr = priv->start;
+ 
+ 	/* read over *pos measurements */
+ 	do {
+ 		event = addr;
+ 
+ 		/* check if current entry is valid */
+-		if (addr + sizeof(struct tcpa_event) > limit)
++		if (addr + sizeof(struct tcpa_event) > priv->end)
+ 			return NULL;
+ 
+ 		converted_event_size =
+@@ -93,7 +102,7 @@ static void *tpm1_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 
+ 		if (((converted_event_type == 0) && (converted_event_size == 0))
+ 		    || ((addr + sizeof(struct tcpa_event) + converted_event_size)
+-			> limit))
++			> priv->end))
+ 			return NULL;
+ 
+ 		if (i++ == *pos)
+@@ -108,10 +117,8 @@ static void *tpm1_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+ 					loff_t *pos)
+ {
++	struct tpm_measurements *priv = m->private;
+ 	struct tcpa_event *event = v;
+-	struct tpm_chip *chip = m->private;
+-	struct tpm_bios_log *log = &chip->log;
+-	void *limit = log->bios_event_log_end;
+ 	u32 converted_event_size;
+ 	u32 converted_event_type;
+ 
+@@ -121,7 +128,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+ 	v += sizeof(struct tcpa_event) + converted_event_size;
+ 
+ 	/* now check if current entry is valid */
+-	if ((v + sizeof(struct tcpa_event)) > limit)
++	if ((v + sizeof(struct tcpa_event)) > priv->end)
+ 		return NULL;
+ 
+ 	event = v;
+@@ -130,7 +137,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+ 	converted_event_type = do_endian_conversion(event->event_type);
+ 
+ 	if (((converted_event_type == 0) && (converted_event_size == 0)) ||
+-	    ((v + sizeof(struct tcpa_event) + converted_event_size) > limit))
++	    ((v + sizeof(struct tcpa_event) + converted_event_size) > priv->end))
+ 		return NULL;
+ 
+ 	return v;
+@@ -138,6 +145,11 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+ 
+ static void tpm1_bios_measurements_stop(struct seq_file *m, void *v)
+ {
++	struct tpm_measurements *priv = m->private;
++	struct tpm_chip *chip = priv->chip;
++
++	if (!!(chip->flags & TPM_CHIP_FLAG_ACPI_LOG))
++		acpi_os_unmap_iomem(priv->start, priv->end - priv->start);
+ }
+ 
+ static int get_event_name(char *dest, struct tcpa_event *event,
+diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
+index 37a05800980c..79e090dd751a 100644
+--- a/drivers/char/tpm/eventlog/tpm2.c
++++ b/drivers/char/tpm/eventlog/tpm2.c
+@@ -12,14 +12,13 @@
+  * content.
+  */
+ 
++#include "linux/tpm.h"
+ #include <linux/seq_file.h>
+ #include <linux/fs.h>
+ #include <linux/security.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/tpm_eventlog.h>
+-
+-#include "../tpm.h"
+ #include "common.h"
+ 
+ /*
+@@ -41,20 +40,31 @@ static size_t calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+ 
+ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ {
+-	struct tpm_chip *chip = m->private;
++	struct tpm_measurements *priv = m->private;
++	struct tpm_chip *chip = priv->chip;
+ 	struct tpm_bios_log *log = &chip->log;
+-	void *addr = log->bios_event_log;
+-	void *limit = log->bios_event_log_end;
+ 	struct tcg_pcr_event *event_header;
+ 	struct tcg_pcr_event2_head *event;
+-	size_t size;
++	size_t size, log_size;
++	void *addr;
+ 	int i;
+ 
++	log_size = log->bios_event_log_end - log->bios_event_log;
++
++	priv->start = !(chip->flags & TPM_CHIP_FLAG_ACPI_LOG) ?
++		      log->bios_event_log :
++		      acpi_os_map_iomem((unsigned long)log->bios_event_log, log_size);
++	if (!priv->start)
++		return NULL;
++
++	priv->end = priv->start + log_size;
++
++	addr = priv->start;
+ 	event_header = addr;
+ 	size = struct_size(event_header, event, event_header->event_size);
+ 
+ 	if (*pos == 0) {
+-		if (addr + size < limit) {
++		if (addr + size < priv->end) {
+ 			if ((event_header->event_type == 0) &&
+ 			    (event_header->event_size == 0))
+ 				return NULL;
+@@ -66,7 +76,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 		addr += size;
+ 		event = addr;
+ 		size = calc_tpm2_event_size(event, event_header);
+-		if ((addr + size >=  limit) || (size == 0))
++		if ((addr + size >= priv->end) || !size)
+ 			return NULL;
+ 	}
+ 
+@@ -74,7 +84,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 		event = addr;
+ 		size = calc_tpm2_event_size(event, event_header);
+ 
+-		if ((addr + size >= limit) || (size == 0))
++		if ((addr + size >= priv->end) || !size)
+ 			return NULL;
+ 		addr += size;
+ 	}
+@@ -85,16 +95,14 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ 					 loff_t *pos)
+ {
++	struct tpm_measurements *priv = m->private;
+ 	struct tcg_pcr_event *event_header;
+ 	struct tcg_pcr_event2_head *event;
+-	struct tpm_chip *chip = m->private;
+-	struct tpm_bios_log *log = &chip->log;
+-	void *limit = log->bios_event_log_end;
+ 	size_t event_size;
+ 	void *marker;
+ 
+ 	(*pos)++;
+-	event_header = log->bios_event_log;
++	event_header = priv->start;
+ 
+ 	if (v == SEQ_START_TOKEN) {
+ 		event_size = struct_size(event_header, event,
+@@ -109,13 +117,13 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ 	}
+ 
+ 	marker = marker + event_size;
+-	if (marker >= limit)
++	if (marker >= priv->end)
+ 		return NULL;
+ 	v = marker;
+ 	event = v;
+ 
+ 	event_size = calc_tpm2_event_size(event, event_header);
+-	if (((v + event_size) >= limit) || (event_size == 0))
++	if (((v + event_size) >= priv->end) || !event_size)
+ 		return NULL;
+ 
+ 	return v;
+@@ -123,13 +131,17 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ 
+ static void tpm2_bios_measurements_stop(struct seq_file *m, void *v)
+ {
++	struct tpm_measurements *priv = m->private;
++	struct tpm_chip *chip = priv->chip;
++
++	if (!!(chip->flags & TPM_CHIP_FLAG_ACPI_LOG))
++		acpi_os_unmap_iomem(priv->start, priv->end - priv->start);
+ }
+ 
+ static int tpm2_binary_bios_measurements_show(struct seq_file *m, void *v)
+ {
+-	struct tpm_chip *chip = m->private;
+-	struct tpm_bios_log *log = &chip->log;
+-	struct tcg_pcr_event *event_header = log->bios_event_log;
++	struct tpm_measurements *priv = m->private;
++	struct tcg_pcr_event *event_header = priv->start;
+ 	struct tcg_pcr_event2_head *event = v;
+ 	void *temp_ptr;
+ 	size_t size;
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 20a40ade8030..f3d12738b93b 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -348,6 +348,7 @@ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_SUSPENDED			= BIT(8),
+ 	TPM_CHIP_FLAG_HWRNG_DISABLED		= BIT(9),
+ 	TPM_CHIP_FLAG_DISABLE			= BIT(10),
++	TPM_CHIP_FLAG_ACPI_LOG		= BIT(11),
+ };
+ 
+ #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
+-- 
+2.47.1
 
-About BIOS: yes, we all know that BIOS is buggy as always.  And we all
-know that we do tons of workarounds in the kernel side, just because
-we can't be optimistic and expect that BIOS shall be fixed later.
-(With the long-time subsystem maintainer hat on, I have to tell you
-that it's truth, unfortunately...) 
-
-So, if this issue is handled exceptionally and we must ignore the bug,
-we'd love to hear the compelling reason.   e.g. if the suggested fix
-is way too ugly, then it'd be understandable.  But, to my eyes,
-setting the upper bound of the log size is rather a safer move in
-general.
-
-> > This does not hold:
-> >
-> > "
-> > Please don't shoot the messenger.  Neither of the original report and I
-> > understand / manage the relevant code better than you subsystem
-> > maintainers.
-> >
-> > If you can give a patch for testing, I can build a test kernel and ask
-> > the original reporter, of course.  Thanks!
-> > "
-> >
-> > A messenger telling a tale or lore is not my cup of tea, and without
-> > better description, I don't proactively encourage to work on this...
-
-Huh?  A messenger is a messenger; I don't own any relevant hardware or
-whatever information you asked *at all*.  You've been simply hitting a
-very wrong person.
-
-
-thanks,
-
-Takashi
 
