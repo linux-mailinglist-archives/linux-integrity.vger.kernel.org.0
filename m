@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-4448-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4449-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C77819FA073
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Dec 2024 12:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B01099FA0A5
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Dec 2024 13:45:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EE571692F3
-	for <lists+linux-integrity@lfdr.de>; Sat, 21 Dec 2024 11:33:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B244165EBD
+	for <lists+linux-integrity@lfdr.de>; Sat, 21 Dec 2024 12:44:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F381F2397;
-	Sat, 21 Dec 2024 11:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C01E61F237B;
+	Sat, 21 Dec 2024 12:44:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5groNJX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RfhQWaMT"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F672594AE;
-	Sat, 21 Dec 2024 11:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA7864D;
+	Sat, 21 Dec 2024 12:44:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734780808; cv=none; b=N6p7wtoz1pZCo6MsE2yWBg4GvjFhnw5NZMYx2MrG9Uor67akr7Shl1DG5HC0xz8CebXlKS2DEEwMXpVzg9wPOdCHi8d8Bf4nFG3ZCJ1qLSNOZJJFC1hfQX5kk9+xtueby5Y2bMpIKPrdQsnADvFj7bWrj6hjA3MfqXq7wUaiUCs=
+	t=1734785095; cv=none; b=lRVbgDyIykOtK5ENbwX1sQDKbWC6tU2QIU+b323u9HFYQYIlPdJMcvSScQDsQMRfhYtLH29rrcbg5yZAgus0o12Dv1JasSvaFqSTRkWZLMctEQp+ncVk/w2VT0NEMDo9XJfMv5sIYACa8mZ4rNNo9EVsihhwR2sCqeB2YBNQp+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734780808; c=relaxed/simple;
-	bh=PZI/vbZ8+kg40jgJ4A27Ci+mznlX51web6exHfKr+r0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oFs7cQWD0Amul1yPbl9TOC0CeIlfT2x3Tq8lYfsDxbAKnsYsjKUo9w0zGyaYYN//9AHL6FaEmQ0iy1Do96nBduy5TW3w6iWNNJs7PMSjPlYQsGCA6CEikFXJ6zWFPSwBjqEThOr/tvbnDFrMCd3EwSbjsXoSyxxBxtUkh+NRdOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5groNJX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EF4BC4CECE;
-	Sat, 21 Dec 2024 11:33:27 +0000 (UTC)
+	s=arc-20240116; t=1734785095; c=relaxed/simple;
+	bh=m3iZptMCNs/ZO5tvR1FZmc24DsZgQf16xG5yj96wYRw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z37rYAiS1QFeMB2TX8moeSAWSibGNoyRyfGKbmFPqptgKcjTNnpwll5PKFAJcQQHFrhgr9ptOisJmanyhDAqSvPo89FP9qMovbxN/u9PxvDC0XINZmMKyTLFmna67VyK2BdYixqj5SO/p3owFQTnpCp70mCiZDdo4foMv5iwIjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RfhQWaMT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3500C4CECE;
+	Sat, 21 Dec 2024 12:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734780807;
-	bh=PZI/vbZ8+kg40jgJ4A27Ci+mznlX51web6exHfKr+r0=;
+	s=k20201202; t=1734785095;
+	bh=m3iZptMCNs/ZO5tvR1FZmc24DsZgQf16xG5yj96wYRw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=G5groNJXMYOtLnV/7cZv6nd2yyLRvgUvH033c7MgzIVgaNk/24Idu5DL46eX3SYgy
-	 bPoHE508oTvcRK7PklFN5yLTEkjvC0kxxx5tnaKMVA6csXaVliNsmNz3IC90q54xjF
-	 6Z2nYSMOOqJAC7ecOvyX2n0Cga1ff801aKfSklTO63gaNcIWxRl91Taij9bMt3Ohzw
-	 2dI+EI5C7BjB9ofJYlk+U75n8Mg3Dnar1NA+pMCOpv5nWKVW9YgdavHD5jhytwGN+6
-	 DbJj0qqg5PgEsYpnE8RMF6LHPpSt49ro/39qQE7/Oebs/BKn/unOH+CRcq455owbkL
-	 Yl0qZQyHkeSow==
+	b=RfhQWaMT6cRX1PtvovaMoTfEOpyzw6UfeqBmFnuwJwVSWmaMXlT5DQAjdB2Q9UEjf
+	 Z3OtoFVqRK+Cmw1yIr6VzmIx2ECoY2ZEDt5UYw36EE2zgliqUJHZYavshq73nFiXcz
+	 yjyZgyIM5UoA/uldtTE2uh/6uN7JuTafRgBZZZMz7VDxeIaft38QLmGKkBlfod/kox
+	 Cmk0F762NXeSFIUB/bt2jpZg2wJgIrEWQKLN930nsYU4rWTbrLlZybbzANgMRmpyag
+	 egKZ7Mmtqcy/UujKMG4rJxbOeHltjhDjbYOZ8titpxWHoYyrghawnIwJ3fpK9eCgmz
+	 grNAFJcE/b7HQ==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org,
 	Peter Huewe <peterhuewe@gmx.de>,
@@ -51,14 +51,18 @@ To: linux-integrity@vger.kernel.org,
 	Stefan Berger <stefanb@linux.ibm.com>,
 	Ard Biesheuvel <ardb@kernel.org>,
 	Roberto Sassu <roberto.sassu@huawei.com>,
-	Al Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Liang <andy.liang@hpe.com>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Seiji Munetoh <munetoh@jp.ibm.com>,
+	Andrew Morton <akpm@osdl.org>,
+	Kylene Jo Hall <kjhall@us.ibm.com>,
+	Reiner Sailer <sailer@us.ibm.com>
+Cc: stable@vger.kernel.org,
+	Andy Liang <andy.liang@hpe.com>,
 	Matthew Garrett <mjg59@srcf.ucam.org>,
-	Mimi Zohar <zohar@linux.ibm.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: Map the ACPI provided event log
-Date: Sat, 21 Dec 2024 13:33:08 +0200
-Message-ID: <20241221113318.562138-1-jarkko@kernel.org>
+Subject: [PATCH v2] tpm: Map the ACPI provided event log
+Date: Sat, 21 Dec 2024 14:44:36 +0200
+Message-ID: <20241221124447.774553-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -86,18 +90,24 @@ Above shows that ACPI pointed a 16 MiB buffer for the log events because
 RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
 bug by mapping the region when needed instead of copying.
 
+Cc: stable@vger.kernel.org # v2.6.16+
+Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
 Reported-by: Andy Liang <andy.liang@hpe.com>
 Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219495
 Suggested-by: Matthew Garrett <mjg59@srcf.ucam.org>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
+v2:
+* There was some extra cruft (irrelevant diff), which is now wiped away.
+* Added missing tags (fixes, stable).
+---
  drivers/char/tpm/eventlog/acpi.c   | 30 +++++--------------
- drivers/char/tpm/eventlog/common.c | 33 ++++++++++++--------
+ drivers/char/tpm/eventlog/common.c | 25 +++++++++++-----
  drivers/char/tpm/eventlog/common.h |  6 ++++
  drivers/char/tpm/eventlog/tpm1.c   | 38 +++++++++++++++--------
  drivers/char/tpm/eventlog/tpm2.c   | 48 +++++++++++++++++++-----------
  include/linux/tpm.h                |  1 +
- 6 files changed, 91 insertions(+), 65 deletions(-)
+ 6 files changed, 87 insertions(+), 61 deletions(-)
 
 diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
 index 69533d0bfb51..8d8db66ce876 100644
@@ -173,41 +183,33 @@ index 69533d0bfb51..8d8db66ce876 100644
  	return ret;
  }
 diff --git a/drivers/char/tpm/eventlog/common.c b/drivers/char/tpm/eventlog/common.c
-index 4c0bbba64ee5..d934ef8c8b7f 100644
+index 4c0bbba64ee5..44340ca6e2ac 100644
 --- a/drivers/char/tpm/eventlog/common.c
 +++ b/drivers/char/tpm/eventlog/common.c
-@@ -25,11 +25,12 @@
- static int tpm_bios_measurements_open(struct inode *inode,
- 					    struct file *file)
+@@ -27,6 +27,7 @@ static int tpm_bios_measurements_open(struct inode *inode,
  {
--	int err;
--	struct seq_file *seq;
+ 	int err;
+ 	struct seq_file *seq;
 +	struct tpm_measurements *priv;
  	struct tpm_chip_seqops *chip_seqops;
  	const struct seq_operations *seqops;
  	struct tpm_chip *chip;
-+	struct seq_file *seq;
-+	int ret;
- 
- 	inode_lock(inode);
- 	if (!inode->i_private) {
-@@ -42,27 +43,35 @@ static int tpm_bios_measurements_open(struct inode *inode,
+@@ -42,13 +43,18 @@ static int tpm_bios_measurements_open(struct inode *inode,
  	get_device(&chip->dev);
  	inode_unlock(inode);
  
 -	/* now register seq file */
--	err = seq_open(file, seqops);
--	if (!err) {
--		seq = file->private_data;
--		seq->private = chip;
--	} else {
 +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
 +	if (!priv)
 +		return -ENOMEM;
 +	priv->chip = chip;
 +
-+	ret = seq_open(file, seqops);
-+	if (ret) {
+ 	err = seq_open(file, seqops);
+-	if (!err) {
+-		seq = file->private_data;
+-		seq->private = chip;
+-	} else {
++	if (err) {
 +		kfree(priv);
  		put_device(&chip->dev);
 +	} else {
@@ -215,11 +217,8 @@ index 4c0bbba64ee5..d934ef8c8b7f 100644
 +		seq->private = priv;
  	}
  
--	return err;
-+	return ret;
- }
- 
- static int tpm_bios_measurements_release(struct inode *inode,
+ 	return err;
+@@ -58,11 +64,14 @@ static int tpm_bios_measurements_release(struct inode *inode,
  					 struct file *file)
  {
  	struct seq_file *seq = file->private_data;
@@ -255,7 +254,7 @@ index 47ff8136ceb5..ad89a0daf585 100644
  int tpm_read_log_acpi(struct tpm_chip *chip);
  #else
 diff --git a/drivers/char/tpm/eventlog/tpm1.c b/drivers/char/tpm/eventlog/tpm1.c
-index 12ee42a31c71..6141a580e99c 100644
+index 12ee42a31c71..a10aca7c25df 100644
 --- a/drivers/char/tpm/eventlog/tpm1.c
 +++ b/drivers/char/tpm/eventlog/tpm1.c
 @@ -22,11 +22,8 @@
@@ -316,15 +315,14 @@ index 12ee42a31c71..6141a580e99c 100644
  			return NULL;
  
  		if (i++ == *pos)
-@@ -108,10 +117,8 @@ static void *tpm1_bios_measurements_start(struct seq_file *m, loff_t *pos)
- static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+@@ -109,9 +118,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
  					loff_t *pos)
  {
-+	struct tpm_measurements *priv = m->private;
  	struct tcpa_event *event = v;
 -	struct tpm_chip *chip = m->private;
 -	struct tpm_bios_log *log = &chip->log;
 -	void *limit = log->bios_event_log_end;
++	struct tpm_measurements *priv = m->private;
  	u32 converted_event_size;
  	u32 converted_event_type;
  
@@ -359,7 +357,7 @@ index 12ee42a31c71..6141a580e99c 100644
  
  static int get_event_name(char *dest, struct tcpa_event *event,
 diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
-index 37a05800980c..79e090dd751a 100644
+index 37a05800980c..23a12482415b 100644
 --- a/drivers/char/tpm/eventlog/tpm2.c
 +++ b/drivers/char/tpm/eventlog/tpm2.c
 @@ -12,14 +12,13 @@
@@ -433,16 +431,14 @@ index 37a05800980c..79e090dd751a 100644
  			return NULL;
  		addr += size;
  	}
-@@ -85,16 +95,14 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
- static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
- 					 loff_t *pos)
+@@ -87,14 +97,12 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
  {
-+	struct tpm_measurements *priv = m->private;
  	struct tcg_pcr_event *event_header;
  	struct tcg_pcr_event2_head *event;
 -	struct tpm_chip *chip = m->private;
 -	struct tpm_bios_log *log = &chip->log;
 -	void *limit = log->bios_event_log_end;
++	struct tpm_measurements *priv = m->private;
  	size_t event_size;
  	void *marker;
  
