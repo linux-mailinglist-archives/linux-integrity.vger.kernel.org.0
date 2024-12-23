@@ -1,223 +1,129 @@
-Return-Path: <linux-integrity+bounces-4462-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4463-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A65DD9FB213
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Dec 2024 17:13:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C39869FB41B
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Dec 2024 19:42:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CEDF1671D0
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Dec 2024 16:13:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B9FA188496D
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Dec 2024 18:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC6B61B3952;
-	Mon, 23 Dec 2024 16:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390951C07C3;
+	Mon, 23 Dec 2024 18:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gjO5KOjs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ma77nd8w"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80C17E0FF;
-	Mon, 23 Dec 2024 16:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5221B6CFE;
+	Mon, 23 Dec 2024 18:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734970380; cv=none; b=Qm3+1Dj7cXnL+cN+IH06H0rMDTruzTdloiExWCq9daxXey9SCCKuqTMhg0LkO5SZAQpl2BViK/m1dqv+JDH8QQA2C1Fu0zoflkS6wyQZe9kjJiSYnTYWyr4b6adZ0qvbijHW8BLKr9isOWnN5limWwZBjOe62cqmxMZe1ObdEs0=
+	t=1734979362; cv=none; b=ORNgFWP21bfzWdV43+ygIAfaJp+KHirst399YfeSRShrrUn8Yv8PwH7+fPQhSupYTRObBayQVQ1YcxW2baa6h1F78CQyafF/5ysvVFCNZI9CEzbMojVwu0dlWkeROxddd+1adK7WHHL8QR983/G6V7Xy8YkuPVn1hI8teLECl10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734970380; c=relaxed/simple;
-	bh=UtOCTThwOblyR5slazuQ5DRaahQq72ajfmyR4avObJ0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Zr4mL0pmGN77EfQipP/5U4XlQOe7xbGJpc7z5kzDEriaWQc2tzvjIi0FbKGORkMnKTRLyffzsn3f7edlOnQi7OwjcLoPVkBrzHF/svU8OMEBYLEb0f7F8BQ7OrHRdYqNEgqF+IxgkQXLgyWY8HFXRlsx0QSSZ2nybp0CPEgsx98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gjO5KOjs; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNE6m0g010100;
-	Mon, 23 Dec 2024 16:11:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=N0YlXv
-	pThyCaloTijE44N+X/vXn8K189/uxnRfbTsO8=; b=gjO5KOjszlMa3CE1dvBXXa
-	Zcp8iyosndSxa8eReS1uoUGP1nvV+ZWm5+QjuhX6W7w286Tsi2dT59DnBu+qHmVW
-	y1K4+d2Gau6M3rpSmQd64ih+Ls1LT2OziM67fXxqM8C9nXWNM6l1bZrrsSazBe1N
-	TWQv3cVr0F2QFi5xt9WmhaQFWW5C3iLugiijCRE7WYaqsUe0GzsXnJgDEQLItO91
-	5e9aUQ4uh6Hr6Bzn6oLBniXgwko+/XIWiCiQgHBG72p3TarNYmqSG2GwgXBygkJ6
-	ucVwqbDxZgg6YcqvjejM5ENbIoHUrlkXvhkYJWyTZFIRtT6Ut6E+MT7lcy6In9dQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43q9b4ggby-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Dec 2024 16:11:31 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BNGBUHY022869;
-	Mon, 23 Dec 2024 16:11:30 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43q9b4ggbu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Dec 2024 16:11:30 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNEe4gv020602;
-	Mon, 23 Dec 2024 16:11:30 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43p8cy6ee0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Dec 2024 16:11:30 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BNGBTlK27394700
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Dec 2024 16:11:29 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5871C5805A;
-	Mon, 23 Dec 2024 16:11:29 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E12A75803F;
-	Mon, 23 Dec 2024 16:11:27 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.4.210])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 23 Dec 2024 16:11:27 +0000 (GMT)
-Message-ID: <984b472672b4ff4b93963700e9c52dc873ea1924.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH v3 02/13] certs: Introduce ability to link to a
- system key
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Eric Snowberg <eric.snowberg@oracle.com>,
-        linux-security-module@vger.kernel.org
-Cc: dhowells@redhat.com, dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, ardb@kernel.org, jarkko@kernel.org,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, mic@digikod.net,
-        casey@schaufler-ca.com, stefanb@linux.ibm.com, ebiggers@kernel.org,
-        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
-Date: Mon, 23 Dec 2024 11:11:27 -0500
-In-Reply-To: <20241017155516.2582369-3-eric.snowberg@oracle.com>
-References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
-	 <20241017155516.2582369-3-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1734979362; c=relaxed/simple;
+	bh=nmNLPuF0b0SkMRFd3dwgE4963RNLX8W3j1FJMq2a0JA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=joZGhMM+yuUv7UPmh1i73Gd0tasaPxy7QIn1881BP7P7CDbcjdoGYGpyz9o0nD33EVZkNIoUTUQsBwvstwDL2rxNzjQ6bSvEcyTkFr2Xg1LOG4iFKRXAxZ2Et6C7cK9bdMAPR6RLrRdi13n0kAtGCXGZYnCFaK1Cpf9xrS2XYwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ma77nd8w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E85AC4CED3;
+	Mon, 23 Dec 2024 18:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734979361;
+	bh=nmNLPuF0b0SkMRFd3dwgE4963RNLX8W3j1FJMq2a0JA=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=Ma77nd8wO6js0sRAaB03DKLUUR3RNhqmtqfir/+xQfoYyR5yYSOrVGoi0Vk2qZi5t
+	 dmt+cnx+cgf5PUe6d/BZkxhfdvKK+mTM3RYpzzw13XswfL5QAVjrJQctCyfKBUJb3n
+	 /eisJac25MAXOTTDrJjecAWLdqHtsWNd2u/rT2SAVCh40Bc+Qar+oOgRNw4juRD+om
+	 jiwjBmxklqZUdwNjGPMCEsJwcfR6EgdWAF946f34tzps94357Xtu8On9MnjQhE5f/w
+	 z/G5/WyK0HuK57M1wSTb5fjjuyO2xNRrMY15zdsppFGY8ypcf2KXCgcquvMLLJ16oA
+	 wIR7mphgscR9Q==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zWC_HwY6eOMjnFjJIxS35vwJKxpFNaBC
-X-Proofpoint-GUID: t9XBt8-Af9dxcZVpdvCwK2uRSMsNNu_j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- mlxscore=0 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412230143
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 23 Dec 2024 20:42:36 +0200
+Message-Id: <D6JAUP5NAXZ2.MU9167EXYHGM@kernel.org>
+Cc: <stable@vger.kernel.org>, "Andy Liang" <andy.liang@hpe.com>, "Matthew
+ Garrett" <mjg59@srcf.ucam.org>, "Roberto Sassu" <roberto.sassu@huawei.com>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] tpm: Map the ACPI provided event log
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Jarkko Sakkinen" <jarkko@kernel.org>,
+ <linux-integrity@vger.kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>, "Colin Ian King"
+ <colin.i.king@gmail.com>, "Joe Hattori" <joe@pf.is.s.u-tokyo.ac.jp>, "James
+ Bottomley" <James.Bottomley@HansenPartnership.com>, "Stefan Berger"
+ <stefanb@linux.ibm.com>, "Ard Biesheuvel" <ardb@kernel.org>, "Mimi Zohar"
+ <zohar@linux.ibm.com>, "Al Viro" <viro@zeniv.linux.org.uk>, "Kylene Jo
+ Hall" <kjhall@us.ibm.com>, "Seiji Munetoh" <munetoh@jp.ibm.com>, "Reiner
+ Sailer" <sailer@us.ibm.com>, "Andrew Morton" <akpm@osdl.org>
+X-Mailer: aerc 0.18.2
+References: <20241222143022.297309-1-jarkko@kernel.org>
+In-Reply-To: <20241222143022.297309-1-jarkko@kernel.org>
 
-On Thu, 2024-10-17 at 09:55 -0600, Eric Snowberg wrote:
-> Introduce system_key_link(), a new function to allow a keyring to link
-> to a key contained within one of the system keyrings (builtin, secondary,
-> or platform). Depending on how the kernel is built, if the machine
-> keyring is available, it will be checked as well, since it is linked to
-> the secondary keyring. If the asymmetric key id matches a key within one
-> of these system keyrings, the matching key is linked into the passed in
-> keyring.
->=20
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+On Sun Dec 22, 2024 at 4:30 PM EET, Jarkko Sakkinen wrote:
+> The following failure was reported:
+>
+> [   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id=
+ 0)
+> [   10.848132][    T1] ------------[ cut here ]------------
+> [   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __=
+alloc_pages_noprof+0x2ca/0x330
+> [   10.862827][    T1] Modules linked in:
+> [   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted =
+6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98=
+293a7c9eba9013378d807364c088c9375
+> [   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant D=
+L320 Gen12, BIOS 1.20 10/28/2024
+> [   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
+> [   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe=
+ ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce=
+ 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
+> [   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
+> [   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0=
+000000000000000
+> [   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0=
+000000000040cc0
+>
+> Above shows that ACPI pointed a 16 MiB buffer for the log events because
+> RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
+> bug by mapping the region when needed instead of copying.
+>
+> Cc: stable@vger.kernel.org # v2.6.16+
+> Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
+> Reported-by: Andy Liang <andy.liang@hpe.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D219495
+> Suggested-by: Matthew Garrett <mjg59@srcf.ucam.org>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+As you can see from the bug comments clearly both v2 and v3 pass the
+tests in the failing hardware. I don't think it is really a problem for
+us to map 16 MB of address space, as that is zero cost of resources,
+even if there is only some dozens of kilobytes of data. Since ACPI
+does that it will never be available for general consumption anyway.
 
-> ---
->  certs/system_keyring.c        | 30 ++++++++++++++++++++++++++++++
->  include/keys/system_keyring.h |  7 ++++++-
->  2 files changed, 36 insertions(+), 1 deletion(-)
->=20
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index e344cee10d28..4abee7514442 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -20,6 +20,9 @@
->  static struct key *builtin_trusted_keys;
->  #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
->  static struct key *secondary_trusted_keys;
-> +#define system_trusted_keys secondary_trusted_keys
-> +#else
-> +#define system_trusted_keys builtin_trusted_keys
->  #endif
->  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
->  static struct key *machine_trusted_keys;
-> @@ -420,3 +423,30 @@ void __init set_platform_trusted_keys(struct key *ke=
-yring)
->  	platform_trusted_keys =3D keyring;
->  }
->  #endif
-> +
-> +/**
-> + * system_key_link - Link to a system key
-> + * @keyring: The keyring to link into
-> + * @id: The asymmetric key id to look for in the system keyring
-> + *
-> + * Search the system keyrings to see if one of them contains a matching =
-"id".
-> + * If there is a match, link the key into "keyring".  System keyrings al=
-ways
-> + * includes the builtin. If any of the following keyrings are enabled:
-> + * secondary, machine, and platform they are searched as well.
-> + */
-> +int system_key_link(struct key *keyring, struct asymmetric_key_id *id)
-> +{
-> +	struct key *key;
-> +
-> +	key =3D find_asymmetric_key(system_trusted_keys, id, NULL, NULL, false)=
-;
-> +	if (!IS_ERR(key))
-> +		return key_link(keyring, key);
-> +
-> +	if (platform_trusted_keys) {
-> +		key =3D find_asymmetric_key(platform_trusted_keys, id, NULL, NULL, fal=
-se);
-> +		if (!IS_ERR(key))
-> +			return key_link(keyring, key);
-> +	}
-> +
-> +	return -ENOKEY;
-> +}
-> diff --git a/include/keys/system_keyring.h b/include/keys/system_keyring.=
-h
-> index 8365adf842ef..b47ac8e2001a 100644
-> --- a/include/keys/system_keyring.h
-> +++ b/include/keys/system_keyring.h
-> @@ -9,6 +9,7 @@
->  #define _KEYS_SYSTEM_KEYRING_H
-> =20
->  #include <linux/key.h>
-> +struct asymmetric_key_id;
-> =20
->  enum blacklist_hash_type {
->  	/* TBSCertificate hash */
-> @@ -28,7 +29,7 @@ int restrict_link_by_digsig_builtin(struct key *dest_ke=
-yring,
->  				    const union key_payload *payload,
->  				    struct key *restriction_key);
->  extern __init int load_module_cert(struct key *keyring);
-> -
-> +extern int system_key_link(struct key *keyring, struct asymmetric_key_id=
- *id);
->  #else
->  #define restrict_link_by_builtin_trusted restrict_link_reject
->  #define restrict_link_by_digsig_builtin restrict_link_reject
-> @@ -38,6 +39,10 @@ static inline __init int load_module_cert(struct key *=
-keyring)
->  	return 0;
->  }
-> =20
-> +static inline int system_key_link(struct key *keyring, struct asymmetric=
-_key_id *id)
-> +{
-> +	return 0;
-> +}
->  #endif
-> =20
->  #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+Also I've tested the following configurations in QEMU:
 
+1. TPM2 FIFO (or TIS)
+2. TPM2 CRB
+3. TPM1 FIFO
+
+95 insertions and 65 deletions is neither too bad figure, and as
+side-effect makes tpm1.c and tpm2.c pretty much chip independent.
+
+James earlier suggestion to "fix" also OF and other stuff is
+purposely left out as we don't falling tree over there. They
+should continue to use devm_kmalloc() for the moment although
+in principle zero copy mapping is always better (but definitely
+notin the scope of bug fix).
+
+BR, Jarkko
 
