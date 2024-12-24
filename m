@@ -1,140 +1,488 @@
-Return-Path: <linux-integrity+bounces-4466-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4467-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D8F49FB823
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 02:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD81F9FB907
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 04:54:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BD851884B45
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 01:13:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 024AF18809A5
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 03:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E21DF946C;
-	Tue, 24 Dec 2024 01:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DD43E499;
+	Tue, 24 Dec 2024 03:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sTvRZ8WV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H31dE83f"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48EBF372;
-	Tue, 24 Dec 2024 01:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860FDEBE;
+	Tue, 24 Dec 2024 03:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735002781; cv=none; b=FZ48E3GMqaUPAwnSNC2svVvOhYwo1cPfInWJ9vWrcjcxroY2enTUW3U3Ss8zT05+HYUiTqKzvG3lWjGFGAUqdNmRSpHL3KGfUfR/l+zGRc3eOxm/MAmQvM39rIcYszxU/OitcWhenK0x3X3SvWBJ8zbcrwFE9Z261nubsIs+c3U=
+	t=1735012483; cv=none; b=qz3y/GODJQMLIRSccFkX/iV3O+c9s8O1jTvcQTNJ7faEDJRt5n3qMUv0JXb++Os1bCFK0VRoqKpOL7Y4pWAMxk6KN9wu+dfS0FA4qa+3xZNV/5+jrxLwa8Ta8DG+ofOuwbG8ppjdGFyw5/EDKs3l7RbFjlYBvl1uPhybEpdN4cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735002781; c=relaxed/simple;
-	bh=gBzo0TsTHVq5EE7cP3zJjMmpv03XvuAwlF+cgKEGl4g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HXK/4F/8RrfWSQ3JBXwm0qapiWirpdE7e+SiirnGXQOqBqBV9xXh1x5fHju3PhKKuJ/EgV91aG3P33Ed9lFLEEIh4lngw3YdMKyzHF6YyVtMVAdA4efYXf0Y5whp0cJ+WQnOSKxBcw0qUFvgJo528Kq/ok/mcf5SbnFbIXsK9iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sTvRZ8WV; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNEdUPK020183;
-	Tue, 24 Dec 2024 01:11:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=7LTy3+
-	qcIMcjFutY9FBmUWQ9rexhOuVgFr1GEJJnLEI=; b=sTvRZ8WVh6k6YhRihVlIeF
-	NdfcuScfbirQSCTU6YSL68AQ8cksJ7URyflvs8h2GUCXVbqA1N3Ws5da1xPchXlq
-	ObatPmjOkCLsXNHpXFxYZvtSaDsSWWt+DEGWUGwPGF6zWD0y3buhJQOVCRs017qu
-	rk/oBEqVo0IRcnGNh1C0yFBOOe+mILExvUCkapCy38lZc3G5iePdxGrrp81Emois
-	uN8LkhOQ/Gwh3UFig5fU2BCYRK4PAKiMpQEXNKqCNazCjjvGs/iK1Wev/q1Wa3Po
-	ZcNoWK7nXzn48fSrG0cOO0h7kIAJ5LpJFNe/GEmnjdIqKyuZhErjCh6bCzMvAo8Q
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43q0bh4x77-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Dec 2024 01:11:39 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BO1AuLp021037;
-	Tue, 24 Dec 2024 01:11:38 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43q0bh4x73-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Dec 2024 01:11:38 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNNfTiX020197;
-	Tue, 24 Dec 2024 01:11:37 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43p8cy84nc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Dec 2024 01:11:37 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BO1BaCR9765402
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Dec 2024 01:11:36 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B5DD158043;
-	Tue, 24 Dec 2024 01:11:36 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 75A4558059;
-	Tue, 24 Dec 2024 01:11:34 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.60.117])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 24 Dec 2024 01:11:34 +0000 (GMT)
-Message-ID: <110996a70889fcd9f8452b7bb993732b716c919a.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH v3 13/13] clavis: Kunit support
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Eric Snowberg <eric.snowberg@oracle.com>,
-        linux-security-module@vger.kernel.org
-Cc: dhowells@redhat.com, dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, ardb@kernel.org, jarkko@kernel.org,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, mic@digikod.net,
-        casey@schaufler-ca.com, stefanb@linux.ibm.com, ebiggers@kernel.org,
-        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
-Date: Mon, 23 Dec 2024 20:11:33 -0500
-In-Reply-To: <20241017155516.2582369-14-eric.snowberg@oracle.com>
-References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
-	 <20241017155516.2582369-14-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1735012483; c=relaxed/simple;
+	bh=gON3jis2daZvZrZcDHIDCKhEplwG2bItnGmHX7f3Ggo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DMJtmmjhPLwoTQnBwmnP9xYxzJGjuylAT8hv1Sx29DgBp4gNp7b4qHf+iM3RauVvuBS0BdaYhgPi2/qRDrszh81+zwWxAFAl/xX7aamR81v5anpcMnVkeOXKsCGzp9K1NM4uZdHMc0UhVAPPIC1t41HQGECcM7ZNqs3XQ935m3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H31dE83f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6D9C4CED0;
+	Tue, 24 Dec 2024 03:54:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735012483;
+	bh=gON3jis2daZvZrZcDHIDCKhEplwG2bItnGmHX7f3Ggo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=H31dE83fKe8tjMZXtYeuYTMZheZWiKrwVz2FOeyj1MiI3jl0Qc4msUbpJiwo8VrJf
+	 QJHgCgh7BnoQpL/UywD8c9T3GoorzoDDtEnap9mOKOTv6qSBrOCzfhazGPt/xrv+uf
+	 RU0y4RtGRpWeH+JcWFWYTZG9xDy/LkIr+KHVjtF20f90h7y/qKithVufIxBRUV8ucn
+	 NFg87/vYYeMhyHsv0eGZ570gZrZFmXYUIL8f5Y1Az25gD06l68lQfas2u+NAM8Deuv
+	 +8TMh+8p9O+R00chIsr/zbLaCgUEfRvnhMtmx5bygvFq7UayuvMd67VE7A3+RtY0tU
+	 7Cp0yXF5HM+0Q==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Reiner Sailer <sailer@us.ibm.com>,
+	Andrew Morton <akpm@osdl.org>,
+	Kylene Jo Hall <kjhall@us.ibm.com>,
+	Seiji Munetoh <munetoh@jp.ibm.com>
+Cc: stable@vger.kernel.org,
+	Andy Liang <andy.liang@hpe.com>,
+	Matthew Garrett <mjg59@srcf.ucam.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4] tpm: Map the ACPI provided event log
+Date: Tue, 24 Dec 2024 05:54:07 +0200
+Message-ID: <20241224035423.10566-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: OUgtaAXRwi0YGR_kRmEbEBgacM-JjVxY
-X-Proofpoint-GUID: PsIxg0Y5V-rtSmUTSczEGELShNeEb-vw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 spamscore=0
- impostorscore=0 malwarescore=0 adultscore=0 mlxscore=0 clxscore=1015
- mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2411120000 definitions=main-2412240005
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2024-10-17 at 09:55 -0600, Eric Snowberg wrote:
-> +config SECURITY_CLAVIS_KUNIT_TEST
-> +	bool "KUnit tests for Clavis" if !KUNIT_ALL_TESTS
-> +	depends on SECURITY_CLAVIS && KUNIT
+The following failure was reported:
 
-Change KUNIT -> KUNIT=3Dy
+[   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id 0)
+[   10.848132][    T1] ------------[ cut here ]------------
+[   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __alloc_pages_noprof+0x2ca/0x330
+[   10.862827][    T1] Modules linked in:
+[   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98293a7c9eba9013378d807364c088c9375
+[   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant DL320 Gen12, BIOS 1.20 10/28/2024
+[   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
+[   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
+[   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
+[   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0000000000000000
+[   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0000000000040cc0
 
-> +	default KUNIT_ALL_TESTS
-> +	select SYSTEM_BLACKLIST_KEYRING
-> +	select SYSTEM_REVOCATION_LIST
-> +	help
-> +	=C2=A0 Build KUnit tests for Clavis.
-> +
-> +	=C2=A0 See the KUnit documentation in Documentation/dev-tools/kunit
-> +
-> +	=C2=A0 Run all KUnit tests for Clavis with:
-> +	=C2=A0 ./tools/testing/kunit/kunit.py run --kunitconfig security/clavis
-> +
-> +	=C2=A0 If you are unsure how to answer this question, answer N.
+Above shows that ACPI pointed a 16 MiB buffer for the log events because
+RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
+bug by mapping the region when needed instead of copying.
+---
+Cc: stable@vger.kernel.org # v2.6.16+
+Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
+Reported-by: Andy Liang <andy.liang@hpe.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219495
+Suggested-by: Matthew Garrett <mjg59@srcf.ucam.org>
+Tested-by: Andy Liang <andy.liang@hpe.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v4:
+* Added tested-by from Andy Liang.
+v3:
+* Flag mapping code in tpm{1,2}.c with CONFIG_ACPI (nios2 compilation
+  fix).
+v2:
+* There was some extra cruft (irrelevant diff), which is now wiped away.
+* Added missing tags (fixes, stable).
+---
+ drivers/char/tpm/eventlog/acpi.c   | 28 +++++++---------------
+ drivers/char/tpm/eventlog/common.c | 25 +++++++++++++-------
+ drivers/char/tpm/eventlog/common.h | 28 ++++++++++++++++++++++
+ drivers/char/tpm/eventlog/tpm1.c   | 30 ++++++++++++++---------
+ drivers/char/tpm/eventlog/tpm2.c   | 38 +++++++++++++++++-------------
+ include/linux/tpm.h                |  1 +
+ 6 files changed, 95 insertions(+), 55 deletions(-)
 
-thanks,
-
-Mimi
+diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+index 69533d0bfb51..2c4f7355b584 100644
+--- a/drivers/char/tpm/eventlog/acpi.c
++++ b/drivers/char/tpm/eventlog/acpi.c
+@@ -70,14 +70,11 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 	acpi_status status;
+ 	void __iomem *virt;
+ 	u64 len, start;
+-	struct tpm_bios_log *log;
+ 	struct acpi_table_tpm2 *tbl;
+ 	struct acpi_tpm2_phy *tpm2_phy;
+ 	int format;
+ 	int ret;
+ 
+-	log = &chip->log;
+-
+ 	/* Unfortuntely ACPI does not associate the event log with a specific
+ 	 * TPM, like PPI. Thus all ACPI TPMs will read the same log.
+ 	 */
+@@ -135,36 +132,27 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 		return -EIO;
+ 	}
+ 
+-	/* malloc EventLog space */
+-	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
+-	if (!log->bios_event_log)
+-		return -ENOMEM;
+-
+-	log->bios_event_log_end = log->bios_event_log + len;
+-
+ 	virt = acpi_os_map_iomem(start, len);
+ 	if (!virt) {
+ 		dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
+ 		/* try EFI log next */
+-		ret = -ENODEV;
+-		goto err;
++		return -ENODEV;
+ 	}
+ 
+-	memcpy_fromio(log->bios_event_log, virt, len);
+-
+-	acpi_os_unmap_iomem(virt, len);
+-
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
+-	    !tpm_is_tpm2_log(log->bios_event_log, len)) {
++	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_tpm2_log(virt, len)) {
++		acpi_os_unmap_iomem(virt, len);
+ 		/* try EFI log next */
+ 		ret = -ENODEV;
+ 		goto err;
+ 	}
+ 
++	acpi_os_unmap_iomem(virt, len);
++	chip->flags |= TPM_CHIP_FLAG_ACPI_LOG;
++	chip->log.bios_event_log = (void *)start;
++	chip->log.bios_event_log_end = (void *)start + len;
+ 	return format;
+ 
+ err:
+-	devm_kfree(&chip->dev, log->bios_event_log);
+-	log->bios_event_log = NULL;
++	acpi_os_unmap_iomem(virt, len);
+ 	return ret;
+ }
+diff --git a/drivers/char/tpm/eventlog/common.c b/drivers/char/tpm/eventlog/common.c
+index 4c0bbba64ee5..44340ca6e2ac 100644
+--- a/drivers/char/tpm/eventlog/common.c
++++ b/drivers/char/tpm/eventlog/common.c
+@@ -27,6 +27,7 @@ static int tpm_bios_measurements_open(struct inode *inode,
+ {
+ 	int err;
+ 	struct seq_file *seq;
++	struct tpm_measurements *priv;
+ 	struct tpm_chip_seqops *chip_seqops;
+ 	const struct seq_operations *seqops;
+ 	struct tpm_chip *chip;
+@@ -42,13 +43,18 @@ static int tpm_bios_measurements_open(struct inode *inode,
+ 	get_device(&chip->dev);
+ 	inode_unlock(inode);
+ 
+-	/* now register seq file */
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++	priv->chip = chip;
++
+ 	err = seq_open(file, seqops);
+-	if (!err) {
+-		seq = file->private_data;
+-		seq->private = chip;
+-	} else {
++	if (err) {
++		kfree(priv);
+ 		put_device(&chip->dev);
++	} else {
++		seq = file->private_data;
++		seq->private = priv;
+ 	}
+ 
+ 	return err;
+@@ -58,11 +64,14 @@ static int tpm_bios_measurements_release(struct inode *inode,
+ 					 struct file *file)
+ {
+ 	struct seq_file *seq = file->private_data;
+-	struct tpm_chip *chip = seq->private;
++	struct tpm_measurements *priv = seq->private;
++	int ret;
+ 
+-	put_device(&chip->dev);
++	put_device(&priv->chip->dev);
++	ret = seq_release(inode, file);
++	kfree(priv);
+ 
+-	return seq_release(inode, file);
++	return ret;
+ }
+ 
+ static const struct file_operations tpm_bios_measurements_ops = {
+diff --git a/drivers/char/tpm/eventlog/common.h b/drivers/char/tpm/eventlog/common.h
+index 47ff8136ceb5..b98fd6d9a6e9 100644
+--- a/drivers/char/tpm/eventlog/common.h
++++ b/drivers/char/tpm/eventlog/common.h
+@@ -1,12 +1,40 @@
+ #ifndef __TPM_EVENTLOG_COMMON_H__
+ #define __TPM_EVENTLOG_COMMON_H__
+ 
++#include <linux/acpi.h>
+ #include "../tpm.h"
+ 
+ extern const struct seq_operations tpm1_ascii_b_measurements_seqops;
+ extern const struct seq_operations tpm1_binary_b_measurements_seqops;
+ extern const struct seq_operations tpm2_binary_b_measurements_seqops;
+ 
++struct tpm_measurements {
++	struct tpm_chip *chip;
++	void *start;
++	void *end;
++};
++
++static inline bool tpm_measurements_map(struct tpm_measurements *measurements)
++{
++	struct tpm_chip *chip = measurements->chip;
++	struct tpm_bios_log *log = &chip->log;
++	size_t size;
++
++	size = log->bios_event_log_end - log->bios_event_log;
++	measurements->start = log->bios_event_log;
++
++#ifdef CONFIG_ACPI
++	if (chip->flags & TPM_CHIP_FLAG_ACPI_LOG)
++		measurements->start = acpi_os_map_iomem((unsigned long)log->bios_event_log, size);
++#endif
++
++	if (!measurements->start)
++		return false;
++
++	measurements->end = measurements->start + size;
++	return true;
++}
++
+ #if defined(CONFIG_ACPI)
+ int tpm_read_log_acpi(struct tpm_chip *chip);
+ #else
+diff --git a/drivers/char/tpm/eventlog/tpm1.c b/drivers/char/tpm/eventlog/tpm1.c
+index 12ee42a31c71..aef6ee39423a 100644
+--- a/drivers/char/tpm/eventlog/tpm1.c
++++ b/drivers/char/tpm/eventlog/tpm1.c
+@@ -70,20 +70,23 @@ static const char* tcpa_pc_event_id_strings[] = {
+ static void *tpm1_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ {
+ 	loff_t i = 0;
+-	struct tpm_chip *chip = m->private;
+-	struct tpm_bios_log *log = &chip->log;
+-	void *addr = log->bios_event_log;
+-	void *limit = log->bios_event_log_end;
++	struct tpm_measurements *priv = m->private;
+ 	struct tcpa_event *event;
+ 	u32 converted_event_size;
+ 	u32 converted_event_type;
++	void *addr;
++
++	if (!tpm_measurements_map(priv))
++		return NULL;
++
++	addr = priv->start;
+ 
+ 	/* read over *pos measurements */
+ 	do {
+ 		event = addr;
+ 
+ 		/* check if current entry is valid */
+-		if (addr + sizeof(struct tcpa_event) > limit)
++		if (addr + sizeof(struct tcpa_event) > priv->end)
+ 			return NULL;
+ 
+ 		converted_event_size =
+@@ -93,7 +96,7 @@ static void *tpm1_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 
+ 		if (((converted_event_type == 0) && (converted_event_size == 0))
+ 		    || ((addr + sizeof(struct tcpa_event) + converted_event_size)
+-			> limit))
++			> priv->end))
+ 			return NULL;
+ 
+ 		if (i++ == *pos)
+@@ -109,9 +112,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+ 					loff_t *pos)
+ {
+ 	struct tcpa_event *event = v;
+-	struct tpm_chip *chip = m->private;
+-	struct tpm_bios_log *log = &chip->log;
+-	void *limit = log->bios_event_log_end;
++	struct tpm_measurements *priv = m->private;
+ 	u32 converted_event_size;
+ 	u32 converted_event_type;
+ 
+@@ -121,7 +122,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+ 	v += sizeof(struct tcpa_event) + converted_event_size;
+ 
+ 	/* now check if current entry is valid */
+-	if ((v + sizeof(struct tcpa_event)) > limit)
++	if ((v + sizeof(struct tcpa_event)) > priv->end)
+ 		return NULL;
+ 
+ 	event = v;
+@@ -130,7 +131,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+ 	converted_event_type = do_endian_conversion(event->event_type);
+ 
+ 	if (((converted_event_type == 0) && (converted_event_size == 0)) ||
+-	    ((v + sizeof(struct tcpa_event) + converted_event_size) > limit))
++	    ((v + sizeof(struct tcpa_event) + converted_event_size) > priv->end))
+ 		return NULL;
+ 
+ 	return v;
+@@ -138,6 +139,13 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
+ 
+ static void tpm1_bios_measurements_stop(struct seq_file *m, void *v)
+ {
++#ifdef CONFIG_ACPI
++	struct tpm_measurements *priv = m->private;
++	struct tpm_chip *chip = priv->chip;
++
++	if (chip->flags & TPM_CHIP_FLAG_ACPI_LOG)
++		acpi_os_unmap_iomem(priv->start, priv->end - priv->start);
++#endif
+ }
+ 
+ static int get_event_name(char *dest, struct tcpa_event *event,
+diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
+index 37a05800980c..6289d8893e46 100644
+--- a/drivers/char/tpm/eventlog/tpm2.c
++++ b/drivers/char/tpm/eventlog/tpm2.c
+@@ -41,20 +41,22 @@ static size_t calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
+ 
+ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ {
+-	struct tpm_chip *chip = m->private;
+-	struct tpm_bios_log *log = &chip->log;
+-	void *addr = log->bios_event_log;
+-	void *limit = log->bios_event_log_end;
++	struct tpm_measurements *priv = m->private;
+ 	struct tcg_pcr_event *event_header;
+ 	struct tcg_pcr_event2_head *event;
+ 	size_t size;
++	void *addr;
+ 	int i;
+ 
++	if (!tpm_measurements_map(priv))
++		return NULL;
++
++	addr = priv->start;
+ 	event_header = addr;
+ 	size = struct_size(event_header, event, event_header->event_size);
+ 
+ 	if (*pos == 0) {
+-		if (addr + size < limit) {
++		if (addr + size < priv->end) {
+ 			if ((event_header->event_type == 0) &&
+ 			    (event_header->event_size == 0))
+ 				return NULL;
+@@ -66,7 +68,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 		addr += size;
+ 		event = addr;
+ 		size = calc_tpm2_event_size(event, event_header);
+-		if ((addr + size >=  limit) || (size == 0))
++		if ((addr + size >= priv->end) || !size)
+ 			return NULL;
+ 	}
+ 
+@@ -74,7 +76,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 		event = addr;
+ 		size = calc_tpm2_event_size(event, event_header);
+ 
+-		if ((addr + size >= limit) || (size == 0))
++		if ((addr + size >= priv->end) || !size)
+ 			return NULL;
+ 		addr += size;
+ 	}
+@@ -87,14 +89,12 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ {
+ 	struct tcg_pcr_event *event_header;
+ 	struct tcg_pcr_event2_head *event;
+-	struct tpm_chip *chip = m->private;
+-	struct tpm_bios_log *log = &chip->log;
+-	void *limit = log->bios_event_log_end;
++	struct tpm_measurements *priv = m->private;
+ 	size_t event_size;
+ 	void *marker;
+ 
+ 	(*pos)++;
+-	event_header = log->bios_event_log;
++	event_header = priv->start;
+ 
+ 	if (v == SEQ_START_TOKEN) {
+ 		event_size = struct_size(event_header, event,
+@@ -109,13 +109,13 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ 	}
+ 
+ 	marker = marker + event_size;
+-	if (marker >= limit)
++	if (marker >= priv->end)
+ 		return NULL;
+ 	v = marker;
+ 	event = v;
+ 
+ 	event_size = calc_tpm2_event_size(event, event_header);
+-	if (((v + event_size) >= limit) || (event_size == 0))
++	if (((v + event_size) >= priv->end) || !event_size)
+ 		return NULL;
+ 
+ 	return v;
+@@ -123,13 +123,19 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ 
+ static void tpm2_bios_measurements_stop(struct seq_file *m, void *v)
+ {
++#ifdef CONFIG_ACPI
++	struct tpm_measurements *priv = m->private;
++	struct tpm_chip *chip = priv->chip;
++
++	if (chip->flags & TPM_CHIP_FLAG_ACPI_LOG)
++		acpi_os_unmap_iomem(priv->start, priv->end - priv->start);
++#endif
+ }
+ 
+ static int tpm2_binary_bios_measurements_show(struct seq_file *m, void *v)
+ {
+-	struct tpm_chip *chip = m->private;
+-	struct tpm_bios_log *log = &chip->log;
+-	struct tcg_pcr_event *event_header = log->bios_event_log;
++	struct tpm_measurements *priv = m->private;
++	struct tcg_pcr_event *event_header = priv->start;
+ 	struct tcg_pcr_event2_head *event = v;
+ 	void *temp_ptr;
+ 	size_t size;
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 20a40ade8030..f3d12738b93b 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -348,6 +348,7 @@ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_SUSPENDED			= BIT(8),
+ 	TPM_CHIP_FLAG_HWRNG_DISABLED		= BIT(9),
+ 	TPM_CHIP_FLAG_DISABLE			= BIT(10),
++	TPM_CHIP_FLAG_ACPI_LOG		= BIT(11),
+ };
+ 
+ #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
+-- 
+2.47.1
 
 
