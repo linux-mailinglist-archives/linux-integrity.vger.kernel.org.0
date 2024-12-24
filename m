@@ -1,506 +1,783 @@
-Return-Path: <linux-integrity+bounces-4470-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4471-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57C549FBFED
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 17:06:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84E489FC111
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 18:45:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91F11163CA3
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 16:06:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A11D918840D3
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 17:45:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DFFF1D63DE;
-	Tue, 24 Dec 2024 16:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5550E212F91;
+	Tue, 24 Dec 2024 17:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X3VAOVlI"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aKasivIp"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC5A86326;
-	Tue, 24 Dec 2024 16:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B141D799D;
+	Tue, 24 Dec 2024 17:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735056362; cv=none; b=cKBvRse42JCktcqZZfh2P5B9NI/VmVekfwq+FZ3A7KCUGJA/aDdsgtI7Bfr9i2oKSxJ/0IuzxbqlmSFHNChfarTSGsQoI24a0X0TRioTNR4RnlM7ojJQGSl4giMyzk/B1k+7DhAeylynQYftbefUwDe9x5CD1J5iVIbcAZjHL2s=
+	t=1735062312; cv=none; b=XY+w+BEWHESKZO+OpG7/KUysIBZ+GMY6W+wGh2yu6NiZZvWBvsmin/kxxkWWbjdVZ2mxhAwxJ1L28mO/m39HTdgJOEeyPYAgXI65yOkIMSxyPZqEmyIR3rFxNlcrZ7GoFha5b8mkbf5E2LYftsj2mkVRv7F8AYyTadOZiSy75Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735056362; c=relaxed/simple;
-	bh=gWn0mkOh7/QP5mpxRdp09YO/VDMsi4Lwq+6KhEOrgXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D+n8ioN7WvQi5bEIdXAWApdmplbXxAN4Jq4nFw1nbtY8maDQutwhHyZl+cBDC9GuSU8ZxfCkebQX1hTnLp682Yo0IM6HbI3LFZ22mTtwulmVU6GjElMG3yZOMunT22UWuR63SL2KkVk4iINfK0h5Op60BzBoo52X05j1GclAT2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X3VAOVlI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775F7C4CED0;
-	Tue, 24 Dec 2024 16:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735056361;
-	bh=gWn0mkOh7/QP5mpxRdp09YO/VDMsi4Lwq+6KhEOrgXg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=X3VAOVlIb/aTgAPD/hS+DDD3meLQAZvez+KCnMsXh5axOiQ0N9fku+zzBOd50Pihr
-	 VkkBB4UZLloqNLd0M2ivIwfku6DrgNzQ0sZMNd8ZuwrcaqDXMpHclCqlUHLHlHmasW
-	 ji6wb+X+36jVP01jjQ5e/ASXLwEq6w5DkTIsyYYmOALXIVgN4YKu7C6BC8EE9Wbdp2
-	 01bp3CkKMHrqES6KH9tDvYa7NIBIy/zcbwbEMplAbHGrV/mLt2dZQf8wuM69PWXzoK
-	 KBga+R4Zlnupktj29y/ycu+CUK97R1fmr1nEg/02vSHcYO6RoDBFWkZv5psogT9GbW
-	 fLOgXvwDSM2+Q==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-30219437e63so65127391fa.1;
-        Tue, 24 Dec 2024 08:06:01 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUel48L5jDfHkoPk+eouH8PhNWC88APer7/hHKSRRns3ww8rh6pIkqVrZnAjqh4zzVbG2VB1Ypw@vger.kernel.org, AJvYcCVk6IsuCPGLPICpPvj39rgbN0Z5Qekk59nuJfkX8tP0rGIV9786qFr/b1tK7BOKZmpGjnRwBvuxxWg0ieo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWL5FZ2Vvy/2xf5YMUvLhxOtdB8oYEda6AoOWs3kZnW7Y12fbb
-	YHYhuFgVbqDCTDolzy9ueocaisQ8T4ZuB9I74OMhgfMKm7L66vR5QY2Y4gGcdNbgi/3XvCmSPgb
-	gnRxFoF35pGDRZ9UATKP2by5bcnc=
-X-Google-Smtp-Source: AGHT+IG/z5Po6byU3VLO6wtW/F8pbL9HynkAo3ZxeneuuNjfOo2NOHqbkr3JuC5V6Yt8NehOj4QJPPSPz796ONLbSIo=
-X-Received: by 2002:ac2:5681:0:b0:53e:2098:861d with SMTP id
- 2adb3069b0e04-542212f0034mr7979969e87.15.1735056359747; Tue, 24 Dec 2024
- 08:05:59 -0800 (PST)
+	s=arc-20240116; t=1735062312; c=relaxed/simple;
+	bh=wHnb+WImNcE/bGTP5OYYvXsFJXXpjWcMLlUClt+mTc8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=M7tp1KAcLl4SHDGxjKXh2IcFVBW7dVJgRrIjYG7QCwLD/8XIWU1bynoall6mX2ddVxS/nPPo44Gmsewe2bXc8Ait+eWK9BYJVVqmPs7GwTvspoHrEcA7svi4uXZSg4sK8BnUjgr7CswXKC3uCBNsOF8JqEtgvpvVYCWYj21PTTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aKasivIp; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BOGavWp025841;
+	Tue, 24 Dec 2024 17:43:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=dKestP
+	QpUv2K3Y/1wqeTXcp/HysTpHiRWQPfgUpOOQg=; b=aKasivIpDXEZXY4yiF+INH
+	6vKNlveP+5zXnFdSO0bTLM3wcVR0M8EJuTOcY+PbkNrpuYD2xcRtBtlqpsYq3ehf
+	mBjJa2/22pFrTSiChiAqjsZ/cw12bUBE92dx5R3H24n8MmGOdI427UA8yeuDb6bB
+	Ca+1DDGuaRet/RNBEwTwjLcttK9aiAjZKr4oFHlVUusBcMxvGn2UxXyewC2BNm36
+	FfJuR8lJ1GVl6gbiw5PFURguB8liskit6hrpmbFsKlJde2Fm91ykS1N3WA1JUdH9
+	u9v8r/q09c6SqC4J3p3mtfiLm/kPtRtLopSgG8X45AwEI9t4NMe3L3up01kHrEYA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43qj0hbh67-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Dec 2024 17:43:35 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BOHhZjE004346;
+	Tue, 24 Dec 2024 17:43:35 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43qj0hbh63-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Dec 2024 17:43:35 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BOG5N5M010606;
+	Tue, 24 Dec 2024 17:43:33 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43p90n2vjk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Dec 2024 17:43:33 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BOHhWJO32375494
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Dec 2024 17:43:33 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9D08F58053;
+	Tue, 24 Dec 2024 17:43:32 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6575C58043;
+	Tue, 24 Dec 2024 17:43:29 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.59.17])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 24 Dec 2024 17:43:29 +0000 (GMT)
+Message-ID: <0d71ffced35abf40bbfadb6e03b053c24757183d.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v3 08/13] clavis: Introduce new LSM called clavis
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Eric Snowberg <eric.snowberg@oracle.com>,
+        linux-security-module@vger.kernel.org
+Cc: dhowells@redhat.com, dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, ardb@kernel.org, jarkko@kernel.org,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, mic@digikod.net,
+        casey@schaufler-ca.com, stefanb@linux.ibm.com, ebiggers@kernel.org,
+        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Date: Tue, 24 Dec 2024 12:43:28 -0500
+In-Reply-To: <20241017155516.2582369-9-eric.snowberg@oracle.com>
+References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
+	 <20241017155516.2582369-9-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241224040334.11533-1-jarkko@kernel.org>
-In-Reply-To: <20241224040334.11533-1-jarkko@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 24 Dec 2024 17:05:48 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGOcqEH68-Pp4+-WMpG-2D-iN6xAHFTQvQLobO1sE3QFA@mail.gmail.com>
-Message-ID: <CAMj1kXGOcqEH68-Pp4+-WMpG-2D-iN6xAHFTQvQLobO1sE3QFA@mail.gmail.com>
-Subject: Re: [PATCH v5] tpm: Map the ACPI provided event log
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Colin Ian King <colin.i.king@gmail.com>, 
-	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Stefan Berger <stefanb@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Kylene Jo Hall <kjhall@us.ibm.com>, 
-	Reiner Sailer <sailer@us.ibm.com>, Seiji Munetoh <munetoh@jp.ibm.com>, Andrew Morton <akpm@osdl.org>, 
-	stable@vger.kernel.org, Andy Liang <andy.liang@hpe.com>, 
-	Matthew Garrett <mjg59@srcf.ucam.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: X3ts4smAvCrt3bySj_tjCFakYo_zuN3n
+X-Proofpoint-GUID: 68eFynIMHPivo4ZDpPOipK-XozvnKAUn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 malwarescore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 adultscore=0 phishscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412240152
 
-On Tue, 24 Dec 2024 at 05:03, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> The following failure was reported:
->
-> [   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id 0)
-> [   10.848132][    T1] ------------[ cut here ]------------
-> [   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __alloc_pages_noprof+0x2ca/0x330
-> [   10.862827][    T1] Modules linked in:
-> [   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98293a7c9eba9013378d807364c088c9375
-> [   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant DL320 Gen12, BIOS 1.20 10/28/2024
-> [   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
-> [   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
-> [   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
-> [   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0000000000000000
-> [   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0000000000040cc0
->
-> Above shows that ACPI pointed a 16 MiB buffer for the log events because
-> RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
-> bug by mapping the region when needed instead of copying.
->
-
-How can you be sure the memory contents will be preserved? Does it say
-anywhere in the TCG spec that this needs to use a memory type that is
-preserved by default?
-
-Also, the fact that we're now at v5 kind of proves my point that this
-approach may be too complex for a simple bug fix. Why not switch to
-kvmalloc() for a backportable fix, and improve upon that for future
-kernels?
-
-
-> Cc: stable@vger.kernel.org # v2.6.16+
-> Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
-> Reported-by: Andy Liang <andy.liang@hpe.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219495
-> Suggested-by: Matthew Garrett <mjg59@srcf.ucam.org>
-> Tested-by: Andy Liang <andy.liang@hpe.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+On Thu, 2024-10-17 at 09:55 -0600, Eric Snowberg wrote:
+> Introduce a new LSM called clavis.  The motivation behind this LSM is to
+> provide access control for system keys.  The access control list is
+> contained within a keyring call .clavis.  During boot if the clavis=3D bo=
+ot
+> arg is supplied with a key id contained within any of the current system
+> keyrings (builtin, secondary, machine, or platform) it shall be used as
+> the root of trust for validating anything that is added to the ACL list.
+>=20
+> The first restriction introduced with this LSM is the ability to enforce
+> key usage.  The kernel already has a notion of tracking key usage.  This
+> LSM adds the ability to enforce this usage based on the system owners
+> configuration.
+>=20
+> Each system key may have one or more uses defined within the ACL list.
+> Until an entry is added to the .clavis keyring, no other system key may
+> be used for any other purpose.
+>=20
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 > ---
-> v5:
-> * Spotted this right after sending: remove extra acpi_os_unmap_iomem()
->   call.
-> v4:
-> * Added tested-by from Andy Liang.
-> v3:
-> * Flag mapping code in tpm{1,2}.c with CONFIG_ACPI (nios2 compilation
->   fix).
-> v2:
-> * There was some extra cruft (irrelevant diff), which is now wiped away.
-> * Added missing tags (fixes, stable).
-> ---
->  drivers/char/tpm/eventlog/acpi.c   | 27 ++++++---------------
->  drivers/char/tpm/eventlog/common.c | 25 +++++++++++++-------
->  drivers/char/tpm/eventlog/common.h | 28 ++++++++++++++++++++++
->  drivers/char/tpm/eventlog/tpm1.c   | 30 ++++++++++++++---------
->  drivers/char/tpm/eventlog/tpm2.c   | 38 +++++++++++++++++-------------
->  include/linux/tpm.h                |  1 +
->  6 files changed, 94 insertions(+), 55 deletions(-)
->
-> diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-> index 69533d0bfb51..fb84dd3f6106 100644
-> --- a/drivers/char/tpm/eventlog/acpi.c
-> +++ b/drivers/char/tpm/eventlog/acpi.c
-> @@ -70,14 +70,11 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->         acpi_status status;
->         void __iomem *virt;
->         u64 len, start;
-> -       struct tpm_bios_log *log;
->         struct acpi_table_tpm2 *tbl;
->         struct acpi_tpm2_phy *tpm2_phy;
->         int format;
->         int ret;
->
-> -       log = &chip->log;
-> -
->         /* Unfortuntely ACPI does not associate the event log with a specific
->          * TPM, like PPI. Thus all ACPI TPMs will read the same log.
->          */
-> @@ -135,36 +132,26 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->                 return -EIO;
->         }
->
-> -       /* malloc EventLog space */
-> -       log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
-> -       if (!log->bios_event_log)
-> -               return -ENOMEM;
-> -
-> -       log->bios_event_log_end = log->bios_event_log + len;
-> -
->         virt = acpi_os_map_iomem(start, len);
->         if (!virt) {
->                 dev_warn(&chip->dev, "%s: Failed to map ACPI memory\n", __func__);
->                 /* try EFI log next */
-> -               ret = -ENODEV;
-> -               goto err;
-> +               return -ENODEV;
->         }
->
-> -       memcpy_fromio(log->bios_event_log, virt, len);
-> -
-> -       acpi_os_unmap_iomem(virt, len);
-> -
-> -       if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
-> -           !tpm_is_tpm2_log(log->bios_event_log, len)) {
-> +       if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_tpm2_log(virt, len)) {
->                 /* try EFI log next */
->                 ret = -ENODEV;
->                 goto err;
->         }
->
-> +       acpi_os_unmap_iomem(virt, len);
-> +       chip->flags |= TPM_CHIP_FLAG_ACPI_LOG;
-> +       chip->log.bios_event_log = (void *)start;
-> +       chip->log.bios_event_log_end = (void *)start + len;
->         return format;
->
->  err:
-> -       devm_kfree(&chip->dev, log->bios_event_log);
-> -       log->bios_event_log = NULL;
-> +       acpi_os_unmap_iomem(virt, len);
->         return ret;
->  }
-> diff --git a/drivers/char/tpm/eventlog/common.c b/drivers/char/tpm/eventlog/common.c
-> index 4c0bbba64ee5..44340ca6e2ac 100644
-> --- a/drivers/char/tpm/eventlog/common.c
-> +++ b/drivers/char/tpm/eventlog/common.c
-> @@ -27,6 +27,7 @@ static int tpm_bios_measurements_open(struct inode *inode,
->  {
->         int err;
->         struct seq_file *seq;
-> +       struct tpm_measurements *priv;
->         struct tpm_chip_seqops *chip_seqops;
->         const struct seq_operations *seqops;
->         struct tpm_chip *chip;
-> @@ -42,13 +43,18 @@ static int tpm_bios_measurements_open(struct inode *inode,
->         get_device(&chip->dev);
->         inode_unlock(inode);
->
-> -       /* now register seq file */
-> +       priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> +       if (!priv)
-> +               return -ENOMEM;
-> +       priv->chip = chip;
+>  Documentation/admin-guide/LSM/clavis.rst      | 191 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  crypto/asymmetric_keys/signature.c            |   4 +
+>  include/linux/lsm_count.h                     |   8 +-
+>  include/linux/lsm_hook_defs.h                 |   2 +
+>  include/linux/security.h                      |   7 +
+>  include/uapi/linux/lsm.h                      |   1 +
+>  security/Kconfig                              |  10 +-
+>  security/clavis/Makefile                      |   1 +
+>  security/clavis/clavis.c                      |  26 +++
+>  security/clavis/clavis.h                      |   4 +
+>  security/clavis/clavis_keyring.c              |  78 ++++++-
+>  security/security.c                           |  13 ++
+>  .../selftests/lsm/lsm_list_modules_test.c     |   3 +
+>  14 files changed, 346 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/admin-guide/LSM/clavis.rst
+>  create mode 100644 security/clavis/clavis.c
+>=20
+> diff --git a/Documentation/admin-guide/LSM/clavis.rst b/Documentation/adm=
+in-guide/LSM/clavis.rst
+> new file mode 100644
+> index 000000000000..0e924f638a86
+> --- /dev/null
+> +++ b/Documentation/admin-guide/LSM/clavis.rst
+> @@ -0,0 +1,191 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
->         err = seq_open(file, seqops);
-> -       if (!err) {
-> -               seq = file->private_data;
-> -               seq->private = chip;
-> -       } else {
-> +       if (err) {
-> +               kfree(priv);
->                 put_device(&chip->dev);
-> +       } else {
-> +               seq = file->private_data;
-> +               seq->private = priv;
->         }
->
->         return err;
-> @@ -58,11 +64,14 @@ static int tpm_bios_measurements_release(struct inode *inode,
->                                          struct file *file)
->  {
->         struct seq_file *seq = file->private_data;
-> -       struct tpm_chip *chip = seq->private;
-> +       struct tpm_measurements *priv = seq->private;
-> +       int ret;
->
-> -       put_device(&chip->dev);
-> +       put_device(&priv->chip->dev);
-> +       ret = seq_release(inode, file);
-> +       kfree(priv);
->
-> -       return seq_release(inode, file);
-> +       return ret;
+> +=3D=3D=3D=3D=3D=3D
+> +Clavis
+> +=3D=3D=3D=3D=3D=3D
+> +
+> +Clavis is a Linux Security Module that provides mandatory access control=
+ to
+> +system kernel keys (i.e. builtin, secondary, machine and platform). Thes=
+e
+> +restrictions will prohibit keys from being used for validation. Upon boo=
+t, the
+> +Clavis LSM is provided a key id as a boot parameter.  This single key is=
+ then
+> +used as the root of trust for any access control modifications made goin=
+g
+> +forward. Access control updates must be signed and validated by this key=
+.
+> +
+> +Clavis has its own keyring.  All ACL updates are applied through this ke=
+yring.
+> +The update must be signed by the single root of trust key.
+> +
+> +When enabled, all system keys are prohibited from being used until an AC=
+L is
+> +added for them.
+
+Until the single key has been loaded, Clavis is not enabled.  Any key on th=
+e
+system trusted keyrings remains usable for any purpose.
+
+-> When enabled, meaning the single key has been loaded onto the Clavis key=
+ring,
+all system keys are prohibited ...
+
+Until clavis is enabled, in my opinion the defaults should be restrictive (=
+e.g.
+CONFIG_INTEGRITY_CA_MACHINE_KEYRING,
+CONFIG_SECONDARY_TRUSTED_KEYRING_SIGNED_BY_BUILTIN). Once Clavis is enabled=
+,
+based=C2=A0on a new helper function is_clavis_enforced() we could consider =
+relaxing
+some of the existing keyring requirements (e.g. kernel modules).
+
+Mimi
+
+> +
+> +On UEFI platforms, the root of trust key shall survive a kexec. Trying t=
+o
+> +defeat or change it from the command line is not allowed.  The original =
+boot
+> +parameter is stored in UEFI and will always be referenced following a ke=
+xec.
+> +
+> +The Clavis LSM contains a system keyring call .clavis.  It contains a si=
+ngle
+> +asymmetric key that is used to validate anything added to it.  This key =
+can
+> +be added during boot and must be a preexisting system kernel key.  If th=
+e
+> +``clavis=3D`` boot parameter is not used, any asymmetric key the user ow=
+ns
+> +can be added to enable the LSM.
+> +
+> +The only user space components are OpenSSL and the keyctl utility. A new
+> +key type call ``clavis_key_acl`` is used for ACL updates. Any number of =
+signed
+> +``clavis_key_acl`` entries may be added to the .clavis keyring. The
+> +``clavis_key_acl`` contains the subject key identifier along with the al=
+lowed
+> +usage type for the key.
+> +
+> +The format is as follows:
+> +
+> +.. code-block:: console
+> +
+> +  XX:YYYYYYYYYYY
+> +
+> +  XX - Single byte of the key type
+> +	VERIFYING_MODULE_SIGNATURE            00
+> +	VERIFYING_FIRMWARE_SIGNATURE          01
+> +	VERIFYING_KEXEC_PE_SIGNATURE          02
+> +	VERIFYING_KEY_SIGNATURE               03
+> +	VERIFYING_KEY_SELF_SIGNATURE          04
+> +	VERIFYING_UNSPECIFIED_SIGNATURE       05
+> +  :  - ASCII colon
+> +  YY - Even number of hexadecimal characters representing the key id
+> +
+> +The ``clavis_key_acl`` must be S/MIME signed by the sole asymmetric key =
+contained
+> +within the .clavis keyring.
+> +
+> +In the future if new features are added, new key types could be created.
+> +
+> +Usage Examples
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +How to create a signing key:
+> +----------------------------
+> +
+> +.. code-block:: bash
+> +
+> +  cat <<EOF > clavis-lsm.genkey
+> +  [ req ]
+> +  default_bits =3D 4096
+> +  distinguished_name =3D req_distinguished_name
+> +  prompt =3D no
+> +  string_mask =3D utf8only
+> +  x509_extensions =3D v3_ca
+> +  [ req_distinguished_name ]
+> +  O =3D TEST
+> +  CN =3D Clavis LSM key
+> +  emailAddress =3D user@example.com
+> +  [ v3_ca ]
+> +  basicConstraints=3DCA:TRUE
+> +  subjectKeyIdentifier=3Dhash
+> +  authorityKeyIdentifier=3Dkeyid:always,issuer
+> +  keyUsage=3DdigitalSignature
+> +  EOF
+> +
+> +  openssl req -new -x509 -utf8 -sha256 -days 3650 -batch \
+> +        -config clavis-lsm.genkey -outform DER \
+> +        -out clavis-lsm.x509 -keyout clavis-lsm.priv
+> +
+> +How to get the Subject Key Identifier
+> +-------------------------------------
+> +
+> +.. code-block:: bash
+> +
+> +  openssl x509 -in ./clavis-lsm.x509 -inform der \
+> +        -ext subjectKeyIdentifier  -nocert \
+> +        | tail -n +2 | cut -f2 -d '=3D'| tr -d ':'
+> +  4a00ab9f35c9dc3aed7c225d22bafcbd9285e1e8
+> +
+> +How to enroll the signing key into the MOK
+> +------------------------------------------
+> +
+> +The key must now be added to the machine or platform keyrings.  This
+> +indicates the key was added by the system owner. For kernels booted thro=
+ugh
+> +shim, a first-stage UEFI boot loader, a key may be added to the machine =
+keyring
+> +by doing:
+> +
+> +.. code-block:: bash
+> +
+> +  mokutil --import ./clavis-lsm.x509
+> +
+> +and then rebooting and enrolling the key through MokManager.
+> +
+> +How to enable the Clavis LSM
+> +----------------------------
+> +
+> +Add the key id to the ``clavis=3D`` boot parameter.  With the example ab=
+ove the
+> +key id is the subject key identifier: 4a00ab9f35c9dc3aed7c225d22bafcbd92=
+85e1e8
+> +
+> +Add the following boot parameter:
+> +
+> +.. code-block:: console
+> +
+> +  clavis=3D4a00ab9f35c9dc3aed7c225d22bafcbd9285e1e8
+> +
+> +After booting there will be a single key contained in the .clavis keyrin=
+g:
+> +
+> +.. code-block:: bash
+> +
+> +  keyctl show %:.clavis
+> +  Keyring
+> +    254954913 ----swrv      0     0  keyring: .clavis
+> +    301905375 ---lswrv      0     0   \_ asymmetric: TEST: Clavis LSM ke=
+y: 4a00ab9f35c9dc3aed7c225d22bafcbd9285e1e8
+> +
+> +The original ``clavis=3D`` boot parameter will persist across any kexec.=
+ Changing it or
+> +removing it has no effect.
+> +
+> +
+> +How to sign an entry to be added to the .clavis keyring:
+> +--------------------------------------------------------
+> +
+> +In this example we have 3 keys in the machine keyring.  Our Clavis LSM k=
+ey, a
+> +key we want to use for kernel verification and a key we want to use for =
+module
+> +verification.
+> +
+> +.. code-block:: bash
+> +
+> +  keyctl show %:.machine
+> +  Keyring
+> +    999488265 ---lswrv      0     0  keyring: .machine
+> +    912608009 ---lswrv      0     0   \_ asymmetric: TEST: Module Key: 1=
+7eb8c5bf766364be094c577625213700add9471
+> +    646229664 ---lswrv      0     0   \_ asymmetric: TEST: Kernel Key: b=
+360d113c848ace3f1e6a80060b43d1206f0487d
+> +   1073737099 ---lswrv      0     0   \_ asymmetric: TEST: Clavis LSM ke=
+y: 4a00ab9f35c9dc3aed7c225d22bafcbd9285e1e8
+> +
+> +To update the .clavis kerying ACL list, first create a file containing t=
+he
+> +key usage type followed by a colon and the key id that we want to allow =
+to
+> +validate that usage.  In the first example we are saying key
+> +17eb8c5bf766364be094c577625213700add9471 is allowed to validate kernel m=
+odules.
+> +In the second example we are saying key b360d113c848ace3f1e6a80060b43d12=
+06f0487d
+> +is allowed to validate signed kernels.
+> +
+> +.. code-block:: bash
+> +
+> +  echo "00:17eb8c5bf766364be094c577625213700add9471" > module-acl.txt
+> +  echo "02:b360d113c848ace3f1e6a80060b43d1206f0487d" > kernel-acl.txt
+> +
+> +Now both these files must be signed by the key contained in the .clavis =
+keyring:
+> +
+> +.. code-block:: bash
+> +
+> +  openssl smime -sign -signer clavis-lsm.x509 -inkey clavis-lsm.priv -in=
+ module-acl.txt \
+> +        -out module-acl.pkcs7 -binary -outform DER -nodetach -noattr
+> +
+> +  openssl smime -sign -signer clavis-lsm.x509 -inkey clavis-lsm.priv -in=
+ kernel-acl.txt \
+> +        -out kernel-acl.pkcs7 -binary -outform DER -nodetach -noattr
+> +
+> +Afterwards the ACL list in the clavis keyring can be updated:
+> +
+> +.. code-block:: bash
+> +
+> +  keyctl padd clavis_key_acl "" %:.clavis < module-acl.pkcs7
+> +  keyctl padd clavis_key_acl "" %:.clavis < kernel-acl.pkcs7
+> +
+> +  keyctl show %:.clavis
+> +
+> +  Keyring
+> +    254954913 ----swrv      0     0  keyring: .clavis
+> +    301905375 ---lswrv      0     0   \_ asymmetric: TEST: Clavis LSM ke=
+y: 4a00ab9f35c9dc3aed7c225d22bafcbd9285e1e8
+> +   1013065475 --alswrv      0     0   \_ clavis_key_acl: 02:b360d113c848=
+ace3f1e6a80060b43d1206f0487d
+> +    445581284 --alswrv      0     0   \_ clavis_key_acl: 00:17eb8c5bf766=
+364be094c577625213700add9471
+> +
+> +Now the 17eb8c5bf766364be094c577625213700add9471 key can be used for
+> +validating kernel modules and the b360d113c848ace3f1e6a80060b43d1206f048=
+7d
+> +key can be used to validate signed kernels.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7ad507f49324..748ba3f1143e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5567,6 +5567,13 @@ F:	scripts/Makefile.clang
+>  F:	scripts/clang-tools/
+>  K:	\b(?i:clang|llvm)\b
+> =20
+> +CLAVIS LINUX SECURITY MODULE
+> +M:	Eric Snowberg <eric.snowberg@oracle.com>
+> +L:	linux-security-module@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/admin-guide/LSM/clavis.rst
+> +F:	security/clavis
+> +
+>  CLK API
+>  M:	Russell King <linux@armlinux.org.uk>
+>  L:	linux-clk@vger.kernel.org
+> diff --git a/crypto/asymmetric_keys/signature.c b/crypto/asymmetric_keys/=
+signature.c
+> index 2deff81f8af5..7e3a78650a93 100644
+> --- a/crypto/asymmetric_keys/signature.c
+> +++ b/crypto/asymmetric_keys/signature.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/err.h>
+>  #include <linux/slab.h>
+>  #include <linux/keyctl.h>
+> +#include <linux/security.h>
+>  #include <crypto/public_key.h>
+>  #include <keys/user-type.h>
+>  #include "asymmetric_keys.h"
+> @@ -153,6 +154,9 @@ int verify_signature(const struct key *key,
+> =20
+>  	ret =3D subtype->verify_signature(key, sig);
+> =20
+> +	if (!ret)
+> +		ret =3D security_key_verify_signature(key, sig);
+> +
+>  	pr_devel("<=3D=3D%s() =3D %d\n", __func__, ret);
+>  	return ret;
 >  }
->
->  static const struct file_operations tpm_bios_measurements_ops = {
-> diff --git a/drivers/char/tpm/eventlog/common.h b/drivers/char/tpm/eventlog/common.h
-> index 47ff8136ceb5..b98fd6d9a6e9 100644
-> --- a/drivers/char/tpm/eventlog/common.h
-> +++ b/drivers/char/tpm/eventlog/common.h
-> @@ -1,12 +1,40 @@
->  #ifndef __TPM_EVENTLOG_COMMON_H__
->  #define __TPM_EVENTLOG_COMMON_H__
->
-> +#include <linux/acpi.h>
->  #include "../tpm.h"
->
->  extern const struct seq_operations tpm1_ascii_b_measurements_seqops;
->  extern const struct seq_operations tpm1_binary_b_measurements_seqops;
->  extern const struct seq_operations tpm2_binary_b_measurements_seqops;
->
-> +struct tpm_measurements {
-> +       struct tpm_chip *chip;
-> +       void *start;
-> +       void *end;
+> diff --git a/include/linux/lsm_count.h b/include/linux/lsm_count.h
+> index 16eb49761b25..146aba3993d9 100644
+> --- a/include/linux/lsm_count.h
+> +++ b/include/linux/lsm_count.h
+> @@ -102,6 +102,11 @@
+>  #define IPE_ENABLED
+>  #endif
+> =20
+> +#if IS_ENABLED(CONFIG_SECURITY_CLAVIS)
+> +#define CLAVIS_ENABLED 1,
+> +#else
+> +#define CLAVIS_ENABLED
+> +#endif
+>  /*
+>   *  There is a trailing comma that we need to be accounted for. This is =
+done by
+>   *  using a skipped argument in __COUNT_LSMS
+> @@ -124,7 +129,8 @@
+>  		LANDLOCK_ENABLED	\
+>  		IMA_ENABLED		\
+>  		EVM_ENABLED		\
+> -		IPE_ENABLED)
+> +		IPE_ENABLED		\
+> +		CLAVIS_ENABLED)
+> =20
+>  #else
+> =20
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.=
+h
+> index 9eca013aa5e1..a405122a4657 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -410,6 +410,8 @@ LSM_HOOK(int, 0, key_getsecurity, struct key *key, ch=
+ar **buffer)
+>  LSM_HOOK(void, LSM_RET_VOID, key_post_create_or_update, struct key *keyr=
+ing,
+>  	 struct key *key, const void *payload, size_t payload_len,
+>  	 unsigned long flags, bool create)
+> +LSM_HOOK(int, 0, key_verify_signature, const struct key *key,
+> +	 const struct public_key_signature *sig)
+>  #endif /* CONFIG_KEYS */
+> =20
+>  #ifdef CONFIG_AUDIT
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 2ec8f3014757..4439be172a51 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -63,6 +63,7 @@ enum fs_value_type;
+>  struct watch;
+>  struct watch_notification;
+>  struct lsm_ctx;
+> +struct public_key_signature;
+> =20
+>  /* Default (no) options for the capable function */
+>  #define CAP_OPT_NONE 0x0
+> @@ -2053,6 +2054,7 @@ void security_key_post_create_or_update(struct key =
+*keyring, struct key *key,
+>  					const void *payload, size_t payload_len,
+>  					unsigned long flags, bool create);
+> =20
+> +int security_key_verify_signature(const struct key *key, const struct pu=
+blic_key_signature *sig);
+>  #else
+> =20
+>  static inline int security_key_alloc(struct key *key,
+> @@ -2087,6 +2089,11 @@ static inline void security_key_post_create_or_upd=
+ate(struct key *keyring,
+>  						      bool create)
+>  { }
+> =20
+> +static inline int security_key_verify_signature(const struct key *key,
+> +						const struct public_key_signature *sig)
+> +{
+> +	return 0;
+> +}
+>  #endif
+>  #endif /* CONFIG_KEYS */
+> =20
+> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
+> index 938593dfd5da..a2ef13c71143 100644
+> --- a/include/uapi/linux/lsm.h
+> +++ b/include/uapi/linux/lsm.h
+> @@ -65,6 +65,7 @@ struct lsm_ctx {
+>  #define LSM_ID_IMA		111
+>  #define LSM_ID_EVM		112
+>  #define LSM_ID_IPE		113
+> +#define LSM_ID_CLAVIS		114
+> =20
+>  /*
+>   * LSM_ATTR_XXX definitions identify different LSM attributes
+> diff --git a/security/Kconfig b/security/Kconfig
+> index 714ec08dda96..90355ddec5c0 100644
+> --- a/security/Kconfig
+> +++ b/security/Kconfig
+> @@ -265,11 +265,11 @@ endchoice
+> =20
+>  config LSM
+>  	string "Ordered list of enabled LSMs"
+> -	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,=
+apparmor,ipe,bpf" if DEFAULT_SECURITY_SMACK
+> -	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smac=
+k,tomoyo,ipe,bpf" if DEFAULT_SECURITY_APPARMOR
+> -	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,ipe,bpf" if DE=
+FAULT_SECURITY_TOMOYO
+> -	default "landlock,lockdown,yama,loadpin,safesetid,ipe,bpf" if DEFAULT_S=
+ECURITY_DAC
+> -	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,=
+apparmor,ipe,bpf"
+> +	default "landlock,lockdown,yama,loadpin,safesetid,smack,selinux,tomoyo,=
+apparmor,ipe,bpf,clavis" if DEFAULT_SECURITY_SMACK
+> +	default "landlock,lockdown,yama,loadpin,safesetid,apparmor,selinux,smac=
+k,tomoyo,ipe,bpf,clavis" if DEFAULT_SECURITY_APPARMOR
+> +	default "landlock,lockdown,yama,loadpin,safesetid,tomoyo,ipe,bpf,clavis=
+" if DEFAULT_SECURITY_TOMOYO
+> +	default "landlock,lockdown,yama,loadpin,safesetid,ipe,bpf,clavis" if DE=
+FAULT_SECURITY_DAC
+> +	default "landlock,lockdown,yama,loadpin,safesetid,selinux,smack,tomoyo,=
+apparmor,ipe,bpf,clavis"
+>  	help
+>  	  A comma-separated list of LSMs, in initialization order.
+>  	  Any LSMs left off this list, except for those with order
+> diff --git a/security/clavis/Makefile b/security/clavis/Makefile
+> index 16c451f45f37..a3430dd6bdf9 100644
+> --- a/security/clavis/Makefile
+> +++ b/security/clavis/Makefile
+> @@ -1,3 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> =20
+>  obj-$(CONFIG_SECURITY_CLAVIS) +=3D clavis_keyring.o
+> +obj-$(CONFIG_SECURITY_CLAVIS) +=3D clavis.o
+> diff --git a/security/clavis/clavis.c b/security/clavis/clavis.c
+> new file mode 100644
+> index 000000000000..21ade9e625dc
+> --- /dev/null
+> +++ b/security/clavis/clavis.c
+> @@ -0,0 +1,26 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +#include <linux/lsm_hooks.h>
+> +#include <uapi/linux/lsm.h>
+> +#include "clavis.h"
+> +
+> +static struct security_hook_list clavis_hooks[] __ro_after_init =3D {
+> +	LSM_HOOK_INIT(key_verify_signature, clavis_sig_verify),
 > +};
 > +
-> +static inline bool tpm_measurements_map(struct tpm_measurements *measurements)
+> +const struct lsm_id clavis_lsmid =3D {
+> +	.name =3D "clavis",
+> +	.id =3D LSM_ID_CLAVIS,
+> +};
+> +
+> +static int __init clavis_lsm_init(void)
 > +{
-> +       struct tpm_chip *chip = measurements->chip;
-> +       struct tpm_bios_log *log = &chip->log;
-> +       size_t size;
+> +	clavis_keyring_init();
+> +	security_add_hooks(clavis_hooks, ARRAY_SIZE(clavis_hooks), &clavis_lsmi=
+d);
+> +	return 0;
+> +};
 > +
-> +       size = log->bios_event_log_end - log->bios_event_log;
-> +       measurements->start = log->bios_event_log;
+> +DEFINE_LSM(clavis) =3D {
+> +	.name =3D "clavis",
+> +	.init =3D clavis_lsm_init,
+> +};
+> diff --git a/security/clavis/clavis.h b/security/clavis/clavis.h
+> index 92f77a1939ad..b77e4ec8edbe 100644
+> --- a/security/clavis/clavis.h
+> +++ b/security/clavis/clavis.h
+> @@ -3,6 +3,8 @@
+>  #define _SECURITY_CLAVIS_H_
+>  #include <keys/asymmetric-type.h>
+> =20
+> +struct public_key_signature;
 > +
-> +#ifdef CONFIG_ACPI
-> +       if (chip->flags & TPM_CHIP_FLAG_ACPI_LOG)
-> +               measurements->start = acpi_os_map_iomem((unsigned long)log->bios_event_log, size);
-> +#endif
+>  /* Max length for the asymmetric key id contained on the boot param */
+>  #define CLAVIS_BIN_KID_MAX   32
+>  #define CLAVIS_ASCII_KID_MAX 64
+> @@ -20,4 +22,6 @@ const char __initconst *const clavis_module_acl[] =3D {
+>  extern const char __initconst *const clavis_module_acl[];
+>  #endif
+> =20
+> +int __init clavis_keyring_init(void);
+> +int clavis_sig_verify(const struct key *key, const struct public_key_sig=
+nature *sig);
+>  #endif /* _SECURITY_CLAVIS_H_ */
+> diff --git a/security/clavis/clavis_keyring.c b/security/clavis/clavis_ke=
+yring.c
+> index 2a18d0e77189..1e1fbb54f6be 100644
+> --- a/security/clavis/clavis_keyring.c
+> +++ b/security/clavis/clavis_keyring.c
+> @@ -284,7 +284,7 @@ static void clavis_add_acl(const char *const *skid_li=
+st, struct key *keyring)
+>  	}
+>  }
+> =20
+> -static int __init clavis_keyring_init(void)
+> +int __init clavis_keyring_init(void)
+>  {
+>  	struct key_restriction *restriction;
+> =20
+> @@ -306,10 +306,82 @@ static int __init clavis_keyring_init(void)
+> =20
+>  void __init late_init_clavis_setup(void)
+>  {
+> -	clavis_keyring_init();
+> -
+>  	if (!clavis_boot_akid)
+>  		return;
+> =20
+>  	system_key_link(clavis_keyring, clavis_boot_akid);
+>  }
 > +
-> +       if (!measurements->start)
-> +               return false;
+> +int clavis_sig_verify(const struct key *key, const struct public_key_sig=
+nature *sig)
+> +{
+> +	const struct asymmetric_key_ids *kids =3D asymmetric_key_ids(key);
+> +	const struct asymmetric_key_subtype *subtype;
+> +	const struct asymmetric_key_id *newkid;
+> +	char *buf_ptr, *ptr;
+> +	key_ref_t ref;
+> +	int i, buf_len;
 > +
-> +       measurements->end = measurements->start + size;
-> +       return true;
+> +	if (!clavis_acl_enforced())
+> +		return 0;
+> +	if (key->type !=3D &key_type_asymmetric)
+> +		return -EKEYREJECTED;
+> +	subtype =3D asymmetric_key_subtype(key);
+> +	if (!subtype || !key->payload.data[0])
+> +		return -EKEYREJECTED;
+> +	if (!subtype->verify_signature)
+> +		return -EKEYREJECTED;
+> +
+> +	/* Allow sig validation when not using a system keyring */
+> +	if (!test_bit(PKS_USAGE_SET, &sig->usage_flags))
+> +		return 0;
+> +
+> +	/* The previous sig validation is enough to get on the clavis keyring *=
+/
+> +	if (sig->usage =3D=3D VERIFYING_CLAVIS_SIGNATURE)
+> +		return 0;
+> +
+> +	if (test_bit(PKS_REVOCATION_PASS, &sig->usage_flags))
+> +		return 0;
+> +
+> +	for (i =3D 0, buf_len =3D 0; i < 3; i++) {
+> +		if (kids->id[i]) {
+> +			newkid =3D (struct asymmetric_key_id *)kids->id[i];
+> +			if (newkid->len > buf_len)
+> +				buf_len =3D newkid->len;
+> +		}
+> +	}
+> +
+> +	if (!buf_len)
+> +		return -EKEYREJECTED;
+> +
+> +	/* Allocate enough space for the conversion to ascii plus the header. *=
+/
+> +	buf_ptr =3D kmalloc(buf_len * 2 + 4, GFP_KERNEL | __GFP_ZERO);
+> +
+> +	if (!buf_ptr)
+> +		return -ENOMEM;
+> +
+> +	for (i =3D 0; i < 3; i++) {
+> +		if (kids->id[i]) {
+> +			newkid =3D (struct asymmetric_key_id *)kids->id[i];
+> +			if (!newkid->len)
+> +				continue;
+> +
+> +			ptr =3D buf_ptr;
+> +			ptr =3D bin2hex(ptr, &sig->usage, 1);
+> +			*ptr++ =3D ':';
+> +			ptr =3D bin2hex(ptr, newkid->data, newkid->len);
+> +			*ptr =3D 0;
+> +			ref =3D keyring_search(make_key_ref(clavis_keyring_get(), true),
+> +					     &clavis_key_acl, buf_ptr, false);
+> +
+> +			if (!IS_ERR(ref))
+> +				break;
+> +		}
+> +	}
+> +
+> +	kfree(buf_ptr);
+> +
+> +	if (IS_ERR(ref))
+> +		return -EKEYREJECTED;
+> +
+> +	return 0;
 > +}
-> +
->  #if defined(CONFIG_ACPI)
->  int tpm_read_log_acpi(struct tpm_chip *chip);
->  #else
-> diff --git a/drivers/char/tpm/eventlog/tpm1.c b/drivers/char/tpm/eventlog/tpm1.c
-> index 12ee42a31c71..aef6ee39423a 100644
-> --- a/drivers/char/tpm/eventlog/tpm1.c
-> +++ b/drivers/char/tpm/eventlog/tpm1.c
-> @@ -70,20 +70,23 @@ static const char* tcpa_pc_event_id_strings[] = {
->  static void *tpm1_bios_measurements_start(struct seq_file *m, loff_t *pos)
->  {
->         loff_t i = 0;
-> -       struct tpm_chip *chip = m->private;
-> -       struct tpm_bios_log *log = &chip->log;
-> -       void *addr = log->bios_event_log;
-> -       void *limit = log->bios_event_log_end;
-> +       struct tpm_measurements *priv = m->private;
->         struct tcpa_event *event;
->         u32 converted_event_size;
->         u32 converted_event_type;
-> +       void *addr;
-> +
-> +       if (!tpm_measurements_map(priv))
-> +               return NULL;
-> +
-> +       addr = priv->start;
->
->         /* read over *pos measurements */
->         do {
->                 event = addr;
->
->                 /* check if current entry is valid */
-> -               if (addr + sizeof(struct tcpa_event) > limit)
-> +               if (addr + sizeof(struct tcpa_event) > priv->end)
->                         return NULL;
->
->                 converted_event_size =
-> @@ -93,7 +96,7 @@ static void *tpm1_bios_measurements_start(struct seq_file *m, loff_t *pos)
->
->                 if (((converted_event_type == 0) && (converted_event_size == 0))
->                     || ((addr + sizeof(struct tcpa_event) + converted_event_size)
-> -                       > limit))
-> +                       > priv->end))
->                         return NULL;
->
->                 if (i++ == *pos)
-> @@ -109,9 +112,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
->                                         loff_t *pos)
->  {
->         struct tcpa_event *event = v;
-> -       struct tpm_chip *chip = m->private;
-> -       struct tpm_bios_log *log = &chip->log;
-> -       void *limit = log->bios_event_log_end;
-> +       struct tpm_measurements *priv = m->private;
->         u32 converted_event_size;
->         u32 converted_event_type;
->
-> @@ -121,7 +122,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
->         v += sizeof(struct tcpa_event) + converted_event_size;
->
->         /* now check if current entry is valid */
-> -       if ((v + sizeof(struct tcpa_event)) > limit)
-> +       if ((v + sizeof(struct tcpa_event)) > priv->end)
->                 return NULL;
->
->         event = v;
-> @@ -130,7 +131,7 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
->         converted_event_type = do_endian_conversion(event->event_type);
->
->         if (((converted_event_type == 0) && (converted_event_size == 0)) ||
-> -           ((v + sizeof(struct tcpa_event) + converted_event_size) > limit))
-> +           ((v + sizeof(struct tcpa_event) + converted_event_size) > priv->end))
->                 return NULL;
->
->         return v;
-> @@ -138,6 +139,13 @@ static void *tpm1_bios_measurements_next(struct seq_file *m, void *v,
->
->  static void tpm1_bios_measurements_stop(struct seq_file *m, void *v)
->  {
-> +#ifdef CONFIG_ACPI
-> +       struct tpm_measurements *priv = m->private;
-> +       struct tpm_chip *chip = priv->chip;
-> +
-> +       if (chip->flags & TPM_CHIP_FLAG_ACPI_LOG)
-> +               acpi_os_unmap_iomem(priv->start, priv->end - priv->start);
-> +#endif
+> diff --git a/security/security.c b/security/security.c
+> index c5981e558bc2..097f8cedcd36 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -5522,6 +5522,19 @@ void security_key_post_create_or_update(struct key=
+ *keyring, struct key *key,
+>  	call_void_hook(key_post_create_or_update, keyring, key, payload,
+>  		       payload_len, flags, create);
 >  }
->
->  static int get_event_name(char *dest, struct tcpa_event *event,
-> diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
-> index 37a05800980c..6289d8893e46 100644
-> --- a/drivers/char/tpm/eventlog/tpm2.c
-> +++ b/drivers/char/tpm/eventlog/tpm2.c
-> @@ -41,20 +41,22 @@ static size_t calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
->
->  static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
->  {
-> -       struct tpm_chip *chip = m->private;
-> -       struct tpm_bios_log *log = &chip->log;
-> -       void *addr = log->bios_event_log;
-> -       void *limit = log->bios_event_log_end;
-> +       struct tpm_measurements *priv = m->private;
->         struct tcg_pcr_event *event_header;
->         struct tcg_pcr_event2_head *event;
->         size_t size;
-> +       void *addr;
->         int i;
->
-> +       if (!tpm_measurements_map(priv))
-> +               return NULL;
 > +
-> +       addr = priv->start;
->         event_header = addr;
->         size = struct_size(event_header, event, event_header->event_size);
->
->         if (*pos == 0) {
-> -               if (addr + size < limit) {
-> +               if (addr + size < priv->end) {
->                         if ((event_header->event_type == 0) &&
->                             (event_header->event_size == 0))
->                                 return NULL;
-> @@ -66,7 +68,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
->                 addr += size;
->                 event = addr;
->                 size = calc_tpm2_event_size(event, event_header);
-> -               if ((addr + size >=  limit) || (size == 0))
-> +               if ((addr + size >= priv->end) || !size)
->                         return NULL;
->         }
->
-> @@ -74,7 +76,7 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
->                 event = addr;
->                 size = calc_tpm2_event_size(event, event_header);
->
-> -               if ((addr + size >= limit) || (size == 0))
-> +               if ((addr + size >= priv->end) || !size)
->                         return NULL;
->                 addr += size;
->         }
-> @@ -87,14 +89,12 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
->  {
->         struct tcg_pcr_event *event_header;
->         struct tcg_pcr_event2_head *event;
-> -       struct tpm_chip *chip = m->private;
-> -       struct tpm_bios_log *log = &chip->log;
-> -       void *limit = log->bios_event_log_end;
-> +       struct tpm_measurements *priv = m->private;
->         size_t event_size;
->         void *marker;
->
->         (*pos)++;
-> -       event_header = log->bios_event_log;
-> +       event_header = priv->start;
->
->         if (v == SEQ_START_TOKEN) {
->                 event_size = struct_size(event_header, event,
-> @@ -109,13 +109,13 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
->         }
->
->         marker = marker + event_size;
-> -       if (marker >= limit)
-> +       if (marker >= priv->end)
->                 return NULL;
->         v = marker;
->         event = v;
->
->         event_size = calc_tpm2_event_size(event, event_header);
-> -       if (((v + event_size) >= limit) || (event_size == 0))
-> +       if (((v + event_size) >= priv->end) || !event_size)
->                 return NULL;
->
->         return v;
-> @@ -123,13 +123,19 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
->
->  static void tpm2_bios_measurements_stop(struct seq_file *m, void *v)
->  {
-> +#ifdef CONFIG_ACPI
-> +       struct tpm_measurements *priv = m->private;
-> +       struct tpm_chip *chip = priv->chip;
-> +
-> +       if (chip->flags & TPM_CHIP_FLAG_ACPI_LOG)
-> +               acpi_os_unmap_iomem(priv->start, priv->end - priv->start);
-> +#endif
->  }
->
->  static int tpm2_binary_bios_measurements_show(struct seq_file *m, void *v)
->  {
-> -       struct tpm_chip *chip = m->private;
-> -       struct tpm_bios_log *log = &chip->log;
-> -       struct tcg_pcr_event *event_header = log->bios_event_log;
-> +       struct tpm_measurements *priv = m->private;
-> +       struct tcg_pcr_event *event_header = priv->start;
->         struct tcg_pcr_event2_head *event = v;
->         void *temp_ptr;
->         size_t size;
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 20a40ade8030..f3d12738b93b 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -348,6 +348,7 @@ enum tpm_chip_flags {
->         TPM_CHIP_FLAG_SUSPENDED                 = BIT(8),
->         TPM_CHIP_FLAG_HWRNG_DISABLED            = BIT(9),
->         TPM_CHIP_FLAG_DISABLE                   = BIT(10),
-> +       TPM_CHIP_FLAG_ACPI_LOG          = BIT(11),
->  };
->
->  #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
-> --
-> 2.47.1
->
+> +/**
+> + * security_key_verify_signature - verify signature
+> + * @key: key
+> + * @sig: signature
+> + *
+> + * See whether signature verification is allowed based on the ACL for
+> + * key usage.
+> + */
+> +int security_key_verify_signature(const struct key *key, const struct pu=
+blic_key_signature *sig)
+> +{
+> +	return call_int_hook(key_verify_signature, key, sig);
+> +}
+>  #endif	/* CONFIG_KEYS */
+> =20
+>  #ifdef CONFIG_AUDIT
+> diff --git a/tools/testing/selftests/lsm/lsm_list_modules_test.c b/tools/=
+testing/selftests/lsm/lsm_list_modules_test.c
+> index 1cc8a977c711..cf292f976ac4 100644
+> --- a/tools/testing/selftests/lsm/lsm_list_modules_test.c
+> +++ b/tools/testing/selftests/lsm/lsm_list_modules_test.c
+> @@ -131,6 +131,9 @@ TEST(correct_lsm_list_modules)
+>  		case LSM_ID_IPE:
+>  			name =3D "ipe";
+>  			break;
+> +		case LSM_ID_CLAVIS:
+> +			name =3D "clavis";
+> +			break;
+>  		default:
+>  			name =3D "INVALID";
+>  			break;
+
 
