@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-4467-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4468-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD81F9FB907
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 04:54:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 869349FB90D
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 05:03:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 024AF18809A5
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 03:54:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFC42164F93
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 04:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DD43E499;
-	Tue, 24 Dec 2024 03:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3B9433A8;
+	Tue, 24 Dec 2024 04:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H31dE83f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iDuvz3cf"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860FDEBE;
-	Tue, 24 Dec 2024 03:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D127B442C;
+	Tue, 24 Dec 2024 04:03:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735012483; cv=none; b=qz3y/GODJQMLIRSccFkX/iV3O+c9s8O1jTvcQTNJ7faEDJRt5n3qMUv0JXb++Os1bCFK0VRoqKpOL7Y4pWAMxk6KN9wu+dfS0FA4qa+3xZNV/5+jrxLwa8Ta8DG+ofOuwbG8ppjdGFyw5/EDKs3l7RbFjlYBvl1uPhybEpdN4cI=
+	t=1735013020; cv=none; b=miY3wxkYbsheb+ZSw8icEYbEV9vX+68gki8JxcqyEOgW5jTLKAuNMTNJKINkP+m5+JvyYAext68KL7BlGeE3N0jlgmsR31zNZOQUnS5qIU0ouZdMBue/YHXK8TgSOw4JT/RPJSpgwwSd0EpkJjzXGzCC2p5rvOHARqOOGNC3RgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735012483; c=relaxed/simple;
-	bh=gON3jis2daZvZrZcDHIDCKhEplwG2bItnGmHX7f3Ggo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DMJtmmjhPLwoTQnBwmnP9xYxzJGjuylAT8hv1Sx29DgBp4gNp7b4qHf+iM3RauVvuBS0BdaYhgPi2/qRDrszh81+zwWxAFAl/xX7aamR81v5anpcMnVkeOXKsCGzp9K1NM4uZdHMc0UhVAPPIC1t41HQGECcM7ZNqs3XQ935m3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H31dE83f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6D9C4CED0;
-	Tue, 24 Dec 2024 03:54:42 +0000 (UTC)
+	s=arc-20240116; t=1735013020; c=relaxed/simple;
+	bh=C8WQDgynMbk2mc90mHz/WylFQluPG8ues+m+/hG7CZo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S78eRVCwJ5Nr9RFoqZY1gR3HiiSAYgB1WdJj3D0xfaBH0o1HCNcaH+uV8xm81Lc2PV7H6JIqvhmHuDDsL9Hk17hllsP4CHay5Zx1QOTrlwYKOHpwdxm1Rad1+RKK68yrmMDcMpU3obCCpQOs3xhIzxXPMZEwaqlWL5odJy6q2GU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iDuvz3cf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A721BC4CED0;
+	Tue, 24 Dec 2024 04:03:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735012483;
-	bh=gON3jis2daZvZrZcDHIDCKhEplwG2bItnGmHX7f3Ggo=;
+	s=k20201202; t=1735013020;
+	bh=C8WQDgynMbk2mc90mHz/WylFQluPG8ues+m+/hG7CZo=;
 	h=From:To:Cc:Subject:Date:From;
-	b=H31dE83fKe8tjMZXtYeuYTMZheZWiKrwVz2FOeyj1MiI3jl0Qc4msUbpJiwo8VrJf
-	 QJHgCgh7BnoQpL/UywD8c9T3GoorzoDDtEnap9mOKOTv6qSBrOCzfhazGPt/xrv+uf
-	 RU0y4RtGRpWeH+JcWFWYTZG9xDy/LkIr+KHVjtF20f90h7y/qKithVufIxBRUV8ucn
-	 NFg87/vYYeMhyHsv0eGZ570gZrZFmXYUIL8f5Y1Az25gD06l68lQfas2u+NAM8Deuv
-	 +8TMh+8p9O+R00chIsr/zbLaCgUEfRvnhMtmx5bygvFq7UayuvMd67VE7A3+RtY0tU
-	 7Cp0yXF5HM+0Q==
+	b=iDuvz3cfz0gbHn/x0iQWqU3QCUkmtNLLpqiLPR5VyKlAMVOxaG1G7p9Boe+23adNd
+	 hoVs1k80+JyF/E6mX7gHcVYsd3o2bq3SIIBBNP007hWUWj1YcMZ5YZUkM4pdzoq+wm
+	 yP5OF0LyLoEK9GMigZvoX8FB+Fau3guFfbwnyFn+p3NSlss/Z2mWVyl0FCWNkg38YW
+	 r0kDiNztUmbvzJHeyaCXEmHpADceOKNDJKKli9IzfkErLvrITpJyBxY2Rgr8WYhz5S
+	 ebZFzNwHy8w560bQnJ/jVKVOHjcbceTHllh5CJAvnzK+ZGRRvMlBvTmmBJTSHUqZLS
+	 E+s5I0sVKjI7A==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org,
 	Peter Huewe <peterhuewe@gmx.de>,
@@ -50,20 +50,19 @@ To: linux-integrity@vger.kernel.org,
 	James Bottomley <James.Bottomley@HansenPartnership.com>,
 	Stefan Berger <stefanb@linux.ibm.com>,
 	Ard Biesheuvel <ardb@kernel.org>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
 	Al Viro <viro@zeniv.linux.org.uk>,
-	Reiner Sailer <sailer@us.ibm.com>,
-	Andrew Morton <akpm@osdl.org>,
 	Kylene Jo Hall <kjhall@us.ibm.com>,
-	Seiji Munetoh <munetoh@jp.ibm.com>
+	Reiner Sailer <sailer@us.ibm.com>,
+	Seiji Munetoh <munetoh@jp.ibm.com>,
+	Andrew Morton <akpm@osdl.org>
 Cc: stable@vger.kernel.org,
 	Andy Liang <andy.liang@hpe.com>,
 	Matthew Garrett <mjg59@srcf.ucam.org>,
-	Mimi Zohar <zohar@linux.ibm.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4] tpm: Map the ACPI provided event log
-Date: Tue, 24 Dec 2024 05:54:07 +0200
-Message-ID: <20241224035423.10566-1-jarkko@kernel.org>
+Subject: [PATCH v5] tpm: Map the ACPI provided event log
+Date: Tue, 24 Dec 2024 06:03:19 +0200
+Message-ID: <20241224040334.11533-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -90,7 +89,7 @@ The following failure was reported:
 Above shows that ACPI pointed a 16 MiB buffer for the log events because
 RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
 bug by mapping the region when needed instead of copying.
----
+
 Cc: stable@vger.kernel.org # v2.6.16+
 Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
 Reported-by: Andy Liang <andy.liang@hpe.com>
@@ -99,6 +98,9 @@ Suggested-by: Matthew Garrett <mjg59@srcf.ucam.org>
 Tested-by: Andy Liang <andy.liang@hpe.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
+v5:
+* Spotted this right after sending: remove extra acpi_os_unmap_iomem()
+  call.
 v4:
 * Added tested-by from Andy Liang.
 v3:
@@ -108,16 +110,16 @@ v2:
 * There was some extra cruft (irrelevant diff), which is now wiped away.
 * Added missing tags (fixes, stable).
 ---
- drivers/char/tpm/eventlog/acpi.c   | 28 +++++++---------------
+ drivers/char/tpm/eventlog/acpi.c   | 27 ++++++---------------
  drivers/char/tpm/eventlog/common.c | 25 +++++++++++++-------
  drivers/char/tpm/eventlog/common.h | 28 ++++++++++++++++++++++
  drivers/char/tpm/eventlog/tpm1.c   | 30 ++++++++++++++---------
  drivers/char/tpm/eventlog/tpm2.c   | 38 +++++++++++++++++-------------
  include/linux/tpm.h                |  1 +
- 6 files changed, 95 insertions(+), 55 deletions(-)
+ 6 files changed, 94 insertions(+), 55 deletions(-)
 
 diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
-index 69533d0bfb51..2c4f7355b584 100644
+index 69533d0bfb51..fb84dd3f6106 100644
 --- a/drivers/char/tpm/eventlog/acpi.c
 +++ b/drivers/char/tpm/eventlog/acpi.c
 @@ -70,14 +70,11 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
@@ -135,7 +137,7 @@ index 69533d0bfb51..2c4f7355b584 100644
  	/* Unfortuntely ACPI does not associate the event log with a specific
  	 * TPM, like PPI. Thus all ACPI TPMs will read the same log.
  	 */
-@@ -135,36 +132,27 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+@@ -135,36 +132,26 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
  		return -EIO;
  	}
  
@@ -162,7 +164,6 @@ index 69533d0bfb51..2c4f7355b584 100644
 -	if (chip->flags & TPM_CHIP_FLAG_TPM2 &&
 -	    !tpm_is_tpm2_log(log->bios_event_log, len)) {
 +	if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_tpm2_log(virt, len)) {
-+		acpi_os_unmap_iomem(virt, len);
  		/* try EFI log next */
  		ret = -ENODEV;
  		goto err;
