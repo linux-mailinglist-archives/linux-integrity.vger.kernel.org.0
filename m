@@ -1,129 +1,441 @@
-Return-Path: <linux-integrity+bounces-4463-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4464-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C39869FB41B
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Dec 2024 19:42:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B85E59FB7F0
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 01:01:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B9FA188496D
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Dec 2024 18:42:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29AFF16479B
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Dec 2024 00:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390951C07C3;
-	Mon, 23 Dec 2024 18:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C3B44A18;
+	Tue, 24 Dec 2024 00:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ma77nd8w"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="quaODbVK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5221B6CFE;
-	Mon, 23 Dec 2024 18:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E33139D;
+	Tue, 24 Dec 2024 00:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734979362; cv=none; b=ORNgFWP21bfzWdV43+ygIAfaJp+KHirst399YfeSRShrrUn8Yv8PwH7+fPQhSupYTRObBayQVQ1YcxW2baa6h1F78CQyafF/5ysvVFCNZI9CEzbMojVwu0dlWkeROxddd+1adK7WHHL8QR983/G6V7Xy8YkuPVn1hI8teLECl10=
+	t=1734998506; cv=none; b=KfzVA0kRNf+GFZFEjoPQE99hObJSmbyZGB7FrSvTieQNHO0ZIsnbfKv/CaTqOIM9X92z58yGjOgrNo0aQEaS+MFGkFwyE9Jvr2W4TeYSpGxovdYIh0tHbmkjK0RIsA3x8qKY+Unrya/Hm7Ho7AWUV/zkIRu/JpHnJrwiz8COx3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734979362; c=relaxed/simple;
-	bh=nmNLPuF0b0SkMRFd3dwgE4963RNLX8W3j1FJMq2a0JA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=joZGhMM+yuUv7UPmh1i73Gd0tasaPxy7QIn1881BP7P7CDbcjdoGYGpyz9o0nD33EVZkNIoUTUQsBwvstwDL2rxNzjQ6bSvEcyTkFr2Xg1LOG4iFKRXAxZ2Et6C7cK9bdMAPR6RLrRdi13n0kAtGCXGZYnCFaK1Cpf9xrS2XYwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ma77nd8w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E85AC4CED3;
-	Mon, 23 Dec 2024 18:42:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734979361;
-	bh=nmNLPuF0b0SkMRFd3dwgE4963RNLX8W3j1FJMq2a0JA=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Ma77nd8wO6js0sRAaB03DKLUUR3RNhqmtqfir/+xQfoYyR5yYSOrVGoi0Vk2qZi5t
-	 dmt+cnx+cgf5PUe6d/BZkxhfdvKK+mTM3RYpzzw13XswfL5QAVjrJQctCyfKBUJb3n
-	 /eisJac25MAXOTTDrJjecAWLdqHtsWNd2u/rT2SAVCh40Bc+Qar+oOgRNw4juRD+om
-	 jiwjBmxklqZUdwNjGPMCEsJwcfR6EgdWAF946f34tzps94357Xtu8On9MnjQhE5f/w
-	 z/G5/WyK0HuK57M1wSTb5fjjuyO2xNRrMY15zdsppFGY8ypcf2KXCgcquvMLLJ16oA
-	 wIR7mphgscR9Q==
+	s=arc-20240116; t=1734998506; c=relaxed/simple;
+	bh=u1+9Pz1OKTqLhFmzv3jI0M4CPMVg8U3YR0TahO4hPFs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NXaznDRv5Q0bwQ7eSPGs5SLl4gUMb6LTKoI5TNs2lf/0wptlvwDHlJAaeb/yZjxCBTZb6RUeL8UiMmdhapkz5Bm1Y9A0TJJ/HnjRHG6tQhRd6x/d2n3hl7PcpIJuc3MMCL4bXQJjWfp5gpv/rAWwpG9gLy65/9CRZCI0pyQ7fmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=quaODbVK; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNFBD91021508;
+	Tue, 24 Dec 2024 00:01:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=uwUmvX
+	5S9nM1MyhDFTK4w5BojjJCP+XnvxNB3Dfqja4=; b=quaODbVKNJHcuJNmxC/k26
+	7tNwa84qZW2Tu4nJe5Githl1akhGQDbeDd/HwmQbhs9o1RY1UYd2iolGyQFzAj3/
+	gs+TGmJyWhDqoMI4pkFvoTUfXN6KSo9CdZVp2ZUNPHNyIHEXO+pfp3dLjzBnCUEk
+	QDOQ2pP7nkMdl5WPL5iuUQHoSv4xgQ1chPhW3wFZKY0z4xOtwKyXazXVSn6BYj7K
+	tZCVDrKrS0WVpcO4ezs8PQtN24Eq6zW10RhJfAahxviYslhhPwgM+3LWIcgmbQA3
+	X361vPNprzQ2NVTKIFN/3FRcDU18o0ISnkLY1+bsIJ2wWR5VZ2qrQbPXskmIQdZA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43q0bh4qpf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Dec 2024 00:01:09 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BNNxdXQ014655;
+	Tue, 24 Dec 2024 00:01:08 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43q0bh4qp9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Dec 2024 00:01:08 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNLm4LG012247;
+	Tue, 24 Dec 2024 00:01:07 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 43paq1feg0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Dec 2024 00:01:07 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BO017qp27591364
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Dec 2024 00:01:07 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 18A6E58052;
+	Tue, 24 Dec 2024 00:01:07 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7461758068;
+	Tue, 24 Dec 2024 00:01:05 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.60.117])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 24 Dec 2024 00:01:05 +0000 (GMT)
+Message-ID: <0dcd6ccea49026950608d8ddde5700ace84a2548.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v3 03/13] clavis: Introduce a new system keyring
+ called clavis
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Eric Snowberg <eric.snowberg@oracle.com>,
+        linux-security-module@vger.kernel.org
+Cc: dhowells@redhat.com, dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, ardb@kernel.org, jarkko@kernel.org,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, mic@digikod.net,
+        casey@schaufler-ca.com, stefanb@linux.ibm.com, ebiggers@kernel.org,
+        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-integrity@vger.kernel.org
+Date: Mon, 23 Dec 2024 19:01:04 -0500
+In-Reply-To: <20241017155516.2582369-4-eric.snowberg@oracle.com>
+References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
+	 <20241017155516.2582369-4-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Dec 2024 20:42:36 +0200
-Message-Id: <D6JAUP5NAXZ2.MU9167EXYHGM@kernel.org>
-Cc: <stable@vger.kernel.org>, "Andy Liang" <andy.liang@hpe.com>, "Matthew
- Garrett" <mjg59@srcf.ucam.org>, "Roberto Sassu" <roberto.sassu@huawei.com>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] tpm: Map the ACPI provided event log
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>,
- <linux-integrity@vger.kernel.org>, "Peter Huewe" <peterhuewe@gmx.de>,
- "Jason Gunthorpe" <jgg@ziepe.ca>, "Colin Ian King"
- <colin.i.king@gmail.com>, "Joe Hattori" <joe@pf.is.s.u-tokyo.ac.jp>, "James
- Bottomley" <James.Bottomley@HansenPartnership.com>, "Stefan Berger"
- <stefanb@linux.ibm.com>, "Ard Biesheuvel" <ardb@kernel.org>, "Mimi Zohar"
- <zohar@linux.ibm.com>, "Al Viro" <viro@zeniv.linux.org.uk>, "Kylene Jo
- Hall" <kjhall@us.ibm.com>, "Seiji Munetoh" <munetoh@jp.ibm.com>, "Reiner
- Sailer" <sailer@us.ibm.com>, "Andrew Morton" <akpm@osdl.org>
-X-Mailer: aerc 0.18.2
-References: <20241222143022.297309-1-jarkko@kernel.org>
-In-Reply-To: <20241222143022.297309-1-jarkko@kernel.org>
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: J2F-klKFcVeLI4t274NTsYKA_DP-mlDZ
+X-Proofpoint-GUID: IWUKzvFlHO1GXA6B2hPNlVshe3jHipdg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 spamscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 mlxscore=0 clxscore=1015
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2412230213
 
-On Sun Dec 22, 2024 at 4:30 PM EET, Jarkko Sakkinen wrote:
-> The following failure was reported:
->
-> [   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id=
- 0)
-> [   10.848132][    T1] ------------[ cut here ]------------
-> [   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __=
-alloc_pages_noprof+0x2ca/0x330
-> [   10.862827][    T1] Modules linked in:
-> [   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted =
-6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98=
-293a7c9eba9013378d807364c088c9375
-> [   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant D=
-L320 Gen12, BIOS 1.20 10/28/2024
-> [   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
-> [   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe=
- ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce=
- 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
-> [   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
-> [   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0=
-000000000000000
-> [   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0=
-000000000040cc0
->
-> Above shows that ACPI pointed a 16 MiB buffer for the log events because
-> RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
-> bug by mapping the region when needed instead of copying.
->
-> Cc: stable@vger.kernel.org # v2.6.16+
-> Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
-> Reported-by: Andy Liang <andy.liang@hpe.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D219495
-> Suggested-by: Matthew Garrett <mjg59@srcf.ucam.org>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+On Thu, 2024-10-17 at 09:55 -0600, Eric Snowberg wrote:
+> Introduce a new system keyring called clavis.  This keyring shall contain
+> a single asymmetric key. This key may be a linked to a key already
+> contained in one of the system keyrings (builtin, secondary, or platform)=
+.
 
-As you can see from the bug comments clearly both v2 and v3 pass the
-tests in the failing hardware. I don't think it is really a problem for
-us to map 16 MB of address space, as that is zero cost of resources,
-even if there is only some dozens of kilobytes of data. Since ACPI
-does that it will never be available for general consumption anyway.
+Although "This key may be a linked to ..." is might be correct.  Being
+introduced in this patch is only the ability of loading a key by specifying=
+ it
+on the boot command line.  In this case, the key must be on one of the syst=
+em
+keyrings.
 
-Also I've tested the following configurations in QEMU:
+> One way to add this key into this keyring is during boot by passing in th=
+e
+> asymmetric key id within the new "clavis=3D" boot param.  If a matching k=
+ey
+> is found in one of the system keyrings, a link shall be created. This
+> keyring will be used in the future by the new Clavis LSM.
+>=20
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |   6 +
+>  include/linux/integrity.h                     |   8 ++
+>  security/Kconfig                              |   1 +
+>  security/Makefile                             |   1 +
+>  security/clavis/Kconfig                       |  11 ++
+>  security/clavis/Makefile                      |   3 +
+>  security/clavis/clavis.h                      |  13 ++
+>  security/clavis/clavis_keyring.c              | 115 ++++++++++++++++++
+>  security/integrity/iint.c                     |   2 +
+>  9 files changed, 160 insertions(+)
+>  create mode 100644 security/clavis/Kconfig
+>  create mode 100644 security/clavis/Makefile
+>  create mode 100644 security/clavis/clavis.h
+>  create mode 100644 security/clavis/clavis_keyring.c
+>=20
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+> index 1518343bbe22..d71397e7d254 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -645,6 +645,12 @@
+>  	cio_ignore=3D	[S390]
+>  			See Documentation/arch/s390/common_io.rst for details.
+> =20
+> +	clavis=3D		[SECURITY,EARLY]
+> +			Identifies a specific key contained in one of the system
+> +			keyrings (builtin, secondary, or platform) to be used as
+> +			the Clavis root of trust.
+> +			Format: { <keyid> }
 
-1. TPM2 FIFO (or TIS)
-2. TPM2 CRB
-3. TPM1 FIFO
+Include .machine keyring here.
 
-95 insertions and 65 deletions is neither too bad figure, and as
-side-effect makes tpm1.c and tpm2.c pretty much chip independent.
+> +
+>  	clearcpuid=3DX[,X...] [X86]
+>  			Disable CPUID feature X for the kernel. See
+>  			arch/x86/include/asm/cpufeatures.h for the valid bit
+> diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+> index f5842372359b..837c52e1d83b 100644
+> --- a/include/linux/integrity.h
+> +++ b/include/linux/integrity.h
+> @@ -23,6 +23,14 @@ enum integrity_status {
+>  #ifdef CONFIG_INTEGRITY
+>  extern void __init integrity_load_keys(void);
+> =20
+> +#ifdef CONFIG_SECURITY_CLAVIS
+> +void __init late_init_clavis_setup(void);
+> +#else
+> +static inline void late_init_clavis_setup(void)
+> +{
+> +}
+> +#endif
+> +
+>  #else
+>  static inline void integrity_load_keys(void)
+>  {
+> diff --git a/security/Kconfig b/security/Kconfig
+> index 28e685f53bd1..714ec08dda96 100644
+> --- a/security/Kconfig
+> +++ b/security/Kconfig
+> @@ -225,6 +225,7 @@ source "security/safesetid/Kconfig"
+>  source "security/lockdown/Kconfig"
+>  source "security/landlock/Kconfig"
+>  source "security/ipe/Kconfig"
+> +source "security/clavis/Kconfig"
+> =20
+>  source "security/integrity/Kconfig"
+> =20
+> diff --git a/security/Makefile b/security/Makefile
+> index cc0982214b84..69576551007a 100644
+> --- a/security/Makefile
+> +++ b/security/Makefile
+> @@ -26,6 +26,7 @@ obj-$(CONFIG_CGROUPS)			+=3D device_cgroup.o
+>  obj-$(CONFIG_BPF_LSM)			+=3D bpf/
+>  obj-$(CONFIG_SECURITY_LANDLOCK)		+=3D landlock/
+>  obj-$(CONFIG_SECURITY_IPE)		+=3D ipe/
+> +obj-$(CONFIG_SECURITY_CLAVIS)		+=3D clavis/
+> =20
+>  # Object integrity file lists
+>  obj-$(CONFIG_INTEGRITY)			+=3D integrity/
+> diff --git a/security/clavis/Kconfig b/security/clavis/Kconfig
+> new file mode 100644
+> index 000000000000..04f7565f2e2b
+> --- /dev/null
+> +++ b/security/clavis/Kconfig
+> @@ -0,0 +1,11 @@
+> +config SECURITY_CLAVIS
+> +	bool "Clavis keyring"
 
-James earlier suggestion to "fix" also OF and other stuff is
-purposely left out as we don't falling tree over there. They
-should continue to use devm_kmalloc() for the moment although
-in principle zero copy mapping is always better (but definitely
-notin the scope of bug fix).
+Isn't SECURITY_CLAVIS the new LSM?  Why is the bool defined as just "Clavis
+keyring"?
 
-BR, Jarkko
+> +	depends on SECURITY
+> +	select SYSTEM_DATA_VERIFICATION
+> +	select CRYPTO_SHA256
+> +	help
+> +	  Enable the clavis keyring. This keyring shall contain a single asymme=
+tric key.
+> +	  This key shall be linked to a key already contained in one of the sys=
+tem
+> +	  keyrings (builtin, secondary, or platform). One way to add this key
+> +	  is during boot by passing in the asymmetric key id within the "clavis=
+=3D" boot
+> +	  param.  This keyring is required by the Clavis LSM.
+
+If SECURITY_CLAVIS is a new LSM, the 'help' shouldn't be limited to just th=
+e
+clavis keyring, but written at a higher level describing the new LSM.  For
+example,
+
+This option enables the Clavis LSM, which provides the ability to configure=
+ and
+enforce the usage of keys contained on the system keyrings -
+.builtin_trusted_keys, .secondary_trusted_keys, .machine, and .platform
+keyrings.  The clavis LSM defines a keyring named "clavis", which contains =
+a
+single asymmetric key and the key usage rules.
+
+The single asymmetric key may be specified on the boot command line ...
+
+[The patch that introduces the key usage rules would add additional info he=
+re.]
+
+[The patch that adds the Documentatoin would add a reference here.]
+
+> diff --git a/security/clavis/Makefile b/security/clavis/Makefile
+> new file mode 100644
+> index 000000000000..16c451f45f37
+> --- /dev/null
+> +++ b/security/clavis/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +obj-$(CONFIG_SECURITY_CLAVIS) +=3D clavis_keyring.o
+> diff --git a/security/clavis/clavis.h b/security/clavis/clavis.h
+> new file mode 100644
+> index 000000000000..5e397b55a60a
+> --- /dev/null
+> +++ b/security/clavis/clavis.h
+> @@ -0,0 +1,13 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _SECURITY_CLAVIS_H_
+> +#define _SECURITY_CLAVIS_H_
+> +#include <keys/asymmetric-type.h>
+> +
+> +/* Max length for the asymmetric key id contained on the boot param */
+> +#define CLAVIS_BIN_KID_MAX   32
+> +
+> +struct asymmetric_setup_kid {
+> +	struct asymmetric_key_id id;
+> +	unsigned char data[CLAVIS_BIN_KID_MAX];
+> +};
+> +#endif /* _SECURITY_CLAVIS_H_ */
+> diff --git a/security/clavis/clavis_keyring.c b/security/clavis/clavis_ke=
+yring.c
+> new file mode 100644
+> index 000000000000..400ed455a3a2
+> --- /dev/null
+> +++ b/security/clavis/clavis_keyring.c
+> @@ -0,0 +1,115 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/security.h>
+> +#include <linux/integrity.h>
+> +#include <keys/asymmetric-type.h>
+> +#include <keys/system_keyring.h>
+> +#include "clavis.h"
+> +
+> +static struct key *clavis_keyring;
+> +static struct asymmetric_key_id *clavis_boot_akid;
+> +static struct asymmetric_setup_kid clavis_setup_akid;
+> +static bool clavis_enforced;
+> +
+> +static bool clavis_acl_enforced(void)
+> +{
+> +	return clavis_enforced;
+> +}
+
+Add blank line between functions.
+
+Mimi
+
+> +static int restrict_link_for_clavis(struct key *dest_keyring, const stru=
+ct key_type *type,
+> +				    const union key_payload *payload, struct key *restrict_key)
+> +{
+> +	/*
+> +	 * Allow a single asymmetric key into this keyring. This key is used as=
+ the
+> +	 * root of trust for anything added afterwards.
+> +	 */
+> +	if (type =3D=3D &key_type_asymmetric && dest_keyring =3D=3D clavis_keyr=
+ing &&
+> +	    !clavis_acl_enforced()) {
+> +		clavis_enforced =3D true;
+> +		return 0;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static struct asymmetric_key_id *clavis_parse_boot_param(char *kid, stru=
+ct asymmetric_key_id *akid,
+> +							 int akid_max_len)
+> +{
+> +	int error, hex_len;
+> +
+> +	if (!kid)
+> +		return 0;
+> +
+> +	hex_len =3D strlen(kid) / 2;
+> +
+> +	if (hex_len > akid_max_len)
+> +		return 0;
+> +
+> +	akid->len =3D hex_len;
+> +	error =3D hex2bin(akid->data, kid, akid->len);
+> +
+> +	if (error < 0) {
+> +		pr_err("Unparsable clavis key id\n");
+> +		return 0;
+> +	}
+> +
+> +	return akid;
+> +}
+> +
+> +static int __init clavis_param(char *kid)
+> +{
+> +	clavis_boot_akid =3D clavis_parse_boot_param(kid, &clavis_setup_akid.id=
+,
+> +						   ARRAY_SIZE(clavis_setup_akid.data));
+> +
+> +	return 1;
+> +}
+> +
+> +__setup("clavis=3D", clavis_param);
+> +
+> +static struct key *clavis_keyring_alloc(const char *desc, struct key_res=
+triction *restriction)
+> +{
+> +	struct key *keyring;
+> +
+> +	keyring =3D keyring_alloc(desc, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, curre=
+nt_cred(),
+> +				KEY_POS_VIEW | KEY_POS_READ | KEY_POS_SEARCH | KEY_POS_WRITE |
+> +				KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH | KEY_USR_WRITE,
+> +				KEY_ALLOC_NOT_IN_QUOTA | KEY_ALLOC_SET_KEEP,
+> +				restriction, NULL);
+> +	return keyring;
+> +}
+> +
+> +static struct key_restriction *clavis_restriction_alloc(key_restrict_lin=
+k_func_t check_func)
+> +{
+> +	struct key_restriction *restriction;
+> +
+> +	restriction =3D kzalloc(sizeof(*restriction), GFP_KERNEL);
+> +
+> +	if (restriction)
+> +		restriction->check =3D check_func;
+> +
+> +	return restriction;
+> +}
+> +
+> +static int __init clavis_keyring_init(void)
+> +{
+> +	struct key_restriction *restriction;
+> +
+> +	restriction =3D clavis_restriction_alloc(restrict_link_for_clavis);
+> +	if (!restriction)
+> +		panic("Can't allocate clavis keyring restriction\n");
+> +
+> +	clavis_keyring =3D clavis_keyring_alloc(".clavis", restriction);
+> +	if (IS_ERR(clavis_keyring))
+> +		panic("Can't allocate clavis keyring\n");
+> +
+> +	return 0;
+> +}
+> +
+> +void __init late_init_clavis_setup(void)
+> +{
+> +	clavis_keyring_init();
+> +
+> +	if (!clavis_boot_akid)
+> +		return;
+> +
+> +	system_key_link(clavis_keyring, clavis_boot_akid);
+> +}
+> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+> index 068ac6c2ae1e..87a8bfc0662f 100644
+> --- a/security/integrity/iint.c
+> +++ b/security/integrity/iint.c
+> @@ -36,6 +36,8 @@ int integrity_kernel_read(struct file *file, loff_t off=
+set,
+>   */
+>  void __init integrity_load_keys(void)
+>  {
+> +	late_init_clavis_setup();
+> +
+>  	ima_load_x509();
+> =20
+>  	if (!IS_ENABLED(CONFIG_IMA_LOAD_X509))
+
 
