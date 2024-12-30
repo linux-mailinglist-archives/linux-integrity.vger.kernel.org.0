@@ -1,90 +1,120 @@
-Return-Path: <linux-integrity+bounces-4492-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4494-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F1419FE2AF
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Dec 2024 06:48:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D9919FE700
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Dec 2024 15:23:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E6481617A7
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Dec 2024 05:48:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4D991602CD
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Dec 2024 14:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA090166F3D;
-	Mon, 30 Dec 2024 05:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27C79443;
+	Mon, 30 Dec 2024 14:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WknDodpz"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4D815DBBA
-	for <linux-integrity@vger.kernel.org>; Mon, 30 Dec 2024 05:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F5B25948F
+	for <linux-integrity@vger.kernel.org>; Mon, 30 Dec 2024 14:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735537684; cv=none; b=FuYlTfhwQY00eu6gqsocTONYYDRlZM3ju9qbYbsbkTUFUzUe87tuAddApaS7NSzQN7BLZr15jAp+kV8GA+tqURbg04fOGpr5iS9sR8fXs85bC00fNg3SKvMIiYjMKzU039MfF2R4B+m+qP9HG0e45yP9dFMb1ua7vvY3WTDRUQg=
+	t=1735568628; cv=none; b=IZn+sViSlevlpT3Kpr92BQ7GBhI3Vw2CZ/Q1/ABOHPTGarOoTGwLYkIacbr4jRaLH/UV5Y5aahIghAHHBXd7MRvEOBiQGTe7Qx1hRZxrUHBcrfo/XDkr+Y9QilaQSn+aj3jxLm02ULPch/bvb8XplChmKnxrKeTMimG2Aw8b2O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735537684; c=relaxed/simple;
-	bh=X/pTaxeY9uxzixcgUNMI8spaGnMaud+VI8PLVKwD3QU=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=RHdaiuX/afG2E6ajDy1WWnq1116byk4+JUl9/ARZXeS9FfGXAgCteFzL1ME+ZM02YiQFvDqBDoyMFx0DMOM7IOFuyJNXUNxJZEOjW2P2ED0nKNyx6zG/Gjj9HNsUay8RQIlG18cQw8CUWFZh0ORZFY1+mnET3nIheJe4KCJ//Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-844d02766f9so756331939f.1
-        for <linux-integrity@vger.kernel.org>; Sun, 29 Dec 2024 21:48:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735537682; x=1736142482;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XEn0TNgC+Egj9+u1OPA67mOeXDAmTFT/Bzf3azKUXZE=;
-        b=Ca3cPW2AfgU0WmPZ3m+jlbqpaN1pI3roZT3FDiHb7oc6qepvim1To2C4amGr5HbStl
-         qABqJB9ei9xSvP4fQjv3PoB+Yz/YCIbZFDFuKOvVcunyjWQ1zgq/AFjzJoJciDSfv5DV
-         MC1Pj19DwUTCKsvlzRciKHyQIiqZtRm+1stgH80P1AJTomj1d31dO6QHPw66HlXeOEbR
-         8jn3m4JbeYZZwgFJn8da4aWFDzK63S1x7m15JWGqktu9PW/7LoKvv6Aj2fEAy75P8hoh
-         PXH7Rt/KtRXW/LrrczgHxRQzpKhvJ9t4YyJ5ZGEoyPuzJCrrs2sBaYZydMRJD8EeEQh2
-         NOXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVq1Ile/dSZf2wLppo0dI0cfAKN+NG7bVx1E1WPkCthvA6rgVECKkIzAr7GiJ3Skqws8pX+qlrH9LuhG5OlWIg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLj83VDWDLcrrB91K/fEKPxBQzWzlxp+xr+yfT7O1I9HT7xj3s
-	cL7+xFQxpYizIopbrnPW5k/T8PuNVv3eef6bGjQuFycXPD9RHfg0zAU9hnnUUktHoVeh+JtaAU1
-	2sahjiBx+l3G/M1NHlUzUozJv9Pvw+aDJGa//dm2YhXYnN3fMeSCU1yw=
-X-Google-Smtp-Source: AGHT+IHNSi+yiedUS+vS8rNLSbjMlJ+TTOLzwjGT3CV4B+A5XArc7fz0pVC+9I6xjxqhhAqh1llINQUlH7F7e8BJC+NA3MUyrTVG
+	s=arc-20240116; t=1735568628; c=relaxed/simple;
+	bh=inJobzTQdlsc5D2DvUnr2I79ZzQhycDRcLVmJDDe3MY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZW8IOPo2AnLfhqH5W8vRNqPLPTZYWJi4KT+TijoV2eZ/PqFasCeAztTmWDNvxEH2jzXVgqL12Dbf8J6tl8paLEGYQ0NEMmZaxQjG3Vmo43IQgfRfgMkHoaeoncd0utCAC52tF+DudxTQLMhPV2gk9S+FDabbuprSWiJx2RacT4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WknDodpz; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BU3ruAf032470;
+	Mon, 30 Dec 2024 14:23:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=31B5eui2smveTNDq1gwpvQwDaUb2dTbRPbBRNcclk
+	Ag=; b=WknDodpz3xGLJh/HsYadjzOlkHheT/K45RKkSvH9m2Z6bweqz8zTaT1/W
+	pvnqWQtlrFWC0E9zWyCrl6O15gDingEY+miPg13rkhNjtxXju5rjo9UdMA2mc1nY
+	SA4kDQkvI/+UtH63goCPU+8Ya4XbS9YmV5ZdcBDGPam4jy1SQTjM5vtuMDE5D2T8
+	jQKwZA3wBnYY+He5c6kBJ1TkzLi9btwHLuvPHecrxR4GRyeBnhcDquVzKifh2u2U
+	x+NTFvuCdB9eVdPEQI84U2sEz5wzvkIVK0zFknkhIH/K6zoi/q/1HLxgzhVjotHy
+	WRShZzOBbM4GzSXvpM+r59adFQGUQ==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43um0gt5c8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Dec 2024 14:23:44 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BUD3jeD026999;
+	Mon, 30 Dec 2024 14:23:43 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 43txc1nsqd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Dec 2024 14:23:43 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BUENdJL28770972
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Dec 2024 14:23:40 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C850920043;
+	Mon, 30 Dec 2024 14:23:39 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9F31420040;
+	Mon, 30 Dec 2024 14:23:38 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.fios-router.home (unknown [9.61.82.190])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 30 Dec 2024 14:23:38 +0000 (GMT)
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: linux-integrity@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Petr Vorel <pvorel@suse.cz>
+Subject: [PATCH] ima: ignore suffixed policy rule comments
+Date: Mon, 30 Dec 2024 09:23:32 -0500
+Message-ID: <20241230142333.1309623-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:6004:b0:844:caac:ad61 with SMTP id
- ca18e2360f4ac-8499e6c4d75mr2967592739f.13.1735537682521; Sun, 29 Dec 2024
- 21:48:02 -0800 (PST)
-Date: Sun, 29 Dec 2024 21:48:02 -0800
-In-Reply-To: <PUZPR04MB6316D814E4CF26B2A62EB24381092@PUZPR04MB6316.apcprd04.prod.outlook.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67723412.050a0220.226966.00cf.GAE@google.com>
-Subject: Re: [syzbot] [integrity?] [lsm?] INFO: task hung in
- process_measurement (2)
-From: syzbot <syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com>
-To: linkinjeon@kernel.org, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	sj1557.seo@samsung.com, syzkaller-bugs@googlegroups.com, yuezhang.mo@sony.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -UUj8Mrs3CEnqITeCy1zS4BQenqctIos
+X-Proofpoint-GUID: -UUj8Mrs3CEnqITeCy1zS4BQenqctIos
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 mlxscore=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 priorityscore=1501 phishscore=0
+ impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2412300121
 
-Hello,
+Lines beginning with '#' in the IMA policy are comments and are ignored.
+Instead of placing the rule and comment on separate lines, allow the
+comment to be suffixed to the IMA policy rule.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/ima/ima_policy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reported-by: syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com
-Tested-by: syzbot+1de5a37cb85a2d536330@syzkaller.appspotmail.com
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 23bbe2c405f0..128fab897930 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1432,7 +1432,7 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+ 		int token;
+ 		unsigned long lnum;
+ 
+-		if (result < 0)
++		if (result < 0 || *p == '#')  /* ignore suffixed comment */
+ 			break;
+ 		if ((*p == '\0') || (*p == ' ') || (*p == '\t'))
+ 			continue;
+-- 
+2.47.1
 
-Tested on:
-
-commit:         fc033cf2 Linux 6.13-rc5
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=155a6818580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ba7cde9482d6bb6
-dashboard link: https://syzkaller.appspot.com/bug?extid=1de5a37cb85a2d536330
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=162126df980000
-
-Note: testing is done by a robot and is best-effort only.
 
