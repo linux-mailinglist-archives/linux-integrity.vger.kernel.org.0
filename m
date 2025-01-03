@@ -1,219 +1,268 @@
-Return-Path: <linux-integrity+bounces-4512-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4513-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27E8FA00BFD
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2025 17:23:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52ED6A00E3C
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2025 20:03:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E81623A1702
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2025 16:23:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F8DE1884ABE
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jan 2025 19:03:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B2351FA8F3;
-	Fri,  3 Jan 2025 16:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 690991FC7CD;
+	Fri,  3 Jan 2025 19:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Ir8R3mPP";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HCEImjxV";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WfUESWxM";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5nkizrrR"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="S+AhPMXE";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="VU0dswyM";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="gCQlH3xh";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="XT1VmpIz"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDA81F9EA4;
-	Fri,  3 Jan 2025 16:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35A41FCF47
+	for <linux-integrity@vger.kernel.org>; Fri,  3 Jan 2025 19:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735921420; cv=none; b=goArBgpNWKokxXxEGojFwNKoqr6auUBcfKbq06sM+OKdqEcu/e4IvFsgPeOIHREjOt9MaF3R911Lp/V1/y0PlEncfMD7geCRoB+wgr+HOY4jU0G9LPVODfN1wcXq7uCpIHmV/fxnEf8m+CdI/JKFEJOwVRGZ5reHt5oPq+CtO1w=
+	t=1735930990; cv=none; b=IVAHS6C9eIObOU3POFbc35gRfpubGWdfu+84bBgUDoovYnzDzhm+VENSCDe47ksBaWDq0KQ2xapV3iCkvDB3J0sYkuP8EWXkLrXiVpaq/FZOfSd4ixkGvfCBZ/budCx/NANsNPsr0Xgr80jibk5/cUJvJ0trok7Rvst3bjxE7ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735921420; c=relaxed/simple;
-	bh=SC4fX0THYHOVWNw6azpsXuG+U+51NIkHveAC2pY9cmw=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n0aBwtxibV08/GZhyEi6ezikwj1nldZkiCwD/kp/dsBCXHeG5OsDmpLosYuIxN5ZlpcAvz+3E2sn1bsE23w6uE5keKbqrsZK3NwJIZtrUoxoqWdb9uTzsMbNziMwyxobfMhQ+Rqqj78zBjhOFmBRSanIfskUjOQgsG/D1Lz+T7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Ir8R3mPP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HCEImjxV; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WfUESWxM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5nkizrrR; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1735930990; c=relaxed/simple;
+	bh=bjXQQtlsTApSJMnLnIuYYo24Fp9fMGEw117ZJcf9Mc4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NSlrQzEU156MkFfUw2QizT+zdR+xsZ2vq6NvAl578kZJy63FJ7wqOlCBx3YPqTRG8vaLn32rS8YXR7CUcWo/YWEd8qafpovymDqopZ2iwWV0tf3O7izVcNmDMKyaBazp+ZjFRho+rcBaGmcAUprBC1s1nb9+xclmEAfkHrLDILA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=S+AhPMXE; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=VU0dswyM; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=gCQlH3xh; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=XT1VmpIz; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id CBE281F38E;
-	Fri,  3 Jan 2025 16:23:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1735921417; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	by smtp-out2.suse.de (Postfix) with ESMTPS id E2A2B1F37C;
+	Fri,  3 Jan 2025 19:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1735930986;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6lm5ITltHkS9tXpmpde4LKGXpCZi+xEonoaF7+jYvUg=;
-	b=Ir8R3mPP3/9Pp/oLoWva768FHZBFSP5qMuv523U9WFk6jksvtN5noDplwsKoxcPowu5w88
-	Rtc5BsLNEupwLwhYuwu7eIoZ84HFRDv++3AEHrRz7/tkZFUcyudrR6yRf4Boxh4zwaYSOd
-	xzcq0f8JUhaUlfDwv7Y7VzjKdJVwucE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1735921417;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	bh=jBWhC7PnxnpzZvviRFqmt3UWdCVHBk+R++5W+UFc/+4=;
+	b=S+AhPMXEKh5jgZxhB080zRWIb+658YL3XFa3pi5mRVyneSUC2KGWmG8u0n3ysliCamQvzP
+	F+QpaJFmgymaszC3j6sJRVLsq83/P/6Y5b8Tcapwds8sH3FPwsTC11nWuYFGsspJ/OTNZ/
+	EtAo3cy4L71eOgXsXstDxY/FYhP4nkc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1735930986;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6lm5ITltHkS9tXpmpde4LKGXpCZi+xEonoaF7+jYvUg=;
-	b=HCEImjxV74cY88/7CMooP39+punaMzGgeN4ln/OsMvq3A3CFk2wnrkDwwcBM8KHQ0gNRWI
-	V0AcGrm7bQbzshDA==
+	bh=jBWhC7PnxnpzZvviRFqmt3UWdCVHBk+R++5W+UFc/+4=;
+	b=VU0dswyMVzleZgTqUqDxwqnsBaOcq76olGe8wxEw5i0PcZDYgLznqpeT/+Hf5AlTuxxWUI
+	KYHtW/o8kJnpwyDw==
 Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WfUESWxM;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=5nkizrrR
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1735921416; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=gCQlH3xh;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=XT1VmpIz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1735930985;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6lm5ITltHkS9tXpmpde4LKGXpCZi+xEonoaF7+jYvUg=;
-	b=WfUESWxMz99DGGtV2Gv8C4oDQdWXJW60da4fClzHU43J/ChTFbK6q5OeMHoEPfqKqH6Eiu
-	B4UJ+uvzWN+0mtfPYCVTv0xuxuqPENkLMUsmjK5G3fkqm1L6iakKaooekeTLnt1OmkmZd3
-	V55JOxmEMe1NzMGUY0jmZ6PV18PVa/M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1735921416;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	bh=jBWhC7PnxnpzZvviRFqmt3UWdCVHBk+R++5W+UFc/+4=;
+	b=gCQlH3xhXk70d/xeNf242uO/TfIAca9cSZbLAPdCSNcW1z/V0OhqQHtD508IXE2+dH0NPH
+	hcYctbLz4FEyGhx5cG/YUyZsNOGghfTk6yzzAHaIN8moMcWflas9mJmTcMwaI3AUwUL3t3
+	XHYDjFaqLyH8Jh3OTl+aEkUiRlLZxxY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1735930985;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6lm5ITltHkS9tXpmpde4LKGXpCZi+xEonoaF7+jYvUg=;
-	b=5nkizrrRxlyYZJOn5/eVzhL7DbwSBaULMcDDNOkyLOYe1UKUEryYTt01J0rRQZpeqY1V0S
-	z9yJVQ7Liw3smfDA==
+	bh=jBWhC7PnxnpzZvviRFqmt3UWdCVHBk+R++5W+UFc/+4=;
+	b=XT1VmpIzMHkQNvRGTzn5Sx5Sr9vJF0E3rQp3lsp/AAYSyonruyAYrTDXHScz+NBbd1k3Ph
+	QeimEjZ6arKcQiBA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5B743134E4;
-	Fri,  3 Jan 2025 16:23:36 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7B23313418;
+	Fri,  3 Jan 2025 19:03:05 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 9yMZFQgPeGfzegAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 03 Jan 2025 16:23:36 +0000
-Date: Fri, 03 Jan 2025 17:23:35 +0100
-Message-ID: <87frlzzx14.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Stefan Berger <stefanb@us.ibm.com>,
-	Andrew Morton <akpm@osdl.org>,
-	Seiji Munetoh <munetoh@jp.ibm.com>,
-	Kylene Jo Hall <kjhall@us.ibm.com>,
-	Reiner Sailer <sailer@us.ibm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	stable@vger.kernel.org,
-	Andy Liang <andy.liang@hpe.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8] tpm: Map the ACPI provided event log
-In-Reply-To: <20241227153911.28128-1-jarkko@kernel.org>
-References: <20241227153911.28128-1-jarkko@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	id e9WHHGk0eGeFIgAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Fri, 03 Jan 2025 19:03:05 +0000
+Date: Fri, 3 Jan 2025 20:02:59 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2 6/8] IMA: Add example policy for ima_violations.sh
+Message-ID: <20250103190259.GA223253@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20241213222014.1580991-1-pvorel@suse.cz>
+ <20241213222014.1580991-7-pvorel@suse.cz>
+ <35af7de88f6961817a9df23c55104d20c32d2680.camel@linux.ibm.com>
+ <20241231122340.GE36475@pevik>
+ <f0746bfae90306d45079f6f3e2f7a1d55e0ad79f.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: CBE281F38E
-X-Spam-Score: -2.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.01 / 50.00];
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0746bfae90306d45079f6f3e2f7a1d55e0ad79f.camel@linux.ibm.com>
+X-Rspamd-Queue-Id: E2A2B1F37C
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.71 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
 	MX_GOOD(-0.01)[];
-	TAGGED_RCPT(0.00)[];
 	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmx.de,ziepe.ca,gmail.com,us.ibm.com,osdl.org,jp.ibm.com,kernel.org,hpe.com];
+	ARC_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	MIME_TRACE(0.00)[0:+];
+	REPLYTO_EQ_FROM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
 	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:dkim];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
 	RCVD_COUNT_TWO(0.00)[2];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.71
 X-Spam-Flag: NO
-X-Spam-Level: 
 
-On Fri, 27 Dec 2024 16:39:09 +0100,
-Jarkko Sakkinen wrote:
-> 
-> The following failure was reported:
-> 
-> [   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id 0)
-> [   10.848132][    T1] ------------[ cut here ]------------
-> [   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __alloc_pages_noprof+0x2ca/0x330
-> [   10.862827][    T1] Modules linked in:
-> [   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98293a7c9eba9013378d807364c088c9375
-> [   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant DL320 Gen12, BIOS 1.20 10/28/2024
-> [   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
-> [   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
-> [   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
-> [   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0000000000000000
-> [   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0000000000040cc0
-> 
-> Above shows that ACPI pointed a 16 MiB buffer for the log events because
-> RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
-> bug with kvmalloc() and devm_add_action_or_reset().
+> On Tue, 2024-12-31 at 13:23 +0100, Petr Vorel wrote:
+> > Hi Mimi,
 
-It looks like that the subject doesn't match with the patch
-description?
+> > > Hi Petr,
 
-(snip)
-> --- a/drivers/char/tpm/eventlog/acpi.c
-> +++ b/drivers/char/tpm/eventlog/acpi.c
-> @@ -63,6 +63,11 @@ static bool tpm_is_tpm2_log(void *bios_event_log, u64 len)
->  	return n == 0;
->  }
->  
-> +static void tpm_bios_log_free(void *data)
-> +{
-> +	kvfree(data);
-> +}
-> +
->  /* read binary bios log */
->  int tpm_read_log_acpi(struct tpm_chip *chip)
->  {
-> @@ -136,10 +141,16 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
->  	}
->  
->  	/* malloc EventLog space */
-> -	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
-> +	log->bios_event_log = kvmalloc(len, GFP_KERNEL);
->  	if (!log->bios_event_log)
->  		return -ENOMEM;
->  
-> +	ret = devm_add_action_or_reset(&chip->dev, tpm_bios_log_free, log->bios_event_log);
-> +	if (ret) {
-> +		log->bios_event_log = NULL;
-> +		return ret;
-> +	}
-> +
->  	log->bios_event_log_end = log->bios_event_log + len;
->  
->  	virt = acpi_os_map_iomem(start, len);
+> > > On Fri, 2024-12-13 at 23:20 +0100, Petr Vorel wrote:
+> > > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > > > ---
+> > > >  .../integrity/ima/datafiles/ima_violations/violations.policy     | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >  create mode 100644 testcases/kernel/security/integrity/ima/datafiles/ima_violations/violations.policy
 
-I'm afraid that you forgot to correct the remaining devm_kfree() in
-the error path of this function.
+> > > > diff --git a/testcases/kernel/security/integrity/ima/datafiles/ima_violations/violations.policy b/testcases/kernel/security/integrity/ima/datafiles/ima_violations/violations.policy
+> > > > new file mode 100644
+> > > > index 0000000000..5734c7617f
+> > > > --- /dev/null
+> > > > +++ b/testcases/kernel/security/integrity/ima/datafiles/ima_violations/violations.policy
+> > > > @@ -0,0 +1 @@
+> > > > +func=FILE_CHECK
 
-(I know it because I initially posted a similar fix in
-   https://lore.kernel.org/all/20241107112054.28448-1-tiwai@suse.de/
- Your devm_add_action_or_reset() is a better choice, indeed, though
- :-)
+> > > "[PATCH v2 1/8] IMA: Add TCB policy as an example for ima_measurements.sh"
+> > > contains two rules to measure files opened by root on file open.
+
+> > > measure func=FILE_CHECK mask=^MAY_READ euid=0
+> > > measure func=FILE_CHECK mask=^MAY_READ uid=0
+
+> > > If the 'tcb' or equivalent policy is loaded, there is no need to load another
+> > > policy rule. 
+
+> > I guess I'll move check for builtin policy loaded via kernel command line
+> > parameter also to ima_setup.sh to avoid loading example policy when there is a
+> > required builtin policy loaded.
 
 
-thanks,
+> Between the builtin and arch specific policies, most of the rules are already
+> defined.  The exception is measuring the boot command line.  Perhaps we should
+> update the arch specific policy to include it with the other kexec rules.
 
-Takashi
+> The arch specific policy may include the rule that requires the IMA policy to be
+> signed.
+
+> > I also wonder what is a common approach - don't
+> > try to load custom example policy when there is builtin policy loaded?
+
+> How about first checking if the rule exists when there is a builtin or
+> equivalent custom policy loaded, before loading the example test policy?
+
+
+> > My goal was to allow more broad IMA testing based on different setup:
+
+> Very good.
+
+> > * running tests with ima_policy=tcb builtin policy (current approach). Many
+> > tests will be skipped due missing required policy content.
+
+> Ok.  Remember even with "ima_policy=tcb" specified on the boot command line, the
+> results will differ depending on whether the arch specific policy is loaded.
+
+> > * running tests without any builtin policy + load a custom policy + reboot via
+> > LTP_IMA_LOAD_POLICY=1 (this patchset), but this should be probably be done only
+> > if required (or even none) builtin policy is loaded.
+
+> Good.  The first patch introduces the equivalent custom policy to
+> "ima_policy=tcb".  By "load a custom policy" are you referring to this policy or
+> a specific policy test rule?
+
+I refer to this policy. Maybe better would be "policy content required by the test"
+or "test example policy".
+
+My point is to allow testing without forcing ima_policy=tcb setup (some tooling
+might not allow easily to add kernel cmdline parameters). Also, mixing test
+example policy with ima_policy=tcb may result a different measurements, right?
+
+If the above assumption is correct I would like to have testing *with*
+ima_policy=tcb without loading any test example policy and *without*
+ima_policy=tcb but loading test example policy via LTP_IMA_LOAD_POLICY=1.
+
+> > * Ideally not require CONFIG_IMA_READ_POLICY=y as some distros does not have it
+> > (but then it is hard to detect whether failures are real bugs or just false
+> > positives due not having a proper policy). Maybe convert TBROK/TFAIL to TCONF if
+
+I'm sorry, I was wrong here, I meant to ask: convert TFAIL to either TBROK or TCONF,
+e.g. my patch [1].
+
+> > policy content is required but cannot be read due CONFIG_IMA_READ_POLICY (and
+> > custom policy with proper content was not loaded).
+
+> Probably the latter option of converting from TBROK/TFAIL to TCONF is
+> preferable.  Why fail a test without knowing it will fail.
+
+Because on distros without CONFIG_IMA_READ_POLICY=y we never get notified about
+the failure (maybe kernel is broken when it fails but nobody notices TCONF).
+But although there is a slight difference between TFAIL and TBROK [2], I agree
+that TCONF is probably the best (nobody wants to deal with false positives),
+which is handled in my patch [1].
+
+But instead of this I'll try for all tests which require to have certain policy
+content (currently all but ima_conditionals.sh): if LTP_IMA_LOAD_POLICY=1 set
+try to load example policy even policy content cannot be checked (TCONF when
+policy fails to be loaded or if LTP_IMA_LOAD_POLICY not set).
+
+Kind regards,
+Petr
+
+> > But you may have an idea what is more useful (brings more test coverage).
+
+> There are two main problems:
+> - Not being able to read the policy.
+> - Only being able to load a signed policy.
+
+> I think between your above ordering and a new test to see if the policy needs to
+> be signed, it's the best we can do for now.
+
+> As mentioned in my 2/8 response, a new package containing pre-defined custom
+> policies that are signed by the distro would resolve the latter problem.
+
+
+> Thanks,
+
+> Mimi
+
+[1] https://patchwork.ozlabs.org/project/ltp/patch/20241213222014.1580991-9-pvorel@suse.cz/
+[2] https://linux-test-project.readthedocs.io/en/latest/developers/api_c_tests.html#tst-res-flags-constants
 
