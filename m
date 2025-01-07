@@ -1,124 +1,283 @@
-Return-Path: <linux-integrity+bounces-4527-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4528-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9DEA04000
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jan 2025 13:56:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E76B9A04937
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jan 2025 19:29:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDF541886B1F
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jan 2025 12:56:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DCD43A4AE4
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jan 2025 18:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 123AB1EF088;
-	Tue,  7 Jan 2025 12:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1283197A7A;
+	Tue,  7 Jan 2025 18:29:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b="oAAdNDJE"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ArO/GxfS"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA561EF08D
-	for <linux-integrity@vger.kernel.org>; Tue,  7 Jan 2025 12:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E72186330
+	for <linux-integrity@vger.kernel.org>; Tue,  7 Jan 2025 18:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736254578; cv=none; b=OONPU/Tu11zwcGs2U7hlp9KZbG7W3bExsc2w5MO4J3HUJNvtvZdKpusvxkKpSukZM8rN403W1LbPRgTZ1Uj58bfWmstyGnrjxTBhWYRgXWiJz0oTJ2u1N8nlZlp1Mw6p1/3SBOq3Ha4ApvL/eptPJPz3nCY4lvVDyfXI/b2dBfc=
+	t=1736274586; cv=none; b=AS3UT3WlTUVhUVusraTfRfapWLSpS5C16rkudIvTIngnJWN9frid4MISXD0TbtII5iGEudxjPcudZsjXhxvy7VcauYm4kR+B7CgnzYbjznwQ8wBe34IogugwP8wXS1a7XUkZEWjnrC/Ox2RDNd02YD91J2aJPvae62P3rendTKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736254578; c=relaxed/simple;
-	bh=mhjI5XJs+wlmeptweqROi6JQ9QOeOFdceKqB0fLjzng=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=aYqPCSFUnEOsJN3qXD4Bpbe0lAEi7x2sbyNyx5PY0Em+asVRR8LaVsAV6HNMYxpW8NdrOTGSe56THV0PqajtczdmNr9YtCAcBi9vIyfAJ3hb21TfUDannSYRqmqvvLZxSm1j2LcVyxeZQ16vZRTuOcsnrN13TRynmCIgsocK/vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at; spf=pass smtp.mailfrom=sigma-star.at; dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b=oAAdNDJE; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sigma-star.at
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43623f0c574so106807295e9.2
-        for <linux-integrity@vger.kernel.org>; Tue, 07 Jan 2025 04:56:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sigma-star.at; s=google; t=1736254572; x=1736859372; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u3ZCQbwToICSm537L8Sy2gP7aNDk3KXPLLCsJPGfnhw=;
-        b=oAAdNDJEJ8VtwnjbngputK7jhZAlRPGLevRm47nr5NWcX4W3pQmbLFrSLLL2pEbRue
-         t1nHYeufDY0YIMmsDoqKG9r8XJw/03JMsfHIZu1tC0x3paVyDu1DxydjzNuR2PXsThCs
-         zCZr0ubOJsetBrE+lMmnMNC9keQjqzGxLB6Og7IHc5iF/tmvVlPMpaB4ZtvnGtvp92oR
-         j2+iYg8RsiNrBUL/yLVmlapCgyXtqN1dJpuTthIbSTlelmM3T2MznXakUDsp5vyxFQY+
-         hJ/ojDCeHk15UJvDatgAO13Up6/n5hpJefqI/1y483A14q4SsCX8jckDlwTNlaODXEhy
-         0JFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736254572; x=1736859372;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u3ZCQbwToICSm537L8Sy2gP7aNDk3KXPLLCsJPGfnhw=;
-        b=hT8PBwtjQzdFlw+CN2awnEtAUdvQojGpqxb2YILWTGIOWZ+5JP8M9wofxsaXccqBgn
-         U7fAX2DnY9E7Ke3UEsGyKjXjDDdQ2w6DnaEacY3OyBLED7g7bi5N3WOTwTKSOQSk4jE1
-         J/7yxxGRcCwd8Qubvd9IzUwQ9//5a1XUgrKyEJ9WFH2PRwcZnzreuMcpMr+N4GYB220I
-         r6IT8EiaPlp7rCKHWGbdgx66FcX/AnrxrZdU8rHkxotIUok0EsLp5g/C0GO7DidLRYde
-         O5AAg0nHaVfQG/Rdz9OPoiqy/EvPlXs8Dpg+/Qm5bDqj8rzxzu07k6b8SltifeVTAjAV
-         PrDA==
-X-Gm-Message-State: AOJu0Yy84o26/zYgfuVEi1kJUHsYymRySDCwuqRmiPFMLVputXeRC+DZ
-	yXnB7RBdxpHs5ZqnDalCzs80miVpEIajCQolmvqz6J/Mae15IIBsXw72BBKXIVs=
-X-Gm-Gg: ASbGncsSRCdzVdCZQhrbyW0RfJS6mD1cWOOKKNUe+7+ktyTXkeuG8NmKd5CfR19FzXU
-	NL34RgR/rOWPXbK3Z5+A04cfb+bvZrEAPYxMASQeIr//2dEn1IPWCuiP/uQ7DylHqhorH8FjfIj
-	6k8fR44K70JjUyYasD7l4UkzYuPGG6W7A/lcRMljLW6G+2F4JH1YPJSZeFhRVVcmNPxnCqw8hb9
-	O/g8O7nbU1vToorv/VOGTpAoFVTN4BVu2XRrwUScdvjilRSYvNOJIv7rQzrBt6tqDt07pg=
-X-Google-Smtp-Source: AGHT+IH3LnvvjrofmboXcdOA469qCM6U4NR7fF54KLrYPLcSCkDti2tVbLL3RQaJvGouHlnnaL3mEw==
-X-Received: by 2002:a05:600c:45cd:b0:434:a7b6:10e9 with SMTP id 5b1f17b1804b1-436686462f9mr571258605e9.17.1736254572516;
-        Tue, 07 Jan 2025 04:56:12 -0800 (PST)
-Received: from smtpclient.apple ([82.150.214.1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a546e822bsm24831226f8f.22.2025.01.07.04.56.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 Jan 2025 04:56:12 -0800 (PST)
-Content-Type: text/plain;
-	charset=us-ascii
+	s=arc-20240116; t=1736274586; c=relaxed/simple;
+	bh=3wpa7NOLMH9uH2o/nipvepQ4jegOFJ4KrWFAqbdCHM8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NRAClnzqphl41bMiBFK1WnOTxp+2PezuCR8B3alX7yRCSFCPfWURHNzyvFhgHE6MViko6TKABW9U/eSEnwpDsxvlwIbrGbQZ6Z9aa5MfaCxuF1HaQb7z9xbK6zO4WFAniIMEYcwzlUoqvLJBmSS34PUWFwde3g4deXA6jBeC4dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ArO/GxfS; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 507I4CXX005396;
+	Tue, 7 Jan 2025 18:29:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=JbEa5N
+	rKIkHLRPHhFYuxRdkxm6VZs+vNTKG7MSmh0uo=; b=ArO/GxfSzebwgN+T/enl8+
+	xELSIR99no1ozkDFTdeEJHiHjZU/hbi0bff6Ho91raNvtyhS+l+0izMp4j7CS6L4
+	sysuIzqxPTC1DyMyPVqw0AYhGrlCME5ky0XVLiU91b4YElKvVEnEnJyegf37Zljk
+	e+tKyCRDFb+ZNGxHRfiWuhIUvS336o0pI7VyBvJnRJa37DJcOHQvsi3RXwyjSCOc
+	VsUCWHLeDEdGW1zNu4/OXKkzFLrQ/e/3LXgzCvo7vh3wl9wxlqIrXY/PyLBYSaQC
+	hd6zpLwolISfJDp7tQkt8oM3zVT0G+T9zreCsvH23QmiAZekK5IcDzsOKLCrwYyg
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4410f3atfh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Jan 2025 18:29:37 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 507G5L6s003614;
+	Tue, 7 Jan 2025 18:29:37 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43yfat42j4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Jan 2025 18:29:37 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 507ITaqR29950582
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 7 Jan 2025 18:29:36 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3FBF55804E;
+	Tue,  7 Jan 2025 18:29:36 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B39F25803F;
+	Tue,  7 Jan 2025 18:29:35 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.138.2])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  7 Jan 2025 18:29:35 +0000 (GMT)
+Message-ID: <baefcfa48e2e66e88b79b9db915d6c664d71c428.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 6/8] IMA: Add example policy for ima_violations.sh
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Petr Vorel <pvorel@suse.cz>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org
+Date: Tue, 07 Jan 2025 13:29:35 -0500
+In-Reply-To: <20250103190259.GA223253@pevik>
+References: <20241213222014.1580991-1-pvorel@suse.cz>
+	 <20241213222014.1580991-7-pvorel@suse.cz>
+	 <35af7de88f6961817a9df23c55104d20c32d2680.camel@linux.ibm.com>
+	 <20241231122340.GE36475@pevik>
+	 <f0746bfae90306d45079f6f3e2f7a1d55e0ad79f.camel@linux.ibm.com>
+	 <20250103190259.GA223253@pevik>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.200.121\))
-Subject: Re: [PATCH] KEYS: trusted: dcp: fix improper sg use with
- CONFIG_VMAP_STACK=y
-From: David Gstir <david@sigma-star.at>
-In-Reply-To: <20241113212754.12758-1-david@sigma-star.at>
-Date: Tue, 7 Jan 2025 13:56:01 +0100
-Cc: "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
- "linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- stable@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <CA61EE6A-F2D5-4812-96D4-4B1AF3B8B3ED@sigma-star.at>
-References: <20241113212754.12758-1-david@sigma-star.at>
-To: sigma star Kernel Team <upstream+dcp@sigma-star.at>,
- James Bottomley <jejb@linux.ibm.com>,
- Jarkko Sakkinen <jarkko@kernel.org>,
- Mimi Zohar <zohar@linux.ibm.com>,
- David Howells <dhowells@redhat.com>,
- Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>
-X-Mailer: Apple Mail (2.3826.200.121)
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Pt7PLwZyzJzqUL0HWFxCBAxwLP7A5rKU
+X-Proofpoint-ORIG-GUID: Pt7PLwZyzJzqUL0HWFxCBAxwLP7A5rKU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2501070153
 
+On Fri, 2025-01-03 at 20:02 +0100, Petr Vorel wrote:
+> > On Tue, 2024-12-31 at 13:23 +0100, Petr Vorel wrote:
+> > > Hi Mimi,
+>=20
+> > > > Hi Petr,
+>=20
+> > > > On Fri, 2024-12-13 at 23:20 +0100, Petr Vorel wrote:
+> > > > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > > > > ---
+> > > > > =C2=A0.../integrity/ima/datafiles/ima_violations/violations.polic=
+y=C2=A0=C2=A0=C2=A0=C2=A0 | 1 +
+> > > > > =C2=A01 file changed, 1 insertion(+)
+> > > > > =C2=A0create mode 100644
+> > > > > testcases/kernel/security/integrity/ima/datafiles/ima_violations/=
+violations
+> > > > > .policy
+>=20
+> > > > > diff --git
+> > > > > a/testcases/kernel/security/integrity/ima/datafiles/ima_violation=
+s/violatio
+> > > > > ns.policy
+> > > > > b/testcases/kernel/security/integrity/ima/datafiles/ima_violation=
+s/violatio
+> > > > > ns.policy
+> > > > > new file mode 100644
+> > > > > index 0000000000..5734c7617f
+> > > > > --- /dev/null
+> > > > > +++
+> > > > > b/testcases/kernel/security/integrity/ima/datafiles/ima_violation=
+s/violatio
+> > > > > ns.policy
+> > > > > @@ -0,0 +1 @@
+> > > > > +func=3DFILE_CHECK
+>=20
+> > > > "[PATCH v2 1/8] IMA: Add TCB policy as an example for ima_measureme=
+nts.sh"
+> > > > contains two rules to measure files opened by root on file open.
+>=20
+> > > > measure func=3DFILE_CHECK mask=3D^MAY_READ euid=3D0
+> > > > measure func=3DFILE_CHECK mask=3D^MAY_READ uid=3D0
+>=20
+> > > > If the 'tcb' or equivalent policy is loaded, there is no need to lo=
+ad another
+> > > > policy rule.=20
+>=20
+> > > I guess I'll move check for builtin policy loaded via kernel command =
+line
+> > > parameter also to ima_setup.sh to avoid loading example policy when t=
+here is a
+> > > required builtin policy loaded.
+>=20
+>=20
+> > Between the builtin and arch specific policies, most of the rules are a=
+lready
+> > defined.=C2=A0 The exception is measuring the boot command line.=C2=A0 =
+Perhaps we should
+> > update the arch specific policy to include it with the other kexec rule=
+s.
+>=20
+> > The arch specific policy may include the rule that requires the IMA pol=
+icy to be
+> > signed.
+>=20
+> > > I also wonder what is a common approach - don't
+> > > try to load custom example policy when there is builtin policy loaded=
+?
+>=20
+> > How about first checking if the rule exists when there is a builtin or
+> > equivalent custom policy loaded, before loading the example test policy=
+?
+>=20
+>=20
+> > > My goal was to allow more broad IMA testing based on different setup:
+>=20
+> > Very good.
+>=20
+> > > * running tests with ima_policy=3Dtcb builtin policy (current approac=
+h). Many
+> > > tests will be skipped due missing required policy content.
+>=20
+> > Ok.=C2=A0 Remember even with "ima_policy=3Dtcb" specified on the boot c=
+ommand line, the
+> > results will differ depending on whether the arch specific policy is lo=
+aded.
+>=20
+> > > * running tests without any builtin policy + load a custom policy + r=
+eboot via
+> > > LTP_IMA_LOAD_POLICY=3D1 (this patchset), but this should be probably =
+be done only
+> > > if required (or even none) builtin policy is loaded.
+>=20
+> > Good.=C2=A0 The first patch introduces the equivalent custom policy to
+> > "ima_policy=3Dtcb".=C2=A0 By "load a custom policy" are you referring t=
+o this policy or
+> > a specific policy test rule?
+>=20
+> I refer to this policy. Maybe better would be "policy content required by=
+ the test"
+> or "test example policy".
+>=20
+> My point is to allow testing without forcing ima_policy=3Dtcb setup (some=
+ tooling
+> might not allow easily to add kernel cmdline parameters). Also, mixing te=
+st
+> example policy with ima_policy=3Dtcb may result a different measurements,=
+ right?
 
-> On 13.11.2024, at 22:27, David Gstir <david@sigma-star.at> wrote:
-> 
-> With vmalloc stack addresses enabled (CONFIG_VMAP_STACK=y) DCP trusted
-> keys can crash during en- and decryption of the blob encryption key via
-> the DCP crypto driver. This is caused by improperly using sg_init_one()
-> with vmalloc'd stack buffers (plain_key_blob).
-> 
-> Fix this by always using kmalloc() for buffers we give to the DCP crypto
-> driver.
-> 
-> Cc: stable@vger.kernel.org # v6.10+
-> Fixes: 0e28bf61a5f9 ("KEYS: trusted: dcp: fix leak of blob encryption key")
-> Signed-off-by: David Gstir <david@sigma-star.at>
+Only if the file matches multiple, different measurement rules.  The orderi=
+ng of the
+policy rules impacts the measurement and might even prevent the measurement=
+.
 
-gentle ping.
+>=20
+> If the above assumption is correct I would like to have testing *with*
+> ima_policy=3Dtcb without loading any test example policy
 
-Thanks!
-- David
+I assume the purpose is to simplify testing.
 
+However,
+- Not all of the policy rules needed by the tests are included in the built=
+in "tcb"
+measurement policy.  Without loading test specific example policy rules, th=
+e testing
+would be incomplete.
+
+- There's no guarantee that the builtin "tcb" measurement policy has not be=
+en
+replaced with a custom policy.
+
+> and *without*
+> ima_policy=3Dtcb but loading test example policy via LTP_IMA_LOAD_POLICY=
+=3D1.
+
+Ok, but this assumes the ability of loading an unsigned policy.
+
+>=20
+> > > * Ideally not require CONFIG_IMA_READ_POLICY=3Dy as some distros does=
+ not have it
+> > > (but then it is hard to detect whether failures are real bugs or just=
+ false
+> > > positives due not having a proper policy). Maybe convert TBROK/TFAIL =
+to TCONF
+> > > if
+>=20
+> I'm sorry, I was wrong here, I meant to ask: convert TFAIL to either TBRO=
+K or
+> TCONF,
+> e.g. my patch [1].
+>=20
+> > > policy content is required but cannot be read due CONFIG_IMA_READ_POL=
+ICY (and
+> > > custom policy with proper content was not loaded).
+>=20
+> > Probably the latter option of converting from TBROK/TFAIL to TCONF is
+> > preferable.=C2=A0 Why fail a test without knowing it will fail.
+>=20
+> Because on distros without CONFIG_IMA_READ_POLICY=3Dy we never get notifi=
+ed about
+> the failure (maybe kernel is broken when it fails but nobody notices TCON=
+F).
+> But although there is a slight difference between TFAIL and TBROK [2], I =
+agree
+> that TCONF is probably the best (nobody wants to deal with false positive=
+s),
+> which is handled in my patch [1].
+>=20
+> But instead of this I'll try for all tests which require to have certain =
+policy
+> content (currently all but ima_conditionals.sh): if LTP_IMA_LOAD_POLICY=
+=3D1 set
+> try to load example policy even policy content cannot be checked (TCONF w=
+hen
+> policy fails to be loaded or if LTP_IMA_LOAD_POLICY not set).
+
+Sounds good.
+
+Mimi
 
