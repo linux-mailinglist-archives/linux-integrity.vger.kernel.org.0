@@ -1,143 +1,589 @@
-Return-Path: <linux-integrity+bounces-4553-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4554-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21DCBA10763
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 14:07:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 543A2A107FD
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 14:36:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 343CD168CD4
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 13:07:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0B8D3A6930
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 13:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F74C234D19;
-	Tue, 14 Jan 2025 13:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33F0120F998;
+	Tue, 14 Jan 2025 13:36:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="LQsFjL50"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jHTCj2eR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C86E23098A
-	for <linux-integrity@vger.kernel.org>; Tue, 14 Jan 2025 13:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5A4232454;
+	Tue, 14 Jan 2025 13:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736860045; cv=none; b=VyBj7O3wouvrGm+fRUmNP1E4eJoicWkqXzsT1D6HTdDp9ap87NoCm54t6LvCCdeAyg6XkoobNk6nixaQBdGipcRjEMoXGTCHC6AJ3+V2xGr66J/Wq2w0W66VhXf0RSjqwD9U2wnDIOp/WCySc2oONPQWs2GxZPUOt+oyd7+GzvE=
+	t=1736861766; cv=none; b=uKVunnLKXcy/jjGUforiZG+5ih/hf7Ea/mbbRsFJu4a57w93auP11V48g6U1rQCpaE/M+M/JQU97sFNxIhushFI4PP/nU0yXkNaDSq9zolQQcc5UFy2StscuLr1Wmu+h46dw2BncRXwv7s++9UPe2PKqM3H58Cw85h2D7hb3cJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736860045; c=relaxed/simple;
-	bh=/avICbdPpHdjemOQvkLGAY2+9dfeloypzwM49yfXZ78=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oojKpAc633ol+MAjPlCC4LOLPa+al76eBi1tjTE4skLd2KX54vSu5R2QR/KENNU/BHZiyG6TjtZCWECmZxWCTKU7CozOG+j2AtQFG5RCFKjPa60C0Qvg/qZmv56FtQbewoHT96vqzKCmAQ4644/cK9gRf6fCZyLlreOr8r438N0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=LQsFjL50; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6dd1962a75bso43424396d6.3
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Jan 2025 05:07:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1736860042; x=1737464842; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3TbuYi0/uhpyIsEsjZiVCHU/0H6AIyzAzvX2PVA6CnY=;
-        b=LQsFjL50oooI+CayDX5ewn/omBqtoeqN9u1guEYka1oIK5aqJcGXPu42aIYmBpVd0h
-         gK6ZAH4VWW95bnThaOCHO90Mr6bcnqcb1aizzIAbA9RYQT/V9g1R6k77uAf5I6Gst7mW
-         78xdyPRUcGd0h/ACazOzotcMN2LfIuCVOrHnxuZH3sz9kslWBrW6rGcaRPjAkRJLqIBN
-         59eIC8cBFKYx+GqzdZBsFEfkJnsGHVxkAyKIAM0DiNja5uAZkcf7JwV6ipFZ0NaX6VMH
-         KvyBLIU6lII0pwcvkfSigsh9ucohloB1ndeT02w6bXbO/M5Z/REQbFqYaOa2WCE27bjA
-         s8Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736860042; x=1737464842;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3TbuYi0/uhpyIsEsjZiVCHU/0H6AIyzAzvX2PVA6CnY=;
-        b=cfilf5uWwvhZqJse0kBqTJVvbR3t3JZrBj85POQ78Tn8NSQqc+SBqxHyOWTNMTn98I
-         xDuXnnWMx2OizoWr32pcQYqsxTahDqsJ/dn5fd7C4pXC6sWl98TgTuQPlGuxXL75NP+U
-         7ZAy/2AM6LlxjGDGmDOuQ85HqWxJFfYNnZKfmsw5vVGt59FEza3Lj2Fmk/GVtHyy04ea
-         Ff8eH1cD+y6/k0w/1eVeBK1HAxboAolfsCVXhNYaiozBpC+LqIxkXdzy4fjJepywYe1+
-         p6O5v31dEK11G9uuFqlSblBm8fGq0I9YR7OeT8kA7jH5RGz5N5xMZmdS4oyUAg5EcK5+
-         IqNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXlO//IgVgSqkMjLYUTWW525FhFjLN3QDr4rex2ngm5ycX1hMXi+J0OIfVvnvgUIys+Rss1LL/pF/27ZFA9bRs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDHNIjwCe0oO5P94MsN56gu96yk7rAQEKxNOpZt4VP22I9eqRf
-	avvnO1Qp61KQOgbDU56xXRpexB9y2667S60PuL0uFlTrvV3MBpRY+r77DIMOyyw=
-X-Gm-Gg: ASbGncs7weNZiLC5y0IoHxNZ1b4um6KTrNHFw3VYnjJ+H0hPl6/3jAAxT2R/BLwNGXZ
-	FAUXXBqW7xJ1nH6SRJ2Zyy/pRxNspggdxjDU3ztvcJzJMHhThLetx0ipvsUWmPtif7wtkYiQIDw
-	gX/BoatUyDgAcSvNNeu9/qP6EqfoMoTX+8foHlpJJEnaRfYWb+LKAv7p1rIV00yPqWTfwSZX2Z9
-	sRI+kw2jTF8A3PuxPZ15hLKmHcJztARCMd4tMB8PhUotvxLUbML5H5Jj59adMXhDuxT95V5GHn+
-	JEn7bvEWmhb48cZOZb/GS1P/nMkqjQ==
-X-Google-Smtp-Source: AGHT+IGLd1udhy0Of2yDBsH2ne4/vF+q3n9lb8J+wsePBP6osAhl0cEquesspYzUnUKjTPWXZsReXA==
-X-Received: by 2002:a05:6214:2686:b0:6d4:36ff:4356 with SMTP id 6a1803df08f44-6df9b220effmr448916986d6.19.1736860042256;
-        Tue, 14 Jan 2025 05:07:22 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-128-5.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.128.5])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dfade73b8fsm52418026d6.72.2025.01.14.05.07.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 05:07:21 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1tXgdc-00000002Lxg-3sFN;
-	Tue, 14 Jan 2025 09:07:20 -0400
-Date: Tue, 14 Jan 2025 09:07:20 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>,
-	James Bottomley <james.bottomley@hansenpartnership.com>,
-	linux-coco@lists.linux.dev, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Huewe <peterhuewe@gmx.de>, "H. Peter Anvin" <hpa@zytor.com>,
-	linux-integrity@vger.kernel.org, x86@kernel.org,
-	Joerg Roedel <jroedel@suse.de>, Jarkko Sakkinen <jarkko@kernel.org>,
-	linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	Dov Murik <dovmurik@linux.ibm.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH 3/3] x86/sev: add a SVSM vTPM platform device
-Message-ID: <20250114130720.GJ26854@ziepe.ca>
-References: <20241210143423.101774-4-sgarzare@redhat.com>
- <20241210144025.GG1888283@ziepe.ca>
- <50a2e1d29b065498146f459035e447851a518d1a.camel@HansenPartnership.com>
- <20241210150413.GI1888283@ziepe.ca>
- <CAGxU2F6yzqb0o_pQDakBbCj3RdKy_XfZfzGsiywnYL65g6WeGg@mail.gmail.com>
- <20241211150048.GJ1888283@ziepe.ca>
- <CAGxU2F7QjQTnXsqYeKc0q03SQCoW+BHbej9Q2Z8gxbgu-3O2fA@mail.gmail.com>
- <D6FSHG5Z9UJQ.CWQTAANBVIQQ@iki.fi>
- <6rwo7tkdst227kb4pwvr54w4mfz2zw3offux7mqfupi3rgwkaz@65yklvvqw6n4>
- <CAGxU2F4YQy-otsGtGiUHDiL7PGXic2_HzWL_+GHkn+Hs_ScGpQ@mail.gmail.com>
+	s=arc-20240116; t=1736861766; c=relaxed/simple;
+	bh=avibWBzzYlVJuJNsyxPVWE3qJgJLyOxk08sKoQLXxdA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gTbwjZO2lU31zpJzEPCCJxytrFwKw9iWSQemw5qO/OahcV2Wo/kd78sdJBKTxoT8o/F77b5f6Xbo57C1FSRFP5WGzmuBHa1AGY2FNWRyjwfD8F5gKt7TnEV7N++iruttxnMcXnVT0sBLeqeN79MxYGk7cZJuuzTFdz5UXfrFAO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jHTCj2eR; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50EDUskV031385;
+	Tue, 14 Jan 2025 13:35:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=5J44fg
+	WG2g28SUw2UDmVWWHkV8cQ+6akBsC3mlxe5BE=; b=jHTCj2eR3VfCjH2/Y4Jqce
+	3EGxuifb0Y+4Jx1NMBU84xAAxJaSp8f0KaPIrVM7+VH/Y768msBs6BlUEUEOCkoo
+	4m205p+IyA/J90cUJxw/VLxnjZSNcfGbAlzur60WUXwBTGXrb/zTrxFYREeGvhLR
+	1R64vYBkM111ky+j6cokwrcalU+etBLO0BOLqc+J2LoXQog4txpiuZGu9KtX4uHL
+	8KtTMm/LOxo4BDRbIhapDsKoqdc5cDnCwaAcjDR/UfANotbXePgCxijgah0xlbT9
+	PyM6rCLw6rjohY76Mo5p1nDP3IbHGk98XRCVUoGSk5GbgEN9JMnm21eq5y4cbisg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 445cnb2stv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Jan 2025 13:35:35 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50EDZYOa021414;
+	Tue, 14 Jan 2025 13:35:34 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 445cnb2sts-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Jan 2025 13:35:34 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50E9xFf1017014;
+	Tue, 14 Jan 2025 13:35:33 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4444fk38p8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Jan 2025 13:35:33 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50EDZXfu64815492
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Jan 2025 13:35:33 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5D52358059;
+	Tue, 14 Jan 2025 13:35:33 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 25A2858043;
+	Tue, 14 Jan 2025 13:35:31 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.110.183])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 14 Jan 2025 13:35:31 +0000 (GMT)
+Message-ID: <5bd0ab00a006c5dbbe62f9c5e43a722db05f8e49.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 2/7] ima: Remove inode lock
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, jack@suse.cz, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date: Tue, 14 Jan 2025 08:35:30 -0500
+In-Reply-To: <20241128100621.461743-3-roberto.sassu@huaweicloud.com>
+References: <20241128100621.461743-1-roberto.sassu@huaweicloud.com>
+	 <20241128100621.461743-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGxU2F4YQy-otsGtGiUHDiL7PGXic2_HzWL_+GHkn+Hs_ScGpQ@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: VCNFpYBBhbVcRt1IWZYrDzvQZ0DODHlT
+X-Proofpoint-GUID: MHHAf5tYYYN6dYz9Uoh06FgBjH3xb3DM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 spamscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501140111
 
-On Tue, Jan 14, 2025 at 11:42:34AM +0100, Stefano Garzarella wrote:
-> Hi Jarkko,
-> 
-> On Thu, 19 Dec 2024 at 17:07, Stefano Garzarella <sgarzare@redhat.com> wrote:
-> >
-> > On Thu, Dec 19, 2024 at 05:40:58PM +0200, Jarkko Sakkinen wrote:
-> > >On Thu Dec 19, 2024 at 5:35 PM EET, Stefano Garzarella wrote:
-> > >> So to use them directly in sev, we would have to move these definitions
-> > >> into include/linux/tpm.h or some other file in inlcude/. Is this
-> > >> acceptable for TPM maintainers?
-> > >
-> > >There's only me.
-> > >
-> > >I don't know.
-> > >
-> > >What you want to put to include/linux/tpm.h anyway?
-> >
-> > At least tpmm_chip_alloc(), tpm2_probe(), and tpm_chip_register()
+On Thu, 2024-11-28 at 11:06 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>=20
+> Move out the mutex in the ima_iint_cache structure to a new structure
+> called ima_iint_cache_lock, so that a lock can be taken regardless of
+> whether or not inode integrity metadata are stored in the inode.
+>=20
+> Introduce ima_inode_security() to retrieve the ima_iint_cache_lock
+> structure, if inode i_security is not NULL, and consequently remove
+> ima_inode_get_iint() and ima_inode_set_iint(), since the ima_iint_cache
+> structure can be read and modified from the new structure.
+>=20
+> Move the mutex initialization and annotation in the new function
+> ima_inode_alloc_security() and introduce ima_iint_lock() and
+> ima_iint_unlock() to respectively lock and unlock the mutex.
+>=20
+> Finally, expand the critical region in process_measurement() guarded by
+> iint->mutex up to where the inode was locked, use only one iint lock in
+> __ima_inode_hash(), since the mutex is now in the inode security blob, an=
+d
+> replace the inode_lock()/inode_unlock() calls in ima_check_last_writer().
+>=20
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: Paul Moore <paul@paul-moore.com>
+> ---
+> =C2=A0security/integrity/ima/ima.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 31 +++=
++-------
+> =C2=A0security/integrity/ima/ima_api.c=C2=A0 |=C2=A0 4 +-
+> =C2=A0security/integrity/ima/ima_iint.c | 92 ++++++++++++++++++++++++++--=
+---
+> =C2=A0security/integrity/ima/ima_main.c | 39 ++++++-------
+> =C2=A04 files changed, 109 insertions(+), 57 deletions(-)
+>=20
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 3f1a82b7cd71..b4eeab48f08a 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -182,7 +182,6 @@ struct ima_kexec_hdr {
+> =C2=A0
+> =C2=A0/* IMA integrity metadata associated with an inode */
+> =C2=A0struct ima_iint_cache {
+> -	struct mutex mutex;	/* protects: version, flags, digest */
+> =C2=A0	struct integrity_inode_attributes real_inode;
+> =C2=A0	unsigned long flags;
+> =C2=A0	unsigned long measured_pcrs;
+> @@ -195,35 +194,27 @@ struct ima_iint_cache {
+> =C2=A0	struct ima_digest_data *ima_hash;
+> =C2=A0};
+> =C2=A0
+> +struct ima_iint_cache_lock {
+> +	struct mutex mutex;	/* protects: iint version, flags, digest */
+> +	struct ima_iint_cache *iint;
+> +};
+> +
+> =C2=A0extern struct lsm_blob_sizes ima_blob_sizes;
+> =C2=A0
+> -static inline struct ima_iint_cache *
+> -ima_inode_get_iint(const struct inode *inode)
+> +static inline struct ima_iint_cache_lock *ima_inode_security(void *i_sec=
+urity)
+> =C2=A0{
 
-The intention was that tpm drivers would be under drivers/char/tpm/
+Is there a reason for naming the function ima_inode_security() and passing
+i_security, when the other LSMs name it <lsm>_inode() and pass the inode?
 
-Do you really need to put your tpm driver in arch code? Historically
-drivers in arch code have not worked out so well.
+static inline struct inode_smack *smack_inode(const struct inode *inode)
+static inline struct inode_security_struct *selinux_inode(const struct inod=
+e *inode)
+static inline struct landlock_inode_security *landlock_inode(const struct i=
+node
+*const inode)
 
-Meaning that you'd export some of your arch stuff for the tpm driver
-to live in its natural home
+Mimi
 
-Jason
+
+> -	struct ima_iint_cache **iint_sec;
+> -
+> -	if (unlikely(!inode->i_security))
+> +	if (unlikely(!i_security))
+> =C2=A0		return NULL;
+> =C2=A0
+> -	iint_sec =3D inode->i_security + ima_blob_sizes.lbs_inode;
+> -	return *iint_sec;
+> -}
+> -
+> -static inline void ima_inode_set_iint(const struct inode *inode,
+> -				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct ima_iint_cache *iint)
+> -{
+> -	struct ima_iint_cache **iint_sec;
+> -
+> -	if (unlikely(!inode->i_security))
+> -		return;
+> -
+> -	iint_sec =3D inode->i_security + ima_blob_sizes.lbs_inode;
+> -	*iint_sec =3D iint;
+> +	return i_security + ima_blob_sizes.lbs_inode;
+> =C2=A0}
+> =C2=A0
+> =C2=A0struct ima_iint_cache *ima_iint_find(struct inode *inode);
+> =C2=A0struct ima_iint_cache *ima_inode_get(struct inode *inode);
+> +int ima_inode_alloc_security(struct inode *inode);
+> =C2=A0void ima_inode_free_rcu(void *inode_security);
+> +void ima_iint_lock(struct inode *inode);
+> +void ima_iint_unlock(struct inode *inode);
+> =C2=A0void __init ima_iintcache_init(void);
+> =C2=A0
+> =C2=A0extern const int read_idmap[];
+> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/im=
+a_api.c
+> index 984e861f6e33..37c2a228f0e1 100644
+> --- a/security/integrity/ima/ima_api.c
+> +++ b/security/integrity/ima/ima_api.c
+> @@ -234,7 +234,7 @@ static bool ima_get_verity_digest(struct ima_iint_cac=
+he *iint,
+> =C2=A0 * Calculate the file hash, if it doesn't already exist,
+> =C2=A0 * storing the measurement and i_version in the iint.
+> =C2=A0 *
+> - * Must be called with iint->mutex held.
+> + * Must be called with iint mutex held.
+> =C2=A0 *
+> =C2=A0 * Return 0 on success, error code otherwise
+> =C2=A0 */
+> @@ -343,7 +343,7 @@ int ima_collect_measurement(struct ima_iint_cache *ii=
+nt, struct
+> file *file,
+> =C2=A0 *	- the inode was previously flushed as well as the iint info,
+> =C2=A0 *	=C2=A0 containing the hashing info.
+> =C2=A0 *
+> - * Must be called with iint->mutex held.
+> + * Must be called with iint mutex held.
+> =C2=A0 */
+> =C2=A0void ima_store_measurement(struct ima_iint_cache *iint, struct file=
+ *file,
+> =C2=A0			=C2=A0=C2=A0 const unsigned char *filename,
+> diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/i=
+ma_iint.c
+> index 9d9fc7a911ad..dcc32483d29f 100644
+> --- a/security/integrity/ima/ima_iint.c
+> +++ b/security/integrity/ima/ima_iint.c
+> @@ -26,7 +26,13 @@ static struct kmem_cache *ima_iint_cache __ro_after_in=
+it;
+> =C2=A0 */
+> =C2=A0struct ima_iint_cache *ima_iint_find(struct inode *inode)
+> =C2=A0{
+> -	return ima_inode_get_iint(inode);
+> +	struct ima_iint_cache_lock *iint_lock;
+> +
+> +	iint_lock =3D ima_inode_security(inode->i_security);
+> +	if (!iint_lock)
+> +		return NULL;
+> +
+> +	return iint_lock->iint;
+> =C2=A0}
+> =C2=A0
+> =C2=A0#define IMA_MAX_NESTING (FILESYSTEM_MAX_STACK_DEPTH + 1)
+> @@ -37,18 +43,18 @@ struct ima_iint_cache *ima_iint_find(struct inode *in=
+ode)
+> =C2=A0 * mutex to avoid lockdep false positives related to IMA + overlayf=
+s.
+> =C2=A0 * See ovl_lockdep_annotate_inode_mutex_key() for more details.
+> =C2=A0 */
+> -static inline void ima_iint_lockdep_annotate(struct ima_iint_cache *iint=
+,
+> -					=C2=A0=C2=A0=C2=A0=C2=A0 struct inode *inode)
+> +static inline void ima_iint_lock_lockdep_annotate(struct mutex *mutex,
+> +						=C2=A0 struct inode *inode)
+> =C2=A0{
+> =C2=A0#ifdef CONFIG_LOCKDEP
+> -	static struct lock_class_key ima_iint_mutex_key[IMA_MAX_NESTING];
+> +	static struct lock_class_key ima_iint_lock_mutex_key[IMA_MAX_NESTING];
+> =C2=A0
+> =C2=A0	int depth =3D inode->i_sb->s_stack_depth;
+> =C2=A0
+> =C2=A0	if (WARN_ON_ONCE(depth < 0 || depth >=3D IMA_MAX_NESTING))
+> =C2=A0		depth =3D 0;
+> =C2=A0
+> -	lockdep_set_class(&iint->mutex, &ima_iint_mutex_key[depth]);
+> +	lockdep_set_class(mutex, &ima_iint_lock_mutex_key[depth]);
+> =C2=A0#endif
+> =C2=A0}
+> =C2=A0
+> @@ -65,14 +71,11 @@ static void ima_iint_init_always(struct ima_iint_cach=
+e *iint,
+> =C2=A0	iint->ima_read_status =3D INTEGRITY_UNKNOWN;
+> =C2=A0	iint->ima_creds_status =3D INTEGRITY_UNKNOWN;
+> =C2=A0	iint->measured_pcrs =3D 0;
+> -	mutex_init(&iint->mutex);
+> -	ima_iint_lockdep_annotate(iint, inode);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void ima_iint_free(struct ima_iint_cache *iint)
+> =C2=A0{
+> =C2=A0	kfree(iint->ima_hash);
+> -	mutex_destroy(&iint->mutex);
+> =C2=A0	kmem_cache_free(ima_iint_cache, iint);
+> =C2=A0}
+> =C2=A0
+> @@ -87,9 +90,14 @@ static void ima_iint_free(struct ima_iint_cache *iint)
+> =C2=A0 */
+> =C2=A0struct ima_iint_cache *ima_inode_get(struct inode *inode)
+> =C2=A0{
+> +	struct ima_iint_cache_lock *iint_lock;
+> =C2=A0	struct ima_iint_cache *iint;
+> =C2=A0
+> -	iint =3D ima_iint_find(inode);
+> +	iint_lock =3D ima_inode_security(inode->i_security);
+> +	if (!iint_lock)
+> +		return NULL;
+> +
+> +	iint =3D iint_lock->iint;
+> =C2=A0	if (iint)
+> =C2=A0		return iint;
+> =C2=A0
+> @@ -99,11 +107,31 @@ struct ima_iint_cache *ima_inode_get(struct inode *i=
+node)
+> =C2=A0
+> =C2=A0	ima_iint_init_always(iint, inode);
+> =C2=A0
+> -	ima_inode_set_iint(inode, iint);
+> +	iint_lock->iint =3D iint;
+> =C2=A0
+> =C2=A0	return iint;
+> =C2=A0}
+> =C2=A0
+> +/**
+> + * ima_inode_alloc_security - Called to init an inode
+> + * @inode: Pointer to the inode
+> + *
+> + * Initialize and annotate the mutex in the ima_iint_cache_lock structur=
+e.
+> + *
+> + * Return: Zero.
+> + */
+> +int ima_inode_alloc_security(struct inode *inode)
+> +{
+> +	struct ima_iint_cache_lock *iint_lock;
+> +
+> +	iint_lock =3D ima_inode_security(inode->i_security);
+> +
+> +	mutex_init(&iint_lock->mutex);
+> +	ima_iint_lock_lockdep_annotate(&iint_lock->mutex, inode);
+> +
+> +	return 0;
+> +}
+> +
+> =C2=A0/**
+> =C2=A0 * ima_inode_free_rcu - Called to free an inode via a RCU callback
+> =C2=A0 * @inode_security: The inode->i_security pointer
+> @@ -112,10 +140,48 @@ struct ima_iint_cache *ima_inode_get(struct inode *=
+inode)
+> =C2=A0 */
+> =C2=A0void ima_inode_free_rcu(void *inode_security)
+> =C2=A0{
+> -	struct ima_iint_cache **iint_p =3D inode_security +
+> ima_blob_sizes.lbs_inode;
+> +	struct ima_iint_cache_lock *iint_lock;
+> +
+> +	iint_lock =3D ima_inode_security(inode_security);
+> +
+> +	mutex_destroy(&iint_lock->mutex);
+> +
+> +	if (iint_lock->iint)
+> +		ima_iint_free(iint_lock->iint);
+> +}
+> +
+> +/**
+> + * ima_iint_lock - Lock integrity metadata
+> + * @inode: Pointer to the inode
+> + *
+> + * Lock integrity metadata.
+> + */
+> +void ima_iint_lock(struct inode *inode)
+> +{
+> +	struct ima_iint_cache_lock *iint_lock;
+> +
+> +	iint_lock =3D ima_inode_security(inode->i_security);
+> +
+> +	/* Only inodes with i_security are processed by IMA. */
+> +	if (iint_lock)
+> +		mutex_lock(&iint_lock->mutex);
+> +}
+> +
+> +/**
+> + * ima_iint_unlock - Unlock integrity metadata
+> + * @inode: Pointer to the inode
+> + *
+> + * Unlock integrity metadata.
+> + */
+> +void ima_iint_unlock(struct inode *inode)
+> +{
+> +	struct ima_iint_cache_lock *iint_lock;
+> +
+> +	iint_lock =3D ima_inode_security(inode->i_security);
+> =C2=A0
+> -	if (*iint_p)
+> -		ima_iint_free(*iint_p);
+> +	/* Only inodes with i_security are processed by IMA. */
+> +	if (iint_lock)
+> +		mutex_unlock(&iint_lock->mutex);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static void ima_iint_init_once(void *foo)
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
+ma_main.c
+> index cea0afbbc28d..05cfb04cd02b 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -163,7 +163,7 @@ static void ima_check_last_writer(struct ima_iint_cac=
+he *iint,
+> =C2=A0	if (!(mode & FMODE_WRITE))
+> =C2=A0		return;
+> =C2=A0
+> -	mutex_lock(&iint->mutex);
+> +	ima_iint_lock(inode);
+> =C2=A0	if (atomic_read(&inode->i_writecount) =3D=3D 1) {
+> =C2=A0		struct kstat stat;
+> =C2=A0
+> @@ -181,7 +181,7 @@ static void ima_check_last_writer(struct ima_iint_cac=
+he *iint,
+> =C2=A0				ima_update_xattr(iint, file);
+> =C2=A0		}
+> =C2=A0	}
+> -	mutex_unlock(&iint->mutex);
+> +	ima_iint_unlock(inode);
+> =C2=A0}
+> =C2=A0
+> =C2=A0/**
+> @@ -247,7 +247,7 @@ static int process_measurement(struct file *file, con=
+st struct
+> cred *cred,
+> =C2=A0	if (action & IMA_FILE_APPRAISE)
+> =C2=A0		func =3D FILE_CHECK;
+> =C2=A0
+> -	inode_lock(inode);
+> +	ima_iint_lock(inode);
+> =C2=A0
+> =C2=A0	if (action) {
+> =C2=A0		iint =3D ima_inode_get(inode);
+> @@ -259,15 +259,11 @@ static int process_measurement(struct file *file, c=
+onst
+> struct cred *cred,
+> =C2=A0		ima_rdwr_violation_check(file, iint, action & IMA_MEASURE,
+> =C2=A0					 &pathbuf, &pathname, filename);
+> =C2=A0
+> -	inode_unlock(inode);
+> -
+> =C2=A0	if (rc)
+> =C2=A0		goto out;
+> =C2=A0	if (!action)
+> =C2=A0		goto out;
+> =C2=A0
+> -	mutex_lock(&iint->mutex);
+> -
+> =C2=A0	if (test_and_clear_bit(IMA_CHANGE_ATTR, &iint->atomic_flags))
+> =C2=A0		/* reset appraisal flags if ima_inode_post_setattr was called */
+> =C2=A0		iint->flags &=3D ~(IMA_APPRAISE | IMA_APPRAISED |
+> @@ -412,10 +408,10 @@ static int process_measurement(struct file *file, c=
+onst
+> struct cred *cred,
+> =C2=A0	if ((mask & MAY_WRITE) && test_bit(IMA_DIGSIG, &iint->atomic_flags=
+) &&
+> =C2=A0	=C2=A0=C2=A0=C2=A0=C2=A0 !(iint->flags & IMA_NEW_FILE))
+> =C2=A0		rc =3D -EACCES;
+> -	mutex_unlock(&iint->mutex);
+> =C2=A0	kfree(xattr_value);
+> =C2=A0	ima_free_modsig(modsig);
+> =C2=A0out:
+> +	ima_iint_unlock(inode);
+> =C2=A0	if (pathbuf)
+> =C2=A0		__putname(pathbuf);
+> =C2=A0	if (must_appraise) {
+> @@ -580,18 +576,13 @@ static int __ima_inode_hash(struct inode *inode, st=
+ruct file
+> *file, char *buf,
+> =C2=A0	struct ima_iint_cache *iint =3D NULL, tmp_iint;
+> =C2=A0	int rc, hash_algo;
+> =C2=A0
+> -	if (ima_policy_flag) {
+> +	ima_iint_lock(inode);
+> +
+> +	if (ima_policy_flag)
+> =C2=A0		iint =3D ima_iint_find(inode);
+> -		if (iint)
+> -			mutex_lock(&iint->mutex);
+> -	}
+> =C2=A0
+> =C2=A0	if ((!iint || !(iint->flags & IMA_COLLECTED)) && file) {
+> -		if (iint)
+> -			mutex_unlock(&iint->mutex);
+> -
+> =C2=A0		memset(&tmp_iint, 0, sizeof(tmp_iint));
+> -		mutex_init(&tmp_iint.mutex);
+> =C2=A0
+> =C2=A0		rc =3D ima_collect_measurement(&tmp_iint, file, NULL, 0,
+> =C2=A0					=C2=A0=C2=A0=C2=A0=C2=A0 ima_hash_algo, NULL);
+> @@ -600,22 +591,24 @@ static int __ima_inode_hash(struct inode *inode, st=
+ruct file
+> *file, char *buf,
+> =C2=A0			if (rc !=3D -ENOMEM)
+> =C2=A0				kfree(tmp_iint.ima_hash);
+> =C2=A0
+> +			ima_iint_unlock(inode);
+> =C2=A0			return -EOPNOTSUPP;
+> =C2=A0		}
+> =C2=A0
+> =C2=A0		iint =3D &tmp_iint;
+> -		mutex_lock(&iint->mutex);
+> =C2=A0	}
+> =C2=A0
+> -	if (!iint)
+> +	if (!iint) {
+> +		ima_iint_unlock(inode);
+> =C2=A0		return -EOPNOTSUPP;
+> +	}
+> =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * ima_file_hash can be called when ima_collect_measurement has st=
+ill
+> =C2=A0	 * not been called, we might not always have a hash.
+> =C2=A0	 */
+> =C2=A0	if (!iint->ima_hash || !(iint->flags & IMA_COLLECTED)) {
+> -		mutex_unlock(&iint->mutex);
+> +		ima_iint_unlock(inode);
+> =C2=A0		return -EOPNOTSUPP;
+> =C2=A0	}
+> =C2=A0
+> @@ -626,11 +619,12 @@ static int __ima_inode_hash(struct inode *inode, st=
+ruct file
+> *file, char *buf,
+> =C2=A0		memcpy(buf, iint->ima_hash->digest, copied_size);
+> =C2=A0	}
+> =C2=A0	hash_algo =3D iint->ima_hash->algo;
+> -	mutex_unlock(&iint->mutex);
+> =C2=A0
+> =C2=A0	if (iint =3D=3D &tmp_iint)
+> =C2=A0		kfree(iint->ima_hash);
+> =C2=A0
+> +	ima_iint_unlock(inode);
+> +
+> =C2=A0	return hash_algo;
+> =C2=A0}
+> =C2=A0
+> @@ -1118,7 +1112,7 @@ EXPORT_SYMBOL_GPL(ima_measure_critical_data);
+> =C2=A0 * @kmod_name: kernel module name
+> =C2=A0 *
+> =C2=A0 * Avoid a verification loop where verifying the signature of the m=
+odprobe
+> - * binary requires executing modprobe itself. Since the modprobe iint->m=
+utex
+> + * binary requires executing modprobe itself. Since the modprobe iint mu=
+tex
+> =C2=A0 * is already held when the signature verification is performed, a =
+deadlock
+> =C2=A0 * occurs as soon as modprobe is executed within the critical regio=
+n, since
+> =C2=A0 * the same lock cannot be taken again.
+> @@ -1193,6 +1187,7 @@ static struct security_hook_list ima_hooks[] __ro_a=
+fter_init
+> =3D {
+> =C2=A0#ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
+> =C2=A0	LSM_HOOK_INIT(kernel_module_request, ima_kernel_module_request),
+> =C2=A0#endif
+> +	LSM_HOOK_INIT(inode_alloc_security, ima_inode_alloc_security),
+> =C2=A0	LSM_HOOK_INIT(inode_free_security_rcu, ima_inode_free_rcu),
+> =C2=A0};
+> =C2=A0
+> @@ -1210,7 +1205,7 @@ static int __init init_ima_lsm(void)
+> =C2=A0}
+> =C2=A0
+> =C2=A0struct lsm_blob_sizes ima_blob_sizes __ro_after_init =3D {
+> -	.lbs_inode =3D sizeof(struct ima_iint_cache *),
+> +	.lbs_inode =3D sizeof(struct ima_iint_cache_lock),
+> =C2=A0};
+> =C2=A0
+> =C2=A0DEFINE_LSM(ima) =3D {
+
 
