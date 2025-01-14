@@ -1,83 +1,83 @@
-Return-Path: <linux-integrity+bounces-4555-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4556-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34D07A10914
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 15:21:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3664EA10971
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 15:32:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D49283A5260
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 14:21:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46BE3161B12
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 14:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A63E613E41A;
-	Tue, 14 Jan 2025 14:21:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54FB31474A2;
+	Tue, 14 Jan 2025 14:32:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tjG7QCLV"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Zp7DSMlJ"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F86126C0D;
-	Tue, 14 Jan 2025 14:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4C041C94;
+	Tue, 14 Jan 2025 14:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736864479; cv=none; b=TMQlY+Lo7zeeSxvRdFt5kt4q6QyLtfkNlU/sZoaLgly+yyLJLbGT2iOgHhTjGVbbTfaULAW6etneevfgavAaXjvU/6P7Q0XkFQmzrKDWOlQipbV+YbpqO9arzhImZj7orUs/CpwR+wq5DbDEMPGUN9eQ+UcLcsB3lUbqeTso0Xo=
+	t=1736865173; cv=none; b=OupUCPWZfKRUmFKr/ps1BwPHCCtwn3kciTadWssyV/+NOybteJYsTj1Jc2iX9zsy8BVf6YUXh8atYzcRpGIs2nFO15FBfc84ApzBiO0lIs37Hq41O4QE9vowZ7Z0Ut3yZdWXPExH+NOuAwY7CWrDEumqqeYKd32FdCHbUDbsWDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736864479; c=relaxed/simple;
-	bh=mOjrhcNJumrD7oGOzLiEB/Af5QF2YsulVU+Sef5zJjc=;
+	s=arc-20240116; t=1736865173; c=relaxed/simple;
+	bh=CXT+2n998GraIpo3xFCkNZ/cMesx2buqdH/8pQlpHxE=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n3DUSVJiYcRpwLRdPbgkubs4e0bQsQlerys91t2LalkquOTGbXxcErY2dKrS18yFWZYd0O5UbbMeRQWESJ+MhRHK6W88OWRs8ZXmLUvZC5EY//sWb7zzUEkyU4QB+EdeQ1NgoGgqqu0b/3tedxrjRbFRHtTtIYZVBeqGCcnNb0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tjG7QCLV; arc=none smtp.client-ip=148.163.158.5
+	 Content-Type:MIME-Version; b=WEt1QotYnr8+iscNmKJ2HK77jOhgRQD0zQxV6CQuPNP/uAJFxChsG9oH3UUw9H5so6kk+PPxJDC695AaPUzQDG4cIIjZoPsCYgrHctKLSQlOZaza5l7rGw3xVJ8CQNA9kLvC09DsMMySNP24jdt04D7h42CAj9k/5uS7e4+vz4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Zp7DSMlJ; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50DNaHTW028858;
-	Tue, 14 Jan 2025 14:20:43 GMT
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50EE6KqQ013489;
+	Tue, 14 Jan 2025 14:32:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=2YWz2P
-	YWntESkOYs4GkD1axYx6lXfF6WpZaE+S77tZM=; b=tjG7QCLV99e2KuScyCqk5H
-	4m2Ng4luUKJNbfdEaHxojLlObfpTp4cwYJ2GFUFHSslfLUmmD4wBwE5QxgG/PTOk
-	nU9aWTlAg9+qvfQLoEVy1tqd8QMZG/ETq9zkTm8De/i4CF7z7EYoPv3YxlNFpCSu
-	xhzMA/SEw8fAsG+xmPCHo8bdO022DsWhAFrfqSIY+ee+iUtWOO3BOkJO7KwD1vH3
-	g93cDTlHpQ4WAt+6nUFDRYp1Hg0EfAkuP6+SrFUQO1SBb5RMdhT9v8R/WEgKucCm
-	EAl7mH4g8UMGwSteF/Kv7sBH5Loyq0mdIC+fzaz9XFegAyjDGuO6WSmPX0lBXs8w
+	:message-id:mime-version:references:subject:to; s=pp1; bh=jtLAFz
+	jeOwhpY5+se6uHC7jF6IT5yZMY4ox8zRlKOEA=; b=Zp7DSMlJ2IeVzVTFykABEy
+	XCgyRjSBIPfF4ErzK0VGFlGMRpEoGPuirp7HltGmg1We3idLp7aADy3/4dSr8M+X
+	EGuM8VB0o2bdkCiNiRYzm0T6W2HrnsiGQToxHQ3+Hy2rqyRAk/O7N0vts4vTeUMp
+	hw6MYMJDXeTX+HOI3JcpZ9y4wvdXBvQ2TvHhi6F06RhDIISFoH39XEwbd152Z6yl
+	7tOY/VBW8YgHMP0yuFCLMhK9LJ3FUjTUvDVjzAjFnyzaXYT5Pt+p9NFP+iBkNsbS
+	pfiP/szvZlwJxW0Gt/AhZTBsuI4/K+qvMtb5MjCtYv9nPZonnSWN9i3aUeqx1YHQ
 	==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 445cnb2yyx-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 445sd6040a-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Jan 2025 14:20:42 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50EEKcrK019545;
-	Tue, 14 Jan 2025 14:20:42 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 445cnb2yyt-1
+	Tue, 14 Jan 2025 14:32:30 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50EEPhIl021648;
+	Tue, 14 Jan 2025 14:32:29 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 445sd60405-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Jan 2025 14:20:41 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50EDWPWY002663;
-	Tue, 14 Jan 2025 14:20:41 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4443by3mfr-1
+	Tue, 14 Jan 2025 14:32:29 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50EAk4tl001108;
+	Tue, 14 Jan 2025 14:32:28 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44456juags-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Jan 2025 14:20:41 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50EEKe2119530328
+	Tue, 14 Jan 2025 14:32:28 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50EEWS0J27722340
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Jan 2025 14:20:40 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8149558055;
-	Tue, 14 Jan 2025 14:20:40 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 92B9F58043;
-	Tue, 14 Jan 2025 14:20:39 +0000 (GMT)
+	Tue, 14 Jan 2025 14:32:28 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 09FEF5803F;
+	Tue, 14 Jan 2025 14:32:28 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 463EA58056;
+	Tue, 14 Jan 2025 14:32:26 +0000 (GMT)
 Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.110.183])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 Jan 2025 14:20:39 +0000 (GMT)
-Message-ID: <3545a38326a5d3dff28b1089ab2149f1662a641b.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 3/7] ima: Ensure lock is held when setting iint
- pointer in inode security blob
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 14 Jan 2025 14:32:26 +0000 (GMT)
+Message-ID: <6de587ad97ca3f053cd6dae3df9a4af945d8c17d.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 4/7] ima: Mark concurrent accesses to the iint
+ pointer in the inode security blob
 From: Mimi Zohar <zohar@linux.ibm.com>
 To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
         brauner@kernel.org, jack@suse.cz, dmitry.kasatkin@gmail.com,
@@ -86,10 +86,10 @@ To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
 Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Date: Tue, 14 Jan 2025 09:20:39 -0500
-In-Reply-To: <20241128100621.461743-4-roberto.sassu@huaweicloud.com>
+Date: Tue, 14 Jan 2025 09:32:25 -0500
+In-Reply-To: <20241128100621.461743-5-roberto.sassu@huaweicloud.com>
 References: <20241128100621.461743-1-roberto.sassu@huaweicloud.com>
-	 <20241128100621.461743-4-roberto.sassu@huaweicloud.com>
+	 <20241128100621.461743-5-roberto.sassu@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
@@ -100,116 +100,70 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: VIjwZgTQ_o8CSnNqxEvZMhkfeSbv8D2N
-X-Proofpoint-GUID: FKwaSuEbO9iefhSmboy5NN6m9CPGxmCo
+X-Proofpoint-GUID: cxSxMEpZvOG_kngIrSHYkYKyiQYhaX7a
+X-Proofpoint-ORIG-GUID: mZJLh6tVltSQkoXID79lxcxrH3I7_XCv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=598 spamscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501140112
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ clxscore=1015 phishscore=0 spamscore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=999 bulkscore=0 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501140115
 
 On Thu, 2024-11-28 at 11:06 +0100, Roberto Sassu wrote:
 > From: Roberto Sassu <roberto.sassu@huawei.com>
 >=20
-> IMA stores a pointer of the ima_iint_cache structure, containing integrit=
-y
-> metadata, in the inode security blob. However, check and assignment of th=
-is
-> pointer is not atomic, and it might happen that two tasks both see that t=
-he
-> iint pointer is NULL and try to set it, causing a memory leak.
+> Use the READ_ONCE() and WRITE_ONCE() macros to mark concurrent read and
+> write accesses to the portion of the inode security blob containing the
+> iint pointer.
 >=20
-> Ensure that the iint check and assignment is guarded, by adding a lockdep
-> assertion in ima_inode_get().
-
--> is guarded by the ima_iint_cache_lock mutex, ...
-
->=20
-> Consequently, guard the remaining ima_inode_get() calls, in
-> ima_post_create_tmpfile() and ima_post_path_mknod(), to avoid the lockdep
-> warnings.
+> Writers are serialized by the iint lock.
 >=20
 > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Thanks, Roberto.
+
+Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
+
 > ---
-> =C2=A0security/integrity/ima/ima_iint.c |=C2=A0 2 ++
-> =C2=A0security/integrity/ima/ima_main.c | 14 ++++++++++++--
-> =C2=A02 files changed, 14 insertions(+), 2 deletions(-)
+> =C2=A0security/integrity/ima/ima_iint.c | 6 +++---
+> =C2=A01 file changed, 3 insertions(+), 3 deletions(-)
 >=20
 > diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/i=
 ma_iint.c
-> index dcc32483d29f..fca9db293c79 100644
+> index fca9db293c79..c763f431fbc1 100644
 > --- a/security/integrity/ima/ima_iint.c
 > +++ b/security/integrity/ima/ima_iint.c
-> @@ -97,6 +97,8 @@ struct ima_iint_cache *ima_inode_get(struct inode *inod=
+> @@ -32,7 +32,7 @@ struct ima_iint_cache *ima_iint_find(struct inode *inod=
 e)
 > =C2=A0	if (!iint_lock)
 > =C2=A0		return NULL;
 > =C2=A0
-> +	lockdep_assert_held(&iint_lock->mutex);
-> +
-
-lockdep_assert_held() doesn't actually "ensure" the lock is held, but emits=
- a warning
-when the lock is not held (if debugging is enabled).  Semantically "ensure"=
- gives the
-impression of enforcing.
-
-Mimi
-
-> =C2=A0	iint =3D iint_lock->iint;
+> -	return iint_lock->iint;
+> +	return READ_ONCE(iint_lock->iint);
+> =C2=A0}
+> =C2=A0
+> =C2=A0#define IMA_MAX_NESTING (FILESYSTEM_MAX_STACK_DEPTH + 1)
+> @@ -99,7 +99,7 @@ struct ima_iint_cache *ima_inode_get(struct inode *inod=
+e)
+> =C2=A0
+> =C2=A0	lockdep_assert_held(&iint_lock->mutex);
+> =C2=A0
+> -	iint =3D iint_lock->iint;
+> +	iint =3D READ_ONCE(iint_lock->iint);
 > =C2=A0	if (iint)
 > =C2=A0		return iint;
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index 05cfb04cd02b..1e474ff6a777 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -705,14 +705,19 @@ static void ima_post_create_tmpfile(struct mnt_idma=
-p *idmap,
-> =C2=A0	if (!must_appraise)
-> =C2=A0		return;
 > =C2=A0
-> +	ima_iint_lock(inode);
-> +
-> =C2=A0	/* Nothing to do if we can't allocate memory */
-> =C2=A0	iint =3D ima_inode_get(inode);
-> -	if (!iint)
-> +	if (!iint) {
-> +		ima_iint_unlock(inode);
-> =C2=A0		return;
-> +	}
+> @@ -109,7 +109,7 @@ struct ima_iint_cache *ima_inode_get(struct inode *in=
+ode)
 > =C2=A0
-> =C2=A0	/* needed for writing the security xattrs */
-> =C2=A0	set_bit(IMA_UPDATE_XATTR, &iint->atomic_flags);
-> =C2=A0	iint->ima_file_status =3D INTEGRITY_PASS;
-> +	ima_iint_unlock(inode);
+> =C2=A0	ima_iint_init_always(iint, inode);
+> =C2=A0
+> -	iint_lock->iint =3D iint;
+> +	WRITE_ONCE(iint_lock->iint, iint);
+> =C2=A0
+> =C2=A0	return iint;
 > =C2=A0}
-> =C2=A0
-> =C2=A0/**
-> @@ -737,13 +742,18 @@ static void ima_post_path_mknod(struct mnt_idmap *i=
-dmap,
-> struct dentry *dentry)
-> =C2=A0	if (!must_appraise)
-> =C2=A0		return;
-> =C2=A0
-> +	ima_iint_lock(inode);
-> +
-> =C2=A0	/* Nothing to do if we can't allocate memory */
-> =C2=A0	iint =3D ima_inode_get(inode);
-> -	if (!iint)
-> +	if (!iint) {
-> +		ima_iint_unlock(inode);
-> =C2=A0		return;
-> +	}
-> =C2=A0
-> =C2=A0	/* needed for re-opening empty files */
-> =C2=A0	iint->flags |=3D IMA_NEW_FILE;
-> +	ima_iint_unlock(inode);
-> =C2=A0}
-> =C2=A0
-> =C2=A0/**
 
 
