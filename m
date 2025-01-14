@@ -1,147 +1,176 @@
-Return-Path: <linux-integrity+bounces-4540-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4542-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A808A1047F
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 11:42:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E5FCA1055B
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 12:29:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 984061695A8
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 10:42:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2443318822E8
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jan 2025 11:29:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A801EE7C5;
-	Tue, 14 Jan 2025 10:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2D6284A44;
+	Tue, 14 Jan 2025 11:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DpvSzIX1"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="LUpwNvJd";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="RYIGfKg5";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="LUpwNvJd";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="RYIGfKg5"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9BF1C4617
-	for <linux-integrity@vger.kernel.org>; Tue, 14 Jan 2025 10:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F383224B07
+	for <linux-integrity@vger.kernel.org>; Tue, 14 Jan 2025 11:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736851371; cv=none; b=OtO9YHBvN6s9bSB6Yoo5QERv/V9QLnTacmxCF2rbxS4lY/UzGct6Z1MaNR9Yy+sB4IznUKZq9r08TPPySIq3LsqVh164yMdmFnrsZC1HWPzST5COtM1TJeFlMtaPsBElMv5ZKM9gSWoRoGuCTEyKjMwkBxQFUGgIBHougSI71j8=
+	t=1736854167; cv=none; b=WNUPZQajxFbqKDGYy1aKtyFfSw7f4mOoMGA/TCZrzyAe3YlCPBPbD15Y5eDppAAOHStUb9ipVpDyTxfexpGH1TCSoxNiftb4YI6aU2BztT+xiB3kzNo84JkbpT4fn+uvTyzI9YgJUUzDDEzAd5SB/skJHx2PGpSSO0Ww3AwI1WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736851371; c=relaxed/simple;
-	bh=XUmwUb2mpX4ZIjItpQkbXH2upcyx/o8+os3uVGGcCto=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BbM2VkRtuC2U+gA3klr5uxcF+mZeHNblRVMpk0TB9vkp0bfBm8s1K15s2A/qdmq80SmuzDh83X2zO9FAA9hHn1ldhk23HYnmKMO1U1vXksaw4/NsQ0eYRrrvhihQZbR/yMnUEuCsg6RFDlAcRlVdh6fPhBQs+RoSmyflnqBxfxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DpvSzIX1; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736851368;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XUmwUb2mpX4ZIjItpQkbXH2upcyx/o8+os3uVGGcCto=;
-	b=DpvSzIX1TLEk4CMFxcYD6aNyc/kYW72xWu9nINa0lUBAV8fAJNuLb1CAULv+4sAB/lpo6/
-	ZsQV4BklDXIPPkLqYK0DTfkLqpp6Ps673M0qO1431pu1RJ0kzncsSBwp8wNHcakTcY1Qoa
-	AYDW8/YSy/Za20d+VXB1aGgGbehZPkw=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-472-1iuHZFxFOMKoEQYtzBfuhg-1; Tue, 14 Jan 2025 05:42:47 -0500
-X-MC-Unique: 1iuHZFxFOMKoEQYtzBfuhg-1
-X-Mimecast-MFC-AGG-ID: 1iuHZFxFOMKoEQYtzBfuhg
-Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-e3a1bc0c876so11608728276.1
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Jan 2025 02:42:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736851367; x=1737456167;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XUmwUb2mpX4ZIjItpQkbXH2upcyx/o8+os3uVGGcCto=;
-        b=S4UhTeBrEgCYlPn/uGyk8ebgfBpjicqqhd0mDuNFC8/W1LcacevNBEQGo12UpxrVwq
-         Hm+ht+AjEUoiSai2/brfgFvW3svm2jh+9OnKGuOj0IJMmUFc0Gm0g07KEp9vglMz8bqr
-         wPv665bd/lupqtnIpVTqijmVhHqqfVjaoSaIJGjCc4EnlvOeH4VFWKQ0JsJ+xKl216QH
-         3LLOpOi7TGL06x0tznDeV00620Bf4/wERQ+UBDiSPxTkQMO3u90G0vapEFbe0oiaQetA
-         oLg0VV6Lqy0pO4uIvwu85PWnX833DJS596z/ebt+DjO2osyT2O0OJro+gND14duDyMpt
-         iFIg==
-X-Forwarded-Encrypted: i=1; AJvYcCXGIC3HEaCRPSZLB7T/Q09vsO0+/5ZaduM+ciOe7Dv/GTn810PShp5VHOGg00e1yvhwFVA5nvy31mxcKsL2+q0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz28rcwfs3l0RCsF/scA//6/nb8E/LYdwJL8ZwZ3Fug+n5OZJvY
-	mFV1Q9PxOAyVTQNjL0gin8hIaFAb9iLjvx5r6mbv0Xk2f/FY2JCF6SwmZ4xCcpv706wliZsjPbf
-	mHZh6b9x4WUaEma6W+GAnVyg2X5HaDrsb7xjGI400u0EgB9FYFehaf99m3gpkr2eQM8cGv/DBld
-	0hfUk9LSkrjbjNeIAz5a7pvl8ocjIRhHnF0Oc0EG/1
-X-Gm-Gg: ASbGnct9zaz4jpMt6T2EnBKpKQJr/ey86pboXUPQrSA0TgxE4HdSmz8S6LBnYrmIg9i
-	CumGSFNE6MkNCjUnNaag/W9eEHtAlY29flBiVxg==
-X-Received: by 2002:a05:6902:2b8f:b0:e57:3635:8659 with SMTP id 3f1490d57ef6-e573635870fmr9141699276.25.1736851366891;
-        Tue, 14 Jan 2025 02:42:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFOZIJlicLLrBAyQmDoeqAtFnyT1ImV+T1Uhx17NQT/QOC5LkDQJVhFAyMaYO7X972M5OFPus6XF/HZMq7kyU8=
-X-Received: by 2002:a05:6902:2b8f:b0:e57:3635:8659 with SMTP id
- 3f1490d57ef6-e573635870fmr9141695276.25.1736851366585; Tue, 14 Jan 2025
- 02:42:46 -0800 (PST)
+	s=arc-20240116; t=1736854167; c=relaxed/simple;
+	bh=i01zXafbwIg9Q8a1VI2M+Q6xVCRTaVhur6rjBo4bSUQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u8GjEswMT5K/AopFZCd1vIU4jo6VqhsX4arusNE0WJJ1sozx7seTsfWxi7PUkaBIfkuTXPuOSCOb135BYo73UzSr5Dc7KxzaVoWcUqJDgKg/oHziKUYxbaGUcQDhzlKCazeLFUGOhhoddmMXamqch7wR1s6hSZ7QFDrjBenGMFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=LUpwNvJd; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=RYIGfKg5; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=LUpwNvJd; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=RYIGfKg5; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6BB552117C;
+	Tue, 14 Jan 2025 11:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1736854163; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=fO/s0NZFEMKAk0O+hRINtnsWQ1xdbifZa+NKDJ5KFd8=;
+	b=LUpwNvJd3SX7e3G+1gnh2kuSdpxP7DIYWRi9+D7SRV6XOADTZ18pJCFN2uleZt691uQzEc
+	M4fWq0vLCZTUWxSFESxbU+1JT0eaBpDCmHRDlqFUn1mvNzAMqHX4aCo3t0W+kWQ+ydDroo
+	kQOw8+eKMtaMHMi0hnT8cAAHUrapiJ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1736854163;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=fO/s0NZFEMKAk0O+hRINtnsWQ1xdbifZa+NKDJ5KFd8=;
+	b=RYIGfKg5isC934otZjO4An+0/xzy2R9wONn2owIkTREnsyPV7FKUiZ4BtqK3zzIGlD9f3X
+	nrdv5eWcpZsH3SCA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1736854163; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=fO/s0NZFEMKAk0O+hRINtnsWQ1xdbifZa+NKDJ5KFd8=;
+	b=LUpwNvJd3SX7e3G+1gnh2kuSdpxP7DIYWRi9+D7SRV6XOADTZ18pJCFN2uleZt691uQzEc
+	M4fWq0vLCZTUWxSFESxbU+1JT0eaBpDCmHRDlqFUn1mvNzAMqHX4aCo3t0W+kWQ+ydDroo
+	kQOw8+eKMtaMHMi0hnT8cAAHUrapiJ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1736854163;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=fO/s0NZFEMKAk0O+hRINtnsWQ1xdbifZa+NKDJ5KFd8=;
+	b=RYIGfKg5isC934otZjO4An+0/xzy2R9wONn2owIkTREnsyPV7FKUiZ4BtqK3zzIGlD9f3X
+	nrdv5eWcpZsH3SCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3BC99139CB;
+	Tue, 14 Jan 2025 11:29:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id b7RgDZNKhmeMIAAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Tue, 14 Jan 2025 11:29:23 +0000
+From: Petr Vorel <pvorel@suse.cz>
+To: ltp@lists.linux.it
+Cc: Petr Vorel <pvorel@suse.cz>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	linux-integrity@vger.kernel.org
+Subject: [PATCH v3 00/10] LTP tests: load predefined policy, enhancements
+Date: Tue, 14 Jan 2025 12:29:05 +0100
+Message-ID: <20250114112915.610297-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210143423.101774-1-sgarzare@redhat.com> <20241210143423.101774-4-sgarzare@redhat.com>
- <20241210144025.GG1888283@ziepe.ca> <50a2e1d29b065498146f459035e447851a518d1a.camel@HansenPartnership.com>
- <20241210150413.GI1888283@ziepe.ca> <CAGxU2F6yzqb0o_pQDakBbCj3RdKy_XfZfzGsiywnYL65g6WeGg@mail.gmail.com>
- <20241211150048.GJ1888283@ziepe.ca> <CAGxU2F7QjQTnXsqYeKc0q03SQCoW+BHbej9Q2Z8gxbgu-3O2fA@mail.gmail.com>
- <D6FSHG5Z9UJQ.CWQTAANBVIQQ@iki.fi> <6rwo7tkdst227kb4pwvr54w4mfz2zw3offux7mqfupi3rgwkaz@65yklvvqw6n4>
-In-Reply-To: <6rwo7tkdst227kb4pwvr54w4mfz2zw3offux7mqfupi3rgwkaz@65yklvvqw6n4>
-From: Stefano Garzarella <sgarzare@redhat.com>
-Date: Tue, 14 Jan 2025 11:42:34 +0100
-X-Gm-Features: AbW1kvaMP9hqrX7EbZd8ixyMHLxXzfJgXSkmu3Hcf4GyoCzHKWggJwOwPVU6IFE
-Message-ID: <CAGxU2F4YQy-otsGtGiUHDiL7PGXic2_HzWL_+GHkn+Hs_ScGpQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] x86/sev: add a SVSM vTPM platform device
-To: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, James Bottomley <james.bottomley@hansenpartnership.com>, 
-	linux-coco@lists.linux.dev, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Peter Huewe <peterhuewe@gmx.de>, 
-	"H. Peter Anvin" <hpa@zytor.com>, linux-integrity@vger.kernel.org, x86@kernel.org, 
-	Joerg Roedel <jroedel@suse.de>, Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org, 
-	Ingo Molnar <mingo@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Claudio Carvalho <cclaudio@linux.ibm.com>, Dov Murik <dovmurik@linux.ibm.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-Hi Jarkko,
+Changes v2->v3:
+* Rewrite verifying logic if policy needs to be loaded and how it is
+  loaded.
+* Allow testing when policy is not reliable, but relax failures to TCONF.
+* Add TCB policy example.
+* Document LTP_IMA_LOAD_POLICY in doc/users/setup_tests.rst.
+* Fix test policy installation (previously wrong Makefile).
+* Removed some of the previous commits ("ima_kexec.sh: Relax result on
+  unreadable policy to TCONF", "ima_violations.sh: Check for a required policy",
+  "ima_setup: Print warning when policy not readable").
+* More cleanup.
 
-On Thu, 19 Dec 2024 at 17:07, Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> On Thu, Dec 19, 2024 at 05:40:58PM +0200, Jarkko Sakkinen wrote:
-> >On Thu Dec 19, 2024 at 5:35 PM EET, Stefano Garzarella wrote:
-> >> So to use them directly in sev, we would have to move these definitions
-> >> into include/linux/tpm.h or some other file in inlcude/. Is this
-> >> acceptable for TPM maintainers?
-> >
-> >There's only me.
-> >
-> >I don't know.
-> >
-> >What you want to put to include/linux/tpm.h anyway?
->
-> At least tpmm_chip_alloc(), tpm2_probe(), and tpm_chip_register()
->
-> >I have not followed this discussion.
->
-> Let me try to summarize what we are doing: We are writing a small TPM
-> driver to support AMD SEV-SNP SVSM. Basically SVSM defines some sort of
-> hypercalls, which the guest OS can call to talk to the emulated vTPM.
->
-> In the current version of this series, based on James' RFC, we have an
-> intermediate module (tpm_platform) and then another small driver
-> (platform_device) in arch/x86/coco/sev/core.c that registers the
-> callback to use.
->
-> To avoid the intermediate driver (Jason correct me if I misunderstood),
-> we want to register the `tpm_chip` with its `tpm_class_ops` directly in
-> arch/x86/coco/sev/core.c where it's easy to use "SVSM calls" (i.e.
-> svsm_perform_call_protocol()).
->
-> And here I have this problem, so I was proposing to expose these APIs.
-> BTW, we do have an alternative though that I proposed in the previous
-> email that might avoid this.
+TODO: ima_measurements.sh and ima_violations.sh use detection for
+ima_policy=tcb builtin policy. But if example policy is loaded there is
+no longer tcb policy. Not sure how to fix it - some tooling might not
+support reboot, thus I wanted to use ima_policy=tcb, which previously
+worked.
 
-Any thought on this?
+Petr Vorel (10):
+  ima_violations.sh: Fix log detection
+  IMA: Add TCB policy as an example for ima_measurements.sh
+  IMA: Move requirement check to ima_setup.sh
+  IMA: Add example policy for ima_violations.sh
+  IMA: Read required policy from file
+  ima_violations.sh: Declare tcb builtin policy
+  ima_setup.sh: Add digest index detection for ima-buf format
+  ima_setup.sh: Allow to load predefined policy
+  ima_measurements.sh: Check policy for test3
+  tst_test.sh: IMA: Allow to disable LSM warnings and use it for IMA
 
-Thanks,
-Stefano
+ doc/users/setup_tests.rst                     |   3 +
+ .../kernel/security/integrity/ima/README.md   |  12 ++
+ .../security/integrity/ima/datafiles/Makefile |   4 +-
+ .../ima/datafiles/ima_measurements/Makefile   |  11 ++
+ .../ima/datafiles/ima_measurements/tcb.policy |  20 +++
+ .../ima/datafiles/ima_violations/Makefile     |  11 ++
+ .../ima_violations/violations.policy          |   2 +
+ .../integrity/ima/tests/evm_overlay.sh        |   3 +-
+ .../security/integrity/ima/tests/ima_kexec.sh |  20 +--
+ .../security/integrity/ima/tests/ima_keys.sh  |  48 ++-----
+ .../integrity/ima/tests/ima_measurements.sh   |  19 ++-
+ .../integrity/ima/tests/ima_selinux.sh        |  23 ++-
+ .../security/integrity/ima/tests/ima_setup.sh | 135 +++++++++++++++---
+ .../integrity/ima/tests/ima_violations.sh     |  15 +-
+ testcases/lib/tst_test.sh                     |   4 +-
+ 15 files changed, 235 insertions(+), 95 deletions(-)
+ create mode 100644 testcases/kernel/security/integrity/ima/datafiles/ima_measurements/Makefile
+ create mode 100644 testcases/kernel/security/integrity/ima/datafiles/ima_measurements/tcb.policy
+ create mode 100644 testcases/kernel/security/integrity/ima/datafiles/ima_violations/Makefile
+ create mode 100644 testcases/kernel/security/integrity/ima/datafiles/ima_violations/violations.policy
+
+-- 
+2.47.1
 
 
