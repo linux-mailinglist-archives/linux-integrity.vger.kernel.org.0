@@ -1,186 +1,282 @@
-Return-Path: <linux-integrity+bounces-4567-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4568-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4995AA12101
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 11:51:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEFF6A1256A
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 14:51:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72055188D4BB
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 10:51:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E189E7A5C3F
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 13:48:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E5711DB151;
-	Wed, 15 Jan 2025 10:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0181924227D;
+	Wed, 15 Jan 2025 13:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VkOUQ12I"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7787248BA1;
-	Wed, 15 Jan 2025 10:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F85B29A5;
+	Wed, 15 Jan 2025 13:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736938307; cv=none; b=GqWeKjkUSOVg9z/M3Wy7pDSuV9KIOpk4E8FuUBXvY8zPB46hcO8b4or6FttkiL9ipxH+514BKVvfBnjpfUXs60MeLxMXtiRFepfRJS/Y04UZU5HKqPGrHmwVbuzEEhp+wG2ghWIAexOTrPOlFzyUPdrv5oX6+xBNfUrM0LHkAg0=
+	t=1736948800; cv=none; b=vGmNAimSZTkTC9SPg6XcgFnQxpYkoJHuTNCGZFHI3S5osFXnN1GilA00hFa1udoiRycaz83ZCEo4L1EbChrA2oKYK8GzUFp+56+f1UTCojSquK69HM5HrjqoH5IQKfj+Y0mdpL6vja78WxXcgQEeFNgPKfFpTRGyvPy/L6CS2Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736938307; c=relaxed/simple;
-	bh=QRU8U5lXb2pp4lu+Afpob7QHF/SlW2QAmZnjqoFRw6A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NPXJX8s5I92Ewl0H+5w7607scgKvsMWMEmfjiGmU5Yi7K7qhk9C+/ZW50PM8gI02uw2KZKJ9mJd2r15gwQFvbH1WPbdGQs/IfW5OY54bFtKA4oOCbcZsjFpR7Q0xm5zsm/E6U9QWlPopnD2Ciny9TU9F65/UYBZL8bvTFVP9shk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4YY2L516L9z9v7N7;
-	Wed, 15 Jan 2025 18:29:33 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 61B5F140451;
-	Wed, 15 Jan 2025 18:51:35 +0800 (CST)
-Received: from [10.45.149.44] (unknown [10.45.149.44])
-	by APP1 (Coremail) with SMTP id LxC2BwC3O0osk4dn7zysAA--.10045S2;
-	Wed, 15 Jan 2025 11:51:34 +0100 (CET)
-Message-ID: <85823922-0947-488e-ba95-f6c0e3132313@huaweicloud.com>
-Date: Wed, 15 Jan 2025 11:51:22 +0100
+	s=arc-20240116; t=1736948800; c=relaxed/simple;
+	bh=BJBiP01vAX3/hcSFK9Qtvwkh971Yj1osxx2tvLHtq2I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Ky1XsDjRVtRwj+8KVTUibnmWiUAfbyMnhlm0axbDj6/RPEPWA+0g+fGQtjZ2eeu7fwQb3V52MO2TNM2CD9IT7SZzUIfUp/arXzyJblaXibQTH9W5pOHYZwgTnH0TQLwt4wU0qD5ygUAS8fzw55cZIyf3S6p5qtMQN4GvLh8+x0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VkOUQ12I; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50F3rIvn019911;
+	Wed, 15 Jan 2025 13:46:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=zzEO5g
+	okc39peyexb+JjoQ95EgGI6De7Tp73/tvf5Iw=; b=VkOUQ12IR3OmrTGFcMkDzY
+	zFBmGOHCtbjLWORieL438CLKqz1nkZOS+w3STDgMStCP2tPRqfp/dHGwv+2r5oqv
+	s0+TAtl1Ccg8t/+Rr4ce/DbadGYdjiiVnJOPEo2ZKZtE+l3PeZxXcQeMiYXr/QWb
+	VFLHKLvlqRmGm37Ybn/k77gRJfd23FUy5He7d+Bp5HJEnLD6Txd6eZJOPc6EKqM7
+	rtZX+UNV+kr34rOeEVMx1wqWaKtROaPdkr2/x+06Yb/l+wm1AX5saF7IoITtoQBs
+	+NfS1S621keOHPdBNNNpzTNOLw+uqAtWsHNj+oOgzF13xOyggH5sF6/lDtg5V8Hg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4465gjtdc9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Jan 2025 13:46:07 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50FDjgq9015833;
+	Wed, 15 Jan 2025 13:46:07 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4465gjtdc5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Jan 2025 13:46:07 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50FBoLa7001108;
+	Wed, 15 Jan 2025 13:46:06 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44456k0a30-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Jan 2025 13:46:06 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50FDk5qj29491880
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 15 Jan 2025 13:46:05 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7A4325805B;
+	Wed, 15 Jan 2025 13:46:05 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 22A9E58055;
+	Wed, 15 Jan 2025 13:46:04 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.175.76])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 15 Jan 2025 13:46:03 +0000 (GMT)
+Message-ID: <72d71cc694f27dbafb64656d8db4a89df8532aed.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 5/7] ima: Set security.ima on file close when
+ ima_appraise=fix
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, jack@suse.cz, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date: Wed, 15 Jan 2025 08:46:03 -0500
+In-Reply-To: <20241128100621.461743-6-roberto.sassu@huaweicloud.com>
+References: <20241128100621.461743-1-roberto.sassu@huaweicloud.com>
+	 <20241128100621.461743-6-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/7] ima: Ensure lock is held when setting iint pointer
- in inode security blob
-To: Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
- brauner@kernel.org, jack@suse.cz, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- Roberto Sassu <roberto.sassu@huawei.com>
-References: <20241128100621.461743-1-roberto.sassu@huaweicloud.com>
- <20241128100621.461743-4-roberto.sassu@huaweicloud.com>
- <3545a38326a5d3dff28b1089ab2149f1662a641b.camel@linux.ibm.com>
-Content-Language: en-US
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <3545a38326a5d3dff28b1089ab2149f1662a641b.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwC3O0osk4dn7zysAA--.10045S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr15Jw4xJFy8tr1fCFyfWFg_yoW5CFy5pa
-	n5ta4UG34jvFZ7Wr4Fva43uF1fK3ySgFWDGw45J3WvyFZrJr1qqr48Gry7ur15Gr4rA3Wv
-	vr1jg3sxu3WqyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFf
-	HUUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAJBGeHXlMCcAADsQ
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hvxL16T867bUyhhyR3ZRT50OVa7egvOt
+X-Proofpoint-GUID: gbfl1k6tWGMrM5Yv7bcPMYW43YAd13gz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-15_05,2025-01-15_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ clxscore=1015 suspectscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 mlxlogscore=999 impostorscore=0 adultscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2501150102
 
-On 1/14/2025 3:20 PM, Mimi Zohar wrote:
-> On Thu, 2024-11-28 at 11:06 +0100, Roberto Sassu wrote:
->> From: Roberto Sassu <roberto.sassu@huawei.com>
->>
->> IMA stores a pointer of the ima_iint_cache structure, containing integrity
->> metadata, in the inode security blob. However, check and assignment of this
->> pointer is not atomic, and it might happen that two tasks both see that the
->> iint pointer is NULL and try to set it, causing a memory leak.
->>
->> Ensure that the iint check and assignment is guarded, by adding a lockdep
->> assertion in ima_inode_get().
-> 
-> -> is guarded by the ima_iint_cache_lock mutex, ...
+Please use "__fput()" rather than "file close".  Perhaps update the subject=
+ line to
+something like "ima: Defer fixing security.ima to __fput()".=20
 
-By the iint_lock mutex...
+On Thu, 2024-11-28 at 11:06 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>=20
+> IMA-Appraisal implements a fix mode, selectable from the kernel command
+> line by specifying ima_appraise=3Dfix.
+>=20
+> The fix mode is meant to be used in a TOFU (trust on first use) model,
+> where systems are supposed to work under controlled conditions before the
+> real enforcement starts.
+>=20
+> Since the systems are under controlled conditions, it is assumed that the
+> files are not corrupted, and thus their current data digest can be truste=
+d,
+> and written to security.ima.
+>=20
+> When IMA-Appraisal is switched to enforcing mode, the security.ima value
+> collected during the fix mode is used as a reference value, and a mismatc=
+h
+> with the current value cause the access request to be denied.
+>=20
+> However, since fixing security.ima is placed in ima_appraise_measurement(=
+)
+> during the integrity check, it requires the inode lock to be taken in
+> process_measurement(), in addition to ima_update_xattr() invoked at file
+> close.
+>=20
+> Postpone the security.ima update to ima_check_last_writer(), by setting t=
+he
+> new atomic flag IMA_UPDATE_XATTR_FIX in the inode integrity metadata, in
+> ima_appraise_measurement(), if security.ima needs to be fixed. In this wa=
+y,
+> the inode lock can be removed from process_measurement(). Also, set the
+> cause appropriately for the fix operation and for allowing access to new
+> and empty signed files.
+>=20
+> Finally, update security.ima when IMA_UPDATE_XATTR_FIX is set, and when
+> there wasn't a previous security.ima update, which occurs if the process
+> closing the file descriptor is the last writer. =20
+>=20
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
->> Consequently, guard the remaining ima_inode_get() calls, in
->> ima_post_create_tmpfile() and ima_post_path_mknod(), to avoid the lockdep
->> warnings.
->>
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->> ---
->>   security/integrity/ima/ima_iint.c |  2 ++
->>   security/integrity/ima/ima_main.c | 14 ++++++++++++--
->>   2 files changed, 14 insertions(+), 2 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima_iint.c b/security/integrity/ima/ima_iint.c
->> index dcc32483d29f..fca9db293c79 100644
->> --- a/security/integrity/ima/ima_iint.c
->> +++ b/security/integrity/ima/ima_iint.c
->> @@ -97,6 +97,8 @@ struct ima_iint_cache *ima_inode_get(struct inode *inode)
->>   	if (!iint_lock)
->>   		return NULL;
->>   
->> +	lockdep_assert_held(&iint_lock->mutex);
->> +
-> 
-> lockdep_assert_held() doesn't actually "ensure" the lock is held, but emits a warning
-> when the lock is not held (if debugging is enabled).  Semantically "ensure" gives the
-> impression of enforcing.
+Roberto, I really like the idea of removing the inode_lock in process_measu=
+rement()
+needed for writing xattrs, but I'm concerned about the delay being introduc=
+ed.  For
+example, does it interfere with labeling the filesystem with file signature=
+s
+(with/without EVM enabled)?
 
-I agree. I would replace ensure with detect.
+> ---
+> =C2=A0security/integrity/ima/ima.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 |=C2=A0 1 +
+> =C2=A0security/integrity/ima/ima_appraise.c |=C2=A0 7 +++++--
+> =C2=A0security/integrity/ima/ima_main.c=C2=A0=C2=A0=C2=A0=C2=A0 | 18 ++++=
++++++++-------
+> =C2=A03 files changed, 17 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index b4eeab48f08a..22c3b87cfcac 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -179,6 +179,7 @@ struct ima_kexec_hdr {
+> =C2=A0#define IMA_CHANGE_ATTR		2
+> =C2=A0#define IMA_DIGSIG		3
+> =C2=A0#define IMA_MUST_MEASURE	4
+> +#define IMA_UPDATE_XATTR_FIX	5
+> =C2=A0
+> =C2=A0/* IMA integrity metadata associated with an inode */
+> =C2=A0struct ima_iint_cache {
+> diff --git a/security/integrity/ima/ima_appraise.c
+> b/security/integrity/ima/ima_appraise.c
+> index 656c709b974f..94401de8b805 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -576,8 +576,10 @@ int ima_appraise_measurement(enum ima_hooks func, st=
+ruct
+> ima_iint_cache *iint,
+> =C2=A0		if ((ima_appraise & IMA_APPRAISE_FIX) && !try_modsig &&
+> =C2=A0		=C2=A0=C2=A0=C2=A0 (!xattr_value ||
+> =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0 xattr_value->type !=3D EVM_IMA_XATTR_DIG=
+SIG)) {
+> -			if (!ima_fix_xattr(dentry, iint))
+> -				status =3D INTEGRITY_PASS;
+> +			/* Fix by setting security.ima on file close. */
+> +			set_bit(IMA_UPDATE_XATTR_FIX, &iint->atomic_flags);
+> +			status =3D INTEGRITY_PASS;
+> +			cause =3D "fix";
+> =C2=A0		}
+> =C2=A0
+> =C2=A0		/*
+> @@ -587,6 +589,7 @@ int ima_appraise_measurement(enum ima_hooks func, str=
+uct
+> ima_iint_cache *iint,
+> =C2=A0		if (inode->i_size =3D=3D 0 && iint->flags & IMA_NEW_FILE &&
+> =C2=A0		=C2=A0=C2=A0=C2=A0 test_bit(IMA_DIGSIG, &iint->atomic_flags)) {
+> =C2=A0			status =3D INTEGRITY_PASS;
+> +			cause =3D "new-signed-file";
+> =C2=A0		}
+> =C2=A0
+> =C2=A0		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
+ma_main.c
+> index 1e474ff6a777..50b37420ea2c 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -158,13 +158,16 @@ static void ima_check_last_writer(struct ima_iint_c=
+ache
+> *iint,
+> =C2=A0				=C2=A0 struct inode *inode, struct file *file)
+> =C2=A0{
+> =C2=A0	fmode_t mode =3D file->f_mode;
+> -	bool update;
+> +	bool update =3D false, update_fix;
+> =C2=A0
+> -	if (!(mode & FMODE_WRITE))
+> +	update_fix =3D test_and_clear_bit(IMA_UPDATE_XATTR_FIX,
+> +					&iint->atomic_flags);
+> +
+> +	if (!(mode & FMODE_WRITE) && !update_fix)
+> =C2=A0		return;
+> =C2=A0
+> =C2=A0	ima_iint_lock(inode);
+> -	if (atomic_read(&inode->i_writecount) =3D=3D 1) {
+> +	if (atomic_read(&inode->i_writecount) =3D=3D 1 && (mode & FMODE_WRITE))=
+ {
 
-Thanks
+Probably better to reverse the "mode & FMODE_WRITE" and atomic_read() test =
+order.
 
-Roberto
+Mimi
 
-> Mimi
-> 
->>   	iint = iint_lock->iint;
->>   	if (iint)
->>   		return iint;
->> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
->> index 05cfb04cd02b..1e474ff6a777 100644
->> --- a/security/integrity/ima/ima_main.c
->> +++ b/security/integrity/ima/ima_main.c
->> @@ -705,14 +705,19 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
->>   	if (!must_appraise)
->>   		return;
->>   
->> +	ima_iint_lock(inode);
->> +
->>   	/* Nothing to do if we can't allocate memory */
->>   	iint = ima_inode_get(inode);
->> -	if (!iint)
->> +	if (!iint) {
->> +		ima_iint_unlock(inode);
->>   		return;
->> +	}
->>   
->>   	/* needed for writing the security xattrs */
->>   	set_bit(IMA_UPDATE_XATTR, &iint->atomic_flags);
->>   	iint->ima_file_status = INTEGRITY_PASS;
->> +	ima_iint_unlock(inode);
->>   }
->>   
->>   /**
->> @@ -737,13 +742,18 @@ static void ima_post_path_mknod(struct mnt_idmap *idmap,
->> struct dentry *dentry)
->>   	if (!must_appraise)
->>   		return;
->>   
->> +	ima_iint_lock(inode);
->> +
->>   	/* Nothing to do if we can't allocate memory */
->>   	iint = ima_inode_get(inode);
->> -	if (!iint)
->> +	if (!iint) {
->> +		ima_iint_unlock(inode);
->>   		return;
->> +	}
->>   
->>   	/* needed for re-opening empty files */
->>   	iint->flags |= IMA_NEW_FILE;
->> +	ima_iint_unlock(inode);
->>   }
->>   
->>   /**
-> 
+> =C2=A0		struct kstat stat;
+> =C2=A0
+> =C2=A0		update =3D test_and_clear_bit(IMA_UPDATE_XATTR,
+> @@ -181,6 +184,10 @@ static void ima_check_last_writer(struct ima_iint_ca=
+che *iint,
+> =C2=A0				ima_update_xattr(iint, file);
+> =C2=A0		}
+> =C2=A0	}
+> +
+> +	if (!update && update_fix)
+> +		ima_update_xattr(iint, file);
+> +
+> =C2=A0	ima_iint_unlock(inode);
+> =C2=A0}
+> =C2=A0
+> @@ -378,13 +385,10 @@ static int process_measurement(struct file *file, c=
+onst
+> struct cred *cred,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 template_desc);
+> =C2=A0	if (rc =3D=3D 0 && (action & IMA_APPRAISE_SUBMASK)) {
+> =C2=A0		rc =3D ima_check_blacklist(iint, modsig, pcr);
+> -		if (rc !=3D -EPERM) {
+> -			inode_lock(inode);
+> +		if (rc !=3D -EPERM)
+> =C2=A0			rc =3D ima_appraise_measurement(func, iint, file,
+> =C2=A0						=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pathname, xattr_value,
+> =C2=A0						=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xattr_len, modsig);
+> -			inode_unlock(inode);
+> -		}
+> =C2=A0		if (!rc)
+> =C2=A0			rc =3D mmap_violation_check(func, file, &pathbuf,
+> =C2=A0						=C2=A0 &pathname, filename);
 
 
