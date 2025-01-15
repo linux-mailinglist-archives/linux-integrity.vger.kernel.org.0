@@ -1,110 +1,125 @@
-Return-Path: <linux-integrity+bounces-4564-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4565-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73290A11600
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 01:18:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA4D5A11EF4
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 11:10:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93450169BBF
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 00:18:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA04616627F
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 10:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C9D0182D2;
-	Wed, 15 Jan 2025 00:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Ytd0/5vt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11CF81EEA2B;
+	Wed, 15 Jan 2025 10:10:26 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6A820ED
-	for <linux-integrity@vger.kernel.org>; Wed, 15 Jan 2025 00:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DE01E7C16
+	for <linux-integrity@vger.kernel.org>; Wed, 15 Jan 2025 10:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736900296; cv=none; b=MIYDQffhZJijOC7rZlmIfg7bNjENHRfDprzpBVnSyyAbudsovgG8mrq0BlX2QsOkTe0vAwB8n4bcai8Uz1X1c+HyLbvClnW5BirRDdmXkyjaK3Qp8oRcV87wHL2z7QplkmG1i2/nnnC+Y8bOhua2+315u5OrAWeGi1G2MsYP7kM=
+	t=1736935826; cv=none; b=ouRBaPb95sUPIVsahTgnCTi7Z9ta0OwyBG0IqgHZSqLGWypCg/R1cU9Kk1yeXSHnB/1ovdueVQoUKAK5MFz8iIjpt0eu8NudiKd+m5YY4s4wywsFPnw+JJy4ROufN1l8vFcJeyeADzURlbNbQaCT2iwwM6tWiA7FWltuTKsb1ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736900296; c=relaxed/simple;
-	bh=Zp49rurA1Myl0pyaSxk9MhtQoSZ5WS+5uSafkdF+aKI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jUyvEacctbATYCVhB49gnV0aZ++JvvGeZ3msN0+kZxgR0O2D7Gfi3IPJp312s+3v+mGi/aR6jYuHrrhfaJHn3rBDmmf0cdUYz53hXZYGrsxERdyqPRpQrltdISfk3YQufBBYz/y4h3VMBXLxMGqZRY2VjEHCeoJxB3/HLarxk+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Ytd0/5vt; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e53537d8feeso8998609276.0
-        for <linux-integrity@vger.kernel.org>; Tue, 14 Jan 2025 16:18:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736900294; x=1737505094; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zp49rurA1Myl0pyaSxk9MhtQoSZ5WS+5uSafkdF+aKI=;
-        b=Ytd0/5vt5mbHsaA+1uehqTjn72JDz0D4KPYxpwRIK1lXSfDUrv4JepQt1rUn3Ppubx
-         5x2pX1MHSrJ8817FJmBDcfBRCTfIt6tPGDTtfyWEJqSJvaFTnO4wJ9s7HiKGnjD4PRxg
-         MJ4O2YdI20kDRQnXZGTf9JisB75gVe1Bl8oJ6zUQPui6t1odFJouRmIYG0OZVWlXd9r3
-         f2c7xoSdrl/SArjItXBG0tq95SfgLfreQi1qKrUZb5krTQ4B3wDPRgPmxRAF3VUBgEQ+
-         q3Hc2Q3jOQNbafNKmo/FB9Lo4Wk1b7ji9OMhebr6OFtf6uQUlhVwOkIMp2yb5U+B8xC2
-         Dotw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736900294; x=1737505094;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zp49rurA1Myl0pyaSxk9MhtQoSZ5WS+5uSafkdF+aKI=;
-        b=GtzoAcQ1R8d+ZhH1Fsjbddhj6eBRDGjQK9Jqe9Zsholm11bqqLcloNKO5K0hfK4eRt
-         Hmnvh4bcUtRBj2um8kgq5QRaQx2+DfjlRR71dbeYFe0Itg966YkiCnD9HmVqL8o021ZN
-         hcuN0Njn2ZOR6yP9AT17HVOElXNZcnTF8xjFRt1/mEgyh47kY96JVMtoVQ+3l5UxtMQd
-         qjGA9m82Y+g61/wB0XWSouZmJSBFJArAzoM+rnSkTbl8fqZV50Ai2zJ65L4ALm37sFSg
-         nP0D8bLj/gkk09bMbMLHfkANQqaMQr2X6jRygxcreU0ticJH+RWtxADXN/HipAdv3wuJ
-         3sYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/WJgxlVb2KsD3+c/E5yVvhnDTC2h2CH9XECuaPPOkqpDJaUpON864zNsiwq4LDG/FGqQCiP8+PTp77Q/X+i0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTEw64onFZj0zDX/hdw82oaQb8CAhdQCFAxFSPDJI4RQrFH5nv
-	2jUwlr5H05kpqpr4dk2scKliJW26urowttf4l48qom3QlpZcmNxnINI/oC0lzv2rXg2KKYBdsQW
-	DTQmyyKLJqTUkuEbPQu8Y/6FxSTnSOLsfl+H7
-X-Gm-Gg: ASbGncsd0VWfGGrrzd/ayfhOC/EN0MyMne/PS5fB9VQEvB2ceTbPHfgEtutXTkYMpk8
-	HUKjxeAUlHF5rbueTxeC0KUoXhx2mCAZO9mDB
-X-Google-Smtp-Source: AGHT+IHtJYSwXkwz+07V0jN+izWJEyDVHZCMBZLUC2IdNu3wLbY2abzMLGBC7XuWrOyXqA98/b43/EFQmm+YZfl72hQ=
-X-Received: by 2002:a05:6902:1444:b0:e57:2e8f:b680 with SMTP id
- 3f1490d57ef6-e572e8fb8d7mr13442994276.40.1736900294049; Tue, 14 Jan 2025
- 16:18:14 -0800 (PST)
+	s=arc-20240116; t=1736935826; c=relaxed/simple;
+	bh=3HbDjPF2IK9U7H9HGzV/eBhECGZl6h5ZG+ZEJbN42Bg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ReeXC1fhbjPjM6sXQoRXkPHRl2rmEyzm0dgN6+959q4hdXvbEm4Nni1DLgkhfuZr26aLsLyiKzGJrsquG/7rteIVa4UwXecYvnr/fwjbWZFMLITM5y8FmWRSPjJE93P0tarJMOC3sRD00WDMro2W2Iw3xAt1ij6+D2O+d54YYaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4YY1GT3BX6z9v7JM
+	for <linux-integrity@vger.kernel.org>; Wed, 15 Jan 2025 17:41:21 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 886531402C3
+	for <linux-integrity@vger.kernel.org>; Wed, 15 Jan 2025 18:10:06 +0800 (CST)
+Received: from [10.45.149.44] (unknown [10.45.149.44])
+	by APP1 (Coremail) with SMTP id LxC2BwAXnkx0iYdns8mrAA--.25929S2;
+	Wed, 15 Jan 2025 11:10:04 +0100 (CET)
+Message-ID: <d0cb280f-ab70-4a26-b253-f99c7b62abaa@huaweicloud.com>
+Date: Wed, 15 Jan 2025 11:09:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250111.22fc32ae0729@gnoack.org> <20250112072925.1774-1-tanyaagarwal25699@gmail.com>
- <20250113.a860b47a11c7@gnoack.org> <d1b05612412a1d4b858662f296b45279c2141aa8.camel@linux.ibm.com>
- <CAPdGtUw9Ee7weCmS2ZP-Hi5KwPw9-O1fGRrY_KLKQh-SWgEN5Q@mail.gmail.com>
-In-Reply-To: <CAPdGtUw9Ee7weCmS2ZP-Hi5KwPw9-O1fGRrY_KLKQh-SWgEN5Q@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 14 Jan 2025 19:18:03 -0500
-X-Gm-Features: AbW1kvaUpZnLTH-RTdyjzL8irQYqX_incLPjKbOpK4BgJaOp8exyZK1GGvI_Sl0
-Message-ID: <CAHC9VhQ1X_6V3ReOQv1ob22My=fjYk-b4Cfm0wB1YS6fomJtYg@mail.gmail.com>
-Subject: Re: [PATCH V2] security: fix typos and spelling errors
-To: Tanya Agarwal <tanyaagarwal25699@gmail.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>, 
-	casey@schaufler-ca.com, takedakn@nttdata.co.jp, 
-	penguin-kernel@i-love.sakura.ne.jp, john.johansen@canonical.com, 
-	jmorris@namei.org, serge@hallyn.com, roberto.sassu@huawei.com, 
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, mic@digikod.net, 
-	gnoack@google.com, stephen.smalley.work@gmail.com, omosnace@redhat.com, 
-	linux-kernel@vger.kernel.org, apparmor@lists.ubuntu.com, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	skhan@linuxfoundation.org, anupnewsmail@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] ima: limit the builtin 'tcb' dont_measure tmpfs policy
+ rule
+To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc: Petr Vorel <pvorel@suse.cz>
+References: <20241230142333.1309623-1-zohar@linux.ibm.com>
+ <20241230142333.1309623-2-zohar@linux.ibm.com>
+Content-Language: en-US
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <20241230142333.1309623-2-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:LxC2BwAXnkx0iYdns8mrAA--.25929S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFWrAr4ftry3AFykKF4fGrg_yoW8uFW8pa
+	9FvFWUCrn8XFy2k3W8C3ZrX3yIv3s3J3yDC3y5Gw1jyas8JrnrtwsxCr45ZFWIyF1jyry2
+	y3WFgFsrG3Z7ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVj
+	vjDU0xZFpf9x07j8sqAUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBGeHXlICDwAAsu
 
-On Tue, Jan 14, 2025 at 11:13=E2=80=AFAM Tanya Agarwal
-<tanyaagarwal25699@gmail.com> wrote:
->
-> Hi All,
-> Thanks for the review.
-> Sure, I'll split patches of different security subsystems so, that
-> they are easy for maintainers to merge.
+On 12/30/2024 3:23 PM, Mimi Zohar wrote:
+> With a custom policy similar to the builtin IMA 'tcb' policy [1], arch
+> specific policy, and a kexec boot command line measurement policy rule,
+> the kexec boot command line is not measured due to the dont_measure
+> tmpfs rule.
+> 
+> Limit the builtin 'tcb' dont_measure tmpfs policy rule to just the
+> "func=FILE_CHECK" hook.  Depending on the end users security threat
+> model, a custom policy might not even include this dont_measure tmpfs
+> rule.
 
-Thanks!
+Another possible alternative would be to support negation for the func= 
+keyword.
 
---=20
-paul-moore.com
+In that case, the dont_measure tmpfs policy rule can be rewritten like:
+
+dont_measure fsmagic=0x01021994 func=!KEXEC_CMDLINE
+
+Roberto
+
+> Note: as a result of this policy rule change, other measurements might
+> also be included in the IMA-measurement list that previously weren't
+> included.
+> 
+> [1] https://ima-doc.readthedocs.io/en/latest/ima-policy.html#ima-tcb
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>   security/integrity/ima/ima_policy.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 21a8e54c383f..23bbe2c405f0 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -148,7 +148,8 @@ static struct ima_rule_entry dont_measure_rules[] __ro_after_init = {
+>   	{.action = DONT_MEASURE, .fsmagic = PROC_SUPER_MAGIC, .flags = IMA_FSMAGIC},
+>   	{.action = DONT_MEASURE, .fsmagic = SYSFS_MAGIC, .flags = IMA_FSMAGIC},
+>   	{.action = DONT_MEASURE, .fsmagic = DEBUGFS_MAGIC, .flags = IMA_FSMAGIC},
+> -	{.action = DONT_MEASURE, .fsmagic = TMPFS_MAGIC, .flags = IMA_FSMAGIC},
+> +	{.action = DONT_MEASURE, .fsmagic = TMPFS_MAGIC, .func = FILE_CHECK,
+> +	 .flags = IMA_FSMAGIC | IMA_FUNC},
+>   	{.action = DONT_MEASURE, .fsmagic = DEVPTS_SUPER_MAGIC, .flags = IMA_FSMAGIC},
+>   	{.action = DONT_MEASURE, .fsmagic = BINFMTFS_MAGIC, .flags = IMA_FSMAGIC},
+>   	{.action = DONT_MEASURE, .fsmagic = SECURITYFS_MAGIC, .flags = IMA_FSMAGIC},
+
 
