@@ -1,203 +1,157 @@
-Return-Path: <linux-integrity+bounces-4570-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4571-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC32A12753
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 16:24:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E04D9A12DA0
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 22:22:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 960A31883B4C
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 15:25:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 654723A41BF
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Jan 2025 21:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3EDD14B959;
-	Wed, 15 Jan 2025 15:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451601DA112;
+	Wed, 15 Jan 2025 21:22:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="eftFZdAR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nezd8nX8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [45.157.188.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410621465B3;
-	Wed, 15 Jan 2025 15:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18AC94D599;
+	Wed, 15 Jan 2025 21:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736954692; cv=none; b=OFmG7T2KooV/imHHgJMaBGluYfgMXHUw/wTV2XUwVuL+mSSNHzCvMepd+eC83XzpGYvYp3Kw5QokExvJLILV3R50ZkTMeSHDQj7G595prnfC0Ql2mWgVZXHEDH3klHyeU5FOh+EBcVW+buKxKhQ38SiiASrnQtBFeBs0YRk2VX8=
+	t=1736976169; cv=none; b=VUaRf6bn4XDCmByieIlmSXMLB0/mMSwSMj2ezLLXeyv0t8Qr3iAb/ghqgOUU+lFZ1eWn/ZG58IvXmuWM0DVm4C08wDTEALjN3LE56wuGqvMwO2ru4VFkL8+97+Rlxp5kb1r/XzF1rQaOb3ke3Gv+Tl/+eVmDXQxslZRCK2kNa4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736954692; c=relaxed/simple;
-	bh=kOY3vFWLP+FEHx5M1IiPDdVvOJzmSd4CLBlalrm5bTs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eVYwjLwci7ETBL+xJiQW//se3nNcVXweMhHGngsuaK6/PUQTYTXQofCZ7HXfEIqGAL2LVHDpf5zUkMU1kCWmdmwpETOGY6aiXcvzDsAJOWlda6yDEpbLZBHasMMkRbIZe4RM/1tV5RLnPTDM2hZZxFmQNObtQTC868smtsBekDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=eftFZdAR; arc=none smtp.client-ip=45.157.188.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YY8td4YsHzVMr;
-	Wed, 15 Jan 2025 16:24:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1736954681;
-	bh=OKke/r7WO2oX+n3KadtktTVK+uXU2ESxGj2KaHjaNJQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eftFZdARawb0lOmamDXKZ8GxSfXruL53Rhh7T90IwPVKUPGqVjddobOiO6hqNVNqE
-	 Mo8zFpDcn703TYsLDqeqKTtpk0O9kvmY2ktGgmx5C+vmNV29VYZ/6kCS47gFFUauLS
-	 iFQPjWpppKW7Ye7YBY0wqf3aD1EfkI6wP8zJUKEs=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YY8tV0cZGzCXZ;
-	Wed, 15 Jan 2025 16:24:34 +0100 (CET)
-Date: Wed, 15 Jan 2025 16:24:33 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>, 
-	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>, Alejandro Colomar <alx@kernel.org>, 
-	Aleksa Sarai <cyphar@cyphar.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Christian Heimes <christian@python.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, Elliott Hughes <enh@google.com>, 
-	Eric Biggers <ebiggers@kernel.org>, Eric Chiang <ericchiang@google.com>, 
-	Fan Wu <wufan@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, James Morris <jamorris@linux.microsoft.com>, 
-	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Luca Boccassi <bluca@debian.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	"Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Matthew Garrett <mjg59@srcf.ucam.org>, Matthew Wilcox <willy@infradead.org>, 
-	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Nicolas Bouchinet <nicolas.bouchinet@ssi.gouv.fr>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Scott Shell <scottsh@microsoft.com>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, Theodore Ts'o <tytso@mit.edu>, 
-	Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>, Vincent Strubel <vincent.strubel@ssi.gouv.fr>, 
-	Xiaoming Ni <nixiaoming@huawei.com>, kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v23 7/8] samples/check-exec: Add an enlighten "inc"
- interpreter and 28 tests
-Message-ID: <20250115.asu4ueXao3ho@digikod.net>
-References: <20241212174223.389435-1-mic@digikod.net>
- <20241212174223.389435-8-mic@digikod.net>
- <20250114205645.GA2825031@ax162>
+	s=arc-20240116; t=1736976169; c=relaxed/simple;
+	bh=4zT/Agcn8gYciKlkGmDRXwSQHgpkRsd47yw2ZWOY50g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PvCLyPSS9FXt77pmiehkEnUYpX5vmtQSzv4aS0JaclFAmZNGwI6A0GB053kUGPczkNE2z6DQA3c92+8n7xRHKPgt+x2suC0GAWhofzyzcGQVLB77foej6RWAUFHHJY/9m9Zm3MKX3xRjD/b+QwheH0V8e3LHZMGANqGpwgpc2l4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nezd8nX8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00D02C4CED1;
+	Wed, 15 Jan 2025 21:22:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736976168;
+	bh=4zT/Agcn8gYciKlkGmDRXwSQHgpkRsd47yw2ZWOY50g=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Nezd8nX84KxusPZoVCt8MwHROtfv8l5OcuD6tgriacyOAASePCeuPM7xAPqUkzO0Z
+	 PweF67ZgDYKGjRc3KUyinLIDPygHaFcn1mrTjKylqp6u7tzlRYenww7iApe6NXTcBK
+	 0qlmTcIhJK0LUH0/w7nFUmNEcF9lJvUSXm3OwgkWMwBtV/xzgVZdXEzaJ4Yz+YrvCg
+	 AZG3TG57AcXt3nreJfIE1Et/OOsDNN91IyyGEk76Im4EsCazFs1TxvuRw1VGXowIg6
+	 B0dRUfi0E4swnU0rajBSH1hMdix+FTOsAXahbNsOFX/CPXXm70qHMdpa/e2R5IOLTF
+	 tsQDC+zTe/UHQ==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Reiner Sailer <sailer@us.ibm.com>,
+	Seiji Munetoh <munetoh@jp.ibm.com>,
+	Kylene Jo Hall <kjhall@us.ibm.com>,
+	Stefan Berger <stefanb@us.ibm.com>,
+	Andrew Morton <akpm@osdl.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+	stable@vger.kernel.org,
+	Andy Liang <andy.liang@hpe.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v9] tpm: Map the ACPI provided event log
+Date: Wed, 15 Jan 2025 23:22:35 +0200
+Message-ID: <20250115212237.57436-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.48.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250114205645.GA2825031@ax162>
-X-Infomaniak-Routing: alpha
 
-On Tue, Jan 14, 2025 at 01:56:45PM -0700, Nathan Chancellor wrote:
-> Hi Mickaël,
-> 
-> On Thu, Dec 12, 2024 at 06:42:22PM +0100, Mickaël Salaün wrote:
-> > Add a very simple script interpreter called "inc" that can evaluate two
-> > different commands (one per line):
-> > - "?" to initialize a counter from user's input;
-> > - "+" to increment the counter (which is set to 0 by default).
-> > 
-> > It is enlighten to only interpret executable files according to
-> > AT_EXECVE_CHECK and the related securebits:
-> > 
-> >   # Executing a script with RESTRICT_FILE is only allowed if the script
-> >   # is executable:
-> >   ./set-exec -f -- ./inc script-exec.inc # Allowed
-> >   ./set-exec -f -- ./inc script-noexec.inc # Denied
-> > 
-> >   # Executing stdin with DENY_INTERACTIVE is only allowed if stdin is an
-> >   # executable regular file:
-> >   ./set-exec -i -- ./inc -i < script-exec.inc # Allowed
-> >   ./set-exec -i -- ./inc -i < script-noexec.inc # Denied
-> > 
-> >   # However, a pipe is not executable and it is then denied:
-> >   cat script-noexec.inc | ./set-exec -i -- ./inc -i # Denied
-> > 
-> >   # Executing raw data (e.g. command argument) with DENY_INTERACTIVE is
-> >   # always denied.
-> >   ./set-exec -i -- ./inc -c "+" # Denied
-> >   ./inc -c "$(<script-ask.inc)" # Allowed
-> > 
-> >   # To directly execute a script, we can update $PATH (used by `env`):
-> >   PATH="${PATH}:." ./script-exec.inc
-> > 
-> >   # To execute several commands passed as argument:
-> > 
-> > Add a complete test suite to check the script interpreter against all
-> > possible execution cases:
-> > 
-> >   make TARGETS=exec kselftest-install
-> >   ./tools/testing/selftests/kselftest_install/run_kselftest.sh
-> > 
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Paul Moore <paul@paul-moore.com>
-> > Cc: Serge Hallyn <serge@hallyn.com>
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> > Link: https://lore.kernel.org/r/20241212174223.389435-8-mic@digikod.net
-> ...
-> > diff --git a/samples/check-exec/inc.c b/samples/check-exec/inc.c
-> > new file mode 100644
-> > index 000000000000..94b87569d2a2
-> > --- /dev/null
-> > +++ b/samples/check-exec/inc.c
-> ...
-> > +/* Returns 1 on error, 0 otherwise. */
-> > +static int interpret_stream(FILE *script, char *const script_name,
-> > +			    char *const *const envp, const bool restrict_stream)
-> > +{
-> > +	int err;
-> > +	char *const script_argv[] = { script_name, NULL };
-> > +	char buf[128] = {};
-> > +	size_t buf_size = sizeof(buf);
-> > +
-> > +	/*
-> > +	 * We pass a valid argv and envp to the kernel to emulate a native
-> > +	 * script execution.  We must use the script file descriptor instead of
-> > +	 * the script path name to avoid race conditions.
-> > +	 */
-> > +	err = execveat(fileno(script), "", script_argv, envp,
-> > +		       AT_EMPTY_PATH | AT_EXECVE_CHECK);
-> > +	if (err && restrict_stream) {
-> > +		perror("ERROR: Script execution check");
-> > +		return 1;
-> > +	}
-> > +
-> > +	/* Reads script. */
-> > +	buf_size = fread(buf, 1, buf_size - 1, script);
-> > +	return interpret_buffer(buf, buf_size);
-> > +}
-> 
-> The use of execveat() in this test case breaks the build when glibc is
-> less than 2.34, as that is the earliest version that has the execveat()
-> wrapper:
-> 
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=19d83270fcd993cc349570164e21b06d57036704
-> 
->   $ ldd --version | head -1
->   ldd (Debian GLIBC 2.31-13+deb11u11) 2.31
-> 
->   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- mrproper allmodconfig samples/
->   ...
->   samples/check-exec/inc.c:81:8: error: call to undeclared function 'execveat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      81 |         err = execveat(fileno(script), "", script_argv, envp,
->         |               ^
->   samples/check-exec/inc.c:81:8: note: did you mean 'execve'?
->   /usr/include/unistd.h:551:12: note: 'execve' declared here
->     551 | extern int execve (const char *__path, char *const __argv[],
->         |            ^
->   1 error generated.
->   ...
-> 
-> Should this just use the syscall directly?
+The following failure was reported:
 
-Thanks for the report, I sent a fix:
-https://lore.kernel.org/r/20250115144753.311152-1-mic@digikod.net
+[   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id 0)
+[   10.848132][    T1] ------------[ cut here ]------------
+[   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __alloc_pages_noprof+0x2ca/0x330
+[   10.862827][    T1] Modules linked in:
+[   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98293a7c9eba9013378d807364c088c9375
+[   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant DL320 Gen12, BIOS 1.20 10/28/2024
+[   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
+[   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
+[   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
+[   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0000000000000000
+[   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0000000000040cc0
 
-> 
-> Cheers,
-> Nathan
+Above shows that ACPI pointed a 16 MiB buffer for the log events because
+RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
+bug with kvmalloc() and devm_add_action_or_reset().
+
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Cc: stable@vger.kernel.org # v2.6.16+
+Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
+Reported-by: Andy Liang <andy.liang@hpe.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219495
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v9:
+* Call devm_add_action() as the last step and execute the plain action
+  in the fallback path:
+  https://lore.kernel.org/linux-integrity/87frlzzx14.wl-tiwai@suse.de/
+v8:
+* Reduced to only to this quick fix. Let HPE reserve 16 MiB if they want
+  to. We have mapping approach backed up in lore.
+v7:
+* Use devm_add_action_or_reset().
+* Fix tags.
+v6:
+* A new patch.
+---
+ drivers/char/tpm/eventlog/acpi.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/eventlog/acpi.c b/drivers/char/tpm/eventlog/acpi.c
+index 69533d0bfb51..cf02ec646f46 100644
+--- a/drivers/char/tpm/eventlog/acpi.c
++++ b/drivers/char/tpm/eventlog/acpi.c
+@@ -63,6 +63,11 @@ static bool tpm_is_tpm2_log(void *bios_event_log, u64 len)
+ 	return n == 0;
+ }
+ 
++static void tpm_bios_log_free(void *data)
++{
++	kvfree(data);
++}
++
+ /* read binary bios log */
+ int tpm_read_log_acpi(struct tpm_chip *chip)
+ {
+@@ -136,7 +141,7 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 	}
+ 
+ 	/* malloc EventLog space */
+-	log->bios_event_log = devm_kmalloc(&chip->dev, len, GFP_KERNEL);
++	log->bios_event_log = kvmalloc(len, GFP_KERNEL);
+ 	if (!log->bios_event_log)
+ 		return -ENOMEM;
+ 
+@@ -161,10 +166,16 @@ int tpm_read_log_acpi(struct tpm_chip *chip)
+ 		goto err;
+ 	}
+ 
++	ret = devm_add_action(&chip->dev, tpm_bios_log_free, log->bios_event_log);
++	if (ret) {
++		log->bios_event_log = NULL;
++		goto err;
++	}
++
+ 	return format;
+ 
+ err:
+-	devm_kfree(&chip->dev, log->bios_event_log);
++	tpm_bios_log_free(log->bios_event_log);
+ 	log->bios_event_log = NULL;
+ 	return ret;
+ }
+-- 
+2.48.0
+
 
