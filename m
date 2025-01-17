@@ -1,209 +1,287 @@
-Return-Path: <linux-integrity+bounces-4583-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4584-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51706A1531A
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 16:47:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30F5DA1554A
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 18:06:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DBEB188A314
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 15:47:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5116F16041D
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 17:06:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE39F194A75;
-	Fri, 17 Jan 2025 15:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="WRF3I0hI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B3F219EEBD;
+	Fri, 17 Jan 2025 17:06:33 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [45.157.188.11])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282C818A6A7
-	for <linux-integrity@vger.kernel.org>; Fri, 17 Jan 2025 15:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5512313B59B;
+	Fri, 17 Jan 2025 17:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737128842; cv=none; b=plKlJds1JZczKlIq2U+uWBj5bu1goePVMp/C7Cw82DSlSi5UzSc5YatP3OQ+KxNlL9rQdXhexySL+WVwkQOaUA0woSwN+kDBpyqjNtsdPTZ/ptij1pFsiID496lAbgqUxliTzGkQfgXwex4pdowbiwj/9sc8Krhu1T/zXZLs2uU=
+	t=1737133593; cv=none; b=ARWf+3VFb5h0ei3FlUs9xyd/DRP/KFWUG/VuhEXwLmQCMI2I1p4UZVyvb0e6bCLAjxNpKzCzYUrcnWqQ3OyYFz9g8rd9ThOcS5/pvGlAqzh0UuYAvRVPDerCN3a6SptQFV+RXZog1ygK6wXkWFH59GfY8BHeooctT4gHMa6thYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737128842; c=relaxed/simple;
-	bh=FXtv7W1tTZCZwvKzdYCQy615fK4f84nKg0ubPToRYrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JlhGj1XILKw710FpJ/I7LAPjjfEcvJ5eWAaiokRfyA+I+48vOSLn0a3rOO1fsQhFvwWdqsJHzxHpBUKcRcWa5tS75M+oVhQ2DSh34KEHYFKz7iJV4T0bfl/Aj5HJtG5HRQkxLtssyg4YjpStfzZgAGV5qgr/FcCN+6EadmJi1bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=WRF3I0hI; arc=none smtp.client-ip=45.157.188.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YZPHd169Bz14PS;
-	Fri, 17 Jan 2025 16:47:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1737128829;
-	bh=aCV8+joJ0WwwhpBHcz/sG6l6fT4xHQJOZ3/s67DE/1Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WRF3I0hI9hSvp3sVkvQtKce72h7ota3phhhEv0vDzZ0nf9lnYZH/M0Xl5UtyGIG0z
-	 FtXVy7jQFT/v1LEHUS4zMbFachXwX1YK0KEDUOQNdZc3Zhc3f4yvVmxf+osvox/QfF
-	 358v1GFRlNKEvwFS8suJPUx31gE2r8NTTzaczT2E=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YZPHZ4gw3z6Rm;
-	Fri, 17 Jan 2025 16:47:06 +0100 (CET)
-Date: Fri, 17 Jan 2025 16:47:05 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Jeff Xu <jeffxu@chromium.org>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Paul Moore <paul@paul-moore.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Serge Hallyn <serge@hallyn.com>, Stefan Berger <stefanb@linux.ibm.com>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1] selftests: Handle old glibc without execveat(2)
-Message-ID: <20250117.aiy2ooph6Lee@digikod.net>
-References: <20250115144753.311152-1-mic@digikod.net>
- <20250117.062883f45a7d@gnoack.org>
+	s=arc-20240116; t=1737133593; c=relaxed/simple;
+	bh=in4JlROnQDHcP8GUZq+j4sVW3Duj8qwmyK5DwZ07WK8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GrsMk6yqxqtjN2hMbKttJSdh6qojLoDNtB5afhBEoinOd1UICsx/MmbF0S0tuSrdRY48iacVVC8Ww0udzWq/yIj8rrcM/Xtn6VtoKyLk+2mBxYX27RZpQpes8TByQC4raqdvNBjdtPrVwxtxwGSWjp5BJ9tTAxg8tnoCMddCWQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4YZQYb4JKtz9v7Vg;
+	Sat, 18 Jan 2025 00:44:19 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id DDCC81402C8;
+	Sat, 18 Jan 2025 01:06:21 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwDnbEsCjopnGx7PAA--.40276S2;
+	Fri, 17 Jan 2025 18:06:21 +0100 (CET)
+Message-ID: <6f310cfc1a0f505cf5e07885728d8cbf783cd644.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 5/7] ima: Set security.ima on file close when
+ ima_appraise=fix
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk, 
+ brauner@kernel.org, jack@suse.cz, dmitry.kasatkin@gmail.com, 
+ eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	Roberto Sassu <roberto.sassu@huawei.com>
+Date: Fri, 17 Jan 2025 18:06:06 +0100
+In-Reply-To: <72d71cc694f27dbafb64656d8db4a89df8532aed.camel@linux.ibm.com>
+References: <20241128100621.461743-1-roberto.sassu@huaweicloud.com>
+	 <20241128100621.461743-6-roberto.sassu@huaweicloud.com>
+	 <72d71cc694f27dbafb64656d8db4a89df8532aed.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250117.062883f45a7d@gnoack.org>
-X-Infomaniak-Routing: alpha
+X-CM-TRANSID:LxC2BwDnbEsCjopnGx7PAA--.40276S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xw4DGw1rAF43uw4UWrWUtwb_yoWxuryfpa
+	yvqa4UKryv9F97WFWvya13CayF93yjgF4DWws8J3WvvFnxZr10gr1rJr129Fy3Xrs5Jw1x
+	tr1jg3yUZa1vyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgALBGeKAVIGRgAAsz
 
-On Fri, Jan 17, 2025 at 03:42:22PM +0100, Günther Noack wrote:
-> On Wed, Jan 15, 2025 at 03:47:50PM +0100, Mickaël Salaün wrote:
-> > Add an execveat(2) wrapper because glibc < 2.34 does not have one.  This
-> > fixes the check-exec tests and samples.
-> > 
-> > Cc: Günther Noack <gnoack@google.com>
-> > Cc: Jeff Xu <jeffxu@chromium.org>
-> > Cc: Kees Cook <kees@kernel.org>
-> > Cc: Mimi Zohar <zohar@linux.ibm.com>
-> > Cc: Paul Moore <paul@paul-moore.com>
-> > Cc: Roberto Sassu <roberto.sassu@huawei.com>
-> > Cc: Serge Hallyn <serge@hallyn.com>
-> > Cc: Stefan Berger <stefanb@linux.ibm.com>
-> > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> > Closes: https://lore.kernel.org/r/20250114205645.GA2825031@ax162
-> > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+On Wed, 2025-01-15 at 08:46 -0500, Mimi Zohar wrote:
+> Please use "__fput()" rather than "file close".  Perhaps update the subje=
+ct line to
+> something like "ima: Defer fixing security.ima to __fput()".=20
+>=20
+> On Thu, 2024-11-28 at 11:06 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> >=20
+> > IMA-Appraisal implements a fix mode, selectable from the kernel command
+> > line by specifying ima_appraise=3Dfix.
+> >=20
+> > The fix mode is meant to be used in a TOFU (trust on first use) model,
+> > where systems are supposed to work under controlled conditions before t=
+he
+> > real enforcement starts.
+> >=20
+> > Since the systems are under controlled conditions, it is assumed that t=
+he
+> > files are not corrupted, and thus their current data digest can be trus=
+ted,
+> > and written to security.ima.
+> >=20
+> > When IMA-Appraisal is switched to enforcing mode, the security.ima valu=
+e
+> > collected during the fix mode is used as a reference value, and a misma=
+tch
+> > with the current value cause the access request to be denied.
+> >=20
+> > However, since fixing security.ima is placed in ima_appraise_measuremen=
+t()
+> > during the integrity check, it requires the inode lock to be taken in
+> > process_measurement(), in addition to ima_update_xattr() invoked at fil=
+e
+> > close.
+> >=20
+> > Postpone the security.ima update to ima_check_last_writer(), by setting=
+ the
+> > new atomic flag IMA_UPDATE_XATTR_FIX in the inode integrity metadata, i=
+n
+> > ima_appraise_measurement(), if security.ima needs to be fixed. In this =
+way,
+> > the inode lock can be removed from process_measurement(). Also, set the
+> > cause appropriately for the fix operation and for allowing access to ne=
+w
+> > and empty signed files.
+> >=20
+> > Finally, update security.ima when IMA_UPDATE_XATTR_FIX is set, and when
+> > there wasn't a previous security.ima update, which occurs if the proces=
+s
+> > closing the file descriptor is the last writer. =20
+> >=20
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>=20
+> Roberto, I really like the idea of removing the inode_lock in process_mea=
+surement()
+> needed for writing xattrs, but I'm concerned about the delay being introd=
+uced.  For
+> example, does it interfere with labeling the filesystem with file signatu=
+res
+> (with/without EVM enabled)?
+
+There will be a difference when EVM is enabled, and inode metadata are
+corrupted.
+
+In that case, currently IMA in fix mode is able to fix inode metadata
+as well, by writing security.ima. That happens because IMA ignores the
+result of evm_verifyxattr() and writes the xattr directly, causing EVM
+to update the HMAC to a valid one.
+
+With the new patch, the EVM HMAC remains invalid until file close,
+meaning that it will not be possible for example to set xattr on the
+opened file descriptor. It works after closing the file though.
+
+Setting other LSMs xattrs will fail as well, if the EVM HMAC is
+invalid.
+
+If the problem is EVM, I would recommend setting evm=3Dfix as well, so
+that inode metadata can be properly fixed.
+
+I will update the documentation to describe the limitation introduced
+by this patch, and to suggest to use evm=3Dfix.
+
+Thanks
+
+Roberto
+
 > > ---
-> > 
-> > Based on Kees Cook's next/execve branch.
-> > ---
-> >  samples/check-exec/inc.c                   | 11 +++++++++--
-> >  tools/testing/selftests/exec/check-exec.c  | 11 +++++++++--
-> >  tools/testing/selftests/landlock/fs_test.c | 10 ++++++++--
-> >  3 files changed, 26 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/samples/check-exec/inc.c b/samples/check-exec/inc.c
-> > index 94b87569d2a2..7f6ef06a2f06 100644
-> > --- a/samples/check-exec/inc.c
-> > +++ b/samples/check-exec/inc.c
-> > @@ -21,8 +21,15 @@
-> >  #include <stdlib.h>
-> >  #include <string.h>
-> >  #include <sys/prctl.h>
-> > +#include <sys/syscall.h>
-> >  #include <unistd.h>
-> >  
-> > +static int sys_execveat(int dirfd, const char *pathname, char *const argv[],
-> > +			char *const envp[], int flags)
-> > +{
-> > +	return syscall(__NR_execveat, dirfd, pathname, argv, envp, flags);
-> > +}
+> > =C2=A0security/integrity/ima/ima.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
+> > =C2=A0security/integrity/ima/ima_appraise.c |=C2=A0 7 +++++--
+> > =C2=A0security/integrity/ima/ima_main.c=C2=A0=C2=A0=C2=A0=C2=A0 | 18 ++=
++++++++++-------
+> > =C2=A03 files changed, 17 insertions(+), 9 deletions(-)
+> >=20
+> > diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.=
+h
+> > index b4eeab48f08a..22c3b87cfcac 100644
+> > --- a/security/integrity/ima/ima.h
+> > +++ b/security/integrity/ima/ima.h
+> > @@ -179,6 +179,7 @@ struct ima_kexec_hdr {
+> > =C2=A0#define IMA_CHANGE_ATTR		2
+> > =C2=A0#define IMA_DIGSIG		3
+> > =C2=A0#define IMA_MUST_MEASURE	4
+> > +#define IMA_UPDATE_XATTR_FIX	5
+> > =C2=A0
+> > =C2=A0/* IMA integrity metadata associated with an inode */
+> > =C2=A0struct ima_iint_cache {
+> > diff --git a/security/integrity/ima/ima_appraise.c
+> > b/security/integrity/ima/ima_appraise.c
+> > index 656c709b974f..94401de8b805 100644
+> > --- a/security/integrity/ima/ima_appraise.c
+> > +++ b/security/integrity/ima/ima_appraise.c
+> > @@ -576,8 +576,10 @@ int ima_appraise_measurement(enum ima_hooks func, =
+struct
+> > ima_iint_cache *iint,
+> > =C2=A0		if ((ima_appraise & IMA_APPRAISE_FIX) && !try_modsig &&
+> > =C2=A0		=C2=A0=C2=A0=C2=A0 (!xattr_value ||
+> > =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0 xattr_value->type !=3D EVM_IMA_XATTR_D=
+IGSIG)) {
+> > -			if (!ima_fix_xattr(dentry, iint))
+> > -				status =3D INTEGRITY_PASS;
+> > +			/* Fix by setting security.ima on file close. */
+> > +			set_bit(IMA_UPDATE_XATTR_FIX, &iint->atomic_flags);
+> > +			status =3D INTEGRITY_PASS;
+> > +			cause =3D "fix";
+> > =C2=A0		}
+> > =C2=A0
+> > =C2=A0		/*
+> > @@ -587,6 +589,7 @@ int ima_appraise_measurement(enum ima_hooks func, s=
+truct
+> > ima_iint_cache *iint,
+> > =C2=A0		if (inode->i_size =3D=3D 0 && iint->flags & IMA_NEW_FILE &&
+> > =C2=A0		=C2=A0=C2=A0=C2=A0 test_bit(IMA_DIGSIG, &iint->atomic_flags)) {
+> > =C2=A0			status =3D INTEGRITY_PASS;
+> > +			cause =3D "new-signed-file";
+> > =C2=A0		}
+> > =C2=A0
+> > =C2=A0		integrity_audit_msg(AUDIT_INTEGRITY_DATA, inode, filename,
+> > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima=
+/ima_main.c
+> > index 1e474ff6a777..50b37420ea2c 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -158,13 +158,16 @@ static void ima_check_last_writer(struct ima_iint=
+_cache
+> > *iint,
+> > =C2=A0				=C2=A0 struct inode *inode, struct file *file)
+> > =C2=A0{
+> > =C2=A0	fmode_t mode =3D file->f_mode;
+> > -	bool update;
+> > +	bool update =3D false, update_fix;
+> > =C2=A0
+> > -	if (!(mode & FMODE_WRITE))
+> > +	update_fix =3D test_and_clear_bit(IMA_UPDATE_XATTR_FIX,
+> > +					&iint->atomic_flags);
 > > +
-> >  /* Returns 1 on error, 0 otherwise. */
-> >  static int interpret_buffer(char *buffer, size_t buffer_size)
-> >  {
-> > @@ -78,8 +85,8 @@ static int interpret_stream(FILE *script, char *const script_name,
-> >  	 * script execution.  We must use the script file descriptor instead of
-> >  	 * the script path name to avoid race conditions.
-> >  	 */
-> > -	err = execveat(fileno(script), "", script_argv, envp,
-> > -		       AT_EMPTY_PATH | AT_EXECVE_CHECK);
-> > +	err = sys_execveat(fileno(script), "", script_argv, envp,
-> > +			   AT_EMPTY_PATH | AT_EXECVE_CHECK);
-> >  	if (err && restrict_stream) {
-> >  		perror("ERROR: Script execution check");
-> >  		return 1;
-> > diff --git a/tools/testing/selftests/exec/check-exec.c b/tools/testing/selftests/exec/check-exec.c
-> > index 4d3f4525e1e1..55bce47e56b7 100644
-> > --- a/tools/testing/selftests/exec/check-exec.c
-> > +++ b/tools/testing/selftests/exec/check-exec.c
-> > @@ -22,6 +22,7 @@
-> >  #include <sys/prctl.h>
-> >  #include <sys/socket.h>
-> >  #include <sys/stat.h>
-> > +#include <sys/syscall.h>
-> >  #include <sys/sysmacros.h>
-> >  #include <unistd.h>
-> >  
-> > @@ -31,6 +32,12 @@
-> >  
-> >  #include "../kselftest_harness.h"
-> >  
-> > +static int sys_execveat(int dirfd, const char *pathname, char *const argv[],
-> > +			char *const envp[], int flags)
-> > +{
-> > +	return syscall(__NR_execveat, dirfd, pathname, argv, envp, flags);
-> > +}
+> > +	if (!(mode & FMODE_WRITE) && !update_fix)
+> > =C2=A0		return;
+> > =C2=A0
+> > =C2=A0	ima_iint_lock(inode);
+> > -	if (atomic_read(&inode->i_writecount) =3D=3D 1) {
+> > +	if (atomic_read(&inode->i_writecount) =3D=3D 1 && (mode & FMODE_WRITE=
+)) {
+>=20
+> Probably better to reverse the "mode & FMODE_WRITE" and atomic_read() tes=
+t order.
+>=20
+> Mimi
+>=20
+> > =C2=A0		struct kstat stat;
+> > =C2=A0
+> > =C2=A0		update =3D test_and_clear_bit(IMA_UPDATE_XATTR,
+> > @@ -181,6 +184,10 @@ static void ima_check_last_writer(struct ima_iint_=
+cache *iint,
+> > =C2=A0				ima_update_xattr(iint, file);
+> > =C2=A0		}
+> > =C2=A0	}
 > > +
-> >  static void drop_privileges(struct __test_metadata *const _metadata)
-> >  {
-> >  	const unsigned int noroot = SECBIT_NOROOT | SECBIT_NOROOT_LOCKED;
-> > @@ -219,8 +226,8 @@ static void test_exec_fd(struct __test_metadata *_metadata, const int fd,
-> >  	 * test framework as an error.  With AT_EXECVE_CHECK, we only check a
-> >  	 * potential successful execution.
-> >  	 */
-> > -	access_ret =
-> > -		execveat(fd, "", argv, NULL, AT_EMPTY_PATH | AT_EXECVE_CHECK);
-> > +	access_ret = sys_execveat(fd, "", argv, NULL,
-> > +				  AT_EMPTY_PATH | AT_EXECVE_CHECK);
-> >  	access_errno = errno;
-> >  	if (err_code) {
-> >  		EXPECT_EQ(-1, access_ret);
-> > diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> > index cd66901be612..ac9701c018e0 100644
-> > --- a/tools/testing/selftests/landlock/fs_test.c
-> > +++ b/tools/testing/selftests/landlock/fs_test.c
-> > @@ -59,6 +59,12 @@ int open_tree(int dfd, const char *filename, unsigned int flags)
-> >  }
-> >  #endif
-> >  
-> > +static int sys_execveat(int dirfd, const char *pathname, char *const argv[],
-> > +			char *const envp[], int flags)
-> > +{
-> > +	return syscall(__NR_execveat, dirfd, pathname, argv, envp, flags);
-> > +}
+> > +	if (!update && update_fix)
+> > +		ima_update_xattr(iint, file);
 > > +
-> >  #ifndef RENAME_EXCHANGE
-> >  #define RENAME_EXCHANGE (1 << 1)
-> >  #endif
-> > @@ -2018,8 +2024,8 @@ static void test_check_exec(struct __test_metadata *const _metadata,
-> >  	int ret;
-> >  	char *const argv[] = { (char *)path, NULL };
-> >  
-> > -	ret = execveat(AT_FDCWD, path, argv, NULL,
-> > -		       AT_EMPTY_PATH | AT_EXECVE_CHECK);
-> > +	ret = sys_execveat(AT_FDCWD, path, argv, NULL,
-> > +			   AT_EMPTY_PATH | AT_EXECVE_CHECK);
-> >  	if (err) {
-> >  		EXPECT_EQ(-1, ret);
-> >  		EXPECT_EQ(errno, err);
-> > 
-> > base-commit: 95b3cdafd7cb74414070893445a9b731793f7b55
-> > -- 
-> > 2.48.1
-> > 
-> 
-> Reviewed-by: Günther Noack <gnoack3000@gmail.com>
-> 
-> Do you want to add a comment next to these, to remind ourselves do undo this?
-> You are surely not planning to support old versions of glibc indefinitely?
+> > =C2=A0	ima_iint_unlock(inode);
+> > =C2=A0}
+> > =C2=A0
+> > @@ -378,13 +385,10 @@ static int process_measurement(struct file *file,=
+ const
+> > struct cred *cred,
+> > =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 template_desc);
+> > =C2=A0	if (rc =3D=3D 0 && (action & IMA_APPRAISE_SUBMASK)) {
+> > =C2=A0		rc =3D ima_check_blacklist(iint, modsig, pcr);
+> > -		if (rc !=3D -EPERM) {
+> > -			inode_lock(inode);
+> > +		if (rc !=3D -EPERM)
+> > =C2=A0			rc =3D ima_appraise_measurement(func, iint, file,
+> > =C2=A0						=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pathname, xattr_value,
+> > =C2=A0						=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xattr_len, modsig);
+> > -			inode_unlock(inode);
+> > -		}
+> > =C2=A0		if (!rc)
+> > =C2=A0			rc =3D mmap_violation_check(func, file, &pathbuf,
+> > =C2=A0						=C2=A0 &pathname, filename);
 
-I don't about glibc.  Minimal versions for other tools are documented
-here though:
-https://docs.kernel.org/process/changes.html
-
-Nathan, Jon, any idea?
 
