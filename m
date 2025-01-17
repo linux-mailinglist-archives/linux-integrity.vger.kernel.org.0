@@ -1,207 +1,234 @@
-Return-Path: <linux-integrity+bounces-4581-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4582-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27D42A1506B
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 14:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CD0CA15208
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 15:42:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47D41164B09
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 13:22:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55CD1169759
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 14:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A311FF60A;
-	Fri, 17 Jan 2025 13:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B11814B06C;
+	Fri, 17 Jan 2025 14:42:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PCpQgCKP";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="NsGlBXML";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uAOWqiT6";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GGqHApG/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KEb4H/84"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAB41FCCEE;
-	Fri, 17 Jan 2025 13:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5987015B54A;
+	Fri, 17 Jan 2025 14:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737120169; cv=none; b=LRGIcdGOssszPgr9L70UNta+7ugT9f6qSMIWbdBd/jWIxSXh9BMZAGVHW9u2pJC1YB9TY4WYyVS0WI9lDn/2hpkZcWACICzT6LzQaTuu9fuQ2VIlMuYnLGSiwO9ipWQXy7UW5tHgIHsqvXvz+oqq+onxNECO9y1aPLXeWDlqjaU=
+	t=1737124951; cv=none; b=enFSx8wgZl5ROZaEHLF2OS/7lgWKKp+FITjcsx8LD33FNr4aNI6VRpSujs2ULdYUxPOsZQqSZAW38CkeCp2PYxoA7qaAIc4NDZE8Y1EYF8VLAAZTGqRgfMWmoVN8wKtL5CUp3DmjaSCkai/b8KJ5zZ8IHXS0hcNrkO4oYvHbB1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737120169; c=relaxed/simple;
-	bh=Hi6+UXzNjN1M7TKHAq6QV9LqViDoyf3NlUbmvmMGHig=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mdlbrpFnffMkdTewtkZoHho9iABlxYbt5d4OuoT3iOx7goRWq/eux/yoKhy5xvxAXIV1CqycsFMdQ5L1J4bX12z7/KxAyJc0IctS/97pG249PcY5iBm0KN8ZDHKsY8tcfO3JVgBIeUA/FH3wB/JKLmFOYqMCHsSc9VB8upXX3uA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=PCpQgCKP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=NsGlBXML; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uAOWqiT6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GGqHApG/; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E9D851F38F;
-	Fri, 17 Jan 2025 13:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1737120166; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Hnx6LIBUeP6NEc/J9B3bi4AxvEmsHeIqCQoKy/mxHls=;
-	b=PCpQgCKPSk8kfwgcFUGRS++iL7O0G3GgxXy+5+ijZ16Cf0V2nDkX67gtoo4lBktcopNC/s
-	n8K/kX+gc+tr7B4+efMB9iEIRmRYDUMY+Nn3X2Vps48Qo2kygKZ5HRNCG0AizRSFe4t4BW
-	3vvpBe2ouScDKGiLsaUyBubFswYg46g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1737120166;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Hnx6LIBUeP6NEc/J9B3bi4AxvEmsHeIqCQoKy/mxHls=;
-	b=NsGlBXML/VWm9LqhzYk4o2p0X6xRBBz6zcXVy7XhIhEGVxWsn/w+/nrW9piuoKM2kofKCo
-	W/WlQMjEnKj8t1Dg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=uAOWqiT6;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="GGqHApG/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1737120165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Hnx6LIBUeP6NEc/J9B3bi4AxvEmsHeIqCQoKy/mxHls=;
-	b=uAOWqiT6VuluviNER/baCQ9kL8JlIfsLKZMt34nBR1F/xe9Djjj6n0BkM/YKfHf5VXtttn
-	iK6wHvf+D4mJRT0CwMD3dgCH901vf7ES/x7AHYdtjTZwHJ1+2KFTyaFVVmBATVSKQP9F/P
-	CIdB5np3/Pwm9vzyqAaSBUh2jf4hgPI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1737120165;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Hnx6LIBUeP6NEc/J9B3bi4AxvEmsHeIqCQoKy/mxHls=;
-	b=GGqHApG/y9HsM8/lU4tLcLDtI4S4amY3zcnU1V2zXof/S4fvhG25qINJ+i5nN+xg4ySBT3
-	q3LN1deVqRHrlLBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 88B4313A30;
-	Fri, 17 Jan 2025 13:22:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id QiEGIKVZimf+CQAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 17 Jan 2025 13:22:45 +0000
-Date: Fri, 17 Jan 2025 14:22:45 +0100
-Message-ID: <878qr9shga.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>
-Cc: "Takashi Iwai" <tiwai@suse.de>,
-	<linux-integrity@vger.kernel.org>,
-	"Peter Huewe" <peterhuewe@gmx.de>,
-	"Jason Gunthorpe" <jgg@ziepe.ca>,
-	"Colin Ian King"
- <colin.i.king@gmail.com>,
-	"Stefan Berger" <stefanb@us.ibm.com>,
-	"Reiner Sailer" <sailer@us.ibm.com>,
-	"Seiji Munetoh" <munetoh@jp.ibm.com>,
-	"Andrew Morton" <akpm@osdl.org>,
-	"Kylene Jo Hall" <kjhall@us.ibm.com>,
-	"Ard Biesheuvel" <ardb@kernel.org>,
-	<stable@vger.kernel.org>,
-	"Andy Liang"
- <andy.liang@hpe.com>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10] tpm: Map the ACPI provided event log
-In-Reply-To: <D74DJJTER7IQ.3KT9ECIRLN0JW@kernel.org>
-References: <20250115224315.482487-1-jarkko@kernel.org>
-	<87cyglsjdh.wl-tiwai@suse.de>
-	<D74DJJTER7IQ.3KT9ECIRLN0JW@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1737124951; c=relaxed/simple;
+	bh=FFsSB34E0ao8K38FLpNRRuWEXihZouOMwO0eIPDcqLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WiQZ7fuv6T1UNPdCWjWi0EwE3qrfpHz4amnDcv+8+EGY//arJ703jxF73jgWQJ3Q8u7qaweAV9P2+dWHZ1FKN/n4ueIlo2nVCUTQ8sC+VY4b1JOkKJYYuHDnGYsugOQF6vTgmfTWu8XN3o0fD6UNlfCH1EmvfElbR/LexiNE5V8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KEb4H/84; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-aaec111762bso427378266b.2;
+        Fri, 17 Jan 2025 06:42:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737124948; x=1737729748; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nOD4pNV3mPT1I1Ya6badU5VbEXfW6f5YfORqdQrB6KU=;
+        b=KEb4H/84eZLhjx0b99NpwrroPTTTnOVfs0Mf/mJqhUGK4nB5UxxTcz9lhLLchnqE/D
+         GoCp8Y//8TBGH4NNw/gcaigWRhHOTI6bnyipd0G8REYo+pLcxY0+5SDMwKSIJMI7SHZq
+         HhuwTxs7RGhWAQd8xUrPcJ1gDnr3nDCq6xs6I8mqyLoODfgGz2J+kA1NiUPl2rh+jLVw
+         KeK1jCFUFsu0F7/wyWdBcm3R5ZRytLln0M37sOoZMBPMrs9ouDCmeNi7gPf9erimDfQj
+         QpKO2tn/uBLB7gL+rtoDIiz+orb11TZC6LIVrqX3n6IPi6jbaVcMEdyDEZDir7yRMIbP
+         0Wjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737124948; x=1737729748;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nOD4pNV3mPT1I1Ya6badU5VbEXfW6f5YfORqdQrB6KU=;
+        b=KQksJWCbmvHKsk5gZYJxFOaxKxYdVjXI/YJP1mYb3O2xLqKt/3b4y3th48CXwytTd5
+         l1E159AL8S0du5FLjP2LjX5s5I7xoFItJVhQzSF3jiAQtj+XKOkhVQP6quzRHpX3BASe
+         +8OfaJQ6nSYZahxZ63EM8HjZyaFfxHRICdJ0040DI6iYaeMqNYWbSvRH6PltMfFZEq5T
+         nWPP4AbIqIIqLk1yI2y+fvaOKD9eutfyll6ZNpMPIkSlRmOUXJXoQlcVjs4L5SlmfUhH
+         uC3HXVOVnbJuRkyYB1IHutJ2rzy2wXBwric5Hov0aTgKJHYWEU+1WN5zL8aM9rtgiERZ
+         r4UA==
+X-Forwarded-Encrypted: i=1; AJvYcCVW76geyWqjM+ObjLZQkmlFw2jdV7dpOkX2KIYSt/+YLxzaNgYlWjNcOfvbEA86DuiNQkbWBMgAnS8KL/qNsCGQ/z0jGWC7@vger.kernel.org, AJvYcCVvieaAeHEqM+1mcWhBOb8Aot5XblMiIsCcYbrYGZumU5VikvQ1+o8uPUFIgBbK80J61QXsy9svsUm6I3fn@vger.kernel.org, AJvYcCWdH625ik0BVlBX48hckyj2XPGwmduCth9/QmnG91eK5qOZxsB4gJ+eutF4WAcrS+AHttxvXSr3I57tuL5AbTs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyti1WlLRZBWDQhpz4OQm6VL1qlPeX3DqLy1hmL5xKh/FpqToFh
+	5pG4Zdf3aIlyPnzPEb2sx3xRsj4yrYwUMz8LHzaR2Qp93tA9mZ9152PNlw==
+X-Gm-Gg: ASbGnctLDyMPPFZEnsD/CohCVf7Pcv4dBMwIZHB0D/IfbblqO6uPxrCVUkxvd1iv/PZ
+	LTRJZEyASxcAJhWbC+bYXG45e/EEAmV40p7u4A2tHV0/3efcmwcK/uEce8xWAC1WELG8RDnUmc0
+	ykOaUA4GYJxv6jQYSxm/CqJByWZGPBl85AvQIY3Bgcz6jhDH4piDVWjAOFMSeGlZw71FC9gu6vo
+	nxAncCxFKdnxdTv6aXDVnU4idPAmjvnmxRMUjKzkDtEt2IgkO2wKD0F1w==
+X-Google-Smtp-Source: AGHT+IGBQ1aAJFrMiRvnQwh32HdjT5afCCpZlBxjV6nktWYkixeKaeSQfoiwlLenrF4Ok9ZEbakrCQ==
+X-Received: by 2002:a17:907:6d1d:b0:aae:c9bf:41b3 with SMTP id a640c23a62f3a-ab38b36bd3amr307044366b.37.1737124947322;
+        Fri, 17 Jan 2025 06:42:27 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:a201:48ff:95d2:7dab:ae81])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab384f22c5fsm180915166b.93.2025.01.17.06.42.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2025 06:42:26 -0800 (PST)
+Date: Fri, 17 Jan 2025 15:42:22 +0100
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Jeff Xu <jeffxu@chromium.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Serge Hallyn <serge@hallyn.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH v1] selftests: Handle old glibc without execveat(2)
+Message-ID: <20250117.062883f45a7d@gnoack.org>
+References: <20250115144753.311152-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: E9D851F38F
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	FREEMAIL_CC(0.00)[suse.de,vger.kernel.org,gmx.de,ziepe.ca,gmail.com,us.ibm.com,jp.ibm.com,osdl.org,kernel.org,hpe.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,hpe.com:email]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -2.01
-X-Spam-Flag: NO
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250115144753.311152-1-mic@digikod.net>
 
-On Fri, 17 Jan 2025 14:15:05 +0100,
-Jarkko Sakkinen wrote:
+On Wed, Jan 15, 2025 at 03:47:50PM +0100, Mickaël Salaün wrote:
+> Add an execveat(2) wrapper because glibc < 2.34 does not have one.  This
+> fixes the check-exec tests and samples.
 > 
-> On Fri Jan 17, 2025 at 2:41 PM EET, Takashi Iwai wrote:
-> > On Wed, 15 Jan 2025 23:42:56 +0100,
-> > Jarkko Sakkinen wrote:
-> > > 
-> > > The following failure was reported:
-> > > 
-> > > [   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id 0)
-> > > [   10.848132][    T1] ------------[ cut here ]------------
-> > > [   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __alloc_pages_noprof+0x2ca/0x330
-> > > [   10.862827][    T1] Modules linked in:
-> > > [   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98293a7c9eba9013378d807364c088c9375
-> > > [   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant DL320 Gen12, BIOS 1.20 10/28/2024
-> > > [   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
-> > > [   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
-> > > [   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
-> > > [   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0000000000000000
-> > > [   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0000000000040cc0
-> > > 
-> > > Above shows that ACPI pointed a 16 MiB buffer for the log events because
-> > > RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
-> > > bug with kvmalloc() and devm_add_action_or_reset().
-> > > 
-> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> > > Cc: stable@vger.kernel.org # v2.6.16+
-> > > Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
-> > > Reported-by: Andy Liang <andy.liang@hpe.com>
-> > > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219495
-> > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >
-> > One of my previous review comments overlooked?
-> > The subject line still doesn't match with the actual code change.
+> Cc: Günther Noack <gnoack@google.com>
+> Cc: Jeff Xu <jeffxu@chromium.org>
+> Cc: Kees Cook <kees@kernel.org>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Roberto Sassu <roberto.sassu@huawei.com>
+> Cc: Serge Hallyn <serge@hallyn.com>
+> Cc: Stefan Berger <stefanb@linux.ibm.com>
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Closes: https://lore.kernel.org/r/20250114205645.GA2825031@ax162
+> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> ---
 > 
-> True, thanks for catching this.
+> Based on Kees Cook's next/execve branch.
+> ---
+>  samples/check-exec/inc.c                   | 11 +++++++++--
+>  tools/testing/selftests/exec/check-exec.c  | 11 +++++++++--
+>  tools/testing/selftests/landlock/fs_test.c | 10 ++++++++--
+>  3 files changed, 26 insertions(+), 6 deletions(-)
 > 
-> >
-> > I guess "Map the ACPI provided event log" is meant for another patch,
-> > not for this fix.
+> diff --git a/samples/check-exec/inc.c b/samples/check-exec/inc.c
+> index 94b87569d2a2..7f6ef06a2f06 100644
+> --- a/samples/check-exec/inc.c
+> +++ b/samples/check-exec/inc.c
+> @@ -21,8 +21,15 @@
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <sys/prctl.h>
+> +#include <sys/syscall.h>
+>  #include <unistd.h>
+>  
+> +static int sys_execveat(int dirfd, const char *pathname, char *const argv[],
+> +			char *const envp[], int flags)
+> +{
+> +	return syscall(__NR_execveat, dirfd, pathname, argv, envp, flags);
+> +}
+> +
+>  /* Returns 1 on error, 0 otherwise. */
+>  static int interpret_buffer(char *buffer, size_t buffer_size)
+>  {
+> @@ -78,8 +85,8 @@ static int interpret_stream(FILE *script, char *const script_name,
+>  	 * script execution.  We must use the script file descriptor instead of
+>  	 * the script path name to avoid race conditions.
+>  	 */
+> -	err = execveat(fileno(script), "", script_argv, envp,
+> -		       AT_EMPTY_PATH | AT_EXECVE_CHECK);
+> +	err = sys_execveat(fileno(script), "", script_argv, envp,
+> +			   AT_EMPTY_PATH | AT_EXECVE_CHECK);
+>  	if (err && restrict_stream) {
+>  		perror("ERROR: Script execution check");
+>  		return 1;
+> diff --git a/tools/testing/selftests/exec/check-exec.c b/tools/testing/selftests/exec/check-exec.c
+> index 4d3f4525e1e1..55bce47e56b7 100644
+> --- a/tools/testing/selftests/exec/check-exec.c
+> +++ b/tools/testing/selftests/exec/check-exec.c
+> @@ -22,6 +22,7 @@
+>  #include <sys/prctl.h>
+>  #include <sys/socket.h>
+>  #include <sys/stat.h>
+> +#include <sys/syscall.h>
+>  #include <sys/sysmacros.h>
+>  #include <unistd.h>
+>  
+> @@ -31,6 +32,12 @@
+>  
+>  #include "../kselftest_harness.h"
+>  
+> +static int sys_execveat(int dirfd, const char *pathname, char *const argv[],
+> +			char *const envp[], int flags)
+> +{
+> +	return syscall(__NR_execveat, dirfd, pathname, argv, envp, flags);
+> +}
+> +
+>  static void drop_privileges(struct __test_metadata *const _metadata)
+>  {
+>  	const unsigned int noroot = SECBIT_NOROOT | SECBIT_NOROOT_LOCKED;
+> @@ -219,8 +226,8 @@ static void test_exec_fd(struct __test_metadata *_metadata, const int fd,
+>  	 * test framework as an error.  With AT_EXECVE_CHECK, we only check a
+>  	 * potential successful execution.
+>  	 */
+> -	access_ret =
+> -		execveat(fd, "", argv, NULL, AT_EMPTY_PATH | AT_EXECVE_CHECK);
+> +	access_ret = sys_execveat(fd, "", argv, NULL,
+> +				  AT_EMPTY_PATH | AT_EXECVE_CHECK);
+>  	access_errno = errno;
+>  	if (err_code) {
+>  		EXPECT_EQ(-1, access_ret);
+> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+> index cd66901be612..ac9701c018e0 100644
+> --- a/tools/testing/selftests/landlock/fs_test.c
+> +++ b/tools/testing/selftests/landlock/fs_test.c
+> @@ -59,6 +59,12 @@ int open_tree(int dfd, const char *filename, unsigned int flags)
+>  }
+>  #endif
+>  
+> +static int sys_execveat(int dirfd, const char *pathname, char *const argv[],
+> +			char *const envp[], int flags)
+> +{
+> +	return syscall(__NR_execveat, dirfd, pathname, argv, envp, flags);
+> +}
+> +
+>  #ifndef RENAME_EXCHANGE
+>  #define RENAME_EXCHANGE (1 << 1)
+>  #endif
+> @@ -2018,8 +2024,8 @@ static void test_check_exec(struct __test_metadata *const _metadata,
+>  	int ret;
+>  	char *const argv[] = { (char *)path, NULL };
+>  
+> -	ret = execveat(AT_FDCWD, path, argv, NULL,
+> -		       AT_EMPTY_PATH | AT_EXECVE_CHECK);
+> +	ret = sys_execveat(AT_FDCWD, path, argv, NULL,
+> +			   AT_EMPTY_PATH | AT_EXECVE_CHECK);
+>  	if (err) {
+>  		EXPECT_EQ(-1, ret);
+>  		EXPECT_EQ(errno, err);
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/
+> base-commit: 95b3cdafd7cb74414070893445a9b731793f7b55
+> -- 
+> 2.48.1
 > 
-> I edited also the description a bit. Does this make more sense to you
-> now? (also denote any additonal possible tags)
 
-Yes, looks good.  Thanks!
+Reviewed-by: Günther Noack <gnoack3000@gmail.com>
 
+Do you want to add a comment next to these, to remind ourselves do undo this?
+You are surely not planning to support old versions of glibc indefinitely?
 
-Takashi
+–Günther
 
