@@ -1,184 +1,180 @@
-Return-Path: <linux-integrity+bounces-4578-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4579-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5E9FA13A99
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jan 2025 14:13:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B8FFA14F5F
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 13:41:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE4EC1691AC
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Jan 2025 13:13:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55633188AC93
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Jan 2025 12:41:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4801B19539F;
-	Thu, 16 Jan 2025 13:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191581FF1BA;
+	Fri, 17 Jan 2025 12:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A7eWZjmZ"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="P9aS0sJE";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="cBgFScN1";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="P9aS0sJE";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="cBgFScN1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D74519CC39;
-	Thu, 16 Jan 2025 13:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DE51FF1B2;
+	Fri, 17 Jan 2025 12:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737033210; cv=none; b=kozCXg4o9ns1FcIfflSk1rkOb3Xkh8AUumIQluTw2LL04RWOVsT6GInMA7yc5wLSrE8FYyn4OTN8WLweyJnFQNFNiV4dkuCNqJ42woAiz8ouFL+TtqehiNp4iQifAzkjWTzcE4i44Vh1TfhIJkLvtwVDUZrr5WAGGWg6NM/rrQA=
+	t=1737117679; cv=none; b=SLKy1FRo9Hqyp8mbrxosU0yRdXXHDP9SKJHOF3FiUysCtoGuDGGFYGIsgo3xxf/l5LJeMRIcuAApUTZ/Hhkjys1+F8sjnA6UC2E/gr7br4nXXwhYc+/WuHS6jZWHL7Ur9s/GCdUAmPYd9VOtQ/lg6Qtji+RXCfW7bcLuIUhvOZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737033210; c=relaxed/simple;
-	bh=a4FelPve24hx2H541JYRkMU/NzufVucHC49QLg/Y6nI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=N/THiKubvfZFNb2rasLgFYcyQnKF0GqhGaYN9hIQtymf55JIUniNa4m02BWxpFCSbKyxPzx7O10Ln9piRqK1RdmfGECRXjbOmtUhafFUkkxGOAN5y4eupiJCij0wPQfqknB0jDOhEyg8m80iLkcivEPc8+pz6xZoTZB5mGahV+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A7eWZjmZ; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50G78xVM019751;
-	Thu, 16 Jan 2025 13:13:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=BEbmGn
-	qQf1/62KTsvyxoe5FQYiW9lG/p4Gib5T766i8=; b=A7eWZjmZKL9H8DuPQs0Xg4
-	9tKBHhscO/XwQqEuPGZrcNj7RHAgVdxy3zBF+kGxNUvJSZDaNSNqdynbxA6QR5VE
-	4+cuR/G6b2G3k3BX+DJCZVLIw7T0X/D33r0TNsVpoTdrSgVwdG4NeK7TOg5GrHUf
-	CgubsLOQP4MCWkGVnBWDFL4olwodMMrJzqFXAo4kiGYXWDjEfwy2XEl5KdQ54u6Z
-	9fuMm9rdY166X9OL+Wpk+lzFEpMigifrzrhNuRy0wqX47J8B7KoyjxzRIOb6ppjr
-	55L0Gw6UD+o1ZVcP5Y2oE+ICYwe1EvaCenvH9N8XR8/Lxzp9wZ+w7SpkdCG+ZVJw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 446eg5wrk6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jan 2025 13:13:03 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50GDAgM0011301;
-	Thu, 16 Jan 2025 13:13:02 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 446eg5wrk3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jan 2025 13:13:02 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50G9t5HB007385;
-	Thu, 16 Jan 2025 13:13:01 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4443yndykd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jan 2025 13:13:01 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50GDD1iR29819634
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 16 Jan 2025 13:13:01 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 11D1458065;
-	Thu, 16 Jan 2025 13:13:01 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 17A6558057;
-	Thu, 16 Jan 2025 13:13:00 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.122.241])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 16 Jan 2025 13:13:00 +0000 (GMT)
-Message-ID: <71ef0b0abbb5cb9cfff7b8287542308b9a0b88d4.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 7/7] ima: Reset IMA_NONACTION_RULE_FLAGS after
- post_setattr
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, jack@suse.cz, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>, stable@vger.kernel.org
-Date: Thu, 16 Jan 2025 08:12:59 -0500
-In-Reply-To: <20241128100621.461743-8-roberto.sassu@huaweicloud.com>
-References: <20241128100621.461743-1-roberto.sassu@huaweicloud.com>
-	 <20241128100621.461743-8-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1737117679; c=relaxed/simple;
+	bh=YgN/kVZUCYxbqA9hxRcV8XwsGS0ecqzNUDyYe8q92jw=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Q1Jsa0Hvw3bcvqSInzPP2m2EVtdATDqtgUXrC2MmPI3ayAauLcAjalaOxWig9OEFyxjr3h1cjOJR9QPSTDzbNOv+43hznfcKHk6Jted/7fXNhVnUEat4ZY3cl3xktBWk0tGOWaHZxNmZfBYYete/whziR3lSnhArlgfErO8MydE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=P9aS0sJE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=cBgFScN1; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=P9aS0sJE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=cBgFScN1; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 19BD021175;
+	Fri, 17 Jan 2025 12:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1737117675; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZmVzdJYE/Fh+arWkO2e/FTFlqv6WD/FLeWeFkS/wLTA=;
+	b=P9aS0sJEabaIkoDCgEtF6DCeOCyk7eUzoGPC9WdmneVF48za8zMtei8tciQqGAw1IlHdhS
+	lm+4s7Dhx4jGGNAxsoUi2oGez8Lv5FqVb6LlfnMwyXMKUje5TOwdKGy5thqqfimlvI1ary
+	PMJWsDVN7mm2PFJ0HJojQlFAbqFW2QE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1737117675;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZmVzdJYE/Fh+arWkO2e/FTFlqv6WD/FLeWeFkS/wLTA=;
+	b=cBgFScN1TzeClM196UvV1olEh5ggnSmcwMEsl0//2rlTiGTuCjB9vsjDwxf8OFOvKe+1mU
+	+W8V2HafAT5D6ACg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1737117675; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZmVzdJYE/Fh+arWkO2e/FTFlqv6WD/FLeWeFkS/wLTA=;
+	b=P9aS0sJEabaIkoDCgEtF6DCeOCyk7eUzoGPC9WdmneVF48za8zMtei8tciQqGAw1IlHdhS
+	lm+4s7Dhx4jGGNAxsoUi2oGez8Lv5FqVb6LlfnMwyXMKUje5TOwdKGy5thqqfimlvI1ary
+	PMJWsDVN7mm2PFJ0HJojQlFAbqFW2QE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1737117675;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZmVzdJYE/Fh+arWkO2e/FTFlqv6WD/FLeWeFkS/wLTA=;
+	b=cBgFScN1TzeClM196UvV1olEh5ggnSmcwMEsl0//2rlTiGTuCjB9vsjDwxf8OFOvKe+1mU
+	+W8V2HafAT5D6ACg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AC83D13332;
+	Fri, 17 Jan 2025 12:41:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id zpShKOpPimc7egAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 17 Jan 2025 12:41:14 +0000
+Date: Fri, 17 Jan 2025 13:41:14 +0100
+Message-ID: <87cyglsjdh.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Stefan Berger <stefanb@us.ibm.com>,
+	Reiner Sailer <sailer@us.ibm.com>,
+	Seiji Munetoh <munetoh@jp.ibm.com>,
+	Andrew Morton <akpm@osdl.org>,
+	Kylene Jo Hall <kjhall@us.ibm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	stable@vger.kernel.org,
+	Andy Liang <andy.liang@hpe.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10] tpm: Map the ACPI provided event log
+In-Reply-To: <20250115224315.482487-1-jarkko@kernel.org>
+References: <20250115224315.482487-1-jarkko@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uDhFwdqcGNgLHe6QWTo2O8Z-H_B0tG1E
-X-Proofpoint-ORIG-GUID: n32nTXmeXhDBCBbzNnUbIzeTg-g9H8XU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-16_05,2025-01-16_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- clxscore=1015 phishscore=0 malwarescore=0 spamscore=0 adultscore=0
- mlxscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501160098
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spamd-Result: default: False [-1.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TAGGED_RCPT(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmx.de,ziepe.ca,gmail.com,us.ibm.com,jp.ibm.com,osdl.org,kernel.org,hpe.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
+X-Spam-Score: -1.80
+X-Spam-Flag: NO
 
-On Thu, 2024-11-28 at 11:06 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->=20
-> Commit 11c60f23ed13 ("integrity: Remove unused macro
-> IMA_ACTION_RULE_FLAGS") removed the IMA_ACTION_RULE_FLAGS mask, due to it
-> not being used after commit 0d73a55208e9 ("ima: re-introduce own integrit=
-y
-> cache lock").
->=20
-> However, it seems that the latter commit mistakenly used the wrong mask
-> when moving the code from ima_inode_post_setattr() to
-> process_measurement(). There is no mention in the commit message about th=
-is
-> change and it looks quite important, since changing from IMA_ACTIONS_FLAG=
-S
-> (later renamed to IMA_NONACTION_FLAGS) to IMA_ACTION_RULE_FLAGS was done =
-by
-> commit 42a4c603198f0 ("ima: fix ima_inode_post_setattr").
->=20
-> Restore the original change, but with new mask 0xfb000000 since the
-> policy-specific flags changed meanwhile, and rename IMA_ACTION_RULE_FLAGS
-> to IMA_NONACTION_RULE_FLAGS, to be consistent with IMA_NONACTION_FLAGS.
+On Wed, 15 Jan 2025 23:42:56 +0100,
+Jarkko Sakkinen wrote:
+> 
+> The following failure was reported:
+> 
+> [   10.693310][    T1] tpm_tis STM0925:00: 2.0 TPM (device-id 0x3, rev-id 0)
+> [   10.848132][    T1] ------------[ cut here ]------------
+> [   10.853559][    T1] WARNING: CPU: 59 PID: 1 at mm/page_alloc.c:4727 __alloc_pages_noprof+0x2ca/0x330
+> [   10.862827][    T1] Modules linked in:
+> [   10.866671][    T1] CPU: 59 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-lp155.2.g52785e2-default #1 openSUSE Tumbleweed (unreleased) 588cd98293a7c9eba9013378d807364c088c9375
+> [   10.882741][    T1] Hardware name: HPE ProLiant DL320 Gen12/ProLiant DL320 Gen12, BIOS 1.20 10/28/2024
+> [   10.892170][    T1] RIP: 0010:__alloc_pages_noprof+0x2ca/0x330
+> [   10.898103][    T1] Code: 24 08 e9 4a fe ff ff e8 34 36 fa ff e9 88 fe ff ff 83 fe 0a 0f 86 b3 fd ff ff 80 3d 01 e7 ce 01 00 75 09 c6 05 f8 e6 ce 01 01 <0f> 0b 45 31 ff e9 e5 fe ff ff f7 c2 00 00 08 00 75 42 89 d9 80 e1
+> [   10.917750][    T1] RSP: 0000:ffffb7cf40077980 EFLAGS: 00010246
+> [   10.923777][    T1] RAX: 0000000000000000 RBX: 0000000000040cc0 RCX: 0000000000000000
+> [   10.931727][    T1] RDX: 0000000000000000 RSI: 000000000000000c RDI: 0000000000040cc0
+> 
+> Above shows that ACPI pointed a 16 MiB buffer for the log events because
+> RSI maps to the 'order' parameter of __alloc_pages_noprof(). Address the
+> bug with kvmalloc() and devm_add_action_or_reset().
+> 
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Cc: stable@vger.kernel.org # v2.6.16+
+> Fixes: 55a82ab3181b ("[PATCH] tpm: add bios measurement log")
+> Reported-by: Andy Liang <andy.liang@hpe.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219495
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Thanks, Roberto.  Please summarize the reason for reverting the change.  So=
-mething
-like:  Restore the original change to not reset the new file status after .=
-..
+One of my previous review comments overlooked?
+The subject line still doesn't match with the actual code change.
 
->=20
-> Cc: stable@vger.kernel.org=C2=A0# v4.16.x
-> Fixes: 11c60f23ed13 ("integrity: Remove unused macro IMA_ACTION_RULE_FLAG=
-S")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+I guess "Map the ACPI provided event log" is meant for another patch,
+not for this fix.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-> ---
-> =C2=A0security/integrity/ima/ima.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 1 +
-> =C2=A0security/integrity/ima/ima_main.c | 2 +-
-> =C2=A02 files changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 22c3b87cfcac..32ffef2cc92a 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -141,6 +141,7 @@ struct ima_kexec_hdr {
-> =C2=A0
-> =C2=A0/* IMA iint policy rule cache flags */
-> =C2=A0#define IMA_NONACTION_FLAGS	0xff000000
-> +#define IMA_NONACTION_RULE_FLAGS	0xfb000000
-> =C2=A0#define IMA_DIGSIG_REQUIRED	0x01000000
-> =C2=A0#define IMA_PERMIT_DIRECTIO	0x02000000
-> =C2=A0#define IMA_NEW_FILE		0x04000000
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index 712c3a522e6c..83e467ad18d4 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -277,7 +277,7 @@ static int process_measurement(struct file *file, con=
-st struct
-> cred *cred,
-> =C2=A0		/* reset appraisal flags if ima_inode_post_setattr was called */
-> =C2=A0		iint->flags &=3D ~(IMA_APPRAISE | IMA_APPRAISED |
-> =C2=A0				 IMA_APPRAISE_SUBMASK | IMA_APPRAISED_SUBMASK |
-> -				 IMA_NONACTION_FLAGS);
-> +				 IMA_NONACTION_RULE_FLAGS);
-> =C2=A0
-> =C2=A0	/*
-> =C2=A0	 * Re-evaulate the file if either the xattr has changed or the
+thanks,
 
+Takashi
 
