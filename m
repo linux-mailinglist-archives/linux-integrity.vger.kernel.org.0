@@ -1,97 +1,94 @@
-Return-Path: <linux-integrity+bounces-4591-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4592-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 841D3A163C2
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Jan 2025 20:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31AEBA17A4D
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jan 2025 10:37:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1B71163702
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Jan 2025 19:57:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6828016A45E
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jan 2025 09:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BDF017B421;
-	Sun, 19 Jan 2025 19:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8F271C07D9;
+	Tue, 21 Jan 2025 09:36:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fte+Q/JK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kh5TXMsp"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A37179BC;
-	Sun, 19 Jan 2025 19:57:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE7B1C07D5;
+	Tue, 21 Jan 2025 09:36:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737316633; cv=none; b=AInfWERPtmph3+DfNs7/idOeII710wwq6y+pFs6d5q95Dg0ljnbmPK0aK7HHwppsOL8bgYNuPN9zUNMwa3Ksa4qdpXft7HmUmuU/41CO+3aGqFa/Ru9xGQPiSKFDVapcOWWv5R01aNlmp4Yp4SIUJutq5vID8MfBkuZJFzVN8To=
+	t=1737452219; cv=none; b=hggXO7HM6OYauUY0gsTsILJULBbntm5Itbua8oedrMXG7AWtz9qA1qmPE1E/TuDvvd3TGxsRogJIUXzaROs+4ItxU+zAsnY8ivVX8/dG39mVp9wqU8mHh0KRe9kWibhC/Mx2LpOtkRpZbOv74i/wlCP3NmltOjSF7f4AhaA8+Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737316633; c=relaxed/simple;
-	bh=n3uV3i3rzKwYzykUioq/0JhsbHV7ZXcmbtlcumjBX1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KANUstzo78iypZQpmvySrVBLcZvdgZ12WBHPNjMc84Gfi6kEuqY5pfmxUrUp4nfRyChUnjYA2NB/oBD6MhTdR144TPftPgF/HLZaeG1ChQw/KXi4ZKMDXWTvcvDSoB+TGPAnUctOj3eikrVboDXv4JRbnwZSCzetA/b97cIabc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fte+Q/JK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 955EAC4CED6;
-	Sun, 19 Jan 2025 19:57:09 +0000 (UTC)
+	s=arc-20240116; t=1737452219; c=relaxed/simple;
+	bh=EI5S/iz514lfNCax9LcEZSG+EjLfBy6b6gXnwQmwfYQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To; b=ubcLpoCchUJW27C73TutytCT8CJ5fYzmTkShs5fDDvPnUX7IKXW0Q++2x0BDyLAf1FBlVJRZiUc/G2aKI0p8MpxgVVvSC+jZU4YBTKFt4nS5JqFdhISJxyB6CdlL9Vu8w/CYUDxC9CU5IwWD4BCYzqP5OZ03vzwLHBd6js5LtrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kh5TXMsp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB596C4CEDF;
+	Tue, 21 Jan 2025 09:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737316632;
-	bh=n3uV3i3rzKwYzykUioq/0JhsbHV7ZXcmbtlcumjBX1A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fte+Q/JKijhDkWkOBhWwDax9qfAUqm6EGbsYC2UAySiI5aUbGJHefe8fRIR5Wn9oI
-	 S97xvuETqdRN0KyqJVapYyVYam0qMmgJKC1Jq6n8XBAloW/187lyF3MgrNN6Tnl/pv
-	 dKEJS1FPFHWg9JjFbSB2Ifijjz7DKpIGyAmhOm+f5MeWB3tx8iuJ68lIL4k6+NJJ8V
-	 JkY6Mw51SqD3lEYbSki14DyRYTmdeu9S1IhuY6W0l/TDC/FgKCwEfLGtlWdOBbZDlM
-	 F/dsRyd4eX24/QSxANW6mB1h6Jp5DgAVb29U4HpOBC7e+kdku9bdq9ork1BFPLgPVD
-	 Hlq9/LXHOHbVw==
-Date: Sun, 19 Jan 2025 12:57:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, Kees Cook <kees@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Jeff Xu <jeffxu@chromium.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Serge Hallyn <serge@hallyn.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1] selftests: Handle old glibc without execveat(2)
-Message-ID: <20250119195706.GB1824045@ax162>
-References: <20250115144753.311152-1-mic@digikod.net>
- <20250117.062883f45a7d@gnoack.org>
- <20250117.aiy2ooph6Lee@digikod.net>
+	s=k20201202; t=1737452219;
+	bh=EI5S/iz514lfNCax9LcEZSG+EjLfBy6b6gXnwQmwfYQ=;
+	h=Date:Cc:Subject:From:To:From;
+	b=Kh5TXMsp2nvyto3/qR/1cbr72JKcHhsy+OAQ3oKk/MVZ2vj7uH42+f4CyggFabR26
+	 5vDwhvVP9+j/duna3OaW5LYgoFRfmynLkTrI9j1P2iYt33i8gQm5uppV/NZDZC4y9H
+	 hhKWL5199WYIm8VQ53bUzunUxIe3zOmNvO93INBqAwlbMTwTX4RA6aP2X/c51oUaQq
+	 6YptiFbDk53dueZSXvXDZLnoNpKwrpeVGmopF1g/Bn+WR4RWoqdXu3GEr0IK0+KR25
+	 WLoYvEIaJ/RGFhI9Fc63/DvxovImGt6tL2ZSdETiqJrb5chSqaHmegcbRo28YBCzo2
+	 cfb5ECZJ+ltRw==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250117.aiy2ooph6Lee@digikod.net>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 21 Jan 2025 11:36:55 +0200
+Message-Id: <D77NEOPLOQ14.36MY4H1HJCG6J@kernel.org>
+Cc: "David Howells" <dhowells@redhat.com>, "Herbert Xu"
+ <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>,
+ <keyrings@vger.kernel.org>, <linux-integrity@vger.kernel.org>
+Subject: [GIT PULL] KEYS: keys-next-6.13-rc1
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>
+X-Mailer: aerc 0.18.2
 
-On Fri, Jan 17, 2025 at 04:47:05PM +0100, Mickaël Salaün wrote:
-> On Fri, Jan 17, 2025 at 03:42:22PM +0100, Günther Noack wrote:
-> > Do you want to add a comment next to these, to remind ourselves do undo this?
-> > You are surely not planning to support old versions of glibc indefinitely?
-> 
-> I don't about glibc.  Minimal versions for other tools are documented
-> here though:
-> https://docs.kernel.org/process/changes.html
-> 
-> Nathan, Jon, any idea?
+The following changes since commit 95ec54a420b8f445e04a7ca0ea8deb72c51fe1d3=
+:
 
-I do not know if the idea of setting a minimum supported version of a
-libc has ever come up before (at least I am unaware of one). I suspect
-most people do a patch like this then move on because it is the
-maximally compatible option and these samples are not changing much, are
-they? This is the first build error I can recall seeing as a result of
-using an older glibc environment. If we would like to seriously consider
-setting a minimum supported version of glibc, it deserves a conversation
-with a wider audience since it could impact areas other than the
-samples, such as host tools (and IMHO, feels like a big hammer).
+  Merge tag 'powerpc-6.14-1' of git://git.kernel.org/pub/scm/linux/kernel/g=
+it/powerpc/linux (2025-01-20 21:40:19 -0800)
 
-Cheers,
-Nathan
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags=
+/keys-next-6.13-rc1
+
+for you to fetch changes up to e8d9fab39d1f87b52932646b2f1e7877aa3fc0f4:
+
+  KEYS: trusted: dcp: fix improper sg use with CONFIG_VMAP_STACK=3Dy (2025-=
+01-21 11:25:23 +0200)
+
+----------------------------------------------------------------
+Hi,
+
+Here's the changes for 6.13-rc1.
+
+BR, Jarkko
+
+----------------------------------------------------------------
+Christian G=C3=B6ttsche (1):
+      keys: drop shadowing dead prototype
+
+David Gstir (1):
+      KEYS: trusted: dcp: fix improper sg use with CONFIG_VMAP_STACK=3Dy
+
+ include/keys/system_keyring.h            |  2 +-
+ security/keys/trusted-keys/trusted_dcp.c | 22 ++++++++++++++++++----
+ 2 files changed, 19 insertions(+), 5 deletions(-)
 
