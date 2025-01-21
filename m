@@ -1,234 +1,429 @@
-Return-Path: <linux-integrity+bounces-4597-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4598-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5466A17E96
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jan 2025 14:12:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5B84A17ECC
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jan 2025 14:29:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3D233A4530
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jan 2025 13:11:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE6C33A6643
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Jan 2025 13:29:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC92F1F239A;
-	Tue, 21 Jan 2025 13:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D1F1F2390;
+	Tue, 21 Jan 2025 13:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="UovvOZw6"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F951F2390;
-	Tue, 21 Jan 2025 13:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87ED01F193C;
+	Tue, 21 Jan 2025 13:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737465107; cv=none; b=PaprVwkjenaiNBrP/sf2Xv2IY3sXFfa+VHcJI52AAWXWuXWBk1gPXgDWaIyF+u6ee8UVvUNShZNcuhTCAUoDVAeeb9yCYFPlbEu2pGLtmKeKLQgtgUjdiFzH/6g+z/TWrF2VQwGiH5QTDCeK86QwvlmEgnHI/XSqbQSiKJSn9ns=
+	t=1737466163; cv=none; b=E7+j3ImrGRHS7HPrUgoTzVLVklyyy+thzWNRP2glFQD20hk29gRxhSbZxoOnqN1m/FliQkWcxSUKkJQrHtf6+foUFYrtkFlcYV7BIrn83ZYSm/guOigt18CnFANWhPWaVprC+bteP0ew1Ry3WgnZ7+X/Ynjady7z5yovNA8QQZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737465107; c=relaxed/simple;
-	bh=9fYvXgSwsjHYdYsfiwKZn0WXtSbUbbLx+ln552yY3kI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pQkqvE7mBUsRJc3StY14jvMaClTApcQl29Nfrcjj2tUfd3nfmPDnnHnv2PQoHI1OVWisK9LmIj4TLeufY125ll1siSH79W3rUV4ZpP0k/apmNQfbyMT8RBCDHOU6ikGnrCF+DajC2ZMKpDJnMp52/Tu3zY6eMcoc3QWwsWPpXiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Ycn8p5fv9z9v7N7;
-	Tue, 21 Jan 2025 20:49:30 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id BE634140725;
-	Tue, 21 Jan 2025 21:11:30 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwD3reDwnI9nT9QIAQ--.50808S2;
-	Tue, 21 Jan 2025 14:11:29 +0100 (CET)
-Message-ID: <207235b3b8939fe6831e43208a41d9bed38f0fb2.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 0/6] module: Introduce hash-based integrity checking
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Arnd Bergmann
- <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
- <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, Daniel
- Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, James
- Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan
- Corbet <corbet@lwn.net>, Fabian =?ISO-8859-1?Q?Gr=FCnbichler?=
- <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>, Mattia
- Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-integrity@vger.kernel.org, zohar@linux.ibm.com
-Date: Tue, 21 Jan 2025 14:11:09 +0100
-In-Reply-To: <ea767c0b-77fd-4e8a-ab14-4d231e9b779f@t-8ch.de>
-References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
-	 <69b38f6a6fb53e7b8f8250e1d37641c6abbb6d07.camel@huaweicloud.com>
-	 <ea767c0b-77fd-4e8a-ab14-4d231e9b779f@t-8ch.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1737466163; c=relaxed/simple;
+	bh=9Q6yHTklC/n7S2+KGzlqYY9DqTQl9fDlBHLIvs1gGy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e96AlqAsMEEA9+SKtF13jwWWVoeRM5ls7wZaGGiPtdPkBuY8StXthjx3x+oA8KP36/EUDUARaUxd9NyWsK21y14gwybctJzMkhEr3d9mvAFL1+/3eS0YnKx/XCv5c7TuXQtlD5KhFPLLxyoHQqMV3iRWe06q+l7WROT2hm0GDxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=UovvOZw6; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1737466157;
+	bh=9Q6yHTklC/n7S2+KGzlqYY9DqTQl9fDlBHLIvs1gGy0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UovvOZw6FldbKmDHz8lTw5ToS/fBZthSGFNzP3dn33rQ6RrMSZFMoV2m3IILLXsgH
+	 EkNKX3qJuWZF0lDMR1Lf4MqKfStjzc38o9eGzkLC1Y7XgrfoGu1sCszZOEUqaUtcf9
+	 1khXCDCx/uux89PHHWc1d9YorIhVa+S4nkpRwo1E=
+Date: Tue, 21 Jan 2025 14:29:17 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, corbet@lwn.net, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, akpm@linux-foundation.org, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, shuah@kernel.org, 
+	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com, pbrobinson@gmail.com, 
+	zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org, pmatilai@redhat.com, 
+	jannh@google.com, dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com, 
+	ppavlu@suse.com, petr.vorel@gmail.com, mzerqung@0pointer.de, kgold@linux.ibm.com, 
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v6 01/15] lib: Add TLV parser
+Message-ID: <c316b1be-d18f-4bb0-8434-bcc9236619df@t-8ch.de>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+ <20241119104922.2772571-2-roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwD3reDwnI9nT9QIAQ--.50808S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtr43AF4fZF1rtr1UuryfJFb_yoW7Wr1Upa
-	yUKa15tr4kJryxJF4Syw1v9F15K397JF42gFnxGr1xJryq9r1jvF17K34fuF97Wr48CFyU
-	Wr4aq3WDuryDA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
-	0PDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBGePR1MDeQAAsP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241119104922.2772571-2-roberto.sassu@huaweicloud.com>
 
-On Tue, 2025-01-21 at 13:58 +0100, Thomas Wei=C3=9Fschuh wrote:
-> Hi Roberto,
->=20
-> On 2025-01-21 11:26:29+0100, Roberto Sassu wrote:
-> > On Mon, 2025-01-20 at 18:44 +0100, Thomas Wei=C3=9Fschuh wrote:
-> > > The current signature-based module integrity checking has some drawba=
-cks
-> > > in combination with reproducible builds:
-> > > Either the module signing key is generated at build time, which makes
-> > > the build unreproducible, or a static key is used, which precludes
-> > > rebuilds by third parties and makes the whole build and packaging
-> > > process much more complicated.
-> > > Introduce a new mechanism to ensure only well-known modules are loade=
-d
-> > > by embedding a list of hashes of all modules built as part of the ful=
-l
-> > > kernel build into vmlinux.
-> > >=20
-> > > Interest has been proclaimed by NixOS, Arch Linux, Proxmox, SUSE and =
-the
-> > > general reproducible builds community.
-> > >=20
-> > > To properly test the reproducibility in combination with CONFIG_INFO_=
-BTF
-> > > another patch is needed:
-> > > "[PATCH bpf-next] kbuild, bpf: Enable reproducible BTF generation" [0=
-]
-> > > (If you happen to test that one, please give some feedback)
-> > >=20
-> > > Questions for current patch:
-> > > * Naming
-> > > * Can the number of built-in modules be retrieved while building
-> > >   kernel/module/hashes.o? This would remove the need for the
-> > >   preallocation step in link-vmlinux.sh.
-> > >=20
-> > > Further improvements:
-> > > * Use a LSM/IMA/Keyring to store and validate hashes
-> >=20
-> > + linux-integrity, Mimi
-> >=20
-> > Hi Thomas
-> >=20
-> > I developed something related to it, it is called Integrity Digest
-> > Cache [1].
->=20
-> Thanks for the pointer.
->=20
-> > It has the ability to store in the kernel memory a cache of digests
-> > extracted from a file (or if desired in the future, from a reserved
-> > area in the kernel image).
-> >=20
-> > It exposes an API to query a digest (get/lookup/put) from a digest
-> > cache and to verify whether or not the integrity of the file digests
-> > were extracted from was verified by IMA or another LSM
-> > (verif_set/verif_get).=20
->=20
-> I see how this could be used together with the module hashes.
-> For now I think both features should be developed independently.
-> Integrating them will require some extra code and coordination.
+Hi Robert,
 
-Yes, I agree.
+On 2024-11-19 11:49:08+0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Add a parser of a generic Type-Length-Value (TLV) format:
+> 
+> +--------------+--+---------+--------+---------+
+> | field1 (u16) | len1 (u32) | value1 (u8 len1) |
+> +--------------+------------+------------------+
+> |     ...      |    ...     |        ...       |
+> +--------------+------------+------------------+
+> | fieldN (u16) | lenN (u32) | valueN (u8 lenN) |
+> +--------------+------------+------------------+
 
-> While the current linear, unsorted list of hashes used by my code may be
-> slightly inefficient, it shouldn't matter in practize as the hash
-> validation is only a bunch of memcmp()s over a contiguous chunk of
-> memory, which is very cheap.
+Should mention that its big endian.
 
-Ok, I guess so, should not be too slow for this use case.
+> Each adopter can define its own fields. The TLV parser does not need to be
+> aware of those, but lets the adopter obtain the data and decide how to
 
-> When both features are well established we can look at integrating them.
-> At least a build-time userspace generator of a digest cache would be
-> necessary.
-> And due to the current implementation details it would be necessary to
-> estimate the size of a static digest cache more or less exactly by its
-> number of elements alone.
+"adopter" -> "user".
 
-This information is included in the digest list, since it is also used
-by the Integrity Digest Cache itself to determine the correct size of
-the hash table.
+> continue.
+> 
+> After processing a TLV entry, call the callback function also with the
+> callback data provided by the adopter. The latter can decide how to
+> interpret the TLV entry depending on the field ID.
+> 
+> Nesting TLVs is also possible, the callback function can call tlv_parse()
+> to parse the inner structure.
 
-Thanks
+Given that we already have the netlink data structures, helpers and
+infrastructure, what is the advantage over those?
 
-Roberto
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  MAINTAINERS                     |  8 +++
+>  include/linux/tlv_parser.h      | 32 ++++++++++++
+>  include/uapi/linux/tlv_parser.h | 41 ++++++++++++++++
+>  lib/Kconfig                     |  3 ++
+>  lib/Makefile                    |  2 +
+>  lib/tlv_parser.c                | 87 +++++++++++++++++++++++++++++++++
+>  lib/tlv_parser.h                | 18 +++++++
+>  7 files changed, 191 insertions(+)
+>  create mode 100644 include/linux/tlv_parser.h
+>  create mode 100644 include/uapi/linux/tlv_parser.h
+>  create mode 100644 lib/tlv_parser.c
+>  create mode 100644 lib/tlv_parser.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a097afd76ded..1f7ffa1c9dbd 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -23388,6 +23388,14 @@ W:	http://sourceforge.net/projects/tlan/
+>  F:	Documentation/networking/device_drivers/ethernet/ti/tlan.rst
+>  F:	drivers/net/ethernet/ti/tlan.*
+>  
+> +TLV PARSER
+> +M:	Roberto Sassu <roberto.sassu@huawei.com>
+> +L:	linux-kernel@vger.kernel.org
+> +S:	Maintained
+> +F:	include/linux/tlv_parser.h
+> +F:	include/uapi/linux/tlv_parser.h
+> +F:	lib/tlv_parser.*
+> +
+>  TMIO/SDHI MMC DRIVER
+>  M:	Wolfram Sang <wsa+renesas@sang-engineering.com>
+>  L:	linux-mmc@vger.kernel.org
+> diff --git a/include/linux/tlv_parser.h b/include/linux/tlv_parser.h
+> new file mode 100644
+> index 000000000000..0c72742af548
+> --- /dev/null
+> +++ b/include/linux/tlv_parser.h
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * Header file of TLV parser.
+> + */
+> +
+> +#ifndef _LINUX_TLV_PARSER_H
+> +#define _LINUX_TLV_PARSER_H
+> +
+> +#include <uapi/linux/tlv_parser.h>
+> +
+> +/**
+> + * typedef callback - Callback after parsing TLV entry
+> + * @callback_data: Opaque data to supply to the callback function
+> + * @field: Field identifier
+> + * @field_data: Field data
+> + * @field_len: Length of @field_data
+> + *
+> + * This callback is invoked after a TLV entry is parsed.
+> + *
+> + * Return: Zero on success, a negative value on error.
 
-> Thomas
->=20
-> > [1]: https://lore.kernel.org/linux-integrity/20241119104922.2772571-1-r=
-oberto.sassu@huaweicloud.com/
-> >=20
-> > > * Use MODULE_SIG_HASH for configuration
-> > > * UAPI for discovery?
-> > >=20
-> > > [0] https://lore.kernel.org/lkml/20241211-pahole-reproducible-v1-1-22=
-feae19bad9@weissschuh.net/
-> > >=20
-> > > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> > > ---
-> > > Changes in v2:
-> > > - Drop RFC state
-> > > - Mention interested parties in cover letter
-> > > - Expand Kconfig description
-> > > - Add compatibility with CONFIG_MODULE_SIG
-> > > - Parallelize module-hashes.sh
-> > > - Update Documentation/kbuild/reproducible-builds.rst
-> > > - Link to v1: https://lore.kernel.org/r/20241225-module-hashes-v1-0-d=
-710ce7a3fd1@weissschuh.net
-> > >=20
-> > > ---
-> > > Thomas Wei=C3=9Fschuh (6):
-> > >       kbuild: add stamp file for vmlinux BTF data
-> > >       module: Make module loading policy usable without MODULE_SIG
-> > >       module: Move integrity checks into dedicated function
-> > >       module: Move lockdown check into generic module loader
-> > >       lockdown: Make the relationship to MODULE_SIG a dependency
-> > >       module: Introduce hash-based integrity checking
-> > >=20
-> > >  .gitignore                                   |  1 +
-> > >  Documentation/kbuild/reproducible-builds.rst |  5 ++-
-> > >  Makefile                                     |  8 ++++-
-> > >  include/asm-generic/vmlinux.lds.h            | 11 ++++++
-> > >  include/linux/module.h                       |  8 ++---
-> > >  include/linux/module_hashes.h                | 17 +++++++++
-> > >  kernel/module/Kconfig                        | 21 ++++++++++-
-> > >  kernel/module/Makefile                       |  1 +
-> > >  kernel/module/hashes.c                       | 52 ++++++++++++++++++=
-+++++++++
-> > >  kernel/module/internal.h                     |  8 +----
-> > >  kernel/module/main.c                         | 54 ++++++++++++++++++=
-+++++++---
-> > >  kernel/module/signing.c                      | 24 +------------
-> > >  scripts/Makefile.modfinal                    | 10 ++++--
-> > >  scripts/Makefile.vmlinux                     |  5 +++
-> > >  scripts/link-vmlinux.sh                      | 31 +++++++++++++++-
-> > >  scripts/module-hashes.sh                     | 26 ++++++++++++++
-> > >  security/lockdown/Kconfig                    |  2 +-
-> > >  17 files changed, 238 insertions(+), 46 deletions(-)
-> > > ---
-> > > base-commit: 2cd5917560a84d69dd6128b640d7a68406ff019b
-> > > change-id: 20241225-module-hashes-7a50a7cc2a30
-> > >=20
-> > > Best regards,
-> >=20
+It's not explained what happens on error.
 
+> + */
+> +typedef int (*callback)(void *callback_data, __u16 field,
+> +			const __u8 *field_data, __u32 field_len);
+
+No need for __underscore types in kernel-only signatures.
+
+> +
+> +int tlv_parse(callback callback, void *callback_data, const __u8 *data,
+> +	      size_t data_len, const char **fields, __u32 num_fields);
+> +
+> +#endif /* _LINUX_TLV_PARSER_H */
+> diff --git a/include/uapi/linux/tlv_parser.h b/include/uapi/linux/tlv_parser.h
+> new file mode 100644
+> index 000000000000..171d0cfd2c4c
+> --- /dev/null
+> +++ b/include/uapi/linux/tlv_parser.h
+> @@ -0,0 +1,41 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * Implement the user space interface for the TLV parser.
+> + */
+
+Can you explain in the commit message where this will be exposed to
+userspace as binary?
+
+> +
+> +#ifndef _UAPI_LINUX_TLV_PARSER_H
+> +#define _UAPI_LINUX_TLV_PARSER_H
+> +
+> +#include <linux/types.h>
+> +
+> +/*
+> + * TLV format:
+> + *
+> + * +--------------+--+---------+--------+---------+
+> + * | field1 (u16) | len1 (u32) | value1 (u8 len1) |
+> + * +--------------+------------+------------------+
+> + * |     ...      |    ...     |        ...       |
+> + * +--------------+------------+------------------+
+> + * | fieldN (u16) | lenN (u32) | valueN (u8 lenN) |
+> + * +--------------+------------+------------------+
+> + */
+> +
+> +/**
+> + * struct tlv_entry - Entry of TLV format
+> + * @field: Field identifier
+> + * @length: Data length
+> + * @data: Data
+> + *
+> + * This structure represents an entry of the TLV format.
+> + */
+> +struct tlv_entry {
+> +	__u16 field;
+> +	__u32 length;
+
+Use __be16 and __be32 here.
+
+> +	__u8 data[];
+
+__counted_by()?
+Not sure how this interacts with __be.
+
+> +} __attribute__((packed));
+> +
+> +#endif /* _UAPI_LINUX_TLV_PARSER_H */
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index b38849af6f13..9141dcfc1704 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -777,3 +777,6 @@ config POLYNOMIAL
+>  
+>  config FIRMWARE_TABLE
+>  	bool
+> +
+> +config TLV_PARSER
+> +	bool
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 773adf88af41..630de494eab5 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -393,5 +393,7 @@ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
+>  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+>  
+>  obj-$(CONFIG_FIRMWARE_TABLE) += fw_table.o
+> +obj-$(CONFIG_TLV_PARSER) += tlv_parser.o
+> +CFLAGS_tlv_parser.o += -I lib
+
+Does this work with out of tree builds?
+
+>  
+>  subdir-$(CONFIG_FORTIFY_SOURCE) += test_fortify
+> diff --git a/lib/tlv_parser.c b/lib/tlv_parser.c
+> new file mode 100644
+> index 000000000000..dbbe08018b4d
+> --- /dev/null
+> +++ b/lib/tlv_parser.c
+> @@ -0,0 +1,87 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * Implement the TLV parser.
+> + */
+> +
+> +#define pr_fmt(fmt) "tlv_parser: "fmt
+> +#include <tlv_parser.h>
+
+This should be "tlv_parser.h",
+but the header files looks unnecessary in the first place.
+
+> +
+> +/**
+> + * tlv_parse - Parse TLV data
+> + * @callback: Callback function to call to parse the entries
+> + * @callback_data: Opaque data to supply to the callback function
+> + * @data: Data to parse
+> + * @data_len: Length of @data
+> + * @fields: Array of field strings
+> + * @num_fields: Number of elements of @fields
+> + *
+> + * Parse the TLV data format and call the supplied callback function for each
+> + * entry, passing also the opaque data pointer.
+> + *
+> + * The callback function decides how to process data depending on the field.
+
+Mention that a callback return an error will abort the whole parsing.
+
+> + *
+> + * Return: Zero on success, a negative value on error.
+> + */
+> +int tlv_parse(callback callback, void *callback_data, const __u8 *data,
+> +	      size_t data_len, const char **fields, __u32 num_fields)
+
+No need for __underscore types in kernel-only functions.
+
+"num_fields" and "fields" are accessed without checking for validity.
+
+"fields" is only every used for debug logging, so can be removed.
+"num_fields" probably, too.
+
+> +{
+> +	const __u8 *data_ptr = data;
+> +	struct tlv_entry *entry;
+
+This comes from the input data, should also be const.
+
+> +	__u16 parsed_field;
+> +	__u32 len;
+
+field_len
+
+> +	int ret;
+> +
+> +	if (data_len > U32_MAX) {
+> +		pr_debug("Data too big, size: %zd\n", data_len);
+> +		return -E2BIG;
+> +	}
+> +
+> +	while (data_len) {
+> +		if (data_len < sizeof(*entry))
+> +			return -EBADMSG;
+> +
+> +		entry = (struct tlv_entry *)data_ptr;
+> +		data_ptr += sizeof(*entry);
+> +		data_len -= sizeof(*entry);
+> +
+> +		parsed_field = __be16_to_cpu(entry->field);
+
+This doesn't seem to handle invalid alignment, some architectures will
+trap unaligned accesses.
+Depending on the size and usage patterns it may make sense to document
+some alignment recommendations/requirements.
+(Not sure how big of a performance difference it would make)
+
+> +		if (parsed_field >= num_fields) {
+> +			pr_debug("Invalid field %u, max: %u\n",
+> +				 parsed_field, num_fields - 1);
+> +			return -EBADMSG;
+> +		}
+> +
+> +		len = __be32_to_cpu(entry->length);
+> +
+> +		if (data_len < len)
+> +			return -EBADMSG;
+> +
+> +		pr_debug("Data: field: %s, len: %u\n", fields[parsed_field],
+> +			 len);
+> +
+> +		if (!len)
+> +			continue;
+
+Empty fields are discarded silently, is this intentional?
+It should be documented. Those fields could be useful for flag data.
+
+> +
+> +		ret = callback(callback_data, parsed_field, data_ptr, len);
+> +		if (ret < 0) {
+> +			pr_debug("Parsing of field %s failed, ret: %d\n",
+> +				 fields[parsed_field], ret);
+> +			return ret;
+> +		}
+> +
+> +		data_ptr += len;
+> +		data_len -= len;
+> +	}
+> +
+> +	if (data_len) {
+
+Can this ever happen?
+The check at the beginning of the loop should have caught it already.
+
+> +		pr_debug("Excess data: %zu bytes\n", data_len);
+> +		return -EBADMSG;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(tlv_parse);
+
+Some kunit tests would be great.
+
+> diff --git a/lib/tlv_parser.h b/lib/tlv_parser.h
+> new file mode 100644
+> index 000000000000..e663966deac5
+> --- /dev/null
+> +++ b/lib/tlv_parser.h
+> @@ -0,0 +1,18 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * Header file of TLV parser.
+> + */
+> +
+> +#ifndef _LIB_TLV_PARSER_H
+> +#define _LIB_TLV_PARSER_H
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/err.h>
+> +#include <linux/limits.h>
+> +#include <linux/tlv_parser.h>
+
+The #includes should move to the .c file and the header be removed.
+
+> +
+> +#endif /* _LIB_TLV_PARSER_H */
+> -- 
+> 2.47.0.118.gfd3785337b
+> 
 
