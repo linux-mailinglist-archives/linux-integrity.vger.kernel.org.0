@@ -1,148 +1,210 @@
-Return-Path: <linux-integrity+bounces-4612-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4613-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 922E6A197AB
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jan 2025 18:28:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49C7DA19A60
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jan 2025 22:30:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80A173AB6FC
-	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jan 2025 17:27:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 769E716BF5E
+	for <lists+linux-integrity@lfdr.de>; Wed, 22 Jan 2025 21:30:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 408032165E1;
-	Wed, 22 Jan 2025 17:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 838151C5D7A;
+	Wed, 22 Jan 2025 21:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nzjHGbPG"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF0B2163B3;
-	Wed, 22 Jan 2025 17:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C7911C5D64
+	for <linux-integrity@vger.kernel.org>; Wed, 22 Jan 2025 21:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737566776; cv=none; b=V218HmTnYOXtlwwAFWr4rtqS1qt6cqPRg+8jbAyU2KG6RYE6PRoDfZFJiuxZ4VjkJF6Z6YGKHuWU8CSKbtAimWLtC6gb2mMJntYRYprYzcvjL5H+OH/odvNC3O3sVl4yOQ79bAkLE+RnnR8i6V/k6HEAg4mnIy/3i+t+NIOrQtg=
+	t=1737581397; cv=none; b=KBoIF++dkBo9r5x9HwsiKxb/kdBeD+1E2wysxbm72UuuSjYQTdZ63qhrD34gS/agqUDCR3XYQPqOAaQfpDGQ8kiPRpHXtqmUyzRiGtYQofw1+GX0pXiFDzBGNYc5g1PSY7zTVMmlM7QLuoPSTgOLh95hhImKH7R3HmD3UDusHxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737566776; c=relaxed/simple;
-	bh=+G54zyLYx4ceeWfGoCy64lc7WrHPNoQcsdY8qK53ikE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bJPum4dLrV7b8gLl6MB7zbUH6Hp07WA+Xv+c1xwlFi2hXT115nw7VKqUvLss+DHcnqimnXUXU78fSGjnn1tdi87quvAgPTcOfERBNsLHMZYsSWFSpbVTObXLCq30xzQPLyQDP5DZBGx0UPqgOGvAo5vDWjkjAiALx1bIMptcCX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4YdVc466Yzz9v7JQ;
-	Thu, 23 Jan 2025 00:57:08 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id ED4E3140521;
-	Thu, 23 Jan 2025 01:26:05 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDnbEvkKZFnsGscAQ--.5068S8;
-	Wed, 22 Jan 2025 18:26:05 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: corbet@lwn.net,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com
-Cc: linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v3 6/6] ima: Reset IMA_NONACTION_RULE_FLAGS after post_setattr
-Date: Wed, 22 Jan 2025 18:24:32 +0100
-Message-Id: <20250122172432.3074180-7-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250122172432.3074180-1-roberto.sassu@huaweicloud.com>
-References: <20250122172432.3074180-1-roberto.sassu@huaweicloud.com>
+	s=arc-20240116; t=1737581397; c=relaxed/simple;
+	bh=zPSSsJeZd9K61Rac126fQ7pKueKdfVs0dP50Mme3eBk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FIApNbkSqoiR/AIiSNRHqRGI5uthN+7sKbTWqaReuPTwTHm9DPi+SeTwFUTtGGihhI9ZwGnCqmGL1GFu2QvZIeoxEBy1BVxcqVgq1lbUjQ6TyOAoLblaz3J8oc9caR07kCoIS2+3PZQDJ+nC5MB3rkx292703rBTwTF9qsdp9cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nzjHGbPG; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ab651f1dd36so54099266b.0
+        for <linux-integrity@vger.kernel.org>; Wed, 22 Jan 2025 13:29:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1737581394; x=1738186194; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zPSSsJeZd9K61Rac126fQ7pKueKdfVs0dP50Mme3eBk=;
+        b=nzjHGbPGruCjrv32TryesWc88rn8uNOLNlsG0u59wP3Ur3qZkWGzWpAlY5PZtzhqwW
+         Tc4rveOKdaUqgNfKjgCJ3dNBCrx1BpUppgUnhAeXAJOp26mCNQfH6e+rghQuIBfjr3Aj
+         U4a8P54o3MywvI0yiDfLQhnhEfzYUGx79foTQrvp0JQsLcrKvvDym1PAoj6N8e7Rv6eN
+         HWXZqb13kb7AL8oyYrjOYijVd0RMhDE4+SsXuck0tW7+GmiuSj3uFB5qXpICQ9eatANU
+         B4weJ3CV8pIirRaQUvSpsyWGkxU+AFVV+Y7xR7k+cJhb2Dzn+8+HlTZLts3kWy90rPr3
+         OGiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737581394; x=1738186194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zPSSsJeZd9K61Rac126fQ7pKueKdfVs0dP50Mme3eBk=;
+        b=nmRKku+wBe2wJVqHyohl+WnZLGg29q29BosXOtY3qmVEiKvH4w3CfveEgDqswPeuDf
+         vP6lnacvZuaaqd3F1DMKfA5b+8sOGYlfxTJ+DPEHIJHysH+qhIKu+B6LDG3fili4rQII
+         IkivUqpEPlfBkY5l/Zof88BkcApqPyIQxvJoT4+Q3gzNcqWG9a4w+sWE8Ilt7B+jmyQO
+         Zm+B0/vn6tR+RcG4jzy4pABkN5aT0NjZe4Z9NU4xX+At4x02a22uyZ/GfNUyM4TwecDW
+         SOg7rZbjcBwItICKLzX/zjcrqeJ/okcHYJXzdQ2G4nh2P0GDcBLsFM7VmqYzu1BHE8D4
+         0iNA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+afak44xHTaI+sj6zDjI8yoZK8Um++zCZYBVe+Mypejq6BgrIiJ9WE9HFLmYYkuFm6AWBMUtnGZYOimTR8Ho=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxw/s1XDjKDaUy0gChIC1yLOlFdBgb3e0n7uLwhc7RDCUxSal9n
+	RuBC7IsNrpMB0jNru46KSG3ZgcWFLCiDdnHzkKjwNc1zZMJnDz1CAuIpUidNx4QMUQlyEOihX/S
+	8AJ8e4CJc2ms1FbroUk6W7bO54bctJ1aTHs2Z
+X-Gm-Gg: ASbGncuSUWIn7hgGkRi7Zk6HsusVQ4CLDM7k1hQI/RdVkjYDnr+fvs4iUSJoEacBXgx
+	oIwikYiv6DyT9way5jhIfVhewjPIZXnlHIlLv+0XjL33mF4xaUyOa0rv3fjL2zs/kvvExs3Gcst
+	PZHg==
+X-Google-Smtp-Source: AGHT+IG3800wXK57ZgJEoNJZD9NN8RKbiZQdhoDJpPk0SsgyWjH5F5LmlEVuZc6zBh0UypRcCRSsvwsaI9kjNMi9qgk=
+X-Received: by 2002:a17:907:7b9c:b0:aae:ce4c:ca40 with SMTP id
+ a640c23a62f3a-ab38b2e737cmr2209361766b.32.1737581393723; Wed, 22 Jan 2025
+ 13:29:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwDnbEvkKZFnsGscAQ--.5068S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr1UCFWUuFWxWry7urW3Jrb_yoW5Jw48pa
-	9a9FyUGr10qFW0krn3J3W3Ca4rK39F9FWUXa15Aw1vyFnxZr1jqFyDtr17CF98Wr1SkFy2
-	qF9IvryYya1qyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-	C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-	7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
-	kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-	6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-	v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvE
-	c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-	AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-	pf9x07jIPfQUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBGeQmNQFOgAAsR
+References: <20241210143423.101774-1-sgarzare@redhat.com> <20241210143423.101774-4-sgarzare@redhat.com>
+ <20241210144025.GG1888283@ziepe.ca> <50a2e1d29b065498146f459035e447851a518d1a.camel@HansenPartnership.com>
+ <20241210150413.GI1888283@ziepe.ca> <CAGxU2F6yzqb0o_pQDakBbCj3RdKy_XfZfzGsiywnYL65g6WeGg@mail.gmail.com>
+ <20241211150048.GJ1888283@ziepe.ca> <CAGxU2F7QjQTnXsqYeKc0q03SQCoW+BHbej9Q2Z8gxbgu-3O2fA@mail.gmail.com>
+ <D6FSHG5Z9UJQ.CWQTAANBVIQQ@iki.fi> <6rwo7tkdst227kb4pwvr54w4mfz2zw3offux7mqfupi3rgwkaz@65yklvvqw6n4>
+ <CAGxU2F4YQy-otsGtGiUHDiL7PGXic2_HzWL_+GHkn+Hs_ScGpQ@mail.gmail.com>
+ <D725TPWOVBUL.1DJAOZ0QL0RNH@kernel.org> <D725V628UV87.31SUEYVF9IUUC@kernel.org>
+ <D726DAWHLOGW.3TR2LCJ936OG7@kernel.org>
+In-Reply-To: <D726DAWHLOGW.3TR2LCJ936OG7@kernel.org>
+From: Dionna Amalie Glaze <dionnaglaze@google.com>
+Date: Wed, 22 Jan 2025 13:29:42 -0800
+X-Gm-Features: AbW1kvafwXI9IVMNRZ_87L98h-hcqR15uzBbb_GR-HQyCarswSAe-qgXejxD7HM
+Message-ID: <CAAH4kHYy7=OZsHnOBiQug0Y__bNHt6i+bop0xaxQjpWQ6aQr1Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] x86/sev: add a SVSM vTPM platform device
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Stefano Garzarella <sgarzare@redhat.com>, Jarkko Sakkinen <jarkko.sakkinen@iki.fi>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, James Bottomley <james.bottomley@hansenpartnership.com>, 
+	linux-coco@lists.linux.dev, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Huewe <peterhuewe@gmx.de>, 
+	"H. Peter Anvin" <hpa@zytor.com>, linux-integrity@vger.kernel.org, x86@kernel.org, 
+	Joerg Roedel <jroedel@suse.de>, linux-kernel@vger.kernel.org, 
+	Ingo Molnar <mingo@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Claudio Carvalho <cclaudio@linux.ibm.com>, Dov Murik <dovmurik@linux.ibm.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue, Jan 14, 2025 at 3:12=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
+ wrote:
+>
+> On Wed Jan 15, 2025 at 12:48 AM EET, Jarkko Sakkinen wrote:
+> > On Wed Jan 15, 2025 at 12:46 AM EET, Jarkko Sakkinen wrote:
+> > > On Tue Jan 14, 2025 at 12:42 PM EET, Stefano Garzarella wrote:
+> > > > Hi Jarkko,
+> > > >
+> > > > On Thu, 19 Dec 2024 at 17:07, Stefano Garzarella <sgarzare@redhat.c=
+om> wrote:
+> > > > >
+> > > > > On Thu, Dec 19, 2024 at 05:40:58PM +0200, Jarkko Sakkinen wrote:
+> > > > > >On Thu Dec 19, 2024 at 5:35 PM EET, Stefano Garzarella wrote:
+> > > > > >> So to use them directly in sev, we would have to move these de=
+finitions
+> > > > > >> into include/linux/tpm.h or some other file in inlcude/. Is th=
+is
+> > > > > >> acceptable for TPM maintainers?
+> > > > > >
+> > > > > >There's only me.
+> > > > > >
+> > > > > >I don't know.
+> > > > > >
+> > > > > >What you want to put to include/linux/tpm.h anyway?
+> > > > >
+> > > > > At least tpmm_chip_alloc(), tpm2_probe(), and tpm_chip_register()
+> > > > >
+> > > > > >I have not followed this discussion.
+> > > > >
+> > > > > Let me try to summarize what we are doing: We are writing a small=
+ TPM
+> > > > > driver to support AMD SEV-SNP SVSM. Basically SVSM defines some s=
+ort of
+> > > > > hypercalls, which the guest OS can call to talk to the emulated v=
+TPM.
+> > > > >
+> > > > > In the current version of this series, based on James' RFC, we ha=
+ve an
+> > > > > intermediate module (tpm_platform) and then another small driver
+> > > > > (platform_device) in arch/x86/coco/sev/core.c that registers the
+> > > > > callback to use.
+> > > > >
+> > > > > To avoid the intermediate driver (Jason correct me if I misunders=
+tood),
+> > > > > we want to register the `tpm_chip` with its `tpm_class_ops` direc=
+tly in
+> > > > > arch/x86/coco/sev/core.c where it's easy to use "SVSM calls" (i.e=
+.
+> > > > > svsm_perform_call_protocol()).
+> > > > >
+> > > > > And here I have this problem, so I was proposing to expose these =
+APIs.
+> > > > > BTW, we do have an alternative though that I proposed in the prev=
+ious
+> > > > > email that might avoid this.
+> > > >
+> > > > Any thought on this?
+> > >
+> > > A redundant super low-quality TPM stack driver implemtation to suppor=
+t
+> > > only single vendor's vTPM with speculative generalization.
+> > >
+> > > It's a formula for destruction really.
+> > >
+> > > I don't know if I event want to comment on this. Figure out a better
+> > > solution I guess that works together sound with existing stack.
+> > >
+> > > If that helps we could make the main TPM driver only Y/N (instead of
+> > > tristate).
+> >
+> > Also e.g. James' hmac encryption: not a single bug fixed by the author,
+> > which does further reduce my ability to have any possible trust on this=
+.
+> >
+> > I do care quality over features, sorry.
+>
+> One more rant.
+>
+> It's engineering problem to find **a fit** for the existing art. For
+> You can set the constraint here as "no two TPM stacks".
+>
+> I know also almost nothing about SVSM. E.g. I don't understand why a
+> vTPM cannot be seen as fTPM by the guest, and why this needs user
+> space exported device (please do not answer here, do a better job
+> instead).
 
-Commit 11c60f23ed13 ("integrity: Remove unused macro
-IMA_ACTION_RULE_FLAGS") removed the IMA_ACTION_RULE_FLAGS mask, due to it
-not being used after commit 0d73a55208e9 ("ima: re-introduce own integrity
-cache lock").
+I can appreciate this viewpoint. It even surfaced Microsoft's fTPM
+paper to me, which solves some interesting problems we need to solve
+in SVSM too. So thanks for that.
 
-However, it seems that the latter commit mistakenly used the wrong mask
-when moving the code from ima_inode_post_setattr() to
-process_measurement(). There is no mention in the commit message about this
-change and it looks quite important, since changing from IMA_ACTIONS_FLAGS
-(later renamed to IMA_NONACTION_FLAGS) to IMA_ACTION_RULE_FLAGS was done by
-commit 42a4c603198f0 ("ima: fix ima_inode_post_setattr").
+Just to clarify, you're not asking for SVSM to implement the TIS-MMIO
+interface instead, but rather to use the fTPM stack, which could make
+SVSM calls a TEE device operation?
 
-Restore the original change of resetting only the policy-specific flags and
-not the new file status, but with new mask 0xfb000000 since the
-policy-specific flags changed meanwhile. Also rename IMA_ACTION_RULE_FLAGS
-to IMA_NONACTION_RULE_FLAGS, to be consistent with IMA_NONACTION_FLAGS.
+>
+> Even if I wanted to say how this should be changed, I could not
+> because it too far away to make any possible sense to begin with.
+> And I don't want to take the risk of those words being used as an
+> argument later on, when I don't even know what I'm looking.
+>
+> BR, Jarkko
+>
 
-Cc: stable@vger.kernel.org # v4.16.x
-Fixes: 11c60f23ed13 ("integrity: Remove unused macro IMA_ACTION_RULE_FLAGS")
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima.h      | 1 +
- security/integrity/ima/ima_main.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index e1a3d1239bee..615900d4150d 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -141,6 +141,7 @@ struct ima_kexec_hdr {
- 
- /* IMA iint policy rule cache flags */
- #define IMA_NONACTION_FLAGS	0xff000000
-+#define IMA_NONACTION_RULE_FLAGS	0xfb000000
- #define IMA_DIGSIG_REQUIRED	0x01000000
- #define IMA_PERMIT_DIRECTIO	0x02000000
- #define IMA_NEW_FILE		0x04000000
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 46adfd524dd8..7173dca20c23 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -275,7 +275,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 		/* reset appraisal flags if ima_inode_post_setattr was called */
- 		iint->flags &= ~(IMA_APPRAISE | IMA_APPRAISED |
- 				 IMA_APPRAISE_SUBMASK | IMA_APPRAISED_SUBMASK |
--				 IMA_NONACTION_FLAGS);
-+				 IMA_NONACTION_RULE_FLAGS);
- 
- 	/*
- 	 * Re-evaulate the file if either the xattr has changed or the
--- 
-2.34.1
-
+--=20
+-Dionna Glaze, PhD, CISSP, CCSP (she/her)
 
