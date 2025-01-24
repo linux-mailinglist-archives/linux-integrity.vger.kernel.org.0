@@ -1,166 +1,120 @@
-Return-Path: <linux-integrity+bounces-4630-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4631-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22E2EA1AA6D
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jan 2025 20:40:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF6B0A1B7F4
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jan 2025 15:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11A6D188D276
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Jan 2025 19:40:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B5313ADD8D
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jan 2025 14:35:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E46DB17085C;
-	Thu, 23 Jan 2025 19:40:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1945139597;
+	Fri, 24 Jan 2025 14:35:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R+5861lj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwPZ3fUx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EFF153BF8;
-	Thu, 23 Jan 2025 19:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A2C13AD20;
+	Fri, 24 Jan 2025 14:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737661209; cv=none; b=QoDo9PMf3IT25LLmFuZbAAjUIgvsWaHTTCflelnCgPeGLB6wsFq2h7TdrKW6blAHA0XlnZ9W4AVvreSinTWv3zIMCW+pve+GC/RkK97M4rnxTWTRmcdrDUx1q7wqgosCJwAulbUiJcf8p80c6SFMQw53LQNdAx3l1N3g6F0xMdo=
+	t=1737729349; cv=none; b=mr2hzL9rvzLlAERkjwdNRt6Pk1x6oCkl3JWFxtJyDhrbU9W2bYbpd7Uz1QpZInMr76xWByoh6XgXdqS5IaNkoszNIoGTRu0zzhNJsZeCfR54lzBZraHvQN9ib7o2mMrGq8DigazMiiL3a1CwEHWa1FCWGswybDJYtLWNAnR747Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737661209; c=relaxed/simple;
-	bh=lNvFblm0tA75dRFkK2dQQ2vP5N1S9A5oJ9+tZziA3SU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=svqQxiX9STAEoCFIshgKcccGSUBfOcO2rNcG6mNIo2AV/V9UPx3D+OlIaaqqjlR1IvCdoZJO2VLJJHAqbvqFp4sISnHw1ZgpEAqUEug9cO5BX8j6d2a7PWI4ZMs/kVeAyPxZ/ORALl8+6O0A73fibP7/045dY8ZrQD7Il9beVSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R+5861lj; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1737729349; c=relaxed/simple;
+	bh=40PukyPfhep4n+kZqIPY/40E0T4dG3demxbsls4t/jM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AfeVNA2yUFLSU8BOd+F95L25FILlYDOLRwvTuzyeXjXIB6Nq8FLIVrcUz7YsziCj+Yc5p4HHHHn+nRpLeOwgYmOx7K8IyfH1ps8IpR3CS334kcUhE+P3h8vuyNwPQOKG2rUZRVtdpJHU9wNVnpUR7OxbJj6twH98GWb4uTKKxJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwPZ3fUx; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21680814d42so21924925ad.2;
-        Thu, 23 Jan 2025 11:40:08 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-436281c8a38so15513365e9.3;
+        Fri, 24 Jan 2025 06:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737661207; x=1738266007; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGNk0E1QQh9jtcLegFAVre19rme1v+GqwcPtvIzl+1s=;
-        b=R+5861lji0BtabkkiCj0H4SN/x89FJMsQkAoILlgyvHiayuR88Bu2GOxQKoH4XGdFE
-         r7uQqqlwGTNQ0KlDnElJoIZiIkr+SjufvNu7dnyyU0CMw3Sms0K6PUUfIzrkIkWHeLht
-         2461HF/YeLA/RyoLxOXSKxhgntEfuXMA6+3kQYqt7GKzG9FjbU9KFopqVunl6KnEmjUX
-         Po0EmCfJ/3ARi+/eEe54O6lYFf6zjZs7zj18gyysGzhuYNiJ44QML95vbpq5k0Umhl3o
-         R1yptL9e39ncixI/XrYM99vnCxFubWQk+VfuhWKvm/zD4c696Fdo0r6GOLBRO4UzdRaI
-         D8xg==
+        d=gmail.com; s=20230601; t=1737729346; x=1738334146; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b5rVEKKiK44ITxyzKVGWZwAXtaJ1Sw2ESc38CfsaFbs=;
+        b=OwPZ3fUxaA+qA0maofhl+p4tr+JWwfIqSG6xc1hE8uMYFnyAgWaoeQvH5sCjcPhNBj
+         6UUQ4itkRaMl4Ap76Eo/jyuXqy/JkSTNaz5R0bASlOb5EM07lDW0MUxJI/Ye3WACzU+c
+         VjT3m7XjHjYjbNZIOPZdjHT52/JmYD+U/V90uEKwxkJ8inwMi6lsu0nrmg2glPT9HoR9
+         OsARc1xVby6xVXeQWz+ggDHFot7N7rJEd3F60ZYaSz/kCQCEX7ZPYArH9NDtQ1OryzWz
+         mxmXqgW0rrOaHnoxCQMGw2xatWOE1oo190H46WlBgKH6UMncbMO6sMX/y14I5rgeLmlg
+         G+Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737661207; x=1738266007;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XGNk0E1QQh9jtcLegFAVre19rme1v+GqwcPtvIzl+1s=;
-        b=gUTs2neuN8CBXeh1cHovVkBYq8U8ojPVYFIbp1jMcl5YojIzX1XCt7TwiT/b879sVh
-         Rtox1qVKzUQb011or8hB3tvvlwVELF6KS/Xwddua5rkX+EplWpRK0zrZqSCAPJl/+09u
-         gi4YIWbuOlOLs5zg7P8thanmHWMQ9xeXkm60V2wwWSDjaProEwxw4ScWPb1BDOOdyA8B
-         /VasnBtVCd1zrzfmznGjERxPC0+UdA8eRMcbVY1/gIprs17qrCVHg2t8x/bm1D/S4I8C
-         an79S/naqeVjxWPBb+ga8dcQGokRus1qDdLXl1DGJoAum8NPhW8by1ZkqwISMCGWLN3Z
-         pTGg==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ1Yq4raqHpTEPH9U3IhgGy2cgPA3pf1+4FofQ9JAbweSe5ftAM/Dpkj+cybuCcWTzXt7QvKBcozlBBvY=@vger.kernel.org, AJvYcCXrAYCjNFj01cXYDRbdRuo/ocY/p2JO8jQJg1HinrGrhqinMPx97vGzkRerJLVDSmsOPSzKLid6IA7iJ2ChttHEebtf8Jon@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDPWqR1zq6RX05j+zfjPVJu+zlw99VNV1a4hHXh2sCkFxdlkFg
-	9+jDkDflFYwqP199yq9TNOE3s1p5h2f5efks3cK4Kzc9pbb88/UO
-X-Gm-Gg: ASbGnctbwL0mCsw6hUucqaZKC4Wrw3AVa8NvtJ+1/Rkh/LWqRNtkFQHHraF4crLNrQk
-	W/VgDtWTaeu0ieaX9f2cyhRZxyy8k2ysQyjKqH8VZkkJZH7KTlGOfMnLESkqev3GWVfwOABP7G6
-	GfmLS19OCPCiEfo/PL82s6374wYFoqtNegs2olp3ZaTSJRX4Iaiee/Dmqvdz+IsfczY3EY5N5sB
-	EXtUDdcFrM3mF1mAVPIs2SmkjpVHPF8IqJYl6p3XqQbCjj0IM0UpfsqLz8QlwKbbchmBaorpmT/
-	lg==
-X-Google-Smtp-Source: AGHT+IFOJ0YepxdXCiA5AdmwfYu25lYNDwnM4txqqU57cNwYZy5mXZ0IROA1Lb7I0hEy4FBbPXVl6g==
-X-Received: by 2002:a17:903:2344:b0:210:fce4:11ec with SMTP id d9443c01a7336-21c352ddf4emr456747045ad.1.1737661207398;
-        Thu, 23 Jan 2025 11:40:07 -0800 (PST)
-Received: from localhost.localdomain ([122.174.87.98])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-21da413f453sm2680515ad.120.2025.01.23.11.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 11:40:06 -0800 (PST)
-From: Tanya Agarwal <tanyaagarwal25699@gmail.com>
-X-Google-Original-From: Tanya Agarwal <tanyaagarwal25699@gmail.com
-To: zohar@linux.ibm.com,
-	roberto.sassu@huawei.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com
-Cc: linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	anupnewsmail@gmail.com,
-	Tanya Agarwal <tanyaagarwal25699@gmail.com>
-Subject: [PATCH] integrity: fix typos and spelling errors
-Date: Fri, 24 Jan 2025 01:07:44 +0530
-Message-Id: <20250123193742.2623-1-tanyaagarwal25699@gmail.com>
-X-Mailer: git-send-email 2.39.5
+        d=1e100.net; s=20230601; t=1737729346; x=1738334146;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b5rVEKKiK44ITxyzKVGWZwAXtaJ1Sw2ESc38CfsaFbs=;
+        b=VJrQvSUBmTmnrxrCKYKUEdmYBM1itZ08qAdQfAETUwZjvbVOu+K83rXhiS8X/Ub8hh
+         MYxT5hRTe7QbPICrr5RiLuCAXrgMc7GizOD7tQyDHldvv6H+Be6tZVGG+lACDd5S+WTG
+         CpbTmqaalb7e6t2OOztERfYrR3GNjCAq11M+peiLReubzdLmrARC2DQ+ZokXej1AkUxt
+         wJPg3+MRdZtujqdIWq6Jb0RsBPVajMjLccCauwtqlHUDc3a+M1R50HNQYnc25CASFsEa
+         RJpppngFP063B9h7/X01E6A+HIr+Mq2LQwLGBJt3PcZ1mgkHrHLDmFeZL9ZNqoeIFGRN
+         v+tA==
+X-Forwarded-Encrypted: i=1; AJvYcCU7q6c2hAxky7IKxNxL6GwLbmr9sN2XCYpFX6A61BNirATwLepXMiqPZRVEaeiI6GB/VyTVhwujVIU1VpnTmuQ=@vger.kernel.org, AJvYcCVRlbL0nHKL2h9PQzw7Q08mc1cNfO2btwZGQuUEO33vdPkAV3naig1u0ELbQs6VlzskS5sKsYWI9uyDzkmwaUsc@vger.kernel.org, AJvYcCXDBnCA00KibTj9Zu+Yh1bJFYFIZSUAd+WkuahIr52AUoBCCZo9j4vINpf3nAuRK/fdbt5rHul6SYaUbJ72@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIO8gV/P2W798UGAfV64kLHkEhzIvBL1J26uqaMXhcRG0u44K6
+	/N11fEvVjSSQ83wot4o6v626FVYJnQsUJsPf/UwAKVZxWwsQDHbB
+X-Gm-Gg: ASbGncssOm4XajEm6igOP26Uftmj90YGdp8i3f/uKG4gFD9qFv4o9qLx6HV1/3BsDfT
+	RlsttB9P8o13a0IcHAzX8RDcDmFiuKzgXamtPdIgdyl+2bdsoXaqtUgx2byvs/rhhl/NNIznmN2
+	k5CmqQLeSw7nCF0iB2BG2ZGr10lpSY4WWBMY7mKGwi3mPnchnE8jdQ+kF/hTV0sURDxJjme+bgh
+	YAJh23fI0CwLphlUYmJWKTxlyL7Skmo+Pk83LudnRyKaNarZ1JEZd1skP+8yQFxyx+s3iYBOMfM
+	3oht+GnYTOajq/LI7Q1CjRKAK5YsWtq/
+X-Google-Smtp-Source: AGHT+IFY3RKBRogyV0Z88W0dqHnNRmu41djNwwWhRDYwqecfTkmbtxi4XgbU4lZqIOwwKLoE7Mxa8w==
+X-Received: by 2002:a05:600c:5112:b0:434:a5bc:70fc with SMTP id 5b1f17b1804b1-438913cfa0emr277742865e9.8.1737729346091;
+        Fri, 24 Jan 2025 06:35:46 -0800 (PST)
+Received: from [192.168.1.14] ([197.63.236.210])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438bd4d34e3sm28434765e9.39.2025.01.24.06.35.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jan 2025 06:35:45 -0800 (PST)
+Message-ID: <d7c0995d-5159-47a8-9193-d9d29fdfeea0@gmail.com>
+Date: Fri, 24 Jan 2025 16:35:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests: tpm2: create a dedicated .gitignore
+To: Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de, jgg@ziepe.ca,
+ shuah@kernel.org
+Cc: linux-kernel-mentees@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250122065021.91814-1-khaledelnaggarlinux@gmail.com>
+ <D79CVJJBY9KX.23K6C7S5BU8AV@kernel.org>
+Content-Language: en-US
+From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+In-Reply-To: <D79CVJJBY9KX.23K6C7S5BU8AV@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Tanya Agarwal <tanyaagarwal25699@gmail.com>
+On 1/23/25 11:47 AM, Jarkko Sakkinen wrote: 
+> Why?
 
-Fix typos and spelling errors in integrity module comments that were
-identified using the codespell tool.
-No functional changes - documentation only.
+Sorry I should have included v1 in the thread but I am still
+new to the LKML process.
 
-Signed-off-by: Tanya Agarwal <tanyaagarwal25699@gmail.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
----
-Original discussion:
-https://lore.kernel.org/all/20250112072925.1774-1-tanyaagarwal25699@gmail.com
+Basically tpm2 selftests have 2 leftover log files after running
+(namely AsyncTest.log and SpaceTest.log). Only SpaceTest.log
+is in selftests/.gitignore while AsyncTest.log appears untracked
+with git status.
 
-This patch set is split into individual patches for each LSM
-to facilitate easier review by respective maintainers. 
+To solve this, one could either append AsyncTest.log to 
+selftests/.gitignore or create a dedicated .gitignore for 
+the tpm2 subsystem tests. The 2nd approach is better in order
+to not clutter selftests/.gitignore and keep tpm2 isolated.
 
- security/integrity/evm/evm_crypto.c | 2 +-
- security/integrity/evm/evm_main.c   | 2 +-
- security/integrity/ima/ima_main.c   | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Shuah actually suggested the 2nd approach in reply to v1.
 
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index 7c06ffd633d2..a5e730ffda57 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -180,7 +180,7 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
- }
- 
- /*
-- * Dump large security xattr values as a continuous ascii hexademical string.
-+ * Dump large security xattr values as a continuous ascii hexadecimal string.
-  * (pr_debug is limited to 64 bytes.)
-  */
- static void dump_security_xattr_l(const char *prefix, const void *src,
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 377e57e9084f..0add782e73ba 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -169,7 +169,7 @@ static int is_unsupported_hmac_fs(struct dentry *dentry)
-  * and compare it against the stored security.evm xattr.
-  *
-  * For performance:
-- * - use the previoulsy retrieved xattr value and length to calculate the
-+ * - use the previously retrieved xattr value and length to calculate the
-  *   HMAC.)
-  * - cache the verification result in the iint, when available.
-  *
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 9b87556b03a7..cdb8c7419d7e 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -983,9 +983,9 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
- 	}
- 
- 	/*
--	 * Both LSM hooks and auxilary based buffer measurements are
--	 * based on policy.  To avoid code duplication, differentiate
--	 * between the LSM hooks and auxilary buffer measurements,
-+	 * Both LSM hooks and auxiliary based buffer measurements are
-+	 * based on policy. To avoid code duplication, differentiate
-+	 * between the LSM hooks and auxiliary buffer measurements,
- 	 * retrieving the policy rule information only for the LSM hook
- 	 * buffer measurements.
- 	 */
--- 
-2.39.5
+Would you like me to resubmit this patch with a clearer message?
+Or include v1 in the thread?
 
+Thanks
+Khaled
 
