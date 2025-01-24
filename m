@@ -1,120 +1,79 @@
-Return-Path: <linux-integrity+bounces-4631-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4632-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF6B0A1B7F4
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jan 2025 15:35:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70A12A1B9EA
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jan 2025 17:04:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B5313ADD8D
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jan 2025 14:35:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE79418831DC
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Jan 2025 16:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1945139597;
-	Fri, 24 Jan 2025 14:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D17156676;
+	Fri, 24 Jan 2025 16:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwPZ3fUx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MJrS6yl+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A2C13AD20;
-	Fri, 24 Jan 2025 14:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD9C70816;
+	Fri, 24 Jan 2025 16:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737729349; cv=none; b=mr2hzL9rvzLlAERkjwdNRt6Pk1x6oCkl3JWFxtJyDhrbU9W2bYbpd7Uz1QpZInMr76xWByoh6XgXdqS5IaNkoszNIoGTRu0zzhNJsZeCfR54lzBZraHvQN9ib7o2mMrGq8DigazMiiL3a1CwEHWa1FCWGswybDJYtLWNAnR747Q=
+	t=1737734680; cv=none; b=kaz3YvT20+hF+waepbqbI6aNueBCJtOgN5iRDeNC4Gnq8eLz0gksyFKq05INyWfWwT+2gvUC0i22Ewb+kABlnegt13OWOfmz3mDjvXbJ5cuL70vge8u1MhdZQ1A/epQp/EjwjMnswYkpz3M4hRG14xWDWOObKTIPUY6KGkE9Mm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737729349; c=relaxed/simple;
-	bh=40PukyPfhep4n+kZqIPY/40E0T4dG3demxbsls4t/jM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AfeVNA2yUFLSU8BOd+F95L25FILlYDOLRwvTuzyeXjXIB6Nq8FLIVrcUz7YsziCj+Yc5p4HHHHn+nRpLeOwgYmOx7K8IyfH1ps8IpR3CS334kcUhE+P3h8vuyNwPQOKG2rUZRVtdpJHU9wNVnpUR7OxbJj6twH98GWb4uTKKxJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwPZ3fUx; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-436281c8a38so15513365e9.3;
-        Fri, 24 Jan 2025 06:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737729346; x=1738334146; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b5rVEKKiK44ITxyzKVGWZwAXtaJ1Sw2ESc38CfsaFbs=;
-        b=OwPZ3fUxaA+qA0maofhl+p4tr+JWwfIqSG6xc1hE8uMYFnyAgWaoeQvH5sCjcPhNBj
-         6UUQ4itkRaMl4Ap76Eo/jyuXqy/JkSTNaz5R0bASlOb5EM07lDW0MUxJI/Ye3WACzU+c
-         VjT3m7XjHjYjbNZIOPZdjHT52/JmYD+U/V90uEKwxkJ8inwMi6lsu0nrmg2glPT9HoR9
-         OsARc1xVby6xVXeQWz+ggDHFot7N7rJEd3F60ZYaSz/kCQCEX7ZPYArH9NDtQ1OryzWz
-         mxmXqgW0rrOaHnoxCQMGw2xatWOE1oo190H46WlBgKH6UMncbMO6sMX/y14I5rgeLmlg
-         G+Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737729346; x=1738334146;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b5rVEKKiK44ITxyzKVGWZwAXtaJ1Sw2ESc38CfsaFbs=;
-        b=VJrQvSUBmTmnrxrCKYKUEdmYBM1itZ08qAdQfAETUwZjvbVOu+K83rXhiS8X/Ub8hh
-         MYxT5hRTe7QbPICrr5RiLuCAXrgMc7GizOD7tQyDHldvv6H+Be6tZVGG+lACDd5S+WTG
-         CpbTmqaalb7e6t2OOztERfYrR3GNjCAq11M+peiLReubzdLmrARC2DQ+ZokXej1AkUxt
-         wJPg3+MRdZtujqdIWq6Jb0RsBPVajMjLccCauwtqlHUDc3a+M1R50HNQYnc25CASFsEa
-         RJpppngFP063B9h7/X01E6A+HIr+Mq2LQwLGBJt3PcZ1mgkHrHLDmFeZL9ZNqoeIFGRN
-         v+tA==
-X-Forwarded-Encrypted: i=1; AJvYcCU7q6c2hAxky7IKxNxL6GwLbmr9sN2XCYpFX6A61BNirATwLepXMiqPZRVEaeiI6GB/VyTVhwujVIU1VpnTmuQ=@vger.kernel.org, AJvYcCVRlbL0nHKL2h9PQzw7Q08mc1cNfO2btwZGQuUEO33vdPkAV3naig1u0ELbQs6VlzskS5sKsYWI9uyDzkmwaUsc@vger.kernel.org, AJvYcCXDBnCA00KibTj9Zu+Yh1bJFYFIZSUAd+WkuahIr52AUoBCCZo9j4vINpf3nAuRK/fdbt5rHul6SYaUbJ72@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIO8gV/P2W798UGAfV64kLHkEhzIvBL1J26uqaMXhcRG0u44K6
-	/N11fEvVjSSQ83wot4o6v626FVYJnQsUJsPf/UwAKVZxWwsQDHbB
-X-Gm-Gg: ASbGncssOm4XajEm6igOP26Uftmj90YGdp8i3f/uKG4gFD9qFv4o9qLx6HV1/3BsDfT
-	RlsttB9P8o13a0IcHAzX8RDcDmFiuKzgXamtPdIgdyl+2bdsoXaqtUgx2byvs/rhhl/NNIznmN2
-	k5CmqQLeSw7nCF0iB2BG2ZGr10lpSY4WWBMY7mKGwi3mPnchnE8jdQ+kF/hTV0sURDxJjme+bgh
-	YAJh23fI0CwLphlUYmJWKTxlyL7Skmo+Pk83LudnRyKaNarZ1JEZd1skP+8yQFxyx+s3iYBOMfM
-	3oht+GnYTOajq/LI7Q1CjRKAK5YsWtq/
-X-Google-Smtp-Source: AGHT+IFY3RKBRogyV0Z88W0dqHnNRmu41djNwwWhRDYwqecfTkmbtxi4XgbU4lZqIOwwKLoE7Mxa8w==
-X-Received: by 2002:a05:600c:5112:b0:434:a5bc:70fc with SMTP id 5b1f17b1804b1-438913cfa0emr277742865e9.8.1737729346091;
-        Fri, 24 Jan 2025 06:35:46 -0800 (PST)
-Received: from [192.168.1.14] ([197.63.236.210])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438bd4d34e3sm28434765e9.39.2025.01.24.06.35.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jan 2025 06:35:45 -0800 (PST)
-Message-ID: <d7c0995d-5159-47a8-9193-d9d29fdfeea0@gmail.com>
-Date: Fri, 24 Jan 2025 16:35:43 +0200
+	s=arc-20240116; t=1737734680; c=relaxed/simple;
+	bh=OeiEbT5K8cnDh1TWXoWJBvobV/f43GzaMibGIlZ5IH8=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=hJlXziBM62NgJ3H9jJbkDSfFCp5BkTd8gEoAQIX/xA78picgmzPPX8of/0fyGlGuZ5GBbgZBBJvJhBVQN1U++ktdniFuofXrV6Cts6xRgULjh+9IqgxShWOz8NyzRXPlfo1bAf0HwSeosXbAEFfgocST5/yw6abKS5QB1uQRsYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MJrS6yl+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2366DC4CED2;
+	Fri, 24 Jan 2025 16:04:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737734680;
+	bh=OeiEbT5K8cnDh1TWXoWJBvobV/f43GzaMibGIlZ5IH8=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=MJrS6yl+YWgWkpv/MB/pkMsK48f9svMiHLIK2aTGdG4JrrVfVQsPFCedEoejsqSJj
+	 c7P1e3ca96YNF7q67SMr7s7DpVIsDvf9Uknn4YZaIoVht/EizDYW3VdH556nNzOXMT
+	 slnnjNaIDOeVctplqx+6sHU7xX6Evq633LkzWhOrvEr/+B6z8vXe0wRTBfZ9+pydvY
+	 6kgBrb6B8KP1FK80yGn9Vg3M6CnVZgZYBRJeAZwZlLDYOM8rySYHiNHaRttb1jF2c1
+	 ey5RaRpBZkiMxkQ4ajqWwUWSIJDEjwFCp80KbIsjiQFhg//sGWeeNz7zVlzElHaDRP
+	 Mxn5shHp5r2KA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3490D380AA79;
+	Fri, 24 Jan 2025 16:05:06 +0000 (UTC)
+Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-6.14-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <D79BYW5LF81P.3S7NLCWK7RAL9@iki.fi>
+References: <D79BYW5LF81P.3S7NLCWK7RAL9@iki.fi>
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <D79BYW5LF81P.3S7NLCWK7RAL9@iki.fi>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-6.14-rc1
+X-PR-Tracked-Commit-Id: a3a860bc0fd6c07332e4911cf9a238d20de90173
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ae2d4fc540cd27d667d10597b6ad8cc4c6ce622a
+Message-Id: <173773470475.2087587.4723226889722538524.pr-tracker-bot@kernel.org>
+Date: Fri, 24 Jan 2025 16:05:04 +0000
+To: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: tpm2: create a dedicated .gitignore
-To: Jarkko Sakkinen <jarkko@kernel.org>, peterhuewe@gmx.de, jgg@ziepe.ca,
- shuah@kernel.org
-Cc: linux-kernel-mentees@vger.kernel.org, linux-integrity@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250122065021.91814-1-khaledelnaggarlinux@gmail.com>
- <D79CVJJBY9KX.23K6C7S5BU8AV@kernel.org>
-Content-Language: en-US
-From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
-In-Reply-To: <D79CVJJBY9KX.23K6C7S5BU8AV@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 1/23/25 11:47 AM, Jarkko Sakkinen wrote: 
-> Why?
+The pull request you sent on Thu, 23 Jan 2025 11:04:25 +0200:
 
-Sorry I should have included v1 in the thread but I am still
-new to the LKML process.
+> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-6.14-rc1
 
-Basically tpm2 selftests have 2 leftover log files after running
-(namely AsyncTest.log and SpaceTest.log). Only SpaceTest.log
-is in selftests/.gitignore while AsyncTest.log appears untracked
-with git status.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ae2d4fc540cd27d667d10597b6ad8cc4c6ce622a
 
-To solve this, one could either append AsyncTest.log to 
-selftests/.gitignore or create a dedicated .gitignore for 
-the tpm2 subsystem tests. The 2nd approach is better in order
-to not clutter selftests/.gitignore and keep tpm2 isolated.
+Thank you!
 
-Shuah actually suggested the 2nd approach in reply to v1.
-
-Would you like me to resubmit this patch with a clearer message?
-Or include v1 in the thread?
-
-Thanks
-Khaled
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
