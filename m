@@ -1,148 +1,123 @@
-Return-Path: <linux-integrity+bounces-4654-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4655-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BFCDA1C862
-	for <lists+linux-integrity@lfdr.de>; Sun, 26 Jan 2025 15:23:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 743E1A1CCA0
+	for <lists+linux-integrity@lfdr.de>; Sun, 26 Jan 2025 17:30:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC139188600D
-	for <lists+linux-integrity@lfdr.de>; Sun, 26 Jan 2025 14:23:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2BB23A493A
+	for <lists+linux-integrity@lfdr.de>; Sun, 26 Jan 2025 16:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B8513C3F2;
-	Sun, 26 Jan 2025 14:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7159143895;
+	Sun, 26 Jan 2025 16:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YgoQqaam"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fHq6GGGx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B5D2AF0E;
-	Sun, 26 Jan 2025 14:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AD04207A;
+	Sun, 26 Jan 2025 16:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737901387; cv=none; b=BUqaJ94MOxU4+uj+HokQ9wj6KS15PLpP0y2kf1qMdcvFGZGX6wH6IuleoNmfs1gjJDj0ldz3hdrg7+Apn0RvAaux3P03iWvJYeHSOkh5zbG2QgR6Fuj6rev+2VVjyAVpOMrjQNlMkchwcwbOox6uUXAI2Kaj7nl+X8Amf5xFbY8=
+	t=1737909015; cv=none; b=dmVpNrNCRJSXKOLHgse+BmOggpU1R913w9xKLZh8fA3ctbM1dSTA6wqawNwjsLZNUYvSKB20+QZlh+NAkhsv1zmTevOuaYJl3hRKOsBVzIbEHiJheMnsc0Q4W8P6bQFyyTCeyB8wj4vHz7VTI6mvMwuB2Nz1kr0hZqNmT7oSMl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737901387; c=relaxed/simple;
-	bh=mCzL/dBwEy9WDpyveWJgH0ElaDOtGcBU5X27UvQgGE4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L+QQxldLkQzSoKS+aQEglCJrpAyFYJahvCEMaBVuCC2W2sHAgTpwE6AQgZkvSaZAv7etL7Aa7YRTjmy3jlzK4lij4ebNhc51D6bvded16NtJsijr1mCAjm5nceQirydtxj8baMpBbsJ3lRqqmyqiTJ7fH1fCGlTQEUFIgmERtfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YgoQqaam; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-38a88ba968aso3580083f8f.3;
-        Sun, 26 Jan 2025 06:23:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737901384; x=1738506184; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+JsO0Sv7NIyDcMlDbuS3LUoMnSAC3pEGbqVvq6TmE3M=;
-        b=YgoQqaamcbFFNB3HeW64Jy+fRFjcK314Yx8GZ709y+IYqXSL6fXbCGx00S7iMhX2PY
-         HxaB7aN9foC3t5ZcJ5JDB05i9KWkKBj1Z58vwUzX1GdDRi4V93BTHS8q/47K3jtYtu3H
-         PPjIvXqxA6Rl72CuUw9TiuwbTqSyAfmkdNqWmi3rOx9v4Ey46elZU7NKI5JfAFJEJ+UG
-         1qvg4tJvUFWEhQApLVWqyV3nT9KJYkZHRI3Co5hgHT+ODccqEa/MgnFL1a4HOW3sMDJn
-         AE/5pOoqKb8i3RYbS/MHzm5ITCFgCsn5GIPCnt9z17D+nmMb4ntguUtbg+HD0rYUMmkZ
-         di/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737901384; x=1738506184;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+JsO0Sv7NIyDcMlDbuS3LUoMnSAC3pEGbqVvq6TmE3M=;
-        b=i5FDRJqusrglqtan2kRQIGr0W74bOObH3+DlGxQ9U9DfAhFtKWMyQ+IzhwIbjp5Qbo
-         feMPAH8SxBLlTFt9G1OANYfwM0S4vatYyIwJCrD2ZDL+FtweOY37EaIsFCClG+cuyFET
-         pAkZW8Tp/xTsyCL0bp2RKoZLkmVJDa1DDMvM4OXUjWomWAE4NgJERnz1q/jh0orgK/1X
-         AUQjHMpZup51ZTXDm5sSJvtIFRyykaIrIoirV333DZh6cAeth6cnirQ25HjGFnseuAoi
-         t9ODV/kdWvlFEKgzh+GwDMcBC8+oWZ/PApTnsn7ERKZ4u+7WSiGpyrfMWVZCn5c3cDxS
-         EziQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDkU/ah9js35vPVpYH+rPEi1++Ea5N7ulatEjkDSqHG7Oo7ywqvAh5ODkNEeSR4j573PLLMQ+LE4VhW7TU@vger.kernel.org, AJvYcCWIeX0BZgMUAfRLL8+UVV+jLVrWCZ8HudtY2g71mucJQe2AOICg0UM0kbBLq2zDbKm/JTaiOK4wewM6pipN2EY=@vger.kernel.org, AJvYcCXLV4/7MZrrdudxf5Bv0mT1d5lKs6A+mYkAlQHMfkW0APi6TBGCtXWgjtEI9br7aE/65i+hckjrWek3W/kcKMpn@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy10U9+XscJUSphOKzTU7ydedDj5bnddE+d2b2S+/t/IvAK01y+
-	wt5pdHtiRSL1IJDiRhanB0BJoxWeAZFlWUsOBkLoVMVzzmlgu732
-X-Gm-Gg: ASbGnctp3bhGc94OSlZGh1x9ogfnlOEmN9jAU+bH4oDiIylY07qNKxYHCftvtYpnAtK
-	5Cchcpv/rOdNpnqN9IcgTrIZbXilft4w+RUw/6aYRx6DJf5bVLt8I4+QPZAFRLKissCps33Cv3X
-	8R/S0CXGai++cfj/y8wlG+sBQT1qSR2Ttb2X3MWqkqTNTX5AxYqylFbpLA+Z7B6VKHbWm3KrGv8
-	zlNaJOJqkzK6fReJgce4s3hF5CiCnm9kS5s23cXB6oUzECdgYpJ5beZt+gqobvJzaQWIBLjXpbU
-	tIOYxC/6/y055gE/hYjtI9dPFy2bZUooT506n7qGQA==
-X-Google-Smtp-Source: AGHT+IEoz/6JfgKFyFLkMMqKBzicgoh41VaBIR/K9A5qblDl4yTIVM10sMUgg+FhZ1BGg0izqJskyA==
-X-Received: by 2002:a05:6000:1786:b0:385:d7f9:f16c with SMTP id ffacd0b85a97d-38bf57be11bmr38468682f8f.46.1737901384163;
-        Sun, 26 Jan 2025 06:23:04 -0800 (PST)
-Received: from localhost.localdomain ([197.63.236.210])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a176434sm8341491f8f.13.2025.01.26.06.23.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jan 2025 06:23:03 -0800 (PST)
-From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
-To: shuah@kernel.org,
-	peterhuewe@gmx.de,
-	jarkko@kernel.org,
-	jgg@ziepe.ca
-Cc: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH v3] selftests: tpm2: create a dedicated .gitignore
-Date: Sun, 26 Jan 2025 16:22:48 +0200
-Message-ID: <20250126142250.839019-1-khaledelnaggarlinux@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250122065021.91814-1-khaledelnaggarlinux@gmail.com>
-References: <20250122065021.91814-1-khaledelnaggarlinux@gmail.com>
+	s=arc-20240116; t=1737909015; c=relaxed/simple;
+	bh=S+titEhlUb+YuBZU352XKekzkddgMY2IF2iQ3s9Ha78=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=CyVHvcH+Peno1DcA7UfwJMfijrwVNhXK+FzhPXvBOZ/t/aW+hqdixZRyvSoUlJUGvLPGv+7EH7cdNqbr4ctxqXvU8987ytryxx10y6+OkrWR8oGufum2q0ymk+utvIcgGwPGHvhC1s0mj3ZJPXeHbjG8bguprl+MP1ueIoiDMl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fHq6GGGx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57E4C4CED3;
+	Sun, 26 Jan 2025 16:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737909014;
+	bh=S+titEhlUb+YuBZU352XKekzkddgMY2IF2iQ3s9Ha78=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=fHq6GGGxfr8xN+irpfhxmtgUM6cLRywp70+XYXqUwhdtfv+G+tljn/+QCLd8bWHk3
+	 mkaqSEHkssD1I4B5DN/NZTSmfjgp/PSzgPmi+dRmDsEPdrhdAEj9UvgaYNfzuKkln2
+	 ZJdBJPMX2kV1LobRkqoPlNoKcUGjAm2BKP6qE3aovt8daS/AGgj8bdp+q5VO0kHym/
+	 kcXDLmAqmUTBBubmIMsG1Wr+PxFbfuzMkrjPgldR228ZZZ20YAh5VY+gm1vmaUuxdN
+	 ECyjj5pJiAXVy6PeESs/5e1vmgwOPKOVv90iSTJs9H6zMZGk+ywFSDw3mn3LteNR7p
+	 dEhHD4j5mM0yA==
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 26 Jan 2025 18:30:09 +0200
+Message-Id: <D7C5BT3H2UW1.1FE9LG8GKH51U@kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-integrity@vger.kernel.org>
+Subject: Re: [PATCH v3] selftests: tpm2: create a dedicated .gitignore
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Khaled Elnaggar" <khaledelnaggarlinux@gmail.com>, <shuah@kernel.org>,
+ <peterhuewe@gmx.de>, <jgg@ziepe.ca>
+X-Mailer: aerc 0.18.2
+References: <20250122065021.91814-1-khaledelnaggarlinux@gmail.com>
+ <20250126142250.839019-1-khaledelnaggarlinux@gmail.com>
+In-Reply-To: <20250126142250.839019-1-khaledelnaggarlinux@gmail.com>
 
-The tpm2 selftests produce two logs: SpaceTest.log and
-AsyncTest.log. Only SpaceTest.log was listed in selftests/.gitignore,
-while AsyncTest.log remained untracked.
+On Sun Jan 26, 2025 at 4:22 PM EET, Khaled Elnaggar wrote:
+> The tpm2 selftests produce two logs: SpaceTest.log and
+> AsyncTest.log. Only SpaceTest.log was listed in selftests/.gitignore,
+> while AsyncTest.log remained untracked.
+>
+> This change creates a dedicated .gitignore in the tpm2/ directory to
+> manage these entries, keeping tpm2-specific patterns isolated from
+> parent .gitignore.
+>
+> Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+> ---
+> Hello, please let me if you have comments on anything.
+>
+> Thanks,
+> Khaled
+>
+> Changes:
+> v3: Improve commit message
+> v2: Created a dedicated .gitignore
+> v1: https://lore.kernel.org/linux-kselftest/20250116085929.313677-1-eng.k=
+haled.elnaggar@gmail.com
+> ---
+>  tools/testing/selftests/.gitignore      | 1 -
+>  tools/testing/selftests/tpm2/.gitignore | 4 ++++
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/tpm2/.gitignore
+>
+> diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests=
+/.gitignore
+> index cb24124ac5b9..674aaa02e396 100644
+> --- a/tools/testing/selftests/.gitignore
+> +++ b/tools/testing/selftests/.gitignore
+> @@ -4,7 +4,6 @@ gpiogpio-hammer
+>  gpioinclude/
+>  gpiolsgpio
+>  kselftest_install/
+> -tpm2/SpaceTest.log
+>
+>  # Python bytecode and cache
+>  __pycache__/
+> diff --git a/tools/testing/selftests/tpm2/.gitignore b/tools/testing/self=
+tests/tpm2/.gitignore
+> new file mode 100644
+> index 000000000000..917fe0065467
+> --- /dev/null
+> +++ b/tools/testing/selftests/tpm2/.gitignore
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +tpm2/AsyncTest.log
+> +tpm2/SpaceTest.log
+> +
+> --
+> 2.45.2
 
-This change creates a dedicated .gitignore in the tpm2/ directory to
-manage these entries, keeping tpm2-specific patterns isolated from
-parent .gitignore.
 
-Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
----
-Hello, please let me if you have comments on anything.
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Thanks,
-Khaled
-
-Changes:
-v3: Improve commit message
-v2: Created a dedicated .gitignore
-v1: https://lore.kernel.org/linux-kselftest/20250116085929.313677-1-eng.khaled.elnaggar@gmail.com
----
- tools/testing/selftests/.gitignore      | 1 -
- tools/testing/selftests/tpm2/.gitignore | 4 ++++
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/tpm2/.gitignore
-
-diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
-index cb24124ac5b9..674aaa02e396 100644
---- a/tools/testing/selftests/.gitignore
-+++ b/tools/testing/selftests/.gitignore
-@@ -4,7 +4,6 @@ gpiogpio-hammer
- gpioinclude/
- gpiolsgpio
- kselftest_install/
--tpm2/SpaceTest.log
-
- # Python bytecode and cache
- __pycache__/
-diff --git a/tools/testing/selftests/tpm2/.gitignore b/tools/testing/selftests/tpm2/.gitignore
-new file mode 100644
-index 000000000000..917fe0065467
---- /dev/null
-+++ b/tools/testing/selftests/tpm2/.gitignore
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+tpm2/AsyncTest.log
-+tpm2/SpaceTest.log
-+
---
-2.45.2
-
+BR, Jarkko
 
