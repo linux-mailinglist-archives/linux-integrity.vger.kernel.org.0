@@ -1,129 +1,97 @@
-Return-Path: <linux-integrity+bounces-4675-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4676-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14DE3A23C2E
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 11:25:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EADCA23D8F
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 13:09:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 787337A2BDF
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 10:24:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 139E33A3280
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 12:09:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB92424B28;
-	Fri, 31 Jan 2025 10:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJvyz0it"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE027195B33;
+	Fri, 31 Jan 2025 12:09:24 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F3B1CA81
-	for <linux-integrity@vger.kernel.org>; Fri, 31 Jan 2025 10:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1072416D9AF
+	for <linux-integrity@vger.kernel.org>; Fri, 31 Jan 2025 12:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738319126; cv=none; b=k2ubFEkh4Z8MVhcLjBXrips20YAQssGjzpCeRPDbuL3CQJuUaptFNp/UinCVBbo6+K6X7MXKKJ6CIajLVDyGkxIaJ7pf87F4f7ptR8XCfC4j1uf1jobOWztrtprVTjyes6I5A28E540IBXDZ47oVA5D/GCrjAx9umW59kxris7o=
+	t=1738325364; cv=none; b=MJojXcinvbdOheAAuFkCBWxId8N7hFFThYlPk1EcTkW0G/gkHY4iOUlIJORTU8O9dyICfGfROXcIQRBEy12QIz+Ut3S1+GYjGux0LlThhCj7lNQ307bDMDgTPyZ7gVDZODBuKK8/F61CJUDJkjL794IhG7UonsdzToBN/GsfPtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738319126; c=relaxed/simple;
-	bh=GRIcu//5Q5U/aXsV/JPZjbLkSk3juXa/4xH6nFrAH6g=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ONITm39v/IZqreEVJThRYfrneYT1BM71/P1o1dY44DIC5b9zVh+tHG0H2IJl81L6CjNVq10Mqy8RNuMnohY1rd3NXmyan+cGJsZEbwDASe+5oWzBUo9/xnW6tgOthey8T88q0ooU0NLzgbxhIHXRaJva8lfI/lxN0kxC5Cz0axk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJvyz0it; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B8EC4CED1;
-	Fri, 31 Jan 2025 10:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738319126;
-	bh=GRIcu//5Q5U/aXsV/JPZjbLkSk3juXa/4xH6nFrAH6g=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=TJvyz0itXtpqvcUxexGHs3QJQ3Rxuj2LPwDd+nx8tYTo7OIzue5fUtJyrPjDnS1Cq
-	 DDfR8h8FhW2SdliHJCsj/RIKVriipWU2tIiTZYH0HV2X4e9VjekHBmbNgn+hvpgLcl
-	 L5ZtQw6tjkwsNFRpIx7dBQImmujuGwM0YBF4u59Yko8HRCvM19Y1PsmYcuzOeircBY
-	 6QK5se//lvyoYDbXTSG1sfQjTVhVBCOZOAUvdOXQe14zoWIRrCdT4u5xf9gmPacXdN
-	 S9rXVC3hbYHSAQvRLiJJCdciP/ab9bjvNgcxReRJIQ9lkBY5I8VuXSVLESPnfWluJP
-	 3HEdIHwWudDKg==
+	s=arc-20240116; t=1738325364; c=relaxed/simple;
+	bh=D7UOrx7bP+Qs38VKM0BVZgQUbJim76IQqg3EISc8CmM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EEjQ0hZbp8jg+ciBnbDZAaIc0JxdwHDJsw9SBvyCBGENboD/HI3GGB2nH2X4dsqKktS0DVcQiJF22dd+L55O7eo8z1ucnuU6eUJvS68EDx7KpfFs6kGu05IIvjE2jq3xMs9LxFjH7kBJBFI9FMD2PMX5ZAwvKMhsUkn6ZDWmpdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 061A71F38F;
+	Fri, 31 Jan 2025 12:09:21 +0000 (UTC)
+Authentication-Results: smtp-out2.suse.de;
+	none
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8B580133A6;
+	Fri, 31 Jan 2025 12:09:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 46WMIHC9nGcmTgAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Fri, 31 Jan 2025 12:09:20 +0000
+Date: Fri, 31 Jan 2025 13:09:03 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Cyril Hrubis <chrubis@suse.cz>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org,
+	Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [LTP] [PATCH v3 10/10] tst_test.sh: IMA: Allow to disable LSM
+ warnings and use it for IMA
+Message-ID: <20250131120903.GC1116925@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20250114112915.610297-1-pvorel@suse.cz>
+ <20250114112915.610297-11-pvorel@suse.cz>
+ <Z5yXNjKBRwj2ed4s@rei.lan>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 31 Jan 2025 12:25:21 +0200
-Message-Id: <D7G6P7W7AY65.257WPBC8I3HAF@kernel.org>
-Cc: "Jonathan McDowell" <noodles@earth.li>,
- <linux-integrity@vger.kernel.org>
-Subject: Re: TPM operation times out (very rarely)
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: =?utf-8?q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
-X-Mailer: aerc 0.18.2
-References: <Z5pI07m0Muapyu9w@kitsune.suse.cz> <Z5pRKcZKc3FUzP8Q@earth.li>
- <D7FSS837QLNR.5XOU66J6FBTU@kernel.org> <Z5yLYVBn6inIH8cG@kitsune.suse.cz>
-In-Reply-To: <Z5yLYVBn6inIH8cG@kitsune.suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z5yXNjKBRwj2ed4s@rei.lan>
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -4.00
+X-Rspamd-Queue-Id: 061A71F38F
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
 
-On Fri Jan 31, 2025 at 10:35 AM EET, Michal Such=C3=A1nek wrote:
-> Hello,
->
-> On Fri, Jan 31, 2025 at 01:31:01AM +0200, Jarkko Sakkinen wrote:
-> > On Wed Jan 29, 2025 at 6:02 PM EET, Jonathan McDowell wrote:
-> > > On Wed, Jan 29, 2025 at 04:27:15PM +0100, Michal Such=C3=A1nek wrote:
-> > > > there is a problem report that booting a specific type of system ab=
-out
-> > > > 0.1% of the time encrypted volume (using a PCR to release the key) =
-fails
-> > > > to unlock because of TPM operation timeout.
-> > > >=20
-> > > > Minimizing the test case failed so far.
-> > > >=20
-> > > > For example, booting into text mode as opposed to graphical desktop
-> > > > makes the problem unreproducible.
-> > > >=20
-> > > > The test is done with a frankenkernel that has TPM drivers about on=
- par
-> > > > with Linux 6.4 but using actual Linux 6.4 the problem is not
-> > > > reproducible, either.
-> > > >=20
-> > > > However, given the problem takes up to a day to reproduce I do not =
-have
-> > > > much confidence in the negative results.
-> > >
-> > > So. We see what look like similar timeouts in our fleet, but I haven'=
-t
-> > > managed to produce a reliable test case that gives me any confidence
-> > > about what the cause is.
-> > >
-> > > https://lore.kernel.org/linux-integrity/Zv1810ZfEBEhybmg@earth.li/
-> > >
-> > > for my previous post about this.
-> >=20
-> > Ugh, this was my first week at new job, sorry.
-> >=20
-> > 2000 ms is like a spec value, which can be a bad idea. Please look at
-> > Table 18.
-> >=20
-> > My guess is that GUI makes more stuff happening in the system, which
-> > could make latencies more shaky.
-> >=20
-> > The most trivial candidate would be:
-> >=20
-> > 	status =3D tpm_tis_status(chip);
-> > 	if ((status & TPM_STS_COMMAND_READY) =3D=3D 0) {
-> > 		tpm_tis_ready(chip);
-> > 		if (wait_for_tpm_stat
-> > 		    (chip, TPM_STS_COMMAND_READY, TPM_TIS_TIMEOUT_MAX /* e.g. 2250 ms=
- */,
->
-> 2250 is more than the measured 2226 but I have no idea if that's random
-> or in some way deterministic.
+> Hi!
+> Maybe a bit more description wouldn't hurt here. E.g. that we are
+> printing a hint on a failure that selinux or apparmor may have caused
+> the failure and we want a knob to disable it and use it for IMA.`
 
-Your text vs GUI at least gives evidence of stochasticity while not a
-full-fledged proof. You can expect e.g. more IRQs happening when you
-run a GUI. I did not engineer that number. You could e.g. double the
-original number. The whole framework for timeout_b is ridiculous (if
-it is because of me it does not change that fact).
++1, this patch merged with the above explanation.
 
-Or perhaps we could consider even  wait_event_interruptible() inside
-wait_for_tpm_stat(), since it is interruptible.
+Thanks!
 
-BR, Jarkko
+Kind regards,
+Petr
 
