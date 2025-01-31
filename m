@@ -1,197 +1,143 @@
-Return-Path: <linux-integrity+bounces-4677-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4678-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B41FDA23E1C
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 14:02:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F53AA2410D
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 17:52:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EA13188A12A
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 13:03:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EC2B163992
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 16:52:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E2171C174A;
-	Fri, 31 Jan 2025 13:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07FE81E7648;
+	Fri, 31 Jan 2025 16:52:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1hwAYynK";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Uku4A+2+";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1hwAYynK";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Uku4A+2+"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fEa2aLJa"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F841C4A24
-	for <linux-integrity@vger.kernel.org>; Fri, 31 Jan 2025 13:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6181C5D63;
+	Fri, 31 Jan 2025 16:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738328562; cv=none; b=ZnkPF2vIlAi0UNG8U2sjQdQZcDi0nbB2Q86BCBCHaO9OtxCyBf6iYKqLWa1hN9+VLD55wFKjVY4s1ltkj//nQK7L65N0rren7GZw5ebx12z/qh+Dk7gueqBA0EzFM9E7nvxPUF9EU2wE26e3v4lpSviVYqZHqytqsWE8d+0UEhQ=
+	t=1738342350; cv=none; b=avjiY5CylJ5KRjZENX4i/aBHT+9m3XpaGkwXXF4TgK55qBWPgVj2wINHEE8o+RzZKOE/aaBc2A+/FQKmxFpukGDLEuF2VW5xBy/txFw2rPrJNYorg/mMhiEUnsodc1kO6Vinvql188baK0o6Yk90bJc9taGKKidTzOsAPcIEYyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738328562; c=relaxed/simple;
-	bh=Nt18X2cICHKaBPXC61PcQo2hbxd9zBuCZZJsi20C3HQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kHU9E6Dwq/7Efh64XbZgoVV5dmJ0i2FsP3GF+3/ZGhCZlaUE4v6XIpY52x3RDQBaM2HjzLbjWEmQapXWYru3nUrwQ5HjdAPeAeD3YvojF6LaLj4Lo1BgBX1xY/tCZOZuHtd6p/cR+VncSPOd3f9lRKhYAIOJEwd7tNn9Nao/C+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1hwAYynK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Uku4A+2+; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1hwAYynK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Uku4A+2+; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A7F1621167;
-	Fri, 31 Jan 2025 13:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1738328558; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lAFfjv5GHldSfYyTW02k1rzv9HNvwYLgIhNmhlRFtv8=;
-	b=1hwAYynKdTSOuiXpDd8YzQxiEnztoqVKexdJoMY8iIRe4arrRJTn0Hzf7HZiRN/3clbgXa
-	elxkH0HR0q9obAWaSWxoq0x1Qqpp7d+QUA/0IB2wphBgVwpnDqRvLB/PYnABvR7sHNWOCq
-	wopFg5K11rnxT3plmtLuATht7Yy/vN4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1738328558;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lAFfjv5GHldSfYyTW02k1rzv9HNvwYLgIhNmhlRFtv8=;
-	b=Uku4A+2+LY7rdFDDRxZ0VLuuMufOjPL8tvn0oVM5/AmFVRG9koTzbPGdPtvhahG7PJXftn
-	lQt9JOyUXAx2gcDg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1738328558; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lAFfjv5GHldSfYyTW02k1rzv9HNvwYLgIhNmhlRFtv8=;
-	b=1hwAYynKdTSOuiXpDd8YzQxiEnztoqVKexdJoMY8iIRe4arrRJTn0Hzf7HZiRN/3clbgXa
-	elxkH0HR0q9obAWaSWxoq0x1Qqpp7d+QUA/0IB2wphBgVwpnDqRvLB/PYnABvR7sHNWOCq
-	wopFg5K11rnxT3plmtLuATht7Yy/vN4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1738328558;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lAFfjv5GHldSfYyTW02k1rzv9HNvwYLgIhNmhlRFtv8=;
-	b=Uku4A+2+LY7rdFDDRxZ0VLuuMufOjPL8tvn0oVM5/AmFVRG9koTzbPGdPtvhahG7PJXftn
-	lQt9JOyUXAx2gcDg==
-Date: Fri, 31 Jan 2025 14:02:37 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jonathan McDowell <noodles@earth.li>, linux-integrity@vger.kernel.org
-Subject: Re: TPM operation times out (very rarely)
-Message-ID: <Z5zJ7R6vDU4h9iDk@kitsune.suse.cz>
-References: <Z5pI07m0Muapyu9w@kitsune.suse.cz>
- <Z5pRKcZKc3FUzP8Q@earth.li>
- <D7FSS837QLNR.5XOU66J6FBTU@kernel.org>
- <Z5yLYVBn6inIH8cG@kitsune.suse.cz>
- <D7G6P7W7AY65.257WPBC8I3HAF@kernel.org>
+	s=arc-20240116; t=1738342350; c=relaxed/simple;
+	bh=6Xp4ueQdFl8WmbQ0ueOgHxXi/KSsNywtWaKc8axdKss=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bQwC6o0VXW8XZRP3hqtOk9LMhzjf1i5vrMf4SBHg4vcHJbVEBHIMQsuR2ll07oY8QJTWIV6WEEJnrj4Siz5BNFbtUPJCWwsmBMpu8+kXoF60NY7C6ILeSlxeKclMGOnSdL5DmtuAGeFdLCpQws7oNggOBWGfAQ7pyBt2sqlge+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fEa2aLJa; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50VF1PMV012998;
+	Fri, 31 Jan 2025 16:52:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=7uKq2R
+	Xg8AsGUgQND13tWgTLMrt+YZuxi3vOWeNbpvQ=; b=fEa2aLJaEbdhGEUE1GN48E
+	GjyFRIlqCrSoYJcxtjBjaly589uSPrygnYIdeMVCeRTpu7VonhoMSubAvg6k0Ao3
+	9exIrKBbXIL2p/5XhXIFYf9VbHqoMWCZqR02vDUiSNVHZ9T53eMLADUuuuj6oR1k
+	7qd6pm6Oorpjd9faT06cUJqLyhxyI8YNfU1e7sCBBW7/CxAk8x1SGXPwjnC4XGR8
+	1FJLlQwmbHcFcTvJqSlqjRdoNqJhuxHoHVhDy8H/ps+fqhn2AMbdbIqh5pq877TK
+	+rsboAgrN3+RcFzCOmkrC8ieg1ZZTaxDdB7hwqY/bdSktYKxyOD3onsQd17kb5Bg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44h0t00hss-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jan 2025 16:52:00 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50VGnMRM019574;
+	Fri, 31 Jan 2025 16:52:00 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44h0t00hsm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jan 2025 16:51:59 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50VGhLwA010192;
+	Fri, 31 Jan 2025 16:51:58 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44gfa0mfcn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jan 2025 16:51:58 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50VGpvsj31392436
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 31 Jan 2025 16:51:57 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4274A5805D;
+	Fri, 31 Jan 2025 16:51:58 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C093F5805C;
+	Fri, 31 Jan 2025 16:51:56 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.73.176])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 31 Jan 2025 16:51:56 +0000 (GMT)
+Message-ID: <910cb84836f8366a566bae7dbe92f0e649d1715c.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 3/6] ima: Detect if lock is held when iint pointer is
+ set in inode security blob
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Fri, 31 Jan 2025 11:51:56 -0500
+In-Reply-To: <20250122172432.3074180-4-roberto.sassu@huaweicloud.com>
+References: <20250122172432.3074180-1-roberto.sassu@huaweicloud.com>
+	 <20250122172432.3074180-4-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D7G6P7W7AY65.257WPBC8I3HAF@kernel.org>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCPT_COUNT_THREE(0.00)[3]
-X-Spam-Score: -4.30
-X-Spam-Flag: NO
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: t-iBCn-6cVlDFpiJP4zIMTMVPEpbVSAB
+X-Proofpoint-ORIG-GUID: 9DFpJgQh-UceYTkhgy6J5n4OhGVWXLc2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-31_05,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 mlxlogscore=822
+ lowpriorityscore=0 suspectscore=0 impostorscore=0 spamscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2501310123
 
-On Fri, Jan 31, 2025 at 12:25:21PM +0200, Jarkko Sakkinen wrote:
-> On Fri Jan 31, 2025 at 10:35 AM EET, Michal Suchánek wrote:
-> > Hello,
-> >
-> > On Fri, Jan 31, 2025 at 01:31:01AM +0200, Jarkko Sakkinen wrote:
-> > > On Wed Jan 29, 2025 at 6:02 PM EET, Jonathan McDowell wrote:
-> > > > On Wed, Jan 29, 2025 at 04:27:15PM +0100, Michal Suchánek wrote:
-> > > > > there is a problem report that booting a specific type of system about
-> > > > > 0.1% of the time encrypted volume (using a PCR to release the key) fails
-> > > > > to unlock because of TPM operation timeout.
-> > > > > 
-> > > > > Minimizing the test case failed so far.
-> > > > > 
-> > > > > For example, booting into text mode as opposed to graphical desktop
-> > > > > makes the problem unreproducible.
-> > > > > 
-> > > > > The test is done with a frankenkernel that has TPM drivers about on par
-> > > > > with Linux 6.4 but using actual Linux 6.4 the problem is not
-> > > > > reproducible, either.
-> > > > > 
-> > > > > However, given the problem takes up to a day to reproduce I do not have
-> > > > > much confidence in the negative results.
-> > > >
-> > > > So. We see what look like similar timeouts in our fleet, but I haven't
-> > > > managed to produce a reliable test case that gives me any confidence
-> > > > about what the cause is.
-> > > >
-> > > > https://lore.kernel.org/linux-integrity/Zv1810ZfEBEhybmg@earth.li/
-> > > >
-> > > > for my previous post about this.
-> > > 
-> > > Ugh, this was my first week at new job, sorry.
-> > > 
-> > > 2000 ms is like a spec value, which can be a bad idea. Please look at
-> > > Table 18.
-> > > 
-> > > My guess is that GUI makes more stuff happening in the system, which
-> > > could make latencies more shaky.
-> > > 
-> > > The most trivial candidate would be:
-> > > 
-> > > 	status = tpm_tis_status(chip);
-> > > 	if ((status & TPM_STS_COMMAND_READY) == 0) {
-> > > 		tpm_tis_ready(chip);
-> > > 		if (wait_for_tpm_stat
-> > > 		    (chip, TPM_STS_COMMAND_READY, TPM_TIS_TIMEOUT_MAX /* e.g. 2250 ms */,
-> >
-> > 2250 is more than the measured 2226 but I have no idea if that's random
-> > or in some way deterministic.
-> 
-> Your text vs GUI at least gives evidence of stochasticity while not a
-> full-fledged proof. You can expect e.g. more IRQs happening when you
-> run a GUI. I did not engineer that number. You could e.g. double the
-> original number. The whole framework for timeout_b is ridiculous (if
-> it is because of me it does not change that fact).
+On Wed, 2025-01-22 at 18:24 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>=20
+> IMA stores a pointer of the ima_iint_cache structure, containing integrit=
+y
+> metadata, in the inode security blob. However, check and assignment of th=
+is
+> pointer is not atomic, and it might happen that two tasks both see that t=
+he
+> iint pointer is NULL and try to set it, causing a memory leak.
+>=20
+> Detect if the iint check and assignment is guarded by the iint_lock mutex=
+,
+> by adding a lockdep assertion in ima_inode_get().
+>=20
+> Consequently, guard the remaining ima_inode_get() calls, in
+> ima_post_create_tmpfile() and ima_post_path_mknod(), to avoid the lockdep
+> warnings.
+>=20
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-It looks like the timeout_b is used exclusively as the ready timeout *),
-with various sources of the value depending on chip type.
+Thank you for updating the patch description.  You might also want to menti=
+on that
+CONFIG_LOCKDEP_DEBUG is required to see the warnings.
 
-Then increasing it should not cause any problem other than the kernel
-waiting longer when the TPM chip is really stuck.
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-* There is one instance of use of timeout_b for TPM_STS_VALID in
-st33zp24_pm_resume.
-
-> Or perhaps we could consider even  wait_event_interruptible() inside
-> wait_for_tpm_stat(), since it is interruptible.
-
-It seems to be already interruptible, at least the implementation in
-tpm_tis_core. There is another one in xenfront, and a few more
-wait_for_stat() without _tpm_ in the middle.
-
-Thanks
-
-Michal
 
