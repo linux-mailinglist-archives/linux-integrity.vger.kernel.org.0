@@ -1,226 +1,148 @@
-Return-Path: <linux-integrity+bounces-4673-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4674-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C68F5A23AB9
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 09:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D9CD1A23B6A
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 10:26:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B4F97A3D5E
-	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 08:35:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E4C37A1091
+	for <lists+linux-integrity@lfdr.de>; Fri, 31 Jan 2025 09:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCDC4EED8;
-	Fri, 31 Jan 2025 08:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9BA166F0C;
+	Fri, 31 Jan 2025 09:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0wq5yWCD";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5UkbpJnD";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="w9YZ+z9I";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="m2OSBHAP"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="nXz5HlNk";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="zgU7Whk6";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hGBVy8fe";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5Qq7RuSS"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF0E15667D
-	for <linux-integrity@vger.kernel.org>; Fri, 31 Jan 2025 08:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23C114B092
+	for <linux-integrity@vger.kernel.org>; Fri, 31 Jan 2025 09:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738312550; cv=none; b=BfeH4nneOqyCYHIYJxLujz0JnjOc6k+4oX1kbaSif4yMwA+7LckeW8uH7wPxN3JUnCfVEKTH1v7WxXhSnnSvXqXnzdWXJeVjQfX3zW3sdHGDCfzeCIVJmAL0AsIzr/nK25Lht1qBxvvsOV9dlxJM6l/k3sB30SGiy8jAozwJakI=
+	t=1738315590; cv=none; b=LHCHOJFQY18MUzNtRm1o9WiO3TqMusIZaOqryyvY6mb0Y2Jx5N04ZO9OVH/5vXER/yKfB8xFD6ht3RpKONFYQQnuYoUC7B3YlvhL+kVveT2nyzMsnMhnHbVaenPS4fWXzjfWrw3g++EgT4pHZBIssf5FmjTJP9ctLrN58TW+kxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738312550; c=relaxed/simple;
-	bh=Ep1FHwa6FbBUbz72J+5xaiubmfF8qaN5UpydGBJdH5E=;
+	s=arc-20240116; t=1738315590; c=relaxed/simple;
+	bh=6VXpURCd4JsIXcJzDDVWwTwAk7axS3HE1ZSaSzeufTM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ad6azBTV2OCwqUmq6kYgqYp+2hBamPzXQ4BWOG/n/mIueMP6E+sF9Yg4bA8kRiDWm04lCkYtripw5y4FbPAIcenYtBuuyZsduul3QwH/HgDf5nwuEjnYl9H7bizyGMno/OrXGasKDeJzEsRHJBiC23ZHllSulSTEiFvbmSWnjZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0wq5yWCD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5UkbpJnD; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=w9YZ+z9I; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=m2OSBHAP; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	 Content-Type:Content-Disposition:In-Reply-To; b=aTCdrUMj2rH/8vlaIDq/q2JIZP7gXUYTr0UhLkU3qu0qiJT5hGtgKcIv/vHoScZB+ZmOB5u1OiaSiueYyXdWxpRMoSlpkMWpauBnurnwiPN9n5G80NH8BbMvvymI9AHPctIrHaI9IgJiQoG7FsBKgWB4UG+BQXC5czg1q0Rt7os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=nXz5HlNk; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=zgU7Whk6; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hGBVy8fe; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5Qq7RuSS; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id EDA662116C;
-	Fri, 31 Jan 2025 08:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1738312547; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	by smtp-out2.suse.de (Postfix) with ESMTPS id CA9631F38E;
+	Fri, 31 Jan 2025 09:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1738315587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GsSd+unac3H7b3HMEmS71hYlaPFrvtmwGibDMyi/MYA=;
-	b=0wq5yWCDY+QgxSTlS/92/2TzYqIGuyrh6QaovB1aH64omEeWiXsRYyKrFxsLXpKWVZbpR+
-	v0Rs/+EHYzqrMsJriunqdjS/2uHxeDatEKeMGPPlh+t5uz+sSfWX9M0CXWQnW8BBDBpbQN
-	Uu9rTVTN9p3pMZ19o+66nwZT7jl9ep8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1738312547;
+	bh=uLwDXM4QsqjnYzrt6MoAZiFEkuYmPSVvjGBWXQ0037c=;
+	b=nXz5HlNkS2eCFiw9ZRXRt1BSxh5brMRLkqxwbJ2ySv1grXzaYfND+hjB3zWag045ObXfm7
+	hged1hd3aaLUs9JXBmS3V9Us8q86sj3cXLqqxea/5fW3pxqj0yh5UeKOe2BU+6m0/MnLTe
+	s7h4tXQyA4zyLzWSv8m4o/fN0L4BT7U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1738315587;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GsSd+unac3H7b3HMEmS71hYlaPFrvtmwGibDMyi/MYA=;
-	b=5UkbpJnDFue+UBSg3+hlSd4keGFbqFwB6uD5UD2uOiXGjouAe8vuDJyffVlf+7nkIYdOQn
-	QuLH/5EztzIW3EBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1738312546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	bh=uLwDXM4QsqjnYzrt6MoAZiFEkuYmPSVvjGBWXQ0037c=;
+	b=zgU7Whk6BJY/j+0/eBEzpmt8Ef4elloPIWlf82CZS7bSpwHx5HaAZsGH94O2q34cZ5+oMv
+	YU5Gg1ZIBMIkUuAg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=hGBVy8fe;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=5Qq7RuSS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1738315586; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GsSd+unac3H7b3HMEmS71hYlaPFrvtmwGibDMyi/MYA=;
-	b=w9YZ+z9ImOBBKOI3Aei+Sn4wPfwzOYal2CnADxVDkIXjmqKea/vrgIFYcrFatIsODIDnhA
-	AEDmi2GHloccoaFqP0lXwDdbmVDcvTOqzMl2xxm+MSQLXoZsdzQE57OdT9gEBYims8fTmq
-	TdL/NW/PdYixnGfgQMs5rR0xQs9ka9M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1738312546;
+	bh=uLwDXM4QsqjnYzrt6MoAZiFEkuYmPSVvjGBWXQ0037c=;
+	b=hGBVy8feFsaTF3aHPBr/ba6a5M28a9pU2EMd3zzLQDWeRhX463IIffcUROR9l7jDe5z184
+	2feJ+2azoavH7hEvrcI/rq0kEkXjEl/Q8t1x7ec8cazeQ7mZfC1bgcjzvGuDXDmKV4OsFY
+	uzSHpTE0hK36nGLXyZxpRJUqmyY6R+g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1738315586;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GsSd+unac3H7b3HMEmS71hYlaPFrvtmwGibDMyi/MYA=;
-	b=m2OSBHAPMQOQpWdkjR0HXsAwet6MxkFGP87HGqqYF/dSi4uOKoqzsCkKhF6IYueIwsRrSs
-	vIIvlEE1FCIlPsCg==
-Date: Fri, 31 Jan 2025 09:35:45 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jonathan McDowell <noodles@earth.li>, linux-integrity@vger.kernel.org
-Subject: Re: TPM operation times out (very rarely)
-Message-ID: <Z5yLYVBn6inIH8cG@kitsune.suse.cz>
-References: <Z5pI07m0Muapyu9w@kitsune.suse.cz>
- <Z5pRKcZKc3FUzP8Q@earth.li>
- <D7FSS837QLNR.5XOU66J6FBTU@kernel.org>
+	bh=uLwDXM4QsqjnYzrt6MoAZiFEkuYmPSVvjGBWXQ0037c=;
+	b=5Qq7RuSSmn4mjgOdjg3VvtHApX6jDdDslTxy3LaUVx3UPfYTUeqAlG2UktCcDYX4mB4rtS
+	g/a1Tcg1wjyayzCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B07051364B;
+	Fri, 31 Jan 2025 09:26:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id B68TKkKXnGd5HAAAD6G6ig
+	(envelope-from <chrubis@suse.cz>); Fri, 31 Jan 2025 09:26:26 +0000
+Date: Fri, 31 Jan 2025 10:26:14 +0100
+From: Cyril Hrubis <chrubis@suse.cz>
+To: Petr Vorel <pvorel@suse.cz>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org
+Subject: Re: [LTP] [PATCH v3 10/10] tst_test.sh: IMA: Allow to disable LSM
+ warnings and use it for IMA
+Message-ID: <Z5yXNjKBRwj2ed4s@rei.lan>
+References: <20250114112915.610297-1-pvorel@suse.cz>
+ <20250114112915.610297-11-pvorel@suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D7FSS837QLNR.5XOU66J6FBTU@kernel.org>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
+In-Reply-To: <20250114112915.610297-11-pvorel@suse.cz>
+X-Rspamd-Queue-Id: CA9631F38E
+X-Spam-Score: -4.51
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MIME_TRACE(0.00)[0:+];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	HAS_WP_URI(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCPT_COUNT_THREE(0.00)[3]
-X-Spam-Score: -4.30
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spam-Flag: NO
+X-Spam-Level: 
 
-Hello,
+Hi!
+Maybe a bit more description wouldn't hurt here. E.g. that we are
+printing a hint on a failure that selinux or apparmor may have caused
+the failure and we want a knob to disable it and use it for IMA.`
 
-On Fri, Jan 31, 2025 at 01:31:01AM +0200, Jarkko Sakkinen wrote:
-> On Wed Jan 29, 2025 at 6:02 PM EET, Jonathan McDowell wrote:
-> > On Wed, Jan 29, 2025 at 04:27:15PM +0100, Michal Suchánek wrote:
-> > > there is a problem report that booting a specific type of system about
-> > > 0.1% of the time encrypted volume (using a PCR to release the key) fails
-> > > to unlock because of TPM operation timeout.
-> > > 
-> > > Minimizing the test case failed so far.
-> > > 
-> > > For example, booting into text mode as opposed to graphical desktop
-> > > makes the problem unreproducible.
-> > > 
-> > > The test is done with a frankenkernel that has TPM drivers about on par
-> > > with Linux 6.4 but using actual Linux 6.4 the problem is not
-> > > reproducible, either.
-> > > 
-> > > However, given the problem takes up to a day to reproduce I do not have
-> > > much confidence in the negative results.
-> >
-> > So. We see what look like similar timeouts in our fleet, but I haven't
-> > managed to produce a reliable test case that gives me any confidence
-> > about what the cause is.
-> >
-> > https://lore.kernel.org/linux-integrity/Zv1810ZfEBEhybmg@earth.li/
-> >
-> > for my previous post about this.
-> 
-> Ugh, this was my first week at new job, sorry.
-> 
-> 2000 ms is like a spec value, which can be a bad idea. Please look at
-> Table 18.
-> 
-> My guess is that GUI makes more stuff happening in the system, which
-> could make latencies more shaky.
-> 
-> The most trivial candidate would be:
-> 
-> 	status = tpm_tis_status(chip);
-> 	if ((status & TPM_STS_COMMAND_READY) == 0) {
-> 		tpm_tis_ready(chip);
-> 		if (wait_for_tpm_stat
-> 		    (chip, TPM_STS_COMMAND_READY, TPM_TIS_TIMEOUT_MAX /* e.g. 2250 ms */,
+Otherwise it looks good:
 
-2250 is more than the measured 2226 but I have no idea if that's random
-or in some way deterministic.
+Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
 
-> 		     &priv->int_queue, false) < 0) {
-> 		     	rc = -ETIME;
-> 			goto out_err;
-> 		}
-> 	}
-> 
-> On the other hand, for me tpm_tis_send_main() looked initially weird:
-> 
-> 	for (try = 0; try < TPM_RETRY; try++) {
-> 		rc = tpm_tis_send_data(chip, buf, len);
-> 		if (rc >= 0)
-> 			/* Data transfer done successfully */
-> 			break;
-> 		else if (rc != -EIO)
-> 			/* Data transfer failed, not recoverable */
-> 			return rc;
-> 	}
-> 
-> I.e. no retry on -ETIME.
-> 
-> But I'd fixup instead tpm_common_write():
-> 
-> out:
-> 	mutex_unlock(&priv->buffer_mutex);
-> 
-> 	if (ret == -ETIME)
-> 		return -ERESTARTSYS;
-> 
-> 	return ret;
-> }
-> 
-> It still can be interrupted by a signal this way. Retry loop would
-> block too much.
-
-Not sure if this would help. As was noted in the discussion so far if
-the value is consumed by the kernel it will likely not retry in the
-upper layer code.
-
-Also restarting the userspace cryptsetup service reportedly did not help
-addressing the problem which suggests that the consumer is indeed the
-kernel, and it marked something as defunct and gave up on getting the
-key from the TPM entirely.
-
-Also the loop can already block for up to 2s. If blocking in the loop is
-a problem then it should be addressed in that loop.
-
-Thanks
-
-Michal
-
-> 
-> Not sure if only the increase in timeout value would be enough or
-> should the both sites be fixed up.
-> 
-> [1] https://trustedcomputinggroup.org/wp-content/uploads/PC-Client-Specific-Platform-TPM-Profile-for-TPM-2p0-v1p05p_r14_pub.pdf
-> 
-> BR, Jarkko
+-- 
+Cyril Hrubis
+chrubis@suse.cz
 
