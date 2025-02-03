@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-4705-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4711-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9371AA267C4
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2025 00:20:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D1FA267D6
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2025 00:21:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 599961885B55
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 23:21:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29523165361
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 23:21:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F7D1211487;
-	Mon,  3 Feb 2025 23:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F4E212B28;
+	Mon,  3 Feb 2025 23:20:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="rNnUZOTP"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="TDdDaHat"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5B9C201269;
-	Mon,  3 Feb 2025 23:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7231D211292;
+	Mon,  3 Feb 2025 23:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738624843; cv=none; b=XN+qnUfVXLQdclSOcyEbaNNlcogQlA/3YDX9gYEWW/Ja0WOFu7172ACJzWcRa4uevl+KNbeUH5H4nZR+dgTYWGrTIAvjwUlko3NGhOegVEuc4/GA37ZplHjOyIlAf70VoSkgY0BnPty4wl76z+mX7qGpAiWE4MevQCZVpzqlJCw=
+	t=1738624846; cv=none; b=VjXccPt5SzfHMuf+JhqGar7hJCDMUfBKt3yYxaRx1e4kSRC4sf5T6RbRGvAT4no1gRb0L0wE7niaa1S6j025b3Y42WUkoPHoOKmaZiWp1XrTsW124JZuMAuxAp72i/ExMDJAAjAYhVy8iGsQ3c+L79RPw4BhWGJ5JKL15/9ScY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738624843; c=relaxed/simple;
+	s=arc-20240116; t=1738624846; c=relaxed/simple;
 	bh=EGSzYZ/wUc8bEEIuGyf1CrDl3ntDab0/DRlAcjZi9fE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fBGsl3khRp7falu1YpSp8cTOj8X43KVlwjhCV7XOLf1MmQz9P1tqlCoLfbfiuGrDIbTTflsDWHfPZ9SOAEB7GpbIumKrLApvnMRGc+g04t2rHcuOrFwCqdcAH4B5fDKyB17c0J7LxNd2LnMrBh8T4whdlMf0H9O+wiozeytwtyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=rNnUZOTP; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version:Content-Type; b=WfBG9do+DfX08wndiwI6wtL8B2tXOi5tVeL3PQMxRCPC18ZQ0xVyKtec8XXPknPPjhVFhqhT4MKDXsAaSvIbsJo8u+YlNbngM7THNcV1jF0wNmGWTtAm4p9xV8iG4wEvU/J4kkraijnrl9XIHcoHs6CxFnuCyh8yNTecOMM6V0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=TDdDaHat; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from localhost.localdomain (unknown [167.220.59.4])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 6B3D3205493F;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 9D5B6205721D;
 	Mon,  3 Feb 2025 15:20:41 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6B3D3205493F
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9D5B6205721D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1738624841;
 	bh=VwNfvVLfL00S8Xn+X+PulIftmjpln6BGP2uOmQnQBPE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rNnUZOTP5koN12g6mRjPgI3kW9PhzR7tllDMcyTm1gPdSl5Yasi38scCiK7tmzEmT
-	 8a+pjvMzt8vqFO7qaMYRRlzQkqBjAKubtMAU98HC+NnsKj7yJdjeVFPAj5n2eAektR
-	 Zv845WMmEkj1W/zASNbE008JmayCXNDudn2/2ed8=
+	b=TDdDaHatZSoFR3+WbGaU47BeXhV6OPzcTdh8NgkxcOCQf3E20OUa32tqqT4r+ORkQ
+	 DGv1k+qcxySb+GyZdHCnEnfd5tN9ks95qpeV72DcjDFs3sNbQ9iBj4lYYopWjYyQRf
+	 g0hI662mhTxoZ8TfgNyqTNXu3dUY803km/MtBFkM=
 From: steven chen <chenste@linux.microsoft.com>
 To: zohar@linux.ibm.com,
 	stefanb@linux.ibm.com,
@@ -59,8 +59,8 @@ Cc: madvenka@linux.microsoft.com,
 	nramas@linux.microsoft.com,
 	James.Bottomley@HansenPartnership.com
 Subject: [PATCH v7 4/7] ima: kexec: define functions to copy IMA log at soft boot
-Date: Mon,  3 Feb 2025 15:20:29 -0800
-Message-Id: <20250203232033.64123-5-chenste@linux.microsoft.com>
+Date: Mon,  3 Feb 2025 15:20:30 -0800
+Message-Id: <20250203232033.64123-6-chenste@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250203232033.64123-1-chenste@linux.microsoft.com>
 References: <20250203232033.64123-1-chenste@linux.microsoft.com>
