@@ -1,211 +1,173 @@
-Return-Path: <linux-integrity+bounces-4686-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4687-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5316A2510E
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 02:32:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0AF4A25A7F
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 14:15:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35203163C87
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 01:31:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73276163B33
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 13:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30C22B673;
-	Mon,  3 Feb 2025 01:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E38C204F74;
+	Mon,  3 Feb 2025 13:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WcJKnUHW"
+	dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b="LppzQA80"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655213C2F;
-	Mon,  3 Feb 2025 01:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5287204C39;
+	Mon,  3 Feb 2025 13:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738546315; cv=none; b=Vw3pGhHG1SG8jrFX+qYYXGRIBaH/apo3TQNHgAaz6XmFGX3uBVvpwu5J3LHXO+edgnxiFh8PE3f10QeLZ6Pyj/Rvu8NfjKzh81IGXrDLarHDGaQswlp5XauDpKf18YJB3ybuwyQReGuWI0/nx+awQEC4lNXxcJSjFnuhpJlheJo=
+	t=1738588503; cv=none; b=gcn4OO6sIbpsKOTt2VTtv4MAImfpD/w4yMv1mofsxpS0HrbgKu088j2iXXotnrKcMRq8dGsmaZJU4rfdB3WNBDACYsFEUyMDQ78T7lfa5lXl1v82p+Ayhh+uashB3XnYeWKCO7umJD3+zRgA6rgsokAM/EwhexbpkdFUyQc0xJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738546315; c=relaxed/simple;
-	bh=TGDXhA9VFUOBW0nUR/5s5rwPA+aY4v4jgiKejMQ3o/w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MKtQIlhutZ9EgwiM7EL/mGUcaE2RTVEFItpr4rd85D0DFf+EMSN3FNrZDqSAPwik1Blb1NImgaE5fwJSNO+g8c5s2TCgmY6O4nFxl7SJPKTwPnj6q5Z1z1vAnZvDJ9u9s2bq4n9P3QvrGjmKp9W/B9jUInA4uC8Ektz0PIHVcOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WcJKnUHW; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 512Bt595015380;
-	Mon, 3 Feb 2025 01:31:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=kjxtf4
-	7CKNtSchjNhx+lVCQZ7est2gEQwyCLkceGQhQ=; b=WcJKnUHWyMsH86R3gehVOc
-	3YwRh0hayDnxFdDGo1bRMPfL4nveP9Er5tzc0TC426W+ypv4q4LiGkQDePQDEVsU
-	6QQHB+SjFu3upkC9I8si3ioTuAh+9KbWhJWsrre/v/hQHw5mShyJZ+mMXjuukYhA
-	bjKHBm1L0ZcnQXuH4m9NaNg66jHVsVtAEDxKhMfl+JUY6lIn7O48mXSo5WxWbm99
-	HbHPuUD2BVLt8k2wZOaYRbW/vuLn7ZrjTQtPocqHCGWG5xYzyXoKpvmP2wpCO/zM
-	yjF5GDugKHXfksFtbQUtnjmTqhzlm3asMIudYLDy22Spz50qH2yReV/N9siSoTJw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44j2h7b2nn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Feb 2025 01:31:13 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 5131VCk6026537;
-	Mon, 3 Feb 2025 01:31:12 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44j2h7b2nj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Feb 2025 01:31:12 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51305aci005258;
-	Mon, 3 Feb 2025 01:31:11 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44j05jktxk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Feb 2025 01:31:11 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5131VAKY21889644
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 3 Feb 2025 01:31:10 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AC1E15804B;
-	Mon,  3 Feb 2025 01:31:10 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 22A3E58063;
-	Mon,  3 Feb 2025 01:31:09 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.68.214])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  3 Feb 2025 01:31:09 +0000 (GMT)
-Message-ID: <e93596a3f7696bfe4912f6ec91152e8969bb1192.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 6/6] ima: Reset IMA_NONACTION_RULE_FLAGS after
- post_setattr
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
-        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Roberto Sassu
- <roberto.sassu@huawei.com>, stable@vger.kernel.org
-Date: Sun, 02 Feb 2025 20:31:08 -0500
-In-Reply-To: <20250122172432.3074180-7-roberto.sassu@huaweicloud.com>
-References: <20250122172432.3074180-1-roberto.sassu@huaweicloud.com>
-	 <20250122172432.3074180-7-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1738588503; c=relaxed/simple;
+	bh=AE1GNI4dCnKiSpYJEGzMAZPeqcrJkHOL3Nw8EWbZIW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uzeeovLWMT1Q1vmRLxVJUx9JPbauZjnZO6/q3oZ3Lu0LuInVIzn7cMSzCBNUeQDQqVTUk0OiOf1BYriWPY59r2hJyf+MxR8zVRdt7R+2Tm72VA9ft9zNZOi9f9F8TlrgtoCS/3BRYwFx3l6kird0jqec0ipQEnGAHcVc4F+0aCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu; spf=pass smtp.mailfrom=heusel.eu; dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b=LppzQA80; arc=none smtp.client-ip=217.72.192.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=heusel.eu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heusel.eu;
+	s=s1-ionos; t=1738588486; x=1739193286; i=christian@heusel.eu;
+	bh=HW/nhA7rOLlZN/zmthKgpqOHoSWN2U6+fDDzCTddEJw=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:In-Reply-To:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=LppzQA802y5aZz9FYytlu7pwxMQDYgmSpzfYXSp51a9i15cF39uXd1v0O3d+I2DF
+	 nDwb9houPen/p1zCAppZUIq5wdDnRI8MDQkmqjyNDprMgPjpPbmcQfUOzDQRmYTNM
+	 u8/5d4AD3YjYdCoki8N8fnWlxycPSqJAkED9OSn7W21HCRlaffMU27VtDPYU853NV
+	 O/jIHS8LUaEVo65lTmw7gMpOnxUVdcCgaHyXsBE6ZFN3aPptUQT7bAPUZMlN2swtO
+	 vUpssc+kN+K2jpM84TJvY81pXJWb6P6HkDxUJfvFxt8Fd6kXEYLe/0043bZhHdakt
+	 uO4/1MFw4Z76E/hiiA==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from localhost ([80.187.122.235]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MoNu2-1t3St32XHc-00gLz3; Mon, 03 Feb 2025 14:14:45 +0100
+Date: Mon, 3 Feb 2025 14:14:41 +0100
+From: Christian Heusel <christian@heusel.eu>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
+	kpcyrd <kpcyrd@archlinux.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] module: Introduce hash-based integrity checking
+Message-ID: <62c93d58-2e27-4304-a6ad-36aa932f18ac@heusel.eu>
+References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: t7kdbocf0x0rsMPmREaRiai9DjIdcEvh
-X-Proofpoint-GUID: WIU-qrlO92XxGySXJmSX2cnXAh44zW33
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-02_11,2025-01-31_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 phishscore=0 mlxscore=0 spamscore=0 malwarescore=0
- mlxlogscore=999 clxscore=1015 adultscore=0 suspectscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502030011
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="4hw4xsdogt6jxe7z"
+Content-Disposition: inline
+In-Reply-To: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
+X-Provags-ID: V03:K1:pi4w6UvELjOYlWx7bJXU+/MmGORjxYJ29ngsxP99C0aV5nQ3ul1
+ 50dRrVBGRzy382VjDqjmmj8CaowbFOxH6DRu/k4gDMUunGQRyvqTJFVqMabGxL8+TSojaD+
+ D5zgrN7RkpgcTuwaqWPZsmZPmtWRMPC+TynSjMjsU57e9Ve1YGGzesZTL0TA1sY8pQaJDPj
+ +LnrtY5KXjyOSqIHK3xUQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:MXtMipq4Kd4=;s7t6p8NLj9eAy9+INYP4yrDREcn
+ mAWRrWEOBfYn4sK814eCwCN7T5urJ+ejs/Oy+IxU60xC1bLGsM3kFHQcWBiJz7gUkz7JGrKbw
+ Z91+1BGDEYrOY/tQYmYBOLNB+2+BPO5ImG8WtGBknV7Ag+NHIs788e6PzchIEEXJozfUE/dzX
+ 0WfbkO0FibPwXv0YqjVZ0EvgkgeBbcO/WKIq3rIYCITfInXyCl3h6e1gKfH55fBpVwzs5tI4/
+ C55A+NhSqKAeoTJB3+ts3DAzjMX7bP7v/PhcigUQ2EuDdeqIkKhO4xC/A4eMw75K8otX06HmD
+ 0Wsq+kBc4SNRgXH0cMHxCFC7AzrH4VqGgTuOdvazW69g50x7qtMxQZrtlhqf8yasQ9UpwAwCL
+ 8fuUCcuPnVfKN7rfnEt5l8CEqVDSpgsGxlQXzK0KTX1xFmgdJ+bE8ueFZHrue9PeeYqsmPsPL
+ BB8dv28sMSsUxN9P/Uos9YfSfw6Je7AY/uFHHkRDjV5BFsyOcp0auJB7fk+L9nk83LFFSlEFh
+ DjwutzRJiIT0XbRCo1fcwe2JSiNoKNi4s/iDqhRwa0KjpLIKeFn8wNmhnipTsWW4PGnFtfoVI
+ Lm3JVfMRZXyyCX4HxGpyDxSQqwm4yFGxCTLUAPRtIrmSjv3pZcL53MsEFoCeDZBnsC9VyDuFS
+ hFt0+GvzASuQdrLEYuoMaGrgwBGHthR32jRN9HMEvbtV/XIN39q6IIlRZ3TRVnoBnoqh6u1Fj
+ viIvrVLt/SiNzqiYfVrMNaQoKooh2YrCMXG5Iu4q7zb4Pmjgf54bnUumMeSbqioNLqCstZG9o
+ 200sSd6RHny+UC9RkBl4Jm5990Ea/Wq1EaOFMJ1t7mT7bgEAiJSk++Lng1r+7UamgVXlV3XYu
+ 6pC4eOPSR272a99fpgvxznwhETRs5/fl//8Pp/ysx7caqC/keVlsH8dEkh1aqUrMglRIGgvSl
+ RqTD7dfBkEr864/2UvpSrTNybyGRTPTUzI+Fjpclb3Wo0kUMKHdglQAsFhWtmhVmkB7eEtTxA
+ LkuUlOcWisrg3vtBlcMxnb632UOl6IGIpHrjarOG1t5swqONa21oEcLXtnMP8qhVknssH0/fw
+ sYrQZ2lW50PdTi8547UqqAxc6mVVTv5zBYxt+5fWYNOdYgTl1pltlClsLSMbkTHMmMhQnA/Q6
+ 3beOMFy52JOYX43X5O6qFcc5ZM+PenSI4LL9T4Oosc7Z0pfiMjqtfhyJhcg0KDSMPPtElZ+Z5
+ 3bMNKvZCQh2IsVih3WS3VTHkXN+Hh3sykuyCJOvbdH/wehCqCReBDxI=
 
-On Wed, 2025-01-22 at 18:24 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->=20
-> Commit 11c60f23ed13 ("integrity: Remove unused macro
-> IMA_ACTION_RULE_FLAGS") removed the IMA_ACTION_RULE_FLAGS mask, due to it
-> not being used after commit 0d73a55208e9 ("ima: re-introduce own integrit=
-y
-> cache lock").
->=20
-> However, it seems that the latter commit mistakenly used the wrong mask
-> when moving the code from ima_inode_post_setattr() to process_measurement=
-(). There
-> is no mention in the commit message about this
-> change and it looks quite important, since changing from IMA_ACTIONS_FLAG=
-S
-> (later renamed to IMA_NONACTION_FLAGS) to IMA_ACTION_RULE_FLAGS was done =
-by
-> commit 42a4c603198f0 ("ima: fix ima_inode_post_setattr").
 
-Roberto, thank you for the detailed explanation.  Could we summarize the pr=
-oblem as:=20
+--4hw4xsdogt6jxe7z
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 0/6] module: Introduce hash-based integrity checking
+MIME-Version: 1.0
 
-Commit 0d73a55208e9 ("ima: re-introduce own integrity cache lock") mistaken=
-ly
-reverted the performance improvement introduced in commit 42a4c603198f0 ("i=
-ma: fix
-ima_inode_post_setattr").  The unused bit mask was subsequently removed by =
-commit
-11c60f23ed13 ("integrity: Remove unused macro IMA_ACTION_RULE_FLAGS").
+Hey Thomas,
 
->=20
-> Restore the original change of resetting only the policy-specific flags a=
-nd
-> not the new file status, but with new mask 0xfb000000 since the
-> policy-specific flags changed meanwhile. Also rename IMA_ACTION_RULE_FLAG=
-S
-> to IMA_NONACTION_RULE_FLAGS, to be consistent with IMA_NONACTION_FLAGS.
+On 25/01/20 06:44PM, Thomas Wei=DFschuh wrote:
+> Thomas Wei=DFschuh (6):
+>       kbuild: add stamp file for vmlinux BTF data
+>       module: Make module loading policy usable without MODULE_SIG
+>       module: Move integrity checks into dedicated function
+>       module: Move lockdown check into generic module loader
+>       lockdown: Make the relationship to MODULE_SIG a dependency
+>       module: Introduce hash-based integrity checking
 
-Instead of restoring the bit mask that is used only once, consider inlining=
- the
-correct bit mask (e.g. IMA_NONACTION_FLAGS & ~IMA_NEW_FILE) and expanding t=
-he
-existing comment.
+thanks for working on this!
 
->=20
-> Cc: stable@vger.kernel.org=C2=A0# v4.16.x
-> Fixes: 11c60f23ed13 ("integrity: Remove unused macro IMA_ACTION_RULE_FLAG=
-S")
+I had a look at this patch series together with kpcyrd over the weekend
+and we were able to verify that this indeed allows one to get a
+reproducible kernel image with the toolchain on Arch Linux (if the patch
+you mentioned in your cover letter is also applied), which is of course
+great news! :)
 
-Please update the Fixes tag to refer to commit 0d73a55208e9.
+We also found a major issues with it, as adding it on top of the v6.13
+kernel and setting the needed config options while removing modules
+signatures made the kernel unable to load any module while also not
+printing any error for the failure, therefore resulting in an early boot
+failure on my machine.
 
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Do you have any clue what could be going wrong here or what we could
+investigate? I have pushed my build config into [this repository][0] and
+also uploaded a prebuilt version (signed with my packager key)
+[here][1] (you can therefore just install it via "sudo pacman -U
+<link>").
 
-> ---
-> =C2=A0security/integrity/ima/ima.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 1 +
-> =C2=A0security/integrity/ima/ima_main.c | 2 +-
-> =C2=A02 files changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index e1a3d1239bee..615900d4150d 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -141,6 +141,7 @@ struct ima_kexec_hdr {
-> =C2=A0
-> =C2=A0/* IMA iint policy rule cache flags */
-> =C2=A0#define IMA_NONACTION_FLAGS	0xff000000
-> +#define IMA_NONACTION_RULE_FLAGS	0xfb000000
-> =C2=A0#define IMA_DIGSIG_REQUIRED	0x01000000
-> =C2=A0#define IMA_PERMIT_DIRECTIO	0x02000000
-> =C2=A0#define IMA_NEW_FILE		0x04000000
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index 46adfd524dd8..7173dca20c23 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -275,7 +275,7 @@ static int process_measurement(struct file *file, con=
-st struct
-> cred *cred,
-> =C2=A0		/* reset appraisal flags if ima_inode_post_setattr was called */
+Happy to test more stuff, feel free to CC me on any further revision /
+thread on this!
 
-Update the comment based on the original commit 42a4c603198f ("ima: fix
-ima_inode_post_setattr") patch description.
+Cheers,
+Christian
 
-thanks,
+[0]: https://gitlab.archlinux.org/gromit/linux-mainline-repro-test
+[1]: https://pkgbuild.com/~gromit/linux-bisection-kernels/linux-mainline-6.=
+13-1.2-x86_64.pkg.tar.zst
 
-Mimi
+--4hw4xsdogt6jxe7z
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> =C2=A0		iint->flags &=3D ~(IMA_APPRAISE | IMA_APPRAISED |
-> =C2=A0				 IMA_APPRAISE_SUBMASK | IMA_APPRAISED_SUBMASK |
-> -				 IMA_NONACTION_FLAGS);
-> +				 IMA_NONACTION_RULE_FLAGS);
-> =C2=A0	/*
-> =C2=A0	 * Re-evaulate the file if either the xattr has changed or the
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCAAdFiEEb3ea3iR6a4oPcswTwEfU8yi1JYUFAmegwUEACgkQwEfU8yi1
+JYWeYg//T393bfbxswhXCUthBFnjA93W811Td6FcAaSuQVYHkaShTzHhGFhM0/42
+bPKOeU9FsEBfcAaqQ2hSBfJK951EGxmXPcVuwGD8P3cSLR8076bcH4QJq6YbbO1m
+nGhXArgtsQ/4JeDwP2Od5UQwKJP0eJKL2rrkU+EK/EACyOIQCH4SUJf+AaNN2wab
+3t7GXOIOihirIEeubhD5OpUcsAoWJLG2GiPTwhKWr/P3ia7LStbK335jQl0E2nAu
+sL6T7AopwkFFZ94p2Fd4w9bLd2k4DvzjHsQaI2On3Ybam0qBL/mei6V6jcgjDAvr
+zo5s8O3Pcy3YbFPZYdttjaD1Jp+KNn7JA0G1HBd/Qbz55JevkufdW0c2Fq8/V56m
+LIFAX1wgJMNWT/6BG29OuGJ9yx+qO7EXfz1LjTce+oOTls2tsu3OhuNcyJeQeADN
+W6ThiLff+NFU7YQpEb+rfFgVM2krN7ib+DUrge0oe4Nj/gBivnC8o44BCK9k5zoG
+qvfNGV5ARMqJj/n8e0CtyNZ3d8L+n+3TVPy4o8fvAJRndCHNIVvnY/Tkx9DQn73g
+Mo/jqtT08gUoptL9pYAjr686IXQalRmPDFYcV74Xq43xvUToVApgtKjARphPxXSA
+cnM3z3x5zLdin5otTL1sVwQzUjvt/HcnOR7gVAyqwooTJ6STENA=
+=2M+y
+-----END PGP SIGNATURE-----
+
+--4hw4xsdogt6jxe7z--
 
