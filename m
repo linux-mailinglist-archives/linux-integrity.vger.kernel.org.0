@@ -1,173 +1,148 @@
-Return-Path: <linux-integrity+bounces-4687-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4688-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0AF4A25A7F
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 14:15:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6E83A25F2C
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 16:46:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73276163B33
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 13:15:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92CD11884026
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 15:46:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E38C204F74;
-	Mon,  3 Feb 2025 13:15:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54FBE14F12D;
+	Mon,  3 Feb 2025 15:46:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b="LppzQA80"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lNt2InHP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5287204C39;
-	Mon,  3 Feb 2025 13:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2108209677
+	for <linux-integrity@vger.kernel.org>; Mon,  3 Feb 2025 15:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738588503; cv=none; b=gcn4OO6sIbpsKOTt2VTtv4MAImfpD/w4yMv1mofsxpS0HrbgKu088j2iXXotnrKcMRq8dGsmaZJU4rfdB3WNBDACYsFEUyMDQ78T7lfa5lXl1v82p+Ayhh+uashB3XnYeWKCO7umJD3+zRgA6rgsokAM/EwhexbpkdFUyQc0xJ8=
+	t=1738597577; cv=none; b=DQz3ELqNu4OEPVkOfhnyiX5h5LOlpsYHPd1Dg5L10+CgxmvmMHehVBoqKD7zS+qwN+XffiULeLBVApg60aVXp4Y1PD+3nsrF7WAiTYGRBwScGNtyNNZzqqAcG3Hy8QPBOn8mkYPpVEIYHP2ovUsOBbAKvaQ/sIkvqvF9KEHYEfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738588503; c=relaxed/simple;
-	bh=AE1GNI4dCnKiSpYJEGzMAZPeqcrJkHOL3Nw8EWbZIW8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uzeeovLWMT1Q1vmRLxVJUx9JPbauZjnZO6/q3oZ3Lu0LuInVIzn7cMSzCBNUeQDQqVTUk0OiOf1BYriWPY59r2hJyf+MxR8zVRdt7R+2Tm72VA9ft9zNZOi9f9F8TlrgtoCS/3BRYwFx3l6kird0jqec0ipQEnGAHcVc4F+0aCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu; spf=pass smtp.mailfrom=heusel.eu; dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b=LppzQA80; arc=none smtp.client-ip=217.72.192.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=heusel.eu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heusel.eu;
-	s=s1-ionos; t=1738588486; x=1739193286; i=christian@heusel.eu;
-	bh=HW/nhA7rOLlZN/zmthKgpqOHoSWN2U6+fDDzCTddEJw=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:In-Reply-To:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=LppzQA802y5aZz9FYytlu7pwxMQDYgmSpzfYXSp51a9i15cF39uXd1v0O3d+I2DF
-	 nDwb9houPen/p1zCAppZUIq5wdDnRI8MDQkmqjyNDprMgPjpPbmcQfUOzDQRmYTNM
-	 u8/5d4AD3YjYdCoki8N8fnWlxycPSqJAkED9OSn7W21HCRlaffMU27VtDPYU853NV
-	 O/jIHS8LUaEVo65lTmw7gMpOnxUVdcCgaHyXsBE6ZFN3aPptUQT7bAPUZMlN2swtO
-	 vUpssc+kN+K2jpM84TJvY81pXJWb6P6HkDxUJfvFxt8Fd6kXEYLe/0043bZhHdakt
-	 uO4/1MFw4Z76E/hiiA==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([80.187.122.235]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MoNu2-1t3St32XHc-00gLz3; Mon, 03 Feb 2025 14:14:45 +0100
-Date: Mon, 3 Feb 2025 14:14:41 +0100
-From: Christian Heusel <christian@heusel.eu>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
-	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
-	kpcyrd <kpcyrd@archlinux.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] module: Introduce hash-based integrity checking
-Message-ID: <62c93d58-2e27-4304-a6ad-36aa932f18ac@heusel.eu>
-References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
+	s=arc-20240116; t=1738597577; c=relaxed/simple;
+	bh=jfqYp336tgJfmanRiwA983qSFPBmw9Bio0gNkxBaUMQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=I0YZw1003bbTSgOA0fDEB0J5KiCJSHqRtSO7NwKZsNz2lPEmaSft2iCv1nA4bMkDedRI0ohp2VbwF9+QBgGZst/lBpZ3KEbRMWwHz0G0wCtYWMHAWzikvx6Gl89Pzz005GuYCd6sua60C3Wd7EdvJnscxdGXN005J1Y+P604Bg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lNt2InHP; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 513F5NRj013659;
+	Mon, 3 Feb 2025 15:46:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=jfqYp3
+	36tgJfmanRiwA983qSFPBmw9Bio0gNkxBaUMQ=; b=lNt2InHPrMZOy2ay8Kv094
+	uH/MY0+K37BJ4v4hgBaiyu7M0S+kPZ7LEI1SAKoKuF2jYpKtRxLNhm5aO3ePrjfe
+	4vu3fZUPcFwAe8NcBnRRnYvs2BUKNNkbBCiFwwPYrv4KjJ7XUSQBXnn20G+fhlUE
+	CpZBNJygSJdf+CiV2UPgDPku27yxpZg/vePoqfJOX6bp/RN86fkXCdMzZCQrbPCG
+	UQtBy5srQmqFIrOBHxCb8g5nNOJ1+9RBCZ0jPSAbpPjCgKkLg/FagGa4bLPj2dht
+	8UprQ2bvn/0SjdKTNuk0ZbX2vMzyDFo17gLxi4jhu+nZjfY8vLyvzM5CvmH09UTw
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44jqm7avg1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Feb 2025 15:46:09 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 513DBEGg021483;
+	Mon, 3 Feb 2025 15:46:08 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44j0n16q3t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Feb 2025 15:46:08 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 513Fk7FQ27460202
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 3 Feb 2025 15:46:08 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B848958063;
+	Mon,  3 Feb 2025 15:46:07 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7216858052;
+	Mon,  3 Feb 2025 15:46:07 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.83.5])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  3 Feb 2025 15:46:07 +0000 (GMT)
+Message-ID: <236770773858ed5e619f0a45ed8f2e103e5da9c8.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 02/10] IMA: Add TCB policy as an example for
+ ima_measurements.sh
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
+Cc: linux-integrity@vger.kernel.org
+Date: Mon, 03 Feb 2025 10:46:07 -0500
+In-Reply-To: <52d6a8c168215e6dafe567b37bf5ac65e3b300eb.camel@linux.ibm.com>
+References: <20250114112915.610297-1-pvorel@suse.cz>
+	 <20250114112915.610297-3-pvorel@suse.cz>
+	 <52d6a8c168215e6dafe567b37bf5ac65e3b300eb.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4hw4xsdogt6jxe7z"
-Content-Disposition: inline
-In-Reply-To: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
-X-Provags-ID: V03:K1:pi4w6UvELjOYlWx7bJXU+/MmGORjxYJ29ngsxP99C0aV5nQ3ul1
- 50dRrVBGRzy382VjDqjmmj8CaowbFOxH6DRu/k4gDMUunGQRyvqTJFVqMabGxL8+TSojaD+
- D5zgrN7RkpgcTuwaqWPZsmZPmtWRMPC+TynSjMjsU57e9Ve1YGGzesZTL0TA1sY8pQaJDPj
- +LnrtY5KXjyOSqIHK3xUQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:MXtMipq4Kd4=;s7t6p8NLj9eAy9+INYP4yrDREcn
- mAWRrWEOBfYn4sK814eCwCN7T5urJ+ejs/Oy+IxU60xC1bLGsM3kFHQcWBiJz7gUkz7JGrKbw
- Z91+1BGDEYrOY/tQYmYBOLNB+2+BPO5ImG8WtGBknV7Ag+NHIs788e6PzchIEEXJozfUE/dzX
- 0WfbkO0FibPwXv0YqjVZ0EvgkgeBbcO/WKIq3rIYCITfInXyCl3h6e1gKfH55fBpVwzs5tI4/
- C55A+NhSqKAeoTJB3+ts3DAzjMX7bP7v/PhcigUQ2EuDdeqIkKhO4xC/A4eMw75K8otX06HmD
- 0Wsq+kBc4SNRgXH0cMHxCFC7AzrH4VqGgTuOdvazW69g50x7qtMxQZrtlhqf8yasQ9UpwAwCL
- 8fuUCcuPnVfKN7rfnEt5l8CEqVDSpgsGxlQXzK0KTX1xFmgdJ+bE8ueFZHrue9PeeYqsmPsPL
- BB8dv28sMSsUxN9P/Uos9YfSfw6Je7AY/uFHHkRDjV5BFsyOcp0auJB7fk+L9nk83LFFSlEFh
- DjwutzRJiIT0XbRCo1fcwe2JSiNoKNi4s/iDqhRwa0KjpLIKeFn8wNmhnipTsWW4PGnFtfoVI
- Lm3JVfMRZXyyCX4HxGpyDxSQqwm4yFGxCTLUAPRtIrmSjv3pZcL53MsEFoCeDZBnsC9VyDuFS
- hFt0+GvzASuQdrLEYuoMaGrgwBGHthR32jRN9HMEvbtV/XIN39q6IIlRZ3TRVnoBnoqh6u1Fj
- viIvrVLt/SiNzqiYfVrMNaQoKooh2YrCMXG5Iu4q7zb4Pmjgf54bnUumMeSbqioNLqCstZG9o
- 200sSd6RHny+UC9RkBl4Jm5990Ea/Wq1EaOFMJ1t7mT7bgEAiJSk++Lng1r+7UamgVXlV3XYu
- 6pC4eOPSR272a99fpgvxznwhETRs5/fl//8Pp/ysx7caqC/keVlsH8dEkh1aqUrMglRIGgvSl
- RqTD7dfBkEr864/2UvpSrTNybyGRTPTUzI+Fjpclb3Wo0kUMKHdglQAsFhWtmhVmkB7eEtTxA
- LkuUlOcWisrg3vtBlcMxnb632UOl6IGIpHrjarOG1t5swqONa21oEcLXtnMP8qhVknssH0/fw
- sYrQZ2lW50PdTi8547UqqAxc6mVVTv5zBYxt+5fWYNOdYgTl1pltlClsLSMbkTHMmMhQnA/Q6
- 3beOMFy52JOYX43X5O6qFcc5ZM+PenSI4LL9T4Oosc7Z0pfiMjqtfhyJhcg0KDSMPPtElZ+Z5
- 3bMNKvZCQh2IsVih3WS3VTHkXN+Hh3sykuyCJOvbdH/wehCqCReBDxI=
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: e-u09LBIrHWITJk6nsB14sQtQt0VvEBF
+X-Proofpoint-ORIG-GUID: e-u09LBIrHWITJk6nsB14sQtQt0VvEBF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-03_06,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=977 bulkscore=0 mlxscore=0 suspectscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
+ definitions=main-2502030114
 
 
---4hw4xsdogt6jxe7z
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 0/6] module: Introduce hash-based integrity checking
-MIME-Version: 1.0
+> > diff --git
+> > a/testcases/kernel/security/integrity/ima/datafiles/ima_measurements/tc=
+b.policy
+> > b/testcases/kernel/security/integrity/ima/datafiles/ima_measurements/tc=
+b.policy
+> > new file mode 100644
+> > index 0000000000..1e4a932bf0
+> > --- /dev/null
+> > +++
+> > b/testcases/kernel/security/integrity/ima/datafiles/ima_measurements/tc=
+b.policy
+> > @@ -0,0 +1,20 @@
+> > +dont_measure fsmagic=3D0x9fa0
+> > +dont_measure fsmagic=3D0x62656572
+> > +dont_measure fsmagic=3D0x64626720
+> > +dont_measure fsmagic=3D0x1021994 func=3DFILE_CHECK
 
-Hey Thomas,
+Petr, to avoid test failures datafiles/ima_policy/measure.policy should be =
+similarly
+constrained.
 
-On 25/01/20 06:44PM, Thomas Wei=DFschuh wrote:
-> Thomas Wei=DFschuh (6):
->       kbuild: add stamp file for vmlinux BTF data
->       module: Make module loading policy usable without MODULE_SIG
->       module: Move integrity checks into dedicated function
->       module: Move lockdown check into generic module loader
->       lockdown: Make the relationship to MODULE_SIG a dependency
->       module: Introduce hash-based integrity checking
+thanks,
 
-thanks for working on this!
+Mimi
 
-I had a look at this patch series together with kpcyrd over the weekend
-and we were able to verify that this indeed allows one to get a
-reproducible kernel image with the toolchain on Arch Linux (if the patch
-you mentioned in your cover letter is also applied), which is of course
-great news! :)
+> > +dont_measure fsmagic=3D0x1cd1
+> > +dont_measure fsmagic=3D0x42494e4d
+> > +dont_measure fsmagic=3D0x73636673
+> > +dont_measure fsmagic=3D0xf97cff8c
+> > +dont_measure fsmagic=3D0x43415d53
+> > +dont_measure fsmagic=3D0x27e0eb
+> > +dont_measure fsmagic=3D0x63677270
+> > +dont_measure fsmagic=3D0x6e736673
+> > +dont_measure fsmagic=3D0xde5e81e4
+> > +measure func=3DMMAP_CHECK mask=3DMAY_EXEC
+> > +measure func=3DBPRM_CHECK mask=3DMAY_EXEC
+> > +measure func=3DFILE_CHECK mask=3D^MAY_READ euid=3D0
+> > +measure func=3DFILE_CHECK mask=3D^MAY_READ uid=3D0
+> > +measure func=3DMODULE_CHECK
+> > +measure func=3DFIRMWARE_CHECK
+> > +measure func=3DPOLICY_CHECK
+>=20
+>=20
 
-We also found a major issues with it, as adding it on top of the v6.13
-kernel and setting the needed config options while removing modules
-signatures made the kernel unable to load any module while also not
-printing any error for the failure, therefore resulting in an early boot
-failure on my machine.
-
-Do you have any clue what could be going wrong here or what we could
-investigate? I have pushed my build config into [this repository][0] and
-also uploaded a prebuilt version (signed with my packager key)
-[here][1] (you can therefore just install it via "sudo pacman -U
-<link>").
-
-Happy to test more stuff, feel free to CC me on any further revision /
-thread on this!
-
-Cheers,
-Christian
-
-[0]: https://gitlab.archlinux.org/gromit/linux-mainline-repro-test
-[1]: https://pkgbuild.com/~gromit/linux-bisection-kernels/linux-mainline-6.=
-13-1.2-x86_64.pkg.tar.zst
-
---4hw4xsdogt6jxe7z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEb3ea3iR6a4oPcswTwEfU8yi1JYUFAmegwUEACgkQwEfU8yi1
-JYWeYg//T393bfbxswhXCUthBFnjA93W811Td6FcAaSuQVYHkaShTzHhGFhM0/42
-bPKOeU9FsEBfcAaqQ2hSBfJK951EGxmXPcVuwGD8P3cSLR8076bcH4QJq6YbbO1m
-nGhXArgtsQ/4JeDwP2Od5UQwKJP0eJKL2rrkU+EK/EACyOIQCH4SUJf+AaNN2wab
-3t7GXOIOihirIEeubhD5OpUcsAoWJLG2GiPTwhKWr/P3ia7LStbK335jQl0E2nAu
-sL6T7AopwkFFZ94p2Fd4w9bLd2k4DvzjHsQaI2On3Ybam0qBL/mei6V6jcgjDAvr
-zo5s8O3Pcy3YbFPZYdttjaD1Jp+KNn7JA0G1HBd/Qbz55JevkufdW0c2Fq8/V56m
-LIFAX1wgJMNWT/6BG29OuGJ9yx+qO7EXfz1LjTce+oOTls2tsu3OhuNcyJeQeADN
-W6ThiLff+NFU7YQpEb+rfFgVM2krN7ib+DUrge0oe4Nj/gBivnC8o44BCK9k5zoG
-qvfNGV5ARMqJj/n8e0CtyNZ3d8L+n+3TVPy4o8fvAJRndCHNIVvnY/Tkx9DQn73g
-Mo/jqtT08gUoptL9pYAjr686IXQalRmPDFYcV74Xq43xvUToVApgtKjARphPxXSA
-cnM3z3x5zLdin5otTL1sVwQzUjvt/HcnOR7gVAyqwooTJ6STENA=
-=2M+y
------END PGP SIGNATURE-----
-
---4hw4xsdogt6jxe7z--
 
