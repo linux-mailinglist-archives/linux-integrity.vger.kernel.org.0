@@ -1,69 +1,78 @@
-Return-Path: <linux-integrity+bounces-4697-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4700-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B748BA262DE
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 19:46:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D5A2A2652B
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 21:59:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 589063A62B2
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 18:46:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B47061883BCB
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Feb 2025 20:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ECF420E02F;
-	Mon,  3 Feb 2025 18:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302BA20F07A;
+	Mon,  3 Feb 2025 20:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="koy1D7J/"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OTk3+PO7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1D7A1C1AAA;
-	Mon,  3 Feb 2025 18:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D0120F071
+	for <linux-integrity@vger.kernel.org>; Mon,  3 Feb 2025 20:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738608369; cv=none; b=mzbxxvXfeDs8cQcRkVLAC9W9CCNSenS/RtAsM99cvWo74HYeGwkT9uefwPT4wStrCah9bDdL72EP1ctyvlDP1OPFoSzrNHSrt+uJn5BCKyG3dFXQHLrnuIH4GAK+oX28uqL4hqL+TRuXDLeSwrJvMkk5YKI1Yca0wVKjCg9kdXs=
+	t=1738616340; cv=none; b=lN5S7OllFPxVdAI2wFT1yYx6/ZoFyevGSk4xVdeaeAZfA8YVpYpphpc7YooLsDr6hL60jhFrkbcK+37uXSDihjgsFfbx3zSMCCREpexdB9kCLwWCX8pnJGJBYYcZMSskBBbTotQ9P/2PN49I+1WToLeCUziyNusM97CabzCOLow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738608369; c=relaxed/simple;
-	bh=JMiCI7oEWpaNyaUwMo7rDIzjwYonTLm5E0qBtBtW4bU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sVOZK5gs6b7RbYfqRhZUs8wshd2SUzvy+fYcqMlPZp7oLWeyPm62eRrC1UflVSQP/9fqHOIpWe0lEysqIlHwRXCunHcC1ZMKTTAYT94BgGG4HPi7/Ag6nsPUjk6hg7m2Lopr5nfFAK7nEukKoG6XYtAVsxL3m+AO9V26Pq5eJag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=koy1D7J/; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from localhost.localdomain (unknown [167.220.59.4])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7D0F3206AB71;
-	Mon,  3 Feb 2025 10:46:06 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7D0F3206AB71
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1738608366;
-	bh=0df9k6YmLXTRB5Kdzk0atr6aQfh11G9ejUhwNmP0edM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=koy1D7J/Ezr+ZcS1IHBzVz/LIm8M///+rS0OT40MVyYJH4uxtP//4DNWQcBTIoK+n
-	 Q6WN7Bs8Gkff08p9L3UDGzt1HHpv0+QVqUSd3JAjxLvmXa9FjzjKFS2Fg+BL5PmFFX
-	 jaP0muZ4HAPi3sShAAxT6sAcVT6jLbME9Z0Ugw5o=
-From: steven chen <chenste@linux.microsoft.com>
-To: zohar@linux.ibm.com,
-	stefanb@linux.ibm.com,
-	roberto.sassu@huaweicloud.com,
-	roberto.sassu@huawei.com,
-	eric.snowberg@oracle.com,
-	ebiederm@xmission.com,
-	paul@paul-moore.com,
-	code@tyhicks.com,
-	bauermann@kolabnow.com,
-	linux-integrity@vger.kernel.org,
-	kexec@lists.infradead.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chenste@linux.microsoft.com
-Cc: madvenka@linux.microsoft.com,
-	nramas@linux.microsoft.com,
-	James.Bottomley@HansenPartnership.com
-Subject: [PATCH v7 7/7] ima: measure kexec load and exec events as critical data
-Date: Mon,  3 Feb 2025 10:45:58 -0800
-Message-Id: <20250203184558.61367-8-chenste@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250203184558.61367-1-chenste@linux.microsoft.com>
-References: <20250203184558.61367-1-chenste@linux.microsoft.com>
+	s=arc-20240116; t=1738616340; c=relaxed/simple;
+	bh=bDT0O+Bqrl0IXhzn6X2v4dtrHREwzI3nLkubEuokL8Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g8G2iqw2wnNcQg6uBi7cJVD7dkpEv7mV1j8tK8OayeTT8LIGCN+u6w7quxnjFkfeCvVfTABo1NEViK0MDBlQktfEDq9gpdSkrBDgcU6jk2V+nrGn7vtDU42T3LEpM6AGbYwSzdOFgZccEyTFMfvE+QMIJBOwg0gB6LQpEC/X53Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OTk3+PO7; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 513EAkZF006345;
+	Mon, 3 Feb 2025 20:58:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=ClOCcL0A6MFB3GLlrxCiYOxJUlIA9aT3Xt6cUPadX
+	Ik=; b=OTk3+PO74f15o+ShlR7SPRGzavonSYi+5hMArSwuaNF/+oQfvV/dGqj1S
+	MXEqQdhMwFrozni8re4oUp51JByqhqtYMjtlNrNgT5cVf3UodgkA2Ql+I2GE9qe2
+	J96iyHDxPCiBmq5dy46Hi/HCzFKd6Xa7NZGXlWsQQGtTyzvcwJK21GLtsUvKSNPc
+	eECKWRTtDpn4uTZfikEv1xVTKtLtBthWJpqH6jRq4ShSO5fpKLGuN7TX9D+Dl2wX
+	wAJWecvzWIk/o6QEvuk5BpUCfww+q4Y3sG8kaJBSXie+6Qc1nZxT6dKl6JOUCYrN
+	TubfkSBSeTxEoLDORtLvXF5/FmOZg==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44jmmycqxq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Feb 2025 20:58:50 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 513IYZ1R007139;
+	Mon, 3 Feb 2025 20:58:50 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44hxaygbs4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Feb 2025 20:58:50 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 513Kwkes59244812
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 3 Feb 2025 20:58:46 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 82D17200BE;
+	Mon,  3 Feb 2025 20:58:46 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 58573200BF;
+	Mon,  3 Feb 2025 20:58:45 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.fios-router.home (unknown [9.61.83.5])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  3 Feb 2025 20:58:45 +0000 (GMT)
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: linux-integrity@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huawei.com
+Subject: [RFC PATCH] ima: limit the number of open-writers integrity violations
+Date: Mon,  3 Feb 2025 15:58:39 -0500
+Message-ID: <20250203205839.720225-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -71,90 +80,103 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: D_HWLwP8woafB1dImLNTmxuXR2j8xCMl
+X-Proofpoint-ORIG-GUID: D_HWLwP8woafB1dImLNTmxuXR2j8xCMl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-03_08,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=698 bulkscore=0 spamscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502030148
 
-The amount of memory allocated at kexec load, even with the extra memory
-allocated, might not be large enough for the entire measurement list.  The
-indeterminate interval between kexec 'load' and 'execute' could exacerbate
-this problem.
+Limit the number of open-writers integrity violation audit messages
+and records in the IMA measurement list emitted when re-opening a
+file for read.
 
-Define two new IMA events, 'kexec_load' and 'kexec_execute', to be 
-measured as critical data at kexec 'load' and 'execute' respectively.
-Report the allocated kexec segment size, IMA binary log size and the
-runtime measurements count as part of those events.
-
-These events, and the values reported through them, serve as markers in
-the IMA log to verify the IMA events are captured during kexec soft
-reboot.  The presence of a 'kexec_load' event in between the last two
-'boot_aggregate' events in the IMA log implies this is a kexec soft
-reboot, and not a cold-boot. And the absence of 'kexec_execute' event
-after kexec soft reboot implies missing events in that window which
-results in inconsistency with TPM PCR quotes, necessitating a cold boot
-for a successful remote attestation.
-
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-Signed-off-by: steven chen <chenste@linux.microsoft.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- security/integrity/ima/ima_kexec.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ security/integrity/ima/ima.h      |  1 +
+ security/integrity/ima/ima_main.c | 32 +++++++++++++++++++++++++------
+ 2 files changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index c9c916f69ca7..0342ddfa9342 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -17,6 +17,8 @@
- #include "ima.h"
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 24d09ea91b87..f1196fe1a9ff 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -144,6 +144,7 @@ struct ima_kexec_hdr {
+ #define IMA_DIGSIG_REQUIRED	0x01000000
+ #define IMA_PERMIT_DIRECTIO	0x02000000
+ #define IMA_NEW_FILE		0x04000000
++#define IMA_VIOLATION		0x08000000
+ #define IMA_FAIL_UNVERIFIABLE_SIGS	0x10000000
+ #define IMA_MODSIG_ALLOWED	0x20000000
+ #define IMA_CHECK_BLACKLIST	0x40000000
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 9f9897a7c217..a4474f1e7189 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -126,19 +126,32 @@ static void ima_rdwr_violation_check(struct file *file,
+ 	bool send_tomtou = false, send_writers = false;
  
- #ifdef CONFIG_IMA_KEXEC
-+#define IMA_KEXEC_EVENT_LEN 256
+ 	if (mode & FMODE_WRITE) {
++		if (!iint)
++			iint = ima_iint_find(inode);
 +
- static struct seq_file ima_kexec_file;
- static void *ima_kexec_buffer;
- static size_t kexec_segment_size;
-@@ -36,6 +38,24 @@ static void ima_free_kexec_file_buf(struct seq_file *sf)
- 	ima_reset_kexec_file(sf);
- }
- 
-+static void ima_measure_kexec_event(const char *event_name)
-+{
-+	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
-+	size_t buf_size = 0;
-+	long len;
+ 		if (atomic_read(&inode->i_readcount) && IS_IMA(inode)) {
+-			if (!iint)
+-				iint = ima_iint_find(inode);
+ 			/* IMA_MEASURE is set from reader side */
+ 			if (iint && test_bit(IMA_MUST_MEASURE,
+ 						&iint->atomic_flags))
+ 				send_tomtou = true;
+ 		}
 +
-+	buf_size = ima_get_binary_runtime_size();
-+	len = atomic_long_read(&ima_htable.len);
++		if (iint)
++			iint->flags &= ~IMA_VIOLATION;
+ 	} else {
+ 		if (must_measure)
+ 			set_bit(IMA_MUST_MEASURE, &iint->atomic_flags);
+-		if (inode_is_open_for_write(inode) && must_measure)
+-			send_writers = true;
 +
-+	scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
-+			"kexec_segment_size=%lu;ima_binary_runtime_size=%lu;"
-+			"ima_runtime_measurements_count=%ld;",
-+				kexec_segment_size, buf_size, len);
++		if (inode_is_open_for_write(inode) && must_measure) {
++			if (!iint)
++				iint = ima_iint_find(inode);
 +
-+	ima_measure_critical_data("ima_kexec", event_name, ima_kexec_event,
-+					strlen(ima_kexec_event), false, NULL, 0);
-+}
-+
- static int ima_alloc_kexec_file_buf(size_t segment_size)
- {
- 	/*
-@@ -60,6 +80,7 @@ static int ima_alloc_kexec_file_buf(size_t segment_size)
- out:
- 	ima_kexec_file.read_pos = 0;
- 	ima_kexec_file.count = sizeof(struct ima_kexec_hdr);	/* reserved space */
-+	ima_measure_kexec_event("kexec_load");
- 
- 	return 0;
- }
-@@ -201,6 +222,8 @@ static int ima_update_kexec_buffer(struct notifier_block *self,
- 		return ret;
++			/* Limit number of open_writers violations */
++			if (iint && !(iint->flags & IMA_VIOLATION)) {
++				send_writers = true;
++				iint->flags |= IMA_VIOLATION;
++			}
++		}
  	}
  
-+	ima_measure_kexec_event("kexec_execute");
-+
- 	ret = ima_dump_measurement_list(&buf_size, &buf,
- 					kexec_segment_size);
+ 	if (!send_tomtou && !send_writers)
+@@ -268,11 +281,18 @@ static int process_measurement(struct file *file, const struct cred *cred,
  
+ 	mutex_lock(&iint->mutex);
+ 
++	/*
++	 * Reset the appraisal flags and the policy rule specific flags, if
++	 * ima_inode_post_setattr was called.
++	 *
++	 * Although "open-writers" violations are limited to FILE_CHECK rules,
++	 * the flag is not policy rule specific and should not be reset.  The
++	 * flag prevents superfluous "open-writers" violations.
++	 */
+ 	if (test_and_clear_bit(IMA_CHANGE_ATTR, &iint->atomic_flags))
+-		/* reset appraisal flags if ima_inode_post_setattr was called */
+ 		iint->flags &= ~(IMA_APPRAISE | IMA_APPRAISED |
+ 				 IMA_APPRAISE_SUBMASK | IMA_APPRAISED_SUBMASK |
+-				 IMA_NONACTION_FLAGS);
++				 (IMA_NONACTION_FLAGS & ~IMA_VIOLATION));
+ 
+ 	/*
+ 	 * Re-evaulate the file if either the xattr has changed or the
 -- 
-2.25.1
+2.48.1
 
 
