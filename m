@@ -1,189 +1,124 @@
-Return-Path: <linux-integrity+bounces-4720-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4721-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C44CA27CCC
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2025 21:28:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A9BFA27D0B
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2025 22:09:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95FEC166822
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2025 20:28:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C6F41885B43
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Feb 2025 21:08:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0023A219A67;
-	Tue,  4 Feb 2025 20:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2BD21A450;
+	Tue,  4 Feb 2025 21:08:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="b3Cx44XE"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Dv5z6qVW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4472520A5DA;
-	Tue,  4 Feb 2025 20:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5B421A43A;
+	Tue,  4 Feb 2025 21:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738700886; cv=none; b=era8CuNKvhapK+NXnEgsEMKE4zIsvj08iCzJiTaYklCGZWZn+i/Ubc7JG8e6H1Dpzps1Z2zpkgnLviZRmvIBIcNXISuzZLHrgzUR36e+vbwCkB5PiQzzVZLd06kR5coHo5Z4tlA9a18YqcN264NIZMzXIpOrzptZSK7cL4AzoRM=
+	t=1738703310; cv=none; b=s1WnDih1jtHOPE9Ou9B2cwWN/wL0jCB9TbjEySETL/YP1zeA3sr3/wEMqtgDsW2bfokwf/6s2Ghv7uCyyvuOzRLuBQmgBEuq3+hxX4z0YMe694YS4ClTj6e2/wmrgL8wP3Ubdev4jTMQlHvC1+GUBGBAUhRjNGCv8AkIlvNPwMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738700886; c=relaxed/simple;
-	bh=IoRJFhKv/dqAt17nC9B0LKW2UsEDq8Ti3lmnPQiWALY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GIVySLSON8YfBXDgvV8I6Shf9JuQDDhwoqqlGvwAKty9ATlm1kbizSzD/R8rDkU3ZyPPD5nNChU196KzJ142yL9rkUpnnHIXMJIWg4Byz94ZWUCHuk9ld4CkqWLfWwBTFhsuwxseiqYFDeWVfdJwRPyNkNtIjj7l8JYHnARCapQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=b3Cx44XE; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.17.64.67] (unknown [131.107.1.195])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 754F92054926;
-	Tue,  4 Feb 2025 12:28:04 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 754F92054926
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1738700884;
-	bh=1bt0mVnS0Ir83ngsAvEIbbvQSkHpMuK7XU2Id29OusI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=b3Cx44XESQ7Fszl7nZpg8NVa77+6TTN/umnmM13Eo4MLXInKqDEjmJ0fXIz4B7EB1
-	 cp6HHrvsS3AW/32LDzhiqR9RpE3O9e2k9zk6lHZ0vwuQ6vM/IirIBgcsjO6RQH18D4
-	 2qH6muvI6TW5Bci2oOnOUSPTnGkdO5JQb6VIi1s8=
-Message-ID: <aeef2ca5-2538-4487-a501-7eb2925d198b@linux.microsoft.com>
-Date: Tue, 4 Feb 2025 12:28:03 -0800
+	s=arc-20240116; t=1738703310; c=relaxed/simple;
+	bh=gVu0/OU66wDhI5WrK8fkD90mnoCdFZJ9acV8nvKiCb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dj6Dr+BRVaUwZTA10YJ47eG50UPMTCrotXqNKC0BllefaNDUR3qM7P3nyZCGRbJs2XIqvB4A7b6ZtlWe/rA8kZgYGjU+RIsQnh3AWf+2pD4ZMMjHnLCek+HenlWSuHqlOVEkFFUlm5dekWbmhm4vOiudqpoxjoFCjQEZ42jk6ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Dv5z6qVW; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1738703304;
+	bh=gVu0/OU66wDhI5WrK8fkD90mnoCdFZJ9acV8nvKiCb4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Dv5z6qVWmdkOOVUdpgXz2bBitwe7aZ6Dbdw+NLqejMNeubS3o0VPxrQ8Vz+x/wLD3
+	 zCW9adnlaVmp3ar2Z17uZfGjDiZT+03rsIRvutaKn7KjiMwQTAJS8dHgrDXsIyN8WM
+	 WtfKcyPvXDWxaLXLfpyK2MV/XNzqUIAcT2626hns=
+Date: Tue, 4 Feb 2025 22:08:23 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Christian Heusel <christian@heusel.eu>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
+	kpcyrd <kpcyrd@archlinux.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] module: Introduce hash-based integrity checking
+Message-ID: <1686ea9d-ad36-4a2d-9427-70cd74e64300@t-8ch.de>
+References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
+ <62c93d58-2e27-4304-a6ad-36aa932f18ac@heusel.eu>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 3/7] ima: kexec: skip IMA segment validation after
- kexec soft reboot
-To: Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
- roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
- eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
- code@tyhicks.com, bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
- kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
- James.Bottomley@HansenPartnership.com
-References: <20250203232033.64123-1-chenste@linux.microsoft.com>
- <20250203232033.64123-4-chenste@linux.microsoft.com>
- <00eeeb8b-cc28-42af-873f-3478cd22fb6e@linux.ibm.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <00eeeb8b-cc28-42af-873f-3478cd22fb6e@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <62c93d58-2e27-4304-a6ad-36aa932f18ac@heusel.eu>
 
-On 2/4/2025 11:39 AM, Stefan Berger wrote:
-> On 2/3/25 6:20 PM, steven chen wrote:
->> kexec_calculate_store_digests() calculates and stores the digest of the
->> segment at kexec_file_load syscall where the IMA segment is also
->> allocated.  With this series, the IMA segment will be updated with the
->> measurement log at kexec excute stage when soft reboot is initiated.
->
-> s/excute/execute
->
->> Therefore, it may fail digest verification in verify_sha256_digest()
->> after kexec soft reboot into the new kernel. Therefore, the digest
->> calculation/verification of the IMA segment needs to be skipped.
->>
->> Skip IMA segment from calculating and storing digest in function
->
-> Skip the calculation and storing of the digest of the IMA segment in 
-> kexec_calculate_store_digests() so that ...
->
->
->> kexec_calculate_store_digests() so that it is not added to the
->> 'purgatory_sha_regions'.
->>
->> Since verify_sha256_digest() only verifies 'purgatory_sha_regions',
->> no change is needed in verify_sha256_digest() in this context.
->>
->> With this change, the IMA segment is not included in the digest
->> calculation, storage, and verification.
->>
->> Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> Signed-off-by: steven chen <chenste@linux.microsoft.com>
-> > --->   include/linux/kexec.h              |  3 +++
->>   kernel/kexec_file.c                | 23 +++++++++++++++++++++++
->>   security/integrity/ima/ima_kexec.c |  3 +++
->>   3 files changed, 29 insertions(+)
->>
->> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
->> index f8413ea5c8c8..f3246e881ac8 100644
->> --- a/include/linux/kexec.h
->> +++ b/include/linux/kexec.h
->> @@ -362,6 +362,9 @@ struct kimage {
->>         phys_addr_t ima_buffer_addr;
->>       size_t ima_buffer_size;
->> +
->> +    unsigned long ima_segment_index;
->> +    bool is_ima_segment_index_set;
->>   #endif
->>         /* Core ELF header buffer */
->> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
->> index 3eedb8c226ad..a3370a0dce20 100644
->> --- a/kernel/kexec_file.c
->> +++ b/kernel/kexec_file.c
->> @@ -38,6 +38,22 @@ void set_kexec_sig_enforced(void)
->>   }
->>   #endif
->>   +#ifdef CONFIG_IMA_KEXEC
->> +static bool check_ima_segment_index(struct kimage *image, int i)
->> +{
->> +    if (image->is_ima_segment_index_set &&
->> +            i == image->ima_segment_index)
->
-> The 'i =' should be indented under 'image->'.
->
-> With these nits fixed:
->
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
->
->> +        return true;
->> +    else
->> +        return false;
->> +}
->> +#else
->> +static bool check_ima_segment_index(struct kimage *image, int i)
->> +{
->> +    return false;
->> +}
->> +#endif
->> +
->>   static int kexec_calculate_store_digests(struct kimage *image);
->>     /* Maximum size in bytes for kernel/initrd files. */
->> @@ -764,6 +780,13 @@ static int kexec_calculate_store_digests(struct 
->> kimage *image)
->>           if (ksegment->kbuf == pi->purgatory_buf)
->>               continue;
->>   +        /*
->> +         * Skip the segment if ima_segment_index is set and matches
->> +         * the current index
->> +         */
->> +        if (check_ima_segment_index(image, i))
->> +            continue;
->> +
->>           ret = crypto_shash_update(desc, ksegment->kbuf,
->>                         ksegment->bufsz);
->>           if (ret)
->> diff --git a/security/integrity/ima/ima_kexec.c 
->> b/security/integrity/ima/ima_kexec.c
->> index b60a902460e2..283860d20521 100644
->> --- a/security/integrity/ima/ima_kexec.c
->> +++ b/security/integrity/ima/ima_kexec.c
->> @@ -162,6 +162,7 @@ void ima_add_kexec_buffer(struct kimage *image)
->>       kbuf.buffer = kexec_buffer;
->>       kbuf.bufsz = kexec_buffer_size;
->>       kbuf.memsz = kexec_segment_size;
->> +    image->is_ima_segment_index_set = false;
->>       ret = kexec_add_buffer(&kbuf);
->>       if (ret) {
->>           pr_err("Error passing over kexec measurement buffer.\n");
->> @@ -172,6 +173,8 @@ void ima_add_kexec_buffer(struct kimage *image)
->>       image->ima_buffer_addr = kbuf.mem;
->>       image->ima_buffer_size = kexec_segment_size;
->>       image->ima_buffer = kexec_buffer;
->> +    image->ima_segment_index = image->nr_segments - 1;
->> +    image->is_ima_segment_index_set = true;
->>         /*
->>        * kexec owns kexec_buffer after kexec_add_buffer() is called
+On 2025-02-03 14:14:41+0100, Christian Heusel wrote:
+> Hey Thomas,
+> 
+> On 25/01/20 06:44PM, Thomas Weißschuh wrote:
+> > Thomas Weißschuh (6):
+> >       kbuild: add stamp file for vmlinux BTF data
+> >       module: Make module loading policy usable without MODULE_SIG
+> >       module: Move integrity checks into dedicated function
+> >       module: Move lockdown check into generic module loader
+> >       lockdown: Make the relationship to MODULE_SIG a dependency
+> >       module: Introduce hash-based integrity checking
+> 
+> thanks for working on this!
+> 
+> I had a look at this patch series together with kpcyrd over the weekend
+> and we were able to verify that this indeed allows one to get a
+> reproducible kernel image with the toolchain on Arch Linux (if the patch
+> you mentioned in your cover letter is also applied), which is of course
+> great news! :)
 
-Hi Stefan, I will update in next release. Thanks!
+Great!
+FYI the BTF patch shouldn't be necessary anymore with pahole 1.29.
+
+> We also found a major issues with it, as adding it on top of the v6.13
+> kernel and setting the needed config options while removing modules
+> signatures made the kernel unable to load any module while also not
+> printing any error for the failure, therefore resulting in an early boot
+> failure on my machine.
+> 
+> Do you have any clue what could be going wrong here or what we could
+> investigate? I have pushed my build config into [this repository][0] and
+> also uploaded a prebuilt version (signed with my packager key)
+> [here][1] (you can therefore just install it via "sudo pacman -U
+> <link>").
+
+I would guess the issue is the usage of INSTALL_MOD_STRIP.
+
+What are the contents of .tmp_module_hashes.c ?
+Do they match the hashes from the build directory and package?
+You can also enable CONFIG_MODULE_DEBUG and '#define DEBUG' in
+kernel/module/hashes.c
+
+> Happy to test more stuff, feel free to CC me on any further revision /
+> thread on this!
+
+Will do!
+
+> Cheers,
+> Christian
+> 
+> [0]: https://gitlab.archlinux.org/gromit/linux-mainline-repro-test
+> [1]: https://pkgbuild.com/~gromit/linux-bisection-kernels/linux-mainline-6.13-1.2-x86_64.pkg.tar.zst
+
 
 
