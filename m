@@ -1,144 +1,153 @@
-Return-Path: <linux-integrity+bounces-4724-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4725-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56CD8A28241
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Feb 2025 03:59:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2044DA282E7
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Feb 2025 04:33:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2FF43A5372
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Feb 2025 02:59:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EA977A053E
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Feb 2025 03:32:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BD9D212B0A;
-	Wed,  5 Feb 2025 02:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94030213E6F;
+	Wed,  5 Feb 2025 03:32:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="U2m9dvnj"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rxZCrkR/"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5674A25A65E;
-	Wed,  5 Feb 2025 02:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7519213E60
+	for <linux-integrity@vger.kernel.org>; Wed,  5 Feb 2025 03:32:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738724392; cv=none; b=oqmkYQ2Yc3Iy+YPJgOVjpjeYrYyBcxDQX3aDs0pwtiv6ApqRXv9brujUtJZpJvNF39HacuOn+w0RFwpbNSJKVGGqw3dz252wB27sIPtpIPlsxrN3xSaX1v0S7r7CEztLd9QZ525ETT6P4Pf4T46A6zeujXgB8QJnLNvKRVwo3EQ=
+	t=1738726346; cv=none; b=AKc3a83DpnQTQSHQacy43xp2Ip/LmfsmshOBZMU+Ty4VPmcPl+eD8y2Q7jY3M0vRc8kbB5Mo6ScRXYwGXYLBdT32P/0jyEmtQ2wf/jYID8DF0Qtgr+Z6Hhr/tn8zezZbkeMM8SxyB6ZnMH+U0Q56gg8TgzYWSQ0vDaXsPpFeMdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738724392; c=relaxed/simple;
-	bh=sYStc87QTwMl+FVwFU1qW0OH7vOKR/8Sy0De2ETxsaI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pUwNx888Lj98PHb1W6+1+4tQbOVJgIUReUgbaEtxbHoYOIr5RmVDsZor2wR+r3WrsfXKUMfsIG0EIfrRJwLN5YmYacskshZHqwXvaUQXwPqfzCibtqgETB5rSaj7S2i6idZ7XghEEM/2QaM7IiC7mDTlJyat/j9zWFA3/Qa/KuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=U2m9dvnj; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1738726346; c=relaxed/simple;
+	bh=9L3kvJrGUbFj/JUQLRfE3T3s52/1GZ4DYdZJzxHHv54=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H28H+DLTA8CrAhC89JnITVDfxiwEBbpM1yDUEQR9cXTJWDtagRMpMVmFhvTI2E0o/Tpr78hbQiUnO+F95p2PzCtAE3qaqNx2+1rhfgQ9vdErSt1MWg7QIZvHgHvf/+bus0OUyBDO0eqBSPlIb+2HJ4lF7RvNxlaSFC/Y0DvrlbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rxZCrkR/; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51519CkT014189;
-	Wed, 5 Feb 2025 02:59:34 GMT
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 514GEnPq023279;
+	Wed, 5 Feb 2025 03:32:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=sYStc8
-	7QTwMl+FVwFU1qW0OH7vOKR/8Sy0De2ETxsaI=; b=U2m9dvnjnWWMtijqNsFgsW
-	+1IEm39Uoe9BWxP66AitJhRdLDZP/5TY/mxUj5TjMPA6UZfl6tPG62oS1Z4mJTLU
-	ZtpD+qSRTCknzHQUtBPXLBKErWi5gKBQtMiTgj0tA7lkI5K1pNZkd570okL949AR
-	u4DUsqwL7ierb+0ccDksl0f3BpMEFV8MMJHwPEJkOF+YFgDVRF5ELy9n0p9p6HC0
-	vum8uC+0gYRAXcygc8YY6jsV9pd/FSK3BBAcuiHNVdA6lDE/szny8HIHZM3o9vOr
-	qujXPjUkyLFHdLkPpjU9z5iBfb0Sjgvd3TFOH+T+UN68vM+l4QgLbwm1mmzWH+kw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44kx29gc1s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Feb 2025 02:59:34 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 5152xY5o014989;
-	Wed, 5 Feb 2025 02:59:34 GMT
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=cte2NDqAVcADxjNadHkYl9FRnmzbKfytOpqiWzaal
+	gw=; b=rxZCrkR/QWUa+vSR5RvsB3Mf8Ljt/Sk3ijSayrJu+GisvwcUIgVTybYry
+	cVQQv1AZ1fpTEagSqqF08iEs/cS0QKkSYL3rTx9t2iUtzseLpdvWiDnSPFyK1rDo
+	GrKTxpIS/5HSHFNv/rfIFa/Opiz6oyrtSVgOM4Wmg5SRR5Be+PZIgbvJsyIFOroo
+	nGpZ0NzLBteZQ3Ojh8Nfssv8mg+wu6uQ43m19l1hwCMn4RxtVghyZRXNHMpfPlIU
+	70BwAKoI2+E6FSECxWammt+L7rK6jlL1yA0PsCpoE8/99rsFrkN5TbVLKaT4lGza
+	W5Wv1dBbbK1i/DIwF2E1YWpMeaE4w==
 Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44kx29gc1n-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44kn62k7ng-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Feb 2025 02:59:34 +0000 (GMT)
+	Wed, 05 Feb 2025 03:32:19 +0000 (GMT)
 Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5151Nwdn005258;
-	Wed, 5 Feb 2025 02:59:33 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44j05jxeq7-1
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 515178bI005310;
+	Wed, 5 Feb 2025 03:32:18 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44j05jxjed-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Feb 2025 02:59:33 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5152xVjZ30999180
+	Wed, 05 Feb 2025 03:32:18 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5153WEeg57999668
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 5 Feb 2025 02:59:31 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1109C58056;
-	Wed,  5 Feb 2025 02:59:32 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5FDC45803F;
-	Wed,  5 Feb 2025 02:59:31 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.30.140])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  5 Feb 2025 02:59:31 +0000 (GMT)
-Message-ID: <bbfce282a00854c220eddb1ffcde7c6d839efe5e.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Reset IMA_NONACTION_RULE_FLAGS after post_setattr
+	Wed, 5 Feb 2025 03:32:14 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A9C5A20084;
+	Wed,  5 Feb 2025 03:32:14 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 64C7A20085;
+	Wed,  5 Feb 2025 03:32:13 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.fios-router.home (unknown [9.61.30.140])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  5 Feb 2025 03:32:13 +0000 (GMT)
 From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date: Tue, 04 Feb 2025 21:59:31 -0500
-In-Reply-To: <20250204125720.1326257-1-roberto.sassu@huaweicloud.com>
-References: <20250204125720.1326257-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+To: linux-integrity@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huawei.com,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [RFC PATCH v2 1/2] ima: limit the number of open-writers integrity violations
+Date: Tue,  4 Feb 2025 22:32:09 -0500
+Message-ID: <20250205033210.849509-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i8FWhhR1o8ynWsjyfh7__tbe3wZ8RFTz
-X-Proofpoint-ORIG-GUID: JAxLJEhDOO32DzSD8fPllQKo9naRWG3n
+X-Proofpoint-GUID: aBmfEWTuvbYCdOchpNzw6YrrDFZZuL26
+X-Proofpoint-ORIG-GUID: aBmfEWTuvbYCdOchpNzw6YrrDFZZuL26
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-05_01,2025-02-04_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- bulkscore=0 priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0
- suspectscore=0 adultscore=0 mlxlogscore=999 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502050019
+ definitions=2025-02-05_01,2025-02-05_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ priorityscore=1501 suspectscore=0 impostorscore=0 bulkscore=0
+ mlxlogscore=834 spamscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502050023
 
-On Tue, 2025-02-04 at 13:57 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->=20
-> Commit 0d73a55208e9 ("ima: re-introduce own integrity cache lock")
-> mistakenly reverted the performance improvement introduced in commit
-> 42a4c603198f0 ("ima: fix ima_inode_post_setattr"). The unused bit mask wa=
-s
-> subsequently removed by commit 11c60f23ed13 ("integrity: Remove unused
-> macro IMA_ACTION_RULE_FLAGS").
->=20
-> Restore the performance improvement by introducing the new mask
-> IMA_NONACTION_RULE_FLAGS, equal to IMA_NONACTION_FLAGS without
-> IMA_NEW_FILE, which is not a rule-specific flag.
->=20
-> Finally, reset IMA_NONACTION_RULE_FLAGS instead of IMA_NONACTION_FLAGS in
-> process_measurement(), if the IMA_CHANGE_ATTR atomic flag is set (after
-> file metadata modification).
->=20
-> With this patch, new files for which metadata were modified while they ar=
-e
-> still open, can be reopened before the last file close (when security.ima
-> is written), since the IMA_NEW_FILE flag is not cleared anymore. Otherwis=
-e,
-> appraisal fails because security.ima is missing (files with IMA_NEW_FILE
-> set are an exception).
->=20
-> Cc: stable@vger.kernel.org=C2=A0# v4.16.x
-> Fixes: 0d73a55208e9 ("ima: re-introduce own integrity cache lock")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Limit the number of open-writers integrity violation audit messages
+and records in the IMA measurement list emitted when re-opening a
+file for read.
 
-Thanks!
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ security/integrity/ima/ima.h      |  1 +
+ security/integrity/ima/ima_main.c | 14 ++++++++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-Mimi
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index a4f284bd846c..7f21568544dd 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -182,6 +182,7 @@ struct ima_kexec_hdr {
+ #define IMA_CHANGE_ATTR		2
+ #define IMA_DIGSIG		3
+ #define IMA_MUST_MEASURE	4
++#define IMA_LIMIT_VIOLATIONS	5
+ 
+ /* IMA integrity metadata associated with an inode */
+ struct ima_iint_cache {
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 28b8b0db6f9b..5091ad931677 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -137,8 +137,16 @@ static void ima_rdwr_violation_check(struct file *file,
+ 	} else {
+ 		if (must_measure)
+ 			set_bit(IMA_MUST_MEASURE, &iint->atomic_flags);
+-		if (inode_is_open_for_write(inode) && must_measure)
+-			send_writers = true;
++
++		if (inode_is_open_for_write(inode) && must_measure) {
++			if (!iint)
++				iint = ima_iint_find(inode);
++
++			/* Limit number of open_writers violations */
++			if (iint && !test_and_set_bit(IMA_LIMIT_VIOLATIONS,
++						      &iint->atomic_flags))
++				send_writers = true;
++		}
+ 	}
+ 
+ 	if (!send_tomtou && !send_writers)
+@@ -167,6 +175,8 @@ static void ima_check_last_writer(struct ima_iint_cache *iint,
+ 	if (atomic_read(&inode->i_writecount) == 1) {
+ 		struct kstat stat;
+ 
++		clear_bit(IMA_LIMIT_VIOLATIONS, &iint->atomic_flags);
++
+ 		update = test_and_clear_bit(IMA_UPDATE_XATTR,
+ 					    &iint->atomic_flags);
+ 		if ((iint->flags & IMA_NEW_FILE) ||
+-- 
+2.48.1
+
 
