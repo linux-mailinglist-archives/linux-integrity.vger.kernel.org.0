@@ -1,209 +1,246 @@
-Return-Path: <linux-integrity+bounces-4749-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4750-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A48CBA2CB78
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Feb 2025 19:39:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AD50A2CC55
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Feb 2025 20:11:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 310B416C7E2
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Feb 2025 18:39:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 484113A5C7E
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Feb 2025 19:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BC71B0409;
-	Fri,  7 Feb 2025 18:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50FF318A6A6;
+	Fri,  7 Feb 2025 19:11:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ItAped35"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aX7z8Xh8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE1D19C558
-	for <linux-integrity@vger.kernel.org>; Fri,  7 Feb 2025 18:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875EA10E5;
+	Fri,  7 Feb 2025 19:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738953070; cv=none; b=PlMMLU/ZyjZerHQ61YjX/yRtZPPwWrqL2RnASvW9hgkwCkYkTvUg0TLWU+nPgKdSTtY/BmIn0rq5LBztmVJmWigrFp5iamLNioJ9d6ti2kqrIkP9bfcTovU+vdqgDe6Vu169Go4zqCtpappWDMmoguJXGZQsAL3bX07ndptqvHc=
+	t=1738955469; cv=none; b=RTA1IZkvcu+vjJwtSs7/qMtKwsP7YvP2RAiLp+aMCwO+wBX2J6YmCmf1gqc9iwlqBpikj85Tqahf6UMmxLb4os9M1DVph9smvl2PGdyLAmq2CnSUdWLVXWjBCJOpIo/RrGpwOJQGGhNf0bhwmjPHxkkYckG+v776EYXjWtKNolY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738953070; c=relaxed/simple;
-	bh=Na1GaVD2WleUIhZHv7ETYMCMGvK53tjoGJNuoSccjUM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dlzuSVtl2A0tXKl7yh8Ssj9QzlyEi9TAq34v9S61FHIICnwWwSOolsNiHLS0o5dZCQp6++SISJo9P5H/XWJH8ss6s2LR6oK5H2txzVHuY4K5rh2G7yjKskz2hWRWkoNxRVhrT+tBFjkAm42eo1T0n6mh/Z0J0CiwWxzGTZfUpWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ItAped35; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738953067;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BN2ZmR2Ydnk53bpnRhCB0qi5vI3BoI4kNFdAP4vjWMQ=;
-	b=ItAped35DM6/0QzYPKXbsVX/Fib1XNcJkEChIktwTo5q45hZiiGm7HJGOeSZRxIRMQGSrQ
-	7iAcagaaEDEBpr+6NNt2Kj7RxVwH244znGatfNNLTVkbRoOd/izvNzCCbQq+zB4J76BJWn
-	O6lrfx5i6e9BIm9p3Xa0v69zQrKOwlQ=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-636-BVPYQs13N42_ntX8o3RMxQ-1; Fri, 07 Feb 2025 13:31:05 -0500
-X-MC-Unique: BVPYQs13N42_ntX8o3RMxQ-1
-X-Mimecast-MFC-AGG-ID: BVPYQs13N42_ntX8o3RMxQ
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6dd43b16631so24118236d6.2
-        for <linux-integrity@vger.kernel.org>; Fri, 07 Feb 2025 10:31:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738953065; x=1739557865;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BN2ZmR2Ydnk53bpnRhCB0qi5vI3BoI4kNFdAP4vjWMQ=;
-        b=FPplQKGXC0kRMptEVIL0KF72npfuNVlRZsUYEzK6H6iGHoNh8RAE0AHZVkKe5tABTF
-         tFmrRvJQHSRzrFozCZmucOib7XGZZLUqys8LnQHgHnl2703nf8Kk7sXOc94IrYukiGFq
-         GzXDOOg/3vCabueY/qo/1h2PCjoOO2oKQMRNcEHoDRmZ1ESuLSwU4PM8vkwkowoDJ6PU
-         9cJKsZw1kJa4UZBITR+Bjy/Fh+t+tmKhvtkFQthFr4/47cipkPv5oj7FltO05sUZwQPk
-         qTuokPuJ4bSpAh+pio9cReLb3bpoX4xVlSU2O5/qkNmXE6zyKuUr/E3EedjlcSz6HeWN
-         AIjw==
-X-Forwarded-Encrypted: i=1; AJvYcCW5Weh2tA07Sfkj2eUq05TdFXZZw7SsGvnZfkiA4eTxcx4w2wnBNn+6T/iNlXc6HYfnwDdle8OTcT30q9lxM1U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQ2/CyPKdMX4ihmJJ2lRW73dTLqYu0aEN6HZaiE1oxnvXhSG4F
-	vg43w3IwBFzEwqXdy9K3uAsFT5obu+GTIrqKA6DvQI/YaR1d842jvFNqIc+kPnQILWxpNxuEluq
-	2Lwy35LI2+PoPuFsw/oHEY4pBsOpvtl5r4z6R/E0iLBtP1CAHHvigdTPuADrDX6CZ/A==
-X-Gm-Gg: ASbGncsroVCO6S54edgAlpqCOL36JMPx/DxHVGvqtp0ObNoW2bynl+oNd9cMvsH+klD
-	tPTMTybV/LBTPitrTlI7biBhSS9zkkzsoQDmQxzzKrx/tbDqnCm8MYbml961SLwku/8m6dn46BL
-	j2uzFlPPFUJYAcBLsuPSOSmyj4+PCw+Pmx/AusxLlmNSF7MG1x8x/v8iCYoqkNoAkl9w7s7Aglp
-	z0UX3K69EVulFp+plkJglWvMex0UnsoKUna4cnreQvOpJccdQIOcljJh0HMMS2zhA7wXggRvyAF
-	B4asdbl3tNmU+ovN0vN8lHGS9heAOXSe4A==
-X-Received: by 2002:a05:6214:2688:b0:6d8:850a:4d77 with SMTP id 6a1803df08f44-6e4455c19a6mr64469736d6.7.1738953065290;
-        Fri, 07 Feb 2025 10:31:05 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEk4+CS8K2R5Bg2mrVOVObtVzytFfN1/LyTW9OYchrvGyzV5wA3IwTF+tEX4OmsXLElACR85Q==
-X-Received: by 2002:a05:6214:2688:b0:6d8:850a:4d77 with SMTP id 6a1803df08f44-6e4455c19a6mr64469426d6.7.1738953064964;
-        Fri, 07 Feb 2025 10:31:04 -0800 (PST)
-Received: from localhost (ip70-163-223-251.ph.ph.cox.net. [70.163.223.251])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e44e113e99sm4461126d6.98.2025.02.07.10.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 10:31:04 -0800 (PST)
-Date: Fri, 7 Feb 2025 11:31:03 -0700
-From: Jerry Snitselaar <jsnitsel@redhat.com>
-To: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mike Seo <mikeseohyungjin@gmail.com>, kernel-dev@igalia.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: do not start chip while suspended
-Message-ID: <nounmgquiu46ii5kjsteg7r3qi5c6xmnuu4rlurxhk5mlsqq5m@w4lvevxc3eoa>
-References: <20250207-tpm-suspend-v2-1-b8cfb51d43ce@igalia.com>
+	s=arc-20240116; t=1738955469; c=relaxed/simple;
+	bh=DJuLtTjfrvQjqJ4tHfAAS2f216HEzMWW3ZHgrNo24Bw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FZoYdmIlIlm3KCIxs9tCMb9s+QQCyvOlRiMtKw5eUiop51PZvvlLkjyd8eW5MgsedsxHbH45KP1h9WxYSZApGmz9+zYD50d1blZWpK+CDytUfslRIsEYSYe4LZwNgvMtD7zuIgTevvKUYtBxj6iOpyX0TPZ/D/chShWOPunFU3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aX7z8Xh8; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 517Hc8H6004422;
+	Fri, 7 Feb 2025 19:10:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ZFrW49
+	+Epm/QRPQlGO4LNK3NBVsNDkvRNdGiTRRz3oo=; b=aX7z8Xh8Gae3wzDbqnDo9v
+	ivhvizxT73A7ioZ6QfW+BOmKp5h+iQ15bQo60qqsRgRcfCeaETCT7vVYn3+QOA38
+	Sph4SMrd3WtX32rfd4lv5jzLhRCoRwqeobX9D2AFeEnv01EMq5+v6z9wNgP8YsQ9
+	u1laprOsb+/1zGPM00bB+j1tLc1/Jkv8aooIW//DfWI8F7RwNOUTzG8fRlpjmrse
+	M/Zt7vDnC/aw9lEPh9NyHna4uwBpnFdEE2fDT6e1DeawTo5OMheoUs9IWwq3/cIO
+	yhMoUJg2PHgbjP4pqBoIfm2jHCYYf7O5MUIEmSmrSnwJe4U407shKQ26f6K0kwVg
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44nfn5jwns-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Feb 2025 19:10:36 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 517H0QAV021508;
+	Fri, 7 Feb 2025 19:10:35 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44j0n1vqs5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Feb 2025 19:10:35 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 517JAZfD65077650
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 7 Feb 2025 19:10:35 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1B8F15805D;
+	Fri,  7 Feb 2025 19:10:35 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E0F1858043;
+	Fri,  7 Feb 2025 19:10:32 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.80.253])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  7 Feb 2025 19:10:32 +0000 (GMT)
+Message-ID: <1a7e9cf84715386b7ac3dc2103fd38ba180dd216.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 1/7] ima: define and call ima_alloc_kexec_file_buf
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+        James.Bottomley@HansenPartnership.com
+Date: Fri, 07 Feb 2025 14:10:32 -0500
+In-Reply-To: <20250203232033.64123-2-chenste@linux.microsoft.com>
+References: <20250203232033.64123-1-chenste@linux.microsoft.com>
+	 <20250203232033.64123-2-chenste@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207-tpm-suspend-v2-1-b8cfb51d43ce@igalia.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7QGSpxPfaoZwyEkN0gvx2kdN2Zxuv-kP
+X-Proofpoint-GUID: 7QGSpxPfaoZwyEkN0gvx2kdN2Zxuv-kP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-07_09,2025-02-07_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ suspectscore=0 mlxscore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ mlxlogscore=999 clxscore=1015 spamscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502070142
 
-On Fri, Feb 07, 2025 at 03:07:46PM -0300, Thadeu Lima de Souza Cascardo wrote:
-> Checking TPM_CHIP_FLAG_SUSPENDED after the call to tpm_find_get_ops() can
-> lead to a spurious tpm_chip_start() call:
-> 
-> [35985.503771] i2c i2c-1: Transfer while suspended
-> [35985.503796] WARNING: CPU: 0 PID: 74 at drivers/i2c/i2c-core.h:56 __i2c_transfer+0xbe/0x810
-> [35985.503802] Modules linked in:
-> [35985.503808] CPU: 0 UID: 0 PID: 74 Comm: hwrng Tainted: G        W          6.13.0-next-20250203-00005-gfa0cb5642941 #19 9c3d7f78192f2d38e32010ac9c90fdc71109ef6f
-> [35985.503814] Tainted: [W]=WARN
-> [35985.503817] Hardware name: Google Morphius/Morphius, BIOS Google_Morphius.13434.858.0 10/26/2023
-> [35985.503819] RIP: 0010:__i2c_transfer+0xbe/0x810
-> [35985.503825] Code: 30 01 00 00 4c 89 f7 e8 40 fe d8 ff 48 8b 93 80 01 00 00 48 85 d2 75 03 49 8b 16 48 c7 c7 0a fb 7c a7 48 89 c6 e8 32 ad b0 fe <0f> 0b b8 94 ff ff ff e9 33 04 00 00 be 02 00 00 00 83 fd 02 0f 5
-> [35985.503828] RSP: 0018:ffffa106c0333d30 EFLAGS: 00010246
-> [35985.503833] RAX: 074ba64aa20f7000 RBX: ffff8aa4c1167120 RCX: 0000000000000000
-> [35985.503836] RDX: 0000000000000000 RSI: ffffffffa77ab0e4 RDI: 0000000000000001
-> [35985.503838] RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
-> [35985.503841] R10: 0000000000000004 R11: 00000001000313d5 R12: ffff8aa4c10f1820
-> [35985.503843] R13: ffff8aa4c0e243c0 R14: ffff8aa4c1167250 R15: ffff8aa4c1167120
-> [35985.503846] FS:  0000000000000000(0000) GS:ffff8aa4eae00000(0000) knlGS:0000000000000000
-> [35985.503849] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [35985.503852] CR2: 00007fab0aaf1000 CR3: 0000000105328000 CR4: 00000000003506f0
-> [35985.503855] Call Trace:
-> [35985.503859]  <TASK>
-> [35985.503863]  ? __warn+0xd4/0x260
-> [35985.503868]  ? __i2c_transfer+0xbe/0x810
-> [35985.503874]  ? report_bug+0xf3/0x210
-> [35985.503882]  ? handle_bug+0x63/0xb0
-> [35985.503887]  ? exc_invalid_op+0x16/0x50
-> [35985.503892]  ? asm_exc_invalid_op+0x16/0x20
-> [35985.503904]  ? __i2c_transfer+0xbe/0x810
-> [35985.503913]  tpm_cr50_i2c_transfer_message+0x24/0xf0
-> [35985.503920]  tpm_cr50_i2c_read+0x8e/0x120
-> [35985.503928]  tpm_cr50_request_locality+0x75/0x170
-> [35985.503935]  tpm_chip_start+0x116/0x160
-> [35985.503942]  tpm_try_get_ops+0x57/0x90
-> [35985.503948]  tpm_find_get_ops+0x26/0xd0
-> [35985.503955]  tpm_get_random+0x2d/0x80
-> 
-> Don't move forward with tpm_chip_start() inside tpm_try_get_ops(), unless
-> TPM_CHIP_FLAG_SUSPENDED is not set. tpm_find_get_ops() will return NULL in
-> such a failure case.
-> 
-> Fixes: 9265fed6db60 ("tpm: Lock TPM chip in tpm_pm_suspend() first")
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-> Cc: stable@vger.kernel.org
-> Cc: Jerry Snitselaar <jsnitsel@redhat.com>
-> Cc: Mike Seo <mikeseohyungjin@gmail.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-
+On Mon, 2025-02-03 at 15:20 -0800, steven chen wrote:
+> Carrying the IMA measurement list across kexec requires allocating a
+> buffer and copying the measurement records.=C2=A0 Separate allocating the
+> buffer and copying the measurement records into separate functions in
+> order to allocate the buffer at kexec 'load' and copy the measurements
+> at kexec 'execute'.
+>=20
+> This patch includes the following changes:
+> =C2=A0- Refactor ima_dump_measurement_list() to move the memory allocatio=
+n
+> =C2=A0=C2=A0 to a separate function ima_alloc_kexec_file_buf() which allo=
+cates
+> =C2=A0=C2=A0 buffer of size 'kexec_segment_size' at kexec 'load'.
+> =C2=A0- Make the local variable ima_kexec_file in ima_dump_measurement_li=
+st()
+> =C2=A0=C2=A0 a local static to the file, so that it can be accessed from=
+=20
+> =C2=A0=C2=A0 ima_alloc_kexec_file_buf(). Compare actual memory required t=
+o ensure=20
+> =C2=A0=C2=A0 there is enough memory for the entire measurement record.
+> =C2=A0- Copy as many measurement events as possible.
+> =C2=A0- Make necessary changes to the function ima_add_kexec_buffer() to =
+call
+> =C2=A0=C2=A0 the above two functions.
+> =C2=A0- Compared the memory size allocated with memory size of the entire=
+=20
+> =C2=A0=C2=A0 measurement record. If there is not enough memory, it will c=
+opy as many
+> =C2=A0=C2=A0 IMA measurement records as possible, and this situation will=
+ result
+> =C2=A0=C2=A0 in a failure of remote attestation.
+>=20
+> Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
 > ---
-> Changes in v2:
-> - Improve commit message as suggested by Jarkko Sakkinen.
-> - Link to v1: https://lore.kernel.org/r/20250205-tpm-suspend-v1-1-fb89a29c0b69@igalia.com
-> ---
->  drivers/char/tpm/tpm-chip.c      | 5 +++++
->  drivers/char/tpm/tpm-interface.c | 7 -------
->  2 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 7df7abaf3e526bf7e85ac9dfbaa1087a51d2ab7e..6db864696a583bf59c534ec8714900a6be7b5156 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -168,6 +168,11 @@ int tpm_try_get_ops(struct tpm_chip *chip)
->  		goto out_ops;
->  
->  	mutex_lock(&chip->tpm_mutex);
+> =C2=A0security/integrity/ima/ima.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0=C2=A0 1 +
+> =C2=A0security/integrity/ima/ima_kexec.c | 105 +++++++++++++++++++++-----=
+---
+> =C2=A0security/integrity/ima/ima_queue.c |=C2=A0=C2=A0 4 +-
+> =C2=A03 files changed, 80 insertions(+), 30 deletions(-)
+>=20
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 3c323ca213d4..447a6eb07c2d 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -274,6 +274,7 @@ bool ima_template_has_modsig(const struct ima_templat=
+e_desc
+> *ima_template);
+> =C2=A0int ima_restore_measurement_entry(struct ima_template_entry *entry)=
+;
+> =C2=A0int ima_restore_measurement_list(loff_t bufsize, void *buf);
+> =C2=A0int ima_measurements_show(struct seq_file *m, void *v);
+> +int ima_get_binary_runtime_entry_size(struct ima_template_entry *entry);
+> =C2=A0unsigned long ima_get_binary_runtime_size(void);
+> =C2=A0int ima_init_template(void);
+> =C2=A0void ima_init_template_list(void);
+> diff --git a/security/integrity/ima/ima_kexec.c
+> b/security/integrity/ima/ima_kexec.c
+> index 52e00332defe..b60a902460e2 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -15,62 +15,99 @@
+> =C2=A0#include "ima.h"
+> =C2=A0
+> =C2=A0#ifdef CONFIG_IMA_KEXEC
+> +static struct seq_file ima_kexec_file;
 > +
-> +	/* tmp_chip_start may issue IO that is denied while suspended */
-> +	if (chip->flags & TPM_CHIP_FLAG_SUSPENDED)
-> +		goto out_lock;
+> +static void ima_reset_kexec_file(struct seq_file *sf)
+> +{
+> +	sf->buf =3D NULL;
+> +	sf->size =3D 0;
+> +	sf->read_pos =3D 0;
+> +	sf->count =3D 0;
+> +}
 > +
->  	rc = tpm_chip_start(chip);
->  	if (rc)
->  		goto out_lock;
-> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> index b1daa0d7b341b1a4c71a200115f0d29d2e87512d..f62f7871edbdb0181fad8af3367878308fa8a454 100644
-> --- a/drivers/char/tpm/tpm-interface.c
-> +++ b/drivers/char/tpm/tpm-interface.c
-> @@ -445,18 +445,11 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
->  	if (!chip)
->  		return -ENODEV;
->  
-> -	/* Give back zero bytes, as TPM chip has not yet fully resumed: */
-> -	if (chip->flags & TPM_CHIP_FLAG_SUSPENDED) {
-> -		rc = 0;
-> -		goto out;
-> -	}
-> -
->  	if (chip->flags & TPM_CHIP_FLAG_TPM2)
->  		rc = tpm2_get_random(chip, out, max);
->  	else
->  		rc = tpm1_get_random(chip, out, max);
->  
-> -out:
->  	tpm_put_ops(chip);
->  	return rc;
->  }
-> 
-> ---
-> base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-> change-id: 20250205-tpm-suspend-b22f745f3124
-> 
-> Best regards,
-> -- 
-> Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-> 
+> +static void ima_free_kexec_file_buf(struct seq_file *sf)
+> +{
+> +	vfree(sf->buf);
+> +	ima_reset_kexec_file(sf);
+> +}
+> +
+> +static int ima_alloc_kexec_file_buf(size_t segment_size)
+> +{
+> +	/*
+> +	 * kexec 'load' may be called multiple times.
+> +	 * Free and realloc the buffer only if the segment_size is
+> +	 * changed from the previous kexec 'load' call.
+> +	 */
+> +	if (ima_kexec_file.buf &&
+> +		(ima_kexec_file.size =3D=3D segment_size)) {
+> +		goto out;
+> +	}
+
+Nice cleanup from v5.  The line doesn't doesn't need to be split.  Both the
+parenthesis and the brackets can be removed.
+
+In the future, before posting patches, please use scripts/checkpatch.pl.
+
+CHECK: Unnecessary parentheses around 'ima_kexec_file.size =3D=3D segment_s=
+ize'
+#82: FILE: security/integrity/ima/ima_kexec.c:41:
++	if (ima_kexec_file.buf &&
++		(ima_kexec_file.size =3D=3D segment_size)) {
+
+CHECK: Alignment should match open parenthesis
+#83: FILE: security/integrity/ima/ima_kexec.c:42:
++	if (ima_kexec_file.buf &&
++		(ima_kexec_file.size =3D=3D segment_size)) {
+
+Or simply join the two lines.
+
+thanks,
+
+Mimi
+
+> +
+> +	ima_free_kexec_file_buf(&ima_kexec_file);
+> +
+> +	/* segment size can't change between kexec load and execute */
+> +	ima_kexec_file.buf =3D vmalloc(segment_size);
+> +	if (!ima_kexec_file.buf)
+> +		return -ENOMEM;
+> +
+> +	ima_kexec_file.size =3D segment_size;
+> +
+> +out:
+> +	ima_kexec_file.read_pos =3D 0;
+> +	ima_kexec_file.count =3D sizeof(struct ima_kexec_hdr);	/* reserved spac=
+e
+> */
+> +
+> +	return 0;
+> +}
+>=20
 
 
