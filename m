@@ -1,164 +1,225 @@
-Return-Path: <linux-integrity+bounces-4743-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4744-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45780A2C006
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Feb 2025 10:58:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7719CA2C6A6
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Feb 2025 16:16:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C8797A02CF
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Feb 2025 09:57:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 903D21887C44
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Feb 2025 15:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4EA185B5F;
-	Fri,  7 Feb 2025 09:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83FE0238D59;
+	Fri,  7 Feb 2025 15:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="2Nn7qHr5";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Aox7tjCu";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="2Nn7qHr5";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Aox7tjCu"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cDnX4KEZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648C8192D77
-	for <linux-integrity@vger.kernel.org>; Fri,  7 Feb 2025 09:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1604A1A;
+	Fri,  7 Feb 2025 15:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738922306; cv=none; b=VK+UCrIQls5fZ+fXZ2Zqd3UGBzXetBp8n2Wd7+mNBsfYmjB78Xd1qvZMqAzOUmqwuokFofzaG1FOmOEBjVmWXxrBADrRu7HzmXh3zj7IyrE3RL2ojc2SVFxnT1Xl+fhpWc8TCpIrMxweddCMUW5ijBGPobEfKbsUzjR7oPS8APQ=
+	t=1738941404; cv=none; b=qOInvlyjKBzYdmuE/CKn2jRXd7ZFmTiilSiieCD0jPyCYi09tl2VP+QsTBKyqkk62+9NATAF3gkPV/ZVi0om208O1CpG/bqf4ow1JDTzotj/YKwxO6kFk/zWz3k5S5fi0zFKOKW3yHZyIASo9SDS16cWHfImOixBVIz5DA76Wvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738922306; c=relaxed/simple;
-	bh=AItD+4aEAikeWvTjvEUDPzLMSGEUUOjjbuSJSNXr59w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S2JiLuMGkfojsLNlBw0d7JlBtL5n4IoEAXOiKc3t8s6B8tl80nlD/oODijFNPnJeKTsZbZ42Ud2EJbrViZOCTiSjFEnI3Ay4PpHxneRfqpX89OQb46ayp0by0h2qehtx9djvmceF89XEpBJdyCOO2N5h6nW/PtI10FRcLvrpiTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=2Nn7qHr5; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Aox7tjCu; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=2Nn7qHr5; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Aox7tjCu; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id CC17A1F443;
-	Fri,  7 Feb 2025 09:58:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1738922296; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e3S/T5AoRz2hsnRgMuIqWQOCxbA4KeIe2nc0Y27NseE=;
-	b=2Nn7qHr5c6n5tIfVn3wTzSdViTZdU27QnDLg7ZCJ+1LzqyIDJfbL3rnRr5/YHIgRep92p0
-	PGW7OMGk2ljma6H5RNuN5YuT/RHuezgRd25Rp+okcm1AjfmbGtqVnbzi4tbiKbr59mA7MN
-	CKcc7rkeE7dusHamY3wwQwuNdgjmlxc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1738922296;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e3S/T5AoRz2hsnRgMuIqWQOCxbA4KeIe2nc0Y27NseE=;
-	b=Aox7tjCuUDSZSxfDxuqXpns1p4rrqBh9MpaUXhT08rSLP8x1+IwCd0akHdX+uaUjQdB+pN
-	In23d8J96+i8J6BA==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1738922296; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e3S/T5AoRz2hsnRgMuIqWQOCxbA4KeIe2nc0Y27NseE=;
-	b=2Nn7qHr5c6n5tIfVn3wTzSdViTZdU27QnDLg7ZCJ+1LzqyIDJfbL3rnRr5/YHIgRep92p0
-	PGW7OMGk2ljma6H5RNuN5YuT/RHuezgRd25Rp+okcm1AjfmbGtqVnbzi4tbiKbr59mA7MN
-	CKcc7rkeE7dusHamY3wwQwuNdgjmlxc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1738922296;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e3S/T5AoRz2hsnRgMuIqWQOCxbA4KeIe2nc0Y27NseE=;
-	b=Aox7tjCuUDSZSxfDxuqXpns1p4rrqBh9MpaUXhT08rSLP8x1+IwCd0akHdX+uaUjQdB+pN
-	In23d8J96+i8J6BA==
-Date: Fri, 7 Feb 2025 10:58:15 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Jonathan McDowell <noodles@earth.li>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Subject: Re: TPM operation times out (very rarely)
-Message-ID: <Z6XZN3U5nmb6qu9u@kitsune.suse.cz>
-References: <Z5zJ7R6vDU4h9iDk@kitsune.suse.cz>
- <D7GFCNGDK7S6.1X0KPPHF1TXBO@kernel.org>
- <Z50IKdYe42_n2B0b@kitsune.suse.cz>
- <D7GIBDO5KJMD.118CQO10LJ79Y@kernel.org>
- <Z6Nm7Y8TFF8YG56Z@kitsune.suse.cz>
- <Z6N10NQY75hpX0Ed@earth.li>
- <Z6UdFCdqCNZ8VGOL@kernel.org>
- <Z6XRuFnEXeQI_rEZ@earth.li>
- <Z6XVAEfLIVDuwSLn@kitsune.suse.cz>
- <Z6XWoWAy66P97pAU@earth.li>
+	s=arc-20240116; t=1738941404; c=relaxed/simple;
+	bh=STVLK4/uc5Q8B1kLKI4AT+0I2EICiAVb6GGS+j2/+0I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=tF98RHg5LO+vzeELo6x6aU1sD3vCrcAOaWtu6EYIMmS0x6S7odh6S/UyGY7PcQw924SvX7rW6/VvJQR0gJ4SNIkgaTHe4XJlsUCwRtDI37NbMWz0Oi36dOFgCndLYlb64x9c5wymB3i5h6YYbIyVofHmsG68VR7OPyU93+mLRVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cDnX4KEZ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 517ECPua027772;
+	Fri, 7 Feb 2025 15:16:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=bvv+C2
+	S+HfCmRHdGBlwkwlon1bQ1BEA6avgMHj66Kyg=; b=cDnX4KEZrEz8gtWyLF7EZG
+	J1lE9pQhuZFO6qmKgfD8jVdktkiXGsIALMIuVd4aXW/ToVvxy2R0Pl0apHjo2Edm
+	QKS0iDbFi35Mutiz91RI7CUN+KckzxLL0MkMqAFP4gTbFqyjrRn5KhQ1X2Hw480D
+	GdKGA3bAmOpAJB/xl2yeLMyQ1YOwEXTbIHpriGpljU6R5oXZSuFt2M01ZUkCNrrB
+	fwGtNbjw/1mSbWc2uodlqv5FN2gEiqnr0FLXgtvLPaR+0MWUsLO5wWt7a9ccWdae
+	xO3t50glTkRHXhKEXFfR8FG/Gam+aaXvi9JCtH0MyChPblGX2lfQJbnL2sx14YCQ
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44n910bcej-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Feb 2025 15:16:14 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 517BPNBL024635;
+	Fri, 7 Feb 2025 15:16:13 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44hxxnm429-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Feb 2025 15:16:13 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 517FGDCR18744016
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 7 Feb 2025 15:16:13 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1DD6C58056;
+	Fri,  7 Feb 2025 15:16:13 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3077F58063;
+	Fri,  7 Feb 2025 15:16:12 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.150.111])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  7 Feb 2025 15:16:12 +0000 (GMT)
+Message-ID: <3a4053664cde06622e1f9a9d8e3a5aab80b9beb7.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 7/7] ima: measure kexec load and exec events as
+ critical data
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+        James.Bottomley@HansenPartnership.com
+Date: Fri, 07 Feb 2025 10:16:11 -0500
+In-Reply-To: <20250203232033.64123-9-chenste@linux.microsoft.com>
+References: <20250203232033.64123-1-chenste@linux.microsoft.com>
+	 <20250203232033.64123-9-chenste@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z6XWoWAy66P97pAU@earth.li>
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCPT_COUNT_THREE(0.00)[3]
-X-Spam-Flag: NO
-X-Spam-Level: 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bvWS2oA6QncdRQC_jDFMQVZrnEdHSfxp
+X-Proofpoint-GUID: bvWS2oA6QncdRQC_jDFMQVZrnEdHSfxp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-07_07,2025-02-07_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502070114
 
-On Fri, Feb 07, 2025 at 09:47:13AM +0000, Jonathan McDowell wrote:
-> On Fri, Feb 07, 2025 at 10:40:16AM +0100, Michal Suchánek wrote:
-> > On Fri, Feb 07, 2025 at 09:26:16AM +0000, Jonathan McDowell wrote:
-> > > So just to clarify, this more recent patch is working around a situation
-> > > where the status register gets stuck and needs a complete retry of the
-> > > command send - it's an Infineon errata, not something that would be
-> > > fixed with a longer timeout.
-> > > 
-> > > We see what looks like Michal's issue with timeouts as well, I just
-> > > haven't made the step of instrumenting it all the way he has.
-> > 
-> > And I haven't seen the issue that needs re-sending the command so far.
-> 
-> Your SLB9672 is on the latest firmware, which I believe fixes the
-> problem.
-> 
-> > Maybe it happens even less frequently than the excessive processing
-> > time.
-> > 
-> > Fully restarting the syscall would fix both issues but manual restart of
-> > the userspace task reportedly did not work so I have my doubts that
-> > this method with returning from the syscall would be effective.
-> 
-> Hmmm. I wonder if e3aaebcbb7c6b403416f442d1de70d437ce313a7 (tpm: Clean
-> up TPM space after command failure) would help the userspace restart
+On Mon, 2025-02-03 at 15:20 -0800, steven chen wrote:
+> The amount of memory allocated at kexec load, even with the extra memory
+> allocated, might not be large enough for the entire measurement list.=C2=
+=A0 The
+> indeterminate interval between kexec 'load' and 'execute' could exacerbat=
+e
+> this problem.
+>=20
+> Define two new IMA events, 'kexec_load' and 'kexec_execute', to be=20
+> measured as critical data at kexec 'load' and 'execute' respectively.
+> Report the allocated kexec segment size, IMA binary log size and the
+> runtime measurements count as part of those events.
+>=20
+> These events, and the values reported through them, serve as markers in
+> the IMA log to verify the IMA events are captured during kexec soft
+> reboot.=C2=A0 The presence of a 'kexec_load' event in between the last tw=
+o
+> 'boot_aggregate' events in the IMA log implies this is a kexec soft
+> reboot, and not a cold-boot. And the absence of 'kexec_execute' event
+> after kexec soft reboot implies missing events in that window which
+> results in inconsistency with TPM PCR quotes, necessitating a cold boot
+> for a successful remote attestation.
 
-It's backported to the frankenkernel already so it would not help this
-particular case.
+As a reminder, please include directions for verifying the buffer data hash=
+ against
+the buffer data.  The directions would be similar to those in commit 6b4da8=
+c0e7f
+("IMA: Define a new template field buf").
 
-Unfortunately, it's not clear what the userspace task does, and why it
-would not complete after the first failure.
+>=20
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+> ---
+> =C2=A0security/integrity/ima/ima_kexec.c | 23 +++++++++++++++++++++++
+> =C2=A01 file changed, 23 insertions(+)
+>=20
+> diff --git a/security/integrity/ima/ima_kexec.c
+> b/security/integrity/ima/ima_kexec.c
+> index c9c916f69ca7..0342ddfa9342 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -17,6 +17,8 @@
+> =C2=A0#include "ima.h"
+> =C2=A0
+> =C2=A0#ifdef CONFIG_IMA_KEXEC
+> +#define IMA_KEXEC_EVENT_LEN 256
+> +
+> =C2=A0static struct seq_file ima_kexec_file;
+> =C2=A0static void *ima_kexec_buffer;
+> =C2=A0static size_t kexec_segment_size;
+> @@ -36,6 +38,24 @@ static void ima_free_kexec_file_buf(struct seq_file *s=
+f)
+> =C2=A0	ima_reset_kexec_file(sf);
+> =C2=A0}
+> =C2=A0
+> +static void ima_measure_kexec_event(const char *event_name)
+> +{
+> +	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
+> +	size_t buf_size =3D 0;
+> +	long len;
+> +
+> +	buf_size =3D ima_get_binary_runtime_size();
+> +	len =3D atomic_long_read(&ima_htable.len);
+> +
+> +	scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
+> +			"kexec_segment_size=3D%lu;ima_binary_runtime_size=3D%lu;"
+> +			"ima_runtime_measurements_count=3D%ld;",
+> +				kexec_segment_size, buf_size, len);
 
-Would need to come up with some way of tracing it.
+From scripts/checkpatch.pl, "Alignment should match open parenthesis".=20
 
-Thanks
+> +
+> +	ima_measure_critical_data("ima_kexec", event_name, ima_kexec_event,
+> +					strlen(ima_kexec_event), false, NULL, 0);
 
-Michal
+From the kernel-doc scnprintf(), returns the number of bytes.  There should=
+ be no
+need to calculate it using strlen().
+
+> +}
+> +
+> =C2=A0static int ima_alloc_kexec_file_buf(size_t segment_size)
+> =C2=A0{
+> =C2=A0	/*
+> @@ -60,6 +80,7 @@ static int ima_alloc_kexec_file_buf(size_t segment_size=
+)
+> =C2=A0out:
+> =C2=A0	ima_kexec_file.read_pos =3D 0;
+> =C2=A0	ima_kexec_file.count =3D sizeof(struct ima_kexec_hdr);	/* reserved=
+ space
+> */
+> +	ima_measure_kexec_event("kexec_load");
+> =C2=A0
+> =C2=A0	return 0;
+> =C2=A0}
+> @@ -201,6 +222,8 @@ static int ima_update_kexec_buffer(struct notifier_bl=
+ock *self,
+> =C2=A0		return ret;
+> =C2=A0	}
+> =C2=A0
+> +	ima_measure_kexec_event("kexec_execute");
+> +
+> =C2=A0	ret =3D ima_dump_measurement_list(&buf_size, &buf,
+> =C2=A0					kexec_segment_size);
+> =C2=A0
+
+After fixing up and applying this patch set to 6.14.0-rc1, I'm not seeing t=
+he
+"kexec_execute".  Even after changing the default extra memory, I'm still n=
+ot seeing
+the measurement.
+
+Mimi
+
+
 
