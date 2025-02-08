@@ -1,74 +1,104 @@
-Return-Path: <linux-integrity+bounces-4760-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4761-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37C61A2D8A9
-	for <lists+linux-integrity@lfdr.de>; Sat,  8 Feb 2025 21:33:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03404A2D908
+	for <lists+linux-integrity@lfdr.de>; Sat,  8 Feb 2025 22:54:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6977F1888A0C
-	for <lists+linux-integrity@lfdr.de>; Sat,  8 Feb 2025 20:33:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 079383A481A
+	for <lists+linux-integrity@lfdr.de>; Sat,  8 Feb 2025 21:54:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 386B5243961;
-	Sat,  8 Feb 2025 20:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3099C1F3BAF;
+	Sat,  8 Feb 2025 21:54:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UnxQYAV4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=truemaisha.co.tz header.i=@truemaisha.co.tz header.b="tjULheJ9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from server-598995.kolorio.com (server-598995.kolorio.com [162.241.152.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103B0243942;
-	Sat,  8 Feb 2025 20:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D4F1F3B9E
+	for <linux-integrity@vger.kernel.org>; Sat,  8 Feb 2025 21:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.241.152.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739046777; cv=none; b=PU0nsI2qwzKyRukDlSXXzE3zDetQz5kgE7jSPn8wFmxYNdHcVtWB2G4m1jrZSo0AtkWajLvjelmNQI+/WHRYq34onrw3Ii3wPt1FmMmAsbFEn6z73Yt4Hs4TgrzgBgkiJ6Islxqdv4iumOLj5nwqQTS6FEhmcx58N5Ge0/ODZoo=
+	t=1739051660; cv=none; b=oXftjJYq12bnMkbAqshDi+FBf5ITYtrCydvCUhrGeyK7M7FG1RfYxh6XtutkS7UWjK7jKolLw8EggnAD8Q6KSjcSE/ZaltcIDMEltVrMuwkq8y6oFzXAHBNbMELRP6t/08HYSnkszgshZXkFh4SC5q7likfC0KgAdtTmfSPT+mA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739046777; c=relaxed/simple;
-	bh=Ltr/1l/SbDtKRZMIZzd9idiEi51kqu97pT2cF7X4xxA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PoDY5XKfTSbmeB5TxAdVI5RCy31iCKuosNcRnn4P45/btUDZ6MaxEIGvwTqvXKF2Mxs+vE92hA4zNKgY07prYeAQxYuWzNOk0VwZNst1Do/YndAG6w3NEd2enKZqH+DYck6vLLHo+r4vZfGeoyPy52WJrFHT4NL35xciWnmXPFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UnxQYAV4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A25C4CED6;
-	Sat,  8 Feb 2025 20:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739046776;
-	bh=Ltr/1l/SbDtKRZMIZzd9idiEi51kqu97pT2cF7X4xxA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UnxQYAV4NuOMGp2dph5SgknSoBHveIpqBvhOTmUaX/mwqZFxwwW1FsksrAmYXOwEL
-	 s7b/4inNTNLhPHAZu3GG9Fw/Ii+ZHsvSO9bAi8ktHar7jNQ6KvUGX6cYwLDSk/vDWv
-	 muXa2so2JVfN1tzj6uNJjyeEW7ywuvk24nuD+1J6gYxO4ZKZXNgO8cJuHShlxj8TPF
-	 Vkw5gWGMSrqLtJlPgFp2F1Qqz7Zt6GKnJ7JGZHVZ8MPIOiGM3qhuFUa+7Nuf5P6eCL
-	 l5NMkTDUQjN+r6DbUl2n465AMbDUNrWlB0cl0aitxbM4ITFMIDIRUtE+K/017yzXPS
-	 E+GBRXHkNSWzw==
-Date: Sat, 8 Feb 2025 22:32:52 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Jerry Snitselaar <jsnitsel@redhat.com>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Mike Seo <mikeseohyungjin@gmail.com>, kernel-dev@igalia.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] tpm: do not start chip while suspended
-Message-ID: <Z6e_dGIdUROiqgMo@kernel.org>
-References: <20250207-tpm-suspend-v2-1-b8cfb51d43ce@igalia.com>
+	s=arc-20240116; t=1739051660; c=relaxed/simple;
+	bh=gl4+7vNxgV9+JzZtw7EthQ6aGDgi0WVn3wQV/lnKiyo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Njk2JBee15N7mbx8wKblzXyr0m9Ew2hM4TsV3d623SDnKl2bll612UlYZHWMHQSG2aQ+VBOjTgVsoDvfnAysioSlfmh8acact8AVpm2KzLeM5qIFXY/JmdIB/4zf6Ek+CULlSqIVsu6q5eaojUiYN5HhVJT7qyz0KEaOL5YzWcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=truemaisha.co.tz; spf=pass smtp.mailfrom=truemaisha.co.tz; dkim=pass (2048-bit key) header.d=truemaisha.co.tz header.i=@truemaisha.co.tz header.b=tjULheJ9; arc=none smtp.client-ip=162.241.152.247
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=truemaisha.co.tz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=truemaisha.co.tz
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=truemaisha.co.tz; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=gl4+7vNxgV9+JzZtw7EthQ6aGDgi0WVn3wQV/lnKiyo=; b=tjULheJ92lWcWZk+2tpfU3JLxz
+	l7snrKdHWna5QuoJrPcQWtlqBLatcdGx2f395LEShGe6IOLFyXqo5hhVvkIIEjiE1hzCs+CgYXww1
+	xhA1K1dX/buGyCx4KPc1u5E2qITWJ0Ur4eBFZkxdqUaKWbw1GRXv8kplFMumeK8kXqpz2zJv0l7ni
+	aKgGWJXvjw5Dk0nlm55k4K6X5L2B8GGr1eI7x5odsRtlY5i1Y8IG17zgmWCyM+ZsqvTFlakcxcorq
+	ZpstzdiXOUpim4rO/IAHWgYZb41Lsnce0fBFWTvhtnyMOnZ5DrQlUGRqQK3eJNqBlrf+ON7lwjxw7
+	BbCsv1XQ==;
+Received: from [74.208.124.33] (port=59241 helo=truemaisha.co.tz)
+	by server-598995.kolorio.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <chrispinerick@truemaisha.co.tz>)
+	id 1tgsmE-0002TI-2v
+	for linux-integrity@vger.kernel.org;
+	Sat, 08 Feb 2025 15:54:16 -0600
+Reply-To: dsong@aa4financialservice.com
+From: David Song <chrispinerick@truemaisha.co.tz>
+To: linux-integrity@vger.kernel.org
+Subject: Re: The business loan- 
+Date: 08 Feb 2025 21:54:17 +0000
+Message-ID: <20250208210541.2C67D8A8A2E654D3@truemaisha.co.tz>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207-tpm-suspend-v2-1-b8cfb51d43ce@igalia.com>
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - server-598995.kolorio.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - truemaisha.co.tz
+X-Get-Message-Sender-Via: server-598995.kolorio.com: authenticated_id: chrispinerick@truemaisha.co.tz
+X-Authenticated-Sender: server-598995.kolorio.com: chrispinerick@truemaisha.co.tz
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On Fri, Feb 07, 2025 at 03:07:46PM -0300, Thadeu Lima de Souza Cascardo wrote:
-> Checking TPM_CHIP_FLAG_SUSPENDED after the call to tpm_find_get_ops() can
-> lead to a spurious tpm_chip_start() call:
+Hello,
 
-Looks good to me.
+My name is David Song, at AA4 FS, we are a consultancy and
+brokerage Firm specializing in Growth Financial Loan and joint
+partnership venture. We specialize in investments in all Private
+and public sectors in a broad range of areas within our Financial
+Investment Services.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+ We are experts in financial and operational management, due
+diligence and capital planning in all markets and industries. Our
+Investors wish to invest in any viable Project presented by your
+Management after reviews on your Business Project Presentation
+Plan.
 
-BR, Jarkko
+ We look forward to your Swift response. We also offer commission
+to consultants and brokers for any partnership referrals.
+
+ Regards,
+David Song
+Senior Broker
+
+AA4 Financial Services
+13 Wonersh Way, Cheam,
+Sutton, Surrey, SM2 7LX
+Email: dsong@aa4financialservice.com
+
 
