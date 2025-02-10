@@ -1,87 +1,100 @@
-Return-Path: <linux-integrity+bounces-4770-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4771-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 065F0A2F560
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 18:35:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F244A2FB7F
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 22:12:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E3061887BCC
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 17:35:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A1C43A4489
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 21:12:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C433E255E33;
-	Mon, 10 Feb 2025 17:35:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F4A1F754E;
+	Mon, 10 Feb 2025 21:12:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uRb7VSAc"
+	dkim=pass (1024-bit key) header.d=namei.org header.i=@namei.org header.b="ZyGYKtxX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.namei.org (namei.org [65.99.196.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99678255E2C;
-	Mon, 10 Feb 2025 17:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B12F1F4611;
+	Mon, 10 Feb 2025 21:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.99.196.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739208934; cv=none; b=ZWOUp289AX+M/uqq64PGNpgOlCUwGCFMPpley5qZddy1aE53uUtmLAVOKqGhEdhncrJUNfkBIwnNcEfWDFbm5drYVNrVKPML/Cn54jw4klpZFks1q/w2oV54q9o7yNavWP1X2eF6paCvD9ryrGpgp8w3GB4KtNxVi7o8UEON8pQ=
+	t=1739221927; cv=none; b=VAG5N2IEH5mBBj5RWBbp2Y2dmnYg/ifmAiiggy8r0EfXiTySGR9EQAWV5aBgrvqmQCVXN+osnRtwEd2Ks0G9hXivGE/rgMdM3mW5D/cpV/iu1pZHnqho1Q8hv3nXLDh08No+9PRy5QtRLFQn71OPdWOo5DWjW5D13ry44HU+EUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739208934; c=relaxed/simple;
-	bh=lvR3N9o/7sGph9dQQjX/ztRNTBXY/foJLpqclKRllZo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=Ge9uRY/cGnIxOVKRP4luJ41QrdYejM09ufS5oj39ff18v/Aezq7DAeIL/gqDqecLu6uIU7RDQR0OsogybF38rzN4LPnSWKMCX+3kPvgHPvrZp2bOij8DzAvXwPT6Xc+iHXNYqKoobhVedtwzHzJGAcD0anobK7fTp+8rGSaSEZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uRb7VSAc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A679AC4CEE6;
-	Mon, 10 Feb 2025 17:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739208934;
-	bh=lvR3N9o/7sGph9dQQjX/ztRNTBXY/foJLpqclKRllZo=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=uRb7VSAcSs42JJVMn3WEF3+W6c2aXG+W2CYEJaJoFq6LFWRfBpVHpRWnDyYupelF7
-	 TBgeIqd+bhjeKhGn+9iWjl/5PS+H5W+A3XG9fLwL9OHQmJLBaxwqEPsA+QIzK/y9Qh
-	 fKsqTBxrRadpKz0zHyLkEkSD0QyMXRR5bLhWFK/F6H36uCgYaFAbodtortS+9Fkym4
-	 zQHAz7OYOhkCq7bx3aWITaYuCJmN2hT/uV9u4wdKt2eHjxi3SM6bEYJPofP2QM8kAs
-	 lEFWOH3YP02w9ai0UEZ+Ykqh0eFVi7DNkuwZf/cpwrfol24J57wBaVSKXqL5fUJSYF
-	 AxLdQip1xs0Gg==
+	s=arc-20240116; t=1739221927; c=relaxed/simple;
+	bh=UBCe9p8sj/JNzRoVoJtwDN+Lk8MaBoj1Z2Y1UU8mEbI=;
+	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=BKhwXwFG0OLan0KTy/a7dZVyq+9LfSClAodj1rPZZBiIHj53WbaSGYFF54jSROIT0cr4IVi8vUrQpHk+1rzX8FgCl2zcsrhr7BxBGjL/av/AeeT7h6vI4772nVTEAwvi4nmolVzpBDA3KtLFtm6kN0IRlRWSVoyO8jA53unoBdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=namei.org; spf=pass smtp.mailfrom=namei.org; dkim=pass (1024-bit key) header.d=namei.org header.i=@namei.org header.b=ZyGYKtxX; arc=none smtp.client-ip=65.99.196.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=namei.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=namei.org
+Received: from localhost (localhost [127.0.0.1])
+	by mail.namei.org (Postfix) with ESMTPS id 6B6F6C9;
+	Mon, 10 Feb 2025 21:03:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.namei.org 6B6F6C9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=namei.org; s=2;
+	t=1739221382; bh=h3x3P3W8K+9OlCaN6BjlODAjJulvwo/lejT6q6M/Los=;
+	h=Date:From:To:cc:Subject:From;
+	b=ZyGYKtxXADc7f/1Rh/aC10cIngjwj16ltm/q3MfCt8DpEmDiqR+PtyGUWVSR0kvRz
+	 WXzo9JxxhLYZGiDmsn7pRtZqTKtOIt2S8lftxNWQi+yDOhiUqDdhK6GX2dF3J+WjHA
+	 woDtfm+66JQFoacJ2svGVd5rL0o5ADlT7Wh/OkFs=
+Date: Mon, 10 Feb 2025 13:03:02 -0800 (PST)
+From: James Morris <jmorris@namei.org>
+To: linux-security-module@vger.kernel.org
+cc: Linux Security Summit Program Committee <lss-pc@lists.linuxfoundation.org>, 
+    linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com, 
+    linux-integrity@vger.kernel.org, lwn@lwn.net
+Subject: [Announce] Linux Security Summit North America 2025 CfP
+Message-ID: <35b17495-427f-549f-6e46-619c56545b34@namei.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 10 Feb 2025 19:35:28 +0200
-Message-Id: <D7OY3ZVGJOV5.R3SL9SBFT2DF@kernel.org>
-To: "Ahmed Salem" <x0rw3ll@gmail.com>, <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
- <shuah@kernel.org>, <skhan@linuxfoundation.org>
-Cc: <linux-integrity@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests: tpm2: test_smoke: use POSIX-conformant
- expression operator
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <zdfnlpdb24tk6aikzucyomylf4lqdyhdvlingwyku46fy75eyg@giq5dqojdxj5>
-In-Reply-To: <zdfnlpdb24tk6aikzucyomylf4lqdyhdvlingwyku46fy75eyg@giq5dqojdxj5>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; BOUNDARY="1665246916-1759655948-1739221181=:1918214"
+Content-ID: <1eebfa2-83a-d771-38e3-a986f4542214@namei.org>
 
-On Mon Feb 10, 2025 at 7:03 PM EET, Ahmed Salem wrote:
-> test_smoke.sh:9: expression uses non POSIX-conformant operator
-> symbol '=3D=3D', resulting in skipping the remaining tests.
->
-> This patch ensures the use of POSIX-conformant operator symbol '=3D'.
->
-> w/o this patch for test_smoke.sh
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-> $ sudo make -j8 TARGETS=3Dtpm2 kselftest
-> make[3]: Nothing to be done for 'all'.
-> TAP version 13
-> 1..3
->  # timeout set to 600
->  # selftests: tpm2: test_smoke.sh
->  # ./test_smoke.sh: 9: [: 2: unexpected operator
-> ok 1 selftests: tpm2: test_smoke.sh # SKIP
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-The fix is fine but cut out snippets of transcripts pinpointing
-the issue.
+--1665246916-1759655948-1739221181=:1918214
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <30fe1e86-d93-3681-6dff-9a32f4d6df6@namei.org>
 
-BR, Jarkko
+The Call for Participation for the 2025 Linux Security Summit North 
+America (LSS-NA) is now open.
+
+LSS-NA 2025 is a technical forum for collaboration between Linux 
+developers, researchers, and end-users. Its primary aim is to foster 
+community efforts in deeply analyzing and solving Linux operating system 
+security challenges, including those in the Linux kernel. Presentations 
+are expected to focus deeply on new or improved technology and how it 
+advances the state of practice for addressing these challenges.
+
+Key dates:
+
+    - CFP Closes:  Monday, March 10 at 11:59 PM MDT / 10:59 PM PDT
+    - CFP Notifications: Monday, March 31
+    - Schedule Announcement: Wednesday, April 2
+    - Presentation Slide Due Date: Tuesday, June 24
+    - Event Dates: Thursday, June 26 – Friday, June 27
+
+Location: Denver, Colorado, USA (co-located with OSS).
+
+Full details may be found here: 
+https://events.linuxfoundation.org/linux-security-summit-north-america/
+
+Follow LSS event updates here:
+https://social.kernel.org/LinuxSecSummit
+
+
+
+-- 
+James Morris
+<jmorris@namei.org>
+--1665246916-1759655948-1739221181=:1918214--
 
