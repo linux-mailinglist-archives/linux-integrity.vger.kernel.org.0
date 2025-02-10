@@ -1,100 +1,100 @@
-Return-Path: <linux-integrity+bounces-4771-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4775-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F244A2FB7F
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 22:12:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AD2EA2FE55
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 00:23:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A1C43A4489
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 21:12:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C4277A2682
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 23:22:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F4A1F754E;
-	Mon, 10 Feb 2025 21:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=namei.org header.i=@namei.org header.b="ZyGYKtxX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EEE226138F;
+	Mon, 10 Feb 2025 23:22:43 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.namei.org (namei.org [65.99.196.166])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B12F1F4611;
-	Mon, 10 Feb 2025 21:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.99.196.166
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57865253F16;
+	Mon, 10 Feb 2025 23:22:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739221927; cv=none; b=VAG5N2IEH5mBBj5RWBbp2Y2dmnYg/ifmAiiggy8r0EfXiTySGR9EQAWV5aBgrvqmQCVXN+osnRtwEd2Ks0G9hXivGE/rgMdM3mW5D/cpV/iu1pZHnqho1Q8hv3nXLDh08No+9PRy5QtRLFQn71OPdWOo5DWjW5D13ry44HU+EUg=
+	t=1739229763; cv=none; b=VzxuVamlro9QDJ596VRRcNPZ6NWC7ujh2zXuUxu35AehCoIkXH8jaoqdCJEaBlfZY8InPfV1CLzKWC+NbVWdBwkI5TDXE2q8qL1E54prIZzT62aaPL3jXlhn2rM9NPRc8V7YcuivB32K6E4JQkxbdtiR6oMJMQ+ejpjLS5Iyu68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739221927; c=relaxed/simple;
-	bh=UBCe9p8sj/JNzRoVoJtwDN+Lk8MaBoj1Z2Y1UU8mEbI=;
-	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=BKhwXwFG0OLan0KTy/a7dZVyq+9LfSClAodj1rPZZBiIHj53WbaSGYFF54jSROIT0cr4IVi8vUrQpHk+1rzX8FgCl2zcsrhr7BxBGjL/av/AeeT7h6vI4772nVTEAwvi4nmolVzpBDA3KtLFtm6kN0IRlRWSVoyO8jA53unoBdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=namei.org; spf=pass smtp.mailfrom=namei.org; dkim=pass (1024-bit key) header.d=namei.org header.i=@namei.org header.b=ZyGYKtxX; arc=none smtp.client-ip=65.99.196.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=namei.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=namei.org
-Received: from localhost (localhost [127.0.0.1])
-	by mail.namei.org (Postfix) with ESMTPS id 6B6F6C9;
-	Mon, 10 Feb 2025 21:03:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.namei.org 6B6F6C9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=namei.org; s=2;
-	t=1739221382; bh=h3x3P3W8K+9OlCaN6BjlODAjJulvwo/lejT6q6M/Los=;
-	h=Date:From:To:cc:Subject:From;
-	b=ZyGYKtxXADc7f/1Rh/aC10cIngjwj16ltm/q3MfCt8DpEmDiqR+PtyGUWVSR0kvRz
-	 WXzo9JxxhLYZGiDmsn7pRtZqTKtOIt2S8lftxNWQi+yDOhiUqDdhK6GX2dF3J+WjHA
-	 woDtfm+66JQFoacJ2svGVd5rL0o5ADlT7Wh/OkFs=
-Date: Mon, 10 Feb 2025 13:03:02 -0800 (PST)
-From: James Morris <jmorris@namei.org>
-To: linux-security-module@vger.kernel.org
-cc: Linux Security Summit Program Committee <lss-pc@lists.linuxfoundation.org>, 
-    linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com, 
-    linux-integrity@vger.kernel.org, lwn@lwn.net
-Subject: [Announce] Linux Security Summit North America 2025 CfP
-Message-ID: <35b17495-427f-549f-6e46-619c56545b34@namei.org>
+	s=arc-20240116; t=1739229763; c=relaxed/simple;
+	bh=qS8cBMVZdMwBjCEPPy69jB7alNbKE0vfzadmD5By+ss=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=F63KWMyO/WWHPPuYWsRv1/ZJb2jfFyeWBH2fsenWj1//d+alaCTSZjfCR4Wdrc3Ed5BNb/xGvXBbYTQbWSPxaO8b8d+RDo5yw/l1+hMlqvWhzI9Vw8oFRC+6QoZNv3NJDnoJqdU+9DFE3QxeE3HPi14VHhHgThlgl+8tG5K+ORI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBA2D1477;
+	Mon, 10 Feb 2025 15:23:00 -0800 (PST)
+Received: from beelzebub.ast.arm.com (unknown [10.118.29.240])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CFBB63F6A8;
+	Mon, 10 Feb 2025 15:22:38 -0800 (PST)
+From: Stuart Yoder <stuart.yoder@arm.com>
+To: linux-integrity@vger.kernel.org,
+	jarkko@kernel.org,
+	peterhuewe@gmx.de,
+	jgg@ziepe.ca,
+	sudeep.holla@arm.com,
+	rafael@kernel.org,
+	lenb@kernel.org
+Cc: linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] Add support for the TPM FF-A start method
+Date: Mon, 10 Feb 2025 17:22:23 -0600
+Message-Id: <20250210232227.97761-1-stuart.yoder@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="1665246916-1759655948-1739221181=:1918214"
-Content-ID: <1eebfa2-83a-d771-38e3-a986f4542214@namei.org>
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+These patches add support for the CRB FF-A start method defined
+in the TCG ACPI specification v1.4 and the FF-A ABI defined
+in the Arm TPM Service CRB over FF-A (DEN0138) specification. 
+(https://developer.arm.com/documentation/den0138/latest/)
 
---1665246916-1759655948-1739221181=:1918214
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <30fe1e86-d93-3681-6dff-9a32f4d6df6@namei.org>
+FF-A is a messaging framework for Arm-based systems and in the
+context of the TPM driver is used to signal 'start' to a CRB-based
+TPM service which is hosted in an FF-A secure partition running in
+TrustZone.
 
-The Call for Participation for the 2025 Linux Security Summit North 
-America (LSS-NA) is now open.
+The first patch adds an FF-A driver to handle the FF-A messaging when
+communicating with a CRB-based TPM secure partition built on FF-A.
+The driver is probed when the TPM secure partition is discovered by
+the Linux FF-A infrastructure.
 
-LSS-NA 2025 is a technical forum for collaboration between Linux 
-developers, researchers, and end-users. Its primary aim is to foster 
-community efforts in deeply analyzing and solving Linux operating system 
-security challenges, including those in the Linux kernel. Presentations 
-are expected to focus deeply on new or improved technology and how it 
-advances the state of practice for addressing these challenges.
+The second patch consolidates the check for idle support in the CRB
+driver to one place.
 
-Key dates:
+The third patch defines the new ACPI start method enumeration for
+CRB over FF-A.
 
-    - CFP Closes:  Monday, March 10 at 11:59 PM MDT / 10:59 PM PDT
-    - CFP Notifications: Monday, March 31
-    - Schedule Announcement: Wednesday, April 2
-    - Presentation Slide Due Date: Tuesday, June 24
-    - Event Dates: Thursday, June 26 – Friday, June 27
+The fourth patch adds support for the FF-A ACPI start method to
+the TPM crb driver.
 
-Location: Denver, Colorado, USA (co-located with OSS).
+Stuart Yoder (4):
+  tpm_crb: implement driver compliant to CRB over FF-A
+  tpm_crb: refactor check for idle support into TPM into inline function
+  ACPICA: add start method for Arm FF-A
+  tpm_crb: add support for the Arm FF-A start method
 
-Full details may be found here: 
-https://events.linuxfoundation.org/linux-security-summit-north-america/
-
-Follow LSS event updates here:
-https://social.kernel.org/LinuxSecSummit
-
-
+ drivers/char/tpm/Kconfig   |   9 ++
+ drivers/char/tpm/Makefile  |   1 +
+ drivers/char/tpm/ffa_crb.c | 310 +++++++++++++++++++++++++++++++++++++
+ drivers/char/tpm/ffa_crb.h |  30 ++++
+ drivers/char/tpm/tpm_crb.c |  81 +++++++++-
+ include/acpi/actbl3.h      |   1 +
+ 6 files changed, 426 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/char/tpm/ffa_crb.c
+ create mode 100644 drivers/char/tpm/ffa_crb.h
 
 -- 
-James Morris
-<jmorris@namei.org>
---1665246916-1759655948-1739221181=:1918214--
+2.34.1
+
 
