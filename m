@@ -1,122 +1,177 @@
-Return-Path: <linux-integrity+bounces-4763-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4764-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F302A2EC12
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 12:58:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1B29A2F2E2
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 17:15:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBC993A8FBA
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 11:58:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C851D1889D2F
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Feb 2025 16:15:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6A1D1F7060;
-	Mon, 10 Feb 2025 11:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FBE01F4612;
+	Mon, 10 Feb 2025 16:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b="hF9/qC3q"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="WNJFpbbY"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from the.earth.li (the.earth.li [93.93.131.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996B81F560D
-	for <linux-integrity@vger.kernel.org>; Mon, 10 Feb 2025 11:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A841F460E
+	for <linux-integrity@vger.kernel.org>; Mon, 10 Feb 2025 16:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739188690; cv=none; b=St0VId3jg56DkzlI/FYDGp9OefMwH87ZoiRgOEuhUikIg2fcfRbShh/qKq85UaxmZK8Ayh3ywWm/D7tHQLl/IC2ANORHhM+tMBPj4lTTR2ocnduZ65hBjEOlMyBWPRWYjQMv2F6LzG9JiUFgGt4ZPuxLrcLlZQcBzHiu85axWRU=
+	t=1739204034; cv=none; b=g5hBBLUSp1LSR1EcoS2q+WOBQrtKzqObmerwS1bVeU0bWRJ6Kjw3bOnw9QPqqWpSglCFrcmb9a6YkNxdtaFv4GLv9M6ra82sW+6bmYNOuN6RPcraxtWHUtiJuiWOlnXrIhVkCqtBvnmMybk5y1vJrRRwj8CVbLoJOCkbfptf5fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739188690; c=relaxed/simple;
-	bh=as4SUiBKDJu7f/KIbNhAFDg767Lu1xis1B9Fm+JHYDM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r4bOry6lMLZ+nQd31DZZwMWmXI+GXxRzyqm3LlJl9eiS5yjjjtm6q949f2JMddiq8kum1SA1QUe7/9PO3NEPxd7k8aFbwp/wSrT63LtL7mUjLsE6HGK7jVW0x7Pkk1R/N2aoZwvOLDl/2Z7d1987HW3amuAqkQLQYGFWh6UkHtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at; spf=pass smtp.mailfrom=sigma-star.at; dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at header.b=hF9/qC3q; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sigma-star.at
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sigma-star.at
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-38dc6d55ebaso1891796f8f.1
-        for <linux-integrity@vger.kernel.org>; Mon, 10 Feb 2025 03:58:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sigma-star.at; s=google; t=1739188687; x=1739793487; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=as4SUiBKDJu7f/KIbNhAFDg767Lu1xis1B9Fm+JHYDM=;
-        b=hF9/qC3qvEkqii5v99lO+25HlASbdJiZ7L6PoI0wqTQP//BzHFo5utI/Oc/Zul/Rq3
-         1Y23yhO94yahrt0YarbuS6KA57b41MSq2JME6u7V6AX+P1RrbmgJ7Er/Gw0wzjb9fi0w
-         15e+iOaPku8YBDmpPMHKaLSUspkLdFmy8qaja+KnU5EGIEXFEScihNfN1gkDQSFwRMSP
-         stfd4NrbWvzctso5rO/eBMoBugLAnlAXx9DF1679nl99G1qfyd/znFsazyD6spd9m7B/
-         y2HOUmDmqaEZuPiJQEA2/jRHrh/RQLeMM08D39zPL9QfbT2N0iOZsU6Hd2NAvm12fYQ3
-         SWHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739188687; x=1739793487;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=as4SUiBKDJu7f/KIbNhAFDg767Lu1xis1B9Fm+JHYDM=;
-        b=j69CI3nYwigM3M/sExqybuW5KOlFr9o4kOWGwPf5bzDu4FPX6tYkwF3JGxfO5+9oFC
-         BpsRfd3snxU1KPSBdIR6YqscH7Z4AxHed82s/1xW539ZXAQVbnDpSqAtC7KYH118zHUA
-         BNUu80Iiq3/kJAGpwcqRP8vBibZSAZybt9UXpl8nUQ7Ow3SKf3OVUmQ65696QOoxWfaN
-         uhpzTIL4T5WKG3+Jk33Q8jL4ddw5EO/3qmuxG4JfXIxruAY/gsZm7NjYkSodGZ7uQF8m
-         rQohnjoAjCJacuSOcp9VbT1Av2OyxnAPMdPXEmcdqGfXXAjNbyAQHKzkmuiUDfHkHrW7
-         VPUg==
-X-Gm-Message-State: AOJu0YzYOhQBQfZN/fAGj3gNGXXYK3yCWVOboXnQyKUchCEMcMGuEYk1
-	WGddUjb65yqipUwDMlrbc79HVMP6AOZSqqLtxISBnSenwe9svkFIhVXSYJIbu890Ii7cEwduRlp
-	D
-X-Gm-Gg: ASbGncum91U5kC9rjhx3o4J9AjJ4IJibDzvoDdjszCggTOFAXe1SlR1d7sq0wxsc+n7
-	ttlK3Fjlj+sVGCR20Y6Fi1gt0e3oLg/O65H+RFLNfXKOvJqRMV9roMzvCoMncy1Nxzn9bLtmMcF
-	Tw9oCeHNJSv0L4xXLzl8YQrAFLRMoeVipxdqsQdOKY77NHj7L1jD6YJEMeQ6vjhGrf2RcEdcHfc
-	xBheLY1Qv1jLSdrJTN1Liu7weHnJpM1fc2Te+vp8gW1fXL6ByhFslaOAt1gVeMTuGi/Tp7UhL9+
-	aYaIftQ7kRtPiqpk
-X-Google-Smtp-Source: AGHT+IFEd0xQXpxBXbxhVrVFY+Z1GeZScw7oor+XBNGkufWYSsyj+e3PrFPwPqOelxgNNUVPM0WgUw==
-X-Received: by 2002:a5d:6da9:0:b0:38d:dffc:c14f with SMTP id ffacd0b85a97d-38ddffcc5ffmr2071887f8f.1.1739188686752;
-        Mon, 10 Feb 2025 03:58:06 -0800 (PST)
-Received: from somecomputer ([82.150.214.1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dcc9bd251sm8905203f8f.9.2025.02.10.03.58.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 03:58:06 -0800 (PST)
-From: Richard Weinberger <richard@sigma-star.at>
-To: David Gstir <david@sigma-star.at>,
- sigma star Kernel Team <upstream+dcp@sigma-star.at>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
- David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>,
- SCE_Linux_Security_team@msteams.nxp.com, upstream@sigma-star.at
-Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
- Kshitiz Varshney <kshitiz.varshney@nxp.com>,
- Kshitiz Varshney <kshitiz.varshney@nxp.com>
-Subject:
- Re: [PATCH v1] trusted_dcp.c: Do not return in case of non-secure mode
-Date: Mon, 10 Feb 2025 12:58:05 +0100
-Message-ID: <2171670.G923GbCHz0@anvil>
-In-Reply-To: <20250210114606.1593650-1-kshitiz.varshney@nxp.com>
-References: <20250210114606.1593650-1-kshitiz.varshney@nxp.com>
+	s=arc-20240116; t=1739204034; c=relaxed/simple;
+	bh=NQEenHjhF51u1m2K/t9YQdk7MapsbnlNPUj60+5Jn5U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qKgozdV7MlSDdXe3d9I60D8qBfgVCNLSX9qZPpLVp7DB5JFD/y2Zq+KqlBbrZ7V91MFoBB9idxQfpuHNT5MUEMiZR4UR1bV7yOkffrr3V3CUVHNw6tPKCPj2f7cM9SbvjCMpTy1u40LNiGy2s6VW/2EBnYFcULk6lK3H7oz8oKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=WNJFpbbY; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=q53AG8j8nGRxcN8d1Nt4p7fZmlTh1dwWoXEBbR9t3pY=; b=WNJFpbbYA1DPv8b88ljnpiR93a
+	Tw1OHzVGrv9Dqs0lhSI3MgjITEJ09zJkaIdxhgntnaOBiXagcfQX/AIgVhVeIo/l7V8O+opbsvjJf
+	P3UyunvPFYuCejkfkMGJo7vQsUUWTHJ3Lo46wMcUlciYhx98yCUCuXF2eAJhWlQep3JPtLN9OL5u0
+	HgQdo5Lizgjf79t6S2+G/T1trRbbYZnjn1d1tcucUcgAvCMqatMFl5KGuXOOmFv8207nleTIOnllE
+	C+QK+fsjCrM03TX4PwhzCMlNvjh+EFk4gWnpuYJwKyTmovg/kztvlABroCFnpzavVJbsuoNVlwHx/
+	8GeQrSuA==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1thWPn-001rk1-2v;
+	Mon, 10 Feb 2025 16:13:43 +0000
+Date: Mon, 10 Feb 2025 16:13:43 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Subject: Re: TPM operation times out (very rarely)
+Message-ID: <Z6olt1NHonKkamtM@earth.li>
+References: <D7GFCNGDK7S6.1X0KPPHF1TXBO@kernel.org>
+ <Z50IKdYe42_n2B0b@kitsune.suse.cz>
+ <D7GIBDO5KJMD.118CQO10LJ79Y@kernel.org>
+ <Z6Nm7Y8TFF8YG56Z@kitsune.suse.cz>
+ <Z6N10NQY75hpX0Ed@earth.li>
+ <Z6UdFCdqCNZ8VGOL@kernel.org>
+ <Z6XRuFnEXeQI_rEZ@earth.li>
+ <Z6XVAEfLIVDuwSLn@kitsune.suse.cz>
+ <Z6XWoWAy66P97pAU@earth.li>
+ <Z6XZN3U5nmb6qu9u@kitsune.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-
-On Montag, 10. Februar 2025 12:46 Kshitiz Varshney wrote:
-> There are multiple type of keys in different worlds, like
-> test key in case of non-secure world and OTP, unique key
-> in case of secure world.
-> So, instead of returning with an error, in case of test key, we
-> should display warning to the user and allow the user to run the
-> trusted key functionality with test key.
-
-We have the dcp_skip_zk_test module parameter to allow such cases.
-Why can't you use it?
-
-Thanks,
-//richard
-
-=2D-=20
-=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8B=E2=80=8Bsigma star gmbh | Eduard-Bodem=
-=2DGasse 6, 6020 Innsbruck, AUT UID/VAT Nr:
-ATU 66964118 | FN: 374287y
+Content-Type: multipart/mixed; boundary="c4Np5EkGR3/BQLB0"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z6XZN3U5nmb6qu9u@kitsune.suse.cz>
 
 
+--c4Np5EkGR3/BQLB0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+On Fri, Feb 07, 2025 at 10:58:15AM +0100, Michal Suchánek wrote:
+> On Fri, Feb 07, 2025 at 09:47:13AM +0000, Jonathan McDowell wrote:
+> > On Fri, Feb 07, 2025 at 10:40:16AM +0100, Michal Suchánek wrote:
+> > > On Fri, Feb 07, 2025 at 09:26:16AM +0000, Jonathan McDowell wrote:
+> > > > So just to clarify, this more recent patch is working around a situation
+> > > > where the status register gets stuck and needs a complete retry of the
+> > > > command send - it's an Infineon errata, not something that would be
+> > > > fixed with a longer timeout.
+> > > > 
+> > > > We see what looks like Michal's issue with timeouts as well, I just
+> > > > haven't made the step of instrumenting it all the way he has.
+> > > 
+> > > And I haven't seen the issue that needs re-sending the command so far.
+> > 
+> > Your SLB9672 is on the latest firmware, which I believe fixes the
+> > problem.
+> > 
+> > > Maybe it happens even less frequently than the excessive processing
+> > > time.
+> > > 
+> > > Fully restarting the syscall would fix both issues but manual restart of
+> > > the userspace task reportedly did not work so I have my doubts that
+> > > this method with returning from the syscall would be effective.
+> > 
+> > Hmmm. I wonder if e3aaebcbb7c6b403416f442d1de70d437ce313a7 (tpm: Clean
+> > up TPM space after command failure) would help the userspace restart
+> 
+> It's backported to the frankenkernel already so it would not help this
+> particular case.
+> 
+> Unfortunately, it's not clear what the userspace task does, and why it
+> would not complete after the first failure.
+> 
+> Would need to come up with some way of tracing it.
+
+FWIW bpftrace is great for this. I'm using the attached script as a
+basis for investigations. Obviously the timings it reports are the whole
+command rather than just the wait for status, but over a long period it
+can then show you the latency histogram. (Run it in one terminal, do TPM
+stuff elsewhere, hit Ctrl-C when you're done and it dumps the
+histogram.)
+
+J.
+
+-- 
+101 things you can't have too much of : 47 - More coffee.
+
+--c4Np5EkGR3/BQLB0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="tpm-tracing.bt"
+
+#!/usr/bin/bpftrace
+
+struct tpm_header {
+        uint8_t tag[2];
+        uint8_t length[4];
+        uint8_t ordinal[4];
+}
+struct tpm_buf {
+        uint32_t flags;
+        uint32_t length;
+        struct tpm_header *hdr;
+}
+
+kprobe:tpm_transmit_cmd
+{
+        $buf = (struct tpm_buf *) arg1;
+        printf("%s (0x%02X%02X%02X%02X) (%s)\n", comm,
+                $buf->hdr->ordinal[0],
+                $buf->hdr->ordinal[1],
+                $buf->hdr->ordinal[2],
+                $buf->hdr->ordinal[3],
+                str(arg3));
+}
+
+kprobe:tpm_transmit
+{
+        $hdr = (struct tpm_header *) arg1;
+        $cmd = $hdr->ordinal[0] << 24 | $hdr->ordinal[1] << 16 |
+                $hdr->ordinal[2] << 8 | $hdr->ordinal[3];
+        @start[tid] = nsecs;
+        @tpmcmd[tid] = $cmd;
+}
+
+kretprobe:tpm_transmit
+/@start[tid]/ {
+        $dur = nsecs - @start[tid];
+        @cmdhist[@tpmcmd[tid]] = hist($dur);
+        printf("%s (0x%08X): %d (%d ns)\n", comm, @tpmcmd[tid], retval, $dur);
+        delete(@start[tid]);
+        delete(@tpmcmd[tid]);
+}
+
+--c4Np5EkGR3/BQLB0--
 
