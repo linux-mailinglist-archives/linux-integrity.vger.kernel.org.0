@@ -1,88 +1,103 @@
-Return-Path: <linux-integrity+bounces-4791-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4792-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA6B7A31972
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2025 00:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41482A3197C
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2025 00:25:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F318167023
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 23:21:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC0D0167939
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 23:25:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F60A267AFC;
-	Tue, 11 Feb 2025 23:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306D3267AFF;
+	Tue, 11 Feb 2025 23:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ujNtVwwr"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F385267AF5;
-	Tue, 11 Feb 2025 23:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E28272908;
+	Tue, 11 Feb 2025 23:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739316106; cv=none; b=FMWO2ftBjMuSIswieWqDSWZn2ZMy2FGKLbJHITruxCV2+qMITUUX/CHsq5y7ZO1UrjCz4/NXqF4aX+H8os11soEcONENX/3ljzY93/UkfGa6s99vZpRH9BDhY4h/5vwmpTf1oR9goqqtTqpMMW7e7EHcBO66g8LMZ8pmPhymqqY=
+	t=1739316326; cv=none; b=RU4lUQ8Vj2Ie/0UCJEU9tBbEC0wD33gTQzRfre/QYfDhjknXXhm80nLa1kkLxCdDcj9C9ix64ta2f10XyZhfhfDkGLs6FHbTuDL1lVzEd7d8G4wVErfEB57hc9cBInoQImGTUVF/+brTSBt3ueYSyYx8qWPtQ4SyS1Li7AFLsCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739316106; c=relaxed/simple;
-	bh=sB2itsFohXunEWga5+rM3EMf9osNj1QTEbWJbv6fN8Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dOce9i6vcBdtH4c9x1hpBQ0dSg0ZkS2JIuB4sR3EkSaS/N0tVHvOQ8ybyUgAKq79ItwZAhL5lF3a6K6pMZEtE6OpK3SW5Pd8ECU4rHcsFHDT/1UtMeMd3mUb+jdu7mUNiHnPlb2wdQ55rXw1oAsypr7FF6ZvZ4Yq1DVEngojkaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 353431D15;
-	Tue, 11 Feb 2025 15:22:05 -0800 (PST)
-Received: from [10.118.111.35] (G9L3377F54.austin.arm.com [10.118.111.35])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9597D3F58B;
-	Tue, 11 Feb 2025 15:21:43 -0800 (PST)
-Message-ID: <e9d255f0-82d9-4c6d-b854-e3ba1ca0e8e2@arm.com>
-Date: Tue, 11 Feb 2025 17:21:43 -0600
+	s=arc-20240116; t=1739316326; c=relaxed/simple;
+	bh=togaeu5eaYhtKO5F7a7MEwakO3LtPg29+ybcKw1HZAc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBe6N2Cl7/vTYxpSEbz4kfqgorsex1sU5GpiaPkxn9y9iAcz8in56bb+dk39RdmnmrO8F2DE3x47xxPq2lbdr8eurEL+MFF9T9nfCDzC9Gbq4EcoiBsf4YxeNMPWtB2c7AUg07hUUOHd2JVwQo+Tw1cl7k9wi8nst9A33q8zL8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ujNtVwwr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB830C4CEDD;
+	Tue, 11 Feb 2025 23:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739316325;
+	bh=togaeu5eaYhtKO5F7a7MEwakO3LtPg29+ybcKw1HZAc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ujNtVwwrOvLd2zUbxO8T+ZpGhw+6qjcq0sqXTkBtXgoekNuwHuUl/Q90UOyWS/LNb
+	 DethNKoB3gFCDaazLBtXZUVl1wj/jYcEUSgUXz/CZ1p8yzmGNYo0GFNr2u39PI+FlW
+	 bmMWRhfmYbnDxD3ts3vkemwM8AI5wXeKk9joXckVkPvYa16mUlMXMXicu8t15WMkPg
+	 On7tsqfCUvCTA7yjSbtWTH5L0zt0mO0RZiFWamII5MiXVSLEniHWH+zdbYBWKKgjdJ
+	 F0KiXEPo7phRkKiDgM+BdhZJXg7GBKlfkmJRUv9ufsh505Pex7yt9JtunUvYbN897Y
+	 K76uWspxLc12w==
+Date: Wed, 12 Feb 2025 01:25:20 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Ahmed Salem <x0rw3ll@gmail.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, shuah@kernel.org,
+	skhan@linuxfoundation.org, linux-integrity@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev
+Subject: Re: [PATCH v3] selftests: tpm2: test_smoke: use POSIX-conformant
+ expression operator
+Message-ID: <Z6vcYJjC7vEpf5Um@kernel.org>
+References: <nyskb7mbqk2dvlwhez4sua7ryz5gyi73yker6y3qhd4chyyeaw@x6nhqgtxcyvl>
+ <D7PTH0ZUAH5L.VVEECLR4VEWH@kernel.org>
+ <x4dtkjgxwy7vyjg7rryvqqu3lwhiqm6jmhr4ph2fexa7m2m2mv@dbefieqhx6x6>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] tpm_crb: implement driver compliant to CRB over FF-A
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
- sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
- linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250210232227.97761-1-stuart.yoder@arm.com>
- <20250210232227.97761-2-stuart.yoder@arm.com> <Z6u8Yb-NIs0_v2gm@kernel.org>
-Content-Language: en-US
-From: Stuart Yoder <stuart.yoder@arm.com>
-In-Reply-To: <Z6u8Yb-NIs0_v2gm@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <x4dtkjgxwy7vyjg7rryvqqu3lwhiqm6jmhr4ph2fexa7m2m2mv@dbefieqhx6x6>
 
-
-
-On 2/11/25 3:08 PM, Jarkko Sakkinen wrote:
-> On Mon, Feb 10, 2025 at 05:22:24PM -0600, Stuart Yoder wrote:
->> The Arm specification TPM Service CRB over FF-A specification
->> defines the FF-A messages to interact with a CRB-based TPM
->> implemented as an FF-A secure partition.
->>
->> Spec URL:
->> https://developer.arm.com/documentation/den0138/latest/
->>
->> This driver is probed when a TPM Secure Partition is
->> discovered by the FF-A subsystem. It exposes APIs
->> used by the TPM CRB driver to send notifications to
->> the TPM.
->>
->> Signed-off-by: Stuart Yoder <stuart.yoder@arm.com>
->> ---
->>   drivers/char/tpm/Kconfig   |   9 ++
->>   drivers/char/tpm/Makefile  |   1 +
->>   drivers/char/tpm/ffa_crb.c | 310 +++++++++++++++++++++++++++++++++++++
->>   drivers/char/tpm/ffa_crb.h |  30 ++++
+On Wed, Feb 12, 2025 at 01:05:02AM +0200, Ahmed Salem wrote:
+> On 25/02/11 08:10PM, Jarkko Sakkinen wrote:
+> > On Tue Feb 11, 2025 at 5:00 AM EET, Ahmed Salem wrote:
+> > > Use POSIX-conformant operator symbol '='.
+> > >
+> > > Signed-off-by: Ahmed Salem <x0rw3ll@gmail.com>
+> > > ---
+> > >
+> > > Apologies for my previous mistakes.
+> > >
+> > > Changes in v3:
+> > >  - Reword mistaken commit message
+> > >
+> > > Changes in v2:
+> > >  - Remove snippets pinpointing the issue 
+> > >    from commit message
+> > 
+> > OK I read what I wrote and I guess it could have been misinterpreted.
+> > 
+> > What I meant was to take the relevant part of the transcript that shows
+> > the issue (and possibly also how it works when fixed).
+> > 
+> > Sorry about that.
+> > 
+> > [1] https://lore.kernel.org/linux-integrity/D7OY3ZVGJOV5.R3SL9SBFT2DF@kernel.org/
+> > 
+> > BR, Jarkko
 > 
-> Let's use tpm_ prefix for these.
+> Understood. Thank you so much for your review and continued guidance!
+> 
+> I will be sending the revised patch shortly with the proposed changes.
 
-Ok, will do.
+Yeah, like narrow down the transcript that's all, and yep what I said
+was somewhat misguiding...
 
-Thanks,
-Stuart
-
+BR, Jarkko
 
