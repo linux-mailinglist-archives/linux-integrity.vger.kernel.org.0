@@ -1,87 +1,80 @@
-Return-Path: <linux-integrity+bounces-4786-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4787-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A99D2A3175D
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 22:11:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA33BA31844
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 22:51:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58DF43AA543
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 21:11:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46D6C3A786C
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 21:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FAED26D5A9;
-	Tue, 11 Feb 2025 21:08:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uHhH+6io"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8936267AF4;
+	Tue, 11 Feb 2025 21:50:53 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E977426B2DD;
-	Tue, 11 Feb 2025 21:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895902676D0;
+	Tue, 11 Feb 2025 21:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739308135; cv=none; b=s6y2/+FfJAL5NcXahf73aRPyB9nr8O7nrVM+TZy2M/N3hublwMPnEXL0ICCiwm8WZLhHlAUHkSurnL9eAOYfHkoZf5B9EqYhu1wbwKOddkQu2XEHmxdmqk7XfIto4jwHrfM60b21WgQBL4GQfKKJm22GdqAFFFHXLwhODUuC/go=
+	t=1739310653; cv=none; b=fHxHleaeUCihguw15eas2fHPHxYxmHQti7Nh1jeHOTSAhpyqqP8rKF2bSPLzGfoJ45ux7iyXQa63XeTgdA//Jli0hZxPnJSlmJ7G78/BjxYn8tj634tRPGMBy2XFmG2VcCwJVifE4tkA49LF83YTu9PGxj+GdI77SV1aqPtk7K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739308135; c=relaxed/simple;
-	bh=7HTPGAR48CRJjzHVBoG77n4rmyS/GxYTOxsXPhVkzho=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D7FC3/yKKY3xgmF62lqcs8C5eT6v06sTWZvzL/uaQk2Yv4MNq/A4i8ermB7y+rC08ARJJlulFPWMs9TuM/HFB67/8uPHVQ+AMERvCngIZ+2K2Rf90pEVj5GqWKdcdOq6QTU5MI15kDuOZtFSCdfO5ezbzQR6aah3CU/PfRBBPSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uHhH+6io; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF599C4CEDD;
-	Tue, 11 Feb 2025 21:08:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739308134;
-	bh=7HTPGAR48CRJjzHVBoG77n4rmyS/GxYTOxsXPhVkzho=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uHhH+6io4Up/8fGx8BLwl7OMTe03HpALiGJXH3E6TkaOZ/PMEJC/adrYDD1ArWWh6
-	 cNFr2shyPONMl2VxULJJAgjqVPT1SiAuDWrzmBrMmuuZj2SznGilJAC2HUAHLyBOPN
-	 u0+2fxoDY0NQKM6V2eZ+3WtxLMAXil1ye/45tqGs1G8rBz4h+Bdksg0CnKYamDj9KE
-	 eookp+Qep3mg0nYltyrjeST7rmYf/lmUK47Z1fEgfqvicH9SEGKbpwFHWvM/udV/Qx
-	 F1YHBFciC5dEQuiZdHL3SeZIA3nkSqIHFAMHB3bWaf9tVtNiuBGLX0edMEPzSgAFd6
-	 YtYjxy59s7mGA==
-Date: Tue, 11 Feb 2025 23:08:49 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stuart Yoder <stuart.yoder@arm.com>
-Cc: linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-	sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] tpm_crb: implement driver compliant to CRB over FF-A
-Message-ID: <Z6u8Yb-NIs0_v2gm@kernel.org>
-References: <20250210232227.97761-1-stuart.yoder@arm.com>
- <20250210232227.97761-2-stuart.yoder@arm.com>
+	s=arc-20240116; t=1739310653; c=relaxed/simple;
+	bh=HxP5Sli4K3SAZa0mS2dzwncRLUQw35Zz0t/vyHKGVvg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k9i31YZuRfONlq+6JfB5jAug9WRBaHiQ4N/Q0KTyl0ITX3VtTtL2bzQv27N0bbA99e+a+2kRzhu8md/59+dURhSQqHGZ0lGv9uMZ2h+HsTCB90Stbnq07+5hzwwDkzvkgyLkAV1fu9dz/8xJ2nA8qzpanqQRzovq3VwSXBRtERw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D7011D14;
+	Tue, 11 Feb 2025 13:51:12 -0800 (PST)
+Received: from [10.118.111.35] (G9L3377F54.austin.arm.com [10.118.111.35])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E93B3F58B;
+	Tue, 11 Feb 2025 13:50:50 -0800 (PST)
+Message-ID: <8780f1e3-e0be-48e9-a329-2d48c5bef034@arm.com>
+Date: Tue, 11 Feb 2025 15:50:50 -0600
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250210232227.97761-2-stuart.yoder@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] ACPICA: add start method for Arm FF-A
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: linux-integrity@vger.kernel.org, jarkko@kernel.org, peterhuewe@gmx.de,
+ jgg@ziepe.ca, rafael@kernel.org, lenb@kernel.org,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250210232227.97761-1-stuart.yoder@arm.com>
+ <20250210232227.97761-4-stuart.yoder@arm.com> <Z6sfB-tvhNhTek-Y@bogus>
+Content-Language: en-US
+From: Stuart Yoder <stuart.yoder@arm.com>
+In-Reply-To: <Z6sfB-tvhNhTek-Y@bogus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 10, 2025 at 05:22:24PM -0600, Stuart Yoder wrote:
-> The Arm specification TPM Service CRB over FF-A specification
-> defines the FF-A messages to interact with a CRB-based TPM
-> implemented as an FF-A secure partition.
-> 
-> Spec URL:
-> https://developer.arm.com/documentation/den0138/latest/
-> 
-> This driver is probed when a TPM Secure Partition is
-> discovered by the FF-A subsystem. It exposes APIs
-> used by the TPM CRB driver to send notifications to
-> the TPM.
-> 
-> Signed-off-by: Stuart Yoder <stuart.yoder@arm.com>
-> ---
->  drivers/char/tpm/Kconfig   |   9 ++
->  drivers/char/tpm/Makefile  |   1 +
->  drivers/char/tpm/ffa_crb.c | 310 +++++++++++++++++++++++++++++++++++++
->  drivers/char/tpm/ffa_crb.h |  30 ++++
 
-Let's use tpm_ prefix for these.
 
-BR, Jarkko
+On 2/11/25 3:57 AM, Sudeep Holla wrote:
+> On Mon, Feb 10, 2025 at 05:22:26PM -0600, Stuart Yoder wrote:
+>> Add TPM start method for Arm FF-A defined in the TCG ACPI
+>> specification v1.4.
+>>
+> 
+> ACPICA changes require (at least) a pull request to be submitted to
+> the upstream ACPICA project on GitHub from where the changes get pulled
+> into the kernel along with other changes.
+> 
+> If such a pull request is already created, please resend the Linux patch
+> with a link pointing to that pull request to inform the maintainer about
+> the same so that it helps in the review of the patches here.
+
+I will submit the pull request to acpiaca and send the link when I send
+v2 of this series.
+
+Thanks,
+Stuart
+
 
