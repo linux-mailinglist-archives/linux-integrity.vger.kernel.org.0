@@ -1,123 +1,158 @@
-Return-Path: <linux-integrity+bounces-4779-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4780-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08541A301F7
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 04:02:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F1E7A303C3
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 07:45:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9D853A7292
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 03:01:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 591067A1F2F
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Feb 2025 06:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4DA1CAA89;
-	Tue, 11 Feb 2025 03:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9A5C1D47A6;
+	Tue, 11 Feb 2025 06:45:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MjItOrxd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ugolflmu"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4389C374EA;
-	Tue, 11 Feb 2025 03:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB1B190674
+	for <linux-integrity@vger.kernel.org>; Tue, 11 Feb 2025 06:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739242865; cv=none; b=lPP0tWM+7+B6rrC1aBOjoyXmP+/c20LTodHRqIpXlCFoLvHw+Lfdi4XC0rUe5J/Yr6IMsH7UFgNkpnGKwXwGoie++AJPbGxY7uylu4nqt0fCyr/QTggG4JflRpwAimm9ppliM5YowLlGN8ewKbXntgdNh2uS74z3+dIky4cLGsk=
+	t=1739256334; cv=none; b=C00RA7hIBQCPu156ZGrY6KH3x74x/665arjksx14loNp8myf6qTuBEf/Nl8JgBUGikXXmnVW3A8PVR4jupDnK42gH6sL+0EatBJdx+q6/nuK0AB5Vq8kwUhsEigxDMZIwQxSrsCDOzN3uz5tZL1eGYUF+6YhMmu+J5NnmdeqSeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739242865; c=relaxed/simple;
-	bh=cZRSGsPr5NDIpPaoHCeAoLx/Cg6l0wSrIJIyEW42Puc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mOVaxeC0O5xXo6RbsHNi0CJbH5zJlZ41rEARLfR6VhDAwpNmdS4h3Jt5M7WX4YvK0DMwFbcmh2MtwbNevB+lfyPwv+cmZplzFs7n+OMd5741Ioto8QpBUHxGJnFO3Wufs/HcuLuNcMzj2Ncf6GxEmyHY5mOSEVkFE1FGPD/WUD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MjItOrxd; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4393dc02b78so12964565e9.3;
-        Mon, 10 Feb 2025 19:01:03 -0800 (PST)
+	s=arc-20240116; t=1739256334; c=relaxed/simple;
+	bh=nVfG0++mT1ID/WJVtPd975t5UPGFo2kbmky6L/bL4xo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kDzKiUfTYaWhj1F64zKU6PcrbWwWNg1MHqj3GIsXIqzxV/sAEmxtel6Cz+hhxeAfkkKddhYLCg28PMuZNCZiUEWFaHXoK7MKbiFbyFKcEPOsvXMPzqomfUWSl+UwEW8DFHp/PAMwKiNpu74IqC95y00+SY/bdfRLyYxQes0q+1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ugolflmu; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4ba9680271fso2140842137.1
+        for <linux-integrity@vger.kernel.org>; Mon, 10 Feb 2025 22:45:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739242862; x=1739847662; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I0+Ftmctz1tHLKGjM2SvsvtPNyMgN+i6G6rr2ncjwYw=;
-        b=MjItOrxdIpK9Beqn0GLeYGdPvTYTn6rSyfdBEB++5bPg19oPBSXTPFext8gMkWpykE
-         5K++coT/zGq6cxCtcN51VNAX49sjcR5sL4dHqCFtX0UfEkqVdOc6awnAY+cE5VZzKmww
-         1M2NLpb/1u3V8flavez9oJetoBSJxbUdJIjKDYE1Ob99FOtmspUTVX+fM80ynafUwpIB
-         1Nk1WCNQ08h7kffR6lfPDuJDSf+o4hyYK+DjKQldnmFh6JYKKbB1wT+/XypG4vS86NJ/
-         lLsYLEhejK/javnUh8EuJMEg6mqW4Sc+ZMD88JlfRX5kmXGGapP+RSRD9qV95unuASIN
-         hACg==
+        d=linaro.org; s=google; t=1739256332; x=1739861132; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1QiFCUT3qvEQvHwez3VPpjFS/OoBwVp/3j9UJxOxrlI=;
+        b=UgolflmuQBP0lJQq/x0bG/yRl6xEGSnrQt/HkVI078Z0b5HRB2CexuUv3JLe1xQS9Q
+         +Gzelmm7gf6Cjsr2hC7tXcB88DxU5L5JsnamRkOrInEOem7vgex2hWgR0+mAn4JtVzHc
+         EXlZRkTFq6gCYBX/CPGu66ylQIkQvKGFHrk+xwFNIYPZ/5KChcOuAm6ou0QXRrmIijd4
+         e+OqQ80CoeLg10nqSmxPY3Cf7HlRMNCxHClyc+Xn0uC8v30NIMURHxx8zq/dYXNFXb73
+         i9ohCT+/q7uOvYvtk03+Rqn7adhLosTa/Hl4ETDgpkZKOIx6ZhZ2RnIxbHECUbjnHkcQ
+         F2og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739242862; x=1739847662;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I0+Ftmctz1tHLKGjM2SvsvtPNyMgN+i6G6rr2ncjwYw=;
-        b=DIqzlAz76c5jzko1VVCwVzBiUuuNmugXbc8f16SDc821u8Bo6bHtscTjUzIQvl5Zpw
-         bMkDBNizm1+GvkMz0qM2edsnj016PudKf0RLpWyjEmPs3i4v+D/D/jk9Ix3Zo067Ghtz
-         Dpgp2fRq2kX+96ohWWuTxuAMAsDMZM2ScwsfiSJRgXTelxSWWRjj5e7QBRCjqOl6DTr2
-         TOMZR5ndoRZWdrN6VNd6uJOs4MYKbqLEkGLh12vTks1o3HLgjF0kn4sNq2zDYZ2a26OC
-         1gnwAvrdXl+JZxbFypijbzEu/jikBzqDSwzeIlyKQbZWKwWtfHhiKyPXpI7I3Cr8Wnc1
-         3EaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUgy8COySLBYU08ESORVbeJVbX2xu49AQIdAv//pK4soNe6ju0MiRo6PZivl1I8y77F7icu/CqlfuvD9/yaHS78@vger.kernel.org, AJvYcCVqbEsMk1Zg1oHSF2hxHQ65Jv78NZr69TFH8ycy6mCVJ68W3UgthpU6CXGcvrgzLFuVIjKBoRHR4o/GvYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz84ITrCEtPM1dsEfKM8LBgUDL8pXMTtEEDBfp8BOcDCMOjBezI
-	xg2GTjAlgO06MEjL9d6a5iCMEe70hnVTwuo/LMyz0ingY1l3u3pM
-X-Gm-Gg: ASbGncurzILuWgToRjcvQZoUl3rA+TRg3sWovt9bHxpUs+nY6a4wAagabFjhbqevHfK
-	x1P2T4fIikol0T6Z1ZwdCuU7hIRKCaFxapxieCUJucYJUGgvVfQpf3yuu9ZJKUoQIzoGTGAyDQ6
-	QEJZpsuBF1BqQxCKD/jsd63fZIHbKirVBECp0N3NtU5dCnUekQCCl4cRa4ERC6ukHnQt2RXQuaH
-	Oof62ASxv2kytzU4Wwmv0VVeMpa4Q8W8FXWE7+TlF0Xznb3zGk7yhIpY83Y36qQHjFPqMLEeLLS
-	TlKSGb/9MmRkZ6KbJjpcP0waShD0VYwCLRooNw4=
-X-Google-Smtp-Source: AGHT+IFQ5ct/eLOgfDv7Qw2gj1n3vazuwUHtEoARoYyP42j6t/7paFBG0Ke21LcKUs+x9M67T3tGLQ==
-X-Received: by 2002:a5d:6d0b:0:b0:38d:bd41:2f8b with SMTP id ffacd0b85a97d-38de41bdfe9mr1852527f8f.44.1739242862468;
-        Mon, 10 Feb 2025 19:01:02 -0800 (PST)
-Received: from localhost (tor-exit-9.zbau.f3netze.de. [185.220.100.248])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-38dd4342502sm8153548f8f.26.2025.02.10.19.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 19:01:01 -0800 (PST)
-Date: Tue, 11 Feb 2025 05:00:22 +0200
-From: Ahmed Salem <x0rw3ll@gmail.com>
-To: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, shuah@kernel.org, 
-	skhan@linuxfoundation.org
-Cc: linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev
-Subject: [PATCH v3] selftests: tpm2: test_smoke: use POSIX-conformant
- expression operator
-Message-ID: <nyskb7mbqk2dvlwhez4sua7ryz5gyi73yker6y3qhd4chyyeaw@x6nhqgtxcyvl>
+        d=1e100.net; s=20230601; t=1739256332; x=1739861132;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1QiFCUT3qvEQvHwez3VPpjFS/OoBwVp/3j9UJxOxrlI=;
+        b=hfP8lUjgnP8tcgDt4/nGF5LLZKOInYIp9RgPjiCAjm32KufmHO6ltbGjLgUr6I5Tx/
+         MpgcWbRyRdL643T6Z39HPCrvQRv0VuB6HWP26c97gEZr/RhoGyCYVvAAd2PBNns01tjJ
+         rnPSlKYje/BFHPCoaKCtbLaah6JM/Wlq25wEArKcYz9VmbnkzzYb8Q6TcI9rn26BadLT
+         if7K/P5cq8yp96Tds5Q/vGNHx264qZwXEL9G1G6duv0NYq+3ArIDQGoot5EWhUfvOyHO
+         D8h60EPa1YnjZccWBtBiJEMzcpTQH+EZBWifi/lYpm8Kji7tf1Oe8IEBF5IdVngKXHll
+         CXTA==
+X-Gm-Message-State: AOJu0YwkDhrQCFYtHwysFeb+HkUssoT726gP+jYmvULmWp3htu2679e1
+	8knlRnT34Zh0r45gPFfFvh/2sLgYp2JsD5ExkJYqFCRQBpn7LuAAC1XM+T5n7cksFSR+3tqwdj1
+	hOho2jaHXztfvzzTzxxNuMuu/OmkWiAZiLOWChw==
+X-Gm-Gg: ASbGncu8q/ykAFZnX6zyma9oExh9ih8lciZ80xAj+HBtKVBOhoskYfcPzIagmkwkjul
+	jT7LXZFGLCnq/BHO08btYzgMlwRCL525PkNKYD7fftj9G/I9VIn2UyhUKcVbOY2LnX6223lsOVP
+	A=
+X-Google-Smtp-Source: AGHT+IHraUWItx7lyhs3RGJc1hMUxbfl9W9qX1eehSk1rDY3s6SNEwm4KmyNFqY9duS3Ua0mf2EDxT5evKNmccbGxaE=
+X-Received: by 2002:a05:6102:2acf:b0:4bb:41c0:ea63 with SMTP id
+ ada2fe7eead31-4bbe13bc505mr1500286137.8.1739256331732; Mon, 10 Feb 2025
+ 22:45:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250210232227.97761-1-stuart.yoder@arm.com>
+In-Reply-To: <20250210232227.97761-1-stuart.yoder@arm.com>
+From: Sumit Garg <sumit.garg@linaro.org>
+Date: Tue, 11 Feb 2025 12:15:20 +0530
+X-Gm-Features: AWEUYZmss9mgyyi4uduffWjEUtPdHOzBfArVxLUXxchfgmNTaYDr5MANoP7oRrI
+Message-ID: <CAFA6WYM7K4_toy5_n1arW4po4SOX0R9624rCgO=_MvcMeySwUA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add support for the TPM FF-A start method
+To: Stuart Yoder <stuart.yoder@arm.com>
+Cc: linux-integrity@vger.kernel.org, jarkko@kernel.org, peterhuewe@gmx.de, 
+	jgg@ziepe.ca, sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jens Wiklander <jens.wiklander@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Use POSIX-conformant operator symbol '='.
++ Jens
 
-Signed-off-by: Ahmed Salem <x0rw3ll@gmail.com>
----
+Hi Stuart,
 
-Apologies for my previous mistakes.
+On Tue, 11 Feb 2025 at 04:52, Stuart Yoder <stuart.yoder@arm.com> wrote:
+>
+> These patches add support for the CRB FF-A start method defined
+> in the TCG ACPI specification v1.4 and the FF-A ABI defined
+> in the Arm TPM Service CRB over FF-A (DEN0138) specification.
+> (https://developer.arm.com/documentation/den0138/latest/)
 
-Changes in v3:
- - Reword mistaken commit message
+Nice to have a specification standardizing interface to TPM
+managed/implemented by the firmware. Care to add corresponding kernel
+documentation under Documentation/security/tpm/.
 
-Changes in v2:
- - Remove snippets pinpointing the issue 
-   from commit message
+BTW, we already have drivers/char/tpm/tpm_ftpm_tee.c, so do you see
+possibilities for an abstraction layer on top of communication channel
+based on either FF-A or TEE or platform bus?
 
- tools/testing/selftests/tpm2/test_smoke.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> FF-A is a messaging framework for Arm-based systems and in the
+> context of the TPM driver is used to signal 'start' to a CRB-based
+> TPM service which is hosted in an FF-A secure partition running in
+> TrustZone.
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 168f4b166234..3a60e6c6f5c9 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -6,6 +6,6 @@ ksft_skip=4
- 
- [ -e /dev/tpm0 ] || exit $ksft_skip
- read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
--[ "$tpm_version" == 2 ] || exit $ksft_skip
-+[ "$tpm_version" = 2 ] || exit $ksft_skip
- 
- python3 -m unittest -v tpm2_tests.SmokeTest 2>&1
--- 
-2.47.2
+Is there any open source implementation for such a secure partition
+managing the TPM? Also, is that really a discrete TPM or firmware TPM
+managed by the firmware?
 
+If it supports firmware TPM, I would be interested to see how you plan
+to handle cases related to secure storage.
+
+-Sumit
+
+>
+> The first patch adds an FF-A driver to handle the FF-A messaging when
+> communicating with a CRB-based TPM secure partition built on FF-A.
+> The driver is probed when the TPM secure partition is discovered by
+> the Linux FF-A infrastructure.
+>
+> The second patch consolidates the check for idle support in the CRB
+> driver to one place.
+>
+> The third patch defines the new ACPI start method enumeration for
+> CRB over FF-A.
+>
+> The fourth patch adds support for the FF-A ACPI start method to
+> the TPM crb driver.
+>
+> Stuart Yoder (4):
+>   tpm_crb: implement driver compliant to CRB over FF-A
+>   tpm_crb: refactor check for idle support into TPM into inline function
+>   ACPICA: add start method for Arm FF-A
+>   tpm_crb: add support for the Arm FF-A start method
+>
+>  drivers/char/tpm/Kconfig   |   9 ++
+>  drivers/char/tpm/Makefile  |   1 +
+>  drivers/char/tpm/ffa_crb.c | 310 +++++++++++++++++++++++++++++++++++++
+>  drivers/char/tpm/ffa_crb.h |  30 ++++
+>  drivers/char/tpm/tpm_crb.c |  81 +++++++++-
+>  include/acpi/actbl3.h      |   1 +
+>  6 files changed, 426 insertions(+), 6 deletions(-)
+>  create mode 100644 drivers/char/tpm/ffa_crb.c
+>  create mode 100644 drivers/char/tpm/ffa_crb.h
+>
+> --
+> 2.34.1
+>
+>
 
