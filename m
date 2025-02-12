@@ -1,178 +1,139 @@
-Return-Path: <linux-integrity+bounces-4798-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4799-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CEF3A32011
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2025 08:39:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FB84A32614
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2025 13:44:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70A2B7A186E
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2025 07:38:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 744243A689F
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Feb 2025 12:44:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DF1204682;
-	Wed, 12 Feb 2025 07:39:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AE0220D4E8;
+	Wed, 12 Feb 2025 12:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sbF05qRL"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bU3Rd2tJ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660D42045B2
-	for <linux-integrity@vger.kernel.org>; Wed, 12 Feb 2025 07:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC9F20C487;
+	Wed, 12 Feb 2025 12:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739345977; cv=none; b=iHGYqdxFn4/UVK9VXTKwlqCcLPQqriPT3NgaPI8CNsL9fFW/HtK1CEs+s4nko5kKpa8/xxNLisb1O452B/APuXObgQCvcuEqCunqcDeeelSi63VwPoD1iEwlKWgXOkA1TMPFhp46TCcHU7MpvEJSFKnYN5YAupnSCZO7yb6FvaA=
+	t=1739364280; cv=none; b=eC1V6NbN2D+wZehPEJirz05q/pZ15BReOilCNivm5qtY+PYXnFSXkNR9Tqiz9orfJ7q1oDNJwSBDmPrUE+X+SOvLWRRQHvBPPBv+lU3gsBQ8UgjYNtHW8iUpJMiMltXaV+spXzqhoZPDQ+aK9N6/ZP0qsQBw7cwHrBNG+w8i89M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739345977; c=relaxed/simple;
-	bh=DDn3QJZLeVNQkdyCgloIeeFY8QjFE6nRBdjKBqMF2U4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hjmQhJERxQMu0dyl6JbaJpG94UIfKQINR5Z4ySzU5pUFb9XNbz4dg22kpSm/3HQMiUdjJ9iHh+qTbo/YK7+K9ildUiGV0j9PLvjh5lj10hFgDPC6HhWTjyszJt0M1soBKT5oVHlyGAzbDIxiqkDXjEBW1NvvwN16MxTvVyzEHcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sbF05qRL; arc=none smtp.client-ip=209.85.222.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-86708ac8e2cso990516241.3
-        for <linux-integrity@vger.kernel.org>; Tue, 11 Feb 2025 23:39:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739345974; x=1739950774; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rPFpWXPkHcbJC5yJ8SZuPQTMyeFGoz+jsHD5hgwmaI4=;
-        b=sbF05qRLTtCQvHLSrnkjcYb+0GaC8jUlgt51zDLxksWJR386CmQukuFfoCVB3BhTsU
-         FsM0gYExpxCN0JkU+5HqpM+CLo7YShB2jXtO8dhrqRlYPAisjUM37hDJzmkE3aL5tOB1
-         GaS7SH046cMmfjXqG9JyguZ6qUkQY2MtO13BI5H/zDw3gPzapO3z+HCuUMFtsFdYO53K
-         3xR3qlli8Gr4dbtfybOh2B+HxXiMqtp++z6a30sU+ZncXU2PxIzxpgSpikhr3RksFD4m
-         3jL8p5kLNtvVSnwT0hl2u/AesT3mOtTXNt0bgMrwALleMnJFYE/dfo9ysG2O/k0uxZKD
-         s4DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739345974; x=1739950774;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rPFpWXPkHcbJC5yJ8SZuPQTMyeFGoz+jsHD5hgwmaI4=;
-        b=Qfbguomxi0f6+xHBdqy8s0lxwJFcPcGM45OyLaU4kNs/LZY5dWqIIfGyO3FC8hk1Wn
-         xvmM+0v6n/uRd86M22Z3kpiMD4ldeJ5NQ634uCbDUeR8WhegcjXUXJM9FQTT0/8nE8w2
-         Ka+9qSdqrGWbQi+loi1uzDT5gVUmNinuiexvQX6z59xLCPcB/D3sh9EI1mwp3MyC7RaH
-         O9rYAw3z+CTNEP3gkAY+UrGUZMZWpBIAHDGI1DakqiOtzvcwJ7pHXMmAKbSGWPvMvLWc
-         Yb4jfYx/8YNwozcvjNMooEiKEmoLyo7F5/E1RpXMq8kvsYa54fSznUQ0qbqE7LkY/B5u
-         0ZEA==
-X-Gm-Message-State: AOJu0Yz1ixMQ/tBpWmUWhMp7RtxyyiXUHQ7YBfAHSfurJCuFd0f9Gzey
-	KTmXkC9Zz1faiaTKqIEUNkwR3JTwKKJMjmgnFeQ9KKTd6TTso6qxttfo42E/E11CGMIGSyPF23o
-	WWpp33+1311WmfMCPDV8Yia5uBXUzTdAIgbyCFw==
-X-Gm-Gg: ASbGncuEUAr06IMrwCuwz6O4AsoFl0lbdnj2kXwGsnCQizgDfM2otsDrdEaUOBqv0yi
-	OZUEDyEaQ4u0uoDgZjAlekk4G1oH+bnLx1r4s14Q+jl9gMt9LSc4sKYkzjV1q1umyD/v1CV81tj
-	8=
-X-Google-Smtp-Source: AGHT+IEMiel5s93FgOos2qqIpI//PpocZKIctdEX1cnUApU9jZKvSlLfCRn+pBXhNYid3bsEMoD6l+ZBxkgMxzRoTOk=
-X-Received: by 2002:a05:6102:a4c:b0:4bb:d394:46cc with SMTP id
- ada2fe7eead31-4bbf54922d5mr859998137.2.1739345974277; Tue, 11 Feb 2025
- 23:39:34 -0800 (PST)
+	s=arc-20240116; t=1739364280; c=relaxed/simple;
+	bh=+mhHkXqhc4VDwPi7MLWcNjZdhTc4zZo0gwq+T5cTOIY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qt0m9RiwmHpRLQ+XABRLF70jn5Z3s8Omob7SQxcEzofj9DsdXtgtXADQGaShYhHZ8Nzjt6U/VYRJA+MqLDmALy3uzGNLld4J3hmKFLToTVHkIFZefFDFRhKpoHc0QFLmC0CyoXPE1ncwS+jdmU4MIe0C4OfW7hVFgDo4meB9P3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bU3Rd2tJ; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51CBpiSd013640;
+	Wed, 12 Feb 2025 12:43:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=+mhHkX
+	qhc4VDwPi7MLWcNjZdhTc4zZo0gwq+T5cTOIY=; b=bU3Rd2tJlFFQqu5BV1YnSW
+	tkSX87Qk0oNHNsqBvOCKKjQZaMiiiZktgkFwm6RXdYLRIRz3064de3ZJXTpXluHu
+	jR03F9uRrZfaZigIPn78pnGDR9HygsJhvJ5DYCArhv2PG3aDrjD9XnfD+jBDYhlz
+	xI8W+J8GZ+nTiq+IF6s6C8efmO99g52z7VbIvRvo7u/PcEmBojze6dbCKo6XXUlL
+	j/3GiABLIEtJd6Ef0p7jqIKghjbxcTQr0y0HzxcxSdS0S7J5xaN+VGT0Pq9ntVu1
+	f6RR3BKMvXasb0aO6cNUobfx/7R+rEz600ZMWb7fDBrUlrWX8HgZMXek6yAfaF7A
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44rfpa3bm3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Feb 2025 12:43:04 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 51CCK66g021894;
+	Wed, 12 Feb 2025 12:43:03 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44rfpa3bky-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Feb 2025 12:43:03 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51CCdn11028217;
+	Wed, 12 Feb 2025 12:43:02 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44phyygqa4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Feb 2025 12:43:02 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51CCh1wq27132606
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 12 Feb 2025 12:43:01 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7A3245805F;
+	Wed, 12 Feb 2025 12:43:01 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3039258051;
+	Wed, 12 Feb 2025 12:43:00 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.169.88])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 12 Feb 2025 12:43:00 +0000 (GMT)
+Message-ID: <6f7120f292a7863e7c69d3cb49f224efd12ee629.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v3 07/13] keys: Add ability to track intended usage
+ of the public key
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Jarkko Sakkinen <jarkko.sakkinen@kernel.org>,
+        Eric Snowberg
+	 <eric.snowberg@oracle.com>
+Cc: linux-security-module@vger.kernel.org, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+        ardb@kernel.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
+        mic@digikod.net, casey@schaufler-ca.com, stefanb@linux.ibm.com,
+        ebiggers@kernel.org, rdunlap@infradead.org,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Date: Wed, 12 Feb 2025 07:42:59 -0500
+In-Reply-To: <Z6UU7anXtW43AhNR@kernel.org>
+References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
+	 <20241017155516.2582369-8-eric.snowberg@oracle.com>
+	 <Z6UU7anXtW43AhNR@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210232227.97761-1-stuart.yoder@arm.com> <CAFA6WYM7K4_toy5_n1arW4po4SOX0R9624rCgO=_MvcMeySwUA@mail.gmail.com>
- <4bb3cefa-b843-45ca-82c5-d96b13454baa@arm.com>
-In-Reply-To: <4bb3cefa-b843-45ca-82c5-d96b13454baa@arm.com>
-From: Sumit Garg <sumit.garg@linaro.org>
-Date: Wed, 12 Feb 2025 13:09:23 +0530
-X-Gm-Features: AWEUYZnA0hBKgdYHZkgK2av9Y3l6uKPbO9mL8_cp-1GkP_zm5MsWMPppld1Av2g
-Message-ID: <CAFA6WYM3UA9+TE8L2U5Qd8FZfaGZnbba=QzWU7fEu3LKQVm-tw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Add support for the TPM FF-A start method
-To: Stuart Yoder <stuart.yoder@arm.com>
-Cc: linux-integrity@vger.kernel.org, jarkko@kernel.org, peterhuewe@gmx.de, 
-	jgg@ziepe.ca, sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jens Wiklander <jens.wiklander@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WPOio9vJuKimRSeTX5erqwTICYwt3Uiv
+X-Proofpoint-ORIG-GUID: PANYEldy6s1JY0QEJs3RxZgvBxokQCaR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-12_04,2025-02-11_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ mlxscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ mlxlogscore=923 clxscore=1011 phishscore=0 impostorscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
+ definitions=main-2502120097
 
-On Tue, 11 Feb 2025 at 21:39, Stuart Yoder <stuart.yoder@arm.com> wrote:
->
-> Hi Sumit,
->
-> On 2/11/25 12:45 AM, Sumit Garg wrote:
-> > + Jens
-> >
-> > Hi Stuart,
-> >
-> > On Tue, 11 Feb 2025 at 04:52, Stuart Yoder <stuart.yoder@arm.com> wrote:
-> >>
-> >> These patches add support for the CRB FF-A start method defined
-> >> in the TCG ACPI specification v1.4 and the FF-A ABI defined
-> >> in the Arm TPM Service CRB over FF-A (DEN0138) specification.
-> >> (https://developer.arm.com/documentation/den0138/latest/)
-> >
-> > Nice to have a specification standardizing interface to TPM
-> > managed/implemented by the firmware. Care to add corresponding kernel
-> > documentation under Documentation/security/tpm/.
->
-> Yes, I can add some documentation there.
->
-> > BTW, we already have drivers/char/tpm/tpm_ftpm_tee.c, so do you see
-> > possibilities for an abstraction layer on top of communication channel
-> > based on either FF-A or TEE or platform bus?
->
-> I think the CRB and OP-TEE based messaging approaches for interacting
-> with a TZ-based TPM are fundamentally different and I don't see how
-> to harmonize them through some abstraction.
->
-> The OP-TEE TPM protocol copies the TPM command into a temp shared memory
-> buffer and sends a message to the TPM referencing that buffer.
->
-> The CRB uses a permanently shared memory carve-out that in addition
-> to the command/response data has other fields for locality control,
-> command control, status, TPM idle, etc. The only 'message' needed is
-> something to signal 'start'.  Any OS that is FF-A aware and has a
-> CRB driver can simply add a new start method, which is what this
-> patch series does.
+On Thu, 2025-02-06 at 22:13 +0200, Jarkko Sakkinen wrote:
+> On Thu, Oct 17, 2024 at 09:55:10AM -0600, Eric Snowberg wrote:
+> > Add two new fields in public_key_signature to track the intended usage =
+of
+> > the signature.=C2=A0 Also add a flag for the revocation pass.=C2=A0 Dur=
+ing signature
+> > validation, two verifications can take place for the same signature.=C2=
+=A0 One
+> > to see if it verifies against something on the .blacklist keyring and
+> > the other to see if it verifies against the supplied keyring. The flag
+> > is used to determine which stage the verification is in.
+> >=20
+> > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+>=20
+> Mimi, was this the patch set you asked to look at while ago?</offtopic>
 
-Okay, I see how the CRB driver is closely tied to the ACPI based
-systems. I was expecting the FF-A based TPM interface to be
-independent of ACPI or DT such that it's not constrained by the
-hardware description a platform chooses to use. I suppose there will
-be a different TPM FF-A driver or spec when someone wants to deploy it
-on DT based systems, right?
+Yes, in particular please take a look at Paul's comment on 00/13.
 
->
-> >>
-> >> FF-A is a messaging framework for Arm-based systems and in the
-> >> context of the TPM driver is used to signal 'start' to a CRB-based
-> >> TPM service which is hosted in an FF-A secure partition running in
-> >> TrustZone.
-> >
-> > Is there any open source implementation for such a secure partition
-> > managing the TPM?
->
-> Nothing yet, but something I am working towards.
->
-> > Also, is that really a discrete TPM or firmware TPM
-> > managed by the firmware?
->
-> It could be either. It doesn't matter from the point of view of
-> the OS CRB driver. For testing this patch series I used an
-> internal proof-of-concept fTPM with a CRB interface.
-
-Okay I see, having a real firmware managed TPM implementation will
-really unlock the adoption of this specification.
-
->
-> > If it supports firmware TPM, I would be interested to see how you plan
-> > to handle cases related to secure storage.
->
-> Yes, this is a challenge and there are various ways it could be
-> implemented. For example, RPMB or if you have an internal root of
-> trust with secure storage like an RSE that could play a role.
->
-
-The RPMB kernel routing is what we have for the OP-TEE based fTPM but
-I agree there are numerous ways to implement it given the platform's
-capability.
-
--Sumit
-
-> Thanks,
-> Stuart
->
->
+Mimi
 
