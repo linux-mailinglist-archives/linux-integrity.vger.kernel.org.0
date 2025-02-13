@@ -1,218 +1,143 @@
-Return-Path: <linux-integrity+bounces-4812-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4813-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AEC7A341E2
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Feb 2025 15:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D45CCA3476A
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Feb 2025 16:35:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 121373AB064
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Feb 2025 14:24:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 001EB3B19CD
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Feb 2025 15:19:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43CB0281359;
-	Thu, 13 Feb 2025 14:24:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5D713F434;
+	Thu, 13 Feb 2025 15:20:02 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9188D281353
-	for <linux-integrity@vger.kernel.org>; Thu, 13 Feb 2025 14:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC88826B0BC;
+	Thu, 13 Feb 2025 15:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739456650; cv=none; b=q+d4oirD/UodNhzvmxSKp3mpur4Pna8dCedKGeG+bIedtLyaq971OwB6cG35NIyS0PQmmXcZhn2k9kRRj5uHp81ls0GFXA5Vrsv822ZdYi6tL1Z3DQvzQOM6ZdH+1osQ2gmKMNOAnHPNrPP/2dbkOMxBKP/UjMugaqB49ZqTKFE=
+	t=1739460002; cv=none; b=NzT6E21eGc9e/b0YgVBX1EqdemFN33wW5l8LAcUHTgRikZAF3rzGPNL/Cdms36KGVnebx74n3ZeMM0i3FYaN+jGe6LqRfgE51M0rEONMBNS8pDrfiLVIyT8+qsXpU1dyXEBsKLR7SF2p/E5fcuipGAiddCVETsFo9aeoVyBM0XI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739456650; c=relaxed/simple;
-	bh=qzEAWYMDjfnshH5UqSBuxr2QKwmXoTdzmqaire+hHgM=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UAlPwjrluZwZGXkMVhyre0VyuN4BpV8RMh3jMvkCOMhFdwqK9vTFcT3L5Rh4JqOZE9qV4fnfT2RrHhGra9P0nUKoVYKdZPcRINAgA9WOZXW9GB9BvXv6i380XnmBFAk0xOzhcUWNfEv6VNOf3a1tNc+iOP0+rtZFs5fNa5TsM9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4YtxFf5nc2z9v7J2
-	for <linux-integrity@vger.kernel.org>; Thu, 13 Feb 2025 21:42:46 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id CAA03140109
-	for <linux-integrity@vger.kernel.org>; Thu, 13 Feb 2025 22:05:22 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDHmkka_K1n2kNtAg--.2704S2;
-	Thu, 13 Feb 2025 15:05:21 +0100 (CET)
-Message-ID: <a35aa6f1578a2bf5084a6e4541eb2a567109aca5.camel@huaweicloud.com>
-Subject: Re: [RFC] Issue of  historical file and script invocation when
- using IMA for runtime attestation
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: "Wang, Nicholas" <chenkai3@illinois.edu>, 
-	"linux-integrity@vger.kernel.org"
-	 <linux-integrity@vger.kernel.org>
-Date: Thu, 13 Feb 2025 15:05:11 +0100
-In-Reply-To: <6165162.lOV4Wx5bFT@nicoripper>
-References: <6165162.lOV4Wx5bFT@nicoripper>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1739460002; c=relaxed/simple;
+	bh=N2ef7JANwra75iIw3ldGvYambNz6khJkPVb6/xb2kYs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZD45HfnwPbwmfARFF+M4VkbjZxp/rgUgRrD5mTMdaqw71WZT2T4VPhFxlwMj623l+qwPr1c2vekkgGZZIvnDOE6tpru9ZMAfOXze1sRuKayQFUWaDclgHj5MD6ulxwOtvOrJOv+Ocj+mJiVGSaOEEjgDOLEvOhh+dNctWjGySFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC37E113E;
+	Thu, 13 Feb 2025 07:20:20 -0800 (PST)
+Received: from [172.20.10.14] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E5C33F58B;
+	Thu, 13 Feb 2025 07:19:59 -0800 (PST)
+Message-ID: <e142afd2-38ec-4640-b9be-cb414bccc807@arm.com>
+Date: Thu, 13 Feb 2025 09:19:58 -0600
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwDHmkka_K1n2kNtAg--.2704S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtFyUJr13urWfAr4Uur1rWFg_yoW7WF1kpF
-	WYg39xKF4kA3WxK3srAw17XFWSk393Jay5Wr1DG34UAan8uryv9rWxK3yYvFZ8CrnY93Wj
-	vr1Y934qka4DZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUgqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVj
-	vjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBGetmdcD2AADsL
-
-On Thu, 2025-02-13 at 12:57 +0000, Wang, Nicholas wrote:
-> Linux-integrity community,
->=20
-> Hi, I'm Nicholas Wang from UIUC, and we are researching the potential=20
-> challenges of a remote runtime attestation tool using IMA, Keylime, under=
- a=20
-> simulated deployment environment. In the process, we conducted multiple=
-=20
-> experiments, and we encountered some issues that we realize may not be ab=
-le to=20
-> be solved entirely in userspace.
-
-Hi Nicholas
-
-thanks a lot for your questions. Will try to answer to the best of my
-knowledge.
-
-> To sum up the first issue, IMA may not reflect the whole picture of invoc=
-ation=20
-> or activation history. In particular, we are in question about "Once the=
-=20
-> earlier measurements are verified, there is no need to verify them again"=
-=20
-> according to IMA event log documentation. First off, Keylime uses directo=
-ries=20
-> or paths for matching and ignoring files in their policy file; in IMA pol=
-icy,=20
-> "dont_measure" filters out filesystems. We see two potential scenarios in=
- which=20
-> malicious actors may silently bypass the attestation. We assume Keylime u=
-ser=20
-> does not use "dont_measure" filters in IMA policy and IMA indeed measured=
-=20
-> everything while Keylime attest the digests according to its own policy.=
-=20
-
-I think the basic principle of the dont_measure rules, is that the
-files in the pseudo filesystems are kernel-controlled, meaning that
-they don't have random content but they have to be formatted according
-to what the kernel expects (needs to be verified if it is the case).
-Sure, also tmpfs is skipped, but in this case the initial state is that
-the volume is empty and it is the running system filling it. It is more
-a problem of run-time integrity, rather than load-time.
-
-> Keylime would filter and ignore certain files based on its own directorie=
-s and=20
-> file filtering, and such ignored files would only appear in IMA log once =
-as long=20
-> as the system is not rebooted. Now the issue arises: 1. if the file being=
- moved=20
-> within the same filesystem, it will never re-appear in IMA logs even with=
-=20
-> further invocations, as IMA treated them the exact same file. This may al=
-low an=20
-
-Yes, we are not giving trusted path guarantees. In the past there was a
-patch set from Dmitry Kasatkin about directory protection
-(https://lwn.net/Articles/574221/), but the work didn't progress.
-
-What matters from the IMA point of view is what the process reads, as
-it has the potential of corrupting the process. From where data are
-read, it is not relevant for the purpose of assessing whether or not
-the process got access to malicious data.
-
-> attack to persist throughout until a fresh reboot. 2. In case of a long-l=
-ived=20
-> system which has patched a vulnerable version of one software, the old,=
-=20
-> vulnerable version which has been in the IMA log before will not appear i=
-n=20
-> case of further activation before a reboot. Thus, we believe that the des=
-ign=20
-> which measures each file once may in some cases not reflect a comprehensi=
-ve=20
-> state of the machine to meet runtime attestation needs.
-
-Yes, we still need to have a good rollback detection, for example by
-adding a measurement of outdated binaries. We still need to come up
-with a good solution.
-
-> The other issue we run into is script invocation. We find this is tricky =
-as we=20
-> realize that scripts being too versatile and hard to enforce the attestat=
-ion=20
-> upon execution, and executing them directly (through shebang) versus pass=
-ing=20
-> it to interpreters/shell as arguments results in a drastically different=
-=20
-> attestation result as the latter only attests the interpreter binary itse=
-lf.=20
-> While a naive solution would be turning on attestation for file read oper=
-ations=20
-> in IMA policy or use SELinux file types to facilitate, however, we suspec=
-t it=20
-> would still be an unmanageable task with unbearable performance. As the n=
-ature=20
-> of the problem is essentially to distinguish code from data, the only=20
-> reasonable solution we currently have thought is to have interpreters=20
-> themselves to do the task, and indicate IMA what is code through API.=20
-> Alternatively, the only probable way would be any attestation tool eventu=
-ally=20
-> had to have their own kernel modules and extended file types for IMA poli=
-cy,=20
-> and decide on what to be measured in separate components.
-
-Michael Salakun upstreamed a patch set to let the interpreters query
-the kernel (also IMA) on whether or not a script should be executed:
-
-https://lore.kernel.org/linux-integrity/20241212174223.389435-1-mic@digikod=
-.net/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/4] Add support for the TPM FF-A start method
+To: Sumit Garg <sumit.garg@linaro.org>
+Cc: linux-integrity@vger.kernel.org, jarkko@kernel.org, peterhuewe@gmx.de,
+ jgg@ziepe.ca, sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Jens Wiklander <jens.wiklander@linaro.org>, Rob Herring <robh@kernel.org>
+References: <20250210232227.97761-1-stuart.yoder@arm.com>
+ <CAFA6WYM7K4_toy5_n1arW4po4SOX0R9624rCgO=_MvcMeySwUA@mail.gmail.com>
+ <4bb3cefa-b843-45ca-82c5-d96b13454baa@arm.com>
+ <CAFA6WYM3UA9+TE8L2U5Qd8FZfaGZnbba=QzWU7fEu3LKQVm-tw@mail.gmail.com>
+ <fdaa9a58-790f-4839-8db7-1b9a81eb8edf@arm.com>
+ <CAFA6WYM0ANqc--ScYtJFRjOsCCjzO3NX46=F5V=rza_6Q-Q96g@mail.gmail.com>
+Content-Language: en-US
+From: Stuart Yoder <stuart.yoder@arm.com>
+In-Reply-To: <CAFA6WYM0ANqc--ScYtJFRjOsCCjzO3NX46=F5V=rza_6Q-Q96g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-Following on that, Mimi upstreamed a patch:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/s=
-ecurity/integrity/ima/ima_main.c?h=3Dv6.14-rc2&id=3D95b3cdafd7cb74414070893=
-445a9b731793f7b55
+On 2/12/25 11:31 PM, Sumit Garg wrote:
+> + Rob
+> 
+> On Thu, 13 Feb 2025 at 03:25, Stuart Yoder <stuart.yoder@arm.com> wrote:
+>>
+>>
+>>
+>> On 2/12/25 1:39 AM, Sumit Garg wrote:
+>>> On Tue, 11 Feb 2025 at 21:39, Stuart Yoder <stuart.yoder@arm.com> wrote:
+>>>>
+>>>> Hi Sumit,
+>>>>
+>>>> On 2/11/25 12:45 AM, Sumit Garg wrote:
+>>>>> + Jens
+>>>>>
+>>>>> Hi Stuart,
+>>>>>
+>>>>> On Tue, 11 Feb 2025 at 04:52, Stuart Yoder <stuart.yoder@arm.com> wrote:
+>>>>>>
+>>>>>> These patches add support for the CRB FF-A start method defined
+>>>>>> in the TCG ACPI specification v1.4 and the FF-A ABI defined
+>>>>>> in the Arm TPM Service CRB over FF-A (DEN0138) specification.
+>>>>>> (https://developer.arm.com/documentation/den0138/latest/)
+>>>>>
+>>>>> Nice to have a specification standardizing interface to TPM
+>>>>> managed/implemented by the firmware. Care to add corresponding kernel
+>>>>> documentation under Documentation/security/tpm/.
+>>>>
+>>>> Yes, I can add some documentation there.
+>>>>
+>>>>> BTW, we already have drivers/char/tpm/tpm_ftpm_tee.c, so do you see
+>>>>> possibilities for an abstraction layer on top of communication channel
+>>>>> based on either FF-A or TEE or platform bus?
+>>>>
+>>>> I think the CRB and OP-TEE based messaging approaches for interacting
+>>>> with a TZ-based TPM are fundamentally different and I don't see how
+>>>> to harmonize them through some abstraction.
+>>>>
+>>>> The OP-TEE TPM protocol copies the TPM command into a temp shared memory
+>>>> buffer and sends a message to the TPM referencing that buffer.
+>>>>
+>>>> The CRB uses a permanently shared memory carve-out that in addition
+>>>> to the command/response data has other fields for locality control,
+>>>> command control, status, TPM idle, etc. The only 'message' needed is
+>>>> something to signal 'start'.  Any OS that is FF-A aware and has a
+>>>> CRB driver can simply add a new start method, which is what this
+>>>> patch series does.
+>>>
+>>> Okay, I see how the CRB driver is closely tied to the ACPI based
+>>> systems.
+>>
+>> The CRB driver is currently probed based on ACPI, but it fundamentally
+>> doesn't have to be.  If there was a DT binding for CRB-based
+>> TPMs the different start methods would be defined there and the
+>> CRB driver could support that.
+>>
+> 
+> Can't we rather enable the CRB driver itself probed based on FF-A bus
+> and rather dynamically discover the shared memory buffer via FF-A
+> instead? AFAIU, FF-A provides you with a discovery framework for
+> firmware bits.
 
-that makes IMA measure scripts even if they are passed as argument to
-the interpreter.
+Yes, you could do this. But, then the TPM CRB drivers in all the
+ACPI-based OSes (Linux, Windows) and hypervisors need to be
+taught this new method of discovery. Adding new start methods is
+reasonably straightforward, but changing the basic discovery
+mechanism is a much bigger change.
 
-All the interpreters need to be extended to make such kernel query, but
-potentially scripts would be measured regardless of how they are
-invoked.
+> But if we still want to overload ACPI or DT with the
+> discoverable firmware bits then it seems like an overkill here.
 
-Roberto
+I think it would make sense to do ACPI based discovery or FF-A
+based discovery, but doing both I think would be overkill.  For
+ease of OS integration ACPI is the way to go.  And, potentially
+device tree in the future.
 
-> We wonder whether there is or has been discussions around these questions=
-. If=20
-> so, we would like to learn more about any ongoing efforts or plan on chan=
-ging=20
-> the current situation, or if not, would like to hear the opinions from th=
-e=20
-> kernel community regarding the two issues.
->=20
-> Best regards,
->=20
-> --
-> Nicholas Wang
-
+Thanks,
+Stuart
 
