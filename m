@@ -1,122 +1,116 @@
-Return-Path: <linux-integrity+bounces-4822-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4823-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A3ACA35242
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Feb 2025 00:38:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE3C1A352CE
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Feb 2025 01:28:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 178971888818
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Feb 2025 23:39:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 717EC7A2F72
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Feb 2025 00:27:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328F51C84BB;
-	Thu, 13 Feb 2025 23:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VmvL+KPv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330BE2F46;
+	Fri, 14 Feb 2025 00:27:58 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EF02753F0;
-	Thu, 13 Feb 2025 23:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51A21523A;
+	Fri, 14 Feb 2025 00:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739489930; cv=none; b=FVlO4BblfAq4iTG46ER4cJs41weMeiUcmaEom3gVRUjDzikm79tqCnIBHrpBlW3JtKhSdGHJ9+Cq/qkQ3nxQoByS0HlJzTgyOXMYuPW1N+uPcBb6cKSQoOetuuFJQdyN/5sNE/JLoaBba6iYxY3cPa9VrZ5e6ua435FpqDcy87g=
+	t=1739492878; cv=none; b=attrYDpG+nqSTTjuL6E0G67puGu4I3qt7CZU9DERlA24YRFTgWiZapncE2cxWu5t6jcICD77u5gULP7B3W8JGT8/pXXBOqzttggBzJLSDUzMTHFgXcThPqmNa8Xi9fFvkOIRz9JCMsqtm1mD4R+AB3QH3hvB/JavrKhipxTysZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739489930; c=relaxed/simple;
-	bh=v6IHM/pxIvxj98+aTOVZqxpx5vGcbXDyQaxvorp5I7Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hzEeYiAVZCR1a6iw8DXZzPfFNJBZRQAJEyrq1G0pASNGiaFWy1+r7SvWhl8czXa28Ld/1cnSpCJHkCxhZ+jT7JJOpoc1CWIYeGsrrgf18z8f70E/oRdBa+5Uv5UCZPoPiGq8hnVg3JFgrfiPI+eTRZvLC/rd9/gNOFArHrSVyqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VmvL+KPv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33FBC4CED1;
-	Thu, 13 Feb 2025 23:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739489929;
-	bh=v6IHM/pxIvxj98+aTOVZqxpx5vGcbXDyQaxvorp5I7Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VmvL+KPv4oNJUNysvNVXIBnEIyY8flT2991GHnnh9UPZBUqt6goLe27jyMT7dR9JZ
-	 uX5BZ3mH0B0HWyEdu5e8B+u3uxYkb3mfoGWbOfGJnKrVqxAoJlZFA3B9RJujRm9gJH
-	 0G8tsDF9kRFtLvShjhQMM7lOMSAi/MucIHlUIZgZrQwOmKk79gMI/DuqAqUIW5fTX/
-	 0E6O/kMwPWhoaFco68hRP7PdT2tmmAb5lHx2p034i/svSF1RbFnUj9szIWiMHptyXc
-	 GM50RpNkasNFmzwzMb9L0gVfcQ68AXDWdMRpLG1VsvjfCjO4I6rDbuw8/JTv6MVCgY
-	 9HWV77KaJLupQ==
-Date: Fri, 14 Feb 2025 01:38:44 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stuart Yoder <stuart.yoder@arm.com>
-Cc: linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-	sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] Documentation: tpm: add documentation for the CRB
- FF-A interface
-Message-ID: <Z66ChI32MRi2q0xT@kernel.org>
-References: <20250212220548.400447-1-stuart.yoder@arm.com>
- <20250212220548.400447-6-stuart.yoder@arm.com>
- <Z65uKkt2f0WYxjHi@kernel.org>
- <b9a7d98a-2723-45e0-bb3b-19cd31473251@arm.com>
+	s=arc-20240116; t=1739492878; c=relaxed/simple;
+	bh=WeL1LHcc8sEkQPzhMSDaIxJt+tn9CF57Rhk1EpDs/bc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hh6s6nl+ZKrmZkS8cF+o56trvCcNvB9YV0B+FPBoRvvAqL9kzwbopP5OYjpuGGSKkfLFY9sq05HAiFoj/BRDKFRihczHnmOWEEdotreTl5up5FP+LqvQNAYSqao+C5/f5Jbv1+ee0sPPHpctFNud5+oOHn6kOq6lgVqDT4uAHCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19153113E;
+	Thu, 13 Feb 2025 16:28:16 -0800 (PST)
+Received: from beelzebub.ast.arm.com (u203013-lin.austin.arm.com [10.118.28.29])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 83B143F5A1;
+	Thu, 13 Feb 2025 16:27:55 -0800 (PST)
+From: Stuart Yoder <stuart.yoder@arm.com>
+To: linux-integrity@vger.kernel.org,
+	jarkko@kernel.org,
+	peterhuewe@gmx.de,
+	jgg@ziepe.ca,
+	sudeep.holla@arm.com,
+	rafael@kernel.org,
+	lenb@kernel.org
+Cc: linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/5] Add support for the TPM FF-A start method
+Date: Thu, 13 Feb 2025 18:27:40 -0600
+Message-Id: <20250214002745.878890-1-stuart.yoder@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b9a7d98a-2723-45e0-bb3b-19cd31473251@arm.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 13, 2025 at 04:17:56PM -0600, Stuart Yoder wrote:
-> 
-> 
-> On 2/13/25 4:11 PM, Jarkko Sakkinen wrote:
-> > On Wed, Feb 12, 2025 at 04:05:48PM -0600, Stuart Yoder wrote:
-> > > Add documentation providing details of how the CRB driver interacts
-> > > with FF-A.
-> > > 
-> > > Signed-off-by: Stuart Yoder <stuart.yoder@arm.com>
-> > > ---
-> > >   Documentation/security/tpm/tpm_ffa_crb.rst | 65 ++++++++++++++++++++++
-> > >   1 file changed, 65 insertions(+)
-> > >   create mode 100644 Documentation/security/tpm/tpm_ffa_crb.rst
-> > > 
-> > > diff --git a/Documentation/security/tpm/tpm_ffa_crb.rst b/Documentation/security/tpm/tpm_ffa_crb.rst
-> > > new file mode 100644
-> > > index 000000000000..c70f8904a93d
-> > > --- /dev/null
-> > > +++ b/Documentation/security/tpm/tpm_ffa_crb.rst
-> > > @@ -0,0 +1,65 @@
-> > > +.. SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +========================
-> > > +TPM CRB over FF-A Driver
-> > > +========================
-> > > +
-> > > +The TPM Command Response Buffer (CRB) interface is a standard TPM interface
-> > > +defined in the TCG PC Client Platform TPM Profile (PTP) Specification [1]_.
-> > > +The CRB provides a structured set of control registers a client uses when
-> > > +interacting with a TPM as well as a data buffer for storing TPM commands and
-> > > +responses. A CRB interface can be implemented in:
-> > > +
-> > > +- hardware registers in a discrete TPM chip
-> > > +
-> > > +- in memory for a TPM running in isolated environment where shared memory
-> > > +  allows a client to interact with the TPM
-> > > +
-> > > +The Firmware Framework for Arm A-profile (FF-A) [2]_ is a specification
-> > > +that defines interfaces and protocols for the following purposes:
-> > > +
-> > > +- Compartmentalize firmware into software partitions that run in the Arm
-> > > +  Secure world environment (also know as TrustZone)
-> > 
-> > Does that also cover ARM CCA? Just a question (not a review question).
-> 
-> No, CCA is for confidential VMs which is a separate trusted execution
-> environment and FF-A is not used there.
+Firmware Framework for Arm A-profile (FF-A) is a messaging framework
+for Arm-based systems, and in the context of the TPM CRB driver is used
+to signal 'start' to a CRB-based TPM service which is hosted in an
+FF-A secure partition running in TrustZone.
 
-OK, cool, just plain interested :-)
+These patches add support for the CRB FF-A start method defined
+in the TCG ACPI specification v1.4 and the FF-A ABI defined
+in the Arm TPM Service CRB over FF-A (DEN0138) specification:
+https://developer.arm.com/documentation/den0138/latest/
 
-> 
-> Thanks,
-> Stuart
+The first patch adds an FF-A driver to handle the FF-A messaging when
+communicating with a CRB-based TPM secure partition built on FF-A.
+The driver is probed when the TPM secure partition is discovered by
+the Linux FF-A infrastructure.
 
-BR, Jarkko
+The second patch consolidates the check for idle support in the CRB
+driver to one place.
+
+The third patch defines the new ACPI start method enumeration for
+CRB over FF-A.
+
+The fourth patch adds support for the FF-A ACPI start method to
+the TPM crb driver.
+
+The fifth patch adds documentation explaining how the CRB driver
+and FF-A relate.
+
+Version 3
+-changed prefixes used throughout patch series to tpm_crb_ffa*
+
+Version 2
+-updates to cover letter to define FF-A
+-added new patch with documentation
+-created pull request in ACPIA and added link to the patch
+ updating actbl3.h
+-added tpm_ prefix to the FF-A CRB driver
+
+Stuart Yoder (5):
+  tpm_crb: implement driver compliant to CRB over FF-A
+  tpm_crb: refactor check for idle support into TPM into inline function
+  ACPICA: add start method for Arm FF-A
+  tpm_crb: add support for the Arm FF-A start method
+  Documentation: tpm: add documentation for the CRB FF-A interface
+
+ Documentation/security/tpm/tpm_ffa_crb.rst |  65 +++++
+ drivers/char/tpm/Kconfig                   |   9 +
+ drivers/char/tpm/Makefile                  |   1 +
+ drivers/char/tpm/tpm_crb.c                 |  81 +++++-
+ drivers/char/tpm/tpm_crb_ffa.c             | 310 +++++++++++++++++++++
+ drivers/char/tpm/tpm_crb_ffa.h             |  30 ++
+ include/acpi/actbl3.h                      |   1 +
+ 7 files changed, 491 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/security/tpm/tpm_ffa_crb.rst
+ create mode 100644 drivers/char/tpm/tpm_crb_ffa.c
+ create mode 100644 drivers/char/tpm/tpm_crb_ffa.h
+
+-- 
+2.34.1
+
 
