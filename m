@@ -1,78 +1,64 @@
-Return-Path: <linux-integrity+bounces-4834-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4835-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1F47A37186
-	for <lists+linux-integrity@lfdr.de>; Sun, 16 Feb 2025 01:29:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35C6CA37AD1
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Feb 2025 06:17:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B432216E60F
-	for <lists+linux-integrity@lfdr.de>; Sun, 16 Feb 2025 00:29:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7BC0188CEFA
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Feb 2025 05:17:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F3B623AD;
-	Sun, 16 Feb 2025 00:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE3714D2B7;
+	Mon, 17 Feb 2025 05:17:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aHvGniaz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhA4uC29"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1D31FC8;
-	Sun, 16 Feb 2025 00:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFBA33997;
+	Mon, 17 Feb 2025 05:17:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739665741; cv=none; b=hqCATZwiSFJG5BCVUhwmERMtFQh1av3NkLAXfneXPSf21DSdwHDMWRYsxeewEA3AMtMOqTcEpUAw/x2A6Wyk1UMYWzR4cO9dJ/HI3Qg6m7GcPE9YpYdmj0JJw9xh0OD4lGYqV23Hqm2abcgsn9/o0V5Mjgqqci0w7Kq1SfOHdfM=
+	t=1739769461; cv=none; b=oITcc+ahJoo30kMn7quw9mhG+aIwaixxx53yJLi3O21j8TTOu9UUJL6hrFu+xzcW4adKOzeKcqDcKTzEZopC7kTlFoU/d7yGfxWkutb8oN+C61Q1exA0VciNo0+P+Zg0KwjEQw0HkzKMiBmKhjPfDqM8JJKDofXNveZT8rOdZkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739665741; c=relaxed/simple;
-	bh=ptxeuYv+DMlsfr3xX9uWibwwGHo6HQ1eNYvjC87zIgc=;
+	s=arc-20240116; t=1739769461; c=relaxed/simple;
+	bh=NxHshVEGtai8izhnlNmmjHiPQb35e6Sbsgg4tw41tWE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HqNclcKr83TqIIfwPmJIONudFE6mtGyAT7vXdATYaKYwzpfOJQfT3cvnKueeYcaTMU8kS/b/PJJByK1OF59J+fUg0cmy9IkwEoh5vULQpYhxkOPdXzmMISDhdHdt1eVZt+b2unco+IOgvG6c8oWejN+T8i2IzEUnT1aKPZOeK3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aHvGniaz; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739665740; x=1771201740;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ptxeuYv+DMlsfr3xX9uWibwwGHo6HQ1eNYvjC87zIgc=;
-  b=aHvGniazVBeL8z/HdIJHllGoiF6ufc9olz0d0qKbLgDxsKum2GQFCtlG
-   CkjSN6OvgyzHEmF4IAQpKs5Uo+pJGB2SUDkv//g+8tXhuJll+gZw0qIWO
-   ul+LZdE9L/o4tc0wI3cAjBUtCntjtSNifjRleuLneZ7yDzOLkACx1ki2w
-   X0wsm/rEmfdIOpSagVPoFP8xMA/BWiKmJSVIeo2gGpW+uqvuKVPhxipki
-   DptzcOAviEgKv435weSotTMziIW/PcduWp/whL1dUU21uHhksgQwntpQ3
-   F4KcHQ1Ge1E4/YxKq5Ad8qbata4MRA9ONqOT7Alc+RLKNIYdmk6rowh+Q
-   A==;
-X-CSE-ConnectionGUID: Y0AJ2VywS2Kdem0lyAtjPQ==
-X-CSE-MsgGUID: 24YtorFeQ46PygfL+/NUYA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11346"; a="40255637"
-X-IronPort-AV: E=Sophos;i="6.13,289,1732608000"; 
-   d="scan'208";a="40255637"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2025 16:28:59 -0800
-X-CSE-ConnectionGUID: YrjrGHGXQcaHZH/AlOcNHQ==
-X-CSE-MsgGUID: cA6oL5o9TpuEvVCBmmt5Iw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="114267907"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 15 Feb 2025 16:28:56 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tjSWj-001BRT-1Z;
-	Sun, 16 Feb 2025 00:28:53 +0000
-Date: Sun, 16 Feb 2025 08:28:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stuart Yoder <stuart.yoder@arm.com>, linux-integrity@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=f4Uhscj80jduh/HrQSGbQzuB3bLNFl9g8iZmK4hHmjR9y+O/rx2XCXwvMCwJ2O/rhuddbqwZtMTc/9g15cfuc65lehQs02KO1+ckRZu2Xd70x77YQaIKEmhQjfq+HXfC3uCr9NnZwHO1Q7cNBU/zg0+5wbkdRCnrGKqaQSNrVQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhA4uC29; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF55C4CED1;
+	Mon, 17 Feb 2025 05:17:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739769461;
+	bh=NxHshVEGtai8izhnlNmmjHiPQb35e6Sbsgg4tw41tWE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UhA4uC2991BXSMwh8z19VigmniGO2bbIQ+zZYKiksm65/U26bGd2+vADAFKYfHSu2
+	 pP7jOqSOfaNj3kL6Za1qT4BdYW0dBhZoVx0mmIdgZDt8T7FHMtEYYVzOOVm4XD5qBE
+	 J4Asfa5zE+G8UOWKvthfVBpJ05+MvENrctLmsHsoTRVxnYjkJ0AztILi/mUuTPfEUo
+	 R0FcjRKh2rCBewxxPCuy1h/myLI7WpKEThWV9sinMe8oDx+wgq8UXSBReXsjhjrHak
+	 ffeeGGVuhorRY4GRCLPJLSX3sbC2dK/7XRFeH5IuNKynkCsXi/itX7NIlyp8mpyvFr
+	 o8f5TUF75QN7w==
+Date: Mon, 17 Feb 2025 10:47:33 +0530
+From: Sumit Garg <sumit.garg@kernel.org>
+To: Stuart Yoder <stuart.yoder@arm.com>
+Cc: Sumit Garg <sumit.garg@linaro.org>, linux-integrity@vger.kernel.org,
 	jarkko@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-	sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] tpm_crb: implement driver compliant to CRB over
- FF-A
-Message-ID: <202502160801.zzYlGtHn-lkp@intel.com>
-References: <20250212220548.400447-2-stuart.yoder@arm.com>
+	sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 0/4] Add support for the TPM FF-A start method
+Message-ID: <Z7LGbZsOh_w-HRY2@sumit-X1>
+References: <20250210232227.97761-1-stuart.yoder@arm.com>
+ <CAFA6WYM7K4_toy5_n1arW4po4SOX0R9624rCgO=_MvcMeySwUA@mail.gmail.com>
+ <4bb3cefa-b843-45ca-82c5-d96b13454baa@arm.com>
+ <CAFA6WYM3UA9+TE8L2U5Qd8FZfaGZnbba=QzWU7fEu3LKQVm-tw@mail.gmail.com>
+ <fdaa9a58-790f-4839-8db7-1b9a81eb8edf@arm.com>
+ <CAFA6WYM0ANqc--ScYtJFRjOsCCjzO3NX46=F5V=rza_6Q-Q96g@mail.gmail.com>
+ <e142afd2-38ec-4640-b9be-cb414bccc807@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -81,92 +67,103 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250212220548.400447-2-stuart.yoder@arm.com>
+In-Reply-To: <e142afd2-38ec-4640-b9be-cb414bccc807@arm.com>
 
-Hi Stuart,
+On Thu, Feb 13, 2025 at 09:19:58AM -0600, Stuart Yoder wrote:
+> 
+> 
+> On 2/12/25 11:31 PM, Sumit Garg wrote:
+> > + Rob
+> > 
+> > On Thu, 13 Feb 2025 at 03:25, Stuart Yoder <stuart.yoder@arm.com> wrote:
+> > > 
+> > > 
+> > > 
+> > > On 2/12/25 1:39 AM, Sumit Garg wrote:
+> > > > On Tue, 11 Feb 2025 at 21:39, Stuart Yoder <stuart.yoder@arm.com> wrote:
+> > > > > 
+> > > > > Hi Sumit,
+> > > > > 
+> > > > > On 2/11/25 12:45 AM, Sumit Garg wrote:
+> > > > > > + Jens
+> > > > > > 
+> > > > > > Hi Stuart,
+> > > > > > 
+> > > > > > On Tue, 11 Feb 2025 at 04:52, Stuart Yoder <stuart.yoder@arm.com> wrote:
+> > > > > > > 
+> > > > > > > These patches add support for the CRB FF-A start method defined
+> > > > > > > in the TCG ACPI specification v1.4 and the FF-A ABI defined
+> > > > > > > in the Arm TPM Service CRB over FF-A (DEN0138) specification.
+> > > > > > > (https://developer.arm.com/documentation/den0138/latest/)
+> > > > > > 
+> > > > > > Nice to have a specification standardizing interface to TPM
+> > > > > > managed/implemented by the firmware. Care to add corresponding kernel
+> > > > > > documentation under Documentation/security/tpm/.
+> > > > > 
+> > > > > Yes, I can add some documentation there.
+> > > > > 
+> > > > > > BTW, we already have drivers/char/tpm/tpm_ftpm_tee.c, so do you see
+> > > > > > possibilities for an abstraction layer on top of communication channel
+> > > > > > based on either FF-A or TEE or platform bus?
+> > > > > 
+> > > > > I think the CRB and OP-TEE based messaging approaches for interacting
+> > > > > with a TZ-based TPM are fundamentally different and I don't see how
+> > > > > to harmonize them through some abstraction.
+> > > > > 
+> > > > > The OP-TEE TPM protocol copies the TPM command into a temp shared memory
+> > > > > buffer and sends a message to the TPM referencing that buffer.
+> > > > > 
+> > > > > The CRB uses a permanently shared memory carve-out that in addition
+> > > > > to the command/response data has other fields for locality control,
+> > > > > command control, status, TPM idle, etc. The only 'message' needed is
+> > > > > something to signal 'start'.  Any OS that is FF-A aware and has a
+> > > > > CRB driver can simply add a new start method, which is what this
+> > > > > patch series does.
+> > > > 
+> > > > Okay, I see how the CRB driver is closely tied to the ACPI based
+> > > > systems.
+> > > 
+> > > The CRB driver is currently probed based on ACPI, but it fundamentally
+> > > doesn't have to be.  If there was a DT binding for CRB-based
+> > > TPMs the different start methods would be defined there and the
+> > > CRB driver could support that.
+> > > 
+> > 
+> > Can't we rather enable the CRB driver itself probed based on FF-A bus
+> > and rather dynamically discover the shared memory buffer via FF-A
+> > instead? AFAIU, FF-A provides you with a discovery framework for
+> > firmware bits.
+> 
+> Yes, you could do this. But, then the TPM CRB drivers in all the
+> ACPI-based OSes (Linux, Windows) and hypervisors need to be
+> taught this new method of discovery. Adding new start methods is
+> reasonably straightforward, but changing the basic discovery
+> mechanism is a much bigger change.
 
-kernel test robot noticed the following build warnings:
+We will be teaching every other OS or hypervisor about FF-A
+communication regardless. So it's rather about if we want to do it
+properly leveraging auto discovery mechanisms supported by FF-A or not.
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.14-rc2 next-20250214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> > But if we still want to overload ACPI or DT with the
+> > discoverable firmware bits then it seems like an overkill here.
+> 
+> I think it would make sense to do ACPI based discovery or FF-A
+> based discovery, but doing both I think would be overkill.  For
+> ease of OS integration ACPI is the way to go.  And, potentially
+> device tree in the future.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stuart-Yoder/tpm_crb-implement-driver-compliant-to-CRB-over-FF-A/20250213-060938
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20250212220548.400447-2-stuart.yoder%40arm.com
-patch subject: [PATCH v2 1/5] tpm_crb: implement driver compliant to CRB over FF-A
-config: arm64-randconfig-r073-20250214 (https://download.01.org/0day-ci/archive/20250216/202502160801.zzYlGtHn-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+Encoding firmware bits in ACPI/DT can be seen as an easy upstream path
+in the shorter run. But when the ACPI/DT becomes overloaded with
+information that has to be passed from firmware to the OS rather than
+purely describing hardware to the OS, it's ABI maintainability becomes
+complex. We are already dealing with DT ABI compatibility challenges
+especially the forward compatibility, so let's not make it even worse
+with firmware information that can be discovered automatically.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502160801.zzYlGtHn-lkp@intel.com/
+The other benefit of auto discovery is that platform enablement becomes
+really smooth. Once the firmware starts supporting a particular feature
+like TPM over FF-A then the OS can discover and support it.
 
-smatch warnings:
-drivers/char/tpm/tpm_ffa_crb.c:272 ffa_crb_probe() warn: unsigned 'ffa_crb->minor_version' is never less than zero.
-
-vim +272 drivers/char/tpm/tpm_ffa_crb.c
-
-   230	
-   231	static int ffa_crb_probe(struct ffa_device *ffa_dev)
-   232	{
-   233		int rc;
-   234		struct ffa_crb *p;
-   235	
-   236		/* only one instance of a TPM partition is supported */
-   237		if (ffa_crb && !IS_ERR_VALUE(ffa_crb))
-   238			return -EEXIST;
-   239	
-   240		ffa_crb = ERR_PTR(-ENODEV); // set ffa_crb so we can detect probe failure
-   241	
-   242		if (!ffa_partition_supports_direct_recv(ffa_dev)) {
-   243			pr_err("TPM partition doesn't support direct message receive.\n");
-   244			return -EINVAL;
-   245		}
-   246	
-   247		p = kzalloc(sizeof(*ffa_crb), GFP_KERNEL);
-   248		if (!p)
-   249			return -ENOMEM;
-   250		ffa_crb = p;
-   251	
-   252		mutex_init(&ffa_crb->msg_data_lock);
-   253		ffa_crb->ffa_dev = ffa_dev;
-   254		ffa_dev_set_drvdata(ffa_dev, ffa_crb);
-   255	
-   256		/* if TPM is aarch32 use 32-bit SMCs */
-   257		if (!ffa_partition_check_property(ffa_dev, FFA_PARTITION_AARCH64_EXEC))
-   258			ffa_dev->ops->msg_ops->mode_32bit_set(ffa_dev);
-   259	
-   260		/* verify compatibility of TPM service version number */
-   261		rc = ffa_crb_get_interface_version(&ffa_crb->major_version,
-   262				&ffa_crb->minor_version);
-   263		if (rc) {
-   264			pr_err("failed to get crb interface version. rc:%d", rc);
-   265			goto out;
-   266		}
-   267	
-   268		pr_info("ABI version %u.%u", ffa_crb->major_version,
-   269			ffa_crb->minor_version);
-   270	
-   271		if ((ffa_crb->major_version != FFA_CRB_VERSION_MAJOR) ||
- > 272		    (ffa_crb->minor_version < FFA_CRB_VERSION_MINOR)) {
-   273			pr_err("Incompatible ABI version");
-   274			goto out;
-   275		}
-   276	
-   277		return 0;
-   278	
-   279	out:
-   280		kfree(ffa_crb);
-   281		ffa_crb = ERR_PTR(-ENODEV);
-   282		return -EINVAL;
-   283	}
-   284	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-Sumit
 
