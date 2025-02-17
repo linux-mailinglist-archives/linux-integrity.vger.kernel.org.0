@@ -1,200 +1,202 @@
-Return-Path: <linux-integrity+bounces-4852-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4853-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08C33A38A26
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Feb 2025 17:57:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E825DA38B50
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Feb 2025 19:33:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6E4318940B5
-	for <lists+linux-integrity@lfdr.de>; Mon, 17 Feb 2025 16:57:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E86453A69BC
+	for <lists+linux-integrity@lfdr.de>; Mon, 17 Feb 2025 18:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB58E22652B;
-	Mon, 17 Feb 2025 16:57:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0809B235BF4;
+	Mon, 17 Feb 2025 18:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="JrAOlgsU";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="k6f4SKwq";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ljaZ9XhE";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="99h0b/VG"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D36226528;
-	Mon, 17 Feb 2025 16:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86D021D3F4
+	for <linux-integrity@vger.kernel.org>; Mon, 17 Feb 2025 18:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739811422; cv=none; b=VUDjg+HCTFphd7gZ1ERb6LmX/3S/nYUvncRMDspVzlQEo/li7QhnjgyJeY4uZl37QDFi0vJi/51HE31u0WFBiJ9Xr/Dn/AlmpqcUqUvpOzVUiUYxuC5MTNNrUmMXQq+M/x8E6Prr4hovbN29FF4u/xr5vD+AM2q1vlndPbfEzcU=
+	t=1739817213; cv=none; b=eOBm/xuFAWkjEDbYJeaEf7mgbSIiJpZthyZkIrFlZSo9AQyekHMfPC/GfCE5PRNoDK4kzMNP4UlQB/xA3oWKl7sCTlN9Dl/E41VtbpHHAaZX26uAQroo+Y/wUl7RQ5VicKijXOLlcuMJ41t7fvSIni8ptqne2mIyGb4TENU0Bb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739811422; c=relaxed/simple;
-	bh=+Slhdyr87sEDrXnPmfmh/DMOQQHysATe1TTy7flwAmI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rq8UFvNo7tEv3tVgFo6L2HK3abnfmyIgIIhSWg8FEnT8cqSO+WSyzSLku5MI6v/HWlyx4oE/X5ZRIpDvYmU50TWiACdQXlFGloy2hJSNFR5OjZvT/Yw8xqW0cT8yhtWu4/oA6bD9/Oyl/PMeSuMMLlIEuyRjWbUWiZa3MyafHtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B13F152B;
-	Mon, 17 Feb 2025 08:57:18 -0800 (PST)
-Received: from [10.122.18.64] (unknown [10.122.18.64])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 042953F5A1;
-	Mon, 17 Feb 2025 08:56:58 -0800 (PST)
-Message-ID: <5dae96fa-0e54-4274-bcc6-1c20fe846f60@arm.com>
-Date: Mon, 17 Feb 2025 10:56:58 -0600
+	s=arc-20240116; t=1739817213; c=relaxed/simple;
+	bh=F/UUKjVUz5uldWJsilO4NCgC+6KkRX4LbnT6WSxvszw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fYCty/EiUVfdWmxMfMn/u+0ywB921dEq6JL9kMjY4eKpLxBDiFZYdt+m0oTPoygvQqy7ml6Rp4F8Q6ky7HjdW1FzDubv0YRVUr36g+jCYvPLxlS2Y/lgsuco+xF/kZsW4pAKSFcbm0P87JZiwdgnCTq+CNIMfq1MnrgxUTYXP34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=fail smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=JrAOlgsU; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=k6f4SKwq; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ljaZ9XhE; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=99h0b/VG; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id C1DC61F443;
+	Mon, 17 Feb 2025 18:33:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1739817210; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=RO28s2JbTmZ2ORFUutwm2rH7SuUmXZGUH6MAzf7uOxI=;
+	b=JrAOlgsUCz2E7jGyfyR3RtV5YXUrU9rq084ATTwIutW41tQ7IuxLXpntnsnpO890+cd1QQ
+	+KqRiFXCm+PsjqdlhBoY9vHzrEdOQ5bYx53EeMFfQwRA3jDElBDTBSmeXMNeAdo+ZsdRMQ
+	Ba5AUhhaO4Kc0DcwtKKeX+xGLZbVbHs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1739817210;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=RO28s2JbTmZ2ORFUutwm2rH7SuUmXZGUH6MAzf7uOxI=;
+	b=k6f4SKwqcrFEq8BafM+PwcRe4Fcf/+vgPvQaXzf1SFrG3gK5D5+ngruYoHl5YalyAtCZkw
+	NNnQEizdgpaJ5WAQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=ljaZ9XhE;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="99h0b/VG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1739817209; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=RO28s2JbTmZ2ORFUutwm2rH7SuUmXZGUH6MAzf7uOxI=;
+	b=ljaZ9XhEmIaeYmksiA8MnmMlFQ/1RdphYNhILxXRwpN3k2DHFsqjpNDRZzUjPJeMBkk4fH
+	FuUvQWD37w830lDyMZf/sddAhgNR4NitOtIqBptQ59WPWrNRkRZxw+X6Z57PlEAsVsq9CZ
+	jURTolag9qNAbQtbWoD5M6WO0W6kaxI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1739817209;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=RO28s2JbTmZ2ORFUutwm2rH7SuUmXZGUH6MAzf7uOxI=;
+	b=99h0b/VGzz77lqGNkRs6UmOF9OQTsTUdbbTMTnXlxe2rJM2ErlYn8jD7OVqrugL+6MS27Z
+	HDE7QiwoTK70aTDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 500B5133F9;
+	Mon, 17 Feb 2025 18:33:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Z7saEfmAs2c0eAAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Mon, 17 Feb 2025 18:33:29 +0000
+From: Petr Vorel <pvorel@suse.cz>
+To: ltp@lists.linux.it
+Cc: Petr Vorel <pvorel@suse.cz>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	linux-integrity@vger.kernel.org
+Subject: [PATCH COMMITTED] ima_setup.sh: Quit the test on unsuitable IMA policy
+Date: Mon, 17 Feb 2025 19:33:22 +0100
+Message-ID: <20250217183322.2429271-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] Add support for the TPM FF-A start method
-To: Sumit Garg <sumit.garg@kernel.org>
-Cc: Sumit Garg <sumit.garg@linaro.org>, linux-integrity@vger.kernel.org,
- jarkko@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, sudeep.holla@arm.com,
- rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, Jens Wiklander <jens.wiklander@linaro.org>,
- Rob Herring <robh@kernel.org>
-References: <20250210232227.97761-1-stuart.yoder@arm.com>
- <CAFA6WYM7K4_toy5_n1arW4po4SOX0R9624rCgO=_MvcMeySwUA@mail.gmail.com>
- <4bb3cefa-b843-45ca-82c5-d96b13454baa@arm.com>
- <CAFA6WYM3UA9+TE8L2U5Qd8FZfaGZnbba=QzWU7fEu3LKQVm-tw@mail.gmail.com>
- <fdaa9a58-790f-4839-8db7-1b9a81eb8edf@arm.com>
- <CAFA6WYM0ANqc--ScYtJFRjOsCCjzO3NX46=F5V=rza_6Q-Q96g@mail.gmail.com>
- <e142afd2-38ec-4640-b9be-cb414bccc807@arm.com> <Z7LGbZsOh_w-HRY2@sumit-X1>
-Content-Language: en-US
-From: Stuart Yoder <stuart.yoder@arm.com>
-In-Reply-To: <Z7LGbZsOh_w-HRY2@sumit-X1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: C1DC61F443
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim,suse.cz:mid];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	RCVD_TLS_ALL(0.00)[]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.01
+X-Spam-Flag: NO
 
+Fixing 2 bug:
 
+1) Test wrongly continued testing on SUT with unsuitable IMA policy when
+LTP_IMA_LOAD_POLICY=1 was *not* set.  That caused ima_keys.sh and
+ima_kexec.sh TFAIL instead of TCONF.
 
-On 2/16/25 11:17 PM, Sumit Garg wrote:
-> On Thu, Feb 13, 2025 at 09:19:58AM -0600, Stuart Yoder wrote:
->>
->>
->> On 2/12/25 11:31 PM, Sumit Garg wrote:
->>> + Rob
->>>
->>> On Thu, 13 Feb 2025 at 03:25, Stuart Yoder <stuart.yoder@arm.com> wrote:
->>>>
->>>>
->>>>
->>>> On 2/12/25 1:39 AM, Sumit Garg wrote:
->>>>> On Tue, 11 Feb 2025 at 21:39, Stuart Yoder <stuart.yoder@arm.com> wrote:
->>>>>>
->>>>>> Hi Sumit,
->>>>>>
->>>>>> On 2/11/25 12:45 AM, Sumit Garg wrote:
->>>>>>> + Jens
->>>>>>>
->>>>>>> Hi Stuart,
->>>>>>>
->>>>>>> On Tue, 11 Feb 2025 at 04:52, Stuart Yoder <stuart.yoder@arm.com> wrote:
->>>>>>>>
->>>>>>>> These patches add support for the CRB FF-A start method defined
->>>>>>>> in the TCG ACPI specification v1.4 and the FF-A ABI defined
->>>>>>>> in the Arm TPM Service CRB over FF-A (DEN0138) specification.
->>>>>>>> (https://developer.arm.com/documentation/den0138/latest/)
->>>>>>>
->>>>>>> Nice to have a specification standardizing interface to TPM
->>>>>>> managed/implemented by the firmware. Care to add corresponding kernel
->>>>>>> documentation under Documentation/security/tpm/.
->>>>>>
->>>>>> Yes, I can add some documentation there.
->>>>>>
->>>>>>> BTW, we already have drivers/char/tpm/tpm_ftpm_tee.c, so do you see
->>>>>>> possibilities for an abstraction layer on top of communication channel
->>>>>>> based on either FF-A or TEE or platform bus?
->>>>>>
->>>>>> I think the CRB and OP-TEE based messaging approaches for interacting
->>>>>> with a TZ-based TPM are fundamentally different and I don't see how
->>>>>> to harmonize them through some abstraction.
->>>>>>
->>>>>> The OP-TEE TPM protocol copies the TPM command into a temp shared memory
->>>>>> buffer and sends a message to the TPM referencing that buffer.
->>>>>>
->>>>>> The CRB uses a permanently shared memory carve-out that in addition
->>>>>> to the command/response data has other fields for locality control,
->>>>>> command control, status, TPM idle, etc. The only 'message' needed is
->>>>>> something to signal 'start'.  Any OS that is FF-A aware and has a
->>>>>> CRB driver can simply add a new start method, which is what this
->>>>>> patch series does.
->>>>>
->>>>> Okay, I see how the CRB driver is closely tied to the ACPI based
->>>>> systems.
->>>>
->>>> The CRB driver is currently probed based on ACPI, but it fundamentally
->>>> doesn't have to be.  If there was a DT binding for CRB-based
->>>> TPMs the different start methods would be defined there and the
->>>> CRB driver could support that.
->>>>
->>>
->>> Can't we rather enable the CRB driver itself probed based on FF-A bus
->>> and rather dynamically discover the shared memory buffer via FF-A
->>> instead? AFAIU, FF-A provides you with a discovery framework for
->>> firmware bits.
->>
->> Yes, you could do this. But, then the TPM CRB drivers in all the
->> ACPI-based OSes (Linux, Windows) and hypervisors need to be
->> taught this new method of discovery. Adding new start methods is
->> reasonably straightforward, but changing the basic discovery
->> mechanism is a much bigger change.
-> 
-> We will be teaching every other OS or hypervisor about FF-A
-> communication regardless. So it's rather about if we want to do it
-> properly leveraging auto discovery mechanisms supported by FF-A or not.
-> 
->>
->>> But if we still want to overload ACPI or DT with the
->>> discoverable firmware bits then it seems like an overkill here.
->>
->> I think it would make sense to do ACPI based discovery or FF-A
->> based discovery, but doing both I think would be overkill.  For
->> ease of OS integration ACPI is the way to go.  And, potentially
->> device tree in the future.
-> 
-> Encoding firmware bits in ACPI/DT can be seen as an easy upstream path
-> in the shorter run. But when the ACPI/DT becomes overloaded with
-> information that has to be passed from firmware to the OS rather than
-> purely describing hardware to the OS, it's ABI maintainability becomes
-> complex. We are already dealing with DT ABI compatibility challenges
-> especially the forward compatibility, so let's not make it even worse
-> with firmware information that can be discovered automatically.
+2) Also don't attempt to load policy when needed but LTP_IMA_LOAD_POLICY=1
+was *not* set.
 
-The TCG defined ACPI table has the following:
-    -Physical address of the TPM
-    -Start method
-    -Start method specific parameters
-    -event log address
+This also reverts a5c47143b5 ("ima_measurements.sh: Check policy for test3")
+which required the previous behavior. To restore behavior in the future
+loading policy will need to be rewritten to allow check only for a
+particular test or ima_measurements.sh can be split to require TCB
+policy only for 3rd test.
 
-This has been in place 8+ years and this is what OSes expect.
-The start method advertises the mechanism a driver uses to
-signal the TPM that something has changed in the CRB, and
-this allows different types of TPM implementations:
-    -memory mapped
-    -signal via ACPI
-    -signal via ARM SMC (legacy)
-    -signal via Pluton mailbox
-    -signal via FF-A
+Fixes: aac97cca96 ("ima_setup.sh: Allow to load predefined policy")
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+ .../integrity/ima/tests/ima_measurements.sh        |  2 +-
+ .../security/integrity/ima/tests/ima_setup.sh      | 14 ++++++--------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-I don't see this as overloading the ACPI table, it's just what
-the OS needs to know.
-
-The TPM does not know (and should not know) the address of
-the event log. An FF-A based TPM has no way to know this.
-
-I don't see how changing TPM discovery to be via FF-A directly
-would improve maintainability.
-
-> The other benefit of auto discovery is that platform enablement becomes
-> really smooth. Once the firmware starts supporting a particular feature
-> like TPM over FF-A then the OS can discover and support it.
-
-If we added new CRB/FF-A ABIs to get the CRB physical address,
-start method specific parameters, event log, it would mean that
-all OSes and hypervisors need to re-architect their CRB drivers
-or create new FF-A specific CRB drivers.  That will not smooth
-enablement for TPMs.  And I don't see advantages for
-maintainability.
-
-Thanks,
-Stuart
-
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
+index d1e41b789a..60350f3926 100755
+--- a/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_measurements.sh
+@@ -77,7 +77,7 @@ test3()
+ 	tst_res TINFO "verify not measuring user files"
+ 	tst_check_cmds sudo || return
+ 
+-	if [ "$IMA_POLICY_CHECKED" != 1 ]; then
++	if [ "$IMA_MISSING_POLICY_CONTENT" = 1 ]; then
+ 		tst_res TCONF "test requires specific policy, try load it with LTP_IMA_LOAD_POLICY=1"
+ 		return
+ 	fi
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+index 69ee5a3d65..366e1257dc 100644
+--- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+@@ -190,10 +190,10 @@ verify_ima_policy()
+ 			while read line; do
+ 				if ! grep -q "$line" $IMA_POLICY; then
+ 					tst_res TINFO "WARNING: missing required policy content: '$line'"
++					IMA_MISSING_POLICY_CONTENT=1
+ 					return 1
+ 				fi
+ 			done < $file
+-			IMA_POLICY_CHECKED=1
+ 		else
+ 			tst_res TINFO "policy is not readable, failure will be treated as TCONF"
+ 			IMA_FAIL="TCONF"
+@@ -208,13 +208,11 @@ load_ima_policy()
+ {
+ 	local file="$TST_DATAROOT/$REQUIRED_POLICY_CONTENT"
+ 
+-	if [ "$LTP_IMA_LOAD_POLICY" != 1 -a "$IMA_POLICY_CHECKED" != 1 ]; then
+-		tst_res TCONF "missing required policy, example policy can be loaded with LTP_IMA_LOAD_POLICY=1"
+-		return 0
+-	fi
+-
+-	if [ "$IMA_POLICY_CHECKED" = 1 ]; then
+-		tst_res TINFO "valid policy already loaded, ignore LTP_IMA_LOAD_POLICY=1"
++	if [ "$LTP_IMA_LOAD_POLICY" != 1 ]; then
++		if [ "$IMA_MISSING_POLICY_CONTENT" = 1 ]; then
++			tst_brk TCONF "missing required policy, example policy can be loaded with LTP_IMA_LOAD_POLICY=1"
++		fi
++		return
+ 	fi
+ 
+ 	tst_res TINFO "trying to load '$file' policy:"
+-- 
+2.47.2
 
 
