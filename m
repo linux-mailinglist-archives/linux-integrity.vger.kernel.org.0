@@ -1,260 +1,244 @@
-Return-Path: <linux-integrity+bounces-4879-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4880-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6680DA3A7CA
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2025 20:40:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4994A3A859
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2025 21:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32399172C1C
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2025 19:40:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 503A03A4FFF
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2025 20:01:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178251E8333;
-	Tue, 18 Feb 2025 19:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B912021B9C6;
+	Tue, 18 Feb 2025 20:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lRhm3ada";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="YC8X7XBW"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Kp/gLChc"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E681E8332;
-	Tue, 18 Feb 2025 19:40:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739907651; cv=fail; b=ncGjD7djSSF4+oGS6FiZHyal8gLkOAlT63+AG6yGa5fz7rZUmwhnqpm0trKsro3U6s3m6umGJwosOi/eX3qtdg1rLIZVazca9uRdwnpDFaSuiQ6JX3RI5zETnWgiU3qAO4Cpg5MH0Y61QCb0tfanJu9dyZzRMs2KClHtMWJBAYA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739907651; c=relaxed/simple;
-	bh=xDjm0dzi8hKeHpoU1mcygyJYnxPDVFt1R4ryfpc2MUY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=k4DrTIPkCqYtxi/S9pXRdowtNeahXalgk9JbKukMr4kVNfkHKScwFFBlMgfD9XqQTAHmB/GsdyjVWL48C6n1NblinUCwiOz4ZyNVbeecQWGBiTuespLPT0XsQroNnRBs1QurQXc+ltPK6BsBlPb6sBviQNz5SLj5kcMcKWFtsYs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lRhm3ada; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=YC8X7XBW; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51IJ2q8w024425;
-	Tue, 18 Feb 2025 19:40:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=utg1lsr5+4FsbNhuolDZ/5yOEfBi9bK1EKkrALjlSTE=; b=
-	lRhm3ada/RTVrZ5gC/EXlbxu8oyrfpW7NlAC5g6+0UEQ4e6r2toutl57q5c5qJL2
-	r8ADLkfavWcSr0Xu1m82qcceBsaBk//vyjqb+PVgeSvRqVu8e4rRWrWN7yhcVrvU
-	42EpCc6MZdyehrzmRzujuMG87p2RLxHmtg07wWP/VOxuAqK2TzbxhW6ToKGJHL3Q
-	oRkeQejH0pDPS7KZQpRivFpJMppFV4n7dcecOD5URsKh+nXmFqrOoJjmBr/kOp2O
-	FKdafXoa7SpZjbxbLRMrolFc2be6etkKHWPwPLVxpyAJvFIpfNchuPLBL7mFSEGu
-	TAyxTOl8EpNMV9SPrN3yEQ==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44w00ng35s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Feb 2025 19:40:08 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51IJ8XPj039015;
-	Tue, 18 Feb 2025 19:40:07 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2049.outbound.protection.outlook.com [104.47.51.49])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44thcasbh6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Feb 2025 19:40:07 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Q3Wdxvdq2iKNtqcjruhxwkqQLPS+pIkAA2mV3jq1/T5yuyaCdRjABDiCGIsPkO+GSu2TDbecbCdV3TWr0baCZhQyKHgXwcewnie2ra66wCIWzINqwLKlJ+hJeXdEAyTEJs2EW95yfdxUq60Ah4i+jHG8XaRWgPYV8q5SB7umNZIKiWNoIxcWhgoVJznCPhAdOKb+AQlPNZqKJDy3e8K9l5fWY0iXljgdc4b0igQU7JI9GgwGnKW7HFjRwclx1T1LNyML62WNK5SIelJvZwBoR1Zv/zfczL/bPyXtqeJha8OPAs3VV865eiKLtDbylGWG69sOQzsqmQJ3IFhh3ZgzHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=utg1lsr5+4FsbNhuolDZ/5yOEfBi9bK1EKkrALjlSTE=;
- b=KOOb8N2uBbvutfhnrKaBZxSnE9Lg23jOvGLM2Qnj6qLNFerkSAc2FvrA1BS5hIvx6/juUkvt6muEsCZSr2SIaiYnBL64KhBYaa16rqOb9/Q4Y6qSrKFBOaHlQZUprt8zjpxfOHlDxc6Ypc7OwC9nvxIlcR1QRyqq8SZXF39Zg3jSW5yAlqp35xvDWO4LZEszdH1isjrLZQU2yBPVjoPJkDR+nMK/n0sxL6xU7CYMYOAz0xfOgdbTFaLxfkDkJ8SAUTFcvFLh++li+ztUwjhS2joZX/uTtNC1rZxKfppOTK44N1S1MOZv1I2un1xOIlemtsO9wBtmfIEXzQGmXe1a9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=utg1lsr5+4FsbNhuolDZ/5yOEfBi9bK1EKkrALjlSTE=;
- b=YC8X7XBWsvxVDomhSOJSmEU929F4f04Ch1Q4KwUxKZNZl/t/w3yAQFfA7mNPdj6XVQCY9IqoC5NQNqm6QH1znI5bd0cdHh3A2Xe2R7lt7rj5n9bUrS8Y1HGejVgdP2Z7Vv0D8g6lSlzV893Xq9r9X24nXVo+9QULT/GNia0kVHc=
-Received: from DS0PR10MB7224.namprd10.prod.outlook.com (2603:10b6:8:f5::14) by
- SJ2PR10MB7040.namprd10.prod.outlook.com (2603:10b6:a03:4c6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Tue, 18 Feb
- 2025 19:40:05 +0000
-Received: from DS0PR10MB7224.namprd10.prod.outlook.com
- ([fe80::c57:383f:cfb2:47f8]) by DS0PR10MB7224.namprd10.prod.outlook.com
- ([fe80::c57:383f:cfb2:47f8%4]) with mapi id 15.20.8445.017; Tue, 18 Feb 2025
- 19:40:05 +0000
-Message-ID: <86a65510-b17e-45ac-841a-8a2fd1fa3446@oracle.com>
-Date: Tue, 18 Feb 2025 11:39:58 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 00/19] x86: Trenchboot secure dynamic launch Linux
- kernel support
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-crypto@vger.kernel.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        iommu@lists.linux-foundation.org
-Cc: dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
-        ardb@kernel.org, mjg59@srcf.ucam.org,
-        James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, jgg@ziepe.ca,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
-        ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com,
-        trenchboot-devel@googlegroups.com
-References: <20241219194216.152839-1-ross.philipson@oracle.com>
- <060ffc99-59e8-4b71-9e7d-daeb807332c3@oracle.com>
- <eaa0d608fb78d06caca26edc9a830cf1a02f9fb8.camel@kernel.org>
-Content-Language: en-US
-From: ross.philipson@oracle.com
-In-Reply-To: <eaa0d608fb78d06caca26edc9a830cf1a02f9fb8.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN0PR02CA0046.namprd02.prod.outlook.com
- (2603:10b6:408:e5::21) To DS0PR10MB7224.namprd10.prod.outlook.com
- (2603:10b6:8:f5::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF51621B9E4
+	for <linux-integrity@vger.kernel.org>; Tue, 18 Feb 2025 20:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739908819; cv=none; b=cBE4wNtfYn5/P4nQsaREWPVCbH6HYkXseVF5tBD/NlTcQa+d19ddRKTe1e3oAPsA4qRF0LIgSdKQQSnsrdjGF62Bt6or0MhG/SBwJ2PdxYEbj1SWi24PjJRxltGgCWa+M4w5k0T3UjEga2EqNey1Hk3iAQZpO6MN5ZFvPUF1BgM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739908819; c=relaxed/simple;
+	bh=oJRaHUXdW2yTDICL0A57MPoltMJ6iS/3wB5ZmF9sI9M=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=h+LAzCMfrz4XqbOUGfPWfLGS3NU2sb9dhPJkUm0tgxxIx2Cm5P2UkvT3Mm0xtEp6jW+la45qgOdMoUas8GEfAKoo/MfYoQC6SEXxfAk4dXo5AjEM+1OdUocpqz/6xTruaProinptOGwHAPF6ysnp+9xhqXx/ra7WwnifSrIGKI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Kp/gLChc; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51IIxeF6025458;
+	Tue, 18 Feb 2025 20:00:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=v8RpPR
+	GMR0TauxDZ0DTZZPyr9kDBvVCvWvINdudXozY=; b=Kp/gLChc710oh4vaF5fgxC
+	E/L3xTQEivNCWuYyRcIEBil/aoAcPjLZPHgYekGsF1rZBK4HC3XbG4A/1UrnbtY4
+	SH28WCsdApB7yMTRWz80D3XRWeJr2uCXDxjkrh8SqnDZlCyCOS4wbwCblD3D2/2s
+	0a9OJWvVoXcf88kvwFaSxfbbgnqj7DxkFPjB+DnJxe8v4YZ4dBEd2sGnK0dU8vr3
+	l4QpddSK8S6+KF0uBw2nJBPsAy1uXZ7tEsUzOU6b/enorY7xTXCtGlPD5WRZV5Pa
+	Y5PTMvgGaBL685CSjOIWr55NtIrqqyZ5lu/ZIS1LylKf9SarWv+mCK3dm5jczKog
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44vyynr7sa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Feb 2025 20:00:15 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51IJ8juA009646;
+	Tue, 18 Feb 2025 20:00:14 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w03y066r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Feb 2025 20:00:14 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51IK0DDG27329192
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Feb 2025 20:00:13 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7292958043;
+	Tue, 18 Feb 2025 20:00:13 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 34D7C5805D;
+	Tue, 18 Feb 2025 20:00:13 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.103.152])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 18 Feb 2025 20:00:13 +0000 (GMT)
+Message-ID: <ed0adec273c5fff47e85b61a3d2b969af475d8dd.camel@linux.ibm.com>
+Subject: Re: [RFC] Issue of  historical file and script invocation when
+ using IMA for runtime attestation
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: "Wang, Nicholas" <chenkai3@illinois.edu>,
+        "linux-integrity@vger.kernel.org"
+	 <linux-integrity@vger.kernel.org>
+Date: Tue, 18 Feb 2025 15:00:12 -0500
+In-Reply-To: <2601749.ElGaqSPkdT@nicoripper>
+References: <6165162.lOV4Wx5bFT@nicoripper>
+	 <f77c848b588811236ebb88e6731270943dd22e82.camel@linux.ibm.com>
+	 <2601749.ElGaqSPkdT@nicoripper>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB7224:EE_|SJ2PR10MB7040:EE_
-X-MS-Office365-Filtering-Correlation-Id: fcb355cb-bdaf-426d-4069-08dd50540af2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aHdDVjh5Vmw0aUwwV3Nzbk5pMEZiU3FhVjY5WS95OXgzN2Fnc3BCbE9UYjdC?=
- =?utf-8?B?UGF6ZitKMDJydTk5d2NqTzd5aGxqWlhkZUJXNHFWNXhTNHQ2Qm1NM2hyTElq?=
- =?utf-8?B?cDh4ZUszZFo2TWx4MmpibVdORGwweHlPM0dyN3JUYWxWbEcvMFhVOXpCRHhw?=
- =?utf-8?B?SkxUMUhLMldNZ25rRmhqaGVoNVVLcHFzMkJxUVpIbzFuVC9lanRKRmU0VElp?=
- =?utf-8?B?YTZ3WVAzU0J0SUhZV3N4SG96c0xJWmw4MEsvOG5XYWYzaWdXKzByd1IxTk9k?=
- =?utf-8?B?Y2tTS0dkMGVJbTluNmNnajRNakMxYVlpK0g0TXlFOThhTDFQY3JMVFdJbm9U?=
- =?utf-8?B?Yk1hY3JROHh6VnhkRHdzUzhTS005VWJ1SlZVQ0dzalo4ZjZ4UDIrOU1RTXlD?=
- =?utf-8?B?ZDJXLzVobUxRYXRjT1FJcmt6ODEvSnFZdUJLUXRYMkdjcFVuSTlSQlg0SlNB?=
- =?utf-8?B?UGlrNWtxUTJsRUlZMHloNm9WS2dKRmg4VTViYjMvWjBBVUM3eXZIaU1pdDdQ?=
- =?utf-8?B?eWMrRk9TendqQWR0N1ZtbVp3STk4YWNscFZ2YXNTMjdnZXhWb212YTJrQzBw?=
- =?utf-8?B?b3FRMWRJLzViM3Y4dG8xQjJYbjFMdFJvaXBWYWwxTnBlcU94a2hDc28xTTdF?=
- =?utf-8?B?SUQxMTRrYTB6cHFIZlYweXpZM2t6K05MTDdUZTZCOUNaZFhrTGJSeDhTSUFO?=
- =?utf-8?B?MXFFSVZFRnNmOWUwZ1gva2VJQ1UxVHNDaFJTTi83M0IrbDRwVUtCL2ZIWjlv?=
- =?utf-8?B?b2FFRFlXM0J6ZkRPNjY3Q2hPRlVla3BxWHlWWHZvVHlDN3FyUU9oN21ZejY4?=
- =?utf-8?B?MmcyMGdHSmtBeXVXbkVaL0hWL015amZOOVgrZlV1azk2LzAyYWJ2Qk9sRS81?=
- =?utf-8?B?bDdQcUtMRTJZSjMySzhtMTd0ZEQ4TnRqRHh5UGFSa0FjVTVPRGU3cWU3Skp4?=
- =?utf-8?B?QlBYQnh1NFB0Qms4bS80SjJwZGJpQ3lndUtLdDZkSzJpVkFhQzl2bW5TNTI4?=
- =?utf-8?B?S3Rlb2NXaEpRUTJUTXFGZk9yQnQ2Zm1MQXhaZHc4SEZoTkZ0SWlJK1dPUWps?=
- =?utf-8?B?em1ycUZ2a1ZsZ3lGbnBLSnk1Ykx0T1J3WEMzOCtwRmUxQ2g4SUJ2V0dSalpI?=
- =?utf-8?B?dGhKL0lFUzZidEt2dWswY1FzMC9jeWM0UE9RRDFsVHFwYWxSOGsrMXZZM1ly?=
- =?utf-8?B?WXBVM3l3M2tCQlVBc1A1YWJKamd5Z2wxMEljZ0lPU0NXbkZsYTVaclZpQm9D?=
- =?utf-8?B?MUx5UXplOHlYdG9GRld0aTFscWZYSVpoT09ORDRJYURKRFU5dWdnNXIraW9Y?=
- =?utf-8?B?ajNCWGFkNm1IYVBnd3JxZ0F4RENscnZTbmloZ3RkRkZTZmw2Lyt5VHN2M1J5?=
- =?utf-8?B?SEJZVllGMTV2OHIrV3V1UExBRURKdzVWNUxLNmFKQTlZQzFsN3ozdGk0RTB1?=
- =?utf-8?B?WnlDQkIwb0NqOUpUR2pseEQ2SStEOWZFV3c4cFY5bEt0Rld0b3kvNFpyZUtm?=
- =?utf-8?B?Q0JGY2lMaVdRdkNuclc1bm9qNkp2ZVFSb3dIR1ZvQTRqY1NlSXhWbHpsQjhi?=
- =?utf-8?B?OVJhVVRUanRXWXJDc2szOHpoVkp4SUZOOCtGVlZDbXRQZ1JaR1hVNzJZcE1i?=
- =?utf-8?B?Q2Q2VTV6NXY5dExFNDRQd0lwc2NzVFRtdmpQQjB1SXFLNHJtL0U3L1Z5YWdo?=
- =?utf-8?B?N1BFUWlkeUdjSld0RHRmNENFdUdsSkRFTFFHM0VQOUdYQ3A4U1lSeGxBRGFM?=
- =?utf-8?B?VDVyT2dGZVVUU2dPMFN1dHBJU3k5aDZ0OTRoeC9RNmxuWDBhNExscW9oRlRD?=
- =?utf-8?B?REtvQVU1L3pEa1BGb0hSejdVWm03NndTZFpHYmIvZUg4cHpGSzJ2YUlzSmRP?=
- =?utf-8?Q?nVnJJI7Qz6PJQ?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7224.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Q0xEbjRjUHY1WFh0bUZ5emo4SUF0V1V5ai8rZDR2WXFlbjg0di9nQ2U0WlZt?=
- =?utf-8?B?ZTUzNEpPVCtnd0FBUEozd0tEN2xSbUdRZkxsZGFXdVVQRndpaGVJbmt2SjFM?=
- =?utf-8?B?R2I1Ty9PVU80UmgvNndWS1JaMUYySXVEL1BvQ3NKdFFhTWhTZ0dXcExxSkN4?=
- =?utf-8?B?REVuNnl5VEY0bkJXcHV2MXhNdG04Y3ltNi9uaFpQMWtDRVlaQXI5d0libEVq?=
- =?utf-8?B?NXdpNG16ODRKc0phb242bzcyTGhPLzBzc215dnFCTDQ5TUJlb0szbElMNWtL?=
- =?utf-8?B?cFZDaFl0U05jWUFTQkpINW1qTVpjZnhhKzA2ZElKeGdvZ1cwb3Z5bkJwcWt4?=
- =?utf-8?B?d0RIYnRqdFU3SXNETVNndVk0WGNjUG5TRi9yVG1PY0VDNWozZkxoSjNEZVNa?=
- =?utf-8?B?cmlGWElJcU9pU3ZTMjhTMHl1TENLK2Jld1BXd29ROThmRVNpMU1BOVdWVUpk?=
- =?utf-8?B?Z2VQQTJzZDBXdmdGY09RZUNsWkY2Nkd6TVRGb21sTXppMFVWeCtkenFweE5i?=
- =?utf-8?B?OVVFNVJDUXd2dWZONXFBL0ZBYUpWN3VkTmJhT0VxTi9HRXRDOVlpRkZGTWwv?=
- =?utf-8?B?T3RMcEczNmVrNEk1R1BNaWNUWWx0OWFIYXIyZWY4N1RpRjYrUlMvamlyMUtq?=
- =?utf-8?B?TUIzVXNuWitiV1hLV0hGa3Vrc09yam9ENThJRHpTclUwcXZ5VUtIbUQ2aG1i?=
- =?utf-8?B?QzYvd3orYVp2NzZIVTc0dWMyWDBxT1EveEUxN0crbXUvUk1iNXBOdXhWOWor?=
- =?utf-8?B?VktVaDZrS2tnNVJzbUcwek9oREIvS1pEc0YrTnFqTWxjaUo5QjUycmpmeTlr?=
- =?utf-8?B?Vlh5dWtJSDB1RjUzaFVNbTFHV1pza2dYUkw1ejMrby9ZK0crdmpuWU9Td3Bm?=
- =?utf-8?B?OEFxYU5acXhCaXI2N3d0TmNTcURBOEl5WUlmQUxMc1ZrUVhsRlJIeHk1VFFl?=
- =?utf-8?B?UDJHOGtWK05sbkFFZm9mQ2pReVNwS3hwa0N0eFJKeFpNMUhXWUJ1OXpIMjVa?=
- =?utf-8?B?N3hxMFdNYjdZRmhPR2RCTDdwOGtNVTBoWTkzeG9jRk5CMk9WSzl2Y2xMUjN4?=
- =?utf-8?B?RWJvalE1dlA2SWlMd25IcXZNNTQzZlJTUkpZalpNZTBvL1VhWDBqUE13d25u?=
- =?utf-8?B?TGFoeTNqanB6QXl3dU5rekEzWWl2UHc1aTBKNmFBTDVMMzUybkltZ1NKaTlz?=
- =?utf-8?B?MCtjNUlDZW5JY2hBWXBCS1ptSG5yTVFsczN2ZnluRTB4ZXhJdFE1TjZ2Y01r?=
- =?utf-8?B?eHVSSFM2Qk5xNE1YQSthckxsVzhLbDRSVHVKckVWSFdBNGR5Y0dKdFZGT0g1?=
- =?utf-8?B?SzcvOTZYUjRRM0xhS3JHbElqNUg1ODBkd0JDWWRvSmYwNC82RXBiTFptQk9S?=
- =?utf-8?B?ZWFya1ozVXJwWTNwZllvNDNEZkk5MHlOV2JTbWpVVlJYdFFPYWNGN3plZFg1?=
- =?utf-8?B?RmNQNEZaYnRVeHdtQURZQUpkUWV0YU9YcFc5c0JBV2s0ZDhTNkRqYUF0bExC?=
- =?utf-8?B?MVdUQ3FUV3VyOEZka2FoRGp1QjdPR3NtUUwvdEZGMytucG1LcytwKzdTSVhr?=
- =?utf-8?B?NmlPamI2V2VDV0loZjdQZDlWenF0TFB4Qys2dmg2NU5hTW5vUEZhVWw5K0Vl?=
- =?utf-8?B?eXJIWjQyMmwxOHNJeFVoclFRdlREeHlHaWZOaXBwUUtrOVVsZUZVbHV2amQ2?=
- =?utf-8?B?Y3VEanVINWhncnJxV1YySml5M1AxRHNyMDJPbGN3T2owUnpNRlY2TkhwMnZz?=
- =?utf-8?B?TVZDanM1ZXEzV2VVc3B2R2IxSTdETWtaeVFmNWZiakVZYzVucDk2cmZXbzJH?=
- =?utf-8?B?RksvcHBlNHZlTE1tSjBqV0NYczlVdkUrWTVGdElFTlZqVDErM05jb1R5RlV1?=
- =?utf-8?B?T3U3dVYxaVBweEVsRzlkN3ZrN2hjSFI4ak81Lzl1Z1NVbVQyb0hrMjRMZ0Fo?=
- =?utf-8?B?aVBtWW5CZlVTekNlU0JiOENEOFp3TEN5bzNneG91QmkvWjVCdW91L3pKdjVr?=
- =?utf-8?B?OUJycXhFYkNvUG9rczYxUHBJRWh6bVczL3MwQTY3b3VxRHF5bm11WGpDWi9r?=
- =?utf-8?B?a1JVdVJNb0NPYVNjUUpIQjhNNkFWd01XMG5jZG4wbFJxamhnZTVTUG5rSnYx?=
- =?utf-8?B?eDhua3FhUmhrT2Z2VXdHREttMUdXYUdHZTRHK0JKY0dqaGoxVmxrSXhGb3lY?=
- =?utf-8?B?K1E9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	uLKbVPgaC45H4xhivsz5VpGu3x7IcCckrK1W0rSxPNrnEwOD7SRSK3sJRFUdGzv9CGk4oEicmxzx0ly8g2DFLU/pVja604na6arON5kd1leOtXI5jt42ke9Kyi5vQY9nJRdc21EjLgn6CEjFPjEqx1GG5FYmVWypFWpSmSkmtiuDaA9VEQ3HP460Tl87tH6s64BujFHqDC8kuLxTt6EbeXr0m0KkdrBZlPicfZqP7m/hN/VDW0sHrAJx8je9DGBbTXj+m3xXp27h1zJsRs06bIWNMXqX9e4Ct8lYHlRJx7c9FLTj3P+439C9/2Rg7+yKMiuR38k3hYlC3DbdK3vC/5bKdlGVw2G7n6B5vXsWmk1HuhncEuopOEx+r9zYJPAHrMCsAkOKCeLGlK4AmkCsMCIZbbFsEyyoT46bGmVkUoPBDDkcPpOi4Jju755atBD77Pwi83sxxo3fzueg0/tzjlyVh0enYjOTYtklSGHU1B7O2eqPcVL8phSnvlw+M2+sUwvMqP+BvQv7SxLrRIHLQB3NxbbHk2e0VDDmB/G5YfGSEhbe4fOawoPgUZp3AglecvxJAz5cJdobi4YG1jTXBaT1M69Uh9kKbGsErnOPmGw=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcb355cb-bdaf-426d-4069-08dd50540af2
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7224.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 19:40:04.9461
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sbmU/hpWksUZ2MZubL79nUqIsCJcZAevcxMgYpF28+SE+59Oa2uQh60ro1d2ydATJzJx012BdPUIv+G890m4kE/Xn60+jm5HnLvmfODX29w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7040
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xa8Er2UdbU1hf0pl_q4xfxjJMS-gMg13
+X-Proofpoint-GUID: xa8Er2UdbU1hf0pl_q4xfxjJMS-gMg13
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-18_09,2025-02-18_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
- suspectscore=0 adultscore=0 malwarescore=0 bulkscore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2501170000 definitions=main-2502180135
-X-Proofpoint-GUID: nBb1pahi6t4dN6iPkZRM5h1vHgoX0W-z
-X-Proofpoint-ORIG-GUID: nBb1pahi6t4dN6iPkZRM5h1vHgoX0W-z
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 lowpriorityscore=0 phishscore=0
+ clxscore=1015 adultscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502180137
 
-On 2/18/25 10:31 AM, Jarkko Sakkinen wrote:
-> On Tue, 2025-02-18 at 10:21 -0800, ross.philipson@oracle.com wrote:
->> Hello folks,
->>
->> We posted the v12 version of our patch set in December of 2024 and we
->> have not heard anything on it from the community. We believe we have
->> reasonably addressed the issues as has been discussed on list. I
->> realize
->> there has been a lot going on with releases etc but I just wanted to
->> send a bump that these patches are out there if anyone has time.
-> 
-> I don't know what happened but to be totally honest with you I missed
-> that version. Maybe it was holiday rush but yeah still I did not skip
-> it for that reason per se, just that it could very well explain the
-> silence (people tend to fast-forward more at the time, and then
-> mistakes easily happen).
-> 
-> I'm right now on holiday up until end of this month, and this will
-> require enough time that I unfortunately have to postpone the review
-> up until the first full week of the next Month, in order to do this
-> properly.
-> 
-> Still, apologies for ignoring this!
+On Tue, 2025-02-18 at 18:06 +0000, Wang, Nicholas wrote:
+> Hi,
+>=20
+> Thank you both Roberto and Mimi for your timely replies! I have been=20
+> discussing with our collaborators since and we believe the information=
+=20
+> definitely helps us more on understanding the issue from IMA's perspectiv=
+e.=20
+> While I cannot immediately give a comprehensive reply, I can quickly clar=
+ify=20
+> some of it whichever I can.
+>=20
+> On Friday, 14 February 2025 14:30:42 CST Zohar, Mimi wrote:
+> > On Thu, 2025-02-13 at 12:57 +0000, Wang, Nicholas wrote:
+> > > Linux-integrity community,
+> > >=20
+> > > Hi, I'm Nicholas Wang from UIUC, and we are researching the potential
+> > > challenges of a remote runtime attestation tool using IMA, Keylime, u=
+nder=20
+> > > a
+> > > simulated deployment environment. In the process, we conducted multip=
+le
+> > > experiments, and we encountered some issues that we realize may not b=
+e
+> > > able to be solved entirely in userspace.
+> > >=20
+> > > To sum up the first issue, IMA may not reflect the whole picture of
+> > > invocation or activation history. In particular, we are in question a=
+bout
+> > > "Once the earlier measurements are verified, there is no need to veri=
+fy
+> > > them again" according to IMA event log documentation. First off, Keyl=
+ime
+> > > uses directories or paths for matching and ignoring files in their po=
+licy
+> > > file; in IMA policy, "dont_measure" filters out filesystems. We see t=
+wo
+> > > potential scenarios in which malicious actors may silently bypass the
+> > > attestation. We assume Keylime user does not use "dont_measure" filte=
+rs
+> > > in IMA policy and IMA indeed measured everything while Keylime attest=
+ the
+> > > digests according to its own policy. Keylime would filter and ignore
+> > > certain files based on its own directories and file filtering, and su=
+ch
+> > > ignored files would only appear in IMA log once as long as the system=
+ is
+> > > not rebooted. Now the issue arises: 1. if the file being moved within=
+ the
+> > > same filesystem, it will never re-appear in IMA logs even with furthe=
+r
+> > > invocations, as IMA treated them the exact same file. This may allow =
+an
+> > > attack to persist throughout until a fresh reboot. 2. In case of a
+> > > long-lived system which has patched a vulnerable version of one softw=
+are,
+> > > the old, vulnerable version which has been in the IMA log before will=
+ not
+> > > appear in case of further activation before a reboot. Thus, we believ=
+e
+> > > that the design which measures each file once may in some cases not
+> > > reflect a comprehensive state of the machine to meet runtime attestat=
+ion
+> > > needs.
+> >=20
+> > Hi Nicholas,
+> >=20
+> > Can you explain what you mean by "patched"?=C2=A0 In general, software =
+packages
+> > on long-lived systems can and would be updated (e.g. dnf, apt).=C2=A0 T=
+he new
+> > software would be a different inode and would be measured on first acce=
+ss.
+>=20
+> By patched I meant exactly updated to a patched version, and I believe in=
+ most=20
+> cases your arguments should hold: old executable is either directly=20
+> overwritten, or been deleted and then replaced with new version by the pa=
+ckage=20
+> manager. HOWEVER, I believe the inode assumption does not apply to the=
+=20
+> scenarios I tried to describe. In case 1, assuming attacker "moves" the f=
+ile,=20
+> inode would stay the same, result would be that executable being executed=
+ in a=20
+> new directory without reflecting in the IMA log; In case 2, assuming a so=
+ftware=20
+> is updated, new binary now has a new inode, and is executed therefore att=
+ested=20
+> by IMA after update. IMA log now shows an entry of the vulnerable version=
+, as=20
+> well as an entry of the updated version, with the same path. Now if attac=
+ker=20
+> replace updated executable with the previous vulnerable version at the ex=
+act=20
+> same path, based on our testing, further execution of the vulnerable vers=
+ion=20
+> would never cause a third entry to appear in IMA log, regardless inode is=
+ same=20
+> or different (as long as it has identical path to the first (vulnerable v=
+ersion=20
+> exec.) IMA log entry).
 
-No worries at all! I sent it right before the holidays and people were 
-busy with that and on other things. I appreciate your response and plan 
-to have a look when you can.
+Hi Nicholas,
 
-Thanks
-Ross
+Right, the renamed file (case 1) would not be re-measured unless the file w=
+as also
+modified.  As Roberto explained, the file name is part of the directory, no=
+t metadata
+associated with the inode.  Refer to the getdents man page.
 
-> 
->> Thank you,
->> Ross Philipson
-> 
-> BR, Jarkko
+The case 2 concern was addressed by enabling CONFIG_IMA_DISABLE_HTABLE.  Fo=
+r an
+explanation, please refer to commit 52c208397c24 ("IMA: support for duplica=
+te measurement
+records") patch description.
+
+>=20
+> >=20
+> > There's been discussion on resetting the measured/appraised flags after=
+ a
+> > configurable period of time, but nobody has actually submitted patches.=
+=20
+> > There were a couple of ideas: - Walk the rb tree to reset the
+> > measured/appraised flags. (Obsolete) - Include a timestamp in the iint =
+to
+> > detect "expired" measured/appraised flags on access.
+> >=20
+> > I welcome a patch set that enables re-measuring/re-appraising files.
+>=20
+> Thanks for the information and we will look into the past discussions and=
+=20
+> further discuss with our team, see if we would propose a feasible solutio=
+n and=20
+> potentially submit a patch set to upstream.
+
+Sounds good.
+
+Mimi
 
 
