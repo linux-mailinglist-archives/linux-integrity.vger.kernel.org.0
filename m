@@ -1,62 +1,63 @@
-Return-Path: <linux-integrity+bounces-4865-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4866-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2A5DA3A22C
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2025 17:09:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 655BAA3A38B
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2025 18:06:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4D831899917
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2025 16:06:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 500193AEB50
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Feb 2025 17:06:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7091E26B95A;
-	Tue, 18 Feb 2025 16:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95B6D26FA75;
+	Tue, 18 Feb 2025 17:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kHng7JcE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xx4eqVDe"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4689926A1D5;
-	Tue, 18 Feb 2025 16:06:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3C726FA6E;
+	Tue, 18 Feb 2025 17:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739894782; cv=none; b=d8bF5g0nNgcX1+me2Fw6StsBqp9CnY1UGeu6BCqhBucOjvlM2KPffn4K/+BbqPgUKbNhP9JDdBajVxT842Cn9Dx7omslMl91j+P48U4KqYenSgsmTR4oJz/1SxtTAivkcIke4OCNfVCldl6c0GrrajW8ToPHRE9XbQIeA0TrcCY=
+	t=1739898364; cv=none; b=T2ys9+3TuBk5DczwLeTLx7+MVfZxzhbTc6XCPqXo1shK0mUCGB+Lkq0UV/bnDs51eFJM8yJe2+FZU+0QvfekTHWhx7AhUL2ltxaaraSEzBUA4HCInV2bXFcwwqO/OUVw7u+J0X6LAZGflGwwYnnikxcVanm/O2IQWdFkWJG41SQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739894782; c=relaxed/simple;
-	bh=9+iwSj8pYZbdZmKJ+JtRz6uR4leeeo47skJB8eQ+F4E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oCwZ2JnAKLPNxTvkdQ/CQz5dXT6o6f8kmvhhaVEGdC1HJgl6OHXUbP+7HI1JaqKbHeI+I3mkpw6PszUDOYgwQsWCHF3hqlQSCdwGIFK3RYGiReLo2yCicl3+N6w9xPeSjVxpTuuJ1xbX9UFyBoGjpD2mP2e9IeAnk/k1XkyiEg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHng7JcE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24DDC4CEE2;
-	Tue, 18 Feb 2025 16:06:20 +0000 (UTC)
+	s=arc-20240116; t=1739898364; c=relaxed/simple;
+	bh=PTbtR+JmGwrfTCmOvqXnqMth752ViFO7q1gIDwSLb0k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pqBjPvyGTW0FuPkkKxnMv3kKmG1Lipc2LfVAb0FGW1nDw2cFFMmy7Gn1PygUkrk1ag2os3+UTuuNWwkka7iyzcEVmyU57Gco5pNlWW4mrfKqf47qtYQH4og/g2di1IHAKu+ZCch1O0YbmGZmKuA90eO9wct+f4XvdIbWPNaIgCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xx4eqVDe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56EDEC4CEE8;
+	Tue, 18 Feb 2025 17:06:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739894781;
-	bh=9+iwSj8pYZbdZmKJ+JtRz6uR4leeeo47skJB8eQ+F4E=;
+	s=k20201202; t=1739898363;
+	bh=PTbtR+JmGwrfTCmOvqXnqMth752ViFO7q1gIDwSLb0k=;
 	h=From:To:Cc:Subject:Date:From;
-	b=kHng7JcErMKXBSlG1DFSKPl9KzlTNbDhqnCkSTo1z+n97rbg1nlg9ob2x4grE83oq
-	 eFgt085qpvZXXcRrMGFPAMMLslBr1cyj2vs/x/AGIVq9/sbw2JZlESVTL2EzFfp8XU
-	 NbRRScA+fXfOwO+h7jV8pt19Fnh9B2kLemKJz6VC++dtZWKQxHrzhQhWVNutWvmo5K
-	 f5r7a5wG88C7Y+b4IxhC4AbZLN9UxAIOCiUPtIGSXmieFqJLsZumLp2stAxpA7YR3k
-	 a5vx1ybkqqU9DJ9XYaTjcphiYjPEf/stM6WdHoTluTlA0CZEp0ozDsqaR2vK9x4TKW
-	 XFNEcRfSm1BJg==
+	b=Xx4eqVDeeWA1cLCDtcLdlmfflPRszcSSwOV4pGpIVVLTfCrz6ODi5D86p8Sda5psQ
+	 NukWExB6KctPfUQfCyx8nNeclDB2uZSzvpXa5pf6q5GYLLpF1CfHZJnj3OX2GPpzjK
+	 +fJY6qp61iqgnBnxmXjtlo6JdWkaZIaZqmTQQA/VQKm1vvjkZQ0IULC3KTZLpYuWez
+	 XOhyhuwDlvgTA1nSPvqwHmMBF/Lf/8z9cZgUADpxzVkzVenG0P3XVpgetTiSW/hovP
+	 gfMxzxvCSQzwB/XmEwjw2knCFqxQqn/hGGQIv1SGf06RBEwggTFjNeTeSm9iYfDflV
+	 7I3ZG2sH0p6hg==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Simon Wunderlich <sw@simonwunderlich.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Alex Elder <elder@kernel.org>,
 	Antonio Quartulli <antonio@mandelbit.com>,
 	Kees Cook <kees@kernel.org>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
+	Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
 	Mathieu Othacehe <othacehe@gnu.org>,
-	Eugen Hristev <eugen.hristev@linaro.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>
-Cc: Quentin Monnet <qmo@kernel.org>,
+	Quentin Monnet <qmo@kernel.org>
+Cc: Eugen Hristev <eugen.hristev@linaro.org>,
+	Naoya Horiguchi <nao.horiguchi@gmail.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: remove never used @parity.io email
-Date: Tue, 18 Feb 2025 18:06:05 +0200
-Message-ID: <20250218160607.48829-1-jarkko@kernel.org>
+Subject: [PATCH v2] mailmap: remove never used @parity.io email
+Date: Tue, 18 Feb 2025 19:05:55 +0200
+Message-ID: <20250218170557.68371-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -70,6 +71,9 @@ As this employment lasted only four months and was never used over here,
 let's just rip it off for good.
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v2:
+- Oops, "MAINTAINERS" was just a typo (sorry).
 ---
  .mailmap | 1 -
  1 file changed, 1 deletion(-)
