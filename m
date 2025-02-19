@@ -1,237 +1,237 @@
-Return-Path: <linux-integrity+bounces-4899-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4900-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97E22A3C050
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Feb 2025 14:45:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DEAFA3C3D3
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Feb 2025 16:40:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D945188C158
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Feb 2025 13:45:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D48777A85FB
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Feb 2025 15:37:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CEBF1EB1B7;
-	Wed, 19 Feb 2025 13:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 275BB1DC184;
+	Wed, 19 Feb 2025 15:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W2yZ+zij"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fgSfp0ld"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2025B1E7C25;
-	Wed, 19 Feb 2025 13:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E671F37BA;
+	Wed, 19 Feb 2025 15:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739972657; cv=none; b=Gc5hTCFnIsfKIdnHY3qygzZqejYdKee1Ut0QVJnsRWQAGk8iUTirioHVYi9RwXAypRF5QFjp+vdCjGIkkSXgsSzSVFvWgouqTEw3YYqMAKHXHtghM0vNsH5ex5N0+0Mu4E5HzGmqYVr3dCMedfmFg3tL2CsLVfete8rMlIRdhMo=
+	t=1739979475; cv=none; b=dbipLp9uucQ3aF6mlksy0J942JOETTDJGSikJVQLB8tkaJHF1t8tkWvztE3bZ+fqlpEMa1Wum8wD3HMo6/lVh9aecuCHYWZIhfc4mD057bNp9gIChrELG7pvpG/3p5vAH0p7bm6R7hPUPfKLhHefUgJmrl0e1R+Ag59G8yH92hQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739972657; c=relaxed/simple;
-	bh=N7+6L64rjXg9fF5fR618d6CJYqV7II10i29eiKI9P44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UmxviMQSO/AtLZIyxaJw998otWt4Itg8KCessBlybleEVjwGVeDp27v8sFoEScxXV6hayuX6jDX9ZPVH0s1oaFpSdeYj/ua6HUqUFxqxamiV+wMrepDcd1A7b8hmNYNvCdQapOFxCUFg5GwB1LMI8HR/LE3t5QIdV+R8L4HRPQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W2yZ+zij; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E41DC4CED1;
-	Wed, 19 Feb 2025 13:44:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739972657;
-	bh=N7+6L64rjXg9fF5fR618d6CJYqV7II10i29eiKI9P44=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W2yZ+zijHcI2QmoLkybU+92OwkkHfakORiz+k8Xb1xX9jauDjuU6UkFDjczaZxBug
-	 qmEq5CwxZvDhBpNgn9FZpgPpoUv4PW0ZbYolJ1fGpA83s2RV16cViOngiEJJoxitvT
-	 hGGItpGR4TQS/dXPb1rXR9LfYzZu+2LeymZT34Y/jSXyRDnGTORVZzYUKOnBMZLiKZ
-	 nKbGbMyUTWTheU4uohc/DvmBguIZwIZAnfhnOseWOk/c2pdpVxxTDO85fJF5aWZ3uS
-	 5gLoFfykuXJ6A1afHm3VzvIKYxm8ziodb8zVq9EwDQweAOiW5dm/ndb4T/9lWJzaOc
-	 buAa72zDn/1GA==
-Date: Wed, 19 Feb 2025 15:44:12 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Cc: lee@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net,
-	peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-crypto@vger.kernel.org,
-	jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-	Yinggang Gu <guyinggang@loongson.cn>
-Subject: Re: [PATCH V3 5/6] tpm: Add a driver for Loongson TPM device
-Message-ID: <Z7XgLNU1xXqgOBIL@kernel.org>
-References: <20250219073350.16915-1-zhaoqunqin@loongson.cn>
- <20250219073350.16915-2-zhaoqunqin@loongson.cn>
+	s=arc-20240116; t=1739979475; c=relaxed/simple;
+	bh=axCNMnpKAhLuowO4WagW+r0b9RbhHX8hO31iLpIavNk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QZLBuocoMVxeGqkMrjLHCe6UAjj6qN/3JoXWoFVKSMLIPoYiz7Jceacr/LgE4zM8KsoklHhWnfOp8uWxsRd/LDlMyShlBo6vxVSM3DheZZA1jjdSml+SB0aA+GbChQpkWXYEWTOQDA++cLJvBBB3cXKQgn0vL6hN+KHXfhHzeSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fgSfp0ld; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51JFbA2D011660;
+	Wed, 19 Feb 2025 15:37:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=GutrDS
+	yCSH/AB96WUJAY2Xow2tXi6nzxIQdwxOo5sWo=; b=fgSfp0ldBCTrxRSd+1r43A
+	oC+6tvhhoqMgzNUaL++C9/fvailI0YIt/IGxi6zNIX5FL1dg5eSH3AHLog2oUmYU
+	SD0RQLjLr3vZraDHyYcAApytTd9OB1WwS+T+kVT6s8yQEXW/sPOtajNTWqyfyRvo
+	0/PhMggfDO3pfyovjwiPipR9fjp920p+aWvDDHE2oXYVQ6SNjZc52oxERrBcqIU1
+	HCGH3JdHtG6NFaKwBVh565ksw7/Wgla1oaWzENaSShMe5gEC/zeo+81MHX8VEb8r
+	YelHwIgleSF/haIJ0WyJTCD6rnSjQgoChPA+Lbd0akiqQVkYJuvF86+A+PWjJ9oA
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44w5c9bpwj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Feb 2025 15:37:15 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51JE289l009646;
+	Wed, 19 Feb 2025 15:37:13 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w03y4sg2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Feb 2025 15:37:13 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51JFbCpg29950608
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 19 Feb 2025 15:37:13 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BAEB058059;
+	Wed, 19 Feb 2025 15:37:12 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D913B58043;
+	Wed, 19 Feb 2025 15:37:11 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 19 Feb 2025 15:37:11 +0000 (GMT)
+Message-ID: <f102607b-963a-40c6-a14f-0803f8b059cc@linux.ibm.com>
+Date: Wed, 19 Feb 2025 10:37:11 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250219073350.16915-2-zhaoqunqin@loongson.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 4/7] ima: kexec: define functions to copy IMA log at
+ soft boot
+To: steven chen <chenste@linux.microsoft.com>, zohar@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+        James.Bottomley@HansenPartnership.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com
+References: <20250218225502.747963-1-chenste@linux.microsoft.com>
+ <20250218225502.747963-5-chenste@linux.microsoft.com>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20250218225502.747963-5-chenste@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _2h1PqhZlz4EX5Bg4hbV1qibYy_kiHN-
+X-Proofpoint-GUID: _2h1PqhZlz4EX5Bg4hbV1qibYy_kiHN-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-19_06,2025-02-19_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1011 bulkscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502190122
 
-On Wed, Feb 19, 2025 at 03:33:49PM +0800, Qunqin Zhao wrote:
-> Loongson security engine supports random number generation, hash,
-> symmetric encryption and asymmetric encryption. Based on these
-> encryption functions, TPM2 have been implemented in the Loongson
-> security engine firmware. This driver is responsible for copying data
-> into the memory visible to the firmware and receiving data from the
-> firmware.
+
+
+On 2/18/25 5:54 PM, steven chen wrote:
+> IMA log is copied to the new Kernel during kexec 'load' using
+
+The IMA log is currently copied to the new kernel ...
+
+
+> ima_dump_measurement_list().  The log copy at kexec 'load' may result in
+> loss of IMA measurements during kexec soft reboot.  It needs to be copied
+
+However, the log copied at kexec 'load' may result in loss of IMA 
+measurements due to missed measurements that only occurred after kexec 
+'load'. Therefore, the log needs to be copied during kexec 'execute'. 
+Setup the ...
+
+> over during kexec 'execute'.  Setup the needed infrastructure to move the
+> IMA log copy from kexec 'load' to 'execute'.
 > 
-> Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
-> Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
-> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+> Define a new IMA hook ima_update_kexec_buffer() as a stub function.
+> It will be used to call ima_dump_measurement_list() during kexec
+> 'execute'.
+> 
+> Implement ima_kexec_post_load() function to be invoked after the new
+> Kernel image has been loaded for kexec. ima_kexec_post_load() maps the
+> IMA buffer to a segment in the newly loaded Kernel.  It also registers
+> the reboot notifier_block to trigger ima_update_kexec_buffer() at
+> exec 'execute'.
+
+kexec 'execute'
+
+> 
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+
+With the above changes:
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+
 > ---
-> v3: Added reminder about Loongson security engine to git log.
+>   include/linux/ima.h                |  3 ++
+>   security/integrity/ima/ima_kexec.c | 46 ++++++++++++++++++++++++++++++
+>   2 files changed, 49 insertions(+)
 > 
->  drivers/char/tpm/Kconfig    |   9 ++++
->  drivers/char/tpm/Makefile   |   1 +
->  drivers/char/tpm/tpm_lsse.c | 104 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 114 insertions(+)
->  create mode 100644 drivers/char/tpm/tpm_lsse.c
-> 
-> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> index 0fc9a510e0..56d0417065 100644
-> --- a/drivers/char/tpm/Kconfig
-> +++ b/drivers/char/tpm/Kconfig
-> @@ -225,5 +225,14 @@ config TCG_FTPM_TEE
->  	help
->  	  This driver proxies for firmware TPM running in TEE.
->  
-> +config TCG_LSSE
-> +	tristate "Loongson TPM Interface"
-> +	depends on MFD_LS6000SE
-> +	help
-> +	  If you want to make Loongson TPM support available, say Yes and
-> +	  it will be accessible from within Linux. To compile this
-> +	  driver as a module, choose M here; the module will be called
-> +	  tpm_lsse.
+> diff --git a/include/linux/ima.h b/include/linux/ima.h
+> index 0bae61a15b60..8e29cb4e6a01 100644
+> --- a/include/linux/ima.h
+> +++ b/include/linux/ima.h
+> @@ -32,6 +32,9 @@ static inline void ima_appraise_parse_cmdline(void) {}
+>   
+>   #ifdef CONFIG_IMA_KEXEC
+>   extern void ima_add_kexec_buffer(struct kimage *image);
+> +extern void ima_kexec_post_load(struct kimage *image);
+> +#else
+> +static inline void ima_kexec_post_load(struct kimage *image) {}
+>   #endif
+>   
+>   #else
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 704676fa6615..0fa65f91414b 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -12,10 +12,14 @@
+>   #include <linux/kexec.h>
+>   #include <linux/of.h>
+>   #include <linux/ima.h>
+> +#include <linux/reboot.h>
+> +#include <asm/page.h>
+>   #include "ima.h"
+>   
+>   #ifdef CONFIG_IMA_KEXEC
+>   static struct seq_file ima_kexec_file;
+> +static void *ima_kexec_buffer;
+> +static bool ima_kexec_update_registered;
+>   
+>   static void ima_reset_kexec_file(struct seq_file *sf)
+>   {
+> @@ -183,6 +187,48 @@ void ima_add_kexec_buffer(struct kimage *image)
+>   	kexec_dprintk("kexec measurement buffer for the loaded kernel at 0x%lx.\n",
+>   		      kbuf.mem);
+>   }
 > +
->  source "drivers/char/tpm/st33zp24/Kconfig"
->  endif # TCG_TPM
-> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-> index 9bb142c752..bf2280352d 100644
-> --- a/drivers/char/tpm/Makefile
-> +++ b/drivers/char/tpm/Makefile
-> @@ -44,3 +44,4 @@ obj-$(CONFIG_TCG_XEN) += xen-tpmfront.o
->  obj-$(CONFIG_TCG_CRB) += tpm_crb.o
->  obj-$(CONFIG_TCG_VTPM_PROXY) += tpm_vtpm_proxy.o
->  obj-$(CONFIG_TCG_FTPM_TEE) += tpm_ftpm_tee.o
-> +obj-$(CONFIG_TCG_LSSE) += tpm_lsse.o
-> diff --git a/drivers/char/tpm/tpm_lsse.c b/drivers/char/tpm/tpm_lsse.c
-> new file mode 100644
-> index 0000000000..3fd2d9bac8
-> --- /dev/null
-> +++ b/drivers/char/tpm/tpm_lsse.c
-> @@ -0,0 +1,104 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
-> +
-> +#include <linux/device.h>
-> +#include <linux/mfd/ls6000se.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/wait.h>
-> +
-> +#include "tpm.h"
-> +
-> +struct tpm_msg {
-> +	u32 cmd;
-> +	u32 data_off;
-> +	u32 data_len;
-> +	u32 info[5];
-> +};
-> +
-> +struct tpm_dev {
-> +	struct lsse_ch *se_ch;
-> +	struct completion tpm_completion;
-> +};
-> +
-> +static void tpm_complete(struct lsse_ch *ch)
+> +/*
+> + * Called during kexec execute so that IMA can update the measurement list.
+> + */
+> +static int ima_update_kexec_buffer(struct notifier_block *self,
+> +				   unsigned long action, void *data)
 > +{
-> +	struct tpm_dev *td = ch->priv;
-> +
-> +	complete(&td->tpm_completion);
+> +	return NOTIFY_OK;
 > +}
 > +
-> +static int tpm_ls_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-> +{
-> +	struct tpm_dev *td = dev_get_drvdata(&chip->dev);
-> +	struct tpm_msg *rmsg;
-> +	int sig;
-> +
-> +	sig = wait_for_completion_interruptible(&td->tpm_completion);
-> +	if (sig)
-> +		return sig;
-> +
-> +	rmsg = td->se_ch->rmsg;
-> +	memcpy(buf, td->se_ch->data_buffer, rmsg->data_len);
-> +
-> +	return rmsg->data_len;
-> +}
-> +
-> +static int tpm_ls_send(struct tpm_chip *chip, u8 *buf, size_t count)
-> +{
-> +	struct tpm_dev *td = dev_get_drvdata(&chip->dev);
-> +	struct tpm_msg *smsg = td->se_ch->smsg;
-> +
-> +	memcpy(td->se_ch->data_buffer, buf, count);
-> +	smsg->data_len = count;
-> +
-> +	return se_send_ch_requeset(td->se_ch);
-> +}
-> +
-> +static const struct tpm_class_ops lsse_tpm_ops = {
-> +	.flags = TPM_OPS_AUTO_STARTUP,
-> +	.recv = tpm_ls_recv,
-> +	.send = tpm_ls_send,
+> +struct notifier_block update_buffer_nb = {
+> +	.notifier_call = ima_update_kexec_buffer,
 > +};
 > +
-> +static int lsse_tpm_probe(struct platform_device *pdev)
-
-tpm_lsse_
-
+> +/*
+> + * Create a mapping for the source pages that contain the IMA buffer
+> + * so we can update it later.
+> + */
+> +void ima_kexec_post_load(struct kimage *image)
 > +{
-> +	struct device *dev = &pdev->dev;
-> +	struct tpm_chip *chip;
-> +	struct tpm_msg *smsg;
-> +	struct tpm_dev *td;
+> +	if (ima_kexec_buffer) {
+> +		kimage_unmap_segment(ima_kexec_buffer);
+> +		ima_kexec_buffer = NULL;
+> +	}
 > +
-> +	td = devm_kzalloc(dev, sizeof(struct tpm_dev), GFP_KERNEL);
-> +	if (!td)
-> +		return -ENOMEM;
+> +	if (!image->ima_buffer_addr)
+> +		return;
 > +
-> +	init_completion(&td->tpm_completion);
-> +	td->se_ch = se_init_ch(dev->parent, SE_CH_TPM, PAGE_SIZE,
-> +			       2 * sizeof(struct tpm_msg), td, tpm_complete);
-> +	if (!td->se_ch)
-> +		return -ENODEV;
-> +	smsg = td->se_ch->smsg;
-> +	smsg->cmd = SE_CMD_TPM;
-> +	smsg->data_off = td->se_ch->off;
+> +	ima_kexec_buffer = kimage_map_segment(image,
+> +					      image->ima_buffer_addr,
+> +					      image->ima_buffer_size);
+> +	if (!ima_kexec_buffer) {
+> +		pr_err("Could not map measurements buffer.\n");
+> +		return;
+> +	}
 > +
-> +	chip = tpmm_chip_alloc(dev, &lsse_tpm_ops);
-> +	if (IS_ERR(chip))
-> +		return PTR_ERR(chip);
-> +	chip->flags = TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
-> +	dev_set_drvdata(&chip->dev, td);
-> +
-> +	return tpm_chip_register(chip);
+> +	if (!ima_kexec_update_registered) {
+> +		register_reboot_notifier(&update_buffer_nb);
+> +		ima_kexec_update_registered = true;
+> +	}
 > +}
 > +
-> +static struct platform_driver lsse_tpm_driver = {
-> +	.probe   = lsse_tpm_probe,
-> +	.driver  = {
-> +		.name  = "ls6000se-tpm",
-> +	},
-> +};
-> +module_platform_driver(lsse_tpm_driver);
-> +
-> +MODULE_ALIAS("platform:ls6000se-tpm");
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Yinggang Gu <guyinggang@loongson.cn>");
-> +MODULE_AUTHOR("Qunqin Zhao <zhaoqunqin@loongson.cn>");
+>   #endif /* IMA_KEXEC */
+>   
+>   /*
 
-Remove MODULE_AUTHOR fields. Git encodes this already.
-
-> +MODULE_DESCRIPTION("Loongson TPM driver");
-> -- 
-> 2.43.0
-> 
-
-Prefix all with tpm_lsse instead of tpm
-
-BR, Jarkko
 
