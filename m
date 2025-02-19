@@ -1,143 +1,130 @@
-Return-Path: <linux-integrity+bounces-4916-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4917-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16092A3C95D
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Feb 2025 21:12:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C378A3CCA1
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Feb 2025 23:49:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E469C189C320
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Feb 2025 20:11:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 863EC177E82
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Feb 2025 22:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D6F22D4C9;
-	Wed, 19 Feb 2025 20:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F192423C8CC;
+	Wed, 19 Feb 2025 22:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="tr0r+Yga"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B144222DFE3;
-	Wed, 19 Feb 2025 20:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from the.earth.li (the.earth.li [93.93.131.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940FE1DE2DE
+	for <linux-integrity@vger.kernel.org>; Wed, 19 Feb 2025 22:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739995833; cv=none; b=NUztj2WkwINe48auja/LLNd/mJZ7UUfiDvIvLBCIVCFiINQd0Qya1lv8t/B2P6+CV3KfISWqEp+dIuJt8p3tc8vPQ2ZX2yIRn1Ed5+An7c/W8FQeEF+zt8YPPzjlNSt0ruZPzOTvdWoz2l1ePAx6XH3LIwaSLHUNfgwH7rpQ4IY=
+	t=1740005375; cv=none; b=XjIftTsol91CeoDkOWMCBXDm1YqY3iVg+L3GoeSiYNEgbWlSlElRh27GGSr/jfxdwu/UGaTxwuh/Dtuk+Rp91JIbjxxttwU8g3AO1cK/lqjnyMk5sM1o08ohzrrmBe32vCS3ZPxfk8FKUDSwSfVbH1KQAPL1KiJe8LL0sDWMdI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739995833; c=relaxed/simple;
-	bh=jUSUz00ESf+S26jtK/k3pKofGf7cV8jQzbW7nQEsROM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kwDCqb0sFLoy2iSvlmo2M34baspFwz1RGmQ1VbLFDJulYv47VeCfUGg/hTTfKKXMFRYUXJ03a+B00xM1ohBfJF8YPGxb7swsdE2zgRkXvQwZXSJ0ZIWSdXhSm47+27ibhJGJeykH1Z4+GwNIoXVJ7Ifl2RVDZpClaOnzaiNwuLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7167C2050;
-	Wed, 19 Feb 2025 12:10:45 -0800 (PST)
-Received: from beelzebub.ast.arm.com (unknown [10.118.29.240])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C97AD3F59E;
-	Wed, 19 Feb 2025 12:10:26 -0800 (PST)
-From: Stuart Yoder <stuart.yoder@arm.com>
-To: linux-integrity@vger.kernel.org,
-	jarkko@kernel.org,
-	peterhuewe@gmx.de,
-	jgg@ziepe.ca,
-	sudeep.holla@arm.com,
-	rafael@kernel.org,
-	lenb@kernel.org
-Cc: linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 5/5] Documentation: tpm: add documentation for the CRB FF-A interface
-Date: Wed, 19 Feb 2025 14:10:14 -0600
-Message-Id: <20250219201014.174344-6-stuart.yoder@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250219201014.174344-1-stuart.yoder@arm.com>
-References: <20250219201014.174344-1-stuart.yoder@arm.com>
+	s=arc-20240116; t=1740005375; c=relaxed/simple;
+	bh=LBwEWULeWBpVU9/ZwnxQZJvXa8jSRGlpvv8QTlXADdE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WVcpbJzmRUdGcqVUggRxDBKpHJ1xkh/z5zVcS6TQE0qXziukQyZtE7LbYImPics3O1hMwDOicPaBJ4+3HI5qdOwfEO7sLa1w9v8Bq8UsELQYuVat2FoQayieW8ny8Ie5EJUjUKtKHSaLppP2gBd0x++tbNk/YwboQqbCvZtiF6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=tr0r+Yga; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=iioXPeQYpBhEasb706WvMD2GHyV3Yiu4q3htpc1OUOQ=; b=tr0r+YgaPyafko0jM3ekBrG3rf
+	+KCmpYBBp2N8oK6cUN2m36DNmHKHHdFoluwl8jdbnPL65e8+Yhfq+B+yyDNyHHuZBAHqx+fXkXx2B
+	GaVv4FwoDleAz073oGX7mU4vkId5zcIrO1wRb/PUda7mXh2QDrmhhGEpbM3R/faV5X4zbXOTIxVsE
+	fypZrRyciKzNhb40k6NzTnqi9hBVPKOCXp72pnGBeaRku5RcGOi/msXXOp6KeCFdRm5L4wuiMMRW7
+	OhmI7GkXDtRzwUPpm38Z1BtoeF6b/HqXjCWg67g+fqhyIgqGn9rXc/vKgwlpdndY57feNZm6vhQUQ
+	WJtg9WbA==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1tksZe-00Bsb5-01;
+	Wed, 19 Feb 2025 22:29:46 +0000
+Date: Wed, 19 Feb 2025 22:29:45 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+Cc: linux-integrity@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: TPM operation times out (very rarely)
+Message-ID: <Z7ZbWcLK0Iajd_D9@earth.li>
+References: <Z5pI07m0Muapyu9w@kitsune.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z5pI07m0Muapyu9w@kitsune.suse.cz>
 
-Add documentation providing details of how the CRB driver interacts
-with FF-A.
+On Wed, Jan 29, 2025 at 04:27:15PM +0100, Michal Suchánek wrote:
+> Hello,
+> 
+> there is a problem report that booting a specific type of system about
+> 0.1% of the time encrypted volume (using a PCR to release the key) fails
+> to unlock because of TPM operation timeout.
+> 
+> Minimizing the test case failed so far.
+> 
+> For example, booting into text mode as opposed to graphical desktop
+> makes the problem unreproducible.
+> 
+> The test is done with a frankenkernel that has TPM drivers about on par
+> with Linux 6.4 but using actual Linux 6.4 the problem is not
+> reproducible, either.
+> 
+> However, given the problem takes up to a day to reproduce I do not have
+> much confidence in the negative results.
 
-Signed-off-by: Stuart Yoder <stuart.yoder@arm.com>
----
- Documentation/security/tpm/tpm_ffa_crb.rst | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 Documentation/security/tpm/tpm_ffa_crb.rst
+Michal, can you possibly try the below and see if it helps out? There
+seems to be a timing bug introduced in 6.4+ that I think might be
+related, and matches up with some of our internal metrics that showed an
+increase in timeouts in 6.4 onwards.
 
-diff --git a/Documentation/security/tpm/tpm_ffa_crb.rst b/Documentation/security/tpm/tpm_ffa_crb.rst
-new file mode 100644
-index 000000000000..0184193da3c7
---- /dev/null
-+++ b/Documentation/security/tpm/tpm_ffa_crb.rst
-@@ -0,0 +1,65 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+========================
-+TPM CRB over FF-A Driver
-+========================
-+
-+The TPM Command Response Buffer (CRB) interface is a standard TPM interface
-+defined in the TCG PC Client Platform TPM Profile (PTP) Specification [1]_.
-+The CRB provides a structured set of control registers a client uses when
-+interacting with a TPM as well as a data buffer for storing TPM commands and
-+responses. A CRB interface can be implemented in:
-+
-+- hardware registers in a discrete TPM chip
-+
-+- in memory for a TPM running in isolated environment where shared memory
-+  allows a client to interact with the TPM
-+
-+The Firmware Framework for Arm A-profile (FF-A) [2]_ is a specification
-+that defines interfaces and protocols for the following purposes:
-+
-+- Compartmentalize firmware into software partitions that run in the Arm
-+  Secure world environment (also know as TrustZone)
-+
-+- Provide a standard interface for software components in the Non-secure
-+  state, for example OS and Hypervisors, to communicate with this firmware.
-+
-+A TPM can be implemented as an FF-A secure service.  This could be a firmware
-+TPM or could potentially be a TPM service that acts as a proxy to a discrete
-+TPM chip. An FF-A based TPM abstracts hardware details (e.g. bus controller
-+and chip selects) away from the OS and can protect locality 4 from access
-+by an OS.  The TCG-defined CRB interface is used by clients to interact
-+with the TPM service.
-+
-+The Arm TPM Service Command Response Buffer Interface Over FF-A [3]_
-+specification defines FF-A messages that can be used by a client to signal
-+when updates have been made to the CRB.
-+
-+How the Linux CRB driver interacts with FF-A is summarized below:
-+
-+- The tpm_crb_ffa driver registers with the FF-A subsystem in the kernel
-+  with an architected TPM service UUID defined in the CRB over FF-A spec.
-+
-+- If a TPM service is discovered by FF-A, the probe() function in the
-+  tpm_crb_ffa driver runs, and the driver initializes.
-+
-+- The probing and initialization of the Linux CRB driver is triggered
-+  by the discovery of a TPM advertised via ACPI.  The CRB driver can
-+  detect the type of TPM through the ACPI 'start' method.  The start
-+  method for Arm FF-A was defined in TCG ACPI v1.4 [4]_.
-+
-+- When the CRB driver performs its normal functions such as signaling 'start'
-+  and locality request/relinquish it invokes the tpm_crb_ffa_start() funnction
-+  in the tpm_crb_ffa driver which handles the FF-A messaging to the TPM.
-+
-+References
-+==========
-+
-+.. [1] **TCG PC Client Platform TPM Profile (PTP) Specification**
-+   https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
-+.. [2] **Arm Firmware Framework for Arm A-profile (FF-A)**
-+   https://developer.arm.com/documentation/den0077/latest/
-+.. [3] **Arm TPM Service Command Response Buffer Interface Over FF-A**
-+   https://developer.arm.com/documentation/den0138/latest/
-+.. [4] **TCG ACPI Specification**
-+   https://trustedcomputinggroup.org/resource/tcg-acpi-specification/
--- 
-2.34.1
+commit 79041fba797d0fe907e227012767f56dd93fac32
+Author: Jonathan McDowell <noodles@meta.com>
+Date:   Wed Feb 19 16:20:44 2025 -0600
 
+    tpm, tpm_tis: Fix timeout handling when waiting for TPM status
+    
+    The change to only use interrupts to handle supported status changes,
+    then switch to polling for the rest, inverted the status test and sleep
+    such that we can end up sleeping beyond our timeout and not actually
+    checking the status. This can result in spurious TPM timeouts,
+    especially on a more loaded system. Fix by switching the order back so
+    we sleep *then* check. We've done a up front check when we enter the
+    function so this won't cause an additional delay when the status is
+    already what we're looking for.
+    
+    Cc: stable@vger.kernel.org # v6.4+
+    Fixes: e87fcf0dc2b4 ("tpm, tpm_tis: Only handle supported interrupts")
+    Signed-off-by: Jonathan McDowell <noodles@meta.com>
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index fdef214b9f6b..167d71747666 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -114,11 +114,11 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+ 		return 0;
+ 	/* process status changes without irq support */
+ 	do {
++		usleep_range(priv->timeout_min,
++			     priv->timeout_max);
+ 		status = chip->ops->status(chip);
+ 		if ((status & mask) == mask)
+ 			return 0;
+-		usleep_range(priv->timeout_min,
+-			     priv->timeout_max);
+ 	} while (time_before(jiffies, stop));
+ 	return -ETIME;
+ }
 
