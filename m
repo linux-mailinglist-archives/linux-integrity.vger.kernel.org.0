@@ -1,89 +1,156 @@
-Return-Path: <linux-integrity+bounces-4952-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4954-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F5F0A3E6BD
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 22:36:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18FD6A3E6EB
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 22:45:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5941719C373F
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 21:36:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA6B83BFD47
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 21:44:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C982641D0;
-	Thu, 20 Feb 2025 21:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i2jlj9NL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF352641D0;
+	Thu, 20 Feb 2025 21:43:47 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FA42147E9;
-	Thu, 20 Feb 2025 21:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904572638BC
+	for <linux-integrity@vger.kernel.org>; Thu, 20 Feb 2025 21:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740087387; cv=none; b=eDCYxhdjKzoNeIbywgyPkerHcvsaEWmsC2yDU0CxUW72SUzGI0ZN54TMKYW81A/SFo+KcYycWBZNiU+6SHKx6pIWW0cL678QtTWZCPjrFTSs5tg0A73UKeonb/JENSTkZeuClQQwTz11nKR2bhO6fPGKJb3o5rf1R8iE8jN2oEQ=
+	t=1740087827; cv=none; b=CvxMH+eyYPTBiU7QhnDAf0QtDHqjK48HvXCEvBMlp7lwr2SPgWKxCpoY7R12F3oZAZQQcutfsZ4FoWh0ES4+5WjasUFPFVk7UOLZ4NZZNXbgv5fWHqzedfiq0VQI4daitxlniEdgaRG67iasNVd56h0JG/wJl6Rs8zag/llfR2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740087387; c=relaxed/simple;
-	bh=O3DT5MvTbli6j6HGumy9m5773CwCIv3sxPWm36Idlbk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Db9G/nd+QPKAaG2HDqi9mF4b1AmIYi04BkbCmVYnA/O96vH+K+MJ5K/6pt/tULjhqlk770PL1RGm6r7kifpUpG/o9CYQCQGZAsvwwniqQmPvFw2YCr7/erOqnRYE9LM4Tb7Q6ekXh1jQzintaNUYIyqapCf9qdhqVDJTSh7l4P4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i2jlj9NL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44A6C4CED1;
-	Thu, 20 Feb 2025 21:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740087387;
-	bh=O3DT5MvTbli6j6HGumy9m5773CwCIv3sxPWm36Idlbk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=i2jlj9NLu+SoUVXm6k0vP0l+J/wnUwHx6dT7Pn0vD9PbO8LTfnir3bNgyPdthPRZq
-	 ZkIdUcXLvrNzJ5oRV4ywa/79yFDGqDTQegdC4PxWIGFK5XvDPKrDev5NtxC7rYmwaB
-	 Tc9clPqJQWX9ciqregM/zKlCbpft36t8wV5LTymD0A1FsL2nB4pYvK05JyThQGpOHB
-	 iSH8j0Ak3dh9YD5uImmK/8hsQJWYtsSnyPF32wq9ceHlvM/qbQxhfw1qInLwNxr095
-	 MpAcZIzvB8aUSO2khUXCOtclftinYOxiDpUW8K+bQJJcXewJqFn29tBKae761E99iw
-	 /kwPS4DLE28pw==
-Message-ID: <0d8682ca28d2ed43d1d0f1b2a28f7d62e4ee2957.camel@kernel.org>
-Subject: Re: [PATCH v5 2/5] tpm_crb: clean-up and refactor check for idle
- support
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Paul Menzel <pmenzel@molgen.mpg.de>, Stuart Yoder <stuart.yoder@arm.com>
-Cc: linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, 
-	sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 20 Feb 2025 23:36:22 +0200
-In-Reply-To: <285e81d8-dd07-4075-9c09-0e2b4e59aeae@molgen.mpg.de>
-References: <20250219201014.174344-1-stuart.yoder@arm.com>
-	 <20250219201014.174344-3-stuart.yoder@arm.com>
-	 <Z7b2BlllE6HVIZNN@kernel.org>
-	 <7c913fc0-0f2c-4327-99ee-510bdff8a537@arm.com>
-	 <285e81d8-dd07-4075-9c09-0e2b4e59aeae@molgen.mpg.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1740087827; c=relaxed/simple;
+	bh=mUDj1tsr9f5h9VrRdhRvPRBb9Ww00MH3XUEDBdJ0qec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VIcAxRBij2VZp/vxLqt5IwXE+jPyXWemRbv/Mo9UeTiqSar1Mv4e1I4vVjstG1hnLSxMXHY7zVZ7mxW482+iZMpQaW5byIGIkdgxsCWmGO5Hz6oWmCoITV+Y6A+1eP8kA/Oj7zYQHaYz+pzWx/g3+YW4E05sfij5i2gZ/m6DAqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 2EC6B1F387;
+	Thu, 20 Feb 2025 21:43:37 +0000 (UTC)
+Authentication-Results: smtp-out2.suse.de;
+	none
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 48FED13301;
+	Thu, 20 Feb 2025 21:43:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 2n6rCQiit2cYYAAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Thu, 20 Feb 2025 21:43:36 +0000
+Date: Thu, 20 Feb 2025 22:43:33 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, ltp@lists.linux.it,
+	Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [RFC PATCH 3/3] ima: additional ToMToU violation tests
+Message-ID: <20250220214333.GA2726725@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20250220160054.12149-1-zohar@linux.ibm.com>
+ <20250220160054.12149-3-zohar@linux.ibm.com>
+ <20250220181604.GA2709977@pevik>
+ <fd10e47b4c8b6af0e8d37975cdf1e82133add8c3.camel@linux.ibm.com>
+ <20250220191342.GA2716312@pevik>
+ <c625586b0dbc4302dfb7adf4acb0c891b74cf8bc.camel@linux.ibm.com>
+ <2637152a2715b8e84e966b12bc9c9cb1c27592c2.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2637152a2715b8e84e966b12bc9c9cb1c27592c2.camel@linux.ibm.com>
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -4.00
+X-Rspamd-Queue-Id: 2EC6B1F387
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
 
-On Thu, 2025-02-20 at 20:09 +0100, Paul Menzel wrote:
-> Dear Stuart,
->=20
->=20
-> Thank you for the patch. Should you respin, you could spell *clean
-> up*=20
-> in the summary/title with a space.
->=20
-> The diff looks good.
->=20
->=20
-> Kind regards,
->=20
-> Paul
+> On Thu, 2025-02-20 at 15:22 -0500, Mimi Zohar wrote:
+> > On Thu, 2025-02-20 at 20:13 +0100, Petr Vorel wrote:
+> > > > On Thu, 2025-02-20 at 19:16 +0100, Petr Vorel wrote:
+> > > > > Hi Mimi,
 
-So for the sake of overall good it is better maybe to keep
-this immutable as this will make it more plausible for
-potential testers.
+> > > > > > Kernel patch "ima: limit the number of ToMToU integrity violations"
+> > > > > > prevents superfluous ToMToU violations.  Add corresponding LTP tests.
 
-BR, Jarkko
+> > > > > > Link:
+> > > > > > https://lore.kernel.org/linux-integrity/20250219162131.416719-3-zohar@linux.ibm.com/
+> > > > > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+
+> > > > > Unfortunately tests fail on both mainline kernel and kernel with your patches.
+
+> > > > The new LTP IMA violations patches should fail without the associated kernel
+> > > > patches.
+
+> > > > > Any hint what could be wrong?
+
+> > > > Of course it's dependent on the IMA policy.  The tests assume being booted with the
+> > > > IMA
+> > > > TCB measurement policy or similar policy being loaded.  Can you share the IMA
+> > > > policy?
+> > > > e.g. cat /sys/kernel/security/ima/policy
+
+> > > > thanks,
+
+> > > > Mimi
+
+> > > Now testing on kernel *with* your patches. First run always fails, regardless
+> > > whether using ima_policy=tcb or
+> > > /opt/ltp/testcases/data/ima_violations/violations.policy).
+
+> > > Kind regards,
+> > > Petr
+
+> > I'm not seeing that on my test machine.  Could there be other things running on your
+> > system causing violations.  In anycase, your original test was less exacting.  
+> > Similarly,
+> > instead of "-eq", try using "-qe" in the following test and removing the subsequent new
+> > "gt" test.
+
+> -> "-ge"
+
+Sure, changing to -ge fixes the problem:
+if [ $(($num_violations_new - $num_violations)) -ge $expected_violations ]; then
+
+I guess we need "-ge" for older kernels (unless "fix" for stable).  Should we
+accept "$expected_violations || $expected_violations + 1" for new kernels to
+avoid problems like the one on my system.
+
+I wonder if the problem was somehow caused by the fact that I built kernel. OTOH
+it's build by OBS (official openSUSE build service).
+
+I don't expect you'd have time to look into it, in case you're interested and
+have time sending a links to rpm binary and src package.
+
+https://download.opensuse.org/repositories/home:/pevik:/ima-limit-open-writers-ToMToU/standard/x86_64/kernel-default-6.14~rc3-1.1.gb6b4102.x86_64.rpm
+https://download.opensuse.org/repositories/home:/pevik:/ima-limit-open-writers-ToMToU/standard/src/kernel-source-6.14~rc3-1.1.gb6b4102.src.rpm
+
+Kind regards,
+Petr
+
+> > if [ $(($num_violations_new - $num_violations)) -eq $expected_violations ]; then
+
+
 
