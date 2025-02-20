@@ -1,220 +1,130 @@
-Return-Path: <linux-integrity+bounces-4951-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4953-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B7EEA3E6B8
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 22:35:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B47FCA3E6C0
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 22:36:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20AD517D8A5
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 21:35:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F2D63B199F
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 21:36:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB35C263F34;
-	Thu, 20 Feb 2025 21:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 062672641C2;
+	Thu, 20 Feb 2025 21:36:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WR4xawd4"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TmylOpIO"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8AE19DF6A;
-	Thu, 20 Feb 2025 21:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9DA2638B8;
+	Thu, 20 Feb 2025 21:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740087311; cv=none; b=K0gPi865DbVYgLK8jkCxgV932Fq2LkhA1n7U+PYOK3RhtLUpHgjpLvhjLPFB9XjAKHcx11uS0YhIewwOs5vzLULITRyk5jUhSABWKQPDJirP8UAt3vWP+hkE7hf1J3ff/ofKgUNT5RoG5SS+jTAvQOww501tap9BuWACv53qFW8=
+	t=1740087407; cv=none; b=D2JfVlK+mvMrp2VVMlZC8u7z48sE7dFe1sPSqv25/F/Cg/oVIMLfC4AYRwR9puGBL6/cOGEQ7TAK8ITswEXAkL/1CZmj6wgowrAfqJAiSEsV0TPE7OC1S9ZRmtKumkrAA6THCnYG+XHtvXht3j9HTiKZc/bMkjYKS2gIytKmkl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740087311; c=relaxed/simple;
-	bh=MhjbQXZHVOKqHLGQ5xLuusLGfFvPWfVaBl0Y5meaJyk=;
+	s=arc-20240116; t=1740087407; c=relaxed/simple;
+	bh=ocxn2vITOhCMlyY2Lv+YIJet0NEDux7ShrMIeChy5p4=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jlh6Sw1RD9MF2HTgq4iYOvBqcO3CeME+98UaPWuJvBrOCj3KAdOpTuHu5KB0w2y275lkyR8UoAPDGzj4nr9Y8WzNTpbg7L3M1+1qUMfcR2JyLpRFKoUFVsRPLusla/eQOKoRbzmOG1kGunL6aoZQirq8wFHXETkALEK1IHM0pr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WR4xawd4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EFDC4CED1;
-	Thu, 20 Feb 2025 21:35:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740087311;
-	bh=MhjbQXZHVOKqHLGQ5xLuusLGfFvPWfVaBl0Y5meaJyk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=WR4xawd4Zl9KRCZa4NkJXihZxBC/kSWalxZMgm1gl8oGmVggAZ+QXMubnZRhbh/ft
-	 oceZtmds/xHBk2+sQ1/qeg5ozbtzyJSfzf1WTY/AMxoKLrv9N6MNqSRIYNw6YgF1jw
-	 vrqjuOnMQK+gAw/PoHQmyoZ8V/EsU/q6OK8mcTfHxpqZg8DwisWJmij4jQPu/n1V/s
-	 QPnty1pE+J6aun3y6Xyp6VfpWIL7rsZH8wGxlgUh8yZfC2CdH4/Wmifx76le9sp4I5
-	 +UP1OaLOdMAwDP6sYTjJpgtyu4ffW3drvDpVqWC/MxSbc25G7Up0i9xR2wyrFOglnN
-	 GEjYlDbx9urIw==
-Message-ID: <fdc24d5564b21cf554616afa94b008909ada27f0.camel@kernel.org>
-Subject: Re: [PATCH v5 2/5] tpm_crb: clean-up and refactor check for idle
- support
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stuart Yoder <stuart.yoder@arm.com>
-Cc: linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, 
-	sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 20 Feb 2025 23:35:06 +0200
-In-Reply-To: <7c913fc0-0f2c-4327-99ee-510bdff8a537@arm.com>
-References: <20250219201014.174344-1-stuart.yoder@arm.com>
-	 <20250219201014.174344-3-stuart.yoder@arm.com>
-	 <Z7b2BlllE6HVIZNN@kernel.org>
-	 <7c913fc0-0f2c-4327-99ee-510bdff8a537@arm.com>
+	 Content-Type:MIME-Version; b=Y2uACJYrv05LTy3Bk7D4qu9AfNe7Vszm0fRtOAJ3MhUEILSBxcc6fzSPzD1j2xgWHFcdfoLgtsVQ83JYR6L6UbFqIbudDlVmFEn72dbDJQAjYULLf/X9EaZ2S2x3vMk/+QN533J8Gu2jCqlyznOmOn72Ggq4x9TdGFzqto4LhZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TmylOpIO; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51KH2MDn010151;
+	Thu, 20 Feb 2025 21:36:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ocxn2v
+	ITOhCMlyY2Lv+YIJet0NEDux7ShrMIeChy5p4=; b=TmylOpIOcTcHOHXCMfW2rA
+	Us2ztmKa3wjRUjjQSaqbV/XzKhG5RC2w65RfgOxjLT+cYMLy8Uk7d9BSWJ2sYRUu
+	UwfECa7oUKaCqlZFYIrDtqml+hmJMlDjzuHhaaRzW+bqksx+IeESpSuqZ42LwN9a
+	xiOb4TiKzSWCeVGgvr+kwJBGmWUaPlePIVWFNTIoBo33BHm3v5Q1a5FycrkY5Spr
+	6t8hvYh0KpZBWHRB0YYSfIOOD1JkUHRaq3aXnbZ5Wujuf8JmNR5mU9SQ6nyRV6TO
+	452G4r13BRVqJvPoVuQKDVURF7undN7MPzw5KJPdpY8J5uziPUVIeAhc4O5Yth7A
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44wtfa5hfe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 20 Feb 2025 21:36:23 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51KL0SZO029296;
+	Thu, 20 Feb 2025 21:36:21 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44w024md7y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 20 Feb 2025 21:36:21 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51KLaKQF20382326
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 20 Feb 2025 21:36:21 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C60A45805A;
+	Thu, 20 Feb 2025 21:36:20 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 23F875805D;
+	Thu, 20 Feb 2025 21:36:19 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.103.152])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 20 Feb 2025 21:36:19 +0000 (GMT)
+Message-ID: <44a2c7cb424c769c6c8863324c522533cb70b0a5.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 6/7] ima: make the kexec extra memory configurable
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+        James.Bottomley@HansenPartnership.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com
+Date: Thu, 20 Feb 2025 16:36:18 -0500
+In-Reply-To: <20250218225502.747963-7-chenste@linux.microsoft.com>
+References: <20250218225502.747963-1-chenste@linux.microsoft.com>
+	 <20250218225502.747963-7-chenste@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YqhkbFQcJ59BFj7mB8ysqI2pJLMKyAve
+X-Proofpoint-GUID: YqhkbFQcJ59BFj7mB8ysqI2pJLMKyAve
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-20_09,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
+ bulkscore=0 phishscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502200143
 
-On Thu, 2025-02-20 at 13:04 -0600, Stuart Yoder wrote:
+On Tue, 2025-02-18 at 14:55 -0800, steven chen wrote:
+> The extra memory allocated for carrying the IMA measurement list across
+> kexec is hard-coded as half a PAGE.=C2=A0 Make it configurable.
 >=20
+> Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
+> extra memory (in kb) to be allocated for IMA measurements added during
+> kexec soft reboot.=C2=A0 Ensure the default value of the option is set su=
+ch
+> that extra half a page of memory for additional measurements is allocated
+> for the additional measurements.
 >=20
-> On 2/20/25 3:29 AM, Jarkko Sakkinen wrote:
-> > On Wed, Feb 19, 2025 at 02:10:11PM -0600, Stuart Yoder wrote:
-> > > Refactor TPM idle check to tpm_crb_has_idle(), and reduce
-> > > paraentheses
-> > > usage in start method checks
-> > >=20
-> > > Signed-off-by: Stuart Yoder <stuart.yoder@arm.com>
-> > > ---
-> > > =C2=A0 drivers/char/tpm/tpm_crb.c | 36 +++++++++++++++++++++---------=
--
-> > > -----
-> > > =C2=A0 1 file changed, 21 insertions(+), 15 deletions(-)
-> > >=20
-> > > diff --git a/drivers/char/tpm/tpm_crb.c
-> > > b/drivers/char/tpm/tpm_crb.c
-> > > index ea085b14ab7c..31db879f1324 100644
-> > > --- a/drivers/char/tpm/tpm_crb.c
-> > > +++ b/drivers/char/tpm/tpm_crb.c
-> > > @@ -115,6 +115,16 @@ struct tpm2_crb_pluton {
-> > > =C2=A0=C2=A0	u64 reply_addr;
-> > > =C2=A0 };
-> > > =C2=A0=20
-> > > +/*
-> > > + * Returns true if the start method supports idle.
-> > > + */
-> > > +static inline bool tpm_crb_has_idle(u32 start_method)
-> > > +{
-> > > +	return start_method =3D=3D ACPI_TPM2_START_METHOD ||
-> > > +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 start_method =3D=3D
-> > > ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD ||
-> > > +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 start_method =3D=3D
-> > > ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC;
-> > > +}
-> > > +
-> > > =C2=A0 static bool crb_wait_for_reg_32(u32 __iomem *reg, u32 mask, u3=
-2
-> > > value,
-> > > =C2=A0=C2=A0				unsigned long timeout)
-> > > =C2=A0 {
-> > > @@ -173,9 +183,7 @@ static int __crb_go_idle(struct device *dev,
-> > > struct crb_priv *priv)
-> > > =C2=A0 {
-> > > =C2=A0=C2=A0	int rc;
-> > > =C2=A0=20
-> > > -	if ((priv->sm =3D=3D ACPI_TPM2_START_METHOD) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (priv->sm =3D=3D
-> > > ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (priv->sm =3D=3D ACPI_TPM2_COMMAND_BUFFER_WITH_A=
-RM_SMC))
-> > > +	if (!tpm_crb_has_idle(priv->sm))
-> > > =C2=A0=C2=A0		return 0;
-> > > =C2=A0=20
-> > > =C2=A0=C2=A0	iowrite32(CRB_CTRL_REQ_GO_IDLE, &priv->regs_t-
-> > > >ctrl_req);
-> > > @@ -222,9 +230,7 @@ static int __crb_cmd_ready(struct device
-> > > *dev, struct crb_priv *priv)
-> > > =C2=A0 {
-> > > =C2=A0=C2=A0	int rc;
-> > > =C2=A0=20
-> > > -	if ((priv->sm =3D=3D ACPI_TPM2_START_METHOD) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (priv->sm =3D=3D
-> > > ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (priv->sm =3D=3D ACPI_TPM2_COMMAND_BUFFER_WITH_A=
-RM_SMC))
-> > > +	if (!tpm_crb_has_idle(priv->sm))
-> > > =C2=A0=C2=A0		return 0;
-> > > =C2=A0=20
-> > > =C2=A0=C2=A0	iowrite32(CRB_CTRL_REQ_CMD_READY, &priv->regs_t-
-> > > >ctrl_req);
-> > > @@ -423,13 +429,13 @@ static int crb_send(struct tpm_chip *chip,
-> > > u8 *buf, size_t len)
-> > > =C2=A0=C2=A0	 * report only ACPI start but in practice seems to
-> > > require both
-> > > =C2=A0=C2=A0	 * CRB start, hence invoking CRB start method if hid =3D=
-=3D
-> > > MSFT0101.
-> > > =C2=A0=C2=A0	 */
-> > > -	if ((priv->sm =3D=3D ACPI_TPM2_COMMAND_BUFFER) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (priv->sm =3D=3D ACPI_TPM2_MEMORY_MAPPED) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (!strcmp(priv->hid, "MSFT0101")))
-> > > +	if (priv->sm =3D=3D ACPI_TPM2_COMMAND_BUFFER ||
-> > > +	=C2=A0=C2=A0=C2=A0 priv->sm =3D=3D ACPI_TPM2_MEMORY_MAPPED ||
-> > > +	=C2=A0=C2=A0=C2=A0 !strcmp(priv->hid, "MSFT0101"))
-> > > =C2=A0=C2=A0		iowrite32(CRB_START_INVOKE, &priv->regs_t-
-> > > >ctrl_start);
-> > > =C2=A0=20
-> > > -	if ((priv->sm =3D=3D ACPI_TPM2_START_METHOD) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (priv->sm =3D=3D
-> > > ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD))
-> > > +	if (priv->sm =3D=3D ACPI_TPM2_START_METHOD ||
-> > > +	=C2=A0=C2=A0=C2=A0 priv->sm =3D=3D
-> > > ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD)
-> > > =C2=A0=C2=A0		rc =3D crb_do_acpi_start(chip);
-> > > =C2=A0=20
-> > > =C2=A0=C2=A0	if (priv->sm =3D=3D ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SM=
-C) {
-> > > @@ -449,8 +455,8 @@ static void crb_cancel(struct tpm_chip *chip)
-> > > =C2=A0=20
-> > > =C2=A0=C2=A0	iowrite32(CRB_CANCEL_INVOKE, &priv->regs_t-
-> > > >ctrl_cancel);
-> > > =C2=A0=20
-> > > -	if (((priv->sm =3D=3D ACPI_TPM2_START_METHOD) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (priv->sm =3D=3D
-> > > ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD)) &&
-> > > +	if ((priv->sm =3D=3D ACPI_TPM2_START_METHOD ||
-> > > +	=C2=A0=C2=A0=C2=A0=C2=A0 priv->sm =3D=3D
-> > > ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD) &&
-> > > =C2=A0=C2=A0	=C2=A0=C2=A0=C2=A0=C2=A0 crb_do_acpi_start(chip))
-> > > =C2=A0=C2=A0		dev_err(&chip->dev, "ACPI Start failed\n");
-> > > =C2=A0 }
-> > > @@ -609,8 +615,8 @@ static int crb_map_io(struct acpi_device
-> > > *device, struct crb_priv *priv,
-> > > =C2=A0=C2=A0	 * the control area, as one nice sane region except for
-> > > some older
-> > > =C2=A0=C2=A0	 * stuff that puts the control area outside the ACPI IO
-> > > region.
-> > > =C2=A0=C2=A0	 */
-> > > -	if ((priv->sm =3D=3D ACPI_TPM2_COMMAND_BUFFER) ||
-> > > -	=C2=A0=C2=A0=C2=A0 (priv->sm =3D=3D ACPI_TPM2_MEMORY_MAPPED)) {
-> > > +	if (priv->sm =3D=3D ACPI_TPM2_COMMAND_BUFFER ||
-> > > +	=C2=A0=C2=A0=C2=A0 priv->sm =3D=3D ACPI_TPM2_MEMORY_MAPPED) {
-> > > =C2=A0=C2=A0		if (iores &&
-> > > =C2=A0=C2=A0		=C2=A0=C2=A0=C2=A0 buf->control_address =3D=3D iores->s=
-tart +
-> > > =C2=A0=C2=A0		=C2=A0=C2=A0=C2=A0 sizeof(*priv->regs_h))=20
-> > > --=20
-> > > 2.34.1
-> > >=20
-> >=20
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Update ima_add_kexec_buffer() function to allocate memory based on the
+> Kconfig option value, rather than the currently hard-coded one.
 >=20
-> Thanks for the review.=C2=A0 Do you want me to respin and send out
-> a v6 with your Reviewed-by tags on patches 2/5 and 5/5?
+> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-It's fine I can append them :-)
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-You might have to hold up until to the first work week of
-March because I'm actually on holiday up until that but
-yeah no need for extra noise.
 
-Up until that tested-by's to this patch set version are
-obviously welcome but it's now definitely good enough
-as far as I'm concerned.
-
->=20
-> Thanks,
-> Stuart
-
-BR, Jarkko
 
