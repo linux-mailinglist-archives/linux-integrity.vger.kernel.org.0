@@ -1,175 +1,160 @@
-Return-Path: <linux-integrity+bounces-4934-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4935-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21C65A3DFB2
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 17:02:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C0E6A3E0AE
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 17:28:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EBCE1884A56
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 16:01:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA10617C480
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 16:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36C221FF1AD;
-	Thu, 20 Feb 2025 16:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E7AB2045AB;
+	Thu, 20 Feb 2025 16:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="S6bLBx9i"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="V63/MU68"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725D81FF7B7
-	for <linux-integrity@vger.kernel.org>; Thu, 20 Feb 2025 16:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DECE20D4E5;
+	Thu, 20 Feb 2025 16:24:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740067275; cv=none; b=ZcInrWLTaU2OhnbleVBtwXLxLoV4bjvqOAjySC3ydhd62M34d+RWuMKnKviwvrDFrxqxiwaf/uAb5mR5yO6KPmGibFVYQt2NazfxmOE3v/j7uCZ7WIsHz7V8zFDS+cfmNt+qQ9YVfZg4DfOnLN+yjkNvkaEIjNuaJszC+wNfguc=
+	t=1740068653; cv=none; b=fe+VGT/wI1AM77UdujX1qMBsvpm3wffB6Vxygk3B7/7aOPfvEJKEDy+Cf5moANEKZRARB/HpsEhIG0sgtHMk8OMbSdVthD2YUpRDUZ2CQzgvxm9vHxzBQ9FH3sCqSNMW8mNhJ06cUnxZ/Qh4xUnxBBQfSX8/G/+9nx+MDKjVxjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740067275; c=relaxed/simple;
-	bh=cLwAVuRJv8oolEMtxUlGLIdbmqTU2Q4EO9ve85wejxM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AhlEt4EXZbHp5bvw7r7MKwEEpmA8ujErIZboBAsmLJi4YVTGiYulBRjw5ju+u4LBdHD/C9fT0VlXQ+y8EuMpsIaPOYcR8eYr5K9f5FGGETkL9VnmtVeSC9RRrGvEZ0K/s75AXwj9rzxEZaSDSkUOBamqDrMBUu9B+0MJlRy9vsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=S6bLBx9i; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1740068653; c=relaxed/simple;
+	bh=+/6yjCYYDC/vx/Xl0epM+sZBCKo21xZL+bewavcyoUs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rV7sPc3+9shaVLV165t4n7ce0+3dL8hFJT3VnD6yAqb8/VXe1RgPpmjCMuT6NTCU4snIFSEbtbbfaGT1Tg+EQWDJ76E1U15/ULee1ydkpY5k0amvKLwzvatFKVmS/iT3qkhlHwruK7I/5Wm5FBq73BR1y94DwxWPs0D0VR0+tp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=V63/MU68; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51K7Wq9X008224;
-	Thu, 20 Feb 2025 16:01:08 GMT
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51KAVe4o023220;
+	Thu, 20 Feb 2025 16:23:37 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=/UUSWhrXooLS6NXNd
-	9cpiIivxQgEZ21j5nQ3LsB5ejY=; b=S6bLBx9iByg2yta8dal8xykRi8w9pb3dV
-	esJKVsZxhvJSpjBrfXrfkxqZJv9gW/mNuiKryLE3nNMqqze817nNSMWm0ILKB/Nb
-	szq0i5b2ehzgftNbbDe3PO56Py0nsIgYwKUpAsFBsVQvcZhzXxsGr11e39DR2YGx
-	OVMOZLtILKt5mHfPMB31Agtaxi6WTjbWkECo9rAKAhhWwG8LVseAR7xGOCMRpBgC
-	RjLa7yKD/FpehA+w0J0nX+UtNZ3nfukWzBMEojs39y8wL+9xrqnXCEOhNIjg6Dwj
-	9IgBP0uUHqcmNq9qU3GQS6DNjrVxPSBi9xZQtwNfQfaV5XcnF+4Kw==
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=VzLAvJ
+	4OFYe9FsbbjKeRVznanRJha9P7le1bYv/dDM8=; b=V63/MU68CqnbjiETxInFou
+	dDQUV6roS0RmVkfOv/FI/QdZU0BBipbmj6Zvc0Qg1oCxWEKy+RKKqCVfdru1LsGN
+	KQGLTR48fGHSSBs4p5pnkoelmmzIz1+nWX6wtFAHVr6rjvliGTuJH3VIaGlmK5iq
+	sCvDAmltgDQgM5vqLl7rwTqyAYxiY5ZUraI7EbHMYS5NKYEj87nsRHlxHjMXAH2D
+	5TtepDr4db8xh6ZtTXZ2QyzB0/HaXRfKaeuSnrGhsUmaXnvaZ/VbZ2R9wmdqBRNB
+	68K0xvt1P6eb6XVXfdRdeFTxx2fKHNCyNfUbcEjUjcLHzBugcC4MLBr4k2pII7Hg
+	==
 Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44x03qthka-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44wu80bxtj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Feb 2025 16:01:07 +0000 (GMT)
+	Thu, 20 Feb 2025 16:23:37 +0000 (GMT)
 Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51KF7x6T005771;
-	Thu, 20 Feb 2025 16:01:06 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44w02xjtj8-1
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51KFHavG005817;
+	Thu, 20 Feb 2025 16:23:36 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44w02xjwwc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Feb 2025 16:01:06 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51KG125G43516188
+	Thu, 20 Feb 2025 16:23:36 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51KGNZbY22544992
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Feb 2025 16:01:02 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9D41420043;
-	Thu, 20 Feb 2025 16:01:02 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 337E820040;
-	Thu, 20 Feb 2025 16:01:01 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com.com (unknown [9.61.68.26])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 20 Feb 2025 16:01:00 +0000 (GMT)
+	Thu, 20 Feb 2025 16:23:35 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 827F05805E;
+	Thu, 20 Feb 2025 16:23:35 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 65CE658051;
+	Thu, 20 Feb 2025 16:23:34 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.68.26])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 20 Feb 2025 16:23:34 +0000 (GMT)
+Message-ID: <241e6b5336d1dcee751cb35554e507e552563a16.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 1/7] ima: define and call ima_alloc_kexec_file_buf
 From: Mimi Zohar <zohar@linux.ibm.com>
-To: linux-integrity@vger.kernel.org, ltp@lists.linux.it
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>,
-        Petr Vorel <pvorel@suse.cz>
-Subject: [RFC PATCH 3/3] ima: additional ToMToU violation tests
-Date: Thu, 20 Feb 2025 11:00:54 -0500
-Message-ID: <20250220160054.12149-3-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250220160054.12149-1-zohar@linux.ibm.com>
-References: <20250220160054.12149-1-zohar@linux.ibm.com>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+        steven chen
+	 <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com
+Date: Thu, 20 Feb 2025 11:23:34 -0500
+In-Reply-To: <58e70121aaee33679ac295847197c1e5511b2a81.camel@HansenPartnership.com>
+References: <20250218225502.747963-1-chenste@linux.microsoft.com>
+	 <20250218225502.747963-2-chenste@linux.microsoft.com>
+	 <8023fa50a84817cc911a117db9bd3757c34fddfb.camel@linux.ibm.com>
+	 <58e70121aaee33679ac295847197c1e5511b2a81.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tbRq0PLQX38hTjWatrv4JsZBqxCpznMF
-X-Proofpoint-ORIG-GUID: tbRq0PLQX38hTjWatrv4JsZBqxCpznMF
+X-Proofpoint-GUID: jLH567s1uVFEACBTyWlJqrwhOXCg8KrD
+X-Proofpoint-ORIG-GUID: jLH567s1uVFEACBTyWlJqrwhOXCg8KrD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-20_06,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- phishscore=0 mlxlogscore=581 impostorscore=0 bulkscore=0 clxscore=1015
- malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 spamscore=0 phishscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 mlxlogscore=478 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2502100000 definitions=main-2502200113
 
-Kernel patch "ima: limit the number of ToMToU integrity violations"
-prevents superfluous ToMToU violations.  Add corresponding LTP tests.
+On Thu, 2025-02-20 at 10:04 -0500, James Bottomley wrote:
+> On Thu, 2025-02-20 at 09:53 -0500, Mimi Zohar wrote:
+> > On Tue, 2025-02-18 at 14:54 -0800, steven chen wrote:
+> [...
+> > > Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> >=20
+> > Steven, thank you again for picking up this patch set.
+> >=20
+> > As previously explained, there is no tag named "Author" in
+> > https://www.kernel.org/doc/Documentation/process/submitting-patches.rst
+> > .=C2=A0 To give credit to the original author use "Co-developed-by".
+>=20
+> Just on this, only use the co-developed-by if you actually *modified*
+> the patch.=C2=A0 If you're just transmitting the patch unmodified you can
+> give original author credit by including a=20
+>=20
+> From: original author <email>
+>=20
+> Followed by a blank line at the beginning of the email.=C2=A0 That makes =
+the
+> git author field contan whatever the From: line says.=C2=A0 You still nee=
+d a
+> signoff from yourself in the original patch because you transmitted it.
+>=20
+> Some people also consider minor modifications to be insufficient to
+> disturb the original copyright ownership and simply document what they
+> did in square brackets under their signoff, like this:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/?id=3Db5d1e6ee761a109400e97ac6a1b91c57d0f6a43a
 
-Link: https://lore.kernel.org/linux-integrity/20250219162131.416719-3-zohar@linux.ibm.com/
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- .../integrity/ima/tests/ima_violations.sh     | 46 ++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+Originally I had said:
 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_violations.sh b/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
-index 65c5c3a92..5b6d7e993 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
-@@ -8,7 +8,7 @@
- 
- TST_SETUP="setup"
- TST_CLEANUP="cleanup"
--TST_CNT=6
-+TST_CNT=8
- 
- REQUIRED_BUILTIN_POLICY="tcb"
- REQUIRED_POLICY_CONTENT='violations.policy'
-@@ -245,6 +245,50 @@ test6()
- 	validate $num_violations $count $search 2
- }
- 
-+test7()
-+{
-+	tst_res TINFO "verify limiting single open reader ToMToU violations"
-+
-+	local search="ToMToU"
-+	local count num_violations
-+
-+	read num_violations < $IMA_VIOLATIONS
-+	count="$(get_count $search)"
-+
-+	open_file_read
-+	open_file_write
-+	close_file_write
-+
-+	open_file_write
-+	close_file_write
-+	close_file_read
-+
-+	validate $num_violations $count $search 1
-+}
-+
-+test8()
-+{
-+	tst_res TINFO "verify new open reader causes additional ToMToU violation"
-+
-+	local search="ToMToU"
-+	local count num_violations
-+
-+	read num_violations < $IMA_VIOLATIONS
-+	count="$(get_count $search)"
-+
-+	open_file_read
-+	open_file_write
-+	close_file_write
-+	close_file_read
-+
-+	open_file_read
-+	open_file_write
-+	close_file_write
-+	close_file_read
-+
-+	validate $num_violations $count $search 2
-+}
-+
- . ima_setup.sh
- . daemonlib.sh
- tst_run
--- 
-2.48.1
+   > Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+   > Signed-off-by: steven chen <chenste@linux.microsoft.com>
 
+   Before the "Co-developed-by" tag was defined, it was implied simply by t=
+his ordering
+   of the "Signed-off-by" tags.
+  =20
+   For those patches you didn't modify, simply import Tushar's patch with h=
+im as the
+   author and add your Signed-off-by tag after his.
+
+Thanks, James, for the explanation of using "From: original author <email>"=
+ to force the
+author to be Tushar.
+
+Mimi
 
