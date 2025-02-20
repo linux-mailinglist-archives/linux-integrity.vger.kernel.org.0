@@ -1,164 +1,161 @@
-Return-Path: <linux-integrity+bounces-4936-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4937-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE46CA3E24F
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 18:24:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 988FBA3E39E
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 19:16:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0DC2160AB9
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 17:22:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BE3B42160B
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Feb 2025 18:16:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D306E204875;
-	Thu, 20 Feb 2025 17:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XYDRTG/p"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D995214803;
+	Thu, 20 Feb 2025 18:16:11 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FE71E2848;
-	Thu, 20 Feb 2025 17:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584D321504B
+	for <linux-integrity@vger.kernel.org>; Thu, 20 Feb 2025 18:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740072174; cv=none; b=TLLhSDhUu2JuFiTfIvEJ/rMg8ziGzxlVvTtx+851TH9itTSblEb2DeaTzMiYLPKS8YiiRgG1yIOdOx3paWGCGxHdY9ExIkTuWA9IRZu4Tm7xuHMjGgQtTKNddKIR062H4YyHbVZ/cKTWojjlFYVHgQGHHNt+eozEjS+vgznBPmk=
+	t=1740075371; cv=none; b=ABrhpcLRGeaAsohUsMRmo/PRot205vXuDEJ4e0UseH8NBMZxkl+gLLaL+iFtfiX5kXq+gPPZAkWwLcqxzErm/YZbTqxzNl1Bpbdmxq6le1IhiIJYNC5KYvugT/C08OZrFU0EzGvDRiSkkVIq3UzhWWKH3w66ekfRCNN9x8qj9BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740072174; c=relaxed/simple;
-	bh=iiCsnaoU0TQVN3Wn3gsInJiV1kvV/CCfVEHy+i7LKgI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qu9T7PjBMswDflRKzhLPeTtFbibtWZ2diCeLqETxCY1viZq7VQWYA1/GBZoqpq5eXxE5Myzsk51i3J0eXLoYcRjzujqw0b132Tqr+NZwvmVgHjHXWXm2QMqApmnI86u8HaocFQPJS2BH5TAFSXeobr84mmlKLNDQZV0gwwk9N9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XYDRTG/p; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51KH1ew6007899;
-	Thu, 20 Feb 2025 17:22:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=S+lsw3
-	J2GGZrkffZVS1uXbFw8jdnLUvAixzKeCH+EC0=; b=XYDRTG/pmvtz43XuqCR8Lk
-	q4wHnqTWDvJyI0a7mnMN/TMyrLAhH596y1MmXEgma9OFnlhI+iKKbjY6fviALDQn
-	6aiO/uZAbxz5/5aRiMeOEWEiQICjUbrSiNEyKH5g2+cThWluGSBhHTB5rF4df7Tf
-	hDRuP2ebQnkB42k2hPyuQzOgqQhFCh3B8YV8sWeAbl6Lk5d96FXd+LgPxIxC3YOA
-	7rhN9NYb2ZsL7YskeRvvtBbJ2uoUa4CkK++p6X+h9qI5Km6CTMYp61Twel/meDIq
-	L3BQnS0D9aQHN+1NRj8JmS2ayvrOgbf4/I3lnazhbl2AsEjXyDVeGdaaVEHLR7XQ
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44wtfa4bag-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Feb 2025 17:22:27 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51KF6sLU002343;
-	Thu, 20 Feb 2025 17:22:26 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w03xb6d3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Feb 2025 17:22:26 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51KHMPT129098640
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Feb 2025 17:22:25 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1E5D558052;
-	Thu, 20 Feb 2025 17:22:25 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E475F58056;
-	Thu, 20 Feb 2025 17:22:23 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.68.26])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 20 Feb 2025 17:22:23 +0000 (GMT)
-Message-ID: <c76a6a741b6f465d270153b65ea6f728383ca608.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 2/7] kexec: define functions to map and unmap segments
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
-        code@tyhicks.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-        James.Bottomley@HansenPartnership.com, bhe@redhat.com,
-        vgoyal@redhat.com, dyoung@redhat.com
-Date: Thu, 20 Feb 2025 12:22:23 -0500
-In-Reply-To: <20250218225502.747963-3-chenste@linux.microsoft.com>
-References: <20250218225502.747963-1-chenste@linux.microsoft.com>
-	 <20250218225502.747963-3-chenste@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1740075371; c=relaxed/simple;
+	bh=EJgZqsofTnBrCwGNEqheqjf9VxiFdN1LaGnmhpfB0Jw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hkOwgZGegyFbRREDZnKzRuKQMu72t4SSNKKYgblEbNsd9mFwbVW3VUHVXYjjYyinTi7VonLIKTkwgxPNKlFRTzn/4ZH3DZDjwWfUL2Ne19pRDm2IcsD5YUZKqfgiVyfagRrn6H35gHk5/tBOFql6I6Icrisr8Jf1xjNw9+g9wgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 77C3B1F387;
+	Thu, 20 Feb 2025 18:16:06 +0000 (UTC)
+Authentication-Results: smtp-out2.suse.de;
+	none
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 36A0C13A42;
+	Thu, 20 Feb 2025 18:16:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HW+lCWZxt2dtJgAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Thu, 20 Feb 2025 18:16:06 +0000
+Date: Thu, 20 Feb 2025 19:16:04 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, ltp@lists.linux.it,
+	Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [RFC PATCH 3/3] ima: additional ToMToU violation tests
+Message-ID: <20250220181604.GA2709977@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20250220160054.12149-1-zohar@linux.ibm.com>
+ <20250220160054.12149-3-zohar@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9eyMENDAtdtjGXHKLQ0XI_TrwLnteDmW
-X-Proofpoint-GUID: 9eyMENDAtdtjGXHKLQ0XI_TrwLnteDmW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-20_07,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
- bulkscore=0 phishscore=0 malwarescore=0 mlxscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502200119
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250220160054.12149-3-zohar@linux.ibm.com>
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -4.00
+X-Rspamd-Queue-Id: 77C3B1F387
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
 
-Hi Steven,
+Hi Mimi,
 
-On Tue, 2025-02-18 at 14:54 -0800, steven chen wrote:
-> Currently, the mechanism to map and unmap segments to the kimage
-> structure is not available to the subsystems outside of kexec.=C2=A0 This
-> functionality is needed when IMA is allocating the memory segments
-> during kexec 'load' operation.=C2=A0 Implement functions to map and unmap
-> segments to kimage.
+> Kernel patch "ima: limit the number of ToMToU integrity violations"
+> prevents superfluous ToMToU violations.  Add corresponding LTP tests.
 
-Obviously up to now Kexec was mapping the segments. Missing from this patch=
- description is
-the reason "why" these functions are needed now.  It's not enough to say "i=
-s needed when
-IMA is allocating the memory segments during kexec 'load' operation".  The =
-question is why
-does "IMA" need to allocate the memory segments.  Don't make the kexec/kexe=
-c_dump
-maintainers guess.
+> Link: https://lore.kernel.org/linux-integrity/20250219162131.416719-3-zohar@linux.ibm.com/
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Refer to the section "Describe your changes" in
-https://www.kernel.org/doc/Documentation/process/submitting-patches.rst
+Unfortunately tests fail on both mainline kernel and kernel with your patches.
 
->=20
-> Implement kimage_map_segment() to enable mapping of IMA buffer source
-> pages to the kimage structure post kexec 'load'.=C2=A0 This function,
-> accepting a kimage pointer, an address, and a size, will gather the
-> source pages within the specified address range, create an array of page
-> pointers, and map these to a contiguous virtual address range.=C2=A0 The
-> function returns the start of this range if successful, or NULL if
-> unsuccessful.
->=20
-> Implement kimage_unmap_segment() for unmapping segments
-> using vunmap().
->=20
-> From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Author: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Any hint what could be wrong?
 
-Again, no such thing as an "Author" tag.  Refer to the comments on 1/7.
+Mainline kernel (on kernel with your patches it looks the same):
+ima_violations 1 TINFO: Running: ima_violations.sh
+ima_violations 1 TINFO: Tested kernel: Linux ts 6.13.0-2.g0127a37-default #1 SMP PREEMPT_DYNAMIC Thu Jan 23 11:21:55 UTC 2025 (0127a37) x86_64 x86_64 x86_64 GNU/Linux
+ima_violations 1 TINFO: Using /tmp/LTP_ima_violations.cKm34XVZk2 as tmpdir (tmpfs filesystem)
+tst_device.c:99: TINFO: Found free device 0 '/dev/loop0'
+ima_violations 1 TINFO: Formatting ext3 with opts='/dev/loop0'
+ima_violations 1 TINFO: Mounting device: mount -t ext3 /dev/loop0 /tmp/LTP_ima_violations.cKm34XVZk2/mntpoint
+ima_violations 1 TINFO: timeout per run is 0h 5m 0s
+ima_violations 1 TINFO: IMA kernel config:
+ima_violations 1 TINFO: CONFIG_IMA=y
+ima_violations 1 TINFO: CONFIG_IMA_MEASURE_PCR_IDX=10
+ima_violations 1 TINFO: CONFIG_IMA_LSM_RULES=y
+ima_violations 1 TINFO: CONFIG_IMA_NG_TEMPLATE=y
+ima_violations 1 TINFO: CONFIG_IMA_DEFAULT_TEMPLATE="ima-ng"
+ima_violations 1 TINFO: CONFIG_IMA_DEFAULT_HASH_SHA256=y
+ima_violations 1 TINFO: CONFIG_IMA_DEFAULT_HASH="sha256"
+ima_violations 1 TINFO: CONFIG_IMA_READ_POLICY=y
+ima_violations 1 TINFO: CONFIG_IMA_APPRAISE=y
+ima_violations 1 TINFO: CONFIG_IMA_ARCH_POLICY=y
+ima_violations 1 TINFO: CONFIG_IMA_APPRAISE_BOOTPARAM=y
+ima_violations 1 TINFO: CONFIG_IMA_APPRAISE_MODSIG=y
+ima_violations 1 TINFO: CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS=y
+ima_violations 1 TINFO: CONFIG_IMA_QUEUE_EARLY_BOOT_KEYS=y
+ima_violations 1 TINFO: CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=y
+ima_violations 1 TINFO: CONFIG_IMA_DISABLE_HTABLE=y
+ima_violations 1 TINFO: /proc/cmdline: BOOT_IMAGE=/boot/vmlinuz-6.13.0-2.g0127a37-default root=UUID=e36b2366-1af2-4408-903c-1fca82c60f4c splash=silent video=1024x768 plymouth.ignore-serial-consoles console=ttyS0 console=tty kernel.softlockup_panic=1 resume=/dev/disk/by-uuid/c3b865f9-5d5b-410e-a6d1-9ebcf721584c mitigations=auto security=apparmor ignore_loglevel
+ima_violations 1 TINFO: $TMPDIR is on tmpfs => run on loop device
+ima_violations 1 TINFO: test requires IMA policy:
+measure func=FILE_CHECK mask=^MAY_READ euid=0
+measure func=FILE_CHECK mask=^MAY_READ uid=0
+ima_violations 1 TINFO: SUT has required policy content
+ima_violations 1 TINFO: using log /var/log/audit/audit.log
+ima_violations 1 TINFO: verify open writers violation
+ima_violations 1 TFAIL: open_writers too many violations added
+ima_violations 2 TINFO: verify ToMToU violation
+ima_violations 2 TFAIL: ToMToU too many violations added
+ima_violations 3 TINFO: verify open_writers using mmapped files
+tst_test.c:1900: TINFO: LTP version: 20250130-22-gcd2215702f
+tst_test.c:1904: TINFO: Tested kernel: 6.13.0-2.g0127a37-default #1 SMP PREEMPT_DYNAMIC Thu Jan 23 11:21:55 UTC 2025 (0127a37) x86_64
+tst_kconfig.c:88: TINFO: Parsing kernel config '/proc/config.gz'
+tst_kconfig.c:676: TINFO: CONFIG_FAULT_INJECTION kernel option detected which might slow the execution
+tst_test.c:1722: TINFO: Overall timeout per run is 0h 02m 00s
+ima_mmap.c:38: TINFO: sleep 3s
+ima_violations 3 TFAIL: open_writers too many violations added
+ima_mmap.c:41: TPASS: test completed
 
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+Summary:
+passed   1
+failed   0
+broken   0
+skipped  0
+warnings 0
+ima_violations 4 TINFO: verify limiting single open writer violation
+ima_violations 4 TFAIL: open_writers too many violations added
+ima_violations 5 TINFO: verify limiting multiple open writers violations
+ima_violations 5 TFAIL: open_writers too many violations added
+ima_violations 6 TINFO: verify new open writer causes additional violation
+ima_violations 6 TFAIL: open_writers too many violations added
+ima_violations 7 TINFO: verify limiting single open reader ToMToU violations
+ima_violations 7 TFAIL: ToMToU too many violations added
+ima_violations 8 TINFO: verify new open reader causes additional ToMToU violation
+ima_violations 8 TFAIL: ToMToU too many violations added
 
-As previously requested, please add the Cc's inline here and in all the kex=
-ec/kdump
-related patches:
-
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Baoquan He <bhe@redhat.com>=20
-Cc: Vivek Goyal <vgoyal@redhat.com>
-Cc: Dave Young <dyoung@redhat.com>
-
-> Signed-off-by: steven chen <chenste@linux.microsoft.com>
-
-thanks,
-
-Mimi
-
+Kind regards,
+Petr
 
