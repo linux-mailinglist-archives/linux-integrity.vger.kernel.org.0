@@ -1,99 +1,235 @@
-Return-Path: <linux-integrity+bounces-4962-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4963-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35198A3F6A8
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 15:02:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C26A1A3F93E
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 16:44:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D92A1891B9A
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 14:02:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F236164C0C
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 15:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049771BCA07;
-	Fri, 21 Feb 2025 14:02:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B291D5CCC;
+	Fri, 21 Feb 2025 15:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZGoS3Cd0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9142F2D05E;
-	Fri, 21 Feb 2025 14:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3D71DD9AB;
+	Fri, 21 Feb 2025 15:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740146545; cv=none; b=fswGjdPJjTvi0q4ExX4j1kXWKJqQ+7a/D+MXnX2jcpKfkh+wlJaiYgTKqXYGEjseTyuv2AjQlHRHJyCb9XuUmRtSoTdl/WKD/6Mo+/g9bj9DUmR5pDKjyt5aAbRPSWCDvXRQLszyLNxFjYPpjNqjcAvo4heWkdnKxppPsGD2xtA=
+	t=1740152571; cv=none; b=T/vXs4TDlBFIlD/GqrnulEwnxdczPEpKq7JU0stfnW13HjnXFX6jIujqaa7szWt8q9TXhlR3aTkp/0sJJvLX2Sb0fxlNYLPAjobFCoyxBuZOpGBgb2/Fx4tgnlvG6wwIkciL/WPxXPGb+qfSitvCeDyPQkhPOdCy51nzMXS9/dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740146545; c=relaxed/simple;
-	bh=LllIJWlInIu28fom361MYi5lsTeITv3lVS0i1lQ+RKc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=grLe+EJeZ4Svxkynu14Isr04A+fDHBsd7Q0pMvUZAa2paVLtEvh23uaoffeOH6FqJOZql0AxEdBxlFnlVCAqvDX5ewH0ZLhd+P8jJ7DgKt0OizlnATbHZHPbT9MZPRM9BcMGlIwBOLcQW3gIDzUy1f/kNptNyT0WPOBD3g+BT90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BB42168F;
-	Fri, 21 Feb 2025 06:02:40 -0800 (PST)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 58A9F3F5A1;
-	Fri, 21 Feb 2025 06:02:20 -0800 (PST)
-Date: Fri, 21 Feb 2025 14:02:17 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Sumit Garg <sumit.garg@kernel.org>
-Cc: Stuart Yoder <stuart.yoder@arm.com>, Sumit Garg <sumit.garg@linaro.org>,
-	linux-integrity@vger.kernel.org, jarkko@kernel.org,
-	peterhuewe@gmx.de, jgg@ziepe.ca, rafael@kernel.org, lenb@kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 0/4] Add support for the TPM FF-A start method
-Message-ID: <Z7iHaWPyq3KDG7J2@bogus>
-References: <20250210232227.97761-1-stuart.yoder@arm.com>
- <CAFA6WYM7K4_toy5_n1arW4po4SOX0R9624rCgO=_MvcMeySwUA@mail.gmail.com>
- <4bb3cefa-b843-45ca-82c5-d96b13454baa@arm.com>
- <CAFA6WYM3UA9+TE8L2U5Qd8FZfaGZnbba=QzWU7fEu3LKQVm-tw@mail.gmail.com>
- <fdaa9a58-790f-4839-8db7-1b9a81eb8edf@arm.com>
- <CAFA6WYM0ANqc--ScYtJFRjOsCCjzO3NX46=F5V=rza_6Q-Q96g@mail.gmail.com>
- <e142afd2-38ec-4640-b9be-cb414bccc807@arm.com>
- <Z7LGbZsOh_w-HRY2@sumit-X1>
- <5dae96fa-0e54-4274-bcc6-1c20fe846f60@arm.com>
- <Z7iDuwLDA2rFPZK6@sumit-X1>
+	s=arc-20240116; t=1740152571; c=relaxed/simple;
+	bh=3oGfUaAJqfdFFYmlKDmTZtZ50G7yUU86f5/6w5g2HrE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XR7OZfbKlXZmfw3PU0BimFoqBWnFDUcETryHw9YSrB990UiN3dxqZtLCzS7dgn7yMt9//sMNtaI6Mjw8o9mOMcJEbueLt6dnwwoIE2jUBvBMLUNr2s29ggFI3u0ibInch19xZQmBJKmJXZWj7P+iTgidY6Jj5q9EqTiRd0QOyrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZGoS3Cd0; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51LAu7O9029669;
+	Fri, 21 Feb 2025 15:42:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=KSlXcQ
+	u4bYwd9QVRA4LMcePl4d8VQOxalou03xKgF+4=; b=ZGoS3Cd0dXzWb/TjJkZBvG
+	RZvPkT10j6+s/4pk6XdYBzFUfLXE58cEjEgxUHHLx9LRf/1rPuNfVj9yj2FbPS9E
+	itruWfagpLsn4Jt5sQwvNRd1zK7O1MFg4E56lsWetS7TjF6NDgXRBP9JcH2YPkLD
+	FXcHSKFIPljDXwUeQtoRW4V6KqRgSKGfnjc6SKCmCKSGJK+7e6FygA0DyYfv7uX4
+	6IjI2S7eJeITRR9q9Od6194SXMuPbP3IAe3CDhW3KRLIylOo1GUTdtrhJZNjUVQO
+	7z736y/dcIZ+ZBb4+FZuVOBDeCpERdjwVX2bsmX2hVa1o6Kl0Zwmy0kzmo4/4PNw
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44xfj9uv07-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Feb 2025 15:42:17 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51LFWmDq009721;
+	Fri, 21 Feb 2025 15:42:16 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w03ygs12-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Feb 2025 15:42:16 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51LFgGFU16843430
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 21 Feb 2025 15:42:16 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 60E9A58052;
+	Fri, 21 Feb 2025 15:42:16 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3B0E95805E;
+	Fri, 21 Feb 2025 15:42:15 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.157.102])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 21 Feb 2025 15:42:15 +0000 (GMT)
+Message-ID: <1883119129dbeeabad1f5239f042a7b920feef0f.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 3/7] ima: kexec: skip IMA segment validation after
+ kexec soft reboot
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+        James.Bottomley@HansenPartnership.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com
+Date: Fri, 21 Feb 2025 10:41:59 -0500
+In-Reply-To: <20250218225502.747963-4-chenste@linux.microsoft.com>
+References: <20250218225502.747963-1-chenste@linux.microsoft.com>
+	 <20250218225502.747963-4-chenste@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z7iDuwLDA2rFPZK6@sumit-X1>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QCsQPTOODc6JC0-pUekND63em9iiktCZ
+X-Proofpoint-GUID: QCsQPTOODc6JC0-pUekND63em9iiktCZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-21_05,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ spamscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502210111
 
-Hi Sumit,
+On Tue, 2025-02-18 at 14:54 -0800, steven chen wrote:
+> kexec_calculate_store_digests() calculates and stores the digest of the
+> segment at kexec_file_load syscall where the IMA segment is also
+> allocated.=C2=A0 With this series, the IMA segment will be updated with t=
+he
+> measurement log at kexec execute stage when soft reboot is initiated.=20
+> Therefore, it may fail digest verification in verify_sha256_digest()=20
+> after kexec soft reboot into the new kernel. Therefore, the digest=20
+> calculation/verification of the IMA segment needs to be skipped.
+>=20
+> Skip the calculating and storing digest of the IMA segment in
+> kexec_calculate_store_digests() so that it is not added to the
+> 'purgatory_sha_regions'.
+>=20
+> Since verify_sha256_digest() only verifies 'purgatory_sha_regions',
+> no change is needed in verify_sha256_digest() in this context.
+>=20
+> With this change, the IMA segment is not included in the digest
+> calculation, storage, and verification.
 
-On Fri, Feb 21, 2025 at 07:16:35PM +0530, Sumit Garg wrote:
-> On Mon, Feb 17, 2025 at 10:56:58AM -0600, Stuart Yoder wrote:
-> >
-> > I don't see how changing TPM discovery to be via FF-A directly
-> > would improve maintainability.
->
-> You are considering ACPI at this point but when people want to use this
-> TPM over FF-A on a platform using DT then it will require corresponding
-> DT bindings. After that each platform has to enable TPM over FF-A in
-> their corresponding ACPI/DT. All that won't be needed with auto
-> discovery over FF-A.
+Basically you're saying because the hash verification will fail, don't incl=
+ude
+the IMA buffer.  What's missing is the reason for not caring whether the IM=
+A
+hash is included or not.
 
-I hear you and completely agree. However, someone thought it was a good idea
-to align with other start methods and duplicate information in the TCG ACPI
-specification. This is definitely a bad idea, as it may contradict the
-firmware. All we needed was a simple flag to indicate whether FF-A is the
-start method.
+I understand this is the best we can do without making some major kexec cha=
+nges.
 
-It sounds like a classic case of misalignment between specification authors
-and practical implementation needs. Instead of a simple flag to indicate FF-A
-as the start method, duplicating information in the TCG ACPI specification
-seems unnecessary and potentially problematic—especially if it risks
-conflicting with firmware behavior.
+>=20
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-Anyway, I can't comment on how we ended up here, but this seems to be the reality.
+After updating the patch description,
 
---
-Regards,
-Sudeep
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
+> ---
+> =C2=A0include/linux/kexec.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 3 +++
+> =C2=A0kernel/kexec_file.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 22 ++++++++++++++++++++++
+> =C2=A0security/integrity/ima/ima_kexec.c |=C2=A0 3 +++
+> =C2=A03 files changed, 28 insertions(+)
+>=20
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 4dbf806bccef..bd554ced9fb2 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -362,6 +362,9 @@ struct kimage {
+> =C2=A0
+> =C2=A0	phys_addr_t ima_buffer_addr;
+> =C2=A0	size_t ima_buffer_size;
+> +
+> +	unsigned long ima_segment_index;
+> +	bool is_ima_segment_index_set;
+> =C2=A0#endif
+> =C2=A0
+> =C2=A0	/* Core ELF header buffer */
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 3eedb8c226ad..606132253c79 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -38,6 +38,21 @@ void set_kexec_sig_enforced(void)
+> =C2=A0}
+> =C2=A0#endif
+> =C2=A0
+> +#ifdef CONFIG_IMA_KEXEC
+> +static bool check_ima_segment_index(struct kimage *image, int i)
+> +{
+> +	if (image->is_ima_segment_index_set && i =3D=3D image->ima_segment_inde=
+x)
+> +		return true;
+> +	else
+> +		return false;
+> +}
+> +#else
+> +static bool check_ima_segment_index(struct kimage *image, int i)
+> +{
+> +	return false;
+> +}
+> +#endif
+> +
+> =C2=A0static int kexec_calculate_store_digests(struct kimage *image);
+> =C2=A0
+> =C2=A0/* Maximum size in bytes for kernel/initrd files. */
+> @@ -764,6 +779,13 @@ static int kexec_calculate_store_digests(struct kima=
+ge
+> *image)
+> =C2=A0		if (ksegment->kbuf =3D=3D pi->purgatory_buf)
+> =C2=A0			continue;
+> =C2=A0
+> +		/*
+> +		 * Skip the segment if ima_segment_index is set and matches
+> +		 * the current index
+> +		 */
+> +		if (check_ima_segment_index(image, i))
+> +			continue;
+> +
+> =C2=A0		ret =3D crypto_shash_update(desc, ksegment->kbuf,
+> =C2=A0					=C2=A0 ksegment->bufsz);
+> =C2=A0		if (ret)
+> diff --git a/security/integrity/ima/ima_kexec.c
+> b/security/integrity/ima/ima_kexec.c
+> index 89088f1fa989..704676fa6615 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -160,6 +160,7 @@ void ima_add_kexec_buffer(struct kimage *image)
+> =C2=A0	kbuf.buffer =3D kexec_buffer;
+> =C2=A0	kbuf.bufsz =3D kexec_buffer_size;
+> =C2=A0	kbuf.memsz =3D kexec_segment_size;
+> +	image->is_ima_segment_index_set =3D false;
+> =C2=A0	ret =3D kexec_add_buffer(&kbuf);
+> =C2=A0	if (ret) {
+> =C2=A0		pr_err("Error passing over kexec measurement buffer.\n");
+> @@ -170,6 +171,8 @@ void ima_add_kexec_buffer(struct kimage *image)
+> =C2=A0	image->ima_buffer_addr =3D kbuf.mem;
+> =C2=A0	image->ima_buffer_size =3D kexec_segment_size;
+> =C2=A0	image->ima_buffer =3D kexec_buffer;
+> +	image->ima_segment_index =3D image->nr_segments - 1;
+> +	image->is_ima_segment_index_set =3D true;
+> =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * kexec owns kexec_buffer after kexec_add_buffer() is called
+
 
