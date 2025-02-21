@@ -1,90 +1,90 @@
-Return-Path: <linux-integrity+bounces-4955-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4956-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1262FA3E955
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 01:47:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9B33A3EA8B
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 03:08:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE87619C50BA
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 00:47:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8D3E701673
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 02:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFBDCEEBA;
-	Fri, 21 Feb 2025 00:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A746157A72;
+	Fri, 21 Feb 2025 02:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PLcDEtrC"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="srFNz6pK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F33E8493;
-	Fri, 21 Feb 2025 00:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF4F1CD1E1
+	for <linux-integrity@vger.kernel.org>; Fri, 21 Feb 2025 02:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740098868; cv=none; b=brKf5Pn7eeSRG682oYmy4460UbGxXd8mtpw8DBZZTX0K57cdUFA439de+lOpwTZ7ioKkFjugoux0qdlPeNZLc1IkCEj43DpFCT+5jqKCZ6S1bhkg+4kI2ZJvbF+xYWO7rpnm2CL+Fy2dR95D2VM12wGQMRRjXkOXl3n/M1/luTA=
+	t=1740103654; cv=none; b=oVA4VvjFG+f6sUwuWb0z55PzqwP7EQwswGR3rqbKopWdU+7+jNDaLUeNhqn3EdOFGXSFWh5ZFADphwJ6N13ralc1ixHLIIUAiVVq5c4VdsiJZC/Tdlw0e9aH0bnFjOF69jGWBLH/aQmhxQ74iq6NFay5dKaU1UZSOl1AvQMLEIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740098868; c=relaxed/simple;
-	bh=2HMtZYXb898PScROT67M5PzASShQukoG8ys0ZnbaAMI=;
+	s=arc-20240116; t=1740103654; c=relaxed/simple;
+	bh=ZG0fyS27pCDfL9PFoKlOaT4qSkeTExJncX8NGcvqcjM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZfzPPXhuGoYJVOZmWW/nMVoFMTI082nUjeIHxrEdl48lSdmg+RZFM5UjrdYejINgwr+rqq8Jr3lwu3/DL2w2+oELLcYC/DJMxMR1TY0pm/EvVm8X6dkW/s11VpP11IzDTVT/gQF/G684UQWrMW77ew9JKZM2+n9kop5Qo2NQFpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PLcDEtrC; arc=none smtp.client-ip=148.163.156.1
+	 Content-Type:MIME-Version; b=n0ojU3k0+9FjsacKtYVZaDUtaz+WxRjIjzEG4dEr89SkbIc+u952X1W9R9biQZVzgeU/SmpIrBuAgqYKTWlqp15ELtWVLbBHAht5dK3hhWcVXOcrPb+mKLxKofqCH1VMJJ74YbQQ9SMQDODhhVnxeDkT+GO4Y6Ewpl/NMBt+CfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=srFNz6pK; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51KMnlA0030968;
-	Fri, 21 Feb 2025 00:47:00 GMT
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51KH1d34007117;
+	Fri, 21 Feb 2025 02:07:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Wykm5r
-	1tsFHBMeFgrKaNrDpfELg+QxGL9YbH6kLhy0I=; b=PLcDEtrCAFSrhNcqlHD+lh
-	Gu7wHg0XARoeIkVZlTwx7kVIRbLdKPUdQN59j9tF4t5aO8GgGa+w/IeqzWaxWB0q
-	TUZz/fH11YImC7mZKnDr3Dhj8DGamAX/P0UKnmLqG/2rNezutdaY1Jy94RSEo0Jj
-	uelp3otY4FXqlMLozRKXXcPF12q24wvTyCyaG/GIltBCR7sGoyDwmg4HBHhWqKV0
-	HtiINDlcCfff1wpdDBg8jMUYByLES4m1xBJriENSqDK3gaLDqrYs+LFuTT07xeOd
-	DVsgpvL34kDZlvhlHRGit+cBCptxgnVR81X6NwQDTolI9KutR3/5LuQS5hB26rbw
+	:message-id:mime-version:references:subject:to; s=pp1; bh=C1HPyd
+	21sazgz3pXWPTlykpxc0KCB3IIyp6NaWvihYk=; b=srFNz6pKoW1rdC6cUxH6ys
+	nkgWS1MoTVsmdWItDyzG6v6uu3LHeg0AJpEmbQ5sXCNu5nJY1QYYbWyNCYWEt+m5
+	JXcFxrQV/y9oCz2WF0OWRNDBGEQby3lh6K4tjiHIcdGOJlc4j01Zke2vwx9w+ISj
+	CJ+4cok7NFiCJIibN2NLoe04azmJhnwrdQ+Xd7cOdEeFMNpFqEXUSESUoNLuvNes
+	1biADep7AhoVGiHF5P1YlKkLUYwWw4KnxnPztICjuqRc2DCQpoNpStxX8hv+cAJS
+	RssknSksFJ2xWCWDJeipQQWTeUvdVCw53/ZB+BWF6hvNhvVOZaXmH6e3zStybxwQ
 	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44xdharcyd-1
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44x1qycfqg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 00:47:00 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51KLMURb002343;
-	Fri, 21 Feb 2025 00:46:59 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w03xd2ac-1
+	Fri, 21 Feb 2025 02:07:26 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51L1IQKj030138;
+	Fri, 21 Feb 2025 02:07:25 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44w01xdet1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 00:46:59 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51L0kwh932047766
+	Fri, 21 Feb 2025 02:07:25 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51L27OtI27656744
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 21 Feb 2025 00:46:58 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 92E2F5805D;
-	Fri, 21 Feb 2025 00:46:58 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A048258043;
-	Fri, 21 Feb 2025 00:46:56 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.174.175])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 21 Feb 2025 00:46:56 +0000 (GMT)
-Message-ID: <436c898a39a9bdaa2ab24fc111b50d3c885aa028.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 7/7] ima: measure kexec load and exec events as
- critical data
+	Fri, 21 Feb 2025 02:07:24 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0B15F5805A;
+	Fri, 21 Feb 2025 02:07:25 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A1C9058051;
+	Fri, 21 Feb 2025 02:07:24 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.45.62])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 21 Feb 2025 02:07:24 +0000 (GMT)
+Message-ID: <cd07d8052fbfa0cde426b4b07fde0c70e6aa046f.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 3/3] ima: additional ToMToU violation tests
 From: Mimi Zohar <zohar@linux.ibm.com>
-To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
-        code@tyhicks.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-        James.Bottomley@HansenPartnership.com, bhe@redhat.com,
-        vgoyal@redhat.com, dyoung@redhat.com
-Date: Thu, 20 Feb 2025 19:46:56 -0500
-In-Reply-To: <20250218225502.747963-8-chenste@linux.microsoft.com>
-References: <20250218225502.747963-1-chenste@linux.microsoft.com>
-	 <20250218225502.747963-8-chenste@linux.microsoft.com>
+To: Petr Vorel <pvorel@suse.cz>
+Cc: linux-integrity@vger.kernel.org, ltp@lists.linux.it,
+        Stefan Berger
+	 <stefanb@linux.ibm.com>
+Date: Thu, 20 Feb 2025 21:07:24 -0500
+In-Reply-To: <20250220214333.GA2726725@pevik>
+References: <20250220160054.12149-1-zohar@linux.ibm.com>
+	 <20250220160054.12149-3-zohar@linux.ibm.com>
+	 <20250220181604.GA2709977@pevik>
+	 <fd10e47b4c8b6af0e8d37975cdf1e82133add8c3.camel@linux.ibm.com>
+	 <20250220191342.GA2716312@pevik>
+	 <c625586b0dbc4302dfb7adf4acb0c891b74cf8bc.camel@linux.ibm.com>
+	 <2637152a2715b8e84e966b12bc9c9cb1c27592c2.camel@linux.ibm.com>
+	 <20250220214333.GA2726725@pevik>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
@@ -95,164 +95,116 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7mdZyCPMIbrmHyDxjegjDVduN8VPvOaO
-X-Proofpoint-ORIG-GUID: 7mdZyCPMIbrmHyDxjegjDVduN8VPvOaO
+X-Proofpoint-GUID: N0kut96FH6tF7T3-_kpE9pueIsDUixkq
+X-Proofpoint-ORIG-GUID: N0kut96FH6tF7T3-_kpE9pueIsDUixkq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-20_09,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- clxscore=1015 suspectscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502210002
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ phishscore=0 impostorscore=0 bulkscore=0 mlxlogscore=813 adultscore=0
+ suspectscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502210013
 
-On Tue, 2025-02-18 at 14:55 -0800, steven chen wrote:
-> The amount of memory allocated at kexec load, even with the extra memory
-> allocated, might not be large enough for the entire measurement list.=C2=
-=A0 The
-> indeterminate interval between kexec 'load' and 'execute' could exacerbat=
-e
-> this problem.
+On Thu, 2025-02-20 at 22:43 +0100, Petr Vorel wrote:
+> > On Thu, 2025-02-20 at 15:22 -0500, Mimi Zohar wrote:
+> > > On Thu, 2025-02-20 at 20:13 +0100, Petr Vorel wrote:
+> > > > > On Thu, 2025-02-20 at 19:16 +0100, Petr Vorel wrote:
+> > > > > > Hi Mimi,
 >=20
-> Define two new IMA events, 'kexec_load' and 'kexec_execute', to be=20
-> measured as critical data at kexec 'load' and 'execute' respectively.
-> Report the allocated kexec segment size, IMA binary log size and the
-> runtime measurements count as part of those events.
+> > > > > > > Kernel patch "ima: limit the number of ToMToU integrity viola=
+tions"
+> > > > > > > prevents superfluous ToMToU violations.=C2=A0 Add correspondi=
+ng LTP tests.
 >=20
-> These events, and the values reported through them, serve as markers in
-> the IMA log to verify the IMA events are captured during kexec soft
-> reboot.=C2=A0 The presence of a 'kexec_load' event in between the last tw=
-o
-> 'boot_aggregate' events in the IMA log implies this is a kexec soft
-> reboot, and not a cold-boot. And the absence of 'kexec_execute' event
-> after kexec soft reboot implies missing events in that window which
-> results in inconsistency with TPM PCR quotes, necessitating a cold boot
-> for a successful remote attestation.
+> > > > > > > Link:
+> > > > > > > https://lore.kernel.org/linux-integrity/20250219162131.416719=
+-3-zohar@linux.ibm.com/
+> > > > > > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 >=20
-> The 'kexec_load' event IMA log can be found using the following command:
-> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements |
-> =C2=A0=C2=A0 grep kexec_load
+> > > > > > Unfortunately tests fail on both mainline kernel and kernel wit=
+h your patches.
 >=20
-> The 'kexec_load' event IMA log can be found using the following command:
+> > > > > The new LTP IMA violations patches should fail without the associ=
+ated kernel
+> > > > > patches.
+>=20
+> > > > > > Any hint what could be wrong?
+>=20
+> > > > > Of course it's dependent on the IMA policy.=C2=A0 The tests assum=
+e being booted with
+> > > > > the
+> > > > > IMA
+> > > > > TCB measurement policy or similar policy being loaded.=C2=A0 Can =
+you share the IMA
+> > > > > policy?
+> > > > > e.g. cat /sys/kernel/security/ima/policy
+>=20
+> > > > > thanks,
+>=20
+> > > > > Mimi
+>=20
+> > > > Now testing on kernel *with* your patches. First run always fails, =
+regardless
+> > > > whether using ima_policy=3Dtcb or
+> > > > /opt/ltp/testcases/data/ima_violations/violations.policy).
+>=20
+> > > > Kind regards,
+> > > > Petr
+>=20
+> > > I'm not seeing that on my test machine.=C2=A0 Could there be other th=
+ings running on your
+> > > system causing violations.=C2=A0 In anycase, your original test was l=
+ess exacting.=C2=A0=C2=A0
+> > > Similarly,
+> > > instead of "-eq", try using "-qe" in the following test and removing =
+the subsequent
+> > > new
+> > > "gt" test.
+>=20
+> > -> "-ge"
+>=20
+> Sure, changing to -ge fixes the problem:
+> if [ $(($num_violations_new - $num_violations)) -ge $expected_violations =
+]; then
+>=20
+> I guess we need "-ge" for older kernels (unless "fix" for stable).=C2=A0 =
+Should we
+> accept "$expected_violations || $expected_violations + 1" for new kernels=
+ to
+> avoid problems like the one on my system.
 
--> kexec_execute
-
-> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements |
-> =C2=A0=C2=A0 grep kexec_execute
-
-These critical data events are displayed as hex encoded ascii in the
-ascii_runtime_measurement_list.  Verifying the critical data hash requires =
-calculating the
-hash of the decoded ascii string.  For example:
-
-sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements | gr=
-ep  kexec_load
-| cut -d' ' -f 6 | xxd -r -p | sha256sum
+The problem is that we don't control what else is running on the system.  S=
+o there could
+be other violations independent of these tests.  I'll have to think about i=
+t some more and
+get back to you.  (There's no rush to do anything with these LTP IMA violat=
+ion tests.)
 
 >=20
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Signed-off-by: steven chen <chenste@linux.microsoft.com>
-> ---
-> =C2=A0security/integrity/ima/ima.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 6 ++++++
-> =C2=A0security/integrity/ima/ima_kexec.c | 21 +++++++++++++++++++++
-> =C2=A0security/integrity/ima/ima_queue.c |=C2=A0 5 +++++
-> =C2=A03 files changed, 32 insertions(+)
->=20
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 4428fcf42167..1452c98242a4 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -240,6 +240,12 @@ void ima_post_key_create_or_update(struct key *keyri=
-ng, struct key
-> *key,
-> =C2=A0				=C2=A0=C2=A0 unsigned long flags, bool create);
-> =C2=A0#endif
-> =C2=A0
-> +#ifdef CONFIG_IMA_KEXEC
-> +void ima_measure_kexec_event(const char *event_name);
-> +#else
-> +static inline void ima_measure_kexec_event(const char *event_name) {}
-> +#endif
-> +
-> =C2=A0/*
-> =C2=A0 * The default binary_runtime_measurements list format is defined a=
-s the
-> =C2=A0 * platform native format.=C2=A0 The canonical format is defined as=
- little-endian.
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/=
-ima_kexec.c
-> index 6c8c203ad81e..8d0782e51ffa 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -17,6 +17,8 @@
-> =C2=A0#include "ima.h"
-> =C2=A0
-> =C2=A0#ifdef CONFIG_IMA_KEXEC
-> +#define IMA_KEXEC_EVENT_LEN 256
-> +
-> =C2=A0static struct seq_file ima_kexec_file;
-> =C2=A0static void *ima_kexec_buffer;
-> =C2=A0static size_t kexec_segment_size;
-> @@ -36,6 +38,24 @@ static void ima_free_kexec_file_buf(struct seq_file *s=
-f)
-> =C2=A0	ima_reset_kexec_file(sf);
-> =C2=A0}
-> =C2=A0
-> +void ima_measure_kexec_event(const char *event_name)
-> +{
-> +	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
-> +	size_t buf_size =3D 0;
-> +	long len;
-> +
-> +	buf_size =3D ima_get_binary_runtime_size();
-> +	len =3D atomic_long_read(&ima_htable.len);
-> +
-> +	scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
-> +		=C2=A0 "kexec_segment_size=3D%lu;ima_binary_runtime_size=3D%lu;"
-> +		 "ima_runtime_measurements_count=3D%ld;",
-> +		 kexec_segment_size, buf_size, len);
-> +
-> +	ima_measure_critical_data("ima_kexec", event_name, ima_kexec_event,
-> +				=C2=A0 strlen(ima_kexec_event), false, NULL, 0);
+> I wonder if the problem was somehow caused by the fact that I built kerne=
+l. OTOH
+> it's build by OBS (official openSUSE build service).
 
-As previously mentioned, scnprintf() returns the length.  No need to use st=
-rlen() here.
+As long as you weren't building the kernel and running the tests at the sam=
+e, I doubt it
+would be the problem.
+
+>=20
+> I don't expect you'd have time to look into it, in case you're interested=
+ and
+> have time sending a links to rpm binary and src package.
+
+Ok.
+>=20
+> https://download.opensuse.org/repositories/home:/pevik:/ima-limit-open-wr=
+iters-ToMToU/standard/x86_64/kernel-default-6.14~rc3-1.1.gb6b4102.x86_64.rp=
+m
+> https://download.opensuse.org/repositories/home:/pevik:/ima-limit-open-wr=
+iters-ToMToU/standard/src/kernel-source-6.14~rc3-1.1.gb6b4102.src.rpm
+>=20
+
+thanks,
 
 Mimi
-
-> +}
-> +
-> =C2=A0static int ima_alloc_kexec_file_buf(size_t segment_size)
-> =C2=A0{
-> =C2=A0	/*
-> @@ -58,6 +78,7 @@ static int ima_alloc_kexec_file_buf(size_t segment_size=
-)
-> =C2=A0out:
-> =C2=A0	ima_kexec_file.read_pos =3D 0;
-> =C2=A0	ima_kexec_file.count =3D sizeof(struct ima_kexec_hdr);	/* reserved=
- space */
-> +	ima_measure_kexec_event("kexec_load");
-> =C2=A0
-> =C2=A0	return 0;
-> =C2=A0}
-> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/=
-ima_queue.c
-> index 3dfd178d4292..6afb46989cf6 100644
-> --- a/security/integrity/ima/ima_queue.c
-> +++ b/security/integrity/ima/ima_queue.c
-> @@ -241,6 +241,11 @@ static int ima_reboot_notifier(struct notifier_block=
- *nb,
-> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long action,
-> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 void *data)
-> =C2=A0{
-> +#ifdef CONFIG_IMA_KEXEC
-> +	if (action =3D=3D SYS_RESTART && data && !strcmp(data, "kexec reboot"))
-> +		ima_measure_kexec_event("kexec_execute");
-> +#endif
-> +
-> =C2=A0	ima_measurements_suspend();
-> =C2=A0
-> =C2=A0	return NOTIFY_DONE;
-
 
