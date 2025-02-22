@@ -1,204 +1,135 @@
-Return-Path: <linux-integrity+bounces-4973-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4974-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CB20A401CF
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 22:10:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EC7DA40987
+	for <lists+linux-integrity@lfdr.de>; Sat, 22 Feb 2025 16:39:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36CDF167F75
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Feb 2025 21:10:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15F8E703D35
+	for <lists+linux-integrity@lfdr.de>; Sat, 22 Feb 2025 15:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A1C253B73;
-	Fri, 21 Feb 2025 21:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VIxqpjej"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F09219DF61;
+	Sat, 22 Feb 2025 15:39:41 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8352505BD;
-	Fri, 21 Feb 2025 21:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41F593224;
+	Sat, 22 Feb 2025 15:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740172207; cv=none; b=P/rPUe3swjX40r6M1AuZ8A/eNotZAh55k2JQ2eJV5at5FwtaNnlSAGkzwYCZR8A6CpAi538y48Uvygb1FY8XpAlTYTbnOgAi7AiyyglMZ8R7cS2bO3oZv25AmzC3xQPxl2aVCZw0Sz8y8IUL6Mx5wBKiv9ngKsLiKQPykAbQE/8=
+	t=1740238781; cv=none; b=jU33IQb4vRRUsulngWPzGgWAnUp4nGtG0gISI8fSiLY3QA2tpxSTS2lgq+TKM9Mi/E1GoGPYbyPQCcNednPt+nQ8baJbsmIwUCAGHxei09JLm3V1fGQ2ppvuGqaJtfsyORsGJbjN2cX+9yyDFH2GT3lSH28vu8CpZWhZUMfOab8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740172207; c=relaxed/simple;
-	bh=WTpcEnrAfQeUkKdrqVzvIfHmXroYmr4UzluSMK6NQ2w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ImsTbJ/NWvE/V574LXkHKNMlOThFfvtsAeyre9BJR3Whjd5j6okODONeLmDjXVEMIIaWSoVjNT7V1ZIUEeIZGZLDY/5dE3FykPQtZu87A0mB1r9SIA1HLLCHKyV4tvNiT/LfPU+NzsjJ8Juq1Z5GzCgUr60PuqAhT2ebqMHmzLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VIxqpjej; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.17.64.59] (unknown [131.107.8.59])
-	by linux.microsoft.com (Postfix) with ESMTPSA id A64022053679;
-	Fri, 21 Feb 2025 13:10:05 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A64022053679
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740172206;
-	bh=0lziOMlEQrQGXDNHLwwuurA3vZdazKZBrZ/C9W/SZGI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VIxqpjej/OSCHR0ZVlCRJfVuJEX+zyZGmdXuTGtc1kP3oPNhC1FEG99PJyxGUstA5
-	 oN8r/pRyJtT2u2tnzk7FsP3EuVI3zupdoA1Fy2QZ1/YX5lmPBmcQTOftCRMvSqO8VW
-	 NYJ5nOEogIpGUB8LdfY8OMe6IcTCP+p3b+HnvW1s=
-Message-ID: <7903ffe0-75f9-49f8-b638-9a4964897676@linux.microsoft.com>
-Date: Fri, 21 Feb 2025 13:10:04 -0800
+	s=arc-20240116; t=1740238781; c=relaxed/simple;
+	bh=7IKYFO/1To/SFLqEc4c9Ck4qc3cN4itGbMN5/EgAeaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C/DP0OVnhZ/rT6IrJu8QwkwoAYgE0HGhSiCSKMoLs/YsHLl32idZ6kdvkBQ6HPt5bIs+KWAttkJxWWWvMxfZjFMmz6g7pqPud1Rncfgn0ZDl6UkYOaD2OdOxkLaKYdUN1HNauVhZXiNtYRsjdLisNDTy5c7BZod0F4YvpW2UhS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63D6A152B;
+	Sat, 22 Feb 2025 07:39:48 -0800 (PST)
+Received: from bogus (unknown [10.57.37.210])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07CC23F59E;
+	Sat, 22 Feb 2025 07:39:27 -0800 (PST)
+Date: Sat, 22 Feb 2025 15:39:24 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Stuart Yoder <stuart.yoder@arm.com>
+Cc: Sumit Garg <sumit.garg@kernel.org>, Sumit Garg <sumit.garg@linaro.org>,
+	linux-integrity@vger.kernel.org, jarkko@kernel.org,
+	peterhuewe@gmx.de, jgg@ziepe.ca, rafael@kernel.org, lenb@kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH 0/4] Add support for the TPM FF-A start method
+Message-ID: <20250222153924.wrjqmaowvcmdlojd@bogus>
+References: <4bb3cefa-b843-45ca-82c5-d96b13454baa@arm.com>
+ <CAFA6WYM3UA9+TE8L2U5Qd8FZfaGZnbba=QzWU7fEu3LKQVm-tw@mail.gmail.com>
+ <fdaa9a58-790f-4839-8db7-1b9a81eb8edf@arm.com>
+ <CAFA6WYM0ANqc--ScYtJFRjOsCCjzO3NX46=F5V=rza_6Q-Q96g@mail.gmail.com>
+ <e142afd2-38ec-4640-b9be-cb414bccc807@arm.com>
+ <Z7LGbZsOh_w-HRY2@sumit-X1>
+ <5dae96fa-0e54-4274-bcc6-1c20fe846f60@arm.com>
+ <Z7iDuwLDA2rFPZK6@sumit-X1>
+ <Z7iHaWPyq3KDG7J2@bogus>
+ <79dd35d4-147b-4b12-8ce8-1909428d75bd@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 7/7] ima: measure kexec load and exec events as
- critical data
-To: Mimi Zohar <zohar@linux.ibm.com>, stefanb@linux.ibm.com,
- roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
- eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
- code@tyhicks.com, bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
- kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
- James.Bottomley@HansenPartnership.com, bhe@redhat.com, vgoyal@redhat.com,
- dyoung@redhat.com
-References: <20250218225502.747963-1-chenste@linux.microsoft.com>
- <20250218225502.747963-8-chenste@linux.microsoft.com>
- <436c898a39a9bdaa2ab24fc111b50d3c885aa028.camel@linux.ibm.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <436c898a39a9bdaa2ab24fc111b50d3c885aa028.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <79dd35d4-147b-4b12-8ce8-1909428d75bd@arm.com>
 
-On 2/20/2025 4:46 PM, Mimi Zohar wrote:
-> On Tue, 2025-02-18 at 14:55 -0800, steven chen wrote:
->> The amount of memory allocated at kexec load, even with the extra memory
->> allocated, might not be large enough for the entire measurement list.  The
->> indeterminate interval between kexec 'load' and 'execute' could exacerbate
->> this problem.
->>
->> Define two new IMA events, 'kexec_load' and 'kexec_execute', to be
->> measured as critical data at kexec 'load' and 'execute' respectively.
->> Report the allocated kexec segment size, IMA binary log size and the
->> runtime measurements count as part of those events.
->>
->> These events, and the values reported through them, serve as markers in
->> the IMA log to verify the IMA events are captured during kexec soft
->> reboot.  The presence of a 'kexec_load' event in between the last two
->> 'boot_aggregate' events in the IMA log implies this is a kexec soft
->> reboot, and not a cold-boot. And the absence of 'kexec_execute' event
->> after kexec soft reboot implies missing events in that window which
->> results in inconsistency with TPM PCR quotes, necessitating a cold boot
->> for a successful remote attestation.
->>
->> The 'kexec_load' event IMA log can be found using the following command:
->> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements |
->>     grep kexec_load
->>
->> The 'kexec_load' event IMA log can be found using the following command:
-> -> kexec_execute
+On Fri, Feb 21, 2025 at 12:29:03PM -0600, Stuart Yoder wrote:
 >
->> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements |
->>     grep kexec_execute
-> These critical data events are displayed as hex encoded ascii in the
-> ascii_runtime_measurement_list.  Verifying the critical data hash requires calculating the
-> hash of the decoded ascii string.  For example:
 >
-> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements | grep  kexec_load
-> | cut -d' ' -f 6 | xxd -r -p | sha256sum
+> On 2/21/25 8:02 AM, Sudeep Holla wrote:
+> > Hi Sumit,
+> >
+> > On Fri, Feb 21, 2025 at 07:16:35PM +0530, Sumit Garg wrote:
+> > > On Mon, Feb 17, 2025 at 10:56:58AM -0600, Stuart Yoder wrote:
+> > > >
+> > > > I don't see how changing TPM discovery to be via FF-A directly
+> > > > would improve maintainability.
+> > >
+> > > You are considering ACPI at this point but when people want to use this
+> > > TPM over FF-A on a platform using DT then it will require corresponding
+> > > DT bindings. After that each platform has to enable TPM over FF-A in
+> > > their corresponding ACPI/DT. All that won't be needed with auto
+> > > discovery over FF-A.
 >
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> Signed-off-by: steven chen <chenste@linux.microsoft.com>
->> ---
->>   security/integrity/ima/ima.h       |  6 ++++++
->>   security/integrity/ima/ima_kexec.c | 21 +++++++++++++++++++++
->>   security/integrity/ima/ima_queue.c |  5 +++++
->>   3 files changed, 32 insertions(+)
->>
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index 4428fcf42167..1452c98242a4 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -240,6 +240,12 @@ void ima_post_key_create_or_update(struct key *keyring, struct key
->> *key,
->>   				   unsigned long flags, bool create);
->>   #endif
->>   
->> +#ifdef CONFIG_IMA_KEXEC
->> +void ima_measure_kexec_event(const char *event_name);
->> +#else
->> +static inline void ima_measure_kexec_event(const char *event_name) {}
->> +#endif
->> +
->>   /*
->>    * The default binary_runtime_measurements list format is defined as the
->>    * platform native format.  The canonical format is defined as little-endian.
->> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
->> index 6c8c203ad81e..8d0782e51ffa 100644
->> --- a/security/integrity/ima/ima_kexec.c
->> +++ b/security/integrity/ima/ima_kexec.c
->> @@ -17,6 +17,8 @@
->>   #include "ima.h"
->>   
->>   #ifdef CONFIG_IMA_KEXEC
->> +#define IMA_KEXEC_EVENT_LEN 256
->> +
->>   static struct seq_file ima_kexec_file;
->>   static void *ima_kexec_buffer;
->>   static size_t kexec_segment_size;
->> @@ -36,6 +38,24 @@ static void ima_free_kexec_file_buf(struct seq_file *sf)
->>   	ima_reset_kexec_file(sf);
->>   }
->>   
->> +void ima_measure_kexec_event(const char *event_name)
->> +{
->> +	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
->> +	size_t buf_size = 0;
->> +	long len;
->> +
->> +	buf_size = ima_get_binary_runtime_size();
->> +	len = atomic_long_read(&ima_htable.len);
->> +
->> +	scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
->> +		  "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;"
->> +		 "ima_runtime_measurements_count=%ld;",
->> +		 kexec_segment_size, buf_size, len);
->> +
->> +	ima_measure_critical_data("ima_kexec", event_name, ima_kexec_event,
->> +				  strlen(ima_kexec_event), false, NULL, 0);
-> As previously mentioned, scnprintf() returns the length.  No need to use strlen() here.
+> Yes, we would need a new DT binding.
 >
-> Mimi
->
->> +}
->> +
->>   static int ima_alloc_kexec_file_buf(size_t segment_size)
->>   {
->>   	/*
->> @@ -58,6 +78,7 @@ static int ima_alloc_kexec_file_buf(size_t segment_size)
->>   out:
->>   	ima_kexec_file.read_pos = 0;
->>   	ima_kexec_file.count = sizeof(struct ima_kexec_hdr);	/* reserved space */
->> +	ima_measure_kexec_event("kexec_load");
->>   
->>   	return 0;
->>   }
->> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
->> index 3dfd178d4292..6afb46989cf6 100644
->> --- a/security/integrity/ima/ima_queue.c
->> +++ b/security/integrity/ima/ima_queue.c
->> @@ -241,6 +241,11 @@ static int ima_reboot_notifier(struct notifier_block *nb,
->>   			       unsigned long action,
->>   			       void *data)
->>   {
->> +#ifdef CONFIG_IMA_KEXEC
->> +	if (action == SYS_RESTART && data && !strcmp(data, "kexec reboot"))
->> +		ima_measure_kexec_event("kexec_execute");
->> +#endif
->> +
->>   	ima_measurements_suspend();
->>   
->>   	return NOTIFY_DONE;
 
-Thanks, I will update in next version
+Not sure how that would look like, so I will hold off my comments on this
+topic. But we really should strive towards auto-discovery as much as possible.
 
+> > I hear you and completely agree. However, someone thought it was a good idea
+> > to align with other start methods and duplicate information in the TCG ACPI
+> > specification. This is definitely a bad idea, as it may contradict the
+> > firmware. All we needed was a simple flag to indicate whether FF-A is the
+> > start method.
+>
+> Do you mean a flag exposed via ACPI?  If you do FF-A based discovery you
+> don't even need that.  Everything could be determined via an FF-A
+> interface.
+>
+> > It sounds like a classic case of misalignment between specification authors
+> > and practical implementation needs. Instead of a simple flag to indicate FF-A
+> > as the start method, duplicating information in the TCG ACPI specification
+> > seems unnecessary and potentially problematic—especially if it risks
+> > conflicting with firmware behavior.
+>
+> There is a lot of history, but I think it was simply that ACPI
+> advertisement of an FF-A based TPM seemed like the approach
+> with the least friction. And Linux is not the only target OS.
+>
+
+I guess so. I understand sometimes we need to consider multiple target OS.
+
+> > Anyway, I can't comment on how we ended up here, but this seems to be the reality.
+>
+> I don't think we are locked into ACPI (or DT) only discovery.
+> It's possible that with a modest delta on top of this patch series
+> that the tpm_crb driver could also probe based on FF-A.
+>
+> The CRB over FF-A spec (DEN0138) could be extended in a backwards
+> compatible way to expose additional info like the base address of the
+> CRB.
+>
+
+Ideally, we should manage with dynamic buffers. But I do understand the
+reasons why we may need static curve outs. I prefer the ffa client driver
+take care of that without needing to build FF-A bindings just for that.
+
+I will wait and see how all these shape up (soon ?)
+
+--
+Regards,
+Sudeep
 
