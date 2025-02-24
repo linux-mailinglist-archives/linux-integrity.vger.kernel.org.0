@@ -1,176 +1,213 @@
-Return-Path: <linux-integrity+bounces-4976-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4977-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C463A41BE3
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 12:01:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7404DA41EF4
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 13:29:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63900188C6B2
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 10:59:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CD6E423B6E
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 12:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06EB7146D59;
-	Mon, 24 Feb 2025 10:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E074D221F12;
+	Mon, 24 Feb 2025 12:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ooby2wpD";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nka6XfJH";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ooby2wpD";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nka6XfJH"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="KwEf0HJ/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qnEcewtt";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yiLhzZ/4";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="tPuIB6Fz"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C45257AFA
-	for <linux-integrity@vger.kernel.org>; Mon, 24 Feb 2025 10:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E072F219300
+	for <linux-integrity@vger.kernel.org>; Mon, 24 Feb 2025 12:21:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740394775; cv=none; b=VnT01W3JKpZUAAmY7t1bL95KvFdY/TMF02E12yoQJa9f3/P5bzYlwWscp9+3Etpb8jnn4FmtL3RMytOSIgt4Q3Plc5tB7nkOPpWJQ2h3wLb0I5ATe1i3cbjDe2npOEm5+6CaKUnggbubMCD5WM6jgAY/cby0RxQCW/3eNj57VR8=
+	t=1740399713; cv=none; b=qVz9dvvpphzBgtiIIJhRBhciUEyPHqIlMp41Mp71r6WDurOXvW6AeeO5Hl9t2B6SoBbsoeHGj1SvjuM7Zz4y/ozHU9deBFaKfpDuA+0q4nox6WUelMP2/4vtWJtav3yGhu9JyvNrwv9ICQKfHiKu0xIukgTh0YLfzGy9M1rhBRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740394775; c=relaxed/simple;
-	bh=QpcD1fmZ/w8egIfn3ebXPdqHdG1eN2O5afEKJhxbBYQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rzKTfDFN6LSgPjDqwySGkEIaJHf7EmaBzLU5P7tWBwqu71msy7dyl2oEr+e/hr2NV5iZENaEgRexlAeq6PBTHegMZwvp/HdOBWFufGqvmX7DjfNl9DZGTFjfxVP8qLOOrNMv7POBHw2mIbyYp8jPd5Q2pcINDGsfazwyxzQjv1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ooby2wpD; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nka6XfJH; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ooby2wpD; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nka6XfJH; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	s=arc-20240116; t=1740399713; c=relaxed/simple;
+	bh=Xg5w9NafeEyq9ldTTXzdAzBsXkf90j/KDGh5AUJkXGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D6QKwd0L4mcNtZKt/EbErhH8IWCmnA5140ikH5wRqNyt+6Rtozt2S0orHPhbq0qnOtTDbFww03t7CCXkA5C4tNNpeNriUsIiYB9jKcViRPVFNsaOyu3NOAbk/nGLfmJG5v/HbKH7EiYRHYwL3ATIGmO3PsmgMzJx0/EmF7CfheQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=KwEf0HJ/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qnEcewtt; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yiLhzZ/4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=tPuIB6Fz; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from kitsune.suse.cz (unknown [10.100.12.127])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7088421172;
-	Mon, 24 Feb 2025 10:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1740394772; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=4IDP5Qa4fHg0jOSo/lcZ+hHU/2+DC++btki4r8VUc0Y=;
-	b=Ooby2wpDwvxqHtPbN+bKfVbPxW8hDJGrTlZkvGfN57SiK/DdSQTqmWFpDi980SeHLI+yE2
-	UwTk+qYrZXlzyfqqx6V2fBYYHPlLpd3dct+tcWWzH5YO2Mxx6C6JA779TEjDxXCH4+ScBg
-	UwtyMn2y8VlBAOY930pAvlbkSRvProM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1740394772;
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D7CA52116F;
+	Mon, 24 Feb 2025 12:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1740399710; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YJY12wQIuxf4x7FmCt8Vgu0PjjqF37tRRGikflEPO2g=;
+	b=KwEf0HJ/66wBiKK8A/cWDUwjhSttEQND6jDb3LH2d5m7iouLNKOYlReYyclDINEwwwlm1H
+	s642tGoAGMHyjDN8XNAw0bTt55jazL1h5OSBkNqxz9+L8ZXUIHF3+9hqVfXiH9ZEtpGumn
+	40R1gEvZiBUEa2rpfo9Vw1LWpud7zok=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1740399710;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=4IDP5Qa4fHg0jOSo/lcZ+hHU/2+DC++btki4r8VUc0Y=;
-	b=nka6XfJHPTslCgCkdb2lKNthUBi/WM8qjlaL+udnJwV9mn9jvnDLo29vOnKSYobXNi+KxC
-	0wZiHZ46Rl71AEBA==
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YJY12wQIuxf4x7FmCt8Vgu0PjjqF37tRRGikflEPO2g=;
+	b=qnEcewttxymOvSorwha8xfqlWOxQ5iHwTS8C9++dQXxvTz32JjP77/Mx1IIGvGqtJ+hj9/
+	T2KA8iYcEFOa7/CA==
 Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Ooby2wpD;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=nka6XfJH
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1740394772; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=4IDP5Qa4fHg0jOSo/lcZ+hHU/2+DC++btki4r8VUc0Y=;
-	b=Ooby2wpDwvxqHtPbN+bKfVbPxW8hDJGrTlZkvGfN57SiK/DdSQTqmWFpDi980SeHLI+yE2
-	UwTk+qYrZXlzyfqqx6V2fBYYHPlLpd3dct+tcWWzH5YO2Mxx6C6JA779TEjDxXCH4+ScBg
-	UwtyMn2y8VlBAOY930pAvlbkSRvProM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1740394772;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1740399709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YJY12wQIuxf4x7FmCt8Vgu0PjjqF37tRRGikflEPO2g=;
+	b=yiLhzZ/42m8zD9duWzCi1WDwQu8Pi9fD4/3/AWZp/xxpacs3GyvcI30PaKhCX7M3iUnIKh
+	1IoAlkRxi73+/2IdlEgn043ph5VnKEQ5MPBZl8Y29rvrWl7eo6JPKjhnNzbjp16hWjRlEp
+	b1U+kZlX6n58JqVWS7ZcLJgQiiVqB8g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1740399709;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=4IDP5Qa4fHg0jOSo/lcZ+hHU/2+DC++btki4r8VUc0Y=;
-	b=nka6XfJHPTslCgCkdb2lKNthUBi/WM8qjlaL+udnJwV9mn9jvnDLo29vOnKSYobXNi+KxC
-	0wZiHZ46Rl71AEBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4D40613332;
-	Mon, 24 Feb 2025 10:59:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id rF2dERRRvGf8AQAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Mon, 24 Feb 2025 10:59:32 +0000
-From: Petr Vorel <pvorel@suse.cz>
-To: ltp@lists.linux.it
-Cc: Petr Vorel <pvorel@suse.cz>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH] ima_selinux.sh: Require ima_policy=critical_data kernel cmdline
-Date: Mon, 24 Feb 2025 11:59:25 +0100
-Message-ID: <20250224105925.2865777-1-pvorel@suse.cz>
-X-Mailer: git-send-email 2.47.2
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YJY12wQIuxf4x7FmCt8Vgu0PjjqF37tRRGikflEPO2g=;
+	b=tPuIB6Fzqht0Z68TLPrRbYXHd6FHr1N+45z66VI4G1ufhVta5umoKOGE1i+3bR2hVV1Y19
+	XW0eBtrvpxYPV6AA==
+Date: Mon, 24 Feb 2025 13:21:48 +0100
+From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To: Jonathan McDowell <noodles@earth.li>
+Cc: linux-integrity@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: TPM operation times out (very rarely)
+Message-ID: <Z7xkXAMy4vrUrQce@kitsune.suse.cz>
+References: <Z5pI07m0Muapyu9w@kitsune.suse.cz>
+ <Z7ZbWcLK0Iajd_D9@earth.li>
+ <Z7bq9H2KZARM90A4@kitsune.suse.cz>
+ <Z7h1PYOcqK2lHvLq@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 7088421172
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.01 / 50.00];
+In-Reply-To: <Z7h1PYOcqK2lHvLq@earth.li>
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.994];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
 	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
 	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:email,suse.cz:dkim,suse.cz:mid];
-	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.01
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCPT_COUNT_THREE(0.00)[4]
 X-Spam-Flag: NO
+X-Spam-Level: 
 
-Test requires not only func=CRITICAL_DATA IMA policy content but also
-ima_policy=critical_data kernel cmdline. Without cmdline no measures are
-done.
+On Fri, Feb 21, 2025 at 12:44:45PM +0000, Jonathan McDowell wrote:
+> On Thu, Feb 20, 2025 at 09:42:28AM +0100, Michal Suchánek wrote:
+> > On Wed, Feb 19, 2025 at 10:29:45PM +0000, Jonathan McDowell wrote:
+> > > On Wed, Jan 29, 2025 at 04:27:15PM +0100, Michal Suchánek wrote:
+> > > > Hello,
+> > > > 
+> > > > there is a problem report that booting a specific type of system about
+> > > > 0.1% of the time encrypted volume (using a PCR to release the key) fails
+> > > > to unlock because of TPM operation timeout.
+> > > > 
+> > > > Minimizing the test case failed so far.
+> > > > 
+> > > > For example, booting into text mode as opposed to graphical desktop
+> > > > makes the problem unreproducible.
+> > > > 
+> > > > The test is done with a frankenkernel that has TPM drivers about on par
+> > > > with Linux 6.4 but using actual Linux 6.4 the problem is not
+> > > > reproducible, either.
+> > > > 
+> > > > However, given the problem takes up to a day to reproduce I do not have
+> > > > much confidence in the negative results.
+> > > 
+> > > Michal, can you possibly try the below and see if it helps out? There
+> > > seems to be a timing bug introduced in 6.4+ that I think might be
+> > > related, and matches up with some of our internal metrics that showed an
+> > > increase in timeouts in 6.4 onwards.
+> > 
+> > Thanks for looking into this
+> 
+> No problem. It's something we've seen in our fleet and I've been trying
+> to get to the bottom of, so having some additional data from someone
+> else is really helpful.
+> 
+> > > commit 79041fba797d0fe907e227012767f56dd93fac32
+> > > Author: Jonathan McDowell <noodles@meta.com>
+> > > Date:   Wed Feb 19 16:20:44 2025 -0600
+> > > 
+> > >     tpm, tpm_tis: Fix timeout handling when waiting for TPM status
+> > >     
+> > >     The change to only use interrupts to handle supported status changes,
+> > >     then switch to polling for the rest, inverted the status test and sleep
+> > >     such that we can end up sleeping beyond our timeout and not actually
+> > >     checking the status. This can result in spurious TPM timeouts,
+> > >     especially on a more loaded system. Fix by switching the order back so
+> > >     we sleep *then* check. We've done a up front check when we enter the
+> > >     function so this won't cause an additional delay when the status is
+> > >     already what we're looking for.
+> > >     
+> > >     Cc: stable@vger.kernel.org # v6.4+
+> > >     Fixes: e87fcf0dc2b4 ("tpm, tpm_tis: Only handle supported interrupts")
+> > >     Signed-off-by: Jonathan McDowell <noodles@meta.com>
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> > > index fdef214b9f6b..167d71747666 100644
+> > > --- a/drivers/char/tpm/tpm_tis_core.c
+> > > +++ b/drivers/char/tpm/tpm_tis_core.c
+> > > @@ -114,11 +114,11 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
+> > >  		return 0;
+> > >  	/* process status changes without irq support */
+> > >  	do {
+> > > +		usleep_range(priv->timeout_min,
+> > > +			     priv->timeout_max);
+> > 
+> > What would be the priv->timeout_min and priv->timeout_max here?
+> > 
+> > Note that there are timeouts that are 200ms, and are overblown by 2s.
+> > 
+> > If the 200ms timeout relies on the sleep during the wait for the timeout
+> > being much longer than the timeout itself then the timeout is arguably
+> > bogus regardless of this change helping.
+> 
+> Ah, I thought your major issue was the 2s timeout that was only slightly
+> exceeded.
+> 
+> However in my initial tracing I've seen wait_for_tpm_stat take much
+> longer than the timeout that's passed in, which is what caused me to go
+> and investigate this code path and note it had been changed in 6.4. It
+> seems like a bug either way, but I've been at the TCG meeting this week
+> and not had time to do further instrumentation and confirmation. Given
+> you seem to have a more reliable reproducer I thought it might be easy
+> enough for you to see if it made any difference.
 
-https://ima-doc.readthedocs.io/en/latest/ima-policy.html#ima-policy-critical-data
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fdd1ffe8a812
+The problem is no longer reproducible, probably due to some other hcange
+in the test environment. So much for reliable reproducer.
 
-Fixes: 4944a63ed9 ("IMA: Add test for SELinux measurement")
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
-FYI this is supposed to be applied on the top of "ima_setup.sh: Postpone
-loading policy after test setup" patchset
-https://patchwork.ozlabs.org/project/ltp/list/?series=445166&state=*
-https://lore.kernel.org/ltp/20250219181926.2620960-1-pvorel@suse.cz/t/#u
+Yes, I think this is a bug either way and should be addressed although
+the effect on this problem is minor at best.
 
- testcases/kernel/security/integrity/ima/tests/ima_selinux.sh | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Thanks
 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh b/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
-index 97c5d64ec5..1a0de21efd 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
-@@ -5,7 +5,8 @@
- # Author: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
- #
- # Verify measurement of SELinux policy hash and state.
--# Test requires example IMA policy loadable with LTP_IMA_LOAD_POLICY=1.
-+# Test requires ima_policy=critical_data kernel command line and example IMA
-+# policy loadable with LTP_IMA_LOAD_POLICY=1.
- #
- # Relevant kernel commits:
- # * fdd1ffe8a812 ("selinux: include a consumer of the new IMA critical data hook")
-@@ -22,6 +23,8 @@ setup()
- {
- 	SELINUX_DIR=$(tst_get_selinux_dir)
- 	[ "$SELINUX_DIR" ] || tst_brk TCONF "SELinux is not enabled"
-+
-+	require_ima_policy_cmdline "critical_data"
- }
- 
- # Format of the measured SELinux state data.
--- 
-2.47.2
-
+Michal
 
