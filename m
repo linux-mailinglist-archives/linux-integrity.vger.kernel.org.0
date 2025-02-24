@@ -1,135 +1,109 @@
-Return-Path: <linux-integrity+bounces-4974-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4975-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EC7DA40987
-	for <lists+linux-integrity@lfdr.de>; Sat, 22 Feb 2025 16:39:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B50A7A4153E
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 07:16:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15F8E703D35
-	for <lists+linux-integrity@lfdr.de>; Sat, 22 Feb 2025 15:39:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 711CB1895AAE
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 06:15:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F09219DF61;
-	Sat, 22 Feb 2025 15:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C276B1C878E;
+	Mon, 24 Feb 2025 06:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TTzhrf+O"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41F593224;
-	Sat, 22 Feb 2025 15:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61C01C84A6
+	for <linux-integrity@vger.kernel.org>; Mon, 24 Feb 2025 06:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740238781; cv=none; b=jU33IQb4vRRUsulngWPzGgWAnUp4nGtG0gISI8fSiLY3QA2tpxSTS2lgq+TKM9Mi/E1GoGPYbyPQCcNednPt+nQ8baJbsmIwUCAGHxei09JLm3V1fGQ2ppvuGqaJtfsyORsGJbjN2cX+9yyDFH2GT3lSH28vu8CpZWhZUMfOab8=
+	t=1740377681; cv=none; b=assBgYJf/KmrwRNRe4v1Xi6BnJhlqVdwfDa5+wxxPvNnkeFqTyG11xcndaV4ykcOjsQv7ClhUyuDa+5CfVt4BwsY8+Pfb5tYtHvqOGrmhHMmW1BrRUH4oQr6xlyrUCdUI5STLU9dV9GugjmknCwg4V5KbwjpK2P4q3RKMJ15Zug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740238781; c=relaxed/simple;
-	bh=7IKYFO/1To/SFLqEc4c9Ck4qc3cN4itGbMN5/EgAeaE=;
+	s=arc-20240116; t=1740377681; c=relaxed/simple;
+	bh=Sj+WDGRz5MVg3VGq6R+ObJqw+0Ui/+FSeflrv00EUks=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C/DP0OVnhZ/rT6IrJu8QwkwoAYgE0HGhSiCSKMoLs/YsHLl32idZ6kdvkBQ6HPt5bIs+KWAttkJxWWWvMxfZjFMmz6g7pqPud1Rncfgn0ZDl6UkYOaD2OdOxkLaKYdUN1HNauVhZXiNtYRsjdLisNDTy5c7BZod0F4YvpW2UhS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63D6A152B;
-	Sat, 22 Feb 2025 07:39:48 -0800 (PST)
-Received: from bogus (unknown [10.57.37.210])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07CC23F59E;
-	Sat, 22 Feb 2025 07:39:27 -0800 (PST)
-Date: Sat, 22 Feb 2025 15:39:24 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Stuart Yoder <stuart.yoder@arm.com>
-Cc: Sumit Garg <sumit.garg@kernel.org>, Sumit Garg <sumit.garg@linaro.org>,
-	linux-integrity@vger.kernel.org, jarkko@kernel.org,
-	peterhuewe@gmx.de, jgg@ziepe.ca, rafael@kernel.org, lenb@kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH 0/4] Add support for the TPM FF-A start method
-Message-ID: <20250222153924.wrjqmaowvcmdlojd@bogus>
-References: <4bb3cefa-b843-45ca-82c5-d96b13454baa@arm.com>
- <CAFA6WYM3UA9+TE8L2U5Qd8FZfaGZnbba=QzWU7fEu3LKQVm-tw@mail.gmail.com>
- <fdaa9a58-790f-4839-8db7-1b9a81eb8edf@arm.com>
- <CAFA6WYM0ANqc--ScYtJFRjOsCCjzO3NX46=F5V=rza_6Q-Q96g@mail.gmail.com>
- <e142afd2-38ec-4640-b9be-cb414bccc807@arm.com>
- <Z7LGbZsOh_w-HRY2@sumit-X1>
- <5dae96fa-0e54-4274-bcc6-1c20fe846f60@arm.com>
- <Z7iDuwLDA2rFPZK6@sumit-X1>
- <Z7iHaWPyq3KDG7J2@bogus>
- <79dd35d4-147b-4b12-8ce8-1909428d75bd@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=X4O5f3oBZpYMWLTlHc0GbxhfctgeCxHt1e/8SX7Vv+aGoMO+Xvn+rHoErkPGTx0DfeVHWyMkhabT8MT9b5MHF0P1kKxN7qGhUU+u5i60IQUC94rVAuDAvnFCR5VJ5Z7YYty7iPzMqbMefRT/ZDrBZCH/5ibMy6ngImlVdx87nwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TTzhrf+O; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740377678;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gJAE5VQtKOJvPeRIxHRRWordcbnsd54QiHO4iNapbAU=;
+	b=TTzhrf+OcSeQUKsEY+cEp23uCVrDe8EKPr0y5NA5V2R47ER8g+UnyyKl9bWEnGvo7UaLo2
+	X8RPgws4DeCfCPN/NuMGtNhm2420C5wFw0iNWeb9vt1n6m/fIFxDmWNo3m5f9QkmACUNXQ
+	M2NcYgQudSk7VVfbp/NuqmCFHTfhuWM=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-260-mIj5mZ4mOF6cCPhbbVyElQ-1; Mon,
+ 24 Feb 2025 01:14:33 -0500
+X-MC-Unique: mIj5mZ4mOF6cCPhbbVyElQ-1
+X-Mimecast-MFC-AGG-ID: mIj5mZ4mOF6cCPhbbVyElQ_1740377671
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 276581979057;
+	Mon, 24 Feb 2025 06:14:30 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.127])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9565519560AA;
+	Mon, 24 Feb 2025 06:14:27 +0000 (UTC)
+Date: Mon, 24 Feb 2025 14:14:22 +0800
+From: Baoquan He <bhe@redhat.com>
+To: steven chen <chenste@linux.microsoft.com>
+Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
+	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+	eric.snowberg@oracle.com, ebiederm@xmission.com,
+	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
+	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
+	dyoung@redhat.com
+Subject: Re: [PATCH v8 2/7] kexec: define functions to map and unmap segments
+Message-ID: <Z7wOPiDfy/vtrkCS@MiWiFi-R3L-srv>
+References: <20250218225502.747963-1-chenste@linux.microsoft.com>
+ <20250218225502.747963-3-chenste@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <79dd35d4-147b-4b12-8ce8-1909428d75bd@arm.com>
+In-Reply-To: <20250218225502.747963-3-chenste@linux.microsoft.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-On Fri, Feb 21, 2025 at 12:29:03PM -0600, Stuart Yoder wrote:
->
->
-> On 2/21/25 8:02 AM, Sudeep Holla wrote:
-> > Hi Sumit,
-> >
-> > On Fri, Feb 21, 2025 at 07:16:35PM +0530, Sumit Garg wrote:
-> > > On Mon, Feb 17, 2025 at 10:56:58AM -0600, Stuart Yoder wrote:
-> > > >
-> > > > I don't see how changing TPM discovery to be via FF-A directly
-> > > > would improve maintainability.
-> > >
-> > > You are considering ACPI at this point but when people want to use this
-> > > TPM over FF-A on a platform using DT then it will require corresponding
-> > > DT bindings. After that each platform has to enable TPM over FF-A in
-> > > their corresponding ACPI/DT. All that won't be needed with auto
-> > > discovery over FF-A.
->
-> Yes, we would need a new DT binding.
->
+Hi Steve, Mimi,
 
-Not sure how that would look like, so I will hold off my comments on this
-topic. But we really should strive towards auto-discovery as much as possible.
+On 02/18/25 at 02:54pm, steven chen wrote:
+> Currently, the mechanism to map and unmap segments to the kimage
+> structure is not available to the subsystems outside of kexec.  This
+> functionality is needed when IMA is allocating the memory segments
+> during kexec 'load' operation.  Implement functions to map and unmap
+> segments to kimage.
 
-> > I hear you and completely agree. However, someone thought it was a good idea
-> > to align with other start methods and duplicate information in the TCG ACPI
-> > specification. This is definitely a bad idea, as it may contradict the
-> > firmware. All we needed was a simple flag to indicate whether FF-A is the
-> > start method.
->
-> Do you mean a flag exposed via ACPI?  If you do FF-A based discovery you
-> don't even need that.  Everything could be determined via an FF-A
-> interface.
->
-> > It sounds like a classic case of misalignment between specification authors
-> > and practical implementation needs. Instead of a simple flag to indicate FF-A
-> > as the start method, duplicating information in the TCG ACPI specification
-> > seems unnecessary and potentially problematic—especially if it risks
-> > conflicting with firmware behavior.
->
-> There is a lot of history, but I think it was simply that ACPI
-> advertisement of an FF-A based TPM seemed like the approach
-> with the least friction. And Linux is not the only target OS.
->
+I am done with the whole patchset understanding. My concern is if this
+TPM PCRs content can be carried over through newly introduced KHO. I can
+see that these patchset doesn't introduce too much new code changes,
+while if many conponents need do this, kexec reboot will be patched all
+over its body and become ugly and hard to maintain.
 
-I guess so. I understand sometimes we need to consider multiple target OS.
+Please check Mike Rapoport's v4 patchset to see if IMA can register
+itself to KHO and do somthing during 2nd kernel init to restore those
+TPM PCRs content to make sure all measurement logs are read correctly.
+[PATCH v4 00/14] kexec: introduce Kexec HandOver (KHO)
 
-> > Anyway, I can't comment on how we ended up here, but this seems to be the reality.
->
-> I don't think we are locked into ACPI (or DT) only discovery.
-> It's possible that with a modest delta on top of this patch series
-> that the tpm_crb driver could also probe based on FF-A.
->
-> The CRB over FF-A spec (DEN0138) could be extended in a backwards
-> compatible way to expose additional info like the base address of the
-> CRB.
->
+Thanks
+Baoquan
 
-Ideally, we should manage with dynamic buffers. But I do understand the
-reasons why we may need static curve outs. I prefer the ffa client driver
-take care of that without needing to build FF-A bindings just for that.
-
-I will wait and see how all these shape up (soon ?)
-
---
-Regards,
-Sudeep
 
