@@ -1,109 +1,176 @@
-Return-Path: <linux-integrity+bounces-4975-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4976-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B50A7A4153E
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 07:16:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C463A41BE3
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 12:01:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 711CB1895AAE
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 06:15:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63900188C6B2
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Feb 2025 10:59:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C276B1C878E;
-	Mon, 24 Feb 2025 06:14:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06EB7146D59;
+	Mon, 24 Feb 2025 10:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TTzhrf+O"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ooby2wpD";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nka6XfJH";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ooby2wpD";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="nka6XfJH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61C01C84A6
-	for <linux-integrity@vger.kernel.org>; Mon, 24 Feb 2025 06:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C45257AFA
+	for <linux-integrity@vger.kernel.org>; Mon, 24 Feb 2025 10:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740377681; cv=none; b=assBgYJf/KmrwRNRe4v1Xi6BnJhlqVdwfDa5+wxxPvNnkeFqTyG11xcndaV4ykcOjsQv7ClhUyuDa+5CfVt4BwsY8+Pfb5tYtHvqOGrmhHMmW1BrRUH4oQr6xlyrUCdUI5STLU9dV9GugjmknCwg4V5KbwjpK2P4q3RKMJ15Zug=
+	t=1740394775; cv=none; b=VnT01W3JKpZUAAmY7t1bL95KvFdY/TMF02E12yoQJa9f3/P5bzYlwWscp9+3Etpb8jnn4FmtL3RMytOSIgt4Q3Plc5tB7nkOPpWJQ2h3wLb0I5ATe1i3cbjDe2npOEm5+6CaKUnggbubMCD5WM6jgAY/cby0RxQCW/3eNj57VR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740377681; c=relaxed/simple;
-	bh=Sj+WDGRz5MVg3VGq6R+ObJqw+0Ui/+FSeflrv00EUks=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X4O5f3oBZpYMWLTlHc0GbxhfctgeCxHt1e/8SX7Vv+aGoMO+Xvn+rHoErkPGTx0DfeVHWyMkhabT8MT9b5MHF0P1kKxN7qGhUU+u5i60IQUC94rVAuDAvnFCR5VJ5Z7YYty7iPzMqbMefRT/ZDrBZCH/5ibMy6ngImlVdx87nwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TTzhrf+O; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740377678;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gJAE5VQtKOJvPeRIxHRRWordcbnsd54QiHO4iNapbAU=;
-	b=TTzhrf+OcSeQUKsEY+cEp23uCVrDe8EKPr0y5NA5V2R47ER8g+UnyyKl9bWEnGvo7UaLo2
-	X8RPgws4DeCfCPN/NuMGtNhm2420C5wFw0iNWeb9vt1n6m/fIFxDmWNo3m5f9QkmACUNXQ
-	M2NcYgQudSk7VVfbp/NuqmCFHTfhuWM=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-260-mIj5mZ4mOF6cCPhbbVyElQ-1; Mon,
- 24 Feb 2025 01:14:33 -0500
-X-MC-Unique: mIj5mZ4mOF6cCPhbbVyElQ-1
-X-Mimecast-MFC-AGG-ID: mIj5mZ4mOF6cCPhbbVyElQ_1740377671
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	s=arc-20240116; t=1740394775; c=relaxed/simple;
+	bh=QpcD1fmZ/w8egIfn3ebXPdqHdG1eN2O5afEKJhxbBYQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rzKTfDFN6LSgPjDqwySGkEIaJHf7EmaBzLU5P7tWBwqu71msy7dyl2oEr+e/hr2NV5iZENaEgRexlAeq6PBTHegMZwvp/HdOBWFufGqvmX7DjfNl9DZGTFjfxVP8qLOOrNMv7POBHw2mIbyYp8jPd5Q2pcINDGsfazwyxzQjv1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ooby2wpD; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nka6XfJH; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ooby2wpD; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=nka6XfJH; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 276581979057;
-	Mon, 24 Feb 2025 06:14:30 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.127])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9565519560AA;
-	Mon, 24 Feb 2025 06:14:27 +0000 (UTC)
-Date: Mon, 24 Feb 2025 14:14:22 +0800
-From: Baoquan He <bhe@redhat.com>
-To: steven chen <chenste@linux.microsoft.com>
-Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
-	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-	eric.snowberg@oracle.com, ebiederm@xmission.com,
-	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
-	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
-	dyoung@redhat.com
-Subject: Re: [PATCH v8 2/7] kexec: define functions to map and unmap segments
-Message-ID: <Z7wOPiDfy/vtrkCS@MiWiFi-R3L-srv>
-References: <20250218225502.747963-1-chenste@linux.microsoft.com>
- <20250218225502.747963-3-chenste@linux.microsoft.com>
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 7088421172;
+	Mon, 24 Feb 2025 10:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1740394772; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=4IDP5Qa4fHg0jOSo/lcZ+hHU/2+DC++btki4r8VUc0Y=;
+	b=Ooby2wpDwvxqHtPbN+bKfVbPxW8hDJGrTlZkvGfN57SiK/DdSQTqmWFpDi980SeHLI+yE2
+	UwTk+qYrZXlzyfqqx6V2fBYYHPlLpd3dct+tcWWzH5YO2Mxx6C6JA779TEjDxXCH4+ScBg
+	UwtyMn2y8VlBAOY930pAvlbkSRvProM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1740394772;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=4IDP5Qa4fHg0jOSo/lcZ+hHU/2+DC++btki4r8VUc0Y=;
+	b=nka6XfJHPTslCgCkdb2lKNthUBi/WM8qjlaL+udnJwV9mn9jvnDLo29vOnKSYobXNi+KxC
+	0wZiHZ46Rl71AEBA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Ooby2wpD;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=nka6XfJH
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1740394772; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=4IDP5Qa4fHg0jOSo/lcZ+hHU/2+DC++btki4r8VUc0Y=;
+	b=Ooby2wpDwvxqHtPbN+bKfVbPxW8hDJGrTlZkvGfN57SiK/DdSQTqmWFpDi980SeHLI+yE2
+	UwTk+qYrZXlzyfqqx6V2fBYYHPlLpd3dct+tcWWzH5YO2Mxx6C6JA779TEjDxXCH4+ScBg
+	UwtyMn2y8VlBAOY930pAvlbkSRvProM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1740394772;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=4IDP5Qa4fHg0jOSo/lcZ+hHU/2+DC++btki4r8VUc0Y=;
+	b=nka6XfJHPTslCgCkdb2lKNthUBi/WM8qjlaL+udnJwV9mn9jvnDLo29vOnKSYobXNi+KxC
+	0wZiHZ46Rl71AEBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4D40613332;
+	Mon, 24 Feb 2025 10:59:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id rF2dERRRvGf8AQAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Mon, 24 Feb 2025 10:59:32 +0000
+From: Petr Vorel <pvorel@suse.cz>
+To: ltp@lists.linux.it
+Cc: Petr Vorel <pvorel@suse.cz>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	linux-integrity@vger.kernel.org
+Subject: [PATCH] ima_selinux.sh: Require ima_policy=critical_data kernel cmdline
+Date: Mon, 24 Feb 2025 11:59:25 +0100
+Message-ID: <20250224105925.2865777-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250218225502.747963-3-chenste@linux.microsoft.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 7088421172
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:email,suse.cz:dkim,suse.cz:mid];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.01
+X-Spam-Flag: NO
 
-Hi Steve, Mimi,
+Test requires not only func=CRITICAL_DATA IMA policy content but also
+ima_policy=critical_data kernel cmdline. Without cmdline no measures are
+done.
 
-On 02/18/25 at 02:54pm, steven chen wrote:
-> Currently, the mechanism to map and unmap segments to the kimage
-> structure is not available to the subsystems outside of kexec.  This
-> functionality is needed when IMA is allocating the memory segments
-> during kexec 'load' operation.  Implement functions to map and unmap
-> segments to kimage.
+https://ima-doc.readthedocs.io/en/latest/ima-policy.html#ima-policy-critical-data
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fdd1ffe8a812
 
-I am done with the whole patchset understanding. My concern is if this
-TPM PCRs content can be carried over through newly introduced KHO. I can
-see that these patchset doesn't introduce too much new code changes,
-while if many conponents need do this, kexec reboot will be patched all
-over its body and become ugly and hard to maintain.
+Fixes: 4944a63ed9 ("IMA: Add test for SELinux measurement")
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+FYI this is supposed to be applied on the top of "ima_setup.sh: Postpone
+loading policy after test setup" patchset
+https://patchwork.ozlabs.org/project/ltp/list/?series=445166&state=*
+https://lore.kernel.org/ltp/20250219181926.2620960-1-pvorel@suse.cz/t/#u
 
-Please check Mike Rapoport's v4 patchset to see if IMA can register
-itself to KHO and do somthing during 2nd kernel init to restore those
-TPM PCRs content to make sure all measurement logs are read correctly.
-[PATCH v4 00/14] kexec: introduce Kexec HandOver (KHO)
+ testcases/kernel/security/integrity/ima/tests/ima_selinux.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thanks
-Baoquan
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh b/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
+index 97c5d64ec5..1a0de21efd 100755
+--- a/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
+@@ -5,7 +5,8 @@
+ # Author: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+ #
+ # Verify measurement of SELinux policy hash and state.
+-# Test requires example IMA policy loadable with LTP_IMA_LOAD_POLICY=1.
++# Test requires ima_policy=critical_data kernel command line and example IMA
++# policy loadable with LTP_IMA_LOAD_POLICY=1.
+ #
+ # Relevant kernel commits:
+ # * fdd1ffe8a812 ("selinux: include a consumer of the new IMA critical data hook")
+@@ -22,6 +23,8 @@ setup()
+ {
+ 	SELINUX_DIR=$(tst_get_selinux_dir)
+ 	[ "$SELINUX_DIR" ] || tst_brk TCONF "SELinux is not enabled"
++
++	require_ima_policy_cmdline "critical_data"
+ }
+ 
+ # Format of the measured SELinux state data.
+-- 
+2.47.2
 
 
