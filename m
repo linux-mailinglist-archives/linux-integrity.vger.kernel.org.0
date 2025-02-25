@@ -1,97 +1,128 @@
-Return-Path: <linux-integrity+bounces-4986-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-4987-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A83CA44657
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Feb 2025 17:40:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 730D1A44AC3
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Feb 2025 19:43:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4614319C1BAC
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Feb 2025 16:37:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80B5E3AC886
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Feb 2025 18:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83C1195808;
-	Tue, 25 Feb 2025 16:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF9D14F9C4;
+	Tue, 25 Feb 2025 18:35:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PY9E/YFw"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="oGQjoobX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C411990D9;
-	Tue, 25 Feb 2025 16:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D2718E34A;
+	Tue, 25 Feb 2025 18:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740501442; cv=none; b=taUT8gCoxxZcriQIQR8tu/aLuoZj3TxeckQaowHtsYKFvwZpkjnQh9o2ZNx1apnh1YV66ZUsJ+KHk3DcdlXM42+p2a21c/wAIfNzf5zEdhlTYvlFz4G9GWFuGoL6ggegTP95H3MZalfGhjqHLwlRyX3vIfpfiWMrIoqjsHL0UGw=
+	t=1740508525; cv=none; b=BvFdyJwH1NGwnBIiW5mMSUMBUmCL6ho3eCGx9waJ/qkdlN50bRBUPnDjKBWnscNuIwA2BZT9fdB8d+wRGDayMPUw2ipd+GJG5J05yyA45yrFtd2zccNMgzRFxjwgElykcyB5UT5nTAFxzuRBPnTacslRSb49tdNNDwtpplVJMm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740501442; c=relaxed/simple;
-	bh=PsSFz+o6QsG5C91G69pD+6CtVdAG9/eI0Tp095Rkuu8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=isod+shBWH3TGlc5Yf6ap3sqJbJLYvJSS/vLxe+CQp0oXy9+oGg+QRRKVz+KpeM6VS2ych+CKtgVE2Cla6k1UExl+ibAb3A7HYfJ+YR+g2RUlQOvuKhuS7PWrns8R0yCJd7kv/AcMchs+JqUes2mEGnLFVP/wVKFd87nW1qdt90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PY9E/YFw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4AD6C4CEDD;
-	Tue, 25 Feb 2025 16:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740501442;
-	bh=PsSFz+o6QsG5C91G69pD+6CtVdAG9/eI0Tp095Rkuu8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PY9E/YFwRU9iZrJaqPM6pLw+fUhjno/Kl1yJQzIMl+2PXr59yTinhjWH2K5KRAdea
-	 12l2rMnSUAdk90Kv8S8QWG9N7aYVS2IpIs+R5SKjq8pofSA7i1ZULVYfjqVgujeuEz
-	 MhfngJRuDHs6IuVAxRoGgwMbPICxKk20yvwHo7aRgDKFrUgEM7KXfofk994jrT1OaG
-	 pIyR4sx/EV7eNznT5MvWto5rlhsP81eumuzOHrp11c6vwwIk+aaiXGDZcfZfSlKWp6
-	 IX6ghAOyLXQcK0e/HD6JwP6QG/tImOGyR+0zbZ7rIo/c6v39YHx13/AtybFX9HQbpO
-	 fQF63KkxR5dWQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: ftpm_tee: remove incorrect of_match_ptr annotation
-Date: Tue, 25 Feb 2025 17:37:15 +0100
-Message-Id: <20250225163718.4169649-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1740508525; c=relaxed/simple;
+	bh=neE6Y//ifJeGR4oQHArgzrz7Pt53aD02tH8Z1xoqXRs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q2RXSvfCLeuqRQPAli7cpVFj7SN2G6tPc5fpijGJ113p2FOIM+47BelhPrZfyAseIPN651oi8MSYbvYZKBBnB/WNelaXwoo5aC0ubU53R1eKLOhurreuTcV794OKIpHnvtMslYDCfnuSZ/rwNS1CmTQD0VvpSAz500EgBWVRkOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=oGQjoobX; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.17.64.147] (unknown [131.107.1.147])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 95078203CDDE;
+	Tue, 25 Feb 2025 10:35:22 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 95078203CDDE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1740508523;
+	bh=oAPMpgeQTX575axIRAvAGNwitPSc2FROHu2Kj3FuMr4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oGQjoobXgkyRRqjRFRYg+q70hz6uhg5zsrVj8sKaiZST2hHQzUfdy24mpz723gJq3
+	 wk6LbK9qyHkwSvnY/nWhMXJ+/pbvW5MV3urcV4jMxmRXdRhzymB2vjTgPaLEvtvDsr
+	 QnlelFhG8GfsJ2T3GYOr1XpVnIav81F+3bT3m/g4=
+Message-ID: <8504fd93-8fff-4fd9-8d2d-26b4e1e84bee@linux.microsoft.com>
+Date: Tue, 25 Feb 2025 10:35:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 2/7] kexec: define functions to map and unmap segments
+To: Baoquan He <bhe@redhat.com>
+Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
+ roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+ eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+ code@tyhicks.com, bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+ kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+ linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
+ nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
+ vgoyal@redhat.com, dyoung@redhat.com
+References: <20250218225502.747963-1-chenste@linux.microsoft.com>
+ <20250218225502.747963-3-chenste@linux.microsoft.com>
+ <Z7wOPiDfy/vtrkCS@MiWiFi-R3L-srv>
+ <658b52e4-a4bb-40fc-a00b-bfdb3bf15b52@linux.microsoft.com>
+ <Z70MZD+BssRG4R1H@MiWiFi-R3L-srv>
+Content-Language: en-US
+From: steven chen <chenste@linux.microsoft.com>
+In-Reply-To: <Z70MZD+BssRG4R1H@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 2/24/2025 4:18 PM, Baoquan He wrote:
+> On 02/24/25 at 03:05pm, steven chen wrote:
+>> On 2/23/2025 10:14 PM, Baoquan He wrote:
+>>> Hi Steve, Mimi,
+>>>
+>>> On 02/18/25 at 02:54pm, steven chen wrote:
+>>>> Currently, the mechanism to map and unmap segments to the kimage
+>>>> structure is not available to the subsystems outside of kexec.  This
+>>>> functionality is needed when IMA is allocating the memory segments
+>>>> during kexec 'load' operation.  Implement functions to map and unmap
+>>>> segments to kimage.
+>>> I am done with the whole patchset understanding. My concern is if this
+>>> TPM PCRs content can be carried over through newly introduced KHO. I can
+>>> see that these patchset doesn't introduce too much new code changes,
+>>> while if many conponents need do this, kexec reboot will be patched all
+>>> over its body and become ugly and hard to maintain.
+>>>
+>>> Please check Mike Rapoport's v4 patchset to see if IMA can register
+>>> itself to KHO and do somthing during 2nd kernel init to restore those
+>>> TPM PCRs content to make sure all measurement logs are read correctly.
+>>> [PATCH v4 00/14] kexec: introduce Kexec HandOver (KHO)
+>>>
+>>> Thanks
+>>> Baoquan
+>> Hi Baoquan,
+>>
+>> For IMA, it appears that there are no current issues with TPM PCRs after a
+>> kernel soft reboot.
+> I mean using KHO to hold in 1st kernel and restore the IMA log in 2nd
+> kernel.
+>
+>> This patches is used to get currently missed IMA measurements during the
+>> kexec process copied to new kernel after the kernel soft reboot. I think
+>> it's ok to leave it at current location: it will be easy to maintain for
+>> IMA.
+> Yeah, but I am saying this patchset increase unnecessary code
+> complexity in kexec code maintaining.
+>
+>> Overall, for these patches, do you see any major blockers for kexec?
+>>
+>> If you have any specific concerns or need further details, please let me
+>> know.
+> I have no concerns for this patchset implementation itself, I saw you using
+> vmap to maping the possible scattered source pages smartly and taking
+> the mapped buffer pointers to update later duing kexec jumping. That's very
+> great and clever method. BUT I am concerned about the solution, if we
+> can make use of the existed way of KHO to implement it more simply. Could
+> you please do investigation?
 
-Building with W=1 shows a warning about of_ftpm_tee_ids being unused when
-CONFIG_OF is disabled:
+Hi Baoquan,
 
-    drivers/char/tpm/tpm_ftpm_tee.c:356:34: error: unused variable 'of_ftpm_tee_ids' [-Werror,-Wunused-const-variable]
+I will conduct an investigation. Thank you for your comments.
 
-Drop the unnecessary of_match_ptr().
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-An earlier version had this combined with other changes, I made it
-a separate patch now
----
- drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-index 139556b21cc6..8d9209dfc384 100644
---- a/drivers/char/tpm/tpm_ftpm_tee.c
-+++ b/drivers/char/tpm/tpm_ftpm_tee.c
-@@ -362,7 +362,7 @@ MODULE_DEVICE_TABLE(of, of_ftpm_tee_ids);
- static struct platform_driver ftpm_tee_plat_driver = {
- 	.driver = {
- 		.name = "ftpm-tee",
--		.of_match_table = of_match_ptr(of_ftpm_tee_ids),
-+		.of_match_table = of_ftpm_tee_ids,
- 	},
- 	.shutdown = ftpm_plat_tee_shutdown,
- 	.probe = ftpm_plat_tee_probe,
--- 
-2.39.5
+Steven
 
 
