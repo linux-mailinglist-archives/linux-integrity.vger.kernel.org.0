@@ -1,105 +1,151 @@
-Return-Path: <linux-integrity+bounces-5003-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5004-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BB52A479CA
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2025 11:08:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FE39A47C48
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2025 12:33:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C847D16C58E
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2025 10:08:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6412D166D98
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2025 11:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F79B227E9F;
-	Thu, 27 Feb 2025 10:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE8DE22A7E5;
+	Thu, 27 Feb 2025 11:33:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a55WvY9y"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D5aJlq2F"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D8A1E833A;
-	Thu, 27 Feb 2025 10:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12ADD226863
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2025 11:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740650894; cv=none; b=iJgnwmzeehX96c/6tLTgc32U3T+nRIXMBrwer4qEPBjaO3MsSJHFJe0Hyd5L1DU8+PBDzNKw53tEYfbr3tfaQxa/DA3VBlSKhlFN912kOyrlWFr2nF8OUzXF0TuRHPhv7Tiqh4DMdO65b12jiGjCtVnuUluxvXZSSruh4imXZfE=
+	t=1740655997; cv=none; b=Lemk/Ci9chyMuRK2xoRDqWSNF4LuguQnR9NInra1m9Q8WmWqxXAlUvt/MgbybwMd/t0IQOVqh5+xknLyZRmcZTfKLQre6whv95mKB5VfQElKfD1nGEaLIUR/WDKmXlXXSYwlEAnjWFfpwuUp1F1BjMfkXyOHaB0ETNfvvdgnIRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740650894; c=relaxed/simple;
-	bh=1n1OiaaN37BCrmYRPde40tuuS4Xcqlkkf3w3yU4hC70=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CpimICQmLPuGMsy/EtLeBxG6KoGG+QESHGaiuZdoRwJykzb+Fq7qxQHS9xVO/sAwAsnh68GFZl5D6vZPjyflUs8LtDpci/d9fYQKXotF9VXw5V6kuB0dw/ZW65NDeUUrKSITtz2djJkEXSRdMsZvR2Yyx3hKiaO289SukJxLIsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a55WvY9y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 906DAC4CEDD;
-	Thu, 27 Feb 2025 10:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740650893;
-	bh=1n1OiaaN37BCrmYRPde40tuuS4Xcqlkkf3w3yU4hC70=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a55WvY9yQcKC6PrYjShqh4ox6SoFC9GhDogEFVRQIgOC6bLHsCimgRhOYUf4VpF3I
-	 FUl5p6sjs3Y/Qw9njeQtjdYdbt9lq5twAuSWJ1eFfmyOxenLzMpJsd/sioPUvE/N9A
-	 3FKTOR9xDJuy5cjojp7jTgJAKvOT1cwE7vz0dYBNI0xjsmgh+m3YcFLnA8VW8BiT4O
-	 gNA/VheOH5h84z39CB43vdDvXfLdG62ggKCyJOF3INzYKMdTkCkcDeaIBvbi8oHfZr
-	 1/NPIx3S0gydLW9bnLm5+nPHBLJ1qGsRJR3QIp2VmLnz5Ic9rFTni6QnYOQweXd/sb
-	 50tKIULl8VwUg==
-Date: Thu, 27 Feb 2025 15:38:07 +0530
-From: Sumit Garg <sumit.garg@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm: ftpm_tee: remove incorrect of_match_ptr annotation
-Message-ID: <Z8A5h3WlNFjfNHMT@sumit-X1>
-References: <20250225163718.4169649-1-arnd@kernel.org>
+	s=arc-20240116; t=1740655997; c=relaxed/simple;
+	bh=LO2N9vciU7HB99mtlW3h5ysZsPTzOm1mscKvDNw90XU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hxLbRSL/Qtsi+L+H0SM7bY2okfDY11DJDkLfVLDcc4Vk4hqjxlrlas6AV6IICZd2rE/3Wm7LBB4gw4MSn7DOqFAQo8JhtBprLE4hSJDZvrbaB+E6RfGfJvSS9vaFbXlGnKHBVWqn8KLTMsMMRb4HnF01Idr7rsP+vRZl9Z26L2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D5aJlq2F; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2234e5347e2so13318955ad.1
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2025 03:33:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740655995; x=1741260795; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cg8yMwZ72Jlc0r5z1N3IiuaraHv4s6b2xThN5W01Djk=;
+        b=D5aJlq2F6R3GUVFt9YVYvhZSbEIyrGG1WMu63jw39i9UyiEW8h3xQDgfWN5Pycnn8P
+         beqrTO3UYTF8846iPQOltFhA1dkAD6wN6puK4jcojLYSt2ztSzGi9i2tx3dMkFy8F7Y8
+         3P9XUvlZfrALUIckJ3n71tffqsz1+ZFWZbAMasuiVZQ3Gy7K1ceewuk3Z8DOIU6Nricn
+         HKI1frdmWR289oCt0FpSOlm4NMj0HnV1FFhyvdPGR1hYfOyyT45CDAmLcC4VQhbRhJIZ
+         jJGWvxdM7sF3f+YSy4oeDBoDeCdtPGkLeFXR2pwUJ8mafwT3f8hiUkKPJhpxeUYviKDT
+         NCdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740655995; x=1741260795;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cg8yMwZ72Jlc0r5z1N3IiuaraHv4s6b2xThN5W01Djk=;
+        b=mvGLmkc9BuzO1dY1lamqsZAJFYOMtioAah1YM/x0V11JWzOFojfl3/nbP6DaUO2Hgz
+         bs9itVD4Nr01vmvc03wJ1EvJR16VPzbOGYlQE4rcWxlLUdBAq93pE/Bt6sGTmBDgcr0c
+         +Ksj4Hr+iYkYoW0Phb7K7ilqHa7ZjwGxXcUOPN1gKjoRUJO1FtK243qi2nSyHbq9LW2Z
+         o9KUs1CEK6pX+4PgSv0t22kGIUhj/aZ6KNNfC9PMGOR+7ZN0Dck+Z72Wu+Njybtw1e4W
+         s72FdI74por+svlW/8TP3W8HgoAMXhQvDB00FrjjkA2wdt4ahLQ+F06iQZsUyMecAkAK
+         YpFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUXQE9/O/WWNZX0AmCIBYu2F0ge8nxItHFc89Q5G0bY6EOKD2lUMRTVGtp52BJRxiwjI9QGc7GOpgnAnJTywao=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yygn8f90M+99634TuLEyD9ya74AbcFCFqhDTBmT0hfCafSwFfYo
+	FHifpzk4NE808EhiQjfJpqIE76d3D4m2S3DWAUVlGd+0QwVjdrqY9EIxRB6lPXM=
+X-Gm-Gg: ASbGncsQgYewWv3uStTlDx+VTWOVJyFWCUE4OdlDajZaPpreCBkGTzBBW4UDCWGWd41
+	N3VRXsUKkCTLdY489XOBQEIaeDuu26wMqgrF8NoqAxisVAstnk9jyocBtNFoZiEHOd5JrvQlblL
+	+bry02bvfOdpen8m3STS8KUEynHaj2kw0YAFcB91pj8RDwAPOyFBjEnvoCkPrqbEmRayfV+bgL6
+	cuyoQ5DTwZ9Y4TSUKwawRrTr9AKXXYG88a1sTZs9lc19PpXXLPhFuuTljrmWf0EefcIPdk7hb7E
+	0tnRv9bJT+qWrhNOTlrz/CcpABBl
+X-Google-Smtp-Source: AGHT+IG4VU2x6YDtNodsc0R4UfSHlwxikIm91sBEmZvthobIJS1xQjZsA9eqGdyUlDUdvBKd735Xuw==
+X-Received: by 2002:a05:6a00:4614:b0:732:13fd:3f1f with SMTP id d2e1a72fcca58-7348be7eeb2mr12060717b3a.24.1740655995332;
+        Thu, 27 Feb 2025 03:33:15 -0800 (PST)
+Received: from sumit-X1.. ([223.178.212.145])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7349fe48858sm1343733b3a.51.2025.02.27.03.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2025 03:33:14 -0800 (PST)
+From: Sumit Garg <sumit.garg@linaro.org>
+To: akpm@linux-foundation.org,
+	herbert@gondor.apana.org.au,
+	jarkko@kernel.org,
+	jens.wiklander@linaro.org
+Cc: sumit.garg@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	op-tee@lists.trustedfirmware.org,
+	linux-crypto@vger.kernel.org,
+	Sumit Garg <sumit.garg@linaro.org>
+Subject: [PATCH] MAINTAINERS: .mailmap: Update Sumit Garg's email address
+Date: Thu, 27 Feb 2025 17:02:28 +0530
+Message-ID: <20250227113228.1809449-1-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250225163718.4169649-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 25, 2025 at 05:37:15PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Building with W=1 shows a warning about of_ftpm_tee_ids being unused when
-> CONFIG_OF is disabled:
-> 
->     drivers/char/tpm/tpm_ftpm_tee.c:356:34: error: unused variable 'of_ftpm_tee_ids' [-Werror,-Wunused-const-variable]
-> 
-> Drop the unnecessary of_match_ptr().
-> 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> An earlier version had this combined with other changes, I made it
-> a separate patch now
-> ---
->  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
+Update Sumit Garg's email address to @kernel.org.
 
-Reviewed-by: Sumit Garg <sumit.garg@kernel.org>
+Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+---
+ .mailmap    | 1 +
+ MAINTAINERS | 6 +++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
--Sumit
+diff --git a/.mailmap b/.mailmap
+index a897c16d3bae..4a93909286d8 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -689,6 +689,7 @@ Subbaraman Narayanamurthy <quic_subbaram@quicinc.com> <subbaram@codeaurora.org>
+ Subhash Jadavani <subhashj@codeaurora.org>
+ Sudarshan Rajagopalan <quic_sudaraja@quicinc.com> <sudaraja@codeaurora.org>
+ Sudeep Holla <sudeep.holla@arm.com> Sudeep KarkadaNagesha <sudeep.karkadanagesha@arm.com>
++Sumit Garg <sumit.garg@kernel.org> <sumit.garg@linaro.org>
+ Sumit Semwal <sumit.semwal@ti.com>
+ Surabhi Vishnoi <quic_svishnoi@quicinc.com> <svishnoi@codeaurora.org>
+ Sven Eckelmann <sven@narfation.org> <seckelmann@datto.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1b0cc181db74..616f859c5f92 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12861,7 +12861,7 @@ F:	include/keys/trusted_dcp.h
+ F:	security/keys/trusted-keys/trusted_dcp.c
+ 
+ KEYS-TRUSTED-TEE
+-M:	Sumit Garg <sumit.garg@linaro.org>
++M:	Sumit Garg <sumit.garg@kernel.org>
+ L:	linux-integrity@vger.kernel.org
+ L:	keyrings@vger.kernel.org
+ S:	Supported
+@@ -17661,7 +17661,7 @@ F:	Documentation/ABI/testing/sysfs-bus-optee-devices
+ F:	drivers/tee/optee/
+ 
+ OP-TEE RANDOM NUMBER GENERATOR (RNG) DRIVER
+-M:	Sumit Garg <sumit.garg@linaro.org>
++M:	Sumit Garg <sumit.garg@kernel.org>
+ L:	op-tee@lists.trustedfirmware.org
+ S:	Maintained
+ F:	drivers/char/hw_random/optee-rng.c
+@@ -23272,7 +23272,7 @@ F:	include/media/i2c/tw9910.h
+ 
+ TEE SUBSYSTEM
+ M:	Jens Wiklander <jens.wiklander@linaro.org>
+-R:	Sumit Garg <sumit.garg@linaro.org>
++R:	Sumit Garg <sumit.garg@kernel.org>
+ L:	op-tee@lists.trustedfirmware.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-class-tee
+-- 
+2.43.0
 
-> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-> index 139556b21cc6..8d9209dfc384 100644
-> --- a/drivers/char/tpm/tpm_ftpm_tee.c
-> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
-> @@ -362,7 +362,7 @@ MODULE_DEVICE_TABLE(of, of_ftpm_tee_ids);
->  static struct platform_driver ftpm_tee_plat_driver = {
->  	.driver = {
->  		.name = "ftpm-tee",
-> -		.of_match_table = of_match_ptr(of_ftpm_tee_ids),
-> +		.of_match_table = of_ftpm_tee_ids,
->  	},
->  	.shutdown = ftpm_plat_tee_shutdown,
->  	.probe = ftpm_plat_tee_probe,
-> -- 
-> 2.39.5
-> 
-> 
 
