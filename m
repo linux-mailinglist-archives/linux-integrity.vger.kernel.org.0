@@ -1,153 +1,135 @@
-Return-Path: <linux-integrity+bounces-5009-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5010-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF93A48B6D
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2025 23:24:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3B7DA490B3
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Feb 2025 06:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0192188A081
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Feb 2025 22:25:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D90AD3A9D23
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Feb 2025 05:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9788274267;
-	Thu, 27 Feb 2025 22:22:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E488A1BBBEB;
+	Fri, 28 Feb 2025 05:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="On8udIuW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HGNjYhP4"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D954B272903
-	for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2025 22:22:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0DB1BBBD7
+	for <linux-integrity@vger.kernel.org>; Fri, 28 Feb 2025 05:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740694955; cv=none; b=Y2D3YFVt1ROZ3vD0MKVED/rwM//LFeGUYbT3nuDrMNGZnfnJ5WShlGposD6pwe3VEfT2JrYbGyrRlyM/skTbxTfXsLxewPpJaO+1G5Vnrd3CJOggYJGTO2f/2zwOTXPk0hwQQgss7nxohlzzlzI0/baX8P6ZmvtIqh54a1iDpHw=
+	t=1740719016; cv=none; b=XSmCfORpu/bfHN3lCMmdC8ICP5F4aLEsyvZ3W+TDP9gt939FjoK4DjEa89AZ8YzVzQCbi5WgyCuMRA1z5nv0p0BHm6girH9cCMXQ30PE2+deDU2vJrrx1WwJkZsUZK13CJVzWbNzYiE8am0pjTuw3ACQk2ln5/3wy9gfC/j+BOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740694955; c=relaxed/simple;
-	bh=Le3t4kyiotBAGEeTNlkwGJJUb6SlwUJPq/9Ayw35DTE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GLSabvQDoUD0TB5tPoouEiVkEsD6SA8tWWm3fYPLx8pQsSTp0yji0fmHQA30Ia5I+vY65FK0QCnO7ufUCETI9RzysXK2+hkVNsSc8o082xA5TQuqUqVaqoswhOodhYoIUEJAUCMaGNZ15aNpi5yRzOlNfQSADrimjt+QNhAKVxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=On8udIuW; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6f88509dad2so14725027b3.3
-        for <linux-integrity@vger.kernel.org>; Thu, 27 Feb 2025 14:22:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1740694953; x=1741299753; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ScakE+ivXVszoVLy+xVwqAkmsKVwP1/+ubR/2bsYhJk=;
-        b=On8udIuWbca6dQrFAq6FYI9z1Rs+p3fyKu5wcC7uJ6XcJyM4o6VP2km9c3pkTD3cTP
-         722I+VKEQtfPHd1MJlkEPa+4iJ4c0JbrMEa5f7ojlzB/DAotMlRJ5J+atJZCPqyx5ACM
-         /pVS6qXjVHQ8IOuNEmA75zGVS6hD1Qy80pxvKkTquK1q7mtOXo/5BIJVD2xkY78i5gDr
-         8MzlxWWjG5q5lDZG5wkL+94XpEhKVh++Lx2j31iAg934zMXNXwQEJOl7WVyERRfbRXov
-         I5G+NURaWU0MHbRFlzheUtF+iZGWOrOJlpoXhuMlE7HAJusnJUeS+pCEiXWkngqyTza/
-         TyEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740694953; x=1741299753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ScakE+ivXVszoVLy+xVwqAkmsKVwP1/+ubR/2bsYhJk=;
-        b=Gih4Trz9sTtqA7CLpXE8mo7/I59MYqGToghBNhlDY96faejtJb2EdO5slENqpZnUgI
-         Q69pZ9/ruy3e20OXMVhx/Sy6QGgZG6DAdgUrxKsSYOBbu4laUa2y+FhOdmYEIOVR+aPQ
-         81uRdtVpvg6bFvGg0aT63GecCS40mJC8OTlwLo0XaFPIXURGtKPIWOH1DpXkkLlSKJcU
-         NZDtulgMiW54nAuNxxVCYlI0CFn3jyMXUT2HqHlDGHUsLs/6Ldzf6uxSJs5qnmKNhEsX
-         8b53VGKZwll+cbZyMLeqthwnCqDfwb2QkwSfR+s1JatPxCfqW4VHzPxaFfbDqvUeDlNX
-         OD7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUXz3M9YSJYhCIMgTRF8ucO7LXiK5fcoPRnGScoxEG0iaOeknJSfzhCFvoQF0ikB58x2TDxUZ3VLofvgeGPZWw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzazF7k9L/Pso2AjJ/NBLOK2cg2dV462yvYRYZ4jvZlyNkvqbmu
-	aLeufspMUbas20bihQOtzalnP95FcnsevkjsJFGq5yycVu/NkARt4XiHHA5ZnLyzJ34a1S2CrTN
-	jfrCi3p5xh1LjJDv69cdvwdZ4Vf7XpelEdN6G
-X-Gm-Gg: ASbGncvhLdVX/G0TN/5EGltKzUjtU1FlePN0dUFRtnBatjflUaDpFo2rcXTqDy2ZA77
-	6HNmajRn1fMr4KO+0tbd/F4zGFO08A1lZP+75AJg71zxehEGYt5Y3tFrr/C0MK9PDJQQWUApoI5
-	FepiR+R6E=
-X-Google-Smtp-Source: AGHT+IGKPvb6uJOvINeQsM+iSOmGVr/Q+rN9nHiUXllkoj79N4+6rGnhZ88M/fTJmoa1TMKM7/1/9ZyZ0+zbdTUHg4o=
-X-Received: by 2002:a05:690c:4b8c:b0:6fd:3f9e:b7d6 with SMTP id
- 00721157ae682-6fd4a074751mr20138727b3.19.1740694952817; Thu, 27 Feb 2025
- 14:22:32 -0800 (PST)
+	s=arc-20240116; t=1740719016; c=relaxed/simple;
+	bh=4qgnoU2IzYG+runO5deGQ34JtoBImTWSSSAIltL6Cds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UTYwm/5Ygxqxdac7uGDVtdRaeuoLmizNAMqcg6f1w220qdDXXHvFdIFDBpq1zimQaS4DveikKMJ/q9hgRkjWUSHwNM4Jph4ekQp3QCI1/QCCqs+gAOdnlRBsxZvHyXmi8tqHfddGJhoywXxdyISwv7gNcBfq2Asc6N+OQt1aEjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HGNjYhP4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740719014;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9rWEuJNQK68ECdNdbzEIN/CxByzhoyQY+jPP6y/Lhd0=;
+	b=HGNjYhP4K+LntEnmtMdsjhMS8LjDpGNH0fV+jXLm9vJiOTpOwyAAkTj6u+8yx3e64BHMvc
+	cclAJJBgp7tsD8aywSzA7c1eDTWNzwEUdsdeIMrZWcaQwZlIzsLRfIOKURW0hrQgJllEBK
+	5AiMyysHhxAI3YtPjKOBBZmCXPYXMbg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-470-tLxX70tNO6O3fin0MZsonQ-1; Fri,
+ 28 Feb 2025 00:03:29 -0500
+X-MC-Unique: tLxX70tNO6O3fin0MZsonQ-1
+X-Mimecast-MFC-AGG-ID: tLxX70tNO6O3fin0MZsonQ_1740719006
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF7A21800876;
+	Fri, 28 Feb 2025 05:03:25 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.52])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3D92E19560B9;
+	Fri, 28 Feb 2025 05:03:22 +0000 (UTC)
+Date: Fri, 28 Feb 2025 13:03:18 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
+	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+	eric.snowberg@oracle.com, ebiederm@xmission.com,
+	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
+	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
+	dyoung@redhat.com, Mike Rapoport <mike.rapoport@gmail.com>
+Subject: Re: [PATCH v8 2/7] kexec: define functions to map and unmap segments
+Message-ID: <Z8FDlp8QvnSR58Vd@MiWiFi-R3L-srv>
+References: <20250218225502.747963-1-chenste@linux.microsoft.com>
+ <20250218225502.747963-3-chenste@linux.microsoft.com>
+ <Z7wOPiDfy/vtrkCS@MiWiFi-R3L-srv>
+ <55acf768b52b47dd9d33fa0486772d8c7ae38779.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
- <c490397315c2704e9ef65c8ad3fefedb239f1997.camel@linux.ibm.com>
- <72F52F71-C7F3-402D-8441-3D636A093FE8@oracle.com> <CAHC9VhRHEw5c+drC=aX4xTqWoQJJZ+qkJ7aHUT5dcu+Q5f7BqA@mail.gmail.com>
- <CAHC9VhSJpnaAK1efgs1Uk0Tr3CaDNR1LiDU-t_yDKDQG6J-74Q@mail.gmail.com>
- <E20C617B-EA01-4E69-B5E2-31E9AAD6F7A2@oracle.com> <506e8e58e5236a4525b18d84bafa9aae80b24452.camel@linux.ibm.com>
-In-Reply-To: <506e8e58e5236a4525b18d84bafa9aae80b24452.camel@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 27 Feb 2025 17:22:22 -0500
-X-Gm-Features: AQ5f1JpGHD9sDTEfCNGPaQVwEKRNBeWrx8Lfv7PT8-K9hixoVfU0bPOCCzjhhe8
-Message-ID: <CAHC9VhTsZntLdGBV7=4suauS+rzSQv1O4UAoGcy2vEB02wRkoA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 00/13] Clavis LSM
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Eric Snowberg <eric.snowberg@oracle.com>, David Howells <dhowells@redhat.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, 
-	David Woodhouse <dwmw2@infradead.org>, 
-	"herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>, "davem@davemloft.net" <davem@davemloft.net>, 
-	Ard Biesheuvel <ardb@kernel.org>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	"casey@schaufler-ca.com" <casey@schaufler-ca.com>, Stefan Berger <stefanb@linux.ibm.com>, 
-	"ebiggers@kernel.org" <ebiggers@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
-	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>, 
-	"linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>, 
-	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <55acf768b52b47dd9d33fa0486772d8c7ae38779.camel@linux.ibm.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-On Thu, Feb 27, 2025 at 3:41=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Mon, 2025-01-06 at 17:15 +0000, Eric Snowberg wrote:
-> > > On Jan 5, 2025, at 8:40=E2=80=AFPM, Paul Moore <paul@paul-moore.com> =
-wrote:
-> > > On Fri, Jan 3, 2025 at 11:48=E2=80=AFPM Paul Moore <paul@paul-moore.c=
-om> wrote:
-> > > >
-> > > > Regardless, back to Clavis ... reading quickly through the cover
-> > > > letter again, I do somewhat wonder if this isn't better integrated
-> > > > into the keyring proper; have you talked to both David and Jarkko
-> > > > about this?
-> > >
-> > > I realize I should probably expand on my thinking a bit, especially
-> > > since my comment a while regarding LSMs dedicated to enforcing access
-> > > control on keys is what was given as a reason for making Clavis a LSM=
-.
-> > >
-> > > I still stand by my comment from over a year ago that I see no reason
-> > > why we couldn't support a LSM that enforces access controls on
-> > > keyrings/keys.  What gives me pause with the Clavis LSM is that so
-> > > much of Clavis is resident in the keyrings themselves, e.g. Clavis
-> > > policy ACLs and authorization keys, that it really feels like it
-> > > should be part of the keys subsystem and not a LSM.  Yes, existing
-> > > LSMs do have LSM specific data that resides outside of the LSM and in
-> > > an object's subsystem, but that is usually limited to security
-> > > identifiers and similar things, not the LSM's security policy.
->
-> Hi Jarkko, David,
->
-> Both Paul's and my main concerns with this patch set is storing policy in=
- the
-> keyring.  We would appreciate your chiming in here about storing key poli=
-cy in
-> the keyring itself.
+On 02/27/25 at 10:41am, Mimi Zohar wrote:
+> [Cc'ing Mike Rapoport]
+> 
+> On Mon, 2025-02-24 at 14:14 +0800, Baoquan He wrote:
+> > Hi Steve, Mimi,
+> > 
+> > On 02/18/25 at 02:54pm, steven chen wrote:
+> > > Currently, the mechanism to map and unmap segments to the kimage
+> > > structure is not available to the subsystems outside of kexec.  This
+> > > functionality is needed when IMA is allocating the memory segments
+> > > during kexec 'load' operation.  Implement functions to map and unmap
+> > > segments to kimage.
+> > 
+> > I am done with the whole patchset understanding. My concern is if this
+> > TPM PCRs content can be carried over through newly introduced KHO. I can
+> > see that these patchset doesn't introduce too much new code changes,
+> > while if many conponents need do this, kexec reboot will be patched all
+> > over its body and become ugly and hard to maintain.
+> > 
+> > Please check Mike Rapoport's v4 patchset to see if IMA can register
+> > itself to KHO and do somthing during 2nd kernel init to restore those
+> > TPM PCRs content to make sure all measurement logs are read correctly.
+> > [PATCH v4 00/14] kexec: introduce Kexec HandOver (KHO)
+> 
+> Hi Baoquan,
+> 
+> I was hoping to look at Mike's patch set before responding, but perhaps it is
+> better to respond earlier rather than later with my initial thoughts.
+> 
+> The IMA measurement list isn't stored in contiguous memory, but has to be
+> marshalled before being carried across kexec, and then unmarshalled to restore
+> it after the kexec.  Roberto Sassu has been thinking about changing how the IMA
+> measurement list is stored so marshalling/unmarshalling wouldn't be necessary. 
+> Making both this change and using KHO going forward would be a good idea.
+> 
+> However, that sort of change wouldn't be appropriate to backport.  So the
+> question comes down to whether being unable to attest the measurement list,
+> because the measurements are copied too early at kexec load, but the TPM is
+> being extended through kexec exec, is considered a bug.  If that is the case,
+> then I suggest finish cleaning up and upstreaming this patch set so that it
+> could be backported.
 
-I'd still also like to see some discussion about moving towards the
-addition of keyrings oriented towards usage instead of limiting
-ourselves to keyrings that are oriented on the source of the keys.
-Perhaps I'm missing some important detail which makes this
-impractical, but it seems like an obvious improvement to me and would
-go a long way towards solving some of the problems that we typically
-see with kernel keys.
+Ah, I understand your concern. There are stable kernels or distros
+kernels which need be taken care of. If then, we can continue to work on
+polishing this patchset, as you have pointed out, there are still room
+in this patchset to improve before merging.
 
---=20
-paul-moore.com
 
