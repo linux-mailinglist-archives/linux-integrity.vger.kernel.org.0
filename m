@@ -1,135 +1,214 @@
-Return-Path: <linux-integrity+bounces-5010-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5011-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B7DA490B3
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Feb 2025 06:03:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC40AA49B7F
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Feb 2025 15:11:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D90AD3A9D23
-	for <lists+linux-integrity@lfdr.de>; Fri, 28 Feb 2025 05:03:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 768A61752EB
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Feb 2025 14:11:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E488A1BBBEB;
-	Fri, 28 Feb 2025 05:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9916A26E652;
+	Fri, 28 Feb 2025 14:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HGNjYhP4"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RqFyqPgU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0DB1BBBD7
-	for <linux-integrity@vger.kernel.org>; Fri, 28 Feb 2025 05:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B506426E174;
+	Fri, 28 Feb 2025 14:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740719016; cv=none; b=XSmCfORpu/bfHN3lCMmdC8ICP5F4aLEsyvZ3W+TDP9gt939FjoK4DjEa89AZ8YzVzQCbi5WgyCuMRA1z5nv0p0BHm6girH9cCMXQ30PE2+deDU2vJrrx1WwJkZsUZK13CJVzWbNzYiE8am0pjTuw3ACQk2ln5/3wy9gfC/j+BOM=
+	t=1740751777; cv=none; b=RcF9fi6mgD8bXQQTnAmLb4LNmdHlEJ/uSHx6168Bks/Opql3j+QqvxLv56tPJQyGFIV4C/q7ArNU3tFdj+B83pHm/PWtMg5+ttRXqUAiA1vl+xd73+vajTyObAURGfa8gHO0EUtxeD3V5+t/ky8F3kMRFp6B3A8Um+h+ccrXRqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740719016; c=relaxed/simple;
-	bh=4qgnoU2IzYG+runO5deGQ34JtoBImTWSSSAIltL6Cds=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UTYwm/5Ygxqxdac7uGDVtdRaeuoLmizNAMqcg6f1w220qdDXXHvFdIFDBpq1zimQaS4DveikKMJ/q9hgRkjWUSHwNM4Jph4ekQp3QCI1/QCCqs+gAOdnlRBsxZvHyXmi8tqHfddGJhoywXxdyISwv7gNcBfq2Asc6N+OQt1aEjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HGNjYhP4; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740719014;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9rWEuJNQK68ECdNdbzEIN/CxByzhoyQY+jPP6y/Lhd0=;
-	b=HGNjYhP4K+LntEnmtMdsjhMS8LjDpGNH0fV+jXLm9vJiOTpOwyAAkTj6u+8yx3e64BHMvc
-	cclAJJBgp7tsD8aywSzA7c1eDTWNzwEUdsdeIMrZWcaQwZlIzsLRfIOKURW0hrQgJllEBK
-	5AiMyysHhxAI3YtPjKOBBZmCXPYXMbg=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-470-tLxX70tNO6O3fin0MZsonQ-1; Fri,
- 28 Feb 2025 00:03:29 -0500
-X-MC-Unique: tLxX70tNO6O3fin0MZsonQ-1
-X-Mimecast-MFC-AGG-ID: tLxX70tNO6O3fin0MZsonQ_1740719006
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF7A21800876;
-	Fri, 28 Feb 2025 05:03:25 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.52])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3D92E19560B9;
-	Fri, 28 Feb 2025 05:03:22 +0000 (UTC)
-Date: Fri, 28 Feb 2025 13:03:18 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
-	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-	eric.snowberg@oracle.com, ebiederm@xmission.com,
-	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
-	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
-	dyoung@redhat.com, Mike Rapoport <mike.rapoport@gmail.com>
-Subject: Re: [PATCH v8 2/7] kexec: define functions to map and unmap segments
-Message-ID: <Z8FDlp8QvnSR58Vd@MiWiFi-R3L-srv>
-References: <20250218225502.747963-1-chenste@linux.microsoft.com>
- <20250218225502.747963-3-chenste@linux.microsoft.com>
- <Z7wOPiDfy/vtrkCS@MiWiFi-R3L-srv>
- <55acf768b52b47dd9d33fa0486772d8c7ae38779.camel@linux.ibm.com>
+	s=arc-20240116; t=1740751777; c=relaxed/simple;
+	bh=qwiwX7ilQe4AxIwbOiZQdwGCH/mPZg+/LA5+GbPnb5U=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 MIME-Version:Date; b=VouxBkWoXTIaJ01NzGtUrbr7b3qNFeS3d5UikIffsYEaF9H0/yOf7uHEQe2TENHUOZsScAC1M1VcEbFwV11QXyJrOLqB9We3Z1lfmrDOaIXoMfVEpQMSVoepibXKjeDRFQggtwpInw2ttdNPUr7cKZRfZgFs27LRwldxCFSukSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RqFyqPgU; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51S6PdnB031358;
+	Fri, 28 Feb 2025 14:09:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ZlHYAH
+	d+v8kB7zXgWIauJWsRMxKuy43e8Nv9TXFnhUM=; b=RqFyqPgUfhgKOXFJ0rsDX4
+	p/NdL5k3rUXrWw2VgUmuMAr0IqF9jU/mXxvUcNw8baXqrxqHDbKq01WK8Zd/hjhc
+	LOlhaC2zZkLUUxJC2qTiLpIjWmAKLB5xxdUrdtLVF0MxH8eT4UYpo6/Jwcvz15NT
+	BQvT4yX2wIh0NH/E0D+k3951W1+j/18BlRUuSyZJtpD/Tq5fN/sk9UFlllviIv7r
+	OYBqX1+U7ZszZa3krlqdtRvKtfkU1p7EFkFQ1DtHbxLf9VVQtjzdBCRr4sIe4xAw
+	ly4eyTRb4gQP+O33cUeohn6ikqw3eC2vv9f9EbuCvLDom3dxRuF4/eyTwj0DmOaA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4537v6j1xd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Feb 2025 14:09:04 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 51SDxGMS020959;
+	Fri, 28 Feb 2025 14:09:04 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4537v6j1xa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Feb 2025 14:09:03 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51SDiGDU026269;
+	Fri, 28 Feb 2025 14:09:03 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44yswnxsuq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Feb 2025 14:09:03 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51SE92Uv25231764
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 28 Feb 2025 14:09:02 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6315D5806A;
+	Fri, 28 Feb 2025 14:09:02 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1F77558061;
+	Fri, 28 Feb 2025 14:09:01 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.61.143])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 28 Feb 2025 14:09:01 +0000 (GMT)
+Message-ID: <c580811716f550ed5d6777db5e143afe4ad06edc.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v3 00/13] Clavis LSM
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Eric Snowberg <eric.snowberg@oracle.com>,
+        David Howells
+ <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "open
+ list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+        David
+ Woodhouse <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au"
+ <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>, James Morris <jmorris@namei.org>,
+        "Serge
+ E. Hallyn" <serge@hallyn.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
+        Stefan Berger
+ <stefanb@linux.ibm.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        Randy
+ Dunlap <rdunlap@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+In-Reply-To: <CAHC9VhTsZntLdGBV7=4suauS+rzSQv1O4UAoGcy2vEB02wRkoA@mail.gmail.com>
+References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
+	 <c490397315c2704e9ef65c8ad3fefedb239f1997.camel@linux.ibm.com>
+	 <72F52F71-C7F3-402D-8441-3D636A093FE8@oracle.com>
+	 <CAHC9VhRHEw5c+drC=aX4xTqWoQJJZ+qkJ7aHUT5dcu+Q5f7BqA@mail.gmail.com>
+	 <CAHC9VhSJpnaAK1efgs1Uk0Tr3CaDNR1LiDU-t_yDKDQG6J-74Q@mail.gmail.com>
+	 <E20C617B-EA01-4E69-B5E2-31E9AAD6F7A2@oracle.com>
+	 <506e8e58e5236a4525b18d84bafa9aae80b24452.camel@linux.ibm.com>
+	 <CAHC9VhTsZntLdGBV7=4suauS+rzSQv1O4UAoGcy2vEB02wRkoA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55acf768b52b47dd9d33fa0486772d8c7ae38779.camel@linux.ibm.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Date: Fri, 28 Feb 2025 09:08:33 -0500
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: AeDZ_ey0lISVUY625VsQIU2sGo9yqqm5
+X-Proofpoint-GUID: ZodbjM8bn3G8bxv9jpetEvBt5Lej-tp7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-28_03,2025-02-27_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=870 mlxscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502280102
 
-On 02/27/25 at 10:41am, Mimi Zohar wrote:
-> [Cc'ing Mike Rapoport]
-> 
-> On Mon, 2025-02-24 at 14:14 +0800, Baoquan He wrote:
-> > Hi Steve, Mimi,
-> > 
-> > On 02/18/25 at 02:54pm, steven chen wrote:
-> > > Currently, the mechanism to map and unmap segments to the kimage
-> > > structure is not available to the subsystems outside of kexec.  This
-> > > functionality is needed when IMA is allocating the memory segments
-> > > during kexec 'load' operation.  Implement functions to map and unmap
-> > > segments to kimage.
-> > 
-> > I am done with the whole patchset understanding. My concern is if this
-> > TPM PCRs content can be carried over through newly introduced KHO. I can
-> > see that these patchset doesn't introduce too much new code changes,
-> > while if many conponents need do this, kexec reboot will be patched all
-> > over its body and become ugly and hard to maintain.
-> > 
-> > Please check Mike Rapoport's v4 patchset to see if IMA can register
-> > itself to KHO and do somthing during 2nd kernel init to restore those
-> > TPM PCRs content to make sure all measurement logs are read correctly.
-> > [PATCH v4 00/14] kexec: introduce Kexec HandOver (KHO)
-> 
-> Hi Baoquan,
-> 
-> I was hoping to look at Mike's patch set before responding, but perhaps it is
-> better to respond earlier rather than later with my initial thoughts.
-> 
-> The IMA measurement list isn't stored in contiguous memory, but has to be
-> marshalled before being carried across kexec, and then unmarshalled to restore
-> it after the kexec.  Roberto Sassu has been thinking about changing how the IMA
-> measurement list is stored so marshalling/unmarshalling wouldn't be necessary. 
-> Making both this change and using KHO going forward would be a good idea.
-> 
-> However, that sort of change wouldn't be appropriate to backport.  So the
-> question comes down to whether being unable to attest the measurement list,
-> because the measurements are copied too early at kexec load, but the TPM is
-> being extended through kexec exec, is considered a bug.  If that is the case,
-> then I suggest finish cleaning up and upstreaming this patch set so that it
-> could be backported.
+On Thu, 2025-02-27 at 17:22 -0500, Paul Moore wrote:
+> On Thu, Feb 27, 2025 at 3:41=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> =
+wrote:
+> > On Mon, 2025-01-06 at 17:15 +0000, Eric Snowberg wrote:
+> > > > On Jan 5, 2025, at 8:40=E2=80=AFPM, Paul Moore <paul@paul-moore.com=
+> wrote:
+> > > > On Fri, Jan 3, 2025 at 11:48=E2=80=AFPM Paul Moore <paul@paul-moore=
+.com> wrote:
+> > > > >=20
+> > > > > Regardless, back to Clavis ... reading quickly through the cover
+> > > > > letter again, I do somewhat wonder if this isn't better integrate=
+d
+> > > > > into the keyring proper; have you talked to both David and Jarkko
+> > > > > about this?
+> > > >=20
+> > > > I realize I should probably expand on my thinking a bit, especially
+> > > > since my comment a while regarding LSMs dedicated to enforcing acce=
+ss
+> > > > control on keys is what was given as a reason for making Clavis a L=
+SM.
+> > > >=20
+> > > > I still stand by my comment from over a year ago that I see no reas=
+on
+> > > > why we couldn't support a LSM that enforces access controls on
+> > > > keyrings/keys.  What gives me pause with the Clavis LSM is that so
+> > > > much of Clavis is resident in the keyrings themselves, e.g. Clavis
+> > > > policy ACLs and authorization keys, that it really feels like it
+> > > > should be part of the keys subsystem and not a LSM.  Yes, existing
+> > > > LSMs do have LSM specific data that resides outside of the LSM and =
+in
+> > > > an object's subsystem, but that is usually limited to security
+> > > > identifiers and similar things, not the LSM's security policy.
+> >=20
+> > Hi Jarkko, David,
+> >=20
+> > Both Paul's and my main concerns with this patch set is storing policy =
+in the
+> > keyring.  We would appreciate your chiming in here about storing key po=
+licy in
+> > the keyring itself.
+>=20
+> I'd still also like to see some discussion about moving towards the
+> addition of keyrings oriented towards usage instead of limiting
+> ourselves to keyrings that are oriented on the source of the keys.
+> Perhaps I'm missing some important detail which makes this
+> impractical, but it seems like an obvious improvement to me and would
+> go a long way towards solving some of the problems that we typically
+> see with kernel keys.
 
-Ah, I understand your concern. There are stable kernels or distros
-kernels which need be taken care of. If then, we can continue to work on
-polishing this patchset, as you have pointed out, there are still room
-in this patchset to improve before merging.
+The proliferation of keyrings won't solve the key usage problem for IMA-
+appraisal.  IMA-appraisal can be used to verify the kexec image, kernel mod=
+ules,
+firwmare, etc, but it also verifies file signatures contained in userspace
+packages.  To support the latter case, keyrings would need to be applicatio=
+n
+specific.  (This version of Clavis doesn't solve the latter key usage for I=
+MA-
+appraisal either.)
 
+The keys baked into the kernel are trusted because the kernel itself was si=
+gned
+and verified (secure boot).  Anyone building a kernel can build a key into =
+the
+kernel image, which establishes a "root of trust".  That key can then be us=
+ed to
+verify and load other keys onto the IMA keyring.
+
+The problem is how to safely establish a root of trust without baking the k=
+ey
+into the kernel image and then limiting that trust to specific usages or
+applications.
+
+Mimi
 
