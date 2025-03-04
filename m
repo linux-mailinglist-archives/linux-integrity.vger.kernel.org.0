@@ -1,204 +1,127 @@
-Return-Path: <linux-integrity+bounces-5085-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5086-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9955AA4F024
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 23:23:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13798A4F042
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 23:25:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5BBE7A90C9
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 22:22:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6676E3A4654
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 22:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0AFD25D523;
-	Tue,  4 Mar 2025 22:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71B8427810B;
+	Tue,  4 Mar 2025 22:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QXlroVFN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0WFhpkn"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7499B3597E;
-	Tue,  4 Mar 2025 22:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352191F03D7;
+	Tue,  4 Mar 2025 22:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741126987; cv=none; b=YvNnIoaI+gxJOECno4Axw3KNSqkLOgzgD3TsgL3hr4199tCiSYlx+pRF/CIHlUrWziDy/cj+6JFlJrwQ4aGRGE/4ExT8bWhZ7qrOKhVlHCXmOTAJZOhW1QUb47RZC/GWh1jP13VhQGXVFQ5/KDkygG/+k13/kW75/F1HSvtHpi8=
+	t=1741127103; cv=none; b=rc4zDm9ryxccmXJvsIrLT5cS/X4le5aCFlqGQKaD/L8ZlgZsxVSPhQPSu2hy8ACWv7EQGjQktIzmlVYExQmC/qGBe6yaP/V/DkHnWfzKNDcgJwzc+0XFBEvQNztWC4qM+nbwHaKzdadNn3nmuaOo9FwHzzrN7KaKpa2lJbo501U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741126987; c=relaxed/simple;
-	bh=EDaTlL8s7EFTKV867gVON4AEWAHqBXSc9SoE/eEN/qU=;
+	s=arc-20240116; t=1741127103; c=relaxed/simple;
+	bh=0+/9utZ9Ftp9xnO55BpJlM6f0mOe8fIs9GJvBVmZITk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KKX0thEYP7kWKhiO+dL3bwuYzlsDmyWqtF/HEgBfhUz9TIxoRg7EiItteTfhDOD/GP2eReaBDb2x3QfmWILO9w+DtlEo00TQau/3Sacfk81fJ5pjfZxSjTyhUhSJC/jgXxjm+m8VkOjLi2aDduvONYpcYxlL8kUTvBkaXK9nxr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QXlroVFN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B86B7C4CEE5;
-	Tue,  4 Mar 2025 22:23:06 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AegxbHOszA5k06k723MxcsNidFbLSkTcyPKLdhvxbvqQDk2GctRl0nyrtp+WX0MJt84GHJEWMlyrJWqBOVKqJ0Sh96PNz+2L+LdU2C0Aka69zAWvc/isqI7LVl/Ia1rGJUksHKDxLT9zjsKOKxRsdnl7NMwtbV8kjJcnJnyWeoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0WFhpkn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2EFC4CEE5;
+	Tue,  4 Mar 2025 22:25:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741126987;
-	bh=EDaTlL8s7EFTKV867gVON4AEWAHqBXSc9SoE/eEN/qU=;
+	s=k20201202; t=1741127102;
+	bh=0+/9utZ9Ftp9xnO55BpJlM6f0mOe8fIs9GJvBVmZITk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QXlroVFNmbNpIfl+8c8IoweltYy9n1VHi8GYmTF3jMAjnINtqhc/TBQwWJCOHwj5q
-	 TZb5JTA4lXEYIUO9bVrLimmEN7vbT0T5nfXxb9hQb9tEi0mAwBlgIUYs2yLXWvcmf7
-	 C65ZP+HV3CQCW/CZAyeopoFnAbk84kqgJKU+PU4IJFTYc06oOocfGSr1AounpZ6tlW
-	 eHROW6ZlbxDOhsPL7tV/PwSKu5Y13b+QNuDMBNzARuSXo6HrOCM8F0ZJ7VkIAkhk09
-	 2tj1exuNOTBxF6p6GDNwxPA2ShDRQfndbGom1nCDpSpPnYNjjvJWir37zXTXem/bG0
-	 SmGzVBGlTbQrw==
-Date: Wed, 5 Mar 2025 00:23:02 +0200
+	b=Y0WFhpknFwe00UPXpOJYc/hs7CmG0pQXTXXpLKYxAe3NhDpNbWU9mKpO6aKD/vmIr
+	 KbBPUSgUayaNkK5jIEfWx22v4wwNfz1yhPY422ZfN+WfJHGyc5Z/uy0DCwOyLTzQIj
+	 +pfeK8SVY0SDSYCNXDxyga2WqrNyWsmCI0Q2PVGOO+9C424j1HSRoSw1qeTPCgxpne
+	 xI85EmF39tWrVpqTepxyQGCzlar3aS2yiqC/tqu6Abuq923ZoOsuz+SKiHznVDd5ej
+	 BW/aRZ4wO6sFWsTr+5vOkuoquA6rlzYX22yV/eDzXNNMrQZNySVlqUvgKMBheyCZSy
+	 m731TrXzhW6sw==
+Date: Wed, 5 Mar 2025 00:24:58 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: steven chen <chenste@linux.microsoft.com>
-Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
-	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-	eric.snowberg@oracle.com, ebiederm@xmission.com,
-	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
-	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-	James.Bottomley@hansenpartnership.com, bhe@redhat.com,
-	vgoyal@redhat.com, dyoung@redhat.com
-Subject: Re: [PATCH v9 2/7] kexec: define functions to map and unmap segments
-Message-ID: <Z8d9RvRWPOADOgsx@kernel.org>
-References: <20250304190351.96975-1-chenste@linux.microsoft.com>
- <20250304190351.96975-3-chenste@linux.microsoft.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Eric Snowberg <eric.snowberg@oracle.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	Ard Biesheuvel <ardb@kernel.org>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	"casey@schaufler-ca.com" <casey@schaufler-ca.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	"ebiggers@kernel.org" <ebiggers@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: Re: [RFC PATCH v3 00/13] Clavis LSM
+Message-ID: <Z8d9ulOirAeHmFJV@kernel.org>
+References: <72F52F71-C7F3-402D-8441-3D636A093FE8@oracle.com>
+ <CAHC9VhRHEw5c+drC=aX4xTqWoQJJZ+qkJ7aHUT5dcu+Q5f7BqA@mail.gmail.com>
+ <CAHC9VhSJpnaAK1efgs1Uk0Tr3CaDNR1LiDU-t_yDKDQG6J-74Q@mail.gmail.com>
+ <E20C617B-EA01-4E69-B5E2-31E9AAD6F7A2@oracle.com>
+ <506e8e58e5236a4525b18d84bafa9aae80b24452.camel@linux.ibm.com>
+ <CAHC9VhTsZntLdGBV7=4suauS+rzSQv1O4UAoGcy2vEB02wRkoA@mail.gmail.com>
+ <c580811716f550ed5d6777db5e143afe4ad06edc.camel@linux.ibm.com>
+ <CAHC9VhTz6U5rRdbJBWq0_U4BSKTsiGCsaX=LTgisNNoZXZokOA@mail.gmail.com>
+ <FD501FB8-72D2-4B10-A03A-F52FC5B67646@oracle.com>
+ <CAHC9VhR961uTFueovLXXaOf-3ZAnvQCWOTfw-wCRuAKOKPAOKw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250304190351.96975-3-chenste@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhR961uTFueovLXXaOf-3ZAnvQCWOTfw-wCRuAKOKPAOKw@mail.gmail.com>
 
-On Tue, Mar 04, 2025 at 11:03:46AM -0800, steven chen wrote:
-> The content of memory segments carried over to the new kernel during the 
-> kexec systemcall can be changed at kexec 'execute' stage, but the size of
-> the memory segments cannot be changed at kexec 'execute' stage.
+On Mon, Mar 03, 2025 at 05:40:54PM -0500, Paul Moore wrote:
+> On Fri, Feb 28, 2025 at 12:52 PM Eric Snowberg <eric.snowberg@oracle.com> wrote:
+> > > On Feb 28, 2025, at 9:14 AM, Paul Moore <paul@paul-moore.com> wrote:
+> > > On Fri, Feb 28, 2025 at 9:09 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > >> On Thu, 2025-02-27 at 17:22 -0500, Paul Moore wrote:
+> > >>>
+> > >>> I'd still also like to see some discussion about moving towards the
+> > >>> addition of keyrings oriented towards usage instead of limiting
+> > >>> ourselves to keyrings that are oriented on the source of the keys.
+> > >>> Perhaps I'm missing some important detail which makes this
+> > >>> impractical, but it seems like an obvious improvement to me and would
+> > >>> go a long way towards solving some of the problems that we typically
+> > >>> see with kernel keys.
+> >
+> > The intent is not to limit ourselves to the source of the key.  The main
+> > point of Clavis is to allow the end-user to determine what kernel keys
+> > they want to trust and for what purpose, irrespective of the originating
+> > source (.builtin_trusted, .secondary, .machine, or .platform). If we could
+> > go back in time, individual keyrings could be created that are oriented
+> > toward usage.   The idea for introducing Clavis is to bridge what we
+> > have today with kernel keys and allow them to be usage based.
 > 
-> To copy IMA measurement logs during the kexec operation, IMA needs to 
-> allocate memory at the kexec 'load' stage and map the segments to the 
-> kimage structure. The mapped address will then be used to copy IMA 
-> measurements during the kexec 'execute' stage.
-> 
-> Currently, the mechanism to map and unmap segments to the kimage 
-> structure is not available to subsystems outside of kexec.
+> While it is unlikely that the current well known keyrings could be
+> removed, I see no reason why new usage oriented keyrings could not be
+> introduced.  We've seen far more significant shifts in the kernel over
+> the years.
 
-How does IMA work with kexec without having this? Just interested
-(and confused). 
+Could we implement such change in a way that these new imaginary
+(at this point) usage oriented keyrings would be used to create
+the "legacy" keyrings?
 
 > 
-> Implement kimage_map_segment() to enable IMA to map measurement log list to 
-> the kimage structure during kexec 'load' stage.  This function takes a kimage 
-> pointer, a memory address, and a size, then gathers the
-> source pages within the specified address range, creates an array of page
-> pointers, and maps these to a contiguous virtual address range.  The
-> function returns the start virtual address of this range if successful, or NULL on
-> failure.
-> 
-> Implement kimage_unmap_segment() for unmapping segments
-> using vunmap().
-> 
-> From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Baoquan He <bhe@redhat.com> 
-> Cc: Vivek Goyal <vgoyal@redhat.com>
-> Cc: Dave Young <dyoung@redhat.com>
-> Signed-off-by: steven chen <chenste@linux.microsoft.com>
-> ---
->  include/linux/kexec.h |  6 +++++
->  kernel/kexec_core.c   | 54 +++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 60 insertions(+)
-> 
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index f0e9f8eda7a3..7d6b12f8b8d0 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -467,13 +467,19 @@ extern bool kexec_file_dbg_print;
->  #define kexec_dprintk(fmt, arg...) \
->          do { if (kexec_file_dbg_print) pr_info(fmt, ##arg); } while (0)
->  
-> +extern void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size);
-> +extern void kimage_unmap_segment(void *buffer);
->  #else /* !CONFIG_KEXEC_CORE */
->  struct pt_regs;
->  struct task_struct;
-> +struct kimage;
->  static inline void __crash_kexec(struct pt_regs *regs) { }
->  static inline void crash_kexec(struct pt_regs *regs) { }
->  static inline int kexec_should_crash(struct task_struct *p) { return 0; }
->  static inline int kexec_crash_loaded(void) { return 0; }
-> +static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
-> +{ return NULL; }
-> +static inline void kimage_unmap_segment(void *buffer) { }
->  #define kexec_in_progress false
->  #endif /* CONFIG_KEXEC_CORE */
->  
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index c0bdc1686154..63e4d16b6023 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -867,6 +867,60 @@ int kimage_load_segment(struct kimage *image,
->  	return result;
->  }
->  
-> +void *kimage_map_segment(struct kimage *image,
-> +			 unsigned long addr, unsigned long size)
-> +{
-> +	unsigned long eaddr = addr + size;
-> +	unsigned long src_page_addr, dest_page_addr;
-> +	unsigned int npages;
-> +	struct page **src_pages;
-> +	int i;
-> +	kimage_entry_t *ptr, entry;
-> +	void *vaddr = NULL;
-> +
-> +	/*
-> +	 * Collect the source pages and map them in a contiguous VA range.
-> +	 */
-> +	npages = PFN_UP(eaddr) - PFN_DOWN(addr);
-> +	src_pages = kmalloc_array(npages, sizeof(*src_pages), GFP_KERNEL);
-> +	if (!src_pages) {
-> +		pr_err("Could not allocate ima pages array.\n");
-> +		return NULL;
-> +	}
-> +
-> +	i = 0;
-> +	for_each_kimage_entry(image, ptr, entry) {
-> +		if (entry & IND_DESTINATION) {
-> +			dest_page_addr = entry & PAGE_MASK;
-> +		} else if (entry & IND_SOURCE) {
-> +			if (dest_page_addr >= addr && dest_page_addr < eaddr) {
-> +				src_page_addr = entry & PAGE_MASK;
-> +				src_pages[i++] =
-> +					virt_to_page(__va(src_page_addr));
-> +				if (i == npages)
-> +					break;
-> +				dest_page_addr += PAGE_SIZE;
-> +			}
-> +		}
-> +	}
-> +
-> +	/* Sanity check. */
-> +	WARN_ON(i < npages);
-> +
-> +	vaddr = vmap(src_pages, npages, VM_MAP, PAGE_KERNEL);
-> +	kfree(src_pages);
-> +
-> +	if (!vaddr)
-> +		pr_err("Could not map ima buffer.\n");
-> +
-> +	return vaddr;
-> +}
-> +
-> +void kimage_unmap_segment(void *segment_buffer)
-> +{
-> +	vunmap(segment_buffer);
-> +}
-> +
->  struct kexec_load_limit {
->  	/* Mutex protects the limit count. */
->  	struct mutex mutex;
 > -- 
-> 2.25.1
-> 
+> paul-moore.com
 > 
 
 BR, Jarkko
