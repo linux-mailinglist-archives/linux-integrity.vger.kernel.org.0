@@ -1,146 +1,121 @@
-Return-Path: <linux-integrity+bounces-5055-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5056-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D835A4D6F0
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 09:49:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC7CBA4DD1D
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 12:56:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BF3616B857
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 08:49:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75FE53A0827
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 11:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 837471FA164;
-	Tue,  4 Mar 2025 08:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A06B9201024;
+	Tue,  4 Mar 2025 11:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QMPnQFIX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CeMc+iC0";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QMPnQFIX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CeMc+iC0"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bqPDeVcg"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0406329A9
-	for <linux-integrity@vger.kernel.org>; Tue,  4 Mar 2025 08:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059B12010F5
+	for <linux-integrity@vger.kernel.org>; Tue,  4 Mar 2025 11:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741078155; cv=none; b=D09KQqdv6D8bKqSGO4ipnJ2Wwk9HIfO2rWeROnN09KLYxmec6pcQWuadA0dFP0e/XXDk37iED9BcJulJqbzm1lPSZU83Dh+D8FuGwY1MTAYhEiinI8zguaGTaoXlfudh57SvZogNZ8GC+QHMPZj7Xex7m/Wvo3vMLnKirmotSxw=
+	t=1741089229; cv=none; b=rJ5HSPiypg+hZHPHUtlniGUkdFy+ys+ehIkglgx/wrD2EpmmYcI45S+BUsJ3/clQwUgyg3ZneP3hwEaluBqchA2d74YqdO4oG1TdyJpSlDzKGhs/T8p0Dfe5/mPyPnxVhy2NeRUhPT9ubHYnpTsVBc69uQC4s/IoP5XNXZnlx5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741078155; c=relaxed/simple;
-	bh=rYKJHHkuNux5rqR8KF7XVLyx9vSFFJw0lH67xodEyDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JBbDGKANAY1tMZutGnt+ePLOXGDvpKhhQz6phMyuS8rXa7LdkP6Uhs6sbYcdmjEozauln78OVH810f6GHQ1PjqfailWWMbJM84ryQf4S5QoFtwl32IMLDTMDfPmfnV3k0ZwCaDube2x8JhX+8v7qNKrMVp5LFoBIeNtRLMyd+qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QMPnQFIX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CeMc+iC0; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QMPnQFIX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CeMc+iC0; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 118111F387;
-	Tue,  4 Mar 2025 08:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741078152;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rYKJHHkuNux5rqR8KF7XVLyx9vSFFJw0lH67xodEyDg=;
-	b=QMPnQFIXFuOWUU9KHyb+zwB0ORLwuLk+W5p/F/QAp/z2frxXxEkOkPV5XtXlX/bvI/azhl
-	AJbnp4j5NeAg5WRImnmk5OWBahr5952YBfkou6NY0JbfwA6LxrOMbvewXHvdDNGuWtgF2o
-	5TOiETmG+bDvYiCgEp1H3KIcz/BcorM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741078152;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rYKJHHkuNux5rqR8KF7XVLyx9vSFFJw0lH67xodEyDg=;
-	b=CeMc+iC0hjat2NnRW/VCrbW90KHwuLaRMnfNq5OZIgLyeF7Opd/lP85k8pcfFmNJzdYvtD
-	TlFqcuawwpgtpDDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741078152;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rYKJHHkuNux5rqR8KF7XVLyx9vSFFJw0lH67xodEyDg=;
-	b=QMPnQFIXFuOWUU9KHyb+zwB0ORLwuLk+W5p/F/QAp/z2frxXxEkOkPV5XtXlX/bvI/azhl
-	AJbnp4j5NeAg5WRImnmk5OWBahr5952YBfkou6NY0JbfwA6LxrOMbvewXHvdDNGuWtgF2o
-	5TOiETmG+bDvYiCgEp1H3KIcz/BcorM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741078152;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rYKJHHkuNux5rqR8KF7XVLyx9vSFFJw0lH67xodEyDg=;
-	b=CeMc+iC0hjat2NnRW/VCrbW90KHwuLaRMnfNq5OZIgLyeF7Opd/lP85k8pcfFmNJzdYvtD
-	TlFqcuawwpgtpDDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DA61C1393C;
-	Tue,  4 Mar 2025 08:49:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ISA2NIe+xmdfQAAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Tue, 04 Mar 2025 08:49:11 +0000
-Date: Tue, 4 Mar 2025 09:49:10 +0100
-From: Petr Vorel <pvorel@suse.cz>
+	s=arc-20240116; t=1741089229; c=relaxed/simple;
+	bh=KUo9wQlmv9/QzJPGNoYq36h1ywrzW0R3JyxWK1ltRE0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CK+ThOyML4HyK1NBj4ZTkTlHh1haMkBoP8InvIHgFU7BVI6pgEBFDX9dZs+MMBj4Cdz7fWiWsRfElJW5ljInKgChMhMDtfi7gXizsjq4Ucx9zRjec37ZRQdwaB5ZNIwVMzsL2j0ZFHmRuXsh0oLRUsL0eTiuq+dzHYXh9XRvZ/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bqPDeVcg; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5249rK5v026395;
+	Tue, 4 Mar 2025 11:53:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=dIsUEWCxqhEdj+mTgGu8xdt/PVIOMBGgS/hEVPIwg
+	wE=; b=bqPDeVcga3sKu45+Jkpj/BG9zYMFd7LL1J8CKYJ7UYwjSLMgUjj06AG5g
+	yk7OnPgMFzsDm8NI5gnTSJCMXpSEE1Y/SIDD++OewkO6kq/fX6bolxwCwGjeBW7+
+	3GnIOmY5XAbUfbbTJ7eCVheuNLoJcwUUpgNws89x/gAIprWtnslmopxazXRJUKil
+	sXyv61bTrnTHlmsTGkpzTG4eytwkS2FxUfhHUQDXpRjq2XzvaLe9hc9s8aDUyPdS
+	cIZSmbVdViinIb9ZEEvYVzKXeAgY7+1W6FliSCqWx7j008Lkg7CGk+c1Rh4NLxIV
+	DfdnW/4YCH4YVIbC2cAshMlohHHvw==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 455kkpbncu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Mar 2025 11:53:42 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 524BmaCC020911;
+	Tue, 4 Mar 2025 11:53:42 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 454djnd73e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Mar 2025 11:53:42 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 524BraBH59572704
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 4 Mar 2025 11:53:36 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0F72920043;
+	Tue,  4 Mar 2025 11:53:36 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 79C6220040;
+	Tue,  4 Mar 2025 11:53:34 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com.com (unknown [9.61.57.16])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  4 Mar 2025 11:53:34 +0000 (GMT)
+From: Mimi Zohar <zohar@linux.ibm.com>
 To: ltp@lists.linux.it
-Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH] ima_selinux.sh: Require ima_policy=critical_data kernel
- cmdline
-Message-ID: <20250304084910.GB59205@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20250224105925.2865777-1-pvorel@suse.cz>
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>,
+        Petr Vorel <pvorel@suse.cz>, linux-integrity@vger.kernel.org
+Subject: [PATCH v2 1/4] ima_violations.sh: force $LOG ToMToU violation earlier
+Date: Tue,  4 Mar 2025 06:53:28 -0500
+Message-ID: <20250304115331.524842-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250224105925.2865777-1-pvorel@suse.cz>
-X-Spam-Score: -3.50
-X-Spamd-Result: default: False [-3.50 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	HAS_REPLYTO(0.30)[pvorel@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCPT_COUNT_THREE(0.00)[3];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:replyto];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DMPT953wXYhrz0w3Bqn7xhNzyVE7aAN5
+X-Proofpoint-ORIG-GUID: DMPT953wXYhrz0w3Bqn7xhNzyVE7aAN5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-04_05,2025-03-03_04,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ malwarescore=0 adultscore=0 impostorscore=0 bulkscore=0 mlxlogscore=807
+ phishscore=0 spamscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503040097
 
-Hi all,
+Violation tests are dependent on searching the $LOG file, which may
+itself result in a ToMToU violation.  Preempt getting an additional
+violation during the tests by forcing the $LOG ToMToU violation
+earlier.
 
-> Test requires not only func=CRITICAL_DATA IMA policy content but also
-> ima_policy=critical_data kernel cmdline. Without cmdline no measures are
-> done.
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+---
+ testcases/kernel/security/integrity/ima/tests/ima_violations.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-FYI merged.
+diff --git a/testcases/kernel/security/integrity/ima/tests/ima_violations.sh b/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
+index 37d8d473c..22863fb72 100755
+--- a/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
++++ b/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
+@@ -30,6 +30,7 @@ setup()
+ 	if [ ! -e "$LOG" ]; then
+ 		tst_brk TCONF "log file not found, install auditd"
+ 	fi
++	exec 3< $LOG || tst_brk TBROK "failed to read log file"
+ 	tst_res TINFO "using log $LOG"
+ }
+ 
+-- 
+2.48.1
 
-Kind regards,
-Petr
-
-> https://ima-doc.readthedocs.io/en/latest/ima-policy.html#ima-policy-critical-data
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fdd1ffe8a812
 
