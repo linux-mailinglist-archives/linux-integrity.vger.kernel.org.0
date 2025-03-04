@@ -1,171 +1,316 @@
-Return-Path: <linux-integrity+bounces-5074-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5079-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C451A4EA6C
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 19:04:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C93D6A4ED3C
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 20:24:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0328F7A3AE9
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 18:03:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F1F188564C
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 19:04:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D122E3368;
-	Tue,  4 Mar 2025 17:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D799B25FA0B;
+	Tue,  4 Mar 2025 19:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xeNCDDs3";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="se7dNW2W";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xeNCDDs3";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="se7dNW2W"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Hcqg1Kvi"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7818527BF70
-	for <linux-integrity@vger.kernel.org>; Tue,  4 Mar 2025 17:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589E924EA9B;
+	Tue,  4 Mar 2025 19:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741110228; cv=none; b=hrXqVSnHVrT2e1V3T1JfrMEiDOQd2bkA7fu5a8l2FFBRehnKEKFjOkaHV/ZKNZWS6y5ibM2tp+cyU7ldD2KqciJlaITl1+UKTd5Y3M6bmj3UfhaAAVO1VKq3AUvl9l+607j5KlDSGJhMKe8wJjo/oDvxt8dIA7Kf4XEiZ20ZRcU=
+	t=1741115047; cv=none; b=pxFcTjpjJR7GcqDyLbiiyGaUw7B8fNzsCOPk5M4TO6NMAFn8t2M8efzz8kmlon8CX7VSPOp6qDr9kNI2yNesPpd7d0l7uz/IneSdJQOIjgFfhwp5yXO1TLcBmBjtnAo+BbBC35/I+5//eNVve7p5lu5pWZXGt9LB63Au1n40dVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741110228; c=relaxed/simple;
-	bh=wRz8PDlQEnBAoGjSE8WiVs13vPxJ6QgfY5BP20z9I0g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N55F0KiXxV/9tytsIib9F+dYRySXCfVFOzMDjVY5xiE9qhEZVUBDAghzUXWPSFGNfHEMhTaAPz0hTQQhi3SatSw3ahxkjVR+cRE95GitKvSsQ3YM0zHNjeeLePpYnpNFrEMj5hMdvyj7z9KIzJ8fhQFatR6lagg6VCEF8kr7uD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xeNCDDs3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=se7dNW2W; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xeNCDDs3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=se7dNW2W; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 7B2FD1F456;
-	Tue,  4 Mar 2025 17:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741110224;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eB0kFmZ1ba8iiUIFBYCBKE7udjSI3kpPf37ki3Fbwcg=;
-	b=xeNCDDs3HlYQ6d+5/EwiLmJJtvSCTsyMRXHwCailt4BuaEOCIhgIcc9znNsoIF9eUbY+JN
-	zrulqkQJxqwO8R4CMhSTyVO7Bo1jymMYV9bRACvn7ZbR4xVr7HFIw06z2CuCnmkYKf9dB3
-	lf7CcJOmuLFKpOW840NtnqaLmuJBWtg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741110224;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eB0kFmZ1ba8iiUIFBYCBKE7udjSI3kpPf37ki3Fbwcg=;
-	b=se7dNW2WMHrH4vZem2bva8uQZCU7wIvDcSelRa+vHK3MO7wOWGKqKywKUi0ibhBz65vbcH
-	UzoU9BVFfoFjGGBw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1741110224;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eB0kFmZ1ba8iiUIFBYCBKE7udjSI3kpPf37ki3Fbwcg=;
-	b=xeNCDDs3HlYQ6d+5/EwiLmJJtvSCTsyMRXHwCailt4BuaEOCIhgIcc9znNsoIF9eUbY+JN
-	zrulqkQJxqwO8R4CMhSTyVO7Bo1jymMYV9bRACvn7ZbR4xVr7HFIw06z2CuCnmkYKf9dB3
-	lf7CcJOmuLFKpOW840NtnqaLmuJBWtg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1741110224;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eB0kFmZ1ba8iiUIFBYCBKE7udjSI3kpPf37ki3Fbwcg=;
-	b=se7dNW2WMHrH4vZem2bva8uQZCU7wIvDcSelRa+vHK3MO7wOWGKqKywKUi0ibhBz65vbcH
-	UzoU9BVFfoFjGGBw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EF99213967;
-	Tue,  4 Mar 2025 17:43:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id CtpuNc87x2dccAAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Tue, 04 Mar 2025 17:43:43 +0000
-Date: Tue, 4 Mar 2025 18:43:42 +0100
-From: Petr Vorel <pvorel@suse.cz>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: ltp@lists.linux.it, Stefan Berger <stefanb@linux.ibm.com>,
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] ima_violations.sh: Update validate() to support
- multiple violations
-Message-ID: <20250304174342.GA97130@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20250304115331.524842-1-zohar@linux.ibm.com>
- <20250304115331.524842-2-zohar@linux.ibm.com>
- <20250304133101.GC81126@pevik>
- <678478de87319625e591e8e956a57b31c700bbd2.camel@linux.ibm.com>
- <54cf5311ec5e0debd6dfd63669e8d01883c0ba23.camel@linux.ibm.com>
+	s=arc-20240116; t=1741115047; c=relaxed/simple;
+	bh=shhm6wRN7a0ECw3M7UJ03ZyxShlFhKogwLpFy+5Ln2M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=sp2NC8LDnzJ404GOvCEZGRi7RGvj0AxzYVD7n4vJFzznCpVCfxEoTuNJd90xBNUYr+62UbxInEep94eAHWnngZwm74YmdaixX5Ys5hAualMwpjYX2xCzdbraBPYs4jkHPEKhEbd6mtTqGmnVMX/BkDgihyQ56i7x/EVeYT4SlsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Hcqg1Kvi; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from localhost.localdomain (unknown [167.220.59.4])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 7405B210EAF0;
+	Tue,  4 Mar 2025 11:03:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7405B210EAF0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1741115037;
+	bh=1QvcECRTfUBUq9j5oxbjZ9r7b26mSn04K3XXm4ef5nY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Hcqg1KvibjmFDyl91L0y+T4ZC0+T9iKulHmV72vcxVW4Ocskw6n3ipBq/s4gX2ysg
+	 YZM+Nndq02VuG0yo2Z1ItjKSFc/32TlQcs6sLHftvrDCBbf+s7ETII5PiCjtdURtpi
+	 2mV4sqsNSu1ySXDOBnAUxl8b0MK95CQzYtXZuBHk=
+From: steven chen <chenste@linux.microsoft.com>
+To: zohar@linux.ibm.com,
+	stefanb@linux.ibm.com,
+	roberto.sassu@huaweicloud.com,
+	roberto.sassu@huawei.com,
+	eric.snowberg@oracle.com,
+	ebiederm@xmission.com,
+	paul@paul-moore.com,
+	code@tyhicks.com,
+	bauermann@kolabnow.com,
+	linux-integrity@vger.kernel.org,
+	kexec@lists.infradead.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com,
+	nramas@linux.microsoft.com,
+	James.Bottomley@HansenPartnership.com,
+	bhe@redhat.com,
+	vgoyal@redhat.com,
+	dyoung@redhat.com
+Subject: [PATCH v9 0/7] ima: kexec: measure events between kexec load and execute
+Date: Tue,  4 Mar 2025 11:03:44 -0800
+Message-Id: <20250304190351.96975-1-chenste@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54cf5311ec5e0debd6dfd63669e8d01883c0ba23.camel@linux.ibm.com>
-X-Spam-Score: -3.50
-X-Spamd-Result: default: False [-3.50 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	HAS_REPLYTO(0.30)[pvorel@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-> On Tue, 2025-03-04 at 09:44 -0500, Mimi Zohar wrote:
-> > On Tue, 2025-03-04 at 14:31 +0100, Petr Vorel wrote:
-> > > Hi Mimi,
+The current kernel behavior is IMA measurements snapshot is taken at
+kexec 'load' and not at kexec 'execute'.  IMA log is then carried
+over to the new kernel after kexec 'execute'.
 
-> > > > Add support for the number of expected violations.  Include the
-> > > > expected number of violations in the output.
+New events can be measured during/after the IMA log snapshot at kexec 
+'load' and before the system boots to the new kernel.  In this scenario,
+the TPM PCRs are extended with these events, but they are not carried
+over to the new kernel after kexec soft reboot since the snapshot is
+already taken.  This results in mismatch between TPM PCR quotes and the
+actual IMA measurements list after kexec soft reboot, which in turn
+results in remote attestation failure.
 
-> > > Unfortunately this works only on fixed kernel (e.g. the one with v1 of your
-> > > "ima: limit both open-writers and ToMToU violations" kernel patchset [1]
-> > > (I haven't built v2 [2], but it's really just
-> > > s/IMA_LIMIT_VIOLATIONS/IMA_EMITTED_OPENWRITERS/ => it will work)
+To solve this problem - 
+ - allocate the necessary buffer at kexec 'load' time,
+ - populate the buffer with the IMA measurements at kexec 'execute' time, 
+ - and measure two new IMA events 'kexec_load' and 'kexec_execute' as
+   critical data to help detect missing events after kexec soft reboot.
 
-> > > Testing on any other kernel it fails on first testing after reboot:
+The solution details include:
+ - refactoring the existing code to allocate a buffer to hold IMA
+   measurements at kexec 'load', and dump the measurements at kexec
+   'execute'
 
-> > Hi Petr,
+ - kexec functionality for mapping the segments from the current kernel
+   to the subsequent one, 
 
-> > I only tested by specifying the "ima_policy=tcb" on the boot command line.  This
-> > failure happens when loading the test specific policy rules.  If setup() is
-> > called before loading the test specific policy rules, forcing the $LOG file
-> > violation at setup() would be too early.
+ - necessary changes to the kexec_file_load syscall, enabling it to call
+   the ima functions,
 
-> Sorry, that doesn't seem to be the case.
+ - registering a reboot notifier which gets called during kexec 'execute',
 
-> With the changes to validate(), even the original tests will only work on a new
-> kernel.  I'll rework the patch set, so at least the original tests will continue
-> to work.
+ - introducing a new Kconfig option to configure the extra memory to be
+   allocated for passing IMA log from the current Kernel to the next,
+   
+ - introducing two new events to be measured by IMA during kexec, to
+   help diagnose if the IMA log was copied fully or partially, from the
+   current Kernel to the next, 
 
-+1, thank you!
+ - excluding IMA segment while calculating and storing digest in function
+   kexec_calculate_store_digests(), since IMA segment can be modified
+   after the digest is computed during kexec 'load'.  This will ensure
+   that the segment is not added to the 'purgatory_sha_regions', and thus
+   not verified by verify_sha256_digest().
 
-Kind regards,
-Petr
+The changes proposed in this series ensure the integrity of the IMA
+measurements is preserved across kexec soft reboots, thus significantly
+improving the security of the kernel post kexec soft reboots.
 
-> Mimi
+There were previous attempts to fix this issue [1], [2], [3].  But they
+were not merged into the mainline kernel.
+
+We took inspiration from the past work [1] and [2] while working on this
+patch series.
+
+V4 of this series is available here[6] for reference.
+
+V5 of this series is available here[7] for reference.
+
+V6 of this series is available here[8] for reference.
+
+V7 of this series is available here[9] for reference.
+
+V8 of this series is available here[10] for reference.
+
+References:
+-----------
+
+[1] [PATHC v2 5/9] ima: on soft reboot, save the measurement list
+https://lore.kernel.org/lkml/1472596811-9596-6-git-send-email-zohar@linux.vnet.ibm.com/
+
+[2] PATCH v2 4/6] kexec_file: Add mechanism to update kexec segments.
+https://lkml.org/lkml/2016/8/16/577
+
+[3] [PATCH 1/6] kexec_file: Add buffer hand-over support
+https://lore.kernel.org/linuxppc-dev/1466473476-10104-6-git-send-email-bauerman@linux.vnet.ibm.com/T/
+
+[4] [PATCH v2 0/7] ima: kexec: measure events between kexec load and execute
+https://lore.kernel.org/all/20231005182602.634615-1-tusharsu@linux.microsoft.com/
+
+[5] [PATCH v3 0/7] ima: kexec: measure events between kexec load and execute
+https://lore.kernel.org/all/20231216010729.2904751-1-tusharsu@linux.microsoft.com/
+
+[6] [PATCH v4 0/7] ima: kexec: measure events between kexec load and execute
+https://lore.kernel.org/all/20240122183804.3293904-1-tusharsu@linux.microsoft.com/
+
+[7] [PATCH v5 0/8] ima: kexec: measure events between kexec load and execute
+https://lore.kernel.org/all/20240214153827.1087657-1-tusharsu@linux.microsoft.com/
+
+[8] [PATCH v6 0/7] ima: kexec: measure events between kexec load and execute
+https://lore.kernel.org/all/20250124225547.22684-1-chenste@linux.microsoft.com/
+
+[9] [PATCH v7 0/7] ima: kexec: measure events between kexec load and execute
+https://lore.kernel.org/all/20250203232033.64123-1-chenste@linux.microsoft.com/
+
+[10] [PATCH v8 0/7] ima: kexec: measure events between kexec load and execute
+https://lore.kernel.org/all/20250218225502.747963-1-chenste@linux.microsoft.com/
+
+Change Log v9:
+ - Incorporated feedback from the community (Stefan Berger, Mimi Zohar, 
+   and kernel test robot) on v8 of this series[10].
+ - Rebased the patch series to mainline 6.14.0-rc3.
+ - Verified all the patches are bisect-safe by booting into each
+   patch and verifying multiple kexec 'load' operations work,
+   and also verifying kexec soft reboot works, and IMA log gets
+   carried over for each patch.
+
+Change Log v8:
+ - Incorporated feedback from the community (Stefan Berger, Mimi Zohar) 
+   on v7 of this series[9].
+ - Rebased the patch series to mainline 6.14.0-rc1.
+ - Verified all the patches are bisect-safe by booting into each
+   patch and verifying multiple kexec 'load' operations work,
+   and also verifying kexec soft reboot works, and IMA log gets
+   carried over for each patch.
+
+Change Log v7:
+ - Incorporated feedback from the community (Stefan Berger, Tyler Hicks) 
+   on v6 of this series[8].
+ - Verified all the patches are bisect-safe by booting into each
+   patch and verifying multiple kexec 'load' operations work,
+   and also verifying kexec soft reboot works, and IMA log gets
+   carried over for each patch.
+
+Change Log v6:
+ - Incorporated feedback from the community (Stefan Berger, Mimi Zohar,
+   and Petr Tesařík) on v5 of this series[7].
+ - Rebased the patch series to mainline 6.12.0.
+ - Verified all the patches are bisect-safe by booting into each
+   patch and verifying multiple kexec 'load' operations work,
+   and also verifying kexec soft reboot works, and IMA log gets
+   carried over for each patch.
+ - Compared the memory size allocated with memory size of the entire 
+   measurement record. If there is not enough memory, it will copy as many
+   IMA measurement records as possible, and this situation will result
+   in a failure of remote attestation.
+ - [PATCH V5 6/8] was removed. Per petr comment on [PATCH V5 6/8], during
+   the handover, other CPUs are taken offline (look for
+   migrate_to_reboot_cpu() in kernel/kexec_core.c) and even the reboot CPU
+   will be sufficiently shut down as not to be able to add any more
+   measurements.
+
+Change Log v5:
+ - Incorporated feedback from the community (Stefan Berger and
+   Mimi Zohar) on v4 of this series[6].
+ - Rebased the patch series to mainline 6.8.0-rc1.
+ - Verified all the patches are bisect-safe by booting into each
+   patch and verifying multiple kexec 'load' operations work,
+   and also verifying kexec soft reboot works, and IMA log gets
+   carried over for each patch.
+ - Divided the patch #4 in the v4 of the series[6] into two separate
+   patches. One to setup the infrastructure/stub functions to prepare
+   the IMA log copy from Kexec 'load' to 'execute', and another one
+   to actually copy the log.
+ - Updated the config description for IMA_KEXEC_EXTRA_MEMORY_KB
+   to remove unnecessary references related to backwards compatibility.
+ - Fixed a typo in log message/removed an extra line etc.
+ - Updated patch descriptions as necessary.
+
+Change Log v4:
+ - Incorporated feedback from the community (Stefan Berger and
+   Mimi Zohar) on v3 of this series[5].
+ - Rearranged patches so that they remain bisect-safe i.e. the
+   system can go through kexec soft reboot, and IMA log is carried
+   over after each patch.
+ - Verified all the patches are bisect-safe by booting into each
+   patch and verifying kexec soft reboot works, and IMA log gets
+   carried over.
+ - Suspend-resume measurements is now a separate patch (patch #5)
+   and all the relevant code is part of the same patch.
+ - Excluding IMA segment from segment digest verification is now a
+   separate patch. (patch #3).
+ - Registering reboot notifier and functions related to move ima 
+   log copy from kexec load to execute are now part of the same
+   patch (patch #4) to protect bisect-safeness of the series.
+ - Updated the title of patch #6 as per the feedback.
+ - The default value of kexec extra memory for IMA measurements
+   is set to half the PAGESIZE to maintain backwards compatibility.
+ - Added number of IMA measurement records as part of 'kexec_load' 
+   and 'kexec_execute' IMA critical data events.
+ - Updated patch descriptions as necessary.
+
+Change Log v3:
+ - Incorporated feedback from the community (Stefan Berger and
+   Mimi Zohar) on v2 of this series[4].
+ - Renamed functions and removed extraneous checks and code comments.
+ - Updated patch descriptions and titles as necessary.
+ - Updated kexec_calculate_store_digests() in patch 2/7 to exclude ima
+   segment from calculating and storing digest.
+ - Updated patch 3/7 to use kmalloc_array instead of kmalloc and freed
+   memory early to avoid potential memory leak.
+ - Updated patch 6/7 to change Kconfig option IMA_KEXEC_EXTRA_PAGES to
+   IMA_KEXEC_EXTRA_MEMORY_KB to allocate the memory in kb rather than
+   in number of pages.
+ - Optimized patch 7/7 not to free and alloc memory if the buffer size
+   hasn't changed during multiple kexec 'load' operations.
+ - Fixed a bug in patch 7/7 to measure multiple 'kexec_load' events even
+   if buffer size hasn't changed.
+ - Verified the patches are bisect-safe by compiling and booting into
+   each patch individually.
+
+
+Change Log v2:
+ - Incorporated feedback from the community on v1 series.
+ - Refactored the existing ima_dump_measurement_list to move buffer
+   allocation functionality to ima_alloc_kexec_buf() function.
+ - Introduced a new Kconfig option to configure the memory.
+ - Updated the logic to copy the IMA log only in case of kexec soft 
+   reboot, and not on kexec crash.
+ - Updated the logic to copy as many IMA events as possible in case of
+   memory constraint, rather than just bailing out.
+ - Introduced two new events to be measured by IMA during kexec, to
+   help diagnose if the IMA log was copied fully or partially from the
+   current Kernel to the next.
+ - Refactored patches to ensure no warnings during individual patch
+   compilation.
+ - Used virt_to_page instead of phys_to_page.
+ - Updated patch descriptions as necessary.
+
+
+steven chen (7):
+  ima: copy only complete measurement records across kexec
+  kexec: define functions to map and unmap segments
+  ima: kexec: skip IMA segment validation after kexec soft reboot
+  ima: kexec: define functions to copy IMA log at soft boot
+  ima: kexec: move IMA log copy from kexec load to execute
+  ima: make the kexec extra memory configurable
+  ima: measure kexec load and exec events as critical data
+
+ include/linux/ima.h                |   3 +
+ include/linux/kexec.h              |   9 ++
+ kernel/kexec_core.c                |  54 ++++++++
+ kernel/kexec_file.c                |  32 +++++
+ security/integrity/ima/Kconfig     |  10 ++
+ security/integrity/ima/ima.h       |   7 +
+ security/integrity/ima/ima_kexec.c | 210 ++++++++++++++++++++++++-----
+ security/integrity/ima/ima_queue.c |   9 +-
+ 8 files changed, 297 insertions(+), 37 deletions(-)
+
+-- 
+2.25.1
+
 
