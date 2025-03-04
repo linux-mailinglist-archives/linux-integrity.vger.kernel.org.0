@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-5080-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5082-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65079A4ECB1
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 20:04:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2B3DA4ED4B
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 20:27:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A2E0169027
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 19:04:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E9A0880986
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 19:04:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2A625FA39;
-	Tue,  4 Mar 2025 19:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40C3A2620EF;
+	Tue,  4 Mar 2025 19:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="casVGVZg"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="T7HQWhU3"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E9F7259CA3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BCC225BAC9;
 	Tue,  4 Mar 2025 19:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741115047; cv=none; b=KhpnJwkQ3dGcmcjG+dC8i2OEEGlNWaWPG93kiZWOd8suDxYIDgWkvtMdEAb+W1n/U7Qvz5KF8gjrI1l9sShkoaRjvAu59UbzwvJsu6GnAnPudoA5l5zBg/v0cAgcLPSXM/B20soO2SLoA5xTMmD2hCsOl4phIyfkWio1ZUOB+O4=
+	t=1741115048; cv=none; b=WpvpwzYbSse9QFbGb5uZCaWBSwOqB9IhXCCWtdbtS1u9ACmTN1IKn2pHXPiaXcxzjzTW4PXZG/s5irasl0th5NYpgynUxd+X+01OPZVjCmmS7QrztIBZUq8B0RkeX9KHMrNECRRmwwtr8noMEslRbuHRnP8n+KbZLT2ZOrWMcig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741115047; c=relaxed/simple;
-	bh=OsxKZ3uF2aRWtW8U5Q0hBt5QMQGFxad/c4GW7JdlzRc=;
+	s=arc-20240116; t=1741115048; c=relaxed/simple;
+	bh=ld5Rzt7U3U9kNdPpbYABrBhw8UfYLCmfCpfAmqEgxjw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gkGMyiTH1YON0gIpOOQqAlnCLYST41y4CV6AN13ob+7Uzi3Oqcaniw++Bc+U+2EErGgZLJxVXgRxBfAGX9RjICqMMTOvrmWRFeOV0TRZhV8jOuFi0y+x/qrkZ42fKW83j40tzSKskkwlhFTdq4vK6Jl4ipJWy5tBsK/Yk+wQwkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=casVGVZg; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=gzRhoKufIcpeoAz4W3nlX+3qJlfwuEFZgd2GnnduVjkyLte1nzBU+EDoRmH0sqfHMy7efOidZgVaSdXJnXF7EtYAKuA6YEcXmTUA1b5mZfNSgVIZ9O+6TtEgViWMVvmN4DAwaZUgzvg9Gacd1lUtgy8Nqv1/48Fh/7kFDfAqre0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=T7HQWhU3; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from localhost.localdomain (unknown [167.220.59.4])
-	by linux.microsoft.com (Postfix) with ESMTPSA id BA1D6210EAF9;
+	by linux.microsoft.com (Postfix) with ESMTPSA id EE7E9210EAFB;
 	Tue,  4 Mar 2025 11:03:58 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BA1D6210EAF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EE7E9210EAFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741115038;
-	bh=C4fpkfAT2qDRSew80giIKdwwL8+StIhxSDKSC7I42as=;
+	s=default; t=1741115039;
+	bh=7bpzaKJMyV3E8E00HZMPQxpAdeDwOCI+jQV79Yt99/0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=casVGVZgDDZlGFiWiV3hWdWKoyYHaSIQEDZ5oX9eeeCgtOONN/0UQNhCVXntbS03g
-	 9voUHFotE22DmYfcw1/1AfbYJMDF6VmMfarkqJaM1XQw9YLb3C+JWR6o+MSdMBxBEy
-	 Ys6JO5etPNGex+zEulwetmCLvpMK80fd+leFg760=
+	b=T7HQWhU3oXeIve/XuPEpI9rVt6c4VCA0J5gVMNjF5zkIri2rqUHhNsOqrqPZ6qke+
+	 z5Dagl0YGKTiyXy0EG3B/B7uYI7v1nsQgcgnI5LQSi4TcSWbjqbdlYJChjdzXpNZg7
+	 UD1WWd3Rit7W/1KNg6nq0FoV0buVSnfiH0koAUFw=
 From: steven chen <chenste@linux.microsoft.com>
 To: zohar@linux.ibm.com,
 	stefanb@linux.ibm.com,
@@ -60,9 +60,9 @@ Cc: madvenka@linux.microsoft.com,
 	bhe@redhat.com,
 	vgoyal@redhat.com,
 	dyoung@redhat.com
-Subject: [PATCH v9 6/7] ima: make the kexec extra memory configurable
-Date: Tue,  4 Mar 2025 11:03:50 -0800
-Message-Id: <20250304190351.96975-7-chenste@linux.microsoft.com>
+Subject: [PATCH v9 7/7] ima: measure kexec load and exec events as critical data
+Date: Tue,  4 Mar 2025 11:03:51 -0800
+Message-Id: <20250304190351.96975-8-chenste@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250304190351.96975-1-chenste@linux.microsoft.com>
 References: <20250304190351.96975-1-chenste@linux.microsoft.com>
@@ -74,84 +74,127 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The extra memory allocated for carrying the IMA measurement list across
-kexec is hard-coded as half a PAGE.  Make it configurable.
+The amount of memory allocated at kexec load, even with the extra memory
+allocated, might not be large enough for the entire measurement list.  The
+indeterminate interval between kexec 'load' and 'execute' could exacerbate
+this problem.
 
-Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
-extra memory (in kb) to be allocated for IMA measurements added during
-kexec soft reboot.  Ensure the default value of the option is set such
-that extra half a page of memory for additional measurements is allocated
-for the additional measurements.
+Define two new IMA events, 'kexec_load' and 'kexec_execute', to be 
+measured as critical data at kexec 'load' and 'execute' respectively.
+Report the allocated kexec segment size, IMA binary log size and the
+runtime measurements count as part of those events.
 
-Update ima_add_kexec_buffer() function to allocate memory based on the
-Kconfig option value, rather than the currently hard-coded one.
+These events, and the values reported through them, serve as markers in
+the IMA log to verify the IMA events are captured during kexec soft
+reboot.  The presence of a 'kexec_load' event in between the last two
+'boot_aggregate' events in the IMA log implies this is a kexec soft
+reboot, and not a cold-boot. And the absence of 'kexec_execute' event
+after kexec soft reboot implies missing events in that window which
+results in inconsistency with TPM PCR quotes, necessitating a cold boot
+for a successful remote attestation.
 
-Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
+These critical data events are displayed as hex encoded ascii in the
+ascii_runtime_measurement_list.  Verifying the critical data hash requires 
+calculating the hash of the decoded ascii string.  
+
+For example, to verify the 'kexec_load' data hash:
+
+sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements 
+| grep  kexec_load | cut -d' ' -f 6 | xxd -r -p | sha256sum
+
+
+To verify the 'kexec_execute' data hash:
+
+sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements 
+| grep kexec_execute | cut -d' ' -f 6 | xxd -r -p | sha256sum
+
 Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 Signed-off-by: steven chen <chenste@linux.microsoft.com>
 Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- security/integrity/ima/Kconfig     | 10 ++++++++++
- security/integrity/ima/ima_kexec.c | 16 ++++++++++------
- 2 files changed, 20 insertions(+), 6 deletions(-)
+ security/integrity/ima/ima.h       |  6 ++++++
+ security/integrity/ima/ima_kexec.c | 20 ++++++++++++++++++++
+ security/integrity/ima/ima_queue.c |  5 +++++
+ 3 files changed, 31 insertions(+)
 
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 475c32615006..d73c96c3c1c9 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -321,4 +321,14 @@ config IMA_DISABLE_HTABLE
- 	help
- 	   This option disables htable to allow measurement of duplicate records.
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 4428fcf42167..1452c98242a4 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -240,6 +240,12 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+ 				   unsigned long flags, bool create);
+ #endif
  
-+config IMA_KEXEC_EXTRA_MEMORY_KB
-+	int "Extra memory for IMA measurements added during kexec soft reboot"
-+	depends on IMA_KEXEC
-+	default 0
-+	help
-+	  IMA_KEXEC_EXTRA_MEMORY_KB determines the extra memory to be
-+	  allocated (in kb) for IMA measurements added during kexec soft reboot.
-+	  If set to the default value of 0, an extra half page of memory for those
-+	  additional measurements will be allocated.
++#ifdef CONFIG_IMA_KEXEC
++void ima_measure_kexec_event(const char *event_name);
++#else
++static inline void ima_measure_kexec_event(const char *event_name) {}
++#endif
 +
- endif
+ /*
+  * The default binary_runtime_measurements list format is defined as the
+  * platform native format.  The canonical format is defined as little-endian.
 diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index dd49658153ca..9fb1bf5a592a 100644
+index 9fb1bf5a592a..e40c6da4504c 100644
 --- a/security/integrity/ima/ima_kexec.c
 +++ b/security/integrity/ima/ima_kexec.c
-@@ -133,22 +133,26 @@ void ima_add_kexec_buffer(struct kimage *image)
- 				  .buf_min = 0, .buf_max = ULONG_MAX,
- 				  .top_down = true };
- 	unsigned long binary_runtime_size;
--
-+	unsigned long extra_memory;
- 	/* use more understandable variable names than defined in kbuf */
- 	void *kexec_buffer = NULL;
- 	size_t kexec_buffer_size = 0;
- 	int ret;
+@@ -17,6 +17,8 @@
+ #include "ima.h"
  
+ #ifdef CONFIG_IMA_KEXEC
++#define IMA_KEXEC_EVENT_LEN 256
++
+ static struct seq_file ima_kexec_file;
+ static void *ima_kexec_buffer;
+ static size_t kexec_segment_size;
+@@ -36,6 +38,23 @@ static void ima_free_kexec_file_buf(struct seq_file *sf)
+ 	ima_reset_kexec_file(sf);
+ }
+ 
++void ima_measure_kexec_event(const char *event_name)
++{
++	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
++	size_t buf_size = 0;
++	long len;
++
++	buf_size = ima_get_binary_runtime_size();
++	len = atomic_long_read(&ima_htable.len);
++
++	int n = scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
++					"kexec_segment_size=%lu;ima_binary_runtime_size=%lu;"
++					"ima_runtime_measurements_count=%ld;",
++					kexec_segment_size, buf_size, len);
++
++	ima_measure_critical_data("ima_kexec", event_name, ima_kexec_event, n, false, NULL, 0);
++}
++
+ static int ima_alloc_kexec_file_buf(size_t segment_size)
+ {
  	/*
--	 * Reserve an extra half page of memory for additional measurements
--	 * added during the kexec load.
-+	 * Reserve extra memory for measurements added during kexec.
- 	 */
--	binary_runtime_size = ima_get_binary_runtime_size();
-+	if (CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB <= 0)
-+		extra_memory = PAGE_SIZE / 2;
-+	else
-+		extra_memory = CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB * 1024;
-+	binary_runtime_size = ima_get_binary_runtime_size() + extra_memory;
+@@ -58,6 +77,7 @@ static int ima_alloc_kexec_file_buf(size_t segment_size)
+ out:
+ 	ima_kexec_file.read_pos = 0;
+ 	ima_kexec_file.count = sizeof(struct ima_kexec_hdr);	/* reserved space */
++	ima_measure_kexec_event("kexec_load");
+ 
+ 	return 0;
+ }
+diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
+index 3dfd178d4292..6afb46989cf6 100644
+--- a/security/integrity/ima/ima_queue.c
++++ b/security/integrity/ima/ima_queue.c
+@@ -241,6 +241,11 @@ static int ima_reboot_notifier(struct notifier_block *nb,
+ 			       unsigned long action,
+ 			       void *data)
+ {
++#ifdef CONFIG_IMA_KEXEC
++	if (action == SYS_RESTART && data && !strcmp(data, "kexec reboot"))
++		ima_measure_kexec_event("kexec_execute");
++#endif
 +
- 	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
- 		kexec_segment_size = ULONG_MAX;
- 	else
--		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
--					   PAGE_SIZE / 2, PAGE_SIZE);
-+		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
-+
- 	if ((kexec_segment_size == ULONG_MAX) ||
- 	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
- 		pr_err("Binary measurement list too large.\n");
+ 	ima_measurements_suspend();
+ 
+ 	return NOTIFY_DONE;
 -- 
 2.25.1
 
