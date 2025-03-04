@@ -1,238 +1,174 @@
-Return-Path: <linux-integrity+bounces-5060-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5061-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24A08A4DE6B
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 13:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68D1CA4DE84
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 13:57:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 239B9188E698
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 12:54:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70475188647E
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Mar 2025 12:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E105E202F96;
-	Tue,  4 Mar 2025 12:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C596E20299D;
+	Tue,  4 Mar 2025 12:57:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="O5lhTMDA"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tAVuru5k";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="bPWNnAOI";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tAVuru5k";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="bPWNnAOI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E193C1EA7CE;
-	Tue,  4 Mar 2025 12:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2DA78F33
+	for <linux-integrity@vger.kernel.org>; Tue,  4 Mar 2025 12:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741092874; cv=none; b=sbHsYXSF6bYxIE7Th1em/QoRiIFUu5oN/RDsDrdWl4DGLpATy67DeRXw+WC43lTIwQAyt3qiz3GDPIbOn9BD3zvRglTA74OgFi3VlAvFLcyP99wAI2scq9Ib8GDfwuUdEgF8QDj9Z4TWdUkRysefQbKFDkoMY6a0icx9xy/clDs=
+	t=1741093074; cv=none; b=krbP+7+XasnFKOqYszIQJD/YZ1WB4ei9ArqeYE3SWXOenWvLEFdHDlanrdHxvAC9AqH1fyyxythLiE8spX5znpdBfKN4VmCClcZwOuMXkLgVXRSODoV8AHKslgPstLBBO/xUmxykne7wez9AfhHWvMq9Oxi6SsMnId0Bmn+fcN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741092874; c=relaxed/simple;
-	bh=HyinxsF89BDo1NSbgsVB0G53ZZrA9ZNM5huh2XiqTQo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KWBlqjWVILEOeRIckrCCPDkBgtw6XarIyJRZpiaKfZiuBUkkqyaybEm3gr1MS6O/QP32pi7/1qmTSq7FUQjnwJFj7IuGn6jXlg8MsaliyLhSVyydvPzDZfBsyQGFE37mCw7msPv+ZqQxvI3kMAdVhnioNvlRv1NcgE9gSmudTwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=O5lhTMDA; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5249iOol022691;
-	Tue, 4 Mar 2025 12:53:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Lav0QD
-	Qn3uzKDyq4Ig1kWXcr+7nIByvHXWzRPJRorA0=; b=O5lhTMDAUDbCKgM9h+X2Kl
-	v9OiUDth8TCYYGw4mmx5UnSZXTowT2eZKpor9AnZiJBJBFbyt1t9z4BL2OV73yhy
-	QyTsP5Lgh94O+EzAmpp9ZDL6I8BiBSSge4q8JVvLqc2YWHl9E4u+SKQclQN6pKOC
-	feLBTiUfbfsbLT8W8lUGk4EXaGr7BqCyyMnHRrF6mnry4U07USs1MkmiuxE5nYDt
-	GJezwxB8meFs2CgnTYQ6ecKd4Nntji+DGpydk3REjL3XIn1fxYmdQeXNhGV/XvV4
-	tY0EqFXvi7D7K+UcJwBlNePcD0uU1UGcECJrqE5hsvj5J0UUnrtmXnvXg0PVPlKQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 455ku53x3k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Mar 2025 12:53:24 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 524CHkpg004153;
-	Tue, 4 Mar 2025 12:53:24 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 455ku53x3e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Mar 2025 12:53:24 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5249WBQU025031;
-	Tue, 4 Mar 2025 12:53:23 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 454f91vyjr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Mar 2025 12:53:23 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 524CrM7x24248876
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 4 Mar 2025 12:53:22 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7575B5805B;
-	Tue,  4 Mar 2025 12:53:22 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4D51D5804B;
-	Tue,  4 Mar 2025 12:53:20 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.57.16])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  4 Mar 2025 12:53:20 +0000 (GMT)
-Message-ID: <a1d6ce786256bbade459f98e0b4074e449048fee.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH v3 00/13] Clavis LSM
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Eric Snowberg <eric.snowberg@oracle.com>,
-        David Howells
- <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "open
- list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-        David
- Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au"
- <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>, James Morris <jmorris@namei.org>,
-        "Serge
- E. Hallyn" <serge@hallyn.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
-        Stefan Berger
- <stefanb@linux.ibm.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        Randy
- Dunlap <rdunlap@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Date: Tue, 04 Mar 2025 07:53:19 -0500
-In-Reply-To: <CAHC9VhSzc6N0oBesT8V21xuwB11T7e6V9r0UmiqHXvCg5erkVA@mail.gmail.com>
-References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
-	 <c490397315c2704e9ef65c8ad3fefedb239f1997.camel@linux.ibm.com>
-	 <72F52F71-C7F3-402D-8441-3D636A093FE8@oracle.com>
-	 <CAHC9VhRHEw5c+drC=aX4xTqWoQJJZ+qkJ7aHUT5dcu+Q5f7BqA@mail.gmail.com>
-	 <CAHC9VhSJpnaAK1efgs1Uk0Tr3CaDNR1LiDU-t_yDKDQG6J-74Q@mail.gmail.com>
-	 <E20C617B-EA01-4E69-B5E2-31E9AAD6F7A2@oracle.com>
-	 <506e8e58e5236a4525b18d84bafa9aae80b24452.camel@linux.ibm.com>
-	 <CAHC9VhTsZntLdGBV7=4suauS+rzSQv1O4UAoGcy2vEB02wRkoA@mail.gmail.com>
-	 <c580811716f550ed5d6777db5e143afe4ad06edc.camel@linux.ibm.com>
-	 <CAHC9VhTz6U5rRdbJBWq0_U4BSKTsiGCsaX=LTgisNNoZXZokOA@mail.gmail.com>
-	 <e0e7c0971d42e45c7b4641bd58cb7ea20b36e2e1.camel@linux.ibm.com>
-	 <CAHC9VhSzc6N0oBesT8V21xuwB11T7e6V9r0UmiqHXvCg5erkVA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1741093074; c=relaxed/simple;
+	bh=NstmyUVcdcq5yPTWuwMu2zI2CAu6Y1EHFnJC1nAzUQ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ieDHvdHZYfezupsBTzAxslM4GEZ91VZ2R6pDOyltU0wGf9RpUM9o3cKVpHLzQSUXztaAgix36PV+FXnFhRHr/sAomsMGpYcudRCDCLv7lZCVQVQX4Zbp9aNDp1ieLw6RfHjSm7t+4kM/OdnQO4DZNIpA8g6d+d/6wm2zsQUwlQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tAVuru5k; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=bPWNnAOI; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tAVuru5k; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=bPWNnAOI; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 127F921190;
+	Tue,  4 Mar 2025 12:57:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741093071;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=87zAOwEdaCcmKqN1c4wbkJqYWFYitpjRDie2jchQ710=;
+	b=tAVuru5krXb+Xk2l10WLjHGMJKouBox6M4ZM9tIXRNc34yry28/Y5bGeYOn5fRMTl6KGZQ
+	ci3vJV01UY90jd8DR94JNEqnu1bs8IMLRJWMfiFxYqxVMQP4XZJINnvaXhJ6Z4moVOW9Wg
+	HdWq9xqCiurA9nTB3brJqDYGYwPKLFc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741093071;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=87zAOwEdaCcmKqN1c4wbkJqYWFYitpjRDie2jchQ710=;
+	b=bPWNnAOIV44TBVxZSAPcVOu8Zq9+qH+oABRpbq/NwUH6yALxoetGPDLYl3rRKe9kq4rDpM
+	fc58oKH02QmhyVBw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741093071;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=87zAOwEdaCcmKqN1c4wbkJqYWFYitpjRDie2jchQ710=;
+	b=tAVuru5krXb+Xk2l10WLjHGMJKouBox6M4ZM9tIXRNc34yry28/Y5bGeYOn5fRMTl6KGZQ
+	ci3vJV01UY90jd8DR94JNEqnu1bs8IMLRJWMfiFxYqxVMQP4XZJINnvaXhJ6Z4moVOW9Wg
+	HdWq9xqCiurA9nTB3brJqDYGYwPKLFc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741093071;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=87zAOwEdaCcmKqN1c4wbkJqYWFYitpjRDie2jchQ710=;
+	b=bPWNnAOIV44TBVxZSAPcVOu8Zq9+qH+oABRpbq/NwUH6yALxoetGPDLYl3rRKe9kq4rDpM
+	fc58oKH02QmhyVBw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D9B1B1393C;
+	Tue,  4 Mar 2025 12:57:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id xRFtM874xmc1FAAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Tue, 04 Mar 2025 12:57:50 +0000
+Date: Tue, 4 Mar 2025 13:57:49 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: ltp@lists.linux.it, Stefan Berger <stefanb@linux.ibm.com>,
+	linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] ima_violations.sh: force $LOG ToMToU violation
+ earlier
+Message-ID: <20250304125749.GA81126@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20250304115331.524842-1-zohar@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: P-IbRL-M3d-yxwOmiVwyy_AGpbk01k41
-X-Proofpoint-GUID: P5z29jqVGSnxacVJavhV21wsnAx8KUBc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-04_05,2025-03-03_04,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- clxscore=1015 mlxscore=0 suspectscore=0 impostorscore=0 bulkscore=0
- mlxlogscore=999 lowpriorityscore=0 spamscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2503040102
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304115331.524842-1-zohar@linux.ibm.com>
+X-Spam-Score: -6.24
+X-Spamd-Result: default: False [-6.24 / 50.00];
+	REPLY(-4.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	SUBJECT_HAS_CURRENCY(1.00)[];
+	NEURAL_HAM_LONG(-0.75)[-0.753];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	NEURAL_HAM_SHORT(-0.19)[-0.954];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On Mon, 2025-03-03 at 17:38 -0500, Paul Moore wrote:
-> On Fri, Feb 28, 2025 at 12:19=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com>=
- wrote:
-> > On Fri, 2025-02-28 at 11:14 -0500, Paul Moore wrote:
-> > > On Fri, Feb 28, 2025 at 9:09=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.c=
-om> wrote:
-> > > > On Thu, 2025-02-27 at 17:22 -0500, Paul Moore wrote:
->=20
-> ...
->=20
-> > Ok, let's go through different scenarios to see if it would scale.
-> >=20
-> > Scenario 1: Mostly distro signed userspace applications, minimum number=
- of
-> > developer, customer, 3rd party applications.
-> >=20
-> > Scenario 2: Multiple developer, customer, 3rd party applications, signe=
-d by the
-> > same party.
-> >=20
-> > Scenario 3: extreme case - every application signed by different party.
-> >=20
-> > With the minimum case, there would probably be a default key or sets of
-> > permissible keys.  In the extreme case, the number of keyrings would be
-> > equivalent to the number of application/software packages.
->=20
-> Perhaps we're not understanding each other, but my understanding of
-> the above three scenarios is that they are all examples of signed
-> applications where something (likely something in the kernel like IMA)
-> verifies the signature on the application.  While there are going to
-> be differing numbers of keys in each of the three scenarios, I believe
-> they would all be on/linked-to the same usage oriented keyring as they
-> all share the same usage: application signatures.
+Hi Mimi,
 
-Yes they're all verifying file signatures, but the software packages are fr=
-om
-different sources (e.g. distro, chrome), signed by different keys.  Only a
-particular key should be used to verify the file signatures for a particula=
-r
-application.  The scenarios, described above, are the ratio of distro/singl=
-e
-entity vs. non distro/single entity signed packages, which would correspond=
- to
-the number of keyrings.
+> Violation tests are dependent on searching the $LOG file, which may
+> itself result in a ToMToU violation.  Preempt getting an additional
+> violation during the tests by forcing the $LOG ToMToU violation
+> earlier.
 
-Clavis limits key usage based on LSM hooks (e.g. kernel modules, kernel ima=
-ge,
-firmware, etc).  It's a good start, but even this probably is not fine enou=
-gh
-granularity.
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  testcases/kernel/security/integrity/ima/tests/ima_violations.sh | 1 +
+>  1 file changed, 1 insertion(+)
 
->=20
-> > > My takeaway from Clavis was that it was more about establishing a set
-> > > of access controls around keys already present in the keyrings and my
-> > > comments about usage/spplication oriented keyrings have been in that
-> > > context.  While the access control policy, regardless of how it is
-> > > implemented, should no doubt incorporate the trust placed in the
-> > > individual keys, how that trust is established is a separate issue
-> > > from access control as far as I'm concerned.
-> >=20
-> > Clavis defined both a mechanism for establishing trust and access contr=
-ol rules.
-> >=20
-> > Clavis defined a single Clavis key to establish trust.  The Clavis poli=
-cy rules
-> > were signed by the Clavis key.  The Clavis policy rules defined the acc=
-ess
-> > control.
->=20
-> Unfortunately I think we're getting a little ambiguous with how we are
-> using the word "trust".  Just as "security" can mean different things
-> depending on context, so can "trust" as the qualities we are trusting
-> will vary depending on context.  I'll leave it at that for now as I
-> believe we are talking about different things in the paragraphs above.
->=20
-> Regardless, I'll also say this regarding Clavis and key/keyring access
-> controls - as implemented, Clavis doesn't look like a LSM to me for
-> the reasons already given.  If all of the various keys subsystem
-> maintainers believe it is the Right Thing To Do inside the keys
-> subsystem then it isn't my place to have a say in that.  I personally
-> believe that doing the work to support usage oriented keyrings before,
-> or while, implementing a Clavis-like mechanism is the better option,
-> but that is a decision for you and the other key maintainers.
+> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_violations.sh b/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
+> index 37d8d473c..22863fb72 100755
+> --- a/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
+> +++ b/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
+> @@ -30,6 +30,7 @@ setup()
+>  	if [ ! -e "$LOG" ]; then
+>  		tst_brk TCONF "log file not found, install auditd"
+>  	fi
+> +	exec 3< $LOG || tst_brk TBROK "failed to read log file"
+>  	tst_res TINFO "using log $LOG"
 
-"Usage oriented keyrings" similarly implies any key on a particular keyring=
- is
-acceptable.  Without understanding what you mean by "usage oriented keyring=
-s", I
-would assume it would work initially, but eventually it too will not be fin=
-e
-enough granularity.
+If you don't mind, I would reverse the order to get info about which log is
+used:
 
-Mimi
+	tst_res TINFO "using log $LOG"
+	exec 3< $LOG || tst_brk TBROK "failed to read log file"
+
+Or, if it's needed to for some reason to run it before (no idea why, but I might
+miss something), I would merge it as:
+
+	exec 3< $LOG || tst_brk TBROK "failed to read $LOG"
+	tst_res TINFO "using log $LOG"
+
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
+
+Kind regards,
+Petr
 
