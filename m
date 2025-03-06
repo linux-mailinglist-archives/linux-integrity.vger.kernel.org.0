@@ -1,215 +1,182 @@
-Return-Path: <linux-integrity+bounces-5129-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5130-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AB42A53FA9
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 02:12:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 928AEA542D4
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 07:35:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E5AF3AEF27
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 01:12:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B844916BE6F
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 06:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063BB8624B;
-	Thu,  6 Mar 2025 01:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A66719E7E2;
+	Thu,  6 Mar 2025 06:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="CvwX/Aq7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NkXkKx12"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF3178F35
-	for <linux-integrity@vger.kernel.org>; Thu,  6 Mar 2025 01:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7197D19882F
+	for <linux-integrity@vger.kernel.org>; Thu,  6 Mar 2025 06:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741223572; cv=none; b=EhzV7AhK9gaA7qBKT2OC5rNze79w1b5eoLy/GVX88Hgpszj0a8OGOv9MORYipBDpjKaNYf9SjyKWguSbE2+UHoRIp5xIIrYgQpCYDFW+IPvZz7GlgxPL13/ivbkwLPST4qZBQaTDXO4QqQDSv/XowgC3xAYHQGewMQRT2zHSLcs=
+	t=1741242935; cv=none; b=j34aaQcqhoWKJ1eF62S3E5g8fZEG/hxyNlSFv19dywReTCjUbKRzIG5rgTG6rU7bDfjRBd29Jgr7CKbT84ISfmEw4pQy6JnichsFO0KM8XkER0qhnWc6Z1RXZVG9Jh90tg0hZU6Bov7ZCo1Iu7LGX8RcOcJi0cknkyiHtK3uODI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741223572; c=relaxed/simple;
-	bh=iwuGm3ZHGbApYL4XEYwpkiGj6XRB3Wy/awOqe4nijcs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dIep5eO4r7DceW/FGCpwyamg2A5RUDwwP/Kzeu9yLRZxcDb4GIH2qTAyBgs7aOnj7sVTLZEiakzYw3u37enSbpF48wYnWRoNlJmWyTOoTljqr3bSyS43sSOV2x7ia4AA0050gTTYdn70Me/puO8FdAvdWdvg/piReRJVcizemlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=CvwX/Aq7; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e60b04fc3edso99789276.1
-        for <linux-integrity@vger.kernel.org>; Wed, 05 Mar 2025 17:12:50 -0800 (PST)
+	s=arc-20240116; t=1741242935; c=relaxed/simple;
+	bh=OgVi8LZ/avO7r/TihguE885iMoKtcusZUL+VQwbS8dk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=ifuCxjxnLrYwkCSfbg64wSCiFJnmLJYwfV+oefmup6q6ipj6LkU6NBa8vhPnBlSJydm9S9r1edpvTY3ecGPnoBkE3u3hoF3Q2oAkMVkIDEv69u+sJhqsrUkc59s2oBlmoCsbyoJ94uikLHo2zNchmTgAOj0tTWU08AL2P0lyClY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NkXkKx12; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43bcad638efso1219625e9.2
+        for <linux-integrity@vger.kernel.org>; Wed, 05 Mar 2025 22:35:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1741223570; x=1741828370; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ns9OcNLiPQZ46N5SAy+lKQOOPBlD1bg4YL1QETokjIw=;
-        b=CvwX/Aq7UGvh8jKF6amc8L4Pjg9vIASGNnPFQjiOrAY64bsl/bjq5hsENfPkoWOvBV
-         bAUDCN6FkW10z5OU3AHzF4I8P3TZrYGLkIC/wRKaZDdwv7zwOIMDroPhLNO8fpBF6iYE
-         FQvmI6sRSc1SmaD3hsW1pcMuoEl5zWH7+NGxZAX4RjINKp9ZsU25e1fc0FR0YByEWfuD
-         EO0YuKeJHGRVMyIoJseCdaFMhYvY7qWCOkNWNSvnfrcPOV1oHtOgWPXagbgOxdZ1JPvR
-         pcaQ8VUX71UTUBQmg7drw5wC6cqip27x1vIG+C3Lxn9/fKiRO1+TdCfdQo4bAI1IUrku
-         UGUQ==
+        d=linaro.org; s=google; t=1741242931; x=1741847731; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mx4eXhc4yqpVhI7TdTQuRC9iguxZspH9NuwtaHcC+Lc=;
+        b=NkXkKx121iIVwRfnvL2NV5bLufVR3G63SPc2p4TvkVzVlrqSAO8fwb7sdoMK0GT32C
+         ilASo1O5JK5ny5ODedT2PQkBlTEz9WDqL3Uw3WLQIupKoBZxhobysE7kPRTQY1s9kqa0
+         rk9rvPMv44zRlZlAtGDG7EGQo/5pLiwA8PvxRhYa/g0txZI2zYLfYnN7xk2WsQQZvLOT
+         Vy0eQ+j+Ktk57PekxQCGydsr068OdVmEtWspEdI+gb60MMdV+jfL1SZEn8lDPMasLGpH
+         keu9Rve6CedfwPt/S7sg02dFwD7XQyy23x+MZIoajVllLg+CMTeADiVW/3vHx85yVG83
+         LgwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741223570; x=1741828370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ns9OcNLiPQZ46N5SAy+lKQOOPBlD1bg4YL1QETokjIw=;
-        b=Pxs/u1hIwLbwgEUO7bodaEofuSL2rpfGjjLHL+6jgj1C0ODX/fzj+zCgRnDTPbOGqr
-         A6kiRRcgaZxG8cok2+wxuTU2MraaXB98aRx3POtgyYUSbdEEkEBqqtxUvswjFroX+9Bt
-         D/BQjf36NABBUz/5Yn/FYGD3oTUaKnWDq6Zcvs8fmk/x9ZWsp+IFf/hMhyEi7fDuNaah
-         DT02otuYW0JER/bWjE87HuZdl4nV+iNRKkykK0b2lGF4st+waauRgi2e5JZDS68hNGrn
-         8fS5M6X9f6SBENhpa382F1E8m5ccmdxELFyhWAUTw3lq7vuMKxLqRxalMM/lHMcNrK08
-         5LEw==
-X-Forwarded-Encrypted: i=1; AJvYcCXMHfAPwfS0BnMVc3Z+qMDUHqqQuzT8nxqCmkF0ZAdy/DY1p/N/rvS9jn/k/tsvPke2643MCK5jc42N3AnlvOk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt3c5Dqow5PASJzK6xQDqRGfvagRbIavFjVB4epQCvAnZxwri/
-	vK7xFQEVrLr4+X8jwWN7lznbcFElBWooMbTdm/n0wwTWT1PI4z8zM2RrTmkcG/e0MKpwuudoNJE
-	pZgRQqWZZuK43enpdlkaMoq2uvbviTkOOkc4t
-X-Gm-Gg: ASbGncu6vOE1Uk4D1XrGzvjI3pX0niKa3lji1J2PVol+B8ftz8+O2Ls5mtd+xXIE0xy
-	g1LY7Z7VEjuBTfA7YAf5IUovP8np5YzLAu6Uw8Th1vMVaZpTIgi28lt26qhhhLD/6n17LED0vYp
-	RBBM638XB8eDfpZZumRmuF1uEw1Q==
-X-Google-Smtp-Source: AGHT+IF7pO968cQESwSx4d3Cse0SeXvFnLRkVRGiC/k9GOy1btAF+uyGL5ue4Dp5VeWQu3Cdo1ybcXgzsv8nGNGFq8o=
-X-Received: by 2002:a05:6902:2a4a:b0:e5d:dcc5:59bc with SMTP id
- 3f1490d57ef6-e611e308b67mr7715694276.39.1741223570094; Wed, 05 Mar 2025
- 17:12:50 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741242931; x=1741847731;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mx4eXhc4yqpVhI7TdTQuRC9iguxZspH9NuwtaHcC+Lc=;
+        b=BmFtv+LMOwt2yDgQE3IHUcPQQFh3OxkgsPA1fkCS4xp8l2/x9yRGVjK8uqW7WoveKA
+         DdEIkktixBnuQm1W9Czv5LkhhNGY3Dn/P/3SbMf56pL4DF06YyV9u+RqOwZkO93ovPTJ
+         hhKo4/wTl1zj2+seRojEoOk5Orn79gPGnM+r16IUhTsyeADskFYZJqfRsOf240PesLXx
+         AVkyRaOYJzCQyIRGvCLw1Rl4+pgxbQNXfIEUBZ8YJ3pZ3yI3OgGy7JtrBUhQI8yxWIsr
+         7iYgwZ6zATbu7oXUUfkWJ3jWBhl2xjGrpL4X9uX+2GmLeXwCxUb4UREluF/Ni+bP3jJ+
+         rSQA==
+X-Forwarded-Encrypted: i=1; AJvYcCW0OF3zfHv0sJoErCJjm/nHZVOYlpttQPC1Yxb87eZD5EH6NvWBkwGUxAXE+cXFe31GnR2JoSBjJqpgKcvSopM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydQxQi8OoFIWi0S/oXGPFtPr4Eii64qk4kFObz9vR9GRzRsS/H
+	Ula9dEPU2zwhHPh2c003fynnM+Fwm/Kvn2qOvd0Wsc5k18dbJ66wV120Q14cBXI=
+X-Gm-Gg: ASbGncv+jV7cPSxpuIATyFF/Ob0osd9u8JMKC7Y//1qs5YpyFKj9d07fx3bPVobyjBQ
+	n9Q2zMiZCYX7HPbcI6Oj9rWwY9emDFxJ0VIhxo0SF66FiZxkIwzpDsjNJW7PV3KwfWZcyukbIJa
+	LvDMuFVEyxXA3fvxOU+aIF/THRTAf4jm7drDHgBnIet190tzfrrAKgPW7+gQdvXW6ZG2LLt1VcK
+	OTVRDdLEzTAFzyUZEGI/M2vQGwnbkOWnuU8oWkpKcOab8cXhRU0nauuMPGw/B+E+2y88YD8dja9
+	R6kKphx3dCaZxM4Mxhl0eeBE5K3UV4xrlu6ZvT3gNfdzuq5XHQ==
+X-Google-Smtp-Source: AGHT+IEldEFBJ6GcJ/9AsmwidDi0MW22pFoTiX1DY3pYgmQW8PLpDd7QMPBO5UsdG2P8Z7W4b9nJlQ==
+X-Received: by 2002:a05:600c:1551:b0:43b:cb0c:3556 with SMTP id 5b1f17b1804b1-43bd2af49cemr38379685e9.28.1741242930569;
+        Wed, 05 Mar 2025 22:35:30 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-43bdd8c314asm9415525e9.10.2025.03.05.22.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Mar 2025 22:35:30 -0800 (PST)
+Date: Thu, 6 Mar 2025 09:35:26 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, steven chen <chenste@linux.microsoft.com>,
+	zohar@linux.ibm.com, stefanb@linux.ibm.com,
+	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+	eric.snowberg@oracle.com, ebiederm@xmission.com,
+	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
+	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+	James.Bottomley@hansenpartnership.com, bhe@redhat.com,
+	vgoyal@redhat.com, dyoung@redhat.com
+Subject: Re: [PATCH v9 2/7] kexec: define functions to map and unmap segments
+Message-ID: <7bde870f-07eb-48a6-8b8d-edac57640775@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
- <c490397315c2704e9ef65c8ad3fefedb239f1997.camel@linux.ibm.com>
- <72F52F71-C7F3-402D-8441-3D636A093FE8@oracle.com> <CAHC9VhRHEw5c+drC=aX4xTqWoQJJZ+qkJ7aHUT5dcu+Q5f7BqA@mail.gmail.com>
- <CAHC9VhSJpnaAK1efgs1Uk0Tr3CaDNR1LiDU-t_yDKDQG6J-74Q@mail.gmail.com>
- <E20C617B-EA01-4E69-B5E2-31E9AAD6F7A2@oracle.com> <506e8e58e5236a4525b18d84bafa9aae80b24452.camel@linux.ibm.com>
- <CAHC9VhTsZntLdGBV7=4suauS+rzSQv1O4UAoGcy2vEB02wRkoA@mail.gmail.com>
- <c580811716f550ed5d6777db5e143afe4ad06edc.camel@linux.ibm.com>
- <CAHC9VhTz6U5rRdbJBWq0_U4BSKTsiGCsaX=LTgisNNoZXZokOA@mail.gmail.com>
- <FD501FB8-72D2-4B10-A03A-F52FC5B67646@oracle.com> <CAHC9VhR961uTFueovLXXaOf-3ZAnvQCWOTfw-wCRuAKOKPAOKw@mail.gmail.com>
- <73B78CE7-1BB8-4065-9EBA-FB69E327725E@oracle.com> <CAHC9VhRMUkzLVT5GT5c5hgpfaaKubzcPOTWFDpOmhNne0sswPA@mail.gmail.com>
- <1A222B45-FCC4-4BBD-8E17-D92697FE467D@oracle.com>
-In-Reply-To: <1A222B45-FCC4-4BBD-8E17-D92697FE467D@oracle.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 5 Mar 2025 20:12:39 -0500
-X-Gm-Features: AQ5f1Jodn7KbI0UIW2OdnLduODjPaSZfEKxzP8aA2XiHbTTB_Svl7vi4QeubrRI
-Message-ID: <CAHC9VhTObTee95SwZ+C4EwPotovE9R3vy0gVXf+kATtP3vfXrg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 00/13] Clavis LSM
-To: Eric Snowberg <eric.snowberg@oracle.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, 
-	David Woodhouse <dwmw2@infradead.org>, 
-	"herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>, "davem@davemloft.net" <davem@davemloft.net>, 
-	Ard Biesheuvel <ardb@kernel.org>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	"casey@schaufler-ca.com" <casey@schaufler-ca.com>, Stefan Berger <stefanb@linux.ibm.com>, 
-	"ebiggers@kernel.org" <ebiggers@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
-	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>, 
-	"linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>, 
-	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304190351.96975-3-chenste@linux.microsoft.com>
 
-On Wed, Mar 5, 2025 at 4:30=E2=80=AFPM Eric Snowberg <eric.snowberg@oracle.=
-com> wrote:
-> > On Mar 4, 2025, at 5:23=E2=80=AFPM, Paul Moore <paul@paul-moore.com> wr=
-ote:
-> > On Tue, Mar 4, 2025 at 9:47=E2=80=AFAM Eric Snowberg <eric.snowberg@ora=
-cle.com> wrote:
-> >>> On Mar 3, 2025, at 3:40=E2=80=AFPM, Paul Moore <paul@paul-moore.com> =
-wrote:
-> >>> On Fri, Feb 28, 2025 at 12:52=E2=80=AFPM Eric Snowberg <eric.snowberg=
-@oracle.com> wrote:
-> >>>>> On Feb 28, 2025, at 9:14=E2=80=AFAM, Paul Moore <paul@paul-moore.co=
-m> wrote:
-> >>>>> On Fri, Feb 28, 2025 at 9:09=E2=80=AFAM Mimi Zohar <zohar@linux.ibm=
-.com> wrote:
-> >>>>>> On Thu, 2025-02-27 at 17:22 -0500, Paul Moore wrote:
-> >>>>>>>
-> >>>>>>> I'd still also like to see some discussion about moving towards t=
-he
-> >>>>>>> addition of keyrings oriented towards usage instead of limiting
-> >>>>>>> ourselves to keyrings that are oriented on the source of the keys=
-.
-> >>>>>>> Perhaps I'm missing some important detail which makes this
-> >>>>>>> impractical, but it seems like an obvious improvement to me and w=
-ould
-> >>>>>>> go a long way towards solving some of the problems that we typica=
-lly
-> >>>>>>> see with kernel keys.
-> >>>>
-> >>>> The intent is not to limit ourselves to the source of the key.  The =
-main
-> >>>> point of Clavis is to allow the end-user to determine what kernel ke=
-ys
-> >>>> they want to trust and for what purpose, irrespective of the origina=
-ting
-> >>>> source (.builtin_trusted, .secondary, .machine, or .platform). If we=
- could
-> >>>> go back in time, individual keyrings could be created that are orien=
-ted
-> >>>> toward usage.   The idea for introducing Clavis is to bridge what we
-> >>>> have today with kernel keys and allow them to be usage based.
-> >>>
-> >>> While it is unlikely that the current well known keyrings could be
-> >>> removed, I see no reason why new usage oriented keyrings could not be
-> >>> introduced.  We've seen far more significant shifts in the kernel ove=
-r
-> >>> the years.
-> >>
-> >> Could you further clarify how a usage oriented keyring would work?  Fo=
-r
-> >> example, if a kernel module keyring was added, how would the end-user
-> >> add keys to it while maintaining a root of trust?
-> >
-> > Consider it an exercise left to the reader :)
-> >
-> > I imagine there are different ways one could do that, either using
-> > traditional user/group/capability permissions and/or LSM permissions,
-> > it would depend on the environment and the security goals of the
-> > overall system.
->
-> These keys are used by the Lockdown LSM to provide signature
-> validation.
->
-> I realize the contents that follow in this paragraph is outside the
-> boundary of mainline kernel code.  Every distro that wants their
-> shim signed must explain how their kernel enforces lockdown
-> mode.  The minimum requirement is lockdown in integrity mode.
-> Also, the expectation is lockdown enforcement continues on
-> through a kexec.
+Hi steven,
 
-I personally find it very amusing the UEFI Secure Boot shim is reliant
-on an unmaintained and only marginally supported LSM, Lockdown.  Has
-anyone recently verified that Lockdown's protections are still intact
-and comprehensive enough to be worthwhile?  Sorry, this is a bit of a
-digression, but since you were the one to bring up Lockdown I thought
-it would be important to mention that I don't have much faith that it
-is still working to the same level as it originally was intended.  I
-have a TODO list item to draft a policy around deprecating
-unmaintained LSMs after an extended period of time, and once that is
-in place if we don't have a qualified maintainer for Lockdown it will
-likely fall into the deprecation process (whatever that may be).
+kernel test robot noticed the following build warnings:
 
-> When in lockdown integrity mode, features that allow the kernel
-> to be modified at runtime are disabled.  How would what you have
-> suggested above adhere to these goals?
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-For starters, verify that Lockdown is still comprehensive enough to
-satisfy these requirements on a modern Linux kernel.  After that has
-been done, find someone with some kernel experience to step up and
-maintain Lockdown.  Finally, put a mechanism in place so that
-someone/something is regularly evaluating changes in the upstream
-kernel to ensure that Lockdown is still able to achieve its security
-goals.
+url:    https://github.com/intel-lab-lkp/linux/commits/steven-chen/ima-copy-only-complete-measurement-records-across-kexec/20250305-031719
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
+patch link:    https://lore.kernel.org/r/20250304190351.96975-3-chenste%40linux.microsoft.com
+patch subject: [PATCH v9 2/7] kexec: define functions to map and unmap segments
+config: x86_64-randconfig-161-20250306 (https://download.01.org/0day-ci/archive/20250306/202503061449.gbVGafZc-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
 
-After all that, then you can start worrying about keys.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202503061449.gbVGafZc-lkp@intel.com/
 
-> The point of the Clavis LSM is to use the root of trust provided to
-> the kernel prior to it booting. This maintains the lockdown integrity
-> goals, while also giving the end-user the ability to determine how
-> kernel keys are used.
+smatch warnings:
+kernel/kexec_core.c:896 kimage_map_segment() error: uninitialized symbol 'dest_page_addr'.
 
---=20
-paul-moore.com
+vim +/dest_page_addr +896 kernel/kexec_core.c
+
+bf06eab7ae0f04 steven chen 2025-03-04  870  void *kimage_map_segment(struct kimage *image,
+bf06eab7ae0f04 steven chen 2025-03-04  871  			 unsigned long addr, unsigned long size)
+bf06eab7ae0f04 steven chen 2025-03-04  872  {
+bf06eab7ae0f04 steven chen 2025-03-04  873  	unsigned long eaddr = addr + size;
+bf06eab7ae0f04 steven chen 2025-03-04  874  	unsigned long src_page_addr, dest_page_addr;
+bf06eab7ae0f04 steven chen 2025-03-04  875  	unsigned int npages;
+bf06eab7ae0f04 steven chen 2025-03-04  876  	struct page **src_pages;
+bf06eab7ae0f04 steven chen 2025-03-04  877  	int i;
+bf06eab7ae0f04 steven chen 2025-03-04  878  	kimage_entry_t *ptr, entry;
+bf06eab7ae0f04 steven chen 2025-03-04  879  	void *vaddr = NULL;
+bf06eab7ae0f04 steven chen 2025-03-04  880  
+bf06eab7ae0f04 steven chen 2025-03-04  881  	/*
+bf06eab7ae0f04 steven chen 2025-03-04  882  	 * Collect the source pages and map them in a contiguous VA range.
+bf06eab7ae0f04 steven chen 2025-03-04  883  	 */
+bf06eab7ae0f04 steven chen 2025-03-04  884  	npages = PFN_UP(eaddr) - PFN_DOWN(addr);
+bf06eab7ae0f04 steven chen 2025-03-04  885  	src_pages = kmalloc_array(npages, sizeof(*src_pages), GFP_KERNEL);
+bf06eab7ae0f04 steven chen 2025-03-04  886  	if (!src_pages) {
+bf06eab7ae0f04 steven chen 2025-03-04  887  		pr_err("Could not allocate ima pages array.\n");
+bf06eab7ae0f04 steven chen 2025-03-04  888  		return NULL;
+bf06eab7ae0f04 steven chen 2025-03-04  889  	}
+bf06eab7ae0f04 steven chen 2025-03-04  890  
+bf06eab7ae0f04 steven chen 2025-03-04  891  	i = 0;
+bf06eab7ae0f04 steven chen 2025-03-04  892  	for_each_kimage_entry(image, ptr, entry) {
+bf06eab7ae0f04 steven chen 2025-03-04  893  		if (entry & IND_DESTINATION) {
+bf06eab7ae0f04 steven chen 2025-03-04  894  			dest_page_addr = entry & PAGE_MASK;
+
+Is the first entry always IND_DESTINATION?
+
+bf06eab7ae0f04 steven chen 2025-03-04  895  		} else if (entry & IND_SOURCE) {
+bf06eab7ae0f04 steven chen 2025-03-04 @896  			if (dest_page_addr >= addr && dest_page_addr < eaddr) {
+                                                                    ^^^^^^^^^^^^^^
+otherwise this is uninitialized
+
+bf06eab7ae0f04 steven chen 2025-03-04  897  				src_page_addr = entry & PAGE_MASK;
+bf06eab7ae0f04 steven chen 2025-03-04  898  				src_pages[i++] =
+bf06eab7ae0f04 steven chen 2025-03-04  899  					virt_to_page(__va(src_page_addr));
+bf06eab7ae0f04 steven chen 2025-03-04  900  				if (i == npages)
+bf06eab7ae0f04 steven chen 2025-03-04  901  					break;
+bf06eab7ae0f04 steven chen 2025-03-04  902  				dest_page_addr += PAGE_SIZE;
+bf06eab7ae0f04 steven chen 2025-03-04  903  			}
+bf06eab7ae0f04 steven chen 2025-03-04  904  		}
+bf06eab7ae0f04 steven chen 2025-03-04  905  	}
+bf06eab7ae0f04 steven chen 2025-03-04  906  
+bf06eab7ae0f04 steven chen 2025-03-04  907  	/* Sanity check. */
+bf06eab7ae0f04 steven chen 2025-03-04  908  	WARN_ON(i < npages);
+bf06eab7ae0f04 steven chen 2025-03-04  909  
+bf06eab7ae0f04 steven chen 2025-03-04  910  	vaddr = vmap(src_pages, npages, VM_MAP, PAGE_KERNEL);
+bf06eab7ae0f04 steven chen 2025-03-04  911  	kfree(src_pages);
+bf06eab7ae0f04 steven chen 2025-03-04  912  
+bf06eab7ae0f04 steven chen 2025-03-04  913  	if (!vaddr)
+bf06eab7ae0f04 steven chen 2025-03-04  914  		pr_err("Could not map ima buffer.\n");
+bf06eab7ae0f04 steven chen 2025-03-04  915  
+bf06eab7ae0f04 steven chen 2025-03-04  916  	return vaddr;
+bf06eab7ae0f04 steven chen 2025-03-04  917  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
 
