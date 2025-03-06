@@ -1,359 +1,173 @@
-Return-Path: <linux-integrity+bounces-5132-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5133-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AC01A54545
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 09:48:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1825CA545B8
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 10:01:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 949B016E392
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 08:48:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 322681883E8C
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 09:01:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B036A2080E0;
-	Thu,  6 Mar 2025 08:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268B6207DEA;
+	Thu,  6 Mar 2025 09:01:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="SOMuJmNd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E716719C54C
-	for <linux-integrity@vger.kernel.org>; Thu,  6 Mar 2025 08:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CF019D071;
+	Thu,  6 Mar 2025 09:01:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741250869; cv=none; b=WHTw4yhTu4NgNcjwAxws2yO51ENWRenOdbrugz7Ftpqd1cwwAubFd6DkD/ONOhzNwhxlMNEYXx4h+3uIIO5bkoOe6SAct4g5Jv+sl+Iaprclz3hmN1XF5LbxmUOAFLoK+4ExVKHp2Uf+aveO7kK5mjRLCkiqx6ltxZwat+7YmqY=
+	t=1741251666; cv=none; b=XVZ1+kGYXio0dxYy/h/zGIiyA6q6b5nNo63sTDPR+9s8hzl2SbLutEB5t3uTwbFiZbd5sXDyhyqcfOIlqMFU8muFlukwFz5nqbqpmKP5s25N9eYoZMszI2WUmcSiM2aVGRRfZwzVZcJPC3TAEM27wpjHVXWVt1P9mwLT28ngJsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741250869; c=relaxed/simple;
-	bh=0ViUWIvd+csvzg4HXih9wEPRslj9jOlXn7MzgkcZnjA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JdAGGLtw0RAKYIa7fRItqqFkC0oNRpPCdXIMCov3IONK7YbkX3ks6hqnBwyNXD4Wf1Rq4Cb51dQpui1VGouv+MfRsnjNVRFlDYHMcIImEGZuR8upQ+YnpmZ/dOwFlVajKsXA4GGnxcmwWySykah6AfGBZ/x3YeXFJTFJg8LEjIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4Z7jj52D4JzpTZj
-	for <linux-integrity@vger.kernel.org>; Thu,  6 Mar 2025 16:47:21 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 8EF971400D8
-	for <linux-integrity@vger.kernel.org>; Thu,  6 Mar 2025 16:47:39 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCHC0okYclng86uAw--.14009S2;
-	Thu, 06 Mar 2025 09:47:39 +0100 (CET)
-Message-ID: <a4081237104bc5fdb7e8e316f8ea281b3ed1617d.camel@huaweicloud.com>
-Subject: Re: [RFC][PATCH] ima: add measurement for first unverified write on
- ima policy file
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Enrico Bravi <enrico.bravi@polito.it>, "roberto.sassu@huawei.com"
- <roberto.sassu@huawei.com>, "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>, "zohar@linux.ibm.com"
- <zohar@linux.ibm.com>,  "dmitry.kasatkin@gmail.com"
- <dmitry.kasatkin@gmail.com>
-Cc: "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>
-Date: Thu, 06 Mar 2025 09:47:29 +0100
-In-Reply-To: <f0eb80a5e6e436721e22448de625951d60010013.camel@polito.it>
-References: <20250225131255.154826-1-enrico.bravi@polito.it>
-	 <ecc4630b5e3161736aa1e32f037facb9123025fc.camel@linux.ibm.com>
-	 <013864bca0b53d65b9546125090c8d7776ee565a.camel@polito.it>
-	 <9fb7a98bb88c05d953fd90c84c78af0bbd58df9b.camel@linux.ibm.com>
-	 <484b1563482aca871a147daeff916fcb0730c6d6.camel@polito.it>
-	 <2a6924b36ab41fd5d9666de726b9f4a0754b9cbb.camel@huaweicloud.com>
-	 <091e810e9225014ab61fedd868f7fff70e864da4.camel@polito.it>
-	 <4679907583cfe4d406d43f8e46bada6e9a23c096.camel@huaweicloud.com>
-	 <f0eb80a5e6e436721e22448de625951d60010013.camel@polito.it>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1741251666; c=relaxed/simple;
+	bh=bFPyYCMrzKR8vp8DZ4QjKL2f7mF9ZTGXU+XgZbC8/SE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HhvgE5Hgv4L5uKm2f5Hb/cEv1+ox+stjg7R/IqAlWqoSvvTAFcavrgymXembcyTbbSotfBRwEJlrP0cG2lFywa1iHWNGcTrbHdZlGSc3ShniHjT+YiO1moZBzko5rK4xsv5jeNTmHX+AoIPQ6PTPG5iTaIOuNlnTHZc7Yv793Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=SOMuJmNd; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:
+	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
+	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+	References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+	List-Owner:List-Archive; bh=6IrX1eM8G/pcQ9Ik0E9LCERhzGjEzWP/RJw7jGqJxW4=; b=S
+	OMuJmNdn7T7jkpjiqYfIS8QIoC9gxUfeBwfleKjzyilJ0Yhkvtc2rqhlhx6a9bsiS15557l9+hjoh
+	1z9tPEAvdoJUVFSz240v3wDV0lJEdS233gZCzO6n9DM/WEqjvdOlc/hYO5HK9xHFge1lWJ0KVCyvo
+	B8karKoa6UM33TZaHkPs4OkFx9a2DyQJsO48VbW1K8w+Xo8gCgNNMcT3UfOo8dUGMIv3ghU9WJytq
+	Q/Aw2KHAKoFemjyKiLHcBHa7ymfx6aGwUqA0OApxmSCvoUoSf+b40ra6CD1H1FPg5imTec+dL+Ftu
+	dcxq+huiqtGU9N1RIY3qHTSEDO6+2FwtA==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1tq768-00BiOQ-17;
+	Thu, 06 Mar 2025 09:00:56 +0000
+Date: Thu, 6 Mar 2025 09:00:56 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Stefan Berger <stefanb@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm, tpm_tis: Workaround failed command reception on
+ Infineon devices
+Message-ID: <Z8lkSKOqBgt78pU2@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwCHC0okYclng86uAw--.14009S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtFykXF4fJF43WFyfAw4xZwb_yoW3Ar15pF
-	W5ta4jkr4DXry8Ar17K3WrXr1FvryUJw45XryUJr1UAwn0yr18Kr45Jr1Y9Fn7Jr18Jw1j
-	qr15trW7XF1UZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUymb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UK2NtUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBGfH99oLJwAIs-
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 2025-03-06 at 08:20 +0000, Enrico  Bravi wrote:
-> On Wed, 2025-03-05 at 09:59 +0100, Roberto Sassu wrote:
-> > On Mon, 2025-03-03 at 10:26 +0000, Enrico=C2=A0 Bravi wrote:
-> > > On Thu, 2025-02-27 at 15:49 +0100, Roberto Sassu wrote:
-> > > > On Thu, 2025-02-27 at 11:36 +0000, Enrico=C2=A0 Bravi wrote:
-> > > > > On Wed, 2025-02-26 at 22:05 -0500, Mimi Zohar wrote:
-> > > > > > On Wed, 2025-02-26 at 22:53 +0000, Enrico=C2=A0 Bravi wrote:
-> > > > > > > On Tue, 2025-02-25 at 20:53 -0500, Mimi Zohar wrote:
-> > > > > > > > On Tue, 2025-02-25 at 14:12 +0100, Enrico Bravi wrote:
-> > > > > > > > > The first write on the ima policy file permits to overrid=
-e the
-> > > > > > > > > default
-> > > > > > > > > policy defined with the ima_policy=3D boot parameter. Thi=
-s can be
-> > > > > > > > > done
-> > > > > > > > > by adding the /etc/ima/ima-policy which allows loading th=
-e
-> > > > > > > > > custom
-> > > > > > > > > policy
-> > > > > > > > > during boot. It is also possible to load custom policy at
-> > > > > > > > > runtime
-> > > > > > > > > through
-> > > > > > > > > file operations:
-> > > > > > > > >=20
-> > > > > > > > > cp custom_ima_policy /sys/kernel/security/ima/policy
-> > > > > > > > > cat custom_ima_policy > /sys/kernel/security/ima/policy
-> > > > > > > > >=20
-> > > > > > > > > or by writing the absolute path of the file containing th=
-e
-> > > > > > > > > custom
-> > > > > > > > > policy:
-> > > > > > > > >=20
-> > > > > > > > > echo /path/of/custom_ima_policy >
-> > > > > > > > > /sys/kernel/security/ima/policy
-> > > > > > > > >=20
-> > > > > > > > > In these cases, file signature can be necessary to load t=
-he
-> > > > > > > > > policy
-> > > > > > > > > (func=3DPOLICY_CHECK). Custom policy can also be set at r=
-untime by
-> > > > > > > > > directly
-> > > > > > > > > writing the policy stream on the ima policy file:
-> > > > > > > > >=20
-> > > > > > > > > echo -e "measure func=3DBPRM_CHECK mask=3DMAY_EXEC\n" \
-> > > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0"audit fu=
-nc=3DBPRM_CHECK mask=3DMAY_EXEC\n" \
-> > > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 > /sys/kernel/security/ima/polic=
-y
-> > > > > > > > >=20
-> > > > > > > > > In this case, there is no mechanism to verify the integri=
-ty of
-> > > > > > > > > the
-> > > > > > > > > new
-> > > > > > > > > policy.
-> > > > > > > > >=20
-> > > > > > > > > Add a new entry in the ima measurements list containing t=
-he
-> > > > > > > > > ascii
-> > > > > > > > > custom
-> > > > > > > > > ima policy buffer when not verified at load time.
-> > > > > > > > >=20
-> > > > > > > > > Signed-off-by: Enrico Bravi <enrico.bravi@polito.it>
-> > > > > > > >=20
-> > > > > > > > Hi Enrico,
-> > > > > > >=20
-> > > > > > > Hi Mimi,
-> > > > > > >=20
-> > > > > > > thank you for the quick response.
-> > > > > > >=20
-> > > > > > > > This patch set hard codes measuring the initial custom IMA =
-policy
-> > > > > > > > rules
-> > > > > > > > that
-> > > > > > > > replace the builtin policies specified on the boot command =
-line.=C2=A0
-> > > > > > > > IMA
-> > > > > > > > shouldn't hard code policy.
-> > > > > > >=20
-> > > > > > > My first approach was to define a new critical-data record,=
-=C2=A0
-> > > > >=20
-> > > > > Hi Mimi,
-> > > > >=20
-> > > > > > Hopefully the new critical-data will be of the entire IMA polic=
-y.
-> > > > >=20
-> > > > > yes, absolutely.
-> > > > >=20
-> > > > > > > but performing the
-> > > > > > > measurement after the custom policy becomes effective, the
-> > > > > > > measurement
-> > > > > > > could
-> > > > > > > be
-> > > > > > > bypassed omitting func=3DCRITICAL_DATA in the custom policy.
-> > > > > > >=20
-> > > > > > > > I'm not quite sure why you're differentiating between
-> > > > > > > > measuring the initial and subsequent custom IMA policy rule=
-s.=C2=A0=C2=A0
-> > > > > > >=20
-> > > > > > > My intention is to measure the first direct write (line by li=
-ne) on
-> > > > > > > the
-> > > > > > > policy
-> > > > > > > file, without loading the initial custom policy from a file. =
-This
-> > > > > > > case,
-> > > > > > > if
-> > > > > > > I'm
-> > > > > > > not wrong, is not covered by func=3DPOLICY_CHECK.
-> > > > > >=20
-> > > > > > When secure boot is enabled, the arch specific policy rules req=
-uire
-> > > > > > the
-> > > > > > IMA
-> > > > > > policy to be signed.=C2=A0 Without secure boot enabled, you're =
-correct. The
-> > > > > > custom
-> > > > > > policy rules may directly be loaded without being measured.
-> > > > > >=20
-> > > > > > Why only measure "the first direct write"?=C2=A0 Additional cus=
-tom policy
-> > > > > > rules
-> > > > > > may
-> > > > > > be directly appended without being measured.
-> > > > >=20
-> > > > > Yes, you right. The aim was to measure (at least) the first one, =
-because
-> > > > > it
-> > > > > substitutes the boot policy, but if you are ok with adding a crit=
-ical-
-> > > > > data
-> > > > > record, it would be definitely better.
-> > > >=20
-> > > > Hi Enrico
-> > > >=20
-> > > > in addition to what Mimi suggested, I also like to idea that the
-> > > > POLICY_CHECK hook catches the direct policy loading. That would mea=
-n
-> > > > that those updates would be seen if the 'tcb' IMA policy is selecte=
-d.
-> > >=20
-> > > Hi Roberto,
-> > >=20
-> > > in this case, wouldn't be used the current template? Wouldn't be bett=
-er to
-> > > use
-> > > the ima-buf in order to include the textual policy representation?
-> >=20
-> > Hi Enrico
-> >=20
-> > I would use the current template, I don't find any particular issues
-> > for it. Sure, we don't have a file to measure but there are other cases
-> > where in process_measurement() we measure a buffer instead of a file
-> > (when it is called by ima_post_read_file()).
-> >=20
-> > We can have both critical data and POLICY_CHECK measurement.
+From: Jonathan McDowell <noodles@meta.com>
 
-CRITICAL_DATA and POLICY_CHECK are separate hooks.
+Some Infineon devices have a issue where the status register will get
+stuck with a quick REQUEST_USE / COMMAND_READY sequence. This is not
+simply a matter of requiring a longer timeout; the work around is to
+retry the command submission. Add appropriate logic to do this in the
+send path.
 
-They can do measurement differently, CRITICAL_DATA can be for measuring
-the current state of the full policy, while POLICY_CHECK could be for
-policies sent to the kernel.
+This is fixed in later firmware revisions, but those are not always
+available, and cannot generally be easily updated from outside a
+firmware environment.
 
+Testing has been performed with a simple repeated loop of doing a
+TPM2_CC_GET_CAPABILITY for TPM_CAP_PROP_MANUFACTURER using the Go code
+at:
 
-> Hi Roberto,
->=20
-> sorry, I didn't get this point. What do you mean?
->=20
-> > > In addition, there would be a new record for each line of the input b=
-uffer,
-> > > and
-> > > measuring the input buffer would produce different measurements for t=
-he same
-> > > resulting policy entry, because different or multiple separators can =
-be
-> > > used.
-> > >=20
-> > > I opted to perform the measurement in ima_release_policy() because is=
- where
-> > > the
-> > > new policy becomes effective after ima_update_policy() and can be don=
-e a
-> > > single
-> > > measurement of the new running policy.
-> >=20
-> > I would simply measure what is passed to ima_write_policy() regardless
-> > of whether the policy will be accepted or not. This is more in line
-> > with the trusted computing paradigm of measure & load. If potentially
-> > there is a bug in the policy code, measuring the policy before with a
-> > vulnerable kernel would allow you to see the measurement. After, it
-> > depends on the seriousness of the vulnerability.
->=20
-> Ok perfect, I get your point. Thank you for the explanation.
+ https://the.earth.li/~noodles/tpm-stuff/timeout-reproducer-simple.go
 
-Welcome.
+It can take several hours to reproduce, and millions of operations.
 
-Roberto
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
+---
+ drivers/char/tpm/tpm_tis_core.c | 17 ++++++++++++++---
+ drivers/char/tpm/tpm_tis_core.h |  1 +
+ include/linux/tpm.h             |  1 +
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-> Enrico
->=20
-> > Roberto
-> >=20
-> > > The measurement could be done a bit earlier, working on ima_policy_ru=
-les and
-> > > ima_temp_rules (which basically contains the input buffer) before the
-> > > splicing,
-> > > so it would be considered the current policy and not the new one. In =
-this
-> > > case,
-> > > it would work also when ima_policy=3Dtcb is set, and it could be call=
-ed
-> > > process_buffer_measurement() with POLICY_CHECK, to get a record with =
-the
-> > > entire
-> > > IMA policy.
-> > > What do you think about it?
-> > >=20
-> > > BR,
-> > >=20
-> > > Enrico
-> > >=20
-> > > > I would have recommended to try to add a process_measurement() call=
- in
-> > > > ima_write_policy(), where the buffer to be processed is.
-> > > >=20
-> > > > However, I guess you need to have a valid file descriptor in order =
-to
-> > > > use that function (maybe an anonymous inode?).
-> > > > ima_collect_measurement() should be already able to handle buffers,
-> > > > passed by ima_post_read_file().
-> > > >=20
-> > > > Thanks
-> > > >=20
-> > > > Roberto
-> > > >=20
-> > > > > Thank you,
-> > > > >=20
-> > > > > Enrico
-> > > > >=20
-> > > > > > >=20
-> > > > > > > > Consider defining a new critical-data record to measure the
-> > > > > > > > current
-> > > > > > > > IMA
-> > > > > > > > policy
-> > > > > > > > rules.=C2=A0 Also consider including the new critical-data =
-rule in the
-> > > > > > > > arch
-> > > > > > > > specific policy rules.
-> > > > > > >=20
-> > > > > > > I think that your suggestion, to add the critical-data rule i=
-n the
-> > > > > > > arch
-> > > > > > > policy
-> > > > > > > rules, solves the problems of bypassing the measurement and h=
-ard
-> > > > > > > coding
-> > > > > > > policy.
-> > > > > > >=20
-> > > > > > > Thank you very much for your feedback.
-> > > > > >=20
-> > > > > > You're welcome.
-> > > > > >=20
-> > > > > > Mimi
-> > > > > > >=20
-> > > > >=20
-> > > >=20
-> > >=20
-> >=20
->=20
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 167d71747666..e4eae206a353 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -464,7 +464,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 
+ 		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+ 					&priv->int_queue, false) < 0) {
+-			rc = -ETIME;
++			if (test_bit(TPM_TIS_STATUS_WORKAROUND, &priv->flags))
++				rc = -EAGAIN;
++			else
++				rc = -ETIME;
+ 			goto out_err;
+ 		}
+ 		status = tpm_tis_status(chip);
+@@ -481,7 +484,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 
+ 	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+ 				&priv->int_queue, false) < 0) {
+-		rc = -ETIME;
++		if (test_bit(TPM_TIS_STATUS_WORKAROUND, &priv->flags))
++			rc = -EAGAIN;
++		else
++			rc = -ETIME;
+ 		goto out_err;
+ 	}
+ 	status = tpm_tis_status(chip);
+@@ -546,9 +552,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 		if (rc >= 0)
+ 			/* Data transfer done successfully */
+ 			break;
+-		else if (rc != -EIO)
++		else if (rc != EAGAIN && rc != -EIO)
+ 			/* Data transfer failed, not recoverable */
+ 			return rc;
++
++		usleep_range(priv->timeout_min, priv->timeout_max);
+ 	}
+ 
+ 	/* go and do it */
+@@ -1144,6 +1152,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
+ 	}
+ 
++	if (priv->manufacturer_id == TPM_VID_IFX)
++		set_bit(TPM_TIS_STATUS_WORKAROUND, &priv->flags);
++
+ 	if (is_bsw()) {
+ 		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
+ 					ILB_REMAP_SIZE);
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 690ad8e9b731..ce97b58dc005 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -89,6 +89,7 @@ enum tpm_tis_flags {
+ 	TPM_TIS_INVALID_STATUS		= 1,
+ 	TPM_TIS_DEFAULT_CANCELLATION	= 2,
+ 	TPM_TIS_IRQ_TESTED		= 3,
++	TPM_TIS_STATUS_WORKAROUND	= 4,
+ };
+ 
+ struct tpm_tis_data {
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 20a40ade8030..6c3125300c00 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -335,6 +335,7 @@ enum tpm2_cc_attrs {
+ #define TPM_VID_WINBOND  0x1050
+ #define TPM_VID_STM      0x104A
+ #define TPM_VID_ATML     0x1114
++#define TPM_VID_IFX      0x15D1
+ 
+ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_BOOTSTRAPPED		= BIT(0),
+-- 
+2.48.1
 
 
