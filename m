@@ -1,112 +1,109 @@
-Return-Path: <linux-integrity+bounces-5145-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5146-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40C5FA558EB
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 22:40:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1AA7A55922
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 22:53:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98AC71899954
-	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 21:40:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A917F3B492E
+	for <lists+linux-integrity@lfdr.de>; Thu,  6 Mar 2025 21:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F227920012D;
-	Thu,  6 Mar 2025 21:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7566E278110;
+	Thu,  6 Mar 2025 21:52:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FAQVe28B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pweQuxs0"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6EF151990
-	for <linux-integrity@vger.kernel.org>; Thu,  6 Mar 2025 21:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EED2278104;
+	Thu,  6 Mar 2025 21:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741297201; cv=none; b=ZD6TY6y4Wa5+rZFL8vRkb6VFVYSHtDeNwirLqjK+xwoMcNTe/TALi3/uuLMQ2ojV/RDnzgqcgpJ7eeagE+f+RYSFgB3OoC4gwpw6H1/7ZOjLsEpUSYiTxCE/rJWENe9dcndW+/cv154TFsXt5Qr1IJyEaAjX8B/85i/GbEOUtDY=
+	t=1741297971; cv=none; b=mtBV+KNTc+w360WIHNBTIitM7hAkZ6lVLX4GtPKSXhrmirr/ty/YdoRZNNSztZhwX3oNqS3unCAnmXvzmpifFunNjrhwYUzZbhnr1C77b+mE5hfolCPt7n2iF5L/RSod1ob+08RbDvnnxZr2Z0TPRjdXsKt0QGnrwSFqeNRuwUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741297201; c=relaxed/simple;
-	bh=Ilu9uoxP3/UY5gjj9HqRKiI/VZx0XRBuvM5dCoAHRLw=;
+	s=arc-20240116; t=1741297971; c=relaxed/simple;
+	bh=LMR2PvMaqiPaqf+FPvIKU8w+oYH2T82yjmHwvvbMFQ4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rOOVBg4rAA+c2l0iV+AD6rNE3dJiXbfoCeOjYwCUT3sXfplUvCMoGWVBT+42IqZI46MfIga8Fr8wpivIpqwmIX1w2r7382dbgEpMjoo6UOoVblkuYUoZzoEPzULEd6pnasMIyqSa8Sq5+enmliG+SVcgkCRyPgSN/kIuQL/T8sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FAQVe28B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5D27C4CEE0;
-	Thu,  6 Mar 2025 21:40:00 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZaO9YQo04/AXmS0pFvesx+14nqDUOBGzgwKw5VsDs0GiXlTh2njOboJw+jNFzz4KlWkPLqlbHwjcn5ag1RvBewALVRmFlp5AyL7CAGQyRQchiv5sT3lWXqIzCtybt505Ix+lww+h9/rxQiXAwIHFUe3TtrzIe6Wm4ORVb1y+8K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pweQuxs0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A6EC4CEE5;
+	Thu,  6 Mar 2025 21:52:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741297201;
-	bh=Ilu9uoxP3/UY5gjj9HqRKiI/VZx0XRBuvM5dCoAHRLw=;
+	s=k20201202; t=1741297970;
+	bh=LMR2PvMaqiPaqf+FPvIKU8w+oYH2T82yjmHwvvbMFQ4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FAQVe28BdkqDlL87uIIESSozuhwlvF1mx2vk12UfXepDd+ADfnqWy8ZoHjrOfysc/
-	 T/CcKXW5zUhONgejl7UdQusfKZEdC3gLC1Ru90JkrUC3Z3FsUFtwlAUNIt4k8M5fEz
-	 sAsyKjjwxrp3hNFKK2X7Y5gW1p4PKWXvCFFrp+pOBCs9+FJaQL8iDdMqRINRWBSr8G
-	 j9txtv05fygi5dXZ5npigipUuRN3mqqGh2XzF1AwAGU+aS1a16p0C8IFYRIVzn5XcG
-	 MPXediH3+8HvKqep/dlOUW/PNxpY5389d+CpIV50yGgMxh+jPNcKjQv3Gy6FrEAfZd
-	 qtfXsWffFBSzA==
-Date: Thu, 6 Mar 2025 23:39:56 +0200
+	b=pweQuxs0SJwGMMkXVQOFGk1zV9wNaNjTXJbvTPtAY6ex/1UF0ZoIGO62qC/ovC1Xh
+	 +JfBA+W7lZqRzFlLe1vF4jLl5lzLEy7K8T5rO4vvxlt2exLv6fKj0el71Rmtd6Mx7E
+	 kaIKqwyCIp3c4cLT7P89M55oTKMpIw4M5H7eg0b78xIHyI9D5fJ1uzrI2qhk4SUY5D
+	 V09jBRwRpOvzLKkye2MEH1955mVC19azdZu1KVoN3qBvjRXJ03LZZCkjnTQ5Sn//hz
+	 nzP3GPe1jExmPbNlaD1EM8p0jqHNkpJgHGDfHfIZhS60QxbH1mp/xVI5yc8latBiQY
+	 cUjvO8HecOaKA==
+Date: Thu, 6 Mar 2025 23:52:46 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Jonathan McDowell <noodles@earth.li>,
-	linux-integrity@vger.kernel.org
-Subject: Re: Unbalanced TPM2 HMAC session calls
-Message-ID: <Z8oWLCVk4E1Ly2cQ@kernel.org>
-References: <Z8m8G0RfiRyYGH_t@earth.li>
- <f16aae4408cc7bdd98fa70972b70747c26958dd1.camel@linux.ibm.com>
- <1e1f60fae0fa86a4f3c16106836f63cf1709ab5e.camel@HansenPartnership.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Claudio Carvalho <cclaudio@linux.ibm.com>,
+	Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org,
+	Dov Murik <dovmurik@linux.ibm.com>, linux-coco@lists.linux.dev,
+	Dionna Glaze <dionnaglaze@google.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [RFC PATCH v2 3/6] tpm: add send_recv() ops in tpm_class_ops
+Message-ID: <Z8oZLqn4p2-AWQbz@kernel.org>
+References: <20250228170720.144739-1-sgarzare@redhat.com>
+ <20250228170720.144739-4-sgarzare@redhat.com>
+ <Z8Jmps6AF_geaHUw@kernel.org>
+ <3p5erujbhxw7ozdnfpmresv3dqdh2xszolv6mh4khkagoy3wit@ow5qht4keh4h>
+ <0e156883acf95d31b9358831550d6d675e3ce4ff.camel@kernel.org>
+ <Z8dg46Mj81Q9Z0WV@kernel.org>
+ <jkr5z4thb55gs2jcmtcfipgg6p7z6ikhr6etd6l3nqpf723hf7@3fns3z5cjqk4>
+ <20250305190229.GC354403@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1e1f60fae0fa86a4f3c16106836f63cf1709ab5e.camel@HansenPartnership.com>
+In-Reply-To: <20250305190229.GC354403@ziepe.ca>
 
-On Thu, Mar 06, 2025 at 11:30:01AM -0800, James Bottomley wrote:
-> On Thu, 2025-03-06 at 13:59 -0500, Mimi Zohar wrote:
-> > On Thu, 2025-03-06 at 15:15 +0000, Jonathan McDowell wrote:
-> > > We're seeing a lot of:
-> > > 
-> > > tpm tpm0: auth session is active
-> > > 
-> > > messages in our logs. This is emitted (once per boot) by 
-> > > tpm2_start_auth_session() if the auth sessions is already active
-> > > when it is called.
-> > > 
-> > > Investigating I think this is because tpm2_pcr_extend() calls 
-> > > tpm_buf_append_hmac_session() which sets TPM2_SA_CONTINUE_SESSION
-> > > so tpm_buf_check_hmac_response() does not cleanup the auth session,
-> > > but then doesn't call tpm2_end_auth_session().
-> > > 
-> > > Looking at tpm2_get_random() it uses TPM2_SA_CONTINUE_SESSION but
-> > > *also* cleans up with tpm2_end_auth_session().
-> > > 
-> > > I'd be sending a patch proposing the addition of
-> > > tpm2_end_auth_session() to the end of tpm2_pcr_extend() but I
-> > > recall a bunch of discussion about trying to cache the HMAC session
-> > > to improve IMA performance, so I don't know if perhaps we should be
-> > > dropping the warning instead?
-> > 
-> > Hi Jonathan,
-> > 
-> > That suggestion was nixed. 
+On Wed, Mar 05, 2025 at 03:02:29PM -0400, Jason Gunthorpe wrote:
+> On Wed, Mar 05, 2025 at 10:04:25AM +0100, Stefano Garzarella wrote:
+> > Jason suggested the send_recv() ops [2], which I liked, but if you prefer to
+> > avoid that, I can restore what we did in v1 and replace the
+> > TPM_CHIP_FLAG_IRQ hack with your point 2 (or use TPM_CHIP_FLAG_IRQ if you
+> > think it is fine).
 > 
-> Well it's also upstream as
+> I think it is a pretty notable simplification for the driver as it
+> does not need to implement send, status, req_canceled and more ops.
 > 
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=df745e25098dcb2f706399c0d06dd8d1bab6b6ec
-> 
-> even though it didn't work out for large numbers of extends.  However,
-> that commit introduced this message on a warn once behaviour, so it
-> seems to be expected that this gets printed once for some reason.  From
-> a code flow point of view, the lazy session handling seems to be
-> working correctly, so I think just dropping the warn is correct.
+> Given the small LOC on the core side I'd call that simplification a
+> win..
 
-+1
+I'm sorry to disagree with you on this but adding a callback for
+one leaf driver is not what I would call "a win" :-)
+
+I mean, it's either a minor twist in
+
+1. "the framework code" which affects in a way all other leaf drivers.
+   At bare minimum it adds a tiny bit of complexity to the callback
+   interface and a tiny bit of accumulated maintenance cost.
+2. in the leaf driver
+
+So I'd really would want to keep that tiny bit of extra complexity
+localized.
 
 > 
-> Regards,
-> 
-> James
+> Jason
 
 BR, Jarkko
 
