@@ -1,59 +1,65 @@
-Return-Path: <linux-integrity+bounces-5182-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5183-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F68FA56E2E
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 17:46:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D762A56EF3
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 18:25:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49FB61644B9
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 16:46:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEE631894F71
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 17:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C25C21C180;
-	Fri,  7 Mar 2025 16:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6863223FC4C;
+	Fri,  7 Mar 2025 17:25:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="roeLOZQG"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="kVmqko+g"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0490917583;
-	Fri,  7 Mar 2025 16:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FE923F417;
+	Fri,  7 Mar 2025 17:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741365963; cv=none; b=O2RzxlqiG4hCx5/jTRpO/dq5axPkcUk1Oau+6Rb27JjwEDNSFLzRi3XUAT/nWWobhT/iFDKZzhA+WT4YseMrDYhhteXu/HIU/+E7brm/ovG1n1RmUQbG5DRlkkLJ4/jHdRZXLPaLLUVv+02dRic2HKo0OrKeubGxAJZAXmTyAPI=
+	t=1741368344; cv=none; b=WBqYKqsz+1SsccNJ4+ju49vbKE9ly84Ayzu+pRNHVHBV8UIbBD8jzYM1mgI4qS6FxTEQdy8ll4YI+s+4oOd/h18JaTVNpTQchjkefvo8CK6by8uHuhPHK9mCmXKWR6QrCq04NOND4WB5qbIX9EhfsLgx4kAgxKdytAcQhiOq9+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741365963; c=relaxed/simple;
-	bh=dxkCyg9/hgzqXxZ4pSS0zIMJT2hY5GRvI0K+a6FCMkE=;
+	s=arc-20240116; t=1741368344; c=relaxed/simple;
+	bh=4TgqF5PzG5rwyF22hpvCrDenfnUV2QW4nW9vZ1D2b3A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e84LMG4nDGkhGJClJh9uZK6DuMKXkjT608RvHY0nbFdHeRzhV01RUD1irfCBMT+zAB67DAKKor4beMXNVKdcRhBlkHUHqfu66K668yyLVxYNFKN7OIgDc0orlbKGwwla9LiFVuo/V5cB41kT12hebbuus9aJyzsRbw+BoLG04tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=roeLOZQG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D47C4CED1;
-	Fri,  7 Mar 2025 16:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741365962;
-	bh=dxkCyg9/hgzqXxZ4pSS0zIMJT2hY5GRvI0K+a6FCMkE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=roeLOZQGSeZ329Fhb4v2Ke0hje6eWox1bXX2gXM8giovzLjJcsk/ijPkdIdWHM/SV
-	 8lJyuWnhRwQQU3v/t71XgJpt0cGA9ZC46kDJ1sJi8Bf6tbwF/CGd1LC2byHZ0dziwu
-	 D/yv2k7MKkKl1i4euDLWoTXOWXRsMw0/CcxupXZkG7mAYUTqOrDxlt5BlnOByRf6Js
-	 gLea4imWQDPhGgF41QBRcP5GR8rGmrxHkNBrSvMPspg6ZEaw6iPbVwMpsOj50t6SxY
-	 9nvDGOYKomuMtIuuZ7paNcPGkl4ucJAAFDhPXIFXFwG7gwfRSzxMWTT/Ne4uW8532m
-	 ND03eg2zRjhVA==
-Date: Fri, 7 Mar 2025 18:45:57 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Jonathan McDowell <noodles@earth.li>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TJw3SY+hXjWHCdgIis5lPTljjmrzHgFrITftcTe7WpjeG11W9UwHPywWKDz6iArhhi2FBQyRuu2BAvp1QW9KUHjC3CydrgGuYqM3yC20JtPts2C6Yjrz8ZvhxBh1QiyG40PFuDrbStfbT65gbvHM86C+1ZjcrH10QMqT8cC+gWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=kVmqko+g; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=5tYAA/tNDFjXTBXcriqcTjPLPjUcxEBzzh5F4yIZ5zo=; b=kVmqko+gWV+JaGa7kdCAPkR1K/
+	0Mj9urIZB+ept71ZijGadczjSabubefPcjNDoXcOC9Tfp8LK+qOp9FwaoDMktkD0KDN3Iunw09NEV
+	7dBjpepM+KQ6D4cYGNofT5vmtfvSMViQk/Gi69IbpT3QTht6bdABBGWu2+vjlzmFfm0v8dFOAvg5U
+	MX5CuQq0MfbrFNY4DRyhC8uicfqXe7/FTIVpWPEIKfbiJY5QRj5x/6b1uuFo2yp50W9JFvK4JPC5T
+	2fKGuT+Ih/4T9IMJ/5SgEeYW4c7pETO7GnePLtvpnxUKIsL10xjkxoiZZyaNVkbE5x7zvuZ+R/4ez
+	Fh7UKETA==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1tqbS4-00DF1v-0u;
+	Fri, 07 Mar 2025 17:25:36 +0000
+Date: Fri, 7 Mar 2025 17:25:36 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
 Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
 	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm, tpm_tis: Workaround failed command reception on
- Infineon devices
-Message-ID: <Z8sixTuKG5sxO-D1@kernel.org>
-References: <Z8lkSKOqBgt78pU2@earth.li>
- <Z8ogT_gERUYstPbK@kernel.org>
- <Z8sgfMmsfn894yLj@earth.li>
+	Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: Drop warning when an auth session is active
+Message-ID: <Z8ssEDPIyOguNBXb@earth.li>
+References: <Z8m8G0RfiRyYGH_t@earth.li>
+ <Z8oV9lJ4hsHualcP@kernel.org>
+ <Z8rQ7Mxf_G6227HP@earth.li>
+ <Z8sgcquTyx1ICvS_@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -62,143 +68,42 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z8sgfMmsfn894yLj@earth.li>
+In-Reply-To: <Z8sgcquTyx1ICvS_@kernel.org>
 
-On Fri, Mar 07, 2025 at 04:36:12PM +0000, Jonathan McDowell wrote:
-> On Fri, Mar 07, 2025 at 12:23:11AM +0200, Jarkko Sakkinen wrote:
-> > On Thu, Mar 06, 2025 at 09:00:56AM +0000, Jonathan McDowell wrote:
-> > > From: Jonathan McDowell <noodles@meta.com>
-> > > 
-> > > Some Infineon devices have a issue where the status register will get
-> > > stuck with a quick REQUEST_USE / COMMAND_READY sequence. This is not
-> > > simply a matter of requiring a longer timeout; the work around is to
-> > > retry the command submission. Add appropriate logic to do this in the
-> > > send path.
-> > > 
-> > > This is fixed in later firmware revisions, but those are not always
-> > > available, and cannot generally be easily updated from outside a
-> > > firmware environment.
-> > > 
-> > > Testing has been performed with a simple repeated loop of doing a
-> > > TPM2_CC_GET_CAPABILITY for TPM_CAP_PROP_MANUFACTURER using the Go code
-> > > at:
-> > > 
-> > >  https://the.earth.li/~noodles/tpm-stuff/timeout-reproducer-simple.go
-> > > 
-> > > It can take several hours to reproduce, and millions of operations.
-> > > 
-> > > Signed-off-by: Jonathan McDowell <noodles@meta.com>
-> > > ---
-> > >  drivers/char/tpm/tpm_tis_core.c | 17 ++++++++++++++---
-> > >  drivers/char/tpm/tpm_tis_core.h |  1 +
-> > >  include/linux/tpm.h             |  1 +
-> > >  3 files changed, 16 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> > > index 167d71747666..e4eae206a353 100644
-> > > --- a/drivers/char/tpm/tpm_tis_core.c
-> > > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > > @@ -464,7 +464,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
-> > >  
-> > >  		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
-> > >  					&priv->int_queue, false) < 0) {
-> > > -			rc = -ETIME;
-> > > +			if (test_bit(TPM_TIS_STATUS_WORKAROUND, &priv->flags))
-> > > +				rc = -EAGAIN;
-> > > +			else
-> > > +				rc = -ETIME;
-> > >  			goto out_err;
-> > >  		}
-> > >  		status = tpm_tis_status(chip);
-> > > @@ -481,7 +484,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
-> > >  
-> > >  	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
-> > >  				&priv->int_queue, false) < 0) {
-> > > -		rc = -ETIME;
-> > > +		if (test_bit(TPM_TIS_STATUS_WORKAROUND, &priv->flags))
-> > > +			rc = -EAGAIN;
-> > > +		else
-> > > +			rc = -ETIME;
+On Fri, Mar 07, 2025 at 06:36:02PM +0200, Jarkko Sakkinen wrote:
+> On Fri, Mar 07, 2025 at 10:56:44AM +0000, Jonathan McDowell wrote:
+> > Auth sessions are lazily flushed since commit df745e25098dc ("tpm:
+> > Lazily flush the auth session"), so it's expected that we might try to
+> > start a new session when one is still active.
 > > 
-> > I'd encapsulate this inside wait_for_tpm_stat().
-> 
-> I think that gets a bit more complicated; this is an errata in the send 
-> command path, for a stuck VALID bit, and the fix is to restart the whole 
-> command send (i.e. we need to kick the TPM with tpm_tis_ready() etc). 
-> I'm not sure returning EAGAIN in wait_for_tpm_stat() then makes 
-> tpm_tis_send_data() any simpler.
-
-OK, it is a fair argument. Let's keep it as it is.
-
-> 
-> > >  		goto out_err;
-> > >  	}
-> > >  	status = tpm_tis_status(chip);
-> > > @@ -546,9 +552,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
-> > >  		if (rc >= 0)
-> > >  			/* Data transfer done successfully */
-> > >  			break;
-> > > -		else if (rc != -EIO)
-> > > +		else if (rc != EAGAIN && rc != -EIO)
-> > >  			/* Data transfer failed, not recoverable */
-> > >  			return rc;
-> > > +
-> > > +		usleep_range(priv->timeout_min, priv->timeout_max);
-> > >  	}
-> > >  
-> > >  	/* go and do it */
-> > > @@ -1144,6 +1152,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
-> > >  		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
-> > >  	}
-> > >  
-> > > +	if (priv->manufacturer_id == TPM_VID_IFX)
-> > > +		set_bit(TPM_TIS_STATUS_WORKAROUND, &priv->flags);
-> > > +
-> > >  	if (is_bsw()) {
-> > >  		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
-> > >  					ILB_REMAP_SIZE);
-> > > diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> > > index 690ad8e9b731..ce97b58dc005 100644
-> > > --- a/drivers/char/tpm/tpm_tis_core.h
-> > > +++ b/drivers/char/tpm/tpm_tis_core.h
-> > > @@ -89,6 +89,7 @@ enum tpm_tis_flags {
-> > >  	TPM_TIS_INVALID_STATUS		= 1,
-> > >  	TPM_TIS_DEFAULT_CANCELLATION	= 2,
-> > >  	TPM_TIS_IRQ_TESTED		= 3,
-> > > +	TPM_TIS_STATUS_WORKAROUND	= 4,
+> > Signed-off-by: Jonathan McDowell <noodles@meta.com>
+> > ---
+> >  drivers/char/tpm/tpm2-sessions.c | 1 -
+> >  1 file changed, 1 deletion(-)
 > > 
-> > TPM_TIS_TIMEOUT_AGAIN or maybe *_REPEAT? The current name does
-> > not tell anything.
+> > diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+> > index b70165b588ec..2d2c192ebb14 100644
+> > --- a/drivers/char/tpm/tpm2-sessions.c
+> > +++ b/drivers/char/tpm/tpm2-sessions.c
+> > @@ -982,7 +982,6 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
+> >  	int rc;
+> >  
+> >  	if (chip->auth) {
+> > -		dev_warn_once(&chip->dev, "auth session is active\n");
+> >  		return 0;
+> >  	}
 > 
-> Yeah, TPM_TIS_STATUS_VALID_RETRY is perhaps clearer; it's not a timeout, 
-> and we're looking to do a retry based on STS_VALID.
+> OK so curly faces should be also removed but I can adjust this
+> (if you don't mind), so we save all of us from trouble of
+> going through additional review round?
 
-WFM
+Doh! Shoulda caught that. Feel free to do the fix up.
 
+J.
 
-> 
-> > >  };
-> > >  
-> > >  struct tpm_tis_data {
-> > > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > > index 20a40ade8030..6c3125300c00 100644
-> > > --- a/include/linux/tpm.h
-> > > +++ b/include/linux/tpm.h
-> > > @@ -335,6 +335,7 @@ enum tpm2_cc_attrs {
-> > >  #define TPM_VID_WINBOND  0x1050
-> > >  #define TPM_VID_STM      0x104A
-> > >  #define TPM_VID_ATML     0x1114
-> > > +#define TPM_VID_IFX      0x15D1
-> > >  
-> > >  enum tpm_chip_flags {
-> > >  	TPM_CHIP_FLAG_BOOTSTRAPPED		= BIT(0),
-> 
-> J.
-> 
-> -- 
-> ... "What's the philosophical difference between a killfile and the
->     automoderation?" "A killfile throws away good posts.  Automoderation
->     throws away bad posts." -- Jonathan H N Chin to Calle Dybedahl
-
-BR, Jarkko
+-- 
+   "Why? - because it's f***ing    |  .''`.  Debian GNU/Linux Developer
+     there!" -- Edmund Hilary      | : :' :  Happy to accept PGP signed
+                                   | `. `'   or encrypted mail - RSA
+                                   |   `-    key on the keyservers.
 
