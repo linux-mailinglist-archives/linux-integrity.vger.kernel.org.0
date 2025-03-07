@@ -1,234 +1,340 @@
-Return-Path: <linux-integrity+bounces-5171-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5172-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516A0A562AC
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 09:39:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 481CAA5652D
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 11:26:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 790BC1893A7F
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 08:39:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 396117A9B22
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 10:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F131C84B7;
-	Fri,  7 Mar 2025 08:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4679D20E302;
+	Fri,  7 Mar 2025 10:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b="dtm5Ff2l"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="206iIpJG";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="tcYZkfrI";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="206iIpJG";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="tcYZkfrI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2126.outbound.protection.outlook.com [40.107.21.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378EE1F94C;
-	Fri,  7 Mar 2025 08:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.126
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741336738; cv=fail; b=fjMFIOeSp+YP9nA+XI8lK0/Ah5YQrHzTYJ8aQltndiEFWwvKlW4+n9A85BXlkOSF8SycwePtqN+nfTB3ijT/JH4nWg2vQL+NSPVjHrj6357UsrK7urHyc3xB+7g80PSDO3yBdhUFlXW8OGq/PqsvHXhKF6r1l7b7X+kWrPXteCY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741336738; c=relaxed/simple;
-	bh=4aB3RPMpLK0+PMbVZFD81nlfgqJUWg/nde4djA4fOuE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Ez03Scr8Q5csAdNufzNZHlA+vByJZSExf3GeHX77cZs4uMsuOE2yqHxybTZyQl6NzilkC+HiZex8oNFHf11oVlTxm6Z075VO/cPW5QQGh5g0LJlMrIcgTpGrjIkNsOVRDrw8LeiAJe0QBUKIsrqaQg4ONenRzKc1svoVF0FggT4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com; spf=pass smtp.mailfrom=kunbus.com; dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b=dtm5Ff2l; arc=fail smtp.client-ip=40.107.21.126
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kunbus.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=S1es+Pa4RreEkGHassAcwsGtZe0Dff1OpqCtDkZXx2TGYGAcX/wE8MBtTJKefRa6ATn8F8DMsGshsYidK1fHE0tVEW/q2UorLcJTaNFgsOoAnhJQg2AhtNNgQnj0Do9LDJqjCDlGDI2EaA3j2EVJFwv1nVnYv98KZyGWjMCQEvH2PAWzEqs0OIpeSlcNEzlgUy1yNtMUY2Ar9ZuVM9bizwOMmaskr+tFsVVQcxvGHkxvg7PNtfBIzF5xDrEVRfALYKwY1DTDh/2SpSgjvYv+bEpz2Pb1FGm/FGKD9eaJcHS35D05qRzcEBVS/ldwE61tonhLR6t0QM+UI/IJFlFQrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cgRODO/v/WUbIc9KQWTZPBZmcxIupI9O3T7bSPZyBc4=;
- b=Drklg21bsbzz8gYsIHXsqW7Rq2Yo5/ZSdO9iyJ6kg5qmuOyfvY0dSFXH172n4uBmJf3z+t69DtJb6F9T9u3myaaKH68NodV+0o+iClxYccfdXUus1di4GRWqjn+F8+5eq+6e+XYK3eaogwpL+zZr9qxYP1AL7fWhzQvV0iKzxLa+uaYOZP+sf1UXxcCXIIFmWT+ukwDKzbiOVQTszH41njCycT9OPd8a5vu0nStdP1Xuh+rppkbjqGa+vM5tYDENceU+ZLgHczwqF5Tq+7hc+kBpU9usSuC4Y0FlL94n0dFjpjTaoWkkYrKB3YNT9apYyWKxEazgHL8tnqKV0ZAbHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
- dkim=pass header.d=kunbus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cgRODO/v/WUbIc9KQWTZPBZmcxIupI9O3T7bSPZyBc4=;
- b=dtm5Ff2luvj+0OVIJ4Meewogl4NPFxRAT6mDkLCh7yZUPd+lqJWNXk3CtLeJAfgLOUSDVCRRA7MfUGadOHEqZ+uUtHTKzie+oqu7uFiBN4+oTgV5i6Lw3XmkFh7scRLZ/K10xQ8rfhiCBNeP4yjo7EjnVbCcsqSTWd57osQTYzE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kunbus.com;
-Received: from PR3P193MB0846.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:ab::17)
- by DU4P193MB2607.EURP193.PROD.OUTLOOK.COM (2603:10a6:10:56e::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.18; Fri, 7 Mar
- 2025 08:38:52 +0000
-Received: from PR3P193MB0846.EURP193.PROD.OUTLOOK.COM
- ([fe80::1ab7:2eff:ab2b:c486]) by PR3P193MB0846.EURP193.PROD.OUTLOOK.COM
- ([fe80::1ab7:2eff:ab2b:c486%6]) with mapi id 15.20.8511.020; Fri, 7 Mar 2025
- 08:38:52 +0000
-Message-ID: <8117d025-3ea9-4b1e-bd34-493886c92c30@kunbus.com>
-Date: Fri, 7 Mar 2025 09:38:49 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tpm, tpm_tis: Fix timeout handling when waiting for TPM
- status
-To: Jonathan McDowell <noodles@earth.li>, Jarkko Sakkinen
- <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
- Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Z8gdKxsw2unC5UID@earth.li>
-Content-Language: en-US
-From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-In-Reply-To: <Z8gdKxsw2unC5UID@earth.li>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0178.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b4::6) To PR3P193MB0846.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:102:ab::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D004C1E1DEB
+	for <linux-integrity@vger.kernel.org>; Fri,  7 Mar 2025 10:24:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741343087; cv=none; b=q0Z3Bh6y/874ICY11rGTeqTPtnJHyuhaPnhov7QC7NSkoJnO8/1CmWVoSs7yiuB/nHPEq3uM5OzV3iIxJkYuccl3ON1z9ZG2gGRoEh9aKDV10X7nKKzHhf1t6C9/CRd3afvIALrgW6+segVSD1R5r/UtcvQk55qqDEsvcq5jhlA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741343087; c=relaxed/simple;
+	bh=9NK4kAU3Jk0q0w/csh5gk3rTHDVluqtvpKiyOHt+fQY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tYIJ3yFCc/vrRmmlOzpBr0Yh0WanPZ0lAlmvHpDooMD0Sv4eyqrvS3lX7Jx5actzwoAx5tS3xXLnCxIu2rrB+UXVGcewFy6LqwH+VRh6Ip0IhxsPXpekCyZYVC7UnDvRTGiiOGvJytV89Y/H6opWXTGpDmIKRuvTjicWigJQP/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=206iIpJG; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=tcYZkfrI; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=206iIpJG; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=tcYZkfrI; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 60BA91F38E;
+	Fri,  7 Mar 2025 10:24:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741343076;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xGBPuazfuU8d/m3KNTLHqkIQ7W1iEh+aUAC591BnAzA=;
+	b=206iIpJGngdxUtvntAfhGRGxs3+MOsXh2WIPsBDaihYSQ793WnV47LuqiYONxLB58nC6b/
+	sfikihV2XKHby1UqDbbn/61bWNxNuIkEsHB3Ofx2Ew2QsIxU2Srm9BcVUbqJOeDt+a92Bt
+	1oK9nhhuTwXm/PbbyW3fJL6EPEIyBA4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741343076;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xGBPuazfuU8d/m3KNTLHqkIQ7W1iEh+aUAC591BnAzA=;
+	b=tcYZkfrIFot+qp5/FVk1z9/TzWiE09MTaXHX6nTt/ZxWCfXAUWQLqFA2X99rzmo+Rk5cNn
+	CrSNbkkjD/EOtDAg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=206iIpJG;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=tcYZkfrI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741343076;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xGBPuazfuU8d/m3KNTLHqkIQ7W1iEh+aUAC591BnAzA=;
+	b=206iIpJGngdxUtvntAfhGRGxs3+MOsXh2WIPsBDaihYSQ793WnV47LuqiYONxLB58nC6b/
+	sfikihV2XKHby1UqDbbn/61bWNxNuIkEsHB3Ofx2Ew2QsIxU2Srm9BcVUbqJOeDt+a92Bt
+	1oK9nhhuTwXm/PbbyW3fJL6EPEIyBA4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741343076;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xGBPuazfuU8d/m3KNTLHqkIQ7W1iEh+aUAC591BnAzA=;
+	b=tcYZkfrIFot+qp5/FVk1z9/TzWiE09MTaXHX6nTt/ZxWCfXAUWQLqFA2X99rzmo+Rk5cNn
+	CrSNbkkjD/EOtDAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C269113939;
+	Fri,  7 Mar 2025 10:24:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id VQnzJmPJymdNWQAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Fri, 07 Mar 2025 10:24:35 +0000
+Date: Fri, 7 Mar 2025 11:24:29 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: ltp@lists.linux.it
+Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+	Ignaz Forster <iforster@suse.de>
+Subject: Re: [RFC PATCH] IMA: Remove evm_overlay.sh
+Message-ID: <20250307102429.GA272497@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20250114113239.611278-1-pvorel@suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PR3P193MB0846:EE_|DU4P193MB2607:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c8627a4-abad-4a34-27a1-08dd5d537d16
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|376014|366016|10070799003;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UVNJVFoxOFlnNEpMeEh6MlVEWDkvMW1jaDdhc1ZpaDdRZ0lLVGIrZndNbTg4?=
- =?utf-8?B?Wm5lSW4vOS93TE9kcFN5RXVSclBNdnJxKzZSZ0R1Q1BLeTFkOGVJM1piSTIw?=
- =?utf-8?B?YXV6R3kxK2Z1SW1uTjF4RkZ0VkZFaXd1K1FmdG9BbXljZTFSeGlYTE1TWEkz?=
- =?utf-8?B?b0dQQnJhRGFSZDJscXRNYlBjTlgrSUJ0WVdBVEEvQ25pMllmQnk5WGl2MzBC?=
- =?utf-8?B?OGVRWnd5V2FvZFd2Rkl6MjM4VmV5VFRJY3VqSWhSYnNtUnJDY01qRWc5TDJj?=
- =?utf-8?B?ZFBhQjNRVnZ2bXE2ZjdTcmlEZVlUdFcyZ0djSXM0UjNCT0F4bTdOVHhrdC9T?=
- =?utf-8?B?OTlkU3hDeStiZk1ZU3pEbml6SHlHUWNEZ1pFa1RIbzhPNjQ3QU5QeGlTOWZ1?=
- =?utf-8?B?dVM1bnJiRnFpNkRoaTRiOStSMStNelVBWlc3Z2pkdmZ1UFNtR0xDRmdwUG01?=
- =?utf-8?B?K3dLTXJNcHQzN1Y3U2x0NUZIZEpEQWVpN1lIQWxOcENSWjI3MDlVOUp4dXFq?=
- =?utf-8?B?Sjllc015WkxodWFKK2FzZ0hNam5MVi9kYWlKbE92R3FuSC80UlNkRVU1cHVl?=
- =?utf-8?B?b0wrZHVsR1NPK0QvRSsrRFhzRGMrK1FTWFV2VFFIWXF0NnFkNGdvV0FlV2o3?=
- =?utf-8?B?YzRhZ0hOU002YXZMN3FDVUxWcnlFaDdDekI0ODFNYXFyRUdmcUJ6WDFOb3FM?=
- =?utf-8?B?ZUFGaFZQcVFXZEM0bmREQ3puL1BxdjJNR1FKZDZIMklCa0tISWg4U0tLREM2?=
- =?utf-8?B?UGQzWTRYb0ZnV001ajBWVkdpaFFVNHRXd3ZuNFczSjRlNmNKN3JrUW1iSitL?=
- =?utf-8?B?RlNOK0tnSUxlbGR4K0pjZVJGVEx4L1pMcXpJaG5OcGhaQmlaNGx0c2ttVzJG?=
- =?utf-8?B?bUpoZERoK1FlNjJFUWVxMVE1WTFibHFNVThTbEsvWFIyZDJpbk45OCtwMDVa?=
- =?utf-8?B?RWVEcWdWY0p3YWZDbUtDMloxV0QvSTVLMGRTWVYxUkpSVm1iYVk3NVArbDZD?=
- =?utf-8?B?L0ZneU01bXNKajBIRm5aVGdrSWM2c2haK0RXSm9qblZlZTJpT3hKUUtZKy9Z?=
- =?utf-8?B?NlBIN1FicytsVHNWa0I2TXcvQ3ozWVRrUkI3ckNOVUl2VjFhTjdCazBncFcx?=
- =?utf-8?B?Tkp6Q1JseVl2R0NxRDlTNDk0NGdGMVFmSlEzUzJXWm9ZRnNTMnBZTGRTREN5?=
- =?utf-8?B?eGpJcmJ6SmpJZllZY0V3SGlTanowOWJLZWtSelVyVnFJVGZCVzZCcDNQYVNC?=
- =?utf-8?B?ZU94UEVwYTN2RkZBNy90c3drc0JuTHp6dFpleXpESFF5YnBTeDc5ZXl2WkpI?=
- =?utf-8?B?UldsTVFPZzE2KzlRYXJ0UkR2d29YWlpVK3JyeXFtV3dpcnU0bnowZTJ6V1ly?=
- =?utf-8?B?cnVrMElQblhDWVozaG56cXRGS1lnaHZQMjNUNVJQcDhIWkUyWHliRk5uT3py?=
- =?utf-8?B?NnNYd0JkMzlybHl5ek0yZFBwdmtzaFZaMHJwenlMOGx6MkdlbXVkQWhldWR1?=
- =?utf-8?B?RHNENmx4dFlVaklGMHBGczY3Qm8zNVVLT0RjZlRWN2wvOXhlSGxjYnZDUW1U?=
- =?utf-8?B?Nlh5VXdhYmI2amx5OWhmYkRHVWxPQ2x1NnRwb2prcHhsKzY3SlhBcmcxaFdi?=
- =?utf-8?B?akdtNmt4bGJlZk1Na1FuTDB0c1hVSG9kc2NhbkxDTS94aGZVT1pPVXJraG0v?=
- =?utf-8?B?d3RuaURwWHJxRENVaGNBc09FNEUwK1VVNHl4QW9odEREOXlkQXl3aE1uYjMy?=
- =?utf-8?B?MHRpZVc1OHl0cllzOVVXamlzUDVKaEplenIyUWM0aHhFb3R4bVBFRXhnZTF0?=
- =?utf-8?B?b1FWRXFxQ3ZObHl3YWFWSmF3MWlsN0hvYUFnNXYzSXhTZG5rQlBBNlNRWmV2?=
- =?utf-8?Q?ChPKy4nUncH8o?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3P193MB0846.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(376014)(366016)(10070799003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S2F0YndHeUVlQUsrZk5sTzl0VjI2dm5DdFQ4YTlHMEJDZUQyU2E5eExKcnQ2?=
- =?utf-8?B?U3B0ZlNBdHp6VDBOV2hyeFhxcWxTSFJKWlIzS3VrTTFRL00wSXVicmxINFZx?=
- =?utf-8?B?K0tHMWVaa0JGUHdPOEpKR0V6ZUF1WkZEZ1FPbGZIQkRFT0dlRWd3SlVmY2tt?=
- =?utf-8?B?QmYydkJ5L2R1ZW1VZ2lGbmhRUVNrVUtSQTBlRzRRWkJRY2IxUU0wa01DT0lW?=
- =?utf-8?B?KzF4REhwWWd4aThwNDFUamwwMmtxQTNPaGlyWjdRZDRLekdMZFczRXliT1pE?=
- =?utf-8?B?aWlERTdhNHZNblduVm1ONDBGWWFTUk5XNUlCNXFmaHNRazh5bk0wSGZLdU5y?=
- =?utf-8?B?RnVyT3lvYmRKZmlCR2ZFUHJnVnBIanR4b1kzS1hwR2J2Wk1pRmVtUXVLTWpJ?=
- =?utf-8?B?QUxESHhsa0RMZjZZSUc5eFkxRW4yZ0UvRXYvUGlZRkszb3VjeWJhMU1oa2k2?=
- =?utf-8?B?Sk9WMHgrazllSG9US0tVNWZ5K2NnSEd0VGNEMi9SeGVUNTBsOVR3UjRaek9x?=
- =?utf-8?B?RDlDMnFLYWdoaDlBNVpweGNpNWxhQUt3QWs5a3grazkwcHBEOFh1aHVMM1hR?=
- =?utf-8?B?Mng3ZDByUFlYbkloSlNKakpmanVPWXVEVTVxNnZobnpPZGJSN2hPczZSM2Rq?=
- =?utf-8?B?a2pRLytnbHBtd3gxcnJZV040aDViZEZDK3cyWVgvRkJkRTBKTVNvTFlFVnhN?=
- =?utf-8?B?U0lxejVxeGtvSlFoTHJXeEhyZ2JtaHRRTVkvMW5jUlhBTnByQ0duUXp2cUdL?=
- =?utf-8?B?OTZpUFJ4b0tkT0ROMFNEUHg2SXNmSWJmK282dVg1TnFEMGUzdFZBd2VkaTJ3?=
- =?utf-8?B?aEtwVERRTVVEMUhGNTVRNVI5c1ZmamdpMVd4R2hibWFtUm11UlJENzNVYi9q?=
- =?utf-8?B?MU9xbnJma3M3OHByYThOeGQyVHVNNEtkZC8yNm9odDNNNUVXL3RyL1pvanJW?=
- =?utf-8?B?QTJVNEx1TkNtNjJ0WTdKcVJhazFSUVlGMlRpWE9QN1QxQ1ZhcCtKK3FucDJF?=
- =?utf-8?B?Z2Z0SDhjYkxndldBeGp1RFkvVWRMeXNmWGRWQnVEWnpsY0IrMzRuSjNBaEVK?=
- =?utf-8?B?UFFhcDVYTjRzWXFoa2ZlckVwTGc0c25zS3k0QTZRUnFUcGR2cmU2VGoxWVpp?=
- =?utf-8?B?ZXlDQ2g3QVFnSXNRTzVYRWdFVjcrdWFaRVgzU2xMU2o0Yy9oSnZ3cVFwWDU2?=
- =?utf-8?B?VTNCbWRDM21VZ1crTmRCUnVKR24xeUtZV0h5c2Y3U3ViZVRXTUZieUdoVmk1?=
- =?utf-8?B?RCt2UG9lTjVJOExtbmJZZUNuZ3MzNXl6OTJiNjFWQ2V3ejZuZjB0NkZOaHhx?=
- =?utf-8?B?Vm4wSnFGbWNieXhqUG9wY3ZNeDV3TnNtbjV4cTZLUXVhWGRNd1h2SGw1K0lV?=
- =?utf-8?B?NktONWgraUhIdHRHNCtTL2pGQjhtZ2NWaFN4UGt3UzNzN2ZKbkhvc3VMVG1i?=
- =?utf-8?B?K0VYVkxqNWdQRHB5U3FraXNHdGFzTis3aGlnWDFUbmt5QjF5bkdJaHJFdzRW?=
- =?utf-8?B?ZGducHpybDZVUmswdlVnaEJWNU1yVXZ6TDBEb0J5YmgzRGNvVFdqVmJjdVA0?=
- =?utf-8?B?dEpiZksyQ1lSS3Q5TDU0UDhKd0U0MVFZTFdRZmZmVTNsc0ZCZlQwVzVTWGt5?=
- =?utf-8?B?c1pOTXpoNjZFWGdFbUZNZ0hRUkpqYVhxMFo0ZDF4cm5JK25qL3BycHgzWkhJ?=
- =?utf-8?B?YlNQdDRQK1RBV2t6NFBFRSswK1pxZCtmK1cxZTFXdkRLbnEyYWxEVlQ2K0I3?=
- =?utf-8?B?ZWFVRVRiSHhLMVRtbmJlZS8wRmNoUWIvSjEwYVBValhkaHB6VVBJSGVvcUxN?=
- =?utf-8?B?TmdCVE1aaHJUODRPT3lxbXFsdUI2QjB4akhBdjAwNTBRdFBqb0g3WVpzZWtC?=
- =?utf-8?B?NVdzMFhmblo3ZXlXdVpkOXk5TnN2UG1zRThTNm45ZXlYbjVqYy9BTVNnWGda?=
- =?utf-8?B?RnpRd1NqdmIvQ3M4MmtFdVJrSmgybmlzQUNCYmx4ZmwvODdSSUc2U2JMQTVX?=
- =?utf-8?B?MmhrNXVCanllZnlnRzN0TkM2Tk8yS0NoK1dwV0VFRTZJejlXaXk1M3dzRzVl?=
- =?utf-8?B?RUlCZUpWM2dqYml6UWxDYzlHNmdJUlpRcE1xbEdUY1dhc1plQnliSHgxc0l3?=
- =?utf-8?B?bmp5b3pUMVlaa3k5U3JBbnlvOFd1YWNQZW0wbnNTYVEvSlJ5MkFuUXBCNmM4?=
- =?utf-8?B?SXlacEE2SEZMeTdBcHg4THA0Qlg3RjVaejB4SDVza1NyWlNQVEtoZjBRbHNn?=
- =?utf-8?B?L1hPNkNwK3p6dzBYdFo3TFNueC9nPT0=?=
-X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c8627a4-abad-4a34-27a1-08dd5d537d16
-X-MS-Exchange-CrossTenant-AuthSource: PR3P193MB0846.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2025 08:38:52.0786
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UlyrfSlx5C1x5CqpFhZNaS6ChKQqE96uRDsA/RS9bmzxsBtnGkPs6oS9UPnVRLgUlXu+ght4kNSXxS+YtmrHMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4P193MB2607
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114113239.611278-1-pvorel@suse.cz>
+X-Rspamd-Queue-Id: 60BA91F38E
+X-Spam-Score: -3.71
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.71 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	MIME_TRACE(0.00)[0:+];
+	REPLYTO_EQ_FROM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.cz:dkim,suse.cz:replyto,suse.cz:email];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
+Hi Mimi, Ignaz,
 
-Hi Jonathan,
+> Proof of concept, it was never fixed in the kernel.
+> Instead we should have some basic EVM tests.
 
-On 05.03.25 10:45, Jonathan McDowell wrote:
+gently ping. Is evm_overlay.sh test useful for you?
+Otherwise I'll delete it.
 
-> From: Jonathan McDowell <noodles@meta.com>
-> 
-> The change to only use interrupts to handle supported status changes,
-> then switch to polling for the rest, inverted the status test and sleep
-> such that we can end up sleeping beyond our timeout and not actually
-> checking the status. This can result in spurious TPM timeouts,
-> especially on a more loaded system. Fix by switching the order back so
-> we sleep *then* check. We've done a up front check when we enter the
-> function so this won't cause an additional delay when the status is
-> already what we're looking for.
-> 
-> Cc: stable@vger.kernel.org # v6.4+
-> Fixes: e87fcf0dc2b4 ("tpm, tpm_tis: Only handle supported interrupts")
-> Signed-off-by: Jonathan McDowell <noodles@meta.com>
-> Reviewed-by: Michal Suchánek <msuchanek@suse.de>
+Kind regards,
+Petr
+
+> Signed-off-by: Petr Vorel <pvorel@suse.cz>
 > ---
->  drivers/char/tpm/tpm_tis_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index fdef214b9f6b..167d71747666 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -114,11 +114,11 @@ static int wait_for_tpm_stat(struct tpm_chip *chip, u8 mask,
->                 return 0;
->         /* process status changes without irq support */
->         do {
-> +               usleep_range(priv->timeout_min,
-> +                            priv->timeout_max);
->                 status = chip->ops->status(chip);
->                 if ((status & mask) == mask)
->                         return 0;
-> -               usleep_range(priv->timeout_min,
-> -                            priv->timeout_max);
->         } while (time_before(jiffies, stop));
->         return -ETIME;
->  }
-> --
-> 2.48.1
-> 
+>  runtest/ima                                   |  1 -
+>  .../kernel/security/integrity/ima/README.md   | 64 -------------
+>  .../integrity/ima/tests/evm_overlay.sh        | 93 -------------------
+>  3 files changed, 158 deletions(-)
+>  delete mode 100755 testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
 
-FWIW:
-Reviewed-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-
-I cannot remember any more but I think the change of the logic in 
-the while loop must have been a leftover from some tests I did
-at this time. However it should not have been part of the patch, so
-good that you found it and thanks for the fix!
-
-BR,
-Lino
+> diff --git a/runtest/ima b/runtest/ima
+> index 01942eefa3..75e5a99e7c 100644
+> --- a/runtest/ima
+> +++ b/runtest/ima
+> @@ -7,4 +7,3 @@ ima_keys ima_keys.sh
+>  ima_kexec ima_kexec.sh
+>  ima_selinux ima_selinux.sh
+>  ima_conditionals ima_conditionals.sh
+> -evm_overlay evm_overlay.sh
+> diff --git a/testcases/kernel/security/integrity/ima/README.md b/testcases/kernel/security/integrity/ima/README.md
+> index 5b261a1914..d3c3206bf2 100644
+> --- a/testcases/kernel/security/integrity/ima/README.md
+> +++ b/testcases/kernel/security/integrity/ima/README.md
+> @@ -64,67 +64,3 @@ and reading the IMA policy allowed in the kernel configuration:
+>  CONFIG_SECURITY_SELINUX=y
+>  CONFIG_IMA_READ_POLICY=y
+>  ```
+> -
+> -## EVM tests
+> -
+> -`evm_overlay.sh` requires a builtin IMA appraise tcb policy (e.g. `ima_policy=appraise_tcb`
+> -kernel parameter) which appraises the integrity of all files owned by root and EVM setup.
+> -Again, for simplicity ignore possibility to load requires rules via custom policy.
+> -
+> -Mandatory kernel configuration for EVM tests:
+> -```
+> -CONFIG_INTEGRITY=y
+> -CONFIG_INTEGRITY_SIGNATURE=y
+> -CONFIG_IMA=y
+> -CONFIG_IMA_APPRAISE=y
+> -CONFIG_EVM=y
+> -CONFIG_KEYS=y
+> -CONFIG_TRUSTED_KEYS=y
+> -CONFIG_ENCRYPTED_KEYS=y
+> -```
+> -
+> -Example of preparing environment on for EVM on openSUSE:
+> -
+> -* Boot install system with `ima_policy=tcb|appraise_tcb ima_appraise=fix evm=fix` kernel parameters
+> -  (for IMA measurement, IMA appraisal and EVM protection)
+> -* Proceed with installation until summary screen, but do not start the installation yet
+> -* Select package `dracut-ima` (required for early boot EVM support) for installation
+> -  (Debian based distros already contain IMA + EVM support in `dracut` package)
+> -* Change to a console window and run commands to generate keys required by EVM:
+> -```
+> -# mkdir /etc/keys
+> -# user_key=$(keyctl add user kmk-user "`dd if=/dev/urandom bs=1 count=32 2>/dev/null`" @u)
+> -# keyctl pipe "$user_key" > /etc/keys/kmk-user.blob
+> -# evm_key=$(keyctl add encrypted evm-key "new user:kmk-user 64" @u)
+> -# keyctl pipe "$evm_key" >/etc/keys/evm.blob
+> -# cat <<END >/etc/sysconfig/masterkey
+> -MASTERKEYTYPE="user"
+> -MASTERKEY="/etc/keys/kmk-user.blob"
+> -END
+> -# cat <<END >/etc/sysconfig/evm
+> -EVMKEY="/etc/keys/evm.blob"
+> -END
+> -# mount -t securityfs security /sys/kernel/security
+> -# echo 1 >/sys/kernel/security/evm
+> -```
+> -
+> -* Go back to the installation summary screen and start the installation
+> -* During the installation execute the following commands from the console:
+> -```
+> -# cp -r /etc/keys /mnt/etc/ # Debian based distributions: use /target instead of /mnt
+> -# cp /etc/sysconfig/{evm,masterkey} /mnt/etc/sysconfig/
+> -```
+> -
+> -This should work on any distribution using dracut.
+> -Loading EVM keys is also possible with initramfs-tools (Debian based distributions).
+> -
+> -Of course it's possible to install OS usual way, add keys later and fix missing xattrs with:
+> -```
+> -evmctl -r ima_fix /
+> -```
+> -
+> -or with `find` if evmctl is not available:
+> -```
+> -find / \( -fstype rootfs -o -fstype ext4 -o -fstype btrfs -o -fstype xfs \) -exec sh -c "< '{}'" \;
+> -```
+> -Again, fixing requires `ima_policy=tcb|appraise_tcb ima_appraise=fix evm=fix` kernel parameters.
+> diff --git a/testcases/kernel/security/integrity/ima/tests/evm_overlay.sh b/testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
+> deleted file mode 100755
+> index 12b2a28c25..0000000000
+> --- a/testcases/kernel/security/integrity/ima/tests/evm_overlay.sh
+> +++ /dev/null
+> @@ -1,93 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0-or-later
+> -# Copyright (c) 2019 Petr Vorel <pvorel@suse.cz>
+> -# Based on reproducer and further discussion with Ignaz Forster <iforster@suse.de>
+> -# Reproducer for not upstreamed patchset [1] and previous report [2].
+> -# [1] https://www.spinics.net/lists/linux-integrity/msg05926.html
+> -# [2] https://www.spinics.net/lists/linux-integrity/msg03593.html
+> -
+> -TST_SETUP="setup"
+> -TST_CLEANUP="cleanup"
+> -TST_CNT=4
+> -
+> -setup()
+> -{
+> -	EVM_FILE="/sys/kernel/security/evm"
+> -
+> -	[ -f "$EVM_FILE" ] || tst_brk TCONF "EVM not enabled in kernel"
+> -	[ $(cat $EVM_FILE) -eq 1 ] || tst_brk TCONF "EVM not enabled for this boot"
+> -
+> -	require_ima_policy_cmdline "appraise_tcb"
+> -
+> -	lower="$TST_MNTPOINT/lower"
+> -	upper="$TST_MNTPOINT/upper"
+> -	work="$TST_MNTPOINT/work"
+> -	merged="$TST_MNTPOINT/merged"
+> -	mkdir -p $lower $upper $work $merged
+> -
+> -	device_backup="$TST_DEVICE"
+> -	TST_DEVICE="overlay"
+> -
+> -	fs_type_backup="$TST_FS_TYPE"
+> -	TST_FS_TYPE="overlay"
+> -
+> -	mntpoint_backup="$TST_MNTPOINT"
+> -	TST_MNTPOINT="$PWD/$merged"
+> -
+> -	params_backup="$TST_MNT_PARAMS"
+> -	TST_MNT_PARAMS="-o lowerdir=$lower,upperdir=$upper,workdir=$work"
+> -
+> -	tst_mount
+> -	mounted=1
+> -}
+> -
+> -test1()
+> -{
+> -	local file="foo1.txt"
+> -
+> -	tst_res TINFO "overwrite file in overlay"
+> -	EXPECT_PASS echo lower \> $lower/$file
+> -	EXPECT_PASS echo overlay \> $merged/$file
+> -}
+> -
+> -test2()
+> -{
+> -	local file="foo2.txt"
+> -
+> -	tst_res TINFO "append file in overlay"
+> -	EXPECT_PASS echo lower \> $lower/$file
+> -	EXPECT_PASS echo overlay \>\> $merged/$file
+> -}
+> -
+> -test3()
+> -{
+> -	local file="foo3.txt"
+> -
+> -	tst_res TINFO "create a new file in overlay"
+> -	EXPECT_PASS echo overlay \> $merged/$file
+> -}
+> -
+> -test4()
+> -{
+> -	local f
+> -
+> -	tst_res TINFO "read all created files"
+> -	for f in $(find $TST_MNTPOINT -type f); do
+> -		EXPECT_PASS cat $f \> /dev/null 2\> /dev/null
+> -	done
+> -}
+> -
+> -cleanup()
+> -{
+> -	[ -n "$mounted" ] || return 0
+> -
+> -	tst_umount $TST_MNTPOINT
+> -
+> -	TST_DEVICE="$device_backup"
+> -	TST_FS_TYPE="$fs_type_backup"
+> -	TST_MNTPOINT="$mntpoint_backup"
+> -	TST_MNT_PARAMS="$params_backup"
+> -}
+> -
+> -. ima_setup.sh
+> -tst_run
 
