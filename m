@@ -1,187 +1,222 @@
-Return-Path: <linux-integrity+bounces-5155-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5156-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99361A55DD8
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 03:47:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 923EAA55DEA
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 03:52:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA9CD7A7D99
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 02:46:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCFC516D979
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 02:52:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29826188CB1;
-	Fri,  7 Mar 2025 02:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A899B188904;
+	Fri,  7 Mar 2025 02:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="FuWqQjbw"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pGSCZJTc"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A468148FE6
-	for <linux-integrity@vger.kernel.org>; Fri,  7 Mar 2025 02:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023117E9;
+	Fri,  7 Mar 2025 02:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741315618; cv=none; b=WR9EwVE+xJ0ByG/8OhesF7R04LrBqWCT5eis053i9AilzxbD1XiCnoPSLVHk+lS7v5lM7SMYRFUufWu0aRXh2wDLdUVkkDI0fEkPAF9wuJgMPEydQmwYmVjvPwKl6MZ+8DFF1lDrJMuVPs6IGIO/sH7foik8c3HBSwVVQ3PIRQc=
+	t=1741315948; cv=none; b=WMXGmrz97SEtQu4+5L9cR012m7J/X966DFNqS53draeHeoHryRvMmdegC/kYTkkDVtw7n4XXEdSgIrlIp5uVdFOANvbZq68DMFGOI76W0aypgka3MNHzqTdEkDoyKp2lhrSehttlsl4khep8QAWbPKvdXFy9LKNtULRcpVulhdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741315618; c=relaxed/simple;
-	bh=YEYXLGg/CsKOrCincve+KY8W009xIGLNHMSjNI16DOw=;
-	h=From:To:CC:Date:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=DewBJe/lHtgNconz4L3djYS8PitPYF8CkEQKkiEx4FrQbAL4/z/2bnjMa3XBq01OTyzMoRorT5Tw6NKpVRnTwcg7bmwuLITrPkqgmsCwhNj2/7t2TscWvcVxKF0leIuvGKLlotAfQw2QJge6WKMbTuF7GJXfsY+6/uAUSrJPqns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=FuWqQjbw; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6dd049b5428so13287246d6.2
-        for <linux-integrity@vger.kernel.org>; Thu, 06 Mar 2025 18:46:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1741315615; x=1741920415; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rt0sh+iXDwTk92DHQ0mAKFAW9RB3PuEnSeOiB/9VL1E=;
-        b=FuWqQjbw3bleVbiTxE2Nk++EiZch5q88L6qp/N12jiPd/QJgZQIpRA7UWr4ztV150x
-         g6E3VTvMfm0s8UFo60DTY70lCj+2UhdwCAEmJJCvszfs8rOrWsxpqey0PqV2OI49GZO8
-         cVzDLZPI5w82SzqtetIy0qZKI8sHIIiefnlnLiNyN/b6lSuIrwBsa4R+ORrj0wjashjd
-         achPZsMj5eYiOJdoA6kUWQWCiRWZZTUTHUGIp42+YEr/z5AnVka3meSW9OW2gklcXeyV
-         9BVd3hIhZc2UP7XDe1cJ1+5cjupwbdBeefrSAoOd2JhXH4zVey4I1LsQy8gUGXF/PazS
-         iWVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741315615; x=1741920415;
-        h=content-transfer-encoding:mime-version:subject:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rt0sh+iXDwTk92DHQ0mAKFAW9RB3PuEnSeOiB/9VL1E=;
-        b=H/Q56NVtb6vIhK2lRvm7tnyZyExPz3/TXDgXgpX+lBdGE6xCdW+9NgV8ewNyX5nIjX
-         DjRL19u16xwM4SHkWR9HNKlflprwElGl3rNo+fvmmhsIfGesvC80n0+hiwCebwykI4GX
-         XmQSSDHxn0DLCidw/oZhkH7sUD4q8KoZ7MObh18Pp0CUyDStnP1lhpSSdEcQLkZ/zO2W
-         nWXk7Hfpx2+qfcjTOaq0mBoFcmbXTW3ZYSYeRgLY1tHtL1rI1yiilsYcgup+kIznSR2c
-         KRUAxPv7pKeMP3t/YXk3oMvI3YE4Y7DlRSJ0zA7A8KghtxjhJzOqKVceI92TF8R/3tZV
-         clgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVo1ZDGLXRd2xO8uz4WgVFSrA5xUzKSWNb0V4V6pPZCxBxlmMOyY0DVoZpOHMtADfDB2fv8+M97SD8P/tJmUL4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTJSfiOQfWx75w5zf/NkGdxKcDsFZY2QheoP8oKD0eOpUkHPbj
-	CxtgjGygSvDVhtoUjgvkpOaLAmQgNMOiAZEfbBsDkb1DlxNF8bOhTyVzjCeW/Q==
-X-Gm-Gg: ASbGncv0nKP7JZd9gZcFqTJsF1dcpGSeFCGDWtjIWMLiGj9yU0OgSWfyzMv75xBRhr0
-	tV3rGyNhp/iO6bqoj+DjEwl6FpJ/FSXnrlB0Bxg29cXdaz812xVQUBT9B0Lq4d1h91XI2YTiPZ3
-	4gWOevipxjIMAHgeo6GxHzem7NFxX+kuyy9oTMDj58AsdnwUhU3wRnzG6vS9CSHcjyJdRl40spq
-	MxX8taQ94+RrDBnDV+qmyRyfACRQQ0TtTDKLP9SvQbY/DuSnctUu+vzU0kgLrmDmow59csN+QNg
-	7F7x+TNkff2pC64yM7oQm7fC6txir2Fu9a8CPT46qMs/OKdqw9sN+Mq4AftsSuog7lk3S7JExnP
-	xKNjCrDMpUuS8JX6j5Lg=
-X-Google-Smtp-Source: AGHT+IGN6nnpAum+jUxAhktZIXBBlDfUMfEpdXCUFvRXot6sALexlQzFAHfqQmACtG8oGghU6a73MQ==
-X-Received: by 2002:a05:6214:500f:b0:6e4:4011:9df7 with SMTP id 6a1803df08f44-6e9005f79a2mr19925486d6.16.1741315614964;
-        Thu, 06 Mar 2025 18:46:54 -0800 (PST)
-Received: from [192.168.7.16] (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e8f7182af0sm14044486d6.119.2025.03.06.18.46.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 18:46:54 -0800 (PST)
-From: Paul Moore <paul@paul-moore.com>
-To: Eric Snowberg <eric.snowberg@oracle.com>
-CC: Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, David Woodhouse <dwmw2@infradead.org>, <herbert@gondor.apana.org.au>, <davem@davemloft.net>, Ard Biesheuvel <ardb@kernel.org>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, <casey@schaufler-ca.com>, Stefan Berger <stefanb@linux.ibm.com>, <ebiggers@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, open list <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>, <linux-efi@vger.kernel.org>, <linux-integrity@vger.kernel.org>
-Date: Thu, 06 Mar 2025 21:46:52 -0500
-Message-ID: <1956e7f9d60.28a7.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-In-Reply-To: <EB757F96-E152-4EAB-B3F7-75C1DBE3A03B@oracle.com>
-References: <20241017155516.2582369-1-eric.snowberg@oracle.com>
- <c490397315c2704e9ef65c8ad3fefedb239f1997.camel@linux.ibm.com>
- <72F52F71-C7F3-402D-8441-3D636A093FE8@oracle.com>
- <CAHC9VhRHEw5c+drC=aX4xTqWoQJJZ+qkJ7aHUT5dcu+Q5f7BqA@mail.gmail.com>
- <CAHC9VhSJpnaAK1efgs1Uk0Tr3CaDNR1LiDU-t_yDKDQG6J-74Q@mail.gmail.com>
- <E20C617B-EA01-4E69-B5E2-31E9AAD6F7A2@oracle.com>
- <506e8e58e5236a4525b18d84bafa9aae80b24452.camel@linux.ibm.com>
- <CAHC9VhTsZntLdGBV7=4suauS+rzSQv1O4UAoGcy2vEB02wRkoA@mail.gmail.com>
- <c580811716f550ed5d6777db5e143afe4ad06edc.camel@linux.ibm.com>
- <CAHC9VhTz6U5rRdbJBWq0_U4BSKTsiGCsaX=LTgisNNoZXZokOA@mail.gmail.com>
- <FD501FB8-72D2-4B10-A03A-F52FC5B67646@oracle.com>
- <CAHC9VhR961uTFueovLXXaOf-3ZAnvQCWOTfw-wCRuAKOKPAOKw@mail.gmail.com>
- <73B78CE7-1BB8-4065-9EBA-FB69E327725E@oracle.com>
- <CAHC9VhRMUkzLVT5GT5c5hgpfaaKubzcPOTWFDpOmhNne0sswPA@mail.gmail.com>
- <1A222B45-FCC4-4BBD-8E17-D92697FE467D@oracle.com>
- <CAHC9VhTObTee95SwZ+C4EwPotovE9R3vy0gVXf+kATtP3vfXrg@mail.gmail.com>
- <EB757F96-E152-4EAB-B3F7-75C1DBE3A03B@oracle.com>
-User-Agent: AquaMail/1.54.1 (build: 105401536)
-Subject: Re: [RFC PATCH v3 00/13] Clavis LSM
+	s=arc-20240116; t=1741315948; c=relaxed/simple;
+	bh=QWbG3mhYXb/JRpxuDbnSsSzhGiAA/DGHDEjj14JZBuY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sn7oJagPRGjSiIFZb5uXPvSs0kE54T7+Iufxopu9JtZYvlF2J4WfMTM2VqgocBs6cJjA5+TUMg7FUGlO25PHTglOe77mcsq/VWxj3h4NJNUAnacU2aleEygHrNWr1bRHJp6twN92wrRZg2qcUp/W0ABrisgU/fSXt6nH6/xkBYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pGSCZJTc; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 526MOQlj023805;
+	Fri, 7 Mar 2025 02:51:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=LSX7u7
+	hpQG9kzrD00xcMaeuOdbSpidIB6YttNQE9Zog=; b=pGSCZJTcoSXR8zGp2dMuo1
+	U2kpuyIqgc4U3CJhjYQ1lqparoY/ADpqNpOYCc+nkQIl8ClpXKL6Qf8kepwvhrm8
+	dXBJC9xNn86/DkoSBc6AkZcGs+zXuSfYNgEE8hs0KrQHXmIAOWYhUx2XvVk2yXMW
+	DbqnP8XNEGRfLJjgv/OdnMCJCApaZTUc3n9FNQpov4mfWUaPb+tZIosYiT+tX2Yn
+	pLI7W/RTBHRgyvTurBxEiID9YolyFyc/DYnD4YaUnCu9uYpnDJ+5HVu6e22WUdos
+	up5lZZ4M774B+ksCcwmfb3lrsSpRtxhsh2WNpwRNinEjdtZYy6pNwM6IfWItiJRw
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4574396btd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Mar 2025 02:51:53 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5271a7X2020841;
+	Fri, 7 Mar 2025 02:51:52 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 454djnvf29-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Mar 2025 02:51:52 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5272ppD727525806
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 7 Mar 2025 02:51:52 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C82E958056;
+	Fri,  7 Mar 2025 02:51:51 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8E63B5805E;
+	Fri,  7 Mar 2025 02:51:50 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.66.15])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  7 Mar 2025 02:51:50 +0000 (GMT)
+Message-ID: <69f43be0ed70eee45d3d9d9ac2aeaf39def5770a.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 1/7] ima: copy only complete measurement records
+ across kexec
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, Baoquan He <bhe@redhat.com>
+Cc: stefanb@linux.ibm.com, roberto.sassu@huaweicloud.com,
+        roberto.sassu@huawei.com, eric.snowberg@oracle.com,
+        ebiederm@xmission.com, paul@paul-moore.com, code@tyhicks.com,
+        bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+        kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
+        nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
+        vgoyal@redhat.com, dyoung@redhat.com
+Date: Thu, 06 Mar 2025 21:51:50 -0500
+In-Reply-To: <8bc74dd8-ecd0-44ad-88a2-8b36fa61100a@linux.microsoft.com>
+References: <20250304190351.96975-1-chenste@linux.microsoft.com>
+	 <20250304190351.96975-2-chenste@linux.microsoft.com>
+	 <Z8g+uhZQ6totYLmp@MiWiFi-R3L-srv>
+	 <fe6e3c1333a50d66dc876b5a196d3491170802a8.camel@linux.ibm.com>
+	 <8bc74dd8-ecd0-44ad-88a2-8b36fa61100a@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tcXPqrwRdfAvKYDFQQvRS5oy_sLHQISR
+X-Proofpoint-ORIG-GUID: tcXPqrwRdfAvKYDFQQvRS5oy_sLHQISR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-07_01,2025-03-06_04,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ malwarescore=0 adultscore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503070015
 
-On March 6, 2025 5:29:36 PM Eric Snowberg <eric.snowberg@oracle.com> wrote:
->> On Mar 5, 2025, at 6:12 PM, Paul Moore <paul@paul-moore.com> wrote:
->>
->> On Wed, Mar 5, 2025 at 4:30 PM Eric Snowberg <eric.snowberg@oracle.com> wrote:
->>>> On Mar 4, 2025, at 5:23 PM, Paul Moore <paul@paul-moore.com> wrote:
->>>> On Tue, Mar 4, 2025 at 9:47 AM Eric Snowberg <eric.snowberg@oracle.com> wrote:
->>>>>> On Mar 3, 2025, at 3:40 PM, Paul Moore <paul@paul-moore.com> wrote:
->>>>>> On Fri, Feb 28, 2025 at 12:52 PM Eric Snowberg <eric.snowberg@oracle.com> 
->>>>>> wrote:
->>>>>>>> On Feb 28, 2025, at 9:14 AM, Paul Moore <paul@paul-moore.com> wrote:
->>>>>>>> On Fri, Feb 28, 2025 at 9:09 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
->>>>>>>>> On Thu, 2025-02-27 at 17:22 -0500, Paul Moore wrote:
->>>>>>>>>>
->>>>>>>>>> I'd still also like to see some discussion about moving towards the
->>>>>>>>>> addition of keyrings oriented towards usage instead of limiting
->>>>>>>>>> ourselves to keyrings that are oriented on the source of the keys.
->>>>>>>>>> Perhaps I'm missing some important detail which makes this
->>>>>>>>>> impractical, but it seems like an obvious improvement to me and would
->>>>>>>>>> go a long way towards solving some of the problems that we typically
->>>>>>>>>> see with kernel keys.
->>>>>>>
->>>>>>> The intent is not to limit ourselves to the source of the key.  The main
->>>>>>> point of Clavis is to allow the end-user to determine what kernel keys
->>>>>>> they want to trust and for what purpose, irrespective of the originating
->>>>>>> source (.builtin_trusted, .secondary, .machine, or .platform). If we could
->>>>>>> go back in time, individual keyrings could be created that are oriented
->>>>>>> toward usage.   The idea for introducing Clavis is to bridge what we
->>>>>>> have today with kernel keys and allow them to be usage based.
->>>>>>
->>>>>> While it is unlikely that the current well known keyrings could be
->>>>>> removed, I see no reason why new usage oriented keyrings could not be
->>>>>> introduced.  We've seen far more significant shifts in the kernel over
->>>>>> the years.
->>>>>
->>>>> Could you further clarify how a usage oriented keyring would work?  For
->>>>> example, if a kernel module keyring was added, how would the end-user
->>>>> add keys to it while maintaining a root of trust?
->>>>
->>>> Consider it an exercise left to the reader :)
->>>>
->>>> I imagine there are different ways one could do that, either using
->>>> traditional user/group/capability permissions and/or LSM permissions,
->>>> it would depend on the environment and the security goals of the
->>>> overall system.
->>>
->>> These keys are used by the Lockdown LSM to provide signature
->>> validation.
->>>
->>> I realize the contents that follow in this paragraph is outside the
->>> boundary of mainline kernel code.  Every distro that wants their
->>> shim signed must explain how their kernel enforces lockdown
->>> mode.  The minimum requirement is lockdown in integrity mode.
->>> Also, the expectation is lockdown enforcement continues on
->>> through a kexec.
->>
->> I personally find it very amusing the UEFI Secure Boot shim is reliant
->> on an unmaintained and only marginally supported LSM, Lockdown.  Has
->> anyone recently verified that Lockdown's protections are still intact
->> and comprehensive enough to be worthwhile?  Sorry, this is a bit of a
->> digression, but since you were the one to bring up Lockdown I thought
->> it would be important to mention that I don't have much faith that it
->> is still working to the same level as it originally was intended.  I
->> have a TODO list item to draft a policy around deprecating
->> unmaintained LSMs after an extended period of time, and once that is
->> in place if we don't have a qualified maintainer for Lockdown it will
->> likely fall into the deprecation process (whatever that may be).
->
-> Does this mean Microsoft will begin signing shims in the future without
-> the lockdown requirement?
+On Thu, 2025-03-06 at 14:45 -0800, steven chen wrote:
+> On 3/5/2025 4:27 AM, Mimi Zohar wrote:
+> > On Wed, 2025-03-05 at 20:08 +0800, Baoquan He wrote:
+> > > On 03/04/25 at 11:03am, steven chen wrote:
+> > > > Carrying the IMA measurement list across kexec requires allocating =
+a
+> > > > buffer and copying the measurement records.  Separate allocating th=
+e
+> > > > buffer and copying the measurement records into separate functions =
+in
+> > > > order to allocate the buffer at kexec 'load' and copy the measureme=
+nts
+> > > > at kexec 'execute'.
+> > > >=20
+> > > > This patch includes the following changes:
+> > > I don't know why one patch need include so many changes. From below l=
+og,
+> > > it should be split into separate patches. It may not need to make one
+> > > patch to reflect one change, we should at least split and wrap severa=
+l
+> > > kind of changes to ease patch understanding and reviewing. My persona=
+l
+> > > opinion.
+> > Agreed, well explained.
+> >=20
+> > Mimi
+> >=20
+> > > >   - Refactor ima_dump_measurement_list() to move the memory allocat=
+ion
+> > > >     to a separate function ima_alloc_kexec_file_buf() which allocat=
+es
+> > > >     buffer of size 'kexec_segment_size' at kexec 'load'.
+> > > >   - Make the local variable ima_kexec_file in ima_dump_measurement_=
+list()
+> > > >     a local static to the file, so that it can be accessed from
+> > > >     ima_alloc_kexec_file_buf(). Compare actual memory required to e=
+nsure
+> > > >     there is enough memory for the entire measurement record.
+> > > >   - Copy only complete measurement records.
+> > > >   - Make necessary changes to the function ima_add_kexec_buffer() t=
+o call
+> > > >     the above two functions.
+> > > >   - Compared the memory size allocated with memory size of the enti=
+re
+> > > >     measurement record. Copy only complete measurement records if t=
+here
+> > > >     is enough memory. If there is not enough memory, it will not co=
+py
+> > > >     any IMA measurement records, and this situation will result in =
+a
+> > > >     failure of remote attestation.
+> > > >=20
+> > > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> > > > Signed-off-by: steven chen <chenste@linux.microsoft.com>
+>=20
+> I will split this patch into the following two patches:
+>=20
+>  =C2=A0 =C2=A0 ima: define and call ima_alloc_kexec_file_buf
+>  =C2=A0=C2=A0=C2=A0 ima: copy measurement records as much as possible acr=
+oss kexec
 
-That's not a question I can answer, you'll need to discuss that with the 
-UEFI SB people.
+Steven, breaking up code into patches is in order to simplify patch review.=
+=20
+This is done by limiting each patch to a single "logical change" [1].  For
+example, the change below has nothing to do with "separate allocating the b=
+uffer
+and copying the measurement records into separate functions".
 
---
-paul-moore.com
+        /* This is an append-only list, no need to hold the RCU read lock *=
+/
+        list_for_each_entry_rcu(qe, &ima_measurements, later, true) {
+-               if (file.count < file.size) {
++               entry_size +=3D ima_get_binary_runtime_entry_size(qe->entry=
+);=20
++               if (entry_size <=3D segment_size) {
+                        khdr.count++;
+-                       ima_measurements_show(&file, qe);
++                       ima_measurements_show(&ima_kexec_file, qe);
+                } else {
+                        ret =3D -EINVAL;
++                       pr_err("IMA log file is too big for Kexec buf\n");
+                        break;
+                }
+        }
+
+The original code potentially copied a partial last measurement record, not=
+ a
+complete measurement record.  For ease of review, the above change is fine,=
+ but
+it needs to be a separate patch.
+
+Patches:
+1. ima: copy only complete measurement records across kexec
+2. ima: define and call ima_alloc_kexec_file_buf()
+
+The original code copied as many measurement records as possible.  Please d=
+o not
+change it.
+
+thanks,
+
+Mimi
+
+[1] Refer to the section "Separate your changes" in
+https://www.kernel.org/doc/Documentation/process/submitting-patches.rst
+
+
 
 
 
