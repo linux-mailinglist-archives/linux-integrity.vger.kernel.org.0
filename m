@@ -1,34 +1,34 @@
-Return-Path: <linux-integrity+bounces-5173-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5174-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A8ECA565F0
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 11:57:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14190A565F4
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 11:58:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E43967A39AF
-	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 10:55:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7494E18992FB
+	for <lists+linux-integrity@lfdr.de>; Fri,  7 Mar 2025 10:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB4EE20CCFD;
-	Fri,  7 Mar 2025 10:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5921A20CCFD;
+	Fri,  7 Mar 2025 10:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="D7+hW5mB"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="K2EDHZVs"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5B62066F9;
-	Fri,  7 Mar 2025 10:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAFB1AA1EC;
+	Fri,  7 Mar 2025 10:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741345011; cv=none; b=MRBn2b7ddCHvGme2+RJnOhJ8NzgCGR7KNwnCX3YNAEvbyUrfQmiJXfuqsSfxD4/QzdqVjQ8g0G00xXjB3ExeKz+Ou+eLIqRLOulnr5ntxnPgOiuFcuLUdqFlt+6Y011zpcoVw5IIgqsjtL7i7PhhelrPnKM+zVGQbnzynnT+nEo=
+	t=1741345100; cv=none; b=byarnQaQ2DyzlBxgdQOFfI99O214mn3tDm9+LmFS828gn3nOh9qHC7BodrXeO1ViSQPW9Dq9ZBgCUAzYXJLCs68zqqfuC3a/8KRqVRoEaqTzI3XYavU2ElYsoLdAod8kP3cFEo6dJohNcTQijhjDQWtHxw9RahZ//vwLdXzd9RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741345011; c=relaxed/simple;
-	bh=eTRc/R1vwk7APpvRq+dnRaLINEmGkL9jQlBfW6ATyhw=;
+	s=arc-20240116; t=1741345100; c=relaxed/simple;
+	bh=I/1IaeKKzQDIqgPXc8s6of6uJlxiLd0PoDcImAiKLus=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RIntg8zm+2JbOntsCxs+NJkh9tQeS0qLm+0GMZHaTan8cj2JXKpk+vsT6Qgp0iZJySlFdrDf3PqrbtW+eS0kNiLXnfs7iI11EuyOZgdf2hH7Jqc0sFoI9zZ4sHPIdt3rfwhYelAvjIfXkTOpsVSuo+U8MfPAtaM29DAlEvs0WlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=D7+hW5mB; arc=none smtp.client-ip=93.93.131.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=Em/tJ7cWvZ+mKhw5TyqlSc7y7KzcYEJjqEmUJsBmaXKuPWVViOUmNzRuyp9OpkHIHazke3iqWlnV/dezNn6SxLY1IS7frw228RvNgI5qlzgXGbB7n5vM50KXiiA/ZLhS8Ml+RHBK0zofg+fy1KvynTqzx6Ulp8C9oDJC+TPSsCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=K2EDHZVs; arc=none smtp.client-ip=93.93.131.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
@@ -37,25 +37,24 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=WoTjMvJJto9D8TXVxK8rThpPOlhA/e+cJVWquc8Ex8Q=; b=D7+hW5mBoqVRcpSpaBM6l2vH9E
-	9zywA0UoU44/mwab72ZvxRTzzrIEtUldHCZmE2Mplx0h98Yzw/eKlUUKCyolFddiJyMguJhI8eyxs
-	0deq7bq33WH2Il8p6fcSkqPGBNKyDhtkBWkk1K/8sCnMOLzeseIuTQLKXkNp+HkwutyT2Le20AheK
-	PGe84LfC1i17FKWt7DgjJ6VimO3SrtO8DnlhbA9i2gIUHVNHqHG+dl8MjfxsYIKFAsWPg3wJf6tcv
-	+cmql21Lz6kzsA/a4lL6hJFu367C/8jLaBribGiERVPDuhKM/YagkXay6B+sSN4/5ejKQNbYuemM2
-	veyLBzaw==;
+	bh=TFkcBFEaZQg44pGkkBpbFWsk3TycqXEL+eCSqbUmgqw=; b=K2EDHZVsfIFeh0WDteEuUfu8Go
+	M26LqcGVYjMyxUipjHB0hPT94piM6pW5eJB4Nrz+XUfalNCMBhVrsn82iuLqKyspHqyjO+kzbthpZ
+	Sq0eH2ovp/Zjs1FfoFHPx0hB6r8ub/XFjInTwQPmhnmdroTwbCoY5Vn4asm12zYR2AyLM9j1+Qz0/
+	dG/+aNgv4qIsIC4ZIftAFIOkLznAcetWdXAO4SZaGyscikwZZmE182HXTugox8zjnaFJZYFO2oeBd
+	YKWuOAKV32WCMKxiMgqs9YR9QbfADJf07NcqDSx0A5q6H2yRzJaK6KPkVZEp996Dw/fsJ8sJLLRV8
+	I8FOL8aQ==;
 Received: from noodles by the.earth.li with local (Exim 4.96)
 	(envelope-from <noodles@earth.li>)
-	id 1tqVNk-00Cu2b-0X;
-	Fri, 07 Mar 2025 10:56:44 +0000
-Date: Fri, 7 Mar 2025 10:56:44 +0000
+	id 1tqVPB-00Cu9N-06;
+	Fri, 07 Mar 2025 10:58:13 +0000
+Date: Fri, 7 Mar 2025 10:58:13 +0000
 From: Jonathan McDowell <noodles@earth.li>
 To: Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>,
 	Jason Gunthorpe <jgg@ziepe.ca>
 Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: Drop warning when an auth session is active
-Message-ID: <Z8rQ7Mxf_G6227HP@earth.li>
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm: Lazily flush auth session when getting random data
+Message-ID: <Z8rRRdwlI6JW8RWF@earth.li>
 References: <Z8m8G0RfiRyYGH_t@earth.li>
  <Z8oV9lJ4hsHualcP@kernel.org>
 Precedence: bulk
@@ -68,27 +67,49 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <Z8oV9lJ4hsHualcP@kernel.org>
 
-Auth sessions are lazily flushed since commit df745e25098dc ("tpm:
-Lazily flush the auth session"), so it's expected that we might try to
-start a new session when one is still active.
+From: Jonathan McDowell <noodles@meta.com>
+
+Lazy flushing of TPM auth sessions was introduced to speed up IMA
+measurments into the TPM. Make use of it in tpm2_get_random as well,
+which has the added benefit of not needlessly cleaning up the session
+that IMA is using when there are no userspace accesses taking place.
+
+Command trace before for every call:
+
+hwrng (0x00000161): 14 (52965242 ns)
+hwrng (0x00000176): 48 (161612432 ns)
+hwrng (0x00000165): 10 (2410494 ns)
+hwrng (0x0000017B): 117 (70699883 ns)
+hwrng (0x0000017B): 117 (70959666 ns)
+hwrng (0x00000165): 10 (2756827 ns)
+
+After, with repeated calls showing no setup:
+
+hwrng (0x00000161): 14 (53044582 ns)
+hwrng (0x00000176): 48 (160491333 ns)
+hwrng (0x00000165): 10 (2408220 ns)
+hwrng (0x0000017B): 117 (70695037 ns)
+hwrng (0x0000017B): 117 (70994984 ns)
+hwrng (0x0000017B): 117 (70195388 ns)
+hwrng (0x0000017B): 117 (70973835 ns)
 
 Signed-off-by: Jonathan McDowell <noodles@meta.com>
 ---
- drivers/char/tpm/tpm2-sessions.c | 1 -
+ drivers/char/tpm/tpm2-cmd.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index b70165b588ec..2d2c192ebb14 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -982,7 +982,6 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
- 	int rc;
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index dfdcbd009720..524d802ede26 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -359,7 +359,6 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+ 	} while (retries-- && total < max);
  
- 	if (chip->auth) {
--		dev_warn_once(&chip->dev, "auth session is active\n");
- 		return 0;
- 	}
+ 	tpm_buf_destroy(&buf);
+-	tpm2_end_auth_session(chip);
  
+ 	return total ? total : -EIO;
+ out:
 -- 
 2.48.1
 
