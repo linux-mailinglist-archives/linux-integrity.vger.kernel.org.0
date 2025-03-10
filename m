@@ -1,100 +1,66 @@
-Return-Path: <linux-integrity+bounces-5201-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5202-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADBACA593F7
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 13:15:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCE0BA59415
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 13:20:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6822B167DF8
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 12:14:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6568418891EC
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 12:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA8B1225403;
-	Mon, 10 Mar 2025 12:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6508E1A314B;
+	Mon, 10 Mar 2025 12:20:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ioKTIbWe"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="oNVZNyOe"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9501A314B
-	for <linux-integrity@vger.kernel.org>; Mon, 10 Mar 2025 12:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475B314F11E;
+	Mon, 10 Mar 2025 12:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741608813; cv=none; b=JjfvPCl+G4xlBLCGLOoo2edari/LWl0VjNnAe/cy/yY77WU4PDM/x/a50R/xYiuKK/c3Iq1slh+RqhPo+TK95yQ8hO3FjepiVcFOPOhVQr1GqI1aDaradhSB01upn8Ivfs6oA58LmUfb/7oo/hbto088DnIvoY5IOQd+ymeWuM4=
+	t=1741609211; cv=none; b=m0un5C3fXNw+wCMP/DUiH0lrxEdGrrVUPvxPJShfm79GaaWGnEsErDECWqs50zB44XlJkOOEk7Hes2L52/eUBEVHKRdq6YKskj8MnvGFFo7T6a+LXiruRJQDN3tumaSdzabIzUV4lVB9Ljn99KxeSi94s5VOcI3IoAwxEw6Wz14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741608813; c=relaxed/simple;
-	bh=XUQ74N8CFAQMmZBMklSCKl3+y2dbF8sPEjzdYlp1I3U=;
+	s=arc-20240116; t=1741609211; c=relaxed/simple;
+	bh=D345LRq3bdgwgLdIgf4ibIIQK43XnRCm1Jnw5lxJB0c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hxtdKTti+SxwZkgfoGK95+VC+bxowACwhr4Zqtpw3oYmolqVM4+IN7tSua7X16xaHxjJhv02m9WU9Z1F9ZTddkaf9QArbQ4rlUfWceczhpC2rNictX8H2qN5JfzOo/zVrk3ZpmK0htxnRWRq5IIFfb+0dVMs9Srhk2L6JVvlWZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ioKTIbWe; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741608810;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sGViJXCclzx/2EWYRBSu51fQCiFZyNMwoJLCZOnspZQ=;
-	b=ioKTIbWeDV7ILNC7taHRoE56/mfJC8YtNPK/U1pe3xcPwhCaPe1lnXiDrFdbGl1XzXIeuF
-	Aw/6hTTZgJpqJIeLsCkRherZGvEZYz46++UdXG8/Pudw4eDsF/l/3schczuUXGsbU+ieEb
-	zrgHEvx4c9FnaZmeRcRn4kwMGpLzgGs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-544-GABZxYhiNtOEB7Rrmbd1Fg-1; Mon, 10 Mar 2025 08:13:29 -0400
-X-MC-Unique: GABZxYhiNtOEB7Rrmbd1Fg-1
-X-Mimecast-MFC-AGG-ID: GABZxYhiNtOEB7Rrmbd1Fg_1741608808
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-39149cbc77dso603503f8f.3
-        for <linux-integrity@vger.kernel.org>; Mon, 10 Mar 2025 05:13:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741608808; x=1742213608;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sGViJXCclzx/2EWYRBSu51fQCiFZyNMwoJLCZOnspZQ=;
-        b=cuvuIZPGF4ZHZgtEXNPDls0W2xOJgjUiVht6d1Xg27J2tl07TSNNSWoIYUvWitBBXb
-         G+hUDZGWJFEroGGbe1udbDWSFww/R8hvNqdplqIYXzu/41xhVU63UNHbrRjfa6mqYwd4
-         CiuewCxWCCdOy65iKz0hZf5eigIuH8kr9jQkQDUZIR8CgC8XAyLCsOEY/xtvxcbaMZrB
-         JMANdy8kUPLhZkMhkTURyaXHyVFSOa589J8FJ5UbOoQMHX0Bvise26wSPaKXkgix0yVC
-         aaOxgqohz0bQcCfla0IrT7d3A5dwPVwyK89gtkS7CaQJeZOlhZsCPXMuWElC0kJ7agQ/
-         eVnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5ouGpeWIc7JMb0uiF9o2xYffWxE2w8HM0ie74H3u65w5zcvLvJkmTx5lgUm5BB9TGiqF+jVI9ZbLm1mjXvZs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA9SWSEgLhQLXx0CGTRM9gC+FUtXdUzjbmtxTjCA+gehQCmAY4
-	xOa8zTGwbBSfbBG3ViSdiGfUGJrzL9VTpwWTxltcyPb+ukikJ9dOE11vCCPCYMD1RIE2OQzabt+
-	R0NiW8eGYPU6lVG7mF5GNhfY0KTImZ55Kd1zwnwDhnbq5qsJ+nfBJXGLQZ7/hYyiKkw==
-X-Gm-Gg: ASbGncsBtQ2wAhFdUsfTmIshER/y+a9Hy8akrWC5r2nIMESzo5ZRhO0U53ATdMyuAYd
-	OKiEOOd9ET9A5Cpm8KWUE3GCzzUJ49hC6zLydvKaO149qtx+jHILfHDpbkwkVOAuQXRrZENqTxJ
-	g4pXepOAHgeV/zGIW+HdEFlLWrFgMPWIR1TDl4A+3RtPpGgLEPFfUeRTAUxYWy2GHBgF19ndsZr
-	X/yRU7hiCoX/+rIzMpEdpmZLg7veUD/Z0oko7T71jMppoT6SdCWEZHMk8BE1u3acPnW0wadJqcr
-	ja6k76yi0gNbS4j4yKiR+LM8yD6Svohyl1iaaRbHxQ5TRfkeITlsRfH/s8x8Twmq
-X-Received: by 2002:a5d:6d0c:0:b0:390:de33:b0ef with SMTP id ffacd0b85a97d-39132d7084emr11040361f8f.30.1741608807846;
-        Mon, 10 Mar 2025 05:13:27 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFrpAzNy6sSH4YOG1+5l942/ORd7aa1SNvDl7U7GiW1x9GoWjA6Xlf8uANpk8LgTiYslFPSmg==
-X-Received: by 2002:a5d:6d0c:0:b0:390:de33:b0ef with SMTP id ffacd0b85a97d-39132d7084emr11040296f8f.30.1741608807285;
-        Mon, 10 Mar 2025 05:13:27 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-29.retail.telecomitalia.it. [79.46.200.29])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912c103035sm14450166f8f.88.2025.03.10.05.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Mar 2025 05:13:26 -0700 (PDT)
-Date: Mon, 10 Mar 2025 13:13:22 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Claudio Carvalho <cclaudio@linux.ibm.com>, 
-	Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org, Dov Murik <dovmurik@linux.ibm.com>, 
-	linux-coco@lists.linux.dev, Dionna Glaze <dionnaglaze@google.com>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC PATCH v2 1/6] x86/sev: add SVSM call macros for the vTPM
- protocol
-Message-ID: <5zulxqr6l4xivnbdgal6nyz5c6x2mtqbkvhfx565tu6gmxxrgq@wpklze3745wn>
-References: <20250228170720.144739-1-sgarzare@redhat.com>
- <20250228170720.144739-2-sgarzare@redhat.com>
- <20250310110834.GEZ87IMgB_I86-3u3l@fat_crate.local>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NyLRvAGlR7HkpFatmKgkQekf5puC9BTxDXnQVWgcKv57qq5l1RZ3b3ENV5cXsW2dV+9J+qB5wVLQ8kKT+HrageamWqwlu3Dvd2K16QfZhlLEgAsiahDBiuPu8uSWU/xbYIpq9Jl36JNIZHeMbNKNkwJyUz1AWzCoIUuZ/nuQaT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=oNVZNyOe; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=KSjT+hQVoMfaSSrHYNtWxh3wtoU4L9qucOgNsgeUwtE=; b=oNVZNyOeYnRNFjUJIw7TFB1GQ0
+	mgMXMzYLMHS1uBjaCA//J81gS9b1nqwePBk8D7TCg5oZ3OeGY0A8UFBulcqz0zDL98EFVBB9tI0Ey
+	8qz7h7MhT5/AT36LgWEotxCpPfn82Ic+kvU/NWjErwvWgTQvUHhXWMxJDpzHnWjjevd1bRYarNzVv
+	E1sDkhhZzJ3LUAWElS046yRk8ZqbnAZfO9+cQ6ru/ngoJDjgWp5V+ESJe32FbT+qCHTUbd4Ffq0+1
+	FMEFPJkl/GGlEK0rF9C6GHfmfrkdxR62dxMg8tJJVgyNv0UlE44GU7fWZ/2X4L4qW98z/mdlIlDal
+	PWd7Snag==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1trc6t-00GUvz-1r;
+	Mon, 10 Mar 2025 12:19:55 +0000
+Date: Mon, 10 Mar 2025 12:19:55 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] tpm, tpm_tis: Workaround failed command reception on
+ Infineon devices
+Message-ID: <Z87Y69l5_GbzlLfp@earth.li>
+References: <Z8lkSKOqBgt78pU2@earth.li>
+ <Z8ogT_gERUYstPbK@kernel.org>
+ <Z8sgfMmsfn894yLj@earth.li>
+ <Z8sixTuKG5sxO-D1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -103,54 +69,113 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20250310110834.GEZ87IMgB_I86-3u3l@fat_crate.local>
+In-Reply-To: <Z8sixTuKG5sxO-D1@kernel.org>
 
-On Mon, Mar 10, 2025 at 12:08:34PM +0100, Borislav Petkov wrote:
->On Fri, Feb 28, 2025 at 06:07:15PM +0100, Stefano Garzarella wrote:
->> Add macros for SVSM_VTPM_QUERY and SVSM_VTPM_CMD calls as defined
->> in the "Secure VM Service Module for SEV-SNP Guests"
->> Publication # 58019 Revision: 1.00
->>
->> Link: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf
->
->Those URLs are unstable - simply naming the document properly in the commit
->message so that a search engine can find it is enough.
+From: Jonathan McDowell <noodles@meta.com>
 
-Ack, I'll do it all over the place in this series (commit descriptions, 
-code comment blocks, etc.).
+Some Infineon devices have a issue where the status register will get
+stuck with a quick REQUEST_USE / COMMAND_READY sequence. This is not
+simply a matter of requiring a longer timeout; the work around is to
+retry the command submission. Add appropriate logic to do this in the
+send path.
 
->
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> ---
->>  arch/x86/include/asm/sev.h | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
->> index 1581246491b5..f6ebf4492606 100644
->> --- a/arch/x86/include/asm/sev.h
->> +++ b/arch/x86/include/asm/sev.h
->> @@ -384,6 +384,10 @@ struct svsm_call {
->>  #define SVSM_ATTEST_SERVICES		0
->>  #define SVSM_ATTEST_SINGLE_SERVICE	1
->>
->> +#define SVSM_VTPM_CALL(x)		((2ULL << 32) | (x))
->> +#define SVSM_VTPM_QUERY			0
->> +#define SVSM_VTPM_CMD			1
->> +
->>  #ifdef CONFIG_AMD_MEM_ENCRYPT
->>
->>  extern u8 snp_vmpl;
->> --
->
->Merge this patch with the patch where those are used - no need for a separate
->patch.
+This is fixed in later firmware revisions, but those are not always
+available, and cannot generally be easily updated from outside a
+firmware environment.
 
-Yeah, it is left over from v1 when I had added this patch over James' 
-patches, but now I agree that it no longer makes sense since I have 
-reworked almost every patch in this series. I'm going to incorporate 
-them!
+Testing has been performed with a simple repeated loop of doing a
+TPM2_CC_GET_CAPABILITY for TPM_CAP_PROP_MANUFACTURER using the Go code
+at:
 
-Thanks,
-Stefano
+  https://the.earth.li/~noodles/tpm-stuff/timeout-reproducer-simple.go
+
+It can take several hours to reproduce, and several million operations.
+
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
+---
+v2: Rename flag to TPM_TIS_STATUS_VALID_RETRY
+
+  drivers/char/tpm/tpm_tis_core.c | 17 ++++++++++++++---
+  drivers/char/tpm/tpm_tis_core.h |  1 +
+  include/linux/tpm.h             |  1 +
+  3 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index c969a1793184..4ab69c3e103c 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -463,7 +463,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+  
+  		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+  					&priv->int_queue, false) < 0) {
+-			rc = -ETIME;
++			if (test_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags))
++				rc = -EAGAIN;
++			else
++				rc = -ETIME;
+  			goto out_err;
+  		}
+  		status = tpm_tis_status(chip);
+@@ -480,7 +483,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+  
+  	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+  				&priv->int_queue, false) < 0) {
+-		rc = -ETIME;
++		if (test_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags))
++			rc = -EAGAIN;
++		else
++			rc = -ETIME;
+  		goto out_err;
+  	}
+  	status = tpm_tis_status(chip);
+@@ -545,9 +551,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+  		if (rc >= 0)
+  			/* Data transfer done successfully */
+  			break;
+-		else if (rc != -EIO)
++		else if (rc != EAGAIN && rc != -EIO)
+  			/* Data transfer failed, not recoverable */
+  			return rc;
++
++		usleep_range(priv->timeout_min, priv->timeout_max);
+  	}
+  
+  	/* go and do it */
+@@ -1143,6 +1151,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+  		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
+  	}
+  
++	if (priv->manufacturer_id == TPM_VID_IFX)
++		set_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags);
++
+  	if (is_bsw()) {
+  		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
+  					ILB_REMAP_SIZE);
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 690ad8e9b731..970d02c337c7 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -89,6 +89,7 @@ enum tpm_tis_flags {
+  	TPM_TIS_INVALID_STATUS		= 1,
+  	TPM_TIS_DEFAULT_CANCELLATION	= 2,
+  	TPM_TIS_IRQ_TESTED		= 3,
++	TPM_TIS_STATUS_VALID_RETRY	= 4,
+  };
+  
+  struct tpm_tis_data {
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 20a40ade8030..6c3125300c00 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -335,6 +335,7 @@ enum tpm2_cc_attrs {
+  #define TPM_VID_WINBOND  0x1050
+  #define TPM_VID_STM      0x104A
+  #define TPM_VID_ATML     0x1114
++#define TPM_VID_IFX      0x15D1
+  
+  enum tpm_chip_flags {
+  	TPM_CHIP_FLAG_BOOTSTRAPPED		= BIT(0),
+-- 
+2.48.1
 
 
