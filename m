@@ -1,214 +1,156 @@
-Return-Path: <linux-integrity+bounces-5200-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5201-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55C1AA592C1
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 12:30:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADBACA593F7
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 13:15:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEC167A4B39
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 11:29:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6822B167DF8
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 12:14:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2FC4215F49;
-	Mon, 10 Mar 2025 11:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA8B1225403;
+	Mon, 10 Mar 2025 12:13:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="W/004ubo"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ioKTIbWe"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C6E2B9A7;
-	Mon, 10 Mar 2025 11:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9501A314B
+	for <linux-integrity@vger.kernel.org>; Mon, 10 Mar 2025 12:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741606238; cv=none; b=R2ZUK63M1TcUJatDpw65usIHoe8TQAC2BpfvM/xcM/K4eA09tInSLvv9/A6lblELsjAmgb//BiiVWX083DhZDwz/PyqZ+NH5v0RpnbUpAtZXDR0KVt3Hk5EvYCZc+sDd4fbSrEJxG2EHpF9bFva1ruGj95zSgidvNqgeNegz8t0=
+	t=1741608813; cv=none; b=JjfvPCl+G4xlBLCGLOoo2edari/LWl0VjNnAe/cy/yY77WU4PDM/x/a50R/xYiuKK/c3Iq1slh+RqhPo+TK95yQ8hO3FjepiVcFOPOhVQr1GqI1aDaradhSB01upn8Ivfs6oA58LmUfb/7oo/hbto088DnIvoY5IOQd+ymeWuM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741606238; c=relaxed/simple;
-	bh=GRTitHxgBMnFRI7UPKJaKRl2FGqjFtkgd4wwODVouI8=;
+	s=arc-20240116; t=1741608813; c=relaxed/simple;
+	bh=XUQ74N8CFAQMmZBMklSCKl3+y2dbF8sPEjzdYlp1I3U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H8XVtkO6hYcR0x1DpxprpyhpeIJAtiKyoAUvkbpcxr4+59pdxxo561BKWhEX7kSRXHuE772WNkUo22T6JqNZhW4Usv+IzgVRHScJ80YrkJ/3/v7rQJ3U9O6tVc3jG2Jq5BWvohz3c0yObqVMw3fdTzJ+rzidoQYdbWcTcbKLPSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=W/004ubo; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7D7D640E0202;
-	Mon, 10 Mar 2025 11:30:34 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id A55peK9z12U5; Mon, 10 Mar 2025 11:30:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1741606230; bh=FQ40DY5DBRyjcJp7Mre2YFktay6WLnANIARN9EWbnug=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W/004uboNjkm19t99ojDVZ49EecyWv3EQCnz4LR+6cqThDSwGQAZEDMtXWiNe4cqS
-	 S+d9iTLdq98s3oKPSQT+F4Te+P7PUZW50U9lc0de3O2YzS9tV8HKoxz1VaNwUz1zQy
-	 pvl4ShXzKOhDMzVji1zQ3Z/hJyUxG4tkq4tJC7S8cECcp8k2nxfmpqUSYFU+36I79+
-	 cVHcBtlBNdcsMvhx0FWIcC5Tw/1KVMK1dd0wuwlBGF3Gxr87p/kME6HSVW4j2P5/5g
-	 5siMNOT46EAUzNeeuGWgHNkaK5gFg76nnrz6P+8TxPpjBFXy8CKoKuBAvq//ef7m6E
-	 To2YyKgC606x5ss/14N/1Aw8pF/xB68cAQ9GTJE+dbuQdW+6HZbj1YMGnzQFuyTg7O
-	 KFfJAKLGLQkXUxvoSZ+u9x51ukc8c3QkHAdEj296Y1ozVQP8ajfj1T4bOLp1p9dmLw
-	 DwAtxopd5VILVdscF/VJPl5VbCQ8Kmjui1zd7jqW0fGI6du+JIOYTgcGVFngg9ndOx
-	 SAxAC3/4LNk3mLzXjKtWjuTQc8PiSXwT/uC5yQtyf6FfF4b3oXEKQ+bw67jA0Mvngj
-	 JegU6z0wPw0tPgeA/aeLp3swlc0NsS/AkSC/q2ap+VyVcLDDCur2P4mc/QB8/YDlYA
-	 emDk93Vc1EDY8wn4aOGce4aw=
-Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 89D7240E01AD;
-	Mon, 10 Mar 2025 11:30:12 +0000 (UTC)
-Date: Mon, 10 Mar 2025 12:30:06 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org,
-	Dov Murik <dovmurik@linux.ibm.com>, linux-coco@lists.linux.dev,
-	Dionna Glaze <dionnaglaze@google.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=hxtdKTti+SxwZkgfoGK95+VC+bxowACwhr4Zqtpw3oYmolqVM4+IN7tSua7X16xaHxjJhv02m9WU9Z1F9ZTddkaf9QArbQ4rlUfWceczhpC2rNictX8H2qN5JfzOo/zVrk3ZpmK0htxnRWRq5IIFfb+0dVMs9Srhk2L6JVvlWZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ioKTIbWe; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741608810;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sGViJXCclzx/2EWYRBSu51fQCiFZyNMwoJLCZOnspZQ=;
+	b=ioKTIbWeDV7ILNC7taHRoE56/mfJC8YtNPK/U1pe3xcPwhCaPe1lnXiDrFdbGl1XzXIeuF
+	Aw/6hTTZgJpqJIeLsCkRherZGvEZYz46++UdXG8/Pudw4eDsF/l/3schczuUXGsbU+ieEb
+	zrgHEvx4c9FnaZmeRcRn4kwMGpLzgGs=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-544-GABZxYhiNtOEB7Rrmbd1Fg-1; Mon, 10 Mar 2025 08:13:29 -0400
+X-MC-Unique: GABZxYhiNtOEB7Rrmbd1Fg-1
+X-Mimecast-MFC-AGG-ID: GABZxYhiNtOEB7Rrmbd1Fg_1741608808
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-39149cbc77dso603503f8f.3
+        for <linux-integrity@vger.kernel.org>; Mon, 10 Mar 2025 05:13:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741608808; x=1742213608;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sGViJXCclzx/2EWYRBSu51fQCiFZyNMwoJLCZOnspZQ=;
+        b=cuvuIZPGF4ZHZgtEXNPDls0W2xOJgjUiVht6d1Xg27J2tl07TSNNSWoIYUvWitBBXb
+         G+hUDZGWJFEroGGbe1udbDWSFww/R8hvNqdplqIYXzu/41xhVU63UNHbrRjfa6mqYwd4
+         CiuewCxWCCdOy65iKz0hZf5eigIuH8kr9jQkQDUZIR8CgC8XAyLCsOEY/xtvxcbaMZrB
+         JMANdy8kUPLhZkMhkTURyaXHyVFSOa589J8FJ5UbOoQMHX0Bvise26wSPaKXkgix0yVC
+         aaOxgqohz0bQcCfla0IrT7d3A5dwPVwyK89gtkS7CaQJeZOlhZsCPXMuWElC0kJ7agQ/
+         eVnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5ouGpeWIc7JMb0uiF9o2xYffWxE2w8HM0ie74H3u65w5zcvLvJkmTx5lgUm5BB9TGiqF+jVI9ZbLm1mjXvZs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA9SWSEgLhQLXx0CGTRM9gC+FUtXdUzjbmtxTjCA+gehQCmAY4
+	xOa8zTGwbBSfbBG3ViSdiGfUGJrzL9VTpwWTxltcyPb+ukikJ9dOE11vCCPCYMD1RIE2OQzabt+
+	R0NiW8eGYPU6lVG7mF5GNhfY0KTImZ55Kd1zwnwDhnbq5qsJ+nfBJXGLQZ7/hYyiKkw==
+X-Gm-Gg: ASbGncsBtQ2wAhFdUsfTmIshER/y+a9Hy8akrWC5r2nIMESzo5ZRhO0U53ATdMyuAYd
+	OKiEOOd9ET9A5Cpm8KWUE3GCzzUJ49hC6zLydvKaO149qtx+jHILfHDpbkwkVOAuQXRrZENqTxJ
+	g4pXepOAHgeV/zGIW+HdEFlLWrFgMPWIR1TDl4A+3RtPpGgLEPFfUeRTAUxYWy2GHBgF19ndsZr
+	X/yRU7hiCoX/+rIzMpEdpmZLg7veUD/Z0oko7T71jMppoT6SdCWEZHMk8BE1u3acPnW0wadJqcr
+	ja6k76yi0gNbS4j4yKiR+LM8yD6Svohyl1iaaRbHxQ5TRfkeITlsRfH/s8x8Twmq
+X-Received: by 2002:a5d:6d0c:0:b0:390:de33:b0ef with SMTP id ffacd0b85a97d-39132d7084emr11040361f8f.30.1741608807846;
+        Mon, 10 Mar 2025 05:13:27 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFrpAzNy6sSH4YOG1+5l942/ORd7aa1SNvDl7U7GiW1x9GoWjA6Xlf8uANpk8LgTiYslFPSmg==
+X-Received: by 2002:a5d:6d0c:0:b0:390:de33:b0ef with SMTP id ffacd0b85a97d-39132d7084emr11040296f8f.30.1741608807285;
+        Mon, 10 Mar 2025 05:13:27 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-29.retail.telecomitalia.it. [79.46.200.29])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912c103035sm14450166f8f.88.2025.03.10.05.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 05:13:26 -0700 (PDT)
+Date: Mon, 10 Mar 2025 13:13:22 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Claudio Carvalho <cclaudio@linux.ibm.com>, 
+	Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org, Dov Murik <dovmurik@linux.ibm.com>, 
+	linux-coco@lists.linux.dev, Dionna Glaze <dionnaglaze@google.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
 	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC PATCH v2 2/6] x86/sev: add SVSM vTPM probe/send_command
- functions
-Message-ID: <20250310113006.GFZ87NPu-LgFVVtsEG@fat_crate.local>
+Subject: Re: [RFC PATCH v2 1/6] x86/sev: add SVSM call macros for the vTPM
+ protocol
+Message-ID: <5zulxqr6l4xivnbdgal6nyz5c6x2mtqbkvhfx565tu6gmxxrgq@wpklze3745wn>
 References: <20250228170720.144739-1-sgarzare@redhat.com>
- <20250228170720.144739-3-sgarzare@redhat.com>
+ <20250228170720.144739-2-sgarzare@redhat.com>
+ <20250310110834.GEZ87IMgB_I86-3u3l@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20250228170720.144739-3-sgarzare@redhat.com>
+In-Reply-To: <20250310110834.GEZ87IMgB_I86-3u3l@fat_crate.local>
 
-On Fri, Feb 28, 2025 at 06:07:16PM +0100, Stefano Garzarella wrote:
-> +bool snp_svsm_vtpm_probe(void)
-> +{
-> +	struct svsm_call call = {};
-> +	u64 send_cmd_mask = 0;
-> +	u64 platform_cmds;
-> +	u64 features;
-> +	int ret;
-> +
-> +	/* The vTPM device is available only if we have a SVSM */
+On Mon, Mar 10, 2025 at 12:08:34PM +0100, Borislav Petkov wrote:
+>On Fri, Feb 28, 2025 at 06:07:15PM +0100, Stefano Garzarella wrote:
+>> Add macros for SVSM_VTPM_QUERY and SVSM_VTPM_CMD calls as defined
+>> in the "Secure VM Service Module for SEV-SNP Guests"
+>> Publication # 58019 Revision: 1.00
+>>
+>> Link: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf
+>
+>Those URLs are unstable - simply naming the document properly in the commit
+>message so that a search engine can find it is enough.
 
-s/if we have a SVSM/if an SVSM is present/
+Ack, I'll do it all over the place in this series (commit descriptions, 
+code comment blocks, etc.).
 
-> +	if (!snp_vmpl)
-> +		return false;
-> +
-> +	call.caa = svsm_get_caa();
-> +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_QUERY);
-> +
-> +	ret = svsm_perform_call_protocol(&call);
-> +
+>
+>> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> ---
+>>  arch/x86/include/asm/sev.h | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+>> index 1581246491b5..f6ebf4492606 100644
+>> --- a/arch/x86/include/asm/sev.h
+>> +++ b/arch/x86/include/asm/sev.h
+>> @@ -384,6 +384,10 @@ struct svsm_call {
+>>  #define SVSM_ATTEST_SERVICES		0
+>>  #define SVSM_ATTEST_SINGLE_SERVICE	1
+>>
+>> +#define SVSM_VTPM_CALL(x)		((2ULL << 32) | (x))
+>> +#define SVSM_VTPM_QUERY			0
+>> +#define SVSM_VTPM_CMD			1
+>> +
+>>  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>>
+>>  extern u8 snp_vmpl;
+>> --
+>
+>Merge this patch with the patch where those are used - no need for a separate
+>patch.
 
+Yeah, it is left over from v1 when I had added this patch over James' 
+patches, but now I agree that it no longer makes sense since I have 
+reworked almost every patch in this series. I'm going to incorporate 
+them!
 
-^ Superfluous newline.
+Thanks,
+Stefano
 
-> +	if (ret != SVSM_SUCCESS)
-> +		return false;
-> +
-> +	features = call.rdx_out;
-> +	platform_cmds = call.rcx_out;
-> +
-> +	/* No feature supported, it should be zero */
-> +	if (features)
-> +		pr_warn("SNP SVSM vTPM unsupported features: 0x%llx\n",
-> +			features);
-
-So
-
-	return false;
-
-here?
-
-> +
-> +	/* TPM_SEND_COMMAND - platform command 8 */
-> +	send_cmd_mask = 1 << 8;
-
-	BIT_ULL(8);
-
-> +
-> +	return (platform_cmds & send_cmd_mask) == send_cmd_mask;
-> +}
-> +EXPORT_SYMBOL_GPL(snp_svsm_vtpm_probe);
-> +
-> +int snp_svsm_vtpm_send_command(u8 *buffer)
-> +{
-> +	struct svsm_call call = {};
-> +
-> +	call.caa = svsm_get_caa();
-> +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_CMD);
-> +	call.rcx = __pa(buffer);
-> +
-> +	return svsm_perform_call_protocol(&call);
-> +}
-
-In any case, you can zap all those local vars, use comments instead and slim
-down the function, diff ontop:
-
-diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
-index 3902af4b1385..6d7e97c1f567 100644
---- a/arch/x86/coco/sev/core.c
-+++ b/arch/x86/coco/sev/core.c
-@@ -2631,12 +2631,9 @@ static int snp_issue_guest_request(struct snp_guest_req *req, struct snp_req_dat
- bool snp_svsm_vtpm_probe(void)
- {
- 	struct svsm_call call = {};
--	u64 send_cmd_mask = 0;
--	u64 platform_cmds;
--	u64 features;
- 	int ret;
- 
--	/* The vTPM device is available only if we have a SVSM */
-+	/* The vTPM device is available only if a SVSM is present */
- 	if (!snp_vmpl)
- 		return false;
- 
-@@ -2644,22 +2641,17 @@ bool snp_svsm_vtpm_probe(void)
- 	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_QUERY);
- 
- 	ret = svsm_perform_call_protocol(&call);
--
- 	if (ret != SVSM_SUCCESS)
- 		return false;
- 
--	features = call.rdx_out;
--	platform_cmds = call.rcx_out;
--
- 	/* No feature supported, it should be zero */
--	if (features)
--		pr_warn("SNP SVSM vTPM unsupported features: 0x%llx\n",
--			features);
--
--	/* TPM_SEND_COMMAND - platform command 8 */
--	send_cmd_mask = 1 << 8;
-+	if (call.rdx_out) {
-+		pr_warn("SNP SVSM vTPM unsupported features: 0x%llx\n", call.rdx_out);
-+		return false;
-+	}
- 
--	return (platform_cmds & send_cmd_mask) == send_cmd_mask;
-+	/* Check platform commands is TPM_SEND_COMMAND - platform command 8 */
-+	return (call.rcx_out & BIT_ULL(8)) == BIT_ULL(8);
- }
- EXPORT_SYMBOL_GPL(snp_svsm_vtpm_probe);
- 
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
 
