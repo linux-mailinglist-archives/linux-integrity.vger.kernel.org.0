@@ -1,136 +1,157 @@
-Return-Path: <linux-integrity+bounces-5198-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5199-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3F06A59248
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 12:09:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFD94A59298
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 12:20:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78176188829C
-	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 11:09:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 261BB3AB2E6
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 11:20:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5F8223716;
-	Mon, 10 Mar 2025 11:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5BDE22156B;
+	Mon, 10 Mar 2025 11:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="j9RSy0HF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYtHAf+E"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF81226D18;
-	Mon, 10 Mar 2025 11:09:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AC721D3F7;
+	Mon, 10 Mar 2025 11:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741604942; cv=none; b=mr3SiU9Mf0dKFt8bIrYMw7wA/NqU4eonC/v/7AWbfbbED9GLWxdsKzwYfUvgsJeHU1v15PtmzXxojv24Yblyd5tF0rj7+HGizsHxHDOuLmuTmvTHHb7OK3tWldlMkGDHa8KGs5ssgDNABekwlDuZpzrnEl3qBgvGe2Y3DXTG8Mc=
+	t=1741605582; cv=none; b=ABMQuWhiNIDn5+B4Cu3z6yvqhxPj43UmdF8J8fFHk4PrvSGj1OFmgwEjZKTntLPX525Gd+dKfo47o+1a26dgCsxL0ulWnCN941ynmPGimtOQ6H6/WvBCv9fc92j8H1m5uNStqSRRG1hySI1glCQ1hZEXHUK7Kgp+Y1fZl3VBN1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741604942; c=relaxed/simple;
-	bh=zyuUROdM8RYQHtdyR8GD86eCrfq6ILVcngJvYInm2Xw=;
+	s=arc-20240116; t=1741605582; c=relaxed/simple;
+	bh=XWVIqy9wk7otgQU2pGwNOKtJVNBViOOhWpTuBzczzNo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=un7AYdJc5uzj1ticRbQw7kaKLliaAHNnPspFwwMPEjwEhzjCorIhnons93XfHInCwA1AvtKjGXPSCB/5gDaXMicJkRlt438uySSKwqeIQ8uLla0uotSPDmJ3ElVl+Coq1QTSpGEDeAc9vBjGKoc7Vya2M8/gDuKfqPfScJOoBWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=j9RSy0HF; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3F0F740E0176;
-	Mon, 10 Mar 2025 11:08:58 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id bKnyDEiQksym; Mon, 10 Mar 2025 11:08:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1741604933; bh=YQAaINXv5w2Ci1rsU+w5Dx9VoI6ACjlMHpZFyp5XQpU=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=uHur1QmID9Q6mIs3+1pKdlfmOjnLYecdMIlVLGgHQNgsf6ilclLKG2sJONU3RFi0Ym1BHLM7SJZoYU30Dd54Rz60KQeh8v8McZVxYP8N4IFjpuv1x0up5NtbE7Y577efxufWE9H+6GG0fTRFplQ4x5ry252SpmSZw98sjiVtGes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYtHAf+E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98689C4CEE5;
+	Mon, 10 Mar 2025 11:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741605581;
+	bh=XWVIqy9wk7otgQU2pGwNOKtJVNBViOOhWpTuBzczzNo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=j9RSy0HFlqKlxAbOMr3YapFNwd0xktOUTfuUieUpH6MtW5IEpR6cR9MQsuVUA10MQ
-	 BMkqTeprw9v+v8LpmvCbumr88U/SVTkkmsu2E5lHMU1CdRpsuUkXlILRbB2OxZIeuV
-	 xh26yU0kKBjyI/L7h6KnpKFwzlol/RnsVKBN+RoRu32An/FUAwISUKOHfK91g3RsaR
-	 nBeQ5LExjVwiyy7jsFwRRtehMnd65feMUitCSTix1X44V8AdXbYQqTt76GFDVVQj7A
-	 XvlDAfm//Ue4dd7L8syXz0vrdEr84Ags/4ZpbvJYol1aoi6ZdcFA+rUfhlc/5C3JlL
-	 b4AtwQiEOyYtpSQX/UUcwrdXqmO+7Cc3qkyorC/LiXr5ejYGnjynNeXHotd+V6G4mb
-	 WXwZZxG1DGyfgmwN5Pa9Vca0pFQPEAJdacKCByyzddVzKozzf4+7DscdfUUL+ER9Ew
-	 Quy8cd/rfSCsIjC41fSekVL3+7rKUkv87p8yQJ2FVgQNqkCGfXyzFZfx5UXjtVaGb4
-	 LVtLYIJZ+5Js1Bf62nhwBSA4HPWDnKzVEhlFKSpHvpQXc1ViSeZf7koIP4JXmPnKal
-	 weDhmzqF76Elfy/8XQC3C7254kuGX/6izP2uOk5inKJQ/UC1FDeNXzgnE8lpsr0xk9
-	 VrlRgAi2vTCUMebcF4Q5Cb/k=
-Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4CFC640E015D;
-	Mon, 10 Mar 2025 11:08:35 +0000 (UTC)
-Date: Mon, 10 Mar 2025 12:08:34 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org,
-	Dov Murik <dovmurik@linux.ibm.com>, linux-coco@lists.linux.dev,
-	Dionna Glaze <dionnaglaze@google.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC PATCH v2 1/6] x86/sev: add SVSM call macros for the vTPM
- protocol
-Message-ID: <20250310110834.GEZ87IMgB_I86-3u3l@fat_crate.local>
-References: <20250228170720.144739-1-sgarzare@redhat.com>
- <20250228170720.144739-2-sgarzare@redhat.com>
+	b=sYtHAf+ErfQMkoDwuFKslZ3pfupKVXFvrRMyChzbsFItZPTb6xQ+jVQECv7qmbma4
+	 A4uWaQq4+Y8e6etjRje4Hw/URQqaFTWZ/5Da1Afub2Uf4rRWUh/eeKo5lzmaxblpdn
+	 ueMZ0SKNb605mzDkhUvwqbCd/F9T/misC7HZetBp/1XxhPaClFGtRZTiuVIJwUnWA9
+	 Ed6Pg93W5lzq7zAuMheZWLTS4JA46CnCavpXY02j8D72YDKX8YhLLWDPw86nMwaT9V
+	 SSwPUl3ksb7+7Kjt9oc2gfmRlwhMeHsjIqi945FT3gRg1tkGNt3B/0tRDwV4+oECs5
+	 +WNhp3BXKhwwQ==
+Date: Mon, 10 Mar 2025 13:19:37 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Stuart Yoder <stuart.yoder@arm.com>
+Cc: linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+	sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] Add support for the TPM FF-A start method
+Message-ID: <Z87KyTbL0Xi89jEr@kernel.org>
+References: <20250305173611.74548-1-stuart.yoder@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250228170720.144739-2-sgarzare@redhat.com>
+In-Reply-To: <20250305173611.74548-1-stuart.yoder@arm.com>
 
-On Fri, Feb 28, 2025 at 06:07:15PM +0100, Stefano Garzarella wrote:
-> Add macros for SVSM_VTPM_QUERY and SVSM_VTPM_CMD calls as defined
-> in the "Secure VM Service Module for SEV-SNP Guests"
-> Publication # 58019 Revision: 1.00
+On Wed, Mar 05, 2025 at 11:36:06AM -0600, Stuart Yoder wrote:
+> Firmware Framework for Arm A-profile (FF-A) is a messaging framework
+> for Arm-based systems, and in the context of the TPM CRB driver is used
+> to signal 'start' to a CRB-based TPM service which is hosted in an
+> FF-A secure partition running in TrustZone.
 > 
-> Link: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf
-
-Those URLs are unstable - simply naming the document properly in the commit
-message so that a search engine can find it is enough.
-
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->  arch/x86/include/asm/sev.h | 4 ++++
->  1 file changed, 4 insertions(+)
+> These patches add support for the CRB FF-A start method defined
+> in the TCG ACPI specification v1.4 and the FF-A ABI defined
+> in the Arm TPM Service CRB over FF-A (DEN0138) specification:
+> https://developer.arm.com/documentation/den0138/latest/
 > 
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index 1581246491b5..f6ebf4492606 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -384,6 +384,10 @@ struct svsm_call {
->  #define SVSM_ATTEST_SERVICES		0
->  #define SVSM_ATTEST_SINGLE_SERVICE	1
->  
-> +#define SVSM_VTPM_CALL(x)		((2ULL << 32) | (x))
-> +#define SVSM_VTPM_QUERY			0
-> +#define SVSM_VTPM_CMD			1
-> +
->  #ifdef CONFIG_AMD_MEM_ENCRYPT
->  
->  extern u8 snp_vmpl;
+> The first patch adds an FF-A driver to handle the FF-A messaging when
+> communicating with a CRB-based TPM secure partition built on FF-A.
+> The driver is probed when the TPM secure partition is discovered by
+> the Linux FF-A infrastructure.
+> 
+> The second patch consolidates the check for idle support in the CRB
+> driver to one place.
+> 
+> The third patch defines the new ACPI start method enumeration for
+> CRB over FF-A.
+> 
+> The fourth patch adds support for the FF-A ACPI start method to
+> the TPM crb driver.
+> 
+> The fifth patch adds documentation explaining how the CRB driver
+> and FF-A relate.
+> 
+> Version 6
+> -in tpm_crb removed unnecessary brackets from if statement and
+>  fixed comment style
+> -noticed and fixed bug in patch 2, polarity of return value
+>  from tpm_crb_has_idle() was wrong and wasn't caught in past
+>  testing
+> -added Reviewed-by tag to patches 2 and 5
+> 
+> Version 5
+> -tpm_ffa_crb patch: removed module version
+> -tpm_ffa_crb patch: fixed module description
+> -tpm_ffa_crb patch: updated comment on mutex declaration
+> -reworded commit message for patch 2 as per Jarkko's 
+>  suggestion
+> -added Acked tag by Sudeep to patch 1 for FF-A changes 
+> -added Reviewed-by tag to patches 3 and 4
+> 
+> Version 4
+> -fix warning from kernel test robot in patch 1
+> -fix warnings from checkpatch.pl --strict
+> -clean up unnecessary parenthesis usage
+> -update variable declaration to be reverse tree order
+> -document exported functions in tpm_crb_ffa driver
+> -remove unnecessary author and maintainer info in tpm_crb_ffa driver
+> -fix declaration of variables to be in reverse tree order
+> 
+> Version 3
+> -changed prefixes used throughout patch series to tpm_crb_ffa*
+> 
+> Version 2
+> -updates to cover letter to define FF-A
+> -added new patch with documentation
+> -created pull request in ACPIA and added link to the patch
+>  updating actbl3.h
+> -added tpm_ prefix to the FF-A CRB driver
+> 
+> Stuart Yoder (5):
+>   tpm_crb: implement driver compliant to CRB over FF-A
+>   tpm_crb: clean-up and refactor check for idle support
+>   ACPICA: add start method for Arm FF-A
+>   tpm_crb: add support for the Arm FF-A start method
+>   Documentation: tpm: add documentation for the CRB FF-A interface
+> 
+>  Documentation/security/tpm/tpm_ffa_crb.rst |  65 ++++
+>  drivers/char/tpm/Kconfig                   |   9 +
+>  drivers/char/tpm/Makefile                  |   1 +
+>  drivers/char/tpm/tpm_crb.c                 | 105 +++++--
+>  drivers/char/tpm/tpm_crb_ffa.c             | 348 +++++++++++++++++++++
+>  drivers/char/tpm/tpm_crb_ffa.h             |  25 ++
+>  include/acpi/actbl3.h                      |   1 +
+>  7 files changed, 535 insertions(+), 19 deletions(-)
+>  create mode 100644 Documentation/security/tpm/tpm_ffa_crb.rst
+>  create mode 100644 drivers/char/tpm/tpm_crb_ffa.c
+>  create mode 100644 drivers/char/tpm/tpm_crb_ffa.h
+> 
 > -- 
+> 2.34.1
+> 
 
-Merge this patch with the patch where those are used - no need for a separate
-patch.
+Check this out:
 
-Thx.
+https://web.git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/
 
--- 
-Regards/Gruss,
-    Boris.
+Any tested-by's are welcome.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+BR, Jarkko
 
