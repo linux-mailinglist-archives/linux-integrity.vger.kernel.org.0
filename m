@@ -1,134 +1,136 @@
-Return-Path: <linux-integrity+bounces-5197-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5198-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC4ACA584A5
-	for <lists+linux-integrity@lfdr.de>; Sun,  9 Mar 2025 14:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C3F06A59248
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 12:09:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DFB4188E0B7
-	for <lists+linux-integrity@lfdr.de>; Sun,  9 Mar 2025 13:50:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78176188829C
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Mar 2025 11:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C90651D7E41;
-	Sun,  9 Mar 2025 13:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5F8223716;
+	Mon, 10 Mar 2025 11:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="W5zHiu9Y"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="j9RSy0HF"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.4])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068A91C549F;
-	Sun,  9 Mar 2025 13:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF81226D18;
+	Mon, 10 Mar 2025 11:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741528230; cv=none; b=Wuwrhyk5t18FhFXz6CIi5T2jRfXadhgBfia9XEx5qQb4B/9TD4gXaH1Vf4wd5Gxm6TR+2bBaMDeiiu7LSSVy5IBdJFWARDpmBZwBKt+khOypz9AY2Pv1yTkXOSDG2r0ZX/7WZSiEutfcaeZaxlr21z51SmLE6+Vz4k9FVoWCnBA=
+	t=1741604942; cv=none; b=mr3SiU9Mf0dKFt8bIrYMw7wA/NqU4eonC/v/7AWbfbbED9GLWxdsKzwYfUvgsJeHU1v15PtmzXxojv24Yblyd5tF0rj7+HGizsHxHDOuLmuTmvTHHb7OK3tWldlMkGDHa8KGs5ssgDNABekwlDuZpzrnEl3qBgvGe2Y3DXTG8Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741528230; c=relaxed/simple;
-	bh=wU+5CEn5FrkXdwKXM76N7KyIAXlU/EDsxmpPBGRXI10=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=edflseEWb3VXEQxpWHzb4iUg5SvKbRKaMYWYiX3Sosv2v7lWUfriJCt4w01y+ilnckkUwUS1OERiPIOTlMbj0MawELazAk3+Yv6pPKTpv/2ew/absURciPHqepQwnTnui0sUVa2jFE0M68IsTc2JqW4rEyQH4j7WOvW6KyptX2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=W5zHiu9Y; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1741528225; x=1742133025; i=markus.elfring@web.de;
-	bh=Ti2Of4sCs6CYg2FBatUAg3ntENBfhycGeOXXT5c8zX0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
-	 Subject:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=W5zHiu9YtQQvwrtpylKpw3d7r38YTW6fQ4Mo54KCLPrNXX0DShIghE4mtBC44g8C
-	 wcVNBp+GJYOmsnGB1PVuGkcbnjbOj4/tKbiZPasqsLMIygtfwUKruPDgJJb4v1gks
-	 uFq6AJzS0PQkrjGDxUqPOWMqIUilatW0V8b7h/otF6hfWPfNeneXCKJNXp47Q2ziR
-	 Qnbn8G7z2KNbU+YhUqmN1LWdokHIyk5YTXYroVW3zDyrxsdTecPeKdaUDM9jE2IAa
-	 WgyG68PSfGHnAzLVqUTHR7O/V2KxbkF7XviGHyO7NxW4VBXIWyWGtyyEdq1C6LxlA
-	 VaPR10a9fV0+oY4zlw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.93.26]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MAtwr-1txcpU1ESn-00Fyvl; Sun, 09
- Mar 2025 14:50:25 +0100
-Message-ID: <76001d9d-fd98-42c3-9d93-6594e9de8e26@web.de>
-Date: Sun, 9 Mar 2025 14:50:14 +0100
+	s=arc-20240116; t=1741604942; c=relaxed/simple;
+	bh=zyuUROdM8RYQHtdyR8GD86eCrfq6ILVcngJvYInm2Xw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=un7AYdJc5uzj1ticRbQw7kaKLliaAHNnPspFwwMPEjwEhzjCorIhnons93XfHInCwA1AvtKjGXPSCB/5gDaXMicJkRlt438uySSKwqeIQ8uLla0uotSPDmJ3ElVl+Coq1QTSpGEDeAc9vBjGKoc7Vya2M8/gDuKfqPfScJOoBWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=j9RSy0HF; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3F0F740E0176;
+	Mon, 10 Mar 2025 11:08:58 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id bKnyDEiQksym; Mon, 10 Mar 2025 11:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1741604933; bh=YQAaINXv5w2Ci1rsU+w5Dx9VoI6ACjlMHpZFyp5XQpU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j9RSy0HFlqKlxAbOMr3YapFNwd0xktOUTfuUieUpH6MtW5IEpR6cR9MQsuVUA10MQ
+	 BMkqTeprw9v+v8LpmvCbumr88U/SVTkkmsu2E5lHMU1CdRpsuUkXlILRbB2OxZIeuV
+	 xh26yU0kKBjyI/L7h6KnpKFwzlol/RnsVKBN+RoRu32An/FUAwISUKOHfK91g3RsaR
+	 nBeQ5LExjVwiyy7jsFwRRtehMnd65feMUitCSTix1X44V8AdXbYQqTt76GFDVVQj7A
+	 XvlDAfm//Ue4dd7L8syXz0vrdEr84Ags/4ZpbvJYol1aoi6ZdcFA+rUfhlc/5C3JlL
+	 b4AtwQiEOyYtpSQX/UUcwrdXqmO+7Cc3qkyorC/LiXr5ejYGnjynNeXHotd+V6G4mb
+	 WXwZZxG1DGyfgmwN5Pa9Vca0pFQPEAJdacKCByyzddVzKozzf4+7DscdfUUL+ER9Ew
+	 Quy8cd/rfSCsIjC41fSekVL3+7rKUkv87p8yQJ2FVgQNqkCGfXyzFZfx5UXjtVaGb4
+	 LVtLYIJZ+5Js1Bf62nhwBSA4HPWDnKzVEhlFKSpHvpQXc1ViSeZf7koIP4JXmPnKal
+	 weDhmzqF76Elfy/8XQC3C7254kuGX/6izP2uOk5inKJQ/UC1FDeNXzgnE8lpsr0xk9
+	 VrlRgAi2vTCUMebcF4Q5Cb/k=
+Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4CFC640E015D;
+	Mon, 10 Mar 2025 11:08:35 +0000 (UTC)
+Date: Mon, 10 Mar 2025 12:08:34 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Claudio Carvalho <cclaudio@linux.ibm.com>,
+	Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org,
+	Dov Murik <dovmurik@linux.ibm.com>, linux-coco@lists.linux.dev,
+	Dionna Glaze <dionnaglaze@google.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [RFC PATCH v2 1/6] x86/sev: add SVSM call macros for the vTPM
+ protocol
+Message-ID: <20250310110834.GEZ87IMgB_I86-3u3l@fat_crate.local>
+References: <20250228170720.144739-1-sgarzare@redhat.com>
+ <20250228170720.144739-2-sgarzare@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-integrity@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, =?UTF-8?Q?Peter_H=C3=BCwe?=
- <peterhuewe@gmx.de>
-Content-Language: en-GB
-Cc: LKML <linux-kernel@vger.kernel.org>
-From: Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] tpm: efi: Improve exception handling in tpm_read_log_efi()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:FMW1rO1kiv+iqRU0iHBgllf/fNmE/LI/vLKrcwSOXl7k3lNTVI4
- tH9y1cWEhmoiL8imgVs2wSiMDiSeweFNBx90yjptTimG4Zo+NKsKrg61GxRhC5WC/NNqJL/
- zFgFuGDCa5JDmKPXMfLI3DIsDsuMFJdmPUkAFRGvvXVF38nfBrpiyg/Hxw7YqlAQ5xsvtBj
- trTJKHL6o5GBpiO1h2aRA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:uhr9BeHjhsg=;mRFaEVIaaEM2Rbw5FvdMsgEMIk3
- EV7s+bTlZ+hPBl+D3jLG+THf0/lOTkfwSDc+b9TUo08O/Jupu7PCOmgaXTp2xJdBWoCpkTfVj
- LKCMlEO6ADrncENDCHgtXWG9QoFTp2ZgKpsKV0QnMQ9FsxpXAXBUgxnIztiEBJYsnNHZsUe5t
- Aky+unsbWoTP4MkteovYWsBRZZShw1MSS8aY5giKsKXYZ1Cz+QWuultQyMi5eQEM9YXo68lI4
- FJ3HxKIFGWtp059J90V5229ykojDcs8GS9L7Je32ktdWRt5SiWnMCv849EWE02Bnayu6BGOWw
- 5PbWHhxDoMj2drSf4tuL09WnJKUmBM0YoRVANZNFcSqwAcUKrxY7iGLba+ZY8RWj+3t5+h0fr
- EWDRUrViSlOAvsCmlweocfRIHaUwQllRi7NrlI2B7eVlikLoiCZ4iPeuMxLKXQlul0hIu/PFF
- gKrElGEhZMGFHvW2e/bTnr53XKFoI/JL2YApg6drDYIKuOVcvSW0b91QQyBqy8pKKHSTZTgVT
- BSLahqs7wT4TvUiSWBcNFfn7quGgU5qf9lzoZmNvwxOyjL9hFhikMmFhvRCiPRUkj0dTFJtbt
- aFs29hCi0rCyxSQf4hLyfFWKjMYH8QiIgFziWGyOwjXOsY6rEF1qK4hRkQCbcHQtYskK2TKUQ
- 5XbPgiGIxbkRXNBbpp/Qc6IA1Kchx9a+N97ASlf9NbbEzDeTXZ8MwfbI8AeBwNgusMtvZBq1N
- 4jx5mahR8ssIvpBD+NOmI8UN9hEvLZhP8cTk7Qk9nmWmSe/mdJw8YxxWFD36tvTOhWtQQlkbE
- mLaD4WMD+VkLuDCXuYUsBFV0YMvA5PUZVf2Fsc3Qws2skzUK2P6z1XCrU5iXiQ403vAE0yXA3
- px3kERePCUV+neBfsx5+3AQAoDDHx0L5ohdxg1J2Coz2/gG72dBOU0+75W3kagq7bN2VCUoDx
- JyvRcPkPXtv22xpwfaVVRaCbMBjB11XPf4+xGFIB6mYuyp17cyXljNLwSdo1Ocb6J3sSR/t1C
- QKV6RAt1NNj3BNg03oo3ImkE+7odh61aGBS/h9gazpyFJ8j4nQO6VG0Fxtakz31vAuqv7o6vR
- gJ5uhxeIk1CzsGzC3GNR9Zjk/KDAzAL6Fzppo+nvcSr0joiPH0VRwLwETX4BTdBP5HZvQ03XX
- AgSDX9KG49P0VF9MrligJJuJXCO7HnOvbJAqWiHhwW0ShWM079pRfAmHuDCFhcHjAsOwf3M4E
- L2qJb5VFM4DWhWXZbawaUHynQtDF7WlZQf0M/MoXin+stbZJ8DSe3tBAzvchfPEVXAtuCy3tF
- yMG6A1gxe49qqdB0F3tPd6jYrdknrnbViMzZsUlSm2GYUZMUvF9XwpDldKpe5cUW8TQR39Paw
- GQI+4+vFS1izyrzAXUI0wFjJswb7IuVKvm+KOUX2yBICugfXyNlxyQJ6+SfPoabP/m/yce95v
- XZ2YVD7quxju38HKbKG+RXVsryZs=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250228170720.144739-2-sgarzare@redhat.com>
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sun, 9 Mar 2025 14:43:52 +0100
+On Fri, Feb 28, 2025 at 06:07:15PM +0100, Stefano Garzarella wrote:
+> Add macros for SVSM_VTPM_QUERY and SVSM_VTPM_CMD calls as defined
+> in the "Secure VM Service Module for SEV-SNP Guests"
+> Publication # 58019 Revision: 1.00
+> 
+> Link: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf
 
-Add a label so that a bit of exception handling can be better reused
-from an if branch in this function implementation.
+Those URLs are unstable - simply naming the document properly in the commit
+message so that a search engine can find it is enough.
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/char/tpm/eventlog/efi.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+>  arch/x86/include/asm/sev.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> index 1581246491b5..f6ebf4492606 100644
+> --- a/arch/x86/include/asm/sev.h
+> +++ b/arch/x86/include/asm/sev.h
+> @@ -384,6 +384,10 @@ struct svsm_call {
+>  #define SVSM_ATTEST_SERVICES		0
+>  #define SVSM_ATTEST_SINGLE_SERVICE	1
+>  
+> +#define SVSM_VTPM_CALL(x)		((2ULL << 32) | (x))
+> +#define SVSM_VTPM_QUERY			0
+> +#define SVSM_VTPM_CMD			1
+> +
+>  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>  
+>  extern u8 snp_vmpl;
+> -- 
 
-diff --git a/drivers/char/tpm/eventlog/efi.c b/drivers/char/tpm/eventlog/e=
-fi.c
-index 4e9d7c2bf32e..472292e9d52d 100644
-=2D-- a/drivers/char/tpm/eventlog/efi.c
-+++ b/drivers/char/tpm/eventlog/efi.c
-@@ -77,9 +77,7 @@ int tpm_read_log_efi(struct tpm_chip *chip)
- 			     MEMREMAP_WB);
- 	if (!final_tbl) {
- 		pr_err("Could not map UEFI TPM final log\n");
--		devm_kfree(&chip->dev, log->bios_event_log);
--		ret =3D -ENOMEM;
--		goto out;
-+		goto free_log;
- 	}
+Merge this patch with the patch where those are used - no need for a separate
+patch.
 
- 	/*
-@@ -96,6 +94,7 @@ int tpm_read_log_efi(struct tpm_chip *chip)
- 			    log_size + final_events_log_size,
- 			    GFP_KERNEL);
- 	if (!tmp) {
-+free_log:
- 		devm_kfree(&chip->dev, log->bios_event_log);
- 		ret =3D -ENOMEM;
- 		goto out;
-=2D-
-2.48.1
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
