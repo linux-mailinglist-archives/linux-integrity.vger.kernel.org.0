@@ -1,185 +1,136 @@
-Return-Path: <linux-integrity+bounces-5221-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5222-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF2ABA5BCF1
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 10:56:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9195BA5BD18
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 11:01:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3B2D1890D9D
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 09:56:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74290175689
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 10:01:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF2222B8D9;
-	Tue, 11 Mar 2025 09:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE3522B8D9;
+	Tue, 11 Mar 2025 10:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gsXAyr05"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JcFLopar"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADB81E2606;
-	Tue, 11 Mar 2025 09:56:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6554120B208
+	for <linux-integrity@vger.kernel.org>; Tue, 11 Mar 2025 10:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741686987; cv=none; b=m3K3YZBip0FJp2+AS+svi0N5GU42dq6QMF/1a5jnheGuJi2BLET+w/QpzCzoIXPkXFRh1PWCAuqNJtCMrZb9PzOcZTfZQvKCI5qbNRNTY4WSa+lPfQ/8Ikm9ez3tIM9iSKsjeb+gdpeOTvKrfNMVOtwRq2Bg4IFErP7nKrlt7qo=
+	t=1741687306; cv=none; b=ElI8yG8Dm5Sm+5+kUsIFYCJE2o6Z7qyX9nxsUCzIcJX6E/JleMryt/W0Msx2sn/e0r3dzSmPFyYrerbkwTKTUmNR/vgyMY38HA9uAXhrks+ygGOZn6DiN9Ee8OLaWG0wOVJQ2/ZVoyn8mkzbcU8b+oS16B4tCLZo7HKAaqIbKiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741686987; c=relaxed/simple;
-	bh=cGlSSXVSEuK01WXgLlK5ZZp0Gub8yc9YqoK75j3+P/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HC52bu8WFk+8AzNlL9cQvgyyTwSy9YgYiaOBw7BgIqH5IEmE/NVSSoxzVm9n6RjTwMK20+uzewhncXj75oe7yLNepYA0ylnkbVjkLhXVH5IpCGQyF6e4KfV4wL8Y6JEgQHluABaXFt/6hNqTkeuZtXzD7shKPu/VCTNFEOU/3uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gsXAyr05; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB64C4CEED;
-	Tue, 11 Mar 2025 09:56:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741686986;
-	bh=cGlSSXVSEuK01WXgLlK5ZZp0Gub8yc9YqoK75j3+P/o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gsXAyr05H54DpYqK/bZh1TYBhvU9Vwt3WryKG118xyz1w28zF4KIqT8EFm6d+BOjE
-	 NHNY4vuQZp69Xi8YKqdBV0dXdYK1ocNLqADDZnYin3lxGeQ1cG9S/Fw03HzV33AW/F
-	 OZI3J8MtGU4i9puQyn0/v9fG4azMSY/YaS/UadMKy5hHb8SHWYPcKeMcEeH/R6G+7H
-	 mC3I9Z+y3YMjM2czQxPnlWFmkHDJzGfkhf6hdR882nVNaBGd3GHSTETeRwvB5Ik49m
-	 UDCQejNw5YHXko61uQQGa3ve1v5AwTB0O3W1ZgEdlR+zvAM7RCwXr/ltdDeS9vM0wH
-	 JAkEEJrSO8lcQ==
-Date: Tue, 11 Mar 2025 11:56:23 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Tom Lendacky <thomas.lendacky@amd.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-	linux-integrity@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, linux-coco@lists.linux.dev,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v3 1/4] x86/sev: add SVSM vTPM probe/send_command
- functions
-Message-ID: <Z9AIx9kFKWcHB_WK@kernel.org>
-References: <20250311094225.35129-1-sgarzare@redhat.com>
- <20250311094225.35129-2-sgarzare@redhat.com>
+	s=arc-20240116; t=1741687306; c=relaxed/simple;
+	bh=nWPAfhRPvyOxhsczSmiyOuKDVYDhl25/eaHP1Fif16w=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=LMcgxtQ8vLZW8gmsG0wKSq5MlTikjo28zUC2bd5TVsuoLqVs9KoVEyh9qGUBoU9ZE/Fr6qY/UDEesNvWQkZAIPmwYJj6CgHoGjQ5DQnTnCJCtzV+b5R1YiZzyX/J0SrpKCU6VNLYMlEh+zePSD0AEWdV1moK+CuePOmdlACAWvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JcFLopar; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741687303;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qp4CrAYKQo+4LRd4xuzYXPfxibVR96LFmVo4qXJtxW4=;
+	b=JcFLopar/V5SUm0PdNvW7HhCFQ9U4SaR3Vf8Mjv0czSPmBH4+Bvus65TvpSaus5RpfwxXV
+	Tv1/E88f0tp0voF5KxbAK1ZwkGwyBCafqF2bR9AwxgbQjbyhcFOq8/EtxeNEubu7P/0UwJ
+	oABx2Ojzjl8CojHGGgn7LqXBvx/GvVM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-546-e9Ud0fUOMpCzesd_b2z13Q-1; Tue, 11 Mar 2025 06:01:41 -0400
+X-MC-Unique: e9Ud0fUOMpCzesd_b2z13Q-1
+X-Mimecast-MFC-AGG-ID: e9Ud0fUOMpCzesd_b2z13Q_1741687301
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5e5b65cda33so5608836a12.1
+        for <linux-integrity@vger.kernel.org>; Tue, 11 Mar 2025 03:01:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741687300; x=1742292100;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qp4CrAYKQo+4LRd4xuzYXPfxibVR96LFmVo4qXJtxW4=;
+        b=tab/ACwXrvClrv8toQFeoODp3uFp8iW5x5WUN2bGfdAjErjZwBCxNltmUpTwnVVN0U
+         mPUsiANmd7K8wpkuL8GH2eSREv8X0l76jkIcmqpfwM6EZtU081INebPuyl+gL/zl5EHh
+         zGKO76Ay6dJGdOn/82oCxDpgoDgPAr2dekLTP2yWnmb8le0H38r2T3XBfkX3YprvlLqX
+         WJXC7/jq655hqf66iVems3FEvFslrig2HaexbR0OabMKxwd8CNWj+CyiebBNPtmPMmAd
+         CdSHRJB3kjIWPkvKdmGoCvzxyoCAZMCICsh9zCNWdlXAqd9q0bM14fEBH5xdPeeTmaDz
+         D/8g==
+X-Gm-Message-State: AOJu0YxQ7OXdhr3MqPBRXF4OmdtMvytxCix0Xiid4fwuGR0zRtFDjUkt
+	CzddFe3FMX5rls8aAP2nJSUKCVkGpQYc8O2PQfd40gYmrJmZ88DcR7oFZjB6VD0cJPKydNfHqrb
+	g8PuJBn0VUwINx3DnthO88rCBQ8YpqHsCroGBiVLhZamkEwpjFdiXaF+JYSFZRDLAPA==
+X-Gm-Gg: ASbGncsIp5nHoadPyvYZSNZZ65h9ruq81cypsxcZrIQ6UeflMP4Cgg/T6Y9zdvoOeon
+	ug1mxyFTfk49FAahNRwQWiJOjG/jqwD/VjNtFRQhMMD9HqA+RerA/6Hi2a4lklWWgOAWJjpWBcV
+	OsX+FbzW+z41yTMb7T3F1NPCv63L434zpWw+94erUti5h4H84LAOp+5ZWHhGkdC3Yq2o+hbamje
+	mTPtjszAVX2fqwCuEFWU6/MH2vw7R2hnMfjLyKmAliGJLJ3yFiFptNn7n6fKfp8c9STIS6JnxwE
+	S2hS5ovBV5mp6BmvbZGTmzUCfRAmDoNnyqBXy4d58BtvT3cHXeytjKzfZaOEnRpbJoshD1tq
+X-Received: by 2002:a05:6402:3589:b0:5e0:8c55:501 with SMTP id 4fb4d7f45d1cf-5e5e22a9443mr17057919a12.7.1741687300641;
+        Tue, 11 Mar 2025 03:01:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEjv/+3Hnz070c0jpTEuZGKRv3YWN2bvgQrRUiPNEroDj7rznpBt9RarcCiL+T4rK0S1nXivw==
+X-Received: by 2002:a05:6402:3589:b0:5e0:8c55:501 with SMTP id 4fb4d7f45d1cf-5e5e22a9443mr17057856a12.7.1741687299960;
+        Tue, 11 Mar 2025 03:01:39 -0700 (PDT)
+Received: from localhost.localdomain (host-79-46-200-29.retail.telecomitalia.it. [79.46.200.29])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c766d0e0sm8344611a12.64.2025.03.11.03.01.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Mar 2025 03:01:39 -0700 (PDT)
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Stefano Garzarella <sgarzare@redhat.com>
+Subject: [RFC PATCH 0/3] tpm: add send_recv() op and use it in tpm_ftpm_tee and tpm_svsm drivers
+Date: Tue, 11 Mar 2025 11:01:27 +0100
+Message-ID: <20250311100130.42169-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.48.1
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250311094225.35129-2-sgarzare@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 11, 2025 at 10:42:22AM +0100, Stefano Garzarella wrote:
-> Add two new functions to probe and send commands to the SVSM vTPM.
-> They leverage the two calls defined by the AMD SVSM specification [1]
-> for the vTPM protocol: SVSM_VTPM_QUERY and SVSM_VTPM_CMD.
-> 
-> Expose these functions to be used by other modules such as a tpm
-> driver.
-> 
-> [1] "Secure VM Service Module for SEV-SNP Guests"
->     Publication # 58019 Revision: 1.00
-> 
-> Co-developed-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Co-developed-by: Claudio Carvalho <cclaudio@linux.ibm.com>
-> Signed-off-by: Claudio Carvalho <cclaudio@linux.ibm.com>
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
-> v3:
-> - removed link to the spec because those URLs are unstable [Borislav]
-> - squashed "x86/sev: add SVSM call macros for the vTPM protocol" patch
->   in this one [Borislav]
-> - slimmed down snp_svsm_vtpm_probe() [Borislav]
-> - removed features check and any print related [Tom]
-> ---
->  arch/x86/include/asm/sev.h |  7 +++++++
->  arch/x86/coco/sev/core.c   | 31 +++++++++++++++++++++++++++++++
->  2 files changed, 38 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index ba7999f66abe..09471d058ce5 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -384,6 +384,10 @@ struct svsm_call {
->  #define SVSM_ATTEST_SERVICES		0
->  #define SVSM_ATTEST_SINGLE_SERVICE	1
->  
-> +#define SVSM_VTPM_CALL(x)		((2ULL << 32) | (x))
-> +#define SVSM_VTPM_QUERY			0
-> +#define SVSM_VTPM_CMD			1
-> +
->  #ifdef CONFIG_AMD_MEM_ENCRYPT
->  
->  extern u8 snp_vmpl;
-> @@ -481,6 +485,9 @@ void snp_msg_free(struct snp_msg_desc *mdesc);
->  int snp_send_guest_request(struct snp_msg_desc *mdesc, struct snp_guest_req *req,
->  			   struct snp_guest_request_ioctl *rio);
->  
-> +bool snp_svsm_vtpm_probe(void);
-> +int snp_svsm_vtpm_send_command(u8 *buffer);
-> +
->  void __init snp_secure_tsc_prepare(void);
->  void __init snp_secure_tsc_init(void);
->  
-> diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
-> index 96c7bc698e6b..2166bdff88b7 100644
-> --- a/arch/x86/coco/sev/core.c
-> +++ b/arch/x86/coco/sev/core.c
-> @@ -2628,6 +2628,37 @@ static int snp_issue_guest_request(struct snp_guest_req *req, struct snp_req_dat
->  	return ret;
->  }
->  
+This series is a follow-up to the discussion we had about whether or not
+to add send_recv() op in tpm_class_ops[1].
 
-Since this is an exported symbol, it'd be a good practice document
-snp_svsm_vtpm_probe().
+Some devices do not support interrupts and provide a single operation
+to send the command and receive the response on the same buffer.
+In order to simplify these drivers and avoid temporary buffers to be
+used between the .send() and .recv() callbacks, introduce a new callback
+send_recv(). This was suggested by Jason Gunthorpe while reviewing
+the new SVSM vTPM driver, but the same callback can be used also for the
+fTPM driver to simplify it a bit (second patch of this series).
+I only successfully compiled fTPM, but I don't know how to test, if anyone
+can test or suggest how to do it, I would be grateful.
 
-> +bool snp_svsm_vtpm_probe(void)
-> +{
-> +	struct svsm_call call = {};
-> +
-> +	/* The vTPM device is available only if a SVSM is present */
-> +	if (!snp_vmpl)
-> +		return false;
-> +
-> +	call.caa = svsm_get_caa();
-> +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_QUERY);
+This series is based on "[PATCH v3 0/4] Enlightened vTPM support for SVSM
+on SEV-SNP" [2] (actually only the last patch in this series).
 
-I supposed CAA is some kind of shared memory area for host and VM?
+[1] https://lore.kernel.org/linux-integrity/Z8sfiDEhsG6RATiQ@kernel.org/
+[2] https://lore.kernel.org/linux-integrity/20250311094225.35129-1-sgarzare@redhat.com/
 
-> +
-> +	if (svsm_perform_call_protocol(&call))
-> +		return false;
-> +
-> +	/* Check platform commands contains TPM_SEND_COMMAND - platform command 8 */
-> +	return (call.rcx_out & BIT_ULL(8)) == BIT_ULL(8);
-> +}
-> +EXPORT_SYMBOL_GPL(snp_svsm_vtpm_probe);
-> +
+Stefano Garzarella (3):
+  tpm: add send_recv() op in tpm_class_ops
+  tpm/tpm_ftpm_tee: use send_recv() op
+  tpm/tpm_svsm: use send_recv() op
 
-Ditto.
+ drivers/char/tpm/tpm_ftpm_tee.h  |  4 --
+ include/linux/tpm.h              |  2 +
+ drivers/char/tpm/tpm-interface.c |  7 +++
+ drivers/char/tpm/tpm_ftpm_tee.c  | 86 ++++++++------------------------
+ drivers/char/tpm/tpm_svsm.c      | 46 ++++-------------
+ 5 files changed, 39 insertions(+), 106 deletions(-)
 
-> +int snp_svsm_vtpm_send_command(u8 *buffer)
-> +{
-> +	struct svsm_call call = {};
-> +
-> +	call.caa = svsm_get_caa();
-> +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_CMD);
-> +	call.rcx = __pa(buffer);
-> +
-> +	return svsm_perform_call_protocol(&call);
-> +}
-> +EXPORT_SYMBOL_GPL(snp_svsm_vtpm_send_command);
-> +
->  static struct platform_device sev_guest_device = {
->  	.name		= "sev-guest",
->  	.id		= -1,
-> -- 
-> 2.48.1
-> 
 
-That said, these are rather self-documenting (i.e, nice and clean).
+base-commit: f2cb83b7f8c58952b424a83bf86680f1263ad417
+-- 
+2.48.1
 
-BR, Jarkko
 
