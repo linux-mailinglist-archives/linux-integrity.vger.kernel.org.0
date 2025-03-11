@@ -1,295 +1,216 @@
-Return-Path: <linux-integrity+bounces-5226-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5227-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B299DA5BD3F
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 11:08:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFEC0A5C010
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 13:05:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55A413A6F71
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 10:08:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 643807A5E21
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 12:03:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD88231A30;
-	Tue, 11 Mar 2025 10:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8434C255E3E;
+	Tue, 11 Mar 2025 12:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L20BzaMm"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="knkli6TZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD51942065;
-	Tue, 11 Mar 2025 10:07:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189982571A9;
+	Tue, 11 Mar 2025 12:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741687679; cv=none; b=qTvS1UWRO/ncB0eqUPZ666sobm3kO81JIu0+Um6WiisRxtMuVoy4nbJRsdx4BHD40M3xLkwNHb38Y7OwwPlhNNBZTDLLajaBaJ3PdBD/tYmQi4LvyiN+Zc4mz0e3Y1H1f8kb4LcFIdE551Jc7XHMpRjrAektk+N1BQOW3Vb68Hc=
+	t=1741694597; cv=none; b=ZjXj7HKkh9sGyIRV7/4nk8rkD7UyQNX/PuTYfstBTZXKVCf0Mx98WMf4m4Qxuo4nrf2u8kXCZT5SIeMdLUL//QrwTs8Tro36BCLTfGnSeqZpLemmzS43XFmB8V9aVeqPz4nFY25Jbo45uMRJcsYHSasVuRge938dUPMIT+F63nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741687679; c=relaxed/simple;
-	bh=lFmsRBdUP3YPjBoluZocaCzD1BiaN6yiSoOp1Pz5FAg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T1gGCqe9FoSkRj3Jq9jrXkAdxdvHkzOUzUv2YPe8uLf9dFgX2L7Evnyd+7M9IpjwRq9S8kuXEI+YOF5xfhdr48RSwbgJuSQsODTG0R/6M8gN56oRl7ZYiegNZszbkTF+D3w0R2u7XWr030zyatE3gRQy4BOSNZocKH3zlvanVFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L20BzaMm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2963C4CEED;
-	Tue, 11 Mar 2025 10:07:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741687679;
-	bh=lFmsRBdUP3YPjBoluZocaCzD1BiaN6yiSoOp1Pz5FAg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L20BzaMmOo3mt4XeCu8bTQA5aYTDrCQnIpI+E0tKdwUHgM+SS712akvSJXEnE9JEc
-	 ZyXdUzsgVjOKtbjV4Qu7xCeR2cWENoGVMzFNbvsJqFNUFy1zwbABOPbR5mI4czzl+p
-	 ZMDXBOL2b0HnvTBEUfCt+yadpPdoRFIEMHIHa358zU4vsPnzC2yZZckGlfihjvGIFW
-	 kLioYZJ4MtZ3kim2Xkax/SjQAp2Gn09/zY1s4ioRtKOFlYzuRuJrs3r0q8uHFUEDJU
-	 if3Q4gb5Y5b3QyI6aSfBxVjbeKIbro1AEI+sWyEcjCBXdFUprw4jbqAhBgJIfpNm+/
-	 02l1+Fh+8NRnw==
-Date: Tue, 11 Mar 2025 12:07:55 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Tom Lendacky <thomas.lendacky@amd.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-	linux-integrity@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, linux-coco@lists.linux.dev,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v3 2/4] svsm: add header with SVSM_VTPM_CMD helpers
-Message-ID: <Z9ALe-kPZ5o_pim7@kernel.org>
-References: <20250311094225.35129-1-sgarzare@redhat.com>
- <20250311094225.35129-3-sgarzare@redhat.com>
+	s=arc-20240116; t=1741694597; c=relaxed/simple;
+	bh=/B8LOU3EPY1bvUwmU8M98LiZ3McvkPIlMaG0ADq5cyg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UqmAs4IuPw8tXbdyFsPDR5ggCBjpsYDuCrDicBFFbFXkeCoJ/E20mJNVCvVxeT4Dw/Eh8QY79JntORIs44km0PZ06WtgiZIOZlG0D7g8Do2+OS3x0uB87B1iHZeLfOodt+nAoBUR3rm2eA8WO/FHnPr6OnZVfILZzDRO6fsjWxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=knkli6TZ; arc=none smtp.client-ip=18.194.254.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1741694546;
+	bh=oObmgM37XdbiQEyrtFB9Jj1DhC5YLB/am9mUi1LXOns=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=knkli6TZ+5PJBWNzp+Iti66jQAiAEVTgCST5b6xekTevysV6Z6J9q+8hJEbwKNckH
+	 Ht6cNBfHmXfxNSysn+lVznTbi+REMvQ3sNvCEQwDegt0nhwD2GTpU81yBYWuB6Asa/
+	 kLECI6rKt1zl3czofYW6oo3NJ5J/TeINLqJ8AgxY=
+X-QQ-mid: bizesmtpip3t1741694495tnu5g36
+X-QQ-Originating-IP: yWSAeIPiqtPNf0ao2bIbG/CqRwF5BLPwY+Yu8R3vs9E=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 11 Mar 2025 20:01:33 +0800 (CST)
+X-QQ-SSF: 0002000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 9260470800203559345
+From: WangYuli <wangyuli@uniontech.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org,
+	jgg@ziepe.ca,
+	ardb@kernel.org,
+	wangyuli@uniontech.com,
+	gourry@gourry.net
+Cc: linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	zhanjun@uniontech.com,
+	niecheng1@uniontech.com,
+	guanwentao@uniontech.com,
+	Chen Linxuan <chenlinxuan@uniontech.com>
+Subject: [PATCH] tpm: eventlog: Declare mapping_size __maybe_unused
+Date: Tue, 11 Mar 2025 20:01:15 +0800
+Message-ID: <10590A3A04DA011F+20250311120115.1451048-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250311094225.35129-3-sgarzare@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: OMEqDAhtxLq6no6jefPyEAD/MxqyCdljrmScj8nUuWAmYnc/wXs7Sb60
+	lvTARDenBsaf4xypNWFzSybp4uAtBzKHI37tuB9nlSA2An5e7wx6HvFOqHy5GCi9fBW25gZ
+	nVHyEI1d7qUYB7KXsBoN0P9mH0vchHqJYIiq81mXN5+pFLu4I9mFlpi+SqDsnaKnaLbcDhD
+	ZBR2cAUrY9hkpYW3mu7f+w49AelsHy+udAjUOVZlraYNqzh6wITMd7ZXXGvb72W4t7BYuuy
+	Q0TcYfBJL0ZtiAImBnkc0Dn06Xk7bmYl6JVkSeUFLeRqyi3niBhSo9hhxP7oz01yI6D36v9
+	KIqAl4HA8/O8cIRct4Ds3pl9XQH3ZAhRrWwS6EOpWoV6KzzKXjsAH6NSXXEbIeS5ZSyqY4o
+	6HYpS0E/C2VkZ3ztqnpln6eyUXUIQ0KE9KKfQ0OtRkk1CsnWvVF6mj00w3zxuYvZ55RsgTd
+	LgiX+vdY3ArFbBvMuvh4KydctytgHPSvR7pBVZyqjgaKi1bLwFyc5QYJWtayj7eIiFhzGH2
+	wPovdwjq0KDbRn3XwkjTFbNdpiFIktRijZO9PEjJqxQR+MxxMem95HPim90BHF36IIY3O/i
+	eEpYBqRqqkiFtlKIWRKpErCRRPs71ALt7y7qtZ4a6nmJ12wfJU4BYQ4srHkb5PSjfAV9kK6
+	990ngbTwGhCK//tjZy5l9+Vvb8sjYHnsIvqigvU4QuU8Dk6ID9Jel2y1reioOILUs+t9XSW
+	FZORhmLTGjV1/5pLBVjSlGiDs+KYD0bkbev3eBtucOEdtnvP1qzd9WyV2cxDqklYbwHcJbU
+	6gdzT57QRY8J4UDbiFX/8OOcuEIrmxEgE9KpDk6YWr03pKDCbJVVPdViUaEQ0jhM3MvqPaz
+	Fv3MZNmJ9JDwoH3XT+4XQ/APpQmAZH65T5pZ8v3MmXd2RUGs5g0dHgSldjw6CTpodU2uVkw
+	YcgaBpj0lEvlyOmybTdgRP3fijPbU0ae9cSLYDYz2HJ0nAw6looFYqpGMD901+laf/z3osi
+	La87hJdGc+HoKcD1IsuQn3N9WCYSTJNhxkRC6q4UPzj8VHqVkNJ/pM8lGrZBfJJm3rXrS1e
+	Olu7Yuza+zH
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+X-QQ-RECHKSPAM: 0
 
-On Tue, Mar 11, 2025 at 10:42:23AM +0100, Stefano Garzarella wrote:
-> Helpers for the SVSM_VTPM_CMD calls used by the vTPM protocol defined by
-> the AMD SVSM spec [1].
-> 
-> The vTPM protocol follows the Official TPM 2.0 Reference Implementation
-> (originally by Microsoft, now part of the TCG) simulator protocol.
-> 
-> [1] "Secure VM Service Module for SEV-SNP Guests"
->     Publication # 58019 Revision: 1.00
-> 
-> Co-developed-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Co-developed-by: Claudio Carvalho <cclaudio@linux.ibm.com>
-> Signed-off-by: Claudio Carvalho <cclaudio@linux.ibm.com>
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
-> v3:
-> - renamed header and prefix to make clear it's related to the SVSM vTPM
->   protocol
-> - renamed fill/parse functions [Tom]
-> - removed link to the spec because those URLs are unstable [Borislav]
-> ---
->  include/linux/svsm_vtpm.h | 141 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 141 insertions(+)
->  create mode 100644 include/linux/svsm_vtpm.h
-> 
-> diff --git a/include/linux/svsm_vtpm.h b/include/linux/svsm_vtpm.h
-> new file mode 100644
-> index 000000000000..2ce9b1cb827e
-> --- /dev/null
-> +++ b/include/linux/svsm_vtpm.h
-> @@ -0,0 +1,141 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2023 James.Bottomley@HansenPartnership.com
-> + * Copyright (C) 2025 Red Hat, Inc. All Rights Reserved.
-> + *
-> + * Helpers for the SVSM_VTPM_CMD calls used by the vTPM protocol defined by the
-> + * AMD SVSM spec [1].
-> + *
-> + * The vTPM protocol follows the Official TPM 2.0 Reference Implementation
-> + * (originally by Microsoft, now part of the TCG) simulator protocol.
-> + *
-> + * [1] "Secure VM Service Module for SEV-SNP Guests"
-> + *     Publication # 58019 Revision: 1.00
-> + */
-> +#ifndef _SVSM_VTPM_H_
-> +#define _SVSM_VTPM_H_
-> +
-> +#include <linux/errno.h>
-> +#include <linux/string.h>
-> +#include <linux/types.h>
-> +
-> +/*
-> + * The current TCG Simulator TPM commands we support.  The complete list is
-> + * in the TcpTpmProtocol header:
-> + *
-> + * https://github.com/TrustedComputingGroup/TPM/blob/main/TPMCmd/Simulator/include/TpmTcpProtocol.h
-> + */
-> +
-> +#define TPM_SEND_COMMAND		8
-> +#define TPM_SIGNAL_CANCEL_ON		9
-> +#define TPM_SIGNAL_CANCEL_OFF		10
-> +/*
-> + * Any platform specific commands should be placed here and should start
-> + * at 0x8000 to avoid clashes with the TCG Simulator protocol.  They should
-> + * follow the same self describing buffer format below.
-> + */
-> +
-> +#define SVSM_VTPM_MAX_BUFFER		4096 /* max req/resp buffer size */
-> +
+Given that when CONFIG_EFI is not enabled, do_mapping is inherently
+false. Thus, the mapping_size variable is set but remains unused,
+resulting in a compilation warning.
 
-Across the board below data structures: I'd svsm_vtpm_ prefix them.
-The rational is quite practical: it would easier to grep them later
-on.
+Simply annotating it with __maybe_unused will resolve this compilation
+warning.
 
-> +/**
-> + * struct tpm_req - generic request header for single word command
-> + *
-> + * @cmd:	The command to send
-> + */
-> +struct tpm_req {
-> +	u32 cmd;
-> +} __packed;
+[ Fix follow errors with clang-19 when W=1e: ]
+  In file included from drivers/char/tpm/tpm1-cmd.c:21:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm1-cmd.o] Error 1
+  make[8]: *** Waiting for unfinished jobs....
+  In file included from drivers/char/tpm/tpm-dev-common.c:19:
+  In file included from drivers/char/tpm/tpm.h:28:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-dev-common.o] Error 1
+  In file included from drivers/char/tpm/tpm2-cmd.c:14:
+  In file included from drivers/char/tpm/tpm.h:28:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  In file included from drivers/char/tpm/tpm-dev.c:16:
+  In file included from drivers/char/tpm/tpm-dev.h:6:
+  In file included from drivers/char/tpm/tpm.h:28:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-dev.o] Error 1
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-cmd.o] Error 1
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpmrm-dev.o] Error 1
+  In file included from drivers/char/tpm/tpm-chip.c:24:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  In file included from drivers/char/tpm/tpm-sysfs.c:16:
+  In file included from drivers/char/tpm/tpm.h:28:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-chip.o] Error 1
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-sysfs.o] Error 1
+  In file included from drivers/char/tpm/tpm2-sessions.c:71:
+  In file included from drivers/char/tpm/tpm.h:28:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-sessions.o] Error 1
+  In file included from drivers/char/tpm/tpm-interface.c:28:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-interface.o] Error 1
+  In file included from drivers/char/tpm/tpm2-space.c:16:
+  In file included from drivers/char/tpm/tpm.h:28:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-space.o] Error 1
+  In file included from drivers/char/tpm/eventlog/tpm1.c:24:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/tpm1.o] Error 1
+  In file included from drivers/char/tpm/eventlog/common.c:20:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/common.o] Error 1
+  In file included from drivers/char/tpm/eventlog/tpm2.c:20:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/tpm2.o] Error 1
+  In file included from drivers/char/tpm/tpm_vtpm_proxy.c:24:
+  In file included from drivers/char/tpm/tpm.h:28:
+  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+    167 |         int mapping_size;
+        |             ^
+  1 error generated.
+  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm_vtpm_proxy.o] Error 1
+  make[7]: *** [scripts/Makefile.build:465: drivers/char/tpm] Error 2
+  make[6]: *** [scripts/Makefile.build:465: drivers/char] Error 2
+  make[6]: *** Waiting for unfinished jobs....
 
-__packed is useless here.
+Suggested-by: Chen Linxuan <chenlinxuan@uniontech.com>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+ include/linux/tpm_eventlog.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +
-> +/**
-> + * struct tpm_resp - generic response header
-> + *
-> + * @size:	The response size (zero if nothing follows)
-> + *
-> + * Note: most TCG Simulator commands simply return zero here with no indication
-> + * of success or failure.
-> + */
-> +struct tpm_resp {
-> +	u32 size;
-> +} __packed;
+diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
+index 891368e82558..7ca58b2e96e8 100644
+--- a/include/linux/tpm_eventlog.h
++++ b/include/linux/tpm_eventlog.h
+@@ -164,7 +164,7 @@ static __always_inline u32 __calc_tpm2_event_size(struct tcg_pcr_event2_head *ev
+ 	struct tcg_efi_specid_event_head *efispecid;
+ 	struct tcg_event_field *event_field;
+ 	void *mapping = NULL;
+-	int mapping_size;
++	__maybe_unused int mapping_size;
+ 	void *marker;
+ 	void *marker_start;
+ 	u32 halg_size;
+-- 
+2.47.2
 
-Ditto.
-
-> +
-> +/**
-> + * struct tpm_send_cmd_req - Structure for a TPM_SEND_COMMAND request
-> + *
-> + * @hdr:	The request header whit the command (must be TPM_SEND_COMMAND)
-> + * @locality:	The locality
-> + * @inbuf_size:	The size of the input buffer following
-> + * @inbuf:	A buffer of size inbuf_size
-> + *
-> + * Note that TCG Simulator expects @inbuf_size to be equal to the size of the
-> + * specific TPM command, otherwise an TPM_RC_COMMAND_SIZE error is
-> + * returned.
-> + */
-> +struct tpm_send_cmd_req {
-> +	struct tpm_req hdr;
-
-Useless nesting that makes this obfuscated: you can just as well put
-that single field here, i.e.
-
-	u32 cmd;
-
-> +	u8 locality;
-> +	u32 inbuf_size;
-> +	u8 inbuf[];
-
-Why not just buf?
-
-> +} __packed;
-
-Since we don't care about TCG Simulator compatibility I'd expect that
-these are ordered in a way that they align nicely. E.g.,
-
-struct svsm_vtpm_request {
-	u32 command;
-	u16 locality;
-	u16 buffer_size;
-	u8 buffer[];
-};
-
-64k should enough for any possible TPM command.
-
-> +
-> +/**
-> + * struct tpm_send_cmd_req - Structure for a TPM_SEND_COMMAND response
-> + *
-> + * @hdr:	The response header whit the following size
-> + * @outbuf:	A buffer of size hdr.size
-> + */
-> +struct tpm_send_cmd_resp {
-> +	struct tpm_resp hdr;
-> +	u8 outbuf[];
-> +} __packed;
-
-Why this does not have size? Here also __packed is useless even with the
-pre-existing layout, and something like svsm_tpm_response would be a
-factor more reasonable name.
-
-> +
-> +/**
-> + * svsm_vtpm_fill_cmd_req() - fill a struct tpm_send_cmd_req to be sent to SVSM
-
-> + * @req: The struct tpm_send_cmd_req to fill
-> + * @locality: The locality
-> + * @buf: The buffer from where to copy the payload of the command
-> + * @len: The size of the buffer
-> + *
-> + * Return: 0 on success, negative error code on failure.
-> + */
-> +static inline int
-> +svsm_vtpm_fill_cmd_req(struct tpm_send_cmd_req *req, u8 locality,
-> +		       const u8 *buf, size_t len)
-
-svsm_vtpm_fill_request()
-
-> +{
-> +	if (len > SVSM_VTPM_MAX_BUFFER - sizeof(*req))
-> +		return -EINVAL;
-> +
-> +	req->hdr.cmd = TPM_SEND_COMMAND;
-> +	req->locality = locality;
-> +	req->inbuf_size = len;
-> +
-> +	memcpy(req->inbuf, buf, len);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * svsm_vtpm_parse_cmd_resp() - Parse a struct tpm_send_cmd_resp received from
-> + * SVSM
-> + * @resp: The struct tpm_send_cmd_resp to parse
-> + * @buf: The buffer where to copy the response
-> + * @len: The size of the buffer
-> + *
-> + * Return: buffer size filled with the response on success, negative error
-> + * code on failure.
-> + */
-> +static inline int
-> +svsm_vtpm_parse_cmd_resp(const struct tpm_send_cmd_resp *resp, u8 *buf,
-> +			 size_t len)
-
-svsm_vtpm_parse_response()
-
-> +{
-> +	if (len < resp->hdr.size)
-> +		return -E2BIG;
-> +
-> +	if (resp->hdr.size > SVSM_VTPM_MAX_BUFFER - sizeof(*resp))
-> +		return -EINVAL;  // Invalid response from the platform TPM
-> +
-> +	memcpy(buf, resp->outbuf, resp->hdr.size);
-> +
-> +	return resp->hdr.size;
-> +}
-> +
-> +#endif /* _SVSM_VTPM_H_ */
-> -- 
-> 2.48.1
-> 
-
-BR, Jarkko
 
