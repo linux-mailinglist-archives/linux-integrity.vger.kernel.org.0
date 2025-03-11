@@ -1,115 +1,120 @@
-Return-Path: <linux-integrity+bounces-5234-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5235-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9A8EA5CDDA
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 19:26:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87131A5D1A9
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 22:17:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3C337A40C1
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 18:25:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BECE67A3CAE
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 21:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 307B8263884;
-	Tue, 11 Mar 2025 18:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5936229B17;
+	Tue, 11 Mar 2025 21:17:08 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA6341C72;
-	Tue, 11 Mar 2025 18:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58BC226545;
+	Tue, 11 Mar 2025 21:17:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741717555; cv=none; b=S2KvJZEhZSQoxXPauY0ovDWBufeY6p3Q/0l9X+iXpcggBoxScdaO6Tta64XsFxKgxcG3EPaj+v8a0bQSISQpAOaKhPI8Xp29S9LqyqwaTQo0f/6UYCLbBoLcyu1Bfu2ACbLllDGBM7JI7Pd9zZgi19jY9ImUyqIKyT01p6+1weU=
+	t=1741727828; cv=none; b=c8y0f+yFUY0KgPpMPgUPZZvkQk1b4DZFr1c0lfhAPfAz4bHIG2Sr3fg9MjOLS7i+BUoeQ34EDAQ3RtY+VsQEHOmbIXDX250qIhcQ1Rk4yT11RB+mvNFqu7y8xGDsUsn1SIc+CMPCGrClVgxfZHmMgZtrW/4jaZGmbqCxYMAbpIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741717555; c=relaxed/simple;
-	bh=wqRGd9aY+2+mbyav8XTN1xcMeuNHpDV+Zkes4FCyOtU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z6BktLRazALInMQEqiJZIlJf2g+97IaG2BMNtBJf5f7mlh4K/6n23wHXlc4RxjR9V3HE+jvBltpZ28ed8H1f5moaAkJIb6VaKVY8NF/LuUoP4pV6x44srjMdaYRC5YX+YMNIv+EJtDVouFcB1cdmWvOmAsQ/YPq1CsNWFNQ5Lks=
+	s=arc-20240116; t=1741727828; c=relaxed/simple;
+	bh=mZDR/Pcsay1EeTp2DTUelSVI1Nq0MB+aAtVqD7intt0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fl4/+iYR3aPeszd9Gq/R4FhMFf3Tgjr4N84GopA0DXa8mOfREYzRMOAj91na7JSfcqI8/E3mIvb7QJVPashQ2P7Ll487JN7W1kpVnuG/9+jnGFeJqOckYbR4Dvwtv2gE2GE47xLpbPhhEN6G+byw7E90eybPC34oPc2D92J9xCk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A57EF1424;
-	Tue, 11 Mar 2025 11:26:02 -0700 (PDT)
-Received: from [10.118.109.66] (G9L3377F54.austin.arm.com [10.118.109.66])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 482773F694;
-	Tue, 11 Mar 2025 11:25:51 -0700 (PDT)
-Message-ID: <23c77291-7c6e-45ea-b1ad-952c01882579@arm.com>
-Date: Tue, 11 Mar 2025 13:25:50 -0500
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27CBB152B;
+	Tue, 11 Mar 2025 14:17:17 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.33])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4F3D3F673;
+	Tue, 11 Mar 2025 14:17:03 -0700 (PDT)
+Date: Tue, 11 Mar 2025 21:17:00 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Stuart Yoder <stuart.yoder@arm.com>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>, jarkko@kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	lenb@kernel.org, rafael@kernel.org, jgg@ziepe.ca, peterhuewe@gmx.de,
+	linux-integrity@vger.kernel.org,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: Build error on -next due to tpm_crb.c changes?
+Message-ID: <20250311211700.bwizwecxyxorrwql@bogus>
+References: <20250305173611.74548-1-stuart.yoder@arm.com>
+ <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
+ <92bc0a65-608f-4307-bb1c-16d8836d42e5@arm.com>
+ <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
+ <23c77291-7c6e-45ea-b1ad-952c01882579@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Build error on -next due to tpm_crb.c changes?
-To: Thorsten Leemhuis <linux@leemhuis.info>, jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- lenb@kernel.org, rafael@kernel.org, jgg@ziepe.ca, peterhuewe@gmx.de,
- sudeep.holla@arm.com, linux-integrity@vger.kernel.org,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250305173611.74548-1-stuart.yoder@arm.com>
- <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
- <92bc0a65-608f-4307-bb1c-16d8836d42e5@arm.com>
- <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
-Content-Language: en-US
-From: Stuart Yoder <stuart.yoder@arm.com>
-In-Reply-To: <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23c77291-7c6e-45ea-b1ad-952c01882579@arm.com>
 
-
-
-On 3/11/25 11:51 AM, Thorsten Leemhuis wrote:
-> On 11.03.25 16:53, Stuart Yoder wrote:
->> On 3/11/25 10:21 AM, Thorsten Leemhuis wrote:
->>> On 05.03.25 18:36, Stuart Yoder wrote:
->> [...]
->> So, it should not be possible on one had have
->> CONFIG_TCG_ARM_CRB_FFA being true when building tpm_crb.c
->> and false resulting in the tpm_crb_ffa.o not being
->> picked up in the build.
+On Tue, Mar 11, 2025 at 01:25:50PM -0500, Stuart Yoder wrote:
 > 
-> Many thx for the answer. Maybe Fedora's way to prepare the .config files
-> (which my package builds use to be close to Fedora's official packages)
-> is doing something odd/wrong. Will take a closer look and report back.
+> 
+> On 3/11/25 11:51 AM, Thorsten Leemhuis wrote:
+> > On 11.03.25 16:53, Stuart Yoder wrote:
+> > > On 3/11/25 10:21 AM, Thorsten Leemhuis wrote:
+> > > > On 05.03.25 18:36, Stuart Yoder wrote:
+> > > [...]
+> > > So, it should not be possible on one had have
+> > > CONFIG_TCG_ARM_CRB_FFA being true when building tpm_crb.c
+> > > and false resulting in the tpm_crb_ffa.o not being
+> > > picked up in the build.
+> > 
+> > Many thx for the answer. Maybe Fedora's way to prepare the .config files
+> > (which my package builds use to be close to Fedora's official packages)
+> > is doing something odd/wrong. Will take a closer look and report back.
+> 
+> I've been experimenting with some different build config combinations
+> and have reproduced what must be the issue.
+> 
+> This works fine:
+> <*>   TPM 2.0 CRB Interface                                         < >
+> TPM CRB over Arm FF-A Transport
+> 
+> This works fine:
+> < >   TPM 2.0 CRB Interface                                         <*>
+> TPM CRB over Arm FF-A Transport
+> 
+> This works fine:
+> <*>   TPM 2.0 CRB Interface                                         <*>
+> TPM CRB over Arm FF-A Transport
+> 
+> This works fine:
+> <M>   TPM 2.0 CRB Interface                                         <M>
+> TPM CRB over Arm FF-A Transport
+> 
+> This fails:
+> <*>   TPM 2.0 CRB Interface                                         <M>
+> TPM CRB over Arm FF-A Transport
+> 
+> The 2 drivers are coupled, so we can't have one built as a module
+> and the other built-in.
+> 
+> I'm not a Kconfig expert, and need to do some fiddling to see
+> if I can find a Kconfig syntax that prevents that failure scenario.
+> 
 
-I've been experimenting with some different build config combinations
-and have reproduced what must be the issue.
+	default y if (TCG_CRB && ARM_FFA_TRANSPORT)
 
-This works fine:
-<*>   TPM 2.0 CRB Interface 
-                                         < >   TPM CRB over Arm FF-A 
-Transport
+is the issue here. You can select it as built-in if either or one of the
+TCG_CRB and ARM_FFA_TRANSPORT is a module, but that is exactly what happens.
+Not sure if default value is a must for you. But just depends on each of
+these should be good enough and enable it in defconfig if needed. Or
+you can have multiple default at least 4 combinations I can see. Both
+are =y and either and both are =m
 
-This works fine:
-< >   TPM 2.0 CRB Interface 
-                                         <*>   TPM CRB over Arm FF-A 
-Transport
-
-This works fine:
-<*>   TPM 2.0 CRB Interface 
-                                         <*>   TPM CRB over Arm FF-A 
-Transport
-
-This works fine:
-<M>   TPM 2.0 CRB Interface 
-                                         <M>   TPM CRB over Arm FF-A 
-Transport
-
-This fails:
-<*>   TPM 2.0 CRB Interface 
-                                         <M>   TPM CRB over Arm FF-A 
-Transport
-
-The 2 drivers are coupled, so we can't have one built as a module
-and the other built-in.
-
-I'm not a Kconfig expert, and need to do some fiddling to see
-if I can find a Kconfig syntax that prevents that failure scenario.
-
-Thanks,
-Stuart
-
-
+--
+Regards,
+Sudeep
 
