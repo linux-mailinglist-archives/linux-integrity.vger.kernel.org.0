@@ -1,216 +1,228 @@
-Return-Path: <linux-integrity+bounces-5227-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5228-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFEC0A5C010
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 13:05:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6964FA5C195
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 13:45:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 643807A5E21
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 12:03:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A7503A4722
+	for <lists+linux-integrity@lfdr.de>; Tue, 11 Mar 2025 12:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8434C255E3E;
-	Tue, 11 Mar 2025 12:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E92E22FF22;
+	Tue, 11 Mar 2025 12:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="knkli6TZ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="a180Wzog"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189982571A9;
-	Tue, 11 Mar 2025 12:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBF5322E;
+	Tue, 11 Mar 2025 12:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741694597; cv=none; b=ZjXj7HKkh9sGyIRV7/4nk8rkD7UyQNX/PuTYfstBTZXKVCf0Mx98WMf4m4Qxuo4nrf2u8kXCZT5SIeMdLUL//QrwTs8Tro36BCLTfGnSeqZpLemmzS43XFmB8V9aVeqPz4nFY25Jbo45uMRJcsYHSasVuRge938dUPMIT+F63nA=
+	t=1741697132; cv=none; b=Sr3TsrAEq5GOfHsVy7y3h24Z0ta3GNFHuUrDkEyOPj0jT8BCv9S5M+DVt1/Fz4gvgg/fQOEJzQBCNuOFC/J4HQZDbBLEXBzwAbUGNnTSBoMNjlbRoOv7iHjmrwWfkkTWhfHpP93yIT5ubMbpnOQAlOSisRrol49FdXITtWEoeyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741694597; c=relaxed/simple;
-	bh=/B8LOU3EPY1bvUwmU8M98LiZ3McvkPIlMaG0ADq5cyg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UqmAs4IuPw8tXbdyFsPDR5ggCBjpsYDuCrDicBFFbFXkeCoJ/E20mJNVCvVxeT4Dw/Eh8QY79JntORIs44km0PZ06WtgiZIOZlG0D7g8Do2+OS3x0uB87B1iHZeLfOodt+nAoBUR3rm2eA8WO/FHnPr6OnZVfILZzDRO6fsjWxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=knkli6TZ; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1741694546;
-	bh=oObmgM37XdbiQEyrtFB9Jj1DhC5YLB/am9mUi1LXOns=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=knkli6TZ+5PJBWNzp+Iti66jQAiAEVTgCST5b6xekTevysV6Z6J9q+8hJEbwKNckH
-	 Ht6cNBfHmXfxNSysn+lVznTbi+REMvQ3sNvCEQwDegt0nhwD2GTpU81yBYWuB6Asa/
-	 kLECI6rKt1zl3czofYW6oo3NJ5J/TeINLqJ8AgxY=
-X-QQ-mid: bizesmtpip3t1741694495tnu5g36
-X-QQ-Originating-IP: yWSAeIPiqtPNf0ao2bIbG/CqRwF5BLPwY+Yu8R3vs9E=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 11 Mar 2025 20:01:33 +0800 (CST)
-X-QQ-SSF: 0002000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 9260470800203559345
-From: WangYuli <wangyuli@uniontech.com>
-To: peterhuewe@gmx.de,
-	jarkko@kernel.org,
-	jgg@ziepe.ca,
-	ardb@kernel.org,
-	wangyuli@uniontech.com,
-	gourry@gourry.net
-Cc: linux-kernel@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	zhanjun@uniontech.com,
-	niecheng1@uniontech.com,
-	guanwentao@uniontech.com,
-	Chen Linxuan <chenlinxuan@uniontech.com>
-Subject: [PATCH] tpm: eventlog: Declare mapping_size __maybe_unused
-Date: Tue, 11 Mar 2025 20:01:15 +0800
-Message-ID: <10590A3A04DA011F+20250311120115.1451048-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1741697132; c=relaxed/simple;
+	bh=xj+1D8ksPdQzwEBRN8cYEqDzhY/NBmBySm0XVKszDaQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XgxmyxGp/BOytAXqaja963nQSHDu7iXH1gMGUMClgBOdXidqMG+qpCqeatVELC0jPn7E5Z5dnmw1gofK/7d72zvjmM0+U+cYfmROoogyvP9pz71xKjZMAoqL8B5ZRGnW+gaKkp35QWkEqbB+QCNqVTBxOXF8M6PJwAP7Jd2HwU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=a180Wzog; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52B9vOFU005892;
+	Tue, 11 Mar 2025 12:44:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=kmXfpt
+	VW9q2WaIV8tj2ijtdDlxZ/5KSD1Ekbp7i9cuM=; b=a180WzogI/vru5HC+uWMdy
+	vh3s3wLkFb93WWzLc2wsiU2I+SWifbCbHVeayXonBY59goNuwa5nDdGbcoPlJ4DG
+	fs7fwONjAvw3ObzU0SrEa0mNRgIRz0nGvmuVobFJrQE4yZBK/KsHTf0Gc/zabgJ2
+	NajFQFNIyj9WThcO+u2fiKND7u+MmFXZhuxfUxM//GuY/BB+KtT239lR88Hzp6n2
+	PROjIeFw23xRC0bNt5n+Y35unxLE7UcjzvtUHtOHXeroinrnDwsFUSN95PNR2aDp
+	3jCVQHGYQ5NlDporctugz61HWAPa5fDnxB272zQV7TB5o+HA09m8Mlm4IQlRnv+Q
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45a78quw37-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Mar 2025 12:44:37 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52BCN9E0006941;
+	Tue, 11 Mar 2025 12:44:36 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 45907t4ct0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Mar 2025 12:44:36 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52BCiZWA12124844
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 11 Mar 2025 12:44:36 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B303A5804B;
+	Tue, 11 Mar 2025 12:44:35 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DED3F58055;
+	Tue, 11 Mar 2025 12:44:33 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.163.116])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 11 Mar 2025 12:44:33 +0000 (GMT)
+Message-ID: <631f326006226e23f4f755fd32255792f6514a90.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 1/7] ima: copy only complete measurement records
+ across kexec
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, Baoquan He <bhe@redhat.com>
+Cc: stefanb@linux.ibm.com, roberto.sassu@huaweicloud.com,
+        roberto.sassu@huawei.com, eric.snowberg@oracle.com,
+        ebiederm@xmission.com, paul@paul-moore.com, code@tyhicks.com,
+        bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+        kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
+        nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
+        vgoyal@redhat.com, dyoung@redhat.com
+Date: Tue, 11 Mar 2025 08:44:33 -0400
+In-Reply-To: <69f43be0ed70eee45d3d9d9ac2aeaf39def5770a.camel@linux.ibm.com>
+References: <20250304190351.96975-1-chenste@linux.microsoft.com>
+	 <20250304190351.96975-2-chenste@linux.microsoft.com>
+	 <Z8g+uhZQ6totYLmp@MiWiFi-R3L-srv>
+	 <fe6e3c1333a50d66dc876b5a196d3491170802a8.camel@linux.ibm.com>
+	 <8bc74dd8-ecd0-44ad-88a2-8b36fa61100a@linux.microsoft.com>
+	 <69f43be0ed70eee45d3d9d9ac2aeaf39def5770a.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: OMEqDAhtxLq6no6jefPyEAD/MxqyCdljrmScj8nUuWAmYnc/wXs7Sb60
-	lvTARDenBsaf4xypNWFzSybp4uAtBzKHI37tuB9nlSA2An5e7wx6HvFOqHy5GCi9fBW25gZ
-	nVHyEI1d7qUYB7KXsBoN0P9mH0vchHqJYIiq81mXN5+pFLu4I9mFlpi+SqDsnaKnaLbcDhD
-	ZBR2cAUrY9hkpYW3mu7f+w49AelsHy+udAjUOVZlraYNqzh6wITMd7ZXXGvb72W4t7BYuuy
-	Q0TcYfBJL0ZtiAImBnkc0Dn06Xk7bmYl6JVkSeUFLeRqyi3niBhSo9hhxP7oz01yI6D36v9
-	KIqAl4HA8/O8cIRct4Ds3pl9XQH3ZAhRrWwS6EOpWoV6KzzKXjsAH6NSXXEbIeS5ZSyqY4o
-	6HYpS0E/C2VkZ3ztqnpln6eyUXUIQ0KE9KKfQ0OtRkk1CsnWvVF6mj00w3zxuYvZ55RsgTd
-	LgiX+vdY3ArFbBvMuvh4KydctytgHPSvR7pBVZyqjgaKi1bLwFyc5QYJWtayj7eIiFhzGH2
-	wPovdwjq0KDbRn3XwkjTFbNdpiFIktRijZO9PEjJqxQR+MxxMem95HPim90BHF36IIY3O/i
-	eEpYBqRqqkiFtlKIWRKpErCRRPs71ALt7y7qtZ4a6nmJ12wfJU4BYQ4srHkb5PSjfAV9kK6
-	990ngbTwGhCK//tjZy5l9+Vvb8sjYHnsIvqigvU4QuU8Dk6ID9Jel2y1reioOILUs+t9XSW
-	FZORhmLTGjV1/5pLBVjSlGiDs+KYD0bkbev3eBtucOEdtnvP1qzd9WyV2cxDqklYbwHcJbU
-	6gdzT57QRY8J4UDbiFX/8OOcuEIrmxEgE9KpDk6YWr03pKDCbJVVPdViUaEQ0jhM3MvqPaz
-	Fv3MZNmJ9JDwoH3XT+4XQ/APpQmAZH65T5pZ8v3MmXd2RUGs5g0dHgSldjw6CTpodU2uVkw
-	YcgaBpj0lEvlyOmybTdgRP3fijPbU0ae9cSLYDYz2HJ0nAw6looFYqpGMD901+laf/z3osi
-	La87hJdGc+HoKcD1IsuQn3N9WCYSTJNhxkRC6q4UPzj8VHqVkNJ/pM8lGrZBfJJm3rXrS1e
-	Olu7Yuza+zH
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-X-QQ-RECHKSPAM: 0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LKRc30FZcYrokCVrh36qHk1wdT_YHYkV
+X-Proofpoint-ORIG-GUID: LKRc30FZcYrokCVrh36qHk1wdT_YHYkV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-11_02,2025-03-11_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ spamscore=0 adultscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503110080
 
-Given that when CONFIG_EFI is not enabled, do_mapping is inherently
-false. Thus, the mapping_size variable is set but remains unused,
-resulting in a compilation warning.
+On Thu, 2025-03-06 at 21:51 -0500, Mimi Zohar wrote:
+> On Thu, 2025-03-06 at 14:45 -0800, steven chen wrote:
+> > On 3/5/2025 4:27 AM, Mimi Zohar wrote:
+> > > On Wed, 2025-03-05 at 20:08 +0800, Baoquan He wrote:
+> > > > On 03/04/25 at 11:03am, steven chen wrote:
+> > > > > Carrying the IMA measurement list across kexec requires allocatin=
+g a
+> > > > > buffer and copying the measurement records.  Separate allocating =
+the
+> > > > > buffer and copying the measurement records into separate function=
+s in
+> > > > > order to allocate the buffer at kexec 'load' and copy the measure=
+ments
+> > > > > at kexec 'execute'.
+> > > > >=20
+> > > > > This patch includes the following changes:
+> > > > I don't know why one patch need include so many changes. From below=
+ log,
+> > > > it should be split into separate patches. It may not need to make o=
+ne
+> > > > patch to reflect one change, we should at least split and wrap seve=
+ral
+> > > > kind of changes to ease patch understanding and reviewing. My perso=
+nal
+> > > > opinion.
+> > > Agreed, well explained.
+> > >=20
+> > > Mimi
+> > >=20
+> > > > >   - Refactor ima_dump_measurement_list() to move the memory alloc=
+ation
+> > > > >     to a separate function ima_alloc_kexec_file_buf() which alloc=
+ates
+> > > > >     buffer of size 'kexec_segment_size' at kexec 'load'.
+> > > > >   - Make the local variable ima_kexec_file in ima_dump_measuremen=
+t_list()
+> > > > >     a local static to the file, so that it can be accessed from
+> > > > >     ima_alloc_kexec_file_buf(). Compare actual memory required to=
+ ensure
+> > > > >     there is enough memory for the entire measurement record.
+> > > > >   - Copy only complete measurement records.
+> > > > >   - Make necessary changes to the function ima_add_kexec_buffer()=
+ to call
+> > > > >     the above two functions.
+> > > > >   - Compared the memory size allocated with memory size of the en=
+tire
+> > > > >     measurement record. Copy only complete measurement records if=
+ there
+> > > > >     is enough memory. If there is not enough memory, it will not =
+copy
+> > > > >     any IMA measurement records, and this situation will result i=
+n a
+> > > > >     failure of remote attestation.
+> > > > >=20
+> > > > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > > Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> > > > > Signed-off-by: steven chen <chenste@linux.microsoft.com>
+> >=20
+> > I will split this patch into the following two patches:
+> >=20
+> >  =C2=A0 =C2=A0 ima: define and call ima_alloc_kexec_file_buf
+> >  =C2=A0=C2=A0=C2=A0 ima: copy measurement records as much as possible a=
+cross kexec
+>=20
+> Steven, breaking up code into patches is in order to simplify patch revie=
+w.=20
+> This is done by limiting each patch to a single "logical change" [1].  Fo=
+r
+> example, the change below has nothing to do with "separate allocating the=
+ buffer
+> and copying the measurement records into separate functions".
+>=20
+>         /* This is an append-only list, no need to hold the RCU read lock=
+ */
+>         list_for_each_entry_rcu(qe, &ima_measurements, later, true) {
+> -               if (file.count < file.size) {
+> +               entry_size +=3D ima_get_binary_runtime_entry_size(qe->ent=
+ry);=20
+> +               if (entry_size <=3D segment_size) {
+>                         khdr.count++;
+> -                       ima_measurements_show(&file, qe);
+> +                       ima_measurements_show(&ima_kexec_file, qe);
+>                 } else {
+>                         ret =3D -EINVAL;
+> +                       pr_err("IMA log file is too big for Kexec buf\n")=
+;
+>                         break;
+>                 }
+>         }
+>=20
+> The original code potentially copied a partial last measurement record, n=
+ot a
+> complete measurement record.  For ease of review, the above change is fin=
+e, but
+> it needs to be a separate patch.
+>=20
+> Patches:
+> 1. ima: copy only complete measurement records across kexec
+> 2. ima: define and call ima_alloc_kexec_file_buf()
 
-Simply annotating it with __maybe_unused will resolve this compilation
-warning.
+Steven,
 
-[ Fix follow errors with clang-19 when W=1e: ]
-  In file included from drivers/char/tpm/tpm1-cmd.c:21:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm1-cmd.o] Error 1
-  make[8]: *** Waiting for unfinished jobs....
-  In file included from drivers/char/tpm/tpm-dev-common.c:19:
-  In file included from drivers/char/tpm/tpm.h:28:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-dev-common.o] Error 1
-  In file included from drivers/char/tpm/tpm2-cmd.c:14:
-  In file included from drivers/char/tpm/tpm.h:28:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  In file included from drivers/char/tpm/tpm-dev.c:16:
-  In file included from drivers/char/tpm/tpm-dev.h:6:
-  In file included from drivers/char/tpm/tpm.h:28:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-dev.o] Error 1
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-cmd.o] Error 1
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpmrm-dev.o] Error 1
-  In file included from drivers/char/tpm/tpm-chip.c:24:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  In file included from drivers/char/tpm/tpm-sysfs.c:16:
-  In file included from drivers/char/tpm/tpm.h:28:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-chip.o] Error 1
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-sysfs.o] Error 1
-  In file included from drivers/char/tpm/tpm2-sessions.c:71:
-  In file included from drivers/char/tpm/tpm.h:28:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-sessions.o] Error 1
-  In file included from drivers/char/tpm/tpm-interface.c:28:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-interface.o] Error 1
-  In file included from drivers/char/tpm/tpm2-space.c:16:
-  In file included from drivers/char/tpm/tpm.h:28:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-space.o] Error 1
-  In file included from drivers/char/tpm/eventlog/tpm1.c:24:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/tpm1.o] Error 1
-  In file included from drivers/char/tpm/eventlog/common.c:20:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/common.o] Error 1
-  In file included from drivers/char/tpm/eventlog/tpm2.c:20:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/tpm2.o] Error 1
-  In file included from drivers/char/tpm/tpm_vtpm_proxy.c:24:
-  In file included from drivers/char/tpm/tpm.h:28:
-  ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
-    167 |         int mapping_size;
-        |             ^
-  1 error generated.
-  make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm_vtpm_proxy.o] Error 1
-  make[7]: *** [scripts/Makefile.build:465: drivers/char/tpm] Error 2
-  make[6]: *** [scripts/Makefile.build:465: drivers/char] Error 2
-  make[6]: *** Waiting for unfinished jobs....
+The alternative would be to revert using ima_get_binary_runtime_entry_size(=
+) and
+simply use "ima_kexec_file.count < ima_kexec_file.size".  Only
+ima_kexec_file.size would be initialized in ima_alloc_kexec_buf().  The res=
+t
+would remain in ima_dump_measurement_list().  get_binary_runtime_size() wou=
+ldn't
+need to be made global.
 
-Suggested-by: Chen Linxuan <chenlinxuan@uniontech.com>
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- include/linux/tpm_eventlog.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+To further simplify the patch review, first define a separate patch to just
+rename the seq_file "file" to "ima_kexec_file".
 
-diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
-index 891368e82558..7ca58b2e96e8 100644
---- a/include/linux/tpm_eventlog.h
-+++ b/include/linux/tpm_eventlog.h
-@@ -164,7 +164,7 @@ static __always_inline u32 __calc_tpm2_event_size(struct tcg_pcr_event2_head *ev
- 	struct tcg_efi_specid_event_head *efispecid;
- 	struct tcg_event_field *event_field;
- 	void *mapping = NULL;
--	int mapping_size;
-+	__maybe_unused int mapping_size;
- 	void *marker;
- 	void *marker_start;
- 	u32 halg_size;
--- 
-2.47.2
-
+Mimi
 
