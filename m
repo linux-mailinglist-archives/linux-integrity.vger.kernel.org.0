@@ -1,138 +1,269 @@
-Return-Path: <linux-integrity+bounces-5249-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5250-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE73EA5D8BA
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 09:58:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BFCBA5DAEF
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 11:56:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E3203A4408
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 08:58:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C58218963D5
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 10:56:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E09235364;
-	Wed, 12 Mar 2025 08:58:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D6023E331;
+	Wed, 12 Mar 2025 10:56:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FdPUjpQA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R1NDS/v5"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E31236A68;
-	Wed, 12 Mar 2025 08:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD0123E329
+	for <linux-integrity@vger.kernel.org>; Wed, 12 Mar 2025 10:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741769896; cv=none; b=LDN5w4y4cgwSfbGQWeWxSlyovkgyqHsAgJgbE6zOet+N8IUWl4Q0s0UeXh0G+uvqGAzU3McAwXnX4b3TSsINU31/YtjAXMwn58dnZqLp3GbgCK8ib+g7OJSQf5sBpo/sSzU93wGOi4hzqa7Alq0EFVJ5XTm9PhdUikwGMS+Oawk=
+	t=1741776979; cv=none; b=Y9kcFWnlHrQvxWsdEDZx8iD23dDDpU+ZNHp/qt/Oi8Nnm7H2JJMh/NGJYy1woezSi3jSLP0RzUcQB8S2X9vN2M1XvA47knt1+xlTp6pZ8oMUxlWFS/S1wse3WAvGvzXr7U/x8cGV4/B0UoDQ8QybAJagZEWKJYPVjLQHrQ1FDvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741769896; c=relaxed/simple;
-	bh=HttexNxW0KtxV4sJ29IXJAlxzJTo/xsJm31W440ao9w=;
+	s=arc-20240116; t=1741776979; c=relaxed/simple;
+	bh=C9ho3y8Z4AjksfuMtwufWo5v3OhuqO4rkMnvsa73uUU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dy7ZBnBoarl+/ixpjnhlLPCwiPVipIzPD3k2W2OATaAuEN15o5WY/D2vmxe4/UF1fMts7GbOcTwJs+W44422iL7+VuZIpt57t7XwtXFjt49VcWxAe/rPojMcoget4QA9Fxj8fEQdAPZZYGH+djcl1QathAI2fRiOn6o6+ELEytY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FdPUjpQA; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741769895; x=1773305895;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HttexNxW0KtxV4sJ29IXJAlxzJTo/xsJm31W440ao9w=;
-  b=FdPUjpQAbK7rAoHy+AnxNXMAzZ6p9RMqzJVR05iYNvmdLTd9SnQpBiem
-   MdZPfbg5PqfhIp1oZfj0el78uNHDWjnTx13vn8+UD47zb81RZ7OXeRzJS
-   w44EM4qg9AwQFZG9cpCexnnvx7lxrWal27dwJMNGdzUVIQwmMqQh7de23
-   YR/QZIcCN3kABHJdp2B9hfXvmPsCsL+eNs9afN7CnSe/Iibo6JxaI+EzN
-   1RicCcYgfTUUsY8gYWiv3HvkThouDwmeE0tjzFv+B6OmYJFvNWI5G/3nb
-   jxl9pZ9Eymg2txTtDxojy6TL9NdRONB/khe3uLhpnqDaVF3mi5GG6zAep
-   A==;
-X-CSE-ConnectionGUID: c3sa/YkuRQmE7c17cBFpgw==
-X-CSE-MsgGUID: Ad2R05TKQLyuWpzAtzgTSw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="45618593"
-X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="45618593"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 01:58:14 -0700
-X-CSE-ConnectionGUID: UzbWyRTKQ0+krqIOMX7qPw==
-X-CSE-MsgGUID: UBs0sv0gTUSLN+/Dr7g3Ww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="121475893"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 12 Mar 2025 01:58:09 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsHug-0008Im-0k;
-	Wed, 12 Mar 2025 08:58:06 +0000
-Date: Wed, 12 Mar 2025 16:57:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: steven chen <chenste@linux.microsoft.com>, zohar@linux.ibm.com,
-	stefanb@linux.ibm.com, roberto.sassu@huaweicloud.com,
-	roberto.sassu@huawei.com, eric.snowberg@oracle.com,
-	ebiederm@xmission.com, paul@paul-moore.com, code@tyhicks.com,
-	bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
-	kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, madvenka@linux.microsoft.com,
-	nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
-	bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com
-Subject: Re: [PATCH v9 4/7] ima: kexec: define functions to copy IMA log at
- soft boot
-Message-ID: <202503121600.IMBKp2gC-lkp@intel.com>
-References: <20250304190351.96975-5-chenste@linux.microsoft.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=SGxhyOCsbXVKBeK69YF7glyrju+bpsIKaIyWW9WJ6kzJJF7HO67e0mFhi+rrQi8LBlYkdXdwVAyiGN8lIrogdLNSVKcQcWG3jd/dZlF/LOQgM02ATRvTJtWqp8w/1OsE4vhMGJkc1WnaxU5HXBxNkBeSmdyeqv18b/l7S/zxU9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R1NDS/v5; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741776976;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BMO4udXDunUhobQ7Fjp1hXfrNyFJ45K7k54QtO+Zp4s=;
+	b=R1NDS/v53pHujI0DCPL+rRp/Y7hRtnJ0ihnjB+R55ufjY0RzYsv0ONqcVpEvmgGCu+Zf0/
+	2yDYntI9NERjYrYJyUriwX/9a1d5u2gNznK48+J0bELq49hnkzGilJc+yQtovow42/5UZM
+	ItWbloJfk0BuEtUcWzFoRzFppH4xh0A=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-335-v2vXrr6KMiuydjfj0OjTGg-1; Wed, 12 Mar 2025 06:56:15 -0400
+X-MC-Unique: v2vXrr6KMiuydjfj0OjTGg-1
+X-Mimecast-MFC-AGG-ID: v2vXrr6KMiuydjfj0OjTGg_1741776974
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43ce245c5acso33687155e9.2
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Mar 2025 03:56:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741776974; x=1742381774;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BMO4udXDunUhobQ7Fjp1hXfrNyFJ45K7k54QtO+Zp4s=;
+        b=VLGyK/TwLJRaIReXpCHToSZDAoOS1XbL1oPa4ZNat0p6k5NUA7zkw/LpiBv06D1Aii
+         FBTlqyeR7l8y+S097N9ijB+09PDY25e7/zJZHLsmZVuaU6e3d9ev5EQfnu4mBtE7twTx
+         nrHJZxQzyWaOdxWViia8/U+ba7B7zX4+uSW28AUguwloZdaO1cjkdjrix4kiB46SvRLm
+         0liDgrPQUvyBInx6tEb20VQdAp7HbjToXmB2gUa/K/kJJaDQBcg0uyiDDXyTNPxNxryn
+         af8UZUajoiDTkWuibDr4/TTFP8vNZOqT+MJXCpI3oUKQfismOgHTNi10BLqVueqVQ2ao
+         N6UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUTYVJiso3rbUHvaON4bRn73RH2udbiEP0/iLJMvubupMiuxgcbuvrljO46Xqcl/112fM+o/d1SHsgwAvxQNgw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQLxSO38Wcz76MZjVoXQ3KiBz3A23+p95JMPz0Tfo01e1Ku7Q9
+	rr6ydEuVTLHlxUVeEpReDAc8Zhw/4FRSpZZE+UfrLkJpp/YAVgAVPuAd3NuiN30LIgbfO2/FnSl
+	8WlL50ucQWCbt/lr1rlfH1/IavbtNEbEteci7CqVHl7LViZur7cQKZeQYU5m91L8+Xw==
+X-Gm-Gg: ASbGncvI+ga63pUKBV5gRk5gx15OrXy+ZV/KwMAzjVUFRo+4mCM9Zl4hQo7FEjfhL2R
+	mgSRcSXsowf5HId1/7lEuCnHDoBnKsvm/6pieJDyO3p4O7R0Iq/2AdjYX6rG4+54ZAcrn8RaSAS
+	V22EvjRYUnBUKMKzV4fHjGWRnivlHx9BAmF1UV1A294HxBTvY4Wn5tSRC+ZB+U7IHWxckzy3DIe
+	n+q93iN7RwrobOMlYcWUQsmgYPLgOrfBtoDWA4DiTFlD6SzafPFykfzjcTgzY7RP3jNkyFpR/1m
+	I7mHRLLydNEP0XizaCHTH8Wy1ufdFJnAbcFLZHCEjVuwxDuCIRlioMDspLWHwJqz
+X-Received: by 2002:a05:600c:5112:b0:43d:4e9:27fe with SMTP id 5b1f17b1804b1-43d04e92abamr55444245e9.8.1741776973882;
+        Wed, 12 Mar 2025 03:56:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF9AMJIu9eKhF569vVgvbzoy+XnTi3xrEHJ2FOChRIcm/dKfdUJ7RQpEPKwGeSxzTGkYglWjQ==
+X-Received: by 2002:a05:600c:5112:b0:43d:4e9:27fe with SMTP id 5b1f17b1804b1-43d04e92abamr55443785e9.8.1741776973173;
+        Wed, 12 Mar 2025 03:56:13 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-29.retail.telecomitalia.it. [79.46.200.29])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d0a74c6a1sm17240825e9.13.2025.03.12.03.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Mar 2025 03:56:12 -0700 (PDT)
+Date: Wed, 12 Mar 2025 11:56:06 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Jason Gunthorpe <jgg@ziepe.ca>, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>, linux-integrity@vger.kernel.org, 
+	Dov Murik <dovmurik@linux.ibm.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	linux-coco@lists.linux.dev, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Claudio Carvalho <cclaudio@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v3 1/4] x86/sev: add SVSM vTPM probe/send_command
+ functions
+Message-ID: <2of2zhxi2c735fgvjxug2bxjfpz2zk25adf3h2ps5byau3rj3k@pgbxmpbskezi>
+References: <20250311094225.35129-1-sgarzare@redhat.com>
+ <20250311094225.35129-2-sgarzare@redhat.com>
+ <Z9AIx9kFKWcHB_WK@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20250304190351.96975-5-chenste@linux.microsoft.com>
+In-Reply-To: <Z9AIx9kFKWcHB_WK@kernel.org>
 
-Hi steven,
+On Tue, Mar 11, 2025 at 11:56:23AM +0200, Jarkko Sakkinen wrote:
+>On Tue, Mar 11, 2025 at 10:42:22AM +0100, Stefano Garzarella wrote:
+>> Add two new functions to probe and send commands to the SVSM vTPM.
+>> They leverage the two calls defined by the AMD SVSM specification [1]
+>> for the vTPM protocol: SVSM_VTPM_QUERY and SVSM_VTPM_CMD.
+>>
+>> Expose these functions to be used by other modules such as a tpm
+>> driver.
+>>
+>> [1] "Secure VM Service Module for SEV-SNP Guests"
+>>     Publication # 58019 Revision: 1.00
+>>
+>> Co-developed-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>> Co-developed-by: Claudio Carvalho <cclaudio@linux.ibm.com>
+>> Signed-off-by: Claudio Carvalho <cclaudio@linux.ibm.com>
+>> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> ---
+>> v3:
+>> - removed link to the spec because those URLs are unstable [Borislav]
+>> - squashed "x86/sev: add SVSM call macros for the vTPM protocol" patch
+>>   in this one [Borislav]
+>> - slimmed down snp_svsm_vtpm_probe() [Borislav]
+>> - removed features check and any print related [Tom]
+>> ---
+>>  arch/x86/include/asm/sev.h |  7 +++++++
+>>  arch/x86/coco/sev/core.c   | 31 +++++++++++++++++++++++++++++++
+>>  2 files changed, 38 insertions(+)
+>>
+>> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+>> index ba7999f66abe..09471d058ce5 100644
+>> --- a/arch/x86/include/asm/sev.h
+>> +++ b/arch/x86/include/asm/sev.h
+>> @@ -384,6 +384,10 @@ struct svsm_call {
+>>  #define SVSM_ATTEST_SERVICES		0
+>>  #define SVSM_ATTEST_SINGLE_SERVICE	1
+>>
+>> +#define SVSM_VTPM_CALL(x)		((2ULL << 32) | (x))
+>> +#define SVSM_VTPM_QUERY			0
+>> +#define SVSM_VTPM_CMD			1
+>> +
+>>  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>>
+>>  extern u8 snp_vmpl;
+>> @@ -481,6 +485,9 @@ void snp_msg_free(struct snp_msg_desc *mdesc);
+>>  int snp_send_guest_request(struct snp_msg_desc *mdesc, struct snp_guest_req *req,
+>>  			   struct snp_guest_request_ioctl *rio);
+>>
+>> +bool snp_svsm_vtpm_probe(void);
+>> +int snp_svsm_vtpm_send_command(u8 *buffer);
+>> +
+>>  void __init snp_secure_tsc_prepare(void);
+>>  void __init snp_secure_tsc_init(void);
+>>
+>> diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
+>> index 96c7bc698e6b..2166bdff88b7 100644
+>> --- a/arch/x86/coco/sev/core.c
+>> +++ b/arch/x86/coco/sev/core.c
+>> @@ -2628,6 +2628,37 @@ static int snp_issue_guest_request(struct snp_guest_req *req, struct snp_req_dat
+>>  	return ret;
+>>  }
+>>
+>
+>Since this is an exported symbol, it'd be a good practice document
+>snp_svsm_vtpm_probe().
 
-kernel test robot noticed the following build warnings:
+Yes, you are right, since the others were not documented, I had not 
+added it, but I agree with you, I'll do in v4.
 
-[auto build test WARNING on zohar-integrity/next-integrity]
-[also build test WARNING on linus/master v6.14-rc6 next-20250311]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+>> +bool snp_svsm_vtpm_probe(void)
+>> +{
+>> +	struct svsm_call call = {};
+>> +
+>> +	/* The vTPM device is available only if a SVSM is present */
+>> +	if (!snp_vmpl)
+>> +		return false;
+>> +
+>> +	call.caa = svsm_get_caa();
+>> +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_QUERY);
+>
+>I supposed CAA is some kind of shared memory area for host and VM?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/steven-chen/ima-copy-only-complete-measurement-records-across-kexec/20250305-031719
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git next-integrity
-patch link:    https://lore.kernel.org/r/20250304190351.96975-5-chenste%40linux.microsoft.com
-patch subject: [PATCH v9 4/7] ima: kexec: define functions to copy IMA log at soft boot
-config: powerpc64-randconfig-r133-20250312 (https://download.01.org/0day-ci/archive/20250312/202503121600.IMBKp2gC-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 14.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20250312/202503121600.IMBKp2gC-lkp@intel.com/reproduce)
+Not with the host, but with SVSM, which is the firmware running in the 
+guest, but at a higher privilege level (VMPL) than the kernel, where, 
+for example, the vTPM is emulated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503121600.IMBKp2gC-lkp@intel.com/
+BTW, yep it is a shared memory defined by the SVSM calling convention.
+ From AMD SVSM specification:
 
-sparse warnings: (new ones prefixed by >>)
-   security/integrity/ima/ima_kexec.c:107:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [addressable] [assigned] [usertype] version @@     got restricted __le16 [usertype] @@
-   security/integrity/ima/ima_kexec.c:107:30: sparse:     expected unsigned short [addressable] [assigned] [usertype] version
-   security/integrity/ima/ima_kexec.c:107:30: sparse:     got restricted __le16 [usertype]
-   security/integrity/ima/ima_kexec.c:108:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [addressable] [assigned] [usertype] count @@     got restricted __le64 [usertype] @@
-   security/integrity/ima/ima_kexec.c:108:28: sparse:     expected unsigned long long [addressable] [assigned] [usertype] count
-   security/integrity/ima/ima_kexec.c:108:28: sparse:     got restricted __le64 [usertype]
-   security/integrity/ima/ima_kexec.c:109:34: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [addressable] [assigned] [usertype] buffer_size @@     got restricted __le64 [usertype] @@
-   security/integrity/ima/ima_kexec.c:109:34: sparse:     expected unsigned long long [addressable] [assigned] [usertype] buffer_size
-   security/integrity/ima/ima_kexec.c:109:34: sparse:     got restricted __le64 [usertype]
->> security/integrity/ima/ima_kexec.c:209:23: sparse: sparse: symbol 'update_buffer_nb' was not declared. Should it be static?
+   5 Calling Convention
 
-vim +/update_buffer_nb +209 security/integrity/ima/ima_kexec.c
+     Each call to the SVSM conveys data through a combination of the
+     SVSM Calling Area (whose address was first configured through the
+     SVSM_CAA field of the secrets page) and registers. Use of the
+     Calling Area is necessary for the SVSM to detect the difference
+     between a call that was issued by the guest and a spurious
+     invocation by a poorly behaved host. Registers are used for all
+     other parameters.
+     The initially configured SVSM Calling Area is a page of memory that
+     lies outside the initial SVSM memory range and has not had its VMPL
+     permissions restricted in any way. The address is guaranteed to be
+     aligned to a 4 KB boundary, so the remainder of the page may be used
+     by the guest for memory-based parameter passing if desired.
+     The contents of the Calling Area are described in the following
+     table:
 
-   208	
- > 209	struct notifier_block update_buffer_nb = {
-   210		.notifier_call = ima_update_kexec_buffer,
-   211		.priority = 1,
-   212	};
-   213	
+     Table 2: Calling Area
+     Byte      Size     Name                Description
+     Offset
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+     0x000     1 byte   SVSM_CALL_PENDING   Indicates whether a call has
+                                            been requested by the guest
+                                            (0=no call requested, 1=call
+                                            requested).
+     0x001     1 byte   SVSM_MEM_AVAILABLE  Free memory is available to
+                                            be withdrawn.
+     0x002     6 byte                       Reserved. The SVSM is not
+                                            required to verify that
+                                            these bytes are 0.
+
+>
+>> +
+>> +	if (svsm_perform_call_protocol(&call))
+>> +		return false;
+>> +
+>> +	/* Check platform commands contains TPM_SEND_COMMAND - platform command 8 */
+>> +	return (call.rcx_out & BIT_ULL(8)) == BIT_ULL(8);
+>> +}
+>> +EXPORT_SYMBOL_GPL(snp_svsm_vtpm_probe);
+>> +
+>
+>Ditto.
+
+Ack.
+
+>
+>> +int snp_svsm_vtpm_send_command(u8 *buffer)
+>> +{
+>> +	struct svsm_call call = {};
+>> +
+>> +	call.caa = svsm_get_caa();
+>> +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_CMD);
+>> +	call.rcx = __pa(buffer);
+>> +
+>> +	return svsm_perform_call_protocol(&call);
+>> +}
+>> +EXPORT_SYMBOL_GPL(snp_svsm_vtpm_send_command);
+>> +
+>>  static struct platform_device sev_guest_device = {
+>>  	.name		= "sev-guest",
+>>  	.id		= -1,
+>> --
+>> 2.48.1
+>>
+>
+>That said, these are rather self-documenting (i.e, nice and clean).
+
+Thanks for the review!
+Stefano
+
 
