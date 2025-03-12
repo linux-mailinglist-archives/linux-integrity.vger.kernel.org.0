@@ -1,83 +1,129 @@
-Return-Path: <linux-integrity+bounces-5237-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5238-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 729ADA5D480
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 03:52:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6257A5D5D3
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 07:01:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AE7E1899FFB
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 02:52:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 120841792A4
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 06:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E8A18D643;
-	Wed, 12 Mar 2025 02:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B821922F6;
+	Wed, 12 Mar 2025 06:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tUdG+1Uu"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB7D165F13;
-	Wed, 12 Mar 2025 02:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBDB2F43;
+	Wed, 12 Mar 2025 06:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741747915; cv=none; b=qgMSmChBJ/JwkwszhU2SFiTAKAMB3DVmVVp3pav+7eMzGWK1UZ7c6ZVhcBqiDtqGQJ1w0JFvAqH0CeTCl2j95gD5Wzus8LFxAHbff3dBOZmek1T0OdrkENHjnC2cSj8f3vVVO61f5KowmmTR+lhvTbNakSj9fUlFxAdGQS+Rb7w=
+	t=1741759260; cv=none; b=PJYGT3vgcW+oBCEHZIWR9CCA3HVh5iM/Cu/hDxoJEirj/NpKUzARVjJiUSCdI0YoMdNMvWAj6PA4ASQJir9vLuG3ONKSTRsDtfY1yDWzhnsr6C0xN5JzBtqyVSeu3d2lqZP3UN5Q5VdTzzox/tm0CHzoAaBHFV46FhkxLG/g8Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741747915; c=relaxed/simple;
-	bh=odQu+YbNOqP4hHDB4GXFaIIi08qe4rGyQ0NRo1CGb5A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nmLDvoG/zMQSUfIH2tTAK4FzqF8KVFDQmXttK5+yF+YKjcv4hCsIoZzdRg+VRgrElixauGcwc2CnMoJirxn4aN5nsVT/QAUhBFJjrCZfV+xvlzyg9nEsYGVuzp5ARBFfiERYQnerUH+JqCExTZKm17yQU4tFlrJszF73rAjNyII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4252E152B;
-	Tue, 11 Mar 2025 19:52:02 -0700 (PDT)
-Received: from [10.119.39.65] (unknown [10.119.39.65])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 794B73F673;
-	Tue, 11 Mar 2025 19:51:50 -0700 (PDT)
-Message-ID: <635af7df-be7c-4eb1-95d7-cad26a2af787@arm.com>
-Date: Tue, 11 Mar 2025 21:51:49 -0500
+	s=arc-20240116; t=1741759260; c=relaxed/simple;
+	bh=9pAA/yH6P+xsx2MApZdeJOVyxbVik21j2UMqV/OdY/M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hGRZkiwtgLrdqTbqfbg73P9khiALH1FyMQzMIjVIOU76FfwJXcuxgrFkkGd6fv4Z2cT4EfulB2NPgeUS2zWaiBS1ccbXx2X2cMHBS2DUwfjm9sknihtS+2ZY44WdKOW7/PW28ZBDkszepQYAZZkpZ3dXRWbToI0sdVGuJISc5mE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tUdG+1Uu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A32AC4CEE3;
+	Wed, 12 Mar 2025 06:00:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741759259;
+	bh=9pAA/yH6P+xsx2MApZdeJOVyxbVik21j2UMqV/OdY/M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tUdG+1UusDMvYlqU6TDDAoy5MK2TbaR/9OXJT5bGwAgbwO+np3TbS0SCLDvlC4sJJ
+	 bJYd3K7HkbZ0oGYDk/qSNZaO89Ir3ii8DUOYZn1EfytuQVIVvSTvAHgo+KKdMj7RAo
+	 Xard+klOkiBnpHBq6xo4X68YrI0XHgi4UTLBk2rZR8Dv3wUhMvoQpCPtWI1kxvC3rj
+	 4fnpJCuJGVuQiH+UKUpZqtQl880xhF8oirGJf4pCxaDx//7GOEguGKyBmb6CeKnQAF
+	 iYrIGxeXf40rFlsEa9e5Wttf54ehlq66a1rJDMUY4iqt1b6LvC6YceyxW3tDiKK9bg
+	 NMK9+2BCWfP4g==
+Date: Wed, 12 Mar 2025 08:00:55 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: Stuart Yoder <stuart.yoder@arm.com>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lenb@kernel.org, rafael@kernel.org,
+	jgg@ziepe.ca, peterhuewe@gmx.de, sudeep.holla@arm.com,
+	linux-integrity@vger.kernel.org,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: Build error on -next due to tpm_crb.c changes? (was: Re: [PATCH
+ v6 0/5] Add support for the TPM FF-A start method)
+Message-ID: <Z9EjF-pybmZlnTws@kernel.org>
+References: <20250305173611.74548-1-stuart.yoder@arm.com>
+ <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Build error on -next due to tpm_crb.c changes?
-To: Thorsten Leemhuis <linux@leemhuis.info>, jarkko@kernel.org
-Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- lenb@kernel.org, rafael@kernel.org, jgg@ziepe.ca, peterhuewe@gmx.de,
- sudeep.holla@arm.com, linux-integrity@vger.kernel.org,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250305173611.74548-1-stuart.yoder@arm.com>
- <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
- <92bc0a65-608f-4307-bb1c-16d8836d42e5@arm.com>
- <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
-Content-Language: en-US
-From: Stuart Yoder <stuart.yoder@arm.com>
-In-Reply-To: <77fb9077-f598-4308-8862-6d09b23688bb@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0ad035ff-400e-4b15-8b8f-40b69152ec46@leemhuis.info>
 
-
-
-On 3/11/25 11:51 AM, Thorsten Leemhuis wrote:
-> On 11.03.25 16:53, Stuart Yoder wrote:
->> On 3/11/25 10:21 AM, Thorsten Leemhuis wrote:
->>> On 05.03.25 18:36, Stuart Yoder wrote:
->> [...]
->> So, it should not be possible on one had have
->> CONFIG_TCG_ARM_CRB_FFA being true when building tpm_crb.c
->> and false resulting in the tpm_crb_ffa.o not being
->> picked up in the build.
+On Tue, Mar 11, 2025 at 04:21:38PM +0100, Thorsten Leemhuis wrote:
+> On 05.03.25 18:36, Stuart Yoder wrote:
+> > Firmware Framework for Arm A-profile (FF-A) is a messaging framework
+> > for Arm-based systems, and in the context of the TPM CRB driver is used
+> > to signal 'start' to a CRB-based TPM service which is hosted in an
+> > FF-A secure partition running in TrustZone.
+> > 
+> > These patches add support for the CRB FF-A start method defined
+> > in the TCG ACPI specification v1.4 and the FF-A ABI defined
+> > in the Arm TPM Service CRB over FF-A (DEN0138) specification:
+> > https://developer.arm.com/documentation/den0138/latest/
+> > [...]
+> > Stuart Yoder (5):
+> >   tpm_crb: implement driver compliant to CRB over FF-A
+> >   tpm_crb: clean-up and refactor check for idle support
+> >   ACPICA: add start method for Arm FF-A
+> >   tpm_crb: add support for the Arm FF-A start method
+> >   Documentation: tpm: add documentation for the CRB FF-A interface
+> > 
+> >  Documentation/security/tpm/tpm_ffa_crb.rst |  65 ++++
+> >  drivers/char/tpm/Kconfig                   |   9 +
+> >  drivers/char/tpm/Makefile                  |   1 +
+> >  drivers/char/tpm/tpm_crb.c                 | 105 +++++--
+> >  drivers/char/tpm/tpm_crb_ffa.c             | 348 +++++++++++++++++++++
+> >  drivers/char/tpm/tpm_crb_ffa.h             |  25 ++
+> >  include/acpi/actbl3.h                      |   1 +
+> > [...]
 > 
-> Many thx for the answer. Maybe Fedora's way to prepare the .config files
-> (which my package builds use to be close to Fedora's official packages)
-> is doing something odd/wrong. Will take a closer look and report back.
+> My daily linux-next builds for Fedora failed building on ARM64 today. I did
+> not bisect, but from the error message I suspect it's du to  patches in this
+> series touching drivers/char/tpm/tpm_crb.c :
+> 
+> ld: Unexpected GOT/PLT entries detected!
+> ld: Unexpected run-time procedure linkages detected!
+> ld: drivers/char/tpm/tpm_crb.o: in function `crb_cancel':
+> /builddir/foo//drivers/char/tpm/tpm_crb.c:496:(.text+0x2c0): undefined reference to `tpm_crb_ffa_start'
+> ld: drivers/char/tpm/tpm_crb.o: in function `__crb_request_locality':
+> /builddir/foo/drivers/char/tpm/tpm_crb.c:285:(.text+0x768): undefined reference to `tpm_crb_ffa_start'
+> ld: drivers/char/tpm/tpm_crb.o: in function `__crb_relinquish_locality':
+> /builddir/foo/drivers/char/tpm/tpm_crb.c:319:(.text+0x81c): undefined reference to `tpm_crb_ffa_start'
+> ld: drivers/char/tpm/tpm_crb.o: in function `__crb_request_locality':
+> /builddir/foo/drivers/char/tpm/tpm_crb.c:285:(.text+0x8bc): undefined reference to `tpm_crb_ffa_start'
+> ld: drivers/char/tpm/tpm_crb.o: in function `__crb_relinquish_locality':
+> /builddir/foo/drivers/char/tpm/tpm_crb.c:319:(.text+0x958): undefined reference to `tpm_crb_ffa_start'
+> ld: drivers/char/tpm/tpm_crb.o:/builddir/foo/drivers/char/tpm/tpm_crb.c:474: more undefined references to `tpm_crb_ffa_start' follow
+> ld: drivers/char/tpm/tpm_crb.o: in function `crb_acpi_add':
+> /builddir/foo/drivers/char/tpm/tpm_crb.c:830:(.text+0x1518): undefined reference to `tpm_crb_ffa_init'
+> make[2]: *** [scripts/Makefile.vmlinux:77: vmlinux] Error 1
+> make[1]: *** [/builddir/foo/Makefile:1242: vmlinux] Error 2
+> make: *** [Makefile:259: __sub-make] Error 2
+> 
+> Full log:
+> https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-41-aarch64/08750241-next-next-all/builder-live.log.gz
+> 
+> Same problem on Fedora 40, 42 and 43. 
 
-It would help to be able to see the .config to see how the relevant
-config options were set.
+I dropped these commit, requested for fixes from the author, and a
+couple of additional nitpicks:
 
-Thanks,
-Stuart
+https://lore.kernel.org/all/Z9EiRDuWfPOkcjXN@kernel.org/
 
+BR, Jarkko
 
