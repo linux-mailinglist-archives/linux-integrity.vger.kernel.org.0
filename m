@@ -1,56 +1,56 @@
-Return-Path: <linux-integrity+bounces-5242-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5243-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17098A5D5F6
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 07:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E9EDDA5D605
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 07:24:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32514175A26
-	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 06:21:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9BE4176F59
+	for <lists+linux-integrity@lfdr.de>; Wed, 12 Mar 2025 06:24:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A622D1DE4E5;
-	Wed, 12 Mar 2025 06:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740411E5B72;
+	Wed, 12 Mar 2025 06:24:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bS60GNsj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LLqHZud9"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9651922F6;
-	Wed, 12 Mar 2025 06:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A43B1D86F2;
+	Wed, 12 Mar 2025 06:24:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741760513; cv=none; b=gnzjsU8cdt7X0CnI5ybvpJ61oN6W4qAugHaJ8zJEhQ3GK80JvFvKz/+O6bFniNjW9Pgg/akA9fFRu/nYGomhoAEe4MzZMiyoFBS5ZpGOf4BXkreoGrQdlt82hlD8sTRD2uNiG7l9r/2MsEsjSUr8XK1AeUoLbYf+X7S0u3hI7eI=
+	t=1741760640; cv=none; b=ni4FNKwzMQBRD351j/sSWzvRrkyaUqYeahDYxIWIm8ijEdePEnJvWMJFzrXp7Q5LFq2qS+/JEC2OP0UQnyFlqmC93iM4No+MN+QtXUUEbXV69QmZ+zcOrqRN/nZnvgUJzDoxJPdX1xNSjeGqCzckO8SxcGYw9JUmMMYw9/oHZvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741760513; c=relaxed/simple;
-	bh=FV9MCMpxrhX8pJZGObltZGLJfv74ruTHiIvW6OILA6c=;
+	s=arc-20240116; t=1741760640; c=relaxed/simple;
+	bh=9zvgvZkiaWoEZ55z6rTUOjWUlbOFQL48aHZbETK3QpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=orsQ+1dMF7UfhLKaw3yCS82bYBDZ/Ght5lezi9x+TLyXR5MoAZUbAccmToHaJeEE7aKOmvItM41+PZZ4m5EBRMf5mN/STLn5sbuG9ps0+Y+XQCrUlQBBAx3QxJlN4/iHXZp86yeqYdKXp6yLgOddISTpJg29FoeTo4qyf6uDS0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bS60GNsj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 956D5C4CEE3;
-	Wed, 12 Mar 2025 06:21:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=RQuDcDOTotxf57c/Jpog9JIoNx70Cxx/Q8S/i8xZ6X/JBDPCfHZGjtF+Gapqa9nTfTWJ5fzu0VQKy/9uEIXZKlq0FJ5RZcRBd4LcLRIh/WhiCPclDTIX9p2L1A0w/atnRKicz7sxF9+ktmMPebdEOZhvhz7uF+5y7OxLXayMrW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LLqHZud9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DAA4C4CEE3;
+	Wed, 12 Mar 2025 06:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741760513;
-	bh=FV9MCMpxrhX8pJZGObltZGLJfv74ruTHiIvW6OILA6c=;
+	s=k20201202; t=1741760640;
+	bh=9zvgvZkiaWoEZ55z6rTUOjWUlbOFQL48aHZbETK3QpQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bS60GNsjv5nCxsqhRhvg9qDMkiimQH4tqQFWodYqo63Xj/AEa/6oQGsu1ea2vCv0I
-	 /FuGcTJui8mWXTJMWAesT83wAtfcvesfHBS+VKB6aZNK6Eh+BkEAglAPYjePXED/Eh
-	 a63USW4JE2rx6toGhJc4Pczqw/BXxhG16vX3FZTpPASxbByR3d68UtmqklkKb0D+7U
-	 RzIsKB3TGqm42LTE8MsEqT6jg3xHkq4MSP3czGk5CSGT/KJWs/lHwNuAIsetoQpadj
-	 yfOqMjomj5Z/sOZtHlHj6z8BvjPTwWE4rAYdSoS3/gM54UMflSTs7eb90Kr8OdYad9
-	 oEvpn9p0odqZg==
-Date: Wed, 12 Mar 2025 08:21:49 +0200
+	b=LLqHZud9zOui7Eb7XCnrN6ap2r/mPUzlbkYz50OB4aUBrZtL949bKKEtIDQWp18Jq
+	 /izDchkVJjBDozUe1/x3bE+6Dvjvm1hytznsCxmS185FW2Ls0MIEIySwKuijK4BFcu
+	 cDzI7uZtlvJ9yz6gahRQbvoAdBp44Za+LS0OmceViBJ6CVyqX8ShYO3yoTuBgCEv6u
+	 oHrO9Zw+WYuPxdY1KoK67oLbC9n4X0JZ8JUJGPgMO8fMcgjCrJHf9yvgJw+eo9jXoz
+	 tACLwKojd0c8tGwhFJeBxCzmwLtMRP1ClX+v4uLXpXoLq73W/IL/HzetVO9x+qbTNM
+	 pjFwK9jsQ5WsQ==
+Date: Wed, 12 Mar 2025 08:23:56 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: WangYuli <wangyuli@uniontech.com>
-Cc: peterhuewe@gmx.de, jgg@ziepe.ca, ardb@kernel.org, gourry@gourry.net,
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-	zhanjun@uniontech.com, niecheng1@uniontech.com,
-	guanwentao@uniontech.com, Chen Linxuan <chenlinxuan@uniontech.com>
-Subject: Re: [PATCH] tpm: eventlog: Declare mapping_size __maybe_unused
-Message-ID: <Z9En_ZP4jZE0bkAF@kernel.org>
-References: <10590A3A04DA011F+20250311120115.1451048-1-wangyuli@uniontech.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org, James.Bottomley@hansenpartnership.com,
+	stefanb@linux.ibm.com, ardb@kernel.org, roberto.sassu@huawei.com,
+	viro@zeniv.linux.org.uk, gourry@gourry.net
+Subject: Re: [PATCH] MAINTAINERS: Add include/linux/tpm*.h to TPM maintainers
+Message-ID: <Z9EofB1oLBUgu05C@kernel.org>
+References: <3E528EFF1AE81A17+20250311131440.1468875-1-wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -59,135 +59,49 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <10590A3A04DA011F+20250311120115.1451048-1-wangyuli@uniontech.com>
+In-Reply-To: <3E528EFF1AE81A17+20250311131440.1468875-1-wangyuli@uniontech.com>
 
-On Tue, Mar 11, 2025 at 08:01:15PM +0800, WangYuli wrote:
-> Given that when CONFIG_EFI is not enabled, do_mapping is inherently
-> false. Thus, the mapping_size variable is set but remains unused,
-> resulting in a compilation warning.
+On Tue, Mar 11, 2025 at 09:14:40PM +0800, WangYuli wrote:
+> As of now, within include/linux, there are three header files
+> pertaining to the TPM driver: tpm.h, tpm_eventlg.h and tpm_command.h.
 > 
-> Simply annotating it with __maybe_unused will resolve this compilation
-> warning.
+> Upon investigation when attempting code modifications, it has become
+> evident that these files are currently without a maintainer.
 > 
-> [ Fix follow errors with clang-19 when W=1e: ]
->   In file included from drivers/char/tpm/tpm1-cmd.c:21:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm1-cmd.o] Error 1
->   make[8]: *** Waiting for unfinished jobs....
->   In file included from drivers/char/tpm/tpm-dev-common.c:19:
->   In file included from drivers/char/tpm/tpm.h:28:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-dev-common.o] Error 1
->   In file included from drivers/char/tpm/tpm2-cmd.c:14:
->   In file included from drivers/char/tpm/tpm.h:28:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   In file included from drivers/char/tpm/tpm-dev.c:16:
->   In file included from drivers/char/tpm/tpm-dev.h:6:
->   In file included from drivers/char/tpm/tpm.h:28:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-dev.o] Error 1
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-cmd.o] Error 1
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpmrm-dev.o] Error 1
->   In file included from drivers/char/tpm/tpm-chip.c:24:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   In file included from drivers/char/tpm/tpm-sysfs.c:16:
->   In file included from drivers/char/tpm/tpm.h:28:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-chip.o] Error 1
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-sysfs.o] Error 1
->   In file included from drivers/char/tpm/tpm2-sessions.c:71:
->   In file included from drivers/char/tpm/tpm.h:28:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-sessions.o] Error 1
->   In file included from drivers/char/tpm/tpm-interface.c:28:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm-interface.o] Error 1
->   In file included from drivers/char/tpm/tpm2-space.c:16:
->   In file included from drivers/char/tpm/tpm.h:28:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm2-space.o] Error 1
->   In file included from drivers/char/tpm/eventlog/tpm1.c:24:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/tpm1.o] Error 1
->   In file included from drivers/char/tpm/eventlog/common.c:20:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/common.o] Error 1
->   In file included from drivers/char/tpm/eventlog/tpm2.c:20:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/eventlog/tpm2.o] Error 1
->   In file included from drivers/char/tpm/tpm_vtpm_proxy.c:24:
->   In file included from drivers/char/tpm/tpm.h:28:
->   ./include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
->     167 |         int mapping_size;
->         |             ^
->   1 error generated.
->   make[8]: *** [scripts/Makefile.build:207: drivers/char/tpm/tpm_vtpm_proxy.o] Error 1
->   make[7]: *** [scripts/Makefile.build:465: drivers/char/tpm] Error 2
->   make[6]: *** [scripts/Makefile.build:465: drivers/char] Error 2
->   make[6]: *** Waiting for unfinished jobs....
+> In light of their intrinsic relationship with the TPM driver itself,
+> stewardship of these files should fall under the TPM subsystem. So
+> that scripts/get_maintainer.pl can provide more accurate output
+
+[SNIP]
+
 > 
-> Suggested-by: Chen Linxuan <chenlinxuan@uniontech.com>
+> In passing, also include include/uapi/linux/vtpm_proxy.h for TPM
+> maintainers, as it is facing a comparable plight.
+> 
 > Signed-off-by: WangYuli <wangyuli@uniontech.com>
+
+"Subnames" are separated with space, not with camel case.
+
 > ---
->  include/linux/tpm_eventlog.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  MAINTAINERS | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
-> index 891368e82558..7ca58b2e96e8 100644
-> --- a/include/linux/tpm_eventlog.h
-> +++ b/include/linux/tpm_eventlog.h
-> @@ -164,7 +164,7 @@ static __always_inline u32 __calc_tpm2_event_size(struct tcg_pcr_event2_head *ev
->  	struct tcg_efi_specid_event_head *efispecid;
->  	struct tcg_event_field *event_field;
->  	void *mapping = NULL;
-> -	int mapping_size;
-> +	__maybe_unused int mapping_size;
-
-NAK for the code change. Unused is not a problem.
-Uninitialized is.
-
->  	void *marker;
->  	void *marker_start;
->  	u32 halg_size;
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ed7aa6867674..4a7b2e8b97de 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -24037,6 +24037,8 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+>  F:	Documentation/devicetree/bindings/tpm/
+>  F:	drivers/char/tpm/
+> +F:	include/linux/tpm*.h
+> +F:	include/uapi/linux/vtpm_proxy.h
+>  F:	tools/testing/selftests/tpm2/
+>  
+>  TPS546D24 DRIVER
 > -- 
 > 2.47.2
 > 
->
+
 BR, Jarkko
 
