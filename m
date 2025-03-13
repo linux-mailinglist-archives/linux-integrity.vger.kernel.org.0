@@ -1,93 +1,52 @@
-Return-Path: <linux-integrity+bounces-5274-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5275-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15BBEA5FDE5
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 18:35:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05597A5FDE9
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 18:36:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4178616F00E
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 17:35:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B4023B8806
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 17:35:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394C11DB154;
-	Thu, 13 Mar 2025 17:35:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yYZgIEcS";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="npLhIGwW";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yYZgIEcS";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="npLhIGwW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79CF14386D;
+	Thu, 13 Mar 2025 17:35:10 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758231D5173
-	for <linux-integrity@vger.kernel.org>; Thu, 13 Mar 2025 17:35:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104781684B4
+	for <linux-integrity@vger.kernel.org>; Thu, 13 Mar 2025 17:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741887304; cv=none; b=oYOYanySgLHKDoZ6IG2X8lK5mj+eSZy4+mpWgiXgAM6NIzfHhxV4WTmJtT8c6JVqn1LF6GLyDBCCt87lu3fVGIwxBJYnrMnQjM4JBuEnK3MaPWlleZUCAIxZrJ0Ysb/lvcrbueJ2VP6FlHH9IzDT9cuwFIjAxbsNJj1/Ew6mdJ0=
+	t=1741887310; cv=none; b=V/KvpP7REYMQf9JjObvFd3t6c8IKpjr2s4oQfv66Fycl61DiMnGLOO9LGW8Ff1Z7H2TZwVLpQ90lkRN+AeBwy2uPzNFw6iVa/1j8eSIRUhFSbJVhxLdW6ucYkC2NAjTq2G9vDMfPTz+UJsDWpIWfNn/dzskqh5dbZpR9aLYikrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741887304; c=relaxed/simple;
-	bh=ofk0dyiGJGUPbX7KRZbBwqReFP1t2mJ0ikjz0JZiPHg=;
+	s=arc-20240116; t=1741887310; c=relaxed/simple;
+	bh=+/CXGFgCUz0uWuCA+o+zWIoOUsY7OcPsmo/uFiucgO0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HFoGbTrhNjgO8yaA2KdRNTIF1E17SEoiw5Y2lGOc+tIfwCVeouf0BdXvdHzlZzFVInfugQvv9pS9YXAZ5uIAnAu+OkyOTS7E+zDYhBHFaaDjmrqCm4ncBbb1PDWZYwNe6tQs9rQkldTZ1p80Py/jMWkMfVSHY/2IlbRJOnlFW94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yYZgIEcS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=npLhIGwW; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yYZgIEcS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=npLhIGwW; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version; b=aW1ec+CCWtrLNSsUDL07x1D7+5cv8PFGANd4P0v4TpyOtGhUJWUbT37KJu5ub6FKfFE5P8ldN8RUY8dzSBYUI4WGrzU+mHgS8iC4wSFCVI7Xha6bX1dFyNRLSvzu5LRvP62k7tQ0O61zUZCVA0+aOiSMC0WVfwpp54CiPeklF+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 98F371F769;
-	Thu, 13 Mar 2025 17:35:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1741887300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=USlxaMFieu/+hsrqsfqIHnzxT/feUUlitxBTpJXrB0A=;
-	b=yYZgIEcSLtOx0ewkStIVSpei4aI/h2rg7Cd2fJABZjV8oAg3gCpga9bLnA9sg8RfF5Uw1D
-	9SUzAzgRzYQ0FKiO413dI2WH0pcK55689D7UXSC7dLVFnazvanUkUJeXvicp1voTykXG60
-	bg5RQoA4OH5wg7Hpu7LCx3YpeEt2nig=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1741887300;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=USlxaMFieu/+hsrqsfqIHnzxT/feUUlitxBTpJXrB0A=;
-	b=npLhIGwWRHukPgeghFs+Ofeb/dKs1vyAZkY46PpxpBYPkhOjcbfx+RoEC5NDAGrS0P3QVE
-	qgpGSAeoWZNpoyAA==
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 7612C1F769;
+	Thu, 13 Mar 2025 17:35:07 +0000 (UTC)
 Authentication-Results: smtp-out2.suse.de;
 	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1741887300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=USlxaMFieu/+hsrqsfqIHnzxT/feUUlitxBTpJXrB0A=;
-	b=yYZgIEcSLtOx0ewkStIVSpei4aI/h2rg7Cd2fJABZjV8oAg3gCpga9bLnA9sg8RfF5Uw1D
-	9SUzAzgRzYQ0FKiO413dI2WH0pcK55689D7UXSC7dLVFnazvanUkUJeXvicp1voTykXG60
-	bg5RQoA4OH5wg7Hpu7LCx3YpeEt2nig=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1741887300;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=USlxaMFieu/+hsrqsfqIHnzxT/feUUlitxBTpJXrB0A=;
-	b=npLhIGwWRHukPgeghFs+Ofeb/dKs1vyAZkY46PpxpBYPkhOjcbfx+RoEC5NDAGrS0P3QVE
-	qgpGSAeoWZNpoyAA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8847B137BA;
-	Thu, 13 Mar 2025 17:35:00 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 656BB137BA;
+	Thu, 13 Mar 2025 17:35:07 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id QycUIEQX02cLQwAAD6G6ig
-	(envelope-from <nstange@suse.de>); Thu, 13 Mar 2025 17:35:00 +0000
+	id MAiKF0sX02cXQwAAD6G6ig
+	(envelope-from <nstange@suse.de>); Thu, 13 Mar 2025 17:35:07 +0000
 From: Nicolai Stange <nstange@suse.de>
 To: Mimi Zohar <zohar@linux.ibm.com>,
 	Roberto Sassu <roberto.sassu@huawei.com>,
@@ -97,9 +56,9 @@ Cc: Eric Snowberg <eric.snowberg@oracle.com>,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Nicolai Stange <nstange@suse.de>
-Subject: [RFC PATCH v1 2/7] ima: always create runtime_measurements sysfs file for ima_hash
-Date: Thu, 13 Mar 2025 18:33:34 +0100
-Message-ID: <20250313173339.3815589-3-nstange@suse.de>
+Subject: [RFC PATCH v1 3/7] ima: move INVALID_PCR() to ima.h
+Date: Thu, 13 Mar 2025 18:33:35 +0100
+Message-ID: <20250313173339.3815589-4-nstange@suse.de>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250313173339.3815589-1-nstange@suse.de>
 References: <20250313173339.3815589-1-nstange@suse.de>
@@ -110,71 +69,70 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-5.30 / 50.00];
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Spamd-Result: default: False [-4.00 / 50.00];
 	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com]
-X-Spam-Score: -5.30
+	TAGGED_RCPT(0.00)[]
 X-Spam-Flag: NO
+X-Spam-Score: -4.00
+X-Rspamd-Queue-Id: 7612C1F769
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
 
-runtime_measurements_<hash-algo> sysfs files are getting created for
-each PCR bank + for SHA-1.
-
-Now that runtime_measurements_<hash-algo> sysfs file creation is being
-skipped for unsupported hash algorithms, it will become possible that no
-such file would be provided at all once SHA-1 is made optional in a
-later patch.
-
-Always create the file for the 'ima_hash' algorithm, even if it's not
-associated with any of the PCR banks. As IMA initialization will
-continue to fail if the ima_hash algorithm is not available to the
-kernel, this guarantees that at least one such file will always be
-there.
+Make the INVALID_PCR() #define available to other compilation units
+by moving it from ima_policy.c to ima.h and renaming it to
+IMA_INVALID_PCR() in the course.
 
 Signed-off-by: Nicolai Stange <nstange@suse.de>
 ---
- security/integrity/ima/ima_fs.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ security/integrity/ima/ima.h        | 4 ++++
+ security/integrity/ima/ima_policy.c | 5 +----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index a8df2fe5f4cb..f030ff7f56da 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -436,10 +436,8 @@ static int __init create_securityfs_measurement_lists(void)
- 	u16 algo;
- 	int i;
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index a4f284bd846c..1158a7b8bf6b 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -198,6 +198,10 @@ struct ima_iint_cache {
+ 	struct ima_digest_data *ima_hash;
+ };
  
--	securityfs_measurement_list_count = NR_BANKS(ima_tpm_chip);
++#define IMA_INVALID_PCR(a) (((a) < 0) || \
++	(a) >= (sizeof_field(struct ima_iint_cache, measured_pcrs) * 8))
++
++
+ extern struct lsm_blob_sizes ima_blob_sizes;
+ 
+ static inline struct ima_iint_cache *
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 128fab897930..d9e4210ea814 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -48,9 +48,6 @@
+ #define HASH		0x0100
+ #define DONT_HASH	0x0200
+ 
+-#define INVALID_PCR(a) (((a) < 0) || \
+-	(a) >= (sizeof_field(struct ima_iint_cache, measured_pcrs) * 8))
 -
--	if (ima_sha1_idx >= NR_BANKS(ima_tpm_chip))
--		securityfs_measurement_list_count++;
-+	securityfs_measurement_list_count =
-+		NR_BANKS(ima_tpm_chip) + ima_extra_slots;
+ int ima_policy_flag;
+ static int temp_ima_appraise;
+ static int build_ima_appraise __ro_after_init;
+@@ -1855,7 +1852,7 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+ 			ima_log_string(ab, "pcr", args[0].from);
  
- 	ascii_securityfs_measurement_lists =
- 	    kcalloc(securityfs_measurement_list_count, sizeof(struct dentry *),
+ 			result = kstrtoint(args[0].from, 10, &entry->pcr);
+-			if (result || INVALID_PCR(entry->pcr))
++			if (result || IMA_INVALID_PCR(entry->pcr))
+ 				result = -EINVAL;
+ 			else
+ 				entry->flags |= IMA_PCR;
 -- 
 2.47.1
 
