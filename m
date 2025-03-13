@@ -1,126 +1,151 @@
-Return-Path: <linux-integrity+bounces-5269-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5270-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D215CA5EFA8
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 10:37:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20E45A5F018
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 10:59:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6849A3A918E
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 09:37:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 020CC188B1A9
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 09:59:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D71264626;
-	Thu, 13 Mar 2025 09:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HnlykSsG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABACE261389;
+	Thu, 13 Mar 2025 09:59:18 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDAC263F4F
-	for <linux-integrity@vger.kernel.org>; Thu, 13 Mar 2025 09:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2608714900B;
+	Thu, 13 Mar 2025 09:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741858646; cv=none; b=lXVrThkJa9neIWpkw43GNQFj3WOTQckxgRmZhsfNsRRW4Jbly9zNNjYZtsORK9uyUQnbYxqGhuf+Qb+1k8jE28Gs9xQUlhHsIaOCrfAxurzM0JrULLiZYuu6/+pzf8eCgM7ZWWxCXxZRkibP2mlX8L6JDD4yiPy7cuIh/fuX9Ds=
+	t=1741859958; cv=none; b=D9Z4viSqwZB2y1PFj9v8zbRplhbA4okYCS+IKhepoPxr7beds9r+owMVYltGE/H8cA2aC3Iku7WHo+g/SAjl/eagdB6euBmdi6dKOZH1vuvMqLbtC7ST8kARIVfoBUVhRq9ssg7JN+bcH0N8lfyQ9/jdfc9Aoc+++0d7nNRG8W4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741858646; c=relaxed/simple;
-	bh=0O9+tvS721NPS5SfhMQUQOXZjZEeYgWVPm6bA9exrc0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gKGPQuwKHaUWa2tOd926KIWyutQQ/+s7xfVjosRJeq1vX49ITgJ8bNjUxHztzbSV5PbOFWYfNi3LEHa0+ZpnLrEGQKBpUafAWHdwT5wSxq0NTKPG55x0EM7TRy+JQybTF4bYpVmXBGVRIYNFHanoB+Lf2X8Qn7ydnL7MfiaHpSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HnlykSsG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741858643;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TkMmQDKhA8euP7OgbcejyvBbDNEneAYENQsYyU/R2lQ=;
-	b=HnlykSsGr88XHoI0UfhMORZGg9f9NWOMmKEPcoa+OsAVd824jiqXG+z5daT1qTTI1VEssV
-	HjBsKOgBftQIu5iegcYadiyvn63Nd3KfYsQgsJI0MPSwMq6dpYlOhQIfqpik9NXhMfVFf7
-	uZ5uRkOG61D3f02ICwj5WUwOjXsuC5g=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-14-RBmisXBhODyI7N2n1sJxJw-1; Thu, 13 Mar 2025 05:37:21 -0400
-X-MC-Unique: RBmisXBhODyI7N2n1sJxJw-1
-X-Mimecast-MFC-AGG-ID: RBmisXBhODyI7N2n1sJxJw_1741858640
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3912d9848a7so949453f8f.0
-        for <linux-integrity@vger.kernel.org>; Thu, 13 Mar 2025 02:37:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741858640; x=1742463440;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TkMmQDKhA8euP7OgbcejyvBbDNEneAYENQsYyU/R2lQ=;
-        b=Jvqws2Fmc0DhW13uYrJtZxvEEw73bsJVuIxRyiOjZWqTnJfz8W0Oi9YMb3fUnGRdOb
-         AC34hg9uc2WIKfqqey5laYAqbn7Wg43GzPiH5PA0S3twSemckju7s8NBrtREmBGQZ18y
-         RisqVlQ+5a2BSwHhYK3QwdFzTyltlGTcv3iD/x547E8L2bB/hs/fPaGwz9mYe0bR3cby
-         KZIMEucNwh99V2Ez0kXHCCJQKTq9rol+qOKrQ4yzoQSW5H+nuKG514afsHvCuwPSeNvw
-         zGXFkVYK4UxfoaJjbS8aXh6Rfr1RL1DRGixZlEtRV23+W5xJ1d2lvRAAZJA+kYI8Lao3
-         4+QQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWNJq4gZrV/+ZDBflnyz41O/VXah/TIr5efKaXkXjkQlq4g6xUox+bXscdKuQTkMJO1OqOUVG3NXQw6PhCTknU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUcIZpALXtN216lKGl8UHghSTkh1TBh1VZR2YHk5LeX4H945O5
-	uln0SvO1UibL9lL94RTPdBrxUS8vwNDn7VkvJN91y8Hl/tZvyRdtewsRYf8ZCb3cLE5OKWkYQnd
-	4TPBZBr5c6Mdqedby5HMC4LycQnTPBgreLqojEVPpILL0wzSDx81Etb5FWsvuLD3QBg==
-X-Gm-Gg: ASbGncuQjLlrczEGGF7oeEgplEvJYYm3Kwr9dWlxXum7TAJ/2vcT945cP6zyEUWdpYM
-	7rvKopiVGZlk7vzXgM+L755qjTw3SboHBW8MahEsYib8jcssFFMH15OmGNuIkTT406okD1B3wXH
-	pycsiv38jM927yorhnmVmcRIL4fdXkgbA+sOMujDL8N9dPCMBdrpktztTwiWmVB+cFuYR/Hd9YT
-	vZ+UOJG6V+laiwGXlmW0vdbO2qeFR3O2WZXpUS5beOYFfjN3inJBk0TEPzc2+K4GDlOeZHZEXOd
-	nNMmlYdqR3vG2trtlZ+XCAzgwwxwjwmK5o6Wuc2jGvfQrZ/9GN6C61q/KzjbDouiFg==
-X-Received: by 2002:a05:6000:402c:b0:38d:b028:d906 with SMTP id ffacd0b85a97d-395b830da39mr1197676f8f.21.1741858640545;
-        Thu, 13 Mar 2025 02:37:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFHvIc+eTQqAlF1+2P3Z2fgggj2iNqsracn6CCyYCJT454xBxSLuaRc9Q7eu4Ab6lnc9ZGgWw==
-X-Received: by 2002:a05:6000:402c:b0:38d:b028:d906 with SMTP id ffacd0b85a97d-395b830da39mr1197645f8f.21.1741858640065;
-        Thu, 13 Mar 2025 02:37:20 -0700 (PDT)
-Received: from stex1.redhat.com (host-79-46-200-29.retail.telecomitalia.it. [79.46.200.29])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395c8975d1dsm1531444f8f.50.2025.03.13.02.37.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Mar 2025 02:37:19 -0700 (PDT)
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>,
-	linux-integrity@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH] tpm/tpm_ftpm_tee: fix struct ftpm_tee_private documentation
-Date: Thu, 13 Mar 2025 10:37:17 +0100
-Message-ID: <20250313093717.69270-1-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1741859958; c=relaxed/simple;
+	bh=WjRjfxpFxzqgg5E0INrZzM956AAlPjFd6i9LRa6N/58=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=rYg03kkjtVj5bMg9DQwxTbQ9i65nSQ8PyyOAB2IsHgkLNPjwNPVmjf9tTpQA8Bn8EdSmoftt2GXDJuVvI22GgwS1hEMa0pIhgSgO3O6tC0lwC4iErb2RZCueNsnu9RI4PeBXfr9DeB2ya/q4RNE/C7fuSC9k4e0Uvg+V6EJzbG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8Axz3NvrNJnW8uUAA--.56211S3;
+	Thu, 13 Mar 2025 17:59:11 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front1 (Coremail) with SMTP id qMiowMBxrMZqrNJnNlJIAA--.19194S2;
+	Thu, 13 Mar 2025 17:59:09 +0800 (CST)
+Subject: Re: [PATCH v5 0/6] Drivers for Loongson security engine
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: lee@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+ peterhuewe@gmx.de, jarkko@kernel.org, linux-kernel@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-crypto@vger.kernel.org, jgg@ziepe.ca,
+ linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de
+References: <20250313090508.21252-1-zhaoqunqin@loongson.cn>
+ <CAAhV-H5f1k4_bVybMcK9QXhaVxLOM=b_8n0sA+0r=gyCP4YQRA@mail.gmail.com>
+From: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Message-ID: <d77a36a3-3b74-76a9-38de-1a40ffb58374@loongson.cn>
+Date: Thu, 13 Mar 2025 17:59:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CAAhV-H5f1k4_bVybMcK9QXhaVxLOM=b_8n0sA+0r=gyCP4YQRA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:qMiowMBxrMZqrNJnNlJIAA--.19194S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFykGF47WrWUuryxXw4xGrX_yoW5GFy8pF
+	45AFyrCFWUJF47G34ftFyUCFy5Xas3Xry3Ka9Fqw13Wr9xAa47J3y7CFy7CFZrAr1fGryI
+	vFZ3Cr45CF1Yy3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
+	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
+	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
+	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r
+	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+	0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUU
+	U==
 
-The `state` member in `struct ftpm_tee_private` is in the documentation,
-but it has never been in the implementation since the commit 09e574831b27
-("tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE") that
-introduced it.
 
-Remove it to have a match between documentation and implementation.
+在 2025/3/13 下午5:26, Huacai Chen 写道:
+> You haven't seen my comments in previous version?
+>
+> https://lore.kernel.org/loongarch/CAAhV-H5xyRrF1_=E7rLM3dHeYAEBdMufYQvgoxAq6+d6s5U4Eg@mail.gmail.com/
 
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
- drivers/char/tpm/tpm_ftpm_tee.h | 1 -
- 1 file changed, 1 deletion(-)
+I am very sorry that I didn't notice your reply.
 
-diff --git a/drivers/char/tpm/tpm_ftpm_tee.h b/drivers/char/tpm/tpm_ftpm_tee.h
-index f98daa7bf68c..e39903b7ea07 100644
---- a/drivers/char/tpm/tpm_ftpm_tee.h
-+++ b/drivers/char/tpm/tpm_ftpm_tee.h
-@@ -21,7 +21,6 @@
- /**
-  * struct ftpm_tee_private - fTPM's private data
-  * @chip:     struct tpm_chip instance registered with tpm framework.
-- * @state:    internal state
-  * @session:  fTPM TA session identifier.
-  * @resp_len: cached response buffer length.
-  * @resp_buf: cached response buffer.
--- 
-2.48.1
+I don't think it is necessary to change the driver file name. But if you 
+insist, I will do the change below  in  next revision .
+
+"MFD_LS6000SE -> MFD_LOONGSON_SE,  ls6000se.c -> loongson-se.c
+CRYPTO_DEV_LS6000SE_RNG -> CRYPTO_DEV_LOONGSON_RNG, ls6000se-rng.c 
+->loongson-rng.c
+TCG_LSSE -> TCG_LOONGSON, tpm_lsse.c ->tpm_loongson.c"
+
+
+BR, Qunqin.
+
+>
+> Huacai
+>
+> On Thu, Mar 13, 2025 at 5:05 PM Qunqin Zhao <zhaoqunqin@loongson.cn> wrote:
+>> Loongson security engine supports random number generation, hash,
+>> symmetric encryption and asymmetric encryption. Based on these
+>> encryption functions, TPM2 have been implemented in it.
+>>
+>> mfd is the baser driver, crypto and tpm are users.
+>>
+>> v5: Registered "ls6000se-rng" device in mfd driver.
+>> v4: Please look at changelog in tpm and MAINTAINERS. No changes to mfd
+>>      and crypto.
+>> v3: Put the updates to the MAINTAINERS in a separate patch.
+>> v2: Removed misc driver. Added tpm driver.
+>>
+>> Qunqin Zhao (6):
+>>    mfd: Add support for Loongson Security Module
+>>    MAINTAINERS: Add entry for Loongson Security Module driver
+>>    crypto: loongson - add Loongson RNG driver support
+>>    MAINTAINERS: Add entry for Loongson RNG driver
+>>    tpm: Add a driver for Loongson TPM device
+>>    MAINTAINERS: Add tpm_lsse.c to LOONGSON CRYPTO DRIVER entry
+>>
+>>   MAINTAINERS                            |  14 +
+>>   drivers/char/tpm/Kconfig               |   9 +
+>>   drivers/char/tpm/Makefile              |   1 +
+>>   drivers/char/tpm/tpm_lsse.c            | 103 +++++++
+>>   drivers/crypto/Kconfig                 |   1 +
+>>   drivers/crypto/Makefile                |   1 +
+>>   drivers/crypto/loongson/Kconfig        |   6 +
+>>   drivers/crypto/loongson/Makefile       |   2 +
+>>   drivers/crypto/loongson/ls6000se-rng.c | 190 +++++++++++++
+>>   drivers/mfd/Kconfig                    |  10 +
+>>   drivers/mfd/Makefile                   |   2 +
+>>   drivers/mfd/ls6000se.c                 | 374 +++++++++++++++++++++++++
+>>   include/linux/mfd/ls6000se.h           |  75 +++++
+>>   13 files changed, 788 insertions(+)
+>>   create mode 100644 drivers/char/tpm/tpm_lsse.c
+>>   create mode 100644 drivers/crypto/loongson/Kconfig
+>>   create mode 100644 drivers/crypto/loongson/Makefile
+>>   create mode 100644 drivers/crypto/loongson/ls6000se-rng.c
+>>   create mode 100644 drivers/mfd/ls6000se.c
+>>   create mode 100644 include/linux/mfd/ls6000se.h
+>>
+>>
+>> base-commit: 6a8f122c5f073c8610c32636663f2512514b1270
+>> --
+>> 2.43.0
+>>
+>>
 
 
