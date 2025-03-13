@@ -1,93 +1,93 @@
-Return-Path: <linux-integrity+bounces-5273-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5274-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8B66A5FDDD
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 18:35:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15BBEA5FDE5
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 18:35:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18E4516F7AA
-	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 17:35:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4178616F00E
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Mar 2025 17:35:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15322189F5C;
-	Thu, 13 Mar 2025 17:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394C11DB154;
+	Thu, 13 Mar 2025 17:35:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="UuBmwy3i";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="yfYZxTpT";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="UuBmwy3i";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="yfYZxTpT"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yYZgIEcS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="npLhIGwW";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yYZgIEcS";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="npLhIGwW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089F6189528
-	for <linux-integrity@vger.kernel.org>; Thu, 13 Mar 2025 17:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758231D5173
+	for <linux-integrity@vger.kernel.org>; Thu, 13 Mar 2025 17:35:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741887301; cv=none; b=YuOlQ8uARSoV5GBjyLVe14TTatwH/Y92qWtX/rsqgHDVrQIiGbqOcjLOQZsOSTQqKImkAXZ9CXU7u2RTf7IGC8b5I1xXHTsXLlhKABAMNMX+/MR0BTMnb67FfyiL2fM76qp1GGBkVN1v5CREtzK/LZ/t0QoGjKKW530TVwwPaJY=
+	t=1741887304; cv=none; b=oYOYanySgLHKDoZ6IG2X8lK5mj+eSZy4+mpWgiXgAM6NIzfHhxV4WTmJtT8c6JVqn1LF6GLyDBCCt87lu3fVGIwxBJYnrMnQjM4JBuEnK3MaPWlleZUCAIxZrJ0Ysb/lvcrbueJ2VP6FlHH9IzDT9cuwFIjAxbsNJj1/Ew6mdJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741887301; c=relaxed/simple;
-	bh=v1rvhmq9flKJdSz5Ye+r21lmnpjN+EZa7Dx6O7Yts0g=;
+	s=arc-20240116; t=1741887304; c=relaxed/simple;
+	bh=ofk0dyiGJGUPbX7KRZbBwqReFP1t2mJ0ikjz0JZiPHg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AcyfwhPMZ6Q6PLxQdXAxCVfAn5VE4x+9QJD2LahwAuXLBKHm+2QZq5XVBOZXFurYHqPFy6V6B+iPd65e3OybBKbnVNbW9XWyCQQgln44f6PjB+e5HAUcZZ1tViL36mqF+ZdPKOb14gZnEuNTLuFe1R7rbpM2k2N+RGhQBvcbkGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=UuBmwy3i; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=yfYZxTpT; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=UuBmwy3i; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=yfYZxTpT; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version; b=HFoGbTrhNjgO8yaA2KdRNTIF1E17SEoiw5Y2lGOc+tIfwCVeouf0BdXvdHzlZzFVInfugQvv9pS9YXAZ5uIAnAu+OkyOTS7E+zDYhBHFaaDjmrqCm4ncBbb1PDWZYwNe6tQs9rQkldTZ1p80Py/jMWkMfVSHY/2IlbRJOnlFW94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yYZgIEcS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=npLhIGwW; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yYZgIEcS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=npLhIGwW; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 42A6F21180;
-	Thu, 13 Mar 2025 17:34:57 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 98F371F769;
+	Thu, 13 Mar 2025 17:35:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1741887297; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1741887300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ov3jCGTl7GwgRNl8Ff+VlfzSKuKGonTrVISwQrPpSHI=;
-	b=UuBmwy3iB4ebdyeo3YELrvg3tEt3ETM4jdQhpXtPj5Cv7FmiMKmw7kkzHEYyqPanxvfngj
-	/ceVG5J2ZWe1bgLW19g7m9hhDmN6duGLnx4VJRvl6IncmStldVDK+qlUvAbKSoUCSNUdV7
-	8tpA8Fg0jGge4Q7pnArZLYeQO/I8yLQ=
+	bh=USlxaMFieu/+hsrqsfqIHnzxT/feUUlitxBTpJXrB0A=;
+	b=yYZgIEcSLtOx0ewkStIVSpei4aI/h2rg7Cd2fJABZjV8oAg3gCpga9bLnA9sg8RfF5Uw1D
+	9SUzAzgRzYQ0FKiO413dI2WH0pcK55689D7UXSC7dLVFnazvanUkUJeXvicp1voTykXG60
+	bg5RQoA4OH5wg7Hpu7LCx3YpeEt2nig=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1741887297;
+	s=susede2_ed25519; t=1741887300;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ov3jCGTl7GwgRNl8Ff+VlfzSKuKGonTrVISwQrPpSHI=;
-	b=yfYZxTpTtjKKJzEdNrWGggIWxYUzJ2jgOOfJEn5NO4oAlURlOSwXBvvZMeugw2ItY6AGvs
-	il2Q1rbroxhTzbCw==
-Authentication-Results: smtp-out1.suse.de;
+	bh=USlxaMFieu/+hsrqsfqIHnzxT/feUUlitxBTpJXrB0A=;
+	b=npLhIGwWRHukPgeghFs+Ofeb/dKs1vyAZkY46PpxpBYPkhOjcbfx+RoEC5NDAGrS0P3QVE
+	qgpGSAeoWZNpoyAA==
+Authentication-Results: smtp-out2.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1741887297; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1741887300; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ov3jCGTl7GwgRNl8Ff+VlfzSKuKGonTrVISwQrPpSHI=;
-	b=UuBmwy3iB4ebdyeo3YELrvg3tEt3ETM4jdQhpXtPj5Cv7FmiMKmw7kkzHEYyqPanxvfngj
-	/ceVG5J2ZWe1bgLW19g7m9hhDmN6duGLnx4VJRvl6IncmStldVDK+qlUvAbKSoUCSNUdV7
-	8tpA8Fg0jGge4Q7pnArZLYeQO/I8yLQ=
+	bh=USlxaMFieu/+hsrqsfqIHnzxT/feUUlitxBTpJXrB0A=;
+	b=yYZgIEcSLtOx0ewkStIVSpei4aI/h2rg7Cd2fJABZjV8oAg3gCpga9bLnA9sg8RfF5Uw1D
+	9SUzAzgRzYQ0FKiO413dI2WH0pcK55689D7UXSC7dLVFnazvanUkUJeXvicp1voTykXG60
+	bg5RQoA4OH5wg7Hpu7LCx3YpeEt2nig=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1741887297;
+	s=susede2_ed25519; t=1741887300;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ov3jCGTl7GwgRNl8Ff+VlfzSKuKGonTrVISwQrPpSHI=;
-	b=yfYZxTpTtjKKJzEdNrWGggIWxYUzJ2jgOOfJEn5NO4oAlURlOSwXBvvZMeugw2ItY6AGvs
-	il2Q1rbroxhTzbCw==
+	bh=USlxaMFieu/+hsrqsfqIHnzxT/feUUlitxBTpJXrB0A=;
+	b=npLhIGwWRHukPgeghFs+Ofeb/dKs1vyAZkY46PpxpBYPkhOjcbfx+RoEC5NDAGrS0P3QVE
+	qgpGSAeoWZNpoyAA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 332BA137BA;
-	Thu, 13 Mar 2025 17:34:57 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8847B137BA;
+	Thu, 13 Mar 2025 17:35:00 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id iG1VC0EX02cHQwAAD6G6ig
-	(envelope-from <nstange@suse.de>); Thu, 13 Mar 2025 17:34:57 +0000
+	id QycUIEQX02cLQwAAD6G6ig
+	(envelope-from <nstange@suse.de>); Thu, 13 Mar 2025 17:35:00 +0000
 From: Nicolai Stange <nstange@suse.de>
 To: Mimi Zohar <zohar@linux.ibm.com>,
 	Roberto Sassu <roberto.sassu@huawei.com>,
@@ -97,9 +97,9 @@ Cc: Eric Snowberg <eric.snowberg@oracle.com>,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Nicolai Stange <nstange@suse.de>
-Subject: [RFC PATCH v1 1/7] ima: don't expose runtime_measurements for unsupported hashes
-Date: Thu, 13 Mar 2025 18:33:33 +0100
-Message-ID: <20250313173339.3815589-2-nstange@suse.de>
+Subject: [RFC PATCH v1 2/7] ima: always create runtime_measurements sysfs file for ima_hash
+Date: Thu, 13 Mar 2025 18:33:34 +0100
+Message-ID: <20250313173339.3815589-3-nstange@suse.de>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250313173339.3815589-1-nstange@suse.de>
 References: <20250313173339.3815589-1-nstange@suse.de>
@@ -110,10 +110,10 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -5.30
+X-Spam-Level: 
 X-Spamd-Result: default: False [-5.30 / 50.00];
 	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
+	BAYES_HAM(-3.00)[99.99%];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
@@ -136,124 +136,45 @@ X-Spamd-Result: default: False [-5.30 / 50.00];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
 	TAGGED_RCPT(0.00)[];
 	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Spam-Score: -5.30
 X-Spam-Flag: NO
-X-Spam-Level: 
 
-IMA creates one runtime_measurements_<hash-algo> sysfs file for every TPM
-bank + for SHA1 if not covered by any such. These differ only in that the
-template hash value for each record is of the file's associated algorithm
-each.
+runtime_measurements_<hash-algo> sysfs files are getting created for
+each PCR bank + for SHA-1.
 
-The kernel does not necessarily support each hash algorithm associated
-with some TPM bank though -- the most common case probably being that the
-algorithm is not built-in, but provided as a module, if at all, and thus
-not available at IMA init time yet.
+Now that runtime_measurements_<hash-algo> sysfs file creation is being
+skipped for unsupported hash algorithms, it will become possible that no
+such file would be provided at all once SHA-1 is made optional in a
+later patch.
 
-If that happens to be the case, the behavior is a bit counter-intuitive:
-probably for historic reasons and to still extend the TPM bank with
-something, a record's template hash is filled with the padded SHA1 value.
-That is, it is perfectly possible that runtime_measurements_sha256 contains
-padded SHA1 template hashes if SHA-256 was unavailable at IMA init.
-
-I would argue that it's likely that no existing userspace tool is relying
-on this fallback logic -- they either wouldn't consume the hash value from
-the measurement list directly but recreate it by themselves, as is required
-for verification against PCRs, or, if they did, they would somehow assume a
-hash algorithm and expect the hashes in the measurement list to be of that
-type. If of the latter kind, this could even lead to hard to debug
-verification failures. For example, from looking at keylime's current
-code, the verifier logic seems to assume that the template hashes found
-in the provided measurement list are of the configured 'ima_log_hash_alg'
-type. In particular, it does not check against padded SHA1 upon
-mismatch.
-
-That being said, there's also another dimension: currently IMA has a
-hard requirement on SHA-1 and subsequent patches in this series will
-attempt to get rid of that. If SHA-1 is not available at IMA init though,
-it would also mean that padded SHA-1 values cannot get filled in as a
-fallback for other unsupported algorithms. Substituting something like
-hard coded all-zeroes or all-ones would be dangerous, because some
-application or user scripts could perhaps (ab)use the template hashes from
-the exported measurement lists for some kind of fingerprinting scheme or
-so.
-
-In conclusion, I think it's best to not create the
-runtime_measurements_<hash-algo> sysfs files for hash algorithms not
-supported by the kernel. That way, applications expecting a certain
-hash algorithm for the measurement list and which are not able to handle
-the padded-SHA1 fallback scheme would fail with a clear indication on what
-the problem is. Furthermore, as digests for unsupported banks are not
-getting exposed to userspace anymore, we'll have all flexibility to
-set it to any value internally, including all-ones as will be needed in
-a subsequent patch when addressing PCR extend for unsupported banks.
-
-So, do not create runtime_measurements_<hash-algo> sysfs files for
-unsupported hash algorithms. Likewise for their ascii counterparts.
-
-Note that at this point, SHA-1 is still mandatory, and thus,
-runtime_measurements_sha1 as well as the "runtime_measurements" will
-remain there, even though the code has provisions already to skip their
-creation as well in case SHA-1 was unavailable.
+Always create the file for the 'ima_hash' algorithm, even if it's not
+associated with any of the PCR banks. As IMA initialization will
+continue to fail if the ima_hash algorithm is not available to the
+kernel, this guarantees that at least one such file will always be
+there.
 
 Signed-off-by: Nicolai Stange <nstange@suse.de>
 ---
- security/integrity/ima/ima_fs.c | 35 +++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+ security/integrity/ima/ima_fs.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index e4a79a9b2d58..a8df2fe5f4cb 100644
+index a8df2fe5f4cb..f030ff7f56da 100644
 --- a/security/integrity/ima/ima_fs.c
 +++ b/security/integrity/ima/ima_fs.c
-@@ -454,6 +454,9 @@ static int __init create_securityfs_measurement_lists(void)
- 		return -ENOMEM;
+@@ -436,10 +436,8 @@ static int __init create_securityfs_measurement_lists(void)
+ 	u16 algo;
+ 	int i;
  
- 	for (i = 0; i < securityfs_measurement_list_count; i++) {
-+		if (!ima_algo_array[i].tfm)
-+			continue;
-+
- 		algo = ima_algo_array[i].algo;
+-	securityfs_measurement_list_count = NR_BANKS(ima_tpm_chip);
+-
+-	if (ima_sha1_idx >= NR_BANKS(ima_tpm_chip))
+-		securityfs_measurement_list_count++;
++	securityfs_measurement_list_count =
++		NR_BANKS(ima_tpm_chip) + ima_extra_slots;
  
- 		sprintf(file_name, "ascii_runtime_measurements_%s",
-@@ -573,20 +576,26 @@ int __init ima_fs_init(void)
- 	if (ret != 0)
- 		goto out;
- 
--	binary_runtime_measurements =
--	    securityfs_create_symlink("binary_runtime_measurements", ima_dir,
--				      "binary_runtime_measurements_sha1", NULL);
--	if (IS_ERR(binary_runtime_measurements)) {
--		ret = PTR_ERR(binary_runtime_measurements);
--		goto out;
--	}
-+	if (ima_algo_array[ima_sha1_idx].tfm) {
-+		binary_runtime_measurements =
-+		    securityfs_create_symlink("binary_runtime_measurements",
-+					      ima_dir,
-+					      "binary_runtime_measurements_sha1",
-+					      NULL);
-+		if (IS_ERR(binary_runtime_measurements)) {
-+			ret = PTR_ERR(binary_runtime_measurements);
-+			goto out;
-+		}
- 
--	ascii_runtime_measurements =
--	    securityfs_create_symlink("ascii_runtime_measurements", ima_dir,
--				      "ascii_runtime_measurements_sha1", NULL);
--	if (IS_ERR(ascii_runtime_measurements)) {
--		ret = PTR_ERR(ascii_runtime_measurements);
--		goto out;
-+		ascii_runtime_measurements =
-+		    securityfs_create_symlink("ascii_runtime_measurements",
-+					      ima_dir,
-+					      "ascii_runtime_measurements_sha1",
-+					      NULL);
-+		if (IS_ERR(ascii_runtime_measurements)) {
-+			ret = PTR_ERR(ascii_runtime_measurements);
-+			goto out;
-+		}
- 	}
- 
- 	runtime_measurements_count =
+ 	ascii_securityfs_measurement_lists =
+ 	    kcalloc(securityfs_measurement_list_count, sizeof(struct dentry *),
 -- 
 2.47.1
 
