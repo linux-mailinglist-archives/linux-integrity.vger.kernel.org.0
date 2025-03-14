@@ -1,243 +1,108 @@
-Return-Path: <linux-integrity+bounces-5284-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5285-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B05C5A6147A
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Mar 2025 16:04:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B65D0A6147F
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Mar 2025 16:06:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CC0A1B60805
-	for <lists+linux-integrity@lfdr.de>; Fri, 14 Mar 2025 15:04:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B1307A3D60
+	for <lists+linux-integrity@lfdr.de>; Fri, 14 Mar 2025 15:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C32200119;
-	Fri, 14 Mar 2025 15:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C941FF5E9;
+	Fri, 14 Mar 2025 15:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlTMJ/LP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K5Upj3kT"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4E517579;
-	Fri, 14 Mar 2025 15:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E47017579;
+	Fri, 14 Mar 2025 15:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741964645; cv=none; b=fYhamcMhPBckL8vjP/TI+he0LkVbMhLyiR+AfmqTU+/4xjvhFVetptlqq2OjcSDl4yUr1/rRcMJTJ2XTyR+BG7zN10/rze7pRMv4fuzhxhLaTWujeBCpi/QaGbzZd0ua6dz0oJyasLGIcq+w31dN73uQm0+Hl+x/Vn98xbQFya4=
+	t=1741964756; cv=none; b=Ld/BQw/BdAbAUJ1gYMie2rgE8OF/dIDSqoFHobAlkv9dcED8rdppdjTq309we2l2GRatEfAjipYAPIJXONhxU4JlXHxLBXj0A+BzZWVzikafa2yjdtPgLR/KymlQL0Ax/zMbhk5Sd9uh1WcWtB3R9gLZ3ruvapsduZ4yNqfU8M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741964645; c=relaxed/simple;
-	bh=0e0DjIP+VKfjwdEYSIUIE2NE30oUUxw6WwNZHuvge3A=;
+	s=arc-20240116; t=1741964756; c=relaxed/simple;
+	bh=Ua9D+rF5n2VjgitjQFJO+hx2rde3OWG9LIxmgDoAs3Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=syEl3MIKOq+/Q2WCT5o526b/2IuwpaEQK6F5d0/1yaQiqpGjuK6Vhu7+ZQg9I3uctR1nM5zC8yCqMrh7RbVMDbLwiwkSmc78We9QEQ2jhiNnQByNliqqtUKscG644jYTHANYPO7DPnuYpBZUVOPsfEC9kZaxgsLSaiXMYJibihk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlTMJ/LP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABAF5C4CEE3;
-	Fri, 14 Mar 2025 15:04:04 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mem79NV90/Oc65u6f6W9Q/5r9uHHERV4yTo8YXIG4Ngn4lrIMvjBzL+lZOkzlkqGFJPAmSaPL0rO0kSo1kPs/3y49qc/34gV1OIlIbG4Jk98iDOQwH8JdpmzZdCKMqX2D/583EDNzLgzsQdHwIgc1dqsMBumLE58Kk4AtM6uJH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K5Upj3kT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA76C4CEE3;
+	Fri, 14 Mar 2025 15:05:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741964645;
-	bh=0e0DjIP+VKfjwdEYSIUIE2NE30oUUxw6WwNZHuvge3A=;
+	s=k20201202; t=1741964755;
+	bh=Ua9D+rF5n2VjgitjQFJO+hx2rde3OWG9LIxmgDoAs3Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dlTMJ/LPHUArLjczhP9hRtw8xbFoO9c5acZfol2Gs5Q7IXltfeD/Tn0j1jVh5f59X
-	 Q++N7OWjc+gPpKq+SbV58XPwYclvkrHXvQOjPX8DeUEBrZIjC9Tb1ARZTIROn/GkNk
-	 +nkVecMAI/+hcxiUHvwXgZVhOE5t/h+0FfELm16RRVwAJNSdualYRnedaztMR+IMvo
-	 Anbv41RgSZz7/YmQ2rzDDTVgkk60mfLS1piXGO7UenTWaLS8kknNVBlA5Fgk4KFEMA
-	 RCeH4jDmE+ZTgPaZYvGZdh5nPJkxRzPrkvL4tE/lE7wafzTO2juGQ/z+yudZSSkp1p
-	 xYxfIQ6f5dS1Q==
-Date: Fri, 14 Mar 2025 17:04:00 +0200
+	b=K5Upj3kTUtFGuOzqPvQj2ALgK4/Mp/yXjcWRkViEUMLQOWfnLua/EDnhUtNxQAOpt
+	 1caWrY4JKmqrGbmYTtSpqiE+1tGJAXlkXCNvi8rrbl2QY9R3/nK/VGD8b+Hj/Cpt3r
+	 n/LXjIUXgXLfAWXXfD1D9D4Uhez5K1sEfM1E53wWRmTMtrEYLbxybPG6ikeMctsZTA
+	 RQHKjgyC9hniJnu8dqLYkfG3g8SDHEqu8OE+XuQyi7uq5DU0lX1U7at9Twt5WbPe5p
+	 RrOJwAaUKsBmy+7FLCDqyKqeCdazgBZgZ3ISp/AN5dxA5TV1O97+aHv/NLohTZE7iR
+	 Wh8KytVvm72iA==
+Date: Fri, 14 Mar 2025 17:05:50 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Tom Lendacky <thomas.lendacky@amd.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-	linux-integrity@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, linux-coco@lists.linux.dev,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v3 1/4] x86/sev: add SVSM vTPM probe/send_command
- functions
-Message-ID: <Z9RFYCAGEZTVfqjb@kernel.org>
-References: <20250311094225.35129-1-sgarzare@redhat.com>
- <20250311094225.35129-2-sgarzare@redhat.com>
- <Z9AIx9kFKWcHB_WK@kernel.org>
- <2of2zhxi2c735fgvjxug2bxjfpz2zk25adf3h2ps5byau3rj3k@pgbxmpbskezi>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org, James.Bottomley@hansenpartnership.com,
+	stefanb@linux.ibm.com, ardb@kernel.org, roberto.sassu@huawei.com,
+	viro@zeniv.linux.org.uk, gourry@gourry.net
+Subject: Re: [PATCH] MAINTAINERS: Add include/linux/tpm*.h to TPM maintainers
+Message-ID: <Z9RFzkzAn1Vi76hY@kernel.org>
+References: <3E528EFF1AE81A17+20250311131440.1468875-1-wangyuli@uniontech.com>
+ <Z9EofB1oLBUgu05C@kernel.org>
+ <F0B8DC7D8609F78E+f602292f-27ed-41e0-81d9-911174ee1da0@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2of2zhxi2c735fgvjxug2bxjfpz2zk25adf3h2ps5byau3rj3k@pgbxmpbskezi>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F0B8DC7D8609F78E+f602292f-27ed-41e0-81d9-911174ee1da0@uniontech.com>
 
-On Wed, Mar 12, 2025 at 11:56:06AM +0100, Stefano Garzarella wrote:
-> On Tue, Mar 11, 2025 at 11:56:23AM +0200, Jarkko Sakkinen wrote:
-> > On Tue, Mar 11, 2025 at 10:42:22AM +0100, Stefano Garzarella wrote:
-> > > Add two new functions to probe and send commands to the SVSM vTPM.
-> > > They leverage the two calls defined by the AMD SVSM specification [1]
-> > > for the vTPM protocol: SVSM_VTPM_QUERY and SVSM_VTPM_CMD.
-> > > 
-> > > Expose these functions to be used by other modules such as a tpm
-> > > driver.
-> > > 
-> > > [1] "Secure VM Service Module for SEV-SNP Guests"
-> > >     Publication # 58019 Revision: 1.00
-> > > 
-> > > Co-developed-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> > > Co-developed-by: Claudio Carvalho <cclaudio@linux.ibm.com>
-> > > Signed-off-by: Claudio Carvalho <cclaudio@linux.ibm.com>
-> > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > > ---
-> > > v3:
-> > > - removed link to the spec because those URLs are unstable [Borislav]
-> > > - squashed "x86/sev: add SVSM call macros for the vTPM protocol" patch
-> > >   in this one [Borislav]
-> > > - slimmed down snp_svsm_vtpm_probe() [Borislav]
-> > > - removed features check and any print related [Tom]
-> > > ---
-> > >  arch/x86/include/asm/sev.h |  7 +++++++
-> > >  arch/x86/coco/sev/core.c   | 31 +++++++++++++++++++++++++++++++
-> > >  2 files changed, 38 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> > > index ba7999f66abe..09471d058ce5 100644
-> > > --- a/arch/x86/include/asm/sev.h
-> > > +++ b/arch/x86/include/asm/sev.h
-> > > @@ -384,6 +384,10 @@ struct svsm_call {
-> > >  #define SVSM_ATTEST_SERVICES		0
-> > >  #define SVSM_ATTEST_SINGLE_SERVICE	1
-> > > 
-> > > +#define SVSM_VTPM_CALL(x)		((2ULL << 32) | (x))
-> > > +#define SVSM_VTPM_QUERY			0
-> > > +#define SVSM_VTPM_CMD			1
-> > > +
-> > >  #ifdef CONFIG_AMD_MEM_ENCRYPT
-> > > 
-> > >  extern u8 snp_vmpl;
-> > > @@ -481,6 +485,9 @@ void snp_msg_free(struct snp_msg_desc *mdesc);
-> > >  int snp_send_guest_request(struct snp_msg_desc *mdesc, struct snp_guest_req *req,
-> > >  			   struct snp_guest_request_ioctl *rio);
-> > > 
-> > > +bool snp_svsm_vtpm_probe(void);
-> > > +int snp_svsm_vtpm_send_command(u8 *buffer);
-> > > +
-> > >  void __init snp_secure_tsc_prepare(void);
-> > >  void __init snp_secure_tsc_init(void);
-> > > 
-> > > diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
-> > > index 96c7bc698e6b..2166bdff88b7 100644
-> > > --- a/arch/x86/coco/sev/core.c
-> > > +++ b/arch/x86/coco/sev/core.c
-> > > @@ -2628,6 +2628,37 @@ static int snp_issue_guest_request(struct snp_guest_req *req, struct snp_req_dat
-> > >  	return ret;
-> > >  }
-> > > 
+On Wed, Mar 12, 2025 at 02:48:51PM +0800, WangYuli wrote:
+> Hi Jarkko,
+> 
+> On 2025/3/12 14:23, Jarkko Sakkinen wrote:
+> > "Subnames" are separated with space, not with camel case.
 > > 
-> > Since this is an exported symbol, it'd be a good practice document
-> > snp_svsm_vtpm_probe().
+> It's just a matter of regional cultural differences.
 > 
-> Yes, you are right, since the others were not documented, I had not added
-> it, but I agree with you, I'll do in v4.
+> In my country, we don't have the concept of "Subname" in names.
 > 
-> > 
-> > > +bool snp_svsm_vtpm_probe(void)
-> > > +{
-> > > +	struct svsm_call call = {};
-> > > +
-> > > +	/* The vTPM device is available only if a SVSM is present */
-> > > +	if (!snp_vmpl)
-> > > +		return false;
-> > > +
-> > > +	call.caa = svsm_get_caa();
-> > > +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_QUERY);
-> > 
-> > I supposed CAA is some kind of shared memory area for host and VM?
+> We only have "Surname" and "Given name", and our convention is to put the
+> surname first, followed by the given name, without a space in between.
 > 
-> Not with the host, but with SVSM, which is the firmware running in the
-> guest, but at a higher privilege level (VMPL) than the kernel, where, for
-> example, the vTPM is emulated.
-> 
-> BTW, yep it is a shared memory defined by the SVSM calling convention.
-> From AMD SVSM specification:
-> 
->   5 Calling Convention
-> 
->     Each call to the SVSM conveys data through a combination of the
->     SVSM Calling Area (whose address was first configured through the
->     SVSM_CAA field of the secrets page) and registers. Use of the
->     Calling Area is necessary for the SVSM to detect the difference
->     between a call that was issued by the guest and a spurious
->     invocation by a poorly behaved host. Registers are used for all
->     other parameters.
->     The initially configured SVSM Calling Area is a page of memory that
->     lies outside the initial SVSM memory range and has not had its VMPL
->     permissions restricted in any way. The address is guaranteed to be
->     aligned to a 4 KB boundary, so the remainder of the page may be used
->     by the guest for memory-based parameter passing if desired.
->     The contents of the Calling Area are described in the following
->     table:
-> 
->     Table 2: Calling Area
->     Byte      Size     Name                Description
->     Offset
-> 
->     0x000     1 byte   SVSM_CALL_PENDING   Indicates whether a call has
->                                            been requested by the guest
->                                            (0=no call requested, 1=call
->                                            requested).
->     0x001     1 byte   SVSM_MEM_AVAILABLE  Free memory is available to
->                                            be withdrawn.
->     0x002     6 byte                       Reserved. The SVSM is not
->                                            required to verify that
->                                            these bytes are 0.
-> 
-> > 
-> > > +
-> > > +	if (svsm_perform_call_protocol(&call))
-> > > +		return false;
-> > > +
-> > > +	/* Check platform commands contains TPM_SEND_COMMAND - platform command 8 */
-> > > +	return (call.rcx_out & BIT_ULL(8)) == BIT_ULL(8);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(snp_svsm_vtpm_probe);
-> > > +
-> > 
-> > Ditto.
-> 
-> Ack.
-> 
-> > 
-> > > +int snp_svsm_vtpm_send_command(u8 *buffer)
-> > > +{
-> > > +	struct svsm_call call = {};
-> > > +
-> > > +	call.caa = svsm_get_caa();
-> > > +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_CMD);
-> > > +	call.rcx = __pa(buffer);
-> > > +
-> > > +	return svsm_perform_call_protocol(&call);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(snp_svsm_vtpm_send_command);
-> > > +
-> > >  static struct platform_device sev_guest_device = {
-> > >  	.name		= "sev-guest",
-> > >  	.id		= -1,
-> > > --
-> > > 2.48.1
-> > > 
-> > 
-> > That said, these are rather self-documenting (i.e, nice and clean).
-> 
-> Thanks for the review!
+> So I don't think I need to make any changes to my sign-off.
 
-Sure, don't worry about it! Let's just cycle this enough rounds that
-it fits well...
+OK, I don't really mind the order, and I did not about the white space
+part.
 
-> Stefano
+So with that
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+
+> 
+> Of course, as you are the TPM maintainer, I respect your opinion, and if you
+> strongly insist, I can change my sign-off but only for all future
+> TPM-related commits, perhaps by using Unicode characters instead of spelling
+> it out with English letters.
+
+It's always good to get educated, no worries.
+
+> 
+> Thanks,
+> 
+> -- 
+> 
+> 王昱力
+> 
+
 
 BR, Jarkko
-
 
