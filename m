@@ -1,174 +1,214 @@
-Return-Path: <linux-integrity+bounces-5305-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5306-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B042AA665C7
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Mar 2025 02:57:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B693EA670BE
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Mar 2025 11:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43D60166F38
-	for <lists+linux-integrity@lfdr.de>; Tue, 18 Mar 2025 01:57:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9DD8189C429
+	for <lists+linux-integrity@lfdr.de>; Tue, 18 Mar 2025 10:08:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3478617C220;
-	Tue, 18 Mar 2025 01:57:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B036C1F7076;
+	Tue, 18 Mar 2025 10:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hpNCSpJL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RBZXLiP3"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D6D17A30C;
-	Tue, 18 Mar 2025 01:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46AE205E12
+	for <linux-integrity@vger.kernel.org>; Tue, 18 Mar 2025 10:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742263041; cv=none; b=EDTgjaULobqUa1xAVWEkLGCe+14KCOTBzbPadVeBbCRXpmnw4AhFiKr2J4LBxuudOk20vmJUTBVYHMzM/GSXRYkW9zU35eY2j531WuUS/16aLE7NGovNHluSATHnrZ4oYe7Su2+wnV73PAuxoXSL40Sl7BFyRTTovFYbBRUORp8=
+	t=1742292489; cv=none; b=jwibpFC201+J1ifzKtZnHT0qPlUTYuZCRcKGqh5WYKF3+fee9QmxRayaxLBRPxO48QE/LWU+oiTUwYDdluTIyA3zF8U9E45XEt4vIItSyJjokW6gtkO9EIG3ssSl6YaGw2MZIr/d0h62MzCwecL/Usj6FfVVm1Qv3k1hZ8vuZJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742263041; c=relaxed/simple;
-	bh=/iBmV1cXQoWTW1R5ATObPFcGTqqYcJQHsoPrlpEpZ5A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Z5XTK7QKlDxNTHBQu8CmWV05uEbdeY9Vz5qR+JoVA0vdfMeB+0oHVOKNZhS9DX4vuM2+psYYN9H6TTKbWfVsdUISau7kL71+1mYvQqvUg63a4IF/yOeBBTNjE1S2TE20E8oxUmTjOLiTcZs8yOMKDW/YKqTBY9Hy5PeeyNm8HPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hpNCSpJL; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52HKWmtU013021;
-	Tue, 18 Mar 2025 01:57:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=v8WC45
-	Oi6UTAujif7QXeW5fwBszpSKjT+aq0rVJo5hA=; b=hpNCSpJLklwprbY8IyD+lh
-	YNUVU/FgAhCJ5q53s0EDnB9/e/yFSr9VSTq3whnlveXSBEcSWG6Q7qCCj6M4mtxi
-	eERds/zWrepVsI3FXkAfyVcWc7JicltEWNLrXEI327410kh4F8tEj2LQXCc0npBG
-	w+NG9+z/99WHMef7b9NP92pAlgkUGXZnFbuqfbR+EBUWLyquMh06YvbmC3zCacek
-	TSIkuCrERtjCHXxgkir5Ha+5NwcKjh7VU0ZQWMntuF0sMvIqCdwJ7TtCabXiv/8k
-	JQ7c0L54Ig/cx9md5VwKCafBvw//UZD4rKD0AabCakFAzmhqANtWlfVx2SDKGPGQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45ec49dmqs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Mar 2025 01:57:05 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52I1ustW018855;
-	Tue, 18 Mar 2025 01:57:05 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45ec49dmqp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Mar 2025 01:57:04 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52HMCcQg009577;
-	Tue, 18 Mar 2025 01:57:03 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45dm8ysgun-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Mar 2025 01:57:03 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52I1v3Ze33686128
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Mar 2025 01:57:03 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0326158056;
-	Tue, 18 Mar 2025 01:57:03 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6F1BD5805A;
-	Tue, 18 Mar 2025 01:57:02 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.183.137])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 18 Mar 2025 01:57:02 +0000 (GMT)
-Message-ID: <7e7d730961ee65dd063755f6a1ff9aefdcdff430.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH v1 3/7] ima: move INVALID_PCR() to ima.h
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Nicolai Stange <nstange@suse.de>,
-        Roberto Sassu
- <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: Eric Snowberg <eric.snowberg@oracle.com>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 17 Mar 2025 21:57:02 -0400
-In-Reply-To: <20250313173339.3815589-4-nstange@suse.de>
-References: <20250313173339.3815589-1-nstange@suse.de>
-	 <20250313173339.3815589-4-nstange@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1742292489; c=relaxed/simple;
+	bh=D2uC7q/GfIgxv9SCiH9wXFsiCXWQ3GihsbEJk75avVo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gq/25g/ocp+PScBMp5AdEoiio8bveD6kJf/2nnuF/RiBw/T7q1dgq0/MHnhDl4Bhbp6x5cusZ0MCI8rDNSgYpQXecXqVFBjwtlzZUIC6Q2tRP0KBjNT/MVozU/LiPctgz55wvwgPR6octiLv9K38cGyFcOEq8wNO7709qMsVAF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RBZXLiP3; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742292486;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IEvuZKB25WkNV582zeCY6U1/wQrHODlGoWn807RLAj4=;
+	b=RBZXLiP35AfiZsXQ55ZGeZl3/n+TFMtNsSJwL5TvmvLaeM1S39HerEtzIf3sDEaVZ7/Ktz
+	zZSVQAuAXdeGsY8zG/ktIKmF2F5zGXxYbZZGLrvfGIT2Im7HNxAeUvoGQAYDIplAD8d8XQ
+	X1Ee3CgTb89yBjGR2lpO+FuH3E4UZtw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-570-Dj7agRHtNVa-updOXt30Jg-1; Tue, 18 Mar 2025 06:08:05 -0400
+X-MC-Unique: Dj7agRHtNVa-updOXt30Jg-1
+X-Mimecast-MFC-AGG-ID: Dj7agRHtNVa-updOXt30Jg_1742292484
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43941ad86d4so15380145e9.2
+        for <linux-integrity@vger.kernel.org>; Tue, 18 Mar 2025 03:08:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742292484; x=1742897284;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IEvuZKB25WkNV582zeCY6U1/wQrHODlGoWn807RLAj4=;
+        b=MnqjLZvq7chMVFiGT8x+lYy/z0PGaeHBSEbN6MPzM9j53UuF4Y7dyh0Y4p7B0DTpQ3
+         5h19+iX3rQXhpMULxDSbzcse8e3x7R+WmIAMxN6FzI7SvR54xq1yngeJzIXB4DRNaD+s
+         Hnxha9KchhWE9J9b00p6ycKsZCrLXwcrR9ODlkAUrR7ON1JcvzApHnhzM96qfUluu5Ix
+         DYpx7kzXOFvMkRs1vBB/kTIOwgWcVtdxV+SXiF47QvKxDH6Iw6dbiu3YKmGPTu3qFrT4
+         hcXTci5+WoCB7JLreg4YA6jJRkdZagF/YqroMz4yL7w7FcD7I1yoVJW0MnaWjtjBM4G9
+         z9qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8y+NCv2O527yj+3UcSTnejdrYkETAsmPna2wUpO9rYtDd1OFvp+nONbnrRS+a2Cf/izbkVDGQpBZ0M3vzTpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhCHgTK4aJmvI4jQ/xhugr/kmrcKpaZkC1GyIUF2TASvGzGKSI
+	KeuYiPwDpgCOQAi5+eznUX93iGvM/st/53On7BoAM1ppAQ9+wSpXZ/z45dVdzCi+1bP33m7e/Kr
+	doXY4Br3KX0ycCkEAQ2tfVA1JslqxqhWighIPnziWPNrwhzELYiT+9xbF6goinOH8qA==
+X-Gm-Gg: ASbGncsulrMXQ+Af8zssX8zY8Sj+50OcfINvVv8qEN0m7Vv2KlZxVqK3hK5Zn6175md
+	qipGbbwgmD6VQffmedOHUTDnXyzoz0EYYGBoRy+MfaibvmNO3/BL/7URMJIsTy9QSrWg1kns0jp
+	cFwj/ZNBMVuHWyGSKHhiSfhmVrJP18xKeONQls10qp4gLxSt8PtR9pOQbqYLiv115XG6CTqs+v8
+	Bxqalajxq0IGGsITY7YXWhEOGSF9t3fvXshe+6Qcf4rw2Jh+XXiUS2ObKlvpCyYvsEwfQWxoeVJ
+	889g957d3wd6WNadJ242vK5Wlkxhs3qKixe3wLNF0dY+L33jv1qsTl2tY4cPA8Db
+X-Received: by 2002:a5d:6da4:0:b0:391:3fde:1da with SMTP id ffacd0b85a97d-3996b446894mr2484878f8f.16.1742292483838;
+        Tue, 18 Mar 2025 03:08:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHh3gn7eHXqYAXq/xhJqTxFL+gTLLmKxOf4FLaroBA677Z+26ult7+GExyxZ1z7z5eEbfIXIQ==
+X-Received: by 2002:a5d:6da4:0:b0:391:3fde:1da with SMTP id ffacd0b85a97d-3996b446894mr2484848f8f.16.1742292483336;
+        Tue, 18 Mar 2025 03:08:03 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-29.retail.telecomitalia.it. [79.46.200.29])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395c83b6e92sm17909112f8f.38.2025.03.18.03.08.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Mar 2025 03:08:02 -0700 (PDT)
+Date: Tue, 18 Mar 2025 11:07:57 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Borislav Petkov <bp@alien8.de>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	x86@kernel.org, linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	Dov Murik <dovmurik@linux.ibm.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	linux-coco@lists.linux.dev, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Claudio Carvalho <cclaudio@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v3 1/4] x86/sev: add SVSM vTPM probe/send_command
+ functions
+Message-ID: <7kuhiyy7gj4py323g5n2vy3ddlg666zwhtx3mjcklebgtlstdc@xgdyeecifwei>
+References: <20250311094225.35129-1-sgarzare@redhat.com>
+ <20250311094225.35129-2-sgarzare@redhat.com>
+ <d7e5a1d2-5fcc-bf7f-a67d-7871a1627c98@amd.com>
+ <Z9glWp6U6vyEmKQa@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zqgMWr-Ui97ZSANoVVtI_CR8IQTTLhiE
-X-Proofpoint-ORIG-GUID: w5N93VrmQGHyaqgUAhq6136PR6usp9lG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-18_01,2025-03-17_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- adultscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 mlxscore=0 impostorscore=0
- malwarescore=0 mlxlogscore=955 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2502280000 definitions=main-2503180012
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Z9glWp6U6vyEmKQa@kernel.org>
 
-On Thu, 2025-03-13 at 18:33 +0100, Nicolai Stange wrote:
-> Make the INVALID_PCR() #define available to other compilation units
-> by moving it from ima_policy.c to ima.h and renaming it to
-> IMA_INVALID_PCR() in the course.
->=20
-> Signed-off-by: Nicolai Stange <nstange@suse.de>
+On Mon, Mar 17, 2025 at 03:36:26PM +0200, Jarkko Sakkinen wrote:
+>On Fri, Mar 14, 2025 at 10:27:07AM -0500, Tom Lendacky wrote:
+>> On 3/11/25 04:42, Stefano Garzarella wrote:
+>> > Add two new functions to probe and send commands to the SVSM vTPM.
+>> > They leverage the two calls defined by the AMD SVSM specification [1]
+>> > for the vTPM protocol: SVSM_VTPM_QUERY and SVSM_VTPM_CMD.
+>> >
+>> > Expose these functions to be used by other modules such as a tpm
+>> > driver.
+>> >
+>> > [1] "Secure VM Service Module for SEV-SNP Guests"
+>> >     Publication # 58019 Revision: 1.00
+>> >
+>> > Co-developed-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+>> > Co-developed-by: Claudio Carvalho <cclaudio@linux.ibm.com>
+>> > Signed-off-by: Claudio Carvalho <cclaudio@linux.ibm.com>
+>> > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>>
+>> One minor nit below, otherwise:
+>>
+>> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
 
-Restoring the IMA measurement list doesn't involve extending the TPM.  The =
-hash
-specific measurements have already been extended into the respective TPM ba=
-nks.
-Is this and the subsequent patch necessary?
+Thanks!
 
-Mimi
+>>
+>> > ---
+>> > v3:
+>> > - removed link to the spec because those URLs are unstable [Borislav]
+>> > - squashed "x86/sev: add SVSM call macros for the vTPM protocol" patch
+>> >   in this one [Borislav]
+>> > - slimmed down snp_svsm_vtpm_probe() [Borislav]
+>> > - removed features check and any print related [Tom]
+>> > ---
+>> >  arch/x86/include/asm/sev.h |  7 +++++++
+>> >  arch/x86/coco/sev/core.c   | 31 +++++++++++++++++++++++++++++++
+>> >  2 files changed, 38 insertions(+)
+>> >
+>> > diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+>> > index ba7999f66abe..09471d058ce5 100644
+>> > --- a/arch/x86/include/asm/sev.h
+>> > +++ b/arch/x86/include/asm/sev.h
+>> > @@ -384,6 +384,10 @@ struct svsm_call {
+>> >  #define SVSM_ATTEST_SERVICES		0
+>> >  #define SVSM_ATTEST_SINGLE_SERVICE	1
+>> >
+>> > +#define SVSM_VTPM_CALL(x)		((2ULL << 32) | (x))
+>> > +#define SVSM_VTPM_QUERY			0
+>> > +#define SVSM_VTPM_CMD			1
+>> > +
+>> >  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>> >
+>> >  extern u8 snp_vmpl;
+>> > @@ -481,6 +485,9 @@ void snp_msg_free(struct snp_msg_desc *mdesc);
+>> >  int snp_send_guest_request(struct snp_msg_desc *mdesc, struct snp_guest_req *req,
+>> >  			   struct snp_guest_request_ioctl *rio);
+>> >
+>> > +bool snp_svsm_vtpm_probe(void);
+>> > +int snp_svsm_vtpm_send_command(u8 *buffer);
+>> > +
+>> >  void __init snp_secure_tsc_prepare(void);
+>> >  void __init snp_secure_tsc_init(void);
+>> >
+>> > diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
+>> > index 96c7bc698e6b..2166bdff88b7 100644
+>> > --- a/arch/x86/coco/sev/core.c
+>> > +++ b/arch/x86/coco/sev/core.c
+>> > @@ -2628,6 +2628,37 @@ static int snp_issue_guest_request(struct snp_guest_req *req, struct snp_req_dat
+>> >  	return ret;
+>> >  }
+>> >
+>> > +bool snp_svsm_vtpm_probe(void)
+>> > +{
+>> > +	struct svsm_call call = {};
+>> > +
+>> > +	/* The vTPM device is available only if a SVSM is present */
+>> > +	if (!snp_vmpl)
+>> > +		return false;
+>> > +
+>> > +	call.caa = svsm_get_caa();
+>> > +	call.rax = SVSM_VTPM_CALL(SVSM_VTPM_QUERY);
+>> > +
+>> > +	if (svsm_perform_call_protocol(&call))
+>> > +		return false;
+>> > +
+>> > +	/* Check platform commands contains TPM_SEND_COMMAND - platform command 8 */
+>> > +	return (call.rcx_out & BIT_ULL(8)) == BIT_ULL(8);
+>>
+>> It's a bool function, so this could simplified to just:
+>>
+>> 	return call.rcx_out & BIT_ULL(8);
 
+Sure.
 
-> ---
->  security/integrity/ima/ima.h        | 4 ++++
->  security/integrity/ima/ima_policy.c | 5 +----
->  2 files changed, 5 insertions(+), 4 deletions(-)
->=20
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index a4f284bd846c..1158a7b8bf6b 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -198,6 +198,10 @@ struct ima_iint_cache {
->  	struct ima_digest_data *ima_hash;
->  };
-> =20
-> +#define IMA_INVALID_PCR(a) (((a) < 0) || \
-> +	(a) >=3D (sizeof_field(struct ima_iint_cache, measured_pcrs) * 8))
-> +
-> +
->  extern struct lsm_blob_sizes ima_blob_sizes;
-> =20
->  static inline struct ima_iint_cache *
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima=
-/ima_policy.c
-> index 128fab897930..d9e4210ea814 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -48,9 +48,6 @@
->  #define HASH		0x0100
->  #define DONT_HASH	0x0200
-> =20
-> -#define INVALID_PCR(a) (((a) < 0) || \
-> -	(a) >=3D (sizeof_field(struct ima_iint_cache, measured_pcrs) * 8))
-> -
->  int ima_policy_flag;
->  static int temp_ima_appraise;
->  static int build_ima_appraise __ro_after_init;
-> @@ -1855,7 +1852,7 @@ static int ima_parse_rule(char *rule, struct ima_ru=
-le_entry *entry)
->  			ima_log_string(ab, "pcr", args[0].from);
-> =20
->  			result =3D kstrtoint(args[0].from, 10, &entry->pcr);
-> -			if (result || INVALID_PCR(entry->pcr))
-> +			if (result || IMA_INVALID_PCR(entry->pcr))
->  				result =3D -EINVAL;
->  			else
->  				entry->flags |=3D IMA_PCR;
+>
+>Or perhaps even just "call.rcx_out & 0x100". I don't think BIT_ULL()
+>here brings much additional clarity or anything useful...
+
+I can do that, I slightly prefer BIT_ULL() macro, but I don't have a 
+strong opinion on my side.
+@Borislav since you suggested it, WDYT?
+
+Thanks,
+Stefano
 
 
