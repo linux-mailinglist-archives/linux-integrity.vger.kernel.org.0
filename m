@@ -1,71 +1,58 @@
-Return-Path: <linux-integrity+bounces-5340-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5343-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE77CA6A96F
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 16:10:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33BA6A6A980
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 16:16:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55FD61897254
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 15:01:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1E134840E3
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 15:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD11B1E47C7;
-	Thu, 20 Mar 2025 15:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F70C1E51FA;
+	Thu, 20 Mar 2025 15:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FCNV95CY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZM7dm3My"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9491E261F;
-	Thu, 20 Mar 2025 15:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D79F1DE4C5;
+	Thu, 20 Mar 2025 15:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742482847; cv=none; b=Nn4jHyfcwgH777v4xHGx/6y4CHpM/9hkvPYOjD2sxowT2cuvwgyqztPLYOGaLdGb8CcO0VdALI+QaspvfwkublZNbqoESupq+XIuSW2BLWbfS8WgpnsekVrxY8zFeSbhff6y/OReErN5LdssK/MbRW1sPzSoh9ke6+sTaRFsRKc=
+	t=1742483795; cv=none; b=W81D/UG5t2EjM3mSL7lnsESWHqfzgJjigXEU+AeYuL0mPHSpiip5lpH+hfE8jhvgnzHDG8H6obUuJgcaKuIrSafOIdVulHl5m/iRv3klADeZgfnEbFabOX6Y7WKo+Te3UU0b5rra3m+JoZe2pqK+A+sGRW+pTU09Ide3RudTv5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742482847; c=relaxed/simple;
-	bh=Be//gNDiDHACoFa8CWsun5REmHLhpSALE5TV1KvhaHo=;
+	s=arc-20240116; t=1742483795; c=relaxed/simple;
+	bh=3ISFEoedf+AsgYKpMB/pWOzZYb8aFav8C0G9rOCDxCU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cjL6KgInsu2N7NclX+yRZcKU36/wGasX3xhgEYMyuuzbtsZabIUIW7YHckv75i8rAjQYTObzy/wIYX6KKNNCpzU4WAHS+ZB3CabfUNupK45AOkusSSLF5iA3guwgjzpYcWEGhzzqs+u+D3Oow03FnU3wbdRB0XAbkMTznJSbiBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FCNV95CY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD67C4CEDD;
-	Thu, 20 Mar 2025 15:00:46 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rWGzupM6hvwhxwlcNsO0OgokTKgSn7miqtI/iMbOPCbLHhE/WRL1voX8BEBtg5kdXUHK5eIqafboMafY2TlLpj8uOMs3Y9EyXKO6/fuq9vTSgcquUhgVC31BqVjnzDtWLo4NTTun4Y+hMbUvU4JjYF7hXAHkoSpadp80j8Ma2Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZM7dm3My; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BB4C4CEDD;
+	Thu, 20 Mar 2025 15:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742482847;
-	bh=Be//gNDiDHACoFa8CWsun5REmHLhpSALE5TV1KvhaHo=;
+	s=k20201202; t=1742483794;
+	bh=3ISFEoedf+AsgYKpMB/pWOzZYb8aFav8C0G9rOCDxCU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FCNV95CYJB6Bg57IXbd3x/o8K32MRTrCsSeQZ87G+Z0JbyrSdLDz1kJxPaLcgu9RS
-	 btR0xNYoSH2hgn3ffBq9S1otafi7fqLQr/ZmEbGod7EHRn0pG4hk+JfXcN25qtqTxn
-	 oYSy89HuRit52h7YhA3gO9JSaW/ByPAZU3i3UJoDhogGSrMdmE/2TRA+DkIhIQMel+
-	 4DS2S7ZtIMsoz96N+fF6+937WUu48obBsW0xGD2KAOrPIFcAxY8RBkWiRhIlgJcqBY
-	 DKJtks/22C7BK6I7KTVGtaNAMIuM67psLSD3dATtQglklvVgdEivc6TbsGnzaZOUPF
-	 qq7zdvPDO4tgQ==
-Date: Thu, 20 Mar 2025 17:00:42 +0200
+	b=ZM7dm3MyW1u9kYmnpMqxZbxFqmooKpRDJaGCFC6WSQ75koW1s6RCSXzYTQSj3qFKN
+	 LWK2New6mbyX+UphtaHktjHvLutibQ4P7boeCPjFVcXN0RP4d6xwdeszLrg7HVRxeQ
+	 1a47qfrPK3VJFVuZivf5hnw5F+zpWmJBt9wRbV8OFdTu53liiSaSmySOm0jUdffMXQ
+	 bqZAecPY0PTg1PDEfgzvj2Eq3rAGm9fIOs4k9v8M0coA4vfeImo4+y8uPycUpcPmQv
+	 AuGTXu5s5DycnFUDEbOoQ3QaCZJ4mRmoy3Th2UvffwULb0IQC0axYtUdDzF5vgd0nH
+	 KDUv7WRxVsUEA==
+Date: Thu, 20 Mar 2025 17:16:31 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-	linux-integrity@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, linux-coco@lists.linux.dev,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v3 3/4] tpm: add SNP SVSM vTPM driver
-Message-ID: <Z9wtmqGkqPPkXWqP@kernel.org>
-References: <20250311094225.35129-1-sgarzare@redhat.com>
- <20250311094225.35129-4-sgarzare@redhat.com>
- <e4eeaead-2277-1f6f-86eb-f80deae2135b@amd.com>
- <Z9gm9iWhk5Zs2NvI@kernel.org>
- <CAGxU2F7fdAi148rB-4c==-qCOW1SJjwf4AzC2=TUhfPXMhR5pQ@mail.gmail.com>
- <1262fa5b-0822-b8d4-26c5-426ffa4e0265@amd.com>
- <qne5fm44dhkbnwc6ldgff76ljt7ecd3cvtf3b3lhos56yyx2ez@qbcv45zbxlhp>
- <20250319234422.GG126678@ziepe.ca>
+To: Bo Liu <liubo03@inspur.com>
+Cc: dhowells@redhat.com, James.Bottomley@hansenpartnership.com,
+	zohar@linux.ibm.com, paul@paul-moore.com, jmorris@namei.org,
+	serge@hallyn.com, linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KEYS: trusted: dcp: Use kfree_sensitive() to fix
+ Coccinelle warnings
+Message-ID: <Z9wxT9SV4BmehzmT@kernel.org>
+References: <20250320103557.7236-1-liubo03@inspur.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -74,31 +61,55 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250319234422.GG126678@ziepe.ca>
+In-Reply-To: <20250320103557.7236-1-liubo03@inspur.com>
 
-On Wed, Mar 19, 2025 at 08:44:22PM -0300, Jason Gunthorpe wrote:
-> On Tue, Mar 18, 2025 at 05:18:53PM +0100, Stefano Garzarella wrote:
+On Thu, Mar 20, 2025 at 06:35:57AM -0400, Bo Liu wrote:
+> Replace memzero_explicit() and kfree() with kfree_sensitive() to fix
+> warnings reported by Coccinelle:
 > 
-> > I see, thanks for the clarification!
-> > I saw that with devm_get_free_pages() I can easily allocate a
-> > resource-managed page, so I'll do that in v4.
-> 
-> As a general note you should just use kmalloc these days, even for
-> PAGE_SIZE. It is efficient and OK.
-> 
-> Having a struct that is PAGE_SIZE+1 is not efficient and will waste
-> a page of memory. That should be avoided ..
+> WARNING opportunity for kfree_sensitive/kvfree_sensitive
+> WARNING opportunity for kfree_sensitive/kvfree_sensitive
 
-Yeah, kzalloc() takes care of this magic. As said, kzalloc() vs
-alloc_page() is not an existential question for this patch set :-)
-
-I just would personally use alloc_page(). If nothing else, it does
-have some super cosmetic benefits e.g., thinner call stack (when
-needing to debug deep, which sometimes happens).
+Even if you get the error from Coccinelle, you should still go trouble
+why this warning happens. Otherwise, you are contributing a change that
+you don't understand yourself.
 
 > 
-> Jason
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> ---
+>  security/keys/trusted-keys/trusted_dcp.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
+> diff --git a/security/keys/trusted-keys/trusted_dcp.c b/security/keys/trusted-keys/trusted_dcp.c
+> index 7b6eb655df0c..c967837e72ee 100644
+> --- a/security/keys/trusted-keys/trusted_dcp.c
+> +++ b/security/keys/trusted-keys/trusted_dcp.c
+> @@ -233,8 +233,7 @@ static int trusted_dcp_seal(struct trusted_key_payload *p, char *datablob)
+>  	ret = 0;
+>  
+>  out:
+> -	memzero_explicit(plain_blob_key, AES_KEYSIZE_128);
+> -	kfree(plain_blob_key);
+> +	kfree_sensitive(plain_blob_key);
+>  
+>  	return ret;
+>  }
+> @@ -283,8 +282,7 @@ static int trusted_dcp_unseal(struct trusted_key_payload *p, char *datablob)
+>  	ret = 0;
+>  out:
+>  	if (plain_blob_key) {
+> -		memzero_explicit(plain_blob_key, AES_KEYSIZE_128);
+> -		kfree(plain_blob_key);
+> +		kfree_sensitive(plain_blob_key);
+>  	}
+>  
+>  	return ret;
+> -- 
+> 2.31.1
+> 
+
+Not gonna fly because you did not include KEYS-TRUSTED-DCP maintainer to
+the CC list.
 
 BR, Jarkko
 
