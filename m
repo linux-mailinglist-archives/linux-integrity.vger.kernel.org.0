@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-5339-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5341-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17180A6A959
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 16:04:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00215A6A94A
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 16:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53C8B1882061
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 14:57:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46B833B7D10
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 15:02:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A3941DED47;
-	Thu, 20 Mar 2025 14:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F491DE8B4;
+	Thu, 20 Mar 2025 15:02:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OKK0fLAF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vCF7UO8O"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB38175D53;
-	Thu, 20 Mar 2025 14:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0406B8F6E;
+	Thu, 20 Mar 2025 15:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742482621; cv=none; b=gd4fs037bGMGOUr4uZXYFkKmMQwioe8/rqgDoOjDmLcqF2LAZIZiSath2sKL5EmUZ8C3dGdMYWvNhRCAKAIY/MawVwVV0dvHxKoQgnKvD0y8kT36w6RZwhiBRcZh8o482WJSlCxk1tt+lqj4uXOkxOuU024KRtpSHCsUI6WDvaM=
+	t=1742482934; cv=none; b=C9yfLnqVW9/maKUGg6Lt9kBQ08H9a3zG2GvDMwJeVs7ToWK7Es3PneN19xD1urq24X2Y/RzZcwPLECvYp4PdUK2+TZMi38pbIWRlaZ4DEMPKznwveHyKD6Xpl1T5qUBmMcFGgvZJaX8bcYD1ImvBHjBCHPVkR1EP5Rq3tNHYGMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742482621; c=relaxed/simple;
-	bh=8WMPvIwTcmodJ0F+KEYR4NnukKC0AnVoSMyBtyzEsDs=;
+	s=arc-20240116; t=1742482934; c=relaxed/simple;
+	bh=GScx7v1DB+peoikwJcbCBTD5+TH21YH6ulY+itNoyaE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GbJxLk2v/9ooB5pr3Y/yC2pGb3Nr+0d6LeWY02sta9i1M3Z/UglbgomhLlBOYj0wJek5dV5Yu4CExgOuOkcsc2LqOTvQhQFkWYnGk8Hw6zXi0Qay3llNHbZ6JDXLPQ4uQL4zlGPQZBJKAff6Ialk///d4gGsm2Yl46WDdLu+tYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OKK0fLAF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F25AC4CEDD;
-	Thu, 20 Mar 2025 14:57:00 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=GanXOOmLCi5vp11Aft0w7dic5myaK0K6zPXXLzN8b2EcktIAUZM+0GQFUIaLNTLcuLO+GO5WYR+ywH5wXTxRauCTbJNbwc3svMdCWlkXY6QHOiZqcHL2HwiBgoq77h7OSmFGeF937w+gZwCDo6furj4sq2IVR/epwwyIAxmToo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vCF7UO8O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7BEC4CEDD;
+	Thu, 20 Mar 2025 15:02:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742482620;
-	bh=8WMPvIwTcmodJ0F+KEYR4NnukKC0AnVoSMyBtyzEsDs=;
+	s=k20201202; t=1742482933;
+	bh=GScx7v1DB+peoikwJcbCBTD5+TH21YH6ulY+itNoyaE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OKK0fLAFfnPC6hFkPlaxVRDfEQ1EPY1DgMgAnvpOWsn0e1kaBs3TwHwzJ1G70YfGs
-	 MXfF1w24dzZhEpOv/Pym+lAX2hHtjsv/eTD2BkObhpAYVRHEKGsF24uj9vfpvtZ6Rm
-	 KK9cR6yeSjkwhaV9vSpkU1ymvEX0X14036mDv3j++XCGbhN45Ut5T2mrNdbYz4uPZ/
-	 +k9qGzHindlfrQCWXXnOtxrplcn3mOhEuWIp1YNH+DA2sznHhL6AmIoGCBE72D/CBT
-	 aZlvlZUGppN8UyQbS2G9SejcHCpwpKUclpD5WsqbkTqSa9WhjDghhNI0wfR7gPhnEZ
-	 HyMa9JbpU5iTA==
-Date: Thu, 20 Mar 2025 16:56:56 +0200
+	b=vCF7UO8OTLEpYla8Np1Nni4VhxyluqH2ma0n80LLMr0TO8qHJQexViPiSm+FWRcMk
+	 LeggL64kHd88RyBEwsigeRwu8LIVvbCQjAG7ZaeSnQ187oDJtfqZLsh9zdUBWft+EO
+	 hiTicb4BUjZekXj8kM6QUvmhteW0ICUWj4zcGQsvGdxYYbNd2b9R1GgpHkIPMdGTB3
+	 1sqYb4NjqhFp4oUBdCyPVsCTb9VzBdLJoxl1c/6E89RPc4/2LZd46Bn01qFgjvIKod
+	 a4JzqJMu2gVe+7MotBqBmSEQx0xH9CWgTGWug7ANS38VaPOUV92fDmBDhoLbVwJGvN
+	 +E4mbs+OAw5AQ==
+Date: Thu, 20 Mar 2025 17:02:08 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Stefano Garzarella <sgarzare@redhat.com>
 Cc: Tom Lendacky <thomas.lendacky@amd.com>, Peter Huewe <peterhuewe@gmx.de>,
@@ -55,13 +55,13 @@ Cc: Tom Lendacky <thomas.lendacky@amd.com>, Peter Huewe <peterhuewe@gmx.de>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
 	Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v3 3/4] tpm: add SNP SVSM vTPM driver
-Message-ID: <Z9wsuBJPxIhvLN9x@kernel.org>
+Subject: Re: [PATCH v3 4/4] x86/sev: register tpm-svsm platform device
+Message-ID: <Z9wt8EXI5wL1OaSK@kernel.org>
 References: <20250311094225.35129-1-sgarzare@redhat.com>
- <20250311094225.35129-4-sgarzare@redhat.com>
- <e4eeaead-2277-1f6f-86eb-f80deae2135b@amd.com>
- <Z9gm9iWhk5Zs2NvI@kernel.org>
- <CAGxU2F7fdAi148rB-4c==-qCOW1SJjwf4AzC2=TUhfPXMhR5pQ@mail.gmail.com>
+ <20250311094225.35129-5-sgarzare@redhat.com>
+ <7c35f370-f1f2-7100-3b78-b595e977e964@amd.com>
+ <Z9gk0jg1JLZY4Fk9@kernel.org>
+ <nrn4ur66lz2ocbkkjl2bgiex3xbp552szerfhalsaefunqxf7p@ki7xf66zrf6u>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -70,139 +70,63 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGxU2F7fdAi148rB-4c==-qCOW1SJjwf4AzC2=TUhfPXMhR5pQ@mail.gmail.com>
+In-Reply-To: <nrn4ur66lz2ocbkkjl2bgiex3xbp552szerfhalsaefunqxf7p@ki7xf66zrf6u>
 
-On Tue, Mar 18, 2025 at 11:38:54AM +0100, Stefano Garzarella wrote:
-> On Mon, Mar 17, 2025 at 03:43:18PM +0200, Jarkko Sakkinen wrote:
-> >On Fri, Mar 14, 2025 at 11:48:11AM -0500, Tom Lendacky wrote:
-> >> On 3/11/25 04:42, Stefano Garzarella wrote:
-> >> > Add driver for the vTPM defined by the AMD SVSM spec [1].
-> >> >
-> >> > The specification defines a protocol that a SEV-SNP guest OS can use to
-> >> > discover and talk to a vTPM emulated by the Secure VM Service Module (SVSM)
-> >> > in the guest context, but at a more privileged level (VMPL0).
-> >> >
-> >> > The new tpm-svsm platform driver uses two functions exposed by x86/sev
-> >> > to verify that the device is actually emulated by the platform and to
-> >> > send commands and receive responses.
-> >> >
-> >> > The device cannot be hot-plugged/unplugged as it is emulated by the
-> >> > platform, so we can use module_platform_driver_probe(). The probe
-> >> > function will only check whether in the current runtime configuration,
-> >> > SVSM is present and provides a vTPM.
-> >> >
-> >> > This device does not support interrupts and sends responses to commands
-> >> > synchronously. In order to have .recv() called just after .send() in
-> >> > tpm_try_transmit(), the .status() callback returns 0, and both
-> >> > .req_complete_mask and .req_complete_val are set to 0.
-> >> >
-> >> > [1] "Secure VM Service Module for SEV-SNP Guests"
-> >> >     Publication # 58019 Revision: 1.00
-> >> >
-> >> > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> >> > ---
-> >> > v3:
-> >> > - removed send_recv() ops and followed the ftpm driver implementing .status,
-> >> >   .req_complete_mask, .req_complete_val, etc. [Jarkko]
-> >> > - removed link to the spec because those URLs are unstable [Borislav]
-> >> > ---
-> >> >  drivers/char/tpm/tpm_svsm.c | 148 ++++++++++++++++++++++++++++++++++++
-> >> >  drivers/char/tpm/Kconfig    |  10 +++
-> >> >  drivers/char/tpm/Makefile   |   1 +
-> >> >  3 files changed, 159 insertions(+)
-> >> >  create mode 100644 drivers/char/tpm/tpm_svsm.c
-> >> >
-> >> > diff --git a/drivers/char/tpm/tpm_svsm.c b/drivers/char/tpm/tpm_svsm.c
-> >> > new file mode 100644
-> >> > index 000000000000..5540d0227eed
-> >> > --- /dev/null
-> >> > +++ b/drivers/char/tpm/tpm_svsm.c
-> >> > @@ -0,0 +1,148 @@
-> >> > +// SPDX-License-Identifier: GPL-2.0-only
-> >> > +/*
-> >> > + * Copyright (C) 2025 Red Hat, Inc. All Rights Reserved.
-> >> > + *
-> >> > + * Driver for the vTPM defined by the AMD SVSM spec [1].
-> >> > + *
-> >> > + * The specification defines a protocol that a SEV-SNP guest OS can use to
-> >> > + * discover and talk to a vTPM emulated by the Secure VM Service Module (SVSM)
-> >> > + * in the guest context, but at a more privileged level (usually VMPL0).
-> >> > + *
-> >> > + * [1] "Secure VM Service Module for SEV-SNP Guests"
-> >> > + *     Publication # 58019 Revision: 1.00
-> >> > + */
-> >> > +
-> >> > +#include <asm/sev.h>
-> >>
-> >> Typically the "asm" includes are after the "linux" includes and separated
-> >> from each other by a blank line.
+On Tue, Mar 18, 2025 at 11:44:05AM +0100, Stefano Garzarella wrote:
+> On Mon, Mar 17, 2025 at 03:34:10PM +0200, Jarkko Sakkinen wrote:
+> > On Fri, Mar 14, 2025 at 11:56:31AM -0500, Tom Lendacky wrote:
+> > > On 3/11/25 04:42, Stefano Garzarella wrote:
+> > > > SNP platform can provide a vTPM device emulated by SVSM.
+> > > >
+> > > > The "tpm-svsm" device can be handled by the platform driver added
+> > > > by the previous commit in drivers/char/tpm/tpm_svsm.c
+> > > >
+> > > > The driver will call snp_svsm_vtpm_probe() to check if SVSM is
+> > > > present and if it's support the vTPM protocol.
+> > > >
+> > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > > > ---
+> > > >  arch/x86/coco/sev/core.c | 8 ++++++++
+> > > >  1 file changed, 8 insertions(+)
+> > > >
+> > > > diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
+> > > > index 2166bdff88b7..a2383457889e 100644
+> > > > --- a/arch/x86/coco/sev/core.c
+> > > > +++ b/arch/x86/coco/sev/core.c
+> > > > @@ -2664,6 +2664,11 @@ static struct platform_device sev_guest_device = {
+> > > >  	.id		= -1,
+> > > >  };
+> > > >
+> > > > +static struct platform_device tpm_svsm_device = {
+> > > > +	.name		= "tpm-svsm",
+> > > > +	.id		= -1,
+> > > > +};
+> > > > +
+> > > >  static int __init snp_init_platform_device(void)
+> > > >  {
+> > > >  	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
+> > > > @@ -2672,6 +2677,9 @@ static int __init snp_init_platform_device(void)
+> > > >  	if (platform_device_register(&sev_guest_device))
+> > > >  		return -ENODEV;
+> > > >
+> > > > +	if (platform_device_register(&tpm_svsm_device))
+> > > > +		return -ENODEV;
+> > > > +
+> > > 
+> > > You could avoid registering the device if an SVSM isn't present. Not sure
+> > > if that is desirable or not.
+> > 
+> > Is there any use for the device if an SVSM isn't present? :-)
+> > 
+> > I'd judge it based on that...
 > 
-> Yep, I already fixed it in v4, since I found that issue while
-> backporting this patch to CentOS 9.
-> 
-> >>
-> >> > +#include <linux/module.h>
-> >> > +#include <linux/kernel.h>
-> >> > +#include <linux/platform_device.h>
-> >> > +#include <linux/svsm_vtpm.h>
-> >> > +
-> >> > +#include "tpm.h"
-> >> > +
-> >> > +struct tpm_svsm_priv {
-> >> > +  u8 buffer[SVSM_VTPM_MAX_BUFFER];
-> >> > +  u8 locality;
-> >> > +};
-> >>
-> >> I'm wondering if the buffer shouldn't be a pointer to a page of memory
-> >> that is a page allocation. This ensures it is always page-aligned in case
-> >> the tpm_svsm_priv structure is ever modified.
-> 
-> @Tom Should that buffer really page aligned?
-> 
-> I couldn't find anything in the specification. IIRC edk2 also doesn't
-> allocate it aligned, and the code in SVSM already handles the case when
-> this is not aligned.
-> 
-> So if it is to be aligned to the pages, we should reinforce it in SVSM
-> (spec/code) and also fix edk2.
-> 
-> Or was yours a suggestion for performance/optimization?
-> 
-> >>
-> >> As it is, the kmalloc() allocation will be page-aligned because of the
-> >> size, but it might be safer, dunno, your call.
-> >
-> >This was good catch. There's actually two issues here:
-> >
-> >1. SVSM_VTPM_MAX_BUFFER is same as page size.
-> >2. SVSM_VTPM_MAX_BUFFER is IMHO defined in wrong patch 2/4.
-> 
-> I put it in patch 2 because IIUC it should be part of the SVSM
-> specification (the size, not the alignment).
-> 
-> >
-> >So this constant would be needed, it should be appeneded in this patch,
-> >not in 2/4 because it has direct effect on implementation of the driver.
-> >
-> >I'd personally support the idea of removing this constant altogether
-> >and use alloc_page() (i.e., same as you suggested).
-> 
-> Do you think it's necessary, even though alignment is not required?
-> (I'm still not clear if it's a requirement, see above)
+> I tried to keep the logic of whether or not the driver is needed all in the
+> tpm_svsm_probe()/snp_svsm_vtpm_probe() (where I check for SVSM).
+> If you prefer to move some pieces here, though, I'm open.
 
-If the question is whether I would NAK based on using kzalloc(). Likely
-not but still using page allocator would be more lean :-)
-
-> 
-> >
-> >kmalloc() does do the "right thing here but it is still extra
-> >unnecessary layer of random stuff on top...
-> 
-> Yes, if it has to be aligned I completely agree. I would like to use
-> devm_ functions to keep the driver simple. Do you think
-> devm_get_free_pages() might be a good alternative to alloc_page()?
-
-Yes, I think it could be used here.
+OK good point, thanks! Let's look the update as a whole and not touch
+on this. There's already quite a few pieces moving. Ignore this for
+the moment :-)
 
 > 
 > Thanks,
