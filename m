@@ -1,137 +1,130 @@
-Return-Path: <linux-integrity+bounces-5335-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5336-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 438BFA6A4C9
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 12:20:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9F99A6A609
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 13:14:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BECB7B17D8
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 11:19:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 547233B4E83
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 12:12:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3710221549;
-	Thu, 20 Mar 2025 11:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LhC4gia5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E7D6221DA2;
+	Thu, 20 Mar 2025 12:12:10 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from gardel.0pointer.net (gardel.0pointer.net [85.214.157.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D2A21D5BF
-	for <linux-integrity@vger.kernel.org>; Thu, 20 Mar 2025 11:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A9321E0A2;
+	Thu, 20 Mar 2025 12:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.157.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742469530; cv=none; b=jrxTXEFTeKhKcGdPJpbs2EvYv7C2YGPtsdsX2ExlT7WvqVy9FoKJNG+GbZZJldhiqPFa6xRuY+6Nr5lG30h5/wDCQXDue462m2+HrOxkWmorDYj6CVHZt2wo5YAdaI2JiQGfJrB0khbPkgi4o9TeHiZHWik7oi3jZMnvvXpi2Bo=
+	t=1742472730; cv=none; b=JFhE2S/o4g/p57tyJJPHkX7xaDt/HgFZGNw/5u1K/1msbCdmn+fAMJWor6JPZX9ijDYajosfCGe9V264jYRz8rsV68+i2O/wEyVAtE8/og0FXQbLqdfWEuGq99s2zu057f7c/qoF9ZDB1bFFHKqVII/BUmtjoQs+6puxGNRaIqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742469530; c=relaxed/simple;
-	bh=0FdnkXQluRsPObUmbyXPh2pDGWDzoaM0MsbjAFVybsE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ewdHnnmBwROY+2LTp+EyfoJOLTwYkUokbDI/V6KgAbScBccj81rI+UAcPJ/TySwa9Vm0CiPwv4f5pyMUBuo41R50U1gIJNZHdWRnHRa+4U4Rjhyojged3bOtcnxvaBxuEM/qSqOP649TA+seNFa0Oy+KT37Bflnp/O7ENymDzMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LhC4gia5; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742469528;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NlhLlOmKjiRqXZDEYP/oB3y/fV4BzL5SuKNYZXi0IDU=;
-	b=LhC4gia5O/tkJKMheRz3VBIhpjLRMDwOLWKockOvRz1QoSpF8dOeyH4ON604L6G/gWOIc1
-	q95T6wFnEDA6BiGNMFXJyHGKIxXrtEmfOI8nbJ11JW2JdZxYIL0zoLvpGsKSAtbJe0Jyth
-	lBH69VG6ZBOUY4afWlYZtnMpmkG4PgA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-149-RRqjb3brNFiimW0kLHNYVA-1; Thu, 20 Mar 2025 07:18:44 -0400
-X-MC-Unique: RRqjb3brNFiimW0kLHNYVA-1
-X-Mimecast-MFC-AGG-ID: RRqjb3brNFiimW0kLHNYVA_1742469524
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3914608e90eso415993f8f.2
-        for <linux-integrity@vger.kernel.org>; Thu, 20 Mar 2025 04:18:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742469523; x=1743074323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NlhLlOmKjiRqXZDEYP/oB3y/fV4BzL5SuKNYZXi0IDU=;
-        b=X314wy4dtpgojseUdLlyNbf5meDzOT4uhQigVY1F3rrWkmkNt0htCIpBj8E1vjp5Qi
-         phrN1AvPZCtQh1tZ/qSExnRMBWUYbRN+GJH1WVjviEmqs925ZaJoga++rf0gAfeooq/4
-         u+z0JLtxJLke1/cWz6+a7HYAcskDl2MAo4ly504JRf/n1V4Z3VR4ZAMlGih9pCsRL6aJ
-         7wUDi6FAcApo0sMw3DWTD5t1ObfDVOQK4/53dNLGO8FG1ZZkMgiYYBfOOhkCJSoj3Co/
-         vDYlhazBwfIVgvP4gHPmozU94ZE5djSjp2rErhMndUCXO+TAzB1HNoAbpM4qmjeGGm53
-         Ocaw==
-X-Forwarded-Encrypted: i=1; AJvYcCW/Kt6wBQ9KjxbY7JlBIE4rG0NXVliJqAMK7XS1xBRDxVUdUKjqUtBJVD1yBHe8xzKXKdjs4Boy/WKcjdhzMIE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6f+mJzVq82uST1cy1dxnVTgqw8Xc5xzDmVLnsonDYztM+JDai
-	qYOFGdOFWGG7YdEwrX6eRdlD85Vvq1jNo1OYiPYNEPStOVXc1mFefEMvAFbVdR8Xu1XkBuEXuS/
-	442Vc3irex+E9beMUo2DbnXTn2pIaTclvAG1Ua77jbpX/Kn4XF4b4++e5uTi8JrMOvQ==
-X-Gm-Gg: ASbGncuH4LXTTA7w6CO9pPP38e3BP+Olm36lfLsRuABweZpESXAwCiCGZ3AIVgYlxZc
-	S7MA9v/YohvtMcch4PqiwCRoRYEKslFp5p3+5SDmOHIaC63iwC0EuBIeqOU1NnUj4lfhqVZNZtj
-	Zt8I9MEsJb6NUmuTwsepJo2S8VLsyI3trs/Vf+mM2AE+228UjCkeep63kn36vGY+c09whTIWuSK
-	BcjZgQIejnJLwNi5DNX7h61cJDJdQcGAKsGEF9enE1NT4WOazqbyHgzkSv7JdSS0h1j9naK7A3I
-	zJLI51PTFOwrwphERcCIE8ewBiC3RVuhW0REjgZzyXLthghpMmXbT5jJYh8LF8LN
-X-Received: by 2002:a05:6000:4107:b0:391:255a:748b with SMTP id ffacd0b85a97d-39973afaef3mr7410053f8f.39.1742469523532;
-        Thu, 20 Mar 2025 04:18:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHI5mpKp1YJg5aoVvk5ggv41pOHlIt28ldIzkOLJLMe/dkF2SkzzL//q6jSa4e5CHMy+shCrg==
-X-Received: by 2002:a05:6000:4107:b0:391:255a:748b with SMTP id ffacd0b85a97d-39973afaef3mr7409991f8f.39.1742469522991;
-        Thu, 20 Mar 2025 04:18:42 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-12-25-55.business.telecomitalia.it. [87.12.25.55])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb318acfsm23916885f8f.70.2025.03.20.04.18.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 04:18:42 -0700 (PDT)
-Date: Thu, 20 Mar 2025 12:18:35 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org, 
-	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>, linux-integrity@vger.kernel.org, 
-	Dov Murik <dovmurik@linux.ibm.com>, Dionna Glaze <dionnaglaze@google.com>, 
-	linux-coco@lists.linux.dev, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Claudio Carvalho <cclaudio@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v3 3/4] tpm: add SNP SVSM vTPM driver
-Message-ID: <imld77cuc6e4kyd5an5oeerfseit3l4enrbpazne2ybo34srik@ejqwayyod2mv>
-References: <20250311094225.35129-1-sgarzare@redhat.com>
- <20250311094225.35129-4-sgarzare@redhat.com>
- <e4eeaead-2277-1f6f-86eb-f80deae2135b@amd.com>
- <Z9gm9iWhk5Zs2NvI@kernel.org>
- <CAGxU2F7fdAi148rB-4c==-qCOW1SJjwf4AzC2=TUhfPXMhR5pQ@mail.gmail.com>
- <1262fa5b-0822-b8d4-26c5-426ffa4e0265@amd.com>
- <qne5fm44dhkbnwc6ldgff76ljt7ecd3cvtf3b3lhos56yyx2ez@qbcv45zbxlhp>
- <20250319234422.GG126678@ziepe.ca>
+	s=arc-20240116; t=1742472730; c=relaxed/simple;
+	bh=2hjKwq6kk1hx+A8wkZwRF9MYGKvwTO1wp6RDC9xD8Kw=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ses+iMPv8LnCJecMK/F1QYSbNYNbZCTlN2/I46PqL4K0wv3399wXsPtgsaoMcPoItXaTU4xXR7qiwoVu5oNFLrcDBgQSRIWzXVrtx+7rTlQ0Cng2Q8XhLbdFi0EdiwI/9Tygm6VHuqQ9pQqpCw9xum9fzRA5C0MTGNrCpbF5ptQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0pointer.de; spf=pass smtp.mailfrom=0pointer.de; arc=none smtp.client-ip=85.214.157.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0pointer.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0pointer.de
+Received: from gardel-login.0pointer.net (gardel-mail [85.214.157.71])
+	by gardel.0pointer.net (Postfix) with ESMTP id D02F4E801C3;
+	Thu, 20 Mar 2025 13:02:13 +0100 (CET)
+Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
+	id 6C4FF160206; Thu, 20 Mar 2025 13:02:13 +0100 (CET)
+Date: Thu, 20 Mar 2025 13:02:13 +0100
+From: Lennart Poettering <mzxreary@0pointer.de>
+To: Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Lee, Chun-Yi" <joeyli.kernel@gmail.com>
+Subject: [PATCH] Revert "integrity: Do not load MOK and MOKx when secure boot
+ be disabled"
+Message-ID: <Z9wDxeRQPhTi1EIS@gardel-login>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250319234422.GG126678@ziepe.ca>
 
-On Wed, Mar 19, 2025 at 08:44:22PM -0300, Jason Gunthorpe wrote:
->On Tue, Mar 18, 2025 at 05:18:53PM +0100, Stefano Garzarella wrote:
->
->> I see, thanks for the clarification!
->> I saw that with devm_get_free_pages() I can easily allocate a
->> resource-managed page, so I'll do that in v4.
->
->As a general note you should just use kmalloc these days, even for
->PAGE_SIZE. It is efficient and OK.
+This reverts commit 92ad19559ea9a8ec6f158480934ae26ebfe2c14f.
 
-Thanks for sharing!
+This original commit this reverts creates a strange situation: it
+ensures more restrictive behaviour if SecureBoot is off then when it
+is on, which is the opposite of what one would expect.
 
-I think I'll stay with devm_get_free_pages() just because if it's
-page aligned (with kmalloc I'm not sure if I have a way to ensure it), 
-it can be a bitter faster for SVSM to map/unmap it on every command.
+Typically, one would expect that if SB is off the validation of
+resources during the pre-kernel and kernel initialization is less
+restrictive, not more restrictive. But this check turned the world on
+its head.
 
->
->Having a struct that is PAGE_SIZE+1 is not efficient and will waste
->a page of memory. That should be avoided ..
+I'd like to ask for this commit to be reverted. If SB is on all bets are
+off regarding integrity of boot loaders and stuff, hence it makes no
+sense to be restrictive here: you cannot regain integrity once you gave
+it up once, hence if all bets are off anyway we might as well import any
+Mok keys passed to us into the kernel keyring.
 
-Got it, I will definitely split the buffer allocation from the priv.
+Or to say this differently: if an attacker got control of the pre-kernel
+boot phase they might as well patch around in the firmware apis to make
+the kernel believe it is in SB mode even if it is not. Hence the check
+carries no value. It doesn't protect anything in any effective way.
 
-Thanks,
-Stefano
+The reason i'd like this check to go is that I'd like a nice way to
+insert keys from pre-boot into into the kernel keyring for use with
+signed dm-verity, without requiring recompilation of the kernel, and
+without SB database games. i.e. i'd like to use a regular, signed
+distro kernel, and pass to it additional keys to insert into the
+kernel keyring in a reasonable way. The mok stuff would be great for that,
+except it all falls apart once SB is off.
 
+You might wonder what signed dm-verity gives me if I have SB off. If
+we authenticate the boot phase up to Linux userspace via TPM-based PCR
+policies (i.e. measured boot) we can be sure of the boot integrity
+without having to rely on SB. But then we'd still like to use
+dm-verity based code signing for userspace.
+---
+ security/integrity/platform_certs/load_uefi.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
+index d1fdd113450a..7783bcacd26c 100644
+--- a/security/integrity/platform_certs/load_uefi.c
++++ b/security/integrity/platform_certs/load_uefi.c
+@@ -7,7 +7,6 @@
+ #include <linux/err.h>
+ #include <linux/efi.h>
+ #include <linux/slab.h>
+-#include <linux/ima.h>
+ #include <keys/asymmetric-type.h>
+ #include <keys/system_keyring.h>
+ #include "../integrity.h"
+@@ -211,10 +210,6 @@ static int __init load_uefi_certs(void)
+ 		kfree(dbx);
+ 	}
+
+-	/* the MOK/MOKx can not be trusted when secure boot is disabled */
+-	if (!arch_ima_get_secureboot())
+-		return 0;
+-
+ 	mokx = get_cert_list(L"MokListXRT", &mok_var, &mokxsize, &status);
+ 	if (!mokx) {
+ 		if (status == EFI_NOT_FOUND)
+--
+2.48.1
+
+
+Lennart
+
+--
+Lennart Poettering, Berlin
 
