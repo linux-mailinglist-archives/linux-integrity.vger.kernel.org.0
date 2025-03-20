@@ -1,94 +1,104 @@
-Return-Path: <linux-integrity+bounces-5334-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5335-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3F4A6A4A7
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 12:16:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 438BFA6A4C9
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 12:20:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF96B8A28F2
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 11:15:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BECB7B17D8
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Mar 2025 11:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D3D21CC5D;
-	Thu, 20 Mar 2025 11:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3710221549;
+	Thu, 20 Mar 2025 11:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UB3L4gbP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LhC4gia5"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F24521D5A4
-	for <linux-integrity@vger.kernel.org>; Thu, 20 Mar 2025 11:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D2A21D5BF
+	for <linux-integrity@vger.kernel.org>; Thu, 20 Mar 2025 11:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742469348; cv=none; b=ctKTdauEEe8cvn4O7RHrm9G3Ljy20DnLmyLiKsL/7l1mGR+WFz6yyXGiFsy2kDlNV8eS/qdQmteAllj+9PtIqPP8S40G0UUbjF9MiytJiXtu+vNQAOjOjdl7lW9TxrcDSthKshA1v52EWlR6gRX/5nifWe+z7RyXWYTxktHEZ7A=
+	t=1742469530; cv=none; b=jrxTXEFTeKhKcGdPJpbs2EvYv7C2YGPtsdsX2ExlT7WvqVy9FoKJNG+GbZZJldhiqPFa6xRuY+6Nr5lG30h5/wDCQXDue462m2+HrOxkWmorDYj6CVHZt2wo5YAdaI2JiQGfJrB0khbPkgi4o9TeHiZHWik7oi3jZMnvvXpi2Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742469348; c=relaxed/simple;
-	bh=GuTQSbeQ/uP+AkFQJqxbkb9TGxhTiSjtGoEhGkkSwoY=;
+	s=arc-20240116; t=1742469530; c=relaxed/simple;
+	bh=0FdnkXQluRsPObUmbyXPh2pDGWDzoaM0MsbjAFVybsE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a1WbVMJfqQys/E8j/a/H/Gw17MAMyEsvzFWkrNHSEqY1rbv1OkaXJ6frU+8zfyF5EhK+FPEUvZ37vQGjOwI+MDSmEOVsANnrt1QxUTR57YDNp1ptAdKLTrno1NfvX2VUq+L1gP2DQTmbOLP9knpTJ7rC9fIqsr55C4a3mC7Jrgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UB3L4gbP; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=ewdHnnmBwROY+2LTp+EyfoJOLTwYkUokbDI/V6KgAbScBccj81rI+UAcPJ/TySwa9Vm0CiPwv4f5pyMUBuo41R50U1gIJNZHdWRnHRa+4U4Rjhyojged3bOtcnxvaBxuEM/qSqOP649TA+seNFa0Oy+KT37Bflnp/O7ENymDzMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LhC4gia5; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742469346;
+	s=mimecast20190719; t=1742469528;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+zJmTq24j2TSdEMXZRAZzOm55bRd67GQpITR3GiP3qM=;
-	b=UB3L4gbP5gXZ1HV0OjVBcpu7tvURL8NYlf4i64uZXdFdq3xweB6tTOw0qgoOl/9fnsAKlY
-	6WoikNaIfnbH7pl9HL9uW5ngAGrTl8hoa0ydkMjK3KyAiilx+GIuckvnLx29q13od6vq8D
-	nET2J7gs1QdHbjWMGTCBsuSJKOe5BiU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=NlhLlOmKjiRqXZDEYP/oB3y/fV4BzL5SuKNYZXi0IDU=;
+	b=LhC4gia5O/tkJKMheRz3VBIhpjLRMDwOLWKockOvRz1QoSpF8dOeyH4ON604L6G/gWOIc1
+	q95T6wFnEDA6BiGNMFXJyHGKIxXrtEmfOI8nbJ11JW2JdZxYIL0zoLvpGsKSAtbJe0Jyth
+	lBH69VG6ZBOUY4afWlYZtnMpmkG4PgA=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-180-Kiwp063SN9mEea-5URjbzw-1; Thu, 20 Mar 2025 07:15:42 -0400
-X-MC-Unique: Kiwp063SN9mEea-5URjbzw-1
-X-Mimecast-MFC-AGG-ID: Kiwp063SN9mEea-5URjbzw_1742469342
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43d22c304adso7662205e9.0
-        for <linux-integrity@vger.kernel.org>; Thu, 20 Mar 2025 04:15:42 -0700 (PDT)
+ us-mta-149-RRqjb3brNFiimW0kLHNYVA-1; Thu, 20 Mar 2025 07:18:44 -0400
+X-MC-Unique: RRqjb3brNFiimW0kLHNYVA-1
+X-Mimecast-MFC-AGG-ID: RRqjb3brNFiimW0kLHNYVA_1742469524
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3914608e90eso415993f8f.2
+        for <linux-integrity@vger.kernel.org>; Thu, 20 Mar 2025 04:18:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742469341; x=1743074141;
+        d=1e100.net; s=20230601; t=1742469523; x=1743074323;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+zJmTq24j2TSdEMXZRAZzOm55bRd67GQpITR3GiP3qM=;
-        b=Lc2KsQvjpcULUq6qhnR9o/Enu+O+sAsF7aVXTbGOuYvtf85Sfm3snDs72QAnJJOEip
-         Nv7yy6rr1+DsyyLWjcFGODwdsYnyRoKjOk+XcwdZsFW6TYkT8C9DvfbOnwdrKbrbxLhZ
-         VRxo5egYp3twrHzbqrsc87vcUMdiMWamRySP+qDaCka0zbMLU9ZbnlHRbo8OkNsLl/zj
-         QNJEdIX7RvfIBot9XBQ2Q8YOWsCUlonN5ZuVphKUEQk0BEuRGol+nQGY37seP2HGGfNb
-         1CImNIXpph3Sh5iHKZrOd4O9lrPu5/2jCwMgR6K6MdAQfWXUgIsK/JyaIML3dlDCo2hy
-         D+kg==
-X-Forwarded-Encrypted: i=1; AJvYcCVRPwKVcqYi638qQwIJEpHjnCno2SX98kyeXp0Y+tpeXCxvgxiP7bMFyXZuRwcf0PDU5ee2lZ2DYLNuTHLc9IA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTNHn6Kbd9YTukdNUxYjRq8YWDbfQhUXNgkkzEz9NnQLms1mRe
-	9zbkmXcWqsvW9scLZgh3fv+j95fOtTmWVpKEqNVs0P+pcQww7oKn3lSTFxQuq0BRosS/JyyB29A
-	RnaaaqZHqAs6jo8IPiAiaydxBI+XiwqqwPxOn/bgVAnSXI38wsE2/CoocLjnMveTF8g==
-X-Gm-Gg: ASbGncuG7n7bEvOzZSYT8VeuI2o3Wlo9sa/RREmbGcj9ynkcYpF0OprCMZqupXRr0+j
-	3/honUv/DUDFmvtDXWdnTfZQM+yBSBm6C1x4jRpmXy37uDPHVcnFkI8hiZX9jTMn9BiQWhD9bES
-	GuIBdScdILZ9r6jSCbuIq8H0rVB7P6dmu+fSLPxt0TVA5z6/7378knBgJlIoMF67FBB0JTAJgsJ
-	FVQeP4SOSv4AS0yZ8wiQvfhi+N/jqdZdQtSy/7PMnfPL2UQr6ZTGjyiemuFbzW1lCm8fDTjJao8
-	VYT1VaqFz5k5DNYGvWa9bECYuHMr0dWeq0lMIZ0X1xH4nSbMO48BAHvVGonE+naJ
-X-Received: by 2002:a05:6000:1548:b0:390:e9e0:5cc6 with SMTP id ffacd0b85a97d-39979556803mr2541231f8f.1.1742469341611;
-        Thu, 20 Mar 2025 04:15:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFqDtibOAZ2y1N0SPi/SBBDfHiePj8pG89PRaxe+lkVMALTkUpR5ddcZlaBUIMF9H9cEQB2cg==
-X-Received: by 2002:a05:6000:1548:b0:390:e9e0:5cc6 with SMTP id ffacd0b85a97d-39979556803mr2541194f8f.1.1742469341019;
-        Thu, 20 Mar 2025 04:15:41 -0700 (PDT)
+        bh=NlhLlOmKjiRqXZDEYP/oB3y/fV4BzL5SuKNYZXi0IDU=;
+        b=X314wy4dtpgojseUdLlyNbf5meDzOT4uhQigVY1F3rrWkmkNt0htCIpBj8E1vjp5Qi
+         phrN1AvPZCtQh1tZ/qSExnRMBWUYbRN+GJH1WVjviEmqs925ZaJoga++rf0gAfeooq/4
+         u+z0JLtxJLke1/cWz6+a7HYAcskDl2MAo4ly504JRf/n1V4Z3VR4ZAMlGih9pCsRL6aJ
+         7wUDi6FAcApo0sMw3DWTD5t1ObfDVOQK4/53dNLGO8FG1ZZkMgiYYBfOOhkCJSoj3Co/
+         vDYlhazBwfIVgvP4gHPmozU94ZE5djSjp2rErhMndUCXO+TAzB1HNoAbpM4qmjeGGm53
+         Ocaw==
+X-Forwarded-Encrypted: i=1; AJvYcCW/Kt6wBQ9KjxbY7JlBIE4rG0NXVliJqAMK7XS1xBRDxVUdUKjqUtBJVD1yBHe8xzKXKdjs4Boy/WKcjdhzMIE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6f+mJzVq82uST1cy1dxnVTgqw8Xc5xzDmVLnsonDYztM+JDai
+	qYOFGdOFWGG7YdEwrX6eRdlD85Vvq1jNo1OYiPYNEPStOVXc1mFefEMvAFbVdR8Xu1XkBuEXuS/
+	442Vc3irex+E9beMUo2DbnXTn2pIaTclvAG1Ua77jbpX/Kn4XF4b4++e5uTi8JrMOvQ==
+X-Gm-Gg: ASbGncuH4LXTTA7w6CO9pPP38e3BP+Olm36lfLsRuABweZpESXAwCiCGZ3AIVgYlxZc
+	S7MA9v/YohvtMcch4PqiwCRoRYEKslFp5p3+5SDmOHIaC63iwC0EuBIeqOU1NnUj4lfhqVZNZtj
+	Zt8I9MEsJb6NUmuTwsepJo2S8VLsyI3trs/Vf+mM2AE+228UjCkeep63kn36vGY+c09whTIWuSK
+	BcjZgQIejnJLwNi5DNX7h61cJDJdQcGAKsGEF9enE1NT4WOazqbyHgzkSv7JdSS0h1j9naK7A3I
+	zJLI51PTFOwrwphERcCIE8ewBiC3RVuhW0REjgZzyXLthghpMmXbT5jJYh8LF8LN
+X-Received: by 2002:a05:6000:4107:b0:391:255a:748b with SMTP id ffacd0b85a97d-39973afaef3mr7410053f8f.39.1742469523532;
+        Thu, 20 Mar 2025 04:18:43 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHI5mpKp1YJg5aoVvk5ggv41pOHlIt28ldIzkOLJLMe/dkF2SkzzL//q6jSa4e5CHMy+shCrg==
+X-Received: by 2002:a05:6000:4107:b0:391:255a:748b with SMTP id ffacd0b85a97d-39973afaef3mr7409991f8f.39.1742469522991;
+        Thu, 20 Mar 2025 04:18:42 -0700 (PDT)
 Received: from sgarzare-redhat (host-87-12-25-55.business.telecomitalia.it. [87.12.25.55])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43f7460fsm45091825e9.28.2025.03.20.04.15.39
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb318acfsm23916885f8f.70.2025.03.20.04.18.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 04:15:40 -0700 (PDT)
-Date: Thu, 20 Mar 2025 12:15:33 +0100
+        Thu, 20 Mar 2025 04:18:42 -0700 (PDT)
+Date: Thu, 20 Mar 2025 12:18:35 +0100
 From: Stefano Garzarella <sgarzare@redhat.com>
 To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [RFC PATCH 3/3] tpm/tpm_svsm: use send_recv() op
-Message-ID: <7v7v7quud3z2fb5edh3aogzjyvb7lciaqlvjeuii3ca4glvlmq@joxaspk66q5v>
-References: <20250311100130.42169-1-sgarzare@redhat.com>
- <20250311100130.42169-4-sgarzare@redhat.com>
- <20250319195818.GC126678@ziepe.ca>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>, linux-integrity@vger.kernel.org, 
+	Dov Murik <dovmurik@linux.ibm.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	linux-coco@lists.linux.dev, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Claudio Carvalho <cclaudio@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v3 3/4] tpm: add SNP SVSM vTPM driver
+Message-ID: <imld77cuc6e4kyd5an5oeerfseit3l4enrbpazne2ybo34srik@ejqwayyod2mv>
+References: <20250311094225.35129-1-sgarzare@redhat.com>
+ <20250311094225.35129-4-sgarzare@redhat.com>
+ <e4eeaead-2277-1f6f-86eb-f80deae2135b@amd.com>
+ <Z9gm9iWhk5Zs2NvI@kernel.org>
+ <CAGxU2F7fdAi148rB-4c==-qCOW1SJjwf4AzC2=TUhfPXMhR5pQ@mail.gmail.com>
+ <1262fa5b-0822-b8d4-26c5-426ffa4e0265@amd.com>
+ <qne5fm44dhkbnwc6ldgff76ljt7ecd3cvtf3b3lhos56yyx2ez@qbcv45zbxlhp>
+ <20250319234422.GG126678@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -97,31 +107,29 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20250319195818.GC126678@ziepe.ca>
+In-Reply-To: <20250319234422.GG126678@ziepe.ca>
 
-On Wed, Mar 19, 2025 at 04:58:18PM -0300, Jason Gunthorpe wrote:
->On Tue, Mar 11, 2025 at 11:01:30AM +0100, Stefano Garzarella wrote:
->> This driver does not support interrupts, and receiving the response is
->> synchronous with sending the command.
->>
->> Let's simplify the driver by implementing the new send_recv() op.
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> ---
->> Note: this is based on "[PATCH v3 0/4] Enlightened vTPM support for SVSM
->> on SEV-SNP" series [1].
->> If we will merge this series before it, we can just ignore this patch
->> and I'll squash these changes in that series.
->>
->> [1] https://lore.kernel.org/linux-integrity/20250311094225.35129-1-sgarzare@redhat.com/
->> ---
->>  drivers/char/tpm/tpm_svsm.c | 46 ++++++++-----------------------------
->>  1 file changed, 9 insertions(+), 37 deletions(-)
+On Wed, Mar 19, 2025 at 08:44:22PM -0300, Jason Gunthorpe wrote:
+>On Tue, Mar 18, 2025 at 05:18:53PM +0100, Stefano Garzarella wrote:
 >
->I think the diffstat speaks for itself, you should send this as
->non-RFC
+>> I see, thanks for the clarification!
+>> I saw that with devm_get_free_pages() I can easily allocate a
+>> resource-managed page, so I'll do that in v4.
+>
+>As a general note you should just use kmalloc these days, even for
+>PAGE_SIZE. It is efficient and OK.
 
-Ack, I'll re-send it.
+Thanks for sharing!
+
+I think I'll stay with devm_get_free_pages() just because if it's
+page aligned (with kmalloc I'm not sure if I have a way to ensure it), 
+it can be a bitter faster for SVSM to map/unmap it on every command.
+
+>
+>Having a struct that is PAGE_SIZE+1 is not efficient and will waste
+>a page of memory. That should be avoided ..
+
+Got it, I will definitely split the buffer allocation from the priv.
 
 Thanks,
 Stefano
