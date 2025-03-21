@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-5358-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5359-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 722DAA6BF87
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 17:17:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD4E9A6BFBE
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 17:22:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E883717146E
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 16:17:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F31F1188FDC7
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 16:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D6222D4DA;
-	Fri, 21 Mar 2025 16:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF14B22AE76;
+	Fri, 21 Mar 2025 16:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VXCPZao7"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="kfOmQNWA"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9376B226D1B;
-	Fri, 21 Mar 2025 16:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4490722B8C4;
+	Fri, 21 Mar 2025 16:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742573812; cv=none; b=f6q3JeHioCwQ7yHW6WuASZRMF1ngTCr+/PT9+gVIh+AGjHMSiCqZkljjw0JeJiN6Iuy69uYD2VLaLkQ6zqCdojKOkUgP4ECcmBo4e9Sxu+XrPhpOwM8dPppj48pREycdsds3wPx3EICvQnceeIvVnOun8MEkrM6tyWAuqSAvLU4=
+	t=1742573903; cv=none; b=H1bg831xOhiRy1B4VE8310lmh72fFzzg+H5acgEvM+qGTLN3XWLAwuDr2KiMqFoNEnOLCZg2pRNq+gjT+ED4a+QnsZL+/ZyVfjWv0sgpjQZBCAXC21X2o1tuZ8O27uenxp2Of4oX8+3BxqZsdpXgp+JOhXaa7p/DCcXEeNEFroM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742573812; c=relaxed/simple;
-	bh=g4njPH8ooH1e2h/tZs1yCYEpzY85WHP+MRJtcNkh5oo=;
+	s=arc-20240116; t=1742573903; c=relaxed/simple;
+	bh=DJCH7ueIUm8zn+Nmq0dL4A36uMUfzDskfEgbmVv5vKo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z6oN5p7QGpjmbUrEg/vns1G5b8Pwfjims65uYr9qmplZMkHH+AcY5YXbBRlLpSq9qhD41SrHvAJD+pvskBLr0rX/0nApqe7WXNNH+pSYR0kOGU7q92pOPSp+1CWO66xlT9tKXCnNz27GlOqUl6uS08kM2SNDepfu2YgBxm4UIwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VXCPZao7; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=m9xMf0haqb3OPbzyP14+fckdfaG1QeAWIvIK4nMzEdM+vEyzaEW6UeG/RhhrQUXyf/SVQPsFwgQuhxTIamedK70fFM2GPBRyJv+kolz3lEoLTHO/JjiXQtJ7wF+gvu3DsGn7jdtZYx0Sxt4hW4Gx463jsiBXZlTIcefkL9YAnf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=kfOmQNWA; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.17.64.97] (unknown [131.107.174.225])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 07F52202537E;
-	Fri, 21 Mar 2025 09:16:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 07F52202537E
+	by linux.microsoft.com (Postfix) with ESMTPSA id 95414202537E;
+	Fri, 21 Mar 2025 09:18:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 95414202537E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1742573810;
-	bh=R1nD5dBAblQuNZ9vwCHQrc+0rDQkVy0Dn4/k8PPkSg8=;
+	s=default; t=1742573901;
+	bh=bREkR7Q4lq1SSvQYMg6DzgXSYgZuwjodek6Of27CdyE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VXCPZao7zvdMcq+p5QAf2NTnAQSKSj1jGH57/DoHd8DBvMhknS0QK93UGTaai0LcJ
-	 gys+d3sy6s/OMLq5IyV3YRm6PUSXyyeeTu0RQrqLHpbWu8E9OkcSkYhU7KG0sw7Vwg
-	 NZ7ofHMq8wQCv3++xbQjEadUjMVD4S4tGyUHt/7s=
-Message-ID: <4340a887-f0d1-481f-b47f-cd0226adf869@linux.microsoft.com>
-Date: Fri, 21 Mar 2025 09:16:50 -0700
+	b=kfOmQNWAKkEYR30lvRiIVJDKpN6tjU/J3lpJFFShJOuoaAUJh5Y9O7BnWZFvlebN1
+	 Hq2OHcxk8rSb9nvfQjnXFP3u9xTUlTc1vW5lqrd8oIlWKoOaMuPAPvAdmkX6+3M7lI
+	 9Dt1QL2GGYad15+DeADgtjzAZ9WfRd4w2AIobkZI=
+Message-ID: <798d64a7-eb93-433d-ab6b-37a7c5d89412@linux.microsoft.com>
+Date: Fri, 21 Mar 2025 09:18:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,149 +49,81 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 1/8] ima: rename variable the ser_file "file" to
- "ima_kexec_file"
-To: Mimi Zohar <zohar@linux.ibm.com>, stefanb@linux.ibm.com,
- roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
- eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
- code@tyhicks.com, bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
- kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
- James.Bottomley@HansenPartnership.com, bhe@redhat.com, vgoyal@redhat.com,
- dyoung@redhat.com
+Subject: Re: [PATCH v10 2/8] ima: define and call ima_alloc_kexec_file_buf()
+To: Mimi Zohar <zohar@linux.ibm.com>, Baoquan He <bhe@redhat.com>
+Cc: stefanb@linux.ibm.com, roberto.sassu@huaweicloud.com,
+ roberto.sassu@huawei.com, eric.snowberg@oracle.com, ebiederm@xmission.com,
+ paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
+ linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+ linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+ madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+ James.Bottomley@hansenpartnership.com, vgoyal@redhat.com, dyoung@redhat.com
 References: <20250318010448.954-1-chenste@linux.microsoft.com>
- <20250318010448.954-2-chenste@linux.microsoft.com>
- <255e75954d9418e2658a6eba6879804c31b3713f.camel@linux.ibm.com>
+ <20250318010448.954-3-chenste@linux.microsoft.com>
+ <Z9p7rwXqjB3vjCpj@MiWiFi-R3L-srv>
+ <447b1bf7b31e936ab959b8ba13f09a9c25bb3977.camel@linux.ibm.com>
+ <Z9t0h5vvxP+meMkO@MiWiFi-R3L-srv>
+ <a8368f2402e1145c134e445d015c434140874e06.camel@linux.ibm.com>
 Content-Language: en-US
 From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <255e75954d9418e2658a6eba6879804c31b3713f.camel@linux.ibm.com>
+In-Reply-To: <a8368f2402e1145c134e445d015c434140874e06.camel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/19/2025 6:42 AM, Mimi Zohar wrote:
-> Fix spelling: set_file
+On 3/20/2025 6:06 AM, Mimi Zohar wrote:
+> On Thu, 2025-03-20 at 09:51 +0800, Baoquan He wrote:
+>>>>> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+>>>>> index 8567619889d1..45170e283272 100644
+>>>>> --- a/security/integrity/ima/ima_kexec.c
+>>>>> +++ b/security/integrity/ima/ima_kexec.c
+>>>>> @@ -15,6 +15,48 @@
+>>>>>    #include "ima.h"
+>>>>>    
+>>>>>    #ifdef CONFIG_IMA_KEXEC
+>>>>> +static struct seq_file ima_kexec_file;
+>>>>> +
+>>>>> +static void ima_reset_kexec_file(struct seq_file *sf)
+>>>>> +{
+>>>>> +	sf->buf = NULL;
+>>>>> +	sf->size = 0;
+>>>>> +	sf->read_pos = 0;
+>>>>> +	sf->count = 0;
+>>>>> +}
+>>>>> +
+>>>>> +static void ima_free_kexec_file_buf(struct seq_file *sf)
+>>>>> +{
+>>>>> +	vfree(sf->buf);
+>>>>> +	ima_reset_kexec_file(sf);
+>>>>> +}
+>>>>> +
+>>>>> +static int ima_alloc_kexec_file_buf(size_t segment_size)
+>>>>> +{
+>>>>> +	/*
+>>>>> +	 * kexec 'load' may be called multiple times.
+>>>>> +	 * Free and realloc the buffer only if the segment_size is
+>>>>> +	 * changed from the previous kexec 'load' call.
+>>>>> +	 */
+>>>>> +	if (ima_kexec_file.buf && ima_kexec_file.size == segment_size)
+>>>>> +		goto out;
+>>> The call to ima_reset_kexec_file() in ima_add_kexec_buffer() resets
+>>> ima_kexec_file.buf() hiding the fact that the above test always fails and falls
+>>> through.  As a result, 'buf' is always being re-allocated.
+> Hi Steven,
 >
+> [Reiterating the comment in the "ima: kexec: move IMA log copy from kexec load
+> to execute" thread, here, for completeness.]
 >
-> On Mon, 2025-03-17 at 18:04 -0700, steven chen wrote:
->> The name of the local variable "file" of type seq_file defined in the
->> ima_dump_measurement_list function is too generic. To better reflect the
->> purpose of the variable, rename it to "ima_kexec_file". This change will
->> help improve code readability and maintainability by making the variable's
->> role more explicit.
-> The reason for making the variable name change is the variable scope.
+> Instead of adding and then removing the ima_reset_kexec_file() call from
+> ima_add_kexec_buffer(), defer adding the segment size test to when it is
+> actually possible for the segment size to change. Please make the segment size
+> test as a separate patch.
 >
-> -> Before making the function local seq_file "file" variable global, rename it
-> to ima_kexec_file.
->
->> The variable ima_kexec_file is indeed the memory allocated for copying IMA
->> measurement records. The ima_dump_measurement_list function calculates the
->> actual memory occupied by the IMA logs and compares it with the allocated
->> memory. If there is enough memory, it copies all IMA measurement records;
->> otherwise, it does not copy any records, which would result in a failure
->> of remote attestation.
-> This paragraph is not applicable to the patch change.
->
->> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
->> Signed-off-by: steven chen <chenste@linux.microsoft.com>
->> ---
->>   security/integrity/ima/ima_kexec.c | 39 ++++++++++++++++++------------
->>   1 file changed, 24 insertions(+), 15 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
->> index 9d45f4d26f73..8567619889d1 100644
->> --- a/security/integrity/ima/ima_kexec.c
->> +++ b/security/integrity/ima/ima_kexec.c
->> @@ -15,33 +15,41 @@
->>   #include "ima.h"
->>   
->>   #ifdef CONFIG_IMA_KEXEC
->> +/*
->> + * Copy the measurement list to the allocated memory
->> + * compare the size of IMA measurement list with the size of the allocated memory
->> + *    if the size of the allocated memory is not less than the size of IMA measurement list
->> + *        copy the measurement list to the allocated memory.
->> + *    else
->> + *        return error
->> + */
-> Please minimize patch changes.  Before posting, please look at the patch(s) and
-> remove anything not applicable to it.  In this case, the comment is not
-> applicable to the variable name change.
+> ima_reset_kexec_file() will then only be called by ima_free_kexec_file_buf().
+> Inline the ima_reset_kexec_file() code in ima_free_kexec_file_buf().
 >
 > thanks,
 >
 > Mimi
->    
->>   static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
->>   				     unsigned long segment_size)
->>   {
->> +	struct seq_file ima_kexec_file;
->>   	struct ima_queue_entry *qe;
->> -	struct seq_file file;
->>   	struct ima_kexec_hdr khdr;
->>   	int ret = 0;
->>   
->>   	/* segment size can't change between kexec load and execute */
->> -	file.buf = vmalloc(segment_size);
->> -	if (!file.buf) {
->> +	ima_kexec_file.buf = vmalloc(segment_size);
->> +	if (!ima_kexec_file.buf) {
->>   		ret = -ENOMEM;
->>   		goto out;
->>   	}
->>   
->> -	file.file = NULL;
->> -	file.size = segment_size;
->> -	file.read_pos = 0;
->> -	file.count = sizeof(khdr);	/* reserved space */
->> +	ima_kexec_file.file = NULL;
->> +	ima_kexec_file.size = segment_size;
->> +	ima_kexec_file.read_pos = 0;
->> +	ima_kexec_file.count = sizeof(khdr);	/* reserved space */
->>   
->>   	memset(&khdr, 0, sizeof(khdr));
->>   	khdr.version = 1;
->>   	/* This is an append-only list, no need to hold the RCU read lock */
->>   	list_for_each_entry_rcu(qe, &ima_measurements, later, true) {
->> -		if (file.count < file.size) {
->> +		if (ima_kexec_file.count < ima_kexec_file.size) {
->>   			khdr.count++;
->> -			ima_measurements_show(&file, qe);
->> +			ima_measurements_show(&ima_kexec_file, qe);
->>   		} else {
->>   			ret = -EINVAL;
->>   			break;
->> @@ -55,23 +63,24 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
->>   	 * fill in reserved space with some buffer details
->>   	 * (eg. version, buffer size, number of measurements)
->>   	 */
->> -	khdr.buffer_size = file.count;
->> +	khdr.buffer_size = ima_kexec_file.count;
->>   	if (ima_canonical_fmt) {
->>   		khdr.version = cpu_to_le16(khdr.version);
->>   		khdr.count = cpu_to_le64(khdr.count);
->>   		khdr.buffer_size = cpu_to_le64(khdr.buffer_size);
->>   	}
->> -	memcpy(file.buf, &khdr, sizeof(khdr));
->> +	memcpy(ima_kexec_file.buf, &khdr, sizeof(khdr));
->>   
->>   	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
->> -			     file.buf, file.count < 100 ? file.count : 100,
->> +			     ima_kexec_file.buf, ima_kexec_file.count < 100 ?
->> +			     ima_kexec_file.count : 100,
->>   			     true);
->>   
->> -	*buffer_size = file.count;
->> -	*buffer = file.buf;
->> +	*buffer_size = ima_kexec_file.count;
->> +	*buffer = ima_kexec_file.buf;
->>   out:
->>   	if (ret == -EINVAL)
->> -		vfree(file.buf);
->> +		vfree(ima_kexec_file.buf);
->>   	return ret;
->>   }
->>   
 
 Hi Mimi,
 
