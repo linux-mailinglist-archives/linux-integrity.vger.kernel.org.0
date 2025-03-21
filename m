@@ -1,223 +1,208 @@
-Return-Path: <linux-integrity+bounces-5365-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5366-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC2DCA6C08B
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 17:50:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F498A6C090
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 17:51:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E8181671E3
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 16:49:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77A4A1692A6
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 16:49:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2269922B59D;
-	Fri, 21 Mar 2025 16:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC40F22CBC4;
+	Fri, 21 Mar 2025 16:49:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="IvJA4DLM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="B3A3UUcl"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931A01E7C0B;
-	Fri, 21 Mar 2025 16:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from the.earth.li (the.earth.li [93.93.131.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C4B2AE84;
+	Fri, 21 Mar 2025 16:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742575743; cv=none; b=CM3FsRaNfrKxCtN+X/89PNCBUzDAyUxOAli7MkYmiC07ugWJTwQc2E1I8nirpLvEfNqaclEBLYCzUT1D3gfiN1tol0b3NhiORqim0cSSQglK1C1CpHSOQ3YIudiAKma+MxS5G7C7f0Y1IlG7wf56ss1ezx7fRw8Rd37x6ywPQlE=
+	t=1742575772; cv=none; b=mcPyn/+72/J0dgpc46Og+toRnHGjOw+2/DfX/RtTAQOQbKoCpp35q3rY+OuWrE6c3FBkpmX6Vkt6qvX0s1qRRpVtp8N/zRAsYwYG9WZT3O4mtye+2VQKGU6rBXf4AJDc7GVsR6PmiHpqk18u8smxwEja+LkEg+gBDRxBpg7AtBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742575743; c=relaxed/simple;
-	bh=Jbefc2fy+6DSTbygMu6+1efbepZO0Okur+3ITUsewdU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nje6VTXI9aS11U99Bc3my0NuXvCDV3jhuoExZA1shH8MyIPngkmlO4mPWBR80wTeQ73m5XOK5HXfD8xAUHCcGk3m5BhbPFbExq8WuwPjCBUvFFR3XlwJiHeKf0EfCR84rcHk8v5zRGYG6JdqlBamtw8i5zRYV9jxCXsJtU36m7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=IvJA4DLM; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.17.64.97] (unknown [131.107.174.225])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 08ABD202538B;
-	Fri, 21 Mar 2025 09:49:01 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 08ABD202538B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1742575741;
-	bh=EDq6dkjdVz/tPxpcBKVvaAVpNAoxeUkWXPEwHqJnTOc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IvJA4DLMQDjLEBNN5Nhuv+QYitK6B8t83wGQvVjWhT1X6P/Fvlq+E2Xk2q5aoW9Dm
-	 TmbtrjGdXmLx6HnR5qwD4vrrWd1J/eHWsSFZcW+NLcHbK97JhYZMrLGH/hDO8Ti3wc
-	 tjmCqBSfFKm/+fce2lTr7QQ8v5yOsmJcpZdqo8fE=
-Message-ID: <11de6e57-f307-4382-877e-566b5a4e855e@linux.microsoft.com>
-Date: Fri, 21 Mar 2025 09:49:01 -0700
+	s=arc-20240116; t=1742575772; c=relaxed/simple;
+	bh=nii9VmHDsEAVisWEFrOJ25tH5S57fQqoG/+RCdSS60w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IhvJwsdzBIAXoNq/gH3dJ28ilJi6A9iH00jH377dzByyxGO010SWzd8yizLkOkDYJ/IfSBDkJ2BsoCBZuLFvtKGx6h1LILQxchvu+l9ByafPx3tdO8ORSz/K3B/B6RLxYi1UL1DHuW8we9kJEsfbddVa2cYI5TbKUaS1lnTy0qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=B3A3UUcl; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=tMR6h6WbX3gykTG6+F+ZNl0W3PO7iv0LEpOU8ndGoqY=; b=B3A3UUclkONidBQGy8SmraYKej
+	qYcZxBnGqEPWN2v2R7ciiksydGj78rh+Xt8NlF7KwXZNcfoBekzeWOcdAPJJzU8R//ZMOiELBbJ7u
+	MjonnF8VGzYD+uuPwNUb3+qkHfyyY8AGgFjqx4DKJNVZft/b+Q6ciNz7nw7jpHi70ghPKqn47coML
+	KVoaEoYvmJsRRHdeO4wbWywiNC+3jv6uxSkpzMvc1J07uOInYRNUJd9siGsujs/Yh4UBrXUNOoEkC
+	yh5TZuJvub3hWNGw+cGkTzhflDVENemuYZVJx5IpREaaQ2WvG77Mml5z2Batza9OOuTiOFoKQ2dIy
+	3XNOohaw==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1tvfYZ-00CUnZ-23;
+	Fri, 21 Mar 2025 16:49:15 +0000
+Date: Fri, 21 Mar 2025 16:49:15 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tpm, tpm_tis: Workaround failed command reception on
+ Infineon devices
+Message-ID: <Z92YiwubEvzsm1SO@earth.li>
+References: <Z8lkSKOqBgt78pU2@earth.li>
+ <Z8ogT_gERUYstPbK@kernel.org>
+ <Z8sgfMmsfn894yLj@earth.li>
+ <Z8sixTuKG5sxO-D1@kernel.org>
+ <Z87Y69l5_GbzlLfp@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 8/8] ima: measure kexec load and exec events as
- critical data
-To: Mimi Zohar <zohar@linux.ibm.com>, stefanb@linux.ibm.com,
- roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
- eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
- code@tyhicks.com, bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
- kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
- James.Bottomley@HansenPartnership.com, bhe@redhat.com, vgoyal@redhat.com,
- dyoung@redhat.com
-References: <20250318010448.954-1-chenste@linux.microsoft.com>
- <20250318010448.954-9-chenste@linux.microsoft.com>
- <b61fda41ec01e1fea80a8c09f2259df6821d620e.camel@linux.ibm.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <b61fda41ec01e1fea80a8c09f2259df6821d620e.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Z87Y69l5_GbzlLfp@earth.li>
 
-On 3/19/2025 7:59 PM, Mimi Zohar wrote:
-> On Mon, 2025-03-17 at 18:04 -0700, steven chen wrote:
->> The amount of memory allocated at kexec load, even with the extra memory
->> allocated, might not be large enough for the entire measurement list.  The
->> indeterminate interval between kexec 'load' and 'execute' could exacerbate
->> this problem.
->>
->> Define two new IMA events, 'kexec_load' and 'kexec_execute', to be
->> measured as critical data at kexec 'load' and 'execute' respectively.
->> Report the allocated kexec segment size, IMA binary log size and the
->> runtime measurements count as part of those events.
->>
->> These events, and the values reported through them, serve as markers in
->> the IMA log to verify the IMA events are captured during kexec soft
->> reboot.  The presence of a 'kexec_load' event in between the last two
->> 'boot_aggregate' events in the IMA log implies this is a kexec soft
->> reboot, and not a cold-boot. And the absence of 'kexec_execute' event
->> after kexec soft reboot implies missing events in that window which
->> results in inconsistency with TPM PCR quotes, necessitating a cold boot
->> for a successful remote attestation.
->>
->> These critical data events are displayed as hex encoded ascii in the
->> ascii_runtime_measurement_list.  Verifying the critical data hash requires
->> calculating the hash of the decoded ascii string.
->>
->> For example, to verify the 'kexec_load' data hash:
->>
->> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements
->>> grep  kexec_load | cut -d' ' -f 6 | xxd -r -p | sha256sum
->>
->> To verify the 'kexec_execute' data hash:
->>
->> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements
->>> grep kexec_execute | cut -d' ' -f 6 | xxd -r -p | sha256sum
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->> Signed-off-by: steven chen <chenste@linux.microsoft.com>
->> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
->>   security/integrity/ima/ima.h       |  6 ++++++
->>   security/integrity/ima/ima_kexec.c | 21 +++++++++++++++++++++
->>   security/integrity/ima/ima_queue.c |  5 +++++
->>   3 files changed, 32 insertions(+)
->>
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index 24d09ea91b87..34815baf5e21 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -240,6 +240,12 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
->>   				   unsigned long flags, bool create);
->>   #endif
->>   
->> +#ifdef CONFIG_IMA_KEXEC
->> +void ima_measure_kexec_event(const char *event_name);
->> +#else
->> +static inline void ima_measure_kexec_event(const char *event_name) {}
->> +#endif
->> +
->>   /*
->>    * The default binary_runtime_measurements list format is defined as the
->>    * platform native format.  The canonical format is defined as little-endian.
->> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
->> index 0f214e41dd33..43223eb99046 100644
->> --- a/security/integrity/ima/ima_kexec.c
->> +++ b/security/integrity/ima/ima_kexec.c
->> @@ -17,6 +17,8 @@
->>   #include "ima.h"
->>   
->>   #ifdef CONFIG_IMA_KEXEC
->> +#define IMA_KEXEC_EVENT_LEN 256
->> +
->>   static bool ima_kexec_update_registered;
->>   static struct seq_file ima_kexec_file;
->>   static size_t kexec_segment_size;
->> @@ -36,6 +38,24 @@ static void ima_free_kexec_file_buf(struct seq_file *sf)
->>   	ima_reset_kexec_file(sf);
->>   }
->>   
->> +void ima_measure_kexec_event(const char *event_name)
->> +{
->> +	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
->> +	size_t buf_size = 0;
->> +	long len;
->> +	int n;
->> +
->> +	buf_size = ima_get_binary_runtime_size();
->> +	len = atomic_long_read(&ima_htable.len);
->> +
->> +	n = scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
->> +		      "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;"
->> +		      "ima_runtime_measurements_count=%ld;",
->> +		      kexec_segment_size, buf_size, len);
->> +
->> +	ima_measure_critical_data("ima_kexec", event_name, ima_kexec_event, n, false, NULL, 0);
->> +}
->> +
->>   static int ima_alloc_kexec_file_buf(size_t segment_size)
->>   {
->>   	/*
->> @@ -58,6 +78,7 @@ static int ima_alloc_kexec_file_buf(size_t segment_size)
->>   out:
->>   	ima_kexec_file.read_pos = 0;
->>   	ima_kexec_file.count = sizeof(struct ima_kexec_hdr);	/* reserved space */
->> +	ima_measure_kexec_event("kexec_load");
->>   
->>   	return 0;
->>   }
->> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
->> index 83d53824aa98..590637e81ad1 100644
->> --- a/security/integrity/ima/ima_queue.c
->> +++ b/security/integrity/ima/ima_queue.c
->> @@ -241,6 +241,11 @@ static int ima_reboot_notifier(struct notifier_block *nb,
->>   			       unsigned long action,
->>   			       void *data)
->>   {
->> +#ifdef CONFIG_IMA_KEXEC
->> +	if (action == SYS_RESTART && data && !strcmp(data, "kexec reboot"))
->> +		ima_measure_kexec_event("kexec_execute");
->> +#endif
-> After a kexec execute, the measurement list does not verify properly and the
-> "kexec_execute" critical data does not appear in the measurement list.  This
-> makes me think the critical data IS being extended into the TPM, but the
-> measurement list is being copied before the "kexec_execute" critical data is
-> called.
+Jarkko, I've realised I've somehow introduced a typo in the patch below 
+that means it doesn't fire correctly; I'm not sure how this happened as 
+my local copy I was testing on is definitely correct. Would you like a 
+one line fix up patch, or can you manually fix it up in your tree?
+
+This hunk:
+
+>@@ -545,9 +551,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+> 		if (rc >= 0)
+> 			/* Data transfer done successfully */
+> 			break;
+>-		else if (rc != -EIO)
+>+		else if (rc != EAGAIN && rc != -EIO)
+> 			/* Data transfer failed, not recoverable */
+> 			return rc;
+>+
+>+		usleep_range(priv->timeout_min, priv->timeout_max);
+> 	}
+> 	/* go and do it */
+
+should be "rc != -EAGAIN" - the "-" sign has somehow been lost.
+
+Apologies for this, let me know what's easiest for you in terms of 
+resolving it.
+
+On Mon, Mar 10, 2025 at 12:19:55PM +0000, Jonathan McDowell wrote:
+>From: Jonathan McDowell <noodles@meta.com>
 >
-> This actually makes sense since the reboot notifier ima_update_kexec_buffer()
-> priority is higher than ima_reboot_notifier().
+>Some Infineon devices have a issue where the status register will get
+>stuck with a quick REQUEST_USE / COMMAND_READY sequence. This is not
+>simply a matter of requiring a longer timeout; the work around is to
+>retry the command submission. Add appropriate logic to do this in the
+>send path.
 >
-> INT_MIN: runs the callback late
-> INT_MAX: runs the callback early
+>This is fixed in later firmware revisions, but those are not always
+>available, and cannot generally be easily updated from outside a
+>firmware environment.
 >
-> Either reverse the callback priorities or revert moving the "kexec_execute"
-> critical data to ima_reboot_notifier().
+>Testing has been performed with a simple repeated loop of doing a
+>TPM2_CC_GET_CAPABILITY for TPM_CAP_PROP_MANUFACTURER using the Go code
+>at:
 >
-> thanks,
+> https://the.earth.li/~noodles/tpm-stuff/timeout-reproducer-simple.go
 >
-> Mimi
+>It can take several hours to reproduce, and several million operations.
+>
+>Signed-off-by: Jonathan McDowell <noodles@meta.com>
+>---
+>v2: Rename flag to TPM_TIS_STATUS_VALID_RETRY
+>
+> drivers/char/tpm/tpm_tis_core.c | 17 ++++++++++++++---
+> drivers/char/tpm/tpm_tis_core.h |  1 +
+> include/linux/tpm.h             |  1 +
+> 3 files changed, 16 insertions(+), 3 deletions(-)
+>
+>diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+>index c969a1793184..4ab69c3e103c 100644
+>--- a/drivers/char/tpm/tpm_tis_core.c
+>+++ b/drivers/char/tpm/tpm_tis_core.c
+>@@ -463,7 +463,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+> 		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+> 					&priv->int_queue, false) < 0) {
+>-			rc = -ETIME;
+>+			if (test_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags))
+>+				rc = -EAGAIN;
+>+			else
+>+				rc = -ETIME;
+> 			goto out_err;
+> 		}
+> 		status = tpm_tis_status(chip);
+>@@ -480,7 +483,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+> 	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+> 				&priv->int_queue, false) < 0) {
+>-		rc = -ETIME;
+>+		if (test_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags))
+>+			rc = -EAGAIN;
+>+		else
+>+			rc = -ETIME;
+> 		goto out_err;
+> 	}
+> 	status = tpm_tis_status(chip);
+>@@ -545,9 +551,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+> 		if (rc >= 0)
+> 			/* Data transfer done successfully */
+> 			break;
+>-		else if (rc != -EIO)
+>+		else if (rc != EAGAIN && rc != -EIO)
+> 			/* Data transfer failed, not recoverable */
+> 			return rc;
+>+
+>+		usleep_range(priv->timeout_min, priv->timeout_max);
+> 	}
+> 	/* go and do it */
+>@@ -1143,6 +1151,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+> 		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
+> 	}
+>+	if (priv->manufacturer_id == TPM_VID_IFX)
+>+		set_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags);
+>+
+> 	if (is_bsw()) {
+> 		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
+> 					ILB_REMAP_SIZE);
+>diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+>index 690ad8e9b731..970d02c337c7 100644
+>--- a/drivers/char/tpm/tpm_tis_core.h
+>+++ b/drivers/char/tpm/tpm_tis_core.h
+>@@ -89,6 +89,7 @@ enum tpm_tis_flags {
+> 	TPM_TIS_INVALID_STATUS		= 1,
+> 	TPM_TIS_DEFAULT_CANCELLATION	= 2,
+> 	TPM_TIS_IRQ_TESTED		= 3,
+>+	TPM_TIS_STATUS_VALID_RETRY	= 4,
+> };
+> struct tpm_tis_data {
+>diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+>index 20a40ade8030..6c3125300c00 100644
+>--- a/include/linux/tpm.h
+>+++ b/include/linux/tpm.h
+>@@ -335,6 +335,7 @@ enum tpm2_cc_attrs {
+> #define TPM_VID_WINBOND  0x1050
+> #define TPM_VID_STM      0x104A
+> #define TPM_VID_ATML     0x1114
+>+#define TPM_VID_IFX      0x15D1
+> enum tpm_chip_flags {
+> 	TPM_CHIP_FLAG_BOOTSTRAPPED		= BIT(0),
+>-- 
+>2.48.1
+>
+>
 
-Hi Mimi,
+J.
 
-I will reverse the callback priority.
-
-Thanks,
-
-Steven
-
->> +
->>   	ima_measurements_suspend();
->>   
->>   	return NOTIFY_DONE;
-
-
+-- 
+101 things you can't have too much of : 7 - Memory.
 
