@@ -1,144 +1,168 @@
-Return-Path: <linux-integrity+bounces-5354-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5355-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AABDEA6B620
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 09:40:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF4B5A6B68D
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 10:03:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C2553B9248
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 08:39:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12C7E3BCE32
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Mar 2025 09:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A62D1EFFA0;
-	Fri, 21 Mar 2025 08:40:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E7D71E5B70;
+	Fri, 21 Mar 2025 09:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TmQxIjNQ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from gardel.0pointer.net (gardel.0pointer.net [85.214.157.71])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A500B1E5739;
-	Fri, 21 Mar 2025 08:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.157.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2311E7C3A
+	for <linux-integrity@vger.kernel.org>; Fri, 21 Mar 2025 09:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742546403; cv=none; b=nmNvGY+QS9hzRn1Txjrzz10LnfWVLKMivxMe1ssWNrBdpanuYLY/7v2L9ljHe/7j3f0M0VOGFIGpjIeJ7mxYYz9USNcqCY1ZZdMAf/D+P+hZp3aI4S5W+FlvlaB3mY6MsMpuIXAW435lzOUzo13Q+jzfyMGaCQ50R60SAL1mdcY=
+	t=1742547689; cv=none; b=cp/PQMJSNA4mOj/QuBaWhqPut67cNyMwxgumF0s7xno94VonzyIPfhmGL0WTpOu5m8PkSe3avkw7m8Ywjoyw9JMV33YpM1wVXB6atHDHL+zLsSchCuscuBn1E4aV6SPQUSr7sslNonALxVy8a4KFLZRbiGGmVylElUTxQy0Dx5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742546403; c=relaxed/simple;
-	bh=EsV15d4XaElLZh9cc7vhzqYzwZExX7m6h/piCJGD2Ls=;
+	s=arc-20240116; t=1742547689; c=relaxed/simple;
+	bh=sD61hq3NbhxezVFYNQMHc6yPU40zBPjZnQBfIAHwJ6Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KkdEbJVzxIj/f6+47TBmgcu5JwE5OTTTVE58GQ0iab/A8y3Ber2QFwf7CWkdH0RYctzVIytZxQnywOqM7J5JfiHWtrXn9/UsxhoeSUfjtffqjUOBV9TkHf7fdOyYAsDBL34LfarAUNZViO4hhNKHYk0k2r4WH8JdZimCmMywbig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0pointer.de; spf=pass smtp.mailfrom=0pointer.de; arc=none smtp.client-ip=85.214.157.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0pointer.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0pointer.de
-Received: from gardel-login.0pointer.net (gardel-mail [IPv6:2a01:238:43ed:c300:10c3:bcf3:3266:da74])
-	by gardel.0pointer.net (Postfix) with ESMTP id 17EDFE80188;
-	Fri, 21 Mar 2025 09:39:57 +0100 (CET)
-Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
-	id 50FF3160206; Fri, 21 Mar 2025 09:39:55 +0100 (CET)
-Date: Fri, 21 Mar 2025 09:39:55 +0100
-From: Lennart Poettering <mzxreary@0pointer.de>
-To: lee joey <joeyli.kernel@gmail.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	joeyli <jlee@suse.com>
-Subject: Re: [PATCH] Revert "integrity: Do not load MOK and MOKx when secure
- boot be disabled"
-Message-ID: <Z90l26ADmS87tu0k@gardel-login>
-References: <Z9wDxeRQPhTi1EIS@gardel-login>
- <CAGLnvc_eyLEasc4tKYnYp2c1M+YYRxaoXt2BmJ3kgAec6YTmzg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jpY6dOjpydKJJHoLDGfhkRMUa7FvgLJjN98SOyJfsA7BlVagpd/dZs9Ub38ne3beE/vXnbNq3MpR/wYjmpLtI3xWwAvWEYvn8lewK+eTQ43VrYOUpqctjMnSgumfBuAlcefsZre1JDWn8IKuBvNchwjoY5nCGlctYY38E4Hd+go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TmQxIjNQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742547686;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FmxTpqzZ0HZCDGZEFV/pcObjt3lzP/3kzdelw6nLCTI=;
+	b=TmQxIjNQx4pwOjZ9w7DMw2UmkQd6XqxYVHBMCkmeTt+xNQv5LF6y1PZH5xp24lJxQP6sou
+	iGQYGnozSgqY4Co3/Np4W5Ats+GGx6995jTYtsm/srQVFa27gfyiAPtRYsGPpsixZBHnd6
+	7h5MMnafeEOzTRwpl4iA+284sMwxUT0=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-607-Q4H-ryAOOMGrxaVeDM5aWQ-1; Fri, 21 Mar 2025 05:01:24 -0400
+X-MC-Unique: Q4H-ryAOOMGrxaVeDM5aWQ-1
+X-Mimecast-MFC-AGG-ID: Q4H-ryAOOMGrxaVeDM5aWQ_1742547683
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ac3df3f1193so124810066b.2
+        for <linux-integrity@vger.kernel.org>; Fri, 21 Mar 2025 02:01:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742547683; x=1743152483;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FmxTpqzZ0HZCDGZEFV/pcObjt3lzP/3kzdelw6nLCTI=;
+        b=KqDTM6p39N0mKErUI0CgU7wjHKwfMn9f6fJMAmVQcv5GU51VpZINeIzRMlvmKy1nV7
+         zhOgdbQ6AtPw0CNKPuy8/C8SfhOJ1y/EYN+3nAQYJKbHufHaCNRIxsiHGwi7c6/xVAAo
+         gMXGkpkkN9wDZKW8OqE+burj2YdV20ks6ghA/1fcNdnAtjqC+OSg8h2gv+cQEhoN8s9O
+         jCkpWJ9et2RpAu90DDE3TYuAgTqKPAztwK4A2A7c/te/bWu8AoM959k52DFa7gXWo73u
+         vhVSEqKuilFJBMhWfzP/02Sd+P0hbQw+oFeR9V94t0uxBy7VtMsnX8SXNxdzZ3xYTYJ1
+         8jqw==
+X-Forwarded-Encrypted: i=1; AJvYcCX/jc2FxHH1i8LfxPFOfiTb4bi9BudpDQYbeOa+XaymLLOlKnp70GcGNwhPqX+5gwdvqatzhINqB7ufK7ZT/Ik=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp8yc0etM9BRgDjPPo4XVSopUPlP7uiCwQkq/Boct7QPwAjn2T
+	d8VYxe5eJitQA+nSXSUDUv5HA6gMMiWS1f6WZYJmKZPojzupfjfWiJPt/UtC/oUAMVEZO1zxE/v
+	TSIDSA5UurfcRBXyNSTD1/T2VPG0m66n9ebCQoHfDCdGFMd/FTbkBR87FpahDdVwMNw==
+X-Gm-Gg: ASbGncuuWTGzxpbhfEDfViytRuvsZALLfIjwh0jccwQgewM1asnauFmPGniO/1pi6LV
+	QqKdxlH1PM8rhMNa86P4MLia7QlzBve7p//Z4zKbca6lRbPiajn31RYTVO952zhxiRF27i07+1l
+	bHrB3YJy8+ZOqfZLOr54gBCQ1RI+uSHUxCqpDHy3ri7Q823ojWo858B4sgLk2Ak2DFZQKmjnZQO
+	9ITmxS54NsMuHrKJrT8KY3J3GyDKfyaGVHTDmekiWOIId3F1gOMOPSjOnEYGWmJ4zsZhD7k6UcC
+	PgjTIY2UhoaTnvAMGWVnVGLIkPrBVdYPvdDEkLOZxLWRPZqknLxepqko4aaoz7Pc
+X-Received: by 2002:a17:907:971e:b0:ac2:622f:39c1 with SMTP id a640c23a62f3a-ac3f20f3e88mr195018966b.22.1742547683320;
+        Fri, 21 Mar 2025 02:01:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFWCLFs66okYwfxdtv5GcgcdWwR8ZJt//AkHzaDeJko0ra/kue35fF/YS12dNXFy2WPXsVuiQ==
+X-Received: by 2002:a17:907:971e:b0:ac2:622f:39c1 with SMTP id a640c23a62f3a-ac3f20f3e88mr195011766b.22.1742547682576;
+        Fri, 21 Mar 2025 02:01:22 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-55.business.telecomitalia.it. [87.12.25.55])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3ef8e50edsm114444066b.52.2025.03.21.02.01.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Mar 2025 02:01:21 -0700 (PDT)
+Date: Fri, 21 Mar 2025 10:01:17 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+	Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	x86@kernel.org, linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	Dov Murik <dovmurik@linux.ibm.com>, Dionna Glaze <dionnaglaze@google.com>, 
+	linux-coco@lists.linux.dev, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Claudio Carvalho <cclaudio@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v3 1/4] x86/sev: add SVSM vTPM probe/send_command
+ functions
+Message-ID: <rspkz663fg7i7jomvg5ehv3ldr6ayehttb7vgwwzsfsxafzb5y@uhqcadvsmw6f>
+References: <20250311094225.35129-1-sgarzare@redhat.com>
+ <20250311094225.35129-2-sgarzare@redhat.com>
+ <d7e5a1d2-5fcc-bf7f-a67d-7871a1627c98@amd.com>
+ <Z9glWp6U6vyEmKQa@kernel.org>
+ <7kuhiyy7gj4py323g5n2vy3ddlg666zwhtx3mjcklebgtlstdc@xgdyeecifwei>
+ <Z9wuLVeP726Cssqp@kernel.org>
+ <20250320171619.GOZ9xNY4W54avW2a-u@fat_crate.local>
+ <Z9xQw8QpRKk26G6R@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGLnvc_eyLEasc4tKYnYp2c1M+YYRxaoXt2BmJ3kgAec6YTmzg@mail.gmail.com>
+In-Reply-To: <Z9xQw8QpRKk26G6R@kernel.org>
 
-On Fr, 21.03.25 15:13, lee joey (joeyli.kernel@gmail.com) wrote:
-
-> Hi Lennart,
+On Thu, Mar 20, 2025 at 07:30:43PM +0200, Jarkko Sakkinen wrote:
+>On Thu, Mar 20, 2025 at 06:16:19PM +0100, Borislav Petkov wrote:
+>> On Thu, Mar 20, 2025 at 05:03:09PM +0200, Jarkko Sakkinen wrote:
+>> > > I can do that, I slightly prefer BIT_ULL() macro, but I don't have a strong
+>> > > opinion on my side.
+>> > > @Borislav since you suggested it, WDYT?
+>> >
+>> > Either goes for me. Sorry for nitpicking that :-) The first comment
+>> > stil applies.
+>>
+>> Bit 8 is a lot better than 0x100.
+>>
+>> Let's give a better example:
+>>
+>> 0x0000000008000000
+>>
+>> or
+>>
+>> BIT_ULL(27)
+>>
+>> :-)
 >
-> Lennart Poettering <mzxreary@0pointer.de> 於 2025年3月20日 週四 下午8:02寫道：
-> >
-> > This reverts commit 92ad19559ea9a8ec6f158480934ae26ebfe2c14f.
-> >
-> > This original commit this reverts creates a strange situation: it
-> > ensures more restrictive behaviour if SecureBoot is off then when it
-> > is on, which is the opposite of what one would expect.
-> >
-> > Typically, one would expect that if SB is off the validation of
-> > resources during the pre-kernel and kernel initialization is less
-> > restrictive, not more restrictive. But this check turned the world on
-> > its head.
-> >
+>Sure, I'm fine with using BIT_ULL() :-)
+
+Yeah, we all agree :-)
+
 >
-> SB off means that the chain of trust is broken. Which means that all
-> mechanisms rely on SB are non-secure. Meanwhile, if the integrity of kernel
-> can be guaranteed by other mechanism (e.g. TPM), then mok should not
-> be loaded when SB off.
-
-Why not? as you say, chain of trust is broken: the kernel itself is
-not immediately integrity protected and neither is the firmware. Hence
-filtering out keys in this case is really pointless.
-
-> > I'd like to ask for this commit to be reverted. If SB is on all bets are
-> > off regarding integrity of boot loaders and stuff, hence it makes no
-> > sense to be restrictive here: you cannot regain integrity once you gave
-> > it up once, hence if all bets are off anyway we might as well import any
-> > Mok keys passed to us into the kernel keyring.
-> >
-> > Or to say this differently: if an attacker got control of the pre-kernel
-> > boot phase they might as well patch around in the firmware apis to make
-> > the kernel believe it is in SB mode even if it is not. Hence the check
-> > carries no value. It doesn't protect anything in any effective way.
+>>
+>> While I'm here: I'm guessing I'll route patches 1 and 4 through tip once
+>> they're ready to go and give Jarkko an immutable branch he can base the other
+>> two ontop.
+>>
+>> Agreed?
 >
-> If this is the case, the check of MokListTrustedRT can also be
-> removed.
+>Works for me.
 
-I think it makes sense to honour explicit knobs, such as
-MokListTrustedRT: It has a very clear meaning: it indicates whether to
-import the keys or not.
+Just a note, patch 2 adds `include/linux/svsm_vtpm.h`, that file is 
+basically a translation of the AMD SVSM specification into structures 
+and functions used to communicate with SVSM in the way it is defined by 
+the specification.
 
-This is quite different from SB state, which is not explicit about
-importing keys at all, it just indicates whether firmware level
-validation of signatures is done or not.
+I realized that the file does not fall under any section of MAINTAINERS.
+How do you suggest we proceed?
 
-> All mok can directly be added to machine keyring then link with
-> secondary keyring.
-> Because attacker can create MokListTrusted/MokListTrusted variables to cheat
-> bootloader or kernel. The check of MokListTrustedRT is useless.
+Should we create an SVSM section to maintain it, including the TPM 
+driver and future other drivers,etc.?
 
-Yeah, it does not carry immediate security value if SB is off. But it
-does allow finer-grained control by pre-boot code of how the kernel
-later sets up things. Hence I'd keep it.
+Or include it in other sections? Which one in this case?
 
-> > You might wonder what signed dm-verity gives me if I have SB off. If
-> > we authenticate the boot phase up to Linux userspace via TPM-based PCR
-> > policies (i.e. measured boot) we can be sure of the boot integrity
-> > without having to rely on SB. But then we'd still like to use
-> > dm-verity based code signing for userspace.
->
-> hm... I am a bit confused. So, this patch can help the above
-> scenario?
+I'm willing to help both as a sub-maintainer and reviewer of course, but 
+I would like your advice.
 
-The revert I posted will allow us to populate the kernel keyring used
-for dm-verity signature checks from pre-boot even if SB is off. Via
-local or remote attestation during boot we can later validate this
-chosen boot path, and hence can a-posteriori validate that everything
-is OK even if the a-priori SB check is not done. But once we have
-validated that we then have the key in the kernel keyring for later
-dm-verity validations, which is all we wanted.
+Thanks,
+Stefano
 
-Lennart
-
---
-Lennart Poettering, Berlin
 
