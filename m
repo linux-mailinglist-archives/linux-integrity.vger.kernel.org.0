@@ -1,74 +1,62 @@
-Return-Path: <linux-integrity+bounces-5380-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5381-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E926A6CC2A
-	for <lists+linux-integrity@lfdr.de>; Sat, 22 Mar 2025 21:17:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92696A6CC95
+	for <lists+linux-integrity@lfdr.de>; Sat, 22 Mar 2025 22:10:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 704443A7EF8
-	for <lists+linux-integrity@lfdr.de>; Sat, 22 Mar 2025 20:16:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3E1A179C0E
+	for <lists+linux-integrity@lfdr.de>; Sat, 22 Mar 2025 21:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35F7C1DDA1E;
-	Sat, 22 Mar 2025 20:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E90F51EF38A;
+	Sat, 22 Mar 2025 21:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJ7Qyioq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dOGO7Nx6"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067754C6C;
-	Sat, 22 Mar 2025 20:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE1037160;
+	Sat, 22 Mar 2025 21:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742674628; cv=none; b=OlohidXNuYeQxvHA4Jnly2A+LLinp63rt+09wUJMXig9A1Xrg/4s99w1opc5rhTFw+kCXaB5fYwng01srFFXd3epPEUzTFJfzjxbeW67AwnTT6hJlu5sHhIO6ooK0JcwUDYGwms+HexbeA9ZczwjqlmZ7nszvaYosQqZve8ff3E=
+	t=1742677812; cv=none; b=NnJlAd/6ERG/WfSSM9Sczio6qYGKkgfWVhj+NtZyvCSQeXQ9aI04Nuz1+a8bZJqC625DpODq++gCEetWnP7q719hyyoh2HC6aGFERt77ySiOXGrjuRzZQGBKsiYLUTEjKb5jJ0oiugAt9wHB4OSGJXtQKiBDcLLimEkmf8qAKfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742674628; c=relaxed/simple;
-	bh=CbPGXZSRddE8tuYZ2t+93jHASg0DsRREKTOYcW5uStc=;
+	s=arc-20240116; t=1742677812; c=relaxed/simple;
+	bh=253N/PzBFBuwQnC0JHoJgHSfsloq0t1CvPxbViUcp2o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5Hx2EyGDTb6i/oINniBnHNhSFyJc0LoEOsxXNzcWqrs8XG7EFP3gINbL6fWDegxW2A/5pnj6TRu5j5foGSsq5m5Bca0bQDUPptRjLA2fuUlezFLdZzDo8o7Ta04VFSzHJP+jDdAgOSwAqxoDNAdgOmnuU+B+lvs8EiY5z7rhhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJ7Qyioq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1F8C4CEDD;
-	Sat, 22 Mar 2025 20:17:06 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=W1KNnuoH77AecXYgG74u4xToEhm5GfJDYHhVL54F1+ER0RsgyDnU/ZdKm0HcQAyjmXmBaZ7GwDZnTCzwkolFJGM15/LRADb09LUCaDW9ERG8o0aWywS+evGuKB7ZbiJ7qoVQZGLlx8Aghr07EMbYm8i154OANaD36cMsBmwzYhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dOGO7Nx6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B1EC4CEDD;
+	Sat, 22 Mar 2025 21:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742674627;
-	bh=CbPGXZSRddE8tuYZ2t+93jHASg0DsRREKTOYcW5uStc=;
+	s=k20201202; t=1742677812;
+	bh=253N/PzBFBuwQnC0JHoJgHSfsloq0t1CvPxbViUcp2o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jJ7QyioqHtC4meGbFzh8pnXG/Ic4GpqbDmVvI2sIHyYtiysvIYgegNVrV62vv70nM
-	 yYDBN5LvCXtGKE5UNach+zw0aURrml7OacAI+W2h2PN9vL1ib8Sgg2I8GvEGF6kjS0
-	 R7/68SzkS+yqegyMZhpi50OO0CGkdxwQx79QaoKUoW8lrqeh9PddGcfy1NdrAvmhyL
-	 qlMjomnbyEWs7wPKc0WeVxoUR96+M71l93RlWe8zaGAI+hNu+toSs5DjMNIFeUt/9M
-	 rW0cANLP4tkJP8L+R4wQL5fcsoynfhhwm7skjmzeuoHxGMO1N+dU7VrIjCS8YpvNm9
-	 YS52ci7lpG3mw==
-Date: Sat, 22 Mar 2025 22:17:03 +0200
+	b=dOGO7Nx6X2LGTuemY7rLKTm6dwVrsPYzGHUR3s8FbsvdJTyWXpI53syQNnVLssSYi
+	 J1TcN2sZsIYDeSXNzPOMG6u9jert9AnItZPP9/3rJKL2Ls9EE8+g6kLjPTV0Fwai1E
+	 8CGH1YT8ElE5NPxj3qW6uRelsMtzW3PTJ/NuvxuJL4pn4jXPflh4FV5XoFoOYFej3c
+	 pt/eGXYjQMX8PBv/rXFF2+jXWTSsXIA03WkJQ5Ss8X3+3HBdHyZi86BBcn7oXepRs3
+	 IFzd0LMgGSBMM0q9bHx59jhuwCJZgXnv6HxkFv/ZorE3rhgpRLLz+jT8i0RwnXy8JS
+	 XkY60qLdE899g==
+Date: Sat, 22 Mar 2025 23:10:08 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	x86@kernel.org, linux-kernel@vger.kernel.org,
-	linux-integrity@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, linux-coco@lists.linux.dev,
+To: Jonathan McDowell <noodles@earth.li>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
 	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v3 1/4] x86/sev: add SVSM vTPM probe/send_command
- functions
-Message-ID: <Z98av2cbURhSy6Rk@kernel.org>
-References: <20250311094225.35129-1-sgarzare@redhat.com>
- <20250311094225.35129-2-sgarzare@redhat.com>
- <d7e5a1d2-5fcc-bf7f-a67d-7871a1627c98@amd.com>
- <Z9glWp6U6vyEmKQa@kernel.org>
- <7kuhiyy7gj4py323g5n2vy3ddlg666zwhtx3mjcklebgtlstdc@xgdyeecifwei>
- <Z9wuLVeP726Cssqp@kernel.org>
- <20250320171619.GOZ9xNY4W54avW2a-u@fat_crate.local>
- <Z9xQw8QpRKk26G6R@kernel.org>
- <rspkz663fg7i7jomvg5ehv3ldr6ayehttb7vgwwzsfsxafzb5y@uhqcadvsmw6f>
- <20250321220520.GFZ93ioO0JtfhXCb1n@fat_crate.local>
+	Stefan Berger <stefanb@linux.ibm.com>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] tpm, tpm_tis: Workaround failed command reception on
+ Infineon devices
+Message-ID: <Z98nMDH5Anhwuwox@kernel.org>
+References: <Z8lkSKOqBgt78pU2@earth.li>
+ <Z8ogT_gERUYstPbK@kernel.org>
+ <Z8sgfMmsfn894yLj@earth.li>
+ <Z8sixTuKG5sxO-D1@kernel.org>
+ <Z87Y69l5_GbzlLfp@earth.li>
+ <Z92YiwubEvzsm1SO@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -77,41 +65,53 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250321220520.GFZ93ioO0JtfhXCb1n@fat_crate.local>
+In-Reply-To: <Z92YiwubEvzsm1SO@earth.li>
 
-On Fri, Mar 21, 2025 at 11:05:20PM +0100, Borislav Petkov wrote:
-> On Fri, Mar 21, 2025 at 10:01:17AM +0100, Stefano Garzarella wrote:
-> > Just a note, patch 2 adds `include/linux/svsm_vtpm.h`, that file is
-> > basically a translation of the AMD SVSM specification into structures and
-> > functions used to communicate with SVSM in the way it is defined by the
-> > specification.
-> > 
-> > I realized that the file does not fall under any section of MAINTAINERS.
-> > How do you suggest we proceed?
-> > 
-> > Should we create an SVSM section to maintain it, including the TPM driver
-> > and future other drivers,etc.?
+On Fri, Mar 21, 2025 at 04:49:15PM +0000, Jonathan McDowell wrote:
+> Jarkko, I've realised I've somehow introduced a typo in the patch below that
+> means it doesn't fire correctly; I'm not sure how this happened as my local
+> copy I was testing on is definitely correct. Would you like a one line fix
+> up patch, or can you manually fix it up in your tree?
 > 
-> This all belongs to the TPM drivers, right?
+> This hunk:
 > 
-> I.e., drivers/char/tpm/
+> > @@ -545,9 +551,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+> > 		if (rc >= 0)
+> > 			/* Data transfer done successfully */
+> > 			break;
+> > -		else if (rc != -EIO)
+> > +		else if (rc != EAGAIN && rc != -EIO)
+> > 			/* Data transfer failed, not recoverable */
+> > 			return rc;
+> > +
+> > +		usleep_range(priv->timeout_min, priv->timeout_max);
+> > 	}
+> > 	/* go and do it */
 > 
-> So I guess add that header to the TPM DEVICE DRIVER section if the gents there
-> are fine with it...
+> should be "rc != -EAGAIN" - the "-" sign has somehow been lost.
+> 
+> Apologies for this, let me know what's easiest for you in terms of resolving
+> it.
 
-It's fine for me but I'd suggest to rename the header as "tpm_svsm.h".
-Then this will already provide coverage:
+NP, I missed it too so we're in the same boat ;-)
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=a2fbcecc7027944a2ce447d4dd72725c5822321f
+I did:
 
+$ git -P diff
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index 4ab69c3e103c..ed0d3d8449b3 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -551,7 +551,7 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 		if (rc >= 0)
+ 			/* Data transfer done successfully */
+ 			break;
+-		else if (rc != EAGAIN && rc != -EIO)
++		else if (rc != -EAGAIN && rc != -EIO)
+ 			/* Data transfer failed, not recoverable */
+ 			return rc;
 
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-> 
+Ping, if anything else.
 
 BR, Jarkko
 
