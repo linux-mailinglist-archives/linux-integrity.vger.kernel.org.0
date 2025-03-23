@@ -1,389 +1,187 @@
-Return-Path: <linux-integrity+bounces-5397-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5398-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37418A6CFB4
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 15:13:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58AABA6CFB8
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 15:21:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB75F3B624F
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 14:12:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC89016E802
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 14:21:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 969B7502B1;
-	Sun, 23 Mar 2025 14:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F92CDF60;
+	Sun, 23 Mar 2025 14:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JVB86PYw";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="nQzWs5Nz";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jztpDx32";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Dt3QRzMv"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D49813B29B
-	for <linux-integrity@vger.kernel.org>; Sun, 23 Mar 2025 14:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7FA469D
+	for <linux-integrity@vger.kernel.org>; Sun, 23 Mar 2025 14:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742739050; cv=none; b=rDW2ckMUy0sqw09hxYdOr2xTZz4/lFaZs6kufOW4GQIB5R5mK88KrKfJleqCz83queW6lCK3tT5EhNfwI9uItumRHlYQYCqqz962+A+eWBrc1UODQiFWiy2lCa33UmSOO8KPA/6PNOkr836QDwBwnKdthNNZtMXaIjywwDa/tXU=
+	t=1742739697; cv=none; b=dH5J9bY6G9P/WAYBmQaqvCmfna8BBGXGlpcIF1SOBQLQlmYczTIG7y3TBZ4lcVd/drn3QobgOihsm4CfTO3ppcS+erIORBHZoJwUrklIoA4ZxF1AbWRQk/AzDG7JA7NqtLaoxG7ZeB3BBITvgTHEbO30ndYFyivvvZQLxCsmnyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742739050; c=relaxed/simple;
-	bh=0Nt9HZ9wCJFanHsxL0NL0Mf8URg62LPUrJzWZX4vW9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZtZ1iB9AR7Kmv+DCOVCjB6g2X7Vja2uARSkNwM1oDHWwpyfd0ynGZvOOX+ufnspy23RA3Ie08bbMtqqa5Psp4dmj5WwW9WfAoCqA8qUFh+hBp/sFwbi47ID+e8Kw0H0/OTv0pdHPcEeSgNM26adc2PvUvX7c0DZrrWsYtTIYuaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.130
+	s=arc-20240116; t=1742739697; c=relaxed/simple;
+	bh=XJ+L38rS//K9XpzTu8wB2LVs017e3YfwFDW+V1x8ozw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=JxXM+G7rd6eumrD2Clb0WIbacW14U0QPg2LVb1ZPO2co1UaY494gWazTDM5o1umNx5wTp7VAyxF+PHGYAHp3uC0ptP/aAQI9IevV1plyg0EQZS4D5aOikpMrC6NUTj479RWsQdgysVGqdOQCpnxXdFkzeahpJ2R+xcAMhw3eUqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JVB86PYw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=nQzWs5Nz; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jztpDx32; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Dt3QRzMv; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 28376211BA;
-	Sun, 23 Mar 2025 14:10:38 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
+	by smtp-out2.suse.de (Postfix) with ESMTPS id C06301F445;
+	Sun, 23 Mar 2025 14:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1742739694; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5ZCGhOhrWhO2/XLhlKGz9XPeVAo8qv4HD8ptuAaEb6M=;
+	b=JVB86PYwfaKCYteubKzjqOBJuCCb2LFclwf2YOetXefb8WX1DYjaIObtLx5I1bLoGuomyq
+	Mq0OFakxFmpuXnOxYb4EKkFOtE0PGn70szgroB6fVNSKn/hxnL6AZmq9bZnH9bmqCYUkWp
+	3tvfOiKkJf5OOnDDlAYMu8qW4e9HFe8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1742739694;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5ZCGhOhrWhO2/XLhlKGz9XPeVAo8qv4HD8ptuAaEb6M=;
+	b=nQzWs5NzaSPia2mPkTrZUvNWvSwCWCRJQnweL5r9yMmEjy4alnK7G7OiBhI98AvDA3h/oN
+	ZabhOxCxS6RBsYCw==
+Authentication-Results: smtp-out2.suse.de;
 	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1742739692; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5ZCGhOhrWhO2/XLhlKGz9XPeVAo8qv4HD8ptuAaEb6M=;
+	b=jztpDx324F2T95YeEpFN8WVOSu/oa5SiC5yMmABBaRMKpcvsYBTRqZjEg6raid3c1qvM6C
+	e/WkHGApCg6yB++HUKOKWgvWpbsoni8HzVZgZZuuJ6Kh0pDi0eNzaxHk2H3wAWhHA23k3j
+	x3PahRyfwfwLe4/9FZX9gBwafHlpN0I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1742739692;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5ZCGhOhrWhO2/XLhlKGz9XPeVAo8qv4HD8ptuAaEb6M=;
+	b=Dt3QRzMvID5gT3ir7p+gZkIm0wlHXWLedLCRK0eoc+pWYtW3ZyoRpF5G75Lp8F690zf8Ti
+	DqsICLYH80NubMBg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 153951339F;
-	Sun, 23 Mar 2025 14:10:38 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 838711339F;
+	Sun, 23 Mar 2025 14:21:32 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id USQKBF4W4GfOPAAAD6G6ig
-	(envelope-from <nstange@suse.de>); Sun, 23 Mar 2025 14:10:38 +0000
+	id sZDVHuwY4Gc2PwAAD6G6ig
+	(envelope-from <nstange@suse.de>); Sun, 23 Mar 2025 14:21:32 +0000
 From: Nicolai Stange <nstange@suse.de>
-To: Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: Eric Snowberg <eric.snowberg@oracle.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nicolai Stange <nstange@suse.de>
-Subject: [RFC PATCH v2 13/13] ima: don't re-invalidate unsupported PCR banks after kexec
-Date: Sun, 23 Mar 2025 15:09:11 +0100
-Message-ID: <20250323140911.226137-14-nstange@suse.de>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250323140911.226137-1-nstange@suse.de>
-References: <20250323140911.226137-1-nstange@suse.de>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Nicolai Stange <nstange@suse.de>,  Roberto Sassu
+ <roberto.sassu@huawei.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+  Eric Snowberg <eric.snowberg@oracle.com>,
+  linux-integrity@vger.kernel.org,  linux-security-module@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 6/7] ima: invalidate unsupported PCR banks once
+ at first use
+In-Reply-To: <4e760360258bda56fbcb8f67e865a7a4574c305a.camel@linux.ibm.com>
+	(Mimi Zohar's message of "Tue, 18 Mar 2025 16:49:57 -0400")
+References: <20250313173339.3815589-1-nstange@suse.de>
+	<20250313173339.3815589-7-nstange@suse.de>
+	<34ebd15aae07402d19279ef4286197112c4afc01.camel@linux.ibm.com>
+	<8305c89ec354320100ec272052c036300366a2af.camel@linux.ibm.com>
+	<4e760360258bda56fbcb8f67e865a7a4574c305a.camel@linux.ibm.com>
+Date: Sun, 23 Mar 2025 15:21:31 +0100
+Message-ID: <871punddzo.fsf@>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	TAGGED_RCPT(0.00)[]
-X-Spam-Score: -4.00
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Score: -0.60
+X-Spamd-Result: default: False [-0.60 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	INVALID_MSGID(1.70)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TAGGED_RCPT(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.de,huawei.com,gmail.com,oracle.com,vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 28376211BA
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
 
-Currently, IMA would invalidate a PCR bank corresponding to an unsupported
-hash algorithm by extending it with 0xfe ... fe exactly once.
+Mimi Zohar <zohar@linux.ibm.com> writes:
+> On Tue, 2025-03-18 at 16:55 +0100, Nicolai Stange wrote:
+>> Mimi Zohar <zohar@linux.ibm.com> writes:
+>> > FYI, because the IMA Kconfig selects SHA1, we're guaranteed that SHA1 =
+exists in
+>> > the kernel and the subsequent kexec'ed kernel.  For this reason we're =
+guaranteed
+>> > that the measurement list is complete.  The simplest solution, not nec=
+essarily
+>> > the best, would be to punt the problem for the time being by replacing=
+ the
+>> > "select" with a different hash algorithm.
+>>=20
+>> Yes, that would work as well. IIUC, it would mean that we would
+>> e.g. extend truncated SHA-256 template hashes into a SHA-1 bank, right?
+>> However, since no existing tool like 'ima_measurement' is expecting
+>> that, and would fail a verification then, I'm currently struggling to
+>> see the advantage over just doing a.) and invalidating the PCR banks
+>> with a fixed value right away?
+>
+> Replacing the "Kconfig select" has more to do with having at least one
+> guaranteed complete measurement list.  I'm fine with extending a TPM bank=
+ with
+> an unknown kernel hash algorithm violation (either option a or b).
 
-The idea is, that banks corresponding to such algorithms would be readily
-recognizable by comparing against HASH(0x00 ... 00 | fe ... fe), i.e. the
-value they'd have if extended once when in their initial state after
-reset.
+Ok, I think I got it now.
 
-However, PCRs don't get reset at kexec, yet each kernel in a kexec chain
-would do the (re-)invalidation again. That means that a PCR's bank would
-have a value of e.g. HASH(HASH(0x00 ... 00 | fe ... fe) | fe ... fe)
-after a re-invalidation from the second kernel in the chain and so on.
-In this scenario, it's not anymore immediate from the PCR bank value
-alone whether an invalidation has happened or not.
+FWIW, a v2 can be found at
+https://lore.kernel.org/r/20250323140911.226137-1-nstange@suse.de , includi=
+ng a
+patch for selecting SHA256 now.
 
-Don't re-invalidate banks found to have a value of
-HASH(0x00 ... 00 | fe ... fe) again after kexec.
+Thanks a lot for all your feedback!
 
-Note that the assumption implicit to the example above was that all
-kernels in a kexec chain wouldn't have support for a given hash algorithm.
-However, as it's pointless to start extending some already invalidated
-bank somewhere in the middle of a kexec chain, an even more general
-approach is possible: don't /extend/ banks found to have a value of
-HASH(0x00 ... 00 | fe ... fe) ever again after kexec.
+Nicolai
 
-With that, any bank corresponding to a hash algorithm not supported by the
-initial kernel in a kexec chain will retain its
-HASH(0x00 ... 00 | fe ... fe) value, independent of whether subsequent
-kernels do or do not support the algorithm in question (assuming all
-kernels in the chain implement this logic, of course).
-
-If some bank's hash algorithm is initially supported by one or more
-kernels at the head of the kexec chain, but ceases to do so at a certain
-later point, it necessarily must get invalidated then. As the PCR bank
-cannot get moved to the magic of HASH(0x00 ... 00 | fe ... fe) by design
-of how PCRs work anyway, it doesn't matter how many times it's getting
-invalidated, as long as it's being done at least once. For practicality
-reasons, the choice has been made to re-invalidate such "discontinued"
-banks for every new measurement list entry over and over again.
-(Otherwise, if those banks were e.g. to get invalidated exactly once from
- each kernel not supporting their hashes, the information to get tracked
- per PCR would become a tristate: never extended before, extended by a
- previous kernel or extended by the current one already -- the sets of
- banks to invalidate upon measurement list entry addition would
- potentially all be different for each case.)
-
-So in summary:
-- don't touch banks not supported by the initial kernel ever again and
-  keep them at their magic HASH(0x00 ... 00 | fe ... fe) values,
-- (re-)invalidate any additional bank not supported by the current kernel
-  over and over again for each new measurement list entry added.
-
-Regarding the implementation:
-- Make ima_restore_measurement_list() to determine the set of banks in
-  magic HASH(0x00 ... 00 | fe ... fe) state for each PCR referenced from
-  any entry in the preexisting measurement list after kexec. This is being
-  done by reading back via the ima_pcr_invalidated_banks() helper
-  introduced with a previous patch. The result of this step is the set
-  of banks found invalidated for all the PCRs referenced, kept in the
-  local always_invalidated_pcrs_banks_mask bitmask.
-
-  While walking the measurement list, make
-  ima_restore_measurement_list() to also update the already existing
-  global ima_extended_pcrs_mask to record every PCR seen.
-
-- After walking through the measurement list,
-  always_invalidated_pcrs_banks_mask represents the set of banks whose
-  associated hash algorithms had not been supported by the first kernel
-  in the kexec chain and thus, not been updated by any subsequent kernel
-  between the first and the current one accordingly.
-
-  At that point, ima_unsupported_pcr_banks_mask corresponds to the set of
-  banks whose associated hash algorithms aren't supported by the current
-  kernel, as per the initialization in ima_init_crypto().
-
-  The set difference between the two, i.e.
-    ima_unsupported_pcr_banks_mask & ~always_invalidated_pcrs_banks_mask
-  represents the set of "discontinued" banks, i.e. banks that had been
-  supported and extended before, but which the current kernel cannot
-  maintain any further. As explained above, this set of banks will be
-  subject to re-invalidation upon each new measurement list entry
-  addition. Store it away in new global ima_discontinued_pcr_banks_mask.
-
-- After ima_unsupported_pcr_banks_mask has been computed, update
-  ima_unsupported_pcr_banks_mask to the union of itself (the algorithms
-  not supported by the current kernel) with the set of algorithms found to
-  not have been supported by the first kernel in the kexec chain, as
-  represented by the always_invalidated_pcrs_banks_mask from above.
-
-  At this point, the set banks to not extend any further (for any PCR
-  already encountered before) is
-    ima_unsupported_pcr_banks_mask & ~ima_discontinued_pcr_banks_mask.
-
-  For clarification: for the first kernel in a kexec chain
-  ima_discontinued_pcr_banks_mask is zero and the result of the
-  expression above is ima_unsupported_pcr_banks_mask. For a subsequent
-  kernel however, this effectively evaluates to the
-  always_invalidated_pcrs_banks_mask found above, which should in turn
-  likewise match the set of algorithms not supported by the initial
-  kernel.
-
-  Either way, make ima_pcr_extend() to skip over banks in the set
-  represented by the above expression, instead of over the plain
-  ima_unsupported_pcr_banks_mask as before.
-
-- The last missing piece is to handle PCRs never encountered before
-  correctly. When subsequently extended for the first time, these must
-  get all their banks in ima_unsupported_pcr_banks_mask invalidated,
-  hence extended with 0xfe ... fe. IMA's template hash computation
-  primitives (more specifically ima_calc_field_array_hash() and
-  ima_init_digests()) would substitute 0xfe ... fe for a bank iff the
-  associated ima_algo_array[]'s entry's ->tfm is NULL.
-
-  Make ima_restore_measurement_list() to reset any ->tfm potentially
-  non-NULL but in ima_unsupported_pcr_banks_mask. That is, make it reset
-  ->tfm's for which the current kernel does have an implementation
-  available, but the first kernel in the kexec chain did not.
-
-  As a welcomed side-effect this will also suppress the creation of the
-  {binary,ascii}_runtime_measurements_<hash> sysfs files for any bank
-  never maintained throughout the kexec chain.
-
-- Lastly, while iterating over the banks and resetting ->tfm's as
-  appropriate, log some useful information:
-  - inform about banks found unsupported throughout the kexec chain, i.e.
-    in magic HASH(0x00 ... 00 | fe ... fe) state,
-  - print an error if the bank associated with ima_hash is among those
-  - and warn about discontinued banks.
-
-  With that, any unsupported bank will leave a trace at least once in a
-  kernel log somewhere in the kexec chain (assuming all the kernels
-  are implementing this logic, of course).
-
-Signed-off-by: Nicolai Stange <nstange@suse.de>
----
- security/integrity/ima/ima.h          |  1 +
- security/integrity/ima/ima_crypto.c   |  6 ++
- security/integrity/ima/ima_queue.c    |  9 ++-
- security/integrity/ima/ima_template.c | 84 ++++++++++++++++++++++++++-
- 4 files changed, 98 insertions(+), 2 deletions(-)
-
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 9bfe045ac9d5..2b5351cbf6bd 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -63,6 +63,7 @@ extern int ima_hash_algo_idx __ro_after_init;
- extern int ima_extra_slots __ro_after_init;
- extern struct ima_algo_desc *ima_algo_array __ro_after_init;
- extern unsigned long ima_unsupported_pcr_banks_mask __ro_after_init;
-+extern unsigned long ima_discontinued_pcr_banks_mask __ro_after_init;
- 
- extern unsigned long ima_extended_pcrs_mask;
- 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 716bb302e75d..58829c98a69b 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -69,6 +69,12 @@ struct ima_algo_desc *ima_algo_array __ro_after_init;
- 
- unsigned long ima_unsupported_pcr_banks_mask __ro_after_init;
- 
-+/*
-+ * Subset of unsupported banks that had (possibly) been supported and
-+ * maintained by some previous kernel in a kexec chain.
-+ */
-+unsigned long ima_discontinued_pcr_banks_mask __ro_after_init;
-+
- static int __init ima_init_ima_crypto(void)
- {
- 	long rc;
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 83d5c7034919..4aa94584957e 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -156,7 +156,14 @@ static int ima_pcr_extend(struct tpm_digest *digests_arg, int pcr)
- 		return 0;
- 
- #if !IS_ENABLED(CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND)
--	pcr_banks_skip_mask = ima_unsupported_pcr_banks_mask;
-+	/*
-+	 * Don't invalidate unsupported PCR banks more than once in
-+	 * general, with the exception of discontinued banks possibly
-+	 * maintained by a previous kernel in a kexec chain and now in
-+	 * indeterminate state.
-+	 */
-+	pcr_banks_skip_mask = ima_unsupported_pcr_banks_mask &
-+		~ima_discontinued_pcr_banks_mask;
- 	if (!(ima_extended_pcrs_mask & BIT(pcr))) {
- 		/*
- 		 * Invalidate unsupported banks once upon a PCR's
-diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
-index 04c49f05cb74..4584cfc416f4 100644
---- a/security/integrity/ima/ima_template.c
-+++ b/security/integrity/ima/ima_template.c
-@@ -428,7 +428,9 @@ int ima_restore_measurement_list(loff_t size, void *buf)
- 	struct ima_template_desc *template_desc;
- 	DECLARE_BITMAP(hdr_mask, HDR__LAST);
- 	unsigned long count = 0;
--	int ret = 0;
-+	unsigned long always_invalidated_pcrs_banks_mask = ~0UL;
-+	unsigned long ever_invalidated_pcrs_banks_mask = 0;
-+	int i, ret = 0;
- 
- 	if (!buf || size < sizeof(*khdr))
- 		return 0;
-@@ -527,10 +529,90 @@ int ima_restore_measurement_list(loff_t size, void *buf)
- 
- 		entry->pcr = !ima_canonical_fmt ? *(u32 *)(hdr[HDR_PCR].data) :
- 			     le32_to_cpu(*(__le32 *)(hdr[HDR_PCR].data));
-+		if (IMA_INVALID_PCR(entry->pcr)) {
-+			pr_err("invalid measurement PCR index");
-+			ret = -EINVAL;
-+			break;
-+		}
-+
- 		ret = ima_restore_measurement_entry(entry);
- 		if (ret < 0)
- 			break;
- 
-+#if !IS_ENABLED(CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND)
-+		if (ima_tpm_chip &&
-+		    !(ima_extended_pcrs_mask & BIT(entry->pcr))) {
-+			unsigned long invalidated_pcr_banks_mask;
-+
-+			invalidated_pcr_banks_mask =
-+				ima_pcr_invalidated_banks(entry->pcr);
-+			always_invalidated_pcrs_banks_mask &=
-+				invalidated_pcr_banks_mask;
-+			ever_invalidated_pcrs_banks_mask |=
-+				invalidated_pcr_banks_mask;
-+		}
-+		ima_extended_pcrs_mask |= BIT(entry->pcr);
-+#endif
- 	}
-+
-+	always_invalidated_pcrs_banks_mask &= ever_invalidated_pcrs_banks_mask;
-+	/*
-+	 * Banks that had (possibly) been maintained by a previous
-+	 * kernel in the kexec chain, but aren't anymore now, are
-+	 * considered "discontinued" and in indeterminate
-+	 * state. Re-invalidate unconditionally at each PCR extend.
-+	 */
-+	if (ima_extended_pcrs_mask != 0) {
-+		ima_discontinued_pcr_banks_mask = ima_unsupported_pcr_banks_mask
-+			& ~always_invalidated_pcrs_banks_mask;
-+	}
-+
-+	/*
-+	 * Banks consistently found invalidated for having been
-+	 * unsupported before, are kept in the "unsupported" state and
-+	 * never re-invalidated again, so that they retain their
-+	 * easily recognizable, well-known digest value.
-+	 */
-+	ima_unsupported_pcr_banks_mask |= always_invalidated_pcrs_banks_mask;
-+
-+	for (i = 0; i < NR_BANKS(ima_tpm_chip); ++i) {
-+		if (i >= BITS_PER_LONG)
-+			break;
-+
-+		/*
-+		 * Don't clutter the logs with unrecognized algos,
-+		 * these would always get reported as "discontinued"
-+		 * otherwise.
-+		 */
-+		if (ima_algo_array[i].algo == HASH_ALGO__LAST)
-+			continue;
-+
-+		if (ima_discontinued_pcr_banks_mask & BIT(i)) {
-+			pr_warn("Discontinuing unsupported TPM %s PCR bank\n",
-+				hash_algo_name[ima_algo_array[i].algo]);
-+		} else if (i == ima_hash_algo_idx &&
-+			   ever_invalidated_pcrs_banks_mask & BIT(i)) {
-+			pr_err("Continuing on stale ima_hash TPM PCR bank\n");
-+
-+			/* Force back to supported. */
-+			ima_unsupported_pcr_banks_mask &= ~BIT(i);
-+		} else if (always_invalidated_pcrs_banks_mask & BIT(i)) {
-+			struct crypto_shash *tfm;
-+
-+			pr_info("Masking previously unsupported TPM %s PCR bank\n",
-+				hash_algo_name[ima_algo_array[i].algo]);
-+
-+			/*
-+			 * Remove the ->tfm so that any not yet
-+			 * extended PCRs will get their corresponding
-+			 * bank invalidated as well upon first use.
-+			 */
-+			tfm = ima_algo_array[i].tfm;
-+			ima_algo_array[i].tfm = NULL;
-+			if (tfm)
-+				ima_free_tfm(tfm);
-+		}
-+	}
-+
- 	return ret;
- }
--- 
-2.49.0
-
+--=20
+SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
+rnberg, Germany
+GF: Ivo Totev, Andrew McDonald, Werner Knoblich
+(HRB 36809, AG N=C3=BCrnberg)
 
