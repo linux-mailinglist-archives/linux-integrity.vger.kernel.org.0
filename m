@@ -1,52 +1,52 @@
-Return-Path: <linux-integrity+bounces-5393-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5394-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26F4AA6CFA6
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 15:12:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47823A6CFA8
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 15:12:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF38E16FAA2
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 14:11:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2A1E16F833
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 14:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FCF7130AC8;
-	Sun, 23 Mar 2025 14:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBE71624C1;
+	Sun, 23 Mar 2025 14:10:33 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CC412FF6F
-	for <linux-integrity@vger.kernel.org>; Sun, 23 Mar 2025 14:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C360F14375C
+	for <linux-integrity@vger.kernel.org>; Sun, 23 Mar 2025 14:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742739032; cv=none; b=c/nDOu+Eo+BD7VS9GJOWQi3HlMY/SWifIkaJibtOWTPn1+MKwU8lFcxed424+iEE5XEqyObbvKvlqUTscO0+CHVURO3X1R/KvSuRw9dciWWSVON8cReDC+MvD5xfcE9wYh2ZhLP5ChdeYpLVOAx/CMe2QrcWu2/BifI+yiCx8e8=
+	t=1742739033; cv=none; b=OgtcbpwPWOo8CWu+55QnxaOKRg6vFRqF6jpVC9VRCzwZzURO58O5KXEE+TmvDZYz9Ms3qSpxpLogc4Ce5v1s//QymYjchmfk1WcN0dEb+h3mzALfMQp3Tj9QQ3B7TGLEnpX8pTtN8KacuOVPgSaRv6l94Bktd/WkIYjygyo4aGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742739032; c=relaxed/simple;
-	bh=IzP6QKoVhZwNqwbkC/6zkiAnPo2TojmeLMtdlXFS8BA=;
+	s=arc-20240116; t=1742739033; c=relaxed/simple;
+	bh=mE1eC9HPwNvEBAaoGkNzNse2enTafjWo2svKTu4Z+SM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZzxpIiPxhP3mlz0MbFVFUGAhtgxKMhBGtOfmLYOPGM3+x4Vs3TxRbi5k+eXLwv/7nkgKnl6LVxveMy2s2zUx/pfuFHJSokj2rZC89Or+R7K8nX8PSlmGFXYeo4rxXgSHkwECxbVIVw+me3A03q95KjEhtbXk3t45Iq+6wMz7/S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version; b=VshMek78i6YuQ8iT9Jxt7hms8gT9I9CHgtY5IEzc1AwC4cleeLsuglEgaHEO9x141Be77hpoJ/8+S6HHHu+2m1XM4UK1JqWzOXqHlTOaP5IaDo3tJsFxlSed7padOGHh82jDgGBqr+ubF+e/q97ge/lqQeFHMFiTN5gv23ramvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 39C3F211B0;
-	Sun, 23 Mar 2025 14:10:21 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DA31E1F455;
+	Sun, 23 Mar 2025 14:10:23 +0000 (UTC)
+Authentication-Results: smtp-out2.suse.de;
 	none
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 299161339F;
-	Sun, 23 Mar 2025 14:10:21 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C8ACC1339F;
+	Sun, 23 Mar 2025 14:10:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kKkGCU0W4GevPAAAD6G6ig
-	(envelope-from <nstange@suse.de>); Sun, 23 Mar 2025 14:10:21 +0000
+	id uhnFL08W4GeyPAAAD6G6ig
+	(envelope-from <nstange@suse.de>); Sun, 23 Mar 2025 14:10:23 +0000
 From: Nicolai Stange <nstange@suse.de>
 To: Mimi Zohar <zohar@linux.ibm.com>,
 	Roberto Sassu <roberto.sassu@huawei.com>,
@@ -58,9 +58,9 @@ Cc: Eric Snowberg <eric.snowberg@oracle.com>,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Nicolai Stange <nstange@suse.de>
-Subject: [RFC PATCH v2 09/13] ima: invalidate unsupported PCR banks only once
-Date: Sun, 23 Mar 2025 15:09:07 +0100
-Message-ID: <20250323140911.226137-10-nstange@suse.de>
+Subject: [RFC PATCH v2 10/13] tpm: authenticate tpm2_pcr_read()
+Date: Sun, 23 Mar 2025 15:09:08 +0100
+Message-ID: <20250323140911.226137-11-nstange@suse.de>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250323140911.226137-1-nstange@suse.de>
 References: <20250323140911.226137-1-nstange@suse.de>
@@ -79,7 +79,7 @@ X-Spamd-Result: default: False [-4.00 / 50.00];
 	TAGGED_RCPT(0.00)[]
 X-Spam-Flag: NO
 X-Spam-Score: -4.00
-X-Rspamd-Queue-Id: 39C3F211B0
+X-Rspamd-Queue-Id: DA31E1F455
 X-Rspamd-Pre-Result: action=no action;
 	module=replies;
 	Message is reply to one we originated
@@ -87,155 +87,126 @@ X-Rspamd-Action: no action
 X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spam-Level: 
 
-As it currently stands, IMA would invalidate a PCR bank corresponding to
-an unsupported hash algorithm over and over again by extending it with
-0xfe ... fe for each measurement list entry recorded (for
-CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND=n).
+PCR reads aren't currently authenticated even with CONFIG_TCG_TPM2_HMAC=y
+yet.
 
-This however, makes the problem of deciding from the PCR bank value
-whether or not the bank had been invalidated or not linear in the
-measurement list length: one would have to reproduce the potential
-invalidation extension sequence incrementally for each event recorded
-and compare whether the PCR bank value would match at any given point.
+It is probably desirable though, as e.g. IMA does some PCR reads to form
+the cumulative boot digest subsequently extended into PCR 10 (an operation
+which *is* authenticated).
 
-From a soundness POV, the repeated invalidations are not needed: a single
-one would suffice to ensure no verifier would (wrongly) verify any
-measurement list against the invalidated PCR bank value.
+Furthermore, a subsequent patch will make IMA to skip certain PCR bank
+re-invalidations (which are implemented with extensions) upon kexec based
+on the value read back at boot. In order to not weaken the overall
+security posture in this case, it will be required to establish the same
+level of trust into PCR reads as there is already for the extensions.
 
-With only a single invalidation, an invalidated PCR bank value can get
-recognized easily in O(1) by comparing against
-HASH(0x00 ... 00 | fe ... fe), i.e. the value a PCR bank would have if
-invalidated once in its initial state.
+Make tpm2_pcr_read() to protect the command with a HMAC auth session,
+using the already existing infrastructure.
 
-This would potentially help userspace tools such as ima-evm-utils
-ima_measurement ([1]) which might want to filter unmaintained PCR banks
-and also, it will enable the kernel to log some meaningful meassages when
-the set of supported hash algorithm differs between kernel instances in a
-kexec chain.
+As the TPM2_PCR_Read command doesn't have any authorizations defined, and
+neither of TPM2_SA_ENCRYPT/TPM2_SA_DECRYPT is needed, use TPM2_SA_AUDIT,
+even though no auditing functionality is actually being required. Since
+the TPM will set TPM2_SA_AUDIT_EXCLUSIVE in its response with this
+single-use session, set it upfront so that tpm_buf_check_hmac_response()
+would expect it for the HMAC verification.
 
-Start out by invalidating unsupported PCR banks exactly once from each
-kernel in a kexec chain. Skipping re-invalidations from subsequent kernels
-in a kexec chain will be the subject of a future patch.
-
-Make IMA's crypto __init code to fill in a bitmask of banks with
-unsupported hash algorithms, ima_unsupported_pcr_banks_mask.
-ima_unsupported_pcr_banks_mask has been chosen to be of type unsigned
-long, with the expectation that it will be sufficient to represent all
-banks allocated on a TPM in practice -- note that 32 > the number of hash
-algorithm identifiers defined by the TCG. If not, the code would
-implictly fall back to re-invalidating "excess" banks over and over again,
-so it is always sound.
-
-Make ima_pcr_extend() to skip the extension of a PCR's unsupported banks
-in case the given PCR had not been extend before, as already tracked in
-the ima_extended_pcrs_mask introduced by a previous patch. That is,
-invalidate unsupported banks only once at any given PCR's first extension.
-
-Note that ima_extended_pcrs_mask is not retained across kernels in a
-kexec chain, so each booted kernel would re-invalidate the unsupported
-banks again. As said above, taking care of this as well will be handled
-in a separate patch.
-
-[1] https://github.com/linux-integrity/ima-evm-utils.git
+Now that tpm2_pcr_read() depends on the driver's session infrastructure,
+note that the first call to tpm2_pcr_read() at init time gets issued from
+  tpm_chip_bootstrap() -> tpm_get_pcr_allocation()
+  -> tpm2_get_pcr_allocation() -> tpm2_init_bank_info()
+  -> tpm2_pcr_read()
+after
+  tpm_chip_bootstrap() -> tpm_auto_startup() -> tpm2_auto_startup()
+  -> tpm2_sessions_init(),
+so there won't be any issues with that.
 
 Signed-off-by: Nicolai Stange <nstange@suse.de>
 ---
- security/integrity/ima/ima.h        |  1 +
- security/integrity/ima/ima_crypto.c | 21 +++++++++++++++++----
- security/integrity/ima/ima_queue.c  | 18 +++++++++++++++++-
- 3 files changed, 35 insertions(+), 5 deletions(-)
+ drivers/char/tpm/tpm2-cmd.c | 46 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 42 insertions(+), 4 deletions(-)
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index f99b1f81b35c..7ad4a1eefd94 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -62,6 +62,7 @@ extern int ima_sha1_idx __ro_after_init;
- extern int ima_hash_algo_idx __ro_after_init;
- extern int ima_extra_slots __ro_after_init;
- extern struct ima_algo_desc *ima_algo_array __ro_after_init;
-+extern unsigned long ima_unsupported_pcr_banks_mask __ro_after_init;
- 
- extern unsigned long ima_extended_pcrs_mask;
- 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 4ac4138d98de..c78bf4872b6a 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -67,6 +67,8 @@ int ima_extra_slots __ro_after_init;
- 
- struct ima_algo_desc *ima_algo_array __ro_after_init;
- 
-+unsigned long ima_unsupported_pcr_banks_mask __ro_after_init;
-+
- static int __init ima_init_ima_crypto(void)
- {
- 	long rc;
-@@ -184,6 +186,16 @@ int __init ima_init_crypto(void)
- 		}
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index 23ded8ea47dc..e16772bbc5c8 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -168,6 +168,8 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+ 	int i;
+ 	int rc;
+ 	struct tpm_buf buf;
++	struct tpm_header *head;
++	int offset_p;
+ 	struct tpm2_pcr_read_out *out;
+ 	u8 pcr_select[TPM2_PCR_SELECT_MIN] = {0};
+ 	u16 digest_size;
+@@ -187,9 +189,30 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+ 		expected_digest_size = chip->allocated_banks[i].digest_size;
  	}
  
-+	for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
-+		if (i >= BITS_PER_LONG) {
-+			pr_warn("Too many TPM PCR banks, invalidation tracking capped");
-+			break;
+-	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
+-	if (rc)
+-		return rc;
++	if (IS_ENABLED(CONFIG_TCG_TPM2_HMAC) && !disable_pcr_integrity) {
++		rc = tpm2_start_auth_session(chip);
++		if (rc)
++			return rc;
++
++		rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_READ);
++		if (rc) {
++			tpm2_end_auth_session(chip);
++			return rc;
 +		}
 +
-+		if (!ima_algo_array[i].tfm)
-+			ima_unsupported_pcr_banks_mask |= BIT(i);
-+	}
-+
- 	return 0;
- #if IS_ENABLED(CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND)
- out_array:
-@@ -644,10 +656,11 @@ int ima_calc_field_array_hash(struct ima_field_data *field_data,
- 		 * padded SHA1 if backwards-compatibility fallback PCR
- 		 * extension is enabled. Otherwise fill with
- 		 * 0xfes. This is the value to invalidate unsupported
--		 * PCR banks with. Also, a non-all-zeroes value serves
--		 * as an indicator to kexec measurement restoration
--		 * that the entry is not a violation and all its
--		 * template digests need to get recomputed.
-+		 * PCR banks with once at first use. Also, a
-+		 * non-all-zeroes value serves as an indicator to
-+		 * kexec measurement restoration that the entry is not
-+		 * a violation and all its template digests need to
-+		 * get recomputed.
- 		 */
- 		if (!ima_algo_array[i].tfm) {
- #if IS_ENABLED(CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND)
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 6e8a7514d9f6..83d5c7034919 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -150,11 +150,27 @@ unsigned long ima_get_binary_runtime_size(void)
- static int ima_pcr_extend(struct tpm_digest *digests_arg, int pcr)
- {
- 	int result;
-+	unsigned long pcr_banks_skip_mask;
- 
- 	if (!ima_tpm_chip)
- 		return 0;
- 
--	result = tpm_pcr_extend(ima_tpm_chip, pcr, digests_arg);
-+#if !IS_ENABLED(CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND)
-+	pcr_banks_skip_mask = ima_unsupported_pcr_banks_mask;
-+	if (!(ima_extended_pcrs_mask & BIT(pcr))) {
 +		/*
-+		 * Invalidate unsupported banks once upon a PCR's
-+		 * first usage. Note that the digests_arg[] entries for
-+		 * unsupported algorithms have been filled with 0xfes.
++		 * Exclusivity is not needed, but set in the response.
++		 * Set it here too, so that the HMAC verification
++		 * won't fail.
 +		 */
-+		pcr_banks_skip_mask = 0;
++		tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_AUDIT
++					    | TPM2_SA_AUDIT_EXCLUSIVE,
++					    NULL, 0);
++	} else {
++		rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
++		if (rc)
++			return rc;
 +	}
-+#else
-+	pcr_banks_skip_mask = 0;
-+#endif
+ 
+ 	pcr_select[pcr_idx >> 3] = 1 << (pcr_idx & 0x7);
+ 
+@@ -199,11 +222,24 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+ 	tpm_buf_append(&buf, (const unsigned char *)pcr_select,
+ 		       sizeof(pcr_select));
+ 
++	if (!disable_pcr_integrity)
++		tpm_buf_fill_hmac_session(chip, &buf);
+ 	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to read a pcr value");
+ 	if (rc)
+ 		goto out;
++	if (!disable_pcr_integrity) {
++		rc = tpm_buf_check_hmac_response(chip, &buf, rc);
++		if (rc)
++			goto out;
++	}
 +
-+	result = tpm_pcr_extend_sel(ima_tpm_chip, pcr, digests_arg,
-+				    pcr_banks_skip_mask);
- 	if (result != 0) {
- 		pr_err("Error Communicating to TPM chip, result: %d\n", result);
- 		return result;
++	head = (struct tpm_header *)buf.data;
++	offset_p = TPM_HEADER_SIZE;
++	/* Skip the parameter size field: */
++	if (be16_to_cpu(head->tag) == TPM2_ST_SESSIONS)
++		offset_p += 4;
++	out = (struct tpm2_pcr_read_out *)&buf.data[offset_p];
+ 
+-	out = (struct tpm2_pcr_read_out *)&buf.data[TPM_HEADER_SIZE];
+ 	digest_size = be16_to_cpu(out->digest_size);
+ 	if (digest_size > sizeof(digest->digest) ||
+ 	    (!digest_size_ptr && digest_size != expected_digest_size)) {
+@@ -216,6 +252,8 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+ 
+ 	memcpy(digest->digest, out->digest, digest_size);
+ out:
++	if (!disable_pcr_integrity)
++		tpm2_end_auth_session(chip);
+ 	tpm_buf_destroy(&buf);
+ 	return rc;
+ }
 -- 
 2.49.0
 
