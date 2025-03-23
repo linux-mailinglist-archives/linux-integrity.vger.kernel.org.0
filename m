@@ -1,187 +1,129 @@
-Return-Path: <linux-integrity+bounces-5398-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5399-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58AABA6CFB8
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 15:21:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F24AEA6D038
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 18:25:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC89016E802
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 14:21:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A507E188F327
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Mar 2025 17:25:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F92CDF60;
-	Sun, 23 Mar 2025 14:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C22AD78C9C;
+	Sun, 23 Mar 2025 17:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JVB86PYw";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="nQzWs5Nz";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jztpDx32";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Dt3QRzMv"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="H6VAYzva"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7FA469D
-	for <linux-integrity@vger.kernel.org>; Sun, 23 Mar 2025 14:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA0B136E;
+	Sun, 23 Mar 2025 17:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742739697; cv=none; b=dH5J9bY6G9P/WAYBmQaqvCmfna8BBGXGlpcIF1SOBQLQlmYczTIG7y3TBZ4lcVd/drn3QobgOihsm4CfTO3ppcS+erIORBHZoJwUrklIoA4ZxF1AbWRQk/AzDG7JA7NqtLaoxG7ZeB3BBITvgTHEbO30ndYFyivvvZQLxCsmnyA=
+	t=1742750723; cv=none; b=k10ytSAfsZGRQgRofBvRyllRrLGZD2W5BP/l6Rjj81D+KdLgRYUVkNZ8/8eZmBBPT5FJmAiIaROftPH0zf6N4BWB1h+HwXjGNMjfrWag9Hfwr4B1IIiZjcUX66/oHnxbnL0njNHT5nsAM2ZMUWYHf/fkjAQ1UqbGHY+QktgcUP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742739697; c=relaxed/simple;
-	bh=XJ+L38rS//K9XpzTu8wB2LVs017e3YfwFDW+V1x8ozw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=JxXM+G7rd6eumrD2Clb0WIbacW14U0QPg2LVb1ZPO2co1UaY494gWazTDM5o1umNx5wTp7VAyxF+PHGYAHp3uC0ptP/aAQI9IevV1plyg0EQZS4D5aOikpMrC6NUTj479RWsQdgysVGqdOQCpnxXdFkzeahpJ2R+xcAMhw3eUqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JVB86PYw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=nQzWs5Nz; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jztpDx32; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Dt3QRzMv; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	s=arc-20240116; t=1742750723; c=relaxed/simple;
+	bh=3/sdFDcSkElWIwIhxPhTXlK+rCZ0Y4GcwxBGAn4B3GM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=j2TmkvjPm60xrNmKp7jf65Cr6QsuVI+Nzztf9KFi7ncul0kj8mvaEmKVxyhpODnx4lqLAQIB53gmP54h3eOAq0okqUtNXRhMl+K/NEPFFC9iUuXXDy0bQ7OFImXdpRiAbbbkksg578vaJetKk0Y4OuHFfw6XToUjgE8o8mPzSUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=H6VAYzva; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1742750719;
+	bh=3/sdFDcSkElWIwIhxPhTXlK+rCZ0Y4GcwxBGAn4B3GM=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=H6VAYzvacTKQMikDEJb8KTabkHLc27pMnz32YZYM9EONOl5uQXgsLAFYi34mDpqD2
+	 j6Q+mqT8RgJ/GYxfVP8aS6iuoP9mNucYcTwnEECar0OyODaSwU3RNG637vou96/H2L
+	 mbgWNU/wkTFjSr8pPxbGn1pF6jyA+X2rppn406dw=
+Received: from [10.101.7.56] (ip-185-104-139-74.ptr.icomera.net [185.104.139.74])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id C06301F445;
-	Sun, 23 Mar 2025 14:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1742739694; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5ZCGhOhrWhO2/XLhlKGz9XPeVAo8qv4HD8ptuAaEb6M=;
-	b=JVB86PYwfaKCYteubKzjqOBJuCCb2LFclwf2YOetXefb8WX1DYjaIObtLx5I1bLoGuomyq
-	Mq0OFakxFmpuXnOxYb4EKkFOtE0PGn70szgroB6fVNSKn/hxnL6AZmq9bZnH9bmqCYUkWp
-	3tvfOiKkJf5OOnDDlAYMu8qW4e9HFe8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1742739694;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5ZCGhOhrWhO2/XLhlKGz9XPeVAo8qv4HD8ptuAaEb6M=;
-	b=nQzWs5NzaSPia2mPkTrZUvNWvSwCWCRJQnweL5r9yMmEjy4alnK7G7OiBhI98AvDA3h/oN
-	ZabhOxCxS6RBsYCw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1742739692; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5ZCGhOhrWhO2/XLhlKGz9XPeVAo8qv4HD8ptuAaEb6M=;
-	b=jztpDx324F2T95YeEpFN8WVOSu/oa5SiC5yMmABBaRMKpcvsYBTRqZjEg6raid3c1qvM6C
-	e/WkHGApCg6yB++HUKOKWgvWpbsoni8HzVZgZZuuJ6Kh0pDi0eNzaxHk2H3wAWhHA23k3j
-	x3PahRyfwfwLe4/9FZX9gBwafHlpN0I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1742739692;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5ZCGhOhrWhO2/XLhlKGz9XPeVAo8qv4HD8ptuAaEb6M=;
-	b=Dt3QRzMvID5gT3ir7p+gZkIm0wlHXWLedLCRK0eoc+pWYtW3ZyoRpF5G75Lp8F690zf8Ti
-	DqsICLYH80NubMBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 838711339F;
-	Sun, 23 Mar 2025 14:21:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id sZDVHuwY4Gc2PwAAD6G6ig
-	(envelope-from <nstange@suse.de>); Sun, 23 Mar 2025 14:21:32 +0000
-From: Nicolai Stange <nstange@suse.de>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Nicolai Stange <nstange@suse.de>,  Roberto Sassu
- <roberto.sassu@huawei.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-  Eric Snowberg <eric.snowberg@oracle.com>,
-  linux-integrity@vger.kernel.org,  linux-security-module@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 6/7] ima: invalidate unsupported PCR banks once
- at first use
-In-Reply-To: <4e760360258bda56fbcb8f67e865a7a4574c305a.camel@linux.ibm.com>
-	(Mimi Zohar's message of "Tue, 18 Mar 2025 16:49:57 -0400")
-References: <20250313173339.3815589-1-nstange@suse.de>
-	<20250313173339.3815589-7-nstange@suse.de>
-	<34ebd15aae07402d19279ef4286197112c4afc01.camel@linux.ibm.com>
-	<8305c89ec354320100ec272052c036300366a2af.camel@linux.ibm.com>
-	<4e760360258bda56fbcb8f67e865a7a4574c305a.camel@linux.ibm.com>
-Date: Sun, 23 Mar 2025 15:21:31 +0100
-Message-ID: <871punddzo.fsf@>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 9DA8A1C0211;
+	Sun, 23 Mar 2025 13:25:18 -0400 (EDT)
+Message-ID: <300575957cee207c4191b8bc70219d13d467fdd7.camel@HansenPartnership.com>
+Subject: Re: [RFC PATCH v2 10/13] tpm: authenticate tpm2_pcr_read()
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Nicolai Stange <nstange@suse.de>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>
+Cc: Eric Snowberg <eric.snowberg@oracle.com>, Jarkko Sakkinen
+	 <jarkko@kernel.org>, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Sun, 23 Mar 2025 13:25:15 -0400
+In-Reply-To: <20250323140911.226137-11-nstange@suse.de>
+References: <20250323140911.226137-1-nstange@suse.de>
+	 <20250323140911.226137-11-nstange@suse.de>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -0.60
-X-Spamd-Result: default: False [-0.60 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	INVALID_MSGID(1.70)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	TAGGED_RCPT(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.de,huawei.com,gmail.com,oracle.com,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Level: 
 
-Mimi Zohar <zohar@linux.ibm.com> writes:
-> On Tue, 2025-03-18 at 16:55 +0100, Nicolai Stange wrote:
->> Mimi Zohar <zohar@linux.ibm.com> writes:
->> > FYI, because the IMA Kconfig selects SHA1, we're guaranteed that SHA1 =
-exists in
->> > the kernel and the subsequent kexec'ed kernel.  For this reason we're =
-guaranteed
->> > that the measurement list is complete.  The simplest solution, not nec=
-essarily
->> > the best, would be to punt the problem for the time being by replacing=
- the
->> > "select" with a different hash algorithm.
->>=20
->> Yes, that would work as well. IIUC, it would mean that we would
->> e.g. extend truncated SHA-256 template hashes into a SHA-1 bank, right?
->> However, since no existing tool like 'ima_measurement' is expecting
->> that, and would fail a verification then, I'm currently struggling to
->> see the advantage over just doing a.) and invalidating the PCR banks
->> with a fixed value right away?
->
-> Replacing the "Kconfig select" has more to do with having at least one
-> guaranteed complete measurement list.  I'm fine with extending a TPM bank=
- with
-> an unknown kernel hash algorithm violation (either option a or b).
+On Sun, 2025-03-23 at 15:09 +0100, Nicolai Stange wrote:
+> PCR reads aren't currently authenticated even with
+> CONFIG_TCG_TPM2_HMAC=3Dy yet.
 
-Ok, I think I got it now.
+The reason being TPM2_PCR_Read can only support an audit session, so it
+has even more overhead than the usual HMAC session for something you
+don't care about and because no-one relies on plain reads anyway,
+relying entities use quotes.
 
-FWIW, a v2 can be found at
-https://lore.kernel.org/r/20250323140911.226137-1-nstange@suse.de , includi=
-ng a
-patch for selecting SHA256 now.
+> It is probably desirable though, as e.g. IMA does some PCR reads to
+> form the cumulative boot digest subsequently extended into PCR 10 (an
+> operation which *is* authenticated).
 
-Thanks a lot for all your feedback!
+Could you elaborate on what security properties this adds?  I can't see
+any form of attack that could be done by altering the boot aggregate:
+either the relying party cares, in which case it will quote the boot
+log and arrive at its own value, or it doesn't, in which case the value
+in the log is superfluous.
 
-Nicolai
+> +		/*
+> +		 * Exclusivity is not needed, but set in the
+> response.
+> +		 * Set it here too, so that the HMAC verification
+> +		 * won't fail.
+> +		 */
+> +		tpm_buf_append_hmac_session(chip, &buf,
+> TPM2_SA_AUDIT
+> +					    |
+> TPM2_SA_AUDIT_EXCLUSIVE,
+> +					    NULL, 0);
 
---=20
-SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
-rnberg, Germany
-GF: Ivo Totev, Andrew McDonald, Werner Knoblich
-(HRB 36809, AG N=C3=BCrnberg)
+Exclusivity here requires no other command be unaudited between the
+session starting and now.  That means that with the lazy flush scheme
+you have a reasonable chance of this being violated and triggering an
+error on the command.
+
+Additionally, the response will only have the exclusive flag set if the
+above condition (no other unaudited command since session start) is
+true, which it might not be.  The problem you're having is that
+tpm2_auth_check_hmac_response() uses the command session flags to
+calculate the rpHash, which is a useful short cut because for non-audit
+sessions they're always the same.  If you want to use audit sessions,
+you have to teach it to dig the response session flags out of the
+header and use them instead.
+
+Regards,
+
+James
+
 
