@@ -1,260 +1,301 @@
-Return-Path: <linux-integrity+bounces-5415-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5416-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BA03A6E93D
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Mar 2025 06:19:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D935A703C7
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Mar 2025 15:34:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A21A3188FCF0
-	for <lists+linux-integrity@lfdr.de>; Tue, 25 Mar 2025 05:19:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71A423A53E8
+	for <lists+linux-integrity@lfdr.de>; Tue, 25 Mar 2025 14:27:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD0419CC3D;
-	Tue, 25 Mar 2025 05:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3566F25A2A3;
+	Tue, 25 Mar 2025 14:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pg2bhnKP"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lATcgykU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225CDDDA9;
-	Tue, 25 Mar 2025 05:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6052561C3;
+	Tue, 25 Mar 2025 14:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742879985; cv=none; b=ire0qtoOehL6Fysj7g/K7g3agzJftcsrudxH5q8T5he7F1KwPoyuqBtQ2ekJeAe8zkJtpLNekUYF38JPjCjMUWXI4kI1HuJoSnyAeciTehaP4HDJ2OVjnvC7BIoVDT+KHztnKMniYHDpYtV5kA4UgSIUGgEuJzqjUSFPKzblph8=
+	t=1742912840; cv=none; b=Rsdpvlz91z5zEsnSB6XsUhjC+XDGPgM78+NBjYcJEVg6lqlvUTI78UnM6BvzrOzaS4PM+nh3wLeLJq4Rxel+MRZ+7i5SKL5prq/K51G6w7CJ3fSyTWVpT3CPSg7q9wA1CDLOKVToUaEiO5MPWnjdY0sYFiycrLfwUXGsESfc9W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742879985; c=relaxed/simple;
-	bh=eSul+/3jQyvKTWw3aK9S+uNoEVTyeL5sqC95x+Vdco8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RSZavrBqro70N5KCEHBq68achDxgWs5B2RNYhj8xQktf5oSxXuw745K9LKcA8+KgCkd7R7N0Ubrk1sI0HTc8L5B+GCsuG5GbuEEFhMnzpqsn+IezkHJ0RL8wdCetG9VdfzUDJGYYfwBkI4cBT6e+2A1tVuU9Fq6t9aoTG80U4pQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pg2bhnKP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3FA5C4CEE9;
-	Tue, 25 Mar 2025 05:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742879984;
-	bh=eSul+/3jQyvKTWw3aK9S+uNoEVTyeL5sqC95x+Vdco8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pg2bhnKP7kfpNogcVhDxrpbNsj2+i56JBViNDRJAUFL0ySzEY4VQq41IYzVy6IJDX
-	 qasOu9jb/3nwL6uJP587ZM8cyQNiOI3F2ZYDJljcf4P2TT/0Dvj8HVNr4tjOABiqD0
-	 bPfeOn3DXR9up+M3aNFRsTRYqAjnszu98zOaWV6clpLjmabaG4N5ogEEpUX2FrNrdh
-	 3+jMiyNobyv/cXzjLsr9pdS6k94PBH0XH6TMoGZXyPpYQch2rJdj1miWcs/2GAgwRO
-	 aoEEbcmdAnm1FI+Nz9JL8U0qjUa39tgPTe1XCzevary4DlUFeRRdpCdHgwGTTFFh7L
-	 j9/vq/MDMg47Q==
-Date: Tue, 25 Mar 2025 10:49:38 +0530
-From: Sumit Garg <sumit.garg@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-	linux-integrity@vger.kernel.org,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>
-Subject: Re: [PATCH 2/2] tpm/tpm_ftpm_tee: use send_recv() op
-Message-ID: <Z-I86tWMcD6b_YeM@sumit-X1>
-References: <20250320152433.144083-1-sgarzare@redhat.com>
- <20250320152433.144083-3-sgarzare@redhat.com>
+	s=arc-20240116; t=1742912840; c=relaxed/simple;
+	bh=px61XK7szBKX857OMYLA4R0ENNMTrBRzoxFZcLIPIZ0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Jl0/YNt5g8J8oEN/EMtXo7QEGMyDP7f/YpH4VqUB/RNHofvNCpIouClraOc02cYl1iARZTobp2HKdrrkSEkPH+4rHLsL2W4ul22QRqsDKmtXToSJZus9aSmKu064cpH3/ci2net2HiCnQsYet6g9dtlCd5tYSiFNJCeQw2HmsjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lATcgykU; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52P9xFWZ011554;
+	Tue, 25 Mar 2025 14:27:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=udBKi4
+	S4n9gVHDosWR7cem1epd9mqTZMz3+N2lD2nUI=; b=lATcgykUYfvtzV9aQuv1i4
+	1SSNQqVzM0OqqJXvONI5CBeq0FFLe7KZZb/NoKLQQIeg2rexWgxsSEZVHzIURzG0
+	1GaiYUVuD/g6eLLkUBfFjEpQS0bfxeVl7rDpPHwG/M9wtV+Fh7ZDvkNNsmN7yy0I
+	Nn+2pejshcYhKrw+n6QwLl82dA5c2r2YKloxDjs9m0IJ7PWARNFgD+dBtWiHZOMB
+	ECO75fURglii/8vGtW5sSd0VQjW5h2HRNlSsFGu4zUFu/RCcoNhfidjotqjxDW58
+	GXL3jWi2oJORMTTKsuZyEnkJ9NXrI2nP1ro9b1cS7j1nGefWRQvsiOhJqnokAYBw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45kejpv6xw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Mar 2025 14:27:00 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52PEMkI4030531;
+	Tue, 25 Mar 2025 14:26:59 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45kejpv6xf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Mar 2025 14:26:59 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52PCxtZI020101;
+	Tue, 25 Mar 2025 14:26:53 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45j8hnusnw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Mar 2025 14:26:53 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52PEQq9h23527924
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 25 Mar 2025 14:26:52 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8984258052;
+	Tue, 25 Mar 2025 14:26:52 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 90A7A58045;
+	Tue, 25 Mar 2025 14:26:51 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.150.123])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 25 Mar 2025 14:26:51 +0000 (GMT)
+Message-ID: <0e7ca7094baf8f9968e72b43441745c420d61215.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v2 01/13] ima: don't expose runtime_measurements for
+ unsupported hashes
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Nicolai Stange <nstange@suse.de>,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc: Eric Snowberg <eric.snowberg@oracle.com>,
+        Jarkko Sakkinen
+ <jarkko@kernel.org>,
+        James Bottomley
+ <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date: Tue, 25 Mar 2025 10:26:51 -0400
+In-Reply-To: <20250323140911.226137-2-nstange@suse.de>
+References: <20250323140911.226137-1-nstange@suse.de>
+	 <20250323140911.226137-2-nstange@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250320152433.144083-3-sgarzare@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rcy9s3ku3MB0gbXpZhNZV5VCfoO6Uk_1
+X-Proofpoint-GUID: YVBzbaEO41g3yHFLIxbe0WR6Ea7SHzWj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-25_06,2025-03-25_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
+ impostorscore=0 malwarescore=0 mlxscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503250102
 
-On Thu, Mar 20, 2025 at 04:24:33PM +0100, Stefano Garzarella wrote:
-> From: Stefano Garzarella <sgarzare@redhat.com>
-> 
-> This driver does not support interrupts, and receiving the response is
-> synchronous with sending the command.
-> 
-> It used an internal buffer to cache the response when .send() is called,
-> and then return it when .recv() is called.
-> 
-> Let's simplify the driver by implementing the new send_recv() op, so that
-> we can also remove the 4KB internal buffer used to cache the response.
-> 
-> Tested-by: Jens Wiklander <jens.wiklander@linaro.org>
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+On Sun, 2025-03-23 at 15:08 +0100, Nicolai Stange wrote:
+> IMA creates one runtime_measurements_<hash-algo> sysfs file for every TPM
+> bank + for SHA1 if not covered by any such. These differ only in that the
+> template hash value for each record is of the file's associated algorithm
+> each.
+>=20
+> The kernel does not necessarily support each hash algorithm associated
+> with some TPM bank though -- the most common case probably being that the
+> algorithm is not built-in, but provided as a module, if at all, and thus
+> not available at IMA init time yet.
+
+At least from an IMA perspective, the IMA Kconfig selects "CRYPTO_SHA1", ma=
+king
+it the only crypto hash algorithm required to be built into the kernel.
+>=20
+> If that happens to be the case, the behavior is a bit counter-intuitive:
+> probably for historic reasons and to still extend the TPM bank with
+> something, a record's template hash is filled with the padded SHA1 value.
+> That is, it is perfectly possible that runtime_measurements_sha256 contai=
+ns
+> padded SHA1 template hashes if SHA-256 was unavailable at IMA init.
+
+As you explained in "[RFC PATCH v2 09/13] ima: invalidate unsupported PCR b=
+anks
+only once", not extending the TPM bank:
+  b.) is a security risk, because the bank would validate an empty measurem=
+ent
+list.
+
+The solution was to extend a padded SHA1 digest, which could still be verif=
+ied.
+The question boils down to whether extending the TPM bank with a valid, may=
+be
+deprecated hash algo, is better than not extending it at all.  Was that the
+right solution?  I believe it was at the time.  SHA1 was being deprecated f=
+or
+specific use cases, not all usecases.
+
+So the question is what to do going forward.
+
+>=20
+> I would argue that it's likely that no existing userspace tool is relying
+> on this fallback logic -- they either wouldn't consume the hash value fro=
+m
+> the measurement list directly but recreate it by themselves, as is requir=
+ed
+> for verification against PCRs, or, if they did, they would somehow assume=
+ a
+> hash algorithm and expect the hashes in the measurement list to be of tha=
+t
+> type. If of the latter kind, this could even lead to hard to debug
+> verification failures. For example, from looking at keylime's current
+> code, the verifier logic seems to assume that the template hashes found
+> in the provided measurement list are of the configured 'ima_log_hash_alg'
+> type. In particular, it does not check against padded SHA1 upon
+> mismatch.
+
+The downside, if none of the TPM bank hash algorithms are configured as bui=
+ltin
+in the kernel, is the lack of a measurement list.
+
+True, not implementing the fallback is simpler, but it is their choice.
+
+>=20
+> That being said, there's also another dimension: currently IMA has a
+> hard requirement on SHA-1 and subsequent patches in this series will
+> attempt to get rid of that. If SHA-1 is not available at IMA init though,
+> it would also mean that padded SHA-1 values cannot get filled in as a
+> fallback for other unsupported algorithms. Substituting something like
+> hard coded all-zeroes or all-ones would be dangerous, because some
+> application or user scripts could perhaps (ab)use the template hashes fro=
+m
+> the exported measurement lists for some kind of fingerprinting scheme or
+> so.
+
+Agreed, using the open-writer/ToMToU integrity violation to indicate an
+unsupported TPM bank would not be a good idea.
+
+>=20
+> In conclusion, I think it's best to not create the
+> runtime_measurements_<hash-algo> sysfs files for hash algorithms not
+> supported by the kernel. That way, applications expecting a certain
+> hash algorithm for the measurement list and which are not able to handle
+> the padded-SHA1 fallback scheme would fail with a clear indication on wha=
+t
+> the proem is. Furthermore, as digests for unsupported banks are not
+> getting exposed to userspace anymore, we'll have all flexibility to
+> set it to any value internally, including all-ones as will be needed in
+> a subsequent patch when addressing PCR extend for unsupported banks.
+>=20
+> So, do not create runtime_measurements_<hash-algo> sysfs files for
+> unsupported hash algorithms. Likewise for their ascii counterparts.
+>=20
+> Note that at this point, SHA-1 is still mandatory, and thus,
+> runtime_measurements_sha1 as well as the "runtime_measurements" will
+> remain there, even though the code has provisions already to skip their
+> creation as well in case SHA-1 was unavailable.
+>=20
+> Signed-off-by: Nicolai Stange <nstange@suse.de>
+>=20
+
+If the purpose of this patch set is to actually remove IMA's dependency on =
+a
+working SHA-1, at some point the Kconfig "select CRYPTO_SHA1" needs to be
+removed.  Otherwise the kernel will be built with SHA1 builtin
+(CONFIG_CRYPTO_SHA1=3Dy).
+
+If the purpose of this patch set is preparatory for eventually removing the=
+ SHA1
+dependency, then the cover letter and the patch descriptions should indicat=
+e
+that.
+
+Assuming the latter, other than updating the patch description, the patch i=
+s
+fine.
+
+Before posting the non-RFC version of this patch, please trim the patch
+description.
+
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
 > ---
-> v1:
-> - added Jens' T-b
-> ---
->  drivers/char/tpm/tpm_ftpm_tee.h |  4 --
->  drivers/char/tpm/tpm_ftpm_tee.c | 86 ++++++++-------------------------
->  2 files changed, 21 insertions(+), 69 deletions(-)
->
-
-Reviewed-by: Sumit Garg <sumit.garg@kernel.org>
-
--Sumit
-
-> diff --git a/drivers/char/tpm/tpm_ftpm_tee.h b/drivers/char/tpm/tpm_ftpm_tee.h
-> index e39903b7ea07..8d5c3f0d2879 100644
-> --- a/drivers/char/tpm/tpm_ftpm_tee.h
-> +++ b/drivers/char/tpm/tpm_ftpm_tee.h
-> @@ -22,16 +22,12 @@
->   * struct ftpm_tee_private - fTPM's private data
->   * @chip:     struct tpm_chip instance registered with tpm framework.
->   * @session:  fTPM TA session identifier.
-> - * @resp_len: cached response buffer length.
-> - * @resp_buf: cached response buffer.
->   * @ctx:      TEE context handler.
->   * @shm:      Memory pool shared with fTPM TA in TEE.
->   */
->  struct ftpm_tee_private {
->  	struct tpm_chip *chip;
->  	u32 session;
-> -	size_t resp_len;
-> -	u8 resp_buf[MAX_RESPONSE_SIZE];
->  	struct tee_context *ctx;
->  	struct tee_shm *shm;
->  };
-> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-> index 8d9209dfc384..d472199c0a7b 100644
-> --- a/drivers/char/tpm/tpm_ftpm_tee.c
-> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
-> @@ -31,45 +31,19 @@ static const uuid_t ftpm_ta_uuid =
->  		  0x82, 0xCB, 0x34, 0x3F, 0xB7, 0xF3, 0x78, 0x96);
->  
->  /**
-> - * ftpm_tee_tpm_op_recv() - retrieve fTPM response.
-> - * @chip:	the tpm_chip description as specified in driver/char/tpm/tpm.h.
-> - * @buf:	the buffer to store data.
-> - * @count:	the number of bytes to read.
-> - *
-> - * Return:
-> - *	In case of success the number of bytes received.
-> - *	On failure, -errno.
-> - */
-> -static int ftpm_tee_tpm_op_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-> -{
-> -	struct ftpm_tee_private *pvt_data = dev_get_drvdata(chip->dev.parent);
-> -	size_t len;
-> -
-> -	len = pvt_data->resp_len;
-> -	if (count < len) {
-> -		dev_err(&chip->dev,
-> -			"%s: Invalid size in recv: count=%zd, resp_len=%zd\n",
-> -			__func__, count, len);
-> -		return -EIO;
+>  security/integrity/ima/ima_fs.c | 35 +++++++++++++++++++++------------
+>  1 file changed, 22 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima=
+_fs.c
+> index e4a79a9b2d58..a8df2fe5f4cb 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -454,6 +454,9 @@ static int __init create_securityfs_measurement_lists=
+(void)
+>  		return -ENOMEM;
+> =20
+>  	for (i =3D 0; i < securityfs_measurement_list_count; i++) {
+> +		if (!ima_algo_array[i].tfm)
+> +			continue;
+> +
+>  		algo =3D ima_algo_array[i].algo;
+> =20
+>  		sprintf(file_name, "ascii_runtime_measurements_%s",
+> @@ -573,20 +576,26 @@ int __init ima_fs_init(void)
+>  	if (ret !=3D 0)
+>  		goto out;
+> =20
+> -	binary_runtime_measurements =3D
+> -	    securityfs_create_symlink("binary_runtime_measurements", ima_dir,
+> -				      "binary_runtime_measurements_sha1", NULL);
+> -	if (IS_ERR(binary_runtime_measurements)) {
+> -		ret =3D PTR_ERR(binary_runtime_measurements);
+> -		goto out;
 > -	}
-> -
-> -	memcpy(buf, pvt_data->resp_buf, len);
-> -	pvt_data->resp_len = 0;
-> -
-> -	return len;
-> -}
-> -
-> -/**
-> - * ftpm_tee_tpm_op_send() - send TPM commands through the TEE shared memory.
-> + * ftpm_tee_tpm_op_send_recv() - send TPM commands through the TEE shared memory
-> + * and retrieve the response.
->   * @chip:	the tpm_chip description as specified in driver/char/tpm/tpm.h
-> - * @buf:	the buffer to send.
-> - * @len:	the number of bytes to send.
-> + * @buf:	the buffer to send and to store the response.
-> + * @buf_len:	the size of the buffer.
-> + * @cmd_len:	the number of bytes to send.
->   *
->   * Return:
-> - *	In case of success, returns 0.
-> + *	In case of success, returns the number of bytes received.
->   *	On failure, -errno
->   */
-> -static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
-> +static int ftpm_tee_tpm_op_send_recv(struct tpm_chip *chip, u8 *buf,
-> +				     size_t buf_len, size_t cmd_len)
->  {
->  	struct ftpm_tee_private *pvt_data = dev_get_drvdata(chip->dev.parent);
->  	size_t resp_len;
-> @@ -80,16 +54,15 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
->  	struct tee_param command_params[4];
->  	struct tee_shm *shm = pvt_data->shm;
->  
-> -	if (len > MAX_COMMAND_SIZE) {
-> +	if (cmd_len > MAX_COMMAND_SIZE) {
->  		dev_err(&chip->dev,
->  			"%s: len=%zd exceeds MAX_COMMAND_SIZE supported by fTPM TA\n",
-> -			__func__, len);
-> +			__func__, cmd_len);
->  		return -EIO;
+> +	if (ima_algo_array[ima_sha1_idx].tfm) {
+> +		binary_runtime_measurements =3D
+> +		    securityfs_create_symlink("binary_runtime_measurements",
+> +					      ima_dir,
+> +					      "binary_runtime_measurements_sha1",
+> +					      NULL);
+> +		if (IS_ERR(binary_runtime_measurements)) {
+> +			ret =3D PTR_ERR(binary_runtime_measurements);
+> +			goto out;
+> +		}
+> =20
+> -	ascii_runtime_measurements =3D
+> -	    securityfs_create_symlink("ascii_runtime_measurements", ima_dir,
+> -				      "ascii_runtime_measurements_sha1", NULL);
+> -	if (IS_ERR(ascii_runtime_measurements)) {
+> -		ret =3D PTR_ERR(ascii_runtime_measurements);
+> -		goto out;
+> +		ascii_runtime_measurements =3D
+> +		    securityfs_create_symlink("ascii_runtime_measurements",
+> +					      ima_dir,
+> +					      "ascii_runtime_measurements_sha1",
+> +					      NULL);
+> +		if (IS_ERR(ascii_runtime_measurements)) {
+> +			ret =3D PTR_ERR(ascii_runtime_measurements);
+> +			goto out;
+> +		}
 >  	}
->  
->  	memset(&transceive_args, 0, sizeof(transceive_args));
->  	memset(command_params, 0, sizeof(command_params));
-> -	pvt_data->resp_len = 0;
->  
->  	/* Invoke FTPM_OPTEE_TA_SUBMIT_COMMAND function of fTPM TA */
->  	transceive_args = (struct tee_ioctl_invoke_arg) {
-> @@ -103,7 +76,7 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
->  		.attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT,
->  		.u.memref = {
->  			.shm = shm,
-> -			.size = len,
-> +			.size = cmd_len,
->  			.shm_offs = 0,
->  		},
->  	};
-> @@ -115,7 +88,7 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
->  		return PTR_ERR(temp_buf);
->  	}
->  	memset(temp_buf, 0, (MAX_COMMAND_SIZE + MAX_RESPONSE_SIZE));
-> -	memcpy(temp_buf, buf, len);
-> +	memcpy(temp_buf, buf, cmd_len);
->  
->  	command_params[1] = (struct tee_param) {
->  		.attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT,
-> @@ -156,38 +129,21 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
->  			__func__, resp_len);
->  		return -EIO;
->  	}
-> +	if (resp_len > buf_len) {
-> +		dev_err(&chip->dev,
-> +			"%s: Invalid size in recv: buf_len=%zd, resp_len=%zd\n",
-> +			__func__, buf_len, resp_len);
-> +		return -EIO;
-> +	}
->  
-> -	/* sanity checks look good, cache the response */
-> -	memcpy(pvt_data->resp_buf, temp_buf, resp_len);
-> -	pvt_data->resp_len = resp_len;
-> -
-> -	return 0;
-> -}
-> -
-> -static void ftpm_tee_tpm_op_cancel(struct tpm_chip *chip)
-> -{
-> -	/* not supported */
-> -}
-> -
-> -static u8 ftpm_tee_tpm_op_status(struct tpm_chip *chip)
-> -{
-> -	return 0;
-> -}
-> +	memcpy(buf, temp_buf, resp_len);
->  
-> -static bool ftpm_tee_tpm_req_canceled(struct tpm_chip *chip, u8 status)
-> -{
-> -	return false;
-> +	return resp_len;
->  }
->  
->  static const struct tpm_class_ops ftpm_tee_tpm_ops = {
->  	.flags = TPM_OPS_AUTO_STARTUP,
-> -	.recv = ftpm_tee_tpm_op_recv,
-> -	.send = ftpm_tee_tpm_op_send,
-> -	.cancel = ftpm_tee_tpm_op_cancel,
-> -	.status = ftpm_tee_tpm_op_status,
-> -	.req_complete_mask = 0,
-> -	.req_complete_val = 0,
-> -	.req_canceled = ftpm_tee_tpm_req_canceled,
-> +	.send_recv = ftpm_tee_tpm_op_send_recv,
->  };
->  
->  /*
-> -- 
-> 2.48.1
-> 
+> =20
+>  	runtime_measurements_count =3D
+
 
