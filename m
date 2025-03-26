@@ -1,115 +1,152 @@
-Return-Path: <linux-integrity+bounces-5453-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5454-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9066BA7200C
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 21:37:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D273A7267C
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 23:47:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 259B3168CC4
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 20:37:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03CB917AD4E
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 22:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82FA52192E2;
-	Wed, 26 Mar 2025 20:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9261A0BF1;
+	Wed, 26 Mar 2025 22:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iefXod47"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="sKgV6M9w"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7DA137930;
-	Wed, 26 Mar 2025 20:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7B65149C41;
+	Wed, 26 Mar 2025 22:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743021434; cv=none; b=SUYMGKDIMHez2bO6NqZjNxsMcf51oI4Jl4AA6WW1NpW306GGlRo0MtNAmgKgQEpSuFWJtr7I6SXsfrgXwCFN4uV9kas7rmyFRqnObJFqy8wr5xFFic+Yb1Xr/tD156OlOk7pH8p6tCqy6zBtLfPl2bGvao6eilBs+dvEUvV4aH8=
+	t=1743029220; cv=none; b=F7jWyz9067Qisg3/GLDyq1B8Hf7AqCEL7N4qokuMJCiPx7w5V2IRDTJ9g0Nnrri5UMm3SlD61PcaBXZqC01j4fx03u7wsSD+BU1DtAvIRLS1Sxt6mhk24A2lbzWO2HInC+ef3qzcWnFO4bHLBlMK4dM6DSE6FPQHAhD+XQFYN9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743021434; c=relaxed/simple;
-	bh=gIUYBjs4qNqH+FWbyydKPm0g0LeEniBPBOuD5tjT/jU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fiCHKwoMyT8oPimKy+BvweKWzvJtdMH+Pt5eRnrtBzMXxVr8EAWIAdIUEhcXn3psmyuuJD+/VDIjmK7RMD5rGZIRNTaiRBhSLdFOvbALyOXi9RnX+Od5iKNv9O8iUqOY9ECYOzS3BXVJ6Jb6ZtNjG+fL2SzWMOPv6fZdo9lE6rM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iefXod47; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5732DC4CEE2;
-	Wed, 26 Mar 2025 20:37:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743021433;
-	bh=gIUYBjs4qNqH+FWbyydKPm0g0LeEniBPBOuD5tjT/jU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iefXod47v80rjYS9tmKEVnrdQcLbbHnNFkHyx2VIVSxFtce+oKh6VgmUIrq678PW0
-	 fAgLSea5kBsK+ldIfMsv2r0UkNp/yUDJG2qZQPpEYSsbep8VWNh6sGv74SshB6rR/N
-	 Z8mp3+a2Tj9ulAhRvVKLjGTvXcFmnKgrOhZPlQVcqYszGxkKhnPJs1kjwhvJXx175N
-	 xYuvMLbQOfv5ulWstchROj8Odr2Q1uY03hDwj+0O6TMhPlRrGT8lBpPpqa5p9JTeVH
-	 589do7rnBDDPMrC0maIvdzzhIC6lP3sPzS5KIwjfn3wmxbEqD1mNXq2a7slDQ39l+U
-	 qf1al/wdbyphw==
-Date: Wed, 26 Mar 2025 22:37:09 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Sumit Garg <sumit.garg@kernel.org>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-	linux-integrity@vger.kernel.org,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>
-Subject: Re: [PATCH 2/2] tpm/tpm_ftpm_tee: use send_recv() op
-Message-ID: <Z-RlbEN9BoKnTN2E@kernel.org>
-References: <20250320152433.144083-1-sgarzare@redhat.com>
- <20250320152433.144083-3-sgarzare@redhat.com>
- <Z-I86tWMcD6b_YeM@sumit-X1>
- <Z-Pu4FhcntnKii61@kernel.org>
- <Z+QQWe/upJuVpU8r@ziepe.ca>
- <Z-QV5y1JGBDpsPuH@kernel.org>
- <Z-QkGUenPAMid63l@kernel.org>
+	s=arc-20240116; t=1743029220; c=relaxed/simple;
+	bh=7P3UYO+P9hGo9sz9SOt5vSKtq1wCmqOzSFvHPDcbymk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sKo0xzU1k1nfUKMRllQkj8MWudvMgCH7imq7qeZW1KNioB2ySc0hKkPsJXqOvqYTGRHkKYJYC+AeHWehp5xslKmYUaASkkx5b24PWxd30bSnXkp3C2/N2ANJ0PxT6r/2jEFDnpBivFIgw6DohYPZbh9c4KYNFaHrUtRN5HJGzxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=sKgV6M9w; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.17.64.132] (unknown [131.107.147.132])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 0EFD4210235E;
+	Wed, 26 Mar 2025 15:46:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0EFD4210235E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1743029217;
+	bh=WpQRiPMWre5w+oBe5t52C7npv5APr1INrJO/mypsiTE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sKgV6M9wLQw9WiOTCQUm1nhq24BoZZcDn4uhQq9k6apxualjEFDdcPOgCFCoz572i
+	 ciFXzhFzDl/Cyy2JIVFr2Z9s8ffkrWtdsNDF/CSiODCu6HqGrq3dMBIDm8fz/T4P+j
+	 snRRve0tkABnzrVk+X1KBYQKlJSd7CM9tW3yEt/w=
+Message-ID: <2d2ea573-1ddd-44b4-8ba3-4ae86313d63f@linux.microsoft.com>
+Date: Wed, 26 Mar 2025 15:46:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z-QkGUenPAMid63l@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 6/8] ima: kexec: move IMA log copy from kexec load to
+ execute
+To: Baoquan He <bhe@redhat.com>
+Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
+ roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+ eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+ code@tyhicks.com, bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+ kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+ linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
+ nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
+ vgoyal@redhat.com, dyoung@redhat.com
+References: <20250318010448.954-1-chenste@linux.microsoft.com>
+ <20250318010448.954-7-chenste@linux.microsoft.com>
+ <Z9t4LVpE470DMBYU@MiWiFi-R3L-srv>
+ <3d7b5e06-5166-46bb-89dc-a0b95ca7c767@linux.microsoft.com>
+ <Z+E7X6LuQ82q1i5V@MiWiFi-R3L-srv>
+ <6583378c-55ee-4192-a95f-ebaf3f708bbb@linux.microsoft.com>
+ <Z+NmLtn0vojVYJ3H@MiWiFi-R3L-srv>
+Content-Language: en-US
+From: steven chen <chenste@linux.microsoft.com>
+In-Reply-To: <Z+NmLtn0vojVYJ3H@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 26, 2025 at 05:58:33PM +0200, Jarkko Sakkinen wrote:
-> On Wed, Mar 26, 2025 at 04:57:47PM +0200, Jarkko Sakkinen wrote:
-> > On Wed, Mar 26, 2025 at 11:34:01AM -0300, Jason Gunthorpe wrote:
-> > > On Wed, Mar 26, 2025 at 02:11:12PM +0200, Jarkko Sakkinen wrote:
-> > > 
-> > > > Generally speaking I don't see enough value in complicating
-> > > > callback interface. It's better to handle complications in
-> > > > the leaves (i.e. dictatorship of majority ;-) ).
-> > > 
-> > > That is very much not the way most driver subsystems view the
-> > > world. We want to pull logical things into the core code and remove
-> > > them from drivers to make the drivers simpler and more robust.
-> > > 
-> > > The amount of really dumb driver boiler plate that this series
-> > > obviously removes is exactly the sort of stuff we should be fixing by
-> > > improving the core code.
-> > > 
-> > > The callback interface was never really sanely designed, it was just
-> > > built around the idea of pulling the timout processing into the core
-> > > code for TIS hardware. It should be revised to properly match these
-> > > new HW types that don't have this kind of timeout mechanism.
-> > 
-> > Both TIS and CRB, which are TCG standards and they span to many
-> > different types of drivers and busses. I don't have the figures but
-> > probably they cover vast majority of the hardware.
-> > 
-> > We are talking about 39 lines of reduced complexity at the cost
-> > of complicating branching at the top level. I doubt that there
-> > is either any throughput or latency issues.
-> > 
-> > What is measurable benefit? The rationale is way way too abstract
-> > for me to cope, sorry.
-> 
-> E.g., here's how you can get rid of extra cruft in tpm_ftpm_tee w/o
-> any new callbacks.
+On 3/25/2025 7:27 PM, Baoquan He wrote:
+> On 03/25/25 at 03:27pm, steven chen wrote:
+>> On 3/24/2025 4:00 AM, Baoquan He wrote:
+>>> On 03/21/25 at 09:23am, steven chen wrote:
+>>>> On 3/19/2025 7:06 PM, Baoquan He wrote:
+>>>>> On 03/17/25 at 06:04pm, steven chen wrote:
+>>>>> ...snip...
+>>>>>> ---
+>>>>>>     kernel/kexec_file.c                | 10 ++++++
+>>>>>>     security/integrity/ima/ima_kexec.c | 51 ++++++++++++++++++------------
+>>>>>>     2 files changed, 40 insertions(+), 21 deletions(-)
+>>>>>>
+>>>>>> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+>>>>>> index 606132253c79..ab449b43aaee 100644
+>>>>>> --- a/kernel/kexec_file.c
+>>>>>> +++ b/kernel/kexec_file.c
+>>>>>> @@ -201,6 +201,13 @@ kimage_validate_signature(struct kimage *image)
+>>>>>>     }
+>>>>>>     #endif
+>>>>>> +static void kimage_file_post_load(struct kimage *image)
+>>>>>> +{
+>>>>>> +#ifdef CONFIG_IMA_KEXEC
+>>>>>> +	ima_kexec_post_load(image);
+>>>>>> +#endif
+>>>>>> +}
+>>>>>> +
+>>>>>>     /*
+>>>>>>      * In file mode list of segments is prepared by kernel. Copy relevant
+>>>>>>      * data from user space, do error checking, prepare segment list
+>>>>>> @@ -428,6 +435,9 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+>>>>>>     	kimage_terminate(image);
+>>>>>> +	if (!(flags & KEXEC_FILE_ON_CRASH))
+>>>>>> +		kimage_file_post_load(image);
+>>>>> machine_kexec_post_load() is called by both kexec_load and kexec_file_load,
+>>>>> we should use it to do things post load, but not introducing another
+>>>>> kimage_file_post_load().
+>>>> Hi Baoquan,
+>>>>
+>>>> Could you give me more detail about this?
+>>> I mean machine_kexec_post_load() is the place where post load operations
+>>> are done, including kexec_load and kexec_file_load. There's no need to
+>>> specifically introduce a kimage_file_post_load() to do post load
+>>> operaton for kexec_file_load.
+>> Hi Baoquan,
+>>
+>> Updating the machine_kexec_post_load() API to carry flags would indeed
+>> require changes to multiple files. This approach involves the condition
+>> check if (!(flags & KEXEC_FILE_ON_CRASH)) and ensuring that the flags are
+>> properly passed and handled across the relevant file
+>>
+>> if just adding a API kimage_file_post_load() here, it is much easy and
+>> clean, right?
+> Hmm, it's easier, while maybe not good. We should not repeatedly
+> introduce similar things into codes. Here, it's similar as
+> what kexec_apply_relocations() and arch_kexec_apply_relocations() are
+> doing.
+>
+> int machine_kexec_post_load(struct kimage *image)
+> {
+> #ifdef CONFIG_IMA_KEXEC
+>          ima_kexec_post_load(image);
+> #endif
+> 	return arch_machine_kexec_post_load();
+> }
+>
+> Then a generic arch_machine_kexec_post_load(struct kimage *image)
+> {return 0;} version, and a arm64 specific version.
+>
+> Is it OK to you?
 
-Measurable benefit: no need to allocate memory buffer.
+Hi Baoquan,
 
-Let's take that as a starting point ;-)
+Thanks for your suggestion. I will update in the next version.
 
-On that basis I can consider this (i.e. something to measure).
+Steven
 
-BR, Jarkko
 
