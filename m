@@ -1,182 +1,101 @@
-Return-Path: <linux-integrity+bounces-5447-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5448-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5567BA71B9E
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 17:18:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69DD9A71C7F
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 17:57:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373471889D22
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 16:19:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC19A174477
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 16:54:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB2AA1F3FD7;
-	Wed, 26 Mar 2025 16:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B910315852F;
+	Wed, 26 Mar 2025 16:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IFTmpIbS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMW9oG75"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39611EB5DD;
-	Wed, 26 Mar 2025 16:18:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9137F1547E7;
+	Wed, 26 Mar 2025 16:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743005933; cv=none; b=qojEN9YPxWqtzryw/i9KHmdJZHwXv03aIy666X3ZZe6RHbJLD7iYWjYrbAfCGSKx07B0Q+iTIrZJip1lGeafRzavXwz7BkRA7PDWr+6k7czKAcaHJqot4+baWJFmck76qHDp865VFDgO98Z73srQNk6Dg3gm/my9ohrHSXkx96Q=
+	t=1743008035; cv=none; b=WNwSM8ytjh1nK2EXLUK1rZ6qImL01RTXG1YXxsPReRGtlc6iMukARwnvnI2/PeK8hpNVoOBgtlBZ+Tp9tpMx0JyqLNY1gBmRqE23j4P684yYVN4e4XvGuapYLfgAVq1b6vpJ8O19+Z4iwBOenX3qYWTGRaIC3huj0vS7dW+KcZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743005933; c=relaxed/simple;
-	bh=Z4mfmOoHDjZnf6VjFetSlpm7EqU2U/ycpOa/pXxe3As=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AScncm2LssmMJdn91Uo7bUOcJRGXPJelygVPluMTeSocpfo80f72h/SecAaNb1OzZ4MLk3Hx+K1BKR8TXSrwgPMH9srnGalfTG3fcPqJc8Bkbts/LnbGcLe1PC+kizm6OtbW2RQe/RG51EnSjxoupEqt0f+ZLcaGBW5SPgJlRUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IFTmpIbS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C89A4C4CEE2;
-	Wed, 26 Mar 2025 16:18:52 +0000 (UTC)
+	s=arc-20240116; t=1743008035; c=relaxed/simple;
+	bh=GD9/Unp7kHxkjyBxvRNjmE21o0vBLYIrBR+MU3QlEeY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mqeWAzJWLoFIHOx0+lcFstD5l5J9vAJKJdssnePsRaIRj+4tuLUZa5GW2gXZ/SNSVO8E/CwkY03u/rF4J3X1MTfcp9hsSWR2roUB6vTMTQ0xXj4tEkzNspRY0MsuPlTXsCkd5+lbcCljbVTyz+SRGauMauzJg+IDcbtg/+OB/PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMW9oG75; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35F3C4CEE2;
+	Wed, 26 Mar 2025 16:53:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743005933;
-	bh=Z4mfmOoHDjZnf6VjFetSlpm7EqU2U/ycpOa/pXxe3As=;
-	h=From:To:Cc:Subject:Date:From;
-	b=IFTmpIbSr02+z+3hzqVTVDVY47MUu+MuOh7sDPYKYTz9W4Zd/sQYszYl0O9V5NxkX
-	 ro8eQdeLPbf81UJ3rEAvCcKETeaMaTqNFybysQaLVDVYznROqZeReYdk/zIVHvahJq
-	 9ub88mDc/Pt283gQ59XiLm+C9NSbnzXBRqfXfGd0t7ndfTI+mubG4wdWd4PQ22mWzW
-	 dsUOJb01Ceo80+PjgjrRba4l13mM8/hI54RB52yN+lJJ4vjihzew2lQ4C8wnS4gjPu
-	 +LJwqrfHSl17NMWgSVk0Cc9LPF7bZyeEoR3qEwkiK4C4I3PtZGepUm6BlN0gr2FO8O
-	 +gaWp82UNZkIQ==
+	s=k20201202; t=1743008035;
+	bh=GD9/Unp7kHxkjyBxvRNjmE21o0vBLYIrBR+MU3QlEeY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XMW9oG75dOAkY6lTifdvJK6RSCOfjhN7eboKLZY4VQ3Ar1+gvOgO8OtgBqqv1WFxC
+	 9te4wvjtVj7LDHX4kl0omSGGNQZFE/rS4M953rNI6oNNlsbcEbXa8x8tEUzKCAD8Lt
+	 AMeKOgXftNyKvDQJpkvNixlmteQ213LrzyGfre5EDrn9MG7JpXYzXv/dGSQ/xHDYHy
+	 ns51mHh5GRDIXh4tnX4zl03AcauqeVJ0basYWsBwZq95znB6atrIjFc1EQMZGYbFMX
+	 qaZ2Y/rUwE6h3DeCjjasdS06QbS4ljirUjdczuj9M3h7GwkS4uq+1kBiGzSQfz5DFx
+	 xcs64XumVtgRg==
+Date: Wed, 26 Mar 2025 18:53:51 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Sumit Garg <sumit.garg@kernel.org>,
-	Stefano Garzarella <sgarzare@redhat.com>,
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
 	Jens Wiklander <jens.wiklander@linaro.org>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: Make chip->{status,cancel,req_canceled} opt
-Date: Wed, 26 Mar 2025 18:18:38 +0200
-Message-Id: <20250326161838.123606-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	Sumit Garg <sumit.garg@kernel.org>
+Subject: Re: [PATCH 1/2] tpm: add send_recv() op in tpm_class_ops
+Message-ID: <Z-QxH7aDjlixl2gp@kernel.org>
+References: <20250320152433.144083-1-sgarzare@redhat.com>
+ <20250320152433.144083-2-sgarzare@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250320152433.144083-2-sgarzare@redhat.com>
 
-From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+On Thu, Mar 20, 2025 at 04:24:32PM +0100, Stefano Garzarella wrote:
+> From: Stefano Garzarella <sgarzare@redhat.com>
+> 
+> Some devices do not support interrupts and provide a single operation
+> to send the command and receive the response on the same buffer.
+> 
+> To support this scenario, a driver could set TPM_CHIP_FLAG_IRQ in the
+> chip's flags to get recv() to be called immediately after send() in
+> tpm_try_transmit(), or it needs to implement .status() to return 0,
+> and set both .req_complete_mask and .req_complete_val to 0.
+> 
+> In order to simplify these drivers and avoid temporary buffers to be
 
-tpm_ftpm_tee does not require chip->status, chip->cancel and
-chip->req_canceled. Make them optional.
+Simplification can be addressed with no callback changes:
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
----
- drivers/char/tpm/tpm-interface.c | 31 ++++++++++++++++++++++++++++---
- drivers/char/tpm/tpm_ftpm_tee.c  | 20 --------------------
- 2 files changed, 28 insertions(+), 23 deletions(-)
+https://lore.kernel.org/linux-integrity/20250326161838.123606-1-jarkko@kernel.org/T/#u
 
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index f62f7871edbd..10ba47a882d8 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -58,6 +58,30 @@ unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
- }
- EXPORT_SYMBOL_GPL(tpm_calc_ordinal_duration);
- 
-+static void tpm_chip_cancel(struct tpm_chip *chip)
-+{
-+	if (!chip->ops->cancel)
-+		return;
-+
-+	chip->ops->cancel(chip);
-+}
-+
-+static u8 tpm_chip_status(struct tpm_chip *chip)
-+{
-+	if (!chip->ops->status)
-+		return 0;
-+
-+	return chip->ops->status(chip);
-+}
-+
-+static bool tpm_chip_req_canceled(struct tpm_chip *chip, u8 status)
-+{
-+	if (!chip->ops->req_canceled)
-+		return false;
-+
-+	return chip->ops->req_canceled(chip, status);
-+}
-+
- static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
- {
- 	struct tpm_header *header = buf;
-@@ -65,6 +89,7 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
- 	ssize_t len = 0;
- 	u32 count, ordinal;
- 	unsigned long stop;
-+	u8 status;
- 
- 	if (bufsiz < TPM_HEADER_SIZE)
- 		return -EINVAL;
-@@ -104,12 +129,12 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
- 
- 	stop = jiffies + tpm_calc_ordinal_duration(chip, ordinal);
- 	do {
--		u8 status = chip->ops->status(chip);
-+		status = tpm_chip_status(chip);
- 		if ((status & chip->ops->req_complete_mask) ==
- 		    chip->ops->req_complete_val)
- 			goto out_recv;
- 
--		if (chip->ops->req_canceled(chip, status)) {
-+		if (tpm_chip_req_canceled(chip, status)) {
- 			dev_err(&chip->dev, "Operation Canceled\n");
- 			return -ECANCELED;
- 		}
-@@ -118,7 +143,7 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
- 		rmb();
- 	} while (time_before(jiffies, stop));
- 
--	chip->ops->cancel(chip);
-+	tpm_chip_cancel(chip);
- 	dev_err(&chip->dev, "Operation Timed out\n");
- 	return -ETIME;
- 
-diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-index 8d9209dfc384..53ba28ccd5d3 100644
---- a/drivers/char/tpm/tpm_ftpm_tee.c
-+++ b/drivers/char/tpm/tpm_ftpm_tee.c
-@@ -164,30 +164,10 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
- 	return 0;
- }
- 
--static void ftpm_tee_tpm_op_cancel(struct tpm_chip *chip)
--{
--	/* not supported */
--}
--
--static u8 ftpm_tee_tpm_op_status(struct tpm_chip *chip)
--{
--	return 0;
--}
--
--static bool ftpm_tee_tpm_req_canceled(struct tpm_chip *chip, u8 status)
--{
--	return false;
--}
--
- static const struct tpm_class_ops ftpm_tee_tpm_ops = {
- 	.flags = TPM_OPS_AUTO_STARTUP,
- 	.recv = ftpm_tee_tpm_op_recv,
- 	.send = ftpm_tee_tpm_op_send,
--	.cancel = ftpm_tee_tpm_op_cancel,
--	.status = ftpm_tee_tpm_op_status,
--	.req_complete_mask = 0,
--	.req_complete_val = 0,
--	.req_canceled = ftpm_tee_tpm_req_canceled,
- };
- 
- /*
--- 
-2.39.5
+I also noticed that tpm_ftpm_tee initalized req_complete_mask and
+req_complete_val explictly while they would be already implicitly
+zero.
 
+So it reduces this just a matter of getting rid off the extra
+buffer.
+
+> used between the .send() and .recv() callbacks, introduce a new callback
+> send_recv(). If that callback is defined, it is called in
+> tpm_try_transmit() to send the command and receive the response on
+> the same buffer in a single call.
+
+I don't find anything in the commit message addressing buf_len an
+cmd_len (vs "just len"). Why two lengths are required?
+
+Not completely rejecting but this explanation is incomplete.
+
+BR, Jarkko
 
