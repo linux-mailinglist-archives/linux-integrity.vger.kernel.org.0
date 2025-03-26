@@ -1,218 +1,196 @@
-Return-Path: <linux-integrity+bounces-5440-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5441-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59624A717B9
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 14:46:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F833A71856
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 15:20:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4DF4E7A3ABE
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 13:45:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FF1B3ACF08
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 14:19:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B19E1EB5C0;
-	Wed, 26 Mar 2025 13:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E286F1EE01B;
+	Wed, 26 Mar 2025 14:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zY9ntoT0";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZApb6cmH";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uxP/yxEv";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7I2Syf60"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="s7dybfJi"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D13D42A97
-	for <linux-integrity@vger.kernel.org>; Wed, 26 Mar 2025 13:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216AD54652;
+	Wed, 26 Mar 2025 14:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742996774; cv=none; b=YiyF890rORcibgvLUvAJ4cM5SFOvkiGEooHnklnHB+CtLMdxvovmp59cEBODwVZZSgxf/QWgxKvV3HL5n7BJwMOyfQawKQa7/BDKO+wB3MgVahTakvquYDvPg3iKvZJ1qmqQRfM5k71/7T7fVKyKR0+UY3f86DN2htnovSCQblY=
+	t=1742998743; cv=none; b=OiYP4o53OQBAoV0KVkmjwyQJ/Geuv5JSESCjivpge15ovFQkCp8Yf78vN64HS7WY/WG/hNHTdqXVUj7JlEqtnD3udAP/NXvRAyHV+INVPwfZcpgCZW8rcw4AHDtuJpp0hGLaQSnT6QUy5Vk0/tYlqoexeCzL6hNKU8pJvHYGbzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742996774; c=relaxed/simple;
-	bh=3fXF0s7Lr97Mx30wHkU7YdB2Bni6vue4HSrPiKMG7kA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UprLie9lB67Dx6k+jIj9ipAcpSN3cXfVM8XvbfqkUrUxHBttnhkGlF9/J4Yu6jL6iifhwJ91gLZbRMgmUAGgXCBzeN+O8f/+rjguRqHAY9rOV2SzrUHKFmm4t9AD+yovfZymVj+n1wrUALzVg+lD3ysL4z4TB7+nF2xQY5gnK+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zY9ntoT0; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZApb6cmH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uxP/yxEv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7I2Syf60; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D69E81F44E;
-	Wed, 26 Mar 2025 13:46:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1742996765; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oTG/Q8no1YkK7xiuHcS7e1v3axl5d4cauK+3RFAeiBw=;
-	b=zY9ntoT0VworqMSXYhm3W+mJ7v1PV5nB5LFAV9tr6/a4Q+lP4ZaEhEw8oqUequdWwR9aOW
-	S0T1UDvzCVNioQe77CDxCxwBAvI5IIBz2jotnfv3XIuTlyBjjyCEk4kdSoBe1vAwqFCuxR
-	QPCcgQkwYsM4bpox7VLPl/PTR4DN+1o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1742996765;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oTG/Q8no1YkK7xiuHcS7e1v3axl5d4cauK+3RFAeiBw=;
-	b=ZApb6cmH4iiwyllFeyGJzvplvLFixeU98E7MWaEesl98/r9hextN1HqNKM1xRgYQ2zn4Tn
-	eVwjLCOS4wu1jkCg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1742996764; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oTG/Q8no1YkK7xiuHcS7e1v3axl5d4cauK+3RFAeiBw=;
-	b=uxP/yxEvb05prcMPpSQkDwCwI4/ezeFMPuF2kzsZyrM93G7A6LOwvqvUyBu0lb8lwUanTM
-	JKu/L+3DSg6T7rqGIXZdAexvmlnA+14R7mwJVKUfPKoi6hcL6Zb6rH3oeMRYARXLAFaUis
-	oaUuVks8JAbnlUcrAj4RAGDX7yZ862Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1742996764;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oTG/Q8no1YkK7xiuHcS7e1v3axl5d4cauK+3RFAeiBw=;
-	b=7I2Syf601hxMxDyXIrpq7WTI7OILFQeHwkansOtUhYWK0WNbFEN4AeeTR1xGMgSanknUpt
-	SbyCLeyDmtPujkAg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7FC781374A;
-	Wed, 26 Mar 2025 13:46:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id iiqUHRwF5GcOOQAAD6G6ig
-	(envelope-from <nstange@suse.de>); Wed, 26 Mar 2025 13:46:04 +0000
-From: Nicolai Stange <nstange@suse.de>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Nicolai Stange <nstange@suse.de>,  Roberto Sassu
- <roberto.sassu@huawei.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-  Eric Snowberg <eric.snowberg@oracle.com>,  Jarkko Sakkinen
- <jarkko@kernel.org>,  James Bottomley
- <James.Bottomley@HansenPartnership.com>,  linux-integrity@vger.kernel.org,
-  linux-security-module@vger.kernel.org,  linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 02/13] ima: always create runtime_measurements
- sysfs file for ima_hash
-In-Reply-To: <fbd87f01b5463e399900df8dcb094a9039bd589f.camel@linux.ibm.com>
-	(Mimi Zohar's message of "Wed, 26 Mar 2025 09:17:05 -0400")
+	s=arc-20240116; t=1742998743; c=relaxed/simple;
+	bh=ma1YQtfpq5iTg9o3RgA0apKG26XLDszEhzGUXxMWjhU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lYm7SPa7AOy4PPcms9DxCcwz3QHqU+KtP8qH2YJbOd9T/RdAqQzWGtcFBjfpFC3KObCvhZTFoD3FdInFqnJdNtSmo0MAxxR8nIhhyECnJohaBtDJG5mM3vajJnna4Buyus9eX4MYc0lvYdtkiMpiazKD2GQnJzv8uQUFtlqekQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=s7dybfJi; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52Q95m2m032164;
+	Wed, 26 Mar 2025 14:18:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Orpqfl
+	YvLR6yQCOVp0PAhUv6AcpZGe51LgipDVS9Yg8=; b=s7dybfJi6v55ye1eZXq0Fh
+	fZBvGmumh8DG+xIN2ocriTqFOVrtF2rT8aSxfTs57BLPEGTv1xuHKKFNuQGhnepX
+	EcPmDVlkSYucqg9dfi1CL7bQR0+0ow9y+fMxjF5Ch3EwJwjf4XglwkYT3IurVvWl
+	2KDlm8hqINmv0PtdLgnUXTorQfIbqpvtskX6l1BMSpGhHkN5BdbaWU4Fb4oBrmCB
+	J+RbliiiW6ARSdEXvVz21VArUmMewP6HqJ1OevCzH1p4M5ynz1/RYT7BOAymps/W
+	vTswiKuGXmVuf03rzmGeO2f5GRWGQxfil7NVtWZr2zdIt+EiPCg5eJQOf5afqHzw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45m3q0m6jn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Mar 2025 14:18:44 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52QE9tOc001099;
+	Wed, 26 Mar 2025 14:18:44 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45m3q0m6jk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Mar 2025 14:18:44 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52QE0YxU030308;
+	Wed, 26 Mar 2025 14:18:43 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 45j7htgv9s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Mar 2025 14:18:43 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52QEIgUg28639788
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 26 Mar 2025 14:18:42 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CDF4858053;
+	Wed, 26 Mar 2025 14:18:42 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E88B358043;
+	Wed, 26 Mar 2025 14:18:41 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.116.195])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 26 Mar 2025 14:18:41 +0000 (GMT)
+Message-ID: <a4bf93f0c64f4b329e022663afecf6edf0e22884.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v2 03/13] ima: invalidate unsupported PCR banks
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Nicolai Stange <nstange@suse.de>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley
+ <James.Bottomley@HansenPartnership.com>,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date: Wed, 26 Mar 2025 10:18:41 -0400
+In-Reply-To: <877c4cqi76.fsf@>
 References: <20250323140911.226137-1-nstange@suse.de>
-	<20250323140911.226137-3-nstange@suse.de>
-	<35d199c2a09e9215aad715c97a6702dd04be4a98.camel@linux.ibm.com>
-	<fbd87f01b5463e399900df8dcb094a9039bd589f.camel@linux.ibm.com>
-Date: Wed, 26 Mar 2025 14:46:03 +0100
-Message-ID: <87wmcboqg4.fsf@>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	 <20250323140911.226137-4-nstange@suse.de>
+	 <e492df76d30b0b95f83b577499a25cdca2256407.camel@linux.ibm.com>
+	 <877c4cqi76.fsf@>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -0.60
-X-Spamd-Result: default: False [-0.60 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	INVALID_MSGID(1.70)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TAGGED_RCPT(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.de,huawei.com,gmail.com,oracle.com,kernel.org,HansenPartnership.com,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Level: 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zmLRHcCmztHMSy7QR3Fv_a6UW3CUEQLq
+X-Proofpoint-GUID: tteIZopCLiEUccVcuGbhUcvUT64YJpwm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-26_07,2025-03-26_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=999 priorityscore=1501 adultscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2503260085
 
-Mimi Zohar <zohar@linux.ibm.com> writes:
+On Wed, 2025-03-26 at 10:01 +0100, Nicolai Stange wrote:
+> Mimi Zohar <zohar@linux.ibm.com> writes:
+>=20
+> > > diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity=
+/ima/ima_crypto.c
+> > > index 6f5696d999d0..a43080fb8edc 100644
+> > > --- a/security/integrity/ima/ima_crypto.c
+> > > +++ b/security/integrity/ima/ima_crypto.c
+> > > @@ -625,26 +625,43 @@ int ima_calc_field_array_hash(struct ima_field_=
+data *field_data,
+> > >  	u16 alg_id;
+> > >  	int rc, i;
+> > > =20
+> > > +#if IS_ENABLED(CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND)
+> > >  	rc =3D ima_calc_field_array_hash_tfm(field_data, entry, ima_sha1_id=
+x);
+> > >  	if (rc)
+> > >  		return rc;
+> > > =20
+> > >  	entry->digests[ima_sha1_idx].alg_id =3D TPM_ALG_SHA1;
+> > > +#endif
+> > > =20
+> > >  	for (i =3D 0; i < NR_BANKS(ima_tpm_chip) + ima_extra_slots; i++) {
+> > > +#if IS_ENABLED(CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND)
+> > >  		if (i =3D=3D ima_sha1_idx)
+> > >  			continue;
+> > > +#endif
+> > > =20
+> > >  		if (i < NR_BANKS(ima_tpm_chip)) {
+> > >  			alg_id =3D ima_tpm_chip->allocated_banks[i].alg_id;
+> > >  			entry->digests[i].alg_id =3D alg_id;
+> > >  		}
+> > > =20
+> > > -		/* for unmapped TPM algorithms digest is still a padded SHA1 */
+> > > +		/*
+> > > +		 * For unmapped TPM algorithms, the digest is still a
+> > > +		 * padded SHA1 if backwards-compatibility fallback PCR
+> > > +		 * extension is enabled. Otherwise fill with
+> > > +		 * 0xfes. This is the value to invalidate unsupported
+> > > +		 * PCR banks with. Also, a non-all-zeroes value serves
+> > > +		 * as an indicator to kexec measurement restoration
+> > > +		 * that the entry is not a violation and all its
+> > > +		 * template digests need to get recomputed.
+> > > +		 */
+> > >  		if (!ima_algo_array[i].tfm) {
+> > > +#if IS_ENABLED(CONFIG_IMA_COMPAT_FALLBACK_TPM_EXTEND)
+> > >  			memcpy(entry->digests[i].digest,
+> > >  			       entry->digests[ima_sha1_idx].digest,
+> > >  			       TPM_DIGEST_SIZE);
+>=20
+>                                ^
+> That's been here before, just for the record for the below.
 
-> On Wed, 2025-03-26 at 09:21 +0100, Nicolai Stange wrote:
->> Mimi Zohar <zohar@linux.ibm.com> writes:
->>=20
->> > On Sun, 2025-03-23 at 15:09 +0100, Nicolai Stange wrote:
+And it is correct.
 
->> > "ima_hash" is the default file hash algorithm.  Re-using it as the def=
-ault
->> > complete measurement list assumes that the subsequent kexec'ed kernels=
- configure
->> > and define it as the default file hash algorithm as well, which might =
-not be the
->> > case.
->>=20
->> I don't really see why the ima_hashes would have to match between kexecs
->> for this to work -- all events' template hashes are getting recreated
->> from scratch anyway after kexec (ima_restore_measurement_list() ->
->> ima_calc_field_array_hash()).
->>=20
->> That is, if ima_hash=3Dsha256 first, and ima_hash=3Dsha384 after kexec, =
-one
->> would have *runtime_measurements_sha256 first and
->> *runtime_measurements_sha384 after kexec. And both had exclusively
->> template hashes of their respective algo in them each.
->>=20
->> What am I missing?
->
-> Your solution would work nicely, if the "ima_hash" algorithm could be gua=
-ranteed
-> to be built into the kernel.  It's highly unlikely someone would choose a=
- hash
-> algorithm not built into kernel, but it is possible.  hash_setup() only v=
-erifies
-> that the hash algorithm is a valid name.
+>=20
+> > > +#else
+> > > +			memset(entry->digests[i].digest, 0xfe, TPM_DIGEST_SIZE);
+> > > +#endif
+> >=20
+> > Using TPM_DIGEST_SIZE will result in a padded 0xfe value.
+>=20
+> Yes, but as the sysfs files for unsupported algos are gone, this will be
+> used only for extending the PCR banks. tpm[12]_pcr_extend()
+> (necessarily) truncate the digests to the correct size before sending
+> them to the TPM.
+>=20
+> But if you prefer I can absolutely replace TPM_DIGEST_SIZE by
+> hash_digest_size[ima_algo_array[i].algo].
 
-But ima_init_ima_crypto(), hence the whole IMA __init, would fail if
-ima_hash was unavailable at __init time?
+Unlike violations, which are the full digest size, a padded sha1 is extende=
+d
+into the unsupported algos TPM banks.  I assume you'd want it to be the ful=
+l
+digest size like violations.
 
-Thanks,
+Mimi
 
-Nicolai
-
-> Either fix hash_setup() to guarantee that the chosen hash algorithm is bu=
-ilt
-> into the kernel or use the CONFIG_IMA_DEFAULT_HASH and add a Kconfig to s=
-elect
-> the hash algorithm.  This would be in lieu of v2 05/13.
->
->> > Drop this patch.
->>=20
->> Fine by me, but just to confirm, in case there's no TPM attached and
->> SHA1 was disabled, there would be no /sys/*/*runtime_measurement* at all
->> then. Is that Ok?
->
-> Of course not.  :)
->
->> ima_hash was chosen here only, because after this series, it will be the
->> only single algorithm guaranteed to be available.
->
-> With the proposed changes to "[RFC PATCH v2 05/13] ima: select CRYPTO_SHA=
-256
-> from Kconfig', SHA256 would be added to the "extra" measurements if the T=
-PM
-> SHA256 bank is disabled.
-
-
---=20
-SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
-rnberg, Germany
-GF: Ivo Totev, Andrew McDonald, Werner Knoblich
-(HRB 36809, AG N=C3=BCrnberg)
 
