@@ -1,110 +1,110 @@
-Return-Path: <linux-integrity+bounces-5433-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5434-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91B22A713EB
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 10:41:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CDABA71406
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 10:46:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E7011720F9
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 09:41:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51E851898952
+	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 09:46:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC0F1A5B87;
-	Wed, 26 Mar 2025 09:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 126121AD403;
+	Wed, 26 Mar 2025 09:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WnarsT1J";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ct6QOskY";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WnarsT1J";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ct6QOskY"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SK/madfa";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6/f1qHXt";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="AO80ImJI";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="oBobONKO"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4539015381A
-	for <linux-integrity@vger.kernel.org>; Wed, 26 Mar 2025 09:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5381919E992
+	for <linux-integrity@vger.kernel.org>; Wed, 26 Mar 2025 09:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742982068; cv=none; b=dMEIEzDC+p6UM4bnTD79yFWM8QWNwFEQQHjvGjwKhTdgO/ksrh8Xp/u48sj3ddhGlbg7PAlGbsgnZacFo9XKb1mgGsXrOTPvMq9i0DUHZpekfODFam9wjAng2aO59MIWPIxnVuCKShr7S5cDLjW/oPrSZCx1xhC5DjLtQYpr/wI=
+	t=1742982363; cv=none; b=LEvokaMvbf7M61w0OurFPOp25Ke51oR40nHsYwLe2RNffeO/s/bMbGzActYOMF3PZMneGd2H9vGMaMbVButlgAkyGvxiCVNCUDBrpl3lyb4O3tEg28Jb369U8TW65hk5aX6nQP4rm8IuaSTsl8EHD4HRKwW/yWXmn5u+6Z4UHrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742982068; c=relaxed/simple;
-	bh=/7lSSy7WrPIvgvtMsd8Z/i5e0RTzrYrd6/yP9NCp93Y=;
+	s=arc-20240116; t=1742982363; c=relaxed/simple;
+	bh=xrQALF0xZASC9lAzNDjlGBs1HM4EQBjOhLb9lRIB3q0=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EONuDKNUdLB9JPYj1k9AH9UGNcC8TCYGalKj030Kpucn4zSdheSUQcSxhnOWpbz0l44Nu76pIPykp6/fAGia6kuuwxuGgxlJhGoIBl/KAQeZoXVsMBmK4ySc5aJwTHZu4rJuwQmwkqHwiqMG+xGbx+58e3X3LmnJt0sezQwu7SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WnarsT1J; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ct6QOskY; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WnarsT1J; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ct6QOskY; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version:Content-Type; b=SfTCPzHZZUWQbwKfPuSJTboZF0rHEoRMPlD/7qCVMTS6NViq00mWqm0UhO6girX8pCa8ofx3acTW3FmGkss9lJr7Yxd9FFrQ9V/mU4rLOGi+Rrq58vK0inLa6A1sRFi3XdXw4Y/8fdtVggoiDojcemr3dq8rs+oAI4AODqCK7Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SK/madfa; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6/f1qHXt; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=AO80ImJI; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=oBobONKO; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 4DFC421179;
-	Wed, 26 Mar 2025 09:41:04 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id DDF4E21179;
+	Wed, 26 Mar 2025 09:45:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1742982064; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1742982358; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OV6Y+bvAQ4j6dj4kHxXjpT3o9nRIcJRh1yhwfpE15/k=;
-	b=WnarsT1JLYUFR/FzJ2DLUop9vqDnefw/Ntm+IdS2b618IONGIFJrDdU7bj1MIdTY4NcU0N
-	M7RlmnFm3qzbmpWDMCqXUy5UQthvNLAqrzMnUs9dsvSYlRBBloFQgkAnHJn0QLULPpOYu/
-	2z8WBW7Cn78Mel+ONnGyMUj1pQlPkTg=
+	bh=yEWux97G+JgMR2PuanuTwss4e9Ijl0dgxvw3Gu2V5es=;
+	b=SK/madfar9BpCWtIJ03hVqbDl6MPi+zZJJyTnFnLRCKTaC3yRlZeL72aZRJ6JXoYhfdesG
+	rWSSShP6Vfdmf9xSl1JNwKmmF3jImPpQpiHkQ35vT38Bp6SFDUT33iuPkbSo9zACZQ8RJB
+	IyTmt7v2oecwWHdLF9KZPqWvJI7ma6I=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1742982064;
+	s=susede2_ed25519; t=1742982358;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OV6Y+bvAQ4j6dj4kHxXjpT3o9nRIcJRh1yhwfpE15/k=;
-	b=ct6QOskYUQQV+w6xDWd0/Y/DaddcTn6hpWCaIg2GW2yFrFiERzpvmZf3kUdzyVQivGiJ+S
-	LCFf4DqthP5sTvDw==
+	bh=yEWux97G+JgMR2PuanuTwss4e9Ijl0dgxvw3Gu2V5es=;
+	b=6/f1qHXtdxCLwH3Ea3F8ZDOJNecVF8rzvOrMm2xuLR1r3i8hd3CO1lr+rZ9Kq8KE7NEZTB
+	f/Pe6yXwf9nzTuAQ==
 Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=WnarsT1J;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=ct6QOskY
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=AO80ImJI;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=oBobONKO
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1742982064; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1742982357; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OV6Y+bvAQ4j6dj4kHxXjpT3o9nRIcJRh1yhwfpE15/k=;
-	b=WnarsT1JLYUFR/FzJ2DLUop9vqDnefw/Ntm+IdS2b618IONGIFJrDdU7bj1MIdTY4NcU0N
-	M7RlmnFm3qzbmpWDMCqXUy5UQthvNLAqrzMnUs9dsvSYlRBBloFQgkAnHJn0QLULPpOYu/
-	2z8WBW7Cn78Mel+ONnGyMUj1pQlPkTg=
+	bh=yEWux97G+JgMR2PuanuTwss4e9Ijl0dgxvw3Gu2V5es=;
+	b=AO80ImJIaDXtTkLrSDBtnF2p/4ZftnNh3LGY3J0VLlJSurGzuW/Ei26aTteq3CwOB1LdR+
+	vYEAcY8Spi/k8apowjVa1W/VlaKi31Y/b0Fcq+hmR+cdls+saCmDPR3oeOoiz6lSQV7f87
+	5nqBILwnfzL+DMdFCtcoeXbaB1XNJuU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1742982064;
+	s=susede2_ed25519; t=1742982357;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OV6Y+bvAQ4j6dj4kHxXjpT3o9nRIcJRh1yhwfpE15/k=;
-	b=ct6QOskYUQQV+w6xDWd0/Y/DaddcTn6hpWCaIg2GW2yFrFiERzpvmZf3kUdzyVQivGiJ+S
-	LCFf4DqthP5sTvDw==
+	bh=yEWux97G+JgMR2PuanuTwss4e9Ijl0dgxvw3Gu2V5es=;
+	b=oBobONKOTS7L4WLiticidbETpD/OSDYPgaB3tzjLVWupUvMNltTcJlOcXfy4VLeQSkAbYw
+	cIo/ehfo9FZg7+Ag==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F196C1374A;
-	Wed, 26 Mar 2025 09:41:03 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 912D11374A;
+	Wed, 26 Mar 2025 09:45:57 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Tp+jOa/L42d9aAAAD6G6ig
-	(envelope-from <nstange@suse.de>); Wed, 26 Mar 2025 09:41:03 +0000
+	id 7DSvIdXM42fnaQAAD6G6ig
+	(envelope-from <nstange@suse.de>); Wed, 26 Mar 2025 09:45:57 +0000
 From: Nicolai Stange <nstange@suse.de>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Nicolai Stange <nstange@suse.de>,  Roberto Sassu
- <roberto.sassu@huawei.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-  Eric Snowberg <eric.snowberg@oracle.com>,  Jarkko Sakkinen
- <jarkko@kernel.org>,  James Bottomley
- <James.Bottomley@HansenPartnership.com>,  linux-integrity@vger.kernel.org,
-  linux-security-module@vger.kernel.org,  linux-kernel@vger.kernel.org
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Nicolai Stange <nstange@suse.de>,  Mimi Zohar <zohar@linux.ibm.com>,
+  Roberto Sassu <roberto.sassu@huawei.com>,  Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>,  Eric Snowberg <eric.snowberg@oracle.com>,
+  James Bottomley <James.Bottomley@hansenpartnership.com>,
+  linux-integrity@vger.kernel.org,  linux-security-module@vger.kernel.org,
+  linux-kernel@vger.kernel.org
 Subject: Re: [RFC PATCH v2 07/13] tpm: enable bank selection for PCR extend
-In-Reply-To: <4021363dd955236ad55b5d0c26bcf788fa782d79.camel@linux.ibm.com>
-	(Mimi Zohar's message of "Tue, 25 Mar 2025 21:18:38 -0400")
+In-Reply-To: <Z-Bx_-EvcfCzWqr7@kernel.org> (Jarkko Sakkinen's message of "Sun,
+	23 Mar 2025 22:41:35 +0200")
 References: <20250323140911.226137-1-nstange@suse.de>
 	<20250323140911.226137-8-nstange@suse.de>
-	<4021363dd955236ad55b5d0c26bcf788fa782d79.camel@linux.ibm.com>
-Date: Wed, 26 Mar 2025 10:41:03 +0100
-Message-ID: <87tt7gp1sg.fsf@>
+	<Z-Bx_-EvcfCzWqr7@kernel.org>
+Date: Wed, 26 Mar 2025 10:45:57 +0100
+Message-ID: <87h63gp1ka.fsf@>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -120,113 +120,99 @@ X-Spamd-Result: default: False [-0.81 / 50.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	MIME_GOOD(-0.10)[text/plain];
 	MX_GOOD(-0.01)[];
-	TAGGED_RCPT(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.de,huawei.com,gmail.com,oracle.com,kernel.org,HansenPartnership.com,vger.kernel.org];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.de,linux.ibm.com,huawei.com,gmail.com,oracle.com,hansenpartnership.com,vger.kernel.org];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:dkim]
 X-Spam-Flag: NO
 X-Spamd-Bar: /
-X-Rspamd-Queue-Id: 4DFC421179
+X-Rspamd-Queue-Id: DDF4E21179
 X-Rspamd-Action: no action
 X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spam-Score: -0.81
 X-Spam-Level: 
 
-Mimi Zohar <zohar@linux.ibm.com> writes:
+Jarkko Sakkinen <jarkko@kernel.org> writes:
 
-> On Sun, 2025-03-23 at 15:09 +0100, Nicolai Stange wrote:
+> On Sun, Mar 23, 2025 at 03:09:05PM +0100, Nicolai Stange wrote:
+>> The existing tpm_pcr_extend() extends all of a PCR's allocated banks with
+>> the corresponding digest from the provided digests[] argument.
 >
->> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
->> index dfdcbd009720..23ded8ea47dc 100644
->> --- a/drivers/char/tpm/tpm2-cmd.c
->> +++ b/drivers/char/tpm/tpm2-cmd.c
->> @@ -226,16 +226,34 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_i=
-dx,
->>   * @chip:	TPM chip to use.
->>   * @pcr_idx:	index of the PCR.
->>   * @digests:	list of pcr banks and corresponding digest values to exten=
-d.
->> + * @banks_skip_mask:	pcr banks to skip
->>   *
->>   * Return: Same as with tpm_transmit_cmd.
+> Why not "just" tpm_pcr_extend(). We don't have a concept of
+> "non-existing tpm_pcr_extend()".
+>
+> "tpm_pcr_extend() extends the allocated PCR banks ..."
+>
+> or something.
+
+Right.
+
+
+>>=20
+>> An upcoming code change to IMA will introduce the need to skip over those
+>
+> Don't talk about upcoming code changes. Just explain why IMA depends on
+> the change.
+
+Ok.
+
+
+>> banks it does not have a hash algorithm implementation available for.
+>>=20
+>> Introduce tpm_pcr_extend_sel() to support this.
+>>=20
+>> tpm_pcr_extend_sel() also expects a digests[] array, always being the
+>> number of allocated PCR banks in size, just as it's the case for the
+>> existing tpm_pcr_extend(). In addition to that however, it takes a
+>> 'banks_skip_mask', and will skip the extension of any bank having its
+>> corresponding bit set there.
+>>=20
+>> Signed-off-by: Nicolai Stange <nstange@suse.de>
+>> ---
+>>  drivers/char/tpm/tpm-interface.c | 29 +++++++++++++++++++++++++++--
+>>  drivers/char/tpm/tpm.h           |  3 ++-
+>>  drivers/char/tpm/tpm2-cmd.c      | 29 +++++++++++++++++++++++++++--
+>>  include/linux/tpm.h              |  3 +++
+>>  4 files changed, 59 insertions(+), 5 deletions(-)
+>>=20
+>> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-int=
+erface.c
+>> index b1daa0d7b341..88b4496de1df 100644
+>> --- a/drivers/char/tpm/tpm-interface.c
+>> +++ b/drivers/char/tpm/tpm-interface.c
+>> @@ -314,6 +314,26 @@ EXPORT_SYMBOL_GPL(tpm_pcr_read);
 >>   */
->>  int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
->> -		    struct tpm_digest *digests)
->> +		    struct tpm_digest *digests,
->> +		    unsigned long banks_skip_mask)
->>  {
->>  	struct tpm_buf buf;
->> +	unsigned long skip_mask;
->> +	u32 banks_count;
->>  	int rc;
->>  	int i;
->>=20=20
->> +	banks_count =3D 0;
->> +	skip_mask =3D banks_skip_mask;
->> +	for (i =3D 0; i < chip->nr_allocated_banks; i++) {
->> +		const bool skip_bank =3D skip_mask & 1;
->> +
->> +		skip_mask >>=3D 1;
->> +		if (skip_bank)
->> +			continue;
->> +		banks_count++;
->> +	}
+>>  int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>>  		   struct tpm_digest *digests)
+>> +{
+>> +	return tpm_pcr_extend_sel(chip, pcr_idx, digests, 0);
+>> +}
+>> +EXPORT_SYMBOL_GPL(tpm_pcr_extend);
 >
-> Setting ima_unsupported_pcr_banks_mask used BIT(i).  Testing the bit shou=
-ld be
-> as straight forward here and below.
+> I'd add just an extra argument to tpm_pcr_extend().
 
-I opted for not to using BIT(i) here because in theory
-->nr_allocated_banks could be > BITS_PER_LONG. Not in practice though,
-but I felt it would improve code readabily if there aren't any implict
-assumptions. Also I'm not sure static checkers wouldn't complain about
-for (i =3D 0; i < a; i++) {  1ul << i; }
-
-Anyway, I'm realizing now that the code above is effectively just a
-popcnt implementation on the lower bits of ~banks_skip_mask.
-
-IMO it would be perhaps even better to do
-
-	unsigned long skipped_banks_count, banks_count;
-
-	skipped_banks_count =3D 0;
-	skip_mask =3D banks_skip_mask;
-	for (i =3D 0; skip_mask && i < chip->nr_allocated_banks; i++) {
-        	skipped_banks_count +=3D skip_mask & 1;
-                skip_mask >>=3D 1;
-	}
-        banks_count =3D chip->nr_allocated_banks - skipped_banks_count;
-
-instead. That way it's almost a nop in the common case of a clear
-banks_skip_mask, plus there are no conditionals in the body.
-
-
-> The first TPM extend after boot is the boot_aggregate.  Afterwards the nu=
-mber of
-> banks being extended should always be the same.  Do we really need to re-
-> calculate the number of banks needing to be extended each time?
->
-
-Otherwise the number of banks to skip would have to get stored somewhere
-and passed around, IIUC. I don't think that's worth it, the total number
-of allocated banks is expected to be relatively small and
-banks_skip_mask is zero in the common case anyway.
+Perfect, will do.
 
 Thanks!
 
