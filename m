@@ -1,137 +1,132 @@
-Return-Path: <linux-integrity+bounces-5455-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5456-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19F46A7272F
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 00:44:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0463EA728A9
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 03:17:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE8733BAEAB
-	for <lists+linux-integrity@lfdr.de>; Wed, 26 Mar 2025 23:44:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E14291898BE3
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 02:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7D919AA5D;
-	Wed, 26 Mar 2025 23:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MD36ZbOf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A63C5336D;
+	Thu, 27 Mar 2025 02:17:09 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251EF24C082;
-	Wed, 26 Mar 2025 23:44:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E675E17741;
+	Thu, 27 Mar 2025 02:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743032679; cv=none; b=CuyaGhr9PFjIw/7guNCkl/1Sc7VHojRUbd3dpPVgjPAhmg1pouezsml/tYKUbUgIuVmSNXAs6vSXEvvmPbwp+SdIERo9XsslSBYSZMtQB+Rqw/d7uGR4S8SJlLWg2A3D0D2gicscFuwYBo10FzUOuAhjy0rjiYfHWUWNz0Y/npQ=
+	t=1743041829; cv=none; b=PbBkWIFyiGJ6tXuORV/niJJlkIZPs0vUSAzWyZtsstQ207qiWWrLkBH7qeoCkD7k3qPC4wLDHt7JkP6e7wKHOn52azCZAUsnWKe2ha8zxU/HgHOb+H3aLdDKBiztRB6cYW9usEbN0+m4tL9mHrOTWS6apUbLJvEFCB7I/Qwz5tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743032679; c=relaxed/simple;
-	bh=D1apogL4fCUbwrUIBOk7sBJ0HDf+NbhOpks7NTMIzdM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MuiUvgw2c18odf1YDg5A68k+pcReLOrqTXD2jgF54FLXXRAPLCzoY7FUDJIoQYhmnzkbZw3Zy6ctLodqHYLue5VdTpgd19Nkr8phPzbUqfYLdA4IuUOj+0f/bXRS3mVb+04X8Eyh7mU5H1ly863B7GWIQKh07beZzwTW1W2/zp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MD36ZbOf; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52QLF1Nt008791;
-	Wed, 26 Mar 2025 23:44:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Pb0iPc
-	dEeHebXeBafq6Cz5IsD8ru0VAgrLo98xb9RWo=; b=MD36ZbOfUkPrFh5VqvRb7v
-	+Kt2tEfGngQGbB4KcQ126tLOG4YYdJWL3Com+ciIHdHK+1QXL92XGb06MMAOz0kS
-	fdxKcbXQpA8ptNlQ9nhWiOutiRk5eDBLjr/moSQ6wSejDISOsYb4YKF8wmcZ1B9+
-	/upSEo/DPU1iXFrTJKRTNL81Ct7PPlvkaf7TLth0drdpuFqBPy3TAyzwA8G5r6Pc
-	Y2MHc4tXmKeASyZL8RD1W1QfSUY2f9O7Y/+NBlglnA4s4e4SvsyD9GCzKHGtA9BR
-	CD7mFmYMc4xMeoI1JJLCX7QhE8SZjq5jb/ZQGL7azqipu6q8qoNlpBzmw1/z/LrA
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45mk0qatqb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Mar 2025 23:44:10 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52QN7oei009737;
-	Wed, 26 Mar 2025 23:44:09 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 45j9rktmv5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Mar 2025 23:44:09 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52QNi8JM30737142
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 26 Mar 2025 23:44:08 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 87A7658059;
-	Wed, 26 Mar 2025 23:44:08 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B48D65805D;
-	Wed, 26 Mar 2025 23:44:06 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.98.130])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 26 Mar 2025 23:44:06 +0000 (GMT)
-Message-ID: <af61537d6d4b293813f86c4b55dcfe15a3139085.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 6/8] ima: kexec: move IMA log copy from kexec load
- to execute
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: steven chen <chenste@linux.microsoft.com>, Baoquan He <bhe@redhat.com>
-Cc: stefanb@linux.ibm.com, roberto.sassu@huaweicloud.com,
-        roberto.sassu@huawei.com, eric.snowberg@oracle.com,
-        ebiederm@xmission.com, paul@paul-moore.com, code@tyhicks.com,
-        bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
-        kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
-        nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
-        vgoyal@redhat.com, dyoung@redhat.com
-Date: Wed, 26 Mar 2025 19:44:06 -0400
-In-Reply-To: <2d2ea573-1ddd-44b4-8ba3-4ae86313d63f@linux.microsoft.com>
-References: <20250318010448.954-1-chenste@linux.microsoft.com>
-	 <20250318010448.954-7-chenste@linux.microsoft.com>
-	 <Z9t4LVpE470DMBYU@MiWiFi-R3L-srv>
-	 <3d7b5e06-5166-46bb-89dc-a0b95ca7c767@linux.microsoft.com>
-	 <Z+E7X6LuQ82q1i5V@MiWiFi-R3L-srv>
-	 <6583378c-55ee-4192-a95f-ebaf3f708bbb@linux.microsoft.com>
-	 <Z+NmLtn0vojVYJ3H@MiWiFi-R3L-srv>
-	 <2d2ea573-1ddd-44b4-8ba3-4ae86313d63f@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1743041829; c=relaxed/simple;
+	bh=yFRnNojw1Od6L/ePqAwB1Zg9yTfTMA9aFbKENuuihFg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c7xMZGpsEY0FLa4cFVm6SZM7CFjm3bS/GJBlfCqITxeRa2G1Jw9lN3W1v6YCIYVAB/mQNhxgXpZeTDn9xZGJMEDPjjpMbI+MC/N7MY0RHV/sAus6SYRm8hCWxCPHgP/EsIbbOIWyUa/MlKNkmC1YE7zocrl9Uow72PfCmu+5D64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.40.54.180])
+	by gateway (Coremail) with SMTP id _____8AxQK0eteRnsbynAA--.2271S3;
+	Thu, 27 Mar 2025 10:17:02 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.40.54.180])
+	by front1 (Coremail) with SMTP id qMiowMAxj8UcteRnpXFiAA--.32467S2;
+	Thu, 27 Mar 2025 10:17:01 +0800 (CST)
+From: Qunqin Zhao <zhaoqunqin@loongson.cn>
+To: lee@kernel.org,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-crypto@vger.kernel.org,
+	jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	pmenzel@molgen.mpg.de,
+	Qunqin Zhao <zhaoqunqin@loongson.cn>
+Subject: [PATCH v6 0/6] Drivers for Loongson security engine
+Date: Thu, 27 Mar 2025 10:18:03 +0800
+Message-ID: <20250327021809.29954-1-zhaoqunqin@loongson.cn>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7gAqfQEYtFE5MeYFzlmWitnjt9waQDRW
-X-Proofpoint-ORIG-GUID: 7gAqfQEYtFE5MeYFzlmWitnjt9waQDRW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-26_09,2025-03-26_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=665 impostorscore=0
- malwarescore=0 adultscore=0 bulkscore=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2503260146
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAxj8UcteRnpXFiAA--.32467S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KFW8GrWxJrWxAr1xWFW7Awc_yoW8Zw1DpF
+	43C3yrCr4UJr47Crn3JFW8CFyfZa4fWr9xKay2qw1UWr9rAa4UJ3y3CFyUCa9rAF18JryI
+	qFZ5Cr4UCF1UuacCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
+	Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+	xGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+	JVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+	vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+	x2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
+	wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+
+Loongson security engine supports random number generation, hash,
+symmetric encryption and asymmetric encryption. Based on these
+encryption functions, TPM2 have been implemented in it.
+
+mfd is the baser driver, crypto and tpm are users.
+
+v6: mfd :MFD_LS6000SE -> MFD_LOONGSON_SE,  ls6000se.c -> loongson-se.c
+
+    crypto :CRYPTO_DEV_LS6000SE_RNG -> CRYPTO_DEV_LOONGSON_RNG,
+    ls6000se-rng.c ->loongson-rng.c
+
+    tpm: TCG_LSSE -> TCG_LOONGSON, tpm_lsse.c ->tpm_loongson.c
+
+v5: Registered "ls6000se-rng" device in mfd driver.
+v4: Please look at changelog in tpm and MAINTAINERS. No changes to mfd
+    and crypto.
+v3: Put the updates to the MAINTAINERS in a separate patch.
+v2: Removed misc driver. Added tpm driver.
+
+Qunqin Zhao (6):
+  mfd: Add support for Loongson Security Module
+  MAINTAINERS: Add entry for Loongson Security Module driver
+  crypto: loongson - add Loongson RNG driver support
+  MAINTAINERS: Add entry for Loongson RNG driver
+  tpm: Add a driver for Loongson TPM device
+  MAINTAINERS: Add tpm_loongson.c to LOONGSON CRYPTO DRIVER entry
+
+ MAINTAINERS                            |  14 +
+ drivers/char/tpm/Kconfig               |   9 +
+ drivers/char/tpm/Makefile              |   1 +
+ drivers/char/tpm/tpm_loongson.c        | 103 +++++++
+ drivers/crypto/Kconfig                 |   1 +
+ drivers/crypto/Makefile                |   1 +
+ drivers/crypto/loongson/Kconfig        |   6 +
+ drivers/crypto/loongson/Makefile       |   2 +
+ drivers/crypto/loongson/loongson-rng.c | 190 +++++++++++++
+ drivers/mfd/Kconfig                    |  10 +
+ drivers/mfd/Makefile                   |   2 +
+ drivers/mfd/loongson-se.c              | 374 +++++++++++++++++++++++++
+ include/linux/mfd/loongson-se.h        |  75 +++++
+ 13 files changed, 788 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_loongson.c
+ create mode 100644 drivers/crypto/loongson/Kconfig
+ create mode 100644 drivers/crypto/loongson/Makefile
+ create mode 100644 drivers/crypto/loongson/loongson-rng.c
+ create mode 100644 drivers/mfd/loongson-se.c
+ create mode 100644 include/linux/mfd/loongson-se.h
 
 
-> > Hmm, it's easier, while maybe not good. We should not repeatedly
-> > introduce similar things into codes. Here, it's similar as
-> > what kexec_apply_relocations() and arch_kexec_apply_relocations() are
-> > doing.
-> >=20
-> > int machine_kexec_post_load(struct kimage *image)
+base-commit: b904243247d1acb0ebbd4978feb639441dc51fc1
+-- 
+2.45.2
 
-(As discussed) just as kexec_apply_relocation calls
-arch_kexec_apply_relocations().  Name this function kexec_post_load() and c=
-all
-machine_kexec_post_load().
-
-Mimi
-
-> > {
-> > #ifdef CONFIG_IMA_KEXEC
-> >          ima_kexec_post_load(image);
-> > #endif
-> > 	return arch_machine_kexec_post_load();
-> > }
->=20
 
