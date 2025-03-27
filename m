@@ -1,148 +1,93 @@
-Return-Path: <linux-integrity+bounces-5472-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5473-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3541A732FB
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 14:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C74BDA73322
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 14:16:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CB4A3BF619
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 13:04:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DA9B3AA287
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 13:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0818D215061;
-	Thu, 27 Mar 2025 13:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D768F4C6C;
+	Thu, 27 Mar 2025 13:15:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJyOPrgP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F3Moa8Nm"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A7E2144D1;
-	Thu, 27 Mar 2025 13:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16184409
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Mar 2025 13:15:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743080683; cv=none; b=j3Jiv4zVMCypDLaIJ0yMMpM7NZ3bP+nMp93EX905rcdcRxCNAZnVBO7IgvikLwZfa59ew8cRb+K7M6m4q4Jo85ZmUoAi6N9IO6dKMyWZchMbZRSyQWAUxrARBb5h2Uu6zOq1yH/bWtskLbuiDZHz/BGb0xzZoIjkvMsunh8FvGc=
+	t=1743081326; cv=none; b=GZDYsC9MSBTcSuqs6m+2OrfaFBqnpLIXQzyFsDKUHFmnCsCsuc692/kZfrpUThZ3fnxMNBAEOPKM0P13ygpNq8oyM8M7RPhmzl3Z7ds1uJkfXthbRQQhXMdvxdGW/u614XqbYZ+X3uySOqpTREwP9cAk8/57ffO47NY34/+5LFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743080683; c=relaxed/simple;
-	bh=xhrgFuz1vouc6eTd9s7u/Z+nm7I3LXD3Vys4lqppiS0=;
+	s=arc-20240116; t=1743081326; c=relaxed/simple;
+	bh=uz15+RwhvbrVTIpm3heuGs+gwObHr+xG+vEXx78nkwE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hT/aLZUKiyK6qeuKw0viy++B/zMWrzvKQB9d4oTLGovBbwNfH1WQLR0aDQvSOLyJHrvvaUpi5fhK9C3L0G07POvTr7UYzm9jiGmvSG3MBFxYse8FdVwqJLmfRmwvgn2TXkzvwjeg7SCI5jXx0BguQ7Cf2Qd6HVI8ssXbur0BrvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJyOPrgP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED570C4CEDD;
-	Thu, 27 Mar 2025 13:04:42 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=HcA6OHyFwOQ33O1JaKxcOaRTmLmJY5yG48ssBO97rXukEHdJJPu9Z4Y38guoyPyr39vPOm+SmtxMJxGZ+DiiCJdlo03ehPxrT8+g/HopeEmVifUVVKX6dF2SI5ap4wCyAKo18ffIUP7LTnxQ16cxdjOXcfbHgcvYKS9tsKardgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F3Moa8Nm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39F3C4CEDD;
+	Thu, 27 Mar 2025 13:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743080683;
-	bh=xhrgFuz1vouc6eTd9s7u/Z+nm7I3LXD3Vys4lqppiS0=;
+	s=k20201202; t=1743081326;
+	bh=uz15+RwhvbrVTIpm3heuGs+gwObHr+xG+vEXx78nkwE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BJyOPrgPpfJLnMlcT7qMMQp94LAl/n0viykTpItKLK6VzpvHG3DRl+VhTJ3LVz751
-	 Wdxbi3YgRVJ6/n6RMVF1st+/fqplpekL7CX9RNDZ7uoaHt66XIMP/4blTpMhCrqLIY
-	 pCQdzMsnzkrGgZhrhXFhbO+EUdyg4xh+nq919LXmiR6Os9q3VvECumB96abmfSHWpG
-	 9lW1KBIJCrzLGrPlzw7AAR1ChGEXm5tUsdsAcC0dtRrmsq200v6Kxpxi3BPvy4K+rS
-	 4KQqwBWULjKZiNpE0FYyUok+HHIwLORkigytiWmS0prafCC/k0eQ7X58X6r6lUmRwF
-	 rodWg+uc5X/zw==
-Date: Thu, 27 Mar 2025 15:04:39 +0200
+	b=F3Moa8NmDVNBLwYxethNzTePIxjNaUEhrUQiDHfnZzpFg4PSrZVeqA5hK5pmtFO4d
+	 m7WmsXqzxkG1bNNmUQTBHKZ8mEYxKvze2/Hbpe53e2bHzEqZxMTkd3/JYs9TTraJhN
+	 T7le/kaf1Er1avM2+esTipXYVCG1FdCDjRTlEA/kksuaAev2bQHMfvS0AtURheLBrQ
+	 vNfPIjaVAtV3X0g9BGu5EIdF/+IduDuXLhMDNYtJz/FDEI2kTPOga31wXWNs4DhLEb
+	 6I6OBmOljsXESFCpGKi5+yH4/KNRwv6rI0hkScA81AiHHLmgHXC7HNmKv3w0hx4bHo
+	 mD1aa2G/7hc/A==
+Date: Thu, 27 Mar 2025 15:15:22 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Sumit Garg <sumit.garg@kernel.org>,
-	linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-	linux-integrity@vger.kernel.org,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>
-Subject: Re: [PATCH 2/2] tpm/tpm_ftpm_tee: use send_recv() op
-Message-ID: <Z-VM56u1zWQSPemh@kernel.org>
-References: <20250320152433.144083-1-sgarzare@redhat.com>
- <20250320152433.144083-3-sgarzare@redhat.com>
- <Z-I86tWMcD6b_YeM@sumit-X1>
- <Z-Pu4FhcntnKii61@kernel.org>
- <Z+QQWe/upJuVpU8r@ziepe.ca>
- <Z-QV5y1JGBDpsPuH@kernel.org>
- <Z-QkGUenPAMid63l@kernel.org>
- <Z-RlbEN9BoKnTN2E@kernel.org>
- <6mpece5tkoie6ngv3j3xzjkotn6x6wu2vjs7pc44ns76z6v3d2@c6jinanngw5o>
+To: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+Cc: Jonathan McDowell <noodles@earth.li>, linux-integrity@vger.kernel.org
+Subject: Re: TPM operation times out (very rarely)
+Message-ID: <Z-VPaqDKMo2RR61w@kernel.org>
+References: <D7FSS837QLNR.5XOU66J6FBTU@kernel.org>
+ <Z5yLYVBn6inIH8cG@kitsune.suse.cz>
+ <D7G6P7W7AY65.257WPBC8I3HAF@kernel.org>
+ <Z5zJ7R6vDU4h9iDk@kitsune.suse.cz>
+ <D7GFCNGDK7S6.1X0KPPHF1TXBO@kernel.org>
+ <Z50IKdYe42_n2B0b@kitsune.suse.cz>
+ <D7GIBDO5KJMD.118CQO10LJ79Y@kernel.org>
+ <Z6Nm7Y8TFF8YG56Z@kitsune.suse.cz>
+ <Z6N10NQY75hpX0Ed@earth.li>
+ <Z-VLTKkB_-PoNAly@kitsune.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <6mpece5tkoie6ngv3j3xzjkotn6x6wu2vjs7pc44ns76z6v3d2@c6jinanngw5o>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z-VLTKkB_-PoNAly@kitsune.suse.cz>
 
-On Thu, Mar 27, 2025 at 10:27:48AM +0100, Stefano Garzarella wrote:
-> On Wed, Mar 26, 2025 at 10:37:09PM +0200, Jarkko Sakkinen wrote:
-> > On Wed, Mar 26, 2025 at 05:58:33PM +0200, Jarkko Sakkinen wrote:
-> > > On Wed, Mar 26, 2025 at 04:57:47PM +0200, Jarkko Sakkinen wrote:
-> > > > On Wed, Mar 26, 2025 at 11:34:01AM -0300, Jason Gunthorpe wrote:
-> > > > > On Wed, Mar 26, 2025 at 02:11:12PM +0200, Jarkko Sakkinen wrote:
-> > > > >
-> > > > > > Generally speaking I don't see enough value in complicating
-> > > > > > callback interface. It's better to handle complications in
-> > > > > > the leaves (i.e. dictatorship of majority ;-) ).
-> > > > >
-> > > > > That is very much not the way most driver subsystems view the
-> > > > > world. We want to pull logical things into the core code and remove
-> > > > > them from drivers to make the drivers simpler and more robust.
-> > > > >
-> > > > > The amount of really dumb driver boiler plate that this series
-> > > > > obviously removes is exactly the sort of stuff we should be fixing by
-> > > > > improving the core code.
-> > > > >
-> > > > > The callback interface was never really sanely designed, it was just
-> > > > > built around the idea of pulling the timout processing into the core
-> > > > > code for TIS hardware. It should be revised to properly match these
-> > > > > new HW types that don't have this kind of timeout mechanism.
-> > > >
-> > > > Both TIS and CRB, which are TCG standards and they span to many
-> > > > different types of drivers and busses. I don't have the figures but
-> > > > probably they cover vast majority of the hardware.
-> > > >
-> > > > We are talking about 39 lines of reduced complexity at the cost
-> > > > of complicating branching at the top level. I doubt that there
-> > > > is either any throughput or latency issues.
-> > > >
-> > > > What is measurable benefit? The rationale is way way too abstract
-> > > > for me to cope, sorry.
-> > > 
-> > > E.g., here's how you can get rid of extra cruft in tpm_ftpm_tee w/o
-> > > any new callbacks.
-> 
-> Yeah, I agree that your patch should go in any case, with send_recv() or
-> not. It's a good cleanup.
-> 
-> > 
-> > Measurable benefit: no need to allocate memory buffer.
-> 
-> That's right, I read the whole thread before responding, but that's exactly
-> what I wanted to highlight. Implementing send_recv() we could completely
-> remove the buffer for the cache here in tpm_ftpm_tee, simplifying it quite a
-> bit.
-> 
-> In tpm_svsm instead we allocate it while probing anyway to avoid having to
-> allocate it every time, but we could potentially do the same (I don't know
-> if it makes sense honestly). We do this because for SVSM any buffer is fine,
-> as it can access all guest kernel memory, whereas IIUC for ftpm it has to be
-> taken from shared memory.
-> 
-> > 
-> > Let's take that as a starting point ;-)
-> 
-> Yeah!
-> 
-> > 
-> > On that basis I can consider this (i.e. something to measure).
-> 
-> Okay, I explain this better in the commit description for the next version!
+On Thu, Mar 27, 2025 at 01:57:48PM +0100, Michal Suchánek wrote:
+> This does not address the other problem that when the rimeout triggers
+> on something like LOAD CONTEXT then the kernel and the TPM don't agree
+> on what the state of the context is.
 
-Awesome :-) Thanks for the patience with this. I rather precautionaly
-throw sticks on the road than go through fixes post upstreaming, which
-is factors more nasty and time-consuming...
+In the case of tpm2-sessions, and in-kernel callers, we could try to
+improve the situation in some of the edge cases.
+
+Out-of-my sleeve ideas:
+
+1. E.g., tpm2_load_null() could potentially have retries instead of
+   single trial.
+2. Perhaps timeout in tpm_tis should be adaptive? It could be by
+   defaault 2s and would grow on trials.
+
 
 > 
-> Thanks,
-> Stefano
+> Thanks
 > 
+> Michal
 
 BR, Jarkko
 
