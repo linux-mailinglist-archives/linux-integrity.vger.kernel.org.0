@@ -1,60 +1,65 @@
-Return-Path: <linux-integrity+bounces-5471-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5472-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C75A732F6
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 14:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D3541A732FB
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 14:07:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F7F83B7501
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 13:02:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CB4A3BF619
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 13:04:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2651215769;
-	Thu, 27 Mar 2025 13:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0818D215061;
+	Thu, 27 Mar 2025 13:04:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ey+q4tdY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJyOPrgP"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFA12153D5;
-	Thu, 27 Mar 2025 13:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A7E2144D1;
+	Thu, 27 Mar 2025 13:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743080556; cv=none; b=Pz7NztI9YdQvwDQyxEjLxuFYAiq7Sh2491XqQRzeBjIChr0E628XANK7E76a4DNyyogbGWXsyuVKoElMmF7W9Bj0EdnEtEC9f0yu42KOXSvpP6xgRGO4eKFMxZI+bGIZLLsjQmpsofFR6LERZ8i1Sm9fNBjcnsENG/7UEshItiA=
+	t=1743080683; cv=none; b=j3Jiv4zVMCypDLaIJ0yMMpM7NZ3bP+nMp93EX905rcdcRxCNAZnVBO7IgvikLwZfa59ew8cRb+K7M6m4q4Jo85ZmUoAi6N9IO6dKMyWZchMbZRSyQWAUxrARBb5h2Uu6zOq1yH/bWtskLbuiDZHz/BGb0xzZoIjkvMsunh8FvGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743080556; c=relaxed/simple;
-	bh=Tdpl66XLAOtA5XmignFqms9SJMURQinLKq3XqPhPQTU=;
+	s=arc-20240116; t=1743080683; c=relaxed/simple;
+	bh=xhrgFuz1vouc6eTd9s7u/Z+nm7I3LXD3Vys4lqppiS0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CqhRRhGSPNyE2Tgf8yxm4yDHqlgYdc7ngL/+ro+sq5j1d564dESM5x4vPamvBzmh3En3IoAdjI8YVOO5vvvhp6CCYzKe4w3WLMBemGw5mclTf0D0uV3FfMVfd3lcV/Tio+X+yQGvUN3HEiopqWHGmtY25SDTorQKcVeeGw28GFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ey+q4tdY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93061C4CEE8;
-	Thu, 27 Mar 2025 13:02:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hT/aLZUKiyK6qeuKw0viy++B/zMWrzvKQB9d4oTLGovBbwNfH1WQLR0aDQvSOLyJHrvvaUpi5fhK9C3L0G07POvTr7UYzm9jiGmvSG3MBFxYse8FdVwqJLmfRmwvgn2TXkzvwjeg7SCI5jXx0BguQ7Cf2Qd6HVI8ssXbur0BrvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJyOPrgP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED570C4CEDD;
+	Thu, 27 Mar 2025 13:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743080555;
-	bh=Tdpl66XLAOtA5XmignFqms9SJMURQinLKq3XqPhPQTU=;
+	s=k20201202; t=1743080683;
+	bh=xhrgFuz1vouc6eTd9s7u/Z+nm7I3LXD3Vys4lqppiS0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ey+q4tdYLa7txymgBaZV0kKiZE44zdPHKstItEEk5RPhQuVLGAZwa9v4R1fmngqVO
-	 ijtDiwdZpnarcLF5rmeU8lJStrUFhNvMrzfoLwB4EXniQd/MAFRpYf0prlyo6e6UEl
-	 74uqPC3bl7HWSQjrEdw/IAlXJuq5Y7mPwv24zodD/v1IZ3/Cf1mmMeW//SQLzAz0QJ
-	 uxrIWyn/at0pMUfZjL80/lVPSTI6OkopLt84u+kAbhRzbBlQc8S9bGYE7JaPyZnuBe
-	 nJuStxhkMrE0R+LRpQFM7WUPnI63UWjhkACqRCDlyBFG617M3INQO3IPYBQGGfvs/C
-	 QfFj18jRf2BAA==
-Date: Thu, 27 Mar 2025 15:02:32 +0200
+	b=BJyOPrgPpfJLnMlcT7qMMQp94LAl/n0viykTpItKLK6VzpvHG3DRl+VhTJ3LVz751
+	 Wdxbi3YgRVJ6/n6RMVF1st+/fqplpekL7CX9RNDZ7uoaHt66XIMP/4blTpMhCrqLIY
+	 pCQdzMsnzkrGgZhrhXFhbO+EUdyg4xh+nq919LXmiR6Os9q3VvECumB96abmfSHWpG
+	 9lW1KBIJCrzLGrPlzw7AAR1ChGEXm5tUsdsAcC0dtRrmsq200v6Kxpxi3BPvy4K+rS
+	 4KQqwBWULjKZiNpE0FYyUok+HHIwLORkigytiWmS0prafCC/k0eQ7X58X6r6lUmRwF
+	 rodWg+uc5X/zw==
+Date: Thu, 27 Mar 2025 15:04:39 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Sumit Garg <sumit.garg@kernel.org>,
+	linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+	linux-integrity@vger.kernel.org,
 	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Sumit Garg <sumit.garg@kernel.org>
-Subject: Re: [PATCH 1/2] tpm: add send_recv() op in tpm_class_ops
-Message-ID: <Z-VMWl9UDx5ZY1qK@kernel.org>
+	Jens Wiklander <jens.wiklander@linaro.org>
+Subject: Re: [PATCH 2/2] tpm/tpm_ftpm_tee: use send_recv() op
+Message-ID: <Z-VM56u1zWQSPemh@kernel.org>
 References: <20250320152433.144083-1-sgarzare@redhat.com>
- <20250320152433.144083-2-sgarzare@redhat.com>
- <Z-QxH7aDjlixl2gp@kernel.org>
- <eidmcwgppc4uobyupns4hzqz562wguapiocpyyqq67j5h26qbl@muhbnfxzqvqt>
+ <20250320152433.144083-3-sgarzare@redhat.com>
+ <Z-I86tWMcD6b_YeM@sumit-X1>
+ <Z-Pu4FhcntnKii61@kernel.org>
+ <Z+QQWe/upJuVpU8r@ziepe.ca>
+ <Z-QV5y1JGBDpsPuH@kernel.org>
+ <Z-QkGUenPAMid63l@kernel.org>
+ <Z-RlbEN9BoKnTN2E@kernel.org>
+ <6mpece5tkoie6ngv3j3xzjkotn6x6wu2vjs7pc44ns76z6v3d2@c6jinanngw5o>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -63,99 +68,80 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eidmcwgppc4uobyupns4hzqz562wguapiocpyyqq67j5h26qbl@muhbnfxzqvqt>
+In-Reply-To: <6mpece5tkoie6ngv3j3xzjkotn6x6wu2vjs7pc44ns76z6v3d2@c6jinanngw5o>
 
-On Thu, Mar 27, 2025 at 10:48:17AM +0100, Stefano Garzarella wrote:
-> On Wed, Mar 26, 2025 at 06:53:51PM +0200, Jarkko Sakkinen wrote:
-> > On Thu, Mar 20, 2025 at 04:24:32PM +0100, Stefano Garzarella wrote:
-> > > From: Stefano Garzarella <sgarzare@redhat.com>
+On Thu, Mar 27, 2025 at 10:27:48AM +0100, Stefano Garzarella wrote:
+> On Wed, Mar 26, 2025 at 10:37:09PM +0200, Jarkko Sakkinen wrote:
+> > On Wed, Mar 26, 2025 at 05:58:33PM +0200, Jarkko Sakkinen wrote:
+> > > On Wed, Mar 26, 2025 at 04:57:47PM +0200, Jarkko Sakkinen wrote:
+> > > > On Wed, Mar 26, 2025 at 11:34:01AM -0300, Jason Gunthorpe wrote:
+> > > > > On Wed, Mar 26, 2025 at 02:11:12PM +0200, Jarkko Sakkinen wrote:
+> > > > >
+> > > > > > Generally speaking I don't see enough value in complicating
+> > > > > > callback interface. It's better to handle complications in
+> > > > > > the leaves (i.e. dictatorship of majority ;-) ).
+> > > > >
+> > > > > That is very much not the way most driver subsystems view the
+> > > > > world. We want to pull logical things into the core code and remove
+> > > > > them from drivers to make the drivers simpler and more robust.
+> > > > >
+> > > > > The amount of really dumb driver boiler plate that this series
+> > > > > obviously removes is exactly the sort of stuff we should be fixing by
+> > > > > improving the core code.
+> > > > >
+> > > > > The callback interface was never really sanely designed, it was just
+> > > > > built around the idea of pulling the timout processing into the core
+> > > > > code for TIS hardware. It should be revised to properly match these
+> > > > > new HW types that don't have this kind of timeout mechanism.
+> > > >
+> > > > Both TIS and CRB, which are TCG standards and they span to many
+> > > > different types of drivers and busses. I don't have the figures but
+> > > > probably they cover vast majority of the hardware.
+> > > >
+> > > > We are talking about 39 lines of reduced complexity at the cost
+> > > > of complicating branching at the top level. I doubt that there
+> > > > is either any throughput or latency issues.
+> > > >
+> > > > What is measurable benefit? The rationale is way way too abstract
+> > > > for me to cope, sorry.
 > > > 
-> > > Some devices do not support interrupts and provide a single operation
-> > > to send the command and receive the response on the same buffer.
-> > > 
-> > > To support this scenario, a driver could set TPM_CHIP_FLAG_IRQ in the
-> > > chip's flags to get recv() to be called immediately after send() in
-> > > tpm_try_transmit(), or it needs to implement .status() to return 0,
-> > > and set both .req_complete_mask and .req_complete_val to 0.
-> > > 
-> > > In order to simplify these drivers and avoid temporary buffers to be
-> > 
-> > Simplification can be addressed with no callback changes:
-> > 
-> > https://lore.kernel.org/linux-integrity/20250326161838.123606-1-jarkko@kernel.org/T/#u
-> > 
-> > I also noticed that tpm_ftpm_tee initalized req_complete_mask and
-> > req_complete_val explictly while they would be already implicitly
-> > zero.
-> > 
-> > So it reduces this just a matter of getting rid off the extra
-> > buffer.
+> > > E.g., here's how you can get rid of extra cruft in tpm_ftpm_tee w/o
+> > > any new callbacks.
 > 
-> Yep, as mentioned I think your patch should go either way. So here I can
-> rephrase and put the emphasis on the temporary buffer and the driver
-> simplification.
-
-Yes. Removing extra copy is a goal that can only make sense!
-
+> Yeah, I agree that your patch should go in any case, with send_recv() or
+> not. It's a good cleanup.
 > 
 > > 
-> > > used between the .send() and .recv() callbacks, introduce a new callback
-> > > send_recv(). If that callback is defined, it is called in
-> > > tpm_try_transmit() to send the command and receive the response on
-> > > the same buffer in a single call.
+> > Measurable benefit: no need to allocate memory buffer.
+> 
+> That's right, I read the whole thread before responding, but that's exactly
+> what I wanted to highlight. Implementing send_recv() we could completely
+> remove the buffer for the cache here in tpm_ftpm_tee, simplifying it quite a
+> bit.
+> 
+> In tpm_svsm instead we allocate it while probing anyway to avoid having to
+> allocate it every time, but we could potentially do the same (I don't know
+> if it makes sense honestly). We do this because for SVSM any buffer is fine,
+> as it can access all guest kernel memory, whereas IIUC for ftpm it has to be
+> taken from shared memory.
+> 
 > > 
-> > I don't find anything in the commit message addressing buf_len an
-> > cmd_len (vs "just len"). Why two lengths are required?
+> > Let's take that as a starting point ;-)
+> 
+> Yeah!
+> 
 > > 
-> > Not completely rejecting but this explanation is incomplete.
+> > On that basis I can consider this (i.e. something to measure).
 > 
-> Right.
-> 
-> The same buffer is used as input and output.
-> For input, the buffer contains the command (cmd_len) but the driver can use
-> the entire buffer for output (buf_len).
-> It's basically the same as in tpm_try_transmit(), but we avoid having to
-> parse the header in each driver since we already do that in
-> tpm_try_transmit().
-> 
-> In summary cmd_len = count = be32_to_cpu(header->length).
-> 
-> I admit I'm not good with names, would you prefer a different name or is it
-> okay to explain it better in the commit?
-> 
-> My idea is to add this:
-> 
->     `buf` is used as input and output. It contains the command
->     (`cmd_len` bytes) as input. The driver will be able to use the
->     entire buffer (`buf_len` bytes) for the response as output.
->     Passing `cmd_len` is an optimization to avoid having to access the
->     command header again in each driver and check it.
+> Okay, I explain this better in the commit description for the next version!
 
-This makes more sense. Maybe we could name them as buf_size and
-cmd_len to further make dead obvious the use and purpose.
-
-> 
-> WDYT?
-
-I just want to get this done right if it is done at all, so here's
-one more suggestion:
-
-1. Add TPM_CHIP_FLAG_SYNC
-2. Update send() parameters.
-
-You don't have to do anything smart with the new parameter other than
-add it to leaf drivers. It makes the first patch bit more involved but
-this way we end up keeping the callback interface as simple as it was.
-
-I'm also thinking that for async case do we actually need all those
-complicated masks etc. or could we simplify that side but it is 
-definitely out-of-scope for this patch set (no need to worry about
-this).
+Awesome :-) Thanks for the patience with this. I rather precautionaly
+throw sticks on the road than go through fixes post upstreaming, which
+is factors more nasty and time-consuming...
 
 > 
 > Thanks,
 > Stefano
-> 
 > 
 
 BR, Jarkko
