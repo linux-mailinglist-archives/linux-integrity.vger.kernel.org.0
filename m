@@ -1,93 +1,227 @@
-Return-Path: <linux-integrity+bounces-5473-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5474-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C74BDA73322
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 14:16:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB647A7334D
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 14:24:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DA9B3AA287
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 13:15:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C800D18885F4
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 13:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D768F4C6C;
-	Thu, 27 Mar 2025 13:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16F8C2147F1;
+	Thu, 27 Mar 2025 13:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F3Moa8Nm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SQRkdeck"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16184409
-	for <linux-integrity@vger.kernel.org>; Thu, 27 Mar 2025 13:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E169A1BC41;
+	Thu, 27 Mar 2025 13:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743081326; cv=none; b=GZDYsC9MSBTcSuqs6m+2OrfaFBqnpLIXQzyFsDKUHFmnCsCsuc692/kZfrpUThZ3fnxMNBAEOPKM0P13ygpNq8oyM8M7RPhmzl3Z7ds1uJkfXthbRQQhXMdvxdGW/u614XqbYZ+X3uySOqpTREwP9cAk8/57ffO47NY34/+5LFY=
+	t=1743081825; cv=none; b=UaWR6L5ZPPLhxJw9sZ+ngAstL/layuHYJDdCuIjdt+y8lwroxezQqvVhcP/kQz8qWMVBOTYASlMLTMIU0HISYb7ZFodZsG02Xr4q2lbfel66JgiwHnSHme5Mqu20eg8MoAQo8JXxf+Z5rCKK/0SS2kfIxZbz7ZtI7TML2hNv+Xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743081326; c=relaxed/simple;
-	bh=uz15+RwhvbrVTIpm3heuGs+gwObHr+xG+vEXx78nkwE=;
+	s=arc-20240116; t=1743081825; c=relaxed/simple;
+	bh=y4sLP3up9sPxue2DFidmSkL/uvEDHl5tUByPUffOcQU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcA6OHyFwOQ33O1JaKxcOaRTmLmJY5yG48ssBO97rXukEHdJJPu9Z4Y38guoyPyr39vPOm+SmtxMJxGZ+DiiCJdlo03ehPxrT8+g/HopeEmVifUVVKX6dF2SI5ap4wCyAKo18ffIUP7LTnxQ16cxdjOXcfbHgcvYKS9tsKardgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F3Moa8Nm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39F3C4CEDD;
-	Thu, 27 Mar 2025 13:15:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XpV3q5WqNL+7AsZO8cxmDt9roz4RYbAPPM+npCnXhDqXzV5Xk9nrdgk+jPzEGH9C2I0CVbHb0sfk8stAgMh8YhaTtRVXniiS1zEdIfIAFRzI1HbkkBiwluuTO3FsrYtDdBmUJ6eStx1zCctQxXi71PuuEy+WSLnam2hMY9eQ+EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SQRkdeck; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD220C4CEDD;
+	Thu, 27 Mar 2025 13:23:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743081326;
-	bh=uz15+RwhvbrVTIpm3heuGs+gwObHr+xG+vEXx78nkwE=;
+	s=k20201202; t=1743081823;
+	bh=y4sLP3up9sPxue2DFidmSkL/uvEDHl5tUByPUffOcQU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F3Moa8NmDVNBLwYxethNzTePIxjNaUEhrUQiDHfnZzpFg4PSrZVeqA5hK5pmtFO4d
-	 m7WmsXqzxkG1bNNmUQTBHKZ8mEYxKvze2/Hbpe53e2bHzEqZxMTkd3/JYs9TTraJhN
-	 T7le/kaf1Er1avM2+esTipXYVCG1FdCDjRTlEA/kksuaAev2bQHMfvS0AtURheLBrQ
-	 vNfPIjaVAtV3X0g9BGu5EIdF/+IduDuXLhMDNYtJz/FDEI2kTPOga31wXWNs4DhLEb
-	 6I6OBmOljsXESFCpGKi5+yH4/KNRwv6rI0hkScA81AiHHLmgHXC7HNmKv3w0hx4bHo
-	 mD1aa2G/7hc/A==
-Date: Thu, 27 Mar 2025 15:15:22 +0200
+	b=SQRkdecksjP6KSgis+IA69h4EdAde5LXfB08RrWwUa4ElMt5i5iarcVVAvB5B0RSl
+	 gW4kWzf7Ctll/Vj7NA/udauY2A7yM+3y4ctZkZweiddLZlCVDOaZGRKcTyUReOzg5f
+	 n8OW9jz+HRJMS+5MC+fU52+9RGFCy/Zhfz2zsRjUjjYOvCycgXfBITK18JGLoWX2Vr
+	 i+GQECpQGoPAezTUs0SFSbk4CSn0XM3Brn5ljYhKeaYGd6HafdGjNsMt/HBNPEsTY3
+	 uLYdMQf3cn+M9jda/gQIpe6sSTKIonqHFFH42A7UamPSSvoiY7jt+UMN6WB72chbe+
+	 f+ztypGkVtqug==
+Date: Thu, 27 Mar 2025 15:23:39 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc: Jonathan McDowell <noodles@earth.li>, linux-integrity@vger.kernel.org
-Subject: Re: TPM operation times out (very rarely)
-Message-ID: <Z-VPaqDKMo2RR61w@kernel.org>
-References: <D7FSS837QLNR.5XOU66J6FBTU@kernel.org>
- <Z5yLYVBn6inIH8cG@kitsune.suse.cz>
- <D7G6P7W7AY65.257WPBC8I3HAF@kernel.org>
- <Z5zJ7R6vDU4h9iDk@kitsune.suse.cz>
- <D7GFCNGDK7S6.1X0KPPHF1TXBO@kernel.org>
- <Z50IKdYe42_n2B0b@kitsune.suse.cz>
- <D7GIBDO5KJMD.118CQO10LJ79Y@kernel.org>
- <Z6Nm7Y8TFF8YG56Z@kitsune.suse.cz>
- <Z6N10NQY75hpX0Ed@earth.li>
- <Z-VLTKkB_-PoNAly@kitsune.suse.cz>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: linux-integrity@vger.kernel.org, Sumit Garg <sumit.garg@kernel.org>,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: Make chip->{status,cancel,req_canceled} opt
+Message-ID: <Z-VRWy8jLkA0cpow@kernel.org>
+References: <20250326161838.123606-1-jarkko@kernel.org>
+ <exzxzomw7wcobjuoje37x6i2ta54xzx5ho74t3atd7g74xltlb@ymw2pn3yo27b>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z-VLTKkB_-PoNAly@kitsune.suse.cz>
+In-Reply-To: <exzxzomw7wcobjuoje37x6i2ta54xzx5ho74t3atd7g74xltlb@ymw2pn3yo27b>
 
-On Thu, Mar 27, 2025 at 01:57:48PM +0100, Michal Suchánek wrote:
-> This does not address the other problem that when the rimeout triggers
-> on something like LOAD CONTEXT then the kernel and the TPM don't agree
-> on what the state of the context is.
+On Thu, Mar 27, 2025 at 10:58:00AM +0100, Stefano Garzarella wrote:
+> On Wed, Mar 26, 2025 at 06:18:38PM +0200, Jarkko Sakkinen wrote:
+> > From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+> > 
+> > tpm_ftpm_tee does not require chip->status, chip->cancel and
+> > chip->req_canceled. Make them optional.
+> > 
+> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+> > ---
+> > drivers/char/tpm/tpm-interface.c | 31 ++++++++++++++++++++++++++++---
+> > drivers/char/tpm/tpm_ftpm_tee.c  | 20 --------------------
+> > 2 files changed, 28 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> > index f62f7871edbd..10ba47a882d8 100644
+> > --- a/drivers/char/tpm/tpm-interface.c
+> > +++ b/drivers/char/tpm/tpm-interface.c
+> > @@ -58,6 +58,30 @@ unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
+> > }
+> > EXPORT_SYMBOL_GPL(tpm_calc_ordinal_duration);
+> > 
+> > +static void tpm_chip_cancel(struct tpm_chip *chip)
+> > +{
+> > +	if (!chip->ops->cancel)
+> > +		return;
+> > +
+> > +	chip->ops->cancel(chip);
+> > +}
+> > +
+> > +static u8 tpm_chip_status(struct tpm_chip *chip)
+> > +{
+> > +	if (!chip->ops->status)
+> > +		return 0;
+> > +
+> > +	return chip->ops->status(chip);
+> > +}
+> > +
+> > +static bool tpm_chip_req_canceled(struct tpm_chip *chip, u8 status)
+> > +{
+> > +	if (!chip->ops->req_canceled)
+> > +		return false;
+> > +
+> > +	return chip->ops->req_canceled(chip, status);
+> > +}
+> > +
+> > static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+> > {
+> > 	struct tpm_header *header = buf;
+> > @@ -65,6 +89,7 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+> > 	ssize_t len = 0;
+> > 	u32 count, ordinal;
+> > 	unsigned long stop;
+> > +	u8 status;
+> 
+> Why move `status` out of the do/while block?
 
-In the case of tpm2-sessions, and in-kernel callers, we could try to
-improve the situation in some of the edge cases.
-
-Out-of-my sleeve ideas:
-
-1. E.g., tpm2_load_null() could potentially have retries instead of
-   single trial.
-2. Perhaps timeout in tpm_tis should be adaptive? It could be by
-   defaault 2s and would grow on trials.
+I'm not a huge fan of stack allocations inside blocks, unless there is
+a particular reason to do so.
 
 
 > 
-> Thanks
+> > 
+> > 	if (bufsiz < TPM_HEADER_SIZE)
+> > 		return -EINVAL;
+> > @@ -104,12 +129,12 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+> > 
 > 
-> Michal
+> What about doing an early return avoiding also calling
+> tpm_calc_ordinal_duration()?
+> 
+> I mean something like this:
+> 
+>                 rc = 0;
+>         }
+> 
+> -       if (chip->flags & TPM_CHIP_FLAG_IRQ)
+> +       if (!chip->ops->status || chip->flags & TPM_CHIP_FLAG_IRQ)
+>                 goto out_recv;
+> 
+> 
+> Anyway, those are small things, the patch LGTM and it's a great cleanup
+> for ftpm and the svsm driver I'm developing!
+
+If you refined send() and had that the sync flag, this would become:
+
+	if (chip->flags & (TPM_CHIP_FLAG_IRQ | TPM_CHIP_FLAG_SYNC))
+		goto out_recv;
+
+> 
+> 
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+
+Thank you.
+
+
+> 
+> 
+> > 	stop = jiffies + tpm_calc_ordinal_duration(chip, ordinal);
+> > 	do {
+> > -		u8 status = chip->ops->status(chip);
+> > +		status = tpm_chip_status(chip);
+> > 		if ((status & chip->ops->req_complete_mask) ==
+> > 		    chip->ops->req_complete_val)
+> > 			goto out_recv;
+> > 
+> > -		if (chip->ops->req_canceled(chip, status)) {
+> > +		if (tpm_chip_req_canceled(chip, status)) {
+> > 			dev_err(&chip->dev, "Operation Canceled\n");
+> > 			return -ECANCELED;
+> > 		}
+> > @@ -118,7 +143,7 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+> > 		rmb();
+> > 	} while (time_before(jiffies, stop));
+> > 
+> > -	chip->ops->cancel(chip);
+> > +	tpm_chip_cancel(chip);
+> > 	dev_err(&chip->dev, "Operation Timed out\n");
+> > 	return -ETIME;
+> > 
+> > diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> > index 8d9209dfc384..53ba28ccd5d3 100644
+> > --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> > +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> > @@ -164,30 +164,10 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len)
+> > 	return 0;
+> > }
+> > 
+> > -static void ftpm_tee_tpm_op_cancel(struct tpm_chip *chip)
+> > -{
+> > -	/* not supported */
+> > -}
+> > -
+> > -static u8 ftpm_tee_tpm_op_status(struct tpm_chip *chip)
+> > -{
+> > -	return 0;
+> > -}
+> > -
+> > -static bool ftpm_tee_tpm_req_canceled(struct tpm_chip *chip, u8 status)
+> > -{
+> > -	return false;
+> > -}
+> > -
+> > static const struct tpm_class_ops ftpm_tee_tpm_ops = {
+> > 	.flags = TPM_OPS_AUTO_STARTUP,
+> > 	.recv = ftpm_tee_tpm_op_recv,
+> > 	.send = ftpm_tee_tpm_op_send,
+> > -	.cancel = ftpm_tee_tpm_op_cancel,
+> > -	.status = ftpm_tee_tpm_op_status,
+> > -	.req_complete_mask = 0,
+> > -	.req_complete_val = 0,
+> > -	.req_canceled = ftpm_tee_tpm_req_canceled,
+> > };
+> > 
+> > /*
+> > -- 
+> > 2.39.5
+> > 
+> 
 
 BR, Jarkko
 
