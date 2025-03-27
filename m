@@ -1,219 +1,162 @@
-Return-Path: <linux-integrity+bounces-5470-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5471-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85044A732CA
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 13:58:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0C75A732F6
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 14:06:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12BF53ACCFF
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 12:57:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F7F83B7501
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 13:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED58E2101BD;
-	Thu, 27 Mar 2025 12:57:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2651215769;
+	Thu, 27 Mar 2025 13:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="RTwDqNfL";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/6ivKerz";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="b9R5UEEn";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="53XmRAR7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ey+q4tdY"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09CF14F9F4
-	for <linux-integrity@vger.kernel.org>; Thu, 27 Mar 2025 12:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFA12153D5;
+	Thu, 27 Mar 2025 13:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743080273; cv=none; b=LAyqDcBJHqQYWztlMk9Z3cXP+TXU2tIfFLmmcpd59NiSKDGOP+9NC9D7tvE/co08+plwHeyeckvBjDkikL8InIsgr4jno7kiV6phSZ1tg6EuL1VaFCM2vIdJn9Z2GGEJTcX9426k2/DFgD1C2qAa3+AQn7ZVRXrkK3Mk5xvM/hA=
+	t=1743080556; cv=none; b=Pz7NztI9YdQvwDQyxEjLxuFYAiq7Sh2491XqQRzeBjIChr0E628XANK7E76a4DNyyogbGWXsyuVKoElMmF7W9Bj0EdnEtEC9f0yu42KOXSvpP6xgRGO4eKFMxZI+bGIZLLsjQmpsofFR6LERZ8i1Sm9fNBjcnsENG/7UEshItiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743080273; c=relaxed/simple;
-	bh=hybkWRZXLFZfzoQQLGtF8TSD3ipp3xROXoClXD4fG4I=;
+	s=arc-20240116; t=1743080556; c=relaxed/simple;
+	bh=Tdpl66XLAOtA5XmignFqms9SJMURQinLKq3XqPhPQTU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZAKDEyUXwCApcQ4ryo9h3XLgr7EMYo+rWxx42ZpVGNWTBJL1ouRlpzjUjq879h6aDp2/bTmTG08MKySA4CoVU716z4YYuW3+xPIvYwlyqRSlBn6jWIqwjAVOdXq51+f3EUbnmY5j3d8lS7pJXynBR6DpFBw9NonDNVMFzWv2InE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=RTwDqNfL; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/6ivKerz; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=b9R5UEEn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=53XmRAR7; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id D6A8B2116C;
-	Thu, 27 Mar 2025 12:57:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1743080270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3U8z99LWWqv5z6n0QmJgJpdMz3H6E0bET54Z68ZcmnU=;
-	b=RTwDqNfLPyiX4g60eGHrfRzBZ8e0kB7vDqM7x6wnIS3UoCP4YX6fL6ZNt87Jvf2ZKD+HpZ
-	4/7wxvia0PCtmzfFF+HR7MgWUBaLXxCvydJNDO7V7XF/zd+oajCLfmQhu39litq10zpU4i
-	Sb4hisfb0cTh4yZU3wUzBUV3cw+mJmA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1743080270;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3U8z99LWWqv5z6n0QmJgJpdMz3H6E0bET54Z68ZcmnU=;
-	b=/6ivKerz+AXNejPn8lRn64P46/l9bJeNviaqcGBYrG3/3zEZwH6EO7/qauio69b4I4bccA
-	u2RTjkwS3ePk72DQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1743080269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3U8z99LWWqv5z6n0QmJgJpdMz3H6E0bET54Z68ZcmnU=;
-	b=b9R5UEEn9JImzY7jpdXHKlpZjmpTUkQ65HNPaV01KshGMV/tsjzKBUuAUQilpXh86PkLcL
-	oUdL9MKTHW/OD/0YqM9IevYdXsw9fz/4D51y9cm/Z2lmUep6pccmI6p0LwQc2Wh61PkjxJ
-	tShpOUqJEB4JgtcD+sLm13B7nVae28k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1743080269;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3U8z99LWWqv5z6n0QmJgJpdMz3H6E0bET54Z68ZcmnU=;
-	b=53XmRAR7sWLUdaevsUDHDal0PMjvQcmQMbFvswGaXzacWW4svrZ8emxN3i9x5OTFS+dTgp
-	4pK2fL+bZy3vsfBg==
-Date: Thu, 27 Mar 2025 13:57:48 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Jonathan McDowell <noodles@earth.li>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Subject: Re: TPM operation times out (very rarely)
-Message-ID: <Z-VLTKkB_-PoNAly@kitsune.suse.cz>
-References: <Z5pRKcZKc3FUzP8Q@earth.li>
- <D7FSS837QLNR.5XOU66J6FBTU@kernel.org>
- <Z5yLYVBn6inIH8cG@kitsune.suse.cz>
- <D7G6P7W7AY65.257WPBC8I3HAF@kernel.org>
- <Z5zJ7R6vDU4h9iDk@kitsune.suse.cz>
- <D7GFCNGDK7S6.1X0KPPHF1TXBO@kernel.org>
- <Z50IKdYe42_n2B0b@kitsune.suse.cz>
- <D7GIBDO5KJMD.118CQO10LJ79Y@kernel.org>
- <Z6Nm7Y8TFF8YG56Z@kitsune.suse.cz>
- <Z6N10NQY75hpX0Ed@earth.li>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CqhRRhGSPNyE2Tgf8yxm4yDHqlgYdc7ngL/+ro+sq5j1d564dESM5x4vPamvBzmh3En3IoAdjI8YVOO5vvvhp6CCYzKe4w3WLMBemGw5mclTf0D0uV3FfMVfd3lcV/Tio+X+yQGvUN3HEiopqWHGmtY25SDTorQKcVeeGw28GFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ey+q4tdY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93061C4CEE8;
+	Thu, 27 Mar 2025 13:02:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743080555;
+	bh=Tdpl66XLAOtA5XmignFqms9SJMURQinLKq3XqPhPQTU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ey+q4tdYLa7txymgBaZV0kKiZE44zdPHKstItEEk5RPhQuVLGAZwa9v4R1fmngqVO
+	 ijtDiwdZpnarcLF5rmeU8lJStrUFhNvMrzfoLwB4EXniQd/MAFRpYf0prlyo6e6UEl
+	 74uqPC3bl7HWSQjrEdw/IAlXJuq5Y7mPwv24zodD/v1IZ3/Cf1mmMeW//SQLzAz0QJ
+	 uxrIWyn/at0pMUfZjL80/lVPSTI6OkopLt84u+kAbhRzbBlQc8S9bGYE7JaPyZnuBe
+	 nJuStxhkMrE0R+LRpQFM7WUPnI63UWjhkACqRCDlyBFG617M3INQO3IPYBQGGfvs/C
+	 QfFj18jRf2BAA==
+Date: Thu, 27 Mar 2025 15:02:32 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	Sumit Garg <sumit.garg@kernel.org>
+Subject: Re: [PATCH 1/2] tpm: add send_recv() op in tpm_class_ops
+Message-ID: <Z-VMWl9UDx5ZY1qK@kernel.org>
+References: <20250320152433.144083-1-sgarzare@redhat.com>
+ <20250320152433.144083-2-sgarzare@redhat.com>
+ <Z-QxH7aDjlixl2gp@kernel.org>
+ <eidmcwgppc4uobyupns4hzqz562wguapiocpyyqq67j5h26qbl@muhbnfxzqvqt>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z6N10NQY75hpX0Ed@earth.li>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.998];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCPT_COUNT_THREE(0.00)[3]
-X-Spam-Score: -4.30
-X-Spam-Flag: NO
+In-Reply-To: <eidmcwgppc4uobyupns4hzqz562wguapiocpyyqq67j5h26qbl@muhbnfxzqvqt>
 
-Hello,
-
-On Wed, Feb 05, 2025 at 02:29:36PM +0000, Jonathan McDowell wrote:
-> On Wed, Feb 05, 2025 at 02:26:05PM +0100, Michal Suchánek wrote:
-> > On Fri, Jan 31, 2025 at 09:31:30PM +0200, Jarkko Sakkinen wrote:
-> > > On Fri Jan 31, 2025 at 7:28 PM EET, Michal Suchánek wrote:
-> > > > On Fri, Jan 31, 2025 at 07:12:06PM +0200, Jarkko Sakkinen wrote:
-> > > > > On Fri Jan 31, 2025 at 3:02 PM EET, Michal Suchánek wrote:
-> > > > > > It looks like the timeout_b is used exclusively as the ready timeout *),
-> > > > > > with various sources of the value depending on chip type.
-> > > > > >
-> > > > > > Then increasing it should not cause any problem other than the kernel
-> > > > > > waiting longer when the TPM chip is really stuck.
-> > > > > >
-> > > > > > * There is one instance of use of timeout_b for TPM_STS_VALID in
-> > > > > > st33zp24_pm_resume.
-> > > > > 
-> > > > > Possible for you to give a shot for patch and try it out for a while?
-> > > > > I'm fine with 2x, or even 4x in this case.
-> > > >
-> > > > I will see what I can do. It will definitely take a while.
-> > > >
-> > > > How would you like to multiply it?
-> > > >
-> > > > At the sime the timeout_b is assigned, or at the time it's used?
-> > > >
-> > > > Any specific patch that you have in mind?
+On Thu, Mar 27, 2025 at 10:48:17AM +0100, Stefano Garzarella wrote:
+> On Wed, Mar 26, 2025 at 06:53:51PM +0200, Jarkko Sakkinen wrote:
+> > On Thu, Mar 20, 2025 at 04:24:32PM +0100, Stefano Garzarella wrote:
+> > > From: Stefano Garzarella <sgarzare@redhat.com>
 > > > 
-> > > I'll think about this a bit and send a patch with RFC tag. Might take
-> > > to late next week.
+> > > Some devices do not support interrupts and provide a single operation
+> > > to send the command and receive the response on the same buffer.
+> > > 
+> > > To support this scenario, a driver could set TPM_CHIP_FLAG_IRQ in the
+> > > chip's flags to get recv() to be called immediately after send() in
+> > > tpm_try_transmit(), or it needs to implement .status() to return 0,
+> > > and set both .req_complete_mask and .req_complete_val to 0.
+> > > 
+> > > In order to simplify these drivers and avoid temporary buffers to be
 > > 
-> > The ready timeout is not the only one exceeded:
+> > Simplification can be addressed with no callback changes:
 > > 
-> > > Jan 29 19:01:55 localhost kernel: tpm tpm0: tpm_tis_send_data: 357: ready: Timed out (2232 of 2000 ms)
-> > > Jan 29 19:01:55 localhost kernel: tpm tpm0: tpm_tis_send_data: 357: ready: Took (2232 of 2000 ms)
-> > > Jan 30 09:08:20 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: ready: Timed out (2228 of 2000 ms)
-> > > Jan 30 09:08:20 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: ready: Took (2228 of 2000 ms)
-> > > Jan 30 14:26:16 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Timed out (540 of 200 ms)
-> > > Jan 30 14:26:16 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Took (540 of 200 ms)
-> > > Jan 30 23:25:13 localhost kernel: tpm tpm0: tpm_tis_send_data: 354: stat: Timed out (2224 of 200 ms)
-> > > Jan 30 23:25:13 localhost kernel: tpm tpm0: tpm_tis_send_data: 354: stat: Took (2224 of 200 ms)
-> > > Feb 01 05:25:33 localhost kernel: tpm tpm0: tpm_tis_send_data: 357: ready: Timed out (2228 of 2000 ms)
-> > > Feb 01 05:25:33 localhost kernel: tpm tpm0: tpm_tis_send_data: 357: ready: Took (2228 of 2000 ms)
-> > > Feb 01 07:02:53 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Timed out (556 of 200 ms)
-> > > Feb 01 07:02:53 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Took (556 of 200 ms)
-> > > Feb 01 09:26:22 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Timed out (540 of 200 ms)
-> > > Feb 01 09:26:22 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Took (540 of 200 ms)
-> > > Feb 02 02:45:35 localhost kernel: tpm tpm0: tpm_tis_send_data: 379: stat: Timed out (272 of 200 ms)
-> > > Feb 02 02:45:35 localhost kernel: tpm tpm0: tpm_tis_send_data: 379: stat: Took (272 of 200 ms)
-> > > Feb 02 03:40:04 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Timed out (536 of 200 ms)
-> > > Feb 02 03:40:04 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Took (536 of 200 ms)
-> > > Feb 02 04:09:50 localhost kernel: tpm tpm0: tpm_tis_send_data: 357: ready: Timed out (2236 of 2000 ms)
-> > > Feb 02 04:09:50 localhost kernel: tpm tpm0: tpm_tis_send_data: 357: ready: Took (2236 of 2000 ms)
-> > > Feb 02 09:57:41 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Timed out (540 of 200 ms)
-> > > Feb 02 09:57:41 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Took (540 of 200 ms)
-> > > Feb 02 10:59:00 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Timed out (536 of 200 ms)
-> > > Feb 02 10:59:00 localhost kernel: tpm tpm0: tpm_tis_send_data: 353: stat: Took (536 of 200 ms)
-> > > Feb 03 03:58:09 localhost kernel: tpm tpm0: tpm_tis_send_data: 354: stat: Timed out (540 of 200 ms)
-> > > Feb 03 03:58:09 localhost kernel: tpm tpm0: tpm_tis_send_data: 354: stat: Took (540 of 200 ms)
+> > https://lore.kernel.org/linux-integrity/20250326161838.123606-1-jarkko@kernel.org/T/#u
+> > 
+> > I also noticed that tpm_ftpm_tee initalized req_complete_mask and
+> > req_complete_val explictly while they would be already implicitly
+> > zero.
+> > 
+> > So it reduces this just a matter of getting rid off the extra
+> > buffer.
+> 
+> Yep, as mentioned I think your patch should go either way. So here I can
+> rephrase and put the emphasis on the temporary buffer and the driver
+> simplification.
 
-Another new failure:
+Yes. Removing extra copy is a goal that can only make sense!
 
-Mar 25 23:06:20 localhost kernel: tpm tpm0: tpm_tis_send_data: 305: valid: Timed out (212 of 200 ms)
-Mar 25 23:06:20 localhost kernel: tpm tpm0: tpm_tis_send_data: 305: valid: Took (212 of 200 ms)
+> 
+> > 
+> > > used between the .send() and .recv() callbacks, introduce a new callback
+> > > send_recv(). If that callback is defined, it is called in
+> > > tpm_try_transmit() to send the command and receive the response on
+> > > the same buffer in a single call.
+> > 
+> > I don't find anything in the commit message addressing buf_len an
+> > cmd_len (vs "just len"). Why two lengths are required?
+> > 
+> > Not completely rejecting but this explanation is incomplete.
+> 
+> Right.
+> 
+> The same buffer is used as input and output.
+> For input, the buffer contains the command (cmd_len) but the driver can use
+> the entire buffer for output (buf_len).
+> It's basically the same as in tpm_try_transmit(), but we avoid having to
+> parse the header in each driver since we already do that in
+> tpm_try_transmit().
+> 
+> In summary cmd_len = count = be32_to_cpu(header->length).
+> 
+> I admit I'm not good with names, would you prefer a different name or is it
+> okay to explain it better in the commit?
+> 
+> My idea is to add this:
+> 
+>     `buf` is used as input and output. It contains the command
+>     (`cmd_len` bytes) as input. The driver will be able to use the
+>     entire buffer (`buf_len` bytes) for the response as output.
+>     Passing `cmd_len` is an optimization to avoid having to access the
+>     command header again in each driver and check it.
 
-which is CREATE PRIMARY, and happens on
+This makes more sense. Maybe we could name them as buf_size and
+cmd_len to further make dead obvious the use and purpose.
 
- tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1A, rev-id 16)
+> 
+> WDYT?
 
-TPM Device
-        Vendor ID: 
-        Specification Version: 2.0
-        Firmware Revision: 5.63
-        Description: INFINEON
-        Characteristics:
-                Family configurable via platform software support
-        OEM-specific Information: 0x00000000
+I just want to get this done right if it is done at all, so here's
+one more suggestion:
 
-With this we have ready timoeout which is 2000ms but the TPM takes
-up to 2236ms, stat timeout which is 200ms and the TPM takes up to
-2224ms, and valid timeout which is 200 ms and the TPM takes up to 212ms.
+1. Add TPM_CHIP_FLAG_SYNC
+2. Update send() parameters.
 
-Given that I think it makes sense to replace all these timeouts with one
-timeout that is something like 4 or 5s.
+You don't have to do anything smart with the new parameter other than
+add it to leaf drivers. It makes the first patch bit more involved but
+this way we end up keeping the callback interface as simple as it was.
 
-This does not address the other problem that when the rimeout triggers
-on something like LOAD CONTEXT then the kernel and the TPM don't agree
-on what the state of the context is.
+I'm also thinking that for async case do we actually need all those
+complicated masks etc. or could we simplify that side but it is 
+definitely out-of-scope for this patch set (no need to worry about
+this).
 
-Thanks
+> 
+> Thanks,
+> Stefano
+> 
+> 
 
-Michal
+BR, Jarkko
 
