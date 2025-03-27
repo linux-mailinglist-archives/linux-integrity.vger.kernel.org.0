@@ -1,136 +1,132 @@
-Return-Path: <linux-integrity+bounces-5485-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5486-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E161AA7365C
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 17:09:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25144A736D7
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 17:30:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F88A1888CCB
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 16:09:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A7F916D1C8
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 16:29:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D816B1A238D;
-	Thu, 27 Mar 2025 16:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="T1QWWaMg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9160919C546;
+	Thu, 27 Mar 2025 16:29:38 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F1618BB8E
-	for <linux-integrity@vger.kernel.org>; Thu, 27 Mar 2025 16:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5D32F3B;
+	Thu, 27 Mar 2025 16:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743091769; cv=none; b=qSbtezxIAXOuBGEP2hv8nx3KWSSsfzeeKcUiZK0eb0u0Wjdp/AfKa3O2CoL8bHN+vNdRvJ/HHhygy4xFDVmn5sAY9ZmgpF6s7yZFmpLgTK+NXIIIBcKI7FYtCAJRe25QGPL/HabYUXAv0Z7EGOtwDSxS15pd/EM0PXGJyCnb0ao=
+	t=1743092978; cv=none; b=AYNx8YTkoacqNsnq+/dGK0YxNNkkDBheBwjuYcberclrRVisUwuvKTwuRh9i5078oVbxJMRTXU9Tx9dRzMF57EGmwFkDK0BNlRCuUHx5HHRBQi4B5xtbVgNed+vY9DKKry65bIm++cw7jqu/LtByKaI1A3frt7jQmUSzdjzQonE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743091769; c=relaxed/simple;
-	bh=Iv1t8vhll1NnfJAVcvohsPup3KoMa8DNYAHImENq+hY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UAjwqB4129z0vaE8cJbr+H3EzzNiPG6hgOvBgceTHYyDdaPQGDMS4d5EzTMSL/V2fn18QaX2wox1JF2OYKEepP/TC0DdoSMJXM6wFBBCIfUaM6DXqGS7sowZ/NvYYBRFCTwfsShpJ3afHNCu/0InQvEhKtI5kyYKF5q/fU4ioBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=T1QWWaMg; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-85e1b1f08a5so33102539f.2
-        for <linux-integrity@vger.kernel.org>; Thu, 27 Mar 2025 09:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1743091767; x=1743696567; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lc9tpoqy6nWDYPuOoCnxwnYnaP2wtDpP4dKKDjWcgOM=;
-        b=T1QWWaMg861Yv9Jw3i3+lACFSA3Qz3b5nG8s0Ze5Fmc5zuzynrs/1ZIMVErAfvuE8R
-         Y6ShHmLkiSJ8VitH1BSIWLgNI/f7ZBqTrjHC78/owDZ9iTAsWlh/3CMNKkDC77xdxR4S
-         Ls11a8f3CuTCVJh2usKWn4hV2b62nuKKxhu6C6aMAOgYGe+vL5P+bHxn6FqX2O1eEvuN
-         40I44yXX26RCHcjNmpY6S9TgxOYWLM2dOX+b3cLqdqrgCNQq3kiesf87YyvJo0O44a6/
-         deXJz0G1W2l5Q0URaedxSgNyrT/tcVY4DmONC6aWvjaLgLCUDNaoXvHPanV8k+GgrEYv
-         X3YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743091767; x=1743696567;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lc9tpoqy6nWDYPuOoCnxwnYnaP2wtDpP4dKKDjWcgOM=;
-        b=V7Tgkv/vPsrS/eJsGbRQo0mFxpsaAbJB0rVtBQ9h6sFLywX/JmpCdZc3YHCkALq9MA
-         O5SYZkxKO5oEVQsar3CbeHNr0WkGF924FibiXMesOBsk2gBZtWGYRUWE6WY3gho11yLy
-         9SzAX2AFl/Ua6ImlQ8fOpOy4TWdcfdSh9x464CKbTNByn5pfzbMMJ1uObYGvsdbcBZks
-         FtJzooTd2HoF0Wq4xz6YoQOJ9OzhriMNBiWBcKRkU2x/Wfcbd/wLtuumNuRDrS6kB9PM
-         kTh6m1fV0viO1RBbpwGAja8crjKXCd93mWQDp/6hwt/Rn9sGZ4sxbZxsUApDGMj7XTPb
-         6P2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVytk+O/q4ppcDyWtBnM8v+h/z8kfwGbLk/KShRvd9/sUmrOicd2RwU3vCAXe+g5NdTlFkK4mgrZUgAkLBwdGU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3QvcDxfAOB74Tn8qIiivACqXMi/KapRgqnyy/kWDoERXc4j2A
-	cOVo+exTvrfNzYdiZCDfO/8lKlkgQkfvuZZBwsaQGnWEUyiMKr6firS+IeaOgnA=
-X-Gm-Gg: ASbGncviXwwD3c6JWgisS+mw6bgKZdWd7w2X9UGQ8fITr4N1LX681Qd2WWSCLDnw5tQ
-	O3+1dETlyBMAhX9xZqNNa6lXcMVDRj4K3MjQoX2uteXd9zatD5matsoz/k3ez5JCGSRszD2zpUx
-	WNrqkMZ8HAazjWeg4D1HZyaXdgPdgRW7xdB6py+UJtDTY33Pt7zRjpouugdXVIKWwwlhiT/BRS4
-	vfL5obL4LiyQzsBE5ITsL9Dkm/HCV1ZeCMN3urDT8PUCIbFslf6SR4OlyURKklgTJrsdB7d5Bo/
-	6PWA8qt12wywsVHN9OBH0TLwF0+hmXUxSFzLz44=
-X-Google-Smtp-Source: AGHT+IFIyIjqN7KRfbbaU5gWpkJAPN98hiWDLVUjmx28XhdIkaVpn/ZdT5fnt+0q+a+MgIWRytnq6A==
-X-Received: by 2002:a05:6602:3798:b0:85d:f74b:f8a8 with SMTP id ca18e2360f4ac-85e820551afmr551444139f.2.1743091766522;
-        Thu, 27 Mar 2025 09:09:26 -0700 (PDT)
-Received: from CMGLRV3.. ([2a09:bac5:8152:1b37::2b6:1])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-85e8ff7f50asm1804639f.9.2025.03.27.09.09.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Mar 2025 09:09:25 -0700 (PDT)
-From: Frederick Lawler <fred@cloudflare.com>
-To: Mimi Zohar <zohar@linux.ibm.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Cc: Eric Snowberg <eric.snowberg@oracle.com>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-ima-devel@lists.sourceforge.net,
-	linux-integrity@vger.kernel.org,
-	linux-ima-user@lists.sourceforge.net,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@cloudfalre.com,
-	Frederick Lawler <fred@cloudflare.com>
-Subject: [PATCH v3] ima: process_measurement() needlessly takes inode_lock() on MAY_READ
-Date: Thu, 27 Mar 2025 11:09:11 -0500
-Message-ID: <20250327160916.279090-1-fred@cloudflare.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1743092978; c=relaxed/simple;
+	bh=smNazMYrmLP7FOK1l8FsdTynBL+oU8j8CFtel+Zj/W8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=O+Bvn85w59zJM6EbNE253qAvNeS0uHxXK4Xf/9BkE04v/fD7sx5sWC0MBqlIWaTnIilAq12Sm0zxnAUXXd75aXjvxYXQEMEm0tywIwoVHEP48/dkQV7m29xhv7zxG6huZhWjLAQI8xiQ5GAy26KvsXnMF2hFmnE8jdIno1WmVnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4ZNpy55Fvsz1HCHG;
+	Fri, 28 Mar 2025 00:29:01 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id D062514036E;
+	Fri, 28 Mar 2025 00:29:26 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwBXC97dfOVnKPXwBA--.34744S2;
+	Thu, 27 Mar 2025 17:29:26 +0100 (CET)
+Message-ID: <287838024e2bbac3d3b17a8fdf4da2bf6996fa23.camel@huaweicloud.com>
+Subject: Re: [PATCH v3] ima: process_measurement() needlessly takes
+ inode_lock() on MAY_READ
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Frederick Lawler <fred@cloudflare.com>, Mimi Zohar
+ <zohar@linux.ibm.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Eric Snowberg <eric.snowberg@oracle.com>, "Serge E. Hallyn"
+	 <serge@hallyn.com>, linux-ima-devel@lists.sourceforge.net, 
+	linux-integrity@vger.kernel.org, linux-ima-user@lists.sourceforge.net, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@cloudfalre.com
+Date: Thu, 27 Mar 2025 17:29:14 +0100
+In-Reply-To: <20250327160916.279090-1-fred@cloudflare.com>
+References: <20250327160916.279090-1-fred@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwBXC97dfOVnKPXwBA--.34744S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF47Jw1rWw4DGr4rJF4ktFb_yoW8Wr18pa
+	n5tay8CF1UKFyjkF97Ga9FvanYg3yxKr18G3y5ZF10k3Zavr1v9Fn8K3Wj9ryfGr9Yya4a
+	vr4YgrW5Za1qyFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABGfk+N0HDgAAsq
 
-On IMA policy update, if a measure rule exists in the policy,
-IMA_MEASURE is set for ima_policy_flags which makes the violation_check
-variable always true. Coupled with a no-action on MAY_READ for a
-FILE_CHECK call, we're always taking the inode_lock().
+On Thu, 2025-03-27 at 11:09 -0500, Frederick Lawler wrote:
+> On IMA policy update, if a measure rule exists in the policy,
+> IMA_MEASURE is set for ima_policy_flags which makes the violation_check
+> variable always true. Coupled with a no-action on MAY_READ for a
+> FILE_CHECK call, we're always taking the inode_lock().
+>=20
+> This becomes a performance problem for extremely heavy read-only workload=
+s.
+> Therefore, prevent this only in the case there's no action to be taken.
+>=20
+> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
 
-This becomes a performance problem for extremely heavy read-only workloads.
-Therefore, prevent this only in the case there's no action to be taken.
+Thanks Frederick!
 
-Signed-off-by: Frederick Lawler <fred@cloudflare.com>
----
-Changes since v2:
-- s/mask & MAY_WRITE/file->f_mode & FMODE_WRITE/
+Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Changes since v1:
-- Add MAY_WRITE && action check to violation_check to avoid MAY_READ
-  only situations
----
- security/integrity/ima/ima_main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Roberto
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 9b87556b03a7..bc453f5a7531 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -237,7 +237,9 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 				&allowed_algos);
- 	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK ||
- 			    func == MMAP_CHECK_REQPROT) &&
--			   (ima_policy_flag & IMA_MEASURE));
-+			   (ima_policy_flag & IMA_MEASURE) &&
-+			   ((action & IMA_MEASURE) ||
-+			    (file->f_mode & FMODE_WRITE)));
- 	if (!action && !violation_check)
- 		return 0;
- 
--- 
-2.43.0
+> ---
+> Changes since v2:
+> - s/mask & MAY_WRITE/file->f_mode & FMODE_WRITE/
+>=20
+> Changes since v1:
+> - Add MAY_WRITE && action check to violation_check to avoid MAY_READ
+>   only situations
+> ---
+>  security/integrity/ima/ima_main.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
+ma_main.c
+> index 9b87556b03a7..bc453f5a7531 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -237,7 +237,9 @@ static int process_measurement(struct file *file, con=
+st struct cred *cred,
+>  				&allowed_algos);
+>  	violation_check =3D ((func =3D=3D FILE_CHECK || func =3D=3D MMAP_CHECK =
+||
+>  			    func =3D=3D MMAP_CHECK_REQPROT) &&
+> -			   (ima_policy_flag & IMA_MEASURE));
+> +			   (ima_policy_flag & IMA_MEASURE) &&
+> +			   ((action & IMA_MEASURE) ||
+> +			    (file->f_mode & FMODE_WRITE)));
+>  	if (!action && !violation_check)
+>  		return 0;
+> =20
 
 
