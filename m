@@ -1,141 +1,136 @@
-Return-Path: <linux-integrity+bounces-5484-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5485-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016C4A735C8
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 16:40:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E161AA7365C
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 17:09:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48FFC3AE5ED
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 15:38:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F88A1888CCB
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Mar 2025 16:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7580018FC67;
-	Thu, 27 Mar 2025 15:38:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D816B1A238D;
+	Thu, 27 Mar 2025 16:09:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rSOBXBZi"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="T1QWWaMg"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4675412C7FD;
-	Thu, 27 Mar 2025 15:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F1618BB8E
+	for <linux-integrity@vger.kernel.org>; Thu, 27 Mar 2025 16:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743089907; cv=none; b=sKAmCUzLbo4+XKDlNyRzkpp3ReXkzZPb9NwNYOyRcx8dc7YUzM1tlWZiNSx+8HD5I4ofjcRU6u8J8TH4AeAQpbaNaYPw5ZaGr3V7Ap/HStSSfiH5yB5112BARG3VFIN4Yctv9HUT0tl56mTtCfn2+1FQfjsVsGBIKT8P4nVHjvU=
+	t=1743091769; cv=none; b=qSbtezxIAXOuBGEP2hv8nx3KWSSsfzeeKcUiZK0eb0u0Wjdp/AfKa3O2CoL8bHN+vNdRvJ/HHhygy4xFDVmn5sAY9ZmgpF6s7yZFmpLgTK+NXIIIBcKI7FYtCAJRe25QGPL/HabYUXAv0Z7EGOtwDSxS15pd/EM0PXGJyCnb0ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743089907; c=relaxed/simple;
-	bh=2lPC7oxBDrMFBDdkgZJfZHAesgaYsbLAsWow2pzJtmU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From; b=YoX3RHyKBtgZXyBOX84Z8ZUoGVC+GWAdTnhktsK6izmzG2OhlB3XMdFOFN3mdJB8A1+VLi3SGMNqWz7OB15iMMhuX36L/Klg7/AOdh872keqW7KarrZK+0VYHumaiCf+nuM+mpXcCqVx+CQl1lsYIifRzg0Via1p1I4TznPZezc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rSOBXBZi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32035C4CEDD;
-	Thu, 27 Mar 2025 15:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743089906;
-	bh=2lPC7oxBDrMFBDdkgZJfZHAesgaYsbLAsWow2pzJtmU=;
-	h=Date:To:Cc:Subject:From:From;
-	b=rSOBXBZiLQW596sT/QjemQ4L4KkSoiiI0y1klLgJCcDmoIRvZhVJc8vkNQPv5ejkI
-	 DtR9m/4U+GlkKEXP4ebT65PoIFRAOjYf47hbOmLgZzIxlzjQlfpmhWPhOYPaVNVWF1
-	 TDt+A6+4Afwk3pMTPgDNB0mqtRmunmRY2mhAV766Wk5jhIVc9PbMJLK49V4FIn1ww/
-	 r/4OTokK38cvgjFm0XJpkvEeF/VFdqKBbWP+myZgk1OagkjmB5Gvq6hwCJYFi8Gmlv
-	 Sz7pqdmNLBJsOWwBZtB8DIqI4dH9rOxdxZ7O41sbWjf+coRhDTzp4zoA+9AD3V7V/9
-	 z6TGKavoPPNOQ==
+	s=arc-20240116; t=1743091769; c=relaxed/simple;
+	bh=Iv1t8vhll1NnfJAVcvohsPup3KoMa8DNYAHImENq+hY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UAjwqB4129z0vaE8cJbr+H3EzzNiPG6hgOvBgceTHYyDdaPQGDMS4d5EzTMSL/V2fn18QaX2wox1JF2OYKEepP/TC0DdoSMJXM6wFBBCIfUaM6DXqGS7sowZ/NvYYBRFCTwfsShpJ3afHNCu/0InQvEhKtI5kyYKF5q/fU4ioBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=T1QWWaMg; arc=none smtp.client-ip=209.85.166.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-85e1b1f08a5so33102539f.2
+        for <linux-integrity@vger.kernel.org>; Thu, 27 Mar 2025 09:09:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1743091767; x=1743696567; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lc9tpoqy6nWDYPuOoCnxwnYnaP2wtDpP4dKKDjWcgOM=;
+        b=T1QWWaMg861Yv9Jw3i3+lACFSA3Qz3b5nG8s0Ze5Fmc5zuzynrs/1ZIMVErAfvuE8R
+         Y6ShHmLkiSJ8VitH1BSIWLgNI/f7ZBqTrjHC78/owDZ9iTAsWlh/3CMNKkDC77xdxR4S
+         Ls11a8f3CuTCVJh2usKWn4hV2b62nuKKxhu6C6aMAOgYGe+vL5P+bHxn6FqX2O1eEvuN
+         40I44yXX26RCHcjNmpY6S9TgxOYWLM2dOX+b3cLqdqrgCNQq3kiesf87YyvJo0O44a6/
+         deXJz0G1W2l5Q0URaedxSgNyrT/tcVY4DmONC6aWvjaLgLCUDNaoXvHPanV8k+GgrEYv
+         X3YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743091767; x=1743696567;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lc9tpoqy6nWDYPuOoCnxwnYnaP2wtDpP4dKKDjWcgOM=;
+        b=V7Tgkv/vPsrS/eJsGbRQo0mFxpsaAbJB0rVtBQ9h6sFLywX/JmpCdZc3YHCkALq9MA
+         O5SYZkxKO5oEVQsar3CbeHNr0WkGF924FibiXMesOBsk2gBZtWGYRUWE6WY3gho11yLy
+         9SzAX2AFl/Ua6ImlQ8fOpOy4TWdcfdSh9x464CKbTNByn5pfzbMMJ1uObYGvsdbcBZks
+         FtJzooTd2HoF0Wq4xz6YoQOJ9OzhriMNBiWBcKRkU2x/Wfcbd/wLtuumNuRDrS6kB9PM
+         kTh6m1fV0viO1RBbpwGAja8crjKXCd93mWQDp/6hwt/Rn9sGZ4sxbZxsUApDGMj7XTPb
+         6P2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVytk+O/q4ppcDyWtBnM8v+h/z8kfwGbLk/KShRvd9/sUmrOicd2RwU3vCAXe+g5NdTlFkK4mgrZUgAkLBwdGU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3QvcDxfAOB74Tn8qIiivACqXMi/KapRgqnyy/kWDoERXc4j2A
+	cOVo+exTvrfNzYdiZCDfO/8lKlkgQkfvuZZBwsaQGnWEUyiMKr6firS+IeaOgnA=
+X-Gm-Gg: ASbGncviXwwD3c6JWgisS+mw6bgKZdWd7w2X9UGQ8fITr4N1LX681Qd2WWSCLDnw5tQ
+	O3+1dETlyBMAhX9xZqNNa6lXcMVDRj4K3MjQoX2uteXd9zatD5matsoz/k3ez5JCGSRszD2zpUx
+	WNrqkMZ8HAazjWeg4D1HZyaXdgPdgRW7xdB6py+UJtDTY33Pt7zRjpouugdXVIKWwwlhiT/BRS4
+	vfL5obL4LiyQzsBE5ITsL9Dkm/HCV1ZeCMN3urDT8PUCIbFslf6SR4OlyURKklgTJrsdB7d5Bo/
+	6PWA8qt12wywsVHN9OBH0TLwF0+hmXUxSFzLz44=
+X-Google-Smtp-Source: AGHT+IFIyIjqN7KRfbbaU5gWpkJAPN98hiWDLVUjmx28XhdIkaVpn/ZdT5fnt+0q+a+MgIWRytnq6A==
+X-Received: by 2002:a05:6602:3798:b0:85d:f74b:f8a8 with SMTP id ca18e2360f4ac-85e820551afmr551444139f.2.1743091766522;
+        Thu, 27 Mar 2025 09:09:26 -0700 (PDT)
+Received: from CMGLRV3.. ([2a09:bac5:8152:1b37::2b6:1])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-85e8ff7f50asm1804639f.9.2025.03.27.09.09.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Mar 2025 09:09:25 -0700 (PDT)
+From: Frederick Lawler <fred@cloudflare.com>
+To: Mimi Zohar <zohar@linux.ibm.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Eric Snowberg <eric.snowberg@oracle.com>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-ima-devel@lists.sourceforge.net,
+	linux-integrity@vger.kernel.org,
+	linux-ima-user@lists.sourceforge.net,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@cloudfalre.com,
+	Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH v3] ima: process_measurement() needlessly takes inode_lock() on MAY_READ
+Date: Thu, 27 Mar 2025 11:09:11 -0500
+Message-ID: <20250327160916.279090-1-fred@cloudflare.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 27 Mar 2025 17:38:22 +0200
-Message-Id: <D8R5SUN9YYXG.1RL5OEAJPN0GO@jarkko-kan-01>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
- "David Howells" <dhowells@redhat.com>, <keyrings@vger.kernel.org>,
- <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-6.15-rc1
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-X-Mailer: aerc 0.14.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 1a9239bb4253f9076b5b4b2a1a4e8d7defd77a95=
-:
+On IMA policy update, if a measure rule exists in the policy,
+IMA_MEASURE is set for ima_policy_flags which makes the violation_check
+variable always true. Coupled with a no-action on MAY_READ for a
+FILE_CHECK call, we're always taking the inode_lock().
 
-  Merge tag 'net-next-6.15' of git://git.kernel.org/pub/scm/linux/kernel/gi=
-t/netdev/net-next (2025-03-26 21:48:21 -0700)
+This becomes a performance problem for extremely heavy read-only workloads.
+Therefore, prevent this only in the case there's no action to be taken.
 
-are available in the Git repository at:
+Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+---
+Changes since v2:
+- s/mask & MAY_WRITE/file->f_mode & FMODE_WRITE/
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags=
-/tpmdd-next-6.15-rc1
+Changes since v1:
+- Add MAY_WRITE && action check to violation_check to avoid MAY_READ
+  only situations
+---
+ security/integrity/ima/ima_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-for you to fetch changes up to 980a573621ea4b5032123937df0115bdbec6b2de:
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 9b87556b03a7..bc453f5a7531 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -237,7 +237,9 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 				&allowed_algos);
+ 	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK ||
+ 			    func == MMAP_CHECK_REQPROT) &&
+-			   (ima_policy_flag & IMA_MEASURE));
++			   (ima_policy_flag & IMA_MEASURE) &&
++			   ((action & IMA_MEASURE) ||
++			    (file->f_mode & FMODE_WRITE)));
+ 	if (!action && !violation_check)
+ 		return 0;
+ 
+-- 
+2.43.0
 
-  tpm: Make chip->{status,cancel,req_canceled} opt (2025-03-27 17:10:43 +02=
-00)
-
-----------------------------------------------------------------
-Hi,
-
-This PR contains a new driver: TPM FF-A driver. FF comes from Firmware
-Framework, and A comes from Arm's A-profile [1]. FF-A is essentially
-a standard mechanism to communicate with TrustZone apps such as TPM.
-
-Other than that, the PR includes a pile of fixes and small improvments.
-
-BR, Jarkko
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      tpm: ftpm_tee: remove incorrect of_match_ptr annotation
-
-Jarkko Sakkinen (1):
-      tpm: Make chip->{status,cancel,req_canceled} opt
-
-Jonathan McDowell (5):
-      tpm: Lazily flush auth session when getting random data
-      tpm: Convert warn to dbg in tpm2_start_auth_session()
-      tpm, tpm_tis: Fix timeout handling when waiting for TPM status
-      tpm, tpm_tis: Workaround failed command reception on Infineon devices
-      tpm: End any active auth session before shutdown
-
-Stefano Garzarella (1):
-      tpm/tpm_ftpm_tee: fix struct ftpm_tee_private documentation
-
-Stuart Yoder (5):
-      tpm_crb: ffa_tpm: Implement driver compliant to CRB over FF-A
-      tpm_crb: Clean-up and refactor check for idle support
-      ACPICA: Add start method for ARM FF-A
-      tpm_crb: Add support for the ARM FF-A start method
-      Documentation: tpm: Add documentation for the CRB FF-A interface
-
-Thadeu Lima de Souza Cascardo (1):
-      tpm: do not start chip while suspended
-
-WangYuli (1):
-      MAINTAINERS: TPM DEVICE DRIVER: add missing includes
-
- Documentation/security/tpm/index.rst       |   1 +
- Documentation/security/tpm/tpm_ffa_crb.rst |  65 ++++++
- MAINTAINERS                                |   2 +
- drivers/char/tpm/Kconfig                   |   9 +
- drivers/char/tpm/Makefile                  |   1 +
- drivers/char/tpm/tpm-chip.c                |   6 +
- drivers/char/tpm/tpm-interface.c           |  37 ++-
- drivers/char/tpm/tpm2-cmd.c                |   1 -
- drivers/char/tpm/tpm2-sessions.c           |   2 +-
- drivers/char/tpm/tpm_crb.c                 | 105 +++++++--
- drivers/char/tpm/tpm_crb_ffa.c             | 348 +++++++++++++++++++++++++=
-++++
- drivers/char/tpm/tpm_crb_ffa.h             |  25 +++
- drivers/char/tpm/tpm_ftpm_tee.c            |  22 +-
- drivers/char/tpm/tpm_ftpm_tee.h            |   1 -
- drivers/char/tpm/tpm_tis_core.c            |  20 +-
- drivers/char/tpm/tpm_tis_core.h            |   1 +
- include/acpi/actbl3.h                      |   1 +
- include/linux/tpm.h                        |   1 +
- 18 files changed, 590 insertions(+), 58 deletions(-)
- create mode 100644 Documentation/security/tpm/tpm_ffa_crb.rst
- create mode 100644 drivers/char/tpm/tpm_crb_ffa.c
- create mode 100644 drivers/char/tpm/tpm_crb_ffa.h
 
