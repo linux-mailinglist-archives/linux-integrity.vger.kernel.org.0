@@ -1,247 +1,202 @@
-Return-Path: <linux-integrity+bounces-5513-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5514-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B97BA75847
-	for <lists+linux-integrity@lfdr.de>; Sun, 30 Mar 2025 03:14:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7818A759C9
+	for <lists+linux-integrity@lfdr.de>; Sun, 30 Mar 2025 13:17:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7669A18858A4
-	for <lists+linux-integrity@lfdr.de>; Sun, 30 Mar 2025 01:14:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 479E2169292
+	for <lists+linux-integrity@lfdr.de>; Sun, 30 Mar 2025 11:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADC9F9CB;
-	Sun, 30 Mar 2025 01:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C0919AA63;
+	Sun, 30 Mar 2025 11:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="dRG80hsW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ld6/Hdu7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397ED2F24;
-	Sun, 30 Mar 2025 01:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF85C4A05;
+	Sun, 30 Mar 2025 11:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743297266; cv=none; b=Ud1J5SrfNeqwZWt8O5b2daDeHGXj9PjdevvrCdqlNJgP+zzro63o4tUGmyLRRO/cOzSCkCRXaprsHPOeHu6LdHa7D1QIPON5m+AG/WdSC/z7vfXO6Ep6TDfDalvzCYTUePec77ImJGPQP/povr+Fd2A9Usoyclc55RA3+wHIRpA=
+	t=1743333419; cv=none; b=Zh2EpVe8mG3VpbjCESuy6PpMrwQhS2bqPjL5p5lXXYeo9B9ZPpaOEY5a1nBI08uaUKM0mjAH6bH5zQVyL5LW8LP49s3q336GzZMnKKV1bMxDLG2pUxneKbiPsipPIN80NTZoJcD8br1Xkba4McYLTlNqKGhIlzRTeDJjBRjgfdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743297266; c=relaxed/simple;
-	bh=NJjk4aEzjPTotmsuuOjOnYRwqn1RcnR0XuMkiPEmO2c=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Hj3APXv1HBc0Z38FbxZCCc1yNoibQHAHl7r0p+JLjBbASsc1z5zPZui+5Nt+fiMGLvNQpmBFKN4t+b1CPOEDF5lWtsdGZOfX7I7MkLNyTVMPbPOZEqd4wPCF+N1NRVjSvQubGIkXGiL7h7PpwOmvOXllH/tRtUpfY00ioTVvSi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=dRG80hsW; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 52U1DHVh2615696
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sat, 29 Mar 2025 18:13:18 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 52U1DHVh2615696
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025032001; t=1743297205;
-	bh=Yuf/0dPL8EDYIt8LEmDAzk7tX/UHLbJMePeCjp2/s9E=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=dRG80hsWRZPqYaHLspQwvAhajiyygRXgM5oM1moistjtcLvP99FwFeCcuWxQsqp78
-	 9T+sJ1PV56vwPReVUFwF83zO2bXNQzdA/dNvdEICHX+q8mtkhpBIOOCdvg86k60ull
-	 4wrPMV//HewvTULNssMWyjWFlpY+30CFjWyhaYq0c45CgR7chzDulYSOwEoKZamTvg
-	 rqgtTUM2p3ao/sj9COgajivzgHH1x6wAC5WuvS0K9WxIkgSnhxNi1/57/LQ2rRQO5U
-	 mfHeqtDL6XZ2i9rhHSdCQFo3cblzedkxTzCplnl3NiaebFEeURzo5v1oloD1rdXqNm
-	 DXcgS91FdpHyA==
-Date: Sat, 29 Mar 2025 18:13:15 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-crypto@vger.kernel.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        iommu@lists.linux.dev
-CC: ross.philipson@oracle.com, dpsmith@apertussolutions.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, ardb@kernel.org, mjg59@srcf.ucam.org,
-        James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
-        nivedita@alum.mit.edu, herbert@gondor.apana.org.au,
-        davem@davemloft.net, corbet@lwn.net, ebiederm@xmission.com,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com,
-        trenchboot-devel@googlegroups.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v13_19/19=5D_x86/efi=3A_EFI_stu?=
- =?US-ASCII?Q?b_DRTM_launch_support_for_Secure_Launch?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20250328230814.2210230-20-ross.philipson@oracle.com>
-References: <20250328230814.2210230-1-ross.philipson@oracle.com> <20250328230814.2210230-20-ross.philipson@oracle.com>
-Message-ID: <B41D3199-8054-4B2C-94D6-508D1DE4C8B3@zytor.com>
+	s=arc-20240116; t=1743333419; c=relaxed/simple;
+	bh=bTzXpKprA2KMypybMT7l/o4/hn/A7pY8SKGCCVw2Oes=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JukzJFSBjRhmBPxYNniyQIqf1mbas+si9BXwcrVev1hcal2QfdOVNHTimLMJzS7YePs1GdDIMExFPtlUtrjxw47EXDiE8GyQ/ymsp+qQXUgfyKe5bAlnqTmSFzCGypD43KI3+ytvPQ7HLddoyukNVGLK0JQrawSzSTlkR8CsQ+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ld6/Hdu7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826D1C4CEDD;
+	Sun, 30 Mar 2025 11:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743333419;
+	bh=bTzXpKprA2KMypybMT7l/o4/hn/A7pY8SKGCCVw2Oes=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ld6/Hdu7glJQ/4jJ8525vkS46srn/5xoTzoUTe59aGH42X/8RuGAEM+HjJN41bXwv
+	 bYNYcwW0slK5ouHNHGgjtTwfhkR9GrTCPptjOLIUWaa6d6i2nk/UGdCc6pF8sEPaes
+	 7pm39Q+kKyLSEBG9zP2+EIgWe0pqu8vaSuxffGy2BcMdZLMKUfNX8TzzxNgM630IBX
+	 jrEAxyfDpjJ1kIXzoYUcqTrKdDa0A3BO7+PpX4uBfs3cbz/T+YMWewPJQ+/CvvPw8M
+	 Ej5JB+9Bm8patk2Tx5Qh3nbH23W2p4ItnsgbNGFUFtERiJszRHP6gV810ftflK9I7F
+	 0NGzixSJUqgZA==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: keyrings@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org
+Subject: [RFC PATCH v2] KEYS: Add a list for unreferenced keys
+Date: Sun, 30 Mar 2025 14:16:49 +0300
+Message-Id: <20250330111649.13547-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On March 28, 2025 4:08:14 PM PDT, Ross Philipson <ross=2Ephilipson@oracle=
-=2Ecom> wrote:
->This support allows the DRTM launch to be initiated after an EFI stub
->launch of the Linux kernel is done=2E This is accomplished by providing
->a handler to jump to when a Secure Launch is in progress=2E This has to b=
-e
->called after the EFI stub does Exit Boot Services=2E
->
->Signed-off-by: Ross Philipson <ross=2Ephilipson@oracle=2Ecom>
->Reviewed-by: Ard Biesheuvel <ardb@kernel=2Eorg>
->---
-> drivers/firmware/efi/libstub/efistub=2Eh  |  8 +++
-> drivers/firmware/efi/libstub/x86-stub=2Ec | 94 +++++++++++++++++++++++++
-> 2 files changed, 102 insertions(+)
->
->diff --git a/drivers/firmware/efi/libstub/efistub=2Eh b/drivers/firmware/=
-efi/libstub/efistub=2Eh
->index d96d4494070d=2E=2Ebbbc4b327ce1 100644
->--- a/drivers/firmware/efi/libstub/efistub=2Eh
->+++ b/drivers/firmware/efi/libstub/efistub=2Eh
->@@ -135,6 +135,14 @@ void efi_set_u64_split(u64 data, u32 *lo, u32 *hi)
-> 	*hi =3D upper_32_bits(data);
-> }
->=20
->+static inline
->+void efi_set_u64_form(u32 lo, u32 hi, u64 *data)
->+{
->+	u64 upper =3D hi;
->+
->+	*data =3D lo | upper << 32;
->+}
->+
-> /*
->  * Allocation types for calls to boottime->allocate_pages=2E
->  */
->diff --git a/drivers/firmware/efi/libstub/x86-stub=2Ec b/drivers/firmware=
-/efi/libstub/x86-stub=2Ec
->index 863910e9eefc=2E=2E033133e7d953 100644
->--- a/drivers/firmware/efi/libstub/x86-stub=2Ec
->+++ b/drivers/firmware/efi/libstub/x86-stub=2Ec
->@@ -9,6 +9,8 @@
-> #include <linux/efi=2Eh>
-> #include <linux/pci=2Eh>
-> #include <linux/stddef=2Eh>
->+#include <linux/slr_table=2Eh>
->+#include <linux/slaunch=2Eh>
->=20
-> #include <asm/efi=2Eh>
-> #include <asm/e820/types=2Eh>
->@@ -798,6 +800,93 @@ static efi_status_t efi_decompress_kernel(unsigned l=
-ong *kernel_entry)
-> 	return efi_adjust_memory_range_protection(addr, kernel_text_size);
-> }
->=20
->+#if (IS_ENABLED(CONFIG_SECURE_LAUNCH))
->+static bool efi_secure_launch_update_boot_params(struct slr_table *slrt,
->+						 struct boot_params *boot_params)
->+{
->+	struct slr_entry_intel_info *txt_info;
->+	struct slr_entry_policy *policy;
->+	bool updated =3D false;
->+	int i;
->+
->+	txt_info =3D slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_INTEL_INFO);
->+	if (!txt_info)
->+		return false;
->+
->+	txt_info->boot_params_addr =3D (u64)boot_params;
->+
->+	policy =3D slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_ENTRY_POLICY);
->+	if (!policy)
->+		return false;
->+
->+	for (i =3D 0; i < policy->nr_entries; i++) {
->+		if (policy->policy_entries[i]=2Eentity_type =3D=3D SLR_ET_BOOT_PARAMS)=
+Add an isolated list for unreferenced keys. This splits key deletion as
+separate phase, after the key reaper. This makes the whole process more
+rigid, as these two distinct tasks don't intervene each other.
+
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v2:
+- Rename key_gc_unused_keys as key_gc_graveyard, and re-document the
+  function.
+---
+ include/linux/key.h      |  1 -
+ security/keys/gc.c       | 27 +++++++--------------------
+ security/keys/internal.h |  1 +
+ security/keys/key.c      |  7 +++++--
+ 4 files changed, 13 insertions(+), 23 deletions(-)
+
+diff --git a/include/linux/key.h b/include/linux/key.h
+index ba05de8579ec..074dca3222b9 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -236,7 +236,6 @@ struct key {
+ #define KEY_FLAG_ROOT_CAN_INVAL	7	/* set if key can be invalidated by root without permission */
+ #define KEY_FLAG_KEEP		8	/* set if key should not be removed */
+ #define KEY_FLAG_UID_KEYRING	9	/* set if key is a user or user session keyring */
+-#define KEY_FLAG_FINAL_PUT	10	/* set if final put has happened on key */
+ 
+ 	/* the key type and key description string
+ 	 * - the desc is used to match a key against search criteria
+diff --git a/security/keys/gc.c b/security/keys/gc.c
+index f27223ea4578..ffd456b6967d 100644
+--- a/security/keys/gc.c
++++ b/security/keys/gc.c
+@@ -130,9 +130,9 @@ void key_gc_keytype(struct key_type *ktype)
+ }
+ 
+ /*
+- * Garbage collect a list of unreferenced, detached keys
++ * Takes ownership of the given list, and deinitializes and destroys the keys.
+  */
+-static noinline void key_gc_unused_keys(struct list_head *keys)
++static noinline void key_gc_graveyard(struct list_head *keys)
  {
->+			policy->policy_entries[i]=2Eentity =3D (u64)boot_params;
->+			updated =3D true;
->+			break;
->+		}
->+	}
->+
->+	/*
->+	 * If this is a PE entry into EFI stub the mocked up boot params will
->+	 * be missing some of the setup header data needed for the second stage
->+	 * of the Secure Launch boot=2E
->+	 */
->+	if (image) {
->+		struct setup_header *hdr =3D (struct setup_header *)((u8 *)image->imag=
-e_base +
->+					    offsetof(struct boot_params, hdr));
->+		u64 cmdline_ptr;
->+
->+		boot_params->hdr=2Esetup_sects =3D hdr->setup_sects;
->+		boot_params->hdr=2Esyssize =3D hdr->syssize;
->+		boot_params->hdr=2Eversion =3D hdr->version;
->+		boot_params->hdr=2Eloadflags =3D hdr->loadflags;
->+		boot_params->hdr=2Ekernel_alignment =3D hdr->kernel_alignment;
->+		boot_params->hdr=2Emin_alignment =3D hdr->min_alignment;
->+		boot_params->hdr=2Exloadflags =3D hdr->xloadflags;
->+		boot_params->hdr=2Einit_size =3D hdr->init_size;
->+		boot_params->hdr=2Ekernel_info_offset =3D hdr->kernel_info_offset;
->+		efi_set_u64_form(boot_params->hdr=2Ecmd_line_ptr, boot_params->ext_cmd=
-_line_ptr,
->+				 &cmdline_ptr);
->+		boot_params->hdr=2Ecmdline_size =3D strlen((const char *)cmdline_ptr);
->+	}
->+
->+	return updated;
->+}
->+
->+static void efi_secure_launch(struct boot_params *boot_params)
->+{
->+	struct slr_entry_dl_info *dlinfo;
->+	efi_guid_t guid =3D SLR_TABLE_GUID;
->+	dl_handler_func handler_callback;
->+	struct slr_table *slrt;
->+
->+	/*
->+	 * The presence of this table indicated a Secure Launch
->+	 * is being requested=2E
->+	 */
->+	slrt =3D (struct slr_table *)get_efi_config_table(guid);
->+	if (!slrt || slrt->magic !=3D SLR_TABLE_MAGIC)
->+		return;
->+
->+	/*
->+	 * Since the EFI stub library creates its own boot_params on entry, the
->+	 * SLRT and TXT heap have to be updated with this version=2E
->+	 */
->+	if (!efi_secure_launch_update_boot_params(slrt, boot_params))
->+		return;
->+
->+	/* Jump through DL stub to initiate Secure Launch */
->+	dlinfo =3D slr_next_entry_by_tag(slrt, NULL, SLR_ENTRY_DL_INFO);
->+
->+	handler_callback =3D (dl_handler_func)dlinfo->dl_handler;
->+
->+	handler_callback(&dlinfo->bl_context);
->+
->+	unreachable();
->+}
->+#endif
->+
-> static void __noreturn enter_kernel(unsigned long kernel_addr,
-> 				    struct boot_params *boot_params)
-> {
->@@ -925,6 +1014,11 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
-> 		goto fail;
-> 	}
->=20
->+#if (IS_ENABLED(CONFIG_SECURE_LAUNCH))
->+	/* If a Secure Launch is in progress, this never returns */
->+	efi_secure_launch(boot_params);
->+#endif
->+
-> 	/*
-> 	 * Call the SEV init code while still running with the firmware's
-> 	 * GDT/IDT, so #VC exceptions will be handled by EFI=2E
+ 	while (!list_empty(keys)) {
+ 		struct key *key =
+@@ -218,11 +218,6 @@ static void key_garbage_collector(struct work_struct *work)
+ 		key = rb_entry(cursor, struct key, serial_node);
+ 		cursor = rb_next(cursor);
+ 
+-		if (test_bit(KEY_FLAG_FINAL_PUT, &key->flags)) {
+-			smp_mb(); /* Clobber key->user after FINAL_PUT seen. */
+-			goto found_unreferenced_key;
+-		}
+-
+ 		if (unlikely(gc_state & KEY_GC_REAPING_DEAD_1)) {
+ 			if (key->type == key_gc_dead_keytype) {
+ 				gc_state |= KEY_GC_FOUND_DEAD_KEY;
+@@ -286,6 +281,10 @@ static void key_garbage_collector(struct work_struct *work)
+ 		key_schedule_gc(new_timer);
+ 	}
+ 
++	spin_lock(&key_serial_lock);
++	list_splice_init(&key_graveyard, &graveyard);
++	spin_unlock(&key_serial_lock);
++
+ 	if (unlikely(gc_state & KEY_GC_REAPING_DEAD_2) ||
+ 	    !list_empty(&graveyard)) {
+ 		/* Make sure that all pending keyring payload destructions are
+@@ -299,7 +298,7 @@ static void key_garbage_collector(struct work_struct *work)
+ 
+ 	if (!list_empty(&graveyard)) {
+ 		kdebug("gc keys");
+-		key_gc_unused_keys(&graveyard);
++		key_gc_graveyard(&graveyard);
+ 	}
+ 
+ 	if (unlikely(gc_state & (KEY_GC_REAPING_DEAD_1 |
+@@ -328,18 +327,6 @@ static void key_garbage_collector(struct work_struct *work)
+ 	kleave(" [end %x]", gc_state);
+ 	return;
+ 
+-	/* We found an unreferenced key - once we've removed it from the tree,
+-	 * we can safely drop the lock.
+-	 */
+-found_unreferenced_key:
+-	kdebug("unrefd key %d", key->serial);
+-	rb_erase(&key->serial_node, &key_serial_tree);
+-	spin_unlock(&key_serial_lock);
+-
+-	list_add_tail(&key->graveyard_link, &graveyard);
+-	gc_state |= KEY_GC_REAP_AGAIN;
+-	goto maybe_resched;
+-
+ 	/* We found a restricted keyring and need to update the restriction if
+ 	 * it is associated with the dead key type.
+ 	 */
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 2cffa6dc8255..c1b6f0b5817c 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -66,6 +66,7 @@ struct key_user {
+ extern struct rb_root	key_user_tree;
+ extern spinlock_t	key_user_lock;
+ extern struct key_user	root_key_user;
++extern struct list_head key_graveyard;
+ 
+ extern struct key_user *key_user_lookup(kuid_t uid);
+ extern void key_user_put(struct key_user *user);
+diff --git a/security/keys/key.c b/security/keys/key.c
+index 7198cd2ac3a3..b34b4cba6ce7 100644
+--- a/security/keys/key.c
++++ b/security/keys/key.c
+@@ -22,6 +22,7 @@ DEFINE_SPINLOCK(key_serial_lock);
+ 
+ struct rb_root	key_user_tree; /* tree of quota records indexed by UID */
+ DEFINE_SPINLOCK(key_user_lock);
++LIST_HEAD(key_graveyard);
+ 
+ unsigned int key_quota_root_maxkeys = 1000000;	/* root's key count quota */
+ unsigned int key_quota_root_maxbytes = 25000000; /* root's key space quota */
+@@ -658,8 +659,10 @@ void key_put(struct key *key)
+ 				key->user->qnbytes -= key->quotalen;
+ 				spin_unlock_irqrestore(&key->user->lock, flags);
+ 			}
+-			smp_mb(); /* key->user before FINAL_PUT set. */
+-			set_bit(KEY_FLAG_FINAL_PUT, &key->flags);
++			spin_lock(&key_serial_lock);
++			rb_erase(&key->serial_node, &key_serial_tree);
++			list_add_tail(&key->graveyard_link, &key_graveyard);
++			spin_unlock(&key_serial_lock);
+ 			schedule_work(&key_gc_work);
+ 		}
+ 	}
+-- 
+2.39.5
 
-efi_set_u64_form()?
-
-What the heck is that? If it actually involves two u32 packed into a 64 fi=
-eld, why not simply do two stores?
 
