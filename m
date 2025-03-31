@@ -1,70 +1,70 @@
-Return-Path: <linux-integrity+bounces-5521-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5522-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E74BEA763ED
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 Mar 2025 12:15:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F6B9A763F3
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 Mar 2025 12:16:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BD5416825E
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 Mar 2025 10:15:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FBD23AA7A1
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 Mar 2025 10:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E641DAC81;
-	Mon, 31 Mar 2025 10:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7751E04AD;
+	Mon, 31 Mar 2025 10:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikzoz86/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BcTfgHME"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A9427726;
-	Mon, 31 Mar 2025 10:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D7F1DFE0A;
+	Mon, 31 Mar 2025 10:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743416136; cv=none; b=SVdmHbkUYKnAWvsMrHryGCog1KoiDp0/oOYn2jpb2mneODbEIHgW9Of2tp79/rxgUDmHNrJXiGImqeAr5MlqyZQxlmk1pTwfGmy/F788TAAdAEw8BLNo9mjPIlpVx3Nq8B3fVqGpYu/RUgX0OdsbGVRS2zw7Y1ygOTJy1I8xZNo=
+	t=1743416150; cv=none; b=BYjXf+u75lukLAPyDEoPgVAXi9diSeGPbnPxKjC/eXLtu599lAi/4lz0rXY1fSF9e+N8CYbBrsX0LjcKjhNhsncR1oAOrmjZQ1XwkFb/SsFD84cixHvq6bADV1/iPlVuKBMQeazqITQp82ZX7R+iIco/yhDnXYbWgI8Em+6j4jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743416136; c=relaxed/simple;
-	bh=n/4COzO4gMf0SnjP1aJaKrr7So+8HZxWI/tdajgQLHM=;
+	s=arc-20240116; t=1743416150; c=relaxed/simple;
+	bh=xarSw2oz1TBNPFF+FSxuyylvE8IEaEtSettU4JXkkpA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cApNB0f9v9cWrMQOCIdOpOShOOp+cQaRN0WlGKm78SO+93t3P4zeNHK/SJ0D3YDPIOU11ckcPMlSpOtmaIAqUnW1E/ovCxSVhvn6v3n544DjuoevXGvdJ0P/64Zgt8ZkSvPSASV43GnHjo7eTxNaY4G03h4d0W7GNWCTg9IdnNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikzoz86/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E224FC4CEED;
-	Mon, 31 Mar 2025 10:15:35 +0000 (UTC)
+	 To:Cc:Content-Type; b=cR4ycbl6LAn2UUi8jAkMeacwW5gwOMKtlyGJ9he/oe/Hby5Rp1irNgzjhLFn0n1AspE9PA+IrxDJly/4DXY2/5VyyWlo9PIY1I3tMr5o+w7ZF3Dh0/Wm4SbJxHNhAgH1fCLKkiOnOo2WjGKVnlmE5ckgBmCh4vr1ObO7z144iNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BcTfgHME; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F45C4CEE5;
+	Mon, 31 Mar 2025 10:15:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743416135;
-	bh=n/4COzO4gMf0SnjP1aJaKrr7So+8HZxWI/tdajgQLHM=;
+	s=k20201202; t=1743416149;
+	bh=xarSw2oz1TBNPFF+FSxuyylvE8IEaEtSettU4JXkkpA=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ikzoz86/mJBFdLZmuKXOmswQ9V53sVhfI33od6Q7MkLwr7vwQQVwA3zLC3ZX2kc3k
-	 pPHNuj52VImTcWMy3avlBQ6dyx68swDb1Oq0XC3MjpKVDC5go5GrQZI50LDdOF8VCv
-	 CEbUO3YYXtvS32+XxZBxh5IGPzBQonRrJyt+9PoW3bOH6JORyKO2Bcds3keR36FV21
-	 jcwjGdpUcF4juRFlWfQ99NPhC2BlG9r4sFcxiUz1s7FRusT6s/hElxCUakMzvyCx/l
-	 PiRyZR7fM4xaaucnJVHKCtmbLzNXlBLpRyXMsQ7V4Be3msP1fSxA0TCuKE1ASLAM0+
-	 ZEIfiLLHdtSIw==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5e5deb6482cso9547989a12.1;
-        Mon, 31 Mar 2025 03:15:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXpfML6LZJkRNsHBpyi64OTZ/wHrWb/edUTE7JqO2mLowCvG1HcoU24jIKaNiwbIEz08X6fikU+fI4pa0Re8BT@vger.kernel.org, AJvYcCV5ASWZdlZLRnDaJDaekxs341frQL30M7wN/BHufttL7ICmHqBssa45HnqXhj1EWrz2yaupYWSM2I0iSAEF@vger.kernel.org, AJvYcCVJB3AZ9G+Qlx/aOBjT8fY0n3cbR1badYZihoK5x172dCqkOQdqQMFRBlXmHAfq4OsEbiK9Qk20dACwTw0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtGZZPshjSUiqM2wT4CYGuWyYAXtj1qlys1MOFDskNy9g/YwFa
-	bs5xyJ+1JZfQWxi8I9x54XXm8OxcWqzpOhsIdTcNmbPPgec7WqtuzJATYFOLRiLKt+Zwc59OGFP
-	9jzoPg9hhc6Fs1i+zA25PhzmFang=
-X-Google-Smtp-Source: AGHT+IFvFYObft2zKhI8nax3MvCXP4CIDl94lJKKoyX3Fte0jLIZ2CNZL9CRyoJud42hvncTtq9u8PJTs1GVTz88TqQ=
-X-Received: by 2002:a17:907:c0f:b0:ac6:e20d:c3c0 with SMTP id
- a640c23a62f3a-ac71eca8b58mr1117145266b.16.1743416134168; Mon, 31 Mar 2025
- 03:15:34 -0700 (PDT)
+	b=BcTfgHMEUEaC8K52fmXTZnfu0oETja8uENtB5qW1p1/Ja2g4nGtbaYInr1/k25Dcc
+	 rD/QbluJMu8KCOPxNVkfQ/flYOQhMgO/NO1xFS2RDLFotK5ShMVmvd0mYU6p8CrEwy
+	 JnYi4zccN8IldfouC8sp6WCr6n9J0kod143SS9nKSWDwSu00pIWY7s/cuZ7BX9ey26
+	 +Cplm4kReeftb7KCrApqczaDI/pQy9u8Dnh74/4cqCVa3bsFhpV5ao52O7QG7aq1N1
+	 3aNdcX6K5Kz1AAs2YhkVArIGs42FiBimWw4HyiFBD3nns9VYfEZNPkqgVxGqDrZrA+
+	 798TjxZgFMidQ==
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e5e63162a0so2977908a12.3;
+        Mon, 31 Mar 2025 03:15:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUSHBUKzCvR6MBDtkguGhEltHZlxVHPAZOp+yHax4ojX6IRAB6Li7K+f8XVq2V0gj+wKdAcsMuESIqoJaXv@vger.kernel.org, AJvYcCWCCvTczNpRXj5vVsdbyTL5j0QQ7SgHgp4IMRMHuExCLpo/4dm1eaUkVD73qNBtAqKHugQ8a5i2+Ag8s9I=@vger.kernel.org, AJvYcCWm5wW7Ax8XSpq2PSO6pLM4vyKldlLVCIJA9YbzX7RuFIWLTF65b/tQLsABZ3j7LNQcOtTXFUVJMvunTTTU/3Ww@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/JciHJYlVACtAJgJv8lv1+n5Bufud86Bs8nBPs1A3MlvWKZmv
+	X2DTFLCTfUEtUSpUyptRU028bKC59i1jvmoUBtjRxONQGMbhtYD/fo3koIg2ZF1Cvsx1EdsrvZv
+	bqzG8PzBcsEn32BeRcjk3i7U4jYQ=
+X-Google-Smtp-Source: AGHT+IHiIrpZ2r0gNJCQ9+/qDMx0Judo1MQ99Nq9zc5YVsgXIa3hjRhHSC6dQuQWbnnMcx9BOEvpj1KCZR5pfIzWXVI=
+X-Received: by 2002:a17:907:9726:b0:ac7:33d0:dbe with SMTP id
+ a640c23a62f3a-ac738b5472amr703832466b.33.1743416148255; Mon, 31 Mar 2025
+ 03:15:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250327021809.29954-1-zhaoqunqin@loongson.cn> <20250327021809.29954-4-zhaoqunqin@loongson.cn>
-In-Reply-To: <20250327021809.29954-4-zhaoqunqin@loongson.cn>
+References: <20250327021940.29969-1-zhaoqunqin@loongson.cn>
+In-Reply-To: <20250327021940.29969-1-zhaoqunqin@loongson.cn>
 From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 31 Mar 2025 18:15:27 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4AvnVX50iSCaAsmzEe3WZe=4LGjU2VmuTN4q9o9-FpHg@mail.gmail.com>
-X-Gm-Features: AQ5f1Joz7Z3luYpq13-yQCFvoGkxeUBEdKxMuLXoQ8NcX2RlyvjWKtKvm9bL_i0
-Message-ID: <CAAhV-H4AvnVX50iSCaAsmzEe3WZe=4LGjU2VmuTN4q9o9-FpHg@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] crypto: loongson - add Loongson RNG driver support
+Date: Mon, 31 Mar 2025 18:15:42 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5aYiOCpXNsEvGCdPnS1KxYgjygvPFPP7pWXDoMPncTtg@mail.gmail.com>
+X-Gm-Features: AQ5f1JrfZCA-ToCif9d9SrkW_m4ahIxqz6Q5tFtp2lPQpLXSI-cSKQifmwe6XOo
+Message-ID: <CAAhV-H5aYiOCpXNsEvGCdPnS1KxYgjygvPFPP7pWXDoMPncTtg@mail.gmail.com>
+Subject: Re: [PATCH v6 5/6] tpm: Add a driver for Loongson TPM device
 To: Qunqin Zhao <zhaoqunqin@loongson.cn>
 Cc: lee@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net, 
 	peterhuewe@gmx.de, jarkko@kernel.org, linux-kernel@vger.kernel.org, 
@@ -76,277 +76,184 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi, Qunqin,
 
-On Thu, Mar 27, 2025 at 10:17=E2=80=AFAM Qunqin Zhao <zhaoqunqin@loongson.c=
+On Thu, Mar 27, 2025 at 10:18=E2=80=AFAM Qunqin Zhao <zhaoqunqin@loongson.c=
 n> wrote:
 >
-> Loongson's Random Number Generator is found inside Loongson security
-> engine.
+> Loongson security engine supports random number generation, hash,
+> symmetric encryption and asymmetric encryption. Based on these
+> encryption functions, TPM2 have been implemented in the Loongson
+> security engine firmware. This driver is responsible for copying data
+> into the memory visible to the firmware and receiving data from the
+> firmware.
 >
 > Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
 > Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
 > Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
 > ---
 > v6: Replace all "ls6000se" with "loongson"
-> v2-v5: None
+>     Prefix all with tpm_loongson instead of tpm_lsse.
+>     Removed Jarkko's tag cause there are some changes in v6
 >
->  drivers/crypto/Kconfig                 |   1 +
->  drivers/crypto/Makefile                |   1 +
->  drivers/crypto/loongson/Kconfig        |   6 +
->  drivers/crypto/loongson/Makefile       |   2 +
->  drivers/crypto/loongson/loongson-rng.c | 190 +++++++++++++++++++++++++
->  5 files changed, 200 insertions(+)
->  create mode 100644 drivers/crypto/loongson/Kconfig
->  create mode 100644 drivers/crypto/loongson/Makefile
->  create mode 100644 drivers/crypto/loongson/loongson-rng.c
+> v5: None
+> v4: Prefix all with tpm_lsse instead of tpm.
+>     Removed MODULE_AUTHOR fields.
 >
-> diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
-> index 19ab145f9..567ed81b0 100644
-> --- a/drivers/crypto/Kconfig
-> +++ b/drivers/crypto/Kconfig
-> @@ -855,5 +855,6 @@ config CRYPTO_DEV_SA2UL
+> v3: Added reminder about Loongson security engine to git log.
 >
->  source "drivers/crypto/aspeed/Kconfig"
->  source "drivers/crypto/starfive/Kconfig"
-> +source "drivers/crypto/loongson/Kconfig"
+>  drivers/char/tpm/Kconfig        |   9 +++
+>  drivers/char/tpm/Makefile       |   1 +
+>  drivers/char/tpm/tpm_loongson.c | 103 ++++++++++++++++++++++++++++++++
+>  3 files changed, 113 insertions(+)
+>  create mode 100644 drivers/char/tpm/tpm_loongson.c
 >
->  endif # CRYPTO_HW
-> diff --git a/drivers/crypto/Makefile b/drivers/crypto/Makefile
-> index fef18ffdb..643c3710b 100644
-> --- a/drivers/crypto/Makefile
-> +++ b/drivers/crypto/Makefile
-> @@ -50,3 +50,4 @@ obj-y +=3D hisilicon/
->  obj-$(CONFIG_CRYPTO_DEV_AMLOGIC_GXL) +=3D amlogic/
->  obj-y +=3D intel/
->  obj-y +=3D starfive/
-> +obj-y +=3D loongson/
-> diff --git a/drivers/crypto/loongson/Kconfig b/drivers/crypto/loongson/Kc=
-onfig
-> new file mode 100644
-> index 000000000..4368701ad
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/Kconfig
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +config CRYPTO_DEV_LOONGSON_RNG
-> +        tristate "Support for Loongson RNG Driver"
-> +        depends on MFD_LOONGSON_SE
-> +        help
-> +          Support for Loongson RNG Driver.
-> diff --git a/drivers/crypto/loongson/Makefile b/drivers/crypto/loongson/M=
-akefile
-> new file mode 100644
-> index 000000000..b8b013c86
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_CRYPTO_DEV_LOONGSON_RNG)  +=3D loongson-rng.o
-> diff --git a/drivers/crypto/loongson/loongson-rng.c b/drivers/crypto/loon=
-gson/loongson-rng.c
-> new file mode 100644
-> index 000000000..c80346cf7
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/loongson-rng.c
-> @@ -0,0 +1,190 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2019 HiSilicon Limited. */
-> +/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
-> +
-> +#include <linux/crypto.h>
-> +#include <linux/err.h>
-> +#include <linux/hw_random.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kernel.h>
-> +#include <linux/list.h>
-> +#include <linux/mfd/loongson-se.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/random.h>
-> +#include <crypto/internal/rng.h>
-> +
-> +struct lsrng_list {
-> +       struct mutex lock;
-> +       struct list_head list;
-> +       int is_init;
-> +};
-For all data struct and function name, it is better to change the
-lsrng_ prefix to loongson_rng_ which matches the file name.
+> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> index 0fc9a510e..5d0e7a1f8 100644
+> --- a/drivers/char/tpm/Kconfig
+> +++ b/drivers/char/tpm/Kconfig
+> @@ -225,5 +225,14 @@ config TCG_FTPM_TEE
+>         help
+>           This driver proxies for firmware TPM running in TEE.
+>
+> +config TCG_LOONGSON
+> +       tristate "Loongson TPM Interface"
+> +       depends on MFD_LOONGSON_SE
+> +       help
+> +         If you want to make Loongson TPM support available, say Yes and
+> +         it will be accessible from within Linux. To compile this
+> +         driver as a module, choose M here; the module will be called
+> +         tpm_loongson.
+Moving this entry between TCG_IBMVTPM and TCG_XEN is better
+(alpha-betical order), others look good to me.
 
 
 Huacai
 
 > +
-> +struct lsrng {
-> +       bool is_used;
-> +       struct lsse_ch *se_ch;
-> +       struct list_head list;
-> +       struct completion rng_completion;
-> +};
+>  source "drivers/char/tpm/st33zp24/Kconfig"
+>  endif # TCG_TPM
+> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> index 9bb142c75..e84a2f7a9 100644
+> --- a/drivers/char/tpm/Makefile
+> +++ b/drivers/char/tpm/Makefile
+> @@ -44,3 +44,4 @@ obj-$(CONFIG_TCG_XEN) +=3D xen-tpmfront.o
+>  obj-$(CONFIG_TCG_CRB) +=3D tpm_crb.o
+>  obj-$(CONFIG_TCG_VTPM_PROXY) +=3D tpm_vtpm_proxy.o
+>  obj-$(CONFIG_TCG_FTPM_TEE) +=3D tpm_ftpm_tee.o
+> +obj-$(CONFIG_TCG_LOONGSON) +=3D tpm_loongson.o
+> diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loong=
+son.c
+> new file mode 100644
+> index 000000000..91e0390c8
+> --- /dev/null
+> +++ b/drivers/char/tpm/tpm_loongson.c
+> @@ -0,0 +1,103 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
 > +
-> +struct lsrng_ctx {
-> +       struct lsrng *rng;
-> +};
+> +#include <linux/device.h>
+> +#include <linux/mfd/loongson-se.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/wait.h>
 > +
-> +struct rng_msg {
+> +#include "tpm.h"
+> +
+> +struct tpm_loongson_msg {
 > +       u32 cmd;
-> +       union {
-> +               u32 len;
-> +               u32 ret;
-> +       } u;
-> +       u32 resved;
-> +       u32 out_off;
-> +       u32 pad[4];
+> +       u32 data_off;
+> +       u32 data_len;
+> +       u32 info[5];
 > +};
 > +
-> +static atomic_t rng_active_devs;
-> +static struct lsrng_list rng_devices;
-> +
-> +static void lsrng_complete(struct lsse_ch *ch)
-> +{
-> +       struct lsrng *rng =3D (struct lsrng *)ch->priv;
-> +
-> +       complete(&rng->rng_completion);
-> +}
-> +
-> +static int lsrng_generate(struct crypto_rng *tfm, const u8 *src,
-> +                         unsigned int slen, u8 *dstn, unsigned int dlen)
-> +{
-> +       struct lsrng_ctx *ctx =3D crypto_rng_ctx(tfm);
-> +       struct lsrng *rng =3D ctx->rng;
-> +       struct rng_msg *msg;
-> +       int err, len;
-> +
-> +       do {
-> +               len =3D min(dlen, PAGE_SIZE);
-> +               msg =3D rng->se_ch->smsg;
-> +               msg->u.len =3D len;
-> +               err =3D se_send_ch_requeset(rng->se_ch);
-> +               if (err)
-> +                       return err;
-> +
-> +               wait_for_completion_interruptible(&rng->rng_completion);
-> +
-> +               msg =3D rng->se_ch->rmsg;
-> +               if (msg->u.ret)
-> +                       return -EFAULT;
-> +
-> +               memcpy(dstn, rng->se_ch->data_buffer, len);
-> +               dlen -=3D len;
-> +               dstn +=3D len;
-> +       } while (dlen > 0);
-> +
-> +       return 0;
-> +}
-> +
-> +static int lsrng_init(struct crypto_tfm *tfm)
-> +{
-> +       struct lsrng_ctx *ctx =3D crypto_tfm_ctx(tfm);
-> +       struct lsrng *rng;
-> +       int ret =3D -EBUSY;
-> +
-> +       mutex_lock(&rng_devices.lock);
-> +       list_for_each_entry(rng, &rng_devices.list, list) {
-> +               if (!rng->is_used) {
-> +                       rng->is_used =3D true;
-> +                       ctx->rng =3D rng;
-> +                       ret =3D 0;
-> +                       break;
-> +               }
-> +       }
-> +       mutex_unlock(&rng_devices.lock);
-> +
-> +       return ret;
-> +}
-> +
-> +static void lsrng_exit(struct crypto_tfm *tfm)
-> +{
-> +       struct lsrng_ctx *ctx =3D crypto_tfm_ctx(tfm);
-> +
-> +       mutex_lock(&rng_devices.lock);
-> +       ctx->rng->is_used =3D false;
-> +       mutex_unlock(&rng_devices.lock);
-> +}
-> +
-> +static int no_seed(struct crypto_rng *tfm, const u8 *seed, unsigned int =
-slen)
-> +{
-> +       return 0;
-> +}
-> +
-> +static struct rng_alg lsrng_alg =3D {
-> +       .generate =3D lsrng_generate,
-> +       .seed =3D no_seed,
-> +       .base =3D {
-> +               .cra_name =3D "stdrng",
-> +               .cra_driver_name =3D "loongson_stdrng",
-> +               .cra_priority =3D 300,
-> +               .cra_ctxsize =3D sizeof(struct lsrng_ctx),
-> +               .cra_module =3D THIS_MODULE,
-> +               .cra_init =3D lsrng_init,
-> +               .cra_exit =3D lsrng_exit,
-> +       },
+> +struct tpm_loongson_dev {
+> +       struct lsse_ch *se_ch;
+> +       struct completion tpm_loongson_completion;
 > +};
 > +
-> +static void lsrng_add_to_list(struct lsrng *rng)
+> +static void tpm_loongson_complete(struct lsse_ch *ch)
 > +{
-> +       mutex_lock(&rng_devices.lock);
-> +       list_add_tail(&rng->list, &rng_devices.list);
-> +       mutex_unlock(&rng_devices.lock);
+> +       struct tpm_loongson_dev *td =3D ch->priv;
+> +
+> +       complete(&td->tpm_loongson_completion);
 > +}
 > +
-> +static int lsrng_probe(struct platform_device *pdev)
+> +static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t coun=
+t)
 > +{
-> +       struct rng_msg *msg;
-> +       struct lsrng *rng;
-> +       int ret;
+> +       struct tpm_loongson_dev *td =3D dev_get_drvdata(&chip->dev);
+> +       struct tpm_loongson_msg *rmsg;
+> +       int sig;
 > +
-> +       rng =3D devm_kzalloc(&pdev->dev, sizeof(*rng), GFP_KERNEL);
-> +       if (!rng)
+> +       sig =3D wait_for_completion_interruptible(&td->tpm_loongson_compl=
+etion);
+> +       if (sig)
+> +               return sig;
+> +
+> +       rmsg =3D td->se_ch->rmsg;
+> +       memcpy(buf, td->se_ch->data_buffer, rmsg->data_len);
+> +
+> +       return rmsg->data_len;
+> +}
+> +
+> +static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t coun=
+t)
+> +{
+> +       struct tpm_loongson_dev *td =3D dev_get_drvdata(&chip->dev);
+> +       struct tpm_loongson_msg *smsg =3D td->se_ch->smsg;
+> +
+> +       memcpy(td->se_ch->data_buffer, buf, count);
+> +       smsg->data_len =3D count;
+> +
+> +       return se_send_ch_requeset(td->se_ch);
+> +}
+> +
+> +static const struct tpm_class_ops tpm_loongson_ops =3D {
+> +       .flags =3D TPM_OPS_AUTO_STARTUP,
+> +       .recv =3D tpm_loongson_recv,
+> +       .send =3D tpm_loongson_send,
+> +};
+> +
+> +static int tpm_loongson_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev =3D &pdev->dev;
+> +       struct tpm_loongson_msg *smsg;
+> +       struct tpm_loongson_dev *td;
+> +       struct tpm_chip *chip;
+> +
+> +       td =3D devm_kzalloc(dev, sizeof(struct tpm_loongson_dev), GFP_KER=
+NEL);
+> +       if (!td)
 > +               return -ENOMEM;
 > +
-> +       init_completion(&rng->rng_completion);
-> +       rng->se_ch =3D se_init_ch(pdev->dev.parent, SE_CH_RNG, PAGE_SIZE,
-> +                               sizeof(struct rng_msg) * 2, rng, lsrng_co=
-mplete);
-> +       if (!rng->se_ch)
+> +       init_completion(&td->tpm_loongson_completion);
+> +       td->se_ch =3D se_init_ch(dev->parent, SE_CH_TPM, PAGE_SIZE,
+> +                              2 * sizeof(struct tpm_loongson_msg), td,
+> +                              tpm_loongson_complete);
+> +       if (!td->se_ch)
 > +               return -ENODEV;
-> +       msg =3D rng->se_ch->smsg;
-> +       msg->cmd =3D SE_CMD_RNG;
-> +       msg->out_off =3D rng->se_ch->off;
+> +       smsg =3D td->se_ch->smsg;
+> +       smsg->cmd =3D SE_CMD_TPM;
+> +       smsg->data_off =3D td->se_ch->off;
 > +
-> +       if (!rng_devices.is_init) {
-> +               ret =3D crypto_register_rng(&lsrng_alg);
-> +               if (ret) {
-> +                       dev_err(&pdev->dev, "failed to register crypto(%d=
-)\n", ret);
-> +                       return ret;
-> +               }
-> +               INIT_LIST_HEAD(&rng_devices.list);
-> +               mutex_init(&rng_devices.lock);
-> +               rng_devices.is_init =3D true;
-> +       }
+> +       chip =3D tpmm_chip_alloc(dev, &tpm_loongson_ops);
+> +       if (IS_ERR(chip))
+> +               return PTR_ERR(chip);
+> +       chip->flags =3D TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
+> +       dev_set_drvdata(&chip->dev, td);
 > +
-> +       lsrng_add_to_list(rng);
-> +       atomic_inc(&rng_active_devs);
-> +
-> +       return 0;
+> +       return tpm_chip_register(chip);
 > +}
 > +
-> +static struct platform_driver lsrng_driver =3D {
-> +       .probe          =3D lsrng_probe,
-> +       .driver         =3D {
-> +               .name   =3D "loongson-rng",
+> +static struct platform_driver tpm_loongson_driver =3D {
+> +       .probe   =3D tpm_loongson_probe,
+> +       .driver  =3D {
+> +               .name  =3D "loongson-tpm",
 > +       },
 > +};
-> +module_platform_driver(lsrng_driver);
+> +module_platform_driver(tpm_loongson_driver);
 > +
-> +MODULE_ALIAS("platform:loongson-rng");
+> +MODULE_ALIAS("platform:loongson-tpm");
 > +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Yinggang Gu <guyinggang@loongson.cn>");
-> +MODULE_AUTHOR("Qunqin Zhao <zhaoqunqin@loongson.cn>");
-> +MODULE_DESCRIPTION("Loongson random number generator driver");
+> +MODULE_DESCRIPTION("Loongson TPM driver");
 > --
 > 2.45.2
 >
