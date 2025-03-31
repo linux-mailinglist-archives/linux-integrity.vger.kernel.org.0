@@ -1,165 +1,168 @@
-Return-Path: <linux-integrity+bounces-5527-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5528-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9575A7646E
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 Mar 2025 12:40:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1843A76589
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 Mar 2025 14:15:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D5B53AAF63
-	for <lists+linux-integrity@lfdr.de>; Mon, 31 Mar 2025 10:39:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F11683AA075
+	for <lists+linux-integrity@lfdr.de>; Mon, 31 Mar 2025 12:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D711E282D;
-	Mon, 31 Mar 2025 10:39:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D533C1E0489;
+	Mon, 31 Mar 2025 12:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dDTR2abu"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="oGk0LocN"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9801E2611
-	for <linux-integrity@vger.kernel.org>; Mon, 31 Mar 2025 10:39:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300D4154C15
+	for <linux-integrity@vger.kernel.org>; Mon, 31 Mar 2025 12:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743417568; cv=none; b=mlqbuxc8WCWlwXRnrSIjuZxNH6qjovXrCXaMKzK7rcnBhNNogNyRGk58JMHA5TIrt+Scye8TZjL5PTVPUR/g3X9r4Ky2izkddqld82+jRtWhrnPca/4RaVcueSq6COjjjyX1WEe3FuVkFcc7p4tz2YD/Za+SftjrxweG9Rn6h64=
+	t=1743423319; cv=none; b=SPijfNMraPS8gKWvQD6qgQR/XdA48j7kR8s3fovG1viHWnX3xf26++SuL8Vd5NhF/ol+7Nj23VPDCPvHJOy9c6IHuqQmqHFbF3kwE0h83dVxOg8bJxjhm4ignjdiS9M67ywY4ZKwFigeCfzPOPM83AF766hG0eTUMMGdIrbQR74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743417568; c=relaxed/simple;
-	bh=VSwSVqTTPnbOpmlHq9MOfH3OWqH+XBMIsW4BP4w9E5k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D5a06MHj7q4K1+rPEC6+hgctRnx10wiciq6H+iEsqHtl8o2LJgPAbbY2+rq0TEBnoAgUeb1czsznc4tZCFS4KkOczmYDmnwIMXDWVX7Ve7FzPpggsFhmFbWyXdxZFUqqB0/rGceH9iEAJz5+7Ey/pSp/eFijhepkzxdKtsQdIeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dDTR2abu; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743417566;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4fxR3joWDLb15zwEwdHZI3rgw4qmSYJti26bFJQ+VcA=;
-	b=dDTR2abuBMhJ7BPvSjBen389FXqRaX8eFKtYaB/wW6VATeN5rchBdhRF15NLNlDpOD5f1S
-	NWrkqvYmzCxmMDSuT6kTtkZIqxT8PgsqwLx2V7nVjGftPQQghSx8y5RBefY34zYx5uni7n
-	CsneboKOyg5mxm7cS6t3i2cRXLIc+4E=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-490-LlPalZp5PVeTGH31KuBOeg-1; Mon, 31 Mar 2025 06:39:24 -0400
-X-MC-Unique: LlPalZp5PVeTGH31KuBOeg-1
-X-Mimecast-MFC-AGG-ID: LlPalZp5PVeTGH31KuBOeg_1743417563
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43e9a3d2977so7647125e9.1
-        for <linux-integrity@vger.kernel.org>; Mon, 31 Mar 2025 03:39:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743417563; x=1744022363;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4fxR3joWDLb15zwEwdHZI3rgw4qmSYJti26bFJQ+VcA=;
-        b=hyjuzsEGJu9EKV97G0IYcmK9xMUZs6ZhtesKwLl8aJ0ijPyiwSsIRq8gqye6y5g6Js
-         e7uV8WfsVvp68KahM4i/b4ZQVGycHvlV4TdmR+3q5Lydlfir1ma4ENVoXqOxds6f/Q9c
-         e52YZG8PrMofFQYUnd7IPilqyFE0VcsIMxlTqoB76ddSrx1dZ5wwd8k+7mdVQJrbi3xz
-         b7tS9PIR7wtcsJ9iXtH8gyBhRKgDwJybi3f9ELFO4hBcW/V4VphA0UeHJ8lZyjJ3EUmm
-         T2fMUl7DOWw1ELC2PQPjy2Lvzz1vcp33KHl555BRL7rh7yWwOwtOgPIFbziBxHeGYy5j
-         Qd+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU/vwQuhQAlck5Z8rtPsojS2AMPecr2IriXciva7rVomqGHrEVzrj1VDKxdg8YSXqC6xFV1J+yaoXKxSBQEdyI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6IwMTwNtSyhWIUNq5/ym5wa5HVB7c3kgslP27EGCqpSiXLpa3
-	qcHvrN9lBZ+Cmg4O56hDjTfe3xMnjwhirhek3GPQW87bvGZZAOuXhErsILrnQ52kmdN+YokZd2L
-	+OZMvXa0M9GcDx/KxI+I5P5ziws8wyzjPqQ9WdNs0TNwkxKLUVe/Zs6sv9KFhePKkug==
-X-Gm-Gg: ASbGncuM0GFLuQefWsdcWTagSAarVxXnVRMo+PbHJwS7Cw+nSXaXJDCltfChXXjQCbj
-	QlfbIECSOtjZkuWZgqL/txg2yI+NC9VZ+rHekmlX6i4SXTeeDAuftWsjppmMmMMk7Sr9n69caEv
-	kK/jVuiwmtotLl3qEK82x28/w/tQTt8v1YBi+50HZP8OEIf5hT18h6MmJ90Uj0B/rMLS1t/TyNF
-	9ako+mG1j0ZpfOtskZImgoOZZ16jhC0Xd9AupviLfXJY/Bu0gCnjwfthjHCc1E1mK2brhyThXq1
-	soPkV8J/y97BjYjcc9Oh/qM8gEFwCAc52pEiNcs4gqIeeQNmCXhq80dvNEGK0UaeJw==
-X-Received: by 2002:a05:600c:1d83:b0:43c:f64c:447f with SMTP id 5b1f17b1804b1-43db62bf772mr81331215e9.29.1743417563543;
-        Mon, 31 Mar 2025 03:39:23 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFSEY2IAvMlONrWW/ecIZqpU4KW8seEtaraLsrYv8QTUi3aO8abB8sFiMZjGmzhLkOrU2UPdg==
-X-Received: by 2002:a05:600c:1d83:b0:43c:f64c:447f with SMTP id 5b1f17b1804b1-43db62bf772mr81330855e9.29.1743417563067;
-        Mon, 31 Mar 2025 03:39:23 -0700 (PDT)
-Received: from stex1.redhat.com (host-87-12-25-55.business.telecomitalia.it. [87.12.25.55])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c0b66363fsm11273542f8f.36.2025.03.31.03.39.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Mar 2025 03:39:22 -0700 (PDT)
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	linux-integrity@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	linux-coco@lists.linux.dev,
-	Dov Murik <dovmurik@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <jroedel@suse.de>,
-	x86@kernel.org,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH v5 4/4] x86/sev: register tpm-svsm platform device
-Date: Mon, 31 Mar 2025 12:38:57 +0200
-Message-ID: <20250331103900.92701-5-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250331103900.92701-1-sgarzare@redhat.com>
-References: <20250331103900.92701-1-sgarzare@redhat.com>
+	s=arc-20240116; t=1743423319; c=relaxed/simple;
+	bh=i0bklRsEEbf5bOka58mumRDoVltp41/cz8kXrYV08WE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sNOn6Dd60/kHc8dHxAMMpMCs2pzgmnCbRD2s8kqTEb3PJ1HoT34Qzi0svFGZeel72PJqpwUrXghvsMQpANT9+kUgZov/iyaFkAGogmeoHka91g/lhOhcg6kxYbDV9gMuBqsvY3q0vFA1257Ely5Ozr4anIFtQW3JExynXtxNebo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=oGk0LocN; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52VA6Z4a002260;
+	Mon, 31 Mar 2025 12:15:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=DAS3Qf
+	VduVCmO3oX+ysteuIaBnDDCBZMqPHqxm0kNe8=; b=oGk0LocNUBfehVIwZr/grj
+	UvMef8S9twmN3yxGUvo552Ofwt1juMQMZn8aJiHSjlGakHRobWQt89NmpS8Hu5QY
+	IcvEFhyByTnfVveMgKc8oYP7k+gV6Kmj52N6Pu82xhpE3mDHOmlGdcm39FoZtavS
+	miEVv9XfBFtxEa4Wm61pnXq8femlwKyNZWwH4UEA0ZztJ4ZcJMuNneP3kaVAJaEw
+	SPirWiiu1U3sCGdFrfV731ZOUD8HznAamsvRpUmbieyza1tN68yJD1x6DRYgtQXr
+	Kvlc+VtpaOYriDmZk9jpzuMrWEDGviceu97LkKk0/YjJmCF7wlbG/7yTPXFlvwqw
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45q602m8d5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 31 Mar 2025 12:15:11 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52V9sde8009923;
+	Mon, 31 Mar 2025 12:15:09 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45pv6nnp6j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 31 Mar 2025 12:15:09 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52VCF9AD14942800
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 31 Mar 2025 12:15:09 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3672758067;
+	Mon, 31 Mar 2025 12:15:09 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CF44658065;
+	Mon, 31 Mar 2025 12:15:08 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.25.252])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 31 Mar 2025 12:15:08 +0000 (GMT)
+Message-ID: <b1eba83a9f68ed9a19100f6c0dc5aca7aff437d5.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH] ima: add a knob to make IMA be able to be disabled
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Baoquan He <bhe@redhat.com>
+Cc: linux-integrity@vger.kernel.org, kexec@lists.infradead.org
+Date: Mon, 31 Mar 2025 08:15:08 -0400
+In-Reply-To: <20250331061611.253919-1-bhe@redhat.com>
+References: <20250331061611.253919-1-bhe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6HTO2PTXK2LFu8-IhktYn7Za56xczjAB
+X-Proofpoint-ORIG-GUID: 6HTO2PTXK2LFu8-IhktYn7Za56xczjAB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-31_05,2025-03-27_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
+ adultscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2503310085
 
-From: Stefano Garzarella <sgarzare@redhat.com>
+On Mon, 2025-03-31 at 14:16 +0800, Baoquan He wrote:
+> It doesn't make sense to run IMA functionality in kdump kernel, and that
+> will cost extra memory. It would be great to allow IMA to be disabled on
+> purpose, e.g for kdump kernel.
+>=20
+> Hence add a knob here to allow people to disable IMA if needed.
+>=20
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> ---
+>  security/integrity/ima/ima_main.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>=20
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
+ma_main.c
+> index 28b8b0db6f9b..5d677d1389fe 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -38,11 +38,27 @@ int ima_appraise;
+> =20
+>  int __ro_after_init ima_hash_algo =3D HASH_ALGO_SHA1;
+>  static int hash_setup_done;
+> +static int ima_disabled =3D 0;
+> =20
+>  static struct notifier_block ima_lsm_policy_notifier =3D {
+>  	.notifier_call =3D ima_lsm_policy_change,
+>  };
+> =20
+> +static int __init ima_setup(char *str)
+> +{
+> +	if (strncmp(str, "off", 3) =3D=3D 0)
+> +                ima_disabled =3D 1;
+> +        else if (strncmp(str, "on", 2) =3D=3D 0)
+> +                ima_disabled =3D 0;
+> +        else
+> +                pr_err("invalid ima setup option: \"%s\" ", str);
+> +
+> +	return 1;
+> +}
+> +__setup("ima=3D", ima_setup);
 
-SNP platform can provide a vTPM device emulated by SVSM.
+I understand your wanting to disable IMA for Kdump, but this goes way beyon=
+d
+that.  Please don't make it generic like this.
 
-The "tpm-svsm" device can be handled by the platform driver added
-by the previous commit in drivers/char/tpm/tpm_svsm.c
+Please refer to ima_appraise_parse_cmdline().
 
-Register the device unconditionally. The support check (e.g. SVSM, cmd)
-is in snp_svsm_vtpm_probe(), keeping all logic in one place.
-This function is called during the driver's probe along with other
-setup tasks like memory allocation.
+Mimi
 
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
-v4:
-- explained better why we register it anyway in the commit message
----
- arch/x86/coco/sev/core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
-index efb43c9d3d30..acbd9bc526b1 100644
---- a/arch/x86/coco/sev/core.c
-+++ b/arch/x86/coco/sev/core.c
-@@ -2689,6 +2689,11 @@ static struct platform_device sev_guest_device = {
- 	.id		= -1,
- };
- 
-+static struct platform_device tpm_svsm_device = {
-+	.name		= "tpm-svsm",
-+	.id		= -1,
-+};
-+
- static int __init snp_init_platform_device(void)
- {
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-@@ -2697,6 +2702,9 @@ static int __init snp_init_platform_device(void)
- 	if (platform_device_register(&sev_guest_device))
- 		return -ENODEV;
- 
-+	if (platform_device_register(&tpm_svsm_device))
-+		return -ENODEV;
-+
- 	pr_info("SNP guest platform device initialized.\n");
- 	return 0;
- }
--- 
-2.49.0
+> +
+> +
+> +
+>  static int __init hash_setup(char *str)
+>  {
+>  	struct ima_template_desc *template_desc =3D ima_template_desc_current()=
+;
+> @@ -1176,6 +1192,11 @@ static int __init init_ima(void)
+>  {
+>  	int error;
+> =20
+> +	if (ima_disabled) {
+> +		pr_info("IMA functionality is disabled on purpose!");
+> +		return 0;
+> +	}
+> +
+>  	ima_appraise_parse_cmdline();
+>  	ima_init_template_list();
+>  	hash_setup(CONFIG_IMA_DEFAULT_HASH);
 
 
